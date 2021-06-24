@@ -27,6 +27,7 @@
 #include <QMargins>
 #include "PageTable.h"
 #include "PageText.h"
+#include "PageBreak.h"
 #include "PageChildObject.h"
 #include "BtEnumFlags.h"
 

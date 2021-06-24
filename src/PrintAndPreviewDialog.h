@@ -36,6 +36,7 @@
 #include "btpage/BtPage.h"
 #include "btpage/PageImage.h"
 #include "btpage/PageTable.h"
+#include "BrewDayFormatter.h"
 
 
 /*!
@@ -48,33 +49,104 @@ class PrintAndPreviewDialog : public QDialog, private Ui::BtPrintAndPreview
 {
    Q_OBJECT
 public:
+   /**
+    * @brief Construct a new Print And Preview Dialog object
+    *
+    * @param parent
+    */
    PrintAndPreviewDialog( MainWindow *parent );
+
+   /**
+    * @brief Destroy the Print And Preview Dialog object
+    *
+    */
    virtual ~PrintAndPreviewDialog() {}
 
+   /**
+    * @brief shows the dialog and updates the Printing preview.
+    *
+    * @param e
+    */
    virtual void showEvent(QShowEvent *e);
 
    QPrintPreviewWidget* previewWidget;
-private:
-   enum _outputSelection {
-      PAPER,
-      PDF,
-      HTML
-   };
+   RecipeFormatter* recipeFormatter;
+   BrewDayFormatter* brewDayFormatter;
 
+private:
+   /**
+    * @brief Sets allt signal connections for the controls in this Dialog
+    *
+    */
    void setupConnections();
+
+   /**
+    * @brief adds the Preview controls to the Dialog including QPrintPreviewWidgen as well as QTextBrowser for HTML preview.
+    * By default QPrintPreviewWidget is visible.
+    *
+    */
    void setupPreviewWidgets();
+
+   /**
+    * @brief Set the Print selection objects according to selected output
+    *
+    */
    void setPrintingControls();
+
+   /**
+    * @brief collects all available printers on the system and stores them into the printer selector Combobox.
+    *
+    */
    void collectPrinterInfo();
+
+   /**
+    * @brief collects all available papersizes for the selected printer and stores them into the Paper size selector Combobox.
+    *
+    */
    void CollectSupportedPageSizes();
-   void showPrintDialog();
+
+   /**
+    * @brief collects the selected recipe from the Mainwindow.
+    *
+    */
    void collectRecipe();
+
+   /**
+    * @brief Handles the printing. sends to the selected output format.
+    *
+    */
    void handlePrinting();
+
+   /**
+    * @brief Updates the preview to the currently set options.
+    *
+    */
+   void updatePreview();
+
+   /**
+    * @brief Renders the recipe data to the page.
+    *
+    * @param page
+    */
+   void renderRecipe(nBtPage::BtPage &page);
+
+   /**
+    * @brief Renders the BrewDay instructions to the page.
+    *
+    * @param page
+    */
+   void renderBrewdayInstructions(nBtPage::BtPage &page);
+
+   /**
+    * @brief Render the page header to a page.
+    *
+    * @param page
+    */
+   void renderHeader(nBtPage::BtPage &page);
 
    MainWindow *_parent;
    Recipe *selectedRecipe;
-   RecipeFormatter* recipeFormatter;
    QPrinter * _printer = nullptr;
-   _outputSelection outputSelection = PAPER;
    QMap<QString, QPageSize> PageSizeMap;
    QTextBrowser *htmlDocument;
 
@@ -85,5 +157,7 @@ public slots:
    void selectedPrinterChanged(int index);
    void selectedPaperChanged(int index);
    void resetAndClose(bool checked);
+   void checkBoxRecipe_toggle(bool checked);
+   void checkBoxBrewday_toggle(bool checked);
 };
 #endif /* _PRINTANDPREVIEW_H */

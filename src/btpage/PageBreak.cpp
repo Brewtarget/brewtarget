@@ -1,5 +1,5 @@
 /*
- * BtPage.cpp is part of Brewtarget, and is Copyright the following
+ * PageBreak.cpp is part of Brewtarget, and is Copyright the following
  * authors 2021
  * - Mattias Måhl <mattias@kejsarsten.com>
  *
@@ -16,29 +16,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+#include "PageBreak.h"
 #include "BtPage.h"
+
 namespace nBtPage
 {
-
-   BtPage::BtPage(QPrinter *printer) :
-      painter(printer)
+   /**
+    * @brief adds a new page to the printer.
+    *
+    * @param painter
+    */
+   void PageBreak::render(QPainter *painter)
    {
-      this->printer = printer;
-   }
-
-   void BtPage::renderPage()
-   {
-      foreach (PageChildObject *child, _children)
-      {
-         child->render(&painter);
-         if ( child->needPageBrake ) {
-            //We're obviously dealing with a large text, let's create a new page and continue rendering the text.
-            //Allthough this solution is only looking one level down! may need revising to handle an arbatrary number of new pages for VERY long notes as an example.
-            printer->newPage();
-            child->nextSection->render( &painter );
-         }
-      }
-      painter.end();
+      this->parent->printer->newPage();
    }
 }

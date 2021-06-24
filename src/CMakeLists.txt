@@ -70,6 +70,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/AncestorDialog.cpp
     ${SRCDIR}/BeerColorWidget.cpp
     ${SRCDIR}/boiltime.cpp
+    ${SRCDIR}/BrewDayFormatter.cpp
     ${SRCDIR}/BrewDayScrollWidget.cpp
     ${SRCDIR}/BrewDayWidget.cpp
     ${SRCDIR}/BrewNoteWidget.cpp
@@ -87,6 +88,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/BtTreeModel.cpp
     ${SRCDIR}/BtTreeView.cpp
     ${SRCDIR}/btpage/BtPage.cpp
+    ${SRCDIR}/btpage/PageBreak.cpp
     ${SRCDIR}/btpage/PageChildObject.cpp
     ${SRCDIR}/btpage/PageImage.cpp
     ${SRCDIR}/btpage/PageTable.cpp
@@ -249,6 +251,7 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/BeerColorWidget.h
     ${SRCDIR}/beerxml.h
     ${SRCDIR}/boiltime.h
+    ${SRCDIR}/BrewDayFormatter.h
     ${SRCDIR}/BrewDayScrollWidget.h
     ${SRCDIR}/BrewDayWidget.h
     ${SRCDIR}/BrewNoteWidget.h
@@ -350,6 +353,7 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/YeastSortFilterProxyModel.h
     ${SRCDIR}/YeastTableModel.h
     ${SRCDIR}/btpage/BtPage.h
+    ${SRCDIR}/btpage/PageBreak.h
     ${SRCDIR}/btpage/PageChildObject.h
     ${SRCDIR}/btpage/PageImage.h
     ${SRCDIR}/btpage/PageTable.h

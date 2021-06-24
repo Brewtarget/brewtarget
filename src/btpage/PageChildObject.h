@@ -34,7 +34,6 @@ namespace nBtPage
    class PageChildObject
    {
    public:
-
       //All sub classes from PageChildObject should know how to render them selves.
       virtual void render(QPainter *painter) = 0;
       virtual QSize getSize() = 0;

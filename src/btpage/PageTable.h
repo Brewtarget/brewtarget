@@ -102,7 +102,22 @@ namespace nBtPage
        *
        */
       void calculateBoundingBox( double scalex = 0.0, double scaley = 0.0 );
+
+      /**
+       * @brief Set the Table Style object
+       *
+       * @param ts
+       */
+      void setTableStyle(PageTableStyle ts);
+
+      /**
+       * @brief Get the Table Style object
+       *
+       * @return PageTableStyle
+       */
+      PageTableStyle getTableStyle() { return tableStyle; }
    private:
+      PageTableStyle tableStyle;
       int tableHeight = -1;
       int tableWidth = -1;
    };
