@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef _PRINTANDPREVIEW_H
-#define _PRINTANDPREVIEW_H
+#ifndef PRINTANDPREVIEWDIALOG_H
+#define PRINTANDPREVIEWDIALOG_H
 
 #include <QDialog>
 #include "ui_BTPrintAndPreview.h"
@@ -31,8 +31,6 @@
 #include "MainWindow.h"
 #include "RecipeFormatter.h"
 #include "model/Recipe.h"
-#include "BrewDayWidget.h" //THE Brewday-printout NEEDS TO MOVE TO IT'S OWN CLASS
-#include "database.h"
 #include "btpage/Page.h"
 #include "btpage/PageImage.h"
 #include "btpage/PageTable.h"
@@ -160,4 +158,4 @@ public slots:
    void checkBoxRecipe_toggle(bool checked);
    void checkBoxBrewday_toggle(bool checked);
 };
-#endif /* _PRINTANDPREVIEW_H */
+#endif /* PRINTANDPREVIEWDIALOG_H */
