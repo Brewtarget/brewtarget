@@ -20,7 +20,7 @@
 #include "PageImage.h"
 
 #include <QPainter>
-namespace nBtPage
+namespace BtPage
 {
    void PageImage::setImage(QImage image)
    {

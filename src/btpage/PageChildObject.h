@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef _PAGEOCHILDBJECT_H
-#define _PAGEOCHILDBJECT_H
+#ifndef BTPAGE_PAGEOCHILDBJECT_H
+#define BTPAGE_PAGEOCHILDBJECT_H
 #include <QPoint>
 #include <QPainter>
 #include <QObject>
@@ -27,9 +27,9 @@
 #include <QPrinter>
 #include "BtEnumFlags.h"
 
-namespace nBtPage
+namespace BtPage
 {
-   class BtPage;
+   class Page;
 
    class PageChildObject
    {
@@ -40,7 +40,7 @@ namespace nBtPage
       virtual void calculateBoundingBox( double scalex = 0.0, double scaley = 0.0 ) = 0;
 
       QFont Font;
-      BtPage *parent;
+      Page *parent;
       //poor mans singularly linked list for outputting to multiple pages.
       PageChildObject *nextSection = nullptr;
       bool needPageBrake = false;
@@ -61,4 +61,4 @@ namespace nBtPage
       QPoint _position;
    };
 }
-#endif /* _PAGECHILDOBJECT_H */
+#endif /* BTPAGE_PAGECHILDOBJECT_H */

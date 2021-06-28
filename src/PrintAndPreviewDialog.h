@@ -33,7 +33,7 @@
 #include "model/Recipe.h"
 #include "BrewDayWidget.h" //THE Brewday-printout NEEDS TO MOVE TO IT'S OWN CLASS
 #include "database.h"
-#include "btpage/BtPage.h"
+#include "btpage/Page.h"
 #include "btpage/PageImage.h"
 #include "btpage/PageTable.h"
 #include "BrewDayFormatter.h"
@@ -128,21 +128,21 @@ private:
     *
     * @param page
     */
-   void renderRecipe(nBtPage::BtPage &page);
+   void renderRecipe(BtPage::Page &page);
 
    /**
     * @brief Renders the BrewDay instructions to the page.
     *
     * @param page
     */
-   void renderBrewdayInstructions(nBtPage::BtPage &page);
+   void renderBrewdayInstructions(BtPage::Page &page);
 
    /**
     * @brief Render the page header to a page.
     *
     * @param page
     */
-   void renderHeader(nBtPage::BtPage &page);
+   void renderHeader(BtPage::Page &page);
 
    MainWindow *_parent;
    Recipe *selectedRecipe;

@@ -1,5 +1,5 @@
 /*
- * BtPage.h is part of Brewtarget, and is Copyright the following
+ * Page.h is part of Brewtarget, and is Copyright the following
  * authors 2021
  * - Mattias Måhl <mattias@kejsarsten.com>
  *
@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef _BTPAGE_H
-#define _BTPAGE_H
+#ifndef BTPAGE_PAGE_H
+#define BTPAGE_PAGE_H
 #include <QFont>
 #include <QString>
 #include <QStringList>
@@ -31,10 +31,10 @@
 #include "PageChildObject.h"
 #include "BtEnumFlags.h"
 
-namespace nBtPage
+namespace BtPage
 {
    /**
-    * @brief BtPage handles all object that goes on a page for printout to PDF or Paper.
+    * @brief Page handles all object that goes on a page for printout to PDF or Paper.
     * @authors
     *    @mattiasmaahl
     *
@@ -42,17 +42,17 @@ namespace nBtPage
     * My goal is to have a platform/model that will enable future development to allow for
     * using template/Specifications file that designs the output on screen.
     * I'm trying to keep everything simple for the developer using the object by keeping
-    * to a simple interface where you create an instance of BtPage, add PageChildOjects to
+    * to a simple interface where you create an instance of Page, add PageChildOjects to
     * it and then render it to preview it on screen.
     */
-   class BtPage
+   class Page
    {
    public:
       QPrinter *printer;
       QPainter painter;
 
-      ~BtPage() {};
-      BtPage(QPrinter *printer);
+      ~Page() {};
+      Page(QPrinter *printer);
 
       /**
        * @brief Add an object to the page
@@ -66,7 +66,7 @@ namespace nBtPage
       auto addChildObject(T *obj, QPoint position = QPoint()) -> decltype(obj)
       {
          if ( ! position.isNull() ) obj->setPosition(position);
-         _children.append(obj);
+         items.append(obj);
          return obj;
       }
 
@@ -83,10 +83,10 @@ namespace nBtPage
        * for example
        * myobject->placeRelationalTo(&other object, PlacingFlags::LEFTOF | PlacingFlags::ABOVE, 30, 30);
        * Valid flags for this is:
-       *   - PlacingFlags::BELOW
-       *   - PlacingFlags::ABOVE
-       *   - PlacingFlags::RIGHTOF
-       *   - PlacingFlags::LEFTOF
+       *   - BtPage::BELOW
+       *   - BtPage::ABOVE
+       *   - BtPage::RIGHTOF
+       *   - BtPage::LEFTOF
        *
        * @authors
        *    @mattiasmaahl
@@ -98,7 +98,7 @@ namespace nBtPage
        * @param yOffset if you want to offset the placing in y-direction pixels, defaults 0 px
        */
       template <class T, class S>
-      void placeRelationalTo(T *targetObj, S *sourceObj, PlacingFlags place, int xOffset = 0 /* pixels */, int yOffset = 0 /* pixels */)
+      void placeRelationalTo(T *targetObj, S *sourceObj, RelationalPlacingFlags place, int xOffset = 0 /* pixels */, int yOffset = 0 /* pixels */)
       {
          PageChildObject *other = (PageChildObject*)sourceObj;
          //If the source object goes beyond the page and is doing a page brake, we need call our selves with that child to get to the last in the list.
@@ -115,10 +115,10 @@ namespace nBtPage
          y = other->position().y() + yOffset;
          other->calculateBoundingBox();
          target->calculateBoundingBox();
-         y = (place & PlacingFlags::ABOVE) ? y - target->getBoundingBox().height() : y;
-         y = (place & PlacingFlags::BELOW) ? y + other->getBoundingBox().height() : y;
-         x = (place & PlacingFlags::LEFTOF) ? x - target->getBoundingBox().width() : x;
-         x = (place & PlacingFlags::RIGHTOF) ? x + other->getBoundingBox().width() : x;
+         y = (place & BtPage::ABOVE) ? y - target->getBoundingBox().height() : y;
+         y = (place & BtPage::BELOW) ? y + other->getBoundingBox().height() : y;
+         x = (place & BtPage::LEFTOF) ? x - target->getBoundingBox().width() : x;
+         x = (place & BtPage::RIGHTOF) ? x + other->getBoundingBox().width() : x;
 
          target->setPosition(QPoint(x, y));
          target->calculateBoundingBox();
@@ -133,10 +133,10 @@ namespace nBtPage
        * for example
        * myobject->placeRelationalTo(&other object, PlacingFlags::LEFTOF | PlacingFlags::ABOVE, 30, 30);
        * Valid flags for this is:
-       *   - PlacingFlags::BELOW
-       *   - PlacingFlags::ABOVE
-       *   - PlacingFlags::RIGHTOF
-       *   - PlacingFlags::LEFTOF
+       *   - BtPage::BELOW
+       *   - BtPage::ABOVE
+       *   - BtPage::RIGHTOF
+       *   - BtPage::LEFTOF
        *
        * @author @mattiasmaahl
        *
@@ -147,7 +147,7 @@ namespace nBtPage
        * @param yOffset if you want to offset the placing in y-direction in Millimeter, defaults 0 mm
        */
       template <class T, class S>
-      void placeRelationalToMM(T *targetObj, S *sourceObj, PlacingFlags place, int xOffset = 0 /* Millimeter */ , int yOffset = 0 /* Millimeter */)
+      void placeRelationalToMM(T *targetObj, S *sourceObj, RelationalPlacingFlags place, int xOffset = 0 /* Millimeter */ , int yOffset = 0 /* Millimeter */)
       {
          //Converting the MM offsets to pixels on the page.
          yOffset *= (printer->logicalDpiY() / 25.4);
@@ -162,17 +162,17 @@ namespace nBtPage
        * PlacingFlags can be stacked together for placement.
        * The object has to be placed on a page object before calling this as the page sizes are needed for the caclulations.
        * i.e.
-       * BtPage * myPage = new BtPage(QPrinter);
+       * Page * myPage = new Page(QPrinter);
        * PageImage * myObject = myPage.addChildObject( new PageImage(.....));
        * myobject->placeRelationalTo(&other object, PlacingFlags::TOP | PlacingFlags::RIGHT);
        *
        * Valid flags for this is:
-       *    - PlacingFlags::LEFT
-       *    - PlacingFlags::RIGHT
-       *    - PlacingFlags::TOP
-       *    - PlacingFlags::BOTTOM
-       *    - PlacingFlags::VCENTER
-       *    - PlacingFlags::HCENTER
+       *    - BtPage::LEFT
+       *    - BtPage::RIGHT
+       *    - BtPage::TOP
+       *    - BtPage::BOTTOM
+       *    - BtPage::VCENTER
+       *    - BtPage::HCENTER
        *    all other Flags will be ignored.
        *
        * @author @mattiasmaahl
@@ -183,25 +183,25 @@ namespace nBtPage
        * @param yOffset Offset from the placement in the y-axis.
        */
       template <class T>
-      void placeOnPage(T *targetObj, PlacingFlags place, int xOffset = 0, int yOffset = 0)
+      void placeOnPage(T *targetObj, FixedPlacingFlags place, int xOffset = 0, int yOffset = 0)
       {
          PageChildObject *tO = (PageChildObject*)targetObj;
 
          QRectF pagePaintRect = printer->pageLayout().paintRectPixels(printer->logicalDpiX());
          int x = tO->position().x() + xOffset;
          int y = tO->position().y() + yOffset;
-         x = (place & PlacingFlags::RIGHT) ? pagePaintRect.width() - tO->getBoundingBox().width() : x;
-         x = (place & PlacingFlags::LEFT) ? 0 : x;
-         y = (place & PlacingFlags::TOP) ? 0 : y;
-         y = (place & PlacingFlags::BOTTOM) ? pagePaintRect.height() - tO->getBoundingBox().height() : y;
-         y = (place & PlacingFlags::VCENTER) ? ((pagePaintRect.height() - tO->getBoundingBox().height()) / 2) : y;
-         x = (place & PlacingFlags::HCENTER) ? ((pagePaintRect.width() - tO->getBoundingBox().width()) / 2) : x;
+         x = (place & BtPage::RIGHT) ? pagePaintRect.width() - tO->getBoundingBox().width() : x;
+         x = (place & BtPage::LEFT) ? 0 : x;
+         y = (place & BtPage::TOP) ? 0 : y;
+         y = (place & BtPage::BOTTOM) ? pagePaintRect.height() - tO->getBoundingBox().height() : y;
+         y = (place & BtPage::VCENTER) ? ((pagePaintRect.height() - tO->getBoundingBox().height()) / 2) : y;
+         x = (place & BtPage::HCENTER) ? ((pagePaintRect.width() - tO->getBoundingBox().width()) / 2) : x;
          tO->setPosition(QPoint(x, y));
          tO->moveBoundingBox(QPoint(x, y));
       }
 
    private:
-      QList<PageChildObject *> _children;
+      QList<PageChildObject *> items;
    };
 }
-#endif /* _BTPAGE_H */
+#endif /* BTPAGE_PAGE_H */

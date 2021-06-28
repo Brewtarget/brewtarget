@@ -17,11 +17,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "PageTable.h"
-#include "BtPage.h"
+#include "Page.h"
 #include <QTextOption>
-namespace nBtPage
+namespace BtPage
 {
-   PageTable::PageTable(BtPage *parent, PageText *th, QList<QStringList> td, QFont tableDataFont, QFont *columnHeaderFont, QPoint pos, QRect rect)
+   PageTable::PageTable(Page *parent, PageText *th, QList<QStringList> td, QFont tableDataFont, QFont *columnHeaderFont, QPoint pos, QRect rect)
    {
       this->parent = parent;
       setPosition(pos);
@@ -101,7 +101,7 @@ namespace nBtPage
       calculateBoundingBox();
    }
 
-   PageTable::PageTable(BtPage *parent, QString title, QList<QStringList> tabledata, QPoint pos, QRect rect) : PageTable(
+   PageTable::PageTable(Page *parent, QString title, QList<QStringList> tabledata, QPoint pos, QRect rect) : PageTable(
                                                                                                    parent,
                                                                                                    //Create the Table header for the document
                                                                                                    new PageText{

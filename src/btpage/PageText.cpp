@@ -1,5 +1,5 @@
 /*
- * PageText.h is part of Brewtarget, and is Copyright the following
+ * PageText.cpp is part of Brewtarget, and is Copyright the following
  * authors 2021
  * - Mattias Måhl <mattias@kejsarsten.com>
  *
@@ -18,11 +18,11 @@
  */
 
 #include "PageText.h"
-#include "BtPage.h"
-namespace nBtPage
+#include "Page.h"
+namespace BtPage
 {
 
-   PageText::PageText(BtPage *parent, QString value, QFont font)
+   PageText::PageText(Page *parent, QString value, QFont font)
    {
       this->parent = parent;
       Value = value;

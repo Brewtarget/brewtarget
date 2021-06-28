@@ -21,9 +21,9 @@
 #include <QPagedPaintDevice>
 #include <QRectF>
 #include <QMargins>
-#include "BtPage.h"
+#include "Page.h"
 
-namespace nBtPage
+namespace BtPage
 {
    void PageChildObject::setBoundingBox(QRect rect)
    {

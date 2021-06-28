@@ -1,5 +1,5 @@
 /*
- * BtPage.cpp is part of Brewtarget, and is Copyright the following
+ * Page.cpp is part of Brewtarget, and is Copyright the following
  * authors 2021
  * - Mattias Måhl <mattias@kejsarsten.com>
  *
@@ -17,26 +17,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "BtPage.h"
-namespace nBtPage
+#include "Page.h"
+namespace BtPage
 {
 
-   BtPage::BtPage(QPrinter *printer) :
+   Page::Page(QPrinter *printer) :
       painter(printer)
    {
       this->printer = printer;
    }
 
-   void BtPage::renderPage()
+   void Page::renderPage()
    {
-      foreach (PageChildObject *child, _children)
+      foreach (PageChildObject *item, items)
       {
-         child->render(&painter);
-         if ( child->needPageBrake ) {
+         item->render(&painter);
+         if ( item->needPageBrake ) {
             //We're obviously dealing with a large text, let's create a new page and continue rendering the text.
             //Allthough this solution is only looking one level down! may need revising to handle an arbatrary number of new pages for VERY long notes as an example.
             printer->newPage();
-            child->nextSection->render( &painter );
+            item->nextSection->render( &painter );
          }
       }
       painter.end();

@@ -17,15 +17,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _PAGEBREAK_H
-#define _PAGEBREAK_H
+#ifndef BTPAGE_PAGEBREAK_H
+#define BTPAGE_PAGEBREAK_H
 #include "PageChildObject.h"
 
 
 
-namespace nBtPage
+namespace BtPage
 {
-   class BtPage;
+   class Page;
    /**
     * @brief class to handle adding in extra pagebrakes in the generation of prinouts
     *
@@ -38,7 +38,7 @@ namespace nBtPage
        *
        * @param parent
        */
-      PageBreak(BtPage *parent) {
+      PageBreak(Page *parent) {
          this->parent = parent;
       }
 
@@ -54,4 +54,4 @@ namespace nBtPage
    };
 }
 
-#endif /* _PAGEBREAK_H */
+#endif /* BTPAGE_PAGEBREAK_H */

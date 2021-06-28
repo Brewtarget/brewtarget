@@ -25,7 +25,7 @@
 #include <QPrinterInfo>
 #include <QList>
 #include <QSizePolicy>
-#include "btpage/BtPage.h"
+#include "btpage/Page.h"
 
 PrintAndPreviewDialog::PrintAndPreviewDialog ( MainWindow *parent)
    : QDialog(parent)
@@ -323,9 +323,9 @@ void PrintAndPreviewDialog::printDocument(QPrinter * printer)
    if ( _parent->currentRecipe() == nullptr)
       return;
    recipeFormatter->setRecipe(_parent->currentRecipe());
-   using namespace nBtPage;
+   using namespace BtPage;
    //Setting up a blank page for drawing.
-   BtPage page(printer);
+   Page page(printer);
    /*
    all of the below code to generate the printout will be subject to change and refactoring when I get around to
    making the template editor for printouts where you can save your templates and use them or share them
@@ -350,11 +350,11 @@ void PrintAndPreviewDialog::printDocument(QPrinter * printer)
 /**
  * @brief Reders the Recipe data onto the page object.
  * @author Mattias Måhl
- * @param page BtPage object to render content to.
+ * @param page Page object to render content to.
  */
-void PrintAndPreviewDialog::renderRecipe(nBtPage::BtPage &page)
+void PrintAndPreviewDialog::renderRecipe(BtPage::Page &page)
 {
-   using namespace nBtPage;
+   using namespace BtPage;
 
    //Statistics table with beer data.
    PageTable *statTable = page.addChildObject(
@@ -374,7 +374,7 @@ void PrintAndPreviewDialog::renderRecipe(nBtPage::BtPage &page)
          QString(tr("Fermentables")),
          recipeFormatter->buildFermentableList()
       ));
-   page.placeRelationalToMM(fermTable, statTable, PlacingFlags::BELOW, 0, 5);
+   page.placeRelationalToMM(fermTable, statTable, BtPage::BELOW, 0, 5);
 
    // Create the HopsTable
    PageTable *hopsTable = page.addChildObject(
@@ -384,7 +384,7 @@ void PrintAndPreviewDialog::renderRecipe(nBtPage::BtPage &page)
          recipeFormatter->buildHopsList()
       ));
    hopsTable->setColumnAlignment(1, Qt::AlignRight);
-   page.placeRelationalToMM(hopsTable, fermTable, PlacingFlags::BELOW, 0, 5);
+   page.placeRelationalToMM(hopsTable, fermTable, BtPage::BELOW, 0, 5);
 
    // Create the MiscTable
    PageTable *miscTable = page.addChildObject(
@@ -393,7 +393,7 @@ void PrintAndPreviewDialog::renderRecipe(nBtPage::BtPage &page)
          QString(tr("Misc")),
          recipeFormatter->buildMiscList()
       ));
-   page.placeRelationalToMM(miscTable, hopsTable, PlacingFlags::BELOW, 0, 5);
+   page.placeRelationalToMM(miscTable, hopsTable, BtPage::BELOW, 0, 5);
 
    // Create the Yeast Table
    PageTable *yeastTable = page.addChildObject(
@@ -402,7 +402,7 @@ void PrintAndPreviewDialog::renderRecipe(nBtPage::BtPage &page)
          QString(tr("Yeast")),
          recipeFormatter->buildYeastList()
       ));
-   page.placeRelationalToMM(yeastTable, miscTable, PlacingFlags::BELOW, 0, 5);
+   page.placeRelationalToMM(yeastTable, miscTable, BtPage::BELOW, 0, 5);
 
    PageTable *mashTable = page.addChildObject(
       new PageTable (
@@ -410,7 +410,7 @@ void PrintAndPreviewDialog::renderRecipe(nBtPage::BtPage &page)
          QString(tr("Mash")),
          recipeFormatter->buildMashList()
       ));
-   page.placeRelationalToMM(mashTable, yeastTable, PlacingFlags::BELOW, 0, 5);
+   page.placeRelationalToMM(mashTable, yeastTable, BtPage::BELOW, 0, 5);
 
    PageText *notesHeader = page.addChildObject(
       new PageText (
@@ -418,7 +418,7 @@ void PrintAndPreviewDialog::renderRecipe(nBtPage::BtPage &page)
          QString(tr("Notes")),
          QFont("Arial", 12, QFont::Bold)
       ));
-   page.placeRelationalToMM(notesHeader, mashTable, PlacingFlags::BELOW, 0, 5);
+   page.placeRelationalToMM(notesHeader, mashTable, BtPage::BELOW, 0, 5);
 
    PageText *notesText = page.addChildObject(
       new PageText (
@@ -426,7 +426,7 @@ void PrintAndPreviewDialog::renderRecipe(nBtPage::BtPage &page)
          recipeFormatter->buildNotesString(),
          QFont("Arial", 10)
       ));
-   page.placeRelationalToMM(notesText, notesHeader, PlacingFlags::BELOW);
+   page.placeRelationalToMM(notesText, notesHeader, BtPage::BELOW);
 
    PageText *tasteNotesHeader = page.addChildObject(
       new PageText (
@@ -434,7 +434,7 @@ void PrintAndPreviewDialog::renderRecipe(nBtPage::BtPage &page)
          QString(tr("Taste notes")),
          QFont("Arial", 12, QFont::Bold)
       ));
-   page.placeRelationalToMM(tasteNotesHeader, notesText, PlacingFlags::BELOW, 0, 5);
+   page.placeRelationalToMM(tasteNotesHeader, notesText, BtPage::BELOW, 0, 5);
 
    PageText *tasteNotesHeaderText = page.addChildObject(
       new PageText (
@@ -442,18 +442,18 @@ void PrintAndPreviewDialog::renderRecipe(nBtPage::BtPage &page)
          recipeFormatter->buildTasteNotesString(),
          QFont("Arial", 10)
       ));
-   page.placeRelationalToMM(tasteNotesHeaderText, tasteNotesHeader, PlacingFlags::BELOW);
+   page.placeRelationalToMM(tasteNotesHeaderText, tasteNotesHeader, BtPage::BELOW);
 }
 
 /**
  * @brief Renders the instructions for the recipe on the page supplied in arguments.
  * @author Mattias Måhl
- * @param page BtPage object to render content to.
+ * @param page Page object to render content to.
  */
-void PrintAndPreviewDialog::renderBrewdayInstructions(nBtPage::BtPage &page)
+void PrintAndPreviewDialog::renderBrewdayInstructions(BtPage::Page &page)
 {
    brewDayFormatter->setRecipe(_parent->currentRecipe());
-   using namespace nBtPage;
+   using namespace BtPage;
    PageTable *statsTable = page.addChildObject(new PageTable (
       &page,
       _parent->currentRecipe()->name(),
@@ -466,18 +466,17 @@ void PrintAndPreviewDialog::renderBrewdayInstructions(nBtPage::BtPage &page)
       QString("Instructions"),
       brewDayFormatter->buildInstructionList()
    ));
-   page.placeRelationalToMM(instructionsTable, statsTable, PlacingFlags::BELOW, 0, 5);
-
+   page.placeRelationalToMM(instructionsTable, statsTable, BtPage::BELOW, 0, 5);
 }
 
 /**
  * @brief Reders the Recipe data onto the page object.
  * @author Mattias Måhl
- * @param page BtPage object to render content to.
+ * @param page Page object to render content to.
  */
-void PrintAndPreviewDialog::renderHeader(nBtPage::BtPage &page)
+void PrintAndPreviewDialog::renderHeader(BtPage::Page &page)
 {
-   using namespace nBtPage;
+   using namespace BtPage;
    // adding the Recipe name as a title.
    PageText *recipeText = page.addChildObject(
       new PageText (
@@ -494,7 +493,7 @@ void PrintAndPreviewDialog::renderHeader(nBtPage::BtPage &page)
          _parent->currentRecipe()->brewer(),
          QFont("Arial", 10)
       ));
-   page.placeRelationalToMM(brewerText, recipeText, PlacingFlags::BELOW, 2, 0);
+   page.placeRelationalToMM(brewerText, recipeText, BtPage::BELOW, 2, 0);
 
    //Adding the Brewtarget logo.
    PageImage *img = page.addChildObject(
@@ -504,5 +503,5 @@ void PrintAndPreviewDialog::renderHeader(nBtPage::BtPage &page)
          QImage(":/images/title.svg")
       ));
    img->setImageSizeMM(100, 20);
-   page.placeOnPage(img, PlacingFlags::TOP | PlacingFlags::RIGHT);
+   page.placeOnPage(img, BtPage::TOP | BtPage::RIGHT);
 }

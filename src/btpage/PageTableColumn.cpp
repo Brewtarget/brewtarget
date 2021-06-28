@@ -18,7 +18,7 @@
  */
 
 #include "PageTableColumn.h"
-namespace nBtPage
+namespace BtPage
 {
    void PageTableColumn::setAlignment(Qt::AlignmentFlag a)
    {
