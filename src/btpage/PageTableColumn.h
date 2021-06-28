@@ -16,16 +16,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef _PAGETABLECOLUMN_H
-#define _PAGETABLECOLUMN_H
+#ifndef BTPAGE_PAGETABLECOLUMN_H
+#define BTPAGE_PAGETABLECOLUMN_H
 #include <QString>
 #include <QFont>
 #include "PageText.h"
 #include "PageTableStyle.h"
 
-namespace nBtPage
+namespace BtPage
 {
-   class BtPage;
+   class Page;
 
    class PageTableColumn
    {
@@ -36,4 +36,4 @@ namespace nBtPage
       void setAlignment(Qt::AlignmentFlag a);
    };
 }
-#endif /* _PAGETABLECOLUMN_H */
+#endif /* BTPAGE_PAGETABLECOLUMN_H */

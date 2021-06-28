@@ -17,9 +17,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "PageBreak.h"
-#include "BtPage.h"
+#include "Page.h"
 
-namespace nBtPage
+namespace BtPage
 {
    /**
     * @brief adds a new page to the printer.

@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef _PAGETABLE_H
-#define _PAGETABLE_H
+#ifndef BTPAGE_PAGETABLE_H
+#define BTPAGE_PAGETABLE_H
 
 #include "PageChildObject.h"
 #include "PageText.h"
@@ -28,9 +28,9 @@
 #include <QList>
 #include <QPainter>
 
-namespace nBtPage
+namespace BtPage
 {
-   class BtPage;
+   class Page;
    /* \!brief
    * class PageTable
    * This is meant to represent a table to render/print onto a Paper or PDF.
@@ -50,7 +50,7 @@ namespace nBtPage
        * @param pos Location for the table on the page
        * @param rect QRect bounding box for the table, if set it will override the automatic sizing of the table.
        */
-      PageTable(BtPage *parent, PageText *th, QList<QStringList> td, QFont tableDataFont, QFont *columnHeaderFont = nullptr, QPoint pos = QPoint(), QRect rect = QRect());
+      PageTable(Page *parent, PageText *th, QList<QStringList> td, QFont tableDataFont, QFont *columnHeaderFont = nullptr, QPoint pos = QPoint(), QRect rect = QRect());
 
       /**
        * @brief Constuctor PageTable
@@ -61,7 +61,7 @@ namespace nBtPage
        * @param pos Position of the table on the printout
        * @param rect Bounding box for the table, this overrides the automatic sizing of the table.
        */
-      PageTable(BtPage *parent, QString title, QList<QStringList> tabledata, QPoint pos = QPoint(), QRect rect = QRect());
+      PageTable(Page *parent, QString title, QList<QStringList> tabledata, QPoint pos = QPoint(), QRect rect = QRect());
 
       PageText *tableHeader;
       QList<PageTableColumn *> columnHeaders;
@@ -122,4 +122,4 @@ namespace nBtPage
       int tableWidth = -1;
    };
 }
-#endif /* _PAGETABLE_H */
+#endif /* BTPAGE_PAGETABLE_H */

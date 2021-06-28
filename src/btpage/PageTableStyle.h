@@ -19,9 +19,9 @@
 #include <QColor>
 #include <QBrush>
 
-#ifndef _PAGETABLESTYLE_H
-#define _PAGETABLESTYLE_H
-namespace nBtPage
+#ifndef BTPAGE_PAGETABLESTYLE_H
+#define BTPAGE_PAGETABLESTYLE_H
+namespace BtPage
 {
    /**
     * @brief This is a Data class for suppyling the PageTable with styling options when rendering.
@@ -57,4 +57,4 @@ namespace nBtPage
       FillRectOptions *fillRectOptions;
    };
 }
-#endif /* _PAGETABLESTYLE_H */
+#endif /* BTPAGE_PAGETABLESTYLE_H */

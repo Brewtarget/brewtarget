@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef _PAGETEXT_H
-#define _PAGETEXT_H
+#ifndef BTPAGE_PAGETEXT_H
+#define BTPAGE_PAGETEXT_H
 #include "PageChildObject.h"
 #include <QPainter>
 #include <QString>
@@ -26,7 +26,7 @@
 #include <QFont>
 #include <QDebug>
 
-namespace nBtPage
+namespace BtPage
 {
    /* \!brief
    * class PageText
@@ -38,7 +38,7 @@ namespace nBtPage
    {
 
    public:
-      PageText(BtPage *parent, QString value, QFont font);
+      PageText(Page *parent, QString value, QFont font);
       QString Value;
       QTextOption Options;
 
@@ -50,4 +50,4 @@ namespace nBtPage
       void calculateBoundingBox( double scalex = 0.0, double scaley = 0.0 );
    };
 }
-#endif /* _PAGETEXT_H */
+#endif /* BTPAGE_PAGETEXT_H */

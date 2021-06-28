@@ -16,27 +16,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef _PAGEIMAGE_H
-#define _PAGEIMAGE_H
+#ifndef BTPAGE_PAGEIMAGE_H
+#define BTPAGE_PAGEIMAGE_H
 #include <QImage>
 #include <QPainter>
 #include <QRect>
 #include <QPoint>
-#include "BtPage.h"
+#include "Page.h"
 #include "PageChildObject.h"
 
-namespace nBtPage
+namespace BtPage
 {
    /* \!brief
  * Class PageImage
- * Class to handle image printout on the BtPage object.
+ * Class to handle image printout on the Page object.
  */
    class PageImage
       : public PageChildObject
    {
    public:
       PageImage(){};
-      PageImage(BtPage *parent, QPoint pos, QImage image)
+      PageImage(Page *parent, QPoint pos, QImage image)
       {
          this->parent = parent;
          setPosition(pos);
@@ -62,4 +62,4 @@ namespace nBtPage
       int _width = -1, _height = -1;
    };
 }
-#endif /* _PAGEIMAGE */
+#endif /* BTPAGE_PAGEIMAGE */

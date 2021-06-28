@@ -87,7 +87,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/BtTreeItem.cpp
     ${SRCDIR}/BtTreeModel.cpp
     ${SRCDIR}/BtTreeView.cpp
-    ${SRCDIR}/btpage/BtPage.cpp
+    ${SRCDIR}/btpage/Page.cpp
     ${SRCDIR}/btpage/PageBreak.cpp
     ${SRCDIR}/btpage/PageChildObject.cpp
     ${SRCDIR}/btpage/PageImage.cpp
@@ -352,12 +352,14 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/YeastEditor.h
     ${SRCDIR}/YeastSortFilterProxyModel.h
     ${SRCDIR}/YeastTableModel.h
-    ${SRCDIR}/btpage/BtPage.h
+    ${SRCDIR}/btpage/BtEnumFlags.h
+    ${SRCDIR}/btpage/Page.h
     ${SRCDIR}/btpage/PageBreak.h
     ${SRCDIR}/btpage/PageChildObject.h
     ${SRCDIR}/btpage/PageImage.h
     ${SRCDIR}/btpage/PageTable.h
     ${SRCDIR}/btpage/PageTableColumn.h
+    ${SRCDIR}/btpage/PageTableStyle.h
     ${SRCDIR}/btpage/PageText.h
 )
 

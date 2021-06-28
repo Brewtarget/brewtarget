@@ -1,5 +1,5 @@
 /*
- * BtPage.h is part of Brewtarget, and is Copyright the following
+ * BtEnumFlags.h is part of Brewtarget, and is Copyright the following
  * authors 2021
  * - Mattias Måhl <mattias@kejsarsten.com>
  *
@@ -16,47 +16,68 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef _BTENUMFLAGS_H
-#define _BTENUMFLAGS_H
+#ifndef BTENUMFLAGS_H
+#define BTENUMFLAGS_H
 
-namespace nBtPage
+namespace BtPage
 {
    /**
-    * @brief These flags are used for placing objects on BtPage either relational to
-    * other objects or to the page it self.
+    * @brief These flags are used for placing objects on Page relational to
+    * other objects.
     * I use the bitshift method below as it more clearly shows the order of the flags and easier to see if one was missed. :)
     *
     * As these flags will be used with the | operator we can never have overlapping bits in their values
     * i.e. (1<<1) to give me an integer value of 2.
     * bitmasks and actual values are commented below on each value.
     */
-   enum struct PlacingFlags
+   enum RelationalPlacingFlags
    {
-      NOTUSED      = 0,
-      /* These four are used with BtPage::placeRelationalto(..) and BtPage::placeRelationalToMM(..) functions */
-      BELOW        = (1<<0), //00000000 00000000 00000000 00000001 (1)
-      ABOVE        = (1<<1), //00000000 00000000 00000000 00000010 (2)
-      RIGHTOF      = (1<<2), //00000000 00000000 00000000 00000100 (4)
-      LEFTOF       = (1<<3), //00000000 00000000 00000000 00001000 (8)
-      /* These six are used with BtPage::placeOnPage(...) function */
-      LEFT         = (1<<4), //00000000 00000000 00000000 00010000 (16)
-      RIGHT        = (1<<5), //00000000 00000000 00000000 00100000 (32)
-      TOP          = (1<<6), //00000000 00000000 00000000 01000000 (64)
-      BOTTOM       = (1<<7), //00000000 00000000 00000000 10000000 (128)
-      VCENTER      = (1<<8), //00000000 00000000 00000001 00000000 (256)
-      HCENTER      = (1<<9)  //00000000 00000000 00000010 00000000 (512)
+      /* These four are used with Page::placeRelationalto(..) and Page::placeRelationalToMM(..) functions */
+      BELOW        = 1, // (1<<0) = 1! 00000000 00000000 00000000 00000001 (1)
+      ABOVE        = (1<<1),         //00000000 00000000 00000000 00000010 (2)
+      RIGHTOF      = (1<<2),         //00000000 00000000 00000000 00000100 (4)
+      LEFTOF       = (1<<3),         //00000000 00000000 00000000 00001000 (8)
    };
 
-   inline PlacingFlags operator|(PlacingFlags a, PlacingFlags b)
+   inline RelationalPlacingFlags operator|(RelationalPlacingFlags a, RelationalPlacingFlags b)
    {
-      return static_cast<PlacingFlags>(static_cast<int>(a) | static_cast<int>(b));
+      return static_cast<RelationalPlacingFlags>(static_cast<int>(a) | static_cast<int>(b));
    }
 
-   inline bool operator&(PlacingFlags a, PlacingFlags b)
+   inline bool operator&(RelationalPlacingFlags a, RelationalPlacingFlags b)
+   {
+      return (static_cast<int>(a) & static_cast<int>(b));
+   }
+
+   /**
+    * @brief These flags are used for placing objects on Page, these are the fixed positions to the page it self.
+    * I use the bitshift method below as it more clearly shows the order of the flags and easier to see if one was missed. :)
+    *
+    * As these flags will be used with the | operator we can never have overlapping bits in their values
+    * i.e. (1<<1) to give me an integer value of 2.
+    * bitmasks and actual values are commented below on each value.
+    */
+   enum FixedPlacingFlags
+   {
+      /* These six are used with Page::placeOnPage(...) function */
+      LEFT         = 1,      // (1<<0) = 1, 00000000 00000000 00000000 00010000 (16)
+      RIGHT        = (1<<1),              //00000000 00000000 00000000 00100000 (32)
+      TOP          = (1<<2),              //00000000 00000000 00000000 01000000 (64)
+      BOTTOM       = (1<<3),              //00000000 00000000 00000000 10000000 (128)
+      VCENTER      = (1<<4),              //00000000 00000000 00000001 00000000 (256)
+      HCENTER      = (1<<5)               //00000000 00000000 00000010 00000000 (512)
+   };
+
+   inline FixedPlacingFlags operator|(FixedPlacingFlags a, FixedPlacingFlags b)
+   {
+      return static_cast<FixedPlacingFlags>(static_cast<int>(a) | static_cast<int>(b));
+   }
+
+   inline bool operator&(FixedPlacingFlags a, FixedPlacingFlags b)
    {
       return (static_cast<int>(a) & static_cast<int>(b));
    }
 }
 
 
-#endif /* _BTENUMFLAGS_H */
+#endif /* BTENUMFLAGS_H */

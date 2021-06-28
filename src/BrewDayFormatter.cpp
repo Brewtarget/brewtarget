@@ -132,7 +132,7 @@ QString BrewDayFormatter::buildTitleHTML(bool includeImage)
 }
 
 /**
- * @brief Creates and returns a list of StringList rows with data to be used in BtPage.
+ * @brief Creates and returns a list of StringList rows with data to be used in Page.
  * @author Mattias Måhl
  *
  * @param includeImage
