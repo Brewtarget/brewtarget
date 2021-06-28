@@ -68,7 +68,7 @@
                <enum>QTabWidget::West</enum>
               </property>
               <property name="currentIndex">
-               <number>0</number>
+               <number>1</number>
               </property>
               <widget class="QWidget" name="printAndPreviewTabRecipe">
                <attribute name="title">
@@ -153,7 +153,60 @@
                <attribute name="title">
                 <string>Inventory</string>
                </attribute>
-               <layout class="QVBoxLayout" name="verticalLayout_7"/>
+               <layout class="QVBoxLayout" name="verticalLayout_7">
+                <item>
+                 <layout class="QVBoxLayout" name="verticalLayout_9">
+                  <item>
+                   <widget class="QCheckBox" name="checkBox_inventoryAll">
+                    <property name="text">
+                     <string>All</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QCheckBox" name="checkBox_inventoryFermentables">
+                    <property name="text">
+                     <string>Fermentables</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QCheckBox" name="checkBox_inventoryHops">
+                    <property name="text">
+                     <string>Hops</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QCheckBox" name="checkBox_inventoryMicellaneous">
+                    <property name="text">
+                     <string>Micelleneous</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QCheckBox" name="checkBox_inventoryYeast">
+                    <property name="text">
+                     <string>Yeast</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <spacer name="verticalSpacer_2">
+                    <property name="orientation">
+                     <enum>Qt::Vertical</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>20</width>
+                      <height>40</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
               </widget>
              </widget>
             </item>

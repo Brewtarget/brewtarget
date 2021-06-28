@@ -43,7 +43,7 @@ namespace BtPage
       Page *parent;
       //poor mans singularly linked list for outputting to multiple pages.
       PageChildObject *nextSection = nullptr;
-      bool needPageBrake = false;
+      bool needPageBreak = false;
 
       void setBoundingBox(QRect rect);
       void setBoundingBox(int x, int y, int width, int height);
