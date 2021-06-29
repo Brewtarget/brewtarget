@@ -89,7 +89,7 @@ namespace BtPage
          qDebug() << Q_FUNC_INFO << "nextSectionText: " << nextSectionText;
          //setting this flag to tell the rendering method that the data is splitted.
          //If this is set to true the pointer to the next section will be called when rendering the pages.
-         needPageBrake = true;
+         needPageBreak = true;
          //Create the next section of the text.
          //this will most often happen when there are long notes or brewing instructions.
          PageText *tnextSection = new PageText(parent, nextSectionText, Font);
@@ -106,8 +106,8 @@ namespace BtPage
          Value = currentRow;
          qDebug() << Q_FUNC_INFO << "Value after split: " << Value;
       }
-      if (needPageBrake) qDebug() << Q_FUNC_INFO << "NeedPageBrake == true :: ri = " << ri;
-      _boundingBox = ri;
+      if (needPageBreak) qDebug() << Q_FUNC_INFO << "NeedPageBrake == true :: ri = " << ri;
+      itemBoundingBox = ri;
       moveBoundingBox(position());
    }
 }

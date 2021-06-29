@@ -847,9 +847,9 @@ QString RecipeFormatter::buildStatTableTxt()
 }
 
 /**
- * @brief
- * RecipeFormatter::buildStatList()
+ * @brief RecipeFormatter::buildStatList()
  * This will return a List of strings where the first row is the headers for each column.
+ * @author Mattias Måhl <mattias@kejsarsten.com>
  * @return QList<QStringList> of Stats for the recipe.
 */
 QList<QStringList> RecipeFormatter::buildStatList()
@@ -1009,9 +1009,9 @@ QString RecipeFormatter::buildFermentableTableTxt()
 }
 
 /**
- * @brief
- * RecipeFormatter::buildFermentableList()
+ * @brief RecipeFormatter::buildFermentableList()
  * This will return a List of strings where the first row is the headers for each column.
+ * @author Mattias Måhl <mattias@kejsarsten.com>
  * @return QList<QStringList> of Fermentables.
 */
 QList<QStringList> RecipeFormatter::buildFermentableList()
@@ -1155,9 +1155,9 @@ QString RecipeFormatter::buildHopsTableTxt()
 }
 
 /**
- * @brief
- * RecipeFormatter::buildHopsList()
+ * @brief RecipeFormatter::buildHopsList()
  * This will return a List of strings where the first row is the headers for each column.
+ * @author Mattias Måhl <mattias@kejsarsten.com>
  * @return QList<QStringList> of Hops.
 */
 QList<QStringList> RecipeFormatter::buildHopsList()
@@ -1285,9 +1285,9 @@ QString RecipeFormatter::buildMiscTableTxt()
 }
 
 /**
- * @brief
- * buildMiscList
+ * @brief buildMiscList
  * collects all the miscs from the recipe an returns a list.
+ * @author Mattias Måhl <mattias@kejsarsten.com>
  * @return QList<QStringList>
  */
 QList<QStringList> RecipeFormatter::buildMiscList()
@@ -1413,9 +1413,9 @@ QString RecipeFormatter::buildYeastTableTxt()
 }
 
 /**
- * @brief
- * buildYeastList
+ * @brief buildYeastList
  * collects all the yeasts from the recipe an returns a list.
+ * @author Mattias Måhl <mattias@kejsarsten.com>
  * @return QList<QStringList>
  */
 QList<QStringList> RecipeFormatter::buildYeastList()
@@ -1583,9 +1583,9 @@ QString RecipeFormatter::buildMashTableTxt()
 }
 
 /**
- * @brief
- * buildMashList
+ * @brief buildMashList
  * collects all the mashsteps from the recipe an returns a list.
+ * @author Mattias Måhl <mattias@kejsarsten.com>
  * @return QList<QStringList>
  */
 QList<QStringList> RecipeFormatter::buildMashList()
@@ -1662,7 +1662,7 @@ QString RecipeFormatter::buildNotesHtml()
  * @brief
  * buildNotesString
  * Returns the notes for the recipe as a continous string.
- *
+ * @author Mattias Måhl <mattias@kejsarsten.com>
  * @return QString
  */
 QString RecipeFormatter::buildNotesString()

@@ -20,7 +20,7 @@
 #define PRINTANDPREVIEWDIALOG_H
 
 #include <QDialog>
-#include "ui_BTPrintAndPreview.h"
+#include "ui_BtPrintAndPreview.h"
 #include <QPrintPreviewWidget>
 #include <QPrinter>
 #include <QWidget>
@@ -101,7 +101,7 @@ private:
     * @brief collects all available papersizes for the selected printer and stores them into the Paper size selector Combobox.
     *
     */
-   void CollectSupportedPageSizes();
+   void collectSupportedPageSizes();
 
    /**
     * @brief collects the selected recipe from the Mainwindow.
@@ -142,9 +142,9 @@ private:
     */
    void renderHeader(BtPage::Page &page);
 
-   MainWindow *_parent;
+   MainWindow *mainWindow;
    Recipe *selectedRecipe;
-   QPrinter * _printer = nullptr;
+   QPrinter * printer = nullptr;
    QMap<QString, QPageSize> PageSizeMap;
    QTextBrowser *htmlDocument;
 

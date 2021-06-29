@@ -64,7 +64,7 @@ namespace BtPage
 
    void PageImage::render(QPainter *painter)
    {
-      painter->drawImage(_position, _image);
+      painter->drawImage(itemPosition, _image);
    }
 
    QSize PageImage::getSize()
