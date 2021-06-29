@@ -47,9 +47,10 @@ namespace BtPage
          tableHeight += fm_colHeaders.height();
          foreach (QString st, td.takeFirst())
          {
+            int fm_width = getFontHorizontalAdvance(fm_colHeaders, st);
             columnHeaders.append(new PageTableColumn {
                   //set the initial Column width to the fonts horizontal advance as a startingpoint for calculating column widths below.
-                  fm_colHeaders.horizontalAdvance(st),
+                  fm_width,
                   PageText
                      (
                         parent,
@@ -61,7 +62,7 @@ namespace BtPage
       else
       {
          tableHeader->Value = QString("No %1 in this Recipe").arg(tableHeader->Value.toLower());
-         tableWidth = (int)qMax(fm_tableheader.horizontalAdvance(tableHeader->Value)*1.05, (double)tableWidth);
+         tableWidth = (int)qMax(getFontHorizontalAdvance(fm_tableheader, tableHeader->Value)*1.05, (double)tableWidth);
          columnHeaders = QList<PageTableColumn *>();
       }
 
@@ -80,7 +81,7 @@ namespace BtPage
 
          for (int col = 0; col < row.count(); col++)
          {
-            columnHeaders.at(col)->ColumnWidth = (columnHeaders.at(col)->ColumnWidth < fm.horizontalAdvance(row.at(col))) ? fm.horizontalAdvance(row.at(col)) : columnHeaders.at(col)->ColumnWidth;
+            columnHeaders.at(col)->ColumnWidth = (columnHeaders.at(col)->ColumnWidth < getFontHorizontalAdvance(fm, row.at(col))) ? getFontHorizontalAdvance(fm, row.at(col)) : columnHeaders.at(col)->ColumnWidth;
             current_row.append(PageText{
                parent,
                row.at(col),
@@ -97,7 +98,7 @@ namespace BtPage
       {
          tableWidth += col->ColumnWidth + columnPadding;
       }
-      tableWidth = (int)qMax(fm_tableheader.horizontalAdvance(tableHeader->Value)*1.05, (double)tableWidth);
+      tableWidth = (int)qMax(getFontHorizontalAdvance(fm_tableheader, tableHeader->Value)*1.05, (double)tableWidth);
       calculateBoundingBox();
    }
 

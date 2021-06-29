@@ -49,8 +49,6 @@ class RecipeFormatter : public QObject
    friend class PrintAndPreviewDialog;
 public:
 
-   enum { PRINT, PREVIEW, HTML, NUMACTIONS };
-
    RecipeFormatter(QObject* parent=nullptr);
    ~RecipeFormatter();
    //! Set the recipe to view.
@@ -81,9 +79,6 @@ public:
    void padAllToMaxLength( QStringList* list, unsigned int padding=2 );
    //! Return the text wrapped with the given length
    QString wrapText( const QString &text, int wrapLength );
-
-   //! Send a printable version to the printer.
-   void print(QPrinter *mainPrinter, int action = PRINT, QFile* outFile=nullptr);
 
 public slots:
    //! Put the plaintext view onto the clipboard.
@@ -133,13 +128,6 @@ private:
 
    QString* textSeparator;
    Recipe* rec;
-
-   QPrinter* printer;
-   QTextBrowser* doc;
-   QDialog* docDialog;
-
-private slots:
-   bool loadComplete(bool ok);
 };
 
 #endif /*RECIPE_FORMATTER_H*/

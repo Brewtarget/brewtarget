@@ -44,7 +44,7 @@ namespace BtPage
    QSize PageText::getSize()
    {
       QFontMetrics fm(Font);
-      return QSize(fm.horizontalAdvance(Value), fm.height());
+      return QSize(getFontHorizontalAdvance(fm, Value), fm.height());
    }
 
    void PageText::calculateBoundingBox( double scalex, double scaley)
@@ -52,7 +52,7 @@ namespace BtPage
       int tW, w, pageLogicalWidth;
       QRect pagePaintRect, ri;
       QFontMetrics fm(Font, parent->printer);
-      tW = fm.horizontalAdvance(Value);
+      tW = getFontHorizontalAdvance(fm, Value);
       pagePaintRect = parent->printer->pageLayout().paintRectPixels(parent->printer->logicalDpiX());
       pageLogicalWidth = pagePaintRect.width();
 

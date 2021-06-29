@@ -48,23 +48,6 @@ RecipeFormatter::RecipeFormatter(QObject* parent)
 {
    textSeparator = nullptr;
    rec = nullptr;
-
-   //===Construct a print-preview dialog.===
-   docDialog = new QDialog(Brewtarget::mainWindow());
-   docDialog->setWindowTitle("Print Preview");
-   if( docDialog->layout() == nullptr )
-      docDialog->setLayout(new QVBoxLayout);
-   doc = new QTextBrowser(docDialog);
-   docDialog->layout()->addWidget(doc);
-   /*
-   // Add a print button at the bottom.
-   QHBoxLayout* buttonBox = new QHBoxLayout(docDialog);
-   QPushButton* print = new QPushButton(QObject::tr("Print"), docDialog);
-   connect(print, SLOT(clicked()), Brewtarget::mainWindow, SLOT(printRecipe()));
-   buttonBox->addStretch();
-   buttonBox->addWidget(print);
-   docDialog->layout()->addItem(buttonBox);
-   */
 }
 
 RecipeFormatter::~RecipeFormatter()
@@ -1903,39 +1886,6 @@ QString RecipeFormatter::getLabelToolTip() {
    body += "</table></body></html>";
 
    return header + body;
-}
-
-bool RecipeFormatter::loadComplete(bool ok)
-{
-   doc->print(printer);
-   return ok;
-}
-
-void RecipeFormatter::print(QPrinter* mainPrinter,
-      int action, QFile* outFile)
-{
-   if( rec == nullptr )
-      return;
-
-   // Short cut if we are saving to HTML
-   if ( action == HTML )
-   {
-      QTextStream out(outFile);
-      out << getHTMLFormat();
-      outFile->close();
-      return;
-   }
-   // We are printing hard copy
-   if ( action == PRINT )
-   {
-      printer = mainPrinter;
-      doc->setHtml(getHTMLFormat());
-      loadComplete(true);
-   }
-
-   doc->setHtml(getHTMLFormat());
-   if ( action == PREVIEW )
-      docDialog->show();
 }
 
 QList<Hop*> RecipeFormatter::sortHopsByTime(Recipe* rec)

@@ -243,7 +243,6 @@ public slots:
    void deleteSelected();
    void copySelected();
    void exportSelected();
-   void exportSelectedHtml();
 
    //! \brief Backup the database.
    void backup();
@@ -252,21 +251,6 @@ public slots:
 
    //! \brief makes sure we can do water chemistry before we show the window
    void popChemistry();
-   /*!
-    * \brief Prints a document.
-    *
-    * Asks the user to select a printer and then calls the @p functor with the
-    * selected printer.
-    */
-   void print(std::function<void(QPrinter* printer)> functor);
-
-   /*!
-    * \brief Exports a HTML document.
-    *
-    * Asks the user to select a file and then calls the @p functor with the
-    * selected file.
-    */
-   void exportHTML(std::function<void(QFile* file)> functor);
 
    //! \brief draws a context menu, the exact nature of which depends on which
    //tree is focused

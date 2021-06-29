@@ -46,11 +46,36 @@ namespace BtPage
       moveBoundingBox(point);
    }
 
+   /**
+    * @brief Sets the position of the object on the page. messurements in millimeter.
+    *
+    * @param x
+    * @param y
+    */
    void PageChildObject::setPositionMM(int x, int y)
    {
       //Convert MM to pixel on the page.
       x *= (parent->printer->logicalDpiX() / 25.4);
       y *= (parent->printer->logicalDpiY() / 25.4);
       setPosition(QPoint(x, y));
+   }
+
+   /**
+    * @brief Get the Font Horizontal Advance for a given string.
+    * Thsi is QT version sensitive, using different methods depanding on QT version.
+    * Since Qt-version 5.13 they introdued QFontMetrics::horizontalAdvance(const QString &text, int len = -1) to get the width of a given string.
+    * Before that there was the QFontMetrics::width(const QString &text, int len = -1) function to do the same.
+    *
+    * @param fontMetrics
+    * @param text
+    * @return int
+    */
+   int PageChildObject::getFontHorizontalAdvance(QFontMetrics fontMetrics, QString text)
+   {
+      #if QT_VERSION < QT_VERSION_CHECK(5,13,0)
+         return fontMetrics.width(text);
+      #else
+         return fontMetrics.horizontalAdvance(text);
+      #endif
    }
 }

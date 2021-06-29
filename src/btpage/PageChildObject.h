@@ -56,6 +56,18 @@ namespace BtPage
       void setPositionMM(int x, int y);
       QPoint position() { return itemPosition; }
 
+      /**
+       * @brief Get the Font Horizontal Advance for a given string.
+       * Thsi is QT version sensitive, using different methods depanding on QT version.
+       * Since Qt-version 5.13 they introdued QFontMetrics::horizontalAdvance(const QString &text, int len = -1) to get the width of a given string.
+       * Before that there was the QFontMetrics::width(const QString &text, int len = -1) function to do the same.
+       *
+       * @param fontMetrics
+       * @param text
+       * @return int
+       */
+      int getFontHorizontalAdvance(QFontMetrics fm, QString text);
+
    protected:
       QRect itemBoundingBox;
       QPoint itemPosition;
