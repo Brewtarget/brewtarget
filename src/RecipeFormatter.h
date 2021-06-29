@@ -56,7 +56,7 @@ public:
    //! Get a plaintext view.
    QString getTextFormat();
    //! Get an html view.
-   QString getHTMLFormat(bool generateBrewInstructions = true);
+   QString getHTMLFormat();
    //! Get a whole mess of html views
    QString getHTMLFormat( QList<Recipe*> recipes );
    //! Get a BBCode view. Why is this here?

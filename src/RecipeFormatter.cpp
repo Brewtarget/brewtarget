@@ -167,7 +167,6 @@ QString RecipeFormatter::getHTMLFormat( QList<Recipe*> recipes ) {
       hDoc += buildYeastTableHtml();
       hDoc += buildMashTableHtml();
       hDoc += buildNotesHtml();
-      hDoc += buildInstructionTableHtml();
       hDoc += buildBrewNotesHtml();
       hDoc += "<p></p>";
    }
@@ -177,7 +176,7 @@ QString RecipeFormatter::getHTMLFormat( QList<Recipe*> recipes ) {
    return hDoc;
 }
 
-QString RecipeFormatter::getHTMLFormat(bool generateBrewInstructions)
+QString RecipeFormatter::getHTMLFormat()
 {
    QString pDoc;
 
@@ -189,9 +188,7 @@ QString RecipeFormatter::getHTMLFormat(bool generateBrewInstructions)
    pDoc += buildYeastTableHtml();
    pDoc += buildMashTableHtml();
    pDoc += buildNotesHtml();
-   pDoc += (generateBrewInstructions) ? buildInstructionTableHtml() : "";
    pDoc += buildBrewNotesHtml();
-
    pDoc += buildHTMLFooter();
 
    return pDoc;
@@ -1688,7 +1685,7 @@ QString RecipeFormatter::buildInstructionTableHtml()
 {
    if( rec == nullptr )
       return "";
-   BrewDayFormatter *brewDayFormatter(nullptr);
+   BrewDayFormatter *brewDayFormatter(parent);
    brewDayFormatter->setRecipe(rec);
    return brewDayFormatter->buildInstructionHTML();
    /*QString itable;

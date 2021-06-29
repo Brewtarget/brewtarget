@@ -44,7 +44,7 @@ BrewDayFormatter::BrewDayFormatter(QObject *parent)
  */
 void BrewDayFormatter::setRecipe(Recipe *recipe)
 {
-   this->recObs = recipe;
+   recObs = recipe;
 }
 
 /**

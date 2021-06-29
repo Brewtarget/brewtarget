@@ -37,7 +37,7 @@ PrintAndPreviewDialog::PrintAndPreviewDialog ( MainWindow *parent)
 {
    setupUi(this);
 
-   this->mainWindow = parent;
+   mainWindow = parent;
 
    printer = new QPrinter(QPrinter::HighResolution);
 
