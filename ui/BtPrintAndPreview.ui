@@ -269,9 +269,6 @@
                  <property name="currentText">
                   <string/>
                  </property>
-                 <property name="placeholderText">
-                  <string>Select Printer</string>
-                 </property>
                 </widget>
                </item>
                <item>
