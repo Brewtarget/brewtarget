@@ -27,16 +27,21 @@
 #include <QSizePolicy>
 #include "btpage/Page.h"
 
+/**
+ * @brief Construct a new Print And Preview Dialog:: Print And Preview Dialog object
+ *
+ * @param parent
+ */
 PrintAndPreviewDialog::PrintAndPreviewDialog ( MainWindow *parent)
    : QDialog(parent)
 {
    setupUi(this);
 
-   _parent = parent;
+   this->mainWindow = parent;
 
-   _printer = new QPrinter(QPrinter::HighResolution);
+   printer = new QPrinter(QPrinter::HighResolution);
 
-   QPageLayout layout = _printer->pageLayout();
+   QPageLayout layout = printer->pageLayout();
    layout.setUnits(QPageLayout::Point);
    QMarginsF margins = layout.margins();
 
@@ -46,9 +51,9 @@ PrintAndPreviewDialog::PrintAndPreviewDialog ( MainWindow *parent)
    margins.setLeft( margin );
    margins.setRight( margin );
    layout.setMargins(margins);
-   _printer->setPageLayout(layout);
+   printer->setPageLayout(layout);
 
-   previewWidget = new QPrintPreviewWidget( _printer , this);
+   previewWidget = new QPrintPreviewWidget( printer , this);
    recipeFormatter = new RecipeFormatter(this);
    brewDayFormatter = new BrewDayFormatter(this);
    htmlDocument = new QTextBrowser(this);
@@ -63,37 +68,54 @@ PrintAndPreviewDialog::PrintAndPreviewDialog ( MainWindow *parent)
    setupPreviewWidgets();
 }
 
+/**
+ * @brief Show event for the dialog
+ *
+ * @param e Event object
+ */
 void PrintAndPreviewDialog::showEvent(QShowEvent *e) {
    setVisible(true);
    collectRecipe();
 
-   int index = comboBox_PaperFormatSelector->findText(_printer->pageLayout().pageSize().name());
+   int index = comboBox_PaperFormatSelector->findText(printer->pageLayout().pageSize().name());
    comboBox_PaperFormatSelector->setCurrentIndex(index);
    comboBox_PaperFormatSelector->repaint();
    previewWidget->updatePreview();
 }
 
+/**
+ * @brief Gets the Recipe from MainWindow and sets it to the respective formatters.
+ *
+ */
 void PrintAndPreviewDialog::collectRecipe() {
-   selectedRecipe = _parent->currentRecipe();
+   selectedRecipe = mainWindow->currentRecipe();
    recipeFormatter->setRecipe(selectedRecipe);
    brewDayFormatter->setRecipe(selectedRecipe);
    label_CurrentRecipe->setText((selectedRecipe != nullptr) ? selectedRecipe->name() : "NULL");
 }
 
+/**
+ * @brief Collects the available printers on the computer and saves the list to the comboBox.
+ *
+ */
 void PrintAndPreviewDialog::collectPrinterInfo() {
    //Getting the list of available printers on the system and adding them to the combobox for user selection.
    comboBox_PrinterSelector->addItems(QStringList(QPrinterInfo().availablePrinterNames()));
    //setting the systems default printer as the selected printer.
    comboBox_PrinterSelector->setCurrentText(QPrinterInfo().defaultPrinterName());
 
-   CollectSupportedPageSizes();
+   collectSupportedPageSizes();
 
 }
 
-void PrintAndPreviewDialog::CollectSupportedPageSizes() {
+/**
+ * @brief Collect the supported Paper sizes from the selected printer.
+ *
+ */
+void PrintAndPreviewDialog::collectSupportedPageSizes() {
    PageSizeMap.clear();
 
-   QPrinterInfo printerInfo(*_printer);
+   QPrinterInfo printerInfo(*printer);
    QList<QPageSize> supportedPageSizeList(printerInfo.supportedPageSizes());
    foreach(QPageSize pageSize, supportedPageSizeList) {
       PageSizeMap.insert(pageSize.name(), pageSize);
@@ -101,6 +123,10 @@ void PrintAndPreviewDialog::CollectSupportedPageSizes() {
    }
 }
 
+/**
+ * @brief Connects all the signals to their respective function.
+ *
+ */
 void PrintAndPreviewDialog::setupConnections() {
    //Preview windows connections for drawing the previewed document. connects to the printer.
    connect(previewWidget, &QPrintPreviewWidget::paintRequested, this, &PrintAndPreviewDialog::printDocument);
@@ -184,8 +210,8 @@ void PrintAndPreviewDialog::handlePrinting() {
    qDebug() << Q_FUNC_INFO << "Filename to save: " << filename;
    if (radioButton_OutputPDF->isChecked())
    {
-      _printer->setOutputFormat(QPrinter::PdfFormat);
-      _printer->setOutputFileName(filename);
+      printer->setOutputFormat(QPrinter::PdfFormat);
+      printer->setOutputFileName(filename);
       previewWidget->print();
    }
    else
@@ -236,10 +262,20 @@ void PrintAndPreviewDialog::updatePreview() {
    }
 }
 
+/**
+ * @brief Closes the Dialog
+ *
+ * @param checked
+ */
 void PrintAndPreviewDialog::resetAndClose(bool checked) {
    setVisible(false);
 }
 
+/**
+ * @brief Sets the selected paper and updates the view.
+ *
+ * @param index
+ */
 void PrintAndPreviewDialog::selectedPaperChanged(int index) {
    if (PageSizeMap.empty()) {
       return;
@@ -247,24 +283,42 @@ void PrintAndPreviewDialog::selectedPaperChanged(int index) {
    QString key(comboBox_PaperFormatSelector->currentText());
    QPageSize page(PageSizeMap.value(key));
    //_printer->setPageSize(page);
-   _printer->pageLayout().setPageSize(page);
+   printer->pageLayout().setPageSize(page);
    previewWidget->update();
    //previewWidget->updatePreview();
 }
 
+/**
+ * @brief updates the selected printer and sets appropriate values to Papersize
+ *
+ * @param index
+ */
 void PrintAndPreviewDialog::selectedPrinterChanged(int index) {
-   _printer->setPrinterName(comboBox_PrinterSelector->itemText(index));
+   printer->setPrinterName(comboBox_PrinterSelector->itemText(index));
+   collectSupportedPageSizes();
 }
 
+/**
+ * @brief handles the output radio buttons signal.
+ *
+ */
 void PrintAndPreviewDialog::outputRadioButtonsClicked() {
    setPrintingControls();
 }
 
+/**
+ * @brief Handles the Orientation Radio buttons
+ *
+ */
 void PrintAndPreviewDialog::orientationRadioButtonsClicked() {
-   _printer->setPageOrientation((radioButton_Protrait->isChecked()) ? QPageLayout::Orientation::Portrait : QPageLayout::Orientation::Landscape);
+   printer->setPageOrientation((radioButton_Protrait->isChecked()) ? QPageLayout::Orientation::Portrait : QPageLayout::Orientation::Landscape);
    previewWidget->updatePreview();
 }
 
+/**
+ * @brief Sets the Printing settings and enables/disables controls accordingly.
+ *
+ */
 void PrintAndPreviewDialog::setPrintingControls() {
    //First off, The Printer selector either needs to be disabled when you output to PDF or HTML, or you set the outout selector to say like "QT PDF exporter" or something.
    //for now, let's disable it.
@@ -284,12 +338,12 @@ void PrintAndPreviewDialog::setPrintingControls() {
    //setting up printer accordingly
    if (radioButton_OutputPaper->isChecked())
    {
-      _printer->setOutputFormat(QPrinter::OutputFormat::NativeFormat);
-      _printer->setPrinterName(comboBox_PrinterSelector->currentText());
+      printer->setOutputFormat(QPrinter::OutputFormat::NativeFormat);
+      printer->setPrinterName(comboBox_PrinterSelector->currentText());
    }
    else if (radioButton_OutputPDF->isChecked())
    {
-      _printer->setOutputFormat(QPrinter::OutputFormat::PdfFormat);
+      printer->setOutputFormat(QPrinter::OutputFormat::PdfFormat);
    }
 
    //setting up views correctly.
@@ -297,6 +351,11 @@ void PrintAndPreviewDialog::setPrintingControls() {
 
 }
 
+/**
+ * @brief Creates the preview widgets and sets the QPrintPreviewWidget as default viewer.
+ * this is changed according to when output is changed.
+ *
+ */
 void PrintAndPreviewDialog::setupPreviewWidgets()
 {
    //Setting up the Document preview for Paper and PDF
@@ -320,9 +379,9 @@ void PrintAndPreviewDialog::setupPreviewWidgets()
  */
 void PrintAndPreviewDialog::printDocument(QPrinter * printer)
 {
-   if ( _parent->currentRecipe() == nullptr)
+   if ( mainWindow->currentRecipe() == nullptr)
       return;
-   recipeFormatter->setRecipe(_parent->currentRecipe());
+   recipeFormatter->setRecipe(mainWindow->currentRecipe());
    using namespace BtPage;
    //Setting up a blank page for drawing.
    Page page(printer);
@@ -452,11 +511,11 @@ void PrintAndPreviewDialog::renderRecipe(BtPage::Page &page)
  */
 void PrintAndPreviewDialog::renderBrewdayInstructions(BtPage::Page &page)
 {
-   brewDayFormatter->setRecipe(_parent->currentRecipe());
+   brewDayFormatter->setRecipe(mainWindow->currentRecipe());
    using namespace BtPage;
    PageTable *statsTable = page.addChildObject(new PageTable (
       &page,
-      _parent->currentRecipe()->name(),
+      mainWindow->currentRecipe()->name(),
       brewDayFormatter->buildTitleList()
    ));
    statsTable->setPositionMM(10,20);
@@ -481,7 +540,7 @@ void PrintAndPreviewDialog::renderHeader(BtPage::Page &page)
    PageText *recipeText = page.addChildObject(
       new PageText (
          &page,
-         _parent->currentRecipe()->name(),
+         mainWindow->currentRecipe()->name(),
          QFont("Arial", 18, QFont::Bold)
       ),
       QPoint(0,0)
@@ -490,7 +549,7 @@ void PrintAndPreviewDialog::renderHeader(BtPage::Page &page)
    PageText *brewerText = page.addChildObject(
       new PageText (
          &page,
-         _parent->currentRecipe()->brewer(),
+         mainWindow->currentRecipe()->brewer(),
          QFont("Arial", 10)
       ));
    page.placeRelationalToMM(brewerText, recipeText, BtPage::BELOW, 2, 0);

@@ -27,7 +27,7 @@ namespace BtPage
 {
    void PageChildObject::setBoundingBox(QRect rect)
    {
-      _boundingBox = rect;
+      itemBoundingBox = rect;
    }
 
    void PageChildObject::setBoundingBox(int x, int y, int width, int height)
@@ -42,7 +42,7 @@ namespace BtPage
 
    void PageChildObject::setPosition(QPoint point)
    {
-      _position = QPoint(point);
+      itemPosition = QPoint(point);
       moveBoundingBox(point);
    }
 

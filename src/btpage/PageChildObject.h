@@ -49,16 +49,16 @@ namespace BtPage
       void setBoundingBox(int x, int y, int width, int height);
       void setBoundingBox(QPoint p, int width, int height);
       QRect getBoundingBox() {
-         return _boundingBox;
+         return itemBoundingBox;
       }
-      void moveBoundingBox(QPoint point) { _boundingBox.moveTopLeft(point); }
+      void moveBoundingBox(QPoint point) { itemBoundingBox.moveTopLeft(point); }
       void setPosition(QPoint point);
       void setPositionMM(int x, int y);
-      QPoint position() { return _position; }
+      QPoint position() { return itemPosition; }
 
    protected:
-      QRect _boundingBox;
-      QPoint _position;
+      QRect itemBoundingBox;
+      QPoint itemPosition;
    };
 }
 #endif /* BTPAGE_PAGECHILDOBJECT_H */

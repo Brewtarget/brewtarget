@@ -103,7 +103,7 @@ namespace BtPage
          PageChildObject *other = (PageChildObject*)sourceObj;
          //If the source object goes beyond the page and is doing a page brake, we need call our selves with that child to get to the last in the list.
          //this way we get the bottom coordinates from the last part of the object, thus placing ourselves to the right coordinates.
-         if (other->needPageBrake && other->nextSection != nullptr) {
+         if (other->needPageBreak && other->nextSection != nullptr) {
             placeRelationalTo( targetObj, other->nextSection, place, xOffset, yOffset );
             //after this we return so we done brake everuthing after.
             return;

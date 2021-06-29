@@ -32,7 +32,7 @@ namespace BtPage
       foreach (PageChildObject *item, items)
       {
          item->render(&painter);
-         if ( item->needPageBrake ) {
+         if ( item->needPageBreak ) {
             //We're obviously dealing with a large text, let's create a new page and continue rendering the text.
             //Allthough this solution is only looking one level down! may need revising to handle an arbatrary number of new pages for VERY long notes as an example.
             printer->newPage();

@@ -86,6 +86,44 @@ static QString createInventoryTableFermentable()
    return result;
 }
 
+/**
+ * @brief Create a Inventory List of Fermentables
+ * @author Mattias Måhl <mattias@kejsarsten.com>
+ *
+ * @return QList<QStringList>
+ */
+static QList<QStringList> createInventoryListFermentable()
+{
+   QList<QStringList> result;
+
+   const QMap<int, double> inventory =
+         Database::instance().getInventory(Brewtarget::FERMTABLE);
+
+   if (!inventory.empty())
+   {
+      QStringList row;
+      row << QObject::tr("Name") << QObject::tr("Amount");
+      result.append(row);
+
+      for (auto itor = inventory.begin(); itor != inventory.end(); ++itor)
+      {
+         const Fermentable* fermentable =
+               Database::instance().fermentable(itor.key());
+
+         if (!fermentable)
+         {
+            qCritical() << QString("The fermentable %1 has a record in the "
+                                     "inventory, but does not exist.")
+                                   .arg(itor.key());
+            continue;
+         }
+         row << fermentable->name() << Brewtarget::displayAmount(itor.value(), "fermentableTable", "inventory_kg", &Units::kilograms);
+         result.append(row);
+      }
+   }
+   return result;
+}
+
 static QString createInventoryTableHop()
 {
    QString result;
