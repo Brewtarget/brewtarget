@@ -59,6 +59,7 @@ namespace BtPage
     */
    enum FixedPlacingFlags
    {
+      CUSTOM       = 0,
       /* These six are used with Page::placeOnPage(...) function */
       LEFT         = 1,      // (1<<0) = 1, 00000000 00000000 00000000 00010000 (16)
       RIGHT        = (1<<1),              //00000000 00000000 00000000 00100000 (32)

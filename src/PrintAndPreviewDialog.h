@@ -142,6 +142,13 @@ private:
     */
    void renderHeader(BtPage::Page &page);
 
+   /**
+    * @brief Render the inventory tables onto the page.
+    *
+    * @param page
+    */
+   void renderInventory(BtPage::Page &page);
+
    MainWindow *mainWindow;
    Recipe *selectedRecipe;
    QPrinter * printer = nullptr;
@@ -157,5 +164,6 @@ public slots:
    void resetAndClose(bool checked);
    void checkBoxRecipe_toggle(bool checked);
    void checkBoxBrewday_toggle(bool checked);
+   void checkBoxInventoryAll_toggle(bool checked);
 };
 #endif /* PRINTANDPREVIEWDIALOG_H */

@@ -200,6 +200,16 @@ namespace BtPage
          tO->moveBoundingBox(QPoint(x, y));
       }
 
+      template <class T>
+      void placeOnPageMM(T *targetObj, FixedPlacingFlags place, int xOffset = 0, int yOffset = 0)
+      {
+         //Converting the MM offsets to pixels on the page.
+         yOffset *= (printer->logicalDpiY() / 25.4);
+         xOffset *= (printer->logicalDpiX() / 25.4);
+
+         placeOnPage(targetObj, place, xOffset, yOffset);
+      }
+
    private:
       QList<PageChildObject *> items;
    };

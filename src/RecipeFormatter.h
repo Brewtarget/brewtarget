@@ -107,7 +107,6 @@ private:
    QString buildMiscTableTxt();
    QList<QStringList> buildMiscList();
    QString buildNotesHtml();
-   QString buildInstructionTableHtml();
    QString buildInstructionTableTxt();
    /* I am not sure how I want to implement these yet.
     * I might just include the salts in the instructions table. Until I decide

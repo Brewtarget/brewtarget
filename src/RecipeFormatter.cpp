@@ -1676,40 +1676,6 @@ QString RecipeFormatter::buildTasteNotesString()
    return rec->tasteNotes();
 }
 
-/**
- * @brief returns HTML generated text with the instructions on how to brew this beverage.
- *
- * @return QString
- */
-QString RecipeFormatter::buildInstructionTableHtml()
-{
-   if( rec == nullptr )
-      return "";
-   BrewDayFormatter *brewDayFormatter(parent);
-   brewDayFormatter->setRecipe(rec);
-   return brewDayFormatter->buildInstructionHTML();
-   /*QString itable;
-   int i, size;
-   QList<Instruction*> instructions = rec->instructions();
-   size = instructions.size();
-
-   if ( size < 1 )
-      return "";
-
-   itable = QString("<h3>%1</h3>").arg(tr("Instructions"));
-   itable += "<ol id=\"instruction\">";
-
-   for( i = 0; i < size; ++i )
-   {
-      Instruction* ins = instructions[i];
-      itable += QString("<li>%1</li>").arg( ins->directions());
-   }
-
-   itable += "</ol>";
-
-   return itable;*/
-}
-
 QString RecipeFormatter::buildInstructionTableTxt()
 {
    QString ret = "";

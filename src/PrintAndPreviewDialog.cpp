@@ -26,6 +26,7 @@
 #include <QList>
 #include <QSizePolicy>
 #include "btpage/Page.h"
+#include "InventoryFormatter.h"
 
 /**
  * @brief Construct a new Print And Preview Dialog:: Print And Preview Dialog object
@@ -160,6 +161,8 @@ void PrintAndPreviewDialog::setupConnections() {
    connect(checkBox_Recipe, &QCheckBox::toggled, this, &PrintAndPreviewDialog::checkBoxRecipe_toggle);
    connect(checkBox_BrewdayInstructions, &QCheckBox::toggled, this, &PrintAndPreviewDialog::checkBoxBrewday_toggle);
 
+   connect(checkBox_inventoryAll, &QCheckBox::toggled, this, &PrintAndPreviewDialog::checkBoxInventoryAll_toggle);
+
 }
 
 /**
@@ -187,6 +190,23 @@ void PrintAndPreviewDialog::checkBoxBrewday_toggle(bool checked)
 
    //update the view accordingly
    updatePreview();
+}
+
+/**
+ * @brief handle the Inventory All checkBox signal.
+ *
+ * @param checked
+ */
+void PrintAndPreviewDialog::checkBoxInventoryAll_toggle(bool checked)
+{
+   checkBox_inventoryFermentables->setEnabled(checked);
+   checkBox_inventoryHops->setEnabled(checked);
+   checkBox_inventoryYeast->setEnabled(checked);
+   checkBox_inventoryMicellaneous->setEnabled(checked);
+   checkBox_inventoryFermentables->setChecked(true);
+   checkBox_inventoryHops->setChecked(true);
+   checkBox_inventoryYeast->setChecked(true);
+   checkBox_inventoryMicellaneous->setChecked(true);
 }
 
 /**
@@ -251,10 +271,10 @@ void PrintAndPreviewDialog::updatePreview() {
       bool chkBDI = checkBox_BrewdayInstructions->isChecked();
       QString pDoc = "";
       if (chkRec) {
-         pDoc = recipeFormatter->getHTMLFormat(checkBox_BrewdayInstructions->isChecked());
+         pDoc = recipeFormatter->getHTMLFormat();
       }
       if ( chkBDI && !chkRec ) {
-         pDoc = brewDayFormatter->buildHTML();
+         pDoc += brewDayFormatter->buildHTML();
       }
       htmlDocument->setHtml(pDoc);
       (radioButton_OutputHTML->isChecked()) ? htmlDocument->show() : htmlDocument->hide();
@@ -386,21 +406,33 @@ void PrintAndPreviewDialog::printDocument(QPrinter * printer)
    //Setting up a blank page for drawing.
    Page page(printer);
    /*
-   all of the below code to generate the printout will be subject to change and refactoring when I get around to
-   making the template editor for printouts where you can save your templates and use them or share them
-   with other BT users.
+   This is UUUUGLY but will do for now, all these if:s has got done a better way!
    */
-   if ( checkBox_Recipe->isChecked())
+   //if we are watching the Recipe tab we should print recipe stuff.
+   if (Ui_BtPrintAndPreview::verticalTabWidget->currentIndex() == 0)
    {
-      renderHeader(page);
-      renderRecipe(page);
+      /*
+      all of the below code to generate the printout will be subject to change and refactoring when I get around to
+      making the template editor for printouts where you can save your templates and use them or share them
+      with other BT users.
+      */
+      if ( checkBox_Recipe->isChecked())
+      {
+         renderHeader(page);
+         renderRecipe(page);
+      }
+      if ( checkBox_Recipe->isChecked() && checkBox_BrewdayInstructions->isChecked())
+         page.addChildObject(new PageBreak(&page));
+      if (checkBox_BrewdayInstructions->isChecked())
+      {
+         renderHeader(page);
+         renderBrewdayInstructions(page);
+      }
    }
-   if ( checkBox_Recipe->isChecked() && checkBox_BrewdayInstructions->isChecked())
-      page.addChildObject(new PageBreak(&page));
-   if (checkBox_BrewdayInstructions->isChecked())
+   else if (verticalTabWidget->currentIndex() == 1)
    {
       renderHeader(page);
-      renderBrewdayInstructions(page);
+      renderInventory(page);
    }
    //Render the Page onto the painter/printer for preview/printing.
    page.renderPage();
@@ -563,4 +595,72 @@ void PrintAndPreviewDialog::renderHeader(BtPage::Page &page)
       ));
    img->setImageSizeMM(100, 20);
    page.placeOnPage(img, BtPage::TOP | BtPage::RIGHT);
+}
+
+void PrintAndPreviewDialog::renderInventory(BtPage::Page &page)
+{
+   using namespace BtPage;
+   PageTable *fermentables = nullptr;
+   PageTable *hops = nullptr;
+   PageTable *yeasts = nullptr;
+   PageTable *miscs = nullptr;
+   QList<PageTable*> renderList;
+
+   if (checkBox_inventoryAll->isChecked() || checkBox_inventoryFermentables->isChecked())
+   {
+      fermentables = page.addChildObject(new PageTable (
+         &page,
+         QString("Fermentables"),
+         InventoryFormatter::createInventoryList<Fermentable>(Brewtarget::DBTable::FERMTABLE)
+      ));
+      renderList.append(fermentables);
+   }
+
+   if (checkBox_inventoryAll->isChecked() || checkBox_inventoryHops->isChecked())
+   {
+      hops = page.addChildObject(new PageTable (
+         &page,
+         QString("Hops"),
+         InventoryFormatter::createInventoryList<Hop>(Brewtarget::DBTable::HOPTABLE)
+      ));
+      renderList.append(hops);
+   }
+
+   if (checkBox_inventoryAll->isChecked() || checkBox_inventoryYeast->isChecked())
+   {
+      yeasts = page.addChildObject(new PageTable (
+         &page,
+         QString("Yeast"),
+         InventoryFormatter::createInventoryList<Yeast>(Brewtarget::DBTable::YEASTTABLE)
+      ));
+      renderList.append(yeasts);
+   }
+
+   if (checkBox_inventoryAll->isChecked() || checkBox_inventoryMicellaneous->isChecked())
+   {
+      miscs = page.addChildObject(new PageTable (
+         &page,
+         QString("Miscellaneous"),
+         InventoryFormatter::createInventoryList<Misc>(Brewtarget::DBTable::MISCTABLE)
+      ));
+      renderList.append(miscs);
+   }
+
+   // I chose to do it this way as we don't know what tables has been rendered above.
+   // so we save the rendered tables in a list and then render them in order.
+   // this way the user has the freedom to print what they want.
+   PageTable *tableBefore = nullptr;
+   foreach(PageTable *table, renderList)
+   {
+      if (tableBefore == nullptr)
+      {
+         page.placeOnPageMM(table, CUSTOM, 0, 20);
+      }
+      else
+      {
+         page.placeRelationalToMM(table, tableBefore, BELOW, 0, 5);
+      }
+      //save the pointer to the current table for next iteration.
+      tableBefore = table;
+   }
 }
