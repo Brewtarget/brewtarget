@@ -61,7 +61,7 @@ namespace BtPage
       }
       else
       {
-         tableHeader->Value = QString("No %1 in this Recipe").arg(tableHeader->Value.toLower());
+         tableHeader->Value = QString("No %1 available").arg(tableHeader->Value.toLower());
          tableWidth = (int)qMax(getFontHorizontalAdvance(fm_tableheader, tableHeader->Value)*1.05, (double)tableWidth);
          columnHeaders = QList<PageTableColumn *>();
       }

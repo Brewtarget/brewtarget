@@ -165,5 +165,7 @@ public slots:
    void checkBoxRecipe_toggle(bool checked);
    void checkBoxBrewday_toggle(bool checked);
    void checkBoxInventoryAll_toggle(bool checked);
+   void checkBoxInventoryIngredient_toggle(bool checked);
+   void verticalTabWidget_currentChanged(int index);
 };
 #endif /* PRINTANDPREVIEWDIALOG_H */

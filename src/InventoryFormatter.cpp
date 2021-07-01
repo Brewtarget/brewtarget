@@ -246,16 +246,20 @@ namespace InventoryFormatter
    }
 
    /**
-    * @brief Create Inventory HTML Body
+    * @brief Create a Inventory H T M L Body object
     *
+    * @param flags HTMLgeneretionFlags stacked to generate
     * @return QString
     */
-   static QString createInventoryHTMLBody()
+   static QString createInventoryHTMLBody(HTMLgenerationFlags flags)
    {
+      //Only generate users selection of Ingredient inventory.
       QString result =
-            createInventoryTableFermentableHTML() + createInventoryTableHopHTML() +
-            createInventoryTableMiscellaneousHTML() + createInventoryTableYeastHTML();
-
+            ((HTMLgenerationFlags::FERMENTABLESFLAG && flags) ? createInventoryTableFermentableHTML() : "") +
+            ((HTMLgenerationFlags::HOPSFLAG && flags) ? createInventoryTableHopHTML() : "") +
+            ((HTMLgenerationFlags::MISCELLANEOUSFLAG && flags) ? createInventoryTableMiscellaneousHTML() : "") +
+            ((HTMLgenerationFlags::YEASTFLAG && flags) ? createInventoryTableYeastHTML() : "");
+      //If users selects no printout or if there are no inventory for the selected ingredients.
       if (result.size() == 0)
       {
          result = QObject::tr("No inventory available.");
@@ -279,10 +283,11 @@ namespace InventoryFormatter
     *
     * @return QString
     */
-   static QString createInventoryHTML()
+   QString createInventoryHTML(HTMLgenerationFlags flags)
    {
-      return createInventoryHeaderHTML() + createInventoryHTMLBody() +
-            createInventoryFooterHTML();
+      return createInventoryHeaderHTML() +
+               createInventoryHTMLBody(flags) +
+               createInventoryFooterHTML();
    }
 
 

@@ -158,11 +158,16 @@ void PrintAndPreviewDialog::setupConnections() {
    });
 
    //Connect the Recipe and BrewInstructions checkboxes to update the preview when toggled
-   connect(checkBox_Recipe, &QCheckBox::toggled, this, &PrintAndPreviewDialog::checkBoxRecipe_toggle);
-   connect(checkBox_BrewdayInstructions, &QCheckBox::toggled, this, &PrintAndPreviewDialog::checkBoxBrewday_toggle);
+   connect(checkBox_Recipe,                 &QCheckBox::toggled,         this, &PrintAndPreviewDialog::checkBoxRecipe_toggle);
+   connect(checkBox_BrewdayInstructions,    &QCheckBox::toggled,         this, &PrintAndPreviewDialog::checkBoxBrewday_toggle);
 
-   connect(checkBox_inventoryAll, &QCheckBox::toggled, this, &PrintAndPreviewDialog::checkBoxInventoryAll_toggle);
+   connect(checkBox_inventoryAll,           &QCheckBox::toggled,         this, &PrintAndPreviewDialog::checkBoxInventoryAll_toggle);
+   connect(checkBox_inventoryFermentables,  &QCheckBox::toggled,         this, &PrintAndPreviewDialog::checkBoxInventoryIngredient_toggle);
+   connect(checkBox_inventoryHops,          &QCheckBox::toggled,         this, &PrintAndPreviewDialog::checkBoxInventoryIngredient_toggle);
+   connect(checkBox_inventoryMicellaneous,  &QCheckBox::toggled,         this, &PrintAndPreviewDialog::checkBoxInventoryIngredient_toggle);
+   connect(checkBox_inventoryYeast,         &QCheckBox::toggled,         this, &PrintAndPreviewDialog::checkBoxInventoryIngredient_toggle);
 
+   connect(verticalTabWidget,               &QTabWidget::currentChanged, this, &PrintAndPreviewDialog::verticalTabWidget_currentChanged);
 }
 
 /**
@@ -199,14 +204,35 @@ void PrintAndPreviewDialog::checkBoxBrewday_toggle(bool checked)
  */
 void PrintAndPreviewDialog::checkBoxInventoryAll_toggle(bool checked)
 {
-   checkBox_inventoryFermentables->setEnabled(checked);
-   checkBox_inventoryHops->setEnabled(checked);
-   checkBox_inventoryYeast->setEnabled(checked);
-   checkBox_inventoryMicellaneous->setEnabled(checked);
+   checkBox_inventoryFermentables->setEnabled(!checked);
+   checkBox_inventoryHops->setEnabled(!checked);
+   checkBox_inventoryYeast->setEnabled(!checked);
+   checkBox_inventoryMicellaneous->setEnabled(!checked);
    checkBox_inventoryFermentables->setChecked(true);
    checkBox_inventoryHops->setChecked(true);
    checkBox_inventoryYeast->setChecked(true);
    checkBox_inventoryMicellaneous->setChecked(true);
+   updatePreview();
+}
+
+/**
+ * @brief handles the Ingredient checkboxes toggled signal.
+ *
+ * @param checked
+ */
+void PrintAndPreviewDialog::checkBoxInventoryIngredient_toggle(bool checked)
+{
+   updatePreview();
+}
+
+/**
+ * @brief Handels the Vertical TabWidget 'currentChanged" signal.
+ *
+ * @param index
+ */
+void PrintAndPreviewDialog::verticalTabWidget_currentChanged(int index)
+{
+   updatePreview();
 }
 
 /**
@@ -267,16 +293,31 @@ void PrintAndPreviewDialog::updatePreview() {
    }
    else
    {
-      bool chkRec = checkBox_Recipe->isChecked();
-      bool chkBDI = checkBox_BrewdayInstructions->isChecked();
       QString pDoc = "";
-      if (chkRec) {
-         pDoc = recipeFormatter->getHTMLFormat();
+
+      if (verticalTabWidget->currentIndex() == 0)
+      {
+         bool chkRec = checkBox_Recipe->isChecked();
+         bool chkBDI = checkBox_BrewdayInstructions->isChecked();
+         if (chkRec) {
+            pDoc = recipeFormatter->getHTMLFormat();
+         }
+         if ( chkBDI && !chkRec ) {
+            pDoc += brewDayFormatter->buildHTML();
+         }
       }
-      if ( chkBDI && !chkRec ) {
-         pDoc += brewDayFormatter->buildHTML();
+      else if (verticalTabWidget->currentIndex() == 1)
+      {
+         InventoryFormatter::HTMLgenerationFlags flags = ((checkBox_inventoryFermentables->isChecked()) ? InventoryFormatter::FERMENTABLESFLAG : InventoryFormatter::NOOPERATION) |
+                                                         ((checkBox_inventoryHops->isChecked()) ? InventoryFormatter::HOPSFLAG : InventoryFormatter::NOOPERATION) |
+                                                         ((checkBox_inventoryYeast->isChecked()) ? InventoryFormatter::YEASTFLAG : InventoryFormatter::NOOPERATION) |
+                                                         ((checkBox_inventoryMicellaneous->isChecked()) ? InventoryFormatter::MISCELLANEOUSFLAG : InventoryFormatter::NOOPERATION);
+
+         pDoc = InventoryFormatter::createInventoryHTML(flags);
       }
+      // adding the generated HTML to the QTexBrowser.
       htmlDocument->setHtml(pDoc);
+      // choose what displaywidget that should be showing depending on users choice.
       (radioButton_OutputHTML->isChecked()) ? htmlDocument->show() : htmlDocument->hide();
       (radioButton_OutputPaper->isChecked() || radioButton_OutputPDF->isChecked()) ? previewWidget->show() : previewWidget->hide();
    }
