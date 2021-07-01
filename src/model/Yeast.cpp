@@ -58,7 +58,7 @@ QString Yeast::classNameStr()
 //============================CONSTRUCTORS======================================
 
 Yeast::Yeast(QString name, bool cache )
-   : NamedEntity(Brewtarget::YEASTTABLE, name, true ),
+   : NamedEntityWithInventory(Brewtarget::YEASTTABLE, cache, name, true ),
      m_typeString(QString()),
      m_type(static_cast<Yeast::Type>(0)),
      m_formString(QString()),
@@ -76,18 +76,12 @@ Yeast::Yeast(QString name, bool cache )
      m_bestFor(QString()),
      m_timesCultured(0),
      m_maxReuse(0),
-     m_addToSecondary(false),
-     m_inventory(-1),
-     m_inventory_id(0),
-     m_cacheOnly(cache)
-{
+     m_addToSecondary(false) {
+   return;
 }
 
 Yeast::Yeast(TableSchema* table, QSqlRecord rec, int t_key)
-   : NamedEntity(table, rec, t_key),
-     m_inventory(-1),
-     m_cacheOnly(false)
-{
+   : NamedEntityWithInventory(table, rec, t_key) {
      m_typeString = rec.value( table->propertyToColumn( PropertyNames::Yeast::type)).toString();
      m_formString = rec.value( table->propertyToColumn( PropertyNames::Yeast::form)).toString();
      m_flocculationString = rec.value( table->propertyToColumn( PropertyNames::Yeast::flocculation)).toString();
@@ -104,37 +98,32 @@ Yeast::Yeast(TableSchema* table, QSqlRecord rec, int t_key)
      m_maxReuse = rec.value( table->propertyToColumn( PropertyNames::Yeast::maxReuse)).toInt();
      m_addToSecondary = rec.value( table->propertyToColumn( PropertyNames::Yeast::addToSecondary)).toBool();
 
-     // foreign keys blow
-     m_inventory_id = rec.value( table->foreignKeyToColumn( PropertyNames::Yeast::inventory_id)).toInt();
-
      m_type = static_cast<Yeast::Type>(types.indexOf(m_typeString));
      m_form = static_cast<Yeast::Form>(forms.indexOf(m_formString));
      m_flocculation = static_cast<Yeast::Flocculation>(flocculations.indexOf(m_flocculationString));
 }
 
-Yeast::Yeast(Yeast & other) : NamedEntity(other),
-     m_typeString(other.m_typeString),
-     m_type(other.m_type),
-     m_formString(other.m_formString),
-     m_form(other.m_form),
-     m_flocculationString(other.m_flocculationString),
-     m_flocculation(other.m_flocculation),
-     m_amount(other.m_amount),
-     m_amountIsWeight(other.m_amountIsWeight),
-     m_laboratory(other.m_laboratory),
-     m_productID(other.m_productID),
-     m_minTemperature_c(other.m_minTemperature_c),
-     m_maxTemperature_c(other.m_maxTemperature_c),
-     m_attenuation_pct(other.m_attenuation_pct),
-     m_notes(other.m_notes),
-     m_bestFor(other.m_bestFor),
-     m_timesCultured(other.m_timesCultured),
-     m_maxReuse(other.m_maxReuse),
-     m_addToSecondary(other.m_addToSecondary),
-     m_inventory(other.m_inventory),
-     m_inventory_id(other.m_inventory_id),
-     m_cacheOnly(other.m_cacheOnly)
-{
+Yeast::Yeast(Yeast const & other) :
+   NamedEntityWithInventory{other                     },
+   m_typeString            {other.m_typeString        },
+   m_type                  {other.m_type              },
+   m_formString            {other.m_formString        },
+   m_form                  {other.m_form              },
+   m_flocculationString    {other.m_flocculationString},
+   m_flocculation          {other.m_flocculation      },
+   m_amount                {other.m_amount            },
+   m_amountIsWeight        {other.m_amountIsWeight    },
+   m_laboratory            {other.m_laboratory        },
+   m_productID             {other.m_productID         },
+   m_minTemperature_c      {other.m_minTemperature_c  },
+   m_maxTemperature_c      {other.m_maxTemperature_c  },
+   m_attenuation_pct       {other.m_attenuation_pct   },
+   m_notes                 {other.m_notes             },
+   m_bestFor               {other.m_bestFor           },
+   m_timesCultured         {other.m_timesCultured     },
+   m_maxReuse              {other.m_maxReuse          },
+   m_addToSecondary        {other.m_addToSecondary    } {
+   return;
 }
 
 //============================="GET" METHODS====================================
@@ -149,14 +138,6 @@ double Yeast::amount() const { return m_amount; }
 double Yeast::minTemperature_c() const { return m_minTemperature_c; }
 double Yeast::maxTemperature_c() const { return m_maxTemperature_c; }
 double Yeast::attenuation_pct() const { return m_attenuation_pct; }
-int Yeast::inventory() {
-   if ( m_inventory < 0 ) {
-      m_inventory = getInventory().toInt();
-   }
-   return m_inventory;
-}
-
-int Yeast::inventoryId() const { return m_inventory_id; }
 int Yeast::timesCultured() const { return m_timesCultured; }
 int Yeast::maxReuse() const { return m_maxReuse; }
 bool Yeast::addToSecondary() const { return m_addToSecondary; }
@@ -207,8 +188,6 @@ const QString Yeast::flocculationStringTr() const
       return flocculationsTr.at(0);
    }
 }
-
-bool Yeast::cacheOnly() const { return m_cacheOnly; }
 
 //============================="SET" METHODS====================================
 void Yeast::setType( Yeast::Type t )
@@ -265,25 +244,12 @@ void Yeast::setAmount( double var )
    }
 }
 
-void Yeast::setInventoryQuanta( int var )
-{
-   if( var < 0.0 ) {
-      qWarning() << "Yeast: inventory < 0:" << var;
-      return;
-   }
-
-   m_inventory = var;
-   if ( ! m_cacheOnly ) {
-      setInventory(var,m_inventory_id);
-   }
-}
-
-void Yeast::setInventoryId( int key )
-{
-   m_inventory_id = key;
-   if ( ! m_cacheOnly ) {
-      setEasy(kpropInventoryId, key);
-   }
+// .:TBD:. I'm not wild about using "quanta" here (presumably to mean number of packets or number of cultures)
+//         Storing an int in a double is safe, so, for now, just leave this in place but as a wrapper around the more
+//         generic setInventoryAmount().
+void Yeast::setInventoryQuanta(int var) {
+   this->setInventoryAmount(var);
+   return;
 }
 
 void Yeast::setAmountIsWeight( bool var )
@@ -451,8 +417,6 @@ void Yeast::setAddToSecondary( bool var )
       signalCacheChange(PropertyNames::Yeast::addToSecondary, var);
    }
 }
-
-void Yeast::setCacheOnly(bool cache) { m_cacheOnly = cache; }
 
 //========================OTHER METHODS=========================================
 bool Yeast::isValidType(const QString& str) const

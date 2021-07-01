@@ -56,7 +56,7 @@ bool Equipment::isEqualTo(NamedEntity const & other) const {
 
 //=============================CONSTRUCTORS=====================================
 Equipment::Equipment(QString t_name, bool cacheOnly)
-   : NamedEntity(Brewtarget::EQUIPTABLE, t_name, true),
+   : NamedEntity(Brewtarget::EQUIPTABLE, cacheOnly, t_name, true),
    m_boilSize_l(22.927),
    m_batchSize_l(18.927),
    m_tunVolume_l(0.0),
@@ -73,15 +73,12 @@ Equipment::Equipment(QString t_name, bool cacheOnly)
    m_hopUtilization_pct(100.0),
    m_notes(QString()),
    m_grainAbsorption_LKg(1.086),
-   m_boilingPoint_c(100.0),
-   m_cacheOnly(cacheOnly)
-{
+   m_boilingPoint_c(100.0) {
+   return;
 }
 
 Equipment::Equipment(TableSchema* table, QSqlRecord rec, int t_key)
-   : NamedEntity(table, rec, t_key ),
-   m_cacheOnly(false)
-{
+   : NamedEntity(table, rec, t_key ) {
    m_boilSize_l = rec.value( table->propertyToColumn( PropertyNames::Equipment::boilSize_l)).toDouble();
    m_batchSize_l = rec.value( table->propertyToColumn( PropertyNames::Equipment::batchSize_l)).toDouble();
    m_tunVolume_l = rec.value( table->propertyToColumn( PropertyNames::Equipment::tunVolume_l)).toDouble();
@@ -120,9 +117,8 @@ Equipment::Equipment( Equipment const& other )
    m_hopUtilization_pct(other.m_hopUtilization_pct),
    m_notes(other.m_notes),
    m_grainAbsorption_LKg(other.m_grainAbsorption_LKg),
-   m_boilingPoint_c(other.m_boilingPoint_c),
-   m_cacheOnly(other.m_cacheOnly)
-{
+   m_boilingPoint_c(other.m_boilingPoint_c) {
+   return;
 }
 
 QString Equipment::classNameStr()
@@ -248,7 +244,7 @@ void Equipment::setTrubChillerLoss_l( double var )
 
 void Equipment::setEvapRate_pctHr( double var )
 {
-   // NOTE: evapRate_pctHr is only used in xml input/output. 
+   // NOTE: evapRate_pctHr is only used in xml input/output.
    if( var < 0.0 || var > 100.0) {
       qWarning() << "Equipment: 0 < evap rate < 100:" << var;
       return;
@@ -404,8 +400,6 @@ void Equipment::setBoilingPoint_c(double var)
    }
 }
 
-void Equipment::setCacheOnly(bool cache) { m_cacheOnly = cache; }
-
 //============================"GET" METHODS=====================================
 
 QString Equipment::notes() const { return m_notes; }
@@ -425,7 +419,6 @@ double Equipment::topUpKettle_l() const { return m_topUpKettle_l; }
 double Equipment::hopUtilization_pct() const { return m_hopUtilization_pct; }
 double Equipment::grainAbsorption_LKg() { return m_grainAbsorption_LKg; }
 double Equipment::boilingPoint_c() const { return m_boilingPoint_c; }
-bool Equipment::cacheOnly() const { return m_cacheOnly; }
 
 void Equipment::doCalculations()
 {

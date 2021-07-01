@@ -1,6 +1,6 @@
 /*
  * YeastTableModel.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2020
+ * authors 2009-2021
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -20,35 +20,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "YeastTableModel.h"
 
-#include <QAbstractTableModel>
 #include <QAbstractItemModel>
-#include <QWidget>
-#include <QModelIndex>
-#include <QVariant>
-#include <QItemDelegate>
-#include <QStyleOptionViewItem>
+#include <QAbstractTableModel>
 #include <QComboBox>
+#include <QHeaderView>
+#include <QItemDelegate>
 #include <QLineEdit>
 #include <QString>
 #include <QVector>
-#include <QHeaderView>
+#include <QWidget>
 
-#include "database.h"
-#include "model/Yeast.h"
-#include "YeastTableModel.h"
-#include "Unit.h"
 #include "brewtarget.h"
-#include "model/Recipe.h"
+#include "database.h"
 #include "MainWindow.h"
+#include "model/Recipe.h"
+#include "model/Yeast.h"
+#include "Unit.h"
+#include "YeastTableModel.h"
 
-YeastTableModel::YeastTableModel(QTableView* parent, bool editable)
-   : QAbstractTableModel(parent),
-     editable(editable),
-     _inventoryEditable(false),
-     parentTableWidget(parent),
-     recObs(nullptr)
-{
+YeastTableModel::YeastTableModel(QTableView* parent, bool editable) :
+   QAbstractTableModel(parent),
+   editable(editable),
+   _inventoryEditable(false),
+   parentTableWidget(parent),
+   recObs(nullptr) {
+
    yeastObs.clear();
    setObjectName("yeastTableModel");
 
@@ -74,8 +72,9 @@ void YeastTableModel::addYeast(Yeast* yeast)
          yeast->deleted() ||
          !yeast->display()
       )
-   )
+   ) {
       return;
+   }
    int size = yeastObs.size();
    beginInsertRows( QModelIndex(), size, size );
    yeastObs.append(yeast);
@@ -187,7 +186,9 @@ void YeastTableModel::changedInventory(Brewtarget::DBTable table, int invKey, QV
          }
       }
    }
+   return;
 }
+
 void YeastTableModel::changed(QMetaProperty prop, QVariant /*val*/)
 {
    int i;
@@ -287,7 +288,7 @@ QVariant YeastTableModel::data( const QModelIndex& index, int role ) const
 
          return QVariant(
                            Brewtarget::displayAmount( row->amount(),
-                                                      row->amountIsWeight() ? static_cast<Unit const *>(&Units::kilograms) : static_cast<Unit const *>(&Units::liters),
+                                                      row->amountIsWeight() ? &Units::kilograms : &Units::liters,
                                                       3,
                                                       unit,
                                                       Unit::noScale
@@ -387,7 +388,7 @@ bool YeastTableModel::setData( const QModelIndex& index, const QVariant& value, 
          if( ! value.canConvert(QVariant::Int) )
             return false;
          Brewtarget::mainWindow()->doOrRedoUpdate(*row,
-                                                  "type",
+                                                  PropertyNames::Yeast::type,
                                                   static_cast<Yeast::Type>(value.toInt()),
                                                   tr("Change Yeast Type"));
          break;
@@ -395,7 +396,7 @@ bool YeastTableModel::setData( const QModelIndex& index, const QVariant& value, 
          if( ! value.canConvert(QVariant::Int) )
             return false;
          Brewtarget::mainWindow()->doOrRedoUpdate(*row,
-                                                  "form",
+                                                  PropertyNames::Yeast::form,
                                                   static_cast<Yeast::Form>(value.toInt()),
                                                   tr("Change Yeast Form"));
          break;
@@ -403,18 +404,18 @@ bool YeastTableModel::setData( const QModelIndex& index, const QVariant& value, 
          if( ! value.canConvert(QVariant::Int) )
             return false;
          Brewtarget::mainWindow()->doOrRedoUpdate(*row,
-                                                  "inventoryQuanta",
+                                                  PropertyNames::NamedEntityWithInventory::inventory,
                                                   value.toInt(),
-                                                  tr("Change Yeast Inventory Unit Size")); // .:TBD:. MY 2020-12-11 Whilst it's admirably concise, I find "quanta" unclear, and I'm not sure it's that easy to translate either
+                                                  tr("Change Yeast Inventory Amount"));
          break;
       case YEASTAMOUNTCOL:
          if( ! value.canConvert(QVariant::String) )
             return false;
 
-         unit = row->amountIsWeight() ? static_cast<Unit const *>(&Units::kilograms) : static_cast<Unit const *>(&Units::liters);
+         unit = row->amountIsWeight() ? &Units::kilograms : &Units::liters;
 
          Brewtarget::mainWindow()->doOrRedoUpdate(*row,
-                                                  "amount",
+                                                  PropertyNames::Yeast::amount,
                                                   Brewtarget::qStringToSI(value.toString(), unit, dspUnit, dspScl),
                                                   tr("Change Yeast Amount"));
          break;

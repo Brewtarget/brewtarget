@@ -1318,7 +1318,7 @@ void TableSchema::defineFermInventoryTable()
    m_key->addProperty(kpropKey, Brewtarget::PGSQL,  kcolKey, QString(""), QString("integer"), QVariant(0), 0, kPgSQLConstraint);
    m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
-   m_properties[PropertyNames::Fermentable::inventory]      = new PropertySchema( PropertyNames::Fermentable::inventory,     kcolAmount,        kxmlPropAmount, QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::NamedEntityWithInventory::inventory]      = new PropertySchema( PropertyNames::NamedEntityWithInventory::inventory,     kcolAmount,        kxmlPropAmount, QString("real"), QVariant(0.0));
 }
 
 void TableSchema::defineHopInventoryTable()
@@ -1329,7 +1329,7 @@ void TableSchema::defineHopInventoryTable()
    m_key->addProperty(kpropKey, Brewtarget::PGSQL,  kcolKey, QString(""), QString("integer"), QVariant(0), 0, kPgSQLConstraint);
    m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
-   m_properties[PropertyNames::Hop::inventory] = new PropertySchema( PropertyNames::Hop::inventory, kcolAmount, kxmlPropAmount, QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::NamedEntityWithInventory::inventory] = new PropertySchema( PropertyNames::NamedEntityWithInventory::inventory, kcolAmount, kxmlPropAmount, QString("real"), QVariant(0.0));
 }
 
 void TableSchema::defineMiscInventoryTable()
@@ -1340,7 +1340,7 @@ void TableSchema::defineMiscInventoryTable()
    m_key->addProperty(kpropKey, Brewtarget::PGSQL,  kcolKey, QString(""), QString("integer"), QVariant(0), 0, kPgSQLConstraint);
    m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
-   m_properties[PropertyNames::Misc::inventory] = new PropertySchema( PropertyNames::Misc::inventory, kcolAmount, kxmlPropAmount, QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::NamedEntityWithInventory::inventory] = new PropertySchema( PropertyNames::NamedEntityWithInventory::inventory, kcolAmount, kxmlPropAmount, QString("real"), QVariant(0.0));
 
 }
 
@@ -1352,7 +1352,7 @@ void TableSchema::defineYeastInventoryTable()
    m_key->addProperty(kpropKey, Brewtarget::PGSQL,  kcolKey, QString(""), QString("integer"), QVariant(0), 0, kPgSQLConstraint);
    m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
-   m_properties[PropertyNames::Yeast::inventory] = new PropertySchema( kpropQuanta,  kcolYeastQuanta, kxmlPropAmount, QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::NamedEntityWithInventory::inventory] = new PropertySchema(PropertyNames::NamedEntityWithInventory::inventory,  kcolYeastQuanta, kxmlPropAmount, QString("real"), QVariant(0.0));
 
 }
 

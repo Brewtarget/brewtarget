@@ -1,7 +1,8 @@
 /*
  * brewtarget.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
  * - Dan Cavanagh <dan@dancavanagh.com>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  * - Rob Taylor <robtaylor@floopily.org>
@@ -53,7 +54,6 @@ Q_DECLARE_METATYPE( QMetaProperty )
 
 /*!
  * \class Brewtarget
- * \author Philip G. Lee
  *
  * \brief The main class. Figures out stuff from the system, formats things appropriately, handles translation, etc.
  */
@@ -61,7 +61,7 @@ class Brewtarget : public QObject
 {
    Q_OBJECT
    Q_ENUMS(DBTypes)
-   Q_ENUMS(delOptions);
+   Q_ENUMS(delOptions)
 
    friend class OptionDialog;
    friend class IbuMethods;

@@ -54,35 +54,31 @@ QString Salt::classNameStr()
 }
 
 Salt::Salt(QString name, bool cache)
-   : NamedEntity(Brewtarget::SALTTABLE, name, true),
+   : NamedEntity(Brewtarget::SALTTABLE, cache, name, true),
    m_amount(0.0),
    m_add_to(NEVER),
    m_type(NONE),
    m_amount_is_weight(true),
    m_percent_acid(0.0),
    m_is_acid(false),
-   m_misc_id(-1),
-   m_cacheOnly(cache)
-{
+   m_misc_id(-1) {
+   return;
 }
 
 Salt::Salt(Salt & other)
-   : NamedEntity(Brewtarget::SALTTABLE, other.name(), true),
+   : NamedEntity(other),
    m_amount(other.m_amount),
    m_add_to(other.m_add_to),
    m_type(other.m_type),
    m_amount_is_weight(other.m_amount_is_weight),
    m_percent_acid(other.m_percent_acid),
    m_is_acid(other.m_is_acid),
-   m_misc_id(other.m_misc_id),
-   m_cacheOnly(other.m_cacheOnly)
-{
+   m_misc_id(other.m_misc_id) {
+   return;
 }
 
 Salt::Salt(TableSchema* table, QSqlRecord rec, int t_key)
-   : NamedEntity(table, rec, t_key),
-   m_cacheOnly(false)
-{
+   : NamedEntity(table, rec, t_key) {
    m_amount = rec.value(table->propertyToColumn( PropertyNames::Salt::amount)).toDouble();
    m_amount_is_weight = rec.value( table->propertyToColumn( PropertyNames::Salt::amountIsWeight)).toBool();
    m_percent_acid = rec.value( table->propertyToColumn( PropertyNames::Salt::percentAcid)).toDouble();
@@ -123,7 +119,7 @@ void Salt::setType(Salt::Types type)
 
    bool anAcid = (type > NAHCO3);
    bool isWeight = ! (type == LACTIC || type == H3PO4);
-   if ( m_cacheOnly || 
+   if ( m_cacheOnly ||
         setEasy(PropertyNames::Salt::type, type) ||
         setEasy(PropertyNames::Salt::isAcid, anAcid) ||
         setEasy(PropertyNames::Salt::amountIsWeight, isWeight) ) {
@@ -153,13 +149,11 @@ void Salt::setPercentAcid(double var)
       m_percent_acid = var;
    }
 }
-void Salt::setCacheOnly(bool cache) { m_cacheOnly = cache; }
 
 //=========================="GET" METHODS=======================================
 double Salt::amount() const { return m_amount; }
 Salt::WhenToAdd Salt::addTo() const { return m_add_to; }
 Salt::Types Salt::type() const { return m_type; }
-bool Salt::cacheOnly() const { return m_cacheOnly; }
 int Salt::miscId() const { return m_misc_id; }
 bool Salt::isAcid() const { return m_is_acid; }
 bool Salt::amountIsWeight() const { return m_amount_is_weight; }

@@ -121,7 +121,6 @@ public:
    double ph() const;
    double alkalinity() const;
    QString notes() const;
-   bool cacheOnly() const;
    Water::Types type() const;
    double mashRO() const;
    double spargeRO() const;
@@ -138,7 +137,6 @@ public:
    void setPh( double var );
    void setAlkalinity(double var);
    void setNotes( const QString &var );
-   void setCacheOnly( bool cache );
    void setType(Types type);
    void setMashRO(double var);
    void setSpargeRO(double var);
@@ -170,7 +168,6 @@ private:
    double m_ph;
    double m_alkalinity;
    QString m_notes;
-   bool m_cacheOnly;
    Water::Types m_type;
    double m_mash_ro;
    double m_sparge_ro;

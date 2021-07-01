@@ -36,12 +36,16 @@
 #include <QVariant>
 
 #include "brewtarget.h"
+#include "model/NamedParameterBundle.h"
 #include "TableSchema.h"
 
-namespace PropertyNames::NamedEntity { static char const * const folder = "folder"; /* previously kpropFolder */ }
-namespace PropertyNames::NamedEntity { static char const * const display = "display"; /* previously kpropDisplay */ }
 namespace PropertyNames::NamedEntity { static char const * const deleted = "deleted"; /* previously kpropDeleted */ }
+namespace PropertyNames::NamedEntity { static char const * const display = "display"; /* previously kpropDisplay */ }
+namespace PropertyNames::NamedEntity { static char const * const folder = "folder"; /* previously kpropFolder */ }
+namespace PropertyNames::NamedEntity { static char const * const key = "key"; }
 namespace PropertyNames::NamedEntity { static char const * const name = "name"; /* previously kpropName */ }
+namespace PropertyNames::NamedEntity { static char const * const parentKey = "parentKey"; }
+
 // For uintptr_t.
 #if HAVE_STDINT_H
 #   include <stdint.h>
@@ -77,9 +81,12 @@ Q_DECLARE_METATYPE( uintptr_t )
  * \b Yeast) are ingredients in the normal sense of the word, others (eg \b Instruction, \b Equipment, \b Style,
  * \b Mash) are not really.  Equally, the fact that derived classes can be instantiated from BeerXML is not their
  * defining characteristic.
+ *
+ * NB: We cannot make this a template class (eg to use
+ * https://en.wikipedia.org/wiki/Curiously_recurring_template_pattern) because the Qt Meta-Object Compiler (moc) cannot
+ * handle templates, and we want to be able to use the Qt Property system as well as signals and slots.
  */
-class NamedEntity : public QObject
-{
+class NamedEntity : public QObject {
    Q_OBJECT
    Q_CLASSINFO("version","1")
 
@@ -90,11 +97,13 @@ public:
    NamedEntity(Brewtarget::DBTable table, int key, QString t_name = QString(),
                   bool t_display = false, QString folder = QString());
 */
-   NamedEntity(Brewtarget::DBTable table, QString t_name = QString(), bool t_display = false);
+   NamedEntity(Brewtarget::DBTable table, bool cache = true, QString t_name = QString(), bool t_display = false);
 
    NamedEntity(TableSchema* table, QSqlRecord rec, int t_key );
 
-   NamedEntity( NamedEntity const& other );
+   NamedEntity(NamedEntity const & other);
+
+   NamedEntity(NamedParameterBundle const & namedParameterBundle);
 
    // Our destructor needs to be virtual because we sometimes point to an instance of a derived class through a pointer
    // to this class -- ie NamedEntity * namedEntity = new Hop() and suchlike.  We do already get a virtual destructor by
@@ -106,6 +115,12 @@ public:
     *        overload) the protected virtual isEqualTo() function.
     */
    bool operator==(NamedEntity const & other) const;
+
+   /**
+    * \brief We don't have a need to assign one NamedEntity to another, and the compiler implementation of this would
+    *        be wrong, so we delete it.
+    */
+   NamedEntity & operator=(NamedEntity const &) = delete;
 
    /**
     * \brief This generic version of operator!= should work for subclasses provided they correctly _override_ (NB not
@@ -156,6 +171,10 @@ public:
 
    //! \returns our key in the table we are stored in.
    int key() const;
+
+   bool cacheOnly() const;
+   void setCacheOnly(bool cache);
+
    //! \returns the table we are stored in.
    Brewtarget::DBTable table() const;
    //! \returns the BeerXML version of this element.
@@ -165,6 +184,8 @@ public:
    //! Convenience method to get a meta property by name.
    QMetaProperty metaProperty(QString const& name) const;
 
+   // .:TODO:. MY 2021-03-23 These don't really belong here
+   // Should be able to get rid of them when we finish refactoring BeerXml.cpp
    // Some static helpers to convert to/from text.
    static double getDouble( const QDomText& textNode );
    static bool getBool( const QDomText& textNode );
@@ -246,6 +267,7 @@ protected:
    Brewtarget::DBTable m_table;
    // This is 0 if there is no parent (or parent is not yet known)
    int parentKey;
+   bool m_cacheOnly;
 
    /*!
     * \param prop_name A meta-property name
@@ -268,7 +290,7 @@ protected:
     */
    QVariant get( const QString& col_name ) const;
 
-   void setInventory( const QVariant& value, int invKey = 0, bool notify=true );
+   void setInventory( const QVariant& value, int invKey, bool notify=true );
    QVariant getInventory() const;
 
    QVariantMap getColumnValueMap() const;

@@ -22,30 +22,28 @@
  */
 #ifndef MODEL_MISC_H
 #define MODEL_MISC_H
+#pragma once
 
 #include <QString>
 
-#include "model/NamedEntity.h"
-
+#include "model/NamedEntityWithInventory.h"
 namespace PropertyNames::Misc { static char const * const amount = "amount"; /* previously kpropAmount */ }
 namespace PropertyNames::Misc { static char const * const amountIsWeight = "amountIsWeight"; /* previously kpropAmtIsWgt */ }
-namespace PropertyNames::Misc { static char const * const inventory = "inventory"; /* previously kpropInventory */ }
-namespace PropertyNames::Misc { static char const * const inventory_id = "inventory_id"; /* previously kpropInventoryId */ }
-namespace PropertyNames::Misc { static char const * const useString = "useString"; /* previously kpropUseString */ }
-namespace PropertyNames::Misc { static char const * const use = "use"; /* previously kpropUse */ }
-namespace PropertyNames::Misc { static char const * const typeString = "typeString"; /* previously kpropTypeString */ }
-namespace PropertyNames::Misc { static char const * const type = "type"; /* previously kpropType */ }
+namespace PropertyNames::Misc { static char const * const amountType = "amountType"; }
 namespace PropertyNames::Misc { static char const * const notes = "notes"; /* previously kpropNotes */ }
 namespace PropertyNames::Misc { static char const * const time = "time"; /* previously kpropMiscTime */ }
+namespace PropertyNames::Misc { static char const * const typeString = "typeString"; /* previously kpropTypeString */ }
+namespace PropertyNames::Misc { static char const * const type = "type"; /* previously kpropType */ }
 namespace PropertyNames::Misc { static char const * const useFor = "useFor"; /* previously kpropUseFor */ }
+namespace PropertyNames::Misc { static char const * const useString = "useString"; /* previously kpropUseString */ }
+namespace PropertyNames::Misc { static char const * const use = "use"; /* previously kpropUse */ }
 
 /*!
  * \class Misc
  *
  * \brief Model for a misc record in the database.
  */
-class Misc : public NamedEntity
-{
+class Misc : public NamedEntityWithInventory {
    Q_OBJECT
    Q_CLASSINFO("signal", "miscs")
 
@@ -88,10 +86,6 @@ public:
    Q_PROPERTY( double time READ time WRITE setTime /*NOTIFY changed*/ /*changedTime*/ )
    //! \brief The amount in either kg or L, depending on \c amountIsWeight().
    Q_PROPERTY( double amount READ amount WRITE setAmount /*NOTIFY changed*/ /*changedAmount*/ )
-   //! \brief The amount in inventory in either kg or L, depending on \c amountIsWeight().
-   Q_PROPERTY( double inventory READ inventory WRITE setInventoryAmount /*NOTIFY changed*/ /*changedAmount*/ )
-   //! \brief The inventory id.
-   Q_PROPERTY( double inventoryId READ inventoryId WRITE setInventoryId /*NOTIFY changed*/ /*changedAmount*/ )
    //! \brief Whether the amount is weight (kg), or volume (L).
    Q_PROPERTY( bool amountIsWeight READ amountIsWeight WRITE setAmountIsWeight /*NOTIFY changed*/ /*changedAmountIsWeight*/ )
    //! \brief What to use it for.
@@ -104,13 +98,11 @@ public:
    void setUse( Use u );
    void setAmountType( AmountType t );
    void setAmount( double var );
-   void setInventoryAmount( double var );
+
    void setTime( double var );
    void setAmountIsWeight( bool var );
    void setUseFor( const QString &var );
    void setNotes( const QString &var );
-   void setCacheOnly( bool cache );
-   void setInventoryId( int key );
 
    // Get
 //   QString name() const;
@@ -124,13 +116,10 @@ public:
    const QString amountTypeString() const;
    const QString amountTypeStringTr() const;
    double amount() const;
-   double inventory();
-   int inventoryId() const;
    double time() const;
    bool amountIsWeight() const;
    QString useFor() const;
    QString notes() const;
-   bool cacheOnly() const;
 
    static QString classNameStr();
 
@@ -149,7 +138,7 @@ protected:
 
 private:
    Misc(TableSchema* table, QSqlRecord rec, int t_key = -1);
-   Misc(Misc & other);
+   Misc(Misc const & other);
 
    QString m_typeString;
    Type m_type;
@@ -160,9 +149,6 @@ private:
    bool m_amountIsWeight;
    QString m_useFor;
    QString m_notes;
-   double m_inventory;
-   int m_inventory_id;
-   bool m_cacheOnly;
 
    bool isValidType( const QString &var );
    bool isValidUse( const QString &var );
@@ -173,31 +159,5 @@ private:
 };
 
 Q_DECLARE_METATYPE( QList<Misc*> )
-/*
-inline bool MiscPtrLt( Misc* lhs, Misc* rhs)
-{
-   return lhs->name() < rhs->name();
-}
 
-inline bool MiscPtrEq( Misc* lhs, Misc* rhs)
-{
-   return lhs->name() == rhs->name();
-}
-
-struct Misc_ptr_cmp
-{
-   bool operator()( Misc* lhs, Misc* rhs)
-   {
-      return lhs->name() < rhs->name();
-   }
-};
-
-struct Misc_ptr_equals
-{
-   bool operator()( Misc* lhs, Misc* rhs )
-   {
-      return lhs->name() == rhs->name();
-   }
-};
-*/
-#endif   /* _MISC_H */
+#endif

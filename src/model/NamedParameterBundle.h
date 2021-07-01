@@ -40,14 +40,14 @@ public:
    QVariant operator()(char const * const parameterName) const;
 
    /**
-    * \brief Get and store the value of a parameter that is required to be present
+    * \brief Get the value of a parameter that is not required to be present
     *
     *        (NB: There is no general implementation of this templated function, just specific specialisations)
     *
     * \param parameterName
-    * \param storeIn
+    * \param defaultValue  What to return if the parameter is not present in the bundle
     */
-   template <class T> void operator()(char const * const parameterName, T & storeIn) const;
+   template <class T> T operator()(char const * const parameterName, T const & defaultValue) const;
 };
 
 #endif

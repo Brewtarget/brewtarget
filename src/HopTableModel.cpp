@@ -43,30 +43,27 @@
 #include "brewtarget.h"
 #include "MainWindow.h"
 
-HopTableModel::HopTableModel(QTableView* parent, bool editable)
-   : QAbstractTableModel(parent),
-     colFlags(HOPNUMCOLS),
-     _inventoryEditable(false),
-     recObs(nullptr),
-     parentTableWidget(parent),
-     showIBUs(false)
-{
-   hopObs.clear();
-   setObjectName("hopTable");
+HopTableModel::HopTableModel(QTableView * parent, bool editable) :
+   QAbstractTableModel(parent),
+   colFlags(HOPNUMCOLS),
+   _inventoryEditable(false),
+   recObs(nullptr),
+   parentTableWidget(parent),
+   showIBUs(false) {
+   this->hopObs.clear();
+   this->setObjectName("hopTable");
 
-   int i;
-   for( i = 0; i < HOPNUMCOLS; ++i )
-   {
-      if( i == HOPNAMECOL )
+   for (int i = 0; i < HOPNUMCOLS; ++i) {
+      if (i == HOPNAMECOL) {
          colFlags[i] = Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
-      else if( i == HOPINVENTORYCOL )
+      } else if (i == HOPINVENTORYCOL) {
          colFlags[i] = Qt::ItemIsEnabled;
-      else
+      } else
          colFlags[i] = Qt::ItemIsSelectable | (editable ? Qt::ItemIsEditable : Qt::NoItemFlags) | Qt::ItemIsDragEnabled |
-            Qt::ItemIsEnabled;
+                       Qt::ItemIsEnabled;
    }
 
-   QHeaderView* headerView = parentTableWidget->horizontalHeader();
+   QHeaderView * headerView = parentTableWidget->horizontalHeader();
    headerView->setContextMenuPolicy(Qt::CustomContextMenu);
    parentTableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
    parentTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
@@ -76,31 +73,25 @@ HopTableModel::HopTableModel(QTableView* parent, bool editable)
    connect( &(Database::instance()), &Database::changedInventory, this, &HopTableModel::changedInventory );
 }
 
-HopTableModel::~HopTableModel()
-{
-   hopObs.clear();
+HopTableModel::~HopTableModel() {
+   this->hopObs.clear();
 }
 
-void HopTableModel::observeRecipe(Recipe* rec)
-{
-   if( recObs )
-   {
-      disconnect( recObs, nullptr, this, nullptr );
+void HopTableModel::observeRecipe(Recipe * rec) {
+   if (this->recObs) {
+      disconnect(this->recObs, nullptr, this, nullptr);
       removeAll();
    }
 
-   recObs = rec;
-   if( recObs )
-   {
-      connect( recObs, &NamedEntity::changed, this, &HopTableModel::changed );
-      addHops( recObs->hops() );
+   this->recObs = rec;
+   if (this->recObs) {
+      connect(this->recObs, &NamedEntity::changed, this, &HopTableModel::changed);
+      this->addHops(this->recObs->hops());
    }
 }
 
-void HopTableModel::observeDatabase(bool val)
-{
-   if( val )
-   {
+void HopTableModel::observeDatabase(bool val) {
+   if (val) {
       observeRecipe(nullptr);
       removeAll();
       connect( &(Database::instance()), qOverload<Hop*>(&Database::createdSignal), this, &HopTableModel::addHop );
@@ -156,14 +147,11 @@ void HopTableModel::addHops(QList<Hop*> hops)
    }
 }
 
-bool HopTableModel::removeHop(Hop* hop)
-{
-   int i;
-   i = hopObs.indexOf(hop);
-   if( i >= 0 )
-   {
-      beginRemoveRows( QModelIndex(), i, i );
-      disconnect( hop, nullptr, this, nullptr );
+bool HopTableModel::removeHop(Hop * hop) {
+   int i = hopObs.indexOf(hop);
+   if (i >= 0) {
+      beginRemoveRows(QModelIndex(), i, i);
+      disconnect(hop, nullptr, this, nullptr);
       hopObs.removeAt(i);
       //reset(); // Tell everybody the table has changed.
       endRemoveRows();
@@ -179,14 +167,11 @@ void HopTableModel::setShowIBUs( bool var )
    showIBUs = var;
 }
 
-void HopTableModel::removeAll()
-{
-   if (hopObs.size())
-   {
-      beginRemoveRows( QModelIndex(), 0, hopObs.size()-1 );
-      while( !hopObs.isEmpty() )
-      {
-         disconnect( hopObs.takeLast(), nullptr, this, nullptr );
+void HopTableModel::removeAll() {
+   if (hopObs.size()) {
+      beginRemoveRows(QModelIndex(), 0, hopObs.size() - 1);
+      while (!hopObs.isEmpty()) {
+         disconnect(hopObs.takeLast(), nullptr, this, nullptr);
       }
       endRemoveRows();
    }
@@ -207,6 +192,7 @@ void HopTableModel::changedInventory(Brewtarget::DBTable table, int invKey, QVar
          }
       }
    }
+   return;
 }
 
 void HopTableModel::changed(QMetaProperty prop, QVariant /*val*/)
@@ -214,59 +200,54 @@ void HopTableModel::changed(QMetaProperty prop, QVariant /*val*/)
    int i;
 
    // Find the notifier in the list
-   Hop* hopSender = qobject_cast<Hop*>(sender());
-   if( hopSender )
-   {
+   Hop * hopSender = qobject_cast<Hop *>(sender());
+   if (hopSender) {
       i = hopObs.indexOf(hopSender);
-      if( i < 0 )
+      if (i < 0) {
          return;
+      }
 
-      emit dataChanged( QAbstractItemModel::createIndex(i, 0),
-                        QAbstractItemModel::createIndex(i, HOPNUMCOLS-1));
-      emit headerDataChanged( Qt::Vertical, i, i );
+      emit dataChanged(QAbstractItemModel::createIndex(i, 0),
+                       QAbstractItemModel::createIndex(i, HOPNUMCOLS - 1));
+      emit headerDataChanged(Qt::Vertical, i, i);
       return;
    }
 
    // See if sender is our recipe.
-   Recipe* recSender = qobject_cast<Recipe*>(sender());
-   if( recSender && recSender == recObs )
-   {
-      if( QString(prop.name()) == "hops" )
-      {
+   Recipe * recSender = qobject_cast<Recipe *>(sender());
+   if (recSender && recSender == recObs) {
+      if (QString(prop.name()) == "hops") {
          removeAll();
-         addHops( recObs->hops() );
+         addHops(recObs->hops());
       }
-      if( rowCount() > 0 )
-         emit headerDataChanged( Qt::Vertical, 0, rowCount()-1 );
+      if (rowCount() > 0) {
+         emit headerDataChanged(Qt::Vertical, 0, rowCount() - 1);
+      }
       return;
    }
 }
 
-int HopTableModel::rowCount(const QModelIndex& /*parent*/) const
-{
+int HopTableModel::rowCount(const QModelIndex & /*parent*/) const {
    return hopObs.size();
 }
 
-int HopTableModel::columnCount(const QModelIndex& /*parent*/) const
-{
+int HopTableModel::columnCount(const QModelIndex & /*parent*/) const {
    return HOPNUMCOLS;
 }
 
-QVariant HopTableModel::data( const QModelIndex& index, int role ) const
-{
-   Hop* row;
+QVariant HopTableModel::data(const QModelIndex & index, int role) const {
+   Hop * row;
    int col = index.column();
    Unit::unitScale scale;
    Unit::unitDisplay unit;
 
    // Ensure the row is ok.
-   if( index.row() >= static_cast<int>(hopObs.size() ))
-   {
+   if (index.row() >= static_cast<int>(hopObs.size())) {
       qWarning() << QString("Bad model index. row = %1").arg(index.row());
       return QVariant();
-   }
-   else
+   } else {
       row = hopObs[index.row()];
+   }
 
    switch( index.column() )
    {
@@ -407,7 +388,7 @@ bool HopTableModel::setData( const QModelIndex& index, const QVariant& value, in
          retVal = value.canConvert(QVariant::String);
          if( retVal ) {
             Brewtarget::mainWindow()->doOrRedoUpdate(*row,
-                                                     "inventoryAmount",
+                                                     PropertyNames::NamedEntityWithInventory::inventory,
                                                      Brewtarget::qStringToSI(value.toString(),&Units::kilograms, displayUnit(HOPINVENTORYCOL)),
                                                      tr("Change Hop Inventory Amount"));
          }
@@ -416,7 +397,7 @@ bool HopTableModel::setData( const QModelIndex& index, const QVariant& value, in
          retVal = value.canConvert(QVariant::String);
          if( retVal ) {
             Brewtarget::mainWindow()->doOrRedoUpdate(*row,
-                                                     "amount_kg",
+                                                     PropertyNames::Hop::amount_kg,
                                                      Brewtarget::qStringToSI(value.toString(), &Units::kilograms, dspUnit, dspScl),
                                                      tr("Change Hop Amount"));
          }
@@ -425,7 +406,7 @@ bool HopTableModel::setData( const QModelIndex& index, const QVariant& value, in
          retVal = value.canConvert(QVariant::Int);
          if( retVal ) {
             Brewtarget::mainWindow()->doOrRedoUpdate(*row,
-                                                     "use",
+                                                     PropertyNames::Hop::use,
                                                      static_cast<Hop::Use>(value.toInt()),
                                                      tr("Change Hop Use"));
          }
@@ -434,7 +415,7 @@ bool HopTableModel::setData( const QModelIndex& index, const QVariant& value, in
          retVal = value.canConvert(QVariant::Int);
          if( retVal ) {
             Brewtarget::mainWindow()->doOrRedoUpdate(*row,
-                                                     "form",
+                                                     PropertyNames::Hop::form,
                                                      static_cast<Hop::Form>(value.toInt()),
                                                      tr("Change Hop Form"));
          }

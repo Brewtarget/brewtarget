@@ -57,11 +57,8 @@ bool Misc::isEqualTo(NamedEntity const & other) const {
 
 //============================CONSTRUCTORS======================================
 
-Misc::Misc(TableSchema* table, QSqlRecord rec, int t_key)
-   : NamedEntity(table, rec, t_key),
-   m_inventory(-1.0),
-   m_cacheOnly(false)
-{
+Misc::Misc(TableSchema* table, QSqlRecord rec, int t_key) :
+   NamedEntityWithInventory(table, rec, t_key) {
    m_typeString = rec.value( table->propertyToColumn( PropertyNames::Misc::type)).toString();
    m_useString = rec.value( table->propertyToColumn( PropertyNames::Misc::use)).toString();
    m_time = rec.value( table->propertyToColumn( PropertyNames::Misc::time)).toDouble();
@@ -70,14 +67,12 @@ Misc::Misc(TableSchema* table, QSqlRecord rec, int t_key)
    m_useFor = rec.value( table->propertyToColumn( PropertyNames::Misc::useFor)).toString();
    m_notes = rec.value( table->propertyToColumn( PropertyNames::Misc::notes)).toString();
 
-   // handle foreign keys properly
-   m_inventory_id = rec.value( table->foreignKeyToColumn( PropertyNames::Misc::inventory_id)).toInt();
    // not read from the db
    m_type = static_cast<Misc::Type>(types.indexOf(m_typeString));
    m_use = static_cast<Misc::Use>(uses.indexOf(m_useString));
 }
 
-Misc::Misc(Misc & other) : NamedEntity(other),
+Misc::Misc(Misc const & other) : NamedEntityWithInventory(other),
    m_typeString(other.m_typeString),
    m_type(other.m_type),
    m_useString(other.m_useString),
@@ -86,15 +81,12 @@ Misc::Misc(Misc & other) : NamedEntity(other),
    m_amount(other.m_amount),
    m_amountIsWeight(other.m_amountIsWeight),
    m_useFor(other.m_useFor),
-   m_notes(other.m_notes),
-   m_inventory(other.m_inventory),
-   m_inventory_id(other.m_inventory_id),
-   m_cacheOnly(other.m_cacheOnly)
-{
+   m_notes(other.m_notes) {
+   return;
 }
 
-Misc::Misc(QString name, bool cache)
-   : NamedEntity(Brewtarget::MISCTABLE, name, true),
+Misc::Misc(QString name, bool cache) :
+   NamedEntityWithInventory(Brewtarget::MISCTABLE, cache, name, true),
    m_typeString(QString()),
    m_type(static_cast<Misc::Type>(0)),
    m_useString(QString()),
@@ -103,11 +95,8 @@ Misc::Misc(QString name, bool cache)
    m_amount(0.0),
    m_amountIsWeight(false),
    m_useFor(QString()),
-   m_notes(QString()),
-   m_inventory(-1.0),
-   m_inventory_id(0),
-   m_cacheOnly(cache)
-{
+   m_notes(QString()) {
+   return;
 }
 
 //============================"GET" METHODS=====================================
@@ -128,16 +117,6 @@ bool Misc::amountIsWeight() const { return m_amountIsWeight; }
 QString Misc::useFor() const { return m_useFor; }
 
 QString Misc::notes() const { return m_notes; }
-
-double Misc::inventory()
-{
-   if ( m_inventory < 0.0 ) {
-      m_inventory = getInventory().toDouble();
-   }
-   return m_inventory;
-}
-
-int Misc::inventoryId() const { return m_inventory_id; }
 
 Misc::AmountType Misc::amountType() const { return m_amountIsWeight ? AmountType_Weight : AmountType_Volume; }
 
@@ -175,8 +154,6 @@ const QString Misc::amountTypeStringTr() const
       return QString("Weight");
    }
 }
-
-bool Misc::cacheOnly() const { return m_cacheOnly; }
 
 //============================"SET" METHODS=====================================
 void Misc::setType( Type t )
@@ -269,26 +246,6 @@ void Misc::setAmount( double var )
    }
 }
 
-void Misc::setInventoryAmount( double var )
-{
-   if( var < 0.0 ) {
-      qWarning() << QString("Misc: inventory < 0: %1").arg(var);
-      return;
-   }
-
-   m_inventory = var;
-   if ( ! m_cacheOnly ) {
-      setInventory(var,m_inventory_id);
-   }
-}
-
-void Misc::setInventoryId( int key )
-{
-   m_inventory_id = key;
-   if ( ! m_cacheOnly )
-      setEasy(kpropInventoryId, key);
-}
-
 void Misc::setTime( double var )
 {
    if( var < 0.0 ) {
@@ -303,8 +260,6 @@ void Misc::setTime( double var )
       signalCacheChange( PropertyNames::Misc::time, var );
    }
 }
-
-void Misc::setCacheOnly(bool cache) { m_cacheOnly = cache; }
 
 //========================OTHER METHODS=========================================
 

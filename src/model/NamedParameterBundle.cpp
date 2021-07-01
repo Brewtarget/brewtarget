@@ -24,6 +24,14 @@
 #include <QDebug>
 #include <QString>
 
+namespace {
+   template <class T> T valueFromQVariant(QVariant const & qv);
+   template <> QString valueFromQVariant(QVariant const & qv) {return qv.toString();}
+   template <> bool    valueFromQVariant(QVariant const & qv) {return qv.toBool();}
+   template <> int     valueFromQVariant(QVariant const & qv) {return qv.toInt();}
+   template <> double  valueFromQVariant(QVariant const & qv) {return qv.toDouble();}
+}
+
 NamedParameterBundle::NamedParameterBundle() : QHash<char const * const, QVariant>() {
    return;
 }
@@ -53,20 +61,15 @@ QVariant NamedParameterBundle::operator()(char const * const parameterName) cons
    return returnValue;
 }
 
+template <class T> T NamedParameterBundle::operator()(char const * const parameterName, T const & defaultValue) const {
+   return this->contains(parameterName) ? valueFromQVariant<T>(this->value(parameterName)) : defaultValue;
+}
 
-template <> void NamedParameterBundle::operator()<QString>(char const * const parameterName, QString & storeIn) const {
-   storeIn = this->operator()(parameterName).toString();
-   return;
-}
-template <> void NamedParameterBundle::operator()<bool>(char const * const parameterName, bool & storeIn) const {
-   storeIn = this->operator()(parameterName).toBool();
-   return;
-}
-template <> void NamedParameterBundle::operator()<int>(char const * const parameterName, int & storeIn) const {
-   storeIn = this->operator()(parameterName).toInt();
-   return;
-}
-template <> void NamedParameterBundle::operator()<double>(char const * const parameterName, double & storeIn) const {
-   storeIn = this->operator()(parameterName).toDouble();
-   return;
-}
+//
+// Instantiate the above template function for the types that are going to use it
+// (This is all just a trick to allow the template definition to be here in the .cpp file and not in the header.)
+//
+template QString    NamedParameterBundle::operator()(char const * const parameterName, QString const & defaultValue) const;
+template bool       NamedParameterBundle::operator()(char const * const parameterName, bool    const & defaultValue) const;
+template int        NamedParameterBundle::operator()(char const * const parameterName, int     const & defaultValue) const;
+template double     NamedParameterBundle::operator()(char const * const parameterName, double  const & defaultValue) const;

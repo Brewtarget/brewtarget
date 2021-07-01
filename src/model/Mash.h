@@ -90,7 +90,6 @@ public:
    void setTunWeight_kg( double var );
    void setTunSpecificHeat_calGC( double var );
    void setEquipAdjust( bool var );
-   void setCacheOnly( bool cache );
 
    // Getters
    double grainTemp_c() const;
@@ -102,7 +101,6 @@ public:
    double tunWeight_kg() const;
    double tunSpecificHeat_calGC() const;
    bool equipAdjust() const;
-   bool cacheOnly() const;
 
    // Calculated getters
    //! \brief all the mash water, sparge and strike
@@ -153,7 +151,6 @@ private:
    double m_tunWeight_kg;
    double m_tunSpecificHeat_calGC;
    bool m_equipAdjust;
-   bool m_cacheOnly;
 
    QList<MashStep*> m_mashSteps;
 

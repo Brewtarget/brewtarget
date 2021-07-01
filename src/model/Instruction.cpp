@@ -43,20 +43,18 @@ QString Instruction::classNameStr()
 }
 
 Instruction::Instruction(QString name, bool cache)
-   : NamedEntity(Brewtarget::INSTRUCTIONTABLE, name, true),
+   : NamedEntity(Brewtarget::INSTRUCTIONTABLE, cache, name, true),
      m_directions(QString()),
      m_hasTimer  (false),
      m_timerValue(QString()),
      m_completed (false),
      m_interval  (0.0),
-     m_cacheOnly(cache),
      m_recipe   (nullptr)
 {
 }
 
 Instruction::Instruction(TableSchema* table, QSqlRecord rec, int t_key)
    : NamedEntity(table, rec, t_key),
-     m_cacheOnly(false),
      m_recipe   (nullptr)
 {
      m_directions = rec.value( table->propertyToColumn( PropertyNames::Instruction::directions)).toString();
@@ -137,7 +135,6 @@ void Instruction::addReagent(const QString& reagent)
 
 void Instruction::setRecipe(Recipe * const recipe) { this->m_recipe = recipe; }
 
-void Instruction::setCacheOnly(bool cache) { m_cacheOnly = cache; }
 // Accessors ==================================================================
 QString Instruction::directions() { return m_directions; }
 
@@ -152,8 +149,6 @@ QList<QString> Instruction::reagents() { return m_reagents; }
 double Instruction::interval() { return m_interval; }
 
 int Instruction::instructionNumber() const { return Database::instance().instructionNumber(this); }
-
-bool Instruction::cacheOnly() { return m_cacheOnly; }
 
 int Instruction::insertInDatabase() {
    qDebug() << Q_FUNC_INFO << "this->m_recipe:" << static_cast<void *>(this->m_recipe);

@@ -81,7 +81,7 @@ bool BrewNote::isEqualTo(NamedEntity const & other) const {
 
 // Initializers
 BrewNote::BrewNote(QString name, bool cache)
-   : NamedEntity(Brewtarget::BREWNOTETABLE,name,true),
+   : NamedEntity(Brewtarget::BREWNOTETABLE, cache, name, true),
      loading(false),
      m_brewDate(QDateTime()),
      m_fermentDate(QDateTime()),
@@ -112,16 +112,13 @@ BrewNote::BrewNote(QString name, bool cache)
      m_projABV_pct(0.0),
      m_projPoints(0.0),
      m_projFermPoints(0.0),
-     m_projAtten(0.0),
-     m_cacheOnly(cache)
-{
+     m_projAtten(0.0) {
+   return;
 }
 
 BrewNote::BrewNote(TableSchema* table, QSqlRecord rec, int t_key)
    : NamedEntity(table, rec, t_key),
-     loading(false),
-     m_cacheOnly(false)
-{
+     loading(false) {
      m_brewDate = QDateTime::fromString( rec.value( table->propertyToColumn( PropertyNames::BrewNote::brewDate )).toString(), Qt::ISODate);
      m_fermentDate = QDateTime::fromString(rec.value( table->propertyToColumn(PropertyNames::BrewNote::fermentDate)).toString(), Qt::ISODate);
      m_notes = rec.value( table->propertyToColumn(PropertyNames::BrewNote::notes)).toString();
@@ -263,40 +260,39 @@ void BrewNote::recalculateEff(Recipe* parent)
    calculateBrewHouseEff_pct();
 }
 
-BrewNote::BrewNote(BrewNote const& other)
-   : NamedEntity(other),
-     m_brewDate(other.m_brewDate),
-     m_fermentDate(other.m_fermentDate),
-     m_notes(other.m_notes),
-     m_sg(other.m_sg),
-     m_abv(other.m_abv),
-     m_effIntoBK_pct(other.m_effIntoBK_pct),
-     m_brewhouseEff_pct(other.m_brewhouseEff_pct),
-     m_volumeIntoBK_l(other.m_volumeIntoBK_l),
-     m_strikeTemp_c(other.m_strikeTemp_c),
-     m_mashFinTemp_c(other.m_mashFinTemp_c),
-     m_og(other.m_og),
-     m_postBoilVolume_l(other.m_postBoilVolume_l),
-     m_volumeIntoFerm_l(other.m_volumeIntoFerm_l),
-     m_pitchTemp_c(other.m_pitchTemp_c),
-     m_fg(other.m_fg),
-     m_attenuation(other.m_attenuation),
-     m_finalVolume_l(other.m_finalVolume_l),
-     m_boilOff_l(other.m_boilOff_l),
-     m_projBoilGrav(other.m_projBoilGrav),
-     m_projVolIntoBK_l(other.m_projVolIntoBK_l),
-     m_projStrikeTemp_c(other.m_projStrikeTemp_c),
-     m_projMashFinTemp_c(other.m_projMashFinTemp_c),
-     m_projOg(other.m_projOg),
-     m_projVolIntoFerm_l(other.m_projVolIntoFerm_l),
-     m_projFg(other.m_projFg),
-     m_projEff_pct(other.m_projEff_pct),
-     m_projABV_pct(other.m_projABV_pct),
-     m_projPoints(other.m_projPoints),
-     m_projFermPoints(other.m_projFermPoints),
-     m_projAtten(other.m_projAtten),
-     m_cacheOnly(other.m_cacheOnly)
-{
+BrewNote::BrewNote(BrewNote const& other) :
+   NamedEntity        {other                    },
+   m_brewDate         {other.m_brewDate         },
+   m_fermentDate      {other.m_fermentDate      },
+   m_notes            {other.m_notes            },
+   m_sg               {other.m_sg               },
+   m_abv              {other.m_abv              },
+   m_effIntoBK_pct    {other.m_effIntoBK_pct    },
+   m_brewhouseEff_pct {other.m_brewhouseEff_pct },
+   m_volumeIntoBK_l   {other.m_volumeIntoBK_l   },
+   m_strikeTemp_c     {other.m_strikeTemp_c     },
+   m_mashFinTemp_c    {other.m_mashFinTemp_c    },
+   m_og               {other.m_og               },
+   m_postBoilVolume_l {other.m_postBoilVolume_l },
+   m_volumeIntoFerm_l {other.m_volumeIntoFerm_l },
+   m_pitchTemp_c      {other.m_pitchTemp_c      },
+   m_fg               {other.m_fg               },
+   m_attenuation      {other.m_attenuation      },
+   m_finalVolume_l    {other.m_finalVolume_l    },
+   m_boilOff_l        {other.m_boilOff_l        },
+   m_projBoilGrav     {other.m_projBoilGrav     },
+   m_projVolIntoBK_l  {other.m_projVolIntoBK_l  },
+   m_projStrikeTemp_c {other.m_projStrikeTemp_c },
+   m_projMashFinTemp_c{other.m_projMashFinTemp_c},
+   m_projOg           {other.m_projOg           },
+   m_projVolIntoFerm_l{other.m_projVolIntoFerm_l},
+   m_projFg           {other.m_projFg           },
+   m_projEff_pct      {other.m_projEff_pct      },
+   m_projABV_pct      {other.m_projABV_pct      },
+   m_projPoints       {other.m_projPoints       },
+   m_projFermPoints   {other.m_projFermPoints   },
+   m_projAtten        {other.m_projAtten        } {
+   return;
 }
 
 // Setters=====================================================================
@@ -610,8 +606,6 @@ void BrewNote::setBoilOff_l(double var)
    }
 }
 
-void BrewNote::setCacheOnly(bool cache) { m_cacheOnly = cache; }
-
 void BrewNote::setRecipe(Recipe * recipe) { this->m_recipe = recipe; }
 
 
@@ -625,7 +619,6 @@ QString BrewNote::fermentDate_str() const { return m_fermentDate.toString(); }
 QString BrewNote::fermentDate_short() const { return Brewtarget::displayDateUserFormated(m_fermentDate.date()); }
 
 QString BrewNote::notes() const { return m_notes; }
-bool BrewNote::cacheOnly() const { return m_cacheOnly; }
 
 double BrewNote::sg() const { return m_sg; }
 double BrewNote::abv() const { return m_abv; }
