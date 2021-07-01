@@ -32,7 +32,7 @@ jobs:
           version: 5.9.5
 
     - name: Install dependencies
-      run: brew install xalan-c
+      run: brew install xalan-c boost
 
     - name: Build
       env:

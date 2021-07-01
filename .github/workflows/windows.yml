@@ -44,6 +44,7 @@ jobs:
             mingw-w64-${{ matrix.arch }}-qt5
             mingw-w64-${{ matrix.arch }}-xalan-c
             mingw-w64-${{ matrix.arch }}-nsis
+            mingw-w64-${{ matrix.arch }}-boost
           update: true
           release: true
           path-type: strict
