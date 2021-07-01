@@ -381,7 +381,6 @@ public:
    double carbonationTemp_c() const;
    double primingSugarEquiv() const;
    double kegPrimingFactor() const;
-   bool cacheOnly() const;
    bool locked() const;
 
    // Calculated getters.
@@ -483,7 +482,6 @@ public:
    void setCarbonationTemp_c( double var );
    void setPrimingSugarEquiv( double var );
    void setKegPrimingFactor( double var );
-   void setCacheOnly( bool cache );
    void setLocked(bool isLocked);
    void setHasDescendants(bool spawned);
 
@@ -565,7 +563,6 @@ private:
    double m_og_fermentable;
    double m_fg_fermentable;
 
-   bool m_cacheOnly;
    bool m_locked;
    // True when constructed, indicates whether recalcAll has been called.
    bool m_uninitializedCalcs;

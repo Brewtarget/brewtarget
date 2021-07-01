@@ -56,7 +56,7 @@ QString Mash::classNameStr()
 }
 
 Mash::Mash(QString name, bool cache)
-   : NamedEntity(Brewtarget::MASHTABLE, name, true),
+   : NamedEntity(Brewtarget::MASHTABLE, cache, name, true),
      m_grainTemp_c(0.0),
      m_notes(QString()),
      m_tunTemp_c(0.0),
@@ -64,15 +64,12 @@ Mash::Mash(QString name, bool cache)
      m_ph(0.0),
      m_tunWeight_kg(0.0),
      m_tunSpecificHeat_calGC(0.0),
-     m_equipAdjust(true),
-     m_cacheOnly(cache)
-{
+     m_equipAdjust(true) {
+   return;
 }
 
-Mash::Mash(TableSchema* table, QSqlRecord rec, int t_key)
-   : NamedEntity(table, rec, t_key),
-     m_cacheOnly(false)
-{
+Mash::Mash(TableSchema* table, QSqlRecord rec, int t_key) :
+   NamedEntity(table, rec, t_key) {
      m_grainTemp_c = rec.value( table->propertyToColumn(PropertyNames::Mash::grainTemp_c)).toDouble();
      m_notes = rec.value( table->propertyToColumn(PropertyNames::Mash::notes)).toString();
      m_tunTemp_c = rec.value( table->propertyToColumn(PropertyNames::Mash::tunTemp_c)).toDouble();
@@ -197,8 +194,6 @@ void Mash::removeAllMashSteps()
    emit mashStepsChanged();
 }
 
-void Mash::setCacheOnly(bool cache) { m_cacheOnly = cache; }
-
 //============================="GET" METHODS====================================
 QString Mash::notes() const { return m_notes; }
 
@@ -215,8 +210,6 @@ double Mash::tunWeight_kg() const { return m_tunWeight_kg; }
 double Mash::tunSpecificHeat_calGC() const { return m_tunSpecificHeat_calGC; }
 
 bool Mash::equipAdjust() const { return m_equipAdjust; }
-
-bool Mash::cacheOnly() const { return m_cacheOnly; }
 
 // === other methods ===
 double Mash::totalMashWater_l()

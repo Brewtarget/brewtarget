@@ -1,6 +1,6 @@
 /*
  * FermentableTableModel.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2020
+ * authors 2009-2021
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -20,33 +20,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "FermentableTableModel.h"
 
-#include <QAbstractTableModel>
 #include <QAbstractItemModel>
 #include <QAbstractItemView>
-#include <QHeaderView>
-#include <QWidget>
-#include <QModelIndex>
-#include <QVariant>
-#include <QItemEditorFactory>
-#include <QStyle>
-#include <QRect>
-#include <QDebug>
-
-#include "database.h"
-#include "brewtarget.h"
-#include <QSize>
+#include <QAbstractTableModel>
 #include <QComboBox>
-#include <QListWidget>
-#include <QLineEdit>
-#include <QString>
-#include <QVector>
+#include <QDebug>
 #include <QHeaderView>
-#include "model/Fermentable.h"
-#include "FermentableTableModel.h"
-#include "Unit.h"
-#include "model/Recipe.h"
+#include <QItemEditorFactory>
+#include <QLineEdit>
+#include <QListWidget>
+#include <QModelIndex>
+#include <QRect>
+#include <QSize>
+#include <QString>
+#include <QStyle>
+#include <QVariant>
+#include <QVector>
+#include <QWidget>
+
+#include "brewtarget.h"
+#include "database.h"
 #include "MainWindow.h"
+#include "model/Fermentable.h"
+#include "model/Recipe.h"
+#include "Unit.h"
 
 //=====================CLASS FermentableTableModel==============================
 FermentableTableModel::FermentableTableModel(QTableView* parent, bool editable)
@@ -629,7 +628,7 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
          if ( retVal ) {
             // Doing the set via doOrRedoUpdate() saves us from doing a static_cast<Fermentable::Type>() here (as the Q_PROPERTY system will do the casting for us).
             Brewtarget::mainWindow()->doOrRedoUpdate(*row,
-                                                     "type",
+                                                     PropertyNames::Fermentable::type,
                                                      value.toInt(),
                                                      tr("Change Fermentable Type"));
          }
@@ -639,7 +638,7 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
          if( retVal ) {
             // Inventory amount is in kg, but is just called "inventory" rather than "inventory_kg" in the Q_PROPERTY declaration in the Fermentable class
             Brewtarget::mainWindow()->doOrRedoUpdate(*row,
-                                                     "inventory",
+                                                     PropertyNames::NamedEntityWithInventory::inventory,
                                                      Brewtarget::qStringToSI(value.toString(), &Units::kilograms,dspUnit,dspScl),
                                                      tr("Change Inventory Amount"));
          }
@@ -650,7 +649,7 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
             // This is where the amount of a fermentable in a recipe gets updated
             // We need to refer back to the MainWindow to make this an undoable operation
             Brewtarget::mainWindow()->doOrRedoUpdate(*row,
-                                                     "amount_kg",
+                                                     PropertyNames::Fermentable::amount_kg,
                                                      Brewtarget::qStringToSI(value.toString(), &Units::kilograms,dspUnit,dspScl),
                                                      tr("Change Fermentable Amount"));
             if( rowCount() > 0 )
@@ -662,7 +661,7 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
          if( retVal ) {
             // Doing the set via doOrRedoUpdate() saves us from doing a static_cast<Fermentable::AdditionMethod>() here (as the Q_PROPERTY system will do the casting for us).
             Brewtarget::mainWindow()->doOrRedoUpdate(*row,
-                                                     "additionMethod",
+                                                     PropertyNames::Fermentable::additionMethod,
                                                      value.toInt(),
                                                      tr("Change Addition Method"));
          }
@@ -672,7 +671,7 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
          if( retVal ) {
             // Doing the set via doOrRedoUpdate() saves us from doing a static_cast<Fermentable::AdditionTime>() here (as the Q_PROPERTY system will do the casting for us).
             Brewtarget::mainWindow()->doOrRedoUpdate(*row,
-                                                     "additionTime",
+                                                     PropertyNames::Fermentable::additionTime,
                                                      value.toInt(),
                                                      tr("Change Addition Time"));
          }
@@ -690,7 +689,7 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
          retVal = value.canConvert(QVariant::Double);
          if( retVal ) {
             Brewtarget::mainWindow()->doOrRedoUpdate(*row,
-                                                     "color_srm",
+                                                     PropertyNames::Fermentable::color_srm,
                                                      Brewtarget::qStringToSI(value.toString(), &Units::srm, dspUnit, dspScl),
                                                      tr("Change Color"));
          }

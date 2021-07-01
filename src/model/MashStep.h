@@ -21,9 +21,10 @@
 #ifndef MODEL_MASHSTEP_H
 #define MODEL_MASHSTEP_H
 
-#include "model/NamedEntity.h"
 #include <QStringList>
 #include <QString>
+
+#include "model/NamedEntity.h"
 #include "model/Mash.h"
 
 namespace PropertyNames::MashStep { static char const * const stepNumber = "stepNumber"; /* previously kpropStepNumber */ }
@@ -45,7 +46,7 @@ namespace PropertyNames::MashStep { static char const * const type = "type"; /* 
 class MashStep : public NamedEntity
 {
    Q_OBJECT
-   Q_CLASSINFO("signal", "mashsteps");
+   Q_CLASSINFO("signal", "mashsteps")
 
    // this seems to be a class with a lot of friends
    friend class Database;
@@ -94,7 +95,6 @@ public:
    void setEndTemp_c( double var);
    void setInfuseTemp_c( double var);
    void setDecoctionAmount_l( double var);
-   void setCacheOnly(bool cache);
    void setMash(Mash * mash);
 
    Type type() const;
@@ -107,7 +107,6 @@ public:
    double endTemp_c() const;
    double infuseTemp_c() const;
    double decoctionAmount_l() const;
-   bool cacheOnly() const;
    Mash * mash() const;
 
    //! What number this step is in the mash.
@@ -146,7 +145,6 @@ private:
    double m_infuseTemp_c;
    double m_decoctionAmount_l;
    int m_stepNumber;
-   bool m_cacheOnly;
    Mash * m_mash;
 
    bool isValidType( const QString &str ) const;

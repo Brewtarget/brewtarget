@@ -115,7 +115,6 @@ public:
    void setNotes( const QString &var );
    void setGrainAbsorption_LKg(double var);
    void setBoilingPoint_c(double var);
-   void setCacheOnly(bool cache);
 
    // Get
    double boilSize_l() const;
@@ -135,7 +134,6 @@ public:
    QString notes() const;
    double grainAbsorption_LKg();
    double boilingPoint_c() const;
-   bool cacheOnly() const;
 
    //! \brief Calculate how much wort is left immediately at knockout.
    double wortEndOfBoil_l( double kettleWort_l ) const;
@@ -190,7 +188,6 @@ private:
    QString m_notes;
    double m_grainAbsorption_LKg;
    double m_boilingPoint_c;
-   bool m_cacheOnly;
 
    // Calculate the boil size.
    void doCalculations();

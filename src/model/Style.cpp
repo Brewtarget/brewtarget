@@ -52,7 +52,7 @@ QString Style::classNameStr()
 
 // suitable for something that will be written to the db later
 Style::Style(QString t_name, bool cacheOnly)
-   : NamedEntity(Brewtarget::STYLETABLE, t_name, true),
+   : NamedEntity(Brewtarget::STYLETABLE, cacheOnly, t_name, true),
      m_category(QString()),
      m_categoryNumber(QString()),
      m_styleLetter(QString()),
@@ -74,16 +74,13 @@ Style::Style(QString t_name, bool cacheOnly)
      m_notes(QString()),
      m_profile(QString()),
      m_ingredients(QString()),
-     m_examples(QString()),
-     m_cacheOnly(cacheOnly)
-{
+     m_examples(QString()) {
+   return;
 }
 
 // suitable for creating a Style from a database record
 Style::Style(TableSchema* table, QSqlRecord rec, int t_key)
-   : NamedEntity(table, rec, t_key),
-     m_cacheOnly(false)
-{
+   : NamedEntity(table, rec, t_key) {
      m_category = rec.value( table->propertyToColumn( PropertyNames::Style::category)).toString();
      m_categoryNumber = rec.value( table->propertyToColumn( PropertyNames::Style::categoryNumber)).toString();
      m_styleLetter = rec.value( table->propertyToColumn( PropertyNames::Style::styleLetter)).toString();
@@ -359,8 +356,6 @@ void Style::setExamples( const QString& var )
    }
 }
 
-void Style::setCacheOnly( const bool cache ) { m_cacheOnly = cache; }
-
 //============================="GET" METHODS====================================
 QString Style::category() const { return m_category; }
 QString Style::categoryNumber() const { return m_categoryNumber; }
@@ -373,7 +368,6 @@ QString Style::examples() const { return m_examples; }
 Style::Type Style::type() const { return m_type; }
 const QString Style::typeString() const { return m_typeStr; }
 
-bool   Style::cacheOnly() const { return m_cacheOnly; }
 double Style::ogMin() const { return m_ogMin; }
 double Style::ogMax() const { return m_ogMax; }
 double Style::fgMin() const { return m_fgMin; }

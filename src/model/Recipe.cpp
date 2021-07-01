@@ -111,7 +111,7 @@ QString Recipe::classNameStr()
 }
 
 Recipe::Recipe(QString name, bool cache)
-   : NamedEntity(Brewtarget::RECTABLE, name, true),
+   : NamedEntity(Brewtarget::RECTABLE, cache, name, true),
    m_type(QString("All Grain")),
    m_brewer(QString("")),
    m_asstBrewer(QString("Brewtarget: free beer software")),
@@ -141,7 +141,6 @@ Recipe::Recipe(QString name, bool cache)
    m_style_id(0),
    m_og(1.0),
    m_fg(1.0),
-   m_cacheOnly(cache),
    m_locked(false),
    m_hasDescendants(false)
 {
@@ -149,7 +148,6 @@ Recipe::Recipe(QString name, bool cache)
 
 Recipe::Recipe(TableSchema* table, QSqlRecord rec, int t_key)
    : NamedEntity(table, rec, t_key),
-   m_cacheOnly(false),
    m_hasDescendants(false)
 {
    m_type = rec.value( table->propertyToColumn( PropertyNames::Recipe::type)).toString();
@@ -215,7 +213,6 @@ Recipe::Recipe( Recipe const& other ) : NamedEntity(other),
    m_style_id(other.m_style_id),
    m_og(other.m_og),
    m_fg(other.m_fg),
-   m_cacheOnly(other.m_cacheOnly),
    m_locked(other.m_locked),
    m_hasDescendants(false)
 {
@@ -1380,8 +1377,6 @@ void Recipe::setLocked(bool isLocked )
    }
 }
 
-void Recipe::setCacheOnly( bool cache ) { m_cacheOnly = cache; }
-
 //==========================Calculated Getters============================
 
 double Recipe::og()
@@ -1613,7 +1608,6 @@ double Recipe::primingSugarEquiv() const { return m_primingSugarEquiv; }
 double Recipe::kegPrimingFactor() const { return m_kegPrimingFactor; }
 int Recipe::fermentationStages() const { return m_fermentationStages; }
 QDate Recipe::date() const { return m_date; }
-bool Recipe::cacheOnly() const { return m_cacheOnly; }
 bool Recipe::locked() const { return m_locked; }
 
 //=============================Adders and Removers========================================

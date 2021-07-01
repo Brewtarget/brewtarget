@@ -50,7 +50,7 @@ QString Water::classNameStr()
 }
 
 Water::Water(QString name, bool cache)
-   : NamedEntity(Brewtarget::WATERTABLE, name, true),
+   : NamedEntity(Brewtarget::WATERTABLE, cache, name, true),
    m_amount(0.0),
    m_calcium_ppm(0.0),
    m_bicarbonate_ppm(0.0),
@@ -61,7 +61,6 @@ Water::Water(QString name, bool cache)
    m_ph(0.0),
    m_alkalinity(0.0),
    m_notes(QString()),
-   m_cacheOnly(cache),
    m_type(NONE),
    m_mash_ro(0.0),
    m_sparge_ro(0.0),
@@ -70,7 +69,7 @@ Water::Water(QString name, bool cache)
 }
 
 Water::Water(Water const& other, bool cache)
-   : NamedEntity(Brewtarget::WATERTABLE, other.name(), true),
+   : NamedEntity(Brewtarget::WATERTABLE, cache, other.name(), true),
    m_amount(other.m_amount),
    m_calcium_ppm(other.m_calcium_ppm),
    m_bicarbonate_ppm(other.m_bicarbonate_ppm),
@@ -81,7 +80,6 @@ Water::Water(Water const& other, bool cache)
    m_ph(other.m_ph),
    m_alkalinity(other.m_alkalinity),
    m_notes(other.m_notes),
-   m_cacheOnly(cache),
    m_type(other.m_type),
    m_mash_ro(other.m_mash_ro),
    m_sparge_ro(other.m_sparge_ro),
@@ -90,9 +88,7 @@ Water::Water(Water const& other, bool cache)
 }
 
 Water::Water(TableSchema* table, QSqlRecord rec, int t_key)
-   : NamedEntity(table, rec, t_key),
-   m_cacheOnly(false)
-{
+   : NamedEntity(table, rec, t_key) {
    m_amount = rec.value( table->propertyToColumn( PropertyNames::Water::amount)).toDouble();
    m_calcium_ppm = rec.value( table->propertyToColumn( PropertyNames::Water::calcium_ppm)).toDouble();
    m_bicarbonate_ppm = rec.value( table->propertyToColumn( PropertyNames::Water::bicarbonate_ppm)).toDouble();
@@ -182,8 +178,6 @@ void Water::setNotes( const QString &var )
    }
 }
 
-void Water::setCacheOnly(bool cache) { m_cacheOnly = cache; }
-
 void Water::setType(Types type)
 {
    if ( type < NONE || type > TARGET ) {
@@ -227,7 +221,6 @@ double Water::sodium_ppm() const { return m_sodium_ppm; }
 double Water::magnesium_ppm() const { return m_magnesium_ppm; }
 double Water::ph() const { return m_ph; }
 double Water::alkalinity() const { return m_alkalinity; }
-bool Water::cacheOnly() const { return m_cacheOnly; }
 Water::Types Water::type() const { return m_type; }
 double Water::mashRO() const { return m_mash_ro; }
 double Water::spargeRO() const { return m_sparge_ro; }

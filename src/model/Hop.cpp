@@ -76,8 +76,8 @@ QString Hop::classNameStr()
    return name;
 }
 
-Hop::Hop(QString name, bool cache)
-   : NamedEntity(Brewtarget::HOPTABLE, name, true),
+Hop::Hop(QString name, bool cache) :
+   NamedEntityWithInventory(Brewtarget::HOPTABLE, cache, name, true),
      m_useStr(QString()),
      m_use(static_cast<Hop::Use>(0)),
      m_typeStr(QString()),
@@ -95,18 +95,12 @@ Hop::Hop(QString name, bool cache)
      m_humulene_pct(0.0),
      m_caryophyllene_pct(0.0),
      m_cohumulone_pct(0.0),
-     m_myrcene_pct(0.0),
-     m_inventory(-1.0),
-     m_inventory_id(0),
-     m_cacheOnly(cache)
-{
+     m_myrcene_pct(0.0) {
+   return;
 }
 
-Hop::Hop(TableSchema* table, QSqlRecord rec, int t_key)
-   : NamedEntity(table, rec, t_key),
-     m_inventory(-1.0),
-     m_cacheOnly(false)
-{
+Hop::Hop(TableSchema* table, QSqlRecord rec, int t_key) :
+   NamedEntityWithInventory(table, rec, t_key) {
      m_useStr = rec.value(table->propertyToColumn(PropertyNames::Hop::use)).toString();
      m_typeStr = rec.value(table->propertyToColumn(PropertyNames::Hop::type)).toString();
      m_formStr = rec.value(table->propertyToColumn(PropertyNames::Hop::form)).toString();
@@ -123,17 +117,14 @@ Hop::Hop(TableSchema* table, QSqlRecord rec, int t_key)
      m_cohumulone_pct = rec.value(table->propertyToColumn(PropertyNames::Hop::cohumulone_pct)).toDouble();
      m_myrcene_pct = rec.value(table->propertyToColumn(PropertyNames::Hop::myrcene_pct)).toDouble();
 
-     // keys need special handling
-     m_inventory_id = rec.value(table->foreignKeyToColumn(PropertyNames::Hop::inventory_id)).toInt();
-
      // these are not taken directly from the SQL record
      m_use  = static_cast<Hop::Use>(uses.indexOf(m_useStr));
      m_type = static_cast<Hop::Type>(types.indexOf(m_typeStr));
      m_form = static_cast<Hop::Form>(forms.indexOf(m_formStr));
 }
 
-Hop::Hop( Hop & other )
-   : NamedEntity(other),
+Hop::Hop( Hop & other ) :
+   NamedEntityWithInventory(other),
      m_useStr(other.m_useStr),
      m_use(other.m_use),
      m_typeStr(other.m_typeStr),
@@ -151,11 +142,8 @@ Hop::Hop( Hop & other )
      m_humulene_pct(other.m_humulene_pct),
      m_caryophyllene_pct(other.m_caryophyllene_pct),
      m_cohumulone_pct(other.m_cohumulone_pct),
-     m_myrcene_pct(other.m_myrcene_pct),
-     m_inventory(other.m_inventory),
-     m_inventory_id(other.m_inventory_id),
-     m_cacheOnly(other.m_cacheOnly)
-{
+     m_myrcene_pct(other.m_myrcene_pct) {
+   return;
 }
 
 //============================="SET" METHODS====================================
@@ -189,27 +177,6 @@ void Hop::setAmount_kg( double num )
    else if ( setEasy(PropertyNames::Hop::amount_kg,num) ) {
       m_amount_kg = num;
       signalCacheChange(PropertyNames::Hop::amount_kg,num);
-   }
-}
-
-void Hop::setInventoryAmount( double num )
-{
-   if( num < 0.0 ) {
-      qWarning() << "Hop: inventory < 0:" << num;
-      return;
-   }
-
-   m_inventory = num;
-   if ( ! m_cacheOnly ) {
-      setInventory(num,m_inventory_id);
-   }
-}
-
-void Hop::setInventoryId( int key )
-{
-   m_inventory_id = key;
-   if ( ! m_cacheOnly ) {
-      setEasy(PropertyNames::Hop::inventory_id, key);
    }
 }
 
@@ -412,8 +379,6 @@ void Hop::setMyrcene_pct( double num )
    }
 }
 
-void Hop::setCacheOnly(bool cache) { m_cacheOnly = cache; }
-
 //============================="GET" METHODS====================================
 
 Hop::Use Hop::use() const { return m_use; }
@@ -434,21 +399,6 @@ double Hop::humulene_pct() const { return m_humulene_pct; }
 double Hop::caryophyllene_pct() const { return m_caryophyllene_pct; }
 double Hop::cohumulone_pct() const { return m_cohumulone_pct; }
 double Hop::myrcene_pct() const { return m_myrcene_pct; }
-bool   Hop::cacheOnly() const { return m_cacheOnly; }
-
-// a little different in that we don't get the results in advance, but on the fly. I had to undo some const action to make this work
-double Hop::inventory()
-{
-   if ( m_inventory < 0 ) {
-      m_inventory = getInventory().toDouble();
-   }
-   return m_inventory;
-}
-
-int Hop::inventoryId() const
-{
-   return m_inventory_id;
-}
 
 const QString Hop::useStringTr() const
 {

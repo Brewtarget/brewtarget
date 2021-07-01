@@ -36,22 +36,24 @@
 static const char* kVersion = "version";
 
 // sometimes I just want to create a thing with a name and nothing else
-NamedEntity::NamedEntity(Brewtarget::DBTable table, QString t_name, bool t_display)
+NamedEntity::NamedEntity(Brewtarget::DBTable table, bool cache, QString t_name, bool t_display)
    : QObject(nullptr),
      m_key(-1),
      m_table(table),
      parentKey(0),
+     m_cacheOnly(cache),
      m_folder(QString()),
      m_name(t_name),
      m_display(t_display),
-     m_deleted(QVariant())
-{
+     m_deleted(QVariant()) {
+   return;
 }
 
 // othertimes, we creating a thing from a record in the db
 NamedEntity::NamedEntity(TableSchema* table, QSqlRecord rec, int t_key )
    : QObject(nullptr),
      parentKey(0),
+     m_cacheOnly(false),
      m_deleted(QVariant())
 {
    if ( t_key == -1 ) {
@@ -60,24 +62,40 @@ NamedEntity::NamedEntity(TableSchema* table, QSqlRecord rec, int t_key )
    else {
       m_key = t_key;
    }
-      
+
    m_folder  = rec.value( table->propertyToColumn(PropertyNames::NamedEntity::folder)  ).toString();
    m_name    = rec.value( table->propertyToColumn(PropertyNames::NamedEntity::name)    ).toString();
    m_display = rec.value( table->propertyToColumn(PropertyNames::NamedEntity::display) ).toBool();
    m_table   = table->dbTable();
 }
 
+NamedEntity::NamedEntity(NamedParameterBundle const & namedParameterBundle) :
+   QObject    {nullptr                                                            },
+   m_key      {namedParameterBundle(PropertyNames::NamedEntity::key).toInt()      },
+   // Not all subclasses have parents so parentKey should be optional in the NamedParameterBundle
+   // .:TBD:. For the moment, parent IDs are actually stored outside the main object table (eg in equipment_children
+   //         rather than equipment), so this will always set parentKey to -1, but we could envisage changing that in
+   //         future.
+   parentKey  {namedParameterBundle(PropertyNames::NamedEntity::parentKey, -1)    },
+   m_cacheOnly{false                                                              },
+   m_folder    {namedParameterBundle(PropertyNames::NamedEntity::folder, QString{})}, // Not all subclasses have folders
+   m_name      {namedParameterBundle(PropertyNames::NamedEntity::name, QString{})  }, // One subclass, BrewNote, does not have a name
+   m_display   {namedParameterBundle(PropertyNames::NamedEntity::display).toBool() },
+   m_deleted   {namedParameterBundle(PropertyNames::NamedEntity::deleted).toBool() } {
+   return;
+}
+
 // and finally sometimes we create a thing from other things
-NamedEntity::NamedEntity(NamedEntity const& other)
-   : QObject(nullptr),
-     m_key(other.m_key),
-     m_table(other.m_table),
-     parentKey(other.parentKey),
-     m_folder(other.m_folder),
-     m_name(QString()),
-     m_display(other.m_display),
-     m_deleted(other.m_deleted)
-{
+NamedEntity::NamedEntity(NamedEntity const& other) :
+   QObject(nullptr),
+   m_key(other.m_key),
+   m_table(other.m_table),
+   parentKey(other.parentKey),
+   m_cacheOnly(other.m_cacheOnly),
+   m_folder(other.m_folder),
+   m_name(QString()),
+   m_display(other.m_display),
+   m_deleted(other.m_deleted) {
    return;
 }
 
@@ -208,9 +226,18 @@ int NamedEntity::key() const
    return m_key;
 }
 
+bool NamedEntity::cacheOnly() const {
+   return this->m_cacheOnly;
+}
+
 Brewtarget::DBTable NamedEntity::table() const
 {
    return m_table;
+}
+
+void NamedEntity::setCacheOnly(bool cache) {
+   this->m_cacheOnly = cache;
+   return;
 }
 
 int NamedEntity::version() const

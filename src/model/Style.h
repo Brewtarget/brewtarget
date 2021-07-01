@@ -140,7 +140,6 @@ public:
    void setProfile( const QString& var);
    void setNamedEntitys( const QString& var);
    void setExamples( const QString& var);
-   void setCacheOnly(const bool cache);
 
    QString category() const;
    QString categoryNumber() const;
@@ -164,7 +163,6 @@ public:
    QString profile() const;
    QString ingredients() const;
    QString examples() const;
-   bool cacheOnly() const;
 
    static QString classNameStr();
 
@@ -205,8 +203,6 @@ private:
    QString m_profile;
    QString m_ingredients;
    QString m_examples;
-
-   bool m_cacheOnly;
 
    bool isValidType( const QString &str );
    static QStringList m_types;

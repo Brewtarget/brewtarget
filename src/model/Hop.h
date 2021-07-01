@@ -22,42 +22,39 @@
  */
 #ifndef MODEL_HOP_H
 #define MODEL_HOP_H
+#pragma once
 
 #include <QString>
 #include <QStringList>
 
-#include "model/NamedEntity.h"
+#include "model/NamedEntityWithInventory.h"
 #include "TableSchema.h"
 
-namespace PropertyNames::Hop { static char const * const form = "form"; /* previously kpropForm */ }
-namespace PropertyNames::Hop { static char const * const time_min = "time_min"; /* previously kpropTime */ }
-namespace PropertyNames::Hop { static char const * const inventory = "inventory"; /* previously kpropInventory */ }
-namespace PropertyNames::Hop { static char const * const inventory_id = "inventory_id"; /* previously kpropInventoryId */ }
-namespace PropertyNames::Hop { static char const * const useString = "useString"; /* previously kpropUseString */ }
-namespace PropertyNames::Hop { static char const * const use = "use"; /* previously kpropUse */ }
-namespace PropertyNames::Hop { static char const * const origin = "origin"; /* previously kpropOrigin */ }
+namespace PropertyNames::Hop { static char const * const alpha_pct = "alpha_pct"; /* previously kpropAlpha */ }
 namespace PropertyNames::Hop { static char const * const amount_kg = "amount_kg"; /* previously kpropAmountKg */ }
+namespace PropertyNames::Hop { static char const * const beta_pct = "beta_pct"; /* previously kpropBeta */ }
+namespace PropertyNames::Hop { static char const * const caryophyllene_pct = "caryophyllene_pct"; /* previously kpropCaryophyllene */ }
+namespace PropertyNames::Hop { static char const * const cohumulone_pct = "cohumulone_pct"; /* previously kpropCohumulone */ }
+namespace PropertyNames::Hop { static char const * const form = "form"; /* previously kpropForm */ }
+namespace PropertyNames::Hop { static char const * const formString = "formString"; /* previously kpropFormString */ }
+namespace PropertyNames::Hop { static char const * const hsi_pct = "hsi_pct"; /* previously kpropHSI */ }
+namespace PropertyNames::Hop { static char const * const humulene_pct = "humulene_pct"; /* previously kpropHumulene */ }
+namespace PropertyNames::Hop { static char const * const myrcene_pct = "myrcene_pct"; /* previously kpropMyrcene */ }
+namespace PropertyNames::Hop { static char const * const notes = "notes"; /* previously kpropNotes */ }
+namespace PropertyNames::Hop { static char const * const origin = "origin"; /* previously kpropOrigin */ }
+namespace PropertyNames::Hop { static char const * const substitutes = "substitutes"; /* previously kpropSubstitutes */ }
+namespace PropertyNames::Hop { static char const * const time_min = "time_min"; /* previously kpropTime */ }
 namespace PropertyNames::Hop { static char const * const typeString = "typeString"; /* previously kpropTypeString */ }
 namespace PropertyNames::Hop { static char const * const type = "type"; /* previously kpropType */ }
-namespace PropertyNames::Hop { static char const * const notes = "notes"; /* previously kpropNotes */ }
-namespace PropertyNames::Hop { static char const * const formString = "formString"; /* previously kpropFormString */ }
-namespace PropertyNames::Hop { static char const * const myrcene_pct = "myrcene_pct"; /* previously kpropMyrcene */ }
-namespace PropertyNames::Hop { static char const * const cohumulone_pct = "cohumulone_pct"; /* previously kpropCohumulone */ }
-namespace PropertyNames::Hop { static char const * const caryophyllene_pct = "caryophyllene_pct"; /* previously kpropCaryophyllene */ }
-namespace PropertyNames::Hop { static char const * const humulene_pct = "humulene_pct"; /* previously kpropHumulene */ }
-namespace PropertyNames::Hop { static char const * const substitutes = "substitutes"; /* previously kpropSubstitutes */ }
-namespace PropertyNames::Hop { static char const * const hsi_pct = "hsi_pct"; /* previously kpropHSI */ }
-namespace PropertyNames::Hop { static char const * const beta_pct = "beta_pct"; /* previously kpropBeta */ }
-namespace PropertyNames::Hop { static char const * const alpha_pct = "alpha_pct"; /* previously kpropAlpha */ }
-
+namespace PropertyNames::Hop { static char const * const useString = "useString"; /* previously kpropUseString */ }
+namespace PropertyNames::Hop { static char const * const use = "use"; /* previously kpropUse */ }
 
 /*!
  * \class Hop
  *
  * \brief Model class for a hop record in the database.
  */
-class Hop : public NamedEntity
-{
+class Hop : public NamedEntityWithInventory {
    Q_OBJECT
    Q_CLASSINFO("signal", "hops")
 
@@ -86,10 +83,6 @@ public:
    Q_PROPERTY( double alpha_pct READ alpha_pct WRITE setAlpha_pct /*NOTIFY changed*/ /*changedAlpha_pct*/ )
    //! \brief The amount in kg.
    Q_PROPERTY( double amount_kg READ amount_kg WRITE setAmount_kg /*NOTIFY changed*/ /*changedAmount_kg*/ )
-   //! \brief The amount in inventory in kg.
-   Q_PROPERTY( double inventory READ inventory WRITE setInventoryAmount /*NOTIFY changed*/ /*changedInventory*/ )
-   //! \brief The inventory ID -- needed for signal processing. This is pretty much readonly
-   Q_PROPERTY( double inventoryId READ inventoryId WRITE setInventoryId /*NOTIFY changed*/ /*changedInventory*/ )
    //! \brief The \c Use.
    Q_PROPERTY( Use use READ use WRITE setUse /*NOTIFY changed*/ /*changedUse*/ )
    //! \brief The untranslated \c Use string.
@@ -125,8 +118,6 @@ public:
 
    double alpha_pct() const;
    double amount_kg() const;
-   double inventory();
-   int inventoryId() const;
    // Use in enumerated, untranslated and translated versions
    Use use() const;
    const QString useString() const;
@@ -153,12 +144,10 @@ public:
    double caryophyllene_pct() const;
    double cohumulone_pct() const;
    double myrcene_pct() const;
-   bool cacheOnly() const;
 
    //set
    void setAlpha_pct( double num);
    void setAmount_kg( double num);
-   void setInventoryAmount( double num);
    void setUse( Use u);
    void setTime_min( double num);
 
@@ -173,8 +162,6 @@ public:
    void setCaryophyllene_pct( double num);
    void setCohumulone_pct( double num);
    void setMyrcene_pct( double num);
-   void setCacheOnly(bool cache);
-   void setInventoryId(int key);
 
    static QString classNameStr();
 
@@ -210,9 +197,6 @@ private:
    double m_caryophyllene_pct;
    double m_cohumulone_pct;
    double m_myrcene_pct;
-   double m_inventory;
-   int m_inventory_id;
-   bool m_cacheOnly;
 
    void setDefaults();
 
@@ -226,17 +210,7 @@ private:
 };
 
 Q_DECLARE_METATYPE( QList<Hop*> )
-/*
-inline bool HopPtrLt( Hop* lhs, Hop* rhs)
-{
-   return *lhs < *rhs;
-}
 
-inline bool HopPtrEq( Hop* lhs, Hop* rhs)
-{
-   return *lhs == *rhs;
-}
-*/
 inline bool hopLessThanByTime(const Hop* lhs, const Hop* rhs)
 {
    if ( lhs->use() == rhs->use() )
@@ -248,21 +222,5 @@ inline bool hopLessThanByTime(const Hop* lhs, const Hop* rhs)
    }
    return lhs->use() < rhs->use();
 }
-/*
-struct Hop_ptr_cmp
-{
-   bool operator()( Hop* lhs, Hop* rhs)
-   {
-      return *lhs < *rhs;
-   }
-};
 
-struct Hop_ptr_equals
-{
-   bool operator()( Hop* lhs, Hop* rhs )
-   {
-      return *lhs == *rhs;
-   }
-};
-*/
-#endif // _HOP_H
+#endif

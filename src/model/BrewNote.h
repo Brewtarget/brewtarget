@@ -138,7 +138,6 @@ public:
    void populateNote(Recipe* parent);
    void recalculateEff(Recipe* parent);
    void setLoading(bool flag);
-   void setCacheOnly(bool cache);
    void setRecipe(Recipe * recipe);
 
    // Getters
@@ -210,7 +209,6 @@ public:
    double projPoints() const;
    double projFermPoints() const;
    double projAtten() const;
-   bool cacheOnly() const;
 
    // BrewNote objects do not have parents
    NamedEntity * getParent() { return nullptr; }
@@ -262,7 +260,6 @@ private:
    double m_projPoints;
    double m_projFermPoints;
    double m_projAtten;
-   bool m_cacheOnly;
    Recipe * m_recipe;
 
 ///   QHash<QString,double> info;

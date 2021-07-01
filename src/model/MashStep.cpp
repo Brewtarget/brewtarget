@@ -58,7 +58,7 @@ QString MashStep::classNameStr()
 //==============================CONSTRUCTORS====================================
 
 MashStep::MashStep(QString name, bool cache)
-   : NamedEntity(Brewtarget::MASHSTEPTABLE, name, true),
+   : NamedEntity(Brewtarget::MASHSTEPTABLE, cache, name, true),
      m_typeStr(QString()),
      m_type(static_cast<MashStep::Type>(0)),
      m_infuseAmount_l(0.0),
@@ -68,15 +68,12 @@ MashStep::MashStep(QString name, bool cache)
      m_endTemp_c(0.0),
      m_infuseTemp_c(0.0),
      m_decoctionAmount_l(0.0),
-     m_stepNumber(0.0),
-     m_cacheOnly(cache)
-{
+     m_stepNumber(0.0) {
+   return;
 }
 
 MashStep::MashStep(TableSchema* table, QSqlRecord rec, int t_key)
-   : NamedEntity(table, rec, t_key),
-     m_cacheOnly(false)
-{
+   : NamedEntity(table, rec, t_key) {
      m_typeStr = rec.value( table->propertyToColumn( PropertyNames::MashStep::type)).toString();
      m_infuseAmount_l = rec.value( table->propertyToColumn( PropertyNames::MashStep::infuseAmount_l)).toDouble();
      m_stepTemp_c = rec.value( table->propertyToColumn( PropertyNames::MashStep::stepTemp_c)).toDouble();
@@ -223,8 +220,6 @@ void MashStep::setDecoctionAmount_l(double var )
    }
 }
 
-void MashStep::setCacheOnly( bool cache ) { m_cacheOnly = cache; }
-
 void MashStep::setMash( Mash * mash ) { this->m_mash = mash; }
 
 //============================="GET" METHODS====================================
@@ -244,7 +239,6 @@ double MashStep::rampTime_min() const { return m_rampTime_min; }
 double MashStep::endTemp_c() const { return m_endTemp_c; }
 double MashStep::decoctionAmount_l() const { return m_decoctionAmount_l; }
 int MashStep::stepNumber() const { return m_stepNumber; }
-bool MashStep::cacheOnly( ) const { return m_cacheOnly; }
 Mash * MashStep::mash( ) const { return m_mash; }
 
 bool MashStep::isInfusion() const

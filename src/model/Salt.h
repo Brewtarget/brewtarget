@@ -93,8 +93,6 @@ public:
    Q_PROPERTY( bool isAcid READ isAcid WRITE setIsAcid /*NOTIFY changed*/ /*changedIsAcid*/ )
    //! \brief A link to the salt in the MISC table. Not sure I'm going to use this
    Q_PROPERTY( int miscId READ miscId /* WRITE setMiscId*/ /*NOTIFY changed*/ /*changedSulfate_ppm*/ )
-   //! \brief To cache or not to cache
-   Q_PROPERTY( bool cacheOnly READ cacheOnly WRITE setCacheOnly /*NOTIFY changed*/ /*changedSulfate_ppm*/ )
 
    double amount() const;
    Salt::WhenToAdd addTo() const;
@@ -103,7 +101,6 @@ public:
    double percentAcid() const;
    bool isAcid() const;
    int miscId() const;
-   bool cacheOnly() const;
 
    void setAmount( double var );
    void setAddTo( Salt::WhenToAdd var );
@@ -111,7 +108,6 @@ public:
    void setAmountIsWeight( bool var );
    void setPercentAcid(double var);
    void setIsAcid( bool var );
-   void setCacheOnly( bool var );
 
    static QString classNameStr();
 
@@ -145,7 +141,6 @@ private:
    double m_percent_acid;
    bool m_is_acid;
    int m_misc_id;
-   bool m_cacheOnly;
 
 };
 
