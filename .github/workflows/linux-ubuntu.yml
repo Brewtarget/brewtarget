@@ -37,7 +37,8 @@ jobs:
             lintian \
             rpmlint \
             libxerces-c-dev \
-            libxalan-c-dev
+            libxalan-c-dev \
+            libboost-all-dev
 
       - name: Apply Patches
         shell: bash
