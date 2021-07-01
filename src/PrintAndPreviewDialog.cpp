@@ -103,7 +103,7 @@ void PrintAndPreviewDialog::collectPrinterInfo() {
    //Getting the list of available printers on the system and adding them to the combobox for user selection.
    comboBox_PrinterSelector->addItems(QStringList(QPrinterInfo().availablePrinterNames()));
    //If there are no printers installed on the system we disable the Paper output and select the PDF as default.
-   if (comboBox_PrinterSelector->count == 0)
+   if (comboBox_PrinterSelector->count() == 0)
    {
       radioButton_OutputPDF->setChecked(true);
       radioButton_OutputPaper->setEnabled(false);
@@ -120,19 +120,23 @@ void PrintAndPreviewDialog::collectPrinterInfo() {
  * @brief Collect the supported Paper sizes from the selected printer.
  *
  */
-void PrintAndPreviewDialog::collectSupportedPageSizes() {
+void PrintAndPreviewDialog::collectSupportedPageSizes()
+{
    PageSizeMap.clear();
+   QPrinterInfo printerInfo;
    QList<QPageSize> supportedPageSizeList;
    if (radioButton_OutputPaper->isChecked())
    {
-      QPrinterInfo printerInfo(*printer);
+      printerInfo = QPrinterInfo(*printer);
       supportedPageSizeList = printerInfo.supportedPageSizes();
    }
    else if (radioButton_OutputPDF)
    {
-      supportedPageSizeList = QPageSize::
+      printerInfo = QPrinterInfo();
+      supportedPageSizeList = printerInfo.supportedPageSizes();
    }
-   foreach(QPageSize pageSize, supportedPageSizeList) {
+   foreach(QPageSize pageSize, supportedPageSizeList)
+   {
       PageSizeMap.insert(pageSize.name(), pageSize);
       comboBox_PaperFormatSelector->addItem(pageSize.name());
    }
