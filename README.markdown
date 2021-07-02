@@ -105,6 +105,7 @@ On Debian systems like Ubuntu, the packages for dependencies are:
 * libqt5sql5-psql
 * libqt5svg5-dev
 * libqt5multimedia5-plugins
+* libboost-all-dev
 * doxygen (optional, for source documentation)
 
 ### Compiling
