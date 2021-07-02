@@ -84,7 +84,7 @@ static const QString ktableYeastInventory("yeast_in_inventory");
  static char const * const kpropFermentableId = "fermentable_id";
  static char const * const kpropHopId = "hop_id";
  static char const * const kpropInstructionId = "instruction_id";
- static char const * const kpropInventoryId = "inventory_id";
+ static char const * const kpropInventoryId = "inventoryId";
  static char const * const kpropMashId = "mash_id";
  static char const * const kpropMiscId = "misc_id";
  static char const * const kpropStyleId = "style_id";
