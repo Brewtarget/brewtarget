@@ -587,7 +587,8 @@ INSTALL(FILES ${QM_FILES}
 
 # http://pmarinc-tidylib.googlecode.com/hg/src/Sigil/CMakeLists.txt?r=8276c61e05bc385d5ffbcc58e1f007f84b0c52df
 IF( APPLE )
-   SET ( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}" "-D_GNU_SOURCE" )
+   SET ( BOOST_GNU_SOURCE_FLAG "-D_GNU_SOURCE" )
+   SET ( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${BOOST_GNU_SOURCE_FLAG}" )
    # make addframeworks should copy the Qt libraries to the app.
    SET(QT_BINARY_DIR "${_qt5Core_install_prefix}/bin")
    ADD_CUSTOM_TARGET(
