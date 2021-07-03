@@ -1082,7 +1082,9 @@ QString Database::findRecipeFromForeignKey(TableSchema* tbl, NamedEntity const *
                         .arg(obj->key());
    }
    else {
-      qInfo() << Q_FUNC_INFO << "couldn't find a key for" << obj->name();
+      qInfo() <<
+         Q_FUNC_INFO << "couldn't find a key for" << obj->metaObject()->className() << ":" << obj->name() <<
+         "(which has table" << obj->table() << ")";
    }
    return QString();
 }
@@ -1099,6 +1101,9 @@ QString Database::findRecipeFromInRec(TableSchema* tbl, TableSchema* inrec, Name
 // this handles all things with in_recipe tables (fermentables, hops, miscs, waters and yeasts)
 Recipe* Database::getParentRecipe(NamedEntity const * ing)
 {
+   qDebug() <<
+      Q_FUNC_INFO << ing->metaObject()->className() << "has table #" << ing->table() << "(" <<
+      this->dbDefn->tableName(ing->table()) << ")";
    TableSchema* table = this->dbDefn->table( ing->table() );
    TableSchema* inrec = this->dbDefn->table( table->inRecTable() );
    QString select;
@@ -3078,8 +3083,23 @@ bool Database::modifyEntry(NamedEntity* object, QString propName, QVariant value
    Recipe *owner, *spawn;
    NamedEntity* neClone;
    bool noclone = true;
+   qDebug() <<
+      Q_FUNC_INFO << "Modifying: " << object->metaObject()->className() << " property " << propName << "to value" <<
+      value;
 
-   owner = getParentRecipe(object);
+   //
+   // We have to be careful here as there are several overloaded versions of getParentRecipe(), one for NamedEntity,
+   // one for BrewNote and one for MashStep.  You might think that if object is actually pointing to a BrewNote or a
+   // MashStep then the right version of getParentRecipe() would get called but, in C++, that's not the case.  In C++,
+   // dynamic dispatch only happens on virtual member functions.
+   //
+   if (MashStep * mashStep = dynamic_cast<MashStep *>(object)) {
+      owner = getParentRecipe(mashStep);
+   } else if (BrewNote * brewNote = dynamic_cast<BrewNote *>(object)) {
+      owner = getParentRecipe(brewNote);
+   } else {
+      owner = getParentRecipe(object);
+   }
 
    // if the ingredient is in a recipe and that recipe needs a version
    if ( owner && wantsVersion(owner) ) {
