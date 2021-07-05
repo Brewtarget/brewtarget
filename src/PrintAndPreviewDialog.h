@@ -46,6 +46,7 @@
 class PrintAndPreviewDialog : public QDialog, private Ui::BtPrintAndPreview
 {
    Q_OBJECT
+
 public:
    /**
     * @brief Construct a new Print And Preview Dialog object
@@ -161,6 +162,7 @@ private:
    QPrinter * printer = nullptr;
    QMap<QString, QPageSize> PageSizeMap;
    QTextBrowser *htmlDocument;
+   QPageSize currentlySelectedPageSize;
 
 public slots:
    void printDocument(QPrinter * printer);

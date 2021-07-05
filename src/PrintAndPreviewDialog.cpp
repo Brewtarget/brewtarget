@@ -77,11 +77,11 @@ PrintAndPreviewDialog::PrintAndPreviewDialog ( MainWindow *parent)
 void PrintAndPreviewDialog::showEvent(QShowEvent *e) {
    setVisible(true);
    collectRecipe();
-
-   int index = comboBox_PaperFormatSelector->findText(printer->pageLayout().pageSize().name());
+   currentlySelectedPageSize = printer->pageLayout().pageSize();
+   int index = comboBox_PaperFormatSelector->findText(currentlySelectedPageSize.name());
    comboBox_PaperFormatSelector->setCurrentIndex(index);
    comboBox_PaperFormatSelector->repaint();
-   previewWidget->updatePreview();
+   updatePreview();
 }
 
 /**
@@ -122,24 +122,28 @@ void PrintAndPreviewDialog::collectPrinterInfo() {
 void PrintAndPreviewDialog::collectSupportedPageSizes()
 {
    PageSizeMap.clear();
-   QPrinterInfo printerInfo;
+   QPrinterInfo printerInfo(*printer);
    QList<QPageSize> supportedPageSizeList;
    if (radioButton_OutputPaper->isChecked())
    {
-      printerInfo = QPrinterInfo(*printer);
       supportedPageSizeList = printerInfo.supportedPageSizes();
-      comboBox_PaperFormatSelector->setCurrentText(printerInfo.defaultPageSize().name());
    }
    else if (radioButton_OutputPDF->isChecked())
    {
-      QString printername = QPrinterInfo(*printer).printerName();
-      supportedPageSizeList = QPrinterInfo().supportedPageSizes();
-      //comboBox_PaperFormatSelector->setCurrentText();
+      qDebug() << "generating a list of page sizes as there is no printer intalled on the system";
+      supportedPageSizeList = generatePageSizeList();
    }
    foreach(QPageSize pageSize, supportedPageSizeList)
    {
       PageSizeMap.insert(pageSize.name(), pageSize);
       comboBox_PaperFormatSelector->addItem(pageSize.name());
+   }
+   if (comboBox_PaperFormatSelector->findText(currentlySelectedPageSize.name(), Qt::MatchFlag::MatchContains) > -1)
+      comboBox_PaperFormatSelector->setCurrentText(currentlySelectedPageSize.name());
+   else
+   {
+      currentlySelectedPageSize = QPageSize((QPageSize::PageSizeId)0);
+      comboBox_PaperFormatSelector->setCurrentIndex(0);
    }
 }
 
@@ -147,6 +151,12 @@ void PrintAndPreviewDialog::collectSupportedPageSizes()
 QList<QPageSize> PrintAndPreviewDialog::generatePageSizeList()
 {
    QList<QPageSize> result;
+
+   for(int itor = 0; itor < QPageSize::LastPageSize; itor++)
+   {
+      QPageSize key((QPageSize::PageSizeId)itor);
+      result.append(key);
+   }
    return result;
 }
 
@@ -272,38 +282,40 @@ void PrintAndPreviewDialog::handlePrinting() {
    {
       previewWidget->print();
    }
-   // if we are not sending to printer we need to save a file.
-   QString fileDialogFilter = (radioButton_OutputPDF->isChecked()) ? "PDF (*.pdf)" : "HTML (*.html)";
-   QString filename = QFileDialog::getSaveFileName(
-      this,
-      (radioButton_OutputPDF->isChecked()) ? "Save PDF" : "Save HTML",
-      QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
-      fileDialogFilter
-      );
-   qDebug() << Q_FUNC_INFO << "Filename to save: " << filename;
-   if (radioButton_OutputPDF->isChecked())
-   {
-      printer->setOutputFormat(QPrinter::PdfFormat);
-      printer->setOutputFileName(filename);
-      previewWidget->print();
-   }
    else
    {
-      QFile file = QFile(filename);
-      if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+      // if we are not sending to printer we need to save a file.
+      QString fileDialogFilter = (radioButton_OutputPDF->isChecked()) ? "PDF (*.pdf)" : "HTML (*.html)";
+      QString filename = QFileDialog::getSaveFileName(
+         this,
+         (radioButton_OutputPDF->isChecked()) ? "Save PDF" : "Save HTML",
+         QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
+         fileDialogFilter
+         );
+      qDebug() << Q_FUNC_INFO << "Filename to save: " << filename;
+      if (radioButton_OutputPDF->isChecked())
       {
-         qWarning() << Q_FUNC_INFO << tr("File %1 filname << could not be saved").arg(filename);
-         QMessageBox msgbox(this);
-         msgbox.setWindowTitle(tr("Error saving file"));
-         msgbox.setText(tr("Could not open the file %1 for writing! please try again with a new filename or diretory").arg(filename));
-         msgbox.exec();
-         return;
+         printer->setOutputFormat(QPrinter::PdfFormat);
+         printer->setOutputFileName(filename);
+         previewWidget->print();
       }
-      QTextStream ts(&file);
-      ts << htmlDocument->document()->toHtml();
-      file.close();
+      else
+      {
+         QFile file(filename);
+         if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+         {
+            qWarning() << Q_FUNC_INFO << tr("File %1 filname << could not be saved").arg(filename);
+            QMessageBox msgbox(this);
+            msgbox.setWindowTitle(tr("Error saving file"));
+            msgbox.setText(tr("Could not open the file %1 for writing! please try again with a new filename or diretory").arg(filename));
+            msgbox.exec();
+            return;
+         }
+         QTextStream ts(&file);
+         ts << htmlDocument->document()->toHtml();
+         file.close();
+      }
    }
-
    //Closing down the dialog.
    setVisible(false);
 }
@@ -369,11 +381,10 @@ void PrintAndPreviewDialog::selectedPaperChanged(int index) {
       return;
    }
    QString key(comboBox_PaperFormatSelector->currentText());
-   QPageSize page(PageSizeMap.value(key));
+   currentlySelectedPageSize = PageSizeMap.value(key);
    //_printer->setPageSize(page);
-   printer->pageLayout().setPageSize(page);
-   previewWidget->update();
-   //previewWidget->updatePreview();
+   printer->pageLayout().setPageSize(currentlySelectedPageSize);
+   updatePreview();
 }
 
 /**
