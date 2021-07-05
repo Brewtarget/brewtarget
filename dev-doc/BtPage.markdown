@@ -48,9 +48,12 @@ Signals the page renderer that there should be a page break before drawing the n
 
 ### Helper classes
 #### PageTableStyle object
->Create this style as you wish( read 'can') and then add it to the PageTable object to style the tables output on screen.
+***THIS IS NOT IMPLEMENTED YET***
+Create this style as you wish( read 'can') and then add it to the PageTable object to style the tables output on screen.
+*NOTE: this does nothing to the output on screen/paper/file yet, it's an idea of implementing style to printout/pdfs but need more thought.
+
 #### PageTableColumn object
->defines a column with attributes ina table. see [PageTable](#pagetable-object).
+defines a column with attributes ina table. see [PageTable](#pagetable-object).
 
 
 ### Enums and Flags
@@ -73,6 +76,7 @@ Definitions:
 
             enum struct FixedPlacingFlags
             {
+               CUSTOM       = 0,
                /* These six are used with Page::placeOnPage(...) function */
                LEFT         = 1,      // (1<<0) = 1, 00000000 00000000 00000000 00010000 (16)
                RIGHT        = (1<<1),              //00000000 00000000 00000000 00100000 (32)
