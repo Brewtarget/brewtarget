@@ -107,7 +107,6 @@ void PrintAndPreviewDialog::collectPrinterInfo() {
    {
       radioButton_OutputPDF->setChecked(true);
       radioButton_OutputPaper->setEnabled(false);
-
    }
    //setting the systems default printer as the selected printer.
    comboBox_PrinterSelector->setCurrentText(QPrinterInfo().defaultPrinterName());
@@ -129,11 +128,13 @@ void PrintAndPreviewDialog::collectSupportedPageSizes()
    {
       printerInfo = QPrinterInfo(*printer);
       supportedPageSizeList = printerInfo.supportedPageSizes();
+      comboBox_PaperFormatSelector->setCurrentText(printerInfo.defaultPageSize().name());
    }
-   else if (radioButton_OutputPDF)
+   else if (radioButton_OutputPDF->isChecked())
    {
-      printerInfo = QPrinterInfo();
-      supportedPageSizeList = printerInfo.supportedPageSizes();
+      QString printername = QPrinterInfo(*printer).printerName();
+      supportedPageSizeList = QPrinterInfo().supportedPageSizes();
+      //comboBox_PaperFormatSelector->setCurrentText();
    }
    foreach(QPageSize pageSize, supportedPageSizeList)
    {
@@ -141,6 +142,14 @@ void PrintAndPreviewDialog::collectSupportedPageSizes()
       comboBox_PaperFormatSelector->addItem(pageSize.name());
    }
 }
+
+
+QList<QPageSize> PrintAndPreviewDialog::generatePageSizeList()
+{
+   QList<QPageSize> result;
+   return result;
+}
+
 
 /**
  * @brief Connects all the signals to their respective function.
@@ -335,10 +344,10 @@ void PrintAndPreviewDialog::updatePreview() {
       }
       // adding the generated HTML to the QTexBrowser.
       htmlDocument->setHtml(pDoc);
-      // choose what displaywidget that should be showing depending on users choice.
-      (radioButton_OutputHTML->isChecked()) ? htmlDocument->show() : htmlDocument->hide();
-      (radioButton_OutputPaper->isChecked() || radioButton_OutputPDF->isChecked()) ? previewWidget->show() : previewWidget->hide();
    }
+   // choose what displaywidget that should be showing depending on users choice.
+   (radioButton_OutputHTML->isChecked()) ? htmlDocument->show() : htmlDocument->hide();
+   (radioButton_OutputPaper->isChecked() || radioButton_OutputPDF->isChecked()) ? previewWidget->show() : previewWidget->hide();
 }
 
 /**

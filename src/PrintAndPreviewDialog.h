@@ -104,6 +104,13 @@ private:
    void collectSupportedPageSizes();
 
    /**
+    * @brief generates a list of Page sizes for use in Dialog when there is no printer installed on the system.
+    *
+    * @return QList<QPageSize>
+    */
+   QList<QPageSize> generatePageSizeList();
+
+   /**
     * @brief collects the selected recipe from the Mainwindow.
     *
     */
