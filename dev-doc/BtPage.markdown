@@ -3,13 +3,13 @@ This dialog is an attempt to get the printing to be *cross-platform-WYSIWYG* in 
 I also aimed to make a unified print/export dialog instead of having multiple menu items saying print-this and print-that.
 
 ## BtPage namespace
-I created this namespace to keep averything in one bubble of code and separate from the rest of Brewtarget. this was to minimize the risk of running into duplicate nameing.
+I created this namespace to keep everything in one bubble of code and separate from the rest of Brewtarget. this was to minimize the risk of running into duplicate naming.
 This namespace includes all that is necessary for generating the printout and Html-export to file, while relying on Brewtargets RecipeFormatter- and BrewNoteFormatter-class to get the data for generating the pages. I'm not sure this is the way it should be in the future but will leave it there for now.
 
 ### Page class
-This class is used to store all child elements/classes and placing them on the page. this class also contains the referens to the printer in use and is responible for calling all childrens ::render() method to get everthing printed onto the page.
-This is genereated everytime you change your selection for printout or the prewview needs to refresh for any reason.
-#### Funtions:
+This class is used to store all child elements/classes and placing them on the page. this class also contains pointer to the printer in use and is responsible for calling all page-items ::render() method to get everything printed onto the page.
+This is generated every you change your selection for printout or the preview needs to refresh for any reason.
+#### Functions:
 - **template \<class T> auto addChildObject(T \*obj, QPoint position = QPoint()) -> decltype(obj)**\
 You add content to the page by creating and adding PageChildObject-subclasses, see below. this returns a pointer to the added object if you need to make more setting to is, i.e. adding a style to a table
 - **renderPage()**\
@@ -21,11 +21,11 @@ Same as placeRelationalTo(..) but offset is in millimeters and this will calcula
 - **template \<class T> void placeOnPage(T \*targetObj, FixedPlacingFlags place, int xOffset = 0, int yOffset = 0)**\
 This will set the position on the supplied targetObj according to the FixedPlacingFlags provided. this funtion is a convinient way of placing anyting to, for example, the TOP-RIGHT corner of the page or why not the center of the page. more on [PlacingFlags](#placingflags) below.
 ### PageChildObject
- This is a abstract / Interface class for all child object to put on the page. It holds some basic informations about the object and makes sure that all derived classes implement a few methods, i.e. a render method, because all children need to know how to draw it self onto a QPainter and ultimatly onto a page.\
-This class also contains information on the boundingbox and position that is the same for all derived classes.
+ This is a abstract / Interface class for all child object to put on the page. It holds some basic informations about the object and makes sure that all derived classes implement a few methods, i.e. a render method, because all children need to know how to draw it self onto a QPainter and ultimately onto a page.\
+This class also contains information on the bounding box and position that is the same for all derived classes.
 
 #### Derived Classes
-These are the derived classes for now, in the future I'll implement more children to draw more kind of objects on the page, for example arcs or circles or lines. I'm contemplating to have the MainWindows rangeWidgets print out on page, I think that would look good, Not htere yet though. :)
+These are the derived classes for now, in the future I'll implement more children to draw more kind of objects on the page, for example arcs or circles or lines. I'm contemplating to have the MainWindows rangeWidgets print out on page, I think that would look good, Not there yet though. :)
 
 ##### PageText object
 This holds a text to be generated onto the page, this is used for all text to be generated onto a page whether it be a single header added directly to BtPage object or added to a [PageTable object](#pagetable-object). This object has properties like Font to display correctly onto the page.
@@ -38,13 +38,11 @@ You define columns by adding a [PageTableColumn](#pagetablecolumn-object) to the
 
 ##### PageImage object
 Draws an image on the page (aspiring MUC-Award winner! :) )\
-Contaings the size of the imge and can resize when needed.
+Contains the size of the image and can resize when needed.
 
 ##### PageBreak object
 This small little class does one thing, and one thing only....\
-Signals the page renderer that there should be a page break before drawing the next object.
-
-
+Signals the page-renderer that there should be a page break before drawing the next object.
 
 ### Helper classes
 #### PageTableStyle object
@@ -53,7 +51,7 @@ Create this style as you wish( read 'can') and then add it to the PageTable obje
 *NOTE: this does nothing to the output on screen/paper/file yet, it's an idea of implementing style to printout/pdfs but need more thought.
 
 #### PageTableColumn object
-defines a column with attributes ina table. see [PageTable](#pagetable-object).
+Defines a column with attributes ina table. see [PageTable](#pagetable-object).
 
 
 ### Enums and Flags
