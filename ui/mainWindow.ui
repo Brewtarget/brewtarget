@@ -1694,14 +1694,6 @@
      <addaction name="actionRestore_Database"/>
      <addaction name="actionMergeDatabases"/>
     </widget>
-    <widget class="QMenu" name="menuInventory">
-     <property name="title">
-      <string>In&amp;ventory</string>
-     </property>
-     <addaction name="actionInventoryPreview"/>
-     <addaction name="actionInventoryPrint"/>
-     <addaction name="actionInventoryHTML"/>
-    </widget>
     <addaction name="actionNewRecipe"/>
     <addaction name="actionCopy_Recipe"/>
     <addaction name="separator"/>

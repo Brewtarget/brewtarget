@@ -255,10 +255,10 @@ namespace InventoryFormatter
    {
       //Only generate users selection of Ingredient inventory.
       QString result =
-            ((HTMLgenerationFlags::FERMENTABLESFLAG && flags) ? createInventoryTableFermentableHTML() : "") +
-            ((HTMLgenerationFlags::HOPSFLAG && flags) ? createInventoryTableHopHTML() : "") +
-            ((HTMLgenerationFlags::MISCELLANEOUSFLAG && flags) ? createInventoryTableMiscellaneousHTML() : "") +
-            ((HTMLgenerationFlags::YEASTFLAG && flags) ? createInventoryTableYeastHTML() : "");
+            ((HTMLgenerationFlags::FERMENTABLESFLAG  & flags) ? createInventoryTableFermentableHTML() : "") +
+            ((HTMLgenerationFlags::HOPSFLAG          & flags) ? createInventoryTableHopHTML() : "") +
+            ((HTMLgenerationFlags::MISCELLANEOUSFLAG & flags) ? createInventoryTableMiscellaneousHTML() : "") +
+            ((HTMLgenerationFlags::YEASTFLAG         & flags) ? createInventoryTableYeastHTML() : "");
       //If users selects no printout or if there are no inventory for the selected ingredients.
       if (result.size() == 0)
       {
