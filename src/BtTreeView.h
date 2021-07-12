@@ -169,19 +169,22 @@ signals:
    void recipeSpawn(Recipe* descendant);
 
 private:
-   BtTreeModel* _model;
-   BtTreeFilterProxyModel* _filter;
-   BtTreeModel::TypeMasks _type;
-   QMenu *_contextMenu, 
+   BtTreeModel* m_model;
+   BtTreeFilterProxyModel* m_filter;
+   BtTreeModel::TypeMasks m_type;
+   QMenu *m_contextMenu,
          *subMenu,
-         *m_versionMenu;
+         *m_versionMenu,
+         *m_exportMenu;
    QAction *m_deleteAction, 
            *m_showAncestorAction,
            *m_hideAncestorAction,
            *m_orphanAction,
-           *m_spawnAction;
+           *m_spawnAction,
+           *m_copyAction,
+           *m_brewItAction;
    QPoint dragStart;
-   QWidget* _editor;
+   QWidget* m_editor;
 
    bool doubleClick;
 
