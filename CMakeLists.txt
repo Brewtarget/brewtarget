@@ -437,9 +437,7 @@ IF( WIN32 )
         ${QtSql_location}
         ${QtSvg_location}
         ${QtXml_location}
-        ${QtWebKit_location}
         ${QtGui_location}
-        ${QtWebKitWidgets_location}
         ${QtOpenGL_location}
    )
    IF( NOT ${NO_QTMULTIMEDIA})
@@ -549,11 +547,13 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
     #-----------------DEB----------------
     SET( CPACK_DEBIAN_PACKAGE_MAINTAINER "Philip G. Lee <rocketman768@gmail.com>" )
     # NOTE: Use the getdependencies script to get the dependencies!
-    SET( CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.3.6-6~), libc6 (>= 2.1.3), libgcc1 (>= 1:4.1.1), libphonon4 (>= 4:4.2.0), libqt4-dbus (>= 4:4.5.3), libqt4-network (>= 4:4.5.3), libqt4-svg (>= 4:4.5.3), libqtwebkit4 (>= 2.3.4.dfsg-9.1), libqt4-xml (>= 4:4.5.3), libqtcore4 (>= 4:4.6.1), libqtgui4 (>= 4:4.5.3), libstdc++6 (>= 4.1.1), phonon (>= 4:4.5.2)" )
-
+ 
     SET( CPACK_DEBIAN_PACKAGE_SECTION "misc" )
     SET( CPACK_DEBIAN_PACKAGE_VERSION "${brewtarget_VERSION_STRING}-1")
     SET( CPACK_DEBIAN_PACKAGE_PRIORITY "optional" )
+
+    # autogenerate dependency information
+    set (CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
 
     SET(CPACK_DEBIAN_PACKAGE_NAME ${CMAKE_PROJECT_NAME}_${brewtarget_VERSION_STRING})
 
@@ -575,6 +575,11 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
     SET( CPACK_PACKAGE_INSTALL_REGISTRY_KEY "Brewtarget-${brewtarget_VERSION_STRING}" )
     SET( CPACK_PACKAGE_INSTALL_DIRECTORY "Brewtarget-${brewtarget_VERSION_STRING}" )
     SET( CPACK_NSIS_MODIFY_PATH ON )
+
+    # The redistribution package from Microsoft is needed for Windows 7 installation.
+    # NSIS will install on target system if needed, but the file has to be included in the installer.
+    # Another approach would be to instruct the users of Windows 7 to download the redist for their platform and install it themselfs.
+    SET( CPACK_PACKAGE_REDIST_DIR "${ROOTDIR}/redist")
 
     # Extra start menu items.
     #SET( CPACK_NSIS_MENU_LINKS

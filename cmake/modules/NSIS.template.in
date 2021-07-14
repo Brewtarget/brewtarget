@@ -6,6 +6,7 @@
   !define VERSION "@CPACK_PACKAGE_VERSION@"
   !define PATCH  "@CPACK_PACKAGE_VERSION_PATCH@"
   !define INST_DIR "@CPACK_TEMPORARY_DIRECTORY@"
+  !define REDIST_DIR "@CPACK_PACKAGE_REDIST_DIR@"
 
 ;--------------------------------
 ;Variables
@@ -603,7 +604,6 @@ FunctionEnd
   !insertmacro MUI_PAGE_STARTMENU Application $STARTMENU_FOLDER
 
   @CPACK_NSIS_PAGE_COMPONENTS@
-
   !insertmacro MUI_PAGE_INSTFILES
   !insertmacro MUI_PAGE_FINISH
 
@@ -672,9 +672,9 @@ FunctionEnd
   ;These files should be inserted before other files in the data block
   ;Keep these lines before any File command
   ;Only for solid compression (by default, solid compression is enabled for BZIP2 and LZMA)
-
   ReserveFile "NSIS.InstallOptions.ini"
   !insertmacro MUI_RESERVEFILE_INSTALLOPTIONS
+  ReserveFile "${REDIST_DIR}\vcredist_x64.exe"
 
 ;--------------------------------
 ;Installer Sections
@@ -774,6 +774,33 @@ Section "-Add to path"
   StrCmp $DO_NOT_ADD_TO_PATH "1" doNotAddToPath 0
     Call AddToPath
   doNotAddToPath:
+SectionEnd
+
+; This section will check if VC redistributable package is installed to the correct version.
+; If not it will run the installer in the background
+Section "Visual Studio Runtime"
+   DetailPrint "Checking Previosly installed Visual Studio Runtime"
+   ReadRegDWORD $0 HKLM64 "SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x64" "Major"
+   ReadRegDWORD $1 HKLM64 "SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x64" "Minor"
+   ReadRegDWORD $2 HKLM64 "SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x64" "Bld"
+
+   ${If} $0 == 0
+      ReadRegDWORD $0 HKLM "SOFTWARE\Wow6432node\Microsoft\VisualStudio\14.0\VC\Runtimes\x64" "Major"
+      ReadRegDWORD $1 HKLM "SOFTWARE\Wow6432node\Microsoft\VisualStudio\14.0\VC\Runtimes\x64" "Minor"
+      ReadRegDWORD $2 HKLM "SOFTWARE\Wow6432node\Microsoft\VisualStudio\14.0\VC\Runtimes\x64" "Bld"
+   ${EndIf}
+
+   ${If} $0 >= 14
+      ${AndIf} $1 >= 27
+         ${AndIf} $2 >= 29016
+            DetailPrint "VC redistributable package installed, skipping install"
+   ${Else}
+      DetailPrint "Correct version not found, installing Visual Studio runtime"
+      InitPluginsDir
+      SetOutPath "$PLUGINSDIR"
+      File "${REDIST_DIR}\vcredist_x64.exe"
+      ExecWait '"$PLUGINSDIR\vcredist_x64.exe" /install /quiet /norestart'
+   ${EndIf}
 SectionEnd
 
 ;--------------------------------
