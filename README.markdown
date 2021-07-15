@@ -108,6 +108,10 @@ On Debian systems like Ubuntu, the packages for dependencies are:
 * libboost-all-dev
 * doxygen (optional, for source documentation)
 
+    $ sudo apt install cmake build-essential libxerces-c-dev libxerces-c-doc libxalan-c-dev libxalan-c-doc qtbase5-dev
+qttools5-dev qttools5-dev-tools qtmultimedia5-dev libqt5sql5-sqlite libqt5sql5-psql libqt5svg5-dev libqt5multimedia5-plugins
+libboost-all-dev doxygen
+    
 ### Compiling
 
 We do not do any in-source builds. You will create a separate directory
