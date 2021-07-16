@@ -31,7 +31,10 @@ class RecipeFormatter;
 #include <QTextBrowser>
 #include <QDialog>
 #include <QFile>
+#include <QList>
+#include <QStringList>
 #include "model/Recipe.h"
+#include "PrintAndPreviewDialog.h"
 
 /*!
  * \class RecipeFormatter
@@ -42,9 +45,9 @@ class RecipeFormatter;
 class RecipeFormatter : public QObject
 {
    Q_OBJECT
-public:
 
-   enum { PRINT, PREVIEW, HTML, NUMACTIONS };
+   friend class PrintAndPreviewDialog;
+public:
 
    RecipeFormatter(QObject* parent=nullptr);
    ~RecipeFormatter();
@@ -77,9 +80,6 @@ public:
    //! Return the text wrapped with the given length
    QString wrapText( const QString &text, int wrapLength );
 
-   //! Send a printable version to the printer.
-   void print(QPrinter *mainPrinter, int action = PRINT, QFile* outFile=nullptr);
-
 public slots:
    //! Put the plaintext view onto the clipboard.
    void toTextClipboard();
@@ -90,18 +90,23 @@ private:
    QString buildHTMLHeader();
    QString buildStatTableHtml();
    QString buildStatTableTxt();
+   QList<QStringList> buildStatList();
    QString buildFermentableTableHtml();
    QString buildFermentableTableTxt();
+   QList<QStringList> buildFermentableList();
    QString buildHopsTableHtml();
    QString buildHopsTableTxt();
+   QList<QStringList> buildHopsList();
    QString buildYeastTableHtml();
    QString buildYeastTableTxt();
+   QList<QStringList> buildYeastList();
    QString buildMashTableHtml();
    QString buildMashTableTxt();
+   QList<QStringList> buildMashList();
    QString buildMiscTableHtml();
    QString buildMiscTableTxt();
+   QList<QStringList> buildMiscList();
    QString buildNotesHtml();
-   QString buildInstructionTableHtml();
    QString buildInstructionTableTxt();
    /* I am not sure how I want to implement these yet.
     * I might just include the salts in the instructions table. Until I decide
@@ -112,6 +117,8 @@ private:
    QString buildSaltTableTxt();
    */
    QString buildBrewNotesHtml();
+   QString buildNotesString();
+   QString buildTasteNotesString();
    QString buildBrewNotesTxt();
    QString buildHTMLFooter();
 
@@ -120,13 +127,6 @@ private:
 
    QString* textSeparator;
    Recipe* rec;
-
-   QPrinter* printer;
-   QTextBrowser* doc;
-   QDialog* docDialog;
-
-private slots:
-   bool loadComplete(bool ok);
 };
 
 #endif /*RECIPE_FORMATTER_H*/

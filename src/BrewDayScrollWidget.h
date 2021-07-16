@@ -33,6 +33,7 @@ class BrewDayScrollWidget;
 #include <QFile>
 #include "model/Recipe.h"
 
+
 /*!
  * \class BrewDayScrollWidget
  * \author Philip G. Lee

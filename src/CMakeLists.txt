@@ -73,6 +73,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/AncestorDialog.cpp
     ${SRCDIR}/BeerColorWidget.cpp
     ${SRCDIR}/boiltime.cpp
+    ${SRCDIR}/BrewDayFormatter.cpp
     ${SRCDIR}/BrewDayScrollWidget.cpp
     ${SRCDIR}/BrewDayWidget.cpp
     ${SRCDIR}/BrewNoteWidget.cpp
@@ -89,6 +90,13 @@ SET( brewtarget_SRCS
     ${SRCDIR}/BtTreeItem.cpp
     ${SRCDIR}/BtTreeModel.cpp
     ${SRCDIR}/BtTreeView.cpp
+    ${SRCDIR}/btpage/Page.cpp
+    ${SRCDIR}/btpage/PageBreak.cpp
+    ${SRCDIR}/btpage/PageChildObject.cpp
+    ${SRCDIR}/btpage/PageImage.cpp
+    ${SRCDIR}/btpage/PageTable.cpp
+    ${SRCDIR}/btpage/PageTableColumn.cpp
+    ${SRCDIR}/btpage/PageText.cpp
     ${SRCDIR}/ColorMethods.cpp
     ${SRCDIR}/ConverterTool.cpp
     ${SRCDIR}/CustomComboBox.cpp
@@ -151,6 +159,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/OptionDialog.cpp
     ${SRCDIR}/PitchDialog.cpp
     ${SRCDIR}/PreInstruction.cpp
+    ${SRCDIR}/PrintAndPreviewDialog.cpp
     ${SRCDIR}/PrimingDialog.cpp
     ${SRCDIR}/PropertySchema.cpp
     ${SRCDIR}/QueuedMethod.cpp
@@ -228,6 +237,7 @@ SET( brewtarget_UIS
     ${UIDIR}/pitchDialog.ui
     ${UIDIR}/brewDayScrollWidget.ui
     ${UIDIR}/recipeExtrasWidget.ui
+    ${UIDIR}/BtPrintAndPreview.ui
 )
 
 #
@@ -245,6 +255,7 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/BeerColorWidget.h
     ${SRCDIR}/beerxml.h
     ${SRCDIR}/boiltime.h
+    ${SRCDIR}/BrewDayFormatter.h
     ${SRCDIR}/BrewDayScrollWidget.h
     ${SRCDIR}/BrewDayWidget.h
     ${SRCDIR}/BrewNoteWidget.h
@@ -313,6 +324,7 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/OgAdjuster.h
     ${SRCDIR}/OptionDialog.h
     ${SRCDIR}/PitchDialog.h
+    ${SRCDIR}/PrintAndPreviewDialog.h
     ${SRCDIR}/PrimingDialog.h
     ${SRCDIR}/PropertySchema.h
     ${SRCDIR}/QueuedMethod.h
@@ -345,6 +357,15 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/YeastEditor.h
     ${SRCDIR}/YeastSortFilterProxyModel.h
     ${SRCDIR}/YeastTableModel.h
+    ${SRCDIR}/btpage/BtEnumFlags.h
+    ${SRCDIR}/btpage/Page.h
+    ${SRCDIR}/btpage/PageBreak.h
+    ${SRCDIR}/btpage/PageChildObject.h
+    ${SRCDIR}/btpage/PageImage.h
+    ${SRCDIR}/btpage/PageTable.h
+    ${SRCDIR}/btpage/PageTableColumn.h
+    ${SRCDIR}/btpage/PageTableStyle.h
+    ${SRCDIR}/btpage/PageText.h
 )
 
 SET( FILES_TO_TRANSLATE

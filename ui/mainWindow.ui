@@ -1682,23 +1682,6 @@
     <property name="title">
      <string>&amp;File</string>
     </property>
-    <widget class="QMenu" name="menuBrewday">
-     <property name="title">
-      <string>&amp;Brewday</string>
-     </property>
-     <addaction name="actionBrewdayPreview"/>
-     <addaction name="actionBrewdayPrint"/>
-     <addaction name="actionBrewdayHTML"/>
-    </widget>
-    <widget class="QMenu" name="menuRecipe">
-     <property name="title">
-      <string>&amp;Recipe</string>
-     </property>
-     <addaction name="actionRecipePreview"/>
-     <addaction name="actionRecipePrint"/>
-     <addaction name="actionRecipeHTML"/>
-     <addaction name="actionRecipeBBCode"/>
-    </widget>
     <widget class="QMenu" name="menuDatabase">
      <property name="title">
       <string>&amp;Database</string>
@@ -1711,14 +1694,6 @@
      <addaction name="actionRestore_Database"/>
      <addaction name="actionMergeDatabases"/>
     </widget>
-    <widget class="QMenu" name="menuInventory">
-     <property name="title">
-      <string>In&amp;ventory</string>
-     </property>
-     <addaction name="actionInventoryPreview"/>
-     <addaction name="actionInventoryPrint"/>
-     <addaction name="actionInventoryHTML"/>
-    </widget>
     <addaction name="actionNewRecipe"/>
     <addaction name="actionCopy_Recipe"/>
     <addaction name="separator"/>
@@ -1726,10 +1701,8 @@
     <addaction name="actionExportToXml"/>
     <addaction name="menuDatabase"/>
     <addaction name="separator"/>
-    <addaction name="menuBrewday"/>
-    <addaction name="menuRecipe"/>
+    <addaction name="actionPrint" />
     <addaction name="separator"/>
-    <addaction name="menuInventory"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
@@ -1908,6 +1881,18 @@
     <string>Ctrl+T</string>
    </property>
   </action>
+  <action name="actionPrint">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/printer.png</normaloff>:/images/printer.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Print and preview</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
+   </property>
+  </action>
   <action name="actionExit">
    <property name="icon">
     <iconset resource="../brewtarget.qrc">
@@ -2029,96 +2014,12 @@
     <string>&amp;Pitch Rate Calculator</string>
    </property>
   </action>
-  <action name="actionBrewdayPrint_old">
-   <property name="text">
-    <string>Brewday</string>
-   </property>
-  </action>
-  <action name="actionRecipePreview_old">
-   <property name="text">
-    <string>Recipe</string>
-   </property>
-  </action>
-  <action name="actionBrewdayPreview_old">
-   <property name="text">
-    <string>Brewday</string>
-   </property>
-  </action>
-  <action name="actionRecipePrint_old">
-   <property name="text">
-    <string>Recipe</string>
-   </property>
-  </action>
-  <action name="actionBrewdayHTML_old">
-   <property name="text">
-    <string>Brewday</string>
-   </property>
-  </action>
-  <action name="actionRecipeHTML_old">
-   <property name="text">
-    <string>Recipe</string>
-   </property>
-  </action>
   <action name="action">
    <property name="text">
     <string>Merge Databases</string>
    </property>
    <property name="toolTip">
     <string>Select another database to merge into the current one.</string>
-   </property>
-  </action>
-  <action name="actionBrewdayPrint">
-   <property name="icon">
-    <iconset resource="../brewtarget.qrc">
-     <normaloff>:/images/printer.png</normaloff>:/images/printer.png</iconset>
-   </property>
-   <property name="text">
-    <string>&amp;Print</string>
-   </property>
-  </action>
-  <action name="actionBrewdayPreview">
-   <property name="icon">
-    <iconset resource="../brewtarget.qrc">
-     <normaloff>:/images/document-print-preview.png</normaloff>:/images/document-print-preview.png</iconset>
-   </property>
-   <property name="text">
-    <string>Print Pre&amp;view</string>
-   </property>
-  </action>
-  <action name="actionBrewdayHTML">
-   <property name="icon">
-    <iconset resource="../brewtarget.qrc">
-     <normaloff>:/images/document-export.png</normaloff>:/images/document-export.png</iconset>
-   </property>
-   <property name="text">
-    <string>&amp;Export To HTML</string>
-   </property>
-  </action>
-  <action name="actionRecipePreview">
-   <property name="icon">
-    <iconset resource="../brewtarget.qrc">
-     <normaloff>:/images/document-print-preview.png</normaloff>:/images/document-print-preview.png</iconset>
-   </property>
-   <property name="text">
-    <string>Print Pre&amp;view</string>
-   </property>
-  </action>
-  <action name="actionRecipePrint">
-   <property name="icon">
-    <iconset resource="../brewtarget.qrc">
-     <normaloff>:/images/printer.png</normaloff>:/images/printer.png</iconset>
-   </property>
-   <property name="text">
-    <string>&amp;Print</string>
-   </property>
-  </action>
-  <action name="actionRecipeHTML">
-   <property name="icon">
-    <iconset resource="../brewtarget.qrc">
-     <normaloff>:/images/document-export.png</normaloff>:/images/document-export.png</iconset>
-   </property>
-   <property name="text">
-    <string>&amp;Export to HTML</string>
    </property>
   </action>
   <action name="actionBackup_Database">
@@ -2240,33 +2141,6 @@
    </property>
    <property name="text">
     <string>&amp;Hydrometer Temp Adjustment</string>
-   </property>
-  </action>
-  <action name="actionInventoryPreview">
-   <property name="icon">
-    <iconset resource="../brewtarget.qrc">
-     <normaloff>:/images/document-print-preview.png</normaloff>:/images/document-print-preview.png</iconset>
-   </property>
-   <property name="text">
-    <string>Print Pre&amp;view</string>
-   </property>
-  </action>
-  <action name="actionInventoryPrint">
-   <property name="icon">
-    <iconset resource="../brewtarget.qrc">
-     <normaloff>:/images/printer.png</normaloff>:/images/printer.png</iconset>
-   </property>
-   <property name="text">
-    <string>&amp;Print</string>
-   </property>
-  </action>
-  <action name="actionInventoryHTML">
-   <property name="icon">
-    <iconset resource="../brewtarget.qrc">
-     <normaloff>:/images/document-export.png</normaloff>:/images/document-export.png</iconset>
-   </property>
-   <property name="text">
-    <string>&amp;Export to HTML</string>
    </property>
   </action>
   <action name="actionAlcohol_Percentage_Tool">
