@@ -49,7 +49,7 @@ namespace {
    char const * const FOLDER_FOR_SUPPLIED_RECIPES = "brewtarget";
 
    //! \brief converts sqlite values (mostly booleans) into something postgres wants
-   QVariant convertValue(Database::DbType newType, QSqlField field) {
+/*   QVariant convertValue(Database::DbType newType, QSqlField field) {
       QVariant retVar = field.value();
       if ( field.type() == QVariant::Bool ) {
          switch(newType) {
@@ -64,7 +64,7 @@ namespace {
          retVar = "'now()'";
       }
       return retVar;
-   }
+   }*/
 
    struct QueryAndParameters {
       QString sql;
