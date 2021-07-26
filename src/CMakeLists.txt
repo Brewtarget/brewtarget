@@ -97,7 +97,6 @@ SET( brewtarget_SRCS
     ${SRCDIR}/database/DatabaseSchemaHelper.cpp
     ${SRCDIR}/database/DbTransaction.cpp
     ${SRCDIR}/database/ObjectStoreTyped.cpp
-    ${SRCDIR}/database/ObjectStoreWrapper.cpp
     ${SRCDIR}/database/ObjectStore.cpp
     ${SRCDIR}/EquipmentButton.cpp
     ${SRCDIR}/EquipmentEditor.cpp
