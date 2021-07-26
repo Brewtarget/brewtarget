@@ -82,6 +82,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/BtFolder.cpp
     ${SRCDIR}/BtLabel.cpp
     ${SRCDIR}/BtLineEdit.cpp
+    ${SRCDIR}/BtPrintPreview.cpp
     ${SRCDIR}/BtSplashScreen.cpp
     ${SRCDIR}/BtTabWidget.cpp
     ${SRCDIR}/BtTextEdit.cpp
@@ -92,9 +93,12 @@ SET( brewtarget_SRCS
     ${SRCDIR}/ColorMethods.cpp
     ${SRCDIR}/ConverterTool.cpp
     ${SRCDIR}/CustomComboBox.cpp
-    ${SRCDIR}/database.cpp
-    ${SRCDIR}/DatabaseSchema.cpp
-    ${SRCDIR}/DatabaseSchemaHelper.cpp
+    ${SRCDIR}/database/Database.cpp
+    ${SRCDIR}/database/DatabaseSchemaHelper.cpp
+    ${SRCDIR}/database/DbTransaction.cpp
+    ${SRCDIR}/database/ObjectStoreTyped.cpp
+    ${SRCDIR}/database/ObjectStoreWrapper.cpp
+    ${SRCDIR}/database/ObjectStore.cpp
     ${SRCDIR}/EquipmentButton.cpp
     ${SRCDIR}/EquipmentEditor.cpp
     ${SRCDIR}/EquipmentListModel.cpp
@@ -113,7 +117,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/IbuMethods.cpp
     ${SRCDIR}/InstructionWidget.cpp
     ${SRCDIR}/InventoryFormatter.cpp
-    ${SRCDIR}/Log.cpp
+    ${SRCDIR}/Logging.cpp
     ${SRCDIR}/MainWindow.cpp
     ${SRCDIR}/MashButton.cpp
     ${SRCDIR}/MashComboBox.cpp
@@ -134,6 +138,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/model/Fermentable.cpp
     ${SRCDIR}/model/Hop.cpp
     ${SRCDIR}/model/Instruction.cpp
+    ${SRCDIR}/model/Inventory.cpp
     ${SRCDIR}/model/Mash.cpp
     ${SRCDIR}/model/MashStep.cpp
     ${SRCDIR}/model/Misc.cpp
@@ -149,10 +154,10 @@ SET( brewtarget_SRCS
     ${SRCDIR}/NamedMashEditor.cpp
     ${SRCDIR}/OgAdjuster.cpp
     ${SRCDIR}/OptionDialog.cpp
+    ${SRCDIR}/PersistentSettings.cpp
     ${SRCDIR}/PitchDialog.cpp
     ${SRCDIR}/PreInstruction.cpp
     ${SRCDIR}/PrimingDialog.cpp
-    ${SRCDIR}/PropertySchema.cpp
     ${SRCDIR}/QueuedMethod.cpp
     ${SRCDIR}/RadarChart.cpp
     ${SRCDIR}/RangedSlider.cpp
@@ -168,7 +173,6 @@ SET( brewtarget_SRCS
     ${SRCDIR}/StyleListModel.cpp
     ${SRCDIR}/StyleRangeWidget.cpp
     ${SRCDIR}/StyleSortFilterProxyModel.cpp
-    ${SRCDIR}/TableSchema.cpp
     ${SRCDIR}/TimerListDialog.cpp
     ${SRCDIR}/TimerMainDialog.cpp
     ${SRCDIR}/TimerWidget.cpp
@@ -185,6 +189,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/xml/BtDomErrorHandler.cpp
     ${SRCDIR}/xml/XercesHelpers.cpp
     ${SRCDIR}/xml/XmlCoding.cpp
+    ${SRCDIR}/xml/XmlMashRecord.cpp
     ${SRCDIR}/xml/XmlMashStepRecord.cpp
     ${SRCDIR}/xml/XmlRecipeRecord.cpp
     ${SRCDIR}/xml/XmlRecordCount.cpp
@@ -200,34 +205,33 @@ SET( brewtarget_SRCS
 # in the ui/ directory instead of here?
 SET( brewtarget_UIS
     ${UIDIR}/ancestorDialog.ui
-    ${UIDIR}/brewDayWidget.ui
     ${UIDIR}/brewDayScrollWidget.ui
+    ${UIDIR}/brewDayWidget.ui
     ${UIDIR}/brewNoteWidget.ui
-    ${UIDIR}/mainWindow.ui
-    ${UIDIR}/mashStepEditor.ui
-    ${UIDIR}/miscEditor.ui
     ${UIDIR}/equipmentEditor.ui
     ${UIDIR}/fermentableEditor.ui
     ${UIDIR}/hopEditor.ui
     ${UIDIR}/instructionWidget.ui
+    ${UIDIR}/mainWindow.ui
+    ${UIDIR}/mashDesigner.ui
     ${UIDIR}/mashEditor.ui
-    ${UIDIR}/namedMashEditor.ui
+    ${UIDIR}/mashStepEditor.ui
     ${UIDIR}/mashWizard.ui
+    ${UIDIR}/miscEditor.ui
+    ${UIDIR}/namedMashEditor.ui
     ${UIDIR}/ogAdjuster.ui
     ${UIDIR}/optionsDialog.ui
+    ${UIDIR}/pitchDialog.ui
     ${UIDIR}/primingDialog.ui
+    ${UIDIR}/recipeExtrasWidget.ui
     ${UIDIR}/refractoDialog.ui
     ${UIDIR}/strikeWaterDialog.ui
     ${UIDIR}/styleEditor.ui
     ${UIDIR}/timerMainDialog.ui
     ${UIDIR}/timerWidget.ui
-    ${UIDIR}/waterEditor.ui
     ${UIDIR}/waterDialog.ui
+    ${UIDIR}/waterEditor.ui
     ${UIDIR}/yeastEditor.ui
-    ${UIDIR}/mashDesigner.ui
-    ${UIDIR}/pitchDialog.ui
-    ${UIDIR}/brewDayScrollWidget.ui
-    ${UIDIR}/recipeExtrasWidget.ui
 )
 
 #
@@ -243,7 +247,6 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/AlcoholTool.h
     ${SRCDIR}/AncestorDialog.h
     ${SRCDIR}/BeerColorWidget.h
-    ${SRCDIR}/beerxml.h
     ${SRCDIR}/boiltime.h
     ${SRCDIR}/BrewDayScrollWidget.h
     ${SRCDIR}/BrewDayWidget.h
@@ -261,10 +264,9 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/BtTreeModel.h
     ${SRCDIR}/BtTreeView.h
     ${SRCDIR}/CMakeLists.txt
-    ${SRCDIR}/.CMakeLists.txt.kate-swp
     ${SRCDIR}/ConverterTool.h
     ${SRCDIR}/CustomComboBox.h
-    ${SRCDIR}/database.h
+    ${SRCDIR}/database/Database.h
     ${SRCDIR}/EquipmentButton.h
     ${SRCDIR}/EquipmentEditor.h
     ${SRCDIR}/EquipmentListModel.h
@@ -311,10 +313,8 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/NamedEntitySortProxyModel.h
     ${SRCDIR}/NamedMashEditor.h
     ${SRCDIR}/OgAdjuster.h
-    ${SRCDIR}/OptionDialog.h
     ${SRCDIR}/PitchDialog.h
     ${SRCDIR}/PrimingDialog.h
-    ${SRCDIR}/PropertySchema.h
     ${SRCDIR}/QueuedMethod.h
     ${SRCDIR}/RangedSlider.h
     ${SRCDIR}/RecipeExtrasWidget.h
@@ -329,7 +329,7 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/StyleListModel.h
     ${SRCDIR}/StyleRangeWidget.h
     ${SRCDIR}/StyleSortFilterProxyModel.h
-    ${SRCDIR}/TableSchema.h
+    ${SRCDIR}/Testing.h
     ${SRCDIR}/TimerListDialog.h
     ${SRCDIR}/TimerMainDialog.h
     ${SRCDIR}/TimerWidget.h

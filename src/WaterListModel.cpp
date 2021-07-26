@@ -1,6 +1,7 @@
 /*
  * WaterListModel.cpp is part of Brewtarget, and is Copyright the following
- * authors 2020-2025
+ * authors 2020-2021
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@fastmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -16,22 +17,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #include "WaterListModel.h"
-#include "model/Water.h"
-#include "database.h"
-#include "model/Recipe.h"
 
-WaterListModel::WaterListModel(QWidget* parent)
-   : QAbstractListModel(parent), m_recipe(nullptr)
-{
-   connect( &(Database::instance()), qOverload<Water*>(&Database::createdSignal), this, &WaterListModel::addWater );
-   connect( &(Database::instance()), qOverload<Water*>(&Database::deletedSignal), this, &WaterListModel::removeWater);
+#include "database/ObjectStoreWrapper.h"
+#include "model/Recipe.h"
+#include "model/Water.h"
+
+WaterListModel::WaterListModel(QWidget* parent) :
+   QAbstractListModel(parent),
+   m_recipe(nullptr) {
+   connect(&ObjectStoreTyped<Water>::getInstance(), &ObjectStoreTyped<Water>::signalObjectInserted, this, &WaterListModel::addWater);
+   connect(&ObjectStoreTyped<Water>::getInstance(), &ObjectStoreTyped<Water>::signalObjectDeleted,  this, &WaterListModel::removeWater);
    repopulateList();
+   return;
 }
 
-void WaterListModel::addWater(Water* water)
-{
+void WaterListModel::addWater(int waterId) {
+   Water* water = ObjectStoreWrapper::getByIdRaw<Water>(waterId);
+
    if ( !water || m_waters.contains(water) || water->deleted() || !water->display() ) {
       return;
    }
@@ -69,8 +72,12 @@ void WaterListModel::addWaters(QList<Water*> waters)
    }
 }
 
-void WaterListModel::removeWater(Water* water)
-{
+void WaterListModel::removeWater(int waterId, std::shared_ptr<QObject> object) {
+   this->remove(std::static_pointer_cast<Water>(object).get());
+   return;
+}
+
+void WaterListModel::remove(Water* water) {
    int ndx = m_waters.indexOf(water);
    if( ndx > 0 ) {
       beginRemoveRows( QModelIndex(), ndx, ndx );
@@ -100,28 +107,27 @@ void WaterListModel::waterChanged(QMetaProperty prop, QVariant val)
    if( eSend == nullptr )
       return;
 
-   QString propName(prop.name());
-   if ( propName == PropertyNames::NamedEntity::name ) {
+   if (prop.name() == PropertyNames::NamedEntity::name) {
       int ndx = m_waters.indexOf(eSend);
-      if ( ndx >= 0 )
+      if ( ndx >= 0 ) {
          emit dataChanged( createIndex(ndx,0), createIndex(ndx,0) );
+      }
    }
 }
 
-void WaterListModel::recChanged(QMetaProperty prop, QVariant val)
-{
-   QString propName(prop.name());
-   if ( propName == "water" ) {
-      Water* newWater = qobject_cast<Water*>(NamedEntity::extractPtr(val));
-      // Now do something with the water.
+void WaterListModel::recChanged(QMetaProperty prop, QVariant val) {
+   if (prop.name() == PropertyNames::Recipe::waters) {
+      Water* newWater = val.value<Water*>();
+      // .:TODO:. Now do something with the water.
       Q_UNUSED(newWater) // Until then, this will keep the compiler happy
    }
+   return;
 }
 
-void WaterListModel::repopulateList()
-{
+void WaterListModel::repopulateList() {
    removeAll();
-   addWaters( Database::instance().waters() );
+   addWaters( ObjectStoreTyped<Water>::getInstance().getAllRaw() );
+   return;
 }
 
 Water* WaterListModel::at(int ndx)

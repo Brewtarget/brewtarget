@@ -1,7 +1,8 @@
 /*
  * BrewNoteWidget.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -18,11 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#ifndef _BREWNOTEWIDGET_H
-#define _BREWNOTEWIDGET_H
-
-class BrewNoteWidget;
+#ifndef BREWNOTEWIDGET_H
+#define BREWNOTEWIDGET_H
 
 #include <QWidget>
 #include <QDialog>
@@ -35,7 +33,6 @@ class BrewNote;
 
 /*!
  * \class BrewNoteWidget
- * \author Mik Firestone
  *
  * \brief View/controller widget that edits BrewNotes.
  */

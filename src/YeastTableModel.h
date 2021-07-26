@@ -1,7 +1,8 @@
 /*
  * YeastTableModel.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  * - Samuel Östling <MrOstling@gmail.com>
@@ -19,40 +20,38 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef YEASTTABLEMODEL_H
+#define YEASTTABLEMODEL_H
+#pragma once
 
-#ifndef _YEASTTABLEMODEL_H
-#define _YEASTTABLEMODEL_H
-
-class YeastTableModel;
-class YeastItemDelegate;
+#include <memory>
 
 #include <QAbstractTableModel>
-#include <QWidget>
-#include <QModelIndex>
-#include <QMetaProperty>
-#include <QVariant>
 #include <QItemDelegate>
 #include <QList>
+#include <QMetaProperty>
+#include <QModelIndex>
 #include <QTableView>
+#include <QVariant>
+#include <QWidget>
 
-#include "Unit.h"
 #include "brewtarget.h"
+#include "Unit.h"
 
 // Forward declarations.
 class Yeast;
 class YeastTableWidget;
+class YeastItemDelegate;
 class Recipe;
 
 enum{ YEASTNAMECOL, YEASTLABCOL, YEASTPRODIDCOL, YEASTTYPECOL, YEASTFORMCOL, YEASTAMOUNTCOL, YEASTINVENTORYCOL, YEASTNUMCOLS /*This one MUST be last*/};
 
 /*!
  * \class YeastTableModel
- * \author Philip G. Lee
  *
  * \brief Table model for yeasts.
  */
-class YeastTableModel : public QAbstractTableModel
-{
+class YeastTableModel : public QAbstractTableModel {
    Q_OBJECT
 
 public:
@@ -94,18 +93,19 @@ public:
    void setDisplayUnit(int column, Unit::unitDisplay displayUnit);
    void setDisplayScale(int column, Unit::unitScale displayScale);
    QString generateName(int column) const;
+   void remove(Yeast * yeast);
 
 public slots:
    //! \brief Add a \c yeast to the model.
-   void addYeast(Yeast* yeast);
+   void addYeast(int yeastId);
    //! \brief Remove a \c yeast from the model.
-   void removeYeast(Yeast* yeast);
+   void removeYeast(int yeastId, std::shared_ptr<QObject> object);
 
    void contextMenu(const QPoint &point);
 private slots:
    //! \brief Catch changes to Recipe, Database, and Yeast.
    void changed(QMetaProperty, QVariant);
-   void changedInventory(Brewtarget::DBTable,int,QVariant);
+   void changedInventory(int invKey, char const * const propertyName);
 
 private:
    bool editable;
@@ -117,7 +117,7 @@ private:
 
 /*!
  * \class YeastItemDelegate
- * \author Philip G. Lee
+ *
  *
  * Item delegate for yeast tables.
  */
@@ -137,5 +137,4 @@ public:
 private:
 };
 
-#endif   /* _YEASTTABLEMODEL_H */
-
+#endif

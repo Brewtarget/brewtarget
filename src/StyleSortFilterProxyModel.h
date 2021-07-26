@@ -1,6 +1,7 @@
 /*
  * StyleSortFilterProxyModel.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
+ * - Matt Young <mfsy@yahoo.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -16,15 +17,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#ifndef _STYLESORTFILTERPROXYMODEL_H
-#define _STYLESORTFILTERPROXYMODEL_H
+#ifndef STYLESORTFILTERPROXYMODEL_H
+#define STYLESORTFILTERPROXYMODEL_H
 
 #include <QSortFilterProxyModel>
 
 /*!
  * \class StyleSortFilterProxyModel
- * \author Philip G. Lee
  *
  * \brief Proxy model for sorting/filtering Styles.
  * This should really be a base filter for all ingredient models that filters

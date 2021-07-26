@@ -25,18 +25,27 @@
 #pragma once
 
 #include <QString>
+#include <QSqlRecord>
 
 #include "model/NamedEntityWithInventory.h"
-namespace PropertyNames::Misc { static char const * const amount = "amount"; /* previously kpropAmount */ }
-namespace PropertyNames::Misc { static char const * const amountIsWeight = "amountIsWeight"; /* previously kpropAmtIsWgt */ }
-namespace PropertyNames::Misc { static char const * const amountType = "amountType"; }
-namespace PropertyNames::Misc { static char const * const notes = "notes"; /* previously kpropNotes */ }
-namespace PropertyNames::Misc { static char const * const time = "time"; /* previously kpropMiscTime */ }
-namespace PropertyNames::Misc { static char const * const typeString = "typeString"; /* previously kpropTypeString */ }
-namespace PropertyNames::Misc { static char const * const type = "type"; /* previously kpropType */ }
-namespace PropertyNames::Misc { static char const * const useFor = "useFor"; /* previously kpropUseFor */ }
-namespace PropertyNames::Misc { static char const * const useString = "useString"; /* previously kpropUseString */ }
-namespace PropertyNames::Misc { static char const * const use = "use"; /* previously kpropUse */ }
+
+//======================================================================================================================
+//========================================== Start of property name constants ==========================================
+#define AddPropertyName(property) namespace PropertyNames::Misc {static char const * const property = #property; }
+AddPropertyName(amount)
+AddPropertyName(amountIsWeight)
+AddPropertyName(amountType)
+AddPropertyName(notes)
+AddPropertyName(time)
+AddPropertyName(typeString)
+AddPropertyName(type)
+AddPropertyName(useFor)
+AddPropertyName(useString)
+AddPropertyName(use)
+#undef AddPropertyName
+//=========================================== End of property name constants ===========================================
+//======================================================================================================================
+
 
 /*!
  * \class Misc
@@ -47,8 +56,7 @@ class Misc : public NamedEntityWithInventory {
    Q_OBJECT
    Q_CLASSINFO("signal", "miscs")
 
-   friend class Database;
-   friend class BeerXML;
+
    friend class MiscDialog;
 public:
 
@@ -60,8 +68,11 @@ public:
    enum AmountType { AmountType_Weight, AmountType_Volume };
    Q_ENUMS( Type Use AmountType )
 
-   Misc(QString name, bool cache = true);
-   virtual ~Misc() {}
+   Misc(QString name = "", bool cache = true);
+   Misc(NamedParameterBundle const & namedParameterBundle);
+   Misc(Misc const & other);
+
+   virtual ~Misc() = default;
 
    //! \brief The \c Type.
    Q_PROPERTY( Type type READ type WRITE setType /*NOTIFY changed*/ /*changedType*/ )
@@ -99,6 +110,8 @@ public:
    void setAmountType( AmountType t );
    void setAmount( double var );
 
+   //! \brief The amount in inventory in either kg or L, depending on \c amountIsWeight().
+   virtual void setInventoryAmount( double var );
    void setTime( double var );
    void setAmountIsWeight( bool var );
    void setUseFor( const QString &var );
@@ -116,33 +129,27 @@ public:
    const QString amountTypeString() const;
    const QString amountTypeStringTr() const;
    double amount() const;
+   //! \brief The amount in inventory in either kg or L, depending on \c amountIsWeight().
+   virtual double inventory() const;
    double time() const;
    bool amountIsWeight() const;
    QString useFor() const;
    QString notes() const;
 
-   static QString classNameStr();
-
-   NamedEntity * getParent();
-   virtual int insertInDatabase();
-   virtual void removeFromDatabase();
+   virtual Recipe * getOwningRecipe();
 
 signals:
 
    //! \brief Emitted when \c name() changes.
-   // Declared in Base Class BeerXMLElement, should not be overloaded
+   // Declared in Base Class NamedEntity, should not be overloaded
    //void changedName(QString);
 
 protected:
    virtual bool isEqualTo(NamedEntity const & other) const;
+   virtual ObjectStore & getObjectStoreTypedInstance() const;
 
 private:
-   Misc(TableSchema* table, QSqlRecord rec, int t_key = -1);
-   Misc(Misc const & other);
-
-   QString m_typeString;
    Type m_type;
-   QString m_useString;
    Use m_use;
    double m_time;
    double m_amount;
@@ -152,10 +159,6 @@ private:
 
    bool isValidType( const QString &var );
    bool isValidUse( const QString &var );
-
-   static QStringList types;
-   static QStringList uses;
-   static QStringList amountTypes;
 };
 
 Q_DECLARE_METATYPE( QList<Misc*> )

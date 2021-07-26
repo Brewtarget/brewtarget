@@ -29,11 +29,17 @@
  */
 class NamedParameterBundle : public QHash<char const * const, QVariant> {
 public:
-   NamedParameterBundle();
+   enum Mode {
+      STRICT = 0,
+      NOT_STRICT = 1
+   };
+
+   NamedParameterBundle(Mode mode = STRICT);
    ~NamedParameterBundle();
 
    /**
-    * \brief Get the value of a parameter that is required to be present.  Throw an exception if it is not present.
+    * \brief Get the value of a parameter that is required to be present in the DB.  In "strict" mode, throw an
+    *        exception if it is not present.  Otherwise, return whatever default value QVariant gives us.
     *        This is a convenience function to make the call to extract parameters concise.  (We don't want to use the
     *        operator[] of QHash because we want "parameter not found" to be an error.)
     */
@@ -48,6 +54,8 @@ public:
     * \param defaultValue  What to return if the parameter is not present in the bundle
     */
    template <class T> T operator()(char const * const parameterName, T const & defaultValue) const;
+private:
+   Mode mode;
 };
 
 #endif

@@ -21,18 +21,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#include "database.h"
 #include "MashWizard.h"
-#include "model/Mash.h"
-#include "model/MashStep.h"
-#include "model/Fermentable.h"
-#include <QMessageBox>
+
 #include <QButtonGroup>
+#include <QMessageBox>
+
+#include "Algorithms.h"
+#include "database/ObjectStoreWrapper.h"
 #include "HeatCalculations.h"
 #include "model/Equipment.h"
+#include "model/Fermentable.h"
+#include "model/Mash.h"
+#include "model/MashStep.h"
 #include "PhysicalConstants.h"
-#include "Algorithms.h"
 
 MashWizard::MashWizard(QWidget* parent) : QDialog(parent)
 {
@@ -196,7 +197,8 @@ void MashWizard::wizardry()
    for( i = 0; i < steps.size(); ++i) {
       MashStep* step = steps[i];
       if( step->isSparge() ) {
-         Database::instance().removeFrom(mash,step);
+         mash->removeMashStep(step);
+         ObjectStoreWrapper::softDelete(*step);
       }
       else {
           tmp.append(step);
@@ -370,14 +372,15 @@ void MashWizard::wizardry()
             mashStep = new MashStep("", true);
 
             mashStep->setType(MashStep::batchSparge);
-            mashStep->setName(tr("Batch Sparge %1").arg(i+1),true);
+            mashStep->setName(tr("Batch Sparge %1").arg(i+1));
             mashStep->setInfuseAmount_l(volPerBatch);
             mashStep->setInfuseTemp_c(tw);
             mashStep->setEndTemp_c(tw);
             mashStep->setStepTemp_c(tf);
             mashStep->setStepTime_min(15);
-            mashStep->setMash(mash);
-            mashStep->insertInDatabase();
+            //mashStep->setMash(mash);
+            ObjectStoreWrapper::insert(*mashStep);
+            mashStep->setCacheOnly(false);
             steps.append(mashStep);
             emit mashStep->changed(
                         mashStep->metaObject()->property(
@@ -391,15 +394,16 @@ void MashWizard::wizardry()
       else {
          mashStep = new MashStep("", true);
 
-         mashStep->setName(tr("Fly Sparge"), true);
+         mashStep->setName(tr("Fly Sparge"));
          mashStep->setType(MashStep::flySparge);
          mashStep->setInfuseAmount_l(spargeWater_l);
          mashStep->setInfuseTemp_c(tw);
          mashStep->setEndTemp_c(tw);
          mashStep->setStepTemp_c(tf);
          mashStep->setStepTime_min(15);
-         mashStep->setMash(mash);
-         mashStep->insertInDatabase();
+         //mashStep->setMash(mash);
+         ObjectStoreWrapper::insert(*mashStep);
+         mashStep->setCacheOnly(false);
          steps.append(mashStep);
          emit mashStep->changed(
                      mashStep->metaObject()->property(
@@ -416,4 +420,3 @@ void MashWizard::wizardry()
                                tr("You have too much wort from the mash for your boil size. I suggest increasing the boil size by increasing the boil time, or reducing your mash thickness."));
    }
 }
-

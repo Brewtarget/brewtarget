@@ -20,85 +20,89 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #include "model/NamedEntity.h"
 
 #include <typeinfo>
 
-#include <QDomElement>
-#include <QDomNode>
 #include <QMetaProperty>
 
-#include "NamedEntity.h"
 #include "brewtarget.h"
-#include "database.h"
+#include "database/ObjectStore.h"
+#include "model/Recipe.h"
 
-static const char* kVersion = "version";
-
-// sometimes I just want to create a thing with a name and nothing else
-NamedEntity::NamedEntity(Brewtarget::DBTable table, bool cache, QString t_name, bool t_display)
-   : QObject(nullptr),
-     m_key(-1),
-     m_table(table),
-     parentKey(0),
-     m_cacheOnly(cache),
-     m_folder(QString()),
-     m_name(t_name),
-     m_display(t_display),
-     m_deleted(QVariant()) {
+NamedEntity::NamedEntity(int key,  bool cache, QString t_name, bool t_display, QString folder) :
+   QObject    {nullptr  },
+   m_key      {key      },
+   parentKey  {-1       },
+   m_cacheOnly{cache    },
+   m_folder   {folder   },
+   m_name     {t_name   },
+   m_display  {t_display},
+   m_deleted  {false    },
+   m_beingModified{false} {
    return;
 }
 
-// othertimes, we creating a thing from a record in the db
-NamedEntity::NamedEntity(TableSchema* table, QSqlRecord rec, int t_key )
-   : QObject(nullptr),
-     parentKey(0),
-     m_cacheOnly(false),
-     m_deleted(QVariant())
-{
-   if ( t_key == -1 ) {
-      m_key = rec.value( table->keyName() ).toInt();
-   }
-   else {
-      m_key = t_key;
-   }
-
-   m_folder  = rec.value( table->propertyToColumn(PropertyNames::NamedEntity::folder)  ).toString();
-   m_name    = rec.value( table->propertyToColumn(PropertyNames::NamedEntity::name)    ).toString();
-   m_display = rec.value( table->propertyToColumn(PropertyNames::NamedEntity::display) ).toBool();
-   m_table   = table->dbTable();
+NamedEntity::NamedEntity(NamedEntity const & other) :
+   QObject     {nullptr          }, // QObject doesn't have a copy constructor, so just make a new one
+   m_key       {-1               }, // We don't want to copy the other object's key/ID
+   parentKey   {other.parentKey  },
+   m_cacheOnly {other.m_cacheOnly},
+   m_folder    {other.m_folder   },
+   m_name      {other.m_name     },
+   m_display   {other.m_display  },
+   m_deleted   {other.m_deleted  },
+   m_beingModified{false} {
+   return;
 }
 
+//
+// Construct from NamedParameterBundle
+//
+// The "key", "display" and "deleted" properties are optional because they will be set if we're creating from a DB
+// record, but not if we're creating from an XML record.
+//
+// The "folder", "name" and "parent" properties have to be optional because not all subclasses have them.  (BrewNote is
+// the subclass without a name, and, yes, I know the existence of a NamedEntity without a name calls into question our
+// class naming! :->)
+//
+// .:TBD:. For the moment, parent IDs are actually stored outside the main object table (eg in equipment_children
+//         rather than equipment), so this will always set parentKey to -1, but we could envisage changing that in
+//         future.
+//
 NamedEntity::NamedEntity(NamedParameterBundle const & namedParameterBundle) :
-   QObject    {nullptr                                                            },
-   m_key      {namedParameterBundle(PropertyNames::NamedEntity::key).toInt()      },
-   // Not all subclasses have parents so parentKey should be optional in the NamedParameterBundle
-   // .:TBD:. For the moment, parent IDs are actually stored outside the main object table (eg in equipment_children
-   //         rather than equipment), so this will always set parentKey to -1, but we could envisage changing that in
-   //         future.
+   QObject{nullptr},
+   m_key      {namedParameterBundle(PropertyNames::NamedEntity::key, -1)          },
    parentKey  {namedParameterBundle(PropertyNames::NamedEntity::parentKey, -1)    },
    m_cacheOnly{false                                                              },
-   m_folder    {namedParameterBundle(PropertyNames::NamedEntity::folder, QString{})}, // Not all subclasses have folders
-   m_name      {namedParameterBundle(PropertyNames::NamedEntity::name, QString{})  }, // One subclass, BrewNote, does not have a name
-   m_display   {namedParameterBundle(PropertyNames::NamedEntity::display).toBool() },
-   m_deleted   {namedParameterBundle(PropertyNames::NamedEntity::deleted).toBool() } {
+   m_folder   {namedParameterBundle(PropertyNames::NamedEntity::folder, QString{})},
+   m_name     {namedParameterBundle(PropertyNames::NamedEntity::name, QString{})  },
+   m_display  {namedParameterBundle(PropertyNames::NamedEntity::display, true)    },
+   m_deleted  {namedParameterBundle(PropertyNames::NamedEntity::deleted, false)   },
+   m_beingModified{false} {
    return;
 }
 
-// and finally sometimes we create a thing from other things
-NamedEntity::NamedEntity(NamedEntity const& other) :
-   QObject(nullptr),
-   m_key(other.m_key),
-   m_table(other.m_table),
-   parentKey(other.parentKey),
-   m_cacheOnly(other.m_cacheOnly),
-   m_folder(other.m_folder),
-   m_name(QString()),
-   m_display(other.m_display),
-   m_deleted(other.m_deleted) {
+void NamedEntity::makeChild(NamedEntity const & copiedFrom) {
+   // It's a coding error if we're not starting out with objects that are copies of each other
+   Q_ASSERT(*this == copiedFrom);
+   Q_ASSERT(this->parentKey == copiedFrom.parentKey);
+
+   // We also assume that this newly-created object has not yet been put in the database (so we don't need to call
+   // down to the ObjectStore to update fields in the DB).
+   Q_ASSERT(this->m_key <= 0);
+
+   // By default, we have the same parent as the object from which we were copied.  But, if that means we have no
+   // parent, then we take object from which we were copied as our parent, on the assumption that it is the master
+   // version of this Hop/Fermentable/etc.
+   if (this->parentKey <= 0) {
+      this->parentKey = copiedFrom.m_key;
+   }
+
+   // So, now, we should have some plausible parent ID, and in particular we should not be our own parent!
+   Q_ASSERT(this->parentKey != this->m_key);
    return;
 }
-
 
 QRegExp const & NamedEntity::getDuplicateNameNumberMatcher() {
    //
@@ -130,7 +134,7 @@ bool NamedEntity::operator==(NamedEntity const & other) const {
    //
    // For the base class attributes, we deliberately don't compare m_key, parentKey, table or m_folder.  If we've read
    // in an object from a file and want to  see if it's the same as one in the database, then the DB-related info and
-   // folder classification are not a helpful part of that comparison.  Similarly, we do not compare m_display and
+   // folder classification are not a helpful part of that comparison.  Similarly, we do not compare _display and
    // m_deleted as they are more related to the UI than whether, in essence, two objects are the same.
    //
    if (this->m_name != other.m_name) {
@@ -166,265 +170,214 @@ bool NamedEntity::operator!=(NamedEntity const & other) const {
 bool NamedEntity::operator<(const NamedEntity & other) const { return (this->m_name < other.m_name); }
 bool NamedEntity::operator>(const NamedEntity & other) const { return (this->m_name > other.m_name); }
 
-bool NamedEntity::deleted() const
-{
-   return m_deleted.toBool();
+bool NamedEntity::deleted() const {
+   return this->m_deleted;
 }
 
-bool NamedEntity::display() const
-{
-   return m_display.toBool();
+bool NamedEntity::display() const {
+   return this->m_display;
 }
 
 // Sigh. New databases, more complexity
-void NamedEntity::setDeleted(const bool var, bool cachedOnly)
-{
-   if ( cachedOnly || setEasy(PropertyNames::NamedEntity::deleted, Brewtarget::dbBoolean(var)) ) {
-      m_deleted = var;
-   }
-}
-
-void NamedEntity::setDisplay(bool var, bool cachedOnly)
-{
-   if ( cachedOnly || setEasy(PropertyNames::NamedEntity::display, Brewtarget::dbBoolean(var)) ) {
-      m_display = var;
-   }
-}
-
-QString NamedEntity::folder() const
-{
-   return m_folder;
-}
-
-void NamedEntity::setFolder(const QString var, bool signal, bool cachedOnly)
-{
-   if ( cachedOnly || setEasy( PropertyNames::NamedEntity::folder, var ) ) {
-      m_folder = var;
+void NamedEntity::setDeleted(bool const var) {
+   if (this->newValueMatchesExisting(PropertyNames::NamedEntity::deleted, this->m_deleted, var)) {
+      return;
    }
 
-   if ( signal )
-      emit changedFolder(var);
+   this->m_deleted = var;
+   this->propagatePropertyChange(PropertyNames::NamedEntity::deleted);
+   return;
 }
 
-QString NamedEntity::name() const
-{
-   return m_name;
-}
-
-void NamedEntity::setName(const QString var, bool cachedOnly)
-{
-
-   m_name = var;
-   if ( ! cachedOnly ) {
-      setEasy( PropertyNames::NamedEntity::name, var );
-      emit changedName(var);
+void NamedEntity::setDisplay(bool var) {
+   if (this->newValueMatchesExisting(PropertyNames::NamedEntity::display, this->m_display, var)) {
+      return;
    }
+   this->m_display = var;
+   this->propagatePropertyChange(PropertyNames::NamedEntity::display);
+   return;
 }
 
-int NamedEntity::key() const
-{
-   return m_key;
+QString NamedEntity::folder() const {
+   return this->m_folder;
+}
+
+void NamedEntity::setFolder(QString const & var) {
+   if (this->newValueMatchesExisting(PropertyNames::NamedEntity::folder, this->m_folder, var)) {
+      return;
+   }
+   this->m_folder = var;
+   this->propagatePropertyChange(PropertyNames::NamedEntity::folder);
+   return;
+}
+
+QString NamedEntity::name() const {
+   return this->m_name;
+}
+
+void NamedEntity::setName(QString const & var) {
+   this->setAndNotify(PropertyNames::NamedEntity::name, this->m_name, var);
+   return;
+}
+
+int NamedEntity::key() const {
+   return this->m_key;
+}
+
+void NamedEntity::setKey(int key) {
+   // This will get called by the ObjectStore after inserting something in the DB, so we _don't_ want to call
+   // this->propagatePropertyChange, as this would result in some hilarious and pointless circularity where we call
+   // down again to the ObjectStore to get it to update the property in the DB.
+   this->m_key = key;
+   return;
+}
+
+int NamedEntity::getParentKey() const {
+   return this->parentKey;
 }
 
 bool NamedEntity::cacheOnly() const {
    return this->m_cacheOnly;
 }
 
-Brewtarget::DBTable NamedEntity::table() const
-{
-   return m_table;
+void NamedEntity::setParentKey(int parentKey) {
+   this->parentKey = parentKey;
+
+   //
+   // If the data is obviously messed up then let's at least log it.  (It doesn't necessarily mean there is a bug in
+   // the current version of the code.  It could be the result of a bug in an earlier version.  If so, a manual data
+   // fix is needed in the database.)
+   //
+   // Something should not be its own parent for instance
+   //
+   if (this->parentKey == this->m_key) {
+      qCritical() << Q_FUNC_INFO << this->metaObject()->className() << "#" << this->m_key << "is its own parent!";
+   }
+
+   return;
 }
 
 void NamedEntity::setCacheOnly(bool cache) {
+   // The m_cacheOnly member variable is not stored in the DB, so we don't call this->propagatePropertyChange etc here
    this->m_cacheOnly = cache;
    return;
 }
 
-int NamedEntity::version() const
-{
-   return QString(metaObject()->classInfo(metaObject()->indexOfClassInfo(kVersion)).value()).toInt();
-}
-
-QMetaProperty NamedEntity::metaProperty(const char* name) const
-{
-   return metaObject()->property(metaObject()->indexOfProperty(name));
-}
-
-QMetaProperty NamedEntity::metaProperty(QString const& name) const
-{
-   return metaObject()->property(metaObject()->indexOfProperty(name.toStdString().c_str()));
-}
-
-// getVal =====================================================================
-double NamedEntity::getDouble(const QDomText& textNode)
-{
-   bool ok;
-   double ret;
-
-   QString text = textNode.nodeValue();
-
-   // ret = text.toDouble(&ok);
-   ret = Brewtarget::toDouble(text,&ok);
-   if( !ok )
-      qCritical() << QString("NamedEntity::getDouble: %1 is not a number. Line %2").arg(text).arg(textNode.lineNumber());
-
-   return ret;
-}
-
-bool NamedEntity::getBool(const QDomText& textNode)
-{
-   QString text = textNode.nodeValue();
-
-   if( text == "TRUE" )
-      return true;
-   else if( text == "FALSE" )
-      return false;
-   else
-      qCritical() << QString("NamedEntity::getBool: %1 is not a boolean value. Line %2").arg(text).arg(textNode.lineNumber());
-
-   return false;
-}
-
-int NamedEntity::getInt(const QDomText& textNode)
-{
-   bool ok;
-   int ret;
-   QString text = textNode.nodeValue();
-
-   ret = text.toInt(&ok);
-   if( !ok )
-      qCritical() << QString("NamedEntity::getInt: %1 is not an integer. Line %2").arg(text).arg(textNode.lineNumber());
-
-   return ret;
-}
-
-QString NamedEntity::getString( QDomText const& textNode )
-{
-   return textNode.nodeValue();
-}
-
-QDateTime NamedEntity::getDateTime( QDomText const& textNode )
-{
-   bool ok = true;
-   QDateTime ret;
-   QString text = textNode.nodeValue();
-
-   ret = QDateTime::fromString(text, Qt::ISODate);
-   ok = ret.isValid();
-   if( !ok )
-      qCritical() << QString("NamedEntity::getDateTime: %1 is not a date. Line %2").arg(text).arg(textNode.lineNumber());
-
-   return ret;
-}
-
-QDate NamedEntity::getDate( QDomText const& textNode )
-{
-   bool ok = true;
-   QDate ret;
-   QString text = textNode.nodeValue();
-
-   ret = QDate::fromString(text, "M/d/yyyy");
-   ok = ret.isValid();
-   // Dates have some odd inconsistencies.
-   if( !ok )
-   {
-      ret = QDate::fromString(text,"d/M/yyyy");
-      ok = ret.isValid();
-   }
-
-   if ( !ok )
-      qCritical() << QString("NamedEntity::getDate: %1 is not an ISO date-time. Line %2").arg(text).arg(textNode.lineNumber());
-
-   return ret;
-}
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-QDateTime NamedEntity::getDateTime(QString const& str)
-{
-   QDateTime temp;
-
-   if ( str != "" && (temp = QDateTime::fromString(str, Qt::ISODate)).isValid() )
-      return temp;
-   else
-      return QDateTime::currentDateTime();
-}
-
-QString NamedEntity::text(bool val)
-{
-   if( val )
-      return QString("TRUE");
-   else
-      return QString("FALSE");
-}
-
-QString NamedEntity::text(double val)
-{
-   return QString("%1").arg(val, 0, 'f', 8);
-}
-
-QString NamedEntity::text(int val)
-{
-   return QString("%1").arg(val);
-}
-
-QString NamedEntity::text(QDate const& val)
-{
-   return val.toString(Qt::ISODate);
-}
-
-// Loathsomeness waits and dreams in the deep, and decay spreads over the tottering cities of men.
-bool NamedEntity::setEasy(QString prop_name, QVariant value, bool notify, bool updateEntry)
-{
-   QString className = this->metaObject()->className();
-
-   // you can change the recipe and the mash without trying to version
-   if ( className == QStringLiteral("Recipe") ||
-        className == QStringLiteral("Mash")   ||
-        className == QStringLiteral("BrewNote") ||
-        updateEntry ) {
-      Database::instance().updateEntry(this,prop_name,value,notify);
-      return true;
-   }
-   else {
-      return Database::instance().modifyEntry(this, prop_name, value);
-   }
-}
-
-void NamedEntity::signalCacheChange(QString propName, QVariant value)
-{
-   int idx = this->metaObject()->indexOfProperty(propName.toUtf8().data());
-   QMetaProperty mProp = this->metaObject()->property(idx);
-   emit changed(mProp,value);
-}
-
-QVariant NamedEntity::get( const QString& col_name ) const
-{
-   return Database::instance().get( m_table, m_key, col_name );
-}
-
-void NamedEntity::setInventory( const QVariant& value, int invKey, bool notify )
-{
-   Database::instance().setInventory( this, value, invKey, notify );
-}
-
-QVariant NamedEntity::getInventory() const
-{
-   QVariant val = 0.0;
-   val = Database::instance().getInventoryAmt(m_table, m_key);
-   return val;
-}
-
-void NamedEntity::setParent(NamedEntity const & parentNamedEntity)
-{
-   this->parentKey = parentNamedEntity.m_key;
+void NamedEntity::setBeingModified(bool set) {
+   this->m_beingModified = set;
    return;
 }
 
-QVariantMap NamedEntity::getColumnValueMap() const
-{
-   QVariantMap map;
-   map.insert(PropertyNames::NamedEntity::folder, folder());
-   map.insert(PropertyNames::NamedEntity::name, name());
-   return map;
+bool NamedEntity::isBeingModified() const {
+   return this->m_beingModified;
+}
+
+QVector<int> NamedEntity::getParentAndChildrenIds() const {
+   QVector<int> results;
+   NamedEntity const * parent = this->getParent();
+   if (nullptr == parent) {
+      parent = this;
+   }
+
+   // We are assuming that grandparents do not exist - ie that it's a coding error if they do
+   // We want more than just an assert in that case as debugging would be a lot harder without knowing which
+   // NamedEntity has the unexpected data.
+   if (parent->parentKey > 0) {
+      qCritical() <<
+         Q_FUNC_INFO << this->metaObject()->className() << "#" << this->m_key << "has parent #" << this->parentKey <<
+         "with parent #" << parent->parentKey;
+      Q_ASSERT(false);
+   }
+
+   // We've got the parent ingredient...
+   results.append(parent->m_key);
+
+   // ...now find all the children, ie all the other ingredients of this type whose parent is the ingredient we just
+   // found
+   QList<std::shared_ptr<QObject> > children = this->getObjectStoreTypedInstance().findAllMatching(
+      [parent](std::shared_ptr<QObject> obj) { return std::static_pointer_cast<NamedEntity>(obj)->getParentKey() == parent->key(); }
+   );
+   for (auto child : children) {
+      results.append(std::static_pointer_cast<NamedEntity>(child)->key());
+   }
+   return results;
+}
+
+QMetaProperty NamedEntity::metaProperty(char const * const name) const {
+   return this->metaObject()->property(this->metaObject()->indexOfProperty(name));
+}
+
+void NamedEntity::prepareForPropertyChange(char const * const propertyName) {
+   //
+   // At the moment, the only thing we want to do in this pre-change check is to see whether we need to version a
+   // Recipe.  Obviously we leave all the details of that to the Recipe-related namespace.
+   //
+   RecipeHelper::prepareForPropertyChange(*this, propertyName);
+   return;
+}
+
+void NamedEntity::propagatePropertyChange(char const * const propertyName, bool notify) const {
+   // If we're in "cache only" mode, there's nothing to do
+   if (this->m_cacheOnly) {
+      return;
+   }
+
+   // If we're already stored in the object store, tell it about the property change so that it can write it to the
+   // database.  (We don't pass the new value as it will get read out of the object via propertyName.)
+   if (this->m_key > 0) {
+      this->getObjectStoreTypedInstance().updateProperty(*this, propertyName);
+   }
+
+   // Send a signal if needed
+   if (notify) {
+      // It's obviously a coding error to supply a property name that is not registered with Qt as a property of this
+      // object
+      int idx = this->metaObject()->indexOfProperty(propertyName);
+      Q_ASSERT(idx >= 0);
+      QMetaProperty metaProperty = this->metaObject()->property(idx);
+      QVariant value = metaProperty.read(this);
+      emit this->changed(metaProperty, value);
+   }
+
+   return;
+}
+
+NamedEntity * NamedEntity::getParent() const {
+   if (this->parentKey <= 0) {
+      return nullptr;
+   }
+
+   return static_cast<NamedEntity *>(this->getObjectStoreTypedInstance().getById(this->parentKey).get());
+}
+
+void NamedEntity::setParent(NamedEntity const & parentNamedEntity) {
+   this->setAndNotify(PropertyNames::NamedEntity::parentKey, this->parentKey, parentNamedEntity.m_key);
+   return;
+}
+
+void NamedEntity::hardDeleteOwnedEntities() {
+   // If we are not overridden in the subclass then there is no work to do
+   qDebug() << Q_FUNC_INFO << this->metaObject()->className() << "owns no other entities";
+   return;
+}
+
+//======================================================================================================================
+// NamedEntityModifyingMarker
+//======================================================================================================================
+NamedEntityModifyingMarker::NamedEntityModifyingMarker(NamedEntity & namedEntity) :
+   namedEntity{namedEntity},
+   savedModificationState{namedEntity.isBeingModified()} {
+   qDebug() <<
+      Q_FUNC_INFO << "Marking" << this->namedEntity.metaObject()->className() << "#" << this->namedEntity.key() <<
+      "as being modified (" << (this->savedModificationState ? "no change" : "previously was not") << ")";
+   this->namedEntity.setBeingModified(true);
+   return;
+}
+
+NamedEntityModifyingMarker::~NamedEntityModifyingMarker() {
+   qDebug() <<
+      Q_FUNC_INFO << "Restoring" << this->namedEntity.metaObject()->className() << "#" << this->namedEntity.key() <<
+      "\"being modified\" state to" << (this->savedModificationState ? "on" : "off");
+   this->namedEntity.setBeingModified(this->savedModificationState);
+   return;
 }

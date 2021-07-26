@@ -1,7 +1,8 @@
 /*
  * MashStepEditor.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2020
+ * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -18,11 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#ifndef _MASHSTEPEDITOR_H
-#define   _MASHSTEPEDITOR_H
-
-class MashStepEditor;
+#ifndef MASHSTEPEDITOR_H
+#define MASHSTEPEDITOR_H
 
 #include <QDialog>
 #include <QWidget>
@@ -37,7 +35,6 @@ class Mash;
 
 /*!
  * \class MashStepEditor
- * \author Philip G. Lee
  *
  * \brief View/controller dialog for editing mash steps.
  */

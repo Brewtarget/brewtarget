@@ -1,7 +1,8 @@
 /*
  * BrewDayWidget.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -18,25 +19,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef BREWDAYWIDGET_H
+#define BREWDAYWIDGET_H
 
-#ifndef _BREWDAYWIDGET_H
-#define _BREWDAYWIDGET_H
-
-class BrewDayWidget;
-
-#include "ui_brewDayWidget.h"
-#include <QWidget>
+#include <QMetaProperty>
+#include <QPrinter>
 #include <QSize>
 #include <QTextBrowser>
-#include <QMetaProperty>
 #include <QVariant>
+#include <QWidget>
+
+#include "ui_brewDayWidget.h"
 
 // Forward declarations.
 class Recipe;
 
 /*!
  * \class BrewDayWidget
- * \author Philip G. Lee
+ *
  *
  * \brief Widget that displays the brewday info. Deprecated I believe.
  */
@@ -67,7 +67,7 @@ private:
    QString buildInstructionTable();
    QString buildFooterTable();
    QString getCSS();
-   
+
    Recipe* recObs;
    QPrinter* printer;
    QTextBrowser* doc;
@@ -78,5 +78,4 @@ private slots:
    bool loadComplete(bool ok);
 };
 
-#endif  /* _BREWDAYWIDGET_H */
-
+#endif  /* BREWDAYWIDGET_H */

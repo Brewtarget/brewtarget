@@ -1,6 +1,7 @@
 /*
  * WaterTableModel.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  * - swstim <swstim@gmail.com>
@@ -18,25 +19,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#include <QAbstractTableModel>
-#include <QAbstractItemModel>
-#include <QWidget>
-#include <QModelIndex>
-#include <QVariant>
-#include <QItemDelegate>
-#include <QStyleOptionViewItem>
-#include <QLineEdit>
-#include <QString>
-
-#include <QList>
-#include "database.h"
 #include "WaterTableModel.h"
-#include "WaterTableWidget.h"
-#include "model/Water.h"
-#include "Unit.h"
-#include "model/Recipe.h"
+
+#include <QAbstractItemModel>
+#include <QAbstractTableModel>
+#include <QItemDelegate>
+#include <QLineEdit>
+#include <QList>
+#include <QModelIndex>
+#include <QString>
+#include <QStyleOptionViewItem>
+#include <QVariant>
+#include <QWidget>
+
 #include "brewtarget.h"
+#include "database/ObjectStoreWrapper.h"
+#include "model/Recipe.h"
+#include "model/Water.h"
+#include "PersistentSettings.h"
+#include "Unit.h"
+#include "WaterTableWidget.h"
 
 WaterTableModel::WaterTableModel(WaterTableWidget* parent)
    : QAbstractTableModel(parent), recObs(nullptr), parentTableWidget(parent)
@@ -59,25 +61,22 @@ void WaterTableModel::observeRecipe(Recipe* rec)
    }
 }
 
-void WaterTableModel::observeDatabase(bool val)
-{
-   if( val )
-   {
+void WaterTableModel::observeDatabase(bool val) {
+   if( val ) {
       observeRecipe(nullptr);
       removeAll();
-      connect( &(Database::instance()), qOverload<Water*>(&Database::createdSignal), this, &WaterTableModel::addWater );
-      connect( &(Database::instance()), qOverload<Water*>(&Database::deletedSignal), this, &WaterTableModel::removeWater);
-      addWaters( Database::instance().waters() );
-   }
-   else
-   {
+      connect(&ObjectStoreTyped<Water>::getInstance(), &ObjectStoreTyped<Water>::signalObjectInserted, this, &WaterTableModel::addWater);
+      connect(&ObjectStoreTyped<Water>::getInstance(), &ObjectStoreTyped<Water>::signalObjectDeleted,  this, &WaterTableModel::removeWater);
+      this->addWaters( ObjectStoreTyped<Water>::getInstance().getAllRaw() );
+   } else {
       removeAll();
-      disconnect( &(Database::instance()), nullptr, this, nullptr );
+      disconnect(&ObjectStoreTyped<Water>::getInstance(), nullptr, this, nullptr);
    }
+   return;
 }
 
-void WaterTableModel::addWater(Water* water)
-{
+void WaterTableModel::addWater(int waterId) {
+   Water* water = ObjectStoreWrapper::getByIdRaw<Water>(waterId);
    if( waterObs.contains(water) )
       return;
    // If we are observing the database, ensure that the item is undeleted and
@@ -134,11 +133,9 @@ void WaterTableModel::addWaters(QList<Water*> waters)
 
 }
 
-void WaterTableModel::removeWater(Water* water)
-{
-   int i;
-
-   i = waterObs.indexOf(water);
+void WaterTableModel::removeWater(int waterId, std::shared_ptr<QObject> object) {
+   Water* water = std::static_pointer_cast<Water>(object).get();
+   int i = waterObs.indexOf(water);
    if( i >= 0 )
    {
       beginRemoveRows( QModelIndex(), i, i );
@@ -335,7 +332,7 @@ Unit::unitDisplay WaterTableModel::displayUnit(int column) const
    if ( attribute.isEmpty() )
       return Unit::noUnit;
 
-   return static_cast<Unit::unitDisplay>(Brewtarget::option(attribute, QVariant(-1), this->objectName(), Brewtarget::UNIT).toInt());
+   return static_cast<Unit::unitDisplay>(PersistentSettings::value(attribute, QVariant(-1), this->objectName(), PersistentSettings::UNIT).toInt());
 }
 
 Unit::unitScale WaterTableModel::displayScale(int column) const
@@ -345,7 +342,7 @@ Unit::unitScale WaterTableModel::displayScale(int column) const
    if ( attribute.isEmpty() )
       return Unit::noScale;
 
-   return static_cast<Unit::unitScale>(Brewtarget::option(attribute, QVariant(-1), this->objectName(), Brewtarget::SCALE).toInt());
+   return static_cast<Unit::unitScale>(PersistentSettings::value(attribute, QVariant(-1), this->objectName(), PersistentSettings::SCALE).toInt());
 }
 
 // We need to:
@@ -360,8 +357,8 @@ void WaterTableModel::setDisplayUnit(int column, Unit::unitDisplay displayUnit)
    if ( attribute.isEmpty() )
       return;
 
-   Brewtarget::setOption(attribute,displayUnit,this->objectName(),Brewtarget::UNIT);
-   Brewtarget::setOption(attribute,Unit::noScale,this->objectName(),Brewtarget::SCALE);
+   PersistentSettings::insert(attribute, displayUnit, this->objectName(), PersistentSettings::UNIT);
+   PersistentSettings::insert(attribute, Unit::noScale, this->objectName(), PersistentSettings::SCALE);
 
    /* Disabled cell-specific code
    for (int i = 0; i < rowCount(); ++i )
@@ -382,7 +379,7 @@ void WaterTableModel::setDisplayScale(int column, Unit::unitScale displayScale)
    if ( attribute.isEmpty() )
       return;
 
-   Brewtarget::setOption(attribute,displayScale,this->objectName(),Brewtarget::SCALE);
+   PersistentSettings::insert(attribute,displayScale,this->objectName(),PersistentSettings::SCALE);
 
    /* disabled cell-specific code
    for (int i = 0; i < rowCount(); ++i )

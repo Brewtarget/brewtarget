@@ -1,6 +1,6 @@
 /*
  * MashStepEditor.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2020
+ * authors 2009-2021
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -18,12 +18,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#include "Unit.h"
-#include "brewtarget.h"
 #include "MashStepEditor.h"
+
+#include "brewtarget.h"
 #include "model/MashStep.h"
-#include "database.h"
+#include "Unit.h"
 
 MashStepEditor::MashStepEditor(QWidget* parent)
    : QDialog(parent), obs(nullptr)
@@ -117,22 +116,21 @@ void MashStepEditor::changed(QMetaProperty prop, QVariant /*val*/)
    showChanges(&prop);
 }
 
-void MashStepEditor::setMashStep(MashStep* step)
-{
-   if( obs )
-      disconnect( obs, nullptr, this, nullptr );
+void MashStepEditor::setMashStep(MashStep* step) {
+   if (this->obs) {
+      disconnect(this->obs, nullptr, this, nullptr );
+   }
 
-   if( step )
-   {
-      obs = step;
-      connect( obs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+   if (step) {
+      this->obs = step;
+      connect(this->obs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
       showChanges();
    }
 }
 
 void MashStepEditor::saveAndClose()
 {
-   obs->setName(lineEdit_name->text(),obs->cacheOnly());
+   obs->setName(lineEdit_name->text());
    obs->setType(static_cast<MashStep::Type>(comboBox_type->currentIndex()));
    obs->setInfuseAmount_l(lineEdit_infuseAmount->toSI());
    obs->setInfuseTemp_c(lineEdit_infuseTemp->toSI());

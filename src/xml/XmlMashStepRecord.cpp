@@ -67,34 +67,24 @@ XmlRecord::ProcessingResult XmlMashStepRecord::normaliseAndStoreInDb(NamedEntity
    }
 
    //
-   // Now we've fixed up any bad data, we can store the MashStep.
+   // Now we've done our extra checks, we can let normal processing carry on in the base class
    //
-   // Note that we do not update the XmlRecordCount object (stats) because MashStep objects do not have a freestanding
-   // existence outside of their owning Mash object.
-   //
-   try {
-      //
-      // This call actually stores the MashStep in the DB as well as associating it with the Mash.  Hence we _don't_
-      // call the base class method (XmlRecord::normaliseAndStoreInDb) because we are replacing rather than extending
-      // its functionality.
-      //
-      mash->addMashStep(mashStep);
-   } catch (QString ex) {
-      // Error will already have been logged by caller
-      userMessage << "Database error: " << ex;
-      return XmlRecord::Failed;
-   }
+   return this->XmlRecord::normaliseAndStoreInDb(containingEntity, userMessage, stats);
+}
+
+void XmlMashStepRecord::setContainingEntity(NamedEntity * containingEntity) {
+   qDebug() <<
+      Q_FUNC_INFO << "Setting" << containingEntity->metaObject()->className() << "ID" << containingEntity->key() <<
+      "on" << this->namedEntity->metaObject()->className() << "#" << this->namedEntity->key();
 
    //
-   // DB storing succeeded, so we no longer own the MashStep object
+   // Both the downcasts below should be safe.  Strictly the second one isn't necessary as key() is a member function
+   // of NamedEntity, but I think it makes the code clearer.
    //
-   this->namedEntityRaiiContainer.release();
-
-   //
-   // We deliberately don't update the stats
-   //
-   // This is the point where we would call XmlRecord::normaliseAndStoreChildRecordsInDb(), but that would be a no-op
-   // because MashStep records are not expected to have any children, so we don't bother.
-   //
-   return XmlRecord::Succeeded;
+   Q_ASSERT(this->namedEntity->metaObject()->className() == QString("MashStep"));
+   Q_ASSERT(containingEntity->metaObject()->className() == QString("Mash"));
+   MashStep * mashStep = static_cast<MashStep *>(this->namedEntity);
+   Mash * mash = static_cast<Mash *>(containingEntity);
+   mashStep->setMashId(mash->key());
+   return;
 }

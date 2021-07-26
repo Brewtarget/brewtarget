@@ -70,4 +70,4 @@ protected:
 
 };
 
-#endif /* BTTABWIDGET_H */
+#endif

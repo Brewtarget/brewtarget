@@ -1,6 +1,7 @@
 /*
  * OptionDialog.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
+ * - Matt Young <mfsy@yahoo.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  * - Rob Taylor <robtaylor@floopily.org>
  *
@@ -17,74 +18,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef OPTIONDIALOG_H
+#define OPTIONDIALOG_H
 
-#ifndef _OPTIONDIALOG_H
-#define   _OPTIONDIALOG_H
-
-class OptionDialog;
+#include <memory> // For PImpl
 
 #include <QDialog>
 #include <QWidget>
-#include <QAbstractButton>
-#include <QMap>
-#include <QString>
-#include <QVector>
-#include <QIcon>
-#include <QCheckBox>
-#include "BtLineEdit.h"
+
 #include "ui_optionsDialog.h"
-#include "Unit.h"
-#include "Log.h"
 
 /*!
  * \class OptionDialog
- * \author Philip G. Lee
  *
  * \brief View/controller dialog to manage options.
  */
-class OptionDialog : public QDialog, public Ui::optionsDialog
-{
+class OptionDialog : public QDialog, public Ui::optionsDialog {
    Q_OBJECT
+
 public:
    //! \brief Default constructor.
-   OptionDialog(QWidget *parent=0);
-
-   // UI stuff to make this work as I want
-   // Postgres things
-   QLabel *label_hostname;
-   BtStringEdit *btStringEdit_hostname;
-   QLabel *label_portnum;
-   BtStringEdit *btStringEdit_portnum;
-   QLabel *label_schema;
-   BtStringEdit *btStringEdit_schema;
-   QLabel *label_dbName;
-   BtStringEdit *btStringEdit_dbname;
-   QLabel *label_username;
-   BtStringEdit *btStringEdit_username;
-   QLabel *label_password;
-   BtStringEdit *btStringEdit_password;
-   QHBoxLayout *horizontalLayout_7;
-   QSpacerItem *horizontalSpacer_3;
-   QCheckBox *checkBox_savePassword;
-   // SQLite things
-   QLabel *label_dataDir;
-   BtStringEdit *btStringEdit_dataDir;
-   QPushButton *pushButton_browseDataDir;
-   QLabel *label_backupDir;
-   BtStringEdit *btStringEdit_backupDir;
-   QPushButton *pushButton_browseBackupDir;
-   QLabel *label_numBackups;
-   QSpinBox *spinBox_numBackups;
-   QLabel *label_frequency;
-   QSpinBox *spinBox_frequency;
-
-   void createPostgresElements();
-   void createSQLiteElements();
-   void clearLayout();
-   void setDbDialog(Brewtarget::DBTypes db);
-   void retranslateDbDialog(QDialog *optionsDialog);
-   void sqliteVisible(bool canSee);
-   void postgresVisible(bool canSee);
+   OptionDialog(QWidget * parent = 0);
+   ~OptionDialog();
 
 signals:
    void showAllAncestors(bool showem);
@@ -112,36 +67,20 @@ public slots:
    void testRequired();
    //! \brief handle the dialogs for saving passwords
    void savePassword(bool state);
-
    //! \brief does the version options
    void versioningChanged(bool state);
 
-   //! \brief enables/disables controls in Loggingtab based on checkboxes.
-   void setLoggingControlsState(bool state);
    void setFileLocationState(bool state);
 
 protected:
 
    //! \brief Reimplemented from QWidget.
-   virtual void changeEvent(QEvent* e);
+   virtual void changeEvent(QEvent * e);
 
 private:
-   enum testStates {
-      NOCHANGE,
-      NEEDSTEST,
-      TESTFAILED,
-      TESTPASSED
-   };
-
-   testStates status;
-   // Update UI strings according to current language.
-   void retranslate();
-   // Update dialog with current options.
-   void showChanges();
-   //
-   void changeColors();
-   QStringList ndxToLangCode;
-   QVector<QIcon> langIcons;
+   // Private implementation details - see https://herbsutter.com/gotw/_100/
+   class impl;
+   std::unique_ptr<impl> pimpl;
 
    void configure_unitCombos();
    void configure_formulaCombos();
@@ -168,4 +107,4 @@ private:
    void signalAncestors();
 };
 
-#endif   /* _OPTIONDIALOG_H */
+#endif

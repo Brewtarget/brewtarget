@@ -26,113 +26,116 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include <QWidget>
-#include <QMainWindow>
-#include <QMessageBox>
-#include <QToolButton>
-#include <QSize>
-#include <QtGui>
-#include <QString>
-#include <QFileDialog>
-#include <QIcon>
-#include <QPixmap>
-#include <QList>
-#include <QVector>
-#include <QVBoxLayout>
-#include <QDomDocument>
-#include <QFile>
-#include <QIODevice>
-#include <QTextStream>
-#include <QDomNodeList>
-#include <QDomNode>
-#include <QDomElement>
-#include <QInputDialog>
-#include <QLineEdit>
-#include <QUrl>
-#include <QDesktopServices>
-#include <QNetworkReply>
-#include <QAction>
-#include <QLinearGradient>
-#include <QBrush>
-#include <QPen>
-#include <QDesktopWidget>
-
-#include "Algorithms.h"
-#include "BtTabWidget.h"
-#include "MashStepEditor.h"
-#include "MashStepTableModel.h"
-#include "model/Mash.h"
-#include "MashEditor.h"
-#include "brewtarget.h"
-#include "FermentableEditor.h"
-#include "MiscEditor.h"
-#include "HopEditor.h"
-#include "YeastEditor.h"
-#include "YeastTableModel.h"
-#include "MiscTableModel.h"
-#include "model/Style.h"
-#include "model/Recipe.h"
 #include "MainWindow.h"
-#include "AboutDialog.h"
-#include "database.h"
-#include "YeastDialog.h"
-#include "config.h"
-#include "Unit.h"
-#include "ScaleRecipeTool.h"
-#include "HopTableModel.h"
-#include "BtDigitWidget.h"
-#include "FermentableTableModel.h"
-#include "BrewNoteWidget.h"
-#include "EquipmentEditor.h"
-#include "FermentableDialog.h"
-#include "HopDialog.h"
-#include "InventoryFormatter.h"
-#include "MashWizard.h"
-#include "MiscDialog.h"
-#include "StyleEditor.h"
-#include "OptionDialog.h"
-#include "OgAdjuster.h"
-#include "ConverterTool.h"
-#include "HydrometerTool.h"
-#include "AlcoholTool.h"
-#include "TimerMainDialog.h"
-#include "RecipeFormatter.h"
-#include "PrimingDialog.h"
-#include "StrikeWaterDialog.h"
-#include "RefractoDialog.h"
-#include "MashDesigner.h"
-#include "PitchDialog.h"
-#include "model/Fermentable.h"
-#include "model/Yeast.h"
-#include "model/BrewNote.h"
-#include "model/Equipment.h"
-#include "FermentableTableModel.h"
-#include "FermentableSortFilterProxyModel.h"
-#include "HopTableModel.h"
-#include "HopSortFilterProxyModel.h"
-#include "MiscTableModel.h"
-#include "MiscSortFilterProxyModel.h"
-#include "YeastSortFilterProxyModel.h"
-#include "EquipmentListModel.h"
-#include "StyleListModel.h"
-#include "MashListModel.h"
-#include "StyleSortFilterProxyModel.h"
-#include "NamedMashEditor.h"
-#include "BtDatePopup.h"
-#include "WaterDialog.h"
-#include "WaterListModel.h"
-#include "WaterEditor.h"
-#include "xml/BeerXml.h"
-#include "RelationalUndoableUpdate.h"
-#include "UndoableAddOrRemove.h"
-#include "BtHorizontalTabs.h"
-#include "AncestorDialog.h"
 
 #if defined(Q_OS_WIN)
    #include <windows.h>
 #endif
 
 #include <memory>
+
+#include <QAction>
+#include <QBrush>
+#include <QDesktopServices>
+#include <QDesktopWidget>
+#include <QDomDocument>
+#include <QDomElement>
+#include <QDomNode>
+#include <QDomNodeList>
+#include <QFile>
+#include <QFileDialog>
+#include <QIcon>
+#include <QInputDialog>
+#include <QIODevice>
+#include <QLinearGradient>
+#include <QLineEdit>
+#include <QList>
+#include <QMainWindow>
+#include <QMessageBox>
+#include <QNetworkReply>
+#include <QPen>
+#include <QPixmap>
+#include <QSize>
+#include <QString>
+#include <QTextStream>
+#include <QtGui>
+#include <QToolButton>
+#include <QUrl>
+#include <QVBoxLayout>
+#include <QVector>
+#include <QWidget>
+
+#include "AboutDialog.h"
+#include "AlcoholTool.h"
+#include "Algorithms.h"
+#include "AncestorDialog.h"
+#include "brewtarget.h"
+#include "BrewNoteWidget.h"
+#include "BtDatePopup.h"
+#include "BtDigitWidget.h"
+#include "BtFolder.h"
+#include "BtHorizontalTabs.h"
+#include "BtTabWidget.h"
+#include "config.h"
+#include "ConverterTool.h"
+#include "database/Database.h"
+#include "database/ObjectStoreWrapper.h"
+#include "EquipmentEditor.h"
+#include "EquipmentListModel.h"
+#include "FermentableDialog.h"
+#include "FermentableEditor.h"
+#include "FermentableSortFilterProxyModel.h"
+#include "FermentableTableModel.h"
+#include "HopDialog.h"
+#include "HopEditor.h"
+#include "HopSortFilterProxyModel.h"
+#include "HopTableModel.h"
+#include "HydrometerTool.h"
+#include "InventoryFormatter.h"
+#include "MashDesigner.h"
+#include "MashEditor.h"
+#include "MashListModel.h"
+#include "MashStepEditor.h"
+#include "MashStepTableModel.h"
+#include "MashWizard.h"
+#include "MiscDialog.h"
+#include "MiscEditor.h"
+#include "MiscSortFilterProxyModel.h"
+#include "MiscTableModel.h"
+#include "model/BrewNote.h"
+#include "model/Equipment.h"
+#include "model/Fermentable.h"
+#include "model/Mash.h"
+#include "model/Recipe.h"
+#include "model/Style.h"
+#include "model/Yeast.h"
+#include "NamedMashEditor.h"
+#include "OgAdjuster.h"
+#include "OptionDialog.h"
+#include "PersistentSettings.h"
+#include "PitchDialog.h"
+#include "PrimingDialog.h"
+#include "RecipeFormatter.h"
+#include "RefractoDialog.h"
+#include "RelationalUndoableUpdate.h"
+#include "ScaleRecipeTool.h"
+#include "StrikeWaterDialog.h"
+#include "StyleEditor.h"
+#include "StyleListModel.h"
+#include "StyleSortFilterProxyModel.h"
+#include "TimerMainDialog.h"
+#include "UndoableAddOrRemove.h"
+#include "UndoableAddOrRemoveList.h"
+#include "Unit.h"
+#include "WaterDialog.h"
+#include "WaterEditor.h"
+#include "WaterListModel.h"
+#include "xml/BeerXml.h"
+#include "YeastDialog.h"
+#include "YeastEditor.h"
+#include "YeastSortFilterProxyModel.h"
+#include "YeastTableModel.h"
+
 
 // This private implementation class holds all private non-virtual members of MainWindow
 class MainWindow::impl {
@@ -189,9 +192,9 @@ public:
          qDebug() << Q_FUNC_INFO << "Importing " << filename;
          QString userMessage;
          QTextStream userMessageAsStream{&userMessage};
-         bool succeeded = Database::instance().getBeerXml()->importFromXML(filename, userMessageAsStream);
+         bool succeeded = BeerXML::getInstance().importFromXML(filename, userMessageAsStream);
          qDebug() << Q_FUNC_INFO << "Import " << (succeeded ? "succeeded" : "failed");
-         this->importMsg(filename, succeeded, userMessage);
+         this->importExportMsg(IMPORT, filename, succeeded, userMessage);
       }
 
       mainWindow->showChanges();
@@ -199,28 +202,56 @@ public:
       return;
    }
 
+   enum ImportOrExport {
+      EXPORT,
+      IMPORT
+   };
+
    /**
     * \brief Show a success/failure message to the user after we attempted to import one or more BeerXML files
     */
-   void importMsg(QString const & fileName, bool succeeded, QString const & userMessage) {
+   void importExportMsg(ImportOrExport const importOrExport,
+                        QString const & fileName,
+                        bool succeeded,
+                        QString const & userMessage) {
       // This will allow us to drop the directory path to the file, as it is often long and makes the message box a
       // "wall of text" that will put a lot of users off.
       QFileInfo fileInfo(fileName);
 
-
       QString messageBoxTitle{succeeded ? tr("Success!") : tr("ERROR")};
       QString messageBoxText;
       if (succeeded) {
-         // The userMessage parameter will tell how many files were imported and/or skipped (as duplicates)
-         messageBoxText = QString(
-            tr("Successfully read \"%1\"\n\n%2").arg(fileInfo.fileName()).arg(userMessage)
-         );
+         // The userMessage parameter will tell how many files were imported/exported and/or skipped (as duplicates)
+         // Do separate messages for import and export as it makes translations easier
+         if (IMPORT == importOrExport) {
+            messageBoxText = QString(
+               tr("Successfully read \"%1\"\n\n%2").arg(fileInfo.fileName()).arg(userMessage)
+            );
+         } else {
+            messageBoxText = QString(
+               tr("Successfully wrote \"%1\"\n\n%2").arg(fileInfo.fileName()).arg(userMessage)
+            );
+         }
       } else {
-         messageBoxText = QString(
-            tr("Unable to import data from \"%1\"\n\n"
-               "%2\n\n"
-               "Log file may contain more details.").arg(fileInfo.fileName()).arg(userMessage)
-         );
+         if (IMPORT == importOrExport) {
+            messageBoxText = QString(
+               tr("Unable to import data from \"%1\"\n\n"
+                  "%2\n\n"
+                  "Log file may contain more details.").arg(fileInfo.fileName()).arg(userMessage)
+            );
+         } else {
+            // Some write errors (eg nothing to export) are before the filename was chosen (in which case the name will
+            // be blank).
+            if (fileName == "") {
+               messageBoxText = QString("%2").arg(userMessage);
+            } else {
+               messageBoxText = QString(
+                  tr("Unable to write data to \"%1\"\n\n"
+                     "%2\n\n"
+                     "Log file may contain more details.").arg(fileInfo.fileName()).arg(userMessage)
+               );
+            }
+         }
       }
       qDebug() << Q_FUNC_INFO << "Message box text : " << messageBoxText;
       QMessageBox msgBox{succeeded ? QMessageBox::Information : QMessageBox::Critical,
@@ -232,7 +263,6 @@ public:
 
 private:
    QFileDialog* fileOpener;
-
    QString fileOpenDirectory;
 };
 
@@ -318,13 +348,21 @@ void MainWindow::init() {
    // set up the drag/drop parts
    this->setupDrops();
 
+   // Moved from Database class
+   Recipe::connectSignals();
+   qDebug() << Q_FUNC_INFO << "Recipe signals connected";
+   Mash::connectSignals();
+   qDebug() << Q_FUNC_INFO << "Mash signals connected";
+
    // I do not like this connection here.
-   connect( ancestorDialog, &AncestorDialog::ancestoryChanged, treeView_recipe->model(), &BtTreeModel::versionedRecipe);
-   connect( optionDialog, &OptionDialog::showAllAncestors, treeView_recipe->model(), &BtTreeModel::catchAncestors);
-   connect( treeView_recipe, &BtTreeView::recipeSpawn, this, &MainWindow::versionedRecipe );
+   connect(ancestorDialog, &AncestorDialog::ancestoryChanged, treeView_recipe->model(), &BtTreeModel::versionedRecipe);
+   connect(optionDialog, &OptionDialog::showAllAncestors, treeView_recipe->model(), &BtTreeModel::catchAncestors);
+   connect(treeView_recipe, &BtTreeView::recipeSpawn, this, &MainWindow::versionedRecipe);
+
    // No connections from the database yet? Oh FSM, that probably means I'm
    // doing it wrong again.
-   connect( &(Database::instance()), qOverload<BrewNote*>(&Database::deletedSignal), this, &MainWindow::closeBrewNote);
+   // .:TODO:. Change this so we use the newere deleted signal!
+   connect(&ObjectStoreTyped<BrewNote>::getInstance(), &ObjectStoreTyped<BrewNote>::signalObjectDeleted, this, &MainWindow::closeBrewNote);
 
    // setup the pretty tool tip. It doesn't really belong anywhere, so here it
    // is
@@ -409,7 +447,7 @@ void MainWindow::setupShortCuts()
    actionRedo->setShortcut(QKeySequence::Redo);
 }
 
-void MainWindow::setUpStateChanges() 
+void MainWindow::setUpStateChanges()
 {
    connect( checkBox_locked, &QCheckBox::stateChanged, this, &MainWindow::lockRecipe );
 }
@@ -665,17 +703,13 @@ void MainWindow::setupTables()
 }
 
 // Anything resulting in a restoreState() should go in here
-void MainWindow::restoreSavedState()
-{
+void MainWindow::restoreSavedState() {
 
    // If we saved a size the last time we ran, use it
-   if ( Brewtarget::hasOption("geometry"))
-   {
-      restoreGeometry(Brewtarget::option("geometry").toByteArray());
-      restoreState(Brewtarget::option("windowState").toByteArray());
-   }
-   else
-   {
+   if (PersistentSettings::contains("geometry")) {
+      restoreGeometry(PersistentSettings::value("geometry").toByteArray());
+      restoreState(PersistentSettings::value("windowState").toByteArray());
+   } else {
       // otherwise, guess a reasonable size at 1/4 of the screen.
       QDesktopWidget *desktop = QApplication::desktop();
       int width = desktop->width();
@@ -688,15 +722,19 @@ void MainWindow::restoreSavedState()
 
    // If we saved the selected recipe name the last time we ran, select it and show it.
    int key = -1;
-   if (Brewtarget::hasOption("recipeKey")) {
-      key = Brewtarget::option("recipeKey").toInt();
+   if (PersistentSettings::contains("recipeKey")) {
+      key = PersistentSettings::value("recipeKey").toInt();
+   } else {
+      auto firstRecipeWeFind = ObjectStoreTyped<Recipe>::getInstance().findFirstMatching(
+         // This trivial lambda gives us the first recipe in the list, if there is one
+         [](std::shared_ptr<Recipe> obj) {return true;}
+      );
+      if (firstRecipeWeFind) {
+         key = firstRecipeWeFind.value()->key();
+      }
    }
-   else if ( Database::instance().numberOfRecipes() > 0 ) {
-      key = 0;
-   }
-
    if ( key > -1 ) {
-      recipeObs = Database::instance().recipe( key );
+      this->recipeObs = ObjectStoreWrapper::getByIdRaw<Recipe>(key);
       QModelIndex rIdx = treeView_recipe->findElement(recipeObs);
 
       setRecipe(recipeObs);
@@ -704,31 +742,30 @@ void MainWindow::restoreSavedState()
    }
 
    //UI restore state
-   if (Brewtarget::hasOption("MainWindow/splitter_vertical_State"))
-      splitter_vertical->restoreState(Brewtarget::option("MainWindow/splitter_vertical_State").toByteArray());
-   if (Brewtarget::hasOption("MainWindow/splitter_horizontal_State"))
-      splitter_horizontal->restoreState(Brewtarget::option("MainWindow/splitter_horizontal_State").toByteArray());
-   if (Brewtarget::hasOption("MainWindow/treeView_recipe_headerState"))
-      treeView_recipe->header()->restoreState(Brewtarget::option("MainWindow/treeView_recipe_headerState").toByteArray());
-   if (Brewtarget::hasOption("MainWindow/treeView_style_headerState"))
-      treeView_style->header()->restoreState(Brewtarget::option("MainWindow/treeView_style_headerState").toByteArray());
-   if (Brewtarget::hasOption("MainWindow/treeView_equip_headerState"))
-      treeView_equip->header()->restoreState(Brewtarget::option("MainWindow/treeView_equip_headerState").toByteArray());
-   if (Brewtarget::hasOption("MainWindow/treeView_ferm_headerState"))
-      treeView_ferm->header()->restoreState(Brewtarget::option("MainWindow/treeView_ferm_headerState").toByteArray());
-   if (Brewtarget::hasOption("MainWindow/treeView_hops_headerState"))
-      treeView_hops->header()->restoreState(Brewtarget::option("MainWindow/treeView_hops_headerState").toByteArray());
-   if (Brewtarget::hasOption("MainWindow/treeView_misc_headerState"))
-      treeView_misc->header()->restoreState(Brewtarget::option("MainWindow/treeView_misc_headerState").toByteArray());
-   if (Brewtarget::hasOption("MainWindow/treeView_yeast_headerState"))
-      treeView_yeast->header()->restoreState(Brewtarget::option("MainWindow/treeView_yeast_headerState").toByteArray());
-   if (Brewtarget::hasOption("MainWindow/mashStepTableWidget_headerState"))
-      mashStepTableWidget->horizontalHeader()->restoreState(Brewtarget::option("MainWindow/mashStepTableWidget_headerState").toByteArray());
+   if (PersistentSettings::contains("MainWindow/splitter_vertical_State"))
+      splitter_vertical->restoreState(PersistentSettings::value("MainWindow/splitter_vertical_State").toByteArray());
+   if (PersistentSettings::contains("MainWindow/splitter_horizontal_State"))
+      splitter_horizontal->restoreState(PersistentSettings::value("MainWindow/splitter_horizontal_State").toByteArray());
+   if (PersistentSettings::contains("MainWindow/treeView_recipe_headerState"))
+      treeView_recipe->header()->restoreState(PersistentSettings::value("MainWindow/treeView_recipe_headerState").toByteArray());
+   if (PersistentSettings::contains("MainWindow/treeView_style_headerState"))
+      treeView_style->header()->restoreState(PersistentSettings::value("MainWindow/treeView_style_headerState").toByteArray());
+   if (PersistentSettings::contains("MainWindow/treeView_equip_headerState"))
+      treeView_equip->header()->restoreState(PersistentSettings::value("MainWindow/treeView_equip_headerState").toByteArray());
+   if (PersistentSettings::contains("MainWindow/treeView_ferm_headerState"))
+      treeView_ferm->header()->restoreState(PersistentSettings::value("MainWindow/treeView_ferm_headerState").toByteArray());
+   if (PersistentSettings::contains("MainWindow/treeView_hops_headerState"))
+      treeView_hops->header()->restoreState(PersistentSettings::value("MainWindow/treeView_hops_headerState").toByteArray());
+   if (PersistentSettings::contains("MainWindow/treeView_misc_headerState"))
+      treeView_misc->header()->restoreState(PersistentSettings::value("MainWindow/treeView_misc_headerState").toByteArray());
+   if (PersistentSettings::contains("MainWindow/treeView_yeast_headerState"))
+      treeView_yeast->header()->restoreState(PersistentSettings::value("MainWindow/treeView_yeast_headerState").toByteArray());
+   if (PersistentSettings::contains("MainWindow/mashStepTableWidget_headerState"))
+      mashStepTableWidget->horizontalHeader()->restoreState(PersistentSettings::value("MainWindow/mashStepTableWidget_headerState").toByteArray());
 }
 
 // menu items with a SIGNAL of triggered() should go in here.
-void MainWindow::setupTriggers()
-{
+void MainWindow::setupTriggers() {
    // Connect actions defined in *.ui files to methods in code
    connect( actionExit, &QAction::triggered, this, &QWidget::close );                                                   // > File > Exit
    connect( actionAbout_BrewTarget, &QAction::triggered, dialog_about, &QWidget::show );                                // > About > About Brewtarget
@@ -758,7 +795,6 @@ void MainWindow::setupTriggers()
    connect( actionStrikeWater_Calculator, &QAction::triggered, strikeWaterDialog, &QWidget::show );                     // > Tools > Strike Water Calculator
    connect( actionRefractometer_Tools, &QAction::triggered, refractoDialog, &QWidget::show );                           // > Tools > Refractometer Tools
    connect( actionPitch_Rate_Calculator, &QAction::triggered, this, &MainWindow::showPitchDialog);                      // > Tools > Pitch Rate Calculator
-   connect( actionMergeDatabases, &QAction::triggered, this, &MainWindow::updateDatabase );                             // > File > Database > Merge
    connect( actionTimers, &QAction::triggered, timerMainDialog, &QWidget::show );                                       // > Tools > Timers
    connect( actionDeleteSelected, &QAction::triggered, this, &MainWindow::deleteSelected );
    connect( actionWater_Chemistry, &QAction::triggered, this, &MainWindow::popChemistry);                               // > Tools > Water Chemistry
@@ -767,7 +803,7 @@ void MainWindow::setupTriggers()
 
    // postgresql cannot backup or restore yet. I would like to find some way
    // around this, but for now just disable
-   if ( Brewtarget::dbType() == Brewtarget::PGSQL ) {
+   if ( Database::instance().dbType() == Database::PGSQL ) {
       actionBackup_Database->setEnabled(false);                                                                         // > File > Database > Backup
       actionRestore_Database->setEnabled(false);                                                                        // > File > Database > Restore
    }
@@ -779,16 +815,18 @@ void MainWindow::setupTriggers()
    // Refactoring is good.  It's like a rye saison fermenting away
    connect(actionRecipePrint, &QAction::triggered, [this]() {
       print([this](QPrinter* printer) {
-         recipeFormatter->print(
-               printer,  RecipeFormatter::PRINT);
+//         recipeFormatter->print(printer,  RecipeFormatter::PRINT);
+         recipeFormatter->print(printer);
       });
    });
    connect(actionRecipePreview, &QAction::triggered, [this]() {
-      recipeFormatter->print(printer, RecipeFormatter::PREVIEW);
+//      recipeFormatter->print(printer, RecipeFormatter::PREVIEW);
+      recipeFormatter->printPreview();
    });
    connect(actionRecipeHTML, &QAction::triggered, this, [this]() {
-      exportHTML([this](QFile* file) {
-         recipeFormatter->print(printer, RecipeFormatter::HTML, file);
+      exportHtml([this](QFile* file) {
+//         recipeFormatter->print(printer, RecipeFormatter::HTML, file);
+         recipeFormatter->exportHtml(file);
       });
    });
    connect(actionRecipeBBCode, &QAction::triggered, [this]() {
@@ -796,16 +834,15 @@ void MainWindow::setupTriggers()
    });
    connect(actionBrewdayPrint, &QAction::triggered, [this]() {
       print([this](QPrinter* printer) {
-         brewDayScrollWidget->print(
-               printer,  BrewDayScrollWidget::PRINT);
+         brewDayScrollWidget->print(printer);
       });
    });
    connect(actionBrewdayPreview, &QAction::triggered, [this]() {
-      brewDayScrollWidget->print(printer, RecipeFormatter::PREVIEW);
+      this->brewDayScrollWidget->printPreview();
    });
    connect(actionBrewdayHTML, &QAction::triggered, this, [this]() {
-      exportHTML([this](QFile* file) {
-         brewDayScrollWidget->print(printer,BrewDayScrollWidget::PRINT,file);
+      exportHtml([this](QFile* file) {
+         brewDayScrollWidget->exportHtml(file);
       });
    });
    connect(actionInventoryPrint, &QAction::triggered, [this]() {
@@ -815,14 +852,13 @@ void MainWindow::setupTriggers()
    connect(actionInventoryPreview, &QAction::triggered,
          []() { InventoryFormatter::printPreview(); });
    connect(actionInventoryHTML, &QAction::triggered, [this]() {
-      exportHTML(
-            [](QFile* file) { InventoryFormatter::exportHTML(file); });
+      exportHtml(
+            [](QFile* file) { InventoryFormatter::exportHtml(file); });
    });
 }
 
 // pushbuttons with a SIGNAL of clicked() should go in here.
-void MainWindow::setupClicks()
-{
+void MainWindow::setupClicks() {
    connect( equipmentButton, &QAbstractButton::clicked, this, &MainWindow::showEquipmentEditor);
    connect( styleButton, &QAbstractButton::clicked, this, &MainWindow::showStyleEditor );
    connect( mashButton, &QAbstractButton::clicked, mashEditor, &MashEditor::showEditor );
@@ -915,12 +951,13 @@ void MainWindow::deleteSelected()
       start = active->first();
    }
 
-
    if ( start.isValid() ) {
       if (active->type(start) == BtTreeItem::RECIPE)
          setRecipe(treeView_recipe->recipe(start));
       setTreeSelection(start);
    }
+
+   return;
 }
 
 void MainWindow::treeActivated(const QModelIndex &index)
@@ -1040,13 +1077,13 @@ void MainWindow::setBrewNoteByIndex(const QModelIndex &index)
    }
    // THERE
 
-   Recipe* parent  = Database::instance().getParentRecipe(bNote);
+   Recipe* parent  = ObjectStoreWrapper::getByIdRaw<Recipe>(bNote->getRecipeId());
    QModelIndex pNdx = treeView_recipe->parent(index);
 
    // this gets complex. Versioning means we can't just clear the open
    // brewnote tabs out.
    if ( parent != this->recipeObs ) {
-      if ( ! this->recipeObs->isMyAncestor(parent) ) {
+      if ( ! this->recipeObs->isMyAncestor(*parent) ) {
          setRecipe(parent);
       }
       else if ( treeView_recipe->ancestorsAreShowing(pNdx) ) {
@@ -1111,9 +1148,7 @@ void MainWindow::setAncestor()
    Recipe* rec;
    if ( this->recipeObs ) {
       rec = this->recipeObs;
-      
-   }
-   else {
+   } else {
       QModelIndexList indexes = treeView_recipe->selectionModel()->selectedRows();
       rec = treeView_recipe->recipe(indexes[0]);
    }
@@ -1121,6 +1156,7 @@ void MainWindow::setAncestor()
    ancestorDialog->setAncestor(rec);
    ancestorDialog->show();
 }
+
 
 // Can handle null recipes.
 void MainWindow::setRecipe(Recipe* recipe)
@@ -1191,6 +1227,7 @@ void MainWindow::setRecipe(Recipe* recipe)
 
    checkBox_locked->setCheckState( recipe->locked() ? Qt::Checked : Qt::Unchecked );
    lockRecipe(recipe->locked() ? Qt::Checked : Qt::Unchecked );
+
    // changes in how the data is loaded means we may not have fired all the signals we should have
    // this makes sure the signals are fired. This is likely a 5kg hammer driving a finishing nail.
    recipe->recalcAll();
@@ -1266,31 +1303,25 @@ void MainWindow::lockRecipe(int state)
 
 }
 
-void MainWindow::changed(QMetaProperty prop, QVariant value)
-{
+void MainWindow::changed(QMetaProperty prop, QVariant val) {
    QString propName(prop.name());
 
-   if( propName == "equipment" )
-   {
-      Equipment* newRecEquip = qobject_cast<Equipment*>(NamedEntity::extractPtr(value));
-      recEquip = newRecEquip;
-
-      singleEquipEditor->setEquipment(recEquip);
-   }
-   else if( propName == "style" )
-   {
+   if (propName == PropertyNames::Recipe::equipment) {
+      this->recEquip = val.value<Equipment *>();
+      this->singleEquipEditor->setEquipment(this->recEquip);
+   } else if (propName == PropertyNames::Recipe::style) {
       //recStyle = recipeObs->style();
-      recStyle = qobject_cast<Style*>(NamedEntity::extractPtr(value));
-      singleStyleEditor->setStyle(recStyle);
-
+      this->recStyle = val.value<Style*>();
+      this->singleStyleEditor->setStyle(this->recStyle);
    }
 
-   showChanges(&prop);
+   this->showChanges(&prop);
+   return;
 }
 
 void MainWindow::updateDensitySlider(QString attribute, RangedSlider* slider, double max)
 {
-   Unit::unitDisplay dispUnit = static_cast<Unit::unitDisplay>(Brewtarget::option(attribute, Unit::noUnit, "tab_recipe", Brewtarget::UNIT).toInt());
+   Unit::unitDisplay dispUnit = static_cast<Unit::unitDisplay>(PersistentSettings::value(attribute, Unit::noUnit, "tab_recipe", PersistentSettings::UNIT).toInt());
 
    if ( dispUnit == Unit::noUnit )
       dispUnit = Brewtarget::densityUnit == Brewtarget::PLATO ? Unit::displayPlato : Unit::displaySg;
@@ -1312,7 +1343,7 @@ void MainWindow::updateDensitySlider(QString attribute, RangedSlider* slider, do
 
 void MainWindow::updateColorSlider(QString attribute, RangedSlider* slider)
 {
-   Unit::unitDisplay dispUnit = static_cast<Unit::unitDisplay>(Brewtarget::option(attribute, Unit::noUnit, "tab_recipe", Brewtarget::UNIT).toInt());
+   Unit::unitDisplay dispUnit = static_cast<Unit::unitDisplay>(PersistentSettings::value(attribute, Unit::noUnit, "tab_recipe", PersistentSettings::UNIT).toInt());
 
    if ( dispUnit == Unit::noUnit )
       dispUnit = Brewtarget::colorUnit == Brewtarget::SRM ? Unit::displaySrm : Unit::displayEbc;
@@ -1412,7 +1443,7 @@ void MainWindow::showChanges(QMetaProperty* prop)
    // Not sure about this, but I am annoyed that modifying the hop usage
    // modifiers isn't automatically updating my display
    if ( updateAll ) {
-     recipeObs->acceptHopChange( recipeObs->metaProperty("hops"), QVariant());
+     recipeObs->recalcIBU();
      hopTableProxy->invalidate();
    }
 }
@@ -1469,17 +1500,17 @@ void MainWindow::updateRecipeStyle()
    }
 }
 
-void MainWindow::updateRecipeMash()
-{
-   if( recipeObs == nullptr )
+void MainWindow::updateRecipeMash() {
+   if (this->recipeObs == nullptr) {
       return;
+   }
 
    Mash* selected = mashListModel->at(mashComboBox->currentIndex());
-   if( selected )
-   {
-      Database::instance().addToRecipe( recipeObs, selected );
-      mashEditor->setMash(recipeObs->mash());
-      mashButton->setMash(recipeObs->mash());
+   if (selected) {
+      // The Recipe will decide whether it needs to make a copy of the Mash, hence why we don't reuse "selected" below
+      this->recipeObs->setMash(selected);
+      mashEditor->setMash(this->recipeObs->mash());
+      mashButton->setMash(this->recipeObs->mash());
    }
 }
 
@@ -1568,17 +1599,19 @@ void MainWindow::droppedRecipeStyle(Style* style)
 // Well, aint this a kick in the pants. Apparently I can't template a slot
 void MainWindow::droppedRecipeFermentable(QList<Fermentable*>ferms)
 {
-   if ( ! recipeObs )
+   if ( ! recipeObs ) {
       return;
+   }
 
-   if ( tabWidget_ingredients->currentWidget() != fermentableTab )
+   if ( tabWidget_ingredients->currentWidget() != fermentableTab ) {
       tabWidget_ingredients->setCurrentWidget(fermentableTab);
+   }
    this->doOrRedoUpdate(
-      newUndoableAddOrRemove(*this->recipeObs,
-                             &Recipe::add<Fermentable>,
-                             ferms,
-                             &Recipe::remove<Fermentable>,
-                             tr("Drop fermentables on a recipe"))
+      newUndoableAddOrRemoveList(*this->recipeObs,
+                                 &Recipe::add<Fermentable>,
+                                 ferms,
+                                 &Recipe::remove<Fermentable>,
+                                 tr("Drop fermentables on a recipe"))
    );
 }
 
@@ -1590,11 +1623,11 @@ void MainWindow::droppedRecipeHop(QList<Hop*>hops)
    if ( tabWidget_ingredients->currentWidget() != hopsTab )
       tabWidget_ingredients->setCurrentWidget(hopsTab);
    this->doOrRedoUpdate(
-      newUndoableAddOrRemove(*this->recipeObs,
-                             &Recipe::add<Hop>,
-                             hops,
-                             &Recipe::remove<Hop>,
-                             tr("Drop hops on a recipe"))
+      newUndoableAddOrRemoveList(*this->recipeObs,
+                                 &Recipe::add<Hop>,
+                                 hops,
+                                 &Recipe::remove<Hop>,
+                                 tr("Drop hops on a recipe"))
    );
 }
 
@@ -1606,11 +1639,11 @@ void MainWindow::droppedRecipeMisc(QList<Misc*>miscs)
    if ( tabWidget_ingredients->currentWidget() != miscTab )
       tabWidget_ingredients->setCurrentWidget(miscTab);
    this->doOrRedoUpdate(
-      newUndoableAddOrRemove(*this->recipeObs,
-                             &Recipe::add<Misc>,
-                             miscs,
-                             &Recipe::remove<Misc>,
-                             tr("Drop misc on a recipe"))
+      newUndoableAddOrRemoveList(*this->recipeObs,
+                                 &Recipe::add<Misc>,
+                                 miscs,
+                                 &Recipe::remove<Misc>,
+                                 tr("Drop misc on a recipe"))
    );
 }
 
@@ -1622,11 +1655,11 @@ void MainWindow::droppedRecipeYeast(QList<Yeast*>yeasts)
    if ( tabWidget_ingredients->currentWidget() != yeastTab )
       tabWidget_ingredients->setCurrentWidget(yeastTab);
    this->doOrRedoUpdate(
-      newUndoableAddOrRemove(*this->recipeObs,
-                             &Recipe::add<Yeast>,
-                             yeasts,
-                             &Recipe::remove<Yeast>,
-                             tr("Drop yeast on a recipe"))
+      newUndoableAddOrRemoveList(*this->recipeObs,
+                                 &Recipe::add<Yeast>,
+                                 yeasts,
+                                 &Recipe::remove<Yeast>,
+                                 tr("Drop yeast on a recipe"))
    );
 }
 
@@ -1757,39 +1790,25 @@ void MainWindow::addMashStepToMash(MashStep * mashStep)
  * .:TODO:. (MY 2020-12-30) See also MainWindow::exportSelected().  I wonder if we could share more code between that
  *                          function and this one.
  */
-void MainWindow::exportRecipe()
-{
-   QFile* outFile;
-   QDomDocument doc;
-   BeerXML* bxml = Database::instance().getBeerXml();
+void MainWindow::exportRecipe() {
 
-   if( recipeObs == nullptr )
+   if (recipeObs == nullptr) {
       return;
+   }
 
-   outFile = openForWrite();
-   if ( ! outFile )
+   std::unique_ptr<QFile> outFile{this->openForWrite()};
+   if (!outFile.get()) {
       return;
+   }
 
-   QTextStream out(outFile);
+   BeerXML & bxml = BeerXML::getInstance();
+   bxml.createXmlFile(*outFile);
 
-   QString xmlHead = QString("version=\"1.0\" encoding=\"ISO-8859-1\"");
-
-   // Create the headers to make other BeerXML parsers happy
-   QDomProcessingInstruction inst = doc.createProcessingInstruction("xml", xmlHead);
-   QDomComment beerxml = doc.createComment(QString(" BeerXML generated by Brewtarget %1 ").arg(VERSIONSTRING));
-
-   doc.appendChild(inst);
-   doc.appendChild(beerxml);
-
-   QDomElement recipes = doc.createElement("RECIPES"); // The root element.
-   doc.appendChild(recipes);
-   bxml->toXml( recipeObs, doc, recipes );
-
-   // QString::toLatin1 returns an ISO 8859-1 stream.
-   out << doc.toString().toLatin1();
+   QList<Recipe *> recipes{recipeObs};
+   bxml.toXml(recipes, *outFile);
 
    outFile->close();
-   delete outFile;
+   return;
 }
 
 Recipe* MainWindow::currentRecipe()
@@ -1964,15 +1983,15 @@ void MainWindow::removeHop(Hop * itemToRemove) {
    return;
 }
 void MainWindow::removeFermentable(Fermentable * itemToRemove) {
-   this->fermTableModel->removeFermentable(itemToRemove);
+   this->fermTableModel->remove(itemToRemove);
    return;
 }
 void MainWindow::removeMisc(Misc * itemToRemove) {
-   this->miscTableModel->removeMisc(itemToRemove);
+   this->miscTableModel->remove(itemToRemove);
    return;
 }
 void MainWindow::removeYeast(Yeast * itemToRemove) {
-   this->yeastTableModel->removeYeast(itemToRemove);
+   this->yeastTableModel->remove(itemToRemove);
    return;
 }
 
@@ -2170,7 +2189,7 @@ void MainWindow::newRecipe()
 {
    QString name = QInputDialog::getText(this, tr("Recipe name"),
                                           tr("Recipe name:"));
-   QVariant defEquipKey = Brewtarget::option("defaultEquipmentKey", -1);
+   QVariant defEquipKey = PersistentSettings::value("defaultEquipmentKey", -1);
    QObject* selection = sender();
 
    if( name.isEmpty() )
@@ -2193,19 +2212,19 @@ void MainWindow::newRecipe()
    // we need a valid key, so insert the recipe before we add equipment
    if ( defEquipKey != -1 )
    {
-      Equipment *e = Database::instance().equipment(defEquipKey.toInt());
+      Equipment *e = ObjectStoreWrapper::getByIdRaw<Equipment>(defEquipKey.toInt());
       // I really want to do this before we've written the object to the
       // database
-      if ( e )
-      {
+      if ( e ) {
          newRec->setBatchSize_l( e->batchSize_l() );
          newRec->setBoilSize_l( e->boilSize_l() );
          newRec->setBoilTime_min( e->boilTime_min() );
-         Database::instance().addToRecipe(newRec, e);
+         newRec->setEquipment(e);
       }
    }
 
-   newRec->insertInDatabase();
+   ObjectStoreWrapper::insert(*newRec);
+   newRec->setCacheOnly(false);
 
    // a new recipe will be put in a folder if you right click on a recipe or
    // folder. Otherwise, it goes into the main window?
@@ -2340,28 +2359,35 @@ void MainWindow::renameFolder()
    active->renameFolder(victim,newName);
 }
 
-void MainWindow::setTreeSelection(QModelIndex item)
-{
-   BtTreeView *active = qobject_cast<BtTreeView*>(tabWidget_Trees->currentWidget()->focusWidget());
+void MainWindow::setTreeSelection(QModelIndex item) {
+   qDebug() << Q_FUNC_INFO;
 
-   if (! item.isValid())
+   if (! item.isValid()) {
+      qDebug() << Q_FUNC_INFO << "Item not valid";
       return;
+   }
 
-   if ( active == nullptr )
+   BtTreeView *active = qobject_cast<BtTreeView*>(tabWidget_Trees->currentWidget()->focusWidget());
+   if ( active == nullptr ) {
       active = qobject_cast<BtTreeView*>(treeView_recipe);
+   }
 
    // Couldn't cast the active item to a BtTreeView
-   if ( active == nullptr )
+   if ( active == nullptr ) {
+      qDebug() << Q_FUNC_INFO << "Couldn't cast the active item to a BtTreeView";
       return;
+   }
 
    QModelIndex parent = active->parent(item);
 
    active->setCurrentIndex(item);
-   if ( active->type(parent) == BtTreeItem::FOLDER && ! active->isExpanded(parent) )
-      active->setExpanded(parent,true);
+   if ( active->type(parent) == BtTreeItem::FOLDER && ! active->isExpanded(parent) ) {
+      active->setExpanded(parent, true);
+   }
    active->scrollTo(item,QAbstractItemView::PositionAtCenter);
-
+   return;
 }
+
 // reduces the inventory by the selected recipes
 void MainWindow::reduceInventory(){
 
@@ -2416,6 +2442,7 @@ void MainWindow::reduceInventory(){
          for( i = 0; static_cast<int>(i) < ylist.size(); ++i )
          {
             //Yeast inventory is done by quanta not amount
+            // .:TBD:. I think "quanta" is being used to mean "number of packets" or something
             int newVal = ylist[i]->inventory() - 1;
             newVal = (newVal < 0) ? 0 : newVal;
             ylist[i]->setInventoryQuanta(newVal);
@@ -2425,12 +2452,11 @@ void MainWindow::reduceInventory(){
 }
 
 // Need to make sure the recipe tree is active, I think
-void MainWindow::newBrewNote()
-{
+void MainWindow::newBrewNote() {
    QModelIndexList indexes = treeView_recipe->selectionModel()->selectedRows();
    QModelIndex bIndex;
 
-   foreach(QModelIndex selected, indexes) {
+   for(QModelIndex selected : indexes) {
       Recipe*   rec   = treeView_recipe->recipe(selected);
 
       if( rec == nullptr )
@@ -2440,13 +2466,14 @@ void MainWindow::newBrewNote()
       if( rec != recipeObs )
          setRecipe(rec);
 
-      BrewNote* bNote = Database::instance().newBrewNote(rec);
+      auto bNote = std::make_shared<BrewNote>(*rec);
       bNote->populateNote(rec);
       bNote->setBrewDate();
+      ObjectStoreWrapper::insert(bNote);
 
-      setBrewNote(bNote);
+      this->setBrewNote(bNote.get());
 
-      bIndex = treeView_recipe->findElement(bNote);
+      bIndex = treeView_recipe->findElement(bNote.get());
       if ( bIndex.isValid() )
          setTreeSelection(bIndex);
    }
@@ -2460,18 +2487,20 @@ void MainWindow::reBrewNote()
       BrewNote* old   = treeView_recipe->brewNote(selected);
       Recipe* rec     = treeView_recipe->recipe(treeView_recipe->parent(selected));
 
-      if (! old || ! rec)
+      if (! old || ! rec) {
          return;
+      }
 
-      BrewNote* bNote = Database::instance().newBrewNote(old);
+      auto bNote = std::make_shared<BrewNote>(*old);
       bNote->setBrewDate();
+      ObjectStoreWrapper::insert(bNote);
 
       if (rec != recipeObs)
          setRecipe(rec);
 
-      setBrewNote(bNote);
+      setBrewNote(bNote.get());
 
-      setTreeSelection(treeView_recipe->findElement(bNote));
+      setTreeSelection(treeView_recipe->findElement(bNote.get()));
    }
 }
 
@@ -2540,23 +2569,18 @@ bool MainWindow::verifyImport(QString tag, QString name)
                                 QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes;
 }
 
-void MainWindow::addMashStep()
-{
-   Mash* mash;
-   if( recipeObs != nullptr && recipeObs->mash() != nullptr )
-   {
-      mash = recipeObs->mash();
-   }
-   else
-   {
+void MainWindow::addMashStep() {
+   if( recipeObs == nullptr || recipeObs->mash() == nullptr ) {
       QMessageBox::information(this, tr("No mash"), tr("Trying to add a mash step without a mash. Please create a mash first.") );
       return;
    }
 
+   // This ultimately gets stored in MainWindow::addMashStepToMash()
    MashStep* step = new MashStep("", true);
-   step->setMash(mash);
-   mashStepEditor->setMashStep(step);
-   mashStepEditor->setVisible(true);
+   //step->setMash(recipeObs->mash());
+   this->mashStepEditor->setMashStep(step);
+   this->mashStepEditor->setVisible(true);
+   return;
 }
 
 void MainWindow::removeSelectedMashStep()
@@ -2613,12 +2637,12 @@ void MainWindow::moveSelectedMashStepUp()
    }
 
    // Make sure we can actually move it up.
-   if( row < 1 )
+   if( row < 1 ) {
       return;
+   }
 
-   MashStep* m1 = mashStepTableModel->getMashStep(static_cast<unsigned int>(row));
-   MashStep* m2 = mashStepTableModel->getMashStep(static_cast<unsigned int>(row-1));
-   Database::instance().swapMashStepOrder(m1,m2);
+   this->mashStepTableModel->moveStepUp(row);
+   return;
 }
 
 void MainWindow::moveSelectedMashStepDown()
@@ -2639,12 +2663,12 @@ void MainWindow::moveSelectedMashStepDown()
    }
 
    // Make sure it's not the last row so we can move it down.
-   if( row >= mashStepTableModel->rowCount() - 1 )
+   if( row >= mashStepTableModel->rowCount() - 1 ) {
       return;
+   }
 
-   MashStep* m1 = mashStepTableModel->getMashStep(static_cast<unsigned int>(row));
-   MashStep* m2 = mashStepTableModel->getMashStep(static_cast<unsigned int>(row+1));
-   Database::instance().swapMashStepOrder(m1,m2);
+   this->mashStepTableModel->moveStepDown(row);
+   return;
 }
 
 void MainWindow::editSelectedMashStep()
@@ -2672,47 +2696,50 @@ void MainWindow::editSelectedMashStep()
    mashStepEditor->setVisible(true);
 }
 
-void MainWindow::removeMash()
-{
+void MainWindow::removeMash() {
    Mash *m = mashButton->mash();
 
-   if( m == nullptr)
+   if( m == nullptr) {
       return;
+   }
+
    //due to way this is designed, we can't have a NULL mash, so
    //we need to remove all the mash steps and then remove the mash
    //from the database.
    //remove from db
 
    m->removeAllMashSteps();
-   Database::instance().remove(m);
+   ObjectStoreWrapper::softDelete(*m);
 
-   Mash* defaultMash = Database::instance().newMash(recipeObs);
-   mashStepTableModel->setMash(defaultMash);
+   auto defaultMash = std::make_shared<Mash>();
+   this->recipeObs->setMash(defaultMash.get());
+
+   mashStepTableModel->setMash(defaultMash.get());
 
    //remove from combobox handled automatically by qt
-   mashButton->setMash(defaultMash);
+   mashButton->setMash(defaultMash.get());
 
 }
 
 void MainWindow::closeEvent(QCloseEvent* /*event*/)
 {
    Brewtarget::saveSystemOptions();
-   Brewtarget::setOption("geometry", saveGeometry());
-   Brewtarget::setOption("windowState", saveState());
+   PersistentSettings::insert("geometry", saveGeometry());
+   PersistentSettings::insert("windowState", saveState());
    if ( recipeObs )
-      Brewtarget::setOption("recipeKey", recipeObs->key());
+      PersistentSettings::insert("recipeKey", recipeObs->key());
 
    //UI save state
-   Brewtarget::setOption("MainWindow/splitter_vertical_State", splitter_vertical->saveState());
-   Brewtarget::setOption("MainWindow/splitter_horizontal_State", splitter_horizontal->saveState());
-   Brewtarget::setOption("MainWindow/treeView_recipe_headerState", treeView_recipe->header()->saveState());
-   Brewtarget::setOption("MainWindow/treeView_style_headerState", treeView_style->header()->saveState());
-   Brewtarget::setOption("MainWindow/treeView_equip_headerState", treeView_equip->header()->saveState());
-   Brewtarget::setOption("MainWindow/treeView_ferm_headerState", treeView_ferm->header()->saveState());
-   Brewtarget::setOption("MainWindow/treeView_hops_headerState", treeView_hops->header()->saveState());
-   Brewtarget::setOption("MainWindow/treeView_misc_headerState", treeView_misc->header()->saveState());
-   Brewtarget::setOption("MainWindow/treeView_yeast_headerState", treeView_yeast->header()->saveState());
-   Brewtarget::setOption("MainWindow/mashStepTableWidget_headerState", mashStepTableWidget->horizontalHeader()->saveState());
+   PersistentSettings::insert("MainWindow/splitter_vertical_State", splitter_vertical->saveState());
+   PersistentSettings::insert("MainWindow/splitter_horizontal_State", splitter_horizontal->saveState());
+   PersistentSettings::insert("MainWindow/treeView_recipe_headerState", treeView_recipe->header()->saveState());
+   PersistentSettings::insert("MainWindow/treeView_style_headerState", treeView_style->header()->saveState());
+   PersistentSettings::insert("MainWindow/treeView_equip_headerState", treeView_equip->header()->saveState());
+   PersistentSettings::insert("MainWindow/treeView_ferm_headerState", treeView_ferm->header()->saveState());
+   PersistentSettings::insert("MainWindow/treeView_hops_headerState", treeView_hops->header()->saveState());
+   PersistentSettings::insert("MainWindow/treeView_misc_headerState", treeView_misc->header()->saveState());
+   PersistentSettings::insert("MainWindow/treeView_yeast_headerState", treeView_yeast->header()->saveState());
+   PersistentSettings::insert("MainWindow/mashStepTableWidget_headerState", mashStepTableWidget->horizontalHeader()->saveState());
 
    // After unloading the database, can't make any more queries to it, so first
    // make the main window disappear so that redraw events won't inadvertently
@@ -2725,46 +2752,55 @@ void MainWindow::copyRecipe()
 {
    QString name = QInputDialog::getText( this, tr("Copy Recipe"), tr("Enter a unique name for the copy.") );
 
-   if( name.isEmpty() )
+   if (name.isEmpty()) {
       return;
+   }
 
+/*
    Recipe* newRec = Database::instance().newRecipe(recipeObs); // Create a deep copy.
    if ( newRec )
       newRec->setName(name);
+   */
+   auto newRec = std::make_shared<Recipe>(*this->recipeObs); // Create a deep copy
+   newRec->setName(name);
+   ObjectStoreTyped<Recipe>::getInstance().insert(newRec);
+   return;
 }
 
-void MainWindow::setMashToCurrentlySelected()
+/*void MainWindow::setMashToCurrentlySelected()
 {
    if( recipeObs == nullptr )
       return;
 
    Mash* selected = mashListModel->at(mashComboBox->currentIndex());
-   if( selected )
-   {
+   if (selected) {
       Database::instance().newMash(selected);
       mashButton->setMash(selected);
    }
-}
+}*/
 
-void MainWindow::saveMash()
-{
-   if( recipeObs == nullptr || recipeObs->mash() == nullptr )
+void MainWindow::saveMash() {
+   if ( recipeObs == nullptr || recipeObs->mash() == nullptr ) {
       return;
+   }
 
    Mash* mash = recipeObs->mash();
    // Ensure the mash has a name.
-   if( mash->name() == "" )
-   {
+   if( mash->name() == "" ) {
       QMessageBox::information( this, tr("Oops!"), tr("Please give your mash a name before saving.") );
       return;
    }
 
+
+   // The current UI doesn't make this 100% clear, but what we're actually doing here is saving a _copy_ of the current
+   // Recipe's mash.
+
    // NOTE: should NOT displace recipeObs' current mash.
-   Mash* newMash = Database::instance().newMash(mash, false);
+   auto newMash = ObjectStoreWrapper::insertCopyOf(*mash);
    // NOTE: need to set the display to true for the saved, named mash to work
    newMash->setDisplay(true);
-   mashButton->setMash(newMash);
-
+   mashButton->setMash(newMash.get());
+   return;
 }
 
 void MainWindow::openManual()
@@ -2788,7 +2824,7 @@ void MainWindow::print(std::function<void(QPrinter* printer)> functor)
    }
 }
 
-void MainWindow::exportHTML(std::function<void(QFile* file)> functor)
+void MainWindow::exportHtml(std::function<void(QFile* file)> functor)
 {
    if (!functor)
    {
@@ -2918,7 +2954,7 @@ void MainWindow::exportSelectedHtml() {
    }
 
    // get the targeted file
-   outFile = openForWrite(tr("HTML files (*.html)"), QString("html"));
+   outFile = this->openForWrite(tr("HTML files (*.html)"), QString("html"));
    if ( !outFile )
       return;
 
@@ -2936,114 +2972,130 @@ void MainWindow::exportSelectedHtml() {
    outFile->close();
 }
 
-void MainWindow::exportSelected()
-{
-   BtTreeView* active = qobject_cast<BtTreeView*>(tabWidget_Trees->currentWidget()->focusWidget());
-   QModelIndexList selected;
-   QList<QModelIndex>::const_iterator at,end;
-   QDomDocument doc;
-   QFile* outFile;
-   QDomElement root,dbase,recipe;
-   bool didRecipe = false;
-   BeerXML* bxml = Database::instance().getBeerXml();
-
-
-   if ( active == nullptr )
+void MainWindow::exportSelected() {
+   BtTreeView* active = qobject_cast<BtTreeView*>(this->tabWidget_Trees->currentWidget()->focusWidget());
+   if (active == nullptr) {
+      qDebug() << Q_FUNC_INFO << "No active tree so can't get a selection";
       return;
+   }
 
-   selected = active->selectionModel()->selectedRows();
-   if( selected.count() == 0 )
+   QString userMessage;
+   QString filename;
+   bool succeeded = false;
+   QModelIndexList selected = active->selectionModel()->selectedRows();
+   if (selected.count() == 0) {
+      qDebug() << Q_FUNC_INFO << "Nothing selected, so nothing to export";
+      userMessage = "Nothing selected";
+      this->pimpl->importExportMsg(impl::EXPORT, filename, succeeded, userMessage);
       return;
+   }
 
-   outFile = openForWrite();
-   if ( !outFile )
-      return;
+   //
+   // I think the way that UI works at the moment, we're only going to get one type of thing selected at a time.
+   // Nevertheless, if this were to change in future, there is no inherent reason not to be able to export different
+   // types of things at the same time.
+   //
+   // We therefore gather all the selected things together so that we write out all the Hops together, all the Styles
+   // together and so on, because BeerXML wants them all in group tags (<HOPS>...</HOPS>, etc).
+   //
+   QList<Equipment *>   equipments;
+   QList<Fermentable *> fermentables;
+   QList<Hop *>         hops;
+   QList<Misc *>        miscs;
+   QList<Recipe *>      recipes;
+   QList<Style *>       styles;
+   QList<Water *>       waters;
+   QList<Yeast *>       yeasts;
 
-   QTextStream out(outFile);
-
-   QString xmlHead = QString("version=\"1.0\" encoding=\"%1\"").arg(QTextCodec::codecForLocale()->name().data());
-
-   // Create the headers to make other BeerXML parsers happy
-   QDomProcessingInstruction inst = doc.createProcessingInstruction("xml", xmlHead);
-   QDomComment beerxml = doc.createComment(QString(" BeerXML generated by Brewtarget %1 ").arg(VERSIONSTRING));
-
-   doc.appendChild(inst);
-   doc.appendChild(beerxml);
-
-   // We need to handle the recipes separate from the normal database
-   // elements.  All recipes live under the RECIPES tag, whereas the
-   // equipment, hops, etc. go under DATABASE.
-   dbase = doc.createElement("DATABASE");
-   recipe = doc.createElement("RECIPES");
-
-   for(at = selected.begin(),end = selected.end(); at < end; ++at)
-   {
-      QModelIndex selection = *at;
+   int count = 0;
+   for (auto & selection : selected) {
       int type = active->type(selection);
 
-      switch(type)
-      {
+      switch(type) {
          case BtTreeItem::RECIPE:
-            bxml->toXml( treeView_recipe->recipe(selection), doc, recipe);
-            didRecipe = true;
+            recipes.append(treeView_recipe->recipe(selection));
+            ++count;
             break;
          case BtTreeItem::EQUIPMENT:
-            bxml->toXml( treeView_equip->equipment(selection), doc, dbase);
+            equipments.append(treeView_equip->equipment(selection));
+            ++count;
             break;
          case BtTreeItem::FERMENTABLE:
-            bxml->toXml( treeView_ferm->fermentable(selection), doc, dbase);
+            fermentables.append(treeView_ferm->fermentable(selection));
+            ++count;
             break;
          case BtTreeItem::HOP:
-            bxml->toXml( treeView_hops->hop(selection), doc, dbase);
+            hops.append(treeView_hops->hop(selection));
+            ++count;
             break;
          case BtTreeItem::MISC:
-            bxml->toXml( treeView_misc->misc(selection), doc, dbase);
+            miscs.append(treeView_misc->misc(selection));
+            ++count;
             break;
          case BtTreeItem::STYLE:
-            bxml->toXml( treeView_style->style(selection), doc, dbase);
+            styles.append(treeView_style->style(selection));
+            ++count;
+            break;
+         case BtTreeItem::WATER:
+            waters.append(treeView_water->water(selection));
+            ++count;
             break;
          case BtTreeItem::YEAST:
-            bxml->toXml( treeView_yeast->yeast(selection), doc, dbase);
+            yeasts.append(treeView_yeast->yeast(selection));
+            ++count;
+            break;
+         case BtTreeItem::FOLDER:
+            qDebug() << Q_FUNC_INFO << "Can't export selected Folder to XML as BeerXML does not support it";
+            break;
+         case BtTreeItem::BREWNOTE:
+            qDebug() << Q_FUNC_INFO << "Can't export selected BrewNote to XML as BeerXML does not support it";
+            break;
+         default:
+            // This shouldn't happen, because we should explicitly cover all the types above
+            qWarning() << Q_FUNC_INFO << "Don't know how to export BtTreeItem type" << type;
             break;
       }
    }
 
-   if ( didRecipe )
-      doc.appendChild(recipe);
-   else
-      doc.appendChild(dbase);
+   if (0 == count) {
+      qDebug() << Q_FUNC_INFO << "Nothing selected was exportable to XML";
+      userMessage = "Nothing exportable selected";
+      this->pimpl->importExportMsg(impl::EXPORT, filename, succeeded, userMessage);
+      return;
+   }
 
-   out << doc.toString();
+   std::unique_ptr<QFile> outFile{this->openForWrite()};
+   if (!outFile.get()) {
+      return;
+   }
+
+   BeerXML & bxml = BeerXML::getInstance();
+   bxml.createXmlFile(*outFile);
+
+   //
+   // Not that it matters, but the order things are listed in the BeerXML 1.0 spec is:
+   //    HOPS
+   //    FERMENTABLES
+   //    YEASTS
+   //    MISCS
+   //    WATERS
+   //    STYLES
+   //    MASH_STEPS
+   //    MASHS
+   //    RECIPES
+   //    EQUIPMENTS
+   //
+   bxml.toXml(hops,         *outFile);
+   bxml.toXml(fermentables, *outFile);
+   bxml.toXml(yeasts,       *outFile);
+   bxml.toXml(miscs,        *outFile);
+   bxml.toXml(waters,       *outFile);
+   bxml.toXml(styles,       *outFile);
+   bxml.toXml(recipes,      *outFile);
+   bxml.toXml(equipments,   *outFile);
 
    outFile->close();
-   delete outFile;
-}
-
-void MainWindow::updateDatabase()
-{
-   QString otherDb;
-   QMessageBox::StandardButton but;
-
-   // Tell user what's about to happen.
-   but = QMessageBox::question( this,
-                          tr("Database Update"),
-                          tr("You are about to update the current database with another one. "
-                             "This may make changes to (but will not delete) some of your ingredients. "
-                             "It will not modify any of your recipes. "
-                             "Continue?"),
-                          QMessageBox::Yes | QMessageBox::No,
-                          QMessageBox::No );
-   if( but == QMessageBox::No )
-      return;
-
-   // Select the db to merge with.
-   otherDb = QFileDialog::getOpenFileName( this,
-                                           tr("Select Database File"),
-                                           Brewtarget::getUserDataDir().canonicalPath(),
-                                           tr("Brewtarget Database (*.sqlite)") );
-
-   // Merge.
-   Database::instance().updateDatabase( otherDb );
+   return;
 }
 
 void MainWindow::finishCheckingVersion()
@@ -3214,9 +3266,9 @@ void MainWindow::versionedRecipe(Recipe* descendant)
    treeView_recipe->setCurrentIndex(ndx);
 }
 
-void MainWindow::closeBrewNote(BrewNote* b)
-{
-   Recipe* parent = Database::instance().getParentRecipe(b);
+void MainWindow::closeBrewNote(int brewNoteId, std::shared_ptr<QObject> object) {
+   BrewNote* b = std::static_pointer_cast<BrewNote>(object).get();
+   Recipe* parent = ObjectStoreWrapper::getByIdRaw<Recipe>(b->getRecipeId());
 
    // If this isn't the focused recipe, do nothing because there are no tabs
    // to close.

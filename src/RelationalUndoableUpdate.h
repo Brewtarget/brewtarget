@@ -30,14 +30,12 @@
 
 /*!
  * \class RelationalUndoableUpdate
- * \author Matt Young
  *
  * \brief Each instance of this class is a non-trivial undoable update to, eg, a recipe that cannot be represented with
  *        SimpleUndoableUpdate - eg because we're adding a link to another object.
  */
 template<class UU, class VV>
-class RelationalUndoableUpdate : public QUndoCommand
-{
+class RelationalUndoableUpdate : public QUndoCommand {
 public:
    /*!
     * \param updatee The object we are updating
@@ -132,6 +130,4 @@ template<class UU, class VV> RelationalUndoableUpdate<UU, VV> * newRelationalUnd
    return new RelationalUndoableUpdate<UU, VV>(updatee, setter, oldValue, newValue, callback, description, parent);
 }
 
-
-
-#endif /*RELATIONAL_UNDOABLE_UPDATE_H*/
+#endif

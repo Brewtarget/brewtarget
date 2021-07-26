@@ -16,56 +16,66 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef _XML_XMLRECIPERECORD_H
-#define _XML_XMLRECIPERECORD_H
+#ifndef XML_XMLRECIPERECORD_H
+#define XML_XMLRECIPERECORD_H
 #pragma once
 
 #include "xml/XmlNamedEntityRecord.h"
 #include "model/Recipe.h"
 
 /**
- * \brief Loads a \b Recipe record (including any records it contains) in from an XML file.
+ * \brief Read and write a \c Recipe record (including any records it contains) from or to an XML file
  */
 class XmlRecipeRecord : public XmlNamedEntityRecord<Recipe> {
 public:
-   // We only want to override one method, so the parent class's constructors are fine for us
+   // We only want to override a couple of member functions, so the parent class's constructors are fine for us
    using XmlNamedEntityRecord<Recipe>::XmlNamedEntityRecord;
-/*
-         <!-- EFFICIENCY is not required for Extract but is required for other types
-            so, ideally, we would have an assert here along the following lines:
-               <xs:assert test="EFFICIENCY or (TYPE = 'Extract')"/>
-            However, XSD asserts are part of the XML Schema 1.1 specifications and Xerces-C++
-            (in contrast to Xerces-J) only supports XML Schema 1.0 - ie it doesn't understand
-            the assert tag. -->
 
-
-         <!-- The BeerXML 1.0 Standard defines the next field as required, but then goes on to say in its description
-              that 'No Mash record is needed for “Extract” type brews'.  We'll take the description as accurate.
-              As noted above for EFFICIENCY and INFUSE_AMOUNT, we ideally would include an xs:assert tag here to
-              enforce the circumstances in which a MASH record is required, but this will have to wait until Xerces-C++
-              supports the XML Schema 1.1 specification. -->
-         <xs:element name="MASH" type="MashType"/> <!-- NB singular not plural here -->
-
-
-         <xs:element name="FORCED_CARBONATION" type="CapsBoolean" minOccurs="0" maxOccurs="1"/>
-         <!-- The next field should only be present if the previous one was present and set to TRUE
-              See comments elsewhere about the desirability of enforcing this in future via xs:assert tags -->
-         <xs:element name="PRIMING_SUGAR_NAME" type="xs:string" minOccurs="0" maxOccurs="1"/>
-
-
-*/
+protected:
    /**
-    * \brief We override \b XmlNamedEntityRecord<Recipe>::normaliseAndStoreInDb because ... TO WRITE
-    * \param containingEntity
+    * \brief We override \c XmlRecord::normaliseAndStoreInDb because we need to be able to store multiple instances of
+    *        some child records (Hops, Fermentables, Instructions, etc) and accessing these generically via Qt
+    *        properties is hard unless you make the getters and setters all use the same list type, eg QList<QVariant>
+    *        instead of QList<Hop *>, QList<Fermentable *>, QList<Instruction *>, etc.
     */
    virtual XmlRecord::ProcessingResult normaliseAndStoreInDb(NamedEntity * containingEntity,
                                                              QTextStream & userMessage,
                                                              XmlRecordCount & stats);
+
+   /**
+    * \brief We need to override \c XmlRecord::propertiesToXml for similar reasons that we override
+    *        \c normaliseAndStoreInDb()
+    */
+   virtual void subRecordToXml(XmlRecord::FieldDefinition const & fieldDefinition,
+                               XmlRecord const & subRecord,
+                               NamedEntity const & namedEntityToExport,
+                               QTextStream & out,
+                               int indentLevel,
+                               char const * const indentString) const;
 
 private:
    /**
     * \brief Add to the recipe child (ie contained) objects of type CNE that have already been read in and stored
     */
    template<typename CNE> void addChildren();
+
+   // As of C++ we have the moral equivalent of templated typdefs, which, here, helps make pointers to member functions
+   // on Recipe less ugly
+   template <typename CNE>
+   using RecipeChildGetter = QList<CNE *> (Recipe::*)() const;
+
+   /**
+    * \brief If the supplied property names match, write all the corresponding type to XML
+    */
+   template<typename CNE>
+   bool childrenToXml(XmlRecord::FieldDefinition const & fieldDefinition,
+                      XmlRecord const & subRecord,
+                      Recipe const & recipe,
+                      QTextStream & out,
+                      int indentLevel,
+                      char const * const indentString,
+                      char const * const propertyNameForGetter,
+                      RecipeChildGetter<CNE> getter) const;
+
 };
 #endif

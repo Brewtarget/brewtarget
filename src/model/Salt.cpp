@@ -19,23 +19,13 @@
  */
 #include "model/Salt.h"
 
-#include <QDebug>
-#include <QDomElement>
-#include <QDomText>
-#include <QObject>
 #include <QVector>
+#include <QObject>
+#include <QDebug>
 
 #include "brewtarget.h"
-#include "database.h"
-#include "SaltSchema.h"
-#include "TableSchemaConst.h"
-
-// Salts have a different ordering then the default (by name) to make them display properly in the editor -- grouped
-// around when they are added and not the name.
-bool operator<(const Salt &s1, const Salt &s2)
-{
-   return s1.addTo() < s2.addTo();
-}
+#include "database/ObjectStoreWrapper.h"
+#include "model/Recipe.h"
 
 bool Salt::isEqualTo(NamedEntity const & other) const {
    // Base class (NamedEntity) will have ensured this cast is valid
@@ -47,114 +37,76 @@ bool Salt::isEqualTo(NamedEntity const & other) const {
    );
 }
 
-QString Salt::classNameStr()
-{
-   static const QString name("Salt");
-   return name;
+ObjectStore & Salt::getObjectStoreTypedInstance() const {
+   return ObjectStoreTyped<Salt>::getInstance();
 }
 
-Salt::Salt(QString name, bool cache)
-   : NamedEntity(Brewtarget::SALTTABLE, cache, name, true),
+Salt::Salt(QString name, bool cache) :
+   NamedEntity(-1, cache, name, true),
    m_amount(0.0),
    m_add_to(NEVER),
    m_type(NONE),
    m_amount_is_weight(true),
    m_percent_acid(0.0),
-   m_is_acid(false),
-   m_misc_id(-1) {
+   m_is_acid(false) {
    return;
 }
 
-Salt::Salt(Salt & other)
-   : NamedEntity(other),
-   m_amount(other.m_amount),
-   m_add_to(other.m_add_to),
-   m_type(other.m_type),
-   m_amount_is_weight(other.m_amount_is_weight),
-   m_percent_acid(other.m_percent_acid),
-   m_is_acid(other.m_is_acid),
-   m_misc_id(other.m_misc_id) {
+Salt::Salt(NamedParameterBundle const & namedParameterBundle) :
+   NamedEntity       {namedParameterBundle},
+   m_amount          {namedParameterBundle(PropertyNames::Salt::addTo         ).toDouble()},
+   m_add_to          {static_cast<Salt::WhenToAdd>(namedParameterBundle(PropertyNames::Salt::amount).toInt())},
+   m_type            {static_cast<Salt::Types>(namedParameterBundle(PropertyNames::Salt::amountIsWeight).toInt())},
+   m_amount_is_weight{namedParameterBundle(PropertyNames::Salt::isAcid        ).toBool()},
+   m_percent_acid    {namedParameterBundle(PropertyNames::Salt::percentAcid   ).toDouble()},
+   m_is_acid         {namedParameterBundle(PropertyNames::Salt::type          ).toBool()} {
    return;
 }
 
-Salt::Salt(TableSchema* table, QSqlRecord rec, int t_key)
-   : NamedEntity(table, rec, t_key) {
-   m_amount = rec.value(table->propertyToColumn( PropertyNames::Salt::amount)).toDouble();
-   m_amount_is_weight = rec.value( table->propertyToColumn( PropertyNames::Salt::amountIsWeight)).toBool();
-   m_percent_acid = rec.value( table->propertyToColumn( PropertyNames::Salt::percentAcid)).toDouble();
-   m_is_acid = rec.value( table->propertyToColumn( PropertyNames::Salt::isAcid)).toBool();
-   // foreign keys suck
-   m_misc_id = rec.value(table->foreignKeyToColumn( PropertyNames::Salt::misc_id)).toInt();
-
-   m_add_to = static_cast<Salt::WhenToAdd>(rec.value( table->propertyToColumn( PropertyNames::Salt::addTo)).toInt());
-   m_type = static_cast<Salt::Types>(rec.value( table->propertyToColumn( PropertyNames::Salt::type)).toInt());
+Salt::Salt(Salt const & other) :
+   NamedEntity       {other                   },
+   m_amount          {other.m_amount          },
+   m_add_to          {other.m_add_to          },
+   m_type            {other.m_type            },
+   m_amount_is_weight{other.m_amount_is_weight},
+   m_percent_acid    {other.m_percent_acid    },
+   m_is_acid         {other.m_is_acid         } {
+   return;
 }
 
 //================================"SET" METHODS=================================
-void Salt::setAmount( double var )
-{
-   if ( m_cacheOnly || setEasy(PropertyNames::Salt::amount, var) ) {
-      m_amount = var;
-   }
+void Salt::setAmount(double var) {
+   this->setAndNotify(PropertyNames::Salt::amount, this->m_amount, var);
 }
 
-void Salt::setAddTo( Salt::WhenToAdd var )
-{
-   if ( var < NEVER || var > EQUAL ) {
-      return;
-   }
-
-   if ( m_cacheOnly || setEasy(PropertyNames::Salt::addTo, var) ) {
-      m_add_to = var;
-   }
+void Salt::setAddTo(Salt::WhenToAdd var) {
+   this->setAndNotify(PropertyNames::Salt::addTo, this->m_add_to, var);
 }
 
 // This may come to haunt me, but I am setting the isAcid flag and the
 // amount_is_weight flags here.
-void Salt::setType(Salt::Types type)
-{
-   if ( type < NONE || type > ACIDMLT ) {
-      return;
-   }
-
-   bool anAcid = (type > NAHCO3);
-   bool isWeight = ! (type == LACTIC || type == H3PO4);
-   if ( m_cacheOnly ||
-        setEasy(PropertyNames::Salt::type, type) ||
-        setEasy(PropertyNames::Salt::isAcid, anAcid) ||
-        setEasy(PropertyNames::Salt::amountIsWeight, isWeight) ) {
-      m_is_acid = anAcid;
-      m_amount_is_weight = isWeight;
-      m_type = type;
-   }
+void Salt::setType(Salt::Types type) {
+   this->setAndNotify(PropertyNames::Salt::type,           this->m_type, type);
+   this->setAndNotify(PropertyNames::Salt::isAcid,         this->m_is_acid, (type > NAHCO3));
+   this->setAndNotify(PropertyNames::Salt::amountIsWeight, this->m_amount_is_weight, !(type == LACTIC || type == H3PO4));
 }
 
-void Salt::setAmountIsWeight( bool var )
-{
-   if ( m_cacheOnly || setEasy(PropertyNames::Salt::amountIsWeight, var) ) {
-      m_amount_is_weight = var;
-   }
+void Salt::setAmountIsWeight(bool var) {
+   this->setAndNotify(PropertyNames::Salt::amountIsWeight, this->m_amount_is_weight, var);
 }
 
-void Salt::setIsAcid( bool var )
-{
-   if ( m_cacheOnly || setEasy(PropertyNames::Salt::isAcid, var) ) {
-      m_is_acid = var;
-   }
+void Salt::setIsAcid(bool var) {
+   this->setAndNotify(PropertyNames::Salt::isAcid, this->m_is_acid, var);
 }
 
-void Salt::setPercentAcid(double var)
-{
-   if ( m_cacheOnly || setEasy(PropertyNames::Salt::percentAcid, var) ) {
-      m_percent_acid = var;
-   }
+void Salt::setPercentAcid(double var) {
+   this->setAndNotify(PropertyNames::Salt::percentAcid, this->m_percent_acid, var);
 }
 
 //=========================="GET" METHODS=======================================
 double Salt::amount() const { return m_amount; }
 Salt::WhenToAdd Salt::addTo() const { return m_add_to; }
 Salt::Types Salt::type() const { return m_type; }
-int Salt::miscId() const { return m_misc_id; }
 bool Salt::isAcid() const { return m_is_acid; }
 bool Salt::amountIsWeight() const { return m_amount_is_weight; }
 double Salt::percentAcid() const { return m_percent_acid; }
@@ -242,10 +194,6 @@ double Salt::SO4() const
    }
 }
 
-int Salt::insertInDatabase() {
-   return Database::instance().insertSalt(this);
-}
-
-void Salt::removeFromDatabase() {
-   Database::instance().remove(this);
+Recipe * Salt::getOwningRecipe() {
+   return ObjectStoreWrapper::findFirstMatching<Recipe>( [this](Recipe * rec) {return rec->uses(*this);} );
 }

@@ -16,9 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#ifndef _XML_BTDOMERRORHANDLER_H
-#define _XML_BTDOMERRORHANDLER_H
+#ifndef XML_BTDOMERRORHANDLER_H
+#define XML_BTDOMERRORHANDLER_H
 #pragma once
 
 class QString;

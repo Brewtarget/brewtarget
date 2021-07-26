@@ -40,7 +40,7 @@ class BtStringEdit;
 
 /*!
  * \class BtLineEdit
- * \author Mik Firestone
+ *
  *
  * \brief This extends QLineEdit such that the Object handles all the unit
  * transformation we do, instead of each dialog. It makes the code much

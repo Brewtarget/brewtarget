@@ -1,7 +1,8 @@
 /*
  * InstructionWidget.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
+ * - Matt Young <mfsy@yahoo.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -17,11 +18,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#ifndef _INGREDIENTWIDGET_H
-#define   _INGREDIENTWIDGET_H
-
-class InstructionWidget;
+#ifndef INGREDIENTWIDGET_H
+#define INGREDIENTWIDGET_H
 
 #include "ui_instructionWidget.h"
 #include <QWidget>
@@ -35,7 +33,6 @@ class Instruction;
 
 /*!
  * \class InstructionWidget
- * \author Philip G. Lee
  *
  * \brief View/controller widget that views/edits recipe instructions.
  */
@@ -59,7 +56,7 @@ public slots:
 private:
    void showChanges();
    void makeEverythingInactive();
-   
+
    Instruction* insObs;
    TimerWidget* timer;
 };

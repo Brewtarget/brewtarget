@@ -1,6 +1,7 @@
 /*
  * CustomComboBox.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
+ * - Matt Young <mfsy@yahoo.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -16,16 +17,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#ifndef _CUSTOMCOMBOBOX_H
-#define _CUSTOMCOMBOBOX_H
+#ifndef CUSTOMCOMBOBOX_H
+#define CUSTOMCOMBOBOX_H
 
 #include <QString>
 #include <QComboBox>
 
 /*!
  * \class CustomComboBox
- * \author Philip G. Lee (rocketman768@gmail.com)
  *
  * \brief This class is a more flexible combo box. Does not show any text.
  */
@@ -35,12 +34,12 @@ class CustomComboBox : public QComboBox
 public:
    CustomComboBox(QWidget* parent = 0);
    virtual ~CustomComboBox(){}
-   
+
    //! Reimplemented from QComboBox to allow the popup to be independently sized.
    void showPopup();
-   
+
    //! Reimplemented from QComboBox to not show any text.
    virtual void paintEvent(QPaintEvent*);
 };
 
-#endif /*_CUSTOMCOMBOBOX_H*/
+#endif

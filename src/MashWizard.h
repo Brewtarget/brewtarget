@@ -1,6 +1,7 @@
 /*
  * MashWizard.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
+ * - Matt Young <mfsy@yahoo.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  * - Rob Taylor <robtaylor@floopily.org>
  *
@@ -17,11 +18,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#ifndef _MASHWIZARD_H
-#define _MASHWIZARD_H
-
-class MashWizard;
+#ifndef MASHWIZARD_H
+#define MASHWIZARD_H
 
 #include "ui_mashWizard.h"
 #include <QDialog>
@@ -30,7 +28,6 @@ class MashWizard;
 
 /*!
  * \class MashWizard
- * \author Philip G. Lee
  *
  * \brief View/controller dialog that helps you design a mash.
  */

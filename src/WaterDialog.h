@@ -1,6 +1,7 @@
 /*
  * WaterDialog.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
+ * - Matt Young <mfsy@yahoo.com>
  * - Maxime Lavigne <duguigne@gmail.com>
  * - Philip G. Lee <rocketman768@gmail.com>
  *
@@ -17,8 +18,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef _WATERDIALOG_H
-#define _WATERDIALOG_H
+#ifndef WATERDIALOG_H
+#define WATERDIALOG_H
 
 #include <QDialog>
 #include <QWidget>

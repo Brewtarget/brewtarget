@@ -1,6 +1,7 @@
 /*
  * EquipmentListModel.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  * - swstim <swstim@gmail.com>
@@ -18,22 +19,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #include "EquipmentListModel.h"
+
+#include "database/ObjectStoreWrapper.h"
 #include "model/Equipment.h"
-#include "database.h"
 #include "model/Recipe.h"
 
-EquipmentListModel::EquipmentListModel(QWidget* parent)
-   : QAbstractListModel(parent), recipe(0)
-{
-   connect( &(Database::instance()), qOverload<Equipment*>(&Database::createdSignal), this, &EquipmentListModel::addEquipment );
-   connect( &(Database::instance()), qOverload<Equipment*>(&Database::deletedSignal), this, &EquipmentListModel::removeEquipment);
-   repopulateList();
+EquipmentListModel::EquipmentListModel(QWidget* parent) :
+   QAbstractListModel(parent), recipe(0) {
+   connect(&ObjectStoreTyped<Equipment>::getInstance(), &ObjectStoreTyped<Equipment>::signalObjectInserted, this, &EquipmentListModel::addEquipment);
+   connect(&ObjectStoreTyped<Equipment>::getInstance(), &ObjectStoreTyped<Equipment>::signalObjectDeleted,  this, &EquipmentListModel::removeEquipment);
+   this->repopulateList();
+   return;
 }
 
-void EquipmentListModel::addEquipment(Equipment* equipment)
-{
+
+void EquipmentListModel::addEquipment(int equipmentId) {
+   Equipment* equipment = ObjectStoreWrapper::getByIdRaw<Equipment>(equipmentId);
+
    if( !equipment ||
       equipments.contains(equipment) ||
       equipment->deleted() ||
@@ -77,16 +80,18 @@ void EquipmentListModel::addEquipments(QList<Equipment*> equips)
    }
 }
 
-void EquipmentListModel::removeEquipment(Equipment* equipment)
-{
-   int ndx = equipments.indexOf(equipment);
+
+void EquipmentListModel::removeEquipment(int equipmentId, std::shared_ptr<QObject> object) {
+   auto equipment = std::static_pointer_cast<Equipment>(object);
+   int ndx = equipments.indexOf(equipment.get());
    if( ndx > 0 )
    {
       beginRemoveRows( QModelIndex(), ndx, ndx );
-      disconnect( equipment, 0, this, 0 );
+      disconnect( equipment.get(), 0, this, 0 );
       equipments.removeAt(ndx);
       endRemoveRows();
    }
+   return;
 }
 
 void EquipmentListModel::removeAll()
@@ -112,29 +117,27 @@ void EquipmentListModel::equipChanged(QMetaProperty prop, QVariant val)
       return;
 
    QString propName(prop.name());
-   if( propName == PropertyNames::NamedEntity::name )
-   {
+   if (propName == PropertyNames::NamedEntity::name) {
       int ndx = equipments.indexOf(eSend);
-      if( ndx >= 0 )
+      if (ndx >= 0) {
          emit dataChanged( createIndex(ndx,0), createIndex(ndx,0) );
+      }
    }
 }
 
-void EquipmentListModel::recChanged(QMetaProperty prop, QVariant val)
-{
-   QString propName(prop.name());
-   if( propName == "equipment" )
-   {
-      Equipment* newEquip = qobject_cast<Equipment*>(NamedEntity::extractPtr(val));
-      // Now do something with the equipment.
+void EquipmentListModel::recChanged(QMetaProperty prop, QVariant val) {
+   if (prop.name()== PropertyNames::Recipe::equipment) {
+      Equipment* newEquip = val.value<Equipment *>();
+      // .:TODO:. Now do something with the equipment.
       Q_UNUSED(newEquip); // Until then, this will keep the compiler happy
    }
+   return;
 }
 
-void EquipmentListModel::repopulateList()
-{
+void EquipmentListModel::repopulateList() {
    removeAll();
-   addEquipments( Database::instance().equipments() );
+   addEquipments( ObjectStoreTyped<Equipment>::getInstance().getAllRaw() );
+   return;
 }
 
 Equipment* EquipmentListModel::at(int ndx)

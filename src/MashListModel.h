@@ -1,6 +1,7 @@
 /*
  * MashListModel.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -17,14 +18,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef MASHLISTMODEL_H
+#define MASHLISTMODEL_H
 
-#ifndef _MASHLISTMODEL_H
-#define   _MASHLISTMODEL_H
+#include <memory>
 
 #include <QAbstractListModel>
-#include <QModelIndex>
 #include <QList>
 #include <QMetaProperty>
+#include <QModelIndex>
 #include <QVariant>
 
 // Forward declarations.
@@ -33,44 +35,43 @@ class Recipe;
 
 /*!
  * \class MashListModel
- * \author Mik Firestone
+ *
  *
  * \brief Model for a list of named mashes
  */
-class MashListModel : public QAbstractListModel
-{
+class MashListModel : public QAbstractListModel {
    Q_OBJECT
-   
-   public:
-      MashListModel(QWidget* parent = 0);
-      
-      //! Reimplemented from QAbstractListModel.
-      virtual int rowCount( QModelIndex const& parent = QModelIndex() ) const;
-      //! Reimplemented from QAbstractListModel.
-      virtual QVariant data( QModelIndex const& index, int role = Qt::DisplayRole ) const;
-      //! Reimplemented from QAbstractListModel.
-      virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
-     
-      //! \brief add the mashes named in the \c QList m 
-      void addMashes(QList<Mash*> m);
-      //! \brief removes all mashses from the model
-      void removeAll();
-     
-      //! \brief \return the Mash at \c ndx 
-      Mash* at(int ndx);
-      //! \brief \returns the index of the named \c Mash
-      int indexOf(Mash* m);
 
-   public slots:
-      void mashChanged(QMetaProperty,QVariant);
-      void addMash(Mash*);
-      void removeMash(Mash*);
-      
-   private:
-      QList<Mash*> mashes;
-      Recipe* recipe;
-      
-      void repopulateList();
+public:
+   MashListModel(QWidget* parent = 0);
+
+   //! Reimplemented from QAbstractListModel.
+   virtual int rowCount( QModelIndex const& parent = QModelIndex() ) const;
+   //! Reimplemented from QAbstractListModel.
+   virtual QVariant data( QModelIndex const& index, int role = Qt::DisplayRole ) const;
+   //! Reimplemented from QAbstractListModel.
+   virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
+
+   //! \brief add the mashes named in the \c QList m
+   void addMashes(QList<Mash*> m);
+   //! \brief removes all mashses from the model
+   void removeAll();
+
+   //! \brief \return the Mash at \c ndx
+   Mash* at(int ndx);
+   //! \brief \returns the index of the named \c Mash
+   int indexOf(Mash* m);
+
+public slots:
+   void mashChanged(QMetaProperty,QVariant);
+   void addMash(int mashId);
+   void removeMash(int mashId, std::shared_ptr<QObject> object);
+
+private:
+   QList<Mash*> mashes;
+   Recipe* recipe;
+
+   void repopulateList();
 };
 
-#endif /* _MASHLISTMODEL_H */
+#endif

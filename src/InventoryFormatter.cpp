@@ -19,272 +19,222 @@
  */
 #include "InventoryFormatter.h"
 
+#include <QDate>
+#include <QDialog>
+
+#include "BtPrintPreview.h"
 #include "Html.h"
 #include "MainWindow.h"
 #include "brewtarget.h"
-#include "database.h"
+#include "database/ObjectStoreWrapper.h"
+#include "model/Fermentable.h"
+#include "model/Hop.h"
+#include "model/Inventory.h"
+#include "model/Misc.h"
+#include "model/Yeast.h"
 
-#include <QDate>
-#include <QDialog>
-#include <QTextBrowser>
-#include <QVBoxLayout>
+namespace {
+   QString createInventoryHeader() {
+      return Html::createHeader(QObject::tr("Inventory"), ":css/inventory.css") +
+            QString("<h1>%1 &mdash; %2</h1>")
+                  .arg(QObject::tr("Inventory"))
+                  .arg(Brewtarget::displayDateUserFormated(QDate::currentDate()));
+   }
 
-namespace InventoryFormatter
-{
+   /**
+    * Fermentables
+    */
+   QString createInventoryTableFermentable() {
+      QString result;
 
-static QString createInventoryHeader()
-{
-   return Html::createHeader(QObject::tr("Inventory"), ":css/inventory.css") +
-          QString("<h1>%1 &mdash; %2</h1>")
-                .arg(QObject::tr("Inventory"))
-                .arg(Brewtarget::displayDateUserFormated(QDate::currentDate()));
-}
-
-static QString createInventoryTableFermentable()
-{
-   QString result;
-
-   const QMap<int, double> inventory =
-         Database::instance().getInventory(Brewtarget::FERMTABLE);
-
-   if (!inventory.empty())
-   {
-
-      result += QString("<h2>%1</h2>").arg(QObject::tr("Fermentables"));
-      result += "<table id=\"fermentables\">";
-      result += QString("<tr>"
-                        "<th align=\"left\" width=\"40%\">%1</th>"
-                        "<th align=\"left\" width=\"60%\">%2</th>"
-                        "</tr>")
-                      .arg(QObject::tr("Name"))
-                      .arg(QObject::tr("Amount"));
-
-      for (auto itor = inventory.begin(); itor != inventory.end(); ++itor)
-      {
-         const Fermentable* fermentable =
-               Database::instance().fermentable(itor.key());
-
-         if (!fermentable)
-         {
-            qCritical() << QString("The fermentable %1 has a record in the "
-                                     "inventory, but does not exist.")
-                                   .arg(itor.key());
-            continue;
-         }
-
+      // Find all the parent Fermentables whose inventory is > 0
+      // (We don't want children because they are just usages of the parents in recipes.)
+      auto inventory = ObjectStoreWrapper::findAllMatching<Fermentable>(
+         [](std::shared_ptr<Fermentable> ff) { return (ff->getParent() == nullptr && ff->inventory() > 0.0); }
+      );
+      if (!inventory.empty()) {
+         result += QString("<h2>%1</h2>").arg(QObject::tr("Fermentables"));
+         result += "<table id=\"fermentables\">";
          result += QString("<tr>"
-                           "<td>%1</td>"
-                           "<td>%2</td>"
+                           "<th align=\"left\" width=\"40%\">%1</th>"
+                           "<th align=\"left\" width=\"60%\">%2</th>"
                            "</tr>")
-                         .arg(fermentable->name())
-                         .arg(Brewtarget::displayAmount(itor.value(),
-                               "fermentableTable", "inventory_kg",
-                               &Units::kilograms));
-      }
-      result += "</table>";
-   }
-   return result;
-}
+                        .arg(QObject::tr("Name"))
+                        .arg(QObject::tr("Amount"));
 
-static QString createInventoryTableHop()
-{
-   QString result;
-   const QMap<int, double> inventory =
-         Database::instance().getInventory(Brewtarget::HOPTABLE);
-
-   if (!inventory.empty())
-   {
-
-      result += QString("<h2>%1</h2>").arg(QObject::tr("Hops"));
-      result += "<table id=\"hops\">";
-      result += QString("<tr>"
-                        "<th align=\"left\" width=\"30%\">%1</th>"
-                        "<th align=\"left\" width=\"20%\">%2</th>"
-                        "<th align=\"left\" width=\"50%\">%3</th>"
-                        "</tr>")
-                      .arg(QObject::tr("Name"))
-                      .arg(QObject::tr("Alpha %"))
-                      .arg(QObject::tr("Amount"));
-
-      for (auto itor = inventory.begin(); itor != inventory.end(); ++itor)
-      {
-         const Hop* hop = Database::instance().hop(itor.key());
-
-         if (!hop)
-         {
-            qCritical() << QString("The hop %1 has a record in the "
-                                     "inventory, but does not exist.")
-                                   .arg(itor.key());
-            continue;
+         for (auto fermentable : inventory) {
+            result += QString("<tr>"
+                              "<td>%1</td>"
+                              "<td>%2</td>"
+                              "</tr>")
+                           .arg(fermentable->name())
+                           .arg(Brewtarget::displayAmount(fermentable->inventory(),
+                                 "fermentableTable", "inventory_kg",
+                                 &Units::kilograms));
          }
-
-         result += QString("<tr>"
-                           "<td>%1</td>"
-                           "<td>%2</td>"
-                           "<td>%3</td>"
-                           "</tr>")
-                         .arg(hop->name())
-                         .arg(hop->alpha_pct())
-                         .arg(Brewtarget::displayAmount(itor.value(),
-                               "hopTable", "inventory_kg", &Units::kilograms));
+         result += "</table>";
       }
-      result += "</table>";
+      return result;
    }
-   return result;
-}
 
-static QString createInventoryTableMiscellaneous()
-{
-   QString result;
-   const QMap<int, double> inventory =
-         Database::instance().getInventory(Brewtarget::MISCTABLE);
+   /**
+    * Hops
+    */
+   QString createInventoryTableHop() {
+      QString result;
 
-   if (!inventory.empty())
-   {
+      auto inventory = ObjectStoreWrapper::findAllMatching<Hop>(
+         [](std::shared_ptr<Hop> hh) { return (hh->getParent() == nullptr && hh->inventory() > 0.0); }
+      );
+      if (!inventory.empty()) {
 
-      result += QString("<h2>%1</h2>").arg(QObject::tr("Miscellaneous"));
-      result += "<table id=\"misc\">";
-      result += QString("<tr>"
-                        "<th align=\"left\" width=\"40%\">%1</th>"
-                        "<th align=\"left\" width=\"60%\">%2</th>"
-                        "</tr>")
-                      .arg(QObject::tr("Name"))
-                      .arg(QObject::tr("Amount"));
+         result += QString("<h2>%1</h2>").arg(QObject::tr("Hops"));
+         result += "<table id=\"hops\">";
+         result += QString("<tr>"
+                           "<th align=\"left\" width=\"30%\">%1</th>"
+                           "<th align=\"left\" width=\"20%\">%2</th>"
+                           "<th align=\"left\" width=\"50%\">%3</th>"
+                           "</tr>")
+                        .arg(QObject::tr("Name"))
+                        .arg(QObject::tr("Alpha %"))
+                        .arg(QObject::tr("Amount"));
 
-      for (auto itor = inventory.begin(); itor != inventory.end(); ++itor)
-      {
-         const Misc* miscellaneous = Database::instance().misc(itor.key());
-
-         if (!miscellaneous)
-         {
-            qCritical() << QString("The miscellaneous %1 has a record in the "
-                                     "inventory, but does not exist.")
-                                   .arg(itor.key());
-            continue;
+         for (auto hop : inventory) {
+            result += QString("<tr>"
+                              "<td>%1</td>"
+                              "<td>%2</td>"
+                              "<td>%3</td>"
+                              "</tr>")
+                           .arg(hop->name())
+                           .arg(hop->alpha_pct())
+                           .arg(Brewtarget::displayAmount(hop->inventory(),
+                                 "hopTable", "inventory_kg", &Units::kilograms));
          }
-
-         const QString displayAmount =
-               Brewtarget::displayAmount(itor.value(), "miscTable", "amount",
-                     miscellaneous->amountIsWeight() ? (Unit const *)&Units::kilograms
-                                                     : (Unit const *)&Units::liters);
-         result += QString("<tr>"
-                           "<td>%1</td>"
-                           "<td>%2</td>"
-                           "</tr>")
-                         .arg(miscellaneous->name())
-                         .arg(displayAmount);
+         result += "</table>";
       }
-      result += "</table>";
+      return result;
    }
-   return result;
-}
 
-static QString createInventoryTableYeast()
-{
-   QString result;
-   const QMap<int, double> inventory =
-         Database::instance().getInventory(Brewtarget::YEASTTABLE);
+   /**
+    * Misc
+    */
+   QString createInventoryTableMiscellaneous() {
+      QString result;
 
-   if (!inventory.empty())
-   {
-      result += QString("<h2>%1</h2>").arg(QObject::tr("Yeast"));
-      result += "<table id=\"yeast\">";
-      result += QString("<tr>"
-                        "<th align=\"left\" width=\"40%\">%1</th>"
-                        "<th align=\"left\" width=\"60%\">%2</th>"
-                        "</tr>")
-                      .arg(QObject::tr("Name"))
-                      .arg(QObject::tr("Amount"));
+      auto inventory = ObjectStoreWrapper::findAllMatching<Misc>(
+         [](std::shared_ptr<Misc> mm) { return (mm->getParent() == nullptr && mm->inventory() > 0.0); }
+      );
+      if (!inventory.empty()) {
 
-      for (auto itor = inventory.begin(); itor != inventory.end(); ++itor)
-      {
-         const Yeast* yeast = Database::instance().yeast(itor.key());
+         result += QString("<h2>%1</h2>").arg(QObject::tr("Miscellaneous"));
+         result += "<table id=\"misc\">";
+         result += QString("<tr>"
+                           "<th align=\"left\" width=\"40%\">%1</th>"
+                           "<th align=\"left\" width=\"60%\">%2</th>"
+                           "</tr>")
+                        .arg(QObject::tr("Name"))
+                        .arg(QObject::tr("Amount"));
 
-         if (!yeast)
-         {
-            qCritical() << QString("The yeast %1 has a record in the "
-                                     "inventory, but does not exist.")
-                                   .arg(itor.key());
-            continue;
+         for (auto miscellaneous : inventory) {
+            const QString displayAmount =
+                  Brewtarget::displayAmount(miscellaneous->inventory(), "miscTable", "amount",
+                        miscellaneous->amountIsWeight() ? (Unit*)&Units::kilograms
+                                                      : (Unit*)&Units::liters);
+            result += QString("<tr>"
+                              "<td>%1</td>"
+                              "<td>%2</td>"
+                              "</tr>")
+                           .arg(miscellaneous->name())
+                           .arg(displayAmount);
          }
+         result += "</table>";
+      }
+      return result;
+   }
 
-         const QString displayAmount =
-               Brewtarget::displayAmount(itor.value(), "yeastTable", "quanta",
-                     yeast->amountIsWeight() ? (Unit const *)&Units::kilograms
-                                             : (Unit const *)&Units::liters);
-
+   /**
+    * Yeast
+    */
+   QString createInventoryTableYeast() {
+      QString result;
+      auto inventory = ObjectStoreWrapper::findAllMatching<Yeast>(
+         [](std::shared_ptr<Yeast> yy) { return (yy->getParent() == nullptr && yy->inventory() > 0.0); }
+      );
+      if (!inventory.empty()) {
+         result += QString("<h2>%1</h2>").arg(QObject::tr("Yeast"));
+         result += "<table id=\"yeast\">";
          result += QString("<tr>"
-                           "<td>%1</td>"
-                           "<td>%2</td>"
+                           "<th align=\"left\" width=\"40%\">%1</th>"
+                           "<th align=\"left\" width=\"60%\">%2</th>"
                            "</tr>")
-                         .arg(yeast->name())
-                         .arg(displayAmount);
+                        .arg(QObject::tr("Name"))
+                        .arg(QObject::tr("Amount"));
+
+         for (auto yeast : inventory) {
+            const QString displayAmount =
+                  Brewtarget::displayAmount(yeast->inventory(), "yeastTable", "quanta",
+                        yeast->amountIsWeight() ? (Unit*)&Units::kilograms
+                                                : (Unit*)&Units::liters);
+
+            result += QString("<tr>"
+                              "<td>%1</td>"
+                              "<td>%2</td>"
+                              "</tr>")
+                           .arg(yeast->name())
+                           .arg(displayAmount);
+         }
+         result += "</table>";
       }
-      result += "</table>";
-   }
-   return result;
-}
-
-static QString createInventoryBody()
-{
-   QString result =
-         createInventoryTableFermentable() + createInventoryTableHop() +
-         createInventoryTableMiscellaneous() + createInventoryTableYeast();
-
-   if (result.size() == 0)
-   {
-      result = QObject::tr("No inventory available.");
+      return result;
    }
 
-   return result;
-}
+   QString createInventoryBody() {
+      QString result =
+            createInventoryTableFermentable() + createInventoryTableHop() +
+            createInventoryTableMiscellaneous() + createInventoryTableYeast();
 
-static QString createInventoryFooter()
-{
-   return Html::createFooter();
-}
-
-static QString createInventory()
-{
-   return createInventoryHeader() + createInventoryBody() +
-          createInventoryFooter();
-}
-
-static std::tuple<QDialog*, QTextBrowser*>& previewDialogue()
-{
-   static auto result = []() -> std::tuple<QDialog*, QTextBrowser*> {
-      QDialog* dialog = new QDialog(Brewtarget::mainWindow());
-      dialog->setWindowTitle(QObject::tr("Print Preview"));
-      if (!dialog->layout())
-      {
-         dialog->setLayout(new QVBoxLayout);
+      if (result.size() == 0) {
+         result = QObject::tr("No inventory available.");
       }
-      QTextBrowser* text = new QTextBrowser(dialog);
-      dialog->layout()->addWidget(text);
-      return std::make_tuple(dialog, text);
-   }();
 
-   return result;
+      return result;
+   }
+
+   QString createInventoryFooter() {
+      return Html::createFooter();
+   }
+
+
+   BtPrintPreview * dialog;
+
+   void createOrUpdateDialog() {
+      if (nullptr == dialog) {
+         dialog = new BtPrintPreview(Brewtarget::mainWindow());
+         dialog->setWindowTitle(QObject::tr("Inventory Print Preview"));
+      }
+      dialog->setContent(createInventoryHeader() +
+                         createInventoryBody() +
+                         createInventoryFooter());
+      return;
+   }
+
 }
 
-void printPreview()
-{
-   auto& dialogue = previewDialogue();
-   std::get<1>(dialogue)->setHtml(createInventory());
-   std::get<0>(dialogue)->show();
+
+void InventoryFormatter::printPreview() {
+   createOrUpdateDialog();
+   dialog->show();
+   return;
 }
 
-void print(QPrinter* printer)
-{
-   QTextBrowser& text = *std::get<1>(previewDialogue());
-   text.setHtml(createInventory());
-   text.print(printer);
+void InventoryFormatter::print(QPrinter* printer) {
+   createOrUpdateDialog();
+   dialog->print(printer);
+   return;
 }
 
-void exportHTML(QFile* file)
-{
-   QTextStream(file) << createInventory();
+void InventoryFormatter::exportHtml(QFile* file) {
+   createOrUpdateDialog();
+   dialog->exportHtml(file);
+   return;
 }
-
-} // InventoryFormatter
-

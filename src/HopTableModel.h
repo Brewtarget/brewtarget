@@ -1,7 +1,8 @@
 /*
  * HopTableModel.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  * - Samuel Östling <MrOstling@gmail.com>
@@ -19,29 +20,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef HOPTABLEMODEL_H
+#define HOPTABLEMODEL_H
 
-#ifndef _HOPTABLEMODEL_H
-#define   _HOPTABLEMODEL_H
+#include <QAbstractTableModel>
+#include <QItemDelegate>
+#include <QModelIndex>
+#include <QTableView>
+#include <QVariant>
+#include <QVector>
+#include <QWidget>
+
+#include "model/Hop.h"
+#include "model/Recipe.h"
 
 class HopTableModel;
 class HopItemDelegate;
-
-#include <QAbstractTableModel>
-#include <Qt>
-#include <QWidget>
-#include <QModelIndex>
-#include <QVariant>
-#include <QTableView>
-#include <QItemDelegate>
-#include <QVector>
-#include "model/Hop.h"
-#include "model/Recipe.h"
 
 enum{HOPNAMECOL, HOPALPHACOL, HOPAMOUNTCOL, HOPINVENTORYCOL, HOPFORMCOL, HOPUSECOL, HOPTIMECOL, HOPNUMCOLS /*This one MUST be last*/};
 
 /*!
  * \class HopTableModel
- * \author Philip G. Lee
+ *
  *
  * \brief Model class for a list of hops.
  */
@@ -98,11 +98,13 @@ public:
    QString generateName(int column) const;
 public slots:
    void changed(QMetaProperty, QVariant);
-   void changedInventory(Brewtarget::DBTable,int,QVariant);
+   void changedInventory(int invKey, char const * const propertyName);
    //! \brief Add a hop to the model.
-   void addHop(Hop* hop);
+//   void addHop(Hop* hop);
+   void addHop(int hopId);
    //! \returns true if "hop" is successfully found and removed.
    bool removeHop(Hop* hop);
+   bool removeHop(int hopId);
 
    void contextMenu(const QPoint &point);
 
@@ -117,7 +119,7 @@ private:
 
 /*!
  *  \class HopItemDelegate
- *  \author Philip G. Lee
+ *
  *
  *  \brief An item delegate for hop tables.
  *  \sa HopTableModel
@@ -138,5 +140,4 @@ public:
 private:
 };
 
-#endif   /* _HOPTABLEMODEL_H */
-
+#endif   /* HOPTABLEMODEL_H */

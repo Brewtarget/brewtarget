@@ -1,6 +1,7 @@
 /*
  * ScaleRecipeTool.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2015
+ * authors 2009-2021
+ * - Matt Young <mfsy@yahoo.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -16,22 +17,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #include "ScaleRecipeTool.h"
+
 #include <QMessageBox>
 #include <QButtonGroup>
+
 #include "brewtarget.h"
-#include "model/Recipe.h"
+#include "EquipmentListModel.h"
+#include "model/Equipment.h"
 #include "model/Fermentable.h"
+#include "model/Hop.h"
 #include "model/Mash.h"
 #include "model/MashStep.h"
-#include "model/Hop.h"
 #include "model/Misc.h"
-#include "model/Yeast.h"
+#include "model/Recipe.h"
 #include "model/Water.h"
-#include "database.h"
-#include "model/Equipment.h"
-#include "EquipmentListModel.h"
+#include "model/Yeast.h"
 #include "NamedEntitySortProxyModel.h"
 
 ScaleRecipeTool::ScaleRecipeTool(QWidget* parent) :
@@ -76,7 +77,7 @@ void ScaleRecipeTool::scale(Equipment* equip, double newEff)
    double oldEfficiency = recObs->efficiency_pct();
    double effRatio = oldEfficiency / newEff;
 
-   Database::instance().addToRecipe(recObs, equip);
+   this->recObs->setEquipment(equip);
    recObs->setBatchSize_l(newBatchSize_l);
    recObs->setBoilSize_l(equip->boilSize_l());
    recObs->setEfficiency_pct(newEff);

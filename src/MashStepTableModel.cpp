@@ -19,25 +19,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "MashStepTableModel.h"
 
 #include <QAbstractTableModel>
-#include <QWidget>
-#include <QModelIndex>
-#include <QVariant>
-#include <QTableView>
-#include <QItemDelegate>
-#include <QObject>
 #include <QComboBox>
-#include <QLineEdit>
-#include <QVector>
 #include <QHeaderView>
-#include "database.h"
-#include "model/MashStep.h"
-#include "MashStepTableModel.h"
-#include "Unit.h"
+#include <QItemDelegate>
+#include <QLineEdit>
+#include <QModelIndex>
+#include <QObject>
+#include <QTableView>
+#include <QVariant>
+#include <QVector>
+#include <QWidget>
+
 #include "brewtarget.h"
-#include "SimpleUndoableUpdate.h"
 #include "MainWindow.h"
+#include "model/MashStep.h"
+#include "PersistentSettings.h"
+#include "SimpleUndoableUpdate.h"
+#include "Unit.h"
 
 MashStepTableModel::MashStepTableModel(QTableView* parent)
    : QAbstractTableModel(parent),
@@ -124,6 +125,11 @@ void MashStepTableModel::setMash( Mash* m )
       parentTableWidget->resizeRowsToContents();
    }
 }
+
+Mash * MashStepTableModel::getMash() const {
+   return this->mashObs;
+}
+
 
 void MashStepTableModel::reorderMashStep(MashStep* step, int current)
 {
@@ -408,20 +414,22 @@ bool MashStepTableModel::setData( const QModelIndex& index, const QVariant& valu
    }
 }
 
-void MashStepTableModel::moveStepUp(int i)
-{
-   if( mashObs == nullptr || i == 0 || i >= steps.size() )
+void MashStepTableModel::moveStepUp(int i) {
+   if( this->mashObs == nullptr || i == 0 || i >= this->steps.size() ) {
       return;
+   }
 
-   Database::instance().swapMashStepOrder( steps[i], steps[i-1] );
+   this->mashObs->swapMashSteps(*this->steps[i], *this->steps[i-1]);
+   return;
 }
 
-void MashStepTableModel::moveStepDown(int i)
-{
-   if( mashObs == nullptr ||  i+1 >= steps.size() )
+void MashStepTableModel::moveStepDown(int i) {
+   if( this->mashObs == nullptr ||  i+1 >= steps.size() ) {
       return;
+   }
 
-   Database::instance().swapMashStepOrder( steps[i], steps[i+1] );
+   this->mashObs->swapMashSteps(*this->steps[i], *this->steps[i+1]);
+   return;
 }
 
 Unit::unitDisplay MashStepTableModel::displayUnit(int column) const
@@ -431,7 +439,7 @@ Unit::unitDisplay MashStepTableModel::displayUnit(int column) const
    if ( attribute.isEmpty() )
       return Unit::noUnit;
 
-   return static_cast<Unit::unitDisplay>(Brewtarget::option(attribute, Unit::noUnit, this->objectName(), Brewtarget::UNIT).toInt());
+   return static_cast<Unit::unitDisplay>(PersistentSettings::value(attribute, Unit::noUnit, this->objectName(), PersistentSettings::UNIT).toInt());
 }
 
 Unit::unitScale MashStepTableModel::displayScale(int column) const
@@ -441,7 +449,7 @@ Unit::unitScale MashStepTableModel::displayScale(int column) const
    if ( attribute.isEmpty() )
       return Unit::noScale;
 
-   return static_cast<Unit::unitScale>(Brewtarget::option(attribute, Unit::noScale, this->objectName(), Brewtarget::SCALE).toInt());
+   return static_cast<Unit::unitScale>(PersistentSettings::value(attribute, Unit::noScale, this->objectName(), PersistentSettings::SCALE).toInt());
 }
 
 // We need to:
@@ -456,8 +464,8 @@ void MashStepTableModel::setDisplayUnit(int column, Unit::unitDisplay displayUni
    if ( attribute.isEmpty() )
       return;
 
-   Brewtarget::setOption(attribute,displayUnit,this->objectName(),Brewtarget::UNIT);
-   Brewtarget::setOption(attribute,Unit::noScale,this->objectName(),Brewtarget::SCALE);
+   PersistentSettings::insert(attribute, displayUnit, this->objectName(), PersistentSettings::UNIT);
+   PersistentSettings::insert(attribute, Unit::noScale, this->objectName(), PersistentSettings::SCALE);
 
    /* Disabled cell-specific code
    for (int i = 0; i < rowCount(); ++i )
@@ -478,7 +486,7 @@ void MashStepTableModel::setDisplayScale(int column, Unit::unitScale displayScal
    if ( attribute.isEmpty() )
       return;
 
-   Brewtarget::setOption(attribute,displayScale,this->objectName(),Brewtarget::SCALE);
+   PersistentSettings::insert(attribute,displayScale, this->objectName(), PersistentSettings::SCALE);
 
    /* disabled cell-specific code
    for (int i = 0; i < rowCount(); ++i )

@@ -1,7 +1,8 @@
 /*
  * MashComboBox.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
+ * - Matt Young <mfsy@yahoo.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -17,24 +18,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef MASHCOMBOBOX_H
+#define MASHCOMBOBOX_H
+#pragma once
 
-#ifndef _MASHCOMBOBOX_H
-#define  _MASHCOMBOBOX_H
-
-class MashComboBox;
+#include <memory>
 
 #include <QComboBox>
-#include <QWidget>
 #include <QList>
 #include <QMetaProperty>
 #include <QVariant>
+#include <QWidget>
 
 // Forward declaration.
 class Mash;
 
 /*!
  * \class MashComboBox
- * \author Philip G. Lee
  *
  * \brief A combobox that is a view class for a list of mashes.
  *
@@ -42,34 +42,39 @@ class Mash;
  * a strict view class, since it contains model-related methods, so we should
  * prune out the model methods at some point.
  */
-class MashComboBox : public QComboBox
-{
-  Q_OBJECT
-  
-   public:
-      MashComboBox(QWidget* parent=0);
-      virtual ~MashComboBox() {}
-      //! Set the current index to that which corresponds to \b m.
-      void setIndexByMash(Mash* m);
-      //! Set the index.
-      void setIndex(int ndx);
-      //! Remove all mashs from the internal model.
-      void removeAllMashs();
-      //! Populate the internal model with all the database mashs.
-      void repopulateList();
-      
-      //! \return the selected mash.
-      Mash* getSelectedMash();
-      
-   public slots:
-      void changed(QMetaProperty, QVariant);
-      //! Add a mash to the internal model's list.
-      void addMash(Mash* m);
-      //! Remove a mash from the internal model's list.
-      void removeMash(Mash* m);
-      
-   private:
-      QList<Mash*> mashObs;
+class MashComboBox : public QComboBox {
+   Q_OBJECT
+
+public:
+   MashComboBox(QWidget * parent = 0);
+   virtual ~MashComboBox() = default;
+
+   //! Set the current index to that which corresponds to \b m.
+   void setIndexByMash(Mash * m);
+   //! Set the index.
+   void setIndex(int ndx);
+   //! Remove all mashs from the internal model.
+   void removeAllMashs();
+   //! Populate the internal model with all the database mashs.
+   void repopulateList();
+
+   //! \return the selected mash.
+   Mash * getSelectedMash();
+
+   //! Add a mash to the internal model's list.
+   void add(Mash * m);
+   //! Remove a mash from the internal model's list.
+   void remove(Mash * m);
+
+public slots:
+   void changed(QMetaProperty, QVariant);
+   //! Add a mash to the list.
+   void addMash(int mashId);
+   //! Remove a mash from the list.
+   void removeMash(int mashId, std::shared_ptr<QObject> object);
+
+private:
+   QList<Mash *> mashObs;
 };
 
 #endif

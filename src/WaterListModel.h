@@ -1,6 +1,7 @@
 /*
  * WaterListModel.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
+ * - Matt Young <mfsy@yahoo.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -16,13 +17,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef WATERLISTMODEL_H
+#define WATERLISTMODEL_H
+#pragma once
 
-#ifndef _WATERLISTMODEL_H
-#define _WATERLISTMODEL_H
+#include <memory>
+
 #include <QAbstractListModel>
-#include <QModelIndex>
 #include <QList>
 #include <QMetaProperty>
+#include <QModelIndex>
 #include <QVariant>
 
 // Forward declarations.
@@ -31,17 +35,16 @@ class Recipe;
 
 /*!
  * \class WaterListModel
- * \author Philip G. Lee
+ *
  *
  * \brief Model for a list of waters.
  */
-class WaterListModel : public QAbstractListModel
-{
+class WaterListModel : public QAbstractListModel {
    Q_OBJECT
-   
+
 public:
    WaterListModel(QWidget* parent = nullptr);
-   
+
    //! \brief Reimplemented from QAbstractListModel.
    virtual int rowCount( QModelIndex const& parent = QModelIndex() ) const;
    //! \brief Reimplemented from QAbstractListModel.
@@ -54,27 +57,28 @@ public:
    void addWaters(QList<Water*> waters);
    //! \brief Remove all waters from the list.
    void removeAll();
-   
+
    //! \brief Return the water at the index in the list.
    Water* at(int ndx);
    //! \brief Return the index of a particular water. DEPRECATED.
    int indexOf(Water* w);
    //! \brief Return the index of a particular water.
    QModelIndex find(Water* w);
-   
+   void remove(Water* water);
+
 public slots:
    void recChanged(QMetaProperty,QVariant);
    void waterChanged(QMetaProperty,QVariant);
    //! Add an water to the list.
-   void addWater(Water* water);
+   void addWater(int waterId);
    //! Remove an water from the list.
-   void removeWater(Water* water);
-   
+   void removeWater(int waterId, std::shared_ptr<QObject> object);
+
 private:
    QList<Water*> m_waters;
    Recipe* m_recipe;
-   
+
    void repopulateList();
 };
 
-#endif /* _WATERLISTMODEL_H */
+#endif

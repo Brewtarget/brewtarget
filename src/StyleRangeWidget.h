@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #ifndef STYLERANGEWIDGET_H
 #define STYLERANGEWIDGET_H
 
@@ -24,12 +23,12 @@
 #include <QSize>
 #include <QString>
 #include "RangedSlider.h"
+
 class QPaintEvent;
 class QMouseEvent;
 
 /*!
  * \brief Widget to display a recipe statistic with "in-range" context from the style.
- * \author Philip G. Lee
  */
 class StyleRangeWidget : public RangedSlider
 {
@@ -38,4 +37,4 @@ public:
    StyleRangeWidget(QWidget* parent=0);
 };
 
-#endif /*STYLERANGEWIDGET_H*/
+#endif

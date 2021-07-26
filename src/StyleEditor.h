@@ -1,7 +1,8 @@
 /*
  * StyleEditor.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -18,11 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#ifndef _STYLEEDITOR_H
-#define   _STYLEEDITOR_H
-
-class StyleEditor;
+#ifndef STYLEEDITOR_H
+#define STYLEEDITOR_H
+#pragma once
 
 #include <QDialog>
 #include <QMetaProperty>
@@ -36,12 +35,10 @@ class StyleSortFilterProxyModel;
 
 /*!
  * \class StyleEditor
- * \author Philip G. Lee
  *
  * \brief View/controller dialog to modify styles.
  */
-class StyleEditor : public QDialog, public Ui::styleEditor
-{
+class StyleEditor : public QDialog, public Ui::styleEditor {
    Q_OBJECT
 
 public:
@@ -68,5 +65,4 @@ private:
    void showChanges(QMetaProperty* prop = 0);
 };
 
-#endif   /* _STYLEEDITOR_H */
-
+#endif

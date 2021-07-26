@@ -1,6 +1,7 @@
 /*
  * RecipeFormatter.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -20,44 +21,40 @@
 
 #ifndef RECIPE_FORMATTER_H
 #define RECIPE_FORMATTER_H
+#pragma once
 
-class RecipeFormatter;
+#include <memory> // For PImpl
 
-#include <QString>
-#include <QStringList>
-#include <QObject>
-#include <QPrinter>
-#include <QPrintDialog>
-#include <QTextBrowser>
-#include <QDialog>
 #include <QFile>
+#include <QObject>
+#include <QPrintDialog>
+#include <QPrinter>
+#include <QString>
+
+#include "BtPrintPreview.h"
 #include "model/Recipe.h"
 
 /*!
  * \class RecipeFormatter
- * \author Philip G. Lee
  *
  * \brief View class that creates various text versions of a recipe.
  */
-class RecipeFormatter : public QObject
-{
+class RecipeFormatter : public BtPrintPreview {
    Q_OBJECT
+
 public:
+   RecipeFormatter(QWidget * parent = nullptr);
+   virtual ~RecipeFormatter();
 
-   enum { PRINT, PREVIEW, HTML, NUMACTIONS };
-
-   RecipeFormatter(QObject* parent=nullptr);
-   ~RecipeFormatter();
    //! Set the recipe to view.
    void setRecipe(Recipe* recipe);
-   //! Get a plaintext view.
-   QString getTextFormat();
-   //! Get an html view.
-   QString getHTMLFormat();
+
    //! Get a whole mess of html views
    QString getHTMLFormat( QList<Recipe*> recipes );
+
    //! Get a BBCode view. Why is this here?
    QString getBBCodeFormat();
+
    //! Generate a tooltip for a recipe
    QString getToolTip(Recipe* rec);
    QString getToolTip(Style* style);
@@ -68,65 +65,32 @@ public:
    QString getToolTip(Yeast* yeast);
    QString getToolTip(Water* water);
    QString getLabelToolTip();
-   //! Get the maximum number of characters in a list of strings.
-   unsigned int getMaxLength( QStringList* list );
-   //! Prepend a string with spaces until its final length is the given length.
-   QString padToLength( const QString &str, unsigned int length );
-   //! Same as \b padToLength but with multiple strings.
-   void padAllToMaxLength( QStringList* list, unsigned int padding=2 );
-   //! Return the text wrapped with the given length
-   QString wrapText( const QString &text, int wrapLength );
 
-   //! Send a printable version to the printer.
-   void print(QPrinter *mainPrinter, int action = PRINT, QFile* outFile=nullptr);
+   /*!
+    * \brief Show the print preview
+    */
+   void printPreview();
+
+   /*!
+    * \brief Print the recipe
+    * \param printer The printer to print to, should not be @c NULL
+    */
+   void print(QPrinter* printer);
+
+   /*!
+    * \brief Export the recipe to a HTML document
+    * \param file The output file opened for writing
+    */
+   void exportHtml(QFile* file);
 
 public slots:
    //! Put the plaintext view onto the clipboard.
    void toTextClipboard();
 
 private:
-   QString getTextSeparator();
-
-   QString buildHTMLHeader();
-   QString buildStatTableHtml();
-   QString buildStatTableTxt();
-   QString buildFermentableTableHtml();
-   QString buildFermentableTableTxt();
-   QString buildHopsTableHtml();
-   QString buildHopsTableTxt();
-   QString buildYeastTableHtml();
-   QString buildYeastTableTxt();
-   QString buildMashTableHtml();
-   QString buildMashTableTxt();
-   QString buildMiscTableHtml();
-   QString buildMiscTableTxt();
-   QString buildNotesHtml();
-   QString buildInstructionTableHtml();
-   QString buildInstructionTableTxt();
-   /* I am not sure how I want to implement these yet.
-    * I might just include the salts in the instructions table. Until I decide
-    * these stay commented out
-   QString buildWaterTableHtml();
-   QString buildWaterTableTxt();
-   QString buildSaltTableHtml();
-   QString buildSaltTableTxt();
-   */
-   QString buildBrewNotesHtml();
-   QString buildBrewNotesTxt();
-   QString buildHTMLFooter();
-
-   QList<Hop*> sortHopsByTime(Recipe* rec);
-   QList<Fermentable*> sortFermentablesByWeight(Recipe* rec);
-
-   QString* textSeparator;
-   Recipe* rec;
-
-   QPrinter* printer;
-   QTextBrowser* doc;
-   QDialog* docDialog;
-
-private slots:
-   bool loadComplete(bool ok);
+   // Private implementation details - see https://herbsutter.com/gotw/_100/
+   class impl;
+   std::unique_ptr<impl> pimpl;
 };
 
-#endif /*RECIPE_FORMATTER_H*/
+#endif

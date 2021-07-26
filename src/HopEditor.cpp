@@ -1,7 +1,8 @@
 /*
  * HopEditor.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2020
+ * authors 2009-2021
  * - Kregg K <gigatropolis@yahoo.com>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  * - Samuel Östling <MrOstling@gmail.com>
@@ -19,21 +20,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "HopEditor.h"
 
 #include <QtGui>
 #include <QIcon>
 #include <QInputDialog>
-#include "model/Hop.h"
-#include "HopEditor.h"
-#include "BtHorizontalTabs.h"
-#include "database.h"
-#include "config.h"
-#include "Unit.h"
-#include "brewtarget.h"
 
-HopEditor::HopEditor( QWidget* parent )
-   : QDialog(parent), obsHop(nullptr)
-{
+#include "brewtarget.h"
+#include "BtHorizontalTabs.h"
+#include "config.h"
+#include "database/ObjectStoreWrapper.h"
+#include "model/Hop.h"
+#include "Unit.h"
+
+HopEditor::HopEditor( QWidget* parent ) :
+   QDialog(parent),
+   obsHop(nullptr) {
    setupUi(this);
 
    this->tabWidget_editor->tabBar()->setStyle( new BtHorizontalTabs );
@@ -41,6 +43,8 @@ HopEditor::HopEditor( QWidget* parent )
    connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newHop() ) );
    connect( pushButton_save,   &QAbstractButton::clicked, this, &HopEditor::save );
    connect( pushButton_cancel, &QAbstractButton::clicked, this, &HopEditor::clearAndClose );
+
+   return;
 }
 
 void HopEditor::setHop( Hop* h )
@@ -66,7 +70,7 @@ void HopEditor::save()
       return;
    }
 
-   h->setName(lineEdit_name->text(), h->cacheOnly());
+   h->setName(lineEdit_name->text());
    h->setAlpha_pct(lineEdit_alpha->toSI());
    h->setAmount_kg(lineEdit_amount->toSI());
    h->setUse(static_cast<Hop::Use>(comboBox_use->currentIndex()));
@@ -85,7 +89,8 @@ void HopEditor::save()
    h->setNotes(textEdit_notes->toPlainText());
 
    if ( h->cacheOnly() ) {
-      h->insertInDatabase();
+      ObjectStoreWrapper::insert(*h);
+      h->setCacheOnly(false);
    }
 
    // do this late to make sure we've the row in the inventory table
@@ -105,44 +110,44 @@ void HopEditor::changed(QMetaProperty prop, QVariant /*val*/)
       showChanges(&prop);
 }
 
-void HopEditor::showChanges(QMetaProperty* prop)
-{
+void HopEditor::showChanges(QMetaProperty* prop) {
    bool updateAll = false;
    QString propName;
-   if( obsHop == nullptr )
+   if( obsHop == nullptr ) {
       return;
+   }
 
    if( prop == nullptr ) {
       updateAll = true;
-   }
-   else {
+   } else {
       propName = prop->name();
    }
 
-   if( propName == PropertyNames::NamedEntity::name || updateAll )
-   {
+   if( propName == PropertyNames::NamedEntity::name || updateAll ) {
       lineEdit_name->setText(obsHop->name());
       lineEdit_name->setCursorPosition(0);
       tabWidget_editor->setTabText(0, obsHop->name() );
-      if( ! updateAll )
+      if( ! updateAll ) {
          return;
+      }
    }
    if( propName == PropertyNames::Hop::alpha_pct || updateAll ) {
       lineEdit_alpha->setText(obsHop);
-      if( ! updateAll )
+      if( ! updateAll ) {
          return;
+      }
    }
-   if( propName == "amount_kg" || updateAll ) {
+   if( propName == PropertyNames::Hop::amount_kg || updateAll ) {
       lineEdit_amount->setText(obsHop);
       if( ! updateAll )
          return;
    }
-   if( propName == "inventory" || updateAll ) {
+   if( propName == PropertyNames::NamedEntityWithInventory::inventory || updateAll ) {
       lineEdit_inventory->setText(obsHop);
       if( ! updateAll )
          return;
    }
-   if( propName == "use" || updateAll ) {
+   if( propName == PropertyNames::Hop::use || updateAll ) {
       comboBox_use->setCurrentIndex(obsHop->use());
       if( ! updateAll )
          return;
@@ -152,12 +157,12 @@ void HopEditor::showChanges(QMetaProperty* prop)
       if( ! updateAll )
          return;
    }
-   if( propName == "type" || updateAll ) {
+   if( propName == PropertyNames::Hop::type || updateAll ) {
       comboBox_type->setCurrentIndex(obsHop->type());
       if( ! updateAll )
          return;
    }
-   if( propName == "form" || updateAll ) {
+   if( propName == PropertyNames::Hop::form || updateAll ) {
       comboBox_form->setCurrentIndex(obsHop->form());
       if( ! updateAll )
          return;
@@ -172,7 +177,7 @@ void HopEditor::showChanges(QMetaProperty* prop)
       if( ! updateAll )
          return;
    }
-   if( propName == "origin" || updateAll )
+   if( propName == PropertyNames::Hop::origin || updateAll )
    {
       lineEdit_origin->setText(obsHop->origin());
       lineEdit_origin->setCursorPosition(0);
@@ -204,31 +209,33 @@ void HopEditor::showChanges(QMetaProperty* prop)
       if( ! updateAll )
          return;
    }
-   if( propName == "notes" || updateAll ) {
+   if( propName == PropertyNames::Hop::notes || updateAll ) {
       textEdit_notes->setPlainText(obsHop->notes());
       if( ! updateAll )
          return;
    }
 }
 
-void HopEditor::newHop(QString folder)
-{
+
+void HopEditor::newHop(QString folder) {
    QString name = QInputDialog::getText(this, tr("Hop name"),
                                           tr("Hop name:"));
-   if( name.isEmpty() )
+   if( name.isEmpty() ) {
       return;
+   }
 
    Hop* h = new Hop(name,true);
 
-   if ( ! folder.isEmpty() )
+   if ( ! folder.isEmpty() ) {
       h->setFolder(folder);
+   }
 
    setHop(h);
    show();
+   return;
 }
 
-void HopEditor::newHop()
-{
+void HopEditor::newHop() {
    newHop(QString());
+   return;
 }
-

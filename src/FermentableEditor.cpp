@@ -1,7 +1,8 @@
 /*
  * FermentableEditor.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
  * - Kregg K <gigatropolis@yahoo.com>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  * - Samuel Östling <MrOstling@gmail.com>
@@ -19,20 +20,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "FermentableEditor.h"
 
 #include <QIcon>
 #include <QInputDialog>
-#include "FermentableEditor.h"
-#include "BtHorizontalTabs.h"
-#include "model/Fermentable.h"
-#include "database.h"
-#include "config.h"
-#include "Unit.h"
-#include "brewtarget.h"
 
-FermentableEditor::FermentableEditor( QWidget* parent )
-        : QDialog(parent), obsFerm(nullptr)
-{
+#include "brewtarget.h"
+#include "BtHorizontalTabs.h"
+#include "config.h"
+#include "database/ObjectStoreWrapper.h"
+#include "model/Fermentable.h"
+#include "Unit.h"
+
+FermentableEditor::FermentableEditor( QWidget* parent ) :
+   QDialog(parent), obsFerm(nullptr) {
    setupUi(this);
 
    this->tabWidget_editor->tabBar()->setStyle( new BtHorizontalTabs );
@@ -40,15 +41,15 @@ FermentableEditor::FermentableEditor( QWidget* parent )
    connect( pushButton_new,    SIGNAL( clicked() ),       this, SLOT( newFermentable() ) );
    connect( pushButton_save,   &QAbstractButton::clicked, this, &FermentableEditor::save );
    connect( pushButton_cancel, &QAbstractButton::clicked, this, &FermentableEditor::clearAndClose );
+   return;
 }
 
-void FermentableEditor::setFermentable( Fermentable* newFerm )
-{
-   if(newFerm)
-   {
+void FermentableEditor::setFermentable( Fermentable* newFerm ) {
+   if(newFerm) {
       obsFerm = newFerm;
       showChanges();
    }
+   return;
 }
 
 void FermentableEditor::save()
@@ -59,7 +60,7 @@ void FermentableEditor::save()
       return;
    }
 
-   obsFerm->setName(lineEdit_name->text(), obsFerm->cacheOnly());
+   obsFerm->setName(lineEdit_name->text());
 
    // NOTE: the following assumes that Fermentable::Type is enumerated in the same
    // order as the combobox.
@@ -82,7 +83,8 @@ void FermentableEditor::save()
    obsFerm->setNotes( textEdit_notes->toPlainText() );
 
    if ( obsFerm->cacheOnly() ) {
-      obsFerm->insertInDatabase();
+      ObjectStoreWrapper::insert(*obsFerm);
+      obsFerm->setCacheOnly(false);
    }
 
    // I could do this in the database code, but it makes sense to me here.
@@ -97,30 +99,27 @@ void FermentableEditor::clearAndClose()
    setVisible(false); // Hide the window.
 }
 
-void FermentableEditor::showChanges(QMetaProperty* metaProp)
-{
-   if( !obsFerm )
+void FermentableEditor::showChanges(QMetaProperty* metaProp) {
+   if( !obsFerm ) {
       return;
+   }
 
    QString propName;
    bool updateAll = false;
-
    if( metaProp == nullptr ) {
       updateAll = true;
-   }
-   else
-   {
+   } else {
       propName = metaProp->name();
    }
 
-   if( propName == PropertyNames::NamedEntity::name || updateAll )
-   {
+   if( propName == PropertyNames::NamedEntity::name || updateAll ) {
       lineEdit_name->setText(obsFerm->name());
       lineEdit_name->setCursorPosition(0);
 
       tabWidget_editor->setTabText(0, obsFerm->name() );
-      if( ! updateAll )
+      if( ! updateAll ) {
          return;
+      }
    }
    if( propName == "type" || updateAll) {
       // NOTE: assumes the comboBox entries are in same order as Fermentable::Type
@@ -215,22 +214,25 @@ void FermentableEditor::showChanges(QMetaProperty* metaProp)
    }
 }
 
-void FermentableEditor::newFermentable(QString folder)
-{
+void FermentableEditor::newFermentable(QString folder)  {
    QString name = QInputDialog::getText(this, tr("Fermentable name"),
                                           tr("Fermentable name:"));
-   if( name.isEmpty() )
+   if( name.isEmpty() ) {
       return;
+   }
 
    Fermentable* f = new Fermentable(name,true);
 
-   if ( ! folder.isEmpty() )
+   if ( ! folder.isEmpty() ) {
       f->setFolder(folder);
+   }
 
    setFermentable(f);
    show();
+   return;
 }
-void FermentableEditor::newFermentable()
-{
+
+void FermentableEditor::newFermentable() {
    newFermentable(QString());
+   return;
 }

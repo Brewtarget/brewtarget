@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef _RADARCHART_H
-#define _RADARCHART_H
+#ifndef RADARCHART_H
+#define RADARCHART_H
 
 #include <memory> // For PImpl
 

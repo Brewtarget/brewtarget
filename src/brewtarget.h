@@ -21,30 +21,54 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef _BREWTARGET_H
-#define _BREWTARGET_H
+#ifndef BREWTARGET_H
+#define BREWTARGET_H
 
 #define CONFIG_VERSION 1
 
-// need to use this to turn on mac keyboard shortcuts (see http://doc.qt.nokia.com/4.7-snapshot/qtglobal.html#qt_set_sequence_auto_mnemonic)
+#define BTICON ":/images/brewtarget.svg"
+//#define ICON96 ":/images/BrewtargetIcon_96.png"
+#define GLASS ":/images/glass2.png"
+#define SMALLBARLEY ":/images/smallBarley.svg"
+#define SMALLHOP ":/images/smallHop.svg"
+#define SMALLWATER ":/images/smallWater.svg"
+#define SMALLYEAST ":/images/smallYeast.svg"
+#define SMALLKETTLE ":/images/smallKettle.svg"
+#define SMALLQUESTION ":/images/smallQuestion.svg"
+#define SMALLSTYLE ":/images/smallStyle.svg"
+#define SMALLPLUS ":/images/smallPlus.svg"
+#define SMALLMINUS ":/images/smallMinus.svg"
+#define SMALLARROW ":/images/smallArrow.svg"
+#define SMALLINFO ":/images/smallInfo.svg"
+#define SMALLOUTARROW ":/images/smallOutArrow.svg"
+#define SHRED ":/images/editshred.svg"
+#define EXITPNG ":/images/exit.svg"
+#define SAVEPNG ":/images/filesave.svg"
+#define SAVEDIRTYPNG ":/images/filesavedirty.svg"
+#define CLOCKPNG ":/images/clock.svg"
+#define SOUND ":/images/sound.png"
+#define STOP ":/images/alarm_stop.png"
+
+// need to use this to turn on Mac keyboard shortcuts (see https://doc.qt.io/qt-5/qkeysequence.html#qt_set_sequence_auto_mnemonic)
 extern void qt_set_sequence_auto_mnemonic(bool b);
 
-#include <QObject>
 #include <QApplication>
-#include <QString>
-#include <QFile>
+#include <QDateTime>
+#include <QDebug>
 #include <QDir>
 #include <QDomDocument>
-#include <QTranslator>
-#include <QTextStream>
-#include <QDateTime>
-#include <QSettings>
+#include <QFile>
+#include <QList>
 #include <QMenu>
 #include <QMetaProperty>
-#include <QList>
-#include <QDebug>
+#include <QObject>
+#include <QSettings>
+#include <QString>
+#include <QTextStream>
+#include <QTranslator>
+
 #include "UnitSystem.h"
-#include "Log.h"
+#include "Logging.h"
 
 class NamedEntity;
 class MainWindow;
@@ -56,11 +80,13 @@ Q_DECLARE_METATYPE( QMetaProperty )
  * \class Brewtarget
  *
  * \brief The main class. Figures out stuff from the system, formats things appropriately, handles translation, etc.
+ *
+ * TODO: Lots of things in this class belong elsewhere...
  */
 class Brewtarget : public QObject
 {
    Q_OBJECT
-   Q_ENUMS(DBTypes)
+   Q_ENUMS(DbType)
    Q_ENUMS(delOptions)
 
    friend class OptionDialog;
@@ -69,7 +95,7 @@ class Brewtarget : public QObject
    friend class RecipeFormatter;
    friend class Unit;
    friend class Database;
-   friend class BeerXML;
+
    friend class MainWindow;
    friend class Testing;
 
@@ -86,92 +112,12 @@ public:
    enum DiastaticPowerUnitType {LINTNER, WK};
    //! \brief The formula used to get IBUs.
    enum IbuType {TINSETH, RAGER, NOONAN};
-   //! \brief Controls how units and scales are stored in the options file
-   enum iUnitOps {
-      NOOP = -1 ,
-      SCALE,
-      UNIT
-   };
 
    enum RangeType {
       DENSITY,
       COLOR
    };
 
-   //! \brief The database tables. These are heavily used by the TableSchema and DatabaseSchema classes
-   //! NOTE: If you add a table to this list, do NOT forget to update Brewtarget::dbTableToName with the
-   //! new name(s)
-   enum DBTable{
-      //! None of the tables. 0
-      NOTABLE,
-      // Meta tables first
-      SETTINGTABLE,
-
-      // BeerXML tables next
-      EQUIPTABLE,
-      FERMTABLE,
-      HOPTABLE,
-      MISCTABLE,
-      STYLETABLE,
-      YEASTTABLE,
-      WATERTABLE,
-      MASHTABLE,
-      MASHSTEPTABLE,
-      RECTABLE,
-      BREWNOTETABLE,
-      INSTRUCTIONTABLE,
-      SALTTABLE,
-
-      // then the bt_* tables
-      BT_EQUIPTABLE,
-      BT_FERMTABLE,
-      BT_HOPTABLE,
-      BT_MISCTABLE,
-      BT_STYLETABLE,
-      BT_YEASTTABLE,
-      BT_WATERTABLE,
-
-      // then the *_in_recipe tables
-      FERMINRECTABLE,
-      HOPINRECTABLE,
-      MISCINRECTABLE,
-      WATERINRECTABLE,
-      YEASTINRECTABLE,
-      INSTINRECTABLE,
-      SALTINRECTABLE,
-
-      // then the child tables
-      EQUIPCHILDTABLE,
-      FERMCHILDTABLE,
-      HOPCHILDTABLE,
-      MISCCHILDTABLE,
-      RECIPECHILDTABLE,
-      STYLECHILDTABLE,
-      WATERCHILDTABLE,
-      YEASTCHILDTABLE,
-
-      // finally the inventory tables
-      FERMINVTABLE,
-      HOPINVTABLE,
-      MISCINVTABLE,
-      YEASTINVTABLE
-   };
-
-   static QStringList dbTableToName;
-   //! \brief Supported databases. I am not 100% sure I'm digging this
-   //  solution, but this is more extensible than what I was doing previously
-   enum DBTypes {
-      NODB = 0,  // Popularity was over rated
-      SQLITE,    // compact, fast and a little loose
-      PGSQL,     // big, powerful, uptight and a little stodgy
-      ALLDB      // Keep this one the last one, or bad things will happen
-   };
-
-   //! \brief the user can select what delete means
-   enum delOptions {
-      ANCESTOR,   // delete the recipe and all its ancestors
-      DESCENDANT  // delete only the recipe (orphan and delete)
-   };
    //! \return the data directory
    static QDir getDataDir();
    //! \return the doc directory
@@ -182,12 +128,21 @@ public:
    static QDir getUserDataDir();
    //! \return The System path for users applicationpath. on windows: c:\\users\\<USERNAME>\\AppData\\Roaming\\<APPNAME>
    static QDir getDefaultUserDataDir();
+   /**
+    * \return the resource directory where some files that ship with Brewtarget live (default DB, sounds, translations)
+    *
+    *         Most resources are compiled into the app with the Qt Resource System (see
+    *         https://doc.qt.io/qt-5/resources.html) but, for some files, we want the user also to be able to access
+    *         the file directly.  Such files are stored in this directory.
+    */
+   static QDir getResourceDir();
+
    /*!
     * \brief Blocking call that executes the application.
     * \param userDirectory If !isEmpty, overwrites the current settings.
     * \return Exit code from the application.
     */
-   static int run(const QString &userDirectory = QString());
+   static int run();
 
    static double toDouble(QString text, bool* ok = nullptr);
    static double toDouble(const NamedEntity* element, QString attribute, QString caller);
@@ -283,7 +238,7 @@ public:
 
    //! \brief Read options from file. This is deprecated, but we need it
    // around for the conversion
-   static void convertPersistentOptions();
+//   static void convertPersistentOptions();
    //! \brief Every so often, we need to update the config file itself. This does that.
    static void updateConfig();
    //! \brief Read options from options. This replaces readPersistentOptions()
@@ -292,7 +247,7 @@ public:
    static void saveSystemOptions();
 
    /*!
-    *  \brief Loads the brewtarget translator with two letter ISO 639-1 code.
+    *  \brief Loads the Brewtarget translator with two letter ISO 639-1 code.
     *
     *  For example, for spanish, it would
     *  be 'es'. Currently, this does NO checking to make sure the locale
@@ -312,12 +267,6 @@ public:
     */
    static const QString& getSystemLanguage();
 
-   static bool  hasOption(QString attribute, const QString section = QString(), iUnitOps ops = NOOP);
-   static void  setOption(QString attribute, QVariant value, const QString section = QString(), iUnitOps ops = NOOP);
-   static QVariant option(QString attribute, QVariant default_value = QVariant(), QString section = QString(), iUnitOps = NOOP);
-   static void removeOption(QString attribute, QString section=QString());
-
-   static QString generateName(QString attribute, const QString section, iUnitOps ops);
 
    // Grr. Shortcuts never, ever pay  off
    static QMenu* setupColorMenu(QWidget* parent, Unit::unitDisplay unit);
@@ -330,26 +279,11 @@ public:
    static QMenu* setupTimeMenu(QWidget* parent, Unit::unitScale scale);
    static void generateAction(QMenu* menu, QString text, QVariant data, QVariant currentVal, QActionGroup* qgrp = nullptr);
 
-   /*!
-    * \brief If we are supporting multiple databases, we need some way to
-    * figure out which database we are using. I still don't know that this
-    * will be the final implementation -- I can't help but think I should be
-    * subclassing something
-    */
-   static Brewtarget::DBTypes dbType();
-   /*!
-    * \brief Different databases use different values for true and false.
-    * These two methods handle that difference, in a marginally extensible way
-    */
-   static QString dbTrue(Brewtarget::DBTypes whichDb = Brewtarget::NODB);
-   static QString dbFalse(Brewtarget::DBTypes whichDb = Brewtarget::NODB);
-   static QString dbBoolean(bool flag, Brewtarget::DBTypes whichDb = Brewtarget::NODB);
-
    //! \return the main window.
    static MainWindow* mainWindow();
 
 private:
-   static MainWindow* _mainWindow;
+   static MainWindow* m_mainWindow;
    static QDomDocument* optionsDoc;
    static QTranslator* defaultTrans;
    static QTranslator* btTrans;
@@ -359,15 +293,8 @@ private:
    static QFile pidFile;
    static bool _isInteractive;
 
-   static DBTypes _dbType;
-
    //! \brief If this option is false, do not bother the user about new versions.
    static bool checkVersion;
-
-   /*! Stores the date that we last asked the user to merge the
-    *  data-space database to the user-space database.
-    */
-   static QDateTime lastDbMergeRequest;
 
    //! \brief Where the user says the database files are
    static QDir userDataDir;
@@ -394,26 +321,20 @@ private:
    /*!
     * \brief Run before showing MainWindow, does all system setup.
     *
-    * Creates a PID file, sets config directory, reads system options,
+    * Creates a PID file, reads system options,
     * ensures the data directories and files exist, loads translations,
     * and loads database.
     *
     * \returns false if anything goes awry, true if it's ok to start MainWindow
     */
-   static bool initialize(const QString &userDirectory = QString());
+   static bool initialize();
+
    /*!
     * \brief Run after QApplication exits to clean up shit, close database, etc.
     */
    static void cleanup();
 
-
-   /*!
-    * \brief Checks if another instance is already running.
-    *
-    * Currently only works on Unix systems.
-    */
-   static bool instanceRunning();
-
+public:
    /*!
     * \brief If false, run Brewtarget in a way that requires no user interaction
     *
@@ -424,26 +345,23 @@ private:
    //! \brief Set the mode to an interactive or non-interactive state
    static void setInteractive(bool val);
 
+private:
    /*!
     *  \brief Helper to get option values from XML.
     *
     *  If \b hasOption is not null,
     *  is set to true iff the option exists in the document.
     */
-   static QString getOptionValue(const QDomDocument& optionsDoc,
+/*   static QString getOptionValue(const QDomDocument& optionsDoc,
                                  const QString& option,
                                  bool* hasOption = nullptr);
-
+*/
    /*!
-    *  \brief Copies the user xml files to another directory.
+    *  \brief Copies the SQLite database file to another directory.
     *  \returns false iff the copy is unsuccessful.
     */
    static bool copyDataFiles(const QDir newPath);
 
-   //! \brief Ensure our directories exist.
-   static bool ensureDirectoriesExist();
-   //! \brief Create a directory if it doesn't exist, popping a error dialog if creation fails
-   static bool createDir(QDir dir, QString errText = nullptr);
 
    //! \brief Load translation files.
    static void loadTranslations();
@@ -462,7 +380,6 @@ private:
    static Unit::unitDisplay getDiastaticPowerUnit();
 };
 
-Q_DECLARE_METATYPE( Brewtarget::DBTable )
 
 /*!
  * \mainpage Brewtarget Source Code Documentation
@@ -470,9 +387,6 @@ Q_DECLARE_METATYPE( Brewtarget::DBTable )
  * \section secIntro Introduction
  *
  * Brewtarget is a cross-platform open source beer recipe software suite.
- * Our aim is to make "free as in beer" equal to "free as in speech" and
- * also to make a damn fine piece of software.
- *
  */
 
-#endif   /* _BREWTARGET_H */
+#endif

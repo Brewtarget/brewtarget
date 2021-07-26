@@ -22,30 +22,39 @@
  */
 #ifndef MODEL_YEAST_H
 #define MODEL_YEAST_H
+#pragma once
 
+#include <QSqlRecord>
 #include <QString>
 #include <QStringList>
 
 #include "model/NamedEntityWithInventory.h"
 
-namespace PropertyNames::Yeast { static char const * const addToSecondary = "addToSecondary"; /* previously kpropAddToSec */ }
-namespace PropertyNames::Yeast { static char const * const amount = "amount"; /* previously kpropAmount */ }
-namespace PropertyNames::Yeast { static char const * const amountIsWeight = "amountIsWeight"; /* previously kpropAmtIsWgt */ }
-namespace PropertyNames::Yeast { static char const * const attenuation_pct = "attenuation_pct"; /* previously kpropAttenPct */ }
-namespace PropertyNames::Yeast { static char const * const bestFor = "bestFor"; /* previously kpropBestFor */ }
-namespace PropertyNames::Yeast { static char const * const flocculation = "flocculation"; /* previously kpropFloc */ }
-namespace PropertyNames::Yeast { static char const * const flocculationString = "flocculationString"; /* previously kpropFlocString */ }
-namespace PropertyNames::Yeast { static char const * const form = "form"; /* previously kpropForm */ }
-namespace PropertyNames::Yeast { static char const * const formString = "formString"; /* previously kpropFormString */ }
-namespace PropertyNames::Yeast { static char const * const laboratory = "laboratory"; /* previously kpropLab */ }
-namespace PropertyNames::Yeast { static char const * const maxReuse = "maxReuse"; /* previously kpropMaxReuse */ }
-namespace PropertyNames::Yeast { static char const * const maxTemperature_c = "maxTemperature_c"; /* previously kpropMaxTemp */ }
-namespace PropertyNames::Yeast { static char const * const minTemperature_c = "minTemperature_c"; /* previously kpropMinTemp */ }
-namespace PropertyNames::Yeast { static char const * const notes = "notes"; /* previously kpropNotes */ }
-namespace PropertyNames::Yeast { static char const * const productID = "productID"; /* previously kpropProductID */ }
-namespace PropertyNames::Yeast { static char const * const timesCultured = "timesCultured"; /* previously kpropTimesCultd */ }
-namespace PropertyNames::Yeast { static char const * const typeString = "typeString"; /* previously kpropTypeString */ }
-namespace PropertyNames::Yeast { static char const * const type = "type"; /* previously kpropType */ }
+//======================================================================================================================
+//========================================== Start of property name constants ==========================================
+#define AddPropertyName(property) namespace PropertyNames::Yeast {static char const * const property = #property; }
+AddPropertyName(addToSecondary)
+AddPropertyName(amount)
+AddPropertyName(amountIsWeight)
+AddPropertyName(attenuation_pct)
+AddPropertyName(bestFor)
+AddPropertyName(flocculation)
+AddPropertyName(flocculationString)
+AddPropertyName(form)
+AddPropertyName(formString)
+AddPropertyName(laboratory)
+AddPropertyName(maxReuse)
+AddPropertyName(maxTemperature_c)
+AddPropertyName(minTemperature_c)
+AddPropertyName(notes)
+AddPropertyName(productID)
+AddPropertyName(timesCultured)
+AddPropertyName(typeString)
+AddPropertyName(type)
+#undef AddPropertyName
+//=========================================== End of property name constants ===========================================
+//======================================================================================================================
+
 
 /*!
  * \class Yeast
@@ -56,10 +65,8 @@ class Yeast : public NamedEntityWithInventory {
    Q_OBJECT
    Q_CLASSINFO("signal", "yeasts")
 
-   friend class Database;
-   friend class BeerXML;
-   friend class YeastDialog;
 
+   friend class YeastDialog;
 public:
    //! \brief What beverage the yeast is for.
    enum Type {Ale, Lager, Wheat, Wine, Champagne};
@@ -69,7 +76,10 @@ public:
    enum Flocculation {Low, Medium, High, Very_High}; // NOTE: BeerXML expects a space in "Very High", but not possible with enum. What to do?
    Q_ENUMS( Type Form Flocculation )
 
-   Yeast(QString name, bool cache = true);
+   Yeast(QString name = "", bool cache = true);
+   Yeast(NamedParameterBundle const & namedParameterBundle);
+   Yeast(Yeast const & other);
+
    virtual ~Yeast() = default;
 
    //! \brief The \c Type.
@@ -119,6 +129,7 @@ public:
    void setType( Type t);
    void setForm( Form f);
    void setAmount( double var);
+   virtual void setInventoryAmount(double var);
    void setInventoryQuanta(int var);
    void setAmountIsWeight( bool var);
    void setLaboratory( const QString& var);
@@ -141,6 +152,7 @@ public:
    const QString formString() const;
    const QString formStringTr() const;
    double amount() const;
+   virtual double inventory() const;
    bool amountIsWeight() const;
    QString laboratory() const;
    QString productID() const;
@@ -156,27 +168,17 @@ public:
    int maxReuse() const;
    bool addToSecondary() const;
 
-   static QString classNameStr();
-
-   NamedEntity * getParent();
-   virtual int insertInDatabase();
-   virtual void removeFromDatabase();
+   virtual Recipe * getOwningRecipe();
 
 signals:
 
 protected:
    virtual bool isEqualTo(NamedEntity const & other) const;
+   virtual ObjectStore & getObjectStoreTypedInstance() const;
 
 private:
-//   Yeast(Brewtarget::DBTable table, int key);
-   Yeast(TableSchema* table, QSqlRecord rec, int t_key = -1);
-   Yeast(Yeast const & other);
-
-   QString m_typeString;
    Type m_type;
-   QString m_formString;
    Form m_form;
-   QString m_flocculationString;
    Flocculation m_flocculation;
    double m_amount;
    bool m_amountIsWeight;
@@ -190,43 +192,9 @@ private:
    int m_timesCultured;
    int m_maxReuse;
    bool m_addToSecondary;
-
-   static QStringList types;
-   static QStringList forms;
-   static QStringList flocculations;
-
-   // Methods
-   bool isValidType(const QString& str) const;
-   bool isValidForm(const QString& str) const;
-   bool isValidFlocculation(const QString& str) const;
+   int m_inventory_id;
 };
 
 Q_DECLARE_METATYPE( QList<Yeast*> )
-/*
-inline bool YeastPtrLt( Yeast* lhs, Yeast* rhs)
-{
-   return *lhs < *rhs;
-}
 
-inline bool YeastPtrEq( Yeast* lhs, Yeast* rhs)
-{
-   return *lhs == *rhs;
-}
-
-struct Yeast_ptr_cmp
-{
-   bool operator()( Yeast* lhs, Yeast* rhs)
-   {
-      return *lhs < *rhs;
-   }
-};
-
-struct Yeast_ptr_equals
-{
-   bool operator()( Yeast* lhs, Yeast* rhs )
-   {
-      return *lhs == *rhs;
-   }
-};
-*/
-#endif   // YEAST_H
+#endif

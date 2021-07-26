@@ -1,6 +1,6 @@
 /*
  * BtLineEdit.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2020:
+ * authors 2009-2021:
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -24,13 +24,15 @@
 #include <QDebug>
 #include <QStyle>
 
-#include "brewtarget.h"
-#include "UnitSystem.h"
-#include "Unit.h"
 #include "Algorithms.h"
+#include "brewtarget.h"
+#include "PersistentSettings.h"
+#include "Unit.h"
 
-const int min_text_size = 8;
-const int max_text_size = 50;
+namespace {
+   int const min_text_size = 8;
+   int const max_text_size = 50;
+}
 
 BtLineEdit::BtLineEdit(QWidget *parent, Unit::UnitType type, QString const & maximalDisplayString) :
    QLineEdit(parent),
@@ -114,9 +116,7 @@ void BtLineEdit::lineChanged(Unit::unitDisplay oldUnit, Unit::unitScale oldScale
    }
 }
 
-double BtLineEdit::toSI(Unit::unitDisplay oldUnit,Unit::unitScale oldScale,bool force)
-{
-   UnitSystem const * temp;
+double BtLineEdit::toSI(Unit::unitDisplay oldUnit,Unit::unitScale oldScale,bool force) {
    Unit const *       works;
    Unit::unitDisplay dspUnit  = oldUnit;
    Unit::unitScale   dspScale = oldScale;
@@ -129,19 +129,18 @@ double BtLineEdit::toSI(Unit::unitDisplay oldUnit,Unit::unitScale oldScale,bool 
       if ( _forceUnit != Unit::noUnit )
          dspUnit = _forceUnit;
       else
-         dspUnit   = (Unit::unitDisplay)Brewtarget::option(_editField, Unit::noUnit, _section, Brewtarget::UNIT).toInt();
+         dspUnit   = static_cast<Unit::unitDisplay>(PersistentSettings::value(_editField, Unit::noUnit, _section, PersistentSettings::UNIT).toInt());
 
       // If the display scale is forced, use this scale as the default one.
       if( _forceScale != Unit::noScale )
          dspScale = _forceScale;
       else
-         dspScale  = (Unit::unitScale)Brewtarget::option(_editField, Unit::noScale, _section, Brewtarget::SCALE).toInt();
+         dspScale  = static_cast<Unit::unitScale>(PersistentSettings::value(_editField, Unit::noScale, _section, PersistentSettings::SCALE).toInt());
    }
 
    // Find the unit system containing dspUnit
-   temp = Brewtarget::findUnitSystem(_units,dspUnit);
-   if ( temp )
-   {
+   UnitSystem const * temp = Brewtarget::findUnitSystem(_units, dspUnit);
+   if ( temp ) {
       // If we found it, find the unit referred by dspScale
       works = temp->scaleUnit(dspScale);
       if (! works )
@@ -171,12 +170,13 @@ QString BtLineEdit::displayAmount( double amount, int precision)
    Unit::unitDisplay unitDsp;
    Unit::unitScale scale;
 
-   if ( _forceUnit != Unit::noUnit )
+   if ( _forceUnit != Unit::noUnit ) {
       unitDsp = _forceUnit;
-   else
-      unitDsp  = (Unit::unitDisplay)Brewtarget::option(_editField, Unit::noUnit, _section, Brewtarget::UNIT).toInt();
+   } else {
+      unitDsp  = static_cast<Unit::unitDisplay>(PersistentSettings::value(_editField, Unit::noUnit, _section, PersistentSettings::UNIT).toInt());
+   }
 
-   scale    = (Unit::unitScale)Brewtarget::option(_editField, Unit::noScale, _section, Brewtarget::SCALE).toInt();
+   scale = static_cast<Unit::unitScale>(PersistentSettings::value(_editField, Unit::noScale, _section, PersistentSettings::SCALE).toInt());
 
    // I find this a nice level of abstraction. This lets all of the setText()
    // methods make a single call w/o having to do the logic for finding the
@@ -222,10 +222,9 @@ void BtLineEdit::setText( NamedEntity* element, int precision )
    double amount = 0.0;
    QString display;
 
-   if ( _type == Unit::String )
+   if ( _type == Unit::String ) {
       display = element->property(_editField.toLatin1().constData()).toString();
-   else if ( element->property(_editField.toLatin1().constData()).canConvert(QVariant::Double) )
-   {
+   } else if ( element->property(_editField.toLatin1().constData()).canConvert(QVariant::Double) ) {
       bool ok = false;
       // Get the value from the element, and put it in a QVariant
       QVariant tmp = element->property(_editField.toLatin1().constData());
@@ -241,32 +240,27 @@ void BtLineEdit::setText( NamedEntity* element, int precision )
       }
 
       display = displayAmount(amount, precision);
-   }
-   else
-   {
+   } else {
       display = "?";
    }
 
    QLineEdit::setText(display);
-   this->setDisplaySize( _type == Unit::String);
+   this->setDisplaySize(_type == Unit::String);
    return;
 }
 
-void BtLineEdit::setText( QString amount, int precision)
-{
-   double amt;
+void BtLineEdit::setText( QString amount, int precision) {
    bool ok = false;
    bool force = false;
 
    if ( _type == Unit::String ) {
       QLineEdit::setText(amount);
       force = true;
-   }
-   else
-   {
-      amt = Brewtarget::toDouble(amount,&ok);
-      if ( !ok )
+   } else {
+      double amt = Brewtarget::toDouble(amount,&ok);
+      if ( !ok ) {
          qWarning() << QString("%1 could not convert %2 (%3:%4) to double").arg(Q_FUNC_INFO).arg(amount).arg(_section).arg(_editField);
+      }
       QLineEdit::setText(displayAmount(amt, precision));
    }
 
@@ -274,8 +268,7 @@ void BtLineEdit::setText( QString amount, int precision)
    return;
 }
 
-void BtLineEdit::setText( QVariant amount, int precision)
-{
+void BtLineEdit::setText( QVariant amount, int precision) {
    setText(amount.toString(), precision);
    return;
 }
@@ -345,8 +338,7 @@ void BtLineEdit::setForcedScale( QString forcedScale )
    _forceScale = (Unit::unitScale)unitEnum.keyToValue(forcedScale.toStdString().c_str());
 }
 
-void BtLineEdit::calculateDisplaySize(QString const & maximalDisplayString)
-{
+void BtLineEdit::calculateDisplaySize(QString const & maximalDisplayString) {
    //
    // By default, some, but not all, boxes have a min and max width of 100 pixels, but this is not wide enough on a
    // high DPI display.  We instead calculate width here based on font-size - but without reducing any existing minimum
@@ -374,8 +366,7 @@ void BtLineEdit::calculateDisplaySize(QString const & maximalDisplayString)
    return;
 }
 
-void BtLineEdit::setDisplaySize(bool recalculate)
-{
+void BtLineEdit::setDisplaySize(bool recalculate) {
    if ( recalculate ) {
       QString sizing_string = text();
 
@@ -385,8 +376,7 @@ void BtLineEdit::setDisplaySize(bool recalculate)
       setMinimumWidth(0);
       if ( sizing_string.length() < min_text_size ) {
          sizing_string = QString(min_text_size,'a');
-      }
-      else if ( sizing_string.length() > max_text_size ) {
+      } else if ( sizing_string.length() > max_text_size ) {
          sizing_string = QString(max_text_size,'a');
       }
       calculateDisplaySize(sizing_string);
@@ -474,4 +464,3 @@ BtDiastaticPowerEdit::BtDiastaticPowerEdit(QWidget *parent)
 {
    _units = &Units::lintner;
 }
-

@@ -1,6 +1,7 @@
 /*
  * MashButton.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -17,9 +18,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#ifndef _MASHBUTTON_H
-#define _MASHBUTTON_H
+#ifndef MASHBUTTON_H
+#define MASHBUTTON_H
 
 #include <QPushButton>
 #include <QMetaProperty>
@@ -32,7 +32,6 @@ class QWidget;
 
 /*!
  * \class MashButton
- * \author Mik Firestone (mikfire@gmail.com)
  *
  * \brief This is a view class that displays a named mash
  */
@@ -42,7 +41,7 @@ class MashButton : public QPushButton
 public:
    MashButton(QWidget* parent = 0);
    virtual ~MashButton(){}
-   
+
    //! \brief Observe \c recipe
    void setRecipe(Recipe* recipe);
    //! \brief Observe \c mash.
@@ -55,7 +54,7 @@ private slots:
    void mashChanged(QMetaProperty,QVariant);
 
 private:
-   Recipe* _rec;
+   Recipe* m_rec;
    Mash* _mash;
 };
 

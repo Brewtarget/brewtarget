@@ -1,6 +1,7 @@
 /*
  * FermentableSortFilterProxyModel.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -17,18 +18,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#ifndef _FermentableSORTFILTERPROXYMODEL_H
-#define _FermentableSORTFILTERPROXYMODEL_H
-
-class FermentableSortFilterProxyModel;
+#ifndef FERMENTABLESORTFILTERPROXYMODEL_H
+#define FERMENTABLESORTFILTERPROXYMODEL_H
 
 #include <QSortFilterProxyModel>
 
 /*!
  * \class FermentableSortFilterProxyModel
- * \author Mik Firestone
- * \author Philip G. Lee
  *
  * \brief Proxy model for sorting Fermentables.
  */

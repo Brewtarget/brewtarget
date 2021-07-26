@@ -75,4 +75,4 @@ private:
    QVariant oldValue, newValue;
 };
 
-#endif /*SIMPLE_UNDOABLE_UPDATE_H*/
+#endif

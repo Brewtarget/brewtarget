@@ -1,6 +1,6 @@
 /*
  * MiscTableModel.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2020
+ * authors 2009-2021
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -20,25 +20,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "MiscTableModel.h"
 
 #include <QComboBox>
-#include <QLineEdit>
 #include <QHeaderView>
-#include "database.h"
-#include "model/Misc.h"
-#include "MiscTableModel.h"
-#include "Unit.h"
-#include "brewtarget.h"
-#include "model/Recipe.h"
-#include "MainWindow.h"
+#include <QLineEdit>
 
-MiscTableModel::MiscTableModel(QTableView* parent, bool editable)
-   : QAbstractTableModel(parent),
-     editable(editable),
-     _inventoryEditable(false),
-     recObs(nullptr),
-     parentTableWidget(parent)
-{
+#include "brewtarget.h"
+#include "database/ObjectStoreWrapper.h"
+#include "MainWindow.h"
+#include "model/Inventory.h"
+#include "model/Misc.h"
+#include "model/Recipe.h"
+#include "PersistentSettings.h"
+#include "Unit.h"
+
+MiscTableModel::MiscTableModel(QTableView* parent, bool editable) :
+   QAbstractTableModel(parent),
+   editable(editable),
+   _inventoryEditable(false),
+   recObs(nullptr),
+   parentTableWidget(parent) {
    miscObs.clear();
    setObjectName("miscTableModel");
 
@@ -49,7 +51,8 @@ MiscTableModel::MiscTableModel(QTableView* parent, bool editable)
    parentTableWidget->setWordWrap(false);
 
    connect(headerView, &QWidget::customContextMenuRequested, this, &MiscTableModel::contextMenu);
-   connect( &(Database::instance()), &Database::changedInventory, this, &MiscTableModel::changedInventory );
+   connect(&ObjectStoreTyped<InventoryMisc>::getInstance(), &ObjectStoreTyped<InventoryMisc>::signalPropertyChanged, this, &MiscTableModel::changedInventory);
+   return;
 }
 
 void MiscTableModel::observeRecipe(Recipe* rec)
@@ -68,27 +71,27 @@ void MiscTableModel::observeRecipe(Recipe* rec)
    }
 }
 
-void MiscTableModel::observeDatabase(bool val)
-{
-   if( val )
-   {
+void MiscTableModel::observeDatabase(bool val) {
+   if (val) {
       observeRecipe(nullptr);
       removeAll();
-      connect( &(Database::instance()), qOverload<Misc*>(&Database::createdSignal), this, &MiscTableModel::addMisc );
-      connect( &(Database::instance()), qOverload<Misc*>(&Database::deletedSignal), this, &MiscTableModel::removeMisc );
-      addMiscs( Database::instance().miscs() );
-   }
-   else
-   {
+      connect(&ObjectStoreTyped<Misc>::getInstance(), &ObjectStoreTyped<Misc>::signalObjectInserted, this, &MiscTableModel::addMisc);
+      connect(&ObjectStoreTyped<Misc>::getInstance(), &ObjectStoreTyped<Misc>::signalObjectDeleted,  this, &MiscTableModel::removeMisc);
+      addMiscs( ObjectStoreTyped<Misc>::getInstance().getAllRaw() );
+   } else {
       removeAll();
-      disconnect( &(Database::instance()), nullptr, this, nullptr );
+      disconnect(&ObjectStoreTyped<Misc>::getInstance(), nullptr, this, nullptr );
    }
+   return;
 }
 
-void MiscTableModel::addMisc(Misc* misc)
-{
-   if( miscObs.contains(misc) )
+void MiscTableModel::addMisc(int miscId) {
+   Misc* misc = ObjectStoreWrapper::getByIdRaw<Misc>(miscId);
+
+   if( miscObs.contains(misc) ) {
       return;
+   }
+
    // If we are observing the database, ensure that the item is undeleted and
    // fit to display.
    if(
@@ -97,8 +100,9 @@ void MiscTableModel::addMisc(Misc* misc)
          misc->deleted() ||
          !misc->display()
       )
-   )
+   ) {
       return;
+   }
 
    int size = miscObs.size();
    beginInsertRows( QModelIndex(), size, size );
@@ -106,6 +110,7 @@ void MiscTableModel::addMisc(Misc* misc)
    connect( misc, &NamedEntity::changed, this, &MiscTableModel::changed );
    //reset(); // Tell everybody that the table has changed.
    endInsertRows();
+   return;
 }
 
 void MiscTableModel::addMiscs(QList<Misc*> miscs)
@@ -135,13 +140,14 @@ void MiscTableModel::addMiscs(QList<Misc*> miscs)
 }
 
 // Returns true when misc is successfully found and removed.
-bool MiscTableModel::removeMisc(Misc* misc)
-{
-   int i;
+void MiscTableModel::removeMisc(int miscId, std::shared_ptr<QObject> object) {
+   this->remove(std::static_pointer_cast<Misc>(object).get());
+   return;
+}
 
-   i = miscObs.indexOf(misc);
-   if( i >= 0 )
-   {
+bool MiscTableModel::remove(Misc * misc) {
+   int i = miscObs.indexOf(misc);
+   if( i >= 0 ) {
       beginRemoveRows( QModelIndex(), i, i );
       disconnect( misc, nullptr, this, nullptr );
       miscObs.removeAt(i);
@@ -226,13 +232,13 @@ QVariant MiscTableModel::data( const QModelIndex& index, int role ) const
             return QVariant();
 
          unit = displayUnit(index.column());
-         return QVariant( Brewtarget::displayAmount(row->inventory(), row->amountIsWeight()? static_cast<Unit const *>(&Units::kilograms) : static_cast<Unit const *>(&Units::liters), 3, unit, Unit::noScale ) );
+         return QVariant( Brewtarget::displayAmount(row->inventory(), row->amountIsWeight()? &Units::kilograms : &Units::liters, 3, unit, Unit::noScale ) );
       case MISCAMOUNTCOL:
          if( role != Qt::DisplayRole )
             return QVariant();
 
          unit = displayUnit(index.column());
-         return QVariant( Brewtarget::displayAmount(row->amount(), row->amountIsWeight()? static_cast<Unit const *>(&Units::kilograms) : static_cast<Unit const *>(&Units::liters), 3, unit, Unit::noScale ) );
+         return QVariant( Brewtarget::displayAmount(row->amount(), row->amountIsWeight()? &Units::kilograms : &Units::liters, 3, unit, Unit::noScale ) );
 
       case MISCISWEIGHT:
          if( role == Qt::DisplayRole )
@@ -302,7 +308,7 @@ bool MiscTableModel::setData( const QModelIndex& index, const QVariant& value, i
       row = miscObs[index.row()];
 
    col = index.column();
-   unit = row->amountIsWeight() ? static_cast<Unit const *>(&Units::kilograms): static_cast<Unit const *>(&Units::liters);
+   unit = row->amountIsWeight() ? &Units::kilograms: &Units::liters;
 
    Unit::unitDisplay dspUnit = displayUnit(index.column());
    Unit::unitScale   dspScl  = displayScale(index.column());
@@ -313,9 +319,9 @@ bool MiscTableModel::setData( const QModelIndex& index, const QVariant& value, i
          if( value.canConvert(QVariant::String) )
          {
             Brewtarget::mainWindow()->doOrRedoUpdate(*row,
-                                                     PropertyNames::NamedEntity::name,
-                                                     value.toString(),
-                                                     tr("Change Misc Name"));
+                                                  PropertyNames::NamedEntity::name,
+                                                  value.toString(),
+                                                  tr("Change Misc Name"));
          }
          else
             return false;
@@ -324,53 +330,53 @@ bool MiscTableModel::setData( const QModelIndex& index, const QVariant& value, i
          if( ! value.canConvert(QVariant::Int) )
             return false;
          Brewtarget::mainWindow()->doOrRedoUpdate(*row,
-                                                   "type",
-                                                  static_cast<Misc::Type>(value.toInt()),
-                                                  tr("Change Misc Type"));
+                                               PropertyNames::Misc::type,
+                                               static_cast<Misc::Type>(value.toInt()),
+                                               tr("Change Misc Type"));
          break;
       case MISCUSECOL:
          if( ! value.canConvert(QVariant::Int) )
             return false;
          Brewtarget::mainWindow()->doOrRedoUpdate(*row,
-                                                   "use",
-                                                   static_cast<Misc::Use>(value.toInt()),
-                                                   tr("Change Misc Use"));
+                                               PropertyNames::Misc::use,
+                                               static_cast<Misc::Use>(value.toInt()),
+                                               tr("Change Misc Use"));
          break;
       case MISCTIMECOL:
          if( ! value.canConvert(QVariant::String) )
             return false;
 
          Brewtarget::mainWindow()->doOrRedoUpdate(*row,
-                                                   PropertyNames::Misc::time,
-                                                   Brewtarget::qStringToSI(value.toString(), &Units::minutes, dspUnit, dspScl),
-                                                   tr("Change Misc Time"));
+                                               PropertyNames::Misc::time,
+                                               Brewtarget::qStringToSI(value.toString(), &Units::minutes, dspUnit, dspScl),
+                                               tr("Change Misc Time"));
          break;
       case MISCINVENTORYCOL:
          if( ! value.canConvert(QVariant::String) )
             return false;
 
          Brewtarget::mainWindow()->doOrRedoUpdate(*row,
-                                                   "inventoryAmount",
-                                                   Brewtarget::qStringToSI(value.toString(), unit, dspUnit,dspScl),
-                                                   tr("Change Misc Inventory Amount"));
+                                               PropertyNames::NamedEntityWithInventory::inventory,
+                                               Brewtarget::qStringToSI(value.toString(), unit, dspUnit,dspScl),
+                                               tr("Change Misc Inventory Amount"));
          break;
       case MISCAMOUNTCOL:
          if( ! value.canConvert(QVariant::String) )
             return false;
 
          Brewtarget::mainWindow()->doOrRedoUpdate(*row,
-                                                   "amount",
-                                                   Brewtarget::qStringToSI(value.toString(), unit, dspUnit,dspScl),
-                                                   tr("Change Misc Amount"));
+                                               PropertyNames::Misc::amount,
+                                               Brewtarget::qStringToSI(value.toString(), unit, dspUnit,dspScl),
+                                               tr("Change Misc Amount"));
          break;
       case MISCISWEIGHT:
          if( ! value.canConvert(QVariant::Int) )
             return false;
 
          Brewtarget::mainWindow()->doOrRedoUpdate(*row,
-                                                   "amountType",
-                                                   static_cast<Misc::AmountType>(value.toInt()),
-                                                   tr("Change Misc Amount Type"));
+                                               PropertyNames::Misc::amountType,
+                                               static_cast<Misc::AmountType>(value.toInt()),
+                                               tr("Change Misc Amount Type"));
          break;
       default:
          return false;
@@ -380,30 +386,30 @@ bool MiscTableModel::setData( const QModelIndex& index, const QVariant& value, i
    return true;
 }
 
-void MiscTableModel::changedInventory(Brewtarget::DBTable table, int invKey, QVariant val)
-{
-   if ( table == Brewtarget::MISCTABLE ) {
+void MiscTableModel::changedInventory(int invKey, char const * const propertyName) {
+   if (QString(propertyName) == PropertyNames::Inventory::amount) {
+///      double newAmount = ObjectStoreWrapper::getById<InventoryMisc>()->getAmount();
       for( int i = 0; i < miscObs.size(); ++i ) {
          Misc* holdmybeer = miscObs.at(i);
 
          if ( invKey == holdmybeer->inventoryId() ) {
-            holdmybeer->setCacheOnly(true);
-            holdmybeer->setInventoryAmount(val.toDouble());
-            holdmybeer->setCacheOnly(false);
+/// No need to update amount as it's only stored in one place (the inventory object) now
+///            holdmybeer->setCacheOnly(true);
+///            holdmybeer->setInventoryAmount(newAmount);
+///            holdmybeer->setCacheOnly(false);
             emit dataChanged( QAbstractItemModel::createIndex(i,MISCINVENTORYCOL),
                               QAbstractItemModel::createIndex(i,MISCINVENTORYCOL) );
          }
       }
    }
+   return;
 }
-void MiscTableModel::changed(QMetaProperty prop, QVariant /*val*/)
-{
-   int i;
 
+void MiscTableModel::changed(QMetaProperty prop, QVariant /*val*/) {
    Misc* miscSender = qobject_cast<Misc*>(sender());
    if( miscSender )
    {
-      i = miscObs.indexOf(miscSender);
+      int i = miscObs.indexOf(miscSender);
       if( i < 0 )
          return;
 
@@ -416,7 +422,7 @@ void MiscTableModel::changed(QMetaProperty prop, QVariant /*val*/)
    Recipe* recSender = qobject_cast<Recipe*>(sender());
    if( recSender && recSender == recObs )
    {
-      if( QString(prop.name()) == "miscs" )
+      if( QString(prop.name()) == PropertyNames::Recipe::miscIds )
       {
          removeAll();
          addMiscs( recObs->miscs() );
@@ -427,12 +433,13 @@ void MiscTableModel::changed(QMetaProperty prop, QVariant /*val*/)
    }
 
    // See if sender is the database.
-   if( sender() == &(Database::instance()) && QString(prop.name()) == "miscs" )
-   {
+   // .:TODO:. Look at this, as sender won't be the DB now
+/*   if ( sender() == &(Database::instance()) && QString(prop.name()) == "miscs" ) {
       removeAll();
-      addMiscs( Database::instance().miscs() );
+      addMiscs( ObjectStoreTyped<Misc>::getInstance().getAllRaw() );
       return;
-   }
+   }*/
+   return;
 }
 
 Misc* MiscTableModel::getMisc(unsigned int i)
@@ -447,7 +454,7 @@ Unit::unitDisplay MiscTableModel::displayUnit(int column) const
    if ( attribute.isEmpty() )
       return Unit::noUnit;
 
-   return static_cast<Unit::unitDisplay>(Brewtarget::option(attribute, Unit::noUnit, this->objectName(), Brewtarget::UNIT).toInt());
+   return static_cast<Unit::unitDisplay>(PersistentSettings::value(attribute, Unit::noUnit, this->objectName(), PersistentSettings::UNIT).toInt());
 }
 
 Unit::unitScale MiscTableModel::displayScale(int column) const
@@ -457,7 +464,7 @@ Unit::unitScale MiscTableModel::displayScale(int column) const
    if ( attribute.isEmpty() )
       return Unit::noScale;
 
-   return static_cast<Unit::unitScale>(Brewtarget::option(attribute, Unit::noScale, this->objectName(), Brewtarget::SCALE).toInt());
+   return static_cast<Unit::unitScale>(PersistentSettings::value(attribute, Unit::noScale, this->objectName(), PersistentSettings::SCALE).toInt());
 }
 
 // We need to:
@@ -471,8 +478,8 @@ void MiscTableModel::setDisplayUnit(int column, Unit::unitDisplay displayUnit)
    if ( attribute.isEmpty() )
       return;
 
-   Brewtarget::setOption(attribute,displayUnit,this->objectName(),Brewtarget::UNIT);
-   Brewtarget::setOption(attribute,Unit::noScale,this->objectName(),Brewtarget::SCALE);
+   PersistentSettings::insert(attribute,displayUnit,this->objectName(),PersistentSettings::UNIT);
+   PersistentSettings::insert(attribute,Unit::noScale,this->objectName(),PersistentSettings::SCALE);
 
 }
 
@@ -484,7 +491,7 @@ void MiscTableModel::setDisplayScale(int column, Unit::unitScale displayScale)
    if ( attribute.isEmpty() )
       return;
 
-   Brewtarget::setOption(attribute,displayScale,this->objectName(),Brewtarget::SCALE);
+   PersistentSettings::insert(attribute,displayScale,this->objectName(),PersistentSettings::SCALE);
 
 }
 
@@ -643,4 +650,3 @@ void MiscItemDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionV
 {
    editor->setGeometry(option.rect);
 }
-

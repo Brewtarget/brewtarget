@@ -18,11 +18,16 @@
  */
 #include "xml/XmlRecipeRecord.h"
 
-#include "model/Hop.h"
+#include <cstring>
+#include <functional>
+
+#include "model/Equipment.h"
 #include "model/Fermentable.h"
+#include "model/Hop.h"
 #include "model/Misc.h"
-#include "model/Yeast.h"
+#include "model/Style.h"
 #include "model/Water.h"
+#include "model/Yeast.h"
 
 namespace {
    //
@@ -31,7 +36,9 @@ namespace {
    // functions.
    //
    template<typename CNE>
-   void setAmountsEtc(CNE & ingredient, NamedParameterBundle const & npb);
+   void setAmountsEtc(CNE & ingredient, NamedParameterBundle const & npb) {
+      return;
+   }
    template<> void setAmountsEtc(Hop & hop, NamedParameterBundle const & npb) {
       hop.setAmount_kg(npb(PropertyNames::Hop::amount_kg).toDouble());
       hop.setTime_min( npb(PropertyNames::Hop::time_min).toDouble());
@@ -60,7 +67,6 @@ namespace {
 }
 
 
-
 template<typename CNE>
 void XmlRecipeRecord::addChildren() {
    //
@@ -69,12 +75,7 @@ void XmlRecipeRecord::addChildren() {
    //
    Recipe * recipe = static_cast<Recipe *>(this->namedEntity);
 
-   //
-   // Subclasses of NamedEntity have a static method that gives us the class name.  Without this we would either have
-   // to instantiate a new instance of the class (to use QMetaObject::className()) or pass the class name in as a
-   // parameter to this function.
-   //
-   QByteArray childClassName = CNE::classNameStr().toLatin1();
+   char const * const childClassName = CNE::staticMetaObject.className();
 
    //
    // QMultiHash guarantees that items that share the same key will appear consecutively, from the most recently to
@@ -83,14 +84,14 @@ void XmlRecipeRecord::addChildren() {
    // but requires a copy which is (a) less efficient and (b) not accepted by all compilers for the types we are
    // using.)
    //
-   for (auto ii = this->childRecords.find(childClassName.constData());
-        ii != this->childRecords.end() && ii.key() == childClassName.constData();
+   for (auto ii = this->childRecords.find(childClassName);
+        ii != this->childRecords.end() && ii.key() == childClassName;
         ++ii) {
-      qDebug() << Q_FUNC_INFO << "Adding " << childClassName.constData() << " to Recipe";
+      qDebug() << Q_FUNC_INFO << "Adding " << childClassName << " to Recipe";
 
       // It would be a (pretty unexpected) coding error if the NamedEntity subclass object stored against a class name
       // isn't of the same class against which it was stored.
-      Q_ASSERT(ii->second->getNamedEntity()->metaObject()->className() == QString(childClassName.constData()));
+      Q_ASSERT(ii->second->getNamedEntity()->metaObject()->className() == QString(childClassName));
 
       // Actually add the Hop/Yeast/etc to the Recipe
       CNE * added = recipe->add<CNE>(static_cast<CNE *>(ii->second->getNamedEntity()));
@@ -114,7 +115,6 @@ void XmlRecipeRecord::addChildren() {
       //
       Q_ASSERT(added != nullptr);
       setAmountsEtc(*added, ii->second->getNamedParameterBundle());
-
    }
    return;
 }
@@ -141,10 +141,61 @@ XmlRecord::ProcessingResult XmlRecipeRecord::normaliseAndStoreInDb(NamedEntity *
    this->addChildren<Yeast>();
    this->addChildren<Water>();
 
-   // BrewNotes and Instructions are a bit different than some of the other fields.  Each BrewNote and each Instruction
-   // relate to only one Recipe, but the Recipe class does not (currently) have an interface for adding BrewNotes or
-   // Instructions.  It suffices to tell each BrewNote and each Instruction what its Recipe is, something we achieve
-   // via template specialisation of XmlNamedEntityRecord::setContainingEntity
+   this->addChildren<Instruction>();
+
+
+   // BrewNotes are a bit different than some of the other fields.  Each BrewNote relates to only one Recipe, but the
+   // Recipe class does not (currently) have an interface for adding BrewNotes.  It suffices to tell each BrewNote what
+   // its Recipe is, something we achieve via template specialisation of XmlNamedEntityRecord::setContainingEntity
 
    return XmlRecord::Succeeded;
+}
+
+template<typename CNE>
+bool XmlRecipeRecord::childrenToXml(XmlRecord::FieldDefinition const & fieldDefinition,
+                                    XmlRecord const & subRecord,
+                                    Recipe const & recipe,
+                                    QTextStream & out,
+                                    int indentLevel,
+                                    char const * const indentString,
+                                    char const * const propertyNameForGetter,
+                                    RecipeChildGetter<CNE> getter) const {
+   if (0 != strcmp(fieldDefinition.propertyName, propertyNameForGetter)) {
+      return false;
+   }
+   QList<CNE *> children = std::invoke(getter, recipe);
+   if (children.size() == 0) {
+      this->writeNone(subRecord, recipe, out, indentLevel, indentString);
+   } else {
+      for (CNE * child : children) {
+         subRecord.toXml(*child, out, indentLevel, indentString);
+      }
+   }
+   return true;
+}
+
+void XmlRecipeRecord::subRecordToXml(XmlRecord::FieldDefinition const & fieldDefinition,
+                                     XmlRecord const & subRecord,
+                                     NamedEntity const & namedEntityToExport,
+                                     QTextStream & out,
+                                     int indentLevel,
+                                     char const * const indentString) const {
+   //
+   // This cast should be safe because Recipe & should be what's passed to XmlRecipeRecord::toXml() (which invokes the
+   // base class member function which ultimately calls this one with the same parameter).
+   //
+   Recipe const & recipe = static_cast<Recipe const &>(namedEntityToExport);
+
+   if (this->childrenToXml(fieldDefinition, subRecord, recipe, out, indentLevel, indentString, PropertyNames::Recipe::hops        , &Recipe::hops        )) { return; }
+   if (this->childrenToXml(fieldDefinition, subRecord, recipe, out, indentLevel, indentString, PropertyNames::Recipe::fermentables, &Recipe::fermentables)) { return; }
+   if (this->childrenToXml(fieldDefinition, subRecord, recipe, out, indentLevel, indentString, PropertyNames::Recipe::miscs       , &Recipe::miscs       )) { return; }
+   if (this->childrenToXml(fieldDefinition, subRecord, recipe, out, indentLevel, indentString, PropertyNames::Recipe::yeasts      , &Recipe::yeasts      )) { return; }
+   if (this->childrenToXml(fieldDefinition, subRecord, recipe, out, indentLevel, indentString, PropertyNames::Recipe::waters      , &Recipe::waters      )) { return; }
+   if (this->childrenToXml(fieldDefinition, subRecord, recipe, out, indentLevel, indentString, PropertyNames::Recipe::instructions, &Recipe::instructions)) { return; }
+   if (this->childrenToXml(fieldDefinition, subRecord, recipe, out, indentLevel, indentString, PropertyNames::Recipe::brewNotes   , &Recipe::brewNotes   )) { return; }
+
+   // It's a coding error if we get here
+   qCritical() << Q_FUNC_INFO << "Don't know how to export Recipe property " << fieldDefinition.propertyName;
+   Q_ASSERT(false); // Stop in a debug build
+   return;          // Soldier on in a production build
 }

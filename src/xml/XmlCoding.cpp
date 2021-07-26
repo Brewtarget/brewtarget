@@ -186,7 +186,15 @@ public:
       // a predefined UTF-16 string saying "comments".  The link above has both, but not every documentation page does.
       //
       // Note too that some of these parameters are defined by the W3C DOM Level 3 standard, and some are Xerces
-      // extensions to that standard.  The latter have long names that begin with "http://apache.org/xml/features/"
+      // extensions to that standard.  The latter have long names that begin with "http://apache.org/xml/features/",
+      // but the names of the predefined string constants are the same format as the features defined in the standard,
+      // so, for example, you pass in xercesc::XMLUni::fgXercesHandleMultipleImports to reference the UTF-16 version
+      // of "http://apache.org/xml/features/validation/schema/handle-multiple-imports".
+      //
+      // There seems to be a subset of config options that have their own direct setters.  Eg the feature
+      // "http://apache.org/xml/features/schema/ignore-annotations" can also be controlled by setIgnoreAnnotations().
+      // AFAICT this is just convenience.  For consistency, we use the setParameter() call for all the features we turn
+      // on or off.
       //
       // Finally, be aware that some parameter settings from the DOM standard are not supported, but there is no return
       // code from setParameter() to tell you this.  (You would have to call canSetParameter() first.)  So, for
@@ -237,6 +245,15 @@ public:
       // "http://apache.org/xml/features/validation/cache-grammarFromParse"
       // true = Cache the grammar in the pool for re-use in subsequent parses
 //      config->setParameter(xercesc::XMLUni::fgXercesCacheGrammarFromParse, true);
+
+      // "http://apache.org/xml/features/dom-has-psvi-info"
+      // true = Enable storing of Post-Schema-Validation Infoset (PSVI) information in element and attribute nodes.
+      // AIUI this would allow us to get, for a given node in an XML document, the corresponding info from the XSD
+      // against which the XML document was validated - eg via xercesc::DOMPSVITypeInfo, as shown here:
+      // https://stackoverflow.com/questions/34878419/integrate-schema-metatdata-during-xml-parsing-with-xerces-c.
+      // However, need to do some more investigation about whether it is possible to access this sort of low-level
+      // Xerces functionality from Xalan.
+      config->setParameter(xercesc::XMLUni::fgXercesDOMHasPSVIInfo, true);
 
       BtDomErrorHandler domErrorHandler;
       config->setParameter(xercesc::XMLUni::fgDOMErrorHandler, &domErrorHandler);
@@ -553,7 +570,7 @@ std::shared_ptr<XmlRecord> XmlCoding::getNewXmlRecord(QString recordName) const 
    XmlRecord::FieldDefinitions const * fieldDefinitions =
       this->entityNameToXmlRecordDefinition.value(recordName).fieldDefinitions;
 
-   return std::shared_ptr<XmlRecord>(constructorWrapper(*this, *fieldDefinitions));
+   return std::shared_ptr<XmlRecord>(constructorWrapper(recordName, *this, *fieldDefinitions));
 }
 
 

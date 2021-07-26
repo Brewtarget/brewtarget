@@ -1,7 +1,8 @@
 /*
  * MashEditor.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2020
+ * authors 2009-2021
  * - Kregg K <gigatropolis@yahoo.com>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -18,50 +19,50 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #include "MashEditor.h"
-#include <QWidget>
-#include <QDebug>
-#include "model/Mash.h"
-#include "brewtarget.h"
-#include "Unit.h"
-#include "model/Equipment.h"
-#include "model/Recipe.h"
-#include "database.h"
 
-MashEditor::MashEditor(QWidget* parent) : QDialog(parent), mashObs(nullptr)
-{
+#include <QDebug>
+#include <QWidget>
+
+#include "brewtarget.h"
+#include "database/ObjectStoreWrapper.h"
+#include "model/Equipment.h"
+#include "model/Mash.h"
+#include "model/Recipe.h"
+#include "Unit.h"
+
+MashEditor::MashEditor(QWidget* parent) : QDialog(parent), mashObs(nullptr) {
    setupUi(this);
 
    connect(pushButton_fromEquipment, &QAbstractButton::clicked, this, &MashEditor::fromEquipment );
    connect(this, &QDialog::accepted, this, &MashEditor::saveAndClose );
    connect(this, &QDialog::rejected, this, &MashEditor::closeEditor );
-
+   return;
 }
 
-void MashEditor::showEditor()
-{
+void MashEditor::showEditor() {
    showChanges();
    setVisible(true);
+   return;
 }
 
-void MashEditor::closeEditor()
-{
+void MashEditor::closeEditor() {
    setVisible(false);
+   return;
 }
 
-void MashEditor::saveAndClose()
-{
+void MashEditor::saveAndClose() {
    bool isNew = false;
 
-   if( mashObs == nullptr ) {
-      mashObs = new Mash( lineEdit_name->text(), true);
+   if (this->mashObs == nullptr) {
+      this->mashObs = new Mash(lineEdit_name->text(), true);
       isNew = true;
    }
+   qDebug() << Q_FUNC_INFO << "Saving" << (isNew ? "new" : "existing") << "mash (#" << this->mashObs->key() << ")";
 
-   mashObs->setEquipAdjust( true ); // BeerXML won't like me, but it's just stupid not to adjust for the equipment when you're able.
+   mashObs->setEquipAdjust(true); // BeerXML won't like me, but it's just stupid not to adjust for the equipment when you're able.
 
-   mashObs->setName( lineEdit_name->text(), mashObs->cacheOnly() );
+   mashObs->setName(lineEdit_name->text());
    mashObs->setGrainTemp_c(lineEdit_grainTemp->toSI());
    mashObs->setSpargeTemp_c(lineEdit_spargeTemp->toSI());
    mashObs->setPh(lineEdit_spargePh->toSI());
@@ -69,12 +70,15 @@ void MashEditor::saveAndClose()
    mashObs->setTunWeight_kg(lineEdit_tunMass->toSI());
    mashObs->setTunSpecificHeat_calGC(lineEdit_tunSpHeat->toSI());
 
-   mashObs->setNotes( textEdit_notes->toPlainText() );
+   mashObs->setNotes(textEdit_notes->toPlainText());
 
-   if ( isNew ) {
-      mashObs->insertInDatabase();
-      Database::instance().addToRecipe(m_rec, mashObs);
+   if (isNew) {
+      mashObs->setCacheOnly(false);
+      ObjectStoreWrapper::insert(*mashObs);
+      this->m_rec->setMash(this->mashObs);
    }
+
+   return;
 }
 
 void MashEditor::fromEquipment()
@@ -87,12 +91,13 @@ void MashEditor::fromEquipment()
 
    lineEdit_tunMass->setText(m_equip);
    lineEdit_tunSpHeat->setText(m_equip);
+   return;
 }
 
-void MashEditor::setMash(Mash* mash)
-{
-   if( mashObs )
+void MashEditor::setMash(Mash* mash) {
+   if (mashObs) {
       disconnect( mashObs, nullptr, this, nullptr );
+   }
 
    mashObs = mash;
    if( mashObs )
@@ -100,40 +105,47 @@ void MashEditor::setMash(Mash* mash)
       connect( mashObs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
       showChanges();
    }
+   return;
 }
 
-void MashEditor::setRecipe(Recipe* r)
-{
+void MashEditor::setRecipe(Recipe* r) {
    if ( ! r )
       return;
 
-   m_rec = r;
-   m_equip = m_rec->equipment();
+   this->m_rec = r;
+   this->m_equip = this->m_rec->equipment();
 
-   if( mashObs && m_equip )
-   {
-      // Only do this if we have to. Otherwise, it causes some unnecessary
-      // updates to the database.
-      if ( mashObs->tunWeight_kg() != m_equip->tunWeight_kg() )
-         mashObs->setTunWeight_kg( m_equip->tunWeight_kg() );
-      if ( mashObs->tunSpecificHeat_calGC() != m_equip->tunSpecificHeat_calGC() )
-         mashObs->setTunSpecificHeat_calGC( m_equip->tunSpecificHeat_calGC() );
+   if (this->mashObs && this->m_equip) {
+      // Only do this if we have to. Otherwise, it causes some unnecessary updates to the database.
+      if (this->mashObs->tunWeight_kg() != this->m_equip->tunWeight_kg()) {
+         qDebug() <<
+            Q_FUNC_INFO << "Overwriting mash tunWeight_kg (" << this->mashObs->tunWeight_kg() << ") with equipment "
+            "tunWeight_kg (" << this->m_equip->tunWeight_kg() << ")";
+         this->mashObs->setTunWeight_kg(this->m_equip->tunWeight_kg());
+      }
+      if (this->mashObs->tunSpecificHeat_calGC() != this->m_equip->tunSpecificHeat_calGC() ) {
+         qDebug() <<
+            Q_FUNC_INFO << "Overwriting mash tunSpecificHeat_calGC (" << this->mashObs->tunSpecificHeat_calGC() << ") "
+            "with equipment tunSpecificHeat_calGC (" << this->m_equip->tunSpecificHeat_calGC() << ")";
+         this->mashObs->setTunSpecificHeat_calGC(this->m_equip->tunSpecificHeat_calGC());
+      }
    }
+   return;
 }
 
-void MashEditor::changed(QMetaProperty prop, QVariant /*val*/)
-{
-   if( sender() == mashObs )
-      showChanges(&prop);
-
-   if (sender() == m_rec ) {
-      m_equip = m_rec->equipment();
-      showChanges();
+void MashEditor::changed(QMetaProperty prop, QVariant /*val*/) {
+   if (sender() == this->mashObs ) {
+      this->showChanges(&prop);
    }
+
+   if (sender() == this->m_rec) {
+      this->m_equip = this->m_rec->equipment();
+      this->showChanges();
+   }
+   return;
 }
 
-void MashEditor::showChanges(QMetaProperty* prop)
-{
+void MashEditor::showChanges(QMetaProperty* prop) {
    bool updateAll = false;
    QString propName;
 
@@ -143,10 +155,12 @@ void MashEditor::showChanges(QMetaProperty* prop)
       return;
    }
 
-   if( prop == nullptr )
+   if (prop == nullptr) {
       updateAll = true;
-   else
+   } else {
       propName = prop->name();
+   }
+   qDebug() << Q_FUNC_INFO << "Updating" << (updateAll ? "all" : "property") << propName;
 
    if( propName == PropertyNames::NamedEntity::name || updateAll ) {
       lineEdit_name->setText(mashObs->name());
@@ -163,7 +177,7 @@ void MashEditor::showChanges(QMetaProperty* prop)
       if( ! updateAll )
          return;
    }
-   if( propName == "ph" || updateAll ) {
+   if( propName == PropertyNames::Mash::ph || updateAll ) {
       lineEdit_spargePh->setText(mashObs);
       if( ! updateAll )
          return;
@@ -173,25 +187,24 @@ void MashEditor::showChanges(QMetaProperty* prop)
       if( ! updateAll )
          return;
    }
-   if( propName == "tunMass_kg" || updateAll ) {
+   if( propName == PropertyNames::Mash::tunWeight_kg || updateAll ) {
       lineEdit_tunMass->setText(mashObs);
       if( ! updateAll )
          return;
    }
-   if( propName == "tunSpecificHeat_calGC" || updateAll ) {
+   if( propName == PropertyNames::Mash::tunSpecificHeat_calGC || updateAll ) {
       lineEdit_tunSpHeat->setText(mashObs);
       if( ! updateAll )
          return;
    }
-   if( propName == "notes" || updateAll ) {
+   if( propName == PropertyNames::Mash::notes || updateAll ) {
       textEdit_notes->setPlainText(mashObs->notes());
       if( ! updateAll )
          return;
    }
 }
 
-void MashEditor::clear()
-{
+void MashEditor::clear() {
    lineEdit_name->setText(QString(""));
    lineEdit_grainTemp->setText(QString(""));
    lineEdit_spargeTemp->setText(QString(""));
@@ -201,4 +214,5 @@ void MashEditor::clear()
    lineEdit_tunSpHeat->setText(QString(""));
 
    textEdit_notes->setPlainText(QString(""));
+   return;
 }

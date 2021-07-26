@@ -1,7 +1,8 @@
 /*
  * MashDesigner.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2017
+ * authors 2009-2021
  * - Dan Cavanagh <dan@dancavanagh.com>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  * - Jonathon Harding <github@jrhardin.net>
@@ -19,14 +20,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#include "database.h"
 #include "MashDesigner.h"
-#include "HeatCalculations.h"
-#include "PhysicalConstants.h"
-#include "model/Fermentable.h"
-#include <QMessageBox>
+
 #include <QInputDialog>
+#include <QMessageBox>
+
+#include "database/ObjectStoreWrapper.h"
+#include "HeatCalculations.h"
+#include "model/Fermentable.h"
+#include "PhysicalConstants.h"
 
 MashDesigner::MashDesigner(QWidget* parent) : QDialog(parent)
 {
@@ -152,7 +154,7 @@ void MashDesigner::saveStep()
    // Bound the target temperature to what can be achieved
    temp = bound_temp_c(temp);
 
-   mashStep->setName( lineEdit_name->text(), mashStep->cacheOnly() );
+   mashStep->setName(lineEdit_name->text());
    mashStep->setType( type );
    mashStep->setStepTemp_c( temp );
    mashStep->setStepTime_min( lineEdit_time->toSI() );
@@ -166,8 +168,9 @@ void MashDesigner::saveStep()
    }
 
    if ( mashStep->cacheOnly() ) {
-      mashStep->setMash(mash);
-      mashStep->insertInDatabase();
+//      mashStep->setMash(mash);
+      ObjectStoreWrapper::insert(*mashStep);
+      mashStep->setCacheOnly(false);
    }
 }
 
@@ -347,11 +350,11 @@ bool MashDesigner::initializeMash()
       return false;
 
    mash = recObs->mash();
-   if( mash == nullptr )
-      // mash = Database::instance().newMash( recObs );
+   if( mash == nullptr ) {
       mash = new Mash(QString(""),true);
-   else
+   } else {
       mash->removeAllMashSteps();
+   }
 
    // Order matters. Don't do this until every that could return false has
    mash->setTunSpecificHeat_calGC( equip->tunSpecificHeat_calGC() );
@@ -377,8 +380,9 @@ bool MashDesigner::initializeMash()
    horizontalSlider_amount->setValue(0); // As thick as possible initially.
 
    if ( mash->cacheOnly() ) {
-       mash->insertInDatabase();
-       Database::instance().addToRecipe(recObs, mash, true);
+      ObjectStoreWrapper::insert(*mash);
+      mash->setCacheOnly(false);
+      this->recObs->setMash(mash);
    }
    return true;
 }

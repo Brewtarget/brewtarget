@@ -1,7 +1,8 @@
 /*
  * SaltTableModel.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
+ * - Matt Young <mfsy@yahoo.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -17,28 +18,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#ifndef _SALTTABLEMODEL_H
-#define _SALTTABLEMODEL_H
-
-class SaltTableModel;
-class SaltItemDelegate;
+#ifndef SALTTABLEMODEL_H
+#define SALTTABLEMODEL_H
 
 #include <QAbstractTableModel>
-#include <QWidget>
-#include <QModelIndex>
-#include <QMetaProperty>
-#include <QVariant>
 #include <QItemDelegate>
 #include <QList>
+#include <QMetaProperty>
+#include <QModelIndex>
 #include <QTableView>
+#include <QVariant>
+#include <QWidget>
+
 #include "model/Salt.h"
+#include "model/Water.h"
 
 #include "Unit.h"
 // Forward declarations.
 class Recipe;
 class WaterDialog;
 class Mash;
+class SaltItemDelegate;
 
 enum{ SALTNAMECOL,
       SALTAMOUNTCOL,
@@ -47,7 +47,7 @@ enum{ SALTNAMECOL,
       SALTNUMCOLS /*This one MUST be last*/};
 /*!
  * \class SaltTableModel
- * \author mik firestone
+ *
  *
  * \brief Table model for salts.
  */
@@ -117,7 +117,7 @@ private:
 
 /*!
  * \class SaltItemDelegate
- * \author Mik Firestone
+ *
  *
  * Item delegate for salt tables.
  */
@@ -142,5 +142,4 @@ private:
 
 };
 
-#endif   /* _SALTTABLEMODEL_H */
-
+#endif   // SALTTABLEMODEL_H

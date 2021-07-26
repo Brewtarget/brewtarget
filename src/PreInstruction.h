@@ -1,6 +1,7 @@
 /*
  * PreInstruction.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
+ * - Matt Young <mfsy@yahoo.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -16,17 +17,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#ifndef _PREINSTRUCTION_H
-#define   _PREINSTRUCTION_H
-
-class PreInstruction;
+#ifndef PREINSTRUCTION_H
+#define PREINSTRUCTION_H
 
 #include <QString>
 
 /*!
  * \class PreInstruction
- * \author Philip G. Lee
  *
  * \brief Simple class to assist the creation of instructions.
  */

@@ -21,32 +21,38 @@
  */
 #ifndef MODEL_SALT_H
 #define MODEL_SALT_H
+#pragma once
 
 #include <QString>
+#include <QSqlRecord>
+#include <QSqlRecord>
 
 #include "model/NamedEntity.h"
 
-namespace PropertyNames::Salt { static char const * const amount = "amount"; /* previously kpropAmount */ }
-namespace PropertyNames::Salt { static char const * const amountIsWeight = "amountIsWeight"; /* previously kpropAmtIsWgt */ }
-namespace PropertyNames::Salt { static char const * const type = "type"; /* previously kpropType */ }
-namespace PropertyNames::Salt { static char const * const isAcid = "isAcid"; /* previously kpropIsAcid */ }
-namespace PropertyNames::Salt { static char const * const percentAcid = "percentAcid"; /* previously kpropPctAcid */ }
-namespace PropertyNames::Salt { static char const * const addTo = "addTo"; /* previously kpropAddTo */ }
-namespace PropertyNames::Salt { static char const * const misc_id = "misc_id"; /* previously kcolMiscId */ }
+//======================================================================================================================
+//========================================== Start of property name constants ==========================================
+#define AddPropertyName(property) namespace PropertyNames::Salt {static char const * const property = #property; }
+AddPropertyName(amount)
+AddPropertyName(amountIsWeight)
+AddPropertyName(type)
+AddPropertyName(isAcid)
+AddPropertyName(percentAcid)
+AddPropertyName(addTo)
+#undef AddPropertyName
+//=========================================== End of property name constants ===========================================
+//======================================================================================================================
+
 
 /*!
  * \class Salt
- * \author Mik Firestone
  *
  * \brief Model for salt records in the database.
  */
-class Salt : public NamedEntity
-{
+class Salt : public NamedEntity {
    Q_OBJECT
    Q_CLASSINFO("signal", "salts")
 
-   friend class Database;
-   friend class BeerXML;
+
    friend class WaterDialog;
    friend class SaltTableModel;
 public:
@@ -75,8 +81,11 @@ public:
 
    Q_ENUMS(WhenToAdd Types)
 
-   Salt(QString name, bool cache = true);
-   virtual ~Salt() {}
+   Salt(QString name = "", bool cache = true);
+   Salt(NamedParameterBundle const & namedParameterBundle);
+   Salt(Salt const & other);
+
+   virtual ~Salt() = default;
 
    // On a base or target profile, bicarbonate and alkalinity cannot both be used. I'm gonna have fun figuring that out
    //! \brief The amount of salt to be added (always a weight)
@@ -91,8 +100,6 @@ public:
    Q_PROPERTY( double percentAcid READ percentAcid WRITE setPercentAcid /*NOTIFY changed*/ /*changedPercentAcid*/ )
    //! \brief Is this an acid or salt?
    Q_PROPERTY( bool isAcid READ isAcid WRITE setIsAcid /*NOTIFY changed*/ /*changedIsAcid*/ )
-   //! \brief A link to the salt in the MISC table. Not sure I'm going to use this
-   Q_PROPERTY( int miscId READ miscId /* WRITE setMiscId*/ /*NOTIFY changed*/ /*changedSulfate_ppm*/ )
 
    double amount() const;
    Salt::WhenToAdd addTo() const;
@@ -109,8 +116,6 @@ public:
    void setPercentAcid(double var);
    void setIsAcid( bool var );
 
-   static QString classNameStr();
-
    double Ca() const;
    double Cl() const;
    double CO3() const;
@@ -119,62 +124,23 @@ public:
    double Na() const;
    double SO4() const;
 
-   // Salt objects do not have parents
-   NamedEntity * getParent() { return nullptr; }
-   virtual int insertInDatabase();
-   virtual void removeFromDatabase();
+   virtual Recipe * getOwningRecipe();
 
 signals:
 
 protected:
    virtual bool isEqualTo(NamedEntity const & other) const;
+   virtual ObjectStore & getObjectStoreTypedInstance() const;
 
 private:
-//   Salt(Brewtarget::DBTable table, int key);
-   Salt(TableSchema* table, QSqlRecord rec, int t_key = -1);
-   Salt(Salt & other );
-
    double m_amount;
    Salt::WhenToAdd m_add_to;
    Salt::Types m_type;
    bool m_amount_is_weight;
    double m_percent_acid;
    bool m_is_acid;
-   int m_misc_id;
-
 };
 
 Q_DECLARE_METATYPE( QList<Salt*> )
-
-inline bool SaltPtrLt( Salt* lhs, Salt* rhs)
-{
-   return (lhs->type() < rhs->type() &&
-           lhs->addTo() < rhs->addTo());
-}
-
-inline bool SaltPtrEq( Salt* lhs, Salt* rhs)
-{
-   return (lhs->type() == rhs->type() &&
-           lhs->addTo() == rhs->addTo());
-
-}
-
-struct Salt_ptr_cmp
-{
-   bool operator()( Salt* lhs, Salt* rhs)
-   {
-      return ( lhs->type() < rhs->type() &&
-           lhs->addTo() < rhs->addTo());
-   }
-};
-
-struct Salt_ptr_equals
-{
-   bool operator()( Salt* lhs, Salt* rhs )
-   {
-      return ( lhs->type() == rhs->type() &&
-           lhs->addTo() == rhs->addTo());
-   }
-};
 
 #endif

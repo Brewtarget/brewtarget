@@ -21,68 +21,77 @@
  */
 #ifndef MODEL_BREWNOTE_H
 #define MODEL_BREWNOTE_H
+#pragma once
 
 #include <QDate>
 #include <QDomDocument>
 #include <QDomNode>
+#include <QSqlRecord>
 #include <QString>
 #include <QStringList>
 
 #include "model/NamedEntity.h"
-namespace PropertyNames::BrewNote { static char const * const fg = "fg"; /* previously kpropFG */ }
-namespace PropertyNames::BrewNote { static char const * const og = "og"; /* previously kpropOG */ }
-namespace PropertyNames::BrewNote { static char const * const notes = "notes"; /* previously kpropNotes */ }
-namespace PropertyNames::BrewNote { static char const * const projVolIntoFerm_l = "projVolIntoFerm_l"; /* previously kpropProjVolIntoFerm */ }
-namespace PropertyNames::BrewNote { static char const * const projVolIntoBK_l = "projVolIntoBK_l"; /* previously kpropProjVolIntoBoil */ }
-namespace PropertyNames::BrewNote { static char const * const postBoilVolume_l = "postBoilVolume_l"; /* previously kpropPostBoilVol */ }
-namespace PropertyNames::BrewNote { static char const * const projBoilGrav = "projBoilGrav"; /* previously kpropProjBoilGrav */ }
-namespace PropertyNames::BrewNote { static char const * const projFermPoints = "projFermPoints"; /* previously kpropProjFermPnts */ }
-namespace PropertyNames::BrewNote { static char const * const projPoints = "projPoints"; /* previously kpropProjPnts */ }
-namespace PropertyNames::BrewNote { static char const * const projOg = "projOg"; /* previously kpropProjOG */ }
-namespace PropertyNames::BrewNote { static char const * const projFg = "projFg"; /* previously kpropProjFG */ }
-namespace PropertyNames::BrewNote { static char const * const projEff_pct = "projEff_pct"; /* previously kpropProjEff */ }
-namespace PropertyNames::BrewNote { static char const * const projABV_pct = "projABV_pct"; /* previously kpropProjABV */ }
-namespace PropertyNames::BrewNote { static char const * const projAtten = "projAtten"; /* previously kpropProjAtten */ }
-namespace PropertyNames::BrewNote { static char const * const projMashFinTemp_c = "projMashFinTemp_c"; /* previously kpropProjMashFinTemp */ }
-namespace PropertyNames::BrewNote { static char const * const projStrikeTemp_c = "projStrikeTemp_c"; /* previously kpropProjStrikeTemp */ }
-namespace PropertyNames::BrewNote { static char const * const boilOff_l = "boilOff_l"; /* previously kpropBoilOff */ }
-namespace PropertyNames::BrewNote { static char const * const volumeIntoFerm_l = "volumeIntoFerm_l"; /* previously kpropVolIntoFerm */ }
-namespace PropertyNames::BrewNote { static char const * const volumeIntoBK_l = "volumeIntoBK_l"; /* previously kpropVolIntoBoil */ }
-namespace PropertyNames::BrewNote { static char const * const brewhouseEff_pct = "brewhouseEff_pct"; /* previously kpropBrewhsEff */ }
-namespace PropertyNames::BrewNote { static char const * const finalVolume_l = "finalVolume_l"; /* previously kpropFinVol */ }
-namespace PropertyNames::BrewNote { static char const * const pitchTemp_c = "pitchTemp_c"; /* previously kpropPitchTemp */ }
-namespace PropertyNames::BrewNote { static char const * const mashFinTemp_c = "mashFinTemp_c"; /* previously kpropMashFinTemp */ }
-namespace PropertyNames::BrewNote { static char const * const strikeTemp_c = "strikeTemp_c"; /* previously kpropStrikeTemp */ }
-namespace PropertyNames::BrewNote { static char const * const effIntoBK_pct = "effIntoBK_pct"; /* previously kpropEffIntoBoil */ }
-namespace PropertyNames::BrewNote { static char const * const attenuation = "attenuation"; /* previously kpropAtten */ }
-namespace PropertyNames::BrewNote { static char const * const abv = "abv"; /* previously kpropABV */ }
-namespace PropertyNames::BrewNote { static char const * const sg = "sg"; /* previously kpropSG */ }
-namespace PropertyNames::BrewNote { static char const * const fermentDate = "fermentDate"; /* previously kpropFermDate */ }
-namespace PropertyNames::BrewNote { static char const * const brewDate = "brewDate"; /* previously kpropBrewDate */ }
+
+//======================================================================================================================
+//========================================== Start of property name constants ==========================================
+#define AddPropertyName(property) namespace PropertyNames::BrewNote {static char const * const property = #property; }
+AddPropertyName(abv)
+AddPropertyName(attenuation)
+AddPropertyName(boilOff_l)
+AddPropertyName(brewDate)
+AddPropertyName(brewhouseEff_pct)
+AddPropertyName(effIntoBK_pct)
+AddPropertyName(fermentDate)
+AddPropertyName(fg)
+AddPropertyName(finalVolume_l)
+AddPropertyName(mashFinTemp_c)
+AddPropertyName(notes)
+AddPropertyName(og)
+AddPropertyName(pitchTemp_c)
+AddPropertyName(postBoilVolume_l)
+AddPropertyName(projABV_pct)
+AddPropertyName(projAtten)
+AddPropertyName(projBoilGrav)
+AddPropertyName(projEff_pct)
+AddPropertyName(projFermPoints)
+AddPropertyName(projFg)
+AddPropertyName(projMashFinTemp_c)
+AddPropertyName(projOg)
+AddPropertyName(projPoints)
+AddPropertyName(projStrikeTemp_c)
+AddPropertyName(projVolIntoBK_l)
+AddPropertyName(projVolIntoFerm_l)
+AddPropertyName(recipeId)
+AddPropertyName(sg)
+AddPropertyName(strikeTemp_c)
+AddPropertyName(volumeIntoBK_l)
+AddPropertyName(volumeIntoFerm_l)
+#undef AddPropertyName
+//=========================================== End of property name constants ===========================================
+//======================================================================================================================
 
 // Forward declarations;
 class Recipe;
 
 /*!
  * \class BrewNote
- * \author Mik Firestone
  *
  * \brief Model for a brewnote record, which records what you did on brewday.
  */
-class BrewNote : public NamedEntity
-{
+class BrewNote : public NamedEntity {
    Q_OBJECT
-   friend class Database;
-   friend class BeerXML;
 
 public:
-   BrewNote(QString name, bool cache = true);
+   BrewNote(QString name = "", bool cache = true);
+   BrewNote(Recipe const & recipe);
+   BrewNote(QDateTime dateNow, bool cache = true, QString const & name = "");
+   BrewNote(NamedParameterBundle const & namedParameterBundle);
+   BrewNote(BrewNote const & other);
+
    virtual ~BrewNote() = default;
 
    bool operator<(BrewNote const & other) const;
    bool operator>(BrewNote const & other) const;
-
-   static QString classNameStr();
 
    Q_PROPERTY( QDateTime brewDate READ brewDate WRITE setBrewDate /*NOTIFY changed*/ STORED false )
    Q_PROPERTY( QDateTime fermentDate READ fermentDate  WRITE setFermentDate /*NOTIFY changed*/ STORED false )
@@ -114,6 +123,7 @@ public:
    Q_PROPERTY( double projPoints READ projPoints WRITE setProjPoints /*NOTIFY changed*/ STORED false )
    Q_PROPERTY( double projFermPoints READ projFermPoints WRITE setProjFermPoints /*NOTIFY changed*/ STORED false )
    Q_PROPERTY( double projAtten READ projAtten WRITE setProjAtten /*NOTIFY changed*/ STORED false )
+   Q_PROPERTY( int    recipeId  READ getRecipeId WRITE setRecipeId STORED false )
 
    // Setters
    void setABV(double var);
@@ -138,6 +148,7 @@ public:
    void populateNote(Recipe* parent);
    void recalculateEff(Recipe* parent);
    void setLoading(bool flag);
+   void setRecipeId(int recipeId);
    void setRecipe(Recipe * recipe);
 
    // Getters
@@ -167,11 +178,16 @@ public:
    double finalVolume_l() const;
    double boilOff_l() const;
    QString notes() const;
+   int getRecipeId() const;
+
+/*
+ * .:TBD:. Think we can comment this out and rely on same function in base class!
+ *
    // ick, but I don't see another way. I need a unique key that has *nothing*
    // to do with the data entered. The best one I can think of is the
    // database's key
-   // int key() const;
-
+   int key() const;
+*/
    // Calculations
    double calculateEffIntoBK_pct();
    double calculateOg();
@@ -210,24 +226,17 @@ public:
    double projFermPoints() const;
    double projAtten() const;
 
-   // BrewNote objects do not have parents
-   NamedEntity * getParent() { return nullptr; }
-   virtual int insertInDatabase();
-   virtual void removeFromDatabase();
+   virtual Recipe * getOwningRecipe();
 
 signals:
    void brewDateChanged(const QDateTime&);
 
 protected:
    virtual bool isEqualTo(NamedEntity const & other) const;
+   virtual ObjectStore & getObjectStoreTypedInstance() const;
 
 private:
-   BrewNote(TableSchema* table, QSqlRecord rec, int t_key = -1);
-   /*
-   BrewNote(Brewtarget::DBTable table, int key);
-   BrewNote(QDateTime dateNow, bool cache = true, QString const & name = "");
-   */
-   BrewNote(BrewNote const& other);
+
    bool loading;
 
    QDateTime m_brewDate;
@@ -260,37 +269,9 @@ private:
    double m_projPoints;
    double m_projFermPoints;
    double m_projAtten;
-   Recipe * m_recipe;
+   int  m_recipeId;
 
-///   QHash<QString,double> info;
 };
 
 Q_DECLARE_METATYPE( QList<BrewNote*> )
-
-inline bool BrewNotePtrLt( BrewNote* lhs, BrewNote* rhs)
-{
-   return *lhs < *rhs;
-}
-
-inline bool BrewNotePtrEq( BrewNote* lhs, BrewNote* rhs)
-{
-   return *lhs == *rhs;
-}
-
-struct BrewNote_ptr_cmp
-{
-   bool operator()(BrewNote* lhs, BrewNote* rhs)
-   {
-      return *lhs < *rhs;
-   }
-};
-
-struct BrewNote_ptr_equals
-{
-   bool operator()(BrewNote* lhs, BrewNote* rhs)
-   {
-      return *lhs == *rhs;
-   }
-};
-
-#endif /* _BREWNOTE_H */
+#endif

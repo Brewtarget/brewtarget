@@ -22,17 +22,31 @@
  */
 #ifndef MODEL_MASH_H
 #define MODEL_MASH_H
+#pragma once
+
+#include <QSqlRecord>
+#include <QVector>
 
 #include "model/NamedEntity.h"
 
-namespace PropertyNames::Mash { static char const * const ph = "ph"; /* previously kpropPH */ }
-namespace PropertyNames::Mash { static char const * const tunSpecificHeat_calGC = "tunSpecificHeat_calGC"; /* previously kpropTunSpecHeat */ }
-namespace PropertyNames::Mash { static char const * const tunWeight_kg = "tunWeight_kg"; /* previously kpropTunWeight */ }
-namespace PropertyNames::Mash { static char const * const notes = "notes"; /* previously kpropNotes */ }
-namespace PropertyNames::Mash { static char const * const equipAdjust = "equipAdjust"; /* previously kpropEquipAdjust */ }
-namespace PropertyNames::Mash { static char const * const spargeTemp_c = "spargeTemp_c"; /* previously kpropSpargeTemp */ }
-namespace PropertyNames::Mash { static char const * const tunTemp_c = "tunTemp_c"; /* previously kpropTunTemp */ }
-namespace PropertyNames::Mash { static char const * const grainTemp_c = "grainTemp_c"; /* previously kpropGrainTemp */ }
+//======================================================================================================================
+//========================================== Start of property name constants ==========================================
+#define AddPropertyName(property) namespace PropertyNames::Mash {static char const * const property = #property; }
+AddPropertyName(equipAdjust)
+AddPropertyName(grainTemp_c)
+AddPropertyName(mashSteps)
+AddPropertyName(notes)
+AddPropertyName(ph)
+AddPropertyName(spargeTemp_c)
+AddPropertyName(totalMashWater_l)
+AddPropertyName(totalTime)
+AddPropertyName(tunSpecificHeat_calGC)
+AddPropertyName(tunTemp_c)
+AddPropertyName(tunWeight_kg)
+#undef AddPropertyName
+//=========================================== End of property name constants ===========================================
+//======================================================================================================================
+
 
 // Forward declarations.
 class MashStep;
@@ -41,21 +55,23 @@ class MashStep;
  * \class Mash
  *
  * \brief Model class for a mash record in the database.
+ *
+ *        .:TBD:. Mashes have a freestanding existence and can, in principle, be shared between Recipes but the UI does
+ *        not currently enforce them having non-empty names.
  */
-class Mash : public NamedEntity
-{
+class Mash : public NamedEntity {
    Q_OBJECT
    Q_CLASSINFO("signal", "mashs")
 
-   friend class Database;
-   friend class BeerXML;
+
    friend class MashDesigner;
    friend class MashEditor;
-
 public:
+   Mash(QString name = "", bool cache = true);
+   Mash(NamedParameterBundle const & namedParameterBundle);
+   Mash(Mash const& other);
 
-   Mash( QString name, bool cache = true );
-   virtual ~Mash() {}
+   virtual ~Mash() = default;
 
    //! \brief The initial grain temp in Celsius.
    Q_PROPERTY( double grainTemp_c READ grainTemp_c WRITE setGrainTemp_c /*NOTIFY changed*/ /*changedGrainTemp_c*/ )
@@ -77,9 +93,17 @@ public:
    Q_PROPERTY( double totalMashWater_l READ totalMashWater_l /*WRITE*/ /*NOTIFY changed*/ /*changedTotalMashWater_l*/ STORED false )
    //! \brief The total mash time in minutes. Calculated.
    Q_PROPERTY( double totalTime READ totalTime /*NOTIFY changed*/ /*changedTotalTime*/ STORED false )
-  // Q_PROPERTY( double tunMass_kg READ tunMass_kg  WRITE setTunMass_kg /*NOTIFY changed*/ /*changedTotalTime*/ )
    //! \brief The individual mash steps.
    Q_PROPERTY( QList<MashStep*> mashSteps  READ mashSteps /*WRITE*/ /*NOTIFY changed*/ /*changedTotalTime*/ STORED false )
+
+   /**
+    * \brief Connect MashStep changed signals to their parent Mashes.
+    *
+    *        Needs to be called \b after all the calls to ObjectStoreTyped<FooBar>::getInstance().loadAll()
+    */
+   static void connectSignals();
+
+   virtual void setKey(int key);
 
    // Setters
    void setGrainTemp_c( double var );
@@ -116,15 +140,19 @@ public:
    // Relational getters
    QList<MashStep*> mashSteps() const;
 
-   // NOTE: should this be completely in Database?
+   /*!
+    * \brief Swap MashSteps \c ms1 and \c ms2
+    */
+   void swapMashSteps(MashStep & ms1, MashStep & ms2);
+
    void removeAllMashSteps();
 
-   static QString classNameStr();
+   virtual Recipe * getOwningRecipe();
 
-   // Mash objects do not have parents
-   NamedEntity * getParent() { return nullptr; }
-   virtual int insertInDatabase();
-   virtual void removeFromDatabase();
+   /**
+    * \brief A Mash owns its MashSteps so needs to delete those if it itself is being deleted
+    */
+   virtual void hardDeleteOwnedEntities();
 
 public slots:
    void acceptMashStepChange(QMetaProperty, QVariant);
@@ -137,12 +165,9 @@ signals:
 
 protected:
    virtual bool isEqualTo(NamedEntity const & other) const;
+   virtual ObjectStore & getObjectStoreTypedInstance() const;
 
 private:
-// Mash(Brewtarget::DBTable table, int key);
-   Mash( TableSchema* table, QSqlRecord rec, int t_key = -1 );
-   Mash( Mash const& other );
-
    double m_grainTemp_c;
    QString m_notes;
    double m_tunTemp_c;
@@ -152,36 +177,11 @@ private:
    double m_tunSpecificHeat_calGC;
    bool m_equipAdjust;
 
-   QList<MashStep*> m_mashSteps;
+//   QList<MashStep*> m_mashSteps;
+   QVector<int> mashStepIds;
 
 };
 
 Q_DECLARE_METATYPE( Mash* )
-/*
-inline bool MashPtrLt( Mash* lhs, Mash* rhs)
-{
-   return *lhs < *rhs;
-}
 
-inline bool MashPtrEq( Mash* lhs, Mash* rhs)
-{
-   return *lhs == *rhs;
-}
-
-struct Mash_ptr_cmp
-{
-   bool operator()( Mash* lhs, Mash* rhs)
-   {
-      return *lhs < *rhs;
-   }
-};
-
-struct Mash_ptr_equals
-{
-   bool operator()( Mash* lhs, Mash* rhs )
-   {
-      return *lhs == *rhs;
-   }
-};
-*/
-#endif //_MASH_H
+#endif

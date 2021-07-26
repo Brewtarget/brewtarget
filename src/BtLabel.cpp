@@ -1,6 +1,7 @@
 /*
  * BtLabel.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -17,15 +18,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #include "BtLabel.h"
-#include "brewtarget.h"
+
 #include <QSettings>
 #include <QDebug>
+
+#include "brewtarget.h"
 #include "model/Style.h"
 #include "model/Recipe.h"
+#include "PersistentSettings.h"
 
-/*! \brief Initialize the BtLabel with the parent and do some things with the type
+/*!
+ * \brief Initialize the BtLabel with the parent and do some things with the type
+ *
  * \param parent - QWidget* to the parent object
  * \param lType - the type of label: none, gravity, mass or volume
  * \return the initialized widget
@@ -41,7 +46,7 @@ BtLabel::BtLabel(QWidget *parent, LabelType lType) :
    _menu = 0;
 
    connect(this, &QWidget::customContextMenuRequested, this, &BtLabel::popContextMenu);
-
+   return;
 }
 
 void BtLabel::initializeSection()
@@ -95,8 +100,8 @@ void BtLabel::initializeMenu()
    if ( _menu )
       return;
 
-   unit  = (Unit::unitDisplay)Brewtarget::option(propertyName, Unit::noUnit, _section, Brewtarget::UNIT).toInt();
-   scale = (Unit::unitScale)Brewtarget::option(propertyName, Unit::noScale, _section, Brewtarget::SCALE).toInt();
+   unit  = static_cast<Unit::unitDisplay>(PersistentSettings::value(propertyName, Unit::noUnit, _section, PersistentSettings::UNIT).toInt());
+   scale = static_cast<Unit::unitScale>(PersistentSettings::value(propertyName, Unit::noScale, _section, PersistentSettings::SCALE).toInt());
 
    switch( whatAmI )
    {
@@ -151,44 +156,38 @@ void BtLabel::popContextMenu(const QPoint& point)
    initializeMenu();
 
    invoked = _menu->exec(widgie->mapToGlobal(point));
-   Unit::unitDisplay unit = (Unit::unitDisplay)Brewtarget::option(propertyName, Unit::noUnit, _section, Brewtarget::UNIT).toInt();
-   Unit::unitScale scale  = (Unit::unitScale)Brewtarget::option(propertyName, Unit::noUnit, _section, Brewtarget::SCALE).toInt();
+   Unit::unitDisplay unit = static_cast<Unit::unitDisplay>(PersistentSettings::value(propertyName, Unit::noUnit, _section, PersistentSettings::UNIT).toInt());
+   Unit::unitScale scale  = static_cast<Unit::unitScale>(PersistentSettings::value(propertyName, Unit::noUnit, _section, PersistentSettings::SCALE).toInt());
 
    if ( invoked == 0 )
       return;
 
    QWidget* pMenu = invoked->parentWidget();
-   if ( pMenu == _menu )
-   {
-      Brewtarget::setOption(propertyName, invoked->data(), _section, Brewtarget::UNIT);
+   if ( pMenu == _menu ) {
+      PersistentSettings::insert(propertyName, invoked->data(), _section, PersistentSettings::UNIT);
       // reset the scale if required
-      if ( Brewtarget::hasOption(propertyName, _section, Brewtarget::SCALE) )
-         Brewtarget::setOption(propertyName, Unit::noScale, _section, Brewtarget::SCALE);
+      if (PersistentSettings::contains(propertyName, _section, PersistentSettings::SCALE) ) {
+         PersistentSettings::insert(propertyName, Unit::noScale, _section, PersistentSettings::SCALE);
+      }
+   } else {
+      PersistentSettings::insert(propertyName, invoked->data(), _section, PersistentSettings::SCALE);
    }
-   else
-      Brewtarget::setOption(propertyName, invoked->data(), _section, Brewtarget::SCALE);
 
    // To make this all work, I need to set ogMin and ogMax when og is set.
-   if ( propertyName == "og" )
-   {
-      Brewtarget::setOption(PropertyNames::Style::ogMin, invoked->data(),_section, Brewtarget::UNIT);
-      Brewtarget::setOption(PropertyNames::Style::ogMax, invoked->data(),_section, Brewtarget::UNIT);
-   }
-   else if ( propertyName == "fg" )
-   {
-      Brewtarget::setOption(PropertyNames::Style::fgMin, invoked->data(),_section, Brewtarget::UNIT);
-      Brewtarget::setOption(PropertyNames::Style::fgMax, invoked->data(),_section, Brewtarget::UNIT);
-   }
-   else if ( propertyName == "color_srm" )
-   {
-      Brewtarget::setOption(PropertyNames::Style::colorMin_srm, invoked->data(),_section, Brewtarget::UNIT);
-      Brewtarget::setOption(PropertyNames::Style::colorMax_srm, invoked->data(),_section, Brewtarget::UNIT);
+   if ( propertyName == "og" ) {
+      PersistentSettings::insert(PropertyNames::Style::ogMin, invoked->data(),_section, PersistentSettings::UNIT);
+      PersistentSettings::insert(PropertyNames::Style::ogMax, invoked->data(),_section, PersistentSettings::UNIT);
+   } else if ( propertyName == "fg" ) {
+      PersistentSettings::insert(PropertyNames::Style::fgMin, invoked->data(),_section, PersistentSettings::UNIT);
+      PersistentSettings::insert(PropertyNames::Style::fgMax, invoked->data(),_section, PersistentSettings::UNIT);
+   } else if ( propertyName == "color_srm" ) {
+      PersistentSettings::insert(PropertyNames::Style::colorMin_srm, invoked->data(),_section, PersistentSettings::UNIT);
+      PersistentSettings::insert(PropertyNames::Style::colorMax_srm, invoked->data(),_section, PersistentSettings::UNIT);
    }
 
    // Hmm. For the color fields, I want to include the ecb or srm in the label
    // text here.
-   if ( whatAmI == COLOR )
-   {
+   if ( whatAmI == COLOR ) {
       Unit::unitDisplay disp = (Unit::unitDisplay)invoked->data().toInt();
       setText( tr("Color (%1)").arg(Brewtarget::colorUnitName(disp)));
    }

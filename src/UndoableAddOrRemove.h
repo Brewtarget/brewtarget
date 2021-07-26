@@ -35,8 +35,7 @@
  * \brief Each instance of this class is a non-trivial undoable addition to, or removal from, a recipe etc.
  */
 template<class UU, class VV>
-class UndoableAddOrRemove : public QUndoCommand
-{
+class UndoableAddOrRemove : public QUndoCommand {
 public:
    /*!
     * \param updatee The object we are updating - eg recipe
@@ -78,7 +77,7 @@ public:
    /*!
     * This is the list version of the previous constructor. Some actions --
     * like dropping hops from the tree on a recipe -- work on lists  of
-    * objects. We need this constructor because casting sucks. 
+    * objects. We need this constructor because casting sucks.
     * \param updatee See above
     * \param doer The method on the updatee to do the addition or removal.
     *             This should return a QList of objects that need to be passed in to the \c undoer method.
@@ -355,4 +354,4 @@ template<class UU, class VV> UndoableAddOrRemove<UU, VV> * newUndoableAddOrRemov
                                           parent);
 }
 
-#endif /*UNDOABLE_ADD_OR_REMOVE_H*/
+#endif

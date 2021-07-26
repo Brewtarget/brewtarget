@@ -1,7 +1,10 @@
 /*
- * EquipmentButton.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
- * - Philip Greggory Lee <rocketman768@gmail.com>
+ * EquipmentButton.cpp is part of Brewtarget, and is copyright the following
+ * authors 2009-2021:
+ *   • Brian Rower <brian.rower@gmail.com>
+ *   • Mat Young <mfsy@yahoo.com>
+ *   • Mik Firestone <mikfire@gmail.com>
+ *   • Philip Greggory Lee <rocketman768@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,63 +16,63 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with
+ * this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #include "EquipmentButton.h"
-#include "model/Equipment.h"
-#include "model/Recipe.h"
+
 #include <QWidget>
 
-EquipmentButton::EquipmentButton(QWidget* parent)
-   : QPushButton(parent),
-     _rec(nullptr),
-     _equip(nullptr)
-{
+#include "model/Equipment.h"
+#include "model/Recipe.h"
+
+EquipmentButton::EquipmentButton(QWidget* parent) :
+   QPushButton(parent),
+   m_rec(nullptr),
+   m_equip(nullptr) {
+   return;
 }
 
-void EquipmentButton::setRecipe(Recipe* rec)
-{
-   if(_rec)
-      disconnect( _rec, nullptr, this, nullptr );
-
-   _rec = rec;
-   if( _rec )
-   {
-      connect( _rec, &NamedEntity::changed, this, &EquipmentButton::recChanged );
-      setEquipment( _rec->equipment() );
+void EquipmentButton::setRecipe(Recipe* rec) {
+   if (this->m_rec) {
+      disconnect(this->m_rec, nullptr, this, nullptr );
    }
-   else
-      setEquipment(nullptr);
+
+   this->m_rec = rec;
+   if (this->m_rec) {
+      connect(this->m_rec, &NamedEntity::changed, this, &EquipmentButton::recChanged );
+      this->setEquipment(this->m_rec->equipment() );
+   } else {
+      this->setEquipment(nullptr);
+   }
+   return;
 }
 
-void EquipmentButton::setEquipment(Equipment* equip)
-{
-   if( _equip )
-      disconnect( _equip, nullptr, this, nullptr );
-
-   _equip = equip;
-   if( _equip )
-   {
-      connect( _equip, &NamedEntity::changed, this, &EquipmentButton::equipChanged );
-      setText( _equip->name() );
+void EquipmentButton::setEquipment(Equipment* equip) {
+   if (this->m_equip) {
+      disconnect(this->m_equip, nullptr, this, nullptr);
    }
-   else
+
+   this->m_equip = equip;
+   if (this->m_equip) {
+      connect(this->m_equip, &NamedEntity::changed, this, &EquipmentButton::equipChanged );
+      setText(this->m_equip->name() );
+   } else {
       setText("");
+   }
+   return;
 }
 
-void EquipmentButton::equipChanged(QMetaProperty prop, QVariant val)
-{
-   QString propName(prop.name());
-   if( propName == PropertyNames::NamedEntity::name )
-      setText( val.toString() );
+void EquipmentButton::equipChanged(QMetaProperty prop, QVariant val) {
+   if (prop.name() == PropertyNames::NamedEntity::name) {
+      this->setText( val.toString() );
+   }
+   return;
 }
 
-void EquipmentButton::recChanged(QMetaProperty prop, QVariant val)
-{
-   QString propName(prop.name());
-
-   if( propName == "equipment" )
-      setEquipment( qobject_cast<Equipment*>(NamedEntity::extractPtr(val)) );
+void EquipmentButton::recChanged(QMetaProperty prop, QVariant val) {
+   if (prop.name() == PropertyNames::Recipe::equipment) {
+      this->setEquipment(val.value<Equipment *>());
+   }
+   return;
 }

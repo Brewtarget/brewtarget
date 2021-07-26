@@ -1,7 +1,8 @@
 /*
  * YeastEditor.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2020
+ * authors 2009-2022
  * - Kregg K <gigatropolis@yahoo.com>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  * - Samuel Östling <MrOstling@gmail.com>
@@ -19,26 +20,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#include "math.h"
-#include <QInputDialog>
 #include "YeastEditor.h"
-#include "BtHorizontalTabs.h"
-#include "database.h"
-#include "config.h"
-#include "Unit.h"
-#include "brewtarget.h"
-#include "model/Yeast.h"
 
-YeastEditor::YeastEditor( QWidget* parent )
-   : QDialog(parent), obsYeast(nullptr)
-{
+#include <cmath>
+
+#include <QInputDialog>
+
+#include "brewtarget.h"
+#include "BtHorizontalTabs.h"
+#include "config.h"
+#include "database/ObjectStoreWrapper.h"
+#include "model/Yeast.h"
+#include "Unit.h"
+
+YeastEditor::YeastEditor( QWidget* parent ) :
+   QDialog(parent),
+   obsYeast(nullptr) {
    setupUi(this);
 
    tabWidget_editor->tabBar()->setStyle( new BtHorizontalTabs );
    connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newYeast() ) );
    connect( pushButton_save,   &QAbstractButton::clicked, this, &YeastEditor::save );
    connect( pushButton_cancel, &QAbstractButton::clicked, this, &YeastEditor::clearAndClose );
+   return;
 }
 
 void YeastEditor::setYeast( Yeast* y )
@@ -64,7 +68,7 @@ void YeastEditor::save()
       return;
    }
 
-   y->setName(lineEdit_name->text(), y->cacheOnly());
+   y->setName(lineEdit_name->text());
    y->setType(static_cast<Yeast::Type>(comboBox_type->currentIndex()));
    y->setForm(static_cast<Yeast::Form>(comboBox_form->currentIndex()));
    y->setAmountIsWeight( (checkBox_amountIsWeight->checkState() == Qt::Checked)? true : false );
@@ -84,7 +88,8 @@ void YeastEditor::save()
    y->setNotes(textEdit_notes->toPlainText());
 
    if ( y->cacheOnly() ) {
-      y->insertInDatabase();
+      ObjectStoreWrapper::insert(*y);
+      y->setCacheOnly(false);
    }
    // do this late to make sure we've the row in the inventory table
    y->setInventoryQuanta( lineEdit_inventory->text().toInt() );
@@ -126,30 +131,31 @@ void YeastEditor::showChanges(QMetaProperty* metaProp)
       lineEdit_name->setCursorPosition(0);
 
       tabWidget_editor->setTabText(0, obsYeast->name());
-      if( ! updateAll )
+      if( ! updateAll ) {
          return;
+      }
    }
-   if( propName == "type" || updateAll ) {
+   if( propName == PropertyNames::Yeast::type || updateAll ) {
       comboBox_type->setCurrentIndex(obsYeast->type());
       if( ! updateAll )
          return;
    }
-   if( propName == "form" || updateAll ) {
+   if( propName == PropertyNames::Yeast::form || updateAll ) {
       comboBox_form->setCurrentIndex(obsYeast->form());
       if( ! updateAll )
          return;
    }
-   if( propName == "amount" || updateAll ) {
+   if( propName == PropertyNames::Yeast::amount || updateAll ) {
       lineEdit_amount->setText( obsYeast );
       if( ! updateAll )
          return;
    }
-   if( propName == "inventory" || updateAll ) {
-      lineEdit_inventory->setText( obsYeast->inventory(),0 );
+   if( propName == PropertyNames::NamedEntityWithInventory::inventory || updateAll ) {
+      lineEdit_inventory->setText(obsYeast->inventory(), 0);
       if( ! updateAll )
          return;
    }
-   if( propName == "amountIsWeight" || updateAll ) {
+   if( propName == PropertyNames::Yeast::amountIsWeight || updateAll ) {
       checkBox_amountIsWeight->setCheckState( (obsYeast->amountIsWeight())? Qt::Checked : Qt::Unchecked );
       if( ! updateAll )
          return;
@@ -187,12 +193,12 @@ void YeastEditor::showChanges(QMetaProperty* metaProp)
          return;
    }
    if( propName == PropertyNames::Yeast::timesCultured || updateAll ) {
-      lineEdit_timesCultured->setText(obsYeast->timesCultured(),0);
+      lineEdit_timesCultured->setText(obsYeast->timesCultured(), 0);
       if( ! updateAll )
          return;
    }
    if( propName == PropertyNames::Yeast::maxReuse || updateAll ) {
-      lineEdit_maxReuse->setText(obsYeast->maxReuse(),0);
+      lineEdit_maxReuse->setText(obsYeast->maxReuse(), 0);
       if( ! updateAll )
          return;
    }
@@ -206,30 +212,32 @@ void YeastEditor::showChanges(QMetaProperty* metaProp)
       if( ! updateAll )
          return;
    }
-   if( propName == "notes" || updateAll ) {
+   if( propName == PropertyNames::Yeast::notes || updateAll ) {
       textEdit_notes->setPlainText(obsYeast->notes());
       if( ! updateAll )
          return;
    }
 }
 
-void YeastEditor::newYeast()
-{
+void YeastEditor::newYeast() {
    newYeast(QString());
+   return;
 }
 
-void YeastEditor::newYeast(QString folder)
-{
+void YeastEditor::newYeast(QString folder) {
    QString name = QInputDialog::getText(this, tr("Yeast name"),
                                           tr("Yeast name:"));
-   if( name.isEmpty() )
+   if( name.isEmpty() ) {
       return;
+   }
 
    Yeast* y = new Yeast(name);
 
-   if ( ! folder.isEmpty() )
+   if ( ! folder.isEmpty() ) {
       y->setFolder(folder);
+   }
 
    setYeast(y);
    show();
+   return;
 }

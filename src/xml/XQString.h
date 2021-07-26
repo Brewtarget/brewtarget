@@ -16,9 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#ifndef _XML_XQSTRING_H
-#define _XML_XQSTRING_H
+#ifndef XML_XQSTRING_H
+#define XML_XQSTRING_H
 #pragma once
 
 #include <QString>

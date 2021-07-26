@@ -25,24 +25,18 @@
 #include <string>
 
 #include <QDebug>
-#include <QDomElement>
-#include <QDomText>
 #include <QObject>
 #include <QVector>
 
 #include "brewtarget.h"
-#include "database.h"
-#include "MiscSchema.h"
-#include "TableSchemaConst.h"
+#include "database/ObjectStoreWrapper.h"
+#include "model/Inventory.h"
+#include "model/Recipe.h"
 
-QStringList Misc::uses = QStringList() << "Boil" << "Mash" << "Primary" << "Secondary" << "Bottling";
-QStringList Misc::types = QStringList() << "Spice" << "Fining" << "Water Agent" << "Herb" << "Flavor" << "Other";
-QStringList Misc::amountTypes = QStringList() << "Weight" << "Volume";
-
-QString Misc::classNameStr()
-{
-   static const QString name("Misc");
-   return name;
+namespace {
+   QStringList uses = QStringList() << "Boil" << "Mash" << "Primary" << "Secondary" << "Bottling";
+   QStringList types = QStringList() << "Spice" << "Fining" << "Water Agent" << "Herb" << "Flavor" << "Other";
+   QStringList amountTypes = QStringList() << "Weight" << "Volume";
 }
 
 bool Misc::isEqualTo(NamedEntity const & other) const {
@@ -55,58 +49,56 @@ bool Misc::isEqualTo(NamedEntity const & other) const {
    );
 }
 
-//============================CONSTRUCTORS======================================
-
-Misc::Misc(TableSchema* table, QSqlRecord rec, int t_key) :
-   NamedEntityWithInventory(table, rec, t_key) {
-   m_typeString = rec.value( table->propertyToColumn( PropertyNames::Misc::type)).toString();
-   m_useString = rec.value( table->propertyToColumn( PropertyNames::Misc::use)).toString();
-   m_time = rec.value( table->propertyToColumn( PropertyNames::Misc::time)).toDouble();
-   m_amount = rec.value( table->propertyToColumn( PropertyNames::Misc::amount)).toDouble();
-   m_amountIsWeight = rec.value( table->propertyToColumn( PropertyNames::Misc::amountIsWeight)).toBool();
-   m_useFor = rec.value( table->propertyToColumn( PropertyNames::Misc::useFor)).toString();
-   m_notes = rec.value( table->propertyToColumn( PropertyNames::Misc::notes)).toString();
-
-   // not read from the db
-   m_type = static_cast<Misc::Type>(types.indexOf(m_typeString));
-   m_use = static_cast<Misc::Use>(uses.indexOf(m_useString));
+ObjectStore & Misc::getObjectStoreTypedInstance() const {
+   return ObjectStoreTyped<Misc>::getInstance();
 }
 
-Misc::Misc(Misc const & other) : NamedEntityWithInventory(other),
-   m_typeString(other.m_typeString),
-   m_type(other.m_type),
-   m_useString(other.m_useString),
-   m_use(other.m_use),
-   m_time(other.m_time),
-   m_amount(other.m_amount),
-   m_amountIsWeight(other.m_amountIsWeight),
-   m_useFor(other.m_useFor),
-   m_notes(other.m_notes) {
+//============================CONSTRUCTORS======================================
+Misc::Misc(Misc const & other) :
+   NamedEntityWithInventory{other                 },
+   m_type                  {other.m_type          },
+   m_use                   {other.m_use           },
+   m_time                  {other.m_time          },
+   m_amount                {other.m_amount        },
+   m_amountIsWeight        {other.m_amountIsWeight},
+   m_useFor                {other.m_useFor        },
+   m_notes                 {other.m_notes         } {
    return;
 }
 
 Misc::Misc(QString name, bool cache) :
-   NamedEntityWithInventory(Brewtarget::MISCTABLE, cache, name, true),
-   m_typeString(QString()),
-   m_type(static_cast<Misc::Type>(0)),
-   m_useString(QString()),
-   m_use(static_cast<Misc::Use>(0)),
-   m_time(0.0),
-   m_amount(0.0),
-   m_amountIsWeight(false),
-   m_useFor(QString()),
-   m_notes(QString()) {
+   NamedEntityWithInventory{-1, cache, name, true},
+   m_type                  {Misc::Spice          },
+   m_use                   {Misc::Boil           },
+   m_time                  {0.0                  },
+   m_amount                {0.0                  },
+   m_amountIsWeight        {false                },
+   m_useFor                {""                   },
+   m_notes                 {""                   } {
    return;
 }
+
+Misc::Misc(NamedParameterBundle const & namedParameterBundle) :
+   NamedEntityWithInventory{namedParameterBundle},
+   m_type                  {static_cast<Misc::Type>(namedParameterBundle(PropertyNames::Misc::type).toInt())},
+   m_use                   {static_cast<Misc::Use>(namedParameterBundle(PropertyNames::Misc::use).toInt())},
+   m_time                  {namedParameterBundle(PropertyNames::Misc::time          ).toDouble()},
+   m_amount                {namedParameterBundle(PropertyNames::Misc::amount        ).toDouble()},
+   m_amountIsWeight        {namedParameterBundle(PropertyNames::Misc::amountIsWeight).toBool()},
+   m_useFor                {namedParameterBundle(PropertyNames::Misc::useFor        ).toString()},
+   m_notes                 {namedParameterBundle(PropertyNames::Misc::notes         ).toString()} {
+   return;
+}
+
 
 //============================"GET" METHODS=====================================
 Misc::Type Misc::type() const { return m_type; }
 
-const QString Misc::typeString() const { return m_typeString; }
+const QString Misc::typeString() const { return types.at(m_type); }
 
 Misc::Use Misc::use() const { return m_use; }
 
-const QString Misc::useString() const { return m_useString; }
+const QString Misc::useString() const { return uses.at(m_use); }
 
 double Misc::amount() const { return m_amount; }
 
@@ -117,6 +109,10 @@ bool Misc::amountIsWeight() const { return m_amountIsWeight; }
 QString Misc::useFor() const { return m_useFor; }
 
 QString Misc::notes() const { return m_notes; }
+
+double Misc::inventory() const {
+   return InventoryUtils::getAmount(*this);
+}
 
 Misc::AmountType Misc::amountType() const { return m_amountIsWeight ? AmountType_Weight : AmountType_Volume; }
 
@@ -156,109 +152,41 @@ const QString Misc::amountTypeStringTr() const
 }
 
 //============================"SET" METHODS=====================================
-void Misc::setType( Type t )
-{
-   if ( t >= types.size() ) {
-      qWarning() << "Unrecognized misc type:" << t;
-      return;
-   }
-
-   if ( m_cacheOnly ) {
-      m_type = t;
-      m_typeString = types.at(t);
-   }
-   else if ( setEasy( PropertyNames::Misc::type, types.at(t) ) ) {
-      m_type = t;
-      m_typeString = types.at(t);
-      signalCacheChange( PropertyNames::Misc::type, types.at(t) );
-   }
+void Misc::setType(Type t) {
+   this->setAndNotify( PropertyNames::Misc::type, this->m_type, t);
 }
 
-void Misc::setUse( Use u )
-{
-   if ( u >= uses.size() ) {
-      qWarning() << "Unrecognized misc use:" << u;
-      return;
-   }
-   if ( m_cacheOnly ) {
-      m_use = u;
-      m_useString = uses.at(u);
-   }
-   else if ( setEasy( PropertyNames::Misc::use, uses.at(u) ) ) {
-      m_use = u;
-      m_useString = uses.at(u);
-      signalCacheChange( PropertyNames::Misc::use, uses.at(u) );
-   }
+void Misc::setUse(Use u) {
+   this->setAndNotify( PropertyNames::Misc::use, this->m_use, u);
 }
 
-void Misc::setUseFor( const QString& var )
-{
-   if ( m_cacheOnly ) {
-      m_useFor = var;
-   }
-   else if ( setEasy( PropertyNames::Misc::useFor, var ) ) {
-      m_useFor = var;
-      signalCacheChange( PropertyNames::Misc::useFor, var );
-   }
+void Misc::setUseFor(QString const & var) {
+   this->setAndNotify( PropertyNames::Misc::useFor, this->m_useFor, var );
 }
 
-void Misc::setNotes( const QString& var )
-{
-   if ( m_cacheOnly ) {
-      m_notes = var;
-   }
-   else if ( setEasy( PropertyNames::Misc::notes, var ) ) {
-      m_notes = var;
-      signalCacheChange( PropertyNames::Misc::notes, var );
-   }
+void Misc::setNotes(QString const & var) {
+   this->setAndNotify( PropertyNames::Misc::notes, this->m_notes, var );
 }
 
-void Misc::setAmountType( AmountType t )
-{
-   bool is_a_weight = t == AmountType_Weight;
-   setAmountIsWeight(is_a_weight);
+void Misc::setAmountType(AmountType t) {
+   this->setAmountIsWeight(t == AmountType_Weight);
 }
 
-void Misc::setAmountIsWeight( bool var )
-{
-   if ( m_cacheOnly ) {
-      m_amountIsWeight = var;
-   }
-   else if ( setEasy( PropertyNames::Misc::amountIsWeight, var ) ) {
-      m_amountIsWeight = var;
-      signalCacheChange( PropertyNames::Misc::amountIsWeight, var );
-   }
+void Misc::setAmountIsWeight(bool var) {
+   this->setAndNotify( PropertyNames::Misc::amountIsWeight, this->m_amountIsWeight, var);
 }
 
-void Misc::setAmount( double var )
-{
-   if( var < 0.0 ) {
-      qWarning() << "Misc: amount < 0:" << var;
-      return;
-   }
-
-   if ( m_cacheOnly ) {
-      m_amount = var;
-   }
-   else if ( setEasy( PropertyNames::Misc::amount, var ) ) {
-      m_amount = var;
-      signalCacheChange( PropertyNames::Misc::amount, var );
-   }
+void Misc::setAmount(double var) {
+   this->setAndNotify( PropertyNames::Misc::amount, this->m_amount, this->enforceMin(var, "amount"));
 }
 
-void Misc::setTime( double var )
-{
-   if( var < 0.0 ) {
-      qWarning() << "Misc: time < 0:" << var;
-      return;
-   }
-   if ( m_cacheOnly ) {
-      m_time = var;
-   }
-   else if ( setEasy( PropertyNames::Misc::time, var ) ) {
-      m_time = var;
-      signalCacheChange( PropertyNames::Misc::time, var );
-   }
+void Misc::setInventoryAmount(double var) {
+   InventoryUtils::setAmount(*this, var);
+   return;
+}
+
+void Misc::setTime(double var) {
+   this->setAndNotify( PropertyNames::Misc::time, this->m_time, this->enforceMin(var, "time"));
 }
 
 //========================OTHER METHODS=========================================
@@ -289,27 +217,6 @@ bool Misc::isValidType( const QString& var )
    return false;
 }
 
-NamedEntity * Misc::getParent() {
-   Misc * myParent = nullptr;
-
-   // If we don't already know our parent, look it up
-   if (!this->parentKey) {
-      this->parentKey = Database::instance().getParentNamedEntityKey(*this);
-   }
-
-   // If we (now) know our parent, get a pointer to it
-   if (this->parentKey) {
-      myParent = Database::instance().misc(this->parentKey);
-   }
-
-   // Return whatever we got
-   return myParent;
-}
-
-int Misc::insertInDatabase() {
-   return Database::instance().insertMisc(this);
-}
-
-void Misc::removeFromDatabase() {
-   Database::instance().remove(this);
+Recipe * Misc::getOwningRecipe() {
+   return ObjectStoreWrapper::findFirstMatching<Recipe>( [this](Recipe * rec) {return rec->uses(*this);} );
 }

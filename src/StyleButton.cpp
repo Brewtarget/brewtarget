@@ -1,6 +1,7 @@
 /*
  * StyleButton.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -26,7 +27,7 @@
 
 StyleButton::StyleButton(QWidget* parent)
    : QPushButton(parent),
-     _rec(nullptr),
+     m_rec(nullptr),
      _style(nullptr)
 {
 }
@@ -34,14 +35,14 @@ StyleButton::StyleButton(QWidget* parent)
 void StyleButton::setRecipe(Recipe* rec)
 {
 
-   if(_rec)
-      disconnect( _rec, nullptr, this, nullptr );
+   if(m_rec)
+      disconnect( m_rec, nullptr, this, nullptr );
 
-   _rec = rec;
-   if( _rec )
+   m_rec = rec;
+   if( m_rec )
    {
-      connect( _rec, &NamedEntity::changed, this, &StyleButton::recChanged );
-      setStyle( _rec->style() );
+      connect( m_rec, &NamedEntity::changed, this, &StyleButton::recChanged );
+      setStyle( m_rec->style() );
    }
    else
       setStyle(nullptr);
@@ -62,17 +63,16 @@ void StyleButton::setStyle(Style* style)
       setText("");
 }
 
-void StyleButton::styleChanged(QMetaProperty prop, QVariant val)
-{
-   QString propName(prop.name());
-   if( propName == PropertyNames::NamedEntity::name )
-      setText( val.toString() );
+void StyleButton::styleChanged(QMetaProperty prop, QVariant val) {
+   if (prop.name() == PropertyNames::NamedEntity::name) {
+      this->setText(val.toString());
+   }
+   return;
 }
 
-void StyleButton::recChanged(QMetaProperty prop, QVariant val)
-{
-   QString propName(prop.name());
-
-   if( propName == "style" )
-      setStyle( qobject_cast<Style*>(NamedEntity::extractPtr(val)) );
+void StyleButton::recChanged(QMetaProperty prop, QVariant val) {
+   if (prop.name() == PropertyNames::Recipe::style) {
+      this->setStyle(val.value<Style*>());
+   }
+   return;
 }

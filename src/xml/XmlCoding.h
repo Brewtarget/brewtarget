@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef _XML_XMLCODING_H
-#define _XML_XMLCODING_H
+#ifndef XML_XMLCODING_H
+#define XML_XMLCODING_H
 #pragma once
 
 #include <memory> // For smart pointers
@@ -27,13 +27,13 @@
 #include <QTextStream>
 #include <QVariant>
 
-
 #include <xalanc/DOMSupport/DOMSupport.hpp>
 #include <xalanc/XalanDOM/XalanNode.hpp>
 
 #include "xml/BtDomErrorHandler.h"
 #include "xml/XmlRecord.h"
 #include "xml/XmlNamedEntityRecord.h"
+#include "xml/XmlMashRecord.h"
 #include "xml/XmlMashStepRecord.h"
 #include "xml/XmlRecipeRecord.h"
 
@@ -136,6 +136,7 @@ public:
     *        To make it easier for callers, we also typedef \b XmlCoding::XmlRecordConstructorWrapperto be a pointer to
     *        a function of this type.
     *
+    * \param recordName passed into the constructor of T (which should be \b XmlRecord or a subclass thereof)
     * \param xmlCoding passed into the constructor of T (which should be \b XmlRecord or a subclass thereof)
     * \param fieldDefinitions passed into the constructor of T (which should be \b XmlRecord or a subclass thereof)
     * \return Pointer to a new instance, constructed on the heap, of an XmlRecord (or subclass thereof) suitable for
@@ -150,16 +151,18 @@ public:
     *         NB: The caller owns this object and is responsible for its deletion.
     */
    template<typename T>
-   static XmlRecord * construct(XmlCoding const & xmlCoding,
+   static XmlRecord * construct(QString const & recordName,
+                                XmlCoding const & xmlCoding,
                                 XmlRecord::FieldDefinitions const & fieldDefinitions) {
-      return new XmlNamedEntityRecord<T>{xmlCoding, fieldDefinitions};
+      return new XmlNamedEntityRecord<T>{recordName, xmlCoding, fieldDefinitions};
    }
 
    /**
     * \brief This is just a convenience typedef representing a pointer to a template specialisation of
     *        \b XmlCoding::construct().
     */
-   typedef XmlRecord * (*XmlRecordConstructorWrapper)(XmlCoding const &,
+   typedef XmlRecord * (*XmlRecordConstructorWrapper)(QString const & recordName,
+                                                      XmlCoding const &,
                                                       XmlRecord::FieldDefinitions const &);
 
    /**
@@ -238,19 +241,28 @@ private:
 
 // Specialisations for classes that aren't handled by XmlNamedEntityRecord
 template<> inline
-XmlRecord * XmlCoding::construct<void>(XmlCoding const & xmlCoding,
+XmlRecord * XmlCoding::construct<void>(QString const & recordName,
+                                       XmlCoding const & xmlCoding,
                                        XmlRecord::FieldDefinitions const & fieldDefinitions) {
-   return new XmlRecord{xmlCoding, fieldDefinitions};
+   return new XmlRecord{recordName, xmlCoding, fieldDefinitions};
 }
 template<> inline
-XmlRecord * XmlCoding::construct<MashStep>(XmlCoding const & xmlCoding,
+XmlRecord * XmlCoding::construct<Mash>(QString const & recordName,
+                                       XmlCoding const & xmlCoding,
+                                       XmlRecord::FieldDefinitions const & fieldDefinitions) {
+   return new XmlMashRecord{recordName, xmlCoding, fieldDefinitions};
+}
+template<> inline
+XmlRecord * XmlCoding::construct<MashStep>(QString const & recordName,
+                                           XmlCoding const & xmlCoding,
                                            XmlRecord::FieldDefinitions const & fieldDefinitions) {
-   return new XmlMashStepRecord{xmlCoding, fieldDefinitions};
+   return new XmlMashStepRecord{recordName, xmlCoding, fieldDefinitions};
 }
 template<> inline
-XmlRecord * XmlCoding::construct<Recipe>(XmlCoding const & xmlCoding,
+XmlRecord * XmlCoding::construct<Recipe>(QString const & recordName,
+                                         XmlCoding const & xmlCoding,
                                          XmlRecord::FieldDefinitions const & fieldDefinitions) {
-   return new XmlRecipeRecord{xmlCoding, fieldDefinitions};
+   return new XmlRecipeRecord{recordName, xmlCoding, fieldDefinitions};
 }
 
 

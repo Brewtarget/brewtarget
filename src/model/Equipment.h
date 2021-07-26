@@ -21,46 +21,57 @@
  */
 #ifndef MODEL_EQUIPMENT_H
 #define MODEL_EQUIPMENT_H
+#pragma once
 
 #include <QDomNode>
+#include <QSqlRecord>
+
 #include "model/NamedEntity.h"
-namespace PropertyNames::Equipment { static char const * const boilTime_min = "boilTime_min"; /* previously kpropBoilTime */ }
-namespace PropertyNames::Equipment { static char const * const boilSize_l = "boilSize_l"; /* previously kpropBoilSize */ }
-namespace PropertyNames::Equipment { static char const * const batchSize_l = "batchSize_l"; /* previously kpropBatchSize */ }
-namespace PropertyNames::Equipment { static char const * const tunSpecificHeat_calGC = "tunSpecificHeat_calGC"; /* previously kpropTunSpecHeat */ }
-namespace PropertyNames::Equipment { static char const * const tunWeight_kg = "tunWeight_kg"; /* previously kpropTunWeight */ }
-namespace PropertyNames::Equipment { static char const * const notes = "notes"; /* previously kpropNotes */ }
-namespace PropertyNames::Equipment { static char const * const boilingPoint_c = "boilingPoint_c"; /* previously kpropBoilingPoint */ }
-namespace PropertyNames::Equipment { static char const * const grainAbsorption_LKg = "grainAbsorption_LKg"; /* previously kpropAbsorption */ }
-namespace PropertyNames::Equipment { static char const * const hopUtilization_pct = "hopUtilization_pct"; /* previously kpropHopUtil */ }
-namespace PropertyNames::Equipment { static char const * const topUpKettle_l = "topUpKettle_l"; /* previously kpropTopUpKettle */ }
-namespace PropertyNames::Equipment { static char const * const lauterDeadspace_l = "lauterDeadspace_l"; /* previously kpropLauterSpace */ }
-namespace PropertyNames::Equipment { static char const * const calcBoilVolume = "calcBoilVolume"; /* previously kpropCalcBoilVol */ }
-namespace PropertyNames::Equipment { static char const * const evapRate_lHr = "evapRate_lHr"; /* previously kpropRealEvapRate */ }
-namespace PropertyNames::Equipment { static char const * const evapRate_pctHr = "evapRate_pctHr"; /* previously kpropEvapRate */ }
-namespace PropertyNames::Equipment { static char const * const trubChillerLoss_l = "trubChillerLoss_l"; /* previously kpropTrubChillLoss */ }
-namespace PropertyNames::Equipment { static char const * const topUpWater_l = "topUpWater_l"; /* previously kpropTopUpWater */ }
-namespace PropertyNames::Equipment { static char const * const tunVolume_l = "tunVolume_l"; /* previously kpropTunVolume */ }
+
+//======================================================================================================================
+//========================================== Start of property name constants ==========================================
+#define AddPropertyName(property) namespace PropertyNames::Equipment {static char const * const property = #property; }
+AddPropertyName(boilTime_min)
+AddPropertyName(boilSize_l)
+AddPropertyName(batchSize_l)
+AddPropertyName(tunSpecificHeat_calGC)
+AddPropertyName(tunWeight_kg)
+AddPropertyName(notes)
+AddPropertyName(boilingPoint_c)
+AddPropertyName(grainAbsorption_LKg)
+AddPropertyName(hopUtilization_pct)
+AddPropertyName(topUpKettle_l)
+AddPropertyName(lauterDeadspace_l)
+AddPropertyName(calcBoilVolume)
+AddPropertyName(evapRate_lHr)
+AddPropertyName(evapRate_pctHr)
+AddPropertyName(trubChillerLoss_l)
+AddPropertyName(topUpWater_l)
+AddPropertyName(tunVolume_l)
+#undef AddPropertyName
+//=========================================== End of property name constants ===========================================
+//======================================================================================================================
+
 
 /*!
  * \class Equipment
  *
  * \brief Model representing a single equipment record.
  */
-class Equipment : public NamedEntity
-{
+class Equipment : public NamedEntity {
    Q_OBJECT
 
    Q_CLASSINFO("signal", "equipments")
 
-   friend class Database;
-   friend class BeerXML;
+
    friend class EquipmentEditor;
 
 public:
+   Equipment(QString t_name = "", bool cacheOnly = true);
+   Equipment(NamedParameterBundle const & namedParameterBundle);
+   Equipment(Equipment const & other);
 
-   Equipment(QString t_name, bool cacheOnly = true);
-   virtual ~Equipment() {}
+   virtual ~Equipment() = default;
 
    //! \brief The boil size in liters.
    Q_PROPERTY( double boilSize_l            READ boilSize_l            WRITE setBoilSize_l            NOTIFY changedBoilSize_l )
@@ -138,11 +149,7 @@ public:
    //! \brief Calculate how much wort is left immediately at knockout.
    double wortEndOfBoil_l( double kettleWort_l ) const;
 
-   static QString classNameStr();
-
-   NamedEntity * getParent();
-   virtual int insertInDatabase();
-   virtual void removeFromDatabase();
+   virtual Recipe * getOwningRecipe();
 
 signals:
    void changedBoilSize_l(double);
@@ -165,12 +172,9 @@ signals:
 
 protected:
    virtual bool isEqualTo(NamedEntity const & other) const;
+   virtual ObjectStore & getObjectStoreTypedInstance() const;
 
 private:
-   Equipment(TableSchema* table, QSqlRecord rec, int t_key = -1);
-   // Equipment(Brewtarget::DBTable table, int key);
-   Equipment( Equipment const& other);
-
    double m_boilSize_l;
    double m_batchSize_l;
    double m_tunVolume_l;

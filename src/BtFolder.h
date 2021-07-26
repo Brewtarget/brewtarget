@@ -16,11 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #ifndef BTFOLDER_H
 #define BTFOLDER_H
-
-class BtFolder;
 
 #include <QSharedPointer>
 #include <QList>
@@ -33,13 +30,12 @@ class BtFolder;
 
 /*!
  * \class BtFolder
- * \author Mik Firestone
  *
  * \brief Item needed to implement folders in the trees
  *
  * This provides a generic item from which the trees are built. Since most of
  * the actions required are the same regardless of the item being stored (e.g.
- * hop or equipment), this class considers them all the same. 
+ * hop or equipment), this class considers them all the same.
  *
  * A few notes, just so I don't have to rethink all of this. This class
  * generates NO signals. It catches signals from cahnges made in the database,
@@ -80,4 +76,4 @@ private:
 
 };
 
-#endif /* BTFOLDER_H */
+#endif
