@@ -26,6 +26,7 @@
 
 #include "Algorithms.h"
 #include "brewtarget.h"
+#include "model/NamedEntity.h"
 #include "PersistentSettings.h"
 #include "Unit.h"
 

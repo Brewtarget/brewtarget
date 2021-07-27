@@ -22,10 +22,10 @@
 #define BTLINEEDIT_H
 
 #include <QLineEdit>
+#include <QString>
+#include <QWidget>
 
-#include "model/NamedEntity.h"
 #include "Unit.h"
-#include "UnitSystem.h"
 
 class BtGenericEdit;
 class BtMassEdit;
@@ -37,10 +37,10 @@ class BtColorEdit;
 class BtMixedEdit;
 class BtDiastaticPowerEdit;
 class BtStringEdit;
+class NamedEntity;
 
 /*!
  * \class BtLineEdit
- *
  *
  * \brief This extends QLineEdit such that the Object handles all the unit
  * transformation we do, instead of each dialog. It makes the code much

@@ -71,6 +71,13 @@ namespace {
    struct DbNativeVariants {
       char const * const sqliteName;
       char const * const postgresqlName;
+      // GCC will let you get away without it, but some C++ compilers are more strict about the need for a non-default
+      // constructor when you have const members in a struct
+      DbNativeVariants(char const * const sqliteName = nullptr, char const * const postgresqlName = nullptr) :
+         sqliteName{sqliteName},
+         postgresqlName{postgresqlName} {
+         return;
+      }
    };
 
    //
