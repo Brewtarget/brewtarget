@@ -53,7 +53,6 @@ BtDatePopup::BtDatePopup(QWidget* parent) : QDialog(parent, Qt::Popup)
    connect(buttonbox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 }
 
-QDateTime BtDatePopup::selectedDate() const
-{
-   return QDateTime(calendar->selectedDate(), QTime::currentTime());
+QDate BtDatePopup::selectedDate() const {
+   return calendar->selectedDate();
 }

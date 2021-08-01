@@ -24,6 +24,7 @@
 
 #include "brewtarget.h"
 #include "database/ObjectStoreWrapper.h"
+#include "model/NamedParameterBundle.h"
 #include "PhysicalConstants.h"
 
 QStringList const MashStep::types{"Infusion", "Temperature", "Decoction", "Fly Sparge", "Batch Sparge"};

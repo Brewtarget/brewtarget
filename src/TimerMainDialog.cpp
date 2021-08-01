@@ -16,10 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #include "TimerMainDialog.h"
+
 #include <QMessageBox>
 #include <QToolTip>
+
 #include "Unit.h"
 
 TimerMainDialog::TimerMainDialog(MainWindow* parent) : QDialog(parent),
@@ -380,4 +381,3 @@ void TimerMainDialog::sortTimers()
         timers = sortedTimers;
     }
 }
-

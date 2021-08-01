@@ -476,10 +476,10 @@ void BtTreeView::setupContextMenu(QWidget * top, QWidget * editor) {
 
          // version menu
          m_versionMenu->setTitle("Snapshots");
-         m_showAncestorAction = m_versionMenu->addAction(tr("Show Snapshots"), this, SLOT(this->showAncestors()));
-         m_hideAncestorAction = m_versionMenu->addAction(tr("Hide Snapshots"), this, SLOT(this->hideAncestors()));
-         m_orphanAction = m_versionMenu->addAction(tr("Detach Recipe"), this, SLOT(this->orphanRecipe()));
-         m_spawnAction  = m_versionMenu->addAction(tr("Snapshot Recipe"), this, SLOT(this->spawnRecipe()));
+         m_showAncestorAction = m_versionMenu->addAction(tr("Show Snapshots"), this, SLOT(showAncestors()));
+         m_hideAncestorAction = m_versionMenu->addAction(tr("Hide Snapshots"), this, SLOT(hideAncestors()));
+         m_orphanAction = m_versionMenu->addAction(tr("Detach Recipe"), this, SLOT(orphanRecipe()));
+         m_spawnAction  = m_versionMenu->addAction(tr("Snapshot Recipe"), this, SLOT(spawnRecipe()));
          m_contextMenu->addMenu(m_versionMenu);
 
          m_contextMenu->addSeparator();

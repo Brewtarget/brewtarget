@@ -19,10 +19,8 @@
  */
 #include "model/Water.h"
 
-#include <QVector>
-
-#include "brewtarget.h"
 #include "database/ObjectStoreWrapper.h"
+#include "model/NamedParameterBundle.h"
 #include "model/Recipe.h"
 
 bool Water::isEqualTo(NamedEntity const & other) const {

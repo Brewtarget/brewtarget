@@ -34,8 +34,8 @@
 #include <QVariant>
 
 #include "brewtarget.h"
-#include "model/NamedParameterBundle.h"
 
+class NamedParameterBundle;
 class ObjectStore;
 class Recipe;
 

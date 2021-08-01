@@ -84,7 +84,7 @@ class BrewNote : public NamedEntity {
 public:
    BrewNote(QString name = "", bool cache = true);
    BrewNote(Recipe const & recipe);
-   BrewNote(QDateTime dateNow, bool cache = true, QString const & name = "");
+   BrewNote(QDate dateNow, bool cache = true, QString const & name = "");
    BrewNote(NamedParameterBundle const & namedParameterBundle);
    BrewNote(BrewNote const & other);
 
@@ -93,8 +93,8 @@ public:
    bool operator<(BrewNote const & other) const;
    bool operator>(BrewNote const & other) const;
 
-   Q_PROPERTY( QDateTime brewDate READ brewDate WRITE setBrewDate /*NOTIFY changed*/ STORED false )
-   Q_PROPERTY( QDateTime fermentDate READ fermentDate  WRITE setFermentDate /*NOTIFY changed*/ STORED false )
+   Q_PROPERTY( QDate brewDate READ brewDate WRITE setBrewDate /*NOTIFY changed*/ STORED false )
+   Q_PROPERTY( QDate fermentDate READ fermentDate  WRITE setFermentDate /*NOTIFY changed*/ STORED false )
    Q_PROPERTY( QString notes READ notes WRITE setNotes /*NOTIFY changed*/ STORED false )
    Q_PROPERTY( double sg READ sg WRITE setSg /*NOTIFY changed*/ STORED false )
    Q_PROPERTY( double abv READ abv WRITE setABV /*NOTIFY changed*/ STORED false )
@@ -128,8 +128,8 @@ public:
    // Setters
    void setABV(double var);
    void setAttenuation(double var);
-   void setBrewDate(QDateTime const& date = QDateTime::currentDateTime());
-   void setFermentDate(QDateTime const& date);
+   void setBrewDate(QDate const& date = QDate::currentDate());
+   void setFermentDate(QDate const& date);
    void setNotes(const QString& var);
    void setSg(double var);
    void setVolumeIntoBK_l(double var);
@@ -152,12 +152,12 @@ public:
    void setRecipe(Recipe * recipe);
 
    // Getters
-   QDateTime brewDate() const;
+   QDate brewDate() const;
    //! Convenience method.
    QString   brewDate_str() const;
    //! Convenience method.
    QString   brewDate_short() const;
-    QDateTime fermentDate() const;
+   QDate fermentDate() const;
    //! Convenience method.
    QString   fermentDate_str() const;
    //! Convenience method.
@@ -229,7 +229,7 @@ public:
    virtual Recipe * getOwningRecipe();
 
 signals:
-   void brewDateChanged(const QDateTime&);
+   void brewDateChanged(const QDate &);
 
 protected:
    virtual bool isEqualTo(NamedEntity const & other) const;
@@ -239,8 +239,8 @@ private:
 
    bool loading;
 
-   QDateTime m_brewDate;
-   QDateTime m_fermentDate;
+   QDate m_brewDate;
+   QDate m_fermentDate;
    QString m_notes;
    double m_sg;
    double m_abv;

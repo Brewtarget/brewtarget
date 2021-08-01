@@ -28,7 +28,6 @@
 #include <QInputDialog>
 #include <QList>
 #include <QObject>
-#include <QSharedPointer>
 
 #include "Algorithms.h"
 #include "brewtarget.h"
@@ -43,6 +42,7 @@
 #include "model/Mash.h"
 #include "model/MashStep.h"
 #include "model/Misc.h"
+#include "model/NamedParameterBundle.h"
 #include "model/Salt.h"
 #include "model/Style.h"
 #include "model/Water.h"

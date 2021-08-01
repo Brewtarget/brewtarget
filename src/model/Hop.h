@@ -86,7 +86,7 @@ public:
    Hop(NamedParameterBundle const & namedParameterBundle);
    Hop(Hop const & other);
 
-   virtual ~Hop() = default;
+   virtual ~Hop();
 
    //! \brief The percent alpha.
    Q_PROPERTY( double alpha_pct READ alpha_pct WRITE setAlpha_pct /*NOTIFY changed*/ /*changedAlpha_pct*/ )

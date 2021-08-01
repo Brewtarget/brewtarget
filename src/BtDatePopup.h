@@ -18,6 +18,7 @@
  */
 #ifndef BTDATEPOPUP_H
 #define BTDATEPOPUP_H
+#pragma once
 
 #include <QCalendarWidget>
 #include <QDate>
@@ -28,7 +29,6 @@
 
 /*!
  * \class BtDatePopup
- * \author Mik Firestone
  *
  * \brief Gives us a calendar popup so that we can redate a brewnote. A lot of
  * setup needs to be done to make this behave, so it is easier to do it as a
@@ -41,14 +41,14 @@ class BtDatePopup : public QDialog {
    Q_OBJECT
 
 public:
-BtDatePopup(QWidget* parent=0);
-QDateTime selectedDate() const;
+      BtDatePopup(QWidget* parent=0);
+      QDate selectedDate() const;
 
 private:
-QWidget* widget;
-QCalendarWidget* calendar;
-QDialogButtonBox* buttonbox;
-QVBoxLayout* vertical;
+      QWidget* widget;
+      QCalendarWidget* calendar;
+      QDialogButtonBox* buttonbox;
+      QVBoxLayout* vertical;
 };
 
 #endif

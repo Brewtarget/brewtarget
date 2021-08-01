@@ -28,6 +28,7 @@
 
 #include "brewtarget.h"
 #include "database/ObjectStore.h"
+#include "model/NamedParameterBundle.h"
 #include "model/Recipe.h"
 
 NamedEntity::NamedEntity(int key,  bool cache, QString t_name, bool t_display, QString folder) :

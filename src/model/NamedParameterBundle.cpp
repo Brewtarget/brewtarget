@@ -20,9 +20,13 @@
 
 #include <string>
 #include <stdexcept>
+#include <sstream>
+
+#include <boost/stacktrace.hpp>
 
 #include <QDebug>
 #include <QString>
+#include <QTextStream>
 
 namespace {
    template <class T> T valueFromQVariant(QVariant const & qv);
@@ -32,7 +36,8 @@ namespace {
    template <> double  valueFromQVariant(QVariant const & qv) {return qv.toDouble();}
 }
 
-NamedParameterBundle::NamedParameterBundle(Mode mode) : QHash<char const * const, QVariant>(), mode{mode} {
+NamedParameterBundle::NamedParameterBundle(NamedParameterBundle::OperationMode mode) :
+   QHash<QString, QVariant>(), mode{mode} {
    return;
 }
 
@@ -41,8 +46,20 @@ NamedParameterBundle::~NamedParameterBundle() = default;
 
 QVariant NamedParameterBundle::operator()(char const * const parameterName) const {
    if (!this->contains(parameterName)) {
-      QString errorMessage = QString("No value supplied for required parameter, %1").arg(parameterName);
-      if (this->mode == NamedParameterBundle::STRICT) {
+      QString errorMessage = QString("No value supplied for required parameter, %1.").arg(parameterName);
+      QTextStream errorMessageAsStream(&errorMessage);
+      errorMessageAsStream << "  (Parameters in this bundle are ";
+      bool wroteFirst = false;
+      for (auto ii = this->constBegin(); ii != this->constEnd(); ++ii) {
+         if (!wroteFirst) {
+            wroteFirst = true;
+         } else {
+            errorMessageAsStream << ", ";
+         }
+         errorMessageAsStream << ii.key();
+      }
+      errorMessageAsStream << ")";
+      if (this->mode == NamedParameterBundle::Strict) {
          //
          // We want to throw an exception here because it's a lot less code than checking a return value on every call
          // and, usually, missing required parameter is a coding error.
@@ -50,7 +67,14 @@ QVariant NamedParameterBundle::operator()(char const * const parameterName) cons
          // Qt doesn't have its own exceptions, so we use a C++ Standard Library one, which in turn means using
          // std::string.
          //
-         qCritical() << Q_FUNC_INFO << errorMessage;
+         // C++ exceptions don't give you a stack trace by default, so we use Boost to include one, as that's going to
+         // be pretty helpful in debugging.
+         //
+         std::ostringstream stacktrace;
+         stacktrace << boost::stacktrace::stacktrace();
+         errorMessageAsStream << "\nStacktrace:\n" << QString::fromStdString(stacktrace.str());
+
+         qCritical().noquote() << Q_FUNC_INFO << errorMessage;
          throw std::invalid_argument(errorMessage.toStdString());
       }
       // In non-strict mode we'll just construct an empty QVariant and return that in the hope that its default value

@@ -29,6 +29,7 @@
 #include "brewtarget.h"
 #include "database/ObjectStoreWrapper.h"
 #include "model/Inventory.h"
+#include "model/NamedParameterBundle.h"
 #include "model/Recipe.h"
 
 // .:TBD:. I think (and hope) that we can dispense with the following line!

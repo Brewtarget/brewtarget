@@ -28,6 +28,7 @@
 #include "brewtarget.h"
 #include "database/ObjectStoreWrapper.h"
 #include "model/Inventory.h"
+#include "model/NamedParameterBundle.h"
 #include "model/Recipe.h"
 
 namespace {
@@ -116,6 +117,11 @@ Hop::Hop(Hop const & other) :
    m_caryophyllene_pct     {other.m_caryophyllene_pct},
    m_cohumulone_pct        {other.m_cohumulone_pct   },
    m_myrcene_pct           {other.m_myrcene_pct      } {
+   return;
+}
+
+Hop::~Hop() {
+//   qDebug() << Q_FUNC_INFO << "Destructor for Hop #" << this->key();
    return;
 }
 

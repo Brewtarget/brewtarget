@@ -20,6 +20,8 @@
  */
 #include "Testing.h"
 
+#include <exception>
+#include <iostream> // For std::cout
 #include <math.h>
 
 #include <xercesc/util/PlatformUtils.hpp>
@@ -28,6 +30,11 @@
 #include <QDir>
 #include <QString>
 #include <QtTest/QtTest>
+#if QT_VERSION < QT_VERSION_CHECK(5,10,0)
+#include <QtGlobal> // For qrand() -- which is superseded by QRandomGenerator in later versions of Qt
+#else
+#include <QRandomGenerator>
+#endif
 
 #include "database/ObjectStoreWrapper.h"
 #include "Logging.h"
@@ -65,7 +72,11 @@ namespace {
       QString randSTR;
       for (int i = 0; i < randomcharLength; i++)
       {
+#if QT_VERSION < QT_VERSION_CHECK(5,10,0)
+         int index = qrand() % posChars.length();
+#else
          int index = QRandomGenerator().generate64() % posChars.length();
+#endif
          QChar nChar = posChars.at(index);
          randSTR.append(nChar);
       }
@@ -86,67 +97,78 @@ void Testing::initTestCase() {
       qCritical() << Q_FUNC_INFO << "Xerces XML Parser Initialisation Failed: " << xercesInitException.getMessage();
       return;
    }
+   std::cout << "Initialising Test Case" << std::endl;
 
-   // Create a different set of options to avoid clobbering real options
-   QCoreApplication::setOrganizationDomain("brewtarget.com/test");
-   QCoreApplication::setApplicationName("brewtarget-test");
+   try {
+      // Create a different set of options to avoid clobbering real options
+      QCoreApplication::setOrganizationDomain("brewken.com/test");
+      QCoreApplication::setApplicationName("brewken-test");
 
-   // Set options so that any data modification does not affect any other data
-   PersistentSettings::initialise(QDir::tempPath());
-   Logging::initializeLogging();
+      // Set options so that any data modification does not affect any other data
+      PersistentSettings::initialise(QDir::tempPath());
 
-   qDebug() << Q_FUNC_INFO << "Initialised";
+      //Log test setup
+      //Verify that the Logging initializes normally
+      qDebug() << "Initiallizing Logging module";
+      Logging::initializeLogging();
+      Logging::setLogLevel(Logging::LogLevel_DEBUG);
+      qDebug() << "logging initialized";
 
-   PersistentSettings::insert("color_formula", "morey");
-   PersistentSettings::insert("ibu_formula", "tinseth");
+      // Inside initializeLogging(), there's a check to see whether we're the test application.  If so, it turns off
+      // logging output to stderr.
+      qDebug() << Q_FUNC_INFO << "Initialised";
+
+      PersistentSettings::insert("color_formula", "morey");
+      PersistentSettings::insert("ibu_formula", "tinseth");
 
    // Tell Brewtarget not to require any "user" input on starting
    Brewtarget::setInteractive(false);
    QVERIFY( Brewtarget::initialize() );
 
-   // 5 gallon equipment
-   this->equipFiveGalNoLoss = std::make_shared<Equipment>();
-   this->equipFiveGalNoLoss->setName("5 gal No Loss");
-   this->equipFiveGalNoLoss->setBoilSize_l(24.0);
-   this->equipFiveGalNoLoss->setBatchSize_l(20.0);
-   this->equipFiveGalNoLoss->setTunVolume_l(40.0);
-   this->equipFiveGalNoLoss->setTopUpWater_l(0);
-   this->equipFiveGalNoLoss->setTrubChillerLoss_l(0);
-   this->equipFiveGalNoLoss->setEvapRate_lHr(4.0);
-   this->equipFiveGalNoLoss->setBoilTime_min(60);
-   this->equipFiveGalNoLoss->setLauterDeadspace_l(0);
-   this->equipFiveGalNoLoss->setTopUpKettle_l(0);
-   this->equipFiveGalNoLoss->setHopUtilization_pct(100);
-   this->equipFiveGalNoLoss->setGrainAbsorption_LKg(1.0);
-   this->equipFiveGalNoLoss->setBoilingPoint_c(100);
+      // 5 gallon equipment
+      this->equipFiveGalNoLoss = std::make_shared<Equipment>();
+      this->equipFiveGalNoLoss->setName("5 gal No Loss");
+      this->equipFiveGalNoLoss->setBoilSize_l(24.0);
+      this->equipFiveGalNoLoss->setBatchSize_l(20.0);
+      this->equipFiveGalNoLoss->setTunVolume_l(40.0);
+      this->equipFiveGalNoLoss->setTopUpWater_l(0);
+      this->equipFiveGalNoLoss->setTrubChillerLoss_l(0);
+      this->equipFiveGalNoLoss->setEvapRate_lHr(4.0);
+      this->equipFiveGalNoLoss->setBoilTime_min(60);
+      this->equipFiveGalNoLoss->setLauterDeadspace_l(0);
+      this->equipFiveGalNoLoss->setTopUpKettle_l(0);
+      this->equipFiveGalNoLoss->setHopUtilization_pct(100);
+      this->equipFiveGalNoLoss->setGrainAbsorption_LKg(1.0);
+      this->equipFiveGalNoLoss->setBoilingPoint_c(100);
 
-   // Cascade pellets at 4% AA
-///   cascade_4pct = Database::instance().newHop();
-   this->cascade_4pct = std::make_shared<Hop>();
-   ObjectStoreWrapper::insert(*this->cascade_4pct);
-   this->cascade_4pct->setCacheOnly(false);
-   this->cascade_4pct->setName("Cascade 4pct");
-   this->cascade_4pct->setAlpha_pct(4.0);
-   this->cascade_4pct->setUse(Hop::Boil);
-   this->cascade_4pct->setTime_min(60);
-   this->cascade_4pct->setType(Hop::Both);
-   this->cascade_4pct->setForm(Hop::Leaf);
+      // Cascade pellets at 4% AA
+      this->cascade_4pct = std::make_shared<Hop>();
+      ObjectStoreWrapper::insert(this->cascade_4pct);
+      this->cascade_4pct->setCacheOnly(false);
+      this->cascade_4pct->setName("Cascade 4pct");
+      this->cascade_4pct->setAlpha_pct(4.0);
+      this->cascade_4pct->setUse(Hop::Boil);
+      this->cascade_4pct->setTime_min(60);
+      this->cascade_4pct->setType(Hop::Both);
+      this->cascade_4pct->setForm(Hop::Leaf);
 
-   // 70% yield, no moisture, 2 SRM
-   this->twoRow = std::make_shared<Fermentable>();
-   this->twoRow->setName("Two Row");
-   this->twoRow->setType(Fermentable::Grain);
-   this->twoRow->setYield_pct(70.0);
-   this->twoRow->setColor_srm(2.0);
-   this->twoRow->setMoisture_pct(0);
-   this->twoRow->setIsMashed(true);
+      // 70% yield, no moisture, 2 SRM
+      this->twoRow = std::make_shared<Fermentable>();
+      this->twoRow->setName("Two Row");
+      this->twoRow->setType(Fermentable::Grain);
+      this->twoRow->setYield_pct(70.0);
+      this->twoRow->setColor_srm(2.0);
+      this->twoRow->setMoisture_pct(0);
+      this->twoRow->setIsMashed(true);
+   } catch (std::exception const & e) {
+      // When an exception gets to Qt, it will barf something along the lines of "Caught unhandled exception" without
+      // leaving you much the wiser.  If we can intercept the exception along the way, we can ensure more details are
+      // output to the console.
+      std::cerr << "Caught exception: " << e.what() << std::endl;
+      throw;
+   }
 
-   //Log test setup
-   //Verify that the Logging initializes normally
-   qDebug() << "Initiallizing Logging module";
-   Logging::initializeLogging();
-   Logging::setLogLevel(Logging::LogLevel_DEBUG);
-   qDebug() << "logging initialized";
+   return;
 }
 
 void Testing::recipeCalcTest_allGrain()

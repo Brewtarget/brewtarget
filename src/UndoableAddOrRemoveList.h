@@ -22,7 +22,6 @@
 #pragma once
 
 #include <QList>
-#include <QMetaType>
 #include <QString>
 #include <QUndoCommand>
 #include <QVariant>
@@ -30,6 +29,7 @@
 #include "model/Recipe.h"
 #include "model/Style.h"
 #include "StyleButton.h"
+#include "UndoableAddOrRemove.h"
 
 /*!
  * \class UndoableAddOrRemoveList
@@ -57,13 +57,13 @@ public:
     * \param parent This is for grouping updates together.
     */
    UndoableAddOrRemoveList(UU & updatee,
-                       VV * (UU::*doer)(VV *),
-                       QList<VV *> listToAddOrRemove,
-                       VV * (UU::*undoer)(VV *),
-                       void (MainWindow::*doCallback)(VV *),
-                       void (MainWindow::*undoCallback)(VV *),
-                       QString const & description,
-                       QUndoCommand * parent = nullptr) : QUndoCommand(parent) {
+                           VV * (UU::*doer)(VV *),
+                           QList<VV *> listToAddOrRemove,
+                           VV * (UU::*undoer)(VV *),
+                           void (MainWindow::*doCallback)(VV *),
+                           void (MainWindow::*undoCallback)(VV *),
+                           QString const & description,
+                           QUndoCommand * parent = nullptr) : QUndoCommand(parent) {
       // Parent class handles storing description and making it accessible to the undo stack etc - we just have to give
       // it the text.
       this->setText(description);
@@ -77,7 +77,7 @@ public:
       for (auto ii : listToAddOrRemove) {
          // Doesn't matter what description we pass in to these child objects as it will never be seen.  Might as well
          // give them the same one as the parent/grouping object.
-         new UndoableAddOrRemove(updatee, doer, ii, undoer, doCallback, undoCallback, description, this);
+         new UndoableAddOrRemove<UU, VV>(updatee, doer, ii, undoer, doCallback, undoCallback, description, this);
       }
 
       return;
@@ -106,13 +106,13 @@ template<class UU, class VV> UndoableAddOrRemoveList<UU, VV> * newUndoableAddOrR
                                                                                   QString const & description,
                                                                                   QUndoCommand * parent = nullptr) {
    return new UndoableAddOrRemoveList<UU, VV>(updatee,
-                                          doer,
-                                          listToAddOrRemove,
-                                          undoer,
-                                          doCallback,
-                                          undoCallback,
-                                          description,
-                                          parent);
+                                              doer,
+                                              listToAddOrRemove,
+                                              undoer,
+                                              doCallback,
+                                              undoCallback,
+                                              description,
+                                              parent);
 }
 
 /*!

@@ -20,6 +20,10 @@
  */
 #include "Logging.h"
 
+#include <sstream>      // For std::ostringstream
+
+#include <boost/stacktrace.hpp>
+
 #include <QApplication>
 #include <QDebug>
 #include <QMutex>
@@ -59,7 +63,11 @@ namespace {
 
    QFile logFile;
    QMutex mutex;
+
+   // This global flag controls whether, in general, we are logging to stderr or not.  Usually it's turned off for at
+   // least the part of automated testing where we're generating lots of test logging.
    bool isLoggingToStderr{true};
+
    QTextStream errStream{stderr};
    QTextStream * stream;
 
@@ -72,6 +80,30 @@ namespace {
    // thread_local to define thread-specific variables that are initialized "before first use"
    //
    thread_local QString const threadId{QString{"%1"}.arg(reinterpret_cast<quintptr>(QThread::currentThreadId()), 0, 36)};
+
+   //
+   // Although we can turn off logging to stderr (eg for running test cases), we want to force it to be enabled for
+   // logging errors about logging.  The combination of this thread-local variable and little RAII class enable you to
+   // create an object that will force stderr logging to be enabled for the current thread for the duration of the
+   // object's life (typically the duration of a function).
+   //
+   thread_local bool forceStderrLogging{false};
+   class TemporarilyForceStderrLogging {
+   public:
+      TemporarilyForceStderrLogging()  {
+         this->savedState = forceStderrLogging;
+         forceStderrLogging = true;
+         return;
+      }
+      ~TemporarilyForceStderrLogging() {
+         forceStderrLogging = this->savedState;
+         return;
+      }
+   private:
+      // We need to save state because one function that has created one of these objects might call another that does
+      // the same
+      bool savedState;
+   };
 
    //
    // We use the Qt functions (qDebug(), qInfo(), etc) do our logging but we need to convert from QtMsgType to our own
@@ -90,14 +122,18 @@ namespace {
       }
    }
 
+   //
+   // This is what actually outputs a message to the log file and/or std::cerr
+   //
    void doLog(const Logging::Level level, const QString message) {
       QString logEntry = QString{"[%1] (%2) %3 : %4"}.arg(QTime::currentTime().toString(timeFormat))
                                                      .arg(threadId)
                                                      .arg(Logging::getStringFromLogLevel(level))
                                                      .arg(message);
       QMutexLocker locker(&mutex);
-      if (isLoggingToStderr) { errStream << logEntry << END_OF_LINE; }
-      if (stream)            {   *stream << logEntry << END_OF_LINE; }
+      if (isLoggingToStderr ||
+          forceStderrLogging) { errStream << logEntry << END_OF_LINE; }
+      if (stream)             {   *stream << logEntry << END_OF_LINE; }
       return;
    }
 
@@ -152,7 +188,10 @@ namespace {
     *        This was moved to its own function as this has to be called every time logs are being pruned.
     */
    bool openLogFile() {
-      //first check if it's time to rotate the log file
+      // We _really_ need to see problems with opening the log file on stderr!
+      TemporarilyForceStderrLogging temporarilyForceStderrLogging;
+
+      // First check if it's time to rotate the log file
       if (logFile.size() > Logging::logFileSize) {
          // Acquire lock due to the file mangling below.  NB: This means we do not want to use Qt logging in this
          // block, as we'd end up attempting to acquire the same mutex in the doLog() function above!  So, any errors
@@ -172,17 +211,26 @@ namespace {
       logFile.setFileName(logDirectory.filePath(logFileFullName()));
       if (logFile.open(QIODevice::WriteOnly | QIODevice::Append)) {
          stream = new QTextStream(&logFile);
+         qInfo() << Q_FUNC_INFO << "Logging to file" << QFileInfo(logFile).canonicalFilePath();
          return true;
       }
+
+      qInfo() <<
+         Q_FUNC_INFO << "Could not open log file" << QFileInfo(logFile).canonicalFilePath() <<
+         "for writing.  Will try using temporary directory";
 
       // Defaults to temporary
       logFile.setFileName(QDir::temp().filePath(logFileFullName()));
       if (logFile.open(QFile::WriteOnly | QFile::Truncate)) {
          logFile.setPermissions(QFileDevice::WriteUser | QFileDevice::ReadUser | QFileDevice::ExeUser);
          stream = new QTextStream(&logFile);
-         qWarning() << QString("Log is in a temporary directory: %1").arg(logFile.fileName());
+         qWarning() <<
+            Q_FUNC_INFO << "Log file is in a temporary directory: " << QFileInfo(logFile).canonicalFilePath();
          return true;
       }
+
+      qCritical() << Q_FUNC_INFO << "Unable to open" << QFileInfo(logFile).canonicalFilePath();
+
       return false;
    }
 
@@ -196,10 +244,9 @@ namespace {
       // Need to close and reset the stream before deleting any files.
       closeLogFile();
 
-      //if the logfile is closed and we're in testing mode where stderr is disabled, we need to enable is temporarily.
-      //saving old value to reset to after pruning.
-      bool old_isLoggingToStderr = isLoggingToStderr;
-      isLoggingToStderr = true;
+      // If the logfile is closed and we're in testing mode where stderr is disabled, we need to enable it temporarily.
+      // saving old value to reset to after pruning.
+      TemporarilyForceStderrLogging temporarilyForceStderrLogging;
 
       //Get the list of log files.
       QFileInfoList fileList = Logging::getLogFileList();
@@ -211,7 +258,7 @@ namespace {
             f.remove();
          }
       }
-      isLoggingToStderr = old_isLoggingToStderr;
+      return;
    }
 
    /**
@@ -317,22 +364,35 @@ namespace Logging {
 
 
 bool Logging::initializeLogging() {
-   // If we're running a test, some settings are differentiate
-   if (QCoreApplication::applicationName() == "brewtarget-test") {
+   // We _really_ need to see problems with opening the log file on stderr!
+   TemporarilyForceStderrLogging temporarilyForceStderrLogging;
+
+   // If we're running a test, some settings are different
+   // .:TODO:. Ideally, we should move this knowledge outside of the Logging namespace and just have a parameter
+   // passed in to this function that tells it whether to use these special settings.
+   if (QCoreApplication::applicationName() == "brewken-test") {
       // Test logs go to a /tmp (or equivalent) so as not to clutter the application path with dummy data.
-      logDirectory.setPath(QDir::tempPath());
+      Logging::setDirectory(QDir::tempPath());
       // Turning off logging to stderr console, this is so you won't have to watch 100k rows generate in the console.
       isLoggingToStderr = false;
+      // Set debug level
+      currentLoggingLevel = Logging::LogLevel_DEBUG;
+   } else {
+      // Normal settings
+      currentLoggingLevel = Logging::getLogLevelFromString(PersistentSettings::value("LoggingLevel", "INFO").toString());
+      Logging::setDirectory(
+         PersistentSettings::contains("LogDirectory") ?
+            std::optional<QDir>(PersistentSettings::value("LogDirectory").toString()) : std::optional<QDir>(std::nullopt)
+      );
    }
 
-   currentLoggingLevel = Logging::getLogLevelFromString(PersistentSettings::value("LoggingLevel", "INFO").toString());
-   Logging::setDirectory(
-      PersistentSettings::contains("LogDirectory") ?
-         std::optional<QDir>(PersistentSettings::value("LogDirectory").toString()) : std::optional<QDir>(std::nullopt)
-   );
-
    qInstallMessageHandler(logMessageHandler);
-   qDebug() << Q_FUNC_INFO << "Logging initialized.  Logs will be written to" << logDirectory;
+   qDebug() << Q_FUNC_INFO << "Logging initialized.  Logs will be written to" << logDirectory.canonicalPath();
+
+   // It's quite useful on debug builds to check that stack trace logging is working, rather than to find out it's not
+   // when you need the info to fix another bug.
+   qDebug().noquote() << Q_FUNC_INFO << "Check that stacktraces are working:" << Logging::getStackTrace();
+
    return true;
 }
 
@@ -345,8 +405,10 @@ bool Logging::setDirectory(std::optional<QDir> newDirectory) {
    // Supplying no directory in the parameter means use the default location, ie the config directory
    if (newDirectory.has_value()) {
       logDirectory = *newDirectory;
+      qDebug() << Q_FUNC_INFO << "Logging to specified directory: " << logDirectory.canonicalPath();
    } else {
       logDirectory = PersistentSettings::getConfigDir();
+      qDebug() << Q_FUNC_INFO << "Logging to configuration directory: " << logDirectory.canonicalPath();
    }
 
    // Check if the new directory exists, if not create it.
@@ -461,4 +523,13 @@ void Logging::terminateLogging() {
    QMutexLocker locker(&mutex);
    closeLogFile();
    return;
+}
+
+QString Logging::getStackTrace() {
+   std::ostringstream stacktrace;
+   stacktrace << boost::stacktrace::stacktrace();
+   QString returnValue;
+   QTextStream returnValueAsStream(&returnValue);
+   returnValueAsStream << "\nStacktrace:\n" << QString::fromStdString(stacktrace.str());
+   return returnValue;
 }

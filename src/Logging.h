@@ -141,6 +141,11 @@ namespace Logging {
     * \brief Terminate logging
     */
    extern void terminateLogging();
+
+   /**
+    * \brief Gets a stack trace, which should be logged with noquote()
+    */
+   extern QString getStackTrace();
 }
 
 #endif

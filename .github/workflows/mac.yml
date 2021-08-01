@@ -21,7 +21,7 @@ jobs:
     runs-on: macos-latest
 
     steps:
-    
+
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
@@ -32,6 +32,8 @@ jobs:
           version: 5.9.5
 
     - name: Install dependencies
+      # Installing Xalan-C will cause Xerces-C to be installed too (as the former depends on the latter)
+      # .:TBD:. Installing Boost here doesn't seem to give us libboost_stacktrace_backtrace
       run: brew install xalan-c boost
 
     - name: Build

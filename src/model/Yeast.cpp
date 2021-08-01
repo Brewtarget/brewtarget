@@ -20,12 +20,11 @@
  */
 #include "model/Yeast.h"
 
-#include <QObject>
 #include <QDebug>
 
-#include "brewtarget.h"
 #include "database/ObjectStoreWrapper.h"
 #include "model/Inventory.h"
+#include "model/NamedParameterBundle.h"
 #include "model/Recipe.h"
 #include "PhysicalConstants.h"
 

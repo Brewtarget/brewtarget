@@ -22,6 +22,7 @@
 
 #include "brewtarget.h"
 #include "database/ObjectStoreWrapper.h"
+#include "model/NamedParameterBundle.h"
 #include "model/Recipe.h"
 
 // This private implementation class holds all private non-virtual members of Instruction

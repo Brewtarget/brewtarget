@@ -22,6 +22,7 @@
 #include "model/Fermentable.h"
 #include "model/Hop.h"
 #include "model/Misc.h"
+#include "model/NamedParameterBundle.h"
 #include "model/Yeast.h"
 
 namespace {

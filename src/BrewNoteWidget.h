@@ -21,6 +21,7 @@
  */
 #ifndef BREWNOTEWIDGET_H
 #define BREWNOTEWIDGET_H
+#pragma once
 
 #include <QWidget>
 #include <QDialog>
@@ -62,7 +63,7 @@ public slots:
 
    void updateFG();
    void updateFinalVolume_l();
-   void updateFermentDate(const QDateTime& datetime);
+   void updateFermentDate(QDate const & datetime);
    void updateDateFormat(Unit::unitDisplay display,Unit::unitScale scale);
 
    void updateNotes();
@@ -80,4 +81,4 @@ private:
 
 };
 
-#endif // _BREWNOTESWIDGET_H
+#endif

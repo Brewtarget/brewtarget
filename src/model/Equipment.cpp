@@ -23,6 +23,7 @@
 #include "brewtarget.h"
 #include "database/ObjectStoreWrapper.h"
 #include "HeatCalculations.h"
+#include "model/NamedParameterBundle.h"
 #include "model/Recipe.h"
 
 bool Equipment::isEqualTo(NamedEntity const & other) const {

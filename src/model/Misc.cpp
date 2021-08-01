@@ -25,12 +25,12 @@
 #include <string>
 
 #include <QDebug>
-#include <QObject>
 #include <QVector>
 
 #include "brewtarget.h"
 #include "database/ObjectStoreWrapper.h"
 #include "model/Inventory.h"
+#include "model/NamedParameterBundle.h"
 #include "model/Recipe.h"
 
 namespace {

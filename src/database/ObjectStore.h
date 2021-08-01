@@ -19,17 +19,18 @@
 #ifndef DATABASE_OBJECTSTORE_H
 #define DATABASE_OBJECTSTORE_H
 #pragma once
+#include <functional>
 
 #include <memory> // For PImpl
+#include <string>
 
 #include <QObject>
 #include <QSqlDatabase>
 #include <QString>
 #include <QVector>
 
-#include "model/NamedParameterBundle.h"
-
 class Database;
+class NamedParameterBundle;
 
 /**
  * \brief Base class for storing objects (of a given class) in (a) the database and (b) a local in-memory cache.
@@ -88,12 +89,35 @@ public:
     */
    typedef QVector<EnumAndItsDbString> EnumStringMapping;
 
+   //
+   // You might be wondering why we are using QString and std::string here.  There is a reason!
+   //
+   // In theory, we could legitimately store columnName, propertyName, tableName, etc as char const * const because they
+   // are compile-time constant ASCII strings.  In practice, this leads to too many subtle bugs (sometimes compiler-
+   // specific) when you accidentally use == instead of std::strcmp to compare things.  (Such comparisons happen a lot
+   // more in the ObjectStore code than, say, the XML code, as we need to be able to update a field corresponding to an
+   // individual property and are therefore do things such as search for the TableField matching a given property name.)
+   //
+   // In a Qt application such as ours, we naturally look to use QString const instead, not least because we end up
+   // creating QString objects to pass in to QSqlQuery::prepare(), QSqlQuery::bindValue(), and so on.  And creating
+   // QStrings from char const * const values (eg literal string text in source code files) is trivial.
+   //
+   // However, there is one exception to this.  For property names, the Qt functions that use them, such as
+   // QObject::property() and QObject::setProperty(), actually need to be passed char const *, and getting this out of a
+   // QString is a bit painful (because QString is inherently UTF-16 so you end up creating temporaries to hold char *
+   // data etc.)
+   //
+   // So we store property names in std::string (which internally is just char *) instead.
+   //
+   // Fortunately, this is an implementation detail that only needs to be known by ObjectStore and ObjectStoreTyped.
+   // External users of the class don't have to worry about it.
+   //
    struct TableDefinition;
    struct TableField {
       FieldType const                 fieldType;
-      char const * const              columnName;
-      char const * const              propertyName;
-      EnumStringMapping const * const enumMapping = nullptr; // only needed if fieldType is Enum
+      QString const                   columnName;            // Shouldn't ever be empty in practice
+      std::string const               propertyName = "";     // Can be empty (ie N/A) in a junction table (see below)
+      EnumStringMapping const * const enumMapping = nullptr; // Only needed if fieldType is Enum
       TableDefinition const * const   foreignKeyTo = nullptr;
    };
 
@@ -102,8 +126,16 @@ public:
     *        object properties and table fields.
     */
    struct TableDefinition {
-      char const * const tableName;
+      QString const tableName;
       QVector<TableField> const tableFields;
+      // GCC will let you get away without it, but some C++ compilers are more strict about the need for a non-default
+      // constructor when you have const members in a struct
+      TableDefinition(QString const tableName = "",
+                      std::initializer_list<TableField> tableFields = {}) :
+         tableName{tableName},
+         tableFields{tableFields} {
+         return;
+      }
    };
 
    /**
@@ -154,6 +186,14 @@ public:
     */
    struct JunctionTableDefinition : public TableDefinition {
       AssumedNumEntries assumedNumEntries = MULTIPLE_ENTRIES_OK;
+      JunctionTableDefinition(QString const tableName = "",
+                              std::initializer_list<TableField> tableFields = {},
+                              AssumedNumEntries assumedNumEntries = MULTIPLE_ENTRIES_OK) :
+         TableDefinition{tableName, tableFields},
+         assumedNumEntries{assumedNumEntries} {
+         return;
+      }
+
    };
 
 

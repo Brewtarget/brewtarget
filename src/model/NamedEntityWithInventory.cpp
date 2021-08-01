@@ -19,6 +19,7 @@
 #include "model/NamedEntityWithInventory.h"
 
 #include "model/Inventory.h"
+#include "model/NamedParameterBundle.h"
 
 NamedEntityWithInventory::NamedEntityWithInventory(int key, bool cache, QString t_name, bool t_display, QString folder) :
    NamedEntity   {key, cache, t_name, t_display, folder},
