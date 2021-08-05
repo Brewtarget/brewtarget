@@ -1,6 +1,6 @@
 /*
  * MashWizard.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2020
+ * authors 2009-2021
  * - David Grundberg <individ@acc.umu.se>
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Matt Young <mfsy@yahoo.com>
@@ -383,9 +383,9 @@ void MashWizard::wizardry()
             mashStep->setCacheOnly(false);
             steps.append(mashStep);
             emit mashStep->changed(
-                        mashStep->metaObject()->property(
-                            mashStep->metaObject()->indexOfProperty(PropertyNames::MashStep::type)
-                        )
+               mashStep->metaObject()->property(
+                     mashStep->metaObject()->indexOfProperty(*PropertyNames::MashStep::type)
+               )
             );
          }
          emit mash->mashStepsChanged();
@@ -406,9 +406,9 @@ void MashWizard::wizardry()
          mashStep->setCacheOnly(false);
          steps.append(mashStep);
          emit mashStep->changed(
-                     mashStep->metaObject()->property(
-                         mashStep->metaObject()->indexOfProperty(PropertyNames::MashStep::type)
-                     )
+            mashStep->metaObject()->property(
+                  mashStep->metaObject()->indexOfProperty(*PropertyNames::MashStep::type)
+            )
          );
       }
 

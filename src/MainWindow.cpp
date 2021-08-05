@@ -115,6 +115,7 @@
 #include "PersistentSettings.h"
 #include "PitchDialog.h"
 #include "PrimingDialog.h"
+#include "RangedSlider.h"
 #include "RecipeFormatter.h"
 #include "RefractoDialog.h"
 #include "RelationalUndoableUpdate.h"
@@ -127,6 +128,7 @@
 #include "UndoableAddOrRemove.h"
 #include "UndoableAddOrRemoveList.h"
 #include "Unit.h"
+#include "utils/BtStringConst.h"
 #include "WaterDialog.h"
 #include "WaterEditor.h"
 #include "WaterListModel.h"
@@ -135,7 +137,6 @@
 #include "YeastEditor.h"
 #include "YeastSortFilterProxyModel.h"
 #include "YeastTableModel.h"
-
 
 // This private implementation class holds all private non-virtual members of MainWindow
 class MainWindow::impl {
@@ -706,9 +707,9 @@ void MainWindow::setupTables()
 void MainWindow::restoreSavedState() {
 
    // If we saved a size the last time we ran, use it
-   if (PersistentSettings::contains("geometry")) {
-      restoreGeometry(PersistentSettings::value("geometry").toByteArray());
-      restoreState(PersistentSettings::value("windowState").toByteArray());
+   if (PersistentSettings::contains(PersistentSettings::Names::geometry)) {
+      restoreGeometry(PersistentSettings::value(PersistentSettings::Names::geometry).toByteArray());
+      restoreState(PersistentSettings::value(PersistentSettings::Names::windowState).toByteArray());
    } else {
       // otherwise, guess a reasonable size at 1/4 of the screen.
       QDesktopWidget *desktop = QApplication::desktop();
@@ -722,8 +723,8 @@ void MainWindow::restoreSavedState() {
 
    // If we saved the selected recipe name the last time we ran, select it and show it.
    int key = -1;
-   if (PersistentSettings::contains("recipeKey")) {
-      key = PersistentSettings::value("recipeKey").toInt();
+   if (PersistentSettings::contains(PersistentSettings::Names::recipeKey)) {
+      key = PersistentSettings::value(PersistentSettings::Names::recipeKey).toInt();
    } else {
       auto firstRecipeWeFind = ObjectStoreTyped<Recipe>::getInstance().findFirstMatching(
          // This trivial lambda gives us the first recipe in the list, if there is one
@@ -742,26 +743,66 @@ void MainWindow::restoreSavedState() {
    }
 
    //UI restore state
-   if (PersistentSettings::contains("MainWindow/splitter_vertical_State"))
-      splitter_vertical->restoreState(PersistentSettings::value("MainWindow/splitter_vertical_State").toByteArray());
-   if (PersistentSettings::contains("MainWindow/splitter_horizontal_State"))
-      splitter_horizontal->restoreState(PersistentSettings::value("MainWindow/splitter_horizontal_State").toByteArray());
-   if (PersistentSettings::contains("MainWindow/treeView_recipe_headerState"))
-      treeView_recipe->header()->restoreState(PersistentSettings::value("MainWindow/treeView_recipe_headerState").toByteArray());
-   if (PersistentSettings::contains("MainWindow/treeView_style_headerState"))
-      treeView_style->header()->restoreState(PersistentSettings::value("MainWindow/treeView_style_headerState").toByteArray());
-   if (PersistentSettings::contains("MainWindow/treeView_equip_headerState"))
-      treeView_equip->header()->restoreState(PersistentSettings::value("MainWindow/treeView_equip_headerState").toByteArray());
-   if (PersistentSettings::contains("MainWindow/treeView_ferm_headerState"))
-      treeView_ferm->header()->restoreState(PersistentSettings::value("MainWindow/treeView_ferm_headerState").toByteArray());
-   if (PersistentSettings::contains("MainWindow/treeView_hops_headerState"))
-      treeView_hops->header()->restoreState(PersistentSettings::value("MainWindow/treeView_hops_headerState").toByteArray());
-   if (PersistentSettings::contains("MainWindow/treeView_misc_headerState"))
-      treeView_misc->header()->restoreState(PersistentSettings::value("MainWindow/treeView_misc_headerState").toByteArray());
-   if (PersistentSettings::contains("MainWindow/treeView_yeast_headerState"))
-      treeView_yeast->header()->restoreState(PersistentSettings::value("MainWindow/treeView_yeast_headerState").toByteArray());
-   if (PersistentSettings::contains("MainWindow/mashStepTableWidget_headerState"))
-      mashStepTableWidget->horizontalHeader()->restoreState(PersistentSettings::value("MainWindow/mashStepTableWidget_headerState").toByteArray());
+   if (PersistentSettings::contains(PersistentSettings::Names::splitter_vertical_State,
+                                    PersistentSettings::Sections::MainWindow)) {
+      splitter_vertical->restoreState(PersistentSettings::value(PersistentSettings::Names::splitter_vertical_State,
+                                                                QVariant(),
+                                                                PersistentSettings::Sections::MainWindow).toByteArray());
+   }
+   if (PersistentSettings::contains(PersistentSettings::Names::splitter_horizontal_State,
+                                    PersistentSettings::Sections::MainWindow)) {
+      splitter_horizontal->restoreState(PersistentSettings::value(PersistentSettings::Names::splitter_horizontal_State,
+                                                                  QVariant(),
+                                                                  PersistentSettings::Sections::MainWindow).toByteArray());
+   }
+   if (PersistentSettings::contains(PersistentSettings::Names::treeView_recipe_headerState,
+                                    PersistentSettings::Sections::MainWindow)) {
+      treeView_recipe->header()->restoreState(PersistentSettings::value(PersistentSettings::Names::treeView_recipe_headerState,
+                                                                        QVariant(),
+                                                                        PersistentSettings::Sections::MainWindow).toByteArray());
+   }
+   if (PersistentSettings::contains(PersistentSettings::Names::treeView_style_headerState,
+                                    PersistentSettings::Sections::MainWindow)) {
+      treeView_style->header()->restoreState(PersistentSettings::value(PersistentSettings::Names::treeView_style_headerState,
+                                                                       QVariant(),
+                                                                       PersistentSettings::Sections::MainWindow).toByteArray());
+   }
+   if (PersistentSettings::contains(PersistentSettings::Names::treeView_equip_headerState,
+                                    PersistentSettings::Sections::MainWindow)) {
+      treeView_equip->header()->restoreState(PersistentSettings::value(PersistentSettings::Names::treeView_equip_headerState,
+                                                                       QVariant(),
+                                                                       PersistentSettings::Sections::MainWindow).toByteArray());
+   }
+   if (PersistentSettings::contains(PersistentSettings::Names::treeView_ferm_headerState,
+                                    PersistentSettings::Sections::MainWindow)) {
+      treeView_ferm->header()->restoreState(PersistentSettings::value(PersistentSettings::Names::treeView_ferm_headerState,
+                                                                      QVariant(),
+                                                                      PersistentSettings::Sections::MainWindow).toByteArray());
+   }
+   if (PersistentSettings::contains(PersistentSettings::Names::treeView_hops_headerState,
+                                    PersistentSettings::Sections::MainWindow)) {
+      treeView_hops->header()->restoreState(PersistentSettings::value(PersistentSettings::Names::treeView_hops_headerState,
+                                                                      QVariant(),
+                                                                      PersistentSettings::Sections::MainWindow).toByteArray());
+   }
+   if (PersistentSettings::contains(PersistentSettings::Names::treeView_misc_headerState,
+                                    PersistentSettings::Sections::MainWindow)) {
+      treeView_misc->header()->restoreState(PersistentSettings::value(PersistentSettings::Names::treeView_misc_headerState,
+                                                                      QVariant(),
+                                                                      PersistentSettings::Sections::MainWindow).toByteArray());
+   }
+   if (PersistentSettings::contains(PersistentSettings::Names::treeView_yeast_headerState,
+                                    PersistentSettings::Sections::MainWindow)) {
+      treeView_yeast->header()->restoreState(PersistentSettings::value(PersistentSettings::Names::treeView_yeast_headerState,
+                                                                       QVariant(),
+                                                                       PersistentSettings::Sections::MainWindow).toByteArray());
+   }
+   if (PersistentSettings::contains(PersistentSettings::Names::mashStepTableWidget_headerState,
+                                    PersistentSettings::Sections::MainWindow)) {
+      mashStepTableWidget->horizontalHeader()->restoreState(PersistentSettings::value(PersistentSettings::Names::mashStepTableWidget_headerState,
+                                                                                      QVariant(),
+                                                                                      PersistentSettings::Sections::MainWindow).toByteArray());
+   }
 }
 
 // menu items with a SIGNAL of triggered() should go in here.
@@ -1319,39 +1360,55 @@ void MainWindow::changed(QMetaProperty prop, QVariant val) {
    return;
 }
 
-void MainWindow::updateDensitySlider(QString attribute, RangedSlider* slider, double max)
-{
-   Unit::unitDisplay dispUnit = static_cast<Unit::unitDisplay>(PersistentSettings::value(attribute, Unit::noUnit, "tab_recipe", PersistentSettings::UNIT).toInt());
+void MainWindow::updateDensitySlider(BtStringConst const & propertyNameMin,
+                                     BtStringConst const & propertyNameMax,
+                                     BtStringConst const & propertyNameCurrent,
+                                     RangedSlider* slider,
+                                     double max) {
+   Unit::unitDisplay dispUnit = static_cast<Unit::unitDisplay>(
+      PersistentSettings::value(propertyNameCurrent,
+                                 Unit::noUnit,
+                                 PersistentSettings::Sections::tab_recipe,
+                                 PersistentSettings::UNIT).toInt()
+   );
 
-   if ( dispUnit == Unit::noUnit )
-      dispUnit = Brewtarget::densityUnit == Brewtarget::PLATO ? Unit::displayPlato : Unit::displaySg;
+   if ( dispUnit == Unit::noUnit ) {
+      dispUnit = Brewtarget::getDensityUnit();
+   }
 
-   slider->setPreferredRange(Brewtarget::displayRange(recStyle, tab_recipe, attribute, Brewtarget::DENSITY));
-   slider->setRange(         Brewtarget::displayRange(tab_recipe, attribute, 1.000, max, Brewtarget::DENSITY ));
+   slider->setPreferredRange(Brewtarget::displayRange(recStyle, this->tab_recipe, propertyNameMin, propertyNameMax, Brewtarget::DENSITY));
+   slider->setRange(         Brewtarget::displayRange(this->tab_recipe, propertyNameCurrent, 1.000, max, Brewtarget::DENSITY ));
 
-   if ( dispUnit == Unit::displayPlato )
-   {
+   if ( dispUnit == Unit::displayPlato ) {
       slider->setPrecision(1);
       slider->setTickMarks(2,5);
-   }
-   else
-   {
+   } else {
       slider->setPrecision(3);
       slider->setTickMarks(0.010, 2);
    }
+   return;
 }
 
-void MainWindow::updateColorSlider(QString attribute, RangedSlider* slider)
-{
-   Unit::unitDisplay dispUnit = static_cast<Unit::unitDisplay>(PersistentSettings::value(attribute, Unit::noUnit, "tab_recipe", PersistentSettings::UNIT).toInt());
+void MainWindow::updateColorSlider(BtStringConst const & propertyNameMin,
+                                   BtStringConst const & propertyNameMax,
+                                   BtStringConst const & propertyNameCurrent,
+                                   RangedSlider* slider) {
+   Unit::unitDisplay dispUnit = static_cast<Unit::unitDisplay>(
+      PersistentSettings::value(propertyNameCurrent,
+                                 Unit::noUnit,
+                                 PersistentSettings::Sections::tab_recipe,
+                                 PersistentSettings::UNIT).toInt()
+   );
 
-   if ( dispUnit == Unit::noUnit )
-      dispUnit = Brewtarget::colorUnit == Brewtarget::SRM ? Unit::displaySrm : Unit::displayEbc;
+   if ( dispUnit == Unit::noUnit ) {
+      dispUnit = Brewtarget::getColorUnit();
+   }
 
-   slider->setPreferredRange(Brewtarget::displayRange(recStyle, tab_recipe, attribute,Brewtarget::COLOR));
-   slider->setRange(Brewtarget::displayRange(tab_recipe, attribute, 1, 44, Brewtarget::COLOR) );
+   slider->setPreferredRange(Brewtarget::displayRange(recStyle, this->tab_recipe, propertyNameMin, propertyNameMax, Brewtarget::COLOR));
+   slider->setRange(Brewtarget::displayRange(this->tab_recipe, propertyNameCurrent, 1, 44, Brewtarget::COLOR) );
    slider->setTickMarks( dispUnit == Unit::displaySrm ? 10 : 40, 2);
 
+   return;
 }
 
 void MainWindow::showChanges(QMetaProperty* prop)
@@ -1401,26 +1458,29 @@ void MainWindow::showChanges(QMetaProperty* prop)
 */
    lineEdit_boilSg->setText(recipeObs);
 
-   updateDensitySlider("og", styleRangeWidget_og, 1.120);
-   styleRangeWidget_og->setValue(Brewtarget::amountDisplay(recipeObs,tab_recipe,"og",&Units::sp_grav,0));
+   updateDensitySlider(PropertyNames::Style::ogMin, PropertyNames::Style::ogMax, PropertyNames::Recipe::og, styleRangeWidget_og, 1.120);
+   styleRangeWidget_og->setValue(Brewtarget::amountDisplay(recipeObs,tab_recipe,PropertyNames::Recipe::og,&Units::sp_grav,0));
 
-   updateDensitySlider("fg", styleRangeWidget_fg, 1.03);
-   styleRangeWidget_fg->setValue(Brewtarget::amountDisplay(recipeObs,tab_recipe,"fg",&Units::sp_grav,0));
+   updateDensitySlider(PropertyNames::Style::fgMin, PropertyNames::Style::fgMax, PropertyNames::Recipe::fg, styleRangeWidget_fg, 1.03);
+   styleRangeWidget_fg->setValue(Brewtarget::amountDisplay(recipeObs,tab_recipe,PropertyNames::Recipe::fg,&Units::sp_grav,0));
 
    styleRangeWidget_abv->setValue(recipeObs->ABV_pct());
    styleRangeWidget_ibu->setValue(recipeObs->IBU());
 
-   rangeWidget_batchsize->setRange(0, Brewtarget::amountDisplay(recipeObs,tab_recipe,"batchSize_l", &Units::liters,0));
-   rangeWidget_batchsize->setPreferredRange(0, Brewtarget::amountDisplay(recipeObs,tab_recipe,"finalVolume_l", &Units::liters,0));
-   rangeWidget_batchsize->setValue(Brewtarget::amountDisplay(recipeObs,tab_recipe,"finalVolume_l", &Units::liters,0));
+   rangeWidget_batchsize->setRange(0, Brewtarget::amountDisplay(recipeObs, tab_recipe, PropertyNames::Recipe::batchSize_l, &Units::liters, 0));
+   rangeWidget_batchsize->setPreferredRange(0, Brewtarget::amountDisplay(recipeObs, tab_recipe, PropertyNames::Recipe::finalVolume_l, &Units::liters, 0));
+   rangeWidget_batchsize->setValue(Brewtarget::amountDisplay(recipeObs, tab_recipe, PropertyNames::Recipe::finalVolume_l, &Units::liters, 0));
 
-   rangeWidget_boilsize->setRange(0, Brewtarget::amountDisplay(recipeObs,tab_recipe,"boilSize_l", &Units::liters,0));
-   rangeWidget_boilsize->setPreferredRange(0, Brewtarget::amountDisplay(recipeObs,tab_recipe,"boilVolume_l", &Units::liters,0));
-   rangeWidget_boilsize->setValue(Brewtarget::amountDisplay(recipeObs,tab_recipe,"boilVolume_l", &Units::liters,0));
+   rangeWidget_boilsize->setRange(0, Brewtarget::amountDisplay(recipeObs, tab_recipe, PropertyNames::Recipe::boilSize_l, &Units::liters, 0));
+   rangeWidget_boilsize->setPreferredRange(0, Brewtarget::amountDisplay(recipeObs, tab_recipe, PropertyNames::Recipe::boilVolume_l, &Units::liters, 0));
+   rangeWidget_boilsize->setValue(Brewtarget::amountDisplay(recipeObs, tab_recipe, PropertyNames::Recipe::boilVolume_l, &Units::liters, 0));
 
    /* Colors need the same basic treatment as gravity */
-   updateColorSlider("color_srm", styleRangeWidget_srm);
-   styleRangeWidget_srm->setValue(Brewtarget::amountDisplay(recipeObs,tab_recipe,"color_srm",&Units::srm,0));
+   updateColorSlider(PropertyNames::Style::colorMin_srm,
+                     PropertyNames::Style::colorMax_srm,
+                     PropertyNames::Recipe::color_srm,
+                     styleRangeWidget_srm);
+   styleRangeWidget_srm->setValue(Brewtarget::amountDisplay(recipeObs, tab_recipe, PropertyNames::Recipe::color_srm, &Units::srm, 0));
 
    // In some, incomplete, recipes, OG is approximately 1.000, which then makes GU close to 0 and thus IBU/GU insanely
    // large.  Besides being meaningless, such a large number takes up a lot of space.  So, where gravity units are
@@ -1467,12 +1527,12 @@ void MainWindow::displayRangesEtcForCurrentRecipeStyle()
       return;
    }
 
-   styleRangeWidget_og->setPreferredRange( Brewtarget::displayRange(style, tab_recipe, "og", Brewtarget::DENSITY ));
-   styleRangeWidget_fg->setPreferredRange( Brewtarget::displayRange(style, tab_recipe, "fg", Brewtarget::DENSITY ));
+   styleRangeWidget_og->setPreferredRange( Brewtarget::displayRange(style, tab_recipe, PropertyNames::Style::ogMin, PropertyNames::Style::ogMax, Brewtarget::DENSITY ));
+   styleRangeWidget_fg->setPreferredRange( Brewtarget::displayRange(style, tab_recipe, PropertyNames::Style::fgMin, PropertyNames::Style::fgMax, Brewtarget::DENSITY ));
 
    styleRangeWidget_abv->setPreferredRange(style->abvMin_pct(), style->abvMax_pct());
    styleRangeWidget_ibu->setPreferredRange(style->ibuMin(), style->ibuMax());
-   styleRangeWidget_srm->setPreferredRange(Brewtarget::displayRange(style, tab_recipe, "color_srm", Brewtarget::COLOR));
+   styleRangeWidget_srm->setPreferredRange(Brewtarget::displayRange(style, tab_recipe, PropertyNames::Style::colorMin_srm, PropertyNames::Style::colorMax_srm, Brewtarget::COLOR));
 
    this->styleButton->setStyle(style);
 
@@ -1548,8 +1608,8 @@ void MainWindow::droppedRecipeEquipment(Equipment *kit)
    Mash* m = recipeObs->mash();
    if( m )
    {
-      new SimpleUndoableUpdate(*m, "tunWeight_kg", kit->tunWeight_kg(), tr("Change Tun Weight"), equipmentUpdate);
-      new SimpleUndoableUpdate(*m, "tunSpecificHeat_calGC", kit->tunSpecificHeat_calGC(), tr("Change Tun Specific Heat"), equipmentUpdate);
+      new SimpleUndoableUpdate(*m, PropertyNames::Mash::tunWeight_kg, kit->tunWeight_kg(), tr("Change Tun Weight"), equipmentUpdate);
+      new SimpleUndoableUpdate(*m, PropertyNames::Mash::tunSpecificHeat_calGC, kit->tunSpecificHeat_calGC(), tr("Change Tun Specific Heat"), equipmentUpdate);
    }
 
    if( QMessageBox::question(this,
@@ -1566,9 +1626,9 @@ void MainWindow::droppedRecipeEquipment(Equipment *kit)
       // won't ever be seen by the user, but there's no harm in setting them.
       // (The previous call here to mashEditor->setRecipe() was a roundabout way of calling setTunWeight_kg() and
       // setTunSpecificHeat_calGC() on the mash.)
-      new SimpleUndoableUpdate(*this->recipeObs, "batchSize_l", kit->batchSize_l(), tr("Change Batch Size"), equipmentUpdate);
-      new SimpleUndoableUpdate(*this->recipeObs, "boilSize_l", kit->boilSize_l(), tr("Change Boil Size"), equipmentUpdate);
-      new SimpleUndoableUpdate(*this->recipeObs, "boilTime_min", kit->boilTime_min(), tr("Change Boil Time"), equipmentUpdate);
+      new SimpleUndoableUpdate(*this->recipeObs, PropertyNames::Recipe::batchSize_l, kit->batchSize_l(), tr("Change Batch Size"), equipmentUpdate);
+      new SimpleUndoableUpdate(*this->recipeObs, PropertyNames::Recipe::boilSize_l, kit->boilSize_l(), tr("Change Boil Size"), equipmentUpdate);
+      new SimpleUndoableUpdate(*this->recipeObs, PropertyNames::Recipe::boilTime_min, kit->boilTime_min(), tr("Change Boil Time"), equipmentUpdate);
    }
 
    // This will do the equipment update and any related updates - see above
@@ -1668,7 +1728,10 @@ void MainWindow::updateRecipeBatchSize()
    if( recipeObs == nullptr )
       return;
 
-   this->doOrRedoUpdate(*this->recipeObs, "batchSize_l", lineEdit_batchSize->toSI(), tr("Change Batch Size"));
+   this->doOrRedoUpdate(*this->recipeObs,
+                        PropertyNames::Recipe::batchSize_l,
+                        lineEdit_batchSize->toSI(),
+                        tr("Change Batch Size"));
 }
 
 void MainWindow::updateRecipeBoilSize()
@@ -1676,7 +1739,10 @@ void MainWindow::updateRecipeBoilSize()
    if( recipeObs == nullptr )
       return;
 
-   this->doOrRedoUpdate(*this->recipeObs, "boilSize_l", lineEdit_boilSize->toSI(), tr("Change Boil Size"));
+   this->doOrRedoUpdate(*this->recipeObs,
+                        PropertyNames::Recipe::boilSize_l,
+                        lineEdit_boilSize->toSI(),
+                        tr("Change Boil Size"));
 }
 
 void MainWindow::updateRecipeBoilTime()
@@ -1694,10 +1760,11 @@ void MainWindow::updateRecipeBoilTime()
    // changes to recipeObs->boilTime_min and maybe recipeObs->boilSize_l
    // NOTE: This works because kit is the recipe's equipment, not the generic
    // equipment in the recipe drop down.
-   if( kit )
-      this->doOrRedoUpdate(*kit, "boilTime_min", boilTime, tr("Change Boil Time"));
-   else
-      this->doOrRedoUpdate(*this->recipeObs, "boilTime_min", boilTime, tr("Change Boil Time"));
+   if (kit) {
+      this->doOrRedoUpdate(*kit, PropertyNames::Equipment::boilTime_min, boilTime, tr("Change Boil Time"));
+   } else {
+      this->doOrRedoUpdate(*this->recipeObs, PropertyNames::Recipe::boilTime_min, boilTime, tr("Change Boil Time"));
+   }
 
    return;
 }
@@ -1838,7 +1905,7 @@ void MainWindow::doOrRedoUpdate(QUndoCommand * update)
 }
 
 void MainWindow::doOrRedoUpdate(QObject & updatee,
-                                char const * const propertyName,
+                                BtStringConst const & propertyName,
                                 QVariant newValue,
                                 QString const & description,
                                 QUndoCommand * parent) {
@@ -2189,7 +2256,7 @@ void MainWindow::newRecipe()
 {
    QString name = QInputDialog::getText(this, tr("Recipe name"),
                                           tr("Recipe name:"));
-   QVariant defEquipKey = PersistentSettings::value("defaultEquipmentKey", -1);
+   QVariant defEquipKey = PersistentSettings::value(PersistentSettings::Names::defaultEquipmentKey, -1);
    QObject* selection = sender();
 
    if( name.isEmpty() )
@@ -2724,22 +2791,22 @@ void MainWindow::removeMash() {
 void MainWindow::closeEvent(QCloseEvent* /*event*/)
 {
    Brewtarget::saveSystemOptions();
-   PersistentSettings::insert("geometry", saveGeometry());
-   PersistentSettings::insert("windowState", saveState());
+   PersistentSettings::insert(PersistentSettings::Names::geometry, saveGeometry());
+   PersistentSettings::insert(PersistentSettings::Names::windowState, saveState());
    if ( recipeObs )
-      PersistentSettings::insert("recipeKey", recipeObs->key());
+      PersistentSettings::insert(PersistentSettings::Names::recipeKey, recipeObs->key());
 
    //UI save state
-   PersistentSettings::insert("MainWindow/splitter_vertical_State", splitter_vertical->saveState());
-   PersistentSettings::insert("MainWindow/splitter_horizontal_State", splitter_horizontal->saveState());
-   PersistentSettings::insert("MainWindow/treeView_recipe_headerState", treeView_recipe->header()->saveState());
-   PersistentSettings::insert("MainWindow/treeView_style_headerState", treeView_style->header()->saveState());
-   PersistentSettings::insert("MainWindow/treeView_equip_headerState", treeView_equip->header()->saveState());
-   PersistentSettings::insert("MainWindow/treeView_ferm_headerState", treeView_ferm->header()->saveState());
-   PersistentSettings::insert("MainWindow/treeView_hops_headerState", treeView_hops->header()->saveState());
-   PersistentSettings::insert("MainWindow/treeView_misc_headerState", treeView_misc->header()->saveState());
-   PersistentSettings::insert("MainWindow/treeView_yeast_headerState", treeView_yeast->header()->saveState());
-   PersistentSettings::insert("MainWindow/mashStepTableWidget_headerState", mashStepTableWidget->horizontalHeader()->saveState());
+   PersistentSettings::insert(PersistentSettings::Names::splitter_vertical_State, splitter_vertical->saveState(), PersistentSettings::Sections::MainWindow);
+   PersistentSettings::insert(PersistentSettings::Names::splitter_horizontal_State, splitter_horizontal->saveState(), PersistentSettings::Sections::MainWindow);
+   PersistentSettings::insert(PersistentSettings::Names::treeView_recipe_headerState, treeView_recipe->header()->saveState(), PersistentSettings::Sections::MainWindow);
+   PersistentSettings::insert(PersistentSettings::Names::treeView_style_headerState, treeView_style->header()->saveState(), PersistentSettings::Sections::MainWindow);
+   PersistentSettings::insert(PersistentSettings::Names::treeView_equip_headerState, treeView_equip->header()->saveState(), PersistentSettings::Sections::MainWindow);
+   PersistentSettings::insert(PersistentSettings::Names::treeView_ferm_headerState, treeView_ferm->header()->saveState(), PersistentSettings::Sections::MainWindow);
+   PersistentSettings::insert(PersistentSettings::Names::treeView_hops_headerState, treeView_hops->header()->saveState(), PersistentSettings::Sections::MainWindow);
+   PersistentSettings::insert(PersistentSettings::Names::treeView_misc_headerState, treeView_misc->header()->saveState(), PersistentSettings::Sections::MainWindow);
+   PersistentSettings::insert(PersistentSettings::Names::treeView_yeast_headerState, treeView_yeast->header()->saveState(), PersistentSettings::Sections::MainWindow);
+   PersistentSettings::insert(PersistentSettings::Names::mashStepTableWidget_headerState, mashStepTableWidget->horizontalHeader()->saveState(), PersistentSettings::Sections::MainWindow);
 
    // After unloading the database, can't make any more queries to it, so first
    // make the main window disappear so that redraw events won't inadvertently

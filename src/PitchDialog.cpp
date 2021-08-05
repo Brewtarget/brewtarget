@@ -62,7 +62,12 @@ void PitchDialog::updateProductionDate(Unit::unitDisplay dsp, Unit::unitScale sc
 {
    QString format;
    // I need the new unit, not the old
-   Unit::unitDisplay unitDsp = (Unit::unitDisplay)PersistentSettings::value("productionDate", Brewtarget::getDateFormat(), "pitchRateCalc", PersistentSettings::UNIT).toInt();
+   Unit::unitDisplay unitDsp = static_cast<Unit::unitDisplay>(
+      PersistentSettings::value(PersistentSettings::Names::productionDate,
+                                Brewtarget::getDateFormat(),
+                                PersistentSettings::Sections::pitchRateCalc,
+                                PersistentSettings::UNIT).toInt()
+   );
 
    switch(unitDsp)
    {

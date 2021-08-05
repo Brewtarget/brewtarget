@@ -35,15 +35,6 @@
 #include "model/Water.h"
 #include "model/Yeast.h"
 
-// .:TODO:. Create tables
-// .:TBD:. What about triggers?
-//
-// .:TBD:. What about read-only fields, eg if we want an Instruction to pull its Recipe ID from instruction_in_recipe
-//
-// .:TBD:. At the moment, each table name is used pretty much once, but if that changes then we might want to add
-//        constants along the following lines:
-// namespace DatabaseNames::Tables { static char const * const brewnote            = "brewnote"; }
-// plus something similar for column names
 
 namespace {
 

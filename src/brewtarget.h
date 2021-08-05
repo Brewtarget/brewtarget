@@ -69,6 +69,7 @@ extern void qt_set_sequence_auto_mnemonic(bool b);
 
 #include "UnitSystem.h"
 #include "Logging.h"
+#include "utils/BtStringConst.h"
 
 class NamedEntity;
 class MainWindow;
@@ -145,7 +146,7 @@ public:
    static int run();
 
    static double toDouble(QString text, bool* ok = nullptr);
-   static double toDouble(const NamedEntity* element, QString attribute, QString caller);
+   static double toDouble(const NamedEntity* element, BtStringConst const & propertyName, QString caller);
    static double toDouble(QString text, QString caller);
 
    /*!
@@ -164,22 +165,26 @@ public:
     *
     * \param element Element whose amount we wish to display
     * \param object the GUI object doing the display, used to access configured unit&scale
-    * \param attribute the name of the attribute to display
+    * \param propertyName the name of the property to display
     * \param units which unit system it is in
     * \param precision how many decimal places to use, defaulting to 3
     */
-   static QString displayAmount( NamedEntity* element, QObject* object, QString attribute, Unit const * units=nullptr, int precision=3 );
+   static QString displayAmount( NamedEntity* element, QObject* object, BtStringConst const & propertyName, Unit const * units=nullptr, int precision=3 );
 
    /*!
     * \brief Displays an amount in the appropriate units.
     *
     * \param amount the amount to display
     * \param section the name of the object to reference to get units&scales from the config file
-    * \param attribute the attribute name to complete the lookup for units&scales
+    * \param propertyName the property name to complete the lookup for units&scales
     * \param units which unit system it is in
     * \param precision how many decimal places to use, defaulting to 3
     */
-   static QString displayAmount( double amount, QString section, QString attribute, Unit const * units=nullptr, int precision = 3);
+   static QString displayAmount(double amount,
+                                BtStringConst const & section,
+                                BtStringConst const & propertyName,
+                                Unit const * units=nullptr,
+                                int precision = 3);
 
    /*!
     *  \brief Displays an amount in the appropriate units.
@@ -194,10 +199,10 @@ public:
     * \brief Displays an amount in the appropriate units.
     *
     * \param element Element whose amount we wish to display
-    * \param attribute the \c QObject::property of \c element that returns the
+    * \param propertyName the \c QObject::property of \c element that returns the
     *        amount we wish to display
     */
-   static double amountDisplay( NamedEntity* element, QObject* object, QString attribute, Unit const * units=nullptr, int precision=3 );
+   static double amountDisplay( NamedEntity* element, QObject* object, BtStringConst const & propertyName, Unit const * units=nullptr, int precision=3 );
 
    //! \brief Display date formatted for the locale.
    static QString displayDate( QDate const& date );
@@ -208,8 +213,16 @@ public:
    //! \brief Appropriate thickness units will be placed in \c *volumeUnit and \c *weightUnit.
    static void getThicknessUnits( Unit const ** volumeUnit, Unit const ** weightUnit );
 
-   static QPair<double,double> displayRange(NamedEntity* element, QObject *object, QString attribute, RangeType _type = DENSITY);
-   static QPair<double,double> displayRange(QObject *object, QString attribute, double min, double max, RangeType _type = DENSITY);
+   static QPair<double,double> displayRange(NamedEntity* element,
+                                            QObject *object,
+                                            BtStringConst const & propertyNameMin,
+                                            BtStringConst const & propertyNameMax,
+                                            RangeType _type = DENSITY);
+   static QPair<double,double> displayRange(QObject *object,
+                                            BtStringConst const & propertyName,
+                                            double min,
+                                            double max,
+                                            RangeType _type = DENSITY);
 
    //! \return SI amount for the string
    static double qStringToSI( QString qstr, Unit const * unit,

@@ -31,7 +31,7 @@
 
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
-#define AddPropertyName(property) namespace PropertyNames::Mash {static char const * const property = #property; }
+#define AddPropertyName(property) namespace PropertyNames::Mash { BtStringConst const property{#property}; }
 AddPropertyName(equipAdjust)
 AddPropertyName(grainTemp_c)
 AddPropertyName(mashSteps)

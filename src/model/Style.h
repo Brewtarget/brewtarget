@@ -31,7 +31,7 @@
 
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
-#define AddPropertyName(property) namespace PropertyNames::Style {static char const * const property = #property; }
+#define AddPropertyName(property) namespace PropertyNames::Style { BtStringConst const property{#property}; }
 AddPropertyName(abvMax_pct)
 AddPropertyName(abvMin_pct)
 AddPropertyName(carbMax_vol)

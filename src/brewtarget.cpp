@@ -504,7 +504,7 @@ int Brewtarget::run() {
 }
 
 void Brewtarget::updateConfig() {
-   int cVersion = PersistentSettings::value("config_version", QVariant(0)).toInt();
+   int cVersion = PersistentSettings::value(PersistentSettings::Names::config_version, QVariant(0)).toInt();
    while ( cVersion < CONFIG_VERSION ) {
       switch ( ++cVersion ) {
          case 1:
@@ -513,7 +513,7 @@ void Brewtarget::updateConfig() {
             // Write that back to the config file
             PersistentSettings::insert(PersistentSettings::Names::dbType, static_cast<int>(newType));
             // and make sure we don't do it again.
-            PersistentSettings::insert("config_version", QVariant(cVersion));
+            PersistentSettings::insert(PersistentSettings::Names::config_version, QVariant(cVersion));
             break;
       }
    }
@@ -527,7 +527,7 @@ void Brewtarget::readSystemOptions()
    updateConfig();
 
    //================Version Checking========================
-   checkVersion = PersistentSettings::value("check_version", QVariant(false)).toBool();
+   checkVersion = PersistentSettings::value(PersistentSettings::Names::check_version, QVariant(false)).toBool();
 
    //=====================Last DB Merge Request======================
    if (PersistentSettings::contains(PersistentSettings::Names::last_db_merge_req)) {
@@ -535,11 +535,12 @@ void Brewtarget::readSystemOptions()
    }
 
    //=====================Language====================
-   if( PersistentSettings::contains("language") )
-      setLanguage(PersistentSettings::value("language","").toString());
+   if( PersistentSettings::contains(PersistentSettings::Names::language) ) {
+      setLanguage(PersistentSettings::value(PersistentSettings::Names::language,"").toString());
+   }
 
    //=======================Weight=====================
-   text = PersistentSettings::value("weight_unit_system", "SI").toString();
+   text = PersistentSettings::value(PersistentSettings::Names::weight_unit_system, "SI").toString();
    if( text == "Imperial" )
    {
       weightUnitSystem = Imperial;
@@ -557,7 +558,7 @@ void Brewtarget::readSystemOptions()
    }
 
    //===========================Volume=======================
-   text = PersistentSettings::value("volume_unit_system", "SI").toString();
+   text = PersistentSettings::value(PersistentSettings::Names::volume_unit_system, "SI").toString();
    if( text == "Imperial" )
    {
       volumeUnitSystem = Imperial;
@@ -575,7 +576,7 @@ void Brewtarget::readSystemOptions()
    }
 
    //=======================Temp======================
-   text = PersistentSettings::value("temperature_scale", "SI").toString();
+   text = PersistentSettings::value(PersistentSettings::Names::temperature_scale, "SI").toString();
    if( text == "Fahrenheit" )
    {
       tempScale = Fahrenheit;
@@ -592,7 +593,7 @@ void Brewtarget::readSystemOptions()
    thingToUnitSystem.insert(Unit::Time,&UnitSystems::timeUnitSystem);
 
    //===================IBU===================
-   text = PersistentSettings::value("ibu_formula", "tinseth").toString();
+   text = PersistentSettings::value(PersistentSettings::Names::ibu_formula, "tinseth").toString();
    if( text == "tinseth" )
       ibuFormula = TINSETH;
    else if( text == "rager" )
@@ -605,7 +606,7 @@ void Brewtarget::readSystemOptions()
    }
 
    //========================Color Formula======================
-   text = PersistentSettings::value("color_formula", "morey").toString();
+   text = PersistentSettings::value(PersistentSettings::Names::color_formula, "morey").toString();
    if( text == "morey" )
       colorFormula = MOREY;
    else if( text == "daniel" )
@@ -619,7 +620,7 @@ void Brewtarget::readSystemOptions()
 
    //========================Density==================
 
-   if ( PersistentSettings::value("use_plato", false).toBool() )
+   if ( PersistentSettings::value(PersistentSettings::Names::use_plato, false).toBool() )
    {
       densityUnit = PLATO;
       thingToUnitSystem.insert(Unit::Density,&UnitSystems::platoDensityUnitSystem);
@@ -631,7 +632,7 @@ void Brewtarget::readSystemOptions()
    }
 
    //=======================Color unit===================
-   text = PersistentSettings::value("color_unit", "srm").toString();
+   text = PersistentSettings::value(PersistentSettings::Names::color_unit, "srm").toString();
    if( text == "srm" )
    {
       colorUnit = SRM;
@@ -646,7 +647,7 @@ void Brewtarget::readSystemOptions()
       qWarning() << QString("Bad color_unit type: %1").arg(text);
 
    //=======================Diastatic power unit===================
-   text = PersistentSettings::value("diastatic_power_unit", "Lintner").toString();
+   text = PersistentSettings::value(PersistentSettings::Names::diastatic_power_unit, "Lintner").toString();
    if( text == "Lintner" )
    {
       diastaticPowerUnit = LINTNER;
@@ -663,7 +664,7 @@ void Brewtarget::readSystemOptions()
    }
 
    //=======================Date format===================
-   dateFormat = static_cast<Unit::unitDisplay>(PersistentSettings::value("date_format",Unit::displaySI).toInt());
+   dateFormat = static_cast<Unit::unitDisplay>(PersistentSettings::value(PersistentSettings::Names::date_format,Unit::displaySI).toInt());
 
    return;
 
@@ -672,59 +673,59 @@ void Brewtarget::readSystemOptions()
 void Brewtarget::saveSystemOptions() {
    QString text;
 
-   PersistentSettings::insert("check_version", checkVersion);
+   PersistentSettings::insert(PersistentSettings::Names::check_version, checkVersion);
    PersistentSettings::insert(PersistentSettings::Names::last_db_merge_req, Database::lastDbMergeRequest.toString(Qt::ISODate));
-   PersistentSettings::insert("language", getCurrentLanguage());
+   PersistentSettings::insert(PersistentSettings::Names::language, getCurrentLanguage());
    //setOption("user_data_dir", userDataDir);
-   PersistentSettings::insert("weight_unit_system", thingToUnitSystem.value(Unit::Mass)->unitType());
-   PersistentSettings::insert("volume_unit_system",thingToUnitSystem.value(Unit::Volume)->unitType());
-   PersistentSettings::insert("temperature_scale", thingToUnitSystem.value(Unit::Temp)->unitType());
-   PersistentSettings::insert("use_plato", densityUnit == PLATO);
-   PersistentSettings::insert("date_format", dateFormat);
+   PersistentSettings::insert(PersistentSettings::Names::weight_unit_system, thingToUnitSystem.value(Unit::Mass)->unitType());
+   PersistentSettings::insert(PersistentSettings::Names::volume_unit_system, thingToUnitSystem.value(Unit::Volume)->unitType());
+   PersistentSettings::insert(PersistentSettings::Names::temperature_scale, thingToUnitSystem.value(Unit::Temp)->unitType());
+   PersistentSettings::insert(PersistentSettings::Names::use_plato, densityUnit == PLATO);
+   PersistentSettings::insert(PersistentSettings::Names::date_format, dateFormat);
 
    switch(ibuFormula)
    {
       case TINSETH:
-         PersistentSettings::insert("ibu_formula", "tinseth");
+         PersistentSettings::insert(PersistentSettings::Names::ibu_formula, "tinseth");
          break;
       case RAGER:
-         PersistentSettings::insert("ibu_formula", "rager");
+         PersistentSettings::insert(PersistentSettings::Names::ibu_formula, "rager");
          break;
       case NOONAN:
-         PersistentSettings::insert("ibu_formula", "noonan");
+         PersistentSettings::insert(PersistentSettings::Names::ibu_formula, "noonan");
          break;
    }
 
    switch(colorFormula)
    {
       case MOREY:
-         PersistentSettings::insert("color_formula", "morey");
+         PersistentSettings::insert(PersistentSettings::Names::color_formula, "morey");
          break;
       case DANIEL:
-         PersistentSettings::insert("color_formula", "daniel");
+         PersistentSettings::insert(PersistentSettings::Names::color_formula, "daniel");
          break;
       case MOSHER:
-         PersistentSettings::insert("color_formula", "mosher");
+         PersistentSettings::insert(PersistentSettings::Names::color_formula, "mosher");
          break;
    }
 
    switch(colorUnit)
    {
       case SRM:
-         PersistentSettings::insert("color_unit", "srm");
+         PersistentSettings::insert(PersistentSettings::Names::color_unit, "srm");
          break;
       case EBC:
-         PersistentSettings::insert("color_unit", "ebc");
+         PersistentSettings::insert(PersistentSettings::Names::color_unit, "ebc");
          break;
    }
 
    switch(diastaticPowerUnit)
    {
       case LINTNER:
-         PersistentSettings::insert("diastatic_power_unit", "Lintner");
+         PersistentSettings::insert(PersistentSettings::Names::diastatic_power_unit, "Lintner");
          break;
       case WK:
-         PersistentSettings::insert("diastatic_power_unit", "WK");
+         PersistentSettings::insert(PersistentSettings::Names::diastatic_power_unit, "WK");
          break;
    }
 
@@ -778,45 +779,45 @@ double Brewtarget::toDouble(QString text, bool* ok)
    ret = sysDefault.toDouble(text,&success);
 
    // If we failed, try C conversion
-   if ( ! success )
+   if ( ! success ) {
       ret = text.toDouble(&success);
+   }
 
    // If we were asked to return the success, return it here.
-   if ( ok != nullptr )
+   if ( ok != nullptr ) {
       *ok = success;
+   }
 
    // Whatever we got, we return it
    return ret;
 }
 
 // And a few convenience methods, just for that sweet, sweet syntatic sugar
-double Brewtarget::toDouble(const NamedEntity* element, QString attribute, QString caller)
-{
+double Brewtarget::toDouble(const NamedEntity* element, BtStringConst const & propertyName, QString caller) {
    double amount = 0.0;
    QString value;
    bool ok = false;
 
-   if ( element->property(attribute.toLatin1().constData()).canConvert(QVariant::String) )
-   {
+   if ( element->property(*propertyName).canConvert(QVariant::String) ) {
       // Get the amount
-      value = element->property(attribute.toLatin1().constData()).toString();
+      value = element->property(*propertyName).toString();
       amount = toDouble( value, &ok );
-      if (!ok)
-         qWarning() << QString("%1 could not convert %2 to double").arg(caller).arg(value);
+      if (!ok) {
+         qWarning() << Q_FUNC_INFO << caller << "could not convert" << value << "to double";
+      }
       // Get the display units and scale
    }
    return amount;
 }
 
-double Brewtarget::toDouble(QString text, QString caller)
-{
-   double ret = 0.0;
+double Brewtarget::toDouble(QString text, QString caller) {
    bool success = false;
 
-   ret = toDouble(text,&success);
+   double ret = toDouble(text,&success);
 
-   if ( ! success )
-      qWarning() << QString("%1 could not convert %2 to double").arg(caller).arg(text);
+   if ( ! success ) {
+      qWarning() << Q_FUNC_INFO << caller << "could not convert" << text << "to double";
+   }
 
    return ret;
 }
@@ -852,7 +853,7 @@ QString Brewtarget::displayAmount( double amount, Unit const * units, int precis
    return ret;
 }
 
-QString Brewtarget::displayAmount(NamedEntity* element, QObject* object, QString attribute, Unit const * units, int precision )
+QString Brewtarget::displayAmount(NamedEntity* element, QObject* object, BtStringConst const & propertyName, Unit const * units, int precision )
 {
    double amount = 0.0;
    QString value;
@@ -860,18 +861,18 @@ QString Brewtarget::displayAmount(NamedEntity* element, QObject* object, QString
    Unit::unitScale dispScale;
    Unit::unitDisplay dispUnit;
 
-   if ( element->property(attribute.toLatin1().constData()).canConvert(QVariant::Double) )
+   if ( element->property(*propertyName).canConvert(QVariant::Double) )
    {
       // Get the amount
-      value = element->property(attribute.toLatin1().constData()).toString();
+      value = element->property(*propertyName).toString();
       amount = toDouble( value, &ok );
       if ( ! ok )
          qWarning() << QString("%1 could not convert %2 to double")
                .arg(Q_FUNC_INFO)
                .arg(value);
       // Get the display units and scale
-      dispUnit  = static_cast<Unit::unitDisplay>(PersistentSettings::value(attribute, Unit::noUnit,  object->objectName(), PersistentSettings::UNIT).toInt());
-      dispScale = static_cast<Unit::unitScale>(PersistentSettings::value(  attribute, Unit::noScale, object->objectName(), PersistentSettings::SCALE).toInt());
+      dispUnit  = static_cast<Unit::unitDisplay>(PersistentSettings::value(propertyName, Unit::noUnit,  object->objectName(), PersistentSettings::UNIT).toInt());
+      dispScale = static_cast<Unit::unitScale>(PersistentSettings::value(  propertyName, Unit::noScale, object->objectName(), PersistentSettings::SCALE).toInt());
 
       return displayAmount(amount, units, precision, dispUnit, dispScale);
    }
@@ -880,14 +881,17 @@ QString Brewtarget::displayAmount(NamedEntity* element, QObject* object, QString
 
 }
 
-QString Brewtarget::displayAmount(double amt, QString section, QString attribute, Unit const * units, int precision )
-{
+QString Brewtarget::displayAmount(double amt,
+                               BtStringConst const & section,
+                               BtStringConst const & propertyName,
+                               Unit const * units,
+                               int precision) {
    Unit::unitScale dispScale;
    Unit::unitDisplay dispUnit;
 
    // Get the display units and scale
-   dispUnit  = static_cast<Unit::unitDisplay>(PersistentSettings::value(attribute, Unit::noUnit,  section, PersistentSettings::UNIT).toInt());
-   dispScale = static_cast<Unit::unitScale>(PersistentSettings::value(  attribute, Unit::noScale, section, PersistentSettings::SCALE).toInt());
+   dispUnit  = static_cast<Unit::unitDisplay>(PersistentSettings::value(propertyName, Unit::noUnit,  section, PersistentSettings::UNIT).toInt());
+   dispScale = static_cast<Unit::unitScale>(PersistentSettings::value(  propertyName, Unit::noScale, section, PersistentSettings::SCALE).toInt());
 
    return displayAmount(amt, units, precision, dispUnit, dispScale);
 
@@ -918,24 +922,23 @@ double Brewtarget::amountDisplay( double amount, Unit const * units, int precisi
    return ret;
 }
 
-double Brewtarget::amountDisplay(NamedEntity* element, QObject* object, QString attribute, Unit const * units, int precision )
-{
+double Brewtarget::amountDisplay(NamedEntity* element, QObject* object, BtStringConst const & propertyName, Unit const * units, int precision ) {
    double amount = 0.0;
    QString value;
    bool ok = false;
    Unit::unitScale dispScale;
    Unit::unitDisplay dispUnit;
 
-   if ( element->property(attribute.toLatin1().constData()).canConvert(QVariant::Double) )
-   {
+   if ( element->property(*propertyName).canConvert(QVariant::Double) ) {
       // Get the amount
-      value = element->property(attribute.toLatin1().constData()).toString();
+      value = element->property(*propertyName).toString();
       amount = toDouble( value, &ok );
-      if ( ! ok )
-         qWarning() << QString("Brewtarget::amountDisplay(NamedEntity*,QObject*,QString,Unit*,int) could not convert %1 to double").arg(value);
+      if ( ! ok ) {
+         qWarning() << Q_FUNC_INFO << "Could not convert" << value << "to double";
+      }
       // Get the display units and scale
-      dispUnit  = static_cast<Unit::unitDisplay>(PersistentSettings::value(attribute, Unit::noUnit,  object->objectName(), PersistentSettings::UNIT).toInt());
-      dispScale = static_cast<Unit::unitScale>(PersistentSettings::value(  attribute, Unit::noScale, object->objectName(), PersistentSettings::SCALE).toInt());
+      dispUnit  = static_cast<Unit::unitDisplay>(PersistentSettings::value(propertyName, Unit::noUnit,  object->objectName(), PersistentSettings::UNIT).toInt());
+      dispScale = static_cast<Unit::unitScale>(PersistentSettings::value(  propertyName, Unit::noScale, object->objectName(), PersistentSettings::SCALE).toInt());
 
       return amountDisplay(amount, units, precision, dispUnit, dispScale);
    }
@@ -1054,11 +1057,12 @@ bool Brewtarget::hasUnits(QString qstr)
    return amtUnit.cap(2).size() > 0;
 }
 
-QPair<double,double> Brewtarget::displayRange(NamedEntity* element, QObject *object, QString attribute, RangeType _type)
-{
+QPair<double,double> Brewtarget::displayRange(NamedEntity* element,
+                                           QObject *object,
+                                           BtStringConst const & propertyNameMin,
+                                           BtStringConst const & propertyNameMax,
+                                           RangeType _type) {
    QPair<double,double> range;
-   QString minName = QString("%1%2").arg(attribute).arg("Min");
-   QString maxName = QString("%1%2").arg(attribute).arg("Max");
 
    if ( ! element ) {
       range.first  = 0.0;
@@ -1071,19 +1075,26 @@ QPair<double,double> Brewtarget::displayRange(NamedEntity* element, QObject *obj
    }
    else
    {
-      range.first  = amountDisplay(element, object, minName, &Units::sp_grav,0);
-      range.second = amountDisplay(element, object, maxName, &Units::sp_grav,0);
+      range.first  = amountDisplay(element, object, propertyNameMin, &Units::sp_grav,0);
+      range.second = amountDisplay(element, object, propertyNameMax, &Units::sp_grav,0);
    }
 
    return range;
 }
 
-QPair<double,double> Brewtarget::displayRange(QObject *object, QString attribute, double min, double max, RangeType _type)
+QPair<double,double> Brewtarget::displayRange(QObject *object,
+                                           BtStringConst const & propertyName,
+                                           double min,
+                                           double max,
+                                           RangeType _type)
 {
    QPair<double,double> range;
    Unit::unitDisplay displayUnit;
 
-   displayUnit = static_cast<Unit::unitDisplay>(PersistentSettings::value(attribute, Unit::noUnit, object->objectName(), PersistentSettings::UNIT).toInt());
+   displayUnit = static_cast<Unit::unitDisplay>(PersistentSettings::value(propertyName,
+                                                                          Unit::noUnit,
+                                                                          object->objectName(),
+                                                                          PersistentSettings::UNIT).toInt());
 
    if ( _type == DENSITY )
    {

@@ -1,6 +1,6 @@
 /*
  * MashStepTableModel.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2020
+ * authors 2009-2021
  * - Matt Young <mfsy@yahoo.com>
  * - Maxime Lavigne <duguigne@gmail.com>
  * - Mik Firestone <mikfire@gmail.com>
@@ -189,9 +189,8 @@ void MashStepTableModel::mashStepChanged(QMetaProperty prop, QVariant val)
    int i;
 
    MashStep* stepSender = qobject_cast<MashStep*>(sender());
-   if( stepSender && (i = steps.indexOf(stepSender)) >= 0 )
-   {
-      if ( prop.name() == QString(PropertyNames::MashStep::stepNumber) ) {
+   if (stepSender && (i = steps.indexOf(stepSender)) >= 0) {
+      if (prop.name() == PropertyNames::MashStep::stepNumber) {
          reorderMashStep(stepSender,i);
       }
 
@@ -341,9 +340,9 @@ bool MashStepTableModel::setData( const QModelIndex& index, const QVariant& valu
          if( value.canConvert(QVariant::Int) )
          {
             Brewtarget::mainWindow()->doOrRedoUpdate(*row,
-                                                     "type",
-                                                     static_cast<MashStep::Type>(value.toInt()),
-                                                     tr("Change Mash Step Type"));
+                                                  PropertyNames::MashStep::type,
+                                                  static_cast<MashStep::Type>(value.toInt()),
+                                                  tr("Change Mash Step Type"));
             return true;
          }
          else
@@ -504,16 +503,16 @@ QString MashStepTableModel::generateName(int column) const
    switch(column)
    {
       case MASHSTEPAMOUNTCOL:
-         attribute = "amount";
+         attribute = "amount"; // Not a real property name
          break;
       case MASHSTEPTEMPCOL:
-         attribute = PropertyNames::MashStep::infuseTemp_c;
+         attribute = *PropertyNames::MashStep::infuseTemp_c;
          break;
       case MASHSTEPTARGETTEMPCOL:
-         attribute = PropertyNames::MashStep::stepTemp_c;
+         attribute = *PropertyNames::MashStep::stepTemp_c;
          break;
       case MASHSTEPTIMECOL:
-         attribute = PropertyNames::Misc::time;
+         attribute = *PropertyNames::Misc::time;
          break;
       default:
          attribute = "";

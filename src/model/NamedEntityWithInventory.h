@@ -24,7 +24,7 @@
 
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
-#define AddPropertyName(property) namespace PropertyNames::NamedEntityWithInventory {static char const * const property = #property; }
+#define AddPropertyName(property) namespace PropertyNames::NamedEntityWithInventory { BtStringConst const property{#property}; }
 AddPropertyName(inventory)
 AddPropertyName(inventoryId)
 #undef AddPropertyName
@@ -67,7 +67,6 @@ public:
    void setInventoryId(int key);
 
 protected:
-//   double m_inventory;
    int m_inventory_id;
 };
 

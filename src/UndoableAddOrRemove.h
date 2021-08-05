@@ -1,6 +1,6 @@
 /*
  * UndoableAddOrRemove.h is part of Brewtarget, and is Copyright the following
- * authors 2020
+ * authors 2020-2021
  * - Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify

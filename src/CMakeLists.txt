@@ -181,6 +181,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/TimerWidget.cpp
     ${SRCDIR}/Unit.cpp
     ${SRCDIR}/UnitSystem.cpp
+    ${SRCDIR}/utils/BtStringConst.cpp
     ${SRCDIR}/WaterButton.cpp
     ${SRCDIR}/WaterDialog.cpp
     ${SRCDIR}/WaterEditor.cpp

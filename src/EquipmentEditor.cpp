@@ -338,7 +338,7 @@ void EquipmentEditor::showChanges() {
 
    lineEdit_hopUtilization->setText(e);
    checkBox_defaultEquipment->blockSignals(true);
-   if (PersistentSettings::value("defaultEquipmentKey", -1) == e->key()) {
+   if (PersistentSettings::value(PersistentSettings::Names::defaultEquipmentKey, -1) == e->key()) {
       checkBox_defaultEquipment->setCheckState(Qt::Checked);
    } else {
       checkBox_defaultEquipment->setCheckState(Qt::Unchecked);
@@ -372,18 +372,17 @@ double EquipmentEditor::calcBatchSize() {
 }
 
 void EquipmentEditor::updateDefaultEquipment(int state) {
-   QString optionName = "defaultEquipmentKey";
-
-   QVariant currentDefault = PersistentSettings::value(optionName, -1);
+   QVariant currentDefault = PersistentSettings::value(PersistentSettings::Names::defaultEquipmentKey, -1);
    if ( state == Qt::Checked ) {
-      PersistentSettings::insert(optionName, obsEquip->key());
+      PersistentSettings::insert(PersistentSettings::Names::defaultEquipmentKey, obsEquip->key());
    } else if ( currentDefault == obsEquip->key() ) {
-      PersistentSettings::insert(optionName, -1);
+      PersistentSettings::insert(PersistentSettings::Names::defaultEquipmentKey, -1);
    }
+   return;
 }
 
-void EquipmentEditor::closeEvent(QCloseEvent *event)
-{
+void EquipmentEditor::closeEvent(QCloseEvent *event) {
    cancel();
    event->accept();
+   return;
 }

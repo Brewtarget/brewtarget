@@ -101,25 +101,29 @@ void Testing::initTestCase() {
 
    try {
       // Create a different set of options to avoid clobbering real options
-      QCoreApplication::setOrganizationDomain("brewken.com/test");
-      QCoreApplication::setApplicationName("brewken-test");
+      QCoreApplication::setOrganizationDomain("brewtarget.com/test");
+      QCoreApplication::setApplicationName("brewtarget-test");
 
       // Set options so that any data modification does not affect any other data
       PersistentSettings::initialise(QDir::tempPath());
 
-      //Log test setup
-      //Verify that the Logging initializes normally
+      // Log test setup
+      // Verify that the Logging initializes normally
       qDebug() << "Initiallizing Logging module";
       Logging::initializeLogging();
+      // Now change/override a few settings
+      // We always want debug logging for tests as it's useful when a test fails
       Logging::setLogLevel(Logging::LogLevel_DEBUG);
+      // Test logs go to a /tmp (or equivalent) so as not to clutter the application path with dummy data.
+      Logging::setDirectory(QDir::tempPath(), Logging::NewDirectoryIsTemporary);
       qDebug() << "logging initialized";
 
       // Inside initializeLogging(), there's a check to see whether we're the test application.  If so, it turns off
       // logging output to stderr.
       qDebug() << Q_FUNC_INFO << "Initialised";
 
-      PersistentSettings::insert("color_formula", "morey");
-      PersistentSettings::insert("ibu_formula", "tinseth");
+      PersistentSettings::insert(PersistentSettings::Names::color_formula, "morey");
+      PersistentSettings::insert(PersistentSettings::Names::ibu_formula, "tinseth");
 
    // Tell Brewtarget not to require any "user" input on starting
    Brewtarget::setInteractive(false);
@@ -325,17 +329,21 @@ void Testing::postBoilLossOgTest()
    QVERIFY2( fuzzyComp(recLoss->og(), recNoLoss->og(), 0.002), "OG of recipe with post-boil loss is different from no-loss recipe" );
 }
 
-void Testing::testLogRotation()
-{
+void Testing::testLogRotation() {
+   // Turning off logging to stderr console, this is so you won't have to watch 100k rows generate in the console.
+   Logging::setLoggingToStderr(false);
+
    //generate 40 000 log rows giving roughly 10 files with dummy/random logs
    // This should have to log rotate a few times leaving 5 log files in the directory which we can test for size and number of files.
-   for (int i=0; i < 8000; i++)
-   {
+   for (int i=0; i < 8000; i++) {
       qDebug() << QString("iteration %1-1; (%2)").arg(i).arg(randomStringGenerator());
       qWarning() << QString("iteration %1-2; (%2)").arg(i).arg(randomStringGenerator());
       qCritical() << QString("iteration %1-3; (%2)").arg(i).arg(randomStringGenerator());
       qInfo() << QString("iteration %1-4; (%2)").arg(i).arg(randomStringGenerator());
    }
+
+   // Put logging back to normal
+   Logging::setLoggingToStderr(true);
 
    QFileInfoList fileList = Logging::getLogFileList();
    //There is always a "logFileCount" number of old files + 1 current file

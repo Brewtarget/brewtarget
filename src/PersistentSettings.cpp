@@ -128,7 +128,7 @@ void PersistentSettings::initialise(QString customUserDataDir) {
       userDataDir.setPath(customUserDataDir);
    } else {
       userDataDir.setPath(
-         PersistentSettings::value("UserDataDirectory",
+         PersistentSettings::value(PersistentSettings::Names::UserDataDirectory,
                                    QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)).toString()
       );
    }
@@ -149,7 +149,7 @@ QDir PersistentSettings::getUserDataDir() {
 void PersistentSettings::setUserDataDir(QDir newDirectory) {
    Q_ASSERT(initialised);
    userDataDir = newDirectory;
-   PersistentSettings::insert("UserDataDirectory", userDataDir.absolutePath());
+   PersistentSettings::insert(PersistentSettings::Names::UserDataDirectory, userDataDir.absolutePath());
    return;
 }
 
@@ -159,6 +159,22 @@ bool PersistentSettings::contains(QString const & key,
                                   PersistentSettings::Extension extension) {
    Q_ASSERT(initialised);
    return qSettings->contains(generateFqKey(key, section, extension));
+}
+
+bool PersistentSettings::contains(BtStringConst const & constKey,
+                                  QString const section,
+                                  PersistentSettings::Extension extension) {
+   Q_ASSERT(!constKey.isNull());
+   QString key{*constKey};
+   return PersistentSettings::contains(key, section, extension);
+}
+
+bool PersistentSettings::contains(BtStringConst const & constKey,
+                                  BtStringConst const & constSection,
+                                  PersistentSettings::Extension extension) {
+   Q_ASSERT(!constSection.isNull());
+   QString section{*constSection};
+   return PersistentSettings::contains(constKey, section, extension);
 }
 
 void PersistentSettings::insert(QString const & key,
@@ -172,12 +188,50 @@ void PersistentSettings::insert(QString const & key,
    return;
 }
 
+void PersistentSettings::insert(BtStringConst const & constKey,
+                                QVariant value,
+                                QString const section,
+                                PersistentSettings::Extension extension) {
+   Q_ASSERT(!constKey.isNull());
+   QString key{*constKey};
+   PersistentSettings::insert(key, value, section, extension);
+   return;
+}
+
+void PersistentSettings::insert(BtStringConst const & constKey,
+                                QVariant value,
+                                BtStringConst const & constSection,
+                                Extension extension) {
+   Q_ASSERT(!constSection.isNull());
+   QString section{*constSection};
+   PersistentSettings::insert(constKey, value, section, extension);
+   return;
+}
+
 QVariant PersistentSettings::value(QString const & key,
                                    QVariant const defaultValue,
                                    QString const section,
                                    PersistentSettings::Extension extension) {
    Q_ASSERT(initialised);
    return qSettings->value(generateFqKey(key, section, extension), defaultValue);
+}
+
+QVariant PersistentSettings::value(BtStringConst const & constKey,
+                                   QVariant const defaultValue,
+                                   QString const section,
+                                   PersistentSettings::Extension extension) {
+   Q_ASSERT(!constKey.isNull());
+   QString key{*constKey};
+   return PersistentSettings::value(key, defaultValue, section, extension);
+}
+
+QVariant PersistentSettings::value(BtStringConst const & constKey,
+                                   QVariant const defaultValue,
+                                   BtStringConst const & constSection,
+                                   PersistentSettings::Extension extension) {
+   Q_ASSERT(!constSection.isNull());
+   QString section{*constSection};
+   return PersistentSettings::value(constKey, defaultValue, section, extension);
 }
 
 void PersistentSettings::remove(QString const & key,
@@ -191,5 +245,23 @@ void PersistentSettings::remove(QString const & key,
    if (PersistentSettings::contains(fqKey)) {
       qSettings->remove(fqKey);
    }
+   return;
+}
+
+void PersistentSettings::remove(BtStringConst const & constKey,
+                                QString const section,
+                                PersistentSettings::Extension extension) {
+   Q_ASSERT(!constKey.isNull());
+   QString key{*constKey};
+   PersistentSettings::remove(key, section, extension);
+   return;
+}
+
+void PersistentSettings::remove(BtStringConst const & constKey,
+                                    BtStringConst const & constSection,
+                                    PersistentSettings::Extension extension) {
+   Q_ASSERT(!constSection.isNull());
+   QString section{*constSection};
+   PersistentSettings::remove(constKey, section, extension);
    return;
 }

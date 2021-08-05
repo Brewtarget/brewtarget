@@ -105,7 +105,7 @@ public slots:
 private slots:
    //! \brief Catch changes to Recipe, Database, and Yeast.
    void changed(QMetaProperty, QVariant);
-   void changedInventory(int invKey, char const * const propertyName);
+   void changedInventory(int invKey, BtStringConst const & propertyName);
 
 private:
    bool editable;

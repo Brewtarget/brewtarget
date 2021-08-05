@@ -36,15 +36,83 @@
 #include <QString>
 #include <QVariant>
 
-// .:TODO:. Most of the code still uses hard-coded strings for settings names.  We should go through and convert these
-//          all to compile-time-checkable constants in the PersistentSettings::Names namespace (ie defined here).
+#include "utils/BtStringConst.h"
+
 //======================================================================================================================
-//========================================== Start of property name constants ==========================================
-#define AddSettingName(setting) namespace PersistentSettings::Names {static char const * const setting = #setting; }
+//========================================== Start of setting NAME constants ===========================================
+#define AddSettingName(name) namespace PersistentSettings::Names { BtStringConst const name{#name}; }
+AddSettingName(check_version)
+AddSettingName(color_formula)
+AddSettingName(color_unit)
+AddSettingName(config_version)
+AddSettingName(converted)
+AddSettingName(count)                            // backups section
+AddSettingName(date_format)
+AddSettingName(dbHostname)
+AddSettingName(dbName)
+AddSettingName(dbPassword)
+AddSettingName(dbPortnum)
+AddSettingName(dbSchema)
 AddSettingName(dbType)
+AddSettingName(dbUsername)
+AddSettingName(defaultEquipmentKey)
+AddSettingName(deletewhat)
+AddSettingName(diastatic_power_unit)
+AddSettingName(directory)                        // backups section
+AddSettingName(files)                            // backups section
+AddSettingName(firstWortHopAdjustment)
+AddSettingName(frequency)                        // backups section
+AddSettingName(geometry)
+AddSettingName(ibu_formula)
+AddSettingName(language)
 AddSettingName(last_db_merge_req)
+AddSettingName(LogDirectory)
+AddSettingName(LoggingLevel)
+AddSettingName(mashHopAdjustment)
+AddSettingName(mashStepTableWidget_headerState)  // MainWindow section
+AddSettingName(maximum)                          // backups section
+AddSettingName(productionDate)
+AddSettingName(recipeKey)
+AddSettingName(showsnapshots)
+AddSettingName(splitter_horizontal_State)        // MainWindow section
+AddSettingName(splitter_vertical_State)          // MainWindow section
+AddSettingName(temperature_scale)
+AddSettingName(treeView_equip_headerState)       // MainWindow section
+AddSettingName(treeView_ferm_headerState)        // MainWindow section
+AddSettingName(treeView_hops_headerState)        // MainWindow section
+AddSettingName(treeView_misc_headerState)        // MainWindow section
+AddSettingName(treeView_recipe_headerState)      // MainWindow section
+AddSettingName(treeView_style_headerState)       // MainWindow section
+AddSettingName(treeView_yeast_headerState)       // MainWindow section
+AddSettingName(use_plato)
+AddSettingName(UserDataDirectory)
+AddSettingName(versioning)
+AddSettingName(volume_unit_system)
+AddSettingName(weight_unit_system)
+AddSettingName(windowState)
 #undef AddSettingName
-//=========================================== End of property name constants ===========================================
+//=========================================== End of setting NAME constants ============================================
+//======================================================================================================================
+//======================================================================================================================
+//======================================== Start of setting SECTION constants ==========================================
+#define AddSettingSection(section) namespace PersistentSettings::Sections { BtStringConst const section{#section}; }
+AddSettingSection(backups)
+AddSettingSection(fermentableTable)
+AddSettingSection(hopTable)
+AddSettingSection(MainWindow)
+AddSettingSection(mashStepTableModel)
+AddSettingSection(miscTable)
+AddSettingSection(miscTableModel)
+AddSettingSection(page_postboil)
+AddSettingSection(page_postferment)
+AddSettingSection(page_preboil)
+AddSettingSection(pitchRateCalc)
+AddSettingSection(saltTable)
+AddSettingSection(tab_recipe)
+AddSettingSection(yeastTable)
+AddSettingSection(yeastTableModel)
+#undef AddSettingName
+//========================================= End of setting SECTION constants ===========================================
 //======================================================================================================================
 
 
@@ -106,14 +174,18 @@ namespace PersistentSettings {
     * \brief Returns true if the persistent settings storage contains an item with "fully-qualified" key (generated
     *        from key, section and Extension); otherwise returns false.
     */
-   bool contains(QString const & key, QString const section = QString(), Extension extension = NONE);
+   bool contains(QString const & key,            QString const section = QString(),  Extension extension = NONE);
+   bool contains(BtStringConst const & constKey, QString const section = QString(),  Extension extension = NONE);
+   bool contains(BtStringConst const & constKey, BtStringConst const & constSection, Extension extension = NONE);
 
    /**
     * \brief Inserts a new item with the "fully-qualified" key (generated from key, section and Extension) and a value
     *        of value.
     *        If there is already an item with a corresponding key, that item's value is replaced with value.
     */
-   void insert(QString const & key, QVariant value, QString const section = QString(), Extension extension = NONE);
+   void insert(QString const & key,            QVariant value, QString const section = QString(),  Extension extension = NONE);
+   void insert(BtStringConst const & constKey, QVariant value, QString const section = QString(),  Extension extension = NONE);
+   void insert(BtStringConst const & constKey, QVariant value, BtStringConst const & constSection, Extension extension = NONE);
 
    /**
     * \brief Returns the value associated with the "fully-qualified" key (generated from key, section and Extension).
@@ -121,16 +193,17 @@ namespace PersistentSettings {
     *        defaultValue.
     *        If no defaultValue is specified, the function returns a default-constructed value.
     */
-   QVariant value(QString const & key,
-                  QVariant const defaultValue = QVariant(),
-                  QString const section = QString(),
-                  Extension = NONE);
+   QVariant value(QString const & key,            QVariant const defaultValue = QVariant(), QString const section = QString(),  Extension = NONE);
+   QVariant value(BtStringConst const & constKey, QVariant const defaultValue = QVariant(), QString const section = QString(),  Extension = NONE);
+   QVariant value(BtStringConst const & constKey, QVariant const defaultValue,              BtStringConst const & constSection, Extension = NONE);
 
    /**
     * \brief Removes the item matching key (unless key is the name of a section, in which case it removes all keys in
     *        that section -- hence one reason you don't want keys and sections to share names).
     */
-   void remove(QString const & key, QString const section = QString(), Extension extension = NONE);
+   void remove(QString const & key,             QString const section = QString(),  Extension extension = NONE);
+   void remove(BtStringConst const & constName, QString const section = QString(),  Extension extension = NONE);
+   void remove(BtStringConst const & constName, BtStringConst const & constSection, Extension extension = NONE);
 
 }
 #endif

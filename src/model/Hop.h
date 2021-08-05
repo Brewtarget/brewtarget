@@ -32,7 +32,7 @@
 
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
-#define AddPropertyName(property) namespace PropertyNames::Hop {static char const * const property = #property; }
+#define AddPropertyName(property) namespace PropertyNames::Hop { BtStringConst const property{#property}; }
 AddPropertyName(alpha_pct)
 AddPropertyName(amount_kg)
 AddPropertyName(beta_pct)

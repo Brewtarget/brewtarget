@@ -381,7 +381,7 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
                //
                // If we do need it, we now store the value
                //
-               if (nullptr != fieldDefinition->propertyName) {
+               if (!fieldDefinition->propertyName.isNull()) {
                   this->namedParameterBundle.insert(fieldDefinition->propertyName, parsedValue);
                }
             }
@@ -508,12 +508,11 @@ XmlRecord::ProcessingResult XmlRecord::normaliseAndStoreInDb(NamedEntity * conta
          //
          // If we reach here, it means either there was a problem with one of our child records or we ourselves are a
          // late-detected duplicate.  We've already stored our NamedEntity record in the DB, so we need to try to undo
-         // that by deleting it.  It should be the case that this deletion will also take care of deleting any owned
-         // child records that have already been stored.  (Eg if this is a Mash, and we stored it and 2 MashSteps before
-         // hitting an error on the 3rd MashStep, then deleting the Mash from the DB should also result in those 2
-         // stored MashSteps getting deleted from the DB.)
-         //
-         // .:TODO-DATABASE:. Make the above statement about deletion true!
+         // that by deleting it.  It is the responsibility of each NamedEntity subclass to take care of deleting any
+         // owned stored objects, via the virtual member function NamedEntity::hardDeleteOwnedEntities().  So we don't
+         // have to worry about child records that have already been stored.  (Eg if this is a Mash, and we stored it
+         // and 2 MashSteps before hitting an error on the 3rd MashStep, then deleting the Mash from the DB will also
+         // result in those 2 stored MashSteps getting deleted from the DB.)
          //
          qDebug() <<
             Q_FUNC_INFO << "Deleting stored" << this->namedEntityClassName << "as" <<
@@ -545,7 +544,7 @@ bool XmlRecord::normaliseAndStoreChildRecordsInDb(QTextStream & userMessage,
       // property, and RecordComplex, which can't.
       //
       if (XmlRecord::RecordSimple == ii.value().first->fieldType) {
-         char const * const propertyName = ii.value().first->propertyName;
+         char const * const propertyName = *ii.value().first->propertyName;
          Q_ASSERT(nullptr != propertyName);
          // It's a coding error if we had a property defined for a record that's not trying to populate a NamedEntity
          // (ie for the root record).
@@ -684,7 +683,7 @@ void XmlRecord::toXml(NamedEntity const & namedEntityToExport,
    // to control field order precisely).
    for (auto & fieldDefinition : this->fieldDefinitions) {
       // If there isn't a property name that means this is not a field we support so there's nothing to write out.
-      if (!fieldDefinition.propertyName) {
+      if (fieldDefinition.propertyName.isNull()) {
          // At the moment at least, we support all XmlRecord::RecordSimple and XmlRecord::RecordComplex fields, so it's
          // a coding error if one of them does not have a property name.
          Q_ASSERT(XmlRecord::RecordSimple != fieldDefinition.fieldType);
@@ -717,7 +716,7 @@ void XmlRecord::toXml(NamedEntity const & namedEntityToExport,
 
          if (XmlRecord::RecordSimple == fieldDefinition.fieldType) {
             NamedEntity * childNamedEntity =
-               namedEntityToExport.property(fieldDefinition.propertyName).value<NamedEntity *>();
+               namedEntityToExport.property(*fieldDefinition.propertyName).value<NamedEntity *>();
             if (childNamedEntity) {
                subRecord->toXml(*childNamedEntity, out, indentLevel + numContainingTags + 1, indentString);
             } else {
@@ -756,9 +755,9 @@ void XmlRecord::toXml(NamedEntity const & namedEntityToExport,
          // Because it's such an edge case, we abuse the propertyName field to hold the default value (ie what we
          // write out).  This saves having an extra almost-never-used field on XmlRecord::FieldDefinition.
          //
-         valueAsText = fieldDefinition.propertyName;
+         valueAsText = *fieldDefinition.propertyName;
       } else {
-         QVariant value = namedEntityToExport.property(fieldDefinition.propertyName);
+         QVariant value = namedEntityToExport.property(*fieldDefinition.propertyName);
          Q_ASSERT(value.isValid());
          // It's a coding error if we are trying here to write out some field with a complex XPath
          if (fieldDefinition.xPath.contains("/")) {

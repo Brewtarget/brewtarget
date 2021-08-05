@@ -314,7 +314,7 @@ public:
    //! \brief Doing updates via this method makes them undoable (and redoable).  This is the simplified version
    //         which suffices for modifications to most individual non-relational attributes.
    void doOrRedoUpdate(QObject & updatee,
-                       char const * const propertyName,
+                       BtStringConst const & propertyName,
                        QVariant newValue,
                        QString const & description,
                        QUndoCommand * parent = nullptr);
@@ -474,11 +474,17 @@ private:
    //! \brief Connect signal/slots for check boxes
    void setUpStateChanges();
 
-   void updateDensitySlider(QString attribute, RangedSlider* slider, double max);
-   void updateColorSlider(QString attribute, RangedSlider* slider);
+   void updateDensitySlider(BtStringConst const & propertyNameMin,
+                            BtStringConst const & propertyNameMax,
+                            BtStringConst const & propertyNameCurrent,
+                            RangedSlider* slider,
+                            double max);
+   void updateColorSlider(BtStringConst const & propertyNameMin,
+                          BtStringConst const & propertyNameMax,
+                          BtStringConst const & propertyNameCurrent,
+                          RangedSlider* slider);
 
    void convertedMsg();
-
 };
 
 #endif

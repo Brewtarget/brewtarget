@@ -43,10 +43,14 @@ NamedParameterBundle::NamedParameterBundle(NamedParameterBundle::OperationMode m
 
 NamedParameterBundle::~NamedParameterBundle() = default;
 
+NamedParameterBundle::iterator NamedParameterBundle::insert(BtStringConst const & parameterName, QVariant const & value) {
+   return this->QHash<QString, QVariant>::insert(QString{*parameterName}, value);
+}
 
-QVariant NamedParameterBundle::operator()(char const * const parameterName) const {
-   if (!this->contains(parameterName)) {
-      QString errorMessage = QString("No value supplied for required parameter, %1.").arg(parameterName);
+
+QVariant NamedParameterBundle::operator()(BtStringConst const & parameterName) const {
+   if (!this->contains(*parameterName)) {
+      QString errorMessage = QString("No value supplied for required parameter, %1.").arg(*parameterName);
       QTextStream errorMessageAsStream(&errorMessage);
       errorMessageAsStream << "  (Parameters in this bundle are ";
       bool wroteFirst = false;
@@ -82,24 +86,26 @@ QVariant NamedParameterBundle::operator()(char const * const parameterName) cons
       qInfo() << Q_FUNC_INFO << errorMessage << ", so using generic default";
       return QVariant{};
    }
-   QVariant returnValue = this->value(parameterName);
+   QVariant returnValue = this->value(*parameterName);
    if (!returnValue.isValid()) {
-      QString errorMessage = QString("Invalid value (%1) supplied for required parameter, %2").arg(returnValue.toString()).arg(parameterName);
+      QString errorMessage =
+         QString{"Invalid value (%1) supplied for required parameter, %2"}.arg(returnValue.toString(), *parameterName);
       qCritical() << Q_FUNC_INFO << errorMessage;
       throw std::invalid_argument(errorMessage.toStdString());
    }
    return returnValue;
 }
 
-template <class T> T NamedParameterBundle::operator()(char const * const parameterName, T const & defaultValue) const {
-   return this->contains(parameterName) ? valueFromQVariant<T>(this->value(parameterName)) : defaultValue;
+template <class T> T NamedParameterBundle::operator()(BtStringConst const & parameterName, T const & defaultValue) const {
+   Q_ASSERT(!parameterName.isNull());
+   return this->contains(*parameterName) ? valueFromQVariant<T>(this->value(*parameterName)) : defaultValue;
 }
 
 //
 // Instantiate the above template function for the types that are going to use it
 // (This is all just a trick to allow the template definition to be here in the .cpp file and not in the header.)
 //
-template QString    NamedParameterBundle::operator()(char const * const parameterName, QString const & defaultValue) const;
-template bool       NamedParameterBundle::operator()(char const * const parameterName, bool    const & defaultValue) const;
-template int        NamedParameterBundle::operator()(char const * const parameterName, int     const & defaultValue) const;
-template double     NamedParameterBundle::operator()(char const * const parameterName, double  const & defaultValue) const;
+template QString    NamedParameterBundle::operator()(BtStringConst const & parameterName, QString const & defaultValue) const;
+template bool       NamedParameterBundle::operator()(BtStringConst const & parameterName, bool    const & defaultValue) const;
+template int        NamedParameterBundle::operator()(BtStringConst const & parameterName, int     const & defaultValue) const;
+template double     NamedParameterBundle::operator()(BtStringConst const & parameterName, double  const & defaultValue) const;

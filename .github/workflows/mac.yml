@@ -34,7 +34,11 @@ jobs:
     - name: Install dependencies
       # Installing Xalan-C will cause Xerces-C to be installed too (as the former depends on the latter)
       # .:TBD:. Installing Boost here doesn't seem to give us libboost_stacktrace_backtrace
-      run: brew install xalan-c boost
+      #         Also, trying to use the "--cc=clang" option to install boost gives an error ("Error: boost: no bottle
+      #         available!")  For the moment, we're just using Boost header files on Mac though, so this should be OK.
+      run: |
+        brew install xalan-c
+        brew install boost
 
     - name: Build
       env:
@@ -43,14 +47,40 @@ jobs:
         mkdir build
         cd build
         cmake ..
-        make && (CTEST_OUTPUT_ON_FAILURE=TRUE make test)
+        make
+
+    - name: Prep for tests
+      # If a test fails and we get a core, we'd like to analyse it.  This will be easier if we have access to the
+      # relevant directories and there aren't any other files cluttering up the place.
+      #
+      # Running the commands inside an echo statement is a bit of a trick to ensure failure of the rm command (eg
+      # because there are no files to delete) does not count as a build script failure (because the echo command will
+      # return 0 = success).
+      run: |
+        sudo chmod -R +rwx /cores
+        sudo chmod -R +rwx /Library/Logs/DiagnosticReports
+        echo "Clearing contents of /cores directory: $(ls -ltr /cores) $(rm -rf /cores/*)"
+        echo "Clearing contents of /Library/Logs/DiagnosticReports directory: $(ls -ltr /Library/Logs/DiagnosticReports) $(rm -rf /Library/Logs/DiagnosticReports/*)"
+
+    - name: Automated tests
+      # If something does crash we'd like to capture the core, so we need to enable core dumps - hence the call to
+      # ulimit.
+      #
+      # Running "make test" boils down to running ctest (because the invocation of make in the Build step above will
+      # have done all the necessary prep.  Running ctest directly allows us to pass in extra parameters to try to get as
+      # much diagnostics as possible out of a remote build such as this.
+      run: |
+        ulimit -c unlimited
+        echo "Core size limit is $(ulimit -c)"
+        cd build
+        ctest --extra-verbose --output-on-failure 2>&1
 
     - name: Make package
       run: |
         cd build
         make package
 
-    - name: 'Upload mac'
+    - name: Upload Mac
       if: ${{ success() }}
       uses: actions/upload-artifact@v2
       with:
@@ -59,10 +89,38 @@ jobs:
           ${{github.workspace}}/build/brewtarget*.sh
         retention-days: 7
 
-    - name: Recover Debris Artifacts
+    - name: Post-processing on cores
+      if: ${{ failure() }}
+      # It's all very well capturing core files, but if you don't have a Mac to analyse them on they are not a fat lot
+      # of use.  So, if we did get a core, let's at least get a stack trace out of it.
+      run: |
+        sudo chmod -R +rwx /cores
+        sudo chmod -R +rwx /Library/Logs/DiagnosticReports
+        echo "Contents of /cores directory: $(ls -ltr /cores)"
+        echo "Contents of /Library/Logs/DiagnosticReports directory: $(ls -ltr /Library/Logs/DiagnosticReports)"
+        cd /cores
+        echo "bt" | lldb -c $(ls -1)
+
+    - name: Recover Debris Artifacts (aka build output)
       if: ${{ failure() }}
       uses: actions/upload-artifact@v2
       with:
         name: build-results
         path: ${{github.workspace}}/build
+        retention-days: 1
+
+    - name: Recover DiagnosticReports (if any)
+      if: ${{ failure() }}
+      uses: actions/upload-artifact@v2
+      with:
+        name: DiagnosticReports
+        path: /Library/Logs/DiagnosticReports
+        retention-days: 1
+
+    - name: Recover Cores (if any)
+      if: ${{ failure() }}
+      uses: actions/upload-artifact@v2
+      with:
+        name: cores
+        path: /cores
         retention-days: 1

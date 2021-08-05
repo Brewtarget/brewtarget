@@ -99,6 +99,14 @@ namespace Logging {
    extern int const logFileCount;
 
    /**
+    * \brief See \c Logging::setDirectory()
+    */
+   enum PersistNewDirectory {
+      NewDirectoryIsPermanent,
+      NewDirectoryIsTemporary
+   };
+
+   /**
     * \brief Sets the directory in which log files are stored.  Note however that this setting, whilst remembered, is
     *        ignored if we are configured to log in the config directory.
     * \param newDirectory  If set, specifies where to write log files.  If not set, then use the default location,
@@ -115,9 +123,13 @@ namespace Logging {
     *                          tell end users that the user data directory contains everything that they need to take
     *                          backups of.
     *
+    * \param persistNewDirectory By default we the new logging directory in persistent settings so it will be remembered
+    *                            on the next run of the program.  But this behaviour can be turned off for testing.
+    *
     * \return true if succeeds, false otherwise
     */
-   extern bool setDirectory(std::optional<QDir> newDirectory);
+   extern bool setDirectory(std::optional<QDir> newDirectory,
+                            Logging::PersistNewDirectory const persistNewDirectory = Logging::NewDirectoryIsPermanent);
 
    /**
     * \brief Gets the directory in which log files are stored
@@ -131,6 +143,17 @@ namespace Logging {
     * \return
     */
    extern bool initializeLogging();
+
+   /**
+    * \brief By default, logging goes to stderr and to the logfile.  In certain very limited circumstances, you might
+    *        want to disable logging to stderr.  Calling this function with \c false as the parameter will do that (with
+    *        the exception of errors about logging itself, eg inability to rotate log files, which will still show up on
+    *        stderr).
+    *
+    *        At time of writing, the only known reason for suspending logging to stderr is to run a test that generates
+    *        a lot of dummy logs...
+    */
+   extern void setLoggingToStderr(bool const enabled);
 
    /**
     * \brief  Get the list of Logfiles present in the directory currently logging in

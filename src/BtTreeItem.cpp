@@ -274,9 +274,9 @@ QVariant BtTreeItem::dataFermentable(int column) {
                          ferm->color_srm(),
                          &Units::srm,
                          0,
-                         static_cast<Unit::unitDisplay>(PersistentSettings::value("color_srm",
+                         static_cast<Unit::unitDisplay>(PersistentSettings::value(PropertyNames::Fermentable::color_srm,
                                                                                   QVariant(-1),
-                                                                                  nullptr,
+                                                                                  QString{},
                                                                                   PersistentSettings::UNIT).toInt())
                       )
                    );

@@ -31,7 +31,6 @@
 #include <QDebug>
 #include <QHash>
 
-
 // Internal constants
 namespace {
    struct ColorAndObject{
@@ -97,11 +96,13 @@ public:
             this->variableNames.begin(),
             this->variableNames.end(),
             [currSeries] (RadarChart::VariableName const lhs, RadarChart::VariableName const rhs) {
-               return currSeries.object->property(lhs.propertyName).toDouble() < currSeries.object->property(rhs.propertyName).toDouble();
+               return (currSeries.object->property(*lhs.propertyName).toDouble() <
+                       currSeries.object->property(*rhs.propertyName).toDouble());
             }
          );
 
-         maxInAllSeries = std::max(maxInAllSeries, currSeries.object->property(maxVariableInThisSeries->propertyName).toDouble());
+         maxInAllSeries = std::max(maxInAllSeries,
+                                   currSeries.object->property(*maxVariableInThisSeries->propertyName).toDouble());
       }
 
       // Now round up maxInAllSeries to the nearest multiple of this->axisMarkInterval.  If the result is zero (because
@@ -295,9 +296,10 @@ void RadarChart::paintEvent(QPaintEvent *event) {
       for (int ii = 0; ii < this->pimpl->variableNames.size(); ++ii) {
          double angleInRadians = StartingAngleInRadians + ii * this->pimpl->angleInRadiansBetweenAxes;
 
-         seriesPoints[ii] =
-            this->pimpl->polarToQtCartesian(axisLengthInPixels * currSeries.object->property(this->pimpl->variableNames[ii].propertyName).toDouble() / this->pimpl->maxAxisValue,
-                                            angleInRadians);
+         seriesPoints[ii] = this->pimpl->polarToQtCartesian(
+            axisLengthInPixels * currSeries.object->property(*this->pimpl->variableNames[ii].propertyName).toDouble() / this->pimpl->maxAxisValue,
+            angleInRadians
+         );
 
          if (ii > 0) {
             painter.drawLine(seriesPoints[ii - 1], seriesPoints[ii]);

@@ -41,7 +41,7 @@
 
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
-#define AddPropertyName(property) namespace PropertyNames::Recipe {static char const * const property = #property; }
+#define AddPropertyName(property) namespace PropertyNames::Recipe { BtStringConst const property{#property}; }
 AddPropertyName(ABV_pct)
 AddPropertyName(age)
 AddPropertyName(ageTemp_c)
@@ -698,7 +698,7 @@ namespace RecipeHelper {
     *        because we are modifying some ingredient or other attribute of the Recipe and automatic versioning is
     *        enabled.
     */
-   void prepareForPropertyChange(NamedEntity & ne, char const * const propertyName);
+   void prepareForPropertyChange(NamedEntity & ne, BtStringConst const & propertyName);
 
    /**
     * \brief Turn automatic versioning on or off

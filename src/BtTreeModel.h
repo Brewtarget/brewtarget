@@ -31,19 +31,20 @@
 #include <QVariant>
 
 // Forward declarations
-class NamedEntity;
-class Recipe;
+class BrewNote;
 class BtFolder;
+class BtStringConst;
 class BtTreeItem;
 class BtTreeView;
-class BrewNote;
 class Equipment;
 class Fermentable;
 class Hop;
 class Misc;
-class Yeast;
+class NamedEntity;
+class Recipe;
 class Style;
 class Water;
+class Yeast;
 
 /*!
  * \class BtTreeModel
@@ -235,7 +236,7 @@ private slots:
    void elementRemovedBrewNote(int victimId, std::shared_ptr<QObject> victim);
    void elementRemovedWater(int victimId, std::shared_ptr<QObject> victim);
 
-   void recipePropertyChanged(int recipeId, char const * const propertyName);
+   void recipePropertyChanged(int recipeId, BtStringConst const & propertyName);
 
 signals:
    void expandFolder(BtTreeModel::TypeMasks kindofThing, QModelIndex fIdx);

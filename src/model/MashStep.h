@@ -30,7 +30,7 @@
 
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
-#define AddPropertyName(property) namespace PropertyNames::MashStep {static char const * const property = #property; }
+#define AddPropertyName(property) namespace PropertyNames::MashStep { BtStringConst const property{#property}; }
 AddPropertyName(decoctionAmount_l)
 AddPropertyName(endTemp_c)
 AddPropertyName(infuseAmount_l)

@@ -24,6 +24,8 @@
 #include <QString>
 #include <QVariant>
 
+#include "utils/BtStringConst.h"
+
 /**
  * \brief This allows constructors to be called without a long list of positional parameters and, more importantly, for
  *        those parameters to be data-driven, eg from a mapping of database column names to property names.
@@ -39,12 +41,17 @@ public:
    ~NamedParameterBundle();
 
    /**
+    * \brief Override of \c insert to support \c BtStringConst
+    */
+   QHash::iterator insert(BtStringConst const & parameterName, QVariant const & value);
+
+   /**
     * \brief Get the value of a parameter that is required to be present in the DB.  In "strict" mode, throw an
     *        exception if it is not present.  Otherwise, return whatever default value QVariant gives us.
     *        This is a convenience function to make the call to extract parameters concise.  (We don't want to use the
     *        operator[] of QHash because we want "parameter not found" to be an error.)
     */
-   QVariant operator()(char const * const parameterName) const;
+   QVariant operator()(BtStringConst const & parameterName) const;
 
    /**
     * \brief Get the value of a parameter that is not required to be present
@@ -54,7 +61,7 @@ public:
     * \param parameterName
     * \param defaultValue  What to return if the parameter is not present in the bundle
     */
-   template <class T> T operator()(char const * const parameterName, T const & defaultValue) const;
+   template <class T> T operator()(BtStringConst const & parameterName, T const & defaultValue) const;
 private:
    OperationMode mode;
 };

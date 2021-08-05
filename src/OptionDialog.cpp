@@ -27,8 +27,10 @@
 #include <QIcon>
 #include <QMap>
 #include <QMessageBox>
+#include <QSizePolicy>
 #include <QString>
 #include <QVector>
+#include <QWidget>
 
 #include "brewtarget.h"
 #include "BtLineEdit.h"
@@ -391,17 +393,17 @@ public:
 
       // Backup stuff
       // By default backups go in the same directory as the DB
-      this->input_backupDir.setText(PersistentSettings::value("directory",
-                                                              PersistentSettings::getUserDataDir().canonicalPath(), "backups").toString());
-      this->spinBox_numBackups.setValue(PersistentSettings::value("maximum", 10, "backups").toInt());
-      this->spinBox_frequency.setValue(PersistentSettings::value("frequency", 4, "backups").toInt());
+      this->input_backupDir.setText(PersistentSettings::value(PersistentSettings::Names::directory,
+                                                              PersistentSettings::getUserDataDir().canonicalPath(), PersistentSettings::Sections::backups).toString());
+      this->spinBox_numBackups.setValue(PersistentSettings::value(PersistentSettings::Names::maximum, 10, PersistentSettings::Sections::backups).toInt());
+      this->spinBox_frequency.setValue(PersistentSettings::value(PersistentSettings::Names::frequency, 4, PersistentSettings::Sections::backups).toInt());
 
       // The IBU modifications. These will all be calculated from a 60 min boil. This is gonna get confusing.
-      double amt = Brewtarget::toDouble(PersistentSettings::value("mashHopAdjustment", 0).toString(),
+      double amt = Brewtarget::toDouble(PersistentSettings::value(PersistentSettings::Names::mashHopAdjustment, 0).toString(),
                                      "OptionDialog::showChanges()");
       optionDialog.ibuAdjustmentMashHopDoubleSpinBox->setValue(amt * 100);
 
-      amt = Brewtarget::toDouble(PersistentSettings::value("firstWortHopAdjustment", 1.1).toString(),
+      amt = Brewtarget::toDouble(PersistentSettings::value(PersistentSettings::Names::firstWortHopAdjustment, 1.1).toString(),
                               "OptionDialog::showChanges()");
       optionDialog.ibuAdjustmentFirstWortDoubleSpinBox->setValue(amt * 100);
 
@@ -410,13 +412,13 @@ public:
       int tmp = PersistentSettings::value(PersistentSettings::Names::dbType, Database::SQLITE).toInt() - 1;
       optionDialog.comboBox_engine->setCurrentIndex(tmp);
 
-      this->input_pgHostname.setText(PersistentSettings::value("dbHostname", "localhost").toString());
-      this->input_pgPortNum.setText(PersistentSettings::value("dbPort", "5432").toString());
-      this->input_pgSchema.setText(PersistentSettings::value("dbSchema", "public").toString());
-      this->input_pgDbName.setText(PersistentSettings::value("dbName", "brewtarget").toString());
-      this->input_pgUsername.setText(PersistentSettings::value("dbUsername", "brewtarget").toString());
-      this->input_pgPassword.setText(PersistentSettings::value("dbPassword", "").toString());
-      this->checkBox_savePgPassword.setChecked(PersistentSettings::contains("dbPassword"));
+      this->input_pgHostname.setText(PersistentSettings::value(PersistentSettings::Names::dbHostname, "localhost").toString());
+      this->input_pgPortNum.setText(PersistentSettings::value(PersistentSettings::Names::dbPortnum, "5432").toString());
+      this->input_pgSchema.setText(PersistentSettings::value(PersistentSettings::Names::dbSchema, "public").toString());
+      this->input_pgDbName.setText(PersistentSettings::value(PersistentSettings::Names::dbName, "brewtarget").toString());
+      this->input_pgUsername.setText(PersistentSettings::value(PersistentSettings::Names::dbUsername, "brewtarget").toString());
+      this->input_pgPassword.setText(PersistentSettings::value(PersistentSettings::Names::dbPassword, "").toString());
+      this->checkBox_savePgPassword.setChecked(PersistentSettings::contains(PersistentSettings::Names::dbPassword));
 
       this->dbConnectionTestState = NO_CHANGE;
       this->changeColors(optionDialog);
@@ -424,7 +426,7 @@ public:
       if (RecipeHelper::getAutomaticVersioningEnabled()) {
          optionDialog.checkBox_versioning->setCheckState(Qt::Checked);
          optionDialog.groupBox_deleteBehavior->setEnabled(true);
-         switch (PersistentSettings::value("deletewhat", Recipe::DESCENDANT).toInt()) {
+         switch (PersistentSettings::value(PersistentSettings::Names::deletewhat, Recipe::DESCENDANT).toInt()) {
             case Recipe::ANCESTOR:
                optionDialog.radioButton_deleteAncestor->setChecked(true);
                break;
@@ -437,7 +439,7 @@ public:
          optionDialog.groupBox_deleteBehavior->setEnabled(false);
       }
 
-      if (PersistentSettings::value("showsnapshots", false).toBool()) {
+      if (PersistentSettings::value(PersistentSettings::Names::showsnapshots, false).toBool()) {
          optionDialog.checkBox_alwaysShowSnaps->setCheckState(Qt::Checked);
       } else {
          optionDialog.checkBox_alwaysShowSnaps->setCheckState(Qt::Unchecked);
@@ -802,8 +804,8 @@ void OptionDialog::saveFormulae() {
    ndx = colorFormulaComboBox->itemData(colorFormulaComboBox->currentIndex()).toInt(&okay);
    Brewtarget::colorFormula = static_cast<Brewtarget::ColorType>(ndx);
 
-   PersistentSettings::insert("mashHopAdjustment", ibuAdjustmentMashHopDoubleSpinBox->value() / 100);
-   PersistentSettings::insert("firstWortHopAdjustment", ibuAdjustmentFirstWortDoubleSpinBox->value() / 100);
+   PersistentSettings::insert(PersistentSettings::Names::mashHopAdjustment, ibuAdjustmentMashHopDoubleSpinBox->value() / 100);
+   PersistentSettings::insert(PersistentSettings::Names::firstWortHopAdjustment, ibuAdjustmentFirstWortDoubleSpinBox->value() / 100);
 }
 
 void OptionDialog::saveLoggingSettings() {
@@ -824,17 +826,17 @@ void OptionDialog::saveVersioningSettings() {
    if (checkBox_versioning->checkState() == Qt::Checked) {
       RecipeHelper::setAutomaticVersioningEnabled(true);
       if (radioButton_deleteAncestor->isChecked()) {
-         PersistentSettings::insert("deletewhat", Recipe::ANCESTOR);
+         PersistentSettings::insert(PersistentSettings::Names::deletewhat, Recipe::ANCESTOR);
       } else {
-         PersistentSettings::insert("deletewhat", Recipe::DESCENDANT);
+         PersistentSettings::insert(PersistentSettings::Names::deletewhat, Recipe::DESCENDANT);
       }
    } else {
       // the default when versioning is off is to only delete descendant
       RecipeHelper::setAutomaticVersioningEnabled(false);
-      PersistentSettings::insert("deletewhat", Recipe::DESCENDANT);
+      PersistentSettings::insert(PersistentSettings::Names::deletewhat, Recipe::DESCENDANT);
    }
 
-   PersistentSettings::insert("showsnapshots", checkBox_alwaysShowSnaps->checkState() == Qt::Checked);
+   PersistentSettings::insert(PersistentSettings::Names::showsnapshots, checkBox_alwaysShowSnaps->checkState() == Qt::Checked);
 
 }
 
@@ -857,9 +859,9 @@ bool OptionDialog::saveDatabaseConfig() {
    }
 
    if (saveDbConfig && this->pimpl->checkBox_savePgPassword.checkState() == Qt::Checked) {
-      PersistentSettings::insert("dbPassword", this->pimpl->input_pgPassword.text());
+      PersistentSettings::insert(PersistentSettings::Names::dbPassword, this->pimpl->input_pgPassword.text());
    } else {
-      PersistentSettings::remove("dbPassword");
+      PersistentSettings::remove(PersistentSettings::Names::dbPassword);
    }
 
    Database::DbType dbEngine = static_cast<Database::DbType>(comboBox_engine->currentData().toInt());
@@ -891,11 +893,11 @@ bool OptionDialog::transferDatabase() {
       PersistentSettings::insert(PersistentSettings::Names::dbType, engine);
       // only write these changes when switching TO pgsql
       if (engine == Database::PGSQL) {
-         PersistentSettings::insert("dbHostname", this->pimpl->input_pgHostname.text());
-         PersistentSettings::insert("dbPortnum",  this->pimpl->input_pgPortNum.text());
-         PersistentSettings::insert("dbSchema",   this->pimpl->input_pgSchema.text());
-         PersistentSettings::insert("dbName",     this->pimpl->input_pgDbName.text());
-         PersistentSettings::insert("dbUsername", this->pimpl->input_pgUsername.text());
+         PersistentSettings::insert(PersistentSettings::Names::dbHostname, this->pimpl->input_pgHostname.text());
+         PersistentSettings::insert(PersistentSettings::Names::dbPortnum,  this->pimpl->input_pgPortNum.text());
+         PersistentSettings::insert(PersistentSettings::Names::dbSchema,   this->pimpl->input_pgSchema.text());
+         PersistentSettings::insert(PersistentSettings::Names::dbName,     this->pimpl->input_pgDbName.text());
+         PersistentSettings::insert(PersistentSettings::Names::dbUsername, this->pimpl->input_pgUsername.text());
       }
       QMessageBox::information(this, tr("Restart"), tr("Please restart Brewtarget to connect to the new database"));
    } catch (QString e) {
@@ -931,9 +933,9 @@ void OptionDialog::saveSqliteConfig() {
       );
    }
 
-   PersistentSettings::insert("maximum", this->pimpl->spinBox_numBackups.value(), "backups");
-   PersistentSettings::insert("frequency", this->pimpl->spinBox_frequency.value(), "backups");
-   PersistentSettings::insert("directory", this->pimpl->input_backupDir.text(), "backups");
+   PersistentSettings::insert(PersistentSettings::Names::maximum,   this->pimpl->spinBox_numBackups.value(), PersistentSettings::Sections::backups);
+   PersistentSettings::insert(PersistentSettings::Names::frequency, this->pimpl->spinBox_frequency.value(),  PersistentSettings::Sections::backups);
+   PersistentSettings::insert(PersistentSettings::Names::directory, this->pimpl->input_backupDir.text(),     PersistentSettings::Sections::backups);
 
    return;
 }

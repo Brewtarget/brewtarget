@@ -46,6 +46,7 @@
 #include "model/Fermentable.h"
 #include "model/Inventory.h"
 #include "model/Recipe.h"
+#include "utils/BtStringConst.h"
 #include "PersistentSettings.h"
 #include "Unit.h"
 
@@ -215,9 +216,9 @@ void FermentableTableModel::setDisplayPercentages(bool var)
    displayPercentages = var;
 }
 
-void FermentableTableModel::changedInventory(int invKey, char const * const propertyName) {
+void FermentableTableModel::changedInventory(int invKey, BtStringConst const & propertyName) {
 
-   if (QString(propertyName) == PropertyNames::Inventory::amount) {
+   if (propertyName == PropertyNames::Inventory::amount) {
       for( int i = 0; i < fermObs.size(); ++i ) {
          Fermentable* holdmybeer = fermObs.at(i);
          if ( invKey == holdmybeer->inventoryId() ) {
@@ -253,7 +254,7 @@ void FermentableTableModel::changed(QMetaProperty prop, QVariant /*val*/)
 
    // See if our recipe gained or lost fermentables.
    Recipe* recSender = qobject_cast<Recipe*>(sender());
-   if( recSender && recSender == recObs && QString(prop.name()) == PropertyNames::Recipe::fermentableIds )
+   if( recSender && recSender == recObs && prop.name() == PropertyNames::Recipe::fermentableIds )
    {
       removeAll();
       addFermentables( recObs->fermentables() );

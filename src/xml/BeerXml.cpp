@@ -22,6 +22,7 @@
 #include <stdexcept>
 
 #include <QDebug>
+#include <QDomNodeList>
 #include <QFile>
 #include <QHash>
 #include <QList>
@@ -54,6 +55,12 @@
 // Variables and constant definitions that we need only in this file
 //
 namespace {
+   // See comment in XmlRecord.cpp about how we slightly abuse propertyName field of FieldDefinition when fieldType is
+   // XmlRecord::RequiredConstant.  (This is when a required XML field holds data we don't need (and for which we always
+   // write a constant value on output.)  Specifically, in BeerXML, we need to write every version of pretty much every
+   // record as "1".
+   BtStringConst const VERSION1{"1"};
+
    template<class NE> QString BEER_XML_RECORD_NAME;
    template<class NE> XmlRecord::FieldDefinitions const BEER_XML_RECORD_FIELDS;
 
@@ -62,16 +69,16 @@ namespace {
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
    template<> QString const BEER_XML_RECORD_NAME<void>{"BEER_XML"};
    template<> XmlRecord::FieldDefinitions const BEER_XML_RECORD_FIELDS<void> {
-      // Type                    XPath                      Q_PROPERTY   Enum Mapper
-      {XmlRecord::RecordComplex, "HOPS/HOP",                 nullptr,     nullptr},
-      {XmlRecord::RecordComplex, "FERMENTABLES/FERMENTABLE", nullptr,     nullptr},
-      {XmlRecord::RecordComplex, "YEASTS/YEAST",             nullptr,     nullptr},
-      {XmlRecord::RecordComplex, "MISCS/MISC",               nullptr,     nullptr},
-      {XmlRecord::RecordComplex, "WATERS/WATER",             nullptr,     nullptr},
-      {XmlRecord::RecordComplex, "STYLES/STYLE",             nullptr,     nullptr},
-      {XmlRecord::RecordComplex, "MASHS/MASH",               nullptr,     nullptr},
-      {XmlRecord::RecordComplex, "RECIPES/RECIPE",           nullptr,     nullptr},
-      {XmlRecord::RecordComplex, "EQUIPMENTS/EQUIPMENT",     nullptr,     nullptr},
+      // Type                    XPath                       Q_PROPERTY              Enum Mapper
+      {XmlRecord::RecordComplex, "HOPS/HOP",                 BtString::NULL_STR,     nullptr},
+      {XmlRecord::RecordComplex, "FERMENTABLES/FERMENTABLE", BtString::NULL_STR,     nullptr},
+      {XmlRecord::RecordComplex, "YEASTS/YEAST",             BtString::NULL_STR,     nullptr},
+      {XmlRecord::RecordComplex, "MISCS/MISC",               BtString::NULL_STR,     nullptr},
+      {XmlRecord::RecordComplex, "WATERS/WATER",             BtString::NULL_STR,     nullptr},
+      {XmlRecord::RecordComplex, "STYLES/STYLE",             BtString::NULL_STR,     nullptr},
+      {XmlRecord::RecordComplex, "MASHS/MASH",               BtString::NULL_STR,     nullptr},
+      {XmlRecord::RecordComplex, "RECIPES/RECIPE",           BtString::NULL_STR,     nullptr},
+      {XmlRecord::RecordComplex, "EQUIPMENTS/EQUIPMENT",     BtString::NULL_STR,     nullptr},
    };
 
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -98,7 +105,7 @@ namespace {
    template<> XmlRecord::FieldDefinitions const BEER_XML_RECORD_FIELDS<Hop> {
       // Type              XPath             Q_PROPERTY                             Enum Mapper
       {XmlRecord::String,  "NAME",           PropertyNames::NamedEntity::name,      nullptr},
-      {XmlRecord::RequiredConstant, "VERSION", "1",                                 nullptr},
+      {XmlRecord::RequiredConstant, "VERSION", VERSION1,                                 nullptr},
       {XmlRecord::Double,  "ALPHA",          PropertyNames::Hop::alpha_pct,         nullptr},
       {XmlRecord::Double,  "AMOUNT",         PropertyNames::Hop::amount_kg,         nullptr},
       {XmlRecord::Enum,    "USE",            PropertyNames::Hop::use,               &BEER_XML_HOP_USE_MAPPER},
@@ -114,9 +121,9 @@ namespace {
       {XmlRecord::Double,  "CARYOPHYLLENE",  PropertyNames::Hop::caryophyllene_pct, nullptr},
       {XmlRecord::Double,  "COHUMULONE",     PropertyNames::Hop::cohumulone_pct,    nullptr},
       {XmlRecord::Double,  "MYRCENE",        PropertyNames::Hop::myrcene_pct,       nullptr},
-      {XmlRecord::String,  "DISPLAY_AMOUNT", nullptr,                               nullptr}, // Extension tag
-      {XmlRecord::String,  "INVENTORY",      nullptr,                               nullptr}, // Extension tag
-      {XmlRecord::String,  "DISPLAY_TIME",   nullptr,                               nullptr}  // Extension tag
+      {XmlRecord::String,  "DISPLAY_AMOUNT", BtString::NULL_STR,                    nullptr}, // Extension tag
+      {XmlRecord::String,  "INVENTORY",      BtString::NULL_STR,                    nullptr}, // Extension tag
+      {XmlRecord::String,  "DISPLAY_TIME",   BtString::NULL_STR,                    nullptr}  // Extension tag
    };
 
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -133,7 +140,7 @@ namespace {
    template<> XmlRecord::FieldDefinitions const BEER_XML_RECORD_FIELDS<Fermentable> {
       // Type              XPath               Q_PROPERTY                                          Enum Mapper
       {XmlRecord::String,  "NAME",             PropertyNames::NamedEntity::name,                   nullptr},
-      {XmlRecord::RequiredConstant,  "VERSION", "1",                                               nullptr},
+      {XmlRecord::RequiredConstant,  "VERSION", VERSION1,                                               nullptr},
       {XmlRecord::Enum,    "TYPE",             PropertyNames::Fermentable::type,                   &BEER_XML_FERMENTABLE_TYPE_MAPPER},
       {XmlRecord::Double,  "AMOUNT",           PropertyNames::Fermentable::amount_kg,              nullptr},
       {XmlRecord::Double,  "YIELD",            PropertyNames::Fermentable::yield_pct,              nullptr},
@@ -149,10 +156,10 @@ namespace {
       {XmlRecord::Double,  "MAX_IN_BATCH",     PropertyNames::Fermentable::maxInBatch_pct,         nullptr},
       {XmlRecord::Bool,    "RECOMMEND_MASH",   PropertyNames::Fermentable::recommendMash,          nullptr},
       {XmlRecord::Double,  "IBU_GAL_PER_LB",   PropertyNames::Fermentable::ibuGalPerLb,            nullptr},
-      {XmlRecord::String,  "DISPLAY_AMOUNT",   nullptr,                                            nullptr}, // Extension tag
-      {XmlRecord::String,  "POTENTIAL",        nullptr,                                            nullptr}, // Extension tag
-      {XmlRecord::String,  "INVENTORY",        nullptr,                                            nullptr}, // Extension tag
-      {XmlRecord::String,  "DISPLAY_COLOR",    nullptr,                                            nullptr}, // Extension tag
+      {XmlRecord::String,  "DISPLAY_AMOUNT",   BtString::NULL_STR,                                 nullptr}, // Extension tag
+      {XmlRecord::String,  "POTENTIAL",        BtString::NULL_STR,                                 nullptr}, // Extension tag
+      {XmlRecord::String,  "INVENTORY",        BtString::NULL_STR,                                 nullptr}, // Extension tag
+      {XmlRecord::String,  "DISPLAY_COLOR",    BtString::NULL_STR,                                 nullptr}, // Extension tag
       {XmlRecord::Bool,    "IS_MASHED",        PropertyNames::Fermentable::isMashed,               nullptr}  // Non-standard tag, not part of BeerXML 1.0 standard
    };
 
@@ -182,7 +189,7 @@ namespace {
    template<> XmlRecord::FieldDefinitions const BEER_XML_RECORD_FIELDS<Yeast> {
       // Type              XPath               Q_PROPERTY                                    Enum Mapper
       {XmlRecord::String,  "NAME",             PropertyNames::NamedEntity::name,             nullptr},
-      {XmlRecord::RequiredConstant,  "VERSION", "1",                                         nullptr},
+      {XmlRecord::RequiredConstant,  "VERSION", VERSION1,                                         nullptr},
       {XmlRecord::Enum,    "TYPE",             PropertyNames::Yeast::type,                   &BEER_XML_YEAST_TYPE_MAPPER},
       {XmlRecord::Enum,    "FORM",             PropertyNames::Yeast::form,                   &BEER_XML_YEAST_FORM_MAPPER},
       {XmlRecord::Double,  "AMOUNT",           PropertyNames::Yeast::amount,                 nullptr},
@@ -198,11 +205,11 @@ namespace {
       {XmlRecord::Int,     "TIMES_CULTURED",   PropertyNames::Yeast::timesCultured,          nullptr},
       {XmlRecord::Int,     "MAX_REUSE",        PropertyNames::Yeast::maxReuse,               nullptr},
       {XmlRecord::Bool,    "ADD_TO_SECONDARY", PropertyNames::Yeast::addToSecondary,         nullptr},
-      {XmlRecord::String,  "DISPLAY_AMOUNT",   nullptr,                                      nullptr}, // Extension tag
-      {XmlRecord::String,  "DISP_MIN_TEMP",    nullptr,                                      nullptr}, // Extension tag
-      {XmlRecord::String,  "DISP_MAX_TEMP",    nullptr,                                      nullptr}, // Extension tag
-      {XmlRecord::String,  "INVENTORY",        nullptr,                                      nullptr}, // Extension tag
-      {XmlRecord::String,  "CULTURE_DATE",     nullptr,                                      nullptr}  // Extension tag
+      {XmlRecord::String,  "DISPLAY_AMOUNT",   BtString::NULL_STR,                           nullptr}, // Extension tag
+      {XmlRecord::String,  "DISP_MIN_TEMP",    BtString::NULL_STR,                           nullptr}, // Extension tag
+      {XmlRecord::String,  "DISP_MAX_TEMP",    BtString::NULL_STR,                           nullptr}, // Extension tag
+      {XmlRecord::String,  "INVENTORY",        BtString::NULL_STR,                           nullptr}, // Extension tag
+      {XmlRecord::String,  "CULTURE_DATE",     BtString::NULL_STR,                           nullptr}  // Extension tag
    };
 
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -227,7 +234,7 @@ namespace {
    template<> XmlRecord::FieldDefinitions const BEER_XML_RECORD_FIELDS<Misc> {
       // Type              XPath               Q_PROPERTY                           Enum Mapper
       {XmlRecord::String,  "NAME",             PropertyNames::NamedEntity::name,    nullptr},
-      {XmlRecord::RequiredConstant,  "VERSION", "1",                                nullptr},
+      {XmlRecord::RequiredConstant,  "VERSION", VERSION1,                                nullptr},
       {XmlRecord::Enum,    "TYPE",             PropertyNames::Misc::type,           &BEER_XML_MISC_TYPE_MAPPER},
       {XmlRecord::Enum,    "USE",              PropertyNames::Misc::use,            &BEER_XML_MISC_USE_MAPPER},
       {XmlRecord::Double,  "TIME",             PropertyNames::Misc::time,           nullptr},
@@ -235,9 +242,9 @@ namespace {
       {XmlRecord::Bool,    "AMOUNT_IS_WEIGHT", PropertyNames::Misc::amountIsWeight, nullptr},
       {XmlRecord::String,  "USE_FOR",          PropertyNames::Misc::useFor,         nullptr},
       {XmlRecord::String,  "NOTES",            PropertyNames::Misc::notes,          nullptr},
-      {XmlRecord::String,  "DISPLAY_AMOUNT",   nullptr,                             nullptr}, // Extension tag
-      {XmlRecord::String,  "INVENTORY",        nullptr,                             nullptr}, // Extension tag
-      {XmlRecord::String,  "DISPLAY_TIME",     nullptr,                             nullptr}  // Extension tag
+      {XmlRecord::String,  "DISPLAY_AMOUNT",   BtString::NULL_STR,                  nullptr}, // Extension tag
+      {XmlRecord::String,  "INVENTORY",        BtString::NULL_STR,                  nullptr}, // Extension tag
+      {XmlRecord::String,  "DISPLAY_TIME",     BtString::NULL_STR,                  nullptr}  // Extension tag
    };
 
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -247,7 +254,7 @@ namespace {
    template<> XmlRecord::FieldDefinitions const BEER_XML_RECORD_FIELDS<Water> {
       // Type               XPath            Q_PROPERTY                             Enum Mapper
       {XmlRecord::String,  "NAME",           PropertyNames::NamedEntity::name,      nullptr},
-      {XmlRecord::RequiredConstant,  "VERSION", "1",                                nullptr},
+      {XmlRecord::RequiredConstant,  "VERSION", VERSION1,                                nullptr},
       {XmlRecord::Double,  "AMOUNT",         PropertyNames::Water::amount,          nullptr},
       {XmlRecord::Double,  "CALCIUM",        PropertyNames::Water::calcium_ppm,     nullptr},
       {XmlRecord::Double,  "BICARBONATE",    PropertyNames::Water::bicarbonate_ppm, nullptr},
@@ -257,7 +264,7 @@ namespace {
       {XmlRecord::Double,  "MAGNESIUM",      PropertyNames::Water::magnesium_ppm,   nullptr},
       {XmlRecord::Double,  "PH",             PropertyNames::Water::ph,              nullptr},
       {XmlRecord::String,  "NOTES",          PropertyNames::Water::notes,           nullptr},
-      {XmlRecord::String,  "DISPLAY_AMOUNT", nullptr,                               nullptr}  // Extension tag
+      {XmlRecord::String,  "DISPLAY_AMOUNT", BtString::NULL_STR,                    nullptr}  // Extension tag
    };
 
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -276,7 +283,7 @@ namespace {
       // Type              XPath                Q_PROPERTY                            Enum Mapper
       {XmlRecord::String,  "NAME",              PropertyNames::NamedEntity::name,     nullptr},
       {XmlRecord::String,  "CATEGORY",          PropertyNames::Style::category,       nullptr},
-      {XmlRecord::RequiredConstant,  "VERSION", "1",                                  nullptr},
+      {XmlRecord::RequiredConstant,  "VERSION", VERSION1,                                  nullptr},
       {XmlRecord::String,  "CATEGORY_NUMBER",   PropertyNames::Style::categoryNumber, nullptr},
       {XmlRecord::String,  "STYLE_LETTER",      PropertyNames::Style::styleLetter,    nullptr},
       {XmlRecord::String,  "STYLE_GUIDE",       PropertyNames::Style::styleGuide,     nullptr},
@@ -297,18 +304,18 @@ namespace {
       {XmlRecord::String,  "PROFILE",           PropertyNames::Style::profile,        nullptr},
       {XmlRecord::String,  "INGREDIENTS",       PropertyNames::Style::ingredients,    nullptr},
       {XmlRecord::String,  "EXAMPLES",          PropertyNames::Style::examples,       nullptr},
-      {XmlRecord::String,  "DISPLAY_OG_MIN",    nullptr,                              nullptr}, // Extension tag
-      {XmlRecord::String,  "DISPLAY_OG_MAX",    nullptr,                              nullptr}, // Extension tag
-      {XmlRecord::String,  "DISPLAY_FG_MIN",    nullptr,                              nullptr}, // Extension tag
-      {XmlRecord::String,  "DISPLAY_FG_MAX",    nullptr,                              nullptr}, // Extension tag
-      {XmlRecord::String,  "DISPLAY_COLOR_MIN", nullptr,                              nullptr}, // Extension tag
-      {XmlRecord::String,  "DISPLAY_COLOR_MAX", nullptr,                              nullptr}, // Extension tag
-      {XmlRecord::String,  "OG_RANGE",          nullptr,                              nullptr}, // Extension tag
-      {XmlRecord::String,  "FG_RANGE",          nullptr,                              nullptr}, // Extension tag
-      {XmlRecord::String,  "IBU_RANGE",         nullptr,                              nullptr}, // Extension tag
-      {XmlRecord::String,  "CARB_RANGE",        nullptr,                              nullptr}, // Extension tag
-      {XmlRecord::String,  "COLOR_RANGE",       nullptr,                              nullptr}, // Extension tag
-      {XmlRecord::String,  "ABV_RANGE",         nullptr,                              nullptr}  // Extension tag
+      {XmlRecord::String,  "DISPLAY_OG_MIN",    BtString::NULL_STR,                   nullptr}, // Extension tag
+      {XmlRecord::String,  "DISPLAY_OG_MAX",    BtString::NULL_STR,                   nullptr}, // Extension tag
+      {XmlRecord::String,  "DISPLAY_FG_MIN",    BtString::NULL_STR,                   nullptr}, // Extension tag
+      {XmlRecord::String,  "DISPLAY_FG_MAX",    BtString::NULL_STR,                   nullptr}, // Extension tag
+      {XmlRecord::String,  "DISPLAY_COLOR_MIN", BtString::NULL_STR,                   nullptr}, // Extension tag
+      {XmlRecord::String,  "DISPLAY_COLOR_MAX", BtString::NULL_STR,                   nullptr}, // Extension tag
+      {XmlRecord::String,  "OG_RANGE",          BtString::NULL_STR,                   nullptr}, // Extension tag
+      {XmlRecord::String,  "FG_RANGE",          BtString::NULL_STR,                   nullptr}, // Extension tag
+      {XmlRecord::String,  "IBU_RANGE",         BtString::NULL_STR,                   nullptr}, // Extension tag
+      {XmlRecord::String,  "CARB_RANGE",        BtString::NULL_STR,                   nullptr}, // Extension tag
+      {XmlRecord::String,  "COLOR_RANGE",       BtString::NULL_STR,                   nullptr}, // Extension tag
+      {XmlRecord::String,  "ABV_RANGE",         BtString::NULL_STR,                   nullptr}  // Extension tag
    };
 
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -325,19 +332,19 @@ namespace {
    template<> XmlRecord::FieldDefinitions const BEER_XML_RECORD_FIELDS<MashStep> {
       // Type              XPath                 Q_PROPERTY                                  Enum Mapper
       {XmlRecord::String,  "NAME",               PropertyNames::NamedEntity::name,           nullptr},
-      {XmlRecord::RequiredConstant,  "VERSION", "1",                                         nullptr},
+      {XmlRecord::RequiredConstant,  "VERSION", VERSION1,                                         nullptr},
       {XmlRecord::Enum,    "TYPE",               PropertyNames::MashStep::type,              &BEER_XML_MASH_STEP_TYPE_MAPPER},
       {XmlRecord::Double,  "INFUSE_AMOUNT",      PropertyNames::MashStep::infuseAmount_l,    nullptr}, // Should not be supplied if TYPE is "Decoction"
       {XmlRecord::Double,  "STEP_TEMP",          PropertyNames::MashStep::stepTemp_c,        nullptr},
       {XmlRecord::Double,  "STEP_TIME",          PropertyNames::MashStep::stepTime_min,      nullptr},
       {XmlRecord::Double,  "RAMP_TIME",          PropertyNames::MashStep::rampTime_min,      nullptr},
       {XmlRecord::Double,  "END_TEMP",           PropertyNames::MashStep::endTemp_c,         nullptr},
-      {XmlRecord::String,  "DESCRIPTION",        nullptr,                                    nullptr}, // Extension tag
-      {XmlRecord::String,  "WATER_GRAIN_RATIO",  nullptr,                                    nullptr}, // Extension tag
-      {XmlRecord::String,  "DECOCTION_AMT",      nullptr,                                    nullptr}, // Extension tag
+      {XmlRecord::String,  "DESCRIPTION",        BtString::NULL_STR,                         nullptr}, // Extension tag
+      {XmlRecord::String,  "WATER_GRAIN_RATIO",  BtString::NULL_STR,                         nullptr}, // Extension tag
+      {XmlRecord::String,  "DECOCTION_AMT",      BtString::NULL_STR,                         nullptr}, // Extension tag
       {XmlRecord::String,  "INFUSE_TEMP",        PropertyNames::MashStep::infuseTemp_c,      nullptr}, // Extension tag
-      {XmlRecord::String,  "DISPLAY_STEP_TEMP",  nullptr,                                    nullptr}, // Extension tag
-      {XmlRecord::String,  "DISPLAY_INFUSE_AMT", nullptr,                                    nullptr}, // Extension tag
+      {XmlRecord::String,  "DISPLAY_STEP_TEMP",  BtString::NULL_STR,                         nullptr}, // Extension tag
+      {XmlRecord::String,  "DISPLAY_INFUSE_AMT", BtString::NULL_STR,                         nullptr}, // Extension tag
       {XmlRecord::Double,  "DECOCTION_AMOUNT",   PropertyNames::MashStep::decoctionAmount_l, nullptr}  // Non-standard tag, not part of BeerXML 1.0 standard
    };
 
@@ -348,7 +355,7 @@ namespace {
    template<> XmlRecord::FieldDefinitions const BEER_XML_RECORD_FIELDS<Mash> {
       // Type                    XPath                   Q_PROPERTY                                  Enum Mapper
       {XmlRecord::String,        "NAME",                 PropertyNames::NamedEntity::name,           nullptr},
-      {XmlRecord::RequiredConstant,  "VERSION", "1",                                                 nullptr},
+      {XmlRecord::RequiredConstant,  "VERSION", VERSION1,                                                 nullptr},
       {XmlRecord::Double,        "GRAIN_TEMP",           PropertyNames::Mash::grainTemp_c,           nullptr},
       {XmlRecord::RecordComplex, "MASH_STEPS/MASH_STEP", PropertyNames::Mash::mashSteps,             nullptr}, // Additional logic for "MASH-STEPS" is handled in code
       {XmlRecord::String,        "NOTES",                PropertyNames::Mash::notes,                 nullptr},
@@ -358,10 +365,10 @@ namespace {
       {XmlRecord::Double,        "TUN_WEIGHT",           PropertyNames::Mash::tunWeight_kg,          nullptr},
       {XmlRecord::Double,        "TUN_SPECIFIC_HEAT",    PropertyNames::Mash::tunSpecificHeat_calGC, nullptr},
       {XmlRecord::Bool,          "EQUIP_ADJUST",         PropertyNames::Mash::equipAdjust,           nullptr},
-      {XmlRecord::String,        "DISPLAY_GRAIN_TEMP",   nullptr,                                    nullptr}, // Extension tag
-      {XmlRecord::String,        "DISPLAY_TUN_TEMP",     nullptr,                                    nullptr}, // Extension tag
-      {XmlRecord::String,        "DISPLAY_SPARGE_TEMP",  nullptr,                                    nullptr}, // Extension tag
-      {XmlRecord::String,        "DISPLAY_TUN_WEIGHT",   nullptr,                                    nullptr}  // Extension tag
+      {XmlRecord::String,        "DISPLAY_GRAIN_TEMP",   BtString::NULL_STR,                         nullptr}, // Extension tag
+      {XmlRecord::String,        "DISPLAY_TUN_TEMP",     BtString::NULL_STR,                         nullptr}, // Extension tag
+      {XmlRecord::String,        "DISPLAY_SPARGE_TEMP",  BtString::NULL_STR,                         nullptr}, // Extension tag
+      {XmlRecord::String,        "DISPLAY_TUN_WEIGHT",   BtString::NULL_STR,                         nullptr}  // Extension tag
    };
 
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -371,7 +378,7 @@ namespace {
    template<> XmlRecord::FieldDefinitions const BEER_XML_RECORD_FIELDS<Equipment> {
       // Type              XPath                        Q_PROPERTY                                       Enum Mapper
       {XmlRecord::String,  "NAME",                      PropertyNames::NamedEntity::name,                nullptr},
-      {XmlRecord::RequiredConstant,  "VERSION", "1",                                                     nullptr},
+      {XmlRecord::RequiredConstant,  "VERSION", VERSION1,                                                     nullptr},
       {XmlRecord::Double,  "BOIL_SIZE",                 PropertyNames::Equipment::boilSize_l,            nullptr},
       {XmlRecord::Double,  "BATCH_SIZE",                PropertyNames::Equipment::batchSize_l,           nullptr},
       {XmlRecord::Double,  "TUN_VOLUME",                PropertyNames::Equipment::tunVolume_l,           nullptr},
@@ -386,14 +393,14 @@ namespace {
       {XmlRecord::Double,  "TOP_UP_KETTLE",             PropertyNames::Equipment::topUpKettle_l,         nullptr},
       {XmlRecord::Double,  "HOP_UTILIZATION",           PropertyNames::Equipment::hopUtilization_pct,    nullptr},
       {XmlRecord::String,  "NOTES",                     PropertyNames::Equipment::notes,                 nullptr},
-      {XmlRecord::String,  "DISPLAY_BOIL_SIZE",         nullptr,                                         nullptr}, // Extension tag
-      {XmlRecord::String,  "DISPLAY_BATCH_SIZE",        nullptr,                                         nullptr}, // Extension tag
-      {XmlRecord::String,  "DISPLAY_TUN_VOLUME",        nullptr,                                         nullptr}, // Extension tag
-      {XmlRecord::String,  "DISPLAY_TUN_WEIGHT",        nullptr,                                         nullptr}, // Extension tag
-      {XmlRecord::String,  "DISPLAY_TOP_UP_WATER",      nullptr,                                         nullptr}, // Extension tag
-      {XmlRecord::String,  "DISPLAY_TRUB_CHILLER_LOSS", nullptr,                                         nullptr}, // Extension tag
-      {XmlRecord::String,  "DISPLAY_LAUTER_DEADSPACE",  nullptr,                                         nullptr}, // Extension tag
-      {XmlRecord::String,  "DISPLAY_TOP_UP_KETTLE",     nullptr,                                         nullptr}, // Extension tag
+      {XmlRecord::String,  "DISPLAY_BOIL_SIZE",         BtString::NULL_STR,                              nullptr}, // Extension tag
+      {XmlRecord::String,  "DISPLAY_BATCH_SIZE",        BtString::NULL_STR,                              nullptr}, // Extension tag
+      {XmlRecord::String,  "DISPLAY_TUN_VOLUME",        BtString::NULL_STR,                              nullptr}, // Extension tag
+      {XmlRecord::String,  "DISPLAY_TUN_WEIGHT",        BtString::NULL_STR,                              nullptr}, // Extension tag
+      {XmlRecord::String,  "DISPLAY_TOP_UP_WATER",      BtString::NULL_STR,                              nullptr}, // Extension tag
+      {XmlRecord::String,  "DISPLAY_TRUB_CHILLER_LOSS", BtString::NULL_STR,                              nullptr}, // Extension tag
+      {XmlRecord::String,  "DISPLAY_LAUTER_DEADSPACE",  BtString::NULL_STR,                              nullptr}, // Extension tag
+      {XmlRecord::String,  "DISPLAY_TOP_UP_KETTLE",     BtString::NULL_STR,                              nullptr}, // Extension tag
       {XmlRecord::Double,  "REAL_EVAP_RATE",            PropertyNames::Equipment::evapRate_lHr,          nullptr}, // Non-standard tag, not part of BeerXML 1.0 standard
       {XmlRecord::Double,  "ABSORPTION",                PropertyNames::Equipment::grainAbsorption_LKg,   nullptr}, // Non-standard tag, not part of BeerXML 1.0 standard
       {XmlRecord::Double,  "BOILING_POINT",             PropertyNames::Equipment::boilingPoint_c,        nullptr}  // Non-standard tag, not part of BeerXML 1.0 standard
@@ -406,7 +413,7 @@ namespace {
    template<> XmlRecord::FieldDefinitions const BEER_XML_RECORD_FIELDS<Instruction> {
       // Type              XPath         Q_PROPERTY                              Enum Mapper
       {XmlRecord::String,  "NAME",       PropertyNames::NamedEntity::name,       nullptr},
-      {XmlRecord::RequiredConstant,  "VERSION", "1",                             nullptr},
+      {XmlRecord::RequiredConstant,  "VERSION", VERSION1,                             nullptr},
       {XmlRecord::String,  "directions", PropertyNames::Instruction::directions, nullptr},
       {XmlRecord::Bool,    "hasTimer",   PropertyNames::Instruction::hasTimer,   nullptr},
       {XmlRecord::String,  "timervalue", PropertyNames::Instruction::timerValue, nullptr}, // NB XPath is lowercase and property is camelCase
@@ -425,7 +432,7 @@ namespace {
    template<> QString const BEER_XML_RECORD_NAME<BrewNote>{"BREWNOTE"};
    template<> XmlRecord::FieldDefinitions const BEER_XML_RECORD_FIELDS<BrewNote> {
       // Type              XPath                      Q_PROPERTY                                     Enum Mapper
-      {XmlRecord::RequiredConstant,  "VERSION", "1",                                                 nullptr},
+      {XmlRecord::RequiredConstant,  "VERSION", VERSION1,                                                 nullptr},
       {XmlRecord::Date,    "BREWDATE",                PropertyNames::BrewNote::brewDate,             nullptr},
       {XmlRecord::Date,    "DATE_FERMENTED_OUT",      PropertyNames::BrewNote::fermentDate,          nullptr},
       {XmlRecord::String,  "NOTES",                   PropertyNames::BrewNote::notes,                nullptr},
@@ -470,7 +477,7 @@ namespace {
    template<> XmlRecord::FieldDefinitions const BEER_XML_RECORD_FIELDS<Recipe> {
       // Type                    XPath                       Q_PROPERTY                                 Enum Mapper
       {XmlRecord::String,        "NAME",                     PropertyNames::NamedEntity::name,          nullptr},
-      {XmlRecord::RequiredConstant,  "VERSION", "1",                                                    nullptr},
+      {XmlRecord::RequiredConstant,  "VERSION", VERSION1,                                                    nullptr},
       {XmlRecord::Enum,          "TYPE",                     PropertyNames::Recipe::recipeType,         &BEER_XML_RECIPE_STEP_TYPE_MAPPER},
       {XmlRecord::RecordSimple,  "STYLE",                    PropertyNames::Recipe::style,              nullptr},
       {XmlRecord::RecordSimple,  "EQUIPMENT",                PropertyNames::Recipe::equipment,          nullptr},
@@ -509,25 +516,25 @@ namespace {
       {XmlRecord::Double,        "CARBONATION_TEMP",         PropertyNames::Recipe::carbonationTemp_c,  nullptr},
       {XmlRecord::Double,        "PRIMING_SUGAR_EQUIV",      PropertyNames::Recipe::primingSugarEquiv,  nullptr},
       {XmlRecord::Double,        "KEG_PRIMING_FACTOR",       PropertyNames::Recipe::kegPrimingFactor,   nullptr},
-      {XmlRecord::String,        "EST_OG",                   nullptr,                                   nullptr}, // Extension tag
-      {XmlRecord::String,        "EST_FG",                   nullptr,                                   nullptr}, // Extension tag
-      {XmlRecord::String,        "EST_COLOR",                nullptr,                                   nullptr}, // Extension tag
-      {XmlRecord::String,        "IBU",                      nullptr,                                   nullptr}, // Extension tag
-      {XmlRecord::String,        "IBU_METHOD",               nullptr,                                   nullptr}, // Extension tag
-      {XmlRecord::String,        "EST_ABV",                  nullptr,                                   nullptr}, // Extension tag
-      {XmlRecord::String,        "ABV",                      nullptr,                                   nullptr}, // Extension tag
-      {XmlRecord::String,        "ACTUAL_EFFICIENCY",        nullptr,                                   nullptr}, // Extension tag
-      {XmlRecord::String,        "CALORIES",                 nullptr,                                   nullptr}, // Extension tag
-      {XmlRecord::String,        "DISPLAY_BATCH_SIZE",       nullptr,                                   nullptr}, // Extension tag
-      {XmlRecord::String,        "DISPLAY_BOIL_SIZE",        nullptr,                                   nullptr}, // Extension tag
-      {XmlRecord::String,        "DISPLAY_OG",               nullptr,                                   nullptr}, // Extension tag
-      {XmlRecord::String,        "DISPLAY_FG",               nullptr,                                   nullptr}, // Extension tag
-      {XmlRecord::String,        "DISPLAY_PRIMARY_TEMP",     nullptr,                                   nullptr}, // Extension tag
-      {XmlRecord::String,        "DISPLAY_SECONDARY_TEMP",   nullptr,                                   nullptr}, // Extension tag
-      {XmlRecord::String,        "DISPLAY_TERTIARY_TEMP",    nullptr,                                   nullptr}, // Extension tag
-      {XmlRecord::String,        "DISPLAY_AGE_TEMP",         nullptr,                                   nullptr}, // Extension tag
-      {XmlRecord::String,        "CARBONATION_USED",         nullptr,                                   nullptr}, // Extension tag
-      {XmlRecord::String,        "DISPLAY_CARB_TEMP",        nullptr,                                   nullptr}  // Extension tag
+      {XmlRecord::String,        "EST_OG",                   BtString::NULL_STR,                        nullptr}, // Extension tag
+      {XmlRecord::String,        "EST_FG",                   BtString::NULL_STR,                        nullptr}, // Extension tag
+      {XmlRecord::String,        "EST_COLOR",                BtString::NULL_STR,                        nullptr}, // Extension tag
+      {XmlRecord::String,        "IBU",                      BtString::NULL_STR,                        nullptr}, // Extension tag
+      {XmlRecord::String,        "IBU_METHOD",               BtString::NULL_STR,                        nullptr}, // Extension tag
+      {XmlRecord::String,        "EST_ABV",                  BtString::NULL_STR,                        nullptr}, // Extension tag
+      {XmlRecord::String,        "ABV",                      BtString::NULL_STR,                        nullptr}, // Extension tag
+      {XmlRecord::String,        "ACTUAL_EFFICIENCY",        BtString::NULL_STR,                        nullptr}, // Extension tag
+      {XmlRecord::String,        "CALORIES",                 BtString::NULL_STR,                        nullptr}, // Extension tag
+      {XmlRecord::String,        "DISPLAY_BATCH_SIZE",       BtString::NULL_STR,                        nullptr}, // Extension tag
+      {XmlRecord::String,        "DISPLAY_BOIL_SIZE",        BtString::NULL_STR,                        nullptr}, // Extension tag
+      {XmlRecord::String,        "DISPLAY_OG",               BtString::NULL_STR,                        nullptr}, // Extension tag
+      {XmlRecord::String,        "DISPLAY_FG",               BtString::NULL_STR,                        nullptr}, // Extension tag
+      {XmlRecord::String,        "DISPLAY_PRIMARY_TEMP",     BtString::NULL_STR,                        nullptr}, // Extension tag
+      {XmlRecord::String,        "DISPLAY_SECONDARY_TEMP",   BtString::NULL_STR,                        nullptr}, // Extension tag
+      {XmlRecord::String,        "DISPLAY_TERTIARY_TEMP",    BtString::NULL_STR,                        nullptr}, // Extension tag
+      {XmlRecord::String,        "DISPLAY_AGE_TEMP",         BtString::NULL_STR,                        nullptr}, // Extension tag
+      {XmlRecord::String,        "CARBONATION_USED",         BtString::NULL_STR,                        nullptr}, // Extension tag
+      {XmlRecord::String,        "DISPLAY_CARB_TEMP",        BtString::NULL_STR,                        nullptr}  // Extension tag
    };
 }
 

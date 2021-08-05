@@ -33,7 +33,7 @@
 
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
-#define AddPropertyName(property) namespace PropertyNames::Instruction {static char const * const property = #property; }
+#define AddPropertyName(property) namespace PropertyNames::Instruction { BtStringConst const property{#property}; }
 AddPropertyName(completed)
 AddPropertyName(directions)
 AddPropertyName(hasTimer)

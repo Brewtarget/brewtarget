@@ -344,7 +344,7 @@ Logging::Level Logging::getLogLevel() {
 
 void Logging::setLogLevel(Level newLevel) {
    currentLoggingLevel = newLevel;
-   PersistentSettings::insert("LoggingLevel", Logging::getStringFromLogLevel(currentLoggingLevel));
+   PersistentSettings::insert(PersistentSettings::Names::LoggingLevel, Logging::getStringFromLogLevel(currentLoggingLevel));
    return;
 }
 
@@ -362,29 +362,15 @@ namespace Logging {
 
 }
 
-
 bool Logging::initializeLogging() {
    // We _really_ need to see problems with opening the log file on stderr!
    TemporarilyForceStderrLogging temporarilyForceStderrLogging;
 
-   // If we're running a test, some settings are different
-   // .:TODO:. Ideally, we should move this knowledge outside of the Logging namespace and just have a parameter
-   // passed in to this function that tells it whether to use these special settings.
-   if (QCoreApplication::applicationName() == "brewken-test") {
-      // Test logs go to a /tmp (or equivalent) so as not to clutter the application path with dummy data.
-      Logging::setDirectory(QDir::tempPath());
-      // Turning off logging to stderr console, this is so you won't have to watch 100k rows generate in the console.
-      isLoggingToStderr = false;
-      // Set debug level
-      currentLoggingLevel = Logging::LogLevel_DEBUG;
-   } else {
-      // Normal settings
-      currentLoggingLevel = Logging::getLogLevelFromString(PersistentSettings::value("LoggingLevel", "INFO").toString());
-      Logging::setDirectory(
-         PersistentSettings::contains("LogDirectory") ?
-            std::optional<QDir>(PersistentSettings::value("LogDirectory").toString()) : std::optional<QDir>(std::nullopt)
-      );
-   }
+   currentLoggingLevel = Logging::getLogLevelFromString(PersistentSettings::value(PersistentSettings::Names::LoggingLevel, "INFO").toString());
+   Logging::setDirectory(
+      PersistentSettings::contains(PersistentSettings::Names::LogDirectory) ?
+         std::optional<QDir>(PersistentSettings::value(PersistentSettings::Names::LogDirectory).toString()) : std::optional<QDir>(std::nullopt)
+   );
 
    qInstallMessageHandler(logMessageHandler);
    qDebug() << Q_FUNC_INFO << "Logging initialized.  Logs will be written to" << logDirectory.canonicalPath();
@@ -396,8 +382,15 @@ bool Logging::initializeLogging() {
    return true;
 }
 
+void Logging::setLoggingToStderr(bool const enabled) {
+   if (enabled != isLoggingToStderr) {
+      qInfo() << Q_FUNC_INFO << (enabled ? "Enabling" : "Suspending") << "logging to stderr";
+      isLoggingToStderr = enabled;
+   }
+   return;
+}
 
-bool Logging::setDirectory(std::optional<QDir> newDirectory) {
+bool Logging::setDirectory(std::optional<QDir> newDirectory, Logging::PersistNewDirectory const persistNewDirectory) {
    qDebug() << Q_FUNC_INFO;
 
    QDir oldDirectory = logDirectory;
@@ -438,7 +431,9 @@ bool Logging::setDirectory(std::optional<QDir> newDirectory) {
    }
 
    // At this point, enough has succeeded that we're OK to commit to using the new directory
-   PersistentSettings::insert("LogDirectory", logDirectory.absolutePath());
+   if (persistNewDirectory == Logging::NewDirectoryIsPermanent) {
+      PersistentSettings::insert(PersistentSettings::Names::LogDirectory, logDirectory.absolutePath());
+   }
 
    //
    // If we are already writing to a log file in the old directory, it needs to be closed and moved to the new one
@@ -498,7 +493,6 @@ bool Logging::setDirectory(std::optional<QDir> newDirectory) {
 
    return true;
 }
-
 
 QDir Logging::getDirectory() {
    return logDirectory;

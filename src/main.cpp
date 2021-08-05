@@ -139,8 +139,8 @@ int main(int argc, char **argv) {
                                  QMessageBox::Ignore | QMessageBox::Ok,
                                  QMessageBox::Ok);
          if (buttonPressed == QMessageBox::Ok) {
-            // We haven't yet called exec on QApplication, so I'm not sure we _need_ to call exit() here, but it doesn't
-            // seem to hurt.
+            // We haven't yet called exec on QApplication, so I'm not sure we _need_ to call exit() here, but it
+            // doesn't seem to hurt.
             app.exit();
             return EXIT_SUCCESS;
          }
@@ -202,7 +202,7 @@ void importFromXml(const QString & filename) {
       exit(1);
    }
    Database::instance().unload();
-   PersistentSettings::insert("converted", QDate().currentDate().toString());
+   PersistentSettings::insert(PersistentSettings::Names::converted, QDate().currentDate().toString());
    exit(0);
 }
 

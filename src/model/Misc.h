@@ -31,7 +31,7 @@
 
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
-#define AddPropertyName(property) namespace PropertyNames::Misc {static char const * const property = #property; }
+#define AddPropertyName(property) namespace PropertyNames::Misc { BtStringConst const property{#property}; }
 AddPropertyName(amount)
 AddPropertyName(amountIsWeight)
 AddPropertyName(amountType)

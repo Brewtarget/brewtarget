@@ -30,7 +30,7 @@
 
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
-#define AddPropertyName(property) namespace PropertyNames::Equipment {static char const * const property = #property; }
+#define AddPropertyName(property) namespace PropertyNames::Equipment { BtStringConst const property{#property}; }
 AddPropertyName(boilTime_min)
 AddPropertyName(boilSize_l)
 AddPropertyName(batchSize_l)

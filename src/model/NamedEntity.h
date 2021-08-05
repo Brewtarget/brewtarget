@@ -34,6 +34,7 @@
 #include <QVariant>
 
 #include "brewtarget.h"
+#include "utils/BtStringConst.h"
 
 class NamedParameterBundle;
 class ObjectStore;
@@ -43,7 +44,7 @@ class Recipe;
 //========================================== Start of property name constants ==========================================
 // Make this class's property names available via constants in sub-namespace of PropertyNames
 // One advantage of using these constants is you get compile-time checking for typos etc
-#define AddPropertyName(property) namespace PropertyNames::NamedEntity {static char const * const property = #property; }
+#define AddPropertyName(property) namespace PropertyNames::NamedEntity { BtStringConst const property{#property}; }
 AddPropertyName(deleted)
 AddPropertyName(display)
 AddPropertyName(folder)
@@ -325,7 +326,7 @@ protected:
     *        create a new version of a Recipe - eg because we are modifying some ingredient or other attribute of the
     *        Recipe and automatic versioning is enabled.
     */
-   void prepareForPropertyChange(char const * const propertyName);
+   void prepareForPropertyChange(BtStringConst const & propertyName);
 
    /**
     * \brief This is intended to be called from setter member functions (including those of derived classes), \b after
@@ -335,7 +336,7 @@ protected:
     * \param propertyName The name of the property that has been changed
     * \param emitChangedSignal Whether to emit a "changed" signal. Default is \c true
     */
-   void propagatePropertyChange(char const * const propertyName, bool notify = true) const;
+   void propagatePropertyChange(BtStringConst const & propertyName, bool notify = true) const;
 
 
    /**
@@ -345,7 +346,7 @@ protected:
     * \return \c true if there's nothing to change, \c false otherwise
     */
    template<typename T>
-   bool newValueMatchesExisting(char const * const propertyName,
+   bool newValueMatchesExisting(BtStringConst const & propertyName,
                                 T & memberVariable,
                                 T const newValue) {
       if (newValue == memberVariable) {
@@ -361,7 +362,7 @@ protected:
     * \brief Convenience function that wraps preparing for a property change, making it and propagating it.
     */
    template<typename T>
-   void setAndNotify(char const * const propertyName,
+   void setAndNotify(BtStringConst const & propertyName,
                      T & memberVariable,
                      T const newValue) {
       if (this->newValueMatchesExisting(propertyName, memberVariable, newValue)) {

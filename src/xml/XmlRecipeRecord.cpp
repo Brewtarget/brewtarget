@@ -158,9 +158,9 @@ bool XmlRecipeRecord::childrenToXml(XmlRecord::FieldDefinition const & fieldDefi
                                     QTextStream & out,
                                     int indentLevel,
                                     char const * const indentString,
-                                    char const * const propertyNameForGetter,
+                                    BtStringConst const & propertyNameForGetter,
                                     RecipeChildGetter<CNE> getter) const {
-   if (0 != strcmp(fieldDefinition.propertyName, propertyNameForGetter)) {
+   if (fieldDefinition.propertyName != propertyNameForGetter) {
       return false;
    }
    QList<CNE *> children = std::invoke(getter, recipe);

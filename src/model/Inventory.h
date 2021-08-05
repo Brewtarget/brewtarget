@@ -30,7 +30,7 @@ class ObjectStore;
 
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
-#define AddPropertyName(property) namespace PropertyNames::Inventory {static char const * const property = #property; }
+#define AddPropertyName(property) namespace PropertyNames::Inventory { BtStringConst const property{#property}; }
 AddPropertyName(id)
 AddPropertyName(amount)
 #undef AddPropertyName

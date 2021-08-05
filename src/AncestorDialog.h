@@ -1,6 +1,6 @@
 /*
  * AncestorDialog.h is part of Brewtarget, and is Copyright the following
- * authors 2016-2019
+ * authors 2016-2021
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@fastmail.com>
  *

@@ -47,6 +47,7 @@
 #include "model/BrewNote.h"
 #include "model/Style.h"
 #include "model/Water.h"
+#include "utils/BtStringConst.h"
 #include "PersistentSettings.h"
 
 // =========================================================================
@@ -625,7 +626,7 @@ void BtTreeModel::loadTreeModel() {
       // If we have brewnotes, set them up here.
       if (treeMask & RECIPEMASK) {
          Recipe * holdmebeer = qobject_cast<Recipe *>(elem);
-         if (PersistentSettings::value("showsnapshots", false).toBool() && holdmebeer->hasAncestors()) {
+         if (PersistentSettings::value(PersistentSettings::Names::showsnapshots, false).toBool() && holdmebeer->hasAncestors()) {
             setShowChild(ndxLocal, true);
             addAncestoralTree(holdmebeer, i, local);
             addBrewNoteSubTree(holdmebeer, i, local, false);
@@ -884,7 +885,7 @@ void BtTreeModel::deleteSelected(QModelIndexList victims) {
          case BtTreeItem::RECIPE:
             {
                rec = recipe(ndx);
-               deletewhat = PersistentSettings::value("deletewhat", Recipe::DESCENDANT).toInt();
+               deletewhat = PersistentSettings::value(PersistentSettings::Names::deletewhat, Recipe::DESCENDANT).toInt();
                if (deletewhat == Recipe::DESCENDANT) {
                   this->revertRecipeToPreviousVersion(ndx);
                } else {
@@ -1374,11 +1375,11 @@ void BtTreeModel::elementRemoved(NamedEntity * victim) {
    disconnect(victim, nullptr, this, nullptr);
 }
 
-void BtTreeModel::recipePropertyChanged(int recipeId, char const * const propertyName) {
+void BtTreeModel::recipePropertyChanged(int recipeId, BtStringConst const & propertyName) {
    // If a Recipe's ancestor ID has changed then it might be because a new ancestor has been created
    // .:TBD:. We could probably get away with propertyName == PropertyNames::Recipe::ancestorId here because
    // we always use the same constants for property names.
-   if (0 != std::strcmp(propertyName, PropertyNames::Recipe::ancestorId)) {
+   if (propertyName != PropertyNames::Recipe::ancestorId) {
       qDebug() << Q_FUNC_INFO << "Ignoring change to" << propertyName << "on Recipe" << recipeId;
       return;
    }

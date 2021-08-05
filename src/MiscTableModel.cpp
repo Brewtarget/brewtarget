@@ -34,6 +34,7 @@
 #include "model/Recipe.h"
 #include "PersistentSettings.h"
 #include "Unit.h"
+#include "utils/BtStringConst.h"
 
 MiscTableModel::MiscTableModel(QTableView* parent, bool editable) :
    QAbstractTableModel(parent),
@@ -386,8 +387,8 @@ bool MiscTableModel::setData( const QModelIndex& index, const QVariant& value, i
    return true;
 }
 
-void MiscTableModel::changedInventory(int invKey, char const * const propertyName) {
-   if (QString(propertyName) == PropertyNames::Inventory::amount) {
+void MiscTableModel::changedInventory(int invKey, BtStringConst const & propertyName) {
+   if (propertyName == PropertyNames::Inventory::amount) {
 ///      double newAmount = ObjectStoreWrapper::getById<InventoryMisc>()->getAmount();
       for( int i = 0; i < miscObs.size(); ++i ) {
          Misc* holdmybeer = miscObs.at(i);
@@ -502,13 +503,13 @@ QString MiscTableModel::generateName(int column) const
    switch(column)
    {
       case MISCINVENTORYCOL:
-         attribute = "inventory";
+         attribute = *PropertyNames::NamedEntityWithInventory::inventory;
          break;
       case MISCAMOUNTCOL:
-         attribute = "amount";
+         attribute = *PropertyNames::Misc::amount;
          break;
       case MISCTIMECOL:
-         attribute = PropertyNames::Misc::time;
+         attribute = *PropertyNames::Misc::time;
          break;
       default:
          attribute = "";

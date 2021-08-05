@@ -32,6 +32,7 @@
 #include "model/Inventory.h"
 #include "model/Misc.h"
 #include "model/Yeast.h"
+#include "PersistentSettings.h"
 
 namespace {
    QString createInventoryHeader() {
@@ -69,8 +70,9 @@ namespace {
                               "</tr>")
                            .arg(fermentable->name())
                            .arg(Brewtarget::displayAmount(fermentable->inventory(),
-                                 "fermentableTable", "inventory_kg",
-                                 &Units::kilograms));
+                                                       PersistentSettings::Sections::fermentableTable,
+                                                       PropertyNames::NamedEntityWithInventory::inventory,
+                                                       &Units::kilograms));
          }
          result += "</table>";
       }
@@ -108,7 +110,9 @@ namespace {
                            .arg(hop->name())
                            .arg(hop->alpha_pct())
                            .arg(Brewtarget::displayAmount(hop->inventory(),
-                                 "hopTable", "inventory_kg", &Units::kilograms));
+                                                       PersistentSettings::Sections::hopTable,
+                                                       PropertyNames::NamedEntityWithInventory::inventory,
+                                                       &Units::kilograms));
          }
          result += "</table>";
       }
@@ -137,7 +141,9 @@ namespace {
 
          for (auto miscellaneous : inventory) {
             const QString displayAmount =
-                  Brewtarget::displayAmount(miscellaneous->inventory(), "miscTable", "amount",
+                  Brewtarget::displayAmount(miscellaneous->inventory(),
+                                         PersistentSettings::Sections::miscTable,
+                                         PropertyNames::NamedEntityWithInventory::inventory,
                         miscellaneous->amountIsWeight() ? (Unit*)&Units::kilograms
                                                       : (Unit*)&Units::liters);
             result += QString("<tr>"
@@ -172,7 +178,9 @@ namespace {
 
          for (auto yeast : inventory) {
             const QString displayAmount =
-                  Brewtarget::displayAmount(yeast->inventory(), "yeastTable", "quanta",
+                  Brewtarget::displayAmount(yeast->inventory(),
+                                         PersistentSettings::Sections::yeastTable,
+                                         PropertyNames::NamedEntityWithInventory::inventory,
                         yeast->amountIsWeight() ? (Unit*)&Units::kilograms
                                                 : (Unit*)&Units::liters);
 

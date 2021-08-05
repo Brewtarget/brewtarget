@@ -34,7 +34,7 @@
 
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
-#define AddPropertyName(property) namespace PropertyNames::Fermentable {static char const * const property = #property; }
+#define AddPropertyName(property) namespace PropertyNames::Fermentable { BtStringConst const property{#property}; }
 AddPropertyName(addAfterBoil)
 AddPropertyName(additionMethod)
 AddPropertyName(additionTime)

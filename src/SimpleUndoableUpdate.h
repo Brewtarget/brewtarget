@@ -18,6 +18,7 @@
  */
 #ifndef SIMPLE_UNDOABLE_UPDATE_H
 #define SIMPLE_UNDOABLE_UPDATE_H
+#pragma once
 
 #include <QMetaProperty>
 #include <QMetaType>
@@ -25,17 +26,17 @@
 #include <QUndoCommand>
 #include <QVariant>
 
+#include "utils/BtStringConst.h"
+
 /*!
  * \class SimpleUndoableUpdate
- * \author Matt Young
  *
  * \brief Each instance of this class is an undoable update to a 'simple' editable field of a recipe, style, etc.
  *        By simple, we mean that there is one of them and that it is non-relational (ie can be passed and set by value).
  *        The thing being updated needs to inherit from Q_OBJECT and the field being changed needs to have been
  *        declared as a Q_PROPERTY.
  */
-class SimpleUndoableUpdate : public QUndoCommand
-{
+class SimpleUndoableUpdate : public QUndoCommand {
 public:
    /*!
     * \param updatee The entity (eg recipe) we are updating
@@ -45,7 +46,7 @@ public:
     * \param parent This is for grouping updates together.  We don't currently use it.
     */
    SimpleUndoableUpdate(QObject & updatee,
-                        char const * const propertyName,
+                        BtStringConst const & propertyName,
                         QVariant newValue,
                         QString const & description,
                         QUndoCommand * parent = nullptr);
@@ -71,7 +72,7 @@ private:
    bool undoOrRedo(bool const isUndo);
 
    QObject & updatee;
-   char const * const propertyName;
+   BtStringConst const propertyName;
    QVariant oldValue, newValue;
 };
 

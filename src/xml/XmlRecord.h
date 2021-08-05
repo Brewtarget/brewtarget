@@ -69,19 +69,17 @@ public:
       Enum,
       RequiredConstant,   // A fixed value we have to write out in the record (used for BeerXML VERSION tag)
       RecordSimple,       // Single contained record
-      RecordComplex       // Zero, one or more contained records
+      RecordComplex,      // Zero, one or more contained records
+      INVALID
    };
 
    /**
     * \brief Map from a string in an XML file to the value of an enum in a Brewtarget class
     *
-    * .:TODO:. In theory we'll need to make this two-way when we extend to support saving XML, but a straight search
-    *          through the whole map is not actually that burdensome
-    *
-    * Could use QMap or QHash here.  Doubt it makes much difference either way for the quantity of data /
-    * number of look-ups we're doing.  (Documentation says QHash is "significantly faster" if you don't need ordering,
-    * but some people say that's only true beyond a certain number of elements stored.  We could benchmark it if we
-    * were anxious about performance here.)
+    * Could use QMap or QHash here.  Doubt it makes much difference either way for the quantity of data / number of
+    * look-ups we're doing.  (Documentation says QHash is "significantly faster" if you don't need ordering, but some
+    * people say that's only true beyond a certain number of elements stored.  We could benchmark it if we were anxious
+    * about performance here.)
     */
    typedef QHash<QString, int> EnumLookupMap;
 
@@ -92,8 +90,8 @@ public:
    struct FieldDefinition {
       FieldType           fieldType;
       XQString            xPath;
-      char const * const  propertyName;   // If fieldType == RecordComplex, then this is used only on export
-                                          // If fieldType == RequiredConstant, then this is actually the constant value
+      BtStringConst const & propertyName;  // If fieldType == RecordComplex, then this is used only on export
+                                           // If fieldType == RequiredConstant, then this is actually the constant value
       EnumLookupMap const * stringToEnum;
    };
 

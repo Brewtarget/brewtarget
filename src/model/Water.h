@@ -30,7 +30,7 @@
 
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
-#define AddPropertyName(property) namespace PropertyNames::Water {static char const * const property = #property; }
+#define AddPropertyName(property) namespace PropertyNames::Water { BtStringConst const property{#property}; }
 AddPropertyName(ph)
 AddPropertyName(amount)
 AddPropertyName(type)

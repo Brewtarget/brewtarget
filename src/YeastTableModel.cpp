@@ -180,8 +180,8 @@ void YeastTableModel::removeAll()
    }
 }
 
-void YeastTableModel::changedInventory(int invKey, char const * const propertyName) {
-   if (QString(propertyName) == PropertyNames::Inventory::amount) {
+void YeastTableModel::changedInventory(int invKey, BtStringConst const & propertyName) {
+   if (propertyName == PropertyNames::Inventory::amount) {
       for( int i = 0; i < yeastObs.size(); ++i ) {
          Yeast* holdmybeer = yeastObs.at(i);
          if ( invKey == holdmybeer->inventoryId() ) {
