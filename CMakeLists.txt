@@ -235,7 +235,10 @@ FIND_PACKAGE(Boost REQUIRED)
 ELSEIF(APPLE)
 FIND_PACKAGE(Boost REQUIRED)
 ELSE()
-FIND_PACKAGE(Boost REQUIRED COMPONENTS stacktrace_backtrace)
+# TBD Some users report problems getting CMake to find libboost_stacktrace_backtrace on Ubuntu and Gentoo, so disable it
+# for now and fallback to the header-only version
+#FIND_PACKAGE(Boost REQUIRED COMPONENTS stacktrace_backtrace)
+FIND_PACKAGE(Boost REQUIRED)
 ENDIF()
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
 # Uncomment the next two lines if you want to find where Boost headers and DLLs are on your system

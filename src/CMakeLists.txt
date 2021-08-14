@@ -419,9 +419,11 @@ find_package(Backtrace REQUIRED)
 # working.  (Should still get stack traces on Mac, but might not get as much info in them as we'd like.)
 IF(NOT APPLE)
    IF(NOT WIN32)
-      add_compile_definitions(BOOST_STACKTRACE_DYN_LINK)
+# TBD Some users report problems getting CMake to find libboost_stacktrace_backtrace on Ubuntu and Gentoo, so disable it
+# for now and fallback to the header-only version
+#      add_compile_definitions(BOOST_STACKTRACE_DYN_LINK)
    ENDIF()
-   add_compile_definitions(BOOST_STACKTRACE_USE_BACKTRACE)
+#   add_compile_definitions(BOOST_STACKTRACE_USE_BACKTRACE)
 ENDIF()
 message("Backtrace libs " ${DL_LIBRARY} " | " ${Backtrace_LIBRARIES} " | " ${Boost_LIBRARIES})
 
