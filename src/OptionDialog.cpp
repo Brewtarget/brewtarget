@@ -569,10 +569,7 @@ void OptionDialog::configure_logging() {
    checkBox_LogFileLocationUseDefault->setChecked(Logging::getLogInConfigDir());
    lineEdit_LogFileLocation->setText(Logging::getDirectory().absolutePath());
    this->setFileLocationState(Logging::getLogInConfigDir());
-
-   // database panel stuff
-   comboBox_engine->addItem(tr("SQLite (default)"), QVariant(Database::SQLITE));
-   comboBox_engine->addItem(tr("PostgreSQL"), QVariant(Database::PGSQL));
+   return;
 }
 
 void OptionDialog::connect_signals() {
