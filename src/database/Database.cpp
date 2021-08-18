@@ -240,7 +240,8 @@ public:
       // Set file names.
       dbFileName = PersistentSettings::getUserDataDir().filePath("database.sqlite");
       dataDbFileName = Brewtarget::getResourceDir().filePath("default_db.sqlite");
-      qDebug() << Q_FUNC_INFO << QString("dbFileName = \"%1\"\nDatabase::loadSQLite() - dataDbFileName=\"%2\"").arg(dbFileName).arg(dataDbFileName);
+      qDebug().noquote() <<
+         Q_FUNC_INFO << "dbFileName = \"" << dbFileName << "\"\ndataDbFileName=\"" << dataDbFileName << "\"";
       // Set the files.
       dbFile.setFileName(dbFileName);
       dataDbFile.setFileName(dataDbFileName);
