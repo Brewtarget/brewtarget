@@ -69,6 +69,7 @@ namespace {
    struct QueryAndParameters {
       QString sql;
       QVector<QVariant> bindValues = {};
+      bool onlyRunIfPriorQueryHadResults = false;
    };
 
    //
@@ -80,20 +81,40 @@ namespace {
    // attach to each query a (usually empty) list of bind parameters, but it's probably not necessary.
    //
    bool executeSqlQueries(QSqlQuery & q, QVector<QueryAndParameters> const & queries) {
-      // If we get an error, we want to stop processing as otherwise you get "false" errors if subsequent queries fail
-      // as a result of assuming that all prior queries have run OK.
+      //
+      // Sometimes whether or not we want to run a query depends on what data is in the database.  Eg, if we're trying
+      // to insert into a table based on the results of a sub-query, we need to handle the case where the sub-query
+      // returns no results.  This can be painful to do in SQL, so it's simpler to do a dummy-run of the sub-query (or
+      // some adapted version of it) first, and then make running the real query dependent on whether the dummy-run
+      // returned any results.
+      //
+      bool priorQueryHadResults = false;
+      QString priorQuerySql = "N/A";
+
       for (auto & query : queries) {
+         if (query.onlyRunIfPriorQueryHadResults && !priorQueryHadResults) {
+            qInfo() <<
+               Q_FUNC_INFO << "Skipping upgrade query \"" << query.sql << "\" as was dependent on prior upgrade "
+               "query (\"" << priorQuerySql << "\") returning results, and it didn't";
+            // We deliberately don't update priorQueryHadResults or priorQuerySql in this case, as it allows more than
+            // one query in a row to be dependent on a single "dummy-run" query
+            continue;
+         }
          qDebug() << Q_FUNC_INFO << query.sql;
          q.prepare(query.sql);
          for (auto & bv : query.bindValues) {
             q.addBindValue(bv);
          }
          if (!q.exec()) {
+            // If we get an error, we want to stop processing as otherwise you get "false" errors if subsequent queries
+            // fail as a result of assuming that all prior queries have run OK.
             qCritical() <<
                Q_FUNC_INFO << "Error executing database upgrade/set-up query " << query.sql << ": " <<
                q.lastError().text();
             return false;
          }
+         priorQueryHadResults = q.next();
+         priorQuerySql = query.sql;
       }
       return true;
    }
@@ -395,7 +416,20 @@ namespace {
                     "WHERE fermentable.id = fermentable_children.child_id "
                     "AND fermentable_in_inventory.fermentable_id = fermentable.id "
                  ")")},
-         {QString("INSERT INTO fermentable_in_inventory (fermentable_id) VALUES ( "
+         // This next is a dummy-run query for the subsequent insert.  We don't want to try to do the insert if this
+         // query has no results as it will barf trying to insert no rows.  (AFAIK there isn't an elegant way around
+         // this in SQL.)
+         {QString("SELECT id FROM fermentable WHERE NOT EXISTS ( "
+                       "SELECT fermentable_children.id "
+                       "FROM fermentable_children "
+                       "WHERE fermentable_children.child_id = fermentable.id "
+                    ") AND NOT EXISTS ( "
+                       "SELECT fermentable_in_inventory.id "
+                       "FROM fermentable_in_inventory "
+                       "WHERE fermentable_in_inventory.fermentable_id = fermentable.id"
+                    ") ")},
+         {
+            QString("INSERT INTO fermentable_in_inventory (fermentable_id) VALUES ( "
                     // Everything has an inventory row now. This will find all the parent items that don't have an inventory row.
                     "SELECT id FROM fermentable WHERE NOT EXISTS ( "
                        "SELECT fermentable_children.id "
@@ -406,7 +440,10 @@ namespace {
                        "FROM fermentable_in_inventory "
                        "WHERE fermentable_in_inventory.fermentable_id = fermentable.id"
                     ") "
-                 ")")},
+                 ")"),
+            {},
+            true // Don't run this query if the previous one had no results
+         },
          // Once we know all parents have inventory rows, we populate inventory_id for them
          {QString("UPDATE fermentable SET inventory_id = ("
                     "SELECT fermentable_in_inventory.id "
