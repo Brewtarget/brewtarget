@@ -80,20 +80,22 @@ namespace {
    // attach to each query a (usually empty) list of bind parameters, but it's probably not necessary.
    //
    bool executeSqlQueries(QSqlQuery & q, QVector<QueryAndParameters> const & queries) {
-      bool ret = true;
+      // If we get an error, we want to stop processing as otherwise you get "false" errors if subsequent queries fail
+      // as a result of assuming that all prior queries have run OK.
       for (auto & query : queries) {
          qDebug() << Q_FUNC_INFO << query.sql;
          q.prepare(query.sql);
          for (auto & bv : query.bindValues) {
             q.addBindValue(bv);
          }
-         ret &= q.exec();
-         if (!ret) {
+         if (!q.exec()) {
             qCritical() <<
-               Q_FUNC_INFO << "Error executing database upgrade/set-up query " << query.sql << ": " << q.lastError().text();
+               Q_FUNC_INFO << "Error executing database upgrade/set-up query " << query.sql << ": " <<
+               q.lastError().text();
+            return false;
          }
       }
-      return ret;
+      return true;
    }
 
    // This is when we first defined the settings table, and defined the version as a string.
