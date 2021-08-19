@@ -434,6 +434,9 @@ m_hasDescendants    {false                     } {
    // Hops, Fermentables etc as some attributes of the recipe (eg how much and when to add) are stored inside these
    // ingredients.
    //
+   // We _don't_ want to copy BrewNotes (an instance of brewing the Recipe).  (This is easy not to do as we don't
+   // currently store BrewNote IDs in Recipe.)
+   //
    this->pimpl->copyList<Fermentable>(*this, other);
    this->pimpl->copyList<Hop> (*this, other);
    this->pimpl->copyList<Instruction>(*this, other);
@@ -441,8 +444,6 @@ m_hasDescendants    {false                     } {
    this->pimpl->copyList<Salt> (*this, other);
    this->pimpl->copyList<Water> (*this, other);
    this->pimpl->copyList<Yeast> (*this, other);
-
-   // .:TBD:. What about BrewNotes?  We don't currently store their IDs in Recipe
 
    //
    // You might think that Style, Mash and Equipment could safely be shared between Recipes.   However, AFAICT, none of
@@ -2732,15 +2733,6 @@ QList<BrewNote *> RecipeHelper::brewNotesForRecipeAndAncestors(Recipe const & re
 }
 
 void RecipeHelper::prepareForPropertyChange(NamedEntity & ne, BtStringConst const & propertyName) {
-   //
-   // .:TBD:. MY 2021-07-23  This is largely working, in that, with automatic versioning enabled, every time you make a
-   // change to something (a Recipe's own field or a field on an ingredient, the Mash, etc) it generates a new version
-   // of the Recipe.  However, I wonder it's really what we want.  If every single property change generates a new
-   // version of the Recipe then you could end up with a lot of Recipe versions.  If we moved the automatic versioning
-   // logic from the model to the UI then it could be a bit smarter -- eg if the user changes two properties on a
-   // Fermentable in one edit then, when they click Save, it could generate one new version of the Recipe rather than
-   // two.
-   //
 
    //
    // If the user has said they don't want versioning, just return
@@ -2752,10 +2744,22 @@ void RecipeHelper::prepareForPropertyChange(NamedEntity & ne, BtStringConst cons
    qDebug() <<
       Q_FUNC_INFO << "Modifying: " << ne.metaObject()->className() << "#" << ne.key() << "property" << propertyName;
 
-   // If the object we're about to change a property on is a Recipe or is used in a Recipe, then that Recipe probably
-   // needs a new version -- unless it's already being versioned.
+   //
+   // If the object we're about to change a property on is a Recipe or is used in a Recipe, then it might need a new
+   // version -- unless it's already being versioned.
+   //
    Recipe * owner = ne.getOwningRecipe();
    if (!owner || owner->isBeingModified()) {
+      // Change is not related to a recipe or the recipe is already being modified
+      return;
+   }
+
+   //
+   // Automatic versioning means that, once a recipe is brewed, it is "soft locked" and the first change should spawn a
+   // new version.  Any subsequent change should not spawn a new version until it is brewed again.
+   //
+   if (owner->brewNotes().empty()) {
+      // Recipe hasn't been brewed
       return;
    }
 
@@ -2787,6 +2791,10 @@ void RecipeHelper::prepareForPropertyChange(NamedEntity & ne, BtStringConst cons
    ObjectStoreWrapper::insert(spawn);
 
    qDebug() << Q_FUNC_INFO << "Copied Recipe #" << owner->key() << "to new Recipe #" << spawn->key();
+
+   // We assert that the newly created version of the recipe has not yet been brewed (and therefore will not get
+   // automatically versioned on subsequent changes before it is brewed).
+   Q_ASSERT(spawn->brewNotes().empty());
 
    //
    // By default, copying a Recipe does not copy all its ancestry.  Here, we want the copy to become our ancestor (ie

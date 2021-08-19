@@ -202,20 +202,18 @@ QModelIndex BtTreeModel::index(int row, int column, const QModelIndex & parent) 
    }
 }
 
-QModelIndex BtTreeModel::parent(const QModelIndex & index) const {
-   BtTreeItem * pItem, *cItem;
-
+QModelIndex BtTreeModel::parent(QModelIndex const & index) const {
    if (!index.isValid()) {
       return QModelIndex();
    }
 
-   cItem = item(index);
+   BtTreeItem * cItem = item(index);
 
    if (cItem == nullptr) {
       return QModelIndex();
    }
 
-   pItem = cItem->parent();
+   BtTreeItem * pItem = cItem->parent();
 
    if (pItem == rootItem || pItem == nullptr) {
       return QModelIndex();
@@ -679,7 +677,7 @@ void BtTreeModel::addBrewNoteSubTree(Recipe * rec, int i, BtTreeItem * parent, b
    }
 }
 
-Recipe * BtTreeModel::recipe(const QModelIndex & index) const {
+Recipe * BtTreeModel::recipe(QModelIndex const & index) const {
    return index.isValid() ? item(index)->recipe() : nullptr;
 }
 
@@ -1637,15 +1635,25 @@ void BtTreeModel::orphanRecipe(QModelIndex ndx) {
 }
 
 void BtTreeModel::spawnRecipe(QModelIndex ndx) {
-   Recipe * ancestor = recipe(ndx);
+   Q_ASSERT(ndx.isValid());
+   Recipe * ancestor = this->recipe(ndx);
+   Q_ASSERT(ancestor);
    std::shared_ptr<Recipe> descendant = std::make_shared<Recipe>(*ancestor);
    // We want to store the new Recipe first so that it gets an ID...
    ObjectStoreWrapper::insert<Recipe>(descendant);
    // ...then we can connect it to the one it was copied from
    descendant->setAncestor(*ancestor);
-   qDebug() << Q_FUNC_INFO << "Created descendant Recipe" << descendant->key() << "of Recipe" << ancestor->key();
+   qDebug() <<
+      Q_FUNC_INFO << "Created descendant Recipe" << descendant->key() << "of Recipe" << ancestor->key() <<
+      "(at position" << ndx.row() << ")";
 
+   //
    // First, we remove the ancestor from the tree
+   //
+   // NB: Inserting the descendant in the database will have generated a signal resulting in a call to
+   // BtTreeModel::elementAddedRecipe(), so we can't assume that ndx is still valid, hence the reassignement here.
+   //
+   ndx = this->findElement(ancestor);
    if (!removeRows(ndx.row(), 1, this->parent(ndx))) {
       qCritical() << Q_FUNC_INFO << "Could not find Recipe" << ancestor->key() << "in display tree";
    }

@@ -155,7 +155,7 @@ QVariant BtTreeItem::data(int _type, int column) {
 }
 
 int BtTreeItem::childNumber() const {
-   if (parentItem) {
+   if (this->parentItem) {
       return parentItem->childItems.indexOf(const_cast<BtTreeItem *>(this));
    }
    return 0;
