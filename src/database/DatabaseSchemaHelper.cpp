@@ -48,24 +48,6 @@ int const DatabaseSchemaHelper::dbVersion = 10;
 namespace {
    char const * const FOLDER_FOR_SUPPLIED_RECIPES = "brewtarget";
 
-   //! \brief converts sqlite values (mostly booleans) into something postgres wants
-/*   QVariant convertValue(Database::DbType newType, QSqlField field) {
-      QVariant retVar = field.value();
-      if ( field.type() == QVariant::Bool ) {
-         switch(newType) {
-            case Database::PGSQL:
-               retVar = field.value().toBool();
-               break;
-            default:
-               retVar = field.value().toInt();
-               break;
-         }
-      } else if ( field.name() == PropertyNames::BrewNote::fermentDate && field.value().toString() == "CURRENT_DATETIME" ) {
-         retVar = "'now()'";
-      }
-      return retVar;
-   }*/
-
    struct QueryAndParameters {
       QString sql;
       QVector<QVariant> bindValues = {};
@@ -101,11 +83,31 @@ namespace {
             continue;
          }
          qDebug() << Q_FUNC_INFO << query.sql;
-         q.prepare(query.sql);
-         for (auto & bv : query.bindValues) {
-            q.addBindValue(bv);
+         //
+         // It's not clear from the Qt documentation, but it turns out that, if you call QSqlQuery::prepare() on a SQL
+         // statement that doesn't have any placeholders for binding values, then you get  a syntax error when you're
+         // using PostgreSQL; you have to call exec() directly on the SQL.
+         //
+         // At one level, this is "correct" because a query without bind value placeholders is not a prepared statement
+         // (https://en.wikipedia.org/wiki/Prepared_statement) and so doesn't need preparing.  (Qt is just reporting the
+         // error it gets back from PostgreSQL when it asks it to prepare the statement.)
+         //
+         // On the other hand, it's annoying because we have to have tedious special-case handling in code such as this.
+         // Unfortunately, per discussion in https://bugreports.qt.io/browse/QTBUG-48471, this is unlikely to change.
+         //
+         // .:TBD:. Feels almost worth writing our own wrapper around QSqlQuery...
+         //
+         bool result;
+         if (query.bindValues.empty()) {
+            result = q.exec(query.sql);
+         } else {
+            q.prepare(query.sql);
+            for (auto & bv : query.bindValues) {
+               q.addBindValue(bv);
+            }
+            result = q.exec();
          }
-         if (!q.exec()) {
+         if (!result) {
             // If we get an error, we want to stop processing as otherwise you get "false" errors if subsequent queries
             // fail as a result of assuming that all prior queries have run OK.
             qCritical() <<
@@ -138,7 +140,7 @@ namespace {
       // Add the settings table
       queryString = "CREATE TABLE settings ";
       queryStringAsStream << "(\n"
-         "id " << db.getDbNativeTypeName<int>() << " " << db.getDbNativeIntPrimaryKeyModifier() << ",\n"
+         "id " << db.getDbNativePrimaryKeyDeclaration() << ",\n"
          "repopulatechildrenonnextstart " << db.getDbNativeTypeName<int>() << " DEFAULT 0,\n"
          "version " << db.getDbNativeTypeName<int>() << " DEFAULT 0);";
       qDebug() << Q_FUNC_INFO << queryString;
@@ -171,65 +173,65 @@ namespace {
          {QString("UPDATE repopulatechildrenonnextstart integer=1")},
          // Drop and re-create children tables with new UNIQUE requirement
          {QString("DROP TABLE   equipment_children")},
-         {QString("CREATE TABLE equipment_children (id %1 %2, "
+         {QString("CREATE TABLE equipment_children (id %2, "
                                                   "child_id %1, "
                                                   "parent_id %1, "
                                                   "FOREIGN KEY(child_id) REFERENCES equipment(id), "
-                                                  "FOREIGN KEY(parent_id) REFERENCES equipment(id));").arg(db.getDbNativeTypeName<int>(), db.getDbNativeIntPrimaryKeyModifier())},
+                                                  "FOREIGN KEY(parent_id) REFERENCES equipment(id));").arg(db.getDbNativeTypeName<int>(), db.getDbNativePrimaryKeyDeclaration())},
          {QString("DROP TABLE   fermentable_children")},
-         {QString("CREATE TABLE fermentable_children (id %1 %2, "
+         {QString("CREATE TABLE fermentable_children (id %2, "
                                                     "child_id %1, "
                                                     "parent_id %1, "
                                                     "FOREIGN KEY(child_id) REFERENCES fermentable(id), "
-                                                    "FOREIGN KEY(parent_id) REFERENCES fermentable(id));").arg(db.getDbNativeTypeName<int>(), db.getDbNativeIntPrimaryKeyModifier())},
+                                                    "FOREIGN KEY(parent_id) REFERENCES fermentable(id));").arg(db.getDbNativeTypeName<int>(), db.getDbNativePrimaryKeyDeclaration())},
          {QString("DROP TABLE   hop_children")},
-         {QString("CREATE TABLE hop_children (id %1 %2, "
+         {QString("CREATE TABLE hop_children (id %2, "
                                             "child_id %1, "
                                             "parent_id %1, "
                                             "FOREIGN KEY(child_id) REFERENCES hop(id), "
-                                            "FOREIGN KEY(parent_id) REFERENCES hop(id));").arg(db.getDbNativeTypeName<int>(), db.getDbNativeIntPrimaryKeyModifier())},
+                                            "FOREIGN KEY(parent_id) REFERENCES hop(id));").arg(db.getDbNativeTypeName<int>(), db.getDbNativePrimaryKeyDeclaration())},
          {QString("DROP TABLE   misc_children")},
-         {QString("CREATE TABLE misc_children (id %1 %2, "
+         {QString("CREATE TABLE misc_children (id %2, "
                                              "child_id %1, "
                                              "parent_id %1, "
                                              "FOREIGN KEY(child_id) REFERENCES misc(id), "
-                                             "FOREIGN KEY(parent_id) REFERENCES misc(id));").arg(db.getDbNativeTypeName<int>(), db.getDbNativeIntPrimaryKeyModifier())},
+                                             "FOREIGN KEY(parent_id) REFERENCES misc(id));").arg(db.getDbNativeTypeName<int>(), db.getDbNativePrimaryKeyDeclaration())},
          {QString("DROP TABLE   recipe_children")},
-         {QString("CREATE TABLE recipe_children (id %1 %2, "
+         {QString("CREATE TABLE recipe_children (id %2, "
                                                "child_id %1, "
                                                "parent_id %1, "
                                                "FOREIGN KEY(child_id) REFERENCES recipe(id), "
-                                               "FOREIGN KEY(parent_id) REFERENCES recipe(id));").arg(db.getDbNativeTypeName<int>(), db.getDbNativeIntPrimaryKeyModifier())},
+                                               "FOREIGN KEY(parent_id) REFERENCES recipe(id));").arg(db.getDbNativeTypeName<int>(), db.getDbNativePrimaryKeyDeclaration())},
          {QString("DROP TABLE   style_children")},
-         {QString("CREATE TABLE style_children (id %1 %2, "
+         {QString("CREATE TABLE style_children (id %2, "
                                               "child_id %1, "
                                               "parent_id %1, "
                                               "FOREIGN KEY(child_id) REFERENCES style(id), "
-                                              "FOREIGN KEY(parent_id) REFERENCES style(id));").arg(db.getDbNativeTypeName<int>(), db.getDbNativeIntPrimaryKeyModifier())},
+                                              "FOREIGN KEY(parent_id) REFERENCES style(id));").arg(db.getDbNativeTypeName<int>(), db.getDbNativePrimaryKeyDeclaration())},
          {QString("DROP TABLE   water_children")},
-         {QString("CREATE TABLE water_children (id %1 %2, "
+         {QString("CREATE TABLE water_children (id %2, "
                                               "child_id %1, "
                                               "parent_id %1, "
                                               "FOREIGN KEY(child_id) REFERENCES water(id), "
-                                              "FOREIGN KEY(parent_id) REFERENCES water(id));").arg(db.getDbNativeTypeName<int>(), db.getDbNativeIntPrimaryKeyModifier())},
+                                              "FOREIGN KEY(parent_id) REFERENCES water(id));").arg(db.getDbNativeTypeName<int>(), db.getDbNativePrimaryKeyDeclaration())},
          {QString("DROP TABLE   yeast_children")},
-         {QString("CREATE TABLE yeast_children (id %1 %2, "
+         {QString("CREATE TABLE yeast_children (id %2, "
                                               "child_id %1, "
                                               "parent_id %1, "
                                               "FOREIGN KEY(child_id) REFERENCES yeast(id), "
-                                              "FOREIGN KEY(parent_id) REFERENCES yeast(id));").arg(db.getDbNativeTypeName<int>(), db.getDbNativeIntPrimaryKeyModifier())},
+                                              "FOREIGN KEY(parent_id) REFERENCES yeast(id));").arg(db.getDbNativeTypeName<int>(), db.getDbNativePrimaryKeyDeclaration())},
          {QString("DROP TABLE   fermentable_in_inventory")},
-         {QString("CREATE TABLE fermentable_in_inventory (id %1 %2, "
-                                                        "amount %3 DEFAULT 0);").arg(db.getDbNativeTypeName<int>(), db.getDbNativeIntPrimaryKeyModifier(), db.getDbNativeTypeName<double>())},
+         {QString("CREATE TABLE fermentable_in_inventory (id %2, "
+                                                        "amount %3 DEFAULT 0);").arg(db.getDbNativeTypeName<int>(), db.getDbNativePrimaryKeyDeclaration(), db.getDbNativeTypeName<double>())},
          {QString("DROP TABLE   hop_in_inventory")},
-         {QString("CREATE TABLE hop_in_inventory (id %1 %2, "
-                                                "amount %3 DEFAULT 0);").arg(db.getDbNativeTypeName<int>(), db.getDbNativeIntPrimaryKeyModifier(), db.getDbNativeTypeName<double>())},
+         {QString("CREATE TABLE hop_in_inventory (id %2, "
+                                                "amount %3 DEFAULT 0);").arg(db.getDbNativeTypeName<int>(), db.getDbNativePrimaryKeyDeclaration(), db.getDbNativeTypeName<double>())},
          {QString("DROP TABLE   misc_in_inventory")},
-         {QString("CREATE TABLE misc_in_inventory (id %1 %2, "
-                                                 "amount %3 DEFAULT 0);").arg(db.getDbNativeTypeName<int>(), db.getDbNativeIntPrimaryKeyModifier(), db.getDbNativeTypeName<double>())},
+         {QString("CREATE TABLE misc_in_inventory (id %2, "
+                                                 "amount %3 DEFAULT 0);").arg(db.getDbNativeTypeName<int>(), db.getDbNativePrimaryKeyDeclaration(), db.getDbNativeTypeName<double>())},
          {QString("DROP TABLE   yeast_in_inventory")},
-         {QString("CREATE TABLE yeast_in_inventory (id %1 %2, "
-                                                  "quanta %3 DEFAULT 0);").arg(db.getDbNativeTypeName<int>(), db.getDbNativeIntPrimaryKeyModifier(), db.getDbNativeTypeName<double>())},
+         {QString("CREATE TABLE yeast_in_inventory (id %2, "
+                                                  "quanta %3 DEFAULT 0);").arg(db.getDbNativeTypeName<int>(), db.getDbNativePrimaryKeyDeclaration(), db.getDbNativeTypeName<double>())},
          {QString("UPDATE settings VALUES(1,2)")}
       };
       return executeSqlQueries(q, migrationQueries);
@@ -240,9 +242,9 @@ namespace {
          // Save old settings
          {QString("ALTER TABLE settings RENAME TO oldsettings")},
          // Create new table with integer version.
-         {QString("CREATE TABLE settings (id %1 %2, "
+         {QString("CREATE TABLE settings (id %2, "
                                         "repopulatechildrenonnextstart %1 DEFAULT 0, "
-                                        "version %1 DEFAULT 0);").arg(db.getDbNativeTypeName<int>()).arg(db.getDbNativeIntPrimaryKeyModifier())},
+                                        "version %1 DEFAULT 0);").arg(db.getDbNativeTypeName<int>()).arg(db.getDbNativePrimaryKeyDeclaration())},
          // Update version to 4, saving other settings
          {QString("INSERT INTO settings (id, version, repopulatechildrenonnextstart) SELECT 1, 4, repopulatechildrenonnextstart FROM oldsettings")},
          // Cleanup
@@ -287,14 +289,14 @@ namespace {
       QTextStream createTmpBrewnoteSqlStream(&createTmpBrewnoteSql);
       createTmpBrewnoteSqlStream <<
          "CREATE TABLE tmpbrewnote ("
-            "id                      " << db.getDbNativeTypeName<int>()     << " " << db.getDbNativeIntPrimaryKeyModifier() << ", "
+            "id                      " << db.getDbNativePrimaryKeyDeclaration() << ", "
             "abv                     " << db.getDbNativeTypeName<double>()  << " DEFAULT 0, "
             "attenuation             " << db.getDbNativeTypeName<double>()  << " DEFAULT 1, "
             "boil_off                " << db.getDbNativeTypeName<double>()  << " DEFAULT 1, "
             "brewdate                " << db.getDbNativeTypeName<QDate>()   << " DEFAULT CURRENT_TIMESTAMP, "
             "brewhouse_eff           " << db.getDbNativeTypeName<double>()  << " DEFAULT 70, "
-            "deleted                 " << db.getDbNativeTypeName<bool>()    << " DEFAULT 0, "
-            "display                 " << db.getDbNativeTypeName<bool>()    << " DEFAULT 1, "
+            "deleted                 " << db.getDbNativeTypeName<bool>()    << " DEFAULT ?, "
+            "display                 " << db.getDbNativeTypeName<bool>()    << " DEFAULT ?, "
             "eff_into_bk             " << db.getDbNativeTypeName<double>()  << " DEFAULT 70, "
             "fermentdate             " << db.getDbNativeTypeName<QDate>()   << " DEFAULT CURRENT_TIMESTAMP, "
             "fg                      " << db.getDbNativeTypeName<double>()  << " DEFAULT 1, "
@@ -328,7 +330,11 @@ namespace {
          //
          // Drop columns predicted_og and predicted_abv. They are used nowhere I can find and they are breaking things.
          //
-         {createTmpBrewnoteSql},
+         {
+            createTmpBrewnoteSql,
+            {QVariant{false}, // deleted
+             QVariant{true}}  // display
+         },
          {QString("INSERT INTO tmpbrewnote ("
                     "id, "
                     "abv, "
@@ -584,28 +590,28 @@ namespace {
          //
          // Dropping inventory columns - fermentable
          //
-         {QString("CREATE TABLE tmpfermentable_in_inventory (id %1 %2, amount %3 DEFAULT 0);").arg(db.getDbNativeTypeName<int>(), db.getDbNativeIntPrimaryKeyModifier(), db.getDbNativeTypeName<double>())},
+         {QString("CREATE TABLE tmpfermentable_in_inventory (id %1, amount %2 DEFAULT 0);").arg(db.getDbNativePrimaryKeyDeclaration(), db.getDbNativeTypeName<double>())},
          {QString("INSERT INTO tmpfermentable_in_inventory (id, amount) SELECT id, amount FROM fermentable_in_inventory")},
          {QString("DROP TABLE fermentable_in_inventory")},
          {QString("ALTER TABLE tmpfermentable_in_inventory RENAME TO fermentable_in_inventory")},
          //
          // Dropping inventory columns - hop
          //
-         {QString("CREATE TABLE tmphop_in_inventory (id %1 %2, amount %3 DEFAULT 0);").arg(db.getDbNativeTypeName<int>(), db.getDbNativeIntPrimaryKeyModifier(), db.getDbNativeTypeName<double>())},
+         {QString("CREATE TABLE tmphop_in_inventory (id %1, amount %2 DEFAULT 0);").arg(db.getDbNativePrimaryKeyDeclaration(), db.getDbNativeTypeName<double>())},
          {QString("INSERT INTO tmphop_in_inventory (id, amount) SELECT id, amount FROM hop_in_inventory")},
          {QString("DROP TABLE hop_in_inventory")},
          {QString("ALTER TABLE tmphop_in_inventory RENAME TO hop_in_inventory")},
          //
          // Dropping inventory columns - misc
          //
-         {QString("CREATE TABLE tmpmisc_in_inventory (id %1 %2, amount %3 DEFAULT 0);").arg(db.getDbNativeTypeName<int>(), db.getDbNativeIntPrimaryKeyModifier(), db.getDbNativeTypeName<double>())},
+         {QString("CREATE TABLE tmpmisc_in_inventory (id %1, amount %2 DEFAULT 0);").arg(db.getDbNativePrimaryKeyDeclaration(), db.getDbNativeTypeName<double>())},
          {QString("INSERT INTO tmpmisc_in_inventory (id, amount) SELECT id, amount FROM misc_in_inventory")},
          {QString("DROP TABLE misc_in_inventory")},
          {QString("ALTER TABLE tmpmisc_in_inventory RENAME TO misc_in_inventory")},
          //
          // Dropping inventory columns - yeast
          //
-         {QString("CREATE TABLE tmpyeast_in_inventory (id %1 %2, amount %3 DEFAULT 0);").arg(db.getDbNativeTypeName<int>(), db.getDbNativeIntPrimaryKeyModifier(), db.getDbNativeTypeName<double>())},
+         {QString("CREATE TABLE tmpyeast_in_inventory (id %1, amount %2 DEFAULT 0);").arg(db.getDbNativePrimaryKeyDeclaration(), db.getDbNativeTypeName<double>())},
          {QString("INSERT INTO tmpyeast_in_inventory (id, amount) SELECT id, amount FROM yeast_in_inventory")},
          {QString("DROP TABLE yeast_in_inventory")},
          {QString("ALTER TABLE tmpyeast_in_inventory RENAME TO yeast_in_inventory")},
@@ -624,14 +630,14 @@ namespace {
       QTextStream createSaltSqlStream(&createSaltSql);
       createSaltSqlStream <<
          "CREATE TABLE salt ( "
-            "id               " << db.getDbNativeTypeName<int>()     << " " << db.getDbNativeIntPrimaryKeyModifier() << ", "
+            "id               " << db.getDbNativePrimaryKeyDeclaration() << ", "
             "addTo            " << db.getDbNativeTypeName<int>()     << "          DEFAULT 0, "
             "amount           " << db.getDbNativeTypeName<double>()  << "          DEFAULT 0, "
-            "amount_is_weight " << db.getDbNativeTypeName<bool>()    << "          DEFAULT 1, "
-            "deleted          " << db.getDbNativeTypeName<bool>()    << "          DEFAULT 0, "
-            "display          " << db.getDbNativeTypeName<bool>()    << "          DEFAULT 1, "
+            "amount_is_weight " << db.getDbNativeTypeName<bool>()    << "          DEFAULT ?, "
+            "deleted          " << db.getDbNativeTypeName<bool>()    << "          DEFAULT ?, "
+            "display          " << db.getDbNativeTypeName<bool>()    << "          DEFAULT ?, "
             "folder           " << db.getDbNativeTypeName<QString>() << "          DEFAULT '', "
-            "is_acid          " << db.getDbNativeTypeName<bool>()    << "          DEFAULT 0, "
+            "is_acid          " << db.getDbNativeTypeName<bool>()    << "          DEFAULT ?, "
             "name             " << db.getDbNativeTypeName<QString>() << " not null DEFAULT '', "
             "percent_acid     " << db.getDbNativeTypeName<double>()  << "          DEFAULT 0, "
             "stype            " << db.getDbNativeTypeName<int>()     << "          DEFAULT 0, "
@@ -639,19 +645,25 @@ namespace {
             "FOREIGN KEY(misc_id) REFERENCES misc(id)"
          ");";
       QVector<QueryAndParameters> const migrationQueries{
-         {QString("ALTER TABLE water ADD COLUMN wtype      %1 DEFAULT    0").arg(db.getDbNativeTypeName<int>())},
-         {QString("ALTER TABLE water ADD COLUMN alkalinity %1 DEFAULT    0").arg(db.getDbNativeTypeName<double>())},
-         {QString("ALTER TABLE water ADD COLUMN as_hco3    %1 DEFAULT true").arg(db.getDbNativeTypeName<bool>())},
-         {QString("ALTER TABLE water ADD COLUMN sparge_ro  %1 DEFAULT    0").arg(db.getDbNativeTypeName<double>())},
-         {QString("ALTER TABLE water ADD COLUMN mash_ro    %1 DEFAULT    0").arg(db.getDbNativeTypeName<double>())},
-         {createSaltSql},
+         {QString("ALTER TABLE water ADD COLUMN wtype      %1 DEFAULT 0").arg(db.getDbNativeTypeName<int>())},
+         {QString("ALTER TABLE water ADD COLUMN alkalinity %1 DEFAULT 0").arg(db.getDbNativeTypeName<double>())},
+         {QString("ALTER TABLE water ADD COLUMN as_hco3    %1 DEFAULT ?").arg(db.getDbNativeTypeName<bool>()), {QVariant{true}}},
+         {QString("ALTER TABLE water ADD COLUMN sparge_ro  %1 DEFAULT 0").arg(db.getDbNativeTypeName<double>())},
+         {QString("ALTER TABLE water ADD COLUMN mash_ro    %1 DEFAULT 0").arg(db.getDbNativeTypeName<double>())},
+         {
+            createSaltSql,
+            {QVariant{true},  // amount_is_weight
+             QVariant{false}, // deleted
+             QVariant{true},  // display
+             QVariant{false}} // is_acid
+         },
          {QString("CREATE TABLE salt_in_recipe ( "
-                    "id        %1 %2, "
+                    "id        %2, "
                     "recipe_id %1, "
                     "salt_id   %1, "
                     "FOREIGN KEY(recipe_id) REFERENCES recipe(id), "
                     "FOREIGN KEY(salt_id)   REFERENCES salt(id)"
-                 ");").arg(db.getDbNativeTypeName<int>(), db.getDbNativeIntPrimaryKeyModifier())}
+                 ");").arg(db.getDbNativeTypeName<int>(), db.getDbNativePrimaryKeyDeclaration())}
       };
       return executeSqlQueries(q, migrationQueries);
    }
@@ -757,7 +769,7 @@ bool DatabaseSchemaHelper::create(Database & database, QSqlDatabase connection) 
 
    // Create the settings table manually, since it's only used in this file
    QVector<QueryAndParameters> const setUpQueries{
-      {QString("CREATE TABLE settings (id %1 %2, repopulatechildrenonnextstart %1, version %1)").arg(database.getDbNativeTypeName<int>(), database.getDbNativeIntPrimaryKeyModifier())},
+      {QString("CREATE TABLE settings (id %2, repopulatechildrenonnextstart %1, version %1)").arg(database.getDbNativeTypeName<int>(), database.getDbNativePrimaryKeyDeclaration())},
       {QString("INSERT INTO settings (repopulatechildrenonnextstart, version) VALUES (?, ?)"), {QVariant(true), QVariant(dbVersion)}}
 
    };

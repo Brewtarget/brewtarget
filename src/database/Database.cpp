@@ -102,9 +102,9 @@ namespace {
    // Note that, per https://www.sqlite.org/autoinc.html, SQLite explicitly recommends against using AUTOINCREMENT for
    // integer primary keys, as specifying "PRIMARY KEY" alone will result in automatic generation of primary keys with
    // less overhead.
-   DbNativeVariants const nativeIntPrimaryKeyModifier {
-      "PRIMARY KEY",        // SQLite
-      "SERIAL PRIMARY KEY"  // PostgreSQL
+   DbNativeVariants const nativeIntPrimaryKeyDeclaration {
+      "INTEGER PRIMARY KEY", // SQLite
+      "SERIAL PRIMARY KEY"   // PostgreSQL
    };
 
    DbNativeVariants const sqlToAddColumnAsForeignKey {
@@ -957,46 +957,25 @@ void Database::setForeignKeysEnabled(bool enabled, QSqlDatabase connection, Data
    return;
 }
 
-
-QString Database::dbBoolean(bool flag, Database::DbType type) {
-   QString retval;
-
-   if (type == Database::NODB) {
-      type = static_cast<Database::DbType>(PersistentSettings::value(PersistentSettings::Names::dbType, Database::SQLITE).toInt());
-   }
-
-   switch( type ) {
-      case SQLITE:
-         retval = flag ? QString("1") : QString("0");
-         break;
-      case PGSQL:
-         retval = flag ? QString("true") : QString("false");
-         break;
-      default:
-         retval = "notwhiskeytangofoxtrot";
-   }
-   return retval;
-}
-
-template<typename T> char const * Database::getDbNativeTypeName(Database::DbType type) const {
+template<typename T> char const * Database::getDbNativeTypeName() const {
    return getDbNativeName(nativeTypeNames<T>, this->pimpl->dbType);
 }
 //
 // Instantiate the above template function for the types that are going to use it
 // (This is all just a trick to allow the template definition to be here in the .cpp file and not in the header.)
 //
-template char const * Database::getDbNativeTypeName<bool>(Database::DbType type) const;
-template char const * Database::getDbNativeTypeName<int>(Database::DbType type) const;
-template char const * Database::getDbNativeTypeName<unsigned int>(Database::DbType type) const;
-template char const * Database::getDbNativeTypeName<double>(Database::DbType type) const;
-template char const * Database::getDbNativeTypeName<QString>(Database::DbType type) const;
-template char const * Database::getDbNativeTypeName<QDate>(Database::DbType type) const;
+template char const * Database::getDbNativeTypeName<bool>() const;
+template char const * Database::getDbNativeTypeName<int>() const;
+template char const * Database::getDbNativeTypeName<unsigned int>() const;
+template char const * Database::getDbNativeTypeName<double>() const;
+template char const * Database::getDbNativeTypeName<QString>() const;
+template char const * Database::getDbNativeTypeName<QDate>() const;
 
-char const * Database::getDbNativeIntPrimaryKeyModifier(Database::DbType type) const {
-   return getDbNativeName(nativeIntPrimaryKeyModifier, this->pimpl->dbType);
+char const * Database::getDbNativePrimaryKeyDeclaration() const {
+   return getDbNativeName(nativeIntPrimaryKeyDeclaration, this->pimpl->dbType);
 }
 
-char const * Database::getSqlToAddColumnAsForeignKey(Database::DbType type) const {
+char const * Database::getSqlToAddColumnAsForeignKey() const {
    return getDbNativeName(sqlToAddColumnAsForeignKey, this->pimpl->dbType);
 }
 

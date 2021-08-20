@@ -31,7 +31,6 @@
 
 #include "brewtarget.h"
 #include "config.h" // For VERSIONSTRING
-#include "database/Database.h"
 #include "model/BrewNote.h"
 #include "model/Equipment.h"
 #include "model/Fermentable.h"

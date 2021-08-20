@@ -102,14 +102,23 @@ namespace {
             queryStringAsStream << ", \n";
          }
 
-         queryStringAsStream <<
-            fieldDefn.columnName << " " << getDatabaseNativeTypeName(database, fieldDefn.fieldType);
+         queryStringAsStream << fieldDefn.columnName;
 
          if (!firstFieldOutput) {
-            // If it's the first column then it's the primary key and we are going to need to add PRIMARY KEY or some such
-            // at the end.  The Database class knows exactly what text is needed for each type of database.
+            //
+            // If it's the first column then it's the primary key and we are going to need to add INTEGER PRIMARY KEY
+            // (for SQLite) or SERIAL PRIMARY KEY (for PostgreSQL) or some such at the end.  The Database class knows
+            // exactly what text is needed for each type of database.
+            //
+            // NOTE because PostgreSQL needs SERIAL instead of INTEGER for an integer primary key, we (a) ignore
+            // fieldDefn.fieldType and (b) do not support non-integer primary keys.  This _could_ be fixed by making
+            // Database::getDbNativePrimaryKeyDeclaration() take fieldType as a parameter, but this is a future exercise
+            // to consider if we ever reach the point of needing non-integer primary keys.
+            //
             firstFieldOutput = true;
-            queryStringAsStream << " " << database.getDbNativeIntPrimaryKeyModifier();
+            queryStringAsStream << " " << database.getDbNativePrimaryKeyDeclaration();
+         } else {
+            queryStringAsStream << " " << getDatabaseNativeTypeName(database, fieldDefn.fieldType);
          }
       }
       queryStringAsStream << "\n);";

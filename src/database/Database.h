@@ -139,14 +139,6 @@ public:
     */
    Database::DbType dbType();
 
-   /*!
-    * \brief Different databases use different values for true and false.
-    * This method handles that difference, in a marginally extensible way
-    *
-    * .:TODO:. Pretty sure we can kill this once we retire TableSchema.cpp
-    */
-   static QString dbBoolean(bool flag, Database::DbType whichDb = Database::NODB);
-
    /**
     * \brief Turn foreign key constraints on or off.  Typically, turning them off is only required during copying the
     *        contents of one DB to another.
@@ -164,20 +156,16 @@ public:
     *           double
     *           QString
     *           QDate
-    *
-    * \param whichDb Only needs to be specified if you want something other than the current DB
     */
-   template<typename T> char const * getDbNativeTypeName(Database::DbType whichDb = Database::NODB) const;
+   template<typename T> char const * getDbNativeTypeName() const;
 
    /**
     * \brief Returns the text we need to use to specify an integer column as primary key when creating a table, eg:
-    *           "PRIMARY KEY" for SQLite
+    *           "INTEGER PRIMARY KEY" for SQLite
     *           "SERIAL PRIMARY KEY" for PostgreSQL
     *           "AUTO_INCREMENT PRIMARY KEY" for MySQL / MariaDB
-    *
-    * \param whichDb Only needs to be specified if you want something other than the current DB
     */
-   char const * getDbNativeIntPrimaryKeyModifier(Database::DbType whichDb = Database::NODB) const;
+   char const * getDbNativePrimaryKeyDeclaration() const;
 
    /**
     * \brief Returns a text template for an ALTER TABLE query to add a foreign key column to a table.  Callers should
@@ -186,10 +174,8 @@ public:
     *           • column name (to add) as argument 2
     *           • foreign key table name as argument 3
     *           • foreign key column name as argument 4
-    *
-    * \param whichDb Only needs to be specified if you want something other than the current DB
     */
-   char const * getSqlToAddColumnAsForeignKey(Database::DbType whichDb = Database::NODB) const;
+   char const * getSqlToAddColumnAsForeignKey() const;
 
    /*! Stores the date that we last asked the user to merge the
     *  data-space database to the user-space database.
