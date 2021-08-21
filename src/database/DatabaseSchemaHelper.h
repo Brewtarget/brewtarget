@@ -54,7 +54,7 @@ namespace DatabaseSchemaHelper {
    int currentVersion(QSqlDatabase db = QSqlDatabase());
 
    //! \brief does the heavy lifting to copy the contents from one db to the next
-   void copyDatabase(Database::DbType oldType, Database::DbType newType, QSqlDatabase connectionNew);
+   void copyDatabase(Database & oldDatabase, Database & newDatabase, QSqlDatabase connectionNew);
 
    /**
     * \brief Populates (or updates) default Recipes, Hops, Styles, etc in the DB

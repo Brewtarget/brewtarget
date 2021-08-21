@@ -24,6 +24,7 @@
 #include <QHash>
 #include <QSqlDriver>
 #include <QSqlError>
+#include <QSqlField>
 #include <QSqlQuery>
 #include <QSqlRecord>
 
@@ -1429,12 +1430,80 @@ QList<QObject *> ObjectStore::getAllRaw() const {
    return listToReturn;
 }
 
+bool ObjectStore::copyToNewDb(Database & oldDatabase, Database & newDatabase, QSqlDatabase connectionNew) const {
 
-QList<QString> ObjectStore::getAllTableNames() const {
+   QSqlDatabase connectionOld = oldDatabase.sqlDatabase();
+   QSqlQuery readOld(connectionOld);
+   QSqlQuery upsertNew(connectionNew); // we will prepare this in a bit
+
    QList<QString> tableNames;
    tableNames.append(*this->pimpl->primaryTable.tableName);
    for (auto const & junctionTable : this->pimpl->junctionTables) {
       tableNames.append(*junctionTable.tableName);
    }
-   return tableNames;
+
+   for (QString tableName : tableNames) {
+      QString findAllQuery = QString("SELECT * FROM %1").arg(tableName);
+      qDebug() << Q_FUNC_INFO << "FIND ALL:" << findAllQuery;
+      if (! readOld.exec(findAllQuery) ) {
+         qCritical() << Q_FUNC_INFO << "Error reading record from DB with SQL" << readOld.lastQuery() << ":" << readOld.lastError().text();
+         return false;
+      }
+
+      //
+      // We do SELECT * on the old DB table and then look at the records that come back to work out what the INSERT
+      // into the new DB table should look like.  Of course, we're assuming that there aren't any secret extra
+      // fields on the old DB table, otherwise things will break.  But, all being well, this saves a lot of special-
+      // case code.
+      //
+      bool upsertQueryCreated{false};
+      QString fieldNames;
+      QTextStream fieldNamesAsStream{&fieldNames};
+      QString bindNames;
+      QTextStream bindNamesAsStream{&bindNames};
+      QString upsertQuery{"INSERT INTO "};
+      QTextStream upsertQueryAsStream{&upsertQuery};
+
+      // Start reading the records from the old db
+      while (readOld.next()) {
+         QSqlRecord here = readOld.record();
+         if (!upsertQueryCreated) {
+            // Loop through all the fields in the record.  Order shouldn't matter.
+            for (int ii = 0; ii < here.count(); ++ii) {
+               QSqlField field = here.field(ii);
+               if (ii != 0) {
+                  fieldNamesAsStream << ", ";
+                  bindNamesAsStream << ", ";
+               }
+               fieldNamesAsStream << field.name();
+               bindNamesAsStream << ":" << field.name();
+            }
+            upsertQueryAsStream << tableName << " (" << fieldNames << ") VALUES (" << bindNames << ");";
+            upsertNew.prepare(upsertQuery);
+            upsertQueryCreated = true;
+         }
+
+         for (int ii = 0; ii < here.count(); ++ii) {
+            QSqlField field = here.field(ii);
+            QString bindName = QString(":%1").arg(field.name());
+            QVariant bindValue = here.value(field.name());
+            //
+            // QVariant should handle all the problems of different types for us here.  Eg, in SQLite, there is no
+            // native bool type, so we'll get back 0 or 1 on a field we store bools in, but this should still
+            // convert to the right thing in, say, PostgreSQL, when we try to insert it into a field of type
+            // BOOLEAN.
+            //
+            upsertNew.bindValue(bindName, bindValue);
+         }
+
+         if (!upsertNew.exec()) {
+            qCritical() <<
+               Q_FUNC_INFO << "Error writing record to DB with SQL" << upsertNew.lastQuery() << ":" <<
+               upsertNew.lastError().text();
+            return false;
+         }
+      }
+   }
+
+   return true;
 }

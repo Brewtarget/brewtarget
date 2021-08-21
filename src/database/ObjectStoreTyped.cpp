@@ -20,6 +20,7 @@
 
 #include  <mutex> // for std::once_flag
 
+#include "database/DbTransaction.h"
 #include "model/BrewNote.h"
 #include "model/Equipment.h"
 #include "model/Fermentable.h"
@@ -790,6 +791,21 @@ bool CreateAllDatabaseTables(Database & database, QSqlDatabase & connection) {
    return true;
 }
 
-QVector<ObjectStore const *> GetAllObjectStores() {
-   return AllObjectStores;
+bool CopyAllObjectStores(Database & oldDatabase, Database & newDatabase, QSqlDatabase connectionNew) {
+   //
+   // Start transaction
+   // By the magic of RAII, this will abort if we exit this function (including by throwing an exception) without
+   // having called dbTransaction.commit().  (It will also turn foreign keys back on either way -- whether the
+   // transaction is committed or rolled back.)
+   //
+   DbTransaction dbTransaction{newDatabase, connectionNew, DbTransaction::DISABLE_FOREIGN_KEYS};
+
+   for (ObjectStore const * objectStore : AllObjectStores) {
+      if (!objectStore->copyToNewDb(oldDatabase, newDatabase, connectionNew)) {
+         return false;
+      }
+   }
+
+   dbTransaction.commit();
+   return true;
 }

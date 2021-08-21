@@ -108,13 +108,13 @@ public:
    static char const * getDefaultBackupFileName();
 
    //! backs up database to chosen file
-   static bool backupToFile(QString newDbFileName);
+   bool backupToFile(QString newDbFileName);
 
    //! backs up database to 'dir' in chosen directory
-   static bool backupToDir(QString dir, QString filename="");
+   bool backupToDir(QString dir, QString filename="");
 
    //! \brief Reverts database to that of chosen file.
-   static bool restoreFromFile(QString newDbFileStr);
+   bool restoreFromFile(QString newDbFileStr);
 
    static bool verifyDbConnection(Database::DbType testDb,
                                   QString const& hostname,

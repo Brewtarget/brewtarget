@@ -851,9 +851,7 @@ int DatabaseSchemaHelper::currentVersion(QSqlDatabase db) {
    return -1;
 }
 
-void DatabaseSchemaHelper::copyDatabase(Database::DbType oldType, Database::DbType newType, QSqlDatabase connectionNew) {
-   Database & oldDatabase = Database::instance(oldType);
-   Database & newDatabase = Database::instance(newType);
+void DatabaseSchemaHelper::copyDatabase(Database & oldDatabase, Database & newDatabase, QSqlDatabase connectionNew) {
 
    // this is to prevent us from over-writing or doing heavens knows what to an existing db
    if( connectionNew.tables().contains(QLatin1String("settings")) ) {
@@ -869,86 +867,8 @@ void DatabaseSchemaHelper::copyDatabase(Database::DbType oldType, Database::DbTy
       return;
    }
 
-   //
-   // Start transaction
-   // By the magic of RAII, this will abort if we exit this function (including by throwing an exception) without
-   // having called dbTransaction.commit().  (It will also turn foreign keys back on either way -- whether the
-   // transaction is committed or rolled back.)
-   //
-   DbTransaction dbTransaction{newDatabase, connectionNew, DbTransaction::DISABLE_FOREIGN_KEYS};
+   CopyAllObjectStores(oldDatabase, newDatabase, connectionNew);
 
-   QSqlDatabase connectionOld = oldDatabase.sqlDatabase();
-   QSqlQuery readOld(connectionOld);
-   QSqlQuery upsertNew(connectionNew); // we will prepare this in a bit
-
-   QVector<ObjectStore const *> objectStores = GetAllObjectStores();
-   for (ObjectStore const * objectStore : objectStores) {
-      QList<QString> tableNames = objectStore->getAllTableNames();
-      for (QString tableName : tableNames) {
-         QString findAllQuery = QString("SELECT * FROM %1").arg(tableName);
-         qDebug() << Q_FUNC_INFO << "FIND ALL:" << findAllQuery;
-         if (! readOld.exec(findAllQuery) ) {
-            qCritical() << Q_FUNC_INFO << "Error reading record from DB with SQL" << readOld.lastQuery() << ":" << readOld.lastError().text();
-            return;
-         }
-
-         //
-         // We do SELECT * on the old DB table and then look at the records that come back to work out what the INSERT
-         // into the new DB table should look like.  Of course, we're assuming that there aren't any secret extra
-         // fields on the old DB table, otherwise things will break.  But, all being well, this saves a lot of special-
-         // case code either inside ObjectStore or messing with its internal data structures.
-         //
-         bool upsertQueryCreated{false};
-         QString fieldNames;
-         QTextStream fieldNamesAsStream{&fieldNames};
-         QString bindNames;
-         QTextStream bindNamesAsStream{&bindNames};
-         QString upsertQuery{"INSERT INTO "};
-         QTextStream upsertQueryAsStream{&upsertQuery};
-
-         // Start reading the records from the old db
-         while (readOld.next()) {
-            QSqlRecord here = readOld.record();
-            if (!upsertQueryCreated) {
-               // Loop through all the fields in the record.  Order shouldn't matter.
-               for (int ii = 0; ii < here.count(); ++ii) {
-                  QSqlField field = here.field(ii);
-                  if (ii != 0) {
-                     fieldNamesAsStream << ", ";
-                     bindNamesAsStream << ", ";
-                  }
-                  fieldNamesAsStream << field.name();
-                  bindNamesAsStream << ":" << field.name();
-               }
-               upsertQueryAsStream << tableName << " (" << fieldNames << ") VALUES (" << bindNames << ");";
-               upsertNew.prepare(upsertQuery);
-               upsertQueryCreated = true;
-            }
-
-            for (int ii = 0; ii < here.count(); ++ii) {
-               QSqlField field = here.field(ii);
-               QString bindName = QString(":%1").arg(field.name());
-               QVariant bindValue = here.value(field.name());
-               //
-               // QVariant should handle all the problems of different types for us here.  Eg, in SQLite, there is no
-               // native bool type, so we'll get back 0 or 1 on a field we store bools in, but this should still
-               // convert to the right thing in, say, PostgreSQL, when we try to insert it into a field of type
-               // BOOLEAN.
-               //
-               upsertNew.bindValue(bindName, bindValue);
-            }
-
-            if (!upsertNew.exec()) {
-               qCritical() <<
-                  Q_FUNC_INFO << "Error writing record to DB with SQL" << upsertNew.lastQuery() << ":" <<
-                  upsertNew.lastError().text();
-               return;
-            }
-         }
-      }
-   }
-
-   dbTransaction.commit();
    return;
 }
 

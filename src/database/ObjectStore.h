@@ -375,9 +375,12 @@ public:
    QList<QObject *> getAllRaw() const;
 
    /**
-    * \brief Returns a list of all tables used by this store.  Used for copying data from one DB to another.
+    * \brief Copy this object store's data from one DB to another.  Caller's responsibility to wrap everything in a
+    *        transaction.
+    *
+    * \return \c true if succeeded \c false otherwise
     */
-   QList<QString> getAllTableNames() const;
+   bool copyToNewDb(Database & oldDatabase, Database & newDatabase, QSqlDatabase connectionNew) const;
 
 signals:
    /**

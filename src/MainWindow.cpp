@@ -2593,7 +2593,7 @@ void MainWindow::backup()
    // If the filename returned from the dialog is empty, it means the user clicked cancel, so we should stop trying to do the backup
    if (!backupFileName.isEmpty())
    {
-      bool success = Database::backupToFile(backupFileName);
+      bool success = Database::instance().backupToFile(backupFileName);
 
       if( ! success )
          QMessageBox::warning( this, tr("Oops!"), tr("Could not copy the files for some reason."));
@@ -2615,7 +2615,7 @@ void MainWindow::restoreFromBackup()
    }
 
    QString restoreDbFile = QFileDialog::getOpenFileName(this, tr("Choose File"), "", tr("SQLite (*.sqlite)"));
-   bool success = Database::restoreFromFile(restoreDbFile);
+   bool success = Database::instance().restoreFromFile(restoreDbFile);
 
    if( ! success )
       QMessageBox::warning( this, tr("Oops!"), tr("For some reason, the operation failed.") );
@@ -2823,28 +2823,11 @@ void MainWindow::copyRecipe()
       return;
    }
 
-/*
-   Recipe* newRec = Database::instance().newRecipe(recipeObs); // Create a deep copy.
-   if ( newRec )
-      newRec->setName(name);
-   */
    auto newRec = std::make_shared<Recipe>(*this->recipeObs); // Create a deep copy
    newRec->setName(name);
    ObjectStoreTyped<Recipe>::getInstance().insert(newRec);
    return;
 }
-
-/*void MainWindow::setMashToCurrentlySelected()
-{
-   if( recipeObs == nullptr )
-      return;
-
-   Mash* selected = mashListModel->at(mashComboBox->currentIndex());
-   if (selected) {
-      Database::instance().newMash(selected);
-      mashButton->setMash(selected);
-   }
-}*/
 
 void MainWindow::saveMash() {
    if ( recipeObs == nullptr || recipeObs->mash() == nullptr ) {

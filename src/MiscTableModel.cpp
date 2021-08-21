@@ -76,8 +76,8 @@ void MiscTableModel::observeDatabase(bool val) {
    if (val) {
       observeRecipe(nullptr);
       removeAll();
-      connect(&ObjectStoreTyped<Misc>::getInstance(), &ObjectStoreTyped<Misc>::signalObjectInserted, this, &MiscTableModel::addMisc);
-      connect(&ObjectStoreTyped<Misc>::getInstance(), &ObjectStoreTyped<Misc>::signalObjectDeleted,  this, &MiscTableModel::removeMisc);
+      connect(&ObjectStoreTyped<Misc>::getInstance(), &ObjectStoreTyped<Misc>::signalObjectInserted,  this, &MiscTableModel::addMisc);
+      connect(&ObjectStoreTyped<Misc>::getInstance(), &ObjectStoreTyped<Misc>::signalObjectDeleted,   this, &MiscTableModel::removeMisc);
       addMiscs( ObjectStoreTyped<Misc>::getInstance().getAllRaw() );
    } else {
       removeAll();
@@ -389,15 +389,11 @@ bool MiscTableModel::setData( const QModelIndex& index, const QVariant& value, i
 
 void MiscTableModel::changedInventory(int invKey, BtStringConst const & propertyName) {
    if (propertyName == PropertyNames::Inventory::amount) {
-///      double newAmount = ObjectStoreWrapper::getById<InventoryMisc>()->getAmount();
       for( int i = 0; i < miscObs.size(); ++i ) {
          Misc* holdmybeer = miscObs.at(i);
 
          if ( invKey == holdmybeer->inventoryId() ) {
-/// No need to update amount as it's only stored in one place (the inventory object) now
-///            holdmybeer->setCacheOnly(true);
-///            holdmybeer->setInventoryAmount(newAmount);
-///            holdmybeer->setCacheOnly(false);
+            // No need to update amount as it's only stored in one place (the inventory object) now
             emit dataChanged( QAbstractItemModel::createIndex(i,MISCINVENTORYCOL),
                               QAbstractItemModel::createIndex(i,MISCINVENTORYCOL) );
          }
@@ -421,25 +417,17 @@ void MiscTableModel::changed(QMetaProperty prop, QVariant /*val*/) {
 
    // See if sender is our recipe.
    Recipe* recSender = qobject_cast<Recipe*>(sender());
-   if( recSender && recSender == recObs )
-   {
-      if( QString(prop.name()) == PropertyNames::Recipe::miscIds )
-      {
+   if( recSender && recSender == recObs ) {
+      if( QString(prop.name()) == PropertyNames::Recipe::miscIds ) {
          removeAll();
          addMiscs( recObs->miscs() );
       }
-      if( rowCount() > 0 )
+      if( rowCount() > 0 ) {
          emit headerDataChanged( Qt::Vertical, 0, rowCount()-1 );
+      }
       return;
    }
 
-   // See if sender is the database.
-   // .:TODO:. Look at this, as sender won't be the DB now
-/*   if ( sender() == &(Database::instance()) && QString(prop.name()) == "miscs" ) {
-      removeAll();
-      addMiscs( ObjectStoreTyped<Misc>::getInstance().getAllRaw() );
-      return;
-   }*/
    return;
 }
 
