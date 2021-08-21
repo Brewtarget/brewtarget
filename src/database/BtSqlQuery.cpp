@@ -48,6 +48,12 @@ void BtSqlQuery::reallyPrepare() {
    return;
 }
 
+void BtSqlQuery::addBindValue(const QVariant &val, QSql::ParamType paramType) {
+   this->reallyPrepare();
+   this->QSqlQuery::addBindValue(val, paramType);
+   return;
+}
+
 void BtSqlQuery::bindValue(const QString &placeholder, const QVariant &val, QSql::ParamType paramType) {
    this->reallyPrepare();
    this->QSqlQuery::bindValue(placeholder, val, paramType);

@@ -1431,7 +1431,13 @@ QList<QObject *> ObjectStore::getAllRaw() const {
 }
 
 bool ObjectStore::copyToNewDb(Database & oldDatabase, Database & newDatabase, QSqlDatabase connectionNew) const {
-
+   //
+   // This is primarily used when someone is migrating data from, say, SQLite to PostgreSQL.  We could, in theory, say
+   // "We've got all the data cached in memory, so we just need to write it to the new database" but we'd need to modify
+   // various member functions to be able to talk to multiple databases and to be able to operate with transactions
+   // turned off (ie inside a big external transaction).  For the moment, it seems less work to do things in a more SQL-
+   // centric way in this function.
+   //
    QSqlDatabase connectionOld = oldDatabase.sqlDatabase();
    BtSqlQuery readOld(connectionOld);
    BtSqlQuery upsertNew(connectionNew); // we will prepare this in a bit
@@ -1446,7 +1452,9 @@ bool ObjectStore::copyToNewDb(Database & oldDatabase, Database & newDatabase, QS
       QString findAllQuery = QString("SELECT * FROM %1").arg(tableName);
       qDebug() << Q_FUNC_INFO << "FIND ALL:" << findAllQuery;
       if (! readOld.exec(findAllQuery) ) {
-         qCritical() << Q_FUNC_INFO << "Error reading record from DB with SQL" << readOld.lastQuery() << ":" << readOld.lastError().text();
+         qCritical() <<
+            Q_FUNC_INFO << "Error reading record from DB with SQL" << readOld.lastQuery() << ":" <<
+            readOld.lastError().text();
          return false;
       }
 

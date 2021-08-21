@@ -62,6 +62,7 @@ public:
     */
    bool prepare(const QString & query);
 
+   void addBindValue(const QVariant &val, QSql::ParamType paramType = QSql::In);
    void bindValue(const QString &placeholder, const QVariant &val, QSql::ParamType paramType = QSql::In);
    void bindValue(int pos, const QVariant &val, QSql::ParamType paramType = QSql::In);
 
