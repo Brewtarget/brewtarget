@@ -53,12 +53,12 @@
 #include <QSqlDriver>
 #include <QSqlError>
 #include <QSqlField>
-#include <QSqlQuery>
 #include <QString>
 #include <QThread>
 
 #include "brewtarget.h"
 #include "config.h"
+#include "database/BtSqlQuery.h"
 #include "database/DatabaseSchemaHelper.h"
 #include "PersistentSettings.h"
 
@@ -266,7 +266,7 @@ public:
       //
       // It's quite useful to record the DB version in the logs
       //
-      QSqlQuery sqlQuery(connection);
+      BtSqlQuery sqlQuery(connection);
       QString queryString{"SELECT sqlite_version() AS version;"};
       sqlQuery.prepare(queryString);
       if (!sqlQuery.exec() || !sqlQuery.next()) {
@@ -278,7 +278,7 @@ public:
       qInfo() << Q_FUNC_INFO << "SQLite version" << fieldValue;
 
       // NOTE: synchronous=off reduces query time by an order of magnitude!
-      QSqlQuery pragma(connection);
+      BtSqlQuery pragma(connection);
       if ( ! pragma.exec( "PRAGMA synchronous = off" ) ) {
          qCritical() << Q_FUNC_INFO << "Could not disable synchronous writes: " << pragma.lastError().text();
          return false;
@@ -349,7 +349,7 @@ public:
       //
       // It's quite useful to record the DB version in the logs
       //
-      QSqlQuery sqlQuery(connection);
+      BtSqlQuery sqlQuery(connection);
       QString queryString{"SELECT version() AS version;"};
       sqlQuery.prepare(queryString);
       if (!sqlQuery.exec() || !sqlQuery.next()) {

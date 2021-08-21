@@ -28,13 +28,13 @@
 #include <QMessageBox>
 #include <QSqlError>
 #include <QSqlField>
-#include <QSqlQuery>
 #include <QSqlRecord>
 #include <QString>
 #include <QTextStream>
 #include <QVariant>
 
 #include "brewtarget.h"
+#include "database/BtSqlQuery.h"
 #include "database/Database.h"
 #include "database/DbTransaction.h"
 #include "database/ObjectStoreWrapper.h"
@@ -62,7 +62,7 @@ namespace {
    // For the moment, it mostly suffices to execute a list of queries.  A possible future enhancement might be to
    // attach to each query a (usually empty) list of bind parameters, but it's probably not necessary.
    //
-   bool executeSqlQueries(QSqlQuery & q, QVector<QueryAndParameters> const & queries) {
+   bool executeSqlQueries(BtSqlQuery & q, QVector<QueryAndParameters> const & queries) {
       //
       // Sometimes whether or not we want to run a query depends on what data is in the database.  Eg, if we're trying
       // to insert into a table based on the results of a sub-query, we need to handle the case where the sub-query
@@ -83,31 +83,12 @@ namespace {
             continue;
          }
          qDebug() << Q_FUNC_INFO << query.sql;
-         //
-         // It's not clear from the Qt documentation, but it turns out that, if you call QSqlQuery::prepare() on a SQL
-         // statement that doesn't have any placeholders for binding values, then you get  a syntax error when you're
-         // using PostgreSQL; you have to call exec() directly on the SQL.
-         //
-         // At one level, this is "correct" because a query without bind value placeholders is not a prepared statement
-         // (https://en.wikipedia.org/wiki/Prepared_statement) and so doesn't need preparing.  (Qt is just reporting the
-         // error it gets back from PostgreSQL when it asks it to prepare the statement.)
-         //
-         // On the other hand, it's annoying because we have to have tedious special-case handling in code such as this.
-         // Unfortunately, per discussion in https://bugreports.qt.io/browse/QTBUG-48471, this is unlikely to change.
-         //
-         // .:TBD:. Feels almost worth writing our own wrapper around QSqlQuery...
-         //
-         bool result;
-         if (query.bindValues.empty()) {
-            result = q.exec(query.sql);
-         } else {
-            q.prepare(query.sql);
-            for (auto & bv : query.bindValues) {
-               q.addBindValue(bv);
-            }
-            result = q.exec();
+
+         q.prepare(query.sql);
+         for (auto & bv : query.bindValues) {
+            q.addBindValue(bv);
          }
-         if (!result) {
+         if (!q.exec()) {
             // If we get an error, we want to stop processing as otherwise you get "false" errors if subsequent queries
             // fail as a result of assuming that all prior queries have run OK.
             qCritical() <<
@@ -124,7 +105,7 @@ namespace {
    // This is when we first defined the settings table, and defined the version as a string.
    // In the new world, this will create the settings table and define the version as an int.
    // Since we don't set the version until the very last step of the update, I think this will be fine.
-   bool migrate_to_202(Database & db, QSqlQuery q) {
+   bool migrate_to_202(Database & db, BtSqlQuery q) {
       bool ret = true;
 
       // Add "projected_ferm_points" to brewnote table
@@ -149,7 +130,7 @@ namespace {
       return ret;
    }
 
-   bool migrate_to_210(Database & db, QSqlQuery & q) {
+   bool migrate_to_210(Database & db, BtSqlQuery & q) {
       QVector<QueryAndParameters> const migrationQueries{
          {QString("ALTER TABLE equipment   ADD COLUMN folder text DEFAULT ''")},
          {QString("ALTER TABLE fermentable ADD COLUMN folder text DEFAULT ''")},
@@ -237,7 +218,7 @@ namespace {
       return executeSqlQueries(q, migrationQueries);
    }
 
-   bool migrate_to_4(Database & db, QSqlQuery & q) {
+   bool migrate_to_4(Database & db, BtSqlQuery & q) {
       QVector<QueryAndParameters> const migrationQueries{
          // Save old settings
          {QString("ALTER TABLE settings RENAME TO oldsettings")},
@@ -253,7 +234,7 @@ namespace {
       return executeSqlQueries(q, migrationQueries);
    }
 
-   bool migrate_to_5(Database & db, QSqlQuery q) {
+   bool migrate_to_5(Database & db, BtSqlQuery q) {
       QVector<QueryAndParameters> const migrationQueries{
          // Drop the previous bugged TRIGGER
          {QString("DROP TRIGGER dec_ins_num")},
@@ -270,13 +251,13 @@ namespace {
    }
 
    //
-   bool migrate_to_6(Database & db, QSqlQuery q) {
+   bool migrate_to_6(Database & db, BtSqlQuery q) {
       bool ret = true;
       // I drop this table in version 8. There is no sense doing anything here, and it breaks other things.
       return ret;
    }
 
-   bool migrate_to_7(Database & db, QSqlQuery q) {
+   bool migrate_to_7(Database & db, BtSqlQuery q) {
       QVector<QueryAndParameters> const migrationQueries{
          // Add "attenuation" to brewnote table
          {"ALTER TABLE brewnote ADD COLUMN attenuation real DEFAULT 0.0"}
@@ -284,7 +265,7 @@ namespace {
       return executeSqlQueries(q, migrationQueries);
    }
 
-   bool migrate_to_8(Database & db, QSqlQuery q) {
+   bool migrate_to_8(Database & db, BtSqlQuery q) {
       QString createTmpBrewnoteSql;
       QTextStream createTmpBrewnoteSqlStream(&createTmpBrewnoteSql);
       createTmpBrewnoteSqlStream <<
@@ -625,7 +606,7 @@ namespace {
 
    // To support the water chemistry, I need to add two columns to water and to
    // create the salt and salt_in_recipe tables
-   bool migrate_to_9(Database & db, QSqlQuery q) {
+   bool migrate_to_9(Database & db, BtSqlQuery q) {
       QString createSaltSql;
       QTextStream createSaltSqlStream(&createSaltSql);
       createSaltSqlStream <<
@@ -668,7 +649,7 @@ namespace {
       return executeSqlQueries(q, migrationQueries);
    }
 
-   bool migrate_to_10(Database & db, QSqlQuery q) {
+   bool migrate_to_10(Database & db, BtSqlQuery q) {
       QVector<QueryAndParameters> const migrationQueries{
          {QString("ALTER TABLE recipe ADD COLUMN ancestor_id %1 REFERENCES recipe(id)").arg(db.getDbNativeTypeName<int>())},
          {QString("ALTER TABLE recipe ADD COLUMN locked %1").arg(db.getDbNativeTypeName<bool>())},
@@ -684,7 +665,7 @@ namespace {
     */
    bool migrateNext(Database & database, int oldVersion, QSqlDatabase db ) {
       qDebug() << Q_FUNC_INFO << "Migrating DB schema from v" << oldVersion << "to v" << oldVersion + 1;
-      QSqlQuery sqlQuery(db);
+      BtSqlQuery sqlQuery(db);
       bool ret = true;
 
       // NOTE: Add a new case when adding a new schema change
@@ -773,7 +754,7 @@ bool DatabaseSchemaHelper::create(Database & database, QSqlDatabase connection) 
       {QString("INSERT INTO settings (repopulatechildrenonnextstart, version) VALUES (?, ?)"), {QVariant(true), QVariant(dbVersion)}}
 
    };
-   QSqlQuery sqlQuery{connection};
+   BtSqlQuery sqlQuery{connection};
 
    ret &= executeSqlQueries(sqlQuery, setUpQueries);
 
@@ -816,7 +797,7 @@ bool DatabaseSchemaHelper::migrate(Database & database, int oldVersion, int newV
 int DatabaseSchemaHelper::currentVersion(QSqlDatabase db) {
    // Version was a string field in early versions of the code and then became an integer field
    // We'll read it into a QVariant and then work out whether it's a string or an integer
-   QSqlQuery q("SELECT version FROM settings WHERE id=1", db);
+   BtSqlQuery q("SELECT version FROM settings WHERE id=1", db);
    QVariant ver;
    if( q.next() ) {
       ver = q.value("version");

@@ -25,9 +25,9 @@
 #include <QSqlDriver>
 #include <QSqlError>
 #include <QSqlField>
-#include <QSqlQuery>
 #include <QSqlRecord>
 
+#include "database/BtSqlQuery.h"
 #include "database/Database.h"
 #include "database/DbTransaction.h"
 #include "model/NamedParameterBundle.h"
@@ -126,7 +126,7 @@ namespace {
 
       qDebug().noquote() << Q_FUNC_INFO << "Table creation: " << queryString;
 
-      QSqlQuery sqlQuery{connection};
+      BtSqlQuery sqlQuery{connection};
       sqlQuery.prepare(queryString);
       if (!sqlQuery.exec()) {
          qCritical() <<
@@ -165,7 +165,7 @@ namespace {
       // Note that, here, we do one column at a time because it keeps things simple - including in the case where the
       // table has no foreign keys.
       //
-      QSqlQuery sqlQuery{connection};
+      BtSqlQuery sqlQuery{connection};
       for (auto const & fieldDefn: tableDefinition.tableFields) {
          if (fieldDefn.fieldType == ObjectStore::FieldType::Int && fieldDefn.foreignKeyTo != nullptr) {
             // It's obviously a programming error if the foreignKeyTo table doesn't have any fields.  (We only care
@@ -204,7 +204,7 @@ namespace {
     * NB: This can be a long string.  It includes newlines, and is intended to be logged with qDebug().noquote() or
     *     similar.
     */
-   QString BoundValuesToString(QSqlQuery const & sqlQuery) {
+   QString BoundValuesToString(BtSqlQuery const & sqlQuery) {
       QString result;
       QTextStream resultAsStream{&result};
 
@@ -291,7 +291,7 @@ namespace {
    // Insert data from an object property to a junction table
    //
    // We may be inserting more than one row.  In theory we COULD combine all the rows into a single insert statement
-   // using either QSqlQuery::execBatch() or directly constructing one of the common (but technically non-standard)
+   // using either BtSqlQuery::execBatch() or directly constructing one of the common (but technically non-standard)
    // syntaxes, eg the following works on a lot of databases (including PostgreSQL and newer versions of SQLite) for
    // up to 1000 rows):
    //    INSERT INTO table (columnA, columnB, ..., columnN)
@@ -300,7 +300,7 @@ namespace {
    //                      ...,
    //                      (rm_valA, rm_valB, ..., rm_valN);
    // However, we DON"T do this.  The variable binding is more complicated/error-prone than when just doing
-   // individual inserts.  (Even with QSqlQuery::execBatch(), we'd have to loop to construct the lists of bind
+   // individual inserts.  (Even with BtSqlQuery::execBatch(), we'd have to loop to construct the lists of bind
    // parameters.)  And there's likely no noticeable performance benefit given that we're typically inserting only
    // a handful of rows at a time (eg all the Hops in a Recipe).
    //
@@ -350,10 +350,10 @@ namespace {
 
       //
       // Note that, when we are using bind values, we do NOT want to call the
-      // QSqlQuery::QSqlQuery(const QString &, QSqlDatabase db) version of the QSqlQuery constructor because that would
+      // BtSqlQuery::BtSqlQuery(const QString &, QSqlDatabase db) version of the BtSqlQuery constructor because that would
       // result in the supplied query being executed immediately (ie before we've had a chance to bind parameters).
       //
-      QSqlQuery sqlQuery{connection};
+      BtSqlQuery sqlQuery{connection};
       sqlQuery.prepare(queryString);
 
       // Get the list of data to bind to it
@@ -454,7 +454,7 @@ namespace {
          junctionTable.tableName << " WHERE " << GetJunctionTableDefinitionThisPrimaryKeyColumn(junctionTable) <<
          " = " << thisPrimaryKeyBindName << ";";
 
-      QSqlQuery sqlQuery{connection};
+      BtSqlQuery sqlQuery{connection};
       sqlQuery.prepare(queryString);
 
       // Bind the primary key value
@@ -587,7 +587,7 @@ public:
          //
          // Bind the values
          //
-         QSqlQuery sqlQuery{connection};
+         BtSqlQuery sqlQuery{connection};
          sqlQuery.prepare(queryString);
          QVariant propertyBindValue{object.property(*propertyName)};
          // Enums need to be converted to strings first
@@ -750,7 +750,7 @@ void ObjectStore::loadAll(Database * database) {
    QTextStream queryStringAsStream{&queryString};
    this->pimpl->appendColumNames(queryStringAsStream, true, false);
    queryStringAsStream << "\n FROM " << this->pimpl->primaryTable.tableName << ";";
-   QSqlQuery sqlQuery{connection};
+   BtSqlQuery sqlQuery{connection};
    sqlQuery.prepare(queryString);
    if (!sqlQuery.exec()) {
       qCritical() <<
@@ -889,7 +889,7 @@ void ObjectStore::loadAll(Database * database) {
       }
       queryStringAsStream << ";";
 
-      sqlQuery = QSqlQuery{connection};
+      sqlQuery = BtSqlQuery{connection};
       sqlQuery.prepare(queryString);
       if (!sqlQuery.exec()) {
          qCritical() <<
@@ -1042,7 +1042,7 @@ int ObjectStore::insert(std::shared_ptr<QObject> object) {
    //
    // Bind the values
    //
-   QSqlQuery sqlQuery{connection};
+   BtSqlQuery sqlQuery{connection};
    sqlQuery.prepare(queryString);
    bool skippedPrimaryKey = false;
    char const * primaryKeyParameter{nullptr};
@@ -1190,7 +1190,7 @@ void ObjectStore::update(std::shared_ptr<QObject> object) {
    // Bind the values.  Note that, because we're using bind names, it doesn't matter that the order in which we do the
    // binds is different than the order in which the fields appear in the query.
    //
-   QSqlQuery sqlQuery{connection};
+   BtSqlQuery sqlQuery{connection};
    sqlQuery.prepare(queryString);
    for (auto const & fieldDefn: this->pimpl->primaryTable.tableFields) {
       QVariant bindValue{object->property(*fieldDefn.propertyName)};
@@ -1326,7 +1326,7 @@ void ObjectStore::hardDelete(int id) {
    // Bind the value
    //
    QVariant primaryKey{id};
-   QSqlQuery sqlQuery{connection};
+   BtSqlQuery sqlQuery{connection};
    sqlQuery.prepare(queryString);
    sqlQuery.bindValue(QString{":"} + *primaryKeyColumn, primaryKey);
    qDebug().noquote() << Q_FUNC_INFO << "Bind values:" << BoundValuesToString(sqlQuery);
@@ -1433,8 +1433,8 @@ QList<QObject *> ObjectStore::getAllRaw() const {
 bool ObjectStore::copyToNewDb(Database & oldDatabase, Database & newDatabase, QSqlDatabase connectionNew) const {
 
    QSqlDatabase connectionOld = oldDatabase.sqlDatabase();
-   QSqlQuery readOld(connectionOld);
-   QSqlQuery upsertNew(connectionNew); // we will prepare this in a bit
+   BtSqlQuery readOld(connectionOld);
+   BtSqlQuery upsertNew(connectionNew); // we will prepare this in a bit
 
    QList<QString> tableNames;
    tableNames.append(*this->pimpl->primaryTable.tableName);

@@ -97,11 +97,12 @@ SET( brewtarget_SRCS
     ${SRCDIR}/ColorMethods.cpp
     ${SRCDIR}/ConverterTool.cpp
     ${SRCDIR}/CustomComboBox.cpp
+    ${SRCDIR}/database/BtSqlQuery.cpp
     ${SRCDIR}/database/Database.cpp
     ${SRCDIR}/database/DatabaseSchemaHelper.cpp
     ${SRCDIR}/database/DbTransaction.cpp
-    ${SRCDIR}/database/ObjectStoreTyped.cpp
     ${SRCDIR}/database/ObjectStore.cpp
+    ${SRCDIR}/database/ObjectStoreTyped.cpp
     ${SRCDIR}/EquipmentButton.cpp
     ${SRCDIR}/EquipmentEditor.cpp
     ${SRCDIR}/EquipmentListModel.cpp
@@ -254,14 +255,14 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/boiltime.h
     ${SRCDIR}/BrewDayScrollWidget.h
     ${SRCDIR}/BrewDayWidget.h
+    ${SRCDIR}/Brewken.h
     ${SRCDIR}/BrewNoteWidget.h
-    ${SRCDIR}/brewtarget.h
     ${SRCDIR}/BtDatePopup.h
     ${SRCDIR}/BtDigitWidget.h
     ${SRCDIR}/BtFolder.h
-    ${SRCDIR}/BtHorizontalTabs.h
     ${SRCDIR}/BtLabel.h
     ${SRCDIR}/BtLineEdit.h
+    ${SRCDIR}/BtPrintPreview.h
     ${SRCDIR}/BtSplashScreen.h
     ${SRCDIR}/BtTabWidget.h
     ${SRCDIR}/BtTextEdit.h
@@ -271,7 +272,7 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/CMakeLists.txt
     ${SRCDIR}/ConverterTool.h
     ${SRCDIR}/CustomComboBox.h
-    ${SRCDIR}/database/Database.h
+    ${SRCDIR}/database/ObjectStore.h
     ${SRCDIR}/EquipmentButton.h
     ${SRCDIR}/EquipmentEditor.h
     ${SRCDIR}/EquipmentListModel.h
@@ -319,6 +320,7 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/NamedEntitySortProxyModel.h
     ${SRCDIR}/NamedMashEditor.h
     ${SRCDIR}/OgAdjuster.h
+    ${SRCDIR}/OptionDialog.h
     ${SRCDIR}/PitchDialog.h
     ${SRCDIR}/PrimingDialog.h
     ${SRCDIR}/QueuedMethod.h
@@ -335,11 +337,10 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/StyleListModel.h
     ${SRCDIR}/StyleRangeWidget.h
     ${SRCDIR}/StyleSortFilterProxyModel.h
-    ${SRCDIR}/Testing.h
     ${SRCDIR}/TimerListDialog.h
     ${SRCDIR}/TimerMainDialog.h
     ${SRCDIR}/TimerWidget.h
-    ${SRCDIR}/unit.h
+    ${SRCDIR}/Unit.h
     ${SRCDIR}/WaterButton.h
     ${SRCDIR}/WaterDialog.h
     ${SRCDIR}/WaterEditor.h
@@ -347,6 +348,9 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/WaterSortFilterProxyModel.h
     ${SRCDIR}/WaterTableModel.h
     ${SRCDIR}/WaterTableWidget.h
+    ${SRCDIR}/widgets/Animator.h
+    ${SRCDIR}/widgets/SelectionControl.h
+    ${SRCDIR}/widgets/ToggleSwitch.h
     ${SRCDIR}/YeastDialog.h
     ${SRCDIR}/YeastEditor.h
     ${SRCDIR}/YeastSortFilterProxyModel.h
