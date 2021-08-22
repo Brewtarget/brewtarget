@@ -380,10 +380,12 @@ private:
 bool CreateAllDatabaseTables(Database & database, QSqlDatabase & connection);
 
 /**
- * \brief Copy all data in all object stores from one database to another
+ * \brief Write all data in all object stores to a new database
+ *
+ *        Caller's responsibility to have called \c CreateAllDatabaseTables
  *
  * \return \c true if succeeded \c false otherwise
  */
-bool CopyAllObjectStores(Database & oldDatabase, Database & newDatabase, QSqlDatabase connectionNew);
+bool WriteAllObjectStoresToNewDb(Database & newDatabase, QSqlDatabase connectionNew);
 
 #endif

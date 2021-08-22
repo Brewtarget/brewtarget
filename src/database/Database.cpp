@@ -900,11 +900,11 @@ void Database::convertDatabase(QString const& Hostname, QString const& DbName,
       if ( ! connectionNew.isOpen() ) {
          throw QString("Could not open new database: %1").arg(connectionNew.lastError().text());
       }
-      Database & oldDatabase = *this;
+
       // Don't get newDatabase via Database::instance() as we don't want to use the connection details from
       // PersistentSettings (or to attempt to read data from newDatabase)
       Database newDatabase{newType};
-      DatabaseSchemaHelper::copyDatabase(oldDatabase, newDatabase, connectionNew);
+      DatabaseSchemaHelper::copyToNewDatabase(newDatabase, connectionNew);
    }
    catch (QString e) {
       qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);

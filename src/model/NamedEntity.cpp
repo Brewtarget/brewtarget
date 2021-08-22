@@ -322,7 +322,11 @@ void NamedEntity::prepareForPropertyChange(BtStringConst const & propertyName) {
    // At the moment, the only thing we want to do in this pre-change check is to see whether we need to version a
    // Recipe.  Obviously we leave all the details of that to the Recipe-related namespace.
    //
-   RecipeHelper::prepareForPropertyChange(*this, propertyName);
+   // Obviously nothing gets versioned if it's not yet in the DB
+   //
+   if (this->key() > 0) {
+      RecipeHelper::prepareForPropertyChange(*this, propertyName);
+   }
    return;
 }
 

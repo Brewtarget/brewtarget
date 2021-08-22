@@ -743,10 +743,10 @@ bool DatabaseSchemaHelper::create(Database & database, QSqlDatabase connection) 
    // having called dbTransaction.commit().
    DbTransaction dbTransaction{database, connection};
 
-   // .:TODO-DATABASE:. Need to look at the default data population stuff below ALSO move repopulate stuff out of Database class into this one
-   bool ret = true;
    qDebug() << Q_FUNC_INFO;
-   ret &= CreateAllDatabaseTables(database, connection);
+   if (!CreateAllDatabaseTables(database, connection)) {
+      return false;
+   }
 
    // Create the settings table manually, since it's only used in this file
    QVector<QueryAndParameters> const setUpQueries{
@@ -756,14 +756,15 @@ bool DatabaseSchemaHelper::create(Database & database, QSqlDatabase connection) 
    };
    BtSqlQuery sqlQuery{connection};
 
-   ret &= executeSqlQueries(sqlQuery, setUpQueries);
-
-   // If everything went well, we can commit the DB transaction now, otherwise it will abort when this function returns
-   if (ret) {
-      dbTransaction.commit();
+   if (!executeSqlQueries(sqlQuery, setUpQueries)) {
+      return false;
    }
 
-   return ret;
+   // If we got here, everything went well, so we can commit the DB transaction now, otherwise it will have aborted when
+   // we returned from an error branch above.
+   dbTransaction.commit();
+
+   return true;
 }
 
 bool DatabaseSchemaHelper::migrate(Database & database, int oldVersion, int newVersion, QSqlDatabase connection) {
@@ -832,25 +833,27 @@ int DatabaseSchemaHelper::currentVersion(QSqlDatabase db) {
    return -1;
 }
 
-void DatabaseSchemaHelper::copyDatabase(Database & oldDatabase, Database & newDatabase, QSqlDatabase connectionNew) {
+bool DatabaseSchemaHelper::copyToNewDatabase(Database & newDatabase, QSqlDatabase connectionNew) {
 
    // this is to prevent us from over-writing or doing heavens knows what to an existing db
-   if( connectionNew.tables().contains(QLatin1String("settings")) ) {
+   if (connectionNew.tables().contains(QLatin1String("settings"))) {
       qWarning() << Q_FUNC_INFO << "It appears the database is already configured.";
-      return;
+      return false;
    }
 
    // The crucial bit is creating the new tables in the new DB.  Once that is done then, assuming disabling of foreign
-   // keys works OK, it should be turn-the-handle to run through all the tables and copy each record from old DB to new
-   // one.
-   if (!CreateAllDatabaseTables(newDatabase, connectionNew)) {
+   // keys works OK, it should be turn-the-handle to write out all the data.
+   if (!DatabaseSchemaHelper::create(newDatabase, connectionNew)) {
       qCritical() << Q_FUNC_INFO << "Error creating tables in new DB";
-      return;
+      return false;
    }
 
-   CopyAllObjectStores(oldDatabase, newDatabase, connectionNew);
+   if (!WriteAllObjectStoresToNewDb(newDatabase, connectionNew)) {
+      qCritical() << Q_FUNC_INFO << "Error writing data to new DB";
+      return false;
+   }
 
-   return;
+   return true;
 }
 
 

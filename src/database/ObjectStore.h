@@ -375,12 +375,14 @@ public:
    QList<QObject *> getAllRaw() const;
 
    /**
-    * \brief Copy this object store's data from one DB to another.  Caller's responsibility to wrap everything in a
-    *        transaction.
+    * \brief Write everything in this object store to a new database.  Caller's responsibility to wrap everything in a
+    *        transaction and turn off foreign key constraints.
+    *
+    * \param connectionNew
     *
     * \return \c true if succeeded \c false otherwise
     */
-   bool copyToNewDb(Database & oldDatabase, Database & newDatabase, QSqlDatabase connectionNew) const;
+   bool writeAllToNewDb(QSqlDatabase connectionNew) const;
 
 signals:
    /**
