@@ -61,6 +61,7 @@
 #include "database/BtSqlQuery.h"
 #include "database/DatabaseSchemaHelper.h"
 #include "PersistentSettings.h"
+#include "utils/BtStringConst.h"
 
 namespace {
 
@@ -997,6 +998,59 @@ QList<QPair<QString, QString>> Database::displayableConnectionParms() const {
    }
 
    return {};
+}
+
+bool Database::updatePrimaryKeySequenceIfNecessary(QSqlDatabase & connection,
+                                                   BtStringConst const & tableName,
+                                                   BtStringConst const & columnName) const {
+   switch (this->pimpl->dbType) {
+      case SQLITE:
+         // Nothing to do for SQLite
+         break;
+      case PGSQL:
+         {
+            //
+            // https://wiki.postgresql.org/wiki/Fixing_Sequences has a big scary query you can run that will fix all
+            // sequences in the database.  But to fix one sequence on one table, the work is more comprehensible.
+            //
+            // Per https://www.postgresql.org/docs/current/functions-info.html,
+            // pg_get_serial_sequence(table_name, column_name) gets the name of the sequence that a serial, smallserial
+            // or bigserial column uses.  (Usually, for column "id" on table "foo", the sequence will be called
+            // "foo_id_seq".)  Note the need to quote the parameters.
+            //
+            // Per https://www.postgresql.org/docs/current/functions-sequence.html, setval(seq, val, advance)
+            // will update the last_value field on sequence seq to val and, depending on whether advance is true or
+            // false, will or won't increment the last_value field before the next call to nextval().  Note that, since
+            // PostgreSQL 8.1, we _don't_ need to quote the sequence name.
+            //
+            // The result returned by setval is just the value of its second argument.  We only need FROM in the
+            // statement below so that the MAX function will give us the current maximum value of the primary column
+            // whose sequence we are updating.
+            //
+            BtSqlQuery query{connection};
+            query.prepare(
+               QString("SELECT setval(pg_get_serial_sequence('%1', '%2'), COALESCE(MAX(%2), 0), true) "
+                       "FROM %1;").arg(*tableName, *columnName)
+            );
+            if (!query.exec()) {
+               qCritical() <<
+                  Q_FUNC_INFO << "Error updating sequence value for column" << columnName << "on table" << tableName <<
+                  "using SQL \"" << query.lastQuery() << "\":" << query.lastError().text();
+               return false;
+            }
+            if (query.next()) {
+               qInfo() <<
+                  Q_FUNC_INFO << "Updated sequence value for column" << columnName << "on table" << tableName << "to" <<
+                  query.value(0);
+            }
+         }
+         break;
+      default:
+         // It's a coding error (somewhere) if we get here!
+         Q_ASSERT(false);
+         return false;
+   }
+   return true;
 }
 
 //======================================================================================================================

@@ -701,7 +701,7 @@ int DatabaseSchemaHelper::currentVersion(QSqlDatabase db) {
    return -1;
 }
 
-bool DatabaseSchemaHelper::copyToNewDatabase(Database & newDatabase, QSqlDatabase connectionNew) {
+bool DatabaseSchemaHelper::copyToNewDatabase(Database & newDatabase, QSqlDatabase & connectionNew) {
 
    // this is to prevent us from over-writing or doing heavens knows what to an existing db
    if (connectionNew.tables().contains(QLatin1String("settings"))) {

@@ -38,6 +38,8 @@
 #include <QSqlDatabase>
 #include <QString>
 
+class BtStringConst;
+
 /*!
  * \class Database
  *
@@ -188,6 +190,21 @@ public:
     *        \b excluding password
     */
    QList<QPair<QString, QString>> displayableConnectionParms() const;
+
+   /**
+    * \brief This member function should be called after you have manually inserted into a primary key column that is
+    *        normally automatically populated by the database.  When you do such manual inserts, some databases (eg
+    *        PostgreSQL) need to be told to update the value they would use for the next automatically generated ID.
+    *
+    * \param connection The connection you used to do the manual inserts
+    * \param tableName  The table you inserted into
+    * \param columName  The primary key column on that table
+    *
+    * \return \c false if there was an error, \c true otherwise
+    */
+   bool updatePrimaryKeySequenceIfNecessary(QSqlDatabase & connection,
+                                            BtStringConst const & tableName,
+                                            BtStringConst const & columnName) const;
 
 private:
    // Private implementation details - see https://herbsutter.com/gotw/_100/

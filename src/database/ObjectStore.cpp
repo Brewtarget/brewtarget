@@ -1487,7 +1487,7 @@ QList<QObject *> ObjectStore::getAllRaw() const {
    return listToReturn;
 }
 
-bool ObjectStore::writeAllToNewDb(QSqlDatabase connectionNew) const {
+bool ObjectStore::writeAllToNewDb(Database & databaseNew, QSqlDatabase & connectionNew) const {
    //
    // This is primarily used when someone is migrating data from, say, SQLite to PostgreSQL.
    //
@@ -1503,6 +1503,21 @@ bool ObjectStore::writeAllToNewDb(QSqlDatabase connectionNew) const {
          return false;
       }
    }
+
+   //
+   // Some databases (eg PostgreSQL) get confused if you manually insert values into a primary key column that is
+   // normally automatically populated.  Database class knows how to put things back in order for such databases.
+   //
+   // Note that we only need to do this for the primary key on primaryTable.  We make no use of the primary key IDs on
+   // junction tables and we always let the DB auto-generate them, even when writing all data to a new DB.
+   //
+   // We _could_ call databaseNew.updatePrimaryKeySequenceIfNecessary() in this->pimpl->insertObjectInDb() every time we
+   // explicitly insert an ID in primaryTable, but it's currently not necessary as this is the only place we ask
+   // this->pimpl->insertObjectInDb() to do that.
+   //
+   databaseNew.updatePrimaryKeySequenceIfNecessary(connectionNew,
+                                                   this->pimpl->primaryTable.tableName,
+                                                   this->pimpl->getPrimaryKeyColumn());
 
    return true;
 }
