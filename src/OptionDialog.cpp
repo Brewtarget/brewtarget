@@ -21,6 +21,8 @@
  */
 #include "OptionDialog.h"
 
+#include <optional>
+
 #include <QAbstractButton>
 #include <QCheckBox>
 #include <QFileDialog>

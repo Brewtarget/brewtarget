@@ -80,9 +80,8 @@ bool BtSqlQuery::exec() {
       result = this->QSqlQuery::exec(this->bt_query);
    }
 
-   // Reset our extra member variables in case the object is going to be reused
-   this->bt_query = "";
-   this->bt_boundValues = false;
+   // If someone wants to reuse the object, eg to insert multiple rows with the same query, it's already in the correct
+   // state (whether or not there were bound variables, so we're done here.
 
    return result;
 }

@@ -22,6 +22,7 @@
 #include <functional>
 
 #include <memory> // For PImpl
+#include <optional>
 
 #include <QObject>
 #include <QSqlDatabase>

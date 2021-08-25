@@ -59,8 +59,11 @@ namespace {
    // N+1, we don't need (or want) to refer to the generated table definitions from some later version of the schema,
    // which may be quite different.
    //
-   // For the moment, it mostly suffices to execute a list of queries.  A possible future enhancement might be to
-   // attach to each query a (usually empty) list of bind parameters, but it's probably not necessary.
+   // That said, we have rewritten history in a few places where it simplifies things.  In particular, we have omitted
+   // default values that were used in earlier versions of the schema because (a) in current versions of the code they
+   // are not used and (b) setting them in a way that works for SQLite and PostgreSQL is a bit painful thanks to the
+   // differing ways they handle booleans ("DEFAULT true" in PostgreSQL has to be "DEFAULT 1" in SQLite etc, which is a
+   // bit tedious).
    //
    bool executeSqlQueries(BtSqlQuery & q, QVector<QueryAndParameters> const & queries) {
       //
@@ -111,7 +114,7 @@ namespace {
       // Add "projected_ferm_points" to brewnote table
       QString queryString{"ALTER TABLE brewnote ADD COLUMN projected_ferm_points "};
       QTextStream queryStringAsStream{&queryString};
-      queryStringAsStream << db.getDbNativeTypeName<double>() << " DEFAULT 0.0;";
+      queryStringAsStream << db.getDbNativeTypeName<double>() << ";"; // Previously DEFAULT 0.0
       qDebug() << Q_FUNC_INFO << queryString;
       ret &= q.exec(queryString);
       queryString = "ALTER TABLE brewnote SET projected_ferm_points = -1.0;";
@@ -122,8 +125,8 @@ namespace {
       queryString = "CREATE TABLE settings ";
       queryStringAsStream << "(\n"
          "id " << db.getDbNativePrimaryKeyDeclaration() << ",\n"
-         "repopulatechildrenonnextstart " << db.getDbNativeTypeName<int>() << " DEFAULT 0,\n"
-         "version " << db.getDbNativeTypeName<int>() << " DEFAULT 0);";
+         "repopulatechildrenonnextstart " << db.getDbNativeTypeName<int>() << ",\n" // Previously DEFAULT 0
+         "version " << db.getDbNativeTypeName<int>() << ");"; // Previously DEFAULT 0
       qDebug() << Q_FUNC_INFO << queryString;
       ret &= q.exec(queryString);
 
@@ -131,20 +134,18 @@ namespace {
    }
 
    bool migrate_to_210(Database & db, BtSqlQuery & q) {
-      QVector<QueryAndParameters> const migrationQueries{
-         {QString("ALTER TABLE equipment   ADD COLUMN folder text DEFAULT ''")},
-         {QString("ALTER TABLE fermentable ADD COLUMN folder text DEFAULT ''")},
-         {QString("ALTER TABLE hop         ADD COLUMN folder text DEFAULT ''")},
-         {QString("ALTER TABLE misc        ADD COLUMN folder text DEFAULT ''")},
-         {QString("ALTER TABLE style       ADD COLUMN folder text DEFAULT ''")},
-         {QString("ALTER TABLE yeast       ADD COLUMN folder text DEFAULT ''")},
-         {QString("ALTER TABLE water       ADD COLUMN folder text DEFAULT ''")},
-         {QString("ALTER TABLE mash        ADD COLUMN folder text DEFAULT ''")},
-         //{QString("ALTER TABLE mashstep ADD COLUMN   DEFAULT ''")},
-         {QString("ALTER TABLE recipe      ADD COLUMN folder text DEFAULT ''")},
-         {QString("ALTER TABLE brewnote    ADD COLUMN folder text DEFAULT ''")},
-         {QString("ALTER TABLE instruction ADD COLUMN   DEFAULT ''")},
-         {QString("ALTER TABLE salt        ADD COLUMN folder text DEFAULT ''")},
+      QVector<QueryAndParameters> migrationQueries{
+         {QString("ALTER TABLE equipment   ADD COLUMN folder text")}, // Previously DEFAULT ''
+         {QString("ALTER TABLE fermentable ADD COLUMN folder text")}, // Previously DEFAULT ''
+         {QString("ALTER TABLE hop         ADD COLUMN folder text")}, // Previously DEFAULT ''
+         {QString("ALTER TABLE misc        ADD COLUMN folder text")}, // Previously DEFAULT ''
+         {QString("ALTER TABLE style       ADD COLUMN folder text")}, // Previously DEFAULT ''
+         {QString("ALTER TABLE yeast       ADD COLUMN folder text")}, // Previously DEFAULT ''
+         {QString("ALTER TABLE water       ADD COLUMN folder text")}, // Previously DEFAULT ''
+         {QString("ALTER TABLE mash        ADD COLUMN folder text")}, // Previously DEFAULT ''
+         {QString("ALTER TABLE recipe      ADD COLUMN folder text")}, // Previously DEFAULT ''
+         {QString("ALTER TABLE brewnote    ADD COLUMN folder text")}, // Previously DEFAULT ''
+         {QString("ALTER TABLE salt        ADD COLUMN folder text")}, // Previously DEFAULT ''
          // Put the "Bt:.*" recipes into /brewtarget folder
          {QString("UPDATE recipe   SET folder='/brewtarget' WHERE name LIKE 'Bt:%'")},
          // Update version to 2.1.0
@@ -152,69 +153,40 @@ namespace {
          // Used to trigger the code to populate the ingredient inheritance tables
          {QString("ALTER TABLE settings ADD COLUMN repopulatechildrenonnextstart %1").arg(db.getDbNativeTypeName<int>())},
          {QString("UPDATE repopulatechildrenonnextstart integer=1")},
-         // Drop and re-create children tables with new UNIQUE requirement
-         {QString("DROP TABLE   equipment_children")},
-         {QString("CREATE TABLE equipment_children (id %2, "
-                                                  "child_id %1, "
-                                                  "parent_id %1, "
-                                                  "FOREIGN KEY(child_id) REFERENCES equipment(id), "
-                                                  "FOREIGN KEY(parent_id) REFERENCES equipment(id));").arg(db.getDbNativeTypeName<int>(), db.getDbNativePrimaryKeyDeclaration())},
-         {QString("DROP TABLE   fermentable_children")},
-         {QString("CREATE TABLE fermentable_children (id %2, "
-                                                    "child_id %1, "
-                                                    "parent_id %1, "
-                                                    "FOREIGN KEY(child_id) REFERENCES fermentable(id), "
-                                                    "FOREIGN KEY(parent_id) REFERENCES fermentable(id));").arg(db.getDbNativeTypeName<int>(), db.getDbNativePrimaryKeyDeclaration())},
-         {QString("DROP TABLE   hop_children")},
-         {QString("CREATE TABLE hop_children (id %2, "
-                                            "child_id %1, "
-                                            "parent_id %1, "
-                                            "FOREIGN KEY(child_id) REFERENCES hop(id), "
-                                            "FOREIGN KEY(parent_id) REFERENCES hop(id));").arg(db.getDbNativeTypeName<int>(), db.getDbNativePrimaryKeyDeclaration())},
-         {QString("DROP TABLE   misc_children")},
-         {QString("CREATE TABLE misc_children (id %2, "
-                                             "child_id %1, "
-                                             "parent_id %1, "
-                                             "FOREIGN KEY(child_id) REFERENCES misc(id), "
-                                             "FOREIGN KEY(parent_id) REFERENCES misc(id));").arg(db.getDbNativeTypeName<int>(), db.getDbNativePrimaryKeyDeclaration())},
-         {QString("DROP TABLE   recipe_children")},
-         {QString("CREATE TABLE recipe_children (id %2, "
-                                               "child_id %1, "
-                                               "parent_id %1, "
-                                               "FOREIGN KEY(child_id) REFERENCES recipe(id), "
-                                               "FOREIGN KEY(parent_id) REFERENCES recipe(id));").arg(db.getDbNativeTypeName<int>(), db.getDbNativePrimaryKeyDeclaration())},
-         {QString("DROP TABLE   style_children")},
-         {QString("CREATE TABLE style_children (id %2, "
-                                              "child_id %1, "
-                                              "parent_id %1, "
-                                              "FOREIGN KEY(child_id) REFERENCES style(id), "
-                                              "FOREIGN KEY(parent_id) REFERENCES style(id));").arg(db.getDbNativeTypeName<int>(), db.getDbNativePrimaryKeyDeclaration())},
-         {QString("DROP TABLE   water_children")},
-         {QString("CREATE TABLE water_children (id %2, "
-                                              "child_id %1, "
-                                              "parent_id %1, "
-                                              "FOREIGN KEY(child_id) REFERENCES water(id), "
-                                              "FOREIGN KEY(parent_id) REFERENCES water(id));").arg(db.getDbNativeTypeName<int>(), db.getDbNativePrimaryKeyDeclaration())},
-         {QString("DROP TABLE   yeast_children")},
-         {QString("CREATE TABLE yeast_children (id %2, "
-                                              "child_id %1, "
-                                              "parent_id %1, "
-                                              "FOREIGN KEY(child_id) REFERENCES yeast(id), "
-                                              "FOREIGN KEY(parent_id) REFERENCES yeast(id));").arg(db.getDbNativeTypeName<int>(), db.getDbNativePrimaryKeyDeclaration())},
-         {QString("DROP TABLE   fermentable_in_inventory")},
-         {QString("CREATE TABLE fermentable_in_inventory (id %2, "
-                                                        "amount %3 DEFAULT 0);").arg(db.getDbNativeTypeName<int>(), db.getDbNativePrimaryKeyDeclaration(), db.getDbNativeTypeName<double>())},
-         {QString("DROP TABLE   hop_in_inventory")},
-         {QString("CREATE TABLE hop_in_inventory (id %2, "
-                                                "amount %3 DEFAULT 0);").arg(db.getDbNativeTypeName<int>(), db.getDbNativePrimaryKeyDeclaration(), db.getDbNativeTypeName<double>())},
-         {QString("DROP TABLE   misc_in_inventory")},
-         {QString("CREATE TABLE misc_in_inventory (id %2, "
-                                                 "amount %3 DEFAULT 0);").arg(db.getDbNativeTypeName<int>(), db.getDbNativePrimaryKeyDeclaration(), db.getDbNativeTypeName<double>())},
-         {QString("DROP TABLE   yeast_in_inventory")},
-         {QString("CREATE TABLE yeast_in_inventory (id %2, "
-                                                  "quanta %3 DEFAULT 0);").arg(db.getDbNativeTypeName<int>(), db.getDbNativePrimaryKeyDeclaration(), db.getDbNativeTypeName<double>())},
-         {QString("UPDATE settings VALUES(1,2)")}
       };
+      // Drop and re-create children tables with new UNIQUE requirement
+      for (char const * baseTableName : {"equipment", "fermentable", "hop", "misc", "recipe", "style", "water", "yeast"}) {
+         migrationQueries.append({QString("DROP TABLE %1_children").arg(baseTableName)});
+         migrationQueries.append({QString(
+                                    "CREATE TABLE %1_children (id %2, "
+                                                              "child_id %3, "
+                                                              "parent_id %3, "
+                                                              "FOREIGN KEY(child_id) REFERENCES %1(id), "
+                                                              "FOREIGN KEY(parent_id) REFERENCES %1(id));"
+                                 ).arg(baseTableName,
+                                       db.getDbNativePrimaryKeyDeclaration(),
+                                       db.getDbNativeTypeName<int>())});
+      }
+      for (char const * tableName : {"fermentable_in_inventory", "hop_in_inventory", "misc_in_inventory"}) {
+         migrationQueries.append({QString("DROP TABLE   %1;").arg(tableName)});
+         migrationQueries.append(
+            {
+               QString(
+                  "CREATE TABLE %1 (id %2, "
+                                 "amount %3);" // Previously DEFAULT 0
+               ).arg(tableName, db.getDbNativePrimaryKeyDeclaration(), db.getDbNativeTypeName<double>())
+            }
+         );
+      }
+      migrationQueries.append({QString("DROP TABLE   yeast_in_inventory")});
+      migrationQueries.append(
+         {
+            QString("CREATE TABLE %1 (id %2, "
+                                     "quanta %3);" // Previously DEFAULT 0
+            ).arg("yeast_in_inventory", db.getDbNativePrimaryKeyDeclaration(), db.getDbNativeTypeName<double>())
+         }
+      );
+      migrationQueries.append({QString("UPDATE settings VALUES(1,2)")});
       return executeSqlQueries(q, migrationQueries);
    }
 
@@ -223,9 +195,13 @@ namespace {
          // Save old settings
          {QString("ALTER TABLE settings RENAME TO oldsettings")},
          // Create new table with integer version.
-         {QString("CREATE TABLE settings (id %2, "
-                                        "repopulatechildrenonnextstart %1 DEFAULT 0, "
-                                        "version %1 DEFAULT 0);").arg(db.getDbNativeTypeName<int>()).arg(db.getDbNativePrimaryKeyDeclaration())},
+         {
+            QString(
+               "CREATE TABLE settings (id %2, "
+                                      "repopulatechildrenonnextstart %1, " // Previously DEFAULT 0
+                                      "version %1);" // Previously DEFAULT 0
+            ).arg(db.getDbNativeTypeName<int>()).arg(db.getDbNativePrimaryKeyDeclaration())
+         },
          // Update version to 4, saving other settings
          {QString("INSERT INTO settings (id, version, repopulatechildrenonnextstart) SELECT 1, 4, repopulatechildrenonnextstart FROM oldsettings")},
          // Cleanup
@@ -260,7 +236,7 @@ namespace {
    bool migrate_to_7(Database & db, BtSqlQuery q) {
       QVector<QueryAndParameters> const migrationQueries{
          // Add "attenuation" to brewnote table
-         {"ALTER TABLE brewnote ADD COLUMN attenuation real DEFAULT 0.0"}
+         {"ALTER TABLE brewnote ADD COLUMN attenuation real"} // Previously DEFAULT 0.0
       };
       return executeSqlQueries(q, migrationQueries);
    }
@@ -271,51 +247,48 @@ namespace {
       createTmpBrewnoteSqlStream <<
          "CREATE TABLE tmpbrewnote ("
             "id                      " << db.getDbNativePrimaryKeyDeclaration() << ", "
-            "abv                     " << db.getDbNativeTypeName<double>()  << " DEFAULT 0, "
-            "attenuation             " << db.getDbNativeTypeName<double>()  << " DEFAULT 1, "
-            "boil_off                " << db.getDbNativeTypeName<double>()  << " DEFAULT 1, "
-            "brewdate                " << db.getDbNativeTypeName<QDate>()   << " DEFAULT CURRENT_TIMESTAMP, "
-            "brewhouse_eff           " << db.getDbNativeTypeName<double>()  << " DEFAULT 70, "
-            "deleted                 " << db.getDbNativeTypeName<bool>()    << " DEFAULT ?, "
-            "display                 " << db.getDbNativeTypeName<bool>()    << " DEFAULT ?, "
-            "eff_into_bk             " << db.getDbNativeTypeName<double>()  << " DEFAULT 70, "
-            "fermentdate             " << db.getDbNativeTypeName<QDate>()   << " DEFAULT CURRENT_TIMESTAMP, "
-            "fg                      " << db.getDbNativeTypeName<double>()  << " DEFAULT 1, "
-            "final_volume            " << db.getDbNativeTypeName<double>()  << " DEFAULT 1, "
-            "folder                  " << db.getDbNativeTypeName<QString>() << " DEFAULT '', "
-            "mash_final_temp         " << db.getDbNativeTypeName<double>()  << " DEFAULT 67, "
-            "notes                   " << db.getDbNativeTypeName<QString>() << " DEFAULT '', "
-            "og                      " << db.getDbNativeTypeName<double>()  << " DEFAULT 1, "
-            "pitch_temp              " << db.getDbNativeTypeName<double>()  << " DEFAULT 20, "
-            "post_boil_volume        " << db.getDbNativeTypeName<double>()  << " DEFAULT 0, "
-            "projected_abv           " << db.getDbNativeTypeName<double>()  << " DEFAULT 1, "
-            "projected_atten         " << db.getDbNativeTypeName<double>()  << " DEFAULT 75, "
-            "projected_boil_grav     " << db.getDbNativeTypeName<double>()  << " DEFAULT 1, "
-            "projected_eff           " << db.getDbNativeTypeName<double>()  << " DEFAULT 1, "
-            "projected_ferm_points   " << db.getDbNativeTypeName<double>()  << " DEFAULT 1, "
-            "projected_fg            " << db.getDbNativeTypeName<double>()  << " DEFAULT 1, "
-            "projected_mash_fin_temp " << db.getDbNativeTypeName<double>()  << " DEFAULT 67, "
-            "projected_og            " << db.getDbNativeTypeName<double>()  << " DEFAULT 1, "
-            "projected_points        " << db.getDbNativeTypeName<double>()  << " DEFAULT 1, "
-            "projected_strike_temp   " << db.getDbNativeTypeName<double>()  << " DEFAULT 70, "
-            "projected_vol_into_bk   " << db.getDbNativeTypeName<double>()  << " DEFAULT 1, "
-            "projected_vol_into_ferm " << db.getDbNativeTypeName<double>()  << " DEFAULT 0, "
-            "sg                      " << db.getDbNativeTypeName<double>()  << " DEFAULT 1, "
-            "strike_temp             " << db.getDbNativeTypeName<double>()  << " DEFAULT 70, "
-            "volume_into_bk          " << db.getDbNativeTypeName<double>()  << " DEFAULT 0, "
-            "volume_into_fermenter   " << db.getDbNativeTypeName<double>()  << " DEFAULT 0, "
+            "abv                     " << db.getDbNativeTypeName<double>()  << ", " // Previously DEFAULT 0
+            "attenuation             " << db.getDbNativeTypeName<double>()  << ", " // Previously DEFAULT 1
+            "boil_off                " << db.getDbNativeTypeName<double>()  << ", " // Previously DEFAULT 1
+            "brewdate                " << db.getDbNativeTypeName<QDate>()   << ", " // Previously DEFAULT CURRENT_TIMESTAMP
+            "brewhouse_eff           " << db.getDbNativeTypeName<double>()  << ", " // Previously DEFAULT 70
+            "deleted                 " << db.getDbNativeTypeName<bool>()    << ", " // Previously DEFAULT 0 / false
+            "display                 " << db.getDbNativeTypeName<bool>()    << ", " // Previously DEFAULT 1 / true
+            "eff_into_bk             " << db.getDbNativeTypeName<double>()  << ", " // Previously DEFAULT 70
+            "fermentdate             " << db.getDbNativeTypeName<QDate>()   << ", " // Previously DEFAULT CURRENT_TIMESTAMP
+            "fg                      " << db.getDbNativeTypeName<double>()  << ", " // Previously DEFAULT 1
+            "final_volume            " << db.getDbNativeTypeName<double>()  << ", " // Previously DEFAULT 1
+            "folder                  " << db.getDbNativeTypeName<QString>() << ", " // Previously DEFAULT ''
+            "mash_final_temp         " << db.getDbNativeTypeName<double>()  << ", " // Previously DEFAULT 67
+            "notes                   " << db.getDbNativeTypeName<QString>() << ", " // Previously DEFAULT ''
+            "og                      " << db.getDbNativeTypeName<double>()  << ", " // Previously DEFAULT 1
+            "pitch_temp              " << db.getDbNativeTypeName<double>()  << ", " // Previously DEFAULT 20
+            "post_boil_volume        " << db.getDbNativeTypeName<double>()  << ", " // Previously DEFAULT 0
+            "projected_abv           " << db.getDbNativeTypeName<double>()  << ", " // Previously DEFAULT 1
+            "projected_atten         " << db.getDbNativeTypeName<double>()  << ", " // Previously DEFAULT 75
+            "projected_boil_grav     " << db.getDbNativeTypeName<double>()  << ", " // Previously DEFAULT 1
+            "projected_eff           " << db.getDbNativeTypeName<double>()  << ", " // Previously DEFAULT 1
+            "projected_ferm_points   " << db.getDbNativeTypeName<double>()  << ", " // Previously DEFAULT 1
+            "projected_fg            " << db.getDbNativeTypeName<double>()  << ", " // Previously DEFAULT 1
+            "projected_mash_fin_temp " << db.getDbNativeTypeName<double>()  << ", " // Previously DEFAULT 67
+            "projected_og            " << db.getDbNativeTypeName<double>()  << ", " // Previously DEFAULT 1
+            "projected_points        " << db.getDbNativeTypeName<double>()  << ", " // Previously DEFAULT 1
+            "projected_strike_temp   " << db.getDbNativeTypeName<double>()  << ", " // Previously DEFAULT 70
+            "projected_vol_into_bk   " << db.getDbNativeTypeName<double>()  << ", " // Previously DEFAULT 1
+            "projected_vol_into_ferm " << db.getDbNativeTypeName<double>()  << ", " // Previously DEFAULT 0
+            "sg                      " << db.getDbNativeTypeName<double>()  << ", " // Previously DEFAULT 1
+            "strike_temp             " << db.getDbNativeTypeName<double>()  << ", " // Previously DEFAULT 70
+            "volume_into_bk          " << db.getDbNativeTypeName<double>()  << ", " // Previously DEFAULT 0
+            "volume_into_fermenter   " << db.getDbNativeTypeName<double>()  << ", " // Previously DEFAULT 0
             "recipe_id               " << db.getDbNativeTypeName<int>()     << ", "
             "FOREIGN KEY(recipe_id) REFERENCES recipe(id)"
          ");";
-      QVector<QueryAndParameters> const migrationQueries{
+      QVector<QueryAndParameters> migrationQueries{
          //
          // Drop columns predicted_og and predicted_abv. They are used nowhere I can find and they are breaking things.
          //
-         {
-            createTmpBrewnoteSql,
-            {QVariant{false}, // deleted
-             QVariant{true}}  // display
-         },
+         {createTmpBrewnoteSql},
+         {QString("SELECT id FROM brewnote")}, // Dummy-run query
          {QString("INSERT INTO tmpbrewnote ("
                     "id, "
                     "abv, "
@@ -387,220 +360,102 @@ namespace {
                     "volume_into_bk, "
                     "volume_into_fermenter, "
                     "recipe_id "
-                 "FROM brewnote")},
+                 "FROM brewnote"),
+            {},
+            true // Don't run this query if the previous one had no results (ie there's nothing to insert)
+         },
          {QString("drop table brewnote")},
-         {QString("ALTER TABLE tmpbrewnote RENAME TO brewnote")},
-         //
-         // Rearrange inventory - fermentable
-         //
-         {QString("ALTER TABLE fermentable ADD COLUMN inventory_id REFERENCES fermentable_in_inventory (id)")},
-         // It would seem we have kids with their own rows in the db. This is a freaking mess, but I need to delete those rows
-         // before I can do anything else.
-         {QString("DELETE FROM fermentable_in_inventory "
-                 "WHERE fermentable_in_inventory.id in ( "
-                    "SELECT fermentable_in_inventory.id "
-                    "FROM fermentable_in_inventory, fermentable_children, fermentable "
-                    "WHERE fermentable.id = fermentable_children.child_id "
-                    "AND fermentable_in_inventory.fermentable_id = fermentable.id "
-                 ")")},
+         {QString("ALTER TABLE tmpbrewnote RENAME TO brewnote")}
+      };
+      //
+      // Rearrange inventory
+      //
+      for (char const * baseTableName : {"fermentable", "hop", "misc", "yeast"}) {
+         // This gives us the the DB-specific version of
+         //    ALTER TABLE %1 ADD COLUMN inventory_id REFERENCES %1_in_inventory (id)
+         // where %1 is baseTableName!
+         QString inInventoryTable = QString("%1_in_inventory").arg(baseTableName);
+         migrationQueries.append({QString(db.getSqlToAddColumnAsForeignKey()).arg(baseTableName,
+                                                                                  "inventory_id",
+                                                                                  inInventoryTable,
+                                                                                  "id")});
+         // It would seem we have kids with their own rows in the db. This is a freaking mess, but I need to delete
+         // those rows before I can do anything else.
+         migrationQueries.append({QString("DELETE FROM %1_in_inventory "
+                                          "WHERE %1_in_inventory.id in ( "
+                                             "SELECT %1_in_inventory.id "
+                                             "FROM %1_in_inventory, %1_children, %1 "
+                                             "WHERE %1.id = %1_children.child_id "
+                                             "AND %1_in_inventory.%1_id = %1.id )").arg(baseTableName)});
          // This next is a dummy-run query for the subsequent insert.  We don't want to try to do the insert if this
          // query has no results as it will barf trying to insert no rows.  (AFAIK there isn't an elegant way around
          // this in SQL.)
-         {QString("SELECT id FROM fermentable WHERE NOT EXISTS ( "
-                       "SELECT fermentable_children.id "
-                       "FROM fermentable_children "
-                       "WHERE fermentable_children.child_id = fermentable.id "
+         migrationQueries.append({QString("SELECT id FROM %1 WHERE NOT EXISTS ( "
+                                             "SELECT %1_children.id "
+                                             "FROM %1_children "
+                                             "WHERE %1_children.child_id = %1.id "
+                                          ") AND NOT EXISTS ( "
+                                             "SELECT %1_in_inventory.id "
+                                             "FROM %1_in_inventory "
+                                             "WHERE %1_in_inventory.%1_id = %1.id"
+                                          ")").arg(baseTableName)});
+         migrationQueries.append({
+            QString("INSERT INTO %1_in_inventory (%1_id) VALUES ( "
+                    // Everything has an inventory row now. This will find all the parent items that don't have an
+                    // inventory row.
+                    "SELECT id FROM %1 WHERE NOT EXISTS ( "
+                       "SELECT %1_children.id "
+                       "FROM %1_children "
+                       "WHERE %1_children.child_id = %1.id "
                     ") AND NOT EXISTS ( "
-                       "SELECT fermentable_in_inventory.id "
-                       "FROM fermentable_in_inventory "
-                       "WHERE fermentable_in_inventory.fermentable_id = fermentable.id"
-                    ") ")},
-         {
-            QString("INSERT INTO fermentable_in_inventory (fermentable_id) VALUES ( "
-                    // Everything has an inventory row now. This will find all the parent items that don't have an inventory row.
-                    "SELECT id FROM fermentable WHERE NOT EXISTS ( "
-                       "SELECT fermentable_children.id "
-                       "FROM fermentable_children "
-                       "WHERE fermentable_children.child_id = fermentable.id "
-                    ") AND NOT EXISTS ( "
-                       "SELECT fermentable_in_inventory.id "
-                       "FROM fermentable_in_inventory "
-                       "WHERE fermentable_in_inventory.fermentable_id = fermentable.id"
+                       "SELECT %1_in_inventory.id "
+                       "FROM %1_in_inventory "
+                       "WHERE %1_in_inventory.%1_id = %1.id"
                     ") "
-                 ")"),
+                 ")").arg(baseTableName),
             {},
             true // Don't run this query if the previous one had no results
-         },
+         });
          // Once we know all parents have inventory rows, we populate inventory_id for them
-         {QString("UPDATE fermentable SET inventory_id = ("
-                    "SELECT fermentable_in_inventory.id "
-                    "FROM fermentable_in_inventory "
-                    "WHERE fermentable.id = fermentable_in_inventory.fermentable_id"
-                 ")")},
+         migrationQueries.append({QString("UPDATE %1 SET inventory_id = ("
+                                             "SELECT %1_in_inventory.id "
+                                             "FROM %1_in_inventory "
+                                             "WHERE %1.id = %1_in_inventory.%1_id"
+                                          ")").arg(baseTableName)});
          // Finally, we update all the kids to have the same inventory_id as their dear old paw
-         {QString("UPDATE fermentable SET inventory_id = ( "
-                    "SELECT tmp.inventory_id "
-                    "FROM fermentable tmp, fermentable_children "
-                    "WHERE fermentable.id = fermentable_children.child_id "
-                    "AND tmp.id = fermentable_children.parent_id"
-                 ") "
-                 "WHERE inventory_id IS NULL")},
-         //
-         // Rearrange inventory - hop
-         //
-         {QString("ALTER TABLE hop ADD COLUMN inventory_id REFERENCES hop_in_inventory (id)")},
-         // It would seem we have kids with their own rows in the db. This is a freaking mess, but I need to delete those rows
-         // before I can do anything else.
-         {QString("DELETE FROM hop_in_inventory "
-                 "WHERE hop_in_inventory.id in ( "
-                    "SELECT hop_in_inventory.id "
-                    "FROM hop_in_inventory, hop_children, hop "
-                    "WHERE hop.id = hop_children.child_id "
-                    "AND hop_in_inventory.hop_id = hop.id "
-                 ")")},
-         {QString("INSERT INTO hop_in_inventory (hop_id) VALUES ( "
-                    // Everything has an inventory row now. This will find all the parent items that don't have an inventory row.
-                    "SELECT id FROM hop WHERE NOT EXISTS ( "
-                       "SELECT hop_children.id "
-                       "FROM hop_children "
-                       "WHERE hop_children.child_id = hop.id "
-                    ") AND NOT EXISTS ( "
-                       "SELECT hop_in_inventory.id "
-                       "FROM hop_in_inventory "
-                       "WHERE hop_in_inventory.hop_id = hop.id"
-                    ") "
-                 ")")},
-         // Once we know all parents have inventory rows, we populate inventory_id for them
-         {QString("UPDATE hop SET inventory_id = ("
-                    "SELECT hop_in_inventory.id "
-                    "FROM hop_in_inventory "
-                    "WHERE hop.id = hop_in_inventory.hop_id"
-                 ")")},
-         // Finally, we update all the kids to have the same inventory_id as their dear old paw
-         {QString("UPDATE hop SET inventory_id = ( "
-                    "SELECT tmp.inventory_id "
-                    "FROM hop tmp, hop_children "
-                    "WHERE hop.id = hop_children.child_id "
-                    "AND tmp.id = hop_children.parent_id"
-                 ") "
-                 "WHERE inventory_id IS NULL")},
-         //
-         // Rearrange inventory - misc
-         //
-         {QString("ALTER TABLE misc ADD COLUMN inventory_id REFERENCES misc_in_inventory (id)")},
-         // It would seem we have kids with their own rows in the db. This is a freaking mess, but I need to delete those rows
-         // before I can do anything else.
-         {QString("DELETE FROM misc_in_inventory "
-                 "WHERE misc_in_inventory.id in ( "
-                    "SELECT misc_in_inventory.id "
-                    "FROM misc_in_inventory, misc_children, misc "
-                    "WHERE misc.id = misc_children.child_id "
-                    "AND misc_in_inventory.misc_id = misc.id "
-                 ")")},
-         {QString("INSERT INTO misc_in_inventory (misc_id) VALUES ( "
-                    // Everything has an inventory row now. This will find all the parent items that don't have an inventory row.
-                    "SELECT id FROM misc WHERE NOT EXISTS ( "
-                       "SELECT misc_children.id "
-                       "FROM misc_children "
-                       "WHERE misc_children.child_id = misc.id "
-                    ") AND NOT EXISTS ( "
-                       "SELECT misc_in_inventory.id "
-                       "FROM misc_in_inventory "
-                       "WHERE misc_in_inventory.misc_id = misc.id"
-                    ") "
-                 ")")},
-         // Once we know all parents have inventory rows, we populate inventory_id for them
-         {QString("UPDATE misc SET inventory_id = ("
-                    "SELECT misc_in_inventory.id "
-                    "FROM misc_in_inventory "
-                    "WHERE misc.id = misc_in_inventory.misc_id"
-                 ")")},
-         // Finally, we update all the kids to have the same inventory_id as their dear old paw
-         {QString("UPDATE misc SET inventory_id = ( "
-                    "SELECT tmp.inventory_id "
-                    "FROM misc tmp, misc_children "
-                    "WHERE misc.id = misc_children.child_id "
-                    "AND tmp.id = misc_children.parent_id"
-                 ") "
-                 "WHERE inventory_id IS NULL")},
-         //
-         // Rearrange inventory - yeast
-         //
-         {QString("ALTER TABLE yeast ADD COLUMN inventory_id REFERENCES yeast_in_inventory (id)")},
-         // It would seem we have kids with their own rows in the db. This is a freaking mess, but I need to delete those rows
-         // before I can do anything else.
-         {QString("DELETE FROM yeast_in_inventory "
-                 "WHERE yeast_in_inventory.id in ( "
-                    "SELECT yeast_in_inventory.id "
-                    "FROM yeast_in_inventory, yeast_children, yeast "
-                    "WHERE yeast.id = yeast_children.child_id "
-                    "AND yeast_in_inventory.yeast_id = yeast.id "
-                 ")")},
-         {QString("INSERT INTO yeast_in_inventory (yeast_id) VALUES ( "
-                    // Everything has an inventory row now. This will find all the parent items that don't have an inventory row.
-                    "SELECT id FROM yeast WHERE NOT EXISTS ( "
-                       "SELECT yeast_children.id "
-                       "FROM yeast_children "
-                       "WHERE yeast_children.child_id = yeast.id "
-                    ") AND NOT EXISTS ( "
-                       "SELECT yeast_in_inventory.id "
-                       "FROM yeast_in_inventory "
-                       "WHERE yeast_in_inventory.yeast_id = yeast.id"
-                    ") "
-                 ")")},
-         // Once we know all parents have inventory rows, we populate inventory_id for them
-         {QString("UPDATE yeast SET inventory_id = ("
-                    "SELECT yeast_in_inventory.id "
-                    "FROM yeast_in_inventory "
-                    "WHERE yeast.id = yeast_in_inventory.yeast_id"
-                 ")")},
-         // Finally, we update all the kids to have the same inventory_id as their dear old paw
-         {QString("UPDATE yeast SET inventory_id = ( "
-                    "SELECT tmp.inventory_id "
-                    "FROM yeast tmp, yeast_children "
-                    "WHERE yeast.id = yeast_children.child_id "
-                    "AND tmp.id = yeast_children.parent_id"
-                 ") "
-                 "WHERE inventory_id IS NULL")},
-         //
-         // We need to drop the appropriate columns from the inventory tables
-         // Scary, innit? The changes above basically reverse the relation.
-         // Instead of inventory knowing about ingredients, we now have ingredients
-         // knowing about inventory. I am concerned that leaving these in place
-         // will cause circular references
-         //
-         // Dropping inventory columns - fermentable
-         //
-         {QString("CREATE TABLE tmpfermentable_in_inventory (id %1, amount %2 DEFAULT 0);").arg(db.getDbNativePrimaryKeyDeclaration(), db.getDbNativeTypeName<double>())},
-         {QString("INSERT INTO tmpfermentable_in_inventory (id, amount) SELECT id, amount FROM fermentable_in_inventory")},
-         {QString("DROP TABLE fermentable_in_inventory")},
-         {QString("ALTER TABLE tmpfermentable_in_inventory RENAME TO fermentable_in_inventory")},
-         //
-         // Dropping inventory columns - hop
-         //
-         {QString("CREATE TABLE tmphop_in_inventory (id %1, amount %2 DEFAULT 0);").arg(db.getDbNativePrimaryKeyDeclaration(), db.getDbNativeTypeName<double>())},
-         {QString("INSERT INTO tmphop_in_inventory (id, amount) SELECT id, amount FROM hop_in_inventory")},
-         {QString("DROP TABLE hop_in_inventory")},
-         {QString("ALTER TABLE tmphop_in_inventory RENAME TO hop_in_inventory")},
-         //
-         // Dropping inventory columns - misc
-         //
-         {QString("CREATE TABLE tmpmisc_in_inventory (id %1, amount %2 DEFAULT 0);").arg(db.getDbNativePrimaryKeyDeclaration(), db.getDbNativeTypeName<double>())},
-         {QString("INSERT INTO tmpmisc_in_inventory (id, amount) SELECT id, amount FROM misc_in_inventory")},
-         {QString("DROP TABLE misc_in_inventory")},
-         {QString("ALTER TABLE tmpmisc_in_inventory RENAME TO misc_in_inventory")},
-         //
-         // Dropping inventory columns - yeast
-         //
-         {QString("CREATE TABLE tmpyeast_in_inventory (id %1, amount %2 DEFAULT 0);").arg(db.getDbNativePrimaryKeyDeclaration(), db.getDbNativeTypeName<double>())},
-         {QString("INSERT INTO tmpyeast_in_inventory (id, amount) SELECT id, amount FROM yeast_in_inventory")},
-         {QString("DROP TABLE yeast_in_inventory")},
-         {QString("ALTER TABLE tmpyeast_in_inventory RENAME TO yeast_in_inventory")},
-         //
-         // Finally, the btalltables table isn't needed, so drop it
-         //
-         {QString("DROP TABLE IF EXISTS bt_alltables")}
-      };
+         migrationQueries.append({QString("UPDATE %1 SET inventory_id = ( "
+                                             "SELECT tmp.inventory_id "
+                                             "FROM %1 tmp, %1_children "
+                                             "WHERE %1.id = %1_children.child_id "
+                                             "AND tmp.id = %1_children.parent_id"
+                                          ") "
+                                          "WHERE inventory_id IS NULL").arg(baseTableName)});
+      }
+      //
+      // We need to drop the appropriate columns from the inventory tables
+      // Scary, innit? The changes above basically reverse the relation.
+      // Instead of inventory knowing about ingredients, we now have ingredients
+      // knowing about inventory. I am concerned that leaving these in place
+      // will cause circular references
+      //
+      for (char const * baseTableName : {"fermentable", "hop", "misc", "yeast"}) {
+         migrationQueries.append({QString(
+                                     "CREATE TABLE tmp%1_in_inventory (id %2, amount %3);" // Previously DEFAULT 0
+                                  ).arg(baseTableName,
+                                        db.getDbNativePrimaryKeyDeclaration(),
+                                        db.getDbNativeTypeName<double>())});
+         migrationQueries.append({QString("INSERT INTO tmp%1_in_inventory (id, amount) "
+                                          "SELECT id, amount "
+                                          "FROM %1_in_inventory").arg(baseTableName)});
+         migrationQueries.append({QString("DROP TABLE %1_in_inventory").arg(baseTableName)});
+         migrationQueries.append({QString("ALTER TABLE tmp%1_in_inventory "
+                                          "RENAME TO %1_in_inventory").arg(baseTableName)});
+      }
+      //
+      // Finally, the btalltables table isn't needed, so drop it
+      //
+      migrationQueries.append({QString("DROP TABLE IF EXISTS bt_alltables")});
+
       return executeSqlQueries(q, migrationQueries);
    }
 
@@ -612,32 +467,36 @@ namespace {
       createSaltSqlStream <<
          "CREATE TABLE salt ( "
             "id               " << db.getDbNativePrimaryKeyDeclaration() << ", "
-            "addTo            " << db.getDbNativeTypeName<int>()     << "          DEFAULT 0, "
-            "amount           " << db.getDbNativeTypeName<double>()  << "          DEFAULT 0, "
-            "amount_is_weight " << db.getDbNativeTypeName<bool>()    << "          DEFAULT ?, "
-            "deleted          " << db.getDbNativeTypeName<bool>()    << "          DEFAULT ?, "
-            "display          " << db.getDbNativeTypeName<bool>()    << "          DEFAULT ?, "
-            "folder           " << db.getDbNativeTypeName<QString>() << "          DEFAULT '', "
-            "is_acid          " << db.getDbNativeTypeName<bool>()    << "          DEFAULT ?, "
-            "name             " << db.getDbNativeTypeName<QString>() << " not null DEFAULT '', "
-            "percent_acid     " << db.getDbNativeTypeName<double>()  << "          DEFAULT 0, "
-            "stype            " << db.getDbNativeTypeName<int>()     << "          DEFAULT 0, "
+            "addTo            " << db.getDbNativeTypeName<int>()     << "         , " // Previously DEFAULT 0
+            "amount           " << db.getDbNativeTypeName<double>()  << "         , " // Previously DEFAULT 0
+            "amount_is_weight " << db.getDbNativeTypeName<bool>()    << "         , " // Previously DEFAULT 1 / true
+            "deleted          " << db.getDbNativeTypeName<bool>()    << "         , " // Previously DEFAULT 0 / false
+            "display          " << db.getDbNativeTypeName<bool>()    << "         , " // Previously DEFAULT 1 / true
+            "folder           " << db.getDbNativeTypeName<QString>() << "         , " // Previously DEFAULT ''
+            "is_acid          " << db.getDbNativeTypeName<bool>()    << "         , " // Previously DEFAULT 0 / false
+            "name             " << db.getDbNativeTypeName<QString>() << " not null, " // Previously DEFAULT ''
+            "percent_acid     " << db.getDbNativeTypeName<double>()  << "         , " // Previously DEFAULT 0
+            "stype            " << db.getDbNativeTypeName<int>()     << "         , " // Previously DEFAULT 0
             "misc_id          " << db.getDbNativeTypeName<int>()     << ", "
             "FOREIGN KEY(misc_id) REFERENCES misc(id)"
          ");";
       QVector<QueryAndParameters> const migrationQueries{
-         {QString("ALTER TABLE water ADD COLUMN wtype      %1 DEFAULT 0").arg(db.getDbNativeTypeName<int>())},
-         {QString("ALTER TABLE water ADD COLUMN alkalinity %1 DEFAULT 0").arg(db.getDbNativeTypeName<double>())},
-         {QString("ALTER TABLE water ADD COLUMN as_hco3    %1 DEFAULT ?").arg(db.getDbNativeTypeName<bool>()), {QVariant{true}}},
-         {QString("ALTER TABLE water ADD COLUMN sparge_ro  %1 DEFAULT 0").arg(db.getDbNativeTypeName<double>())},
-         {QString("ALTER TABLE water ADD COLUMN mash_ro    %1 DEFAULT 0").arg(db.getDbNativeTypeName<double>())},
-         {
-            createSaltSql,
-            {QVariant{true},  // amount_is_weight
-             QVariant{false}, // deleted
-             QVariant{true},  // display
-             QVariant{false}} // is_acid
-         },
+         {QString(
+            "ALTER TABLE water ADD COLUMN wtype      %1" // Previously DEFAULT 0
+          ).arg(db.getDbNativeTypeName<int>())},
+         {QString(
+            "ALTER TABLE water ADD COLUMN alkalinity %1" // Previously DEFAULT 0
+          ).arg(db.getDbNativeTypeName<double>())},
+         {QString(
+            "ALTER TABLE water ADD COLUMN as_hco3    %1" // Previously DEFAULT 1 / true
+          ).arg(db.getDbNativeTypeName<bool>())},
+         {QString(
+            "ALTER TABLE water ADD COLUMN sparge_ro  %1" // Previously DEFAULT 0
+          ).arg(db.getDbNativeTypeName<double>())},
+         {QString(
+            "ALTER TABLE water ADD COLUMN mash_ro    %1" // Previously DEFAULT 0
+          ).arg(db.getDbNativeTypeName<double>())},
+         {createSaltSql},
          {QString("CREATE TABLE salt_in_recipe ( "
                     "id        %2, "
                     "recipe_id %1, "
@@ -651,7 +510,11 @@ namespace {
 
    bool migrate_to_10(Database & db, BtSqlQuery q) {
       QVector<QueryAndParameters> const migrationQueries{
-         {QString("ALTER TABLE recipe ADD COLUMN ancestor_id %1 REFERENCES recipe(id)").arg(db.getDbNativeTypeName<int>())},
+         // DB-specific version of ALTER TABLE recipe ADD COLUMN ancestor_id INTEGER REFERENCES recipe(id)
+         {QString(db.getSqlToAddColumnAsForeignKey()).arg("recipe",
+                                                          "ancestor_id",
+                                                          "recipe",
+                                                          "id")},
          {QString("ALTER TABLE recipe ADD COLUMN locked %1").arg(db.getDbNativeTypeName<bool>())},
          {QString("UPDATE recipe SET locked = ?"), {QVariant{false}}},
          // By default a Recipe is its own ancestor.  So, we need to set ancestor_id = id where display = true and ancestor_id is null
@@ -748,10 +611,15 @@ bool DatabaseSchemaHelper::create(Database & database, QSqlDatabase connection) 
       return false;
    }
 
+   //
    // Create the settings table manually, since it's only used in this file
+   //
+   // NB: For reasons lost in the mists of time, the repopulateChildrenOnNextStart column was originally implemented as
+   // an integer and not a boolean.
+   //
    QVector<QueryAndParameters> const setUpQueries{
       {QString("CREATE TABLE settings (id %2, repopulatechildrenonnextstart %1, version %1)").arg(database.getDbNativeTypeName<int>(), database.getDbNativePrimaryKeyDeclaration())},
-      {QString("INSERT INTO settings (repopulatechildrenonnextstart, version) VALUES (?, ?)"), {QVariant(true), QVariant(dbVersion)}}
+      {QString("INSERT INTO settings (repopulatechildrenonnextstart, version) VALUES (?, ?)"), {QVariant(1), QVariant(dbVersion)}}
 
    };
    BtSqlQuery sqlQuery{connection};

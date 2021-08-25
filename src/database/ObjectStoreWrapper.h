@@ -40,6 +40,13 @@ namespace ObjectStoreWrapper {
       return ObjectStoreTyped<NE>::getInstance().getById(id).get();
    }
 
+   /**
+    * \brief Similar to \c getById but returns a list of cached objects matching a supplied list of IDs
+    */
+   template<class NE> QList<std::shared_ptr<NE> > getByIds(QVector<int> const & listOfIds) {
+      return ObjectStoreTyped<NE>::getInstance().getByIds(listOfIds);
+   }
+
    template<class NE> QList<std::shared_ptr<NE> > getAll() {
       return ObjectStoreTyped<NE>::getInstance().getAll();
    }

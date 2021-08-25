@@ -21,7 +21,11 @@
 #include "model/Inventory.h"
 #include "model/NamedParameterBundle.h"
 
-NamedEntityWithInventory::NamedEntityWithInventory(int key, bool cache, QString t_name, bool t_display, QString folder) :
+NamedEntityWithInventory::NamedEntityWithInventory(int key,
+                                                   bool cache,
+                                                   QString t_name,
+                                                   bool t_display,
+                                                   QString folder) :
    NamedEntity   {key, cache, t_name, t_display, folder},
    m_inventory_id{-1} {
    return;
@@ -35,9 +39,9 @@ NamedEntityWithInventory::NamedEntityWithInventory(NamedParameterBundle const & 
 }
 
 NamedEntityWithInventory::NamedEntityWithInventory(NamedEntityWithInventory const & other) :
-   NamedEntity     {other                 },
-   // Don't copy Inventory ID as new Fermentable should have its own inventory - unless it's a child, but that case is
-   // handled in makeChild() below
+   NamedEntity{other},
+   // Don't copy Inventory ID as new Fermentable/Hop/etc should have its own inventory - unless it's a child, but that
+   // case is handled in makeChild() below
    m_inventory_id {-1} {
    return;
 }
@@ -54,7 +58,7 @@ void NamedEntityWithInventory::makeChild(NamedEntity const & copiedFrom) {
 void NamedEntityWithInventory::setInventoryId(int key) {
    if (key < 1) {
       // This really shouldn't happen
-      qCritical() << QString("Fermentable: bad inventory id: %1").arg(key);
+      qCritical() << Q_FUNC_INFO << this->metaObject()->className() << "Bad inventory id:" << key;
       Q_ASSERT(false); // Bail on debug build
       return;          // Continue (without setting invalid ID) otherwise
    }

@@ -62,7 +62,6 @@
 #include "database/DatabaseSchemaHelper.h"
 #include "PersistentSettings.h"
 
-
 namespace {
 
    //
@@ -129,16 +128,19 @@ namespace {
    //
    // Each thread has its own connection to the database, and each connection has to have a unique name (otherwise,
    // calling QSqlDatabase::addDatabase() with the same name as an existing connection will replace that existing
-   // connection with the new one created by that function).  We just create a unique connection name from the thread
-   // ID in the same way that we do in the Logging module.
+   // connection with the new one created by that function).  We can create a unique connection name from the thread
+   // ID in a similar way as we do in the Logging module.  The difference is that we need each _instance_ of Database to
+   // have a separate connection name for each _thread_ because, eg, when you're switching between SQLite and
+   // PostgreSQL, a single thread will have two separate connections open (one to current and one to new DB).
    //
    // We only need to store the name of the connection here.  (See header file comment for Database::sqlDatabase() for
    // more details of why it would be unhelpful to store a QSqlDatabase object in thread-local storage.)
    //
    // Since C++11, we can use thread_local to define thread-specific variables that are initialized "before first use"
    //
-   thread_local QString const dbConnectionNameForThisThread {
-      QString{"%1"}.arg(reinterpret_cast<quintptr>(QThread::currentThreadId()), 0, 36)
+   thread_local QMap<int, QString> const dbConnectionNamesForThisThread {
+      {Database::SQLITE, QString{"%1-SQLITE"}.arg(reinterpret_cast<quintptr>(QThread::currentThreadId()), 0, 36)},
+      {Database::PGSQL,  QString{"%1-PGSQL"}.arg(reinterpret_cast<quintptr>(QThread::currentThreadId()), 0, 36)}
    };
 
    // May St. Stevens intercede on my behalf.
@@ -527,10 +529,13 @@ QSqlDatabase Database::sqlDatabase() const {
    // If we already created a valid DB connection for this thread, this call will get it, and we can just return it to
    // the caller.  Otherwise, we'll just get an invalid connection.
    //
-   Q_ASSERT(!dbConnectionNameForThisThread.isEmpty());
-   QSqlDatabase connection = QSqlDatabase::database(dbConnectionNameForThisThread);
+   Q_ASSERT(this->pimpl->dbType != Database::NODB);
+   Q_ASSERT(dbConnectionNamesForThisThread.contains(this->pimpl->dbType));
+   QString connectionName = dbConnectionNamesForThisThread.value(this->pimpl->dbType);
+   Q_ASSERT(!connectionName.isEmpty());
+   QSqlDatabase connection = QSqlDatabase::database(connectionName);
    if (connection.isValid()) {
-      qDebug() << Q_FUNC_INFO << "Returning connection " << dbConnectionNameForThisThread;
+      qDebug() << Q_FUNC_INFO << "Returning connection " << connectionName;
       return connection;
    }
 
@@ -540,8 +545,8 @@ QSqlDatabase Database::sqlDatabase() const {
    //
    QString driverType{this->pimpl->dbType == Database::PGSQL ? "QPSQL" : "QSQLITE"};
    qDebug() <<
-      Q_FUNC_INFO << "Creating connection " << dbConnectionNameForThisThread << " with " << driverType << " driver";
-   connection = QSqlDatabase::addDatabase(driverType, dbConnectionNameForThisThread);
+      Q_FUNC_INFO << "Creating connection " << connectionName << " with " << driverType << " driver";
+   connection = QSqlDatabase::addDatabase(driverType, connectionName);
    if (!connection.isValid()) {
       //
       // If the connection is not valid, it means the specified driver type is not available or could not be loaded

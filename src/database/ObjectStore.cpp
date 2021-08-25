@@ -1145,7 +1145,9 @@ std::shared_ptr<QObject> ObjectStore::getById(int id) const {
    // Callers should always check that the object they are requesting exists.  However, if a caller does request
    // something invalid, then we at least want to log that for debugging.
    if (!this->pimpl->allObjects.contains(id)) {
-      qCritical() << Q_FUNC_INFO << "Unable to find object with ID " << id;
+      qCritical() <<
+         Q_FUNC_INFO << "Unable to find cached object with ID" << id << "(which should be stored in DB table" <<
+         this->pimpl->primaryTable.tableName << ")";
    }
    return this->pimpl->allObjects.value(id);
 }

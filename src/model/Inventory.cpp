@@ -109,7 +109,11 @@ void Inventory::setId(int id) {
 
 void Inventory::setAmount(double amount) {
    this->pimpl->amount = amount;
-   this->getObjectStoreTypedInstance().updateProperty(*this, PropertyNames::Inventory::amount);
+   // If we're already stored in the object store, tell it about the property change so that it can write it to the
+   // database.  (We don't pass the new value as it will get read out of the object via propertyName.)
+   if (this->pimpl->id > 0) {
+      this->getObjectStoreTypedInstance().updateProperty(*this, PropertyNames::Inventory::amount);
+   }
    // .:TBD:. Do we need to send any signals here?  Or should we do that in updateProperty?
    return;
 }
@@ -166,10 +170,28 @@ void InventoryUtils::setAmount(Ing & ing, double amount) {
    // ...(b) store it...
    inventoryObjectStore.insert(std::static_pointer_cast<QObject>(inventory));
    // ...(c) tell the ingredient (and its parent, children, siblings) that it now has an inventory
-   QVector<int> idsOfParentIngredientAndItsChildren = ing.getParentAndChildrenIds();
-   auto parentIngredientAndItsChildren = inventoryObjectStore.getByIds(idsOfParentIngredientAndItsChildren);
-   for (auto ii : parentIngredientAndItsChildren) {
-      std::static_pointer_cast<Ing>(ii)->setInventoryId(inventory->getId());
+   if (ing.key() > 0) {
+      // The ingredient has a valid ID, so it's meaningful to look for its parent, children, siblings
+      QVector<int> idsOfParentIngredientAndItsChildren = ing.getParentAndChildrenIds();
+      qDebug() <<
+         Q_FUNC_INFO << ing.metaObject()->className() << "#" << ing.key() << "has" <<
+         idsOfParentIngredientAndItsChildren.size() - 1 << "parents, children and siblings : " <<
+         idsOfParentIngredientAndItsChildren;
+      auto parentIngredientAndItsChildren = ObjectStoreWrapper::getByIds<Ing>(idsOfParentIngredientAndItsChildren);
+      for (auto ii : parentIngredientAndItsChildren) {
+         qDebug() <<
+            Q_FUNC_INFO << "Assigning new" << inventory->metaObject()->className() << "#" << inventory->getId() <<
+            "to" << ing.metaObject()->className() << "#" << ii->key();
+         ii->setInventoryId(inventory->getId());
+      }
+   } else {
+      // The ingredient does not have a valid ID, which means it's not yet stored in the database.  We don't normally do
+      // things this way around, because it's harder to undo/clean-up, but it should work if the ingredient is about to
+      // be stored.
+      qWarning() <<
+         Q_FUNC_INFO << "Setting inventory amount (" << amount << ") for" << ing.metaObject()->className() <<
+         "before it is stored in the database, so inventory #" << inventory->getId() << "does not yet have an owner";
+      ing.setInventoryId(inventory->getId());
    }
    return;
 }
