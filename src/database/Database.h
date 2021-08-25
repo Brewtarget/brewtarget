@@ -30,6 +30,7 @@
  */
 #ifndef DATABASE_H
 #define DATABASE_H
+#pragma once
 
 #include <memory> // For PImpl
 
@@ -137,7 +138,7 @@ public:
     * will be the final implementation -- I can't help but think I should be
     * subclassing something
     */
-   Database::DbType dbType();
+   Database::DbType dbType() const;
 
    /**
     * \brief Turn foreign key constraints on or off.  Typically, turning them off is only required during copying the
@@ -182,6 +183,12 @@ public:
     */
    static QDateTime lastDbMergeRequest;
 
+   /**
+    * \brief Returns a displayable set of name-value pairs for the connection details for the current database,
+    *        \b excluding password
+    */
+   QList<QPair<QString, QString>> displayableConnectionParms() const;
+
 private:
    // Private implementation details - see https://herbsutter.com/gotw/_100/
    class impl;
@@ -203,5 +210,14 @@ private:
    //! Load database from file.
    bool load();
 };
+
+namespace DatabaseHelper {
+
+   /**
+    * \return displayable name for a given DB type
+    */
+   char const * getNameFromDbTypeName(Database::DbType whichDb);
+
+}
 
 #endif

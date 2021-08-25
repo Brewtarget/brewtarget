@@ -25,6 +25,7 @@
 #include <QStringList>
 
 #include "brewtarget.h"
+#include "database/Database.h" // Needed only for tooltip that displays database connection parameters
 #include "Html.h"
 #include "MainWindow.h"
 #include "model/BrewNote.h"
@@ -1458,45 +1459,22 @@ void RecipeFormatter::toTextClipboard() {
 }
 
 QString RecipeFormatter::getLabelToolTip() {
-   // Do the style sheet first
-   QString header = "<html><head><style type=\"text/css\">";
-   header += Html::getCss(":/css/tooltip.css");
-   header += "</style></head>";
-
-   QString body   = "<body>";
-   body += QString("<div id=\"headerdiv\">");
-   body += QString("<table id=\"tooltip\">");
-   body += QString("<caption>%1</caption>")
-         .arg( "Using PostgreSQL");
-
-   // First row -- hostname and port
-   body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
-         .arg(tr("Hostname"))
-         .arg(PersistentSettings::value(PersistentSettings::Names::dbHostname).toString());
-   body += QString("<td class=\"left\">%1</td><td class=\"value\">%2</td></tr>")
-         .arg(tr("Port"))
-         .arg(PersistentSettings::value(PersistentSettings::Names::dbPortnum).toInt());
-   // Second row -- schema and database
-   body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
-         .arg(tr("Schema"))
-         .arg(PersistentSettings::value(PersistentSettings::Names::dbSchema).toString());
-   body += QString("<td class=\"left\">%1</td><td class=\"value\">%2</td></tr>")
-         .arg(tr("Database"))
-         .arg(PersistentSettings::value(PersistentSettings::Names::dbName).toString());
-
-   // third row -- username and is the password saved (NOTE: NOT THE
-   // PASSWORD ITSELF)
-   body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
-         .arg(tr("Username"))
-         .arg(PersistentSettings::value(PersistentSettings::Names::dbUsername).toString());
-   body += QString("<td class=\"left\">%1</td><td class=\"value\">%2</td></tr>")
-         .arg(tr("Saved Password"))
-         .arg( PersistentSettings::contains(PersistentSettings::Names::dbPassword) ? "Yes" : "No");
-
-
-   body += "</table></body></html>";
-
-   return header + body;
+   Database const & database = Database::instance();
+   QString toolTip{};
+   QTextStream toolTipAsStream{&toolTip};
+   toolTipAsStream <<
+      "<html><head><style type=\"text/css\">" << Html::getCss(":/css/tooltip.css") << "</style></head>"
+      "<body>"
+      "<div id=\"headerdiv\">"
+      "<table id=\"tooltip\">"
+      "<caption>Using " << DatabaseHelper::getNameFromDbTypeName(database.dbType()) << "</caption>";
+   auto connectionParms = database.displayableConnectionParms();
+   for (auto parm : connectionParms) {
+      toolTipAsStream <<
+         "<tr><td class=\"left\">" << parm.first << ": </td><td class=\"value\">" << parm.second << "</td>";
+   }
+   toolTipAsStream << "</table></body></html>";
+   return toolTip;
 }
 
 void RecipeFormatter::printPreview() {

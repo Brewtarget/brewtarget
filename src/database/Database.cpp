@@ -79,6 +79,11 @@ namespace {
       }
    };
 
+   DbNativeVariants const displayableDbType {
+      "SQLite",
+      "PostgreSQL"
+   };
+
    //
    // SQLite actually lets you store any type in any column, and only offers five "affinities" for "the recommended
    // type for data stored in a column".   There are no special types for boolean or date.  However, it also allows you
@@ -221,35 +226,33 @@ public:
       qDebug() << "Loading SQLITE...";
 
       // Set file names.
-      dbFileName = PersistentSettings::getUserDataDir().filePath("database.sqlite");
-      dataDbFileName = Brewtarget::getResourceDir().filePath("default_db.sqlite");
+      this->dbFileName = PersistentSettings::getUserDataDir().filePath("database.sqlite");
+      this->dataDbFileName = Brewtarget::getResourceDir().filePath("default_db.sqlite");
       qDebug().noquote() <<
-         Q_FUNC_INFO << "dbFileName = \"" << dbFileName << "\"\ndataDbFileName=\"" << dataDbFileName << "\"";
+         Q_FUNC_INFO << "dbFileName = \"" << this->dbFileName << "\"\ndataDbFileName=\"" << this->dataDbFileName << "\"";
       // Set the files.
-      dbFile.setFileName(dbFileName);
-      dataDbFile.setFileName(dataDbFileName);
+      this->dbFile.setFileName(this->dbFileName);
+      this->dataDbFile.setFileName(this->dataDbFileName);
 
       // If user restored the database from a backup, make the backup into the primary.
       {
-         QFile newdb(QString("%1.new").arg(dbFileName));
-         if( newdb.exists() )
-         {
-            dbFile.remove();
-            newdb.copy(dbFileName);
-            QFile::setPermissions( dbFileName, QFile::ReadOwner | QFile::WriteOwner | QFile::ReadGroup );
+         QFile newdb(QString("%1.new").arg(this->dbFileName));
+         if (newdb.exists()) {
+            this->dbFile.remove();
+            newdb.copy(this->dbFileName);
+            QFile::setPermissions(this->dbFileName, QFile::ReadOwner | QFile::WriteOwner | QFile::ReadGroup );
             newdb.remove();
          }
       }
 
       // If there's no dbFile, try to copy from dataDbFile.
-      if( !dbFile.exists() )
-      {
+      if (!this->dbFile.exists()) {
          Brewtarget::userDatabaseDidNotExist = true;
 
          // Have to wait until db is open before creating from scratch.
-         if (dataDbFile.exists()) {
-            dataDbFile.copy(dbFileName);
-            QFile::setPermissions( dbFileName, QFile::ReadOwner | QFile::WriteOwner | QFile::ReadGroup );
+         if (this->dataDbFile.exists()) {
+            this->dataDbFile.copy(this->dbFileName);
+            QFile::setPermissions(this->dbFileName, QFile::ReadOwner | QFile::WriteOwner | QFile::ReadGroup);
          }
 
          // Reset the last merge request.
@@ -493,8 +496,7 @@ public:
    QFile dataDbFile;
    QString dataDbFileName;
 
-   // And these are for Postgres databases -- are these really required? Are
-   // the sqlite ones really required?
+   // And these are for Postgres databases
    QString dbHostname;
    int dbPortnum;
    QString dbName;
@@ -917,7 +919,7 @@ void Database::convertDatabase(QString const& Hostname, QString const& DbName,
    }
 }
 
-Database::DbType Database::dbType() {
+Database::DbType Database::dbType() const {
    return this->pimpl->dbType;
 }
 
@@ -926,7 +928,7 @@ void Database::setForeignKeysEnabled(bool enabled, QSqlDatabase connection, Data
       type = this->dbType();
    }
 
-   switch( type ) {
+   switch (type) {
       case SQLITE:
          if (enabled) {
             connection.exec("PRAGMA foreign_keys=on");
@@ -975,3 +977,31 @@ char const * Database::getSqlToAddColumnAsForeignKey() const {
 }
 
 QDateTime Database::lastDbMergeRequest = QDateTime::fromString("1986-02-24T06:00:00", Qt::ISODate);
+
+QList<QPair<QString, QString>> Database::displayableConnectionParms() const {
+   switch (this->pimpl->dbType) {
+      case SQLITE:
+         return {
+            {tr("Filename"), this->pimpl->dbFileName}
+         };
+      case PGSQL:
+         return {
+            { tr("Host & Port"), QString("%1:%2").arg(this->pimpl->dbHostname, this->pimpl->dbPortnum) },
+            { tr("Database"),    this->pimpl->dbName     },
+            { tr("Schema"),      this->pimpl->dbSchema   },
+            { tr("Username"),    this->pimpl->dbUsername }
+         };
+      default:
+         // It's a coding error (somewhere) if we get here!
+         Q_ASSERT(false);
+   }
+
+   return {};
+}
+
+//======================================================================================================================
+//====================================== Start of Functions in Helper Namespace ========================================
+//======================================================================================================================
+char const * DatabaseHelper::getNameFromDbTypeName(Database::DbType whichDb) {
+   return getDbNativeName(displayableDbType, whichDb);
+}
