@@ -145,8 +145,8 @@ namespace {
    // Since C++11, we can use thread_local to define thread-specific variables that are initialized "before first use"
    //
    thread_local QMap<int, QString> const dbConnectionNamesForThisThread {
-      {Database::SQLITE, QString{"%1-SQLITE"}.arg(reinterpret_cast<quintptr>(QThread::currentThreadId()), 0, 36)},
-      {Database::PGSQL,  QString{"%1-PGSQL"}.arg(reinterpret_cast<quintptr>(QThread::currentThreadId()), 0, 36)}
+      {Database::SQLITE, QString{"%1-%2"}.arg(getDbNativeName(displayableDbType, Database::SQLITE)).arg(reinterpret_cast<quintptr>(QThread::currentThreadId()), 0, 36)},
+      {Database::PGSQL,  QString{"%1-%2"}.arg(getDbNativeName(displayableDbType, Database::PGSQL)).arg(reinterpret_cast<quintptr>(QThread::currentThreadId()), 0, 36)}
    };
 
    // May St. Stevens intercede on my behalf.
@@ -731,26 +731,43 @@ bool Database::loadSuccessful()
 
 void Database::unload() {
 
+   // We really don't want this function to be called twice on the same object or when we didn't get as far as making a
+   // connection to the DB etc.
+   if (!this->pimpl->loaded) {
+      qDebug() <<
+         Q_FUNC_INFO << "Nothing to do for Database object for" <<
+         getDbNativeName(displayableDbType, this->pimpl->dbType) << "as not loaded";
+      return;
+   }
+
    // This RAII wrapper does all the hard work on mutex.lock() and mutex.unlock() in an exception-safe way
    QMutexLocker locker(&this->pimpl->mutex);
 
-   // So far, it seems we only create one connection to the db. This is
-   // likely overkill
+   // We only want to close connections that relate to this instance of Database
+   QString ourConnectionPrefix = QString{"%1-"}.arg(getDbNativeName(displayableDbType, this->pimpl->dbType));
+
+   // So far, it seems we only create one connection to the db per database type, so this is likely overkill
    QStringList allConnectionNames{QSqlDatabase::connectionNames()};
    for (QString conName : allConnectionNames) {
-      qDebug() << Q_FUNC_INFO << "Closing connection " << conName;
-      {
-         //
-         // Extra braces here are to ensure that this QSqlDatabase object is out of scope before the call to
-         // QSqlDatabase::removeDatabase() below
-         //
-         QSqlDatabase connectionToClose = QSqlDatabase::database(conName, false);
-         if (connectionToClose.isOpen()) {
-            connectionToClose.rollback();
-            connectionToClose.close();
+      if (0 == conName.indexOf(ourConnectionPrefix)) {
+         qDebug() << Q_FUNC_INFO << "Closing connection " << conName;
+         {
+            //
+            // Extra braces here are to ensure that this QSqlDatabase object is out of scope before the call to
+            // QSqlDatabase::removeDatabase() below
+            //
+            QSqlDatabase connectionToClose = QSqlDatabase::database(conName, false);
+            if (connectionToClose.isOpen()) {
+               connectionToClose.rollback();
+               connectionToClose.close();
+            }
          }
+         QSqlDatabase::removeDatabase(conName);
+      } else {
+         qDebug() <<
+            Q_FUNC_INFO << "Ignoring connection " << conName << "as does not start with \"" << ourConnectionPrefix <<
+            "\"";
       }
-      QSqlDatabase::removeDatabase(conName);
    }
 
    qDebug() << Q_FUNC_INFO << "DB connections all closed";
@@ -1027,9 +1044,17 @@ bool Database::updatePrimaryKeySequenceIfNecessary(QSqlDatabase & connection,
             // statement below so that the MAX function will give us the current maximum value of the primary column
             // whose sequence we are updating.
             //
+            // COALESCE covers the case where the table is empty (so MAX would return NULL).
+            //
+            // We use "setval(..., COALESCE(MAX(%2) + 1, 1), false)" to set the sequence to the next value that should
+            // be used (and don't advance sequence before next insertion), rather than
+            // "setval(..., COALESCE(MAX(%2), 0), true)" to set the sequence to the last insered value (and advance the
+            // sequence before next insertion) because, in the case the table is empty, we don't want to set the
+            // sequence to 0 (an invalid ID) in case it causes problems.
+            //
             BtSqlQuery query{connection};
             query.prepare(
-               QString("SELECT setval(pg_get_serial_sequence('%1', '%2'), COALESCE(MAX(%2), 0), true) "
+               QString("SELECT setval(pg_get_serial_sequence('%1', '%2'), COALESCE(MAX(%2) + 1, 1), false) "
                        "FROM %1;").arg(*tableName, *columnName)
             );
             if (!query.exec()) {

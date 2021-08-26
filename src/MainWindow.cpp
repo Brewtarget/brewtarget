@@ -90,6 +90,7 @@
 #include "HopEditor.h"
 #include "HopSortFilterProxyModel.h"
 #include "HopTableModel.h"
+#include "Html.h"
 #include "HydrometerTool.h"
 #include "InventoryFormatter.h"
 #include "MashDesigner.h"
@@ -137,6 +138,33 @@
 #include "YeastEditor.h"
 #include "YeastSortFilterProxyModel.h"
 #include "YeastTableModel.h"
+
+namespace {
+
+   /**
+    * \brief Generates the pop-up you see when you hover over the Brewtarget image above the trees, which is supposed to
+    *        show the database type you are connected to, and some useful information with respect to that database.
+    */
+   QString getLabelToolTip() {
+      Database const & database = Database::instance();
+      QString toolTip{};
+      QTextStream toolTipAsStream{&toolTip};
+      toolTipAsStream <<
+         "<html><head><style type=\"text/css\">" << Html::getCss(":/css/tooltip.css") << "</style></head>"
+         "<body>"
+         "<div id=\"headerdiv\">"
+         "<table id=\"tooltip\">"
+         "<caption>Using " << DatabaseHelper::getNameFromDbTypeName(database.dbType()) << "</caption>";
+      auto connectionParms = database.displayableConnectionParms();
+      for (auto parm : connectionParms) {
+         toolTipAsStream <<
+            "<tr><td class=\"left\">" << parm.first << ": </td><td class=\"value\">" << parm.second << "</td>";
+      }
+      toolTipAsStream << "</table></body></html>";
+      return toolTip;
+   }
+
+}
 
 // This private implementation class holds all private non-virtual members of MainWindow
 class MainWindow::impl {
@@ -362,12 +390,13 @@ void MainWindow::init() {
 
    // No connections from the database yet? Oh FSM, that probably means I'm
    // doing it wrong again.
-   // .:TODO:. Change this so we use the newere deleted signal!
+   // .:TODO:. Change this so we use the newer deleted signal!
    connect(&ObjectStoreTyped<BrewNote>::getInstance(), &ObjectStoreTyped<BrewNote>::signalObjectDeleted, this, &MainWindow::closeBrewNote);
 
-   // setup the pretty tool tip. It doesn't really belong anywhere, so here it
-   // is
-   label_Brewtarget->setToolTip( recipeFormatter->getLabelToolTip());
+   // Set up the pretty tool tip. It doesn't really belong anywhere, so here it is
+   // .:TODO:. When we allow users to change databases without restarting, we'll need to make sure to call this whenever
+   // the databae is changed (as setToolTip() just takes static text as its parameter).
+   label_Brewtarget->setToolTip(getLabelToolTip());
 
    qDebug() << Q_FUNC_INFO << "MainWindow initialisation complete";
    return;

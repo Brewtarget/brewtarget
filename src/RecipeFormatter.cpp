@@ -25,7 +25,6 @@
 #include <QStringList>
 
 #include "brewtarget.h"
-#include "database/Database.h" // Needed only for tooltip that displays database connection parameters
 #include "Html.h"
 #include "MainWindow.h"
 #include "model/BrewNote.h"
@@ -1456,25 +1455,6 @@ QString RecipeFormatter::getToolTip(Water* water) {
 
 void RecipeFormatter::toTextClipboard() {
    QApplication::clipboard()->setText(this->pimpl->getTextFormat());
-}
-
-QString RecipeFormatter::getLabelToolTip() {
-   Database const & database = Database::instance();
-   QString toolTip{};
-   QTextStream toolTipAsStream{&toolTip};
-   toolTipAsStream <<
-      "<html><head><style type=\"text/css\">" << Html::getCss(":/css/tooltip.css") << "</style></head>"
-      "<body>"
-      "<div id=\"headerdiv\">"
-      "<table id=\"tooltip\">"
-      "<caption>Using " << DatabaseHelper::getNameFromDbTypeName(database.dbType()) << "</caption>";
-   auto connectionParms = database.displayableConnectionParms();
-   for (auto parm : connectionParms) {
-      toolTipAsStream <<
-         "<tr><td class=\"left\">" << parm.first << ": </td><td class=\"value\">" << parm.second << "</td>";
-   }
-   toolTipAsStream << "</table></body></html>";
-   return toolTip;
 }
 
 void RecipeFormatter::printPreview() {

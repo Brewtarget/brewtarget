@@ -64,15 +64,6 @@ public:
    QString getToolTip(Yeast* yeast);
    QString getToolTip(Water* water);
 
-   /**
-    * \brief Generates the pop-up you see when you hover over the Brewtarget image above the trees, which is supposed to
-    *        show the database type you are connected to, and some useful information with respect to that database.
-    *
-    * .:TBD:. Doesn't feel like this really belongs in RecipeFormatter.  We should perhaps move it somewhere else at
-    *         some point.
-    */
-   QString getLabelToolTip();
-
    /*!
     * \brief Show the print preview
     */
