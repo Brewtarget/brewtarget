@@ -39,7 +39,8 @@
  */
 #include "database/Database.h"
 
-#include <mutex>
+#include <iostream> // For writing to std::cerr in destructor
+#include <mutex>    // For std::once_flag etc
 
 #include <QDebug>
 #include <QFile>
@@ -149,6 +150,15 @@ namespace {
       {Database::PGSQL,  QString{"%1-%2"}.arg(getDbNativeName(displayableDbType, Database::PGSQL)).arg(reinterpret_cast<quintptr>(QThread::currentThreadId()), 0, 36)}
    };
 
+   //
+   // At start-up, we know what type of database to talk to (and thus what type of Database object to return from
+   // Database::instance()) by looking in PersistentSettings (and defaulting to SQLite if nothing is marked there).  But
+   // we need to remember this value and not keep looking in PersistentSettings because those settings can change (if
+   // the user wants to switch to another database) and we don't want other bits of the program to suddenly get a
+   // different object back from Database::instance() before we're ready for it.  Hence this variable.
+   //
+   Database::DbType currentDbType = Database::NODB;
+
    // May St. Stevens intercede on my behalf.
    //
    //! \brief opens an SQLite db for transfer
@@ -158,13 +168,13 @@ namespace {
       try {
 ///         dbFile.setFileName(dbFileName);
 
-         if ( filePath.isEmpty() ) {
-            throw QString("Could not read the database file(%1)").arg(filePath);
+         if (filePath.isEmpty()) {
+            throw QString("Could not read the database file (%1)").arg(filePath);
          }
 
          newConnection.setDatabaseName(filePath);
 
-         if (!  newConnection.open() ) {
+         if (!newConnection.open()) {
             throw QString("Could not open %1 : %2").arg(filePath).arg(newConnection.lastError().text());
          }
       } catch (QString e) {
@@ -175,7 +185,7 @@ namespace {
       return newConnection;
    }
 
-   //! \brief opens a PostgreSQL db for transfer. I need
+   //! \brief opens a PostgreSQL db for transfer
    QSqlDatabase openPostgres(QString const& Hostname, QString const& DbName,
                              QString const& Username, QString const& Password,
                              int Portnum) {
@@ -188,7 +198,7 @@ namespace {
          newConnection.setPort(Portnum);
          newConnection.setPassword(Password);
 
-         if ( ! newConnection.open() ) {
+         if (!newConnection.open()) {
             throw QString("Could not open %1 : %2").arg(Hostname).arg(newConnection.lastError().text());
          }
       } catch (QString e) {
@@ -515,9 +525,13 @@ Database::~Database() {
    // Don't try and log in this function as it's called pretty close to the program exiting, at the end of main(), at
    // which point the objects used by the logging module may be in a weird state.
 
-   // If we have not explicitly unloaded, do so now and discard changes.
+   // Similarly, trying to close DB connections etc here can be tricky as some bits of Qt may already have terminated.
+   // It's therefore safer, albeit less elegant to rely on main() or similar to call unload() rather than try to do it
+   // here.
    if (this->pimpl->loaded) {
-      this->unload();
+      std::cerr <<
+         "Warning: Destructor on Database object object for " <<
+         getDbNativeName(displayableDbType, this->pimpl->dbType) << " called before unload()";
    }
 
    return;
@@ -765,8 +779,7 @@ void Database::unload() {
          QSqlDatabase::removeDatabase(conName);
       } else {
          qDebug() <<
-            Q_FUNC_INFO << "Ignoring connection " << conName << "as does not start with \"" << ourConnectionPrefix <<
-            "\"";
+            Q_FUNC_INFO << "Ignoring connection" << conName << "as does not start with" << ourConnectionPrefix;
       }
    }
 
@@ -791,10 +804,16 @@ Database& Database::instance(Database::DbType dbType) {
    // For the moment, with only two types of database supported, we don't do anything too sophisticated here, but we
    // should probably change that if we end up supporting more.
    //
-   if (dbType == Database::NODB) {
-      dbType = static_cast<Database::DbType>(
-         PersistentSettings::value(PersistentSettings::Names::dbType, Database::SQLITE).toInt()
-      );
+   if (Database::NODB == dbType) {
+      // The first time we are asked for the default type of Database, we look in PersistentSettings.  We then want to
+      // remember that value for future requests in case PersistentSettings changes (see comment at definition of
+      // currentDbType).
+      if (Database::NODB == currentDbType) {
+         currentDbType = static_cast<Database::DbType>(
+            PersistentSettings::value(PersistentSettings::Names::dbType, Database::SQLITE).toInt()
+         );
+      }
+      dbType = currentDbType;
    }
 
    //
@@ -863,8 +882,9 @@ bool Database::restoreFromFile(QString newDbFileStr) {
 
 bool Database::verifyDbConnection(Database::DbType testDb, QString const& hostname, int portnum, QString const& schema,
                                   QString const& database, QString const& username, QString const& password) {
-   QString driverName;
+   QString const testConnectionName{"testConnDb"};
 
+   QString driverName;
    switch (testDb) {
       case Database::PGSQL:
          driverName = "QPSQL";
@@ -873,33 +893,41 @@ bool Database::verifyDbConnection(Database::DbType testDb, QString const& hostna
          driverName = "QSQLITE";
    }
 
-   QSqlDatabase connDb = QSqlDatabase::addDatabase(driverName,"testConnDb");
+   bool results = false;
 
-   switch (testDb) {
-      case Database::PGSQL:
-         connDb.setHostName(hostname);
-         connDb.setPort(portnum);
-         connDb.setDatabaseName(database);
-         connDb.setUserName(username);
-         connDb.setPassword(password);
-         break;
-      default:
-         connDb.setDatabaseName(hostname);
+   {
+      // Extra braces here are to ensure that this QSqlDatabase object is out of scope before the call to
+      // QSqlDatabase::removeDatabase() below
+      QSqlDatabase connDb = QSqlDatabase::addDatabase(driverName, testConnectionName);
+
+      switch (testDb) {
+         case Database::PGSQL:
+            connDb.setHostName(hostname);
+            connDb.setPort(portnum);
+            connDb.setDatabaseName(database);
+            connDb.setUserName(username);
+            connDb.setPassword(password);
+            break;
+         default:
+            connDb.setDatabaseName(hostname);
+      }
+
+      results = connDb.open();
+
+      if (results) {
+         connDb.close();
+      } else {
+         QMessageBox::critical(
+            nullptr,
+            tr("Connection failed"),
+            QString(tr("Could not connect to %1 : %2")).arg(hostname).arg(connDb.lastError().text())
+         );
+      }
    }
 
-   bool results = connDb.open();
+   QSqlDatabase::removeDatabase(testConnectionName);
 
-   if ( results ) {
-      connDb.close();
-   } else {
-      QMessageBox::critical(
-         nullptr,
-         tr("Connection failed"),
-         QString(tr("Could not connect to %1 : %2")).arg(hostname).arg(connDb.lastError().text())
-      );
-   }
    return results;
-
 }
 
 void Database::convertDatabase(QString const& Hostname, QString const& DbName,
