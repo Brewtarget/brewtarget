@@ -371,6 +371,11 @@ namespace {
       // Rearrange inventory
       //
       for (char const * baseTableName : {"fermentable", "hop", "misc", "yeast"}) {
+         // On the yeast tables, we use "quanta" instead of "amount", which turns out to be mildly annoying in all sorts
+         // of ways.  One day we'll fix it to be consistent with the other tables.  For now we have to do horrible
+         // things like this.
+         QString const amountColumnName{QString{baseTableName} == "yeast" ? "quanta" : "amount"};
+
          // This gives us the the DB-specific version of
          //    ALTER TABLE %1 ADD COLUMN inventory_id REFERENCES %1_in_inventory (id)
          // where %1 is baseTableName!
@@ -400,7 +405,7 @@ namespace {
                                              "WHERE %1_in_inventory.%1_id = %1.id"
                                           ")").arg(baseTableName)});
          migrationQueries.append({
-            QString("INSERT INTO %1_in_inventory (%1_id) VALUES ( "
+            QString("INSERT INTO %1_in_inventory (%1_id) "
                     // Everything has an inventory row now. This will find all the parent items that don't have an
                     // inventory row.
                     "SELECT id FROM %1 WHERE NOT EXISTS ( "
@@ -411,8 +416,8 @@ namespace {
                        "SELECT %1_in_inventory.id "
                        "FROM %1_in_inventory "
                        "WHERE %1_in_inventory.%1_id = %1.id"
-                    ") "
-                 ")").arg(baseTableName),
+                    ")"
+            ).arg(baseTableName),
             {},
             true // Don't run this query if the previous one had no results
          });
@@ -439,14 +444,17 @@ namespace {
       // will cause circular references
       //
       for (char const * baseTableName : {"fermentable", "hop", "misc", "yeast"}) {
+         // See comment above for annoying use of "quanta" in yeast tables
+         QString const amountColumnName{QString{baseTableName} == "yeast" ? "quanta" : "amount"};
          migrationQueries.append({QString(
-                                     "CREATE TABLE tmp%1_in_inventory (id %2, amount %3);" // Previously DEFAULT 0
+                                     "CREATE TABLE tmp%1_in_inventory (id %2, %3 %4);" // Previously DEFAULT 0
                                   ).arg(baseTableName,
                                         db.getDbNativePrimaryKeyDeclaration(),
+                                        amountColumnName,
                                         db.getDbNativeTypeName<double>())});
-         migrationQueries.append({QString("INSERT INTO tmp%1_in_inventory (id, amount) "
-                                          "SELECT id, amount "
-                                          "FROM %1_in_inventory").arg(baseTableName)});
+         migrationQueries.append({QString("INSERT INTO tmp%1_in_inventory (id, %2) "
+                                          "SELECT id, %2 "
+                                          "FROM %1_in_inventory").arg(baseTableName, amountColumnName)});
          migrationQueries.append({QString("DROP TABLE %1_in_inventory").arg(baseTableName)});
          migrationQueries.append({QString("ALTER TABLE tmp%1_in_inventory "
                                           "RENAME TO %1_in_inventory").arg(baseTableName)});
