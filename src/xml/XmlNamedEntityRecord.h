@@ -89,10 +89,17 @@ protected:
    virtual bool isDuplicate() {
       auto currentEntity = this->namedEntity;
       auto matchResult = ObjectStoreTyped<NE>::getInstance().findFirstMatching(
-         [currentEntity](std::shared_ptr<NE> ne) {return *ne == *currentEntity;}
+         //
+         // Note that, because we run this check both before and after something has been stored in the database (for
+         // reasons explained in XmlRecord::normaliseAndStoreInDb) we need to be particularly careful NOT to match the
+         // object with itself!
+         //
+         [currentEntity](std::shared_ptr<NE> ne) {return (*ne == *currentEntity) && (ne->key() != currentEntity->key());}
       );
       if (matchResult) {
-         qDebug() << Q_FUNC_INFO << "Found a match for " << this->namedEntity->name();
+         qDebug() <<
+            Q_FUNC_INFO << "Found a match (#" << matchResult.value()->key() << "," << matchResult.value()->name() <<
+            ") for #" << this->namedEntity->key() << ", " << this->namedEntity->name();
          // Set our pointer to the Hop/Yeast/Fermentable/etc that we already have stored in the database, so that any
          // containing Recipe etc can refer to it.  The new object we created is still held in
          // this->namedEntityRaiiContainer and will automatically be deleted when we go out of scope.

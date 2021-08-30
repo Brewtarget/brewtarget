@@ -105,8 +105,7 @@ public:
    /**
     * Constructor
     */
-   impl(QString const schemaResource) :
-      grammarPool(xercesc::XMLPlatformUtils::fgMemoryManager) {
+   impl(QString const schemaResource) /* : grammarPool(xercesc::XMLPlatformUtils::fgMemoryManager)*/ {
       this->loadSchema(schemaResource);
       return;
    }
@@ -359,7 +358,7 @@ public:
       // can throw.
       try {
          // Probably not 100% necessary to lock the pool against modifications, as we're not planning any after start-up, but...
-         this->grammarPool.lockPool();
+         //this->grammarPool.lockPool();
 
          /// TBD probably need to lock other things here ///
 
@@ -537,7 +536,12 @@ private:
    // XMLGrammarPoolImpl is a bit lacking in documentation, probably because it used to be an "internal" class of
    // Xerces.  However, since Xerces 3.0.0 release, it is now part of the public API -- see
    // https://xerces.apache.org/xerces-c/migrate-archive-3.html#NewAPI300
-   xercesc::XMLGrammarPoolImpl grammarPool;
+   //
+   // NB: For the moment, this is commented out as I think we don't need it.  If we want to play around with it more
+   //     then we need to be careful about ensuring it is destructed before the Xerces & Xalan libraries are terminated
+   //     in main().
+   //
+   // xercesc::XMLGrammarPoolImpl grammarPool;
 
    xercesc::DOMImplementation * domImplementation;
    xercesc::DOMLSParser * parser;
