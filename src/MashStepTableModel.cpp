@@ -63,7 +63,7 @@ void MashStepTableModel::addMashStep(MashStep * mashStep)
    int size {this->steps.size()};
    beginInsertRows( QModelIndex(), size, size );
    this->steps.append(mashStep);
-   connect( mashStep, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+   connect(mashStep, &NamedEntity::changed, this, &MashStepTableModel::mashStepChanged);
    //reset(); // Tell everybody that the table has changed.
    endInsertRows();
    return;
