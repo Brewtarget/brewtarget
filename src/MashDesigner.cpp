@@ -32,17 +32,17 @@
 
 MashDesigner::MashDesigner(QWidget* parent) : QDialog(parent)
 {
-   setupUi(this);
+   this->setupUi(this);
 
-   recObs = nullptr;
-   mash = nullptr;
-   equip = nullptr;
-   addedWater_l = 0;
-   mashStep = nullptr;
-   prevStep = nullptr;
+   this->recObs = nullptr;
+   this->mash = nullptr;
+   this->equip = nullptr;
+   this->addedWater_l = 0;
+   this->mashStep = nullptr;
+   this->prevStep = nullptr;
 
-   label_zeroVol->setText(Brewtarget::displayAmount(0, &Units::liters));
-   label_zeroWort->setText(Brewtarget::displayAmount(0, &Units::liters));
+   this->label_zeroVol->setText(Brewtarget::displayAmount(0, &Units::liters));
+   this->label_zeroWort->setText(Brewtarget::displayAmount(0, &Units::liters));
 
    // Update temp slider when we move amount slider.
    connect( horizontalSlider_amount, &QAbstractSlider::sliderMoved, this, &MashDesigner::updateTempSlider );
@@ -70,6 +70,7 @@ MashDesigner::MashDesigner(QWidget* parent) : QDialog(parent)
    // connect( checkBox_batchSparge, SIGNAL(clicked()), this, SLOT(updateMaxAmt()) );
    connect( pushButton_finish, &QAbstractButton::clicked, this, &MashDesigner::saveAndClose );
 
+   return;
 }
 
 void MashDesigner::proceed()
@@ -146,32 +147,29 @@ bool MashDesigner::nextStep(int step)
    return true;
 }
 
-void MashDesigner::saveStep()
-{
+void MashDesigner::saveStep() {
    MashStep::Type type = static_cast<MashStep::Type>(comboBox_type->currentIndex());
-   double temp = lineEdit_temp->toSI();
-
    // Bound the target temperature to what can be achieved
-   temp = bound_temp_c(temp);
+   double temp = this->bound_temp_c(lineEdit_temp->toSI());
 
-   mashStep->setName(lineEdit_name->text());
-   mashStep->setType( type );
-   mashStep->setStepTemp_c( temp );
-   mashStep->setStepTime_min( lineEdit_time->toSI() );
+   this->mashStep->setName(lineEdit_name->text());
+   this->mashStep->setType(type);
+   this->mashStep->setStepTemp_c(temp);
+   this->mashStep->setStepTime_min(lineEdit_time->toSI());
 
    // finish a few things -- this may be premature optimization
-   if( isInfusion() )
-   {
-      mashStep->setInfuseAmount_l( selectedAmount_l() );
+   if (isInfusion()) {
+      this->mashStep->setInfuseAmount_l( selectedAmount_l() );
       temp = selectedTemp_c();
-      mashStep->setInfuseTemp_c( temp );
+      this->mashStep->setInfuseTemp_c( temp );
    }
 
-   if ( mashStep->cacheOnly() ) {
-//      mashStep->setMash(mash);
-      ObjectStoreWrapper::insert(*mashStep);
-      mashStep->setCacheOnly(false);
+   if (this->mashStep->key() < 0) {
+      this->mashStep->setMashId(this->mash->key());
+      ObjectStoreWrapper::insert(*this->mashStep);
+      this->mashStep->setCacheOnly(false);
    }
+   return;
 }
 
 double MashDesigner::stepTemp_c()
@@ -322,14 +320,16 @@ double MashDesigner::grainVolume_l()
 }
 
 // After this, mash and equip are non-null iff we return true.
-bool MashDesigner::initializeMash()
-{
-   if(recObs == nullptr)
+bool MashDesigner::initializeMash() {
+   if (this->recObs == nullptr) {
       return false;
+   }
 
-   equip = recObs->equipment();
-   if( equip == nullptr ) {
-      QMessageBox::warning(this, tr("No Equipment"), tr("You have not set an equipment for this recipe. We really cannot continue without one."));
+   this->equip = this->recObs->equipment();
+   if (this->equip == nullptr) {
+      QMessageBox::warning(this,
+                           tr("No Equipment"),
+                           tr("You have not set an equipment for this recipe. We really cannot continue without one."));
       return false;
    }
 
@@ -346,76 +346,76 @@ bool MashDesigner::initializeMash()
 
    //if user hits cancel, cancel out of the dialog and quit the mashDesigner
    //edited jazzbeerman (dcavanagh) 8/20/10
-   if(!ok)
+   if (!ok) {
       return false;
+   }
 
-   mash = recObs->mash();
-   if( mash == nullptr ) {
-      mash = new Mash(QString(""),true);
+   this->mash = recObs->mash();
+   if (this->mash == nullptr) {
+      this->mash = new Mash(QString(""), true);
    } else {
-      mash->removeAllMashSteps();
+      this->mash->removeAllMashSteps();
    }
 
    // Order matters. Don't do this until every that could return false has
-   mash->setTunSpecificHeat_calGC( equip->tunSpecificHeat_calGC() );
-   mash->setTunWeight_kg( equip->tunWeight_kg() );
-   mash->setTunTemp_c( Brewtarget::qStringToSI( dialogText, &Units::celsius ) );
+   this->mash->setTunSpecificHeat_calGC(this->equip->tunSpecificHeat_calGC());
+   this->mash->setTunWeight_kg(this->equip->tunWeight_kg());
+   this->mash->setTunTemp_c(Brewtarget::qStringToSI(dialogText, &Units::celsius));
 
-   curStep = 0;
-   addedWater_l = 0;
-   mashStep = nullptr;
-   prevStep = nullptr;
+   this->curStep = 0;
+   this->addedWater_l = 0;
+   this->mashStep = nullptr;
+   this->prevStep = nullptr;
 
-   MC = recObs->grainsInMash_kg() * HeatCalculations::Cgrain_calGC;
-   grain_kg = recObs->grainsInMash_kg();
+   this->MC = recObs->grainsInMash_kg() * HeatCalculations::Cgrain_calGC;
+   this->grain_kg = recObs->grainsInMash_kg();
 
-   label_tunVol->setText(Brewtarget::displayAmount(equip->tunVolume_l(), &Units::liters));
-   label_wortMax->setText(Brewtarget::displayAmount(recObs->targetCollectedWortVol_l(), &Units::liters));
+   this->label_tunVol->setText(Brewtarget::displayAmount(equip->tunVolume_l(), &Units::liters));
+   this->label_wortMax->setText(Brewtarget::displayAmount(recObs->targetCollectedWortVol_l(), &Units::liters));
 
-   updateMinAmt();
-   updateMaxAmt();
-   updateMinTemp();
-   updateMaxTemp();
-   updateFullness();
-   horizontalSlider_amount->setValue(0); // As thick as possible initially.
+   this->updateMinAmt();
+   this->updateMaxAmt();
+   this->updateMinTemp();
+   this->updateMaxTemp();
+   this->updateFullness();
+   this->horizontalSlider_amount->setValue(0); // As thick as possible initially.
 
-   if ( mash->cacheOnly() ) {
+   if (this->mash->key() < 0) {
       ObjectStoreWrapper::insert(*mash);
-      mash->setCacheOnly(false);
+      this->mash->setCacheOnly(false);
       this->recObs->setMash(mash);
    }
    return true;
 }
 
-void MashDesigner::updateFullness()
-{
-   if( mashStep == nullptr )
+void MashDesigner::updateFullness() {
+   if (this->mashStep == nullptr) {
       return;
+   }
 
-   if( equip == nullptr )
-   {
-      progressBar_fullness->setValue(0);
+   if (this->equip == nullptr) {
+      this->progressBar_fullness->setValue(0);
       return;
    }
 
    double vol_l;
-
-   if( ! isSparge() ) {
+   if (!isSparge()) {
       vol_l = mashVolume_l() + ( isInfusion() ? selectedAmount_l() : 0);
-   }
-   else {
+   } else {
       vol_l = grainVolume_l() + selectedAmount_l();
    }
 
    double ratio = vol_l / equip->tunVolume_l();
-   if( ratio < 0 )
+   if (ratio < 0) {
      ratio = 0;
-   if( ratio > 1 )
+   } else if (ratio > 1) {
      ratio = 1;
+   }
 
-   progressBar_fullness->setValue(static_cast<int>(ratio*progressBar_fullness->maximum()));
-   label_mashVol->setText(Brewtarget::displayAmount(vol_l, &Units::liters));
-   label_thickness->setText(Brewtarget::displayThickness( (addedWater_l + (isInfusion() ? selectedAmount_l() : 0) )/grain_kg ));
+   this->progressBar_fullness->setValue(static_cast<int>(ratio*progressBar_fullness->maximum()));
+   this->label_mashVol->setText(Brewtarget::displayAmount(vol_l, &Units::liters));
+   this->label_thickness->setText(Brewtarget::displayThickness( (addedWater_l + (isInfusion() ? selectedAmount_l() : 0) )/grain_kg ));
+   return;
 }
 
 double MashDesigner::waterFromMash_l()

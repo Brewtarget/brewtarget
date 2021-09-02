@@ -109,7 +109,6 @@ public:
    void setDecoctionAmount_l( double var);
    void setStepNumber(int stepNumber);
    void setMashId(int mashId);
-//   void setMash(Mash * mash);
 
    Type type() const;
    const QString typeString() const;
@@ -122,7 +121,6 @@ public:
    double infuseTemp_c() const;
    double decoctionAmount_l() const;
    int getMashId() const;
-//   Mash * mash() const;
 
    //! What number this step is in the mash.
    int stepNumber() const;

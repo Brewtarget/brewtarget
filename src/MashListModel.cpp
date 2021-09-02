@@ -21,7 +21,6 @@
  */
 #include "MashListModel.h"
 
-//#include "database/Database.h"
 #include "database/ObjectStoreWrapper.h"
 #include "model/Mash.h"
 #include "model/Recipe.h"
@@ -37,6 +36,7 @@ MashListModel::MashListModel(QWidget* parent) :
 }
 
 void MashListModel::addMash(int mashId) {
+   qDebug() << Q_FUNC_INFO << "New mash #" << mashId;
    Mash* m = ObjectStoreWrapper::getByIdRaw<Mash>(mashId);
    if (!m || !m->display() || m->deleted()) {
       return;

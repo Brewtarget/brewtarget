@@ -47,9 +47,10 @@ MashWizard::MashWizard(QWidget* parent) : QDialog(parent)
 
 //   radioButton_batchSparge->setChecked(true);
 
-   connect(bGroup, SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(toggleSpinBox(QAbstractButton*)));
-   connect(buttonBox, &QDialogButtonBox::accepted, this, &MashWizard::wizardry );
-   connect(buttonBox, &QDialogButtonBox::rejected, this, &QWidget::close );
+   connect(bGroup,    QOverload<QAbstractButton *>::of(&QButtonGroup::buttonClicked), this, &MashWizard::toggleSpinBox);
+   connect(buttonBox, &QDialogButtonBox::accepted,                                    this, &MashWizard::wizardry);
+   connect(buttonBox, &QDialogButtonBox::rejected,                                    this, &QWidget::close);
+   return;
 }
 
 void MashWizard::toggleSpinBox(QAbstractButton* button)
@@ -158,7 +159,6 @@ void MashWizard::wizardry()
       return;
 
    Mash* mash = recObs->mash();
-   MashStep* mashStep;
    int i, j;
    double thickness_LKg;
    double thickNum;
@@ -181,7 +181,7 @@ void MashWizard::wizardry()
    QList<MashStep*> tmp;
 
    // We ensured that there was at least one mash step when we displayed the thickness dialog in show().
-   mashStep = steps.at(0);
+   MashStep* mashStep = steps.at(0);
    if ( mashStep == nullptr ) {
       qCritical() << "MashWizard::wizardry(): first mash step was null.";
       return;
@@ -378,7 +378,7 @@ void MashWizard::wizardry()
             mashStep->setEndTemp_c(tw);
             mashStep->setStepTemp_c(tf);
             mashStep->setStepTime_min(15);
-            //mashStep->setMash(mash);
+            mashStep->setMashId(mash->key());
             ObjectStoreWrapper::insert(*mashStep);
             mashStep->setCacheOnly(false);
             steps.append(mashStep);
@@ -401,7 +401,7 @@ void MashWizard::wizardry()
          mashStep->setEndTemp_c(tw);
          mashStep->setStepTemp_c(tf);
          mashStep->setStepTime_min(15);
-         //mashStep->setMash(mash);
+         mashStep->setMashId(mash->key());
          ObjectStoreWrapper::insert(*mashStep);
          mashStep->setCacheOnly(false);
          steps.append(mashStep);

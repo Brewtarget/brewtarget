@@ -107,6 +107,11 @@ void Inventory::setId(int id) {
    return;
 }
 
+void Inventory::setKey(int id) {
+   this->setId(id);
+   return;
+}
+
 void Inventory::setAmount(double amount) {
    this->pimpl->amount = amount;
    // If we're already stored in the object store, tell it about the property change so that it can write it to the
@@ -115,6 +120,11 @@ void Inventory::setAmount(double amount) {
       this->getObjectStoreTypedInstance().updateProperty(*this, PropertyNames::Inventory::amount);
    }
    // .:TBD:. Do we need to send any signals here?  Or should we do that in updateProperty?
+   return;
+}
+
+void Inventory::setCacheOnly(bool var) {
+   // See comment in header.  Nothing to do here.
    return;
 }
 

@@ -169,7 +169,9 @@ public:
    }
 
    /**
-    * \brief Remove the object from our local in-memory cache, mark it as deleted, and remove its record from the DB.
+    * \brief Remove the object from our local in-memory cache, remove its record from the DB, and put it in the same
+    *        state as if we had just created it.  (This means you can then call \c insert() again to re-store the
+    *        object.)
     *
     * \param id ID of the object to delete
     */
@@ -317,18 +319,23 @@ private:
          ne->hardDeleteOwnedEntities();
          // Base class does the heavy lifting on removing the NamedEntity from the DB
          this->ObjectStore::hardDelete(id);
+         // Setting the deleted object's ID to -1 now puts it in the same state as a newly-created object.
+         ne->setKey(-1);
+         ne->setCacheOnly(true);
+         return;
       }
 
-      // This marks the in-memory object as deleted (and will get pushed down to the DB if this is a soft delete)
+      // For soft delete, there's still a bit more work to do
+
+      // This marks the in-memory object as deleted and will get pushed down to the DB
       ne->setDeleted(true);
       ne->setDisplay(false);
 
-      if (!hard) {
-         // Base class softDelete() actually does too much for the soft delete case; we just need to tell any bits of
-         // the UI that need to know that an object was deleted.  (In the hard delete case, this signal will already
-         // have been emitted.)
-         emit this->signalObjectDeleted(id, object);
-      }
+      // Base class softDelete() actually does too much for the soft delete case; we just need to tell any bits of
+      // the UI that need to know that an object was deleted.  (In the hard delete case, this signal will already
+      // have been emitted.)
+      emit this->signalObjectDeleted(id, object);
+
       return;
    }
 

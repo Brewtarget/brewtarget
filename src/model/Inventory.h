@@ -87,6 +87,17 @@ public:
    void setAmount(double amount);
 
    /**
+    * \brief Synonym for \c setId(), as it's needed for \c ObjectStoreTyped::hardDelete()
+    */
+   void setKey(int id);
+
+   /**
+    * \brief This doesn't actually do anything, but using ObjectStoreTyped means we have to provide an implementation,
+    *        as it's needed for \c ObjectStoreTyped::hardDelete().
+    */
+   void setCacheOnly(bool var);
+
+   /**
     * \brief This doesn't actually do anything, but using ObjectStoreTyped means we have to provide an implementation,
     *        as it's needed for \c ObjectStoreTyped::softDelete().
     */

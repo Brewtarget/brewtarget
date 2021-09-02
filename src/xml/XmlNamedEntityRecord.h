@@ -66,7 +66,7 @@ protected:
 
 public:
    virtual void deleteNamedEntityFromDb() {
-      ObjectStoreWrapper::hardDelete(std::static_pointer_cast<NE>(this->namedEntityRaiiContainer));
+      ObjectStoreWrapper::hardDelete(*std::static_pointer_cast<NE>(this->namedEntityRaiiContainer));
       return;
    }
 

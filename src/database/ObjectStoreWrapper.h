@@ -126,13 +126,6 @@ namespace ObjectStoreWrapper {
       return;
    }
 
-   template<class NE> void hardDelete(std::shared_ptr<NE> ne) {
-      if (ne.get()) {
-        ObjectStoreTyped<NE>::getInstance().hardDelete(ne->key());
-      }
-      return;
-   }
-
    /**
     * \brief Search the set of all cached objects with a lambda.
     *
