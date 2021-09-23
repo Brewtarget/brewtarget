@@ -25,7 +25,7 @@
 #include <QPrinterInfo>
 #include <QList>
 #include <QSizePolicy>
-#include "btpage/Page.h"
+#include <QTextBrowser>
 #include "InventoryFormatter.h"
 
 /**
@@ -481,12 +481,9 @@ void PrintAndPreviewDialog::printDocument(QPrinter * printer)
    if ( mainWindow->currentRecipe() == nullptr)
       return;
    recipeFormatter->setRecipe(mainWindow->currentRecipe());
-   using namespace BtPage;
    //Setting up a blank page for drawing.
-   Page page(printer);
-   /*
-   This is UUUUGLY but will do for now, all these if:s has got done a better way!
-   */
+   QTextBrowser textBrowser;
+   QString hDoc = "";
    //if we are watching the Recipe tab we should print recipe stuff.
    if (Ui_BtPrintAndPreview::verticalTabWidget->currentIndex() == 0)
    {
@@ -495,251 +492,27 @@ void PrintAndPreviewDialog::printDocument(QPrinter * printer)
       making the template editor for printouts where you can save your templates and use them or share them
       with other BT users.
       */
+      hDoc += recipeFormatter->buildHTMLHeader();
       if ( checkBox_Recipe->isChecked())
       {
-         renderHeader(page);
-         renderRecipe(page);
+         hDoc += recipeFormatter->getHTMLFormat();
       }
-      if ( checkBox_Recipe->isChecked() && checkBox_BrewdayInstructions->isChecked())
-         page.addChildObject(new PageBreak(&page));
       if (checkBox_BrewdayInstructions->isChecked())
       {
-         renderHeader(page);
-         renderBrewdayInstructions(page);
+         hDoc += brewDayFormatter->buildInstructionHTML();
       }
+      hDoc += recipeFormatter->buildHTMLFooter();
    }
    else if (verticalTabWidget->currentIndex() == 1)
    {
-      renderHeader(page);
-      renderInventory(page);
+      InventoryFormatter::HTMLgenerationFlags flags = ((checkBox_inventoryFermentables->isChecked()) ? InventoryFormatter::FERMENTABLESFLAG : InventoryFormatter::NOOPERATION) |
+                                                         ((checkBox_inventoryHops->isChecked()) ? InventoryFormatter::HOPSFLAG : InventoryFormatter::NOOPERATION) |
+                                                         ((checkBox_inventoryYeast->isChecked()) ? InventoryFormatter::YEASTFLAG : InventoryFormatter::NOOPERATION) |
+                                                         ((checkBox_inventoryMicellaneous->isChecked()) ? InventoryFormatter::MISCELLANEOUSFLAG : InventoryFormatter::NOOPERATION);
+      hDoc += InventoryFormatter::createInventoryHTML(flags);
    }
+
    //Render the Page onto the painter/printer for preview/printing.
-   page.renderPage();
-}
-
-/**
- * @brief Reders the Recipe data onto the page object.
- * @author Mattias Måhl
- * @param page Page object to render content to.
- */
-void PrintAndPreviewDialog::renderRecipe(BtPage::Page &page)
-{
-   using namespace BtPage;
-
-   //Statistics table with beer data.
-   PageTable *statTable = page.addChildObject(
-      new PageTable (
-         &page,
-         QString(tr("Beer details")),
-         recipeFormatter->buildStatList()
-      ));
-   statTable->columnHeadersFont = statTable->Font;
-   statTable->rowPadding=0;
-   statTable->columnHeaders.at(1)->ColumnWidth=200;
-   statTable->setPositionMM(10, 20);
-
-   PageTable *fermTable = page.addChildObject(
-      new PageTable (
-         &page,
-         QString(tr("Fermentables")),
-         recipeFormatter->buildFermentableList()
-      ));
-   page.placeRelationalToMM(fermTable, statTable, BtPage::BELOW, 0, 5);
-
-   // Create the HopsTable
-   PageTable *hopsTable = page.addChildObject(
-      new PageTable (
-         &page,
-         QString(tr("Hops")),
-         recipeFormatter->buildHopsList()
-      ));
-   hopsTable->setColumnAlignment(1, Qt::AlignRight);
-   page.placeRelationalToMM(hopsTable, fermTable, BtPage::BELOW, 0, 5);
-
-   // Create the MiscTable
-   PageTable *miscTable = page.addChildObject(
-      new PageTable (
-         &page,
-         QString(tr("Misc")),
-         recipeFormatter->buildMiscList()
-      ));
-   page.placeRelationalToMM(miscTable, hopsTable, BtPage::BELOW, 0, 5);
-
-   // Create the Yeast Table
-   PageTable *yeastTable = page.addChildObject(
-      new PageTable (
-         &page,
-         QString(tr("Yeast")),
-         recipeFormatter->buildYeastList()
-      ));
-   page.placeRelationalToMM(yeastTable, miscTable, BtPage::BELOW, 0, 5);
-
-   PageTable *mashTable = page.addChildObject(
-      new PageTable (
-         &page,
-         QString(tr("Mash")),
-         recipeFormatter->buildMashList()
-      ));
-   page.placeRelationalToMM(mashTable, yeastTable, BtPage::BELOW, 0, 5);
-
-   PageText *notesHeader = page.addChildObject(
-      new PageText (
-         &page,
-         QString(tr("Notes")),
-         QFont("Arial", 12, QFont::Bold)
-      ));
-   page.placeRelationalToMM(notesHeader, mashTable, BtPage::BELOW, 0, 5);
-
-   PageText *notesText = page.addChildObject(
-      new PageText (
-         &page,
-         recipeFormatter->buildNotesString(),
-         QFont("Arial", 10)
-      ));
-   page.placeRelationalToMM(notesText, notesHeader, BtPage::BELOW);
-
-   PageText *tasteNotesHeader = page.addChildObject(
-      new PageText (
-         &page,
-         QString(tr("Taste notes")),
-         QFont("Arial", 12, QFont::Bold)
-      ));
-   page.placeRelationalToMM(tasteNotesHeader, notesText, BtPage::BELOW, 0, 5);
-
-   PageText *tasteNotesHeaderText = page.addChildObject(
-      new PageText (
-         &page,
-         recipeFormatter->buildTasteNotesString(),
-         QFont("Arial", 10)
-      ));
-   page.placeRelationalToMM(tasteNotesHeaderText, tasteNotesHeader, BtPage::BELOW);
-}
-
-/**
- * @brief Renders the instructions for the recipe on the page supplied in arguments.
- * @author Mattias Måhl
- * @param page Page object to render content to.
- */
-void PrintAndPreviewDialog::renderBrewdayInstructions(BtPage::Page &page)
-{
-   brewDayFormatter->setRecipe(mainWindow->currentRecipe());
-   using namespace BtPage;
-   PageTable *statsTable = page.addChildObject(new PageTable (
-      &page,
-      mainWindow->currentRecipe()->name(),
-      brewDayFormatter->buildTitleList()
-   ));
-   statsTable->setPositionMM(10,20);
-
-   PageTable *instructionsTable = page.addChildObject(new PageTable (
-      &page,
-      QString("Instructions"),
-      brewDayFormatter->buildInstructionList()
-   ));
-   page.placeRelationalToMM(instructionsTable, statsTable, BtPage::BELOW, 0, 5);
-}
-
-/**
- * @brief Reders the Recipe data onto the page object.
- * @author Mattias Måhl
- * @param page Page object to render content to.
- */
-void PrintAndPreviewDialog::renderHeader(BtPage::Page &page)
-{
-   using namespace BtPage;
-   // adding the Recipe name as a title.
-   PageText *recipeText = page.addChildObject(
-      new PageText (
-         &page,
-         mainWindow->currentRecipe()->name(),
-         QFont("Arial", 18, QFont::Bold)
-      ),
-      QPoint(0,0)
-      );
-   // adding Brewers name
-   PageText *brewerText = page.addChildObject(
-      new PageText (
-         &page,
-         mainWindow->currentRecipe()->brewer(),
-         QFont("Arial", 10)
-      ));
-   page.placeRelationalToMM(brewerText, recipeText, BtPage::BELOW, 2, 0);
-
-   //Adding the Brewtarget logo.
-   PageImage *img = page.addChildObject(
-      new PageImage (
-         &page,
-         QPoint(),
-         QImage(":/images/title.svg")
-      ));
-   img->setImageSizeMM(100, 20);
-   page.placeOnPage(img, BtPage::TOP | BtPage::RIGHT);
-}
-
-void PrintAndPreviewDialog::renderInventory(BtPage::Page &page)
-{
-   using namespace BtPage;
-   PageTable *fermentables = nullptr;
-   PageTable *hops = nullptr;
-   PageTable *yeasts = nullptr;
-   PageTable *miscs = nullptr;
-   QList<PageTable*> renderList;
-
-   if (checkBox_inventoryAll->isChecked() || checkBox_inventoryFermentables->isChecked())
-   {
-      fermentables = page.addChildObject(new PageTable (
-         &page,
-         QString("Fermentables"),
-         InventoryFormatter::createInventoryList<Fermentable>(Brewtarget::DBTable::FERMTABLE)
-      ));
-      renderList.append(fermentables);
-   }
-
-   if (checkBox_inventoryAll->isChecked() || checkBox_inventoryHops->isChecked())
-   {
-      hops = page.addChildObject(new PageTable (
-         &page,
-         QString("Hops"),
-         InventoryFormatter::createInventoryList<Hop>(Brewtarget::DBTable::HOPTABLE)
-      ));
-      renderList.append(hops);
-   }
-
-   if (checkBox_inventoryAll->isChecked() || checkBox_inventoryYeast->isChecked())
-   {
-      yeasts = page.addChildObject(new PageTable (
-         &page,
-         QString("Yeast"),
-         InventoryFormatter::createInventoryList<Yeast>(Brewtarget::DBTable::YEASTTABLE)
-      ));
-      renderList.append(yeasts);
-   }
-
-   if (checkBox_inventoryAll->isChecked() || checkBox_inventoryMicellaneous->isChecked())
-   {
-      miscs = page.addChildObject(new PageTable (
-         &page,
-         QString("Miscellaneous"),
-         InventoryFormatter::createInventoryList<Misc>(Brewtarget::DBTable::MISCTABLE)
-      ));
-      renderList.append(miscs);
-   }
-
-   // I chose to do it this way as we don't know what tables has been rendered above.
-   // so we save the rendered tables in a list and then render them in order.
-   // this way the user has the freedom to print what they want.
-   PageTable *tableBefore = nullptr;
-   foreach(PageTable *table, renderList)
-   {
-      if (tableBefore == nullptr)
-      {
-         page.placeOnPageMM(table, CUSTOM, 0, 20);
-      }
-      else
-      {
-         page.placeRelationalToMM(table, tableBefore, BELOW, 0, 5);
-      }
-      //save the pointer to the current table for next iteration.
-      tableBefore = table;
-   }
+   textBrowser.setHtml(hDoc);
+   textBrowser.print(printer);
 }

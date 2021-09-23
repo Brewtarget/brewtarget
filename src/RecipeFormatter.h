@@ -90,22 +90,16 @@ private:
    QString buildHTMLHeader();
    QString buildStatTableHtml();
    QString buildStatTableTxt();
-   QList<QStringList> buildStatList();
    QString buildFermentableTableHtml();
    QString buildFermentableTableTxt();
-   QList<QStringList> buildFermentableList();
    QString buildHopsTableHtml();
    QString buildHopsTableTxt();
-   QList<QStringList> buildHopsList();
    QString buildYeastTableHtml();
    QString buildYeastTableTxt();
-   QList<QStringList> buildYeastList();
    QString buildMashTableHtml();
    QString buildMashTableTxt();
-   QList<QStringList> buildMashList();
    QString buildMiscTableHtml();
    QString buildMiscTableTxt();
-   QList<QStringList> buildMiscList();
    QString buildNotesHtml();
    QString buildInstructionTableTxt();
    /* I am not sure how I want to implement these yet.
@@ -117,8 +111,6 @@ private:
    QString buildSaltTableTxt();
    */
    QString buildBrewNotesHtml();
-   QString buildNotesString();
-   QString buildTasteNotesString();
    QString buildBrewNotesTxt();
    QString buildHTMLFooter();
 

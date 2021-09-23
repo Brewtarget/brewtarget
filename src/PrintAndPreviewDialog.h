@@ -31,9 +31,6 @@
 #include "MainWindow.h"
 #include "RecipeFormatter.h"
 #include "model/Recipe.h"
-#include "btpage/Page.h"
-#include "btpage/PageImage.h"
-#include "btpage/PageTable.h"
 #include "BrewDayFormatter.h"
 
 
@@ -128,34 +125,6 @@ private:
     *
     */
    void updatePreview();
-
-   /**
-    * @brief Renders the recipe data to the page.
-    *
-    * @param page
-    */
-   void renderRecipe(BtPage::Page &page);
-
-   /**
-    * @brief Renders the BrewDay instructions to the page.
-    *
-    * @param page
-    */
-   void renderBrewdayInstructions(BtPage::Page &page);
-
-   /**
-    * @brief Render the page header to a page.
-    *
-    * @param page
-    */
-   void renderHeader(BtPage::Page &page);
-
-   /**
-    * @brief Render the inventory tables onto the page.
-    *
-    * @param page
-    */
-   void renderInventory(BtPage::Page &page);
 
    MainWindow *mainWindow;
    Recipe *selectedRecipe;

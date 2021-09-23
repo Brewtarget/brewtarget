@@ -826,60 +826,6 @@ QString RecipeFormatter::buildStatTableTxt()
    return ret;
 }
 
-/**
- * @brief RecipeFormatter::buildStatList()
- * This will return a List of strings where the first row is the headers for each column.
- * @author Mattias Måhl <mattias@kejsarsten.com>
- * @return QList<QStringList> of Stats for the recipe.
-*/
-QList<QStringList> RecipeFormatter::buildStatList()
-{
-   QList<QStringList> ret = QList<QStringList>();
-
-   if( rec == nullptr )
-      return ret;
-
-   QStringList row;
-
-   row.append(tr("Batch Size"));
-   row.append(QString("%1").arg(Brewtarget::displayAmount(rec->finalVolume_l(), "tab_recipe", "finalVolume_l", &Units::liters)));
-   row.append(tr("Boil Size"));
-   row.append(QString("%1").arg(Brewtarget::displayAmount(rec->boilVolume_l(), "tab_recipe", "boilVolume_l", &Units::liters)));
-   ret.append(row);
-   row.clear();
-   row.append(tr("Boil Time"));
-   row.append(QString("%1").arg((rec->equipment() == nullptr)?
-                         Brewtarget::displayAmount(0, "tab_recipe", "boilTime_min", &Units::minutes)
-                       : Brewtarget::displayAmount( (rec->equipment())->boilTime_min(), "tab_recipe", "boilTime_min", &Units::minutes)));
-   row.append(tr("Efficiency"));
-   row.append(QString("%1%").arg(rec->efficiency_pct(), 0, 'f', 0));
-   ret.append(row);
-   row.clear();
-   row.append(tr("OG"));
-   row.append(QString("%1").arg(Brewtarget::displayAmount(rec->og(), "tab_recipe", "og", &Units::sp_grav, 3)));
-   row.append(tr("FG"));
-   row.append(QString("%1").arg(Brewtarget::displayAmount(rec->fg(), "tab_recipe", "fg", &Units::sp_grav, 3)));
-   ret.append(row);
-   row.clear();
-   row.append(tr("ABV"));
-   row.append(QString("%1%").arg(Brewtarget::displayAmount(rec->ABV_pct(), nullptr, 1)));
-   row.append(tr("Bitterness"));
-   row.append(QString("%1 %2 (%3)").arg(Brewtarget::displayAmount(rec->IBU(), nullptr, 1))
-                              .arg(tr("IBU"))
-                              .arg(Brewtarget::ibuFormulaName()));
-   ret.append(row);
-   row.clear();
-   row.append(tr("Color"));
-   row.append(QString("%1 (%2)").arg(Brewtarget::displayAmount(rec->color_srm(),"tab_recipe", "color_srm", &Units::srm, 1))
-                           .arg(Brewtarget::colorFormulaName()));
-   row.append(QString(""));
-   row.append(QString(""));
-   ret.append(row);
-   row.clear();
-
-   return ret;
-}
-
 QString RecipeFormatter::buildFermentableTableHtml()
 {
    if( rec == nullptr )
@@ -988,54 +934,6 @@ QString RecipeFormatter::buildFermentableTableTxt()
    return ret;
 }
 
-/**
- * @brief RecipeFormatter::buildFermentableList()
- * This will return a List of strings where the first row is the headers for each column.
- * @author Mattias Måhl <mattias@kejsarsten.com>
- * @return QList<QStringList> of Fermentables.
-*/
-QList<QStringList> RecipeFormatter::buildFermentableList()
-{
-   QList<QStringList> ret = QList<QStringList>();
-
-   if( rec == nullptr )
-      return ret;
-
-   QList<Fermentable*> ferms = sortFermentablesByWeight(rec);
-
-   if( ferms.size() > 0 )
-   {
-      QStringList row;
-
-      row.append(tr("Name"));
-      row.append(tr("Type"));
-      row.append(tr("Amount"));
-      row.append(tr("Mashed"));
-      row.append(tr("Late"));
-      row.append(tr("Yield"));
-      row.append(tr("Color"));
-      ret.append(row);
-      row.clear();
-
-      foreach( Fermentable * ferm, ferms)
-      {
-         row.append( ferm->name() );
-         row.append( ferm->typeStringTr() );
-         row.append(Brewtarget::displayAmount(ferm->amount_kg(), "fermentableTable", "amount_kg", &Units::kilograms));
-         row.append( ferm->isMashed() ? tr("Yes") : tr("No"));
-         row.append( ferm->addAfterBoil() ? tr("Yes") : tr("No"));
-         row.append( QString("%1%").arg(Brewtarget::displayAmount(ferm->yield_pct(), nullptr, 0) ) );
-         row.append( QString("%1").arg(Brewtarget::displayAmount(ferm->color_srm(), "fermentableTable", "color_srm", &Units::srm, 1)));
-         ret.append(row);
-         row.clear();
-      }
-      //Do we really need the Total amount of grain?
-      //I could return a Tuple from this function to get this value an print it onto paper/pdf, but is it worth it?
-      //ret += QString("%1 %2\n").arg(tr("Total grain:")).arg(Brewtarget::displayAmount(rec->grains_kg(), "fermentableTable", "amount_kg", &Units::kilograms));
-   }
-   return ret;
-}
-
 QString RecipeFormatter::buildHopsTableHtml()
 {
    if( rec == nullptr )
@@ -1134,46 +1032,6 @@ QString RecipeFormatter::buildHopsTableTxt()
    return ret;
 }
 
-/**
- * @brief RecipeFormatter::buildHopsList()
- * This will return a List of strings where the first row is the headers for each column.
- * @author Mattias Måhl <mattias@kejsarsten.com>
- * @return QList<QStringList> of Hops.
-*/
-QList<QStringList> RecipeFormatter::buildHopsList()
-{
-   QList<QStringList> ret;
-
-   if( rec == nullptr )
-      return QList<QStringList>();
-
-   QList<Hop*> hops = sortHopsByTime(rec);
-   if( hops.count() > 0 )
-   {
-      QStringList row;
-
-      //Add the Headers for each column.
-      row << tr("Name") << tr("Alpha") << tr("Amount") << tr("Use") << tr("Time") << tr("Form") << tr("IBU");
-      ret.append(row);
-
-      //Generate the Rows for each hop.
-      foreach(Hop* hop, hops)
-      {
-         row.clear();
-         row << hop->name()
-             << QString("%1%").arg(Brewtarget::displayAmount(hop->alpha_pct(), nullptr, 1))
-             << Brewtarget::displayAmount(hop->amount_kg(), "hopTable", "amount_kg", &Units::kilograms)
-             << hop->useStringTr()
-             << Brewtarget::displayAmount(hop->time_min(), "hopTable", PropertyNames::Hop::time_min, &Units::minutes)
-             << hop->formStringTr()
-             << QString("%1").arg( Brewtarget::displayAmount(rec->ibuFromHop(hop), nullptr, 1));
-
-         ret.append(row);
-      }
-   }
-   return ret;
-}
-
 QString RecipeFormatter::buildMiscTableHtml()
 {
    if( rec == nullptr )
@@ -1264,46 +1122,6 @@ QString RecipeFormatter::buildMiscTableTxt()
    return ret;
 }
 
-/**
- * @brief buildMiscList
- * collects all the miscs from the recipe an returns a list.
- * @author Mattias Måhl <mattias@kejsarsten.com>
- * @return QList<QStringList>
- */
-QList<QStringList> RecipeFormatter::buildMiscList()
-{
-   QList<QStringList> ret;
-   Unit const * kindOf;
-   QList<Misc*> miscs = (rec != nullptr) ? rec->miscs() : QList<Misc*>();
-   //Return empty list if there is no data.
-   if( rec == nullptr || miscs.size() == 0 )
-      return QList<QStringList>();
-
-   QStringList row;
-   //Adding Columnheaders
-   row.append(tr("Name"));
-   row.append(tr("Type"));
-   row.append(tr("Use"));
-   row.append(tr("Amount"));
-   row.append(tr("Time"));
-   ret.append(row);
-   row.clear();
-
-   //Adding Tabledata
-   foreach(Misc *misc, miscs)
-   {
-      kindOf = misc->amountIsWeight() ? static_cast<Unit const *>(&Units::kilograms) : static_cast<Unit const *>(&Units::liters);
-      row.append(misc->name());
-      row.append(misc->typeStringTr());
-      row.append(misc->useStringTr());
-      row.append(Brewtarget::displayAmount(misc->amount(), "miscTableModel", "amount_kg", kindOf, 3));
-      row.append(Brewtarget::displayAmount(misc->time(), "miscTableModel", PropertyNames::Misc::time, &Units::minutes));
-      ret.append(row);
-      row.clear();
-   }
-   return ret;
-}
-
 QString RecipeFormatter::buildYeastTableHtml()
 {
    if( rec == nullptr )
@@ -1388,48 +1206,6 @@ QString RecipeFormatter::buildYeastTableTxt()
 
       for( i = 0; i < size+1; ++i )
          ret += names.at(i) + types.at(i) + forms.at(i) + amounts.at(i) + stages.at(i) + "\n";
-   }
-   return ret;
-}
-
-/**
- * @brief buildYeastList
- * collects all the yeasts from the recipe an returns a list.
- * @author Mattias Måhl <mattias@kejsarsten.com>
- * @return QList<QStringList>
- */
-QList<QStringList> RecipeFormatter::buildYeastList()
-{
-   QList<QStringList> ret;
-   Unit const * kindOf;
-
-   if( rec == nullptr )
-      return ret;
-
-   QList<Yeast*> yeasts = rec->yeasts();
-   if( yeasts.size() > 0 )
-   {
-      QStringList row;
-
-      row.append(tr("Name"));
-      row.append(tr("Type"));
-      row.append(tr("Form"));
-      row.append(tr("Amount"));
-      row.append(tr("Stage"));
-      ret.append(row);
-      row.clear();
-
-      foreach( Yeast *y, yeasts )
-      {
-         kindOf = y->amountIsWeight() ? static_cast<Unit const *>(&Units::kilograms) : static_cast<Unit const *>(&Units::liters);
-         row.append(y->name());
-         row.append(y->typeStringTr());
-         row.append(y->formStringTr());
-         row.append(Brewtarget::displayAmount( y->amount(), "yeastTableModel", "amount_kg", kindOf, 2));
-         row.append(y->addToSecondary() ? tr("Secondary") : tr("Primary"));
-         ret.append(row);
-         row.clear();
-      }
    }
    return ret;
 }
@@ -1562,67 +1338,6 @@ QString RecipeFormatter::buildMashTableTxt()
    return ret;
 }
 
-/**
- * @brief buildMashList
- * collects all the mashsteps from the recipe an returns a list.
- * @author Mattias Måhl <mattias@kejsarsten.com>
- * @return QList<QStringList>
- */
-QList<QStringList> RecipeFormatter::buildMashList()
-{
-   QList<QStringList> ret = QList<QStringList>();
-
-   if( rec == nullptr )
-      return ret;
-
-   Mash* mash = rec->mash();
-   if (! mash)
-      return ret;
-
-   QList<MashStep*> mashSteps;
-   if( mash )
-      mashSteps = mash->mashSteps();
-   if( mashSteps.size() > 0 )
-   {
-      QStringList row;
-
-      row.append(tr("Name"));
-      row.append(tr("Type"));
-      row.append(tr("Amount"));
-      row.append(tr("Temp"));
-      row.append(tr("Target"));
-      row.append(tr("Time"));
-      ret.append(row);
-      row.clear();
-
-      foreach( MashStep * s, mashSteps)
-      {
-         row.append(s->name());
-         row.append(s->typeStringTr());
-         if( s->isInfusion() )
-         {
-            row.append(Brewtarget::displayAmount(s->infuseAmount_l(), "mashStepTableModel", "amount", &Units::liters));
-            row.append(Brewtarget::displayAmount(s->infuseTemp_c(),   "mashStepTableModel", PropertyNames::MashStep::infuseTemp_c, &Units::celsius));
-         }
-         else if( s->isDecoction() )
-         {
-            row.append(Brewtarget::displayAmount(s->decoctionAmount_l(), "mashStepTableModel", "amount", &Units::liters));
-            row.append("---");
-         }
-         else
-         {
-            row.append( "---" );
-            row.append("---");
-         }
-         row.append(Brewtarget::displayAmount(s->stepTemp_c(), "mashStepTableModel", PropertyNames::MashStep::stepTemp_c, &Units::celsius));
-         row.append(Brewtarget::displayAmount(s->stepTime_min(), "mashStepTableModel", PropertyNames::Misc::time, &Units::minutes, 0));
-         ret.append(row);
-         row.clear();
-      }
-   }
-   return ret;
-}
-
 QString RecipeFormatter::buildNotesHtml()
 {
    QString notes;
@@ -1636,44 +1351,6 @@ QString RecipeFormatter::buildNotesHtml()
    notes += rec->notes().toHtmlEscaped();
 
    return notes;
-}
-
-/**
- * @brief
- * buildNotesString
- * Returns the notes for the recipe as a continous string.
- * @author Mattias Måhl <mattias@kejsarsten.com>
- * @return QString
- */
-QString RecipeFormatter::buildNotesString()
-{
-   QString notes;
-
-   if ( rec == nullptr || rec->notes() == "" )
-      return "";
-
-   // NOTE: (heh) Using the QTextDocument.toHtml() method doesn't really work
-   // here. So we cheat and use some newer functionality
-   return rec->notes();
-}
-
-/**
- * @brief
- * buildNotesString
- * Returns the notes for the recipe as a continous string.
- *
- * @return QString
- */
-QString RecipeFormatter::buildTasteNotesString()
-{
-   QString notes;
-
-   if ( rec == nullptr || rec->notes() == "" )
-      return "";
-
-   // NOTE: (heh) Using the QTextDocument.toHtml() method doesn't really work
-   // here. So we cheat and use some newer functionality
-   return rec->tasteNotes();
 }
 
 QString RecipeFormatter::buildInstructionTableTxt()
