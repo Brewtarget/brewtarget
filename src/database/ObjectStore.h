@@ -278,29 +278,34 @@ public:
    /**
     * \brief Remove the object from our local in-memory cache
     *
-    *        Subclasses can do additional or different work, eg \c ObjectStoreTyped will mark the object as deleted
-    *        both in memory and in the database (via the \c "deleted" property of \c NamedEntity which is also stored
-    *        in the DB) but will leave the object in the local cache (ie will not call down to this base class member
-    *        function).
+    *        Subclasses implementing their own soft delete member functions can use this and/or do additional or
+    *        different work, eg \c ObjectStoreTyped will mark the object as deleted both in memory and in the database
+    *        (via the \c "deleted" property of \c NamedEntity which is also stored in the DB) but will leave the object
+    *        in the local cache (ie will not call down to this base class member function).
     *
     * \param id ID of the object to delete
     *
     *        (We take the ID of the object to delete rather than, say, std::shared_ptr<QObject> because it's almost
     *        certainly simpler for the caller to extract the ID than for us.)
+    *
+    * \return shared pointer to the soft-deleted object, which the caller now owns
     */
-   virtual void softDelete(int id);
+   std::shared_ptr<QObject> defaultSoftDelete(int id);
 
    /**
     * \brief Remove the object from our local in-memory cache and remove its record from the DB.
     *
-    *        Subclasses can do additional work, eg \c ObjectStoreTyped will also mark the in-memory object as
-    *        deleted (via the \c "deleted" property of \c NamedEntity).
+    *        Subclasses implementing their own soft delete member functions can use this and do additional work, eg
+    *        \c ObjectStoreTyped will also mark the in-memory object as deleted (via the \c "deleted" property of
+    *        \c NamedEntity).
     *
     *        .:TODO:. Need to work out where to do "is this object used elsewhere" checks - eg should a Hop be deletable if it's used in a Recipe
     *
     * \param id ID of the object to delete
+    *
+    * \return shared pointer to the hard-deleted object, which the caller now owns
     */
-   virtual void hardDelete(int id);
+   std::shared_ptr<QObject> defaultHardDelete(int id);
 
    /**
     * \brief Return \c true if an object with the supplied ID is stored in the cache or \c false otherwise

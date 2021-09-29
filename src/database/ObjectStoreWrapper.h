@@ -29,6 +29,21 @@
  *        ObjectStoreTyped.h
  */
 namespace ObjectStoreWrapper {
+
+   /**
+    * \brief Determines whether an object of the specified ID exists in the ObjectStore (for this type of object)
+    */
+   template<class NE> bool contains(int id) {
+      return ObjectStoreTyped<NE>::getInstance().contains(id);
+   }
+
+   /**
+    * \brief Get a shared pointer to an object from its database ID.
+    *        Note that it is a coding error to call this for an ID that is not stored in the ObjectStore.  If it is not
+    *        certain that an ID is present, then \c contains() must be called first, to check.
+    *
+    * \return A shared pointer copied from the ObjectStore's "master" shared pointer for this object
+    */
    template<class NE> std::shared_ptr<NE> getById(int id) {
       return ObjectStoreTyped<NE>::getInstance().getById(id);
    }
@@ -67,6 +82,29 @@ namespace ObjectStoreWrapper {
       );
    }
 
+   /**
+    * \brief Given a raw pointer to an object, gets either a copy of the ObjectStore's "master" shared pointer for that
+    *        object (if the object is stored in an ObjectStore), or a new shared pointer (if the object is not stored in
+    *        an ObjectStore)
+    *
+    * \param obj  Pointer to the object, which (a) must not be null and (b) must already be stored in the ObjectStore
+    */
+   template<class NE> std::shared_ptr<NE> getSharedFromRaw(NE * const ne) {
+      int id = ne->key();
+      ObjectStoreTyped<NE> & objectStore = ObjectStoreTyped<NE>::getInstance();
+      if (id > 0 && objectStore.contains(id)) {
+         return objectStore.getById(id);
+      }
+      qDebug() <<
+         Q_FUNC_INFO << "Creating new shared_ptr for unstored" << ne->metaObject()->className() << ":" << ne->name();
+      return std::shared_ptr<NE>{ne};
+   }
+
+   /**
+    * \brief Makes a \b new object that is a copy of the supplied one
+    *
+    * \return Shared pointer to the new object
+    */
    template<class NE> std::shared_ptr<NE> copy(NE const & ne) {
       return std::make_shared<NE>(ne);
    }
@@ -111,19 +149,20 @@ namespace ObjectStoreWrapper {
       return;
    }
 
-   template<class NE> void softDelete(NE const & ne) {
-      ObjectStoreTyped<NE>::getInstance().softDelete(ne.key());
-      return;
+   template<class NE> std::shared_ptr<NE> softDelete(NE const & ne) {
+      return ObjectStoreTyped<NE>::getInstance().softDelete(ne.key());
    }
 
-   template<class NE> void hardDelete(int id) {
-      ObjectStoreTyped<NE>::getInstance().hardDelete(id);
-      return;
+   template<class NE> std::shared_ptr<NE> hardDelete(int id) {
+      return ObjectStoreTyped<NE>::getInstance().hardDelete(id);
    }
 
-   template<class NE> void hardDelete(NE const & ne) {
-      ObjectStoreTyped<NE>::getInstance().hardDelete(ne.key());
-      return;
+   template<class NE> std::shared_ptr<NE> hardDelete(NE const & ne) {
+      return ObjectStoreTyped<NE>::getInstance().hardDelete(ne.key());
+   }
+
+   template<class NE> std::shared_ptr<NE> hardDelete(std::shared_ptr<NE> ne) {
+      return ObjectStoreTyped<NE>::getInstance().hardDelete(ne->key());
    }
 
    /**

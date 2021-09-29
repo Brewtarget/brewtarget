@@ -53,6 +53,49 @@
 
 
 namespace {
+   /**
+    * \brief Check whether the supplied instance of (subclass of) NamedEntity (a) is an "instance of use of" (ie has a
+    *        parent) and (b) is not used in any Recipe.
+    */
+   template<class NE> bool isUnusedInstanceOfUseOf(NE & var) {
+      NE * parentOfVar = static_cast<NE *>(var.getParent());
+      if (nullptr == parentOfVar) {
+         // The var has no parent and so is not "an instance of use of"
+         return false;
+      }
+
+      qDebug() <<
+         Q_FUNC_INFO << var.metaObject()->className() << "#" << var.key() << "has parent #" << parentOfVar->key();
+      //
+      // Parameter has a parent.  See if it (the parameter, not its parent!) is used in a recipe.
+      // (NB: The parent of the NamedEntity is not the same thing as its parent recipe.  We should perhaps find some
+      // different terms!)
+      //
+      auto matchingRecipe = ObjectStoreTyped<Recipe>::getInstance().findFirstMatching(
+         // NB: Important to do the lambda capture of var here by reference, otherwise we'll be passing in a copy of
+         //     var, which won't have an ID and therefore will never give a match.
+         [&var](Recipe * recipe) {
+            return recipe->uses(var);
+         }
+      );
+      if (matchingRecipe == nullptr) {
+         // The parameter is not already used in a recipe, so we'll be able to add it without making a copy
+         // Note that we can't just take the address of var and use it to make a new shared_ptr as that would mean
+         // we had two completely unrelated shared_ptr objects (one in the object store and one newly created here)
+         // pointing to the same address.  We need to get an instance of shared_ptr that's copied from (and thus
+         // shares the internal reference count of) the one held by the object store.
+         qDebug() << Q_FUNC_INFO << var.metaObject()->className() << "#" << var.key() << "not used in any recipe";
+         return true;
+      }
+
+      // The var is used in another Recipe.  (We shouldn't really find ourselves in this position, but the way the rest
+      // of the code works means that, even if we do, we should recover OK - or at least not make the situation any
+      // worse.)
+      qWarning() <<
+         Q_FUNC_INFO << var.metaObject()->className() << "#" << var.key() <<
+         "is unexpectedly already used in recipe #" << matchingRecipe->key();
+      return false;
+   }
 
    /**
     * \brief Decide whether the supplied instance of (subclass of) NamedEntity needs to be copied before being added to
@@ -65,6 +108,9 @@ namespace {
     *         another recipe), or var itself otherwise
     */
    template<class NE> std::shared_ptr<NE> copyIfNeeded(NE & var) {
+      // It's the caller's responsibility to ensure var is already in an ObjectStore
+      Q_ASSERT(var.key() > 0);
+
       //
       // If the supplied Hop/Fermentable/etc has no parent then we need to make a copy of it, because it's the master
       // instance of that Hop/Fermentable/etc.
@@ -73,31 +119,11 @@ namespace {
       // recipe (_including_ this one, because the same ingredient can be added more than once to a recipe - eg Hops
       // added at different times).
       //
-      NE * parentOfVar = static_cast<NE *>(var.getParent());
-      if (parentOfVar != nullptr) {
-         qDebug() <<
-                  Q_FUNC_INFO << var.metaObject()->className() << "#" << var.key() << "has parent #" << parentOfVar->key();
-         //
-         // Parameter has a parent.  See if it (the parameter, not its parent!) is used in a recipe.
-         // (NB: The parent of the NamedEntity is not the same thing as its parent recipe.  We should perhaps find some
-         // different terms!)
-         //
-         auto matchingRecipe = ObjectStoreTyped<Recipe>::getInstance().findFirstMatching(
-                                  // NB: Important to do the lambda capture of var here by reference, otherwise we'll be passing in a copy of
-                                  //     var, which won't have an ID and therefore will never give a match.
-         [&var](Recipe * recipe) {
-            return recipe->uses(var);
-         }
-                               );
-         if (matchingRecipe == nullptr) {
-            // The parameter is not already used in a recipe, so we'll be able to add it without making a copy
-            // Note that we can't just take the address of var and use it to make a new shared_ptr as that would mean
-            // we had two completely unrelated shared_ptr objects (one in the object store and one newly created here)
-            // pointing to the same address.  We need to get an instance of shared_ptr that's copied from (and thus
-            // shares the internal reference count of) the one held by the object store.
-            qDebug() << Q_FUNC_INFO << var.metaObject()->className() << "#" << var.key() << "not used in any recipe";
-            return ObjectStoreWrapper::getById<NE>(var.key());
-         }
+      // All this logic is handled in isUnusedInstanceOfUseOf() because it's the same process for checking it's OK to
+      // delete something when it's been removed from a Recipe.
+      //
+      if (isUnusedInstanceOfUseOf(var)) {
+         return ObjectStoreWrapper::getById<NE>(var.key());
       }
 
       qDebug() << Q_FUNC_INFO << "Making copy of " << var.metaObject()->className() << "#" << var.key();
@@ -557,7 +583,7 @@ void Recipe::mashFermentableIns() {
    str += tr("to the mash tun.");
    ins->setDirections(str);
 
-   this->addNew(ins);
+   this->add(ins);
 
    return;
 }
@@ -585,7 +611,7 @@ void Recipe::saltWater(Salt::WhenToAdd when) {
    str += QString(tr(" into the %1 water").arg(tmp));
    ins->setDirections(str);
 
-   this->addNew(ins);
+   this->add(ins);
 
    return;
 }
@@ -608,7 +634,7 @@ void Recipe::mashWaterIns() {
    str += tr("for upcoming infusions.");
    ins->setDirections(str);
 
-   this->addNew(ins);
+   this->add(ins);
 
    return;
 }
@@ -750,7 +776,7 @@ void Recipe::firstWortHopsIns() {
    ins->setName(tr("First wort hopping"));
    ins->setDirections(str);
 
-   this->addNew(ins);
+   this->add(ins);
 
    return;
 }
@@ -780,7 +806,7 @@ void Recipe::topOffIns() {
    ins->setDirections(str);
    ins->addReagent(tmp);
 
-   this->addNew(ins);
+   this->add(ins);
 
    return;
 }
@@ -896,7 +922,7 @@ void Recipe::postboilFermentablesIns() {
    ins->setDirections(str);
    ins->addReagent(tmp);
 
-   this->addNew(ins);
+   this->add(ins);
 
    return;
 }
@@ -929,7 +955,7 @@ void Recipe::postboilIns() {
    auto ins = std::make_shared<Instruction>();
    ins->setName(tr("Post boil"));
    ins->setDirections(str);
-   this->addNew(ins);
+   this->add(ins);
 
    return;
 }
@@ -945,7 +971,7 @@ void Recipe::addPreinstructions(QVector<PreInstruction> preins) {
       ins->setDirections(pi.getText());
       ins->setInterval(pi.getTime());
 
-      this->addNew(ins);
+      this->add(ins);
    }
    return;
 }
@@ -1020,7 +1046,7 @@ void Recipe::generateInstructions() {
    startBoilIns->setName(tr("Start boil"));
    startBoilIns->setInterval(timeRemaining);
    startBoilIns->setDirections(str);
-   this->addNew(startBoilIns);
+   this->add(startBoilIns);
 
    /*** Get fermentables unless we haven't added yet ***/
    if (hasBoilFermentable()) {
@@ -1047,7 +1073,7 @@ void Recipe::generateInstructions() {
    auto flameoutIns = std::make_shared<Instruction>();
    flameoutIns->setName(tr("Flameout"));
    flameoutIns->setDirections(tr("Stop boiling the wort."));
-   this->addNew(flameoutIns);
+   this->add(flameoutIns);
 
    // Steeped aroma hops
    preinstructions.clear();
@@ -1077,7 +1103,7 @@ void Recipe::generateInstructions() {
    auto pitchIns = std::make_shared<Instruction>();
    pitchIns->setName(tr("Pitch yeast"));
    pitchIns->setDirections(str);
-   this->addNew(pitchIns);
+   this->add(pitchIns);
    /*** End primary yeast ***/
 
    /*** Primary misc ***/
@@ -1094,13 +1120,13 @@ void Recipe::generateInstructions() {
    auto fermentIns = std::make_shared<Instruction>();
    fermentIns->setName(tr("Ferment"));
    fermentIns->setDirections(str);
-   this->addNew(fermentIns);
+   this->add(fermentIns);
 
    str = tr("Transfer beer to secondary.");
    auto transferIns = std::make_shared<Instruction>();
    transferIns->setName(tr("Transfer to secondary"));
    transferIns->setDirections(str);
-   this->addNew(transferIns);
+   this->add(transferIns);
 
    /*** Secondary misc ***/
    addPreinstructions(miscSteps(Misc::Secondary));
@@ -1170,29 +1196,35 @@ QString Recipe::nextAddToBoil(double & time) {
 }
 
 //============================Relational Setters===============================
-template<class NE> NE * Recipe::add(std::shared_ptr<NE> ne) {
+template<class NE> std::shared_ptr<NE> Recipe::add(std::shared_ptr<NE> ne) {
+   // It's a coding error if we've ended up with a null shared_ptr
+   Q_ASSERT(ne);
+
+   // If the object being added is not already in the ObjectStore, we need to add it.  This is typically when we're
+   // adding a new Instruction (which is an object owned by Recipe) or undoing a remove of a Hop/Fermentable/etc (thus
+   // the "instance of use of" object was previously in the ObjectStore, but was removed and now we want to add it
+   // back).
+   if (ne->key() <= 0) {
+      // With shared pointer parameter, ObjectStoreWrapper::insert returns what we passed it (ie our shared pointer
+      // remains valid after the call).
+      qDebug() << Q_FUNC_INFO << "Inserting" << ne->metaObject()->className() << "in object store";
+      ObjectStoreWrapper::insert(ne);
+   } else {
+      //
+      // The object was already in the ObjectStore, so let's check whether we need to copy it.
+      //
+      // Note that std::shared_ptr does all the right things if this assignment ends up boiling down to ne = ne!
+      //
+      ne = copyIfNeeded(*ne);
+   }
+
    this->pimpl->accessIds<NE>().append(ne->key());
    connect(ne.get(), SIGNAL(changed(QMetaProperty, QVariant)), this, SLOT(acceptChangeToContainedObject(QMetaProperty,
                                                                                                         QVariant)));
    this->propagatePropertyChange(propertyToPropertyName<NE>());
 
    this->recalcIfNeeded(ne->metaObject()->className());
-   return ne.get();
-}
-
-/**
- * \brief Create and add a new Hop/Fermentable/Instruction etc, first to the relevant Object Store and then to this
- *        Recipe
- */
-template<class NE> void Recipe::addNew(std::shared_ptr<NE> ne) {
-   ObjectStoreWrapper::insert(ne);
-   this->add(ne);
-   return;
-}
-
-template<class NE> NE * Recipe::add(NE * var) {
-   std::shared_ptr<NE> neToAdd = copyIfNeeded(*var);
-   return this->add(neToAdd);
+   return ne;
 }
 
 //
@@ -1200,13 +1232,13 @@ template<class NE> NE * Recipe::add(NE * var) {
 // (This is all just a trick to allow the template definition to be here in the .cpp file and not in the header, which
 // means, amongst other things, that we can reference the pimpl.)
 //
-template Hop     *     Recipe::add(Hop     *     var);
-template Fermentable * Recipe::add(Fermentable * var);
-template Misc     *    Recipe::add(Misc     *    var);
-template Yeast    *    Recipe::add(Yeast    *    var);
-template Water    *    Recipe::add(Water    *    var);
-template Salt     *    Recipe::add(Salt     *    var);
-template Instruction * Recipe::add(Instruction * var);
+template std::shared_ptr<Hop        > Recipe::add(std::shared_ptr<Hop        > var);
+template std::shared_ptr<Fermentable> Recipe::add(std::shared_ptr<Fermentable> var);
+template std::shared_ptr<Misc       > Recipe::add(std::shared_ptr<Misc       > var);
+template std::shared_ptr<Yeast      > Recipe::add(std::shared_ptr<Yeast      > var);
+template std::shared_ptr<Water      > Recipe::add(std::shared_ptr<Water      > var);
+template std::shared_ptr<Salt       > Recipe::add(std::shared_ptr<Salt       > var);
+template std::shared_ptr<Instruction> Recipe::add(std::shared_ptr<Instruction> var);
 
 template<class NE> bool Recipe::uses(NE const & var) const {
    int idToLookFor = var.key();
@@ -1240,31 +1272,52 @@ template bool Recipe::uses(Yeast        const & var) const;
 template<> bool Recipe::uses<Equipment> (Equipment  const & var) const {
    return var.key() == this->equipmentId;
 }
-template<> bool Recipe::uses<Mash> (Mash       const & var) const {
+template<> bool Recipe::uses<Mash> (Mash const & var) const {
    return var.key() == this->mashId;
 }
-template<> bool Recipe::uses<Style> (Style      const & var) const {
+template<> bool Recipe::uses<Style> (Style const & var) const {
    return var.key() == this->styleId;
 }
 
-template<class NE> NE * Recipe::remove(NE * var) {
-   int idToLookFor = var->key();
-   if (!this->pimpl->accessIds<NE>().removeOne(idToLookFor)) {
-      // This shouldn't happen, but it doesn't inherently break anything, so just log a warning and carry on
-      qWarning() << Q_FUNC_INFO << "Tried to remove object with ID" << idToLookFor << "but couldn't find it";
+template<class NE> std::shared_ptr<NE> Recipe::remove(std::shared_ptr<NE> var) {
+   // It's a coding error to supply a null shared pointer
+   Q_ASSERT(var);
+
+   int idToRemove = var->key();
+   if (!this->pimpl->accessIds<NE>().removeOne(idToRemove)) {
+      // It's a coding error if we try to remove something from the Recipe that wasn't in it in the first place!
+      qCritical() <<
+         Q_FUNC_INFO << "Tried to remove" << var->metaObject()->className() << "with ID" << idToRemove <<
+         "but couldn't find it in Recipe #" << this->key();
+      Q_ASSERT(false);
    } else {
       this->propagatePropertyChange(propertyToPropertyName<NE>());
       this->recalcIBU(); // .:TODO:. Don't need to do this recalculation when it's Instruction
    }
+
+   //
+   // Because Hop/Fermentable/etc objects in a Recipe are actually "Instance of use of Hop/Fermentable/etc" we usually
+   // want to delete the object from the ObjectStore at this point.  But, because we're a bit paranoid, we'll check
+   // first that the object we're removing has a parent (ie really is an "instance of use of") and is not used in any
+   // other Recipes.
+   //
+   if (isUnusedInstanceOfUseOf(*var)) {
+      qDebug() <<
+         Q_FUNC_INFO << "Deleting" << var->metaObject()->className() << "#" << var->key() <<
+         "as it is \"instance of use of\" that is no longer needed";
+      ObjectStoreWrapper::hardDelete<NE>(var->key());
+   }
+   // The caller now owns the removed object unless and until they pass it in to Recipe::add() (typically to undo the
+   // remove).
    return var;
 }
-template Hop     *     Recipe::remove(Hop     *     var);
-template Fermentable * Recipe::remove(Fermentable * var);
-template Misc     *    Recipe::remove(Misc     *    var);
-template Yeast    *    Recipe::remove(Yeast    *    var);
-template Water    *    Recipe::remove(Water    *    var);
-template Salt     *    Recipe::remove(Salt     *    var);
-template Instruction * Recipe::remove(Instruction * var);
+template std::shared_ptr<Hop        > Recipe::remove(std::shared_ptr<Hop        > var);
+template std::shared_ptr<Fermentable> Recipe::remove(std::shared_ptr<Fermentable> var);
+template std::shared_ptr<Misc       > Recipe::remove(std::shared_ptr<Misc       > var);
+template std::shared_ptr<Yeast      > Recipe::remove(std::shared_ptr<Yeast      > var);
+template std::shared_ptr<Water      > Recipe::remove(std::shared_ptr<Water      > var);
+template std::shared_ptr<Salt       > Recipe::remove(std::shared_ptr<Salt       > var);
+template std::shared_ptr<Instruction> Recipe::remove(std::shared_ptr<Instruction> var);
 
 int Recipe::instructionNumber(Instruction const & ins) const {
    return this->pimpl->instructionIds.indexOf(ins.key());

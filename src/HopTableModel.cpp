@@ -103,8 +103,7 @@ void HopTableModel::observeDatabase(bool val) {
       connect(&ObjectStoreTyped<Hop>::getInstance(),
               &ObjectStoreTyped<Hop>::signalObjectDeleted,
               this,
-              static_cast<bool (HopTableModel::*)(int)>
-              (&HopTableModel::removeHop)); // static_cast is needed here because removeHop is overloaded
+              &HopTableModel::removeHop);
       this->addHops(ObjectStoreTyped<Hop>::getInstance().getAllRaw());
    } else {
       removeAll();
@@ -187,7 +186,7 @@ void HopTableModel::addHops(QList<Hop *> hops) {
    return;
 }
 
-bool HopTableModel::removeHop(Hop * hop) {
+bool HopTableModel::remove(Hop * hop) {
    int i = hopObs.indexOf(hop);
    if (i >= 0) {
       beginRemoveRows(QModelIndex(), i, i);
@@ -202,17 +201,9 @@ bool HopTableModel::removeHop(Hop * hop) {
    return false;
 }
 
-bool HopTableModel::removeHop(int hopId) {
-   auto match = std::find_if(this->hopObs.begin(),
-                             this->hopObs.end(),
-   [hopId](Hop * current) {
-      return hopId == current->key();
-   });
-   if (match == this->hopObs.cend()) {
-      // We didn't find the deleted Hop in our list
-      return false;
-   }
-   return this->removeHop(*match);
+void HopTableModel::removeHop(int hopId, std::shared_ptr<QObject> object) {
+   this->remove(std::static_pointer_cast<Hop>(object).get());
+   return;
 }
 
 void HopTableModel::setShowIBUs(bool var) {

@@ -21,27 +21,24 @@
 #include "MashStepEditor.h"
 
 #include "brewtarget.h"
+#include "MainWindow.h"
 #include "model/MashStep.h"
 #include "Unit.h"
 
-MashStepEditor::MashStepEditor(QWidget* parent)
-   : QDialog(parent), obs(nullptr)
-{
-   setupUi(this);
+MashStepEditor::MashStepEditor(QWidget* parent) : QDialog{parent}, obs(nullptr) {
+   this->setupUi(this);
 
-   comboBox_type->setCurrentIndex(-1);
+   this->comboBox_type->setCurrentIndex(-1);
 
-   connect( buttonBox, &QDialogButtonBox::accepted, this, &MashStepEditor::saveAndClose );
-   connect( buttonBox, &QDialogButtonBox::rejected, this, &MashStepEditor::close );
-   connect( comboBox_type, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(grayOutStuff(const QString &)) );
-
+   connect(buttonBox, &QDialogButtonBox::accepted, this, &MashStepEditor::saveAndClose);
+   connect(buttonBox, &QDialogButtonBox::rejected, this, &MashStepEditor::close);
+   connect(this->comboBox_type, &QComboBox::currentTextChanged, this, &MashStepEditor::grayOutStuff);
+   return;
 }
 
-void MashStepEditor::showChanges(QMetaProperty* metaProp)
-{
-   if( obs == nullptr )
-   {
-      clear();
+void MashStepEditor::showChanges(QMetaProperty* metaProp) {
+   if (!this->obs) {
+      this->clear();
       return;
    }
 
@@ -49,49 +46,46 @@ void MashStepEditor::showChanges(QMetaProperty* metaProp)
    QVariant value;
    bool updateAll = false;
 
-   if( metaProp == nullptr )
+   if (metaProp == nullptr) {
       updateAll = true;
-   else
-   {
+   } else {
       propName = metaProp->name();
-      value = metaProp->read(obs);
+      value = metaProp->read(this->obs.get());
    }
 
-   if ( updateAll )
-   {
+   if (updateAll) {
       lineEdit_name->setText(obs->name());
       comboBox_type->setCurrentIndex(obs->type());
-      lineEdit_infuseAmount->setText(obs);
-      lineEdit_infuseTemp->setText(obs);
-      lineEdit_decoctionAmount->setText(obs);
-      lineEdit_stepTemp->setText(obs);
-      lineEdit_stepTime->setText(obs);
-      lineEdit_rampTime->setText(obs);
-      lineEdit_endTemp->setText(obs);
+      lineEdit_infuseAmount->setText(this->obs.get());
+      lineEdit_infuseTemp->setText(this->obs.get());
+      lineEdit_decoctionAmount->setText(this->obs.get());
+      lineEdit_stepTemp->setText(this->obs.get());
+      lineEdit_stepTime->setText(this->obs.get());
+      lineEdit_rampTime->setText(this->obs.get());
+      lineEdit_endTemp->setText(this->obs.get());
+   } else if (propName == PropertyNames::NamedEntity::name) {
+      lineEdit_name->setText(obs->name());
+   } else if (propName == PropertyNames::MashStep::type) {
+      comboBox_type->setCurrentIndex(obs->type());
+   } else if (propName == PropertyNames::MashStep::infuseAmount_l) {
+      lineEdit_infuseAmount->setText(this->obs.get());
+   } else if (propName == PropertyNames::MashStep::infuseTemp_c) {
+      lineEdit_infuseTemp->setText(this->obs.get());
+   } else if (propName == PropertyNames::MashStep::decoctionAmount_l) {
+      lineEdit_decoctionAmount->setText(this->obs.get());
+   } else if (propName == PropertyNames::MashStep::stepTemp_c) {
+      lineEdit_stepTemp->setText(this->obs.get());
+   } else if (propName == PropertyNames::MashStep::stepTime_min) {
+      lineEdit_stepTime->setText(this->obs.get());
+   } else if (propName == PropertyNames::MashStep::rampTime_min) {
+      lineEdit_rampTime->setText(this->obs.get());
+   } else if (propName == PropertyNames::MashStep::endTemp_c) {
+      lineEdit_endTemp->setText(this->obs.get());
    }
-
-   else if( propName == PropertyNames::NamedEntity::name )
-      lineEdit_name->setText(obs->name());
-   else if( propName == "type" )
-      comboBox_type->setCurrentIndex(obs->type());
-   else if( propName == PropertyNames::MashStep::infuseAmount_l )
-      lineEdit_infuseAmount->setText(obs);
-   else if( propName == PropertyNames::MashStep::infuseTemp_c )
-      lineEdit_infuseTemp->setText(obs);
-   else if( propName == PropertyNames::MashStep::decoctionAmount_l )
-      lineEdit_decoctionAmount->setText(obs);
-   else if( propName == PropertyNames::MashStep::stepTemp_c )
-      lineEdit_stepTemp->setText(obs);
-   else if( propName == PropertyNames::MashStep::stepTime_min )
-      lineEdit_stepTime->setText(obs);
-   else if( propName == PropertyNames::MashStep::rampTime_min )
-      lineEdit_rampTime->setText(obs);
-   else if( propName == PropertyNames::MashStep::endTemp_c )
-      lineEdit_endTemp->setText(obs);
+   return;
 }
 
-void MashStepEditor::clear()
-{
+void MashStepEditor::clear() {
    lineEdit_name->setText(QString(""));
    comboBox_type->setCurrentIndex(0);
    lineEdit_infuseAmount->setText(QString(""));
@@ -101,35 +95,38 @@ void MashStepEditor::clear()
    lineEdit_stepTime->setText(QString(""));
    lineEdit_rampTime->setText(QString(""));
    lineEdit_endTemp->setText(QString(""));
+   return;
 }
 
-void MashStepEditor::close()
-{
+void MashStepEditor::close() {
    setVisible(false);
+   return;
 }
 
-void MashStepEditor::changed(QMetaProperty prop, QVariant /*val*/)
-{
-   if( sender() != obs )
+void MashStepEditor::changed(QMetaProperty prop, QVariant /*val*/) {
+   if (sender() != this->obs.get()) {
       return;
+   }
 
    showChanges(&prop);
+   return;
 }
 
-void MashStepEditor::setMashStep(MashStep* step) {
+void MashStepEditor::setMashStep(std::shared_ptr<MashStep> step) {
    if (this->obs) {
-      disconnect(this->obs, nullptr, this, nullptr );
+      disconnect(this->obs.get(), nullptr, this, nullptr);
    }
 
-   if (step) {
-      this->obs = step;
-      connect(this->obs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+   this->obs = step;
+
+   if (this->obs) {
+      connect(this->obs.get(), &MashStep::changed, this, &MashStepEditor::changed);
       showChanges();
    }
+   return;
 }
 
-void MashStepEditor::saveAndClose()
-{
+void MashStepEditor::saveAndClose() {
    obs->setName(lineEdit_name->text());
    obs->setType(static_cast<MashStep::Type>(comboBox_type->currentIndex()));
    obs->setInfuseAmount_l(lineEdit_infuseAmount->toSI());
@@ -141,7 +138,7 @@ void MashStepEditor::saveAndClose()
    obs->setEndTemp_c(lineEdit_endTemp->toSI());
 
    if ( obs->cacheOnly() ) {
-      // This is a new MashStep, so we need to store it.
+      // This is a new MashStep, so we need to store it and add it to the Mash.
       // We'll ask MainWindow to do this for us, because then it can be an undoable action.
       //
       // The Mash of this MashStep should already have been set by the caller
@@ -149,32 +146,26 @@ void MashStepEditor::saveAndClose()
    }
 
    setVisible(false);
+   return;
 }
 
-void MashStepEditor::grayOutStuff(const QString& text)
-{
-   if( text == "Infusion" )
-   {
+void MashStepEditor::grayOutStuff(const QString& text) {
+   if (text == "Infusion") {
       lineEdit_infuseAmount->setEnabled(true);
       lineEdit_infuseTemp->setEnabled(true);
       lineEdit_decoctionAmount->setEnabled(false);
-   }
-   else if( text == "Decoction" )
-   {
+   } else if (text == "Decoction") {
       lineEdit_infuseAmount->setEnabled(false);
       lineEdit_infuseTemp->setEnabled(false);
       lineEdit_decoctionAmount->setEnabled(true);
-   }
-   else if( text == "Temperature" )
-   {
+   } else if (text == "Temperature") {
       lineEdit_infuseAmount->setEnabled(false);
       lineEdit_infuseTemp->setEnabled(false);
       lineEdit_decoctionAmount->setEnabled(false);
-   }
-   else
-   {
+   } else {
       lineEdit_infuseAmount->setEnabled(true);
       lineEdit_infuseTemp->setEnabled(true);
       lineEdit_decoctionAmount->setEnabled(true);
    }
+   return;
 }

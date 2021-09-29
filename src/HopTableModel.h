@@ -97,15 +97,17 @@ public:
 
 
    QString generateName(int column) const;
+
+   //! \returns true if "hop" is successfully found and removed.
+   bool remove(Hop* hop);
+
 public slots:
    void changed(QMetaProperty, QVariant);
    void changedInventory(int invKey, BtStringConst const & propertyName);
    //! \brief Add a hop to the model.
 //   void addHop(Hop* hop);
    void addHop(int hopId);
-   //! \returns true if "hop" is successfully found and removed.
-   bool removeHop(Hop* hop);
-   bool removeHop(int hopId);
+   void removeHop(int hopId, std::shared_ptr<QObject> object);
 
    void contextMenu(const QPoint &point);
 

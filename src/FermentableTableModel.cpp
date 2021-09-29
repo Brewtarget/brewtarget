@@ -109,7 +109,7 @@ void FermentableTableModel::observeDatabase(bool val) {
 
 void FermentableTableModel::addFermentable(int fermId) {
    Fermentable * ferm = ObjectStoreWrapper::getByIdRaw<Fermentable>(fermId);
-   qDebug() << QString("FermentableTableModel::addFermentable() \"%1\"").arg(ferm->name());
+   qDebug() << Q_FUNC_INFO << ferm->name();
 
    //Check to see if it's already in the list
    if( fermObs.contains(ferm) )
@@ -126,6 +126,7 @@ void FermentableTableModel::addFermentable(int fermId) {
    totalFermMass_kg += ferm->amount_kg();
    //reset(); // Tell everybody that the table has changed.
    endInsertRows();
+   return;
 }
 
 void FermentableTableModel::addFermentables(QList<Fermentable*> ferms) {

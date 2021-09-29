@@ -170,7 +170,10 @@ namespace {
 class MainWindow::impl {
 public:
 
-   impl() : fileOpenDirectory{QDir::homePath()} {
+   impl(MainWindow & self) :
+      self{self},
+      fileOpener{},
+      fileOpenDirectory{QDir::homePath()} {
       return;
    }
 
@@ -179,14 +182,9 @@ public:
    /**
     * @brief Import recipes, hops, equipment, etc from files specified by the user.  (Currently this is just BeerXML,
     *        but in future could well be other formats too.
-    *
-    * @param mainWindow Back pointer to MainWindow class
     */
-   void importFromFiles(MainWindow * mainWindow) {
-      // Since we can only be called from an instance of MainWindow, it should be impossible for it to give us null as
-      // the pointer to itself!
-      Q_ASSERT(mainWindow != nullptr);
-
+   void importFromFiles() {
+      //
       // Set up the fileOpener dialog.  In previous versions of the code, this was created once and reused every time
       // we want to open a file.  The advantage of that is that, on subsequent uses, the file dialog is going to open
       // wherever you navigated to when you last opened a file.  However, as at 2020-12-30, there is a known bug in Qt
@@ -196,7 +194,8 @@ public:
       // bones, but https://forum.qt.io/topic/121235/qfiledialog-has-memory has more detail.)
       //
       // Our workaround is to use a new QFileDialog each time, and manually keep track of the current directory
-      QFileDialog fileOpener{mainWindow,
+      //
+      QFileDialog fileOpener{&self,
                              tr("Open"),
                              this->fileOpenDirectory,
                              tr("BeerXML files (*.xml)")};
@@ -226,7 +225,7 @@ public:
          this->importExportMsg(IMPORT, filename, succeeded, userMessage);
       }
 
-      mainWindow->showChanges();
+      self.showChanges();
 
       return;
    }
@@ -291,14 +290,13 @@ public:
    }
 
 private:
+   MainWindow & self;
    QFileDialog* fileOpener;
    QString fileOpenDirectory;
 };
 
 
-MainWindow::MainWindow(QWidget* parent)
-        : QMainWindow(parent), pimpl{ new impl{} }
-{
+MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), pimpl{std::make_unique<impl>(*this)} {
    qDebug() << Q_FUNC_INFO;
 
    undoStack = new QUndoStack(this);
@@ -1807,8 +1805,8 @@ void MainWindow::updateRecipeEfficiency()
    return;
 }
 
-void MainWindow::addFermentableToRecipe(Fermentable* ferm)
-{
+void MainWindow::addFermentableToRecipe(Fermentable* ferm) {
+   Q_ASSERT(nullptr != ferm);
    this->doOrRedoUpdate(
       newUndoableAddOrRemove(*this->recipeObs,
                              &Recipe::add<Fermentable>,
@@ -1818,10 +1816,11 @@ void MainWindow::addFermentableToRecipe(Fermentable* ferm)
    );
    // We don't need to call fermTableModel->addFermentable(ferm) here because the change to the recipe will already have
    // triggered the necessary updates to fermTableModel.
+   return;
 }
 
-void MainWindow::addHopToRecipe(Hop *hop)
-{
+void MainWindow::addHopToRecipe(Hop *hop) {
+   Q_ASSERT(nullptr != hop);
    this->doOrRedoUpdate(
       newUndoableAddOrRemove(*this->recipeObs,
                              &Recipe::add<Hop>,
@@ -1833,8 +1832,8 @@ void MainWindow::addHopToRecipe(Hop *hop)
    // triggered the necessary updates to hopTableModel.
 }
 
-void MainWindow::addMiscToRecipe(Misc* misc)
-{
+void MainWindow::addMiscToRecipe(Misc* misc) {
+   Q_ASSERT(nullptr != misc);
    this->doOrRedoUpdate(
       newUndoableAddOrRemove(*this->recipeObs,
                              &Recipe::add<Misc>,
@@ -1844,10 +1843,11 @@ void MainWindow::addMiscToRecipe(Misc* misc)
    );
    // We don't need to call miscTableModel->addMisc(misc) here because the change to the recipe will already have
    // triggered the necessary updates to miscTableModel.
+   return;
 }
 
-void MainWindow::addYeastToRecipe(Yeast* yeast)
-{
+void MainWindow::addYeastToRecipe(Yeast* yeast) {
+   Q_ASSERT(nullptr != yeast);
    this->doOrRedoUpdate(
       newUndoableAddOrRemove(*this->recipeObs,
                              &Recipe::add<Yeast>,
@@ -1857,29 +1857,27 @@ void MainWindow::addYeastToRecipe(Yeast* yeast)
    );
    // We don't need to call yeastTableModel->addYeast(yeast) here because the change to the recipe will already have
    // triggered the necessary updates to yeastTableModel.
-}
-
-void MainWindow::postAddMashStepToMash(MashStep * mashStep) {
-   this->mashStepTableModel->addMashStep(mashStep);
    return;
 }
 
-void MainWindow::addMashStepToMash(MashStep * mashStep)
-{
+void MainWindow::addMashStepToMash(std::shared_ptr<MashStep> mashStep) {
+   //
+   // Mash Steps are a bit different from most other NamedEntity objects in that they don't really have an independent
+   // existence.  If you ask a Mash to remove a MashStep then it will also tell the ObjectStore to delete it, but, when
+   // we're adding a MashStep to a Mash it's easier (for eg the implementation of undo/redo) if we add it to the
+   // ObjectStore before we call Mash::addMashStep().
+   //
+   ObjectStoreWrapper::insert(mashStep);
    this->doOrRedoUpdate(
       newUndoableAddOrRemove(*this->recipeObs->mash(),
                              &Mash::addMashStep,
                              mashStep,
                              &Mash::removeMashStep,
-                             &MainWindow::postAddMashStepToMash,
-                             static_cast<void (MainWindow::*)(MashStep *)>(nullptr),
                              tr("Add mash step to recipe"))
    );
-   // .:TBD:. (MY 2020-11-24) For some reason that I didn't work out yet, mashStepTableModel is not plumbed in quite
-   //         the same as the other table models, hence the need to add the callback to update it (otherwise Redo of
-   //         add MashStep will not update the display correctly).  This works, but is a bit of a hack.  At some
-   //         point it would be good to bring MashStepTableModel closer into line with similar classes - perhaps
-   //         even by pulling out some of the common/similar code into a base class or template...
+   // We don't need to call mashStepTableModel->addMashStep(mashStep) here because the change to the mash will already
+   // have triggered the necessary updates to mashStepTableModel.
+   return;
 }
 
 /**
@@ -2074,25 +2072,25 @@ Yeast* MainWindow::selectedYeast()
    return y;
 }
 
-void MainWindow::removeHop(Hop * itemToRemove) {
-   this->hopTableModel->removeHop(itemToRemove);
+void MainWindow::removeHop(Hop & itemToRemove) {
+   this->hopTableModel->remove(&itemToRemove);
    return;
 }
-void MainWindow::removeFermentable(Fermentable * itemToRemove) {
-   this->fermTableModel->remove(itemToRemove);
+void MainWindow::removeFermentable(Fermentable & itemToRemove) {
+   this->fermTableModel->remove(&itemToRemove);
    return;
 }
-void MainWindow::removeMisc(Misc * itemToRemove) {
-   this->miscTableModel->remove(itemToRemove);
+void MainWindow::removeMisc(Misc & itemToRemove) {
+   this->miscTableModel->remove(&itemToRemove);
    return;
 }
-void MainWindow::removeYeast(Yeast * itemToRemove) {
-   this->yeastTableModel->remove(itemToRemove);
+void MainWindow::removeYeast(Yeast & itemToRemove) {
+   this->yeastTableModel->remove(&itemToRemove);
    return;
 }
 
-void MainWindow::removeMashStep(MashStep * itemToRemove) {
-   this->mashStepTableModel->removeMashStep(itemToRemove);
+void MainWindow::removeMashStep(MashStep & itemToRemove) {
+   this->mashStepTableModel->remove(&itemToRemove);
    return;
 }
 
@@ -2128,7 +2126,7 @@ void MainWindow::removeSelectedFermentable()
                                 itemsToRemove.at(i),
                                 &Recipe::add<Fermentable>,
                                 &MainWindow::removeFermentable,
-                                static_cast<void (MainWindow::*)(Fermentable *)>(nullptr),
+                                static_cast<void (MainWindow::*)(Fermentable &)>(nullptr),
                                 tr("Remove fermentable from recipe"))
       );
     }
@@ -2205,7 +2203,7 @@ void MainWindow::removeSelectedHop()
                                  itemsToRemove.at(i),
                                  &Recipe::add<Hop>,
                                  &MainWindow::removeHop,
-                                 static_cast<void (MainWindow::*)(Hop *)>(nullptr),
+                                 static_cast<void (MainWindow::*)(Hop &)>(nullptr),
                                  tr("Remove hop from recipe"))
       );
    }
@@ -2241,7 +2239,7 @@ void MainWindow::removeSelectedMisc()
                                  itemsToRemove.at(i),
                                  &Recipe::add<Misc>,
                                  &MainWindow::removeMisc,
-                                 static_cast<void (MainWindow::*)(Misc *)>(nullptr),
+                                 static_cast<void (MainWindow::*)(Misc &)>(nullptr),
                                  tr("Remove misc from recipe"))
       );
    }
@@ -2275,7 +2273,7 @@ void MainWindow::removeSelectedYeast()
                                  itemsToRemove.at(i),
                                  &Recipe::add<Yeast>,
                                  &MainWindow::removeYeast,
-                                 static_cast<void (MainWindow::*)(Yeast *)>(nullptr),
+                                 static_cast<void (MainWindow::*)(Yeast &)>(nullptr),
                                  tr("Remove yeast from recipe"))
       );
    }
@@ -2654,9 +2652,9 @@ void MainWindow::restoreFromBackup()
 }
 
 // Imports all the recipes, hops, equipment or whatever from a BeerXML file into the database.
-void MainWindow::importFiles()
-{
-   this->pimpl->importFromFiles(this);
+void MainWindow::importFiles() {
+   this->pimpl->importFromFiles();
+   return;
 }
 
 bool MainWindow::verifyImport(QString tag, QString name)
@@ -2672,8 +2670,7 @@ void MainWindow::addMashStep() {
    }
 
    // This ultimately gets stored in MainWindow::addMashStepToMash()
-   MashStep* step = new MashStep("", true);
-   //step->setMash(recipeObs->mash());
+   auto step = std::make_shared<MashStep>("", true);
    this->mashStepEditor->setMashStep(step);
    this->mashStepEditor->setVisible(true);
    return;
@@ -2708,7 +2705,7 @@ void MainWindow::removeSelectedMashStep()
                               step,
                               &Mash::addMashStep,
                               &MainWindow::removeMashStep,
-                              &MainWindow::postAddMashStepToMash,
+                              static_cast<void (MainWindow::*)(MashStep&)>(nullptr),
                               tr("Remove mash step"))
    );
 
@@ -2767,29 +2764,31 @@ void MainWindow::moveSelectedMashStepDown()
    return;
 }
 
-void MainWindow::editSelectedMashStep()
-{
-   if( !recipeObs || !recipeObs->mash() )
+void MainWindow::editSelectedMashStep() {
+   if (!recipeObs || !recipeObs->mash()) {
       return;
+   }
 
    QModelIndexList selected = mashStepTableWidget->selectionModel()->selectedIndexes();
-   int row, size, i;
 
-   size = selected.size();
-   if( size == 0 )
+   int size = selected.size();
+   if (size == 0) {
       return;
+   }
 
    // Make sure only one row is selected.
-   row = selected[0].row();
-   for( i = 1; i < size; ++i )
-   {
-      if( selected[i].row() != row )
+   int row = selected[0].row();
+   for (int i = 1; i < size; ++i) {
+      if (selected[i].row() != row) {
          return;
+      }
    }
 
    MashStep* step = mashStepTableModel->getMashStep(static_cast<unsigned int>(row));
-   mashStepEditor->setMashStep(step);
+   auto stepPointer = ObjectStoreWrapper::getSharedFromRaw(step);
+   mashStepEditor->setMashStep(stepPointer);
    mashStepEditor->setVisible(true);
+   return;
 }
 
 void MainWindow::removeMash() {
@@ -2808,6 +2807,7 @@ void MainWindow::removeMash() {
    ObjectStoreWrapper::softDelete(*m);
 
    auto defaultMash = std::make_shared<Mash>();
+   ObjectStoreWrapper::insert(defaultMash);
    this->recipeObs->setMash(defaultMash.get());
 
    mashStepTableModel->setMash(defaultMash.get());

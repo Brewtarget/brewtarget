@@ -497,21 +497,23 @@ double WaterDialog::calculateMashpH()
    return mashpH;
 }
 
-void WaterDialog::saveAndClose()
-{
-   m_salt_table_model->saveAndClose();
-   if ( m_base != nullptr && m_base->cacheOnly() ) {
-      ObjectStoreWrapper::insert(*m_base);
-      m_base->setCacheOnly(false);
-      this->m_rec->add(this->m_base);
+void WaterDialog::saveAndClose() {
+   this->m_salt_table_model->saveAndClose();
+   if (this->m_base != nullptr && this->m_base->cacheOnly()) {
+      std::shared_ptr<Water> water{this->m_base};
+      ObjectStoreWrapper::insert(water);
+      water->setCacheOnly(false);
+      this->m_rec->add(water);
    }
-   if ( m_target != nullptr && m_target->cacheOnly() ) {
-      ObjectStoreWrapper::insert(*m_target);
-      m_target->setCacheOnly(false);
-      this->m_rec->add(this->m_target);
+   if ( this->m_target != nullptr && this->m_target->cacheOnly() ) {
+      std::shared_ptr<Water> water{this->m_target};
+      ObjectStoreWrapper::insert(water);
+      water->setCacheOnly(false);
+      this->m_rec->add(water);
    }
 
    setVisible(false);
+   return;
 }
 
 void WaterDialog::clearAndClose()

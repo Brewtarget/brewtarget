@@ -212,8 +212,8 @@ void NamedMashEditor::addMashStep() {
 
    auto step = std::make_shared<MashStep>();
    ObjectStoreWrapper::insert(step);
-   this->mashObs->addMashStep(step.get());
-   mashStepEditor->setMashStep(step.get());
+   this->mashObs->addMashStep(step);
+   mashStepEditor->setMashStep(step);
    mashStepEditor->setVisible(true);
    return;
 }
@@ -244,7 +244,7 @@ void NamedMashEditor::removeMashStep() {
       return;
 
    MashStep* step = mashStepTableModel->getMashStep(selected[0].row());
-   this->mashObs->removeMashStep(step);
+   this->mashObs->removeMashStep(ObjectStoreWrapper::getSharedFromRaw(step));
    return;
 }
 

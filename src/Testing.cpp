@@ -23,6 +23,7 @@
 #include <exception>
 #include <iostream> // For std::cout
 #include <math.h>
+#include <memory>
 
 #include <xercesc/util/PlatformUtils.hpp>
 
@@ -180,7 +181,7 @@ void Testing::recipeCalcTest_allGrain()
    return;
    double const grain_kg = 5.0;
    double const conversion_l = grain_kg * 2.8; // 2.8 L/kg mash thickness
-   Recipe* rec = new Recipe(QString("TestRecipe"));
+   auto rec = std::make_shared<Recipe>("TestRecipe");
 
    // Basic recipe parameters
    rec->setBatchSize_l(equipFiveGalNoLoss->batchSize_l());
@@ -188,16 +189,16 @@ void Testing::recipeCalcTest_allGrain()
    rec->setEfficiency_pct(70.0);
 
    // Single conversion, single sparge
-   Mash* singleConversion = new Mash();
+   auto singleConversion = std::make_shared<Mash>();
    singleConversion->setName("Single Conversion");
    singleConversion->setGrainTemp_c(20.0);
    singleConversion->setSpargeTemp_c(80.0);
-   MashStep* singleConversion_convert = new MashStep();
+   auto singleConversion_convert = std::make_shared<MashStep>();
    singleConversion_convert->setName("Conversion");
    singleConversion_convert->setType(MashStep::Infusion);
    singleConversion_convert->setInfuseAmount_l(conversion_l);
    singleConversion->addMashStep(singleConversion_convert);
-   MashStep* singleConversion_sparge = new MashStep();
+   auto singleConversion_sparge = std::make_shared<MashStep>();
    singleConversion_sparge->setName("Sparge");
    singleConversion_sparge->setType(MashStep::Infusion);
    singleConversion_sparge->setInfuseAmount_l(
@@ -212,14 +213,14 @@ void Testing::recipeCalcTest_allGrain()
 
    // Add hops (85g)
    cascade_4pct->setAmount_kg(0.085);
-   rec->add(cascade_4pct.get());
+   rec->add(this->cascade_4pct);
 
    // Add grain
    twoRow->setAmount_kg(grain_kg);
-   rec->add<Fermentable>(twoRow.get());
+   rec->add<Fermentable>(this->twoRow);
 
    // Add mash
-   rec->setMash(singleConversion);
+   rec->setMash(singleConversion.get());
 
    // Malt color units
    double mcus =
@@ -296,27 +297,27 @@ void Testing::postBoilLossOgTest()
 
    // Add grain
    twoRow->setAmount_kg(grain_kg);
-   recNoLoss->add<Fermentable>(twoRow.get());
-   recLoss->add<Fermentable>(twoRow.get());
+   recNoLoss->add<Fermentable>(twoRow);
+   recLoss->add<Fermentable>(twoRow);
 
    // Single conversion, no sparge
-   Mash* singleConversion = new Mash();
+   auto singleConversion = std::make_shared<Mash>();
    singleConversion->setName("Single Conversion");
    singleConversion->setGrainTemp_c(20.0);
    singleConversion->setSpargeTemp_c(80.0);
 
-   MashStep* singleConversion_convert = new MashStep();
+   auto singleConversion_convert = std::make_shared<MashStep>();
    singleConversion_convert->setName("Conversion");
    singleConversion_convert->setType(MashStep::Infusion);
    singleConversion->addMashStep(singleConversion_convert);
 
    // Infusion for recNoLoss
    singleConversion_convert->setInfuseAmount_l(mashWaterNoLoss_l);
-   recNoLoss->setMash(singleConversion);
+   recNoLoss->setMash(singleConversion.get());
 
    // Infusion for recLoss
    singleConversion_convert->setInfuseAmount_l(mashWaterLoss_l);
-   recLoss->setMash(singleConversion);
+   recLoss->setMash(singleConversion.get());
 
    // Verify we hit the right boil/final volumes (that the test is sane)
    QVERIFY2( fuzzyComp(recNoLoss->boilVolume_l(),  recNoLoss->boilSize_l(),  0.1),     "Wrong boil volume calculation (recNoLoss)" );

@@ -149,10 +149,11 @@ void SaltTableModel::addSalts(QList<Salt*> salts)
    }
 }
 
-void SaltTableModel::catchSalt()
-{
-   Salt* gaq = new Salt(QString(),true);
+void SaltTableModel::catchSalt() {
+   // .:TODO:. Change to shared_ptr as potential memory leak
+   Salt* gaq = new Salt("");
    addSalt(gaq);
+   return;
 }
 
 double SaltTableModel::multiplier(Salt *s) const
@@ -331,17 +332,16 @@ void SaltTableModel::removeSalt(Salt* salt)
    emit newTotals();
 }
 
-void SaltTableModel::removeSalts(QList<int>deadSalts)
-{
+void SaltTableModel::removeSalts(QList<int>deadSalts) {
    QList<Salt*> dead;
 
    // I am removing the salts so the index of any salt
    // will change. I think this will work
-   foreach(int i, deadSalts) {
+   for (int i : deadSalts) {
       dead.append( saltObs.at(i));
    }
 
-   foreach( Salt* zombie, dead) {
+   for(Salt * zombie : dead) {
       int i = saltObs.indexOf(zombie);
 
       if ( i >= 0 ) {
@@ -353,12 +353,13 @@ void SaltTableModel::removeSalts(QList<int>deadSalts)
          // Dead salts do not malinger in the database. This will
          // delete the thing, not just mark it deleted
          if ( ! zombie->cacheOnly() ) {
-            this->m_rec->remove(zombie);
+            this->m_rec->remove(ObjectStoreWrapper::getSharedFromRaw(zombie));
             ObjectStoreWrapper::hardDelete(*zombie);
          }
       }
    }
    emit newTotals();
+   return;
 }
 
 void SaltTableModel::removeAll()
@@ -656,11 +657,13 @@ void SaltTableModel::saveAndClose() {
    // we've added a new salt. Wonder if this will work?
    for (Salt* i : saltObs) {
       if ( i->cacheOnly() && i->type() != Salt::NONE && i->addTo() != Salt::NEVER ) {
-         ObjectStoreWrapper::insert(*i);
-         i->setCacheOnly(false);
-         this->m_rec->add(i);
+         std::shared_ptr<Salt> salt{i};
+         ObjectStoreWrapper::insert(salt);
+         salt->setCacheOnly(false);
+         this->m_rec->add(salt);
       }
    }
+   return;
 }
 //==========================CLASS SaltItemDelegate===============================
 

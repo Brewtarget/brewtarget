@@ -58,7 +58,11 @@ public:
     * \brief Insert a new object in the DB (and in our cache list)
     */
    virtual int insert(std::shared_ptr<NE> ne) {
-      // The base class does all the work, we just need to cast the pointer
+      // If we are re-inserting something that was previously marked deleted, then we don't want it to be marked deleted
+      // any more
+      ne->setDeleted(false);
+
+      // The base class does all the remaining work, we just need to cast the pointer
       // (We don't want to force callers to use std::shared_ptr<QObject>, as they would anyway have to recast it.  Eg
       // if you created a new Hop, you're going to need a std::shared_ptr<Hop> etc to be able to access Hop-specific
       // member functions)
@@ -158,14 +162,13 @@ public:
     * \brief Mark an object as deleted (including in the database) and but leave it in existence (both in the database
     *        and in our local in-memory cache.
     *
-    *        NB: We do not call down to \c ObjectStore::softDelete() from this member function (as that would remove the
-    *            object from our local in-memory cache.
+    *        NB: We do not call down to \c ObjectStore::defaultSoftDelete() from this member function (as that would
+    *            remove the object from our local in-memory cache.
     *
     * \param id ID of the object to delete
     */
-   virtual void softDelete(int id) {
-      this->hardOrSoftDelete(id, false);
-      return;
+   std::shared_ptr<NE> softDelete(int id) {
+      return this->hardOrSoftDelete(id, false);
    }
 
    /**
@@ -175,9 +178,8 @@ public:
     *
     * \param id ID of the object to delete
     */
-   virtual void hardDelete(int id) {
-      this->hardOrSoftDelete(id, true);
-      return;
+   std::shared_ptr<NE> hardDelete(int id) {
+      return this->hardOrSoftDelete(id, true);
    }
 
    /**
@@ -301,14 +303,14 @@ private:
     * \param id ID of the object to delete
     * \param hard \c true for hard delete, \c false for soft delete
     */
-   void hardOrSoftDelete(int id, bool hard) {
+   std::shared_ptr<NE> hardOrSoftDelete(int id, bool hard) {
       qDebug() <<
          Q_FUNC_INFO << (hard ? "Hard" : "Soft") << "delete " << NE::staticMetaObject.className() << " #" << id;
       if (id <= 0 || !this->contains(id)) {
-         // This is probably a coding error, but might be recoverable
+         // Trying to delete a non-existent object is a coding error, but might be recoverable
          qWarning() <<
             Q_FUNC_INFO << "Trying to delete non-existent " << NE::staticMetaObject.className() << " with ID" << id;
-         return;
+         return std::shared_ptr<NE>{};
       }
 
       auto object = this->ObjectStore::getById(id);
@@ -318,11 +320,11 @@ private:
          // it to delete those first.
          ne->hardDeleteOwnedEntities();
          // Base class does the heavy lifting on removing the NamedEntity from the DB
-         this->ObjectStore::hardDelete(id);
+         this->ObjectStore::defaultHardDelete(id);
          // Setting the deleted object's ID to -1 now puts it in the same state as a newly-created object.
          ne->setKey(-1);
          ne->setCacheOnly(true);
-         return;
+         return ne;
       }
 
       // For soft delete, there's still a bit more work to do
@@ -331,12 +333,12 @@ private:
       ne->setDeleted(true);
       ne->setDisplay(false);
 
-      // Base class softDelete() actually does too much for the soft delete case; we just need to tell any bits of
-      // the UI that need to know that an object was deleted.  (In the hard delete case, this signal will already
+      // Base class defaultSoftDelete() actually does too much for the soft delete case; we just need to tell any bits
+      // of the UI that need to know that an object was deleted.  (In the hard delete case, this signal will already
       // have been emitted.)
       emit this->signalObjectDeleted(id, object);
 
-      return;
+      return ne;
    }
 
    /**

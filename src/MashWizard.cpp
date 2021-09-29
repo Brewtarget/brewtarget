@@ -153,13 +153,11 @@ double MashWizard::calcDecoctionAmount( MashStep* step, Mash* mash, double water
 
 }
 
-void MashWizard::wizardry()
-{
+void MashWizard::wizardry() {
    if( recObs == nullptr || recObs->mash() == nullptr )
       return;
 
    Mash* mash = recObs->mash();
-   int i, j;
    double thickness_LKg;
    double thickNum;
    double MC, MCw; // Thermal mass of mash and water.
@@ -193,15 +191,13 @@ void MashWizard::wizardry()
       return;
    }
 
-   // Find any batch sparges and remove them for now.
-   for( i = 0; i < steps.size(); ++i) {
+   // Find any batch sparges and remove them
+   for (int i = 0; i < steps.size(); ++i) {
       MashStep* step = steps[i];
-      if( step->isSparge() ) {
-         mash->removeMashStep(step);
-         ObjectStoreWrapper::softDelete(*step);
-      }
-      else {
-          tmp.append(step);
+      if (step->isSparge()) {
+         mash->removeMashStep(ObjectStoreWrapper::getSharedFromRaw(step));
+      } else {
+         tmp.append(step);
       }
    }
 
@@ -253,13 +249,12 @@ void MashWizard::wizardry()
    // I am specifically ignoring BeerXML's request to only do this if mash->getEquipAdjust() is set.
    MC += mash->tunSpecificHeat_calGC()*mash->tunWeight_kg();
 
-   for( i = 1; i < steps.size(); ++i ) {
+   for (int i = 1; i < steps.size(); ++i) {
       mashStep = steps[i];
 
-      if( mashStep->isTemperature() ) {
+      if (mashStep->isTemperature()) {
          continue;
-      }
-      else if( mashStep->isDecoction() ) {
+      } else if (mashStep->isDecoction()) {
          double m_w, m_g, m_e, r;
          double c_w, c_g, c_e;
 
@@ -267,8 +262,9 @@ void MashWizard::wizardry()
          t1 = steps[i-1]->stepTemp_c();
 
          m_w = 0; // Total mass of water.
-         for(j = 0; j < i; ++j )
+         for (int j = 0; j < i; ++j) {
             m_w += steps[j]->infuseAmount_l();
+         }
          m_g = grainMass;
          m_e = (mash->equipAdjust()) ? mash->tunWeight_kg() : 0;
 
@@ -302,7 +298,7 @@ void MashWizard::wizardry()
    // if no sparge, adjust volume of last step to meet target runoff volume
    if ( bGroup->checkedButton() == radioButton_noSparge  && steps.size() > 1) {
       double otherMashStepTotal = 0.0;
-      for( i = 0; i < steps.size()-1; ++i ) {
+      for (int i = 0; i < steps.size()-1; ++i) {
          otherMashStepTotal += steps[i]->infuseAmount_l();
       }
 
@@ -369,22 +365,21 @@ void MashWizard::wizardry()
          int numSteps = spinBox_batches->value();
          double volPerBatch = spargeWater_l/numSteps; // its evil, but deal with it
          for(int i=0; i < numSteps; ++i ) {
-            mashStep = new MashStep("", true);
-
-            mashStep->setType(MashStep::batchSparge);
-            mashStep->setName(tr("Batch Sparge %1").arg(i+1));
-            mashStep->setInfuseAmount_l(volPerBatch);
-            mashStep->setInfuseTemp_c(tw);
-            mashStep->setEndTemp_c(tw);
-            mashStep->setStepTemp_c(tf);
-            mashStep->setStepTime_min(15);
-            mashStep->setMashId(mash->key());
-            ObjectStoreWrapper::insert(*mashStep);
-            mashStep->setCacheOnly(false);
-            steps.append(mashStep);
-            emit mashStep->changed(
-               mashStep->metaObject()->property(
-                     mashStep->metaObject()->indexOfProperty(*PropertyNames::MashStep::type)
+            auto newMashStep = std::make_shared<MashStep>(tr("Batch Sparge %1").arg(i+1));
+            newMashStep->setType(MashStep::batchSparge);
+            newMashStep->setInfuseAmount_l(volPerBatch);
+            newMashStep->setInfuseTemp_c(tw);
+            newMashStep->setEndTemp_c(tw);
+            newMashStep->setStepTemp_c(tf);
+            newMashStep->setStepTime_min(15);
+            newMashStep->setMashId(mash->key());
+            ObjectStoreWrapper::insert(newMashStep);
+            newMashStep->setCacheOnly(false);
+            steps.append(newMashStep.get());
+            newMashStep->setStepNumber(steps.size());
+            emit newMashStep->changed(
+               newMashStep->metaObject()->property(
+                     newMashStep->metaObject()->indexOfProperty(*PropertyNames::MashStep::type)
                )
             );
          }
@@ -392,22 +387,21 @@ void MashWizard::wizardry()
       }
       // fly sparge, I think
       else {
-         mashStep = new MashStep("", true);
-
-         mashStep->setName(tr("Fly Sparge"));
-         mashStep->setType(MashStep::flySparge);
-         mashStep->setInfuseAmount_l(spargeWater_l);
-         mashStep->setInfuseTemp_c(tw);
-         mashStep->setEndTemp_c(tw);
-         mashStep->setStepTemp_c(tf);
-         mashStep->setStepTime_min(15);
-         mashStep->setMashId(mash->key());
-         ObjectStoreWrapper::insert(*mashStep);
-         mashStep->setCacheOnly(false);
-         steps.append(mashStep);
-         emit mashStep->changed(
-            mashStep->metaObject()->property(
-                  mashStep->metaObject()->indexOfProperty(*PropertyNames::MashStep::type)
+         auto newMashStep = std::make_shared<MashStep>(tr("Fly Sparge"));
+         newMashStep->setType(MashStep::flySparge);
+         newMashStep->setInfuseAmount_l(spargeWater_l);
+         newMashStep->setInfuseTemp_c(tw);
+         newMashStep->setEndTemp_c(tw);
+         newMashStep->setStepTemp_c(tf);
+         newMashStep->setStepTime_min(15);
+         newMashStep->setMashId(mash->key());
+         ObjectStoreWrapper::insert(newMashStep);
+         newMashStep->setCacheOnly(false);
+         steps.append(newMashStep.get());
+         newMashStep->setStepNumber(steps.size());
+         emit newMashStep->changed(
+            newMashStep->metaObject()->property(
+                  newMashStep->metaObject()->indexOfProperty(*PropertyNames::MashStep::type)
             )
          );
       }
@@ -419,4 +413,5 @@ void MashWizard::wizardry()
                                tr("Too much wort"),
                                tr("You have too much wort from the mash for your boil size. I suggest increasing the boil size by increasing the boil time, or reducing your mash thickness."));
    }
+   return;
 }

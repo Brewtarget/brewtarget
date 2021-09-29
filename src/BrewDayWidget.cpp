@@ -103,7 +103,7 @@ void BrewDayWidget::removeSelectedInstruction()
       return;
    listWidget->takeItem(row);
    repopulateListWidget();
-   recObs->remove(recObs->instructions()[row]);
+   recObs->remove(ObjectStoreWrapper::getSharedFromRaw(recObs->instructions()[row]));
 }
 
 void BrewDayWidget::pushInstructionUp()

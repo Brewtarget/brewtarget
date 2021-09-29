@@ -98,12 +98,13 @@ public:
 
    QTableView* parentTableWidget;
 
+   //! \returns true if "ferm" is successfully found and removed.
    bool remove(Fermentable * ferm);
 
 public slots:
    //! \brief Watch \b ferm for changes.
    void addFermentable(int fermId);
-   //! \returns true if "ferm" is successfully found and removed.
+
    void removeFermentable(int fermId, std::shared_ptr<QObject> object);
    //! \brief pops the context menu for changing units and scales
    void contextMenu(const QPoint &point);

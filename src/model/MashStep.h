@@ -72,7 +72,7 @@ public:
    MashStep(NamedParameterBundle const & namedParameterBundle);
    MashStep( MashStep const& other );
 
-   virtual ~MashStep() = default;
+   virtual ~MashStep();
 
    //! \brief The \c Type.
    Q_PROPERTY( Type type READ type WRITE setType /*NOTIFY changed*/ /*changedType*/ )

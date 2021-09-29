@@ -116,7 +116,7 @@ void BrewDayScrollWidget::removeSelectedInstruction() {
    if (row < 0) {
       return;
    }
-  this->recObs->remove(recIns[row]);
+  this->recObs->remove(ObjectStoreWrapper::getSharedFromRaw(recIns[row]));
 
    if(recIns.isEmpty()) {
       btTextEdit->clear();

@@ -81,11 +81,14 @@ public:
    void setDisplayScale(int column, Unit::unitScale displayScale);
    QString generateName(int column) const;
 
+   //! \returns true if mashStep is successfully found and removed.
+   bool remove(MashStep * MashStep);
+
 public slots:
    //! \brief Add a MashStep to the model.
-   void addMashStep(MashStep * mashStep);
-   //! \returns true if mashStep is successfully found and removed.
-   bool removeMashStep(MashStep * MashStep);
+   void addMashStep(int mashStep);
+
+   void removeMashStep(int mashStepId, std::shared_ptr<QObject> object);
 
    void moveStepUp(int i);
    void moveStepDown(int i);

@@ -313,37 +313,43 @@ public:
    static void connectSignals();
 
    /*!
-    * \brief Add a copy of \c var from the recipe and return the copy
+    * \brief Add (a copy if necessary of) a Hop/Fermentable/Instruction etc (that may or may not already be in an
+    *        ObjectStore).
     *
-    * For many types of ingredient, when we add an ingredient to a recipe, we make a copy of it, and it is the copy that
-    * it associated with the recipe.  Amongst other things, this allows the same ingredient to be added multiple times to
-    * a recipe - eg the same type of hops might well be added at multiple points in the recipe.  It also allows an
-    * ingredient in a recipe to be modified without those modifications affecting the use of the ingredient in other
-    * recipes.
+    * When we add a Hop/Fermentable/Yeast/etc to a Recipe, we make a copy of thing we're adding to serve as an "instance
+    * of use of" record.  Amongst other things, this allows the same Hop/Fermentable/Yeast/etc to be added multiple
+    * times to a recipe - eg the same type of hops might well be added at multiple points in the recipe.  It also allows
+    * an ingredient in a recipe to be modified without those modifications affecting the use of the ingredient in other
+    * recipes (eg if you want to modify the % alpha acid on a hop).  An "instance of use of" instance of a
+    * Hop/Fermentable/Yeast/etc will always have parent record which is the actual Hop/Fermentable/Yeast/etc to which it
+    * relates.
     *
-    * So, calling "myRecipe->addFermentable(&someFermentable)" will result in a COPY of someFermentable
-    * being created and added to the recipe, which means the inverse operation is NOT just
-    * myRecipe->removeFermentable(&someFermentable).  Instead, the add function returns a pointer to the
-    * newly-created ingredient:
+    * Calling the templated \c Recipe::add function returns the copy "instance of use of" object for whatever
+    * Hop/Fermentable/Yeast/etc was added.  This returned object is what needs to be passed to \c Recipe::remove to
+    * remove that instance of use of the Hop/Fermentable/Yeast/etc from the Recipe.  When you  call \c Recipe::remove it
+    * returns the "instance of use of" object that was removed, which you as caller now own (because it will no longer
+    * be in the ObjectStore).  If you want to undo the remove (or redo an add that the remove itself was undoing), you
+    * can call \c Recipe::add with the "instance of use of" object returned from \c Recipe::remove, in which case
+    * \c Recipe::add will determine that the "instance of use of" object can be used directly without needing to be
+    * copied.  (The \c Recipe::add method will also recognise when an object has been removed from the ObjectStore and
+    * will reinsert it, so the caller doesn't need to worry about this.)  Thus, eg, the following sequence of calls is
+    * valid:
     *
-    *    Fermentable * newCopyOfSomeFermentable = myRecipe->add<Fermentable>(&someFermentable);   // DO
-    *    myRecipe->remove<Fermentable>(newCopyOfSomeFermentable);                                 // UNDO
+    *    std::shared_ptr<Hop> copyOfFooHop = myRecipe->add<Hop>(fooHop);                     // DO
+    *    std::shared_ptr<Hop> sameCopyOfFooHop = myRecipe->remove<Hop>(*copyOfFooHop);       // UNDO
+    *    std::shared_ptr<Hop> stillSameCopyOfFooHop = myRecipe->add<Hop>(*sameCopyOfFooHop); // REDO
     *
-    * The remover function returns a pointer to the NamedEntity that it removed.  This is useful because it makes add and
-    * remove symmetric and simplifies the implementation of UndoableAddOrRemove.
+    * TBD: (MY 2020-11-23) It would be good one day to separate out "instance of use of" into a separate class.
     *
-    * TBD: (MY 2020-11-23) It would be good one day to pull out all the non-changeable aspects of ingredients and keep
-    *      just one copy of them in the DB and in memory.
     */
-   template<class T> T * add(T * var);
+   template<class NE> std::shared_ptr<NE> add(std::shared_ptr<NE> var);
 
    /*!
     * \brief Remove \c var from the recipe and return what was removed - ie \c var
     *
-    * We want callers to use this strongly-typed version because it makes the implementation of Undo/Redo easier (by
-    * making add and remove more symmetric).
+    *        We want this to have the same signature as add because it makes the implementation of Undo/Redo easier
     */
-   template<class T> T * remove(T * var);
+   template<class NE> std::shared_ptr<NE> remove(std::shared_ptr<NE> var);
 
    /*!
     * \brief Returns whether \c var is used in this recipe
@@ -670,19 +676,6 @@ private:
    //void setDefaults();
    void addPreinstructions(QVector<PreInstruction> preins);
    bool isValidType(const QString & str);
-
-   /**
-    * \brief Add a Hop/Fermentable/Instruction etc that is already in an Object Store and is known not to be used by
-    *        any other Recipe.
-    */
-   template<class NE> NE * add(std::shared_ptr<NE> ne);
-
-   /**
-    * \brief Create and add a new Hop/Fermentable/Instruction etc, first to the relevant Object Store and then to this
-    *        Recipe
-    */
-   template<class NE> void addNew(std::shared_ptr<NE> ne);
-
 };
 
 /**

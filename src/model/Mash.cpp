@@ -385,19 +385,22 @@ void Mash::acceptMashStepChange(QMetaProperty prop, QVariant /*val*/) {
    return;
 }
 
-MashStep * Mash::addMashStep(MashStep * mashStep) {
-   Q_ASSERT(nullptr != mashStep);
-
+std::shared_ptr<MashStep> Mash::addMashStep(std::shared_ptr<MashStep> mashStep) {
    if (this->key() > 0) {
       mashStep->setMashId(this->key());
    }
 
    mashStep->setStepNumber(this->mashSteps().size() + 1);
 
+
    // MashStep needs to be in the DB for us to add it to the Mash
    if (mashStep->key() < 0) {
-      ObjectStoreWrapper::insert(*mashStep);
+      qDebug() << Q_FUNC_INFO << "Inserting MashStep in DB";
+      ObjectStoreWrapper::insert(mashStep);
    }
+
+   Q_ASSERT(mashStep->key() > 0);
+
    //
    // If the Mash itself is not yet stored in the DB then it needs to hang on to its list of MashSteps so that, when the
    // Mash does get stored, it can tell all the MashSteps what their Mash ID is (see Mash::setKey()).
@@ -406,13 +409,15 @@ MashStep * Mash::addMashStep(MashStep * mashStep) {
    // any time by just asking the relevant ObjectStore for all MashSteps with Mash ID the same as ours.)
    //
    if (this->key() < 0) {
+      qDebug() << Q_FUNC_INFO << "Adding MashStep #" << mashStep->key() << "to Mash #" << this->key();
       this->pimpl->mashStepIds.append(mashStep->key());
    }
+
    return mashStep;
 }
 
-MashStep * Mash::removeMashStep(MashStep * mashStep) {
-   Q_ASSERT(nullptr != mashStep);
+std::shared_ptr<MashStep> Mash::removeMashStep(std::shared_ptr<MashStep> mashStep) {
+   // Disassociate the MashStep from this Mash
    mashStep->setMashId(-1);
 
    // As per Mash::addMashStep(), if we're not yet stored in the database, then we also need to update our list of
@@ -429,9 +434,12 @@ MashStep * Mash::removeMashStep(MashStep * mashStep) {
       }
    }
 
+   //
    // Since a Mash owns its MashSteps, we need to remove the MashStep from the DB when we remove it from the Mash.  It
-   // then makes sense (in the context of undo/redo) to put the MashStep object back into "new" state
-   ObjectStoreWrapper::hardDelete(*mashStep);
+   // then makes sense (in the context of undo/redo) to put the MashStep object back into "new" state, which
+   // ObjectStoreTyped will do for us.
+   //
+   ObjectStoreWrapper::hardDelete(mashStep);
 
    this->pimpl->setCanonicalMashStepNumbers();
 

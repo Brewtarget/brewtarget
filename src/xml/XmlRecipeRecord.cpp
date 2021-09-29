@@ -94,7 +94,8 @@ void XmlRecipeRecord::addChildren() {
       Q_ASSERT(ii->second->getNamedEntity()->metaObject()->className() == QString(childClassName));
 
       // Actually add the Hop/Yeast/etc to the Recipe
-      CNE * added = recipe->add<CNE>(static_cast<CNE *>(ii->second->getNamedEntity()));
+      std::shared_ptr<CNE> child{static_cast<CNE *>(ii->second->getNamedEntity())};
+      auto added = recipe->add<CNE>(child);
 
       //
       // For historical reasons (specifically that early versions of Brewtarget stored data in BeerXML files, not a
@@ -113,7 +114,7 @@ void XmlRecipeRecord::addChildren() {
       // So, now that we added the Hop/Fermentable/etc to the Recipe, and we have the actual object associated with the
       // Recipe, we need to set the "how much and when to add" info based on the fields we retained from XML record.
       //
-      Q_ASSERT(added != nullptr);
+      Q_ASSERT(added);
       setAmountsEtc(*added, ii->second->getNamedParameterBundle());
    }
    return;

@@ -201,9 +201,7 @@ public slots:
    //! \brief Invoke the pop-up Window to add a new mash step to (the mash of) the recipe.
    void addMashStep();
    //! \brief Actually add the new mash step to (the mash of) the recipe (in an undoable way).
-   void addMashStepToMash(MashStep*);
-   //! \brief Update the display once a mash step is added.
-   void postAddMashStepToMash(MashStep * mashStep);
+   void addMashStepToMash(std::shared_ptr<MashStep> mashStep);
    //! \brief Move currently selected mash step down.
    void moveSelectedMashStepUp();
    //! \brief Move currently selected mash step up.
@@ -341,11 +339,11 @@ private:
    class impl;
    std::unique_ptr<impl> pimpl;
 
-   void removeHop(Hop * itemToRemove);
-   void removeFermentable(Fermentable * itemToRemove);
-   void removeMisc(Misc * itemToRemove);
-   void removeYeast(Yeast * itemToRemove);
-   void removeMashStep(MashStep * itemToRemove);
+   void removeHop(Hop & itemToRemove);
+   void removeFermentable(Fermentable & itemToRemove);
+   void removeMisc(Misc & itemToRemove);
+   void removeYeast(Yeast & itemToRemove);
+   void removeMashStep(MashStep & itemToRemove);
 //   void removeWater(Water * itemToRemove);
 //   void removeSalt(Salt * itemToRemove);
 

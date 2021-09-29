@@ -102,6 +102,13 @@ MashStep::MashStep(MashStep const & other) :
 }
 
 
+//MashStep::~MashStep() = default;
+MashStep::~MashStep() {
+   qDebug() << Q_FUNC_INFO << "Destructor for MashStep #" << this->key();
+   return;
+}
+
+
 //================================"SET" METHODS=================================
 void MashStep::setInfuseTemp_c(double var) {
    this->setAndNotify(PropertyNames::MashStep::infuseTemp_c, this->m_infuseTemp_c, var);

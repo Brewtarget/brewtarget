@@ -34,6 +34,7 @@
 #include <QWidget>
 
 #include "brewtarget.h"
+#include "database/ObjectStoreWrapper.h"
 #include "MainWindow.h"
 #include "model/MashStep.h"
 #include "PersistentSettings.h"
@@ -43,22 +44,23 @@
 MashStepTableModel::MashStepTableModel(QTableView* parent)
    : QAbstractTableModel(parent),
      mashObs(nullptr),
-     parentTableWidget(parent)
-{
+     parentTableWidget(parent) {
    setObjectName("mashStepTableModel");
 
    QHeaderView* headerView = parentTableWidget->horizontalHeader();
    headerView->setContextMenuPolicy(Qt::CustomContextMenu);
    connect(headerView, &QWidget::customContextMenuRequested, this, &MashStepTableModel::contextMenu);
+   connect(&ObjectStoreTyped<MashStep>::getInstance(), &ObjectStoreTyped<MashStep>::signalObjectInserted, this, &MashStepTableModel::addMashStep);
+   connect(&ObjectStoreTyped<MashStep>::getInstance(), &ObjectStoreTyped<MashStep>::signalObjectDeleted,  this, &MashStepTableModel::removeMashStep);
+   return;
 }
 
-void MashStepTableModel::addMashStep(MashStep * mashStep)
-{
-   qDebug() << QString("%1").arg(Q_FUNC_INFO);
-
+void MashStepTableModel::addMashStep(int mashStepId) {
+   MashStep * mashStep = ObjectStoreWrapper::getByIdRaw<MashStep>(mashStepId);
    if (mashStep == nullptr || this->steps.contains(mashStep)) {
       return;
    }
+   qDebug() << Q_FUNC_INFO << "Adding MashStep" << mashStep->name() << "(#" << mashStepId << ")";
 
    int size {this->steps.size()};
    beginInsertRows( QModelIndex(), size, size );
@@ -69,13 +71,16 @@ void MashStepTableModel::addMashStep(MashStep * mashStep)
    return;
 }
 
-bool MashStepTableModel::removeMashStep(MashStep * mashStep)
-{
-   qDebug() << QString("%1").arg(Q_FUNC_INFO);
+void MashStepTableModel::removeMashStep(int mashStepId, std::shared_ptr<QObject> object) {
+   this->remove(std::static_pointer_cast<MashStep>(object).get());
+   return;
+}
+
+bool MashStepTableModel::remove(MashStep * mashStep) {
 
    int i {this->steps.indexOf(mashStep)};
-   if( i >= 0 )
-   {
+   if (i >= 0) {
+      qDebug() << Q_FUNC_INFO << "Removing MashStep" << mashStep->name() << "(#" << mashStep->key() << ")";
       beginRemoveRows( QModelIndex(), i, i );
       disconnect( mashStep, nullptr, this, nullptr );
       this->steps.removeAt(i);

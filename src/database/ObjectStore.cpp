@@ -1345,7 +1345,7 @@ void ObjectStore::updateProperty(QObject const & object, BtStringConst const & p
 }
 
 
-void ObjectStore::softDelete(int id) {
+std::shared_ptr<QObject>  ObjectStore::defaultSoftDelete(int id) {
    //
    // We assume on soft-delete that there is nothing to do on related objects - eg if a Mash is soft deleted (ie marked
    // deleted but remains in the DB) then there isn't actually anything we need to do with its MashSteps.
@@ -1359,18 +1359,19 @@ void ObjectStore::softDelete(int id) {
       emit this->signalObjectDeleted(id, object);
    }
 
-   return;
+   return object;
 }
 
 //
-void ObjectStore::hardDelete(int id) {
+std::shared_ptr<QObject>  ObjectStore::defaultHardDelete(int id) {
    //
-   // We assume on hard-delete that the subclass ObjectStore (specifically ObjectStoreTyped will override this member
+   // We assume on hard-delete that the subclass ObjectStore (specifically ObjectStoreTyped) will override this member
    // function to interact with the object to delete any "owned" objects.  It is better to have the rules for that in
    // the object model than here in the object store as they can be subtle, and it would be cumbersome to model them
    // generically.
    //
    qDebug() << Q_FUNC_INFO << "Hard delete item #" << id;
+   auto object = this->pimpl->allObjects.value(id);
    QSqlDatabase connection = this->pimpl->database->sqlDatabase();
    DbTransaction dbTransaction{*this->pimpl->database, connection};
 
@@ -1405,7 +1406,7 @@ void ObjectStore::hardDelete(int id) {
    if (!sqlQuery.exec()) {
       qCritical() <<
          Q_FUNC_INFO << "Error executing database query " << queryString << ": " << sqlQuery.lastError().text();
-      return;
+      return object;
    }
 
    //
@@ -1413,7 +1414,9 @@ void ObjectStore::hardDelete(int id) {
    //
    for (auto const & junctionTable : this->pimpl->junctionTables) {
       if (!deleteFromJunctionTableDefinition(junctionTable, primaryKey, connection)) {
-         return;
+         // We'll have already logged errors in deleteFromJunctionTableDefinition().  Not much more we can do other than
+         // bail here.
+         return object;
       }
    }
 
@@ -1422,13 +1425,12 @@ void ObjectStore::hardDelete(int id) {
    //
    // Remove the object from the cache
    //
-   auto object = this->pimpl->allObjects.value(id);
    this->pimpl->allObjects.remove(id);
 
    // Tell any bits of the UI that need to know that an object was deleted
    emit this->signalObjectDeleted(id, object);
 
-   return;
+   return object;
 }
 
 
