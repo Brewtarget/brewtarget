@@ -2,9 +2,9 @@
  * BrewDayFormatter.h is part of Brewtarget, and is Copyright the following
  * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
+ * - Mattias Måhl <mattias@kejsarsten.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
- * - Mattias Måhl <mattias@kejsarsten.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,8 +20,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _BREWDAYFORMATTER_H
-#define _BREWDAYFORMATTER_H
+#ifndef BREWDAYFORMATTER_H
+#define BREWDAYFORMATTER_H
 #include <QList>
 #include <QStringList>
 #include <QWidget>
@@ -95,4 +95,4 @@ public:
    QString cssName;
 };
 
-#endif /* _BREWDAYFORMATTER_H */
+#endif /* BREWDAYFORMATTER_H */

@@ -70,6 +70,12 @@ PrintAndPreviewDialog::PrintAndPreviewDialog ( MainWindow *parent)
 }
 
 /**
+ * @brief Destroy the Print And Preview Dialog:: Print And Preview Dialog object
+ *
+ */
+PrintAndPreviewDialog::~PrintAndPreviewDialog() = default;
+
+/**
  * @brief Show event for the dialog
  *
  * @param e Event object
@@ -347,11 +353,12 @@ void PrintAndPreviewDialog::updatePreview() {
       }
       else if (verticalTabWidget->currentIndex() == 1)
       {
-         InventoryFormatter::HTMLgenerationFlags flags = ((checkBox_inventoryFermentables->isChecked()) ? InventoryFormatter::FERMENTABLESFLAG : InventoryFormatter::NOOPERATION) |
-                                                         ((checkBox_inventoryHops->isChecked()) ? InventoryFormatter::HOPSFLAG : InventoryFormatter::NOOPERATION) |
-                                                         ((checkBox_inventoryYeast->isChecked()) ? InventoryFormatter::YEASTFLAG : InventoryFormatter::NOOPERATION) |
-                                                         ((checkBox_inventoryMicellaneous->isChecked()) ? InventoryFormatter::MISCELLANEOUSFLAG : InventoryFormatter::NOOPERATION);
-
+         InventoryFormatter::HtmlGenerationFlags flags  = static_cast<InventoryFormatter::HtmlGenerationFlags>(
+            checkBox_inventoryFermentables->isChecked() * InventoryFormatter::FERMENTABLES   +
+            checkBox_inventoryHops->isChecked()         * InventoryFormatter::HOPS           +
+            checkBox_inventoryYeast->isChecked()        * InventoryFormatter::YEAST          +
+            checkBox_inventoryMicellaneous->isChecked() * InventoryFormatter::MISCELLANEOUS
+         );
          pDoc = InventoryFormatter::createInventoryHTML(flags);
       }
       // adding the generated HTML to the QTexBrowser.
@@ -505,10 +512,12 @@ void PrintAndPreviewDialog::printDocument(QPrinter * printer)
    }
    else if (verticalTabWidget->currentIndex() == 1)
    {
-      InventoryFormatter::HTMLgenerationFlags flags = ((checkBox_inventoryFermentables->isChecked()) ? InventoryFormatter::FERMENTABLESFLAG : InventoryFormatter::NOOPERATION) |
-                                                         ((checkBox_inventoryHops->isChecked()) ? InventoryFormatter::HOPSFLAG : InventoryFormatter::NOOPERATION) |
-                                                         ((checkBox_inventoryYeast->isChecked()) ? InventoryFormatter::YEASTFLAG : InventoryFormatter::NOOPERATION) |
-                                                         ((checkBox_inventoryMicellaneous->isChecked()) ? InventoryFormatter::MISCELLANEOUSFLAG : InventoryFormatter::NOOPERATION);
+      InventoryFormatter::HtmlGenerationFlags flags = static_cast<InventoryFormatter::HtmlGenerationFlags>(
+         checkBox_inventoryFermentables->isChecked() * InventoryFormatter::FERMENTABLES   +
+         checkBox_inventoryHops->isChecked()         * InventoryFormatter::HOPS           +
+         checkBox_inventoryYeast->isChecked()        * InventoryFormatter::YEAST          +
+         checkBox_inventoryMicellaneous->isChecked() * InventoryFormatter::MISCELLANEOUS
+      );
       hDoc += InventoryFormatter::createInventoryHTML(flags);
    }
 

@@ -56,7 +56,7 @@ public:
     * @brief Destroy the Print And Preview Dialog object
     *
     */
-   virtual ~PrintAndPreviewDialog() {}
+   virtual ~PrintAndPreviewDialog();
 
    /**
     * @brief shows the dialog and updates the Printing preview.

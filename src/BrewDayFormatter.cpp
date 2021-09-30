@@ -1,7 +1,10 @@
 /*
  * BrewDayFormatter.cpp is part of Brewtarget, and is Copyright the following
- * authors 2021
+ * authors 2009-2021
+  * - Jeff Bailey <skydvr38@verizon.net>
  * - Mattias Måhl <mattias@kejsarsten.com>
+ * - Mik Firestone <mikfire@gmail.com>
+ * - Philip Greggory Lee <rocketman768@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

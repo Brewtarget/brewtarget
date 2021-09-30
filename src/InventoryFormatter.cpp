@@ -27,6 +27,31 @@
 namespace InventoryFormatter
 {
    /**
+    * @brief ORs the HtmlGenerationFlags implementation.
+    *
+    * @param a
+    * @param b
+    * @return HtmlGenerationFlags
+    */
+   HtmlGenerationFlags operator|(HtmlGenerationFlags a, HtmlGenerationFlags b)
+   {
+      return static_cast<HtmlGenerationFlags>(static_cast<int>(a) | static_cast<int>(b));
+   }
+
+   /**
+    * @brief ANDs the HtmlGenerationFlags
+    *
+    * @param a
+    * @param b
+    * @return true
+    * @return false
+    */
+   bool operator&(HtmlGenerationFlags a, HtmlGenerationFlags b)
+   {
+      return (static_cast<int>(a) & static_cast<int>(b));
+   }
+
+   /**
     * @brief Create Inventory HTML Header
     *
     * @return QString
@@ -179,8 +204,8 @@ namespace InventoryFormatter
 
             const QString displayAmount =
                   Brewtarget::displayAmount(itor.value(), "miscTable", "amount",
-                        miscellaneous->amountIsWeight() ? (Unit const *)&Units::kilograms
-                                                      : (Unit const *)&Units::liters);
+                        miscellaneous->amountIsWeight() ? &Units::kilograms
+                                                        : &Units::liters);
             result += QString("<tr>"
                               "<td>%1</td>"
                               "<td>%2</td>"
@@ -251,14 +276,14 @@ namespace InventoryFormatter
     * @param flags HTMLgeneretionFlags stacked to generate
     * @return QString
     */
-   static QString createInventoryHTMLBody(HTMLgenerationFlags flags)
+   static QString createInventoryHTMLBody(HtmlGenerationFlags flags)
    {
       //Only generate users selection of Ingredient inventory.
       QString result =
-            ((HTMLgenerationFlags::FERMENTABLESFLAG  & flags) ? createInventoryTableFermentableHTML() : "") +
-            ((HTMLgenerationFlags::HOPSFLAG          & flags) ? createInventoryTableHopHTML() : "") +
-            ((HTMLgenerationFlags::MISCELLANEOUSFLAG & flags) ? createInventoryTableMiscellaneousHTML() : "") +
-            ((HTMLgenerationFlags::YEASTFLAG         & flags) ? createInventoryTableYeastHTML() : "");
+            ((HtmlGenerationFlags::FERMENTABLES  & flags) ? createInventoryTableFermentableHTML() : "") +
+            ((HtmlGenerationFlags::HOPS          & flags) ? createInventoryTableHopHTML() : "") +
+            ((HtmlGenerationFlags::MISCELLANEOUS & flags) ? createInventoryTableMiscellaneousHTML() : "") +
+            ((HtmlGenerationFlags::YEAST         & flags) ? createInventoryTableYeastHTML() : "");
       //If users selects no printout or if there are no inventory for the selected ingredients.
       if (result.size() == 0)
       {
@@ -283,7 +308,7 @@ namespace InventoryFormatter
     *
     * @return QString
     */
-   QString createInventoryHTML(HTMLgenerationFlags flags)
+   QString createInventoryHTML(HtmlGenerationFlags flags)
    {
       return createInventoryHeaderHTML() +
                createInventoryHTMLBody(flags) +

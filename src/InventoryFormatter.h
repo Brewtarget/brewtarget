@@ -27,24 +27,18 @@
 #include "model/Hop.h"
 namespace InventoryFormatter
 {
-   enum HTMLgenerationFlags
+   enum HtmlGenerationFlags
    {
       NOOPERATION           = 0,
-      FERMENTABLESFLAG      = (1<<0),
-      HOPSFLAG              = (1<<1),
-      YEASTFLAG             = (1<<2),
-      MISCELLANEOUSFLAG     = (1<<3)
+      FERMENTABLES          = (1<<0),
+      HOPS                  = (1<<1),
+      YEAST                 = (1<<2),
+      MISCELLANEOUS         = (1<<3)
    };
 
-   inline HTMLgenerationFlags operator|(HTMLgenerationFlags a, HTMLgenerationFlags b)
-   {
-      return static_cast<HTMLgenerationFlags>(static_cast<int>(a) | static_cast<int>(b));
-   }
+   HtmlGenerationFlags operator|(HtmlGenerationFlags a, HtmlGenerationFlags b);
 
-   inline bool operator&(HTMLgenerationFlags a, HTMLgenerationFlags b)
-   {
-      return (static_cast<int>(a) & static_cast<int>(b));
-   }
+   bool operator&(HtmlGenerationFlags a, HtmlGenerationFlags b);
 
    /**
     * @brief Create a Inventory H T M L for export
@@ -52,7 +46,7 @@ namespace InventoryFormatter
     * @return QString containing the HTML code for the inventory tables.
     *
     */
-   QString createInventoryHTML(HTMLgenerationFlags flags);
+   QString createInventoryHTML(HtmlGenerationFlags flags);
 
    /**
     * @brief this will call the appropriate database function to get the type specified item by id.
