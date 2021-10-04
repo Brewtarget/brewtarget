@@ -33,6 +33,7 @@
 #include "Unit.h"
 #include "brewtarget.h"
 #include "MainWindow.h"
+#include <QDebug>
 #include <QClipboard>
 #include <QObject>
 #include <QPrinter>
@@ -47,23 +48,6 @@ RecipeFormatter::RecipeFormatter(QObject* parent)
 {
    textSeparator = nullptr;
    rec = nullptr;
-
-   //===Construct a print-preview dialog.===
-   docDialog = new QDialog(Brewtarget::mainWindow());
-   docDialog->setWindowTitle("Print Preview");
-   if( docDialog->layout() == nullptr )
-      docDialog->setLayout(new QVBoxLayout);
-   doc = new QTextBrowser(docDialog);
-   docDialog->layout()->addWidget(doc);
-   /*
-   // Add a print button at the bottom.
-   QHBoxLayout* buttonBox = new QHBoxLayout(docDialog);
-   QPushButton* print = new QPushButton(QObject::tr("Print"), docDialog);
-   connect(print, SLOT(clicked()), Brewtarget::mainWindow, SLOT(printRecipe()));
-   buttonBox->addStretch();
-   buttonBox->addWidget(print);
-   docDialog->layout()->addItem(buttonBox);
-   */
 }
 
 RecipeFormatter::~RecipeFormatter()
@@ -183,7 +167,6 @@ QString RecipeFormatter::getHTMLFormat( QList<Recipe*> recipes ) {
       hDoc += buildYeastTableHtml();
       hDoc += buildMashTableHtml();
       hDoc += buildNotesHtml();
-      hDoc += buildInstructionTableHtml();
       hDoc += buildBrewNotesHtml();
       hDoc += "<p></p>";
    }
@@ -205,9 +188,7 @@ QString RecipeFormatter::getHTMLFormat()
    pDoc += buildYeastTableHtml();
    pDoc += buildMashTableHtml();
    pDoc += buildNotesHtml();
-   pDoc += buildInstructionTableHtml();
    pDoc += buildBrewNotesHtml();
-
    pDoc += buildHTMLFooter();
 
    return pDoc;
@@ -618,6 +599,7 @@ QString RecipeFormatter::getToolTip(Water* water)
    return header + body;
 
 }
+
 void RecipeFormatter::toTextClipboard()
 {
    QApplication::clipboard()->setText(getTextFormat());
@@ -1371,33 +1353,6 @@ QString RecipeFormatter::buildNotesHtml()
    return notes;
 }
 
-QString RecipeFormatter::buildInstructionTableHtml()
-{
-   if( rec == nullptr )
-      return "";
-
-   QString itable;
-   int i, size;
-   QList<Instruction*> instructions = rec->instructions();
-   size = instructions.size();
-
-   if ( size < 1 )
-      return "";
-
-   itable = QString("<h3>%1</h3>").arg(tr("Instructions"));
-   itable += "<ol id=\"instruction\">";
-
-   for( i = 0; i < size; ++i )
-   {
-      Instruction* ins = instructions[i];
-      itable += QString("<li>%1</li>").arg( ins->directions());
-   }
-
-   itable += "</ol>";
-
-   return itable;
-}
-
 QString RecipeFormatter::buildInstructionTableTxt()
 {
    QString ret = "";
@@ -1571,40 +1526,6 @@ QString RecipeFormatter::getLabelToolTip() {
    body += "</table></body></html>";
 
    return header + body;
-}
-
-
-bool RecipeFormatter::loadComplete(bool ok)
-{
-   doc->print(printer);
-   return ok;
-}
-
-void RecipeFormatter::print(QPrinter* mainPrinter,
-      int action, QFile* outFile)
-{
-   if( rec == nullptr )
-      return;
-
-   // Short cut if we are saving to HTML
-   if ( action == HTML )
-   {
-      QTextStream out(outFile);
-      out << getHTMLFormat();
-      outFile->close();
-      return;
-   }
-   // We are printing hard copy
-   if ( action == PRINT )
-   {
-      printer = mainPrinter;
-      doc->setHtml(getHTMLFormat());
-      loadComplete(true);
-   }
-
-   doc->setHtml(getHTMLFormat());
-   if ( action == PREVIEW )
-      docDialog->show();
 }
 
 QList<Hop*> RecipeFormatter::sortHopsByTime(Recipe* rec)

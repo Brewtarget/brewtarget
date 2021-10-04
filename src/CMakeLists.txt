@@ -73,6 +73,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/AncestorDialog.cpp
     ${SRCDIR}/BeerColorWidget.cpp
     ${SRCDIR}/boiltime.cpp
+    ${SRCDIR}/BrewDayFormatter.cpp
     ${SRCDIR}/BrewDayScrollWidget.cpp
     ${SRCDIR}/BrewDayWidget.cpp
     ${SRCDIR}/BrewNoteWidget.cpp
@@ -151,6 +152,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/OptionDialog.cpp
     ${SRCDIR}/PitchDialog.cpp
     ${SRCDIR}/PreInstruction.cpp
+    ${SRCDIR}/PrintAndPreviewDialog.cpp
     ${SRCDIR}/PrimingDialog.cpp
     ${SRCDIR}/PropertySchema.cpp
     ${SRCDIR}/QueuedMethod.cpp
@@ -228,6 +230,7 @@ SET( brewtarget_UIS
     ${UIDIR}/pitchDialog.ui
     ${UIDIR}/brewDayScrollWidget.ui
     ${UIDIR}/recipeExtrasWidget.ui
+    ${UIDIR}/BtPrintAndPreview.ui
 )
 
 #
@@ -245,6 +248,7 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/BeerColorWidget.h
     ${SRCDIR}/beerxml.h
     ${SRCDIR}/boiltime.h
+    ${SRCDIR}/BrewDayFormatter.h
     ${SRCDIR}/BrewDayScrollWidget.h
     ${SRCDIR}/BrewDayWidget.h
     ${SRCDIR}/BrewNoteWidget.h
@@ -313,6 +317,7 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/OgAdjuster.h
     ${SRCDIR}/OptionDialog.h
     ${SRCDIR}/PitchDialog.h
+    ${SRCDIR}/PrintAndPreviewDialog.h
     ${SRCDIR}/PrimingDialog.h
     ${SRCDIR}/PropertySchema.h
     ${SRCDIR}/QueuedMethod.h
