@@ -69,8 +69,8 @@
 #include "AlcoholTool.h"
 #include "Algorithms.h"
 #include "AncestorDialog.h"
-#include "brewtarget.h"
 #include "BrewNoteWidget.h"
+#include "brewtarget.h"
 #include "BtDatePopup.h"
 #include "BtDigitWidget.h"
 #include "BtFolder.h"
@@ -116,6 +116,7 @@
 #include "PersistentSettings.h"
 #include "PitchDialog.h"
 #include "PrimingDialog.h"
+#include "PrintAndPreviewDialog.h"
 #include "RangedSlider.h"
 #include "RecipeFormatter.h"
 #include "RefractoDialog.h"
@@ -531,6 +532,7 @@ void MainWindow::setupDialogs()
    optionDialog = new OptionDialog(this);
    recipeScaler = new ScaleRecipeTool(this);
    recipeFormatter = new RecipeFormatter(this);
+   printAndPreviewDialog = new PrintAndPreviewDialog(this);
    ogAdjuster = new OgAdjuster(this);
    converterTool = new ConverterTool(this);
    hydrometerTool = new HydrometerTool(this);
@@ -868,6 +870,8 @@ void MainWindow::setupTriggers() {
    connect( actionWater_Chemistry, &QAction::triggered, this, &MainWindow::popChemistry);                               // > Tools > Water Chemistry
    connect( actionAncestors, &QAction::triggered, this, &MainWindow::setAncestor);                                      // > Tools > Ancestors
    connect( action_brewit, &QAction::triggered, this, &MainWindow::brewItHelper );
+   //One Dialog to rule them all, at least all printing and export.
+   connect( actionPrint, &QAction::triggered, printAndPreviewDialog, &QWidget::show);                                   // > File > Print and Preview
 
    // postgresql cannot backup or restore yet. I would like to find some way
    // around this, but for now just disable
@@ -879,50 +883,6 @@ void MainWindow::setupTriggers() {
       connect( actionBackup_Database, &QAction::triggered, this, &MainWindow::backup );                                 // > File > Database > Backup
       connect( actionRestore_Database, &QAction::triggered, this, &MainWindow::restoreFromBackup );                     // > File > Database > Restore
    }
-   // Printing signals/slots.
-   // Refactoring is good.  It's like a rye saison fermenting away
-   connect(actionRecipePrint, &QAction::triggered, [this]() {
-      print([this](QPrinter* printer) {
-//         recipeFormatter->print(printer,  RecipeFormatter::PRINT);
-         recipeFormatter->print(printer);
-      });
-   });
-   connect(actionRecipePreview, &QAction::triggered, [this]() {
-//      recipeFormatter->print(printer, RecipeFormatter::PREVIEW);
-      recipeFormatter->printPreview();
-   });
-   connect(actionRecipeHTML, &QAction::triggered, this, [this]() {
-      exportHtml([this](QFile* file) {
-//         recipeFormatter->print(printer, RecipeFormatter::HTML, file);
-         recipeFormatter->exportHtml(file);
-      });
-   });
-   connect(actionRecipeBBCode, &QAction::triggered, [this]() {
-      QApplication::clipboard()->setText(recipeFormatter->getBBCodeFormat());
-   });
-   connect(actionBrewdayPrint, &QAction::triggered, [this]() {
-      print([this](QPrinter* printer) {
-         brewDayScrollWidget->print(printer);
-      });
-   });
-   connect(actionBrewdayPreview, &QAction::triggered, [this]() {
-      this->brewDayScrollWidget->printPreview();
-   });
-   connect(actionBrewdayHTML, &QAction::triggered, this, [this]() {
-      exportHtml([this](QFile* file) {
-         brewDayScrollWidget->exportHtml(file);
-      });
-   });
-   connect(actionInventoryPrint, &QAction::triggered, [this]() {
-      print(
-            [](QPrinter* printer) { InventoryFormatter::print(printer); });
-   });
-   connect(actionInventoryPreview, &QAction::triggered,
-         []() { InventoryFormatter::printPreview(); });
-   connect(actionInventoryHTML, &QAction::triggered, [this]() {
-      exportHtml(
-            [](QFile* file) { InventoryFormatter::exportHtml(file); });
-   });
 }
 
 // pushbuttons with a SIGNAL of clicked() should go in here.
@@ -2094,7 +2054,6 @@ void MainWindow::removeMashStep(MashStep & itemToRemove) {
    return;
 }
 
-
 void MainWindow::removeSelectedFermentable()
 {
 
@@ -2133,7 +2092,6 @@ void MainWindow::removeSelectedFermentable()
 
     return;
 }
-
 
 void MainWindow::editSelectedFermentable()
 {
@@ -2209,7 +2167,6 @@ void MainWindow::removeSelectedHop()
    }
 
 }
-
 
 void MainWindow::removeSelectedMisc()
 {
@@ -2888,36 +2845,6 @@ void MainWindow::openManual()
    QDesktopServices::openUrl(QUrl::fromLocalFile(Brewtarget::getDataDir().filePath("manual-en.pdf")));
 }
 
-void MainWindow::print(std::function<void(QPrinter* printer)> functor)
-{
-   if (!functor)
-   {
-      qCritical() << "The print function is called with an empty functor";
-   }
-
-   QPrintDialog dialogue(printer, this);
-   dialogue.setWindowTitle(tr("Print Document"));
-   if (dialogue.exec() == QDialog::Accepted)
-   {
-      functor(printer);
-   }
-}
-
-void MainWindow::exportHtml(std::function<void(QFile* file)> functor)
-{
-   if (!functor)
-   {
-      qCritical() << "The export HTML function is called with an empty functor";
-   }
-
-   std::unique_ptr<QFile> file{
-         openForWrite(tr("HTML files (*.html)"), QString("html"))};
-   if (file)
-   {
-      functor(file.get());
-   }
-}
-
 // We build the menus at start up time.  This just needs to exec the proper
 // menu.
 void MainWindow::contextMenu(const QPoint &point)
@@ -3018,43 +2945,9 @@ QFile* MainWindow::openForWrite( QString filterStr, QString defaultSuff)
    return outFile;
 }
 
-void MainWindow::exportSelectedHtml() {
-   BtTreeView* active = qobject_cast<BtTreeView*>(tabWidget_Trees->currentWidget()->focusWidget());
-   QModelIndexList selected;
-   QList <Recipe*> targets;
-   QFile* outFile;
-
-   if ( active == nullptr )
-      return;
-
-   // this only works for recipes
-   if ( active != treeView_recipe ) {
-       return;
-   }
-
-   // get the targeted file
-   outFile = this->openForWrite(tr("HTML files (*.html)"), QString("html"));
-   if ( !outFile )
-      return;
-
-   // Get the selected recipes and throw them into a list
-   selected = active->selectionModel()->selectedRows();
-   if( selected.count() == 0 )
-      return;
-
-   foreach( QModelIndex ndx, selected)
-      targets.append( treeView_recipe->recipe(ndx) );
-
-   // and write it all
-   QTextStream out(outFile);
-   out << recipeFormatter->getHTMLFormat(targets);
-   outFile->close();
-}
-
 void MainWindow::exportSelected() {
-   BtTreeView* active = qobject_cast<BtTreeView*>(this->tabWidget_Trees->currentWidget()->focusWidget());
+   BtTreeView* active = qobject_cast<BtTreeView*>(tabWidget_Trees->currentWidget()->focusWidget());
    if (active == nullptr) {
-      qDebug() << Q_FUNC_INFO << "No active tree so can't get a selection";
       return;
    }
 

@@ -77,6 +77,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/AncestorDialog.cpp
     ${SRCDIR}/BeerColorWidget.cpp
     ${SRCDIR}/boiltime.cpp
+    ${SRCDIR}/BrewDayFormatter.cpp
     ${SRCDIR}/BrewDayScrollWidget.cpp
     ${SRCDIR}/BrewDayWidget.cpp
     ${SRCDIR}/BrewNoteWidget.cpp
@@ -86,7 +87,6 @@ SET( brewtarget_SRCS
     ${SRCDIR}/BtFolder.cpp
     ${SRCDIR}/BtLabel.cpp
     ${SRCDIR}/BtLineEdit.cpp
-    ${SRCDIR}/BtPrintPreview.cpp
     ${SRCDIR}/BtSplashScreen.cpp
     ${SRCDIR}/BtTabWidget.cpp
     ${SRCDIR}/BtTextEdit.cpp
@@ -161,6 +161,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/PersistentSettings.cpp
     ${SRCDIR}/PitchDialog.cpp
     ${SRCDIR}/PreInstruction.cpp
+    ${SRCDIR}/PrintAndPreviewDialog.cpp
     ${SRCDIR}/PrimingDialog.cpp
     ${SRCDIR}/QueuedMethod.cpp
     ${SRCDIR}/RadarChart.cpp
@@ -213,6 +214,7 @@ SET( brewtarget_UIS
     ${UIDIR}/brewDayScrollWidget.ui
     ${UIDIR}/brewDayWidget.ui
     ${UIDIR}/brewNoteWidget.ui
+    ${UIDIR}/BtPrintAndPreview.ui
     ${UIDIR}/equipmentEditor.ui
     ${UIDIR}/fermentableEditor.ui
     ${UIDIR}/hopEditor.ui
@@ -253,6 +255,7 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/AncestorDialog.h
     ${SRCDIR}/BeerColorWidget.h
     ${SRCDIR}/boiltime.h
+    ${SRCDIR}/BrewDayFormatter.h
     ${SRCDIR}/BrewDayScrollWidget.h
     ${SRCDIR}/BrewDayWidget.h
     ${SRCDIR}/Brewken.h
@@ -262,7 +265,6 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/BtFolder.h
     ${SRCDIR}/BtLabel.h
     ${SRCDIR}/BtLineEdit.h
-    ${SRCDIR}/BtPrintPreview.h
     ${SRCDIR}/BtSplashScreen.h
     ${SRCDIR}/BtTabWidget.h
     ${SRCDIR}/BtTextEdit.h
@@ -322,6 +324,7 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/OgAdjuster.h
     ${SRCDIR}/OptionDialog.h
     ${SRCDIR}/PitchDialog.h
+    ${SRCDIR}/PrintAndPreviewDialog.h
     ${SRCDIR}/PrimingDialog.h
     ${SRCDIR}/QueuedMethod.h
     ${SRCDIR}/RangedSlider.h

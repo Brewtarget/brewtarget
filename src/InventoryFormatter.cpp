@@ -8,33 +8,36 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
-
+ *
  * Brewtarget is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
-
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "InventoryFormatter.h"
 
-#include <QDate>
-#include <QDialog>
+#include <QList>
+#include <QMap>
+#include <QStringList>
 
-#include "BtPrintPreview.h"
-#include "Html.h"
-#include "MainWindow.h"
 #include "brewtarget.h"
 #include "database/ObjectStoreWrapper.h"
+#include "Html.h"
+#include "MainWindow.h"
 #include "model/Fermentable.h"
-#include "model/Hop.h"
-#include "model/Inventory.h"
-#include "model/Misc.h"
 #include "model/Yeast.h"
 #include "PersistentSettings.h"
 
 namespace {
+
+   /**
+    * @brief Create Inventory HTML Header
+    *
+    * @return QString
+    */
    QString createInventoryHeader() {
       return Html::createHeader(QObject::tr("Inventory"), ":css/inventory.css") +
             QString("<h1>%1 &mdash; %2</h1>")
@@ -43,7 +46,7 @@ namespace {
    }
 
    /**
-    * Fermentables
+    * Create Inventory HTML Table of Fermentables
     */
    QString createInventoryTableFermentable() {
       QString result;
@@ -54,6 +57,7 @@ namespace {
          [](std::shared_ptr<Fermentable> ff) { return (ff->getParent() == nullptr && ff->inventory() > 0.0); }
       );
       if (!inventory.empty()) {
+
          result += QString("<h2>%1</h2>").arg(QObject::tr("Fermentables"));
          result += "<table id=\"fermentables\">";
          result += QString("<tr>"
@@ -67,12 +71,12 @@ namespace {
             result += QString("<tr>"
                               "<td>%1</td>"
                               "<td>%2</td>"
-                              "</tr>")
-                           .arg(fermentable->name())
-                           .arg(Brewtarget::displayAmount(fermentable->inventory(),
-                                                       PersistentSettings::Sections::fermentableTable,
-                                                       PropertyNames::NamedEntityWithInventory::inventory,
-                                                       &Units::kilograms));
+                              "</tr>").arg(fermentable->name()).arg(
+                                 Brewtarget::displayAmount(fermentable->inventory(),
+                                 PersistentSettings::Sections::fermentableTable,
+                                 PropertyNames::NamedEntityWithInventory::inventory,
+                                 &Units::kilograms)
+                              );
          }
          result += "</table>";
       }
@@ -80,7 +84,7 @@ namespace {
    }
 
    /**
-    * Hops
+    * Create Inventory HTML Table of Hops
     */
    QString createInventoryTableHop() {
       QString result;
@@ -120,7 +124,7 @@ namespace {
    }
 
    /**
-    * Misc
+    * Create Inventory HTML Table of Misc
     */
    QString createInventoryTableMiscellaneous() {
       QString result;
@@ -159,7 +163,7 @@ namespace {
    }
 
    /**
-    * Yeast
+    * Create Inventory HTML Table of Yeast
     */
    QString createInventoryTableYeast() {
       QString result;
@@ -196,11 +200,18 @@ namespace {
       return result;
    }
 
-   QString createInventoryBody() {
+   /**
+    * Create Inventory HTML Body
+    */
+   QString createInventoryBody(InventoryFormatter::HtmlGenerationFlags flags) {
+      // Only generate users selection of Ingredient inventory.
       QString result =
-            createInventoryTableFermentable() + createInventoryTableHop() +
-            createInventoryTableMiscellaneous() + createInventoryTableYeast();
+         ((InventoryFormatter::FERMENTABLES  & flags) ? createInventoryTableFermentable() : "") +
+         ((InventoryFormatter::HOPS          & flags) ? createInventoryTableHop() : "") +
+         ((InventoryFormatter::MISCELLANEOUS & flags) ? createInventoryTableMiscellaneous() : "") +
+         ((InventoryFormatter::YEAST         & flags) ? createInventoryTableYeast() : "");
 
+         // If user selects no printout or if there are no inventory for the selected ingredients.
       if (result.size() == 0) {
          result = QObject::tr("No inventory available.");
       }
@@ -208,41 +219,29 @@ namespace {
       return result;
    }
 
+   /**
+    * Create Inventory HTML Footer
+    */
    QString createInventoryFooter() {
       return Html::createFooter();
    }
 
-
-   BtPrintPreview * dialog;
-
-   void createOrUpdateDialog() {
-      if (nullptr == dialog) {
-         dialog = new BtPrintPreview(Brewtarget::mainWindow());
-         dialog->setWindowTitle(QObject::tr("Inventory Print Preview"));
-      }
-      dialog->setContent(createInventoryHeader() +
-                         createInventoryBody() +
-                         createInventoryFooter());
-      return;
-   }
-
 }
 
 
-void InventoryFormatter::printPreview() {
-   createOrUpdateDialog();
-   dialog->show();
-   return;
+InventoryFormatter::HtmlGenerationFlags InventoryFormatter::operator|(InventoryFormatter::HtmlGenerationFlags a,
+                                                                      InventoryFormatter::HtmlGenerationFlags b) {
+   return static_cast<HtmlGenerationFlags>(static_cast<int>(a) | static_cast<int>(b));
 }
 
-void InventoryFormatter::print(QPrinter* printer) {
-   createOrUpdateDialog();
-   dialog->print(printer);
-   return;
+bool InventoryFormatter::operator&(InventoryFormatter::HtmlGenerationFlags a,
+                                   InventoryFormatter::HtmlGenerationFlags b) {
+   return (static_cast<int>(a) & static_cast<int>(b));
 }
 
-void InventoryFormatter::exportHtml(QFile* file) {
-   createOrUpdateDialog();
-   dialog->exportHtml(file);
-   return;
+
+QString InventoryFormatter::createInventoryHtml(HtmlGenerationFlags flags) {
+   return createInventoryHeader() +
+          createInventoryBody(flags) +
+          createInventoryFooter();
 }
