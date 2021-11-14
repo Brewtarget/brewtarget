@@ -21,34 +21,42 @@
  */
 #ifndef MODEL_STYLE_H
 #define MODEL_STYLE_H
+#pragma once
 
 #include <QString>
 #include <QStringList>
+#include <QSqlRecord>
 
 #include "model/NamedEntity.h"
 
-namespace PropertyNames::Style { static char const * const typeString = "typeString"; /* previously kpropTypeString */ }
-namespace PropertyNames::Style { static char const * const type = "type"; /* previously kpropType */ }
-namespace PropertyNames::Style { static char const * const notes = "notes"; /* previously kpropNotes */ }
-namespace PropertyNames::Style { static char const * const examples = "examples"; /* previously kpropExamples */ }
-namespace PropertyNames::Style { static char const * const ingredients = "ingredients"; /* previously kpropIngreds */ }
-namespace PropertyNames::Style { static char const * const profile = "profile"; /* previously kpropProfile */ }
-namespace PropertyNames::Style { static char const * const abvMax_pct = "abvMax_pct"; /* previously kpropABVMax */ }
-namespace PropertyNames::Style { static char const * const abvMin_pct = "abvMin_pct"; /* previously kpropABVMin */ }
-namespace PropertyNames::Style { static char const * const carbMax_vol = "carbMax_vol"; /* previously kpropCarbMax */ }
-namespace PropertyNames::Style { static char const * const carbMin_vol = "carbMin_vol"; /* previously kpropCarbMin */ }
-namespace PropertyNames::Style { static char const * const colorMax_srm = "colorMax_srm"; /* previously kpropColorMax */ }
-namespace PropertyNames::Style { static char const * const colorMin_srm = "colorMin_srm"; /* previously kpropColorMin */ }
-namespace PropertyNames::Style { static char const * const ibuMax = "ibuMax"; /* previously kpropIBUMax */ }
-namespace PropertyNames::Style { static char const * const ibuMin = "ibuMin"; /* previously kpropIBUMin */ }
-namespace PropertyNames::Style { static char const * const fgMax = "fgMax"; /* previously kpropFGMax */ }
-namespace PropertyNames::Style { static char const * const fgMin = "fgMin"; /* previously kpropFGMin */ }
-namespace PropertyNames::Style { static char const * const ogMax = "ogMax"; /* previously kpropOGMax */ }
-namespace PropertyNames::Style { static char const * const ogMin = "ogMin"; /* previously kpropOGMin */ }
-namespace PropertyNames::Style { static char const * const styleGuide = "styleGuide"; /* previously kpropGuide */ }
-namespace PropertyNames::Style { static char const * const styleLetter = "styleLetter"; /* previously kpropLetter */ }
-namespace PropertyNames::Style { static char const * const categoryNumber = "categoryNumber"; /* previously kpropCatNum */ }
-namespace PropertyNames::Style { static char const * const category = "category"; /* previously kpropCat */ }
+//======================================================================================================================
+//========================================== Start of property name constants ==========================================
+#define AddPropertyName(property) namespace PropertyNames::Style { BtStringConst const property{#property}; }
+AddPropertyName(abvMax_pct)
+AddPropertyName(abvMin_pct)
+AddPropertyName(carbMax_vol)
+AddPropertyName(carbMin_vol)
+AddPropertyName(category)
+AddPropertyName(categoryNumber)
+AddPropertyName(colorMax_srm)
+AddPropertyName(colorMin_srm)
+AddPropertyName(examples)
+AddPropertyName(fgMax)
+AddPropertyName(fgMin)
+AddPropertyName(ibuMax)
+AddPropertyName(ibuMin)
+AddPropertyName(ingredients)
+AddPropertyName(notes)
+AddPropertyName(ogMax)
+AddPropertyName(ogMin)
+AddPropertyName(profile)
+AddPropertyName(styleGuide)
+AddPropertyName(styleLetter)
+AddPropertyName(type)
+AddPropertyName(typeString)
+#undef AddPropertyName
+//=========================================== End of property name constants ===========================================
+//======================================================================================================================
 
 
 /*!
@@ -56,19 +64,18 @@ namespace PropertyNames::Style { static char const * const category = "category"
  *
  * \brief Model for style records in the database.
  */
-class Style : public NamedEntity
-{
+class Style : public NamedEntity {
    Q_OBJECT
    Q_CLASSINFO("signal", "styles")
 
-   friend class Database;
-   friend class BeerXML;
+
    friend class StyleEditor;
-
 public:
+   Style(QString t_name = "", bool cacheOnly = true);
+   Style(NamedParameterBundle const & namedParameterBundle);
+   Style( Style const & other );
 
-   Style( QString t_name, bool cacheOnly = true);
-   virtual ~Style() {}
+   virtual ~Style() = default;
 
    //! \brief The type of beverage.
    enum Type {Lager, Ale, Mead, Wheat, Mixed, Cider};
@@ -115,7 +122,7 @@ public:
    //! \brief The profile.
    Q_PROPERTY( QString profile READ profile WRITE setProfile /*NOTIFY changed*/ /*changedProfile*/ )
    //! \brief The ingredients.
-   Q_PROPERTY( QString ingredients READ ingredients WRITE setNamedEntitys /*NOTIFY changed*/ /*changedNamedEntitys*/ )
+   Q_PROPERTY( QString ingredients READ ingredients WRITE setIngredients /*NOTIFY changed*/ /*changedIngredients*/ )
    //! \brief The commercial examples.
    Q_PROPERTY( QString examples READ examples WRITE setExamples /*NOTIFY changed*/ /*changedExamples*/ )
 
@@ -138,7 +145,7 @@ public:
    void setAbvMax_pct( double var);
    void setNotes( const QString& var);
    void setProfile( const QString& var);
-   void setNamedEntitys( const QString& var);
+   void setIngredients( const QString& var);
    void setExamples( const QString& var);
 
    QString category() const;
@@ -164,28 +171,19 @@ public:
    QString ingredients() const;
    QString examples() const;
 
-   static QString classNameStr();
-
-   NamedEntity * getParent();
-   virtual int insertInDatabase();
-   virtual void removeFromDatabase();
+   virtual Recipe * getOwningRecipe();
 
 signals:
 
 protected:
    virtual bool isEqualTo(NamedEntity const & other) const;
+   virtual ObjectStore & getObjectStoreTypedInstance() const;
 
 private:
-
-//   Style(Brewtarget::DBTable table, int key);
-   Style( TableSchema* table, QSqlRecord rec, int t_key = -1);
-   Style( Style const& other);
-
    QString m_category;
    QString m_categoryNumber;
    QString m_styleLetter;
    QString m_styleGuide;
-   QString m_typeStr;
    Type m_type;
    double m_ogMin;
    double m_ogMax;
@@ -203,37 +201,8 @@ private:
    QString m_profile;
    QString m_ingredients;
    QString m_examples;
-
-   bool isValidType( const QString &str );
-   static QStringList m_types;
 };
 
 Q_DECLARE_METATYPE( Style* )
-/*
-inline bool StylePtrLt( Style* lhs, Style* rhs)
-{
-   return *lhs < *rhs;
-}
 
-inline bool StylePtrEq( Style* lhs, Style* rhs)
-{
-   return *lhs == *rhs;
-}
-
-struct Style_ptr_cmp
-{
-   bool operator()( Style* lhs, Style* rhs)
-   {
-      return *lhs < *rhs;
-   }
-};
-
-struct Style_ptr_equals
-{
-   bool operator()( Style* lhs, Style* rhs )
-   {
-      return *lhs == *rhs;
-   }
-};
-*/
-#endif //_STYLE_H
+#endif

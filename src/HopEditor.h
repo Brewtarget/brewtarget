@@ -1,7 +1,8 @@
 /*
  * HopEditor.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -18,11 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#ifndef _HOPEDITOR_H
-#define   _HOPEDITOR_H
-
-class HopEditor;
+#ifndef HOPEDITOR_H
+#define HOPEDITOR_H
+#pragma once
 
 #include "ui_hopEditor.h"
 #include <QMetaProperty>
@@ -33,7 +32,6 @@ class Hop;
 
 /*!
  * \class HopEditor
- * \author Philip G. Lee
  *
  * \brief View/controller class for modifying hops.
  */
@@ -66,4 +64,4 @@ private:
    void showChanges(QMetaProperty* prop = nullptr);
 };
 
-#endif   /* _HOPEDITOR_H */
+#endif

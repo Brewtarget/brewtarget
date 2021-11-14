@@ -1,6 +1,7 @@
 /*
  * MashEditor.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -17,10 +18,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef _MASHEDITOR_H
-#define   _MASHEDITOR_H
-
-class MashEditor;
+#ifndef MASHEDITOR_H
+#define MASHEDITOR_H
 
 #include <QDialog>
 #include <QMetaProperty>
@@ -34,7 +33,6 @@ class Equipment;
 
 /*!
  * \class MashEditor
- * \author Philip G. Lee
  *
  * \brief View/controller dialog for editing a mash.
  */

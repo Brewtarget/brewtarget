@@ -1,6 +1,7 @@
 /*
  * StyleListModel.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
+ * - Matt Young <mfsy@yahoo.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  * - swstim <swstim@gmail.com>
  *
@@ -17,22 +18,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #include "StyleListModel.h"
+
 #include "model/Style.h"
-#include "database.h"
+#include "database/ObjectStoreWrapper.h"
 #include "model/Recipe.h"
 
-StyleListModel::StyleListModel(QWidget* parent)
-   : QAbstractListModel(parent), recipe(0)
-{
-   connect( &(Database::instance()), qOverload<Style*>(&Database::createdSignal), this, &StyleListModel::addStyle );
-   connect( &(Database::instance()), qOverload<Style*>(&Database::deletedSignal), this, &StyleListModel::removeStyle);
+StyleListModel::StyleListModel(QWidget* parent) :
+   QAbstractListModel(parent),
+   recipe(0) {
+   connect(&ObjectStoreTyped<Style>::getInstance(), &ObjectStoreTyped<Style>::signalObjectInserted, this, &StyleListModel::addStyle);
+   connect(&ObjectStoreTyped<Style>::getInstance(), &ObjectStoreTyped<Style>::signalObjectDeleted,  this, &StyleListModel::removeStyle);
    repopulateList();
+   return;
 }
 
-void StyleListModel::addStyle(Style* s)
-{
+void StyleListModel::addStyle(int styleId) {
+   Style* s = ObjectStoreWrapper::getByIdRaw<Style>(styleId);
    if( !s || !s->display() || s->deleted() )
       return;
 
@@ -44,6 +46,7 @@ void StyleListModel::addStyle(Style* s)
       connect( s, &NamedEntity::changed, this, &StyleListModel::styleChanged );
       endInsertRows();
    }
+   return;
 }
 
 void StyleListModel::addStyles(QList<Style*> s)
@@ -70,7 +73,12 @@ void StyleListModel::addStyles(QList<Style*> s)
    }
 }
 
-void StyleListModel::removeStyle(Style* style)
+void StyleListModel::removeStyle(int styleId, std::shared_ptr<QObject> object) {
+   this->remove(std::static_pointer_cast<Style>(object).get());
+   return;
+}
+
+void StyleListModel::remove(Style* style)
 {
    int ndx = styles.indexOf(style);
    if( ndx >= 0 )
@@ -111,10 +119,10 @@ void StyleListModel::styleChanged(QMetaProperty prop, QVariant val)
    }
 }
 
-void StyleListModel::repopulateList()
-{
+void StyleListModel::repopulateList() {
    removeAll();
-   addStyles( Database::instance().styles() );
+   addStyles( ObjectStoreTyped<Style>::getInstance().getAllRaw() );
+   return;
 }
 
 Style* StyleListModel::at(int ndx)

@@ -41,22 +41,25 @@
 #include <QWidget>
 
 #include "brewtarget.h"
-#include "database.h"
+#include "database/ObjectStoreWrapper.h"
 #include "MainWindow.h"
 #include "model/Fermentable.h"
+#include "model/Inventory.h"
 #include "model/Recipe.h"
+#include "utils/BtStringConst.h"
+#include "PersistentSettings.h"
 #include "Unit.h"
 
 //=====================CLASS FermentableTableModel==============================
-FermentableTableModel::FermentableTableModel(QTableView* parent, bool editable)
-   : QAbstractTableModel(parent),
-     parentTableWidget(parent),
-     editable(editable),
-     _inventoryEditable(false),
-     recObs(nullptr),
-     displayPercentages(false),
-     totalFermMass_kg(0)
-{
+FermentableTableModel::FermentableTableModel(QTableView* parent, bool editable) :
+   QAbstractTableModel(parent),
+   parentTableWidget(parent),
+   editable(editable),
+   _inventoryEditable(false),
+   recObs(nullptr),
+   displayPercentages(false),
+   totalFermMass_kg(0) {
+
    fermObs.clear();
    // for units and scales
    setObjectName("fermentableTable");
@@ -68,47 +71,45 @@ FermentableTableModel::FermentableTableModel(QTableView* parent, bool editable)
    parentTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
    parentTableWidget->setWordWrap(false);
    connect(headerView, &QWidget::customContextMenuRequested, this, &FermentableTableModel::contextMenu);
-   connect( &(Database::instance()), &Database::changedInventory, this, &FermentableTableModel::changedInventory );
+   connect(&ObjectStoreTyped<InventoryFermentable>::getInstance(), &ObjectStoreTyped<InventoryFermentable>::signalPropertyChanged, this, &FermentableTableModel::changedInventory);
+   return;
 }
 
-void FermentableTableModel::observeRecipe(Recipe* rec)
-{
-   if( recObs )
-   {
-      disconnect( recObs, nullptr, this, nullptr );
-      removeAll();
+void FermentableTableModel::observeRecipe(Recipe* rec) {
+   if (this->recObs) {
+      qDebug() << Q_FUNC_INFO << "Unobserve Recipe #" << this->recObs->key() << "(" << this->recObs->name() << ")";
+      disconnect(this->recObs, nullptr, this, nullptr);
+      this->removeAll();
    }
 
-   recObs = rec;
-   if( recObs )
-   {
-      connect( recObs, &NamedEntity::changed, this, &FermentableTableModel::changed );
-      addFermentables( recObs->fermentables() );
+   this->recObs = rec;
+   if (this->recObs) {
+      qDebug() << Q_FUNC_INFO << "Observe Recipe #" << this->recObs->key() << "(" << this->recObs->name() << ")";
+
+      connect(this->recObs, &NamedEntity::changed, this, &FermentableTableModel::changed);
+      this->addFermentables( recObs->fermentables() );
    }
+   return;
 }
 
-void FermentableTableModel::observeDatabase(bool val)
-{
-   if( val )
-   {
+void FermentableTableModel::observeDatabase(bool val) {
+   if ( val ) {
       // Observing a database and a recipe are mutually exclusive.
-      observeRecipe(nullptr);
+      this->observeRecipe(nullptr);
 
-      removeAll();
-      connect( &(Database::instance()), qOverload<Fermentable*>(&Database::createdSignal), this, &FermentableTableModel::addFermentable );
-      connect( &(Database::instance()), qOverload<Fermentable*>(&Database::deletedSignal), this, &FermentableTableModel::removeFermentable);
-      addFermentables( Database::instance().fermentables() );
-   }
-   else
-   {
-      disconnect( &(Database::instance()), nullptr, this, nullptr );
-      removeAll();
+      this->removeAll();
+      connect(&ObjectStoreTyped<Fermentable>::getInstance(), &ObjectStoreTyped<Fermentable>::signalObjectInserted, this, &FermentableTableModel::addFermentable);
+      connect(&ObjectStoreTyped<Fermentable>::getInstance(), &ObjectStoreTyped<Fermentable>::signalObjectDeleted,  this, &FermentableTableModel::removeFermentable);
+      addFermentables( ObjectStoreTyped<Fermentable>::getInstance().getAllRaw() );
+   } else {
+      disconnect(&ObjectStoreTyped<Fermentable>::getInstance(), nullptr, this, nullptr);
+      this->removeAll();
    }
 }
 
-void FermentableTableModel::addFermentable(Fermentable* ferm)
-{
-   qDebug() << QString("FermentableTableModel::addFermentable() \"%1\"").arg(ferm->name());
+void FermentableTableModel::addFermentable(int fermId) {
+   Fermentable * ferm = ObjectStoreWrapper::getByIdRaw<Fermentable>(fermId);
+   qDebug() << Q_FUNC_INFO << ferm->name();
 
    //Check to see if it's already in the list
    if( fermObs.contains(ferm) )
@@ -125,31 +126,34 @@ void FermentableTableModel::addFermentable(Fermentable* ferm)
    totalFermMass_kg += ferm->amount_kg();
    //reset(); // Tell everybody that the table has changed.
    endInsertRows();
+   return;
 }
 
-void FermentableTableModel::addFermentables(QList<Fermentable*> ferms)
-{
-   qDebug() << QString("FermentableTableModel::addFermentables() Add up to %1 fermentables to existing list of %2").arg(ferms.size()).arg(this->fermObs.size());
+void FermentableTableModel::addFermentables(QList<Fermentable*> ferms) {
+   qDebug() << Q_FUNC_INFO << QString("Add up to %1 fermentables to existing list of %2").arg(ferms.size()).arg(this->fermObs.size());
 
-   QList<Fermentable*>::iterator i;
    QList<Fermentable*> tmp;
 
-   for( i = ferms.begin(); i != ferms.end(); i++ ) {
-      if ( recObs == nullptr  && ( (*i)->deleted() || !(*i)->display() ) ) {
+   for (auto ii : ferms) {
+//      qDebug() <<
+//         Q_FUNC_INFO << "Fermentable #" << ii->key() << (ii->deleted() ? "" : "not") << "deleted, display=" << (ii->display() ? "on" : "off");
+      if ( recObs == nullptr  && ( ii->deleted() || !ii->display() ) ) {
+
             continue;
       }
-      if( !fermObs.contains(*i) )
-         tmp.append(*i);
+      if( !fermObs.contains(ii) ) {
+         tmp.append(ii);
+      }
    }
 
-   qDebug() << QString("FermentableTableModel::addFermentables() After de-duping, adding %1 fermentables").arg(tmp.size());
+   qDebug() << Q_FUNC_INFO << QString("After de-duping, adding %1 fermentables").arg(tmp.size());
 
    int size = fermObs.size();
    if (size+tmp.size()) {
       beginInsertRows( QModelIndex(), size, size+tmp.size()-1 );
       fermObs.append(tmp);
 
-      for( i = tmp.begin(); i != tmp.end(); i++ )
+      for(QList<Fermentable*>::iterator i = tmp.begin(); i != tmp.end(); i++ )
       {
          connect( *i, &NamedEntity::changed, this, &FermentableTableModel::changed );
          totalFermMass_kg += (*i)->amount_kg();
@@ -159,15 +163,17 @@ void FermentableTableModel::addFermentables(QList<Fermentable*> ferms)
    }
 }
 
-bool FermentableTableModel::removeFermentable(Fermentable* ferm)
-{
-   int i;
+void FermentableTableModel::removeFermentable(int fermId, std::shared_ptr<QObject> object) {
+   this->remove(std::static_pointer_cast<Fermentable>(object).get());
+   return;
+}
 
-   i = fermObs.indexOf(ferm);
+bool FermentableTableModel::remove(Fermentable * ferm) {
+   int i = fermObs.indexOf(ferm);
    if( i >= 0 )
    {
       beginRemoveRows( QModelIndex(), i, i );
-      disconnect( ferm, nullptr, this, nullptr );
+      disconnect(ferm, nullptr, this, nullptr);
       fermObs.removeAt(i);
 
       totalFermMass_kg -= ferm->amount_kg();
@@ -211,22 +217,18 @@ void FermentableTableModel::setDisplayPercentages(bool var)
    displayPercentages = var;
 }
 
-void FermentableTableModel::changedInventory(Brewtarget::DBTable table, int invKey, QVariant val)
-{
+void FermentableTableModel::changedInventory(int invKey, BtStringConst const & propertyName) {
 
-   if ( table == Brewtarget::FERMTABLE ) {
+   if (propertyName == PropertyNames::Inventory::amount) {
       for( int i = 0; i < fermObs.size(); ++i ) {
          Fermentable* holdmybeer = fermObs.at(i);
-
          if ( invKey == holdmybeer->inventoryId() ) {
-            holdmybeer->setCacheOnly(true);
-            holdmybeer->setInventoryAmount(val.toDouble());
-            holdmybeer->setCacheOnly(false);
             emit dataChanged( QAbstractItemModel::createIndex(i,FERMINVENTORYCOL),
                               QAbstractItemModel::createIndex(i,FERMINVENTORYCOL) );
          }
       }
    }
+   return;
 }
 
 void FermentableTableModel::changed(QMetaProperty prop, QVariant /*val*/)
@@ -253,7 +255,7 @@ void FermentableTableModel::changed(QMetaProperty prop, QVariant /*val*/)
 
    // See if our recipe gained or lost fermentables.
    Recipe* recSender = qobject_cast<Recipe*>(sender());
-   if( recSender && recSender == recObs && QString(prop.name()) == "fermentables" )
+   if( recSender && recSender == recObs && prop.name() == PropertyNames::Recipe::fermentableIds )
    {
       removeAll();
       addFermentables( recObs->fermentables() );
@@ -271,22 +273,24 @@ int FermentableTableModel::columnCount(const QModelIndex& /*parent*/) const
    return FERMNUMCOLS;
 }
 
-QVariant FermentableTableModel::data( const QModelIndex& index, int role ) const
-{
-   Fermentable* row;
-   int col = index.column();
+QVariant FermentableTableModel::data( const QModelIndex& index, int role ) const {
    Unit::unitScale scale;
    Unit::unitDisplay unit;
 
-   // Ensure the row is ok.
-   if( index.row() >= static_cast<int>(fermObs.size() ))
-   {
-      qCritical() << tr("Bad model index. row = %1").arg(index.row());
+   // Ensure the row is OK
+   if (index.row() >= static_cast<int>(fermObs.size() )) {
+      qCritical() << Q_FUNC_INFO << tr("Bad model index. row = %1").arg(index.row());
       return QVariant();
    }
-   else
-      row = fermObs[index.row()];
 
+   Fermentable* row = this->fermObs[index.row()];
+   if (row == nullptr) {
+      // This is probably a coding error
+      qCritical() << Q_FUNC_INFO << "Null pointer at row" << index.row();
+      return QVariant();
+   }
+
+   int col = index.column();
    switch( col )
    {
       case FERMNAMECOL:
@@ -476,7 +480,7 @@ Unit::unitDisplay FermentableTableModel::displayUnit(int column) const
    if ( attribute.isEmpty() )
       return Unit::noUnit;
 
-   return static_cast<Unit::unitDisplay>(Brewtarget::option(attribute, QVariant(-1), this->objectName(), Brewtarget::UNIT).toInt());
+   return static_cast<Unit::unitDisplay>(PersistentSettings::value(attribute, QVariant(-1), this->objectName(), PersistentSettings::UNIT).toInt());
 }
 
 Unit::unitScale FermentableTableModel::displayScale(int column) const
@@ -486,7 +490,7 @@ Unit::unitScale FermentableTableModel::displayScale(int column) const
    if ( attribute.isEmpty() )
       return Unit::noScale;
 
-   return static_cast<Unit::unitScale>(Brewtarget::option(attribute, QVariant(-1), this->objectName(), Brewtarget::SCALE).toInt());
+   return static_cast<Unit::unitScale>(PersistentSettings::value(attribute, QVariant(-1), this->objectName(), PersistentSettings::SCALE).toInt());
 }
 
 // We need to:
@@ -501,8 +505,8 @@ void FermentableTableModel::setDisplayUnit(int column, Unit::unitDisplay display
    if ( attribute.isEmpty() )
       return;
 
-   Brewtarget::setOption(attribute,displayUnit,this->objectName(),Brewtarget::UNIT);
-   Brewtarget::setOption(attribute,Unit::noScale,this->objectName(),Brewtarget::SCALE);
+   PersistentSettings::insert(attribute, displayUnit, this->objectName(), PersistentSettings::UNIT);
+   PersistentSettings::insert(attribute, Unit::noScale, this->objectName(), PersistentSettings::SCALE);
 
    /* Disabled cell-specific code
    for (int i = 0; i < rowCount(); ++i )
@@ -523,7 +527,7 @@ void FermentableTableModel::setDisplayScale(int column, Unit::unitScale displayS
    if ( attribute.isEmpty() )
       return;
 
-   Brewtarget::setOption(attribute,displayScale,this->objectName(),Brewtarget::SCALE);
+   PersistentSettings::insert(attribute, displayScale, this->objectName(), PersistentSettings::SCALE);
 
    /* disabled cell-specific code
    for (int i = 0; i < rowCount(); ++i )
@@ -619,18 +623,18 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
          retVal = value.canConvert(QVariant::String);
          if ( retVal )
             Brewtarget::mainWindow()->doOrRedoUpdate(*row,
-                                                     PropertyNames::NamedEntity::name,
-                                                     value.toString(),
-                                                     tr("Change Fermentable Name"));
+                                                  PropertyNames::NamedEntity::name,
+                                                  value.toString(),
+                                                  tr("Change Fermentable Name"));
          break;
       case FERMTYPECOL:
          retVal = value.canConvert(QVariant::Int);
          if ( retVal ) {
             // Doing the set via doOrRedoUpdate() saves us from doing a static_cast<Fermentable::Type>() here (as the Q_PROPERTY system will do the casting for us).
             Brewtarget::mainWindow()->doOrRedoUpdate(*row,
-                                                     PropertyNames::Fermentable::type,
-                                                     value.toInt(),
-                                                     tr("Change Fermentable Type"));
+                                                  PropertyNames::Fermentable::type,
+                                                  value.toInt(),
+                                                  tr("Change Fermentable Type"));
          }
          break;
       case FERMINVENTORYCOL:
@@ -638,9 +642,9 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
          if( retVal ) {
             // Inventory amount is in kg, but is just called "inventory" rather than "inventory_kg" in the Q_PROPERTY declaration in the Fermentable class
             Brewtarget::mainWindow()->doOrRedoUpdate(*row,
-                                                     PropertyNames::NamedEntityWithInventory::inventory,
-                                                     Brewtarget::qStringToSI(value.toString(), &Units::kilograms,dspUnit,dspScl),
-                                                     tr("Change Inventory Amount"));
+                                                  PropertyNames::NamedEntityWithInventory::inventory,
+                                                  Brewtarget::qStringToSI(value.toString(), &Units::kilograms,dspUnit,dspScl),
+                                                  tr("Change Inventory Amount"));
          }
          break;
       case FERMAMOUNTCOL:
@@ -649,9 +653,9 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
             // This is where the amount of a fermentable in a recipe gets updated
             // We need to refer back to the MainWindow to make this an undoable operation
             Brewtarget::mainWindow()->doOrRedoUpdate(*row,
-                                                     PropertyNames::Fermentable::amount_kg,
-                                                     Brewtarget::qStringToSI(value.toString(), &Units::kilograms,dspUnit,dspScl),
-                                                     tr("Change Fermentable Amount"));
+                                                  PropertyNames::Fermentable::amount_kg,
+                                                  Brewtarget::qStringToSI(value.toString(), &Units::kilograms,dspUnit,dspScl),
+                                                  tr("Change Fermentable Amount"));
             if( rowCount() > 0 )
                headerDataChanged( Qt::Vertical, 0, rowCount()-1 ); // Need to re-show header (grain percent).
          }
@@ -661,9 +665,9 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
          if( retVal ) {
             // Doing the set via doOrRedoUpdate() saves us from doing a static_cast<Fermentable::AdditionMethod>() here (as the Q_PROPERTY system will do the casting for us).
             Brewtarget::mainWindow()->doOrRedoUpdate(*row,
-                                                     PropertyNames::Fermentable::additionMethod,
-                                                     value.toInt(),
-                                                     tr("Change Addition Method"));
+                                                  PropertyNames::Fermentable::additionMethod,
+                                                  value.toInt(),
+                                                  tr("Change Addition Method"));
          }
          break;
       case FERMAFTERBOIL:
@@ -671,27 +675,27 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
          if( retVal ) {
             // Doing the set via doOrRedoUpdate() saves us from doing a static_cast<Fermentable::AdditionTime>() here (as the Q_PROPERTY system will do the casting for us).
             Brewtarget::mainWindow()->doOrRedoUpdate(*row,
-                                                     PropertyNames::Fermentable::additionTime,
-                                                     value.toInt(),
-                                                     tr("Change Addition Time"));
+                                                  PropertyNames::Fermentable::additionTime,
+                                                  value.toInt(),
+                                                  tr("Change Addition Time"));
          }
          break;
       case FERMYIELDCOL:
          retVal = value.canConvert(QVariant::Double);
          if( retVal ) {
             Brewtarget::mainWindow()->doOrRedoUpdate(*row,
-                                                     PropertyNames::Fermentable::yield_pct,
-                                                     value.toDouble(),
-                                                     tr("Change Yield"));
+                                                  PropertyNames::Fermentable::yield_pct,
+                                                  value.toDouble(),
+                                                  tr("Change Yield"));
          }
          break;
       case FERMCOLORCOL:
          retVal = value.canConvert(QVariant::Double);
          if( retVal ) {
             Brewtarget::mainWindow()->doOrRedoUpdate(*row,
-                                                     PropertyNames::Fermentable::color_srm,
-                                                     Brewtarget::qStringToSI(value.toString(), &Units::srm, dspUnit, dspScl),
-                                                     tr("Change Color"));
+                                                  PropertyNames::Fermentable::color_srm,
+                                                  Brewtarget::qStringToSI(value.toString(), &Units::srm, dspUnit, dspScl),
+                                                  tr("Change Color"));
          }
          break;
       default:

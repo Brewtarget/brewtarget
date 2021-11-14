@@ -1,6 +1,7 @@
 /*
  * EquipmentListModel.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
+ * - Matt Young <mfsy@yahoo.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -16,13 +17,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef EQUIPMENTLISTMODEL_H
+#define EQUIPMENTLISTMODEL_H
 
-#ifndef _EQUIPMENTLISTMODEL_H
-#define _EQUIPMENTLISTMODEL_H
+#include <memory>
+
 #include <QAbstractListModel>
-#include <QModelIndex>
 #include <QList>
 #include <QMetaProperty>
+#include <QModelIndex>
 #include <QVariant>
 
 // Forward declarations.
@@ -31,17 +34,16 @@ class Recipe;
 
 /*!
  * \class EquipmentListModel
- * \author Philip G. Lee
  *
  * \brief Model for a list of equipments.
  */
 class EquipmentListModel : public QAbstractListModel
 {
    Q_OBJECT
-   
+
 public:
    EquipmentListModel(QWidget* parent = 0);
-   
+
    //! \brief Reimplemented from QAbstractListModel.
    virtual int rowCount( QModelIndex const& parent = QModelIndex() ) const;
    //! \brief Reimplemented from QAbstractListModel.
@@ -54,27 +56,28 @@ public:
    void addEquipments(QList<Equipment*> equips);
    //! \brief Remove all equipments from the list.
    void removeAll();
-   
+
    //! \brief Return the equipment at the index in the list.
    Equipment* at(int ndx);
    //! \brief Return the index of a particular equipment. DEPRECATED.
    int indexOf(Equipment* e);
    //! \brief Return the index of a particular equipment.
    QModelIndex find(Equipment* e);
-   
+
 public slots:
    void recChanged(QMetaProperty,QVariant);
    void equipChanged(QMetaProperty,QVariant);
+
    //! Add an equipment to the list.
-   void addEquipment(Equipment* equipment);
+   void addEquipment(int equipmentId);
    //! Remove an equipment from the list.
-   void removeEquipment(Equipment* equipment);
-   
+   void removeEquipment(int equipmentId, std::shared_ptr<QObject> object);
+
 private:
    QList<Equipment*> equipments;
    Recipe* recipe;
-   
+
    void repopulateList();
 };
 
-#endif /* _EQUIPMENTLISTMODEL_H */
+#endif

@@ -1,6 +1,7 @@
 /*
  * QueuedMethod.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
+ * - Matt Young <mfsy@yahoo.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -16,9 +17,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#ifndef _QUEUEDMETHOD_H
-#define _QUEUEDMETHOD_H
+#ifndef QUEUEDMETHOD_H
+#define QUEUEDMETHOD_H
 
 #include <QString>
 #include <QGenericArgument>
@@ -29,7 +29,6 @@
 
 /*!
  * \class QueuedMethod
- * \author Philip G. Lee (rocketman768@gmail.com)
  *
  * \brief Runs long methods in the background.
  *
@@ -74,7 +73,7 @@ public:
 protected:
    //! Reimplemented from QThread.
    void run();
-   
+
 signals:
    /*!
     * Emitted when the encapsulated function has completed.
@@ -83,12 +82,12 @@ signals:
    void done(bool success);
 
 public slots:
-   
+
 private slots:
    void executeFunction();
    void dequeueMyself();
    void startChained();
-   
+
 private:
    QSharedPointer<QueuedMethod> _chainedMethod;
    QObject* _obj;
@@ -98,9 +97,8 @@ private:
    const char* _arg0Name;
    void* _arg0Data;
    bool success;
-   
+
    static QList< QSharedPointer<QueuedMethod> > _queue;
 };
 
-
-#endif /*_QUEUEDMETHOD_H*/
+#endif

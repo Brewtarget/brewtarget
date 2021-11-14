@@ -1,7 +1,8 @@
 /*
  * FermentableTableModel.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  * - Samuel Östling <MrOstling@gmail.com>
@@ -19,34 +20,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef FERMENTABLETABLEMODEL_H
+#define FERMENTABLETABLEMODEL_H
 
-#ifndef _FERMENTABLETABLEMODEL_H
-#define   _FERMENTABLETABLEMODEL_H
+#include <memory>
 
-class FermentableTableModel;
-class FermentableItemDelegate;
-
-#include <QAbstractTableModel>
-#include <QTableView>
-#include <QWidget>
-#include <QModelIndex>
-#include <QVariant>
-#include <QMetaProperty>
-#include <QItemDelegate>
 #include <QAbstractItemDelegate>
+#include <QAbstractTableModel>
+#include <QItemDelegate>
 #include <QList>
+#include <QMetaProperty>
+#include <QModelIndex>
+#include <QTableView>
+#include <QVariant>
+#include <QWidget>
+
 #include "brewtarget.h"
 #include "Unit.h"
 
 // Forward declarations.
+class BtStringConst;
 class Fermentable;
 class Recipe;
+class FermentableItemDelegate;
 
 enum{FERMNAMECOL, FERMTYPECOL, FERMAMOUNTCOL, FERMINVENTORYCOL, FERMISMASHEDCOL, FERMAFTERBOIL, FERMYIELDCOL, FERMCOLORCOL, FERMNUMCOLS /*This one MUST be last*/};
 
 /*!
  * \class FermentableTableModel
- * \author Philip G. Lee
+ *
  *
  * \brief A table model for a list of fermentables.
  */
@@ -96,11 +98,14 @@ public:
 
    QTableView* parentTableWidget;
 
+   //! \returns true if "ferm" is successfully found and removed.
+   bool remove(Fermentable * ferm);
+
 public slots:
    //! \brief Watch \b ferm for changes.
-   void addFermentable(Fermentable* ferm);
-   //! \returns true if "ferm" is successfully found and removed.
-   bool removeFermentable(Fermentable* ferm);
+   void addFermentable(int fermId);
+
+   void removeFermentable(int fermId, std::shared_ptr<QObject> object);
    //! \brief pops the context menu for changing units and scales
    void contextMenu(const QPoint &point);
 
@@ -108,7 +113,7 @@ private slots:
    //! \brief Catch changes to Recipe, Database, and Fermentable.
    void changed(QMetaProperty, QVariant);
    //! \brief Catches changes to inventory
-   void changedInventory(Brewtarget::DBTable,int,QVariant);
+   void changedInventory(int invKey, BtStringConst const & propertyName);
 
 private:
    //! \brief Recalculate the total amount of grains in the model.
@@ -128,7 +133,7 @@ private:
  * \brief An item delegate for Fermentable tables.
  * \sa FermentableTableModel.
  *
- * \author Philip G. Lee
+ *
  */
 class FermentableItemDelegate : public QItemDelegate
 {
@@ -152,5 +157,4 @@ public:
 private:
 };
 
-#endif   /* _FERMENTABLETABLEMODEL_H */
-
+#endif   /* FERMENTABLETABLEMODEL_H */

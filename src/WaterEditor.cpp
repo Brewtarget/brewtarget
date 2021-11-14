@@ -18,15 +18,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "WaterEditor.h"
 
 #include <QDebug>
 #include <QInputDialog>
 
-#include "WaterEditor.h"
-#include "WaterSchema.h"
-#include "TableSchemaConst.h"
-#include "model/Water.h"
 #include "brewtarget.h"
+#include "database/ObjectStoreWrapper.h"
+#include "model/Water.h"
 
 WaterEditor::WaterEditor(QWidget *parent) : QDialog(parent), obs{nullptr} {
    setupUi(this);
@@ -60,8 +59,7 @@ void WaterEditor::setWater(Water *water) {
    this->obs = water;
    if (this->obs) {
       this->waterEditRadarChart->addSeries("Current", Qt::darkGreen, *water);
-
-      connect( this->obs, &NamedEntity::changed, this, &WaterEditor::changed );
+      connect( obs, &NamedEntity::changed, this, &WaterEditor::changed );
       showChanges();
    }
 
@@ -184,7 +182,8 @@ void WaterEditor::saveAndClose()
 
    if (this->obs->cacheOnly()) {
       qDebug() << Q_FUNC_INFO << "writing " << this->obs->name();
-      this->obs->insertInDatabase();
+      ObjectStoreWrapper::insert(*this->obs);
+      this->obs->setCacheOnly(false);
    }
 
    setVisible(false);

@@ -1,6 +1,7 @@
 /*
  * MashListModel.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  * - swstim <swstim@gmail.com>
@@ -18,34 +19,37 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #include "MashListModel.h"
-#include "model/Style.h"
-#include "database.h"
-#include "model/Recipe.h"
-#include "model/Mash.h"
 
-MashListModel::MashListModel(QWidget* parent)
-   : QAbstractListModel(parent), recipe(0)
-{
-   connect( &(Database::instance()), qOverload<Mash*>(&Database::createdSignal), this, &MashListModel::addMash );
-   connect( &(Database::instance()), qOverload<Mash*>(&Database::deletedSignal), this, &MashListModel::removeMash);
-   repopulateList();
+#include "database/ObjectStoreWrapper.h"
+#include "model/Mash.h"
+#include "model/Recipe.h"
+#include "model/Style.h"
+
+MashListModel::MashListModel(QWidget* parent) :
+   QAbstractListModel(parent),
+   recipe(0) {
+   connect(&ObjectStoreTyped<Mash>::getInstance(), &ObjectStoreTyped<Mash>::signalObjectInserted, this, &MashListModel::addMash);
+   connect(&ObjectStoreTyped<Mash>::getInstance(), &ObjectStoreTyped<Mash>::signalObjectDeleted,  this, &MashListModel::removeMash);
+   this->repopulateList();
+   return;
 }
 
-void MashListModel::addMash(Mash* m)
-{
-   if( !m || !m->display() || m->deleted() )
+void MashListModel::addMash(int mashId) {
+   qDebug() << Q_FUNC_INFO << "New mash #" << mashId;
+   Mash* m = ObjectStoreWrapper::getByIdRaw<Mash>(mashId);
+   if (!m || !m->display() || m->deleted()) {
       return;
+   }
 
-   if( !mashes.contains(m) )
-   {
+   if ( !mashes.contains(m) ) {
       int size = mashes.size();
       beginInsertRows( QModelIndex(), size, size );
       mashes.append(m);
       connect( m, &NamedEntity::changed, this, &MashListModel::mashChanged );
       endInsertRows();
    }
+   return;
 }
 
 void MashListModel::addMashes(QList<Mash*> m)
@@ -72,8 +76,9 @@ void MashListModel::addMashes(QList<Mash*> m)
    }
 }
 
-void MashListModel::removeMash(Mash* mash)
-{
+void MashListModel::removeMash(int mashId, std::shared_ptr<QObject> object) {
+
+   Mash* mash = std::static_pointer_cast<Mash>(object).get();
    int ndx = mashes.indexOf(mash);
    if( ndx >= 0 )
    {
@@ -113,10 +118,9 @@ void MashListModel::mashChanged(QMetaProperty prop, QVariant val)
    }
 }
 
-void MashListModel::repopulateList()
-{
+void MashListModel::repopulateList() {
    removeAll();
-   addMashes( Database::instance().mashs() );
+   addMashes( ObjectStoreTyped<Mash>::getInstance().getAllRaw() );
 }
 
 Mash* MashListModel::at(int ndx)

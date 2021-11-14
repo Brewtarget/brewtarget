@@ -1,6 +1,7 @@
 /*
  * ColorMethods.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
+ * - Matt Young <mfsy@yahoo.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -16,15 +17,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#ifndef _COLORMETHODS_H
-#define _COLORMETHODS_H
-
-class ColorMethods;
+#ifndef COLORMETHODS_H
+#define COLORMETHODS_H
 
 /*!
  * \class ColorMethods
- * \author Philip G. Lee
  *
  * \brief Converts malt color units to SRM.
  */

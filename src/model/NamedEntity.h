@@ -24,37 +24,36 @@
 #define MODEL_NAMEDENTITY_H
 #pragma once
 
+#include <cstdint>
+#include <memory>
+
 #include <QDateTime>
-#include <QDomDocument>
-#include <QDomNode>
-#include <QDomText>
 #include <QList>
 #include <QMetaProperty>
 #include <QObject>
-#include <QSqlRecord>
-#include <QString>
 #include <QVariant>
 
 #include "brewtarget.h"
-#include "model/NamedParameterBundle.h"
-#include "TableSchema.h"
+#include "utils/BtStringConst.h"
 
-namespace PropertyNames::NamedEntity { static char const * const deleted = "deleted"; /* previously kpropDeleted */ }
-namespace PropertyNames::NamedEntity { static char const * const display = "display"; /* previously kpropDisplay */ }
-namespace PropertyNames::NamedEntity { static char const * const folder = "folder"; /* previously kpropFolder */ }
-namespace PropertyNames::NamedEntity { static char const * const key = "key"; }
-namespace PropertyNames::NamedEntity { static char const * const name = "name"; /* previously kpropName */ }
-namespace PropertyNames::NamedEntity { static char const * const parentKey = "parentKey"; }
+class NamedParameterBundle;
+class ObjectStore;
+class Recipe;
 
-// For uintptr_t.
-#if HAVE_STDINT_H
-#   include <stdint.h>
-#else
-#   include "pstdint.h"
-#endif
-
-// Make uintptr_t available in QVariant.
-Q_DECLARE_METATYPE( uintptr_t )
+//======================================================================================================================
+//========================================== Start of property name constants ==========================================
+// Make this class's property names available via constants in sub-namespace of PropertyNames
+// One advantage of using these constants is you get compile-time checking for typos etc
+#define AddPropertyName(property) namespace PropertyNames::NamedEntity { BtStringConst const property{#property}; }
+AddPropertyName(deleted)
+AddPropertyName(display)
+AddPropertyName(folder)
+AddPropertyName(key)
+AddPropertyName(name)
+AddPropertyName(parentKey)
+#undef AddPropertyName
+//=========================================== End of property name constants ===========================================
+//======================================================================================================================
 
 /*!
  * \class NamedEntity
@@ -82,33 +81,42 @@ Q_DECLARE_METATYPE( uintptr_t )
  * \b Mash) are not really.  Equally, the fact that derived classes can be instantiated from BeerXML is not their
  * defining characteristic.
  *
- * NB: We cannot make this a template class (eg to use
+ * NB: Although we can template individual member functions, we cannot make this a template class (eg to use
  * https://en.wikipedia.org/wiki/Curiously_recurring_template_pattern) because the Qt Meta-Object Compiler (moc) cannot
  * handle templates, and we want to be able to use the Qt Property system as well as signals and slots.
+ *
+ * NB: Because NamedEntity inherits from QObject, no extra work is required to store pointers to NamedEntity objects
+ *     inside QVariant
  */
 class NamedEntity : public QObject {
    Q_OBJECT
    Q_CLASSINFO("version","1")
 
-   friend class Database;
-   friend class BeerXML;
+
 public:
-/*
-   NamedEntity(Brewtarget::DBTable table, int key, QString t_name = QString(),
-                  bool t_display = false, QString folder = QString());
-*/
-   NamedEntity(Brewtarget::DBTable table, bool cache = true, QString t_name = QString(), bool t_display = false);
-
-   NamedEntity(TableSchema* table, QSqlRecord rec, int t_key );
-
+   NamedEntity(int key, bool cache = true, QString t_name = QString(), bool t_display = false, QString folder = QString());
    NamedEntity(NamedEntity const & other);
 
+   /**
+    * \brief Note that, if you want a \b child of a \c NamedEntity (to add to a \c Recipe), you should call
+    *        \c makeChild() on the copy, which will do the right things about parentage and inventory.
+    */
    NamedEntity(NamedParameterBundle const & namedParameterBundle);
 
    // Our destructor needs to be virtual because we sometimes point to an instance of a derived class through a pointer
    // to this class -- ie NamedEntity * namedEntity = new Hop() and suchlike.  We do already get a virtual destructor by
    // virtue of inheriting from QObject, but this declaration does no harm.
    virtual ~NamedEntity() = default;
+
+   /**
+    * \brief Turns a straight copy of an object into a "child" copy that can be used in a Recipe.  (A child copy is
+    *        essentially an "instance of use of".)
+    *
+    *        NB: This function must be called \b before the object is added to its \c ObjectStore
+    *
+    * \param copiedFrom The object from which this one was copied
+    */
+   virtual void makeChild(NamedEntity const & copiedFrom);
 
    /**
     * \brief This generic version of operator== should work for subclasses provided they correctly _override_ (NB not
@@ -143,16 +151,20 @@ public:
    Q_PROPERTY( bool display   READ display WRITE setDisplay )
    Q_PROPERTY( QString folder READ folder WRITE setFolder )
 
-   Q_PROPERTY( int key READ key )
-   Q_PROPERTY( Brewtarget::DBTable table READ table )
+   Q_PROPERTY( int key READ key WRITE setKey )
+   Q_PROPERTY( int parentKey READ getParentKey WRITE setParentKey )
+   //! \brief To cache or not to cache
+   Q_PROPERTY( bool cacheOnly READ cacheOnly WRITE setCacheOnly /*NOTIFY changed*/ )
 
+   //! \returns our key in the table we are stored in.
+   int key() const;
+   //! Access to the name attribute.
+   QString name() const;
    //! Convenience method to determine if we are deleted or displayed
    bool deleted() const;
    bool display() const;
    //! Access to the folder attribute.
    QString folder() const;
-   //! Access to the name attribute.
-   QString name() const;
 
    /**
     * \brief Returns a regexp that will match the " (n)" (for n some positive integer) added on the end of a name to
@@ -161,59 +173,55 @@ public:
    static QRegExp const & getDuplicateNameNumberMatcher();
 
    //! And ways to set those flags
-   void setDeleted(const bool var, bool cachedOnly = false);
-   void setDisplay(const bool var, bool cachedOnly = false);
+   void setDeleted(bool const var);
+   void setDisplay(bool const var);
    //! and a way to set the folder
-   virtual void setFolder(const QString var, bool signal=true, bool cachedOnly = false);
+   virtual void setFolder(QString const & var);
 
    //!
-   void setName(const QString var, bool cachedOnly = false);
+   void setName(QString const & var);
 
-   //! \returns our key in the table we are stored in.
-   int key() const;
+   /**
+    * \brief This sets or unsets the "being modified" flag on the object.  Callers should preferably access this via
+    *        the \c NamedEntityModifyingMarker RAII wrapper.
+    *
+    *        This is a transient attribute (not stored in the DB) that it supposed to be used to mark when we are in the
+    *        process of modifying or copying the object and therefore do not want to heed signals that would trigger
+    *        further modifications or copies.  It's otherwise too easy to generate endless loops via a sequence of well-
+    *        intentioned signals.  (Finding and eliminating all these potential loops is non-trivial.)
+    */
+   void setBeingModified(bool set);
+   bool isBeingModified() const;
+
+   /**
+    * \brief Set the ID (aka key) by which this object is uniquely identified in its DB table
+    *
+    *        This is virtual because, in some cases, subclasses are going to want to do additional work here
+    */
+   virtual void setKey(int key);
+
+   int getParentKey() const;
+   void setParentKey(int parentKey);
 
    bool cacheOnly() const;
    void setCacheOnly(bool cache);
 
-   //! \returns the table we are stored in.
-   Brewtarget::DBTable table() const;
-   //! \returns the BeerXML version of this element.
-   int version() const;
+   /**
+    * \brief Get the IDs of this object's parent, children and siblings (plus the ID of the object itself).
+    *        A child object is just a copy of the parent that's being used in a Recipe.  Not all NamedEntity subclasses
+    *        have children, just Equipment, Fermentable, Hop, Misc and Yeast.
+    */
+   QVector<int> getParentAndChildrenIds() const;
+
    //! Convenience method to get a meta property by name.
-   QMetaProperty metaProperty(const char* name) const;
-   //! Convenience method to get a meta property by name.
-   QMetaProperty metaProperty(QString const& name) const;
+   QMetaProperty metaProperty(char const * const name) const;
 
-   // .:TODO:. MY 2021-03-23 These don't really belong here
-   // Should be able to get rid of them when we finish refactoring BeerXml.cpp
-   // Some static helpers to convert to/from text.
-   static double getDouble( const QDomText& textNode );
-   static bool getBool( const QDomText& textNode );
-   static int getInt( const QDomText& textNode );
-   static QString getString( QDomText const& textNode );
-   static QDateTime getDateTime( QDomText const& textNode );
-   static QDate getDate( QDomText const& textNode );
-   //! Convert the string to a QDateTime according to Qt::ISODate.
-   static QDateTime getDateTime(QString const& str = "");
-   static QDate getDate(QString const& str = "");
-   static QString text(bool val);
-   static QString text(double val);
-   static QString text(int val);
-   //! Convert the date to string in Qt::ISODate format for storage NOT display.
-   static QString text(QDate const& val);
-
-   //! Use this to pass pointers around in QVariants.
-   static inline QVariant qVariantFromPtr( NamedEntity* ptr )
-   {
-      uintptr_t addr = reinterpret_cast<uintptr_t>(ptr);
-      return QVariant::fromValue<uintptr_t>(addr);
-   }
-
-   static inline NamedEntity* extractPtr( QVariant ptrVal )
-   {
-      uintptr_t addr = ptrVal.value<uintptr_t>();
-      return reinterpret_cast<NamedEntity*>(addr);
-   }
+   /**
+    * \brief Subclasses need to override this to return the Recipe, if any, to which this object belongs.
+    *
+    * \return \c nullptr if this object is not, and does not belong to, any Recipe
+    */
+   virtual Recipe * getOwningRecipe() = 0;
 
    /*!
     * \brief Some entities (eg Fermentable, Hop) get copied when added to a recipe, but others (eg Instruction) don't.
@@ -221,22 +229,17 @@ public:
     *        us to access that parent.
     * \return Pointer to the parent NamedEntity from which this one was originally copied, or null if no such parent exists.
     */
-   virtual NamedEntity * getParent() = 0;
+   NamedEntity * getParent() const;
 
    void setParent(NamedEntity const & parentNamedEntity);
 
-   /*!
-    * \brief When we create an NamedEntity, or undelete a deleted one, we need to put it in the database.  For the case of
-    *        undelete, it's helpful for the caller not to have to know what subclass of NamedEntity we are resurrecting.
-    * \return Key of element inserted in database.
+   /**
+    * \brief If we are _really_ deleting (rather than just marking deleted) an entity that owns other entities (eg a
+    *        Mash owns its MashSteps) then we need to delete those owned entities immediately beforehand.
+    *
+    *        By default this function does nothing.  Subclasses override it if needed.
     */
-   virtual int insertInDatabase() = 0;
-
-   /*!
-    * \brief If we can put something in the database, then we also need to be able to remove it.
-    *        Note that, once removed from the DB, the caller is responsible for deleting this object.
-    */
-   virtual void removeFromDatabase() = 0;
+   virtual void hardDeleteOwnedEntities();
 
 signals:
    /*!
@@ -244,11 +247,17 @@ signals:
     * NOTE: when subclassing, be \em extra careful not to create a method with
     * the same signature. Otherwise, everything will silently break.
     */
-   void changed(QMetaProperty, QVariant value = QVariant());
+   void changed(QMetaProperty, QVariant value = QVariant()) const;
    void changedFolder(QString);
    void changedName(QString);
 
 protected:
+   //! The key of this entity in its table.
+   int m_key;
+   // This is 0 if there is no parent (or parent is not yet known)
+   int parentKey;
+   bool m_cacheOnly;
+
    /**
     * \brief Subclasses need to overload (NB not override) this function to do the substantive work for operator==.
     *        By the time this function is called on a subclass, we will already have established that the two objects
@@ -261,47 +270,137 @@ protected:
     */
    virtual bool isEqualTo(NamedEntity const & other) const = 0;
 
-   //! The key of this entity in its table.
-   int m_key;
-   //! The table where this entity is stored.
-   Brewtarget::DBTable m_table;
-   // This is 0 if there is no parent (or parent is not yet known)
-   int parentKey;
-   bool m_cacheOnly;
-
-   /*!
-    * \param prop_name A meta-property name
-    * \param col_name The appropriate column in the table.
-    * \param value the new value
-    * \param notify true to call NOTIFY method associated with \c prop_name
-    * Should do the following:
-    * 1) Set the appropriate value in the appropriate table row.
-    * 2) Call the NOTIFY method associated with \c prop_name if \c notify == true.
+   /**
+    * \brief Subclasses need to override this function to return the appropriate instance of \c ObjectStoreTyped.
+    *        This allows us in this base class to access \c ObjectStoreTyped<Hop> for \c Hop,
+    *        \c ObjectStoreTyped<Fermentable> for \c Fermentable, etc.
     */
-   /*
-   void set( const char* prop_name, const char* col_name, QVariant const& value, bool notify = true );
-   void set( const QString& prop_name, const QString& col_name, const QVariant& value, bool notify = true );
-   */
-   bool setEasy( QString prop_name, QVariant value, bool notify = true, bool updateEntry = false );
+   virtual ObjectStore & getObjectStoreTypedInstance() const = 0;
 
-   /*!
-    * \param col_name - The database column of the attribute we want to get.
-    * Returns the value of the attribute specified by key/table/col_name.
+   /**
+    * \brief Used by setters to force a value not to be below a certain amount
+    *
+    * \param value the value to check
+    * \param name the name of the value being set, so we can log a warning about it being out of range
+    * \param minValue what value must not be below -- 0 if not specified
+    * \param defaultValue what to use instead of value if it is below minValue -- 0 if not specified
+    *
+    * \return What to use for the value (ie \c value or \c defaultValue, depending on whether \c value is in range
     */
-   QVariant get( const QString& col_name ) const;
+   template<typename T> T enforceMin(T const value,
+                                     char const * const name,
+                                     T const minValue = 0,
+                                     T const defaultValue = 0) {
+      if (value < minValue) {
+         qWarning() <<
+            Q_FUNC_INFO << this->metaObject()->className() << ":" << name << "value" << value <<
+            "below min of" << minValue << "so using" << defaultValue << "instead";
+         return defaultValue;
+      }
+      return value;
+   }
 
-   void setInventory( const QVariant& value, int invKey, bool notify=true );
-   QVariant getInventory() const;
+   /**
+    * \brief Like \c enforceMin, but for a range
+    *
+    *        (We often want \c minValue = 0 and \c maxValue = 100, but I don't default them here as I want it to be
+    *         hard to get \c enforceMin and \c enforceMinAndMax mixed up.)
+    */
+   template<typename T> T enforceMinAndMax(T const value,
+                                           char const * const name,
+                                           T const minValue,
+                                           T const maxValue,
+                                           T const defaultValue = 0) {
+      if (value < minValue || value > maxValue) {
+         qWarning() <<
+            Q_FUNC_INFO << this->metaObject()->className() << ":" << name << "value" << value <<
+            "outside range min of" << minValue << "-" << maxValue << "so using" << defaultValue << "instead";
+         return defaultValue;
+      }
+      return value;
+   }
 
-   QVariantMap getColumnValueMap() const;
-   void signalCacheChange(QString propName, QVariant value);
+   /**
+    * \brief This is intended to be called from setter member functions (including those of derived classes),
+    *        \b before changing a property.  It triggers a check for whether this property change would require us to
+    *        create a new version of a Recipe - eg because we are modifying some ingredient or other attribute of the
+    *        Recipe and automatic versioning is enabled.
+    */
+   void prepareForPropertyChange(BtStringConst const & propertyName);
+
+   /**
+    * \brief This is intended to be called from setter member functions (including those of derived classes), \b after
+    *        changing a property.  It checks whether the object is is in "cache only" mode and, if not, propagates the
+    *        change down to the database layer and, optionally, also emits a "changed" signal.
+    *
+    * \param propertyName The name of the property that has been changed
+    * \param emitChangedSignal Whether to emit a "changed" signal. Default is \c true
+    */
+   void propagatePropertyChange(BtStringConst const & propertyName, bool notify = true) const;
+
+
+   /**
+    * \brief Convenience function to check for the set being a no-op. (Sometimes the UI will call all setters, even on
+    *        fields that haven't changed.)
+    *
+    * \return \c true if there's nothing to change, \c false otherwise
+    */
+   template<typename T>
+   bool newValueMatchesExisting(BtStringConst const & propertyName,
+                                T & memberVariable,
+                                T const newValue) {
+      if (newValue == memberVariable) {
+         qDebug() <<
+            Q_FUNC_INFO << this->metaObject()->className() << "#" << this->key() << ": ignoring call to setter for" <<
+            propertyName << "as value not changing";
+         return true;
+      }
+      return false;
+   }
+
+   /**
+    * \brief Convenience function that wraps preparing for a property change, making it and propagating it.
+    */
+   template<typename T>
+   void setAndNotify(BtStringConst const & propertyName,
+                     T & memberVariable,
+                     T const newValue) {
+      if (this->newValueMatchesExisting(propertyName, memberVariable, newValue)) {
+         return;
+      }
+      this->prepareForPropertyChange(propertyName);
+      memberVariable = newValue;
+      this->propagatePropertyChange(propertyName);
+      return;
+   }
 
 private:
-  mutable QString m_folder;
-  mutable QString m_name;
-  mutable QVariant m_display;
-  mutable QVariant m_deleted;
+  QString m_folder;
+  QString m_name;
+  bool m_display;
+  bool m_deleted;
+  bool m_beingModified;
+};
 
+
+/**
+ * \class NamedEntityModifyingMarker
+ *
+ * \brief RAII helper for temporarily marking a class as being modified
+ */
+class NamedEntityModifyingMarker {
+public:
+   NamedEntityModifyingMarker(NamedEntity & namedEntity);
+   ~NamedEntityModifyingMarker();
+private:
+   NamedEntity & namedEntity;
+   bool savedModificationState;
+
+   // RAII class shouldn't be getting copied or moved
+   NamedEntityModifyingMarker(NamedEntityModifyingMarker const &) = delete;
+   NamedEntityModifyingMarker & operator=(NamedEntityModifyingMarker const &) = delete;
+   NamedEntityModifyingMarker(NamedEntityModifyingMarker &&) = delete;
+   NamedEntityModifyingMarker & operator=(NamedEntityModifyingMarker &&) = delete;
 };
 
 #endif

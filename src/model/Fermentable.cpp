@@ -23,15 +23,14 @@
 #include "model/Fermentable.h"
 
 #include <QDebug>
-#include <QDomElement>
-#include <QDomText>
 #include <QObject>
 #include <QVariant>
 
 #include "brewtarget.h"
-#include "database.h"
-#include "FermentableSchema.h"
-#include "TableSchemaConst.h"
+#include "database/ObjectStoreWrapper.h"
+#include "model/Inventory.h"
+#include "model/NamedParameterBundle.h"
+#include "model/Recipe.h"
 
 // .:TBD:. I think (and hope) that we can dispense with the following line!
 //#define SUPER NamedEntity
@@ -56,56 +55,52 @@ bool Fermentable::isEqualTo(NamedEntity const & other) const {
    );
 }
 
-
-QString Fermentable::classNameStr()
-{
-   static const QString name("Fermentable");
-   return name;
+ObjectStore & Fermentable::getObjectStoreTypedInstance() const {
+   return ObjectStoreTyped<Fermentable>::getInstance();
 }
 
 Fermentable::Fermentable(QString name, bool cache) :
-   NamedEntityWithInventory(Brewtarget::FERMTABLE, cache, name, true),
-     m_typeStr(QString()),
-     m_type(static_cast<Fermentable::Type>(0)),
-     m_amountKg(0.0),
-     m_yieldPct(0.0),
-     m_colorSrm(0.0),
-     m_isAfterBoil(false),
-     m_origin(QString()),
-     m_supplier(QString()),
-     m_notes(QString()),
-     m_coarseFineDiff(0.0),
-     m_moisturePct(0.0),
-     m_diastaticPower(0.0),
-     m_proteinPct(0.0),
-     m_maxInBatchPct(100.0),
-     m_recommendMash(false),
-     m_ibuGalPerLb(0.0),
-     m_isMashed(false) {
+   NamedEntityWithInventory{-1, cache, name, true},
+   m_typeStr       {QString()         },
+   m_type          {Fermentable::Grain},
+   m_amountKg      {0.0               },
+   m_yieldPct      {0.0               },
+   m_colorSrm      {0.0               },
+   m_isAfterBoil   {false             },
+   m_origin        {QString()         },
+   m_supplier      {QString()         },
+   m_notes         {QString()         },
+   m_coarseFineDiff{0.0               },
+   m_moisturePct   {0.0               },
+   m_diastaticPower{0.0               },
+   m_proteinPct    {0.0               },
+   m_maxInBatchPct {100.0             },
+   m_recommendMash {false             },
+   m_ibuGalPerLb   {0.0               },
+   m_isMashed      {false             } {
    return;
 }
 
-Fermentable::Fermentable(TableSchema* table, QSqlRecord rec, int t_key) :
-   NamedEntityWithInventory(table, rec, t_key) {
-     m_typeStr = rec.value( table->propertyToColumn( PropertyNames::Fermentable::type)).toString();
-     m_amountKg = rec.value( table->propertyToColumn( PropertyNames::Fermentable::amount_kg)).toDouble();
-     m_yieldPct = rec.value( table->propertyToColumn( PropertyNames::Fermentable::yield_pct)).toDouble();
-     m_colorSrm = rec.value( table->propertyToColumn( PropertyNames::Fermentable::color_srm)).toDouble();
-     m_isAfterBoil = rec.value( table->propertyToColumn( PropertyNames::Fermentable::addAfterBoil)).toBool();
-     m_origin = rec.value( table->propertyToColumn( PropertyNames::Fermentable::origin)).toString();
-     m_supplier = rec.value( table->propertyToColumn( PropertyNames::Fermentable::supplier)).toString();
-     m_notes = rec.value(table->propertyToColumn( PropertyNames::Fermentable::notes)).toString();
-     m_coarseFineDiff = rec.value( table->propertyToColumn( PropertyNames::Fermentable::coarseFineDiff_pct)).toDouble();
-     m_moisturePct = rec.value( table->propertyToColumn( PropertyNames::Fermentable::moisture_pct)).toDouble();
-     m_diastaticPower = rec.value( table->propertyToColumn( PropertyNames::Fermentable::diastaticPower_lintner)).toDouble();
-     m_proteinPct = rec.value( table->propertyToColumn( PropertyNames::Fermentable::protein_pct)).toDouble();
-     m_maxInBatchPct = rec.value( table->propertyToColumn( PropertyNames::Fermentable::maxInBatch_pct)).toDouble();
-     m_recommendMash = rec.value( table->propertyToColumn( PropertyNames::Fermentable::recommendMash)).toBool();
-     m_ibuGalPerLb = rec.value( table->propertyToColumn( PropertyNames::Fermentable::ibuGalPerLb)).toDouble();
-     m_isMashed = rec.value( table->propertyToColumn( PropertyNames::Fermentable::isMashed)).toBool();
-
-     // calculated, not retrieved from the db
-     m_type = static_cast<Fermentable::Type>(types.indexOf(m_typeStr));
+Fermentable::Fermentable(NamedParameterBundle const & namedParameterBundle) :
+   NamedEntityWithInventory{namedParameterBundle},
+   m_typeStr       {QString()                        },
+   m_type          {static_cast<Fermentable::Type>(namedParameterBundle(PropertyNames::Fermentable::type).toInt())},
+   m_amountKg      {namedParameterBundle(PropertyNames::Fermentable::amount_kg             ).toDouble()},
+   m_yieldPct      {namedParameterBundle(PropertyNames::Fermentable::yield_pct             ).toDouble()},
+   m_colorSrm      {namedParameterBundle(PropertyNames::Fermentable::color_srm             ).toDouble()},
+   m_isAfterBoil   {namedParameterBundle(PropertyNames::Fermentable::addAfterBoil          ).toBool()  },
+   m_origin        {namedParameterBundle(PropertyNames::Fermentable::origin,      QString())           },
+   m_supplier      {namedParameterBundle(PropertyNames::Fermentable::supplier,    QString())           },
+   m_notes         {namedParameterBundle(PropertyNames::Fermentable::notes,       QString())           },
+   m_coarseFineDiff{namedParameterBundle(PropertyNames::Fermentable::coarseFineDiff_pct    ).toDouble()},
+   m_moisturePct   {namedParameterBundle(PropertyNames::Fermentable::moisture_pct          ).toDouble()},
+   m_diastaticPower{namedParameterBundle(PropertyNames::Fermentable::diastaticPower_lintner).toDouble()},
+   m_proteinPct    {namedParameterBundle(PropertyNames::Fermentable::protein_pct           ).toDouble()},
+   m_maxInBatchPct {namedParameterBundle(PropertyNames::Fermentable::maxInBatch_pct        ).toDouble()},
+   m_recommendMash {namedParameterBundle(PropertyNames::Fermentable::recommendMash         ).toBool()  },
+   m_ibuGalPerLb   {namedParameterBundle(PropertyNames::Fermentable::ibuGalPerLb           ).toDouble()},
+   m_isMashed      {namedParameterBundle(PropertyNames::Fermentable::isMashed,        false)           } {
+   return;
 }
 
 Fermentable::Fermentable(Fermentable const & other) :
@@ -238,102 +233,44 @@ bool Fermentable::isValidType( const QString& str )
 
 
 // Sets
-void Fermentable::setType( Type t )
-{
-   if ( m_cacheOnly ) {
-      m_type = t;
-   }
-   else if ( setEasy(PropertyNames::Fermentable::type, types.at(t)) ) {
-      m_type = t;
-      signalCacheChange(PropertyNames::Fermentable::type, types.at(t));
-   }
+void Fermentable::setType( Type t ) {
+   this->setAndNotify(PropertyNames::Fermentable::type, this->m_type, t);
 }
 
-void Fermentable::setAdditionMethod( Fermentable::AdditionMethod m )
-{
-   setIsMashed(m == Fermentable::Mashed);
+void Fermentable::setAdditionMethod( Fermentable::AdditionMethod m ) {
+   this->setIsMashed(m == Fermentable::Mashed);
 }
 
-void Fermentable::setAdditionTime( Fermentable::AdditionTime t )
-{
-   setAddAfterBoil(t == Fermentable::Late);
+void Fermentable::setAdditionTime( Fermentable::AdditionTime t ) {
+   this->setAddAfterBoil(t == Fermentable::Late);
 }
 
-void Fermentable::setAddAfterBoil( bool b )
-{
-   if ( m_cacheOnly ) {
-      m_isAfterBoil = b;
-   }
-   else if ( setEasy(PropertyNames::Fermentable::addAfterBoil, b) ) {
-      m_isAfterBoil = b;
-      signalCacheChange(PropertyNames::Fermentable::addAfterBoil, b);
-   }
+void Fermentable::setAddAfterBoil( bool b ) {
+   this->setAndNotify(PropertyNames::Fermentable::addAfterBoil, this->m_isAfterBoil, b);
 }
 
-void Fermentable::setOrigin( const QString& str )
-{
-   if ( m_cacheOnly ) {
-      m_origin = str;
-   }
-   else if ( setEasy( PropertyNames::Fermentable::origin, str) ) {
-      m_origin = str;
-      signalCacheChange( PropertyNames::Fermentable::origin, str);
-   }
+void Fermentable::setOrigin( const QString& str ) {
+   this->setAndNotify( PropertyNames::Fermentable::origin, this->m_origin, str);
 }
 
-void Fermentable::setSupplier( const QString& str)
-{
-   if ( m_cacheOnly ) {
-      m_supplier = str;
-   }
-   else if ( setEasy(PropertyNames::Fermentable::supplier, str) ) {
-      m_supplier = str;
-      signalCacheChange(PropertyNames::Fermentable::supplier, str);
-   }
+void Fermentable::setSupplier( const QString& str) {
+   this->setAndNotify( PropertyNames::Fermentable::supplier, this->m_supplier, str);
 }
 
-void Fermentable::setNotes( const QString& str )
-{
-   if ( m_cacheOnly ) {
-      m_notes = str;
-   }
-   else if ( setEasy(PropertyNames::Fermentable::notes, str) ) {
-      m_notes = str;
-      signalCacheChange(PropertyNames::Fermentable::notes, str);
-   }
+void Fermentable::setNotes( const QString& str ) {
+   this->setAndNotify( PropertyNames::Fermentable::notes, this->m_notes, str);
 }
 
-void Fermentable::setRecommendMash( bool b )
-{
-   if ( m_cacheOnly ) {
-      m_recommendMash = b;
-   }
-   else if ( setEasy( PropertyNames::Fermentable::recommendMash, b) ) {
-      m_recommendMash = b;
-      signalCacheChange( PropertyNames::Fermentable::recommendMash, b);
-   }
+void Fermentable::setRecommendMash( bool b ) {
+   this->setAndNotify( PropertyNames::Fermentable::recommendMash, this->m_recommendMash, b);
 }
 
-void Fermentable::setIsMashed(bool var)
-{
-   if ( m_cacheOnly ) {
-      m_isMashed = var;
-   }
-   else if ( setEasy( PropertyNames::Fermentable::isMashed, var) ) {
-      m_isMashed = var;
-      signalCacheChange( PropertyNames::Fermentable::isMashed, var);
-   }
+void Fermentable::setIsMashed(bool var) {
+   this->setAndNotify( PropertyNames::Fermentable::isMashed, this->m_isMashed, var);
 }
 
-void Fermentable::setIbuGalPerLb( double num )
-{
-   if ( m_cacheOnly ) {
-      m_ibuGalPerLb = num;
-   }
-   else if ( setEasy( PropertyNames::Fermentable::ibuGalPerLb, num) ) {
-      m_ibuGalPerLb = num;
-      signalCacheChange( PropertyNames::Fermentable::ibuGalPerLb, num);
-   }
+void Fermentable::setIbuGalPerLb( double num ) {
+   this->setAndNotify( PropertyNames::Fermentable::ibuGalPerLb, this->m_ibuGalPerLb, num);
 }
 
 double Fermentable::equivSucrose_kg() const
@@ -347,148 +284,48 @@ double Fermentable::equivSucrose_kg() const
       return ret;
 }
 
-void Fermentable::setAmount_kg( double num )
-{
-   if( num < 0.0 ) {
-      qWarning() << "Fermentable: negative amount:" << num;
-      return;
-   }
-
-   if ( m_cacheOnly ) {
-      m_amountKg = num;
-   }
-   else if ( setEasy( PropertyNames::Fermentable::amount_kg, num) ) {
-      m_amountKg = num;
-      signalCacheChange( PropertyNames::Fermentable::amount_kg, num);
-   }
+void Fermentable::setAmount_kg( double var ) {
+   this->setAndNotify( PropertyNames::Fermentable::amount_kg, this->m_amountKg, this->enforceMin(var, "amount"));
+   return;
 }
 
-void Fermentable::setYield_pct( double num )
-{
-   if ( num < 0.0 || num > 100.0 ) {
-      qWarning() << "Fermentable: 0 < yield < 100:" << num;
-      return;
-   }
-
-   if ( m_cacheOnly ) {
-      m_yieldPct = num;
-   }
-   else if ( setEasy( PropertyNames::Fermentable::yield_pct, num) ) {
-      m_yieldPct = num;
-      signalCacheChange( PropertyNames::Fermentable::yield_pct, num);
-   }
+void Fermentable::setInventoryAmount(double num) {
+   InventoryUtils::setAmount(*this, num);
+   return;
 }
 
-void Fermentable::setColor_srm( double num )
-{
-   if( num < 0.0 ) {
-      qWarning() << "Fermentable: negative color:" << num;
-      return;
-   }
-   if ( m_cacheOnly ) {
-      m_colorSrm = num;
-   }
-   else if ( setEasy( PropertyNames::Fermentable::color_srm, num) ) {
-      m_colorSrm = num;
-      signalCacheChange( PropertyNames::Fermentable::color_srm, num);
-   }
+double Fermentable::inventory() const {
+   return InventoryUtils::getAmount(*this);
 }
 
-void Fermentable::setCoarseFineDiff_pct( double num )
-{
-   if ( num < 0.0 || num > 100.0 ) {
-      qWarning() << "Fermentable: 0 < coarsefinediff < 100:" << num;
-      return;
-   }
-   if ( m_cacheOnly ) {
-      m_coarseFineDiff = num;
-   }
-   else if ( setEasy( PropertyNames::Fermentable::coarseFineDiff_pct, num) ) {
-      m_coarseFineDiff = num;
-      signalCacheChange( PropertyNames::Fermentable::coarseFineDiff_pct, num);
-   }
+void Fermentable::setYield_pct(double var) {
+   this->setAndNotify(PropertyNames::Fermentable::yield_pct, this->m_yieldPct, this->enforceMinAndMax(var, "amount", 0.0, 100.0));
 }
 
-void Fermentable::setMoisture_pct( double num )
-{
-   if ( num < 0.0 || num > 100.0 ) {
-      qWarning() << "Fermentable: 0 < moisture < 100:" << num;
-      return;
-   }
-   if ( m_cacheOnly ) {
-      m_moisturePct = num;
-   }
-   else if ( setEasy( PropertyNames::Fermentable::moisture_pct, num) ) {
-      m_moisturePct = num;
-      signalCacheChange( PropertyNames::Fermentable::moisture_pct, num);
-   }
+void Fermentable::setColor_srm(double var) {
+   this->setAndNotify(PropertyNames::Fermentable::color_srm, this->m_colorSrm, this->enforceMin(var, "color"));
 }
 
-void Fermentable::setDiastaticPower_lintner( double num )
-{
-   if( num < 0.0 ) {
-      qWarning() << "Fermentable: negative DP:" << num;
-      return;
-   }
-   if ( m_cacheOnly ) {
-      m_diastaticPower = num;
-   }
-   else if ( setEasy( PropertyNames::Fermentable::diastaticPower_lintner, num) ) {
-      m_diastaticPower = num;
-      signalCacheChange( PropertyNames::Fermentable::diastaticPower_lintner, num);
-   }
+void Fermentable::setCoarseFineDiff_pct(double var) {
+   this->setAndNotify(PropertyNames::Fermentable::coarseFineDiff_pct, this->m_coarseFineDiff, this->enforceMinAndMax(var, "coarseFineDiff", 0.0, 100.0));
 }
 
-void Fermentable::setProtein_pct( double num )
-{
-   if ( num < 0.0 || num > 100.0 ) {
-      qWarning() << "Fermentable: 0 < protein < 100:" << num;
-      return;
-   }
-   if ( m_cacheOnly ) {
-      m_proteinPct = num;
-   }
-   else if ( setEasy( PropertyNames::Fermentable::protein_pct, num) ) {
-      m_proteinPct = num;
-      signalCacheChange( PropertyNames::Fermentable::protein_pct, num);
-   }
+void Fermentable::setMoisture_pct(double var) {
+   this->setAndNotify(PropertyNames::Fermentable::moisture_pct, this->m_moisturePct, this->enforceMinAndMax(var, "moisture", 0.0, 100.0));
 }
 
-void Fermentable::setMaxInBatch_pct( double num )
-{
-   if ( num < 0.0 || num > 100.0 ) {
-      qWarning() << QString("Fermentable: 0 < maxinbatch < 100: %1").arg(num);
-   }
-   if ( m_cacheOnly ) {
-      m_maxInBatchPct = num;
-   }
-   else if ( setEasy( PropertyNames::Fermentable::maxInBatch_pct, num) ) {
-      m_maxInBatchPct = num;
-      signalCacheChange( PropertyNames::Fermentable::maxInBatch_pct, num);
-   }
+void Fermentable::setDiastaticPower_lintner(double var) {
+   this->setAndNotify( PropertyNames::Fermentable::diastaticPower_lintner, this->m_diastaticPower, this->enforceMin(var, "diastatic power"));
 }
 
-NamedEntity * Fermentable::getParent() {
-   Fermentable * myParent = nullptr;
-
-   // If we don't already know our parent, look it up
-   if (!this->parentKey) {
-      this->parentKey = Database::instance().getParentNamedEntityKey(*this);
-   }
-
-   // If we (now) know our parent, get a pointer to it
-   if (this->parentKey) {
-      myParent = Database::instance().fermentable(this->parentKey);
-   }
-
-   // Return whatever we got
-   return myParent;
+void Fermentable::setProtein_pct(double var) {
+   this->setAndNotify( PropertyNames::Fermentable::protein_pct, this->m_proteinPct, this->enforceMinAndMax(var, "protein", 0.0, 100.0));
 }
 
-int Fermentable::insertInDatabase() {
-   return Database::instance().insertFermentable(this);
+void Fermentable::setMaxInBatch_pct(double var) {
+   this->setAndNotify( PropertyNames::Fermentable::maxInBatch_pct, this->m_maxInBatchPct, this->enforceMinAndMax(var, "max in batch", 0.0, 100.0));
 }
 
-void Fermentable::removeFromDatabase() {
-   Database::instance().remove(this);
+Recipe * Fermentable::getOwningRecipe() {
+   return ObjectStoreWrapper::findFirstMatching<Recipe>( [this](Recipe * rec) {return rec->uses(*this);} );
 }

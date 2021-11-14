@@ -1,6 +1,7 @@
 /*
  * PhysicalConstants.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
+ * - Matt Young <mfsy@yahoo.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -16,9 +17,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#ifndef _PHYSICALCONSTANTS_H
-#define _PHYSICALCONSTANTS_H
+#ifndef PHYSICALCONSTANTS_H
+#define PHYSICALCONSTANTS_H
 
 /*!
  * \brief Collection of physical constants like density of materials.
@@ -32,7 +32,7 @@ namespace PhysicalConstants{
    const double liquidExtractDensity_kgL = 1.412;
    //! \brief Dry extract density in kg per L.
    const double dryExtractDensity_kgL = sucroseDensity_kgL;
-   
+
    //! \brief How many liters of water get absorbed by 1 kg of grain.
    const double grainAbsorption_Lkg = 1.085;
 

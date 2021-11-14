@@ -615,7 +615,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="../../../../../brewtarget/mik/brewtarget.qrc">
+        <iconset resource="../brewtarget.qrc">
          <normaloff>:/images/smallPlus.svg</normaloff>:/images/smallPlus.svg</iconset>
        </property>
       </widget>
@@ -629,7 +629,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="../../../../../brewtarget/mik/brewtarget.qrc">
+        <iconset resource="../brewtarget.qrc">
          <normaloff>:/images/filesave.svg</normaloff>:/images/filesave.svg</iconset>
        </property>
       </widget>
@@ -643,7 +643,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="../../../../../brewtarget/mik/brewtarget.qrc">
+        <iconset resource="../brewtarget.qrc">
          <normaloff>:/images/exit.svg</normaloff>:/images/exit.svg</iconset>
        </property>
       </widget>
@@ -723,7 +723,7 @@
   <tabstop>textEdit_notes</tabstop>
  </tabstops>
  <resources>
-  <include location="../../../../../brewtarget/mik/brewtarget.qrc"/>
+  <include location="../brewtarget.qrc"/>
  </resources>
  <connections/>
 </ui>

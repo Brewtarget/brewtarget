@@ -1,7 +1,8 @@
 /*
  * YeastDialog.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2015
+ * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
+ * - Matt Young <mfsy@yahoo.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -17,9 +18,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#ifndef _YEASTDIALOG_H
-#define _YEASTDIALOG_H
+#ifndef YEASTDIALOG_H
+#define YEASTDIALOG_H
 
 #include <QWidget>
 #include <QDialog>

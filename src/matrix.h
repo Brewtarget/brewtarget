@@ -1,6 +1,7 @@
 /*
  * matrix.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
+ * - Matt Young <mfsy@yahoo.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -16,9 +17,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#ifndef _MATRIX_H
-#define _MATRIX_H
+#ifndef MATRIX_H
+#define MATRIX_H
 
 #include <iostream>
 #include <QVector>
@@ -45,9 +45,9 @@ class Matrix
       Matrix( const QVector<Matrix> &colVec ); // Constructor
       Matrix( const Matrix &m, unsigned int colStart, unsigned int colEnd ); // Constructor
       Matrix( const Matrix &rhs ); // Copy constructor
-      
+
       static Matrix getIdentity( unsigned int n ); // Gets n x n identity matrix.
-      
+
       Matrix& operator=( const Matrix &rhs );
       Matrix& operator+=( const Matrix &rhs );
       Matrix& operator-=( const Matrix &rhs );
@@ -64,12 +64,12 @@ class Matrix
       void setCol( unsigned int col, QVector<double> vec );
       Matrix inverse() const;
       bool hasInverse() const;
-      
+
       void rref();
       bool hasNonZeroDiags() const;
       void swapRows( unsigned int row1, unsigned int row2 );
       void appendCols( const Matrix& other );
-      
+
    private:
       unsigned int _rows;
       unsigned int _cols;
@@ -83,7 +83,7 @@ class DimensionException: public std::exception
    {
       return "Dimensions of argument were not expected.";
    }
-   
+
    public:
       DimensionException(unsigned int argRows, unsigned int argCols, bool rowsMatter, bool colsMatter )
       {
@@ -92,12 +92,12 @@ class DimensionException: public std::exception
          _rowsMatter = rowsMatter;
          _colsMatter = colsMatter;
       }
-      
+
       bool colsMatter(){ return _colsMatter; }
       bool rowsMatter(){ return _rowsMatter; }
       unsigned int getArgRows(){ return _argRows; }
       unsigned int getArgCols(){ return _argCols; }
-      
+
    private:
       unsigned int _argRows;
       unsigned int _argCols;

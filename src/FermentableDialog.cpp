@@ -1,6 +1,7 @@
 /*
  * FermentableDialog.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2015
+ * authors 2009-2021
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -17,21 +18,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "FermentableDialog.h"
 
-#include <QWidget>
 #include <QDialog>
-#include <QString>
 #include <QInputDialog>
 #include <QList>
+#include <QString>
+#include <QWidget>
+
+#include "database/ObjectStoreWrapper.h"
 #include "FermentableEditor.h"
-#include "FermentableDialog.h"
-#include "FermentableTableModel.h"
 #include "FermentableSortFilterProxyModel.h"
-#include "database.h"
-#include "model/Recipe.h"
+#include "FermentableTableModel.h"
 #include "MainWindow.h"
 #include "model/Fermentable.h"
-
+#include "model/Recipe.h"
 
 
 FermentableDialog::FermentableDialog(MainWindow* parent) :
@@ -139,7 +140,8 @@ void FermentableDialog::removeFermentable()
 
    translated = fermTableProxy->mapToSource(selected[0]);
    Fermentable* ferm = fermTableModel->getFermentable(translated.row());
-   Database::instance().remove(ferm);
+   ObjectStoreWrapper::softDelete(*ferm);
+   return;
 }
 
 void FermentableDialog::editSelected()

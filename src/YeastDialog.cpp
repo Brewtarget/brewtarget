@@ -1,6 +1,7 @@
 /*
  * YeastDialog.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2015
+ * authors 2009-2021
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -17,20 +18,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "YeastDialog.h"
 
-#include <QWidget>
 #include <QDialog>
 #include <QInputDialog>
-#include <QString>
 #include <QList>
-#include "YeastDialog.h"
-#include "database.h"
-#include "model/Recipe.h"
+#include <QString>
+#include <QWidget>
+
+#include "database/ObjectStoreWrapper.h"
 #include "MainWindow.h"
+#include "model/Recipe.h"
 #include "model/Yeast.h"
 #include "YeastEditor.h"
-#include "YeastTableModel.h"
 #include "YeastSortFilterProxyModel.h"
+#include "YeastTableModel.h"
 
 YeastDialog::YeastDialog(MainWindow* parent)
         : QDialog(parent), mainWindow(parent), yeastEditor(new YeastEditor(this)), numYeasts(0)
@@ -115,19 +117,16 @@ void YeastDialog::retranslateUi()
 #endif // QT_NO_TOOLTIP
 }
 
-void YeastDialog::removeYeast()
-{
+void YeastDialog::removeYeast() {
    QModelIndexList selected = tableWidget->selectionModel()->selectedIndexes();
-   QModelIndex translated;
-   int row, size, i;
-
-   size = selected.size();
-   if( size == 0 )
+   int size = selected.size();
+   if( size == 0 ) {
       return;
+   }
 
    // Make sure only one row is selected.
-   row = selected[0].row();
-   for( i = 1; i < size; ++i )
+   int row = selected[0].row();
+   for(int i = 1; i < size; ++i )
    {
       if( selected[i].row() != row )
          return;
@@ -135,9 +134,10 @@ void YeastDialog::removeYeast()
 
    // We need to translate from the view's index to the model's index.  The
    // proxy model does the heavy lifting, as long as we do the call.
-   translated = yeastTableProxy->mapToSource(selected[0]);
+   QModelIndex translated = yeastTableProxy->mapToSource(selected[0]);
    Yeast *yeast = yeastTableModel->getYeast(translated.row());
-   Database::instance().remove(yeast);
+   ObjectStoreWrapper::softDelete(*yeast);
+   return;
 }
 
 void YeastDialog::addYeast(const QModelIndex& index)

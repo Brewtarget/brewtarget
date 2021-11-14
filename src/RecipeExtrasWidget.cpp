@@ -1,6 +1,6 @@
 /*
  * RecipeExtrasWidget.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2020
+ * authors 2009-2021
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Peter Buelow <goballstate@gmail.com>
@@ -37,22 +37,22 @@ RecipeExtrasWidget::RecipeExtrasWidget(QWidget* parent)
 
    ratingChanged = false;
 
-   connect( lineEdit_age,        &BtLineEdit::textModified, this, &RecipeExtrasWidget::updateAge);
-   connect( lineEdit_ageTemp,    &BtLineEdit::textModified, this, &RecipeExtrasWidget::updateAgeTemp);
-   connect( lineEdit_asstBrewer, &BtLineEdit::textModified, this, &RecipeExtrasWidget::updateBrewerAsst );
-   connect( lineEdit_brewer,     &BtLineEdit::textModified, this, &RecipeExtrasWidget::updateBrewer );
-   connect( lineEdit_carbVols,   &BtLineEdit::textModified, this, &RecipeExtrasWidget::updateCarbonation );
-   connect( lineEdit_primaryAge, &BtLineEdit::textModified, this, &RecipeExtrasWidget::updatePrimaryAge );
-   connect( lineEdit_primaryTemp,&BtLineEdit::textModified, this, &RecipeExtrasWidget::updatePrimaryTemp );
-   connect( lineEdit_secAge,     &BtLineEdit::textModified, this, &RecipeExtrasWidget::updateSecondaryAge );
-   connect( lineEdit_secTemp,    &BtLineEdit::textModified, this, &RecipeExtrasWidget::updateSecondaryTemp );
-   connect( lineEdit_tertAge,    &BtLineEdit::textModified, this, &RecipeExtrasWidget::updateTertiaryAge );
-   connect( lineEdit_tertTemp,   &BtLineEdit::textModified, this, &RecipeExtrasWidget::updateTertiaryTemp );
+   connect(lineEdit_age,        &BtLineEdit::textModified, this, &RecipeExtrasWidget::updateAge);
+   connect(lineEdit_ageTemp,    &BtLineEdit::textModified, this, &RecipeExtrasWidget::updateAgeTemp);
+   connect(lineEdit_asstBrewer, &BtLineEdit::textModified, this, &RecipeExtrasWidget::updateBrewerAsst );
+   connect(lineEdit_brewer,     &BtLineEdit::textModified, this, &RecipeExtrasWidget::updateBrewer );
+   connect(lineEdit_carbVols,   &BtLineEdit::textModified, this, &RecipeExtrasWidget::updateCarbonation );
+   connect(lineEdit_primaryAge, &BtLineEdit::textModified, this, &RecipeExtrasWidget::updatePrimaryAge );
+   connect(lineEdit_primaryTemp,&BtLineEdit::textModified, this, &RecipeExtrasWidget::updatePrimaryTemp );
+   connect(lineEdit_secAge,     &BtLineEdit::textModified, this, &RecipeExtrasWidget::updateSecondaryAge );
+   connect(lineEdit_secTemp,    &BtLineEdit::textModified, this, &RecipeExtrasWidget::updateSecondaryTemp );
+   connect(lineEdit_tertAge,    &BtLineEdit::textModified, this, &RecipeExtrasWidget::updateTertiaryAge );
+   connect(lineEdit_tertTemp,   &BtLineEdit::textModified, this, &RecipeExtrasWidget::updateTertiaryTemp );
 
-   connect( spinBox_tasteRating, SIGNAL(valueChanged(int)), this, SLOT(changeRatings(int)) );
-   connect( spinBox_tasteRating, &QAbstractSpinBox::editingFinished, this, &RecipeExtrasWidget::updateTasteRating );
+   connect(spinBox_tasteRating, SIGNAL(valueChanged(int)), this, SLOT(changeRatings(int)) );
+   connect(spinBox_tasteRating, &QAbstractSpinBox::editingFinished, this, &RecipeExtrasWidget::updateTasteRating );
 
-   connect( dateEdit_date, &QDateTimeEdit::dateChanged, this, &RecipeExtrasWidget::updateDate );
+   connect(dateEdit_date, &QDateTimeEdit::dateChanged, this, &RecipeExtrasWidget::updateDate );
 
    connect(btTextEdit_notes, &BtTextEdit::textModified, this, &RecipeExtrasWidget::updateNotes);
    connect(btTextEdit_tasteNotes, &BtTextEdit::textModified, this, &RecipeExtrasWidget::updateTasteNotes);
@@ -61,15 +61,16 @@ RecipeExtrasWidget::RecipeExtrasWidget(QWidget* parent)
 
 void RecipeExtrasWidget::setRecipe(Recipe* rec)
 {
-   if( recipe )
-      disconnect( recipe, 0, this, 0 );
-
-   if( rec )
-   {
-      recipe = rec;
-      connect( recipe, &NamedEntity::changed, this, &RecipeExtrasWidget::changed );
-      showChanges();
+   if (this->recipe) {
+      disconnect(this->recipe, 0, this, 0);
    }
+
+   if (rec) {
+      this->recipe = rec;
+      connect(this->recipe, &NamedEntity::changed, this, &RecipeExtrasWidget::changed);
+      this->showChanges();
+   }
+   return;
 }
 
 void RecipeExtrasWidget::updateBrewer()
@@ -169,15 +170,22 @@ void RecipeExtrasWidget::updateAgeTemp()
    Brewtarget::mainWindow()->doOrRedoUpdate(*recipe, PropertyNames::Recipe::ageTemp_c, lineEdit_ageTemp->toSI(), tr("Change Age Temp"));
 }
 
-void RecipeExtrasWidget::updateDate(const QDate& date)
-{
-   if( recipe == 0 )
+void RecipeExtrasWidget::updateDate(QDate const & date) {
+   if (!this->recipe) {
       return;
+   }
 
-   if ( date.isNull()  )
+   if (date.isNull()) {
       Brewtarget::mainWindow()->doOrRedoUpdate(*recipe, PropertyNames::Recipe::date, dateEdit_date->date(), tr("Change Date"));
-   else
-      Brewtarget::mainWindow()->doOrRedoUpdate(*recipe, PropertyNames::Recipe::date, date, tr("Change Date"));
+   } else {
+      // We have to be careful to avoid going round in circles here.  When we call
+      // this->dateEdit_date->setDate(this->recipe->date()) to show the Recipe date in the UI, that will generate a
+      // signal that ends up calling this function to say the date on the Recipe has changed, which it hasn't.
+      if (date != this->recipe->date()) {
+         Brewtarget::mainWindow()->doOrRedoUpdate(*recipe, PropertyNames::Recipe::date, date, tr("Change Date"));
+      }
+   }
+   return;
 }
 
 void RecipeExtrasWidget::updateCarbonation()
@@ -201,7 +209,10 @@ void RecipeExtrasWidget::updateNotes()
    if( recipe == 0 )
       return;
 
-   Brewtarget::mainWindow()->doOrRedoUpdate(*recipe, "notes", btTextEdit_notes->toPlainText(), tr("Edit Notes"));
+   Brewtarget::mainWindow()->doOrRedoUpdate(*recipe,
+                                         PropertyNames::Recipe::notes,
+                                         btTextEdit_notes->toPlainText(),
+                                         tr("Edit Notes"));
 }
 
 void RecipeExtrasWidget::changed(QMetaProperty prop, QVariant /*val*/)

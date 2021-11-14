@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef _XML_XMLRECORD_H
-#define _XML_XMLRECORD_H
+#ifndef XML_XMLRECORD_H
+#define XML_XMLRECORD_H
 #pragma once
 
 #include <memory>
@@ -67,19 +67,19 @@ public:
       String,
       Date,
       Enum,
-      Record
+      RequiredConstant,   // A fixed value we have to write out in the record (used for BeerXML VERSION tag)
+      RecordSimple,       // Single contained record
+      RecordComplex,      // Zero, one or more contained records
+      INVALID
    };
 
    /**
     * \brief Map from a string in an XML file to the value of an enum in a Brewtarget class
     *
-    * .:TODO:. In theory we'll need to make this two-way when we extend to support saving XML, but a straight search
-    *          through the whole map is not actually that burdensome
-    *
-    * Could use QMap or QHash here.  Doubt it makes much difference either way for the quantity of data /
-    * number of look-ups we're doing.  (Documentation says QHash is "significantly faster" if you don't need ordering,
-    * but some people say that's only true beyond a certain number of elements stored.  We could benchmark it if we
-    * were anxious about performance here.)
+    * Could use QMap or QHash here.  Doubt it makes much difference either way for the quantity of data / number of
+    * look-ups we're doing.  (Documentation says QHash is "significantly faster" if you don't need ordering, but some
+    * people say that's only true beyond a certain number of elements stored.  We could benchmark it if we were anxious
+    * about performance here.)
     */
    typedef QHash<QString, int> EnumLookupMap;
 
@@ -90,7 +90,8 @@ public:
    struct FieldDefinition {
       FieldType           fieldType;
       XQString            xPath;
-      char const * const  propertyName;
+      BtStringConst const & propertyName;  // If fieldType == RecordComplex, then this is used only on export
+                                           // If fieldType == RequiredConstant, then this is actually the constant value
       EnumLookupMap const * stringToEnum;
    };
 
@@ -98,17 +99,24 @@ public:
 
    /**
     * \brief Constructor
+    * \param recordName The name of the outer tag around this type of record, eg "RECIPE" for a "<RECIPE>...</RECIPE>"
+    *                   record in BeerXML.
     * \param xmlCoding An \b XmlCoding object representing the XML Coding we are using (eg BeerXML 1.0).  This is what
     *                  we'll need to look up how to handle nested records inside this one.
     * \param fieldDefinitions A list of fields we expect to find in this record (other fields will be ignored) and how
     *                         to parse them.
     */
-   XmlRecord(XmlCoding const & xmlCoding,
+   XmlRecord(QString const & recordName,
+             XmlCoding const & xmlCoding,
              FieldDefinitions const & fieldDefinitions);
 
+   /**
+    * \brief Get the record name (in this coding)
+    */
+   QString getRecordName() const;
 
    /**
-    * \brief Getter for the NamedParameterBundle we readin from this record
+    * \brief Getter for the NamedParameterBundle we read in from this record
     *
     *        This is needed for the same reasons as \c XmlRecord::getNamedEntity() below
     *
@@ -163,6 +171,17 @@ public:
    virtual ProcessingResult normaliseAndStoreInDb(NamedEntity * containingEntity,
                                                   QTextStream & userMessage,
                                                   XmlRecordCount & stats);
+   /**
+    * \brief Export to XML
+    * \param namedEntityToExport The object that we want to export to XML
+    * \param out Where to write the XML
+    * \param indentLevel Current number of indents to put before each opening tag (default 1)
+    * \param indentString String to use for each indent (default two spaces)
+    */
+   void toXml(NamedEntity const & namedEntityToExport,
+              QTextStream & out,
+              int indentLevel = 1,
+              char const * const indentString = "  ") const;
 
 private:
    /**
@@ -174,6 +193,26 @@ private:
                          FieldDefinition const * fieldDefinition,
                          xalanc::NodeRefList & nodesForCurrentXPath,
                          QTextStream & userMessage);
+
+protected:
+   /**
+    * \brief Subclasses need to implement this to populate this->namedEntity with a suitably-constructed object using
+    *        the contents of this=>namedParameterBundle
+    */
+   virtual void constructNamedEntity();
+
+   /**
+    * \brief Subclasses  need to implement this to store this->namedEntityRaiiContainer in the appropriate ObjectStore
+    * \return the ID of the newly-inserted object
+    */
+   virtual int storeNamedEntityInDb();
+
+public:
+   /**
+    * \brief Subclasses  need to implement this to delete this->namedEntityRaiiContainer from the appropriate
+    *        ObjectStore (this is in the event of problems detected after the call to this->storeNamedEntityInDb()
+    */
+   virtual void deleteNamedEntityFromDb();
 
 protected:
    bool normaliseAndStoreChildRecordsInDb(QTextStream & userMessage,
@@ -201,6 +240,33 @@ protected:
    virtual void setContainingEntity(NamedEntity * containingEntity);
 
    /**
+    * \brief Called by \c toXml to write out any fields that are themselves records.
+    *        Subclasses should provide the obvious recursive implementation.
+    * \param fieldDefinition Which of the fields we're trying to export.  It will be of type \c XmlRecord::Record
+    * \param subRecord A suitably constructed subclass of \c XmlRecord that can do the export.  (Note that because
+    *                  exporting to XML is const on \c XmlRecord, we only need one of these even if there are multiple
+    *                  records to export.)
+    * \param namedEntityToExport The object containing (or referencing) the data we want to export to XML
+    * \param out Where to write the XML
+    */
+   virtual void subRecordToXml(XmlRecord::FieldDefinition const & fieldDefinition,
+                               XmlRecord const & subRecord,
+                               NamedEntity const & namedEntityToExport,
+                               QTextStream & out,
+                               int indentLevel,
+                               char const * const indentString) const;
+
+   /**
+    * \brief Writes a comment to the XML output when there is no contained record to output (to make it explicit that
+    *        the omission was not by accident.
+    */
+   void writeNone(XmlRecord const & subRecord,
+                  NamedEntity const & namedEntityToExport,
+                  QTextStream & out,
+                  int indentLevel,
+                  char const * const indentString) const;
+
+   /**
     * \brief Given a name that is a duplicate of an existing one, modify it to a potential alternative.
     *        Callers should call this function as many times as necessary to find a non-clashing name.
     *
@@ -213,8 +279,8 @@ protected:
     */
    static void modifyClashingName(QString & candidateName);
 
+   QString const            recordName;
    XmlCoding const &        xmlCoding;
-
    FieldDefinitions const & fieldDefinitions;
 
    // The name of the class of object contained in this type of record, eg "Hop", "Yeast", etc.
@@ -230,25 +296,24 @@ protected:
    // then we need to ensure it is properly destroyed if we abort that processing.  Putting it in this RAII container
    // handles that automatically for us.
    //
-   // Once the object is populated, and we give ownership to something else (eg Database class), we should call
-   // release(), because we no longer want the new Hop/Yeast/Recipe/etc object to be destroyed when the
-   // XmlNamedEntityRecord is destroyed (typically at end of document processing).
+   // Once the object is populated, and we give ownership to the relevant Object Store there will be another instance of
+   // this shared pointer (in the object store), which is perfect because, at this point, we don't want the new
+   // Hop/Yeast/Recipe/etc object to be destroyed when the XmlNamedEntityRecord is destroyed (typically at end of
+   // document processing).
    //
-   // HOWEVER, we might still need access to the object even after we are no longer its owner.  This is why we also
-   // have this->namedEntity.
-   //
-   // MOREOVER, there are circumstances where we want this->namedEntity and this->namedEntityRaiiContainer to point to
-   // different things.  Specifically, if we are reading in, say a Hop and we discover that we already have the same
-   // Hop (where "the same" means "as determined by NamedEntity.operator==") in the Database, then we will want to set
-   // this->namedEntity to the Hop we already have stored (in case other objects we are reading in need to cross-refer
-   // to it) and leave this->namedEntityRaiiContainer holding the newly-created Hop object that needs to be discarded.
+   // Note HOWEVER, that, despite having this shared pointer, we tend to access through this->namedEntity because there
+   // are circumstances where we want this->namedEntity and this->namedEntityRaiiContainer to point to different things.
+   // Specifically, if we are reading in, say a Hop and we discover that we already have the same Hop (where "the same"
+   // means "as determined by NamedEntity.operator==") in the Database, then we will want to set this->namedEntity to
+   // the Hop we already have stored (in case other objects we are reading in need to cross-refer to it) and leave
+   // this->namedEntityRaiiContainer holding the newly-created Hop object that needs to be discarded.
    //
    // (An alternative approach would be to do replace this->namedEntityRaiiContainer with some boolean flag saying
    // whether we own the object and then write a custom destructor to check the flag and delete this->namedEntity if
    // necessary.  But this creates complication for dealing with duplicates.)
    //
    NamedEntity * namedEntity; // This is null for the root record of a document
-   std::unique_ptr<NamedEntity> namedEntityRaiiContainer;
+   std::shared_ptr<NamedEntity> namedEntityRaiiContainer;
 
    // This determines whether we include this record in the stats we show the user (about how many records were read in
    // or skipped from a file.  By default it's true.  Subclass constructors set it to false for types of record that
@@ -264,7 +329,7 @@ protected:
    //   • A smart pointer to the child XmlRecord.  (Smart pointer ensures each child record is destroyed properly when
    //     our own destructor is called.
    //
-   typedef std::pair<char const * const, std::shared_ptr<XmlRecord> > ChildRecord;
+   typedef std::pair<XmlRecord::FieldDefinition const *, std::shared_ptr<XmlRecord> > ChildRecord;
    QMultiHash<QString const &, ChildRecord> childRecords;
 };
 

@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #ifndef SCALE_RECIPE_TOOL_H
 #define SCALE_RECIPE_TOOL_H
 
@@ -120,4 +119,4 @@ private:
    QLineEdit* effLineEdit;
 };
 
-#endif /*SCALE_RECIPE_TOOL_H*/
+#endif

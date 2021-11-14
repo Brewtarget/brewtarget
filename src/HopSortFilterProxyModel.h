@@ -1,6 +1,7 @@
 /*
  * HopSortFilterProxyModel.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -17,18 +18,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#ifndef _HOPSORTFILTERPROXYMODEL_H
-#define _HOPSORTFILTERPROXYMODEL_H
-
-class HopSortFilterProxyModel;
+#ifndef HOPSORTFILTERPROXYMODEL_H
+#define HOPSORTFILTERPROXYMODEL_H
 
 #include <QSortFilterProxyModel>
 
 /*!
  * \class HopSortFilterProxyModel
- * \author Mik Firestone
- * \author Philip G. Lee
  *
  * \brief Proxy model for sorting hops.
  */

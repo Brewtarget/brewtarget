@@ -18,74 +18,54 @@
  */
 #include "model/NamedEntityWithInventory.h"
 
-NamedEntityWithInventory::NamedEntityWithInventory(Brewtarget::DBTable table, bool cache, QString t_name, bool t_display, QString folder) :
-   NamedEntity   {table, cache, t_name, t_display},
-   m_inventory{0},
+#include "model/Inventory.h"
+#include "model/NamedParameterBundle.h"
+
+NamedEntityWithInventory::NamedEntityWithInventory(int key,
+                                                   bool cache,
+                                                   QString t_name,
+                                                   bool t_display,
+                                                   QString folder) :
+   NamedEntity   {key, cache, t_name, t_display, folder},
    m_inventory_id{-1} {
-   return;
-}
-
-NamedEntityWithInventory::NamedEntityWithInventory(TableSchema* table, QSqlRecord rec, int t_key) :
-   NamedEntity(table, rec, t_key),
-   m_inventory{0} {
-
-   // keys need special handling
-   m_inventory_id = rec.value( table->foreignKeyToColumn(PropertyNames::NamedEntityWithInventory::inventoryId)).toInt();
-
    return;
 }
 
 NamedEntityWithInventory::NamedEntityWithInventory(NamedParameterBundle const & namedParameterBundle) :
    NamedEntity   {namedParameterBundle},
-   m_inventory_id{namedParameterBundle(PropertyNames::NamedEntityWithInventory::inventoryId).toInt()} {
+   // If we're reading in from a BeerXML file, there won't be an inventory ID
+   m_inventory_id{namedParameterBundle(PropertyNames::NamedEntityWithInventory::inventoryId, -1)} {
    return;
 }
 
 NamedEntityWithInventory::NamedEntityWithInventory(NamedEntityWithInventory const & other) :
-   NamedEntity     {other                 },
-   // Don't copy Inventory ID as new object should have its own inventory - unless it's a child
-   m_inventory{0},
+   NamedEntity{other},
+   // Don't copy Inventory ID as new Fermentable/Hop/etc should have its own inventory - unless it's a child, but that
+   // case is handled in makeChild() below
    m_inventory_id {-1} {
    return;
 }
 
+void NamedEntityWithInventory::makeChild(NamedEntity const & copiedFrom) {
+   // First do the base class work
+   this->NamedEntity::makeChild(copiedFrom);
+
+   // Now we want the child to share the same inventory item as its parent
+   this->m_inventory_id = static_cast<NamedEntityWithInventory const &>(copiedFrom).m_inventory_id;
+   return;
+}
+
 void NamedEntityWithInventory::setInventoryId(int key) {
-   if( key < 1 ) {
-      qWarning() << Q_FUNC_INFO << this->metaObject()->className() << ": bad inventory id:" << key;
-      return;
+   if (key < 1) {
+      // This really shouldn't happen
+      qCritical() << Q_FUNC_INFO << this->metaObject()->className() << "Bad inventory id:" << key;
+      Q_ASSERT(false); // Bail on debug build
+      return;          // Continue (without setting invalid ID) otherwise
    }
-   m_inventory_id = key;
-   if ( ! m_cacheOnly ) {
-      setEasy(PropertyNames::NamedEntityWithInventory::inventoryId, key);
-   }
+   this->setAndNotify(PropertyNames::NamedEntityWithInventory::inventoryId, this->m_inventory_id, key);
    return;
 }
 
 int NamedEntityWithInventory::inventoryId() const {
    return m_inventory_id;
-}
-
-
-// changes to inventory amounts do NOT create a version
-void NamedEntityWithInventory::setInventoryAmount(double num) {
-   if( num < 0.0 ) {
-      qWarning() << Q_FUNC_INFO << this->metaObject()->className() << ": negative inventory:" << num;
-      return;
-   }
-
-   m_inventory = num;
-   if ( ! m_cacheOnly ) {
-      if( m_inventory_id < 1 ) {
-         qWarning() << Q_FUNC_INFO << this->metaObject()->className() << ": bad inventory id:" << m_inventory_id;
-         return;
-      }
-      setInventory(num,m_inventory_id);
-   }
-}
-
-double NamedEntityWithInventory::inventory() const {
-   if ( m_inventory < 0 ) {
-      m_inventory = getInventory().toDouble();
-   }
-   return m_inventory;
 }

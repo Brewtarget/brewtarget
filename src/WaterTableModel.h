@@ -1,7 +1,8 @@
 /*
  * WaterTableModel.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
+ * - Matt Young <mfsy@yahoo.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -17,20 +18,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef WATERTABLEMODEL_H
+#define WATERTABLEMODEL_H
+#pragma once
 
-#ifndef _WATERTABLEMODEL_H
-#define   _WATERTABLEMODEL_H
-
-class WaterTableModel;
-class WaterItemDelegate;
+#include <memory>
 
 #include <QAbstractTableModel>
-#include <QWidget>
-#include <QModelIndex>
-#include <QMetaProperty>
-#include <QVariant>
 #include <QItemDelegate>
 #include <QList>
+#include <QMetaProperty>
+#include <QModelIndex>
+#include <QVariant>
+#include <QWidget>
 
 #include "Unit.h"
 // Forward declarations.
@@ -38,13 +38,14 @@ class Water;
 class WaterTableWidget;
 class Recipe;
 
+class WaterItemDelegate;
+
 enum{ WATERNAMECOL, WATERAMOUNTCOL, WATERCALCIUMCOL, WATERBICARBONATECOL,
       WATERSULFATECOL, WATERCHLORIDECOL, WATERSODIUMCOL, WATERMAGNESIUMCOL,
       WATERNUMCOLS /*This one MUST be last*/};
 
 /*!
  * \class WaterTableModel
- * \author Philip G. Lee
  *
  * \brief Table model for waters.
  */
@@ -75,8 +76,8 @@ public:
 
 public slots:
    void changed(QMetaProperty,QVariant);
-   void addWater(Water* water);
-   void removeWater(Water* water);
+   void addWater(int waterId);
+   void removeWater(int waterId, std::shared_ptr<QObject> object);
 
 private:
    QList<Water*> waterObs;
@@ -92,7 +93,7 @@ private:
 
 /*!
  * \class WaterItemDelegate
- * \author Philip G. Lee
+ *
  *
  * Item delegate for water tables.
  */
@@ -112,5 +113,4 @@ public:
 private:
 };
 
-#endif   /* _WATERTABLEMODEL_H */
-
+#endif

@@ -16,19 +16,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #ifndef IBUGUSLIDER_H
 #define IBUGUSLIDER_H
 
 #include "RangedSlider.h"
 
-class IbuGuSlider : public RangedSlider
-{
+class IbuGuSlider : public RangedSlider {
    Q_OBJECT
 public:
    IbuGuSlider(QWidget* parent = 0);
-   
+
    void setValue(double value);
 };
 
-#endif /*IBUGUSLIDER_H*/
+#endif

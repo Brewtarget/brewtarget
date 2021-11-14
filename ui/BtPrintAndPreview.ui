@@ -2,14 +2,6 @@
 <ui version="4.0">
  <class>BtPrintAndPreview</class>
  <widget class="QDialog" name="BtPrintAndPreview">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>611</width>
-    <height>527</height>
-   </rect>
-  </property>
   <property name="windowTitle">
    <string>Print And Preview</string>
   </property>
@@ -20,26 +12,13 @@
    <item>
     <layout class="QVBoxLayout" name="verticalLayout_3">
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_3">
-       <item>
+      <widget class="QSplitter" name="uiSplitter">
         <widget class="QGroupBox" name="groupBox_Controls">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>300</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>300</width>
-           <height>16777215</height>
-          </size>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_4">
           <item>
@@ -47,16 +26,10 @@
             <item>
              <widget class="QTabWidget" name="verticalTabWidget">
               <property name="sizePolicy">
-               <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+               <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>250</width>
-                <height>0</height>
-               </size>
               </property>
               <property name="autoFillBackground">
                <bool>false</bool>
@@ -347,11 +320,8 @@
           </item>
          </layout>
         </widget>
-       </item>
-       <item>
         <layout class="QVBoxLayout" name="verticalLayout_PrintPreviewWidget"/>
-       </item>
-      </layout>
+      </widget>
      </item>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_6">

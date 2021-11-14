@@ -1692,7 +1692,6 @@
      </property>
      <addaction name="actionBackup_Database"/>
      <addaction name="actionRestore_Database"/>
-     <addaction name="actionMergeDatabases"/>
     </widget>
     <addaction name="actionNewRecipe"/>
     <addaction name="actionCopy_Recipe"/>
@@ -2044,18 +2043,6 @@
    </property>
    <property name="toolTip">
     <string>Restore recipes, ingredients, etc. from a previous backup</string>
-   </property>
-  </action>
-  <action name="actionMergeDatabases">
-   <property name="icon">
-    <iconset resource="../brewtarget.qrc">
-     <normaloff>:/images/merge.png</normaloff>:/images/merge.png</iconset>
-   </property>
-   <property name="text">
-    <string>&amp;Merge</string>
-   </property>
-   <property name="toolTip">
-    <string>Merge another set of recipes, ingredients, etc. into the current set</string>
    </property>
   </action>
   <action name="actionNewRecipe">

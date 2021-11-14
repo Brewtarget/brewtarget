@@ -1,6 +1,7 @@
 /*
  * BtDigitWidget.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
+ * = Matt Young <mfsy@yahoo.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -16,15 +17,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "BtDigitWidget.h"
+
+#include <iostream>
 
 #include <QFrame>
-#include <iostream>
 #include <QLocale>
 #include <QSettings>
 #include <QDebug>
 
-#include "BtDigitWidget.h"
 #include "brewtarget.h"
+#include "PersistentSettings.h"
 #include "UnitSystem.h"
 #include "Unit.h"
 
@@ -50,7 +53,7 @@ BtDigitWidget::BtDigitWidget(QWidget *parent, Unit::UnitType type, Unit const * 
    setStyleSheet(m_styleSheet.arg(0,6,16,QChar('0')));
    setFrameStyle(QFrame::Box);
    setFrameShadow(QFrame::Sunken);
-
+   return;
 }
 
 void BtDigitWidget::display(QString str)
@@ -283,8 +286,8 @@ QString BtDigitWidget::displayAmount(double amount, int precision)
    Unit::unitDisplay unitDsp;
    Unit::unitScale scale;
 
-   unitDsp  = static_cast<Unit::unitDisplay>(Brewtarget::option(m_editField, Unit::noUnit, m_section, Brewtarget::UNIT).toInt());
-   scale    = static_cast<Unit::unitScale>(Brewtarget::option(m_editField, Unit::noScale, m_section, Brewtarget::SCALE).toInt());
+   unitDsp  = static_cast<Unit::unitDisplay>(PersistentSettings::value(m_editField, Unit::noUnit, m_section, PersistentSettings::UNIT).toInt());
+   scale    = static_cast<Unit::unitScale>(PersistentSettings::value(m_editField, Unit::noScale, m_section, PersistentSettings::SCALE).toInt());
 
    // I find this a nice level of abstraction. This lets all of the setText()
    // methods make a single call w/o having to do the logic for finding the

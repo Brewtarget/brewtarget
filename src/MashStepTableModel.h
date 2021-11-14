@@ -1,7 +1,8 @@
 /*
  * MashStepTableModel.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -18,12 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#ifndef _MASHSTEPTABLEMODEL_H
-#define   _MASHSTEPTABLEMODEL_H
-
-class MashStepTableModel;
-class MashStepItemDelegate;
+#ifndef MASHSTEPTABLEMODEL_H
+#define MASHSTEPTABLEMODEL_H
 
 #include <QAbstractTableModel>
 #include <QWidget>
@@ -39,11 +36,13 @@ class MashStepItemDelegate;
 #include "model/Mash.h"
 #include "Unit.h"
 
+class MashStepItemDelegate;
+
 enum{ MASHSTEPNAMECOL, MASHSTEPTYPECOL, MASHSTEPAMOUNTCOL, MASHSTEPTEMPCOL, MASHSTEPTARGETTEMPCOL, MASHSTEPTIMECOL, MASHSTEPNUMCOLS /*This one MUST be last*/};
 
 /*!
  * \class MashStepTableModel
- * \author Philip G. Lee
+ *
  *
  * \brief Model for the list of mash steps in a mash.
  */
@@ -53,9 +52,13 @@ class MashStepTableModel : public QAbstractTableModel
 
 public:
    MashStepTableModel(QTableView* parent=0);
-   virtual ~MashStepTableModel() {}
+   virtual ~MashStepTableModel() = default;
+
    //! Set the mash whose mash steps we want to model.
    void setMash( Mash* m );
+
+   Mash * getMash() const;
+
    //! \returns the mash step at model index \b i.
    MashStep* getMashStep(unsigned int i);
 
@@ -78,11 +81,14 @@ public:
    void setDisplayScale(int column, Unit::unitScale displayScale);
    QString generateName(int column) const;
 
+   //! \returns true if mashStep is successfully found and removed.
+   bool remove(MashStep * MashStep);
+
 public slots:
    //! \brief Add a MashStep to the model.
-   void addMashStep(MashStep * mashStep);
-   //! \returns true if mashStep is successfully found and removed.
-   bool removeMashStep(MashStep * MashStep);
+   void addMashStep(int mashStep);
+
+   void removeMashStep(int mashStepId, std::shared_ptr<QObject> object);
 
    void moveStepUp(int i);
    void moveStepDown(int i);
@@ -90,6 +96,7 @@ public slots:
    void mashStepChanged(QMetaProperty,QVariant);
 
    void contextMenu(const QPoint &point);
+
 
 private:
    Mash* mashObs;
@@ -102,7 +109,7 @@ private:
 
 /*!
  * \class MashStepItemDelegate
- * \author Philip G. Lee
+ *
  *
  * An item delegate for mash step tables.
  */
@@ -122,5 +129,4 @@ public:
 private:
 };
 
-#endif   /* _MASHSTEPTABLEMODEL_H */
-
+#endif

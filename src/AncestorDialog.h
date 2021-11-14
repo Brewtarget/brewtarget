@@ -1,6 +1,7 @@
 /*
  * AncestorDialog.h is part of Brewtarget, and is Copyright the following
- * authors 2016 - 2019
+ * authors 2016-2021
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@fastmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -16,9 +17,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#ifndef _ANCESTORDIALOG_H
-#define _ANCESTORDIALOG_H
+#ifndef ANCESTORDIALOG_H
+#define ANCESTORDIALOG_H
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QAction>
@@ -38,19 +38,17 @@
 
 /*!
  * \class AncestorDialog
- * \author Mik Firestone
  *
  * \brief View/controller dialog for setting up ancestoral trees
  */
-class AncestorDialog : public QDialog, public Ui::ancestorDialog
-{
+class AncestorDialog : public QDialog, public Ui::ancestorDialog {
    Q_OBJECT
 
 public:
-   AncestorDialog(QWidget* parent = nullptr);
+   AncestorDialog(QWidget * parent = nullptr);
    virtual ~AncestorDialog() {}
 
-   void setAncestor(Recipe *anc);
+   void setAncestor(Recipe * anc);
 
 public slots:
    void connectDescendant();
@@ -58,15 +56,14 @@ public slots:
    void ancestorSelected(int ndx);
 
 signals:
-   void ancestoryChanged(Recipe* ancestor, Recipe* descendant);
+   void ancestoryChanged(Recipe * ancestor, Recipe * descendant);
 
 private:
-   MainWindow* mainWindow;
+   MainWindow * mainWindow;
 
    void buildAncestorBox();
-   void buildDescendantBox(Recipe *ignore);
-   static bool recipeLessThan(Recipe *right, Recipe *left);
+   void buildDescendantBox(Recipe * ignore);
+   static bool recipeLessThan(Recipe * right, Recipe * left);
 };
 
-#endif   /* _ANCESTORDIALOG_H */
-
+#endif

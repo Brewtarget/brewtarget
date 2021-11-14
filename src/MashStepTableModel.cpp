@@ -1,6 +1,6 @@
 /*
  * MashStepTableModel.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2020
+ * authors 2009-2021
  * - Matt Young <mfsy@yahoo.com>
  * - Maxime Lavigne <duguigne@gmail.com>
  * - Mik Firestone <mikfire@gmail.com>
@@ -19,62 +19,68 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "MashStepTableModel.h"
 
 #include <QAbstractTableModel>
-#include <QWidget>
-#include <QModelIndex>
-#include <QVariant>
-#include <QTableView>
-#include <QItemDelegate>
-#include <QObject>
 #include <QComboBox>
-#include <QLineEdit>
-#include <QVector>
 #include <QHeaderView>
-#include "database.h"
-#include "model/MashStep.h"
-#include "MashStepTableModel.h"
-#include "Unit.h"
+#include <QItemDelegate>
+#include <QLineEdit>
+#include <QModelIndex>
+#include <QObject>
+#include <QTableView>
+#include <QVariant>
+#include <QVector>
+#include <QWidget>
+
 #include "brewtarget.h"
-#include "SimpleUndoableUpdate.h"
+#include "database/ObjectStoreWrapper.h"
 #include "MainWindow.h"
+#include "model/MashStep.h"
+#include "PersistentSettings.h"
+#include "SimpleUndoableUpdate.h"
+#include "Unit.h"
 
 MashStepTableModel::MashStepTableModel(QTableView* parent)
    : QAbstractTableModel(parent),
      mashObs(nullptr),
-     parentTableWidget(parent)
-{
+     parentTableWidget(parent) {
    setObjectName("mashStepTableModel");
 
    QHeaderView* headerView = parentTableWidget->horizontalHeader();
    headerView->setContextMenuPolicy(Qt::CustomContextMenu);
    connect(headerView, &QWidget::customContextMenuRequested, this, &MashStepTableModel::contextMenu);
+   connect(&ObjectStoreTyped<MashStep>::getInstance(), &ObjectStoreTyped<MashStep>::signalObjectInserted, this, &MashStepTableModel::addMashStep);
+   connect(&ObjectStoreTyped<MashStep>::getInstance(), &ObjectStoreTyped<MashStep>::signalObjectDeleted,  this, &MashStepTableModel::removeMashStep);
+   return;
 }
 
-void MashStepTableModel::addMashStep(MashStep * mashStep)
-{
-   qDebug() << QString("%1").arg(Q_FUNC_INFO);
-
+void MashStepTableModel::addMashStep(int mashStepId) {
+   MashStep * mashStep = ObjectStoreWrapper::getByIdRaw<MashStep>(mashStepId);
    if (mashStep == nullptr || this->steps.contains(mashStep)) {
       return;
    }
+   qDebug() << Q_FUNC_INFO << "Adding MashStep" << mashStep->name() << "(#" << mashStepId << ")";
 
    int size {this->steps.size()};
    beginInsertRows( QModelIndex(), size, size );
    this->steps.append(mashStep);
-   connect( mashStep, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+   connect(mashStep, &NamedEntity::changed, this, &MashStepTableModel::mashStepChanged);
    //reset(); // Tell everybody that the table has changed.
    endInsertRows();
    return;
 }
 
-bool MashStepTableModel::removeMashStep(MashStep * mashStep)
-{
-   qDebug() << QString("%1").arg(Q_FUNC_INFO);
+void MashStepTableModel::removeMashStep(int mashStepId, std::shared_ptr<QObject> object) {
+   this->remove(std::static_pointer_cast<MashStep>(object).get());
+   return;
+}
+
+bool MashStepTableModel::remove(MashStep * mashStep) {
 
    int i {this->steps.indexOf(mashStep)};
-   if( i >= 0 )
-   {
+   if (i >= 0) {
+      qDebug() << Q_FUNC_INFO << "Removing MashStep" << mashStep->name() << "(#" << mashStep->key() << ")";
       beginRemoveRows( QModelIndex(), i, i );
       disconnect( mashStep, nullptr, this, nullptr );
       this->steps.removeAt(i);
@@ -124,6 +130,11 @@ void MashStepTableModel::setMash( Mash* m )
       parentTableWidget->resizeRowsToContents();
    }
 }
+
+Mash * MashStepTableModel::getMash() const {
+   return this->mashObs;
+}
+
 
 void MashStepTableModel::reorderMashStep(MashStep* step, int current)
 {
@@ -183,9 +194,8 @@ void MashStepTableModel::mashStepChanged(QMetaProperty prop, QVariant val)
    int i;
 
    MashStep* stepSender = qobject_cast<MashStep*>(sender());
-   if( stepSender && (i = steps.indexOf(stepSender)) >= 0 )
-   {
-      if ( prop.name() == QString(PropertyNames::MashStep::stepNumber) ) {
+   if (stepSender && (i = steps.indexOf(stepSender)) >= 0) {
+      if (prop.name() == PropertyNames::MashStep::stepNumber) {
          reorderMashStep(stepSender,i);
       }
 
@@ -335,9 +345,9 @@ bool MashStepTableModel::setData( const QModelIndex& index, const QVariant& valu
          if( value.canConvert(QVariant::Int) )
          {
             Brewtarget::mainWindow()->doOrRedoUpdate(*row,
-                                                     "type",
-                                                     static_cast<MashStep::Type>(value.toInt()),
-                                                     tr("Change Mash Step Type"));
+                                                  PropertyNames::MashStep::type,
+                                                  static_cast<MashStep::Type>(value.toInt()),
+                                                  tr("Change Mash Step Type"));
             return true;
          }
          else
@@ -408,20 +418,22 @@ bool MashStepTableModel::setData( const QModelIndex& index, const QVariant& valu
    }
 }
 
-void MashStepTableModel::moveStepUp(int i)
-{
-   if( mashObs == nullptr || i == 0 || i >= steps.size() )
+void MashStepTableModel::moveStepUp(int i) {
+   if( this->mashObs == nullptr || i == 0 || i >= this->steps.size() ) {
       return;
+   }
 
-   Database::instance().swapMashStepOrder( steps[i], steps[i-1] );
+   this->mashObs->swapMashSteps(*this->steps[i], *this->steps[i-1]);
+   return;
 }
 
-void MashStepTableModel::moveStepDown(int i)
-{
-   if( mashObs == nullptr ||  i+1 >= steps.size() )
+void MashStepTableModel::moveStepDown(int i) {
+   if( this->mashObs == nullptr ||  i+1 >= steps.size() ) {
       return;
+   }
 
-   Database::instance().swapMashStepOrder( steps[i], steps[i+1] );
+   this->mashObs->swapMashSteps(*this->steps[i], *this->steps[i+1]);
+   return;
 }
 
 Unit::unitDisplay MashStepTableModel::displayUnit(int column) const
@@ -431,7 +443,7 @@ Unit::unitDisplay MashStepTableModel::displayUnit(int column) const
    if ( attribute.isEmpty() )
       return Unit::noUnit;
 
-   return static_cast<Unit::unitDisplay>(Brewtarget::option(attribute, Unit::noUnit, this->objectName(), Brewtarget::UNIT).toInt());
+   return static_cast<Unit::unitDisplay>(PersistentSettings::value(attribute, Unit::noUnit, this->objectName(), PersistentSettings::UNIT).toInt());
 }
 
 Unit::unitScale MashStepTableModel::displayScale(int column) const
@@ -441,7 +453,7 @@ Unit::unitScale MashStepTableModel::displayScale(int column) const
    if ( attribute.isEmpty() )
       return Unit::noScale;
 
-   return static_cast<Unit::unitScale>(Brewtarget::option(attribute, Unit::noScale, this->objectName(), Brewtarget::SCALE).toInt());
+   return static_cast<Unit::unitScale>(PersistentSettings::value(attribute, Unit::noScale, this->objectName(), PersistentSettings::SCALE).toInt());
 }
 
 // We need to:
@@ -456,8 +468,8 @@ void MashStepTableModel::setDisplayUnit(int column, Unit::unitDisplay displayUni
    if ( attribute.isEmpty() )
       return;
 
-   Brewtarget::setOption(attribute,displayUnit,this->objectName(),Brewtarget::UNIT);
-   Brewtarget::setOption(attribute,Unit::noScale,this->objectName(),Brewtarget::SCALE);
+   PersistentSettings::insert(attribute, displayUnit, this->objectName(), PersistentSettings::UNIT);
+   PersistentSettings::insert(attribute, Unit::noScale, this->objectName(), PersistentSettings::SCALE);
 
    /* Disabled cell-specific code
    for (int i = 0; i < rowCount(); ++i )
@@ -478,7 +490,7 @@ void MashStepTableModel::setDisplayScale(int column, Unit::unitScale displayScal
    if ( attribute.isEmpty() )
       return;
 
-   Brewtarget::setOption(attribute,displayScale,this->objectName(),Brewtarget::SCALE);
+   PersistentSettings::insert(attribute,displayScale, this->objectName(), PersistentSettings::SCALE);
 
    /* disabled cell-specific code
    for (int i = 0; i < rowCount(); ++i )
@@ -496,16 +508,16 @@ QString MashStepTableModel::generateName(int column) const
    switch(column)
    {
       case MASHSTEPAMOUNTCOL:
-         attribute = "amount";
+         attribute = "amount"; // Not a real property name
          break;
       case MASHSTEPTEMPCOL:
-         attribute = PropertyNames::MashStep::infuseTemp_c;
+         attribute = *PropertyNames::MashStep::infuseTemp_c;
          break;
       case MASHSTEPTARGETTEMPCOL:
-         attribute = PropertyNames::MashStep::stepTemp_c;
+         attribute = *PropertyNames::MashStep::stepTemp_c;
          break;
       case MASHSTEPTIMECOL:
-         attribute = PropertyNames::Misc::time;
+         attribute = *PropertyNames::Misc::time;
          break;
       default:
          attribute = "";

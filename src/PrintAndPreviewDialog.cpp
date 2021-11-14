@@ -1,8 +1,8 @@
-
 /*
  * PrintAndPreviewDialog.cpp is part of Brewtarget, and is Copyright the following
  * authors 2021
  * - Mattias Måhl <mattias@kejsarsten.com>
+ * - Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,14 +18,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "PrintAndPreviewDialog.h"
+
 #include <QDebug>
-#include <QPainter>
 #include <QFont>
-#include <QMessageBox>
-#include <QPrinterInfo>
 #include <QList>
+#include <QMessageBox>
+#include <QPainter>
+#include <QPrinterInfo>
 #include <QSizePolicy>
+#include <QStandardPaths>
 #include <QTextBrowser>
+
 #include "InventoryFormatter.h"
 
 /**
@@ -33,9 +36,7 @@
  *
  * @param parent
  */
-PrintAndPreviewDialog::PrintAndPreviewDialog ( MainWindow *parent)
-   : QDialog(parent)
-{
+PrintAndPreviewDialog::PrintAndPreviewDialog(MainWindow * parent) : QDialog(parent) {
    setupUi(this);
 
    mainWindow = parent;
@@ -62,11 +63,25 @@ PrintAndPreviewDialog::PrintAndPreviewDialog ( MainWindow *parent)
    checkBox_Recipe->setChecked(true);
    checkBox_Recipe->setEnabled(false);
 
+   //
+   // Set the default split between the controls on the left and the preview on the right.  It is the relative, not
+   // absolute, values that matter here as, per the documentation "The overall size of the splitter widget is not
+   // affected [by the parameters to setSizes()]. Instead, any additional/missing space is distributed amongst the
+   // widgets according to the relative weight of the sizes."
+   //
+   // .:TODO:. We should probably also do something clever like size the dialog relative to the current size of
+   // MainWindow and/or remember its size when it is closed.  (At the moment it comes up a bit small on high DPI
+   // displays.)
+   //
+   QList<int> const horizontalSplits{10, 50};
+   this->uiSplitter->setSizes(horizontalSplits);
+
    collectRecipe();
    collectPrinterInfo();
    setupConnections();
    setPrintingControls();
    setupPreviewWidgets();
+   return;
 }
 
 /**
@@ -332,41 +347,46 @@ void PrintAndPreviewDialog::handlePrinting() {
  * @param checked
  */
 void PrintAndPreviewDialog::updatePreview() {
-   if ( ! radioButton_OutputHTML->isChecked())
-   {
+   if ( ! radioButton_OutputHTML->isChecked()) {
       previewWidget->updatePreview();
-   }
-   else
-   {
+   } else {
       QString pDoc = "";
 
-      if (verticalTabWidget->currentIndex() == 0)
-      {
+      if (verticalTabWidget->currentIndex() == 0) {
          bool chkRec = checkBox_Recipe->isChecked();
          bool chkBDI = checkBox_BrewdayInstructions->isChecked();
          if (chkRec) {
-            pDoc = recipeFormatter->getHTMLFormat();
+            pDoc = recipeFormatter->getHtmlFormat();
          }
          if ( chkBDI && !chkRec ) {
-            pDoc += brewDayFormatter->buildHTML();
+            pDoc += brewDayFormatter->buildHtml();
          }
-      }
-      else if (verticalTabWidget->currentIndex() == 1)
-      {
+      } else if (verticalTabWidget->currentIndex() == 1) {
          InventoryFormatter::HtmlGenerationFlags flags  = static_cast<InventoryFormatter::HtmlGenerationFlags>(
             checkBox_inventoryFermentables->isChecked() * InventoryFormatter::FERMENTABLES   +
             checkBox_inventoryHops->isChecked()         * InventoryFormatter::HOPS           +
             checkBox_inventoryYeast->isChecked()        * InventoryFormatter::YEAST          +
             checkBox_inventoryMicellaneous->isChecked() * InventoryFormatter::MISCELLANEOUS
          );
-         pDoc = InventoryFormatter::createInventoryHTML(flags);
+         pDoc = InventoryFormatter::createInventoryHtml(flags);
       }
       // adding the generated HTML to the QTexBrowser.
       htmlDocument->setHtml(pDoc);
    }
+
    // choose what displaywidget that should be showing depending on users choice.
-   (radioButton_OutputHTML->isChecked()) ? htmlDocument->show() : htmlDocument->hide();
-   (radioButton_OutputPaper->isChecked() || radioButton_OutputPDF->isChecked()) ? previewWidget->show() : previewWidget->hide();
+   if (radioButton_OutputHTML->isChecked()) {
+      htmlDocument->show();
+   } else {
+      htmlDocument->hide();
+   }
+   if (radioButton_OutputPaper->isChecked() || radioButton_OutputPDF->isChecked()) {
+      previewWidget->show();
+   } else {
+      previewWidget->hide();
+   }
+
+   return;
 }
 
 /**
@@ -376,6 +396,7 @@ void PrintAndPreviewDialog::updatePreview() {
  */
 void PrintAndPreviewDialog::resetAndClose(bool checked) {
    setVisible(false);
+   return;
 }
 
 /**
@@ -392,6 +413,7 @@ void PrintAndPreviewDialog::selectedPaperChanged(int index) {
    //_printer->setPageSize(page);
    printer->pageLayout().setPageSize(currentlySelectedPageSize);
    updatePreview();
+   return;
 }
 
 /**
@@ -402,6 +424,7 @@ void PrintAndPreviewDialog::selectedPaperChanged(int index) {
 void PrintAndPreviewDialog::selectedPrinterChanged(int index) {
    printer->setPrinterName(comboBox_PrinterSelector->itemText(index));
    collectSupportedPageSizes();
+   return;
 }
 
 /**
@@ -410,24 +433,25 @@ void PrintAndPreviewDialog::selectedPrinterChanged(int index) {
  */
 void PrintAndPreviewDialog::outputRadioButtonsClicked() {
    setPrintingControls();
+   return;
 }
 
 /**
  * @brief Handles the Orientation Radio buttons
- *
  */
 void PrintAndPreviewDialog::orientationRadioButtonsClicked() {
    printer->setPageOrientation((radioButton_Protrait->isChecked()) ? QPageLayout::Orientation::Portrait : QPageLayout::Orientation::Landscape);
    previewWidget->updatePreview();
+   return;
 }
 
 /**
  * @brief Sets the Printing settings and enables/disables controls accordingly.
- *
  */
 void PrintAndPreviewDialog::setPrintingControls() {
-   //First off, The Printer selector either needs to be disabled when you output to PDF or HTML, or you set the outout selector to say like "QT PDF exporter" or something.
-   //for now, let's disable it.
+   // First off, The Printer selector either needs to be disabled when you output to PDF or HTML, or you set the output
+   // selector to say like "QT PDF exporter" or something.
+   // For now, let's disable it.
    comboBox_PrinterSelector->setEnabled    ( radioButton_OutputPaper->isChecked() );
 
    //Lets set the Papersize selector to be the inverse of radiobutton_OutputHTML.
@@ -455,17 +479,17 @@ void PrintAndPreviewDialog::setPrintingControls() {
    //setting up views correctly.
    updatePreview();
 
+   return;
 }
 
 /**
  * @brief Creates the preview widgets and sets the QPrintPreviewWidget as default viewer.
- * this is changed according to when output is changed.
- *
+ *        This is changed according to when output is changed.
  */
-void PrintAndPreviewDialog::setupPreviewWidgets()
-{
+void PrintAndPreviewDialog::setupPreviewWidgets() {
    //Setting up the Document preview for Paper and PDF
    PrintAndPreviewDialog::verticalLayout_PrintPreviewWidget->addWidget ( previewWidget );
+   previewWidget->setMinimumWidth(300);
    previewWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
    previewWidget->setZoomMode(QPrintPreviewWidget::FitInView);
    previewWidget->show();
@@ -474,6 +498,8 @@ void PrintAndPreviewDialog::setupPreviewWidgets()
    verticalLayout_PrintPreviewWidget->addWidget( htmlDocument );
    htmlDocument->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
    htmlDocument->hide();
+
+   return;
 }
 
 /**
@@ -483,8 +509,7 @@ void PrintAndPreviewDialog::setupPreviewWidgets()
  *
  * @param printer PagedPaintingDevice (QT) Printer to use for printout.
  */
-void PrintAndPreviewDialog::printDocument(QPrinter * printer)
-{
+void PrintAndPreviewDialog::printDocument(QPrinter * printer) {
    if ( mainWindow->currentRecipe() == nullptr)
       return;
    recipeFormatter->setRecipe(mainWindow->currentRecipe());
@@ -499,16 +524,16 @@ void PrintAndPreviewDialog::printDocument(QPrinter * printer)
       making the template editor for printouts where you can save your templates and use them or share them
       with other BT users.
       */
-      hDoc += recipeFormatter->buildHTMLHeader();
+      hDoc += recipeFormatter->buildHtmlHeader();
       if ( checkBox_Recipe->isChecked())
       {
-         hDoc += recipeFormatter->getHTMLFormat();
+         hDoc += recipeFormatter->getHtmlFormat();
       }
       if (checkBox_BrewdayInstructions->isChecked())
       {
-         hDoc += brewDayFormatter->buildInstructionHTML();
+         hDoc += brewDayFormatter->buildInstructionHtml();
       }
-      hDoc += recipeFormatter->buildHTMLFooter();
+      hDoc += recipeFormatter->buildHtmlFooter();
    }
    else if (verticalTabWidget->currentIndex() == 1)
    {
@@ -518,10 +543,12 @@ void PrintAndPreviewDialog::printDocument(QPrinter * printer)
          checkBox_inventoryYeast->isChecked()        * InventoryFormatter::YEAST          +
          checkBox_inventoryMicellaneous->isChecked() * InventoryFormatter::MISCELLANEOUS
       );
-      hDoc += InventoryFormatter::createInventoryHTML(flags);
+      hDoc += InventoryFormatter::createInventoryHtml(flags);
    }
 
    //Render the Page onto the painter/printer for preview/printing.
    textBrowser.setHtml(hDoc);
    textBrowser.print(printer);
+
+   return;
 }

@@ -22,8 +22,15 @@
 
 #include "model/NamedEntity.h"
 
-namespace PropertyNames::NamedEntityWithInventory { static char const * const inventory = "inventory"; /* previously kpropInventory */ }
-namespace PropertyNames::NamedEntityWithInventory { static char const * const inventoryId = "inventoryId"; /* previously kpropInventoryId */ }
+//======================================================================================================================
+//========================================== Start of property name constants ==========================================
+#define AddPropertyName(property) namespace PropertyNames::NamedEntityWithInventory { BtStringConst const property{#property}; }
+AddPropertyName(inventory)
+AddPropertyName(inventoryId)
+#undef AddPropertyName
+//=========================================== End of property name constants ===========================================
+//======================================================================================================================
+
 
 /**
  * \class NamedEntityWithInventory
@@ -33,8 +40,7 @@ namespace PropertyNames::NamedEntityWithInventory { static char const * const in
 class NamedEntityWithInventory : public NamedEntity {
    Q_OBJECT
 public:
-   NamedEntityWithInventory(Brewtarget::DBTable table, bool cache = true, QString t_name = QString(), bool t_display = false, QString folder = QString());
-   NamedEntityWithInventory(TableSchema* table, QSqlRecord rec, int t_key = -1);
+   NamedEntityWithInventory(int key, bool cache = true, QString t_name = QString(), bool t_display = false, QString folder = QString());
    NamedEntityWithInventory(NamedEntityWithInventory const & other);
    NamedEntityWithInventory(NamedParameterBundle const & namedParameterBundle);
 
@@ -45,14 +51,22 @@ public:
    //! \brief The inventory table id, needed for signals
    Q_PROPERTY( double inventoryId            READ inventoryId            WRITE setInventoryId            /*NOTIFY changed*/ /*changedInventoryId*/ )
 
-   virtual double inventory() const;
+   /**
+    * \brief Override \c NamedEntity::makeChild() as we have additional work to do for objects with inventory.
+    *        Specifically, a child object needs to have the same inventory as its parent.
+    *
+    * \param copiedFrom Note that this must stay as a reference to \c NamedEntity because we need to have the same
+    *                   signature as the base class member function that we're overriding.
+    */
+   virtual void makeChild(NamedEntity const & copiedFrom);
+
+   virtual double inventory() const = 0;
    int inventoryId() const;
 
-   virtual void setInventoryAmount(double amount);
+   virtual void setInventoryAmount(double amount) = 0;
    void setInventoryId(int key);
 
 protected:
-   mutable double m_inventory;
    int m_inventory_id;
 };
 

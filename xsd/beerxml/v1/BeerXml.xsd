@@ -682,10 +682,12 @@
 
    <!-- Type for <MASH_STEPS>...</MASH_STEPS> records
         These only exist inside <MASH>...</MASH> record sets, and, in this case, the BeerXML spec seems to imply there
-        is always at least one <MASH_STEP>...</MASH_STEP> record in a <MASH_STEPS>...</MASH_STEPS> record. -->
+        is always at least one <MASH_STEP>...</MASH_STEP> record in a <MASH_STEPS>...</MASH_STEPS> record.  However,
+        in reality, it is not uncommon to find extract recipes that have a MASH containing no MASH_STEPS, so we allow
+        the list to be empty. -->
    <xs:complexType name="MashStepsType">
       <xs:sequence>
-         <xs:element name="MASH_STEP" type="MashStepType" minOccurs="1" maxOccurs="unbounded"/>
+         <xs:element name="MASH_STEP" type="MashStepType" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
    </xs:complexType>
 

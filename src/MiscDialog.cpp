@@ -1,6 +1,7 @@
 /*
  * MiscDialog.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2015
+ * authors 2009-2021
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -17,14 +18,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "MiscDialog.h"
 
-#include <QWidget>
 #include <QDialog>
 #include <QInputDialog>
-#include <QString>
 #include <QList>
-#include "MiscDialog.h"
-#include "database.h"
+#include <QString>
+#include <QWidget>
+
+//#include "database/Database.h"
+#include "database/ObjectStoreWrapper.h"
 #include "model/Recipe.h"
 #include "MainWindow.h"
 #include "model/Misc.h"
@@ -135,7 +138,8 @@ void MiscDialog::removeMisc()
    }
 
    Misc* m = miscTableModel->getMisc(miscTableProxy->mapToSource(selected[0]).row());
-   Database::instance().remove(m);
+   ObjectStoreWrapper::softDelete(*m);
+   return;
 }
 
 void MiscDialog::addMisc(const QModelIndex& index)

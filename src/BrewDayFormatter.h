@@ -3,6 +3,7 @@
  * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Mattias Måhl <mattias@kejsarsten.com>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -19,17 +20,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #ifndef BREWDAYFORMATTER_H
 #define BREWDAYFORMATTER_H
+
 #include <QList>
+#include <QObject>
 #include <QStringList>
 #include <QWidget>
-#include <QObject>
+
 #include "model/Recipe.h"
 
-class BrewDayFormatter : public QObject
-{
+class BrewDayFormatter : public QObject {
    Q_OBJECT
 
 public:
@@ -52,47 +53,47 @@ public:
     *
     * @return QString
     */
-   QString buildHTML();
+   QString buildHtml();
 
+private:
    /**
-    * @brief Creates a HTML string containing the basic information about the recipe
+    * @brief Create HTML string containing the basic information about the recipe
     *
     * @param includeImage
     * @return QString
     */
-   QString buildTitleHTML(bool includeImage = true);
+   QString buildTitleHtml(bool includeImage = true);
 
    /**
     * @brief Creates a list of string-lists that contains the data about the basic information about the recipe.
-    * @author Mattias Måhl
     *
     * @return QList<QStringList>
     */
    QList<QStringList> buildTitleList();
-
+public:
    /**
-    * @brief Create a HTML string containing the instructions for the recipe.
+    * @brief Create HTML string containing the instructions for the recipe
     *
     * @return QString
     */
-   QString buildInstructionHTML();
-
+   QString buildInstructionHtml();
+private:
    /**
-    * @brief Create a list of string-lists that contain the instructions on how to brew the recipe.
+    * @brief Create a list of string-lists that contain the instructions on how to brew the recipe
     *
     * @return QList<QStringList>
     */
    QList<QStringList> buildInstructionList();
-
+public:
    /**
-    * @brief Builds and returns the Boil notes section for the bottom of the HTML page.
+    * @brief Builds and returns the Boil notes section for the bottom of the HTML page
     *
     * @return QString
     */
-   QString buildFooterHTML();
-
+   QString buildFooterHtml();
+private:
    Recipe *recObs;
    QString cssName;
 };
 
-#endif /* BREWDAYFORMATTER_H */
+#endif

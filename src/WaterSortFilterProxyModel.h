@@ -1,6 +1,7 @@
 /*
  * WaterSortFilterProxyModel.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -17,17 +18,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#ifndef _WATERSORTFILTERPROXYMODEL_H
-#define _WATERSORTFILTERPROXYMODEL_H
-
-class WaterSortFilterProxyModel;
+#ifndef WATERSORTFILTERPROXYMODEL_H
+#define WATERSORTFILTERPROXYMODEL_H
 
 #include <QSortFilterProxyModel>
 
 /*!
  * \class WaterSortFilterProxyModel
- * \author Mik Firestone
  *
  * \brief Proxy model for sorting water profiles.
  */

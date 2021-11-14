@@ -1,6 +1,7 @@
 /*
  * MashButton.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -26,7 +27,7 @@
 
 MashButton::MashButton(QWidget* parent)
    : QPushButton(parent),
-     _rec(0),
+     m_rec(0),
      _mash(0)
 {
 }
@@ -34,14 +35,14 @@ MashButton::MashButton(QWidget* parent)
 void MashButton::setRecipe(Recipe* rec)
 {
 
-   if(_rec)
-      disconnect( _rec, 0, this, 0 );
+   if(m_rec)
+      disconnect( m_rec, 0, this, 0 );
 
-   _rec = rec;
-   if( _rec )
+   m_rec = rec;
+   if( m_rec )
    {
-      connect( _rec, &NamedEntity::changed, this, &MashButton::recChanged );
-      setMash( _rec->mash() );
+      connect( m_rec, &NamedEntity::changed, this, &MashButton::recChanged );
+      setMash( m_rec->mash() );
    }
    else
       setMash(0);
@@ -66,17 +67,16 @@ void MashButton::setMash(Mash* mash)
 // because the mash tab is the only tab where you can delete stuff directly.
 Mash* MashButton::mash() { return _mash; }
 
-void MashButton::mashChanged(QMetaProperty prop, QVariant val)
-{
-   QString propName(prop.name());
-   if( propName == PropertyNames::NamedEntity::name )
-      setText( val.toString() );
+void MashButton::mashChanged(QMetaProperty prop, QVariant val) {
+   if (prop.name() == PropertyNames::NamedEntity::name) {
+      this->setText(val.toString());
+   }
+   return;
 }
 
-void MashButton::recChanged(QMetaProperty prop, QVariant val)
-{
-   QString propName(prop.name());
-
-   if( propName == "mash" )
-      setMash( qobject_cast<Mash*>(NamedEntity::extractPtr(val)) );
+void MashButton::recChanged(QMetaProperty prop, QVariant val) {
+   if (prop.name() == PropertyNames::Recipe::mash) {
+      this->setMash(val.value<Mash*>());
+   }
+   return;
 }

@@ -8,56 +8,37 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
-
+ *
  * Brewtarget is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
-
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "InventoryFormatter.h"
 
+#include <QList>
+#include <QMap>
+#include <QStringList>
+
+#include "brewtarget.h"
+#include "database/ObjectStoreWrapper.h"
 #include "Html.h"
 #include "MainWindow.h"
-#include "brewtarget.h"
-#include "database.h"
+#include "model/Fermentable.h"
+#include "model/Yeast.h"
+#include "PersistentSettings.h"
 
-namespace InventoryFormatter
-{
-   /**
-    * @brief ORs the HtmlGenerationFlags implementation.
-    *
-    * @param a
-    * @param b
-    * @return HtmlGenerationFlags
-    */
-   HtmlGenerationFlags operator|(HtmlGenerationFlags a, HtmlGenerationFlags b)
-   {
-      return static_cast<HtmlGenerationFlags>(static_cast<int>(a) | static_cast<int>(b));
-   }
-
-   /**
-    * @brief ANDs the HtmlGenerationFlags
-    *
-    * @param a
-    * @param b
-    * @return true
-    * @return false
-    */
-   bool operator&(HtmlGenerationFlags a, HtmlGenerationFlags b)
-   {
-      return (static_cast<int>(a) & static_cast<int>(b));
-   }
+namespace {
 
    /**
     * @brief Create Inventory HTML Header
     *
     * @return QString
     */
-   static QString createInventoryHeaderHTML()
-   {
+   QString createInventoryHeader() {
       return Html::createHeader(QObject::tr("Inventory"), ":css/inventory.css") +
             QString("<h1>%1 &mdash; %2</h1>")
                   .arg(QObject::tr("Inventory"))
@@ -65,19 +46,17 @@ namespace InventoryFormatter
    }
 
    /**
-    * @brief Create Inventory HTML Table Fermentables
-    *
-    * @return QString
+    * Create Inventory HTML Table of Fermentables
     */
-   static QString createInventoryTableFermentableHTML()
-   {
+   QString createInventoryTableFermentable() {
       QString result;
 
-      const QMap<int, double> inventory =
-            Database::instance().getInventory(Brewtarget::FERMTABLE);
-
-      if (!inventory.empty())
-      {
+      // Find all the parent Fermentables whose inventory is > 0
+      // (We don't want children because they are just usages of the parents in recipes.)
+      auto inventory = ObjectStoreWrapper::findAllMatching<Fermentable>(
+         [](std::shared_ptr<Fermentable> ff) { return (ff->getParent() == nullptr && ff->inventory() > 0.0); }
+      );
+      if (!inventory.empty()) {
 
          result += QString("<h2>%1</h2>").arg(QObject::tr("Fermentables"));
          result += "<table id=\"fermentables\">";
@@ -88,27 +67,16 @@ namespace InventoryFormatter
                         .arg(QObject::tr("Name"))
                         .arg(QObject::tr("Amount"));
 
-         for (auto itor = inventory.begin(); itor != inventory.end(); ++itor)
-         {
-            const Fermentable* fermentable =
-                  Database::instance().fermentable(itor.key());
-
-            if (!fermentable)
-            {
-               qCritical() << QString("The fermentable %1 has a record in the "
-                                       "inventory, but does not exist.")
-                                    .arg(itor.key());
-               continue;
-            }
-
+         for (auto fermentable : inventory) {
             result += QString("<tr>"
                               "<td>%1</td>"
                               "<td>%2</td>"
-                              "</tr>")
-                           .arg(fermentable->name())
-                           .arg(Brewtarget::displayAmount(itor.value(),
-                                 "fermentableTable", "inventory_kg",
-                                 &Units::kilograms));
+                              "</tr>").arg(fermentable->name()).arg(
+                                 Brewtarget::displayAmount(fermentable->inventory(),
+                                 PersistentSettings::Sections::fermentableTable,
+                                 PropertyNames::NamedEntityWithInventory::inventory,
+                                 &Units::kilograms)
+                              );
          }
          result += "</table>";
       }
@@ -116,18 +84,15 @@ namespace InventoryFormatter
    }
 
    /**
-    * @brief Create Inventory HTML Table of Hops
-    *
-    * @return QString
+    * Create Inventory HTML Table of Hops
     */
-   static QString createInventoryTableHopHTML()
-   {
+   QString createInventoryTableHop() {
       QString result;
-      const QMap<int, double> inventory =
-            Database::instance().getInventory(Brewtarget::HOPTABLE);
 
-      if (!inventory.empty())
-      {
+      auto inventory = ObjectStoreWrapper::findAllMatching<Hop>(
+         [](std::shared_ptr<Hop> hh) { return (hh->getParent() == nullptr && hh->inventory() > 0.0); }
+      );
+      if (!inventory.empty()) {
 
          result += QString("<h2>%1</h2>").arg(QObject::tr("Hops"));
          result += "<table id=\"hops\">";
@@ -140,18 +105,7 @@ namespace InventoryFormatter
                         .arg(QObject::tr("Alpha %"))
                         .arg(QObject::tr("Amount"));
 
-         for (auto itor = inventory.begin(); itor != inventory.end(); ++itor)
-         {
-            const Hop* hop = Database::instance().hop(itor.key());
-
-            if (!hop)
-            {
-               qCritical() << QString("The hop %1 has a record in the "
-                                       "inventory, but does not exist.")
-                                    .arg(itor.key());
-               continue;
-            }
-
+         for (auto hop : inventory) {
             result += QString("<tr>"
                               "<td>%1</td>"
                               "<td>%2</td>"
@@ -159,8 +113,10 @@ namespace InventoryFormatter
                               "</tr>")
                            .arg(hop->name())
                            .arg(hop->alpha_pct())
-                           .arg(Brewtarget::displayAmount(itor.value(),
-                                 "hopTable", "inventory_kg", &Units::kilograms));
+                           .arg(Brewtarget::displayAmount(hop->inventory(),
+                                                       PersistentSettings::Sections::hopTable,
+                                                       PropertyNames::NamedEntityWithInventory::inventory,
+                                                       &Units::kilograms));
          }
          result += "</table>";
       }
@@ -168,18 +124,15 @@ namespace InventoryFormatter
    }
 
    /**
-    * @brief Create Inventory HTML Table of Miscellaneous
-    *
-    * @return QString
+    * Create Inventory HTML Table of Misc
     */
-   static QString createInventoryTableMiscellaneousHTML()
-   {
+   QString createInventoryTableMiscellaneous() {
       QString result;
-      const QMap<int, double> inventory =
-            Database::instance().getInventory(Brewtarget::MISCTABLE);
 
-      if (!inventory.empty())
-      {
+      auto inventory = ObjectStoreWrapper::findAllMatching<Misc>(
+         [](std::shared_ptr<Misc> mm) { return (mm->getParent() == nullptr && mm->inventory() > 0.0); }
+      );
+      if (!inventory.empty()) {
 
          result += QString("<h2>%1</h2>").arg(QObject::tr("Miscellaneous"));
          result += "<table id=\"misc\">";
@@ -190,22 +143,13 @@ namespace InventoryFormatter
                         .arg(QObject::tr("Name"))
                         .arg(QObject::tr("Amount"));
 
-         for (auto itor = inventory.begin(); itor != inventory.end(); ++itor)
-         {
-            const Misc* miscellaneous = Database::instance().misc(itor.key());
-
-            if (!miscellaneous)
-            {
-               qCritical() << QString("The miscellaneous %1 has a record in the "
-                                       "inventory, but does not exist.")
-                                    .arg(itor.key());
-               continue;
-            }
-
+         for (auto miscellaneous : inventory) {
             const QString displayAmount =
-                  Brewtarget::displayAmount(itor.value(), "miscTable", "amount",
-                        miscellaneous->amountIsWeight() ? &Units::kilograms
-                                                        : &Units::liters);
+                  Brewtarget::displayAmount(miscellaneous->inventory(),
+                                         PersistentSettings::Sections::miscTable,
+                                         PropertyNames::NamedEntityWithInventory::inventory,
+                        miscellaneous->amountIsWeight() ? (Unit*)&Units::kilograms
+                                                      : (Unit*)&Units::liters);
             result += QString("<tr>"
                               "<td>%1</td>"
                               "<td>%2</td>"
@@ -218,20 +162,15 @@ namespace InventoryFormatter
       return result;
    }
 
-
    /**
-    * @brief Create Inventory HTML Table Yeasts
-    *
-    * @return QString
+    * Create Inventory HTML Table of Yeast
     */
-   static QString createInventoryTableYeastHTML()
-   {
+   QString createInventoryTableYeast() {
       QString result;
-      const QMap<int, double> inventory =
-            Database::instance().getInventory(Brewtarget::YEASTTABLE);
-
-      if (!inventory.empty())
-      {
+      auto inventory = ObjectStoreWrapper::findAllMatching<Yeast>(
+         [](std::shared_ptr<Yeast> yy) { return (yy->getParent() == nullptr && yy->inventory() > 0.0); }
+      );
+      if (!inventory.empty()) {
          result += QString("<h2>%1</h2>").arg(QObject::tr("Yeast"));
          result += "<table id=\"yeast\">";
          result += QString("<tr>"
@@ -241,22 +180,13 @@ namespace InventoryFormatter
                         .arg(QObject::tr("Name"))
                         .arg(QObject::tr("Amount"));
 
-         for (auto itor = inventory.begin(); itor != inventory.end(); ++itor)
-         {
-            const Yeast* yeast = Database::instance().yeast(itor.key());
-
-            if (!yeast)
-            {
-               qCritical() << QString("The yeast %1 has a record in the "
-                                       "inventory, but does not exist.")
-                                    .arg(itor.key());
-               continue;
-            }
-
+         for (auto yeast : inventory) {
             const QString displayAmount =
-                  Brewtarget::displayAmount(itor.value(), "yeastTable", "quanta",
-                        yeast->amountIsWeight() ? (Unit const *)&Units::kilograms
-                                                : (Unit const *)&Units::liters);
+                  Brewtarget::displayAmount(yeast->inventory(),
+                                         PersistentSettings::Sections::yeastTable,
+                                         PropertyNames::NamedEntityWithInventory::inventory,
+                        yeast->amountIsWeight() ? (Unit*)&Units::kilograms
+                                                : (Unit*)&Units::liters);
 
             result += QString("<tr>"
                               "<td>%1</td>"
@@ -271,22 +201,18 @@ namespace InventoryFormatter
    }
 
    /**
-    * @brief Create a Inventory H T M L Body object
-    *
-    * @param flags HTMLgeneretionFlags stacked to generate
-    * @return QString
+    * Create Inventory HTML Body
     */
-   static QString createInventoryHTMLBody(HtmlGenerationFlags flags)
-   {
-      //Only generate users selection of Ingredient inventory.
+   QString createInventoryBody(InventoryFormatter::HtmlGenerationFlags flags) {
+      // Only generate users selection of Ingredient inventory.
       QString result =
-            ((HtmlGenerationFlags::FERMENTABLES  & flags) ? createInventoryTableFermentableHTML() : "") +
-            ((HtmlGenerationFlags::HOPS          & flags) ? createInventoryTableHopHTML() : "") +
-            ((HtmlGenerationFlags::MISCELLANEOUS & flags) ? createInventoryTableMiscellaneousHTML() : "") +
-            ((HtmlGenerationFlags::YEAST         & flags) ? createInventoryTableYeastHTML() : "");
-      //If users selects no printout or if there are no inventory for the selected ingredients.
-      if (result.size() == 0)
-      {
+         ((InventoryFormatter::FERMENTABLES  & flags) ? createInventoryTableFermentable() : "") +
+         ((InventoryFormatter::HOPS          & flags) ? createInventoryTableHop() : "") +
+         ((InventoryFormatter::MISCELLANEOUS & flags) ? createInventoryTableMiscellaneous() : "") +
+         ((InventoryFormatter::YEAST         & flags) ? createInventoryTableYeast() : "");
+
+         // If user selects no printout or if there are no inventory for the selected ingredients.
+      if (result.size() == 0) {
          result = QObject::tr("No inventory available.");
       }
 
@@ -294,72 +220,28 @@ namespace InventoryFormatter
    }
 
    /**
-    * @brief Create Inventory HTML Footer
-    *
-    * @return QString
+    * Create Inventory HTML Footer
     */
-   static QString createInventoryFooterHTML()
-   {
+   QString createInventoryFooter() {
       return Html::createFooter();
    }
 
-   /**
-    * @brief Create Inventory HTML string
-    *
-    * @return QString
-    */
-   QString createInventoryHTML(HtmlGenerationFlags flags)
-   {
-      return createInventoryHeaderHTML() +
-               createInventoryHTMLBody(flags) +
-               createInventoryFooterHTML();
-   }
+}
 
 
-   /**
-    * @brief These implementations are to get the specific entity with the supplies ID.
-    *
-    * @param id
-    * @return templates Type pointer.
-    */
-   template <> Yeast* getEntity(int id) { return Database::instance().yeast(id); }
-   template <> Hop* getEntity(int id) { return Database::instance().hop(id); }
-   template <> Fermentable* getEntity(int id) { return Database::instance().fermentable(id); }
-   template <> Misc* getEntity(int id) { return Database::instance().misc(id); }
+InventoryFormatter::HtmlGenerationFlags InventoryFormatter::operator|(InventoryFormatter::HtmlGenerationFlags a,
+                                                                      InventoryFormatter::HtmlGenerationFlags b) {
+   return static_cast<HtmlGenerationFlags>(static_cast<int>(a) | static_cast<int>(b));
+}
 
-   template<> const QStringList getTableRow(Hop *obj, double value)
-   {
-      return QStringList()
-         << obj->name()
-         << QString("%1").arg(obj->alpha_pct())
-         << Brewtarget::displayAmount(value, "hopTable", "inventory_kg", &Units::kilograms);
-   }
+bool InventoryFormatter::operator&(InventoryFormatter::HtmlGenerationFlags a,
+                                   InventoryFormatter::HtmlGenerationFlags b) {
+   return (static_cast<int>(a) & static_cast<int>(b));
+}
 
-   template<> const QStringList getTableRow(Fermentable *obj, double value)
-   {
-      return QStringList()
-         << obj->name()
-         << Brewtarget::displayAmount(value, "fermentableTable", "inventory_kg", &Units::kilograms);
-   }
 
-   template<> const QStringList getTableRow(Yeast *obj, double value)
-   {
-      const QString displayAmount =
-                  Brewtarget::displayAmount(value, "yeastTable", "quanta",
-                        obj->amountIsWeight() ? (Unit const *)&Units::kilograms
-                                                : (Unit const *)&Units::liters);
-
-      return QStringList() << obj->name() << displayAmount;
-   }
-
-   template<> const QStringList getTableRow(Misc *obj, double value)
-   {
-      const QString displayAmount =
-                  Brewtarget::displayAmount(value, "miscTable", "amount",
-                        obj->amountIsWeight() ? (Unit const *)&Units::kilograms
-                                                      : (Unit const *)&Units::liters);
-      return QStringList() << obj->name() << displayAmount;
-   }
-
-} // InventoryFormatter
-
+QString InventoryFormatter::createInventoryHtml(HtmlGenerationFlags flags) {
+   return createInventoryHeader() +
+          createInventoryBody(flags) +
+          createInventoryFooter();
+}

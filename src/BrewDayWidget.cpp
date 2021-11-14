@@ -1,7 +1,8 @@
 /*
  * BrewDayWidget.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
  * - Kregg K <gigatropolis@yahoo.com>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -18,22 +19,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#include <QListWidgetItem>
-#include <QPrinter>
-#include <QPrintDialog>
-#include <QDate>
-#include <QVector>
-#include <QDir>
-#include <QDebug>
-#include "database.h"
-#include "InstructionWidget.h"
-#include "TimerWidget.h"
-#include "model/Instruction.h"
-#include "brewtarget.h"
 #include "BrewDayWidget.h"
+
+#include <QDate>
+#include <QDebug>
+#include <QDir>
+#include <QListWidgetItem>
+#include <QPrintDialog>
+#include <QPrinter>
+#include <QVector>
+
+#include "brewtarget.h"
+#include "database/ObjectStoreWrapper.h"
+#include "InstructionWidget.h"
+#include "model/Instruction.h"
 #include "model/Recipe.h"
 #include "model/Style.h"
+#include "TimerWidget.h"
 
 // NOTE: QPrinter has no parent? Will it get destroyed properly?
 BrewDayWidget::BrewDayWidget(QWidget* parent) :
@@ -71,21 +73,22 @@ QSize BrewDayWidget::sizeHint() const
    return QSize(0,0);
 }
 
-void BrewDayWidget::insertInstruction()
-{
+void BrewDayWidget::insertInstruction() {
    if( recObs == 0 )
       return;
 
    int pos = lineEdit_step->text().toInt();
    int size = recObs->instructions().size();
-   if( pos < 0 || pos > size )
+   if( pos < 0 || pos > size ) {
       pos = size;
+   }
 
-   Instruction* ins = Database::instance().newInstruction(recObs);
+   auto ins = std::make_shared<Instruction>();
    ins->setName(lineEdit_name->text());
+   ObjectStoreWrapper::insert(ins);
 
    // TODO: figure out how to do ordering of ingredients.
-   recObs->insertInstruction( ins, pos );
+   this->recObs->insertInstruction(ins.get() , pos);
    //listWidget->insertItem(pos, ins->text(false));
    repopulateListWidget();
 }
@@ -100,7 +103,7 @@ void BrewDayWidget::removeSelectedInstruction()
       return;
    listWidget->takeItem(row);
    repopulateListWidget();
-   recObs->removeInstruction(recObs->instructions()[row]);
+   recObs->remove(ObjectStoreWrapper::getSharedFromRaw(recObs->instructions()[row]));
 }
 
 void BrewDayWidget::pushInstructionUp()

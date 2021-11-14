@@ -1,6 +1,7 @@
 /*
  * MiscEditor.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  * - Samuel Östling <MrOstling@gmail.com>
@@ -18,21 +19,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "MiscEditor.h"
 
 #include <QtGui>
 #include <QIcon>
 #include <QInputDialog>
-#include "MiscEditor.h"
-#include "BtHorizontalTabs.h"
-#include "database.h"
-#include "config.h"
-#include "Unit.h"
-#include "brewtarget.h"
-#include "model/Misc.h"
 
-MiscEditor::MiscEditor( QWidget* parent )
-   : QDialog(parent), obsMisc(nullptr)
-{
+#include "brewtarget.h"
+#include "BtHorizontalTabs.h"
+#include "config.h"
+#include "database/ObjectStoreWrapper.h"
+#include "model/Misc.h"
+#include "Unit.h"
+
+MiscEditor::MiscEditor( QWidget* parent ) :
+   QDialog(parent),
+   obsMisc(nullptr) {
    setupUi(this);
 
    tabWidget_editor->tabBar()->setStyle(new BtHorizontalTabs);
@@ -41,6 +43,7 @@ MiscEditor::MiscEditor( QWidget* parent )
    connect( pushButton_save,   &QAbstractButton::clicked, this, &MiscEditor::save );
    connect( pushButton_cancel, &QAbstractButton::clicked, this, &MiscEditor::clearAndClose );
 
+   return;
 }
 
 void MiscEditor::setMisc( Misc* m )
@@ -66,10 +69,10 @@ void MiscEditor::save()
       return;
    }
 
-   qInfo() << comboBox_type->currentIndex();
-   qInfo() << comboBox_use->currentIndex();
+   qDebug() << Q_FUNC_INFO << comboBox_type->currentIndex();
+   qDebug() << Q_FUNC_INFO << comboBox_use->currentIndex();
 
-   m->setName(lineEdit_name->text(),m->cacheOnly());
+   m->setName(lineEdit_name->text());
    m->setType( static_cast<Misc::Type>(comboBox_type->currentIndex()) );
    m->setUse( static_cast<Misc::Use>(comboBox_use->currentIndex()) );
    m->setTime(lineEdit_time->toSI());
@@ -79,8 +82,9 @@ void MiscEditor::save()
    m->setNotes( textEdit_notes->toPlainText() );
 
    if ( m->cacheOnly() ) {
-      qInfo() << "Inserting into database";
-      m->insertInDatabase();
+      qDebug() << Q_FUNC_INFO << "Inserting into database";
+      ObjectStoreWrapper::insert(*m);
+      m->setCacheOnly(false);
    }
    // do this late to make sure we've the row in the inventory table
    m->setInventoryAmount(lineEdit_inventory->toSI());
@@ -120,16 +124,17 @@ void MiscEditor::showChanges(QMetaProperty* metaProp)
       lineEdit_name->setText(obsMisc->name());
       lineEdit_name->setCursorPosition(0);
       tabWidget_editor->setTabText(0, obsMisc->name());
-      if( ! updateAll )
+      if( ! updateAll ) {
          return;
+      }
    }
-   if( propName == "type" || updateAll )
+   if( propName == PropertyNames::Misc::type || updateAll )
    {
       comboBox_type->setCurrentIndex(obsMisc->type());
       if( ! updateAll )
          return;
    }
-   if( propName == "use" || updateAll )
+   if( propName == PropertyNames::Misc::use || updateAll )
    {
       comboBox_use->setCurrentIndex(obsMisc->use());
       if( ! updateAll )
@@ -141,19 +146,19 @@ void MiscEditor::showChanges(QMetaProperty* metaProp)
       if( ! updateAll )
          return;
    }
-   if( propName == "amount" || updateAll )
+   if( propName == PropertyNames::Misc::amount || updateAll )
    {
       lineEdit_amount->setText(obsMisc);
       if( ! updateAll )
          return;
    }
-   if( propName == "amountIsWeight" || updateAll )
+   if( propName == PropertyNames::Misc::amountIsWeight || updateAll )
    {
       checkBox_isWeight->setCheckState( obsMisc->amountIsWeight()? Qt::Checked : Qt::Unchecked );
       if( ! updateAll )
          return;
    }
-   if( propName == "inventory" || updateAll )
+   if( propName == PropertyNames::NamedEntityWithInventory::inventory || updateAll )
    {
       lineEdit_inventory->setText(obsMisc);
       if( ! updateAll )
@@ -165,7 +170,7 @@ void MiscEditor::showChanges(QMetaProperty* metaProp)
       if( ! updateAll )
          return;
    }
-   if( propName == "notes" || updateAll )
+   if( propName == PropertyNames::Misc::notes || updateAll )
    {
       textEdit_notes->setPlainText( obsMisc->notes() );
       if( ! updateAll )
@@ -173,22 +178,25 @@ void MiscEditor::showChanges(QMetaProperty* metaProp)
    }
 }
 
-void MiscEditor::newMisc(QString folder)
-{
+void MiscEditor::newMisc(QString folder) {
    QString name = QInputDialog::getText(this, tr("Misc name"),
                                           tr("Misc name:"));
-   if( name.isEmpty() )
+   if( name.isEmpty() ) {
       return;
+   }
 
    Misc* m = new Misc(name,true);
 
-   if ( ! folder.isEmpty() )
+   if ( ! folder.isEmpty() ) {
       m->setFolder(folder);
+   }
 
    setMisc(m);
    show();
+   return;
 }
-void MiscEditor::newMisc()
-{
+
+void MiscEditor::newMisc() {
    newMisc(QString());
+   return;
 }

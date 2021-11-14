@@ -1,7 +1,8 @@
 /*
- * HydrometerTool.h is part of Brewtarget and was written by Ryan Hoobler
- * (rhoob@yahoo.com).  Copyright is granted to Philip G. Lee
- * (rocketman768@gmail.com), 2016.
+ * HydrometerTool.h is part of Brewtarget, and is Copyright the following
+ * authors 2016-2021
+ * - Matt Young <mfsy@yahoo.com>
+ * - Ryan Hoobler (rhoob@yahoo.com)
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,11 +17,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#ifndef _HYDROMETERTOOL_H
-#define  _HYDROMETERTOOL_H
-
-class HydrometerTool;
+#ifndef HYDROMETERTOOL_H
+#define HYDROMETERTOOL_H
 
 #include <QDialog>
 #include <QWidget>

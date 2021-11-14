@@ -1,7 +1,8 @@
 /*
  * MiscEditor.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -18,9 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#ifndef _MISCEDITOR_H
-#define   _MISCEDITOR_H
+#ifndef MISCEDITOR_H
+#define MISCEDITOR_H
+#pragma once
 
 #include <QDialog>
 #include "ui_miscEditor.h"
@@ -32,7 +33,6 @@ class Misc;
 
 /*!
  * \class MiscEditor
- * \author Philip G. Lee
  *
  * \brief View/controller dialog for editing miscs.
  */
@@ -45,7 +45,7 @@ public:
    virtual ~MiscEditor() {}
    //! Set the misc we wish to view/edit.
    void setMisc( Misc* m );
-   //! Create a misc with folders
+  //! Create a misc with folders
    void newMisc(QString folder);
 
 public slots:
@@ -66,5 +66,4 @@ private:
    void showChanges(QMetaProperty* metaProp = nullptr);
 };
 
-#endif   /* _MISCEDITOR_H */
-
+#endif

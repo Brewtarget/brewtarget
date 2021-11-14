@@ -17,85 +17,46 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef _BEERXML_H
-#define _BEERXML_H
+#ifndef BEERXML_H
+#define BEERXML_H
 
 class BeerXML;
 
 #include <memory> // For PImpl
 
-#include <QDomDocument>
-#include <QDomNode>
-#include <QList>
-#include <QHash>
 #include <QFile>
 #include <QString>
-#include <QVariant>
-#include <QMetaProperty>
-#include <QUndoStack>
-#include <QObject>
-#include <QPair>
-#include <QDebug>
-#include <QRegExp>
-#include <QMap>
-
-#include "model/NamedEntity.h"
-#include "brewtarget.h"
-#include "database.h"
-#include "TableSchema.h"
-
-class BrewNote;
-class Equipment;
-class Fermentable;
-class Hop;
-class Instruction;
-class Mash;
-class MashStep;
-class Misc;
-class Recipe;
-class Style;
-class Water;
-class Yeast;
+#include <QTextStream>
 
 /*!
  * \class BeerXML
- * \author Mik Firestone
  *
- * \brief Handles all translations to and from BeerXML
- *
+ * \brief Singleton that handles all translations to and from BeerXML
  */
-class BeerXML : public QObject
-{
-   Q_OBJECT
-
-   friend class Database;
+class BeerXML {
 public:
+
+   /**
+    * \brief Get the singleton instance
+    */
+   static BeerXML & getInstance();
 
    virtual ~BeerXML();
 
    // Export to BeerXML =======================================================
-   void toXml( BrewNote* a, QDomDocument& doc, QDomNode& parent );
-   void toXml( Equipment* a, QDomDocument& doc, QDomNode& parent );
-   void toXml( Fermentable* a, QDomDocument& doc, QDomNode& parent );
-   void toXml( Hop* a, QDomDocument& doc, QDomNode& parent );
-   void toXml( Instruction* a, QDomDocument& doc, QDomNode& parent );
-   void toXml( Mash* a, QDomDocument& doc, QDomNode& parent );
-   void toXml( MashStep* a, QDomDocument& doc, QDomNode& parent );
-   void toXml( Misc* a, QDomDocument& doc, QDomNode& parent );
-   void toXml( Recipe* a, QDomDocument& doc, QDomNode& parent );
-   void toXml( Style* a, QDomDocument& doc, QDomNode& parent );
-   void toXml( Water* a, QDomDocument& doc, QDomNode& parent );
-   void toXml( Yeast* a, QDomDocument& doc, QDomNode& parent );
-   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-   /*! Populates the \b element with properties. This must be a class that
-    *  simple properties only (no subelements).
-    * \param element is the element you want to populate.
-    * \param xmlTagsToProperties is a hash from xml tags to meta property names.
-    * \param elementNode is the root node of the element we are reading from.
+   /**
+    * \brief Creates a blank BeerXML document in the supplied file (which the caller should have opened for writing
+    *        already).  This can then be supplied to subsequent calls to add BeerXML for Recipes, Hops, etc.
     */
-   void fromXml(NamedEntity* element, QHash<QString,QString> const& xmlTagsToProperties, QDomNode const& elementNode);
-   void fromXml(NamedEntity* element, QDomNode const& elementNode);
+   void createXmlFile(QFile & outFile) const;
+
+   /**
+    * \brief Write a list of objects to the supplied file
+    */
+   template<class NE> void toXml(QList<NE *> & nes, QFile & outFile) const;
+
+   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
    /*! Import ingredients, recipes, etc from BeerXML documents.
     * \param filename
@@ -110,19 +71,19 @@ private:
    class impl;
    std::unique_ptr<impl> pimpl;
 
-   DatabaseSchema* m_tables;
-
    /**
-    * Private constructor means our friend class (Database) can construct us
+    * Private constructor as singleton
     */
-   BeerXML(DatabaseSchema* tables);
+   BeerXML();
 
    //! No copy constructor, as never want anyone, not even our friends, to make copies of a singleton
    BeerXML(BeerXML const&) = delete;
    //! No assignment operator , as never want anyone, not even our friends, to make copies of a singleton.
    BeerXML& operator=(BeerXML const&) = delete;
-
-   QString textFromValue(QVariant value, QString type);
+   //! No move constructor
+   BeerXML(BeerXML &&) = delete;
+   //! No move assignment
+   BeerXML & operator=(BeerXML &&) = delete;
 };
 
 #endif

@@ -20,37 +20,44 @@
  */
 #ifndef MODEL_MASHSTEP_H
 #define MODEL_MASHSTEP_H
+#pragma once
 
-#include <QStringList>
 #include <QString>
+#include <QStringList>
 
-#include "model/NamedEntity.h"
 #include "model/Mash.h"
+#include "model/NamedEntity.h"
 
-namespace PropertyNames::MashStep { static char const * const stepNumber = "stepNumber"; /* previously kpropStepNumber */ }
-namespace PropertyNames::MashStep { static char const * const decoctionAmount_l = "decoctionAmount_l"; /* previously kpropDecoctAmt */ }
-namespace PropertyNames::MashStep { static char const * const infuseTemp_c = "infuseTemp_c"; /* previously kpropInfuseTemp */ }
-namespace PropertyNames::MashStep { static char const * const endTemp_c = "endTemp_c"; /* previously kpropEndTemp */ }
-namespace PropertyNames::MashStep { static char const * const rampTime_min = "rampTime_min"; /* previously kpropRampTime */ }
-namespace PropertyNames::MashStep { static char const * const stepTime_min = "stepTime_min"; /* previously kpropStepTime */ }
-namespace PropertyNames::MashStep { static char const * const stepTemp_c = "stepTemp_c"; /* previously kpropStepTemp */ }
-namespace PropertyNames::MashStep { static char const * const infuseAmount_l = "infuseAmount_l"; /* previously kpropInfuseAmt */ }
-namespace PropertyNames::MashStep { static char const * const typeString = "typeString"; /* previously kpropTypeString */ }
-namespace PropertyNames::MashStep { static char const * const type = "type"; /* previously kpropType */ }
+//======================================================================================================================
+//========================================== Start of property name constants ==========================================
+#define AddPropertyName(property) namespace PropertyNames::MashStep { BtStringConst const property{#property}; }
+AddPropertyName(decoctionAmount_l)
+AddPropertyName(endTemp_c)
+AddPropertyName(infuseAmount_l)
+AddPropertyName(infuseTemp_c)
+AddPropertyName(mashId)
+AddPropertyName(rampTime_min)
+AddPropertyName(stepNumber)
+AddPropertyName(stepTemp_c)
+AddPropertyName(stepTime_min)
+AddPropertyName(typeString)
+AddPropertyName(type)
+#undef AddPropertyName
+//=========================================== End of property name constants ===========================================
+//======================================================================================================================
+
 
 /*!
  * \class MashStep
  *
  * \brief Model for a mash step record in the database.
  */
-class MashStep : public NamedEntity
-{
+class MashStep : public NamedEntity {
    Q_OBJECT
    Q_CLASSINFO("signal", "mashsteps")
 
    // this seems to be a class with a lot of friends
-   friend class Database;
-   friend class BeerXML;
+
    friend class MashStepItemDelegate;
    friend class MashWizard;
    friend class MashDesigner;
@@ -61,8 +68,11 @@ public:
    enum Type { Infusion, Temperature, Decoction, flySparge, batchSparge };
    Q_ENUMS( Type )
 
-   MashStep( QString name, bool cache = true );
-   virtual ~MashStep() {}
+   MashStep(QString name = "", bool cache = true);
+   MashStep(NamedParameterBundle const & namedParameterBundle);
+   MashStep( MashStep const& other );
+
+   virtual ~MashStep();
 
    //! \brief The \c Type.
    Q_PROPERTY( Type type READ type WRITE setType /*NOTIFY changed*/ /*changedType*/ )
@@ -85,7 +95,9 @@ public:
    //! \brief The decoction amount in liters.
    Q_PROPERTY( double decoctionAmount_l READ decoctionAmount_l WRITE setDecoctionAmount_l /*NOTIFY changed*/ /*changedDecoctionAmount_l*/ )
    //! \brief The step number in a sequence of other steps.
-   Q_PROPERTY( int stepNumber READ stepNumber /*WRITE*/ /*NOTIFY changed*/ STORED false )
+   Q_PROPERTY( int stepNumber READ stepNumber WRITE setStepNumber /*NOTIFY changed*/ STORED false )
+   //! \brief The Mash to which this MashStep belongs
+   Q_PROPERTY( int mashId READ getMashId WRITE setMashId )
 
    void setType( Type t);
    void setInfuseAmount_l( double var);
@@ -95,7 +107,8 @@ public:
    void setEndTemp_c( double var);
    void setInfuseTemp_c( double var);
    void setDecoctionAmount_l( double var);
-   void setMash(Mash * mash);
+   void setStepNumber(int stepNumber);
+   void setMashId(int mashId);
 
    Type type() const;
    const QString typeString() const;
@@ -107,7 +120,7 @@ public:
    double endTemp_c() const;
    double infuseTemp_c() const;
    double decoctionAmount_l() const;
-   Mash * mash() const;
+   int getMashId() const;
 
    //! What number this step is in the mash.
    int stepNumber() const;
@@ -118,24 +131,16 @@ public:
    bool isTemperature() const;
    bool isDecoction() const;
 
-   static QString classNameStr();
+   virtual Recipe * getOwningRecipe();
 
-   // MashStep objects do not have parents
-   NamedEntity * getParent() { return nullptr; }
-   virtual int insertInDatabase();
-   virtual void removeFromDatabase();
-
+   static QStringList const types;
 signals:
 
 protected:
    virtual bool isEqualTo(NamedEntity const & other) const;
+   virtual ObjectStore & getObjectStoreTypedInstance() const;
 
 private:
-//   MashStep(Brewtarget::DBTable table, int key);
-   MashStep( TableSchema* table, QSqlRecord rec, int t_key = -1 );
-   MashStep( MashStep const& other );
-
-   QString m_typeStr;
    Type m_type;
    double m_infuseAmount_l;
    double m_stepTemp_c;
@@ -145,38 +150,7 @@ private:
    double m_infuseTemp_c;
    double m_decoctionAmount_l;
    int m_stepNumber;
-   Mash * m_mash;
-
-   bool isValidType( const QString &str ) const;
-
-   static QStringList types;
-   static QStringList typesTr;
-};
-/*
-inline bool MashStepPtrLt( MashStep* lhs, MashStep* rhs)
-{
-   return *lhs < *rhs;
-}
-
-inline bool MashStepPtrEq( MashStep* lhs, MashStep* rhs)
-{
-   return *lhs == *rhs;
-}
-
-struct MashStep_ptr_cmp
-{
-   bool operator()( MashStep* lhs, MashStep* rhs)
-   {
-      return *lhs < *rhs;
-   }
+   int mashId;
 };
 
-struct MashStep_ptr_equals
-{
-   bool operator()( MashStep* lhs, MashStep* rhs )
-   {
-      return *lhs == *rhs;
-   }
-};
-*/
-#endif //_MASHSTEP_H
+#endif

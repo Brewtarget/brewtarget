@@ -1,6 +1,7 @@
 /*
  * BtSplashScreen.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2015
+ * authors 2009-2021
+ * - Matt Young <mfsy@yahoo.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -16,9 +17,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#ifndef _BTSPLASHSCREEN_H
-#define _BTSPLASHSCREEN_H
+#ifndef BTSPLASHSCREEN_H
+#define BTSPLASHSCREEN_H
 
 #include <QWidget>
 #include <QSplashScreen>
@@ -27,7 +27,6 @@
 
 /*!
  * \class BtSplashScreen
- * \author Philip G. Lee
  *
  * \brief A class for showing the brewtarget splash screen on startup.
  */
@@ -45,4 +44,4 @@ public:
    void showMessage(QString const& message);
 };
 
-#endif /*_BTSPLASHSCREEN_H*/
+#endif

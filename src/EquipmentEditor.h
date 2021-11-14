@@ -1,8 +1,9 @@
 /*
  * EquipmentEditor.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2015
+ * authors 2009-2021
  * - David Grundberg <individ@acc.umu.se>
  * - Jeff Bailey <skydvr38@verizon.net>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -19,28 +20,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#ifndef _EQUIPMENTEDITOR_H
-#define _EQUIPMENTEDITOR_H
-
-class EquipmentEditor;
+#ifndef EQUIPMENTEDITOR_H
+#define EQUIPMENTEDITOR_H
 
 #include "ui_equipmentEditor.h"
+
 #include <QMetaProperty>
 #include <QVariant>
 
+// Forward declarations
 class Equipment;
 class EquipmentListModel;
 class NamedEntitySortProxyModel;
 
 /*!
  * \class EquipmentEditor
- * \author Philip G. Lee
  *
  * \brief This is a dialog that edits an equipment record.
  */
-class EquipmentEditor : public QDialog, private Ui::equipmentEditor
-{
+class EquipmentEditor : public QDialog, private Ui::equipmentEditor {
    Q_OBJECT
 
 public:
@@ -90,5 +88,4 @@ private:
 
 };
 
-#endif   /* _EQUIPMENTEDITOR_H */
-
+#endif

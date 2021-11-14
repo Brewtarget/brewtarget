@@ -1,6 +1,7 @@
 /*
  * EquipmentButton.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
+ * - Matt Young <mfsy@yahoo.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -16,9 +17,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#ifndef _EQUIPMENTBUTTON_H
-#define _EQUIPMENTBUTTON_H
+#ifndef EQUIPMENTBUTTON_H
+#define EQUIPMENTBUTTON_H
 
 #include <QPushButton>
 #include <QMetaProperty>
@@ -31,7 +31,6 @@ class QWidget;
 
 /*!
  * \class EquipmentButton
- * \author Philip G. Lee (rocketman768@gmail.com)
  *
  * \brief This is a view class that displays the name of an equipment.
  */
@@ -52,8 +51,8 @@ private slots:
    void equipChanged(QMetaProperty,QVariant);
 
 private:
-   Recipe* _rec;
-   Equipment* _equip;
+   Recipe* m_rec;
+   Equipment* m_equip;
 };
 
 #endif

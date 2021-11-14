@@ -1,6 +1,7 @@
 /*
  * SaltTableModel.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2020
+ * authors 2009-2021
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  * - swstim <swstim@gmail.com>
@@ -18,31 +19,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "SaltTableModel.h"
 
-#include <QAbstractTableModel>
 #include <QAbstractItemModel>
-#include <QStandardItemModel>
-#include <QWidget>
+#include <QAbstractTableModel>
 #include <QComboBox>
 #include <QHeaderView>
-#include <QModelIndex>
-#include <QVariant>
 #include <QItemDelegate>
-#include <QStyleOptionViewItem>
 #include <QLineEdit>
-#include <QString>
-#include <QObject>
-
 #include <QList>
-#include "database.h"
-#include "WaterDialog.h"
-#include "SaltTableModel.h"
-#include "model/Salt.h"
-#include "Unit.h"
-#include "model/Recipe.h"
+#include <QModelIndex>
+#include <QObject>
+#include <QStandardItemModel>
+#include <QString>
+#include <QStyleOptionViewItem>
+#include <QVariant>
+#include <QWidget>
+
+#include "brewtarget.h"
+#include "database/ObjectStoreWrapper.h"
 #include "model/Mash.h"
 #include "model/MashStep.h"
-#include "brewtarget.h"
+#include "model/Recipe.h"
+#include "model/Salt.h"
+#include "PersistentSettings.h"
+#include "Unit.h"
+#include "WaterDialog.h"
 
 static QStringList addToName = QStringList() << QObject::tr("Never")
                                              << QObject::tr("Mash")
@@ -147,10 +149,11 @@ void SaltTableModel::addSalts(QList<Salt*> salts)
    }
 }
 
-void SaltTableModel::catchSalt()
-{
-   Salt* gaq = new Salt(QString(),true);
+void SaltTableModel::catchSalt() {
+   // .:TODO:. Change to shared_ptr as potential memory leak
+   Salt* gaq = new Salt("");
    addSalt(gaq);
+   return;
 }
 
 double SaltTableModel::multiplier(Salt *s) const
@@ -329,17 +332,16 @@ void SaltTableModel::removeSalt(Salt* salt)
    emit newTotals();
 }
 
-void SaltTableModel::removeSalts(QList<int>deadSalts)
-{
+void SaltTableModel::removeSalts(QList<int>deadSalts) {
    QList<Salt*> dead;
 
    // I am removing the salts so the index of any salt
    // will change. I think this will work
-   foreach(int i, deadSalts) {
+   for (int i : deadSalts) {
       dead.append( saltObs.at(i));
    }
 
-   foreach( Salt* zombie, dead) {
+   for(Salt * zombie : dead) {
       int i = saltObs.indexOf(zombie);
 
       if ( i >= 0 ) {
@@ -350,11 +352,14 @@ void SaltTableModel::removeSalts(QList<int>deadSalts)
 
          // Dead salts do not malinger in the database. This will
          // delete the thing, not just mark it deleted
-         if ( ! zombie->cacheOnly() )
-            Database::instance().removeNamedEntityFromRecipe(m_rec,zombie);
+         if ( ! zombie->cacheOnly() ) {
+            this->m_rec->remove(ObjectStoreWrapper::getSharedFromRaw(zombie));
+            ObjectStoreWrapper::hardDelete(*zombie);
+         }
       }
    }
    emit newTotals();
+   return;
 }
 
 void SaltTableModel::removeAll()
@@ -418,7 +423,7 @@ QVariant SaltTableModel::data( const QModelIndex& index, int role ) const
    else
       row = saltObs[index.row()];
 
-   Unit const * rightUnit = row->amountIsWeight() ? static_cast<Unit const *>(&Units::kilograms): static_cast<Unit const *>(&Units::liters);
+   Unit const * rightUnit = row->amountIsWeight() ? &Units::kilograms: &Units::liters;
    switch( index.column() ) {
       case SALTNAMECOL:
          if ( role == Qt::DisplayRole )
@@ -497,7 +502,7 @@ bool SaltTableModel::setData( const QModelIndex& index, const QVariant& value, i
 
    row = saltObs[index.row()];
 
-   Unit const * unit = row->amountIsWeight() ? static_cast<Unit const *>(&Units::kilograms): static_cast<Unit const *>(&Units::liters);
+   Unit const * unit = row->amountIsWeight() ? &Units::kilograms: &Units::liters;
    Unit::unitDisplay dspUnit = displayUnit(index.column());
    Unit::unitScale   dspScl  = displayScale(index.column());
 
@@ -558,7 +563,7 @@ Unit::unitDisplay SaltTableModel::displayUnit(int column) const
    if ( attribute.isEmpty() )
       return Unit::noUnit;
 
-   return static_cast<Unit::unitDisplay>(Brewtarget::option(attribute, QVariant(-1), this->objectName(), Brewtarget::UNIT).toInt());
+   return static_cast<Unit::unitDisplay>(PersistentSettings::value(attribute, QVariant(-1), this->objectName(), PersistentSettings::UNIT).toInt());
 }
 
 Unit::unitScale SaltTableModel::displayScale(int column) const
@@ -568,7 +573,7 @@ Unit::unitScale SaltTableModel::displayScale(int column) const
    if ( attribute.isEmpty() )
       return Unit::noScale;
 
-   return static_cast<Unit::unitScale>(Brewtarget::option(attribute, QVariant(-1), this->objectName(), Brewtarget::SCALE).toInt());
+   return static_cast<Unit::unitScale>(PersistentSettings::value(attribute, QVariant(-1), this->objectName(), PersistentSettings::SCALE).toInt());
 }
 
 void SaltTableModel::setDisplayUnit(int column, Unit::unitDisplay displayUnit)
@@ -578,8 +583,8 @@ void SaltTableModel::setDisplayUnit(int column, Unit::unitDisplay displayUnit)
    if ( attribute.isEmpty() )
       return;
 
-   Brewtarget::setOption(attribute,displayUnit,this->objectName(),Brewtarget::UNIT);
-   Brewtarget::setOption(attribute,Unit::noScale,this->objectName(),Brewtarget::SCALE);
+   PersistentSettings::insert(attribute,displayUnit,this->objectName(),PersistentSettings::UNIT);
+   PersistentSettings::insert(attribute,Unit::noScale,this->objectName(),PersistentSettings::SCALE);
 
 }
 
@@ -592,7 +597,7 @@ void SaltTableModel::setDisplayScale(int column, Unit::unitScale displayScale)
    if ( attribute.isEmpty() )
       return;
 
-   Brewtarget::setOption(attribute,displayScale,this->objectName(),Brewtarget::SCALE);
+   PersistentSettings::insert(attribute,displayScale,this->objectName(),PersistentSettings::SCALE);
 
 }
 
@@ -647,16 +652,18 @@ void SaltTableModel::contextMenu(const QPoint &point)
 
 }
 
-void SaltTableModel::saveAndClose()
-{
+void SaltTableModel::saveAndClose() {
    // all of the writes should have been instantaneous unless
    // we've added a new salt. Wonder if this will work?
-   foreach( Salt* i, saltObs ) {
+   for (Salt* i : saltObs) {
       if ( i->cacheOnly() && i->type() != Salt::NONE && i->addTo() != Salt::NEVER ) {
-         i->insertInDatabase();
-         Database::instance().addToRecipe(m_rec,i,true);
+         std::shared_ptr<Salt> salt{i};
+         ObjectStoreWrapper::insert(salt);
+         salt->setCacheOnly(false);
+         this->m_rec->add(salt);
       }
    }
+   return;
 }
 //==========================CLASS SaltItemDelegate===============================
 

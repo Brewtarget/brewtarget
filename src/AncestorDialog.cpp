@@ -1,6 +1,7 @@
 /*
  * AncestorDialog.cpp is part of Brewtarget, and is Copyright the following
- * authors 2016 - 2019
+ * authors 2016-2021
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@fastmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -16,6 +17,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "AncestorDialog.h"
+
+#include <algorithm>
 
 #include <QDebug>
 #include <QtCore/QVariant>
@@ -30,18 +34,14 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
-#include <algorithm>
 
-#include "AncestorDialog.h"
+#include "database/ObjectStoreWrapper.h"
 #include "MainWindow.h"
-#include "database.h"
-
 #include "model/NamedEntity.h"
 #include "model/Recipe.h"
 
-AncestorDialog::AncestorDialog(QWidget *parent)
-   : QDialog(parent)
-{
+AncestorDialog::AncestorDialog(QWidget * parent)
+   : QDialog(parent) {
 
    setupUi(this);
 
@@ -55,63 +55,63 @@ AncestorDialog::AncestorDialog(QWidget *parent)
    connect(pushButton_close, SIGNAL(clicked()), this, SLOT(reject()));
 
    // just some nice things
-   connect( comboBox_ancestor,   SIGNAL(activated(int)), this, SLOT(ancestorSelected(int)));
+   connect(comboBox_ancestor,   SIGNAL(activated(int)), this, SLOT(ancestorSelected(int)));
    // connect( comboBox_descendant, SIGNAL(activated(int)), this, SLOT(activateButton()));
 }
 
-bool AncestorDialog::recipeLessThan(Recipe *right, Recipe *left)
-{
-   if ( right->name() == left->name() )
+bool AncestorDialog::recipeLessThan(Recipe * right, Recipe * left) {
+   if (right->name() == left->name()) {
       return right->key() < left->key();
+   }
 
    return right->name() < left->name();
 }
 
-void AncestorDialog::buildAncestorBox()
-{
-   QList<Recipe*> recipes = Database::instance().recipes();
-   std::sort(recipes.begin(),recipes.end(),AncestorDialog::recipeLessThan);
+void AncestorDialog::buildAncestorBox() {
+   QList<Recipe *> recipes = ObjectStoreWrapper::getAllRaw<Recipe>();
+   std::sort(recipes.begin(), recipes.end(), AncestorDialog::recipeLessThan);
 
-   foreach (Recipe* recipe, recipes) {
-      if ( recipe->display() ) {
+   foreach (Recipe * recipe, recipes) {
+      if (recipe->display()) {
          comboBox_ancestor->addItem(recipe->name(), recipe->key());
       }
    }
    comboBox_ancestor->setCurrentIndex(-1);
 }
 
-void AncestorDialog::buildDescendantBox(Recipe *ignore)
-{
-   QList<Recipe*> recipes = Database::instance().recipes();
-   std::sort(recipes.begin(),recipes.end(),recipeLessThan);
+void AncestorDialog::buildDescendantBox(Recipe * ignore) {
+   QList<Recipe *> recipes = ObjectStoreWrapper::getAllRaw<Recipe>();
+   std::sort(recipes.begin(), recipes.end(), recipeLessThan);
 
    //  The rules of what can be a target are complex
-   foreach (Recipe* recipe, recipes) {
+   foreach (Recipe * recipe, recipes) {
       // if we are ignoring the recipe, skip
-      if ( recipe == ignore )
+      if (recipe == ignore) {
          continue;
+      }
       // if the recipe is not being displayed, skip
-      if ( ! recipe->display())
+      if (! recipe->display()) {
          continue;
+      }
       // if the recipe already has ancestors, skip
-      if ( recipe->hasAncestors() )
+      if (recipe->hasAncestors()) {
          continue;
+      }
       comboBox_descendant->addItem(recipe->name(), recipe->key());
    }
 }
 
-void AncestorDialog::connectDescendant()
-{
-   Recipe *ancestor, *descendant;
+void AncestorDialog::connectDescendant() {
+   Recipe * ancestor, *descendant;
 
-   ancestor   = Database::instance().recipe( comboBox_ancestor->currentData().toInt() );
-   descendant = Database::instance().recipe( comboBox_descendant->currentData().toInt() );
+   ancestor   = ObjectStoreWrapper::getByIdRaw<Recipe>(comboBox_ancestor->currentData().toInt());
+   descendant = ObjectStoreWrapper::getByIdRaw<Recipe>(comboBox_descendant->currentData().toInt());
 
    // No loops in the inheritance
-   if ( ! descendant->isMyAncestor(ancestor) ) {
-      descendant->setAncestor(ancestor);
+   if (! descendant->isMyAncestor(*ancestor)) {
+      descendant->setAncestor(*ancestor);
 
-      emit ancestoryChanged(ancestor,descendant);
+      emit ancestoryChanged(ancestor, descendant);
    }
 
    // disable the apply button
@@ -126,18 +126,16 @@ void AncestorDialog::connectDescendant()
    buildAncestorBox();
 }
 
-void AncestorDialog::setAncestor(Recipe* anc)
-{
-   comboBox_ancestor->setCurrentText( anc->name() );
+void AncestorDialog::setAncestor(Recipe * anc) {
+   comboBox_ancestor->setCurrentText(anc->name());
    buildDescendantBox(anc);
 
    comboBox_descendant->setEnabled(true);
    activateButton();
 }
 
-void AncestorDialog::ancestorSelected(int ndx)
-{
-   Recipe *ancestor = Database::instance().recipe( comboBox_ancestor->currentData().toInt() );
+void AncestorDialog::ancestorSelected(int ndx) {
+   Recipe * ancestor = ObjectStoreWrapper::getByIdRaw<Recipe>(comboBox_ancestor->currentData().toInt());
    comboBox_descendant->setEnabled(true);
 
    buildDescendantBox(ancestor);
@@ -145,10 +143,8 @@ void AncestorDialog::ancestorSelected(int ndx)
    activateButton();
 }
 
-void AncestorDialog::activateButton()
-{
-   if ( ! pushButton_apply->isEnabled() )
+void AncestorDialog::activateButton() {
+   if (! pushButton_apply->isEnabled()) {
       pushButton_apply->setEnabled(true);
+   }
 }
-
-

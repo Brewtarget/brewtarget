@@ -45,6 +45,7 @@ jobs:
             mingw-w64-${{ matrix.arch }}-xalan-c
             mingw-w64-${{ matrix.arch }}-nsis
             mingw-w64-${{ matrix.arch }}-boost
+            mingw-w64-${{ matrix.arch }}-libbacktrace
           update: true
           release: true
           path-type: strict

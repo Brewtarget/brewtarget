@@ -1,7 +1,8 @@
 /*
  * YeastEditor.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -18,11 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#ifndef _YEASTEDITOR_H
-#define   _YEASTEDITOR_H
-
-class YeastEditor;
+#ifndef YEASTEDITOR_H
+#define YEASTEDITOR_H
+#pragma once
 
 #include <QDialog>
 #include <QMetaProperty>
@@ -34,7 +33,7 @@ class Yeast;
 
 /*!
  * \class YeastEditor
- * \author Philip G. Lee
+ *
  *
  * \brief View/controller dialog for modifying yeasts.
  */
@@ -61,5 +60,4 @@ private:
    void showChanges(QMetaProperty* prop = nullptr);
 };
 
-#endif   /* _YEASTEDITOR_H */
-
+#endif

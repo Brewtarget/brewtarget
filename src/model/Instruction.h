@@ -21,39 +21,47 @@
  */
 #ifndef MODEL_INSTRUCTION_H
 #define MODEL_INSTRUCTION_H
+#pragma once
 
-// This class is completely outside the BeerXML spec.
+#include <memory> // For PImpl
 
 #include <QDomNode>
 #include <QString>
 #include <QVector>
 
 #include "model/NamedEntity.h"
-#include "model/Recipe.h"
-#include "TableSchema.h"
 
-namespace PropertyNames::Instruction { static char const * const interval = "interval"; /* previously kpropInterval */ }
-namespace PropertyNames::Instruction { static char const * const completed = "completed"; /* previously kpropCompleted */ }
-namespace PropertyNames::Instruction { static char const * const timerValue = "timerValue"; /* previously kpropTimerValue */ }
-namespace PropertyNames::Instruction { static char const * const hasTimer = "hasTimer"; /* previously kpropHasTimer */ }
-namespace PropertyNames::Instruction { static char const * const directions = "directions"; /* previously kpropDirections */ }
+//======================================================================================================================
+//========================================== Start of property name constants ==========================================
+#define AddPropertyName(property) namespace PropertyNames::Instruction { BtStringConst const property{#property}; }
+AddPropertyName(completed)
+AddPropertyName(directions)
+AddPropertyName(hasTimer)
+AddPropertyName(interval)
+AddPropertyName(timerValue)
+#undef AddPropertyName
+//=========================================== End of property name constants ===========================================
+//======================================================================================================================
+
 
 /*!
  * \class Instruction
  *
  * \brief Model class for an instruction record in the database.
+ *
+ *        This class is completely outside the BeerXML spec.
  */
-class Instruction : public NamedEntity
-{
+class Instruction : public NamedEntity {
    Q_OBJECT
    Q_CLASSINFO("signal", "instructions")
-   friend class Database;
-   friend class BeerXML;
+
 
 public:
+   Instruction(QString name = "", bool cache = true);
+   Instruction(NamedParameterBundle const & namedParameterBundle);
+   Instruction(Instruction const & other);
 
-   Instruction( QString name, bool cache = true );
-   virtual ~Instruction() {}
+   virtual ~Instruction();
 
    Q_PROPERTY( QString directions READ directions WRITE setDirections /*NOTIFY changed*/ /*changedDirections*/ )
    Q_PROPERTY( bool hasTimer READ hasTimer WRITE setHasTimer /*NOTIFY changed*/ /*changedHasTimer*/ )
@@ -71,7 +79,6 @@ public:
    void setCompleted(bool comp);
    void setInterval(double interval);
    void addReagent(const QString& reagent);
-   void setRecipe(Recipe * const recipe);
 
    // "get" methods.
    QString directions();
@@ -84,28 +91,24 @@ public:
 
    int instructionNumber() const;
 
-   static QString classNameStr();
-
-   // Instruction objects do not have parents
-   NamedEntity * getParent() { return nullptr; }
-   virtual int insertInDatabase();
-   virtual void removeFromDatabase();
+   virtual Recipe * getOwningRecipe();
 
 signals:
 
 protected:
    virtual bool isEqualTo(NamedEntity const & other) const;
+   virtual ObjectStore & getObjectStoreTypedInstance() const;
 
 private:
-   Instruction(TableSchema* table, QSqlRecord rec,int t_key = -1);
-   Instruction( Instruction const& other );
+   // Private implementation details - see https://herbsutter.com/gotw/_100/
+   class impl;
+   std::unique_ptr<impl> pimpl;
 
    QString m_directions;
    bool    m_hasTimer;
    QString m_timerValue;
    bool    m_completed;
    double  m_interval;
-   Recipe * m_recipe;
 
    QList<QString> m_reagents;
 };

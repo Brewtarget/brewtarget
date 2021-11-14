@@ -4,7 +4,11 @@
 # See also ../CMakeLists.txt
 #
 
-# Uncomment the next line for verbose build output
+#
+# Uncomment the next line for slightly verbose build output
+# Alternatively, for very verbose output, invoke make as follows:
+#    $ make VERBOSE=1
+#
 #set(CMAKE_VERBOSE_MAKEFILE ON)
 
 # The current directory in the original source.
@@ -93,9 +97,12 @@ SET( brewtarget_SRCS
     ${SRCDIR}/ColorMethods.cpp
     ${SRCDIR}/ConverterTool.cpp
     ${SRCDIR}/CustomComboBox.cpp
-    ${SRCDIR}/database.cpp
-    ${SRCDIR}/DatabaseSchema.cpp
-    ${SRCDIR}/DatabaseSchemaHelper.cpp
+    ${SRCDIR}/database/BtSqlQuery.cpp
+    ${SRCDIR}/database/Database.cpp
+    ${SRCDIR}/database/DatabaseSchemaHelper.cpp
+    ${SRCDIR}/database/DbTransaction.cpp
+    ${SRCDIR}/database/ObjectStore.cpp
+    ${SRCDIR}/database/ObjectStoreTyped.cpp
     ${SRCDIR}/EquipmentButton.cpp
     ${SRCDIR}/EquipmentEditor.cpp
     ${SRCDIR}/EquipmentListModel.cpp
@@ -114,7 +121,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/IbuMethods.cpp
     ${SRCDIR}/InstructionWidget.cpp
     ${SRCDIR}/InventoryFormatter.cpp
-    ${SRCDIR}/Log.cpp
+    ${SRCDIR}/Logging.cpp
     ${SRCDIR}/MainWindow.cpp
     ${SRCDIR}/MashButton.cpp
     ${SRCDIR}/MashComboBox.cpp
@@ -135,6 +142,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/model/Fermentable.cpp
     ${SRCDIR}/model/Hop.cpp
     ${SRCDIR}/model/Instruction.cpp
+    ${SRCDIR}/model/Inventory.cpp
     ${SRCDIR}/model/Mash.cpp
     ${SRCDIR}/model/MashStep.cpp
     ${SRCDIR}/model/Misc.cpp
@@ -150,11 +158,11 @@ SET( brewtarget_SRCS
     ${SRCDIR}/NamedMashEditor.cpp
     ${SRCDIR}/OgAdjuster.cpp
     ${SRCDIR}/OptionDialog.cpp
+    ${SRCDIR}/PersistentSettings.cpp
     ${SRCDIR}/PitchDialog.cpp
     ${SRCDIR}/PreInstruction.cpp
     ${SRCDIR}/PrintAndPreviewDialog.cpp
     ${SRCDIR}/PrimingDialog.cpp
-    ${SRCDIR}/PropertySchema.cpp
     ${SRCDIR}/QueuedMethod.cpp
     ${SRCDIR}/RadarChart.cpp
     ${SRCDIR}/RangedSlider.cpp
@@ -170,12 +178,12 @@ SET( brewtarget_SRCS
     ${SRCDIR}/StyleListModel.cpp
     ${SRCDIR}/StyleRangeWidget.cpp
     ${SRCDIR}/StyleSortFilterProxyModel.cpp
-    ${SRCDIR}/TableSchema.cpp
     ${SRCDIR}/TimerListDialog.cpp
     ${SRCDIR}/TimerMainDialog.cpp
     ${SRCDIR}/TimerWidget.cpp
     ${SRCDIR}/Unit.cpp
     ${SRCDIR}/UnitSystem.cpp
+    ${SRCDIR}/utils/BtStringConst.cpp
     ${SRCDIR}/WaterButton.cpp
     ${SRCDIR}/WaterDialog.cpp
     ${SRCDIR}/WaterEditor.cpp
@@ -187,6 +195,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/xml/BtDomErrorHandler.cpp
     ${SRCDIR}/xml/XercesHelpers.cpp
     ${SRCDIR}/xml/XmlCoding.cpp
+    ${SRCDIR}/xml/XmlMashRecord.cpp
     ${SRCDIR}/xml/XmlMashStepRecord.cpp
     ${SRCDIR}/xml/XmlRecipeRecord.cpp
     ${SRCDIR}/xml/XmlRecordCount.cpp
@@ -202,35 +211,34 @@ SET( brewtarget_SRCS
 # in the ui/ directory instead of here?
 SET( brewtarget_UIS
     ${UIDIR}/ancestorDialog.ui
-    ${UIDIR}/brewDayWidget.ui
     ${UIDIR}/brewDayScrollWidget.ui
+    ${UIDIR}/brewDayWidget.ui
     ${UIDIR}/brewNoteWidget.ui
-    ${UIDIR}/mainWindow.ui
-    ${UIDIR}/mashStepEditor.ui
-    ${UIDIR}/miscEditor.ui
+    ${UIDIR}/BtPrintAndPreview.ui
     ${UIDIR}/equipmentEditor.ui
     ${UIDIR}/fermentableEditor.ui
     ${UIDIR}/hopEditor.ui
     ${UIDIR}/instructionWidget.ui
+    ${UIDIR}/mainWindow.ui
+    ${UIDIR}/mashDesigner.ui
     ${UIDIR}/mashEditor.ui
-    ${UIDIR}/namedMashEditor.ui
+    ${UIDIR}/mashStepEditor.ui
     ${UIDIR}/mashWizard.ui
+    ${UIDIR}/miscEditor.ui
+    ${UIDIR}/namedMashEditor.ui
     ${UIDIR}/ogAdjuster.ui
     ${UIDIR}/optionsDialog.ui
+    ${UIDIR}/pitchDialog.ui
     ${UIDIR}/primingDialog.ui
+    ${UIDIR}/recipeExtrasWidget.ui
     ${UIDIR}/refractoDialog.ui
     ${UIDIR}/strikeWaterDialog.ui
     ${UIDIR}/styleEditor.ui
     ${UIDIR}/timerMainDialog.ui
     ${UIDIR}/timerWidget.ui
-    ${UIDIR}/waterEditor.ui
     ${UIDIR}/waterDialog.ui
+    ${UIDIR}/waterEditor.ui
     ${UIDIR}/yeastEditor.ui
-    ${UIDIR}/mashDesigner.ui
-    ${UIDIR}/pitchDialog.ui
-    ${UIDIR}/brewDayScrollWidget.ui
-    ${UIDIR}/recipeExtrasWidget.ui
-    ${UIDIR}/BtPrintAndPreview.ui
 )
 
 #
@@ -246,13 +254,12 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/AlcoholTool.h
     ${SRCDIR}/AncestorDialog.h
     ${SRCDIR}/BeerColorWidget.h
-    ${SRCDIR}/beerxml.h
     ${SRCDIR}/boiltime.h
     ${SRCDIR}/BrewDayFormatter.h
     ${SRCDIR}/BrewDayScrollWidget.h
     ${SRCDIR}/BrewDayWidget.h
+    ${SRCDIR}/Brewken.h
     ${SRCDIR}/BrewNoteWidget.h
-    ${SRCDIR}/brewtarget.h
     ${SRCDIR}/BtDatePopup.h
     ${SRCDIR}/BtDigitWidget.h
     ${SRCDIR}/BtFolder.h
@@ -265,10 +272,9 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/BtTreeModel.h
     ${SRCDIR}/BtTreeView.h
     ${SRCDIR}/CMakeLists.txt
-    ${SRCDIR}/.CMakeLists.txt.kate-swp
     ${SRCDIR}/ConverterTool.h
     ${SRCDIR}/CustomComboBox.h
-    ${SRCDIR}/database.h
+    ${SRCDIR}/database/ObjectStore.h
     ${SRCDIR}/EquipmentButton.h
     ${SRCDIR}/EquipmentEditor.h
     ${SRCDIR}/EquipmentListModel.h
@@ -302,6 +308,7 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/model/Fermentable.h
     ${SRCDIR}/model/Hop.h
     ${SRCDIR}/model/Instruction.h
+    ${SRCDIR}/model/Inventory.h
     ${SRCDIR}/model/Mash.h
     ${SRCDIR}/model/MashStep.h
     ${SRCDIR}/model/Misc.h
@@ -319,7 +326,6 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/PitchDialog.h
     ${SRCDIR}/PrintAndPreviewDialog.h
     ${SRCDIR}/PrimingDialog.h
-    ${SRCDIR}/PropertySchema.h
     ${SRCDIR}/QueuedMethod.h
     ${SRCDIR}/RangedSlider.h
     ${SRCDIR}/RecipeExtrasWidget.h
@@ -334,11 +340,10 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/StyleListModel.h
     ${SRCDIR}/StyleRangeWidget.h
     ${SRCDIR}/StyleSortFilterProxyModel.h
-    ${SRCDIR}/TableSchema.h
     ${SRCDIR}/TimerListDialog.h
     ${SRCDIR}/TimerMainDialog.h
     ${SRCDIR}/TimerWidget.h
-    ${SRCDIR}/unit.h
+    ${SRCDIR}/Unit.h
     ${SRCDIR}/WaterButton.h
     ${SRCDIR}/WaterDialog.h
     ${SRCDIR}/WaterEditor.h
@@ -346,6 +351,9 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/WaterSortFilterProxyModel.h
     ${SRCDIR}/WaterTableModel.h
     ${SRCDIR}/WaterTableWidget.h
+    ${SRCDIR}/widgets/Animator.h
+    ${SRCDIR}/widgets/SelectionControl.h
+    ${SRCDIR}/widgets/ToggleSwitch.h
     ${SRCDIR}/YeastDialog.h
     ${SRCDIR}/YeastEditor.h
     ${SRCDIR}/YeastSortFilterProxyModel.h
@@ -397,6 +405,34 @@ IF( WIN32 AND MINGW )
 ELSEIF(WIN32)
   SET(brewtarget_ICON ${RCFILE})
 ENDIF()
+
+#===========================================Requirements for Boost Stacktrace===========================================
+#
+# Per https://www.boost.org/doc/libs/1_76_0/doc/html/stacktrace/configuration_and_build.html, by default
+# Boost.Stacktrace is a header-only library.  However, you get better results by linking (either statically or
+# dynamically) with a helper library.  Of the various options, it seems like boost_stacktrace_backtrace gives the most
+# functionality over the most platforms.  This has dependencies on:
+#   - libdl on POSIX platforms
+#   - libbacktrace
+# The latter is an external library on Windows.  On POSIX plaforms it's typically already either installed on the system
+# (eg see https://man7.org/linux/man-pages/man3/backtrace.3.html) or built in to the compiler.  Fortunately, CMake knows
+# how to do the right thing in either case, thanks to https://cmake.org/cmake/help/latest/module/FindBacktrace.html.
+#
+IF(NOT WIN32)
+   find_library(DL_LIBRARY dl)
+ENDIF()
+find_package(Backtrace REQUIRED)
+# For the moment, leave default settings for Mac as can't work out how to get the backtrace version of stacktrace
+# working.  (Should still get stack traces on Mac, but might not get as much info in them as we'd like.)
+IF(NOT APPLE)
+   IF(NOT WIN32)
+# TBD Some users report problems getting CMake to find libboost_stacktrace_backtrace on Ubuntu and Gentoo, so disable it
+# for now and fallback to the header-only version
+#      add_compile_definitions(BOOST_STACKTRACE_DYN_LINK)
+   ENDIF()
+#   add_compile_definitions(BOOST_STACKTRACE_USE_BACKTRACE)
+ENDIF()
+message("Backtrace libs " ${DL_LIBRARY} " | " ${Backtrace_LIBRARIES} " | " ${Boost_LIBRARIES})
 
 #===========================Create the binary==================================
 
@@ -504,11 +540,24 @@ IF( NOT ${NO_QTMULTIMEDIA})
    SET( QT5_USE_MODULES_LIST ${QT5_USE_MODULES_LIST} Qt5::Multimedia)
 ENDIF()
 
-# The dl library is needed on non-Windows platforms for Boost Stacktrace
-IF(NOT WIN32)
-   SET(LIBDL dl)
-ENDIF()
-target_link_libraries( ${QT5_USE_MODULES_LIST} ${XercesC_LIBRARIES} ${XalanC_LIBRARIES} ${LIBDL} )
+#
+# All the libraries
+#
+# ********************************************************************************************************************
+# * Note that if you change this you need to make corresponding changes to this to target_link_libraries in the Tests
+# * section below.
+# *
+# * .:TODO:. Work out how to avoid this copy-and-paste duplication
+# ********************************************************************************************************************
+#
+target_link_libraries(
+   ${QT5_USE_MODULES_LIST}
+   ${XercesC_LIBRARIES}
+   ${XalanC_LIBRARIES}
+   ${Boost_LIBRARIES}
+   ${DL_LIBRARY}
+   ${Backtrace_LIBRARIES}
+)
 
 #=================================Tests========================================
 
@@ -535,7 +584,15 @@ IF( NOT ${NO_QTMULTIMEDIA})
 SET( QT5_USE_MODULES_LIST ${QT5_USE_MODULES_LIST} Qt5::Multimedia)
 ENDIF()
 
-target_link_libraries(${QT5_USE_MODULES_LIST} ${XercesC_LIBRARIES} ${XalanC_LIBRARIES} ${LIBDL})
+# NB Needs to be same as the one a few lines above. Sigh.
+target_link_libraries(
+   ${QT5_USE_MODULES_LIST}
+   ${XercesC_LIBRARIES}
+   ${XalanC_LIBRARIES}
+   ${Boost_LIBRARIES}
+   ${DL_LIBRARY}
+   ${Backtrace_LIBRARIES}
+)
 
 ADD_TEST(
    NAME pstdintTest

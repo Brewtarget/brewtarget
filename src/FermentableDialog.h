@@ -1,7 +1,8 @@
 /*
  * FermentableDialog.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2015
+ * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
+ * - Matt Young <mfsy@yahoo.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -17,9 +18,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#ifndef _FERMENTABLEDIALOG_H
-#define _FERMENTABLEDIALOG_H
+#ifndef FERMENTABLEDIALOG_H
+#define FERMENTABLEDIALOG_H
 
 #include <QWidget>
 #include <QDialog>
@@ -38,7 +38,6 @@ class FermentableSortFilterProxyModel;
 
 /*!
  * \class FermentableDialog
- * \author Philip G. Lee
  *
  * \brief View/controller class that shows the list of fermentables in the database.
  */

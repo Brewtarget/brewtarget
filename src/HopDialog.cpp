@@ -1,7 +1,8 @@
 /*
  * HopDialog.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2015
+ * authors 2009-2021
  * - Luke Vincent <luke.r.vincent@gmail.com>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -18,21 +19,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "HopDialog.h"
 
-#include <QWidget>
 #include <QDialog>
 #include <QInputDialog>
-#include <QString>
 #include <QList>
-#include "HopDialog.h"
-#include "database.h"
-#include "model/Recipe.h"
+#include <QString>
+#include <QWidget>
+
+//#include "database/Database.h"
+#include "database/ObjectStoreWrapper.h"
+#include "HopEditor.h"
+#include "HopSortFilterProxyModel.h"
+#include "HopTableModel.h"
 #include "MainWindow.h"
 #include "model/Hop.h"
-#include "HopEditor.h"
-#include "HopTableModel.h"
-#include "HopTableModel.h"
-#include "HopSortFilterProxyModel.h"
+#include "model/Recipe.h"
 
 HopDialog::HopDialog(MainWindow* parent) :
    QDialog(parent),
@@ -138,8 +140,9 @@ void HopDialog::removeHop()
    }
    modelIndex = hopTableProxy->mapToSource(selected[0]);
    Hop *hop = hopTableModel->getHop(modelIndex.row());
-   if (hop)
-      Database::instance().remove(hop);
+   if (hop) {
+      ObjectStoreWrapper::softDelete(*hop);
+   }
 }
 
 void HopDialog::addHop(const QModelIndex& index)

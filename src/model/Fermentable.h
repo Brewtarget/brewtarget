@@ -23,32 +23,40 @@
  */
 #ifndef MODEL_FERMENTABLE_H
 #define MODEL_FERMENTABLE_H
+#pragma once
 
 #include <QStringList>
 #include <QString>
+#include <QSqlRecord>
 
 #include "model/NamedEntityWithInventory.h"
 #include "Unit.h"
 
-namespace PropertyNames::Fermentable { static char const * const addAfterBoil = "addAfterBoil"; /* previously kpropAddAfterBoil */ }
-namespace PropertyNames::Fermentable { static char const * const additionMethod = "additionMethod"; }
-namespace PropertyNames::Fermentable { static char const * const additionTime = "additionTime"; }
-namespace PropertyNames::Fermentable { static char const * const amount_kg = "amount_kg"; /* previously kpropAmountKg */ }
-namespace PropertyNames::Fermentable { static char const * const coarseFineDiff_pct = "coarseFineDiff_pct"; /* previously kpropCoarseFineDiff */ }
-namespace PropertyNames::Fermentable { static char const * const color_srm = "color_srm"; /* previously kpropColor */ }
-namespace PropertyNames::Fermentable { static char const * const diastaticPower_lintner = "diastaticPower_lintner"; /* previously kpropDiastaticPower */ }
-namespace PropertyNames::Fermentable { static char const * const ibuGalPerLb = "ibuGalPerLb"; /* previously kpropIBUGalPerLb */ }
-namespace PropertyNames::Fermentable { static char const * const isMashed = "isMashed"; /* previously kpropIsMashed */ }
-namespace PropertyNames::Fermentable { static char const * const maxInBatch_pct = "maxInBatch_pct"; /* previously kpropMaxInBatch */ }
-namespace PropertyNames::Fermentable { static char const * const moisture_pct = "moisture_pct"; /* previously kpropMoisture */ }
-namespace PropertyNames::Fermentable { static char const * const notes = "notes"; /* previously kpropNotes */ }
-namespace PropertyNames::Fermentable { static char const * const origin = "origin"; /* previously kpropOrigin */ }
-namespace PropertyNames::Fermentable { static char const * const protein_pct = "protein_pct"; /* previously kpropProtein */ }
-namespace PropertyNames::Fermentable { static char const * const recommendMash = "recommendMash"; /* previously kpropRecommendMash */ }
-namespace PropertyNames::Fermentable { static char const * const supplier = "supplier"; /* previously kpropSupplier */ }
-namespace PropertyNames::Fermentable { static char const * const typeString = "typeString"; /* previously kpropTypeString */ }
-namespace PropertyNames::Fermentable { static char const * const type = "type"; /* previously kpropType */ }
-namespace PropertyNames::Fermentable { static char const * const yield_pct = "yield_pct"; /* previously kpropYield */ }
+//======================================================================================================================
+//========================================== Start of property name constants ==========================================
+#define AddPropertyName(property) namespace PropertyNames::Fermentable { BtStringConst const property{#property}; }
+AddPropertyName(addAfterBoil)
+AddPropertyName(additionMethod)
+AddPropertyName(additionTime)
+AddPropertyName(amount_kg)
+AddPropertyName(coarseFineDiff_pct)
+AddPropertyName(color_srm)
+AddPropertyName(diastaticPower_lintner)
+AddPropertyName(ibuGalPerLb)
+AddPropertyName(isMashed)
+AddPropertyName(maxInBatch_pct)
+AddPropertyName(moisture_pct)
+AddPropertyName(notes)
+AddPropertyName(origin)
+AddPropertyName(protein_pct)
+AddPropertyName(recommendMash)
+AddPropertyName(supplier)
+AddPropertyName(typeString)
+AddPropertyName(type)
+AddPropertyName(yield_pct)
+#undef AddPropertyName
+//=========================================== End of property name constants ===========================================
+//======================================================================================================================
 
 
 /*!
@@ -61,8 +69,7 @@ class Fermentable : public NamedEntityWithInventory {
    Q_CLASSINFO("signal", "fermentables")
 
    friend class Brewtarget;
-   friend class BeerXML;
-   friend class Database;
+
    friend class FermentableDialog;
 public:
 
@@ -74,8 +81,11 @@ public:
    enum AdditionTime {Normal, Late};
    Q_ENUMS( Type AdditionMethod AdditionTime )
 
-   Fermentable( QString name, bool cache = true );
-   virtual ~Fermentable() {}
+   Fermentable( QString name = "", bool cache = true );
+   Fermentable(NamedParameterBundle const & namedParameterBundle);
+   Fermentable(Fermentable const & other);
+
+   virtual ~Fermentable() = default;
 
    //! \brief The \c Type.
    Q_PROPERTY( Type type                     READ type                   WRITE setType                   /*NOTIFY changed*/ /*changedType*/ )
@@ -130,6 +140,7 @@ public:
 
    Type type() const;
    double amount_kg() const;
+   virtual double inventory() const;
    double yield_pct() const;
    double color_srm() const;
    bool addAfterBoil() const;
@@ -164,6 +175,7 @@ public:
    void setAdditionMethod( AdditionMethod m );
    void setAdditionTime( AdditionTime t );
    void setAmount_kg( double num );
+   virtual void setInventoryAmount(double amount);
    void setYield_pct( double num );
    void setColor_srm( double num );
    void setAddAfterBoil( bool b );
@@ -181,23 +193,15 @@ public:
 
    void save();
 
-   static QString classNameStr();
-
-   NamedEntity * getParent();
-   virtual int insertInDatabase();
-   virtual void removeFromDatabase();
+   virtual Recipe * getOwningRecipe();
 
 signals:
 
 protected:
    virtual bool isEqualTo(NamedEntity const & other) const;
+   virtual ObjectStore & getObjectStoreTypedInstance() const;
 
 private:
-//   Fermentable(Brewtarget::DBTable table, int key);
-   Fermentable(TableSchema* table, QSqlRecord rec, int t_key = -1);
-
-   Fermentable(Fermentable const & other);
-
    static bool isValidType( const QString& str );
    static QStringList types;
 

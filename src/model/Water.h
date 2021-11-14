@@ -21,42 +21,47 @@
  */
 #ifndef MODEL_WATER_H
 #define MODEL_WATER_H
+#pragma once
 
 #include <QString>
+#include <QSqlRecord>
 
 #include "model/NamedEntity.h"
-#include "TableSchema.h"
 
-namespace PropertyNames::Water { static char const * const ph = "ph"; /* previously kpropPH */ }
-namespace PropertyNames::Water { static char const * const amount = "amount"; /* previously kpropAmount */ }
-namespace PropertyNames::Water { static char const * const type = "type"; /* previously kpropType */ }
-namespace PropertyNames::Water { static char const * const notes = "notes"; /* previously kpropNotes */ }
-namespace PropertyNames::Water { static char const * const alkalinityAsHCO3 = "alkalinityAsHCO3"; /* previously kpropAsHCO3 */ }
-namespace PropertyNames::Water { static char const * const spargeRO = "spargeRO"; /* previously kpropSpargeRO */ }
-namespace PropertyNames::Water { static char const * const mashRO = "mashRO"; /* previously kpropMashRO */ }
-namespace PropertyNames::Water { static char const * const alkalinity = "alkalinity"; /* previously kpropAlkalinity */ }
-namespace PropertyNames::Water { static char const * const magnesium_ppm = "magnesium_ppm"; /* previously kpropMagnesium */ }
-namespace PropertyNames::Water { static char const * const sodium_ppm = "sodium_ppm"; /* previously kpropSodium */ }
-namespace PropertyNames::Water { static char const * const chloride_ppm = "chloride_ppm"; /* previously kpropChloride */ }
-namespace PropertyNames::Water { static char const * const sulfate_ppm = "sulfate_ppm"; /* previously kpropSulfate */ }
-namespace PropertyNames::Water { static char const * const bicarbonate_ppm = "bicarbonate_ppm"; /* previously kpropBiCarbonate */ }
-namespace PropertyNames::Water { static char const * const calcium_ppm = "calcium_ppm"; /* previously kpropCalcium */ }
+//======================================================================================================================
+//========================================== Start of property name constants ==========================================
+#define AddPropertyName(property) namespace PropertyNames::Water { BtStringConst const property{#property}; }
+AddPropertyName(ph)
+AddPropertyName(amount)
+AddPropertyName(type)
+AddPropertyName(notes)
+AddPropertyName(alkalinityAsHCO3)
+AddPropertyName(spargeRO)
+AddPropertyName(mashRO)
+AddPropertyName(alkalinity)
+AddPropertyName(magnesium_ppm)
+AddPropertyName(sodium_ppm)
+AddPropertyName(chloride_ppm)
+AddPropertyName(sulfate_ppm)
+AddPropertyName(bicarbonate_ppm)
+AddPropertyName(calcium_ppm)
+#undef AddPropertyName
+//=========================================== End of property name constants ===========================================
+//======================================================================================================================
+
 
 /*!
  * \class Water
  *
  * \brief Model for water records in the database.
  */
-class Water : public NamedEntity
-{
+class Water : public NamedEntity {
    Q_OBJECT
    Q_CLASSINFO("signal", "waters")
 
-   friend class Database;
-   friend class BeerXML;
+
    friend class WaterDialog;
    friend class WaterEditor;
-
 public:
 
    enum Types {
@@ -77,8 +82,11 @@ public:
 
    Q_ENUM(Types Ions)
 
-   Water( QString name, bool cache = true);
-   virtual ~Water() {}
+   Water(QString name = "", bool cache = true);
+   Water(NamedParameterBundle const & namedParameterBundle);
+   Water(Water const & other);
+
+   virtual ~Water() = default;
 
    // On a base or target profile, bicarbonate and alkalinity cannot both be used. I'm gonna have fun figuring that out
    //! \brief The amount in liters.
@@ -142,22 +150,15 @@ public:
    void setSpargeRO(double var);
    void setAlkalinityAsHCO3(bool var);
 
-   static QString classNameStr();
-
-   NamedEntity * getParent();
-   virtual int insertInDatabase();
-   virtual void removeFromDatabase();
+   virtual Recipe * getOwningRecipe();
 
 signals:
 
 protected:
    virtual bool isEqualTo(NamedEntity const & other) const;
+   virtual ObjectStore & getObjectStoreTypedInstance() const;
 
 private:
-//   Water(Brewtarget::DBTable table, int key);
-   Water( TableSchema* table, QSqlRecord rec, int t_key = -1);
-   Water( Water const& other, bool cache = true);
-
    double m_amount;
    double m_calcium_ppm;
    double m_bicarbonate_ppm;

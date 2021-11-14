@@ -16,37 +16,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #ifndef BTDATEPOPUP_H
 #define BTDATEPOPUP_H
+#pragma once
 
-#include <QDialog>
+#include <QCalendarWidget>
 #include <QDate>
 #include <QDateTime>
-#include <QCalendarWidget>
+#include <QDialog>
 #include <QDialogButtonBox>
 #include <QVBoxLayout>
 
-
 /*!
  * \class BtDatePopup
- * \author Mik Firestone
  *
  * \brief Gives us a calendar popup so that we can redate a brewnote. A lot of
  * setup needs to be done to make this behave, so it is easier to do it as a
  * separate class.
- * 
+ *
  * This is largely taken from jordenysp's example on stackoverflow
  * http://stackoverflow.com/questions/1352334/qcalendarwidget-as-pop-up-not-as-new-window
  */
-
-class BtDatePopup : public QDialog
-{
+class BtDatePopup : public QDialog {
    Q_OBJECT
 
 public:
       BtDatePopup(QWidget* parent=0);
-      QDateTime selectedDate() const;
+      QDate selectedDate() const;
 
 private:
       QWidget* widget;
@@ -55,4 +51,4 @@ private:
       QVBoxLayout* vertical;
 };
 
-#endif /* BTDATEPOPUP_H */
+#endif

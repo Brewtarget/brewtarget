@@ -1,7 +1,8 @@
 /*
  * PitchDialog.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
  * - A.J. Drobnich <aj.drobnich@gmail.com>
+ * - Matt Young <mfsy@yahoo.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -17,13 +18,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #include "PitchDialog.h"
-#include <QChar>
-#include "brewtarget.h"
-#include "Algorithms.h"
-#include "Unit.h"
+
 #include <math.h>
+
+#include <QChar>
+
+#include "Algorithms.h"
+#include "brewtarget.h"
+#include "PersistentSettings.h"
+#include "Unit.h"
 
 PitchDialog::PitchDialog(QWidget* parent) : QDialog(parent)
 {
@@ -58,7 +62,12 @@ void PitchDialog::updateProductionDate(Unit::unitDisplay dsp, Unit::unitScale sc
 {
    QString format;
    // I need the new unit, not the old
-   Unit::unitDisplay unitDsp = (Unit::unitDisplay)Brewtarget::option("productionDate", Brewtarget::getDateFormat(), "pitchRateCalc", Brewtarget::UNIT).toInt();
+   Unit::unitDisplay unitDsp = static_cast<Unit::unitDisplay>(
+      PersistentSettings::value(PersistentSettings::Names::productionDate,
+                                Brewtarget::getDateFormat(),
+                                PersistentSettings::Sections::pitchRateCalc,
+                                PersistentSettings::UNIT).toInt()
+   );
 
    switch(unitDsp)
    {
