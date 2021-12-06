@@ -324,9 +324,11 @@ namespace {
    XmlRecord::EnumLookupMap const BEER_XML_MASH_STEP_TYPE_MAPPER {
       {"Infusion",     MashStep::Infusion},
       {"Temperature",  MashStep::Temperature},
-      {"Decoction",    MashStep::Decoction}
+      {"Decoction",    MashStep::Decoction},
       // Inside Brewtarget we also have MashStep::flySparge and MashStep::batchSparge which are not mentioned in the
       // BeerXML 1.0 Standard.  They get treated as "Infusion" when we write to BeerXML
+      {"Infusion",     MashStep::flySparge},
+      {"Infusion",     MashStep::batchSparge}
    };
    template<> XmlRecord::FieldDefinitions const BEER_XML_RECORD_FIELDS<MashStep> {
       // Type              XPath                 Q_PROPERTY                                  Enum Mapper
