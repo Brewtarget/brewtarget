@@ -84,6 +84,8 @@ NamedEntity::NamedEntity(NamedParameterBundle const & namedParameterBundle) :
    return;
 }
 
+NamedEntity::~NamedEntity() = default;
+
 void NamedEntity::makeChild(NamedEntity const & copiedFrom) {
    // It's a coding error if we're not starting out with objects that are copies of each other
    Q_ASSERT(*this == copiedFrom);
@@ -331,11 +333,6 @@ void NamedEntity::prepareForPropertyChange(BtStringConst const & propertyName) {
 }
 
 void NamedEntity::propagatePropertyChange(BtStringConst const & propertyName, bool notify) const {
-   // If we're in "cache only" mode, there's nothing to do
-   if (this->m_cacheOnly) {
-      return;
-   }
-
    // If we're already stored in the object store, tell it about the property change so that it can write it to the
    // database.  (We don't pass the new value as it will get read out of the object via propertyName.)
    if (this->m_key > 0) {
@@ -372,6 +369,12 @@ void NamedEntity::setParent(NamedEntity const & parentNamedEntity) {
 void NamedEntity::hardDeleteOwnedEntities() {
    // If we are not overridden in the subclass then there is no work to do
    qDebug() << Q_FUNC_INFO << this->metaObject()->className() << "owns no other entities";
+   return;
+}
+
+void NamedEntity::hardDeleteOrphanedEntities() {
+   // If we are not overridden in the subclass then there is no work to do
+   qDebug() << Q_FUNC_INFO << this->metaObject()->className() << "leaves no other entities as orphans";
    return;
 }
 

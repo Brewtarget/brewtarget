@@ -321,6 +321,9 @@ private:
          ne->hardDeleteOwnedEntities();
          // Base class does the heavy lifting on removing the NamedEntity from the DB
          this->ObjectStore::defaultHardDelete(id);
+         // Some related entities can only be deleted after the thing to which they are related has been removed from
+         // the database.  This is the opportunity to do that.
+         ne->hardDeleteOrphanedEntities();
          // Setting the deleted object's ID to -1 now puts it in the same state as a newly-created object.
          ne->setKey(-1);
          ne->setCacheOnly(true);

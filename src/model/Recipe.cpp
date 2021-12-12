@@ -2750,8 +2750,24 @@ void Recipe::hardDeleteOwnedEntities() {
    this->pimpl->hardDeleteAllMy<Water>      ();
    this->pimpl->hardDeleteAllMy<Yeast>      ();
 
+   return;
+}
+
+void Recipe::hardDeleteOrphanedEntities() {
+   //
    // Strictly a Recipe does not own its Mash.  However, if our Mash does not have a name and is not used by any other
-   // Recipe, then we delete it, on the grounds that it's not one the user intended to reuse across multiple Recipes.
+   // Recipe, then we want to delete it, on the grounds that it's not one the user intended to reuse across multiple
+   // Recipes.
+   //
+   // However, if we try to just delete the Mash Recipe::hardDeleteOwnedEntities(), we'd get a foreign key constraint
+   // violation error from the DB as, at that point, the Mash ID is still referenced by this Recipe.  (Unsetting the
+   // Mash ID in the Recipe record would be a bit tricky as we'd have to set it to NULL rather than just, say, -1 as,
+   // otherwise we'll get a different foreign key constraint violation error (because the DB can't find a Mash row with
+   // ID -1!).)
+   //
+   // At this point, however, the Recipe record has been removed from the database, so we can safely delete any orphaned
+   // Mash record.
+   //
    Mash * mash = this->mash();
    if (mash && mash->name() == "") {
       qDebug() << Q_FUNC_INFO << "Checking whether our unnamed Mash is used elsewhere";
@@ -2770,7 +2786,6 @@ void Recipe::hardDeleteOwnedEntities() {
 
    return;
 }
-
 
 //======================================================================================================================
 //====================================== Start of Functions in Helper Namespace ========================================

@@ -23,14 +23,13 @@
 #define MASHSTEPTABLEMODEL_H
 
 #include <QAbstractTableModel>
-#include <QWidget>
-#include <QModelIndex>
-#include <QVariant>
-#include <QMetaProperty>
-#include <QVariant>
 #include <QItemDelegate>
-#include <QVector>
+#include <QMetaProperty>
+#include <QModelIndex>
 #include <QTableView>
+#include <QVariant>
+#include <QVector>
+#include <QWidget>
 
 #include "model/MashStep.h"
 #include "model/Mash.h"
@@ -42,7 +41,6 @@ enum{ MASHSTEPNAMECOL, MASHSTEPTYPECOL, MASHSTEPAMOUNTCOL, MASHSTEPTEMPCOL, MASH
 
 /*!
  * \class MashStepTableModel
- *
  *
  * \brief Model for the list of mash steps in a mash.
  */
@@ -103,7 +101,6 @@ private:
    QTableView* parentTableWidget;
    QList<MashStep*> steps;
 
-//   void reorderMashSteps();
    void reorderMashStep(MashStep *step, int current);
 };
 
@@ -113,8 +110,7 @@ private:
  *
  * An item delegate for mash step tables.
  */
-class MashStepItemDelegate : public QItemDelegate
-{
+class MashStepItemDelegate : public QItemDelegate {
    Q_OBJECT
 
 public:

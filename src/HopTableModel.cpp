@@ -148,8 +148,19 @@ void HopTableModel::addHop(int hopId) {
 
    // If we are observing the database, ensure that the item is undeleted and
    // fit to display.
-   if (recObs == nullptr && (hop->deleted() || !hop->display())) {
+   if (this->recObs == nullptr && (hop->deleted() || !hop->display())) {
       return;
+   }
+
+   // If we are watching a Recipe and the new Hop does not belong to it then there is nothing for us to do
+   if (this->recObs) {
+      Recipe * recipeOfNewHop = hop->getOwningRecipe();
+      if (recipeOfNewHop && this->recObs->key() != recipeOfNewHop->key()) {
+         qDebug() <<
+            Q_FUNC_INFO << "Ignoring signal about new Hop #" << hop->key() << "as it belongs to Recipe #" <<
+            recipeOfNewHop->key() << "and we are watching Recipe #" << this->recObs->key();
+         return;
+      }
    }
 
    int size = hopObs.size();

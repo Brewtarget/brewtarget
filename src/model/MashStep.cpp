@@ -66,7 +66,7 @@ MashStep::MashStep(QString name, bool cache) :
    m_endTemp_c(0.0),
    m_infuseTemp_c(0.0),
    m_decoctionAmount_l(0.0),
-   m_stepNumber(0.0),
+   m_stepNumber(0),
    mashId(-1) {
    return;
 }
@@ -141,7 +141,11 @@ void MashStep::setStepNumber(int stepNumber) {
    this->setAndNotify(PropertyNames::MashStep::stepNumber, this->m_stepNumber, stepNumber);
 }
 
-void MashStep::setMashId(int mashId) { this->mashId = mashId; }
+void MashStep::setMashId(int mashId) {
+   this->mashId = mashId;
+   this->propagatePropertyChange(PropertyNames::MashStep::mashId, false);
+   return;
+}
 
 //============================="GET" METHODS====================================
 MashStep::Type MashStep::type() const { return m_type; }

@@ -19,12 +19,12 @@
 #include "xml/XmlMashStepRecord.h"
 #include "model/Mash.h"
 
-XmlRecord::ProcessingResult XmlMashStepRecord::normaliseAndStoreInDb(NamedEntity * containingEntity,
+XmlRecord::ProcessingResult XmlMashStepRecord::normaliseAndStoreInDb(std::shared_ptr<NamedEntity> containingEntity,
                                                                      QTextStream & userMessage,
                                                                      XmlRecordCount & stats) {
    // It's a coding error if either there's no containing entity or it's not a Mash.  Both conditions should have been
    // enforced by XSD parsing.  Thus static_cast should be safe.
-   Mash * mash = static_cast<Mash *>(containingEntity);
+   auto mash = std::static_pointer_cast<Mash>(containingEntity);
    Q_ASSERT(nullptr != mash);
 
    //
@@ -38,7 +38,7 @@ XmlRecord::ProcessingResult XmlMashStepRecord::normaliseAndStoreInDb(NamedEntity
    // data, so let's just correct it and log a warning about what we did.
    // INFUSE_AMOUNT is not supposed to be specified if TYPE is "Decoction".  We can check it here in code though.
    //
-   MashStep * mashStep = static_cast<MashStep *>(this->namedEntity);
+   auto mashStep = std::static_pointer_cast<MashStep>(this->namedEntity);
    if (mashStep->type() == MashStep::Decoction && mashStep->infuseAmount_l() != 0) {
       qWarning() <<
         Q_FUNC_INFO << "Read in a decoction Mash Step with a non-zero infusion volume (" <<
@@ -72,7 +72,7 @@ XmlRecord::ProcessingResult XmlMashStepRecord::normaliseAndStoreInDb(NamedEntity
    return this->XmlRecord::normaliseAndStoreInDb(containingEntity, userMessage, stats);
 }
 
-void XmlMashStepRecord::setContainingEntity(NamedEntity * containingEntity) {
+void XmlMashStepRecord::setContainingEntity(std::shared_ptr<NamedEntity> containingEntity) {
    qDebug() <<
       Q_FUNC_INFO << "Setting" << containingEntity->metaObject()->className() << "ID" << containingEntity->key() <<
       "on" << this->namedEntity->metaObject()->className() << "#" << this->namedEntity->key();
@@ -83,8 +83,17 @@ void XmlMashStepRecord::setContainingEntity(NamedEntity * containingEntity) {
    //
    Q_ASSERT(this->namedEntity->metaObject()->className() == QString("MashStep"));
    Q_ASSERT(containingEntity->metaObject()->className() == QString("Mash"));
-   MashStep * mashStep = static_cast<MashStep *>(this->namedEntity);
-   Mash * mash = static_cast<Mash *>(containingEntity);
-   mashStep->setMashId(mash->key());
+   auto mashStep = std::static_pointer_cast<MashStep>(this->namedEntity);
+   auto mash = std::static_pointer_cast<Mash>(containingEntity);
+
+   // Mash::addMashStep() will make the right calls to MashStep::setMashId() and MashStep::setStepNumber()
+   mash->addMashStep(mashStep);
    return;
+}
+
+int XmlMashStepRecord::storeNamedEntityInDb() {
+   qDebug() <<
+      Q_FUNC_INFO << "Skipping store in DB as already done and MashStep has ID" << this->namedEntity->key() <<
+      "and step number" << std::static_pointer_cast<MashStep>(this->namedEntity)->stepNumber();
+   return this->namedEntity->key();
 }

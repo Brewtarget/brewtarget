@@ -206,12 +206,12 @@ void NamedMashEditor::clear()
 }
 
 void NamedMashEditor::addMashStep() {
-   if ( ! this->mashObs ) {
+   if (!this->mashObs) {
       return;
    }
 
+   // The call to Mash::addMashStep() will also store the MashStep in the ObjectStore / DB
    auto step = std::make_shared<MashStep>();
-   ObjectStoreWrapper::insert(step);
    this->mashObs->addMashStep(step);
    mashStepEditor->setMashStep(step);
    mashStepEditor->setVisible(true);

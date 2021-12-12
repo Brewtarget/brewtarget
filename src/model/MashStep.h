@@ -94,7 +94,7 @@ public:
    Q_PROPERTY( double infuseTemp_c READ infuseTemp_c WRITE setInfuseTemp_c /*NOTIFY changed*/ /*changedInfuseTemp_c*/ )
    //! \brief The decoction amount in liters.
    Q_PROPERTY( double decoctionAmount_l READ decoctionAmount_l WRITE setDecoctionAmount_l /*NOTIFY changed*/ /*changedDecoctionAmount_l*/ )
-   //! \brief The step number in a sequence of other steps.
+   //! \brief The step number in a sequence of other steps.  Step numbers start from 1.
    Q_PROPERTY( int stepNumber READ stepNumber WRITE setStepNumber /*NOTIFY changed*/ STORED false )
    //! \brief The Mash to which this MashStep belongs
    Q_PROPERTY( int mashId READ getMashId WRITE setMashId )

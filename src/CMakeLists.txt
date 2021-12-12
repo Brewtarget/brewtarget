@@ -184,6 +184,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/Unit.cpp
     ${SRCDIR}/UnitSystem.cpp
     ${SRCDIR}/utils/BtStringConst.cpp
+    ${SRCDIR}/utils/EnumStringMapping.cpp
     ${SRCDIR}/WaterButton.cpp
     ${SRCDIR}/WaterDialog.cpp
     ${SRCDIR}/WaterEditor.cpp

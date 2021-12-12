@@ -1821,6 +1821,7 @@ void MainWindow::addYeastToRecipe(Yeast* yeast) {
 }
 
 void MainWindow::addMashStepToMash(std::shared_ptr<MashStep> mashStep) {
+   qDebug() << Q_FUNC_INFO;
    //
    // Mash Steps are a bit different from most other NamedEntity objects in that they don't really have an independent
    // existence.  If you ask a Mash to remove a MashStep then it will also tell the ObjectStore to delete it, but, when

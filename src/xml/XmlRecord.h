@@ -23,6 +23,7 @@
 #include <memory>
 
 #include <QTextStream>
+#include <QVector>
 
 #include <xalanc/DOMSupport/DOMSupport.hpp>
 #include <xalanc/XalanDOM/XalanNode.hpp>
@@ -30,6 +31,7 @@
 
 #include "model/NamedEntity.h"
 #include "model/NamedParameterBundle.h"
+#include "utils/EnumStringMapping.h"
 #include "xml/XmlRecordCount.h"
 #include "xml/XQString.h"
 
@@ -74,16 +76,6 @@ public:
    };
 
    /**
-    * \brief Map from a string in an XML file to the value of an enum in a Brewtarget class
-    *
-    * Could use QMap or QHash here.  Doubt it makes much difference either way for the quantity of data / number of
-    * look-ups we're doing.  (Documentation says QHash is "significantly faster" if you don't need ordering, but some
-    * people say that's only true beyond a certain number of elements stored.  We could benchmark it if we were anxious
-    * about performance here.)
-    */
-   typedef QHash<QString, int> EnumLookupMap;
-
-   /**
     * \brief How to parse every field that we want to be able to read out of the XML file.  See class description for
     *        more details.
     */
@@ -92,7 +84,7 @@ public:
       XQString            xPath;
       BtStringConst const & propertyName;  // If fieldType == RecordComplex, then this is used only on export
                                            // If fieldType == RequiredConstant, then this is actually the constant value
-      EnumLookupMap const * stringToEnum;
+      EnumStringMapping const * enumMapping;
    };
 
    typedef QVector<FieldDefinition> FieldDefinitions;
@@ -105,10 +97,13 @@ public:
     *                  we'll need to look up how to handle nested records inside this one.
     * \param fieldDefinitions A list of fields we expect to find in this record (other fields will be ignored) and how
     *                         to parse them.
+    * \param namedEntityClassName The class name of the \c NamedEntity to which this record relates, or empty string if
+    *                             there is none
     */
    XmlRecord(QString const & recordName,
              XmlCoding const & xmlCoding,
-             FieldDefinitions const & fieldDefinitions);
+             FieldDefinitions const & fieldDefinitions,
+             QString const & namedEntityClassName);
 
    /**
     * \brief Get the record name (in this coding)
@@ -132,9 +127,9 @@ public:
     *        \c XmlRecord::namedEntity only allows an instance of a derived class to access this field on its own
     *         instance.)
     *
-    * \return Pointer to an object that the caller does NOT own (or nullptr for the root record)
+    * \return Shared pointer, which will contain nullptr for the root record
     */
-   NamedEntity * getNamedEntity() const;
+   std::shared_ptr<NamedEntity>  getNamedEntity() const;
 
    /**
     * \brief From the supplied record (ie node) in an XML document, load into memory the data it contains, including
@@ -168,7 +163,7 @@ public:
     * \return \b Succeeded, if processing succeeded, \b Failed, if there was an unresolvable problem, \b FoundDuplicate
     *         if the current record is a duplicate of one already in the DB and should be skipped.
     */
-   virtual ProcessingResult normaliseAndStoreInDb(NamedEntity * containingEntity,
+   virtual ProcessingResult normaliseAndStoreInDb(std::shared_ptr<NamedEntity> containingEntity,
                                                   QTextStream & userMessage,
                                                   XmlRecordCount & stats);
    /**
@@ -237,7 +232,7 @@ protected:
     *        that containing entity), this function should set it - eg this is where a \b BrewNote gets its \b Recipe
     *        set.  For other classes, this function is a no-op.
     */
-   virtual void setContainingEntity(NamedEntity * containingEntity);
+   virtual void setContainingEntity(std::shared_ptr<NamedEntity> containingEntity);
 
    /**
     * \brief Called by \c toXml to write out any fields that are themselves records.
@@ -282,11 +277,11 @@ protected:
    QString const            recordName;
    XmlCoding const &        xmlCoding;
    FieldDefinitions const & fieldDefinitions;
-
+public:
    // The name of the class of object contained in this type of record, eg "Hop", "Yeast", etc.
    // Blank for the root record (which is just a container and doesn't have a NamedEntity).
-   QString namedEntityClassName;
-
+   QString const namedEntityClassName;
+protected:
    // Name-value pairs containing all the field data from the XML record that will be used to construct/populate
    // this->namedEntity
    NamedParameterBundle namedParameterBundle;
@@ -301,19 +296,7 @@ protected:
    // Hop/Yeast/Recipe/etc object to be destroyed when the XmlNamedEntityRecord is destroyed (typically at end of
    // document processing).
    //
-   // Note HOWEVER, that, despite having this shared pointer, we tend to access through this->namedEntity because there
-   // are circumstances where we want this->namedEntity and this->namedEntityRaiiContainer to point to different things.
-   // Specifically, if we are reading in, say a Hop and we discover that we already have the same Hop (where "the same"
-   // means "as determined by NamedEntity.operator==") in the Database, then we will want to set this->namedEntity to
-   // the Hop we already have stored (in case other objects we are reading in need to cross-refer to it) and leave
-   // this->namedEntityRaiiContainer holding the newly-created Hop object that needs to be discarded.
-   //
-   // (An alternative approach would be to do replace this->namedEntityRaiiContainer with some boolean flag saying
-   // whether we own the object and then write a custom destructor to check the flag and delete this->namedEntity if
-   // necessary.  But this creates complication for dealing with duplicates.)
-   //
-   NamedEntity * namedEntity; // This is null for the root record of a document
-   std::shared_ptr<NamedEntity> namedEntityRaiiContainer;
+   std::shared_ptr<NamedEntity> namedEntity;
 
    // This determines whether we include this record in the stats we show the user (about how many records were read in
    // or skipped from a file.  By default it's true.  Subclass constructors set it to false for types of record that
@@ -323,14 +306,12 @@ protected:
 
    //
    // Keep track of any child (ie contained) records
-   // Key is the name of the class of the NamedEntity (eg "Hop", "Yeast", "MashStep", etc)
-   // Value is a pair of:
-   //   • The name, if any, of the property of this class that stores this child
-   //   • A smart pointer to the child XmlRecord.  (Smart pointer ensures each child record is destroyed properly when
-   //     our own destructor is called.
    //
-   typedef std::pair<XmlRecord::FieldDefinition const *, std::shared_ptr<XmlRecord> > ChildRecord;
-   QMultiHash<QString const &, ChildRecord> childRecords;
+   struct ChildRecord {
+      XmlRecord::FieldDefinition const * fieldDefinition;
+      std::shared_ptr<XmlRecord> xmlRecord;
+   };
+   QVector<ChildRecord> childRecords;
 };
 
 #endif

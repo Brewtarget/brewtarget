@@ -244,7 +244,7 @@ template<> inline
 XmlRecord * XmlCoding::construct<void>(QString const & recordName,
                                        XmlCoding const & xmlCoding,
                                        XmlRecord::FieldDefinitions const & fieldDefinitions) {
-   return new XmlRecord{recordName, xmlCoding, fieldDefinitions};
+   return new XmlRecord{recordName, xmlCoding, fieldDefinitions, ""};
 }
 template<> inline
 XmlRecord * XmlCoding::construct<Mash>(QString const & recordName,

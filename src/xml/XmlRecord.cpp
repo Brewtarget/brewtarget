@@ -66,14 +66,14 @@ namespace {
 
 XmlRecord::XmlRecord(QString const & recordName,
                      XmlCoding const & xmlCoding,
-                     FieldDefinitions const & fieldDefinitions) :
+                     FieldDefinitions const & fieldDefinitions,
+                     QString const & namedEntityClassName) :
    recordName{recordName},
    xmlCoding{xmlCoding},
    fieldDefinitions{fieldDefinitions},
-   namedEntityClassName{},
+   namedEntityClassName{namedEntityClassName},
    namedParameterBundle{NamedParameterBundle::NotStrict},
    namedEntity{nullptr},
-   namedEntityRaiiContainer{nullptr},
    includeInStats{true},
    childRecords{} {
    return;
@@ -87,7 +87,7 @@ NamedParameterBundle const & XmlRecord::getNamedParameterBundle() const {
    return this->namedParameterBundle;
 }
 
-NamedEntity * XmlRecord::getNamedEntity() const {
+std::shared_ptr<NamedEntity> XmlRecord::getNamedEntity() const {
    return this->namedEntity;
 }
 
@@ -102,12 +102,22 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
    // Loop through all the fields that we know/care about.  Anything else is intentionally ignored.  (We won't know
    // what to do with it, and, if it weren't allowed to be there, it would have generated an error at XSD parsing.)
    //
-   for (auto fieldDefinition = this->fieldDefinitions.cbegin(); fieldDefinition < this->fieldDefinitions.cend(); ++fieldDefinition) {
+   for (auto fieldDefinition = this->fieldDefinitions.cbegin();
+        fieldDefinition < this->fieldDefinitions.cend();
+        ++fieldDefinition) {
       //
       // NB: If we don't find a node, there's nothing for us to do.  The XSD parsing should already flagged up an error
       // if there are missing _required_ fields or if string fields that are present are not allowed to be blank.  (See
       // comments in BeerXml.xsd for why it is, in practice, plausible and acceptable for some "required" text fields
       // to be empty/blank.)
+      //
+      // Equally, although we only look for nodes we know about, some of these we won't use.  If there is no property
+      // name in our field definition then it's a field we neither read nor write.  We'll parse it but we won't try to
+      // pass it to the object we're creating.  But there are some fields that are "write only", such as IBU on Recipe.
+      // These have a property name in the field definition, so they will be written out in XmlRecord::toXml, but the
+      // relevant object constructor ignores them when they appear in a NamedParameterBundle.  (In the case of IBU on
+      // Recipe, this is because it is a calculated value.  It is helpful to some users to export it in the XML, but
+      // there is no point trying to read it in from XML as the value would get overwritten by our own calculated one.)
       //
       // We're not expecting multiple instances of simple fields (strings, numbers, etc) and XSD parsing should mostly
       // have flagged up errors if there were any present.  But it is often valid to have multiple child records (eg
@@ -120,7 +130,8 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
                                     fieldDefinition->xPath.getXalanString());
       auto numChildNodes = nodesForCurrentXPath.getLength();
       qDebug() << Q_FUNC_INFO << "Found" << numChildNodes << "node(s) for " << fieldDefinition->xPath;
-      if (XmlRecord::RecordSimple == fieldDefinition->fieldType || XmlRecord::RecordComplex == fieldDefinition->fieldType) {
+      if (XmlRecord::RecordSimple == fieldDefinition->fieldType ||
+          XmlRecord::RecordComplex == fieldDefinition->fieldType) {
          //
          // Depending on the context, it may or may not be valid to have multiple children of this type of record (eg
          // a Recipe might have multiple Hops but it only has one Equipment).  We don't really have to worry about that
@@ -136,8 +147,8 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
          //
          if (numChildNodes > 1) {
             qWarning() <<
-               Q_FUNC_INFO << numChildNodes << " nodes found with path " << fieldDefinition->xPath << ".  Taking value only of the "
-               "first one.";
+               Q_FUNC_INFO << numChildNodes << " nodes found with path " << fieldDefinition->xPath << ".  Taking value "
+               "only of the first one.";
          }
          xalanc::XalanNode * fieldContainerNode = nodesForCurrentXPath.item(0);
 
@@ -172,9 +183,9 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
                bool parsedValueOk = false;
                QVariant parsedValue;
 
-               // A field should have a stringToEnum mapping if and only if it's of type Enum
+               // A field should have an enumMapping if and only if it's of type Enum
                // Anything else is a coding error at the caller
-               Q_ASSERT((XmlRecord::Enum == fieldDefinition->fieldType) != (nullptr == fieldDefinition->stringToEnum));
+               Q_ASSERT((XmlRecord::Enum == fieldDefinition->fieldType) != (nullptr == fieldDefinition->enumMapping));
 
                switch(fieldDefinition->fieldType) {
 
@@ -319,16 +330,19 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
 
                   case XmlRecord::Enum:
                      // It's definitely a coding error if there is no stringToEnum mapping for a field declared as Enum!
-                     Q_ASSERT(nullptr != fieldDefinition->stringToEnum);
-                     if (!fieldDefinition->stringToEnum->contains(value)) {
+                     Q_ASSERT(nullptr != fieldDefinition->enumMapping);
+                     {
+                        auto match = fieldDefinition->enumMapping->stringToEnum(value);
+                        if (!match) {
                         // This is probably a coding error as the XSD parsing should already have verified that the
                         // contents of the node are one of the expected values.
                         qWarning() <<
                            Q_FUNC_INFO << "Ignoring " << this->namedEntityClassName << " node " << fieldDefinition->xPath << "=" <<
                            value << " as value not recognised";
                      } else {
-                        parsedValue.setValue(fieldDefinition->stringToEnum->value(value));
+                           parsedValue.setValue(match.value());
                         parsedValueOk = true;
+                     }
                      }
                      break;
 
@@ -418,7 +432,7 @@ void XmlRecord::deleteNamedEntityFromDb() {
    return;
 }
 
-XmlRecord::ProcessingResult XmlRecord::normaliseAndStoreInDb(NamedEntity * containingEntity,
+XmlRecord::ProcessingResult XmlRecord::normaliseAndStoreInDb(std::shared_ptr<NamedEntity> containingEntity,
                                                              QTextStream & userMessage,
                                                              XmlRecordCount & stats) {
    if (nullptr != this->namedEntity) {
@@ -475,10 +489,10 @@ XmlRecord::ProcessingResult XmlRecord::normaliseAndStoreInDb(NamedEntity * conta
       // had to be fully constructed before we could meaningfully check whether it's the same as something we already
       // have in the object store.
       //
-      if (nullptr == this->namedEntity) {
+      if (nullptr == this->namedEntity.get()) {
          // Child records OK and no duplicate check needed (root record), which also means no further processing
          // required
-          return XmlRecord::Succeeded;
+         return XmlRecord::Succeeded;
       }
       processingResult = this->isDuplicate() ? XmlRecord::FoundDuplicate : XmlRecord::Succeeded;
    } else {
@@ -486,7 +500,7 @@ XmlRecord::ProcessingResult XmlRecord::normaliseAndStoreInDb(NamedEntity * conta
       processingResult = XmlRecord::Failed;
    }
 
-   if (nullptr != this->namedEntity) {
+   if (nullptr != this->namedEntity.get()) {
       //
       // We potentially do stats for everything except failure
       //
@@ -527,9 +541,23 @@ XmlRecord::ProcessingResult XmlRecord::normaliseAndStoreInDb(NamedEntity * conta
 
 bool XmlRecord::normaliseAndStoreChildRecordsInDb(QTextStream & userMessage,
                                                   XmlRecordCount & stats) {
+   //
+   // We are assuming it does not matter which order different children are processed in.
+   //
+   // Where there are several children of the same type, we need to process them in the same order as they were read in
+   // from the XML document because, in some cases, this order matters.  In particular, in BeerXML, the Mash Steps
+   // inside a Mash (or rather MASH_STEP tags inside a MASH_STEPS tag inside a MASH tag) are stored in order without any
+   // other means of identifying order.
+   //
+   // So it's simplest just to process all the child records in the order they were read out of the XML document.  This
+   // is the advantage of storing things in a list such as QVector.  (Alternatives such as QMultiHash iterate through
+   // items that share the same key in the opposite order to which they were inserted and don't offer STL reverse
+   // iterators, so going backwards would be a bit clunky.)
+   //
    for (auto ii = this->childRecords.begin(); ii != this->childRecords.end(); ++ii) {
-      qDebug() << Q_FUNC_INFO << "Storing" << ii.key();
-      if (XmlRecord::Failed == ii.value().second->normaliseAndStoreInDb(this->namedEntity, userMessage, stats)) {
+      qDebug() <<
+         Q_FUNC_INFO << "Storing" << ii->xmlRecord->namedEntityClassName << "child of" << this->namedEntityClassName;
+      if (XmlRecord::Failed == ii->xmlRecord->normaliseAndStoreInDb(this->namedEntity, userMessage, stats)) {
          return false;
       }
       //
@@ -543,12 +571,12 @@ bool XmlRecord::normaliseAndStoreChildRecordsInDb(QTextStream & userMessage,
       // XML to work).  Instead we distinguish between two types of records: RecordSimple, which can be set via a
       // property, and RecordComplex, which can't.
       //
-      if (XmlRecord::RecordSimple == ii.value().first->fieldType) {
-         char const * const propertyName = *ii.value().first->propertyName;
+      if (XmlRecord::RecordSimple == ii->fieldDefinition->fieldType) {
+         char const * const propertyName = *ii->fieldDefinition->propertyName;
          Q_ASSERT(nullptr != propertyName);
          // It's a coding error if we had a property defined for a record that's not trying to populate a NamedEntity
          // (ie for the root record).
-         Q_ASSERT(nullptr != this->namedEntity);
+         Q_ASSERT(nullptr != this->namedEntity.get());
          // It's a coding error if we're trying to set a non-existent property on the NamedEntity subclass for this
          // record.
          QMetaObject const * metaObject = this->namedEntity->metaObject();
@@ -557,7 +585,7 @@ bool XmlRecord::normaliseAndStoreChildRecordsInDb(QTextStream & userMessage,
          QMetaProperty metaProperty = metaObject->property(propertyIndex);
          Q_ASSERT(metaProperty.isWritable());
          // It's a coding error if we can't create a valid QVariant from a pointer to class we are trying to "set"
-         Q_ASSERT(QVariant::fromValue(ii.value().second->namedEntity).isValid());
+         Q_ASSERT(QVariant::fromValue(ii->xmlRecord->namedEntity.get()).isValid());
 
          qDebug() <<
             Q_FUNC_INFO << "Setting" << propertyName << "property (type = " <<
@@ -565,7 +593,7 @@ bool XmlRecord::normaliseAndStoreChildRecordsInDb(QTextStream & userMessage,
                this->namedEntity->metaObject()->indexOfProperty(propertyName)
             ).typeName() << ") on" << this->namedEntityClassName << "object";
          this->namedEntity->setProperty(propertyName,
-                                        QVariant::fromValue(ii.value().second->namedEntity));
+                                        QVariant::fromValue(ii->xmlRecord->namedEntity.get()));
       }
    }
    return true;
@@ -610,8 +638,13 @@ bool XmlRecord::loadChildRecords(xalanc::DOMSupport & domSupport,
       Q_ASSERT(this->xmlCoding.isKnownXmlRecordType(childRecordName));
 
       std::shared_ptr<XmlRecord> xmlRecord = this->xmlCoding.getNewXmlRecord(childRecordName);
-      this->childRecords.insert(xmlRecord->namedEntityClassName,
-                                XmlRecord::ChildRecord(fieldDefinition, xmlRecord));
+      this->childRecords.append(XmlRecord::ChildRecord{fieldDefinition, xmlRecord});
+      //
+      // The return value of xalanc::XalanNode::getIndex() doesn't have an instantly obvious direct meaning, but AFAICT
+      // higher values are for nodes that were later in the input file, so useful to log.
+      //
+      qDebug() <<
+         Q_FUNC_INFO << "Loading child record" << childRecordName << "with index" << childRecordNode->getIndex();
       if (!xmlRecord->load(domSupport, childRecordNode, userMessage)) {
          return false;
       }
@@ -637,7 +670,7 @@ void XmlRecord::normaliseName() {
    return;
 }
 
-void XmlRecord::setContainingEntity(NamedEntity * containingEntity) {
+void XmlRecord::setContainingEntity(std::shared_ptr<NamedEntity> containingEntity) {
    // Base class does not have a NamedEntity or a container, so nothing to do
    // Stictly, it's a coding error if this function is called, as caller should first check whether there is a
    // NamedEntity, and subclasses that do have one should override this function.
@@ -788,12 +821,11 @@ void XmlRecord::toXml(NamedEntity const & namedEntityToExport,
                break;
 
             case XmlRecord::Enum:
-               // It's definitely a coding error if there is no stringToEnum mapping for a field declared as Enum!
-               Q_ASSERT(nullptr != fieldDefinition.stringToEnum);
-               // When writing out XML, we have the value of the EnumLookupMap (an int) and need to find the corresponding
-               // key (a string).  Fortunately, the underlying QHash already does all the heavy lifting.
-               valueAsText = fieldDefinition.stringToEnum->key(value.toInt());
-               if (valueAsText == "") {
+               // It's definitely a coding error if there is no enumMapping for a field declared as Enum!
+               Q_ASSERT(nullptr != fieldDefinition.enumMapping);
+               {
+                  auto match = fieldDefinition.enumMapping->enumToString(value.toInt());
+                  if (!match) {
                   // It's a coding error if we couldn't find the enum value the enum mapping
                   qCritical() << Q_FUNC_INFO <<
                      "Could not find string representation of enum property" << fieldDefinition.propertyName <<
@@ -801,6 +833,8 @@ void XmlRecord::toXml(NamedEntity const & namedEntityToExport,
                      namedEntityToExport.metaObject()->className();
                   Q_ASSERT(false); // Stop here on a debug build
                   continue;        // Soldier on in a prod build
+               }
+                  valueAsText = match.value();
                }
                break;
 
