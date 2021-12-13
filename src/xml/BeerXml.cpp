@@ -84,19 +84,19 @@ namespace {
    // Field mappings for <HOP>...</HOP> BeerXML records
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
    template<> QString const BEER_XML_RECORD_NAME<Hop>{"HOP"};
-   XmlRecord::EnumLookupMap const BEER_XML_HOP_USE_MAPPER {
+   EnumStringMapping const BEER_XML_HOP_USE_MAPPER {
       {"Boil",       Hop::Boil},
       {"Dry Hop",    Hop::Dry_Hop},
       {"Mash",       Hop::Mash},
       {"First Wort", Hop::First_Wort},
       {"Aroma",      Hop::UseAroma}
    };
-   XmlRecord::EnumLookupMap const BEER_XML_HOP_TYPE_MAPPER {
+   EnumStringMapping const BEER_XML_HOP_TYPE_MAPPER {
       {"Bittering", Hop::Bittering},
       {"Aroma",     Hop::Aroma},
       {"Both",      Hop::Both}
    };
-   XmlRecord::EnumLookupMap const BEER_XML_HOP_FORM_MAPPER {
+   EnumStringMapping const BEER_XML_HOP_FORM_MAPPER {
       {"Pellet", Hop::Pellet},
       {"Plug",   Hop::Plug},
       {"Leaf",   Hop::Leaf}
@@ -104,7 +104,7 @@ namespace {
    template<> XmlRecord::FieldDefinitions const BEER_XML_RECORD_FIELDS<Hop> {
       // Type              XPath             Q_PROPERTY                             Enum Mapper
       {XmlRecord::String,  "NAME",           PropertyNames::NamedEntity::name,      nullptr},
-      {XmlRecord::RequiredConstant, "VERSION", VERSION1,                                 nullptr},
+      {XmlRecord::RequiredConstant, "VERSION", VERSION1,                            nullptr},
       {XmlRecord::Double,  "ALPHA",          PropertyNames::Hop::alpha_pct,         nullptr},
       {XmlRecord::Double,  "AMOUNT",         PropertyNames::Hop::amount_kg,         nullptr},
       {XmlRecord::Enum,    "USE",            PropertyNames::Hop::use,               &BEER_XML_HOP_USE_MAPPER},
@@ -129,7 +129,7 @@ namespace {
    // Field mappings for <FERMENTABLE>...</FERMENTABLE> BeerXML records
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
    template<> QString const BEER_XML_RECORD_NAME<Fermentable>{"FERMENTABLE"};
-   XmlRecord::EnumLookupMap const BEER_XML_FERMENTABLE_TYPE_MAPPER {
+   EnumStringMapping const BEER_XML_FERMENTABLE_TYPE_MAPPER {
       {"Grain",       Fermentable::Grain},
       {"Sugar",       Fermentable::Sugar},
       {"Extract",     Fermentable::Extract},
@@ -139,7 +139,7 @@ namespace {
    template<> XmlRecord::FieldDefinitions const BEER_XML_RECORD_FIELDS<Fermentable> {
       // Type              XPath               Q_PROPERTY                                          Enum Mapper
       {XmlRecord::String,  "NAME",             PropertyNames::NamedEntity::name,                   nullptr},
-      {XmlRecord::RequiredConstant,  "VERSION", VERSION1,                                               nullptr},
+      {XmlRecord::RequiredConstant,  "VERSION", VERSION1,                                          nullptr},
       {XmlRecord::Enum,    "TYPE",             PropertyNames::Fermentable::type,                   &BEER_XML_FERMENTABLE_TYPE_MAPPER},
       {XmlRecord::Double,  "AMOUNT",           PropertyNames::Fermentable::amount_kg,              nullptr},
       {XmlRecord::Double,  "YIELD",            PropertyNames::Fermentable::yield_pct,              nullptr},
@@ -166,20 +166,20 @@ namespace {
    // Field mappings for <YEAST>...</YEAST> BeerXML records
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
    template<> QString const BEER_XML_RECORD_NAME<Yeast>{"YEAST"};
-   XmlRecord::EnumLookupMap const BEER_XML_YEAST_TYPE_MAPPER {
+   EnumStringMapping const BEER_XML_YEAST_TYPE_MAPPER {
       {"Ale",       Yeast::Ale},
       {"Lager",     Yeast::Lager},
       {"Wheat",     Yeast::Wheat},
       {"Wine",      Yeast::Wine},
       {"Champagne", Yeast::Champagne}
    };
-   XmlRecord::EnumLookupMap const BEER_XML_YEAST_FORM_MAPPER {
+   EnumStringMapping const BEER_XML_YEAST_FORM_MAPPER {
       {"Liquid",  Yeast::Liquid},
       {"Dry",     Yeast::Dry},
       {"Slant",   Yeast::Slant},
       {"Culture", Yeast::Culture}
    };
-   XmlRecord::EnumLookupMap const BEER_XML_YEAST_FLOCCULATION_MAPPER {
+   EnumStringMapping const BEER_XML_YEAST_FLOCCULATION_MAPPER {
       {"Low",       Yeast::Low},
       {"Medium",    Yeast::Medium},
       {"High",      Yeast::High},
@@ -215,7 +215,7 @@ namespace {
    // Field mappings for <MISC>...</MISC> BeerXML records
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
    template<> QString const BEER_XML_RECORD_NAME<Misc>{"MISC"};
-   XmlRecord::EnumLookupMap const BEER_XML_MISC_TYPE_MAPPER {
+   EnumStringMapping const BEER_XML_MISC_TYPE_MAPPER {
       {"Spice",       Misc::Spice},
       {"Fining",      Misc::Fining},
       {"Water Agent", Misc::Water_Agent},
@@ -223,7 +223,7 @@ namespace {
       {"Flavor",      Misc::Flavor},
       {"Other",       Misc::Other}
    };
-   XmlRecord::EnumLookupMap const BEER_XML_MISC_USE_MAPPER {
+   EnumStringMapping const BEER_XML_MISC_USE_MAPPER {
       {"Boil",      Misc::Boil},
       {"Mash",      Misc::Mash},
       {"Primary",   Misc::Primary},
@@ -270,7 +270,7 @@ namespace {
    // Field mappings for <STYLE>...</STYLE> BeerXML records
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
    template<> QString const BEER_XML_RECORD_NAME<Style>{"STYLE"};
-   XmlRecord::EnumLookupMap const BEER_XML_STYLE_TYPE_MAPPER {
+   EnumStringMapping const BEER_XML_STYLE_TYPE_MAPPER {
       {"Lager", Style::Lager},
       {"Ale",   Style::Ale},
       {"Mead",  Style::Mead},
@@ -321,14 +321,15 @@ namespace {
    // Field mappings for <MASH_STEP>...</MASH_STEP> BeerXML records
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
    template<> QString const BEER_XML_RECORD_NAME<MashStep>{"MASH_STEP"};
-   XmlRecord::EnumLookupMap const BEER_XML_MASH_STEP_TYPE_MAPPER {
+   EnumStringMapping const BEER_XML_MASH_STEP_TYPE_MAPPER {
       {"Infusion",     MashStep::Infusion},
       {"Temperature",  MashStep::Temperature},
       {"Decoction",    MashStep::Decoction},
       // Inside Brewtarget we also have MashStep::flySparge and MashStep::batchSparge which are not mentioned in the
       // BeerXML 1.0 Standard.  They get treated as "Infusion" when we write to BeerXML
-      {"Infusion",     MashStep::flySparge},
-      {"Infusion",     MashStep::batchSparge}
+      // Note that we include a comment here to ensure we don't have multiple mappings from "Infusion"
+      {"Infusion<!-- Fly Sparge -->",     MashStep::flySparge},
+      {"Infusion<!-- Batch Sparge -->",     MashStep::batchSparge}
    };
    template<> XmlRecord::FieldDefinitions const BEER_XML_RECORD_FIELDS<MashStep> {
       // Type              XPath                 Q_PROPERTY                                  Enum Mapper
@@ -470,7 +471,7 @@ namespace {
    // Field mappings for <RECIPE>...</RECIPE> BeerXML records
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
    template<> QString const BEER_XML_RECORD_NAME<Recipe>{"RECIPE"};
-   XmlRecord::EnumLookupMap const BEER_XML_RECIPE_STEP_TYPE_MAPPER {
+   EnumStringMapping const BEER_XML_RECIPE_STEP_TYPE_MAPPER {
       {"Extract",      Recipe::Extract},
       {"Partial Mash", Recipe::PartialMash},
       {"All Grain",    Recipe::AllGrain}
@@ -520,7 +521,7 @@ namespace {
       {XmlRecord::String,        "EST_OG",                   BtString::NULL_STR,                        nullptr}, // Extension tag
       {XmlRecord::String,        "EST_FG",                   BtString::NULL_STR,                        nullptr}, // Extension tag
       {XmlRecord::String,        "EST_COLOR",                BtString::NULL_STR,                        nullptr}, // Extension tag
-      {XmlRecord::String,        "IBU",                      BtString::NULL_STR,                        nullptr}, // Extension tag
+      {XmlRecord::String,        "IBU",                      PropertyNames::Recipe::IBU,                nullptr}, // Extension tag.  We write but ignore on read if present.
       {XmlRecord::String,        "IBU_METHOD",               BtString::NULL_STR,                        nullptr}, // Extension tag
       {XmlRecord::String,        "EST_ABV",                  BtString::NULL_STR,                        nullptr}, // Extension tag
       {XmlRecord::String,        "ABV",                      BtString::NULL_STR,                        nullptr}, // Extension tag
@@ -604,7 +605,7 @@ public:
       QFile inputFile;
       inputFile.setFileName(fileName);
 
-      if(! inputFile.open(QIODevice::ReadOnly)) {
+      if(!inputFile.open(QIODevice::ReadOnly)) {
          qWarning() << Q_FUNC_INFO << ": Could not open " << fileName << " for reading";
          return false;
       }
@@ -619,9 +620,9 @@ public:
       //
       // † The BeerXML 1.0 standard diverges from valid/standard XML in a few ways:
       //    • It mandates an XML Declaration (which it calls the "XML Header"), which is normally an optional part of
-      //       any UTF-8 encoded XML document.  (This is perhaps because it seems to mandate an ISO-8859-1 coding of
-      //       BeerXML files, though there is no explicit discussion of file encodings in the standard, and this seems
-      //       an unnecessary constraint to place on files.)
+      //      any UTF-8 encoded XML document.  (This is perhaps because it seems to mandate an ISO-8859-1 coding of
+      //      BeerXML files, though there is no explicit discussion of file encodings in the standard, and this seems
+      //      an unnecessary constraint to place on files.)
       //    • It omits to specify a single root element, even though this is a required part of any valid XML document.
       //    • It uses "TRUE" and "FALSE" (ie caps) for boolean values instead of the XML standard "true" and "false"
       //      (ie lower case).

@@ -38,7 +38,7 @@ protected:
     *        properties is hard unless you make the getters and setters all use the same list type, eg QList<QVariant>
     *        instead of QList<Hop *>, QList<Fermentable *>, QList<Instruction *>, etc.
     */
-   virtual XmlRecord::ProcessingResult normaliseAndStoreInDb(NamedEntity * containingEntity,
+   virtual XmlRecord::ProcessingResult normaliseAndStoreInDb(std::shared_ptr<NamedEntity> containingEntity,
                                                              QTextStream & userMessage,
                                                              XmlRecordCount & stats);
 

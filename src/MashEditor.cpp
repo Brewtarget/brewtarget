@@ -149,9 +149,8 @@ void MashEditor::showChanges(QMetaProperty* prop) {
    bool updateAll = false;
    QString propName;
 
-   if( mashObs == nullptr )
-   {
-      clear();
+   if (mashObs == nullptr) {
+      this->clear();
       return;
    }
 

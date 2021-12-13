@@ -111,13 +111,27 @@ void FermentableTableModel::addFermentable(int fermId) {
    Fermentable * ferm = ObjectStoreWrapper::getByIdRaw<Fermentable>(fermId);
    qDebug() << Q_FUNC_INFO << ferm->name();
 
-   //Check to see if it's already in the list
-   if( fermObs.contains(ferm) )
+   // Check to see if it's already in the list
+   if (this->fermObs.contains(ferm)) {
       return;
+   }
+
    // If we are observing the database, ensure that the ferm is undeleted and
    // fit to display.
-   if( recObs == nullptr && ( ferm->deleted() || !ferm->display() ) )
+   if (this->recObs == nullptr && (ferm->deleted() || !ferm->display())) {
       return;
+   }
+
+   // If we are watching a Recipe and the new Fermentable does not belong to it then there is nothing for us to do
+   if (this->recObs) {
+      Recipe * recipeOfNewFermentable = ferm->getOwningRecipe();
+      if (recipeOfNewFermentable && this->recObs->key() != recipeOfNewFermentable->key()) {
+         qDebug() <<
+            Q_FUNC_INFO << "Ignoring signal about new Ferementable #" << ferm->key() << "as it belongs to Recipe #" <<
+            recipeOfNewFermentable->key() << "and we are watching Recipe #" << this->recObs->key();
+         return;
+      }
+   }
 
    int size = fermObs.size();
    beginInsertRows( QModelIndex(), size, size );

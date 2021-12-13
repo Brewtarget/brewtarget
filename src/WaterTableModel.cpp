@@ -77,18 +77,26 @@ void WaterTableModel::observeDatabase(bool val) {
 
 void WaterTableModel::addWater(int waterId) {
    Water* water = ObjectStoreWrapper::getByIdRaw<Water>(waterId);
-   if( waterObs.contains(water) )
+   if (this->waterObs.contains(water)) {
       return;
+   }
    // If we are observing the database, ensure that the item is undeleted and
    // fit to display.
-   if(
-      recObs == nullptr &&
-      (
-         water->deleted() ||
-         !water->display()
-      )
-   )
+   if (this->recObs == nullptr &&
+       (water->deleted() || !water->display())) {
       return;
+   }
+
+   // If we are watching a Recipe and the new Water does not belong to it then there is nothing for us to do
+   if (this->recObs) {
+      Recipe * recipeOfNewWater = water->getOwningRecipe();
+      if (recipeOfNewWater && this->recObs->key() != recipeOfNewWater->key()) {
+         qDebug() <<
+            Q_FUNC_INFO << "Ignoring signal about new Water #" << water->key() << "as it belongs to Recipe #" <<
+            recipeOfNewWater->key() << "and we are watching Recipe #" << this->recObs->key();
+         return;
+      }
+   }
 
    beginInsertRows( QModelIndex(), waterObs.size(), waterObs.size() );
    waterObs.append(water);

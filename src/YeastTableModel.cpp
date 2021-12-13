@@ -74,15 +74,22 @@ void YeastTableModel::addYeast(int yeastId) {
 
    // If we are observing the database, ensure that the item is undeleted and
    // fit to display.
-   if(
-      recObs == nullptr &&
-      (
-         yeast->deleted() ||
-         !yeast->display()
-      )
-   ) {
+   if (this->recObs == nullptr &&
+       (yeast->deleted() || !yeast->display())) {
       return;
    }
+
+   // If we are watching a Recipe and the new Yeast does not belong to it then there is nothing for us to do
+   if (this->recObs) {
+      Recipe * recipeOfNewYeast = yeast->getOwningRecipe();
+      if (recipeOfNewYeast && this->recObs->key() != recipeOfNewYeast->key()) {
+         qDebug() <<
+            Q_FUNC_INFO << "Ignoring signal about new Yeast #" << yeast->key() << "as it belongs to Recipe #" <<
+            recipeOfNewYeast->key() << "and we are watching Recipe #" << this->recObs->key();
+         return;
+      }
+   }
+
    int size = yeastObs.size();
    beginInsertRows( QModelIndex(), size, size );
    yeastObs.append(yeast);

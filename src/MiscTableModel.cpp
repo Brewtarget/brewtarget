@@ -95,14 +95,20 @@ void MiscTableModel::addMisc(int miscId) {
 
    // If we are observing the database, ensure that the item is undeleted and
    // fit to display.
-   if(
-      recObs == nullptr &&
-      (
-         misc->deleted() ||
-         !misc->display()
-      )
-   ) {
+   if (recObs == nullptr &&
+      (misc->deleted() || !misc->display())) {
       return;
+   }
+
+   // If we are watching a Recipe and the new Misc does not belong to it then there is nothing for us to do
+   if (this->recObs) {
+      Recipe * recipeOfNewMisc = misc->getOwningRecipe();
+      if (recipeOfNewMisc && this->recObs->key() != recipeOfNewMisc->key()) {
+         qDebug() <<
+            Q_FUNC_INFO << "Ignoring signal about new Misc #" << misc->key() << "as it belongs to Recipe #" <<
+            recipeOfNewMisc->key() << "and we are watching Recipe #" << this->recObs->key();
+         return;
+      }
    }
 
    int size = miscObs.size();

@@ -550,6 +550,13 @@ public:
     */
    virtual void hardDeleteOwnedEntities();
 
+   /**
+    * \brief Deleting a Recipe usually results in an orphaned Mash record (which cannot be removed by
+    *        \c hardDeleteOwnedEntities because of the direction of foreign key constraints) and needs to be deleted
+    *        immediately after the Recipe record has been removed from the database.
+    */
+   virtual void hardDeleteOrphanedEntities();
+
 signals:
 
 public slots:

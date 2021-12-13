@@ -48,25 +48,26 @@ public:
    XmlNamedEntityRecord(QString const & recordName,
                         XmlCoding const & xmlCoding,
                         XmlRecord::FieldDefinitions const & fieldDefinitions) :
-   XmlRecord{recordName, xmlCoding, fieldDefinitions} {
-      this->namedEntityClassName = NE::staticMetaObject.className();
+      XmlRecord{recordName, xmlCoding, fieldDefinitions, NE::staticMetaObject.className()} {
       this->includeInStats = this->includedInStats();
       return;
    }
 
 protected:
    virtual void constructNamedEntity() {
-      this->namedEntityRaiiContainer.reset(new NE{this->namedParameterBundle});
-      this->namedEntity = this->namedEntityRaiiContainer.get();
+      // It's a coding error if this function is called when we already have a NamedEntity
+      Q_ASSERT(nullptr == this->namedEntity.get());
+
+      this->namedEntity = std::make_shared<NE>(this->namedParameterBundle);
    }
 
    virtual int storeNamedEntityInDb() {
-      return ObjectStoreWrapper::insert(std::static_pointer_cast<NE>(this->namedEntityRaiiContainer));
+      return ObjectStoreWrapper::insert(std::static_pointer_cast<NE>(this->namedEntity));
    }
 
 public:
    virtual void deleteNamedEntityFromDb() {
-      ObjectStoreWrapper::hardDelete(*std::static_pointer_cast<NE>(this->namedEntityRaiiContainer));
+      ObjectStoreWrapper::hardDelete(*std::static_pointer_cast<NE>(this->namedEntity));
       return;
    }
 
@@ -87,23 +88,34 @@ protected:
     *        story.)
     */
    virtual bool isDuplicate() {
-      auto currentEntity = this->namedEntity;
+      // It's a coding error if we are searching for a duplicate of a null object
+      Q_ASSERT(nullptr != this->namedEntity.get());
+
+      // This copy of the pointer is just to make it clearer what we're passing to lambda in findFirstMatching() below
+      std::shared_ptr<NE const> const currentEntity = std::static_pointer_cast<NE const>(this->namedEntity);
       auto matchResult = ObjectStoreTyped<NE>::getInstance().findFirstMatching(
          //
          // Note that, because we run this check both before and after something has been stored in the database (for
          // reasons explained in XmlRecord::normaliseAndStoreInDb) we need to be particularly careful NOT to match the
          // object with itself!
          //
-         [currentEntity](std::shared_ptr<NE> ne) {return (*ne == *currentEntity) && (ne->key() != currentEntity->key());}
+         // Note too that we don't want to match against soft-deleted entities.  (Otherwise, if you delete something and
+         // then try to import it again, it will never import!)
+         //
+         [currentEntity](std::shared_ptr<NE> ne) {
+            return (*ne == *currentEntity) &&
+                   (ne->key() != currentEntity->key()) &&
+                   (!ne->deleted());
+         }
       );
       if (matchResult) {
          qDebug() <<
             Q_FUNC_INFO << "Found a match (#" << matchResult.value()->key() << "," << matchResult.value()->name() <<
             ") for #" << this->namedEntity->key() << ", " << this->namedEntity->name();
-         // Set our pointer to the Hop/Yeast/Fermentable/etc that we already have stored in the database, so that any
-         // containing Recipe etc can refer to it.  The new object we created is still held in
-         // this->namedEntityRaiiContainer and will automatically be deleted when we go out of scope.
-         this->namedEntity = matchResult.value().get();
+         // Set our Hop/Yeast/Fermentable/etc to the one we found already stored in the database, so that any
+         // containing Recipe etc can refer to it.  The new object we created will get deleted by the magic of shared
+         // pointers.
+         this->namedEntity = matchResult.value();
          return true;
       }
       qDebug() << Q_FUNC_INFO << "No match found for "<< this->namedEntity->name();
@@ -124,6 +136,11 @@ protected:
       QString currentName = this->namedEntity->name();
 
       while (
+         //
+         // At the moment, we're pretty strict here and count a name clash even for things that are soft deleted.  If
+         // we wanted to allow clashes with such soft-deleted things then we could add a check against ne->deleted()
+         // as in the isDuplicate() function.
+         //
          auto matchResult = ObjectStoreTyped<NE>::getInstance().findFirstMatching(
             [currentName](std::shared_ptr<NE> ne) {return ne->name() == currentName;}
          )
@@ -146,7 +163,7 @@ protected:
    /**
     * \brief Implementation of the general case where the object is independent of its containing entity
     */
-   virtual void setContainingEntity(NamedEntity * containingEntity) {
+   virtual void setContainingEntity(std::shared_ptr<NamedEntity> containingEntity) {
       return;
    }
 
@@ -170,10 +187,12 @@ template<> inline void XmlNamedEntityRecord<MashStep>::normaliseName() { return;
 template<> inline void XmlNamedEntityRecord<BrewNote>::normaliseName() { return; }
 
 // Specialisations for cases where object is owned by its containing entity
-template<> inline void XmlNamedEntityRecord<BrewNote>::setContainingEntity(NamedEntity * containingEntity) {
-   qDebug() << Q_FUNC_INFO << "BrewNote * " << static_cast<void*>(this->namedEntity) << ", Recipe * " << static_cast<void*>(containingEntity);
-   BrewNote * brewNote = static_cast<BrewNote *>(this->namedEntity);
-   brewNote->setRecipe(static_cast<Recipe *>(containingEntity));
+template<> inline void XmlNamedEntityRecord<BrewNote>::setContainingEntity(std::shared_ptr<NamedEntity> containingEntity) {
+   qDebug() <<
+      Q_FUNC_INFO << "BrewNote * " << static_cast<void*>(this->namedEntity.get()) << ", Recipe * " <<
+      static_cast<void*>(containingEntity.get());
+   auto brewNote = std::static_pointer_cast<BrewNote>(this->namedEntity);
+   brewNote->setRecipe(static_cast<Recipe *>(containingEntity.get()));
    return;
 }
 

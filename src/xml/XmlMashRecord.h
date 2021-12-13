@@ -54,7 +54,7 @@ protected:
     *        Additionally, if the Recipe gets deleted after being read in (because at that point we determine it's a
     *        duplicate), this means we don't have to try to unpick stats about Mashes.
     */
-   virtual void setContainingEntity(NamedEntity * containingEntity);
+   virtual void setContainingEntity(std::shared_ptr<NamedEntity> containingEntity);
 };
 
 #endif
