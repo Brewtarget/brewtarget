@@ -32,6 +32,7 @@
 #include <QMessageBox>
 #include <QObject>
 #include <QString>
+#include <QStandardPaths>
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QNetworkRequest>
