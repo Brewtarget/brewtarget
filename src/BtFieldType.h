@@ -22,6 +22,8 @@
 
 #include <variant>
 
+#include <QString>
+
 #include "measurement/PhysicalQuantity.h"
 
 /**

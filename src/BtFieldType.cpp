@@ -19,7 +19,6 @@
 #include "BtFieldType.h"
 
 #include <QDebug>
-#include <QString>
 
 #include "utils/EnumStringMapping.h"
 
