@@ -33,6 +33,7 @@
 #endif
 
 #include <memory>
+#include <mutex> // For std::once_flag etc
 
 #include <QAction>
 #include <QBrush>
