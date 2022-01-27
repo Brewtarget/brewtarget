@@ -27,6 +27,7 @@
 
 #include <functional>
 #include <memory> // For PImpl
+#include <optional>
 
 #include <QMultiMap>
 #include <QObject>
