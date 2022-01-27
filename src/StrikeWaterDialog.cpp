@@ -17,10 +17,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include <limits>
-#include <Algorithms.h>
 #include "StrikeWaterDialog.h"
-#include "brewtarget.h"
+
+#include <limits>
+
+#include <Algorithms.h>
 
 // From Northern Brewer ~0.38 but Jon Palmer suggest 0.41
 // to compensate for the lost to the tun even if the tun is pre-heaten
@@ -45,10 +46,10 @@ void StrikeWaterDialog::calculate()
 
 double StrikeWaterDialog::computeInitialInfusion()
 {
-  double grainTemp   = grainTempVal->toSI();
-  double targetMash  = targetMashVal->toSI();
-  double waterVolume = waterVolumeVal->toSI();
-  double grainWeight = grainWeightInitVal->toSI();
+  double grainTemp   = grainTempVal->toSI().quantity;
+  double targetMash  = targetMashVal->toSI().quantity;
+  double waterVolume = waterVolumeVal->toSI().quantity;
+  double grainWeight = grainWeightInitVal->toSI().quantity;
 
   if ( grainWeight == 0.0 )
      return 0.0;
@@ -58,11 +59,11 @@ double StrikeWaterDialog::computeInitialInfusion()
 
 double StrikeWaterDialog::computeMashInfusion()
 {
-  double mashVol       = mashVolVal->toSI();
-  double grainWeight   = grainWeightVal->toSI();
-  double actualMash    = actualMashVal->toSI();
-  double targetMashInf = targetMashInfVal->toSI();
-  double infusionWater = infusionWaterVal->toSI();
+  double mashVol       = mashVolVal->toSI().quantity;
+  double grainWeight   = grainWeightVal->toSI().quantity;
+  double actualMash    = actualMashVal->toSI().quantity;
+  double targetMashInf = targetMashInfVal->toSI().quantity;
+  double infusionWater = infusionWaterVal->toSI().quantity;
 
   return mashInfusionSi(actualMash, targetMashInf, grainWeight, infusionWater, mashVol);
 }
@@ -80,4 +81,3 @@ double StrikeWaterDialog::mashInfusionSi(double initialTemp, double targetTemp, 
 
   return ((targetTemp - initialTemp) * (specificHeatBarley * grainWeight + mashVolume)) / (infusionWater - targetTemp);
 }
-

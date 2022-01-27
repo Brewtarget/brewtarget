@@ -32,7 +32,6 @@
 
 /*!
  * \class MashDesigner
- * \author Philip G. Lee
  *
  * \brief View/controller dialog that gives you more control over mash design than MashWizard does.
  */

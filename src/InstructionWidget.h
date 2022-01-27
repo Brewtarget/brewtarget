@@ -18,8 +18,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef INGREDIENTWIDGET_H
-#define INGREDIENTWIDGET_H
+#ifndef INSTRUCTIONWIDGET_H
+#define INSTRUCTIONWIDGET_H
+#pragma once
 
 #include "ui_instructionWidget.h"
 #include <QWidget>

@@ -20,6 +20,7 @@
  */
 #ifndef HOPSORTFILTERPROXYMODEL_H
 #define HOPSORTFILTERPROXYMODEL_H
+#pragma once
 
 #include <QSortFilterProxyModel>
 

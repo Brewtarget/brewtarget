@@ -20,6 +20,7 @@
  */
 #ifndef RANGEDSLIDER_H
 #define RANGEDSLIDER_H
+#pragma once
 
 #include <QWidget>
 #include <QSize>
@@ -31,7 +32,7 @@ class QMouseEvent;
 
 /*!
  * \brief Widget to display a number with an optional range on a type of read-only slider.
- * \author Philip G. Lee
+ *
  */
 class RangedSlider : public QWidget
 {

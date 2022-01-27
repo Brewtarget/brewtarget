@@ -233,20 +233,15 @@ namespace {
       }
 
       QString stringValue = valueFromDb.toString();
-      auto match = std::find_if(
-         fieldDefn.enumMapping->begin(),
-         fieldDefn.enumMapping->end(),
-         [stringValue](ObjectStore::EnumAndItsDbString const & ii){return stringValue == ii.string;}
-      );
-
+      auto match = fieldDefn.enumMapping->stringToEnum(stringValue);
       // If we didn't find a match, its either a coding error or someone messed with the DB data
-      if (match == fieldDefn.enumMapping->end()) {
+      if (!match) {
          qCritical() <<
             Q_FUNC_INFO << "Could not decode " << stringValue << " to enum when mapping column " <<
             fieldDefn.columnName << " to property " << fieldDefn.propertyName << " so using 0";
          return 0;
       }
-      return match->native;
+      return match.value();
    }
 
    /**
@@ -258,17 +253,11 @@ namespace {
       Q_ASSERT(fieldDefn.fieldType == ObjectStore::Enum);
       Q_ASSERT(fieldDefn.enumMapping != nullptr);
 
-      int nativeValue = propertyValue.toInt();
-      auto match = std::find_if(
-         fieldDefn.enumMapping->begin(),
-         fieldDefn.enumMapping->end(),
-         [nativeValue](ObjectStore::EnumAndItsDbString const & ii){return nativeValue == ii.native;}
-      );
-
+      auto match = fieldDefn.enumMapping->enumToString(propertyValue.toInt());
       // It's a coding error if we couldn't find a match
-      Q_ASSERT(match != fieldDefn.enumMapping->end());
+      Q_ASSERT(match);
 
-      return match->string;
+      return match.value();
    }
 
    //

@@ -95,5 +95,4 @@ private:
    void retranslateUi();
 };
 
-#endif   /* _FERMENTABLEDIALOG_H */
-
+#endif   /* FERMENTABLEDIALOG_H */

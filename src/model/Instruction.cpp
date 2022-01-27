@@ -20,7 +20,6 @@
  */
 #include "model/Instruction.h"
 
-#include "brewtarget.h"
 #include "database/ObjectStoreWrapper.h"
 #include "model/NamedParameterBundle.h"
 #include "model/Recipe.h"
@@ -95,8 +94,8 @@ Instruction::Instruction(Instruction const & other) :
    return;
 }
 
-Instruction::Instruction(QString name, bool cache) :
-   NamedEntity (-1, cache, name, true),
+Instruction::Instruction(QString name) :
+   NamedEntity (name, true),
    pimpl       {new impl{*this}},
    m_directions(""),
    m_hasTimer  (false),

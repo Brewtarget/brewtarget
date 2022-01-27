@@ -18,15 +18,15 @@
  */
 #include "model/NamedEntityWithInventory.h"
 
+#include <QDebug>
+
 #include "model/Inventory.h"
 #include "model/NamedParameterBundle.h"
 
-NamedEntityWithInventory::NamedEntityWithInventory(int key,
-                                                   bool cache,
-                                                   QString t_name,
+NamedEntityWithInventory::NamedEntityWithInventory(QString t_name,
                                                    bool t_display,
                                                    QString folder) :
-   NamedEntity   {key, cache, t_name, t_display, folder},
+   NamedEntity   {t_name, t_display, folder},
    m_inventory_id{-1} {
    return;
 }

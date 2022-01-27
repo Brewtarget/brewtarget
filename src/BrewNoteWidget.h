@@ -23,10 +23,12 @@
 #define BREWNOTEWIDGET_H
 #pragma once
 
-#include <QWidget>
-#include <QDialog>
+#include <QDate>
+#include <QFocusEvent>
+#include <QString>
 #include <QMetaProperty>
 #include <QVariant>
+#include <QWidget>
 #include "ui_brewNoteWidget.h"
 
 // Forward declarations.
@@ -37,13 +39,12 @@ class BrewNote;
  *
  * \brief View/controller widget that edits BrewNotes.
  */
-class BrewNoteWidget : public QWidget, public Ui::brewNoteWidget
-{
+class BrewNoteWidget : public QWidget, public Ui::brewNoteWidget {
     Q_OBJECT
 
 public:
-   BrewNoteWidget(QWidget *parent = 0);
-   virtual ~BrewNoteWidget() {}
+   BrewNoteWidget(QWidget *parent = nullptr);
+   virtual ~BrewNoteWidget();
 
    void setBrewNote(BrewNote* bNote);
    bool isBrewNote(BrewNote* note);
@@ -64,7 +65,7 @@ public slots:
    void updateFG();
    void updateFinalVolume_l();
    void updateFermentDate(QDate const & datetime);
-   void updateDateFormat(Unit::unitDisplay display,Unit::unitScale scale);
+   void updateDateFormat();
 
    void updateNotes();
 //   void saveAll();
@@ -72,13 +73,18 @@ public slots:
    void changed(QMetaProperty,QVariant);
    void showChanges(QString field = "");
 
-   void updateProjOg(Unit::unitDisplay oldUnit, Unit::unitScale oldScale);
-
+   /**
+    * The signal coming into this slot has two parameters:
+    *   • Measurement::SystemOfMeasurement oldSystemOfMeasurement,
+    *   • std::optional<Measurement::UnitSystem::RelativeScale> oldForcedScale
+    * However, because we have access to the underlying "standard units" value, we don't need to be told the old unit or
+    * scale.  Qt allows slots to ignore parameters - eg it is happy to deliver a two-parameter signal to a
+    * zero-parameter slot.  So that is what we do here.
+    */
+   void updateProjOg();
 
 private:
    BrewNote* bNoteObs;
-
-
 };
 
 #endif

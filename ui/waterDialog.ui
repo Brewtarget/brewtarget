@@ -23,7 +23,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Water Chemistry</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_4">
    <item>
@@ -570,9 +570,9 @@
   </connection>
   <connection>
    <sender>label_totalcacl2</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>btDigit_totalcacl2</receiver>
-   <slot>displayChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <slot>displayChanged(Measurement::SystemOfMeasurement, std::optional&lt;Measurement::UnitSystem::RelativeScale&gt;)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>70</x>
@@ -586,9 +586,9 @@
   </connection>
   <connection>
    <sender>label_totalcaco3</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>btDigit_totalcaco3</receiver>
-   <slot>displayChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <slot>displayChanged(Measurement::SystemOfMeasurement, std::optional&lt;Measurement::UnitSystem::RelativeScale&gt;)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>70</x>
@@ -602,9 +602,9 @@
   </connection>
   <connection>
    <sender>label_totalcaso4</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>btDigit_totalcaso4</receiver>
-   <slot>displayChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <slot>displayChanged(Measurement::SystemOfMeasurement, std::optional&lt;Measurement::UnitSystem::RelativeScale&gt;)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>70</x>
@@ -618,9 +618,9 @@
   </connection>
   <connection>
    <sender>label_totalmgso4</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>btDigit_totalmgso4</receiver>
-   <slot>displayChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <slot>displayChanged(Measurement::SystemOfMeasurement, std::optional&lt;Measurement::UnitSystem::RelativeScale&gt;)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>251</x>
@@ -634,9 +634,9 @@
   </connection>
   <connection>
    <sender>label_totalnacl</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>btDigit_totalnacl</receiver>
-   <slot>displayChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <slot>displayChanged(Measurement::SystemOfMeasurement, std::optional&lt;Measurement::UnitSystem::RelativeScale&gt;)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>251</x>
@@ -650,9 +650,9 @@
   </connection>
   <connection>
    <sender>label_totalnahco3</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>btDigit_totalnahco3</receiver>
-   <slot>displayChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <slot>displayChanged(Measurement::SystemOfMeasurement, std::optional&lt;Measurement::UnitSystem::RelativeScale&gt;)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>251</x>

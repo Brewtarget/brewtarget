@@ -53,23 +53,23 @@ ObjectStore & Yeast::getObjectStoreTypedInstance() const {
 
 //============================CONSTRUCTORS======================================
 
-Yeast::Yeast(QString name, bool cache ) :
-   NamedEntityWithInventory(-1, cache, name, true ),
-   m_type(static_cast<Yeast::Type>(0)),
-   m_form(static_cast<Yeast::Form>(0)),
-   m_flocculation(static_cast<Yeast::Flocculation>(0)),
-   m_amount(0.0),
-   m_amountIsWeight(false),
-   m_laboratory(QString()),
-   m_productID(QString()),
-   m_minTemperature_c(0.0),
-   m_maxTemperature_c(0.0),
-   m_attenuation_pct(0.0),
-   m_notes(QString()),
-   m_bestFor(QString()),
-   m_timesCultured(0),
-   m_maxReuse(0),
-   m_addToSecondary(false) {
+Yeast::Yeast(QString name) :
+   NamedEntityWithInventory{name, true},
+   m_type                  {Yeast::Ale},
+   m_form                  {Yeast::Liquid},
+   m_flocculation          {Yeast::Low},
+   m_amount                {0.0},
+   m_amountIsWeight        {false},
+   m_laboratory            {""},
+   m_productID             {""},
+   m_minTemperature_c      {0.0},
+   m_maxTemperature_c      {0.0},
+   m_attenuation_pct       {0.0},
+   m_notes                 {""},
+   m_bestFor               {""},
+   m_timesCultured         {0},
+   m_maxReuse              {0},
+   m_addToSecondary        {false} {
    return;
 }
 

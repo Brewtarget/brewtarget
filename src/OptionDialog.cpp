@@ -25,6 +25,7 @@
 
 #include <QAbstractButton>
 #include <QCheckBox>
+#include <QDebug>
 #include <QFileDialog>
 #include <QIcon>
 #include <QMap>
@@ -34,14 +35,17 @@
 #include <QVector>
 #include <QWidget>
 
-#include "brewtarget.h"
 #include "BtLineEdit.h"
 #include "database/Database.h"
+#include "Localization.h"
 #include "Logging.h"
 #include "MainWindow.h"
+#include "measurement/ColorMethods.h"
+#include "measurement/IbuMethods.h"
+#include "measurement/Measurement.h"
+#include "measurement/Unit.h"
+#include "measurement/UnitSystem.h"
 #include "PersistentSettings.h"
-#include "Unit.h"
-#include "UnitSystem.h"
 
 //
 // Anonymous namespace for constants, global variables and functions used only in this file
@@ -56,12 +60,45 @@ namespace {
    };
 
    struct LanguageInfo {
-      QString            iso639_1Code;       // What we need to pass to Brewtarget::setLanguage()
+      QString            iso639_1Code;       // What we need to pass to Localization::setLanguage()
       QIcon              countryFlag;        // Yes, we know some languages are spoken in more than one country...
       char const    *    nameInEnglish;
       QString            nameInCurrentLang;  // Don't strictly need to store this, but having the hard-coded tr() calls
-      // in the initialisation flag up what language names need translating
+                                             // in the initialisation flag up what language names need translating
    };
+
+   /**
+    * \brief For a given QComboBox, save the UnitSystem it has selected
+    *
+    * \param comboBox
+    * \param comboBoxName Used only for logging
+    * \param physicalQuantity
+    *
+    * \return \c true if succeeded, \c false otherwise
+    */
+   bool saveComboBoxChoiceOfUnitSystem(QComboBox const & comboBox,
+                                       char const * const comboBoxName,
+                                       Measurement::PhysicalQuantity physicalQuantity) {
+      // A QVariant can always be converted to a QString (albeit sometimes an empty one!) so there is no success/failure
+      // notification from QVariant::toString()
+      QString selection = comboBox.itemData(comboBox.currentIndex()).toString();
+      auto unitSystems = Measurement::UnitSystem::getUnitSystems(physicalQuantity);
+      for (auto unitSystem : unitSystems) {
+         if (selection == unitSystem->uniqueName) {
+            qDebug() <<
+               Q_FUNC_INFO << "Setting UnitSystem for" << Measurement::getDisplayName(physicalQuantity) << "to" <<
+               unitSystem->uniqueName;
+            Measurement::setDisplayUnitSystem(physicalQuantity, *unitSystem);
+            return true;
+         }
+      }
+
+      qWarning() <<
+         Q_FUNC_INFO << "Unable to interpret value " << selection << "of" << comboBoxName << "as UnitSystem name for" <<
+         Measurement::getDisplayName(physicalQuantity);
+      return false;
+   }
+
 }
 
 // This private implementation class holds all private non-virtual members of OptionDialog
@@ -373,22 +410,49 @@ public:
    // Update dialog with current options.
    void showChanges(OptionDialog & optionDialog) {
       // Set the right language
-      int index = optionDialog.comboBox_lang->findData(Brewtarget::getCurrentLanguage());
+      int index = optionDialog.comboBox_lang->findData(Localization::getCurrentLanguage());
       if (index >= 0) {
          optionDialog.comboBox_lang->setCurrentIndex(index);
       }
 
-      optionDialog.weightComboBox->setCurrentIndex(optionDialog.weightComboBox->findData(Brewtarget::weightUnitSystem));
-      optionDialog.temperatureComboBox->setCurrentIndex(optionDialog.temperatureComboBox->findData(Brewtarget::tempScale));
-      optionDialog.volumeComboBox->setCurrentIndex(optionDialog.volumeComboBox->findData(Brewtarget::volumeUnitSystem));
-      optionDialog.gravityComboBox->setCurrentIndex(optionDialog.gravityComboBox->findData(Brewtarget::densityUnit));
-      optionDialog.dateComboBox->setCurrentIndex(optionDialog.dateComboBox->findData(Brewtarget::dateFormat));
-      optionDialog.colorComboBox->setCurrentIndex(optionDialog.colorComboBox->findData(Brewtarget::colorUnit));
-      optionDialog.diastaticPowerComboBox->setCurrentIndex(optionDialog.diastaticPowerComboBox->findData(
-                                                              Brewtarget::diastaticPowerUnit));
+      optionDialog.weightComboBox->setCurrentIndex(
+         optionDialog.weightComboBox->findData(
+            Measurement::getDisplayUnitSystem(Measurement::PhysicalQuantity::Mass).uniqueName
+         )
+      );
+      optionDialog.temperatureComboBox->setCurrentIndex(
+         optionDialog.temperatureComboBox->findData(
+            Measurement::getDisplayUnitSystem(Measurement::PhysicalQuantity::Temperature).uniqueName
+         )
+      );
+      optionDialog.volumeComboBox->setCurrentIndex(
+         optionDialog.volumeComboBox->findData(
+            Measurement::getDisplayUnitSystem(Measurement::PhysicalQuantity::Volume).uniqueName
+         )
+      );
+      optionDialog.gravityComboBox->setCurrentIndex(
+         optionDialog.gravityComboBox->findData(
+            Measurement::getDisplayUnitSystem(Measurement::PhysicalQuantity::Density).uniqueName
+         )
+      );
+      optionDialog.dateComboBox->setCurrentIndex(optionDialog.dateComboBox->findData(Localization::getDateFormat()));
+      optionDialog.colorComboBox->setCurrentIndex(
+         optionDialog.colorComboBox->findData(
+            Measurement::getDisplayUnitSystem(Measurement::PhysicalQuantity::Color).uniqueName
+         )
+      );
+      optionDialog.diastaticPowerComboBox->setCurrentIndex(
+         optionDialog.diastaticPowerComboBox->findData(
+            Measurement::getDisplayUnitSystem(Measurement::PhysicalQuantity::DiastaticPower).uniqueName
+         )
+      );
 
-      optionDialog.colorFormulaComboBox->setCurrentIndex(optionDialog.colorFormulaComboBox->findData(Brewtarget::colorFormula));
-      optionDialog.ibuFormulaComboBox->setCurrentIndex(optionDialog.ibuFormulaComboBox->findData(Brewtarget::ibuFormula));
+      optionDialog.colorFormulaComboBox->setCurrentIndex(
+         optionDialog.colorFormulaComboBox->findData(ColorMethods::colorFormula)
+      );
+      optionDialog.ibuFormulaComboBox->setCurrentIndex(
+         optionDialog.ibuFormulaComboBox->findData(IbuMethods::ibuFormula)
+      );
 
       // User data directory
       this->input_userDataDir.setText(PersistentSettings::getUserDataDir().canonicalPath());
@@ -396,17 +460,26 @@ public:
       // Backup stuff
       // By default backups go in the same directory as the DB
       this->input_backupDir.setText(PersistentSettings::value(PersistentSettings::Names::directory,
-                                                              PersistentSettings::getUserDataDir().canonicalPath(), PersistentSettings::Sections::backups).toString());
-      this->spinBox_numBackups.setValue(PersistentSettings::value(PersistentSettings::Names::maximum, 10, PersistentSettings::Sections::backups).toInt());
-      this->spinBox_frequency.setValue(PersistentSettings::value(PersistentSettings::Names::frequency, 4, PersistentSettings::Sections::backups).toInt());
+                                                              PersistentSettings::getUserDataDir().canonicalPath(),
+                                                              PersistentSettings::Sections::backups).toString());
+      this->spinBox_numBackups.setValue(PersistentSettings::value(PersistentSettings::Names::maximum,
+                                                                  10,
+                                                                  PersistentSettings::Sections::backups).toInt());
+      this->spinBox_frequency.setValue(PersistentSettings::value(PersistentSettings::Names::frequency,
+                                                                 4,
+                                                                 PersistentSettings::Sections::backups).toInt());
 
       // The IBU modifications. These will all be calculated from a 60 min boil. This is gonna get confusing.
-      double amt = Brewtarget::toDouble(PersistentSettings::value(PersistentSettings::Names::mashHopAdjustment, 0).toString(),
-                                     "OptionDialog::showChanges()");
+      double amt = Localization::toDouble(
+         PersistentSettings::value(PersistentSettings::Names::mashHopAdjustment, 0).toString(),
+         Q_FUNC_INFO
+      );
       optionDialog.ibuAdjustmentMashHopDoubleSpinBox->setValue(amt * 100);
 
-      amt = Brewtarget::toDouble(PersistentSettings::value(PersistentSettings::Names::firstWortHopAdjustment, 1.1).toString(),
-                              "OptionDialog::showChanges()");
+      amt = Localization::toDouble(
+         PersistentSettings::value(PersistentSettings::Names::firstWortHopAdjustment, 1.1).toString(),
+         Q_FUNC_INFO
+      );
       optionDialog.ibuAdjustmentFirstWortDoubleSpinBox->setValue(amt * 100);
 
       // Database stuff -- this looks weird, but trust me. We want SQLITE to be
@@ -488,7 +561,7 @@ public:
 
 OptionDialog::OptionDialog(QWidget * parent) : QDialog{},
    Ui::optionsDialog{},
-   pimpl{ new impl{*this} } {
+   pimpl{std::make_unique<impl>(*this)} {
 
    // I need a lot of control over what is displayed on the DbConfig dialog.
    // Maybe designer can do it? No idea. So I did this hybrid model, and I
@@ -526,40 +599,49 @@ OptionDialog::OptionDialog(QWidget * parent) : QDialog{},
 
 void OptionDialog::configure_unitCombos() {
    // Populate combo boxes on the "Units" tab
-   weightComboBox->addItem(tr("SI units"), QVariant(SI));
-   weightComboBox->addItem(tr("US traditional units"), QVariant(USCustomary));
-   weightComboBox->addItem(tr("British imperial units"), QVariant(Imperial));
+   weightComboBox->addItem(tr("Metric / SI units"),
+                           QVariant(Measurement::UnitSystems::mass_Metric.uniqueName));
+   weightComboBox->addItem(tr("US traditional units"),
+                           QVariant(Measurement::UnitSystems::mass_UsCustomary.uniqueName));
+   weightComboBox->addItem(tr("British imperial units"),
+                           QVariant(Measurement::UnitSystems::mass_Imperial.uniqueName));
 
-   temperatureComboBox->addItem(tr("Celsius"), QVariant(Celsius));
-   temperatureComboBox->addItem(tr("Fahrenheit"), QVariant(Fahrenheit));
+   temperatureComboBox->addItem(tr("Celsius"),
+                                QVariant(Measurement::UnitSystems::temperature_MetricIsCelsius.uniqueName));
+   temperatureComboBox->addItem(tr("Fahrenheit"),
+                                QVariant(Measurement::UnitSystems::temperature_UsCustomaryIsFahrenheit.uniqueName));
 
-   volumeComboBox->addItem(tr("SI units"), QVariant(SI));
-   volumeComboBox->addItem(tr("US traditional units"), QVariant(USCustomary));
-   volumeComboBox->addItem(tr("British imperial units"), QVariant(Imperial));
+   volumeComboBox->addItem(tr("Metric / SI units"),      QVariant(Measurement::UnitSystems::volume_Metric.uniqueName));
+   volumeComboBox->addItem(tr("US traditional units"),   QVariant(Measurement::UnitSystems::volume_UsCustomary.uniqueName));
+   volumeComboBox->addItem(tr("British imperial units"), QVariant(Measurement::UnitSystems::volume_Imperial.uniqueName));
 
-   gravityComboBox->addItem(tr("20C/20C Specific Gravity"), QVariant(Brewtarget::SG));
-   gravityComboBox->addItem(tr("Plato/Brix/Balling"), QVariant(Brewtarget::PLATO));
+   gravityComboBox->addItem(tr("20C/20C Specific Gravity"),
+                            QVariant(Measurement::UnitSystems::density_SpecificGravity.uniqueName));
+   gravityComboBox->addItem(tr("Plato/Brix/Balling"),
+                            QVariant(Measurement::UnitSystems::density_Plato.uniqueName));
 
-   dateComboBox->addItem(tr("mm-dd-YYYY"), QVariant(Unit::displayUS));
-   dateComboBox->addItem(tr("dd-mm-YYYY"), QVariant(Unit::displayImp));
-   dateComboBox->addItem(tr("YYYY-mm-dd"), QVariant(Unit::displaySI));
+   dateComboBox->addItem(tr("mm-dd-YYYY"), QVariant(Localization::NumericDateFormat::MonthDayYear));
+   dateComboBox->addItem(tr("dd-mm-YYYY"), QVariant(Localization::NumericDateFormat::DayMonthYear));
+   dateComboBox->addItem(tr("YYYY-mm-dd"), QVariant(Localization::NumericDateFormat::YearMonthDay));
 
-   colorComboBox->addItem(tr("SRM"), QVariant(Brewtarget::SRM));
-   colorComboBox->addItem(tr("EBC"), QVariant(Brewtarget::EBC));
+   colorComboBox->addItem(tr("SRM"), QVariant(Measurement::UnitSystems::color_StandardReferenceMethod.uniqueName));
+   colorComboBox->addItem(tr("EBC"), QVariant(Measurement::UnitSystems::color_EuropeanBreweryConvention.uniqueName));
 }
 
 void OptionDialog::configure_formulaCombos() {
-   diastaticPowerComboBox->addItem(tr("Lintner"), QVariant(Brewtarget::LINTNER));
-   diastaticPowerComboBox->addItem(tr("WK"), QVariant(Brewtarget::WK));
+   diastaticPowerComboBox->addItem(tr("Lintner"),
+                                   QVariant(Measurement::UnitSystems::diastaticPower_Lintner.uniqueName));
+   diastaticPowerComboBox->addItem(tr("WK"),
+                                   QVariant(Measurement::UnitSystems::diastaticPower_WindischKolbach.uniqueName));
 
    // Populate combo boxes on the "Formulas" tab
-   ibuFormulaComboBox->addItem(tr("Tinseth's approximation"), QVariant(Brewtarget::TINSETH));
-   ibuFormulaComboBox->addItem(tr("Rager's approximation"), QVariant(Brewtarget::RAGER));
-   ibuFormulaComboBox->addItem(tr("Noonan's approximation"), QVariant(Brewtarget::NOONAN));
+   ibuFormulaComboBox->addItem(tr("Tinseth's approximation"), QVariant(IbuMethods::TINSETH));
+   ibuFormulaComboBox->addItem(tr("Rager's approximation"), QVariant(IbuMethods::RAGER));
+   ibuFormulaComboBox->addItem(tr("Noonan's approximation"), QVariant(IbuMethods::NOONAN));
 
-   colorFormulaComboBox->addItem(tr("Mosher's approximation"), QVariant(Brewtarget::MOSHER));
-   colorFormulaComboBox->addItem(tr("Daniel's approximation"), QVariant(Brewtarget::DANIEL));
-   colorFormulaComboBox->addItem(tr("Morey's approximation"), QVariant(Brewtarget::MOREY));
+   colorFormulaComboBox->addItem(tr("Mosher's approximation"), QVariant(ColorMethods::MOSHER));
+   colorFormulaComboBox->addItem(tr("Daniel's approximation"), QVariant(ColorMethods::DANIEL));
+   colorFormulaComboBox->addItem(tr("Morey's approximation"), QVariant(ColorMethods::MOREY));
 }
 
 void OptionDialog::configure_logging() {
@@ -698,7 +780,7 @@ void OptionDialog::setEngine(int selected) {
    Database::DbType newEngine = static_cast<Database::DbType>(data.toInt());
 
    this->pimpl->setDbDialog(*this, newEngine);
-   testRequired();
+   this->testRequired();
    return;
 }
 
@@ -732,8 +814,7 @@ void OptionDialog::testConnection() {
    if (success) {
       QMessageBox::information(nullptr,
                                QObject::tr("Connection Test"),
-                               QString(QObject::tr("Connection to database was successful"))
-                              );
+                               QString(QObject::tr("Connection to database was successful")));
       this->pimpl->dbConnectionTestState = TEST_PASSED;
    } else {
       // Database::testConnection already popped the dialog
@@ -752,8 +833,12 @@ void OptionDialog::testRequired() {
 
 void OptionDialog::savePassword(bool state) {
    if (state) {
-      QMessageBox::warning(nullptr, QObject::tr("Plaintext"),
-                           QObject::tr("Passwords are saved in plaintext. We make no effort to hide, obscure or otherwise protect the password. By enabling this option, you take full responsibility for any potential problems."));
+      QMessageBox::warning(
+         nullptr,
+         QObject::tr("Plaintext"),
+         QObject::tr("Passwords are saved in plaintext. We make no effort to hide, obscure or otherwise protect the "
+                     "password. By enabling this option, you take full responsibility for any potential problems.")
+      );
    }
    return;
 }
@@ -776,7 +861,7 @@ void OptionDialog::saveAndClose() {
    saveVersioningSettings();
 
    // Set the right language.
-   Brewtarget::setLanguage(this->comboBox_lang->currentData().toString());
+   Localization::setLanguage(this->comboBox_lang->currentData().toString());
 
    setVisible(false);
 }
@@ -799,9 +884,9 @@ void OptionDialog::saveFormulae() {
    bool okay = false;
 
    int ndx = ibuFormulaComboBox->itemData(ibuFormulaComboBox->currentIndex()).toInt(&okay);
-   Brewtarget::ibuFormula = static_cast<Brewtarget::IbuType>(ndx);
+   IbuMethods::ibuFormula = static_cast<IbuMethods::IbuType>(ndx);
    ndx = colorFormulaComboBox->itemData(colorFormulaComboBox->currentIndex()).toInt(&okay);
-   Brewtarget::colorFormula = static_cast<Brewtarget::ColorType>(ndx);
+   ColorMethods::colorFormula = static_cast<ColorMethods::ColorType>(ndx);
 
    PersistentSettings::insert(PersistentSettings::Names::mashHopAdjustment, ibuAdjustmentMashHopDoubleSpinBox->value() / 100);
    PersistentSettings::insert(PersistentSettings::Names::firstWortHopAdjustment, ibuAdjustmentFirstWortDoubleSpinBox->value() / 100);
@@ -815,9 +900,7 @@ void OptionDialog::saveLoggingSettings() {
       std::optional<QDir>(std::nullopt) : std::optional<QDir>(lineEdit_LogFileLocation->text())
    );
    // Make sure the main window updates.
-   if (Brewtarget::mainWindow()) {
-      Brewtarget::mainWindow()->showChanges();
-   }
+   MainWindow::instance().showChanges();
 }
 
 void OptionDialog::saveVersioningSettings() {
@@ -921,7 +1004,7 @@ void OptionDialog::saveSqliteConfig() {
                                   tr("Copy Data"),
                                   tr("There do not seem to be any data files in this directory, so we will copy your old data here.")
                                  );
-         Brewtarget::copyDataFiles(newUserDataDir);
+         Database::copyDataFiles(newUserDataDir);
       }
 
       PersistentSettings::setUserDataDir(newUserDataDir);
@@ -940,123 +1023,40 @@ void OptionDialog::saveSqliteConfig() {
 }
 
 bool OptionDialog::saveWeightUnits() {
-   bool okay = false;
-   switch (weightComboBox->itemData(weightComboBox->currentIndex()).toInt(&okay)) {
-      case SI:
-      default:
-         Brewtarget::weightUnitSystem = SI;
-         Brewtarget::thingToUnitSystem.insert(Unit::Mass, &UnitSystems::siWeightUnitSystem);
-         break;
-      case USCustomary:
-         Brewtarget::weightUnitSystem  = USCustomary;
-         Brewtarget::thingToUnitSystem.insert(Unit::Mass, &UnitSystems::usWeightUnitSystem);
-         break;
-      case Imperial:
-         Brewtarget::weightUnitSystem  = Imperial;
-         Brewtarget::thingToUnitSystem.insert(Unit::Mass, &UnitSystems::usWeightUnitSystem);
-         break;
-   }
-   return okay;
+   return saveComboBoxChoiceOfUnitSystem(*weightComboBox, "weightComboBox", Measurement::PhysicalQuantity::Mass);
 }
 
 bool OptionDialog::saveTemperatureUnits() {
-   bool okay = false;
-   switch (temperatureComboBox->itemData(temperatureComboBox->currentIndex()).toInt(&okay)) {
-      case Celsius:
-      default:
-         Brewtarget::tempScale = Celsius;
-         Brewtarget::thingToUnitSystem.insert(Unit::Temp, &UnitSystems::celsiusTempUnitSystem);
-         break;
-      case Fahrenheit:
-         Brewtarget::tempScale = Fahrenheit;
-         Brewtarget::thingToUnitSystem.insert(Unit::Temp, &UnitSystems::fahrenheitTempUnitSystem);
-         break;
-   }
-   return okay;
+   return saveComboBoxChoiceOfUnitSystem(*temperatureComboBox, "temperatureComboBox", Measurement::PhysicalQuantity::Temperature);
 }
 
 bool OptionDialog::saveVolumeUnits() {
-   bool okay = false;
-   switch (volumeComboBox->itemData(volumeComboBox->currentIndex()).toInt(&okay)) {
-      case SI:
-      default:
-         Brewtarget::volumeUnitSystem = SI;
-         Brewtarget::thingToUnitSystem.insert(Unit::Volume, &UnitSystems::siVolumeUnitSystem);
-         break;
-      case USCustomary:
-         Brewtarget::volumeUnitSystem = USCustomary;
-         Brewtarget::thingToUnitSystem.insert(Unit::Volume, &UnitSystems::usVolumeUnitSystem);
-         break;
-      case Imperial:
-         Brewtarget::volumeUnitSystem = Imperial;
-         Brewtarget::thingToUnitSystem.insert(Unit::Volume, &UnitSystems::imperialVolumeUnitSystem);
-         break;
-   }
-   return okay;
+   return saveComboBoxChoiceOfUnitSystem(*volumeComboBox, "volumeComboBox", Measurement::PhysicalQuantity::Volume);
 }
 
 bool OptionDialog::saveGravityUnits() {
-   bool okay = false;
-   switch (gravityComboBox->itemData(gravityComboBox->currentIndex()).toInt(&okay)) {
-      case Brewtarget::SG:
-      default:
-         Brewtarget::densityUnit = Brewtarget::SG;
-         Brewtarget::thingToUnitSystem.insert(Unit::Density, &UnitSystems::sgDensityUnitSystem);
-         break;
-      case Brewtarget::PLATO:
-         Brewtarget::densityUnit = Brewtarget::PLATO;
-         Brewtarget::thingToUnitSystem.insert(Unit::Density, &UnitSystems::platoDensityUnitSystem);
-         break;
-   }
-   return okay;
+   return saveComboBoxChoiceOfUnitSystem(*gravityComboBox, "gravityComboBox", Measurement::PhysicalQuantity::Density);
 }
 
 bool OptionDialog::saveDateFormat() {
    bool okay = false;
-   switch (dateComboBox->itemData(dateComboBox->currentIndex()).toInt(&okay)) {
-      case Unit::displayUS:
-      default:
-         Brewtarget::dateFormat = Unit::displayUS;
-         break;
-      case Unit::displayImp:
-         Brewtarget::dateFormat = Unit::displayImp;
-         break;
-      case Unit::displaySI:
-         Brewtarget::dateFormat = Unit::displaySI;
-         break;
+   Localization::NumericDateFormat numericDateFormat =
+      static_cast<Localization::NumericDateFormat>(dateComboBox->itemData(dateComboBox->currentIndex()).toInt(&okay));
+   if (!okay) {
+      qWarning() <<
+         Q_FUNC_INFO << "Unable to interpret data format selection" <<
+         dateComboBox->itemData(dateComboBox->currentIndex()) << "as integer";
+      return false;
    }
+
+   Localization::setDateFormat(numericDateFormat);
    return okay;
 }
 
 bool OptionDialog::saveColorUnits() {
-   bool okay = false;
-   switch (colorComboBox->itemData(colorComboBox->currentIndex()).toInt(&okay)) {
-      case Brewtarget::SRM:
-      default:
-         Brewtarget::thingToUnitSystem.insert(Unit::Color, &UnitSystems::srmColorUnitSystem);
-         Brewtarget::colorUnit = Brewtarget::SRM;
-         break;
-      case Brewtarget::EBC:
-         Brewtarget::thingToUnitSystem.insert(Unit::Color, &UnitSystems::ebcColorUnitSystem);
-         Brewtarget::colorUnit = Brewtarget::EBC;
-         break;
-   }
-   return okay;
+   return saveComboBoxChoiceOfUnitSystem(*colorComboBox, "colorComboBox", Measurement::PhysicalQuantity::Color);
 }
 
 bool OptionDialog::saveDiastaticUnits() {
-   bool okay = false;
-   switch (diastaticPowerComboBox->itemData(diastaticPowerComboBox->currentIndex()).toInt(&okay)) {
-      case Brewtarget::LINTNER:
-      default:
-         Brewtarget::thingToUnitSystem.insert(Unit::DiastaticPower, &UnitSystems::lintnerDiastaticPowerUnitSystem);
-         Brewtarget::diastaticPowerUnit = Brewtarget::LINTNER;
-         break;
-      case Brewtarget::WK:
-         Brewtarget::thingToUnitSystem.insert(Unit::DiastaticPower, &UnitSystems::wkDiastaticPowerUnitSystem);
-         Brewtarget::diastaticPowerUnit = Brewtarget::WK;
-         break;
-   }
-
-   return okay;
+   return saveComboBoxChoiceOfUnitSystem(*diastaticPowerComboBox, "diastaticPowerComboBox", Measurement::PhysicalQuantity::DiastaticPower);
 }

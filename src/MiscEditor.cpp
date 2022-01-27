@@ -25,46 +25,40 @@
 #include <QIcon>
 #include <QInputDialog>
 
-#include "brewtarget.h"
 #include "BtHorizontalTabs.h"
 #include "config.h"
 #include "database/ObjectStoreWrapper.h"
+#include "measurement/Unit.h"
 #include "model/Misc.h"
-#include "Unit.h"
 
-MiscEditor::MiscEditor( QWidget* parent ) :
+MiscEditor::MiscEditor(QWidget * parent) :
    QDialog(parent),
    obsMisc(nullptr) {
    setupUi(this);
 
    tabWidget_editor->tabBar()->setStyle(new BtHorizontalTabs);
 
-   connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newMisc() ) );
-   connect( pushButton_save,   &QAbstractButton::clicked, this, &MiscEditor::save );
-   connect( pushButton_cancel, &QAbstractButton::clicked, this, &MiscEditor::clearAndClose );
+   connect(pushButton_new, SIGNAL(clicked()), this, SLOT(newMisc()));
+   connect(pushButton_save,   &QAbstractButton::clicked, this, &MiscEditor::save);
+   connect(pushButton_cancel, &QAbstractButton::clicked, this, &MiscEditor::clearAndClose);
 
    return;
 }
 
-void MiscEditor::setMisc( Misc* m )
-{
-   if( obsMisc )
-      disconnect( obsMisc, nullptr, this, nullptr );
+void MiscEditor::setMisc(Misc * m) {
+   if (obsMisc) {
+      disconnect(obsMisc, nullptr, this, nullptr);
+   }
 
    obsMisc = m;
-   if( obsMisc )
-   {
-      connect( obsMisc, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+   if (obsMisc) {
+      connect(obsMisc, SIGNAL(changed(QMetaProperty, QVariant)), this, SLOT(changed(QMetaProperty, QVariant)));
       showChanges();
    }
 }
 
-void MiscEditor::save()
-{
-   Misc* m = obsMisc;
-
-   if( m == nullptr )
-   {
+void MiscEditor::save() {
+   if (this->obsMisc == nullptr) {
       setVisible(false);
       return;
    }
@@ -72,122 +66,113 @@ void MiscEditor::save()
    qDebug() << Q_FUNC_INFO << comboBox_type->currentIndex();
    qDebug() << Q_FUNC_INFO << comboBox_use->currentIndex();
 
-   m->setName(lineEdit_name->text());
-   m->setType( static_cast<Misc::Type>(comboBox_type->currentIndex()) );
-   m->setUse( static_cast<Misc::Use>(comboBox_use->currentIndex()) );
-   m->setTime(lineEdit_time->toSI());
-   m->setAmountIsWeight( (checkBox_isWeight->checkState() == Qt::Checked)? true : false );
-   m->setAmount( lineEdit_amount->toSI());
-   m->setUseFor(textEdit_useFor->toPlainText());
-   m->setNotes( textEdit_notes->toPlainText() );
+   this->obsMisc->setName(lineEdit_name->text());
+   this->obsMisc->setType(static_cast<Misc::Type>(comboBox_type->currentIndex()));
+   this->obsMisc->setUse(static_cast<Misc::Use>(comboBox_use->currentIndex()));
+   this->obsMisc->setTime(lineEdit_time->toSI().quantity);
+   this->obsMisc->setAmountIsWeight((checkBox_isWeight->checkState() == Qt::Checked) ? true : false);
+   this->obsMisc->setUseFor(textEdit_useFor->toPlainText());
+   this->obsMisc->setNotes(textEdit_notes->toPlainText());
 
-   if ( m->cacheOnly() ) {
+   if (this->obsMisc->key() < 0) {
       qDebug() << Q_FUNC_INFO << "Inserting into database";
-      ObjectStoreWrapper::insert(*m);
-      m->setCacheOnly(false);
+      ObjectStoreWrapper::insert(*this->obsMisc);
    }
    // do this late to make sure we've the row in the inventory table
-   m->setInventoryAmount(lineEdit_inventory->toSI());
+   this->obsMisc->setInventoryAmount(lineEdit_inventory->toSI().quantity);
    setVisible(false);
+   return;
 }
 
-void MiscEditor::clearAndClose()
-{
+void MiscEditor::clearAndClose() {
    setMisc(nullptr);
    setVisible(false); // Hide the window.
 }
 
-void MiscEditor::changed(QMetaProperty prop, QVariant /*val*/)
-{
-   if( sender() == obsMisc )
+void MiscEditor::changed(QMetaProperty prop, QVariant /*val*/) {
+   if (sender() == obsMisc) {
       showChanges(&prop);
+   }
 }
 
-void MiscEditor::showChanges(QMetaProperty* metaProp)
-{
-   if( obsMisc == nullptr )
+void MiscEditor::showChanges(QMetaProperty * metaProp) {
+   if (obsMisc == nullptr) {
       return;
+   }
 
    QString propName;
    QVariant value;
    bool updateAll = false;
-   if( metaProp == nullptr )
+   if (metaProp == nullptr) {
       updateAll = true;
-   else
-   {
+   } else {
       propName = metaProp->name();
       value = metaProp->read(obsMisc);
    }
 
-   if( propName == PropertyNames::NamedEntity::name || updateAll )
-   {
+   if (propName == PropertyNames::NamedEntity::name || updateAll) {
       lineEdit_name->setText(obsMisc->name());
       lineEdit_name->setCursorPosition(0);
       tabWidget_editor->setTabText(0, obsMisc->name());
-      if( ! updateAll ) {
+      if (!updateAll) {
          return;
       }
    }
-   if( propName == PropertyNames::Misc::type || updateAll )
-   {
+   if (propName == PropertyNames::Misc::type || updateAll) {
       comboBox_type->setCurrentIndex(obsMisc->type());
-      if( ! updateAll )
+      if (!updateAll) {
          return;
+      }
    }
-   if( propName == PropertyNames::Misc::use || updateAll )
-   {
+   if (propName == PropertyNames::Misc::use || updateAll) {
       comboBox_use->setCurrentIndex(obsMisc->use());
-      if( ! updateAll )
+      if (!updateAll) {
          return;
+      }
    }
-   if( propName == PropertyNames::Misc::time || updateAll )
-   {
+   if (propName == PropertyNames::Misc::time || updateAll) {
       lineEdit_time->setText(obsMisc);
-      if( ! updateAll )
+      if (!updateAll) {
          return;
+      }
    }
-   if( propName == PropertyNames::Misc::amount || updateAll )
-   {
-      lineEdit_amount->setText(obsMisc);
-      if( ! updateAll )
+   if (propName == PropertyNames::Misc::amountIsWeight || updateAll) {
+      checkBox_isWeight->setCheckState(obsMisc->amountIsWeight() ? Qt::Checked : Qt::Unchecked);
+      if (!updateAll) {
          return;
+      }
    }
-   if( propName == PropertyNames::Misc::amountIsWeight || updateAll )
-   {
-      checkBox_isWeight->setCheckState( obsMisc->amountIsWeight()? Qt::Checked : Qt::Unchecked );
-      if( ! updateAll )
-         return;
-   }
-   if( propName == PropertyNames::NamedEntityWithInventory::inventory || updateAll )
-   {
+   if (propName == PropertyNames::NamedEntityWithInventory::inventory || updateAll) {
       lineEdit_inventory->setText(obsMisc);
-      if( ! updateAll )
+      if (!updateAll) {
          return;
+      }
    }
-   if( propName == PropertyNames::Misc::useFor || updateAll )
-   {
-      textEdit_useFor->setPlainText( obsMisc->useFor() );
-      if( ! updateAll )
+   if (propName == PropertyNames::Misc::useFor || updateAll) {
+      textEdit_useFor->setPlainText(obsMisc->useFor());
+      if (!updateAll) {
          return;
+      }
    }
-   if( propName == PropertyNames::Misc::notes || updateAll )
-   {
-      textEdit_notes->setPlainText( obsMisc->notes() );
-      if( ! updateAll )
+   if (propName == PropertyNames::Misc::notes || updateAll) {
+      textEdit_notes->setPlainText(obsMisc->notes());
+      if (!updateAll) {
          return;
+      }
    }
 }
 
 void MiscEditor::newMisc(QString folder) {
    QString name = QInputDialog::getText(this, tr("Misc name"),
-                                          tr("Misc name:"));
-   if( name.isEmpty() ) {
+                                        tr("Misc name:"));
+   if (name.isEmpty()) {
       return;
    }
 
-   Misc* m = new Misc(name,true);
+   // .:TODO:. This leads to a memory leak in clearAndClose().  Change to shared_ptr
+   Misc * m = new Misc(name);
 
-   if ( ! folder.isEmpty() ) {
+   if (! folder.isEmpty()) {
       m->setFolder(folder);
    }
 

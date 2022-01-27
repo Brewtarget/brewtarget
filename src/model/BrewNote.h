@@ -82,9 +82,9 @@ class BrewNote : public NamedEntity {
    Q_OBJECT
 
 public:
-   BrewNote(QString name = "", bool cache = true);
+   BrewNote(QString name = "");
    BrewNote(Recipe const & recipe);
-   BrewNote(QDate dateNow, bool cache = true, QString const & name = "");
+   BrewNote(QDate dateNow, QString const & name = "");
    BrewNote(NamedParameterBundle const & namedParameterBundle);
    BrewNote(BrewNote const & other);
 
@@ -180,14 +180,6 @@ public:
    QString notes() const;
    int getRecipeId() const;
 
-/*
- * .:TBD:. Think we can comment this out and rely on same function in base class!
- *
-   // ick, but I don't see another way. I need a unique key that has *nothing*
-   // to do with the data entered. The best one I can think of is the
-   // database's key
-   int key() const;
-*/
    // Calculations
    double calculateEffIntoBK_pct();
    double calculateOg();

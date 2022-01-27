@@ -123,11 +123,6 @@ void Inventory::setAmount(double amount) {
    return;
 }
 
-void Inventory::setCacheOnly(bool var) {
-   // See comment in header.  Nothing to do here.
-   return;
-}
-
 void Inventory::setDeleted(bool var) {
    // See comment in header.  This is not currently implemented and it's therefore a coding error if it gets called
    Q_ASSERT(false);

@@ -19,6 +19,7 @@
  */
 #ifndef PRIMINGDIALOG_H
 #define PRIMINGDIALOG_H
+#pragma once
 
 #include <QDialog>
 #include <QWidget>

@@ -22,7 +22,9 @@
 //#include <boost/stacktrace.hpp>
 //#include <sstream>      // std::ostringstream
 
-#include "brewtarget.h" // For logging
+#include <QDebug>
+
+#include "Logging.h"
 
 SimpleUndoableUpdate::SimpleUndoableUpdate(QObject & updatee,
                                            BtStringConst const & propertyName,

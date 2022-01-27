@@ -20,19 +20,20 @@
  */
 #ifndef MASHWIZARD_H
 #define MASHWIZARD_H
+#pragma once
+
+#include <QDialog>
 
 #include "ui_mashWizard.h"
-#include <QDialog>
+#include "measurement/Unit.h"
 #include "model/Recipe.h"
-#include "Unit.h"
 
 /*!
  * \class MashWizard
  *
  * \brief View/controller dialog that helps you design a mash.
  */
-class MashWizard : public QDialog, public Ui::mashWizard
-{
+class MashWizard : public QDialog, public Ui::mashWizard {
    Q_OBJECT
 public:
    MashWizard(QWidget* parent=nullptr);
@@ -46,8 +47,8 @@ public slots:
 
 private:
    Recipe* recObs;
-   Unit const *weightUnit;
-   Unit const *volumeUnit;
+   Measurement::Unit const * weightUnit;
+   Measurement::Unit const * volumeUnit;
 
    //!brief just need a holder for the three buttons
    QButtonGroup* bGroup;
@@ -57,4 +58,4 @@ private:
 
 };
 
-#endif   /* _MASHWIZARD_H */
+#endif

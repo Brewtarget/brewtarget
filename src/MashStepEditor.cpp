@@ -20,10 +20,9 @@
  */
 #include "MashStepEditor.h"
 
-#include "brewtarget.h"
 #include "MainWindow.h"
+#include "measurement/Unit.h"
 #include "model/MashStep.h"
-#include "Unit.h"
 
 MashStepEditor::MashStepEditor(QWidget* parent) : QDialog{parent}, obs(nullptr) {
    this->setupUi(this);
@@ -129,20 +128,20 @@ void MashStepEditor::setMashStep(std::shared_ptr<MashStep> step) {
 void MashStepEditor::saveAndClose() {
    obs->setName(lineEdit_name->text());
    obs->setType(static_cast<MashStep::Type>(comboBox_type->currentIndex()));
-   obs->setInfuseAmount_l(lineEdit_infuseAmount->toSI());
-   obs->setInfuseTemp_c(lineEdit_infuseTemp->toSI());
-   obs->setDecoctionAmount_l(lineEdit_decoctionAmount->toSI());
-   obs->setStepTemp_c(lineEdit_stepTemp->toSI());
-   obs->setStepTime_min(lineEdit_stepTime->toSI());
-   obs->setRampTime_min(lineEdit_rampTime->toSI());
-   obs->setEndTemp_c(lineEdit_endTemp->toSI());
+   obs->setInfuseAmount_l(lineEdit_infuseAmount->toSI().quantity);
+   obs->setInfuseTemp_c(lineEdit_infuseTemp->toSI().quantity);
+   obs->setDecoctionAmount_l(lineEdit_decoctionAmount->toSI().quantity);
+   obs->setStepTemp_c(lineEdit_stepTemp->toSI().quantity);
+   obs->setStepTime_min(lineEdit_stepTime->toSI().quantity);
+   obs->setRampTime_min(lineEdit_rampTime->toSI().quantity);
+   obs->setEndTemp_c(lineEdit_endTemp->toSI().quantity);
 
-   if ( obs->cacheOnly() ) {
-      // This is a new MashStep, so we need to store it and add it to the Mash.
+   if (this->obs->key() < 0) {
+      // This is a new MashStep, so we need to store it.
       // We'll ask MainWindow to do this for us, because then it can be an undoable action.
       //
       // The Mash of this MashStep should already have been set by the caller
-      Brewtarget::mainWindow()->addMashStepToMash(obs);
+      MainWindow::instance().addMashStepToMash(this->obs);
    }
 
    setVisible(false);

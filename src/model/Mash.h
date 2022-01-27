@@ -24,9 +24,13 @@
 #define MODEL_MASH_H
 #pragma once
 
-#include <memory>
+#include <memory> // For PImpl
 
+#include <QList>
+#include <QMetaProperty>
 #include <QSqlRecord>
+#include <QString>
+#include <QVariant>
 #include <QVector>
 
 #include "model/NamedEntity.h"
@@ -66,7 +70,7 @@ class Mash : public NamedEntity {
    Q_CLASSINFO("signal", "mashs")
 
 public:
-   Mash(QString name = "", bool cache = true);
+   Mash(QString name = "");
    Mash(NamedParameterBundle const & namedParameterBundle);
    Mash(Mash const& other);
 

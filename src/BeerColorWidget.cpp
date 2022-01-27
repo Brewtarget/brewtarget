@@ -35,8 +35,8 @@ BeerColorWidget::BeerColorWidget(QWidget* parent) : QWidget(parent)
    //setFixedSize(QSize(90,130));
    setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
    setMinimumSize(90, 130);
-   
-   glass = QImage(GLASS);
+
+   glass = QImage(":/images/glass2.png");
    recObs = 0;
 }
 
@@ -44,7 +44,7 @@ void BeerColorWidget::setRecipe( Recipe* rec )
 {
    if( recObs )
       disconnect( recObs, &Recipe::changed, this, &BeerColorWidget::parseChanges );
-   
+
    recObs = rec;
    if( recObs )
    {
@@ -77,6 +77,6 @@ void BeerColorWidget::paintEvent(QPaintEvent *)
 void BeerColorWidget::setColor( QColor newColor )
 {
    color = QColor(newColor);
-   
+
    repaint();
 }

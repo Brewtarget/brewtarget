@@ -67,7 +67,7 @@ class Equipment : public NamedEntity {
    friend class EquipmentEditor;
 
 public:
-   Equipment(QString t_name = "", bool cacheOnly = true);
+   Equipment(QString t_name = "");
    Equipment(NamedParameterBundle const & namedParameterBundle);
    Equipment(Equipment const & other);
 

@@ -17,12 +17,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #include "BtTextEdit.h"
-#include "brewtarget.h"
-#include <QSettings>
+
 #include <QDebug>
- 
+#include <QSettings>
+
 BtTextEdit::BtTextEdit(QWidget *parent)
 {
    wasModified = false;

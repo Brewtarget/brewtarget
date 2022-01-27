@@ -19,8 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef ALGORITHMS_H_
-#define ALGORITHMS_H_
+#ifndef ALGORITHMS_H
+#define ALGORITHMS_H
+#pragma once
 
 #define ROOT_PRECISION 0.0000001
 
@@ -34,69 +35,40 @@
 
 /*!
  * \brief Class to encapsulate real polynomials in a single variable
+ *
+ * .:TBD:. At somme point consider replacing this with
+ * https://www.boost.org/doc/libs/1_76_0/libs/math/doc/html/math_toolkit/polynomials.html
  */
-class Polynomial {
+class Polynomial
+{
 public:
    //! \brief Default constructor
-   Polynomial() :
-      _coeffs()
-   {
-   }
+   Polynomial();
 
    //! \brief Copy constructor
-   Polynomial( Polynomial const& other ) :
-      _coeffs( other._coeffs )
-   {
-   }
+   Polynomial( Polynomial const& other );
 
    //! \brief Constructs the 0 polynomial with given \c order
-   Polynomial( size_t order ) :
-      _coeffs(order+1, 0.0)
-   {
-   }
+   Polynomial( size_t order );
 
    //! \brief Constructor from an array of coefficients
-   Polynomial( double const* coeffs, size_t order ) :
-      _coeffs(coeffs, coeffs+order+1)
-   {
-   }
+   Polynomial(double const* coeffs, size_t order);
 
    //! \brief Add a coefficient for x^(\c order() + 1)
-   Polynomial& operator<< ( double coeff )
-   {
-      _coeffs.push_back(coeff);
-      return *this;
-   }
+   Polynomial& operator<<(double coeff);
 
    //! \brief Get the polynomial's order (highest exponent)
-   size_t order() const { return _coeffs.size()-1; }
+   size_t order() const;
 
    //! \brief Get coefficient of x^n where \c n <= \c order()
-   double operator[] (size_t n) const
-   {
-      Q_ASSERT( n <= _coeffs.size() );
-      return _coeffs[n];
-   }
+   double operator[](size_t n) const;
 
    //! \brief Get coefficient of x^n where \c n <= \c order() (non-const)
-   double& operator[] (size_t n)
-   {
-      Q_ASSERT( n < _coeffs.size() );
-      return _coeffs[n];
-   }
+   double & operator[](size_t n);
+
 
    //! \brief Evaluate the polynomial at point \c x
-   double eval(double x) const
-   {
-      double ret = 0.0;
-      size_t i;
-
-      for( i = order(); i > 0; --i )
-         ret += _coeffs[i] * intPow( x, i );
-      ret += _coeffs[0];
-
-      return ret;
-   }
+   double eval(double x) const;
 
    /*!
     * \brief Root-finding by the secant method.
@@ -105,40 +77,11 @@ public:
     * \param x1 - one of two initial \b distinct guesses at the root
     * \returns \c HUGE_VAL on failure, otherwise a root of the polynomial
     */
-   double rootFind( double x0, double x1 ) const
-   {
-      double guesses[] = { x0, x1 };
-      double newGuess = x0;
-      double maxAllowableSeparation = qAbs( x0 - x1 ) * 1e3;
-
-      while( qAbs( guesses[0] - guesses[1] ) > ROOT_PRECISION )
-      {
-         newGuess = guesses[1] - (guesses[1] - guesses[0]) * eval(guesses[1]) / ( eval(guesses[1]) - eval(guesses[0]) );
-
-         guesses[0] = guesses[1];
-         guesses[1] = newGuess;
-
-         if( qAbs( guesses[0] - guesses[1] ) > maxAllowableSeparation )
-            return HUGE_VAL;
-      }
-
-      return newGuess;
-   }
+   double rootFind( double x0, double x1 ) const;
 
 private:
-   std::vector<double> _coeffs;
-
-   //! \brief returns base^pow
-   static double intPow( double base, unsigned int pow )
-   {
-      double ret = 1;
-      for(; pow > 0; pow--)
-         ret *= base;
-
-      return ret;
-   }
+   std::vector<double> m_coeffs;
 };
-
 
 /*!
  * \namespace Algorithms
@@ -206,6 +149,8 @@ namespace Algorithms {
    double realExtract( double sg, double plato );
    //! \brief Calculate ABV from OG and FG
    double abvFromOgAndFg(double og, double fg);
+   //! \brief Correct specific gravity reading for the temperature at which it was taken
+   double correctSgForTemperature(double measuredSg, double readingTempInC, double calibrationTempInC);
 }
 
 #endif

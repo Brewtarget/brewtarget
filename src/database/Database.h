@@ -35,6 +35,7 @@
 #include <memory> // For PImpl
 
 #include <QCoreApplication>
+#include <QDir>
 #include <QSqlDatabase>
 #include <QString>
 
@@ -107,6 +108,15 @@ public:
 
    //! \brief Create a blank database in the given file
    bool createBlank(QString const& filename);
+
+   /*!
+    *  \brief Copies the SQLite database file to another directory.
+    *
+    *         Called only from \c OptionDialog
+    *
+    *  \returns false iff the copy is unsuccessful.
+    */
+   static bool copyDataFiles(const QDir newPath);
 
    static char const * getDefaultBackupFileName();
 

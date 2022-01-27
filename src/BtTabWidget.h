@@ -20,19 +20,20 @@
 
 #ifndef BTTABWDIGET_H
 #define BTTABWDIGET_H
+#pragma once
 
-class Recipe;
+#include <QTabWidget>
+
 class Equipment;
-class Style;
 class Fermentable;
 class Hop;
 class Misc;
+class Recipe;
+class Style;
 class Yeast;
-#include <QTabWidget>
 
 /*!
  * \class BtTabWdiget
- * \author Mik Firestone
  *
  * \brief To implement drag'n'drop, you need to subclass the dropEvent. I
  * think I need to implement this as a dragMoveEvent, the dragEnterEvent and

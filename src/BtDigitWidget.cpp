@@ -21,311 +21,236 @@
 
 #include <iostream>
 
+#include <QDebug>
 #include <QFrame>
 #include <QLocale>
 #include <QSettings>
-#include <QDebug>
 
-#include "brewtarget.h"
+#include "Localization.h"
+#include "measurement/Measurement.h"
+#include "measurement/Unit.h"
+#include "measurement/UnitSystem.h"
 #include "PersistentSettings.h"
-#include "UnitSystem.h"
-#include "Unit.h"
 
-BtDigitWidget::BtDigitWidget(QWidget *parent, Unit::UnitType type, Unit const * units) : QLabel(parent),
-   m_type(type),
-   m_forceUnit( Unit::noUnit ),
-   m_forceScale( Unit::noScale ),
-   m_units(units),
-   m_parent(parent),
-   m_rgblow(0x0000d0),
-   m_rgbgood(0x008000),
-   m_rgbhigh(0xd00000),
-   m_lowLim(0.0),
-   m_highLim(1.0),
-   m_styleSheet(QString("QLabel { font-weight: bold; color: #%1 }")),
-   m_constantColor(false),
-   m_lastNum(1.5),
-   m_lastPrec(3),
-   m_low_msg(tr("Too low for style.")),
-   m_good_msg(tr("In range for style.")),
-   m_high_msg(tr("Too high for style."))
-{
-   setStyleSheet(m_styleSheet.arg(0,6,16,QChar('0')));
-   setFrameStyle(QFrame::Box);
-   setFrameShadow(QFrame::Sunken);
+// This private implementation class holds all private non-virtual members of BtDigitWidget
+class BtDigitWidget::impl {
+public:
+   /**
+    * Constructor
+    */
+   impl(BtDigitWidget & self) :
+      self{self},
+      m_rgblow{0x0000d0},
+      m_rgbgood{0x008000},
+      m_rgbhigh{0xd00000},
+      m_lowLim{0.0},
+      m_highLim{1.0},
+      m_styleSheet{QString("QLabel { font-weight: bold; color: #%1 }")},
+      m_constantColor{false},
+      m_lastNum{1.5},
+      m_lastPrec{3},
+      m_low_msg{BtDigitWidget::tr("Too low for style.")},
+      m_good_msg{BtDigitWidget::tr("In range for style.")},
+      m_high_msg{BtDigitWidget::tr("Too high for style.")} {
+      this->self.setStyleSheet(m_styleSheet.arg(0,6,16,QChar('0')));
+      this->self.setFrameStyle(QFrame::Box);
+      this->self.setFrameShadow(QFrame::Sunken);
+      return;
+   }
+
+
+   /**
+    * Destructor
+    */
+   ~impl() = default;
+
+   void setTextStyleAndToolTip(QString str) {
+      QString style{this->m_styleSheet};
+      if ((!this->m_constantColor && (this->m_lastNum < this->m_lowLim)) ||
+         (this->m_constantColor && this->m_color == LOW)) {
+         style = this->m_styleSheet.arg(this->m_rgblow, 6, 16, QChar('0'));
+         self.setToolTip(this->m_constantColor ? "" : this->m_low_msg);
+      } else if ((!this->m_constantColor && (this->m_lastNum <= this->m_highLim)) ||
+               (this->m_constantColor && this->m_color == GOOD)) {
+         style = this->m_styleSheet.arg(this->m_rgbgood, 6, 16, QChar('0'));
+         self.setToolTip(this->m_constantColor ? "" : this->m_good_msg);
+      } else {
+         if (this->m_constantColor && this->m_color == BLACK) {
+            style = this->m_styleSheet.arg(0, 6, 16, QChar('0'));
+         } else {
+            style = this->m_styleSheet.arg(this->m_rgbhigh, 6, 16, QChar('0'));
+            self.setToolTip(this->m_high_msg);
+         }
+      }
+
+      this->self.setStyleSheet(style);
+      this->self.QLabel::setText(str);
+      return;
+   }
+
+   void adjustColors() {
+      this->setTextStyleAndToolTip(self.displayAmount(this->m_lastNum, this->m_lastPrec));
+
+      return;
+   }
+
+   // Member variables for impl
+   BtDigitWidget & self;
+
+   unsigned int m_rgblow;
+   unsigned int m_rgbgood;
+   unsigned int m_rgbhigh;
+   double m_lowLim;
+   double m_highLim;
+   QString m_styleSheet;
+   bool m_constantColor;
+   ColorType m_color;
+   double m_lastNum;
+   int m_lastPrec;
+
+   QString m_low_msg;
+   QString m_good_msg;
+   QString m_high_msg;
+
+};
+
+BtDigitWidget::BtDigitWidget(QWidget *parent,
+                             BtFieldType fieldType,
+                             Measurement::Unit const * units) :
+   QLabel(parent),
+   UiAmountWithUnits(parent, fieldType, units),
+   pimpl{std::make_unique<impl>(*this)} {
    return;
 }
 
-void BtDigitWidget::display(QString str)
-{
+BtDigitWidget::~BtDigitWidget() = default;
+
+QString BtDigitWidget::getWidgetText() const {
+   return this->text();
+}
+
+void BtDigitWidget::setWidgetText(QString text) {
+   this->QLabel::setText(text);
+   return;
+}
+
+void BtDigitWidget::display(QString str) {
    static bool converted;
 
-   m_lastNum = Brewtarget::toDouble(str,&converted);
-   m_lastPrec = str.length() - str.lastIndexOf(QLocale().decimalPoint()) - 1;
-   if( converted )
-      display(m_lastNum,m_lastPrec);
-   else
-   {
-      qWarning() << QString("%1 : could not convert %2 to double")
-            .arg(Q_FUNC_INFO)
-            .arg(str);
+   this->pimpl->m_lastNum = Localization::toDouble(str, &converted);
+   this->pimpl->m_lastPrec = str.length() - str.lastIndexOf(QLocale().decimalPoint()) - 1;
+   if (converted) {
+      this->display(this->pimpl->m_lastNum, this->pimpl->m_lastPrec);
+   } else {
+      qWarning() << Q_FUNC_INFO << "Could not convert" << str << "to double";
       QLabel::setText("-");
    }
+   return;
 }
 
-void BtDigitWidget::display(double num, int prec)
-{
-   QString str = QString("%L1").arg(num,0,'f',prec);
-   QString style = m_styleSheet;
+void BtDigitWidget::display(double num, int prec) {
+   this->pimpl->m_lastNum = num;
+   this->pimpl->m_lastPrec = prec;
 
-   m_lastNum = num;
-   m_lastPrec = prec;
-
-   if( (!m_constantColor && (num < m_lowLim)) || (m_constantColor && m_color == LOW))
-   {
-      style = m_styleSheet.arg(m_rgblow,6,16,QChar('0'));
-      setToolTip(m_constantColor? "" : m_low_msg);
-   }
-   else if( (!m_constantColor && (num <= m_highLim)) || (m_constantColor && m_color == GOOD))
-   {
-      style = m_styleSheet.arg(m_rgbgood,6,16,QChar('0'));
-      setToolTip(m_constantColor? "" : m_good_msg);
-   }
-   else
-   {
-      if( m_constantColor && m_color == BLACK )
-         style = m_styleSheet.arg(0,6,16,QChar('0'));
-      else
-      {
-         style = m_styleSheet.arg(m_rgbhigh,6,16,QChar('0'));
-         setToolTip(m_high_msg);
-      }
-   }
-
-   setStyleSheet(style);
-   QLabel::setText(str);
+   this->pimpl->setTextStyleAndToolTip(QString("%L1").arg(num,0,'f',prec));
+   return;
 }
 
-void BtDigitWidget::adjustColors()
-{
-
-   QString str = displayAmount(m_lastNum, m_lastPrec);
-   QString style = m_styleSheet;
-
-   if( (!m_constantColor && (m_lastNum < m_lowLim)) || (m_constantColor && m_color == LOW))
-   {
-      style = m_styleSheet.arg(m_rgblow,6,16,QChar('0'));
-      setToolTip(m_constantColor? "" : m_low_msg);
+void BtDigitWidget::setLowLim(double num) {
+   if (num < this->pimpl->m_highLim) {
+      this->pimpl->m_lowLim = num;
    }
-   else if( (!m_constantColor && (m_lastNum <= m_highLim)) || (m_constantColor && m_color == GOOD))
-   {
-      style = m_styleSheet.arg(m_rgbgood,6,16,QChar('0'));
-      setToolTip(m_constantColor? "" : m_good_msg);
+   this->display(this->pimpl->m_lastNum, this->pimpl->m_lastPrec);
+   return;
+}
+
+void BtDigitWidget::setHighLim(double num) {
+   if (num > this->pimpl->m_lowLim) {
+      this->pimpl->m_highLim = num;
    }
-   else
-   {
-      if( m_constantColor && m_color == BLACK )
-         style = m_styleSheet.arg(0,6,16,QChar('0'));
-      else
-      {
-         style = m_styleSheet.arg(m_rgbhigh,6,16,QChar('0'));
-         setToolTip(m_high_msg);
-      }
+   this->display(this->pimpl->m_lastNum, this->pimpl->m_lastPrec);
+   return;
+}
+
+void BtDigitWidget::setConstantColor(ColorType c) {
+   this->pimpl->m_constantColor = (c == LOW || c == GOOD || c == HIGH || c == BLACK );
+   this->pimpl->m_color = c;
+   this->update(); // repaint.
+   return;
+}
+
+void BtDigitWidget::setLimits(double low, double high) {
+   if (low <  high) {
+      this->pimpl->m_lowLim = low;
+      this->pimpl->m_highLim = high;
    }
-
-   setStyleSheet(style);
-   QLabel::setText(str);
+   this->pimpl->adjustColors();
+   this->update(); // repaint.
+   return;
 }
 
-void BtDigitWidget::setLowLim(double num)
-{
-   if( num < m_highLim )
-      m_lowLim = num;
-   display(m_lastNum, m_lastPrec);
-}
+void BtDigitWidget::setLowMsg( QString msg ) { this->pimpl->m_low_msg  = msg; update();}
+void BtDigitWidget::setGoodMsg(QString msg ) { this->pimpl->m_good_msg = msg; update();}
+void BtDigitWidget::setHighMsg(QString msg ) { this->pimpl->m_high_msg = msg; update();}
 
-void BtDigitWidget::setHighLim(double num)
-{
-   if( num > m_lowLim )
-      m_highLim = num;
-   display(m_lastNum, m_lastPrec);
-}
-
-void BtDigitWidget::setConstantColor(ColorType c)
-{
-   m_constantColor = (c == LOW || c == GOOD || c == HIGH || c == BLACK );
-   m_color = c;
-   update(); // repaint.
-}
-
-void BtDigitWidget::setLimits(double low, double high)
-{
-   if( low <  high ) {
-      m_lowLim = low;
-      m_highLim = high;
-   }
-   adjustColors();
-   update(); // repaint.
-}
-
-void BtDigitWidget::setLowMsg(  QString msg ) { m_low_msg  = msg; update();}
-void BtDigitWidget::setGoodMsg( QString msg ) { m_good_msg = msg; update();}
-void BtDigitWidget::setHighMsg( QString msg ) { m_high_msg = msg; update();}
-
-void BtDigitWidget::setMessages( QStringList msgs )
-{
+void BtDigitWidget::setMessages( QStringList msgs ) {
    if ( msgs.size() != 3 ) {
-      qWarning() << "Wrong number of messages";
+      qWarning() << Q_FUNC_INFO << "Wrong number of messages";
       return;
    }
-   m_low_msg = msgs[0];
-   m_good_msg = msgs[1];
-   m_high_msg = msgs[2];
+   this->pimpl->m_low_msg = msgs[0];
+   this->pimpl->m_good_msg = msgs[1];
+   this->pimpl->m_high_msg = msgs[2];
 
-   adjustColors();
+   this->pimpl->adjustColors();
+   return;
 }
 
+void BtDigitWidget::displayChanged(PreviousScaleInfo previousScaleInfo) {
+   this->textOrUnitsChanged(previousScaleInfo);
 
-int BtDigitWidget::type() const { return (int)m_type; }
-QString BtDigitWidget::editField() const { return m_editField; }
-QString BtDigitWidget::configSection()
-{
-   if ( m_section.isEmpty() ) {
-      setConfigSection("");
-   }
-
-   return m_section;
+   return;
 }
 
-// Once we require >qt5.5, we can replace this noise with
-// QMetaEnum::fromType()
-QString BtDigitWidget::forcedUnit() const
-{
-   const QMetaObject &mo = Unit::staticMetaObject;
-   int index = mo.indexOfEnumerator("unitDisplay");
-   QMetaEnum unitEnum = mo.enumerator(index);
-
-   return QString( unitEnum.valueToKey(m_forceUnit) );
-}
-
-QString BtDigitWidget::forcedScale() const
-{
-   const QMetaObject &mo = Unit::staticMetaObject;
-   int index = mo.indexOfEnumerator("unitScale");
-   QMetaEnum scaleEnum = mo.enumerator(index);
-
-   return QString( scaleEnum.valueToKey(m_forceScale) );
-}
-
-void BtDigitWidget::setType(int type) { m_type = (Unit::UnitType)type;}
-void BtDigitWidget::setEditField( QString editField) { m_editField = editField; }
-
-// The cascade looks a little odd, but it is intentional.
-void BtDigitWidget::setConfigSection(QString configSection)
-{
-   m_section = configSection;
-
-   if ( m_section.isEmpty() )
-      m_section = m_parent->property("configSection").toString();
-
-   if ( m_section.isEmpty() )
-      m_section = m_parent->objectName();
-}
-
-// previous comment about qt5.5 applies
-void BtDigitWidget::setForcedUnit( QString forcedUnit )
-{
-   const QMetaObject &mo = Unit::staticMetaObject;
-   int index = mo.indexOfEnumerator("unitDisplay");
-   QMetaEnum unitEnum = mo.enumerator(index);
-
-   m_forceUnit = (Unit::unitDisplay)unitEnum.keyToValue(forcedUnit.toStdString().c_str());
-}
-
-void BtDigitWidget::setForcedScale( QString forcedScale )
-{
-   const QMetaObject &mo = Unit::staticMetaObject;
-   int index = mo.indexOfEnumerator("unitScale");
-   QMetaEnum unitEnum = mo.enumerator(index);
-
-   m_forceScale = (Unit::unitScale)unitEnum.keyToValue(forcedScale.toStdString().c_str());
-}
-
-void BtDigitWidget::displayChanged(Unit::unitDisplay oldUnit, Unit::unitScale oldScale)
-{
-   // This is where it gets hard
-   double val = -1.0;
-   QString amt;
-   bool ok = false;
-
-   if (text().isEmpty()) {
-      return;
-   }
-
-   // The idea here is we need to first translate the field into a known
-   // amount (aka to SI) and then into the unit we want.
-   switch( m_type ) {
-      case Unit::Mass:
-         amt = displayAmount(m_lastNum,2);
-         break;
-      case Unit::String:
-         amt = text();
-         break;
-      case Unit::None:
-      default:
-         val = Brewtarget::toDouble(text(),&ok);
-         if ( ! ok )
-            qWarning() << QString("%1: failed to convert %2 (%3:%4) to double").arg(Q_FUNC_INFO).arg(text()).arg(m_section).arg(m_editField);
-         amt = displayAmount(val);
-   }
-   QLabel::setText(amt);
-}
-
-QString BtDigitWidget::displayAmount(double amount, int precision)
-{
-   Unit::unitDisplay unitDsp;
-   Unit::unitScale scale;
-
-   unitDsp  = static_cast<Unit::unitDisplay>(PersistentSettings::value(m_editField, Unit::noUnit, m_section, PersistentSettings::UNIT).toInt());
-   scale    = static_cast<Unit::unitScale>(PersistentSettings::value(m_editField, Unit::noScale, m_section, PersistentSettings::SCALE).toInt());
-
-   // I find this a nice level of abstraction. This lets all of the setText()
-   // methods make a single call w/o having to do the logic for finding the
-   // unit and scale.
-   return Brewtarget::displayAmount(amount, m_units, precision, unitDsp, scale);
-}
-
-void BtDigitWidget::setText(QString amount, int precision)
-{
+void BtDigitWidget::setText(QString amount, int precision) {
    double amt;
    bool ok = false;
 
-
-   setConfigSection("");
-   if ( m_type == Unit::String )
+   this->setConfigSection("");
+   auto const myFieldType = this->getFieldType();
+   if (std::holds_alternative<NonPhysicalQuantity>(myFieldType) &&
+       NonPhysicalQuantity::String == std::get<NonPhysicalQuantity>(myFieldType)) {
       QLabel::setText(amount);
-   else
-   {
-      amt = Brewtarget::toDouble(amount,&ok);
+   } else {
+      amt = Localization::toDouble(amount, &ok);
       if ( !ok ) {
          qWarning() << QString("%1 could not convert %2 (%3:%4) to double")
                .arg(Q_FUNC_INFO)
                .arg(amount)
-               .arg(m_section)
-               .arg(m_editField);
+               .arg(this->configSection)
+               .arg(this->editField);
       }
-      m_lastNum = amt;
-      m_lastPrec = precision;
+      this->pimpl->m_lastNum = amt;
+      this->pimpl->m_lastPrec = precision;
       QLabel::setText(displayAmount(amt, precision));
    }
-}
-void BtDigitWidget::setText(double amount, int precision)
-{
-   m_lastNum = amount;
-   m_lastPrec = precision;
-   setConfigSection("");
-   QLabel::setText( displayAmount(amount,precision) );
+   return;
 }
 
-BtMassDigit::BtMassDigit(QWidget* parent) : BtDigitWidget(parent,Unit::Mass,&Units::kilograms) {}
-BtGenericDigit::BtGenericDigit(QWidget* parent): BtDigitWidget(parent,Unit::None,nullptr) {}
+void BtDigitWidget::setText(double amount, int precision) {
+   this->pimpl->m_lastNum = amount;
+   this->pimpl->m_lastPrec = precision;
+   this->setConfigSection("");
+   QLabel::setText( displayAmount(amount,precision) );
+   return;
+}
+
+BtMassDigit::BtMassDigit(QWidget* parent) :
+   BtDigitWidget{parent, Measurement::PhysicalQuantity::Mass, &Measurement::Units::kilograms} {
+   return;
+}
+
+BtGenericDigit::BtGenericDigit(QWidget* parent) :
+   BtDigitWidget{parent, NonPhysicalQuantity::Count, nullptr} {
+   return;
+}

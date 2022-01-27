@@ -23,7 +23,6 @@
 #include <QDebug>
 #include <QInputDialog>
 
-#include "brewtarget.h"
 #include "database/ObjectStoreWrapper.h"
 #include "model/Water.h"
 
@@ -75,6 +74,7 @@ void WaterEditor::newWater(QString folder) {
 
    qDebug() << Q_FUNC_INFO << "Creating new Water, " << name;
 
+   // .:TODO:. Change to shared_ptr as currently leads to memory leak in clearAndClose()
    Water* w = new Water(name);
    if ( ! folder.isEmpty() ) {
       w->setFolder(folder);
@@ -161,29 +161,27 @@ void WaterEditor::changed(QMetaProperty prop, QVariant /*val*/)
    return;
 }
 
-void WaterEditor::saveAndClose()
-{
-   if (this->obs == nullptr) {
+void WaterEditor::saveAndClose() {
+   if (!this->obs) {
       return;
    }
 
    this->obs->setName( lineEdit_name->text());
    this->obs->setAmount(0.0);
-   this->obs->setBicarbonate_ppm( lineEdit_alk->toSI() );
-   this->obs->setCalcium_ppm( lineEdit_ca->toSI() );
-   this->obs->setMagnesium_ppm( lineEdit_mg->toSI() );
-   this->obs->setSulfate_ppm( lineEdit_so4->toSI() );
-   this->obs->setSodium_ppm( lineEdit_na->toSI() );
-   this->obs->setChloride_ppm( lineEdit_cl->toSI() );
-   this->obs->setPh( lineEdit_ph->toSI() );
-   this->obs->setAlkalinity( lineEdit_alk->toSI());
+   this->obs->setBicarbonate_ppm( lineEdit_alk->toSI().quantity );
+   this->obs->setCalcium_ppm( lineEdit_ca->toSI().quantity );
+   this->obs->setMagnesium_ppm( lineEdit_mg->toSI().quantity );
+   this->obs->setSulfate_ppm( lineEdit_so4->toSI().quantity );
+   this->obs->setSodium_ppm( lineEdit_na->toSI().quantity );
+   this->obs->setChloride_ppm( lineEdit_cl->toSI().quantity );
+   this->obs->setPh( lineEdit_ph->toSI().quantity );
+   this->obs->setAlkalinity( lineEdit_alk->toSI().quantity);
    this->obs->setAlkalinityAsHCO3(comboBox_alk->currentText() == QString("HCO3"));
    this->obs->setNotes( plainTextEdit_notes->toPlainText());
 
-   if (this->obs->cacheOnly()) {
+   if (this->obs->key() < 0) {
       qDebug() << Q_FUNC_INFO << "writing " << this->obs->name();
       ObjectStoreWrapper::insert(*this->obs);
-      this->obs->setCacheOnly(false);
    }
 
    setVisible(false);

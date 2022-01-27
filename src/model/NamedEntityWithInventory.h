@@ -40,7 +40,7 @@ AddPropertyName(inventoryId)
 class NamedEntityWithInventory : public NamedEntity {
    Q_OBJECT
 public:
-   NamedEntityWithInventory(int key, bool cache = true, QString t_name = QString(), bool t_display = false, QString folder = QString());
+   NamedEntityWithInventory(QString t_name, bool t_display = false, QString folder = QString());
    NamedEntityWithInventory(NamedEntityWithInventory const & other);
    NamedEntityWithInventory(NamedParameterBundle const & namedParameterBundle);
 

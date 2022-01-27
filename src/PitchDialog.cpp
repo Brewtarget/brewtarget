@@ -25,12 +25,11 @@
 #include <QChar>
 
 #include "Algorithms.h"
-#include "brewtarget.h"
+#include "Localization.h"
+#include "measurement/Unit.h"
 #include "PersistentSettings.h"
-#include "Unit.h"
 
-PitchDialog::PitchDialog(QWidget* parent) : QDialog(parent)
-{
+PitchDialog::PitchDialog(QWidget* parent) : QDialog(parent) {
    setupUi(this);
 
    // Set default dates
@@ -38,50 +37,35 @@ PitchDialog::PitchDialog(QWidget* parent) : QDialog(parent)
    dateEdit_ProductionDate->setDate(QDate::currentDate());
    updateViabilityFromDate(QDate::currentDate());
 
-   connect( lineEdit_vol, &BtLineEdit::textModified, this, &PitchDialog::calculate);
-   connect( lineEdit_OG, &BtLineEdit::textModified, this, &PitchDialog::calculate);
-   connect( slider_pitchRate, &QAbstractSlider::valueChanged, this, &PitchDialog::calculate );
-   connect( slider_pitchRate, &QAbstractSlider::valueChanged, this, &PitchDialog::updateShownPitchRate );
-   connect( spinBox_Viability, SIGNAL(valueChanged(int)), this, SLOT(calculate()));
-   connect( spinBox_VialsPitched, SIGNAL(valueChanged(int)), this, SLOT(calculate()));
-   connect( comboBox_AerationMethod, SIGNAL(currentIndexChanged(int)), this, SLOT(calculate()));
-   connect( dateEdit_ProductionDate, &QDateTimeEdit::dateChanged, this, &PitchDialog::updateViabilityFromDate);
-   connect( checkBox_CalculateViability, &QCheckBox::stateChanged, this, &PitchDialog::toggleViabilityFromDate);
+   connect(lineEdit_vol,                &BtLineEdit::textModified,                           this, &PitchDialog::calculate);
+   connect(lineEdit_OG,                 &BtLineEdit::textModified,                           this, &PitchDialog::calculate);
+   connect(slider_pitchRate,            &QAbstractSlider::valueChanged,                      this, &PitchDialog::calculate);
+   connect(slider_pitchRate,            &QAbstractSlider::valueChanged,                      this, &PitchDialog::updateShownPitchRate);
+   connect(spinBox_Viability,           QOverload<int>::of(&QSpinBox::valueChanged),         this, &PitchDialog::calculate);
+   connect(spinBox_VialsPitched,        QOverload<int>::of(&QSpinBox::valueChanged),         this, &PitchDialog::calculate);
+   connect(comboBox_AerationMethod,     QOverload<int>::of(&QComboBox::currentIndexChanged), this, &PitchDialog::calculate);
+   connect(dateEdit_ProductionDate,     &QDateTimeEdit::dateChanged,                         this, &PitchDialog::updateViabilityFromDate);
+   connect(checkBox_CalculateViability, &QCheckBox::stateChanged,                            this, &PitchDialog::toggleViabilityFromDate);
 
    // Dates are a little more cranky
-   connect(label_productionDate,&BtLabel::labelChanged,this,&PitchDialog::updateProductionDate);
-   updateProductionDate(Unit::noUnit,Unit::noScale);
+///   connect(label_productionDate,        &BtLabel::changedSystemOfMeasurementOrScale,                  this, &PitchDialog::updateProductionDate);
+   this->updateProductionDate();
    updateShownPitchRate(0);
+   return;
 }
 
-PitchDialog::~PitchDialog()
-{
-}
+PitchDialog::~PitchDialog() = default;
 
-void PitchDialog::updateProductionDate(Unit::unitDisplay dsp, Unit::unitScale scl)
-{
-   QString format;
+void PitchDialog::updateProductionDate() {
    // I need the new unit, not the old
-   Unit::unitDisplay unitDsp = static_cast<Unit::unitDisplay>(
-      PersistentSettings::value(PersistentSettings::Names::productionDate,
-                                Brewtarget::getDateFormat(),
-                                PersistentSettings::Sections::pitchRateCalc,
-                                PersistentSettings::UNIT).toInt()
-   );
-
-   switch(unitDsp)
-   {
-      case Unit::displayUS:
-         format = "MM-dd-yyyy";
-         break;
-      case Unit::displayImp:
-         format = "dd-MM-yyyy";
-         break;
-      case Unit::displaySI:
-      default:
-         format = "yyyy-MM-dd";
-   }
-   dateEdit_ProductionDate->setDisplayFormat(format);
+   // .:TBD:. For the moment, we stick with whatever date format the user has set for the whole program.  Would need to
+   // uncomment the following line and implement the corresponding function in Localization, plus do an appropriate
+   // pop-up menu etc if we want to select date format per-field.
+//   auto dateFormat = Localization::getDateFormatForField(PersistentSettings::Names::productionDate,
+//                                                         PersistentSettings::Sections::pitchRateCalc);
+   auto dateFormat = Localization::getDateFormat();
+   QString format = Localization::numericToStringDateFormat(dateFormat);
+   this->dateEdit_ProductionDate->setDisplayFormat(format);
 }
 
 void PitchDialog::setWortVolume_l(double volume)
@@ -101,8 +85,8 @@ void PitchDialog::calculate()
    double rate_MpermLP = (2-0.75) * ((double)slider_pitchRate->value()) / 100.0 + 0.75;
 
    // This isn't right.
-   double og = lineEdit_OG->toSI();
-   double vol_l = lineEdit_vol->toSI();
+   double og = lineEdit_OG->toSI().quantity;
+   double vol_l = lineEdit_vol->toSI().quantity;
 
    // I somewhat aribtrarily defined "SI" for density to be specific gravity.
    // Since these calcs need plato, convert

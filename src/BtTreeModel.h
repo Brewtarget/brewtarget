@@ -17,8 +17,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef BTTREEMODEL_H_
-#define BTTREEMODEL_H_
+#ifndef BTTREEMODEL_H
+#define BTTREEMODEL_H
 
 #include <memory>
 

@@ -26,14 +26,10 @@
 #include <QObject>
 #include <QVariant>
 
-#include "brewtarget.h"
 #include "database/ObjectStoreWrapper.h"
 #include "model/Inventory.h"
 #include "model/NamedParameterBundle.h"
 #include "model/Recipe.h"
-
-// .:TBD:. I think (and hope) that we can dispense with the following line!
-//#define SUPER NamedEntity
 
 QStringList Fermentable::types = QStringList() << "Grain" << "Sugar" << "Extract" << "Dry Extract" << "Adjunct";
 
@@ -59,8 +55,8 @@ ObjectStore & Fermentable::getObjectStoreTypedInstance() const {
    return ObjectStoreTyped<Fermentable>::getInstance();
 }
 
-Fermentable::Fermentable(QString name, bool cache) :
-   NamedEntityWithInventory{-1, cache, name, true},
+Fermentable::Fermentable(QString name) :
+   NamedEntityWithInventory{name, true},
    m_typeStr       {QString()         },
    m_type          {Fermentable::Grain},
    m_amountKg      {0.0               },

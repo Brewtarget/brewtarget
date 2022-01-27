@@ -16,24 +16,37 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #include "ConverterTool.h"
-#include "Unit.h"
-#include <QHBoxLayout>
-#include <QVBoxLayout>
-#include <QFormLayout>
-#include <QSpacerItem>
 
-ConverterTool::ConverterTool(QWidget* parent) : QDialog(parent)
-{
-   doLayout();
+#include <QFormLayout>
+#include <QHBoxLayout>
+#include <QSpacerItem>
+#include <QVBoxLayout>
+
+#include "measurement/Unit.h"
+
+ConverterTool::ConverterTool(QWidget* parent) : QDialog(parent) {
+   this->doLayout();
 
    connect( pushButton_convert, &QAbstractButton::clicked, this, &ConverterTool::convert );
+   return;
 }
 
-void ConverterTool::doLayout()
-{
-   resize(279, 96);
+void ConverterTool::convert() {
+   this->outputLineEdit->setText(Measurement::Unit::convert(inputLineEdit->text(), outputUnitsLineEdit->text()));
+   return;
+}
+
+void ConverterTool::changeEvent(QEvent* event) {
+   if (event->type() == QEvent::LanguageChange) {
+      this->retranslateUi();
+   }
+   QDialog::changeEvent(event);
+   return;
+}
+
+void ConverterTool::doLayout() {
+   this->resize(279, 96);
    QHBoxLayout* hLayout = new QHBoxLayout(this);
       QFormLayout* formLayout = new QFormLayout();
          inputLabel = new QLabel(this);
@@ -68,24 +81,20 @@ void ConverterTool::doLayout()
    hLayout->addLayout(formLayout);
    hLayout->addLayout(vLayout);
 
-   retranslateUi();
+   this->retranslateUi();
+   return;
 }
 
-void ConverterTool::retranslateUi()
-{
-   setWindowTitle(tr("Converter Tool"));
-   inputLabel->setText(tr("Input"));
-   outputUnitsLabel->setText(tr("Output Units"));
-   outputLabel->setText(tr("Output"));
-   pushButton_convert->setText(tr("Convert"));
+void ConverterTool::retranslateUi() {
+   this->setWindowTitle(tr("Converter Tool"));
+   this->inputLabel->setText(tr("Input"));
+   this->outputUnitsLabel->setText(tr("Output Units"));
+   this->outputLabel->setText(tr("Output"));
+   this->pushButton_convert->setText(tr("Convert"));
 #ifndef QT_NO_TOOLTIP
-   inputLineEdit->setToolTip(tr("Amount and units to convert"));
-   outputUnitsLineEdit->setToolTip(tr("Unit you want to convert to"));
-   outputLineEdit->setToolTip(tr("Output conversion"));
+   this->inputLineEdit->setToolTip(tr("Amount and units to convert"));
+   this->outputUnitsLineEdit->setToolTip(tr("Unit you want to convert to"));
+   this->outputLineEdit->setToolTip(tr("Output conversion"));
 #endif // QT_NO_TOOLTIP
-}
-
-void ConverterTool::convert()
-{
-   outputLineEdit->setText(Unit::convert(inputLineEdit->text(), outputUnitsLineEdit->text()));
+   return;
 }

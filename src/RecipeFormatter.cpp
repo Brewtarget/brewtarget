@@ -21,19 +21,16 @@
 #include "RecipeFormatter.h"
 
 #include <QClipboard>
-#include <QDebug>
-#include <QHBoxLayout>
-#include <QObject>
-#include <QPrintDialog>
 #include <QPrinter>
-#include <QPushButton>
 #include <QStringList>
-#include <QTextDocument>
-#include <QVBoxLayout>
 
-#include "brewtarget.h"
 #include "Html.h"
+#include "Localization.h"
 #include "MainWindow.h"
+#include "measurement/ColorMethods.h"
+#include "measurement/IbuMethods.h"
+#include "measurement/Measurement.h"
+#include "measurement/Unit.h"
 #include "model/BrewNote.h"
 #include "model/Equipment.h"
 #include "model/Fermentable.h"
@@ -46,7 +43,6 @@
 #include "model/Water.h"
 #include "model/Yeast.h"
 #include "PersistentSettings.h"
-#include "Unit.h"
 
 namespace {
    //! Get the maximum number of characters in a list of strings.
@@ -275,7 +271,7 @@ public:
                      "<td class=\"value \">%2</td>"
                      "</tr>")
             .arg(tr("Date"))
-            .arg(Brewtarget::displayDate(rec->date()));
+            .arg(Localization::displayDate(rec->date()));
       body += "</table>";
 
       // Build the top table
@@ -289,20 +285,27 @@ public:
                      "<td align=\"left\" class=\"left\">%1</td>"
                      "<td width=\"20%\" class=\"value\">%2</td>")
             .arg(tr("Batch Size"))
-            .arg(Brewtarget::displayAmount(rec->finalVolume_l(), PersistentSettings::Sections::tab_recipe, PropertyNames::Recipe::finalVolume_l, &Units::liters));
+            .arg(Measurement::displayAmount(Measurement::Amount{rec->finalVolume_l(), Measurement::Units::liters},
+                                            PersistentSettings::Sections::tab_recipe,
+                                            PropertyNames::Recipe::finalVolume_l));
       body += QString("<td width=\"40%\" align=\"right\" class=\"right\">%1</td>"
                      "<td class=\"value\">%2</td>"
                      "</tr>")
             .arg(tr("Boil Size"))
-            .arg(Brewtarget::displayAmount(rec->boilVolume_l(), PersistentSettings::Sections::tab_recipe, PropertyNames::Recipe::boilVolume_l, &Units::liters));
+            .arg(Measurement::displayAmount(Measurement::Amount{rec->boilVolume_l(), Measurement::Units::liters},
+                                            PersistentSettings::Sections::tab_recipe,
+                                            PropertyNames::Recipe::boilVolume_l));
       // Second row: Boil Time and Efficiency
       body += QString("<tr>"
                      "<td align=\"left\" class=\"left\">%1</td>"
                      "<td class=\"value\">%2</td>")
             .arg(tr("Boil Time"))
-            .arg( (rec->equipment() == nullptr)?
-                     Brewtarget::displayAmount(0, PersistentSettings::Sections::tab_recipe, PropertyNames::Recipe::boilTime_min, &Units::minutes)
-                  : Brewtarget::displayAmount( (rec->equipment())->boilTime_min(), PersistentSettings::Sections::tab_recipe, PropertyNames::Recipe::boilTime_min, &Units::minutes));
+            .arg(Measurement::displayAmount(Measurement::Amount{
+                                               rec->equipment() == nullptr ? 0.0 : rec->equipment()->boilTime_min(),
+                                               Measurement::Units::minutes
+                                            },
+                                            PersistentSettings::Sections::tab_recipe,
+                                            PropertyNames::Recipe::boilTime_min));
       body += QString("<td align=\"right\" class=\"right\">%1</td>"
                      "<td class=\"value\">%2</td></tr>")
             .arg(tr("Efficiency"))
@@ -313,36 +316,48 @@ public:
                      "<td align=\"left\" class=\"left\">%1</td>"
                      "<td class=\"value\">%2</td>")
             .arg(tr("OG"))
-            .arg(Brewtarget::displayAmount(rec->og(), PersistentSettings::Sections::tab_recipe, PropertyNames::Recipe::og, &Units::sp_grav, 3));
+            .arg(Measurement::displayAmount(Measurement::Amount{rec->og(), Measurement::Units::sp_grav},
+                                            PersistentSettings::Sections::tab_recipe,
+                                            PropertyNames::Recipe::og,
+                                            3));
       body += QString("<td align=\"right\" class=\"right\">%1</td>"
                      "<td class=\"value\">%2</td></tr>")
             .arg(tr("FG"))
-            .arg(Brewtarget::displayAmount(rec->fg(), PersistentSettings::Sections::tab_recipe, PropertyNames::Recipe::fg, &Units::sp_grav, 3));
+            .arg(Measurement::displayAmount(Measurement::Amount{rec->fg(), Measurement::Units::sp_grav},
+                                            PersistentSettings::Sections::tab_recipe,
+                                            PropertyNames::Recipe::fg,
+                                            3));
 
       // Fourth row: ABV and Bitterness.  We need to set the bitterness string up first
       body += QString("<tr>"
                      "<td align=\"left\" class=\"left\">%1</td>"
                      "<td class=\"value\">%2%</td>")
             .arg(tr("ABV"))
-            .arg(Brewtarget::displayAmount(rec->ABV_pct(), nullptr, 1));
+            .arg(Measurement::displayQuantity(rec->ABV_pct(), 1));
       body += QString("<td align=\"right\" class=\"right\">%1</td>"
                      "<td class=\"value\">%2 (%3)</td></tr>")
             .arg(tr("IBU"))
-            .arg(Brewtarget::displayAmount(rec->IBU(), nullptr, 1))
-            .arg(Brewtarget::ibuFormulaName() );
+            .arg(Measurement::displayQuantity(rec->IBU(), 1))
+            .arg(IbuMethods::ibuFormulaName() );
 
       // Fifth row: Color and calories.  Set up the color string first
       body += QString("<tr>"
                      "<td align=\"left\" class=\"left\">%1</td>"
                      "<td class=\"value\">%2 (%3)</td>")
             .arg(tr("Color"))
-            .arg(Brewtarget::displayAmount(rec->color_srm(),PersistentSettings::Sections::tab_recipe, PropertyNames::Recipe::color_srm, &Units::srm, 1))
-            .arg(Brewtarget::colorFormulaName());
+            .arg(Measurement::displayAmount(Measurement::Amount{rec->color_srm(), Measurement::Units::srm},
+                                            PersistentSettings::Sections::tab_recipe,
+                                            PropertyNames::Recipe::color_srm,
+                                            1))
+            .arg(ColorMethods::colorFormulaName());
 
+      bool displayMetricVolumes =
+         Measurement::getDisplayUnitSystem(Measurement::PhysicalQuantity::Volume) ==
+         Measurement::UnitSystems::volume_Metric;
       body += QString("<td align=\"right\" class=\"right\">%1</td>"
                      "<td class=\"value\">%2</td></tr>")
-            .arg( Brewtarget::getVolumeUnitSystem() == SI ? tr("Estimated calories (per 33 cl)") : tr("Estimated calories (per 12 oz)"))
-            .arg( Brewtarget::displayAmount(Brewtarget::getVolumeUnitSystem() == SI ? rec->calories33cl() : rec->calories12oz(),nullptr,0) );
+            .arg(displayMetricVolumes ? tr("Estimated calories (per 33 cl)") : tr("Estimated calories (per 12 oz)"))
+            .arg(Measurement::displayQuantity(displayMetricVolumes ? rec->calories33cl() : rec->calories12oz(), 0) );
 
       body += "</table>";
 
@@ -360,28 +375,46 @@ public:
       QStringList entry, value;
 
       entry.append(tr("Batch Size"));
-      value.append(QString("%1").arg(Brewtarget::displayAmount(rec->finalVolume_l(), PersistentSettings::Sections::tab_recipe, PropertyNames::Recipe::finalVolume_l, &Units::liters)));
+      value.append(QString("%1").arg(Measurement::displayAmount(Measurement::Amount{rec->finalVolume_l(), Measurement::Units::liters},
+                                                                PersistentSettings::Sections::tab_recipe,
+                                                                PropertyNames::Recipe::finalVolume_l)));
       entry.append(tr("Boil Size"));
-      value.append(QString("%1").arg(Brewtarget::displayAmount(rec->boilVolume_l(), PersistentSettings::Sections::tab_recipe, PropertyNames::Recipe::boilVolume_l, &Units::liters)));
+      value.append(QString("%1").arg(Measurement::displayAmount(Measurement::Amount{rec->boilVolume_l(), Measurement::Units::liters},
+                                                                PersistentSettings::Sections::tab_recipe,
+                                                                PropertyNames::Recipe::boilVolume_l)));
       entry.append(tr("Boil Time"));
-      value.append(QString("%1").arg((rec->equipment() == nullptr)?
-                           Brewtarget::displayAmount(0, PersistentSettings::Sections::tab_recipe, PropertyNames::Recipe::boilTime_min, &Units::minutes)
-                        : Brewtarget::displayAmount( (rec->equipment())->boilTime_min(), PersistentSettings::Sections::tab_recipe, PropertyNames::Recipe::boilTime_min, &Units::minutes)));
+      value.append(
+         QString("%1").arg(
+            Measurement::displayAmount(Measurement::Amount{rec->equipment() == nullptr ? 0.0 : rec->equipment()->boilTime_min(),
+                                                           Measurement::Units::minutes},
+                                       PersistentSettings::Sections::tab_recipe,
+                                       PropertyNames::Recipe::boilTime_min)
+         )
+      );
       entry.append(tr("Efficiency"));
       value.append(QString("%1%").arg(rec->efficiency_pct(), 0, 'f', 0));
       entry.append(tr("OG"));
-      value.append(QString("%1").arg(Brewtarget::displayAmount(rec->og(), PersistentSettings::Sections::tab_recipe, PropertyNames::Recipe::og, &Units::sp_grav, 3)));
+      value.append(QString("%1").arg(Measurement::displayAmount(Measurement::Amount{rec->og(), Measurement::Units::sp_grav},
+                                                                PersistentSettings::Sections::tab_recipe,
+                                                                PropertyNames::Recipe::og,
+                                                                3)));
       entry.append(tr("FG"));
-      value.append(QString("%1").arg(Brewtarget::displayAmount(rec->fg(), PersistentSettings::Sections::tab_recipe, PropertyNames::Recipe::fg, &Units::sp_grav, 3)));
+      value.append(QString("%1").arg(Measurement::displayAmount(Measurement::Amount{rec->fg(), Measurement::Units::sp_grav},
+                                                                PersistentSettings::Sections::tab_recipe,
+                                                                PropertyNames::Recipe::fg,
+                                                                3)));
       entry.append(tr("ABV"));
-      value.append(QString("%1%").arg(Brewtarget::displayAmount(rec->ABV_pct(), nullptr, 1)));
+      value.append(QString("%1%").arg(Measurement::displayQuantity(rec->ABV_pct(), 1)));
       entry.append(tr("Bitterness"));
-      value.append(QString("%1 %2 (%3)").arg(Brewtarget::displayAmount(rec->IBU(), nullptr, 1))
+      value.append(QString("%1 %2 (%3)").arg(Measurement::displayQuantity(rec->IBU(), 1))
                                  .arg(tr("IBU"))
-                                 .arg(Brewtarget::ibuFormulaName()));
+                                 .arg(IbuMethods::ibuFormulaName()));
       entry.append(tr("Color"));
-      value.append(QString("%1 (%2)").arg(Brewtarget::displayAmount(rec->color_srm(),PersistentSettings::Sections::tab_recipe, PropertyNames::Recipe::color_srm, &Units::srm, 1))
-                              .arg(Brewtarget::colorFormulaName()));
+      value.append(QString("%1 (%2)").arg(Measurement::displayAmount(Measurement::Amount{rec->color_srm(), Measurement::Units::srm},
+                                                                     PersistentSettings::Sections::tab_recipe,
+                                                                     PropertyNames::Recipe::color_srm,
+                                                                     1))
+                              .arg(ColorMethods::colorFormulaName()));
 
       padAllToMaxLength(&entry);
       padAllToMaxLength(&value);
@@ -432,17 +465,24 @@ public:
          ftable += QString("<tr><td>%1</td><td>%2</td><td>%3</td><td>%4</td><td>%5</td><td>%6%</td><td>%7</td></tr>")
                .arg( ferm->name())
                .arg( ferm->typeStringTr())
-               .arg( Brewtarget::displayAmount(ferm->amount_kg(), PersistentSettings::Sections::fermentableTable, PropertyNames::Fermentable::amount_kg, &Units::kilograms))
+               .arg( Measurement::displayAmount(Measurement::Amount{ferm->amount_kg(), Measurement::Units::kilograms},
+                                                PersistentSettings::Sections::fermentableTable,
+                                                PropertyNames::Fermentable::amount_kg))
                .arg( ferm->isMashed() ? tr("Yes") : tr("No") )
                .arg( ferm->addAfterBoil() ? tr("Yes") : tr("No"))
-               .arg( Brewtarget::displayAmount(ferm->yield_pct(), nullptr, 0) )
-               .arg( Brewtarget::displayAmount(ferm->color_srm(), PersistentSettings::Sections::fermentableTable, PropertyNames::Fermentable::color_srm, &Units::srm, 1));
+               .arg( Measurement::displayQuantity(ferm->yield_pct(), 0) )
+               .arg( Measurement::displayAmount(Measurement::Amount{ferm->color_srm(), Measurement::Units::srm},
+                                                PersistentSettings::Sections::fermentableTable,
+                                                PropertyNames::Fermentable::color_srm,
+                                                1));
       }
       // One row for the total grain (QTextBrowser does not know the caption tag)
       ftable += QString("<tr><td><b>%1</b></td><td>%2</td><td>%3</td><td>%4</td><td>%5</td><td>%6</td><td>%7</td></tr>")
                .arg(tr("Total"))
                .arg("&mdash;" )
-               .arg(Brewtarget::displayAmount(rec->grains_kg(), PersistentSettings::Sections::fermentableTable, PropertyNames::Fermentable::amount_kg, &Units::kilograms))
+               .arg(Measurement::displayAmount(Measurement::Amount{rec->grains_kg(), Measurement::Units::kilograms},
+                                               PersistentSettings::Sections::fermentableTable,
+                                               PropertyNames::Fermentable::amount_kg))
                .arg("&mdash;")
                .arg("&mdash;")
                .arg("&mdash;")
@@ -474,11 +514,16 @@ public:
             Fermentable* ferm =  ferms[ii];
             names.append( ferm->name() );
             types.append( ferm->typeStringTr() );
-            amounts.append(Brewtarget::displayAmount(ferm->amount_kg(), PersistentSettings::Sections::fermentableTable, PropertyNames::Fermentable::amount_kg, &Units::kilograms));
+            amounts.append(Measurement::displayAmount(Measurement::Amount{ferm->amount_kg(), Measurement::Units::kilograms},
+                                                      PersistentSettings::Sections::fermentableTable,
+                                                      PropertyNames::Fermentable::amount_kg));
             masheds.append( ferm->isMashed() ? tr("Yes") : tr("No"));
             lates.append( ferm->addAfterBoil() ? tr("Yes") : tr("No"));
-            yields.append( QString("%1%").arg(Brewtarget::displayAmount(ferm->yield_pct(), nullptr, 0) ) );
-            colors.append( QString("%1").arg(Brewtarget::displayAmount(ferm->color_srm(), PersistentSettings::Sections::fermentableTable, PropertyNames::Fermentable::color_srm, &Units::srm, 1)));
+            yields.append( QString("%1%").arg(Measurement::displayQuantity(ferm->yield_pct(), 0) ) );
+            colors.append( QString("%1").arg(Measurement::displayAmount(Measurement::Amount{ferm->color_srm(), Measurement::Units::srm},
+                                                                        PersistentSettings::Sections::fermentableTable,
+                                                                        PropertyNames::Fermentable::color_srm,
+                                                                        1)));
          }
 
          padAllToMaxLength(&names);
@@ -493,7 +538,11 @@ public:
             ret += names.at(ii) + types.at(ii) + amounts.at(ii) + masheds.at(ii) + lates.at(ii) + yields.at(ii) + colors.at(ii) + "\n";
          }
 
-         ret += QString("%1 %2\n").arg(tr("Total grain:")).arg(Brewtarget::displayAmount(rec->grains_kg(), PersistentSettings::Sections::fermentableTable, PropertyNames::Fermentable::amount_kg, &Units::kilograms));
+         ret += QString("%1 %2\n").arg(tr("Total grain:")).arg(
+            Measurement::displayAmount(Measurement::Amount{rec->grains_kg(), Measurement::Units::kilograms},
+                                       PersistentSettings::Sections::fermentableTable,
+                                       PropertyNames::Fermentable::amount_kg)
+         );
       }
       return ret;
    }
@@ -534,12 +583,16 @@ public:
          Hop *hop = hops[ii];
          hTable += QString("<tr><td>%1</td><td>%2%</td><td>%3</td><td>%4</td><td>%5</td><td>%6</td><td>%7</td></tr>")
                .arg( hop->name())
-               .arg( Brewtarget::displayAmount(hop->alpha_pct(),nullptr,1) )
-               .arg( Brewtarget::displayAmount(hop->amount_kg(), PersistentSettings::Sections::hopTable, PropertyNames::Hop::amount_kg, &Units::kilograms))
+               .arg( Measurement::displayQuantity(hop->alpha_pct(), 1) )
+               .arg( Measurement::displayAmount(Measurement::Amount{hop->amount_kg(), Measurement::Units::kilograms},
+                                                PersistentSettings::Sections::hopTable,
+                                                PropertyNames::Hop::amount_kg))
                .arg( hop->useStringTr())
-               .arg( Brewtarget::displayAmount(hop->time_min(), PersistentSettings::Sections::hopTable, PropertyNames::Hop::time_min, &Units::minutes))
+               .arg( Measurement::displayAmount(Measurement::Amount{hop->time_min(), Measurement::Units::minutes},
+                                                PersistentSettings::Sections::hopTable,
+                                                PropertyNames::Hop::time_min))
                .arg( hop->formStringTr())
-               .arg( Brewtarget::displayAmount(rec->ibuFromHop(hop), nullptr, 1) );
+               .arg( Measurement::displayQuantity(rec->ibuFromHop(hop), 1) );
       }
       hTable += "</table>";
       return hTable;
@@ -568,12 +621,16 @@ public:
             Hop* hop = hops[ii];
 
             names.append(hop->name());
-            alphas.append(QString("%1%").arg(Brewtarget::displayAmount(hop->alpha_pct(), nullptr, 1)));
-            amounts.append(Brewtarget::displayAmount(hop->amount_kg(), PersistentSettings::Sections::hopTable, PropertyNames::Hop::amount_kg, &Units::kilograms));
+            alphas.append(QString("%1%").arg(Measurement::displayQuantity(hop->alpha_pct(), 1)));
+            amounts.append(Measurement::displayAmount(Measurement::Amount{hop->amount_kg(), Measurement::Units::kilograms},
+                                                      PersistentSettings::Sections::hopTable,
+                                                      PropertyNames::Hop::amount_kg));
             uses.append(hop->useStringTr());
-            times.append(Brewtarget::displayAmount(hop->time_min(), PersistentSettings::Sections::hopTable, PropertyNames::Hop::time_min, &Units::minutes));
+            times.append(Measurement::displayAmount(Measurement::Amount{hop->time_min(), Measurement::Units::minutes},
+                                                    PersistentSettings::Sections::hopTable,
+                                                    PropertyNames::Hop::time_min));
             forms.append(hop->formStringTr());
-            ibus.append(QString("%1").arg( Brewtarget::displayAmount(rec->ibuFromHop(hop), nullptr, 1)));
+            ibus.append(QString("%1").arg( Measurement::displayQuantity(rec->ibuFromHop(hop), 1)));
          }
 
          padAllToMaxLength(&names);
@@ -619,14 +676,21 @@ public:
             .arg(tr("Time"));
       for (int ii = 0; ii < size; ++ii) {
          Misc *misc = miscs[ii];
-         Unit const * kindOf = misc->amountIsWeight() ? &Units::kilograms : &Units::liters;
 
          mtable += QString("<tr><td>%1</td><td>%2</td><td>%3</td><td>%4</td><td>%5</td></tr>")
                .arg( misc->name())
                .arg( misc->typeStringTr())
                .arg( misc->useStringTr())
-               .arg( Brewtarget::displayAmount(misc->amount(), PersistentSettings::Sections::miscTableModel, PropertyNames::Misc::amount, kindOf, 3))
-               .arg( Brewtarget::displayAmount(misc->time(), PersistentSettings::Sections::miscTableModel, PropertyNames::Misc::time, &Units::minutes));
+               .arg( Measurement::displayAmount(Measurement::Amount{
+                                                   misc->amount(),
+                                                   misc->amountIsWeight() ? Measurement::Units::kilograms : Measurement::Units::liters
+                                                },
+                                                PersistentSettings::Sections::miscTableModel,
+                                                PropertyNames::Misc::amount,
+                                                3))
+               .arg( Measurement::displayAmount(Measurement::Amount{misc->time(), Measurement::Units::minutes},
+                                                PersistentSettings::Sections::miscTableModel,
+                                                PropertyNames::Misc::time));
       }
       mtable += "</table>";
       return mtable;
@@ -652,12 +716,21 @@ public:
 
          for (int ii = 0; ii < size; ++ii) {
             Misc* misc = miscs[ii];
-            Unit const * kindOf = misc->amountIsWeight() ? &Units::kilograms : &Units::liters;
             names.append(misc->name());
             types.append(misc->typeStringTr());
             uses.append(misc->useStringTr());
-            amounts.append(Brewtarget::displayAmount(misc->amount(), PersistentSettings::Sections::miscTableModel, PropertyNames::Misc::amount, kindOf, 3));
-            times.append(Brewtarget::displayAmount(misc->time(), PersistentSettings::Sections::miscTableModel, PropertyNames::Misc::time, &Units::minutes));
+            amounts.append(
+               Measurement::displayAmount(Measurement::Amount{
+                                             misc->amount(),
+                                             misc->amountIsWeight() ? Measurement::Units::kilograms : Measurement::Units::liters
+                                          },
+                                          PersistentSettings::Sections::miscTableModel,
+                                          PropertyNames::Misc::amount,
+                                          3)
+            );
+            times.append(Measurement::displayAmount(Measurement::Amount{misc->time(),  Measurement::Units::minutes},
+                                                    PersistentSettings::Sections::miscTableModel,
+                                                    PropertyNames::Misc::time));
          }
 
          padAllToMaxLength(&names);
@@ -681,7 +754,7 @@ public:
       QList<Yeast*> yeasts = this->rec->yeasts();
       int size = yeasts.size();
 
-      if( size < 1 ) {
+      if (size < 1) {
          return "";
       }
 
@@ -699,15 +772,20 @@ public:
             .arg(tr("Form"))
             .arg(tr("Amount"))
             .arg(tr("Stage"));
-      for(int ii = 0; ii < size; ++ii) {
+      for (int ii = 0; ii < size; ++ii) {
          Yeast* y = yeasts[ii];
-         Unit const * kindOf = y->amountIsWeight() ? &Units::kilograms : &Units::liters;
 
          ytable += QString("<tr><td>%1</td><td>%2</td><td>%3</td><td>%4</td><td>%5</td></tr>")
                .arg( y->name())
                .arg( y->typeStringTr())
                .arg( y->formStringTr())
-               .arg( Brewtarget::displayAmount( y->amount(), PersistentSettings::Sections::yeastTableModel, PropertyNames::Yeast::amount, kindOf, 2) )
+               .arg( Measurement::displayAmount(Measurement::Amount{
+                                                   y->amount(),
+                                                   y->amountIsWeight() ? Measurement::Units::kilograms : Measurement::Units::liters
+                                                },
+                                                PersistentSettings::Sections::yeastTableModel,
+                                                PropertyNames::Yeast::amount,
+                                                2) )
                .arg( y->addToSecondary() ? tr("Secondary") : tr("Primary"));
       }
       ytable += "</table>";
@@ -733,11 +811,16 @@ public:
 
          for (int ii = 0; ii < size; ++ii) {
             Yeast* y = yeasts[ii];
-            Unit const * kindOf = y->amountIsWeight() ? &Units::kilograms : &Units::liters;
             names.append(y->name());
             types.append(y->typeStringTr());
             forms.append(y->formStringTr());
-            amounts.append(Brewtarget::displayAmount( y->amount(), PersistentSettings::Sections::yeastTableModel, PropertyNames::Yeast::amount, kindOf, 2));
+            amounts.append(Measurement::displayAmount(Measurement::Amount{
+                                                         y->amount(),
+                                                         y->amountIsWeight() ? Measurement::Units::kilograms : Measurement::Units::liters
+                                                      },
+                                                      PersistentSettings::Sections::yeastTableModel,
+                                                      PropertyNames::Yeast::amount,
+                                                      2));
             stages.append(y->addToSecondary() ? tr("Secondary") : tr("Primary"));
          }
 
@@ -794,17 +877,28 @@ public:
                .arg(ms->typeStringTr());
 
          if (ms->isInfusion()) {
-            tmp = tmp.arg(Brewtarget::displayAmount(ms->infuseAmount_l(), PersistentSettings::Sections::mashStepTableModel, PropertyNames::MashStep::infuseAmount_l, &Units::liters))
-                     .arg(Brewtarget::displayAmount(ms->infuseTemp_c(),   PersistentSettings::Sections::mashStepTableModel, PropertyNames::MashStep::infuseTemp_c, &Units::celsius));
+            tmp = tmp.arg(Measurement::displayAmount(Measurement::Amount{ms->infuseAmount_l(), Measurement::Units::liters},
+                                                     PersistentSettings::Sections::mashStepTableModel,
+                                                     PropertyNames::MashStep::infuseAmount_l))
+                     .arg(Measurement::displayAmount(Measurement::Amount{ms->infuseTemp_c(), Measurement::Units::celsius},
+                                                     PersistentSettings::Sections::mashStepTableModel,
+                                                     PropertyNames::MashStep::infuseTemp_c));
          } else if (ms->isDecoction()) {
-            tmp = tmp.arg( Brewtarget::displayAmount( ms->decoctionAmount_l(), PersistentSettings::Sections::mashStepTableModel, PropertyNames::MashStep::decoctionAmount_l, &Units::liters ) )
+            tmp = tmp.arg( Measurement::displayAmount(Measurement::Amount{ms->decoctionAmount_l(), Measurement::Units::liters},
+                                                      PersistentSettings::Sections::mashStepTableModel,
+                                                      PropertyNames::MashStep::decoctionAmount_l))
                   .arg("---");
          } else {
             tmp = tmp.arg( "---" ).arg("---");
          }
 
-         tmp = tmp.arg( Brewtarget::displayAmount(ms->stepTemp_c(), PersistentSettings::Sections::mashStepTableModel, PropertyNames::MashStep::stepTemp_c, &Units::celsius) );
-         tmp = tmp.arg( Brewtarget::displayAmount(ms->stepTime_min(), PersistentSettings::Sections::mashStepTableModel, PropertyNames::Misc::time, &Units::minutes, 0) );
+         tmp = tmp.arg( Measurement::displayAmount(Measurement::Amount{ms->stepTemp_c(), Measurement::Units::celsius},
+                                                   PersistentSettings::Sections::mashStepTableModel,
+                                                   PropertyNames::MashStep::stepTemp_c) );
+         tmp = tmp.arg( Measurement::displayAmount(Measurement::Amount{ms->stepTime_min(), Measurement::Units::minutes},
+                                                   PersistentSettings::Sections::mashStepTableModel,
+                                                   PropertyNames::Misc::time,
+                                                   0) );
 
          mtable += tmp + "</tr>";
       }
@@ -844,17 +938,28 @@ public:
             names.append(s->name());
             types.append(s->typeStringTr());
             if ( s->isInfusion() ) {
-               amounts.append(Brewtarget::displayAmount(s->infuseAmount_l(), PersistentSettings::Sections::mashStepTableModel, PropertyNames::MashStep::infuseAmount_l, &Units::liters));
-               temps.append(Brewtarget::displayAmount(s->infuseTemp_c(),   PersistentSettings::Sections::mashStepTableModel, PropertyNames::MashStep::infuseTemp_c, &Units::celsius));
+               amounts.append(Measurement::displayAmount(Measurement::Amount{s->infuseAmount_l(), Measurement::Units::liters},
+                                                         PersistentSettings::Sections::mashStepTableModel,
+                                                         PropertyNames::MashStep::infuseAmount_l));
+               temps.append(Measurement::displayAmount(Measurement::Amount{s->infuseTemp_c(), Measurement::Units::celsius},
+                                                       PersistentSettings::Sections::mashStepTableModel,
+                                                       PropertyNames::MashStep::infuseTemp_c));
             } else if( s->isDecoction() ) {
-               amounts.append(Brewtarget::displayAmount(s->decoctionAmount_l(), PersistentSettings::Sections::mashStepTableModel, PropertyNames::MashStep::decoctionAmount_l, &Units::liters));
+               amounts.append(Measurement::displayAmount(Measurement::Amount{s->decoctionAmount_l(), Measurement::Units::liters},
+                                                         PersistentSettings::Sections::mashStepTableModel,
+                                                         PropertyNames::MashStep::decoctionAmount_l));
                temps.append("---");
             } else {
                amounts.append( "---" );
                temps.append("---");
             }
-            targets.append(Brewtarget::displayAmount(s->stepTemp_c(), PersistentSettings::Sections::mashStepTableModel, PropertyNames::MashStep::stepTemp_c, &Units::celsius));
-            times.append(Brewtarget::displayAmount(s->stepTime_min(), PersistentSettings::Sections::mashStepTableModel, PropertyNames::Misc::time, &Units::minutes, 0));
+            targets.append(Measurement::displayAmount(Measurement::Amount{s->stepTemp_c(), Measurement::Units::celsius},
+                                                      PersistentSettings::Sections::mashStepTableModel,
+                                                      PropertyNames::MashStep::stepTemp_c));
+            times.append(Measurement::displayAmount(Measurement::Amount{s->stepTime_min(), Measurement::Units::minutes},
+                                                    PersistentSettings::Sections::mashStepTableModel,
+                                                    PropertyNames::Misc::time,
+                                                    0));
          }
 
          padAllToMaxLength(&names);
@@ -970,21 +1075,33 @@ public:
          bnTable += QString("<caption>%1</caption>").arg(tr("Preboil"));
          bnTable += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</td></tr>")
                   .arg(tr("SG"))
-                  .arg(Brewtarget::displayAmount(note->sg(), PersistentSettings::Sections::page_preboil, PropertyNames::BrewNote::sg, &Units::sp_grav, 3))
+                  .arg(Measurement::displayAmount(Measurement::Amount{note->sg(), Measurement::Units::sp_grav},
+                                                  PersistentSettings::Sections::page_preboil,
+                                                  PropertyNames::BrewNote::sg,
+                                                  3))
                   .arg(tr("Volume into BK"))
-                  .arg(Brewtarget::displayAmount(note->volumeIntoBK_l(), PersistentSettings::Sections::page_preboil, PropertyNames::BrewNote::volumeIntoBK_l, &Units::liters));
+                  .arg(Measurement::displayAmount(Measurement::Amount{note->volumeIntoBK_l(), Measurement::Units::liters},
+                                                  PersistentSettings::Sections::page_preboil,
+                                                  PropertyNames::BrewNote::volumeIntoBK_l));
 
          bnTable += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</td></tr>")
                   .arg(tr("Strike Temp"))
-                  .arg(Brewtarget::displayAmount(note->strikeTemp_c(), PersistentSettings::Sections::page_preboil, PropertyNames::BrewNote::strikeTemp_c, &Units::celsius))
+                  .arg(Measurement::displayAmount(Measurement::Amount{note->strikeTemp_c(), Measurement::Units::celsius},
+                                                  PersistentSettings::Sections::page_preboil,
+                                                  PropertyNames::BrewNote::strikeTemp_c))
                   .arg(tr("Final Temp"))
-                  .arg(Brewtarget::displayAmount(note->mashFinTemp_c(), PersistentSettings::Sections::page_preboil, PropertyNames::BrewNote::mashFinTemp_c, &Units::celsius));
+                  .arg(Measurement::displayAmount(Measurement::Amount{note->mashFinTemp_c(), Measurement::Units::celsius},
+                                                  PersistentSettings::Sections::page_preboil,
+                                                  PropertyNames::BrewNote::mashFinTemp_c));
 
          bnTable += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2%</td><td class=\"right\">%3</td><td class=\"value\">%4</td></tr>")
                   .arg(tr("Eff into BK"))
-                  .arg(Brewtarget::displayAmount(note->calculateEffIntoBK_pct(), nullptr, 2))
+                  .arg(Measurement::displayQuantity(note->calculateEffIntoBK_pct(), 2))
                   .arg(tr("Projected OG"))
-                  .arg(Brewtarget::displayAmount(note->calculateOg(), PersistentSettings::Sections::page_preboil, PropertyNames::BrewNote::projOg, &Units::sp_grav, 3));
+                  .arg(Measurement::displayAmount(Measurement::Amount{note->calculateOg(), Measurement::Units::sp_grav},
+                                                  PersistentSettings::Sections::page_preboil,
+                                                  PropertyNames::BrewNote::projOg,
+                                                  3));
          bnTable += "</table>";
 
          // POSTBOIL
@@ -992,17 +1109,24 @@ public:
          bnTable += QString("<caption>%1</caption>").arg(tr("Postboil"));
          bnTable += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</td></tr>")
                   .arg(tr("OG"))
-                  .arg(Brewtarget::displayAmount(note->og(),PersistentSettings::Sections::page_postboil, PropertyNames::BrewNote::og, &Units::sp_grav, 3))
+                  .arg(Measurement::displayAmount(Measurement::Amount{note->og(), Measurement::Units::sp_grav},
+                                                  PersistentSettings::Sections::page_postboil,
+                                                  PropertyNames::BrewNote::og,
+                                                  3))
                   .arg(tr("Postboil Volume"))
-                  .arg(Brewtarget::displayAmount(note->postBoilVolume_l(), PersistentSettings::Sections::page_postboil, PropertyNames::BrewNote::postBoilVolume_l, &Units::liters));
+                  .arg(Measurement::displayAmount(Measurement::Amount{note->postBoilVolume_l(), Measurement::Units::liters},
+                                                  PersistentSettings::Sections::page_postboil,
+                                                  PropertyNames::BrewNote::postBoilVolume_l));
          bnTable += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</td></tr>")
                   .arg(tr("Volume Into Fermenter"))
-                  .arg(Brewtarget::displayAmount(note->volumeIntoFerm_l(), PersistentSettings::Sections::page_postboil, PropertyNames::BrewNote::volumeIntoFerm_l, &Units::liters))
+                  .arg(Measurement::displayAmount(Measurement::Amount{note->volumeIntoFerm_l(), Measurement::Units::liters},
+                                                  PersistentSettings::Sections::page_postboil,
+                                                  PropertyNames::BrewNote::volumeIntoFerm_l))
                   .arg(tr("Brewhouse Eff"))
-                  .arg(Brewtarget::displayAmount(note->calculateBrewHouseEff_pct(), nullptr, 2));
+                  .arg(Measurement::displayQuantity(note->calculateBrewHouseEff_pct(), 2));
          bnTable += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2%</td></tr>")
                   .arg(tr("Projected ABV"))
-                  .arg(Brewtarget::displayAmount(note->calculateABV_pct(), nullptr, 2));
+                  .arg(Measurement::displayQuantity(note->calculateABV_pct(), 2));
          bnTable += "</table>";
 
 
@@ -1011,15 +1135,20 @@ public:
          bnTable += QString("<caption>%1</caption>").arg(tr("Postferment"));
          bnTable += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</td></tr>")
                   .arg(tr("FG"))
-                  .arg(Brewtarget::displayAmount(note->fg(),PersistentSettings::Sections::page_postferment, PropertyNames::BrewNote::fg,&Units::sp_grav, 3))
+                  .arg(Measurement::displayAmount(Measurement::Amount{note->fg(), Measurement::Units::sp_grav},
+                                                  PersistentSettings::Sections::page_postferment,
+                                                  PropertyNames::BrewNote::fg,
+                                                  3))
                   .arg(tr("Volume"))
-                  .arg(Brewtarget::displayAmount(note->finalVolume_l(), PersistentSettings::Sections::page_postferment, PropertyNames::BrewNote::finalVolume_l, &Units::liters));
+                  .arg(Measurement::displayAmount(Measurement::Amount{note->finalVolume_l(), Measurement::Units::liters},
+                                                  PersistentSettings::Sections::page_postferment,
+                                                  PropertyNames::BrewNote::finalVolume_l));
 
          bnTable += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</td></tr>")
                   .arg(tr("Date"))
                   .arg(note->fermentDate_short())
                   .arg(tr("ABV"))
-                  .arg(Brewtarget::displayAmount(note->calculateActualABV_pct(), nullptr, 2));
+                  .arg(Measurement::displayQuantity(note->calculateActualABV_pct(), 2));
          bnTable += "</table>";
 
       }
@@ -1187,20 +1316,20 @@ QString RecipeFormatter::getToolTip(Recipe* rec) {
    // Third row: OG and FG
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
            .arg(tr("OG"))
-           .arg(Brewtarget::displayAmount(rec->og(), &Units::sp_grav, 3));
+           .arg(Measurement::displayAmount(Measurement::Amount{rec->og(), Measurement::Units::sp_grav}, 3));
    body += QString("<td class=\"left\">%1</td><td class=\"value\">%2</td></tr>")
            .arg(tr("FG"))
-           .arg(Brewtarget::displayAmount(rec->fg(), &Units::sp_grav, 3));
+           .arg(Measurement::displayAmount(Measurement::Amount{rec->fg(), Measurement::Units::sp_grav}, 3));
 
    // Fourth row: Color and Bitterness.
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2 (%3)</td>")
            .arg(tr("Color"))
-           .arg(Brewtarget::displayAmount(rec->color_srm(),&Units::srm, 1))
-           .arg(Brewtarget::colorFormulaName());
+           .arg(Measurement::displayAmount(Measurement::Amount{rec->color_srm(), Measurement::Units::srm}, 1))
+           .arg(ColorMethods::colorFormulaName());
    body += QString("<td class=\"left\">%1</td><td class=\"value\">%2 (%3)</td></tr>")
            .arg(tr("IBU"))
-           .arg(Brewtarget::displayAmount(rec->IBU(), nullptr, 1))
-           .arg(Brewtarget::ibuFormulaName() );
+           .arg(Measurement::displayQuantity(rec->IBU(), 1))
+           .arg(IbuMethods::ibuFormulaName() );
 
    body += "</table></body></html>";
 
@@ -1266,10 +1395,10 @@ QString RecipeFormatter::getToolTip(Equipment* kit) {
    // First row -- batchsize and boil time
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
            .arg(tr("Preboil"))
-           .arg(Brewtarget::displayAmount(kit->boilSize_l(), &Units::liters) );
+           .arg(Measurement::displayAmount(Measurement::Amount{kit->boilSize_l(), Measurement::Units::liters}) );
    body += QString("<td class=\"left\">%1</td><td class=\"value\">%2</td></tr>")
            .arg(tr("BoilTime"))
-           .arg(Brewtarget::displayAmount(kit->boilTime_min(), &Units::minutes) );
+           .arg(Measurement::displayAmount(Measurement::Amount{kit->boilTime_min(), Measurement::Units::minutes}) );
 
    body += "</table></body></html>";
 
@@ -1300,14 +1429,14 @@ QString RecipeFormatter::getToolTip(Fermentable* ferm) {
            .arg(ferm->typeStringTr());
    body += QString("<td class=\"left\">%1</td><td class=\"value\">%2</td></tr>")
            .arg(tr("Color"))
-           .arg(Brewtarget::displayAmount(ferm->color_srm(), &Units::srm, 1));
+           .arg(Measurement::displayAmount(Measurement::Amount{ferm->color_srm(), Measurement::Units::srm}, 1));
    // Second row -- isMashed and yield?
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
            .arg(tr("Mashed"))
            .arg( ferm->isMashed() ? tr("Yes") : tr("No") );
    body += QString("<td class=\"left\">%1</td><td class=\"value\">%2</td></tr>")
            .arg(tr("Yield"))
-           .arg(Brewtarget::displayAmount(ferm->yield_pct(), nullptr));
+           .arg(Measurement::displayQuantity(ferm->yield_pct(), 3));
 
    body += "</table></body></html>";
 
@@ -1334,10 +1463,10 @@ QString RecipeFormatter::getToolTip(Hop* hop) {
    // First row -- alpha and beta
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
            .arg(tr("Alpha"))
-           .arg(Brewtarget::displayAmount(hop->alpha_pct(), nullptr));
+           .arg(Measurement::displayQuantity(hop->alpha_pct(), 3));
    body += QString("<td class=\"left\">%1</td><td class=\"value\">%2</td></tr>")
            .arg(tr("Beta"))
-           .arg(Brewtarget::displayAmount(hop->beta_pct(), nullptr));
+           .arg(Measurement::displayQuantity(hop->beta_pct(), 3));
 
    // Second row -- form and use
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
@@ -1412,7 +1541,7 @@ QString RecipeFormatter::getToolTip(Yeast* yeast) {
            .arg(yeast->laboratory());
    body += QString("<td class=\"left\">%1</td><td class=\"value\">%2</td></tr>")
            .arg(tr("Attenuation"))
-           .arg(Brewtarget::displayAmount(yeast->attenuation_pct(), nullptr));
+           .arg(Measurement::displayQuantity(yeast->attenuation_pct(), 3));
 
    // third row -- atten and floc
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")

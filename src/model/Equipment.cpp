@@ -20,7 +20,6 @@
  */
 #include "model/Equipment.h"
 
-#include "brewtarget.h"
 #include "database/ObjectStoreWrapper.h"
 #include "HeatCalculations.h"
 #include "model/NamedParameterBundle.h"
@@ -53,25 +52,25 @@ ObjectStore & Equipment::getObjectStoreTypedInstance() const {
 
 
 //=============================CONSTRUCTORS=====================================
-Equipment::Equipment(QString t_name, bool cacheOnly) :
-   NamedEntity(-1, cacheOnly, t_name, true),
-   m_boilSize_l(22.927),
-   m_batchSize_l(18.927),
-   m_tunVolume_l(0.0),
-   m_tunWeight_kg(0.0),
-   m_tunSpecificHeat_calGC(0.0),
-   m_topUpWater_l(0.0),
-   m_trubChillerLoss_l(1.0),
-   m_evapRate_pctHr(0.0),
-   m_evapRate_lHr(4.0),
-   m_boilTime_min(60.0),
-   m_calcBoilVolume(true),
-   m_lauterDeadspace_l(0.0),
-   m_topUpKettle_l(0.0),
-   m_hopUtilization_pct(100.0),
-   m_notes(QString()),
-   m_grainAbsorption_LKg(1.086),
-   m_boilingPoint_c(100.0) {
+Equipment::Equipment(QString t_name) :
+   NamedEntity            {t_name, true},
+   m_boilSize_l           {22.927},
+   m_batchSize_l          {18.927},
+   m_tunVolume_l          {0.0},
+   m_tunWeight_kg         {0.0},
+   m_tunSpecificHeat_calGC{0.0},
+   m_topUpWater_l         {0.0},
+   m_trubChillerLoss_l    {1.0},
+   m_evapRate_pctHr       {0.0},
+   m_evapRate_lHr         {4.0},
+   m_boilTime_min         {60.0},
+   m_calcBoilVolume       {true},
+   m_lauterDeadspace_l    {0.0},
+   m_topUpKettle_l        {0.0},
+   m_hopUtilization_pct   {100.0},
+   m_notes                {""},
+   m_grainAbsorption_LKg  {1.086},
+   m_boilingPoint_c       {100.0} {
    return;
 }
 
@@ -129,15 +128,13 @@ Equipment::Equipment(Equipment const & other) :
 
 //============================"SET" METHODS=====================================
 
-// The logic through here is similar to what's in Hop. When either cacheOnly
-// is true or setEasy return true (we didn't clone), then update the cached
-// value. Unfortunately, the additional signals don't allow quite the
+// The logic through here is similar to what's in Hop. Unfortunately, the additional signals don't allow quite the
 // compactness.
 void Equipment::setBoilSize_l( double var ) {
    this->setAndNotify(PropertyNames::Equipment::boilSize_l,
                       this->m_boilSize_l,
                       this->enforceMin(var, "boil size"));
-   if ( ! m_cacheOnly ) {
+   if (this->key() > 0) {
       // .:TBD:. Do we need a special-purpose signal here or can we not rely on the generic changed one from NamedEntity?
       emit changedBoilSize_l(var);
    }
@@ -147,7 +144,7 @@ void Equipment::setBatchSize_l( double var ) {
    this->setAndNotify(PropertyNames::Equipment::batchSize_l,
                       this->m_batchSize_l,
                       this->enforceMin(var, "batch size"));
-   if ( ! m_cacheOnly ) {
+   if (this->key() > 0) {
       doCalculations();
    }
 }
@@ -174,7 +171,7 @@ void Equipment::setTopUpWater_l( double var ) {
    this->setAndNotify(PropertyNames::Equipment::topUpWater_l,
                       this->m_topUpWater_l,
                       this->enforceMin(var, "top-up water"));
-   if ( ! m_cacheOnly ) {
+   if (this->key() > 0) {
       doCalculations();
    }
 }
@@ -183,7 +180,7 @@ void Equipment::setTrubChillerLoss_l( double var ) {
    this->setAndNotify(PropertyNames::Equipment::trubChillerLoss_l,
                       this->m_trubChillerLoss_l,
                       this->enforceMin(var, "trub chiller loss"));
-   if ( ! m_cacheOnly ) {
+   if (this->key() > 0) {
       doCalculations();
    }
 }
@@ -205,7 +202,7 @@ void Equipment::setEvapRate_lHr( double var ) {
    this->propagatePropertyChange(PropertyNames::Equipment::evapRate_lHr);
    this->propagatePropertyChange(PropertyNames::Equipment::evapRate_pctHr);
 
-   // Right now, I am claiming this needs to happen regardless m_cacheOnly.
+   // Right now, I am claiming this needs to happen regardless of whether we're yet stored in the database.
    // I could be wrong
    doCalculations();
 }
@@ -214,7 +211,7 @@ void Equipment::setBoilTime_min( double var ) {
    this->setAndNotify(PropertyNames::Equipment::boilTime_min,
                       this->m_boilTime_min,
                       this->enforceMin(var, "boil time"));
-   if ( ! m_cacheOnly ) {
+   if (this->key() > 0) {
       // .:TBD:. Do we need a special-purpose signal here or can we not rely on the generic changed one from NamedEntity?
       emit changedBoilTime_min(var);
    }

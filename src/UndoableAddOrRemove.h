@@ -142,7 +142,7 @@ private:
             this->whatToAddOrRemove->metaObject()->className() << "#" << this->whatToAddOrRemove->key();
 
          if (this->doCallback != nullptr) {
-            (Brewtarget::mainWindow()->*(this->doCallback))(*this->whatToAddOrRemove);
+            (MainWindow::instance().*(this->doCallback))(*this->whatToAddOrRemove);
          }
 
          // In this implementation "Do" and "Redo" are identical, but it's nonetheless useful for debugging purposes to
@@ -159,7 +159,7 @@ private:
             this->whatToAddOrRemove->key();
 
          if (this->undoCallback != nullptr) {
-            (Brewtarget::mainWindow()->*(this->undoCallback))(*this->whatToAddOrRemove);
+            (MainWindow::instance().*(this->undoCallback))(*this->whatToAddOrRemove);
          }
       }
 

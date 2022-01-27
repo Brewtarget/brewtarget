@@ -31,10 +31,10 @@
 #include "database/ObjectStoreWrapper.h"
 #include "HopEditor.h"
 #include "HopSortFilterProxyModel.h"
-#include "HopTableModel.h"
 #include "MainWindow.h"
 #include "model/Hop.h"
 #include "model/Recipe.h"
+#include "tableModels/HopTableModel.h"
 
 HopDialog::HopDialog(MainWindow* parent) :
    QDialog(parent),
@@ -178,7 +178,7 @@ void HopDialog::addHop(const QModelIndex& index)
          return;
    }
 
-   Brewtarget::mainWindow()->addHopToRecipe(hopTableModel->getHop(translated.row()));
+   MainWindow::instance().addHopToRecipe(hopTableModel->getHop(translated.row()));
 
    return;
 }
@@ -219,7 +219,8 @@ void HopDialog::newHop(QString folder)
    if( name.isEmpty() )
       return;
 
-   Hop* hop = new Hop(name,true);
+   // .:TODO:. Change to shared_ptr as potential memory leak
+   Hop* hop = new Hop(name);
    if ( ! folder.isEmpty() )
       hop->setFolder(folder);
 

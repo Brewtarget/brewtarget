@@ -18,6 +18,7 @@
  */
 #ifndef SCALE_RECIPE_TOOL_H
 #define SCALE_RECIPE_TOOL_H
+#pragma once
 
 #include <QDialog>
 #include <QWidget>

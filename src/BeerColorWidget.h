@@ -21,32 +21,29 @@
 #ifndef BEERCOLORWIDGET_H
 #define BEERCOLORWIDGET_H
 
-class BeerColorWidget;
-
-#include <QWidget>
 #include <QColor>
-#include <QPaintEvent>
 #include <QImage>
 #include <QMetaProperty>
+#include <QPaintEvent>
 #include <QVariant>
+#include <QWidget>
+
 #include "model/Recipe.h"
 
 /*!
  * \class BeerColorWidget
- * \author Philip G. Lee
  *
  * \brief Displays the approximate color of the beer on screen.
  */
-class BeerColorWidget : public QWidget
-{
+class BeerColorWidget : public QWidget {
    Q_OBJECT
 
 public:
-   BeerColorWidget(QWidget* parent=0);
+   BeerColorWidget(QWidget * parent = nullptr);
 
-   void setColor( QColor newColor );
+   void setColor(QColor newColor);
    //! Observe \b rec for changes in color, and automatically update.
-   void setRecipe( Recipe* rec );
+   void setRecipe(Recipe* rec);
 
 public slots:
    void parseChanges(QMetaProperty prop, QVariant val);
@@ -61,5 +58,4 @@ private:
    Recipe* recObs;
 };
 
-#endif   /* _BEERCOLORWIDGET_H */
-
+#endif

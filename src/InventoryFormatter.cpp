@@ -19,15 +19,19 @@
  */
 #include "InventoryFormatter.h"
 
-#include <QList>
-#include <QMap>
-#include <QStringList>
+#include <QDate>
+#include <QDialog>
 
 #include "brewtarget.h"
 #include "database/ObjectStoreWrapper.h"
 #include "Html.h"
+#include "Localization.h"
 #include "MainWindow.h"
+#include "measurement/Measurement.h"
 #include "model/Fermentable.h"
+#include "model/Hop.h"
+#include "model/Inventory.h"
+#include "model/Misc.h"
 #include "model/Yeast.h"
 #include "PersistentSettings.h"
 
@@ -42,7 +46,7 @@ namespace {
       return Html::createHeader(QObject::tr("Inventory"), ":css/inventory.css") +
             QString("<h1>%1 &mdash; %2</h1>")
                   .arg(QObject::tr("Inventory"))
-                  .arg(Brewtarget::displayDateUserFormated(QDate::currentDate()));
+                  .arg(Localization::displayDateUserFormated(QDate::currentDate()));
    }
 
    /**
@@ -71,12 +75,11 @@ namespace {
             result += QString("<tr>"
                               "<td>%1</td>"
                               "<td>%2</td>"
-                              "</tr>").arg(fermentable->name()).arg(
-                                 Brewtarget::displayAmount(fermentable->inventory(),
-                                 PersistentSettings::Sections::fermentableTable,
-                                 PropertyNames::NamedEntityWithInventory::inventory,
-                                 &Units::kilograms)
-                              );
+                              "</tr>")
+                           .arg(fermentable->name())
+                           .arg(Measurement::displayAmount(Measurement::Amount{fermentable->inventory(), Measurement::Units::kilograms},
+                                                           PersistentSettings::Sections::fermentableTable,
+                                                           PropertyNames::NamedEntityWithInventory::inventory));
          }
          result += "</table>";
       }
@@ -113,10 +116,9 @@ namespace {
                               "</tr>")
                            .arg(hop->name())
                            .arg(hop->alpha_pct())
-                           .arg(Brewtarget::displayAmount(hop->inventory(),
-                                                       PersistentSettings::Sections::hopTable,
-                                                       PropertyNames::NamedEntityWithInventory::inventory,
-                                                       &Units::kilograms));
+                           .arg(Measurement::displayAmount(Measurement::Amount{hop->inventory(), Measurement::Units::kilograms},
+                                                           PersistentSettings::Sections::hopTable,
+                                                           PropertyNames::NamedEntityWithInventory::inventory));
          }
          result += "</table>";
       }
@@ -144,12 +146,14 @@ namespace {
                         .arg(QObject::tr("Amount"));
 
          for (auto miscellaneous : inventory) {
-            const QString displayAmount =
-                  Brewtarget::displayAmount(miscellaneous->inventory(),
-                                         PersistentSettings::Sections::miscTable,
-                                         PropertyNames::NamedEntityWithInventory::inventory,
-                        miscellaneous->amountIsWeight() ? (Unit*)&Units::kilograms
-                                                      : (Unit*)&Units::liters);
+            QString const displayAmount = Measurement::displayAmount(
+               Measurement::Amount{
+                  miscellaneous->inventory(),
+                  miscellaneous->amountIsWeight() ? Measurement::Units::kilograms : Measurement::Units::liters
+               },
+               PersistentSettings::Sections::miscTable,
+               PropertyNames::NamedEntityWithInventory::inventory
+            );
             result += QString("<tr>"
                               "<td>%1</td>"
                               "<td>%2</td>"
@@ -181,12 +185,14 @@ namespace {
                         .arg(QObject::tr("Amount"));
 
          for (auto yeast : inventory) {
-            const QString displayAmount =
-                  Brewtarget::displayAmount(yeast->inventory(),
-                                         PersistentSettings::Sections::yeastTable,
-                                         PropertyNames::NamedEntityWithInventory::inventory,
-                        yeast->amountIsWeight() ? (Unit*)&Units::kilograms
-                                                : (Unit*)&Units::liters);
+            QString const displayAmount = Measurement::displayAmount(
+               Measurement::Amount{
+                  yeast->inventory(),
+                  yeast->amountIsWeight() ? Measurement::Units::kilograms : Measurement::Units::liters
+               },
+               PersistentSettings::Sections::yeastTable,
+               PropertyNames::NamedEntityWithInventory::inventory
+            );
 
             result += QString("<tr>"
                               "<td>%1</td>"
@@ -226,7 +232,7 @@ namespace {
       return Html::createFooter();
    }
 
-}
+   }
 
 
 InventoryFormatter::HtmlGenerationFlags InventoryFormatter::operator|(InventoryFormatter::HtmlGenerationFlags a,

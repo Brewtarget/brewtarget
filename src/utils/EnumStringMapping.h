@@ -33,6 +33,20 @@
 struct EnumAndItsString {
    QString string;
    int     native;
+
+   /**
+    * \brief Standard constructor, which we need to declare explicitly in order to have the templated version below
+    */
+   EnumAndItsString(QString string, int native);
+
+   /**
+    * \brief Convenience constructor for creating \c EnumAndItsString using strongly typed enums (ie those declared as
+    *        "enum class")
+    */
+   template<typename E>
+   EnumAndItsString(QString string, E native) : EnumAndItsString(string, static_cast<int>(native)) {
+      return;
+   }
 };
 
 /**
@@ -48,7 +62,27 @@ public:
    using QVector::QVector;
 
    std::optional<int>     stringToEnum(QString const & stringValue) const;
-   std::optional<QString> enumToString(int const       enumValue) const;
+   std::optional<QString> enumToString(int     const   enumValue) const;
+
+   /**
+    * \brief Convenience function for using \c enumToString with strongly typed enums (ie those declared as
+    *        "enum class")
+    */
+   template<typename E>
+   std::optional<QString> enumToString(E const enumValue) const {
+      return this->enumToString(static_cast<int>(enumValue));
+   }
+
+   /**
+    * \brief Convenience function for using \c stringToEnum with strongly typed enums (ie those declared as
+    *        "enum class")
+    */
+   template<typename E>
+   std::optional<E> stringToEnum(QString const & stringValue) const {
+      std::optional<int> result = this->stringToEnum(stringValue);
+      return result ? std::optional<E>{static_cast<E>(*result)} : std::optional<E>{std::nullopt};
+   }
+
 };
 
 #endif

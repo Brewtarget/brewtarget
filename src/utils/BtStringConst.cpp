@@ -25,6 +25,7 @@
 #include <QTextStream>
 
 BtStringConst const BtString::NULL_STR{static_cast<char const * const>(nullptr)};
+BtStringConst const BtString::EMPTY_STR{""};
 
 BtStringConst::BtStringConst(char const * const cString) : cString(cString) {
    return;

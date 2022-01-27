@@ -30,6 +30,8 @@
 #include <QVector>
 
 #include "utils/BtStringConst.h"
+#include "utils/EnumStringMapping.h"
+
 class Database;
 class NamedParameterBundle;
 
@@ -78,22 +80,6 @@ public:
       Date,
       Enum   // Stored as a string in the DB
    };
-
-   /**
-    * \brief Associates an enum value with a string representation in the DB.  This is more robust than just storing
-    *        the raw numerical value of the enum.
-    */
-   struct EnumAndItsDbString {
-      QString string;
-      int     native;
-   };
-
-   /**
-    * \brief We don't actually bother creating hashmaps or similar between enum values and string representations
-    *        because it's usually going to be a short list that we can search through pretty quickly (probably faster
-    *        than calculating the hash of a key!)
-    */
-   typedef QVector<EnumAndItsDbString> EnumStringMapping;
 
    //
    // It's a bit tedious having to create constructors for structs but we need them to allow BtStringConst members to be

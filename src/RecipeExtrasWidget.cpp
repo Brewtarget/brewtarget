@@ -19,20 +19,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "RecipeExtrasWidget.h"
 
 #include <QDate>
 #include <QWidget>
 #include <QDebug>
-#include "RecipeExtrasWidget.h"
-#include "Unit.h"
-#include "brewtarget.h"
-#include "model/Recipe.h"
+
 #include "BtLabel.h"
 #include "MainWindow.h"
+#include "measurement/Unit.h"
+#include "model/Recipe.h"
 
-RecipeExtrasWidget::RecipeExtrasWidget(QWidget* parent)
-   : QWidget(parent), recipe(0)
-{
+RecipeExtrasWidget::RecipeExtrasWidget(QWidget* parent) : QWidget(parent), recipe(nullptr) {
    setupUi(this);
 
    ratingChanged = false;
@@ -78,7 +76,7 @@ void RecipeExtrasWidget::updateBrewer()
    if( recipe == 0 )
       return;
 
-   Brewtarget::mainWindow()->doOrRedoUpdate(*recipe, PropertyNames::Recipe::brewer, lineEdit_brewer->text(), tr("Change Brewer"));
+   MainWindow::instance().doOrRedoUpdate(*recipe, PropertyNames::Recipe::brewer, lineEdit_brewer->text(), tr("Change Brewer"));
 }
 
 void RecipeExtrasWidget::updateBrewerAsst()
@@ -87,7 +85,7 @@ void RecipeExtrasWidget::updateBrewerAsst()
       return;
 
    if ( lineEdit_asstBrewer->isModified() ) {
-      Brewtarget::mainWindow()->doOrRedoUpdate(*recipe, PropertyNames::Recipe::asstBrewer, lineEdit_asstBrewer->text(), tr("Change Assistant Brewer"));
+      MainWindow::instance().doOrRedoUpdate(*recipe, PropertyNames::Recipe::asstBrewer, lineEdit_asstBrewer->text(), tr("Change Assistant Brewer"));
    }
    return;
 }
@@ -101,7 +99,7 @@ void RecipeExtrasWidget::updateTasteRating()
 
    if ( ratingChanged )
    {
-      Brewtarget::mainWindow()->doOrRedoUpdate(*recipe, PropertyNames::Recipe::tasteRating, spinBox_tasteRating->value(), tr("Change Taste Rating"));
+      MainWindow::instance().doOrRedoUpdate(*recipe, PropertyNames::Recipe::tasteRating, spinBox_tasteRating->value(), tr("Change Taste Rating"));
       ratingChanged = false;
    }
 }
@@ -111,7 +109,7 @@ void RecipeExtrasWidget::updatePrimaryAge()
    if( recipe == 0 )
       return;
 
-   Brewtarget::mainWindow()->doOrRedoUpdate(*recipe, PropertyNames::Recipe::primaryAge_days, lineEdit_primaryAge->toSI(), tr("Change Primary Age"));
+   MainWindow::instance().doOrRedoUpdate(*recipe, PropertyNames::Recipe::primaryAge_days, lineEdit_primaryAge->toSI().quantity, tr("Change Primary Age"));
 }
 
 void RecipeExtrasWidget::updatePrimaryTemp()
@@ -119,7 +117,7 @@ void RecipeExtrasWidget::updatePrimaryTemp()
    if( recipe == 0 )
       return;
 
-   Brewtarget::mainWindow()->doOrRedoUpdate(*recipe, PropertyNames::Recipe::primaryTemp_c, lineEdit_primaryTemp->toSI(), tr("Change Primary Temp"));
+   MainWindow::instance().doOrRedoUpdate(*recipe, PropertyNames::Recipe::primaryTemp_c, lineEdit_primaryTemp->toSI().quantity, tr("Change Primary Temp"));
 }
 
 void RecipeExtrasWidget::updateSecondaryAge()
@@ -127,7 +125,7 @@ void RecipeExtrasWidget::updateSecondaryAge()
    if( recipe == 0 )
       return;
 
-   Brewtarget::mainWindow()->doOrRedoUpdate(*recipe, PropertyNames::Recipe::secondaryAge_days, lineEdit_secAge->toSI(), tr("Change Secondary Age"));
+   MainWindow::instance().doOrRedoUpdate(*recipe, PropertyNames::Recipe::secondaryAge_days, lineEdit_secAge->toSI().quantity, tr("Change Secondary Age"));
 }
 
 void RecipeExtrasWidget::updateSecondaryTemp()
@@ -135,7 +133,7 @@ void RecipeExtrasWidget::updateSecondaryTemp()
    if( recipe == 0 )
       return;
 
-   Brewtarget::mainWindow()->doOrRedoUpdate(*recipe, PropertyNames::Recipe::secondaryTemp_c, lineEdit_secTemp->toSI(), tr("Change Secondary Temp"));
+   MainWindow::instance().doOrRedoUpdate(*recipe, PropertyNames::Recipe::secondaryTemp_c, lineEdit_secTemp->toSI().quantity, tr("Change Secondary Temp"));
 }
 
 void RecipeExtrasWidget::updateTertiaryAge()
@@ -143,7 +141,7 @@ void RecipeExtrasWidget::updateTertiaryAge()
    if( recipe == 0 )
       return;
 
-   Brewtarget::mainWindow()->doOrRedoUpdate(*recipe, PropertyNames::Recipe::tertiaryAge_days, lineEdit_tertAge->toSI(), tr("Change Tertiary Age"));
+   MainWindow::instance().doOrRedoUpdate(*recipe, PropertyNames::Recipe::tertiaryAge_days, lineEdit_tertAge->toSI().quantity, tr("Change Tertiary Age"));
 }
 
 void RecipeExtrasWidget::updateTertiaryTemp()
@@ -151,7 +149,7 @@ void RecipeExtrasWidget::updateTertiaryTemp()
    if( recipe == 0 )
       return;
 
-   Brewtarget::mainWindow()->doOrRedoUpdate(*recipe, PropertyNames::Recipe::tertiaryTemp_c, lineEdit_tertTemp->toSI(), tr("Change Tertiary Temp"));
+   MainWindow::instance().doOrRedoUpdate(*recipe, PropertyNames::Recipe::tertiaryTemp_c, lineEdit_tertTemp->toSI().quantity, tr("Change Tertiary Temp"));
 }
 
 void RecipeExtrasWidget::updateAge()
@@ -159,7 +157,7 @@ void RecipeExtrasWidget::updateAge()
    if( recipe == 0 )
       return;
 
-   Brewtarget::mainWindow()->doOrRedoUpdate(*recipe, PropertyNames::Recipe::age, lineEdit_age->toSI(), tr("Change Age"));
+   MainWindow::instance().doOrRedoUpdate(*recipe, PropertyNames::Recipe::age, lineEdit_age->toSI().quantity, tr("Change Age"));
 }
 
 void RecipeExtrasWidget::updateAgeTemp()
@@ -167,7 +165,7 @@ void RecipeExtrasWidget::updateAgeTemp()
    if( recipe == 0 )
       return;
 
-   Brewtarget::mainWindow()->doOrRedoUpdate(*recipe, PropertyNames::Recipe::ageTemp_c, lineEdit_ageTemp->toSI(), tr("Change Age Temp"));
+   MainWindow::instance().doOrRedoUpdate(*recipe, PropertyNames::Recipe::ageTemp_c, lineEdit_ageTemp->toSI().quantity, tr("Change Age Temp"));
 }
 
 void RecipeExtrasWidget::updateDate(QDate const & date) {
@@ -176,13 +174,13 @@ void RecipeExtrasWidget::updateDate(QDate const & date) {
    }
 
    if (date.isNull()) {
-      Brewtarget::mainWindow()->doOrRedoUpdate(*recipe, PropertyNames::Recipe::date, dateEdit_date->date(), tr("Change Date"));
+      MainWindow::instance().doOrRedoUpdate(*recipe, PropertyNames::Recipe::date, dateEdit_date->date(), tr("Change Date"));
    } else {
       // We have to be careful to avoid going round in circles here.  When we call
       // this->dateEdit_date->setDate(this->recipe->date()) to show the Recipe date in the UI, that will generate a
       // signal that ends up calling this function to say the date on the Recipe has changed, which it hasn't.
       if (date != this->recipe->date()) {
-         Brewtarget::mainWindow()->doOrRedoUpdate(*recipe, PropertyNames::Recipe::date, date, tr("Change Date"));
+         MainWindow::instance().doOrRedoUpdate(*recipe, PropertyNames::Recipe::date, date, tr("Change Date"));
       }
    }
    return;
@@ -193,7 +191,10 @@ void RecipeExtrasWidget::updateCarbonation()
    if( recipe == 0 )
       return;
 
-   Brewtarget::mainWindow()->doOrRedoUpdate(*recipe, PropertyNames::Recipe::carbonation_vols, lineEdit_carbVols->toSI(), tr("Change Carbonation"));
+   MainWindow::instance().doOrRedoUpdate(*recipe,
+                                         PropertyNames::Recipe::carbonation_vols,
+                                         lineEdit_carbVols->toSI().quantity,
+                                         tr("Change Carbonation"));
 }
 
 void RecipeExtrasWidget::updateTasteNotes()
@@ -201,7 +202,10 @@ void RecipeExtrasWidget::updateTasteNotes()
    if( recipe == 0 )
       return;
 
-   Brewtarget::mainWindow()->doOrRedoUpdate(*recipe, PropertyNames::Recipe::tasteNotes, btTextEdit_tasteNotes->toPlainText(), tr("Edit Taste Notes"));
+   MainWindow::instance().doOrRedoUpdate(*recipe,
+                                         PropertyNames::Recipe::tasteNotes,
+                                         btTextEdit_tasteNotes->toPlainText(),
+                                         tr("Edit Taste Notes"));
 }
 
 void RecipeExtrasWidget::updateNotes()
@@ -209,7 +213,7 @@ void RecipeExtrasWidget::updateNotes()
    if( recipe == 0 )
       return;
 
-   Brewtarget::mainWindow()->doOrRedoUpdate(*recipe,
+   MainWindow::instance().doOrRedoUpdate(*recipe,
                                          PropertyNames::Recipe::notes,
                                          btTextEdit_notes->toPlainText(),
                                          tr("Edit Notes"));

@@ -19,6 +19,7 @@
  */
 #ifndef CUSTOMCOMBOBOX_H
 #define CUSTOMCOMBOBOX_H
+#pragma once
 
 #include <QString>
 #include <QComboBox>

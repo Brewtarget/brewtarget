@@ -32,7 +32,6 @@ class QWidget;
 
 /*!
  * \class StyleButton
- * \author Mik Firestone (mikfire@gmail.com)
  *
  * \brief This is a view class that displays the name of a style
  */

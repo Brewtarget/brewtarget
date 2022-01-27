@@ -26,15 +26,12 @@
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QDialog>
-#include <QtWidgets/QDialogButtonBox>
-#include <QtWidgets/QHBoxLayout>
-#include <QtWidgets/QHeaderView>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
 #include "model/Recipe.h"
 #include "ui_ancestorDialog.h"
+
+class MainWindow;
 
 /*!
  * \class AncestorDialog

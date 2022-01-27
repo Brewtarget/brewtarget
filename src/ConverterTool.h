@@ -19,33 +19,32 @@
  */
 #ifndef CONVERTERTOOL_H
 #define CONVERTERTOOL_H
+#pragma once
 
 #include <QDialog>
-#include <QWidget>
-#include <QPushButton>
-#include <QLineEdit>
-#include <QLabel>
 #include <QEvent>
+#include <QLabel>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QWidget>
 
 /*!
  * \brief Dialog to convert units.
  */
-class ConverterTool : public QDialog
-{
+class ConverterTool : public QDialog {
    Q_OBJECT
 public:
-
-   ConverterTool(QWidget* parent=0);
+   ConverterTool(QWidget * parent = nullptr);
 
    //! \name Public UI Variables
    //! @{
-   QPushButton* pushButton_convert;
-   QLabel* inputLabel;
-   QLineEdit* inputLineEdit;
-   QLabel* outputLabel;
-   QLineEdit* outputLineEdit;
-   QLabel* outputUnitsLabel;
-   QLineEdit* outputUnitsLineEdit;
+   QPushButton * pushButton_convert;
+   QLabel *      inputLabel;
+   QLineEdit *   inputLineEdit;
+   QLabel *      outputLabel;
+   QLineEdit *   outputLineEdit;
+   QLabel *      outputUnitsLabel;
+   QLineEdit *   outputUnitsLineEdit;
    //! @}
 
 public slots:
@@ -53,12 +52,7 @@ public slots:
 
 protected:
 
-   virtual void changeEvent(QEvent* event)
-   {
-      if(event->type() == QEvent::LanguageChange)
-         retranslateUi();
-      QDialog::changeEvent(event);
-   }
+   virtual void changeEvent(QEvent* event);
 
 private:
 

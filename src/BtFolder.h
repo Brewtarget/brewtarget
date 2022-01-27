@@ -18,6 +18,7 @@
  */
 #ifndef BTFOLDER_H
 #define BTFOLDER_H
+#pragma once
 
 #include <QSharedPointer>
 #include <QList>

@@ -20,16 +20,18 @@
  */
 #ifndef STRIKEWATERDIALOG_H
 #define STRIKEWATERDIALOG_H
+#pragma once
 
 #include <QDialog>
 #include <QWidget>
 #include <QButtonGroup>
+
 #include "ui_strikeWaterDialog.h"
-#include "Unit.h"
+
+#include "measurement/Unit.h"
 
 /*!
  * \class StrikeWaterDialog
- * \author Maxime Lavigne
  *
  * \brief Dialog to calculate the amount and temperature of the strike water.
  */

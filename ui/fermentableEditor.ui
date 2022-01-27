@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>543</width>
-    <height>316</height>
+    <width>661</width>
+    <height>348</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -343,44 +343,6 @@
          </property>
          <property name="editField" stdset="0">
           <string notr="true">yield_pct</string>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="3">
-        <widget class="BtMassLabel" name="label_amount">
-         <property name="contextMenuPolicy">
-          <enum>Qt::CustomContextMenu</enum>
-         </property>
-         <property name="toolTip">
-          <string>Required</string>
-         </property>
-         <property name="text">
-          <string>Default Amount</string>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit_amount</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="4">
-        <widget class="BtMassEdit" name="lineEdit_amount">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>100</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="toolTip">
-          <string>Amount</string>
-         </property>
-         <property name="editField" stdset="0">
-          <string notr="true">amount_kg</string>
          </property>
         </widget>
        </item>
@@ -777,7 +739,7 @@
    <extends>QLabel</extends>
    <header>BtLabel.h</header>
    <slots>
-    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+    <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    </slots>
   </customwidget>
   <customwidget>
@@ -785,7 +747,7 @@
    <extends>QLineEdit</extends>
    <header>BtLineEdit.h</header>
    <slots>
-    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+    <slot>lineChanged(PreviousScaleInfo)</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -795,7 +757,7 @@
    <slots>
     <signal>textModified()</signal>
     <slot>lineChanged()</slot>
-    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+    <slot>lineChanged(PreviousScaleInfo)</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -803,7 +765,7 @@
    <extends>QLabel</extends>
    <header>BtLabel.h</header>
    <slots>
-    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+    <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
     <slot>popContextMenu(QPoint)</slot>
    </slots>
   </customwidget>
@@ -812,7 +774,7 @@
    <extends>QLineEdit</extends>
    <header>BtLineEdit.h</header>
    <slots>
-    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+    <slot>lineChanged(PreviousScaleInfo)</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -820,7 +782,7 @@
    <extends>QLabel</extends>
    <header>BtLabel.h</header>
    <slots>
-    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+    <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    </slots>
   </customwidget>
  </customwidgets>
@@ -834,7 +796,6 @@
   <tabstop>checkBox_addAfterBoil</tabstop>
   <tabstop>checkBox_recommendMash</tabstop>
   <tabstop>checkBox_isMashed</tabstop>
-  <tabstop>lineEdit_amount</tabstop>
   <tabstop>lineEdit_origin</tabstop>
   <tabstop>lineEdit_supplier</tabstop>
   <tabstop>lineEdit_moisture</tabstop>
@@ -853,26 +814,10 @@
  </resources>
  <connections>
   <connection>
-   <sender>label_amount</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
-   <receiver>lineEdit_amount</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>65</x>
-     <y>90</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>165</x>
-     <y>90</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>label_inventory</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>lineEdit_inventory</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <slot>lineChanged(PreviousScaleInfo)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>66</x>
@@ -886,9 +831,9 @@
   </connection>
   <connection>
    <sender>label_color</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>lineEdit_color</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <slot>lineChanged(PreviousScaleInfo)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>67</x>
@@ -902,7 +847,7 @@
   </connection>
   <connection>
    <sender>label_diastaticPower</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>lineEdit_diastaticPower</receiver>
    <slot>cut()</slot>
    <hints>
@@ -918,9 +863,9 @@
   </connection>
   <connection>
    <sender>label_diastaticPower</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>lineEdit_diastaticPower</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <slot>lineChanged(PreviousScaleInfo)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>346</x>

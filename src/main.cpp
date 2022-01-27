@@ -25,6 +25,8 @@
 
 #include <QApplication>
 #include <QCommandLineParser>
+#include <QDate>
+#include <QDebug>
 #include <QMessageBox>
 #include <QSharedMemory>
 
@@ -32,6 +34,7 @@
 #include "brewtarget.h"
 #include "config.h"
 #include "database/Database.h"
+#include "Logging.h"
 #include "PersistentSettings.h"
 
 void importFromXml(const QString & filename);

@@ -23,15 +23,15 @@
 #include <QPushButton>
 #include <QMetaProperty>
 #include <QVariant>
+#include <QWidget>
+
 #include "model/Water.h"
 
 // Forward declarations.
 class Recipe;
-class QWidget;
 
 /*!
  * \class WaterButton
- * \author Mik Firestone (mikfire@fastmail.com)
  *
  * \brief This is a view class that displays the name of an water.
  */

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>501</width>
-    <height>307</height>
+    <width>689</width>
+    <height>418</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -253,7 +253,7 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="2">
+       <item row="1" column="2">
         <widget class="QLabel" name="label_amountIsWeight">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -269,7 +269,7 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="3">
+       <item row="1" column="3">
         <widget class="QCheckBox" name="checkBox_amountIsWeight">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -282,41 +282,6 @@
          </property>
          <property name="text">
           <string/>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="2">
-        <widget class="BtMixedLabel" name="label_amount">
-         <property name="contextMenuPolicy">
-          <enum>Qt::CustomContextMenu</enum>
-         </property>
-         <property name="text">
-          <string>Default Amount</string>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit_amount</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="3">
-        <widget class="BtMixedEdit" name="lineEdit_amount">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>100</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="toolTip">
-          <string>Amount</string>
-         </property>
-         <property name="editField" stdset="0">
-          <string notr="true">amount</string>
          </property>
         </widget>
        </item>
@@ -665,7 +630,7 @@
    <extends>QLineEdit</extends>
    <header>BtLineEdit.h</header>
    <slots>
-    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+    <slot>lineChanged(PreviousScaleInfo)</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -673,24 +638,7 @@
    <extends>QLabel</extends>
    <header>BtLabel.h</header>
    <slots>
-    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtMixedLabel</class>
-   <extends>QLabel</extends>
-   <header>BtLabel.h</header>
-   <slots>
-    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtMixedEdit</class>
-   <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
-   <slots>
-    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
-    <slot>setIsWeight(bool)</slot>
+    <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    </slots>
   </customwidget>
   <customwidget>
@@ -706,8 +654,6 @@
   <tabstop>comboBox_form</tabstop>
   <tabstop>lineEdit_laboratory</tabstop>
   <tabstop>lineEdit_productID</tabstop>
-  <tabstop>checkBox_amountIsWeight</tabstop>
-  <tabstop>lineEdit_amount</tabstop>
   <tabstop>lineEdit_inventory</tabstop>
   <tabstop>lineEdit_attenuation</tabstop>
   <tabstop>lineEdit_minTemperature</tabstop>
@@ -727,26 +673,10 @@
  </resources>
  <connections>
   <connection>
-   <sender>label_amount</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
-   <receiver>lineEdit_amount</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>48</x>
-     <y>114</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>140</x>
-     <y>114</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>label_minTemperature</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>lineEdit_minTemperature</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <slot>lineChanged(PreviousScaleInfo)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>46</x>
@@ -760,9 +690,9 @@
   </connection>
   <connection>
    <sender>label_maxTemperature</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>lineEdit_maxTemperature</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <slot>lineChanged(PreviousScaleInfo)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>46</x>
@@ -771,22 +701,6 @@
     <hint type="destinationlabel">
      <x>143</x>
      <y>275</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>checkBox_amountIsWeight</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>lineEdit_amount</receiver>
-   <slot>setIsWeight(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>200</x>
-     <y>171</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>171</x>
-     <y>143</y>
     </hint>
    </hints>
   </connection>

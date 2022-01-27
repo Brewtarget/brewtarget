@@ -18,12 +18,12 @@
  */
 #ifndef STYLERANGEWIDGET_H
 #define STYLERANGEWIDGET_H
+#pragma once
 
 #include <QWidget>
 #include <QSize>
 #include <QString>
 #include "RangedSlider.h"
-
 class QPaintEvent;
 class QMouseEvent;
 

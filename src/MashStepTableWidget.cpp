@@ -17,12 +17,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "MashStepTableWidget.h"
 
+#include <QDebug>
 #include <QTableView>
 #include <QWidget>
-#include <QDebug>
-#include "MashStepTableModel.h"
-#include "MashStepTableWidget.h"
+
+#include "tableModels/MashStepTableModel.h"
 
 MashStepTableWidget::MashStepTableWidget(QWidget* parent)
         : QTableView(parent)

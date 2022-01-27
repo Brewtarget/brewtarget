@@ -19,6 +19,7 @@
 #include "xml/XmlCoding.h"
 
 #include <QDebug>
+#include <QFile>
 
 #include <xercesc/dom/DOMConfiguration.hpp>
 #include <xercesc/dom/DOMDocument.hpp>

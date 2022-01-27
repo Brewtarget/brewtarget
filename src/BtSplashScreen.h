@@ -19,6 +19,7 @@
  */
 #ifndef BTSPLASHSCREEN_H
 #define BTSPLASHSCREEN_H
+#pragma once
 
 #include <QWidget>
 #include <QSplashScreen>

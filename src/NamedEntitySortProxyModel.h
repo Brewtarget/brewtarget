@@ -26,7 +26,7 @@ class QAbstractItemModel;
 
 /*!
  * \brief Small wrapper on QSortFilterProxyModel for sorting NamedEntity lists.
- * \author Philip G. Lee
+ *
  *
  * Sorts models dynamically based on their properties' default sort behavior.
  */

@@ -26,207 +26,208 @@
 #include <QIcon>
 #include <QInputDialog>
 
-#include "brewtarget.h"
 #include "BtHorizontalTabs.h"
 #include "config.h"
 #include "database/ObjectStoreWrapper.h"
+#include "measurement/Unit.h"
 #include "model/Hop.h"
-#include "Unit.h"
 
-HopEditor::HopEditor( QWidget* parent ) :
+HopEditor::HopEditor(QWidget * parent) :
    QDialog(parent),
    obsHop(nullptr) {
    setupUi(this);
 
-   this->tabWidget_editor->tabBar()->setStyle( new BtHorizontalTabs );
+   this->tabWidget_editor->tabBar()->setStyle(new BtHorizontalTabs);
 
-   connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newHop() ) );
-   connect( pushButton_save,   &QAbstractButton::clicked, this, &HopEditor::save );
-   connect( pushButton_cancel, &QAbstractButton::clicked, this, &HopEditor::clearAndClose );
+   connect(pushButton_new, SIGNAL(clicked()), this, SLOT(newHop()));
+   connect(pushButton_save,   &QAbstractButton::clicked, this, &HopEditor::save);
+   connect(pushButton_cancel, &QAbstractButton::clicked, this, &HopEditor::clearAndClose);
 
    return;
 }
 
-void HopEditor::setHop( Hop* h )
-{
-   if( obsHop )
-      disconnect( obsHop, nullptr, this, nullptr );
+void HopEditor::setHop(Hop * h) {
+   if (obsHop) {
+      disconnect(obsHop, nullptr, this, nullptr);
+   }
 
    obsHop = h;
-   if( obsHop )
-   {
-      connect( obsHop, &NamedEntity::changed, this, &HopEditor::changed );
+   if (obsHop) {
+      connect(obsHop, &NamedEntity::changed, this, &HopEditor::changed);
       showChanges();
    }
 }
 
-void HopEditor::save()
-{
-   Hop* h = obsHop;
-
-   if( h == nullptr )
-   {
+void HopEditor::save() {
+   if (!this->obsHop) {
       setVisible(false);
       return;
    }
 
-   h->setName(lineEdit_name->text());
-   h->setAlpha_pct(lineEdit_alpha->toSI());
-   h->setAmount_kg(lineEdit_amount->toSI());
-   h->setUse(static_cast<Hop::Use>(comboBox_use->currentIndex()));
-   h->setTime_min(lineEdit_time->toSI());
-   h->setType(static_cast<Hop::Type>(comboBox_type->currentIndex()));
-   h->setForm(static_cast<Hop::Form>(comboBox_form->currentIndex()));
-   h->setBeta_pct(lineEdit_beta->toSI());
-   h->setHsi_pct(lineEdit_HSI->toSI());
-   h->setOrigin(lineEdit_origin->text());
-   h->setHumulene_pct(lineEdit_humulene->toSI());
-   h->setCaryophyllene_pct(lineEdit_caryophyllene->toSI());
-   h->setCohumulone_pct(lineEdit_cohumulone->toSI());
-   h->setMyrcene_pct(lineEdit_myrcene->toSI());
+   this->obsHop->setName(lineEdit_name->text());
+   this->obsHop->setAlpha_pct(lineEdit_alpha->toSI().quantity);
+   this->obsHop->setUse(static_cast<Hop::Use>(comboBox_use->currentIndex()));
+   this->obsHop->setTime_min(lineEdit_time->toSI().quantity);
+   this->obsHop->setType(static_cast<Hop::Type>(comboBox_type->currentIndex()));
+   this->obsHop->setForm(static_cast<Hop::Form>(comboBox_form->currentIndex()));
+   this->obsHop->setBeta_pct(lineEdit_beta->toSI().quantity);
+   this->obsHop->setHsi_pct(lineEdit_HSI->toSI().quantity);
+   this->obsHop->setOrigin(lineEdit_origin->text());
+   this->obsHop->setHumulene_pct(lineEdit_humulene->toSI().quantity);
+   this->obsHop->setCaryophyllene_pct(lineEdit_caryophyllene->toSI().quantity);
+   this->obsHop->setCohumulone_pct(lineEdit_cohumulone->toSI().quantity);
+   this->obsHop->setMyrcene_pct(lineEdit_myrcene->toSI().quantity);
 
-   h->setSubstitutes(textEdit_substitutes->toPlainText());
-   h->setNotes(textEdit_notes->toPlainText());
+   this->obsHop->setSubstitutes(textEdit_substitutes->toPlainText());
+   this->obsHop->setNotes(textEdit_notes->toPlainText());
 
-   if ( h->cacheOnly() ) {
-      ObjectStoreWrapper::insert(*h);
-      h->setCacheOnly(false);
+   if (this->obsHop->key() < 0) {
+      ObjectStoreWrapper::insert(*this->obsHop);
    }
 
    // do this late to make sure we've the row in the inventory table
-   h->setInventoryAmount(lineEdit_inventory->toSI());
+   this->obsHop->setInventoryAmount(lineEdit_inventory->toSI().quantity);
    setVisible(false);
+   return;
 }
 
-void HopEditor::clearAndClose()
-{
+void HopEditor::clearAndClose() {
    setHop(nullptr);
    setVisible(false); // Hide the window.
 }
 
-void HopEditor::changed(QMetaProperty prop, QVariant /*val*/)
-{
-   if( sender() == obsHop )
+void HopEditor::changed(QMetaProperty prop, QVariant /*val*/) {
+   if (sender() == obsHop) {
       showChanges(&prop);
+   }
 }
 
-void HopEditor::showChanges(QMetaProperty* prop) {
+void HopEditor::showChanges(QMetaProperty * prop) {
    bool updateAll = false;
    QString propName;
-   if( obsHop == nullptr ) {
+   if (obsHop == nullptr) {
       return;
    }
 
-   if( prop == nullptr ) {
+   if (prop == nullptr) {
       updateAll = true;
    } else {
       propName = prop->name();
    }
 
-   if( propName == PropertyNames::NamedEntity::name || updateAll ) {
+   if (propName == PropertyNames::NamedEntity::name || updateAll) {
       lineEdit_name->setText(obsHop->name());
       lineEdit_name->setCursorPosition(0);
-      tabWidget_editor->setTabText(0, obsHop->name() );
-      if( ! updateAll ) {
+      tabWidget_editor->setTabText(0, obsHop->name());
+      if (!updateAll) {
          return;
       }
    }
-   if( propName == PropertyNames::Hop::alpha_pct || updateAll ) {
+   if (propName == PropertyNames::Hop::alpha_pct || updateAll) {
       lineEdit_alpha->setText(obsHop);
-      if( ! updateAll ) {
+      if (!updateAll) {
          return;
       }
    }
-   if( propName == PropertyNames::Hop::amount_kg || updateAll ) {
-      lineEdit_amount->setText(obsHop);
-      if( ! updateAll )
-         return;
-   }
-   if( propName == PropertyNames::NamedEntityWithInventory::inventory || updateAll ) {
+   if (propName == PropertyNames::NamedEntityWithInventory::inventory || updateAll) {
       lineEdit_inventory->setText(obsHop);
-      if( ! updateAll )
+      if (!updateAll) {
          return;
+      }
    }
-   if( propName == PropertyNames::Hop::use || updateAll ) {
+   if (propName == PropertyNames::Hop::use || updateAll) {
       comboBox_use->setCurrentIndex(obsHop->use());
-      if( ! updateAll )
+      if (!updateAll) {
          return;
+      }
    }
-   if( propName == PropertyNames::Hop::time_min || updateAll ) {
+   if (propName == PropertyNames::Hop::time_min || updateAll) {
       lineEdit_time->setText(obsHop);
-      if( ! updateAll )
+      if (!updateAll) {
          return;
+      }
    }
-   if( propName == PropertyNames::Hop::type || updateAll ) {
+   if (propName == PropertyNames::Hop::type || updateAll) {
       comboBox_type->setCurrentIndex(obsHop->type());
-      if( ! updateAll )
+      if (!updateAll) {
          return;
+      }
    }
-   if( propName == PropertyNames::Hop::form || updateAll ) {
+   if (propName == PropertyNames::Hop::form || updateAll) {
       comboBox_form->setCurrentIndex(obsHop->form());
-      if( ! updateAll )
+      if (!updateAll) {
          return;
+      }
    }
-   if( propName == PropertyNames::Hop::beta_pct || updateAll ) {
+   if (propName == PropertyNames::Hop::beta_pct || updateAll) {
       lineEdit_beta->setText(obsHop);
-      if( ! updateAll )
+      if (!updateAll) {
          return;
+      }
    }
-   if( propName == PropertyNames::Hop::hsi_pct || updateAll ) {
+   if (propName == PropertyNames::Hop::hsi_pct || updateAll) {
       lineEdit_HSI->setText(obsHop);
-      if( ! updateAll )
+      if (!updateAll) {
          return;
+      }
    }
-   if( propName == PropertyNames::Hop::origin || updateAll )
-   {
+   if (propName == PropertyNames::Hop::origin || updateAll) {
       lineEdit_origin->setText(obsHop->origin());
       lineEdit_origin->setCursorPosition(0);
-      if( ! updateAll )
+      if (!updateAll) {
          return;
+      }
    }
-   if( propName == PropertyNames::Hop::humulene_pct || updateAll ) {
+   if (propName == PropertyNames::Hop::humulene_pct || updateAll) {
       lineEdit_humulene->setText(obsHop);
-      if( ! updateAll )
+      if (!updateAll) {
          return;
+      }
    }
-   if( propName == PropertyNames::Hop::caryophyllene_pct || updateAll ) {
+   if (propName == PropertyNames::Hop::caryophyllene_pct || updateAll) {
       lineEdit_caryophyllene->setText(obsHop);
-      if( ! updateAll )
+      if (!updateAll) {
          return;
+      }
    }
-   if( propName == PropertyNames::Hop::cohumulone_pct || updateAll ) {
+   if (propName == PropertyNames::Hop::cohumulone_pct || updateAll) {
       lineEdit_cohumulone->setText(obsHop);
-      if( ! updateAll )
+      if (!updateAll) {
          return;
+      }
    }
-   if( propName == PropertyNames::Hop::myrcene_pct || updateAll ) {
+   if (propName == PropertyNames::Hop::myrcene_pct || updateAll) {
       lineEdit_myrcene->setText(obsHop);
-      if( ! updateAll )
+      if (!updateAll) {
          return;
+      }
    }
-   if( propName == PropertyNames::Hop::substitutes || updateAll ) {
+   if (propName == PropertyNames::Hop::substitutes || updateAll) {
       textEdit_substitutes->setPlainText(obsHop->substitutes());
-      if( ! updateAll )
+      if (!updateAll) {
          return;
+      }
    }
-   if( propName == PropertyNames::Hop::notes || updateAll ) {
+   if (propName == PropertyNames::Hop::notes || updateAll) {
       textEdit_notes->setPlainText(obsHop->notes());
-      if( ! updateAll )
+      if (!updateAll) {
          return;
+      }
    }
 }
 
 
 void HopEditor::newHop(QString folder) {
    QString name = QInputDialog::getText(this, tr("Hop name"),
-                                          tr("Hop name:"));
-   if( name.isEmpty() ) {
+                                        tr("Hop name:"));
+   if (name.isEmpty()) {
       return;
    }
 
-   Hop* h = new Hop(name,true);
+   // .:TODO:. Change this to shared_ptr as currently results in memory leak in clearAndClose()
+   Hop * h = new Hop(name);
 
-   if ( ! folder.isEmpty() ) {
+   if (! folder.isEmpty()) {
       h->setFolder(folder);
    }
 

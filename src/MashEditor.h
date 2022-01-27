@@ -21,6 +21,8 @@
 #ifndef MASHEDITOR_H
 #define MASHEDITOR_H
 
+class MashEditor;
+
 #include <QDialog>
 #include <QMetaProperty>
 #include <QVariant>
@@ -35,9 +37,10 @@ class Equipment;
  * \class MashEditor
  *
  * \brief View/controller dialog for editing a mash.
+ *
+ *        See also \c NamedMashEditor
  */
-class MashEditor : public QDialog, public Ui::mashEditor
-{
+class MashEditor : public QDialog, public Ui::mashEditor {
    Q_OBJECT
 public:
    MashEditor( QWidget *parent = nullptr );
@@ -62,5 +65,4 @@ private:
 
 };
 
-#endif   /* _MASHEDITOR_H */
-
+#endif
