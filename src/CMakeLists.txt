@@ -273,6 +273,7 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/BrewDayFormatter.h
     ${SRCDIR}/BrewDayScrollWidget.h
     ${SRCDIR}/BrewDayWidget.h
+    ${SRCDIR}/brewtarget.h
     ${SRCDIR}/BrewNoteWidget.h
     ${SRCDIR}/BtDatePopup.h
     ${SRCDIR}/BtDigitWidget.h
