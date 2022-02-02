@@ -841,7 +841,7 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../brewken.qrc"/>
+  <include location="../brewtarget.qrc"/>
  </resources>
  <connections>
   <connection>
