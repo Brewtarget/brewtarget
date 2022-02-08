@@ -20,6 +20,12 @@
 
 #include <algorithm>
 
+EnumAndItsString::EnumAndItsString(QString string, int native) :
+   string{string},
+   native{native} {
+   return;
+}
+
 std::optional<int> EnumStringMapping::stringToEnum(QString const & stringValue) const {
    auto match = std::find_if(this->begin(),
                              this->end(),

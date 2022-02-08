@@ -42,22 +42,22 @@ ObjectStore & Water::getObjectStoreTypedInstance() const {
    return ObjectStoreTyped<Water>::getInstance();
 }
 
-Water::Water(QString name, bool cache) :
-   NamedEntity(-1, cache, name, true),
-   m_amount(0.0),
-   m_calcium_ppm(0.0),
-   m_bicarbonate_ppm(0.0),
-   m_sulfate_ppm(0.0),
-   m_chloride_ppm(0.0),
-   m_sodium_ppm(0.0),
-   m_magnesium_ppm(0.0),
-   m_ph(0.0),
-   m_alkalinity(0.0),
-   m_notes(QString()),
-   m_type(NONE),
-   m_mash_ro(0.0),
-   m_sparge_ro(0.0),
-   m_alkalinity_as_hco3(true) {
+Water::Water(QString name) :
+   NamedEntity         {name, true},
+   m_amount            {0.0},
+   m_calcium_ppm       {0.0},
+   m_bicarbonate_ppm   {0.0},
+   m_sulfate_ppm       {0.0},
+   m_chloride_ppm      {0.0},
+   m_sodium_ppm        {0.0},
+   m_magnesium_ppm     {0.0},
+   m_ph                {0.0},
+   m_alkalinity        {0.0},
+   m_notes             {""},
+   m_type              {NONE},
+   m_mash_ro           {0.0},
+   m_sparge_ro         {0.0},
+   m_alkalinity_as_hco3{true} {
    return;
 }
 

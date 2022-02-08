@@ -20,6 +20,7 @@
  */
 #ifndef FERMENTABLESORTFILTERPROXYMODEL_H
 #define FERMENTABLESORTFILTERPROXYMODEL_H
+#pragma once
 
 #include <QSortFilterProxyModel>
 

@@ -623,7 +623,7 @@
               </widget>
              </item>
              <item row="0" column="1">
-              <widget class="BtDigitWidget" name="lcdnumber_effBK">
+              <widget class="BtGenericDigit" name="lcdnumber_effBK">
                <property name="text">
                 <string/>
                </property>
@@ -649,7 +649,7 @@
               </widget>
              </item>
              <item row="1" column="1">
-              <widget class="BtDigitWidget" name="lcdnumber_projectedOG">
+              <widget class="BtGenericDigit" name="lcdnumber_projectedOG">
                <property name="text">
                 <string/>
                </property>
@@ -666,7 +666,7 @@
               </widget>
              </item>
              <item row="2" column="1">
-              <widget class="BtDigitWidget" name="lcdnumber_brewhouseEff">
+              <widget class="BtGenericDigit" name="lcdnumber_brewhouseEff">
                <property name="text">
                 <string/>
                </property>
@@ -683,7 +683,7 @@
               </widget>
              </item>
              <item row="3" column="1">
-              <widget class="BtDigitWidget" name="lcdnumber_projABV">
+              <widget class="BtGenericDigit" name="lcdnumber_projABV">
                <property name="text">
                 <string/>
                </property>
@@ -700,7 +700,7 @@
               </widget>
              </item>
              <item row="4" column="1">
-              <widget class="BtDigitWidget" name="lcdnumber_abv">
+              <widget class="BtGenericDigit" name="lcdnumber_abv">
                <property name="text">
                 <string/>
                </property>
@@ -717,7 +717,7 @@
               </widget>
              </item>
              <item row="5" column="1">
-              <widget class="BtDigitWidget" name="lcdnumber_projAtten">
+              <widget class="BtGenericDigit" name="lcdnumber_projAtten">
                <property name="text">
                 <string/>
                </property>
@@ -734,7 +734,7 @@
               </widget>
              </item>
              <item row="6" column="1">
-              <widget class="BtDigitWidget" name="lcdnumber_atten">
+              <widget class="BtGenericDigit" name="lcdnumber_atten">
                <property name="text">
                 <string/>
                </property>
@@ -781,7 +781,7 @@
    <extends>QLineEdit</extends>
    <header>BtLineEdit.h</header>
    <slots>
-    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+    <slot>lineChanged(PreviousScaleInfo)</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -789,7 +789,7 @@
    <extends>QLabel</extends>
    <header>BtLabel.h</header>
    <slots>
-    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+    <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    </slots>
   </customwidget>
   <customwidget>
@@ -802,7 +802,7 @@
    <extends>QLabel</extends>
    <header>BtLabel.h</header>
    <slots>
-    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+    <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    </slots>
   </customwidget>
   <customwidget>
@@ -810,7 +810,7 @@
    <extends>QLabel</extends>
    <header>BtLabel.h</header>
    <slots>
-    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+    <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    </slots>
   </customwidget>
   <customwidget>
@@ -818,7 +818,7 @@
    <extends>QLineEdit</extends>
    <header>BtLineEdit.h</header>
    <slots>
-    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+    <slot>lineChanged(PreviousScaleInfo)</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -826,11 +826,11 @@
    <extends>QLineEdit</extends>
    <header>BtLineEdit.h</header>
    <slots>
-    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+    <slot>lineChanged(PreviousScaleInfo)</slot>
    </slots>
   </customwidget>
   <customwidget>
-   <class>BtDigitWidget</class>
+   <class>BtGenericDigit</class>
    <extends>QLabel</extends>
    <header>BtDigitWidget.h</header>
   </customwidget>
@@ -846,9 +846,9 @@
  <connections>
   <connection>
    <sender>btLabel_Sg</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>lineEdit_SG</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <slot>lineChanged(PreviousScaleInfo)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>70</x>
@@ -862,9 +862,9 @@
   </connection>
   <connection>
    <sender>btLabel_volIntoBk</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>lineEdit_volIntoBK</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <slot>lineChanged(PreviousScaleInfo)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>58</x>
@@ -878,9 +878,9 @@
   </connection>
   <connection>
    <sender>btLabel_strikeTemp</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>lineEdit_strikeTemp</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <slot>lineChanged(PreviousScaleInfo)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>48</x>
@@ -894,9 +894,9 @@
   </connection>
   <connection>
    <sender>btLabel_mashFinTemp</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>lineEdit_mashFinTemp</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <slot>lineChanged(PreviousScaleInfo)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>51</x>
@@ -910,9 +910,9 @@
   </connection>
   <connection>
    <sender>btLabel_Og</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>lineEdit_OG</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <slot>lineChanged(PreviousScaleInfo)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>125</x>
@@ -926,9 +926,9 @@
   </connection>
   <connection>
    <sender>btLabel_postBoilVol</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>lineEdit_postBoilVol</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <slot>lineChanged(PreviousScaleInfo)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>92</x>
@@ -942,9 +942,9 @@
   </connection>
   <connection>
    <sender>btLabel_volIntoFerm</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>lineEdit_volIntoFerm</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <slot>lineChanged(PreviousScaleInfo)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>76</x>
@@ -958,9 +958,9 @@
   </connection>
   <connection>
    <sender>btLabel_pitchTemp</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>lineEdit_pitchTemp</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <slot>lineChanged(PreviousScaleInfo)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>105</x>
@@ -974,9 +974,9 @@
   </connection>
   <connection>
    <sender>btLabel_postFermentFg</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>lineEdit_FG</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <slot>lineChanged(PreviousScaleInfo)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>50</x>
@@ -990,9 +990,9 @@
   </connection>
   <connection>
    <sender>btLabel_finalVolume</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>lineEdit_finalVol</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <slot>lineChanged(PreviousScaleInfo)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>38</x>

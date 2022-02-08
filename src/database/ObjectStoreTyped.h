@@ -326,7 +326,6 @@ private:
          ne->hardDeleteOrphanedEntities();
          // Setting the deleted object's ID to -1 now puts it in the same state as a newly-created object.
          ne->setKey(-1);
-         ne->setCacheOnly(true);
          return ne;
       }
 

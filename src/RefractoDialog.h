@@ -19,8 +19,7 @@
  */
 #ifndef REFRACTODIALOG_H
 #define REFRACTODIALOG_H
-
-class RefractoDialog;
+#pragma once
 
 #include <QDialog>
 #include <QWidget>

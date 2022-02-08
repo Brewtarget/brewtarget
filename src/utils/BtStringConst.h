@@ -110,9 +110,20 @@ private:
 namespace BtString { extern BtStringConst const NULL_STR; }
 
 /**
+ * \brief If you need to pass empty string (ie "") as a \c BtStringConst parameter, you can use this constant
+ */
+namespace BtString { extern BtStringConst const EMPTY_STR; }
+
+/**
  * \brief Output \c BtStringConst to \c QTextStream
+ *        See comment above for why this is \b not templated
  */
 QTextStream & operator<<(QTextStream & outputStream, BtStringConst const & btStringConst);
+
+/**
+ * \brief Output \c BtStringConst to \c QDebug
+ *        See comment above for why this is \b not templated
+ */
 QDebug & operator<<(QDebug & outputStream, BtStringConst const & btStringConst);
 
 /**

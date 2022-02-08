@@ -29,6 +29,7 @@
 #include "Algorithms.h"
 #include "database/ObjectStoreWrapper.h"
 #include "HeatCalculations.h"
+#include "measurement/Measurement.h"
 #include "model/Equipment.h"
 #include "model/Fermentable.h"
 #include "model/Mash.h"
@@ -76,8 +77,9 @@ void MashWizard::setRecipe(Recipe* rec)
 
 void MashWizard::show()
 {
-   if( recObs == nullptr || recObs->mash() == nullptr )
+   if( recObs == nullptr || recObs->mash() == nullptr ) {
       return;
+   }
 
    // Ensure at least one mash step.
    if( recObs->mash()->mashSteps().size() == 0 )
@@ -86,15 +88,15 @@ void MashWizard::show()
       return;
    }
 
-   Brewtarget::getThicknessUnits(&volumeUnit,&weightUnit);
-   label_mashThickness->setText(tr("Mash thickness (%1/%2)").arg(volumeUnit->getUnitName(),weightUnit->getUnitName()));
+   Measurement::getThicknessUnits(&volumeUnit,&weightUnit);
+   label_mashThickness->setText(tr("Mash thickness (%1/%2)").arg(volumeUnit->name, weightUnit->name));
 
-   MashStep *firstStep = recObs->mash()->mashSteps().first();
-   MashStep *lastStep = recObs->mash()->mashSteps().last();
+   MashStep * firstStep = recObs->mash()->mashSteps().first();
+   MashStep * lastStep  = recObs->mash()->mashSteps().last();
 
    // Recalculate the mash thickness
    double thickNum = firstStep->infuseAmount_l()/recObs->grainsInMash_kg();
-   double thickness = thickNum * weightUnit->toSI(1) / volumeUnit->toSI(1) ;
+   double thickness = thickNum * weightUnit->toSI(1).quantity / volumeUnit->toSI(1).quantity ;
    doubleSpinBox_thickness->setValue(thickness);
 
    // Is this a batch, fly or no sparge?
@@ -205,7 +207,7 @@ void MashWizard::wizardry() {
    grainMass = recObs->grainsInMash_kg();
    if ( bGroup->checkedButton() != radioButton_noSparge ) {
       thickNum = doubleSpinBox_thickness->value();
-      thickness_LKg = thickNum * volumeUnit->toSI(1) / weightUnit->toSI(1);
+      thickness_LKg = thickNum * volumeUnit->toSI(1).quantity / weightUnit->toSI(1).quantity;
    }
    else {
       // not sure I like this. Why is this here and not somewhere later?
@@ -374,7 +376,6 @@ void MashWizard::wizardry() {
             newMashStep->setStepTime_min(15);
             newMashStep->setMashId(mash->key());
             ObjectStoreWrapper::insert(newMashStep);
-            newMashStep->setCacheOnly(false);
             steps.append(newMashStep.get());
             newMashStep->setStepNumber(steps.size());
             emit newMashStep->changed(
@@ -396,7 +397,6 @@ void MashWizard::wizardry() {
          newMashStep->setStepTime_min(15);
          newMashStep->setMashId(mash->key());
          ObjectStoreWrapper::insert(newMashStep);
-         newMashStep->setCacheOnly(false);
          steps.append(newMashStep.get());
          newMashStep->setStepNumber(steps.size());
          emit newMashStep->changed(

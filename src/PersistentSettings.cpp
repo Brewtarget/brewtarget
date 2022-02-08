@@ -62,13 +62,13 @@ namespace {
       };
 
       switch (extension) {
-         case PersistentSettings::UNIT:
+         case PersistentSettings::Extension::UNIT:
             fullyQualifiedKey += "_unit";
             break;
-         case PersistentSettings::SCALE:
+         case PersistentSettings::Extension::SCALE:
             fullyQualifiedKey += "_scale";
             break;
-         case PersistentSettings::NONE:
+         case PersistentSettings::Extension::NONE:
          default:
             break;
       }

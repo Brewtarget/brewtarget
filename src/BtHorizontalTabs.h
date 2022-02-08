@@ -19,13 +19,15 @@
 
 #ifndef BTHORIZONTALTABS_H
 #define BTHORIZONTALTABS_H
+#pragma once
 
 #include <QProxyStyle>
 #include <QStyleOption>
 #include <QStyleOptionTab>
 #include <QSize>
 
-/* A quick little bit to handle a tab bar with the tabs on the west. 
+/**
+ * \brief A quick little bit to handle a tab bar with the tabs on the west.
  */
 class BtHorizontalTabs : public QProxyStyle
 {

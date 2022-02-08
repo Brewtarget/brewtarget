@@ -27,12 +27,12 @@
 
 /*!
  * \class BtTextEdit
- * \author Mik Firestone
+ *
  *
  * \brief This extend QPlainTextEdit such that it only signals when the widget
  * loses focus and the text has been modified within the widget. This, in
  * turn, reduces the number of needless writes we make to the database.
- * 
+ *
  */
 class BtTextEdit : public QPlainTextEdit
 {

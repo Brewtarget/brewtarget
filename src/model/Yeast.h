@@ -76,7 +76,7 @@ public:
    enum Flocculation {Low, Medium, High, Very_High}; // NOTE: BeerXML expects a space in "Very High", but not possible with enum. What to do?
    Q_ENUMS( Type Form Flocculation )
 
-   Yeast(QString name = "", bool cache = true);
+   Yeast(QString name = "");
    Yeast(NamedParameterBundle const & namedParameterBundle);
    Yeast(Yeast const & other);
 

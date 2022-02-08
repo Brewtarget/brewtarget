@@ -54,8 +54,8 @@
             <property name="editField" stdset="0">
              <string notr="true">origPlato</string>
             </property>
-            <property name="forcedUnit" stdset="0">
-             <string notr="true">displayPlato</string>
+            <property name="forcedSystemOfMeasurement" stdset="0">
+             <string notr="true">Plato</string>
             </property>
            </widget>
           </item>
@@ -83,8 +83,8 @@
             <property name="editField" stdset="0">
              <string notr="true">inputOG</string>
             </property>
-            <property name="forcedUnit" stdset="0">
-             <string notr="true">displaySg</string>
+            <property name="forcedSystemOfMeasurement" stdset="0">
+             <string notr="true">SpecificGravity</string>
             </property>
            </widget>
           </item>
@@ -123,8 +123,8 @@
             <property name="editField" stdset="0">
              <string notr="true">curP</string>
             </property>
-            <property name="forcedUnit" stdset="0">
-             <string notr="true">displayPlato</string>
+            <property name="forcedSystemOfMeasurement" stdset="0">
+             <string notr="true">Plato</string>
             </property>
            </widget>
           </item>
@@ -214,8 +214,8 @@
         <property name="readOnly">
          <bool>true</bool>
         </property>
-        <property name="forcedUnit" stdset="0">
-         <string notr="true">displaySg</string>
+        <property name="forcedSystemOfMeasurement" stdset="0">
+         <string notr="true">SpecificGravity</string>
         </property>
        </widget>
       </item>
@@ -296,8 +296,8 @@
         <property name="readOnly">
          <bool>true</bool>
         </property>
-        <property name="forcedUnit" stdset="0">
-         <string notr="true">displayPlato</string>
+        <property name="forcedSystemOfMeasurement" stdset="0">
+         <string notr="true">Plato</string>
         </property>
        </widget>
       </item>
@@ -322,8 +322,8 @@
         <property name="readOnly">
          <bool>true</bool>
         </property>
-        <property name="forcedUnit" stdset="0">
-         <string notr="true">displaySg</string>
+        <property name="forcedSystemOfMeasurement" stdset="0">
+         <string notr="true">SpecificGravity</string>
         </property>
        </widget>
       </item>
@@ -338,7 +338,7 @@
    <extends>QLineEdit</extends>
    <header>BtLineEdit.h</header>
    <slots>
-    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+    <slot>lineChanged(PreviousScaleInfo)</slot>
    </slots>
   </customwidget>
   <customwidget>

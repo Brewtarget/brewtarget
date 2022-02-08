@@ -17,13 +17,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "MiscSortFilterProxyModel.h"
 
 #include <QAbstractItemModel>
-#include "MiscSortFilterProxyModel.h"
-#include "MiscTableModel.h"
+
+#include "measurement/Measurement.h"
+#include "measurement/PhysicalQuantity.h"
+#include "measurement/Unit.h"
 #include "model/Misc.h"
-#include "brewtarget.h"
-#include "Unit.h"
+#include "tableModels/MiscTableModel.h"
 
 MiscSortFilterProxyModel::MiscSortFilterProxyModel(QObject *parent, bool filt)
 : QSortFilterProxyModel(parent)
@@ -32,29 +34,33 @@ MiscSortFilterProxyModel::MiscSortFilterProxyModel(QObject *parent, bool filt)
 }
 
 bool MiscSortFilterProxyModel::lessThan(const QModelIndex &left,
-                                        const QModelIndex &right) const
-{
+                                        const QModelIndex &right) const {
    QAbstractItemModel* source = sourceModel();
    QVariant leftMisc, rightMisc;
-   if( source )
-   {
+   if (source) {
       leftMisc = source->data(left);
       rightMisc = source->data(right);
    }
 
-   switch( left.column() )
-   {
-   case MISCINVENTORYCOL:
-         if (Brewtarget::qStringToSI(leftMisc.toString(), &Units::kilograms) == 0.0 && this->sortOrder() == Qt::AscendingOrder)
+   switch (left.column()) {
+       case MISCINVENTORYCOL:
+         if (Measurement::qStringToSI(leftMisc.toString(), Measurement::PhysicalQuantity::Mass).quantity == 0.0 &&
+             this->sortOrder() == Qt::AscendingOrder) {
             return false;
-         else
-            return Brewtarget::qStringToSI(leftMisc.toString(), &Units::kilograms) < Brewtarget::qStringToSI(rightMisc.toString(), &Units::kilograms);
-   case MISCAMOUNTCOL:
-         return Brewtarget::qStringToSI(leftMisc.toString(), &Units::kilograms) < Brewtarget::qStringToSI(rightMisc.toString(), &Units::kilograms);
-   case MISCTIMECOL:
-      return Brewtarget::qStringToSI(leftMisc.toString(), &Units::minutes) < Brewtarget::qStringToSI(rightMisc.toString(), &Units::minutes);
-    default:
-      return leftMisc.toString() < rightMisc.toString();
+         }
+         return (Measurement::qStringToSI(leftMisc.toString(), Measurement::PhysicalQuantity::Mass) <
+                 Measurement::qStringToSI(rightMisc.toString(), Measurement::PhysicalQuantity::Mass));
+
+      case MISCAMOUNTCOL:
+         return (Measurement::qStringToSI(leftMisc.toString(), Measurement::PhysicalQuantity::Mass) <
+                 Measurement::qStringToSI(rightMisc.toString(), Measurement::PhysicalQuantity::Mass));
+
+      case MISCTIMECOL:
+         return (Measurement::qStringToSI(leftMisc.toString(), Measurement::PhysicalQuantity::Time) <
+                 Measurement::qStringToSI(rightMisc.toString(), Measurement::PhysicalQuantity::Time));
+
+      default:
+         return leftMisc.toString() < rightMisc.toString();
    }
 }
 

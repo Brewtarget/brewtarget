@@ -21,16 +21,20 @@
 #ifndef NAMEDMASHEDITOR_H
 #define NAMEDMASHEDITOR_H
 
+class NamedMashEditor;
+
 #include <QDialog>
 #include <QMetaProperty>
+#include <QString>
 #include <QVariant>
+#include <QWidget>
 
 #include "ui_namedMashEditor.h"
-#include "MashStepTableModel.h"
 #include "MashListModel.h"
 #include "MashStepEditor.h"
 #include "EquipmentListModel.h"
 #include "NamedEntitySortProxyModel.h"
+#include "tableModels/MashStepTableModel.h"
 
 
 // Forward declarations.
@@ -40,12 +44,12 @@ class Equipment;
 
 /*!
  * \class NamedMashEditor
- * \author Philip G. Lee
  *
  * \brief View/controller dialog for editing a mash.
+ *
+ *        See also \c MashEditor
  */
-class NamedMashEditor : public QDialog, public Ui::namedMashEditor
-{
+class NamedMashEditor : public QDialog, public Ui::namedMashEditor {
    Q_OBJECT
 public:
    NamedMashEditor( QWidget *parent = 0, MashStepEditor* editor =0, bool singleMashEditor = false );
@@ -99,5 +103,4 @@ private:
 
 };
 
-#endif   /* _NAMEDMASHEDITOR_H */
-
+#endif

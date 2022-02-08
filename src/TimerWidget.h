@@ -35,7 +35,7 @@ class TimerWidget;
 
 /*!
  * \class TimerWidget
- * \author Aidan Roberts
+ *
  *
  * \brief Individual boil addition timers
  */

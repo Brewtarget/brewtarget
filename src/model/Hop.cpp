@@ -25,7 +25,6 @@
 #include <QDebug>
 #include <QObject>
 
-#include "brewtarget.h"
 #include "database/ObjectStoreWrapper.h"
 #include "model/Inventory.h"
 #include "model/NamedParameterBundle.h"
@@ -60,8 +59,8 @@ ObjectStore & Hop::getObjectStoreTypedInstance() const {
    return ObjectStoreTyped<Hop>::getInstance();
 }
 
-Hop::Hop(QString name, bool cache) :
-   NamedEntityWithInventory{-1, cache, name, true},
+Hop::Hop(QString name) :
+   NamedEntityWithInventory{name, true},
    m_use              {Hop::Mash},
    m_type             {Hop::Bittering},
    m_form             {Hop::Leaf},

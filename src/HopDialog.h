@@ -20,6 +20,7 @@
  */
 #ifndef HOPDIALOG_H
 #define HOPDIALOG_H
+#pragma once
 
 #include <QWidget>
 #include <QDialog>

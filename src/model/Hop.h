@@ -82,7 +82,7 @@ public:
    enum Use {Mash, First_Wort, Boil, UseAroma, Dry_Hop }; // NOTE: way bad. We have a duplicate enum (Aroma)
    Q_ENUMS( Type Form Use )
 
-   Hop(QString name = "", bool cache = true);
+   Hop(QString name = "");
    Hop(NamedParameterBundle const & namedParameterBundle);
    Hop(Hop const & other);
 

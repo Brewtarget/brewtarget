@@ -25,7 +25,7 @@
 
 /*!
  * \class OgAdjuster
- * \author Philip G. Lee
+ *
  *
  * \brief View/controller dialog that helps you correct your OG on brew day.
  */

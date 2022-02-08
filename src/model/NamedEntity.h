@@ -28,12 +28,12 @@
 #include <memory>
 
 #include <QDateTime>
+#include <QDebug>
 #include <QList>
 #include <QMetaProperty>
 #include <QObject>
 #include <QVariant>
 
-#include "brewtarget.h"
 #include "utils/BtStringConst.h"
 
 class NamedParameterBundle;
@@ -94,7 +94,7 @@ class NamedEntity : public QObject {
 
 
 public:
-   NamedEntity(int key, bool cache = true, QString t_name = QString(), bool t_display = false, QString folder = QString());
+   NamedEntity(QString t_name, bool t_display = false, QString folder = QString());
    NamedEntity(NamedEntity const & other);
 
    /**
@@ -146,15 +146,13 @@ public:
    bool operator>(NamedEntity const & other) const;
 
    // Everything that inherits from BeerXML has a name, delete, display and a folder
-   Q_PROPERTY( QString name   READ name WRITE setName )
-   Q_PROPERTY( bool deleted   READ deleted WRITE setDeleted )
-   Q_PROPERTY( bool display   READ display WRITE setDisplay )
-   Q_PROPERTY( QString folder READ folder WRITE setFolder )
+   Q_PROPERTY(QString name   READ name WRITE setName )
+   Q_PROPERTY(bool deleted   READ deleted WRITE setDeleted )
+   Q_PROPERTY(bool display   READ display WRITE setDisplay )
+   Q_PROPERTY(QString folder READ folder WRITE setFolder )
 
-   Q_PROPERTY( int key READ key WRITE setKey )
-   Q_PROPERTY( int parentKey READ getParentKey WRITE setParentKey )
-   //! \brief To cache or not to cache
-   Q_PROPERTY( bool cacheOnly READ cacheOnly WRITE setCacheOnly /*NOTIFY changed*/ )
+   Q_PROPERTY(int key READ key WRITE setKey )
+   Q_PROPERTY(int parentKey READ getParentKey WRITE setParentKey )
 
    //! \returns our key in the table we are stored in.
    int key() const;
@@ -202,9 +200,6 @@ public:
 
    int getParentKey() const;
    void setParentKey(int parentKey);
-
-   bool cacheOnly() const;
-   void setCacheOnly(bool cache);
 
    /**
     * \brief Get the IDs of this object's parent, children and siblings (plus the ID of the object itself).
@@ -263,9 +258,8 @@ signals:
 protected:
    //! The key of this entity in its table.
    int m_key;
-   // This is 0 if there is no parent (or parent is not yet known)
+   // This is <=0 if there is no parent (or parent is not yet known)
    int parentKey;
-   bool m_cacheOnly;
 
    /**
     * \brief Subclasses need to overload (NB not override) this function to do the substantive work for operator==.

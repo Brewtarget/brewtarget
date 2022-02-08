@@ -20,42 +20,42 @@
 
 #ifndef PITCHDIALOG_H
 #define PITCHDIALOG_H
-
-class PitchDialog;
+#pragma once
 
 #include <QDialog>
 #include <QWidget>
 #include "ui_pitchDialog.h"
 
+#include "measurement/UnitSystem.h"
+
 /*!
  * \class PitchDialog
- * \author Philip G. Lee
  *
  * \brief Dialog to calculate how much yeast to pitch.
  */
-class PitchDialog : public QDialog, public Ui::pitchDialog
-{
+class PitchDialog : public QDialog, public Ui::pitchDialog {
    Q_OBJECT
 
 public:
-   PitchDialog(QWidget* parent=0);
+   PitchDialog(QWidget* parent = nullptr);
    ~PitchDialog();
 
    //! \brief Set the wort volume in liters.
    void setWortVolume_l(double volume);
+
    //! \brief Set the wort gravity in 20C/20C SG.
    void setWortDensity(double sg);
-   
+
 public slots:
    void calculate();
    void updateShownPitchRate(int percent);
    void toggleViabilityFromDate(int state);
    void updateViabilityFromDate(QDate date);
 
-   void updateProductionDate(Unit::unitDisplay dsp, Unit::unitScale scl);
+   void updateProductionDate();
 
 private:
 
 };
 
-#endif // PITCHDIALOG_H
+#endif

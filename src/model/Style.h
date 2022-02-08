@@ -71,9 +71,9 @@ class Style : public NamedEntity {
 
    friend class StyleEditor;
 public:
-   Style(QString t_name = "", bool cacheOnly = true);
+   Style(QString t_name = "");
    Style(NamedParameterBundle const & namedParameterBundle);
-   Style( Style const & other );
+   Style(Style const & other);
 
    virtual ~Style() = default;
 

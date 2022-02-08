@@ -16,12 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #include "WaterSortFilterProxyModel.h"
-#include "WaterTableModel.h"
-#include "model/Yeast.h"
-#include "brewtarget.h"
+
 #include <iostream>
+
+#include "model/Yeast.h"
+#include "tableModels/WaterTableModel.h"
 
 WaterSortFilterProxyModel::WaterSortFilterProxyModel(QObject *parent, bool filt)
 : QSortFilterProxyModel(parent),

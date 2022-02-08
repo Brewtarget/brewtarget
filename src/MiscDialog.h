@@ -95,5 +95,4 @@ private:
    void retranslateUi();
 };
 
-#endif   /* _MISCDIALOG_H */
-
+#endif   /* MISCDIALOG_H */

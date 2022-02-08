@@ -19,6 +19,7 @@
  */
 #ifndef MASHSTEPTABLEWIDGET_H
 #define MASHSTEPTABLEWIDGET_H
+#pragma once
 
 #include <QTableView>
 #include <QWidget>
@@ -26,7 +27,6 @@ class MashStepTableModel;
 
 /*!
  * \class MashStepTableWidget
- * \author Philip G. Lee
  *
  * \brief View class that displays a table of mash steps.
  * NOTE: This class seems completely

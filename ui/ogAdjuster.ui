@@ -257,8 +257,8 @@
               <property name="editField" stdset="0">
                <string notr="true">plato</string>
               </property>
-              <property name="forcedUnit" stdset="0">
-               <string notr="true">displayPlato</string>
+              <property name="forcedSystemOfMeasurement" stdset="0">
+               <string notr="true">Plato</string>
               </property>
              </widget>
             </item>
@@ -578,7 +578,7 @@
    <extends>QLineEdit</extends>
    <header>BtLineEdit.h</header>
    <slots>
-    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+    <slot>lineChanged(PreviousScaleInfo)</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -586,7 +586,7 @@
    <extends>QLineEdit</extends>
    <header>BtLineEdit.h</header>
    <slots>
-    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+    <slot>lineChanged(PreviousScaleInfo)</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -594,7 +594,7 @@
    <extends>QLabel</extends>
    <header>BtLabel.h</header>
    <slots>
-    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+    <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    </slots>
   </customwidget>
   <customwidget>
@@ -602,7 +602,7 @@
    <extends>QLabel</extends>
    <header>BtLabel.h</header>
    <slots>
-    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+    <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    </slots>
   </customwidget>
   <customwidget>
@@ -610,7 +610,7 @@
    <extends>QLineEdit</extends>
    <header>BtLineEdit.h</header>
    <slots>
-    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+    <slot>lineChanged(PreviousScaleInfo)</slot>
    </slots>
   </customwidget>
  </customwidgets>
@@ -618,9 +618,9 @@
  <connections>
   <connection>
    <sender>label_temp</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>lineEdit_temp</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <slot>lineChanged(PreviousScaleInfo)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>30</x>
@@ -634,9 +634,9 @@
   </connection>
   <connection>
    <sender>label_calTemp</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>lineEdit_calTemp</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <slot>lineChanged(PreviousScaleInfo)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>55</x>
@@ -650,9 +650,9 @@
   </connection>
   <connection>
    <sender>label_batchsize</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>lineEdit_batchSize</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <slot>lineChanged(PreviousScaleInfo)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>411</x>
@@ -666,9 +666,9 @@
   </connection>
   <connection>
    <sender>label_add</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>lineEdit_add</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <slot>lineChanged(PreviousScaleInfo)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>411</x>
@@ -682,9 +682,9 @@
   </connection>
   <connection>
    <sender>label_volume</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>lineEdit_volume</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <slot>lineChanged(PreviousScaleInfo)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>174</x>

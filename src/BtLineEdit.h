@@ -20,88 +20,79 @@
  */
 #ifndef BTLINEEDIT_H
 #define BTLINEEDIT_H
+#pragma once
 
 #include <QLineEdit>
 #include <QString>
 #include <QWidget>
 
-#include "Unit.h"
+#include "BtFieldType.h"
+#include "measurement/PhysicalQuantity.h"
+#include "measurement/Unit.h"
+#include "measurement/UnitSystem.h"
+#include "UiAmountWithUnits.h"
 
-class BtGenericEdit;
-class BtMassEdit;
-class BtVolumeEdit;
-class BtTemperatureEdit;
-class BtTimeEdit;
-class BtDensityEdit;
-class BtColorEdit;
-class BtMixedEdit;
-class BtDiastaticPowerEdit;
-class BtStringEdit;
 class NamedEntity;
 
 /*!
  * \class BtLineEdit
  *
  * \brief This extends QLineEdit such that the Object handles all the unit
- * transformation we do, instead of each dialog. It makes the code much
- * nicer and prevents more cut'n'paste code.
+ *        transformation we do, instead of each dialog. It makes the code much
+ *        nicer and prevents more cut'n'paste code.
  *
+ *        A \c BtLineEdit (or subclass thereof) will usually have a corresponding \c BtLabel (or subclass thereof).
+ *        See comment in BtLabel.h for more details on the relationship between the two classes.
+ *
+ *        NB: Per https://doc.qt.io/qt-5/moc.html#multiple-inheritance-requires-qobject-to-be-first, "If you are using
+ *        multiple inheritance, moc [Qt's Meta-Object Compiler] assumes that the first inherited class is a subclass of
+ *        QObject. Also, be sure that only the first inherited class is a QObject."  In particular, this means we must
+ *        put Q_PROPERTY declarations for UiAmountWithUnits attributes here rather than in UiAmountWithUnits itself.
  */
-class BtLineEdit : public QLineEdit
-{
+class BtLineEdit : public QLineEdit, public UiAmountWithUnits {
    Q_OBJECT
-   Q_PROPERTY( int     type              READ type              WRITE setType              STORED false)
-   Q_PROPERTY( QString configSection     READ configSection     WRITE setConfigSection     STORED false)
-   Q_PROPERTY( QString editField         READ editField         WRITE setEditField         STORED false)
-   Q_PROPERTY( QString forcedUnit        READ forcedUnit        WRITE setForcedUnit        STORED false)
-   Q_PROPERTY( QString forcedScale       READ forcedScale       WRITE setForcedScale       STORED false)
+///   Q_PROPERTY(int     type                      READ type                                  WRITE setType                               STORED false)
+   Q_PROPERTY(QString configSection             READ getConfigSection                      WRITE setConfigSection                      STORED false)
+   Q_PROPERTY(QString editField                 READ getEditField                          WRITE setEditField                          STORED false)
+   Q_PROPERTY(QString forcedSystemOfMeasurement READ getForcedSystemOfMeasurementViaString WRITE setForcedSystemOfMeasurementViaString STORED false)
+   Q_PROPERTY(QString forcedRelativeScale       READ getForcedRelativeScaleViaString       WRITE setForcedRelativeScaleViaString       STORED false)
 
 public:
+   /*!
+    * \brief Initialize the BtLineEdit with the parent and do some things with the type
+    *
+    * \param parent - QWidget* to the parent object
+    * \param lType - the type of label: none, gravity, mass or volume
+    * \param maximalDisplayString - an example of the widest string this widget would be expected to need to display
+    *
+    * \todo Not sure if I can get the name of the widget being created.
+    *       Not sure how to signal the parent to redisplay
+    */
+   BtLineEdit(QWidget* parent = nullptr,
+              BtFieldType fieldType = NonPhysicalQuantity::String,
+              Measurement::Unit const * units = nullptr,
+              QString const & maximalDisplayString = "100.000 srm");
 
-   /*! \brief Initialize the BtLineEdit with the parent and do some things with the type
-   * \param parent - QWidget* to the parent object
-   * \param lType - the type of label: none, gravity, mass or volume
-   * \param maximalDisplayString - an example of the widest string this widget would be expected to need to display
-   * \return the initialized widget
-   * \todo Not sure if I can get the name of the widget being created.
-   *       Not sure how to signal the parent to redisplay
-   */
+   virtual ~BtLineEdit();
 
-   BtLineEdit(QWidget* parent = nullptr, Unit::UnitType type = Unit::None, QString const & maximalDisplayString = "100.000 L");
-   double toSI(Unit::unitDisplay oldUnit = Unit::noUnit, Unit::unitScale oldScale = Unit::noScale, bool force = false);
-   // Use this when you want to do something with the returned QString
-   QString displayAmount( double amount, int precision = 3);
+   virtual QString getWidgetText() const;
+   virtual void setWidgetText(QString text);
 
    // Use one of these when you just want to set the text
-   void    setText( NamedEntity* element, int precision=3 );
-   void    setText( double amount, int precision = 3);
-   void    setText( QString amount, int precision=3 );
-   void    setText( QVariant amount, int precision=3 );
+   void setText(NamedEntity* element, int precision = 3);
+   void setText(double amount, int precision = 3);
+   void setText(QString amount, int precision = 3);
+   void setText(QVariant amount, int precision = 3);
 
-   // Too many places still use getDouble, which just hoses me down. We're
-   // gonna fix this.
-   double  toDouble(bool* ok);
-
-   // By defining the setters/getters, we can remove the need for
-   // initializeProperties.
-   QString editField() const;
-   void setEditField( QString editField );
-
-   QString configSection();
-   void setConfigSection( QString configSection );
-
-   int type() const;
-   void setType(int type);
-
-   QString forcedUnit() const;
-   void setForcedUnit(QString forcedUnit);
-
-   QString forcedScale() const;
-   void setForcedScale(QString forcedScale);
 
 public slots:
    void onLineChanged();
-   void lineChanged(Unit::unitDisplay oldUnit, Unit::unitScale oldScale);
+   /**
+    * \brief Received from \c BtLabel when the user has change \c UnitSystem
+    *
+    * This is mostly referenced in .ui files.  (NB this means that the signal connections are only checked at run-time.)
+    */
+   void lineChanged(PreviousScaleInfo previousScaleInfo);
 
 signals:
    void textModified();
@@ -110,100 +101,28 @@ private:
    void calculateDisplaySize(QString const & maximalDisplayString);
    void setDisplaySize(bool recalculate = false);
    int desiredWidthInPixels;
-
-protected:
-   QWidget *btParent;
-   QString _section, _editField;
-   Unit::UnitType _type;
-   Unit::unitDisplay _forceUnit;
-   Unit::unitScale _forceScale;
-   Unit const * _units;
-
 };
 
-class BtGenericEdit : public BtLineEdit
-{
-   Q_OBJECT
-
-public:
-   BtGenericEdit(QWidget* parent = nullptr);
-};
-
-class BtMassEdit : public BtLineEdit
-{
-   Q_OBJECT
-
-public:
-   BtMassEdit(QWidget* parent = nullptr);
-};
-
-class BtVolumeEdit : public BtLineEdit
-{
-   Q_OBJECT
-
-public:
-   BtVolumeEdit(QWidget* parent = nullptr);
-};
-
-class BtTemperatureEdit : public BtLineEdit
-{
-   Q_OBJECT
-
-public:
-   BtTemperatureEdit(QWidget* parent = nullptr);
-};
-
-class BtTimeEdit : public BtLineEdit
-{
-   Q_OBJECT
-
-public:
-   BtTimeEdit(QWidget* parent = nullptr);
-};
-
-class BtDensityEdit : public BtLineEdit
-{
-   Q_OBJECT
-
-public:
-   BtDensityEdit(QWidget* parent = nullptr);
-};
-
-class BtColorEdit : public BtLineEdit
-{
-   Q_OBJECT
-
-public:
-   BtColorEdit(QWidget* parent = nullptr);
-};
-
-class BtStringEdit : public BtLineEdit
-{
-   Q_OBJECT
-
-public:
-   BtStringEdit(QWidget* parent = nullptr);
-};
+//
+// See comment in BtLabel.h for why we need all these trivial child classes to use in .ui files
+//
+class BtGenericEdit :        public BtLineEdit { Q_OBJECT public: BtGenericEdit(QWidget* parent); };
+class BtMassEdit :           public BtLineEdit { Q_OBJECT public: BtMassEdit(QWidget* parent); };
+class BtVolumeEdit :         public BtLineEdit { Q_OBJECT public: BtVolumeEdit(QWidget* parent); };
+class BtTemperatureEdit :    public BtLineEdit { Q_OBJECT public: BtTemperatureEdit(QWidget* parent); };
+class BtTimeEdit :           public BtLineEdit { Q_OBJECT public: BtTimeEdit(QWidget* parent); };
+class BtDensityEdit :        public BtLineEdit { Q_OBJECT public: BtDensityEdit(QWidget* parent); };
+class BtColorEdit :          public BtLineEdit { Q_OBJECT public: BtColorEdit(QWidget* parent); };
+class BtStringEdit :         public BtLineEdit { Q_OBJECT public: BtStringEdit(QWidget* parent); };
+class BtDiastaticPowerEdit : public BtLineEdit { Q_OBJECT public: BtDiastaticPowerEdit(QWidget* parent); };
 
 // mixed objects are a pain.
-class BtMixedEdit : public BtLineEdit
-{
+class BtMixedEdit : public BtLineEdit {
    Q_OBJECT
-
 public:
-   BtMixedEdit(QWidget* parent = nullptr);
-
+   BtMixedEdit(QWidget* parent);
 public slots:
    void setIsWeight(bool state);
-
-};
-
-class BtDiastaticPowerEdit : public BtLineEdit
-{
-   Q_OBJECT
-
-public:
-   BtDiastaticPowerEdit(QWidget* parent = nullptr);
 };
 
 #endif

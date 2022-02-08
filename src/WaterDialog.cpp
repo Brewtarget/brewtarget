@@ -27,21 +27,20 @@
 #include <QFont>
 #include <QInputDialog>
 
-#include "brewtarget.h"
 #include "BtDigitWidget.h"
-#include "ColorMethods.h"
 #include "database/ObjectStoreWrapper.h"
+#include "measurement/ColorMethods.h"
 #include "model/Fermentable.h"
 #include "model/Mash.h"
 #include "model/MashStep.h"
 #include "model/Recipe.h"
 #include "model/Salt.h"
-#include "SaltTableModel.h"
 #include "WaterButton.h"
 #include "WaterEditor.h"
 #include "WaterListModel.h"
 #include "WaterSortFilterProxyModel.h"
-#include "WaterTableModel.h"
+#include "tableModels/SaltTableModel.h"
+#include "tableModels/WaterTableModel.h"
 
 WaterDialog::WaterDialog(QWidget* parent) : QDialog(parent),
    m_ppm_digits( QVector<BtDigitWidget*>(Water::numIons) ),
@@ -123,19 +122,20 @@ WaterDialog::WaterDialog(QWidget* parent) : QDialog(parent),
    connect(baseProfileButton,   &WaterButton::clicked, m_base_editor,   &QWidget::show);
    connect(targetProfileButton, &WaterButton::clicked, m_target_editor, &QWidget::show);
 
-   connect( m_salt_table_model,    &SaltTableModel::newTotals, this, &WaterDialog::newTotals);
-   connect( pushButton_addSalt,    &QAbstractButton::clicked,  m_salt_table_model, &SaltTableModel::catchSalt);
-   connect( pushButton_removeSalt, &QAbstractButton::clicked,  this, &WaterDialog::removeSalts);
+   connect(m_salt_table_model,    &SaltTableModel::newTotals, this, &WaterDialog::newTotals);
+   connect(pushButton_addSalt,    &QAbstractButton::clicked,  m_salt_table_model, &SaltTableModel::catchSalt);
+   connect(pushButton_removeSalt, &QAbstractButton::clicked,  this, &WaterDialog::removeSalts);
 
-   connect( spinBox_mashRO, SIGNAL(valueChanged(int)),   this, SLOT(setMashRO(int)));
-   connect( spinBox_spargeRO, SIGNAL(valueChanged(int)), this, SLOT(setSpargeRO(int)));
+   connect(spinBox_mashRO, SIGNAL(valueChanged(int)),   this, SLOT(setMashRO(int)));
+   connect(spinBox_spargeRO, SIGNAL(valueChanged(int)), this, SLOT(setSpargeRO(int)));
 
-   connect( buttonBox_save, &QDialogButtonBox::accepted, this, &WaterDialog::saveAndClose);
-   connect( buttonBox_save, &QDialogButtonBox::rejected, this, &WaterDialog::clearAndClose);
+   connect(buttonBox_save, &QDialogButtonBox::accepted, this, &WaterDialog::saveAndClose);
+   connect(buttonBox_save, &QDialogButtonBox::rejected, this, &WaterDialog::clearAndClose);
 
+   return;
 }
 
-WaterDialog::~WaterDialog() {}
+WaterDialog::~WaterDialog() = default;
 
 void WaterDialog::setMashRO(int val)
 {
@@ -151,13 +151,13 @@ void WaterDialog::setSpargeRO(int val)
    newTotals();
 }
 
-void WaterDialog::setDigits(Water* target)
-{
-   if ( target == nullptr )
+void WaterDialog::setDigits() {
+   if (!this->m_target) {
       return;
+   }
 
    for(int i = 0; i < Water::numIons; ++i ) {
-      double ppm = target->ppm(static_cast<Water::Ions>(i));
+      double ppm = this->m_target->ppm(static_cast<Water::Ions>(i));
       double min_ppm = ppm * 0.95;
       double max_ppm = ppm * 1.05;
       QStringList msgs = QStringList()
@@ -169,6 +169,7 @@ void WaterDialog::setDigits(Water* target)
    }
 
    // oddly, pH doesn't change with the target water
+   return;
 }
 
 void WaterDialog::setRecipe(Recipe *rec)
@@ -190,10 +191,11 @@ void WaterDialog::setRecipe(Recipe *rec)
    targetProfileButton->setRecipe(m_rec);
 
    foreach( Water* w, m_rec->waters()) {
-      if (w->type() == Water::BASE )
-         m_base = w;
-      else if ( w->type() == Water::TARGET )
-         m_target = w;
+      if (w->type() == Water::BASE) {
+         this->m_base.reset(w);
+      } else if ( w->type() == Water::TARGET ) {
+         this->m_target.reset(w);
+      }
    }
 
    // I need these numbers before we set the ranges
@@ -207,48 +209,48 @@ void WaterDialog::setRecipe(Recipe *rec)
    }
    m_thickness = m_rec->mash()->totalInfusionAmount_l()/m_total_grains;
 
-   if ( m_base != nullptr ) {
+   if (this->m_base) {
 
-      m_mashRO = m_base->mashRO();
+      m_mashRO = this->m_base->mashRO();
       spinBox_mashRO->setValue( QVariant(m_mashRO*100).toInt());
-      m_spargeRO = m_base->spargeRO();
+      m_spargeRO = this->m_base->spargeRO();
       spinBox_spargeRO->setValue( QVariant(m_spargeRO*100).toInt());
 
-      baseProfileButton->setWater(m_base);
-      m_base_editor->setWater(m_base);
+      baseProfileButton->setWater(this->m_base.get());
+      m_base_editor->setWater(this->m_base.get());
       // all of the magic to set the sliders happens in newTotals(). So don't do it twice
    }
-   if ( m_target != nullptr  && m_target != m_base ) {
-      targetProfileButton->setWater(m_target);
-      m_target_editor->setWater(m_target);
+   if (this->m_target && this->m_target != this->m_base) {
+      targetProfileButton->setWater(this->m_target.get());
+      m_target_editor->setWater(this->m_target.get());
 
-      setDigits(m_target);
+      this->setDigits();
    }
    newTotals();
 
+   return;
 }
 
-void WaterDialog::update_baseProfile(int selected)
-{
+void WaterDialog::update_baseProfile(int selected) {
    Q_UNUSED(selected)
-   if ( m_rec == nullptr )
+   if (m_rec == nullptr) {
       return;
+   }
 
    QModelIndex proxyIdx(m_base_filter->index(baseProfileCombo->currentIndex(),0));
    QModelIndex sourceIdx(m_base_filter->mapToSource(proxyIdx));
-   const Water* parent = m_base_combo_list->at(sourceIdx.row());
+   Water const * parent = m_base_combo_list->at(sourceIdx.row());
+   if (parent) {
+      // The copy constructor won't copy the key (aka database ID), so the new object will be in-memory only until we
+      // explicitly insert it in the Object Store
+      this->m_base = std::make_shared<Water>(*parent);
+      this->m_base->setType(Water::BASE);
 
-   if ( parent ) {
-      // this is in cache only until we say "ok"
-      m_base = new Water(*parent);
-      m_base->setCacheOnly(true);
-      m_base->setType(Water::BASE);
-
-      baseProfileButton->setWater(m_base);
-      m_base_editor->setWater(m_base);
+      baseProfileButton->setWater(this->m_base.get());
+      m_base_editor->setWater(this->m_base.get());
       newTotals();
-
    }
+   return;
 }
 
 void WaterDialog::update_targetProfile(int selected)
@@ -263,14 +265,14 @@ void WaterDialog::update_targetProfile(int selected)
    Water* parent = m_target_combo_list->at(sourceIdx.row());
 
    if ( parent ) {
-      // this is in cache only until we say "ok"
-      m_target = new Water(*parent);
-      m_target->setCacheOnly(true);
-      m_target->setType(Water::TARGET);
-      targetProfileButton->setWater(m_target);
-      m_target_editor->setWater(m_target);
+      // The copy constructor won't copy the key (aka database ID), so the new object will be in-memory only until we
+      // explicitly insert it in the Object Store
+      this->m_target = std::make_shared<Water>(*parent);
+      this->m_target->setType(Water::TARGET);
+      targetProfileButton->setWater(this->m_target.get());
+      m_target_editor->setWater(this->m_target.get());
 
-      setDigits(m_target);
+      this->setDigits();
    }
 }
 
@@ -451,7 +453,7 @@ double WaterDialog::calculateGristpH()
 
    if ( m_rec && m_rec->fermentables().size() ) {
 
-      double platoRatio = 1/Units::plato.fromSI(m_rec->og());
+      double platoRatio = 1/Measurement::Units::plato.fromSI(m_rec->og());
       double color = m_rec->color_srm();
       double colorFromGrain = 0.0;
 
@@ -498,17 +500,15 @@ double WaterDialog::calculateMashpH()
 }
 
 void WaterDialog::saveAndClose() {
-   this->m_salt_table_model->saveAndClose();
-   if (this->m_base != nullptr && this->m_base->cacheOnly()) {
+   m_salt_table_model->saveAndClose();
+   if (m_base != nullptr && m_base->key() < 0) {
       std::shared_ptr<Water> water{this->m_base};
       ObjectStoreWrapper::insert(water);
-      water->setCacheOnly(false);
       this->m_rec->add(water);
    }
-   if ( this->m_target != nullptr && this->m_target->cacheOnly() ) {
+   if (m_target != nullptr && m_target->key() < 0) {
       std::shared_ptr<Water> water{this->m_target};
       ObjectStoreWrapper::insert(water);
-      water->setCacheOnly(false);
       this->m_rec->add(water);
    }
 
@@ -516,7 +516,7 @@ void WaterDialog::saveAndClose() {
    return;
 }
 
-void WaterDialog::clearAndClose()
-{
+void WaterDialog::clearAndClose() {
    setVisible(false);
+   return;
 }

@@ -82,7 +82,7 @@ public:
 
    Q_ENUM(Types Ions)
 
-   Water(QString name = "", bool cache = true);
+   Water(QString name = "");
    Water(NamedParameterBundle const & namedParameterBundle);
    Water(Water const & other);
 

@@ -20,14 +20,12 @@
  */
 #ifndef MISCSORTFILTERPROXYMODEL_H
 #define MISCSORTFILTERPROXYMODEL_H
-
-class MiscSortFilterProxyModel;
+#pragma once
 
 #include <QSortFilterProxyModel>
 
 /*!
  * \class MiscSortFilterProxyModel
- * \author Philip G. Lee
  *
  * \brief Proxy model for sorting miscs.
  */

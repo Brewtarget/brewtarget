@@ -23,11 +23,16 @@
 
 #include <QDate>
 #include <QDebug>
-#include <QWidget>
 
-#include "brewtarget.h"
+#include "Localization.h"
+#include "measurement/Measurement.h"
 #include "model/BrewNote.h"
 #include "PersistentSettings.h"
+
+namespace {
+   double const lowLimitPct  = 0.95;
+   double const highLimitPct = 1.05;
+}
 
 BrewNoteWidget::BrewNoteWidget(QWidget *parent) : QWidget(parent) {
    setupUi(this);
@@ -52,219 +57,216 @@ BrewNoteWidget::BrewNoteWidget(QWidget *parent) : QWidget(parent) {
 
    // A few labels on this page need special handling, so I connect them here
    // instead of how we would normally do this.
-   connect(btLabel_projectedOg, &BtLabel::labelChanged, this, &BrewNoteWidget::updateProjOg);
-   connect(btLabel_fermentDate, &BtLabel::labelChanged, this, &BrewNoteWidget::updateDateFormat);
+   connect(btLabel_projectedOg, &BtLabel::changedSystemOfMeasurementOrScale, this, &BrewNoteWidget::updateProjOg);
+///   connect(btLabel_fermentDate, &BtLabel::changedSystemOfMeasurementOrScale, this, &BrewNoteWidget::updateDateFormat);
 
    // I think this might work
-   updateDateFormat(Unit::noUnit, Unit::noScale);
+   updateDateFormat();
 }
 
+BrewNoteWidget::~BrewNoteWidget() = default;
+
+//.:TBD:. See comment in PitchDialog::updateProductionDate() for how we might re-implement per-field date format
+// selection
 // I should really do this better, but I really cannot bring myself to do
 // another UnitSystem for one input field.
-void BrewNoteWidget::updateDateFormat(Unit::unitDisplay display,Unit::unitScale scale)
-{
-   QString format;
-   // I need the new unit, not the old
-   Unit::unitDisplay unitDsp = (Unit::unitDisplay)PersistentSettings::value(PropertyNames::BrewNote::fermentDate, Brewtarget::getDateFormat(), "page_postferment", PersistentSettings::UNIT).toInt();
-
-   switch(unitDsp) {
-      case Unit::displayUS:
-         format = "MM-dd-yyyy";
-         break;
-      case Unit::displayImp:
-         format = "dd-MM-yyyy";
-         break;
-      case Unit::displaySI:
-      default:
-         format = "yyyy-MM-dd";
-   }
-   lineEdit_fermentDate->setDisplayFormat(format);
+void BrewNoteWidget::updateDateFormat() {
+//   auto dateFormat = Localization::getDateFormatForField(PersistentSettings::BrewNote::fermentDate,
+//                                                         PersistentSettings::Sections::page_postferment);
+   auto dateFormat = Localization::getDateFormat();
+   QString format = Localization::numericToStringDateFormat(dateFormat);
+   this->lineEdit_fermentDate->setDisplayFormat(format);
    return;
 }
 
 
-void BrewNoteWidget::updateProjOg(Unit::unitDisplay oldUnit, Unit::unitScale oldScale)
-{
-   double low  = 0.95;
-   double high = 1.05;
-   double quant;
-   int precision = 3;
+void BrewNoteWidget::updateProjOg() {
+   // Density UnitSystems only have one scale, so we don't bother looking up UnitSystem::RelativeScale
+   auto forcedSystemOfMeasurement =
+      Measurement::getForcedSystemOfMeasurementForField(*PropertyNames::BrewNote::projOg,
+                                                        *PersistentSettings::Sections::page_preboil);
+   double quant = Measurement::amountDisplay(Measurement::Amount{this->bNoteObs->projOg(), Measurement::Units::sp_grav},
+                                             forcedSystemOfMeasurement);
+   this->lcdnumber_projectedOG->setLowLim( lowLimitPct  * quant);
+   this->lcdnumber_projectedOG->setHighLim(highLimitPct * quant);
 
-   // I don't think we care about the old unit or scale, just the new ones
-   Unit::unitDisplay unitDsp = static_cast<Unit::unitDisplay>(
-      PersistentSettings::value(PropertyNames::BrewNote::projOg,
-                                Unit::noUnit,
-                                PersistentSettings::Sections::page_preboil,
-                                PersistentSettings::UNIT).toInt()
-   );
+   Measurement::UnitSystem const & displayUnitSystem =
+      Measurement::getUnitSystemForField(*PropertyNames::BrewNote::projOg,
+                                         *PersistentSettings::Sections::page_preboil,
+                                         Measurement::PhysicalQuantity::Density);
+   int precision = (displayUnitSystem == Measurement::UnitSystems::density_Plato) ? 0 : 3;
 
-
-   if ( unitDsp == Unit::noUnit )
-      unitDsp = Brewtarget::getDensityUnit();
-
-   if ( unitDsp == Unit::displayPlato )
-      precision = 0;
-
-   quant = Brewtarget::amountDisplay(bNoteObs, page_preboil, PropertyNames::BrewNote::projOg,&Units::sp_grav);
-   lcdnumber_projectedOG->setLowLim(  low  * quant );
-   lcdnumber_projectedOG->setHighLim( high * quant );
-   lcdnumber_projectedOG->display(quant, precision);
+   this->lcdnumber_projectedOG->display(quant, precision);
+   return;
 }
 
-void BrewNoteWidget::setBrewNote(BrewNote* bNote)
-{
-   double low = 0.95;
-   double high = 1.05;
+void BrewNoteWidget::setBrewNote(BrewNote* bNote) {
 
-   if( bNoteObs != 0 )
-      disconnect( bNoteObs, 0, this, 0 );
+   if (this->bNoteObs) {
+      disconnect(this->bNoteObs, nullptr, this, nullptr);
+   }
 
-   if ( bNote )
-   {
-      bNoteObs = bNote;
-      connect( bNoteObs, &NamedEntity::changed, this, &BrewNoteWidget::changed );
+   if (bNote) {
+      this->bNoteObs = bNote;
+      connect(this->bNoteObs, &NamedEntity::changed, this, &BrewNoteWidget::changed);
 
       // Set the highs and the lows for the lcds
-      lcdnumber_effBK->setLowLim(bNoteObs->projEff_pct() * low);
-      lcdnumber_effBK->setHighLim(bNoteObs->projEff_pct() * high);
+      lcdnumber_effBK->setLowLim(bNoteObs->projEff_pct() * lowLimitPct);
+      lcdnumber_effBK->setHighLim(bNoteObs->projEff_pct() * highLimitPct);
 
-      lcdnumber_projectedOG->setLowLim( bNoteObs->projOg() * low);
-      lcdnumber_projectedOG->setHighLim( bNoteObs->projOg() * high);
+      lcdnumber_projectedOG->setLowLim( bNoteObs->projOg() * lowLimitPct);
+      lcdnumber_projectedOG->setHighLim( bNoteObs->projOg() * highLimitPct);
 
-      lcdnumber_brewhouseEff->setLowLim(bNoteObs->projEff_pct() * low);
-      lcdnumber_brewhouseEff->setHighLim(bNoteObs->projEff_pct() * high);
+      lcdnumber_brewhouseEff->setLowLim(bNoteObs->projEff_pct() * lowLimitPct);
+      lcdnumber_brewhouseEff->setHighLim(bNoteObs->projEff_pct() * highLimitPct);
 
-      lcdnumber_projABV->setLowLim( bNoteObs->projABV_pct() * low);
-      lcdnumber_projABV->setHighLim( bNoteObs->projABV_pct() * high);
+      lcdnumber_projABV->setLowLim( bNoteObs->projABV_pct() * lowLimitPct);
+      lcdnumber_projABV->setHighLim( bNoteObs->projABV_pct() * highLimitPct);
 
-      lcdnumber_abv->setLowLim( bNoteObs->projABV_pct() * low);
-      lcdnumber_abv->setHighLim( bNoteObs->projABV_pct() * high);
+      lcdnumber_abv->setLowLim( bNoteObs->projABV_pct() * lowLimitPct);
+      lcdnumber_abv->setHighLim( bNoteObs->projABV_pct() * highLimitPct);
 
-      lcdnumber_atten->setLowLim( bNoteObs->projAtten() * low );
-      lcdnumber_atten->setHighLim( bNoteObs->projAtten() * high );
+      lcdnumber_atten->setLowLim( bNoteObs->projAtten() * lowLimitPct );
+      lcdnumber_atten->setHighLim( bNoteObs->projAtten() * highLimitPct );
 
-      lcdnumber_projAtten->setLowLim( bNoteObs->projAtten() * low );
-      lcdnumber_projAtten->setHighLim( bNoteObs->projAtten() * high );
+      lcdnumber_projAtten->setLowLim( bNoteObs->projAtten() * lowLimitPct );
+      lcdnumber_projAtten->setHighLim( bNoteObs->projAtten() * highLimitPct );
 
       showChanges();
    }
+   return;
 }
 
-bool BrewNoteWidget::isBrewNote(BrewNote* note) { return bNoteObs == note; }
-
-void BrewNoteWidget::updateSG()
-{
-   if (bNoteObs == 0)
-      return;
-
-   bNoteObs->setSg(lineEdit_SG->toSI());
+bool BrewNoteWidget::isBrewNote(BrewNote* note) {
+   return this->bNoteObs == note;
 }
 
-void BrewNoteWidget::updateVolumeIntoBK_l()
-{
-   if (bNoteObs == 0)
+void BrewNoteWidget::updateSG() {
+   if (this->bNoteObs == nullptr) {
       return;
+   }
 
-   bNoteObs->setVolumeIntoBK_l(lineEdit_volIntoBK->toSI());
+   this->bNoteObs->setSg(lineEdit_SG->toSI().quantity);
+   return;
 }
 
-void BrewNoteWidget::updateStrikeTemp_c()
-{
-   if (bNoteObs == 0)
+void BrewNoteWidget::updateVolumeIntoBK_l() {
+   if (this->bNoteObs == nullptr) {
       return;
+   }
 
-   bNoteObs->setStrikeTemp_c(lineEdit_strikeTemp->toSI());
+   this->bNoteObs->setVolumeIntoBK_l(lineEdit_volIntoBK->toSI().quantity);
+   return;
 }
 
-void BrewNoteWidget::updateMashFinTemp_c()
-{
-   if (bNoteObs == 0)
+void BrewNoteWidget::updateStrikeTemp_c() {
+   if (this->bNoteObs == nullptr) {
       return;
+   }
 
-   bNoteObs->setMashFinTemp_c(lineEdit_mashFinTemp->toSI());
+   this->bNoteObs->setStrikeTemp_c(lineEdit_strikeTemp->toSI().quantity);
+   return;
 }
 
-void BrewNoteWidget::updateOG()
-{
-   if (bNoteObs == 0)
+void BrewNoteWidget::updateMashFinTemp_c() {
+   if (this->bNoteObs == nullptr) {
       return;
+   }
 
-   bNoteObs->setOg(lineEdit_OG->toSI());
+   this->bNoteObs->setMashFinTemp_c(lineEdit_mashFinTemp->toSI().quantity);
+   return;
 }
 
-void BrewNoteWidget::updatePostBoilVolume_l()
-{
-   if (bNoteObs == 0)
+void BrewNoteWidget::updateOG() {
+   if (this->bNoteObs == nullptr) {
       return;
+   }
 
-   bNoteObs->setPostBoilVolume_l(lineEdit_postBoilVol->toSI());
-   showChanges();
+   this->bNoteObs->setOg(lineEdit_OG->toSI().quantity);
+   return;
 }
 
-void BrewNoteWidget::updateVolumeIntoFerm_l()
-{
-   if (bNoteObs == 0)
+void BrewNoteWidget::updatePostBoilVolume_l() {
+   if (this->bNoteObs == nullptr) {
       return;
+   }
 
-   bNoteObs->setVolumeIntoFerm_l(lineEdit_volIntoFerm->toSI());
-   showChanges();
+   this->bNoteObs->setPostBoilVolume_l(lineEdit_postBoilVol->toSI().quantity);
+   this->showChanges();
+   return;
 }
 
-void BrewNoteWidget::updatePitchTemp_c()
-{
-   if (bNoteObs == 0)
+void BrewNoteWidget::updateVolumeIntoFerm_l() {
+   if (this->bNoteObs == nullptr) {
       return;
+   }
 
-   bNoteObs->setPitchTemp_c(lineEdit_pitchTemp->toSI());
-   showChanges();
+   this->bNoteObs->setVolumeIntoFerm_l(lineEdit_volIntoFerm->toSI().quantity);
+   this->showChanges();
+   return;
 }
 
-void BrewNoteWidget::updateFG()
-{
-   if (bNoteObs == 0)
+void BrewNoteWidget::updatePitchTemp_c() {
+   if (this->bNoteObs == nullptr) {
       return;
+   }
 
-   bNoteObs->setFg(lineEdit_FG->toSI());
-   showChanges();
+   this->bNoteObs->setPitchTemp_c(lineEdit_pitchTemp->toSI().quantity);
+   this->showChanges();
+   return;
 }
 
-void BrewNoteWidget::updateFinalVolume_l()
-{
-   if (bNoteObs == 0)
+void BrewNoteWidget::updateFG() {
+   if (this->bNoteObs == nullptr) {
       return;
+   }
 
-   bNoteObs->setFinalVolume_l(lineEdit_finalVol->toSI());
-//   showChanges();
+   this->bNoteObs->setFg(lineEdit_FG->toSI().quantity);
+   this->showChanges();
+   return;
 }
 
-void BrewNoteWidget::updateFermentDate(QDate const & datetime)
-{
-   if (bNoteObs == 0)
+void BrewNoteWidget::updateFinalVolume_l() {
+   if (this->bNoteObs == nullptr) {
       return;
+   }
 
-   bNoteObs->setFermentDate(datetime);
+   this->bNoteObs->setFinalVolume_l(lineEdit_finalVol->toSI().quantity);
+//   this->showChanges();
+   return;
 }
 
-void BrewNoteWidget::updateNotes()
-{
-   if (bNoteObs == 0)
+void BrewNoteWidget::updateFermentDate(QDate const & datetime) {
+   if (this->bNoteObs == nullptr) {
       return;
+   }
 
-   bNoteObs->setNotes(btTextEdit_brewNotes->toPlainText() );
+   this->bNoteObs->setFermentDate(datetime);
+   return;
 }
 
-void BrewNoteWidget::changed(QMetaProperty /*prop*/, QVariant /*val*/)
-{
-   if ( sender() != bNoteObs )
+void BrewNoteWidget::updateNotes() {
+   if (this->bNoteObs == nullptr) {
       return;
+   }
 
-   showChanges();
+   this->bNoteObs->setNotes(btTextEdit_brewNotes->toPlainText() );
+   return;
 }
 
-void BrewNoteWidget::showChanges(QString field)
-{
-   if (bNoteObs == 0)
+void BrewNoteWidget::changed(QMetaProperty /*prop*/, QVariant /*val*/) {
+   if (this->sender() != this->bNoteObs) {
       return;
+   }
+
+   this->showChanges();
+   return;
+}
+
+void BrewNoteWidget::showChanges(QString field) {
+   if (this->bNoteObs == nullptr) {
+      return;
+   }
 
    lineEdit_SG->setText(bNoteObs);
    lineEdit_volIntoBK->setText(bNoteObs);
@@ -284,15 +286,16 @@ void BrewNoteWidget::showChanges(QString field)
    lcdnumber_effBK->display(bNoteObs->effIntoBK_pct(),2);
 
    // Need to think about these? Maybe use the bubbles?
-   updateProjOg(Unit::noUnit,Unit::noScale); // this requires more work, but updateProj does it
+   this->updateProjOg(); // this requires more work, but updateProj does it
 
    lcdnumber_brewhouseEff->display(bNoteObs->brewhouseEff_pct(),2);
    lcdnumber_projABV->display(bNoteObs->projABV_pct(),2);
    lcdnumber_abv->display(bNoteObs->abv(),2);
    lcdnumber_atten->display(bNoteObs->attenuation(),2);
    lcdnumber_projAtten->display(bNoteObs->projAtten(),2);
+   return;
 }
 
-void BrewNoteWidget::focusOutEvent(QFocusEvent *e)
-{
+void BrewNoteWidget::focusOutEvent(QFocusEvent *e) {
+   return;
 }

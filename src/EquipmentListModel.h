@@ -19,6 +19,7 @@
  */
 #ifndef EQUIPMENTLISTMODEL_H
 #define EQUIPMENTLISTMODEL_H
+#pragma once
 
 #include <memory>
 

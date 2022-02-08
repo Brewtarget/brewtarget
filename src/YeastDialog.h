@@ -39,7 +39,7 @@ class YeastSortFilterProxyModel;
 
 /*!
  * \class YeastDialog
- * \author Philip G. Lee
+ *
  *
  * \brief View/controller dialog for displaying all the yeasts in the database.
  */
@@ -92,5 +92,4 @@ private:
    void retranslateUi();
 };
 
-#endif   /* _YEASTDIALOG_H */
-
+#endif   // YEASTDIALOG_H

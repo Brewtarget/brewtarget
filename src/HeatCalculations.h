@@ -20,23 +20,26 @@
 #ifndef HEATCALCULATIONS_H
 #define HEATCALCULATIONS_H
 
+class HeatCalculations;
+
 /*!
- * \author Philip G. Lee
+ *
  * \brief Algorithms and constants related to the thermodynamics of beer.
  */
-class HeatCalculations {
+class HeatCalculations
+{
 public:
 
-double equivalentMCProduct(double m1, double c1, double m2, double c2);
-// Water temp when mass 1 is initially at T1 and is to be brought to Tf by
-// water. MCw = (mass of water)*(water sp. heat). MC1 = (mass 1)*(sp. heat 1).
-double requiredWaterTemp( double MCw, double MC1, double Tf, double T1 );
+   double equivalentMCProduct(double m1, double c1, double m2, double c2);
+   // Water temp when mass 1 is initially at T1 and is to be brought to Tf by
+   // water. MCw = (mass of water)*(water sp. heat). MC1 = (mass 1)*(sp. heat 1).
+   double requiredWaterTemp( double MCw, double MC1, double Tf, double T1 );
 
-/***Specific heats***/
-// Water's specific heat.
-static double Cw_JKgK;
-static double Cw_calGC;
-static double Cgrain_calGC;
+   /***Specific heats***/
+   // Water's specific heat.
+   static double const Cw_JKgK;
+   static double const Cw_calGC;
+   static double const Cgrain_calGC;
 };
 
-#endif
+#endif   /* _HEATCALCULATIONS_H */

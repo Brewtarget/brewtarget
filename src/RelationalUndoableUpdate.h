@@ -18,12 +18,14 @@
  */
 #ifndef RELATIONAL_UNDOABLE_UPDATE_H
 #define RELATIONAL_UNDOABLE_UPDATE_H
+#pragma once
 
-#include "brewtarget.h" // For logging
 #include <QMetaType>
 #include <QString>
 #include <QUndoCommand>
 #include <QVariant>
+
+#include "Logging.h"
 #include "model/Recipe.h"
 #include "model/Style.h"
 #include "StyleButton.h"
@@ -100,7 +102,7 @@ private:
    {
       (this->updatee.*(this->setter))(isUndo ? this->oldValue : this->newValue);
       if (this->callback != nullptr) {
-         (Brewtarget::mainWindow()->*(this->callback))();
+         (MainWindow::instance().*(this->callback))();
       }
       return;
    }
@@ -129,5 +131,6 @@ template<class UU, class VV> RelationalUndoableUpdate<UU, VV> * newRelationalUnd
                                                                                             QUndoCommand * parent = nullptr) {
    return new RelationalUndoableUpdate<UU, VV>(updatee, setter, oldValue, newValue, callback, description, parent);
 }
+
 
 #endif

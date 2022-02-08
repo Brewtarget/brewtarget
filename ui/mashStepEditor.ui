@@ -497,7 +497,7 @@
    <extends>QLineEdit</extends>
    <header>BtLineEdit.h</header>
    <slots>
-    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+    <slot>lineChanged(PreviousScaleInfo)</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -505,7 +505,7 @@
    <extends>QLabel</extends>
    <header>BtLabel.h</header>
    <slots>
-    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+    <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    </slots>
   </customwidget>
   <customwidget>
@@ -513,7 +513,7 @@
    <extends>QLabel</extends>
    <header>BtLabel.h</header>
    <slots>
-    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+    <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    </slots>
   </customwidget>
   <customwidget>
@@ -521,7 +521,7 @@
    <extends>QLineEdit</extends>
    <header>BtLineEdit.h</header>
    <slots>
-    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+    <slot>lineChanged(PreviousScaleInfo)</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -529,7 +529,7 @@
    <extends>QLabel</extends>
    <header>BtLabel.h</header>
    <slots>
-    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+    <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    </slots>
   </customwidget>
   <customwidget>
@@ -537,7 +537,7 @@
    <extends>QLineEdit</extends>
    <header>BtLineEdit.h</header>
    <slots>
-    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+    <slot>lineChanged(PreviousScaleInfo)</slot>
    </slots>
   </customwidget>
  </customwidgets>
@@ -577,9 +577,9 @@
   </connection>
   <connection>
    <sender>label_stepTemp</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>lineEdit_stepTemp</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <slot>lineChanged(PreviousScaleInfo)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>29</x>
@@ -593,9 +593,9 @@
   </connection>
   <connection>
    <sender>label_infuseAmount</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>lineEdit_infuseAmount</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <slot>lineChanged(PreviousScaleInfo)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>53</x>
@@ -609,9 +609,9 @@
   </connection>
   <connection>
    <sender>label_infuseTemp</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>lineEdit_infuseTemp</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <slot>lineChanged(PreviousScaleInfo)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>40</x>
@@ -625,9 +625,9 @@
   </connection>
   <connection>
    <sender>label_decoctionAmount</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>lineEdit_decoctionAmount</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <slot>lineChanged(PreviousScaleInfo)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>310</x>
@@ -641,9 +641,9 @@
   </connection>
   <connection>
    <sender>label_endTemp</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>lineEdit_endTemp</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <slot>lineChanged(PreviousScaleInfo)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>310</x>
@@ -657,9 +657,9 @@
   </connection>
   <connection>
    <sender>label_stepTime</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>lineEdit_stepTime</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <slot>lineChanged(PreviousScaleInfo)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>282</x>
@@ -673,9 +673,9 @@
   </connection>
   <connection>
    <sender>label_rampTime</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>lineEdit_rampTime</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <slot>lineChanged(PreviousScaleInfo)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>301</x>

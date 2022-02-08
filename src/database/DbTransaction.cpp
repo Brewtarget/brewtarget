@@ -39,7 +39,6 @@ DbTransaction::DbTransaction(Database & database, QSqlDatabase & connection, DbT
    qDebug() << Q_FUNC_INFO << "Database transaction begin: " << (succeeded ? "succeeded" : "failed");
    if (!succeeded) {
       qCritical() << Q_FUNC_INFO << "Unable to start database transaction:" << connection.lastError().text();
-      Q_ASSERT(false); // .:TODO-DATABASE:. COMMENT OUT THIS ASSERT!
    }
    return;
 }

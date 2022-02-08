@@ -30,14 +30,14 @@ class TimerListDialog;
 
 /*!
  * \class TimerListDialog
- * \author Aidan Roberts
+ *
  *
  * \brief Dialog to hold addition timers
  */
 class TimerListDialog : public QDialog
 {
    Q_OBJECT
-   
+
 public:
       TimerListDialog(QWidget* parent, QList<TimerWidget*> * timers);
       ~TimerListDialog();

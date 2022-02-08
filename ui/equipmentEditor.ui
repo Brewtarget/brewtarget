@@ -575,7 +575,7 @@
    <extends>QLineEdit</extends>
    <header>BtLineEdit.h</header>
    <slots>
-    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+    <slot>lineChanged(PreviousScaleInfo)</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -583,7 +583,7 @@
    <extends>QLabel</extends>
    <header>BtLabel.h</header>
    <slots>
-    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+    <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    </slots>
   </customwidget>
   <customwidget>
@@ -596,7 +596,7 @@
    <extends>QLineEdit</extends>
    <header>BtLineEdit.h</header>
    <slots>
-    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+    <slot>lineChanged(PreviousScaleInfo)</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -604,7 +604,7 @@
    <extends>QLabel</extends>
    <header>BtLabel.h</header>
    <slots>
-    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+    <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    </slots>
   </customwidget>
   <customwidget>
@@ -614,7 +614,7 @@
    <slots>
     <signal>textModified()</signal>
     <slot>lineChanged()</slot>
-    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+    <slot>lineChanged(PreviousScaleInfo)</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -622,7 +622,7 @@
    <extends>QLabel</extends>
    <header>BtLabel.h</header>
    <slots>
-    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+    <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
     <slot>popContextMenu(QPoint)</slot>
    </slots>
   </customwidget>
@@ -631,7 +631,7 @@
    <extends>QLabel</extends>
    <header>BtLabel.h</header>
    <slots>
-    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+    <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    </slots>
   </customwidget>
   <customwidget>
@@ -639,7 +639,7 @@
    <extends>QLineEdit</extends>
    <header>BtLineEdit.h</header>
    <slots>
-    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+    <slot>lineChanged(PreviousScaleInfo)</slot>
    </slots>
   </customwidget>
  </customwidgets>
@@ -676,9 +676,9 @@
  <connections>
   <connection>
    <sender>label_tunWeight</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>lineEdit_tunWeight</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <slot>lineChanged(PreviousScaleInfo)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>120</x>
@@ -692,9 +692,9 @@
   </connection>
   <connection>
    <sender>label_boilTime</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>lineEdit_boilTime</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <slot>lineChanged(PreviousScaleInfo)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>119</x>
@@ -708,9 +708,9 @@
   </connection>
   <connection>
    <sender>label_batchSize</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>lineEdit_batchSize</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <slot>lineChanged(PreviousScaleInfo)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>121</x>
@@ -724,9 +724,9 @@
   </connection>
   <connection>
    <sender>label_boilSize</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>lineEdit_boilSize</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <slot>lineChanged(PreviousScaleInfo)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>121</x>
@@ -740,9 +740,9 @@
   </connection>
   <connection>
    <sender>label_evaporationRate</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>lineEdit_evaporationRate</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <slot>lineChanged(PreviousScaleInfo)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>119</x>
@@ -756,9 +756,9 @@
   </connection>
   <connection>
    <sender>label_topUpKettle</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>lineEdit_topUpKettle</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <slot>lineChanged(PreviousScaleInfo)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>119</x>
@@ -772,9 +772,9 @@
   </connection>
   <connection>
    <sender>label_topUpWater</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>lineEdit_topUpWater</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <slot>lineChanged(PreviousScaleInfo)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>119</x>
@@ -788,9 +788,9 @@
   </connection>
   <connection>
    <sender>label_boilingPoint</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>lineEdit_boilingPoint</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <slot>lineChanged(PreviousScaleInfo)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>119</x>
@@ -804,9 +804,9 @@
   </connection>
   <connection>
    <sender>label_tunVolume</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>lineEdit_tunWeight</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <slot>lineChanged(PreviousScaleInfo)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>120</x>
@@ -820,9 +820,9 @@
   </connection>
   <connection>
    <sender>label_trubChillerLoss</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>lineEdit_trubChillerLoss</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <slot>lineChanged(PreviousScaleInfo)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>120</x>
@@ -836,9 +836,9 @@
   </connection>
   <connection>
    <sender>label_lauterDeadspace</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>lineEdit_lauterDeadspace</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <slot>lineChanged(PreviousScaleInfo)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>120</x>

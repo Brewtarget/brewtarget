@@ -16,13 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "BtFolder.h"
 
+#include <QDebug>
 #include <QString>
 #include <QRegExp>  // Yeah, you knew that had to happen
-#include <QDebug>
-
-#include "BtFolder.h"
-#include "brewtarget.h"
 
 BtFolder::BtFolder() : QObject()
 {
@@ -42,21 +40,21 @@ QString BtFolder::path() const { return _path; }
 QString BtFolder::fullPath() const { return _fullPath; }
 
 // changing the name changes the fullPath
-void BtFolder::setName(QString var) 
-{ 
-   _name = var; 
+void BtFolder::setName(QString var)
+{
+   _name = var;
    _fullPath = _path.append("/").append(_name);
 }
 
 // changing the path changes the fullPath
-void BtFolder::setPath(QString var) 
-{ 
-   _path = var; 
+void BtFolder::setPath(QString var)
+{
+   _path = var;
    _fullPath = _path.append("/").append(_name);
 }
 
 // changing the full path necessarily changes the name and the path
-void BtFolder::setfullPath(QString var) 
+void BtFolder::setfullPath(QString var)
 {
 #if QT_VERSION < QT_VERSION_CHECK(5,15,0)
    QStringList pieces = var.split("/", QString::SkipEmptyParts);
@@ -73,7 +71,7 @@ void BtFolder::setfullPath(QString var)
       _fullPath = var;
 
    }
-   else 
+   else
    {
       _name = var;
       _path = var;
@@ -81,9 +79,8 @@ void BtFolder::setfullPath(QString var)
    }
 }
 
-bool BtFolder::isFolder(QString var ) 
+bool BtFolder::isFolder(QString var )
 {
 
    return _fullPath == var;
 }
-

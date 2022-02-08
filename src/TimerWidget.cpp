@@ -17,17 +17,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #include "TimerWidget.h"
+
 #include <QChar>
-#include <QFileDialog>
 #include <QDir>
-#include <QUrl>
-#include <QSpacerItem>
+#include <QFileDialog>
 #include <QHBoxLayout>
-#include <QVBoxLayout>
-#include "brewtarget.h"
 #include <QMessageBox>
+#include <QSpacerItem>
+#include <QUrl>
+#include <QVBoxLayout>
+
+#include "brewtarget.h"
 
 TimerWidget::TimerWidget(TimerMainDialog *parent, BoilTime* bt) :
     QDialog(parent),

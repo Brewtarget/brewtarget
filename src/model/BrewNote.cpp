@@ -28,8 +28,8 @@
 #include <QString>
 
 #include "Algorithms.h"
-#include "brewtarget.h"
 #include "database/ObjectStoreWrapper.h"
+#include "Localization.h"
 #include "model/Equipment.h"
 #include "model/Mash.h"
 #include "model/MashStep.h"
@@ -73,12 +73,12 @@ ObjectStore & BrewNote::getObjectStoreTypedInstance() const {
 }
 
 // Initializers
-BrewNote::BrewNote(QString name, bool cache) : BrewNote(QDate(), cache, name) {
+BrewNote::BrewNote(QString name) : BrewNote(QDate(), name) {
    return;
 }
 
 BrewNote::BrewNote(Recipe const & recipe) :
-   BrewNote(QDate(), true, "") {
+   BrewNote(QDate(), "") {
    this->m_recipeId = recipe.key();
    return;
 }
@@ -121,39 +121,39 @@ BrewNote::BrewNote(NamedParameterBundle const & namedParameterBundle) :
 }
 
 
-BrewNote::BrewNote(QDate dateNow, bool cache, QString const & name) :
-   NamedEntity(-1, cache, name, true),
-   loading(false),
-   m_brewDate(dateNow),
-   m_fermentDate(QDate()),
-   m_notes(QString()),
-   m_sg(0.0),
-   m_abv(0.0),
-   m_effIntoBK_pct(0.0),
-   m_brewhouseEff_pct(0.0),
-   m_volumeIntoBK_l(0.0),
-   m_strikeTemp_c(0.0),
-   m_mashFinTemp_c(0.0),
-   m_og(0.0),
-   m_postBoilVolume_l(0.0),
-   m_volumeIntoFerm_l(0.0),
-   m_pitchTemp_c(0.0),
-   m_fg(0.0),
-   m_attenuation(0.0),
-   m_finalVolume_l(0.0),
-   m_boilOff_l(0.0),
-   m_projBoilGrav(0.0),
-   m_projVolIntoBK_l(0.0),
-   m_projStrikeTemp_c(0.0),
-   m_projMashFinTemp_c(0.0),
-   m_projOg(0.0),
-   m_projVolIntoFerm_l(0.0),
-   m_projFg(0.0),
-   m_projEff_pct(0.0),
-   m_projABV_pct(0.0),
-   m_projPoints(0.0),
-   m_projFermPoints(0.0),
-   m_projAtten(0.0) {
+BrewNote::BrewNote(QDate dateNow, QString const & name) :
+   NamedEntity        {name, true},
+   loading            {false},
+   m_brewDate         {dateNow},
+   m_fermentDate      {},
+   m_notes            {""},
+   m_sg               {0.0},
+   m_abv              {0.0},
+   m_effIntoBK_pct    {0.0},
+   m_brewhouseEff_pct {0.0},
+   m_volumeIntoBK_l   {0.0},
+   m_strikeTemp_c     {0.0},
+   m_mashFinTemp_c    {0.0},
+   m_og               {0.0},
+   m_postBoilVolume_l {0.0},
+   m_volumeIntoFerm_l {0.0},
+   m_pitchTemp_c      {0.0},
+   m_fg               {0.0},
+   m_attenuation      {0.0},
+   m_finalVolume_l    {0.0},
+   m_boilOff_l        {0.0},
+   m_projBoilGrav     {0.0},
+   m_projVolIntoBK_l  {0.0},
+   m_projStrikeTemp_c {0.0},
+   m_projMashFinTemp_c{0.0},
+   m_projOg           {0.0},
+   m_projVolIntoFerm_l{0.0},
+   m_projFg           {0.0},
+   m_projEff_pct      {0.0},
+   m_projABV_pct      {0.0},
+   m_projPoints       {0.0},
+   m_projFermPoints   {0.0},
+   m_projAtten        {0.0} {
    return;
 }
 
@@ -304,7 +304,7 @@ BrewNote::BrewNote(BrewNote const& other) :
 // Setters=====================================================================
 void BrewNote::setBrewDate(QDate const & date) {
    this->setAndNotify(PropertyNames::BrewNote::brewDate, this->m_brewDate, date);
-   if ( ! m_cacheOnly ) {
+   if (this->key() > 0) {
       // .:TBD:. Do we really need this special signal when we could use the generic changed one?
       emit brewDateChanged(date);
    }
@@ -495,11 +495,11 @@ Recipe * BrewNote::getOwningRecipe() {
 // Getters
 QDate BrewNote::brewDate() const { return m_brewDate; }
 QString BrewNote::brewDate_str() const { return m_brewDate.toString(); }
-QString BrewNote::brewDate_short() const { return Brewtarget::displayDateUserFormated(m_brewDate); }
+QString BrewNote::brewDate_short() const { return Localization::displayDateUserFormated(m_brewDate); }
 
 QDate BrewNote::fermentDate() const { return m_fermentDate; }
 QString BrewNote::fermentDate_str() const { return m_fermentDate.toString(); }
-QString BrewNote::fermentDate_short() const { return Brewtarget::displayDateUserFormated(m_fermentDate); }
+QString BrewNote::fermentDate_short() const { return Localization::displayDateUserFormated(m_fermentDate); }
 
 QString BrewNote::notes() const { return m_notes; }
 

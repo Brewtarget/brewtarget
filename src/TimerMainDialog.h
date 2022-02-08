@@ -37,7 +37,7 @@ class TimerMainDialog;
 
 /*!
  * \class TimerMainDialog
- * \author Aidan Roberts
+ *
  *
  * \brief Main boil timer, create timers individually or generate from recipe
  */

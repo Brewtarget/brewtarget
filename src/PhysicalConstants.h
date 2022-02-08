@@ -19,6 +19,7 @@
  */
 #ifndef PHYSICALCONSTANTS_H
 #define PHYSICALCONSTANTS_H
+#pragma once
 
 /*!
  * \brief Collection of physical constants like density of materials.

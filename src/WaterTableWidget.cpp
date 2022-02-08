@@ -16,11 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "WaterTableWidget.h"
 
 #include <QTableView>
 #include <QWidget>
-#include "WaterTableModel.h"
-#include "WaterTableWidget.h"
+
+#include "tableModels/WaterTableModel.h"
 
 WaterTableWidget::WaterTableWidget(QWidget* parent)
         : QTableView(parent)

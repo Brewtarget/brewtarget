@@ -20,13 +20,18 @@
  */
 #ifndef WATERDIALOG_H
 #define WATERDIALOG_H
+#pragma once
 
-#include <QDialog>
-#include <QWidget>
+#include <memory>
+
 #include <QButtonGroup>
+#include <QDialog>
 #include <QVector>
+#include <QWidget>
+
 #include "ui_waterDialog.h"
-#include "Unit.h"
+
+#include "measurement/Unit.h"
 #include "model/Water.h"
 #include "model/Salt.h"
 
@@ -39,9 +44,10 @@ class Salt;
 
 /*!
  * \class WaterDialog
- * \author mik firestone
  *
  * \brief Trying my hand at making water chemistry work
+ *
+ * .:TBD:. This class (and associated UI files etc) might better be called Water Chemistry Dialog
  */
 class WaterDialog : public QDialog, public Ui::waterDialog
 {
@@ -79,7 +85,8 @@ private:
    WaterEditor* m_base_editor;
    WaterEditor* m_target_editor;
    Recipe* m_rec;
-   Water *m_base, *m_target;
+   std::shared_ptr<Water> m_base;
+   std::shared_ptr<Water> m_target;
    double m_mashRO;
    double m_spargeRO;
    double m_total_grains;
@@ -89,7 +96,7 @@ private:
    WaterSortFilterProxyModel *m_base_filter;
    WaterSortFilterProxyModel *m_target_filter;
 
-   void setDigits(Water* target);
+   void setDigits();
    void calculateGrainEquivalent();
 
    double calculateRA() const;

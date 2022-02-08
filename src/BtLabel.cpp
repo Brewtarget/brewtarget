@@ -22,223 +22,247 @@
 
 #include <QSettings>
 #include <QDebug>
+#include <QMouseEvent>
 
-#include "brewtarget.h"
+#include "measurement/Measurement.h"
 #include "model/Style.h"
 #include "model/Recipe.h"
 #include "PersistentSettings.h"
+#include "utils/OptionalToStream.h"
+#include "widgets/UnitAndScalePopUpMenu.h"
 
-/*!
- * \brief Initialize the BtLabel with the parent and do some things with the type
- *
- * \param parent - QWidget* to the parent object
- * \param lType - the type of label: none, gravity, mass or volume
- * \return the initialized widget
- * \todo Not sure if I can get the name of the widget being created.
- *       Not sure how to signal the parent to redisplay
- */
-
-BtLabel::BtLabel(QWidget *parent, LabelType lType) :
-   QLabel(parent)
-{
-   whatAmI = lType;
-   btParent = parent;
-   _menu = 0;
-
+BtLabel::BtLabel(QWidget *parent,
+                 BtFieldType fieldType) :
+   QLabel{parent},
+   fieldType{fieldType},
+   btParent{parent},
+   contextMenu{nullptr} {
    connect(this, &QWidget::customContextMenuRequested, this, &BtLabel::popContextMenu);
    return;
 }
 
-void BtLabel::initializeSection()
-{
-   QWidget* mybuddy;
+BtLabel::~BtLabel() = default;
 
-   if ( ! _section.isEmpty() )
+void BtLabel::enterEvent(QEvent* event) {
+   this->textEffect(true);
+   return;
+}
+
+void BtLabel::leaveEvent(QEvent* event) {
+   this->textEffect(false);
+   return;
+}
+
+void BtLabel::mouseReleaseEvent (QMouseEvent * event) {
+   // For the moment, we want left-click and right-click to have the same effect, so when we get a left-click event, we
+   // send ourselves the right-click signal, which will then fire BtLabel::popContextMenu().
+   emit this->QWidget::customContextMenuRequested(event->pos());
+   return;
+}
+
+void BtLabel::textEffect(bool enabled) {
+   QFont myFont = this->font();
+   myFont.setUnderline(enabled);
+   this->setFont(myFont);
+   return;
+}
+
+void BtLabel::initializeSection() {
+   if (!this->configSection.isEmpty()) {
       return;
+   }
 
    // as much as I dislike it, dynamic properties can't be referenced on
    // initialization.
-   mybuddy = buddy();
+   QWidget * mybuddy = this->buddy();
+
+   //
    // If the label has the configSection defined, use it
    // otherwise, if the paired field has a configSection, use it
    // otherwise, if the parent object has a configSection, use it
    // if all else fails, get the parent's object name
-   if ( property("configSection").isValid() )
-      _section = property("configSection").toString();
-   else if ( mybuddy && mybuddy->property("configSection").isValid() )
-      _section = mybuddy->property("configSection").toString();
-   else if ( btParent->property("configSection").isValid() )
-      _section = btParent->property("configSection").toString();
-   else
-   {
-      qDebug() << "this failed" << this;
-      _section = btParent->objectName();
+   //
+   if (this->property("configSection").isValid()) {
+      this->configSection = property("configSection").toString();
+   } else if (mybuddy && mybuddy->property("configSection").isValid() ) {
+      this->configSection = mybuddy->property("configSection").toString();
+   } else if (this->btParent->property("configSection").isValid() ) {
+      this->configSection = this->btParent->property("configSection").toString();
+   } else {
+      qWarning() << Q_FUNC_INFO << "this failed" << this;
+      this->configSection = this->btParent->objectName();
    }
+   return;
 }
 
-void BtLabel::initializeProperty()
-{
-   QWidget* mybuddy;
+void BtLabel::initializeProperty() {
 
-   if ( ! propertyName.isEmpty() )
+   if (!this->propertyName.isEmpty()) {
       return;
-
-   mybuddy = buddy();
-   if ( property("editField").isValid() )
-      propertyName = property("editField").toString();
-   else if ( mybuddy && mybuddy->property("editField").isValid() )
-      propertyName = mybuddy->property("editField").toString();
-   else
-      qDebug() << "That failed miserably";
-}
-
-void BtLabel::initializeMenu()
-{
-   Unit::unitDisplay unit;
-   Unit::unitScale scale;
-
-   if ( _menu )
-      return;
-
-   unit  = static_cast<Unit::unitDisplay>(PersistentSettings::value(propertyName, Unit::noUnit, _section, PersistentSettings::UNIT).toInt());
-   scale = static_cast<Unit::unitScale>(PersistentSettings::value(propertyName, Unit::noScale, _section, PersistentSettings::SCALE).toInt());
-
-   switch( whatAmI )
-   {
-      case COLOR:
-         _menu = Brewtarget::setupColorMenu(btParent,unit);
-         break;
-      case DENSITY:
-         _menu = Brewtarget::setupDensityMenu(btParent,unit);
-         break;
-      case MASS:
-         _menu = Brewtarget::setupMassMenu(btParent,unit,scale);
-         break;
-      case MIXED:
-         // This looks weird, but it works.
-         _menu = Brewtarget::setupVolumeMenu(btParent,unit,scale,false); // no scale menu
-         break;
-      case TEMPERATURE:
-         _menu = Brewtarget::setupTemperatureMenu(btParent,unit);
-         break;
-      case VOLUME:
-         _menu = Brewtarget::setupVolumeMenu(btParent,unit,scale);
-         break;
-      case TIME:
-         _menu = Brewtarget::setupTimeMenu(btParent,scale); //scale menu only
-         break;
-      case DATE:
-         _menu = Brewtarget::setupDateMenu(btParent,unit); // unit only
-         break;
-      case DIASTATIC_POWER:
-         _menu = Brewtarget::setupDiastaticPowerMenu(btParent,unit);
-         break;
-      default:
-         return;
    }
+
+   QWidget* mybuddy = this->buddy();
+   if (this->property("editField").isValid()) {
+      this->propertyName = this->property("editField").toString();
+   } else if (mybuddy && mybuddy->property("editField").isValid()) {
+      this->propertyName = mybuddy->property("editField").toString();
+   } else {
+      qWarning() << Q_FUNC_INFO  << "That failed miserably";
+   }
+   return;
 }
 
-void BtLabel::popContextMenu(const QPoint& point)
-{
+
+
+void BtLabel::initializeMenu() {
+   // If a context menu already exists, we need to delete it and recreate it.  We can't always reuse an existing menu
+   // because the sub-menu for relative scale needs to change when a different unit system is selected.  (In theory we
+   // could only recreate the context menu when a different unit system is selected, but that adds complication.)
+   if (this->contextMenu) {
+      // NB: Although the existing menu is "owned" by this->btParent, it is fine for us to delete it here.  The Qt
+      // ownership in this context merely guarantees that this->btParent will, in its own destructor, delete the menu if
+      // it still exists.
+      delete this->contextMenu;
+      this->contextMenu = nullptr;
+   }
+
+   std::optional<Measurement::SystemOfMeasurement> forcedSystemOfMeasurement =
+      Measurement::getForcedSystemOfMeasurementForField(this->propertyName, this->configSection);
+   std::optional<Measurement::UnitSystem::RelativeScale> forcedRelativeScale =
+      Measurement::getForcedRelativeScaleForField(this->propertyName, this->configSection);
+   qDebug() <<
+      Q_FUNC_INFO << "forcedSystemOfMeasurement=" << forcedSystemOfMeasurement << ", forcedRelativeScale=" <<
+      forcedRelativeScale;
+
+   if (!std::holds_alternative<Measurement::PhysicalQuantity>(this->fieldType)) {
+      return;
+   }
+
+   Measurement::PhysicalQuantity physicalQuantity = std::get<Measurement::PhysicalQuantity>(this->fieldType);
+
+   this->contextMenu = UnitAndScalePopUpMenu::create(this->btParent,
+                                                      physicalQuantity,
+                                                      forcedSystemOfMeasurement,
+                                                      forcedRelativeScale);
+   return;
+}
+
+void BtLabel::popContextMenu(const QPoint& point) {
+   // For the moment, at least, we do not allow people to choose date formats per-field.  (Although you might want to
+   // mix and match metric and imperial systems in certain circumstances, it's less clear that there's a benefit to
+   // mixing and matching date formats.)
+   if (!std::holds_alternative<Measurement::PhysicalQuantity>(this->fieldType)) {
+      return;
+   }
+
    QObject* calledBy = sender();
-   QWidget* widgie;
-   QAction *invoked;
-
-   if ( calledBy == 0 )
+   if (calledBy == nullptr) {
       return;
+   }
 
-   widgie = qobject_cast<QWidget*>(calledBy);
-   if ( widgie == 0 )
+   QWidget * widgie = qobject_cast<QWidget*>(calledBy);
+   if (widgie == nullptr) {
       return;
+   }
 
-   initializeProperty();
-   initializeSection();
-   initializeMenu();
+   this->initializeProperty();
+   this->initializeSection();
+   this->initializeMenu();
 
-   invoked = _menu->exec(widgie->mapToGlobal(point));
-   Unit::unitDisplay unit = static_cast<Unit::unitDisplay>(PersistentSettings::value(propertyName, Unit::noUnit, _section, PersistentSettings::UNIT).toInt());
-   Unit::unitScale scale  = static_cast<Unit::unitScale>(PersistentSettings::value(propertyName, Unit::noUnit, _section, PersistentSettings::SCALE).toInt());
-
-   if ( invoked == 0 )
+   // Show the pop-up menu and get back whatever the user seleted
+   QAction * invoked = this->contextMenu->exec(widgie->mapToGlobal(point));
+   if (invoked == nullptr) {
       return;
+   }
 
-   QWidget* pMenu = invoked->parentWidget();
-   if ( pMenu == _menu ) {
-      PersistentSettings::insert(propertyName, invoked->data(), _section, PersistentSettings::UNIT);
-      // reset the scale if required
-      if (PersistentSettings::contains(propertyName, _section, PersistentSettings::SCALE) ) {
-         PersistentSettings::insert(propertyName, Unit::noScale, _section, PersistentSettings::SCALE);
+   // Save the current settings (which may come from system-wide defaults) for the signal below
+   Q_ASSERT(std::holds_alternative<Measurement::PhysicalQuantity>(this->fieldType));
+   Measurement::PhysicalQuantity physicalQuantity = std::get<Measurement::PhysicalQuantity>(this->fieldType);
+   PreviousScaleInfo previousScaleInfo{
+      Measurement::getSystemOfMeasurementForField(this->propertyName, this->configSection, physicalQuantity),
+      Measurement::getForcedRelativeScaleForField(this->propertyName, this->configSection)
+   };
+
+   // To make this all work, we need to set ogMin and ogMax when og is set etc
+   QVector<QString> fieldsToSet;
+   fieldsToSet.append(this->propertyName);
+   if (this->propertyName == "og") {
+      fieldsToSet.append(QString(*PropertyNames::Style::ogMin));
+      fieldsToSet.append(QString(*PropertyNames::Style::ogMax));
+   } else if (this->propertyName == "fg") {
+      fieldsToSet.append(QString(*PropertyNames::Style::fgMin));
+      fieldsToSet.append(QString(*PropertyNames::Style::fgMax));
+   } else if (this->propertyName == "color_srm") {
+      fieldsToSet.append(QString(*PropertyNames::Style::colorMin_srm));
+      fieldsToSet.append(QString(*PropertyNames::Style::colorMax_srm));
+   }
+
+   // User will either have selected a SystemOfMeasurement or a UnitSystem::RelativeScale.  We can know which based on
+   // whether it's the menu or the sub-menu that it came from.
+   bool isTopMenu{invoked->parentWidget() == this->contextMenu};
+   if (isTopMenu) {
+      // It's the menu, so SystemOfMeasurement
+      std::optional<Measurement::SystemOfMeasurement> whatSelected =
+         UnitAndScalePopUpMenu::dataFromQAction<Measurement::SystemOfMeasurement>(*invoked);
+      qDebug() << Q_FUNC_INFO << "Selected SystemOfMeasurement" << whatSelected;
+      if (!whatSelected) {
+         // Null means "Default", which means don't set a forced SystemOfMeasurement for this field
+         for (auto field : fieldsToSet) {
+            Measurement::setForcedSystemOfMeasurementForField(field, this->configSection, std::nullopt);
+         }
+      } else {
+         for (auto field : fieldsToSet) {
+            Measurement::setForcedSystemOfMeasurementForField(field, this->configSection, *whatSelected);
+         }
+      }
+      // Choosing a forced SystemOfMeasurement resets any selection of forced RelativeScale
+      for (auto field : fieldsToSet) {
+         Measurement::setForcedRelativeScaleForField(field, this->configSection, std::nullopt);
+      }
+
+      //
+      // Hmm. For the color fields, we want to include the ecb or srm in the label text here.
+      //
+      // Assert that we already bailed above for fields that aren't a PhysicalQuantity, so we know std::get won't throw
+      // here.
+      //
+      Q_ASSERT(std::holds_alternative<Measurement::PhysicalQuantity>(this->fieldType));
+      if (Measurement::PhysicalQuantity::Color == std::get<Measurement::PhysicalQuantity>(this->fieldType)) {
+         Measurement::UnitSystem const & disp =
+            Measurement::getUnitSystemForField(this->propertyName,
+                                               this->configSection,
+                                               Measurement::PhysicalQuantity::Color);
+         this->setText(tr("Color (%1)").arg(disp.unit()->name));
       }
    } else {
-      PersistentSettings::insert(propertyName, invoked->data(), _section, PersistentSettings::SCALE);
-   }
-
-   // To make this all work, I need to set ogMin and ogMax when og is set.
-   if ( propertyName == "og" ) {
-      PersistentSettings::insert(PropertyNames::Style::ogMin, invoked->data(),_section, PersistentSettings::UNIT);
-      PersistentSettings::insert(PropertyNames::Style::ogMax, invoked->data(),_section, PersistentSettings::UNIT);
-   } else if ( propertyName == "fg" ) {
-      PersistentSettings::insert(PropertyNames::Style::fgMin, invoked->data(),_section, PersistentSettings::UNIT);
-      PersistentSettings::insert(PropertyNames::Style::fgMax, invoked->data(),_section, PersistentSettings::UNIT);
-   } else if ( propertyName == "color_srm" ) {
-      PersistentSettings::insert(PropertyNames::Style::colorMin_srm, invoked->data(),_section, PersistentSettings::UNIT);
-      PersistentSettings::insert(PropertyNames::Style::colorMax_srm, invoked->data(),_section, PersistentSettings::UNIT);
-   }
-
-   // Hmm. For the color fields, I want to include the ecb or srm in the label
-   // text here.
-   if ( whatAmI == COLOR ) {
-      Unit::unitDisplay disp = (Unit::unitDisplay)invoked->data().toInt();
-      setText( tr("Color (%1)").arg(Brewtarget::colorUnitName(disp)));
+      // It's the sub-menu, so UnitSystem::RelativeScale
+      std::optional<Measurement::UnitSystem::RelativeScale> whatSelected =
+         UnitAndScalePopUpMenu::dataFromQAction<Measurement::UnitSystem::RelativeScale>(*invoked);
+      qDebug() << Q_FUNC_INFO << "Selected RelativeScale" << whatSelected;
+      if (!whatSelected) {
+         // Null means "Default", which means don't set a forced RelativeScale for this field
+         for (auto field : fieldsToSet) {
+            Measurement::setForcedRelativeScaleForField(field, this->configSection, std::nullopt);
+         }
+      } else {
+         for (auto field : fieldsToSet) {
+            Measurement::setForcedRelativeScaleForField(field, this->configSection, *whatSelected);
+         }
+      }
    }
 
    // Remember, we need the original unit, not the new one.
+   emit changedSystemOfMeasurementOrScale(previousScaleInfo);
 
-   emit labelChanged(unit,scale);
-
+   return;
 }
 
-BtColorLabel::BtColorLabel(QWidget *parent)
-   : BtLabel(parent,COLOR)
-{
-}
-
-BtDateLabel::BtDateLabel(QWidget *parent)
-   : BtLabel(parent,DATE)
-{
-}
-
-BtDensityLabel::BtDensityLabel(QWidget *parent)
-   : BtLabel(parent,DENSITY)
-{
-}
-
-BtMassLabel::BtMassLabel(QWidget *parent)
-   : BtLabel(parent,MASS)
-{
-}
-
-BtMixedLabel::BtMixedLabel(QWidget *parent)
-   : BtLabel(parent,MIXED)
-{
-}
-
-BtTemperatureLabel::BtTemperatureLabel(QWidget *parent)
-   : BtLabel(parent,TEMPERATURE)
-{
-}
-
-BtTimeLabel::BtTimeLabel(QWidget *parent)
-   : BtLabel(parent,TIME)
-{
-}
-
-BtVolumeLabel::BtVolumeLabel(QWidget *parent)
-   : BtLabel(parent,VOLUME)
-{
-}
-
-BtDiastaticPowerLabel::BtDiastaticPowerLabel(QWidget *parent)
-   : BtLabel(parent,DIASTATIC_POWER)
-{
-}
+BtColorLabel::BtColorLabel(QWidget *parent) :                   BtLabel(parent, Measurement::PhysicalQuantity::Color)          { return; }
+BtDateLabel::BtDateLabel(QWidget *parent) :                     BtLabel(parent, NonPhysicalQuantity::Date)                     { return; }
+BtDensityLabel::BtDensityLabel(QWidget *parent) :               BtLabel(parent, Measurement::PhysicalQuantity::Density)        { return; }
+BtMassLabel::BtMassLabel(QWidget *parent) :                     BtLabel(parent, Measurement::PhysicalQuantity::Mass)           { return; }
+BtMixedLabel::BtMixedLabel(QWidget *parent) :                   BtLabel(parent, Measurement::PhysicalQuantity::Mixed)          { return; }
+BtTemperatureLabel::BtTemperatureLabel(QWidget *parent) :       BtLabel(parent, Measurement::PhysicalQuantity::Temperature)    { return; }
+BtTimeLabel::BtTimeLabel(QWidget *parent) :                     BtLabel(parent, Measurement::PhysicalQuantity::Time)           { return; }
+BtVolumeLabel::BtVolumeLabel(QWidget *parent) :                 BtLabel(parent, Measurement::PhysicalQuantity::Volume)         { return; }
+BtDiastaticPowerLabel::BtDiastaticPowerLabel(QWidget *parent) : BtLabel(parent, Measurement::PhysicalQuantity::DiastaticPower) { return; }

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>472</width>
-    <height>318</height>
+    <width>778</width>
+    <height>450</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -84,19 +84,6 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="0">
-        <widget class="BtMassLabel" name="label_inventory">
-         <property name="contextMenuPolicy">
-          <enum>Qt::CustomContextMenu</enum>
-         </property>
-         <property name="text">
-          <string>Amount in Inventory</string>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit_inventory</cstring>
-         </property>
-        </widget>
-       </item>
        <item row="1" column="1">
         <widget class="BtGenericEdit" name="lineEdit_alpha">
          <property name="toolTip">
@@ -107,52 +94,10 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="1">
-        <widget class="BtMassEdit" name="lineEdit_amount">
-         <property name="toolTip">
-          <string>Amount</string>
-         </property>
-         <property name="editField" stdset="0">
-          <string notr="true">amount_kg</string>
-         </property>
-        </widget>
-       </item>
        <item row="0" column="1">
         <widget class="BtStringEdit" name="lineEdit_name">
          <property name="toolTip">
           <string>Name</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="BtMassLabel" name="label_amount">
-         <property name="contextMenuPolicy">
-          <enum>Qt::CustomContextMenu</enum>
-         </property>
-         <property name="toolTip">
-          <string>Required</string>
-         </property>
-         <property name="text">
-          <string>Default Amount</string>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit_amount</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="1">
-        <widget class="BtMassEdit" name="lineEdit_inventory">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="toolTip">
-          <string>Amount in inventory</string>
-         </property>
-         <property name="editField" stdset="0">
-          <string notr="true">inventory</string>
          </property>
         </widget>
        </item>
@@ -275,6 +220,35 @@
            <string>Plug</string>
           </property>
          </item>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="BtMassEdit" name="lineEdit_inventory">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string>Amount in inventory</string>
+         </property>
+         <property name="editField" stdset="0">
+          <string notr="true">inventory</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="BtMassLabel" name="label_inventory">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
+         <property name="text">
+          <string>Amount in Inventory</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_inventory</cstring>
+         </property>
         </widget>
        </item>
       </layout>
@@ -668,7 +642,7 @@
    <extends>QLineEdit</extends>
    <header>BtLineEdit.h</header>
    <slots>
-    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+    <slot>lineChanged(PreviousScaleInfo)</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -676,7 +650,7 @@
    <extends>QLabel</extends>
    <header>BtLabel.h</header>
    <slots>
-    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+    <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    </slots>
   </customwidget>
   <customwidget>
@@ -686,7 +660,7 @@
    <slots>
     <signal>textModified()</signal>
     <slot>lineChanged()</slot>
-    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+    <slot>lineChanged(PreviousScaleInfo)</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -694,7 +668,7 @@
    <extends>QLabel</extends>
    <header>BtLabel.h</header>
    <slots>
-    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+    <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
     <slot>popContextMenu(QPoint)</slot>
    </slots>
   </customwidget>
@@ -703,8 +677,6 @@
   <tabstop>tabWidget_editor</tabstop>
   <tabstop>lineEdit_name</tabstop>
   <tabstop>lineEdit_alpha</tabstop>
-  <tabstop>lineEdit_amount</tabstop>
-  <tabstop>lineEdit_inventory</tabstop>
   <tabstop>comboBox_use</tabstop>
   <tabstop>comboBox_type</tabstop>
   <tabstop>comboBox_form</tabstop>

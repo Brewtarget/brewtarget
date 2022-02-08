@@ -18,6 +18,7 @@
  */
 #ifndef IBUGUSLIDER_H
 #define IBUGUSLIDER_H
+#pragma once
 
 #include "RangedSlider.h"
 

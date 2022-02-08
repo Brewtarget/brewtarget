@@ -27,6 +27,7 @@
 #define MAINWINDOW_H
 #pragma once
 
+#include <functional>
 #include <memory> // For PImpl
 
 #include <QCloseEvent>
@@ -106,14 +107,20 @@ class YeastTableModel;
  *
  * \brief Brewtarget's main window. This is a view/controller class.
  */
-class MainWindow : public QMainWindow, public Ui::mainWindow
-{
+class MainWindow : public QMainWindow, public Ui::mainWindow {
    Q_OBJECT
 
    friend class OptionDialog;
 public:
    MainWindow(QWidget* parent=nullptr);
    virtual ~MainWindow();
+
+   static MainWindow & instance();
+   /**
+    * \brief Call at program termination to clean-up.  Caller's responsibility not to subsequently call (or use the
+    *        return value from) \c MainWindow::instance().
+    */
+   static void DeleteMainWindow();
 
    /**
     * \brief This needs to be called immediately after the constructor.  It does the remaining initialisation of the
@@ -322,6 +329,15 @@ private:
    // Private implementation details - see https://herbsutter.com/gotw/_100/
    class impl;
    std::unique_ptr<impl> pimpl;
+
+   //! No copy constructor, as never want anyone, not even our friends, to make copies of a singleton
+   MainWindow(MainWindow const&) = delete;
+   //! No assignment operator , as never want anyone, not even our friends, to make copies of a singleton.
+   MainWindow& operator=(MainWindow const&) = delete;
+   //! No move constructor
+   MainWindow(MainWindow &&) = delete;
+   //! No move assignment
+   MainWindow & operator=(MainWindow &&) = delete;
 
    void removeHop(Hop & itemToRemove);
    void removeFermentable(Fermentable & itemToRemove);

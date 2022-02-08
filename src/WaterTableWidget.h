@@ -28,7 +28,7 @@ class WaterTableModel;
 
 /*!
  * \class WaterTableWidget
- * \author Philip G. Lee
+ *
  *
  * \brief Completely redundant class. Remove and just use QTableView.
  */
@@ -44,5 +44,4 @@ private:
    WaterTableModel* model;
 };
 
-#endif   /* _WATERTABLEWIDGET_H */
-
+#endif   //WATERTABLEWIDGET_H

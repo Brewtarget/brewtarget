@@ -19,11 +19,10 @@
 
 #include "HeatCalculations.h"
 
-double HeatCalculations::Cw_JKgK = 4184.0;
-double HeatCalculations::Cw_calGC = 1.0;
-double HeatCalculations::Cgrain_calGC = 0.4;
+double const HeatCalculations::Cw_JKgK = 4184.0;
+double const HeatCalculations::Cw_calGC = 1.0;
+double const HeatCalculations::Cgrain_calGC = 0.4;
 
-double HeatCalculations::equivalentMCProduct(double m1, double c1, double m2, double c2)
-{
-   return m1*c1*(1.+(m2*c2)/(m1*c1));
+double HeatCalculations::equivalentMCProduct(double m1, double c1, double m2, double c2) {
+   return m1 * c1 * (1.0 + (m2 * c2)/(m1 * c1));
 }

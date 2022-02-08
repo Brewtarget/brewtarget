@@ -22,11 +22,9 @@
 
 #include <QDebug>
 
-#include "brewtarget.h"
 #include "BtFolder.h"
 #include "BtTreeModel.h"
 #include "BtTreeItem.h"
-
 #include "model/Equipment.h"
 #include "model/Fermentable.h"
 #include "model/Hop.h"
@@ -405,4 +403,3 @@ bool BtTreeFilterProxyModel::filterAcceptsRow(int source_row, const QModelIndex 
    }
 
 }
-

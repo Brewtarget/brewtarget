@@ -32,7 +32,6 @@
 #include <QVariant>
 
 #include "AncestorDialog.h"
-#include "brewtarget.h"
 #include "BtFolder.h"
 #include "BtTreeItem.h"
 #include "BtTreeView.h"

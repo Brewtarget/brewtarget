@@ -22,17 +22,14 @@
 
 #include <QInputDialog>
 
-#include "brewtarget.h"
 #include "BtHorizontalTabs.h"
 #include "database/ObjectStoreWrapper.h"
+#include "measurement/Unit.h"
 #include "model/Style.h"
 #include "StyleListModel.h"
 #include "StyleSortFilterProxyModel.h"
-#include "Unit.h"
 
-StyleEditor::StyleEditor(QWidget* parent, bool singleStyleEditor)
-   : QDialog(parent), obsStyle(0)
-{
+StyleEditor::StyleEditor(QWidget* parent, bool singleStyleEditor) : QDialog(parent), obsStyle(nullptr) {
    setupUi(this);
    if ( singleStyleEditor )
    {
@@ -94,44 +91,41 @@ void StyleEditor::styleSelected( const QString& /*text*/ )
    setStyle( styleListModel->at(sourceIndex.row()) );
 }
 
-void StyleEditor::save()
-{
-   Style* s = obsStyle;
-   if( s == 0 )
-   {
+void StyleEditor::save() {
+   if (!this->obsStyle) {
       setVisible(false);
       return;
    }
 
-   s->setName(lineEdit_name->text());
-   s->setCategory( lineEdit_category->text() );
-   s->setCategoryNumber( lineEdit_categoryNumber->text() );
-   s->setStyleLetter( lineEdit_styleLetter->text() );
-   s->setStyleGuide( lineEdit_styleGuide->text() );
-   s->setType( static_cast<Style::Type>(comboBox_type->currentIndex()) );
-   s->setOgMin( lineEdit_ogMin->toSI() );
-   s->setOgMax( lineEdit_ogMax->toSI() );
-   s->setFgMin( lineEdit_fgMin->toSI() );
-   s->setFgMax( lineEdit_fgMax->toSI() );
-   s->setIbuMin( lineEdit_ibuMin->toSI() );
-   s->setIbuMax( lineEdit_ibuMax->toSI() );
-   s->setColorMin_srm( lineEdit_colorMin->toSI() );
-   s->setColorMax_srm( lineEdit_colorMax->toSI() );
-   s->setCarbMin_vol( lineEdit_carbMin->toSI() );
-   s->setCarbMax_vol( lineEdit_carbMax->toSI() );
-   s->setAbvMin_pct( lineEdit_abvMin->toSI() );
-   s->setAbvMax_pct( lineEdit_abvMax->toSI() );
-   s->setProfile( textEdit_profile->toPlainText() );
-   s->setIngredients( textEdit_ingredients->toPlainText() );
-   s->setExamples( textEdit_examples->toPlainText() );
-   s->setNotes( textEdit_notes->toPlainText() );
+   this->obsStyle->setName(lineEdit_name->text());
+   this->obsStyle->setCategory( lineEdit_category->text() );
+   this->obsStyle->setCategoryNumber( lineEdit_categoryNumber->text() );
+   this->obsStyle->setStyleLetter( lineEdit_styleLetter->text() );
+   this->obsStyle->setStyleGuide( lineEdit_styleGuide->text() );
+   this->obsStyle->setType( static_cast<Style::Type>(comboBox_type->currentIndex()) );
+   this->obsStyle->setOgMin( lineEdit_ogMin->toSI().quantity );
+   this->obsStyle->setOgMax( lineEdit_ogMax->toSI().quantity );
+   this->obsStyle->setFgMin( lineEdit_fgMin->toSI().quantity );
+   this->obsStyle->setFgMax( lineEdit_fgMax->toSI().quantity );
+   this->obsStyle->setIbuMin( lineEdit_ibuMin->toSI().quantity );
+   this->obsStyle->setIbuMax( lineEdit_ibuMax->toSI().quantity );
+   this->obsStyle->setColorMin_srm( lineEdit_colorMin->toSI().quantity );
+   this->obsStyle->setColorMax_srm( lineEdit_colorMax->toSI().quantity );
+   this->obsStyle->setCarbMin_vol( lineEdit_carbMin->toSI().quantity );
+   this->obsStyle->setCarbMax_vol( lineEdit_carbMax->toSI().quantity );
+   this->obsStyle->setAbvMin_pct( lineEdit_abvMin->toSI().quantity );
+   this->obsStyle->setAbvMax_pct( lineEdit_abvMax->toSI().quantity );
+   this->obsStyle->setProfile( textEdit_profile->toPlainText() );
+   this->obsStyle->setIngredients( textEdit_ingredients->toPlainText() );
+   this->obsStyle->setExamples( textEdit_examples->toPlainText() );
+   this->obsStyle->setNotes( textEdit_notes->toPlainText() );
 
-   if ( s->cacheOnly() ) {
-      ObjectStoreWrapper::insert(*s);
-      s->setCacheOnly(false);
+   if (this->obsStyle->key() < 0) {
+      ObjectStoreWrapper::insert(*this->obsStyle);
    }
 
    setVisible(false);
+   return;
 }
 
 void StyleEditor::newStyle()

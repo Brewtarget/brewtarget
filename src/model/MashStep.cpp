@@ -22,7 +22,6 @@
 #include <QDebug>
 #include <QVector>
 
-#include "brewtarget.h"
 #include "database/ObjectStoreWrapper.h"
 #include "model/NamedParameterBundle.h"
 #include "PhysicalConstants.h"
@@ -56,18 +55,18 @@ ObjectStore & MashStep::getObjectStoreTypedInstance() const {
 
 //==============================CONSTRUCTORS====================================
 
-MashStep::MashStep(QString name, bool cache) :
-   NamedEntity(-1, cache, name, true),
-   m_type(static_cast<MashStep::Type>(0)),
-   m_infuseAmount_l(0.0),
-   m_stepTemp_c(0.0),
-   m_stepTime_min(0.0),
-   m_rampTime_min(0.0),
-   m_endTemp_c(0.0),
-   m_infuseTemp_c(0.0),
-   m_decoctionAmount_l(0.0),
-   m_stepNumber(0),
-   mashId(-1) {
+MashStep::MashStep(QString name) :
+   NamedEntity        {name, true},
+   m_type             {MashStep::Infusion},
+   m_infuseAmount_l   {0.0},
+   m_stepTemp_c       {0.0},
+   m_stepTime_min     {0.0},
+   m_rampTime_min     {0.0},
+   m_endTemp_c        {0.0},
+   m_infuseTemp_c     {0.0},
+   m_decoctionAmount_l{0.0},
+   m_stepNumber       {0},
+   mashId             {-1} {
    return;
 }
 
@@ -101,7 +100,9 @@ MashStep::MashStep(MashStep const & other) :
    return;
 }
 
+
 MashStep::~MashStep() = default;
+
 
 //================================"SET" METHODS=================================
 void MashStep::setInfuseTemp_c(double var) {

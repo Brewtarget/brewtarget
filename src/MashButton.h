@@ -20,6 +20,7 @@
  */
 #ifndef MASHBUTTON_H
 #define MASHBUTTON_H
+#pragma once
 
 #include <QPushButton>
 #include <QMetaProperty>

@@ -29,9 +29,9 @@
 #include <QVariant>
 #include <QVector>
 
-#include "brewtarget.h"
 #include "BtFolder.h"
-#include "FermentableTableModel.h"
+#include "Localization.h"
+#include "measurement/Measurement.h"
 #include "model/BrewNote.h"
 #include "model/Equipment.h"
 #include "model/Fermentable.h"
@@ -218,7 +218,7 @@ QVariant BtTreeItem::dataRecipe(int column) {
          break;
       case RECIPEBREWDATECOL:
          if (recipe) {
-            return Brewtarget::displayDateUserFormated(recipe->date());
+            return Localization::displayDateUserFormated(recipe->date());
          }
          break;
       case RECIPESTYLECOL:
@@ -253,7 +253,7 @@ QVariant BtTreeItem::dataEquipment(int column) {
 }
 
 QVariant BtTreeItem::dataFermentable(int column) {
-   Fermentable * ferm = qobject_cast<Fermentable *>(_thing);
+   Fermentable * ferm = qobject_cast<Fermentable *>(this->_thing);
 
    switch (column) {
       case FERMENTABLENAMECOL:
@@ -269,21 +269,15 @@ QVariant BtTreeItem::dataFermentable(int column) {
          break;
       case FERMENTABLECOLORCOL:
          if (ferm) {
-            return QVariant(
-                      Brewtarget::displayAmount(
-                         ferm->color_srm(),
-                         &Units::srm,
-                         0,
-                         static_cast<Unit::unitDisplay>(PersistentSettings::value(PropertyNames::Fermentable::color_srm,
-                                                                                  QVariant(-1),
-                                                                                  QString{},
-                                                                                  PersistentSettings::UNIT).toInt())
-                      )
-                   );
+            return QVariant(Measurement::displayAmount(Measurement::Amount{ferm->color_srm(), Measurement::Units::srm},
+                                                       BtString::EMPTY_STR,
+                                                       PropertyNames::Fermentable::color_srm,
+                                                       0));
          }
          break;
       default :
-         qWarning() << QString("BtTreeItem::dataFermentable Bad column: %1").arg(column);
+         qWarning() << Q_FUNC_INFO << "Bad column:" << column;
+         break;
    }
    return QVariant();
 }
@@ -308,7 +302,7 @@ QVariant BtTreeItem::dataHop(int column) {
          }
          break;
       default :
-         qWarning() << QString("BtTreeItem::dataHop Bad column: %1").arg(column);
+         qWarning() << Q_FUNC_INFO << "Bad column:" << column;
    }
    return QVariant();
 }

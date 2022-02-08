@@ -18,24 +18,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #include "RangedSlider.h"
-#include "brewtarget.h"
-#include <QPaintEvent>
-#include <QPainter>
-#include <QColor>
-#include <QPalette>
+
 #include <QApplication>
-#include <QRectF>
+#include <QColor>
+#include <QDebug>
 #include <QFont>
 #include <QFontMetrics>
-#include <QMouseEvent>
 #include <QLabel>
-#include <QToolTip>
 #include <QLinearGradient>
+#include <QMouseEvent>
+#include <QPainter>
 #include <QPainterPath>
-
-#include <QDebug>
+#include <QPaintEvent>
+#include <QPalette>
+#include <QRectF>
+#include <QToolTip>
 
 RangedSlider::RangedSlider(QWidget* parent)
    : QWidget(parent),

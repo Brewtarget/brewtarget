@@ -30,9 +30,9 @@
 #include "MainWindow.h"
 #include "model/Recipe.h"
 #include "model/Yeast.h"
+#include "tableModels/YeastTableModel.h"
 #include "YeastEditor.h"
 #include "YeastSortFilterProxyModel.h"
-#include "YeastTableModel.h"
 
 YeastDialog::YeastDialog(MainWindow* parent)
         : QDialog(parent), mainWindow(parent), yeastEditor(new YeastEditor(this)), numYeasts(0)
@@ -175,7 +175,7 @@ void YeastDialog::addYeast(const QModelIndex& index)
    }
 
    // Adds a copy of yeast.
-   Brewtarget::mainWindow()->addYeastToRecipe(yeastTableModel->getYeast(translated.row()));
+   MainWindow::instance().addYeastToRecipe(yeastTableModel->getYeast(translated.row()));
 
    return;
 }

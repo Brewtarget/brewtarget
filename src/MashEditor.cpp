@@ -24,12 +24,11 @@
 #include <QDebug>
 #include <QWidget>
 
-#include "brewtarget.h"
 #include "database/ObjectStoreWrapper.h"
+#include "measurement/Unit.h"
 #include "model/Equipment.h"
 #include "model/Mash.h"
 #include "model/Recipe.h"
-#include "Unit.h"
 
 MashEditor::MashEditor(QWidget* parent) : QDialog(parent), mashObs(nullptr) {
    setupUi(this);
@@ -55,7 +54,7 @@ void MashEditor::saveAndClose() {
    bool isNew = false;
 
    if (this->mashObs == nullptr) {
-      this->mashObs = new Mash(lineEdit_name->text(), true);
+      this->mashObs = new Mash(lineEdit_name->text());
       isNew = true;
    }
    qDebug() << Q_FUNC_INFO << "Saving" << (isNew ? "new" : "existing") << "mash (#" << this->mashObs->key() << ")";
@@ -63,17 +62,16 @@ void MashEditor::saveAndClose() {
    mashObs->setEquipAdjust(true); // BeerXML won't like me, but it's just stupid not to adjust for the equipment when you're able.
 
    mashObs->setName(lineEdit_name->text());
-   mashObs->setGrainTemp_c(lineEdit_grainTemp->toSI());
-   mashObs->setSpargeTemp_c(lineEdit_spargeTemp->toSI());
-   mashObs->setPh(lineEdit_spargePh->toSI());
-   mashObs->setTunTemp_c(lineEdit_tunTemp->toSI());
-   mashObs->setTunWeight_kg(lineEdit_tunMass->toSI());
-   mashObs->setTunSpecificHeat_calGC(lineEdit_tunSpHeat->toSI());
+   mashObs->setGrainTemp_c(lineEdit_grainTemp->toSI().quantity);
+   mashObs->setSpargeTemp_c(lineEdit_spargeTemp->toSI().quantity);
+   mashObs->setPh(lineEdit_spargePh->toSI().quantity);
+   mashObs->setTunTemp_c(lineEdit_tunTemp->toSI().quantity);
+   mashObs->setTunWeight_kg(lineEdit_tunMass->toSI().quantity);
+   mashObs->setTunSpecificHeat_calGC(lineEdit_tunSpHeat->toSI().quantity);
 
    mashObs->setNotes(textEdit_notes->toPlainText());
 
    if (isNew) {
-      mashObs->setCacheOnly(false);
       ObjectStoreWrapper::insert(*mashObs);
       this->m_rec->setMash(this->mashObs);
    }
@@ -81,13 +79,14 @@ void MashEditor::saveAndClose() {
    return;
 }
 
-void MashEditor::fromEquipment()
-{
-   if( mashObs == nullptr )
+void MashEditor::fromEquipment() {
+   if (this->mashObs == nullptr) {
       return;
+   }
 
-   if ( m_equip == nullptr )
+   if (this->m_equip == nullptr) {
       return;
+   }
 
    lineEdit_tunMass->setText(m_equip);
    lineEdit_tunSpHeat->setText(m_equip);
@@ -149,8 +148,9 @@ void MashEditor::showChanges(QMetaProperty* prop) {
    bool updateAll = false;
    QString propName;
 
-   if (mashObs == nullptr) {
-      this->clear();
+   if( mashObs == nullptr )
+   {
+      clear();
       return;
    }
 

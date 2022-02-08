@@ -169,7 +169,7 @@
            <property name="editField" stdset="0">
             <string notr="true">primaryAge_days</string>
            </property>
-           <property name="forcedScale" stdset="0">
+           <property name="forcedRelativeScale" stdset="0">
             <string notr="true">scaleLarge</string>
            </property>
           </widget>
@@ -248,7 +248,7 @@
            <property name="editField" stdset="0">
             <string notr="true">secondaryAge_days</string>
            </property>
-           <property name="forcedScale" stdset="0">
+           <property name="forcedRelativeScale" stdset="0">
             <string notr="true">scaleLarge</string>
            </property>
           </widget>
@@ -327,7 +327,7 @@
            <property name="editField" stdset="0">
             <string notr="true">tertiaryAge_days</string>
            </property>
-           <property name="forcedScale" stdset="0">
+           <property name="forcedRelativeScale" stdset="0">
             <string notr="true">scaleLarge</string>
            </property>
           </widget>
@@ -406,7 +406,7 @@
            <property name="editField" stdset="0">
             <string notr="true">age</string>
            </property>
-           <property name="forcedScale" stdset="0">
+           <property name="forcedRelativeScale" stdset="0">
             <string notr="true">scaleLarge</string>
            </property>
           </widget>
@@ -587,7 +587,7 @@
    <extends>QLineEdit</extends>
    <header location="global">BtLineEdit.h</header>
    <slots>
-    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+    <slot>lineChanged(PreviousScaleInfo)</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -595,7 +595,7 @@
    <extends>QLabel</extends>
    <header location="global">BtLabel.h</header>
    <slots>
-    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+    <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    </slots>
   </customwidget>
   <customwidget>
@@ -603,7 +603,7 @@
    <extends>QLabel</extends>
    <header location="global">BtLabel.h</header>
    <slots>
-    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+    <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    </slots>
   </customwidget>
   <customwidget>
@@ -611,7 +611,7 @@
    <extends>QLineEdit</extends>
    <header location="global">BtLineEdit.h</header>
    <slots>
-    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+    <slot>lineChanged(PreviousScaleInfo)</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -648,9 +648,9 @@
  <connections>
   <connection>
    <sender>label_ageTemp</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>lineEdit_ageTemp</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <slot>lineChanged(PreviousScaleInfo)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>92</x>
@@ -664,9 +664,9 @@
   </connection>
   <connection>
    <sender>label_secTemp</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>lineEdit_secTemp</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <slot>lineChanged(PreviousScaleInfo)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>96</x>
@@ -680,9 +680,9 @@
   </connection>
   <connection>
    <sender>label_tertTemp</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>lineEdit_tertTemp</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <slot>lineChanged(PreviousScaleInfo)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>101</x>
@@ -696,9 +696,9 @@
   </connection>
   <connection>
    <sender>label_primaryTemp</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>lineEdit_primaryTemp</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <slot>lineChanged(PreviousScaleInfo)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>55</x>
@@ -712,9 +712,9 @@
   </connection>
   <connection>
    <sender>label_secAge</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>lineEdit_secAge</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <slot>lineChanged(PreviousScaleInfo)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>90</x>
@@ -728,9 +728,9 @@
   </connection>
   <connection>
    <sender>label_tertAge</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>lineEdit_tertAge</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <slot>lineChanged(PreviousScaleInfo)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>103</x>
@@ -744,9 +744,9 @@
   </connection>
   <connection>
    <sender>label_age</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>lineEdit_age</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <slot>lineChanged(PreviousScaleInfo)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>107</x>
@@ -760,9 +760,9 @@
   </connection>
   <connection>
    <sender>label_primaryAge</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>lineEdit_primaryAge</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <slot>lineChanged(PreviousScaleInfo)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>93</x>

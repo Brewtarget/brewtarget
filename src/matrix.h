@@ -115,4 +115,3 @@ class IncomputableException: public std::exception
 };
 
 #endif
-

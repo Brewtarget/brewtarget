@@ -21,6 +21,7 @@
 
 #include <stdexcept>
 
+#include <QApplication>
 #include <QDebug>
 #include <QDomNodeList>
 #include <QFile>
@@ -29,7 +30,6 @@
 #include <QTextCodec>
 #include <QTextStream>
 
-#include "brewtarget.h"
 #include "config.h" // For VERSIONSTRING
 #include "model/BrewNote.h"
 #include "model/Equipment.h"
@@ -552,7 +552,7 @@ public:
     */
    impl() : BeerXml1Coding{
                "BeerXML 1.0",
-               ":/xsd/beerxml/v1/BeerXml.xsd",
+               ":/schemas/beerxml/v1/BeerXml.xsd",
                QHash<QString, XmlCoding::XmlRecordDefinition>{
                   {BEER_XML_RECORD_NAME<void>       , {&XmlCoding::construct<void>,        &BEER_XML_RECORD_FIELDS<void>       } }, //Root
                   {BEER_XML_RECORD_NAME<Hop>        , {&XmlCoding::construct<Hop>,         &BEER_XML_RECORD_FIELDS<Hop>        } },

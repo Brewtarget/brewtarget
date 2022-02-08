@@ -68,7 +68,7 @@ public:
    enum Type { Infusion, Temperature, Decoction, flySparge, batchSparge };
    Q_ENUMS( Type )
 
-   MashStep(QString name = "", bool cache = true);
+   MashStep(QString name = "");
    MashStep(NamedParameterBundle const & namedParameterBundle);
    MashStep( MashStep const& other );
 
