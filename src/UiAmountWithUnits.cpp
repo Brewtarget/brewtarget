@@ -157,9 +157,17 @@ double UiAmountWithUnits::toDoubleRaw(bool * ok) const {
 
 Measurement::Amount UiAmountWithUnits::toSI() {
    // It's a coding error to call this function if we are not dealing with a physical quantity
-   Q_ASSERT(std::holds_alternative<Measurement::PhysicalQuantity>(this->getFieldType()));
-   Q_ASSERT(this->units);
+   // However, we can often recover by returning just the numeric part of the field and pretending it is seconds.
+   // If caller ignores the units and just used the quantity, then it will probably be OK.  Of course, we log an error
+   // and hope this prompts caller to call toDoubleRaw() instead of toSI().quantity!
+   if (!std::holds_alternative<Measurement::PhysicalQuantity>(this->getFieldType())) {
+      qCritical() <<
+         Q_FUNC_INFO << "Coding error - call to toSI() for" << this->getFieldType() << "for field with contents:" <<
+         this->getWidgetText();
+      return Measurement::Amount{this->getWidgetText().toDouble(), Measurement::Units::seconds};
+   }
 
+   Q_ASSERT(this->units);
    return Measurement::qStringToSI(this->getWidgetText(),
                                    this->units->getPhysicalQuantity(),
                                    this->getForcedSystemOfMeasurement(),
