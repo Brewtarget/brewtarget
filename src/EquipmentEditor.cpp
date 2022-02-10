@@ -1,6 +1,6 @@
 /*
  * EquipmentEditor.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2022
  * - A.J. Drobnich <aj.drobnich@gmail.com>
  * - David Grundberg <individ@acc.umu.se>
  * - Matt Young <mfsy@yahoo.com>
@@ -191,7 +191,7 @@ void EquipmentEditor::save() {
       inform = inform + QString("<li>%1</li>").arg(tr("batch size"));
    }
 
-   if ( qFuzzyCompare(lineEdit_hopUtilization->toSI().quantity, 0.0) ) {
+   if ( qFuzzyCompare(lineEdit_hopUtilization->toDoubleRaw(), 0.0) ) {
       problems = true;
       inform = inform + QString("<li>%1</li>").arg(tr("hop utilization"));
    }
@@ -220,7 +220,7 @@ void EquipmentEditor::save() {
 
    this->obsEquip->setTunWeight_kg( lineEdit_tunWeight->toSI().quantity );
 
-   this->obsEquip->setTunSpecificHeat_calGC( lineEdit_tunSpecificHeat->toSI().quantity );
+   this->obsEquip->setTunSpecificHeat_calGC( lineEdit_tunSpecificHeat->toDoubleRaw() );
    this->obsEquip->setBoilTime_min( lineEdit_boilTime->toSI().quantity);
    this->obsEquip->setEvapRate_lHr(  lineEdit_evaporationRate->toSI().quantity );
    this->obsEquip->setTopUpKettle_l( lineEdit_topUpKettle->toSI().quantity );
@@ -229,7 +229,7 @@ void EquipmentEditor::save() {
    this->obsEquip->setLauterDeadspace_l( lineEdit_lauterDeadspace->toSI().quantity );
    this->obsEquip->setGrainAbsorption_LKg( ga_LKg );
    this->obsEquip->setBoilingPoint_c( lineEdit_boilingPoint->toSI().quantity );
-   this->obsEquip->setHopUtilization_pct( lineEdit_hopUtilization->toSI().quantity );
+   this->obsEquip->setHopUtilization_pct( lineEdit_hopUtilization->toDoubleRaw() );
 
    this->obsEquip->setNotes(textEdit_notes->toPlainText());
    this->obsEquip->setCalcBoilVolume(checkBox_calcBoilVolume->checkState() == Qt::Checked);
