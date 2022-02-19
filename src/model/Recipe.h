@@ -437,6 +437,7 @@ public:
    QList<double> IBUs();
 
    // Relational getters
+   template<typename NE> QList< std::shared_ptr<NE> > getAll() const;
    QList<Hop *> hops() const;
    QVector<int> getHopIds() const;
    QList<Instruction *> instructions() const;
@@ -453,6 +454,7 @@ public:
    QVector<int> getSaltIds() const;
    QList<BrewNote *> brewNotes() const;
    QList<Recipe *> ancestors() const;
+   std::shared_ptr<Mash> getMash() const;
    Mash * mash() const;
    int getMashId() const;
    Equipment * equipment() const;
@@ -464,6 +466,7 @@ public:
 
    // Relational setters
    void setEquipment(Equipment * equipment);
+   void setMash(std::shared_ptr<Mash> mash);
    void setMash(Mash * var);
    void setStyle(Style * style);
 
@@ -503,7 +506,7 @@ public:
    //! \brief Formats the fermentables for instructions
    QList<QString> getReagents(QList<Fermentable *> ferms);
    //! \brief Formats the mashsteps for instructions
-   QList<QString> getReagents(QList<MashStep *> msteps);
+   QList<QString> getReagents(QList< std::shared_ptr<MashStep> >);
    //! \brief Formats the hops for instructions
    QList<QString> getReagents(QList<Hop *> hops, bool firstWort = false);
    //! \brief Formats the salts for instructions

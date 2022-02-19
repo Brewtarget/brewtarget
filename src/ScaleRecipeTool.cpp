@@ -45,7 +45,7 @@ ScaleRecipeTool::ScaleRecipeTool(QWidget* parent) :
 
 void ScaleRecipeTool::accept() {
    int row = field("equipComboBox").toInt();
-   QModelIndex equipProxyNdx( equipSortProxyModel->index(row, 0) );
+   QModelIndex equipProxyNdx( equipSortProxyModel->index(row, 0));
    QModelIndex equipNdx = equipSortProxyModel->mapToSource(equipProxyNdx);
 
    Equipment* selectedEquip = equipListModel->at(equipNdx.row());
@@ -60,12 +60,10 @@ void ScaleRecipeTool::setRecipe(Recipe* rec)
    recObs = rec;
 }
 
-void ScaleRecipeTool::scale(Equipment* equip, double newEff)
-{
-   if( recObs == nullptr || equip == nullptr )
+void ScaleRecipeTool::scale(Equipment* equip, double newEff) {
+   if (!this->recObs || !equip ) {
       return;
-
-   int i, size;
+   }
 
    // Calculate volume ratio
    double currentBatchSize_l = recObs->batchSize_l();
@@ -77,87 +75,46 @@ void ScaleRecipeTool::scale(Equipment* equip, double newEff)
    double effRatio = oldEfficiency / newEff;
 
    this->recObs->setEquipment(equip);
-   recObs->setBatchSize_l(newBatchSize_l);
-   recObs->setBoilSize_l(equip->boilSize_l());
-   recObs->setEfficiency_pct(newEff);
-   recObs->setBoilTime_min(equip->boilTime_min());
+   this->recObs->setBatchSize_l(newBatchSize_l);
+   this->recObs->setBoilSize_l(equip->boilSize_l());
+   this->recObs->setEfficiency_pct(newEff);
+   this->recObs->setBoilTime_min(equip->boilTime_min());
 
-   QList<Fermentable*> ferms = recObs->fermentables();
-   size = ferms.size();
-   for( i = 0; i < size; ++i )
-   {
-      Fermentable* ferm = ferms[i];
-      // NOTE: why the hell do we need this?
-      if( ferm == nullptr )
-         continue;
-
-      if( !ferm->isSugar() && !ferm->isExtract() ) {
+   for (auto ferm : this->recObs->fermentables()) {
+      if (!ferm->isSugar() && !ferm->isExtract()) {
          ferm->setAmount_kg(ferm->amount_kg() * effRatio * volRatio);
       } else {
          ferm->setAmount_kg(ferm->amount_kg() * volRatio);
       }
    }
 
-   QList<Hop*> hops = recObs->hops();
-   size = hops.size();
-   for( i = 0; i < size; ++i )
-   {
-      Hop* hop = hops[i];
-      // NOTE: why the hell do we need this?
-      if( hop == nullptr )
-         continue;
-
+   for (auto hop : this->recObs->hops()) {
       hop->setAmount_kg(hop->amount_kg() * volRatio);
    }
 
-   QList<Misc*> miscs = recObs->miscs();
-   size = miscs.size();
-   for( i = 0; i < size; ++i )
-   {
-      Misc* misc = miscs[i];
-      // NOTE: why the hell do we need this?
-      if( misc == nullptr )
-         continue;
-
-      misc->setAmount( misc->amount() * volRatio );
+   for (auto misc : this->recObs->miscs()) {
+      misc->setAmount( misc->amount() * volRatio);
    }
 
-   QList<Water*> waters = recObs->waters();
-   size = waters.size();
-   for( i = 0; i < size; ++i )
-   {
-      Water* water = waters[i];
-      // NOTE: why the hell do we need this?
-      if( water == nullptr )
-         continue;
-
+   for (auto water : this->recObs->waters()) {
       water->setAmount(water->amount() * volRatio);
    }
 
-   Mash* mash = recObs->mash();
-   if( mash == nullptr )
-      return;
-
-   QList<MashStep*> mashSteps = mash->mashSteps();
-   size = mashSteps.size();
-   for( i = 0; i < size; ++i )
-   {
-      MashStep* step = mashSteps[i];
-      // NOTE: why the hell do we need this?
-      if( step == nullptr )
-         continue;
-
-      // Reset all these to zero so that the user
-      // will know to re-run the mash wizard.
-      step->setDecoctionAmount_l(0);
-      step->setInfuseAmount_l(0);
+   Mash* mash = this->recObs->mash();
+   if (mash) {
+      for (auto step : mash->mashSteps()) {
+         // Reset all these to zero so that the user
+         // will know to re-run the mash wizard.
+         step->setDecoctionAmount_l(0);
+         step->setInfuseAmount_l(0);
+      }
    }
 
    // I don't think I should scale the yeasts.
 
    // Let the user know what happened.
    QMessageBox::information(this, tr("Recipe Scaled"),
-             tr("The equipment and mash have been reset due to the fact that mash temperatures do not scale easily. Please re-run the mash wizard.") );
+             tr("The equipment and mash have been reset due to the fact that mash temperatures do not scale easily. Please re-run the mash wizard."));
 }
 
 // ScaleRecipeIntroPage =======================================================
@@ -185,7 +142,7 @@ void ScaleRecipeIntroPage::retranslateUi() {
       "This wizard will help you scale a recipe to another size or efficiency."
       "Select another equipment with the new batch size and/or efficiency and"
       "the wizard will scale the recipe ingredients automatically."
-   ));
+  ));
 }
 
 // ScaleRecipeEquipmentPage ===================================================
@@ -219,7 +176,7 @@ void ScaleRecipeEquipmentPage::retranslateUi() {
    setTitle(tr("Select Equipment"));
    setSubTitle(tr("The recipe will be scaled to match the batch size and "
                   "efficiency of the selected equipment"
-   ));
+  ));
 
    equipLabel->setText(tr("New Equipment"));
    effLabel->setText(tr("New Efficiency (%)"));

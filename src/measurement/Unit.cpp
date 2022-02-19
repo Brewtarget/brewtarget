@@ -214,9 +214,17 @@ QString Measurement::Unit::convert(QString qstr, QString toUnit) {
 
 Measurement::Unit const * Measurement::Unit::getUnit(QString const & name,
                                                      std::optional<Measurement::PhysicalQuantity> physicalQuantity) {
+   auto const numMatches = nameToUnit.count(name);
+   if (0 == numMatches) {
+      qDebug() << Q_FUNC_INFO << name << "does not match any Unit";
+      return nullptr;
+   }
+
+   qDebug() << Q_FUNC_INFO << name << "has" << numMatches << "match(es)";
+
    // Under most circumstances, there is a one-to-one relationship between unit string and Unit. C will only map to
    // Measurement::Unit::Celsius, for example. If there's only one match, just return it.
-   if (nameToUnit.count(name) == 1) {
+   if (1 == numMatches) {
       Measurement::Unit const * unitToReturn = nameToUnit.value(name);
       if (physicalQuantity && unitToReturn->getPhysicalQuantity() != *physicalQuantity) {
          qWarning() <<
@@ -233,22 +241,25 @@ Measurement::Unit const * Measurement::Unit::getUnit(QString const & name,
    // Measurement::Unit::imperial_quart, and try to find one that matches the global default.
    Measurement::Unit const * defUnit = nullptr;
    for (auto ii = nameToUnit.find(name); ii != nameToUnit.end() && ii.key() == name; ++ii) {
-      Measurement::Unit const * u = ii.value();
-      if (physicalQuantity && u->getPhysicalQuantity() != *physicalQuantity) {
+      Measurement::Unit const * unit = ii.value();
+      auto const & displayUnitSystem = Measurement::getDisplayUnitSystem(unit->getPhysicalQuantity());
+      qDebug() <<
+         Q_FUNC_INFO << "Look at" << *unit << "from" << unit->getUnitSystem() << "(Display Unit System for" <<
+         unit->getPhysicalQuantity() << "is" << displayUnitSystem << ")";
+      if (physicalQuantity && unit->getPhysicalQuantity() != *physicalQuantity) {
          // If the caller knows the amount is, say, a Volume, don't bother trying to match against units for any other
          // physical quantity.
+         qDebug() << Q_FUNC_INFO << "Ignoring match in" << unit->getPhysicalQuantity() << "as not" << *physicalQuantity;
          continue;
       }
 
-      if (Measurement::getDisplayUnitSystem(u->getPhysicalQuantity()) == u->getUnitSystem()) {
+      if (displayUnitSystem == unit->getUnitSystem()) {
          // We found a match that belongs to one of the global default unit systems
-         return u;
+         return unit;
       }
 
-      // Save this for later if we need it
-      if (u->getUnitSystem() == Measurement::UnitSystems::volume_UsCustomary) {
-         defUnit = u;
-      }
+      // Save this for later if we need it - ie if we don't find a better match
+      defUnit = unit;
    }
 
    // If we got here, we couldn't find a match. Unless something weird has

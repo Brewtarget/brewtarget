@@ -90,6 +90,6 @@ bool HopSortFilterProxyModel::filterAcceptsRow( int source_row, const QModelInde
    return !filter
           ||
            ( sourceModel()->data(index).toString().contains(filterRegExp())
-             && model->getHop(source_row)->display()
+             && model->getRow(source_row)->display()
            );
 }

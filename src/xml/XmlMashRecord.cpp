@@ -33,11 +33,11 @@ void XmlMashRecord::subRecordToXml(XmlRecord::FieldDefinition const & fieldDefin
    // We assert that MashStep is the only complex record inside a Mash
    Q_ASSERT(fieldDefinition.propertyName == PropertyNames::Mash::mashSteps);
 
-   QList<MashStep *> children = mash.mashSteps();
+   auto children = mash.mashSteps();
    if (children.empty()) {
       this->writeNone(subRecord, mash, out, indentLevel, indentString);
    } else {
-      for (MashStep * child : children) {
+      for (auto child : children) {
          subRecord.toXml(*child, out, indentLevel, indentString);
       }
    }

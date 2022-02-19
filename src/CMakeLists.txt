@@ -166,8 +166,8 @@ SET( brewtarget_SRCS
     ${SRCDIR}/PersistentSettings.cpp
     ${SRCDIR}/PitchDialog.cpp
     ${SRCDIR}/PreInstruction.cpp
-    ${SRCDIR}/PrintAndPreviewDialog.cpp
     ${SRCDIR}/PrimingDialog.cpp
+    ${SRCDIR}/PrintAndPreviewDialog.cpp
     ${SRCDIR}/RadarChart.cpp
     ${SRCDIR}/RangedSlider.cpp
     ${SRCDIR}/RecipeExtrasWidget.cpp
@@ -182,6 +182,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/StyleRangeWidget.cpp
     ${SRCDIR}/StyleSortFilterProxyModel.cpp
     ${SRCDIR}/tableModels/BtTableModel.cpp
+    ${SRCDIR}/tableModels/BtTableModelInventory.cpp
     ${SRCDIR}/tableModels/FermentableTableModel.cpp
     ${SRCDIR}/tableModels/HopTableModel.cpp
     ${SRCDIR}/tableModels/MashStepTableModel.cpp
@@ -224,6 +225,10 @@ SET( brewtarget_SRCS
 # List of all the *.ui
 # TODO: can I somehow have a separate CMakeLists.txt
 # in the ui/ directory instead of here?
+#
+# You can recreate the body of this list by running the following from the bash prompt in the build directory:
+#    find ../ui -name '*.ui' | sort  | sed 's+^../ui+    ${SRCDIR}+'
+#
 SET( brewtarget_UIS
     ${UIDIR}/ancestorDialog.ui
     ${UIDIR}/brewDayScrollWidget.ui
@@ -336,8 +341,8 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/OgAdjuster.h
     ${SRCDIR}/OptionDialog.h
     ${SRCDIR}/PitchDialog.h
-    ${SRCDIR}/PrintAndPreviewDialog.h
     ${SRCDIR}/PrimingDialog.h
+    ${SRCDIR}/PrintAndPreviewDialog.h
     ${SRCDIR}/RangedSlider.h
     ${SRCDIR}/RecipeExtrasWidget.h
     ${SRCDIR}/RecipeFormatter.h

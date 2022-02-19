@@ -104,4 +104,15 @@ namespace Measurement {
     */
    QString getDisplayName(PhysicalQuantity physicalQuantity);
 }
+
+/**
+ * \brief Convenience function for logging
+ */
+template<class S>
+S & operator<<(S & stream, Measurement::PhysicalQuantity const physicalQuantity) {
+   stream <<
+      "PhysicalQuantity #" << static_cast<int>(physicalQuantity) << ": (" <<
+      Measurement::getDisplayName(physicalQuantity) << ")";
+   return stream;
+}
 #endif

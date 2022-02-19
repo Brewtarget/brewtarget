@@ -26,6 +26,7 @@
 
 #include <cstdint>
 #include <memory>
+#include <type_traits>
 
 #include <QDateTime>
 #include <QDebug>
@@ -405,5 +406,45 @@ private:
    NamedEntityModifyingMarker(NamedEntityModifyingMarker &&) = delete;
    NamedEntityModifyingMarker & operator=(NamedEntityModifyingMarker &&) = delete;
 };
+
+/**
+ * \brief Convenience function for logging
+ */
+template<class S>
+S & operator<<(S & stream, NamedEntity const & namedEntity) {
+   stream << namedEntity.metaObject()->className() << " #" << namedEntity.key();
+   return stream;
+}
+
+template<class S>
+S & operator<<(S & stream, NamedEntity const * namedEntity) {
+   if (namedEntity) {
+      stream << *namedEntity;
+   } else {
+      stream << "Null";
+   }
+   return stream;
+}
+
+/**
+ * \brief Convenience function for logging, including coping with null pointers
+ *
+ *        std::is_base_of<NamedEntity, NE>::value is \c true if NE is \c NamedEntity or a subclass thereof
+ *        std::enable_if_t<condition> is only defined if condition is true
+ *        Thus std::enable_if_t<std::is_base_of<NamedEntity, NE>::value> is only defined if NE is \c NamedEntity or a
+ *        subclass thereof.  This means this template should not be instantiated for any other classes.
+ *
+ *        .:TODO:. This isn't quite working yet!
+ */
+template<class S, class NE,
+         std::enable_if_t<std::is_base_of<NamedEntity, NE>::value> >
+S & operator<<(S & stream, NE const * namedEntity) {
+   if (namedEntity) {
+      stream << *namedEntity;
+   } else {
+      stream << "Null " << NE::staticMetaObject.metaObject()->className();
+   }
+   return stream;
+}
 
 #endif

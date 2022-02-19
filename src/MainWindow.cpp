@@ -115,6 +115,7 @@
 #include "PersistentSettings.h"
 #include "PitchDialog.h"
 #include "PrimingDialog.h"
+#include "PrintAndPreviewDialog.h"
 #include "RangedSlider.h"
 #include "RecipeFormatter.h"
 #include "RefractoDialog.h"
@@ -907,6 +908,7 @@ void MainWindow::setupTriggers() {
       connect( actionBackup_Database, &QAction::triggered, this, &MainWindow::backup );                                 // > File > Database > Backup
       connect( actionRestore_Database, &QAction::triggered, this, &MainWindow::restoreFromBackup );                     // > File > Database > Restore
    }
+   return;
 }
 
 // pushbuttons with a SIGNAL of clicked() should go in here.
@@ -1800,8 +1802,8 @@ void MainWindow::updateRecipeEfficiency() {
    return;
 }
 
-void MainWindow::addFermentableToRecipe(Fermentable* ferm) {
-   Q_ASSERT(nullptr != ferm);
+void MainWindow::addFermentableToRecipe(std::shared_ptr<Fermentable> ferm) {
+   Q_ASSERT(ferm);
    this->doOrRedoUpdate(
       newUndoableAddOrRemove(*this->recipeObs,
                              &Recipe::add<Fermentable>,
@@ -1814,8 +1816,8 @@ void MainWindow::addFermentableToRecipe(Fermentable* ferm) {
    return;
 }
 
-void MainWindow::addHopToRecipe(Hop *hop) {
-   Q_ASSERT(nullptr != hop);
+void MainWindow::addHopToRecipe(std::shared_ptr<Hop> hop) {
+   Q_ASSERT(hop);
    this->doOrRedoUpdate(
       newUndoableAddOrRemove(*this->recipeObs,
                              &Recipe::add<Hop>,
@@ -1827,8 +1829,8 @@ void MainWindow::addHopToRecipe(Hop *hop) {
    // triggered the necessary updates to hopTableModel.
 }
 
-void MainWindow::addMiscToRecipe(Misc* misc) {
-   Q_ASSERT(nullptr != misc);
+void MainWindow::addMiscToRecipe(std::shared_ptr<Misc> misc) {
+   Q_ASSERT(misc);
    this->doOrRedoUpdate(
       newUndoableAddOrRemove(*this->recipeObs,
                              &Recipe::add<Misc>,
@@ -1841,8 +1843,8 @@ void MainWindow::addMiscToRecipe(Misc* misc) {
    return;
 }
 
-void MainWindow::addYeastToRecipe(Yeast* yeast) {
-   Q_ASSERT(nullptr != yeast);
+void MainWindow::addYeastToRecipe(std::shared_ptr<Yeast> yeast) {
+   Q_ASSERT(yeast);
    this->doOrRedoUpdate(
       newUndoableAddOrRemove(*this->recipeObs,
                              &Recipe::add<Yeast>,
@@ -1961,163 +1963,139 @@ void MainWindow::editRedo()
    return;
 }
 
-Fermentable* MainWindow::selectedFermentable()
-{
+Fermentable* MainWindow::selectedFermentable() {
    QModelIndexList selected = fermentableTable->selectionModel()->selectedIndexes();
-   QModelIndex modelIndex, viewIndex;
-   int row, size, i;
 
-   size = selected.size();
-   if( size == 0 )
+   int size = selected.size();
+   if (size == 0) {
       return nullptr;
-
-   // Make sure only one row is selected.
-   viewIndex = selected[0];
-   row = viewIndex.row();
-   for( i = 1; i < size; ++i )
-   {
-      if( selected[i].row() != row )
-         return nullptr;
    }
 
-   modelIndex = fermTableProxy->mapToSource(viewIndex);
-   Fermentable* ferm = fermTableModel->getFermentable(static_cast<unsigned int>(modelIndex.row()));
+   // Make sure only one row is selected.
+   QModelIndex viewIndex = selected[0];
+   int row = viewIndex.row();
+   for (int i = 1; i < size; ++i ) {
+      if (selected[i].row() != row) {
+         return nullptr;
+      }
+   }
 
-   return ferm;
+   QModelIndex modelIndex = fermTableProxy->mapToSource(viewIndex);
+   return fermTableModel->getRow(modelIndex.row()).get();
 }
 
-Hop* MainWindow::selectedHop()
-{
+Hop* MainWindow::selectedHop() {
    QModelIndexList selected = hopTable->selectionModel()->selectedIndexes();
-   QModelIndex modelIndex, viewIndex;
-   int row, size, i;
 
-   size = selected.size();
-   if( size == 0 )
+   int size = selected.size();
+   if (size == 0) {
       return nullptr;
-
-   // Make sure only one row is selected.
-   viewIndex = selected[0];
-   row = viewIndex.row();
-   for( i = 1; i < size; ++i )
-   {
-      if( selected[i].row() != row )
-         return nullptr;
    }
 
-   modelIndex = hopTableProxy->mapToSource(viewIndex);
+   // Make sure only one row is selected.
+   QModelIndex viewIndex = selected[0];
+   int row = viewIndex.row();
+   for (int i = 1; i < size; ++i ) {
+      if (selected[i].row() != row) {
+         return nullptr;
+      }
+   }
 
-   Hop* h = hopTableModel->getHop(modelIndex.row());
-
-   return h;
+   QModelIndex modelIndex = hopTableProxy->mapToSource(viewIndex);
+   return hopTableModel->getRow(modelIndex.row()).get();
 }
 
-Misc* MainWindow::selectedMisc()
-{
+Misc* MainWindow::selectedMisc() {
    QModelIndexList selected = miscTable->selectionModel()->selectedIndexes();
-   QModelIndex modelIndex, viewIndex;
-   int row, size, i;
 
-   size = selected.size();
-   if( size == 0 )
+   int size = selected.size();
+   if (size == 0) {
       return nullptr;
-
-   // Make sure only one row is selected.
-   viewIndex = selected[0];
-   row = viewIndex.row();
-   for( i = 1; i < size; ++i )
-   {
-      if( selected[i].row() != row )
-         return nullptr;
    }
 
-   modelIndex = miscTableProxy->mapToSource(viewIndex);
+   // Make sure only one row is selected.
+   QModelIndex viewIndex = selected[0];
+   int row = viewIndex.row();
+   for (int i = 1; i < size; ++i ) {
+      if (selected[i].row() != row) {
+         return nullptr;
+      }
+   }
 
-   Misc* m = miscTableModel->getMisc(static_cast<unsigned int>(modelIndex.row()));
-
-   return m;
+   QModelIndex modelIndex = miscTableProxy->mapToSource(viewIndex);
+   return miscTableModel->getRow(modelIndex.row()).get();
 }
 
-Yeast* MainWindow::selectedYeast()
-{
+Yeast* MainWindow::selectedYeast() {
    QModelIndexList selected = yeastTable->selectionModel()->selectedIndexes();
-   QModelIndex modelIndex, viewIndex;
-   int row, size, i;
 
-   size = selected.size();
-   if( size == 0 )
+   int size = selected.size();
+   if (size == 0) {
       return nullptr;
-
-   // Make sure only one row is selected.
-   viewIndex = selected[0];
-   row = viewIndex.row();
-   for( i = 1; i < size; ++i )
-   {
-      if( selected[i].row() != row )
-         return nullptr;
    }
 
-   modelIndex = yeastTableProxy->mapToSource(viewIndex);
+   // Make sure only one row is selected.
+   QModelIndex viewIndex = selected[0];
+   int row = viewIndex.row();
+   for (int i = 1; i < size; ++i ) {
+      if (selected[i].row() != row) {
+         return nullptr;
+      }
+   }
 
-   Yeast* y = yeastTableModel->getYeast(static_cast<unsigned int>(modelIndex.row()));
-
-   return y;
-}
-
-void MainWindow::removeHop(Hop & itemToRemove) {
-   this->hopTableModel->remove(&itemToRemove);
-   return;
-}
-void MainWindow::removeFermentable(Fermentable & itemToRemove) {
-   this->fermTableModel->remove(&itemToRemove);
-   return;
-}
-void MainWindow::removeMisc(Misc & itemToRemove) {
-   this->miscTableModel->remove(&itemToRemove);
-   return;
-}
-void MainWindow::removeYeast(Yeast & itemToRemove) {
-   this->yeastTableModel->remove(&itemToRemove);
-   return;
+   QModelIndex modelIndex = yeastTableProxy->mapToSource(viewIndex);
+   return yeastTableModel->getRow(modelIndex.row()).get();
 }
 
-void MainWindow::removeMashStep(MashStep & itemToRemove) {
-   this->mashStepTableModel->remove(&itemToRemove);
+void MainWindow::removeHop(std::shared_ptr<Hop> itemToRemove) {
+   this->hopTableModel->remove(itemToRemove);
+   return;
+}
+void MainWindow::removeFermentable(std::shared_ptr<Fermentable> itemToRemove) {
+   this->fermTableModel->remove(itemToRemove);
+   return;
+}
+void MainWindow::removeMisc(std::shared_ptr<Misc> itemToRemove) {
+   this->miscTableModel->remove(itemToRemove);
+   return;
+}
+void MainWindow::removeYeast(std::shared_ptr<Yeast> itemToRemove) {
+   this->yeastTableModel->remove(itemToRemove);
    return;
 }
 
-void MainWindow::removeSelectedFermentable()
-{
+void MainWindow::removeMashStep(std::shared_ptr<MashStep> itemToRemove) {
+   this->mashStepTableModel->remove(itemToRemove);
+   return;
+}
+
+void MainWindow::removeSelectedFermentable() {
 
    QModelIndexList selected = fermentableTable->selectionModel()->selectedIndexes();
-   QModelIndex viewIndex, modelIndex;
-   QList<Fermentable *> itemsToRemove;
-   int size, i;
-
-   size = selected.size();
+   int size = selected.size();
 
    qDebug() << QString("MainWindow::removeSelectedFermentable() %1 items selected to remove").arg(size);
 
-   if( size == 0 )
+   if (size == 0) {
       return;
-
-   for(int i = 0; i < size; i++)
-   {
-      viewIndex = selected.at(i);
-      modelIndex = fermTableProxy->mapToSource(viewIndex);
-
-      itemsToRemove.append(fermTableModel->getFermentable(static_cast<unsigned int>(modelIndex.row())));
    }
 
-   for(i = 0; i < itemsToRemove.size(); i++)
-   {
+   QList< std::shared_ptr<Fermentable> > itemsToRemove;
+   for(int i = 0; i < size; i++) {
+      QModelIndex viewIndex = selected.at(i);
+      QModelIndex modelIndex = fermTableProxy->mapToSource(viewIndex);
+
+      itemsToRemove.append(fermTableModel->getRow(modelIndex.row()));
+   }
+
+   for (auto item : itemsToRemove) {
       this->doOrRedoUpdate(
          newUndoableAddOrRemove(*this->recipeObs,
                                 &Recipe::remove<Fermentable>,
-                                itemsToRemove.at(i),
+                                item,
                                 &Recipe::add<Fermentable>,
                                 &MainWindow::removeFermentable,
-                                static_cast<void (MainWindow::*)(Fermentable &)>(nullptr),
+                                static_cast<void (MainWindow::*)(std::shared_ptr<Fermentable>)>(nullptr),
                                 tr("Remove fermentable from recipe"))
       );
     }
@@ -2125,8 +2103,7 @@ void MainWindow::removeSelectedFermentable()
     return;
 }
 
-void MainWindow::editSelectedFermentable()
-{
+void MainWindow::editSelectedFermentable() {
    Fermentable* f = selectedFermentable();
    if( f == nullptr )
       return;
@@ -2135,8 +2112,7 @@ void MainWindow::editSelectedFermentable()
    fermEditor->show();
 }
 
-void MainWindow::editSelectedMisc()
-{
+void MainWindow::editSelectedMisc() {
    Misc* m = selectedMisc();
    if( m == nullptr )
       return;
@@ -2165,104 +2141,89 @@ void MainWindow::editSelectedYeast()
    yeastEditor->show();
 }
 
-void MainWindow::removeSelectedHop()
-{
+void MainWindow::removeSelectedHop() {
    QModelIndexList selected = hopTable->selectionModel()->selectedIndexes();
-   QModelIndex modelIndex, viewIndex;
-   QList<Hop *> itemsToRemove;
-   int size, i;
+   QList< std::shared_ptr<Hop> > itemsToRemove;
 
-   size = selected.size();
-
-   if( size == 0 )
+   int size = selected.size();
+   if (size == 0) {
       return;
-
-   for(int i = 0; i < size; i++)
-   {
-      viewIndex = selected.at(i);
-      modelIndex = hopTableProxy->mapToSource(viewIndex);
-
-      itemsToRemove.append(hopTableModel->getHop(modelIndex.row()));
    }
 
-   for(i = 0; i < itemsToRemove.size(); i++)
-   {
+   for (int i = 0; i < size; i++) {
+      QModelIndex viewIndex = selected.at(i);
+      QModelIndex modelIndex = hopTableProxy->mapToSource(viewIndex);
+      itemsToRemove.append(hopTableModel->getRow(modelIndex.row()));
+   }
+
+   for (auto item : itemsToRemove) {
       this->doOrRedoUpdate(
          newUndoableAddOrRemove(*this->recipeObs,
                                  &Recipe::remove<Hop>,
-                                 itemsToRemove.at(i),
+                                 item,
                                  &Recipe::add<Hop>,
                                  &MainWindow::removeHop,
-                                 static_cast<void (MainWindow::*)(Hop &)>(nullptr),
+                                 static_cast<void (MainWindow::*)(std::shared_ptr<Hop>)>(nullptr),
                                  tr("Remove hop from recipe"))
       );
    }
 
 }
 
-void MainWindow::removeSelectedMisc()
-{
+
+void MainWindow::removeSelectedMisc() {
    QModelIndexList selected = miscTable->selectionModel()->selectedIndexes();
-   QModelIndex modelIndex, viewIndex;
-   QList<Misc *> itemsToRemove;
-   int size, i;
+   QList< std::shared_ptr<Misc> > itemsToRemove;
 
-   size = selected.size();
-
-   if( size == 0 )
+   int size = selected.size();
+   if (size == 0) {
       return;
-
-   for(int i = 0; i < size; i++)
-   {
-      viewIndex = selected.at(i);
-      modelIndex = miscTableProxy->mapToSource(viewIndex);
-
-      itemsToRemove.append(miscTableModel->getMisc(static_cast<unsigned int>(modelIndex.row())));
    }
 
-   for(i = 0; i < itemsToRemove.size(); i++)
-   {
+   for (int i = 0; i < size; i++) {
+      QModelIndex viewIndex = selected.at(i);
+      QModelIndex modelIndex = miscTableProxy->mapToSource(viewIndex);
+
+      itemsToRemove.append(miscTableModel->getRow(modelIndex.row()));
+   }
+
+   for (auto item : itemsToRemove) {
       this->doOrRedoUpdate(
          newUndoableAddOrRemove(*this->recipeObs,
                                  &Recipe::remove<Misc>,
-                                 itemsToRemove.at(i),
+                                 item,
                                  &Recipe::add<Misc>,
                                  &MainWindow::removeMisc,
-                                 static_cast<void (MainWindow::*)(Misc &)>(nullptr),
+                                 static_cast<void (MainWindow::*)(std::shared_ptr<Misc>)>(nullptr),
                                  tr("Remove misc from recipe"))
       );
    }
 }
 
-void MainWindow::removeSelectedYeast()
-{
+void MainWindow::removeSelectedYeast() {
    QModelIndexList selected = yeastTable->selectionModel()->selectedIndexes();
-   QModelIndex modelIndex, viewIndex;
-   QList<Yeast *> itemsToRemove;
-   int size, i;
+   QList< std::shared_ptr<Yeast> > itemsToRemove;
 
-   size = selected.size();
-
-   if( size == 0 )
+   int size = selected.size();
+   if (size == 0) {
       return;
-
-   for(int i = 0; i < size; i++)
-   {
-      viewIndex = selected.at(i);
-      modelIndex = yeastTableProxy->mapToSource(viewIndex);
-
-      itemsToRemove.append(yeastTableModel->getYeast(static_cast<unsigned int>(modelIndex.row())));
    }
 
-   for(i = 0; i < itemsToRemove.size(); i++)
-   {
+   for(int i = 0; i < size; i++) {
+      QModelIndex viewIndex = selected.at(i);
+      QModelIndex modelIndex = yeastTableProxy->mapToSource(viewIndex);
+
+      itemsToRemove.append(yeastTableModel->getRow(modelIndex.row()));
+   }
+
+   for (auto item : itemsToRemove) {
       this->doOrRedoUpdate(
          newUndoableAddOrRemove(*this->recipeObs,
                                  &Recipe::remove<Yeast>,
-                                 itemsToRemove.at(i),
+                                 item,
                                  &Recipe::add<Yeast>,
                                  &MainWindow::removeYeast,
-                                 static_cast<void (MainWindow::*)(Yeast &)>(nullptr),
+                                 static_cast<void (MainWindow::*)(std::shared_ptr<Yeast>)>(nullptr),
                                  tr("Remove yeast from recipe"))
       );
    }
@@ -2664,36 +2625,38 @@ void MainWindow::addMashStep() {
    return;
 }
 
-void MainWindow::removeSelectedMashStep()
-{
-   Mash* mash = recipeObs == nullptr ? nullptr : recipeObs->mash();
-   if( mash == nullptr )
+void MainWindow::removeSelectedMashStep() {
+   if (!this->recipeObs) {
       return;
-
-   QModelIndexList selected = mashStepTableWidget->selectionModel()->selectedIndexes();
-   int row, size, i;
-
-   size = selected.size();
-   if( size == 0 )
+   }
+   Mash* mash = this->recipeObs->mash();
+   if (!mash) {
       return;
-
-   // Make sure only one row is selected.
-   row = selected[0].row();
-   for( i = 1; i < size; ++i )
-   {
-      if( selected[i].row() != row )
-         return;
    }
 
-   MashStep* step = mashStepTableModel->getMashStep(static_cast<unsigned int>(row));
+   QModelIndexList selected = mashStepTableWidget->selectionModel()->selectedIndexes();
 
+   int size = selected.size();
+   if (size == 0) {
+      return;
+   }
+
+   // Make sure only one row is selected.
+   int row = selected[0].row();
+   for (int i = 1; i < size; ++i) {
+      if (selected[i].row() != row) {
+         return;
+      }
+   }
+
+   auto step = mashStepTableModel->getRow(row);
    this->doOrRedoUpdate(
       newUndoableAddOrRemove(*this->recipeObs->mash(),
                               &Mash::removeMashStep,
                               step,
                               &Mash::addMashStep,
                               &MainWindow::removeMashStep,
-                              static_cast<void (MainWindow::*)(MashStep&)>(nullptr),
+                              static_cast<void (MainWindow::*)(std::shared_ptr<MashStep>)>(nullptr),
                               tr("Remove mash step"))
    );
 
@@ -2772,9 +2735,8 @@ void MainWindow::editSelectedMashStep() {
       }
    }
 
-   MashStep* step = mashStepTableModel->getMashStep(static_cast<unsigned int>(row));
-   auto stepPointer = ObjectStoreWrapper::getSharedFromRaw(step);
-   mashStepEditor->setMashStep(stepPointer);
+   auto step = mashStepTableModel->getRow(static_cast<unsigned int>(row));
+   mashStepEditor->setMashStep(step);
    mashStepEditor->setVisible(true);
    return;
 }

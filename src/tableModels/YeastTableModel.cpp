@@ -46,7 +46,7 @@
 #include "utils/BtStringConst.h"
 
 YeastTableModel::YeastTableModel(QTableView * parent, bool editable) :
-   BtTableModel{
+   BtTableModelInventory{
       parent,
       editable,
       {{YEASTNAMECOL,      {tr("Name"),       NonPhysicalQuantity::String,          ""      }},
@@ -57,10 +57,8 @@ YeastTableModel::YeastTableModel(QTableView * parent, bool editable) :
        {YEASTAMOUNTCOL,    {tr("Amount"),     Measurement::PhysicalQuantity::Mixed, "amount"}},
        {YEASTINVENTORYCOL, {tr("Inventory"),  NonPhysicalQuantity::Count,           ""      }}}
    },
-   _inventoryEditable(false),
-   recObs(nullptr) {
+   BtTableModelData<Yeast>{} {
 
-   yeastObs.clear();
    setObjectName("yeastTableModel");
 
    QHeaderView * headerView = parentTableWidget->horizontalHeader();
@@ -78,15 +76,15 @@ YeastTableModel::YeastTableModel(QTableView * parent, bool editable) :
 YeastTableModel::~YeastTableModel() = default;
 
 void YeastTableModel::addYeast(int yeastId) {
-   Yeast * yeast = ObjectStoreWrapper::getByIdRaw<Yeast>(yeastId);
+   auto yeast = ObjectStoreWrapper::getById<Yeast>(yeastId);
 
-   if (this->yeastObs.contains(yeast)) {
+   if (this->rows.contains(yeast)) {
       return;
    }
 
    // If we are observing the database, ensure that the item is undeleted and
    // fit to display.
-   if (recObs == nullptr && (yeast->deleted() || !yeast->display())) {
+   if (!this->recObs && (yeast->deleted() || !yeast->display())) {
       return;
    }
 
@@ -101,25 +99,26 @@ void YeastTableModel::addYeast(int yeastId) {
       }
    }
 
-   int size = yeastObs.size();
+   int size = this->rows.size();
    beginInsertRows(QModelIndex(), size, size);
-   yeastObs.append(yeast);
-   connect(yeast, &NamedEntity::changed, this, &YeastTableModel::changed);
+   this->rows.append(yeast);
+   connect(yeast.get(), &NamedEntity::changed, this, &YeastTableModel::changed);
    //reset(); // Tell everybody that the table has changed.
    endInsertRows();
 }
 
 void YeastTableModel::observeRecipe(Recipe * rec) {
-   if (recObs) {
-      disconnect(recObs, nullptr, this, nullptr);
+   if (this->recObs) {
+      disconnect(this->recObs, nullptr, this, nullptr);
       removeAll();
    }
 
-   recObs = rec;
-   if (recObs) {
-      connect(recObs, &NamedEntity::changed, this, &YeastTableModel::changed);
-      addYeasts(recObs->yeasts());
+   this->recObs = rec;
+   if (this->recObs) {
+      connect(this->recObs, &NamedEntity::changed, this, &YeastTableModel::changed);
+      addYeasts(this->recObs->getAll<Yeast>());
    }
+   return;
 }
 
 void YeastTableModel::observeDatabase(bool val) {
@@ -135,63 +134,55 @@ void YeastTableModel::observeDatabase(bool val) {
               &ObjectStoreTyped<Yeast>::signalObjectDeleted,
               this,
               &YeastTableModel::removeYeast);
-      addYeasts(ObjectStoreTyped<Yeast>::getInstance().getAllRaw());
+      this->addYeasts(ObjectStoreWrapper::getAll<Yeast>());
    } else {
       removeAll();
       disconnect(&ObjectStoreTyped<Yeast>::getInstance(), nullptr, this, nullptr);
    }
+   return;
 }
 
-void YeastTableModel::addYeasts(QList<Yeast *> yeasts) {
-   QList<Yeast *>::iterator i;
-   QList<Yeast *> tmp;
+void YeastTableModel::addYeasts(QList<std::shared_ptr<Yeast> > yeasts) {
+   auto tmp = this->removeDuplicates(yeasts, this->recObs);
 
-   for (i = yeasts.begin(); i != yeasts.end(); i++) {
-      if (recObs == nullptr && ((*i)->deleted() || !(*i)->display())) {
-         continue;
-      }
-
-      if (!yeastObs.contains(*i)) {
-         tmp.append(*i);
-      }
-   }
-
-   int size = yeastObs.size();
+   int size = this->rows.size();
    if (size + tmp.size()) {
       beginInsertRows(QModelIndex(), size, size + tmp.size() - 1);
-      yeastObs.append(tmp);
+      this->rows.append(tmp);
 
-      for (i = tmp.begin(); i != tmp.end(); i++) {
-         connect(*i, &NamedEntity::changed, this, &YeastTableModel::changed);
+      for (auto yeast : tmp) {
+         connect(yeast.get(), &NamedEntity::changed, this, &YeastTableModel::changed);
       }
 
       endInsertRows();
    }
-}
-
-void YeastTableModel::removeYeast(int yeastId, std::shared_ptr<QObject> object) {
-   this->remove(std::static_pointer_cast<Yeast>(object).get());
    return;
 }
 
-void YeastTableModel::remove(Yeast * yeast) {
+void YeastTableModel::removeYeast(int yeastId, std::shared_ptr<QObject> object) {
+   this->remove(std::static_pointer_cast<Yeast>(object));
+   return;
+}
 
-   int i = yeastObs.indexOf(yeast);
+void YeastTableModel::remove(std::shared_ptr<Yeast> yeast) {
+
+   int i = this->rows.indexOf(yeast);
 
    if (i >= 0) {
       beginRemoveRows(QModelIndex(), i, i);
-      disconnect(yeast, nullptr, this, nullptr);
-      yeastObs.removeAt(i);
+      disconnect(yeast.get(), nullptr, this, nullptr);
+      this->rows.removeAt(i);
       //reset(); // Tell everybody the table has changed.
       endRemoveRows();
    }
+   return;
 }
 
 void YeastTableModel::removeAll() {
-   if (yeastObs.size()) {
-      beginRemoveRows(QModelIndex(), 0, yeastObs.size() - 1);
-      while (!yeastObs.isEmpty()) {
-         disconnect(yeastObs.takeLast(), nullptr, this, nullptr);
+   if (this->rows.size()) {
+      beginRemoveRows(QModelIndex(), 0, this->rows.size() - 1);
+      while (!this->rows.isEmpty()) {
+         disconnect(this->rows.takeLast().get(), nullptr, this, nullptr);
       }
       endRemoveRows();
    }
@@ -199,11 +190,10 @@ void YeastTableModel::removeAll() {
 
 void YeastTableModel::changedInventory(int invKey, BtStringConst const & propertyName) {
    if (propertyName == PropertyNames::Inventory::amount) {
-      for (int i = 0; i < yeastObs.size(); ++i) {
-         Yeast * holdmybeer = yeastObs.at(i);
-         if (invKey == holdmybeer->inventoryId()) {
-            emit dataChanged(QAbstractItemModel::createIndex(i, YEASTINVENTORYCOL),
-                             QAbstractItemModel::createIndex(i, YEASTINVENTORYCOL));
+      for (int ii = 0; ii < this->rows.size(); ++ii) {
+         if (invKey == this->rows.at(ii)->inventoryId()) {
+            emit dataChanged(QAbstractItemModel::createIndex(ii, YEASTINVENTORYCOL),
+                             QAbstractItemModel::createIndex(ii, YEASTINVENTORYCOL));
          }
       }
    }
@@ -211,18 +201,17 @@ void YeastTableModel::changedInventory(int invKey, BtStringConst const & propert
 }
 
 void YeastTableModel::changed(QMetaProperty prop, QVariant /*val*/) {
-   int i;
-
    // Find the notifier in the list
    Yeast * yeastSender = qobject_cast<Yeast *>(sender());
    if (yeastSender) {
-      i = yeastObs.indexOf(yeastSender);
-      if (i < 0) {
+      auto spYeastSender = ObjectStoreWrapper::getSharedFromRaw(yeastSender);
+      int ii = this->rows.indexOf(spYeastSender);
+      if (ii < 0) {
          return;
       }
 
-      emit dataChanged(QAbstractItemModel::createIndex(i, 0),
-                       QAbstractItemModel::createIndex(i, YEASTNUMCOLS - 1));
+      emit dataChanged(QAbstractItemModel::createIndex(ii, 0),
+                       QAbstractItemModel::createIndex(ii, YEASTNUMCOLS - 1));
       return;
    }
 
@@ -231,7 +220,7 @@ void YeastTableModel::changed(QMetaProperty prop, QVariant /*val*/) {
    if (recSender && recSender == recObs) {
       if (QString(prop.name()) == PropertyNames::Recipe::yeastIds) {
          removeAll();
-         addYeasts(recObs->yeasts());
+         this->addYeasts(this->recObs->getAll<Yeast>());
       }
       if (rowCount() > 0) {
          emit headerDataChanged(Qt::Vertical, 0, rowCount() - 1);
@@ -241,17 +230,17 @@ void YeastTableModel::changed(QMetaProperty prop, QVariant /*val*/) {
 }
 
 int YeastTableModel::rowCount(const QModelIndex & /*parent*/) const {
-   return yeastObs.size();
+   return this->rows.size();
 }
 
 QVariant YeastTableModel::data(QModelIndex const & index, int role) const {
    // Ensure the row is ok.
-   if (index.row() >= static_cast<int>(this->yeastObs.size())) {
+   if (index.row() >= static_cast<int>(this->rows.size())) {
       qWarning() << Q_FUNC_INFO << "Bad model index. row = " << index.row();
       return QVariant();
    }
 
-   Yeast * row = yeastObs[index.row()];
+   auto row = this->rows[index.row()];
 
    int const column = index.column();
    switch (column) {
@@ -326,7 +315,7 @@ Qt::ItemFlags YeastTableModel::flags(const QModelIndex & index) const {
       case YEASTNAMECOL:
          return Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
       case YEASTINVENTORYCOL:
-         return (Qt::ItemIsEnabled | (_inventoryEditable ? Qt::ItemIsEditable : Qt::NoItemFlags));
+         return (Qt::ItemIsEnabled | (this->isInventoryEditable() ? Qt::ItemIsEditable : Qt::NoItemFlags));
       default:
          return Qt::ItemIsSelectable | (editable ? Qt::ItemIsEditable : Qt::NoItemFlags) | Qt::ItemIsDragEnabled |
                 Qt::ItemIsEnabled;
@@ -334,11 +323,11 @@ Qt::ItemFlags YeastTableModel::flags(const QModelIndex & index) const {
 }
 
 bool YeastTableModel::setData(QModelIndex const & index, QVariant const & value, int role) {
-   if (index.row() >= static_cast<int>(this->yeastObs.size()) || role != Qt::EditRole) {
+   if (index.row() >= static_cast<int>(this->rows.size()) || role != Qt::EditRole) {
       return false;
    }
 
-   Yeast * row = this->yeastObs[index.row()];
+   auto row = this->rows[index.row()];
 
    int const column = index.column();
    switch (column) {
@@ -419,11 +408,6 @@ bool YeastTableModel::setData(QModelIndex const & index, QVariant const & value,
    }
    return true;
 }
-
-Yeast * YeastTableModel::getYeast(unsigned int i) {
-   return yeastObs[static_cast<int>(i)];
-}
-
 
 //==========================CLASS YeastItemDelegate===============================
 

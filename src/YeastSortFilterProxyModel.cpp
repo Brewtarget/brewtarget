@@ -67,5 +67,5 @@ bool YeastSortFilterProxyModel::filterAcceptsRow( int source_row, const QModelIn
    QModelIndex index = sourceModel()->index(source_row, 0, source_parent);
 
    return !filter ||
-          (sourceModel()->data(index).toString().contains(filterRegExp()) && model->getYeast(source_row)->display());
+          (sourceModel()->data(index).toString().contains(filterRegExp()) && model->getRow(source_row)->display());
 }
