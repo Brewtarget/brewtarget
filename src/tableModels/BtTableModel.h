@@ -23,6 +23,7 @@
 #include <optional>
 
 #include <QAbstractTableModel>
+#include <QDebug>
 #include <QHeaderView>
 #include <QMap>
 #include <QMenu>
