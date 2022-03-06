@@ -1,6 +1,6 @@
 /*
  * BtTreeItem.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2022
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip G. Lee <rocketman768@gmail.com>
@@ -18,19 +18,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef BTTTREEITEM_H
+#define BTTTREEITEM_H
+#pragma once
 
-#ifndef BTTTREEITEM_H_
-#define BTTTREEITEM_H_
-
-class BtTreeItem;
-
-#include <QSharedPointer>
 #include <QList>
-#include <QVariant>
 #include <QModelIndex>
-#include <QWidget>
-#include <QVector>
 #include <QObject>
+#include <QSharedPointer>
+#include <QVariant>
+#include <QVector>
+#include <QWidget>
 
 #include "model/NamedEntity.h"
 
@@ -48,7 +46,6 @@ class Water;
 
 /*!
  * \class BtTreeItem
- *
  *
  * \brief Model for an item in a tree.
  *
@@ -202,7 +199,7 @@ public:
    /*!
     * This enum lists the different things that we can store in an item
     */
-   enum ITEMTYPE {
+   enum class Type {
       RECIPE,
       EQUIPMENT,
       FERMENTABLE,
@@ -212,15 +209,21 @@ public:
       BREWNOTE,
       STYLE,
       FOLDER,
-      WATER,
-      NUMTYPES
+      WATER
    };
+
+   /**
+    * \brief This templated function will convert a class to its \c BtTreeItem::Type. Eg \c typeOf<Hop>() returns
+    *        \c BtTreeItem::Type::Hop
+    */
+   template<class T>
+   static BtTreeItem::Type typeOf();
 
    friend bool operator==(BtTreeItem & lhs, BtTreeItem & rhs);
 
    //! \brief A constructor that sets the \c type of the BtTreeItem and
    // the \c parent
-   BtTreeItem(int _type = NUMTYPES, BtTreeItem * parent = nullptr);
+   BtTreeItem(BtTreeItem::Type itemType = BtTreeItem::Type::FOLDER, BtTreeItem * parent = nullptr);
    virtual ~BtTreeItem();
 
    //! \brief returns the child at \c number
@@ -229,48 +232,27 @@ public:
    BtTreeItem * parent();
 
    //! \brief returns item's type
-   int type();
+   BtTreeItem::Type type() const;
    //! \brief returns the number of the item's children
    int childCount() const;
    //! \brief returns number of columns associated with the item's \c type
-   int columnCount(int _type) const;
+   int columnCount(BtTreeItem::Type itemType) const;
    //! \brief returns the data of the item of \c type at \c column
-   QVariant data(int _type, int column);
+   QVariant data(/*BtTreeItem::Type itemType, */int column);
    //! \brief returns the index of the item in it's parents list
    int childNumber() const;
 
-   //! \brief provides a wrapper to data() so that the caller doesn't need to
-   // know the type of the item
-   QVariant data(int column);
-
    //! \brief sets the \c t type of the object and the \c d data
-   void setData(int t, QObject * d);
+   void setData(BtTreeItem::Type t, QObject * d);
 
-   //! \brief returns the data as a Recipe
-   Recipe   *   recipe();
-   //! \brief returns the data as an Equipment
-   Equipment  * equipment();
-   //! \brief returns the data as a fermentable
-   Fermentable * fermentable();
-   //! \brief returns the data as a hop
-   Hop     *    hop();
-   //! \brief returns the data as a misc
-   Misc    *    misc();
-   //! \brief returns the data as a yeast
-   Yeast    *   yeast();
-   //! \brief returns the data as a brewnote
-   BrewNote  *  brewNote();
-   //! \brief returns the data as a style
-   Style    *   style();
-   //! \brief returns data as a folder
-   BtFolder  * folder();
-   //! \brief returns data as a water
-   Water  * water();
+   //! \brief returns the data as a T
+   template<class T> T * getData();
+
    //! \brief returns the data as a NamedEntity
    NamedEntity * thing();
 
    //! \brief inserts \c count new items of \c type, starting at \c position
-   bool insertChildren(int position, int count, int _type = RECIPE);
+   bool insertChildren(int position, int count, BtTreeItem::Type itemType = BtTreeItem::Type::RECIPE);
    //! \brief removes \c count items starting at \c position
    bool removeChildren(int position, int count);
 
@@ -281,9 +263,6 @@ public:
    //! \brief does the node want to be shown regardless of display()
    bool showMe() const;
 
-   //! \brief For logging an ITEMTYPE
-   char const * const itemTypeToString(ITEMTYPE);
-
 private:
    /*!  Keep a pointer to the parent tree item. */
    BtTreeItem * parentItem;
@@ -291,7 +270,8 @@ private:
    QList<BtTreeItem *> childItems;
 
    /*! the type of this item */
-   int _type;
+   BtTreeItem::Type itemType;
+
    /*! the data associated with this item */
    QObject * _thing;
    //! \b overrides the display()
@@ -308,8 +288,6 @@ private:
    QVariant dataStyle(int column);
    QVariant dataFolder(int column);
    QVariant dataWater(int column);
-
-   void setType(int t);
 };
 
 #endif

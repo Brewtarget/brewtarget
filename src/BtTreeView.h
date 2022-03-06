@@ -1,6 +1,6 @@
 /*
  * BtTreeView.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2022
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  *
@@ -71,27 +71,14 @@ public:
 
    QModelIndex findElement(NamedEntity * thing);
 
-   //! \brief returns the recipe at \c index
-   Recipe * recipe(const QModelIndex & index) const;
-   //! \brief returns the equipment at \c index
-   Equipment * equipment(const QModelIndex & index) const;
-   //! \brief returns the fermentable at \c index
-   Fermentable * fermentable(const QModelIndex & index) const;
-   //! \brief returns the hop at \c index
-   Hop * hop(const QModelIndex & index) const;
-   //! \brief returns the misc at \c index
-   Misc * misc(const QModelIndex & index) const;
-   //! \brief returns the yeast at \c index
-   Yeast * yeast(const QModelIndex & index) const;
-   //! \brief returns the yeast at \c index
-   Style * style(const QModelIndex & index) const;
-   //! \brief returns the brewnote at \c index
-   BrewNote * brewNote(const QModelIndex & index) const;
-   //! \brief returns the water at \c index
-   Water * water(const QModelIndex & index) const;
+   /**
+    * \brief returns the item at \c index
+    *        Valid for \c Recipe, \c Equipment, \c Fermentable, \c Hop, \c Misc, \c Yeast, \c Style, \c BrewNote,
+    *        \c Water, \c BtFolder.
+    */
+   template<class T>
+   T * getItem(QModelIndex const & index) const;
 
-   //! \brief returns the folder at \c index
-   BtFolder * folder(const QModelIndex & index) const;
    //! \brief finds the index of the \c folder in the tree,but does not create
    QModelIndex findFolder(BtFolder * folder);
    //! \brief adds a folder to the tree
@@ -101,7 +88,7 @@ public:
    QString folderName(QModelIndex starter);
 
    //! \brief gets the type of the item at \c index.
-   int type(const QModelIndex & index);
+   std::optional<BtTreeItem::Type> type(QModelIndex const & index);
 
    //! \brief returns true if the recipe at ndx is showing its ancestors
    bool ancestorsAreShowing(QModelIndex ndx);

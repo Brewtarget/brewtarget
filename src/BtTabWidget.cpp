@@ -1,6 +1,6 @@
 /*
  * BtTabWidget.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2022
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  *
@@ -19,6 +19,7 @@
  */
 #include "BtTabWidget.h"
 
+#include <QDebug>
 #include <QtGui>
 
 #include "BtTreeItem.h"
@@ -35,19 +36,23 @@
 
 
 //! \brief set up the popup window.
-BtTabWidget::BtTabWidget(QWidget* parent) : QTabWidget(parent)
-{
-   setAcceptDrops(true);
-   acceptMime = "";
+BtTabWidget::BtTabWidget(QWidget* parent) :
+   QTabWidget{parent},
+   acceptMime{""} {
+   this->setAcceptDrops(true);
+   return;
 }
 
-void BtTabWidget::dragEnterEvent(QDragEnterEvent *event)
-{
-   if ( acceptMime.size() == 0 )
-      acceptMime = property("mimeAccepted").toString();
+void BtTabWidget::dragEnterEvent(QDragEnterEvent *event) {
+   if (this->acceptMime.size() == 0) {
+      this->acceptMime = property("mimeAccepted").toString();
+      qDebug() << Q_FUNC_INFO << "this->acceptMime:" << this->acceptMime;
+   }
 
-   if (event->mimeData()->hasFormat(acceptMime) )
+   if (event->mimeData()->hasFormat(this->acceptMime) ) {
       event->acceptProposedAction();
+   }
+   return;
 }
 
 /*
@@ -56,51 +61,63 @@ void BtTabWidget::dragEnterEvent(QDragEnterEvent *event)
  * started.
  */
 void BtTabWidget::dropEvent(QDropEvent *event) {
-   int _type;
-   QString name;
-   int id;
+   qDebug() << Q_FUNC_INFO;
+
+   if (this->acceptMime.size() == 0) {
+      this->acceptMime = property("mimeAccepted").toString();
+      qDebug() << Q_FUNC_INFO << "this->acceptMime:" << this->acceptMime;
+   }
+
+   if (!event->mimeData()->hasFormat(this->acceptMime)) {
+      return;
+   }
+
    QList<Fermentable*>ferms;
    QList<Hop*>hops;
    QList<Misc*>miscs;
    QList<Yeast*>yeasts;
 
-   if ( acceptMime.size() == 0 )
-      acceptMime = property("mimeAccepted").toString();
+   QMimeData const * mData = event->mimeData();
+   QByteArray itemData = mData->data(this->acceptMime);
 
-   if (! event->mimeData()->hasFormat(acceptMime) )
-      return;
-
-   const QMimeData* mData = event->mimeData();
-   QByteArray itemData = mData->data(acceptMime);
-   QDataStream dStream(&itemData,QIODevice::ReadOnly);
-
-   while ( ! dStream.atEnd() )
-   {
-      dStream >> _type >> id >> name;
-      switch( _type ) {
-         case BtTreeItem::RECIPE:
+   for (QDataStream dStream(&itemData, QIODevice::ReadOnly); !dStream.atEnd(); ) {
+      int itemTypeRaw;
+      int id;
+      QString name;
+      dStream >> itemTypeRaw >> id >> name;
+      qDebug() << Q_FUNC_INFO << "Item type #" << itemTypeRaw;
+      BtTreeItem::Type itemType{itemTypeRaw};
+      switch (itemType) {
+         case BtTreeItem::Type::RECIPE:
             event->acceptProposedAction();
             emit setRecipe(ObjectStoreWrapper::getById<Recipe>(id).get());
             return;
-         case BtTreeItem::EQUIPMENT:
+         case BtTreeItem::Type::EQUIPMENT:
             event->acceptProposedAction();
             emit setEquipment(ObjectStoreWrapper::getById<Equipment>(id).get());
             return;
-         case BtTreeItem::STYLE:
+         case BtTreeItem::Type::STYLE:
             event->acceptProposedAction();
             emit setStyle(ObjectStoreWrapper::getById<Style>(id).get());
             return;
-         case BtTreeItem::FERMENTABLE:
+         case BtTreeItem::Type::FERMENTABLE:
             ferms.append(ObjectStoreWrapper::getById<Fermentable>(id).get());
             break;
-         case BtTreeItem::HOP:
+         case BtTreeItem::Type::HOP:
             hops.append(ObjectStoreWrapper::getById<Hop>(id).get());
             break;
-         case BtTreeItem::MISC:
+         case BtTreeItem::Type::MISC:
             miscs.append(ObjectStoreWrapper::getById<Misc>(id).get());
             break;
-         case BtTreeItem::YEAST:
+         case BtTreeItem::Type::YEAST:
             yeasts.append(ObjectStoreWrapper::getById<Yeast>(id).get());
+            break;
+         case BtTreeItem::Type::BREWNOTE:
+         case BtTreeItem::Type::FOLDER:
+         case BtTreeItem::Type::WATER:
+            // These cases shouldn't arise (I think!) but the compiler will emit a warning if we don't explicitly have
+            // code to handle them (which is good!).
+            qWarning() << Q_FUNC_INFO << "Unexpected item type" << itemTypeRaw;
             break;
       }
    }
@@ -114,4 +131,5 @@ void BtTabWidget::dropEvent(QDropEvent *event) {
       emit setYeasts(yeasts);
 
    event->acceptProposedAction();
+   return;
 }

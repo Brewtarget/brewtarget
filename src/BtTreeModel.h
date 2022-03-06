@@ -1,6 +1,6 @@
 /*
  * BtTreeModel.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2022
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  *
@@ -19,8 +19,10 @@
  */
 #ifndef BTTREEMODEL_H
 #define BTTREEMODEL_H
+#pragma once
 
 #include <memory>
+#include <optional>
 
 #include <QAbstractItemModel>
 #include <QList>
@@ -30,11 +32,12 @@
 #include <QSqlRelationalTableModel>
 #include <QVariant>
 
+#include "BtTreeItem.h"
+
 // Forward declarations
 class BrewNote;
 class BtFolder;
 class BtStringConst;
-class BtTreeItem;
 class BtTreeView;
 class Equipment;
 class Fermentable;
@@ -48,7 +51,6 @@ class Yeast;
 
 /*!
  * \class BtTreeModel
- *
  *
  * \brief Model for a tree of Recipes, Equipments, Fermentables, Hops, Miscs and Yeasts
  *
@@ -104,7 +106,10 @@ public:
    virtual QModelIndex parent(const QModelIndex & index) const;
 
    //! \brief Reimplemented from QAbstractItemModel
-   bool insertRow(int row, const QModelIndex & parent = QModelIndex(), QObject * victim = nullptr, int victimType = -1);
+   bool insertRow(int row,
+                  QModelIndex const & parent = QModelIndex(),
+                  QObject * victim = nullptr,
+                  std::optional<BtTreeItem::Type> victimType = std::nullopt);
    //! \brief Reimplemented from QAbstractItemModel
    virtual bool removeRows(int row, int count, const QModelIndex & parent = QModelIndex());
 
@@ -113,29 +118,17 @@ public:
    //! \brief returns the BtTreeItem at \c index
    BtTreeItem * item(const QModelIndex & index) const;
 
-   //! \brief Test type at \c index.
-   bool isRecipe(const QModelIndex & index) const;
-   //! \brief Test type at \c index.
-   bool isEquipment(const QModelIndex & index) const;
-   //! \brief Test type at \c index.
-   bool isFermentable(const QModelIndex & index) const;
-   //! \brief Test type at \c index.
-   bool isHop(const QModelIndex & index) const;
-   //! \brief Test type at \c index.
-   bool isMisc(const QModelIndex & index) const;
-   //! \brief Test type at \c index.
-   bool isYeast(const QModelIndex & index) const;
-   //! \brief Test type at \c index.
-   bool isBrewNote(const QModelIndex & index) const;
-   //! \brief Test type at \c index.
-   bool isStyle(const QModelIndex & index) const;
-   //! \brief Test type at \c index.
-   bool isFolder(const QModelIndex & index) const;
-   //! \brief Test type at \c index.
-   bool isWater(const QModelIndex & index) const;
+   /**
+    * \brief Test type at \c index.
+    *        Valid for \c Recipe, \c Equipment, \c Fermentable, \c Hop, \c Misc, \c Yeast, \c Style, \c BrewNote,
+    *        \c Water, \c BtFolder.
+    */
+   template<class T>
+   bool itemIs(QModelIndex const & index) const;
 
    //! \brief Gets the type of item at \c index
-   int type(const QModelIndex & index) const;
+   std::optional<BtTreeItem::Type> type(const QModelIndex & index) const;
+
    //! \brief Return the type mask for this tree. \sa BtTreeModel::TypeMasks
    int mask();
 
@@ -146,26 +139,15 @@ public:
    void deleteSelected(QModelIndexList victims);
 
    void copySelected(QList< QPair<QModelIndex, QString>> toBeCopied);
-   //! \brief Get Recipe at \c index.
-   Recipe * recipe(const QModelIndex & index) const;
-   //! \brief Get Equipment at \c index.
-   Equipment * equipment(const QModelIndex & index) const;
-   //! \brief Get Fermentable at \c index.
-   Fermentable * fermentable(const QModelIndex & index) const;
-   //! \brief Get Hop at \c index.
-   Hop * hop(const QModelIndex & index) const;
-   //! \brief Get Misc at \c index.
-   Misc * misc(const QModelIndex & index) const;
-   //! \brief Get Yeast at \c index.
-   Yeast * yeast(const QModelIndex & index) const;
-   //! \brief Get BrewNote at \c index.
-   BrewNote * brewNote(const QModelIndex & index) const;
-   //! \brief Get Style at \c index.
-   Style * style(const QModelIndex & index) const;
-   //! \brief Get folder at \c index
-   BtFolder * folder(const QModelIndex & index) const;
-   //! \brief Get folder at \c index
-   Water * water(const QModelIndex & index) const;
+
+   /**
+    * \brief Get T at \c index.
+    *        Valid for \c Recipe, \c Equipment, \c Fermentable, \c Hop, \c Misc, \c Yeast, \c Style, \c BrewNote,
+    *        \c Water, \c BtFolder.
+    */
+   template<class T>
+   T * getItem(QModelIndex const & index) const;
+
    //! \brief Get NamedEntity at \c index.
    NamedEntity * thing(const QModelIndex & index) const;
 
@@ -290,15 +272,13 @@ private:
    void addBrewNoteSubTree(Recipe * rec, int i, BtTreeItem * parent, bool recurse = true);
    //! \b flip the switch to show descendants
    void setShowChild(QModelIndex child, bool val);
-/*   //! \b link to recipes (this will get reverted later)
-   void makeAncestors(NamedEntity * ancestor, NamedEntity * descendant);
-   */
    void addAncestoralTree(Recipe * rec, int i, BtTreeItem * parent);
 
    BtTreeItem * rootItem;
    BtTreeView * parentTree;
    TypeMasks treeMask;
-   int _type, m_maxColumns;
+   BtTreeItem::Type itemType;
+   int m_maxColumns;
    QString _mimeType;
 
 };

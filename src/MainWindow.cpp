@@ -999,8 +999,9 @@ void MainWindow::deleteSelected()
    }
 
    if ( start.isValid() ) {
-      if (active->type(start) == BtTreeItem::RECIPE)
-         setRecipe(treeView_recipe->recipe(start));
+      if (active->type(start) == BtTreeItem::Type::RECIPE) {
+         setRecipe(treeView_recipe->getItem<Recipe>(start));
+      }
       setTreeSelection(start);
    }
 
@@ -1030,74 +1031,69 @@ void MainWindow::treeActivated(const QModelIndex &index)
    if ( active == nullptr )
       return;
 
-   switch( active->type(index))
-   {
-      case BtTreeItem::RECIPE:
-         setRecipe(treeView_recipe->recipe(index));
-         break;
-      case BtTreeItem::EQUIPMENT:
-         kit = active->equipment(index);
-         if ( kit )
-         {
-            singleEquipEditor->setEquipment(kit);
-            singleEquipEditor->show();
-         }
-         break;
-      case BtTreeItem::FERMENTABLE:
-         ferm = active->fermentable(index);
-         if ( ferm )
-         {
-            fermEditor->setFermentable(ferm);
-            fermEditor->show();
-         }
-         break;
-      case BtTreeItem::HOP:
-         h = active->hop(index);
-         if (h)
-         {
-            hopEditor->setHop(h);
-            hopEditor->show();
-         }
-         break;
-      case BtTreeItem::MISC:
-         m = active->misc(index);
-         if (m)
-         {
-            miscEditor->setMisc(m);
-            miscEditor->show();
-         }
-         break;
-      case BtTreeItem::STYLE:
-         s = active->style(index);
-         if ( s )
-         {
-            singleStyleEditor->setStyle(s);
-            singleStyleEditor->show();
-         }
-         break;
-      case BtTreeItem::YEAST:
-         y = active->yeast(index);
-         if (y)
-         {
-            yeastEditor->setYeast(y);
-            yeastEditor->show();
-         }
-         break;
-      case BtTreeItem::BREWNOTE:
-         setBrewNoteByIndex(index);
-         break;
-      case BtTreeItem::FOLDER:  // default behavior is fine, but no warning
-         break;
-      case BtTreeItem::WATER:
-         w = active->water(index);
-         if (w)
-         {
-            waterEditor->setWater(w);
-            waterEditor->show();
-         }
-         break;
-      default:
-         qWarning() << QString("MainWindow::treeActivated Unknown type %1.").arg(treeView_recipe->type(index));
+   auto itemType = active->type(index);
+   if (!itemType) {
+      qWarning() << Q_FUNC_INFO << "Unknown type for index" << index;
+   } else {
+      switch (*itemType) {
+         case BtTreeItem::Type::RECIPE:
+            setRecipe(treeView_recipe->getItem<Recipe>(index));
+            break;
+         case BtTreeItem::Type::EQUIPMENT:
+            kit = active->getItem<Equipment>(index);
+            if ( kit ) {
+               singleEquipEditor->setEquipment(kit);
+               singleEquipEditor->show();
+            }
+            break;
+         case BtTreeItem::Type::FERMENTABLE:
+            ferm = active->getItem<Fermentable>(index);
+            if ( ferm ) {
+               fermEditor->setFermentable(ferm);
+               fermEditor->show();
+            }
+            break;
+         case BtTreeItem::Type::HOP:
+            h = active->getItem<Hop>(index);
+            if (h) {
+               hopEditor->setHop(h);
+               hopEditor->show();
+            }
+            break;
+         case BtTreeItem::Type::MISC:
+            m = active->getItem<Misc>(index);
+            if (m) {
+               miscEditor->setMisc(m);
+               miscEditor->show();
+            }
+            break;
+         case BtTreeItem::Type::STYLE:
+            s = active->getItem<Style>(index);
+            if ( s ) {
+               singleStyleEditor->setStyle(s);
+               singleStyleEditor->show();
+            }
+            break;
+         case BtTreeItem::Type::YEAST:
+            y = active->getItem<Yeast>(index);
+            if (y) {
+               yeastEditor->setYeast(y);
+               yeastEditor->show();
+            }
+            break;
+         case BtTreeItem::Type::BREWNOTE:
+            setBrewNoteByIndex(index);
+            break;
+         case BtTreeItem::Type::FOLDER:  // default behavior is fine, but no warning
+            break;
+         case BtTreeItem::Type::WATER:
+            w = active->getItem<Water>(index);
+            if (w) {
+               waterEditor->setWater(w);
+               waterEditor->show();
+            }
+            break;
+      }
    }
    treeView_recipe->setCurrentIndex(index);
 }
@@ -1106,7 +1102,7 @@ void MainWindow::setBrewNoteByIndex(const QModelIndex &index)
 {
    BrewNoteWidget* ni;
 
-   BrewNote* bNote = treeView_recipe->brewNote(index);
+   auto bNote = treeView_recipe->getItem<BrewNote>(index);
 
    if ( ! bNote )
       return;
@@ -1197,7 +1193,7 @@ void MainWindow::setAncestor()
       rec = this->recipeObs;
    } else {
       QModelIndexList indexes = treeView_recipe->selectionModel()->selectedRows();
-      rec = treeView_recipe->recipe(indexes[0]);
+      rec = treeView_recipe->getItem<Recipe>(indexes[0]);
    }
 
    ancestorDialog->setAncestor(rec);
@@ -1206,17 +1202,21 @@ void MainWindow::setAncestor()
 
 
 // Can handle null recipes.
-void MainWindow::setRecipe(Recipe* recipe)
-{
-   int tabs = 0;
+void MainWindow::setRecipe(Recipe* recipe) {
    // Don't like void pointers.
-   if( recipe == nullptr )
+   if (!recipe) {
       return;
+   }
+
+   qDebug() << Q_FUNC_INFO << "Recipe #" << recipe->key() << ":" << recipe->name();
+
+   int tabs = 0;
 
    // Make sure this MainWindow is paying attention...
-   if( recipeObs )
-      disconnect( recipeObs, nullptr, this, nullptr );
-   recipeObs = recipe;
+   if (this->recipeObs) {
+      disconnect(this->recipeObs, nullptr, this, nullptr);
+   }
+   this->recipeObs = recipe;
 
    this->recStyle = recipe->style();
    recEquip = recipe->equipment();
@@ -2280,46 +2280,44 @@ void MainWindow::newRecipe()
          // selected and you click the big blue + button.
          if ( indexes.size() > 0 )
          {
-            if ( sent->type(indexes.at(0)) == BtTreeItem::RECIPE )
+            if ( sent->type(indexes.at(0)) == BtTreeItem::Type::RECIPE )
             {
-               Recipe* foo = sent->recipe(indexes.at(0));
+               auto foo = sent->getItem<Recipe>(indexes.at(0));
 
-               if ( foo && ! foo->folder().isEmpty())
+               if ( foo && ! foo->folder().isEmpty()) {
                   newRec->setFolder( foo->folder() );
+               }
             }
-            else if ( sent->type(indexes.at(0)) == BtTreeItem::FOLDER )
+            else if ( sent->type(indexes.at(0)) == BtTreeItem::Type::FOLDER )
             {
-               BtFolder* foo = sent->folder(indexes.at(0));
-               if ( foo )
+               BtFolder* foo = sent->getItem<BtFolder>(indexes.at(0));
+               if ( foo ) {
                   newRec->setFolder( foo->fullPath() );
+               }
             }
          }
       }
    }
    setTreeSelection(treeView_recipe->findElement(newRec));
    setRecipe(newRec);
+   return;
 }
 
-void MainWindow::newFolder()
-{
-   QString dPath;
-   QModelIndexList indexes;
-   QModelIndex starter;
+void MainWindow::newFolder() {
    // get the currently active tree
    BtTreeView* active = qobject_cast<BtTreeView*>(tabWidget_Trees->currentWidget()->focusWidget());
 
-   if (! active )
+   if (!active) {
       return;
+   }
 
-   indexes = active->selectionModel()->selectedRows();
-   starter = indexes.at(0);
+   QModelIndexList indexes = active->selectionModel()->selectedRows();
+   QModelIndex starter = indexes.at(0);
 
    // Where to start from
-   dPath = active->folderName(starter);
+   QString dPath = active->folderName(starter);
 
-   QString name = QInputDialog::getText(this, tr("Folder name"),
-                                          tr("Folder name:"),
-                                           QLineEdit::Normal, dPath);
+   QString name = QInputDialog::getText(this, tr("Folder name"), tr("Folder name:"), QLineEdit::Normal, dPath);
    // User clicks cancel
    if (name.isEmpty())
       return;
@@ -2327,8 +2325,7 @@ void MainWindow::newFolder()
 
    // Nice little builtin to collapse leading and following white space
    name = name.simplified();
-   if ( name.isEmpty() )
-   {
+   if ( name.isEmpty() ) {
       QMessageBox::critical( this, tr("Bad Name"),
                              tr("A folder name must have at least one non-whitespace character in it"));
       return;
@@ -2339,48 +2336,48 @@ void MainWindow::newFolder()
 #else
    Qt::SplitBehaviorFlags skip = Qt::SkipEmptyParts;
 #endif
-   if ( name.split("/", skip).isEmpty() )
-   {
+   if ( name.split("/", skip).isEmpty() ) {
       QMessageBox::critical( this, tr("Bad Name"), tr("A folder name must have at least one non-/ character in it"));
       return;
    }
    active->addFolder(name);
 }
 
-void MainWindow::renameFolder()
-{
+void MainWindow::renameFolder() {
    BtTreeView* active = qobject_cast<BtTreeView*>(tabWidget_Trees->currentWidget()->focusWidget());
-   BtFolder* victim;
-   QModelIndexList indexes;
-   QModelIndex starter;
 
    // If the sender cannot be morphed into a BtTreeView object
-   if ( active == nullptr )
+   if ( active == nullptr ) {
       return;
+   }
 
    // I don't think I can figure out what the behavior will be if you select
    // many items
-   indexes = active->selectionModel()->selectedRows();
-   starter = indexes.at(0);
+   QModelIndexList indexes = active->selectionModel()->selectedRows();
+   QModelIndex starter = indexes.at(0);
 
    // The item to be renamed
    // Don't rename anything other than a folder
-   if ( active->type(starter) != BtTreeItem::FOLDER )
+   if ( active->type(starter) != BtTreeItem::Type::FOLDER) {
       return;
+   }
 
-   victim = active->folder(starter);
-   QString newName = QInputDialog::getText(this, tr("Folder name"), tr("Folder name:"),
-                                           QLineEdit::Normal, victim->name());
+   BtFolder* victim = active->getItem<BtFolder>(starter);
+   QString newName = QInputDialog::getText(this,
+                                           tr("Folder name"),
+                                           tr("Folder name:"),
+                                           QLineEdit::Normal,
+                                           victim->name());
 
    // User clicks cancel
-   if (newName.isEmpty())
+   if (newName.isEmpty()) {
       return;
+   }
    // Do some input validation here.
 
    // Nice little builtin to collapse leading and following white space
    newName = newName.simplified();
-   if ( newName.isEmpty() )
-   {
+   if (newName.isEmpty()) {
       QMessageBox::critical( this, tr("Bad Name"),
                              tr("A folder name must have at least one non-whitespace character in it"));
       return;
@@ -2391,8 +2388,7 @@ void MainWindow::renameFolder()
 #else
    Qt::SplitBehaviorFlags skip = Qt::SkipEmptyParts;
 #endif
-   if ( newName.split("/", skip).isEmpty() )
-   {
+   if ( newName.split("/", skip).isEmpty() ) {
       QMessageBox::critical( this, tr("Bad Name"), tr("A folder name must have at least one non-/ character in it"));
       return;
    }
@@ -2424,7 +2420,7 @@ void MainWindow::setTreeSelection(QModelIndex item) {
    QModelIndex parent = active->parent(item);
 
    active->setCurrentIndex(item);
-   if ( active->type(parent) == BtTreeItem::FOLDER && ! active->isExpanded(parent) ) {
+   if ( active->type(parent) == BtTreeItem::Type::FOLDER && ! active->isExpanded(parent) ) {
       active->setExpanded(parent, true);
    }
    active->scrollTo(item,QAbstractItemView::PositionAtCenter);
@@ -2437,18 +2433,19 @@ void MainWindow::reduceInventory(){
    QModelIndexList indexes = treeView_recipe->selectionModel()->selectedRows();
 
    foreach(QModelIndex selected, indexes) {
-      Recipe* rec   = treeView_recipe->recipe(selected);
+      Recipe* rec = treeView_recipe->getItem<Recipe>(selected);
       if ( rec == nullptr ) {
          //try the parent recipe
-         rec = treeView_recipe->recipe(treeView_recipe->parent(selected));
+         rec = treeView_recipe->getItem<Recipe>(treeView_recipe->parent(selected));
          if ( rec == nullptr ) {
             continue;
          }
       }
 
       // Make sure everything is properly set and selected
-      if( rec != recipeObs )
+      if( rec != recipeObs ) {
          setRecipe(rec);
+      }
 
       int i = 0;
       //reduce fermentables
@@ -2499,15 +2496,16 @@ void MainWindow::newBrewNote() {
    QModelIndexList indexes = treeView_recipe->selectionModel()->selectedRows();
    QModelIndex bIndex;
 
-   for(QModelIndex selected : indexes) {
-      Recipe*   rec   = treeView_recipe->recipe(selected);
-
-      if( rec == nullptr )
+   for (QModelIndex selected : indexes) {
+      Recipe*   rec   = treeView_recipe->getItem<Recipe>(selected);
+      if (!rec) {
          continue;
+      }
 
       // Make sure everything is properly set and selected
-      if( rec != recipeObs )
+      if (rec != recipeObs) {
          setRecipe(rec);
+      }
 
       auto bNote = std::make_shared<BrewNote>(*rec);
       bNote->populateNote(rec);
@@ -2522,13 +2520,11 @@ void MainWindow::newBrewNote() {
    }
 }
 
-void MainWindow::reBrewNote()
-{
+void MainWindow::reBrewNote() {
    QModelIndexList indexes = treeView_recipe->selectionModel()->selectedRows();
-   foreach(QModelIndex selected, indexes)
-   {
-      BrewNote* old   = treeView_recipe->brewNote(selected);
-      Recipe* rec     = treeView_recipe->recipe(treeView_recipe->parent(selected));
+   for (QModelIndex selected : indexes) {
+      BrewNote* old   = treeView_recipe->getItem<BrewNote>(selected);
+      Recipe* rec     = treeView_recipe->getItem<Recipe>(treeView_recipe->parent(selected));
 
       if (! old || ! rec) {
          return;
@@ -2538,8 +2534,9 @@ void MainWindow::reBrewNote()
       bNote->setBrewDate();
       ObjectStoreWrapper::insert(bNote);
 
-      if (rec != recipeObs)
+      if (rec != recipeObs) {
          setRecipe(rec);
+      }
 
       setBrewNote(bNote.get());
 
@@ -2547,20 +2544,17 @@ void MainWindow::reBrewNote()
    }
 }
 
-void MainWindow::brewItHelper()
-{
+void MainWindow::brewItHelper() {
    newBrewNote();
    reduceInventory();
 }
 
-void MainWindow::brewAgainHelper()
-{
+void MainWindow::brewAgainHelper() {
    reBrewNote();
    reduceInventory();
 }
 
-void MainWindow::backup()
-{
+void MainWindow::backup() {
    // NB: QDir does all the necessary magic of translating '/' to whatever current platform's directory separator is
    QString defaultBackupFileName = QDir::currentPath() + "/" + Database::getDefaultBackupFileName();
    QString backupFileName = QFileDialog::getSaveFileName(this, tr("Backup Database"), defaultBackupFileName);
@@ -2974,51 +2968,54 @@ void MainWindow::exportSelected() {
 
    int count = 0;
    for (auto & selection : selected) {
-      int type = active->type(selection);
-
-      switch(type) {
-         case BtTreeItem::RECIPE:
-            recipes.append(treeView_recipe->recipe(selection));
-            ++count;
-            break;
-         case BtTreeItem::EQUIPMENT:
-            equipments.append(treeView_equip->equipment(selection));
-            ++count;
-            break;
-         case BtTreeItem::FERMENTABLE:
-            fermentables.append(treeView_ferm->fermentable(selection));
-            ++count;
-            break;
-         case BtTreeItem::HOP:
-            hops.append(treeView_hops->hop(selection));
-            ++count;
-            break;
-         case BtTreeItem::MISC:
-            miscs.append(treeView_misc->misc(selection));
-            ++count;
-            break;
-         case BtTreeItem::STYLE:
-            styles.append(treeView_style->style(selection));
-            ++count;
-            break;
-         case BtTreeItem::WATER:
-            waters.append(treeView_water->water(selection));
-            ++count;
-            break;
-         case BtTreeItem::YEAST:
-            yeasts.append(treeView_yeast->yeast(selection));
-            ++count;
-            break;
-         case BtTreeItem::FOLDER:
-            qDebug() << Q_FUNC_INFO << "Can't export selected Folder to XML as BeerXML does not support it";
-            break;
-         case BtTreeItem::BREWNOTE:
-            qDebug() << Q_FUNC_INFO << "Can't export selected BrewNote to XML as BeerXML does not support it";
-            break;
-         default:
-            // This shouldn't happen, because we should explicitly cover all the types above
-            qWarning() << Q_FUNC_INFO << "Don't know how to export BtTreeItem type" << type;
-            break;
+      auto itemType = active->type(selection);
+      if (!itemType) {
+         qWarning() << Q_FUNC_INFO << "Unknown type for selection" << selection;
+      } else {
+         switch(*itemType) {
+            case BtTreeItem::Type::RECIPE:
+               recipes.append(treeView_recipe->getItem<Recipe>(selection));
+               ++count;
+               break;
+            case BtTreeItem::Type::EQUIPMENT:
+               equipments.append(treeView_equip->getItem<Equipment>(selection));
+               ++count;
+               break;
+            case BtTreeItem::Type::FERMENTABLE:
+               fermentables.append(treeView_ferm->getItem<Fermentable>(selection));
+               ++count;
+               break;
+            case BtTreeItem::Type::HOP:
+               hops.append(treeView_hops->getItem<Hop>(selection));
+               ++count;
+               break;
+            case BtTreeItem::Type::MISC:
+               miscs.append(treeView_misc->getItem<Misc>(selection));
+               ++count;
+               break;
+            case BtTreeItem::Type::STYLE:
+               styles.append(treeView_style->getItem<Style>(selection));
+               ++count;
+               break;
+            case BtTreeItem::Type::WATER:
+               waters.append(treeView_water->getItem<Water>(selection));
+               ++count;
+               break;
+            case BtTreeItem::Type::YEAST:
+               yeasts.append(treeView_yeast->getItem<Yeast>(selection));
+               ++count;
+               break;
+            case BtTreeItem::Type::FOLDER:
+               qDebug() << Q_FUNC_INFO << "Can't export selected Folder to XML as BeerXML does not support it";
+               break;
+            case BtTreeItem::Type::BREWNOTE:
+               qDebug() << Q_FUNC_INFO << "Can't export selected BrewNote to XML as BeerXML does not support it";
+               break;
+            default:
+               // This shouldn't happen, because we should explicitly cover all the types above
+               qWarning() << Q_FUNC_INFO << "Don't know how to export BtTreeItem type" << static_cast<int>(*itemType);
+               break;
+         }
       }
    }
 
@@ -3172,9 +3169,8 @@ void MainWindow::changeBrewDate()
    QModelIndexList indexes = treeView_recipe->selectionModel()->selectedRows();
    QDate newDate;
 
-   foreach(QModelIndex selected, indexes)
-   {
-      BrewNote* target = treeView_recipe->brewNote(selected);
+   for (QModelIndex selected : indexes) {
+      auto target = treeView_recipe->getItem<BrewNote>(selected);
 
       // No idea how this could happen, but I've seen stranger things
       if ( ! target )
@@ -3202,18 +3198,19 @@ void MainWindow::fixBrewNote()
    QModelIndexList indexes = treeView_recipe->selectionModel()->selectedRows();
    QDate newDate;
 
-   foreach(QModelIndex selected, indexes)
-   {
-      BrewNote* target = treeView_recipe->brewNote(selected);
+   for (QModelIndex selected : indexes) {
+      auto target = treeView_recipe->getItem<BrewNote>(selected);
 
       // No idea how this could happen, but I've seen stranger things
-      if ( ! target )
+      if ( ! target ) {
          continue;
+      }
 
-      Recipe* noteParent = treeView_recipe->recipe( treeView_recipe->parent(selected));
+      auto noteParent = treeView_recipe->getItem<Recipe>( treeView_recipe->parent(selected));
 
-      if ( ! noteParent )
+      if ( ! noteParent ) {
          continue;
+      }
 
       target->recalculateEff(noteParent);
    }
