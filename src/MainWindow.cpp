@@ -907,6 +907,7 @@ void MainWindow::setupTriggers() {
       connect( actionBackup_Database, &QAction::triggered, this, &MainWindow::backup );                                 // > File > Database > Backup
       connect( actionRestore_Database, &QAction::triggered, this, &MainWindow::restoreFromBackup );                     // > File > Database > Restore
    }
+   return;
 }
 
 // pushbuttons with a SIGNAL of clicked() should go in here.
@@ -997,8 +998,9 @@ void MainWindow::deleteSelected()
    }
 
    if ( start.isValid() ) {
-      if (active->type(start) == BtTreeItem::RECIPE)
+      if (active->type(start) == BtTreeItem::RECIPE) {
          setRecipe(treeView_recipe->recipe(start));
+      }
       setTreeSelection(start);
    }
 
@@ -1032,68 +1034,68 @@ void MainWindow::treeActivated(const QModelIndex &index)
    {
       case BtTreeItem::RECIPE:
          setRecipe(treeView_recipe->recipe(index));
-         break;
+            break;
       case BtTreeItem::EQUIPMENT:
          kit = active->equipment(index);
          if ( kit )
          {
-            singleEquipEditor->setEquipment(kit);
-            singleEquipEditor->show();
-         }
-         break;
+               singleEquipEditor->setEquipment(kit);
+               singleEquipEditor->show();
+            }
+            break;
       case BtTreeItem::FERMENTABLE:
          ferm = active->fermentable(index);
          if ( ferm )
          {
-            fermEditor->setFermentable(ferm);
-            fermEditor->show();
-         }
-         break;
+               fermEditor->setFermentable(ferm);
+               fermEditor->show();
+            }
+            break;
       case BtTreeItem::HOP:
          h = active->hop(index);
          if (h)
          {
-            hopEditor->setHop(h);
-            hopEditor->show();
-         }
-         break;
+               hopEditor->setHop(h);
+               hopEditor->show();
+            }
+            break;
       case BtTreeItem::MISC:
          m = active->misc(index);
          if (m)
          {
-            miscEditor->setMisc(m);
-            miscEditor->show();
-         }
-         break;
+               miscEditor->setMisc(m);
+               miscEditor->show();
+            }
+            break;
       case BtTreeItem::STYLE:
          s = active->style(index);
          if ( s )
          {
-            singleStyleEditor->setStyle(s);
-            singleStyleEditor->show();
-         }
-         break;
+               singleStyleEditor->setStyle(s);
+               singleStyleEditor->show();
+            }
+            break;
       case BtTreeItem::YEAST:
          y = active->yeast(index);
          if (y)
          {
-            yeastEditor->setYeast(y);
-            yeastEditor->show();
-         }
-         break;
+               yeastEditor->setYeast(y);
+               yeastEditor->show();
+            }
+            break;
       case BtTreeItem::BREWNOTE:
-         setBrewNoteByIndex(index);
-         break;
+            setBrewNoteByIndex(index);
+            break;
       case BtTreeItem::FOLDER:  // default behavior is fine, but no warning
-         break;
+            break;
       case BtTreeItem::WATER:
          w = active->water(index);
          if (w)
          {
-            waterEditor->setWater(w);
-            waterEditor->show();
-         }
-         break;
+               waterEditor->setWater(w);
+               waterEditor->show();
+            }
+            break;
       default:
          qWarning() << QString("MainWindow::treeActivated Unknown type %1.").arg(treeView_recipe->type(index));
    }
@@ -1789,13 +1791,14 @@ void MainWindow::updateRecipeBoilTime() {
 }
 
 void MainWindow::updateRecipeEfficiency() {
+   qDebug() << Q_FUNC_INFO << lineEdit_efficiency->getWidgetText();
    if (!this->recipeObs) {
       return;
    }
 
    this->doOrRedoUpdate(*this->recipeObs,
                         PropertyNames::Recipe::efficiency_pct,
-                        lineEdit_efficiency->toSI().quantity,
+                        lineEdit_efficiency->getValueAs<unsigned int>(),
                         tr("Change Recipe Efficiency"));
    return;
 }
@@ -1978,7 +1981,7 @@ Fermentable* MainWindow::selectedFermentable()
    {
       if( selected[i].row() != row )
          return nullptr;
-   }
+      }
 
    modelIndex = fermTableProxy->mapToSource(viewIndex);
    Fermentable* ferm = fermTableModel->getFermentable(static_cast<unsigned int>(modelIndex.row()));
@@ -2003,7 +2006,7 @@ Hop* MainWindow::selectedHop()
    {
       if( selected[i].row() != row )
          return nullptr;
-   }
+      }
 
    modelIndex = hopTableProxy->mapToSource(viewIndex);
 
@@ -2029,7 +2032,7 @@ Misc* MainWindow::selectedMisc()
    {
       if( selected[i].row() != row )
          return nullptr;
-   }
+      }
 
    modelIndex = miscTableProxy->mapToSource(viewIndex);
 
@@ -2055,7 +2058,7 @@ Yeast* MainWindow::selectedYeast()
    {
       if( selected[i].row() != row )
          return nullptr;
-   }
+      }
 
    modelIndex = yeastTableProxy->mapToSource(viewIndex);
 
@@ -2325,16 +2328,16 @@ void MainWindow::newRecipe()
 
                if ( foo && ! foo->folder().isEmpty())
                   newRec->setFolder( foo->folder() );
-            }
+               }
             else if ( sent->type(indexes.at(0)) == BtTreeItem::FOLDER )
             {
                BtFolder* foo = sent->folder(indexes.at(0));
                if ( foo )
                   newRec->setFolder( foo->fullPath() );
+               }
             }
          }
       }
-   }
    setTreeSelection(treeView_recipe->findElement(newRec));
    setRecipe(newRec);
 }
@@ -2538,7 +2541,7 @@ void MainWindow::newBrewNote() {
    QModelIndexList indexes = treeView_recipe->selectionModel()->selectedRows();
    QModelIndex bIndex;
 
-   for(QModelIndex selected : indexes) {
+   for (QModelIndex selected : indexes) {
       Recipe*   rec   = treeView_recipe->recipe(selected);
 
       if( rec == nullptr )
@@ -2683,7 +2686,7 @@ void MainWindow::removeSelectedMashStep()
    {
       if( selected[i].row() != row )
          return;
-   }
+      }
 
    MashStep* step = mashStepTableModel->getMashStep(static_cast<unsigned int>(row));
 
@@ -3017,48 +3020,48 @@ void MainWindow::exportSelected() {
       switch(type) {
          case BtTreeItem::RECIPE:
             recipes.append(treeView_recipe->recipe(selection));
-            ++count;
-            break;
+               ++count;
+               break;
          case BtTreeItem::EQUIPMENT:
             equipments.append(treeView_equip->equipment(selection));
-            ++count;
-            break;
+               ++count;
+               break;
          case BtTreeItem::FERMENTABLE:
             fermentables.append(treeView_ferm->fermentable(selection));
-            ++count;
-            break;
+               ++count;
+               break;
          case BtTreeItem::HOP:
             hops.append(treeView_hops->hop(selection));
-            ++count;
-            break;
+               ++count;
+               break;
          case BtTreeItem::MISC:
             miscs.append(treeView_misc->misc(selection));
-            ++count;
-            break;
+               ++count;
+               break;
          case BtTreeItem::STYLE:
             styles.append(treeView_style->style(selection));
-            ++count;
-            break;
+               ++count;
+               break;
          case BtTreeItem::WATER:
             waters.append(treeView_water->water(selection));
-            ++count;
-            break;
+               ++count;
+               break;
          case BtTreeItem::YEAST:
             yeasts.append(treeView_yeast->yeast(selection));
-            ++count;
-            break;
+               ++count;
+               break;
          case BtTreeItem::FOLDER:
-            qDebug() << Q_FUNC_INFO << "Can't export selected Folder to XML as BeerXML does not support it";
-            break;
+               qDebug() << Q_FUNC_INFO << "Can't export selected Folder to XML as BeerXML does not support it";
+               break;
          case BtTreeItem::BREWNOTE:
-            qDebug() << Q_FUNC_INFO << "Can't export selected BrewNote to XML as BeerXML does not support it";
-            break;
-         default:
-            // This shouldn't happen, because we should explicitly cover all the types above
+               qDebug() << Q_FUNC_INFO << "Can't export selected BrewNote to XML as BeerXML does not support it";
+               break;
+            default:
+               // This shouldn't happen, because we should explicitly cover all the types above
             qWarning() << Q_FUNC_INFO << "Don't know how to export BtTreeItem type" << type;
-            break;
+               break;
+         }
       }
-   }
 
    if (0 == count) {
       qDebug() << Q_FUNC_INFO << "Nothing selected was exportable to XML";
