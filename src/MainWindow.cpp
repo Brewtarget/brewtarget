@@ -2298,6 +2298,7 @@ void MainWindow::newRecipe()
             }
          }
       }
+   }
    setTreeSelection(treeView_recipe->findElement(newRec));
    setRecipe(newRec);
    return;
