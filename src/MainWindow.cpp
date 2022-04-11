@@ -3018,6 +3018,7 @@ void MainWindow::exportSelected() {
                break;
          }
       }
+   }
 
    if (0 == count) {
       qDebug() << Q_FUNC_INFO << "Nothing selected was exportable to XML";
