@@ -23,6 +23,7 @@
 #include <optional>
 
 #include <QAbstractTableModel>
+#include <QDebug>
 #include <QHeaderView>
 #include <QMap>
 #include <QMenu>
@@ -32,6 +33,99 @@
 #include "BtFieldType.h"
 #include "measurement/UnitSystem.h"
 
+class Recipe;
+class NamedEntity;
+
+/**
+ * \class BtTableModelData
+ *
+ * \brief Unfortunately we can't template \c BtTableModel because it inherits from a \c QObject and the Qt meta-object
+ *        compiler (moc) can't handle templated classes in QObject-derived classes (though it is fine with templated
+ *        member functions in such classes, as long as the are not signals or slots).  We might one day look at
+ *        https://github.com/woboq/verdigris, which overcomes these limitations, but, for now, we live within Qt's
+ *        limitations and try to pull out as much common code as possible using a limited form of multiple inheritance.
+ *
+ *              QObject
+ *                   \
+ *                   ...
+ *                     \
+ *              QAbstractTableModel
+ *                           \
+ *                            \
+ *                          BtTableModel               BtTableModelData
+ *                                /   \                /     /     /
+ *                               /     \              /     /     /
+ *                              /      MashStepTableModel  /     /
+ *                             /                          /     /
+ *                            /                          /     /
+ *                         BtTableModelRecipeObserver   /     /
+ *                              \       \              /     /
+ *                               \       \            /     /
+ *                                \      SaltTableModel    /
+ *                                 \    WaterTableModel   /
+ *                                  \                    /
+ *                                   \                  /
+ *                         BtTableModelInventory       /
+ *                                    \               /
+ *                                     \             /
+ *                                FermentableTableModel
+ *                                    HopTableModel
+ *                                   MiscTableModel
+ *                                   YeastTableModel
+ *
+ *        (I did start trying to do something clever with a common base class to try to expose functions from
+ *        \c BtTableModelData to the implementation of \c BtTableModel / \c BtTableModelRecipeObserver /
+ *        \c BtTableModelInventory, but it quickly starts getting more complicated than it's worth IMHO because (a)
+ *        \c BtTableModelData is templated but a common base class cannot be and (b) templated functions cannot be virtual.)
+ */
+template<class NE>
+class BtTableModelData {
+protected:
+   BtTableModelData() : rows{} {
+      return;
+   }
+public:
+   /**
+    * \brief Return the \c i-th row in the model.
+    *        Returns \c nullptr on failure.
+    */
+   std::shared_ptr<NE> getRow(int ii) {
+      if (!(this->rows.isEmpty())) {
+         if (ii >= 0 && ii < this->rows.size()) {
+            return this->rows[ii];
+         }
+         qWarning() << Q_FUNC_INFO << "index out of range (" << ii << "/" << this->rows.size() << ")";
+      } else {
+         qWarning() << Q_FUNC_INFO << "this->rows is empty (" << ii << "/" << this->rows.size() << ")";
+      }
+      return nullptr;
+   }
+
+   /**
+    * \brief Remove duplicates and non-displayable items from the supplied list
+    */
+   QList< std::shared_ptr<NE> > removeDuplicates(QList< std::shared_ptr<NE> > items, Recipe const * recipe = nullptr) {
+      decltype(items) tmp;
+
+      for (auto ii : items) {
+         if (!recipe && (ii->deleted() || !ii->display())) {
+               continue;
+         }
+         if (!this->rows.contains(ii) ) {
+            tmp.append(ii);
+         }
+      }
+      return tmp;
+   }
+
+protected:
+   virtual std::shared_ptr<NamedEntity> getRowAsNamedEntity(int ii) {
+      return std::static_pointer_cast<NamedEntity>(this->getRow(ii));
+   }
+
+
+   QList< std::shared_ptr<NE> > rows;
+};
 
 /*!
  * \class BtTableModel
@@ -82,9 +176,19 @@ public slots:
 protected:
    QTableView* parentTableWidget;
    bool editable;
-
 private:
    QMap<int, ColumnInfo> columnIdToInfo;
+
 };
 
+class BtTableModelRecipeObserver : public BtTableModel {
+public:
+   BtTableModelRecipeObserver(QTableView * parent,
+                              bool editable,
+                              std::initializer_list<std::pair<int const, ColumnInfo> > columnIdToInfo);
+   ~BtTableModelRecipeObserver();
+
+protected:
+   Recipe* recObs;
+};
 #endif

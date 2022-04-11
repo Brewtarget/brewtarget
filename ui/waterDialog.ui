@@ -508,7 +508,7 @@
    <extends>QLabel</extends>
    <header>BtLabel.h</header>
    <slots>
-    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+    <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    </slots>
   </customwidget>
   <customwidget>
@@ -572,7 +572,7 @@
    <sender>label_totalcacl2</sender>
    <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>btDigit_totalcacl2</receiver>
-   <slot>displayChanged(Measurement::SystemOfMeasurement, std::optional&lt;Measurement::UnitSystem::RelativeScale&gt;)</slot>
+   <slot>displayChanged(PreviousScaleInfo)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>70</x>
@@ -588,7 +588,7 @@
    <sender>label_totalcaco3</sender>
    <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>btDigit_totalcaco3</receiver>
-   <slot>displayChanged(Measurement::SystemOfMeasurement, std::optional&lt;Measurement::UnitSystem::RelativeScale&gt;)</slot>
+   <slot>displayChanged(PreviousScaleInfo)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>70</x>
@@ -604,7 +604,7 @@
    <sender>label_totalcaso4</sender>
    <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>btDigit_totalcaso4</receiver>
-   <slot>displayChanged(Measurement::SystemOfMeasurement, std::optional&lt;Measurement::UnitSystem::RelativeScale&gt;)</slot>
+   <slot>displayChanged(PreviousScaleInfo)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>70</x>
@@ -620,7 +620,7 @@
    <sender>label_totalmgso4</sender>
    <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>btDigit_totalmgso4</receiver>
-   <slot>displayChanged(Measurement::SystemOfMeasurement, std::optional&lt;Measurement::UnitSystem::RelativeScale&gt;)</slot>
+   <slot>displayChanged(PreviousScaleInfo)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>251</x>
@@ -636,7 +636,7 @@
    <sender>label_totalnacl</sender>
    <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>btDigit_totalnacl</receiver>
-   <slot>displayChanged(Measurement::SystemOfMeasurement, std::optional&lt;Measurement::UnitSystem::RelativeScale&gt;)</slot>
+   <slot>displayChanged(PreviousScaleInfo)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>251</x>
@@ -652,7 +652,7 @@
    <sender>label_totalnahco3</sender>
    <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    <receiver>btDigit_totalnahco3</receiver>
-   <slot>displayChanged(Measurement::SystemOfMeasurement, std::optional&lt;Measurement::UnitSystem::RelativeScale&gt;)</slot>
+   <slot>displayChanged(PreviousScaleInfo)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>251</x>

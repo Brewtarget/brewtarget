@@ -168,8 +168,6 @@ protected:
     *        If \c fieldType is not a \c Measurement::PhysicalQuantity, this will be \c nullptr
     */
    Measurement::Unit const * units;
-//   std::optional<Measurement::SystemOfMeasurement> forcedSystemOfMeasurement;
-//   std::optional<Measurement::UnitSystem::RelativeScale> forcedRelativeScale;
    QString editField;
    QString configSection;
 };

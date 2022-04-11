@@ -1,6 +1,6 @@
 /*
  * BtTreeFilterProxyModel.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2022
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip G. Lee <rocketman768@gmail.com>
@@ -34,9 +34,202 @@
 #include "model/Water.h"
 #include "model/Yeast.h"
 
-BtTreeFilterProxyModel::BtTreeFilterProxyModel(QObject * parent, BtTreeModel::TypeMasks mask)
-   : QSortFilterProxyModel(parent),
-     treeMask(mask) {
+namespace {
+
+   template<class T> bool lessThan(BtTreeModel * model,
+                                   QModelIndex const & left,
+                                   QModelIndex const & right,
+                                   T * lhs,
+                                   T * rhs);
+
+   template<> bool lessThan<Recipe>(BtTreeModel * model,
+                                    QModelIndex const & left,
+                                    QModelIndex const & right,
+                                    Recipe * lhs,
+                                    Recipe * rhs) {
+      // Yog-Sothoth knows the gate
+      // This reads soo much better
+      if (model->showChild(left) && model->showChild(right)) {
+         return lhs->key() > rhs->key();
+      }
+
+      switch (left.column()) {
+         case BtTreeItem::RECIPENAMECOL:
+            return lhs->name() < rhs->name();
+         case BtTreeItem::RECIPEBREWDATECOL:
+            return lhs->date() < rhs->date();
+         case BtTreeItem::RECIPESTYLECOL:
+            if (! lhs->style()) {
+               return true;
+            } else if (! rhs->style()) {
+               return false;
+            } else {
+               return lhs->style()->name() < rhs->style()->name();
+            }
+      }
+      // Default will be to just do a name sort. This doesn't likely make sense,
+      // but it will prevent a lot of warnings.
+      return lhs->name() < rhs->name();
+   }
+
+   template<> bool lessThan<Equipment>(BtTreeModel * model,
+                                       QModelIndex const & left,
+                                       QModelIndex const & right,
+                                       Equipment * lhs,
+                                       Equipment * rhs) {
+      switch (left.column()) {
+         case BtTreeItem::EQUIPMENTNAMECOL:
+            return lhs->name() < rhs->name();
+         case BtTreeItem::EQUIPMENTBOILTIMECOL:
+            return lhs->boilTime_min() < rhs->boilTime_min();
+      }
+      return lhs->name() < rhs->name();
+   }
+
+   template<> bool lessThan<Fermentable>(BtTreeModel * model,
+                                         QModelIndex const & left,
+                                         QModelIndex const & right,
+                                         Fermentable * lhs,
+                                         Fermentable * rhs) {
+      switch (left.column()) {
+         case BtTreeItem::FERMENTABLENAMECOL:
+            return lhs->name() < rhs->name();
+         case BtTreeItem::FERMENTABLETYPECOL:
+            return lhs->type() < rhs->type();
+         case BtTreeItem::FERMENTABLECOLORCOL:
+            return lhs->color_srm() < rhs->color_srm();
+      }
+      return lhs->name() < rhs->name();
+   }
+
+   template<> bool lessThan<Hop>(BtTreeModel * model,
+                                 QModelIndex const & left,
+                                 QModelIndex const & right,
+                                 Hop * lhs,
+                                 Hop * rhs) {
+      switch (left.column()) {
+         case BtTreeItem::HOPNAMECOL:
+            return lhs->name() < rhs->name();
+         case BtTreeItem::HOPFORMCOL:
+            return lhs->form() < rhs->form();
+         case BtTreeItem::HOPUSECOL:
+            return lhs->use() < rhs->use();
+      }
+      return lhs->name() < rhs->name();
+   }
+
+   template<> bool lessThan<Misc>(BtTreeModel * model,
+                                  QModelIndex const & left,
+                                  QModelIndex const & right,
+                                  Misc * lhs,
+                                  Misc * rhs) {
+      switch (left.column()) {
+         case BtTreeItem::MISCNAMECOL:
+            return lhs->name() < rhs->name();
+         case BtTreeItem::MISCTYPECOL:
+            return lhs->type() < rhs->type();
+         case BtTreeItem::MISCUSECOL:
+            return lhs->use() < rhs->use();
+      }
+      return lhs->name() < rhs->name();
+   }
+
+   template<> bool lessThan<Style>(BtTreeModel * model,
+                                   QModelIndex const & left,
+                                   QModelIndex const & right,
+                                   Style * lhs,
+                                   Style * rhs) {
+      switch (left.column()) {
+         case BtTreeItem::STYLENAMECOL:
+            return lhs->name() < rhs->name();
+         case BtTreeItem::STYLECATEGORYCOL:
+            return lhs->category() < rhs->category();
+         case BtTreeItem::STYLENUMBERCOL:
+            return lhs->categoryNumber() < rhs->categoryNumber();
+         case BtTreeItem::STYLELETTERCOL:
+            return lhs->styleLetter() < rhs->styleLetter();
+         case BtTreeItem::STYLEGUIDECOL:
+            return lhs->styleGuide() < rhs->styleGuide();
+      }
+      return lhs->name() < rhs->name();
+   }
+
+   template<> bool lessThan<Yeast>(BtTreeModel * model,
+                                   QModelIndex const & left,
+                                   QModelIndex const & right,
+                                   Yeast * lhs,
+                                   Yeast * rhs) {
+      switch (left.column()) {
+         case BtTreeItem::YEASTNAMECOL:
+            return lhs->name() < rhs->name();
+         case BtTreeItem::YEASTTYPECOL:
+            return lhs->type() < rhs->type();
+         case BtTreeItem::YEASTFORMCOL:
+            return lhs->form() < rhs->form();
+      }
+      return lhs->name() < rhs->name();
+   }
+
+   template<> bool lessThan<Water>(BtTreeModel * model,
+                                   QModelIndex const & left,
+                                   QModelIndex const & right,
+                                   Water * lhs,
+                                   Water * rhs) {
+      switch (left.column()) {
+         case BtTreeItem::WATERNAMECOL:
+            return lhs->name() < rhs->name();
+         case BtTreeItem::WATERpHCOL:
+            return lhs->ph() < rhs->ph();
+         case BtTreeItem::WATERHCO3COL:
+            return lhs->bicarbonate_ppm() < rhs->bicarbonate_ppm();
+         case BtTreeItem::WATERSO4COL:
+            return lhs->sulfate_ppm() < rhs->sulfate_ppm();
+         case BtTreeItem::WATERCLCOL:
+            return lhs->chloride_ppm() < rhs->chloride_ppm();
+         case BtTreeItem::WATERNACOL:
+            return lhs->sodium_ppm() < rhs->sodium_ppm();
+         case BtTreeItem::WATERMGCOL:
+            return lhs->magnesium_ppm() < rhs->magnesium_ppm();
+         case BtTreeItem::WATERCACOL:
+            return lhs->calcium_ppm() < rhs->calcium_ppm();
+      }
+      return lhs->name() < rhs->name();
+   }
+
+   template<class T>
+   bool isLessThan(BtTreeModel * model,
+                 QModelIndex const & left,
+                 QModelIndex const & right) {
+      // As the models get more complex, so does the sort algorithm
+      // Try to sort folders first.
+      if (model->type(left) == BtTreeItem::Type::FOLDER && model->type(right) == BtTreeItem::typeOf<T>()) {
+         auto leftFolder = model->getItem<BtFolder>(left);
+         auto rightTee = model->getItem<T>(right);
+
+         return leftFolder->fullPath() < rightTee->name();
+      }
+
+      if (model->type(right) == BtTreeItem::Type::FOLDER && model->type(left) == BtTreeItem::typeOf<T>()) {
+         auto rightFolder = model->getItem<BtFolder>(right);
+         auto leftTee = model->getItem<T>(left);
+         return leftTee->name() < rightFolder->fullPath();
+      }
+
+      if (model->type(right) == BtTreeItem::Type::FOLDER && model->type(left) == BtTreeItem::Type::FOLDER) {
+         auto rightFolder = model->getItem<BtFolder>(right);
+         auto leftFolder = model->getItem<BtFolder>(left);
+         return leftFolder->fullPath() < rightFolder->fullPath();
+      }
+
+      return lessThan(model, left, right, model->getItem<T>(left), model->getItem<T>(right));
+   }
+}
+
+BtTreeFilterProxyModel::BtTreeFilterProxyModel(QObject * parent,
+                                               BtTreeModel::TypeMasks mask) :
+   QSortFilterProxyModel{parent},
+   treeMask{mask} {
+   return;
 }
 
 bool BtTreeFilterProxyModel::lessThan(const QModelIndex & left,
@@ -45,327 +238,35 @@ bool BtTreeFilterProxyModel::lessThan(const QModelIndex & left,
    BtTreeModel * model = qobject_cast<BtTreeModel *>(sourceModel());
    switch (treeMask) {
       case BtTreeModel::RECIPEMASK:
-         return lessThanRecipe(model, left, right);
-      case BtTreeModel::EQUIPMASK:
-         return lessThanEquip(model, left, right);
-      case BtTreeModel::FERMENTMASK:
-         return lessThanFerment(model, left, right);
-      case BtTreeModel::HOPMASK:
-         return lessThanHop(model, left, right);
-      case BtTreeModel::MISCMASK:
-         return lessThanMisc(model, left, right);
-      case BtTreeModel::YEASTMASK:
-         return lessThanYeast(model, left, right);
-      case BtTreeModel::STYLEMASK:
-         return lessThanStyle(model, left, right);
-      case BtTreeModel::WATERMASK:
-         return lessThanWater(model, left, right);
-      default:
-         return lessThanRecipe(model, left, right);
-
-   }
-}
-
-bool BtTreeFilterProxyModel::lessThanRecipe(BtTreeModel * model, const QModelIndex & left,
-                                            const QModelIndex & right) const {
-   // We don't want to sort brewnotes with the recipes, so only do this if
-   // both sides are brewnotes
-   if (model->type(left) == BtTreeItem::BREWNOTE ||
-       model->type(right) == BtTreeItem::BREWNOTE) {
-      BrewNote * leftBn = model->brewNote(left);
-      BrewNote * rightBn = model->brewNote(right);
-
-      if (leftBn && rightBn) {
-         return leftBn->brewDate() < rightBn->brewDate();
-      } else {
-         return false;
-      }
-   }
-
-   // Try to sort folders first.
-   if (model->type(left) == BtTreeItem::FOLDER && model->type(right) == BtTreeItem::RECIPE) {
-      BtFolder * leftFolder = model->folder(left);
-      Recipe * rightRecipe = model->recipe(right);
-
-      return leftFolder->fullPath() < rightRecipe->name();
-   } else if (model->type(right) == BtTreeItem::FOLDER && model->type(left) == BtTreeItem::RECIPE) {
-      BtFolder * rightFolder = model->folder(right);
-      Recipe * leftRecipe = model->recipe(left);
-      return leftRecipe->name() < rightFolder->fullPath();
-   } else if (model->type(right) == BtTreeItem::FOLDER && model->type(left) == BtTreeItem::FOLDER) {
-      BtFolder * rightFolder = model->folder(right);
-      BtFolder * leftFolder = model->folder(left);
-      return leftFolder->fullPath() < rightFolder->fullPath();
-   }
-
-
-   Recipe * leftRecipe  = model->recipe(left);
-   Recipe * rightRecipe = model->recipe(right);
-
-   // Yog-Sothoth knows the gate
-   // This reads soo much better
-   if (model->showChild(left) && model->showChild(right)) {
-      return leftRecipe->key() > rightRecipe->key();
-   }
-
-   switch (left.column()) {
-      case BtTreeItem::RECIPENAMECOL:
-         return leftRecipe->name() < rightRecipe->name();
-      case BtTreeItem::RECIPEBREWDATECOL:
-         return leftRecipe->date() < rightRecipe->date();
-      case BtTreeItem::RECIPESTYLECOL:
-         if (! leftRecipe->style()) {
-            return true;
-         } else if (! rightRecipe->style()) {
+         // We don't want to sort brewnotes with the recipes, so only do this if
+         // both sides are brewnotes
+         if (model->type(left) == BtTreeItem::Type::BREWNOTE || model->type(right) == BtTreeItem::Type::BREWNOTE) {
+            BrewNote * leftBn = model->getItem<BrewNote>(left);
+            BrewNote * rightBn = model->getItem<BrewNote>(right);
+            if (leftBn && rightBn) {
+               return leftBn->brewDate() < rightBn->brewDate();
+            }
             return false;
-         } else {
-            return leftRecipe->style()->name() < rightRecipe->style()->name();
          }
+         return isLessThan<Recipe>(model, left, right);
+      case BtTreeModel::EQUIPMASK:
+         return isLessThan<Equipment>(model, left, right);
+      case BtTreeModel::FERMENTMASK:
+         return isLessThan<Fermentable>(model, left, right);
+      case BtTreeModel::HOPMASK:
+         return isLessThan<Hop>(model, left, right);
+      case BtTreeModel::MISCMASK:
+         return isLessThan<Misc>(model, left, right);
+      case BtTreeModel::YEASTMASK:
+         return isLessThan<Yeast>(model, left, right);
+      case BtTreeModel::STYLEMASK:
+         return isLessThan<Style>(model, left, right);
+      case BtTreeModel::WATERMASK:
+         return isLessThan<Water>(model, left, right);
+      default:
+         return isLessThan<Recipe>(model, left, right);
+
    }
-   // Default will be to just do a name sort. This doesn't likely make sense,
-   // but it will prevent a lot of warnings.
-   return leftRecipe->name() < rightRecipe->name();
-}
-
-bool BtTreeFilterProxyModel::lessThanEquip(BtTreeModel * model, const QModelIndex & left,
-                                           const QModelIndex & right) const {
-   // As the models get more complex, so does the sort algorithm
-   if (model->type(left) == BtTreeItem::FOLDER && model->type(right) == BtTreeItem::EQUIPMENT) {
-      BtFolder * leftFolder = model->folder(left);
-      Equipment * rightEquipment = model->equipment(right);
-
-      return leftFolder->fullPath() < rightEquipment->name();
-   } else if (model->type(right) == BtTreeItem::FOLDER && model->type(left) == BtTreeItem::EQUIPMENT) {
-      BtFolder * rightFolder = model->folder(right);
-      Equipment * leftEquipment = model->equipment(left);
-      return leftEquipment->name() < rightFolder->fullPath();
-   } else if (model->type(right) == BtTreeItem::FOLDER && model->type(left) == BtTreeItem::FOLDER) {
-      BtFolder * rightFolder = model->folder(right);
-      BtFolder * leftFolder = model->folder(left);
-      return leftFolder->fullPath() < rightFolder->fullPath();
-   }
-
-   Equipment * leftEquip = model->equipment(left);
-   Equipment * rightEquip = model->equipment(right);
-
-
-   switch (left.column()) {
-      case BtTreeItem::EQUIPMENTNAMECOL:
-         return leftEquip->name() < rightEquip->name();
-      case BtTreeItem::EQUIPMENTBOILTIMECOL:
-         return leftEquip->boilTime_min() < rightEquip->boilTime_min();
-   }
-   return leftEquip->name() < rightEquip->name();
-}
-
-bool BtTreeFilterProxyModel::lessThanFerment(BtTreeModel * model, const QModelIndex & left,
-                                             const QModelIndex & right) const {
-   // As the models get more complex, so does the sort algorithm
-   if (model->type(left) == BtTreeItem::FOLDER && model->type(right) == BtTreeItem::FERMENTABLE) {
-      BtFolder * leftFolder = model->folder(left);
-      Fermentable * rightFermentable = model->fermentable(right);
-
-      return leftFolder->fullPath() < rightFermentable->name();
-   } else if (model->type(right) == BtTreeItem::FOLDER && model->type(left) == BtTreeItem::FERMENTABLE) {
-      BtFolder * rightFolder = model->folder(right);
-      Fermentable * leftFermentable = model->fermentable(left);
-      return leftFermentable->name() < rightFolder->fullPath();
-   } else if (model->type(right) == BtTreeItem::FOLDER && model->type(left) == BtTreeItem::FOLDER) {
-      BtFolder * rightFolder = model->folder(right);
-      BtFolder * leftFolder = model->folder(left);
-      return leftFolder->fullPath() < rightFolder->fullPath();
-   }
-
-   Fermentable * leftFerment = model->fermentable(left);
-   Fermentable * rightFerment = model->fermentable(right);
-
-   switch (left.column()) {
-      case BtTreeItem::FERMENTABLENAMECOL:
-         return leftFerment->name() < rightFerment->name();
-      case BtTreeItem::FERMENTABLETYPECOL:
-         return leftFerment->type() < rightFerment->type();
-      case BtTreeItem::FERMENTABLECOLORCOL:
-         return leftFerment->color_srm() < rightFerment->color_srm();
-   }
-   return leftFerment->name() < rightFerment->name();
-}
-
-bool BtTreeFilterProxyModel::lessThanHop(BtTreeModel * model, const QModelIndex & left,
-                                         const QModelIndex & right) const {
-   // As the models get more complex, so does the sort algorithm
-   if (model->type(left) == BtTreeItem::FOLDER && model->type(right) == BtTreeItem::HOP) {
-      BtFolder * leftFolder = model->folder(left);
-      Hop * rightHop = model->hop(right);
-
-      return leftFolder->fullPath() < rightHop->name();
-   } else if (model->type(right) == BtTreeItem::FOLDER && model->type(left) == BtTreeItem::HOP) {
-      BtFolder * rightFolder = model->folder(right);
-      Hop * leftHop = model->hop(left);
-      return leftHop->name() < rightFolder->fullPath();
-   } else if (model->type(right) == BtTreeItem::FOLDER && model->type(left) == BtTreeItem::FOLDER) {
-      BtFolder * rightFolder = model->folder(right);
-      BtFolder * leftFolder = model->folder(left);
-      return leftFolder->fullPath() < rightFolder->fullPath();
-   }
-
-   Hop * leftHop = model->hop(left);
-   Hop * rightHop = model->hop(right);
-
-
-   switch (left.column()) {
-      case BtTreeItem::HOPNAMECOL:
-         return leftHop->name() < rightHop->name();
-      case BtTreeItem::HOPFORMCOL:
-         return leftHop->form() < rightHop->form();
-      case BtTreeItem::HOPUSECOL:
-         return leftHop->use() < rightHop->use();
-   }
-   return leftHop->name() < rightHop->name();
-}
-
-bool BtTreeFilterProxyModel::lessThanMisc(BtTreeModel * model, const QModelIndex & left,
-                                          const QModelIndex & right) const {
-   // As the models get more complex, so does the sort algorithm
-   if (model->type(left) == BtTreeItem::FOLDER && model->type(right) == BtTreeItem::MISC) {
-      BtFolder * leftFolder = model->folder(left);
-      Misc * rightMisc = model->misc(right);
-
-      return leftFolder->fullPath() < rightMisc->name();
-   } else if (model->type(right) == BtTreeItem::FOLDER && model->type(left) == BtTreeItem::MISC) {
-      BtFolder * rightFolder = model->folder(right);
-      Misc * leftMisc = model->misc(left);
-      return leftMisc->name() < rightFolder->fullPath();
-   } else if (model->type(right) == BtTreeItem::FOLDER && model->type(left) == BtTreeItem::FOLDER) {
-      BtFolder * rightFolder = model->folder(right);
-      BtFolder * leftFolder = model->folder(left);
-      return leftFolder->fullPath() < rightFolder->fullPath();
-   }
-
-   Misc * leftMisc = model->misc(left);
-   Misc * rightMisc = model->misc(right);
-
-   switch (left.column()) {
-      case BtTreeItem::MISCNAMECOL:
-         return leftMisc->name() < rightMisc->name();
-      case BtTreeItem::MISCTYPECOL:
-         return leftMisc->type() < rightMisc->type();
-      case BtTreeItem::MISCUSECOL:
-         return leftMisc->use() < rightMisc->use();
-   }
-   return leftMisc->name() < rightMisc->name();
-}
-
-bool BtTreeFilterProxyModel::lessThanStyle(BtTreeModel * model, const QModelIndex & left,
-                                           const QModelIndex & right) const {
-   // As the models get more complex, so does the sort algorithm
-   if (model->type(left) == BtTreeItem::FOLDER && model->type(right) == BtTreeItem::STYLE) {
-      BtFolder * leftFolder = model->folder(left);
-      Style * rightStyle = model->style(right);
-
-      return leftFolder->fullPath() < rightStyle->name();
-   } else if (model->type(right) == BtTreeItem::FOLDER && model->type(left) == BtTreeItem::STYLE) {
-      BtFolder * rightFolder = model->folder(right);
-      Style * leftStyle = model->style(left);
-      return leftStyle->name() < rightFolder->fullPath();
-   } else if (model->type(right) == BtTreeItem::FOLDER && model->type(left) == BtTreeItem::FOLDER) {
-      BtFolder * rightFolder = model->folder(right);
-      BtFolder * leftFolder = model->folder(left);
-      return leftFolder->fullPath() < rightFolder->fullPath();
-   }
-
-   Style * leftStyle = model->style(left);
-   Style * rightStyle = model->style(right);
-
-
-   switch (left.column()) {
-      case BtTreeItem::STYLENAMECOL:
-         return leftStyle->name() < rightStyle->name();
-      case BtTreeItem::STYLECATEGORYCOL:
-         return leftStyle->category() < rightStyle->category();
-      case BtTreeItem::STYLENUMBERCOL:
-         return leftStyle->categoryNumber() < rightStyle->categoryNumber();
-      case BtTreeItem::STYLELETTERCOL:
-         return leftStyle->styleLetter() < rightStyle->styleLetter();
-      case BtTreeItem::STYLEGUIDECOL:
-         return leftStyle->styleGuide() < rightStyle->styleGuide();
-   }
-   return leftStyle->name() < rightStyle->name();
-}
-
-bool BtTreeFilterProxyModel::lessThanYeast(BtTreeModel * model, const QModelIndex & left,
-                                           const QModelIndex & right) const {
-   // As the models get more complex, so does the sort algorithm
-   if (model->type(left) == BtTreeItem::FOLDER && model->type(right) == BtTreeItem::YEAST) {
-      BtFolder * leftFolder = model->folder(left);
-      Yeast * rightYeast = model->yeast(right);
-
-      return leftFolder->fullPath() < rightYeast->name();
-   } else if (model->type(right) == BtTreeItem::FOLDER && model->type(left) == BtTreeItem::YEAST) {
-      BtFolder * rightFolder = model->folder(right);
-      Yeast * leftYeast = model->yeast(left);
-      return leftYeast->name() < rightFolder->fullPath();
-   } else if (model->type(right) == BtTreeItem::FOLDER && model->type(left) == BtTreeItem::FOLDER) {
-      BtFolder * rightFolder = model->folder(right);
-      BtFolder * leftFolder = model->folder(left);
-      return leftFolder->fullPath() < rightFolder->fullPath();
-   }
-
-   Yeast * leftYeast = model->yeast(left);
-   Yeast * rightYeast = model->yeast(right);
-
-
-   switch (left.column()) {
-      case BtTreeItem::YEASTNAMECOL:
-         return leftYeast->name() < rightYeast->name();
-      case BtTreeItem::YEASTTYPECOL:
-         return leftYeast->type() < rightYeast->type();
-      case BtTreeItem::YEASTFORMCOL:
-         return leftYeast->form() < rightYeast->form();
-   }
-   return leftYeast->name() < rightYeast->name();
-}
-
-bool BtTreeFilterProxyModel::lessThanWater(BtTreeModel * model, const QModelIndex & left,
-                                           const QModelIndex & right) const {
-   // As the models get more complex, so does the sort algorithm
-   if (model->type(left) == BtTreeItem::FOLDER && model->type(right) == BtTreeItem::WATER) {
-      BtFolder * leftFolder = model->folder(left);
-      Water * rightWater = model->water(right);
-
-      return leftFolder->fullPath() < rightWater->name();
-   } else if (model->type(right) == BtTreeItem::FOLDER && model->type(left) == BtTreeItem::WATER) {
-      BtFolder * rightFolder = model->folder(right);
-      Water * leftWater = model->water(left);
-      return leftWater->name() < rightFolder->fullPath();
-   } else if (model->type(right) == BtTreeItem::FOLDER && model->type(left) == BtTreeItem::FOLDER) {
-      BtFolder * rightFolder = model->folder(right);
-      BtFolder * leftFolder = model->folder(left);
-      return leftFolder->fullPath() < rightFolder->fullPath();
-   }
-
-   Water * leftWater = model->water(left);
-   Water * rightWater = model->water(right);
-
-
-   switch (left.column()) {
-      case BtTreeItem::WATERNAMECOL:
-         return leftWater->name() < rightWater->name();
-      case BtTreeItem::WATERpHCOL:
-         return leftWater->ph() < rightWater->ph();
-      case BtTreeItem::WATERHCO3COL:
-         return leftWater->bicarbonate_ppm() < rightWater->bicarbonate_ppm();
-      case BtTreeItem::WATERSO4COL:
-         return leftWater->sulfate_ppm() < rightWater->sulfate_ppm();
-      case BtTreeItem::WATERCLCOL:
-         return leftWater->chloride_ppm() < rightWater->chloride_ppm();
-      case BtTreeItem::WATERNACOL:
-         return leftWater->sodium_ppm() < rightWater->sodium_ppm();
-      case BtTreeItem::WATERMGCOL:
-         return leftWater->magnesium_ppm() < rightWater->magnesium_ppm();
-      case BtTreeItem::WATERCACOL:
-         return leftWater->calcium_ppm() < rightWater->calcium_ppm();
-   }
-   return leftWater->name() < rightWater->name();
 }
 
 bool BtTreeFilterProxyModel::filterAcceptsRow(int source_row, const QModelIndex & source_parent) const {
@@ -383,7 +284,7 @@ bool BtTreeFilterProxyModel::filterAcceptsRow(int source_row, const QModelIndex 
       return false;
    }
 
-   if (model->isFolder(child)) {
+   if (model->itemIs<BtFolder>(child)) {
       return true;
    }
 

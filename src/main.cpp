@@ -37,8 +37,31 @@
 #include "Logging.h"
 #include "PersistentSettings.h"
 
-void importFromXml(const QString & filename);
-void createBlankDb(const QString & filename);
+namespace {
+   /*!
+   * \brief Imports the content of an xml file to the database.
+   *
+   * Use at your own risk.
+   */
+   void importFromXml(const QString & filename) {
+
+      QString errorMessage;
+      QTextStream errorMessageAsStream{&errorMessage};
+      if (!BeerXML::getInstance().importFromXML(filename, errorMessageAsStream)) {
+         qCritical() << "Unable to import" << filename << "Error: " << errorMessage;
+         exit(1);
+      }
+      Database::instance().unload();
+      PersistentSettings::insert(PersistentSettings::Names::converted, QDate().currentDate().toString());
+      exit(0);
+   }
+
+   //! \brief Creates a blank database using the given filename.
+   void createBlankDb(const QString & filename) {
+      Database::instance().createBlank(filename);
+      exit(0);
+   }
+}
 
 int main(int argc, char **argv) {
    QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling, true);
@@ -189,28 +212,4 @@ int main(int argc, char **argv) {
             QApplication::tr("The application encountered a fatal error."));
    }
    return EXIT_FAILURE;
-}
-
-/*!
- * \brief Imports the content of an xml file to the database.
- *
- * Use at your own risk.
- */
-void importFromXml(const QString & filename) {
-
-   QString errorMessage;
-   QTextStream errorMessageAsStream{&errorMessage};
-   if (!BeerXML::getInstance().importFromXML(filename, errorMessageAsStream)) {
-      qCritical() << "Unable to import" << filename << "Error: " << errorMessage;
-      exit(1);
-   }
-   Database::instance().unload();
-   PersistentSettings::insert(PersistentSettings::Names::converted, QDate().currentDate().toString());
-   exit(0);
-}
-
-//! \brief Creates a blank database using the given filename.
-void createBlankDb(const QString & filename) {
-    Database::instance().createBlank(filename);
-    exit(0);
 }

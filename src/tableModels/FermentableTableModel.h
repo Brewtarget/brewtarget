@@ -35,7 +35,7 @@
 #include <QWidget>
 
 #include "measurement/Unit.h"
-#include "tableModels/BtTableModel.h"
+#include "tableModels/BtTableModelInventory.h"
 
 // Forward declarations.
 class BtStringConst;
@@ -50,7 +50,7 @@ enum{FERMNAMECOL, FERMTYPECOL, FERMAMOUNTCOL, FERMINVENTORYCOL, FERMISMASHEDCOL,
  *
  * \brief A table model for a list of fermentables.
  */
-class FermentableTableModel : public BtTableModel {
+class FermentableTableModel : public BtTableModelInventory, public BtTableModelData<Fermentable> {
    Q_OBJECT
 
 public:
@@ -61,20 +61,14 @@ public:
    void observeRecipe(Recipe* rec);
    //! \brief If true, we model the database's list of fermentables.
    void observeDatabase(bool val);
+private:
    //! \brief Watch all the \b ferms for changes.
-   void addFermentables(QList<Fermentable*> ferms);
+   void addFermentables(QList<std::shared_ptr< Fermentable> > ferms);
+public:
    //! \brief Clear the model.
    void removeAll();
-   //! \brief Return the \c i-th fermentable in the model.
-   Fermentable* getFermentable(unsigned int i);
    //! \brief True if you want to display percent of each grain in the row header.
    void setDisplayPercentages( bool var );
-   /*!
-    * \brief True if the inventory column should be editable, false otherwise.
-    *
-    * The default is that the inventory column is not editable
-    */
-   void setInventoryEditable( bool var ) { _inventoryEditable = var; }
 
    //! \brief Reimplemented from QAbstractTableModel.
    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
@@ -88,7 +82,7 @@ public:
    virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
 
    //! \returns true if "ferm" is successfully found and removed.
-   bool remove(Fermentable * ferm);
+   bool remove(std::shared_ptr<Fermentable> ferm);
 
 public slots:
    //! \brief Watch \b ferm for changes.
@@ -107,12 +101,8 @@ private:
    void updateTotalGrains();
 
 private:
-   bool _inventoryEditable;
-   QList<Fermentable*> fermObs;
-   Recipe* recObs;
    bool displayPercentages;
    double totalFermMass_kg;
-
 };
 
 /*!

@@ -57,8 +57,8 @@ public:
                            std::shared_ptr<VV> (UU::*doer)(std::shared_ptr<VV>),
                            QList<VV *> listToAddOrRemove,
                            std::shared_ptr<VV> (UU::*undoer)(std::shared_ptr<VV>),
-                           void (MainWindow::*doCallback)(VV &),
-                           void (MainWindow::*undoCallback)(VV &),
+                           void (MainWindow::*doCallback)(std::shared_ptr<VV>),
+                           void (MainWindow::*undoCallback)(std::shared_ptr<VV>),
                            QString const & description,
                            QUndoCommand * parent = nullptr) : QUndoCommand(parent) {
       // Parent class handles storing description and making it accessible to the undo stack etc - we just have to give
@@ -104,8 +104,8 @@ UndoableAddOrRemoveList<UU, VV> * newUndoableAddOrRemoveList(UU & updatee,
                                                              std::shared_ptr<VV> (UU::*doer)(std::shared_ptr<VV>),
                                                              QList<VV *> listToAddOrRemove,
                                                              std::shared_ptr<VV> (UU::*undoer)(std::shared_ptr<VV>),
-                                                             void (MainWindow::*doCallback)(VV &),
-                                                             void (MainWindow::*undoCallback)(VV &),
+                                                             void (MainWindow::*doCallback)(std::shared_ptr<VV>),
+                                                             void (MainWindow::*undoCallback)(std::shared_ptr<VV>),
                                                              QString const & description,
                                                              QUndoCommand * parent = nullptr) {
    return new UndoableAddOrRemoveList<UU, VV>(updatee,
@@ -134,8 +134,8 @@ UndoableAddOrRemoveList<UU, VV> * newUndoableAddOrRemoveList(UU & updatee,
                                               doer,
                                               listToAddOrRemove,
                                               undoer,
-                                              static_cast<void (MainWindow::*)(VV &)>(nullptr),
-                                              static_cast<void (MainWindow::*)(VV &)>(nullptr),
+                                              static_cast<void (MainWindow::*)(std::shared_ptr<VV>)>(nullptr),
+                                              static_cast<void (MainWindow::*)(std::shared_ptr<VV>)>(nullptr),
                                               description,
                                               parent);
 }

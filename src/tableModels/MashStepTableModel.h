@@ -21,6 +21,7 @@
  */
 #ifndef TABLEMODELS_MASHSTEPTABLEMODEL_H
 #define TABLEMODELS_MASHSTEPTABLEMODEL_H
+#pragma once
 
 #include <QItemDelegate>
 #include <QMetaProperty>
@@ -44,20 +45,20 @@ enum{ MASHSTEPNAMECOL, MASHSTEPTYPECOL, MASHSTEPAMOUNTCOL, MASHSTEPTEMPCOL, MASH
  *
  * \brief Model for the list of mash steps in a mash.
  */
-class MashStepTableModel : public BtTableModel {
+class MashStepTableModel : public BtTableModel, public BtTableModelData<MashStep> {
    Q_OBJECT
 
 public:
    MashStepTableModel(QTableView* parent = nullptr);
    virtual ~MashStepTableModel();
 
-   //! Set the mash whose mash steps we want to model.
-   void setMash( Mash* m );
+   /**
+    * \brief Set the mash whose mash steps we want to model or reload steps from an existing mash after they were
+    *        changed.
+    */
+   void setMash(Mash * m);
 
    Mash * getMash() const;
-
-   //! \returns the mash step at model index \b i.
-   MashStep* getMashStep(unsigned int i);
 
    //! Reimplemented from QAbstractTableModel.
    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
@@ -71,14 +72,9 @@ public:
    virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
 
    //! \returns true if mashStep is successfully found and removed.
-   bool remove(MashStep * MashStep);
+   bool remove(std::shared_ptr<MashStep> MashStep);
 
 public slots:
-   //! \brief Add a MashStep to the model.
-   void addMashStep(int mashStep);
-
-   void removeMashStep(int mashStepId, std::shared_ptr<QObject> object);
-
    void moveStepUp(int i);
    void moveStepDown(int i);
    void mashChanged();
@@ -86,9 +82,8 @@ public slots:
 
 private:
    Mash* mashObs;
-   QList<MashStep*> steps;
 
-   void reorderMashStep(MashStep *step, int current);
+   void reorderMashStep(std::shared_ptr<MashStep> step, int current);
 };
 
 /*!

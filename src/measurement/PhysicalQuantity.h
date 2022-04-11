@@ -20,7 +20,7 @@
 #define MEASUREMENT_PHYSICALQUANTITY_H
 #pragma once
 
-class QString;
+#include <QString>
 
 namespace Measurement {
    /**
@@ -103,5 +103,16 @@ namespace Measurement {
     * \brief Return the name of a \c PhysicalQuantity suitable either for display to the user or logging
     */
    QString getDisplayName(PhysicalQuantity physicalQuantity);
+}
+
+/**
+ * \brief Convenience function for logging
+ */
+template<class S>
+S & operator<<(S & stream, Measurement::PhysicalQuantity const physicalQuantity) {
+   stream <<
+      "PhysicalQuantity #" << static_cast<int>(physicalQuantity) << ": (" <<
+      Measurement::getDisplayName(physicalQuantity) << ")";
+   return stream;
 }
 #endif

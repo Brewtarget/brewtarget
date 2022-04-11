@@ -42,19 +42,19 @@
 #include "WaterTableWidget.h"
 
 WaterTableModel::WaterTableModel(WaterTableWidget * parent) :
-   BtTableModel{
-   parent,
-   false,
-   {  {WATERNAMECOL,        {tr("Name"),              NonPhysicalQuantity::String,           ""      }},
-      {WATERAMOUNTCOL,      {tr("Amount"),            Measurement::PhysicalQuantity::Volume, "amount"}},
-      {WATERCALCIUMCOL,     {tr("Calcium (ppm)"),     NonPhysicalQuantity::Count,            ""      }},
-      {WATERBICARBONATECOL, {tr("Bicarbonate (ppm)"), NonPhysicalQuantity::Count,            ""      }},
-      {WATERSULFATECOL,     {tr("Sulfate (ppm)"),     NonPhysicalQuantity::Count,            ""      }},
-      {WATERCHLORIDECOL,    {tr("Chloride (ppm)"),    NonPhysicalQuantity::Count,            ""      }},
-      {WATERSODIUMCOL,      {tr("Sodium (ppm)"),      NonPhysicalQuantity::Count,            ""      }},
-      {WATERMAGNESIUMCOL,   {tr("Magnesium (ppm)"),   NonPhysicalQuantity::Count,            ""      }}}
-},
-recObs{nullptr} {
+   BtTableModelRecipeObserver{
+      parent,
+      false,
+      {  {WATERNAMECOL,        {tr("Name"),              NonPhysicalQuantity::String,           ""      }},
+         {WATERAMOUNTCOL,      {tr("Amount"),            Measurement::PhysicalQuantity::Volume, "amount"}},
+         {WATERCALCIUMCOL,     {tr("Calcium (ppm)"),     NonPhysicalQuantity::Count,            ""      }},
+         {WATERBICARBONATECOL, {tr("Bicarbonate (ppm)"), NonPhysicalQuantity::Count,            ""      }},
+         {WATERSULFATECOL,     {tr("Sulfate (ppm)"),     NonPhysicalQuantity::Count,            ""      }},
+         {WATERCHLORIDECOL,    {tr("Chloride (ppm)"),    NonPhysicalQuantity::Count,            ""      }},
+         {WATERSODIUMCOL,      {tr("Sodium (ppm)"),      NonPhysicalQuantity::Count,            ""      }},
+         {WATERMAGNESIUMCOL,   {tr("Magnesium (ppm)"),   NonPhysicalQuantity::Count,            ""      }}}
+   },
+   BtTableModelData<Water>{} {
    return;
 }
 
@@ -69,7 +69,7 @@ void WaterTableModel::observeRecipe(Recipe * rec) {
    recObs = rec;
    if (recObs) {
       connect(recObs, &NamedEntity::changed, this, &WaterTableModel::changed);
-      addWaters(recObs->waters());
+      addWaters(recObs->getAll<Water>());
    }
 }
 
@@ -85,7 +85,7 @@ void WaterTableModel::observeDatabase(bool val) {
               &ObjectStoreTyped<Water>::signalObjectDeleted,
               this,
               &WaterTableModel::removeWater);
-      this->addWaters(ObjectStoreTyped<Water>::getInstance().getAllRaw());
+      this->addWaters(ObjectStoreWrapper::getAll<Water>());
    } else {
       removeAll();
       disconnect(&ObjectStoreTyped<Water>::getInstance(), nullptr, this, nullptr);
@@ -94,18 +94,16 @@ void WaterTableModel::observeDatabase(bool val) {
 }
 
 void WaterTableModel::addWater(int waterId) {
-   Water * water = ObjectStoreWrapper::getByIdRaw<Water>(waterId);
-   if (this->waterObs.contains(water)) {
+   auto water = ObjectStoreWrapper::getById<Water>(waterId);
+   if (this->rows.contains(water)) {
       return;
    }
 
    // If we are observing the database, ensure that the item is undeleted and
    // fit to display.
-   if (this->recObs == nullptr &&
-       (water->deleted() || !water->display())) {
+   if (!this->recObs && (water->deleted() || !water->display())) {
       return;
    }
-
 
    // If we are watching a Recipe and the new Water does not belong to it then there is nothing for us to do
    if (this->recObs) {
@@ -118,9 +116,9 @@ void WaterTableModel::addWater(int waterId) {
       }
    }
 
-   beginInsertRows(QModelIndex(), waterObs.size(), waterObs.size());
-   waterObs.append(water);
-   connect(water, &NamedEntity::changed, this, &WaterTableModel::changed);
+   beginInsertRows(QModelIndex(), rows.size(), rows.size());
+   rows.append(water);
+   connect(water.get(), &NamedEntity::changed, this, &WaterTableModel::changed);
    endInsertRows();
 
    if (parentTableWidget) {
@@ -129,23 +127,16 @@ void WaterTableModel::addWater(int waterId) {
    }
 }
 
-void WaterTableModel::addWaters(QList<Water *> waters) {
-   QList<Water *>::iterator i;
-   QList<Water *> tmp;
+void WaterTableModel::addWaters(QList<std::shared_ptr<Water> > waters) {
+   auto tmp = this->removeDuplicates(waters);
 
-   for (i = waters.begin(); i != waters.end(); i++) {
-      if (!waterObs.contains(*i)) {
-         tmp.append(*i);
-      }
-   }
-
-   int size = waterObs.size();
+   int size = rows.size();
    if (size + tmp.size()) {
       beginInsertRows(QModelIndex(), size, size + tmp.size() - 1);
-      waterObs.append(tmp);
+      rows.append(tmp);
 
-      for (i = tmp.begin(); i != tmp.end(); i++) {
-         connect(*i, &NamedEntity::changed, this, &WaterTableModel::changed);
+      for (auto water : tmp) {
+         connect(water.get(), &NamedEntity::changed, this, &WaterTableModel::changed);
       }
 
       endInsertRows();
@@ -159,12 +150,12 @@ void WaterTableModel::addWaters(QList<Water *> waters) {
 }
 
 void WaterTableModel::removeWater(int waterId, std::shared_ptr<QObject> object) {
-   Water * water = std::static_pointer_cast<Water>(object).get();
-   int i = waterObs.indexOf(water);
+   auto water = std::static_pointer_cast<Water>(object);
+   int i = rows.indexOf(water);
    if (i >= 0) {
       beginRemoveRows(QModelIndex(), i, i);
-      disconnect(water, nullptr, this, nullptr);
-      waterObs.removeAt(i);
+      disconnect(water.get(), nullptr, this, nullptr);
+      rows.removeAt(i);
       endRemoveRows();
 
       if (parentTableWidget) {
@@ -175,43 +166,41 @@ void WaterTableModel::removeWater(int waterId, std::shared_ptr<QObject> object) 
 }
 
 void WaterTableModel::removeAll() {
-   beginRemoveRows(QModelIndex(), 0, waterObs.size() - 1);
-   while (!waterObs.isEmpty()) {
-      disconnect(waterObs.takeLast(), nullptr, this, nullptr);
+   beginRemoveRows(QModelIndex(), 0, rows.size() - 1);
+   while (!rows.isEmpty()) {
+      disconnect(rows.takeLast().get(), nullptr, this, nullptr);
    }
    endRemoveRows();
 }
 
 void WaterTableModel::changed(QMetaProperty prop, QVariant val) {
-   int i;
-
    Q_UNUSED(prop)
    Q_UNUSED(val)
    // Find the notifier in the list
    Water * waterSender = qobject_cast<Water *>(sender());
    if (waterSender) {
-      i = waterObs.indexOf(waterSender);
-      if (i >= 0)
+      auto spWaterSender = ObjectStoreWrapper::getSharedFromRaw(waterSender);
+      int i = rows.indexOf(spWaterSender);
+      if (i >= 0) {
          emit dataChanged(QAbstractItemModel::createIndex(i, 0),
                           QAbstractItemModel::createIndex(i, WATERNUMCOLS - 1));
-      return;
+      }
    }
+   return;
 }
 
 int WaterTableModel::rowCount(const QModelIndex & /*parent*/) const {
-   return waterObs.size();
+   return this->rows.size();
 }
 
 QVariant WaterTableModel::data(const QModelIndex & index, int role) const {
-   Water * row;
-
    // Ensure the row is ok.
-   if (index.row() >= waterObs.size()) {
+   if (index.row() >= rows.size()) {
       qWarning() << tr("Bad model index. row = %1").arg(index.row());
       return QVariant();
-   } else {
-      row = waterObs[index.row()];
    }
+
+   auto row = this->rows[index.row()];
 
    // Make sure we only respond to the DisplayRole role.
    if (role != Qt::DisplayRole) {
@@ -260,7 +249,7 @@ Qt::ItemFlags WaterTableModel::flags(const QModelIndex & index) const {
 }
 
 bool WaterTableModel::setData(QModelIndex const & index, QVariant const & value, int role) {
-   if (index.row() >= waterObs.size() || role != Qt::EditRole) {
+   if (index.row() >= rows.size() || role != Qt::EditRole) {
       return false;
    }
 
@@ -269,7 +258,7 @@ bool WaterTableModel::setData(QModelIndex const & index, QVariant const & value,
       return retval;
    }
 
-   Water * row = this->waterObs[index.row()];
+   auto row = this->rows[index.row()];
 
    int const column = index.column();
    switch (column) {

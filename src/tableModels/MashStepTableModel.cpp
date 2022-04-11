@@ -58,52 +58,30 @@ MashStepTableModel::MashStepTableModel(QTableView* parent) :
    QHeaderView* headerView = parentTableWidget->horizontalHeader();
    headerView->setContextMenuPolicy(Qt::CustomContextMenu);
    connect(headerView, &QWidget::customContextMenuRequested, this, &MashStepTableModel::contextMenu);
-   connect(&ObjectStoreTyped<MashStep>::getInstance(), &ObjectStoreTyped<MashStep>::signalObjectInserted, this, &MashStepTableModel::addMashStep);
-   connect(&ObjectStoreTyped<MashStep>::getInstance(), &ObjectStoreTyped<MashStep>::signalObjectDeleted,  this, &MashStepTableModel::removeMashStep);
+   //
+   // Whilst, in principle, we could connect to ObjectStoreTyped<MashStep>::getInstance() to listen for signals
+   // &ObjectStoreTyped<MashStep>::signalObjectInserted and &ObjectStoreTyped<MashStep>::signalObjectDeleted, this is
+   // less useful in practice because (a) we get updates about MashSteps in Mashes other than the one we are watching
+   // (so we have to filter them out) and (b) when a new MashStep is created, it doesn't have a Mash, so it's not useful
+   // for us to receive a signal about it until after it has been added to a Mash.  Fortunately, all we have to do is
+   // connect to the Mash we are watching and listen for Mash::mashStepsChanged, which we'll get whenever a MashStep is
+   // added to, or removed from, the Mash, as well as when the MashStep order changes.  We then just reread all the
+   // MashSteps from the Mash which gives us simplicity for a miniscule overhead (because the number of MashSteps in a
+   // Mash is never going to be enormous).
+   //
    return;
 }
 
 MashStepTableModel::~MashStepTableModel() = default;
 
-void MashStepTableModel::addMashStep(int mashStepId) {
-   // A new MashStep has been inserted in the DB, so we've been sent a signal.  If the MashStep doesn't exist(!?!), or
-   // if we already have it in our list, or if it's not for the the Mash we're watching, or we're not watching a Mash,
-   // then there is nothing for us to do.
-   MashStep * mashStep = ObjectStoreWrapper::getByIdRaw<MashStep>(mashStepId);
-   if (mashStep == nullptr ||
-       this->mashObs == nullptr ||
-       this->steps.contains(mashStep) ||
-       this->mashObs->key() != mashStep->getMashId()) {
-      return;
-   }
+bool MashStepTableModel::remove(std::shared_ptr<MashStep> mashStep) {
 
-   int size {this->steps.size()};
-
-   qDebug() <<
-      Q_FUNC_INFO << "Instance @" << static_cast<void *>(this) << "Adding MashStep" << mashStep->name() << "(#" <<
-      mashStepId << ") to existing list of " << size << "steps for Mash #" << this->mashObs->key();
-
-   beginInsertRows( QModelIndex(), size, size );
-   this->steps.append(mashStep);
-   connect(mashStep, &NamedEntity::changed, this, &MashStepTableModel::mashStepChanged);
-   //reset(); // Tell everybody that the table has changed.
-   endInsertRows();
-   return;
-}
-
-void MashStepTableModel::removeMashStep(int mashStepId, std::shared_ptr<QObject> object) {
-   this->remove(std::static_pointer_cast<MashStep>(object).get());
-   return;
-}
-
-bool MashStepTableModel::remove(MashStep * mashStep) {
-
-   int i {this->steps.indexOf(mashStep)};
-   if (i >= 0) {
+   int ii {this->rows.indexOf(mashStep)};
+   if (ii >= 0) {
       qDebug() << Q_FUNC_INFO << "Removing MashStep" << mashStep->name() << "(#" << mashStep->key() << ")";
-      beginRemoveRows( QModelIndex(), i, i );
-      disconnect( mashStep, nullptr, this, nullptr );
-      this->steps.removeAt(i);
+      beginRemoveRows( QModelIndex(), ii, ii );
+      disconnect(mashStep.get(), nullptr, this, nullptr);
+      this->rows.removeAt(ii);
       //reset(); // Tell everybody the table has changed.
       endRemoveRows();
 
@@ -114,35 +92,40 @@ bool MashStepTableModel::remove(MashStep * mashStep) {
 }
 
 void MashStepTableModel::setMash(Mash * m) {
-   if (this->mashObs && this->steps.size() > 0) {
+   if (this->mashObs && this->rows.size() > 0) {
       qDebug() <<
-         Q_FUNC_INFO << "Removing" << this->steps.size() << "MashStep rows for old Mash #" << this->mashObs->key();
-      this->beginRemoveRows(QModelIndex(), 0, this->steps.size() - 1);
-      // Remove mashObs and all steps.
-      disconnect( mashObs, nullptr, this, nullptr );
+         Q_FUNC_INFO << "Removing" << this->rows.size() << "MashStep rows for old Mash #" << this->mashObs->key();
+      this->beginRemoveRows(QModelIndex(), 0, this->rows.size() - 1);
 
-      for (int i = 0; i < this->steps.size(); ++i) {
-         disconnect(this->steps[i], nullptr, this, nullptr);
+      for (auto step : this->rows) {
+         disconnect(step.get(), nullptr, this, nullptr);
       }
-      this->steps.clear();
+      this->rows.clear();
       this->endRemoveRows();
+   }
+
+   // Disconnect old signals if any were connected and we're changing Mash
+   if (this->mashObs && this->mashObs != m) {
+      // Remove mashObs and all steps.
+      disconnect(mashObs, nullptr, this, nullptr);
+   }
+
+   // Connect new signals, unless there is no new Mash or we're not changing Mash
+   if (m && this->mashObs != m) {
+      connect(m, &Mash::mashStepsChanged, this, &MashStepTableModel::mashChanged);
    }
 
    this->mashObs = m;
    if (this->mashObs) {
       qDebug() << Q_FUNC_INFO << "Now watching Mash #" << this->mashObs->key();
 
-      // This has to happen outside of the if{} block to make sure the mash
-      // signal is connected. Otherwise, empty mashes will never be not empty.
-      connect( mashObs, &Mash::mashStepsChanged, this, &MashStepTableModel::mashChanged );
-
-      QList<MashStep*> tmpSteps = this->mashObs->mashSteps();
+      auto tmpSteps = this->mashObs->mashSteps();
       if (tmpSteps.size() > 0) {
          qDebug() << Q_FUNC_INFO << "Inserting" << tmpSteps.size() << "MashStep rows";
          this->beginInsertRows(QModelIndex(), 0, tmpSteps.size() - 1);
-         this->steps = tmpSteps;
-         for (int i = 0; i < this->steps.size(); ++i ) {
-            connect(this->steps[i], &NamedEntity::changed, this, &MashStepTableModel::mashStepChanged);
+         this->rows = tmpSteps;
+         for (auto step : this->rows) {
+            connect(step.get(), &NamedEntity::changed, this, &MashStepTableModel::mashStepChanged);
          }
          this->endInsertRows();
      }
@@ -159,8 +142,7 @@ Mash * MashStepTableModel::getMash() const {
    return this->mashObs;
 }
 
-
-void MashStepTableModel::reorderMashStep(MashStep* step, int current) {
+void MashStepTableModel::reorderMashStep(std::shared_ptr<MashStep> step, int current) {
    // doSomething will be -1 if we are moving up and 1 if we are moving down
    // and 0 if nothing is to be done (see next comment)
    int destChild   = step->stepNumber();
@@ -191,11 +173,11 @@ void MashStepTableModel::reorderMashStep(MashStep* step, int current) {
 
    // We assert that we are swapping valid locations on the list as, to do otherwise implies a coding error
    qDebug() <<
-      Q_FUNC_INFO << "Swap" << current + doSomething << "with" << current << ", in list of " << this->steps.size();
+      Q_FUNC_INFO << "Swap" << current + doSomething << "with" << current << ", in list of " << this->rows.size();
    Q_ASSERT(current >= 0);
    Q_ASSERT(current + doSomething >= 0);
-   Q_ASSERT(current < this->steps.size());
-   Q_ASSERT(current + doSomething < this->steps.size());
+   Q_ASSERT(current < this->rows.size());
+   Q_ASSERT(current + doSomething < this->rows.size());
 
    this->beginMoveRows(QModelIndex(), current, current, QModelIndex(), destChild);
 
@@ -203,33 +185,27 @@ void MashStepTableModel::reorderMashStep(MashStep* step, int current) {
    // current -1 when moving up, and swap current with current+1 when moving
    // down
 #if QT_VERSION < QT_VERSION_CHECK(5,13,0)
-   this->steps.swap(current,current+doSomething);
+   this->rows.swap(current,current+doSomething);
 #else
-   this->steps.swapItemsAt(current,current+doSomething);
+   this->rows.swapItemsAt(current,current+doSomething);
 #endif
    this->endMoveRows();
    return;
 }
 
-MashStep* MashStepTableModel::getMashStep(unsigned int i) {
-   if (i < static_cast<unsigned int>(this->steps.size())) {
-      return this->steps[static_cast<int>(i)];
-   }
-
-   return nullptr;
-}
-
 void MashStepTableModel::mashChanged() {
-   // Remove and re-add all steps.
-   this->setMash(mashObs);
+   // A mash step was added, removed or change order.  Remove and re-add all steps.
+   qDebug() << Q_FUNC_INFO << "Re-reading mash steps for" << this->mashObs;
+   this->setMash(this->mashObs);
    return;
 }
 
 void MashStepTableModel::mashStepChanged(QMetaProperty prop, QVariant val) {
    qDebug() << Q_FUNC_INFO;
 
-   MashStep* stepSender = qobject_cast<MashStep*>(sender());
-   if (stepSender) {
+   MashStep* stepSenderRaw = qobject_cast<MashStep*>(sender());
+   if (stepSenderRaw) {
+      auto stepSender = ObjectStoreWrapper::getSharedFromRaw(stepSenderRaw);
       if (stepSender->getMashId() != this->mashObs->key()) {
          // It really shouldn't happen that we get a notification for a MashStep that's not in the Mash we're watching,
          // but, if we do, then stop trying to process the update.
@@ -240,7 +216,7 @@ void MashStepTableModel::mashStepChanged(QMetaProperty prop, QVariant val) {
          return;
       }
 
-      int ii = this->steps.indexOf(stepSender);
+      int ii = this->rows.indexOf(stepSender);
       if (ii >= 0) {
          if (prop.name() == PropertyNames::MashStep::stepNumber) {
             this->reorderMashStep(stepSender, ii);
@@ -260,7 +236,7 @@ void MashStepTableModel::mashStepChanged(QMetaProperty prop, QVariant val) {
 }
 
 int MashStepTableModel::rowCount(const QModelIndex& /*parent*/) const {
-   return steps.size();
+   return this->rows.size();
 }
 
 QVariant MashStepTableModel::data(QModelIndex const & index, int role) const {
@@ -274,12 +250,12 @@ QVariant MashStepTableModel::data(QModelIndex const & index, int role) const {
    }
 
    // Ensure the row is ok.
-   if (index.row() >= static_cast<int>(this->steps.size())) {
+   if (index.row() >= static_cast<int>(this->rows.size())) {
       qWarning() << Q_FUNC_INFO << "Bad model index. row = " << index.row();
       return QVariant();
    }
 
-   MashStep* row = this->steps[index.row()];
+   auto row = this->rows[index.row()];
 
    int const column = index.column();
    switch (column) {
@@ -355,11 +331,11 @@ bool MashStepTableModel::setData(QModelIndex const & index, QVariant const & val
       return false;
    }
 
-   if (index.row() >= static_cast<int>(steps.size()) || role != Qt::EditRole ) {
+   if (index.row() >= static_cast<int>(this->rows.size()) || role != Qt::EditRole ) {
       return false;
    }
 
-   MashStep * row = this->steps[index.row()];
+   auto row = this->rows[index.row()];
 
    int const column = index.column();
    switch (column) {
@@ -385,7 +361,7 @@ bool MashStepTableModel::setData(QModelIndex const & index, QVariant const & val
 
       case MASHSTEPAMOUNTCOL:
          if (value.canConvert(QVariant::String)) {
-            if( row->type() == MashStep::Decoction ) {
+            if (row->type() == MashStep::Decoction ) {
                MainWindow::instance().doOrRedoUpdate(
                   *row,
                   PropertyNames::MashStep::decoctionAmount_l,
@@ -474,20 +450,20 @@ bool MashStepTableModel::setData(QModelIndex const & index, QVariant const & val
 }
 
 void MashStepTableModel::moveStepUp(int i) {
-   if (this->mashObs == nullptr || i == 0 || i >= this->steps.size()) {
+   if (this->mashObs == nullptr || i == 0 || i >= this->rows.size()) {
       return;
    }
 
-   this->mashObs->swapMashSteps(*this->steps[i], *this->steps[i-1]);
+   this->mashObs->swapMashSteps(*this->rows[i], *this->rows[i-1]);
    return;
 }
 
 void MashStepTableModel::moveStepDown(int i) {
-   if (this->mashObs == nullptr ||  i+1 >= steps.size()) {
+   if (this->mashObs == nullptr ||  i+1 >= this->rows.size()) {
       return;
    }
 
-   this->mashObs->swapMashSteps(*this->steps[i], *this->steps[i+1]);
+   this->mashObs->swapMashSteps(*this->rows[i], *this->rows[i+1]);
    return;
 }
 
@@ -499,7 +475,7 @@ MashStepItemDelegate::MashStepItemDelegate(QObject* parent) : QItemDelegate(pare
 
 QWidget* MashStepItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &/*option*/, const QModelIndex &index) const
 {
-   if( index.column() == MASHSTEPTYPECOL )
+   if (index.column() == MASHSTEPTYPECOL )
    {
       QComboBox *box = new QComboBox(parent);
 
@@ -516,7 +492,7 @@ QWidget* MashStepItemDelegate::createEditor(QWidget *parent, const QStyleOptionV
 
 void MashStepItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
 {
-   if( index.column() == MASHSTEPTYPECOL )
+   if (index.column() == MASHSTEPTYPECOL )
    {
       QComboBox* box = qobject_cast<QComboBox*>(editor);
       QString text = index.model()->data(index, Qt::DisplayRole).toString();
@@ -536,7 +512,7 @@ void MashStepItemDelegate::setEditorData(QWidget *editor, const QModelIndex &ind
 void MashStepItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
 {
    QStringList typesTr = QStringList() << QObject::tr("Infusion") << QObject::tr("Temperature") << QObject::tr("Decoction");
-   if( index.column() == MASHSTEPTYPECOL )
+   if (index.column() == MASHSTEPTYPECOL )
    {
       QComboBox* box = qobject_cast<QComboBox*>(editor);
       int ndx = box->currentIndex();

@@ -121,8 +121,7 @@ void HopDialog::retranslateUi()
 #endif // QT_NO_TOOLTIP
 }
 
-void HopDialog::removeHop()
-{
+void HopDialog::removeHop() {
    QModelIndex modelIndex, viewIndex;
    QModelIndexList selected = tableWidget->selectionModel()->selectedIndexes();
    int row, size, i;
@@ -139,10 +138,11 @@ void HopDialog::removeHop()
          return;
    }
    modelIndex = hopTableProxy->mapToSource(selected[0]);
-   Hop *hop = hopTableModel->getHop(modelIndex.row());
+   auto hop = hopTableModel->getRow(modelIndex.row());
    if (hop) {
       ObjectStoreWrapper::softDelete(*hop);
    }
+   return;
 }
 
 void HopDialog::addHop(const QModelIndex& index)
@@ -178,7 +178,7 @@ void HopDialog::addHop(const QModelIndex& index)
          return;
    }
 
-   MainWindow::instance().addHopToRecipe(hopTableModel->getHop(translated.row()));
+   MainWindow::instance().addHopToRecipe(hopTableModel->getRow(translated.row()));
 
    return;
 }
@@ -202,9 +202,10 @@ void HopDialog::editSelected()
    }
 
    translated = hopTableProxy->mapToSource(selected.value(0));
-   Hop *hop = hopTableModel->getHop(translated.row());
-   hopEditor->setHop(hop);
+   auto hop = hopTableModel->getRow(translated.row());
+   hopEditor->setHop(hop.get());
    hopEditor->show();
+   return;
 }
 
 void HopDialog::newHop()

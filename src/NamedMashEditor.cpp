@@ -242,8 +242,8 @@ void NamedMashEditor::removeMashStep() {
    if ( !justOne(selected) )
       return;
 
-   MashStep* step = mashStepTableModel->getMashStep(selected[0].row());
-   this->mashObs->removeMashStep(ObjectStoreWrapper::getSharedFromRaw(step));
+   auto step = mashStepTableModel->getRow(selected[0].row());
+   this->mashObs->removeMashStep(step);
    return;
 }
 
@@ -301,22 +301,24 @@ void NamedMashEditor::fromEquipment(const QString& name)
    }
 }
 
-void NamedMashEditor::removeMash()
-{
-   if ( ! mashObs )
+void NamedMashEditor::removeMash() {
+   if (!this->mashObs) {
       return;
+   }
 
-   int newMash = mashComboBox->currentIndex() - 1;
+   int newMash = this->mashComboBox->currentIndex() - 1;
 
    // I *think* we want to disconnect the mash first?
-   disconnect(mashObs, 0, this, 0);
+   disconnect(this->mashObs, 0, this, 0);
    // Delete the mashsteps
-   QList<MashStep*> steps = mashObs->mashSteps();
-   for (auto step : steps) {
+   // .:TBD:. Mash should be responsible for deleting its steps.  This is already correctly handled for hard delete, but
+   // not for soft delete.
+   for (auto step : this->mashObs->mashSteps()) {
       ObjectStoreWrapper::softDelete(*step);
    }
-   // and delete the mash itself
+   // Delete the mash itself
    ObjectStoreWrapper::softDelete(*this->mashObs);
-   setMash(mashListModel->at(newMash));
+
+   this->setMash(this->mashListModel->at(newMash));
    return;
 }

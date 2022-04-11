@@ -249,6 +249,13 @@ public:
    template<class NE> QVector<int> & accessIds();
 
    /**
+    * \brief Get shared pointers to all ingredients etc of a particular type (Hop, Fermentable, etc) in this Recipe
+    */
+   template<class NE> QList< std::shared_ptr<NE> > getAllMy() {
+      return ObjectStoreTyped<NE>::getInstance().getByIds(this->accessIds<NE>());
+   }
+
+   /**
     * \brief Get raw pointers to all ingredients etc of a particular type (Hop, Fermentable, etc) in this Recipe
     */
    template<class NE> QList<NE *> getAllMyRaw() {
@@ -641,54 +648,49 @@ void Recipe::mashWaterIns() {
 
 QVector<PreInstruction> Recipe::mashInstructions(double timeRemaining, double totalWaterAdded_l, unsigned int size) {
    QVector<PreInstruction> preins;
-   MashStep * mstep;
-   QString str;
-   unsigned int i;
 
    if (mash() == nullptr) {
       return preins;
    }
 
-   QList<MashStep *> msteps = mash()->mashSteps();
-   for (i = 0; i < size; ++i) {
-      mstep = msteps[static_cast<int>(i)];
-
-      if (mstep->isInfusion()) {
+   for (auto step : this->mash()->mashSteps()) {
+      QString str;
+      if (step->isInfusion()) {
          str = tr("Add %1 water at %2 to mash to bring it to %3.")
-               .arg(Measurement::displayAmount(Measurement::Amount{mstep->infuseAmount_l(), Measurement::Units::liters},
+               .arg(Measurement::displayAmount(Measurement::Amount{step->infuseAmount_l(), Measurement::Units::liters},
                                                PersistentSettings::Sections::mashStepTableModel,
                                                PropertyNames::MashStep::infuseAmount_l))
-               .arg(Measurement::displayAmount(Measurement::Amount{mstep->infuseTemp_c(), Measurement::Units::celsius},
+               .arg(Measurement::displayAmount(Measurement::Amount{step->infuseTemp_c(), Measurement::Units::celsius},
                                                PersistentSettings::Sections::mashStepTableModel,
                                                PropertyNames::MashStep::infuseTemp_c))
-               .arg(Measurement::displayAmount(Measurement::Amount{mstep->stepTemp_c(), Measurement::Units::celsius},
+               .arg(Measurement::displayAmount(Measurement::Amount{step->stepTemp_c(), Measurement::Units::celsius},
                                                PersistentSettings::Sections::mashStepTableModel,
                                                PropertyNames::MashStep::stepTemp_c));
-         totalWaterAdded_l += mstep->infuseAmount_l();
-      } else if (mstep->isTemperature()) {
-         str = tr("Heat mash to %1.").arg(Measurement::displayAmount(Measurement::Amount{mstep->stepTemp_c(),
+         totalWaterAdded_l += step->infuseAmount_l();
+      } else if (step->isTemperature()) {
+         str = tr("Heat mash to %1.").arg(Measurement::displayAmount(Measurement::Amount{step->stepTemp_c(),
                                                                                          Measurement::Units::celsius},
                                                                      PersistentSettings::Sections::mashStepTableModel,
                                                                      PropertyNames::MashStep::stepTemp_c));
-      } else if (mstep->isDecoction()) {
+      } else if (step->isDecoction()) {
          str = tr("Bring %1 of the mash to a boil and return to the mash tun to bring it to %2.")
-               .arg(Measurement::displayAmount(Measurement::Amount{mstep->decoctionAmount_l(),
+               .arg(Measurement::displayAmount(Measurement::Amount{step->decoctionAmount_l(),
                                                                    Measurement::Units::liters},
                                                PersistentSettings::Sections::mashStepTableModel,
                                                PropertyNames::MashStep::decoctionAmount_l))
-               .arg(Measurement::displayAmount(Measurement::Amount{mstep->stepTemp_c(), Measurement::Units::celsius},
+               .arg(Measurement::displayAmount(Measurement::Amount{step->stepTemp_c(), Measurement::Units::celsius},
                                                PersistentSettings::Sections::mashStepTableModel,
                                                PropertyNames::MashStep::stepTemp_c));
       }
 
-      str += tr(" Hold for %1.").arg(Measurement::displayAmount(Measurement::Amount{mstep->stepTime_min(),
+      str += tr(" Hold for %1.").arg(Measurement::displayAmount(Measurement::Amount{step->stepTime_min(),
                                                                                     Measurement::Units::minutes},
                                                                 PersistentSettings::Sections::mashStepTableModel,
                                                                 PropertyNames::MashStep::stepTime_min));
 
-      preins.push_back(PreInstruction(str, QString("%1 - %2").arg(mstep->typeStringTr()).arg(mstep->name()),
+      preins.push_back(PreInstruction(str, QString("%1 - %2").arg(step->typeStringTr()).arg(step->name()),
                                       timeRemaining));
-      timeRemaining -= mstep->stepTime_min();
+      timeRemaining -= step->stepTime_min();
    }
    return preins;
 }
@@ -1426,6 +1428,13 @@ void Recipe::setEquipment(Equipment * var) {
    return;
 }
 
+void Recipe::setMash(std::shared_ptr<Mash> mash) {
+   // In the long run we'll keep this setter and retire the raw pointer version.  For now though, they pretty much
+   // share the same implementation.
+   this->setMash(mash.get());
+   return;
+}
+
 void Recipe::setMash(Mash * var) {
    if (var->key() == this->mashId) {
       return;
@@ -1928,6 +1937,9 @@ Style * Recipe::style() const {
 int Recipe::getStyleId() const {
    return this->styleId;
 }
+std::shared_ptr<Mash> Recipe::getMash() const {
+   return ObjectStoreWrapper::getById<Mash>(this->mashId);
+}
 Mash * Recipe::mash() const {
    return ObjectStoreWrapper::getByIdRaw<Mash>(this->mashId);
 }
@@ -1957,6 +1969,22 @@ QList<BrewNote *> Recipe::brewNotes() const {
       }
    );
 }
+
+template<typename NE> QList< std::shared_ptr<NE> > Recipe::getAll() const {
+   return this->pimpl->getAllMy<NE>();
+}
+//
+// Instantiate the above template function for the types that are going to use it
+// (This is all just a trick to allow the template definition to be here in the .cpp file and not in the header, which
+// means, amongst other things, that we can reference the pimpl.)
+//
+template QList< std::shared_ptr<Hop> > Recipe::getAll<Hop>() const;
+template QList< std::shared_ptr<Fermentable> > Recipe::getAll<Fermentable>() const;
+template QList< std::shared_ptr<Misc> > Recipe::getAll<Misc>() const;
+template QList< std::shared_ptr<Salt> > Recipe::getAll<Salt>() const;
+template QList< std::shared_ptr<Yeast> > Recipe::getAll<Yeast>() const;
+template QList< std::shared_ptr<Water> > Recipe::getAll<Water>() const;
+
 QList<Hop *> Recipe::hops() const {   return this->pimpl->getAllMyRaw<Hop>();                       }
 QVector<int> Recipe::getHopIds() const {   return this->pimpl->hopIds;                              }
 QList<Fermentable *> Recipe::fermentables() const { return this->pimpl->getAllMyRaw<Fermentable>(); }
@@ -2653,15 +2681,15 @@ QList<QString> Recipe::getReagents(QList<Hop *> hops, bool firstWort) {
    return reagents;
 }
 
-QList<QString> Recipe::getReagents(QList<MashStep *> msteps) {
-   QString tmp;
+QList<QString> Recipe::getReagents(QList< std::shared_ptr<MashStep> > msteps) {
    QList<QString> reagents;
 
    for (int i = 0; i < msteps.size(); ++i) {
-      if (! msteps[i]->isInfusion()) {
+      if (!msteps[i]->isInfusion()) {
          continue;
       }
 
+      QString tmp;
       if (i + 1 < msteps.size()) {
          tmp = tr("%1 water to %2, ")
                .arg(Measurement::displayAmount(Measurement::Amount{msteps[i]->infuseAmount_l(), Measurement::Units::liters},
@@ -2683,6 +2711,7 @@ QList<QString> Recipe::getReagents(QList<MashStep *> msteps) {
    }
    return reagents;
 }
+
 
 //! \brief send me a list of salts and if we are wanting to add to the
 //! mash or the sparge, and I will return a list of instructions

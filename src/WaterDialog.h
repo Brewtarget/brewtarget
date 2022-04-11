@@ -49,8 +49,7 @@ class Salt;
  *
  * .:TBD:. This class (and associated UI files etc) might better be called Water Chemistry Dialog
  */
-class WaterDialog : public QDialog, public Ui::waterDialog
-{
+class WaterDialog : public QDialog, public Ui::waterDialog {
    Q_OBJECT
 
 public:

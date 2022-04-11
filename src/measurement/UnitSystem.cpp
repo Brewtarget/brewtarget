@@ -235,18 +235,14 @@ Measurement::Amount Measurement::UnitSystem::qstringToSI(QString qstr, Unit cons
       if (unitToUse) {
          qDebug() << Q_FUNC_INFO << this->uniqueName << ":" << unitName << "interpreted as" << unitToUse->name;
       } else {
-         qDebug() << Q_FUNC_INFO << this->uniqueName << ":" << unitName << "not recognised";
+         qDebug() <<
+            Q_FUNC_INFO << this->uniqueName << ":" << unitName << "not recognised for" << this->pimpl->physicalQuantity;
       }
    }
 
    if (!unitToUse) {
+      qDebug() << Q_FUNC_INFO << "Defaulting to" << defUnit;
       unitToUse = &defUnit;
-   }
-
-   // It is possible for unitToUse to be NULL at this point, so make sure we handle that case
-   if (!unitToUse) {
-      qDebug() << Q_FUNC_INFO << this->uniqueName << ": Couldn't determine units";
-      return Amount{-1.0, Measurement::Unit::getCanonicalUnit(this->pimpl->physicalQuantity)};
    }
 
    Measurement::Amount siAmount = unitToUse->toSI(amt);

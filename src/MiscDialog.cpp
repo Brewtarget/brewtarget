@@ -137,7 +137,7 @@ void MiscDialog::removeMisc()
          return;
    }
 
-   Misc* m = miscTableModel->getMisc(miscTableProxy->mapToSource(selected[0]).row());
+   auto m = miscTableModel->getRow(miscTableProxy->mapToSource(selected[0]).row());
    ObjectStoreWrapper::softDelete(*m);
    return;
 }
@@ -177,7 +177,7 @@ void MiscDialog::addMisc(const QModelIndex& index)
          return;
    }
 
-   MainWindow::instance().addMiscToRecipe(miscTableModel->getMisc(translated.row()));
+   MainWindow::instance().addMiscToRecipe(miscTableModel->getRow(translated.row()));
 
    return;
 }
@@ -199,9 +199,10 @@ void MiscDialog::editSelected()
          return;
    }
 
-   Misc* m = miscTableModel->getMisc(miscTableProxy->mapToSource(selected[0]).row());
-   miscEdit->setMisc(m);
+   auto m = miscTableModel->getRow(miscTableProxy->mapToSource(selected[0]).row());
+   miscEdit->setMisc(m.get());
    miscEdit->show();
+   return;
 }
 
 void MiscDialog::newMisc()

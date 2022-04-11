@@ -30,6 +30,17 @@
 #include "utils/OptionalToStream.h"
 #include "widgets/UnitAndScalePopUpMenu.h"
 
+BtTableModelRecipeObserver::BtTableModelRecipeObserver(QTableView * parent,
+                                                       bool editable,
+                                                       std::initializer_list<std::pair<int const, ColumnInfo> > columnIdToInfo) :
+   BtTableModel{parent, editable, columnIdToInfo},
+   recObs{nullptr} {
+   return;
+}
+
+BtTableModelRecipeObserver::~BtTableModelRecipeObserver() = default;
+
+//======================================================================================================================
 BtTableModel::BtTableModel(QTableView * parent,
                            bool editable,
                            std::initializer_list<std::pair<int const, BtTableModel::ColumnInfo> > columnIdToInfo) :
