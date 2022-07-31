@@ -1,11 +1,46 @@
 #
-# CMakeLists.txt is part of Brewtarget
+# CMakeLists.txt is part of Brewtarget, and is Copyright the following
+# authors 2009-2022
+#  - Chris Pavetto <chrispavetto@gmail.com>
+#  - Dan Cavanagh <dan@dancavanagh.com>
+#  - Daniel Moreno <danielm5@users.noreply.github.com>
+#  - Daniel Pettersson <pettson81@gmail.com>
+#  - Kregg Kemper <gigatropolis@yahoo.com>
+#  - Matt Young <mfsy@yahoo.com>
+#  - Maxime Lavigne (malavv) <duguigne@gmail.com>
+#  - Mik Firestone <mikfire@gmail.com>
+#  - Philip Greggory Lee <rocketman768@gmail.com>
+#  - Robby Workman <rworkman@slackware.com>
+#  - Théophane Martin <theophane.m@gmail.com>
+#
+# Brewtarget is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Brewtarget is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
 #
 # See also src/CMakeLists.txt
 #
-PROJECT(brewtarget)
-CMAKE_MINIMUM_REQUIRED( VERSION 3.16 )
-CMAKE_POLICY( VERSION 3.16 )
+
+#================================================= CMake Configuration =================================================
+cmake_minimum_required(VERSION 3.16)
+cmake_policy(VERSION 3.16)
+# Ensure we are using modern behaviour of the project command (introduced in CMake 3.0) which enables setting version
+# numbers via it (rather than manually setting individual major/minor/patch vars).
+cmake_policy(SET CMP0048 NEW)
+
+#============================================== Project name and Version ===============================================
+project(brewtarget VERSION 2.4.0 LANGUAGES CXX)
+message(STATUS "Building " ${PROJECT_NAME} " version " ${PROJECT_VERSION})
+message(STATUS "PROJECT_SOURCE_DIR is " ${PROJECT_SOURCE_DIR})
 
 # Creates a Makefile.
 # NOTE: cmake . -DCMAKE_INSTALL_PREFIX=/tmp/blah && make DESTDIR=/foo
@@ -41,12 +76,6 @@ ADD_CUSTOM_TARGET(
            -P "${CMAKE_BINARY_DIR}/cmake_install.cmake"
 )
 
-#=================================Version======================================
-SET( brewtarget_VERSION_MAJOR 2 )
-SET( brewtarget_VERSION_MINOR 4 )
-SET( brewtarget_VERSION_PATCH 0 )
-SET( brewtarget_VERSION_STRING "${brewtarget_VERSION_MAJOR}.${brewtarget_VERSION_MINOR}.${brewtarget_VERSION_PATCH}" )
-
 #===================================Options====================================
 OPTION( BUILD_DESIGNER_PLUGINS
         "If on, you will only build and install the designer plugins."
@@ -56,9 +85,6 @@ OPTION( DO_RELEASE_BUILD
         OFF )
 OPTION( NO_MESSING_WITH_FLAGS
         "On means do not add any build flags whatsoever. May override other options."
-        OFF )
-OPTION( NO_QTMULTIMEDIA
-        "On means QtMultimedia won't be linked to the final binary and related functionalities will be disabled."
         OFF )
 
 # Do this right off the bat
@@ -79,7 +105,7 @@ SET( MACOSX_BUNDLE_COPYRIGHT "GPLv3" )
 set( CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # We need C++17 or later for nested namespaces (and C++11 or later for lambdas)
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED_ON)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 IF( NOT ${NO_MESSING_WITH_FLAGS} )
@@ -93,10 +119,6 @@ IF( NOT ${NO_MESSING_WITH_FLAGS} )
       SET( CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -pipe" )
       SET( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -pipe" )
    ENDIF()
-ENDIF()
-
-IF( ${NO_QTMULTIMEDIA} )
-   ADD_DEFINITIONS( -DNO_QTMULTIMEDIA )
 ENDIF()
 
 #====================================================Set build type=====================================================
@@ -185,10 +207,8 @@ INCLUDE_DIRECTORIES(${Qt5Svg_INCLUDE_DIRS})
 FIND_PACKAGE(Qt5Xml ${QT5_MIN_VERSION} REQUIRED)
 INCLUDE_DIRECTORIES(${Qt5Xml_INCLUDE_DIRS})
 
-IF( NOT ${NO_QTMULTIMEDIA} )
-   FIND_PACKAGE(Qt5Multimedia ${QT5_MIN_VERSION} REQUIRED)
-   INCLUDE_DIRECTORIES(${Qt5Multimedia_INCLUDE_DIRS})
-ENDIF()
+FIND_PACKAGE(Qt5Multimedia ${QT5_MIN_VERSION} REQUIRED)
+INCLUDE_DIRECTORIES(${Qt5Multimedia_INCLUDE_DIRS})
 
 FIND_PACKAGE(Qt5Test ${QT5_MIN_VERSION} REQUIRED)
 INCLUDE_DIRECTORIES(${Qt5Test_INCLUDE_DIRS})
@@ -202,7 +222,7 @@ IF(Qt5_POSITION_INDEPENDENT_CODE)
 ENDIF()
 
 # Uncomment the following line to show what version of Qt is actually being used
-message(STATUS "Using Qt version " ${QT_VERSION})
+message(STATUS "Using Qt version " ${Qt5Core_VERSION})
 
 MESSAGE( STATUS "CMAKE_SYSTEM_INCLUDE_PATH: ${CMAKE_SYSTEM_INCLUDE_PATH}" )
 
@@ -217,19 +237,52 @@ SET_PROPERTY(
 )
 
 #======================================================Find Boost=======================================================
-# Boost is a collection of separate libraries, so we need to specify here which ones we are using
-# On Windows, using MSYS2, the mingw-w64-boost packages do not include libboost_stacktrace_backtrace, but
-# https://www.boost.org/doc/libs/1_76_0/doc/html/stacktrace/configuration_and_build.html suggests it is not required
-# (because on Windows, if you have libbacktrace installed, you can set BOOST_STACKTRACE_USE_BACKTRACE in header-only
-# mode).
+# Boost is a collection of separate libraries, some, but not all, of which are header-only.  We only specify the Boost
+# libraries that we actually use.
 #
-# .:TODO:. Not sure how to get libboost_stacktrace_backtrace installed on Mac.  It doesn't seem to be findable by CMake
-# after installing Boost via Homebrew (https://brew.sh/).  For the moment, skip trying to use
-# libboost_stacktrace_backtrace on Mac
+# On Linux, there are cases where we need a more recent version of a Boost library than is readily-available in system-
+# supplied packages.  I haven't found a slick way to solve this in CMake, though https://github.com/Orphis/boost-cmake
+# looks promising.  (For header-only Boost libraries, you might think it would be relatively painless to pull them in
+# from where they are hosted on GitHub (see https://github.com/boostorg), but this is not the case.  AFAICT you can't
+# easily pull a specific release, and just pulling master doesn't guarantee that everything compiles.)  So, anyway, on
+# Debian-based distros of Linux, such as Ubuntu, you need to do the following to install Boost 1.79 in place of whatever
+# (if anything) is already installed:
 #
-# .:TODO:. So far don't have stacktraces working properly on Windows (everything shows as register_frame_ctor), so that
-# needs some more investigation.  (It could be that it's a bug in Boost, at least according to
-# https://stackoverflow.com/questions/54333608/boost-stacktrace-not-demangling-names-when-cross-compiled)
+#    $ sudo apt remove boost-all-dev
+#    $ cd ~
+#    $ mkdir boost-tmp
+#    $ cd boost-tmp
+#    $ wget https://boostorg.jfrog.io/artifactory/main/release/1.79.0/source/boost_1_79_0.tar.bz2
+#    $ tar --bzip2 -xf boost_1_79_0.tar.bz2
+#    $ cd boost_1_79_0
+#    $ ./bootstrap.sh --prefix=/usr
+#    $ sudo ./b2 install
+#    $ cd ../..
+#    $ sudo rm -rf boost-tmp
+#
+# (Obviously if you want to make the necessary change to install an even more recent version than Boost 1.79 then that
+# should be fine.)
+#
+# We do the same in .github/workflows/linux-ubuntu.yml to make GitHub automated builds work.
+#
+#    ************************
+#    *** Boost Stacktrace ***
+#    ************************
+#
+#    We use this for diagnostics.  In certain error cases it's very helpful to be able to log the call stack.
+#
+#    On Windows, using MSYS2, the mingw-w64-boost packages do not include libboost_stacktrace_backtrace, but
+#    https://www.boost.org/doc/libs/1_76_0/doc/html/stacktrace/configuration_and_build.html suggests it is not required
+#    (because on Windows, if you have libbacktrace installed, you can set BOOST_STACKTRACE_USE_BACKTRACE in header-only
+#    mode).
+#
+#    .:TODO:. Not sure how to get libboost_stacktrace_backtrace installed on Mac.  It doesn't seem to be findable by
+#    CMake after installing Boost via Homebrew (https://brew.sh/).  For the moment, skip trying to use
+#    libboost_stacktrace_backtrace on Mac
+#
+#    .:TODO:. So far don't have stacktraces working properly on Windows (everything shows as register_frame_ctor), so
+#    that needs some more investigation.  (It could be that it's a bug in Boost, at least according to
+#    https://stackoverflow.com/questions/54333608/boost-stacktrace-not-demangling-names-when-cross-compiled)
 IF(WIN32)
 FIND_PACKAGE(Boost REQUIRED)
 ELSEIF(APPLE)
@@ -242,8 +295,8 @@ FIND_PACKAGE(Boost REQUIRED)
 ENDIF()
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
 # Uncomment the next two lines if you want to find where Boost headers and DLLs are on your system
-message( "Boost include directories: " ${Boost_INCLUDE_DIRS} )
-message( "Boost libraries: " ${Boost_LIBRARIES} )
+#message( "Boost include directories: " ${Boost_INCLUDE_DIRS} )
+#message( "Boost libraries: " ${Boost_LIBRARIES} )
 
 #===============================Find Xerces-C++================================
 # CMake already knows how to find and configure Xerces-C++, see
@@ -259,8 +312,8 @@ INCLUDE_DIRECTORIES(${XercesC_INCLUDE_DIRS})
 FIND_PACKAGE(XalanC REQUIRED)
 INCLUDE_DIRECTORIES(${XalanC_INCLUDE_DIRS})
 # Uncomment the next two lines if you want to find where Xalan headers and DLLs are on your system
-#message( "Xalan-C++ include directories: " ${XalanC_INCLUDE_DIRS} )
-#message( "Xalan-C++ libraries: " ${XalanC_LIBRARIES} )
+message( "Xalan-C++ include directories: " ${XalanC_INCLUDE_DIRS} )
+message( "Xalan-C++ libraries: " ${XalanC_LIBRARIES} )
 
 #=========================Configure brewtarget.qrc.in==========================
 
@@ -409,36 +462,36 @@ SET( TRANSLATIONS_FILES
 SET( RCFILE ${WINDIR}/icon.rc )
 
 SET( brewtarget_SOUNDS
-     ${DATADIR}/sounds/45minLeft.ogg
-     ${DATADIR}/sounds/addFuckinHops.ogg
-     ${DATADIR}/sounds/aromaHops.ogg
-     ${DATADIR}/sounds/beep.ogg
-     ${DATADIR}/sounds/bitteringHops.ogg
-     ${DATADIR}/sounds/checkBoil.ogg
-     ${DATADIR}/sounds/checkFirstRunnings.ogg
-     ${DATADIR}/sounds/checkGravity.ogg
-     ${DATADIR}/sounds/checkHydrometer.ogg
-     ${DATADIR}/sounds/checkMashTemps.ogg
-     ${DATADIR}/sounds/checkTemp.ogg
-     ${DATADIR}/sounds/clarifyingAgent.ogg
-     ${DATADIR}/sounds/cleanup.ogg
-     ${DATADIR}/sounds/closeFuckinValves.ogg
-     ${DATADIR}/sounds/closeValves.ogg
-     ${DATADIR}/sounds/doughIn.ogg
-     ${DATADIR}/sounds/drinkAnotherHomebrew.ogg
-     ${DATADIR}/sounds/drinkHomebrew.ogg
-     ${DATADIR}/sounds/emptyMashTun.ogg
-     ${DATADIR}/sounds/extraPropane.ogg
-     ${DATADIR}/sounds/flameout.ogg
-     ${DATADIR}/sounds/flavorHops.ogg
-     ${DATADIR}/sounds/heatWater.ogg
-     ${DATADIR}/sounds/mashHops.ogg
-     ${DATADIR}/sounds/pitchYeast.ogg
-     ${DATADIR}/sounds/sanitize.ogg
-     ${DATADIR}/sounds/sparge.ogg
-     ${DATADIR}/sounds/startBurner.ogg
-     ${DATADIR}/sounds/startChill.ogg
-     ${DATADIR}/sounds/stirMash.ogg
+     ${DATADIR}/sounds/45minLeft.wav
+     ${DATADIR}/sounds/addFuckinHops.wav
+     ${DATADIR}/sounds/aromaHops.wav
+     ${DATADIR}/sounds/beep.wav
+     ${DATADIR}/sounds/bitteringHops.wav
+     ${DATADIR}/sounds/checkBoil.wav
+     ${DATADIR}/sounds/checkFirstRunnings.wav
+     ${DATADIR}/sounds/checkGravity.wav
+     ${DATADIR}/sounds/checkHydrometer.wav
+     ${DATADIR}/sounds/checkMashTemps.wav
+     ${DATADIR}/sounds/checkTemp.wav
+     ${DATADIR}/sounds/clarifyingAgent.wav
+     ${DATADIR}/sounds/cleanup.wav
+     ${DATADIR}/sounds/closeFuckinValves.wav
+     ${DATADIR}/sounds/closeValves.wav
+     ${DATADIR}/sounds/doughIn.wav
+     ${DATADIR}/sounds/drinkAnotherHomebrew.wav
+     ${DATADIR}/sounds/drinkHomebrew.wav
+     ${DATADIR}/sounds/emptyMashTun.wav
+     ${DATADIR}/sounds/extraPropane.wav
+     ${DATADIR}/sounds/flameout.wav
+     ${DATADIR}/sounds/flavorHops.wav
+     ${DATADIR}/sounds/heatWater.wav
+     ${DATADIR}/sounds/mashHops.wav
+     ${DATADIR}/sounds/pitchYeast.wav
+     ${DATADIR}/sounds/sanitize.wav
+     ${DATADIR}/sounds/sparge.wav
+     ${DATADIR}/sounds/startBurner.wav
+     ${DATADIR}/sounds/startChill.wav
+     ${DATADIR}/sounds/stirMash.wav
 )
 
 SET( brewtarget_INFO_PLIST "${ROOTDIR}/mac/Info.plist" )
@@ -451,17 +504,13 @@ SET( brewtarget_MAC_ICNS "${ROOTDIR}/mac/BrewtargetIcon.icns" )
 #
 # .:TBD:. MY 2020-12-29 What do we need to do for Xerces and Xalan here?
 IF( WIN32 )
-   IF( NOT ${NO_QTMULTIMEDIA} )
    FIND_PACKAGE(Qt5MultimediaWidgets REQUIRED)
-   ENDIF()
    FIND_PACKAGE(Qt5OpenGL REQUIRED)
 
    GET_TARGET_PROPERTY(QtCore_location Qt5::Core LOCATION_${CMAKE_BUILD_TYPE})
    GET_TARGET_PROPERTY(QtGui_location Qt5::Gui LOCATION_${CMAKE_BUILD_TYPE})
-   IF( NOT ${NO_QTMULTIMEDIA} )
    GET_TARGET_PROPERTY(QtMultimedia_location Qt5::Multimedia LOCATION_${CMAKE_BUILD_TYPE})
    GET_TARGET_PROPERTY(QtMultimediaWidgets_location Qt5::MultimediaWidgets LOCATION_${CMAKE_BUILD_TYPE})
-   ENDIF()
    GET_TARGET_PROPERTY(QtNetwork_location Qt5::Network LOCATION_${CMAKE_BUILD_TYPE})
    GET_TARGET_PROPERTY(QtOpenGL_location Qt5::OpenGL LOCATION_${CMAKE_BUILD_TYPE})
    GET_TARGET_PROPERTY(QtPrintSupport_location Qt5::PrintSupport LOCATION_${CMAKE_BUILD_TYPE})
@@ -494,13 +543,11 @@ IF( WIN32 )
         ${QtWebKitWidgets_location}
         ${QtOpenGL_location}
    )
-   IF( NOT ${NO_QTMULTIMEDIA})
-      SET( Qt_DLLs
-        ${Qt_DLLs}
-        ${QtMultimedia_location}
-        ${QtMultimediaWidgets_location}
+   SET( Qt_DLLs
+      ${Qt_DLLs}
+      ${QtMultimedia_location}
+      ${QtMultimediaWidgets_location}
    )
-   ENDIF()
    SET( SQL_Drivers_DLLs
         ${QtSqliteDriver_location}
    )

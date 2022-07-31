@@ -96,6 +96,9 @@
        <property name="text">
         <string/>
        </property>
+       <property name="toolTip">
+        <string>Stop</string>
+       </property>
        <property name="icon">
         <iconset resource="../brewtarget.qrc">
          <normaloff>:/images/alarm_stop.png</normaloff>:/images/alarm_stop.png</iconset>
@@ -106,6 +109,9 @@
       <widget class="QPushButton" name="setSoundButton">
        <property name="text">
         <string/>
+       </property>
+       <property name="toolTip">
+        <string>Set Sound</string>
        </property>
        <property name="icon">
         <iconset resource="../brewtarget.qrc">
@@ -118,9 +124,26 @@
        <property name="text">
         <string/>
        </property>
+       <property name="toolTip">
+        <string>Cancel</string>
+       </property>
        <property name="icon">
         <iconset resource="../brewtarget.qrc">
          <normaloff>:/images/exit.svg</normaloff>:/images/exit.svg</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="playButton">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="toolTip">
+        <string>Play Alarm Sound</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../brewtarget.qrc">
+         <normaloff>:/images/play.png</normaloff>:/images/play.png</iconset>
        </property>
       </widget>
      </item>
