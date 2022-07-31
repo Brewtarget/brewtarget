@@ -1,8 +1,9 @@
 /*
  * TimerMainDialog.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
- * - Philip Greggory Lee <rocketman768@gmail.com>
+ * authors 2009-2022:
  * - Aidan Roberts <aidanr67@gmail.com>
+ * - Matt Young <mfsy@yahoo.com>
+ * - Philip Greggory Lee <rocketman768@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,78 +20,75 @@
  */
 #ifndef TIMERMAINDIALOG_H
 #define TIMERMAINDIALOG_H
-
-class TimerMainDialog;
+#pragma once
 
 #include "ui_timerMainDialog.h"
-#include <QDialog>
-#include <QWidget>
-#include "TimerListDialog.h"
-#include "TimerWidget.h"
-#include "boiltime.h"
-#include "model/Recipe.h"
-#include "model/Hop.h"
-#include <QString>
+
 #include <QDebug>
-#include "MainWindow.h"
+#include <QDialog>
 #include <QStack>
+#include <QString>
+#include <QWidget>
+
+#include "boiltime.h"
+
+class MainWindow;
+class TimerListDialog;
+class TimerWidget;
 
 /*!
  * \class TimerMainDialog
  *
- *
  * \brief Main boil timer, create timers individually or generate from recipe
  */
-class TimerMainDialog : public QDialog, public Ui::TimerMainDialog
-{
+class TimerMainDialog : public QDialog, public Ui::TimerMainDialog {
    Q_OBJECT
 
 public:
-      TimerMainDialog(MainWindow* parent);
-      ~TimerMainDialog();
-      void removeTimer(TimerWidget* t);
-      unsigned int getAlarmLimit();
-      void hideTimers();
-      void setTimerVisible(TimerWidget* t);
-      void showTimers();
+   TimerMainDialog(MainWindow* parent);
+   ~TimerMainDialog();
+   void removeTimer(TimerWidget* t);
+   unsigned int getAlarmLimit();
+   void hideTimers();
+   void setTimerVisible(TimerWidget* t);
+   void showTimers();
 
 private slots:
-      void on_addTimerButton_clicked();
-      void on_startButton_clicked();
-      void on_stopButton_clicked();
-      void on_setBoilTimeBox_valueChanged(int t);
-      void on_hideButton_clicked();
-      void on_showButton_clicked();
-      void on_resetButton_clicked();
-      void on_loadRecipesButton_clicked();
-      void on_cancelButton_clicked();
-      void on_limitRingTimeCheckBox_clicked();
-      void on_limitRingTimeSpinBox_valueChanged(int l);
+   void on_addTimerButton_clicked();
+   void on_startButton_clicked();
+   void on_stopButton_clicked();
+   void on_setBoilTimeBox_valueChanged(int t);
+   void on_hideButton_clicked();
+   void on_showButton_clicked();
+   void on_resetButton_clicked();
+   void on_loadRecipesButton_clicked();
+   void on_cancelButton_clicked();
+   void on_limitRingTimeCheckBox_clicked();
+   void on_limitRingTimeSpinBox_valueChanged(int l);
 
-      void decrementTimer();
-      void timesUp();
+   void decrementTimer();
+   void timesUp();
 
 private:
-      MainWindow* mainWindow; //To get currently selected recipe
-      QList<TimerWidget*> * timers;
-      TimerListDialog* timerWindow;
-      BoilTime* boilTime;
-      bool stopped;
-      bool limitAlarmRing;
-      unsigned int alarmLimit;
+   MainWindow* mainWindow; //To get currently selected recipe
+   QList<TimerWidget*> * timers;
+   TimerListDialog* timerWindow;
+   BoilTime* boilTime;
+   bool stopped;
+   bool limitAlarmRing;
+   unsigned int alarmLimit;
 
-      void removeAllTimers();
-      void resetTimers();
-      void updateTime();
-      QString timeToString(int t);
-      void setRingLimits(bool l, unsigned int a);
-      void sortTimers();
-      TimerWidget* createNewTimer();
-      void createTimer();
-      void createTimer(QString n);
-      void createTimer(QString n, int t);
-      //Overload QDialog::reject()
-      void reject();
+   void removeAllTimers();
+   void resetTimers();
+   void updateTime();
+   void setRingLimits(bool l, unsigned int a);
+   void sortTimers();
+   TimerWidget* createNewTimer();
+   void createTimer();
+   void createTimer(QString n);
+   void createTimer(QString n, int t);
+   //Overload QDialog::reject()
+   void reject();
 };
 
 #endif

@@ -1,5 +1,29 @@
 #
-# src/CMakeLists.txt is part of Brewtarget
+# src/CMakeLists.txt is part of Brewtarget, and is Copyright the following
+# authors 2009-2022:
+#  - Aidan Roberts <aidanr67@gmail.com>
+#  - Daniel Moreno <danielm5@users.noreply.github.com>
+#  - Mark de Wever <koraq@xs4all.nl>
+#  - Mattias Måhl <mattias@kejsarsten.com>
+#  - Matt Young<mfsy@yahoo.com>
+#  - Maxime Lavigne <duguigne@gmail.com>
+#  - Mik Firestone <mikfire@gmail.com>
+#  - Philip Greggory Lee <rocketman768@gmail.com>
+#  - Ryan Hoobler <rhoob@yahoo.com>
+#  - Théophane Martin <theophane.m@gmail.com>
+#
+# Brewtarget is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Brewtarget is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 # See also ../CMakeLists.txt
 #
@@ -198,6 +222,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/utils/BtStringConst.cpp
     ${SRCDIR}/utils/BtStringStream.cpp
     ${SRCDIR}/utils/EnumStringMapping.cpp
+    ${SRCDIR}/utils/TimerUtils.cpp
     ${SRCDIR}/WaterButton.cpp
     ${SRCDIR}/WaterDialog.cpp
     ${SRCDIR}/WaterEditor.cpp
@@ -433,14 +458,22 @@ ENDIF()
 # Boost.Stacktrace is a header-only library.  However, you get better results by linking (either statically or
 # dynamically) with a helper library.  Of the various options, it seems like boost_stacktrace_backtrace gives the most
 # functionality over the most platforms.  This has dependencies on:
-#   - libdl on POSIX platforms
+#   - libdl on POSIX platforms -- but see note below
 #   - libbacktrace
 # The latter is an external library on Windows.  On POSIX plaforms it's typically already either installed on the system
 # (eg see https://man7.org/linux/man-pages/man3/backtrace.3.html) or built in to the compiler.  Fortunately, CMake knows
 # how to do the right thing in either case, thanks to https://cmake.org/cmake/help/latest/module/FindBacktrace.html.
 #
+# Just to make things extra fun, in 2021, the GNU compilers did away with libdl and incorporated its functionality into
+# libc, per the announcement of GNU C Library v2.3.4 at
+# https://sourceware.org/pipermail/libc-alpha/2021-August/129718.html.  This means, if we're using the GNU tool chain
+# and libc is v2.3.4 or newer, then we should NOT look for libdl, as we won't find it!
+#
+# Fortunately, CMake has a special variable, CMAKE_DL_LIBS, that is, essentially "whatever library you need to link to
+# for dlopen and dlclose", so we don't need to worry about libc versions.
+#
 IF(NOT WIN32)
-   find_library(DL_LIBRARY dl)
+   set(DL_LIBRARY ${CMAKE_DL_LIBS})
 ENDIF()
 find_package(Backtrace REQUIRED)
 # For the moment, leave default settings for Mac as can't work out how to get the backtrace version of stacktrace
@@ -557,9 +590,7 @@ SET( QT5_USE_MODULES_LIST
    Qt5::Xml
    )
 
-IF( NOT ${NO_QTMULTIMEDIA})
-   SET( QT5_USE_MODULES_LIST ${QT5_USE_MODULES_LIST} Qt5::Multimedia)
-ENDIF()
+SET( QT5_USE_MODULES_LIST ${QT5_USE_MODULES_LIST} Qt5::Multimedia)
 
 #
 # All the libraries
@@ -601,9 +632,7 @@ SET( QT5_USE_MODULES_LIST
    Qt5::Test
    )
 
-IF( NOT ${NO_QTMULTIMEDIA})
 SET( QT5_USE_MODULES_LIST ${QT5_USE_MODULES_LIST} Qt5::Multimedia)
-ENDIF()
 
 # NB Needs to be same as the one a few lines above. Sigh.
 target_link_libraries(
