@@ -37,8 +37,17 @@ jobs:
             lintian \
             rpmlint \
             libxerces-c-dev \
-            libxalan-c-dev \
-            libboost-all-dev
+            libxalan-c-dev
+          cd ~
+          mkdir ~/boost-tmp
+          cd ~/boost-tmp
+          wget https://boostorg.jfrog.io/artifactory/main/release/1.79.0/source/boost_1_79_0.tar.bz2
+          tar --bzip2 -xf boost_1_79_0.tar.bz2
+          cd boost_1_79_0
+          ./bootstrap.sh --prefix=/usr
+          sudo ./b2 install
+          cd ~
+          sudo rm -rf ~/boost-tmp
 
       - name: Apply Patches
         shell: bash
