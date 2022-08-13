@@ -1,9 +1,10 @@
 # Brewtarget Changelog
 
-This changelog is for high-level user-visible changes to Brewtarget, intended
-for consumption by the typical end-user.
+This change log is for high-level user-visible changes to Brewtarget, intended for consumption by the typical end-user.
+Note however that we also process it into a Debian-compliant text change log, so we need to keep the format consistent.
+In particular, the Release Timestamp section is needed as part of this.
 
-## v2.5.0
+## Forthcoming in v2.5.0
 
 ### New Features
 
@@ -13,15 +14,16 @@ for consumption by the typical end-user.
 
 ### New Features
 
-* PostgreSQL 9.5 is now a supported database.
+* PostgreSQL 9.5 is now a supported database
 * SQLite database is automatically backed up
 * Temporary database has been removed, in favor of the automated backups
 * All writes are now live -- no need to save your work.
-* Three new mash types have been added: Batch Sparge, Fly Sparge and No
-  Sparge. The maths should work.
+* Three new mash types have been added: Batch Sparge, Fly Sparge and No Sparge. The maths should work.
 * Units&scale now work for input as well as output
 * UI state persists
-* Improved equipment editor.
+* Improved equipment editor
+* XML import is more robust
+
 
 ### Bug Fixes
 
@@ -48,6 +50,9 @@ for consumption by the typical end-user.
 * Two running Brewtargets Resets Database [#73](https://github.com/Brewtarget/brewtarget/issues/73)
 * Keep inventory when copying a recipe [#72] (https://github.com/Brewtarget/brewtarget/issues/72)
 
+### Release Timestamp
+Sun, 06 Feb 2022 12:02:58 +0100
+
 ## v2.3.1
 
 ### New Features
@@ -60,6 +65,9 @@ for consumption by the typical end-user.
 * Bad time sorting in hop table [#182](https://github.com/Brewtarget/brewtarget/issues/182)
 * First wort hop adjustment 100x too high [#177](https://github.com/Brewtarget/brewtarget/issues/177)
 * OG in Plato wrongly displayed in refracto dialog [#159](https://github.com/Brewtarget/brewtarget/issues/159)
+
+### Release Timestamp
+Sat, 19 Mar 2016 14:27:30 -0700
 
 ## v2.3.0
 
@@ -77,7 +85,8 @@ for consumption by the typical end-user.
 * Oddities in brewday step numbering [#97](https://github.com/Brewtarget/brewtarget/pull/97)
 * Crash in instruction editor [#86](https://github.com/Brewtarget/brewtarget/issues/86)
 
-### Incompatibilities
+### Release Timestamp
+Sun, 10 Jan 2016 13:38:30 -0800
 
 ## v2.2.0
 
@@ -110,7 +119,8 @@ for consumption by the typical end-user.
 * Fixes import/export of brewnotes
 * Bug 1374421 -- cannot delete brewnotes
 
-### Incompatibilities
+### Release Timestamp
+Sun, 09 Nov 2014 13:14:30 -0600
 
 ## v2.1.0
 
@@ -130,7 +140,8 @@ for consumption by the typical end-user.
 * Missing icons for some distributions [#1346342](https://bugs.launchpad.net/bugs/1346342).
 * Failed to launch on OSX with case-sensitive filesystems [#1259374](https://bugs.launchpad.net/bugs/1259374).
 
-### Incompatibilities
+### Release Timestamp
+Sun, 14 Sep 2014 13:41:30 -0500
 
 ## v2.0.3
 
@@ -145,7 +156,8 @@ Minor bugfix release.
 * Windows builds now properly find phonon library [#1226862](https://bugs.launchpad.net/brewtarget/+bug/1226862).
 * Mash wizard does not overshoot target boil size when recipe includes extract or sugar.[#1233744](https://bugs.launchpad.net/brewtarget/+bug/1233744)
 
-### Incompatibilities
+### Release Timestamp
+Sat, 03 May 2014 09:38:30 -0500
 
 ## v2.0.2
 
@@ -177,9 +189,8 @@ This is a minor bugfix release.
 * No longer crashes when copying recipe that has no style selected. [#1233745](https://bugs.launchpad.net/brewtarget/+bug/1233745)
 * Made the manual open in a browser. [#1224584](https://bugs.launchpad.net/brewtarget/+bug/1224584).
 
-### Incompatibilities
-
-None
+### Release Timestamp
+Mon, 27 Jan 2014 08:38:30 -0600
 
 ## v2.0.1
 
@@ -198,9 +209,8 @@ This is a minor bugfix release.
 * Fixed Windows issue causing changes not to be saved [#1133821](https://bugs.launchpad.net/bugs/1133821)
 * Fixed strange boil kettle efficiency calculations in brewnotes [#1121200](https://bugs.launchpad.net/bugs/1121200)
 
-### Incompatibilities
-
-None
+### Release Timestamp
+Mon, 17 Mar 2013 20:41:21 -0600
 
 ## v2.0.0
 
@@ -224,3 +234,21 @@ Numerous
   can still export recipes and ingredients that can be read by earlier
   versions.
 
+### Release Timestamp
+Sat, 29 Dec 2012 09:02:42 -0500
+
+
+## v1.2.4
+
+New upstream release
+
+### Release Timestamp
+Sun, 02 Oct 2011 12:23:44 -0500
+
+## v1.2.3
+
+New upstream release 1.2.3
+* Initial debian release (Closes: #538751)
+
+### Release Timestamp
+Sun, 13 Mar 2011 09:38:00 -0600
