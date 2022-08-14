@@ -176,8 +176,8 @@ std::optional<BtTreeItem::Type> BtTreeView::type(const QModelIndex & index) {
 
 void BtTreeView::mousePressEvent(QMouseEvent * event) {
    if (event->button() == Qt::LeftButton) {
-      dragStart = event->pos();
-      doubleClick = false;
+      this->dragStart = event->pos();
+      this->doubleClick = false;
    }
 
    // Send the event on its way up to the parent
@@ -187,9 +187,9 @@ void BtTreeView::mousePressEvent(QMouseEvent * event) {
 void BtTreeView::mouseDoubleClickEvent(QMouseEvent * event) {
 
    if (event->button() == Qt::LeftButton) {
-      doubleClick = true;
+      this->doubleClick = true;
    } else {
-      doubleClick = false;
+      this->doubleClick = false;
    }
 
    // Send the event on its way up to the parent
@@ -207,7 +207,7 @@ void BtTreeView::mouseMoveEvent(QMouseEvent * event) {
       return;
    }
 
-   if (doubleClick) {
+   if (this->doubleClick) {
       return;
    }
 
@@ -740,6 +740,10 @@ void BtTreeView::deleteSelected(QModelIndexList selected) {
 
    // If we get here, call the model to delete the victims
    this->m_model->deleteSelected(translated);
+
+   // NB: In the case of deleting a Recipe, MainWindow::deleteSelected() has the logic that then chooses a new Recipe to
+   // show in the main edit pane.
+
    return;
 }
 

@@ -37,21 +37,47 @@
 #          - QtDesignerPlugins/CMakeLists.txt
 #
 # Standard make targets:
-#   * make                  -  Compile the source code
+#   * make                  -  Regenerate the makefile if necessary and compile the source code
+#                              NB: Other make targets will NOT regenerate the makefile from this CMakeLists.txt file.
+#                              That means that, if you make a change that affects "make package" or "make clean" etc,
+#                              you must run "make" before you run "make package" or "make clean" etc, otherwise your
+#                              change will not be picked up.  (If necessary, you can interrupt the build that "make"
+#                              kicks off, as, by that point, the makefile will be updated.)
 #   * make clean            -  Delete compiled objects so next build starts from scratch
 #   * sudo make install     -  Install locally
-#   * make package          -  Makes .deb, .rpm, NSIS Installer, and .tar.bz2 binary packages.
+#   * make package          -  Makes .deb, .rpm, NSIS Installer, and .tar.bz2 binary packages.  (TBD What about Mac?)
+#
+#                              NB: On Linux you should run "make changelog" first.  (One day we'll automate this!)
+#
+#                              On Linux, after make package, it's one of the following to install, if you want to
+#                              install from the package rather than direct from the build tree (with sudo make install).
+#                              (This would typically be for installing the package on a different machine then where the
+#                              build was done.)
+#                                 $ sudo dpkg -i brewtarget*.deb
+#                                 $ sudo rpm -i brewtarget*.rpm
+#
+#                              On Mac and Windows environments, the `package` target will create an installer
+#                              that may be executed to finish the installation.
+#
 #   * make package_source   -  Makes a .tar.bz2 source package.
 #
 # Custom make targets:
-#   * make source_doc       -  Makes html documentation of the source in doc/html.
-#   * make changelog
+#   * make plugins          -  Builds the Qt Designer plugins
+#   * make source_doc       -  Makes Doxygen HTML documentation of the source in doc/html
+#   * make changelog        -  Converts the markdown list of changes (CHANGES.markdown) to Debian package format
+#                              changelog
 #   * make install-data
 #   * make install-runtime
 #   * make package_lint     -  Runs lintian and rpmlint on packages
 #
-
 #
+# CMake options
+# If you invoke CMake directly (rather than via make), you can pass the following options with the `-D` flag:
+#   * CMAKE_INSTALL_PREFIX  - /usr/local by default. Set this to /usr on Debian-based systems like Ubuntu.
+#   * DO_RELEASE_BUILD      - OFF by default. If ON, will do a release build. Otherwise, debug build.
+#   * NO_MESSING_WITH_FLAGS - OFF by default. ON means do not add any build flags whatsoever. May override other options.
+#
+
 # Uncomment the next line for slightly verbose build output
 # Alternatively, for very verbose output, invoke make as follows:
 #    $ make VERBOSE=1
@@ -77,13 +103,13 @@ message(STATUS "PROJECT_SOURCE_DIR is ${PROJECT_SOURCE_DIR}")
 #=======================================================================================================================
 #======================================================= Options =======================================================
 #=======================================================================================================================
-OPTION(BUILD_DESIGNER_PLUGINS
+option(BUILD_DESIGNER_PLUGINS
         "If on, you will only build and install the designer plugins."
         OFF)
-OPTION(DO_RELEASE_BUILD
+option(DO_RELEASE_BUILD
         "If on, will do a release build. Otherwise, debug build."
         OFF)
-OPTION(NO_MESSING_WITH_FLAGS
+option(NO_MESSING_WITH_FLAGS
         "On means do not add any build flags whatsoever. May override other options."
         OFF)
 
@@ -112,7 +138,10 @@ set(WINDIR "${repoDir}/win")
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules")
 
 #=================================================== Build directory ===================================================
-set(buildDir "${CMAKE_CURRENT_BINARY_DIR}")
+# It's useful to grab a copy of the base value of CMAKE_CURRENT_BINARY_DIR as it can, under certain circumstances,
+# change during makefile processing.  (Specifically "each directory added by add_subdirectory() will create a binary
+# directory in the build tree, and as it is being processed this variable will be set".)
+#set(CMAKE_CURRENT_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}")
 
 #================================================= Install directories =================================================
 # Note that WIN32 is true "when the target system is Windows, including Win64" (see
@@ -148,8 +177,8 @@ elseif(WIN32)
    # the prefix needs to be empty. Also, seems that the .exe
    # needs to be in bin/. Fucking piece of shit CPack...
    # Can anybody shed some light on this situation?
-   #SET(CMAKE_INSTALL_PREFIX "")
-   SET(CPACK_INSTALL_PREFIX "")
+   #set(CMAKE_INSTALL_PREFIX "")
+   set(CPACK_INSTALL_PREFIX "")
 
    set(installSubDir_data "data")
    set(installSubDir_doc  "doc")
@@ -175,7 +204,7 @@ endif()
 #=================================================== General Settings ==================================================
 #=======================================================================================================================
 # This is needed to enable the add_test() command (used in src/CMakeLists.txt)
-ENABLE_TESTING()
+enable_testing()
 
 #=======================================================================================================================
 #=============================================== Installation Components ===============================================
@@ -188,14 +217,14 @@ set(RUNTIME_INSTALL_COMPONENT "Runtime")
 #=======================================================================================================================
 #================================================= Mac Bundle Settings =================================================
 #=======================================================================================================================
-SET(MACOSX_BUNDLE_BUNDLE_NAME "Brewtarget")
-#SET(MACOSX_BUNDLE_GUI_IDENTIFIER)
-#SET(MACOSX_BUNDLE_INFO_STRING)
-#SET(MACOSX_BUNDLE_BUNDLE_VERSION)
-#SET(MACOSX_BUNDLE_SHORT_VERSION_STRING)
-SET(MACOSX_BUNDLE_LONG_VERSION_STRING ${PROJECT_VERSION})
-SET(MACOSX_BUNDLE_ICON_FILE "BrewtargetIcon.icns")
-SET(MACOSX_BUNDLE_COPYRIGHT "GPLv3")
+set(MACOSX_BUNDLE_BUNDLE_NAME "Brewtarget")
+#set(MACOSX_BUNDLE_GUI_IDENTIFIER)
+#set(MACOSX_BUNDLE_INFO_STRING)
+#set(MACOSX_BUNDLE_BUNDLE_VERSION)
+#set(MACOSX_BUNDLE_SHORT_VERSION_STRING)
+set(MACOSX_BUNDLE_LONG_VERSION_STRING ${PROJECT_VERSION})
+set(MACOSX_BUNDLE_ICON_FILE "BrewtargetIcon.icns")
+set(MACOSX_BUNDLE_COPYRIGHT "GPLv3")
 
 #=======================================================================================================================
 #============================================== Compiler settings & flags ==============================================
@@ -252,7 +281,11 @@ if(WIN32 AND MINGW)
    # MinGW-specific flags.
    #    '-Wl,-subsystem,windows' supresses the output command window.
    #    '-Wl,-s' strips the executable of symbols.
-   SET_TARGET_PROPERTIES( ${fileName_executable} PROPERTIES LINK_FLAGS "-Wl,-enable-stdcall-fixup -Wl,-enable-auto-import -Wl,-enable-runtime-pseudo-reloc -mthreads -Wl,-subsystem,windows")
+   set_target_properties(
+      ${fileName_executable}
+      PROPERTIES
+      LINK_FLAGS "-Wl,-enable-stdcall-fixup -Wl,-enable-auto-import -Wl,-enable-runtime-pseudo-reloc -mthreads -Wl,-subsystem,windows"
+   )
 
    if(TARGET Qt5::windeployqt)
       # execute windeployqt in a tmp directory after build
@@ -311,15 +344,15 @@ endif()
 #
 # example : ADD_PCH_RULE(headers.h myprog_SRCS)
 MACRO (ADD_PCH_RULE  _header_filename _src_list)
-   SET(_gch_filename "${CMAKE_CURRENT_BINARY_DIR}/${_header_filename}.gch")
-   SET(_header "${CMAKE_CURRENT_SOURCE_DIR}/${_header_filename}")
+   set(_gch_filename "${CMAKE_CURRENT_BINARY_DIR}/${_header_filename}.gch")
+   set(_header "${CMAKE_CURRENT_SOURCE_DIR}/${_header_filename}")
 
    LIST(APPEND ${_src_list} ${_gch_filename})
 
    SET (_args ${CMAKE_CXX_FLAGS})
    LIST(APPEND _args -c ${_header} -o ${_gch_filename})
 
-   GET_DIRECTORY_PROPERTY(DIRINC INCLUDE_DIRECTORIES)
+   GET_DIRECTORY_PROPERTY(DIRINC include_directories)
    FOREACH(_inc ${DIRINC})
       LIST(APPEND _args "-I" ${_inc})
    ENDFOREACH(_inc ${DIRINC})
@@ -332,6 +365,8 @@ MACRO (ADD_PCH_RULE  _header_filename _src_list)
                       DEPENDS ${_header})
 ENDMACRO(ADD_PCH_RULE _src_list _header_filename)
 
+# See discussion at https://stackoverflow.com/questions/1138301/precompiled-headers-do-we-really-need-them about the
+# pros and cons of using pre-compiles headers.  For now we keep them turned off.
 #if( UNIX AND NOT APPLE )
 #   SET( precompiled_h "equipment.h" "fermentable.h" "hop.h" "instruction.h" "mash.h" "mashstep.h" "misc.h" "recipe.h" "style.h" "unit.h" "water.h" "yeast.h" "database.h" "brewtarget.h" )
 #   FOREACH( header ${precompiled_h} )
@@ -373,48 +408,73 @@ endif()
 #
 # For the moment, max version we can have here is 5.9.5, because that's what Ubuntu 18.04 topped out at
 #
-SET(QT5_MIN_VERSION 5.9.5)
+set(QT5_MIN_VERSION 5.9.5)
 
-# Automatically run moc on source files when necessary
-SET(CMAKE_AUTOMOC ON)
+# Set the AUTOMOC property on all targets.  This tells CMake to automatically handle the Qt Meta-Object Compiler (moc)
+# preprocessor (ie the thing that handles Qt's C++ extensions), without having to use commands such as QT4_WRAP_CPP(),
+# QT5_WRAP_CPP(), etc.  In particular, it also means we no longer have to manually identify which headers have Q_OBJECT
+# declarations etc.
+set(CMAKE_AUTOMOC ON)
+
+# Set the AUTOUIC property on all targets.  This tells CMake to automatically handle the Qt uic code generator, without
+# having to use commands such as QT4_WRAP_UI(), QT5_WRAP_UI(), etc.
+set(CMAKE_AUTOUIC ON)
+
+# This tells CMake where to look for .ui files when AUTOUIC is on
+set(CMAKE_AUTOUIC_SEARCH_PATHS ${repoDir}/ui)
+
+# Set the AUTORCC property on all targets.  This tells CMake to automatically handle the Qt Resource Compiler (rcc),
+# without having to use commands such as QT4_ADD_RESOURCES(), QT5_ADD_RESOURCES(), etc.
+# Note that you need to add your .qrc file(s) as sources to the target you are building
+set(CMAKE_AUTORCC ON)
+
+# Name of FOLDER for *_autogen targets that are added automatically by CMake for targets for which AUTOMOC is enabled.
+# Note that this replaces AUTOMOC_TARGETS_FOLDER.
+set_property(GLOBAL PROPERTY AUTOGEN_TARGETS_FOLDER ${CMAKE_CURRENT_BINARY_DIR}/autogen)
+
+# Directory where AUTOMOC, AUTOUIC and AUTORCC generate files for the target.
+set_property(GLOBAL PROPERTY AUTOGEN_BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR}/autogen)
+
 # As moc files are generated in the binary dir, tell CMake
 # to always look for includes there:
-SET(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-FIND_PACKAGE(Qt5Core ${QT5_MIN_VERSION} REQUIRED)
-INCLUDE_DIRECTORIES(${Qt5Core_INCLUDE_DIRS})
+find_package(Qt5Core ${QT5_MIN_VERSION} REQUIRED)
+include_directories(${Qt5Core_INCLUDE_DIRS})
 
-FIND_PACKAGE(Qt5Widgets ${QT5_MIN_VERSION} REQUIRED)
-INCLUDE_DIRECTORIES(${Qt5Widgets_INCLUDE_DIRS})
+find_package(Qt5Widgets ${QT5_MIN_VERSION} REQUIRED)
+include_directories(${Qt5Widgets_INCLUDE_DIRS})
 
-FIND_PACKAGE(Qt5Network ${QT5_MIN_VERSION} REQUIRED)
-INCLUDE_DIRECTORIES(${Qt5Network_INCLUDE_DIRS})
+find_package(Qt5Network ${QT5_MIN_VERSION} REQUIRED)
+include_directories(${Qt5Network_INCLUDE_DIRS})
 
-FIND_PACKAGE(Qt5PrintSupport ${QT5_MIN_VERSION} REQUIRED)
-INCLUDE_DIRECTORIES(${Qt5PrintSupport_INCLUDE_DIRS})
+find_package(Qt5PrintSupport ${QT5_MIN_VERSION} REQUIRED)
+include_directories(${Qt5PrintSupport_INCLUDE_DIRS})
 
-FIND_PACKAGE(Qt5Sql ${QT5_MIN_VERSION} REQUIRED)
-INCLUDE_DIRECTORIES(${Qt5Sql_INCLUDE_DIRS})
+find_package(Qt5Sql ${QT5_MIN_VERSION} REQUIRED)
+include_directories(${Qt5Sql_INCLUDE_DIRS})
 
 # This is required to make the deploy scripts pick up the svg plugins
-FIND_PACKAGE(Qt5Svg ${QT5_MIN_VERSION} REQUIRED)
-INCLUDE_DIRECTORIES(${Qt5Svg_INCLUDE_DIRS})
+find_package(Qt5Svg ${QT5_MIN_VERSION} REQUIRED)
+include_directories(${Qt5Svg_INCLUDE_DIRS})
 
-FIND_PACKAGE(Qt5Xml ${QT5_MIN_VERSION} REQUIRED)
-INCLUDE_DIRECTORIES(${Qt5Xml_INCLUDE_DIRS})
+find_package(Qt5Xml ${QT5_MIN_VERSION} REQUIRED)
+include_directories(${Qt5Xml_INCLUDE_DIRS})
 
-FIND_PACKAGE(Qt5Multimedia ${QT5_MIN_VERSION} REQUIRED)
-INCLUDE_DIRECTORIES(${Qt5Multimedia_INCLUDE_DIRS})
+find_package(Qt5Multimedia ${QT5_MIN_VERSION} REQUIRED)
+include_directories(${Qt5Multimedia_INCLUDE_DIRS})
 
-FIND_PACKAGE(Qt5Test ${QT5_MIN_VERSION} REQUIRED)
-INCLUDE_DIRECTORIES(${Qt5Test_INCLUDE_DIRS})
+find_package(Qt5Test ${QT5_MIN_VERSION} REQUIRED)
+include_directories(${Qt5Test_INCLUDE_DIRS})
 
-FIND_PACKAGE(Qt5LinguistTools ${QT5_MIN_VERSION} REQUIRED)
-INCLUDE_DIRECTORIES(${Qt5LinguistTools_INCLUDE_DIRS})
+find_package(Qt5LinguistTools ${QT5_MIN_VERSION} REQUIRED)
+include_directories(${Qt5LinguistTools_INCLUDE_DIRS})
 
-# Fuckin Qt5 requires -fPIC if Qt5 itself was built with -fPIC
+# Qt wants position independent code in certain circumstances - specifically "You must build your code with position
+# independent code if Qt was built with -reduce-relocations. Compile your code with -fPIC (and not with -fPIE)."
 if(Qt5_POSITION_INDEPENDENT_CODE)
-   SET(CMAKE_POSITION_INDEPENDENT_CODE ON)
+   # This will initialize the POSITION_INDEPENDENT_CODE property on all the targets
+   set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 endif()
 
 # There's apparently a whole bunch of extra work we need to do to use Qt on Windows
@@ -422,28 +482,25 @@ if(WIN32)
    find_package(Qt5MultimediaWidgets REQUIRED)
    find_package(Qt5OpenGL REQUIRED)
 
-   get_target_property(QtCore_location Qt5::Core LOCATION_${CMAKE_BUILD_TYPE})
-   get_target_property(QtGui_location Qt5::Gui LOCATION_${CMAKE_BUILD_TYPE})
-   get_target_property(QtMultimedia_location Qt5::Multimedia LOCATION_${CMAKE_BUILD_TYPE})
-   get_target_property(QtMultimediaWidgets_location Qt5::MultimediaWidgets LOCATION_${CMAKE_BUILD_TYPE})
-   get_target_property(QtNetwork_location Qt5::Network LOCATION_${CMAKE_BUILD_TYPE})
-   get_target_property(QtOpenGL_location Qt5::OpenGL LOCATION_${CMAKE_BUILD_TYPE})
-   get_target_property(QtPrintSupport_location Qt5::PrintSupport LOCATION_${CMAKE_BUILD_TYPE})
-   get_target_property(QtSql_location Qt5::Sql LOCATION_${CMAKE_BUILD_TYPE})
-   get_target_property(QtSvg_location Qt5::Svg LOCATION_${CMAKE_BUILD_TYPE})
-   get_target_property(QtWidgets_location Qt5::Widgets LOCATION_${CMAKE_BUILD_TYPE})
-   get_target_property(QtXml_location Qt5::Xml LOCATION_${CMAKE_BUILD_TYPE})
-
-   get_target_property(QtSqliteDriver_location Qt5::QSQLiteDriverPlugin LOCATION_${CMAKE_BUILD_TYPE})
-
-   get_target_property(QtQgif_location Qt5::QGifPlugin LOCATION_${CMAKE_BUILD_TYPE})
-   get_target_property(QtQico_location Qt5::QICOPlugin LOCATION_${CMAKE_BUILD_TYPE})
-   get_target_property(QtQjpeg_location Qt5::QJpegPlugin LOCATION_${CMAKE_BUILD_TYPE})
-   get_target_property(QtQsvg_location Qt5::QSvgPlugin LOCATION_${CMAKE_BUILD_TYPE})
-   get_target_property(QtQtiff_location Qt5::QTiffPlugin LOCATION_${CMAKE_BUILD_TYPE})
-   get_target_property(QtQWindows_location Qt5::QWindowsIntegrationPlugin LOCATION_${CMAKE_BUILD_TYPE})
-
-   get_target_property(QtQsvgIcon_location Qt5::QSvgIconPlugin LOCATION_${CMAKE_BUILD_TYPE})
+   get_target_property(QtCore_location              Qt5::Core                      LOCATION_${CMAKE_BUILD_TYPE})
+   get_target_property(QtGui_location               Qt5::Gui                       LOCATION_${CMAKE_BUILD_TYPE})
+   get_target_property(QtMultimedia_location        Qt5::Multimedia                LOCATION_${CMAKE_BUILD_TYPE})
+   get_target_property(QtMultimediaWidgets_location Qt5::MultimediaWidgets         LOCATION_${CMAKE_BUILD_TYPE})
+   get_target_property(QtNetwork_location           Qt5::Network                   LOCATION_${CMAKE_BUILD_TYPE})
+   get_target_property(QtOpenGL_location            Qt5::OpenGL                    LOCATION_${CMAKE_BUILD_TYPE})
+   get_target_property(QtPrintSupport_location      Qt5::PrintSupport              LOCATION_${CMAKE_BUILD_TYPE})
+   get_target_property(QtQgif_location              Qt5::QGifPlugin                LOCATION_${CMAKE_BUILD_TYPE})
+   get_target_property(QtQico_location              Qt5::QICOPlugin                LOCATION_${CMAKE_BUILD_TYPE})
+   get_target_property(QtQjpeg_location             Qt5::QJpegPlugin               LOCATION_${CMAKE_BUILD_TYPE})
+   get_target_property(QtQsvgIcon_location          Qt5::QSvgIconPlugin            LOCATION_${CMAKE_BUILD_TYPE})
+   get_target_property(QtQsvg_location              Qt5::QSvgPlugin                LOCATION_${CMAKE_BUILD_TYPE})
+   get_target_property(QtQtiff_location             Qt5::QTiffPlugin               LOCATION_${CMAKE_BUILD_TYPE})
+   get_target_property(QtQWindows_location          Qt5::QWindowsIntegrationPlugin LOCATION_${CMAKE_BUILD_TYPE})
+   get_target_property(QtSqliteDriver_location      Qt5::QSQLiteDriverPlugin       LOCATION_${CMAKE_BUILD_TYPE})
+   get_target_property(QtSql_location               Qt5::Sql                       LOCATION_${CMAKE_BUILD_TYPE})
+   get_target_property(QtSvg_location               Qt5::Svg                       LOCATION_${CMAKE_BUILD_TYPE})
+   get_target_property(QtWidgets_location           Qt5::Widgets                   LOCATION_${CMAKE_BUILD_TYPE})
+   get_target_property(QtXml_location               Qt5::Xml                       LOCATION_${CMAKE_BUILD_TYPE})
 
    set(Qt_DLLs            ${QtCore_location}
                           ${QtGui_location}
@@ -474,7 +531,8 @@ if(WIN32)
 
    get_target_property(_qmake_executable Qt5::qmake IMPORTED_LOCATION)
    get_filename_component(QT5_BIN_DIR "${_qmake_executable}" DIRECTORY)
-   FIND_PROGRAM(WINDEPLOYQT_EXECUTABLE windeployqt HINTS "${QT5_BIN_DIR}")
+
+   find_program(WINDEPLOYQT_EXECUTABLE windeployqt HINTS "${QT5_BIN_DIR}")
    if(EXISTS ${WINDEPLOYQT_EXECUTABLE})
       add_executable(Qt5::windeployqt IMPORTED)
       set_target_properties(Qt5::windeployqt PROPERTIES IMPORTED_LOCATION ${WINDEPLOYQT_EXECUTABLE})
@@ -538,16 +596,16 @@ message(STATUS "Using Qt version " ${Qt5Core_VERSION})
 #    https://stackoverflow.com/questions/54333608/boost-stacktrace-not-demangling-names-when-cross-compiled)
 set(Boost_USE_STATIC_LIBS ON)
 if(WIN32)
-FIND_PACKAGE(Boost REQUIRED)
+find_package(Boost REQUIRED)
 ELSEif(APPLE)
-FIND_PACKAGE(Boost REQUIRED)
+find_package(Boost REQUIRED)
 ELSE()
 # TBD Some users report problems getting CMake to find libboost_stacktrace_backtrace on Ubuntu and Gentoo, so disable it
 # for now and fallback to the header-only version
-#FIND_PACKAGE(Boost REQUIRED COMPONENTS stacktrace_backtrace)
-FIND_PACKAGE(Boost REQUIRED)
+#find_package(Boost REQUIRED COMPONENTS stacktrace_backtrace)
+find_package(Boost REQUIRED)
 endif()
-INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
+include_directories(${Boost_INCLUDE_DIRS})
 # Uncomment the next two lines if you want to find where Boost headers and DLLs are on your system
 #message("Boost include directories: " ${Boost_INCLUDE_DIRS})
 #message("Boost libraries: " ${Boost_LIBRARIES})
@@ -592,16 +650,16 @@ message("Backtrace libs " ${DL_LIBRARY} " | " ${Backtrace_LIBRARIES} " | " ${Boo
 #=================================================== Find Xerces-C++ ===================================================
 # CMake already knows how to find and configure Xerces-C++, see
 # https://cmake.org/cmake/help/latest/module/FindXercesC.html
-FIND_PACKAGE(XercesC REQUIRED)
-INCLUDE_DIRECTORIES(${XercesC_INCLUDE_DIRS})
+find_package(XercesC REQUIRED)
+include_directories(${XercesC_INCLUDE_DIRS})
 # Uncomment the next two lines if you want to find where Xerces headers and DLLs are on your system
 #message("Xerces-C++ include directories: " ${XercesC_INCLUDE_DIRS})
 #message("Xerces-C++ libraries: " ${XercesC_LIBRARIES})
 
 #==================================================== Find Xalan-C++ ===================================================
 # Same comments apply here as for Xerces above
-FIND_PACKAGE(XalanC REQUIRED)
-INCLUDE_DIRECTORIES(${XalanC_INCLUDE_DIRS})
+find_package(XalanC REQUIRED)
+include_directories(${XalanC_INCLUDE_DIRS})
 # Uncomment the next two lines if you want to find where Xalan headers and DLLs are on your system
 #message("Xalan-C++ include directories: " ${XalanC_INCLUDE_DIRS})
 #message("Xalan-C++ libraries: " ${XalanC_LIBRARIES})
@@ -647,7 +705,7 @@ configure_file(src/config.in src/config.h)
 #=======================================================================================================================
 # We don't need to list the embedded resource files themselves here, just the "Resource Collection File" that lists what
 # they are.
-set(resourceCollectionFile "${CMAKE_CURRENT_SOURCE_DIR}/brewtarget.qrc")
+set(filesToCompile_qrc "${CMAKE_CURRENT_SOURCE_DIR}/brewtarget.qrc")
 
 #=======================================================================================================================
 #=========================================== Files included with the program ===========================================
@@ -734,23 +792,197 @@ set(filesToInstall_macIcons "${repoDir}/mac/BrewtargetIcon.icns")
 set(filesToInstall_changeLogUncompressed "${repoDir}/CHANGES.markdown")
 
 # This one gets created by make changeLog
-set(filesToInstall_changeLogCompressed "${buildDir}/changelog.gz")
+set(filesToInstall_changeLogCompressed "${CMAKE_CURRENT_BINARY_DIR}/changelog.gz")
 
-#=======================================================================================================================
-# EXPERIMENTAL
-#=======================================================================================================================
 #=======================================================================================================================
 #=========================================== Process other CMakeList.txt files =========================================
 #=======================================================================================================================
-if(${BUILD_DESIGNER_PLUGINS})
-   message(STATUS "Building Qt Designer plugins.")
-#   ADD_SUBDIRECTORY(QtDesignerPlugins)
-   include(QtDesignerPlugins/CMakeLists.txt)
-ELSE()
-   message(STATUS "Building Main Application.")
-#   ADD_SUBDIRECTORY(src)
-   include(src/CMakeLists.txt)
+# We try to restrict QtDesignerPlugins/CMakeLists.txt and src/CMakeLists.txt to just holding lists of source files,
+# otherwise the dependencies and interactions between those files and this one get a bit hard to follow.
+include(QtDesignerPlugins/CMakeLists.txt)
+include(src/CMakeLists.txt)
+
+#=======================================================================================================================
+# Targets
+#=======================================================================================================================
+set(FILES_TO_TRANSLATE ${filesToCompile_cpp}
+                       ${filesToCompile_ui})
+
+#==================================Qt Junk=====================================
+
+# Create the .qm files from the .ts files
+# Per https://doc.qt.io/qt-5/qtlinguist-cmake-qt5-add-translation.html, these get put, by default in the root level of
+# the build directory.  We want them inside a folder, so we set the OUTPUT_LOCATION property for each of the .ts files
+set_property(SOURCE ${filesToInstall_translations} PROPERTY OUTPUT_LOCATION ${CMAKE_CURRENT_BINARY_DIR}/translations)
+qt5_add_translation(QM_FILES ${filesToInstall_translations})
+
+# Add a target for the QM_FILES so that we can add
+# the translations as a dependency for the executable later.
+ADD_CUSTOM_TARGET(translations DEPENDS ${QM_FILES})
+
+#============================Icon for Windows==================================
+
+SET(brewtarget_ICON "")
+
+IF( WIN32 AND MINGW )
+  ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_BINARY_DIR}/src/icon.o
+                     COMMAND windres.exe -I${CMAKE_CURRENT_SOURCE_DIR}
+                     -i${filesToInstall_windowsIcon}
+                     -o${CMAKE_BINARY_DIR}/src/icon.o
+                     DEPENDS ${filesToInstall_windowsIcon}
+  )
+  SET(brewtarget_ICON ${CMAKE_BINARY_DIR}/src/icon.o)
+ELSEIF(WIN32)
+  SET(brewtarget_ICON ${filesToInstall_windowsIcon})
+ENDIF()
+
+#===========================Create the binary==================================
+
+# This intermediate library target simplifies building the main app and the test app from largely the same sources
+# Note that using this is why we can't include src/main.cpp in filesToCompile_cpp.
+add_library(btobjlib
+            OBJECT
+            ${filesToCompile_cpp}
+            ${filesToCompile_qrc})
+
+set_source_files_properties(${filesToInstall_macIcons}
+                              PROPERTIES
+                              MACOSX_PACKAGE_LOCATION "Resources")
+set_source_files_properties(${filesToInstall_data}
+                              PROPERTIES
+                              MACOSX_PACKAGE_LOCATION "Resources")
+set_source_files_properties(${filesToInstall_docs}
+                              PROPERTIES
+                              MACOSX_PACKAGE_LOCATION "Resources/en.lproj")
+set_source_files_properties(${filesToInstall_sounds}
+                              PROPERTIES
+                              MACOSX_PACKAGE_LOCATION "Resources/sounds")
+set_source_files_properties(${QM_FILES}
+                              PROPERTIES
+                              MACOSX_PACKAGE_LOCATION "Resources/translations_qm")
+
+if(APPLE)
+   add_executable(${fileName_executable}
+                  MACOSX_BUNDLE
+                  ${repoDir}/src/main.cpp
+                  ${filesToInstall_macIcons}
+                  ${filesToInstall_data}
+                  ${filesToInstall_docs}
+                  ${filesToInstall_sounds}
+                  ${QM_FILES}
+                  $<TARGET_OBJECTS:btobjlib>)
+else()
+   add_executable(${fileName_executable}
+                  ${repoDir}/src/main.cpp
+                  ${brewtarget_ICON}
+                  $<TARGET_OBJECTS:btobjlib>)
 endif()
+
+add_dependencies(${fileName_executable} translations)
+
+# All the libraries that are used by both the main app and the unit testing app
+set(appAndTestCommonLibraries
+   Qt5::Multimedia
+   Qt5::Network
+   Qt5::PrintSupport
+   Qt5::Sql
+   Qt5::Svg
+   Qt5::Widgets
+   Qt5::Xml
+   ${XercesC_LIBRARIES}
+   ${XalanC_LIBRARIES}
+   ${Boost_LIBRARIES}
+   ${DL_LIBRARY}
+   ${Backtrace_LIBRARIES}
+)
+target_link_libraries(${fileName_executable} ${appAndTestCommonLibraries})
+
+#=================================Tests========================================
+add_executable(brewtarget_tests
+               ${repoDir}/src/unitTests/Testing.cpp
+               ${testing_MOC_SRCS}
+               $<TARGET_OBJECTS:btobjlib>)
+
+# Test app needs all the same libraries as the main app, plus Qt5::Test
+target_link_libraries(brewtarget_tests ${appAndTestCommonLibraries}
+                                       Qt5::Test)
+
+add_test(
+   NAME pstdintTest
+   COMMAND brewtarget_tests pstdintTest
+)
+add_test(
+   NAME recipeCalcTest_allGrain
+   COMMAND brewtarget_tests recipeCalcTest_allGrain
+)
+add_test(
+   NAME postBoilLossOgTest
+   COMMAND brewtarget_tests postBoilLossOgTest
+)
+add_test(
+   NAME testUnitConversions
+   COMMAND brewtarget_tests testUnitConversions
+)
+add_test(
+   NAME testLogRotation
+   COMMAND brewtarget_tests testLogRotation
+)
+#=================================Installs=====================================
+
+# Install executable.
+install(TARGETS ${fileName_executable}
+        BUNDLE DESTINATION .
+        RUNTIME DESTINATION ${installSubDir_bin}
+        COMPONENT ${RUNTIME_INSTALL_COMPONENT})
+
+IF( WIN32 )
+      install(CODE
+      "
+         file(GET_RUNTIME_DEPENDENCIES
+            RESOLVED_DEPENDENCIES_VAR deps
+            UNRESOLVED_DEPENDENCIES_VAR confdeps
+            EXECUTABLES src/${fileName_executable}.exe
+            PRE_EXCLUDE_REGEXES \"^api-ms-win.*\$|^ext-ms.*\$\"
+            POST_EXCLUDE_REGEXES \".*system32.*\"
+            DIRECTORIES ${Mingw_Path}
+         )
+         #message(\"Installing: \${deps}\")
+         #message(\"Not found: \${confdeps}\")
+         FOREACH (fdep IN LISTS deps)
+            message( \"\${fdep}\" )
+            file( INSTALL
+               DESTINATION bin
+               TYPE SHARED_LIBRARY
+               FOLLOW_SYMLINK_CHAIN
+               FILES \"\${fdep}\")
+         ENDFOREACH()
+      ")
+   ENDIF()
+
+# Install the translations.
+install(FILES ${QM_FILES}
+        DESTINATION "${installSubDir_data}/translations_qm"
+        COMPONENT ${DATA_INSTALL_COMPONENT} )
+
+#==================== make plugins = Our Qt Designer plugins
+add_library(plugins SHARED EXCLUDE_FROM_ALL ${filesToCompile_pluginsCpp})
+
+target_compile_definitions(plugins PUBLIC ${QT_DEFINITIONS}
+                                          -DQT_PLUGIN
+                                          -DQT_NO_DEBUG
+                                          -DQT_SHARED)
+
+target_include_directories(plugins PUBLIC ${QT_INCLUDE_DIR}
+                                          ${repoDir}/src)
+
+target_link_directories(plugins PUBLIC ${QT_LIBRARY_DIR})
+
+target_link_libraries(plugins ${QT_LIBRARIES})
+
+# By default only QtCore and QtGui are enabled
+set_target_properties(plugins PROPERTIES QT_USE_QTDESIGNER TRUE)
+
+install(TARGETS plugins EXCLUDE_FROM_ALL DESTINATION ${QT_PLUGINS_DIR}/designer)
 
 #=======================================================================================================================
 #======================================= Install (both locally and for packages) =======================================
@@ -964,13 +1196,17 @@ if(UNIX AND NOT APPLE)
    # This should (I think) save us having to set CPACK_RPM_PACKAGE_REQUIRES manually
    set(CPACK_RPM_PACKAGE_AUTOREQ yes)
 
+   # .:TBD:. Not sure what these are for...
    set(CPACK_RPM_SPEC_MORE_DEFINE "%define ignore \#")
-   set(CPACK_RPM_USER_FILELIST "%ignore /usr" "%ignore /usr/local" "%ignore /usr/local/bin" "%ignore /usr/local/share" "%ignore /usr/local/share/applications")
+   set(CPACK_RPM_USER_FILELIST "%ignore /usr"
+                               "%ignore /usr/local"
+                               "%ignore /usr/local/bin"
+                               "%ignore /usr/local/share"
+                               "%ignore /usr/local/share/applications")
 elseif(WIN32)
    #================================================ Windows Packaging =================================================
    # http://www.thegigsite.com/cmake-2.6.0/CMakeCPackOptions.cmake
    set(CPACK_GENERATOR "NSIS")
-
 
    set(CPACK_NSIS_PACKAGE_NAME "Brewtarget-${PROJECT_VERSION}")
    set(CPACK_NSIS_DISPLAY__NAME "Brewtarget-${PROJECT_VERSION}")
@@ -1004,13 +1240,13 @@ INCLUDE(CPack)
 # These go at the end of the file so that they can use any of the variables created above
 
 # `make install-data` or `make install-runtime`
-ADD_CUSTOM_TARGET(
+add_custom_target(
    install-data
    COMMAND "${CMAKE_COMMAND}"
            -DCOMPONENT=${DATA_INSTALL_COMPONENT}
            -P "${CMAKE_BINARY_DIR}/cmake_install.cmake"
 )
-ADD_CUSTOM_TARGET(
+add_custom_target(
    install-runtime
    DEPENDS ${fileName_executable}
    COMMAND "${CMAKE_COMMAND}"
@@ -1021,9 +1257,9 @@ ADD_CUSTOM_TARGET(
 # Doxygen Custom Target
 FIND_PROGRAM(DOXYGEN_CMD doxygen)
 if(DOXYGEN_CMD)
-  SET(DOXYFILE "${CMAKE_CURRENT_BINARY_DIR}/doc/Doxyfile")
+  set(DOXYFILE "${CMAKE_CURRENT_BINARY_DIR}/doc/Doxyfile")
   CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/doc/Doxyfile.in" ${DOXYFILE})
-  ADD_CUSTOM_TARGET(source_doc
+  add_custom_target(source_doc
                      COMMAND ${DOXYGEN_CMD} ${DOXYFILE}
                      WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/doc"
                   )
@@ -1131,29 +1367,33 @@ if(UNIX AND NOT APPLE)
       COMMENT "Processing ${filesToInstall_changeLogUncompressed} to ${filesToInstall_changeLogCompressed}"
       MAIN_DEPENDENCY ${filesToInstall_changeLogUncompressed}
    )
-   ADD_CUSTOM_TARGET(changelog ALL DEPENDS ${filesToInstall_changeLogCompressed})
+   add_custom_target(changelog ALL DEPENDS ${filesToInstall_changeLogCompressed})
 endif()
 
-# Some extra files for the "make clean" target.
+# Some extra files for the "make clean" target
+# Note that the ADDITIONAL_CLEAN_FILES property does NOT do any sort of glob pattern matching, so we have to use the
+# file command to do that.
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
              APPEND
              PROPERTY ADDITIONAL_CLEAN_FILES ".*~$" # Kate backup files.
                                              "CMakeLists.txt.user" # From QtCreator I think.
                                              "CPackConfig.cmake"
                                              "CPackSourceConfig.cmake")
-set_property(DIRECTORY ${buildDir}
+file(GLOB packagesDebFiles      "${CMAKE_CURRENT_BINARY_DIR}/*.deb")
+file(GLOB packagesRpmFiles      "${CMAKE_CURRENT_BINARY_DIR}/*.rpm")
+file(GLOB packagesTarBz2Files   "${CMAKE_CURRENT_BINARY_DIR}/*.tar.bz2")
+file(GLOB packagesChecksumFiles "${CMAKE_CURRENT_BINARY_DIR}/*.*.sha256")
+set_property(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
              APPEND
-             PROPERTY ADDITIONAL_CLEAN_FILES "*.deb"
-                                             "*.deb.sha256"
-                                             "*.rpm"
-                                             "*.rpm.sha256"
-                                             "*.tar.bz2"
-                                             "*.tar.bz2.sha256")
+             PROPERTY ADDITIONAL_CLEAN_FILES ${packagesDebFiles}
+                                             ${packagesRpmFiles}
+                                             ${packagesTarBz2Files}
+                                             ${packagesChecksumFiles})
 
 # make addframeworks should copy the Qt libraries to the app.
 if(APPLE)
    set(QT_BINARY_DIR "${_qt5Core_install_prefix}/bin")
-   ADD_CUSTOM_TARGET(
+   add_custom_target(
       addframeworks ALL
       COMMAND ${QT_BINARY_DIR}/macdeployqt "Brewtarget.app" -dmg
       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
@@ -1162,7 +1402,7 @@ if(APPLE)
 endif()
 
 if(UNIX AND NOT APPLE)
-   ADD_CUSTOM_TARGET(
+   add_custom_target(
       package_lint
       # Running lintian does a very strict check on the Debian package.  You can find a list of all the error and
       # warning codes at https://lintian.debian.org/tags.

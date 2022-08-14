@@ -290,4 +290,10 @@ private:
    QVariant dataWater(int column);
 };
 
+/**
+ * \brief Convenience function for logging
+ */
+template<class S>
+S & operator<<(S & stream, BtTreeItem::Type const treeItemType);
+
 #endif
