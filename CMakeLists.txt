@@ -271,38 +271,6 @@ if(NOT ${NO_MESSING_WITH_FLAGS})
    endif()
 endif()
 
-# Windows-specific library linking
-if(WIN32 AND MINGW)
-   ############################################################################
-   # Need to set some linker flags that I don't know how to get
-   # automatically.
-   ############################################################################
-
-   # MinGW-specific flags.
-   #    '-Wl,-subsystem,windows' supresses the output command window.
-   #    '-Wl,-s' strips the executable of symbols.
-   set_target_properties(
-      ${fileName_executable}
-      PROPERTIES
-      LINK_FLAGS "-Wl,-enable-stdcall-fixup -Wl,-enable-auto-import -Wl,-enable-runtime-pseudo-reloc -mthreads -Wl,-subsystem,windows"
-   )
-
-   if(TARGET Qt5::windeployqt)
-      # execute windeployqt in a tmp directory after build
-      add_custom_command(TARGET ${fileName_executable}
-         POST_BUILD
-         COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_CURRENT_BINARY_DIR}/windeployqt"
-         COMMAND Qt5::windeployqt --dir "${CMAKE_CURRENT_BINARY_DIR}/windeployqt" --no-translations --compiler-runtime "$<TARGET_FILE_DIR:${fileName_executable}>/$<TARGET_FILE_NAME:${fileName_executable}>"
-   )
-
-   # copy deployment directory during installation
-   install(
-      DIRECTORY
-      "${CMAKE_CURRENT_BINARY_DIR}/windeployqt/"
-      DESTINATION bin
-   )
-   endif()
-endif()
 
 # Mac-specific compilation settings
 if(APPLE AND NOT CMAKE_OSX_ARCHITECTURES)
@@ -876,6 +844,39 @@ else()
                   ${repoDir}/src/main.cpp
                   ${brewtarget_ICON}
                   $<TARGET_OBJECTS:btobjlib>)
+endif()
+
+# Windows-specific library linking
+if(WIN32 AND MINGW)
+   ############################################################################
+   # Need to set some linker flags that I don't know how to get
+   # automatically.
+   ############################################################################
+
+   # MinGW-specific flags.
+   #    '-Wl,-subsystem,windows' supresses the output command window.
+   #    '-Wl,-s' strips the executable of symbols.
+   set_target_properties(
+      ${fileName_executable}
+      PROPERTIES
+      LINK_FLAGS "-Wl,-enable-stdcall-fixup -Wl,-enable-auto-import -Wl,-enable-runtime-pseudo-reloc -mthreads -Wl,-subsystem,windows"
+   )
+
+   if(TARGET Qt5::windeployqt)
+      # execute windeployqt in a tmp directory after build
+      add_custom_command(TARGET ${fileName_executable}
+         POST_BUILD
+         COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_CURRENT_BINARY_DIR}/windeployqt"
+         COMMAND Qt5::windeployqt --dir "${CMAKE_CURRENT_BINARY_DIR}/windeployqt" --no-translations --compiler-runtime "$<TARGET_FILE_DIR:${fileName_executable}>/$<TARGET_FILE_NAME:${fileName_executable}>"
+   )
+
+   # copy deployment directory during installation
+   install(
+      DIRECTORY
+      "${CMAKE_CURRENT_BINARY_DIR}/windeployqt/"
+      DESTINATION bin
+   )
+   endif()
 endif()
 
 add_dependencies(${fileName_executable} translations)
