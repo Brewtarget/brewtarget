@@ -1,6 +1,6 @@
 /*
  * BrewDayScrollWidget.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2022
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -120,12 +120,21 @@ void BrewDayScrollWidget::removeSelectedInstruction() {
    if (row < 0) {
       return;
    }
-   this->recObs->remove(ObjectStoreWrapper::getSharedFromRaw(recIns[row]));
+   this->recObs->remove(ObjectStoreWrapper::getSharedFromRaw(this->recIns[row]));
 
-   if (recIns.isEmpty()) {
+   // After updating the model, this is the simplest way to update the display
+   this->setRecipe(this->recObs);
+
+   if (this->recIns.isEmpty()) {
       btTextEdit->clear();
       btTextEdit->setEnabled(false);
+   } else {
+      if (row > this->recIns.size()) {
+         row = this->recIns.size();
+      }
+      listWidget->setCurrentRow(row);
    }
+
    return;
 }
 
@@ -139,7 +148,11 @@ void BrewDayScrollWidget::pushInstructionUp() {
       return;
    }
 
-   this->recObs->swapInstructions(recIns[row], recIns[row-1]);
+   this->recObs->swapInstructions(this->recIns[row], this->recIns[row-1]);
+
+   // After updating the model, this is the simplest way to update the display
+   this->setRecipe(this->recObs);
+
    listWidget->setCurrentRow(row-1);
    return;
 }
@@ -150,12 +163,15 @@ void BrewDayScrollWidget::pushInstructionDown() {
    }
 
    int row = listWidget->currentRow();
-
    if (row >= listWidget->count() - 1 || row < 0) {
       return;
    }
 
-   this->recObs->swapInstructions(recIns[row], recIns[row+1]);
+   this->recObs->swapInstructions(this->recIns[row], this->recIns[row+1]);
+
+   // After updating the model, this is the simplest way to update the display
+   this->setRecipe(this->recObs);
+
    listWidget->setCurrentRow(row+1);
    return;
 }
@@ -202,16 +218,17 @@ void BrewDayScrollWidget::print(QPrinter *mainPrinter, int action, QFile* outFil
 
 void BrewDayScrollWidget::setRecipe(Recipe* rec) {
    // Disconnect old notifier.
-   if (recObs) {
+   if (this->recObs) {
       disconnect(this->recObs, &Recipe::changed, this, &BrewDayScrollWidget::acceptChanges );
    }
 
-  this->recObs = rec;
-   connect(this->recObs, &Recipe::changed, this, &BrewDayScrollWidget::acceptChanges );
+   this->recObs = rec;
+   connect(this->recObs, &Recipe::changed, this, &BrewDayScrollWidget::acceptChanges);
 
-   recIns =this->recObs->instructions();
-   foreach( Instruction* ins, recIns )
-         connect( ins, &Instruction::changed, this, &BrewDayScrollWidget::acceptInsChanges );
+   recIns = this->recObs->instructions();
+   for (Instruction* ins : recIns) {
+      connect(ins, &Instruction::changed, this, &BrewDayScrollWidget::acceptInsChanges);
+   }
 
    btTextEdit->clear();
    if (recIns.isEmpty()) {
@@ -240,13 +257,19 @@ void BrewDayScrollWidget::insertInstruction() {
       pos = lineEdit_step->text().toInt();
       lineEdit_step->clear();
    }
+
+   qDebug() << Q_FUNC_INFO << "Inserting instruction '" << lineEdit_name->text() << "' at posistion" << pos;
    auto ins = std::make_shared<Instruction>();
    ins->setName(lineEdit_name->text());
    ObjectStoreWrapper::insert(ins);
    lineEdit_name->clear();
 
    pos = qBound(1, pos, this->recIns.size());
-   this->recObs->insertInstruction(ins.get(), pos);
+   this->recObs->insertInstruction(*ins.get(), pos);
+
+   // After updating the model, this is the simplest way to update the display
+   this->setRecipe(this->recObs);
+
    listWidget->setCurrentRow(pos-1);
    return;
 }

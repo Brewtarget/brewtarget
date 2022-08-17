@@ -19,63 +19,63 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef BREWDAYWIDGET_H
-#define BREWDAYWIDGET_H
-
-#include <QMetaProperty>
-#include <QPrinter>
-#include <QSize>
-#include <QTextBrowser>
-#include <QVariant>
-#include <QWidget>
-
-#include "ui_brewDayWidget.h"
-
-// Forward declarations.
-class Recipe;
-
-/*!
- * \class BrewDayWidget
- *
- *
- * \brief Widget that displays the brewday info. Deprecated I believe.
- */
-class BrewDayWidget : public QWidget, public Ui::brewDayWidget
-{
-   Q_OBJECT
-public:
-   BrewDayWidget(QWidget* parent=0);
-   virtual ~BrewDayWidget() {}
-   void setRecipe(Recipe* rec);
-
-   virtual QSize sizeHint() const; // From QWidget
-
-public slots:
-   void insertInstruction();
-   void removeSelectedInstruction();
-   void pushInstructionUp();
-   void pushInstructionDown();
-   void pushInstructionPrint();
-   void pushInstructionPreview();
-   void changed(QMetaProperty, QVariant);
-
-private:
-   void showChanges();
-   void repopulateListWidget();
-   void clear();
-   QString buildTitleTable();
-   QString buildInstructionTable();
-   QString buildFooterTable();
-   QString getCSS();
-
-   Recipe* recObs;
-   QPrinter* printer;
-   QTextBrowser* doc;
-
-   QString cssName;
-
-private slots:
-   bool loadComplete(bool ok);
-};
-
-#endif  /* BREWDAYWIDGET_H */
+///#ifndef BREWDAYWIDGET_H
+///#define BREWDAYWIDGET_H
+///
+///#include <QMetaProperty>
+///#include <QPrinter>
+///#include <QSize>
+///#include <QTextBrowser>
+///#include <QVariant>
+///#include <QWidget>
+///
+///#include "ui_brewDayWidget.h"
+///
+///// Forward declarations.
+///class Recipe;
+///
+////*!
+/// * \class BrewDayWidget
+/// *
+/// *
+/// * \brief Widget that displays the brewday info. Deprecated I believe.
+/// */
+///class BrewDayWidget : public QWidget, public Ui::brewDayWidget
+///{
+///   Q_OBJECT
+///public:
+///   BrewDayWidget(QWidget* parent=0);
+///   virtual ~BrewDayWidget() {}
+///   void setRecipe(Recipe* rec);
+///
+///   virtual QSize sizeHint() const; // From QWidget
+///
+///public slots:
+///   void insertInstruction();
+///   void removeSelectedInstruction();
+///   void pushInstructionUp();
+///   void pushInstructionDown();
+///   void pushInstructionPrint();
+///   void pushInstructionPreview();
+///   void changed(QMetaProperty, QVariant);
+///
+///private:
+///   void showChanges();
+///   void repopulateListWidget();
+///   void clear();
+///   QString buildTitleTable();
+///   QString buildInstructionTable();
+///   QString buildFooterTable();
+///   QString getCSS();
+///
+///   Recipe* recObs;
+///   QPrinter* printer;
+///   QTextBrowser* doc;
+///
+///   QString cssName;
+///
+///private slots:
+///   bool loadComplete(bool ok);
+///};
+///
+///#endif  /* BREWDAYWIDGET_H */

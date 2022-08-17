@@ -137,12 +137,6 @@ set(WINDIR "${repoDir}/win")
 # Location of custom CMake modules. (At the moment, there is only one, which is used for Windows packaging
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules")
 
-#=================================================== Build directory ===================================================
-# It's useful to grab a copy of the base value of CMAKE_CURRENT_BINARY_DIR as it can, under certain circumstances,
-# change during makefile processing.  (Specifically "each directory added by add_subdirectory() will create a binary
-# directory in the build tree, and as it is being processed this variable will be set".)
-#set(CMAKE_CURRENT_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}")
-
 #================================================= Install directories =================================================
 # Note that WIN32 is true "when the target system is Windows, including Win64" (see
 # https://cmake.org/cmake/help/latest/variable/WIN32.html), so this is ALL versions of Windows, not just 32-bit.
@@ -1220,13 +1214,20 @@ elseif(WIN32)
    #  )
 elseif(APPLE)
    #================================================== Mac Packaging ===================================================
-#  set(CPACK_GENERATOR "Bundle")
-#
-#  set(CPACK_BUNDLE_NAME            "${CMAKE_PROJECT_NAME}_${PROJECT_VERSION}")
-#  set(CPACK_BUNDLE_ICON            "${filesToInstall_macIcons}")
-#  set(CPACK_BUNDLE_PLIST           "${filesToInstall_macPropertyList}")
-#  set(CPACK_BUNDLE_STARTUP_COMMAND "${fileName_executable}")
-#
+   # It seems like there are two CPack generators that could potentially be used for Mac:
+   #   - Bundle (https://cmake.org/cmake/help/latest/cpack_gen/bundle.html) which I think is used in conjunction with
+   #     the DragNDrop generator
+   #   - DragNDrop (https://cmake.org/cmake/help/latest/cpack_gen/dmg.html) which generates a DMG disk image from which
+   #     the end user copies the application to her/his Applications folder
+   #   - IFW (https://cmake.org/cmake/help/latest/cpack_gen/ifw.html) which generates a Qt installer
+   # Historically it looks like DMG images were what we released.
+   set(CPACK_GENERATOR "Bundle")
+
+   set(CPACK_BUNDLE_NAME            "${CMAKE_PROJECT_NAME}_${PROJECT_VERSION}")
+   set(CPACK_BUNDLE_ICON            "${filesToInstall_macIcons}")
+   set(CPACK_BUNDLE_PLIST           "${filesToInstall_macPropertyList}")
+   set(CPACK_BUNDLE_STARTUP_COMMAND "${fileName_executable}")
+
    #set(CPACK_GENERATOR "DragNDrop")
    #set(CPACK_DMG_FORMAT "UDBZ")
 endif()
