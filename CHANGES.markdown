@@ -81,6 +81,7 @@ New features, rewrites of several low-level interfaces, changes to the basic dat
 * Crash when creating new Equipment [#634](https://github.com/Brewtarget/brewtarget/issues/634)
 * Crash when importing .xml-file [#280](https://github.com/Brewtarget/brewtarget/issues/280)
 * Creating a new recipe makes the program crash on start-up [#518](https://github.com/Brewtarget/brewtarget/issues/518)
+* Custom instructions aren't added to Recipe [#656](https://github.com/Brewtarget/brewtarget/issues/656)
 * Database performance [#309](https://github.com/Brewtarget/brewtarget/issues/309)
 * DatabaseSchemaHelper::create doesn't define mashstep table properly [#145](https://github.com/Brewtarget/brewtarget/issues/145)
 * DatabaseSchemaHelper() defines hop table incorrectly [#150](https://github.com/Brewtarget/brewtarget/issues/150)

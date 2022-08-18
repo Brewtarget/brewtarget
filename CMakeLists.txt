@@ -1227,9 +1227,8 @@ elseif(APPLE)
    # XML format Information Property List file containing application metadata
    # Note that CFBundleVersion in this file should be the same as PROJECT_VERSION in this one
    set(CPACK_BUNDLE_PLIST           "${filesToInstall_macPropertyList}")
-   # Path to the file (in current build directory) that should be executed when the user opens the bundle.  Can be a
-   # shell-script or a binary.
-   set(CPACK_BUNDLE_STARTUP_COMMAND "${fileName_executable}")
+   # Path to a startup script. This is a path to an executable or script that will be run whenever an end-user double-clicks the generated bundle in the OSX Finder. Optional.
+   #set(CPACK_BUNDLE_STARTUP_COMMAND "${fileName_executable}")
 
    message(STATUS "Building Mac package")
    #set(CPACK_GENERATOR "DragNDrop")
