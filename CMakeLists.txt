@@ -556,9 +556,9 @@ message(STATUS "Using Qt version " ${Qt5Core_VERSION})
 set(Boost_USE_STATIC_LIBS ON)
 if(WIN32)
 find_package(Boost REQUIRED)
-ELSEif(APPLE)
+elseif(APPLE)
 find_package(Boost REQUIRED)
-ELSE()
+else()
 # TBD Some users report problems getting CMake to find libboost_stacktrace_backtrace on Ubuntu and Gentoo, so disable it
 # for now and fallback to the header-only version
 #find_package(Boost REQUIRED COMPONENTS stacktrace_backtrace)
@@ -1197,9 +1197,19 @@ elseif(WIN32)
    # http://www.thegigsite.com/cmake-2.6.0/CMakeCPackOptions.cmake
    set(CPACK_GENERATOR "NSIS")
 
+   # The title displayed at the top of the installer.
    set(CPACK_NSIS_PACKAGE_NAME "Brewtarget-${PROJECT_VERSION}")
-   set(CPACK_NSIS_DISPLAY__NAME "Brewtarget-${PROJECT_VERSION}")
+   # The display name string that appears in the Windows Apps & features in Control Panel
+   set(CPACK_NSIS_DISPLAY_NAME "Brewtarget-${PROJECT_VERSION}")
+   # ?
    set(CPACK_PACKAGE_INSTALL_REGISTRY_KEY "Brewtarget-${PROJECT_VERSION}")
+   # URL to a web site providing more information about your application
+   set(CPACK_NSIS_URL_INFO_ABOUT "https://github.com/Brewtarget/brewtarget")
+
+   # In theory CMake should work out for itself which tool to use for dependency resolution.  In practice, on Windows,
+   # it seems there are issues.  In a MinGW environment we want to use objdump rather than the Visual Studio dumpbin.
+   set(CMAKE_OBJDUMP "objdump")
+
    set(CPACK_NSIS_MODIFY_PATH ON)
 
    # Extra start menu items.
