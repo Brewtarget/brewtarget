@@ -48,7 +48,6 @@ set(filesToCompile_cpp
     ${repoDir}/src/boiltime.cpp
     ${repoDir}/src/BrewDayFormatter.cpp
     ${repoDir}/src/BrewDayScrollWidget.cpp
-    ${repoDir}/src/BrewDayWidget.cpp
     ${repoDir}/src/BrewNoteWidget.cpp
     ${repoDir}/src/brewtarget.cpp
     ${repoDir}/src/BtColor.cpp

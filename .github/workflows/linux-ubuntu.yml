@@ -65,7 +65,7 @@ jobs:
           cmake \
             -DDO_RELEASE_BUILD=ON \
             -DNO_MESSING_WITH_FLAGS=ON \
-            -DEXEC_PREFIX=/usr \
+            --prefix /usr \
             $GITHUB_WORKSPACE
 
       - name: Build

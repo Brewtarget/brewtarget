@@ -96,16 +96,13 @@ cmake_policy(SET CMP0048 NEW)
 #=======================================================================================================================
 #============================================== Project name and Version ===============================================
 #=======================================================================================================================
-project(brewtarget VERSION 2.4.0 LANGUAGES CXX)
+project(brewtarget VERSION 3.0.0 LANGUAGES CXX)
 message(STATUS "Building ${PROJECT_NAME} version ${PROJECT_VERSION}")
 message(STATUS "PROJECT_SOURCE_DIR is ${PROJECT_SOURCE_DIR}")
 
 #=======================================================================================================================
 #======================================================= Options =======================================================
 #=======================================================================================================================
-option(BUILD_DESIGNER_PLUGINS
-        "If on, you will only build and install the designer plugins."
-        OFF)
 option(DO_RELEASE_BUILD
         "If on, will do a release build. Otherwise, debug build."
         OFF)
@@ -626,10 +623,6 @@ include_directories(${XalanC_INCLUDE_DIRS})
 #message("Xalan-C++ include directories: " ${XalanC_INCLUDE_DIRS})
 #message("Xalan-C++ libraries: " ${XalanC_LIBRARIES})
 
-# Shows all the places we are looking for headers
-message(STATUS "CMAKE_SYSTEM_INCLUDE_PATH: ${CMAKE_SYSTEM_INCLUDE_PATH}")
-message(STATUS "CMAKE_INCLUDE_PATH: ${CMAKE_INCLUDE_PATH}")
-
 #========================================= Find MinGW (only needed on Windows) =========================================
 if(WIN32)
 
@@ -645,6 +638,10 @@ if(WIN32)
       endif()
    endif()
 endif()
+
+# Shows all the places we are looking for headers
+message(STATUS "CMAKE_SYSTEM_INCLUDE_PATH: ${CMAKE_SYSTEM_INCLUDE_PATH}")
+message(STATUS "CMAKE_INCLUDE_PATH: ${CMAKE_INCLUDE_PATH}")
 
 include(InstallRequiredSystemLibraries)
 
@@ -780,23 +777,23 @@ qt5_add_translation(QM_FILES ${filesToInstall_translations})
 
 # Add a target for the QM_FILES so that we can add
 # the translations as a dependency for the executable later.
-ADD_CUSTOM_TARGET(translations DEPENDS ${QM_FILES})
+add_custom_target(translations DEPENDS ${QM_FILES})
 
 #============================Icon for Windows==================================
 
-SET(brewtarget_ICON "")
+set(brewtarget_ICON "")
 
-IF( WIN32 AND MINGW )
-  ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_BINARY_DIR}/src/icon.o
+if(WIN32 AND MINGW)
+  add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/src/icon.o
                      COMMAND windres.exe -I${CMAKE_CURRENT_SOURCE_DIR}
                      -i${filesToInstall_windowsIcon}
                      -o${CMAKE_BINARY_DIR}/src/icon.o
                      DEPENDS ${filesToInstall_windowsIcon}
   )
-  SET(brewtarget_ICON ${CMAKE_BINARY_DIR}/src/icon.o)
-ELSEIF(WIN32)
-  SET(brewtarget_ICON ${filesToInstall_windowsIcon})
-ENDIF()
+  set(brewtarget_ICON ${CMAKE_BINARY_DIR}/src/icon.o)
+elseif(WIN32)
+  set(brewtarget_ICON ${filesToInstall_windowsIcon})
+endif()
 
 #===========================Create the binary==================================
 
@@ -990,71 +987,68 @@ install(TARGETS plugins EXCLUDE_FROM_ALL DESTINATION ${QT_PLUGINS_DIR}/designer)
 # When a relative path is given in the DESTINATION option of the install() command, it is interpreted relative to the
 # value of the CMAKE_INSTALL_PREFIX variable.
 #
-if(NOT ${BUILD_DESIGNER_PLUGINS})
+# Install the data
+install(FILES ${filesToInstall_data}
+        DESTINATION ${installSubDir_data}
+        COMPONENT ${DATA_INSTALL_COMPONENT})
 
-   # Install the data
-   install(FILES ${filesToInstall_data}
-           DESTINATION ${installSubDir_data}
+# Install the documentation
+install(FILES ${filesToInstall_docs}
+        DESTINATION ${installSubDir_doc}
+        COMPONENT ${DATA_INSTALL_COMPONENT})
+
+# Install sounds
+install(FILES ${filesToInstall_sounds}
+        DESTINATION "${installSubDir_data}/sounds"
+        COMPONENT ${DATA_INSTALL_COMPONENT})
+
+if(UNIX AND NOT APPLE)
+   #----------- Linux -----------
+   # Install the icons
+   install(FILES ${filesToInstall_icons}
+           DESTINATION "${installSubDir_data}/icons/hicolor/scalable/apps/"
            COMPONENT ${DATA_INSTALL_COMPONENT})
 
-   # Install the documentation
-   install(FILES ${filesToInstall_docs}
+   # Install the .desktop file
+   install(FILES ${filesToInstall_desktop}
+           DESTINATION "${installSubDir_data}/applications"
+           COMPONENT ${DATA_INSTALL_COMPONENT})
+
+   # Install friendly-format change log aka release notes
+   # Note that lintian does not like having a file called CHANGES.markdown in the doc directory, as it thinks it is a
+   # misnamed changelog.Debian.gz (even when changelog.Debian.gz is also present!) so you get a
+   # wrong-name-for-upstream-changelog warning.
+   # The simplest way round this is to rename CHANGES.markdown to RelaseNotes.markdown
+   install(FILES ${filesToInstall_changeLogUncompressed}
+           RENAME "RelaseNotes.markdown"
            DESTINATION ${installSubDir_doc}
            COMPONENT ${DATA_INSTALL_COMPONENT})
 
-   # Install sounds
-   install(FILES ${filesToInstall_sounds}
-           DESTINATION "${installSubDir_data}/sounds"
+   # Debian packages need to have the copyright file in a particular place (/usr/share/doc/PACKAGE/copyright)
+   # RPM packages don't like having duplicate files in the same directory (eg copyright and COPYRIGHT with same
+   # contents).  So the simplest thing is to rename COPYRIGHT to copyright for both.
+   install(FILES "${repoDir}/COPYRIGHT"
+           RENAME "copyright"
+           DESTINATION ${installSubDir_doc}
            COMPONENT ${DATA_INSTALL_COMPONENT})
 
-   if(UNIX AND NOT APPLE)
-      #----------- Linux -----------
-      # Install the icons
-      install(FILES ${filesToInstall_icons}
-              DESTINATION "${installSubDir_data}/icons/hicolor/scalable/apps/"
-              COMPONENT ${DATA_INSTALL_COMPONENT})
+   # Each Debian package (which provides a /usr/share/doc/pkg directory) must install a Debian changelog file in
+   # /usr/share/doc/pkg/changelog.Debian.gz
+   install(FILES ${filesToInstall_changeLogCompressed}
+           RENAME "changelog.Debian.gz"
+           DESTINATION ${installSubDir_doc}
+           COMPONENT ${DATA_INSTALL_COMPONENT})
+else()
+   #----------- Windows and Mac -----------
+   install(FILES "${repoDir}/COPYRIGHT"
+           DESTINATION ${installSubDir_doc}
+           COMPONENT ${DATA_INSTALL_COMPONENT})
+endif()
 
-      # Install the .desktop file
-      install(FILES ${filesToInstall_desktop}
-              DESTINATION "${installSubDir_data}/applications"
-              COMPONENT ${DATA_INSTALL_COMPONENT})
-
-      # Install friendly-format change log aka release notes
-      # Note that lintian does not like having a file called CHANGES.markdown in the doc directory, as it thinks it is a
-      # misnamed changelog.Debian.gz (even when changelog.Debian.gz is also present!) so you get a
-      # wrong-name-for-upstream-changelog warning.
-      # The simplest way round this is to rename CHANGES.markdown to RelaseNotes.markdown
-      install(FILES ${filesToInstall_changeLogUncompressed}
-              RENAME "RelaseNotes.markdown"
-              DESTINATION ${installSubDir_doc}
-              COMPONENT ${DATA_INSTALL_COMPONENT})
-
-      # Debian packages need to have the copyright file in a particular place (/usr/share/doc/PACKAGE/copyright)
-      # RPM packages don't like having duplicate files in the same directory (eg copyright and COPYRIGHT with same
-      # contents).  So the simplest thing is to rename COPYRIGHT to copyright for both.
-      install(FILES "${repoDir}/COPYRIGHT"
-              RENAME "copyright"
-              DESTINATION ${installSubDir_doc}
-              COMPONENT ${DATA_INSTALL_COMPONENT})
-
-      # Each Debian package (which provides a /usr/share/doc/pkg directory) must install a Debian changelog file in
-      # /usr/share/doc/pkg/changelog.Debian.gz
-      install(FILES ${filesToInstall_changeLogCompressed}
-              RENAME "changelog.Debian.gz"
-              DESTINATION ${installSubDir_doc}
-              COMPONENT ${DATA_INSTALL_COMPONENT})
-   else()
-      #----------- Windows and Mac -----------
-      install(FILES "${repoDir}/COPYRIGHT"
-              DESTINATION ${installSubDir_doc}
-              COMPONENT ${DATA_INSTALL_COMPONENT})
-   endif()
-
-   if(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS)
-      install(PROGRAMS ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS}
-              DESTINATION bin
-              COMPONENT System)
-   endif()
+if(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS)
+   install(PROGRAMS ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS}
+           DESTINATION bin
+           COMPONENT System)
 endif()
 
 
@@ -1221,13 +1215,23 @@ elseif(APPLE)
    #     the end user copies the application to her/his Applications folder
    #   - IFW (https://cmake.org/cmake/help/latest/cpack_gen/ifw.html) which generates a Qt installer
    # Historically it looks like DMG images were what we released.
+   #
+   # See some info at https://doc.qt.io/qt-6/macos-deployment.html for "official" Qt way to do things, but this is using
+   # qmake.  This page https://gitlab.kitware.com/cmake/community/-/wikis/doc/cpack/PackageGenerators is more helpful.
    set(CPACK_GENERATOR "Bundle")
 
+   # Bundle name (displayed in the finder underneath the bundle icon).
    set(CPACK_BUNDLE_NAME            "${CMAKE_PROJECT_NAME}_${PROJECT_VERSION}")
+   # Bundle icon (displayed in the /Applications folder, on the dock, etc).
    set(CPACK_BUNDLE_ICON            "${filesToInstall_macIcons}")
+   # XML format Information Property List file containing application metadata
+   # Note that CFBundleVersion in this file should be the same as PROJECT_VERSION in this one
    set(CPACK_BUNDLE_PLIST           "${filesToInstall_macPropertyList}")
+   # Path to the file (in current build directory) that should be executed when the user opens the bundle.  Can be a
+   # shell-script or a binary.
    set(CPACK_BUNDLE_STARTUP_COMMAND "${fileName_executable}")
 
+   message(STATUS "Building Mac package")
    #set(CPACK_GENERATOR "DragNDrop")
    #set(CPACK_DMG_FORMAT "UDBZ")
 endif()
@@ -1338,7 +1342,7 @@ if(UNIX AND NOT APPLE)
       "sed 's/^\\([^ ÷]\\)/  * \\1/' | "
       # Split any long lines.  Make the width less than 80 so we've got a margin go insert spaces at the start of
       # bullet continuation lines.
-      "fold -s --width=76 | "
+      "fold -s --width=72 | "
       # With a lot of help from awk, reindent the lines that were split off from a long bullet line so that they align
       # with that previous line.
       "awk 'BEGIN { inBullet=0 } "
