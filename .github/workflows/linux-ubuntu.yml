@@ -63,9 +63,9 @@ jobs:
         run: |
           umask 022
           cmake \
+            DESTDIR=/usr \
             -DDO_RELEASE_BUILD=ON \
             -DNO_MESSING_WITH_FLAGS=ON \
-            --prefix /usr \
             $GITHUB_WORKSPACE
 
       - name: Build
@@ -88,19 +88,14 @@ jobs:
         shell: bash
         run: |
           umask 022
+          make changelog
           make package
 
-      - name: Lintian
+      - name: LintianAndRmpLint
         continue-on-error: true
         working-directory: ${{github.workspace}}/build
         shell: bash
-        run: lintian --profile debian --pedantic *.deb | less
-
-      - name: rpmlint
-        continue-on-error: true
-        working-directory: ${{github.workspace}}/build
-        shell: bash
-        run: rpmlint *.rpm | less
+        run: make package_lint
 
       - name: Upload Brewtarget Installers
         if: ${{ success() }}
