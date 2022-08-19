@@ -49,11 +49,6 @@ jobs:
           cd ~
           sudo rm -rf ~/boost-tmp
 
-      - name: Apply Patches
-        shell: bash
-        working-directory: ${{github.workspace}}
-        run: ./build-scripts/linux/apply-patches.sh $GITHUB_WORKSPACE
-
       - name: Create Build Environment
         run: cmake -E make_directory ${{github.workspace}}/build
 

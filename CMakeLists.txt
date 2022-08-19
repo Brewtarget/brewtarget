@@ -1207,7 +1207,10 @@ elseif(WIN32)
    set(CPACK_NSIS_URL_INFO_ABOUT "https://github.com/Brewtarget/brewtarget")
 
    # In theory CMake should work out for itself which tool to use for dependency resolution.  In practice, on Windows,
-   # it seems there are issues.  In a MinGW environment we want to use objdump rather than the Visual Studio dumpbin.
+   # it seems there are issues.  In an MSYS2/MinGW environment we want to use objdump rather than the Visual Studio
+   # dumpbin.
+   #
+   # .:TBD:. This is not sufficient to get objdump used...
    set(CMAKE_OBJDUMP "objdump")
 
    set(CPACK_NSIS_MODIFY_PATH ON)
