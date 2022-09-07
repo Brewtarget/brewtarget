@@ -8,7 +8,7 @@ AUTHORS=$(git log --format=' * - %aN <%aE>' $FILE | sort -u)
 cat <<EOF
 /*
  * $FILENAME is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2022
 $AUTHORS
  *
  * Brewtarget is free software: you can redistribute it and/or modify

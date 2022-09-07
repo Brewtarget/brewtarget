@@ -566,8 +566,8 @@ find_package(Boost REQUIRED)
 endif()
 include_directories(${Boost_INCLUDE_DIRS})
 # Uncomment the next two lines if you want to find where Boost headers and DLLs are on your system
-#message("Boost include directories: " ${Boost_INCLUDE_DIRS})
-#message("Boost libraries: " ${Boost_LIBRARIES})
+message( "Boost include directories: " ${Boost_INCLUDE_DIRS} )
+message( "Boost libraries: " ${Boost_LIBRARIES} )
 
 #
 # Extra requirements for Boost Stacktrace
@@ -625,10 +625,20 @@ include_directories(${XalanC_INCLUDE_DIRS})
 
 #========================================= Find MinGW (only needed on Windows) =========================================
 if(WIN32)
+   # This is to detect whether we're using MSYS2 and/or MinGW
+   if(WIN32)
+      execute_process(COMMAND uname OUTPUT_VARIABLE uname)
+      message(STATUS "Uname is " ${uname})
+      if (uname MATCHES "^MSYS" OR uname MATCHES "^MINGW")
+         message(STATUS "Running on MSYS/MinGW")
+         set(MINGW true)
+      endif()
+   endif()
 
    # Find extra MinGW-specific dlls.
    if(MINGW)
       if(NOT MINGW_BIN_DIR)
+         # Yes, it's mingw32-make.exe even on 64-bit systems
          FIND_PATH(MINGW_BIN_DIR "mingw32-make.exe")
       endif()
       if(NOT EXISTS ${MINGW_BIN_DIR})
@@ -636,6 +646,7 @@ if(WIN32)
       ELSE()
          get_filename_component(Mingw_Path ${CMAKE_CXX_COMPILER} PATH)
       endif()
+      message(STATUS "MINGW_BIN_DIR " ${MINGW_BIN_DIR})
    endif()
 endif()
 
@@ -927,29 +938,17 @@ install(TARGETS ${fileName_executable}
         RUNTIME DESTINATION ${installSubDir_bin}
         COMPONENT ${RUNTIME_INSTALL_COMPONENT})
 
-IF( WIN32 )
-      install(CODE
-      "
-         file(GET_RUNTIME_DEPENDENCIES
-            RESOLVED_DEPENDENCIES_VAR deps
-            UNRESOLVED_DEPENDENCIES_VAR confdeps
-            EXECUTABLES src/${fileName_executable}.exe
-            PRE_EXCLUDE_REGEXES \"^api-ms-win.*\$|^ext-ms.*\$\"
-            POST_EXCLUDE_REGEXES \".*system32.*\"
-            DIRECTORIES ${Mingw_Path}
-         )
-         #message(\"Installing: \${deps}\")
-         #message(\"Not found: \${confdeps}\")
-         FOREACH (fdep IN LISTS deps)
-            message( \"\${fdep}\" )
-            file( INSTALL
-               DESTINATION bin
-               TYPE SHARED_LIBRARY
-               FOLLOW_SYMLINK_CHAIN
-               FILES \"\${fdep}\")
-         ENDFOREACH()
-      ")
-   ENDIF()
+if(WIN32)
+   # See https://cmake.org/cmake/help/latest/manual/cmake-generator-expressions.7.html#genex:TARGET_RUNTIME_DLLS
+   # (This replaces use of GET_RUNTIME_DEPENDENCIES which I just could not get to work correctly, despite following all
+   # sorts of helpful advice at
+   # https://stackoverflow.com/questions/62884439/how-to-use-cmake-file-get-runtime-dependencies-in-an-install-statement
+   # I always hit a "Failed to start objdump" error.)
+   add_custom_command(TARGET ${fileName_executable} POST_BUILD
+     COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_RUNTIME_DLLS:brewtarget> $<TARGET_FILE_DIR:brewtarget>
+     COMMAND_EXPAND_LISTS
+   )
+endif()
 
 # Install the translations.
 install(FILES ${QM_FILES}
@@ -1094,8 +1093,11 @@ set(CPACK_PACKAGE_HOMEPAGE_URL "https://github.com/Brewtarget/brewtarget")
 message("CMAKE_PROJECT_NAME = ${CMAKE_PROJECT_NAME}")
 message("PROJECT_VERSION = ${PROJECT_VERSION}")
 set(CPACK_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME}_${PROJECT_VERSION}_${CMAKE_SYSTEM_PROCESSOR}")
-set(CPACK_PACKAGE_INSTALL_DIRECTORY "Brewtarget-${PROJECT_VERSION}")
-set(CPACK_PACKAGE_ICON "${repoDir}/images/brewtarget.svg")
+set(CPACK_PACKAGE_INSTALL_DIRECTORY "brewtarget-${PROJECT_VERSION}")
+if(NOT WIN32)
+   # Setting this on Windows breaks the NSIS packager with some confusing message saying it can't find the file
+   set(CPACK_PACKAGE_ICON "${repoDir}/images/brewtarget.svg")
+endif()
 set(CPACK_PACKAGE_CHECKSUM "SHA256")
 set(CPACK_RESOURCE_FILE_LICENSE "${repoDir}/COPYING.GPLv3")
 set(CPACK_STRIP_FILES true)
@@ -1205,6 +1207,8 @@ elseif(WIN32)
    set(CPACK_PACKAGE_INSTALL_REGISTRY_KEY "Brewtarget-${PROJECT_VERSION}")
    # URL to a web site providing more information about your application
    set(CPACK_NSIS_URL_INFO_ABOUT "https://github.com/Brewtarget/brewtarget")
+   # The name of a *.ico file used as the main icon for the generated install program
+   set(CPACK_NSIS_MUI_ICON ${repoDir}/win/BrewtargetIcon_96.ico)
 
    # In theory CMake should work out for itself which tool to use for dependency resolution.  In practice, on Windows,
    # it seems there are issues.  In an MSYS2/MinGW environment we want to use objdump rather than the Visual Studio
@@ -1212,6 +1216,12 @@ elseif(WIN32)
    #
    # .:TBD:. This is not sufficient to get objdump used...
    set(CMAKE_OBJDUMP "objdump")
+   set(CMAKE_GET_RUNTIME_DEPENDENCIES_TOOL objdump)
+   set(CMAKE_GET_RUNTIME_DEPENDENCIES_COMMAND /usr/bin/objdump)
+
+   message(STATUS "CMAKE_GET_RUNTIME_DEPENDENCIES_PLATFORM is " ${CMAKE_GET_RUNTIME_DEPENDENCIES_PLATFORM})
+   message(STATUS "CMAKE_GET_RUNTIME_DEPENDENCIES_TOOL is "     ${CMAKE_GET_RUNTIME_DEPENDENCIES_TOOL})
+   message(STATUS "CMAKE_GET_RUNTIME_DEPENDENCIES_COMMAND is "  ${CMAKE_GET_RUNTIME_DEPENDENCIES_COMMAND})
 
    set(CPACK_NSIS_MODIFY_PATH ON)
 
@@ -1255,38 +1265,11 @@ INCLUDE(CPack)
 #=======================================================================================================================
 #================================================= Custom Make Targets =================================================
 #=======================================================================================================================
-# These go at the end of the file so that they can use any of the variables created above
-
-# `make install-data` or `make install-runtime`
-add_custom_target(
-   install-data
-   COMMAND "${CMAKE_COMMAND}"
-           -DCOMPONENT=${DATA_INSTALL_COMPONENT}
-           -P "${CMAKE_BINARY_DIR}/cmake_install.cmake"
-)
-add_custom_target(
-   install-runtime
-   DEPENDS ${fileName_executable}
-   COMMAND "${CMAKE_COMMAND}"
-           -DCOMPONENT=${RUNTIME_INSTALL_COMPONENT}
-           -P "${CMAKE_BINARY_DIR}/cmake_install.cmake"
-)
-
-# Doxygen Custom Target
-FIND_PROGRAM(DOXYGEN_CMD doxygen)
-if(DOXYGEN_CMD)
-  set(DOXYFILE "${CMAKE_CURRENT_BINARY_DIR}/doc/Doxyfile")
-  CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/doc/Doxyfile.in" ${DOXYFILE})
-  add_custom_target(source_doc
-                     COMMAND ${DOXYGEN_CMD} ${DOXYFILE}
-                     WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/doc"
-                  )
-endif()
-
-#
-# ChangeLog custom target
 #
 # This is to create a compressed changelog in a Debian-friendly format
+#
+# NB: Even though this is a target you build (with make changelog) before doing make package, this section needs to
+#     appear below the stuff for make package so that we can reuse variables such as CPACK_DEBIAN_PACKAGE_MAINTAINER
 #
 # Our change log (CHANGES.markdown) uses markdown format, with the following raw structure:
 #    ## v1.2.3
@@ -1385,7 +1368,38 @@ if(UNIX AND NOT APPLE)
       COMMENT "Processing ${filesToInstall_changeLogUncompressed} to ${filesToInstall_changeLogCompressed}"
       MAIN_DEPENDENCY ${filesToInstall_changeLogUncompressed}
    )
-   add_custom_target(changelog ALL DEPENDS ${filesToInstall_changeLogCompressed})
+   add_custom_target(changelog DEPENDS ${filesToInstall_changeLogCompressed})
+endif()
+
+#=======================================================================================================================
+#================================================= Custom Make Targets =================================================
+#=======================================================================================================================
+# These go at the end of the file so that they can use any of the variables created above
+
+# `make install-data` or `make install-runtime`
+add_custom_target(
+   install-data
+   COMMAND "${CMAKE_COMMAND}"
+           -DCOMPONENT=${DATA_INSTALL_COMPONENT}
+           -P "${CMAKE_BINARY_DIR}/cmake_install.cmake"
+)
+add_custom_target(
+   install-runtime
+   DEPENDS ${fileName_executable}
+   COMMAND "${CMAKE_COMMAND}"
+           -DCOMPONENT=${RUNTIME_INSTALL_COMPONENT}
+           -P "${CMAKE_BINARY_DIR}/cmake_install.cmake"
+)
+
+# Doxygen Custom Target
+FIND_PROGRAM(DOXYGEN_CMD doxygen)
+if(DOXYGEN_CMD)
+  set(DOXYFILE "${CMAKE_CURRENT_BINARY_DIR}/doc/Doxyfile")
+  CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/doc/Doxyfile.in" ${DOXYFILE})
+  add_custom_target(source_doc
+                     COMMAND ${DOXYGEN_CMD} ${DOXYFILE}
+                     WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/doc"
+                  )
 endif()
 
 # Some extra files for the "make clean" target
@@ -1403,7 +1417,8 @@ file(GLOB packagesTarBz2Files   "${CMAKE_CURRENT_BINARY_DIR}/*.tar.bz2")
 file(GLOB packagesChecksumFiles "${CMAKE_CURRENT_BINARY_DIR}/*.*.sha256")
 set_property(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
              APPEND
-             PROPERTY ADDITIONAL_CLEAN_FILES ${packagesDebFiles}
+             PROPERTY ADDITIONAL_CLEAN_FILES "install_manifest.txt"
+                                             ${packagesDebFiles}
                                              ${packagesRpmFiles}
                                              ${packagesTarBz2Files}
                                              ${packagesChecksumFiles})
