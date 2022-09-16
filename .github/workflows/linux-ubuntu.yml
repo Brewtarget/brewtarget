@@ -83,7 +83,6 @@ jobs:
         shell: bash
         run: |
           umask 022
-          make changelog
           make package
 
       - name: LintianAndRmpLint
