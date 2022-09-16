@@ -37,17 +37,20 @@
 #          - QtDesignerPlugins/CMakeLists.txt
 #
 # Standard make targets:
-#   * make                  -  Regenerate the makefile if necessary and compile the source code
+#   * make                  -  Regenerate the makefile if necessary and compile the source code.  (On Linux, also
+#                              converts the markdown list of changes (CHANGES.markdown) to Debian package format
+#                              changelog.)
+#
 #                              NB: Other make targets will NOT regenerate the makefile from this CMakeLists.txt file.
 #                              That means that, if you make a change that affects "make package" or "make clean" etc,
 #                              you must run "make" before you run "make package" or "make clean" etc, otherwise your
 #                              change will not be picked up.  (If necessary, you can interrupt the build that "make"
 #                              kicks off, as, by that point, the makefile will be updated.)
+#
 #   * make clean            -  Delete compiled objects so next build starts from scratch
 #   * sudo make install     -  Install locally
+#   * make test             -  Run unit tests via CTest
 #   * make package          -  Makes .deb, .rpm, NSIS Installer, and .tar.bz2 binary packages.  (TBD What about Mac?)
-#
-#                              NB: On Linux you should run "make changelog" first.  (One day we'll automate this!)
 #
 #                              On Linux, after make package, it's one of the following to install, if you want to
 #                              install from the package rather than direct from the build tree (with sudo make install).
@@ -64,8 +67,6 @@
 # Custom make targets:
 #   * make plugins          -  Builds the Qt Designer plugins
 #   * make source_doc       -  Makes Doxygen HTML documentation of the source in doc/html
-#   * make changelog        -  Converts the markdown list of changes (CHANGES.markdown) to Debian package format
-#                              changelog
 #   * make install-data
 #   * make install-runtime
 #   * make package_lint     -  Runs lintian and rpmlint on packages
@@ -190,11 +191,12 @@ if(APPLE)
 else()
    set(fileName_executable "brewtarget")
 endif()
+set(fileName_unitTestRunner "${PROJECT_NAME}_tests")
 
 #=======================================================================================================================
 #=================================================== General Settings ==================================================
 #=======================================================================================================================
-# This is needed to enable the add_test() command (used in src/CMakeLists.txt)
+# This is needed to enable the add_test() command
 enable_testing()
 
 #=======================================================================================================================
@@ -262,6 +264,13 @@ if(NOT ${NO_MESSING_WITH_FLAGS})
    endif()
 endif()
 
+# Windows-specific compilation settings
+if(WIN32)
+   # See https://gcc.gnu.org/onlinedocs/gcc-12.2.0/gcc/Link-Options.html#Link-Options for more on GCC linker options
+   # In theory, this statically links all the GCC and MinGW libraries, so we don't have to ship DLLs for them.  In
+   # practice, it seems we still need a fair few other DLLs.
+   set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++ -static")
+endif()
 
 # Mac-specific compilation settings
 if(APPLE AND NOT CMAKE_OSX_ARCHITECTURES)
@@ -398,36 +407,38 @@ set_property(GLOBAL PROPERTY AUTOGEN_BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR}/autog
 # to always look for includes there:
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-find_package(Qt5Core ${QT5_MIN_VERSION} REQUIRED)
-include_directories(${Qt5Core_INCLUDE_DIRS})
-
-find_package(Qt5Widgets ${QT5_MIN_VERSION} REQUIRED)
-include_directories(${Qt5Widgets_INCLUDE_DIRS})
-
-find_package(Qt5Network ${QT5_MIN_VERSION} REQUIRED)
-include_directories(${Qt5Network_INCLUDE_DIRS})
-
-find_package(Qt5PrintSupport ${QT5_MIN_VERSION} REQUIRED)
-include_directories(${Qt5PrintSupport_INCLUDE_DIRS})
-
-find_package(Qt5Sql ${QT5_MIN_VERSION} REQUIRED)
-include_directories(${Qt5Sql_INCLUDE_DIRS})
-
-# This is required to make the deploy scripts pick up the svg plugins
-find_package(Qt5Svg ${QT5_MIN_VERSION} REQUIRED)
-include_directories(${Qt5Svg_INCLUDE_DIRS})
-
-find_package(Qt5Xml ${QT5_MIN_VERSION} REQUIRED)
-include_directories(${Qt5Xml_INCLUDE_DIRS})
-
-find_package(Qt5Multimedia ${QT5_MIN_VERSION} REQUIRED)
-include_directories(${Qt5Multimedia_INCLUDE_DIRS})
-
-find_package(Qt5Test ${QT5_MIN_VERSION} REQUIRED)
-include_directories(${Qt5Test_INCLUDE_DIRS})
-
-find_package(Qt5LinguistTools ${QT5_MIN_VERSION} REQUIRED)
-include_directories(${Qt5LinguistTools_INCLUDE_DIRS})
+#
+# Although it's possible to do individual find_package commands for each bit of Qt we want to use (Qt5Core, Qt5Widgets,
+# Qt5Sql, etc), the newer, and more compact, way of doing things (per
+# https://cmake.org/cmake/help/latest/manual/cmake-qt.7.html and https://doc.qt.io/qt-5/cmake-get-started.html) is to do
+# one find for Qt as a whole and to list the components that we need.  Depending on what versions of CMake and Qt you
+# have installed, the way to find out what components exist varies a bit, but there is a relatively recent list at
+# https://stackoverflow.com/questions/62676472/how-to-list-all-cmake-components-of-qt5
+#
+set(qtCommonComponents
+   Core
+   Gui
+   Multimedia
+   Network
+   PrintSupport
+   Sql
+   Svg          # Required to make the deploy scripts pick up the svg plugins
+   Widgets
+   Xml          # TBD: Not sure we need this any more
+)
+set(qtTestComponents
+   Test
+)
+set(qtToolsComponents
+   LinguistTools
+)
+list(APPEND qtAllComponents ${qtCommonComponents} ${qtToolsComponents} ${qtTestComponents})
+find_package(Qt5 ${QT5_MIN_VERSION} COMPONENTS ${qtAllComponents} REQUIRED)
+# Each package has its own include directories that we need to make sure the compiler knows about
+foreach(qtComponent IN LISTS qtAllComponents)
+   # Sometimes it's useful that part of a variable name can be specified by expanding another variable!
+   include_directories(${Qt5${qtComponent}_INCLUDE_DIRS})
+endforeach()
 
 # Qt wants position independent code in certain circumstances - specifically "You must build your code with position
 # independent code if Qt was built with -reduce-relocations. Compile your code with -fPIC (and not with -fPIE)."
@@ -438,6 +449,7 @@ endif()
 
 # There's apparently a whole bunch of extra work we need to do to use Qt on Windows
 if(WIN32)
+   # .:TBD:.  Not sure whether/why we need these additional Qt components on Windows
    find_package(Qt5MultimediaWidgets REQUIRED)
    find_package(Qt5OpenGL REQUIRED)
 
@@ -461,6 +473,7 @@ if(WIN32)
    get_target_property(QtWidgets_location           Qt5::Widgets                   LOCATION_${CMAKE_BUILD_TYPE})
    get_target_property(QtXml_location               Qt5::Xml                       LOCATION_${CMAKE_BUILD_TYPE})
 
+   # .:TBD:. Not clear whether/where these xxx_DLLs variables get used
    set(Qt_DLLs            ${QtCore_location}
                           ${QtGui_location}
                           ${QtMultimedia_location}
@@ -490,14 +503,21 @@ if(WIN32)
 
    get_target_property(_qmake_executable Qt5::qmake IMPORTED_LOCATION)
    get_filename_component(QT5_BIN_DIR "${_qmake_executable}" DIRECTORY)
+   message("QT5_BIN_DIR = ${QT5_BIN_DIR}")
 
+   #
+   # Per https://doc.qt.io/qt-6/windows-deployment.html, the windeployqt executable creates all the necessary folder
+   # tree "containing the Qt-related dependencies (libraries, QML imports, plugins, and translations) required to run
+   # the application from that folder".
+   #
    find_program(WINDEPLOYQT_EXECUTABLE windeployqt HINTS "${QT5_BIN_DIR}")
    if(EXISTS ${WINDEPLOYQT_EXECUTABLE})
       add_executable(Qt5::windeployqt IMPORTED)
       set_target_properties(Qt5::windeployqt PROPERTIES IMPORTED_LOCATION ${WINDEPLOYQT_EXECUTABLE})
    endif()
 
-   file(GLOB IcuDlls "${QT5_BIN_DIR}/ic*.dll")
+   # International Components for Unicode
+   file(GLOB IcuDlls "${QT5_BIN_DIR}/libicu*.dll")
 
 endif()
 
@@ -761,7 +781,7 @@ set(filesToInstall_macIcons "${repoDir}/mac/BrewtargetIcon.icns")
 
 set(filesToInstall_changeLogUncompressed "${repoDir}/CHANGES.markdown")
 
-# This one gets created by make changeLog
+# See below for how this one gets created from filesToInstall_changeLogUncompressed
 set(filesToInstall_changeLogCompressed "${CMAKE_CURRENT_BINARY_DIR}/changelog.gz")
 
 #=======================================================================================================================
@@ -805,6 +825,17 @@ if(WIN32 AND MINGW)
 elseif(WIN32)
   set(brewtarget_ICON ${filesToInstall_windowsIcon})
 endif()
+
+#===========================File ownership==================================
+#
+# When you do "make install", the last thing CMake does is generate a file called install_manifest.txt in the build
+# output directory containing a list of all the files that were installed.  On Linux, since we need to run make install
+# as root (eg via "sudo make install"), this file would get created with root:root ownership.  That's a problem because
+# you then when you run "make package" as a non-root user, you get an error "file failed to open for writing (Permission
+# denied)".  The workaround is to create the install_manifest.txt file as a normal user when "make" is run, so that
+# "sudo make install" is just updating an existing file rather than creating it from scratch.
+#
+file(TOUCH ${CMAKE_BINARY_DIR}/install_manifest.txt)
 
 #===========================Create the binary==================================
 
@@ -864,72 +895,185 @@ if(WIN32 AND MINGW)
       LINK_FLAGS "-Wl,-enable-stdcall-fixup -Wl,-enable-auto-import -Wl,-enable-runtime-pseudo-reloc -mthreads -Wl,-subsystem,windows"
    )
 
+   # This is from https://stackoverflow.com/questions/41193584/deploy-all-qt-dependencies-when-building
    if(TARGET Qt5::windeployqt)
-      # execute windeployqt in a tmp directory after build
+      # First, execute windeployqt in a temporary directory after the build to create the directory structure and files
+      # that Qt needs on Windows...
       add_custom_command(TARGET ${fileName_executable}
          POST_BUILD
          COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_CURRENT_BINARY_DIR}/windeployqt"
          COMMAND Qt5::windeployqt --dir "${CMAKE_CURRENT_BINARY_DIR}/windeployqt" --no-translations --compiler-runtime "$<TARGET_FILE_DIR:${fileName_executable}>/$<TARGET_FILE_NAME:${fileName_executable}>"
-   )
+      )
 
-   # copy deployment directory during installation
-   install(
-      DIRECTORY
-      "${CMAKE_CURRENT_BINARY_DIR}/windeployqt/"
-      DESTINATION bin
-   )
+      # ...then we copy that directory tree to (a) the installation directory (when "make install" is run) and (b)
+      # the directory where we run the test executable (straight away)
+      install(DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/windeployqt/" DESTINATION bin)
+      add_custom_target(
+         copy-runtime-files ALL
+         COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_BINARY_DIR}/windeployqt/" "${CMAKE_BINARY_DIR}/bin"
+         DEPENDS ${fileName_executable}
+      )
    endif()
 endif()
 
 add_dependencies(${fileName_executable} translations)
 
-# All the libraries that are used by both the main app and the unit testing app
+# All the libraries (except the Qt ones we add immediately below) that are used by both the main app and the unit
+# testing app
 set(appAndTestCommonLibraries
-   Qt5::Multimedia
-   Qt5::Network
-   Qt5::PrintSupport
-   Qt5::Sql
-   Qt5::Svg
-   Qt5::Widgets
-   Qt5::Xml
-   ${XercesC_LIBRARIES}
-   ${XalanC_LIBRARIES}
+   ${Backtrace_LIBRARIES}
    ${Boost_LIBRARIES}
    ${DL_LIBRARY}
-   ${Backtrace_LIBRARIES}
+   ${XalanC_LIBRARIES}
+   ${XercesC_LIBRARIES}
 )
+foreach(qtComponent IN LISTS qtCommonComponents)
+   list(APPEND appAndTestCommonLibraries "Qt5::${qtComponent}")
+endforeach()
+message("appAndTestCommonLibraries: ${appAndTestCommonLibraries}")
 target_link_libraries(${fileName_executable} ${appAndTestCommonLibraries})
 
 #=================================Tests========================================
-add_executable(brewtarget_tests
+# We build the unit test executable in the bin subdirectory because, on Windows, we're going to copy a lot of other
+# files in there (see below).
+add_executable(${fileName_unitTestRunner}
                ${repoDir}/src/unitTests/Testing.cpp
                ${testing_MOC_SRCS}
                $<TARGET_OBJECTS:btobjlib>)
+set_target_properties(${fileName_unitTestRunner} PROPERTIES RUNTIME_OUTPUT_DIRECTORY bin)
 
 # Test app needs all the same libraries as the main app, plus Qt5::Test
-target_link_libraries(brewtarget_tests ${appAndTestCommonLibraries}
-                                       Qt5::Test)
+target_link_libraries(${fileName_unitTestRunner} ${appAndTestCommonLibraries} Qt5::Test)
 
 add_test(
    NAME pstdintTest
-   COMMAND brewtarget_tests pstdintTest
+   COMMAND bin/${fileName_unitTestRunner} pstdintTest
 )
 add_test(
    NAME recipeCalcTest_allGrain
-   COMMAND brewtarget_tests recipeCalcTest_allGrain
+   COMMAND bin/${fileName_unitTestRunner} recipeCalcTest_allGrain
 )
 add_test(
    NAME postBoilLossOgTest
-   COMMAND brewtarget_tests postBoilLossOgTest
+   COMMAND bin/${fileName_unitTestRunner} postBoilLossOgTest
 )
 add_test(
    NAME testUnitConversions
-   COMMAND brewtarget_tests testUnitConversions
+   COMMAND bin/${fileName_unitTestRunner} testUnitConversions
 )
 add_test(
    NAME testLogRotation
-   COMMAND brewtarget_tests testLogRotation
+   COMMAND bin/${fileName_unitTestRunner} testLogRotation
 )
+
+#=======================================================================================================================
+#============================================== Debian-friendly ChangeLog ==============================================
+#=======================================================================================================================
+#
+# This is to create a compressed changelog in a Debian-friendly format
+#
+# NB: Even though this is a target you build (with make changelog) before doing make package, this section needs to
+#     appear below the stuff for make package so that we can reuse variables such as CPACK_DEBIAN_PACKAGE_MAINTAINER
+#
+# Our change log (CHANGES.markdown) uses markdown format, with the following raw structure:
+#    ## v1.2.3
+#
+#    Optional one-line description of the release.
+#
+#    ### New Features
+#
+#    * Blah blah blah
+#    * etc
+#
+#    ### Bug Fixes
+#
+#    * Blah blah blah
+#    * etc
+#
+#    ### Incompatibilities
+#
+#    None
+#
+#    ### Release Timestamp
+#    Sun, 06 Feb 2022 12:02:58 +0100
+#
+# However, per https://www.debian.org/doc/debian-policy/ch-source.html#debian-changelog-debian-changelog, Debian
+# change logs need to be in the following format:
+#    package (version) distribution(s); urgency=urgency
+#      [optional blank line(s), stripped]
+#      * change details
+#      more change details
+#      [blank line(s), included in output of dpkg-parsechangelog]
+#      * even more change details
+#      [optional blank line(s), stripped]
+#     -- maintainer name <email address>[two spaces]  date
+#
+# We are being a bit fast-and-loose in hard-coding the same maintainer name for each release, but I don't thing it's a
+# huge issue.
+#
+# Note that, to keep us on our toes, Debian change log lines are not supposed to be more than 80 characters long.  This
+# is non-trivial, but the ghastly bit of awk below gets us most of the way there.
+#
+if(UNIX AND NOT APPLE)
+   # Note that, whilst using VERBATIM below makes things a lot less painful, we still have to double-escape things -
+   # once for CMake and once for bash.  (Where something is single-escaped it probably means either that CMake needs the
+   # escape and the bash command does not, or vice versa.)  Also, we have more invocations of sed that we strictly need
+   # because it makes things slightly easier to follow and debug.
+   string(
+      CONCAT changeLogProcessCommands
+      "cat ${filesToInstall_changeLogUncompressed} | "
+      # Skip over the introductory headings and paragraphs of CHANGES.markdown until we get to the first version line
+      "sed -n '/^## v/,$p' | "
+      # We want to change the release timestamp to maintainer + timestamp, but we don't want to create too long a line
+      # before we do the fold command below, so use "÷÷maintainer÷÷" as a placeholder for
+      # " -- ${CPACK_DEBIAN_PACKAGE_MAINTAINER}  "
+      "sed -z 's/\\n### Release Timestamp\\n\\([^\\n]*\\)\\n/\\n÷÷maintainer÷÷\\1\\n/g' | "
+      # Join continued lines in bullet lists
+      "sed -z 's/\\n  / /g' | "
+      # Change the version to package (version) etc.  Stick a '÷' on the front of the line to protect it from
+      # modification below
+      "sed 's/^## v\\(.*\\)$/÷${PROJECT_NAME} (\\1-1) unstable\; urgency=low/' | "
+      # Change bullets to sub-bullets
+      "sed 's/^\\* /    - /' | "
+      # Change headings to bullets
+      "sed 's/^### /  * /' | "
+      # Change any lines that don't start with space OR a ÷ character to be bullets
+      "sed 's/^\\([^ ÷]\\)/  * \\1/' | "
+      # Split any long lines.  Make the width less than 80 so we've got a margin go insert spaces at the start of
+      # bullet continuation lines.
+      "fold -s --width=72 | "
+      # With a lot of help from awk, reindent the lines that were split off from a long bullet line so that they align
+      # with that previous line.
+      "awk 'BEGIN { inBullet=0 } "
+      "{"
+         "if (!inBullet) {"
+            "inBullet=match($0, \"^( +)[^ ] \", spaces)\;"
+            "print\;"
+         "} else {"
+            "bulletContinues=match($0, \"^[^ ]\")\;"
+            "if (!bulletContinues) {"
+               "inBullet=match($0, \"^( +)[^ ] \", spaces)\;"
+               "print\;"
+            "} else {"
+               "print spaces[1] \"  \" $0\;"
+            "}"
+         "}"
+      "}' | "
+      # Fix the "÷÷maintainer÷÷" placeholders
+      "sed 's/÷÷maintainer÷÷/ -- ${CPACK_DEBIAN_PACKAGE_MAINTAINER}  /' | "
+      # Remove the protective '÷' from the start of any other lines
+      "sed 's/^÷//' | "
+      "gzip --best -n --to-stdout > ${filesToInstall_changeLogCompressed}"
+   )
+   add_custom_command(
+      TARGET ${fileName_executable} POST_BUILD
+      COMMAND bash -c ${changeLogProcessCommands}
+      VERBATIM
+      COMMENT "Processing ${filesToInstall_changeLogUncompressed} to ${filesToInstall_changeLogCompressed}"
+      MAIN_DEPENDENCY ${filesToInstall_changeLogUncompressed}
+   )
+endif()
+
 #=================================Installs=====================================
 
 # Install executable.
@@ -939,14 +1083,105 @@ install(TARGETS ${fileName_executable}
         COMPONENT ${RUNTIME_INSTALL_COMPONENT})
 
 if(WIN32)
+   #
+   # Shared libraries (DLLs) are a bit complicated on Windows.  Because there is not really a standard package
+   # management system, we can't easily just say "we require libraries X, Y and Z".  Instead, we need to ship said
+   # libraries in the same directory as our application's executable.
+   #
+   # (Of course, if you're just running on the same machine where you built the software, you could simply set the PATH
+   # variable to include all the directories where the DLLs are.  But, in the general case, we're trying to create a
+   # package that does not require people to have pre-installed Qt, Xerces, Xalan, etc.)
+   #
+   # In theory, CMake can work out what DLLs we need and thereby generate a list of files that we need to ensure are
+   # copied as part of the install/packaging.  In practice, everything seems to be a bit more complicated.
+   #
    # See https://cmake.org/cmake/help/latest/manual/cmake-generator-expressions.7.html#genex:TARGET_RUNTIME_DLLS
    # (This replaces use of GET_RUNTIME_DEPENDENCIES which I just could not get to work correctly, despite following all
    # sorts of helpful advice at
    # https://stackoverflow.com/questions/62884439/how-to-use-cmake-file-get-runtime-dependencies-in-an-install-statement
    # I always hit a "Failed to start objdump" error.)
-   add_custom_command(TARGET ${fileName_executable} POST_BUILD
-     COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_RUNTIME_DLLS:brewtarget> $<TARGET_FILE_DIR:brewtarget>
-     COMMAND_EXPAND_LISTS
+   #
+   # Note, however that this does not find all the DLLs we need.  Perhaps this is related to the mention in the CMake
+   # doco that "Many Find Modules produce imported targets with the UNKNOWN type and therefore will be ignored."
+   #
+   add_custom_command(
+      TARGET ${fileName_executable} POST_BUILD
+      COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_RUNTIME_DLLS:brewken> $<TARGET_FILE_DIR:brewken>
+      COMMAND_EXPAND_LISTS
+   )
+
+   #
+   # On MSYS2/MinGW, static libraries (including .dll.a files) live in /mingw64/lib (usually = C:/msys64/mingw64/lib/)
+   # and dynamically linked libraries (aka DLLs) live in /mingw64/bin (usually = C:/msys64/mingw64/bin/).
+   #
+   # First, we do a bit of a hack to get to the bin directory from the lib one, without hard-coding either (in case
+   # your 64-bit instance of MSYS2 is not installed at C:/msys64/).  XercesC_LIBRARIES will be the .dll.a file for
+   # Xerces.  Usually only one library for Xerces, but we take first in the list in case.
+   #
+   list(GET XercesC_LIBRARIES 0 xercesFirstLibrary)
+   get_filename_component(staticLibDir ${xercesFirstLibrary} DIRECTORY)
+   set(dynamicLibDir ${staticLibDir}/../bin)
+   message(STATUS "dynamicLibDir=" ${dynamicLibDir})
+
+   #
+   # Now, for each static library (/mingw64/lib/BlahBlah.dll.a) we know about, we get the corresponding dynamic one
+   # (/mingw64/bin/BlahBlah.dll) and copy it into the same directory as the .exe file.
+   #
+   # Just to make our lives fun, sometimes the static and dynamic versions of the library will have slightly different
+   # naming conventions.  Eg, for Xalan, we have:
+   #    /mingw64/bin/libxalan-c.dll
+   #    /mingw64/lib/libxalan-c.dll.a
+   # But for Xerces, we have:
+   #    /mingw64/lib/libxerces-c.dll.a
+   #    /mingw64/bin/libxerces-c-3-2.dll
+   # Hence the extra '*' in the glob expression below.
+   #
+   # Finally, note that, to make debugging more interesting, the message command below outputs during "make" rather
+   # than during "make install".
+   #
+   foreach(staticLib IN LISTS XercesC_LIBRARIES XalanC_LIBRARIES)
+      get_filename_component(libBaseName ${staticLib} NAME_WE)
+      file(GLOB dynamicallyLinkedLibrary ${dynamicLibDir}/${libBaseName}*.dll)
+      message(STATUS "Install will copy DLL ${dynamicallyLinkedLibrary} to ${installSubDir_bin}")
+      install(FILES ${dynamicallyLinkedLibrary} DESTINATION ${installSubDir_bin})
+   endforeach()
+
+   #
+   # Now, because we're also not assuming that the person running the code will have MSYS2/MinGW installed, we need to
+   # include the DLLs that ship with them and get pulled in by GCC.  I am hoping to find a less manual way of doing this
+   # but have not yet paydirt.
+   #
+   set(msys2Dlls
+      libbrotli
+      libbz2
+      libdouble-conversion
+      libfreetype
+      libglib
+      libgraphite
+      libharfbuzz
+      libiconv
+      libintl
+      libmd4c
+      libpcre
+      libpng16
+      libsqlite3    # You need this IN ADDITION to bin/sqldrivers/qsqlite.dll, which gets installed by windeployqt
+      libxalanMsg
+      libzstd
+      zlib1
+   )
+   foreach(dynamicLib IN LISTS msys2Dlls)
+      file(GLOB dynamicallyLinkedLibrary ${dynamicLibDir}/${dynamicLib}*.dll)
+      message(STATUS "Install will also copy DLL ${dynamicallyLinkedLibrary} to ${installSubDir_bin}")
+      install(FILES ${dynamicallyLinkedLibrary} DESTINATION ${installSubDir_bin})
+   endforeach()
+
+   # These are something to do with International Components for Unicode
+   message(STATUS "Install will copy ${IcuDlls} to ${installSubDir_bin}")
+   install(FILES ${IcuDlls} DESTINATION ${installSubDir_bin})
+
+   add_custom_command(
+      TARGET ${fileName_executable} POST_BUILD
+      COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::Widgets> $<TARGET_FILE_DIR:brewken>
    )
 endif()
 
@@ -954,26 +1189,6 @@ endif()
 install(FILES ${QM_FILES}
         DESTINATION "${installSubDir_data}/translations_qm"
         COMPONENT ${DATA_INSTALL_COMPONENT} )
-
-#==================== make plugins = Our Qt Designer plugins
-add_library(plugins SHARED EXCLUDE_FROM_ALL ${filesToCompile_pluginsCpp})
-
-target_compile_definitions(plugins PUBLIC ${QT_DEFINITIONS}
-                                          -DQT_PLUGIN
-                                          -DQT_NO_DEBUG
-                                          -DQT_SHARED)
-
-target_include_directories(plugins PUBLIC ${QT_INCLUDE_DIR}
-                                          ${repoDir}/src)
-
-target_link_directories(plugins PUBLIC ${QT_LIBRARY_DIR})
-
-target_link_libraries(plugins ${QT_LIBRARIES})
-
-# By default only QtCore and QtGui are enabled
-set_target_properties(plugins PROPERTIES QT_USE_QTDESIGNER TRUE)
-
-install(TARGETS plugins EXCLUDE_FROM_ALL DESTINATION ${QT_PLUGINS_DIR}/designer)
 
 #=======================================================================================================================
 #======================================= Install (both locally and for packages) =======================================
@@ -1261,115 +1476,6 @@ endif()
 # The documentation implies that all the CPACK_* variables need to be set before we include the CPack module, so that's
 # what we do.
 INCLUDE(CPack)
-
-#=======================================================================================================================
-#================================================= Custom Make Targets =================================================
-#=======================================================================================================================
-#
-# This is to create a compressed changelog in a Debian-friendly format
-#
-# NB: Even though this is a target you build (with make changelog) before doing make package, this section needs to
-#     appear below the stuff for make package so that we can reuse variables such as CPACK_DEBIAN_PACKAGE_MAINTAINER
-#
-# Our change log (CHANGES.markdown) uses markdown format, with the following raw structure:
-#    ## v1.2.3
-#
-#    Optional one-line description of the release.
-#
-#    ### New Features
-#
-#    * Blah blah blah
-#    * etc
-#
-#    ### Bug Fixes
-#
-#    * Blah blah blah
-#    * etc
-#
-#    ### Incompatibilities
-#
-#    None
-#
-#    ### Release Timestamp
-#    Sun, 06 Feb 2022 12:02:58 +0100
-#
-# However, per https://www.debian.org/doc/debian-policy/ch-source.html#debian-changelog-debian-changelog, Debian
-# change logs need to be in the following format:
-#    package (version) distribution(s); urgency=urgency
-#      [optional blank line(s), stripped]
-#      * change details
-#      more change details
-#      [blank line(s), included in output of dpkg-parsechangelog]
-#      * even more change details
-#      [optional blank line(s), stripped]
-#     -- maintainer name <email address>[two spaces]  date
-#
-# We are being a bit fast-and-loose in hard-coding the same maintainer name for each release, but I don't thing it's a
-# huge issue.
-#
-# Note that, to keep us on our toes, Debian change log lines are not supposed to be more than 80 characters long.  This
-# is non-trivial, but the ghastly bit of awk below gets us most of the way there.
-#
-if(UNIX AND NOT APPLE)
-   # Note that, whilst using VERBATIM below makes things a lot less painful, we still have to double-escape things -
-   # once for CMake and once for bash.  (Where something is single-escaped it probably means either that CMake needs the
-   # escape and the bash command does not, or vice versa.)  Also, we have more invocations of sed that we strictly need
-   # because it makes things slightly easier to follow and debug.
-   string(
-      CONCAT changeLogProcessCommands
-      "cat ${filesToInstall_changeLogUncompressed} | "
-      # Skip over the introductory headings and paragraphs of CHANGES.markdown until we get to the first version line
-      "sed -n '/^## v/,$p' | "
-      # We want to change the release timestamp to maintainer + timestamp, but we don't want to create too long a line
-      # before we do the fold command below, so use "÷÷maintainer÷÷" as a placeholder for
-      # " -- ${CPACK_DEBIAN_PACKAGE_MAINTAINER}  "
-      "sed -z 's/\\n### Release Timestamp\\n\\([^\\n]*\\)\\n/\\n÷÷maintainer÷÷\\1\\n/g' | "
-      # Join continued lines in bullet lists
-      "sed -z 's/\\n  / /g' | "
-      # Change the version to package (version) etc.  Stick a '÷' on the front of the line to protect it from
-      # modification below
-      "sed 's/^## v\\(.*\\)$/÷${PROJECT_NAME} (\\1-1) unstable\; urgency=low/' | "
-      # Change bullets to sub-bullets
-      "sed 's/^\\* /    - /' | "
-      # Change headings to bullets
-      "sed 's/^### /  * /' | "
-      # Change any lines that don't start with space OR a ÷ character to be bullets
-      "sed 's/^\\([^ ÷]\\)/  * \\1/' | "
-      # Split any long lines.  Make the width less than 80 so we've got a margin go insert spaces at the start of
-      # bullet continuation lines.
-      "fold -s --width=72 | "
-      # With a lot of help from awk, reindent the lines that were split off from a long bullet line so that they align
-      # with that previous line.
-      "awk 'BEGIN { inBullet=0 } "
-      "{"
-         "if (!inBullet) {"
-            "inBullet=match($0, \"^( +)[^ ] \", spaces)\;"
-            "print\;"
-         "} else {"
-            "bulletContinues=match($0, \"^[^ ]\")\;"
-            "if (!bulletContinues) {"
-               "inBullet=match($0, \"^( +)[^ ] \", spaces)\;"
-               "print\;"
-            "} else {"
-               "print spaces[1] \"  \" $0\;"
-            "}"
-         "}"
-      "}' | "
-      # Fix the "÷÷maintainer÷÷" placeholders
-      "sed 's/÷÷maintainer÷÷/ -- ${CPACK_DEBIAN_PACKAGE_MAINTAINER}  /' | "
-      # Remove the protective '÷' from the start of any other lines
-      "sed 's/^÷//' | "
-      "gzip --best -n --to-stdout > ${filesToInstall_changeLogCompressed}"
-   )
-   ADD_CUSTOM_COMMAND(
-      OUTPUT ${filesToInstall_changeLogCompressed}
-      COMMAND bash -c ${changeLogProcessCommands}
-      VERBATIM
-      COMMENT "Processing ${filesToInstall_changeLogUncompressed} to ${filesToInstall_changeLogCompressed}"
-      MAIN_DEPENDENCY ${filesToInstall_changeLogUncompressed}
-   )
-   add_custom_target(changelog DEPENDS ${filesToInstall_changeLogCompressed})
-endif()
 
 #=======================================================================================================================
 #================================================= Custom Make Targets =================================================

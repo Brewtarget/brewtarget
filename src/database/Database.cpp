@@ -626,6 +626,10 @@ bool Database::load() {
    this->pimpl->schemaUpdated = false;
    this->pimpl->loadWasSuccessful = false;
 
+   // We have had problems on Windows with the DB driver not being found in certain circumstances.  This is some extra
+   // diagnostic to help resolve that.
+   qInfo() << Q_FUNC_INFO << "Known DB drivers: " << QSqlDatabase::drivers();
+
    bool dbIsOpen;
    if (this->dbType() == Database::PGSQL ) {
       dbIsOpen = this->pimpl->loadPgSQL(*this);
@@ -654,7 +658,7 @@ bool Database::load() {
    bool schemaErr = false;
    this->pimpl->schemaUpdated = this->pimpl->updateSchema(*this, &schemaErr);
 
-   if( schemaErr ) {
+   if (schemaErr ) {
       if (Brewtarget::isInteractive()) {
          QMessageBox::critical(
             nullptr,
@@ -725,7 +729,7 @@ bool Database::createBlank(QString const& filename)
       QSqlDatabase sqldb = QSqlDatabase::addDatabase("QSQLITE", "blank");
       sqldb.setDatabaseName(filename);
       bool dbIsOpen = sqldb.open();
-      if( ! dbIsOpen )
+      if (! dbIsOpen )
       {
          qWarning() << QString("Database::createBlank(): could not open '%1'").arg(filename);
          return false;
