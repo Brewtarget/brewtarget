@@ -1106,7 +1106,7 @@ if(WIN32)
    #
    add_custom_command(
       TARGET ${fileName_executable} POST_BUILD
-      COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_RUNTIME_DLLS:brewken> $<TARGET_FILE_DIR:brewken>
+      COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_RUNTIME_DLLS:brewtarget> $<TARGET_FILE_DIR:brewtarget>
       COMMAND_EXPAND_LISTS
    )
 
@@ -1181,7 +1181,7 @@ if(WIN32)
 
    add_custom_command(
       TARGET ${fileName_executable} POST_BUILD
-      COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::Widgets> $<TARGET_FILE_DIR:brewken>
+      COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::Widgets> $<TARGET_FILE_DIR:brewtarget>
    )
 endif()
 
