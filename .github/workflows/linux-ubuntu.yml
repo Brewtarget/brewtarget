@@ -26,18 +26,18 @@ jobs:
         shell: bash
         run: |
           sudo apt-get update && sudo apt-get install -y \
+            libqt5multimedia5-plugins \
+            libqt5sql5-psql \
+            libqt5sql5-sqlite \
+            libqt5svg5-dev \
+            libxalan-c-dev \
+            libxerces-c-dev \
+            lintian \
             qtbase5-dev \
+            qtmultimedia5-dev \
             qttools5-dev \
             qttools5-dev-tools \
-            qtmultimedia5-dev \
-            libqt5sql5-sqlite \
-            libqt5sql5-psql \
-            libqt5svg5-dev \
-            libqt5multimedia5-plugins \
-            lintian \
-            rpmlint \
-            libxerces-c-dev \
-            libxalan-c-dev
+            rpmlint
           cd ~
           mkdir ~/boost-tmp
           cd ~/boost-tmp
@@ -85,18 +85,24 @@ jobs:
           umask 022
           make package
 
-      - name: LintianAndRmpLint
+      - name: LintianAndRpmLint
         continue-on-error: true
         working-directory: ${{github.workspace}}/build
         shell: bash
         run: make package_lint
 
-      - name: Upload Brewtarget Installers
+      - name: Upload Linux Packages (Installers)
         if: ${{ success() }}
         uses: actions/upload-artifact@v2
         with:
           name: brewtarget-${{matrix.os}}
-          path: build/brewtarget*
+          path: |
+            build/brewtarget*.rpm
+            build/brewtarget*.rpm.sha256
+            build/brewtarget*.deb
+            build/brewtarget*.deb.sha256
+            build/brewtarget*.tar.bz2
+            build/brewtarget*.tar.bz2.sha256
           retention-days: 7
 
       - name: Recover Debris Artifacts

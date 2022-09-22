@@ -97,9 +97,13 @@ cmake_policy(SET CMP0048 NEW)
 #=======================================================================================================================
 #============================================== Project name and Version ===============================================
 #=======================================================================================================================
+# It's simplest to keep the project name all lower-case as it means we can use a lot more of the default settings for
+# Linux packaging (where directory names etc are expected to be all lower-case)
 project(brewtarget VERSION 3.0.0 LANGUAGES CXX)
 message(STATUS "Building ${PROJECT_NAME} version ${PROJECT_VERSION}")
 message(STATUS "PROJECT_SOURCE_DIR is ${PROJECT_SOURCE_DIR}")
+# Sometimes we do need the capitalised version of the project name
+set(capitalisedProjectName Brewtarget)
 
 #=======================================================================================================================
 #======================================================= Options =======================================================
@@ -187,9 +191,9 @@ endif()
 #=======================================================================================================================
 if(APPLE)
    # Use capital letters. Don't question the APPLE.
-   set(fileName_executable "Brewtarget")
+   set(fileName_executable "${capitalisedProjectName}")
 else()
-   set(fileName_executable "brewtarget")
+   set(fileName_executable "${PROJECT_NAME}")
 endif()
 set(fileName_unitTestRunner "${PROJECT_NAME}_tests")
 
@@ -210,7 +214,7 @@ set(RUNTIME_INSTALL_COMPONENT "Runtime")
 #=======================================================================================================================
 #================================================= Mac Bundle Settings =================================================
 #=======================================================================================================================
-set(MACOSX_BUNDLE_BUNDLE_NAME "Brewtarget")
+set(MACOSX_BUNDLE_BUNDLE_NAME "${capitalisedProjectName}")
 #set(MACOSX_BUNDLE_GUI_IDENTIFIER)
 #set(MACOSX_BUNDLE_INFO_STRING)
 #set(MACOSX_BUNDLE_BUNDLE_VERSION)
@@ -812,7 +816,7 @@ add_custom_target(translations DEPENDS ${QM_FILES})
 
 #============================Icon for Windows==================================
 
-set(brewtarget_ICON "")
+set(desktopIcon "")
 
 if(WIN32 AND MINGW)
   add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/src/icon.o
@@ -821,9 +825,9 @@ if(WIN32 AND MINGW)
                      -o${CMAKE_BINARY_DIR}/src/icon.o
                      DEPENDS ${filesToInstall_windowsIcon}
   )
-  set(brewtarget_ICON ${CMAKE_BINARY_DIR}/src/icon.o)
+  set(desktopIcon ${CMAKE_BINARY_DIR}/src/icon.o)
 elseif(WIN32)
-  set(brewtarget_ICON ${filesToInstall_windowsIcon})
+  set(desktopIcon ${filesToInstall_windowsIcon})
 endif()
 
 #===========================File ownership==================================
@@ -875,7 +879,7 @@ if(APPLE)
 else()
    add_executable(${fileName_executable}
                   ${repoDir}/src/main.cpp
-                  ${brewtarget_ICON}
+                  ${desktopIcon}
                   $<TARGET_OBJECTS:btobjlib>)
 endif()
 
@@ -1264,7 +1268,6 @@ if(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS)
            DESTINATION bin
            COMPONENT System)
 endif()
-
 
 #=======================================================================================================================
 #====================================================== Packaging ======================================================

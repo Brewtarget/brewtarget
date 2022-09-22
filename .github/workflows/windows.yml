@@ -33,21 +33,22 @@ jobs:
         with:
           path: temp
           fetch-depth: 0
+          submodules: recursive
 
       - uses: msys2/setup-msys2@v2
         with:
           msystem: ${{ matrix.msystem }}
           install: >-
+            mingw-w64-${{ matrix.arch }}-boost
             mingw-w64-${{ matrix.arch }}-cmake
-            mingw-w64-${{ matrix.arch }}-make
+            mingw-w64-${{ matrix.arch }}-doxygen
             mingw-w64-${{ matrix.arch }}-gcc
+            mingw-w64-${{ matrix.arch }}-libbacktrace
+            mingw-w64-${{ matrix.arch }}-make
+            mingw-w64-${{ matrix.arch }}-nsis
             mingw-w64-${{ matrix.arch }}-qt5
             mingw-w64-${{ matrix.arch }}-xalan-c
             mingw-w64-${{ matrix.arch }}-xerces-c
-            mingw-w64-${{ matrix.arch }}-doxygen
-            mingw-w64-${{ matrix.arch }}-nsis
-            mingw-w64-${{ matrix.arch }}-boost
-            mingw-w64-${{ matrix.arch }}-libbacktrace
           update: true
           release: true
           path-type: strict
@@ -67,40 +68,42 @@ jobs:
       - name: CMake config
         shell: msys2 {0}
         run: |
-             cd /C/_/build
-             cp ./Locate/Include/Locate.nsh /mingw32/share/nsis/Include/
-             cp ./Locate/Plugin/locate.dll /mingw32/share/nsis/Plugins/ansi/
-             cp ./Nsislog/plugin/nsislog.dll /mingw32/share/nsis/Plugins/ansi
-             cmake .. -DCMAKE_RC_COMPILER:FILEPATH=windres.exe -G "MinGW Makefiles"
+          cd /C/_/build
+          cp ./Locate/Include/Locate.nsh /mingw32/share/nsis/Include/
+          cp ./Locate/Plugin/locate.dll /mingw32/share/nsis/Plugins/ansi/
+          cp ./Nsislog/plugin/nsislog.dll /mingw32/share/nsis/Plugins/ansi
+          cmake .. -DCMAKE_RC_COMPILER:FILEPATH=windres.exe -G "MinGW Makefiles"
 
       - name: Build
         shell: msys2 {0}
         run: |
-             cd /C/_/build
-             pwd
-             cmake --build .
+          cd /C/_/build
+          pwd
+          cmake --build .
 
       - name: Test
         shell: msys2 {0}
         run: |
-             cd /C/_/build
-             cmake --build . --target test
+          cd /C/_/build
+          cmake --build . --target test
 
       - name: Package
         shell: msys2 {0}
         run: |
-             cd /C/_/build
-             cmake --build . --target package --verbose
+          cd /C/_/build
+          cmake --build . --target package --verbose
 
-      - name: "Upload binaries"
+      - name: Upload Windows binaries (installers)
         if: ${{ success()}}
         uses: actions/upload-artifact@v2
         with:
           name: brewtarget-dev-${{ matrix.msystem }}
-          path: C:/_/build/brewtarget*.exe
+          path: |
+            C:/_/build/brewtarget*.exe
+            C:/_/build/brewtarget*.exe.sha256
           retention-days: 7
 
-      - name: "Upload error build"
+      - name: Upload error info from failed build
         if: ${{ failure() }}
         uses: actions/upload-artifact@v2
         with:
