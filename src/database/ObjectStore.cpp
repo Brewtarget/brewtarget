@@ -344,6 +344,7 @@ namespace {
          queryStringAsStream << ", " << orderByBindName;
       }
       queryStringAsStream << ");";
+      qDebug() << Q_FUNC_INFO << "Using query string" << queryString;
 
       //
       // Note that, when we are using bind values, we do NOT want to call the
@@ -419,9 +420,9 @@ namespace {
             sqlQuery.bindValue(orderByBindName, itemNumber);
          }
          qDebug() <<
-            Q_FUNC_INFO << itemNumber << ": " <<
-            GetJunctionTableDefinitionThisPrimaryKeyColumn(junctionTable) << " #" << primaryKey.toInt() << " <-> " <<
-            GetJunctionTableDefinitionOtherPrimaryKeyColumn(junctionTable) << " #" << curValue;
+            Q_FUNC_INFO <<
+            GetJunctionTableDefinitionThisPrimaryKeyColumn(junctionTable) << " #" << primaryKey.toInt() << ":" <<
+            GetJunctionTableDefinitionOtherPrimaryKeyColumn(junctionTable) << "N°" << itemNumber << " is #" << curValue;
 
          if (!sqlQuery.exec()) {
             qCritical() <<
@@ -1068,43 +1069,54 @@ void ObjectStore::loadAll(Database * database) {
       qDebug() << Q_FUNC_INFO << "Reading junction table rows from database query " << queryString;
 
       //
-      // The simplest way to process the data is first to build the raw ID-to-ID map in memory...
+      // The simplest way to process the data is first to build the ID-to-ordered-list-of-IDs map in memory, then loop
+      // through this to pass the data to the relevant objects.
       //
-      QMultiHash<int, QVariant> thisToOtherKeys;
+      int previousPrimaryKey = -1;
+      QMap< int, QVector<int> > thisToOtherKeys;
       while (sqlQuery.next()) {
-         thisToOtherKeys.insert(sqlQuery.value(*GetJunctionTableDefinitionThisPrimaryKeyColumn(junctionTable)).toInt(),
-                                sqlQuery.value(*GetJunctionTableDefinitionOtherPrimaryKeyColumn(junctionTable)));
+         int thisPrimaryKey = sqlQuery.value(*GetJunctionTableDefinitionThisPrimaryKeyColumn(junctionTable)).toInt();
+         int otherPrimaryKey = sqlQuery.value(*GetJunctionTableDefinitionOtherPrimaryKeyColumn(junctionTable)).toInt();
+         qDebug() << Q_FUNC_INFO << "Interim store of" << thisPrimaryKey << "<->" << otherPrimaryKey;
+
+         if (thisPrimaryKey != previousPrimaryKey) {
+            thisToOtherKeys.insert(thisPrimaryKey, QVector<int>{});
+            previousPrimaryKey = thisPrimaryKey;
+         }
+         Q_ASSERT(thisToOtherKeys.contains(thisPrimaryKey));
+         thisToOtherKeys[thisPrimaryKey].append(otherPrimaryKey);
       }
 
-      //
-      // ...then loop through the map to pass the data to the relevant objects
-      //
-      for (int const currentKey : thisToOtherKeys.uniqueKeys()) {
+      for (auto currentMapping = thisToOtherKeys.cbegin();
+           currentMapping != thisToOtherKeys.cend();
+           ++currentMapping) {
          //
          // It's probably a coding error somewhere if there's an associative entry for an object that doesn't exist,
          // but we can recover by ignoring the associative entry
          //
-         if (!this->contains(currentKey)) {
+         if (!this->contains(currentMapping.key())) {
             qCritical() <<
                Q_FUNC_INFO << "Ignoring record in table " << junctionTable.tableName <<
-               " for non-existent object with primary key " << currentKey;
+               " for non-existent object with primary key " << currentMapping.key();
             continue;
          }
 
-         auto currentObject = this->getById(currentKey);
+         auto currentObject = this->getById(currentMapping.key());
+
+         // We assert that we could not have created a mapping without at least one entry
+         Q_ASSERT(currentMapping.value().size() > 0);
 
          //
          // Normally we'd pass a list of all the "other" keys for each "this" object, but if we've been told to assume
          // there is at most one "other" per "this", then we'll pass just the first one we get back for each "this".
          //
-         QList<QVariant> otherKeys = thisToOtherKeys.values(currentKey);
          bool success = false;
          if (junctionTable.assumedNumEntries == ObjectStore::MAX_ONE_ENTRY) {
             qDebug() <<
-               Q_FUNC_INFO << currentObject->metaObject()->className() << " #" << currentKey << ", " <<
-               GetJunctionTableDefinitionPropertyName(junctionTable) << "=" << otherKeys.first();
+               Q_FUNC_INFO << currentObject->metaObject()->className() << " #" << currentMapping.key() << ", " <<
+               GetJunctionTableDefinitionPropertyName(junctionTable) << "=" << currentMapping.value().first();
             success = currentObject->setProperty(*GetJunctionTableDefinitionPropertyName(junctionTable),
-                                                 otherKeys.first());
+                                                 currentMapping.value().first());
          } else {
             //
             // The setProperty function always takes a QVariant, so we need to create one from the QList<QVariant> we
@@ -1113,18 +1125,18 @@ void ObjectStore::loadAll(Database * database) {
             //
             // In particular, we can't just shove a QList<QVariant> (ie otherKeys) inside a QVariant, because passing
             // this to setProperty() (or equivalent calls via the metaObject) will cause Qt to attempt (and fail) to
-            // access a setter that takes QList<QVariant>.  We need to create QVector<int> (ie what the setter expects)
-            // and then wrap that in a QVariant.
+            // access a setter that takes QList<QVariant>.  We need a QVector<int> (ie what the setter expects) wrapped
+            // in a QVariant.
             //
             // To add to the challenge, despite QVariant having a huge number of constructors, none of them will accept
             // QVector<int>, so, instead, you have to use the static function QVariant::fromValue to create a QVariant
             // wrapper around QVector<int>.
             //
-            QVector<int> convertedOtherKeys;
-            for (auto ii : otherKeys) {
-               convertedOtherKeys.append(ii.toInt());
-            }
-            QVariant wrappedConvertedOtherKeys = QVariant::fromValue(convertedOtherKeys);
+            QVariant wrappedConvertedOtherKeys = QVariant::fromValue(currentMapping.value());
+            qDebug() <<
+               Q_FUNC_INFO << currentObject->metaObject()->className() << " #" << currentMapping.key() << ", " <<
+               GetJunctionTableDefinitionPropertyName(junctionTable) << "=" << currentMapping.value() << "(" <<
+               wrappedConvertedOtherKeys << ")";
             success = currentObject->setProperty(*GetJunctionTableDefinitionPropertyName(junctionTable),
                                                  wrappedConvertedOtherKeys);
          }

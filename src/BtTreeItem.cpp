@@ -497,3 +497,22 @@ bool BtTreeItem::showMe() const {
 void BtTreeItem::setShowMe(bool val) {
    m_showMe = val;
 }
+
+template<class S>
+S & operator<<(S & stream, BtTreeItem::Type const treeItemType) {
+   std::optional<QString> itemTypeAsString = itemTypeToName.enumToString(treeItemType);
+   if (itemTypeAsString) {
+      stream << *itemTypeAsString;
+   } else {
+      // This is a coding error
+      stream << "Unrecognised tree item type: " << static_cast<int>(treeItemType);
+   }
+   return stream;
+}
+
+//
+// Instantiate the above template function for the types that are going to use it
+// (This is all just a trick to allow the template definition to be here in the .cpp file and not in the header.)
+//
+template QDebug & operator<<(QDebug & stream, BtTreeItem::Type const treeItemType);
+template QTextStream & operator<<(QTextStream & stream, BtTreeItem::Type const treeItemType);

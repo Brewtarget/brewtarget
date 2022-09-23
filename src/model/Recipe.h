@@ -1,6 +1,6 @@
 /*
  * model/Recipe.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2022
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Kregg K <gigatropolis@yahoo.com>
  * - Matt Young <mfsy@yahoo.com>
@@ -153,7 +153,7 @@ public:
    };
 
    //! \brief The type of recipe
-   enum Type { Extract, PartialMash, AllGrain };
+   enum class Type { Extract, PartialMash, AllGrain };
    Q_ENUMS(Type)
 
    //! \brief The \b Type
@@ -364,7 +364,7 @@ public:
    //! \brief Remove all instructions.
    void clearInstructions();
    //! \brief Insert instruction ins into slot pos.
-   void insertInstruction(Instruction * ins, int pos);
+   void insertInstruction(Instruction const & ins, int pos);
    //! \brief Automagically generate a list of instructions.
    void generateInstructions();
    /*!
@@ -489,8 +489,8 @@ public:
    // Other junk.
    QVector<PreInstruction> mashInstructions(double timeRemaining, double totalWaterAdded_l, unsigned int size);
    QVector<PreInstruction> mashSteps();
-   QVector<PreInstruction> hopSteps(Hop::Use type = Hop::Boil);
-   QVector<PreInstruction> miscSteps(Misc::Use type = Misc::Boil);
+   QVector<PreInstruction> hopSteps(Hop::Use type = Hop::Use::Boil);
+   QVector<PreInstruction> miscSteps(Misc::Use type = Misc::Use::Boil);
    PreInstruction boilFermentablesPre(double timeRemaining);
    bool hasBoilFermentable();
    bool hasBoilExtract();

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- See https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/AboutInformationPropertyListFiles.html
+     for more info on property list files such as this one -->
 <plist version="1.0">
 <dict>
    <key>CFBundleDocumentTypes</key>
@@ -24,6 +26,6 @@
    <key>CFBundlePackageType</key>
    <string>APPL</string>
    <key>CFBundleVersion</key>
-   <string>2.2.0</string>
+   <string>3.0.0</string>
 </dict>
 </plist>

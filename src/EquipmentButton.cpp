@@ -2,7 +2,7 @@
  * EquipmentButton.cpp is part of Brewtarget, and is copyright the following
  * authors 2009-2021:
  *   • Brian Rower <brian.rower@gmail.com>
- *   • Mat Young <mfsy@yahoo.com>
+ *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
  *   • Philip Greggory Lee <rocketman768@gmail.com>
  *
