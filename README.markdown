@@ -13,6 +13,8 @@ export and import recipes in BeerXML, allowing you to easily share recipes with
 friends who use BeerSmith or other programs. All of this means that Brewtarget
 is your single, free, go-to tool when crafting your beer recipes.
 
+### Please note that the latest releases are [Github](https://github.com/Brewtarget/brewtarget/) and that the old brewtarget.org website is no longer maintained.
+
 ## Authors
 
 * Adam Hawes <ach@hawes.net.au>
