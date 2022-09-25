@@ -128,8 +128,13 @@ void PersistentSettings::initialise(QString customUserDataDir) {
       userDataDir.setPath(customUserDataDir);
    } else {
       userDataDir.setPath(
+         // Note that Brewtarget differs from Brewken in its default location for the database.  Specifically,
+         // Brewtarget puts it in the same directory as the logging and conf files (~/.config/brewtarget/ on Linux)
+         // Brewken puts it QStandardPaths::AppDataLocation (which, for Brewtarget, would be ~/.local/share/brewtarget/
+         // on Linux).  This is a slightly more logical location, but we don't want to change directories for existing
+         // Brewtarget users.
          PersistentSettings::value(PersistentSettings::Names::UserDataDirectory,
-                                   QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)).toString()
+                                   QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation)).toString()
       );
    }
 

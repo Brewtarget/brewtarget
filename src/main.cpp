@@ -88,13 +88,9 @@ int main(int argc, char **argv) {
    //
    QApplication app(argc, argv);
    app.setOrganizationDomain("brewtarget.com");
-   app.setApplicationName(
-#ifdef QT_DEBUG
-      "brewtarget-debug"
-#else
-      "brewtarget"
-#endif
-   );
+   // We used to vary the application name (and therefore location of config files etc) depending on whether we're
+   // building with debug or release version of Qt, but on the whole I don't think this is helpful
+   app.setApplicationName("brewtarget");
    app.setApplicationVersion(VERSIONSTRING);
 
    // Process command-line options relatively early as some may override other settings
@@ -183,9 +179,13 @@ int main(int argc, char **argv) {
    if (parser.isSet(createBlankDBOption)) createBlankDb(parser.value(createBlankDBOption));
 
    try {
-      qInfo() << "Starting Brewtarget v" << VERSIONSTRING << " on " << QSysInfo::prettyProductName();
+      qInfo() <<
+         "Starting Brewtarget v" << VERSIONSTRING << " (app name" << app.applicationName() << ") on " <<
+         QSysInfo::prettyProductName();
       qInfo() << "Log directory:" << Logging::getDirectory().absolutePath();
       qInfo() << "Using Qt runtime v" << qVersion() << " (compiled against Qt v" << QT_VERSION_STR << ")";
+      qInfo() << "Configuration directory:" << PersistentSettings::getConfigDir().absolutePath();
+      qInfo() << "Data directory:" << PersistentSettings::getUserDataDir().absolutePath();
       qDebug() << Q_FUNC_INFO << "Library Paths:" << qApp->libraryPaths();
 
       auto mainAppReturnValue = Brewtarget::run();
