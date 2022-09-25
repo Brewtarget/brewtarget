@@ -1,6 +1,6 @@
 /*
  * database/ObjectStoreTyped.h is part of Brewtarget, and is copyright the
- * following authors 2021:
+ * following authors 2021-2022:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -100,6 +100,7 @@ public:
     * \return ID of the newly-inserted object in the database
     */
    int insert(NE & ne) {
+      qWarning() << Q_FUNC_INFO << "Deprecated function";
       std::shared_ptr<NE> nePointer{&ne};
       return this->insert(nePointer);
    }
@@ -116,11 +117,13 @@ public:
    }
 
    /**
-    * \brief Raw pointer version of \c insertOrUpdate
+    * \brief Raw pointer version of \c insertOrUpdate.  This is deprecated as, in the case of insert, the caller needs
+    *        to be REALLY certain that no shared_ptr exists already for the supplied parameter.
     *
     * \return ID of what was inserted or updated
     */
    int insertOrUpdate(NE & ne) {
+      qWarning() << Q_FUNC_INFO << "Deprecated function";
       int id = ne.key();
       if (id > 0) {
          std::shared_ptr<NE> nep = this->getById(id);

@@ -1,6 +1,6 @@
 /*
  * model/Water.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2022
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
@@ -59,18 +59,15 @@ class Water : public NamedEntity {
    Q_OBJECT
    Q_CLASSINFO("signal", "waters")
 
-
-   friend class WaterDialog;
-   friend class WaterEditor;
 public:
 
-   enum Types {
+   enum class Types {
       NONE,
       BASE,
       TARGET
    };
 
-   enum Ions {
+   enum class Ions {
       Ca,
       Cl,
       HCO3,
@@ -86,9 +83,20 @@ public:
    Water(NamedParameterBundle const & namedParameterBundle);
    Water(Water const & other);
 
-   virtual ~Water() = default;
+protected:
+   /**
+    * \brief Swap the contents of two Water objects - which provides an exception-safe way of implementing operator=
+    */
+   void swap(Water & other) noexcept;
 
-   // On a base or target profile, bicarbonate and alkalinity cannot both be used. I'm gonna have fun figuring that out
+public:
+   virtual ~Water();
+
+   // It is useful to be able to assign one Water to another - see eg WaterEditor.cpp
+   Water & operator=(Water other);
+
+   // .:TODO:. On a base or target profile, bicarbonate and alkalinity cannot both be used. I'm gonna have fun figuring that out
+
    //! \brief The amount in liters.
    // .:TBD:. (MY 2020-01-03) In Hop we have amount_kg, so might be more consistent here to have amount_l or similar
    Q_PROPERTY( double amount READ amount WRITE setAmount /*NOTIFY changed*/ /*changedAmount_l*/ )
@@ -119,22 +127,25 @@ public:
    //! \brief is the alkalinity measured as HCO3 or CO3?
    Q_PROPERTY( bool alkalinityAsHCO3 READ alkalinityAsHCO3 WRITE setAlkalinityAsHCO3 /*NOTIFY changed*/ /*changedSpargeRO*/ )
 
-   double amount() const;
-   double calcium_ppm() const;
-   double bicarbonate_ppm() const;
-   double sulfate_ppm() const;
-   double chloride_ppm() const;
-   double sodium_ppm() const;
-   double magnesium_ppm() const;
-   double ph() const;
-   double alkalinity() const;
-   QString notes() const;
-   Water::Types type() const;
-   double mashRO() const;
-   double spargeRO() const;
-   bool alkalinityAsHCO3() const;
+   // Getters
+   double       amount()           const;
+   double       calcium_ppm()      const;
+   double       bicarbonate_ppm()  const;
+   double       sulfate_ppm()      const;
+   double       chloride_ppm()     const;
+   double       sodium_ppm()       const;
+   double       magnesium_ppm()    const;
+   double       ph()               const;
+   double       alkalinity()       const;
+   QString      notes()            const;
+   Water::Types type()             const;
+   double       mashRO()           const;
+   double       spargeRO()         const;
+   bool         alkalinityAsHCO3() const;
 
-   double ppm( Water::Ions ion );
+   double       ppm(Water::Ions const ion) const;
+
+   // Setters
    void setAmount( double var );
    void setCalcium_ppm( double var );
    void setSulfate_ppm( double var );
@@ -145,7 +156,7 @@ public:
    void setPh( double var );
    void setAlkalinity(double var);
    void setNotes( const QString &var );
-   void setType(Types type);
+   void setType(Types var);
    void setMashRO(double var);
    void setSpargeRO(double var);
    void setAlkalinityAsHCO3(bool var);
@@ -159,21 +170,20 @@ protected:
    virtual ObjectStore & getObjectStoreTypedInstance() const;
 
 private:
-   double m_amount;
-   double m_calcium_ppm;
-   double m_bicarbonate_ppm;
-   double m_sulfate_ppm;
-   double m_chloride_ppm;
-   double m_sodium_ppm;
-   double m_magnesium_ppm;
-   double m_ph;
-   double m_alkalinity;
-   QString m_notes;
+   double       m_amount;
+   double       m_calcium_ppm;
+   double       m_bicarbonate_ppm;
+   double       m_sulfate_ppm;
+   double       m_chloride_ppm;
+   double       m_sodium_ppm;
+   double       m_magnesium_ppm;
+   double       m_ph;
+   double       m_alkalinity;
+   QString      m_notes;
    Water::Types m_type;
-   double m_mash_ro;
-   double m_sparge_ro;
-   bool m_alkalinity_as_hco3;
-
+   double       m_mash_ro;
+   double       m_sparge_ro;
+   bool         m_alkalinity_as_hco3;
 };
 
 #endif

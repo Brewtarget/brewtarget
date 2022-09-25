@@ -1,6 +1,6 @@
 /*
  * model/NamedEntity.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2022
  * - Kregg K <gigatropolis@yahoo.com>
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
@@ -78,6 +78,24 @@ NamedEntity::NamedEntity(NamedParameterBundle const & namedParameterBundle) :
    m_display  {namedParameterBundle(PropertyNames::NamedEntity::display, true)    },
    m_deleted  {namedParameterBundle(PropertyNames::NamedEntity::deleted, false)   },
    m_beingModified{false} {
+   return;
+}
+
+void NamedEntity::swap(NamedEntity & other) noexcept {
+   // Assume nothing important to swap in QObject (see comment in model/NamedEntity.h
+   //
+   // Since we're only using this for assignment operator, which in turn uses copy constructor, we're assuming we are
+   // NEVER swapping two objects that both have a valid key.  Assert that here.
+   Q_ASSERT(-1 == this->m_key || -1 == other.m_key);
+   // Similarly, we assert we are never trying to swap an object that is in the middle of being modified
+   Q_ASSERT(!this->m_beingModified);
+   Q_ASSERT(!other.m_beingModified);
+   // Now do the actual swapping
+   std::swap(this->parentKey, other.parentKey);
+   std::swap(this->m_folder , other.m_folder );
+   std::swap(this->m_name   , other.m_name   );
+   std::swap(this->m_display, other.m_display);
+   std::swap(this->m_deleted, other.m_deleted);
    return;
 }
 

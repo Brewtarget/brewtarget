@@ -1033,28 +1033,19 @@ void MainWindow::deleteSelected() {
    return;
 }
 
-void MainWindow::treeActivated(const QModelIndex &index)
-{
-   Equipment *kit;
-   Fermentable *ferm;
-   Hop* h;
-   Misc *m;
-   Yeast *y;
-   Style *s;
-   Water *w;
-
+void MainWindow::treeActivated(const QModelIndex &index) {
    QObject* calledBy = sender();
-   BtTreeView* active;
-
    // Not sure how this could happen, but better safe the sigsegv'd
-   if ( calledBy == nullptr )
+   if (!calledBy) {
       return;
+   }
 
-   active = qobject_cast<BtTreeView*>(calledBy);
-
+   BtTreeView* active = qobject_cast<BtTreeView*>(calledBy);
    // If the sender cannot be morphed into a BtTreeView object
-   if ( active == nullptr )
+   if (!active) {
+      qWarning() << Q_FUNC_INFO << "Unrecognised sender" << calledBy->metaObject()->className();
       return;
+   }
 
    auto itemType = active->type(index);
    if (!itemType) {
@@ -1065,46 +1056,58 @@ void MainWindow::treeActivated(const QModelIndex &index)
             setRecipe(treeView_recipe->getItem<Recipe>(index));
             break;
          case BtTreeItem::Type::EQUIPMENT:
-            kit = active->getItem<Equipment>(index);
+            {
+               Equipment * kit = active->getItem<Equipment>(index);
                if ( kit ) {
                   singleEquipEditor->setEquipment(kit);
                   singleEquipEditor->show();
                }
+            }
             break;
          case BtTreeItem::Type::FERMENTABLE:
-            ferm = active->getItem<Fermentable>(index);
+            {
+               Fermentable * ferm = active->getItem<Fermentable>(index);
                if (ferm) {
                   fermEditor->setFermentable(ferm);
                   fermEditor->show();
                }
+            }
             break;
          case BtTreeItem::Type::HOP:
-            h = active->getItem<Hop>(index);
+            {
+               Hop* h = active->getItem<Hop>(index);
                if (h) {
                   hopEditor->setHop(h);
                   hopEditor->show();
                }
+            }
             break;
          case BtTreeItem::Type::MISC:
-            m = active->getItem<Misc>(index);
+            {
+               Misc * m = active->getItem<Misc>(index);
                if (m) {
                   miscEditor->setMisc(m);
                   miscEditor->show();
                }
+            }
             break;
          case BtTreeItem::Type::STYLE:
-            s = active->getItem<Style>(index);
+            {
+               Style * s = active->getItem<Style>(index);
                if ( s ) {
                   singleStyleEditor->setStyle(s);
                   singleStyleEditor->show();
                }
+            }
             break;
          case BtTreeItem::Type::YEAST:
-            y = active->getItem<Yeast>(index);
+            {
+               Yeast * y = active->getItem<Yeast>(index);
                if (y) {
                   yeastEditor->setYeast(y);
                   yeastEditor->show();
                }
+            }
             break;
          case BtTreeItem::Type::BREWNOTE:
             setBrewNoteByIndex(index);
@@ -1112,15 +1115,18 @@ void MainWindow::treeActivated(const QModelIndex &index)
          case BtTreeItem::Type::FOLDER:  // default behavior is fine, but no warning
             break;
          case BtTreeItem::Type::WATER:
-            w = active->getItem<Water>(index);
+            {
+               Water * w = active->getItem<Water>(index);
                if (w) {
-                  waterEditor->setWater(w);
+                  waterEditor->setWater(ObjectStoreWrapper::getSharedFromRaw(w));
                   waterEditor->show();
                }
+            }
             break;
       }
    }
    treeView_recipe->setCurrentIndex(index);
+   return;
 }
 
 void MainWindow::setBrewNoteByIndex(const QModelIndex &index)

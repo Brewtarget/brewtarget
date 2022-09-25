@@ -1,6 +1,6 @@
 /*
  * database/ObjectStore.h is part of Brewtarget, and is copyright the following
- * authors 2021:
+ * authors 2021-2022:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -202,6 +202,12 @@ public:
    ~ObjectStore();
 
    /**
+    * \brief This will log info about every object the store knows about.  Usually only needed for debugging double-free
+    *        problems.
+    */
+   void logDiagnostics() const;
+
+   /**
     * \brief Create the table(s) for the objects handled by this store.  It is the caller's responsibility to handle
     *        transactions (on the assumption that callers will typically want to call \c createTables() on all
     *        \c ObjectStore objects, then call \c addTableConstraints() on the same, then, potentially, import data.
@@ -235,9 +241,23 @@ public:
    virtual int insert(std::shared_ptr<QObject> object);
 
    /**
+    * \brief We don't want the compiler automatically constructing a shared_ptr for us if we accidentally call insert
+    *        with, say, a raw pointer, so this template trick ensures it can't.
+    */
+   template <typename D> void insert(D) = delete;
+
+   /**
     * \brief Update an existing object in the DB
     */
    virtual void update(std::shared_ptr<QObject> object);
+
+   virtual void update(QObject & object);
+
+   /**
+    * \brief We don't want the compiler automatically constructing a shared_ptr for us if we accidentally call update
+    *        with, say, a raw pointer, so this template trick ensures it can't.
+    */
+   template <typename D> void update(D) = delete;
 
    /**
     * \brief Convenience function that calls either \c insert or \c update, depending on whether the object is already
@@ -255,6 +275,12 @@ public:
     * \return ID of what was inserted or updated
     */
    int insertOrUpdate(QObject & object);
+
+   /**
+    * \brief We don't want the compiler automatically constructing a shared_ptr for us if we accidentally call
+    *        insertOrUpdate with, say, a raw pointer, so this template trick ensures it can't.
+    */
+   template <typename D> void insertOrUpdate(D) = delete;
 
    /**
     * \brief Update a single property of an existing object in the DB

@@ -1,6 +1,6 @@
 /*
  * model/NamedEntity.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2022
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
@@ -87,12 +87,13 @@ AddPropertyName(parentKey)
  * handle templates, and we want to be able to use the Qt Property system as well as signals and slots.
  *
  * NB: Because NamedEntity inherits from QObject, no extra work is required to store pointers to NamedEntity objects
- *     inside QVariant
+ *     inside QVariant.  We also get to have Qt properties for free.  Because we do not use any state in the QObject
+ *     from which we inherit, we can get away with not trying to move/copy such state in our copy constructor,
+ *     assignment operator, etc.  This is good because there isn't a handy way to do such moves or copies.
  */
 class NamedEntity : public QObject {
    Q_OBJECT
    Q_CLASSINFO("version","1")
-
 
 public:
    NamedEntity(QString t_name, bool t_display = false, QString folder = QString());
@@ -104,10 +105,36 @@ public:
     */
    NamedEntity(NamedParameterBundle const & namedParameterBundle);
 
+protected:
+   /**
+    * \brief Swap the contents of two NamedEntity objects - which provides an exception-safe way of implementing
+    *        operator=
+    */
+   void swap(NamedEntity & other) noexcept;
+
+public:
    // Our destructor needs to be virtual because we sometimes point to an instance of a derived class through a pointer
    // to this class -- ie NamedEntity * namedEntity = new Hop() and suchlike.  We do already get a virtual destructor by
    // virtue of inheriting from QObject, but this declaration does no harm.
    virtual ~NamedEntity();
+
+   /**
+    * \brief Although we might need to implement assignment operator for some of its derived classes (eg Water),
+    *        NamedEntity itself is an abstract class, so there isn't a meaningful implementation, and we don't ever
+    *        want the compiler to try to create one (per the "Rule of Three").
+    */
+   NamedEntity & operator=(NamedEntity const &) = delete;
+
+   /**
+    * \brief Don't think we want move assignment either.
+    */
+   NamedEntity & operator=(NamedEntity &&) = delete;
+
+   /**
+    * \brief For the moment, we don't need a move constructor, so make sure the compiler doesn't generate one for us (as
+    *        it would likely be wrong).
+    */
+   NamedEntity(NamedEntity &&) = delete;
 
    /**
     * \brief Turns a straight copy of an object into a "child" copy that can be used in a Recipe.  (A child copy is
@@ -124,12 +151,6 @@ public:
     *        overload) the protected virtual isEqualTo() function.
     */
    bool operator==(NamedEntity const & other) const;
-
-   /**
-    * \brief We don't have a need to assign one NamedEntity to another, and the compiler implementation of this would
-    *        be wrong, so we delete it.
-    */
-   NamedEntity & operator=(NamedEntity const &) = delete;
 
    /**
     * \brief This generic version of operator!= should work for subclasses provided they correctly _override_ (NB not
@@ -412,7 +433,7 @@ private:
  */
 template<class S>
 S & operator<<(S & stream, NamedEntity const & namedEntity) {
-   stream << namedEntity.metaObject()->className() << " #" << namedEntity.key();
+   stream << namedEntity.metaObject()->className() << " #" << namedEntity.key() << "(" << namedEntity.name() << ")";
    return stream;
 }
 
