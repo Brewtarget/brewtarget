@@ -1,6 +1,6 @@
 /*
  * xml/XmlRecord.cpp is part of Brewtarget, and is Copyright the following
- * authors 2020-2021
+ * authors 2020-2022
  * - Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -130,8 +130,8 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
                                     fieldDefinition->xPath.getXalanString());
       auto numChildNodes = nodesForCurrentXPath.getLength();
       qDebug() << Q_FUNC_INFO << "Found" << numChildNodes << "node(s) for " << fieldDefinition->xPath;
-      if (XmlRecord::RecordSimple == fieldDefinition->fieldType ||
-          XmlRecord::RecordComplex == fieldDefinition->fieldType) {
+      if (XmlRecord::FieldType::RecordSimple == fieldDefinition->fieldType ||
+          XmlRecord::FieldType::RecordComplex == fieldDefinition->fieldType) {
          //
          // Depending on the context, it may or may not be valid to have multiple children of this type of record (eg
          // a Recipe might have multiple Hops but it only has one Equipment).  We don't really have to worry about that
@@ -185,11 +185,12 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
 
                // A field should have an enumMapping if and only if it's of type Enum
                // Anything else is a coding error at the caller
-               Q_ASSERT((XmlRecord::Enum == fieldDefinition->fieldType) != (nullptr == fieldDefinition->enumMapping));
+               Q_ASSERT((XmlRecord::FieldType::Enum == fieldDefinition->fieldType) !=
+                        (nullptr == fieldDefinition->enumMapping));
 
                switch(fieldDefinition->fieldType) {
 
-                  case XmlRecord::Bool:
+                  case XmlRecord::FieldType::Bool:
                      // Unlike other XML documents, boolean fields in BeerXML are caps, so we have to accommodate that
                      if (value.toLower() == "true") {
                         parsedValue.setValue(true);
@@ -206,7 +207,7 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
                      }
                      break;
 
-                  case XmlRecord::Int:
+                  case XmlRecord::FieldType::Int:
                      // QString's toInt method will report success/failure of parsing straight back into our flag
                      parsedValue.setValue(value.toInt(&parsedValueOk));
                      if (!parsedValueOk) {
@@ -218,7 +219,7 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
                      }
                      break;
 
-                  case XmlRecord::UInt:
+                  case XmlRecord::FieldType::UInt:
                      // QString's toUInt method will report success/failure of parsing straight back into our flag
                      parsedValue.setValue(value.toUInt(&parsedValueOk));
                      if (!parsedValueOk) {
@@ -230,7 +231,7 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
                      }
                      break;
 
-                  case XmlRecord::Double:
+                  case XmlRecord::FieldType::Double:
                      // QString's toDouble method will report success/failure of parsing straight back into our flag
                      parsedValue.setValue(value.toDouble(&parsedValueOk));
                      if (!parsedValueOk) {
@@ -253,7 +254,7 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
                      }
                      break;
 
-                  case XmlRecord::Date:
+                  case XmlRecord::FieldType::Date:
                      {
                         //
                         // Extra braces here as we have a variable (date) that is only used in this case of the switch,
@@ -328,25 +329,25 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
                      }
                      break;
 
-                  case XmlRecord::Enum:
+                  case XmlRecord::FieldType::Enum:
                      // It's definitely a coding error if there is no stringToEnum mapping for a field declared as Enum!
                      Q_ASSERT(nullptr != fieldDefinition->enumMapping);
                      {
                         auto match = fieldDefinition->enumMapping->stringToEnum(value);
                         if (!match) {
-                        // This is probably a coding error as the XSD parsing should already have verified that the
-                        // contents of the node are one of the expected values.
-                        qWarning() <<
-                           Q_FUNC_INFO << "Ignoring " << this->namedEntityClassName << " node " << fieldDefinition->xPath << "=" <<
-                           value << " as value not recognised";
-                     } else {
-                           parsedValue.setValue(match.value());
-                        parsedValueOk = true;
-                     }
+                           // This is probably a coding error as the XSD parsing should already have verified that the
+                           // contents of the node are one of the expected values.
+                           qWarning() <<
+                              Q_FUNC_INFO << "Ignoring " << this->namedEntityClassName << " node " << fieldDefinition->xPath << "=" <<
+                              value << " as value not recognised";
+                        } else {
+                              parsedValue.setValue(match.value());
+                           parsedValueOk = true;
+                        }
                      }
                      break;
 
-                  case XmlRecord::RequiredConstant:
+                  case XmlRecord::FieldType::RequiredConstant:
                      //
                      // This is a field that is required to be in the XML, but whose value we don't need (and for which
                      // we always write a constant value on output).  At the moment it's only needed for the VERSION tag
@@ -363,14 +364,15 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
                      continue; // NB: _NOT_break here.  We want to jump straight to the next run through the for loop.
 
                   // By default we assume it's a string
-                  case XmlRecord::String:
+                  case XmlRecord::FieldType::String:
                   default:
-                     if (fieldDefinition->fieldType != XmlRecord::String) {
+                     if (fieldDefinition->fieldType != XmlRecord::FieldType::String) {
                         // This is almost certainly a coding error in this class as we should be able to parse all the
                         // types callers need us to.
                         qWarning() <<
-                           Q_FUNC_INFO << "Treating " << this->namedEntityClassName << " node " << fieldDefinition->xPath << "=" <<
-                           value << " as string because did not recognise requested parse type " << fieldDefinition->fieldType;
+                           Q_FUNC_INFO << "Treating " << this->namedEntityClassName << " node " <<
+                           fieldDefinition->xPath << "=" << value << " as string because did not recognise requested "
+                           "parse type " << static_cast<int>(fieldDefinition->fieldType);
                      }
                      parsedValue.setValue(static_cast<QString>(value));
                      parsedValueOk = true;
@@ -456,7 +458,7 @@ XmlRecord::ProcessingResult XmlRecord::normaliseAndStoreInDb(std::shared_ptr<Nam
          if (this->includeInStats) {
             stats.skipped(this->namedEntityClassName.toLower());
          }
-         return XmlRecord::FoundDuplicate;
+         return XmlRecord::ProcessingResult::FoundDuplicate;
       }
 
       this->normaliseName();
@@ -471,7 +473,7 @@ XmlRecord::ProcessingResult XmlRecord::normaliseAndStoreInDb(std::shared_ptr<Nam
       if (id <= 0) {
          userMessage << "Error storing" << this->namedEntity->metaObject()->className() <<
          "in database.  See logs for more details";
-         return XmlRecord::Failed;
+         return XmlRecord::ProcessingResult::Failed;
       }
    }
 
@@ -492,33 +494,35 @@ XmlRecord::ProcessingResult XmlRecord::normaliseAndStoreInDb(std::shared_ptr<Nam
       if (nullptr == this->namedEntity.get()) {
          // Child records OK and no duplicate check needed (root record), which also means no further processing
          // required
-         return XmlRecord::Succeeded;
+         return XmlRecord::ProcessingResult::Succeeded;
       }
-      processingResult = this->isDuplicate() ? XmlRecord::FoundDuplicate : XmlRecord::Succeeded;
+      processingResult = this->isDuplicate() ? XmlRecord::ProcessingResult::FoundDuplicate :
+                                               XmlRecord::ProcessingResult::Succeeded;
    } else {
       // There was a problem with one of our child records
-      processingResult = XmlRecord::Failed;
+      processingResult = XmlRecord::ProcessingResult::Failed;
    }
 
    if (nullptr != this->namedEntity.get()) {
       //
       // We potentially do stats for everything except failure
       //
-      if (XmlRecord::FoundDuplicate == processingResult) {
+      if (XmlRecord::ProcessingResult::FoundDuplicate == processingResult) {
          qDebug() <<
             Q_FUNC_INFO << "(Late found) duplicate" << this->namedEntityClassName <<
             (this->includeInStats ? " will" : " won't") << " be included in stats";
          if (this->includeInStats) {
             stats.skipped(this->namedEntityClassName.toLower());
          }
-      } else if (XmlRecord::Succeeded == processingResult && this->includeInStats) {
+      } else if (XmlRecord::ProcessingResult::Succeeded == processingResult && this->includeInStats) {
          stats.processedOk(this->namedEntityClassName.toLower());
       }
 
       //
       // Clean-up
       //
-      if (XmlRecord::FoundDuplicate == processingResult || XmlRecord::Failed == processingResult) {
+      if (XmlRecord::ProcessingResult::FoundDuplicate == processingResult ||
+          XmlRecord::ProcessingResult::Failed == processingResult) {
          //
          // If we reach here, it means either there was a problem with one of our child records or we ourselves are a
          // late-detected duplicate.  We've already stored our NamedEntity record in the DB, so we need to try to undo
@@ -530,7 +534,7 @@ XmlRecord::ProcessingResult XmlRecord::normaliseAndStoreInDb(std::shared_ptr<Nam
          //
          qDebug() <<
             Q_FUNC_INFO << "Deleting stored" << this->namedEntityClassName << "as" <<
-            (XmlRecord::FoundDuplicate == processingResult ? "duplicate" : "failed to read all child records");
+            (XmlRecord::ProcessingResult::FoundDuplicate == processingResult ? "duplicate" : "failed to read all child records");
          this->deleteNamedEntityFromDb();
       }
    }
@@ -557,7 +561,8 @@ bool XmlRecord::normaliseAndStoreChildRecordsInDb(QTextStream & userMessage,
    for (auto ii = this->childRecords.begin(); ii != this->childRecords.end(); ++ii) {
       qDebug() <<
          Q_FUNC_INFO << "Storing" << ii->xmlRecord->namedEntityClassName << "child of" << this->namedEntityClassName;
-      if (XmlRecord::Failed == ii->xmlRecord->normaliseAndStoreInDb(this->namedEntity, userMessage, stats)) {
+      if (XmlRecord::ProcessingResult::Failed ==
+         ii->xmlRecord->normaliseAndStoreInDb(this->namedEntity, userMessage, stats)) {
          return false;
       }
       //
@@ -571,7 +576,7 @@ bool XmlRecord::normaliseAndStoreChildRecordsInDb(QTextStream & userMessage,
       // XML to work).  Instead we distinguish between two types of records: RecordSimple, which can be set via a
       // property, and RecordComplex, which can't.
       //
-      if (XmlRecord::RecordSimple == ii->fieldDefinition->fieldType) {
+      if (XmlRecord::FieldType::RecordSimple == ii->fieldDefinition->fieldType) {
          char const * const propertyName = *ii->fieldDefinition->propertyName;
          Q_ASSERT(nullptr != propertyName);
          // It's a coding error if we had a property defined for a record that's not trying to populate a NamedEntity
@@ -719,15 +724,15 @@ void XmlRecord::toXml(NamedEntity const & namedEntityToExport,
       if (fieldDefinition.propertyName.isNull()) {
          // At the moment at least, we support all XmlRecord::RecordSimple and XmlRecord::RecordComplex fields, so it's
          // a coding error if one of them does not have a property name.
-         Q_ASSERT(XmlRecord::RecordSimple != fieldDefinition.fieldType);
-         Q_ASSERT(XmlRecord::RecordComplex != fieldDefinition.fieldType);
+         Q_ASSERT(XmlRecord::FieldType::RecordSimple != fieldDefinition.fieldType);
+         Q_ASSERT(XmlRecord::FieldType::RecordComplex != fieldDefinition.fieldType);
          continue;
       }
 
       // Nested record fields are of two types.  XmlRecord::RecordSimple can be handled generically.
       // XmlRecord::RecordComplex need to be handled in part by subclasses.
-      if (XmlRecord::RecordSimple == fieldDefinition.fieldType ||
-          XmlRecord::RecordComplex == fieldDefinition.fieldType) {
+      if (XmlRecord::FieldType::RecordSimple == fieldDefinition.fieldType ||
+          XmlRecord::FieldType::RecordComplex == fieldDefinition.fieldType) {
          //
          // Some of the work is generic, so we do it here.  In particular, we can work out what tags are needed to
          // contain the record (from the XPath, if any, prior to the last slash), but also what type of XmlRecord(s) we
@@ -747,7 +752,7 @@ void XmlRecord::toXml(NamedEntity const & namedEntityToExport,
          qDebug() << Q_FUNC_INFO << xPathElements.last();
          std::shared_ptr<XmlRecord> subRecord = this->xmlCoding.getNewXmlRecord(xPathElements.last());
 
-         if (XmlRecord::RecordSimple == fieldDefinition.fieldType) {
+         if (XmlRecord::FieldType::RecordSimple == fieldDefinition.fieldType) {
             NamedEntity * childNamedEntity =
                namedEntityToExport.property(*fieldDefinition.propertyName).value<NamedEntity *>();
             if (childNamedEntity) {
@@ -780,7 +785,7 @@ void XmlRecord::toXml(NamedEntity const & namedEntityToExport,
       }
 
       QString valueAsText;
-      if (fieldDefinition.fieldType == XmlRecord::RequiredConstant) {
+      if (fieldDefinition.fieldType == XmlRecord::FieldType::RequiredConstant) {
          //
          // This is a field that is required to be in the XML, but whose value we don't need, and for which we always
          // write a constant value on output.  At the moment it's only needed for the VERSION tag in BeerXML.
@@ -803,24 +808,24 @@ void XmlRecord::toXml(NamedEntity const & namedEntityToExport,
 
          switch (fieldDefinition.fieldType) {
 
-            case XmlRecord::Bool:
+            case XmlRecord::FieldType::Bool:
                // Unlike other XML documents, boolean fields in BeerXML are caps, so we have to accommodate that
                valueAsText = value.toBool() ? "TRUE" : "FALSE";
                break;
 
-            case XmlRecord::Int:
-            case XmlRecord::UInt:
-            case XmlRecord::Double:
+            case XmlRecord::FieldType::Int:
+            case XmlRecord::FieldType::UInt:
+            case XmlRecord::FieldType::Double:
                // QVariant knows how to convert a number to a string
                valueAsText = value.toString();
                break;
 
-            case XmlRecord::Date:
+            case XmlRecord::FieldType::Date:
                // There is only one true date format :-)
                valueAsText = value.toDate().toString(Qt::ISODate);
                break;
 
-            case XmlRecord::Enum:
+            case XmlRecord::FieldType::Enum:
                // It's definitely a coding error if there is no enumMapping for a field declared as Enum!
                Q_ASSERT(nullptr != fieldDefinition.enumMapping);
                {
@@ -839,7 +844,7 @@ void XmlRecord::toXml(NamedEntity const & namedEntityToExport,
                break;
 
             // By default we assume it's a string
-            case XmlRecord::String:
+            case XmlRecord::FieldType::String:
             default:
                {
                   // We use this to escape "&" to "&amp;" and so on in string content.  (Other data types should not

@@ -158,12 +158,12 @@ double SaltTableModel::multiplier(Salt & salt) const {
       return ret;
    }
 
-   if (salt.addTo() == Salt::EQUAL ) {
+   if (salt.addTo() == Salt::WhenToAdd::EQUAL ) {
       ret = 2.0;
    }
    // If we are adding a proportional amount to both,
    // this should handle that math.
-   else if (salt.addTo() == Salt::RATIO ) {
+   else if (salt.addTo() == Salt::WhenToAdd::RATIO ) {
       ret = 1.0 + spargePct;
    }
 
@@ -234,26 +234,24 @@ double SaltTableModel::total_SO4() const {
    return ret;
 }
 
-double SaltTableModel::total(Water::Ions ion) const
-{
+double SaltTableModel::total(Water::Ions ion) const {
    switch(ion) {
-      case Water::Ca: return total_Ca();
-      case Water::Cl: return total_Cl();
-      case Water::HCO3: return total_HCO3();
-      case Water::Mg: return total_Mg();
-      case Water::Na: return total_Na();
-      case Water::SO4: return total_SO4();
+      case Water::Ions::Ca:   return total_Ca();
+      case Water::Ions::Cl:   return total_Cl();
+      case Water::Ions::HCO3: return total_HCO3();
+      case Water::Ions::Mg:   return total_Mg();
+      case Water::Ions::Na:   return total_Na();
+      case Water::Ions::SO4:  return total_SO4();
       default: return 0.0;
    }
    return 0.0;
 }
 
-double SaltTableModel::total(Salt::Types type) const
-{
+double SaltTableModel::total(Salt::Types type) const {
    double ret = 0.0;
-   if (type != Salt::NONE) {
+   if (type != Salt::Types::NONE) {
       for (auto salt : this->rows) {
-         if (salt->type() == type && salt->addTo() != Salt::NEVER) {
+         if (salt->type() == type && salt->addTo() != Salt::WhenToAdd::NEVER) {
             double mult  = multiplier(*salt);
             ret += mult * salt->amount();
          }
@@ -268,21 +266,21 @@ double SaltTableModel::totalAcidWeight(Salt::Types type) const
    const double lactic_density = 1.2;
 
    double ret = 0.0;
-   if (type != Salt::NONE) {
+   if (type != Salt::Types::NONE) {
       for (auto salt : this->rows) {
-         if ( salt->type() == type && salt->addTo() != Salt::NEVER) {
+         if ( salt->type() == type && salt->addTo() != Salt::WhenToAdd::NEVER) {
             double mult  = multiplier(*salt);
             // Acid malts are easy
-            if ( type == Salt::ACIDMLT ) {
+            if ( type == Salt::Types::ACIDMLT ) {
                ret += 1000.0 * salt->amount() * salt->percentAcid();
             }
             // Lactic acid isn't quite so easy
-            else if ( type == Salt::LACTIC ) {
+            else if ( type == Salt::Types::LACTIC ) {
                double density = salt->percentAcid()/88.0 * (lactic_density - 1.0) + 1.0;
                double lactic_wgt = 1000.0 * salt->amount() * mult * density;
                ret += (salt->percentAcid()/100.0) * lactic_wgt;
             }
-            else if ( type == Salt::H3PO4 ) {
+            else if ( type == Salt::Types::H3PO4 ) {
                double density = salt->percentAcid()/85.0 * (H3PO4_density - 1.0) + 1.0;
                double H3PO4_wgt = 1000.0 * salt->amount() * density;
                ret += (salt->percentAcid()/100.0) * H3PO4_wgt;
@@ -395,10 +393,10 @@ QVariant SaltTableModel::data(QModelIndex const & index, int role) const {
    switch (column) {
       case SALTNAMECOL:
          if (role == Qt::DisplayRole) {
-            return QVariant( saltNames.at(row->type()));
+            return QVariant(saltNames.at(static_cast<int>(row->type())));
          }
          if (role == Qt::UserRole) {
-            return QVariant( row->type());
+            return QVariant(static_cast<int>(row->type()));
          }
          return QVariant();
       case SALTAMOUNTCOL:
@@ -418,10 +416,10 @@ QVariant SaltTableModel::data(QModelIndex const & index, int role) const {
          );
       case SALTADDTOCOL:
          if (role == Qt::DisplayRole) {
-            return QVariant( addToName.at(row->addTo()));
+            return QVariant( addToName.at(static_cast<int>(row->addTo())));
          }
          if (role == Qt::UserRole) {
-            return QVariant( row->addTo());
+            return QVariant(static_cast<int>(row->addTo()));
          }
          return QVariant();
       case SALTPCTACIDCOL:
@@ -474,11 +472,11 @@ bool SaltTableModel::setData(QModelIndex const & index, QVariant const & value, 
             Salt::Types oldType = row->type();
             row->setType(static_cast<Salt::Types>(newType));
             row->setName(saltNames.at(newType));
-            if ( oldType == Salt::NONE ) {
+            if ( oldType == Salt::Types::NONE ) {
                switch(  static_cast<Salt::Types>(newType) ) {
-                  case Salt::LACTIC: row->setPercentAcid(88); break;
-                  case Salt::H3PO4:  row->setPercentAcid(10); break;
-                  case Salt::ACIDMLT: row->setPercentAcid(2); break;
+                  case Salt::Types::LACTIC: row->setPercentAcid(88); break;
+                  case Salt::Types::H3PO4:  row->setPercentAcid(10); break;
+                  case Salt::Types::ACIDMLT: row->setPercentAcid(2); break;
                   default: row->setPercentAcid(0);
                }
             }
@@ -514,7 +512,7 @@ bool SaltTableModel::setData(QModelIndex const & index, QVariant const & value, 
          qWarning() << tr("Bad column: %1").arg(index.column());
    }
 
-   if ( retval && row->addTo() != Salt::NEVER ) {
+   if ( retval && row->addTo() != Salt::WhenToAdd::NEVER ) {
       emit newTotals();
    }
    emit dataChanged(index,index);
@@ -528,7 +526,7 @@ void SaltTableModel::saveAndClose() {
    // all of the writes should have been instantaneous unless
    // we've added a new salt. Wonder if this will work?
    for (auto salt : this->rows) {
-      if (salt->key() < 0 && salt->type() != Salt::NONE && salt->addTo() != Salt::NEVER) {
+      if (salt->key() < 0 && salt->type() != Salt::Types::NONE && salt->addTo() != Salt::WhenToAdd::NEVER) {
          ObjectStoreWrapper::insert(salt);
          this->recObs->add(salt);
       }
@@ -549,16 +547,16 @@ QWidget* SaltItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
    if ( index.column() == SALTNAMECOL ) {
       QComboBox *box = new QComboBox(parent);
 
-      box->addItem(tr("NONE")  ,      Salt::NONE);
-      box->addItem(tr("CaCl2") ,      Salt::CACL2);
-      box->addItem(tr("CaCO3") ,      Salt::CACO3);
-      box->addItem(tr("CaSO4") ,      Salt::CASO4);
-      box->addItem(tr("MgSO4") ,      Salt::MGSO4);
-      box->addItem(tr("NaCl")  ,      Salt::NACL);
-      box->addItem(tr("NaHCO3"),      Salt::NAHCO3);
-      box->addItem(tr("Lactic acid"), Salt::LACTIC);
-      box->addItem(tr("H3PO4"),       Salt::H3PO4);
-      box->addItem(tr("Acid malt"),   Salt::ACIDMLT);
+      box->addItem(tr("NONE")  ,      static_cast<int>(Salt::Types::NONE   ));
+      box->addItem(tr("CaCl2") ,      static_cast<int>(Salt::Types::CACL2  ));
+      box->addItem(tr("CaCO3") ,      static_cast<int>(Salt::Types::CACO3  ));
+      box->addItem(tr("CaSO4") ,      static_cast<int>(Salt::Types::CASO4  ));
+      box->addItem(tr("MgSO4") ,      static_cast<int>(Salt::Types::MGSO4  ));
+      box->addItem(tr("NaCl")  ,      static_cast<int>(Salt::Types::NACL   ));
+      box->addItem(tr("NaHCO3"),      static_cast<int>(Salt::Types::NAHCO3 ));
+      box->addItem(tr("Lactic acid"), static_cast<int>(Salt::Types::LACTIC ));
+      box->addItem(tr("H3PO4"),       static_cast<int>(Salt::Types::H3PO4  ));
+      box->addItem(tr("Acid malt"),   static_cast<int>(Salt::Types::ACIDMLT));
       box->setMinimumWidth( box->minimumSizeHint().width());
       box->setSizeAdjustPolicy(QComboBox::AdjustToContents);
       return box;
@@ -567,11 +565,11 @@ QWidget* SaltItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
    else if ( index.column() == SALTADDTOCOL ) {
       QComboBox *box = new QComboBox(parent);
 
-      box->addItem(tr("Never"),  Salt::NEVER);
-      box->addItem(tr("Mash"),   Salt::MASH);
-      box->addItem(tr("Sparge"), Salt::SPARGE);
-      box->addItem(tr("Ratio"),  Salt::RATIO);
-      box->addItem(tr("Equal"),  Salt::EQUAL);
+      box->addItem(tr("Never"),  static_cast<int>(Salt::WhenToAdd::NEVER ));
+      box->addItem(tr("Mash"),   static_cast<int>(Salt::WhenToAdd::MASH  ));
+      box->addItem(tr("Sparge"), static_cast<int>(Salt::WhenToAdd::SPARGE));
+      box->addItem(tr("Ratio"),  static_cast<int>(Salt::WhenToAdd::RATIO ));
+      box->addItem(tr("Equal"),  static_cast<int>(Salt::WhenToAdd::EQUAL ));
       box->setMinimumWidth( box->minimumSizeHint().width());
       box->setSizeAdjustPolicy(QComboBox::AdjustToContents);
 

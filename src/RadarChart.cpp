@@ -1,6 +1,6 @@
 /*
  * RadarChart.cpp is part of Brewtarget, and is Copyright the following
- * authors 2021
+ * authors 2021-2022
  * - Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -139,14 +139,14 @@ public:
    // Calculated in RadarChart::init()
    double angleInRadiansBetweenAxes;
 
-   // The smallest multiple of axisMarkInterval that is greater than or equal to the maximum value of any point on the graph
-   // Used to size/scale the axes (aka radii aka spokes)
+   // The smallest multiple of axisMarkInterval that is greater than or equal to the maximum value of any point on the
+   // graph.  Used to size/scale the axes (aka radii aka spokes)
    double maxAxisValue;
 
 };
 
 RadarChart::RadarChart(QWidget * parent) : QWidget(parent),
-                                           pimpl{ new impl{} } {
+                                           pimpl{std::make_unique<impl>()} {
    return;
 }
 
@@ -160,6 +160,7 @@ void RadarChart::init(QString const unitsName,
                       QVector<RadarChart::VariableName> const variableNames) {
    this->pimpl->unitsName = unitsName;
    this->pimpl->axisMarkInterval = axisMarkInterval;
+   this->pimpl->maxAxisValue     = axisMarkInterval; // Starting assumption before we have any data
    this->pimpl->variableNames = variableNames;
 
    // It's a programming error to supply a zero or negative axis interval
@@ -169,6 +170,10 @@ void RadarChart::init(QString const unitsName,
    Q_ASSERT(variableNames.size() > 0);
 
    this->pimpl->angleInRadiansBetweenAxes = RadiansInACircle / variableNames.size();
+
+   qDebug() <<
+      Q_FUNC_INFO << "axisMarkInterval:" << this->pimpl->axisMarkInterval << "; maxAxisValue:" <<
+      this->pimpl->maxAxisValue;
    return;
 }
 

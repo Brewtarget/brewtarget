@@ -1,6 +1,6 @@
 /*
  * database/ObjectStoreWrapper.h is part of Brewtarget, and is copyright the
- * following authors 2021:
+ * following authors 2021-2022:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -29,6 +29,15 @@
  *        ObjectStoreTyped.h
  */
 namespace ObjectStoreWrapper {
+
+   /**
+    * \brief Log diagnostics about the ObjectStore (for this type of object).  Usually only needed for debugging double-
+    *        free issues...
+    */
+   template<class NE> void logDiagnostics() {
+      ObjectStoreTyped<NE>::getInstance().logDiagnostics();
+      return;
+   }
 
    /**
     * \brief Determines whether an object of the specified ID exists in the ObjectStore (for this type of object)
@@ -96,7 +105,8 @@ namespace ObjectStoreWrapper {
          return objectStore.getById(id);
       }
       qDebug() <<
-         Q_FUNC_INFO << "Creating new shared_ptr for unstored" << ne->metaObject()->className() << ":" << ne->name();
+         Q_FUNC_INFO << "Creating new shared_ptr for unstored" << ne->metaObject()->className() << "#" << id << " :" <<
+         ne->name();
       return std::shared_ptr<NE>{ne};
    }
 
@@ -133,6 +143,7 @@ namespace ObjectStoreWrapper {
     *        get called twice and, sooner or later, we'll get a segfault.
     */
    template<class NE> int insert(NE & ne) {
+      qWarning() << Q_FUNC_INFO << "Deprecated function";
       return ObjectStoreTyped<NE>::getInstance().insert(ne);
    }
 
@@ -140,8 +151,14 @@ namespace ObjectStoreWrapper {
       return ObjectStoreTyped<NE>::getInstance().insertCopyOf(ne.key());
    }
 
+   template<class NE> void update(NE & ne) {
+      ObjectStoreTyped<NE>::getInstance().update(static_cast<QObject &>(ne));
+      return;
+   }
+
    template<class NE> int insertOrUpdate(NE & ne) {
-      return ObjectStoreTyped<NE>::getInstance().insertOrUpdate(ne);
+      qWarning() << Q_FUNC_INFO << "Deprecated function";
+      return ObjectStoreTyped<NE>::getInstance().insertOrUpdate(static_cast<QObject &>(ne));
    }
 
    template<class NE> void updateProperty(NE const & ne, BtStringConst const & propertyName) {

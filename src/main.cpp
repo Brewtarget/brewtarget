@@ -1,6 +1,6 @@
 /*
  * main.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2022
  * - A.J. Drobnich <aj.drobnich@gmail.com>
  * - Matt Young <mfsy@yahoo.com>
  * - Maxime Lavigne <duguigne@gmail.com>
@@ -64,6 +64,12 @@ namespace {
 }
 
 int main(int argc, char **argv) {
+   // Uncomment this line to debug problems loading Qt plug-ins.  (If you're launching from the command line, you can
+   // also just set the QT_DEBUG_PLUGINS environment variable from the shell, but we have had a bug that only appeared
+   // when launching from Windows GUI.)  The output goes to the same place as Qt logs, so will be interspersed with our
+   // own logging.
+   //qputenv("QT_DEBUG_PLUGINS", QByteArray("1"));
+
    QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling, true);
 
    //
@@ -82,13 +88,9 @@ int main(int argc, char **argv) {
    //
    QApplication app(argc, argv);
    app.setOrganizationDomain("brewtarget.com");
-   app.setApplicationName(
-#ifdef QT_DEBUG
-      "brewtarget-debug"
-#else
-      "brewtarget"
-#endif
-   );
+   // We used to vary the application name (and therefore location of config files etc) depending on whether we're
+   // building with debug or release version of Qt, but on the whole I don't think this is helpful
+   app.setApplicationName("brewtarget");
    app.setApplicationVersion(VERSIONSTRING);
 
    // Process command-line options relatively early as some may override other settings
@@ -176,8 +178,16 @@ int main(int argc, char **argv) {
    if (parser.isSet(importFromXmlOption)) importFromXml(parser.value(importFromXmlOption));
    if (parser.isSet(createBlankDBOption)) createBlankDb(parser.value(createBlankDBOption));
 
-   try
-   {
+   try {
+      qInfo() <<
+         "Starting Brewtarget v" << VERSIONSTRING << " (app name" << app.applicationName() << ") on " <<
+         QSysInfo::prettyProductName();
+      qInfo() << "Log directory:" << Logging::getDirectory().absolutePath();
+      qInfo() << "Using Qt runtime v" << qVersion() << " (compiled against Qt v" << QT_VERSION_STR << ")";
+      qInfo() << "Configuration directory:" << PersistentSettings::getConfigDir().absolutePath();
+      qInfo() << "Data directory:" << PersistentSettings::getUserDataDir().absolutePath();
+      qDebug() << Q_FUNC_INFO << "Library Paths:" << qApp->libraryPaths();
+
       auto mainAppReturnValue = Brewtarget::run();
 
       //

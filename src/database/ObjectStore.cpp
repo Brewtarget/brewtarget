@@ -847,6 +847,17 @@ ObjectStore::~ObjectStore() {
    return;
 }
 
+void ObjectStore::logDiagnostics() const {
+   for (int key : this->pimpl->allObjects.keys()) {
+      std::shared_ptr<QObject> object = this->pimpl->allObjects.value(key);
+      qDebug() <<
+         Q_FUNC_INFO << "Object @" << static_cast<void *>(object.get()) << "stored as #" << key << "has key" <<
+         this->pimpl->getPrimaryKey(*object) << "and shared pointer use count" << object.use_count();
+   }
+   return;
+}
+
+
 // Note that we have to pass Database in as a parameter because, ultimately, we're being called from Database::load()
 // which is called from Database::getInstance(), so we don't want to get in an endless loop.
 bool ObjectStore::createTables(Database & database, QSqlDatabase & connection) const {
@@ -1323,6 +1334,16 @@ void ObjectStore::update(std::shared_ptr<QObject> object) {
    return;
 }
 
+void ObjectStore::update(QObject & object) {
+   // It's a coding error to call this function for something that's not already stored in the DB
+   int const primaryKey = this->pimpl->getPrimaryKey(object).toInt();
+   Q_ASSERT(primaryKey > 0);
+
+   // Since the object is already stored, we want a copy of the shared_ptr that we already have for it
+   auto sharedPointer = this->getById(primaryKey);
+   this->update(sharedPointer);
+   return;
+}
 
 std::shared_ptr<QObject> ObjectStore::insertOrUpdate(std::shared_ptr<QObject> object) {
    QVariant const primaryKey = this->pimpl->getPrimaryKey(*object);
@@ -1335,8 +1356,17 @@ std::shared_ptr<QObject> ObjectStore::insertOrUpdate(std::shared_ptr<QObject> ob
 }
 
 int ObjectStore::insertOrUpdate(QObject & object) {
-   std::shared_ptr<QObject> sharedPointer{&object};
-   this->insertOrUpdate(sharedPointer);
+   QVariant const primaryKey = this->pimpl->getPrimaryKey(object);
+   if (primaryKey.toInt() > 0) {
+      // If the object is already stored, then we want a copy of the shared_ptr that we already have for it
+      auto sharedPointer = this->getById(primaryKey.toInt());
+      this->update(sharedPointer);
+   } else {
+      // If the object is NOT already stored, then we are assuming (because calling this member function rather than
+      // the one with the shared_ptr parameter) that no-one has yet made a shared_ptr for it and we are safe to do so.
+      std::shared_ptr<QObject> sharedPointer{&object};
+      this->insert(sharedPointer);
+   }
    return this->pimpl->getPrimaryKey(object).toInt();
 }
 
