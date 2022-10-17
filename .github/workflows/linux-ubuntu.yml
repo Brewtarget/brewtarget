@@ -16,7 +16,17 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-18.04, ubuntu-latest]
+        #
+        # See https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners#supported-runners-and-hardware-resources
+        # for info on runner images
+        #
+        # Usually "ubuntu-latest" is the most recent LTS version of Ubuntu, but there can be a bit of lag between a new
+        # LTS release and the update of ubuntu-latest (eg in October 2022, it was still Ubuntu 20.04 rather than 22.04.
+        # So we explicitly specify here which versions we want to build on.
+        #
+        # Note that ubuntu-18.04 is deprecated and we need to remove it by April 2023
+        #
+        os: [ubuntu-18.04, ubuntu-20.04, ubuntu-22.04]
     steps:
       - uses: actions/checkout@v2
         with:
