@@ -29,7 +29,7 @@ jobs:
         ]
     steps:
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           path: temp
           fetch-depth: 0
@@ -95,7 +95,7 @@ jobs:
 
       - name: Upload Windows binaries (installers)
         if: ${{ success()}}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: brewtarget-dev-${{ matrix.msystem }}
           path: |
@@ -105,7 +105,7 @@ jobs:
 
       - name: Upload error info from failed build
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.msystem }}-build
           path: C:/_/build/

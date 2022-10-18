@@ -28,7 +28,7 @@ jobs:
         #
         os: [ubuntu-18.04, ubuntu-20.04, ubuntu-22.04]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
@@ -103,7 +103,7 @@ jobs:
 
       - name: Upload Linux Packages (Installers)
         if: ${{ success() }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: brewtarget-${{matrix.os}}
           path: |
@@ -117,7 +117,7 @@ jobs:
 
       - name: Recover Debris Artifacts
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: build-results-${{matrix.os}}
           path: build
