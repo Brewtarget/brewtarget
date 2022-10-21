@@ -1,6 +1,6 @@
 /*
  * xml/XmlRecordCount.cpp is part of Brewtarget, and is Copyright the following
- * authors 2020-2021
+ * authors 2020-2022
  * - Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -45,12 +45,12 @@ bool XmlRecordCount::writeToUserMessage(QTextStream & userMessage) {
       // Haven't managed to get the XSD to enforce that there is at least some recognisable content in the file, so we
       // need to handle this case ourselves.
       //
-      userMessage << this->tr("Couldn't find any recognisable data in the file!");
+      userMessage << tr("Couldn't find any recognisable data in the file!");
       return false;
    }
 
    if (!this->oks.isEmpty()) {
-      userMessage << this->tr("🗸 Read ");
+      userMessage << tr("🗸 Read ");
       int totalRecordsRead = 0;
       int typesOfRecordsRead = 0;
       for (auto ii = this->oks.constBegin(); ii != this->oks.constEnd(); ++ii, ++typesOfRecordsRead) {
@@ -60,17 +60,17 @@ bool XmlRecordCount::writeToUserMessage(QTextStream & userMessage) {
          userMessage << ii.value() << " " << ii.key();
          totalRecordsRead += ii.value();
       }
-      userMessage << (1 == totalRecordsRead ? this->tr(" record") : this->tr(" records"));
+      userMessage << (1 == totalRecordsRead ? tr(" record") : tr(" records"));
    }
 
    if (!this->skips.isEmpty()) {
       // If we read some records _and_ skipped some, then we need some space between the two messages (about what we
       // read and what we skipped).
       if (!this->oks.isEmpty()) {
-         userMessage << this->tr("\n\n");
+         userMessage << tr("\n\n");
       }
 
-      userMessage << this->tr("↷ Skipped ");
+      userMessage << tr("↷ Skipped ");
       int totalRecordsSkipped = 0;
       int typesOfRecordsSkipped = 0;
       for (auto ii = this->skips.constBegin(); ii != this->skips.constEnd(); ++ii, ++typesOfRecordsSkipped) {
@@ -81,7 +81,7 @@ bool XmlRecordCount::writeToUserMessage(QTextStream & userMessage) {
          totalRecordsSkipped += ii.value();
       }
       userMessage <<
-         (1 == totalRecordsSkipped ? this->tr(" record") : this->tr(" records")) << " already in database";
+         (1 == totalRecordsSkipped ? tr(" record") : tr(" records")) << " already in database";
    }
 
    return true;

@@ -27,16 +27,16 @@ namespace {
    // One day we should probably combine these two mapping tables
    //
    EnumStringMapping const systemOfMeasurementToDisplayName {
-      {QT_TR_NOOP("British Imperial")                 , Measurement::SystemOfMeasurement::Imperial                 },
-      {QT_TR_NOOP("US Customary")                     , Measurement::SystemOfMeasurement::UsCustomary              },
-      {QT_TR_NOOP("Metric")                           , Measurement::SystemOfMeasurement::Metric                   },
-      {QT_TR_NOOP("Standard Time Units")              , Measurement::SystemOfMeasurement::StandardTimeUnits        },
-      {QT_TR_NOOP("SRM (Standard Reference Method)")  , Measurement::SystemOfMeasurement::StandardReferenceMethod  },
-      {QT_TR_NOOP("EBC (European Brewery Convention)"), Measurement::SystemOfMeasurement::EuropeanBreweryConvention},
-      {QT_TR_NOOP("SG (Specific Gravity)")            , Measurement::SystemOfMeasurement::SpecificGravity          },
-      {QT_TR_NOOP("Plato")                            , Measurement::SystemOfMeasurement::Plato                    },
-      {QT_TR_NOOP("Lintner")                          , Measurement::SystemOfMeasurement::Lintner                  },
-      {QT_TR_NOOP("WindischKolbach")                  , Measurement::SystemOfMeasurement::WindischKolbach          }
+      {QObject::tr("British Imperial")                 , Measurement::SystemOfMeasurement::Imperial                 },
+      {QObject::tr("US Customary")                     , Measurement::SystemOfMeasurement::UsCustomary              },
+      {QObject::tr("Metric")                           , Measurement::SystemOfMeasurement::Metric                   },
+      {QObject::tr("Standard Time Units")              , Measurement::SystemOfMeasurement::StandardTimeUnits        },
+      {QObject::tr("SRM (Standard Reference Method)")  , Measurement::SystemOfMeasurement::StandardReferenceMethod  },
+      {QObject::tr("EBC (European Brewery Convention)"), Measurement::SystemOfMeasurement::EuropeanBreweryConvention},
+      {QObject::tr("SG (Specific Gravity)")            , Measurement::SystemOfMeasurement::SpecificGravity          },
+      {QObject::tr("Plato")                            , Measurement::SystemOfMeasurement::Plato                    },
+      {QObject::tr("Lintner")                          , Measurement::SystemOfMeasurement::Lintner                  },
+      {QObject::tr("WindischKolbach")                  , Measurement::SystemOfMeasurement::WindischKolbach          }
    };
    EnumStringMapping const systemOfMeasurementToUniqueName {
       {"Imperial"                 , Measurement::SystemOfMeasurement::Imperial                 },

@@ -9,6 +9,164 @@
     </message>
 </context>
 <context>
+    <name>AlcoholTool</name>
+    <message>
+        <source>Alcohol Tool</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Original Gravity (OG)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ABV</source>
+        <translation type="unfinished">ABV</translation>
+    </message>
+    <message>
+        <source>Final Gravity (FG)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reading</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Temperature</source>
+        <translation type="unfinished">Temperatur</translation>
+    </message>
+    <message>
+        <source>Corrected Reading</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Advanced Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hydrometer Calibration Temperature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Initial Reading</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Final Reading</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Result</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Calculated according to the formula set by the UK Laboratory of the Government Chemist</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>BrewDayFormatter</name>
+    <message>
+        <source>Brewday</source>
+        <translation type="unfinished">Bryggedag</translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <translation type="unfinished">Øltype</translation>
+    </message>
+    <message>
+        <source>Date</source>
+        <translation type="unfinished">Dato</translation>
+    </message>
+    <message>
+        <source>Boil Time</source>
+        <translation type="unfinished">Koketid</translation>
+    </message>
+    <message>
+        <source>Efficiency</source>
+        <translation type="unfinished">Effektivitet</translation>
+    </message>
+    <message>
+        <source>Boil Volume</source>
+        <translation type="unfinished">Kokevolum</translation>
+    </message>
+    <message>
+        <source>Preboil Gravity</source>
+        <translation type="unfinished">Tetthet før kok</translation>
+    </message>
+    <message>
+        <source>Final Volume</source>
+        <translation type="unfinished">Sluttvolum</translation>
+    </message>
+    <message>
+        <source>Starting Gravity</source>
+        <translation type="unfinished">Tetthet start</translation>
+    </message>
+    <message>
+        <source>IBU</source>
+        <translation type="unfinished">IBU</translation>
+    </message>
+    <message>
+        <source>Final Gravity</source>
+        <translation type="unfinished">Tetthet slutt</translation>
+    </message>
+    <message>
+        <source>ABV</source>
+        <translation type="unfinished">ABV</translation>
+    </message>
+    <message>
+        <source>Estimated calories (per 33 cl)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Estimated calories (per 12 oz)</source>
+        <translation type="unfinished">Estimert kalorier</translation>
+    </message>
+    <message>
+        <source>Instructions</source>
+        <translation type="unfinished">Instruksjoner</translation>
+    </message>
+    <message>
+        <source>Completed</source>
+        <translation type="unfinished">Fullført</translation>
+    </message>
+    <message>
+        <source>Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Step</source>
+        <translation type="unfinished">Trinn</translation>
+    </message>
+    <message>
+        <source>Add grains</source>
+        <translation type="unfinished">Legg til malt</translation>
+    </message>
+    <message>
+        <source>Heat water</source>
+        <translation type="unfinished">Varm opp vann</translation>
+    </message>
+    <message>
+        <source>Actual PreBoil Volume</source>
+        <translation type="unfinished">Reelt  kokevolum ved start</translation>
+    </message>
+    <message>
+        <source>Actual PreBoil Gravity</source>
+        <translation type="unfinished">Reell tetthet før koking</translation>
+    </message>
+    <message>
+        <source>PostBoil Volume</source>
+        <translation type="unfinished">Volum etter kok</translation>
+    </message>
+    <message>
+        <source>PostBoil Gravity</source>
+        <translation type="unfinished">Tetthet etter kok</translation>
+    </message>
+    <message>
+        <source>Volume into fermenter</source>
+        <translation type="unfinished">Volum til gjæring</translation>
+    </message>
+</context>
+<context>
     <name>BrewDayScrollWidget</name>
     <message>
         <source>Style</source>
@@ -92,7 +250,7 @@
     </message>
     <message>
         <source>Print Document</source>
-        <translation>Skriv ut dokument</translation>
+        <translation type="vanished">Skriv ut dokument</translation>
     </message>
     <message>
         <source>&lt;h2&gt;Notes&lt;/h2&gt;</source>
@@ -118,231 +276,195 @@
         <source>Estimated calories (per 12 oz)</source>
         <translation type="unfinished">Estimert kalorier</translation>
     </message>
+    <message>
+        <source>Brewday</source>
+        <translation type="unfinished">Bryggedag</translation>
+    </message>
 </context>
 <context>
     <name>BrewDayWidget</name>
     <message>
         <source>Style</source>
-        <translation>Øltype</translation>
+        <translation type="vanished">Øltype</translation>
     </message>
     <message>
         <source>Date</source>
-        <translation>Dato</translation>
+        <translation type="vanished">Dato</translation>
     </message>
     <message>
         <source>Boil Volume</source>
-        <translation>Kokevolum</translation>
+        <translation type="vanished">Kokevolum</translation>
     </message>
     <message>
         <source>Preboil Gravity</source>
-        <translation>Tetthet før kok</translation>
+        <translation type="vanished">Tetthet før kok</translation>
     </message>
     <message>
         <source>Final Volume</source>
-        <translation>Sluttvolum</translation>
+        <translation type="vanished">Sluttvolum</translation>
     </message>
     <message>
         <source>Starting Gravity</source>
-        <translation>Tetthet start</translation>
+        <translation type="vanished">Tetthet start</translation>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation>Koketid</translation>
+        <translation type="vanished">Koketid</translation>
     </message>
     <message>
         <source>IBU</source>
-        <translation>IBU</translation>
+        <translation type="vanished">IBU</translation>
     </message>
     <message>
         <source>Predicted Efficiency</source>
-        <translation>Estimert effektivitet</translation>
+        <translation type="vanished">Estimert effektivitet</translation>
     </message>
     <message>
         <source>Estimated calories (per 12 oz)</source>
-        <translation>Estimert kalorier</translation>
+        <translation type="vanished">Estimert kalorier</translation>
     </message>
     <message>
         <source>Instructions</source>
-        <translation>Instruksjoner</translation>
+        <translation type="vanished">Instruksjoner</translation>
     </message>
     <message>
         <source>Completed</source>
-        <translation>Fullført</translation>
+        <translation type="vanished">Fullført</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation>Tidtaker</translation>
+        <translation type="vanished">Tidtaker</translation>
     </message>
     <message>
         <source>Step</source>
-        <translation>Trinn</translation>
+        <translation type="vanished">Trinn</translation>
     </message>
     <message>
         <source>Actual Pre-boil Volume:</source>
-        <translation>Reelt kokevolum</translation>
+        <translation type="vanished">Reelt kokevolum</translation>
     </message>
     <message>
         <source>Actual Pre-boil Gravity:</source>
-        <translation>Reell tetthet før koking:</translation>
+        <translation type="vanished">Reell tetthet før koking:</translation>
     </message>
     <message>
         <source>Post-boil Volume:</source>
-        <translation>Volum etter kok</translation>
+        <translation type="vanished">Volum etter kok</translation>
     </message>
     <message>
         <source>Post-boil Gravity:</source>
-        <translation>Tetthet etter kok</translation>
+        <translation type="vanished">Tetthet etter kok</translation>
     </message>
     <message>
         <source>Volume in fermenter:</source>
-        <translation>Volum til gjæring</translation>
+        <translation type="vanished">Volum til gjæring</translation>
     </message>
     <message>
         <source>Print Document</source>
-        <translation>Skriv ut dokument</translation>
+        <translation type="vanished">Skriv ut dokument</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Notater</translation>
+        <translation type="vanished">Notater</translation>
     </message>
     <message>
         <source>Step %1: %2</source>
-        <translation>Trinn %1: %2</translation>
-    </message>
-    <message>
-        <source>Estimated calories (per 33 cl)</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Trinn %1: %2</translation>
     </message>
 </context>
 <context>
     <name>Brewtarget</name>
     <message>
         <source>Default</source>
-        <translation>Standard</translation>
+        <translation type="vanished">Standard</translation>
     </message>
     <message>
         <source>EBC</source>
-        <translation>EBC</translation>
+        <translation type="vanished">EBC</translation>
     </message>
     <message>
         <source>SRM</source>
-        <translation>SRM</translation>
+        <translation type="vanished">SRM</translation>
     </message>
     <message>
         <source>Plato</source>
-        <translation>Plato</translation>
+        <translation type="vanished">Plato</translation>
     </message>
     <message>
         <source>Specific Gravity</source>
-        <translation>Spesifikk tetthet</translation>
+        <translation type="vanished">Spesifikk tetthet</translation>
     </message>
     <message>
         <source>SI</source>
-        <translation>SI</translation>
+        <translation type="vanished">SI</translation>
     </message>
     <message>
         <source>US Customary</source>
-        <translation>Amerikanske enheter</translation>
+        <translation type="vanished">Amerikanske enheter</translation>
     </message>
     <message>
         <source>Milligrams</source>
-        <translation>Milligram</translation>
+        <translation type="vanished">Milligram</translation>
     </message>
     <message>
         <source>Grams</source>
-        <translation>Gram</translation>
+        <translation type="vanished">Gram</translation>
     </message>
     <message>
         <source>Kilograms</source>
-        <translation>Kilo</translation>
+        <translation type="vanished">Kilo</translation>
     </message>
     <message>
         <source>Ounces</source>
-        <translation>Unser</translation>
+        <translation type="vanished">Unser</translation>
     </message>
     <message>
         <source>Pounds</source>
-        <translation>Pund</translation>
+        <translation type="vanished">Pund</translation>
     </message>
     <message>
         <source>Celsius</source>
-        <translation>Celsius</translation>
+        <translation type="vanished">Celsius</translation>
     </message>
     <message>
         <source>Fahrenheit</source>
-        <translation>Fahrenheit</translation>
+        <translation type="vanished">Fahrenheit</translation>
     </message>
     <message>
         <source>British Imperial</source>
-        <translation>Britiske enheter</translation>
+        <translation type="vanished">Britiske enheter</translation>
     </message>
     <message>
         <source>MilliLiters</source>
-        <translation>Milliliter</translation>
+        <translation type="vanished">Milliliter</translation>
     </message>
     <message>
         <source>Liters</source>
-        <translation>Liter</translation>
+        <translation type="vanished">Liter</translation>
     </message>
     <message>
         <source>Teaspoons</source>
-        <translation>Teskje</translation>
+        <translation type="vanished">Teskje</translation>
     </message>
     <message>
         <source>Tablespoons</source>
-        <translation>Spiseskje</translation>
+        <translation type="vanished">Spiseskje</translation>
     </message>
     <message>
         <source>Cups</source>
-        <translation>Cups</translation>
+        <translation type="vanished">Cups</translation>
     </message>
     <message>
         <source>Quarts</source>
-        <translation>Quarts</translation>
+        <translation type="vanished">Quarts</translation>
     </message>
     <message>
         <source>Gallons</source>
-        <translation>Gallons</translation>
+        <translation type="vanished">Gallons</translation>
     </message>
     <message>
         <source>Unknown</source>
-        <translation>Ukjent</translation>
-    </message>
-    <message>
-        <source>YYYY-mm-dd</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>dd-mm-YYYY</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>mm-dd-YYYY</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Seconds</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Minutes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hours</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Days</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Barrels</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Scale</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Ukjent</translation>
     </message>
 </context>
 <context>
@@ -438,6 +560,38 @@
     </message>
     <message>
         <source>There was an unexpected error creating %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Snapshots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ca</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>HCO3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SO4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cl</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Na</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mg</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>pH</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -544,7 +698,23 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>To HTML</source>
+        <source>Show Snapshots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hide Snapshots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Detach Recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Snapshot Recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Water</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -609,6 +779,48 @@
         <source>Could not connect to %1 : %2</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Success!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ERROR</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Successfully read new default data
+
+%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unable to import new default data
+
+%1
+
+Log file may contain more details.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Filename</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Host &amp; Port</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Schema</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Username</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>EquipmentEditor</name>
@@ -650,139 +862,135 @@
     </message>
     <message>
         <source>Equipment Editor</source>
-        <translation>Utstyrsredigering</translation>
+        <translation type="vanished">Utstyrsredigering</translation>
     </message>
     <message>
         <source>Equipment</source>
-        <translation>Utstyr</translation>
+        <translation type="vanished">Utstyr</translation>
     </message>
     <message>
         <source>Set as Default</source>
-        <translation>Sett som forvalgt</translation>
+        <translation type="vanished">Sett som forvalgt</translation>
     </message>
     <message>
         <source>Required Fields</source>
-        <translation>Obligatoriske felt</translation>
+        <translation type="vanished">Obligatoriske felt</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Navn</translation>
+        <translation type="vanished">Navn</translation>
     </message>
     <message>
         <source>Pre-boil volume</source>
-        <translation>Volum før koking</translation>
+        <translation type="vanished">Volum før koking</translation>
     </message>
     <message>
         <source>Calculate pre-boil volume</source>
-        <translation>Kalkuler volum før koking</translation>
+        <translation type="vanished">Kalkuler volum før koking</translation>
     </message>
     <message>
         <source>Batch size</source>
-        <translation>Batch størrelse</translation>
+        <translation type="vanished">Batch størrelse</translation>
     </message>
     <message>
         <source>Boiling &amp;&amp; Water</source>
-        <translation>Koking &amp;&amp; Vann</translation>
+        <translation type="vanished">Koking &amp;&amp; Vann</translation>
     </message>
     <message>
         <source>Boil time</source>
-        <translation>Koketid</translation>
+        <translation type="vanished">Koketid</translation>
     </message>
     <message>
         <source>Evaporation rate (per hr)</source>
-        <translation>Frodampningsrate (pr time)</translation>
+        <translation type="vanished">Frodampningsrate (pr time)</translation>
     </message>
     <message>
         <source>Kettle top-up water</source>
-        <translation>Etterfyllingsvann kjele</translation>
+        <translation type="vanished">Etterfyllingsvann kjele</translation>
     </message>
     <message>
         <source>Final top-up water</source>
-        <translation>Endelig etterfyllingsvann</translation>
+        <translation type="vanished">Endelig etterfyllingsvann</translation>
     </message>
     <message>
         <source>Grain Absorption (L/kg)</source>
-        <translation>Maltets vannabsorpsjon (L/kg)</translation>
+        <translation type="vanished">Maltets vannabsorpsjon (L/kg)</translation>
     </message>
     <message>
         <source>Default Absorption</source>
-        <translation>Normalverdi absorpsjon</translation>
+        <translation type="vanished">Normalverdi absorpsjon</translation>
     </message>
     <message>
         <source>Hop Utilization </source>
-        <translation>Humleutilisering </translation>
+        <translation type="vanished">Humleutilisering </translation>
     </message>
     <message>
         <source>Boiling Point of Water</source>
-        <translation>Kokepunkt for vann</translation>
+        <translation type="vanished">Kokepunkt for vann</translation>
     </message>
     <message>
         <source>Mash Tun</source>
-        <translation>Meskekar</translation>
+        <translation type="vanished">Meskekar</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation>Volum</translation>
+        <translation type="vanished">Volum</translation>
     </message>
     <message>
         <source>Mass</source>
-        <translation>Masse</translation>
+        <translation type="vanished">Masse</translation>
     </message>
     <message>
         <source>Remove equipment</source>
-        <translation>Fjern utstyr</translation>
+        <translation type="vanished">Fjern utstyr</translation>
     </message>
     <message>
         <source>If checked, we will calculate your pre-boil volume based on your desired batch size, boil time, evaporation rate, losses, etc.</source>
-        <translation>Hvis avkrysset, vil vi kalkulere volum før koking basert på din ønskede batch størrelse, koketid, fordampningsrate, tap, etc.</translation>
+        <translation type="vanished">Hvis avkrysset, vil vi kalkulere volum før koking basert på din ønskede batch størrelse, koketid, fordampningsrate, tap, etc.</translation>
     </message>
     <message>
         <source>Automatically fill in pre-boil volume</source>
-        <translation>Automatisk fyll ut volum før koking</translation>
+        <translation type="vanished">Automatisk fyll ut volum før koking</translation>
     </message>
     <message>
         <source>How much water boils off per hour</source>
-        <translation>Hvor mye vann koker bort pr time</translation>
+        <translation type="vanished">Hvor mye vann koker bort pr time</translation>
     </message>
     <message>
         <source>How much water is added to kettle immediately pre-boil</source>
-        <translation>Hvor mye vann tilsettes rett før koking</translation>
+        <translation type="vanished">Hvor mye vann tilsettes rett før koking</translation>
     </message>
     <message>
         <source>Water added to fermenter</source>
-        <translation>Vann tilsatt gjæringskar</translation>
+        <translation type="vanished">Vann tilsatt gjæringskar</translation>
     </message>
     <message>
         <source>Volume of mash tun</source>
-        <translation>Volum på meskekar</translation>
+        <translation type="vanished">Volum på meskekar</translation>
     </message>
     <message>
         <source>Mass or weight of mash tun</source>
-        <translation>Masse/vekt på meskekar</translation>
+        <translation type="vanished">Masse/vekt på meskekar</translation>
     </message>
     <message>
         <source>Wort lost between kettle and fermenter</source>
-        <translation>Vørter tapt mellom kjele og gjæringskar</translation>
+        <translation type="vanished">Vørter tapt mellom kjele og gjæringskar</translation>
     </message>
     <message>
         <source>Volume of wort lost to lauter deadspace</source>
-        <translation>Volum av tapt vørter i separasjonstankens dødrom</translation>
+        <translation type="vanished">Volum av tapt vørter i separasjonstankens dødrom</translation>
     </message>
     <message>
         <source>New equipment</source>
-        <translation>Nytt utstyr</translation>
+        <translation type="vanished">Nytt utstyr</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation>Lagre</translation>
+        <translation type="vanished">Lagre</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Avbryt</translation>
-    </message>
-    <message>
-        <source>This equipment profile may break brewtarget&apos;s maths</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Avbryt</translation>
     </message>
     <message>
         <source>The following values are not set:</source>
@@ -802,6 +1010,10 @@
     </message>
     <message>
         <source>Calculation Warnings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This equipment profile may break Brewtarget&apos;s maths</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -868,6 +1080,17 @@
     </message>
 </context>
 <context>
+    <name>FermentableEditor</name>
+    <message>
+        <source>Fermentable name</source>
+        <translation type="unfinished">Gjærbar råvares navn</translation>
+    </message>
+    <message>
+        <source>Fermentable name:</source>
+        <translation type="unfinished">Gjærbar råvares navn:</translation>
+    </message>
+</context>
+<context>
     <name>FermentableItemDelegate</name>
     <message>
         <source>Grain</source>
@@ -914,11 +1137,11 @@
     <name>FermentableTableModel</name>
     <message>
         <source>Bad model index. row = %1</source>
-        <translation>Dårlig modell indeks.rad = %1</translation>
+        <translation type="vanished">Dårlig modell indeks.rad = %1</translation>
     </message>
     <message>
         <source>Bad column: %1</source>
-        <translation>Feil i kolonne: %1</translation>
+        <translation type="vanished">Feil i kolonne: %1</translation>
     </message>
     <message>
         <source>Name</source>
@@ -950,6 +1173,38 @@
     </message>
     <message>
         <source>Addition</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Fermentable Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Fermentable Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Inventory Amount</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Fermentable Amount</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Addition Method</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Addition Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Yield</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Color</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1036,6 +1291,17 @@
     </message>
 </context>
 <context>
+    <name>HopEditor</name>
+    <message>
+        <source>Hop name</source>
+        <translation type="unfinished">Humlenavn</translation>
+    </message>
+    <message>
+        <source>Hop name:</source>
+        <translation type="unfinished">Humlenavn:</translation>
+    </message>
+</context>
+<context>
     <name>HopItemDelegate</name>
     <message>
         <source>Boil</source>
@@ -1100,6 +1366,34 @@
         <source>Inventory</source>
         <translation>Lagerbeholdning</translation>
     </message>
+    <message>
+        <source>Change Hop Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Hop Alpha %</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Hop Inventory Amount</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Hop Amount</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Hop Use</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Hop Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Hop Time</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HydrometerTool</name>
@@ -1129,6 +1423,10 @@
     </message>
     <message>
         <source>Corrected gravity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hydrometer Calibration</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1187,23 +1485,23 @@
     </message>
     <message>
         <source>HTML files (*.html)</source>
-        <translation>HTML-filer (*.html)</translation>
+        <translation type="vanished">HTML-filer (*.html)</translation>
     </message>
     <message>
         <source>Database Update</source>
-        <translation>Databaseoppdatering</translation>
+        <translation type="vanished">Databaseoppdatering</translation>
     </message>
     <message>
         <source>You are about to update the current database with another one. This may make changes to (but will not delete) some of your ingredients. It will not modify any of your recipes. Continue?</source>
-        <translation>Du er i ferd med å oppdatere nåværende database med en annen. Dette kan gjøre endringer i (men ikke slette) noen av ingrediensene dine. Det vil ikke endre noen av dine oppskrifter. Fortsette?</translation>
+        <translation type="vanished">Du er i ferd med å oppdatere nåværende database med en annen. Dette kan gjøre endringer i (men ikke slette) noen av ingrediensene dine. Det vil ikke endre noen av dine oppskrifter. Fortsette?</translation>
     </message>
     <message>
         <source>Select Database File</source>
-        <translation>Velg databasefil</translation>
+        <translation type="vanished">Velg databasefil</translation>
     </message>
     <message>
         <source>Brewtarget Database (*.sqlite)</source>
-        <translation>Brewtarget-database (*.sqlite)</translation>
+        <translation type="vanished">Brewtarget-database (*.sqlite)</translation>
     </message>
     <message>
         <source>Recipe name</source>
@@ -1303,7 +1601,7 @@
     </message>
     <message>
         <source>The import contained invalid beerXML. It has been imported, but please make certain it makes sense.</source>
-        <translation>Importeringen innholdt ugyldig beerXML. Den er blitt importert men, vær vennlig å sjekk at ting ser riktig ut.</translation>
+        <translation type="vanished">Importeringen innholdt ugyldig beerXML. Den er blitt importert men, vær vennlig å sjekk at ting ser riktig ut.</translation>
     </message>
     <message>
         <source>Folder name</source>
@@ -1326,11 +1624,155 @@
         <translation>Et mappenavn må ha minst et ikke-/  tegn</translation>
     </message>
     <message>
-        <source>Error copying recipe</source>
+        <source>An error was returned while creating %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>An error was returned while creating %1</source>
+        <source>Success!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ERROR</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Successfully read &quot;%1&quot;
+
+%2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Successfully wrote &quot;%1&quot;
+
+%2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unable to import data from &quot;%1&quot;
+
+%2
+
+Log file may contain more details.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unable to write data to &quot;%1&quot;
+
+%2
+
+Log file may contain more details.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Recipe Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Recipe Style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Recipe Kit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Tun Weight</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Tun Specific Heat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Batch Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Boil Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Boil Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Drop fermentables on a recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Drop hops on a recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Drop misc on a recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Drop yeast on a recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Recipe Efficiency</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add fermentable to recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add hop to recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add misc to recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add yeast to recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add mash step to recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Undo %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Redo %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove fermentable from recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove hop from recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove misc from recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove yeast from recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error creating recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove mash step</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No Mash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You must define a mash first.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1370,14 +1812,21 @@
     </message>
 </context>
 <context>
+    <name>MashStep</name>
+    <message>
+        <source>Unnamed Mash Step</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>MashStepTableModel</name>
     <message>
         <source>Bad model index. row = %1</source>
-        <translation>Dårlig modell indeks.rad = %1</translation>
+        <translation type="vanished">Dårlig modell indeks.rad = %1</translation>
     </message>
     <message>
         <source>Bad column: %1</source>
-        <translation>Feil i kolonne: %1</translation>
+        <translation type="vanished">Feil i kolonne: %1</translation>
     </message>
     <message>
         <source>Name</source>
@@ -1402,6 +1851,38 @@
     <message>
         <source>Time</source>
         <translation>Tid</translation>
+    </message>
+    <message>
+        <source>Change Mash Step Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Mash Step Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Mash Step Decoction Amount</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Mash Step Infuse Amount</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Mash Step Infuse Temp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Mash Step Temp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Mash Step End Temp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Mash Step Time</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1473,6 +1954,21 @@
     <message>
         <source>Fly Sparge</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Infusion temp.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>In order to hit your target temp on the final step, the infusion water must be above boiling. Lower your initial infusion volume.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Measurement::Units</name>
+    <message>
+        <source>min</source>
+        <translation type="obsolete">min</translation>
     </message>
 </context>
 <context>
@@ -1570,6 +2066,17 @@
     </message>
 </context>
 <context>
+    <name>MiscEditor</name>
+    <message>
+        <source>Misc name</source>
+        <translation type="unfinished">Diverse navn</translation>
+    </message>
+    <message>
+        <source>Misc name:</source>
+        <translation type="unfinished">Diverse navn:</translation>
+    </message>
+</context>
+<context>
     <name>MiscItemDelegate</name>
     <message>
         <source>Spice</source>
@@ -1654,12 +2161,40 @@
         <source>Inventory</source>
         <translation>Lagerbeholdning</translation>
     </message>
+    <message>
+        <source>Change Misc Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Misc Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Misc Use</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Misc Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Misc Inventory Amount</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Misc Amount</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Misc Amount Type</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>OptionDialog</name>
     <message>
         <source>Open Directory</source>
-        <translation>Åpne mappe</translation>
+        <translation type="vanished">Åpne mappe</translation>
     </message>
     <message>
         <source>Copy Data</source>
@@ -1728,10 +2263,6 @@
     <message>
         <source>Chinese</source>
         <translation>Kinesisk</translation>
-    </message>
-    <message>
-        <source>SI units</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>US traditional units</source>
@@ -1854,19 +2385,58 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Saving the options without testing the connection can cause brewtarget to not restart. Your changes have been discarded, which is likely really, really crappy UX. Please open a bug explaining exactly how you got to this message.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Would you like brewtarget to transfer your data to the new database? NOTE: If you&apos;ve already loaded the data, say No</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Transfer database</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Please restart brewtarget to connect to the new database</source>
+        <source>Metric / SI units</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lintner</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>WK</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose User Data Directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose Backups Directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose Logging Directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Would you like Brewtarget to transfer your data to the new database? NOTE: If you&apos;ve already loaded the data, say No</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please restart Brewtarget to connect to the new database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Saving the options without testing the connection can cause Brewken to not restart.  Your changes have been discarded, which is likely really, really crappy UX.  Please open a bug explaining exactly how you got to this message.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PrintAndPreviewDialog</name>
+    <message>
+        <source>File %1 filname &lt;&lt; could not be saved</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error saving file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not open the file %1 for writing! please try again with a new filename or diretory</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1906,7 +2476,7 @@
     </message>
     <message>
         <source>Failed to open the database &apos;%1&apos;.</source>
-        <translation>Kunne ikke åpne database &apos;%1&apos;.</translation>
+        <translation type="vanished">Kunne ikke åpne database &apos;%1&apos;.</translation>
     </message>
     <message>
         <source>Save Database Changes</source>
@@ -2073,10 +2643,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Data directory &quot;%1&quot; is missing.  Some features will be unavaliable.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Fly Sparge</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2098,6 +2664,305 @@
     </message>
     <message>
         <source>Passwords are saved in plaintext. We make no effort to hide, obscure or otherwise protect the password. By enabling this option, you take full responsibility for any potential problems.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Never</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mash</source>
+        <translation type="unfinished">Mesk</translation>
+    </message>
+    <message>
+        <source>Sparge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ratio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Both</source>
+        <translation type="unfinished">Begge</translation>
+    </message>
+    <message>
+        <source>None</source>
+        <translation type="unfinished">Ingen</translation>
+    </message>
+    <message>
+        <source>CaCl2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CaCO3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CaSO4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>MgSO4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>NaCl</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>NaHCO3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lactic acid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>H3PO4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Acid malt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unknown</source>
+        <translation type="unfinished">Ukjent</translation>
+    </message>
+    <message>
+        <source>Detailed (for debugging)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Normal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Warnings and Errors only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Errors only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not create new log file directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not read new log file directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not write to new log file directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> reverting to </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Inventory</source>
+        <translation type="unfinished">Lagerbeholdning</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Navn</translation>
+    </message>
+    <message>
+        <source>Amount</source>
+        <translation type="unfinished">Mengde</translation>
+    </message>
+    <message>
+        <source>Alpha %</source>
+        <translation type="unfinished">Alfa %</translation>
+    </message>
+    <message>
+        <source>No inventory available.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not open PostgreSQL DB connection to %1.
+%2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not open SQLite DB file %1.
+%2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Resource directory &quot;%1&quot; is missing.  Some features will be unavailable.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>kg</source>
+        <extracomment>NOTE FOR TRANSLATORS: The abbreviated name of each unit (eg &quot;kg&quot; for kilograms, &quot;g&quot; for grams, etc) must be</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>g</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>mg</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>lb</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>oz</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>L</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>mL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>bbl</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>gal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>qt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>cup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>tbsp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>tsp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>min</source>
+        <translation type="unfinished">min</translation>
+    </message>
+    <message>
+        <source>s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>hr</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>day</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>C</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>F</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>srm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ebc</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>sg</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>P</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>WK</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>British Imperial</source>
+        <translation type="unfinished">Britiske enheter</translation>
+    </message>
+    <message>
+        <source>US Customary</source>
+        <translation type="unfinished">Amerikanske enheter</translation>
+    </message>
+    <message>
+        <source>Metric</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Standard Time Units</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SRM (Standard Reference Method)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>EBC (European Brewery Convention)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SG (Specific Gravity)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Plato</source>
+        <translation type="unfinished">Plato</translation>
+    </message>
+    <message>
+        <source>Lintner</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>WindischKolbach</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mass</source>
+        <translation type="unfinished">Masse</translation>
+    </message>
+    <message>
+        <source>Volume</source>
+        <translation type="unfinished">Volum</translation>
+    </message>
+    <message>
+        <source>Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Color</source>
+        <translation type="unfinished">Farge</translation>
+    </message>
+    <message>
+        <source>Density</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mixed</source>
+        <translation type="unfinished">Blandet</translation>
+    </message>
+    <message>
+        <source>DiastaticPower</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2329,6 +3194,93 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
         <source>%1 water to %2 </source>
         <translation>%1 vann til %2 </translation>
     </message>
+    <message>
+        <source>mash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>sparge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Modify %1 water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dissolve </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> into the %1 water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 %2, </source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>RecipeExtrasWidget</name>
+    <message>
+        <source>Change Brewer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Assistant Brewer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Taste Rating</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Primary Age</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Primary Temp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Secondary Age</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Secondary Temp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Tertiary Age</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Tertiary Temp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Age</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Age Temp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Carbonation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit Taste Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RecipeFormatter</name>
@@ -2546,7 +3498,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Print Document</source>
-        <translation>Skriv ut dokument</translation>
+        <translation type="vanished">Skriv ut dokument</translation>
     </message>
     <message>
         <source>Category</source>
@@ -2613,27 +3565,31 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Hostname</source>
+        <source>Recipe</source>
+        <translation type="unfinished">Oppskrift</translation>
+    </message>
+    <message>
+        <source>Ca</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Port</source>
+        <source>Mg</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Schema</source>
+        <source>SO&lt;sub&gt;4&lt;/sub&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Database</source>
+        <source>Na</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Username</source>
+        <source>Cl</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Saved Password</source>
+        <source>HCO&lt;sub&gt;3&lt;/sub&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2646,6 +3602,92 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     <message>
         <source>Based on the given original plato, the OG should be %1, but you have entered %2. Continuing with the calculated OG.</source>
         <translation>Basert på given original plato, skulle OG være %1, men du har skrevet %2. Fortsetter med kalkulert OG.</translation>
+    </message>
+</context>
+<context>
+    <name>SaltItemDelegate</name>
+    <message>
+        <source>NONE</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CaCl2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CaCO3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CaSO4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>MgSO4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>NaCl</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>NaHCO3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lactic acid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>H3PO4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Acid malt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Never</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mash</source>
+        <translation type="unfinished">Mesk</translation>
+    </message>
+    <message>
+        <source>Sparge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ratio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Equal</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SaltTableModel</name>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Navn</translation>
+    </message>
+    <message>
+        <source>Amount</source>
+        <translation type="unfinished">Mengde</translation>
+    </message>
+    <message>
+        <source>Added To</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>% Acid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bad column: %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2703,36 +3745,8 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
 <context>
     <name>TimerDialog</name>
     <message>
-        <source>Addition Timer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Set Addition Time(min):</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Time Remaining:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Notes: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Notes...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Set Alarm sound</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Stop Alarm</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Cancel</source>
-        <translation type="unfinished">Avbryt</translation>
+        <translation type="obsolete">Avbryt</translation>
     </message>
 </context>
 <context>
@@ -2745,56 +3759,12 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
 <context>
     <name>TimerMainDialog</name>
     <message>
-        <source>Main Boil Timer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Add Timer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Start</source>
-        <translation type="unfinished">Start</translation>
+        <translation type="obsolete">Start</translation>
     </message>
     <message>
         <source>Stop</source>
-        <translation type="unfinished">Stopp</translation>
-    </message>
-    <message>
-        <source>Reset</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hide Timers</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Show Timers</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cancel Timers</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Load Current Recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Set Boil Timer (mins):</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Set Boil Time Here</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Limit Alarm Ring Time </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Alarm Ring Time (secs):</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Stopp</translation>
     </message>
     <message>
         <source>No Timers</source>
@@ -2857,7 +3827,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Audio Files (*.wav *.ogg *.mp3 *.aiff)</source>
-        <translation>Lydfiler (*.wav *.ogg *.mp3 *.aiff)</translation>
+        <translation type="vanished">Lydfiler (*.wav *.ogg *.mp3 *.aiff)</translation>
     </message>
     <message>
         <source>Stop</source>
@@ -2907,6 +3877,94 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
         <source>Addition time cannot be longer than remaining boil time</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Audio Files (*.wav)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>UnitAndScalePopUpMenu</name>
+    <message>
+        <source>Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>UnitSystem</name>
+    <message>
+        <source>Scale</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>WaterDialog</name>
+    <message>
+        <source>Too low for target profile.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>In range for target profile.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Too high for target profile.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Minimum expected concentration is %1 ppm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Maximum expected concentration is %1 ppm</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>WaterEditor</name>
+    <message>
+        <source>PPM</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Calcium</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bicarbonate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sulfate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Chloride</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sodium</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Magnesium</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Current</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Modified</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Water name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Water name:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>WaterTableModel</name>
@@ -2952,6 +4010,50 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
 </context>
 <context>
+    <name>XmlCoding</name>
+    <message>
+        <source>Internal Error! (Document parse returned null pointer.)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Contents of file were not readable</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not understand file format</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>XmlRecordCount</name>
+    <message>
+        <source>Couldn&apos;t find any recognisable data in the file!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>🗸 Read </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> record</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> records</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>
+
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>↷ Skipped </source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>YeastDialog</name>
     <message>
         <source>Yeast name</source>
@@ -2988,6 +4090,17 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     <message>
         <source>Remove selected ingredient</source>
         <translation>Fjern valgt ingrediens</translation>
+    </message>
+</context>
+<context>
+    <name>YeastEditor</name>
+    <message>
+        <source>Yeast name</source>
+        <translation type="unfinished">Gjærnavn</translation>
+    </message>
+    <message>
+        <source>Yeast name:</source>
+        <translation type="unfinished">Gjærnavn:</translation>
     </message>
 </context>
 <context>
@@ -3033,11 +4146,11 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     <name>YeastTableModel</name>
     <message>
         <source>Bad model index. row = %1</source>
-        <translation>Dårlig modell indeks.rad = %1</translation>
+        <translation type="vanished">Dårlig modell indeks.rad = %1</translation>
     </message>
     <message>
         <source>Bad column: %1</source>
-        <translation>Feil kolonne: %1</translation>
+        <translation type="vanished">Feil kolonne: %1</translation>
     </message>
     <message>
         <source>Name</source>
@@ -3067,1108 +4180,1112 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
         <source>Inventory</source>
         <translation>Lagerbeholdning</translation>
     </message>
+    <message>
+        <source>Change Yeast Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Yeast Laboratory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Yeast Product ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Yeast Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Yeast Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Yeast Inventory Unit Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Yeast Amount</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>brewDayScrollWidget</name>
     <message>
         <source>Form</source>
-        <translation>Skjema</translation>
+        <translation type="vanished">Skjema</translation>
     </message>
     <message>
         <source>Generate Instructions</source>
-        <translation>Generer instruksjoner</translation>
+        <translation type="vanished">Generer instruksjoner</translation>
     </message>
     <message>
         <source>Insert step</source>
-        <translation>Legg til fase</translation>
+        <translation type="vanished">Legg til fase</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Navn</translation>
+        <translation type="vanished">Navn</translation>
     </message>
     <message>
         <source>Name of new step</source>
-        <translation>Navn på ny fase</translation>
+        <translation type="vanished">Navn på ny fase</translation>
     </message>
     <message>
         <source>Step #</source>
-        <translation>Fase #</translation>
+        <translation type="vanished">Fase #</translation>
     </message>
     <message>
         <source>The number where the new step should be placed</source>
-        <translation>Nummeret hvor den nye fasen skal bli plassert</translation>
+        <translation type="vanished">Nummeret hvor den nye fasen skal bli plassert</translation>
     </message>
     <message>
         <source>Insert the new step</source>
-        <translation>Legg til den nye fasen</translation>
+        <translation type="vanished">Legg til den nye fasen</translation>
     </message>
     <message>
         <source>Move steps</source>
-        <translation>Flytt fase</translation>
+        <translation type="vanished">Flytt fase</translation>
     </message>
     <message>
         <source>Move currently selected step up</source>
-        <translation>Flytt valgte fase opp</translation>
+        <translation type="vanished">Flytt valgte fase opp</translation>
     </message>
     <message>
         <source>Move currently selected step down</source>
-        <translation>Flytt valgte fase ned</translation>
+        <translation type="vanished">Flytt valgte fase ned</translation>
     </message>
     <message>
         <source>Remove currently selected step</source>
-        <translation>Fjern valgte fase</translation>
+        <translation type="vanished">Fjern valgte fase</translation>
     </message>
 </context>
 <context>
     <name>brewDayWidget</name>
     <message>
         <source>Brewday Mode</source>
-        <translation>Bryggedag</translation>
+        <translation type="vanished">Bryggedag</translation>
     </message>
     <message>
         <source>Instructions</source>
-        <translation>Instruksjoner</translation>
+        <translation type="vanished">Instruksjoner</translation>
     </message>
     <message>
         <source>Move currently selected step up</source>
-        <translation>Flytt valgte fase opp</translation>
+        <translation type="vanished">Flytt valgte fase opp</translation>
     </message>
     <message>
         <source>Up</source>
-        <translation>Opp</translation>
+        <translation type="vanished">Opp</translation>
     </message>
     <message>
         <source>Move currently selected step down</source>
-        <translation>Flytt valgte fase ned</translation>
+        <translation type="vanished">Flytt valgte fase ned</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation>Ned</translation>
+        <translation type="vanished">Ned</translation>
     </message>
     <message>
         <source>Remove currently selected step</source>
-        <translation>Fjern valgte fase</translation>
+        <translation type="vanished">Fjern valgte fase</translation>
     </message>
     <message>
         <source>Remove</source>
-        <translation>Fjern</translation>
+        <translation type="vanished">Fjern</translation>
     </message>
     <message>
         <source>Insert step</source>
-        <translation>Legg til fase</translation>
+        <translation type="vanished">Legg til fase</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Navn</translation>
+        <translation type="vanished">Navn</translation>
     </message>
     <message>
         <source>Name of new step</source>
-        <translation>Navn på ny fase</translation>
+        <translation type="vanished">Navn på ny fase</translation>
     </message>
     <message>
         <source>Step #</source>
-        <translation>Fase #</translation>
+        <translation type="vanished">Fase #</translation>
     </message>
     <message>
         <source>The number where the new step should be placed</source>
-        <translation>Nummeret hvor den nye fasen skal bli plassert</translation>
+        <translation type="vanished">Nummeret hvor den nye fasen skal bli plassert</translation>
     </message>
     <message>
         <source>Insert the new step</source>
-        <translation>Legg til den nye fasen</translation>
+        <translation type="vanished">Legg til den nye fasen</translation>
     </message>
     <message>
         <source>Insert</source>
-        <translation>Sett inn</translation>
+        <translation type="vanished">Sett inn</translation>
     </message>
 </context>
 <context>
     <name>brewNoteWidget</name>
     <message>
         <source>Preboil</source>
-        <translation>Før koking</translation>
+        <translation type="vanished">Før koking</translation>
     </message>
     <message>
         <source>SG</source>
-        <translation>SG</translation>
+        <translation type="vanished">SG</translation>
     </message>
     <message>
         <source>Preboil gravity</source>
-        <translation>SG før koking</translation>
+        <translation type="vanished">SG før koking</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation>Volum</translation>
+        <translation type="vanished">Volum</translation>
     </message>
     <message>
         <source>Volume of wort collected</source>
-        <translation>Volum på samlet vørter</translation>
+        <translation type="vanished">Volum på samlet vørter</translation>
     </message>
     <message>
         <source>Strike Temp</source>
-        <translation>Forhåndstemperatur</translation>
+        <translation type="vanished">Forhåndstemperatur</translation>
     </message>
     <message>
         <source>Temperature of mash after dough in</source>
-        <translation>Temperatur på mesk etter proteinpause</translation>
+        <translation type="vanished">Temperatur på mesk etter proteinpause</translation>
     </message>
     <message>
         <source>Final Temp</source>
-        <translation>Endelig temperatur</translation>
+        <translation type="vanished">Endelig temperatur</translation>
     </message>
     <message>
         <source>Temperature of mash before mash out</source>
-        <translation>Temperatur på mesk før utmesking</translation>
+        <translation type="vanished">Temperatur på mesk før utmesking</translation>
     </message>
     <message>
         <source>Postboil</source>
-        <translation>Etter koking</translation>
+        <translation type="vanished">Etter koking</translation>
     </message>
     <message>
         <source>OG</source>
-        <translation>OG</translation>
+        <translation type="vanished">OG</translation>
     </message>
     <message>
         <source>Post boil gravity</source>
-        <translation>SG etter koking</translation>
+        <translation type="vanished">SG etter koking</translation>
     </message>
     <message>
         <source>Postboil Volume</source>
-        <translation>Volum etter koking</translation>
+        <translation type="vanished">Volum etter koking</translation>
     </message>
     <message>
         <source>Volume of wort in BK after boil</source>
-        <translation>Volum på vørter i BK etter koking</translation>
+        <translation type="vanished">Volum på vørter i BK etter koking</translation>
     </message>
     <message>
         <source>Volume of wort transferred to fermenter</source>
-        <translation>Volum på vørter overført til gjæring</translation>
+        <translation type="vanished">Volum på vørter overført til gjæring</translation>
     </message>
     <message>
         <source>Volume into fermenter</source>
-        <translation>Volum til gjæring</translation>
+        <translation type="vanished">Volum til gjæring</translation>
     </message>
     <message>
         <source> Pitch Temp</source>
-        <translation> Temperatur på gjærstarter</translation>
+        <translation type="vanished"> Temperatur på gjærstarter</translation>
     </message>
     <message>
         <source>Temperature of wort when yeast is pitched</source>
-        <translation>Temperatur på vørter når gjær tilsettes</translation>
+        <translation type="vanished">Temperatur på vørter når gjær tilsettes</translation>
     </message>
     <message>
         <source>Postferment</source>
-        <translation>Etter gjæring</translation>
+        <translation type="vanished">Etter gjæring</translation>
     </message>
     <message>
         <source>Final gravity</source>
-        <translation>FG</translation>
+        <translation type="vanished">FG</translation>
     </message>
     <message>
         <source>Volume of beer into serving keg/bottles</source>
-        <translation>Volum øl til flasking/fat</translation>
+        <translation type="vanished">Volum øl til flasking/fat</translation>
     </message>
     <message>
         <source>percent efficiency into boil kettle</source>
-        <translation>Prosent effektivitet i kokekar</translation>
+        <translation type="vanished">Prosent effektivitet i kokekar</translation>
     </message>
     <message>
         <source>Eff into BK</source>
-        <translation>Eff i BK</translation>
+        <translation type="vanished">Eff i BK</translation>
     </message>
     <message>
         <source>Expected OG, based on measure fg</source>
-        <translation>Forventet OG, basert på målt fg</translation>
+        <translation type="vanished">Forventet OG, basert på målt fg</translation>
     </message>
     <message>
         <source>Projected OG</source>
-        <translation>Projisert OG</translation>
+        <translation type="vanished">Projisert OG</translation>
     </message>
     <message>
         <source>Brewhouse efficiency</source>
-        <translation>Bryggerhusefektivitet</translation>
+        <translation type="vanished">Bryggerhusefektivitet</translation>
     </message>
     <message>
         <source>Brewhouse Eff</source>
-        <translation>Bryggerhus Eff</translation>
+        <translation type="vanished">Bryggerhus Eff</translation>
     </message>
     <message>
         <source>Expected ABV based on OG</source>
-        <translation>Forventet ABV basert på OG</translation>
+        <translation type="vanished">Forventet ABV basert på OG</translation>
     </message>
     <message>
         <source>Projected ABV</source>
-        <translation>Projisert ABV</translation>
+        <translation type="vanished">Projisert ABV</translation>
     </message>
     <message>
         <source>ABV based on FG</source>
-        <translation>ABV basert på OG</translation>
+        <translation type="vanished">ABV basert på OG</translation>
     </message>
     <message>
         <source>ABV</source>
-        <translation>ABV</translation>
+        <translation type="vanished">ABV</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Notater</translation>
-    </message>
-    <message>
-        <source>brewNote</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>yyyy-dd-MM</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Notater</translation>
     </message>
 </context>
 <context>
     <name>equipmentEditor</name>
     <message>
         <source>Specific heat (cal/(g*K))</source>
-        <translation>Spesifikk varmekap. (cal/(g*K))</translation>
+        <translation type="vanished">Spesifikk varmekap. (cal/(g*K))</translation>
     </message>
     <message>
         <source>Losses</source>
-        <translation>Tap</translation>
+        <translation type="vanished">Tap</translation>
     </message>
     <message>
         <source>Kettle to fermenter</source>
-        <translation>Kjele til gjæringskar</translation>
+        <translation type="vanished">Kjele til gjæringskar</translation>
     </message>
     <message>
         <source>Lauter deadspace</source>
-        <translation>Dødrom i separasjonstank</translation>
-    </message>
-    <message>
-        <source>equipmentEditor</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Dødrom i separasjonstank</translation>
     </message>
 </context>
 <context>
     <name>fermentableEditor</name>
     <message>
         <source>Fermentable Editor</source>
-        <translation>Redigering av gjærbart</translation>
+        <translation type="vanished">Redigering av gjærbart</translation>
     </message>
     <message>
         <source>Required Fields</source>
-        <translation>Obligatoriske felt</translation>
+        <translation type="vanished">Obligatoriske felt</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Navn</translation>
+        <translation type="vanished">Navn</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Type</translation>
+        <translation type="vanished">Type</translation>
     </message>
     <message>
         <source>Grain</source>
-        <translation>Korn</translation>
+        <translation type="vanished">Korn</translation>
     </message>
     <message>
         <source>Sugar</source>
-        <translation>Sukker</translation>
+        <translation type="vanished">Sukker</translation>
     </message>
     <message>
         <source>Extract</source>
-        <translation>Ekstrakt</translation>
+        <translation type="vanished">Ekstrakt</translation>
     </message>
     <message>
         <source>Dry Extract</source>
-        <translation>Tørr ekstrakt</translation>
+        <translation type="vanished">Tørr ekstrakt</translation>
     </message>
     <message>
         <source>Adjunct</source>
-        <translation>Adjunkt</translation>
+        <translation type="vanished">Adjunkt</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation>Mengde</translation>
+        <translation type="vanished">Mengde</translation>
     </message>
     <message>
         <source>Yield (%)</source>
-        <translation>Utbytte (%)</translation>
+        <translation type="vanished">Utbytte (%)</translation>
     </message>
     <message>
         <source>Yield as compared to glucose</source>
-        <translation>Utbytte sammenlignet med glykose</translation>
+        <translation type="vanished">Utbytte sammenlignet med glykose</translation>
     </message>
     <message>
         <source>Lovibond rating</source>
-        <translation>Lovibond rate</translation>
+        <translation type="vanished">Lovibond rate</translation>
     </message>
     <message>
         <source>Add After Boil</source>
-        <translation>Legg til etter koking</translation>
+        <translation type="vanished">Legg til etter koking</translation>
     </message>
     <message>
         <source>This ingredient is added post boil.</source>
-        <translation>Denne ingrediensen legges til før koking</translation>
+        <translation type="vanished">Denne ingrediensen legges til før koking</translation>
     </message>
     <message>
         <source>Origin</source>
-        <translation>Opphav</translation>
+        <translation type="vanished">Opphav</translation>
     </message>
     <message>
         <source>Supplier</source>
-        <translation>Leverandør</translation>
+        <translation type="vanished">Leverandør</translation>
     </message>
     <message>
         <source>Coarse/Fine Diff (%)</source>
-        <translation>Grov/Fin Diff (%)</translation>
+        <translation type="vanished">Grov/Fin Diff (%)</translation>
     </message>
     <message>
         <source>Yield difference between coarse and fine grind</source>
-        <translation>Utbyttefoskjell mellom grov og fin oppmaling</translation>
+        <translation type="vanished">Utbyttefoskjell mellom grov og fin oppmaling</translation>
     </message>
     <message>
         <source>Moisture (%)</source>
-        <translation>Fuktighet (%)</translation>
+        <translation type="vanished">Fuktighet (%)</translation>
     </message>
     <message>
         <source>Moisture percentage by mass</source>
-        <translation>Massens fuktighetsprosent</translation>
+        <translation type="vanished">Massens fuktighetsprosent</translation>
     </message>
     <message>
         <source>DP (Lintner)</source>
-        <translation>DP (Lintner)</translation>
+        <translation type="vanished">DP (Lintner)</translation>
     </message>
     <message>
         <source>Diastatic power in Lintner</source>
-        <translation>Diastatisk kraft i Lintner</translation>
+        <translation type="vanished">Diastatisk kraft i Lintner</translation>
     </message>
     <message>
         <source>Protein (%)</source>
-        <translation>Protein (%)</translation>
+        <translation type="vanished">Protein (%)</translation>
     </message>
     <message>
         <source>Protein percentage by mass</source>
-        <translation>Massens proteinprosent</translation>
+        <translation type="vanished">Massens proteinprosent</translation>
     </message>
     <message>
         <source>Max In Batch (%)</source>
-        <translation>Maks i batch (%)</translation>
+        <translation type="vanished">Maks i batch (%)</translation>
     </message>
     <message>
         <source>Maximum recommended percentage of total grist</source>
-        <translation>Maksimal anbefalt andel av total malt</translation>
+        <translation type="vanished">Maksimal anbefalt andel av total malt</translation>
     </message>
     <message>
         <source>Recommend Mash</source>
-        <translation>Anbefalt mesket</translation>
+        <translation type="vanished">Anbefalt mesket</translation>
     </message>
     <message>
         <source>Recommend this be mashed</source>
-        <translation>Anbefal dette til å bli mesket</translation>
+        <translation type="vanished">Anbefal dette til å bli mesket</translation>
     </message>
     <message>
         <source>Is Mashed</source>
-        <translation>Blir mesket</translation>
+        <translation type="vanished">Blir mesket</translation>
     </message>
     <message>
         <source>Checked if it is present in mash</source>
-        <translation>Sjekk om det er tilstede i mesk</translation>
+        <translation type="vanished">Sjekk om det er tilstede i mesk</translation>
     </message>
     <message>
         <source>Bitterness (IBU*gal/lb)</source>
-        <translation>Bitterhet (IBU*gal/lb)</translation>
+        <translation type="vanished">Bitterhet (IBU*gal/lb)</translation>
     </message>
     <message>
         <source>Bitterness of pre-hopped extracts</source>
-        <translation>Bitterhet på prehumlede ekstrakter</translation>
+        <translation type="vanished">Bitterhet på prehumlede ekstrakter</translation>
     </message>
     <message>
         <source>Notes:</source>
-        <translation>Notater:</translation>
+        <translation type="vanished">Notater:</translation>
     </message>
     <message>
         <source>Default Amount</source>
-        <translation>Forhåndsvalgt mengde</translation>
+        <translation type="vanished">Forhåndsvalgt mengde</translation>
     </message>
     <message>
         <source>Amount in Inventory</source>
-        <translation>Mengde i varebeholdning</translation>
+        <translation type="vanished">Mengde i varebeholdning</translation>
     </message>
     <message>
         <source>Amount in inventory</source>
-        <translation>Mengde i varebeholdning</translation>
+        <translation type="vanished">Mengde i varebeholdning</translation>
     </message>
     <message>
         <source>Color</source>
-        <translation>Farge</translation>
+        <translation type="vanished">Farge</translation>
     </message>
 </context>
 <context>
     <name>hopEditor</name>
     <message>
         <source>Hop Editor</source>
-        <translation>Rediger humle</translation>
+        <translation type="vanished">Rediger humle</translation>
     </message>
     <message>
         <source>Required Fields</source>
-        <translation>Obligatoriske felt</translation>
+        <translation type="vanished">Obligatoriske felt</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Navn</translation>
+        <translation type="vanished">Navn</translation>
     </message>
     <message>
         <source>Alpha (%)</source>
-        <translation>Alfa (%)</translation>
+        <translation type="vanished">Alfa (%)</translation>
     </message>
     <message>
         <source>Alpha acids as percent by mass</source>
-        <translation>Massens alfasyrer som prosent</translation>
+        <translation type="vanished">Massens alfasyrer som prosent</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation>Mengde</translation>
+        <translation type="vanished">Mengde</translation>
     </message>
     <message>
         <source>Use</source>
-        <translation>Bruk</translation>
+        <translation type="vanished">Bruk</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation>Mesk</translation>
+        <translation type="vanished">Mesk</translation>
     </message>
     <message>
         <source>First Wort</source>
-        <translation>Skylling</translation>
+        <translation type="vanished">Skylling</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation>Kok</translation>
+        <translation type="vanished">Kok</translation>
     </message>
     <message>
         <source>Aroma</source>
-        <translation>Aroma</translation>
+        <translation type="vanished">Aroma</translation>
     </message>
     <message>
         <source>Dry Hop</source>
-        <translation>Tørrhumle</translation>
+        <translation type="vanished">Tørrhumle</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation>Tid</translation>
+        <translation type="vanished">Tid</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Type</translation>
+        <translation type="vanished">Type</translation>
     </message>
     <message>
         <source>Bittering</source>
-        <translation>Forbitrende</translation>
+        <translation type="vanished">Forbitrende</translation>
     </message>
     <message>
         <source>Both</source>
-        <translation>Begge</translation>
+        <translation type="vanished">Begge</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation>Skjema</translation>
+        <translation type="vanished">Skjema</translation>
     </message>
     <message>
         <source>Leaf</source>
-        <translation>Blad</translation>
+        <translation type="vanished">Blad</translation>
     </message>
     <message>
         <source>Pellet</source>
-        <translation>Pellet</translation>
+        <translation type="vanished">Pellet</translation>
     </message>
     <message>
         <source>Plug</source>
-        <translation>Plugg</translation>
+        <translation type="vanished">Plugg</translation>
     </message>
     <message>
         <source>Beta (%)</source>
-        <translation>Beta (%)</translation>
+        <translation type="vanished">Beta (%)</translation>
     </message>
     <message>
         <source>Beta acids as percent by mass</source>
-        <translation>Massens betasyrer i prosent</translation>
+        <translation type="vanished">Massens betasyrer i prosent</translation>
     </message>
     <message>
         <source>HSI</source>
-        <translation>HSI</translation>
+        <translation type="vanished">HSI</translation>
     </message>
     <message>
         <source>Hop Stability/Storage index</source>
-        <translation>Humlestabilitet/Lagringsindex</translation>
+        <translation type="vanished">Humlestabilitet/Lagringsindex</translation>
     </message>
     <message>
         <source>Origin</source>
-        <translation>Opphav</translation>
+        <translation type="vanished">Opphav</translation>
     </message>
     <message>
         <source>Humulene (%)</source>
-        <translation>Humulene (%)</translation>
+        <translation type="vanished">Humulene (%)</translation>
     </message>
     <message>
         <source>Humulene</source>
-        <translation>Humulene</translation>
+        <translation type="vanished">Humulene</translation>
     </message>
     <message>
         <source>Caryophyllene (%)</source>
-        <translation>Caryophyllene (%)</translation>
+        <translation type="vanished">Caryophyllene (%)</translation>
     </message>
     <message>
         <source>Caryophyllene</source>
-        <translation>Caryophyllene</translation>
+        <translation type="vanished">Caryophyllene</translation>
     </message>
     <message>
         <source>Cohumulone (%)</source>
-        <translation>Cohumulone (%)</translation>
+        <translation type="vanished">Cohumulone (%)</translation>
     </message>
     <message>
         <source>Cohumulone</source>
-        <translation>Cohumulone</translation>
+        <translation type="vanished">Cohumulone</translation>
     </message>
     <message>
         <source>Myrcene (%)</source>
-        <translation>Myrcene (%)</translation>
+        <translation type="vanished">Myrcene (%)</translation>
     </message>
     <message>
         <source>Myrcene</source>
-        <translation>Myrcene</translation>
+        <translation type="vanished">Myrcene</translation>
     </message>
     <message>
         <source>Substitutes:</source>
-        <translation>Erstatninger:</translation>
+        <translation type="vanished">Erstatninger:</translation>
     </message>
     <message>
         <source>Notes:</source>
-        <translation>Notater:</translation>
+        <translation type="vanished">Notater:</translation>
     </message>
     <message>
         <source>Default Amount </source>
-        <translation>Forhåndsvalgt mengd </translation>
+        <translation type="vanished">Forhåndsvalgt mengd </translation>
     </message>
     <message>
         <source>Amount in Inventory</source>
-        <translation>Mengde i varebeholdning</translation>
+        <translation type="vanished">Mengde i varebeholdning</translation>
     </message>
     <message>
         <source>Amount in inventory</source>
-        <translation>Mengde i varebeholdning</translation>
+        <translation type="vanished">Mengde i varebeholdning</translation>
     </message>
 </context>
 <context>
     <name>instructionWidget</name>
     <message>
         <source>Form</source>
-        <translation>Skjema</translation>
+        <translation type="vanished">Skjema</translation>
     </message>
     <message>
         <source>Show a timer</source>
-        <translation>Vis et tidsur</translation>
+        <translation type="vanished">Vis et tidsur</translation>
     </message>
     <message>
         <source>Show timer</source>
-        <translation>Vis tidsur</translation>
+        <translation type="vanished">Vis tidsur</translation>
     </message>
     <message>
         <source>Mark this step completed</source>
-        <translation>Merk fase som ferdig</translation>
+        <translation type="vanished">Merk fase som ferdig</translation>
     </message>
     <message>
         <source>Step completed</source>
-        <translation>Fase ferdig</translation>
+        <translation type="vanished">Fase ferdig</translation>
     </message>
 </context>
 <context>
     <name>mainWindow</name>
     <message>
         <source>Recipes</source>
-        <translation>Oppskrifter</translation>
+        <translation type="vanished">Oppskrifter</translation>
     </message>
     <message>
         <source>Styles</source>
-        <translation>Stiler</translation>
+        <translation type="vanished">Stiler</translation>
     </message>
     <message>
         <source>Fermentables</source>
-        <translation>Gjærbart</translation>
+        <translation type="vanished">Gjærbart</translation>
     </message>
     <message>
         <source>Hops</source>
-        <translation>Humle</translation>
+        <translation type="vanished">Humle</translation>
     </message>
     <message>
         <source>Miscs</source>
-        <translation>Diverse</translation>
+        <translation type="vanished">Diverse</translation>
     </message>
     <message>
         <source>Yeasts</source>
-        <translation>Gjær</translation>
+        <translation type="vanished">Gjær</translation>
     </message>
     <message>
         <source>Recipe</source>
-        <translation>Oppskrift</translation>
+        <translation type="vanished">Oppskrift</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Navn</translation>
+        <translation type="vanished">Navn</translation>
     </message>
     <message>
         <source>Name of recipe</source>
-        <translation>Navn på oppskrift</translation>
+        <translation type="vanished">Navn på oppskrift</translation>
     </message>
     <message>
         <source>Target boil size</source>
-        <translation>Kokevolum mål</translation>
+        <translation type="vanished">Kokevolum mål</translation>
     </message>
     <message>
         <source>Efficiency (%)</source>
-        <translation>Effektivitet (%)</translation>
+        <translation type="vanished">Effektivitet (%)</translation>
     </message>
     <message>
         <source>Calculated Boil Size</source>
-        <translation>Kalkulert kokevolum</translation>
+        <translation type="vanished">Kalkulert kokevolum</translation>
     </message>
     <message>
         <source>Calculated Batch Size</source>
-        <translation>Kalkulert batch volum</translation>
+        <translation type="vanished">Kalkulert batch volum</translation>
     </message>
     <message>
         <source>The extraction efficiency you expect</source>
-        <translation>Ekstraksjonseffektiviteten du forventer</translation>
+        <translation type="vanished">Ekstraksjonseffektiviteten du forventer</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation>Øltype</translation>
+        <translation type="vanished">Øltype</translation>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation>Koketid</translation>
+        <translation type="vanished">Koketid</translation>
     </message>
     <message>
         <source>Target batch size</source>
-        <translation>Batchvolum mål</translation>
+        <translation type="vanished">Batchvolum mål</translation>
     </message>
     <message>
         <source>Target Batch Size</source>
-        <translation>Batchvolum mål</translation>
+        <translation type="vanished">Batchvolum mål</translation>
     </message>
     <message>
         <source>Equipment</source>
-        <translation>Utstyr</translation>
+        <translation type="vanished">Utstyr</translation>
     </message>
     <message>
         <source>Target Boil Size</source>
-        <translation>Kokevolum mål</translation>
+        <translation type="vanished">Kokevolum mål</translation>
     </message>
     <message>
         <source>OG</source>
-        <translation>OG</translation>
+        <translation type="vanished">OG</translation>
     </message>
     <message>
         <source>Boil SG</source>
-        <translation>SG koking</translation>
+        <translation type="vanished">SG koking</translation>
     </message>
     <message>
         <source>FG</source>
-        <translation>FG</translation>
+        <translation type="vanished">FG</translation>
     </message>
     <message>
         <source>ABV</source>
-        <translation>ABV</translation>
+        <translation type="vanished">ABV</translation>
     </message>
     <message>
         <source>Bitterness (IBU)</source>
-        <translation>Bitterhet (IBU)</translation>
+        <translation type="vanished">Bitterhet (IBU)</translation>
     </message>
     <message>
         <source>Color</source>
-        <translation>Farge</translation>
+        <translation type="vanished">Farge</translation>
     </message>
     <message>
         <source>IBU/GU</source>
-        <translation>IBU/GU</translation>
+        <translation type="vanished">IBU/GU</translation>
     </message>
     <message>
         <source>Calories/12oz</source>
-        <translation>Kalorier/12oz</translation>
+        <translation type="vanished">Kalorier/12oz</translation>
     </message>
     <message>
         <source>Extras</source>
-        <translation>Ekstra</translation>
+        <translation type="vanished">Ekstra</translation>
     </message>
     <message>
         <source>Brewday</source>
-        <translation>Bryggedag</translation>
+        <translation type="vanished">Bryggedag</translation>
     </message>
     <message>
         <source>Add a fermentable</source>
-        <translation>Legg til gjærbart</translation>
+        <translation type="vanished">Legg til gjærbart</translation>
     </message>
     <message>
         <source>Remove selected fermentable</source>
-        <translation>Fjern valgt gjærbar</translation>
+        <translation type="vanished">Fjern valgt gjærbar</translation>
     </message>
     <message>
         <source>Edit selected fermentable</source>
-        <translation>Rediger valgt gjærbar</translation>
+        <translation type="vanished">Rediger valgt gjærbar</translation>
     </message>
     <message>
         <source>Add hop</source>
-        <translation>Legg til humle</translation>
+        <translation type="vanished">Legg til humle</translation>
     </message>
     <message>
         <source>Remove selected hop</source>
-        <translation>Fjern valgt humle</translation>
+        <translation type="vanished">Fjern valgt humle</translation>
     </message>
     <message>
         <source>Edit selected hop</source>
-        <translation>Rediger valgt humle</translation>
+        <translation type="vanished">Rediger valgt humle</translation>
     </message>
     <message>
         <source>Miscellaneous</source>
-        <translation>Diverse</translation>
+        <translation type="vanished">Diverse</translation>
     </message>
     <message>
         <source>Add misc</source>
-        <translation>Legg til diverse</translation>
+        <translation type="vanished">Legg til diverse</translation>
     </message>
     <message>
         <source>Remove selected misc</source>
-        <translation>Fjern valgt diverse</translation>
+        <translation type="vanished">Fjern valgt diverse</translation>
     </message>
     <message>
         <source>Edit selected misc</source>
-        <translation>Rediger valgt diverse</translation>
+        <translation type="vanished">Rediger valgt diverse</translation>
     </message>
     <message>
         <source>Yeast</source>
-        <translation>Gjær</translation>
+        <translation type="vanished">Gjær</translation>
     </message>
     <message>
         <source>Add yeast</source>
-        <translation>Legg til gjær</translation>
+        <translation type="vanished">Legg til gjær</translation>
     </message>
     <message>
         <source>Remove selected yeast</source>
-        <translation>Fjern valgt gjær</translation>
+        <translation type="vanished">Fjern valgt gjær</translation>
     </message>
     <message>
         <source>Edit selected yeast</source>
-        <translation>Rediger valgt gjær</translation>
+        <translation type="vanished">Rediger valgt gjær</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation>Mesk</translation>
+        <translation type="vanished">Mesk</translation>
     </message>
     <message>
         <source>Add mash step</source>
-        <translation>Legg til meskefase</translation>
+        <translation type="vanished">Legg til meskefase</translation>
     </message>
     <message>
         <source>Remove selected mash step</source>
-        <translation>Fjern valgt meskefase</translation>
+        <translation type="vanished">Fjern valgt meskefase</translation>
     </message>
     <message>
         <source>Edit selected mash step</source>
-        <translation>Rediger valgt meskefase</translation>
+        <translation type="vanished">Rediger valgt meskefase</translation>
     </message>
     <message>
         <source>Edit mash properties</source>
-        <translation>Rediger meskeegenskaper</translation>
+        <translation type="vanished">Rediger meskeegenskaper</translation>
     </message>
     <message>
         <source>Edit mash</source>
-        <translation>Rediger mesk</translation>
+        <translation type="vanished">Rediger mesk</translation>
     </message>
     <message>
         <source>Mash Des</source>
-        <translation>Mesk Des</translation>
+        <translation type="vanished">Mesk Des</translation>
     </message>
     <message>
         <source>Invoke the mash wizard</source>
-        <translation>Start meskeveilleder</translation>
+        <translation type="vanished">Start meskeveilleder</translation>
     </message>
     <message>
         <source>Mash wiz</source>
-        <translation>Meskeveil.</translation>
+        <translation type="vanished">Meskeveil.</translation>
     </message>
     <message>
         <source>Mashs</source>
-        <translation>Mesker</translation>
+        <translation type="vanished">Mesker</translation>
     </message>
     <message>
         <source>Mash step up</source>
-        <translation>Meskeopptrinn</translation>
+        <translation type="vanished">Meskeopptrinn</translation>
     </message>
     <message>
         <source>Mash step down</source>
-        <translation>Meskenedtrinn</translation>
+        <translation type="vanished">Meskenedtrinn</translation>
     </message>
     <message>
         <source>Save this mash profile</source>
-        <translation>Lagre denne meskeprofilen</translation>
+        <translation type="vanished">Lagre denne meskeprofilen</translation>
     </message>
     <message>
         <source>Save Mash</source>
-        <translation>Lagre mesk</translation>
+        <translation type="vanished">Lagre mesk</translation>
     </message>
     <message>
         <source>&amp;About</source>
-        <translation>&amp;Om</translation>
+        <translation type="vanished">&amp;Om</translation>
     </message>
     <message>
         <source>&amp;File</source>
-        <translation>&amp;Fil</translation>
+        <translation type="vanished">&amp;Fil</translation>
     </message>
     <message>
         <source>&amp;Brewday</source>
-        <translation>&amp;Bryggedag</translation>
+        <translation type="vanished">&amp;Bryggedag</translation>
     </message>
     <message>
         <source>&amp;Recipe</source>
-        <translation>&amp;Oppskrift</translation>
+        <translation type="vanished">&amp;Oppskrift</translation>
     </message>
     <message>
         <source>&amp;Database</source>
-        <translation>&amp;Database</translation>
+        <translation type="vanished">&amp;Database</translation>
     </message>
     <message>
         <source>&amp;View</source>
-        <translation>&amp;Vis</translation>
+        <translation type="vanished">&amp;Vis</translation>
     </message>
     <message>
         <source>&amp;Tools</source>
-        <translation>&amp;Verktøy</translation>
+        <translation type="vanished">&amp;Verktøy</translation>
     </message>
     <message>
         <source>toolBar</source>
-        <translation>Verktøylinje</translation>
+        <translation type="vanished">Verktøylinje</translation>
     </message>
     <message>
         <source>About &amp;BrewTarget</source>
-        <translation>Om &amp;BrewTarget</translation>
+        <translation type="vanished">Om &amp;BrewTarget</translation>
     </message>
     <message>
         <source>About Brewtarget</source>
-        <translation>Om Brewtarget</translation>
+        <translation type="vanished">Om Brewtarget</translation>
     </message>
     <message>
         <source>&amp;Export Recipe</source>
-        <translation>&amp;Eksporter oppskrift</translation>
+        <translation type="vanished">&amp;Eksporter oppskrift</translation>
     </message>
     <message>
         <source>&amp;Fermentables</source>
-        <translation>&amp;Gjærbare</translation>
+        <translation type="vanished">&amp;Gjærbare</translation>
     </message>
     <message>
         <source>Ctrl+F</source>
-        <translation>Ctrl+F</translation>
+        <translation type="vanished">Ctrl+F</translation>
     </message>
     <message>
         <source>&amp;Hops</source>
-        <translation>&amp;Humler</translation>
+        <translation type="vanished">&amp;Humler</translation>
     </message>
     <message>
         <source>Ctrl+H</source>
-        <translation>Ctrl+H</translation>
+        <translation type="vanished">Ctrl+H</translation>
     </message>
     <message>
         <source>&amp;Miscs</source>
-        <translation>&amp;Diverse</translation>
+        <translation type="vanished">&amp;Diverse</translation>
     </message>
     <message>
         <source>Ctrl+M</source>
-        <translation>Ctrl+M</translation>
+        <translation type="vanished">Ctrl+M</translation>
     </message>
     <message>
         <source>&amp;Yeasts</source>
-        <translation>&amp;Gjær</translation>
+        <translation type="vanished">&amp;Gjær</translation>
     </message>
     <message>
         <source>Ctrl+Y</source>
-        <translation>Ctrl+Y</translation>
+        <translation type="vanished">Ctrl+Y</translation>
     </message>
     <message>
         <source>&amp;Equipments</source>
-        <translation>&amp;Utstyr</translation>
+        <translation type="vanished">&amp;Utstyr</translation>
     </message>
     <message>
         <source>Ctrl+E</source>
-        <translation>Ctrl+E</translation>
+        <translation type="vanished">Ctrl+E</translation>
     </message>
     <message>
         <source>&amp;Styles</source>
-        <translation>&amp;Øltyper</translation>
+        <translation type="vanished">&amp;Øltyper</translation>
     </message>
     <message>
         <source>Ctrl+T</source>
-        <translation>Ctrl+T</translation>
+        <translation type="vanished">Ctrl+T</translation>
     </message>
     <message>
         <source>&amp;Exit</source>
-        <translation>&amp;Avslutt</translation>
+        <translation type="vanished">&amp;Avslutt</translation>
     </message>
     <message>
         <source>Ctrl+Q</source>
-        <translation>Ctrl+Q</translation>
+        <translation type="vanished">Ctrl+Q</translation>
     </message>
     <message>
         <source>&amp;Import Recipes</source>
-        <translation>&amp;Importer oppskrift</translation>
+        <translation type="vanished">&amp;Importer oppskrift</translation>
     </message>
     <message>
         <source>&amp;Options</source>
-        <translation>&amp;Innstillinger</translation>
+        <translation type="vanished">&amp;Innstillinger</translation>
     </message>
     <message>
         <source>&amp;Manual</source>
-        <translation>&amp;Manual</translation>
+        <translation type="vanished">&amp;Manual</translation>
     </message>
     <message>
         <source>&amp;Scale Recipe</source>
-        <translation>&amp;Skaler oppskift</translation>
+        <translation type="vanished">&amp;Skaler oppskift</translation>
     </message>
     <message>
         <source>Recipe to Clipboard as &amp;Text</source>
-        <translation>Oppskrift til utklippstavle som &amp;Tekst</translation>
+        <translation type="vanished">Oppskrift til utklippstavle som &amp;Tekst</translation>
     </message>
     <message>
         <source>&amp;OG Correction Help</source>
-        <translation>&amp;OG korreksjon hjelp</translation>
+        <translation type="vanished">&amp;OG korreksjon hjelp</translation>
     </message>
     <message>
         <source>&amp;Convert Units</source>
-        <translation>&amp;Konverter enheter</translation>
+        <translation type="vanished">&amp;Konverter enheter</translation>
     </message>
     <message>
         <source>Backup Database</source>
-        <translation>Sikkerhetskopier database</translation>
+        <translation type="vanished">Sikkerhetskopier database</translation>
     </message>
     <message>
         <source>Restore Database</source>
-        <translation>Gjenopprett database</translation>
+        <translation type="vanished">Gjenopprett database</translation>
     </message>
     <message>
         <source>&amp;Copy Recipe</source>
-        <translation>&amp;Kopier oppskrift</translation>
+        <translation type="vanished">&amp;Kopier oppskrift</translation>
     </message>
     <message>
         <source>Pr&amp;iming Calculator</source>
-        <translation>Ka&amp;rboneringskalkulator</translation>
+        <translation type="vanished">Ka&amp;rboneringskalkulator</translation>
     </message>
     <message>
         <source>&amp;Refractometer Tools</source>
-        <translation>&amp;Refraktometerverktøy</translation>
+        <translation type="vanished">&amp;Refraktometerverktøy</translation>
     </message>
     <message>
         <source>&amp;Pitch Rate Calculator</source>
-        <translation>&amp;Gærstartkalkulator</translation>
+        <translation type="vanished">&amp;Gærstartkalkulator</translation>
     </message>
     <message>
         <source>Merge Databases</source>
-        <translation>Legg sammen databaser</translation>
+        <translation type="vanished">Legg sammen databaser</translation>
     </message>
     <message>
         <source>Select another database to merge into the current one.</source>
-        <translation>Velg database du vil slå sammen med gjeldende</translation>
+        <translation type="vanished">Velg database du vil slå sammen med gjeldende</translation>
     </message>
     <message>
         <source>&amp;Print</source>
-        <translation>&amp;Skriv ut</translation>
+        <translation type="vanished">&amp;Skriv ut</translation>
     </message>
     <message>
         <source>Print Pre&amp;view</source>
-        <translation>&amp;Forhåndsvisning av utskrift</translation>
+        <translation type="vanished">&amp;Forhåndsvisning av utskrift</translation>
     </message>
     <message>
         <source>&amp;Export To HTML</source>
-        <translation>&amp;Eksporter til HTML</translation>
+        <translation type="vanished">&amp;Eksporter til HTML</translation>
     </message>
     <message>
         <source>&amp;Export to HTML</source>
-        <translation>&amp;Eksporter til HTML</translation>
+        <translation type="vanished">&amp;Eksporter til HTML</translation>
     </message>
     <message>
         <source>&amp;Backup</source>
-        <translation>&amp;Sikkerhetskopi</translation>
+        <translation type="vanished">&amp;Sikkerhetskopi</translation>
     </message>
     <message>
         <source>Save all recipes, ingredients, etc. to a backup folder</source>
-        <translation>Lagre alle oppskrifter, ingredienser, etc til en sikkerhetskopimappe</translation>
+        <translation type="vanished">Lagre alle oppskrifter, ingredienser, etc til en sikkerhetskopimappe</translation>
     </message>
     <message>
         <source>&amp;Restore</source>
-        <translation>&amp;Gjenopprett</translation>
+        <translation type="vanished">&amp;Gjenopprett</translation>
     </message>
     <message>
         <source>Restore recipes, ingredients, etc. from a previous backup</source>
-        <translation>Gjenopprett oppskrifter, ingredenser, etc. fra en tidligere backup</translation>
+        <translation type="vanished">Gjenopprett oppskrifter, ingredenser, etc. fra en tidligere backup</translation>
     </message>
     <message>
         <source>&amp;Merge</source>
-        <translation>&amp;Slå sammen</translation>
+        <translation type="vanished">&amp;Slå sammen</translation>
     </message>
     <message>
         <source>Merge another set of recipes, ingredients, etc. into the current set</source>
-        <translation>Slå sammen et annet sett oppskrifter, ingredenser, etc. med gjeldende sett</translation>
+        <translation type="vanished">Slå sammen et annet sett oppskrifter, ingredenser, etc. med gjeldende sett</translation>
     </message>
     <message>
         <source>&amp;New Recipe</source>
-        <translation>&amp;Ny oppskrift</translation>
+        <translation type="vanished">&amp;Ny oppskrift</translation>
     </message>
     <message>
         <source>Timers</source>
-        <translation>Tidtakere</translation>
+        <translation type="vanished">Tidtakere</translation>
     </message>
     <message>
         <source>Show timers</source>
-        <translation>Vis tidtakere</translation>
+        <translation type="vanished">Vis tidtakere</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation>Lagre</translation>
+        <translation type="vanished">Lagre</translation>
     </message>
     <message>
         <source>Delete selected</source>
-        <translation>Slett merkede</translation>
+        <translation type="vanished">Slett merkede</translation>
     </message>
     <message>
         <source>Delete recipe</source>
-        <translation>Slett oppskrift</translation>
+        <translation type="vanished">Slett oppskrift</translation>
     </message>
     <message>
         <source>&amp;Mashs</source>
-        <translation>&amp;Mesk</translation>
+        <translation type="vanished">&amp;Mesk</translation>
     </message>
     <message>
         <source>Mashes</source>
-        <translation>Mesker</translation>
+        <translation type="vanished">Mesker</translation>
     </message>
     <message>
         <source>1.0</source>
-        <translation>1.0</translation>
+        <translation type="vanished">1.0</translation>
     </message>
     <message>
         <source>Strike Water Calculator</source>
-        <translation>Meskevannkalkulator</translation>
-    </message>
-    <message>
-        <source>tab_recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Export to &amp;BBCode</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hydrometer Temp Adjustment</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Meskevannkalkulator</translation>
     </message>
 </context>
 <context>
     <name>mashDesigner</name>
     <message>
         <source>Mash Designer</source>
-        <translation>Meskedesigner</translation>
+        <translation type="vanished">Meskedesigner</translation>
     </message>
     <message>
         <source>Name</source>
@@ -4184,7 +5301,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation>Tid</translation>
+        <translation type="vanished">Tid</translation>
     </message>
     <message>
         <source>Batch Sparge</source>
@@ -4192,524 +5309,492 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Next</source>
-        <translation>Neste</translation>
+        <translation type="vanished">Neste</translation>
     </message>
     <message>
         <source>Finish</source>
-        <translation>Avslutt</translation>
+        <translation type="vanished">Avslutt</translation>
     </message>
     <message>
         <source>Infusion/Decoction Amount</source>
-        <translation>Mengde infusjon/avkok</translation>
+        <translation type="vanished">Mengde infusjon/avkok</translation>
     </message>
     <message>
         <source>min</source>
-        <translation>min</translation>
+        <translation type="vanished">min</translation>
     </message>
     <message>
         <source>max</source>
-        <translation>maks</translation>
+        <translation type="vanished">maks</translation>
     </message>
     <message>
         <source>0</source>
-        <translation>0</translation>
+        <translation type="vanished">0</translation>
     </message>
     <message>
         <source>Infusion Temp</source>
-        <translation>Infusjonstemperatur</translation>
+        <translation type="vanished">Infusjonstemperatur</translation>
     </message>
     <message>
         <source>Total Collected Wort</source>
-        <translation>Totalt samlet vørter</translation>
+        <translation type="vanished">Totalt samlet vørter</translation>
     </message>
     <message>
         <source>vol</source>
-        <translation>vol</translation>
+        <translation type="vanished">vol</translation>
     </message>
     <message>
         <source>Tun Fullness</source>
-        <translation>Karfullhet</translation>
+        <translation type="vanished">Karfullhet</translation>
     </message>
     <message>
         <source>tunVol</source>
-        <translation>Karvolum</translation>
+        <translation type="vanished">Karvolum</translation>
     </message>
     <message>
         <source>thickness</source>
-        <translation>tykkelse</translation>
-    </message>
-    <message>
-        <source>&amp;Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Tar&amp;get temp.</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">tykkelse</translation>
     </message>
 </context>
 <context>
     <name>mashEditor</name>
     <message>
         <source>Mash Editor</source>
-        <translation>Meskeredigerer</translation>
+        <translation type="vanished">Meskeredigerer</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Navn</translation>
+        <translation type="vanished">Navn</translation>
     </message>
     <message>
         <source>Initial grain temp</source>
-        <translation>Temperatur malt</translation>
+        <translation type="vanished">Temperatur malt</translation>
     </message>
     <message>
         <source>Sparge temp</source>
-        <translation>Temepratur meskevann</translation>
+        <translation type="vanished">Temepratur meskevann</translation>
     </message>
     <message>
         <source>Sparge temp target</source>
-        <translation>Måltemperatur meskevann</translation>
+        <translation type="vanished">Måltemperatur meskevann</translation>
     </message>
     <message>
         <source>Sparge pH</source>
-        <translation>Meskevannets pH</translation>
+        <translation type="vanished">Meskevannets pH</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Notater</translation>
+        <translation type="vanished">Notater</translation>
     </message>
     <message>
         <source>Tun</source>
-        <translation>Kar</translation>
+        <translation type="vanished">Kar</translation>
     </message>
     <message>
         <source>Initial tun temp</source>
-        <translation>Temperatur kar</translation>
+        <translation type="vanished">Temperatur kar</translation>
     </message>
     <message>
         <source>Get following parameters from the recipe&apos;s equipment.</source>
-        <translation>Hent følgende parametere fra oppskriftens utstyr</translation>
+        <translation type="vanished">Hent følgende parametere fra oppskriftens utstyr</translation>
     </message>
     <message>
         <source>From Equipment</source>
-        <translation>Fra utstyr</translation>
+        <translation type="vanished">Fra utstyr</translation>
     </message>
     <message>
         <source>Tun mass</source>
-        <translation>Karets masse</translation>
+        <translation type="vanished">Karets masse</translation>
     </message>
     <message>
         <source>Tun sp. heat</source>
-        <translation>Karets spesifikk varme</translation>
+        <translation type="vanished">Karets spesifikk varme</translation>
     </message>
     <message>
         <source>Tun specific heat (cal/(g*K))</source>
-        <translation>Karets spesifikk varme (cal/(g*K))</translation>
+        <translation type="vanished">Karets spesifikk varme (cal/(g*K))</translation>
     </message>
 </context>
 <context>
     <name>mashStepEditor</name>
     <message>
         <source>Mash Step Editor</source>
-        <translation>Stegmeskredigerer</translation>
+        <translation type="vanished">Stegmeskredigerer</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Navn</translation>
+        <translation type="vanished">Navn</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Type</translation>
+        <translation type="vanished">Type</translation>
     </message>
     <message>
         <source>Infusion</source>
-        <translation>Infusjon</translation>
+        <translation type="vanished">Infusjon</translation>
     </message>
     <message>
         <source>Temperature</source>
-        <translation>Temperatur</translation>
+        <translation type="vanished">Temperatur</translation>
     </message>
     <message>
         <source>Decoction</source>
-        <translation>Innkoking</translation>
+        <translation type="vanished">Innkoking</translation>
     </message>
     <message>
         <source>Target temp.</source>
-        <translation>Måltemp.</translation>
+        <translation type="vanished">Måltemp.</translation>
     </message>
     <message>
         <source>Target temp. of this step</source>
-        <translation>Måltemp. denne fase</translation>
+        <translation type="vanished">Måltemp. denne fase</translation>
     </message>
     <message>
         <source>Infuse Amount</source>
-        <translation>Infusjonsmengde</translation>
+        <translation type="vanished">Infusjonsmengde</translation>
     </message>
     <message>
         <source>Amount of water to infuse</source>
-        <translation>Mengde vann til infusjon</translation>
+        <translation type="vanished">Mengde vann til infusjon</translation>
     </message>
     <message>
         <source>Infuse temp.</source>
-        <translation>Infusjonstemp.</translation>
+        <translation type="vanished">Infusjonstemp.</translation>
     </message>
     <message>
         <source>Temperature of infusion water</source>
-        <translation>Innfusjonsvannets temperatur</translation>
+        <translation type="vanished">Innfusjonsvannets temperatur</translation>
     </message>
     <message>
         <source>Decoction Amount</source>
-        <translation>Innkokingsmengde</translation>
+        <translation type="vanished">Innkokingsmengde</translation>
     </message>
     <message>
         <source>Amount of mash to decoct</source>
-        <translation>Mengde mesk til å innkoke</translation>
+        <translation type="vanished">Mengde mesk til å innkoke</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation>Tid</translation>
+        <translation type="vanished">Tid</translation>
     </message>
     <message>
         <source>Time to conduct the step</source>
-        <translation>Tid til å gjennomføre trinnet</translation>
+        <translation type="vanished">Tid til å gjennomføre trinnet</translation>
     </message>
     <message>
         <source>Temp. lag time</source>
-        <translation>Temp. forsinkelsestid</translation>
+        <translation type="vanished">Temp. forsinkelsestid</translation>
     </message>
     <message>
         <source>Lag time</source>
-        <translation>Forsinkelsestid</translation>
+        <translation type="vanished">Forsinkelsestid</translation>
     </message>
     <message>
         <source>End temp.</source>
-        <translation>Slutttemp.</translation>
+        <translation type="vanished">Slutttemp.</translation>
     </message>
     <message>
         <source>Final temp. of this step</source>
-        <translation>Endelig temp. for denne fasen</translation>
+        <translation type="vanished">Endelig temp. for denne fasen</translation>
     </message>
 </context>
 <context>
     <name>mashWizard</name>
     <message>
         <source>Mash Wizard</source>
-        <translation>Meskeveilleder</translation>
+        <translation type="vanished">Meskeveilleder</translation>
     </message>
     <message>
         <source>Mash thickness (L/kg)</source>
-        <translation>Mesketetthet (L/kg)</translation>
+        <translation type="vanished">Mesketetthet (L/kg)</translation>
     </message>
     <message>
         <source>Mash thickness (do not enter any units)</source>
         <translation type="vanished">Mesketetthet (ikke skriv inn enhet)</translation>
-    </message>
-    <message>
-        <source>No Spar&amp;ge</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fl&amp;y Sparge</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Ba&amp;tch Sparge</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Batches</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>miscEditor</name>
     <message>
         <source>Misc Editor</source>
-        <translation>Diverseredigerer</translation>
+        <translation type="vanished">Diverseredigerer</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Navn</translation>
+        <translation type="vanished">Navn</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Type</translation>
+        <translation type="vanished">Type</translation>
     </message>
     <message>
         <source>Spice</source>
-        <translation>Krydder</translation>
+        <translation type="vanished">Krydder</translation>
     </message>
     <message>
         <source>Fining</source>
-        <translation>Klaringsmiddel</translation>
+        <translation type="vanished">Klaringsmiddel</translation>
     </message>
     <message>
         <source>Water Agent</source>
-        <translation>Vannjustering</translation>
+        <translation type="vanished">Vannjustering</translation>
     </message>
     <message>
         <source>Herb</source>
-        <translation>Urt</translation>
+        <translation type="vanished">Urt</translation>
     </message>
     <message>
         <source>Flavor</source>
-        <translation>Smak</translation>
+        <translation type="vanished">Smak</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation>Annet</translation>
+        <translation type="vanished">Annet</translation>
     </message>
     <message>
         <source>Use</source>
-        <translation>Bruk</translation>
+        <translation type="vanished">Bruk</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation>Kok</translation>
+        <translation type="vanished">Kok</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation>Mesk</translation>
+        <translation type="vanished">Mesk</translation>
     </message>
     <message>
         <source>Primary</source>
-        <translation>Primær</translation>
+        <translation type="vanished">Primær</translation>
     </message>
     <message>
         <source>Secondary</source>
-        <translation>Sekundær</translation>
+        <translation type="vanished">Sekundær</translation>
     </message>
     <message>
         <source>Bottling</source>
-        <translation>Flasking</translation>
+        <translation type="vanished">Flasking</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation>Tid</translation>
+        <translation type="vanished">Tid</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation>Mengde</translation>
+        <translation type="vanished">Mengde</translation>
     </message>
     <message>
         <source>Check it if the amount listed is in kg instead of L.</source>
-        <translation>Sjekk etter om mengde listet opp er i kg i stedet for L.</translation>
+        <translation type="vanished">Sjekk etter om mengde listet opp er i kg i stedet for L.</translation>
     </message>
     <message>
         <source>Amount is weight?</source>
-        <translation>Mengde er i vekt?</translation>
+        <translation type="vanished">Mengde er i vekt?</translation>
     </message>
     <message>
         <source>Checked if the given amount is weight instead of volume</source>
-        <translation>Sjekk etter om mengde listet opp er i vekt i stedet for volum.</translation>
+        <translation type="vanished">Sjekk etter om mengde listet opp er i vekt i stedet for volum.</translation>
     </message>
     <message>
         <source>Use for:</source>
-        <translation>Brukt til:</translation>
+        <translation type="vanished">Brukt til:</translation>
     </message>
     <message>
         <source>Notes:</source>
-        <translation>Notater:</translation>
+        <translation type="vanished">Notater:</translation>
     </message>
     <message>
         <source>Default Amount</source>
-        <translation>Forhåndsvalgt mengde</translation>
+        <translation type="vanished">Forhåndsvalgt mengde</translation>
     </message>
     <message>
         <source>Amount in Inventory</source>
-        <translation>Mengde i varebeholdning</translation>
+        <translation type="vanished">Mengde i varebeholdning</translation>
     </message>
     <message>
         <source>Amount in inventory</source>
-        <translation>Mengde i varebeholdning</translation>
+        <translation type="vanished">Mengde i varebeholdning</translation>
     </message>
 </context>
 <context>
     <name>namedMashEditor</name>
     <message>
         <source>Named Mash Editor</source>
-        <translation>Navngitt meskeredigerer</translation>
+        <translation type="vanished">Navngitt meskeredigerer</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation>Mesk</translation>
+        <translation type="vanished">Mesk</translation>
     </message>
     <message>
         <source>Delete selected style</source>
-        <translation>Slett valgt stil</translation>
+        <translation type="vanished">Slett valgt stil</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Navn</translation>
+        <translation type="vanished">Navn</translation>
     </message>
     <message>
         <source>Initial grain temp</source>
-        <translation>Temperatur malt</translation>
+        <translation type="vanished">Temperatur malt</translation>
     </message>
     <message>
         <source>Sparge temp</source>
-        <translation>Temepratur meskevann</translation>
+        <translation type="vanished">Temepratur meskevann</translation>
     </message>
     <message>
         <source>Sparge temp target</source>
-        <translation>Måltemperatur meskevann</translation>
+        <translation type="vanished">Måltemperatur meskevann</translation>
     </message>
     <message>
         <source>Sparge pH</source>
-        <translation>Meskevannets pH</translation>
+        <translation type="vanished">Meskevannets pH</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Notater</translation>
+        <translation type="vanished">Notater</translation>
     </message>
     <message>
         <source>Tun</source>
-        <translation>Kar</translation>
+        <translation type="vanished">Kar</translation>
     </message>
     <message>
         <source>Initial tun temp</source>
-        <translation>Temperatur kar</translation>
+        <translation type="vanished">Temperatur kar</translation>
     </message>
     <message>
         <source>From Equipment</source>
-        <translation>Fra utstyr</translation>
+        <translation type="vanished">Fra utstyr</translation>
     </message>
     <message>
         <source>Tun mass</source>
-        <translation>Karets masse</translation>
+        <translation type="vanished">Karets masse</translation>
     </message>
     <message>
         <source>Tun sp. heat</source>
-        <translation>Karets spesifikk varme</translation>
+        <translation type="vanished">Karets spesifikk varme</translation>
     </message>
     <message>
         <source>Tun specific heat (cal/(g*K))</source>
-        <translation>Karets spesifikk varme (cal/(g*K))</translation>
+        <translation type="vanished">Karets spesifikk varme (cal/(g*K))</translation>
     </message>
     <message>
         <source>Add mash step</source>
-        <translation>Legg til meskefase</translation>
+        <translation type="vanished">Legg til meskefase</translation>
     </message>
     <message>
         <source>Remove selected mash step</source>
-        <translation>Fjern valgt meskefase</translation>
+        <translation type="vanished">Fjern valgt meskefase</translation>
     </message>
     <message>
         <source>Mash step up</source>
-        <translation>Meskeopptrinn</translation>
+        <translation type="vanished">Meskeopptrinn</translation>
     </message>
     <message>
         <source>Mash step down</source>
-        <translation>Meskenedtrinn</translation>
+        <translation type="vanished">Meskenedtrinn</translation>
     </message>
 </context>
 <context>
     <name>ogAdjuster</name>
     <message>
         <source>Adjust Volume to Hit OG</source>
-        <translation>Juster volum for å treffe OG</translation>
+        <translation type="vanished">Juster volum for å treffe OG</translation>
     </message>
     <message>
         <source>Input</source>
-        <translation>Inndata</translation>
+        <translation type="vanished">Inndata</translation>
     </message>
     <message>
         <source>SG</source>
-        <translation>SG</translation>
+        <translation type="vanished">SG</translation>
     </message>
     <message>
         <source>Measured gravity pre-boil</source>
-        <translation>Målt SG før koking</translation>
+        <translation type="vanished">Målt SG før koking</translation>
     </message>
     <message>
         <source>Temp</source>
-        <translation>Temp</translation>
+        <translation type="vanished">Temp</translation>
     </message>
     <message>
         <source>Temperature of SG reading</source>
-        <translation>Temperatur ved måling av SG</translation>
+        <translation type="vanished">Temperatur ved måling av SG</translation>
     </message>
     <message>
         <source>Calibration Temp</source>
-        <translation>Kalibreringstemperatur</translation>
+        <translation type="vanished">Kalibreringstemperatur</translation>
     </message>
     <message>
         <source>Temp to which the hydrometer is calibrated</source>
-        <translation>Temperatur når gavitasjonsmeteret er kalibrert</translation>
+        <translation type="vanished">Temperatur når gavitasjonsmeteret er kalibrert</translation>
     </message>
     <message>
         <source>-or-</source>
-        <translation>-eller-</translation>
+        <translation type="vanished">-eller-</translation>
     </message>
     <message>
         <source>Plato</source>
-        <translation>Plato</translation>
+        <translation type="vanished">Plato</translation>
     </message>
     <message>
         <source>Plato (percent by mass of equivalent sucrose)</source>
-        <translation>Plato (prosent ekvivalent sukrose i massen)</translation>
+        <translation type="vanished">Plato (prosent ekvivalent sukrose i massen)</translation>
     </message>
     <message>
         <source>Pre-Boil Volume</source>
-        <translation>Volum før koking</translation>
+        <translation type="vanished">Volum før koking</translation>
     </message>
     <message>
         <source>Measured pre-boil volume</source>
-        <translation>Målt volum før koking</translation>
+        <translation type="vanished">Målt volum før koking</translation>
     </message>
     <message>
         <source>Output</source>
-        <translation>Utdata</translation>
+        <translation type="vanished">Utdata</translation>
     </message>
     <message>
         <source>OG w/o Correction</source>
-        <translation>OG uten korrigering</translation>
+        <translation type="vanished">OG uten korrigering</translation>
     </message>
     <message>
         <source>OG if you boil as planned</source>
-        <translation>OG hvis du koker som planlagt</translation>
+        <translation type="vanished">OG hvis du koker som planlagt</translation>
     </message>
     <message>
         <source>Add to Boil</source>
-        <translation>Legg til i kok</translation>
+        <translation type="vanished">Legg til i kok</translation>
     </message>
     <message>
         <source>Amount of water you need to add to hit planned OG (or boil off if negative)</source>
-        <translation>Mengde vann du må tilsette for å treffe planlagt OG (eller koke ut hvis negativt tall)</translation>
+        <translation type="vanished">Mengde vann du må tilsette for å treffe planlagt OG (eller koke ut hvis negativt tall)</translation>
     </message>
     <message>
         <source>Final Batch Size</source>
-        <translation>Endelig batchstørrelse</translation>
+        <translation type="vanished">Endelig batchstørrelse</translation>
     </message>
     <message>
         <source>Estimated batch size after correction</source>
-        <translation>Estimert batchstørrelse etter korrigering</translation>
+        <translation type="vanished">Estimert batchstørrelse etter korrigering</translation>
     </message>
     <message>
         <source>Calculate</source>
-        <translation>Beregn</translation>
-    </message>
-    <message>
-        <source>ogAdjuster</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Beregn</translation>
     </message>
 </context>
 <context>
     <name>optionsDialog</name>
     <message>
         <source>Options</source>
-        <translation>Alternativer</translation>
+        <translation type="vanished">Alternativer</translation>
     </message>
     <message>
         <source>Units</source>
-        <translation>Enheter</translation>
+        <translation type="vanished">Enheter</translation>
     </message>
     <message>
         <source>Weight</source>
-        <translation>Vekt</translation>
+        <translation type="vanished">Vekt</translation>
     </message>
     <message>
         <source>Use SI units</source>
@@ -4725,7 +5810,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Temperature</source>
-        <translation>Temperatur</translation>
+        <translation type="vanished">Temperatur</translation>
     </message>
     <message>
         <source>Celsius</source>
@@ -4737,11 +5822,11 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation>Volum</translation>
+        <translation type="vanished">Volum</translation>
     </message>
     <message>
         <source>Gravity</source>
-        <translation>Gravitasjon</translation>
+        <translation type="vanished">Gravitasjon</translation>
     </message>
     <message>
         <source>20C/20C Specific Gravity</source>
@@ -4753,7 +5838,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Color</source>
-        <translation>Farge</translation>
+        <translation type="vanished">Farge</translation>
     </message>
     <message>
         <source>Use SRM</source>
@@ -4765,7 +5850,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Formulas</source>
-        <translation>Formularer</translation>
+        <translation type="vanished">Formularer</translation>
     </message>
     <message>
         <source>Mosher&apos;s approximation</source>
@@ -4781,7 +5866,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>IBU</source>
-        <translation>IBU</translation>
+        <translation type="vanished">IBU</translation>
     </message>
     <message>
         <source>Tinseth&apos;s approximation</source>
@@ -4793,7 +5878,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>IBU Adjustments</source>
-        <translation>IBU-justeringer</translation>
+        <translation type="vanished">IBU-justeringer</translation>
     </message>
     <message>
         <source>% IBU adjustment</source>
@@ -4829,7 +5914,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Language</source>
-        <translation>Språk</translation>
+        <translation type="vanished">Språk</translation>
     </message>
     <message>
         <source>&lt;qt&gt;
@@ -4839,7 +5924,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
   &lt;a href=&quot;https://sourceforge.net/sendmessage.php?touser=938941&quot;&gt;
   provide a translation&lt;/a&gt; so that your friends can use brewtarget!
 &lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;
+        <translation type="vanished">&lt;qt&gt;
    &lt;b&gt;Kan du et annet språk?&lt;/b&gt;
    &lt;br&gt;&lt;br&gt;
    Eller, vil du forbedre en oversettelse? Hjelp oss å  &lt;a href=&quot;https://sourceforge.net/sendmessage.php?touser=938941&quot;&gt;
@@ -4848,43 +5933,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Date</source>
-        <translation>Dato</translation>
-    </message>
-    <message>
-        <source>Forumulas</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mash Hop (%)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>First Wort (%)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Databases</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Engines</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>RDBMS Engine</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Test Connection</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Configuration</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Restore defaults</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Dato</translation>
     </message>
     <message>
         <source>Hostname</source>
@@ -4967,7 +6016,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>How frequently a backup is made: 1 means always backup</source>
+        <source>How many times Brewtarget needs to be run to trigger another backup: 1 means always backup</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4975,538 +6024,482 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     <name>pitchDialog</name>
     <message>
         <source>Pitch Rate Calculator</source>
-        <translation>Gjæringsratekalkulator</translation>
+        <translation type="vanished">Gjæringsratekalkulator</translation>
     </message>
     <message>
         <source>Input</source>
-        <translation>Inndata</translation>
+        <translation type="vanished">Inndata</translation>
     </message>
     <message>
         <source>Wort Volume</source>
-        <translation>Volum vørter</translation>
+        <translation type="vanished">Volum vørter</translation>
     </message>
     <message>
         <source>OG</source>
-        <translation>OG</translation>
+        <translation type="vanished">OG</translation>
     </message>
     <message>
         <source>For ales, 0.75-1. For lagers, 1.5-2.</source>
-        <translation>For ale, 0.75-1. For lager, 1.5-2.</translation>
+        <translation type="vanished">For ale, 0.75-1. For lager, 1.5-2.</translation>
     </message>
     <message>
         <source>Pitch Rate (M cells)/(mL*P)</source>
-        <translation>Gjæringsrate (M cells)/(mL*P)</translation>
+        <translation type="vanished">Gjæringsrate (M cells)/(mL*P)</translation>
     </message>
     <message>
         <source>Aeration Method</source>
-        <translation>Innluftingsmetode</translation>
+        <translation type="vanished">Innluftingsmetode</translation>
     </message>
     <message>
         <source>Yeast Production Date</source>
-        <translation>Gjærens produksjonsdato</translation>
+        <translation type="vanished">Gjærens produksjonsdato</translation>
     </message>
     <message>
         <source>Yeast Viability</source>
-        <translation>Gjærens levedyktighet</translation>
+        <translation type="vanished">Gjærens levedyktighet</translation>
     </message>
     <message>
         <source>None</source>
-        <translation>Ingen</translation>
+        <translation type="vanished">Ingen</translation>
     </message>
     <message>
         <source>O2 At Start</source>
-        <translation>O2 ved start</translation>
+        <translation type="vanished">O2 ved start</translation>
     </message>
     <message>
         <source>Stir Plate</source>
-        <translation>Magnet rører</translation>
+        <translation type="vanished">Magnet rører</translation>
     </message>
     <message>
         <source>MM/dd/yyyy</source>
-        <translation>MM/dd/yyyy</translation>
+        <translation type="vanished">MM/dd/yyyy</translation>
     </message>
     <message>
         <source>%</source>
-        <translation>%</translation>
+        <translation type="vanished">%</translation>
     </message>
     <message>
         <source>TextLabel</source>
-        <translation>Tekstetikett</translation>
+        <translation type="vanished">Tekstetikett</translation>
     </message>
     <message>
         <source>Calculate Viability From Date</source>
-        <translation>Kalkuler levedyktighet ut i fra dato</translation>
+        <translation type="vanished">Kalkuler levedyktighet ut i fra dato</translation>
     </message>
     <message>
         <source># Vials/Smack Packs Pitched</source>
-        <translation># Prøverør/pakker tilsatt</translation>
+        <translation type="vanished"># Prøverør/pakker tilsatt</translation>
     </message>
     <message>
         <source>Output</source>
-        <translation>Utdata</translation>
+        <translation type="vanished">Utdata</translation>
     </message>
     <message>
         <source>Billions of Yeast Cells Required</source>
-        <translation>Milliarder gjærseller som kreves</translation>
+        <translation type="vanished">Milliarder gjærseller som kreves</translation>
     </message>
     <message>
         <source># Vials/Smack Packs w/o Starter</source>
-        <translation># Prøverør/pakker foruten starter</translation>
+        <translation type="vanished"># Prøverør/pakker foruten starter</translation>
     </message>
     <message>
         <source>Dry Yeast</source>
-        <translation>Tørrgjær</translation>
+        <translation type="vanished">Tørrgjær</translation>
     </message>
     <message>
         <source>Starter Volume</source>
-        <translation>Startervolum</translation>
-    </message>
-    <message>
-        <source>Volume of wort</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Starting gravity of the wort</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Aeration method</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Production date (Best By date less three months)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Estimated viability of the yeast</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Desired pitch rate</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Number of vials/smack packs added to starter</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>How much yeast you will need</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>How many smack packs or vials required to reach pitch rate</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Amount of dry yeast needed to reach pitch rate</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Starter size to reach pitch rate</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Startervolum</translation>
     </message>
 </context>
 <context>
     <name>primingDialog</name>
     <message>
         <source>Priming Calculator</source>
-        <translation>Karboneringskalkulator</translation>
+        <translation type="vanished">Karboneringskalkulator</translation>
     </message>
     <message>
         <source>Input</source>
-        <translation>Inndata</translation>
+        <translation type="vanished">Inndata</translation>
     </message>
     <message>
         <source>Collected Beer Volume</source>
-        <translation>Samlet volum øl</translation>
+        <translation type="vanished">Samlet volum øl</translation>
     </message>
     <message>
         <source>Amount of beer to prime</source>
-        <translation>Mengde øl til karbonering</translation>
+        <translation type="vanished">Mengde øl til karbonering</translation>
     </message>
     <message>
         <source>Beer Temperature</source>
-        <translation>Øltemperatur</translation>
+        <translation type="vanished">Øltemperatur</translation>
     </message>
     <message>
         <source>Temp of the beer</source>
-        <translation>Øllets temperatur</translation>
+        <translation type="vanished">Øllets temperatur</translation>
     </message>
     <message>
         <source>Desired Volumes</source>
-        <translation>Ønsket mengde</translation>
+        <translation type="vanished">Ønsket mengde</translation>
     </message>
     <message>
         <source>How many volumes of CO2 you want (1 L CO2 @ STP per L beer)</source>
-        <translation>Hvor mye CO2 du vil ha (1 L CO2 @ 1 atm per L øl)</translation>
+        <translation type="vanished">Hvor mye CO2 du vil ha (1 L CO2 @ 1 atm per L øl)</translation>
     </message>
     <message>
         <source>Glucose Monohydrate (corn sugar)</source>
-        <translation>Glucose monohydrate (Druesukker)</translation>
+        <translation type="vanished">Glucose monohydrate (Druesukker)</translation>
     </message>
     <message>
         <source>Anhydrous Glucose</source>
-        <translation>Anhydrous Glucose</translation>
+        <translation type="vanished">Anhydrous Glucose</translation>
     </message>
     <message>
         <source>Sucrose (table sugar)</source>
-        <translation>Sucrose (Vanlig sukker)</translation>
+        <translation type="vanished">Sucrose (Vanlig sukker)</translation>
     </message>
     <message>
         <source>Dry Malt Extract</source>
-        <translation>Tørr maltekstrakt</translation>
+        <translation type="vanished">Tørr maltekstrakt</translation>
     </message>
     <message>
         <source>Output</source>
-        <translation>Utdata</translation>
+        <translation type="vanished">Utdata</translation>
     </message>
     <message>
         <source>Prime with</source>
-        <translation>Karboner med</translation>
+        <translation type="vanished">Karboner med</translation>
     </message>
     <message>
         <source>How much priming ingredient to use</source>
-        <translation>Hvor mye karboneringsingrediens å bruke</translation>
+        <translation type="vanished">Hvor mye karboneringsingrediens å bruke</translation>
     </message>
     <message>
         <source>Calculate</source>
-        <translation>Beregn</translation>
+        <translation type="vanished">Beregn</translation>
     </message>
 </context>
 <context>
     <name>recipeExtrasWidget</name>
     <message>
         <source>Form</source>
-        <translation>Skjema</translation>
+        <translation type="vanished">Skjema</translation>
     </message>
     <message>
         <source>Brewer</source>
-        <translation>Brygger</translation>
+        <translation type="vanished">Brygger</translation>
     </message>
     <message>
         <source>Asst. Brewer</source>
-        <translation>Ass. brygger</translation>
+        <translation type="vanished">Ass. brygger</translation>
     </message>
     <message>
         <source>Taste Rating</source>
-        <translation>Smaksrate</translation>
+        <translation type="vanished">Smaksrate</translation>
     </message>
     <message>
         <source>Primary Age (days)</source>
-        <translation>Primærtid (dager)</translation>
+        <translation type="vanished">Primærtid (dager)</translation>
     </message>
     <message>
         <source>Primary Temp</source>
-        <translation>Primærtemperatur</translation>
+        <translation type="vanished">Primærtemperatur</translation>
     </message>
     <message>
         <source>Secondary Age (days)</source>
-        <translation>Sekundærtid (dager)</translation>
+        <translation type="vanished">Sekundærtid (dager)</translation>
     </message>
     <message>
         <source>Secondary Temp</source>
-        <translation>Sekundærtemperatur</translation>
+        <translation type="vanished">Sekundærtemperatur</translation>
     </message>
     <message>
         <source>Tertiary Age (days)</source>
-        <translation>Tertiærtid (dager)</translation>
+        <translation type="vanished">Tertiærtid (dager)</translation>
     </message>
     <message>
         <source>Tertiary Temp</source>
-        <translation>Tertiærtemperatur</translation>
+        <translation type="vanished">Tertiærtemperatur</translation>
     </message>
     <message>
         <source>Bottle/Keg Age (days)</source>
-        <translation>Flaske/Fat-tid (dager)</translation>
+        <translation type="vanished">Flaske/Fat-tid (dager)</translation>
     </message>
     <message>
         <source>Bottle/Keg Temp</source>
-        <translation>Flaske/Fat-temperatur</translation>
+        <translation type="vanished">Flaske/Fat-temperatur</translation>
     </message>
     <message>
         <source>Date First Brewed</source>
-        <translation>Dato først brygget</translation>
+        <translation type="vanished">Dato først brygget</translation>
     </message>
     <message>
         <source>dd MMM yyyy</source>
-        <translation>dd MMM yyyy</translation>
+        <translation type="vanished">dd MMM yyyy</translation>
     </message>
     <message>
         <source>Carbonation Volumes</source>
-        <translation>Karboneringsmengde</translation>
+        <translation type="vanished">Karboneringsmengde</translation>
     </message>
     <message>
         <source>Taste Notes</source>
-        <translation>Smaksnotater</translation>
+        <translation type="vanished">Smaksnotater</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Notater</translation>
+        <translation type="vanished">Notater</translation>
     </message>
 </context>
 <context>
     <name>refractoDialog</name>
     <message>
         <source>Refractometer Tools</source>
-        <translation>Refraktometerverktøy</translation>
+        <translation type="vanished">Refraktometerverktøy</translation>
     </message>
     <message>
         <source>Inputs</source>
-        <translation>Inndata</translation>
+        <translation type="vanished">Inndata</translation>
     </message>
     <message>
         <source>Original Plato</source>
-        <translation>Original Plato</translation>
+        <translation type="vanished">Original Plato</translation>
     </message>
     <message>
         <source>OG (20 C)</source>
-        <translation>OG (20 C)</translation>
+        <translation type="vanished">OG (20 C)</translation>
     </message>
     <message>
         <source>Current Plato</source>
-        <translation>Gjeldende Plato</translation>
+        <translation type="vanished">Gjeldende Plato</translation>
     </message>
     <message>
         <source>Calculate</source>
-        <translation>Beregn</translation>
+        <translation type="vanished">Beregn</translation>
     </message>
     <message>
         <source>Outputs</source>
-        <translation>Utdata</translation>
+        <translation type="vanished">Utdata</translation>
     </message>
     <message>
         <source>SG (20C)</source>
-        <translation>SG (20C)</translation>
+        <translation type="vanished">SG (20C)</translation>
     </message>
     <message>
         <source>ABV</source>
-        <translation>ABV</translation>
+        <translation type="vanished">ABV</translation>
     </message>
     <message>
         <source>ABW</source>
-        <translation>ABW</translation>
+        <translation type="vanished">ABW</translation>
     </message>
     <message>
         <source>Refractive Index</source>
-        <translation>Refraktiv index</translation>
+        <translation type="vanished">Refraktiv index</translation>
     </message>
     <message>
         <source>Real Extract (Plato)</source>
-        <translation>Virkelig ekstrakt (Plato)</translation>
+        <translation type="vanished">Virkelig ekstrakt (Plato)</translation>
     </message>
     <message>
         <source>OG (20C)</source>
-        <translation>OG (20C)</translation>
-    </message>
-    <message>
-        <source>Measured original plato</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Measured original gravity</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Current measured plato</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">OG (20C)</translation>
     </message>
 </context>
 <context>
     <name>strikeWaterDialog</name>
     <message>
         <source>Strike Water Calculator</source>
-        <translation>Meskevannkalkulator</translation>
+        <translation type="vanished">Meskevannkalkulator</translation>
     </message>
     <message>
         <source>Initial Infusion</source>
-        <translation>Initiell infusjon</translation>
+        <translation type="vanished">Initiell infusjon</translation>
     </message>
     <message>
         <source>Original Grain Temperature</source>
-        <translation>Orginal malttemperatur</translation>
+        <translation type="vanished">Orginal malttemperatur</translation>
     </message>
     <message>
         <source>Target Mash Temperature</source>
-        <translation>Måltemperatur mesk</translation>
+        <translation type="vanished">Måltemperatur mesk</translation>
     </message>
     <message>
         <source>Weight of Grain</source>
-        <translation>Maltvekt</translation>
+        <translation type="vanished">Maltvekt</translation>
     </message>
     <message>
         <source>Volume of Water</source>
-        <translation>Vannvolum</translation>
+        <translation type="vanished">Vannvolum</translation>
     </message>
     <message>
         <source>Mash Infusion</source>
-        <translation>Meskinfusjon</translation>
+        <translation type="vanished">Meskinfusjon</translation>
     </message>
     <message>
         <source>Total Volume of Water</source>
-        <translation>Totalvolum vann</translation>
+        <translation type="vanished">Totalvolum vann</translation>
     </message>
     <message>
         <source>Grain Weight</source>
-        <translation>Maltvekt</translation>
+        <translation type="vanished">Maltvekt</translation>
     </message>
     <message>
         <source>Actual Mash Temperature</source>
-        <translation>Faktisk mesketemperatur</translation>
+        <translation type="vanished">Faktisk mesketemperatur</translation>
     </message>
     <message>
         <source>Infusion Water Temperature</source>
-        <translation>Innfusjonsvanntemperatur</translation>
+        <translation type="vanished">Innfusjonsvanntemperatur</translation>
     </message>
     <message>
         <source>Calculate</source>
-        <translation>Beregn</translation>
+        <translation type="vanished">Beregn</translation>
     </message>
     <message>
         <source>Strike Water Temperature</source>
-        <translation>Meskevanntemperatur</translation>
+        <translation type="vanished">Meskevanntemperatur</translation>
     </message>
     <message>
         <source>Volume to add</source>
-        <translation>Volum å tilsette</translation>
+        <translation type="vanished">Volum å tilsette</translation>
     </message>
     <message>
         <source>Note: This calculator assumes a preheated mash tun.</source>
-        <translation>NB: Denne kalkulatoren antar et forhåndsvarmet meskekar</translation>
+        <translation type="vanished">NB: Denne kalkulatoren antar et forhåndsvarmet meskekar</translation>
     </message>
 </context>
 <context>
     <name>styleEditor</name>
     <message>
         <source>Style Editor</source>
-        <translation>Øltyperedigerer</translation>
+        <translation type="vanished">Øltyperedigerer</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation>Øltype</translation>
+        <translation type="vanished">Øltype</translation>
     </message>
     <message>
         <source>Delete selected style</source>
-        <translation>Slett valgt øltype</translation>
+        <translation type="vanished">Slett valgt øltype</translation>
     </message>
     <message>
         <source>Basic Information</source>
-        <translation>Grunnleggende informasjon</translation>
+        <translation type="vanished">Grunnleggende informasjon</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Navn</translation>
+        <translation type="vanished">Navn</translation>
     </message>
     <message>
         <source>Category</source>
-        <translation>Ølkategori</translation>
+        <translation type="vanished">Ølkategori</translation>
     </message>
     <message>
         <source>Category number</source>
-        <translation>Ølkategorinummer</translation>
+        <translation type="vanished">Ølkategorinummer</translation>
     </message>
     <message>
         <source>Style letter</source>
-        <translation>Øltypebokstav</translation>
+        <translation type="vanished">Øltypebokstav</translation>
     </message>
     <message>
         <source>Style guide</source>
-        <translation>Hvilke rettningslinjer</translation>
+        <translation type="vanished">Hvilke rettningslinjer</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Type</translation>
+        <translation type="vanished">Type</translation>
     </message>
     <message>
         <source>Type of beverage</source>
-        <translation>Type drikke</translation>
+        <translation type="vanished">Type drikke</translation>
     </message>
     <message>
         <source>Lager</source>
-        <translation>Lager</translation>
+        <translation type="vanished">Lager</translation>
     </message>
     <message>
         <source>Ale</source>
-        <translation>Ale</translation>
+        <translation type="vanished">Ale</translation>
     </message>
     <message>
         <source>Mead</source>
-        <translation>Mjød</translation>
+        <translation type="vanished">Mjød</translation>
     </message>
     <message>
         <source>Wheat</source>
-        <translation>Hvete</translation>
+        <translation type="vanished">Hvete</translation>
     </message>
     <message>
         <source>Mixed</source>
-        <translation>Blandet</translation>
+        <translation type="vanished">Blandet</translation>
     </message>
     <message>
         <source>Cider</source>
-        <translation>Sider</translation>
+        <translation type="vanished">Sider</translation>
     </message>
     <message>
         <source>Vital Statistics</source>
-        <translation>Vital statistikk</translation>
+        <translation type="vanished">Vital statistikk</translation>
     </message>
     <message>
         <source>Max</source>
-        <translation>Maks</translation>
+        <translation type="vanished">Maks</translation>
     </message>
     <message>
         <source>Min</source>
-        <translation>Min</translation>
+        <translation type="vanished">Min</translation>
     </message>
     <message>
         <source>OG</source>
-        <translation>OG</translation>
+        <translation type="vanished">OG</translation>
     </message>
     <message>
         <source>FG</source>
-        <translation>FG</translation>
+        <translation type="vanished">FG</translation>
     </message>
     <message>
         <source>IBUs</source>
-        <translation>IBU&apos;er</translation>
+        <translation type="vanished">IBU&apos;er</translation>
     </message>
     <message>
         <source>Color (SRM)</source>
-        <translation>Farge (SRM)</translation>
+        <translation type="vanished">Farge (SRM)</translation>
     </message>
     <message>
         <source>Carb (vols)</source>
-        <translation>Karb (Vols)</translation>
+        <translation type="vanished">Karb (Vols)</translation>
     </message>
     <message>
         <source>ABV (pct)</source>
-        <translation>ABV (pst)</translation>
+        <translation type="vanished">ABV (pst)</translation>
     </message>
     <message>
         <source>Profile</source>
-        <translation>Profil</translation>
+        <translation type="vanished">Profil</translation>
     </message>
     <message>
         <source>Ingredients</source>
-        <translation>Ingredienser</translation>
+        <translation type="vanished">Ingredienser</translation>
     </message>
     <message>
         <source>Examples</source>
-        <translation>Eksempler</translation>
+        <translation type="vanished">Eksempler</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Notater</translation>
+        <translation type="vanished">Notater</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>Ny</translation>
+        <translation type="vanished">Ny</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation>Lagre</translation>
+        <translation type="vanished">Lagre</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Avbryt</translation>
+        <translation type="vanished">Avbryt</translation>
     </message>
 </context>
 <context>
@@ -5515,218 +6508,191 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
         <source>Timers</source>
         <translation type="vanished">Tidtakere</translation>
     </message>
-    <message>
-        <source>Addition Timers</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>timerWidget</name>
-    <message>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Add:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Notes...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>At:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>mins</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>waterEditor</name>
     <message>
         <source>Dialog</source>
-        <translation>Dialog</translation>
+        <translation type="vanished">Dialog</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Navn</translation>
+        <translation type="vanished">Navn</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Notater</translation>
+        <translation type="vanished">Notater</translation>
     </message>
 </context>
 <context>
     <name>yeastEditor</name>
     <message>
         <source>Yeast Editor</source>
-        <translation>Gjærredigerer</translation>
+        <translation type="vanished">Gjærredigerer</translation>
     </message>
     <message>
         <source>Required Fields</source>
-        <translation>Obligatoriske felt</translation>
+        <translation type="vanished">Obligatoriske felt</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Navn</translation>
+        <translation type="vanished">Navn</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Type</translation>
+        <translation type="vanished">Type</translation>
     </message>
     <message>
         <source>Ale</source>
-        <translation>Ale</translation>
+        <translation type="vanished">Ale</translation>
     </message>
     <message>
         <source>Lager</source>
-        <translation>Lager</translation>
+        <translation type="vanished">Lager</translation>
     </message>
     <message>
         <source>Wheat</source>
-        <translation>Hvete</translation>
+        <translation type="vanished">Hvete</translation>
     </message>
     <message>
         <source>Wine</source>
-        <translation>Vin</translation>
+        <translation type="vanished">Vin</translation>
     </message>
     <message>
         <source>Champagne</source>
-        <translation>Champagne</translation>
+        <translation type="vanished">Champagne</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation>Skjema</translation>
+        <translation type="vanished">Skjema</translation>
     </message>
     <message>
         <source>Liquid</source>
-        <translation>Flytende</translation>
+        <translation type="vanished">Flytende</translation>
     </message>
     <message>
         <source>Dry</source>
-        <translation>Tørr</translation>
+        <translation type="vanished">Tørr</translation>
     </message>
     <message>
         <source>Slant</source>
-        <translation>Prøverør</translation>
+        <translation type="vanished">Prøverør</translation>
     </message>
     <message>
         <source>Culture</source>
-        <translation>Kultur</translation>
+        <translation type="vanished">Kultur</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation>Mengde</translation>
+        <translation type="vanished">Mengde</translation>
     </message>
     <message>
         <source>Check it if the amount given is in kg instead of L.</source>
-        <translation>Sjekk etter om mengden er gitt i kg instedet for L.</translation>
+        <translation type="vanished">Sjekk etter om mengden er gitt i kg instedet for L.</translation>
     </message>
     <message>
         <source>Amount is weight?</source>
-        <translation>Mengde er i vekt?</translation>
+        <translation type="vanished">Mengde er i vekt?</translation>
     </message>
     <message>
         <source>Checked if the given amount is weight instead of volume</source>
-        <translation>Sjekk etter om mengden er gitt i vekt instedet for volum.</translation>
+        <translation type="vanished">Sjekk etter om mengden er gitt i vekt instedet for volum.</translation>
     </message>
     <message>
         <source>Lab</source>
-        <translation>Lab</translation>
+        <translation type="vanished">Lab</translation>
     </message>
     <message>
         <source>Product ID</source>
-        <translation>Produkt-ID</translation>
+        <translation type="vanished">Produkt-ID</translation>
     </message>
     <message>
         <source>Min Temp</source>
-        <translation>Min Temp</translation>
+        <translation type="vanished">Min Temp</translation>
     </message>
     <message>
         <source>Min temp</source>
-        <translation>Min Temp</translation>
+        <translation type="vanished">Min Temp</translation>
     </message>
     <message>
         <source>Max Temp</source>
-        <translation>Maks Temp</translation>
+        <translation type="vanished">Maks Temp</translation>
     </message>
     <message>
         <source>Max temp</source>
-        <translation>Maks Temp</translation>
+        <translation type="vanished">Maks Temp</translation>
     </message>
     <message>
         <source>Flocculation</source>
-        <translation>Flokkulering</translation>
+        <translation type="vanished">Flokkulering</translation>
     </message>
     <message>
         <source>Low</source>
-        <translation>Lav</translation>
+        <translation type="vanished">Lav</translation>
     </message>
     <message>
         <source>Medium</source>
-        <translation>Medium</translation>
+        <translation type="vanished">Medium</translation>
     </message>
     <message>
         <source>High</source>
-        <translation>Høy</translation>
+        <translation type="vanished">Høy</translation>
     </message>
     <message>
         <source>Very High</source>
-        <translation>Veldig høy</translation>
+        <translation type="vanished">Veldig høy</translation>
     </message>
     <message>
         <source>Attenuation (%)</source>
-        <translation>Attenuation (%)</translation>
+        <translation type="vanished">Attenuation (%)</translation>
     </message>
     <message>
         <source>Apparent attenuation as percentage of OG points</source>
-        <translation>Tilsynelatende demping i prosent av OG-poeng</translation>
+        <translation type="vanished">Tilsynelatende demping i prosent av OG-poeng</translation>
     </message>
     <message>
         <source>Times Recultured</source>
-        <translation>Ganger rekulturert</translation>
+        <translation type="vanished">Ganger rekulturert</translation>
     </message>
     <message>
         <source>Times this yeast has been recultured</source>
-        <translation>Antall ganger denne gjæren er rekulturert</translation>
+        <translation type="vanished">Antall ganger denne gjæren er rekulturert</translation>
     </message>
     <message>
         <source>Max Recultures</source>
-        <translation>Maks rekultureringer</translation>
+        <translation type="vanished">Maks rekultureringer</translation>
     </message>
     <message>
         <source>Max recultures</source>
-        <translation>Maks antall ganger rekulturering</translation>
+        <translation type="vanished">Maks antall ganger rekulturering</translation>
     </message>
     <message>
         <source>Add to Secondary</source>
-        <translation>Legg til i sekundær</translation>
+        <translation type="vanished">Legg til i sekundær</translation>
     </message>
     <message>
         <source>Checked means add this yeast to secondary instead of primary</source>
-        <translation>Avkrysset betyr: Legg til denne gjær i sekundær i stedet for primær</translation>
+        <translation type="vanished">Avkrysset betyr: Legg til denne gjær i sekundær i stedet for primær</translation>
     </message>
     <message>
         <source>Best For:</source>
-        <translation>Best for:</translation>
+        <translation type="vanished">Best for:</translation>
     </message>
     <message>
         <source>Notes:</source>
-        <translation>Notater:</translation>
+        <translation type="vanished">Notater:</translation>
     </message>
     <message>
         <source>Default Amount</source>
-        <translation>Forhåndsvalgt mengde</translation>
+        <translation type="vanished">Forhåndsvalgt mengde</translation>
     </message>
     <message>
         <source>Quanta in Inventory</source>
-        <translation>Mengde i varebeholdning</translation>
+        <translation type="vanished">Mengde i varebeholdning</translation>
     </message>
     <message>
         <source>Quanta in inventory</source>
-        <translation>Mengde i varebeholdning</translation>
+        <translation type="vanished">Mengde i varebeholdning</translation>
     </message>
 </context>
 </TS>

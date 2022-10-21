@@ -46,16 +46,16 @@
 
 namespace {
    EnumStringMapping const itemTypeToName {
-      {QT_TR_NOOP("RECIPE"     )          , BtTreeItem::Type::RECIPE      },
-      {QT_TR_NOOP("EQUIPMENT"  )          , BtTreeItem::Type::EQUIPMENT   },
-      {QT_TR_NOOP("FERMENTABLE")          , BtTreeItem::Type::FERMENTABLE },
-      {QT_TR_NOOP("HOP"        )          , BtTreeItem::Type::HOP         },
-      {QT_TR_NOOP("MISC"       )          , BtTreeItem::Type::MISC        },
-      {QT_TR_NOOP("YEAST"      )          , BtTreeItem::Type::YEAST       },
-      {QT_TR_NOOP("BREWNOTE"   )          , BtTreeItem::Type::BREWNOTE    },
-      {QT_TR_NOOP("STYLE"      )          , BtTreeItem::Type::STYLE       },
-      {QT_TR_NOOP("FOLDER"     )          , BtTreeItem::Type::FOLDER      },
-      {QT_TR_NOOP("WATER"      )          , BtTreeItem::Type::WATER       }
+      {"RECIPE"     , BtTreeItem::Type::RECIPE     },
+      {"EQUIPMENT"  , BtTreeItem::Type::EQUIPMENT  },
+      {"FERMENTABLE", BtTreeItem::Type::FERMENTABLE},
+      {"HOP"        , BtTreeItem::Type::HOP        },
+      {"MISC"       , BtTreeItem::Type::MISC       },
+      {"YEAST"      , BtTreeItem::Type::YEAST      },
+      {"BREWNOTE"   , BtTreeItem::Type::BREWNOTE   },
+      {"STYLE"      , BtTreeItem::Type::STYLE      },
+      {"FOLDER"     , BtTreeItem::Type::FOLDER     },
+      {"WATER"      , BtTreeItem::Type::WATER      }
    };
 }
 

@@ -73,10 +73,12 @@
 #
 #
 # CMake options
-# If you invoke CMake directly (rather than via make), you can pass the following options with the `-D` flag:
 #   * CMAKE_INSTALL_PREFIX  - /usr/local by default. Set this to /usr on Debian-based systems like Ubuntu.
 #   * DO_RELEASE_BUILD      - OFF by default. If ON, will do a release build. Otherwise, debug build.
 #   * NO_MESSING_WITH_FLAGS - OFF by default. ON means do not add any build flags whatsoever. May override other options.
+# NOTE: You need to run CMake to change the options (you can't change them just by running make, not even by running
+# make clean.  Eg, in the build directory, run the following to switch to debug builds:
+#     cmake -DDO_RELEASE_BUILD=OFF ..
 #
 
 # Uncomment the next line for slightly verbose build output
@@ -108,12 +110,8 @@ set(capitalisedProjectName Brewtarget)
 #=======================================================================================================================
 #======================================================= Options =======================================================
 #=======================================================================================================================
-option(DO_RELEASE_BUILD
-        "If on, will do a release build. Otherwise, debug build."
-        OFF)
-option(NO_MESSING_WITH_FLAGS
-        "On means do not add any build flags whatsoever. May override other options."
-        OFF)
+option(DO_RELEASE_BUILD "If on, will do a release build. Otherwise, debug build." OFF)
+option(NO_MESSING_WITH_FLAGS "On means do not add any build flags whatsoever. May override other options." OFF)
 
 #=======================================================================================================================
 #===================================================== Directories =====================================================
@@ -258,7 +256,18 @@ if(NOT ${NO_MESSING_WITH_FLAGS})
       # packaging/rpmLintFilters.toml).
       #
       set(CMAKE_CXX_FLAGS_RELEASE "-Wall -ansi -pedantic -Wno-long-long -O2 -z noexecstack")
-      set(CMAKE_CXX_FLAGS_DEBUG "-Wall -g3")
+      #
+      # -g3 should give even more debugging information thatn -g (which is equivalent to -g2)
+      # -no-pie -fno-pie -rdynamic are needed for Boost stacktrace to work properly - at least according to comments
+      # at https://stackoverflow.com/questions/52583544/boost-stack-trace-not-showing-function-names-and-line-numbers
+      #
+      # But, for some reason, gcc on Windows does not accept -rdynamic
+      #
+      if(NOT WIN32)
+         set(CMAKE_CXX_FLAGS_DEBUG "-Wall -g3 -no-pie -fno-pie -rdynamic")
+      else()
+         set(CMAKE_CXX_FLAGS_DEBUG "-Wall -g3 -no-pie -fno-pie")
+      endif()
    endif()
 
    # Speed up compilation if using gcc.
@@ -364,7 +373,9 @@ if(${DO_RELEASE_BUILD})
    set(CMAKE_BUILD_TYPE "Release")
 else()
    set(CMAKE_BUILD_TYPE "Debug")
+   set(CMAKE_ENABLE_EXPORTS true)
 endif()
+message(STATUS "Doing ${CMAKE_BUILD_TYPE} build (DO_RELEASE_BUILD = ${DO_RELEASE_BUILD})")
 
 #=======================================================================================================================
 #========================================= Find various libraries we depend on =========================================
@@ -723,7 +734,10 @@ set(filesToInstall_desktop ${repoDir}/brewtarget.desktop)
 # Icon files to install.
 set(filesToInstall_icons ${repoDir}/images/brewtarget.svg)
 
-set(filesToInstall_translations ${repoDir}/translations/bt_ca.ts # Catalan
+# This is the list of translation files to update (from translatable strings in the source code) and from which the
+# binary .qm files will be generated and shipped.  Note that src/OptionDialog.cpp controls which languages are shown to
+# the user as options for the UI
+set(translationSourceFiles ${repoDir}/translations/bt_ca.ts # Catalan
                                 ${repoDir}/translations/bt_cs.ts # Czech
                                 ${repoDir}/translations/bt_de.ts # German
                                 ${repoDir}/translations/bt_en.ts # English
@@ -797,18 +811,28 @@ include(QtDesignerPlugins/CMakeLists.txt)
 include(src/CMakeLists.txt)
 
 #=======================================================================================================================
-# Targets
+#==================================================== Translations =====================================================
 #=======================================================================================================================
-set(FILES_TO_TRANSLATE ${filesToCompile_cpp}
-                       ${filesToCompile_ui})
-
-#==================================Qt Junk=====================================
-
-# Create the .qm files from the .ts files
-# Per https://doc.qt.io/qt-5/qtlinguist-cmake-qt5-add-translation.html, these get put, by default in the root level of
-# the build directory.  We want them inside a folder, so we set the OUTPUT_LOCATION property for each of the .ts files
-set_property(SOURCE ${filesToInstall_translations} PROPERTY OUTPUT_LOCATION ${CMAKE_CURRENT_BINARY_DIR}/translations)
-qt5_add_translation(QM_FILES ${filesToInstall_translations})
+#
+# We need to do two processes with Translation Source (.ts) XML files:
+#   - Update them from the source code, ie to ensure they have all the tr(), QObject::tr() etc calls from the .cpp files
+#     and all the translatable strings from the .ui files -- which can be done manually from the command line with
+#     lupdate
+#   - Generate the binary .qm files that ship with the application and are used at run time -- which can be done
+#     manually from the command line with lrelease
+#
+# Note that qt5_add_translation() _only_ does the latter and we need instead to use qt5_create_translation() which does
+# both.
+#
+# Per https://doc.qt.io/qt-5/qtlinguist-cmake-qt5-add-translation.html and
+# https://doc.qt.io/qt-5/qtlinguist-cmake-qt5-create-translation.html, the default location for the .qm files is the
+# root level of the build directory.  We want them inside a folder, so we set the OUTPUT_LOCATION property for each of
+# the .ts files
+#
+set_property(SOURCE ${translationSourceFiles} PROPERTY OUTPUT_LOCATION ${CMAKE_CURRENT_BINARY_DIR}/translations)
+# The qt5_create_translation understands what to do with each file name by its extension thus .cpp and .ui files are
+# used to update the .ts files.  The list of generated .qm files ends up in the QM_FILES variable.
+qt5_create_translation(QM_FILES ${translationSourceFiles} ${filesToCompile_cpp} ${filesToCompile_ui})
 
 # Add a target for the QM_FILES so that we can add
 # the translations as a dependency for the executable later.
@@ -1427,6 +1451,15 @@ elseif(WIN32)
    set(CPACK_NSIS_URL_INFO_ABOUT "https://github.com/Brewtarget/brewtarget")
    # The name of a *.ico file used as the main icon for the generated install program
    set(CPACK_NSIS_MUI_ICON ${repoDir}/win/BrewtargetIcon_96.ico)
+
+   # Lists each of the executables and associated text label to be used to create Start Menu shortcuts.
+   # For example, setting this to the list ccmake;CMake would create a shortcut named "CMake" that would execute the
+   # installed executable ccmake.
+   set(CPACK_PACKAGE_EXECUTABLES "${fileName_executable};${capitalisedProjectName}")
+
+   # List of desktop links to create. Each desktop link requires a corresponding start menu shortcut as created by
+   # CPACK_PACKAGE_EXECUTABLES.
+   set(CPACK_CREATE_DESKTOP_LINKS ${fileName_executable})
 
    # In theory CMake should work out for itself which tool to use for dependency resolution.  In practice, on Windows,
    # it seems there are issues.  In an MSYS2/MinGW environment we want to use objdump rather than the Visual Studio

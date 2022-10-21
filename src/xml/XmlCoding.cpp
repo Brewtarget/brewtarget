@@ -1,6 +1,6 @@
 /*
  * xml/XmlCoding.cpp is part of Brewtarget, and is Copyright the following
- * authors 2020-2021
+ * authors 2020-2022
  * - Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -469,7 +469,7 @@ public:
       xalanc::XalanNode * rootNode = xalanDocument->getFirstChild();
       if (nullptr == rootNode) {
          qCritical() << Q_FUNC_INFO << "Couldn't find any nodes in the document!";
-         userMessage << xmlCoding->tr("Contents of file were not readable");
+         userMessage << XmlCoding::tr("Contents of file were not readable");
          return false;
       }
       XQString firstChildName{rootNode->getNodeName()};
@@ -477,7 +477,7 @@ public:
          qCritical() <<
             Q_FUNC_INFO << "First node in document was not the one we inserted!  Found " << firstChildName <<
             "instead of BEER_XML";
-         userMessage << xmlCoding->tr("Could not understand file format");
+         userMessage << XmlCoding::tr("Could not understand file format");
          return false;
       }
 
@@ -509,7 +509,7 @@ public:
       Q_ASSERT(xmlCoding->isKnownXmlRecordType(rootNodeName));
       if (!xmlCoding->isKnownXmlRecordType(rootNodeName)) {
          qCritical() << Q_FUNC_INFO << "First node in document (" << rootNodeName << ") was not recognised!";
-         userMessage << xmlCoding->tr("Could not understand file format");
+         userMessage << XmlCoding::tr("Could not understand file format");
          return false;
       }
 
