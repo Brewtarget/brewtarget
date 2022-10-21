@@ -522,6 +522,101 @@
     </message>
 </context>
 <context>
+    <name>BtPrintAndPreview</name>
+    <message>
+        <source>Print And Preview</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Recipe</source>
+        <translation type="unfinished">Recept</translation>
+    </message>
+    <message>
+        <source>Select Recipe(s)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select what to include</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brewday Instructions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Inventory</source>
+        <translation type="unfinished">Készlet</translation>
+    </message>
+    <message>
+        <source>All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fermentables</source>
+        <translation type="unfinished">Erjesztető anyagok</translation>
+    </message>
+    <message>
+        <source>Hops</source>
+        <translation type="unfinished">Komló</translation>
+    </message>
+    <message>
+        <source>Micelleneous</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Yeast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Output</source>
+        <translation type="unfinished">Kimenet</translation>
+    </message>
+    <message>
+        <source>Paper</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PDF</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>HTML</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Printer Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Paper size: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select available Printers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Orientation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Portrait</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Landscape</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Mégsem</translation>
+    </message>
+    <message>
+        <source>Print</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>BtSplashScreen</name>
     <message>
         <source>Loading...</source>
@@ -1993,13 +2088,6 @@ Log file may contain more details.</source>
     </message>
 </context>
 <context>
-    <name>Measurement::Units</name>
-    <message>
-        <source>min</source>
-        <translation type="obsolete">minimum</translation>
-    </message>
-</context>
-<context>
     <name>Misc</name>
     <message>
         <source>Spice</source>
@@ -2441,15 +2529,15 @@ Log file may contain more details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Saving the options without testing the connection can cause Brewken to not restart.  Your changes have been discarded, which is likely really, really crappy UX.  Please open a bug explaining exactly how you got to this message.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Would you like Brewtarget to transfer your data to the new database? NOTE: If you&apos;ve already loaded the data, say No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Please restart Brewtarget to connect to the new database</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Saving the options without testing the connection can cause Brewken to not restart.  Your changes have been discarded, which is likely really, really crappy UX.  Please open a bug explaining exactly how you got to this message.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2755,80 +2843,6 @@ Log file may contain more details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Unknown</source>
-        <translation type="unfinished">ismeretlen</translation>
-    </message>
-    <message>
-        <source>Detailed (for debugging)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Normal</source>
-        <translation type="unfinished">Normál</translation>
-    </message>
-    <message>
-        <source>Warnings and Errors only</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Errors only</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Could not create new log file directory</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Could not read new log file directory</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Could not write to new log file directory</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source> reverting to </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Inventory</source>
-        <translation type="unfinished">Készlet</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="unfinished">Név</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation type="unfinished">Mennyiség</translation>
-    </message>
-    <message>
-        <source>Alpha %</source>
-        <translation type="unfinished">Alfasav %</translation>
-    </message>
-    <message>
-        <source>No inventory available.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Could not open PostgreSQL DB connection to %1.
-%2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Could not open SQLite DB file %1.
-%2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Water</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Resource directory &quot;%1&quot; is missing.  Some features will be unavailable.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>kg</source>
         <extracomment>NOTE FOR TRANSLATORS: The abbreviated name of each unit (eg &quot;kg&quot; for kilograms, &quot;g&quot; for grams, etc) must be</extracomment>
         <translation type="unfinished"></translation>
@@ -2991,6 +3005,80 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>DiastaticPower</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unknown</source>
+        <translation type="unfinished">ismeretlen</translation>
+    </message>
+    <message>
+        <source>Detailed (for debugging)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Normal</source>
+        <translation type="unfinished">Normál</translation>
+    </message>
+    <message>
+        <source>Warnings and Errors only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Errors only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not create new log file directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not read new log file directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not write to new log file directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> reverting to </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Inventory</source>
+        <translation type="unfinished">Készlet</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Név</translation>
+    </message>
+    <message>
+        <source>Amount</source>
+        <translation type="unfinished">Mennyiség</translation>
+    </message>
+    <message>
+        <source>Alpha %</source>
+        <translation type="unfinished">Alfasav %</translation>
+    </message>
+    <message>
+        <source>No inventory available.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not open PostgreSQL DB connection to %1.
+%2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not open SQLite DB file %1.
+%2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Resource directory &quot;%1&quot; is missing.  Some features will be unavailable.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3773,8 +3861,36 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
 <context>
     <name>TimerDialog</name>
     <message>
+        <source>Addition Timer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Addition Time(min):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Time Remaining:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Notes: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Notes...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Alarm sound</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stop Alarm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Cancel</source>
-        <translation type="obsolete">Mégsem</translation>
+        <translation type="unfinished">Mégsem</translation>
     </message>
 </context>
 <context>
@@ -3787,12 +3903,56 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
 <context>
     <name>TimerMainDialog</name>
     <message>
+        <source>Main Boil Timer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add Timer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Start</source>
-        <translation type="obsolete">Kezdés</translation>
+        <translation type="unfinished">Kezdés</translation>
     </message>
     <message>
         <source>Stop</source>
-        <translation type="obsolete">Leállítás</translation>
+        <translation type="unfinished">Leállítás</translation>
+    </message>
+    <message>
+        <source>Reset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hide Timers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Timers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel Timers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Load Current Recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Boil Timer (mins):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Boil Time Here</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Limit Alarm Ring Time </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alarm Ring Time (secs):</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>No Timers</source>
@@ -4214,54 +4374,73 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
 </context>
 <context>
+    <name>ancestorDialog</name>
+    <message>
+        <source>Dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>is an descendant of</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save changes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Discard and close</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>brewDayScrollWidget</name>
     <message>
         <source>Form</source>
-        <translation type="vanished">Forma</translation>
+        <translation>Forma</translation>
     </message>
     <message>
         <source>Generate Instructions</source>
-        <translation type="vanished">Útmutató készítése</translation>
+        <translation>Útmutató készítése</translation>
     </message>
     <message>
         <source>Insert step</source>
-        <translation type="vanished">Lépés beszúrása</translation>
+        <translation>Lépés beszúrása</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="vanished">Név</translation>
+        <translation>Név</translation>
     </message>
     <message>
         <source>Name of new step</source>
-        <translation type="vanished">Új lépés neve</translation>
+        <translation>Új lépés neve</translation>
     </message>
     <message>
         <source>Step #</source>
-        <translation type="vanished">lépés #.</translation>
+        <translation>lépés #.</translation>
     </message>
     <message>
         <source>The number where the new step should be placed</source>
-        <translation type="vanished">A hely/szám, ahová az új lépés beillesztésre kerül</translation>
+        <translation>A hely/szám, ahová az új lépés beillesztésre kerül</translation>
     </message>
     <message>
         <source>Insert the new step</source>
-        <translation type="vanished">Új lépés beillesztése</translation>
+        <translation>Új lépés beillesztése</translation>
     </message>
     <message>
         <source>Move steps</source>
-        <translation type="vanished">Lépés áthelyezése</translation>
+        <translation>Lépés áthelyezése</translation>
     </message>
     <message>
         <source>Move currently selected step up</source>
-        <translation type="vanished">A kijelölt lépés felfelé mozgatása</translation>
+        <translation>A kijelölt lépés felfelé mozgatása</translation>
     </message>
     <message>
         <source>Move currently selected step down</source>
-        <translation type="vanished">A kijelölt lépés lefelé mozgatása</translation>
+        <translation>A kijelölt lépés lefelé mozgatása</translation>
     </message>
     <message>
         <source>Remove currently selected step</source>
-        <translation type="vanished">A kijelölt lépés törlése</translation>
+        <translation>A kijelölt lépés törlése</translation>
     </message>
 </context>
 <context>
@@ -4331,27 +4510,27 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     <name>brewNoteWidget</name>
     <message>
         <source>Preboil</source>
-        <translation type="vanished">Forralást megelőző</translation>
+        <translation>Forralást megelőző</translation>
     </message>
     <message>
         <source>SG</source>
-        <translation type="vanished">fajsúly (SG)</translation>
+        <translation>fajsúly (SG)</translation>
     </message>
     <message>
         <source>Preboil gravity</source>
-        <translation type="vanished">forralás előtti fajsúly</translation>
+        <translation>forralás előtti fajsúly</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation type="vanished">Mennyiség</translation>
+        <translation>Mennyiség</translation>
     </message>
     <message>
         <source>Volume of wort collected</source>
-        <translation type="vanished">Színlé mennyisége</translation>
+        <translation>Színlé mennyisége</translation>
     </message>
     <message>
         <source>Strike Temp</source>
-        <translation type="vanished">Felöntővíz hőmérséklet</translation>
+        <translation>Felöntővíz hőmérséklet</translation>
     </message>
     <message>
         <source>Temperature of mash after dough in</source>
@@ -4359,59 +4538,59 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source>Final Temp</source>
-        <translation type="vanished">Végleges hőmérséklet</translation>
+        <translation>Végleges hőmérséklet</translation>
     </message>
     <message>
         <source>Temperature of mash before mash out</source>
-        <translation type="vanished">A kicefrézés megkezdése előtti cefre hőfoka</translation>
+        <translation>A kicefrézés megkezdése előtti cefre hőfoka</translation>
     </message>
     <message>
         <source>Postboil</source>
-        <translation type="vanished">Forralást követő</translation>
+        <translation>Forralást követő</translation>
     </message>
     <message>
         <source>OG</source>
-        <translation type="vanished">kezdeti fajsúly (OG)</translation>
+        <translation>kezdeti fajsúly (OG)</translation>
     </message>
     <message>
         <source>Post boil gravity</source>
-        <translation type="vanished">Forralás utáni fajsúly</translation>
+        <translation>Forralás utáni fajsúly</translation>
     </message>
     <message>
         <source>Postboil Volume</source>
-        <translation type="vanished">Forralás utáni mennyiség</translation>
+        <translation>Forralás utáni mennyiség</translation>
     </message>
     <message>
         <source>Volume of wort in BK after boil</source>
-        <translation type="vanished">Sörlé mennyisége forralás után</translation>
+        <translation>Sörlé mennyisége forralás után</translation>
     </message>
     <message>
         <source>Volume of wort transferred to fermenter</source>
-        <translation type="vanished">Erjesztőbe átfejtett sörlé mennyisége</translation>
+        <translation>Erjesztőbe átfejtett sörlé mennyisége</translation>
     </message>
     <message>
         <source>Volume into fermenter</source>
-        <translation type="vanished">Mennyiség (erjesztőbe fejtéskor)</translation>
+        <translation>Mennyiség (erjesztőbe fejtéskor)</translation>
     </message>
     <message>
         <source> Pitch Temp</source>
-        <translation type="vanished"> Élesztővel beoltás hőfoka</translation>
+        <translation> Élesztővel beoltás hőfoka</translation>
     </message>
     <message>
         <source>Temperature of wort when yeast is pitched</source>
-        <translation type="vanished">Sörlé hőfoka beoltáskor</translation>
+        <translation>Sörlé hőfoka beoltáskor</translation>
     </message>
     <message>
         <source>Postferment</source>
-        <translation type="vanished">Erjedést követő</translation>
+        <translation>Erjedést követő</translation>
     </message>
     <message>
         <source>Final gravity</source>
-        <translation type="vanished">Végleges fajsúly</translation>
+        <translation>Végleges fajsúly</translation>
     </message>
     <message>
         <source>Volume of beer into serving keg/bottles</source>
-        <translation type="vanished">Kiszerelési mennyiség</translation>
+        <translation>Kiszerelési mennyiség</translation>
     </message>
     <message>
         <source>percent efficiency into boil kettle</source>
@@ -4427,11 +4606,11 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source>Projected OG</source>
-        <translation type="vanished">Várható kezdeti fajsúly</translation>
+        <translation>Várható kezdeti fajsúly</translation>
     </message>
     <message>
         <source>Brewhouse efficiency</source>
-        <translation type="vanished">Kihozatal</translation>
+        <translation>Kihozatal</translation>
     </message>
     <message>
         <source>Brewhouse Eff</source>
@@ -4443,7 +4622,7 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source>Projected ABV</source>
-        <translation type="vanished">Tervezett alkoholfok (v/v%)</translation>
+        <translation>Tervezett alkoholfok (v/v%)</translation>
     </message>
     <message>
         <source>ABV based on FG</source>
@@ -4451,11 +4630,59 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source>ABV</source>
-        <translation type="vanished">alkoholfok (v/v%)</translation>
+        <translation>alkoholfok (v/v%)</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="vanished">Megjegyzések</translation>
+        <translation>Megjegyzések</translation>
+    </message>
+    <message>
+        <source>brewNote</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>yyyy-dd-MM</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Temperature of strike water before dough in</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Percent efficiency into boil kettle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Efficiency into boil kettle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Expected OG, based on measured FG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Expected ABV based on recipe OG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ABV based on user-reported FG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Yeast attenuation based on yeast specified in recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Projected yeast attenuation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Yeast attentuation based on user-reported OG and FG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Measured yeast attenuation</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4474,14 +4701,182 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source>Lauter deadspace</source>
-        <translation type="vanished">Holttér a szűrőkádban (az alfenék és az edény alja között)</translation>
+        <translation>Holttér a szűrőkádban (az alfenék és az edény alja között)</translation>
+    </message>
+    <message>
+        <source>equipmentEditor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Equipment Editor</source>
+        <translation type="unfinished">Felszerelés szerkesztő</translation>
+    </message>
+    <message>
+        <source>Equipment</source>
+        <translation type="unfinished">Felszerelés</translation>
+    </message>
+    <message>
+        <source>Set as Default</source>
+        <translation type="unfinished">Beállítás alapértelmezésként</translation>
+    </message>
+    <message>
+        <source>Main</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pre-boil Volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Batch Size</source>
+        <translation type="unfinished">Főzet méret</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Név</translation>
+    </message>
+    <message>
+        <source>name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Required</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>boilSize_l</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>batchSize_l</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Time</source>
+        <translation type="unfinished">Idõ</translation>
+    </message>
+    <message>
+        <source>Calculate pre-boil volume</source>
+        <translation type="unfinished">Forralás előtti mennyiség kiszámolása</translation>
+    </message>
+    <message>
+        <source>Boil time</source>
+        <translation type="unfinished">Forralási idő</translation>
+    </message>
+    <message>
+        <source>Evaporation rate (per hr)</source>
+        <translation type="unfinished">Párolgási arány (óránként)</translation>
+    </message>
+    <message>
+        <source>evapRate_lHr</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Final top-up water</source>
+        <translation type="unfinished">A főzés utolsó fázisban hozzáadott víz mennyisége</translation>
+    </message>
+    <message>
+        <source>topUpWater_l</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Kettle top-up water</source>
+        <translation type="unfinished">Vízpótlás mennyisége forraláskor</translation>
+    </message>
+    <message>
+        <source>topUpKettle_l</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Kettle to Fermenter Loss</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>trubChillerLoss_l</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>lauterDeadspace_l</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Physics</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default Absorption</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Grain absorption (L/kg)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hop % Utilization</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>grainAbsorption_LKg</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Boiling Point of Water</source>
+        <translation type="unfinished">Víz forráspontja</translation>
+    </message>
+    <message>
+        <source>Mash tun Volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mash tun Weight</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Volume of mash tun</source>
+        <translation type="unfinished">Cefréző edény térfogata</translation>
+    </message>
+    <message>
+        <source>hopUtilization_pct</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>boilingPoint_c</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>tunWeight_kg</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Specific Heat (Cal/(g*C))</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>tunSpecificHeat_calGC</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished">Megjegyzések</translation>
+    </message>
+    <message>
+        <source>New equipment</source>
+        <translation type="unfinished">Új berendezés</translation>
+    </message>
+    <message>
+        <source>Save and close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Discard and close</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>fermentableEditor</name>
     <message>
         <source>Fermentable Editor</source>
-        <translation type="vanished">Erjeszthető összetevő szerkeszése</translation>
+        <translation>Erjeszthető összetevő szerkeszése</translation>
     </message>
     <message>
         <source>Required Fields</source>
@@ -4489,31 +4884,31 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="vanished">Név</translation>
+        <translation>Név</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="vanished">Fajta</translation>
+        <translation>Fajta</translation>
     </message>
     <message>
         <source>Grain</source>
-        <translation type="vanished">Maláta/gabona</translation>
+        <translation>Maláta/gabona</translation>
     </message>
     <message>
         <source>Sugar</source>
-        <translation type="vanished">Cukor</translation>
+        <translation>Cukor</translation>
     </message>
     <message>
         <source>Extract</source>
-        <translation type="vanished">Folyékony malátasűrítmény (LME)</translation>
+        <translation>Folyékony malátasűrítmény (LME)</translation>
     </message>
     <message>
         <source>Dry Extract</source>
-        <translation type="vanished">Szárított malátasűrítmény (DME)</translation>
+        <translation>Szárított malátasűrítmény (DME)</translation>
     </message>
     <message>
         <source>Adjunct</source>
-        <translation type="vanished">Adalék</translation>
+        <translation>Adalék</translation>
     </message>
     <message>
         <source>Amount</source>
@@ -4525,43 +4920,43 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source>Yield as compared to glucose</source>
-        <translation type="vanished">Glukózhoz mért kihozatali arány</translation>
+        <translation>Glukózhoz mért kihozatali arány</translation>
     </message>
     <message>
         <source>Lovibond rating</source>
-        <translation type="vanished">Lovibond besorolás</translation>
+        <translation>Lovibond besorolás</translation>
     </message>
     <message>
         <source>Add After Boil</source>
-        <translation type="vanished">Forrás után hozzáad</translation>
+        <translation>Forrás után hozzáad</translation>
     </message>
     <message>
         <source>This ingredient is added post boil.</source>
-        <translation type="vanished">Ez az összetevő forrás után kerül hozzáadásra</translation>
+        <translation>Ez az összetevő forrás után kerül hozzáadásra</translation>
     </message>
     <message>
         <source>Origin</source>
-        <translation type="vanished">Eredet</translation>
+        <translation>Eredet</translation>
     </message>
     <message>
         <source>Supplier</source>
-        <translation type="vanished">Szállító</translation>
+        <translation>Szállító</translation>
     </message>
     <message>
         <source>Coarse/Fine Diff (%)</source>
-        <translation type="vanished">Durva/finom őrlet különbsége (%)</translation>
+        <translation>Durva/finom őrlet különbsége (%)</translation>
     </message>
     <message>
         <source>Yield difference between coarse and fine grind</source>
-        <translation type="vanished">Durva és finom őrlet közötti kihozatali arány különbség (%)</translation>
+        <translation>Durva és finom őrlet közötti kihozatali arány különbség (%)</translation>
     </message>
     <message>
         <source>Moisture (%)</source>
-        <translation type="vanished">Nedvességtartalom (%)</translation>
+        <translation>Nedvességtartalom (%)</translation>
     </message>
     <message>
         <source>Moisture percentage by mass</source>
-        <translation type="vanished">Nedvesség tömegszázalékban kifejezett tartalma</translation>
+        <translation>Nedvesség tömegszázalékban kifejezett tartalma</translation>
     </message>
     <message>
         <source>DP (Lintner)</source>
@@ -4573,31 +4968,43 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source>Protein (%)</source>
-        <translation type="vanished">Fehérjetartalom (%)</translation>
+        <translation>Fehérjetartalom (%)</translation>
     </message>
     <message>
         <source>Protein percentage by mass</source>
-        <translation type="vanished">Fehérjetartalom tömegszázalékban kifejezve</translation>
+        <translation>Fehérjetartalom tömegszázalékban kifejezve</translation>
     </message>
     <message>
         <source>Max In Batch (%)</source>
-        <translation type="vanished">Maximum a főzetben (%)</translation>
+        <translation>Maximum a főzetben (%)</translation>
     </message>
     <message>
         <source>Maximum recommended percentage of total grist</source>
-        <translation type="vanished">A dara teljes mennyiségében maximálisan felhasználható mennyiség (%)</translation>
+        <translation>A dara teljes mennyiségében maximálisan felhasználható mennyiség (%)</translation>
+    </message>
+    <message>
+        <source>Recommend Mash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Recommend this be mashed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Is Mashed</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Checked if it is present in mash</source>
-        <translation type="vanished">Ellenőrizni, hogy a bekerült-e a cefrébe.</translation>
+        <translation>Ellenőrizni, hogy a bekerült-e a cefrébe.</translation>
     </message>
     <message>
         <source>Bitterness (IBU*gal/lb)</source>
-        <translation type="vanished">Keserűség (IBU * gallon/font)</translation>
+        <translation>Keserűség (IBU * gallon/font)</translation>
     </message>
     <message>
         <source>Bitterness of pre-hopped extracts</source>
-        <translation type="vanished">Előre komlózott malátakivonat keserűsége</translation>
+        <translation>Előre komlózott malátakivonat keserűsége</translation>
     </message>
     <message>
         <source>Notes:</source>
@@ -4609,22 +5016,70 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source>Amount in Inventory</source>
-        <translation type="vanished">Készleten lévő mennyiség</translation>
+        <translation>Készleten lévő mennyiség</translation>
     </message>
     <message>
         <source>Amount in inventory</source>
-        <translation type="vanished">Készleten lévő mennyiség</translation>
+        <translation>Készleten lévő mennyiség</translation>
     </message>
     <message>
         <source>Color</source>
-        <translation type="vanished">Szín</translation>
+        <translation>Szín</translation>
+    </message>
+    <message>
+        <source>Main</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Required</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Yield %</source>
+        <translation type="unfinished">Süllyedés %</translation>
+    </message>
+    <message>
+        <source>Extras</source>
+        <translation type="unfinished">Extrák</translation>
+    </message>
+    <message>
+        <source>origin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Diastatic power</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>supplier</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished">Megjegyzések</translation>
+    </message>
+    <message>
+        <source>New fermentable</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save and close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Discard and close</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>hopEditor</name>
     <message>
         <source>Hop Editor</source>
-        <translation type="vanished">Komló szerkesztő</translation>
+        <translation>Komló szerkesztő</translation>
     </message>
     <message>
         <source>Required Fields</source>
@@ -4632,7 +5087,7 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="vanished">Név</translation>
+        <translation>Név</translation>
     </message>
     <message>
         <source>Alpha (%)</source>
@@ -4640,7 +5095,7 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source>Alpha acids as percent by mass</source>
-        <translation type="vanished">Alfasav tartalom tömegszázalékban</translation>
+        <translation>Alfasav tartalom tömegszázalékban</translation>
     </message>
     <message>
         <source>Amount</source>
@@ -4648,59 +5103,59 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source>Use</source>
-        <translation type="vanished">Felhasználás</translation>
+        <translation>Felhasználás</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="vanished">Cefre</translation>
+        <translation>Cefre</translation>
     </message>
     <message>
         <source>First Wort</source>
-        <translation type="vanished">Színlé komlózása (forralás előtt)</translation>
+        <translation>Színlé komlózása (forralás előtt)</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation type="vanished">Forralás</translation>
+        <translation>Forralás</translation>
     </message>
     <message>
         <source>Aroma</source>
-        <translation type="vanished">Aroma</translation>
+        <translation>Aroma</translation>
     </message>
     <message>
         <source>Dry Hop</source>
-        <translation type="vanished">Hidegkomló</translation>
+        <translation>Hidegkomló</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="vanished">Idõ</translation>
+        <translation>Idõ</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="vanished">Fajta</translation>
+        <translation>Fajta</translation>
     </message>
     <message>
         <source>Bittering</source>
-        <translation type="vanished">Keserűkomló</translation>
+        <translation>Keserűkomló</translation>
     </message>
     <message>
         <source>Both</source>
-        <translation type="vanished">Mindkettő</translation>
+        <translation>Mindkettő</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation type="vanished">Forma</translation>
+        <translation>Forma</translation>
     </message>
     <message>
         <source>Leaf</source>
-        <translation type="vanished">leveles</translation>
+        <translation>leveles</translation>
     </message>
     <message>
         <source>Pellet</source>
-        <translation type="vanished">Pellet</translation>
+        <translation>Pellet</translation>
     </message>
     <message>
         <source>Plug</source>
-        <translation type="vanished">Nagy pellet (komlódugó)</translation>
+        <translation>Nagy pellet (komlódugó)</translation>
     </message>
     <message>
         <source>Beta (%)</source>
@@ -4708,19 +5163,19 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source>Beta acids as percent by mass</source>
-        <translation type="vanished">Bétasav tartalom tömegszázalékban</translation>
+        <translation>Bétasav tartalom tömegszázalékban</translation>
     </message>
     <message>
         <source>HSI</source>
-        <translation type="vanished">Komló tárolási index</translation>
+        <translation>Komló tárolási index</translation>
     </message>
     <message>
         <source>Hop Stability/Storage index</source>
-        <translation type="vanished">Komló tárolási/stabilitási mutató</translation>
+        <translation>Komló tárolási/stabilitási mutató</translation>
     </message>
     <message>
         <source>Origin</source>
-        <translation type="vanished">Eredet</translation>
+        <translation>Eredet</translation>
     </message>
     <message>
         <source>Humulene (%)</source>
@@ -4728,7 +5183,7 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source>Humulene</source>
-        <translation type="vanished">Humulene</translation>
+        <translation>Humulene</translation>
     </message>
     <message>
         <source>Caryophyllene (%)</source>
@@ -4744,7 +5199,7 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source>Cohumulone</source>
-        <translation type="vanished">Cohumulone</translation>
+        <translation>Cohumulone</translation>
     </message>
     <message>
         <source>Myrcene (%)</source>
@@ -4752,7 +5207,7 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source>Myrcene</source>
-        <translation type="vanished">Myrcene</translation>
+        <translation>Myrcene</translation>
     </message>
     <message>
         <source>Substitutes:</source>
@@ -4768,65 +5223,121 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source>Amount in Inventory</source>
-        <translation type="vanished">Készleten lévő mennyiség</translation>
+        <translation>Készleten lévő mennyiség</translation>
     </message>
     <message>
         <source>Amount in inventory</source>
-        <translation type="vanished">Készleten lévő mennyiség</translation>
+        <translation>Készleten lévő mennyiség</translation>
+    </message>
+    <message>
+        <source>Main</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Required</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alpha %</source>
+        <translation type="unfinished">Alfasav %</translation>
+    </message>
+    <message>
+        <source>Extras</source>
+        <translation type="unfinished">Extrák</translation>
+    </message>
+    <message>
+        <source>Cohumulone %</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Myrcene %</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Beta %</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Humulene %</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Caryophyllene %</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Substitutes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished">Megjegyzések</translation>
+    </message>
+    <message>
+        <source>New hop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save and close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Discard and close</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>instructionWidget</name>
     <message>
         <source>Form</source>
-        <translation type="vanished">Forma</translation>
+        <translation>Forma</translation>
     </message>
     <message>
         <source>Show a timer</source>
-        <translation type="vanished">Időzítő megjelenítése</translation>
+        <translation>Időzítő megjelenítése</translation>
     </message>
     <message>
         <source>Show timer</source>
-        <translation type="vanished">Időzítő megjelenítése</translation>
+        <translation>Időzítő megjelenítése</translation>
     </message>
     <message>
         <source>Mark this step completed</source>
-        <translation type="vanished">Befejezett lépés</translation>
+        <translation>Befejezett lépés</translation>
     </message>
     <message>
         <source>Step completed</source>
-        <translation type="vanished">Befejezett lépés</translation>
+        <translation>Befejezett lépés</translation>
     </message>
 </context>
 <context>
     <name>mainWindow</name>
     <message>
         <source>Recipes</source>
-        <translation type="vanished">Receptek</translation>
+        <translation>Receptek</translation>
     </message>
     <message>
         <source>Styles</source>
-        <translation type="vanished">Stílusok</translation>
+        <translation>Stílusok</translation>
     </message>
     <message>
         <source>Fermentables</source>
-        <translation type="vanished">Erjesztető anyagok</translation>
+        <translation>Erjesztető anyagok</translation>
     </message>
     <message>
         <source>Hops</source>
-        <translation type="vanished">Komló</translation>
+        <translation>Komló</translation>
     </message>
     <message>
         <source>Miscs</source>
-        <translation type="vanished">Egyebek</translation>
+        <translation>Egyebek</translation>
     </message>
     <message>
         <source>Yeasts</source>
-        <translation type="vanished">Élesztők</translation>
+        <translation>Élesztők</translation>
     </message>
     <message>
         <source>Recipe</source>
-        <translation type="vanished">Recept</translation>
+        <translation>Recept</translation>
     </message>
     <message>
         <source>Name</source>
@@ -4834,11 +5345,11 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source>Name of recipe</source>
-        <translation type="vanished">Recept neve</translation>
+        <translation>Recept neve</translation>
     </message>
     <message>
         <source>Target boil size</source>
-        <translation type="vanished">Főzet várt mennyisége</translation>
+        <translation>Főzet várt mennyisége</translation>
     </message>
     <message>
         <source>Efficiency (%)</source>
@@ -4854,7 +5365,7 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source>The extraction efficiency you expect</source>
-        <translation type="vanished">Várható kihozatali hatékonyság</translation>
+        <translation>Várható kihozatali hatékonyság</translation>
     </message>
     <message>
         <source>Style</source>
@@ -4866,7 +5377,7 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source>Target batch size</source>
-        <translation type="vanished">Főzet várt mennyisége</translation>
+        <translation>Főzet várt mennyisége</translation>
     </message>
     <message>
         <source>Target Batch Size</source>
@@ -4874,7 +5385,7 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source>Equipment</source>
-        <translation type="vanished">Felszerelés</translation>
+        <translation>Felszerelés</translation>
     </message>
     <message>
         <source>Target Boil Size</source>
@@ -4882,159 +5393,163 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source>OG</source>
-        <translation type="vanished">kezdeti fajsúly (OG)</translation>
+        <translation>kezdeti fajsúly (OG)</translation>
     </message>
     <message>
         <source>Boil SG</source>
-        <translation type="vanished">Fajsúly forraláskor</translation>
+        <translation>Fajsúly forraláskor</translation>
     </message>
     <message>
         <source>FG</source>
-        <translation type="vanished">végleges fajsúly (FG)</translation>
+        <translation>végleges fajsúly (FG)</translation>
     </message>
     <message>
         <source>ABV</source>
-        <translation type="vanished">alkoholfok (v/v%)</translation>
+        <translation>alkoholfok (v/v%)</translation>
     </message>
     <message>
         <source>Bitterness (IBU)</source>
-        <translation type="vanished">Keserűség (IBU)</translation>
+        <translation>Keserűség (IBU)</translation>
     </message>
     <message>
         <source>Color</source>
-        <translation type="vanished">Szín</translation>
+        <translation>Szín</translation>
     </message>
     <message>
         <source>IBU/GU</source>
-        <translation type="vanished">Keserűség/fajsúly arányszám</translation>
+        <translation>Keserűség/fajsúly arányszám</translation>
     </message>
     <message>
         <source>Calories/12oz</source>
-        <translation type="vanished">Energiatartalom (Kcal/354ml)</translation>
+        <translation>Energiatartalom (Kcal/354ml)</translation>
     </message>
     <message>
         <source>Extras</source>
-        <translation type="vanished">Extrák</translation>
+        <translation>Extrák</translation>
     </message>
     <message>
         <source>Brewday</source>
-        <translation type="vanished">Főzés napja</translation>
+        <translation>Főzés napja</translation>
     </message>
     <message>
         <source>Add a fermentable</source>
-        <translation type="vanished">Erjeszthető hozzávaló hozzáadása</translation>
+        <translation>Erjeszthető hozzávaló hozzáadása</translation>
     </message>
     <message>
         <source>Remove selected fermentable</source>
-        <translation type="vanished">Erjeszthető hozzávaló eltávolítása</translation>
+        <translation>Erjeszthető hozzávaló eltávolítása</translation>
     </message>
     <message>
         <source>Edit selected fermentable</source>
-        <translation type="vanished">Erjeszthető hozzávaló szerkesztése</translation>
+        <translation>Erjeszthető hozzávaló szerkesztése</translation>
     </message>
     <message>
         <source>Add hop</source>
-        <translation type="vanished">Komló hozzáadása</translation>
+        <translation>Komló hozzáadása</translation>
     </message>
     <message>
         <source>Remove selected hop</source>
-        <translation type="vanished">Komló eltávolítása</translation>
+        <translation>Komló eltávolítása</translation>
     </message>
     <message>
         <source>Edit selected hop</source>
-        <translation type="vanished">Kiválasztott komló szerkesztése</translation>
+        <translation>Kiválasztott komló szerkesztése</translation>
     </message>
     <message>
         <source>Miscellaneous</source>
-        <translation type="vanished">Egyebek</translation>
+        <translation>Egyebek</translation>
     </message>
     <message>
         <source>Add misc</source>
-        <translation type="vanished">Egyéb hozzávaló hozzáadása</translation>
+        <translation>Egyéb hozzávaló hozzáadása</translation>
     </message>
     <message>
         <source>Remove selected misc</source>
-        <translation type="vanished">Kiválasztott egyéb hozzávaló eltávolítása</translation>
+        <translation>Kiválasztott egyéb hozzávaló eltávolítása</translation>
     </message>
     <message>
         <source>Edit selected misc</source>
-        <translation type="vanished">Kiválasztott egyéb hozzávaló szerkeszése</translation>
+        <translation>Kiválasztott egyéb hozzávaló szerkeszése</translation>
     </message>
     <message>
         <source>Yeast</source>
-        <translation type="vanished">Élesztő</translation>
+        <translation>Élesztő</translation>
     </message>
     <message>
         <source>Add yeast</source>
-        <translation type="vanished">Élesztő hozzáadása</translation>
+        <translation>Élesztő hozzáadása</translation>
     </message>
     <message>
         <source>Remove selected yeast</source>
-        <translation type="vanished">Kiválasztott élesztő eltávolítása</translation>
+        <translation>Kiválasztott élesztő eltávolítása</translation>
     </message>
     <message>
         <source>Edit selected yeast</source>
-        <translation type="vanished">Kiválasztott élesztő szerkesztése</translation>
+        <translation>Kiválasztott élesztő szerkesztése</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="vanished">Cefre</translation>
+        <translation>Cefre</translation>
     </message>
     <message>
         <source>Add mash step</source>
-        <translation type="vanished">Cefrézési lépés hozzáadása</translation>
+        <translation>Cefrézési lépés hozzáadása</translation>
     </message>
     <message>
         <source>Remove selected mash step</source>
-        <translation type="vanished">Kiválasztott cefrézési lépcső eltávolítása</translation>
+        <translation>Kiválasztott cefrézési lépcső eltávolítása</translation>
     </message>
     <message>
         <source>Edit selected mash step</source>
-        <translation type="vanished">Kiválasztott cefrézési lépcső eltávolítása</translation>
+        <translation>Kiválasztott cefrézési lépcső eltávolítása</translation>
     </message>
     <message>
         <source>Edit mash properties</source>
-        <translation type="vanished">Cefrézési tulajdonságok szerkesztése</translation>
+        <translation>Cefrézési tulajdonságok szerkesztése</translation>
     </message>
     <message>
         <source>Edit mash</source>
-        <translation type="vanished">Cefrézés szerkesztése</translation>
+        <translation>Cefrézés szerkesztése</translation>
+    </message>
+    <message>
+        <source>Mash Des</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Invoke the mash wizard</source>
-        <translation type="vanished">Cefrézés varázsló</translation>
+        <translation>Cefrézés varázsló</translation>
     </message>
     <message>
         <source>Mash wiz</source>
-        <translation type="vanished">Cefrézés varázsló</translation>
+        <translation>Cefrézés varázsló</translation>
     </message>
     <message>
         <source>Mashs</source>
-        <translation type="vanished">Cefrék</translation>
+        <translation>Cefrék</translation>
     </message>
     <message>
         <source>Mash step up</source>
-        <translation type="vanished">Cefrézési lépés fel</translation>
+        <translation>Cefrézési lépés fel</translation>
     </message>
     <message>
         <source>Mash step down</source>
-        <translation type="vanished">Cefrézési lépés le</translation>
+        <translation>Cefrézési lépés le</translation>
     </message>
     <message>
         <source>Save this mash profile</source>
-        <translation type="vanished">Cefrézési profil mentése</translation>
+        <translation>Cefrézési profil mentése</translation>
     </message>
     <message>
         <source>Save Mash</source>
-        <translation type="vanished">Mentés (cefrézés)</translation>
+        <translation>Mentés (cefrézés)</translation>
     </message>
     <message>
         <source>&amp;About</source>
-        <translation type="vanished">&amp;Névjegy</translation>
+        <translation>&amp;Névjegy</translation>
     </message>
     <message>
         <source>&amp;File</source>
-        <translation type="vanished">&amp;Fájl</translation>
+        <translation>&amp;Fájl</translation>
     </message>
     <message>
         <source>&amp;Brewday</source>
@@ -5046,27 +5561,27 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source>&amp;Database</source>
-        <translation type="vanished">&amp;Adatbázis</translation>
+        <translation>&amp;Adatbázis</translation>
     </message>
     <message>
         <source>&amp;View</source>
-        <translation type="vanished">&amp;Nézet</translation>
+        <translation>&amp;Nézet</translation>
     </message>
     <message>
         <source>&amp;Tools</source>
-        <translation type="vanished">&amp;Eszközök</translation>
+        <translation>&amp;Eszközök</translation>
     </message>
     <message>
         <source>toolBar</source>
-        <translation type="vanished">eszközTár</translation>
+        <translation>eszközTár</translation>
     </message>
     <message>
         <source>About &amp;BrewTarget</source>
-        <translation type="vanished">A Brewtargetről</translation>
+        <translation>A Brewtargetről</translation>
     </message>
     <message>
         <source>About Brewtarget</source>
-        <translation type="vanished">a Brewtargetről</translation>
+        <translation>a Brewtargetről</translation>
     </message>
     <message>
         <source>&amp;Export Recipe</source>
@@ -5074,19 +5589,19 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source>&amp;Fermentables</source>
-        <translation type="vanished">&amp;Erjesztető hozzávalók</translation>
+        <translation>&amp;Erjesztető hozzávalók</translation>
     </message>
     <message>
         <source>Ctrl+F</source>
-        <translation type="vanished">Ctrl+F</translation>
+        <translation>Ctrl+F</translation>
     </message>
     <message>
         <source>&amp;Hops</source>
-        <translation type="vanished">&amp;Komlók</translation>
+        <translation>&amp;Komlók</translation>
     </message>
     <message>
         <source>Ctrl+H</source>
-        <translation type="vanished">Ctrl+H</translation>
+        <translation>Ctrl+H</translation>
     </message>
     <message>
         <source>&amp;Miscs</source>
@@ -5094,31 +5609,31 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source>Ctrl+M</source>
-        <translation type="vanished">Ctrl+M</translation>
+        <translation>Ctrl+M</translation>
     </message>
     <message>
         <source>&amp;Yeasts</source>
-        <translation type="vanished">&amp;Élesztők</translation>
+        <translation>&amp;Élesztők</translation>
     </message>
     <message>
         <source>Ctrl+Y</source>
-        <translation type="vanished">Ctrl+Y</translation>
+        <translation>Ctrl+Y</translation>
     </message>
     <message>
         <source>&amp;Equipments</source>
-        <translation type="vanished">&amp;Felszerelések</translation>
+        <translation>&amp;Felszerelések</translation>
     </message>
     <message>
         <source>Ctrl+E</source>
-        <translation type="vanished">Ctrl+E</translation>
+        <translation>Ctrl+E</translation>
     </message>
     <message>
         <source>&amp;Styles</source>
-        <translation type="vanished">&amp;Stílusok</translation>
+        <translation>&amp;Stílusok</translation>
     </message>
     <message>
         <source>Ctrl+T</source>
-        <translation type="vanished">Ctrl+T</translation>
+        <translation>Ctrl+T</translation>
     </message>
     <message>
         <source>&amp;Exit</source>
@@ -5126,7 +5641,7 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source>Ctrl+Q</source>
-        <translation type="vanished">Ctrl+Q</translation>
+        <translation>Ctrl+Q</translation>
     </message>
     <message>
         <source>&amp;Import Recipes</source>
@@ -5138,55 +5653,55 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source>&amp;Manual</source>
-        <translation type="vanished">&amp;Kézikönyv</translation>
+        <translation>&amp;Kézikönyv</translation>
     </message>
     <message>
         <source>&amp;Scale Recipe</source>
-        <translation type="vanished">&amp;Recept arányítás</translation>
+        <translation>&amp;Recept arányítás</translation>
     </message>
     <message>
         <source>Recipe to Clipboard as &amp;Text</source>
-        <translation type="vanished">Recept másolása a vágópadra &amp;Szővegként</translation>
+        <translation>Recept másolása a vágópadra &amp;Szővegként</translation>
     </message>
     <message>
         <source>&amp;OG Correction Help</source>
-        <translation type="vanished">&amp;Eredeti fajsúly korrekció segítség</translation>
+        <translation>&amp;Eredeti fajsúly korrekció segítség</translation>
     </message>
     <message>
         <source>&amp;Convert Units</source>
-        <translation type="vanished">&amp;Mértékegység átváltás</translation>
+        <translation>&amp;Mértékegység átváltás</translation>
     </message>
     <message>
         <source>Backup Database</source>
-        <translation type="vanished">Adatbázis mentése</translation>
+        <translation>Adatbázis mentése</translation>
     </message>
     <message>
         <source>Restore Database</source>
-        <translation type="vanished">Adatbázis visszaállítás</translation>
+        <translation>Adatbázis visszaállítás</translation>
     </message>
     <message>
         <source>&amp;Copy Recipe</source>
-        <translation type="vanished">&amp;Recept másolás</translation>
+        <translation>&amp;Recept másolás</translation>
     </message>
     <message>
         <source>Pr&amp;iming Calculator</source>
-        <translation type="vanished">Számológép palackos érleléshez</translation>
+        <translation>Számológép palackos érleléshez</translation>
     </message>
     <message>
         <source>&amp;Refractometer Tools</source>
-        <translation type="vanished">Refraktométereszközök</translation>
+        <translation>Refraktométereszközök</translation>
     </message>
     <message>
         <source>&amp;Pitch Rate Calculator</source>
-        <translation type="vanished">&amp;Számológép élesztővel beoltáshoz</translation>
+        <translation>&amp;Számológép élesztővel beoltáshoz</translation>
     </message>
     <message>
         <source>Merge Databases</source>
-        <translation type="vanished">Adatbázisok összefésülése</translation>
+        <translation>Adatbázisok összefésülése</translation>
     </message>
     <message>
         <source>Select another database to merge into the current one.</source>
-        <translation type="vanished">Másik adatbázis választása a jelenlegivel való összefésüléshez</translation>
+        <translation>Másik adatbázis választása a jelenlegivel való összefésüléshez</translation>
     </message>
     <message>
         <source>&amp;Print</source>
@@ -5206,19 +5721,19 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source>&amp;Backup</source>
-        <translation type="vanished">&amp;Másolat készítése</translation>
+        <translation>&amp;Másolat készítése</translation>
     </message>
     <message>
         <source>Save all recipes, ingredients, etc. to a backup folder</source>
-        <translation type="vanished">Minden recept, hozzávaló, stb. mentése másolatba</translation>
+        <translation>Minden recept, hozzávaló, stb. mentése másolatba</translation>
     </message>
     <message>
         <source>&amp;Restore</source>
-        <translation type="vanished">&amp;Visszaállítás</translation>
+        <translation>&amp;Visszaállítás</translation>
     </message>
     <message>
         <source>Restore recipes, ingredients, etc. from a previous backup</source>
-        <translation type="vanished">Receptek, hozzávalók, stb. visszaállítása másolatból</translation>
+        <translation>Receptek, hozzávalók, stb. visszaállítása másolatból</translation>
     </message>
     <message>
         <source>&amp;Merge</source>
@@ -5230,7 +5745,7 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source>&amp;New Recipe</source>
-        <translation type="vanished">&amp;Új recept</translation>
+        <translation>&amp;Új recept</translation>
     </message>
     <message>
         <source>Timers</source>
@@ -5238,42 +5753,162 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source>Show timers</source>
-        <translation type="vanished">dőzítők</translation>
+        <translation>dőzítők</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation type="vanished">Mentés</translation>
+        <translation>Mentés</translation>
     </message>
     <message>
         <source>Delete selected</source>
-        <translation type="vanished">Kijelölt törlése</translation>
+        <translation>Kijelölt törlése</translation>
     </message>
     <message>
         <source>Delete recipe</source>
-        <translation type="vanished">Recept törlése</translation>
+        <translation>Recept törlése</translation>
     </message>
     <message>
         <source>&amp;Mashs</source>
-        <translation type="vanished">&amp;Cefrék</translation>
+        <translation>&amp;Cefrék</translation>
     </message>
     <message>
         <source>Mashes</source>
-        <translation type="vanished">Cefrék</translation>
+        <translation>Cefrék</translation>
     </message>
     <message>
         <source>1.0</source>
-        <translation type="vanished">1.0</translation>
+        <translation>1.0</translation>
     </message>
     <message>
         <source>Strike Water Calculator</source>
         <translation type="vanished">Felöntő víz kiszámítás</translation>
+    </message>
+    <message>
+        <source>tab_recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export to &amp;BBCode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Boil Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>E&amp;quipment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tar&amp;get Boil Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Recipe Locked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Target Batch Si&amp;ze</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Efficiency (%)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Batch Size</source>
+        <translation type="unfinished">Főzet méret</translation>
+    </message>
+    <message>
+        <source>Boil Size</source>
+        <translation type="unfinished">Forralási mennyiség</translation>
+    </message>
+    <message>
+        <source>Edit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Export to File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>M&amp;iscs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Print and preview</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+P</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>E&amp;xit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Import from File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Optio&amp;ns</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ti&amp;mers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Strike &amp;Water Calculator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Hydrometer Temp Adjustment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alcohol Percentage Tool</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Water &amp;Chemistry</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Undo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Redo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ancestors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew It!</source>
+        <translation type="unfinished">Kezdődjön a főzés!</translation>
     </message>
 </context>
 <context>
     <name>mashDesigner</name>
     <message>
         <source>Mash Designer</source>
-        <translation type="vanished">Cefrézés szerkesztő</translation>
+        <translation>Cefrézés szerkesztő</translation>
     </message>
     <message>
         <source>Name</source>
@@ -5289,7 +5924,7 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="vanished">Idõ</translation>
+        <translation>Idõ</translation>
     </message>
     <message>
         <source>Batch Sparge</source>
@@ -5297,212 +5932,323 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source>Next</source>
-        <translation type="vanished">Következõ</translation>
+        <translation>Következõ</translation>
     </message>
     <message>
         <source>Finish</source>
-        <translation type="vanished">Befejezés</translation>
+        <translation>Befejezés</translation>
+    </message>
+    <message>
+        <source>Infusion/Decoction Amount</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>min</source>
-        <translation type="vanished">minimum</translation>
+        <translation>minimum</translation>
     </message>
     <message>
         <source>max</source>
-        <translation type="vanished">maximum</translation>
+        <translation>maximum</translation>
     </message>
     <message>
         <source>0</source>
-        <translation type="vanished">0</translation>
+        <translation>0</translation>
     </message>
     <message>
         <source>Infusion Temp</source>
-        <translation type="vanished">Cefrézési hőmérséklet</translation>
+        <translation>Cefrézési hőmérséklet</translation>
     </message>
     <message>
         <source>Total Collected Wort</source>
-        <translation type="vanished">Összes színlé</translation>
+        <translation>Összes színlé</translation>
     </message>
     <message>
         <source>vol</source>
-        <translation type="vanished">űrtartalom</translation>
+        <translation>űrtartalom</translation>
     </message>
     <message>
         <source>Tun Fullness</source>
-        <translation type="vanished">Edény telítettség</translation>
+        <translation>Edény telítettség</translation>
     </message>
     <message>
         <source>tunVol</source>
-        <translation type="vanished">Edény űrtartalom</translation>
+        <translation>Edény űrtartalom</translation>
     </message>
     <message>
         <source>thickness</source>
-        <translation type="vanished">sűrűség</translation>
+        <translation>sűrűség</translation>
+    </message>
+    <message>
+        <source>&amp;Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tar&amp;get temp.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>mashEditor</name>
     <message>
         <source>Mash Editor</source>
-        <translation type="vanished">Cefrézés szerkesztő</translation>
+        <translation>Cefrézés szerkesztő</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="vanished">Név</translation>
+        <translation>Név</translation>
     </message>
     <message>
         <source>Initial grain temp</source>
-        <translation type="vanished">Dara kezdeti hőmérséklet</translation>
+        <translation>Dara kezdeti hőmérséklet</translation>
     </message>
     <message>
         <source>Sparge temp</source>
-        <translation type="vanished">Máslás hőmérséklete</translation>
+        <translation>Máslás hőmérséklete</translation>
     </message>
     <message>
         <source>Sparge temp target</source>
-        <translation type="vanished">Máslás megcélzott hőmérséklete</translation>
+        <translation>Máslás megcélzott hőmérséklete</translation>
     </message>
     <message>
         <source>Sparge pH</source>
-        <translation type="vanished">Máslási pH</translation>
+        <translation>Máslási pH</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="vanished">Megjegyzések</translation>
+        <translation>Megjegyzések</translation>
+    </message>
+    <message>
+        <source>Tun</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Initial tun temp</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Get following parameters from the recipe&apos;s equipment.</source>
-        <translation type="vanished">Felvenni a következő paramétereket, mint a recepthez társított felszerelés alapértékeat</translation>
+        <translation>Felvenni a következő paramétereket, mint a recepthez társított felszerelés alapértékeat</translation>
+    </message>
+    <message>
+        <source>From Equipment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tun mass</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tun sp. heat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tun specific heat (cal/(g*K))</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>mashStepEditor</name>
     <message>
         <source>Mash Step Editor</source>
-        <translation type="vanished">Cefrézési lépés szerkesztése</translation>
+        <translation>Cefrézési lépés szerkesztése</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="vanished">Név</translation>
+        <translation>Név</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="vanished">Fajta</translation>
+        <translation>Fajta</translation>
     </message>
     <message>
         <source>Infusion</source>
-        <translation type="vanished">Infúziós cefrézés</translation>
+        <translation>Infúziós cefrézés</translation>
     </message>
     <message>
         <source>Temperature</source>
-        <translation type="vanished">Hőmérséklet</translation>
+        <translation>Hőmérséklet</translation>
     </message>
     <message>
         <source>Decoction</source>
-        <translation type="vanished">Dekokció</translation>
+        <translation>Dekokció</translation>
     </message>
     <message>
         <source>Target temp.</source>
-        <translation type="vanished">Hőmérséklet célérték</translation>
+        <translation>Hőmérséklet célérték</translation>
     </message>
     <message>
         <source>Target temp. of this step</source>
-        <translation type="vanished">Cefrézési lépés megcélzott hőmérséklete</translation>
+        <translation>Cefrézési lépés megcélzott hőmérséklete</translation>
     </message>
     <message>
         <source>Infuse Amount</source>
-        <translation type="vanished">Teljes becefrézett anyag mennyisége</translation>
+        <translation>Teljes becefrézett anyag mennyisége</translation>
     </message>
     <message>
         <source>Amount of water to infuse</source>
-        <translation type="vanished">Becefrézett anyagból a víz mennyisége</translation>
+        <translation>Becefrézett anyagból a víz mennyisége</translation>
     </message>
     <message>
         <source>Infuse temp.</source>
-        <translation type="vanished">Infúziós cefrézés hőmérséklete</translation>
+        <translation>Infúziós cefrézés hőmérséklete</translation>
     </message>
     <message>
         <source>Temperature of infusion water</source>
-        <translation type="vanished">cefrézővíz hőmérséklete</translation>
+        <translation>cefrézővíz hőmérséklete</translation>
     </message>
     <message>
         <source>Decoction Amount</source>
-        <translation type="vanished">Dekokció mennyisége</translation>
+        <translation>Dekokció mennyisége</translation>
     </message>
     <message>
         <source>Amount of mash to decoct</source>
-        <translation type="vanished">Dekokcióhoz felhasznált cefre mennyisége</translation>
+        <translation>Dekokcióhoz felhasznált cefre mennyisége</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="vanished">Idõ</translation>
+        <translation>Idõ</translation>
+    </message>
+    <message>
+        <source>Time to conduct the step</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Temp. lag time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lag time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>End temp.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Final temp. of this step</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fly Sparge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Batch Sparge</source>
+        <translation type="unfinished">Felöntéses máslás</translation>
+    </message>
+</context>
+<context>
+    <name>mashWizard</name>
+    <message>
+        <source>Mash Wizard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mash thickness (L/kg)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No Spar&amp;ge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fl&amp;y Sparge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ba&amp;tch Sparge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Batches</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>miscEditor</name>
     <message>
+        <source>Misc Editor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Name</source>
-        <translation type="vanished">Név</translation>
+        <translation>Név</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="vanished">Fajta</translation>
+        <translation>Fajta</translation>
     </message>
     <message>
         <source>Spice</source>
-        <translation type="vanished">Fűszer</translation>
+        <translation>Fűszer</translation>
     </message>
     <message>
         <source>Fining</source>
-        <translation type="vanished">Derítőszer</translation>
+        <translation>Derítőszer</translation>
     </message>
     <message>
         <source>Water Agent</source>
-        <translation type="vanished">Vízkezelő anyag</translation>
+        <translation>Vízkezelő anyag</translation>
     </message>
     <message>
         <source>Herb</source>
-        <translation type="vanished">Gyógynövény</translation>
+        <translation>Gyógynövény</translation>
     </message>
     <message>
         <source>Flavor</source>
-        <translation type="vanished">Ízanyag</translation>
+        <translation>Ízanyag</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="vanished">Egyéb anyag</translation>
+        <translation>Egyéb anyag</translation>
     </message>
     <message>
         <source>Use</source>
-        <translation type="vanished">Felhasználás</translation>
+        <translation>Felhasználás</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation type="vanished">Forralás</translation>
+        <translation>Forralás</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="vanished">Cefre</translation>
+        <translation>Cefre</translation>
     </message>
     <message>
         <source>Primary</source>
-        <translation type="vanished">Elsődleges</translation>
+        <translation>Elsődleges</translation>
     </message>
     <message>
         <source>Secondary</source>
-        <translation type="vanished">Másodlagos</translation>
+        <translation>Másodlagos</translation>
     </message>
     <message>
         <source>Bottling</source>
-        <translation type="vanished">Palackozás</translation>
+        <translation>Palackozás</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="vanished">Idõ</translation>
+        <translation>Idõ</translation>
     </message>
     <message>
         <source>Amount</source>
         <translation type="vanished">Mennyiség</translation>
+    </message>
+    <message>
+        <source>Check it if the amount listed is in kg instead of L.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount is weight?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Checked if the given amount is weight instead of volume</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Notes:</source>
@@ -5514,92 +6260,224 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source>Amount in Inventory</source>
-        <translation type="vanished">Készleten lévő mennyiség</translation>
+        <translation>Készleten lévő mennyiség</translation>
     </message>
     <message>
         <source>Amount in inventory</source>
-        <translation type="vanished">Készleten lévő mennyiség</translation>
+        <translation>Készleten lévő mennyiség</translation>
+    </message>
+    <message>
+        <source>Main</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use for</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished">Megjegyzések</translation>
+    </message>
+    <message>
+        <source>New misc</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save and close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Discard and close</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>namedMashEditor</name>
     <message>
+        <source>Named Mash Editor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Mash</source>
-        <translation type="vanished">Cefre</translation>
+        <translation>Cefre</translation>
+    </message>
+    <message>
+        <source>Delete selected style</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="vanished">Név</translation>
+        <translation>Név</translation>
     </message>
     <message>
         <source>Initial grain temp</source>
-        <translation type="vanished">Dara kezdeti hőmérséklet</translation>
+        <translation>Dara kezdeti hőmérséklet</translation>
     </message>
     <message>
         <source>Sparge temp</source>
-        <translation type="vanished">Máslás hőmérséklete</translation>
+        <translation>Máslás hőmérséklete</translation>
     </message>
     <message>
         <source>Sparge temp target</source>
-        <translation type="vanished">Máslás megcélzott hőmérséklete</translation>
+        <translation>Máslás megcélzott hőmérséklete</translation>
     </message>
     <message>
         <source>Sparge pH</source>
-        <translation type="vanished">Máslási pH</translation>
+        <translation>Máslási pH</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="vanished">Megjegyzések</translation>
+        <translation>Megjegyzések</translation>
+    </message>
+    <message>
+        <source>Tun</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Initial tun temp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>From Equipment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tun mass</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tun sp. heat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tun specific heat (cal/(g*K))</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Add mash step</source>
-        <translation type="vanished">Cefrézési lépés hozzáadása</translation>
+        <translation>Cefrézési lépés hozzáadása</translation>
     </message>
     <message>
         <source>Remove selected mash step</source>
-        <translation type="vanished">Kiválasztott cefrézési lépcső eltávolítása</translation>
+        <translation>Kiválasztott cefrézési lépcső eltávolítása</translation>
     </message>
     <message>
         <source>Mash step up</source>
-        <translation type="vanished">Cefrézési lépés fel</translation>
+        <translation>Cefrézési lépés fel</translation>
     </message>
     <message>
         <source>Mash step down</source>
-        <translation type="vanished">Cefrézési lépés le</translation>
+        <translation>Cefrézési lépés le</translation>
     </message>
 </context>
 <context>
     <name>ogAdjuster</name>
     <message>
+        <source>Adjust Volume to Hit OG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Input</source>
-        <translation type="vanished">Bevitel</translation>
+        <translation>Bevitel</translation>
     </message>
     <message>
         <source>SG</source>
-        <translation type="vanished">fajsúly (SG)</translation>
+        <translation>fajsúly (SG)</translation>
+    </message>
+    <message>
+        <source>Measured gravity pre-boil</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Temp</source>
-        <translation type="vanished">Hőmérséklet</translation>
+        <translation>Hőmérséklet</translation>
+    </message>
+    <message>
+        <source>Temperature of SG reading</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Calibration Temp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Temp to which the hydrometer is calibrated</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>-or-</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Plato</source>
-        <translation type="vanished">°B</translation>
+        <translation>°B</translation>
+    </message>
+    <message>
+        <source>Plato (percent by mass of equivalent sucrose)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pre-Boil Volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Measured pre-boil volume</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Output</source>
-        <translation type="vanished">Kimenet</translation>
+        <translation>Kimenet</translation>
+    </message>
+    <message>
+        <source>OG w/o Correction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>OG if you boil as planned</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add to Boil</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount of water you need to add to hit planned OG (or boil off if negative)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Final Batch Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Estimated batch size after correction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Calculate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ogAdjuster</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>optionsDialog</name>
     <message>
+        <source>Options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Units</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Weight</source>
-        <translation type="vanished">Súly</translation>
+        <translation>Súly</translation>
     </message>
     <message>
         <source>Temperature</source>
-        <translation type="vanished">Hőmérséklet</translation>
+        <translation>Hőmérséklet</translation>
     </message>
     <message>
         <source>Celsius</source>
@@ -5611,15 +6489,27 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation type="vanished">Mennyiség</translation>
+        <translation>Mennyiség</translation>
+    </message>
+    <message>
+        <source>Gravity</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Color</source>
-        <translation type="vanished">Szín</translation>
+        <translation>Szín</translation>
+    </message>
+    <message>
+        <source>Formulas</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>IBU</source>
-        <translation type="vanished">Keserűség (IBU)</translation>
+        <translation>Keserűség (IBU)</translation>
+    </message>
+    <message>
+        <source>IBU Adjustments</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>First Wort</source>
@@ -5634,8 +6524,58 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
         <translation type="vanished">Alapértelmezett</translation>
     </message>
     <message>
+        <source>Language</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;qt&gt;
+   &lt;b&gt;Know another language?&lt;/b&gt;
+   &lt;br&gt;&lt;br&gt;
+   Or, would you like to improve a translation? Help us out and
+  &lt;a href=&quot;https://sourceforge.net/sendmessage.php?touser=938941&quot;&gt;
+  provide a translation&lt;/a&gt; so that your friends can use brewtarget!
+&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Date</source>
-        <translation type="vanished">Időpont</translation>
+        <translation>Időpont</translation>
+    </message>
+    <message>
+        <source>Forumulas</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mash Hop (%)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>First Wort (%)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Databases</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Engines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>RDBMS Engine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Test Connection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Configuration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Restore defaults</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Hostname</source>
@@ -5718,6 +6658,54 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Diastatic power</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Logging</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Logging Level</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Log file location</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use Default location</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable logging</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Recipe Snapshots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable Automatic Snapshots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Deleting a recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Deletes all the snapshots too</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Deletes only the recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Always show snapshots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>How many times Brewtarget needs to be run to trigger another backup: 1 means always backup</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5725,103 +6713,519 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
 <context>
     <name>pitchDialog</name>
     <message>
+        <source>Pitch Rate Calculator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Input</source>
-        <translation type="vanished">Bevitel</translation>
+        <translation>Bevitel</translation>
+    </message>
+    <message>
+        <source>Wort Volume</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>OG</source>
-        <translation type="vanished">kezdeti fajsúly (OG)</translation>
+        <translation>kezdeti fajsúly (OG)</translation>
+    </message>
+    <message>
+        <source>For ales, 0.75-1. For lagers, 1.5-2.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pitch Rate (M cells)/(mL*P)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Aeration Method</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Yeast Production Date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Yeast Viability</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>None</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>O2 At Start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stir Plate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>MM/dd/yyyy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>TextLabel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Calculate Viability From Date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source># Vials/Smack Packs Pitched</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Output</source>
-        <translation type="vanished">Kimenet</translation>
+        <translation>Kimenet</translation>
+    </message>
+    <message>
+        <source>Billions of Yeast Cells Required</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source># Vials/Smack Packs w/o Starter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dry Yeast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Starter Volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Volume of wort</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Starting gravity of the wort</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Aeration method</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Production date (Best By date less three months)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Estimated viability of the yeast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Desired pitch rate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Number of vials/smack packs added to starter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>How much yeast you will need</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>How many smack packs or vials required to reach pitch rate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount of dry yeast needed to reach pitch rate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Starter size to reach pitch rate</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>primingDialog</name>
     <message>
+        <source>Priming Calculator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Input</source>
-        <translation type="vanished">Bevitel</translation>
+        <translation>Bevitel</translation>
+    </message>
+    <message>
+        <source>Collected Beer Volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount of beer to prime</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Beer Temperature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Temp of the beer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Desired Volumes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>How many volumes of CO2 you want (1 L CO2 @ STP per L beer)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Glucose Monohydrate (corn sugar)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Anhydrous Glucose</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sucrose (table sugar)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dry Malt Extract</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Output</source>
-        <translation type="vanished">Kimenet</translation>
+        <translation>Kimenet</translation>
+    </message>
+    <message>
+        <source>Prime with</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>How much priming ingredient to use</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Calculate</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>recipeExtrasWidget</name>
     <message>
         <source>Form</source>
-        <translation type="vanished">Forma</translation>
+        <translation>Forma</translation>
     </message>
     <message>
         <source>Brewer</source>
-        <translation type="vanished">Sörfőző</translation>
+        <translation>Sörfőző</translation>
+    </message>
+    <message>
+        <source>Asst. Brewer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Taste Rating</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Primary Age (days)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Primary Temp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Secondary Age (days)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Secondary Temp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tertiary Age (days)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tertiary Temp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bottle/Keg Age (days)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bottle/Keg Temp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Date First Brewed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>dd MMM yyyy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Carbonation Volumes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Taste Notes</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="vanished">Megjegyzések</translation>
+        <translation>Megjegyzések</translation>
     </message>
 </context>
 <context>
     <name>refractoDialog</name>
     <message>
+        <source>Refractometer Tools</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Inputs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Original Plato</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>OG (20 C)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Current Plato</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Calculate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Outputs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SG (20C)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>ABV</source>
-        <translation type="vanished">alkoholfok (v/v%)</translation>
+        <translation>alkoholfok (v/v%)</translation>
+    </message>
+    <message>
+        <source>ABW</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Refractive Index</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Real Extract (Plato)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>OG (20C)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Measured original plato</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Measured original gravity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Current measured plato</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>strikeWaterDialog</name>
     <message>
         <source>Strike Water Calculator</source>
-        <translation type="vanished">Felöntő víz kiszámítás</translation>
+        <translation>Felöntő víz kiszámítás</translation>
+    </message>
+    <message>
+        <source>Initial Infusion</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Original Grain Temperature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Target Mash Temperature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Weight of Grain</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Volume of Water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mash Infusion</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Total Volume of Water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Grain Weight</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Actual Mash Temperature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Infusion Water Temperature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Calculate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Strike Water Temperature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Volume to add</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Note: This calculator assumes a preheated mash tun.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>styleEditor</name>
     <message>
+        <source>Style Editor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Style</source>
-        <translation type="vanished">Stílus</translation>
+        <translation>Stílus</translation>
+    </message>
+    <message>
+        <source>Delete selected style</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="vanished">Név</translation>
+        <translation>Név</translation>
     </message>
     <message>
         <source>Category</source>
-        <translation type="vanished">Kategória</translation>
+        <translation>Kategória</translation>
+    </message>
+    <message>
+        <source>Category number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Style letter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Style guide</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="vanished">Fajta</translation>
+        <translation>Fajta</translation>
+    </message>
+    <message>
+        <source>Type of beverage</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Lager</source>
-        <translation type="vanished">Lager</translation>
+        <translation>Lager</translation>
     </message>
     <message>
         <source>Ale</source>
-        <translation type="vanished">Ale</translation>
+        <translation>Ale</translation>
+    </message>
+    <message>
+        <source>Mead</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Wheat</source>
-        <translation type="vanished">Búza</translation>
+        <translation>Búza</translation>
+    </message>
+    <message>
+        <source>Mixed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cider</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Max</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Min</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>OG</source>
-        <translation type="vanished">kezdeti fajsúly (OG)</translation>
+        <translation>kezdeti fajsúly (OG)</translation>
     </message>
     <message>
         <source>FG</source>
-        <translation type="vanished">végleges fajsúly (FG)</translation>
+        <translation>végleges fajsúly (FG)</translation>
+    </message>
+    <message>
+        <source>IBUs</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Color (SRM)</source>
-        <translation type="vanished">Szín (SRM)</translation>
+        <translation>Szín (SRM)</translation>
+    </message>
+    <message>
+        <source>Carb (vols)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ABV (pct)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ingredients</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Examples</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="vanished">Megjegyzések</translation>
+        <translation>Megjegyzések</translation>
     </message>
     <message>
         <source>New</source>
@@ -5835,6 +7239,50 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
         <source>Cancel</source>
         <translation type="vanished">Mégsem</translation>
     </message>
+    <message>
+        <source>Main</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Required</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>styleLetter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>styleGuide</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>categoryNumber</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>category</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ranges</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save and close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Discard and close</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>timerListDialog</name>
@@ -5842,110 +7290,373 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
         <source>Timers</source>
         <translation type="vanished">Időzítők</translation>
     </message>
+    <message>
+        <source>Addition Timers</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>timerWidget</name>
     <message>
         <source>Form</source>
-        <translation type="obsolete">Forma</translation>
+        <translation type="unfinished">Forma</translation>
+    </message>
+    <message>
+        <source>Add:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Notes...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>At:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>mins</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stop</source>
+        <translation type="unfinished">Leállítás</translation>
+    </message>
+    <message>
+        <source>Set Sound</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Mégsem</translation>
+    </message>
+    <message>
+        <source>Play Alarm Sound</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>waterDialog</name>
+    <message>
+        <source>Water Chemistry</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Profiles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>% RO in Mash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Target Profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PushButton</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Base Profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>% RO in Sparge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PPM</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>totalSalts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>nappm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ca</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>so4ppm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mg</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>cappm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ph</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>hco3ppm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>pH</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Na</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cl</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SO&lt;sub&gt;4&lt;/sub&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>mgppm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>clppm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>HCO&lt;sub&gt;3&lt;/sub&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Total Salts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CaCl&lt;sub&gt;2&lt;/sub&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>cacl</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>MgSO&lt;sub&gt;4&lt;/sub&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>mgso4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CaCO&lt;sub&gt;3&lt;/sub&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>caco3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>NaCl</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>nacl</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CaSO&lt;sub&gt;4&lt;?sub&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>caso4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>NaHCO&lt;sub&gt;3&lt;/sub&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>nahco3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Salts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add a salt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove selected salt</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>waterEditor</name>
     <message>
         <source>Name</source>
-        <translation type="vanished">Név</translation>
+        <translation>Név</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="vanished">Megjegyzések</translation>
+        <translation>Megjegyzések</translation>
+    </message>
+    <message>
+        <source>Edit Water</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>yeastEditor</name>
+    <message>
+        <source>Yeast Editor</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <source>Required Fields</source>
         <translation type="vanished">Szükséges mezők</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="vanished">Név</translation>
+        <translation>Név</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="vanished">Fajta</translation>
+        <translation>Fajta</translation>
     </message>
     <message>
         <source>Ale</source>
-        <translation type="vanished">Ale</translation>
+        <translation>Ale</translation>
     </message>
     <message>
         <source>Lager</source>
-        <translation type="vanished">Lager</translation>
+        <translation>Lager</translation>
     </message>
     <message>
         <source>Wheat</source>
-        <translation type="vanished">Búza</translation>
+        <translation>Búza</translation>
     </message>
     <message>
         <source>Wine</source>
-        <translation type="vanished">Bor</translation>
+        <translation>Bor</translation>
     </message>
     <message>
         <source>Champagne</source>
-        <translation type="vanished">Pezsgőélesztő</translation>
+        <translation>Pezsgőélesztő</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation type="vanished">Forma</translation>
+        <translation>Forma</translation>
     </message>
     <message>
         <source>Liquid</source>
-        <translation type="vanished">Folyékony élesztő</translation>
+        <translation>Folyékony élesztő</translation>
     </message>
     <message>
         <source>Dry</source>
-        <translation type="vanished">Szárított élesztő</translation>
+        <translation>Szárított élesztő</translation>
     </message>
     <message>
         <source>Slant</source>
-        <translation type="vanished">Slant</translation>
+        <translation>Slant</translation>
     </message>
     <message>
         <source>Culture</source>
-        <translation type="vanished">élesztőkultúra</translation>
+        <translation>élesztőkultúra</translation>
     </message>
     <message>
         <source>Amount</source>
         <translation type="vanished">Mennyiség</translation>
     </message>
     <message>
+        <source>Check it if the amount given is in kg instead of L.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount is weight?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Checked if the given amount is weight instead of volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Lab</source>
-        <translation type="vanished">Labor</translation>
+        <translation>Labor</translation>
     </message>
     <message>
         <source>Product ID</source>
-        <translation type="vanished">Termékazonosító</translation>
+        <translation>Termékazonosító</translation>
+    </message>
+    <message>
+        <source>Min Temp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Min temp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Max Temp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Max temp</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Flocculation</source>
-        <translation type="vanished">ülepedés</translation>
+        <translation>ülepedés</translation>
     </message>
     <message>
         <source>Low</source>
-        <translation type="vanished">Alacsony</translation>
+        <translation>Alacsony</translation>
     </message>
     <message>
         <source>Medium</source>
-        <translation type="vanished">Közepes</translation>
+        <translation>Közepes</translation>
     </message>
     <message>
         <source>High</source>
-        <translation type="vanished">Magas</translation>
+        <translation>Magas</translation>
     </message>
     <message>
         <source>Very High</source>
-        <translation type="vanished">Nagyon magas</translation>
+        <translation>Nagyon magas</translation>
+    </message>
+    <message>
+        <source>Attenuation (%)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Apparent attenuation as percentage of OG points</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Times Recultured</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Times this yeast has been recultured</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Max Recultures</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Max recultures</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add to Secondary</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Checked means add this yeast to secondary instead of primary</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Notes:</source>
@@ -5954,6 +7665,42 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     <message>
         <source>Default Amount</source>
         <translation type="vanished">Mennyiségi alapérték</translation>
+    </message>
+    <message>
+        <source>Quanta in Inventory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Quanta in inventory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Main</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Extras</source>
+        <translation type="unfinished">Extrák</translation>
+    </message>
+    <message>
+        <source>Best For</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished">Megjegyzések</translation>
+    </message>
+    <message>
+        <source>New yeast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save and close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Discard and close</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>
