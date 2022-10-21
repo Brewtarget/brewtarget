@@ -261,7 +261,13 @@ if(NOT ${NO_MESSING_WITH_FLAGS})
       # -no-pie -fno-pie -rdynamic are needed for Boost stacktrace to work properly - at least according to comments
       # at https://stackoverflow.com/questions/52583544/boost-stack-trace-not-showing-function-names-and-line-numbers
       #
-      set(CMAKE_CXX_FLAGS_DEBUG "-Wall -g3 -no-pie -fno-pie -rdynamic")
+      # But, for some reason, gcc on Windows does not accept -rdynamic
+      #
+      if(NOT WIN32)
+         set(CMAKE_CXX_FLAGS_DEBUG "-Wall -g3 -no-pie -fno-pie -rdynamic")
+      else()
+         set(CMAKE_CXX_FLAGS_DEBUG "-Wall -g3 -no-pie -fno-pie")
+      endif()
    endif()
 
    # Speed up compilation if using gcc.
