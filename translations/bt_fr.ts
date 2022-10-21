@@ -530,6 +530,101 @@
     </message>
 </context>
 <context>
+    <name>BtPrintAndPreview</name>
+    <message>
+        <source>Print And Preview</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Recipe</source>
+        <translation type="unfinished">Recette</translation>
+    </message>
+    <message>
+        <source>Select Recipe(s)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select what to include</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brewday Instructions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Inventory</source>
+        <translation type="unfinished">Inventaire</translation>
+    </message>
+    <message>
+        <source>All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fermentables</source>
+        <translation type="unfinished">Fermentescibles</translation>
+    </message>
+    <message>
+        <source>Hops</source>
+        <translation type="unfinished">Houblons</translation>
+    </message>
+    <message>
+        <source>Micelleneous</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Yeast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Output</source>
+        <translation type="unfinished">Sortie</translation>
+    </message>
+    <message>
+        <source>Paper</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PDF</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>HTML</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Printer Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Paper size: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select available Printers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Orientation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Portrait</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Landscape</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Annuler</translation>
+    </message>
+    <message>
+        <source>Print</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>BtSplashScreen</name>
     <message>
         <source>Loading...</source>
@@ -2005,13 +2100,6 @@ Log file may contain more details.</source>
     </message>
 </context>
 <context>
-    <name>Measurement::Units</name>
-    <message>
-        <source>min</source>
-        <translation type="obsolete">min</translation>
-    </message>
-</context>
-<context>
     <name>Misc</name>
     <message>
         <source>Spice</source>
@@ -2453,15 +2541,15 @@ Log file may contain more details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Saving the options without testing the connection can cause Brewken to not restart.  Your changes have been discarded, which is likely really, really crappy UX.  Please open a bug explaining exactly how you got to this message.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Would you like Brewtarget to transfer your data to the new database? NOTE: If you&apos;ve already loaded the data, say No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Please restart Brewtarget to connect to the new database</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Saving the options without testing the connection can cause Brewken to not restart.  Your changes have been discarded, which is likely really, really crappy UX.  Please open a bug explaining exactly how you got to this message.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2767,80 +2855,6 @@ Log file may contain more details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Unknown</source>
-        <translation type="unfinished">Inconnu</translation>
-    </message>
-    <message>
-        <source>Detailed (for debugging)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Normal</source>
-        <translation type="unfinished">Standard</translation>
-    </message>
-    <message>
-        <source>Warnings and Errors only</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Errors only</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Could not create new log file directory</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Could not read new log file directory</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Could not write to new log file directory</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source> reverting to </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Inventory</source>
-        <translation type="unfinished">Inventaire</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="unfinished">Nom</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Alpha %</source>
-        <translation type="unfinished">Alpha %</translation>
-    </message>
-    <message>
-        <source>No inventory available.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Could not open PostgreSQL DB connection to %1.
-%2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Could not open SQLite DB file %1.
-%2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Water</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Resource directory &quot;%1&quot; is missing.  Some features will be unavailable.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>kg</source>
         <extracomment>NOTE FOR TRANSLATORS: The abbreviated name of each unit (eg &quot;kg&quot; for kilograms, &quot;g&quot; for grams, etc) must be</extracomment>
         <translation type="unfinished"></translation>
@@ -3003,6 +3017,80 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>DiastaticPower</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unknown</source>
+        <translation type="unfinished">Inconnu</translation>
+    </message>
+    <message>
+        <source>Detailed (for debugging)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Normal</source>
+        <translation type="unfinished">Standard</translation>
+    </message>
+    <message>
+        <source>Warnings and Errors only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Errors only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not create new log file directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not read new log file directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not write to new log file directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> reverting to </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Inventory</source>
+        <translation type="unfinished">Inventaire</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Nom</translation>
+    </message>
+    <message>
+        <source>Amount</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alpha %</source>
+        <translation type="unfinished">Alpha %</translation>
+    </message>
+    <message>
+        <source>No inventory available.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not open PostgreSQL DB connection to %1.
+%2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not open SQLite DB file %1.
+%2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Resource directory &quot;%1&quot; is missing.  Some features will be unavailable.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3785,8 +3873,36 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
 <context>
     <name>TimerDialog</name>
     <message>
+        <source>Addition Timer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Addition Time(min):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Time Remaining:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Notes: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Notes...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Alarm sound</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stop Alarm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Cancel</source>
-        <translation type="obsolete">Annuler</translation>
+        <translation type="unfinished">Annuler</translation>
     </message>
 </context>
 <context>
@@ -3799,12 +3915,56 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
 <context>
     <name>TimerMainDialog</name>
     <message>
+        <source>Main Boil Timer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add Timer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Start</source>
-        <translation type="obsolete">Démarrer</translation>
+        <translation type="unfinished">Démarrer</translation>
     </message>
     <message>
         <source>Stop</source>
-        <translation type="obsolete">Arrêter</translation>
+        <translation type="unfinished">Arrêter</translation>
+    </message>
+    <message>
+        <source>Reset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hide Timers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Timers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel Timers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Load Current Recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Boil Timer (mins):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Boil Time Here</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Limit Alarm Ring Time </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alarm Ring Time (secs):</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>No Timers</source>
@@ -4250,54 +4410,73 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
 </context>
 <context>
+    <name>ancestorDialog</name>
+    <message>
+        <source>Dialog</source>
+        <translation type="unfinished">Boîte de dialogue</translation>
+    </message>
+    <message>
+        <source>is an descendant of</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save changes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Discard and close</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>brewDayScrollWidget</name>
     <message>
         <source>Form</source>
-        <translation type="vanished">Format</translation>
+        <translation>Format</translation>
     </message>
     <message>
         <source>Generate Instructions</source>
-        <translation type="vanished">Générer les Instructions</translation>
+        <translation>Générer les Instructions</translation>
     </message>
     <message>
         <source>Insert step</source>
-        <translation type="vanished">Insérer une étape</translation>
+        <translation>Insérer une étape</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="vanished">Nom</translation>
+        <translation>Nom</translation>
     </message>
     <message>
         <source>Name of new step</source>
-        <translation type="vanished">Nom de la nouvelle étape</translation>
+        <translation>Nom de la nouvelle étape</translation>
     </message>
     <message>
         <source>Step #</source>
-        <translation type="vanished">Étape #</translation>
+        <translation>Étape #</translation>
     </message>
     <message>
         <source>The number where the new step should be placed</source>
-        <translation type="vanished">La position à laquelle insérer la nouvelle étape</translation>
+        <translation>La position à laquelle insérer la nouvelle étape</translation>
     </message>
     <message>
         <source>Insert the new step</source>
-        <translation type="vanished">Insérer la nouvelle étape</translation>
+        <translation>Insérer la nouvelle étape</translation>
     </message>
     <message>
         <source>Move steps</source>
-        <translation type="vanished">Déplacer les étapes</translation>
+        <translation>Déplacer les étapes</translation>
     </message>
     <message>
         <source>Move currently selected step up</source>
-        <translation type="vanished">Déplacer l&apos;étape choisie vers le haut</translation>
+        <translation>Déplacer l&apos;étape choisie vers le haut</translation>
     </message>
     <message>
         <source>Move currently selected step down</source>
-        <translation type="vanished">Déplacer l&apos;étape choisie vers le bas</translation>
+        <translation>Déplacer l&apos;étape choisie vers le bas</translation>
     </message>
     <message>
         <source>Remove currently selected step</source>
-        <translation type="vanished">Supprimer l&apos;étape sélectionnée</translation>
+        <translation>Supprimer l&apos;étape sélectionnée</translation>
     </message>
 </context>
 <context>
@@ -4367,27 +4546,27 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     <name>brewNoteWidget</name>
     <message>
         <source>Preboil</source>
-        <translation type="vanished">Pré-ébullition</translation>
+        <translation>Pré-ébullition</translation>
     </message>
     <message>
         <source>SG</source>
-        <translation type="vanished">Densité Spécifique</translation>
+        <translation>Densité Spécifique</translation>
     </message>
     <message>
         <source>Preboil gravity</source>
-        <translation type="vanished">Densité pré-ébullition</translation>
+        <translation>Densité pré-ébullition</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation type="vanished">Volume</translation>
+        <translation>Volume</translation>
     </message>
     <message>
         <source>Volume of wort collected</source>
-        <translation type="vanished">Volume de moût collecté</translation>
+        <translation>Volume de moût collecté</translation>
     </message>
     <message>
         <source>Strike Temp</source>
-        <translation type="vanished">Température d&apos;empâtage</translation>
+        <translation>Température d&apos;empâtage</translation>
     </message>
     <message>
         <source>Temperature of mash after dough in</source>
@@ -4395,61 +4574,61 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Final Temp</source>
-        <translation type="vanished">Température finale</translation>
+        <translation>Température finale</translation>
     </message>
     <message>
         <source>Temperature of mash before mash out</source>
-        <translation type="vanished">Température avant mash out</translation>
+        <translation>Température avant mash out</translation>
     </message>
     <message>
         <source>Postboil</source>
-        <translation type="vanished">Post-ébullition</translation>
+        <translation>Post-ébullition</translation>
     </message>
     <message>
         <source>OG</source>
         <translatorcomment>Densité initiale
 </translatorcomment>
-        <translation type="vanished">DI</translation>
+        <translation>DI</translation>
     </message>
     <message>
         <source>Post boil gravity</source>
-        <translation type="vanished">Densité post-ébullition</translation>
+        <translation>Densité post-ébullition</translation>
     </message>
     <message>
         <source>Postboil Volume</source>
-        <translation type="vanished">Volume post-ébullition</translation>
+        <translation>Volume post-ébullition</translation>
     </message>
     <message>
         <source>Volume of wort in BK after boil</source>
-        <translation type="vanished">Volume de moût dans la cuve après ébullition</translation>
+        <translation>Volume de moût dans la cuve après ébullition</translation>
     </message>
     <message>
         <source>Volume of wort transferred to fermenter</source>
-        <translation type="vanished">Volume de moût transféré dans le fermenteur</translation>
+        <translation>Volume de moût transféré dans le fermenteur</translation>
     </message>
     <message>
         <source>Volume into fermenter</source>
-        <translation type="vanished">Volume dans le fermenteur</translation>
+        <translation>Volume dans le fermenteur</translation>
     </message>
     <message>
         <source> Pitch Temp</source>
-        <translation type="vanished"> Température d&apos;ensemencement</translation>
+        <translation> Température d&apos;ensemencement</translation>
     </message>
     <message>
         <source>Temperature of wort when yeast is pitched</source>
-        <translation type="vanished">Température du moût lors de l&apos;ensemencement</translation>
+        <translation>Température du moût lors de l&apos;ensemencement</translation>
     </message>
     <message>
         <source>Postferment</source>
-        <translation type="vanished">Après fermentation</translation>
+        <translation>Après fermentation</translation>
     </message>
     <message>
         <source>Final gravity</source>
-        <translation type="vanished">Densité finale</translation>
+        <translation>Densité finale</translation>
     </message>
     <message>
         <source>Volume of beer into serving keg/bottles</source>
-        <translation type="vanished">Volume de bière en fûts/bouteilles</translation>
+        <translation>Volume de bière en fûts/bouteilles</translation>
     </message>
     <message>
         <source>percent efficiency into boil kettle</source>
@@ -4465,11 +4644,11 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Projected OG</source>
-        <translation type="vanished">DF prévue</translation>
+        <translation>DF prévue</translation>
     </message>
     <message>
         <source>Brewhouse efficiency</source>
-        <translation type="vanished">Efficacité de l&apos;installation</translation>
+        <translation>Efficacité de l&apos;installation</translation>
     </message>
     <message>
         <source>Brewhouse Eff</source>
@@ -4481,7 +4660,7 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Projected ABV</source>
-        <translation type="vanished">ABV visé</translation>
+        <translation>ABV visé</translation>
     </message>
     <message>
         <source>ABV based on FG</source>
@@ -4489,19 +4668,59 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>ABV</source>
-        <translation type="vanished">ABV</translation>
+        <translation>ABV</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="vanished">Notes</translation>
+        <translation>Notes</translation>
     </message>
     <message>
         <source>brewNote</source>
-        <translation type="vanished">Notes de Brassage</translation>
+        <translation>Notes de Brassage</translation>
     </message>
     <message>
         <source>yyyy-dd-MM</source>
-        <translation type="vanished">yyyy-dd-MM</translation>
+        <translation>yyyy-dd-MM</translation>
+    </message>
+    <message>
+        <source>Temperature of strike water before dough in</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Percent efficiency into boil kettle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Efficiency into boil kettle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Expected OG, based on measured FG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Expected ABV based on recipe OG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ABV based on user-reported FG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Yeast attenuation based on yeast specified in recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Projected yeast attenuation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Yeast attentuation based on user-reported OG and FG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Measured yeast attenuation</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4520,18 +4739,182 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Lauter deadspace</source>
-        <translation type="vanished">Espace mort dans la cuve-filtre</translation>
+        <translation>Espace mort dans la cuve-filtre</translation>
     </message>
     <message>
         <source>equipmentEditor</source>
-        <translation type="vanished">equipmentEditor</translation>
+        <translation>equipmentEditor</translation>
+    </message>
+    <message>
+        <source>Equipment Editor</source>
+        <translation type="unfinished">Éditeur d&apos;équipement</translation>
+    </message>
+    <message>
+        <source>Equipment</source>
+        <translation type="unfinished">Équipement</translation>
+    </message>
+    <message>
+        <source>Set as Default</source>
+        <translation type="unfinished">Par défaut</translation>
+    </message>
+    <message>
+        <source>Main</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pre-boil Volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Batch Size</source>
+        <translation type="unfinished">Volume du brassin</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Nom</translation>
+    </message>
+    <message>
+        <source>name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Required</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>boilSize_l</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>batchSize_l</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Calculate pre-boil volume</source>
+        <translation type="unfinished">Volume pré-ébullition calculé</translation>
+    </message>
+    <message>
+        <source>Boil time</source>
+        <translation type="unfinished">Durée d&apos;ébullition</translation>
+    </message>
+    <message>
+        <source>Evaporation rate (per hr)</source>
+        <translation type="unfinished">Taux d&apos;évaporation (par h)</translation>
+    </message>
+    <message>
+        <source>evapRate_lHr</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Final top-up water</source>
+        <translation type="unfinished">Ajout d&apos;eau dans le fermenteur</translation>
+    </message>
+    <message>
+        <source>topUpWater_l</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Kettle top-up water</source>
+        <translation type="unfinished">Ajout d&apos;eau avant l&apos;ébullition</translation>
+    </message>
+    <message>
+        <source>topUpKettle_l</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Kettle to Fermenter Loss</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>trubChillerLoss_l</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>lauterDeadspace_l</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Physics</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default Absorption</source>
+        <translation type="unfinished">Absorption par défaut</translation>
+    </message>
+    <message>
+        <source>Grain absorption (L/kg)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hop % Utilization</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>grainAbsorption_LKg</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Boiling Point of Water</source>
+        <translation type="unfinished">Point d&apos;ébullition de l&apos;eau</translation>
+    </message>
+    <message>
+        <source>Mash tun Volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mash tun Weight</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Volume of mash tun</source>
+        <translation type="unfinished">Volume de la cuve matière</translation>
+    </message>
+    <message>
+        <source>hopUtilization_pct</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>boilingPoint_c</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>tunWeight_kg</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Specific Heat (Cal/(g*C))</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>tunSpecificHeat_calGC</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished">Notes</translation>
+    </message>
+    <message>
+        <source>New equipment</source>
+        <translation type="unfinished">Nouvel équipement</translation>
+    </message>
+    <message>
+        <source>Save and close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Discard and close</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>fermentableEditor</name>
     <message>
         <source>Fermentable Editor</source>
-        <translation type="vanished">Éditeur de fermentescible</translation>
+        <translation>Éditeur de fermentescible</translation>
     </message>
     <message>
         <source>Required Fields</source>
@@ -4539,31 +4922,31 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="vanished">Nom</translation>
+        <translation>Nom</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="vanished">Type</translation>
+        <translation>Type</translation>
     </message>
     <message>
         <source>Grain</source>
-        <translation type="vanished">Grain</translation>
+        <translation>Grain</translation>
     </message>
     <message>
         <source>Sugar</source>
-        <translation type="vanished">Sucre</translation>
+        <translation>Sucre</translation>
     </message>
     <message>
         <source>Extract</source>
-        <translation type="vanished">Extrait</translation>
+        <translation>Extrait</translation>
     </message>
     <message>
         <source>Dry Extract</source>
-        <translation type="vanished">Extrait sec</translation>
+        <translation>Extrait sec</translation>
     </message>
     <message>
         <source>Adjunct</source>
-        <translation type="vanished">Adjuvant</translation>
+        <translation>Adjuvant</translation>
     </message>
     <message>
         <source>Amount</source>
@@ -4575,43 +4958,43 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Yield as compared to glucose</source>
-        <translation type="vanished">Rendement d&apos;extraction comparé au glucose</translation>
+        <translation>Rendement d&apos;extraction comparé au glucose</translation>
     </message>
     <message>
         <source>Lovibond rating</source>
-        <translation type="vanished">Échelle de notation Lovibond</translation>
+        <translation>Échelle de notation Lovibond</translation>
     </message>
     <message>
         <source>Add After Boil</source>
-        <translation type="vanished">Ajouter après l&apos;ébullition</translation>
+        <translation>Ajouter après l&apos;ébullition</translation>
     </message>
     <message>
         <source>This ingredient is added post boil.</source>
-        <translation type="vanished">Cet ingrédient est ajouté après l&apos;ébullition.</translation>
+        <translation>Cet ingrédient est ajouté après l&apos;ébullition.</translation>
     </message>
     <message>
         <source>Origin</source>
-        <translation type="vanished">Origine</translation>
+        <translation>Origine</translation>
     </message>
     <message>
         <source>Supplier</source>
-        <translation type="vanished">Fournisseur</translation>
+        <translation>Fournisseur</translation>
     </message>
     <message>
         <source>Coarse/Fine Diff (%)</source>
-        <translation type="vanished">Diff. Grossier/Fin (%)</translation>
+        <translation>Diff. Grossier/Fin (%)</translation>
     </message>
     <message>
         <source>Yield difference between coarse and fine grind</source>
-        <translation type="vanished">Différence de rendement entre un concassage grossier et un concassage fin</translation>
+        <translation>Différence de rendement entre un concassage grossier et un concassage fin</translation>
     </message>
     <message>
         <source>Moisture (%)</source>
-        <translation type="vanished">Humidité (%)</translation>
+        <translation>Humidité (%)</translation>
     </message>
     <message>
         <source>Moisture percentage by mass</source>
-        <translation type="vanished">Pourcentage d&apos;humidité en masse</translation>
+        <translation>Pourcentage d&apos;humidité en masse</translation>
     </message>
     <message>
         <source>DP (Lintner)</source>
@@ -4623,43 +5006,43 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Protein (%)</source>
-        <translation type="vanished">Protéine (%)</translation>
+        <translation>Protéine (%)</translation>
     </message>
     <message>
         <source>Protein percentage by mass</source>
-        <translation type="vanished">Pourcentage de protéine en masse</translation>
+        <translation>Pourcentage de protéine en masse</translation>
     </message>
     <message>
         <source>Max In Batch (%)</source>
-        <translation type="vanished">Max dans le brassin (%)</translation>
+        <translation>Max dans le brassin (%)</translation>
     </message>
     <message>
         <source>Maximum recommended percentage of total grist</source>
-        <translation type="vanished">Pourcentage maximal recommandé du poids total de grain</translation>
+        <translation>Pourcentage maximal recommandé du poids total de grain</translation>
     </message>
     <message>
         <source>Recommend Mash</source>
-        <translation type="vanished">Empâtage recommandé</translation>
+        <translation>Empâtage recommandé</translation>
     </message>
     <message>
         <source>Recommend this be mashed</source>
-        <translation type="vanished">Cocher pour recommander d&apos;empâter cet ingrédient</translation>
+        <translation>Cocher pour recommander d&apos;empâter cet ingrédient</translation>
     </message>
     <message>
         <source>Is Mashed</source>
-        <translation type="vanished">Empâté</translation>
+        <translation>Empâté</translation>
     </message>
     <message>
         <source>Checked if it is present in mash</source>
-        <translation type="vanished">À cocher si cet ingrédient est empâté</translation>
+        <translation>À cocher si cet ingrédient est empâté</translation>
     </message>
     <message>
         <source>Bitterness (IBU*gal/lb)</source>
-        <translation type="vanished">Amertume (IBU*gal/lb)</translation>
+        <translation>Amertume (IBU*gal/lb)</translation>
     </message>
     <message>
         <source>Bitterness of pre-hopped extracts</source>
-        <translation type="vanished">Amertume des extraits pré-houblonnés</translation>
+        <translation>Amertume des extraits pré-houblonnés</translation>
     </message>
     <message>
         <source>Notes:</source>
@@ -4671,22 +5054,70 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Amount in Inventory</source>
-        <translation type="vanished">Quantité dans l&apos;inventaire</translation>
+        <translation>Quantité dans l&apos;inventaire</translation>
     </message>
     <message>
         <source>Amount in inventory</source>
-        <translation type="vanished">Quantité dans l&apos;inventaire</translation>
+        <translation>Quantité dans l&apos;inventaire</translation>
     </message>
     <message>
         <source>Color</source>
-        <translation type="vanished">Couleur</translation>
+        <translation>Couleur</translation>
+    </message>
+    <message>
+        <source>Main</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Required</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Yield %</source>
+        <translation type="unfinished">Rendement %</translation>
+    </message>
+    <message>
+        <source>Extras</source>
+        <translation type="unfinished">Extras</translation>
+    </message>
+    <message>
+        <source>origin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Diastatic power</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>supplier</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished">Notes</translation>
+    </message>
+    <message>
+        <source>New fermentable</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save and close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Discard and close</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>hopEditor</name>
     <message>
         <source>Hop Editor</source>
-        <translation type="vanished">Éditeur de houblon</translation>
+        <translation>Éditeur de houblon</translation>
     </message>
     <message>
         <source>Required Fields</source>
@@ -4694,7 +5125,7 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="vanished">Nom</translation>
+        <translation>Nom</translation>
     </message>
     <message>
         <source>Alpha (%)</source>
@@ -4702,7 +5133,7 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Alpha acids as percent by mass</source>
-        <translation type="vanished">Pourcentage d&apos;acides alpha en masse</translation>
+        <translation>Pourcentage d&apos;acides alpha en masse</translation>
     </message>
     <message>
         <source>Amount</source>
@@ -4710,59 +5141,59 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Use</source>
-        <translation type="vanished">Utilisation</translation>
+        <translation>Utilisation</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="vanished">Empâtage</translation>
+        <translation>Empâtage</translation>
     </message>
     <message>
         <source>First Wort</source>
-        <translation type="vanished">Pré-ébullition</translation>
+        <translation>Pré-ébullition</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation type="vanished">Ébullition</translation>
+        <translation>Ébullition</translation>
     </message>
     <message>
         <source>Aroma</source>
-        <translation type="vanished">Arômatique</translation>
+        <translation>Arômatique</translation>
     </message>
     <message>
         <source>Dry Hop</source>
-        <translation type="vanished">Houblonnage à cru</translation>
+        <translation>Houblonnage à cru</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="vanished">Durée</translation>
+        <translation>Durée</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="vanished">Type</translation>
+        <translation>Type</translation>
     </message>
     <message>
         <source>Bittering</source>
-        <translation type="vanished">Amérisant</translation>
+        <translation>Amérisant</translation>
     </message>
     <message>
         <source>Both</source>
-        <translation type="vanished">Les deux</translation>
+        <translation>Les deux</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation type="vanished">Format</translation>
+        <translation>Format</translation>
     </message>
     <message>
         <source>Leaf</source>
-        <translation type="vanished">Cône</translation>
+        <translation>Cône</translation>
     </message>
     <message>
         <source>Pellet</source>
-        <translation type="vanished">Pellet</translation>
+        <translation>Pellet</translation>
     </message>
     <message>
         <source>Plug</source>
-        <translation type="vanished">Plug</translation>
+        <translation>Plug</translation>
     </message>
     <message>
         <source>Beta (%)</source>
@@ -4770,19 +5201,19 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Beta acids as percent by mass</source>
-        <translation type="vanished">Pourcentage d&apos;acides bêta en masse</translation>
+        <translation>Pourcentage d&apos;acides bêta en masse</translation>
     </message>
     <message>
         <source>HSI</source>
-        <translation type="vanished">HSI</translation>
+        <translation>HSI</translation>
     </message>
     <message>
         <source>Hop Stability/Storage index</source>
-        <translation type="vanished">Indice de stabilité/durée de conservation du houblon</translation>
+        <translation>Indice de stabilité/durée de conservation du houblon</translation>
     </message>
     <message>
         <source>Origin</source>
-        <translation type="vanished">Origine</translation>
+        <translation>Origine</translation>
     </message>
     <message>
         <source>Humulene (%)</source>
@@ -4790,7 +5221,7 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Humulene</source>
-        <translation type="vanished">Humulène</translation>
+        <translation>Humulène</translation>
     </message>
     <message>
         <source>Caryophyllene (%)</source>
@@ -4806,7 +5237,7 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Cohumulone</source>
-        <translation type="vanished">Cohumulène</translation>
+        <translation>Cohumulène</translation>
     </message>
     <message>
         <source>Myrcene (%)</source>
@@ -4814,7 +5245,7 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Myrcene</source>
-        <translation type="vanished">Myrcène</translation>
+        <translation>Myrcène</translation>
     </message>
     <message>
         <source>Substitutes:</source>
@@ -4830,65 +5261,121 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Amount in Inventory</source>
-        <translation type="vanished">Quantité dans l&apos;inventaire</translation>
+        <translation>Quantité dans l&apos;inventaire</translation>
     </message>
     <message>
         <source>Amount in inventory</source>
-        <translation type="vanished">Quantité dans l&apos;inventaire</translation>
+        <translation>Quantité dans l&apos;inventaire</translation>
+    </message>
+    <message>
+        <source>Main</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Required</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alpha %</source>
+        <translation type="unfinished">Alpha %</translation>
+    </message>
+    <message>
+        <source>Extras</source>
+        <translation type="unfinished">Extras</translation>
+    </message>
+    <message>
+        <source>Cohumulone %</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Myrcene %</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Beta %</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Humulene %</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Caryophyllene %</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Substitutes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished">Notes</translation>
+    </message>
+    <message>
+        <source>New hop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save and close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Discard and close</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>instructionWidget</name>
     <message>
         <source>Form</source>
-        <translation type="vanished">Format</translation>
+        <translation>Format</translation>
     </message>
     <message>
         <source>Show a timer</source>
-        <translation type="vanished">Afficher une minuterie</translation>
+        <translation>Afficher une minuterie</translation>
     </message>
     <message>
         <source>Show timer</source>
-        <translation type="vanished">Afficher la minuterie</translation>
+        <translation>Afficher la minuterie</translation>
     </message>
     <message>
         <source>Mark this step completed</source>
-        <translation type="vanished">Marquer cette étape comme achevée</translation>
+        <translation>Marquer cette étape comme achevée</translation>
     </message>
     <message>
         <source>Step completed</source>
-        <translation type="vanished">Étape achevée</translation>
+        <translation>Étape achevée</translation>
     </message>
 </context>
 <context>
     <name>mainWindow</name>
     <message>
         <source>Recipes</source>
-        <translation type="vanished">Recettes</translation>
+        <translation>Recettes</translation>
     </message>
     <message>
         <source>Styles</source>
-        <translation type="vanished">Styles</translation>
+        <translation>Styles</translation>
     </message>
     <message>
         <source>Fermentables</source>
-        <translation type="vanished">Fermentescibles</translation>
+        <translation>Fermentescibles</translation>
     </message>
     <message>
         <source>Hops</source>
-        <translation type="vanished">Houblons</translation>
+        <translation>Houblons</translation>
     </message>
     <message>
         <source>Miscs</source>
-        <translation type="vanished">Divers</translation>
+        <translation>Divers</translation>
     </message>
     <message>
         <source>Yeasts</source>
-        <translation type="vanished">Levures</translation>
+        <translation>Levures</translation>
     </message>
     <message>
         <source>Recipe</source>
-        <translation type="vanished">Recette</translation>
+        <translation>Recette</translation>
     </message>
     <message>
         <source>Name</source>
@@ -4896,11 +5383,11 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Name of recipe</source>
-        <translation type="vanished">Nom de la recette</translation>
+        <translation>Nom de la recette</translation>
     </message>
     <message>
         <source>Target boil size</source>
-        <translation type="vanished">Volume d&apos;ébullition visé</translation>
+        <translation>Volume d&apos;ébullition visé</translation>
     </message>
     <message>
         <source>Efficiency (%)</source>
@@ -4916,7 +5403,7 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>The extraction efficiency you expect</source>
-        <translation type="vanished">Le rendement d&apos;extraction prévu</translation>
+        <translation>Le rendement d&apos;extraction prévu</translation>
     </message>
     <message>
         <source>Style</source>
@@ -4928,7 +5415,7 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Target batch size</source>
-        <translation type="vanished">Volume du brassin visé</translation>
+        <translation>Volume du brassin visé</translation>
     </message>
     <message>
         <source>Target Batch Size</source>
@@ -4936,7 +5423,7 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Equipment</source>
-        <translation type="vanished">Équipement</translation>
+        <translation>Équipement</translation>
     </message>
     <message>
         <source>Target Boil Size</source>
@@ -4944,163 +5431,163 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>OG</source>
-        <translation type="vanished">DI</translation>
+        <translation>DI</translation>
     </message>
     <message>
         <source>Boil SG</source>
-        <translation type="vanished">Densité pré-ébullition</translation>
+        <translation>Densité pré-ébullition</translation>
     </message>
     <message>
         <source>FG</source>
-        <translation type="vanished">DF</translation>
+        <translation>DF</translation>
     </message>
     <message>
         <source>ABV</source>
-        <translation type="vanished">ABV</translation>
+        <translation>ABV</translation>
     </message>
     <message>
         <source>Bitterness (IBU)</source>
-        <translation type="vanished">Amertume (IBU)</translation>
+        <translation>Amertume (IBU)</translation>
     </message>
     <message>
         <source>Color</source>
-        <translation type="vanished">Couleur</translation>
+        <translation>Couleur</translation>
     </message>
     <message>
         <source>IBU/GU</source>
-        <translation type="vanished">IBU/GU</translation>
+        <translation>IBU/GU</translation>
     </message>
     <message>
         <source>Calories/12oz</source>
-        <translation type="vanished">Calories/33cl</translation>
+        <translation>Calories/33cl</translation>
     </message>
     <message>
         <source>Extras</source>
-        <translation type="vanished">Extras</translation>
+        <translation>Extras</translation>
     </message>
     <message>
         <source>Brewday</source>
-        <translation type="vanished">Journée de brassage</translation>
+        <translation>Journée de brassage</translation>
     </message>
     <message>
         <source>Add a fermentable</source>
-        <translation type="vanished">Ajouter un fermentescible</translation>
+        <translation>Ajouter un fermentescible</translation>
     </message>
     <message>
         <source>Remove selected fermentable</source>
-        <translation type="vanished">Supprimer le fermentescible sélectionné</translation>
+        <translation>Supprimer le fermentescible sélectionné</translation>
     </message>
     <message>
         <source>Edit selected fermentable</source>
-        <translation type="vanished">Modifier le fermentescible sélectionné</translation>
+        <translation>Modifier le fermentescible sélectionné</translation>
     </message>
     <message>
         <source>Add hop</source>
-        <translation type="vanished">Ajouter un houblon</translation>
+        <translation>Ajouter un houblon</translation>
     </message>
     <message>
         <source>Remove selected hop</source>
-        <translation type="vanished">Supprimer le houblon sélectionné</translation>
+        <translation>Supprimer le houblon sélectionné</translation>
     </message>
     <message>
         <source>Edit selected hop</source>
-        <translation type="vanished">Modifier le houblon sélectionné</translation>
+        <translation>Modifier le houblon sélectionné</translation>
     </message>
     <message>
         <source>Miscellaneous</source>
-        <translation type="vanished">Divers</translation>
+        <translation>Divers</translation>
     </message>
     <message>
         <source>Add misc</source>
-        <translation type="vanished">Ajouter divers</translation>
+        <translation>Ajouter divers</translation>
     </message>
     <message>
         <source>Remove selected misc</source>
-        <translation type="vanished">Supprimer l&apos;ingrédient divers  sélectionné</translation>
+        <translation>Supprimer l&apos;ingrédient divers  sélectionné</translation>
     </message>
     <message>
         <source>Edit selected misc</source>
-        <translation type="vanished">Modifier l&apos;ingrédient divers sélectionné</translation>
+        <translation>Modifier l&apos;ingrédient divers sélectionné</translation>
     </message>
     <message>
         <source>Yeast</source>
-        <translation type="vanished">Levures</translation>
+        <translation>Levures</translation>
     </message>
     <message>
         <source>Add yeast</source>
-        <translation type="vanished">Ajouter une levure</translation>
+        <translation>Ajouter une levure</translation>
     </message>
     <message>
         <source>Remove selected yeast</source>
-        <translation type="vanished">Supprimer la levure sélectionnée</translation>
+        <translation>Supprimer la levure sélectionnée</translation>
     </message>
     <message>
         <source>Edit selected yeast</source>
-        <translation type="vanished">Modifier la levure sélectionnée</translation>
+        <translation>Modifier la levure sélectionnée</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="vanished">Empâtage</translation>
+        <translation>Empâtage</translation>
     </message>
     <message>
         <source>Add mash step</source>
-        <translation type="vanished">Ajouter un palier d&apos;empâtage</translation>
+        <translation>Ajouter un palier d&apos;empâtage</translation>
     </message>
     <message>
         <source>Remove selected mash step</source>
-        <translation type="vanished">Supprimer le palier d&apos;empâtage sélectionné</translation>
+        <translation>Supprimer le palier d&apos;empâtage sélectionné</translation>
     </message>
     <message>
         <source>Edit selected mash step</source>
-        <translation type="vanished">Modifier le palier d&apos;empâtage sélectionné</translation>
+        <translation>Modifier le palier d&apos;empâtage sélectionné</translation>
     </message>
     <message>
         <source>Edit mash properties</source>
-        <translation type="vanished">Modifier les paramètres d&apos;empâtage</translation>
+        <translation>Modifier les paramètres d&apos;empâtage</translation>
     </message>
     <message>
         <source>Edit mash</source>
-        <translation type="vanished">Modifier l&apos;empâtage</translation>
+        <translation>Modifier l&apos;empâtage</translation>
     </message>
     <message>
         <source>Mash Des</source>
-        <translation type="vanished">Créateur d&apos;empâtage</translation>
+        <translation>Créateur d&apos;empâtage</translation>
     </message>
     <message>
         <source>Invoke the mash wizard</source>
-        <translation type="vanished">Faites appel à l&apos;assistant d&apos;empâtage</translation>
+        <translation>Faites appel à l&apos;assistant d&apos;empâtage</translation>
     </message>
     <message>
         <source>Mash wiz</source>
-        <translation type="vanished">Assistant d&apos;empâtage</translation>
+        <translation>Assistant d&apos;empâtage</translation>
     </message>
     <message>
         <source>Mashs</source>
-        <translation type="vanished">Empâtage</translation>
+        <translation>Empâtage</translation>
     </message>
     <message>
         <source>Mash step up</source>
-        <translation type="vanished">Monter le palier</translation>
+        <translation>Monter le palier</translation>
     </message>
     <message>
         <source>Mash step down</source>
-        <translation type="vanished">Descendre le palier</translation>
+        <translation>Descendre le palier</translation>
     </message>
     <message>
         <source>Save this mash profile</source>
-        <translation type="vanished">Sauvegarder ce profil d&apos;empâtage</translation>
+        <translation>Sauvegarder ce profil d&apos;empâtage</translation>
     </message>
     <message>
         <source>Save Mash</source>
-        <translation type="vanished">Sauvegarder le profil</translation>
+        <translation>Sauvegarder le profil</translation>
     </message>
     <message>
         <source>&amp;About</source>
-        <translation type="vanished">&amp;À propos</translation>
+        <translation>&amp;À propos</translation>
     </message>
     <message>
         <source>&amp;File</source>
-        <translation type="vanished">&amp;Fichier</translation>
+        <translation>&amp;Fichier</translation>
     </message>
     <message>
         <source>&amp;Brewday</source>
@@ -5112,27 +5599,27 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>&amp;Database</source>
-        <translation type="vanished">Base de &amp;données</translation>
+        <translation>Base de &amp;données</translation>
     </message>
     <message>
         <source>&amp;View</source>
-        <translation type="vanished">Afficha&amp;ge</translation>
+        <translation>Afficha&amp;ge</translation>
     </message>
     <message>
         <source>&amp;Tools</source>
-        <translation type="vanished">Ou&amp;tils</translation>
+        <translation>Ou&amp;tils</translation>
     </message>
     <message>
         <source>toolBar</source>
-        <translation type="vanished">Barre d&apos;outils</translation>
+        <translation>Barre d&apos;outils</translation>
     </message>
     <message>
         <source>About &amp;BrewTarget</source>
-        <translation type="vanished">À propos de &amp;Brewtarget</translation>
+        <translation>À propos de &amp;Brewtarget</translation>
     </message>
     <message>
         <source>About Brewtarget</source>
-        <translation type="vanished">À propos de Brewtarget</translation>
+        <translation>À propos de Brewtarget</translation>
     </message>
     <message>
         <source>&amp;Export Recipe</source>
@@ -5140,19 +5627,19 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>&amp;Fermentables</source>
-        <translation type="vanished">&amp;Fermentescibles</translation>
+        <translation>&amp;Fermentescibles</translation>
     </message>
     <message>
         <source>Ctrl+F</source>
-        <translation type="vanished">Ctrl+F</translation>
+        <translation>Ctrl+F</translation>
     </message>
     <message>
         <source>&amp;Hops</source>
-        <translation type="vanished">&amp;Houblons</translation>
+        <translation>&amp;Houblons</translation>
     </message>
     <message>
         <source>Ctrl+H</source>
-        <translation type="vanished">Ctrl+H</translation>
+        <translation>Ctrl+H</translation>
     </message>
     <message>
         <source>&amp;Miscs</source>
@@ -5160,31 +5647,31 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Ctrl+M</source>
-        <translation type="vanished">Ctrl+M</translation>
+        <translation>Ctrl+M</translation>
     </message>
     <message>
         <source>&amp;Yeasts</source>
-        <translation type="vanished">&amp;Levures</translation>
+        <translation>&amp;Levures</translation>
     </message>
     <message>
         <source>Ctrl+Y</source>
-        <translation type="vanished">Ctrl+Y</translation>
+        <translation>Ctrl+Y</translation>
     </message>
     <message>
         <source>&amp;Equipments</source>
-        <translation type="vanished">&amp;Équipements</translation>
+        <translation>&amp;Équipements</translation>
     </message>
     <message>
         <source>Ctrl+E</source>
-        <translation type="vanished">Ctrl+E</translation>
+        <translation>Ctrl+E</translation>
     </message>
     <message>
         <source>&amp;Styles</source>
-        <translation type="vanished">&amp;Styles</translation>
+        <translation>&amp;Styles</translation>
     </message>
     <message>
         <source>Ctrl+T</source>
-        <translation type="vanished">Ctrl+T</translation>
+        <translation>Ctrl+T</translation>
     </message>
     <message>
         <source>&amp;Exit</source>
@@ -5192,7 +5679,7 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Ctrl+Q</source>
-        <translation type="vanished">Ctrl+Q</translation>
+        <translation>Ctrl+Q</translation>
     </message>
     <message>
         <source>&amp;Import Recipes</source>
@@ -5204,55 +5691,55 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>&amp;Manual</source>
-        <translation type="vanished">&amp;Manuel</translation>
+        <translation>&amp;Manuel</translation>
     </message>
     <message>
         <source>&amp;Scale Recipe</source>
-        <translation type="vanished">&amp;Adapter la recette</translation>
+        <translation>&amp;Adapter la recette</translation>
     </message>
     <message>
         <source>Recipe to Clipboard as &amp;Text</source>
-        <translation type="vanished">Copier la recette dans le presse papier en &amp;texte</translation>
+        <translation>Copier la recette dans le presse papier en &amp;texte</translation>
     </message>
     <message>
         <source>&amp;OG Correction Help</source>
-        <translation type="vanished">Aide à la correction de &amp;DI</translation>
+        <translation>Aide à la correction de &amp;DI</translation>
     </message>
     <message>
         <source>&amp;Convert Units</source>
-        <translation type="vanished">&amp;Convertisseur d&apos;unités</translation>
+        <translation>&amp;Convertisseur d&apos;unités</translation>
     </message>
     <message>
         <source>Backup Database</source>
-        <translation type="vanished">Sauvegarder la base de donnés</translation>
+        <translation>Sauvegarder la base de donnés</translation>
     </message>
     <message>
         <source>Restore Database</source>
-        <translation type="vanished">Restaurer la base de données</translation>
+        <translation>Restaurer la base de données</translation>
     </message>
     <message>
         <source>&amp;Copy Recipe</source>
-        <translation type="vanished">&amp;Copier la recette</translation>
+        <translation>&amp;Copier la recette</translation>
     </message>
     <message>
         <source>Pr&amp;iming Calculator</source>
-        <translation type="vanished">Calculateur de &amp;sucrage</translation>
+        <translation>Calculateur de &amp;sucrage</translation>
     </message>
     <message>
         <source>&amp;Refractometer Tools</source>
-        <translation type="vanished">Outil pour &amp;réfractomètre</translation>
+        <translation>Outil pour &amp;réfractomètre</translation>
     </message>
     <message>
         <source>&amp;Pitch Rate Calculator</source>
-        <translation type="vanished">Calculateur d&apos;&amp;ensemencement</translation>
+        <translation>Calculateur d&apos;&amp;ensemencement</translation>
     </message>
     <message>
         <source>Merge Databases</source>
-        <translation type="vanished">Fusionner les bases de données</translation>
+        <translation>Fusionner les bases de données</translation>
     </message>
     <message>
         <source>Select another database to merge into the current one.</source>
-        <translation type="vanished">Sélectionner une base de données à fusionner avec la base actuelle.</translation>
+        <translation>Sélectionner une base de données à fusionner avec la base actuelle.</translation>
     </message>
     <message>
         <source>&amp;Print</source>
@@ -5272,19 +5759,19 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>&amp;Backup</source>
-        <translation type="vanished">&amp;Sauvegarder</translation>
+        <translation>&amp;Sauvegarder</translation>
     </message>
     <message>
         <source>Save all recipes, ingredients, etc. to a backup folder</source>
-        <translation type="vanished">Sauvegarder toutes les recettes, ingrédients, etc. dans un dossier</translation>
+        <translation>Sauvegarder toutes les recettes, ingrédients, etc. dans un dossier</translation>
     </message>
     <message>
         <source>&amp;Restore</source>
-        <translation type="vanished">&amp;Restaurer</translation>
+        <translation>&amp;Restaurer</translation>
     </message>
     <message>
         <source>Restore recipes, ingredients, etc. from a previous backup</source>
-        <translation type="vanished">Restaure les recettes, ingrédients, etc. depuis une sauvegarde</translation>
+        <translation>Restaure les recettes, ingrédients, etc. depuis une sauvegarde</translation>
     </message>
     <message>
         <source>&amp;Merge</source>
@@ -5296,7 +5783,7 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>&amp;New Recipe</source>
-        <translation type="vanished">&amp;Nouvelle recette</translation>
+        <translation>&amp;Nouvelle recette</translation>
     </message>
     <message>
         <source>Timers</source>
@@ -5304,31 +5791,31 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Show timers</source>
-        <translation type="vanished">Afficher les minuteries</translation>
+        <translation>Afficher les minuteries</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation type="vanished">Sauvegarder</translation>
+        <translation>Sauvegarder</translation>
     </message>
     <message>
         <source>Delete selected</source>
-        <translation type="vanished">Supprimer l&apos;élément sélectionné</translation>
+        <translation>Supprimer l&apos;élément sélectionné</translation>
     </message>
     <message>
         <source>Delete recipe</source>
-        <translation type="vanished">Supprimer la recette</translation>
+        <translation>Supprimer la recette</translation>
     </message>
     <message>
         <source>&amp;Mashs</source>
-        <translation type="vanished">Profils d&apos;e&amp;mpâtage</translation>
+        <translation>Profils d&apos;e&amp;mpâtage</translation>
     </message>
     <message>
         <source>Mashes</source>
-        <translation type="vanished">Profils d&apos;empâtage</translation>
+        <translation>Profils d&apos;empâtage</translation>
     </message>
     <message>
         <source>1.0</source>
-        <translation type="vanished">1.0</translation>
+        <translation>1.0</translation>
     </message>
     <message>
         <source>Strike Water Calculator</source>
@@ -5336,18 +5823,130 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>tab_recipe</source>
-        <translation type="vanished">tab_recipe</translation>
+        <translation>tab_recipe</translation>
     </message>
     <message>
         <source>Export to &amp;BBCode</source>
-        <translation type="vanished">Exporter vers &amp;BBCode</translation>
+        <translation>Exporter vers &amp;BBCode</translation>
+    </message>
+    <message>
+        <source>Water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Boil Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>E&amp;quipment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tar&amp;get Boil Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Recipe Locked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Target Batch Si&amp;ze</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Efficiency (%)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Batch Size</source>
+        <translation type="unfinished">Volume du brassin</translation>
+    </message>
+    <message>
+        <source>Boil Size</source>
+        <translation type="unfinished">Volume pré-ébullition</translation>
+    </message>
+    <message>
+        <source>Edit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Export to File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>M&amp;iscs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Print and preview</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+P</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>E&amp;xit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Import from File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Optio&amp;ns</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ti&amp;mers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Strike &amp;Water Calculator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Hydrometer Temp Adjustment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alcohol Percentage Tool</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Water &amp;Chemistry</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Undo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Redo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ancestors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew It!</source>
+        <translation type="unfinished">Brassons !</translation>
     </message>
 </context>
 <context>
     <name>mashDesigner</name>
     <message>
         <source>Mash Designer</source>
-        <translation type="vanished">Créateur de profil d&apos;empâtage</translation>
+        <translation>Créateur de profil d&apos;empâtage</translation>
     </message>
     <message>
         <source>Name</source>
@@ -5363,7 +5962,7 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="vanished">Durée</translation>
+        <translation>Durée</translation>
     </message>
     <message>
         <source>Batch Sparge</source>
@@ -5371,275 +5970,311 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Next</source>
-        <translation type="vanished">Suivant</translation>
+        <translation>Suivant</translation>
     </message>
     <message>
         <source>Finish</source>
-        <translation type="vanished">Terminer</translation>
+        <translation>Terminer</translation>
     </message>
     <message>
         <source>Infusion/Decoction Amount</source>
-        <translation type="vanished">Volume d&apos;infusion/de décoction</translation>
+        <translation>Volume d&apos;infusion/de décoction</translation>
     </message>
     <message>
         <source>min</source>
-        <translation type="vanished">min</translation>
+        <translation>min</translation>
     </message>
     <message>
         <source>max</source>
-        <translation type="vanished">max</translation>
+        <translation>max</translation>
     </message>
     <message>
         <source>0</source>
-        <translation type="vanished">0</translation>
+        <translation>0</translation>
     </message>
     <message>
         <source>Infusion Temp</source>
-        <translation type="vanished">Température d&apos;infusion</translation>
+        <translation>Température d&apos;infusion</translation>
     </message>
     <message>
         <source>Total Collected Wort</source>
-        <translation type="vanished">Volume total de moût</translation>
+        <translation>Volume total de moût</translation>
     </message>
     <message>
         <source>vol</source>
-        <translation type="vanished">vol</translation>
+        <translation>vol</translation>
     </message>
     <message>
         <source>Tun Fullness</source>
-        <translation type="vanished">Remplissage de la cuve</translation>
+        <translation>Remplissage de la cuve</translation>
     </message>
     <message>
         <source>tunVol</source>
-        <translation type="vanished">volCuve</translation>
+        <translation>volCuve</translation>
     </message>
     <message>
         <source>thickness</source>
-        <translation type="vanished">Épaisseur</translation>
+        <translation>Épaisseur</translation>
+    </message>
+    <message>
+        <source>&amp;Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tar&amp;get temp.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>mashEditor</name>
     <message>
         <source>Mash Editor</source>
-        <translation type="vanished">Éditeur de profil d&apos;empâtage</translation>
+        <translation>Éditeur de profil d&apos;empâtage</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="vanished">Nom</translation>
+        <translation>Nom</translation>
     </message>
     <message>
         <source>Initial grain temp</source>
-        <translation type="vanished">Temp. initiale du grain</translation>
+        <translation>Temp. initiale du grain</translation>
     </message>
     <message>
         <source>Sparge temp</source>
-        <translation type="vanished">Température de rinçage</translation>
+        <translation>Température de rinçage</translation>
     </message>
     <message>
         <source>Sparge temp target</source>
-        <translation type="vanished">Température de rinçage ciblée</translation>
+        <translation>Température de rinçage ciblée</translation>
     </message>
     <message>
         <source>Sparge pH</source>
-        <translation type="vanished">pH eau de rinçage</translation>
+        <translation>pH eau de rinçage</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="vanished">Notes</translation>
+        <translation>Notes</translation>
     </message>
     <message>
         <source>Tun</source>
-        <translation type="vanished">Cuve matière</translation>
+        <translation>Cuve matière</translation>
     </message>
     <message>
         <source>Initial tun temp</source>
-        <translation type="vanished">Température initiale</translation>
+        <translation>Température initiale</translation>
     </message>
     <message>
         <source>Get following parameters from the recipe&apos;s equipment.</source>
-        <translation type="vanished">Utiliser les données de l&apos;équipement défini dans la recette pour les paramètres suivants.</translation>
+        <translation>Utiliser les données de l&apos;équipement défini dans la recette pour les paramètres suivants.</translation>
     </message>
     <message>
         <source>From Equipment</source>
-        <translation type="vanished">Utiliser les valeurs de l&apos;équipement</translation>
+        <translation>Utiliser les valeurs de l&apos;équipement</translation>
     </message>
     <message>
         <source>Tun mass</source>
-        <translation type="vanished">Poids</translation>
+        <translation>Poids</translation>
     </message>
     <message>
         <source>Tun sp. heat</source>
-        <translation type="vanished">Chaleur spécifique</translation>
+        <translation>Chaleur spécifique</translation>
     </message>
     <message>
         <source>Tun specific heat (cal/(g*K))</source>
-        <translation type="vanished">Chaleur spécifique de la cuve matière (cal/(g*K))</translation>
+        <translation>Chaleur spécifique de la cuve matière (cal/(g*K))</translation>
     </message>
 </context>
 <context>
     <name>mashStepEditor</name>
     <message>
         <source>Mash Step Editor</source>
-        <translation type="vanished">Éditeur de paliers d&apos;empâtage</translation>
+        <translation>Éditeur de paliers d&apos;empâtage</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="vanished">Nom</translation>
+        <translation>Nom</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="vanished">Type</translation>
+        <translation>Type</translation>
     </message>
     <message>
         <source>Infusion</source>
-        <translation type="vanished">Infusion</translation>
+        <translation>Infusion</translation>
     </message>
     <message>
         <source>Temperature</source>
-        <translation type="vanished">Chauffe</translation>
+        <translation>Chauffe</translation>
     </message>
     <message>
         <source>Decoction</source>
-        <translation type="vanished">Décoction</translation>
+        <translation>Décoction</translation>
     </message>
     <message>
         <source>Target temp.</source>
-        <translation type="vanished">Température cible.</translation>
+        <translation>Température cible.</translation>
     </message>
     <message>
         <source>Target temp. of this step</source>
-        <translation type="vanished">Température cible de ce palier</translation>
+        <translation>Température cible de ce palier</translation>
     </message>
     <message>
         <source>Infuse Amount</source>
-        <translation type="vanished">Volume d&apos;infusion</translation>
+        <translation>Volume d&apos;infusion</translation>
     </message>
     <message>
         <source>Amount of water to infuse</source>
-        <translation type="vanished">Volume d&apos;eau à utiliser pour l&apos;infusion</translation>
+        <translation>Volume d&apos;eau à utiliser pour l&apos;infusion</translation>
     </message>
     <message>
         <source>Infuse temp.</source>
-        <translation type="vanished">Température d&apos;infusion</translation>
+        <translation>Température d&apos;infusion</translation>
     </message>
     <message>
         <source>Temperature of infusion water</source>
-        <translation type="vanished">Température de l&apos;eau d&apos;infusion</translation>
+        <translation>Température de l&apos;eau d&apos;infusion</translation>
     </message>
     <message>
         <source>Decoction Amount</source>
-        <translation type="vanished">Volume de décoction</translation>
+        <translation>Volume de décoction</translation>
     </message>
     <message>
         <source>Amount of mash to decoct</source>
-        <translation type="vanished">Volume de moût à prélever pour la décoction</translation>
+        <translation>Volume de moût à prélever pour la décoction</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="vanished">Durée</translation>
+        <translation>Durée</translation>
     </message>
     <message>
         <source>Time to conduct the step</source>
-        <translation type="vanished">Durée de maintien de ce palier</translation>
+        <translation>Durée de maintien de ce palier</translation>
     </message>
     <message>
         <source>Temp. lag time</source>
-        <translation type="vanished">Temps de latence de la chauffe</translation>
+        <translation>Temps de latence de la chauffe</translation>
     </message>
     <message>
         <source>Lag time</source>
-        <translation type="vanished">Temps de latence</translation>
+        <translation>Temps de latence</translation>
     </message>
     <message>
         <source>End temp.</source>
-        <translation type="vanished">Température finale.</translation>
+        <translation>Température finale.</translation>
     </message>
     <message>
         <source>Final temp. of this step</source>
-        <translation type="vanished">Température finale de ce palier</translation>
+        <translation>Température finale de ce palier</translation>
+    </message>
+    <message>
+        <source>Fly Sparge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Batch Sparge</source>
+        <translation type="unfinished">Rinçage par lots</translation>
     </message>
 </context>
 <context>
     <name>mashWizard</name>
     <message>
         <source>Mash Wizard</source>
-        <translation type="vanished">Assistant d&apos;empâtage</translation>
+        <translation>Assistant d&apos;empâtage</translation>
     </message>
     <message>
         <source>Mash thickness (L/kg)</source>
-        <translation type="vanished">Densité d&apos;empâtage (L/kg)</translation>
+        <translation>Densité d&apos;empâtage (L/kg)</translation>
     </message>
     <message>
         <source>Mash thickness (do not enter any units)</source>
         <translation type="vanished">Densité d&apos;empâtage (ne pas entrer d&apos;unités)</translation>
+    </message>
+    <message>
+        <source>No Spar&amp;ge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fl&amp;y Sparge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ba&amp;tch Sparge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Batches</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>miscEditor</name>
     <message>
         <source>Misc Editor</source>
-        <translation type="vanished">Éditeur d&apos;ingrédients divers</translation>
+        <translation>Éditeur d&apos;ingrédients divers</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="vanished">Nom</translation>
+        <translation>Nom</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="vanished">Type</translation>
+        <translation>Type</translation>
     </message>
     <message>
         <source>Spice</source>
-        <translation type="vanished">Épices</translation>
+        <translation>Épices</translation>
     </message>
     <message>
         <source>Fining</source>
-        <translation type="vanished">Clarifiant</translation>
+        <translation>Clarifiant</translation>
     </message>
     <message>
         <source>Water Agent</source>
-        <translation type="vanished">Agent d&apos;eau</translation>
+        <translation>Agent d&apos;eau</translation>
     </message>
     <message>
         <source>Herb</source>
-        <translation type="vanished">Herbes</translation>
+        <translation>Herbes</translation>
     </message>
     <message>
         <source>Flavor</source>
-        <translation type="vanished">Saveur</translation>
+        <translation>Saveur</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="vanished">Autres</translation>
+        <translation>Autres</translation>
     </message>
     <message>
         <source>Use</source>
-        <translation type="vanished">Utilisation</translation>
+        <translation>Utilisation</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation type="vanished">Ébullition</translation>
+        <translation>Ébullition</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="vanished">Empâtage</translation>
+        <translation>Empâtage</translation>
     </message>
     <message>
         <source>Primary</source>
-        <translation type="vanished">Primaire</translation>
+        <translation>Primaire</translation>
     </message>
     <message>
         <source>Secondary</source>
-        <translation type="vanished">Secondaire</translation>
+        <translation>Secondaire</translation>
     </message>
     <message>
         <source>Bottling</source>
-        <translation type="vanished">Embouteillage</translation>
+        <translation>Embouteillage</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="vanished">Durée</translation>
+        <translation>Durée</translation>
     </message>
     <message>
         <source>Amount</source>
@@ -5647,15 +6282,15 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Check it if the amount listed is in kg instead of L.</source>
-        <translation type="vanished">Vérifier que la quantité est exprimée en kg et non en L.</translation>
+        <translation>Vérifier que la quantité est exprimée en kg et non en L.</translation>
     </message>
     <message>
         <source>Amount is weight?</source>
-        <translation type="vanished">Exprimée en poids</translation>
+        <translation>Exprimée en poids</translation>
     </message>
     <message>
         <source>Checked if the given amount is weight instead of volume</source>
-        <translation type="vanished">À cocher si la quantité est exprimée en poids et non en volume</translation>
+        <translation>À cocher si la quantité est exprimée en poids et non en volume</translation>
     </message>
     <message>
         <source>Use for:</source>
@@ -5671,192 +6306,220 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Amount in Inventory</source>
-        <translation type="vanished">Quantité dans l&apos;inventaire</translation>
+        <translation>Quantité dans l&apos;inventaire</translation>
     </message>
     <message>
         <source>Amount in inventory</source>
-        <translation type="vanished">Quantité dans l&apos;inventaire</translation>
+        <translation>Quantité dans l&apos;inventaire</translation>
+    </message>
+    <message>
+        <source>Main</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use for</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished">Notes</translation>
+    </message>
+    <message>
+        <source>New misc</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save and close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Discard and close</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>namedMashEditor</name>
     <message>
         <source>Named Mash Editor</source>
-        <translation type="vanished">Éditeur de profil d&apos;empâtage</translation>
+        <translation>Éditeur de profil d&apos;empâtage</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="vanished">Empâtage</translation>
+        <translation>Empâtage</translation>
     </message>
     <message>
         <source>Delete selected style</source>
-        <translation type="vanished">Supprimer le style sélectionné</translation>
+        <translation>Supprimer le style sélectionné</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="vanished">Nom</translation>
+        <translation>Nom</translation>
     </message>
     <message>
         <source>Initial grain temp</source>
-        <translation type="vanished">Température initiale du grain</translation>
+        <translation>Température initiale du grain</translation>
     </message>
     <message>
         <source>Sparge temp</source>
-        <translation type="vanished">Température de rinçage</translation>
+        <translation>Température de rinçage</translation>
     </message>
     <message>
         <source>Sparge temp target</source>
-        <translation type="vanished">Température de rinçage ciblée</translation>
+        <translation>Température de rinçage ciblée</translation>
     </message>
     <message>
         <source>Sparge pH</source>
-        <translation type="vanished">pH eau de rinçage</translation>
+        <translation>pH eau de rinçage</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="vanished">Notes</translation>
+        <translation>Notes</translation>
     </message>
     <message>
         <source>Tun</source>
-        <translation type="vanished">Cuve matière</translation>
+        <translation>Cuve matière</translation>
     </message>
     <message>
         <source>Initial tun temp</source>
-        <translation type="vanished">Température initiale</translation>
+        <translation>Température initiale</translation>
     </message>
     <message>
         <source>From Equipment</source>
-        <translation type="vanished">Valeurs de l&apos;équipement</translation>
+        <translation>Valeurs de l&apos;équipement</translation>
     </message>
     <message>
         <source>Tun mass</source>
-        <translation type="vanished">Poids</translation>
+        <translation>Poids</translation>
     </message>
     <message>
         <source>Tun sp. heat</source>
-        <translation type="vanished">Chaleur spécifique</translation>
+        <translation>Chaleur spécifique</translation>
     </message>
     <message>
         <source>Tun specific heat (cal/(g*K))</source>
-        <translation type="vanished">Chaleur spécifique de la cuve matière (cal/(g*K))</translation>
+        <translation>Chaleur spécifique de la cuve matière (cal/(g*K))</translation>
     </message>
     <message>
         <source>Add mash step</source>
-        <translation type="vanished">Ajouter un palier d&apos;empâtage</translation>
+        <translation>Ajouter un palier d&apos;empâtage</translation>
     </message>
     <message>
         <source>Remove selected mash step</source>
-        <translation type="vanished">Supprimer le palier d&apos;empâtage sélectionné</translation>
+        <translation>Supprimer le palier d&apos;empâtage sélectionné</translation>
     </message>
     <message>
         <source>Mash step up</source>
-        <translation type="vanished">Monter le palier</translation>
+        <translation>Monter le palier</translation>
     </message>
     <message>
         <source>Mash step down</source>
-        <translation type="vanished">Descendre le palier</translation>
+        <translation>Descendre le palier</translation>
     </message>
 </context>
 <context>
     <name>ogAdjuster</name>
     <message>
         <source>Adjust Volume to Hit OG</source>
-        <translation type="vanished">Ajuster le volume pour atteindre la DI</translation>
+        <translation>Ajuster le volume pour atteindre la DI</translation>
     </message>
     <message>
         <source>Input</source>
-        <translation type="vanished">Entrée</translation>
+        <translation>Entrée</translation>
     </message>
     <message>
         <source>SG</source>
-        <translation type="vanished">DS</translation>
+        <translation>DS</translation>
     </message>
     <message>
         <source>Measured gravity pre-boil</source>
-        <translation type="vanished">Densité Spécifique mesurée pré-ébullition</translation>
+        <translation>Densité Spécifique mesurée pré-ébullition</translation>
     </message>
     <message>
         <source>Temp</source>
-        <translation type="vanished">Température</translation>
+        <translation>Température</translation>
     </message>
     <message>
         <source>Temperature of SG reading</source>
-        <translation type="vanished">Température du moût lors de la mesure de la DS</translation>
+        <translation>Température du moût lors de la mesure de la DS</translation>
     </message>
     <message>
         <source>Calibration Temp</source>
-        <translation type="vanished">Température de calibration</translation>
+        <translation>Température de calibration</translation>
     </message>
     <message>
         <source>Temp to which the hydrometer is calibrated</source>
-        <translation type="vanished">Température à laquelle le densimètre est calibré</translation>
+        <translation>Température à laquelle le densimètre est calibré</translation>
     </message>
     <message>
         <source>-or-</source>
-        <translation type="vanished">-ou-</translation>
+        <translation>-ou-</translation>
     </message>
     <message>
         <source>Plato</source>
-        <translation type="vanished">Plato</translation>
+        <translation>Plato</translation>
     </message>
     <message>
         <source>Plato (percent by mass of equivalent sucrose)</source>
-        <translation type="vanished">Plato (pourcentage de la masse de sucrose équivalent)</translation>
+        <translation>Plato (pourcentage de la masse de sucrose équivalent)</translation>
     </message>
     <message>
         <source>Pre-Boil Volume</source>
-        <translation type="vanished">Volume pré-ébullition</translation>
+        <translation>Volume pré-ébullition</translation>
     </message>
     <message>
         <source>Measured pre-boil volume</source>
-        <translation type="vanished">Volume pré-ébullition mesuré</translation>
+        <translation>Volume pré-ébullition mesuré</translation>
     </message>
     <message>
         <source>Output</source>
-        <translation type="vanished">Sortie</translation>
+        <translation>Sortie</translation>
     </message>
     <message>
         <source>OG w/o Correction</source>
-        <translation type="vanished">DI sans correction</translation>
+        <translation>DI sans correction</translation>
     </message>
     <message>
         <source>OG if you boil as planned</source>
-        <translation type="vanished">DI après l&apos;ébullition prévue</translation>
+        <translation>DI après l&apos;ébullition prévue</translation>
     </message>
     <message>
         <source>Add to Boil</source>
-        <translation type="vanished">Ajouter à l&apos;ébullition</translation>
+        <translation>Ajouter à l&apos;ébullition</translation>
     </message>
     <message>
         <source>Amount of water you need to add to hit planned OG (or boil off if negative)</source>
-        <translation type="vanished">Quantité d&apos;eau à ajouter afin d&apos;atteindre la DI prévue (ou taux d&apos;évaporation si négatif)</translation>
+        <translation>Quantité d&apos;eau à ajouter afin d&apos;atteindre la DI prévue (ou taux d&apos;évaporation si négatif)</translation>
     </message>
     <message>
         <source>Final Batch Size</source>
-        <translation type="vanished">Volume final du brassin</translation>
+        <translation>Volume final du brassin</translation>
     </message>
     <message>
         <source>Estimated batch size after correction</source>
-        <translation type="vanished">Volume du brassin estimé après correction</translation>
+        <translation>Volume du brassin estimé après correction</translation>
     </message>
     <message>
         <source>Calculate</source>
-        <translation type="vanished">Calculer</translation>
+        <translation>Calculer</translation>
+    </message>
+    <message>
+        <source>ogAdjuster</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>optionsDialog</name>
     <message>
         <source>Options</source>
-        <translation type="vanished">Options</translation>
+        <translation>Options</translation>
     </message>
     <message>
         <source>Units</source>
-        <translation type="vanished">Unités</translation>
+        <translation>Unités</translation>
     </message>
     <message>
         <source>Weight</source>
-        <translation type="vanished">Poids</translation>
+        <translation>Poids</translation>
     </message>
     <message>
         <source>Use SI units</source>
@@ -5872,7 +6535,7 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Temperature</source>
-        <translation type="vanished">Température</translation>
+        <translation>Température</translation>
     </message>
     <message>
         <source>Celsius</source>
@@ -5884,11 +6547,11 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation type="vanished">Volume</translation>
+        <translation>Volume</translation>
     </message>
     <message>
         <source>Gravity</source>
-        <translation type="vanished">Densité</translation>
+        <translation>Densité</translation>
     </message>
     <message>
         <source>20C/20C Specific Gravity</source>
@@ -5900,7 +6563,7 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Color</source>
-        <translation type="vanished">Couleur</translation>
+        <translation>Couleur</translation>
     </message>
     <message>
         <source>Use SRM</source>
@@ -5912,7 +6575,7 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Formulas</source>
-        <translation type="vanished">Formules</translation>
+        <translation>Formules</translation>
     </message>
     <message>
         <source>Mosher&apos;s approximation</source>
@@ -5928,7 +6591,7 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>IBU</source>
-        <translation type="vanished">IBU</translation>
+        <translation>IBU</translation>
     </message>
     <message>
         <source>Tinseth&apos;s approximation</source>
@@ -5940,7 +6603,7 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>IBU Adjustments</source>
-        <translation type="vanished">Ajustements de l&apos;IBU</translation>
+        <translation>Ajustements de l&apos;IBU</translation>
     </message>
     <message>
         <source>% IBU adjustment</source>
@@ -5976,7 +6639,7 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Language</source>
-        <translation type="vanished">Langue</translation>
+        <translation>Langue</translation>
     </message>
     <message>
         <source>&lt;qt&gt;
@@ -5986,7 +6649,7 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
   &lt;a href=&quot;https://sourceforge.net/sendmessage.php?touser=938941&quot;&gt;
   provide a translation&lt;/a&gt; so that your friends can use brewtarget!
 &lt;/qt&gt;</source>
-        <translation type="vanished">&lt;qt&gt;
+        <translation>&lt;qt&gt;
    &lt;b&gt;Connaissez vous une autre langue ?&lt;/b&gt;
    &lt;br&gt;&lt;br&gt;
    Ou, souhaitez-vous  améliorer une traduction ? Aidez-nous en
@@ -5996,7 +6659,7 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Date</source>
-        <translation type="vanished">Date</translation>
+        <translation>Date</translation>
     </message>
     <message>
         <source>mm-dd-YYYY</source>
@@ -6013,6 +6676,42 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     <message>
         <source>Noonan&apos;s approximation</source>
         <translation type="vanished">Approximation de Noonan</translation>
+    </message>
+    <message>
+        <source>Forumulas</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mash Hop (%)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>First Wort (%)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Databases</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Engines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>RDBMS Engine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Test Connection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Configuration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Restore defaults</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Hostname</source>
@@ -6095,6 +6794,54 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Diastatic power</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Logging</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Logging Level</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Log file location</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use Default location</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable logging</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Recipe Snapshots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable Automatic Snapshots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Deleting a recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Deletes all the snapshots too</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Deletes only the recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Always show snapshots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>How many times Brewtarget needs to be run to trigger another backup: 1 means always backup</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6103,418 +6850,418 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     <name>pitchDialog</name>
     <message>
         <source>Pitch Rate Calculator</source>
-        <translation type="vanished">Calculateur d&apos;ensemencement</translation>
+        <translation>Calculateur d&apos;ensemencement</translation>
     </message>
     <message>
         <source>Input</source>
-        <translation type="vanished">Entrée</translation>
+        <translation>Entrée</translation>
     </message>
     <message>
         <source>Wort Volume</source>
-        <translation type="vanished">Volume de moût</translation>
+        <translation>Volume de moût</translation>
     </message>
     <message>
         <source>OG</source>
-        <translation type="vanished">DI</translation>
+        <translation>DI</translation>
     </message>
     <message>
         <source>For ales, 0.75-1. For lagers, 1.5-2.</source>
-        <translation type="vanished">Pour les ales : 0.75-1. Pour les lagers : 1.5-2.</translation>
+        <translation>Pour les ales : 0.75-1. Pour les lagers : 1.5-2.</translation>
     </message>
     <message>
         <source>Pitch Rate (M cells)/(mL*P)</source>
-        <translation type="vanished">Taux d&apos;ensemencement (M cellules)/(mL*P)</translation>
+        <translation>Taux d&apos;ensemencement (M cellules)/(mL*P)</translation>
     </message>
     <message>
         <source>Aeration Method</source>
-        <translation type="vanished">Méthode d&apos;aération</translation>
+        <translation>Méthode d&apos;aération</translation>
     </message>
     <message>
         <source>Yeast Production Date</source>
-        <translation type="vanished">Date de production de la levure</translation>
+        <translation>Date de production de la levure</translation>
     </message>
     <message>
         <source>Yeast Viability</source>
-        <translation type="vanished">Viabilité de la levure</translation>
+        <translation>Viabilité de la levure</translation>
     </message>
     <message>
         <source>None</source>
-        <translation type="vanished">Aucun</translation>
+        <translation>Aucun</translation>
     </message>
     <message>
         <source>O2 At Start</source>
-        <translation type="vanished">Oxygénation au début</translation>
+        <translation>Oxygénation au début</translation>
     </message>
     <message>
         <source>Stir Plate</source>
-        <translation type="vanished">Agitateur magnétique</translation>
+        <translation>Agitateur magnétique</translation>
     </message>
     <message>
         <source>MM/dd/yyyy</source>
-        <translation type="vanished">dd/MM/yyyy</translation>
+        <translation>dd/MM/yyyy</translation>
     </message>
     <message>
         <source>%</source>
-        <translation type="vanished">%</translation>
+        <translation>%</translation>
     </message>
     <message>
         <source>TextLabel</source>
-        <translation type="vanished">TextLabel</translation>
+        <translation>TextLabel</translation>
     </message>
     <message>
         <source>Calculate Viability From Date</source>
-        <translation type="vanished">Calculer la viabilité en fonction de la date</translation>
+        <translation>Calculer la viabilité en fonction de la date</translation>
     </message>
     <message>
         <source># Vials/Smack Packs Pitched</source>
-        <translation type="vanished"># Fioles/Smack Packs utilisés</translation>
+        <translation># Fioles/Smack Packs utilisés</translation>
     </message>
     <message>
         <source>Output</source>
-        <translation type="vanished">Sortie</translation>
+        <translation>Sortie</translation>
     </message>
     <message>
         <source>Billions of Yeast Cells Required</source>
-        <translation type="vanished">Milliards de cellules requises</translation>
+        <translation>Milliards de cellules requises</translation>
     </message>
     <message>
         <source># Vials/Smack Packs w/o Starter</source>
-        <translation type="vanished"># Fioles/Smack Packs sans Starter</translation>
+        <translation># Fioles/Smack Packs sans Starter</translation>
     </message>
     <message>
         <source>Dry Yeast</source>
-        <translation type="vanished">Levure sèche</translation>
+        <translation>Levure sèche</translation>
     </message>
     <message>
         <source>Starter Volume</source>
-        <translation type="vanished">Volume de starter</translation>
+        <translation>Volume de starter</translation>
     </message>
     <message>
         <source>Volume of wort</source>
-        <translation type="vanished">Volume de moût</translation>
+        <translation>Volume de moût</translation>
     </message>
     <message>
         <source>Starting gravity of the wort</source>
-        <translation type="vanished">Densité Initial du moût</translation>
+        <translation>Densité Initial du moût</translation>
     </message>
     <message>
         <source>Aeration method</source>
-        <translation type="vanished">Méthode d&apos;aération</translation>
+        <translation>Méthode d&apos;aération</translation>
     </message>
     <message>
         <source>Production date (Best By date less three months)</source>
-        <translation type="vanished">Date de production (de préférence de moins de trois mois)</translation>
+        <translation>Date de production (de préférence de moins de trois mois)</translation>
     </message>
     <message>
         <source>Estimated viability of the yeast</source>
-        <translation type="vanished">Viabilité estimée de la levure</translation>
+        <translation>Viabilité estimée de la levure</translation>
     </message>
     <message>
         <source>Desired pitch rate</source>
-        <translation type="vanished">Taux d&apos;ensemencement souhaité</translation>
+        <translation>Taux d&apos;ensemencement souhaité</translation>
     </message>
     <message>
         <source>Number of vials/smack packs added to starter</source>
-        <translation type="vanished">Nombre de fioles/Smack Packs ajoutés au starter</translation>
+        <translation>Nombre de fioles/Smack Packs ajoutés au starter</translation>
     </message>
     <message>
         <source>How much yeast you will need</source>
-        <translation type="vanished">De combien de levure vous aurez besoin</translation>
+        <translation>De combien de levure vous aurez besoin</translation>
     </message>
     <message>
         <source>How many smack packs or vials required to reach pitch rate</source>
-        <translation type="vanished">Combien de fioles ou de Smack Packs sont nécessaires pour atteindre le taux d&apos;ensemencement</translation>
+        <translation>Combien de fioles ou de Smack Packs sont nécessaires pour atteindre le taux d&apos;ensemencement</translation>
     </message>
     <message>
         <source>Amount of dry yeast needed to reach pitch rate</source>
-        <translation type="vanished">Quantité de levure sèche nécessaire pour atteindre le taux d&apos;ensemencement</translation>
+        <translation>Quantité de levure sèche nécessaire pour atteindre le taux d&apos;ensemencement</translation>
     </message>
     <message>
         <source>Starter size to reach pitch rate</source>
-        <translation type="vanished">Volume du starter nécessaire pour atteindre le taux d&apos;ensemencement</translation>
+        <translation>Volume du starter nécessaire pour atteindre le taux d&apos;ensemencement</translation>
     </message>
 </context>
 <context>
     <name>primingDialog</name>
     <message>
         <source>Priming Calculator</source>
-        <translation type="vanished">Calculateur de sucrage</translation>
+        <translation>Calculateur de sucrage</translation>
     </message>
     <message>
         <source>Input</source>
-        <translation type="vanished">Entrée</translation>
+        <translation>Entrée</translation>
     </message>
     <message>
         <source>Collected Beer Volume</source>
-        <translation type="vanished">Volume de bière</translation>
+        <translation>Volume de bière</translation>
     </message>
     <message>
         <source>Amount of beer to prime</source>
-        <translation type="vanished">Volume de bière à sucrer</translation>
+        <translation>Volume de bière à sucrer</translation>
     </message>
     <message>
         <source>Beer Temperature</source>
-        <translation type="vanished">Température de la bière</translation>
+        <translation>Température de la bière</translation>
     </message>
     <message>
         <source>Temp of the beer</source>
-        <translation type="vanished">Température de la bière</translation>
+        <translation>Température de la bière</translation>
     </message>
     <message>
         <source>Desired Volumes</source>
-        <translation type="vanished">Volume de CO2 souhaité</translation>
+        <translation>Volume de CO2 souhaité</translation>
     </message>
     <message>
         <source>How many volumes of CO2 you want (1 L CO2 @ STP per L beer)</source>
-        <translation type="vanished">Quel volume de C02 souhaitez-vous ? (1 L CO2 @ STP par L bière)</translation>
+        <translation>Quel volume de C02 souhaitez-vous ? (1 L CO2 @ STP par L bière)</translation>
     </message>
     <message>
         <source>Glucose Monohydrate (corn sugar)</source>
-        <translation type="vanished">Glucose monohydrate (sucre de maïs)</translation>
+        <translation>Glucose monohydrate (sucre de maïs)</translation>
     </message>
     <message>
         <source>Anhydrous Glucose</source>
-        <translation type="vanished">Glucose anhydre</translation>
+        <translation>Glucose anhydre</translation>
     </message>
     <message>
         <source>Sucrose (table sugar)</source>
-        <translation type="vanished">Sucrose (sucre blanc de table)</translation>
+        <translation>Sucrose (sucre blanc de table)</translation>
     </message>
     <message>
         <source>Dry Malt Extract</source>
-        <translation type="vanished">Extrait de malt en poudre</translation>
+        <translation>Extrait de malt en poudre</translation>
     </message>
     <message>
         <source>Output</source>
-        <translation type="vanished">Sortie</translation>
+        <translation>Sortie</translation>
     </message>
     <message>
         <source>Prime with</source>
-        <translation type="vanished">Sucrer avec</translation>
+        <translation>Sucrer avec</translation>
     </message>
     <message>
         <source>How much priming ingredient to use</source>
-        <translation type="vanished">Quantité d&apos;ingrédient sucrant à utiliser</translation>
+        <translation>Quantité d&apos;ingrédient sucrant à utiliser</translation>
     </message>
     <message>
         <source>Calculate</source>
-        <translation type="vanished">Calculer</translation>
+        <translation>Calculer</translation>
     </message>
 </context>
 <context>
     <name>recipeExtrasWidget</name>
     <message>
         <source>Form</source>
-        <translation type="vanished">Format</translation>
+        <translation>Format</translation>
     </message>
     <message>
         <source>Brewer</source>
-        <translation type="vanished">Brasseur</translation>
+        <translation>Brasseur</translation>
     </message>
     <message>
         <source>Asst. Brewer</source>
-        <translation type="vanished">Asst. brasseur</translation>
+        <translation>Asst. brasseur</translation>
     </message>
     <message>
         <source>Taste Rating</source>
-        <translation type="vanished">Note de dégustation</translation>
+        <translation>Note de dégustation</translation>
     </message>
     <message>
         <source>Primary Age (days)</source>
-        <translation type="vanished">Garde primaire (jours)</translation>
+        <translation>Garde primaire (jours)</translation>
     </message>
     <message>
         <source>Primary Temp</source>
-        <translation type="vanished">Température primaire</translation>
+        <translation>Température primaire</translation>
     </message>
     <message>
         <source>Secondary Age (days)</source>
-        <translation type="vanished">Garde secondaire (jours)</translation>
+        <translation>Garde secondaire (jours)</translation>
     </message>
     <message>
         <source>Secondary Temp</source>
-        <translation type="vanished">Température secondaire</translation>
+        <translation>Température secondaire</translation>
     </message>
     <message>
         <source>Tertiary Age (days)</source>
-        <translation type="vanished">Garde tertiaire (jours)</translation>
+        <translation>Garde tertiaire (jours)</translation>
     </message>
     <message>
         <source>Tertiary Temp</source>
-        <translation type="vanished">Température tertiaire</translation>
+        <translation>Température tertiaire</translation>
     </message>
     <message>
         <source>Bottle/Keg Age (days)</source>
-        <translation type="vanished">Garde en bouteilles/fûts (jours)</translation>
+        <translation>Garde en bouteilles/fûts (jours)</translation>
     </message>
     <message>
         <source>Bottle/Keg Temp</source>
-        <translation type="vanished">Température en bouteilles/fûts</translation>
+        <translation>Température en bouteilles/fûts</translation>
     </message>
     <message>
         <source>Date First Brewed</source>
-        <translation type="vanished">Date à laquelle la recette a été brassée la première fois</translation>
+        <translation>Date à laquelle la recette a été brassée la première fois</translation>
     </message>
     <message>
         <source>dd MMM yyyy</source>
-        <translation type="vanished">dd MMM yyyy</translation>
+        <translation>dd MMM yyyy</translation>
     </message>
     <message>
         <source>Carbonation Volumes</source>
-        <translation type="vanished">Volumes de carbonatation</translation>
+        <translation>Volumes de carbonatation</translation>
     </message>
     <message>
         <source>Taste Notes</source>
-        <translation type="vanished">Notes de dégustation</translation>
+        <translation>Notes de dégustation</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="vanished">Notes</translation>
+        <translation>Notes</translation>
     </message>
 </context>
 <context>
     <name>refractoDialog</name>
     <message>
         <source>Refractometer Tools</source>
-        <translation type="vanished">Outil pour réfractomètre</translation>
+        <translation>Outil pour réfractomètre</translation>
     </message>
     <message>
         <source>Inputs</source>
-        <translation type="vanished">Entées</translation>
+        <translation>Entées</translation>
     </message>
     <message>
         <source>Original Plato</source>
-        <translation type="vanished">DI (°P)</translation>
+        <translation>DI (°P)</translation>
     </message>
     <message>
         <source>OG (20 C)</source>
-        <translation type="vanished">DI (20°C)</translation>
+        <translation>DI (20°C)</translation>
     </message>
     <message>
         <source>Current Plato</source>
-        <translation type="vanished">Densité actuelle (°P)</translation>
+        <translation>Densité actuelle (°P)</translation>
     </message>
     <message>
         <source>Calculate</source>
-        <translation type="vanished">Calculer</translation>
+        <translation>Calculer</translation>
     </message>
     <message>
         <source>Outputs</source>
-        <translation type="vanished">Résultats</translation>
+        <translation>Résultats</translation>
     </message>
     <message>
         <source>SG (20C)</source>
-        <translation type="vanished">Densité Spécifique (20°C)</translation>
+        <translation>Densité Spécifique (20°C)</translation>
     </message>
     <message>
         <source>ABV</source>
-        <translation type="vanished">ABV</translation>
+        <translation>ABV</translation>
     </message>
     <message>
         <source>ABW</source>
-        <translation type="vanished">ABW</translation>
+        <translation>ABW</translation>
     </message>
     <message>
         <source>Refractive Index</source>
-        <translation type="vanished">Indice de réfraction</translation>
+        <translation>Indice de réfraction</translation>
     </message>
     <message>
         <source>Real Extract (Plato)</source>
-        <translation type="vanished">Extrait réel (°P)</translation>
+        <translation>Extrait réel (°P)</translation>
     </message>
     <message>
         <source>OG (20C)</source>
-        <translation type="vanished">DI (20°C)</translation>
+        <translation>DI (20°C)</translation>
     </message>
     <message>
         <source>Measured original plato</source>
-        <translation type="vanished">Densité Initiale mesurée en degrés Plato</translation>
+        <translation>Densité Initiale mesurée en degrés Plato</translation>
     </message>
     <message>
         <source>Measured original gravity</source>
-        <translation type="vanished">Densité Initiale mesurée en densité spécifique à 20°C</translation>
+        <translation>Densité Initiale mesurée en densité spécifique à 20°C</translation>
     </message>
     <message>
         <source>Current measured plato</source>
-        <translation type="vanished">Densité actuelle mesurée en degrés Plato</translation>
+        <translation>Densité actuelle mesurée en degrés Plato</translation>
     </message>
 </context>
 <context>
     <name>strikeWaterDialog</name>
     <message>
         <source>Strike Water Calculator</source>
-        <translation type="vanished">Calculateur d&apos;eau d&apos;empâtage</translation>
+        <translation>Calculateur d&apos;eau d&apos;empâtage</translation>
     </message>
     <message>
         <source>Initial Infusion</source>
-        <translation type="vanished">Infusion initiale</translation>
+        <translation>Infusion initiale</translation>
     </message>
     <message>
         <source>Original Grain Temperature</source>
-        <translation type="vanished">Température initiale du grain</translation>
+        <translation>Température initiale du grain</translation>
     </message>
     <message>
         <source>Target Mash Temperature</source>
-        <translation type="vanished">Température d&apos;empâtage désirée</translation>
+        <translation>Température d&apos;empâtage désirée</translation>
     </message>
     <message>
         <source>Weight of Grain</source>
-        <translation type="vanished">Poids du grain</translation>
+        <translation>Poids du grain</translation>
     </message>
     <message>
         <source>Volume of Water</source>
-        <translation type="vanished">Volume d&apos;eau</translation>
+        <translation>Volume d&apos;eau</translation>
     </message>
     <message>
         <source>Mash Infusion</source>
-        <translation type="vanished">Infusion de la maische</translation>
+        <translation>Infusion de la maische</translation>
     </message>
     <message>
         <source>Total Volume of Water</source>
-        <translation type="vanished">Volume d&apos;eau total</translation>
+        <translation>Volume d&apos;eau total</translation>
     </message>
     <message>
         <source>Grain Weight</source>
-        <translation type="vanished">Poids du grain</translation>
+        <translation>Poids du grain</translation>
     </message>
     <message>
         <source>Actual Mash Temperature</source>
-        <translation type="vanished">Température d&apos;empâtage réelle</translation>
+        <translation>Température d&apos;empâtage réelle</translation>
     </message>
     <message>
         <source>Infusion Water Temperature</source>
-        <translation type="vanished">Température de l&apos;eau d&apos;infusion</translation>
+        <translation>Température de l&apos;eau d&apos;infusion</translation>
     </message>
     <message>
         <source>Calculate</source>
-        <translation type="vanished">Calculer</translation>
+        <translation>Calculer</translation>
     </message>
     <message>
         <source>Strike Water Temperature</source>
-        <translation type="vanished">Température d&apos;eau d&apos;empâtage</translation>
+        <translation>Température d&apos;eau d&apos;empâtage</translation>
     </message>
     <message>
         <source>Volume to add</source>
-        <translation type="vanished">Volume à ajouter</translation>
+        <translation>Volume à ajouter</translation>
     </message>
     <message>
         <source>Note: This calculator assumes a preheated mash tun.</source>
-        <translation type="vanished">Note : Ce calculateur suppose que la cuve matière est préchauffée.</translation>
+        <translation>Note : Ce calculateur suppose que la cuve matière est préchauffée.</translation>
     </message>
 </context>
 <context>
     <name>styleEditor</name>
     <message>
         <source>Style Editor</source>
-        <translation type="vanished">Éditeur de style</translation>
+        <translation>Éditeur de style</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation type="vanished">Style</translation>
+        <translation>Style</translation>
     </message>
     <message>
         <source>Delete selected style</source>
-        <translation type="vanished">Supprimer le style sélectionné</translation>
+        <translation>Supprimer le style sélectionné</translation>
     </message>
     <message>
         <source>Basic Information</source>
@@ -6522,55 +7269,55 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="vanished">Nom</translation>
+        <translation>Nom</translation>
     </message>
     <message>
         <source>Category</source>
-        <translation type="vanished">Catégorie</translation>
+        <translation>Catégorie</translation>
     </message>
     <message>
         <source>Category number</source>
-        <translation type="vanished">Numéro de catégorie</translation>
+        <translation>Numéro de catégorie</translation>
     </message>
     <message>
         <source>Style letter</source>
-        <translation type="vanished">Lettre du style</translation>
+        <translation>Lettre du style</translation>
     </message>
     <message>
         <source>Style guide</source>
-        <translation type="vanished">Guide du style</translation>
+        <translation>Guide du style</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="vanished">Type</translation>
+        <translation>Type</translation>
     </message>
     <message>
         <source>Type of beverage</source>
-        <translation type="vanished">Type de breuvage</translation>
+        <translation>Type de breuvage</translation>
     </message>
     <message>
         <source>Lager</source>
-        <translation type="vanished">Lager</translation>
+        <translation>Lager</translation>
     </message>
     <message>
         <source>Ale</source>
-        <translation type="vanished">Ale</translation>
+        <translation>Ale</translation>
     </message>
     <message>
         <source>Mead</source>
-        <translation type="vanished">Hydromel</translation>
+        <translation>Hydromel</translation>
     </message>
     <message>
         <source>Wheat</source>
-        <translation type="vanished">Blanche</translation>
+        <translation>Blanche</translation>
     </message>
     <message>
         <source>Mixed</source>
-        <translation type="vanished">Mixte</translation>
+        <translation>Mixte</translation>
     </message>
     <message>
         <source>Cider</source>
-        <translation type="vanished">Cidre</translation>
+        <translation>Cidre</translation>
     </message>
     <message>
         <source>Vital Statistics</source>
@@ -6578,51 +7325,51 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Max</source>
-        <translation type="vanished">Max</translation>
+        <translation>Max</translation>
     </message>
     <message>
         <source>Min</source>
-        <translation type="vanished">Min</translation>
+        <translation>Min</translation>
     </message>
     <message>
         <source>OG</source>
-        <translation type="vanished">DI</translation>
+        <translation>DI</translation>
     </message>
     <message>
         <source>FG</source>
-        <translation type="vanished">DF</translation>
+        <translation>DF</translation>
     </message>
     <message>
         <source>IBUs</source>
-        <translation type="vanished">IBUs</translation>
+        <translation>IBUs</translation>
     </message>
     <message>
         <source>Color (SRM)</source>
-        <translation type="vanished">Couleur (SRM)</translation>
+        <translation>Couleur (SRM)</translation>
     </message>
     <message>
         <source>Carb (vols)</source>
-        <translation type="vanished">Carb (vols)</translation>
+        <translation>Carb (vols)</translation>
     </message>
     <message>
         <source>ABV (pct)</source>
-        <translation type="vanished">ABV (%)</translation>
+        <translation>ABV (%)</translation>
     </message>
     <message>
         <source>Profile</source>
-        <translation type="vanished">Profile</translation>
+        <translation>Profile</translation>
     </message>
     <message>
         <source>Ingredients</source>
-        <translation type="vanished">Ingrédients</translation>
+        <translation>Ingrédients</translation>
     </message>
     <message>
         <source>Examples</source>
-        <translation type="vanished">Exemples</translation>
+        <translation>Exemples</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="vanished">Notes</translation>
+        <translation>Notes</translation>
     </message>
     <message>
         <source>New</source>
@@ -6636,6 +7383,50 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
         <source>Cancel</source>
         <translation type="vanished">Annuler</translation>
     </message>
+    <message>
+        <source>Main</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Required</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>styleLetter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>styleGuide</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>categoryNumber</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>category</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ranges</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save and close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Discard and close</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>timerListDialog</name>
@@ -6643,12 +7434,207 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
         <source>Timers</source>
         <translation type="vanished">Minuteries</translation>
     </message>
+    <message>
+        <source>Addition Timers</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>timerWidget</name>
     <message>
         <source>Form</source>
-        <translation type="obsolete">Format</translation>
+        <translation type="unfinished">Format</translation>
+    </message>
+    <message>
+        <source>Add:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Notes...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>At:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>mins</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stop</source>
+        <translation type="unfinished">Arrêter</translation>
+    </message>
+    <message>
+        <source>Set Sound</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Annuler</translation>
+    </message>
+    <message>
+        <source>Play Alarm Sound</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>waterDialog</name>
+    <message>
+        <source>Water Chemistry</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Profiles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>% RO in Mash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Target Profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PushButton</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Base Profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>% RO in Sparge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PPM</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>totalSalts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>nappm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ca</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>so4ppm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mg</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>cappm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ph</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>hco3ppm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>pH</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Na</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cl</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SO&lt;sub&gt;4&lt;/sub&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>mgppm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>clppm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>HCO&lt;sub&gt;3&lt;/sub&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Total Salts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CaCl&lt;sub&gt;2&lt;/sub&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>cacl</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>MgSO&lt;sub&gt;4&lt;/sub&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>mgso4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CaCO&lt;sub&gt;3&lt;/sub&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>caco3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>NaCl</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>nacl</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CaSO&lt;sub&gt;4&lt;?sub&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>caso4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>NaHCO&lt;sub&gt;3&lt;/sub&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>nahco3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Salts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add a salt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove selected salt</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -6659,18 +7645,22 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="vanished">Nom</translation>
+        <translation>Nom</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="vanished">Notes</translation>
+        <translation>Notes</translation>
+    </message>
+    <message>
+        <source>Edit Water</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>yeastEditor</name>
     <message>
         <source>Yeast Editor</source>
-        <translation type="vanished">Éditeur de levure</translation>
+        <translation>Éditeur de levure</translation>
     </message>
     <message>
         <source>Required Fields</source>
@@ -6678,51 +7668,51 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="vanished">Nom</translation>
+        <translation>Nom</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="vanished">Type</translation>
+        <translation>Type</translation>
     </message>
     <message>
         <source>Ale</source>
-        <translation type="vanished">Ale</translation>
+        <translation>Ale</translation>
     </message>
     <message>
         <source>Lager</source>
-        <translation type="vanished">Lager</translation>
+        <translation>Lager</translation>
     </message>
     <message>
         <source>Wheat</source>
-        <translation type="vanished">Blanche</translation>
+        <translation>Blanche</translation>
     </message>
     <message>
         <source>Wine</source>
-        <translation type="vanished">Vin</translation>
+        <translation>Vin</translation>
     </message>
     <message>
         <source>Champagne</source>
-        <translation type="vanished">Champagne</translation>
+        <translation>Champagne</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation type="vanished">Format</translation>
+        <translation>Format</translation>
     </message>
     <message>
         <source>Liquid</source>
-        <translation type="vanished">Liquide</translation>
+        <translation>Liquide</translation>
     </message>
     <message>
         <source>Dry</source>
-        <translation type="vanished">Sèche</translation>
+        <translation>Sèche</translation>
     </message>
     <message>
         <source>Slant</source>
-        <translation type="vanished">Gélose inclinée</translation>
+        <translation>Gélose inclinée</translation>
     </message>
     <message>
         <source>Culture</source>
-        <translation type="vanished">Culture</translation>
+        <translation>Culture</translation>
     </message>
     <message>
         <source>Amount</source>
@@ -6730,91 +7720,91 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Check it if the amount given is in kg instead of L.</source>
-        <translation type="vanished">À cocher si la quantité est exprimée en kg et non en L.</translation>
+        <translation>À cocher si la quantité est exprimée en kg et non en L.</translation>
     </message>
     <message>
         <source>Amount is weight?</source>
-        <translation type="vanished">Exprimée en poids</translation>
+        <translation>Exprimée en poids</translation>
     </message>
     <message>
         <source>Checked if the given amount is weight instead of volume</source>
-        <translation type="vanished">À cocher si la quantité est exprimée en poids et non en volume</translation>
+        <translation>À cocher si la quantité est exprimée en poids et non en volume</translation>
     </message>
     <message>
         <source>Lab</source>
-        <translation type="vanished">Labo</translation>
+        <translation>Labo</translation>
     </message>
     <message>
         <source>Product ID</source>
-        <translation type="vanished">ID du produit</translation>
+        <translation>ID du produit</translation>
     </message>
     <message>
         <source>Min Temp</source>
-        <translation type="vanished">Temp. min</translation>
+        <translation>Temp. min</translation>
     </message>
     <message>
         <source>Min temp</source>
-        <translation type="vanished">Temp. min</translation>
+        <translation>Temp. min</translation>
     </message>
     <message>
         <source>Max Temp</source>
-        <translation type="vanished">Temp. max</translation>
+        <translation>Temp. max</translation>
     </message>
     <message>
         <source>Max temp</source>
-        <translation type="vanished">Temp. max</translation>
+        <translation>Temp. max</translation>
     </message>
     <message>
         <source>Flocculation</source>
-        <translation type="vanished">Floculation</translation>
+        <translation>Floculation</translation>
     </message>
     <message>
         <source>Low</source>
-        <translation type="vanished">Faible</translation>
+        <translation>Faible</translation>
     </message>
     <message>
         <source>Medium</source>
-        <translation type="vanished">Moyen</translation>
+        <translation>Moyen</translation>
     </message>
     <message>
         <source>High</source>
-        <translation type="vanished">Élevé</translation>
+        <translation>Élevé</translation>
     </message>
     <message>
         <source>Very High</source>
-        <translation type="vanished">Très élevé</translation>
+        <translation>Très élevé</translation>
     </message>
     <message>
         <source>Attenuation (%)</source>
-        <translation type="vanished">Atténuation (%)</translation>
+        <translation>Atténuation (%)</translation>
     </message>
     <message>
         <source>Apparent attenuation as percentage of OG points</source>
-        <translation type="vanished">Atténuation apparente en pourcentage de la densité initiale</translation>
+        <translation>Atténuation apparente en pourcentage de la densité initiale</translation>
     </message>
     <message>
         <source>Times Recultured</source>
-        <translation type="vanished">Nombre de cultures</translation>
+        <translation>Nombre de cultures</translation>
     </message>
     <message>
         <source>Times this yeast has been recultured</source>
-        <translation type="vanished">Nombre de fois que cette levure a été cultivée</translation>
+        <translation>Nombre de fois que cette levure a été cultivée</translation>
     </message>
     <message>
         <source>Max Recultures</source>
-        <translation type="vanished">Nombre de cultures max</translation>
+        <translation>Nombre de cultures max</translation>
     </message>
     <message>
         <source>Max recultures</source>
-        <translation type="vanished">Nombre de cultures max</translation>
+        <translation>Nombre de cultures max</translation>
     </message>
     <message>
         <source>Add to Secondary</source>
-        <translation type="vanished">Ajouter en secondaire</translation>
+        <translation>Ajouter en secondaire</translation>
     </message>
     <message>
         <source>Checked means add this yeast to secondary instead of primary</source>
-        <translation type="vanished">À cocher si vous souhaitez ajouter cette levure en secondaire et non primaire</translation>
+        <translation>À cocher si vous souhaitez ajouter cette levure en secondaire et non primaire</translation>
     </message>
     <message>
         <source>Best For:</source>
@@ -6830,11 +7820,39 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Quanta in Inventory</source>
-        <translation type="vanished">Quantité dans l&apos;inventaire</translation>
+        <translation>Quantité dans l&apos;inventaire</translation>
     </message>
     <message>
         <source>Quanta in inventory</source>
-        <translation type="vanished">Quantité dans l&apos;inventaire</translation>
+        <translation>Quantité dans l&apos;inventaire</translation>
+    </message>
+    <message>
+        <source>Main</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Extras</source>
+        <translation type="unfinished">Extras</translation>
+    </message>
+    <message>
+        <source>Best For</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished">Notes</translation>
+    </message>
+    <message>
+        <source>New yeast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save and close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Discard and close</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

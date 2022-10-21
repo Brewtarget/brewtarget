@@ -738,27 +738,27 @@ set(filesToInstall_icons ${repoDir}/images/brewtarget.svg)
 # binary .qm files will be generated and shipped.  Note that src/OptionDialog.cpp controls which languages are shown to
 # the user as options for the UI
 set(translationSourceFiles ${repoDir}/translations/bt_ca.ts # Catalan
-                                ${repoDir}/translations/bt_cs.ts # Czech
-                                ${repoDir}/translations/bt_de.ts # German
-                                ${repoDir}/translations/bt_en.ts # English
-                                ${repoDir}/translations/bt_el.ts # Greek
-                                ${repoDir}/translations/bt_es.ts # Spanish
-                                ${repoDir}/translations/bt_et.ts # Estonian
-                                ${repoDir}/translations/bt_eu.ts # Basque
-                                ${repoDir}/translations/bt_fr.ts # French
-                                ${repoDir}/translations/bt_gl.ts # Galician
-                                ${repoDir}/translations/bt_nb.ts # Norwegian Bokmal
-                                ${repoDir}/translations/bt_it.ts # Italian
-                                ${repoDir}/translations/bt_lv.ts # Latvian
-                                ${repoDir}/translations/bt_nl.ts # Dutch
-                                ${repoDir}/translations/bt_pl.ts # Polish
-                                ${repoDir}/translations/bt_pt.ts # Portuguese
-                                ${repoDir}/translations/bt_hu.ts # Hungarian
-                                ${repoDir}/translations/bt_ru.ts # Russian
-                                ${repoDir}/translations/bt_sr.ts # Serbian
-                                ${repoDir}/translations/bt_sv.ts # Swedish
-                                ${repoDir}/translations/bt_tr.ts # Turkish
-                                ${repoDir}/translations/bt_zh.ts) # Chinese
+                           ${repoDir}/translations/bt_cs.ts # Czech
+                           ${repoDir}/translations/bt_de.ts # German
+                           ${repoDir}/translations/bt_en.ts # English
+                           ${repoDir}/translations/bt_el.ts # Greek
+                           ${repoDir}/translations/bt_es.ts # Spanish
+                           ${repoDir}/translations/bt_et.ts # Estonian
+                           ${repoDir}/translations/bt_eu.ts # Basque
+                           ${repoDir}/translations/bt_fr.ts # French
+                           ${repoDir}/translations/bt_gl.ts # Galician
+                           ${repoDir}/translations/bt_nb.ts # Norwegian Bokmal
+                           ${repoDir}/translations/bt_it.ts # Italian
+                           ${repoDir}/translations/bt_lv.ts # Latvian
+                           ${repoDir}/translations/bt_nl.ts # Dutch
+                           ${repoDir}/translations/bt_pl.ts # Polish
+                           ${repoDir}/translations/bt_pt.ts # Portuguese
+                           ${repoDir}/translations/bt_hu.ts # Hungarian
+                           ${repoDir}/translations/bt_ru.ts # Russian
+                           ${repoDir}/translations/bt_sr.ts # Serbian
+                           ${repoDir}/translations/bt_sv.ts # Swedish
+                           ${repoDir}/translations/bt_tr.ts # Turkish
+                           ${repoDir}/translations/bt_zh.ts) # Chinese
 
 set(filesToInstall_windowsIcon ${repoDir}/win/icon.rc)
 
@@ -792,6 +792,11 @@ set(filesToInstall_sounds ${repoDir}/data/sounds/45minLeft.wav
                           ${repoDir}/data/sounds/startBurner.wav
                           ${repoDir}/data/sounds/startChill.wav
                           ${repoDir}/data/sounds/stirMash.wav)
+
+# We mostly don't need to explicitly specify the .ui files because AUTOUIC will find them all for us.  However, I
+# haven't found a way to connect AUTOUIC with the translation stuff below, so grab a list of all the .ui files here for
+# that.
+file(GLOB_RECURSE filesToCompile_ui "${repoDir}/ui/*.ui")
 
 set(filesToInstall_macPropertyList "${repoDir}/mac/Info.plist")
 
@@ -832,6 +837,8 @@ include(src/CMakeLists.txt)
 set_property(SOURCE ${translationSourceFiles} PROPERTY OUTPUT_LOCATION ${CMAKE_CURRENT_BINARY_DIR}/translations)
 # The qt5_create_translation understands what to do with each file name by its extension thus .cpp and .ui files are
 # used to update the .ts files.  The list of generated .qm files ends up in the QM_FILES variable.
+message(STATUS "Pulling strings to translate from " "${filesToCompile_cpp} ${filesToCompile_ui}")
+message(STATUS "translationSourceFiles " "${translationSourceFiles}")
 qt5_create_translation(QM_FILES ${translationSourceFiles} ${filesToCompile_cpp} ${filesToCompile_ui})
 
 # Add a target for the QM_FILES so that we can add
