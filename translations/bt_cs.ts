@@ -9,6 +9,164 @@
     </message>
 </context>
 <context>
+    <name>AlcoholTool</name>
+    <message>
+        <source>Alcohol Tool</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Original Gravity (OG)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ABV</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Final Gravity (FG)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reading</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Temperature</source>
+        <translation type="unfinished">Teplota</translation>
+    </message>
+    <message>
+        <source>Corrected Reading</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Advanced Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hydrometer Calibration Temperature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Initial Reading</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Final Reading</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Result</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Calculated according to the formula set by the UK Laboratory of the Government Chemist</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>BrewDayFormatter</name>
+    <message>
+        <source>Brewday</source>
+        <translation type="unfinished">Varní list</translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <translation type="unfinished">Styl</translation>
+    </message>
+    <message>
+        <source>Date</source>
+        <translation type="unfinished">Datum</translation>
+    </message>
+    <message>
+        <source>Boil Time</source>
+        <translation type="unfinished">Délka chmelovaru</translation>
+    </message>
+    <message>
+        <source>Efficiency</source>
+        <translation type="unfinished">Výtěžnost</translation>
+    </message>
+    <message>
+        <source>Boil Volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Preboil Gravity</source>
+        <translation type="unfinished">Hustota před chmelovarem</translation>
+    </message>
+    <message>
+        <source>Final Volume</source>
+        <translation type="unfinished">Cílový objem</translation>
+    </message>
+    <message>
+        <source>Starting Gravity</source>
+        <translation type="unfinished">Počáteční hustota</translation>
+    </message>
+    <message>
+        <source>IBU</source>
+        <translation type="unfinished">IBU</translation>
+    </message>
+    <message>
+        <source>Final Gravity</source>
+        <translation type="unfinished">Konečná hustota</translation>
+    </message>
+    <message>
+        <source>ABV</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Estimated calories (per 33 cl)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Estimated calories (per 12 oz)</source>
+        <translation type="unfinished">Kalorická hodnota (na 340 g)</translation>
+    </message>
+    <message>
+        <source>Instructions</source>
+        <translation type="unfinished">Instrukce</translation>
+    </message>
+    <message>
+        <source>Completed</source>
+        <translation type="unfinished">Dokončeno</translation>
+    </message>
+    <message>
+        <source>Time</source>
+        <translation type="unfinished">Čas</translation>
+    </message>
+    <message>
+        <source>Step</source>
+        <translation type="unfinished">Krok</translation>
+    </message>
+    <message>
+        <source>Add grains</source>
+        <translation type="unfinished">Přidejte slad</translation>
+    </message>
+    <message>
+        <source>Heat water</source>
+        <translation type="unfinished">Ohřejte vodu</translation>
+    </message>
+    <message>
+        <source>Actual PreBoil Volume</source>
+        <translation type="unfinished">Skutečný objem před chmelovarem</translation>
+    </message>
+    <message>
+        <source>Actual PreBoil Gravity</source>
+        <translation type="unfinished">Skutečná hustota před chmelovarem</translation>
+    </message>
+    <message>
+        <source>PostBoil Volume</source>
+        <translation type="unfinished">Množství po chmelovaru</translation>
+    </message>
+    <message>
+        <source>PostBoil Gravity</source>
+        <translation type="unfinished">Hustota po chmelovaru</translation>
+    </message>
+    <message>
+        <source>Volume into fermenter</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>BrewDayScrollWidget</name>
     <message>
         <source>Style</source>
@@ -92,7 +250,7 @@
     </message>
     <message>
         <source>Print Document</source>
-        <translation>Vytisknout dokument</translation>
+        <translation type="vanished">Vytisknout dokument</translation>
     </message>
     <message>
         <source>&lt;h2&gt;Notes&lt;/h2&gt;</source>
@@ -118,231 +276,195 @@
         <source>Estimated calories (per 12 oz)</source>
         <translation type="unfinished">Kalorická hodnota (na 340 g)</translation>
     </message>
+    <message>
+        <source>Brewday</source>
+        <translation type="unfinished">Varní list</translation>
+    </message>
 </context>
 <context>
     <name>BrewDayWidget</name>
     <message>
         <source>Style</source>
-        <translation>Styl</translation>
+        <translation type="vanished">Styl</translation>
     </message>
     <message>
         <source>Date</source>
-        <translation>Datum</translation>
+        <translation type="vanished">Datum</translation>
     </message>
     <message>
         <source>Boil Volume</source>
-        <translation>Množství k chmelovaru</translation>
+        <translation type="vanished">Množství k chmelovaru</translation>
     </message>
     <message>
         <source>Preboil Gravity</source>
-        <translation>Hustota před chmelovarem</translation>
+        <translation type="vanished">Hustota před chmelovarem</translation>
     </message>
     <message>
         <source>Final Volume</source>
-        <translation>Cílový objem</translation>
+        <translation type="vanished">Cílový objem</translation>
     </message>
     <message>
         <source>Starting Gravity</source>
-        <translation>Počáteční hustota</translation>
+        <translation type="vanished">Počáteční hustota</translation>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation>Délka chmelovaru</translation>
+        <translation type="vanished">Délka chmelovaru</translation>
     </message>
     <message>
         <source>IBU</source>
-        <translation>IBU</translation>
+        <translation type="vanished">IBU</translation>
     </message>
     <message>
         <source>Predicted Efficiency</source>
-        <translation>Odhadovaná výtěžnost</translation>
+        <translation type="vanished">Odhadovaná výtěžnost</translation>
     </message>
     <message>
         <source>Estimated calories (per 12 oz)</source>
-        <translation>Kalorická hodnota (na 340 g)</translation>
+        <translation type="vanished">Kalorická hodnota (na 340 g)</translation>
     </message>
     <message>
         <source>Instructions</source>
-        <translation>Instrukce</translation>
+        <translation type="vanished">Instrukce</translation>
     </message>
     <message>
         <source>Completed</source>
-        <translation>Dokončeno</translation>
+        <translation type="vanished">Dokončeno</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation>Čas</translation>
+        <translation type="vanished">Čas</translation>
     </message>
     <message>
         <source>Step</source>
-        <translation>Krok</translation>
+        <translation type="vanished">Krok</translation>
     </message>
     <message>
         <source>Actual Pre-boil Volume:</source>
-        <translation>Skutečný objem před chmelovarem:</translation>
+        <translation type="vanished">Skutečný objem před chmelovarem:</translation>
     </message>
     <message>
         <source>Actual Pre-boil Gravity:</source>
-        <translation>Skutečná hustota před chmelovarem:</translation>
+        <translation type="vanished">Skutečná hustota před chmelovarem:</translation>
     </message>
     <message>
         <source>Post-boil Volume:</source>
-        <translation>Množství po chmelovaru:</translation>
+        <translation type="vanished">Množství po chmelovaru:</translation>
     </message>
     <message>
         <source>Post-boil Gravity:</source>
-        <translation>Hustota po chmelovaru:</translation>
+        <translation type="vanished">Hustota po chmelovaru:</translation>
     </message>
     <message>
         <source>Volume in fermenter:</source>
-        <translation>Objem ve spilce:</translation>
+        <translation type="vanished">Objem ve spilce:</translation>
     </message>
     <message>
         <source>Print Document</source>
-        <translation>Vytisknout dokument</translation>
+        <translation type="vanished">Vytisknout dokument</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Poznámky</translation>
+        <translation type="vanished">Poznámky</translation>
     </message>
     <message>
         <source>Step %1: %2</source>
-        <translation>Krok %1: %2</translation>
-    </message>
-    <message>
-        <source>Estimated calories (per 33 cl)</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Krok %1: %2</translation>
     </message>
 </context>
 <context>
     <name>Brewtarget</name>
     <message>
         <source>Default</source>
-        <translation>Výchozí</translation>
+        <translation type="vanished">Výchozí</translation>
     </message>
     <message>
         <source>EBC</source>
-        <translation>EBC</translation>
+        <translation type="vanished">EBC</translation>
     </message>
     <message>
         <source>SRM</source>
-        <translation>SRM</translation>
+        <translation type="vanished">SRM</translation>
     </message>
     <message>
         <source>Plato</source>
-        <translation>Plato</translation>
+        <translation type="vanished">Plato</translation>
     </message>
     <message>
         <source>Specific Gravity</source>
-        <translation>Hustota</translation>
+        <translation type="vanished">Hustota</translation>
     </message>
     <message>
         <source>SI</source>
-        <translation>SI</translation>
+        <translation type="vanished">SI</translation>
     </message>
     <message>
         <source>US Customary</source>
-        <translation>Americké jednotky</translation>
+        <translation type="vanished">Americké jednotky</translation>
     </message>
     <message>
         <source>Milligrams</source>
-        <translation>Miligramy</translation>
+        <translation type="vanished">Miligramy</translation>
     </message>
     <message>
         <source>Grams</source>
-        <translation>Gramy</translation>
+        <translation type="vanished">Gramy</translation>
     </message>
     <message>
         <source>Kilograms</source>
-        <translation>Kilogramy</translation>
+        <translation type="vanished">Kilogramy</translation>
     </message>
     <message>
         <source>Ounces</source>
-        <translation>Unce</translation>
+        <translation type="vanished">Unce</translation>
     </message>
     <message>
         <source>Pounds</source>
-        <translation>Libry</translation>
+        <translation type="vanished">Libry</translation>
     </message>
     <message>
         <source>Celsius</source>
-        <translation>Stupně Celsia</translation>
+        <translation type="vanished">Stupně Celsia</translation>
     </message>
     <message>
         <source>Fahrenheit</source>
-        <translation>Fahrenheity</translation>
+        <translation type="vanished">Fahrenheity</translation>
     </message>
     <message>
         <source>British Imperial</source>
-        <translation>Britské imperiální</translation>
+        <translation type="vanished">Britské imperiální</translation>
     </message>
     <message>
         <source>MilliLiters</source>
-        <translation>Mililitry</translation>
+        <translation type="vanished">Mililitry</translation>
     </message>
     <message>
         <source>Liters</source>
-        <translation>Litry</translation>
+        <translation type="vanished">Litry</translation>
     </message>
     <message>
         <source>Teaspoons</source>
-        <translation>Čajové lžičky</translation>
+        <translation type="vanished">Čajové lžičky</translation>
     </message>
     <message>
         <source>Tablespoons</source>
-        <translation>Polévkové lžíce</translation>
+        <translation type="vanished">Polévkové lžíce</translation>
     </message>
     <message>
         <source>Cups</source>
-        <translation>Šálky</translation>
+        <translation type="vanished">Šálky</translation>
     </message>
     <message>
         <source>Quarts</source>
-        <translation>Kvarty</translation>
+        <translation type="vanished">Kvarty</translation>
     </message>
     <message>
         <source>Gallons</source>
-        <translation>Galony</translation>
+        <translation type="vanished">Galony</translation>
     </message>
     <message>
         <source>Unknown</source>
-        <translation>Neznámý</translation>
-    </message>
-    <message>
-        <source>YYYY-mm-dd</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>dd-mm-YYYY</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>mm-dd-YYYY</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Seconds</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Minutes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hours</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Days</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Barrels</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Scale</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Neznámý</translation>
     </message>
 </context>
 <context>
@@ -438,6 +560,38 @@
     </message>
     <message>
         <source>There was an unexpected error creating %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Snapshots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ca</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>HCO3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SO4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cl</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Na</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mg</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>pH</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -544,7 +698,23 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>To HTML</source>
+        <source>Show Snapshots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hide Snapshots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Detach Recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Snapshot Recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Water</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -609,6 +779,48 @@
         <source>Could not connect to %1 : %2</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Success!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ERROR</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Successfully read new default data
+
+%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unable to import new default data
+
+%1
+
+Log file may contain more details.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Filename</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Host &amp; Port</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Schema</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Username</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>EquipmentEditor</name>
@@ -650,139 +862,135 @@
     </message>
     <message>
         <source>Equipment Editor</source>
-        <translation>Editor vybavení</translation>
+        <translation type="vanished">Editor vybavení</translation>
     </message>
     <message>
         <source>Equipment</source>
-        <translation>Vybavení</translation>
+        <translation type="vanished">Vybavení</translation>
     </message>
     <message>
         <source>Set as Default</source>
-        <translation>Nastavit jako Výchozí</translation>
+        <translation type="vanished">Nastavit jako Výchozí</translation>
     </message>
     <message>
         <source>Required Fields</source>
-        <translation>Povinná pole</translation>
+        <translation type="vanished">Povinná pole</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Název</translation>
+        <translation type="vanished">Název</translation>
     </message>
     <message>
         <source>Pre-boil volume</source>
-        <translation>Objem před chmelovarem</translation>
+        <translation type="vanished">Objem před chmelovarem</translation>
     </message>
     <message>
         <source>Calculate pre-boil volume</source>
-        <translation>Vypočít. obj. před chmelovarem</translation>
+        <translation type="vanished">Vypočít. obj. před chmelovarem</translation>
     </message>
     <message>
         <source>Batch size</source>
-        <translation>Objem várky</translation>
+        <translation type="vanished">Objem várky</translation>
     </message>
     <message>
         <source>Boiling &amp;&amp; Water</source>
-        <translation>Vaření a voda</translation>
+        <translation type="vanished">Vaření a voda</translation>
     </message>
     <message>
         <source>Boil time</source>
-        <translation>Délka chmelovaru</translation>
+        <translation type="vanished">Délka chmelovaru</translation>
     </message>
     <message>
         <source>Evaporation rate (per hr)</source>
-        <translation>Odpar (za hodinu)</translation>
+        <translation type="vanished">Odpar (za hodinu)</translation>
     </message>
     <message>
         <source>Kettle top-up water</source>
-        <translation>Přilití vody před chmelovarem</translation>
+        <translation type="vanished">Přilití vody před chmelovarem</translation>
     </message>
     <message>
         <source>Final top-up water</source>
-        <translation>Přilití vody po chmelovaru</translation>
+        <translation type="vanished">Přilití vody po chmelovaru</translation>
     </message>
     <message>
         <source>Grain Absorption (L/kg)</source>
-        <translation>Nasákavost sladu (l/kg)</translation>
+        <translation type="vanished">Nasákavost sladu (l/kg)</translation>
     </message>
     <message>
         <source>Default Absorption</source>
-        <translation>Výchozí nasákavost</translation>
+        <translation type="vanished">Výchozí nasákavost</translation>
     </message>
     <message>
         <source>Hop Utilization </source>
-        <translation>Výtěžnost chmele </translation>
+        <translation type="vanished">Výtěžnost chmele </translation>
     </message>
     <message>
         <source>Boiling Point of Water</source>
-        <translation>Bod varu vody</translation>
+        <translation type="vanished">Bod varu vody</translation>
     </message>
     <message>
         <source>Mash Tun</source>
-        <translation>Rmutovací pánev</translation>
+        <translation type="vanished">Rmutovací pánev</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation>Objem</translation>
+        <translation type="vanished">Objem</translation>
     </message>
     <message>
         <source>Mass</source>
-        <translation>Hmotnost</translation>
+        <translation type="vanished">Hmotnost</translation>
     </message>
     <message>
         <source>Remove equipment</source>
-        <translation>Odebrat vybavení</translation>
+        <translation type="vanished">Odebrat vybavení</translation>
     </message>
     <message>
         <source>If checked, we will calculate your pre-boil volume based on your desired batch size, boil time, evaporation rate, losses, etc.</source>
-        <translation>Při zaškrtnutí vypočítá objem před chmelovarem na základě požadované velikosti várky, odparu, ztrát a podobně.</translation>
+        <translation type="vanished">Při zaškrtnutí vypočítá objem před chmelovarem na základě požadované velikosti várky, odparu, ztrát a podobně.</translation>
     </message>
     <message>
         <source>Automatically fill in pre-boil volume</source>
-        <translation>Automaticky vyplnit objem před chmelovarem</translation>
+        <translation type="vanished">Automaticky vyplnit objem před chmelovarem</translation>
     </message>
     <message>
         <source>How much water boils off per hour</source>
-        <translation>Kolik vody se za hodinu odpaří</translation>
+        <translation type="vanished">Kolik vody se za hodinu odpaří</translation>
     </message>
     <message>
         <source>How much water is added to kettle immediately pre-boil</source>
-        <translation>Kolik vody se do kádě přidává těsně před chmelovarem</translation>
+        <translation type="vanished">Kolik vody se do kádě přidává těsně před chmelovarem</translation>
     </message>
     <message>
         <source>Water added to fermenter</source>
-        <translation>Přidání vody před začátkem kvašení</translation>
+        <translation type="vanished">Přidání vody před začátkem kvašení</translation>
     </message>
     <message>
         <source>Volume of mash tun</source>
-        <translation>Objem rmutovací pánve</translation>
+        <translation type="vanished">Objem rmutovací pánve</translation>
     </message>
     <message>
         <source>Mass or weight of mash tun</source>
-        <translation>Hmotnost rmutovací pánve</translation>
+        <translation type="vanished">Hmotnost rmutovací pánve</translation>
     </message>
     <message>
         <source>Wort lost between kettle and fermenter</source>
-        <translation>Dílo ztracené mezi pánví a kvasnou nádobou</translation>
+        <translation type="vanished">Dílo ztracené mezi pánví a kvasnou nádobou</translation>
     </message>
     <message>
         <source>Volume of wort lost to lauter deadspace</source>
-        <translation>Objem díla ztraceného při zcezování</translation>
+        <translation type="vanished">Objem díla ztraceného při zcezování</translation>
     </message>
     <message>
         <source>New equipment</source>
-        <translation>Nové vybavení</translation>
+        <translation type="vanished">Nové vybavení</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation>Uložit</translation>
+        <translation type="vanished">Uložit</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Zrušit</translation>
-    </message>
-    <message>
-        <source>This equipment profile may break brewtarget&apos;s maths</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Zrušit</translation>
     </message>
     <message>
         <source>The following values are not set:</source>
@@ -802,6 +1010,10 @@
     </message>
     <message>
         <source>Calculation Warnings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This equipment profile may break Brewtarget&apos;s maths</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -868,6 +1080,17 @@
     </message>
 </context>
 <context>
+    <name>FermentableEditor</name>
+    <message>
+        <source>Fermentable name</source>
+        <translation type="unfinished">Název suroviny</translation>
+    </message>
+    <message>
+        <source>Fermentable name:</source>
+        <translation type="unfinished">Název suroviny:</translation>
+    </message>
+</context>
+<context>
     <name>FermentableItemDelegate</name>
     <message>
         <source>Grain</source>
@@ -914,11 +1137,11 @@
     <name>FermentableTableModel</name>
     <message>
         <source>Bad model index. row = %1</source>
-        <translation>Chybný index modelu. řádek = %1</translation>
+        <translation type="vanished">Chybný index modelu. řádek = %1</translation>
     </message>
     <message>
         <source>Bad column: %1</source>
-        <translation>Chybný sloupec: %1</translation>
+        <translation type="vanished">Chybný sloupec: %1</translation>
     </message>
     <message>
         <source>Name</source>
@@ -950,6 +1173,38 @@
     </message>
     <message>
         <source>Addition</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Fermentable Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Fermentable Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Inventory Amount</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Fermentable Amount</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Addition Method</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Addition Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Yield</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Color</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1036,6 +1291,17 @@
     </message>
 </context>
 <context>
+    <name>HopEditor</name>
+    <message>
+        <source>Hop name</source>
+        <translation type="unfinished">Název chmele</translation>
+    </message>
+    <message>
+        <source>Hop name:</source>
+        <translation type="unfinished">Název chmele:</translation>
+    </message>
+</context>
+<context>
     <name>HopItemDelegate</name>
     <message>
         <source>Boil</source>
@@ -1100,6 +1366,34 @@
         <source>Inventory</source>
         <translation>Sklad</translation>
     </message>
+    <message>
+        <source>Change Hop Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Hop Alpha %</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Hop Inventory Amount</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Hop Amount</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Hop Use</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Hop Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Hop Time</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HydrometerTool</name>
@@ -1129,6 +1423,10 @@
     </message>
     <message>
         <source>Corrected gravity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hydrometer Calibration</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1187,23 +1485,23 @@
     </message>
     <message>
         <source>HTML files (*.html)</source>
-        <translation>Soubory HTML (*.html)</translation>
+        <translation type="vanished">Soubory HTML (*.html)</translation>
     </message>
     <message>
         <source>Database Update</source>
-        <translation>Aktualizace databáze</translation>
+        <translation type="vanished">Aktualizace databáze</translation>
     </message>
     <message>
         <source>You are about to update the current database with another one. This may make changes to (but will not delete) some of your ingredients. It will not modify any of your recipes. Continue?</source>
-        <translation>Chystáte se aktualizovat současnou databázi nějakou další. Tato změna může mít vliv na některé z vašich surovin (žádné však nesmaže). Vaše recepty zůstanou nezměněny. Chcete pokračovat?</translation>
+        <translation type="vanished">Chystáte se aktualizovat současnou databázi nějakou další. Tato změna může mít vliv na některé z vašich surovin (žádné však nesmaže). Vaše recepty zůstanou nezměněny. Chcete pokračovat?</translation>
     </message>
     <message>
         <source>Select Database File</source>
-        <translation>Vybrat databázový soubor</translation>
+        <translation type="vanished">Vybrat databázový soubor</translation>
     </message>
     <message>
         <source>Brewtarget Database (*.sqlite)</source>
-        <translation>Databáze Brewtargetu (*.sqlite)</translation>
+        <translation type="vanished">Databáze Brewtargetu (*.sqlite)</translation>
     </message>
     <message>
         <source>Recipe name</source>
@@ -1303,7 +1601,7 @@
     </message>
     <message>
         <source>The import contained invalid beerXML. It has been imported, but please make certain it makes sense.</source>
-        <translation>Importovaná data obsahovala neplaté beerXML. Byla importována, ujistěte se však, že dávají smysl.</translation>
+        <translation type="vanished">Importovaná data obsahovala neplaté beerXML. Byla importována, ujistěte se však, že dávají smysl.</translation>
     </message>
     <message>
         <source>Folder name</source>
@@ -1326,11 +1624,155 @@
         <translation>Název adresáře musí obsahovat alespoň jeden nelomítkový znak</translation>
     </message>
     <message>
-        <source>Error copying recipe</source>
+        <source>An error was returned while creating %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>An error was returned while creating %1</source>
+        <source>Success!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ERROR</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Successfully read &quot;%1&quot;
+
+%2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Successfully wrote &quot;%1&quot;
+
+%2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unable to import data from &quot;%1&quot;
+
+%2
+
+Log file may contain more details.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unable to write data to &quot;%1&quot;
+
+%2
+
+Log file may contain more details.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Recipe Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Recipe Style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Recipe Kit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Tun Weight</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Tun Specific Heat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Batch Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Boil Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Boil Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Drop fermentables on a recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Drop hops on a recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Drop misc on a recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Drop yeast on a recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Recipe Efficiency</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add fermentable to recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add hop to recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add misc to recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add yeast to recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add mash step to recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Undo %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Redo %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove fermentable from recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove hop from recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove misc from recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove yeast from recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error creating recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove mash step</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No Mash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You must define a mash first.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1370,14 +1812,21 @@
     </message>
 </context>
 <context>
+    <name>MashStep</name>
+    <message>
+        <source>Unnamed Mash Step</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>MashStepTableModel</name>
     <message>
         <source>Bad model index. row = %1</source>
-        <translation>Chybný index modelu. řádek = %1</translation>
+        <translation type="vanished">Chybný index modelu. řádek = %1</translation>
     </message>
     <message>
         <source>Bad column: %1</source>
-        <translation>Chybný sloupec: %1</translation>
+        <translation type="vanished">Chybný sloupec: %1</translation>
     </message>
     <message>
         <source>Name</source>
@@ -1402,6 +1851,38 @@
     <message>
         <source>Time</source>
         <translation>Čas</translation>
+    </message>
+    <message>
+        <source>Change Mash Step Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Mash Step Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Mash Step Decoction Amount</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Mash Step Infuse Amount</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Mash Step Infuse Temp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Mash Step Temp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Mash Step End Temp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Mash Step Time</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1473,6 +1954,21 @@
     <message>
         <source>Fly Sparge</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Infusion temp.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>In order to hit your target temp on the final step, the infusion water must be above boiling. Lower your initial infusion volume.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Measurement::Units</name>
+    <message>
+        <source>min</source>
+        <translation type="obsolete">min</translation>
     </message>
 </context>
 <context>
@@ -1570,6 +2066,17 @@
     </message>
 </context>
 <context>
+    <name>MiscEditor</name>
+    <message>
+        <source>Misc name</source>
+        <translation type="unfinished">Název přípravku</translation>
+    </message>
+    <message>
+        <source>Misc name:</source>
+        <translation type="unfinished">Název přípravku:</translation>
+    </message>
+</context>
+<context>
     <name>MiscItemDelegate</name>
     <message>
         <source>Spice</source>
@@ -1654,12 +2161,40 @@
         <source>Inventory</source>
         <translation>Sklad</translation>
     </message>
+    <message>
+        <source>Change Misc Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Misc Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Misc Use</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Misc Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Misc Inventory Amount</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Misc Amount</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Misc Amount Type</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>OptionDialog</name>
     <message>
         <source>Open Directory</source>
-        <translation>Otevřít adresář</translation>
+        <translation type="vanished">Otevřít adresář</translation>
     </message>
     <message>
         <source>Copy Data</source>
@@ -1728,10 +2263,6 @@
     <message>
         <source>Chinese</source>
         <translation>Čínština</translation>
-    </message>
-    <message>
-        <source>SI units</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>US traditional units</source>
@@ -1854,19 +2385,58 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Saving the options without testing the connection can cause brewtarget to not restart. Your changes have been discarded, which is likely really, really crappy UX. Please open a bug explaining exactly how you got to this message.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Would you like brewtarget to transfer your data to the new database? NOTE: If you&apos;ve already loaded the data, say No</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Transfer database</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Please restart brewtarget to connect to the new database</source>
+        <source>Metric / SI units</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lintner</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>WK</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose User Data Directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose Backups Directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose Logging Directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Would you like Brewtarget to transfer your data to the new database? NOTE: If you&apos;ve already loaded the data, say No</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please restart Brewtarget to connect to the new database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Saving the options without testing the connection can cause Brewken to not restart.  Your changes have been discarded, which is likely really, really crappy UX.  Please open a bug explaining exactly how you got to this message.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PrintAndPreviewDialog</name>
+    <message>
+        <source>File %1 filname &lt;&lt; could not be saved</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error saving file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not open the file %1 for writing! please try again with a new filename or diretory</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1906,7 +2476,7 @@
     </message>
     <message>
         <source>Failed to open the database &apos;%1&apos;.</source>
-        <translation>Nepodařilo se otevřít databázi &apos;%1&apos;.</translation>
+        <translation type="vanished">Nepodařilo se otevřít databázi &apos;%1&apos;.</translation>
     </message>
     <message>
         <source>Save Database Changes</source>
@@ -2073,10 +2643,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Data directory &quot;%1&quot; is missing.  Some features will be unavaliable.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Fly Sparge</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2098,6 +2664,305 @@
     </message>
     <message>
         <source>Passwords are saved in plaintext. We make no effort to hide, obscure or otherwise protect the password. By enabling this option, you take full responsibility for any potential problems.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Never</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sparge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ratio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Both</source>
+        <translation type="unfinished">Oboje</translation>
+    </message>
+    <message>
+        <source>None</source>
+        <translation type="unfinished">Žádný</translation>
+    </message>
+    <message>
+        <source>CaCl2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CaCO3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CaSO4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>MgSO4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>NaCl</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>NaHCO3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lactic acid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>H3PO4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Acid malt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unknown</source>
+        <translation type="unfinished">Neznámý</translation>
+    </message>
+    <message>
+        <source>Detailed (for debugging)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Normal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Warnings and Errors only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Errors only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not create new log file directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not read new log file directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not write to new log file directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> reverting to </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Inventory</source>
+        <translation type="unfinished">Sklad</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Název</translation>
+    </message>
+    <message>
+        <source>Amount</source>
+        <translation type="unfinished">Množství</translation>
+    </message>
+    <message>
+        <source>Alpha %</source>
+        <translation type="unfinished">Alfa %</translation>
+    </message>
+    <message>
+        <source>No inventory available.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not open PostgreSQL DB connection to %1.
+%2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not open SQLite DB file %1.
+%2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Resource directory &quot;%1&quot; is missing.  Some features will be unavailable.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>kg</source>
+        <extracomment>NOTE FOR TRANSLATORS: The abbreviated name of each unit (eg &quot;kg&quot; for kilograms, &quot;g&quot; for grams, etc) must be</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>g</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>mg</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>lb</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>oz</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>L</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>mL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>bbl</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>gal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>qt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>cup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>tbsp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>tsp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>min</source>
+        <translation type="unfinished">min</translation>
+    </message>
+    <message>
+        <source>s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>hr</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>day</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>C</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>F</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>srm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ebc</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>sg</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>P</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>WK</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>British Imperial</source>
+        <translation type="unfinished">Britské imperiální</translation>
+    </message>
+    <message>
+        <source>US Customary</source>
+        <translation type="unfinished">Americké jednotky</translation>
+    </message>
+    <message>
+        <source>Metric</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Standard Time Units</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SRM (Standard Reference Method)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>EBC (European Brewery Convention)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SG (Specific Gravity)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Plato</source>
+        <translation type="unfinished">Plato</translation>
+    </message>
+    <message>
+        <source>Lintner</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>WindischKolbach</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mass</source>
+        <translation type="unfinished">Hmotnost</translation>
+    </message>
+    <message>
+        <source>Volume</source>
+        <translation type="unfinished">Objem</translation>
+    </message>
+    <message>
+        <source>Time</source>
+        <translation type="unfinished">Čas</translation>
+    </message>
+    <message>
+        <source>Color</source>
+        <translation type="unfinished">Barva</translation>
+    </message>
+    <message>
+        <source>Density</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mixed</source>
+        <translation type="unfinished">Mix</translation>
+    </message>
+    <message>
+        <source>DiastaticPower</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2329,6 +3194,93 @@ Celkový objem pro hlavní kvašení je %1.</translation>
         <source>%1 water to %2 </source>
         <translation>%1 vody na teplotu %2 </translation>
     </message>
+    <message>
+        <source>mash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>sparge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Modify %1 water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dissolve </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> into the %1 water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 %2, </source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>RecipeExtrasWidget</name>
+    <message>
+        <source>Change Brewer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Assistant Brewer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Taste Rating</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Primary Age</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Primary Temp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Secondary Age</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Secondary Temp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Tertiary Age</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Tertiary Temp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Age</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Age Temp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Carbonation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit Taste Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RecipeFormatter</name>
@@ -2546,7 +3498,7 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
     <message>
         <source>Print Document</source>
-        <translation>Vytisknout dokument</translation>
+        <translation type="vanished">Vytisknout dokument</translation>
     </message>
     <message>
         <source>Category</source>
@@ -2613,27 +3565,31 @@ Celkový objem pro hlavní kvašení je %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Hostname</source>
+        <source>Recipe</source>
+        <translation type="unfinished">Recept</translation>
+    </message>
+    <message>
+        <source>Ca</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Port</source>
+        <source>Mg</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Schema</source>
+        <source>SO&lt;sub&gt;4&lt;/sub&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Database</source>
+        <source>Na</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Username</source>
+        <source>Cl</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Saved Password</source>
+        <source>HCO&lt;sub&gt;3&lt;/sub&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2646,6 +3602,92 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     <message>
         <source>Based on the given original plato, the OG should be %1, but you have entered %2. Continuing with the calculated OG.</source>
         <translation>Na základě původního Plato by původní hustota měla být %1, vy jste však zadali %2. Pokračuji s vypočtenou původní hustotou.</translation>
+    </message>
+</context>
+<context>
+    <name>SaltItemDelegate</name>
+    <message>
+        <source>NONE</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CaCl2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CaCO3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CaSO4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>MgSO4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>NaCl</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>NaHCO3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lactic acid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>H3PO4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Acid malt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Never</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sparge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ratio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Equal</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SaltTableModel</name>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Název</translation>
+    </message>
+    <message>
+        <source>Amount</source>
+        <translation type="unfinished">Množství</translation>
+    </message>
+    <message>
+        <source>Added To</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>% Acid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bad column: %1</source>
+        <translation type="unfinished">Chybný sloupec: %1</translation>
     </message>
 </context>
 <context>
@@ -2703,36 +3745,8 @@ Celkový objem pro hlavní kvašení je %1.</translation>
 <context>
     <name>TimerDialog</name>
     <message>
-        <source>Addition Timer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Set Addition Time(min):</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Time Remaining:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Notes: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Notes...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Set Alarm sound</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Stop Alarm</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Cancel</source>
-        <translation type="unfinished">Zrušit</translation>
+        <translation type="obsolete">Zrušit</translation>
     </message>
 </context>
 <context>
@@ -2745,56 +3759,12 @@ Celkový objem pro hlavní kvašení je %1.</translation>
 <context>
     <name>TimerMainDialog</name>
     <message>
-        <source>Main Boil Timer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Add Timer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Start</source>
-        <translation type="unfinished">Spustit</translation>
+        <translation type="obsolete">Spustit</translation>
     </message>
     <message>
         <source>Stop</source>
-        <translation type="unfinished">Zastavit</translation>
-    </message>
-    <message>
-        <source>Reset</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hide Timers</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Show Timers</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cancel Timers</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Load Current Recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Set Boil Timer (mins):</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Set Boil Time Here</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Limit Alarm Ring Time </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Alarm Ring Time (secs):</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Zastavit</translation>
     </message>
     <message>
         <source>No Timers</source>
@@ -2857,7 +3827,7 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
     <message>
         <source>Audio Files (*.wav *.ogg *.mp3 *.aiff)</source>
-        <translation>Zvukové soubory (*.wav *.ogg *.mp3 *.aiff)</translation>
+        <translation type="vanished">Zvukové soubory (*.wav *.ogg *.mp3 *.aiff)</translation>
     </message>
     <message>
         <source>Stop</source>
@@ -2907,6 +3877,94 @@ Celkový objem pro hlavní kvašení je %1.</translation>
         <source>Addition time cannot be longer than remaining boil time</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Audio Files (*.wav)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>UnitAndScalePopUpMenu</name>
+    <message>
+        <source>Default</source>
+        <translation type="unfinished">Výchozí</translation>
+    </message>
+</context>
+<context>
+    <name>UnitSystem</name>
+    <message>
+        <source>Scale</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>WaterDialog</name>
+    <message>
+        <source>Too low for target profile.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>In range for target profile.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Too high for target profile.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Minimum expected concentration is %1 ppm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Maximum expected concentration is %1 ppm</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>WaterEditor</name>
+    <message>
+        <source>PPM</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Calcium</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bicarbonate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sulfate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Chloride</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sodium</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Magnesium</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Current</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Modified</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Water name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Water name:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>WaterTableModel</name>
@@ -2952,6 +4010,50 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
 </context>
 <context>
+    <name>XmlCoding</name>
+    <message>
+        <source>Internal Error! (Document parse returned null pointer.)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Contents of file were not readable</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not understand file format</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>XmlRecordCount</name>
+    <message>
+        <source>Couldn&apos;t find any recognisable data in the file!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>🗸 Read </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> record</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> records</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>
+
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>↷ Skipped </source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>YeastDialog</name>
     <message>
         <source>Yeast name</source>
@@ -2988,6 +4090,17 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     <message>
         <source>Remove selected ingredient</source>
         <translation>Odebrat zvolenou přísadu</translation>
+    </message>
+</context>
+<context>
+    <name>YeastEditor</name>
+    <message>
+        <source>Yeast name</source>
+        <translation type="unfinished">Název kvasnic</translation>
+    </message>
+    <message>
+        <source>Yeast name:</source>
+        <translation type="unfinished">Název kvasnic:</translation>
     </message>
 </context>
 <context>
@@ -3033,11 +4146,11 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     <name>YeastTableModel</name>
     <message>
         <source>Bad model index. row = %1</source>
-        <translation>Chybný index modelu. řádek = %1</translation>
+        <translation type="vanished">Chybný index modelu. řádek = %1</translation>
     </message>
     <message>
         <source>Bad column: %1</source>
-        <translation>Chybný sloupec: %1</translation>
+        <translation type="vanished">Chybný sloupec: %1</translation>
     </message>
     <message>
         <source>Name</source>
@@ -3067,1110 +4180,1114 @@ Celkový objem pro hlavní kvašení je %1.</translation>
         <source>Inventory</source>
         <translation>Sklad</translation>
     </message>
+    <message>
+        <source>Change Yeast Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Yeast Laboratory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Yeast Product ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Yeast Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Yeast Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Yeast Inventory Unit Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Yeast Amount</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>brewDayScrollWidget</name>
     <message>
         <source>Form</source>
-        <translation>Forma</translation>
+        <translation type="vanished">Forma</translation>
     </message>
     <message>
         <source>Generate Instructions</source>
-        <translation>Vygenerovat pokyny</translation>
+        <translation type="vanished">Vygenerovat pokyny</translation>
     </message>
     <message>
         <source>Insert step</source>
-        <translation>Přidat krok</translation>
+        <translation type="vanished">Přidat krok</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Název</translation>
+        <translation type="vanished">Název</translation>
     </message>
     <message>
         <source>Name of new step</source>
-        <translation>Název kroku</translation>
+        <translation type="vanished">Název kroku</translation>
     </message>
     <message>
         <source>Step #</source>
-        <translation>Číslo kroku</translation>
+        <translation type="vanished">Číslo kroku</translation>
     </message>
     <message>
         <source>The number where the new step should be placed</source>
-        <translation>Číslo, kam má být krok přidán</translation>
+        <translation type="vanished">Číslo, kam má být krok přidán</translation>
     </message>
     <message>
         <source>Insert the new step</source>
-        <translation>Přidat nový krok</translation>
+        <translation type="vanished">Přidat nový krok</translation>
     </message>
     <message>
         <source>Move steps</source>
-        <translation>Přesunout kroky</translation>
+        <translation type="vanished">Přesunout kroky</translation>
     </message>
     <message>
         <source>Move currently selected step up</source>
-        <translation>Přesunout zvolený nahoru</translation>
+        <translation type="vanished">Přesunout zvolený nahoru</translation>
     </message>
     <message>
         <source>Move currently selected step down</source>
-        <translation>Přesunout zvolený dolů</translation>
+        <translation type="vanished">Přesunout zvolený dolů</translation>
     </message>
     <message>
         <source>Remove currently selected step</source>
-        <translation>Odebrat zvolený krok</translation>
+        <translation type="vanished">Odebrat zvolený krok</translation>
     </message>
 </context>
 <context>
     <name>brewDayWidget</name>
     <message>
         <source>Brewday Mode</source>
-        <translation>Režim varního listu</translation>
+        <translation type="vanished">Režim varního listu</translation>
     </message>
     <message>
         <source>Instructions</source>
-        <translation>Instrukce</translation>
+        <translation type="vanished">Instrukce</translation>
     </message>
     <message>
         <source>Move currently selected step up</source>
-        <translation>Přesunout zvolený nahoru</translation>
+        <translation type="vanished">Přesunout zvolený nahoru</translation>
     </message>
     <message>
         <source>Up</source>
-        <translation>Nahoru</translation>
+        <translation type="vanished">Nahoru</translation>
     </message>
     <message>
         <source>Move currently selected step down</source>
-        <translation>Přesunout zvolený dolů</translation>
+        <translation type="vanished">Přesunout zvolený dolů</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation>Dolů</translation>
+        <translation type="vanished">Dolů</translation>
     </message>
     <message>
         <source>Remove currently selected step</source>
-        <translation>Odebrat zvolený krok</translation>
+        <translation type="vanished">Odebrat zvolený krok</translation>
     </message>
     <message>
         <source>Remove</source>
-        <translation>Odebrat</translation>
+        <translation type="vanished">Odebrat</translation>
     </message>
     <message>
         <source>Insert step</source>
-        <translation>Přidat krok</translation>
+        <translation type="vanished">Přidat krok</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Název</translation>
+        <translation type="vanished">Název</translation>
     </message>
     <message>
         <source>Name of new step</source>
-        <translation>Název kroku</translation>
+        <translation type="vanished">Název kroku</translation>
     </message>
     <message>
         <source>Step #</source>
-        <translation>Číslo kroku</translation>
+        <translation type="vanished">Číslo kroku</translation>
     </message>
     <message>
         <source>The number where the new step should be placed</source>
-        <translation>Číslo, kam má být krok přidán</translation>
+        <translation type="vanished">Číslo, kam má být krok přidán</translation>
     </message>
     <message>
         <source>Insert the new step</source>
-        <translation>Přidat nový krok</translation>
+        <translation type="vanished">Přidat nový krok</translation>
     </message>
     <message>
         <source>Insert</source>
-        <translation>Přidat</translation>
+        <translation type="vanished">Přidat</translation>
     </message>
 </context>
 <context>
     <name>brewNoteWidget</name>
     <message>
         <source>Preboil</source>
-        <translation>Před chmelovarem</translation>
+        <translation type="vanished">Před chmelovarem</translation>
     </message>
     <message>
         <source>SG</source>
-        <translation>Hustota</translation>
+        <translation type="vanished">Hustota</translation>
     </message>
     <message>
         <source>Preboil gravity</source>
-        <translation>Hustota před chmelovarem</translation>
+        <translation type="vanished">Hustota před chmelovarem</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation>Objem</translation>
+        <translation type="vanished">Objem</translation>
     </message>
     <message>
         <source>Volume of wort collected</source>
-        <translation>Objem získaného díla</translation>
+        <translation type="vanished">Objem získaného díla</translation>
     </message>
     <message>
         <source>Strike Temp</source>
-        <translation>Teplota zapářky</translation>
+        <translation type="vanished">Teplota zapářky</translation>
     </message>
     <message>
         <source>Temperature of mash after dough in</source>
-        <translation>Teplota rmutu po zapaření</translation>
+        <translation type="vanished">Teplota rmutu po zapaření</translation>
     </message>
     <message>
         <source>Final Temp</source>
-        <translation>Výsledná teplota</translation>
+        <translation type="vanished">Výsledná teplota</translation>
     </message>
     <message>
         <source>Temperature of mash before mash out</source>
-        <translation>Teplota rmutu před odrmutováním</translation>
+        <translation type="vanished">Teplota rmutu před odrmutováním</translation>
     </message>
     <message>
         <source>Postboil</source>
-        <translation>Po chmelovaru</translation>
+        <translation type="vanished">Po chmelovaru</translation>
     </message>
     <message>
         <source>OG</source>
-        <translation>Počát. hustota</translation>
+        <translation type="vanished">Počát. hustota</translation>
     </message>
     <message>
         <source>Post boil gravity</source>
-        <translation>Hustota po chmelovaru</translation>
+        <translation type="vanished">Hustota po chmelovaru</translation>
     </message>
     <message>
         <source>Postboil Volume</source>
-        <translation>Objem po chmelovaru</translation>
+        <translation type="vanished">Objem po chmelovaru</translation>
     </message>
     <message>
         <source>Volume of wort in BK after boil</source>
-        <translation>Objem díla ve varné nádobě po chmelovaru</translation>
+        <translation type="vanished">Objem díla ve varné nádobě po chmelovaru</translation>
     </message>
     <message>
         <source>Volume of wort transferred to fermenter</source>
-        <translation>Objem díla přesouvanéhé do spilky</translation>
+        <translation type="vanished">Objem díla přesouvanéhé do spilky</translation>
     </message>
     <message>
         <source>Volume into fermenter</source>
-        <translation>Objem do spilky</translation>
+        <translation type="vanished">Objem do spilky</translation>
     </message>
     <message>
         <source> Pitch Temp</source>
-        <translation> Teplota zakvašení</translation>
+        <translation type="vanished"> Teplota zakvašení</translation>
     </message>
     <message>
         <source>Temperature of wort when yeast is pitched</source>
-        <translation>Teplota díla, při které se přidají kvasnice</translation>
+        <translation type="vanished">Teplota díla, při které se přidají kvasnice</translation>
     </message>
     <message>
         <source>Postferment</source>
-        <translation>Po kvašení</translation>
+        <translation type="vanished">Po kvašení</translation>
     </message>
     <message>
         <source>Final gravity</source>
-        <translation>Konečná hustota</translation>
+        <translation type="vanished">Konečná hustota</translation>
     </message>
     <message>
         <source>Volume of beer into serving keg/bottles</source>
-        <translation>Objem piva do sudů/lahví</translation>
+        <translation type="vanished">Objem piva do sudů/lahví</translation>
     </message>
     <message>
         <source>percent efficiency into boil kettle</source>
-        <translation>procentuální výtěžnost varné nádoby</translation>
+        <translation type="vanished">procentuální výtěžnost varné nádoby</translation>
     </message>
     <message>
         <source>Eff into BK</source>
-        <translation>Výtěžnost varné nádoby</translation>
+        <translation type="vanished">Výtěžnost varné nádoby</translation>
     </message>
     <message>
         <source>Expected OG, based on measure fg</source>
-        <translation>Očekávaná počáteční hustota, založeno na měření konečné hustoty</translation>
+        <translation type="vanished">Očekávaná počáteční hustota, založeno na měření konečné hustoty</translation>
     </message>
     <message>
         <source>Projected OG</source>
-        <translation>Předpokl. počáteční hustota</translation>
+        <translation type="vanished">Předpokl. počáteční hustota</translation>
     </message>
     <message>
         <source>Brewhouse efficiency</source>
-        <translation>Varní výtěžnost pivovaru</translation>
+        <translation type="vanished">Varní výtěžnost pivovaru</translation>
     </message>
     <message>
         <source>Brewhouse Eff</source>
-        <translation>Varní výtěžnost pivovaru</translation>
+        <translation type="vanished">Varní výtěžnost pivovaru</translation>
     </message>
     <message>
         <source>Expected ABV based on OG</source>
-        <translation>Očekávaný obsah alkoholu na základě počáteční hustoty</translation>
+        <translation type="vanished">Očekávaný obsah alkoholu na základě počáteční hustoty</translation>
     </message>
     <message>
         <source>Projected ABV</source>
-        <translation>Odhadovaný obsah alkoholu</translation>
+        <translation type="vanished">Odhadovaný obsah alkoholu</translation>
     </message>
     <message>
         <source>ABV based on FG</source>
-        <translation>Obsah alkoholu na základě konečné hustoty</translation>
+        <translation type="vanished">Obsah alkoholu na základě konečné hustoty</translation>
     </message>
     <message>
         <source>ABV</source>
-        <translation>Obsah alkoholu</translation>
+        <translation type="vanished">Obsah alkoholu</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Poznámky</translation>
-    </message>
-    <message>
-        <source>brewNote</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>yyyy-dd-MM</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Poznámky</translation>
     </message>
 </context>
 <context>
     <name>equipmentEditor</name>
     <message>
         <source>Specific heat (cal/(g*K))</source>
-        <translation>Spec. teplo (kal.(g*K))</translation>
+        <translation type="vanished">Spec. teplo (kal.(g*K))</translation>
     </message>
     <message>
         <source>Losses</source>
-        <translation>Ztráty</translation>
+        <translation type="vanished">Ztráty</translation>
     </message>
     <message>
         <source>Kettle to fermenter</source>
-        <translation>Z pánve do kv. nádoby</translation>
+        <translation type="vanished">Z pánve do kv. nádoby</translation>
     </message>
     <message>
         <source>Lauter deadspace</source>
-        <translation>Mrtvý objem zcezovačky</translation>
-    </message>
-    <message>
-        <source>equipmentEditor</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Mrtvý objem zcezovačky</translation>
     </message>
 </context>
 <context>
     <name>fermentableEditor</name>
     <message>
         <source>Fermentable Editor</source>
-        <translation>Editor surovin</translation>
+        <translation type="vanished">Editor surovin</translation>
     </message>
     <message>
         <source>Required Fields</source>
-        <translation>Povinná pole</translation>
+        <translation type="vanished">Povinná pole</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Název</translation>
+        <translation type="vanished">Název</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Druh</translation>
+        <translation type="vanished">Druh</translation>
     </message>
     <message>
         <source>Grain</source>
-        <translation>Slad</translation>
+        <translation type="vanished">Slad</translation>
     </message>
     <message>
         <source>Sugar</source>
-        <translation>Cukr</translation>
+        <translation type="vanished">Cukr</translation>
     </message>
     <message>
         <source>Extract</source>
-        <translation>Výtažek</translation>
+        <translation type="vanished">Výtažek</translation>
     </message>
     <message>
         <source>Dry Extract</source>
-        <translation>Sušený výtažek</translation>
+        <translation type="vanished">Sušený výtažek</translation>
     </message>
     <message>
         <source>Adjunct</source>
-        <translation>Surogát</translation>
+        <translation type="vanished">Surogát</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation>Množství</translation>
+        <translation type="vanished">Množství</translation>
     </message>
     <message>
         <source>Yield (%)</source>
-        <translation>Výtěžnost (%)</translation>
+        <translation type="vanished">Výtěžnost (%)</translation>
     </message>
     <message>
         <source>Yield as compared to glucose</source>
-        <translation>Výtěžnost ve srovnání s glukózou</translation>
+        <translation type="vanished">Výtěžnost ve srovnání s glukózou</translation>
     </message>
     <message>
         <source>Lovibond rating</source>
-        <translation>Hodnota Lovibond/SRM</translation>
+        <translation type="vanished">Hodnota Lovibond/SRM</translation>
     </message>
     <message>
         <source>Add After Boil</source>
-        <translation>Přidat po chmelovaru</translation>
+        <translation type="vanished">Přidat po chmelovaru</translation>
     </message>
     <message>
         <source>This ingredient is added post boil.</source>
-        <translation>Tato přísada se přidává po chmelovaru.</translation>
+        <translation type="vanished">Tato přísada se přidává po chmelovaru.</translation>
     </message>
     <message>
         <source>Origin</source>
-        <translation>Původ</translation>
+        <translation type="vanished">Původ</translation>
     </message>
     <message>
         <source>Supplier</source>
-        <translation>Dodavatel</translation>
+        <translation type="vanished">Dodavatel</translation>
     </message>
     <message>
         <source>Coarse/Fine Diff (%)</source>
-        <translation>Hrubý/jemný (%)</translation>
+        <translation type="vanished">Hrubý/jemný (%)</translation>
     </message>
     <message>
         <source>Yield difference between coarse and fine grind</source>
-        <translation>Rozdíl vytěžnosti mezi hrubým a jemným meltím</translation>
+        <translation type="vanished">Rozdíl vytěžnosti mezi hrubým a jemným meltím</translation>
     </message>
     <message>
         <source>Moisture (%)</source>
-        <translation>Vlhkost (%)</translation>
+        <translation type="vanished">Vlhkost (%)</translation>
     </message>
     <message>
         <source>Moisture percentage by mass</source>
-        <translation>Hmotnostní procenta vlkhosti</translation>
+        <translation type="vanished">Hmotnostní procenta vlkhosti</translation>
     </message>
     <message>
         <source>DP (Lintner)</source>
-        <translation>Diastat. moh. (Lintner)</translation>
+        <translation type="vanished">Diastat. moh. (Lintner)</translation>
     </message>
     <message>
         <source>Diastatic power in Lintner</source>
-        <translation>Diastatická mohutnost v jednotkách Lintera</translation>
+        <translation type="vanished">Diastatická mohutnost v jednotkách Lintera</translation>
     </message>
     <message>
         <source>Protein (%)</source>
-        <translation>Proteiny (%)</translation>
+        <translation type="vanished">Proteiny (%)</translation>
     </message>
     <message>
         <source>Protein percentage by mass</source>
-        <translation>Hmotnostní procenta proteinů</translation>
+        <translation type="vanished">Hmotnostní procenta proteinů</translation>
     </message>
     <message>
         <source>Max In Batch (%)</source>
-        <translation>Maximum ve várce (%)</translation>
+        <translation type="vanished">Maximum ve várce (%)</translation>
     </message>
     <message>
         <source>Maximum recommended percentage of total grist</source>
-        <translation>Maximální doporučený podíl na várce</translation>
+        <translation type="vanished">Maximální doporučený podíl na várce</translation>
     </message>
     <message>
         <source>Recommend Mash</source>
-        <translation>Doporučeno rmutování</translation>
+        <translation type="vanished">Doporučeno rmutování</translation>
     </message>
     <message>
         <source>Recommend this be mashed</source>
-        <translation>Je doporučeno tuto surovinu rmutovat</translation>
+        <translation type="vanished">Je doporučeno tuto surovinu rmutovat</translation>
     </message>
     <message>
         <source>Is Mashed</source>
         <translatorcomment>Znamená to, že už je po rmutování?
 </translatorcomment>
-        <translation>Je rmutovaná</translation>
+        <translation type="vanished">Je rmutovaná</translation>
     </message>
     <message>
         <source>Checked if it is present in mash</source>
-        <translation>Zaškrtněte pokud je přítomna ve rmutu</translation>
+        <translation type="vanished">Zaškrtněte pokud je přítomna ve rmutu</translation>
     </message>
     <message>
         <source>Bitterness (IBU*gal/lb)</source>
-        <translation>Hořkost (IBU*gal/lb)</translation>
+        <translation type="vanished">Hořkost (IBU*gal/lb)</translation>
     </message>
     <message>
         <source>Bitterness of pre-hopped extracts</source>
-        <translation>Hořkost předchmelených výtažků</translation>
+        <translation type="vanished">Hořkost předchmelených výtažků</translation>
     </message>
     <message>
         <source>Notes:</source>
-        <translation>Poznámky:</translation>
+        <translation type="vanished">Poznámky:</translation>
     </message>
     <message>
         <source>Default Amount</source>
-        <translation>Výchozí množství</translation>
+        <translation type="vanished">Výchozí množství</translation>
     </message>
     <message>
         <source>Amount in Inventory</source>
-        <translation>Množství na skladě</translation>
+        <translation type="vanished">Množství na skladě</translation>
     </message>
     <message>
         <source>Amount in inventory</source>
-        <translation>Množství na skladě</translation>
+        <translation type="vanished">Množství na skladě</translation>
     </message>
     <message>
         <source>Color</source>
-        <translation>Barva</translation>
+        <translation type="vanished">Barva</translation>
     </message>
 </context>
 <context>
     <name>hopEditor</name>
     <message>
         <source>Hop Editor</source>
-        <translation>Editor chmele</translation>
+        <translation type="vanished">Editor chmele</translation>
     </message>
     <message>
         <source>Required Fields</source>
-        <translation>Povinná pole</translation>
+        <translation type="vanished">Povinná pole</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Název</translation>
+        <translation type="vanished">Název</translation>
     </message>
     <message>
         <source>Alpha (%)</source>
-        <translation>Alfa (%)</translation>
+        <translation type="vanished">Alfa (%)</translation>
     </message>
     <message>
         <source>Alpha acids as percent by mass</source>
-        <translation>Hmotnostní procenta alfa hořkých kyselin</translation>
+        <translation type="vanished">Hmotnostní procenta alfa hořkých kyselin</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation>Množství</translation>
+        <translation type="vanished">Množství</translation>
     </message>
     <message>
         <source>Use</source>
-        <translation>Použití</translation>
+        <translation type="vanished">Použití</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation>Vystírka (mash hop)</translation>
+        <translation type="vanished">Vystírka (mash hop)</translation>
     </message>
     <message>
         <source>First Wort</source>
-        <translation>Vyslazování (first wort)</translation>
+        <translation type="vanished">Vyslazování (first wort)</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation>Chmelovar</translation>
+        <translation type="vanished">Chmelovar</translation>
     </message>
     <message>
         <source>Aroma</source>
-        <translation>Aromatický</translation>
+        <translation type="vanished">Aromatický</translation>
     </message>
     <message>
         <source>Dry Hop</source>
-        <translation>Dry hopping</translation>
+        <translation type="vanished">Dry hopping</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation>Čas</translation>
+        <translation type="vanished">Čas</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Druh</translation>
+        <translation type="vanished">Druh</translation>
     </message>
     <message>
         <source>Bittering</source>
-        <translation>Hořký</translation>
+        <translation type="vanished">Hořký</translation>
     </message>
     <message>
         <source>Both</source>
-        <translation>Oboje</translation>
+        <translation type="vanished">Oboje</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation>Forma</translation>
+        <translation type="vanished">Forma</translation>
     </message>
     <message>
         <source>Leaf</source>
-        <translation>Hlávkový</translation>
+        <translation type="vanished">Hlávkový</translation>
     </message>
     <message>
         <source>Pellet</source>
-        <translation>Granulovaný</translation>
+        <translation type="vanished">Granulovaný</translation>
     </message>
     <message>
         <source>Plug</source>
-        <translation>Lisovaný</translation>
+        <translation type="vanished">Lisovaný</translation>
     </message>
     <message>
         <source>Beta (%)</source>
-        <translation>Beta (%)</translation>
+        <translation type="vanished">Beta (%)</translation>
     </message>
     <message>
         <source>Beta acids as percent by mass</source>
-        <translation>Hmotnostní procenta beta hořkých kyselin</translation>
+        <translation type="vanished">Hmotnostní procenta beta hořkých kyselin</translation>
     </message>
     <message>
         <source>HSI</source>
-        <translation>HSI</translation>
+        <translation type="vanished">HSI</translation>
     </message>
     <message>
         <source>Hop Stability/Storage index</source>
-        <translation>Index stability/skladovatelnosti chmele</translation>
+        <translation type="vanished">Index stability/skladovatelnosti chmele</translation>
     </message>
     <message>
         <source>Origin</source>
-        <translation>Původ</translation>
+        <translation type="vanished">Původ</translation>
     </message>
     <message>
         <source>Humulene (%)</source>
-        <translation>Humulin (%)</translation>
+        <translation type="vanished">Humulin (%)</translation>
     </message>
     <message>
         <source>Humulene</source>
-        <translation>Humulin</translation>
+        <translation type="vanished">Humulin</translation>
     </message>
     <message>
         <source>Caryophyllene (%)</source>
-        <translation>Karofilen (%)</translation>
+        <translation type="vanished">Karofilen (%)</translation>
     </message>
     <message>
         <source>Caryophyllene</source>
-        <translation>Karofilen</translation>
+        <translation type="vanished">Karofilen</translation>
     </message>
     <message>
         <source>Cohumulone (%)</source>
-        <translation>Kohumulon (%)</translation>
+        <translation type="vanished">Kohumulon (%)</translation>
     </message>
     <message>
         <source>Cohumulone</source>
-        <translation>Kohumulon</translation>
+        <translation type="vanished">Kohumulon</translation>
     </message>
     <message>
         <source>Myrcene (%)</source>
-        <translation>Mircen (%)</translation>
+        <translation type="vanished">Mircen (%)</translation>
     </message>
     <message>
         <source>Myrcene</source>
-        <translation>Mircen</translation>
+        <translation type="vanished">Mircen</translation>
     </message>
     <message>
         <source>Substitutes:</source>
-        <translation>Náhrady:</translation>
+        <translation type="vanished">Náhrady:</translation>
     </message>
     <message>
         <source>Notes:</source>
-        <translation>Poznámky:</translation>
+        <translation type="vanished">Poznámky:</translation>
     </message>
     <message>
         <source>Default Amount </source>
-        <translation>Výchozí množtví </translation>
+        <translation type="vanished">Výchozí množtví </translation>
     </message>
     <message>
         <source>Amount in Inventory</source>
-        <translation>Množství na skladě</translation>
+        <translation type="vanished">Množství na skladě</translation>
     </message>
     <message>
         <source>Amount in inventory</source>
-        <translation>Množství na skladě</translation>
+        <translation type="vanished">Množství na skladě</translation>
     </message>
 </context>
 <context>
     <name>instructionWidget</name>
     <message>
         <source>Form</source>
-        <translation>Formulář</translation>
+        <translation type="vanished">Formulář</translation>
     </message>
     <message>
         <source>Show a timer</source>
-        <translation>Zobrazit časovač</translation>
+        <translation type="vanished">Zobrazit časovač</translation>
     </message>
     <message>
         <source>Show timer</source>
-        <translation>Zobrazit časovač</translation>
+        <translation type="vanished">Zobrazit časovač</translation>
     </message>
     <message>
         <source>Mark this step completed</source>
-        <translation>Označit krok jako provedený</translation>
+        <translation type="vanished">Označit krok jako provedený</translation>
     </message>
     <message>
         <source>Step completed</source>
-        <translation>Krok proveden</translation>
+        <translation type="vanished">Krok proveden</translation>
     </message>
 </context>
 <context>
     <name>mainWindow</name>
     <message>
         <source>Recipes</source>
-        <translation>Recepty</translation>
+        <translation type="vanished">Recepty</translation>
     </message>
     <message>
         <source>Styles</source>
-        <translation>Styly</translation>
+        <translation type="vanished">Styly</translation>
     </message>
     <message>
         <source>Fermentables</source>
-        <translation>Suroviny</translation>
+        <translation type="vanished">Suroviny</translation>
     </message>
     <message>
         <source>Hops</source>
-        <translation>Chmele</translation>
+        <translation type="vanished">Chmele</translation>
     </message>
     <message>
         <source>Miscs</source>
-        <translation>Přípravky</translation>
+        <translation type="vanished">Přípravky</translation>
     </message>
     <message>
         <source>Yeasts</source>
-        <translation>Kvasnice</translation>
+        <translation type="vanished">Kvasnice</translation>
     </message>
     <message>
         <source>Recipe</source>
-        <translation>Recept</translation>
+        <translation type="vanished">Recept</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Název</translation>
+        <translation type="vanished">Název</translation>
     </message>
     <message>
         <source>Name of recipe</source>
-        <translation>Název receptu</translation>
+        <translation type="vanished">Název receptu</translation>
     </message>
     <message>
         <source>Target boil size</source>
-        <translation>Objem várky před chmelovarem</translation>
+        <translation type="vanished">Objem várky před chmelovarem</translation>
     </message>
     <message>
         <source>Efficiency (%)</source>
-        <translation>Varní výtěžnost (%)</translation>
+        <translation type="vanished">Varní výtěžnost (%)</translation>
     </message>
     <message>
         <source>Calculated Boil Size</source>
-        <translation>Vypočt. obj. várky před chmlv.</translation>
+        <translation type="vanished">Vypočt. obj. várky před chmlv.</translation>
     </message>
     <message>
         <source>Calculated Batch Size</source>
-        <translation>Vypočtený cílový objem várky</translation>
+        <translation type="vanished">Vypočtený cílový objem várky</translation>
     </message>
     <message>
         <source>The extraction efficiency you expect</source>
-        <translation>Očekávaná varní výtěžnost</translation>
+        <translation type="vanished">Očekávaná varní výtěžnost</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation>Styl</translation>
+        <translation type="vanished">Styl</translation>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation>Délka chmelovaru</translation>
+        <translation type="vanished">Délka chmelovaru</translation>
     </message>
     <message>
         <source>Target batch size</source>
-        <translation>Požadovaná cílová velikost várky</translation>
+        <translation type="vanished">Požadovaná cílová velikost várky</translation>
     </message>
     <message>
         <source>Target Batch Size</source>
-        <translation>Cílový objem várky</translation>
+        <translation type="vanished">Cílový objem várky</translation>
     </message>
     <message>
         <source>Equipment</source>
-        <translation>Vybavení</translation>
+        <translation type="vanished">Vybavení</translation>
     </message>
     <message>
         <source>Target Boil Size</source>
-        <translation>Objem várky před chmelovarem</translation>
+        <translation type="vanished">Objem várky před chmelovarem</translation>
     </message>
     <message>
         <source>OG</source>
-        <translation>Počáteční hustota</translation>
+        <translation type="vanished">Počáteční hustota</translation>
     </message>
     <message>
         <source>Boil SG</source>
-        <translation>Hustota před chmelovarem</translation>
+        <translation type="vanished">Hustota před chmelovarem</translation>
     </message>
     <message>
         <source>FG</source>
-        <translation>Konečná hustota</translation>
+        <translation type="vanished">Konečná hustota</translation>
     </message>
     <message>
         <source>ABV</source>
-        <translation>Obsah alkoholu</translation>
+        <translation type="vanished">Obsah alkoholu</translation>
     </message>
     <message>
         <source>Bitterness (IBU)</source>
-        <translation>Hořkost (IBU)</translation>
+        <translation type="vanished">Hořkost (IBU)</translation>
     </message>
     <message>
         <source>Color</source>
-        <translation>Barva</translation>
+        <translation type="vanished">Barva</translation>
     </message>
     <message>
         <source>IBU/GU</source>
-        <translation>IBU/hustota</translation>
+        <translation type="vanished">IBU/hustota</translation>
     </message>
     <message>
         <source>Calories/12oz</source>
-        <translation>Kalorická hodnota (na 340 g)</translation>
+        <translation type="vanished">Kalorická hodnota (na 340 g)</translation>
     </message>
     <message>
         <source>Extras</source>
-        <translation>Podrobnosti</translation>
+        <translation type="vanished">Podrobnosti</translation>
     </message>
     <message>
         <source>Brewday</source>
-        <translation>Varní list</translation>
+        <translation type="vanished">Varní list</translation>
     </message>
     <message>
         <source>Add a fermentable</source>
-        <translation>Přidat surovinu</translation>
+        <translation type="vanished">Přidat surovinu</translation>
     </message>
     <message>
         <source>Remove selected fermentable</source>
-        <translation>Odebrat zvolenou surovinu</translation>
+        <translation type="vanished">Odebrat zvolenou surovinu</translation>
     </message>
     <message>
         <source>Edit selected fermentable</source>
-        <translation>Upravit zvolenou surovinu</translation>
+        <translation type="vanished">Upravit zvolenou surovinu</translation>
     </message>
     <message>
         <source>Add hop</source>
-        <translation>Přidat chmel</translation>
+        <translation type="vanished">Přidat chmel</translation>
     </message>
     <message>
         <source>Remove selected hop</source>
-        <translation>Odebrat zvolený chmel</translation>
+        <translation type="vanished">Odebrat zvolený chmel</translation>
     </message>
     <message>
         <source>Edit selected hop</source>
-        <translation>Upravit zvolený chmel</translation>
+        <translation type="vanished">Upravit zvolený chmel</translation>
     </message>
     <message>
         <source>Miscellaneous</source>
-        <translation>Přípravky</translation>
+        <translation type="vanished">Přípravky</translation>
     </message>
     <message>
         <source>Add misc</source>
-        <translation>Přidat přípravek</translation>
+        <translation type="vanished">Přidat přípravek</translation>
     </message>
     <message>
         <source>Remove selected misc</source>
-        <translation>Odebrat zvolený přípravek</translation>
+        <translation type="vanished">Odebrat zvolený přípravek</translation>
     </message>
     <message>
         <source>Edit selected misc</source>
-        <translation>Upravit zvolený přípravek</translation>
+        <translation type="vanished">Upravit zvolený přípravek</translation>
     </message>
     <message>
         <source>Yeast</source>
-        <translation>Kvasnice</translation>
+        <translation type="vanished">Kvasnice</translation>
     </message>
     <message>
         <source>Add yeast</source>
-        <translation>Přidat kvasnice</translation>
+        <translation type="vanished">Přidat kvasnice</translation>
     </message>
     <message>
         <source>Remove selected yeast</source>
-        <translation>Odebrat zvolené kvasnice</translation>
+        <translation type="vanished">Odebrat zvolené kvasnice</translation>
     </message>
     <message>
         <source>Edit selected yeast</source>
-        <translation>Upravit zvolené kvasnice</translation>
+        <translation type="vanished">Upravit zvolené kvasnice</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation>Rmutování</translation>
+        <translation type="vanished">Rmutování</translation>
     </message>
     <message>
         <source>Add mash step</source>
-        <translation>Přidat rmutovací krok</translation>
+        <translation type="vanished">Přidat rmutovací krok</translation>
     </message>
     <message>
         <source>Remove selected mash step</source>
-        <translation>Odebrat zvolený rmutovací krok</translation>
+        <translation type="vanished">Odebrat zvolený rmutovací krok</translation>
     </message>
     <message>
         <source>Edit selected mash step</source>
-        <translation>Upravit zvolený rmutovací krok</translation>
+        <translation type="vanished">Upravit zvolený rmutovací krok</translation>
     </message>
     <message>
         <source>Edit mash properties</source>
-        <translation>Upravit možnosti rmutování</translation>
+        <translation type="vanished">Upravit možnosti rmutování</translation>
     </message>
     <message>
         <source>Edit mash</source>
-        <translation>Upravit rmutování</translation>
+        <translation type="vanished">Upravit rmutování</translation>
     </message>
     <message>
         <source>Mash Des</source>
-        <translation>Návrhář rmutování</translation>
+        <translation type="vanished">Návrhář rmutování</translation>
     </message>
     <message>
         <source>Invoke the mash wizard</source>
-        <translation>Spustit průvodce rmutováním</translation>
+        <translation type="vanished">Spustit průvodce rmutováním</translation>
     </message>
     <message>
         <source>Mash wiz</source>
-        <translation>Průvodce rmutováním</translation>
+        <translation type="vanished">Průvodce rmutováním</translation>
     </message>
     <message>
         <source>Mashs</source>
-        <translation>Rmutování</translation>
+        <translation type="vanished">Rmutování</translation>
     </message>
     <message>
         <source>Mash step up</source>
-        <translation>Krok nahoru</translation>
+        <translation type="vanished">Krok nahoru</translation>
     </message>
     <message>
         <source>Mash step down</source>
-        <translation>Krok dolů</translation>
+        <translation type="vanished">Krok dolů</translation>
     </message>
     <message>
         <source>Save this mash profile</source>
-        <translation>Uložit tento rmutovací profil</translation>
+        <translation type="vanished">Uložit tento rmutovací profil</translation>
     </message>
     <message>
         <source>Save Mash</source>
-        <translation>Uložit rmutování</translation>
+        <translation type="vanished">Uložit rmutování</translation>
     </message>
     <message>
         <source>&amp;About</source>
-        <translation>&amp;Nápověda</translation>
+        <translation type="vanished">&amp;Nápověda</translation>
     </message>
     <message>
         <source>&amp;File</source>
-        <translation>&amp;Soubor</translation>
+        <translation type="vanished">&amp;Soubor</translation>
     </message>
     <message>
         <source>&amp;Brewday</source>
-        <translation>&amp;Varní list</translation>
+        <translation type="vanished">&amp;Varní list</translation>
     </message>
     <message>
         <source>&amp;Recipe</source>
-        <translation>&amp;Recept</translation>
+        <translation type="vanished">&amp;Recept</translation>
     </message>
     <message>
         <source>&amp;Database</source>
-        <translation>&amp;Databáze</translation>
+        <translation type="vanished">&amp;Databáze</translation>
     </message>
     <message>
         <source>&amp;View</source>
-        <translation>&amp;Zobrazit</translation>
+        <translation type="vanished">&amp;Zobrazit</translation>
     </message>
     <message>
         <source>&amp;Tools</source>
-        <translation>Nás&amp;troje</translation>
+        <translation type="vanished">Nás&amp;troje</translation>
     </message>
     <message>
         <source>toolBar</source>
-        <translation>nástrojováLišta</translation>
+        <translation type="vanished">nástrojováLišta</translation>
     </message>
     <message>
         <source>About &amp;BrewTarget</source>
-        <translation>&amp;O aplikaci Brewtarget</translation>
+        <translation type="vanished">&amp;O aplikaci Brewtarget</translation>
     </message>
     <message>
         <source>About Brewtarget</source>
-        <translation>O aplikaci Brewtarget</translation>
+        <translation type="vanished">O aplikaci Brewtarget</translation>
     </message>
     <message>
         <source>&amp;Export Recipe</source>
-        <translation>&amp;Exportovat recept</translation>
+        <translation type="vanished">&amp;Exportovat recept</translation>
     </message>
     <message>
         <source>&amp;Fermentables</source>
-        <translation>&amp;Suroviny</translation>
+        <translation type="vanished">&amp;Suroviny</translation>
     </message>
     <message>
         <source>Ctrl+F</source>
-        <translation>Ctrl+F</translation>
+        <translation type="vanished">Ctrl+F</translation>
     </message>
     <message>
         <source>&amp;Hops</source>
-        <translation>&amp;Chmele</translation>
+        <translation type="vanished">&amp;Chmele</translation>
     </message>
     <message>
         <source>Ctrl+H</source>
-        <translation>Ctrl+H</translation>
+        <translation type="vanished">Ctrl+H</translation>
     </message>
     <message>
         <source>&amp;Miscs</source>
-        <translation>&amp;Přípravky</translation>
+        <translation type="vanished">&amp;Přípravky</translation>
     </message>
     <message>
         <source>Ctrl+M</source>
-        <translation>Ctrl+M</translation>
+        <translation type="vanished">Ctrl+M</translation>
     </message>
     <message>
         <source>&amp;Yeasts</source>
-        <translation>&amp;Kvasnice</translation>
+        <translation type="vanished">&amp;Kvasnice</translation>
     </message>
     <message>
         <source>Ctrl+Y</source>
-        <translation>Ctrl+Y</translation>
+        <translation type="vanished">Ctrl+Y</translation>
     </message>
     <message>
         <source>&amp;Equipments</source>
-        <translation>&amp;Vybavení</translation>
+        <translation type="vanished">&amp;Vybavení</translation>
     </message>
     <message>
         <source>Ctrl+E</source>
-        <translation>Ctrl+E</translation>
+        <translation type="vanished">Ctrl+E</translation>
     </message>
     <message>
         <source>&amp;Styles</source>
-        <translation>S&amp;tyly</translation>
+        <translation type="vanished">S&amp;tyly</translation>
     </message>
     <message>
         <source>Ctrl+T</source>
-        <translation>Ctrl+T</translation>
+        <translation type="vanished">Ctrl+T</translation>
     </message>
     <message>
         <source>&amp;Exit</source>
-        <translation>&amp;Konec</translation>
+        <translation type="vanished">&amp;Konec</translation>
     </message>
     <message>
         <source>Ctrl+Q</source>
-        <translation>Ctrl+Q</translation>
+        <translation type="vanished">Ctrl+Q</translation>
     </message>
     <message>
         <source>&amp;Import Recipes</source>
-        <translation>&amp;Importovat recepty</translation>
+        <translation type="vanished">&amp;Importovat recepty</translation>
     </message>
     <message>
         <source>&amp;Options</source>
-        <translation>&amp;Možnosti</translation>
+        <translation type="vanished">&amp;Možnosti</translation>
     </message>
     <message>
         <source>&amp;Manual</source>
-        <translation>&amp;Návod</translation>
+        <translation type="vanished">&amp;Návod</translation>
     </message>
     <message>
         <source>&amp;Scale Recipe</source>
-        <translation>&amp;Změnit objem</translation>
+        <translation type="vanished">&amp;Změnit objem</translation>
     </message>
     <message>
         <source>Recipe to Clipboard as &amp;Text</source>
-        <translation>&amp;Recept do schránky jako text</translation>
+        <translation type="vanished">&amp;Recept do schránky jako text</translation>
     </message>
     <message>
         <source>&amp;OG Correction Help</source>
-        <translation>Ú&amp;prava objemu pro dosažení hustoty</translation>
+        <translation type="vanished">Ú&amp;prava objemu pro dosažení hustoty</translation>
     </message>
     <message>
         <source>&amp;Convert Units</source>
-        <translation>&amp;Převody jednotek</translation>
+        <translation type="vanished">&amp;Převody jednotek</translation>
     </message>
     <message>
         <source>Backup Database</source>
-        <translation>Zálohovat databázi</translation>
+        <translation type="vanished">Zálohovat databázi</translation>
     </message>
     <message>
         <source>Restore Database</source>
-        <translation>Obnovit databázi</translation>
+        <translation type="vanished">Obnovit databázi</translation>
     </message>
     <message>
         <source>&amp;Copy Recipe</source>
-        <translation>&amp;Kopírovat recept</translation>
+        <translation type="vanished">&amp;Kopírovat recept</translation>
     </message>
     <message>
         <source>Pr&amp;iming Calculator</source>
-        <translation>&amp;Výpočet kvasných cukrů</translation>
+        <translation type="vanished">&amp;Výpočet kvasných cukrů</translation>
     </message>
     <message>
         <source>&amp;Refractometer Tools</source>
-        <translation>&amp;Nástroje pro refraktometr</translation>
+        <translation type="vanished">&amp;Nástroje pro refraktometr</translation>
     </message>
     <message>
         <source>&amp;Pitch Rate Calculator</source>
-        <translation>Vý&amp;počet rozkvašení kvasnic</translation>
+        <translation type="vanished">Vý&amp;počet rozkvašení kvasnic</translation>
     </message>
     <message>
         <source>Merge Databases</source>
-        <translation>Spojit databáze</translation>
+        <translation type="vanished">Spojit databáze</translation>
     </message>
     <message>
         <source>Select another database to merge into the current one.</source>
-        <translation>Vyberte jinou databázi pro spojení se současnou.</translation>
+        <translation type="vanished">Vyberte jinou databázi pro spojení se současnou.</translation>
     </message>
     <message>
         <source>&amp;Print</source>
-        <translation>&amp;Tisk</translation>
+        <translation type="vanished">&amp;Tisk</translation>
     </message>
     <message>
         <source>Print Pre&amp;view</source>
-        <translation>T&amp;iskový náhled</translation>
+        <translation type="vanished">T&amp;iskový náhled</translation>
     </message>
     <message>
         <source>&amp;Export To HTML</source>
-        <translation>&amp;Exportovat do HTML</translation>
+        <translation type="vanished">&amp;Exportovat do HTML</translation>
     </message>
     <message>
         <source>&amp;Export to HTML</source>
-        <translation>&amp;Exportovat do HTML</translation>
+        <translation type="vanished">&amp;Exportovat do HTML</translation>
     </message>
     <message>
         <source>&amp;Backup</source>
-        <translation>&amp;Zálohovat</translation>
+        <translation type="vanished">&amp;Zálohovat</translation>
     </message>
     <message>
         <source>Save all recipes, ingredients, etc. to a backup folder</source>
-        <translation>Uložit všechny recepty, přísady a další do adresáře záloh</translation>
+        <translation type="vanished">Uložit všechny recepty, přísady a další do adresáře záloh</translation>
     </message>
     <message>
         <source>&amp;Restore</source>
-        <translation>&amp;Obnovit</translation>
+        <translation type="vanished">&amp;Obnovit</translation>
     </message>
     <message>
         <source>Restore recipes, ingredients, etc. from a previous backup</source>
-        <translation>Obnovit recepty, přísady a další z předchozí zálohy</translation>
+        <translation type="vanished">Obnovit recepty, přísady a další z předchozí zálohy</translation>
     </message>
     <message>
         <source>&amp;Merge</source>
-        <translation>&amp;Spojit</translation>
+        <translation type="vanished">&amp;Spojit</translation>
     </message>
     <message>
         <source>Merge another set of recipes, ingredients, etc. into the current set</source>
-        <translation>Spojit další sadu receptu, přísad a dalšího se současnou sadou</translation>
+        <translation type="vanished">Spojit další sadu receptu, přísad a dalšího se současnou sadou</translation>
     </message>
     <message>
         <source>&amp;New Recipe</source>
-        <translation>&amp;Nový recept</translation>
+        <translation type="vanished">&amp;Nový recept</translation>
     </message>
     <message>
         <source>Timers</source>
-        <translation>Časovače</translation>
+        <translation type="vanished">Časovače</translation>
     </message>
     <message>
         <source>Show timers</source>
-        <translation>Zobrazit časovač</translation>
+        <translation type="vanished">Zobrazit časovač</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation>Uložit</translation>
+        <translation type="vanished">Uložit</translation>
     </message>
     <message>
         <source>Delete selected</source>
-        <translation>Odstranit vybraný</translation>
+        <translation type="vanished">Odstranit vybraný</translation>
     </message>
     <message>
         <source>Delete recipe</source>
-        <translation>Odebrat recept</translation>
+        <translation type="vanished">Odebrat recept</translation>
     </message>
     <message>
         <source>&amp;Mashs</source>
-        <translation>&amp;Rmutovací schémata</translation>
+        <translation type="vanished">&amp;Rmutovací schémata</translation>
     </message>
     <message>
         <source>Mashes</source>
-        <translation>Rmutovací schémata</translation>
+        <translation type="vanished">Rmutovací schémata</translation>
     </message>
     <message>
         <source>1.0</source>
-        <translation>1.0</translation>
+        <translation type="vanished">1.0</translation>
     </message>
     <message>
         <source>Strike Water Calculator</source>
-        <translation>Výpočet nálevu</translation>
-    </message>
-    <message>
-        <source>tab_recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Export to &amp;BBCode</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hydrometer Temp Adjustment</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Výpočet nálevu</translation>
     </message>
 </context>
 <context>
     <name>mashDesigner</name>
     <message>
         <source>Mash Designer</source>
-        <translation>Návrhář rmutování</translation>
+        <translation type="vanished">Návrhář rmutování</translation>
     </message>
     <message>
         <source>Name</source>
@@ -4186,7 +5303,7 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation>Čas</translation>
+        <translation type="vanished">Čas</translation>
     </message>
     <message>
         <source>Batch Sparge</source>
@@ -4194,524 +5311,492 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
     <message>
         <source>Next</source>
-        <translation>Další</translation>
+        <translation type="vanished">Další</translation>
     </message>
     <message>
         <source>Finish</source>
-        <translation>Dokončit</translation>
+        <translation type="vanished">Dokončit</translation>
     </message>
     <message>
         <source>Infusion/Decoction Amount</source>
-        <translation>Infuzní/dekokční množství</translation>
+        <translation type="vanished">Infuzní/dekokční množství</translation>
     </message>
     <message>
         <source>min</source>
-        <translation>min</translation>
+        <translation type="vanished">min</translation>
     </message>
     <message>
         <source>max</source>
-        <translation>max</translation>
+        <translation type="vanished">max</translation>
     </message>
     <message>
         <source>0</source>
-        <translation>0</translation>
+        <translation type="vanished">0</translation>
     </message>
     <message>
         <source>Infusion Temp</source>
-        <translation>Teplota infuze</translation>
+        <translation type="vanished">Teplota infuze</translation>
     </message>
     <message>
         <source>Total Collected Wort</source>
-        <translation>Celkový objem díla</translation>
+        <translation type="vanished">Celkový objem díla</translation>
     </message>
     <message>
         <source>vol</source>
-        <translation>množství</translation>
+        <translation type="vanished">množství</translation>
     </message>
     <message>
         <source>Tun Fullness</source>
-        <translation>Plnost nádoby</translation>
+        <translation type="vanished">Plnost nádoby</translation>
     </message>
     <message>
         <source>tunVol</source>
-        <translation>objNád</translation>
+        <translation type="vanished">objNád</translation>
     </message>
     <message>
         <source>thickness</source>
-        <translation>hustota</translation>
-    </message>
-    <message>
-        <source>&amp;Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Tar&amp;get temp.</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">hustota</translation>
     </message>
 </context>
 <context>
     <name>mashEditor</name>
     <message>
         <source>Mash Editor</source>
-        <translation>Editor rmutů</translation>
+        <translation type="vanished">Editor rmutů</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Název</translation>
+        <translation type="vanished">Název</translation>
     </message>
     <message>
         <source>Initial grain temp</source>
-        <translation>Počáteční teplota sladu</translation>
+        <translation type="vanished">Počáteční teplota sladu</translation>
     </message>
     <message>
         <source>Sparge temp</source>
-        <translation>Teplota vyslazovací vody</translation>
+        <translation type="vanished">Teplota vyslazovací vody</translation>
     </message>
     <message>
         <source>Sparge temp target</source>
-        <translation>Cílová teplota vyslazovací vody</translation>
+        <translation type="vanished">Cílová teplota vyslazovací vody</translation>
     </message>
     <message>
         <source>Sparge pH</source>
-        <translation>pH sladiny</translation>
+        <translation type="vanished">pH sladiny</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Poznámky</translation>
+        <translation type="vanished">Poznámky</translation>
     </message>
     <message>
         <source>Tun</source>
-        <translation>Pánev</translation>
+        <translation type="vanished">Pánev</translation>
     </message>
     <message>
         <source>Initial tun temp</source>
-        <translation>Počáteční teplota</translation>
+        <translation type="vanished">Počáteční teplota</translation>
     </message>
     <message>
         <source>Get following parameters from the recipe&apos;s equipment.</source>
-        <translation>Získat následující parametry z vybavení receptu.</translation>
+        <translation type="vanished">Získat následující parametry z vybavení receptu.</translation>
     </message>
     <message>
         <source>From Equipment</source>
-        <translation>Z vybavení</translation>
+        <translation type="vanished">Z vybavení</translation>
     </message>
     <message>
         <source>Tun mass</source>
-        <translation>Hmotnost kádě</translation>
+        <translation type="vanished">Hmotnost kádě</translation>
     </message>
     <message>
         <source>Tun sp. heat</source>
-        <translation>Spec. teplo kádě</translation>
+        <translation type="vanished">Spec. teplo kádě</translation>
     </message>
     <message>
         <source>Tun specific heat (cal/(g*K))</source>
-        <translation>Specifické teplo kádě (kalorií/(g*K))</translation>
+        <translation type="vanished">Specifické teplo kádě (kalorií/(g*K))</translation>
     </message>
 </context>
 <context>
     <name>mashStepEditor</name>
     <message>
         <source>Mash Step Editor</source>
-        <translation>Editor rmutovacích kroků</translation>
+        <translation type="vanished">Editor rmutovacích kroků</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Název</translation>
+        <translation type="vanished">Název</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Druh</translation>
+        <translation type="vanished">Druh</translation>
     </message>
     <message>
         <source>Infusion</source>
-        <translation>Infuze</translation>
+        <translation type="vanished">Infuze</translation>
     </message>
     <message>
         <source>Temperature</source>
-        <translation>Teplota</translation>
+        <translation type="vanished">Teplota</translation>
     </message>
     <message>
         <source>Decoction</source>
-        <translation>Dekokce</translation>
+        <translation type="vanished">Dekokce</translation>
     </message>
     <message>
         <source>Target temp.</source>
-        <translation>Cílová teplota</translation>
+        <translation type="vanished">Cílová teplota</translation>
     </message>
     <message>
         <source>Target temp. of this step</source>
-        <translation>Cílová teplota tohoto kroku</translation>
+        <translation type="vanished">Cílová teplota tohoto kroku</translation>
     </message>
     <message>
         <source>Infuse Amount</source>
-        <translation>Infuzní množství</translation>
+        <translation type="vanished">Infuzní množství</translation>
     </message>
     <message>
         <source>Amount of water to infuse</source>
-        <translation>Množství vody pro infuzi</translation>
+        <translation type="vanished">Množství vody pro infuzi</translation>
     </message>
     <message>
         <source>Infuse temp.</source>
-        <translation>Teplota infuze</translation>
+        <translation type="vanished">Teplota infuze</translation>
     </message>
     <message>
         <source>Temperature of infusion water</source>
-        <translation>Teplota infuzní vody</translation>
+        <translation type="vanished">Teplota infuzní vody</translation>
     </message>
     <message>
         <source>Decoction Amount</source>
-        <translation>Dekokční množ.</translation>
+        <translation type="vanished">Dekokční množ.</translation>
     </message>
     <message>
         <source>Amount of mash to decoct</source>
-        <translation>Množství rmutu pro dekokci</translation>
+        <translation type="vanished">Množství rmutu pro dekokci</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation>Čas</translation>
+        <translation type="vanished">Čas</translation>
     </message>
     <message>
         <source>Time to conduct the step</source>
-        <translation>Čas pro provedení kroku</translation>
+        <translation type="vanished">Čas pro provedení kroku</translation>
     </message>
     <message>
         <source>Temp. lag time</source>
-        <translation>Prodleva</translation>
+        <translation type="vanished">Prodleva</translation>
     </message>
     <message>
         <source>Lag time</source>
-        <translation>Čas pro odpočinek</translation>
+        <translation type="vanished">Čas pro odpočinek</translation>
     </message>
     <message>
         <source>End temp.</source>
-        <translation>Konečná teplota</translation>
+        <translation type="vanished">Konečná teplota</translation>
     </message>
     <message>
         <source>Final temp. of this step</source>
-        <translation>Konečná teplota tohoto kroku</translation>
+        <translation type="vanished">Konečná teplota tohoto kroku</translation>
     </message>
 </context>
 <context>
     <name>mashWizard</name>
     <message>
         <source>Mash Wizard</source>
-        <translation>Průvodce rmutováním</translation>
+        <translation type="vanished">Průvodce rmutováním</translation>
     </message>
     <message>
         <source>Mash thickness (L/kg)</source>
-        <translation>Tloušťka rmutu (L/kg)</translation>
+        <translation type="vanished">Tloušťka rmutu (L/kg)</translation>
     </message>
     <message>
         <source>Mash thickness (do not enter any units)</source>
         <translation type="vanished">Tloušťka rmutu (nezadávejte jednotky)</translation>
-    </message>
-    <message>
-        <source>No Spar&amp;ge</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fl&amp;y Sparge</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Ba&amp;tch Sparge</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Batches</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>miscEditor</name>
     <message>
         <source>Misc Editor</source>
-        <translation>Editor přípravků</translation>
+        <translation type="vanished">Editor přípravků</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Název</translation>
+        <translation type="vanished">Název</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Druh</translation>
+        <translation type="vanished">Druh</translation>
     </message>
     <message>
         <source>Spice</source>
-        <translation>Koření</translation>
+        <translation type="vanished">Koření</translation>
     </message>
     <message>
         <source>Fining</source>
-        <translation>Čeření</translation>
+        <translation type="vanished">Čeření</translation>
     </message>
     <message>
         <source>Water Agent</source>
-        <translation>Úprava vody</translation>
+        <translation type="vanished">Úprava vody</translation>
     </message>
     <message>
         <source>Herb</source>
-        <translation>Bylina</translation>
+        <translation type="vanished">Bylina</translation>
     </message>
     <message>
         <source>Flavor</source>
-        <translation>Příchuť</translation>
+        <translation type="vanished">Příchuť</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation>Jiný</translation>
+        <translation type="vanished">Jiný</translation>
     </message>
     <message>
         <source>Use</source>
-        <translation>Použití</translation>
+        <translation type="vanished">Použití</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation>Chmelovar</translation>
+        <translation type="vanished">Chmelovar</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation>Rmutování</translation>
+        <translation type="vanished">Rmutování</translation>
     </message>
     <message>
         <source>Primary</source>
-        <translation>Hlavní kvašení</translation>
+        <translation type="vanished">Hlavní kvašení</translation>
     </message>
     <message>
         <source>Secondary</source>
-        <translation>Dokvašování</translation>
+        <translation type="vanished">Dokvašování</translation>
     </message>
     <message>
         <source>Bottling</source>
-        <translation>Stáčení</translation>
+        <translation type="vanished">Stáčení</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation>Čas</translation>
+        <translation type="vanished">Čas</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation>Množství</translation>
+        <translation type="vanished">Množství</translation>
     </message>
     <message>
         <source>Check it if the amount listed is in kg instead of L.</source>
-        <translation>Zaškrtněte, pokud se množství přísady vyjadřuje v kg místo l.</translation>
+        <translation type="vanished">Zaškrtněte, pokud se množství přísady vyjadřuje v kg místo l.</translation>
     </message>
     <message>
         <source>Amount is weight?</source>
-        <translation>Množství je v kg?</translation>
+        <translation type="vanished">Množství je v kg?</translation>
     </message>
     <message>
         <source>Checked if the given amount is weight instead of volume</source>
-        <translation>Zaškrtněte pokud je zadané množství v hmostnostních a ne objemových jednotkách</translation>
+        <translation type="vanished">Zaškrtněte pokud je zadané množství v hmostnostních a ne objemových jednotkách</translation>
     </message>
     <message>
         <source>Use for:</source>
-        <translation>Použít pro:</translation>
+        <translation type="vanished">Použít pro:</translation>
     </message>
     <message>
         <source>Notes:</source>
-        <translation>Poznámky:</translation>
+        <translation type="vanished">Poznámky:</translation>
     </message>
     <message>
         <source>Default Amount</source>
-        <translation>Výchozí množství</translation>
+        <translation type="vanished">Výchozí množství</translation>
     </message>
     <message>
         <source>Amount in Inventory</source>
-        <translation>Množství na skladě</translation>
+        <translation type="vanished">Množství na skladě</translation>
     </message>
     <message>
         <source>Amount in inventory</source>
-        <translation>Množství na skladě</translation>
+        <translation type="vanished">Množství na skladě</translation>
     </message>
 </context>
 <context>
     <name>namedMashEditor</name>
     <message>
         <source>Named Mash Editor</source>
-        <translation>Editor pojmenovaných rmutovacích schémat</translation>
+        <translation type="vanished">Editor pojmenovaných rmutovacích schémat</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation>Rmutovací schéma</translation>
+        <translation type="vanished">Rmutovací schéma</translation>
     </message>
     <message>
         <source>Delete selected style</source>
-        <translation>Odstranit vybraný styl</translation>
+        <translation type="vanished">Odstranit vybraný styl</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Název</translation>
+        <translation type="vanished">Název</translation>
     </message>
     <message>
         <source>Initial grain temp</source>
-        <translation>Počáteční teplota sladu</translation>
+        <translation type="vanished">Počáteční teplota sladu</translation>
     </message>
     <message>
         <source>Sparge temp</source>
-        <translation>Teplota vyslazovací vody</translation>
+        <translation type="vanished">Teplota vyslazovací vody</translation>
     </message>
     <message>
         <source>Sparge temp target</source>
-        <translation>Cílová teplota vyslazovací vody</translation>
+        <translation type="vanished">Cílová teplota vyslazovací vody</translation>
     </message>
     <message>
         <source>Sparge pH</source>
-        <translation>pH sladiny</translation>
+        <translation type="vanished">pH sladiny</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Poznámky</translation>
+        <translation type="vanished">Poznámky</translation>
     </message>
     <message>
         <source>Tun</source>
-        <translation>Káď</translation>
+        <translation type="vanished">Káď</translation>
     </message>
     <message>
         <source>Initial tun temp</source>
-        <translation>Počáteční teplota kádě</translation>
+        <translation type="vanished">Počáteční teplota kádě</translation>
     </message>
     <message>
         <source>From Equipment</source>
-        <translation>Z vybavení</translation>
+        <translation type="vanished">Z vybavení</translation>
     </message>
     <message>
         <source>Tun mass</source>
-        <translation>Hmotnost kádě</translation>
+        <translation type="vanished">Hmotnost kádě</translation>
     </message>
     <message>
         <source>Tun sp. heat</source>
-        <translation>Spec. teplo kádě</translation>
+        <translation type="vanished">Spec. teplo kádě</translation>
     </message>
     <message>
         <source>Tun specific heat (cal/(g*K))</source>
-        <translation>Specifické teplo kádě (kalorií/(g*K))</translation>
+        <translation type="vanished">Specifické teplo kádě (kalorií/(g*K))</translation>
     </message>
     <message>
         <source>Add mash step</source>
-        <translation>Přidat rmutovací krok</translation>
+        <translation type="vanished">Přidat rmutovací krok</translation>
     </message>
     <message>
         <source>Remove selected mash step</source>
-        <translation>Odebrat zvolený rmutovací krok</translation>
+        <translation type="vanished">Odebrat zvolený rmutovací krok</translation>
     </message>
     <message>
         <source>Mash step up</source>
-        <translation>Krok nahoru</translation>
+        <translation type="vanished">Krok nahoru</translation>
     </message>
     <message>
         <source>Mash step down</source>
-        <translation>Krok dolů</translation>
+        <translation type="vanished">Krok dolů</translation>
     </message>
 </context>
 <context>
     <name>ogAdjuster</name>
     <message>
         <source>Adjust Volume to Hit OG</source>
-        <translation>Úprava objemu pro dosažení hustoty</translation>
+        <translation type="vanished">Úprava objemu pro dosažení hustoty</translation>
     </message>
     <message>
         <source>Input</source>
-        <translation>Vstup</translation>
+        <translation type="vanished">Vstup</translation>
     </message>
     <message>
         <source>SG</source>
-        <translation>Hustota</translation>
+        <translation type="vanished">Hustota</translation>
     </message>
     <message>
         <source>Measured gravity pre-boil</source>
-        <translation>Změřená hustota před chmelovarem</translation>
+        <translation type="vanished">Změřená hustota před chmelovarem</translation>
     </message>
     <message>
         <source>Temp</source>
-        <translation>Tepl.</translation>
+        <translation type="vanished">Tepl.</translation>
     </message>
     <message>
         <source>Temperature of SG reading</source>
-        <translation>Teplota vzorku při měření hustoty</translation>
+        <translation type="vanished">Teplota vzorku při měření hustoty</translation>
     </message>
     <message>
         <source>Calibration Temp</source>
-        <translation>Kalibr. tepl.</translation>
+        <translation type="vanished">Kalibr. tepl.</translation>
     </message>
     <message>
         <source>Temp to which the hydrometer is calibrated</source>
-        <translation>Teplota, na kterou je hydrometr kalibrován</translation>
+        <translation type="vanished">Teplota, na kterou je hydrometr kalibrován</translation>
     </message>
     <message>
         <source>-or-</source>
-        <translation>-n.-</translation>
+        <translation type="vanished">-n.-</translation>
     </message>
     <message>
         <source>Plato</source>
-        <translation>Plato</translation>
+        <translation type="vanished">Plato</translation>
     </message>
     <message>
         <source>Plato (percent by mass of equivalent sucrose)</source>
-        <translation>Plato (hmotnostní procenta sacharozy)</translation>
+        <translation type="vanished">Plato (hmotnostní procenta sacharozy)</translation>
     </message>
     <message>
         <source>Pre-Boil Volume</source>
-        <translation>Objem před chmelovarem</translation>
+        <translation type="vanished">Objem před chmelovarem</translation>
     </message>
     <message>
         <source>Measured pre-boil volume</source>
-        <translation>Změřený objem před chmelovarem</translation>
+        <translation type="vanished">Změřený objem před chmelovarem</translation>
     </message>
     <message>
         <source>Output</source>
-        <translation>Výstup</translation>
+        <translation type="vanished">Výstup</translation>
     </message>
     <message>
         <source>OG w/o Correction</source>
-        <translation>Původní hustota bez kor.</translation>
+        <translation type="vanished">Původní hustota bez kor.</translation>
     </message>
     <message>
         <source>OG if you boil as planned</source>
-        <translation>Hustota, které by bylo dosaženo, pokud byste vařili podle plánu</translation>
+        <translation type="vanished">Hustota, které by bylo dosaženo, pokud byste vařili podle plánu</translation>
     </message>
     <message>
         <source>Add to Boil</source>
-        <translation>Množství pro přidání</translation>
+        <translation type="vanished">Množství pro přidání</translation>
     </message>
     <message>
         <source>Amount of water you need to add to hit planned OG (or boil off if negative)</source>
-        <translation>Množství vody, které musíte přidat pro dosažení požadované hustoty</translation>
+        <translation type="vanished">Množství vody, které musíte přidat pro dosažení požadované hustoty</translation>
     </message>
     <message>
         <source>Final Batch Size</source>
-        <translation>Celkový objem várky</translation>
+        <translation type="vanished">Celkový objem várky</translation>
     </message>
     <message>
         <source>Estimated batch size after correction</source>
-        <translation>Odhadovaný objem várky po korekci</translation>
+        <translation type="vanished">Odhadovaný objem várky po korekci</translation>
     </message>
     <message>
         <source>Calculate</source>
-        <translation>Spočítat</translation>
-    </message>
-    <message>
-        <source>ogAdjuster</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Spočítat</translation>
     </message>
 </context>
 <context>
     <name>optionsDialog</name>
     <message>
         <source>Options</source>
-        <translation>Možnosti</translation>
+        <translation type="vanished">Možnosti</translation>
     </message>
     <message>
         <source>Units</source>
-        <translation>Jednotky</translation>
+        <translation type="vanished">Jednotky</translation>
     </message>
     <message>
         <source>Weight</source>
-        <translation>Hmotnost</translation>
+        <translation type="vanished">Hmotnost</translation>
     </message>
     <message>
         <source>Use SI units</source>
@@ -4727,7 +5812,7 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
     <message>
         <source>Temperature</source>
-        <translation>Teplota</translation>
+        <translation type="vanished">Teplota</translation>
     </message>
     <message>
         <source>Celsius</source>
@@ -4739,11 +5824,11 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation>Objem</translation>
+        <translation type="vanished">Objem</translation>
     </message>
     <message>
         <source>Gravity</source>
-        <translation>Hustota</translation>
+        <translation type="vanished">Hustota</translation>
     </message>
     <message>
         <source>20C/20C Specific Gravity</source>
@@ -4755,7 +5840,7 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
     <message>
         <source>Color</source>
-        <translation>Barva</translation>
+        <translation type="vanished">Barva</translation>
     </message>
     <message>
         <source>Use SRM</source>
@@ -4767,7 +5852,7 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
     <message>
         <source>Formulas</source>
-        <translation>Vzorce</translation>
+        <translation type="vanished">Vzorce</translation>
     </message>
     <message>
         <source>Mosher&apos;s approximation</source>
@@ -4783,7 +5868,7 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
     <message>
         <source>IBU</source>
-        <translation>IBU</translation>
+        <translation type="vanished">IBU</translation>
     </message>
     <message>
         <source>Tinseth&apos;s approximation</source>
@@ -4795,7 +5880,7 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
     <message>
         <source>IBU Adjustments</source>
-        <translation>Úpravy IBU</translation>
+        <translation type="vanished">Úpravy IBU</translation>
     </message>
     <message>
         <source>% IBU adjustment</source>
@@ -4831,7 +5916,7 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
     <message>
         <source>Language</source>
-        <translation>Jazyk</translation>
+        <translation type="vanished">Jazyk</translation>
     </message>
     <message>
         <source>&lt;qt&gt;
@@ -4841,7 +5926,7 @@ Celkový objem pro hlavní kvašení je %1.</translation>
   &lt;a href=&quot;https://sourceforge.net/sendmessage.php?touser=938941&quot;&gt;
   provide a translation&lt;/a&gt; so that your friends can use brewtarget!
 &lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;
+        <translation type="vanished">&lt;qt&gt;
    &lt;b&gt;Rozumíte dalšímu jazyku?&lt;/b&gt;
    &lt;br&gt;&lt;br&gt;
    Nebo máte zájem vylepšit překlad? Pomozte nám a 
@@ -4851,43 +5936,7 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
     <message>
         <source>Date</source>
-        <translation>Datum</translation>
-    </message>
-    <message>
-        <source>Forumulas</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mash Hop (%)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>First Wort (%)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Databases</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Engines</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>RDBMS Engine</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Test Connection</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Configuration</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Restore defaults</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Datum</translation>
     </message>
     <message>
         <source>Hostname</source>
@@ -4970,7 +6019,7 @@ Celkový objem pro hlavní kvašení je %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>How frequently a backup is made: 1 means always backup</source>
+        <source>How many times Brewtarget needs to be run to trigger another backup: 1 means always backup</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4978,538 +6027,470 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     <name>pitchDialog</name>
     <message>
         <source>Pitch Rate Calculator</source>
-        <translation>Výpočet rozkvašení kvasnic</translation>
+        <translation type="vanished">Výpočet rozkvašení kvasnic</translation>
     </message>
     <message>
         <source>Input</source>
-        <translation>Vstup</translation>
+        <translation type="vanished">Vstup</translation>
     </message>
     <message>
         <source>Wort Volume</source>
-        <translation>Objem díla</translation>
+        <translation type="vanished">Objem díla</translation>
     </message>
     <message>
         <source>OG</source>
-        <translation>Hustota mladiny</translation>
+        <translation type="vanished">Hustota mladiny</translation>
     </message>
     <message>
         <source>For ales, 0.75-1. For lagers, 1.5-2.</source>
-        <translation>Pro ejly 0,75. Pro ležáky 1,5-2.</translation>
+        <translation type="vanished">Pro ejly 0,75. Pro ležáky 1,5-2.</translation>
     </message>
     <message>
         <source>Pitch Rate (M cells)/(mL*P)</source>
-        <translation>Rychl. množení (M buňek)/(mL*P)</translation>
+        <translation type="vanished">Rychl. množení (M buňek)/(mL*P)</translation>
     </message>
     <message>
         <source>Aeration Method</source>
-        <translation>Způsob provzdušnění</translation>
+        <translation type="vanished">Způsob provzdušnění</translation>
     </message>
     <message>
         <source>Yeast Production Date</source>
-        <translation>Datum výroby kvasnic</translation>
+        <translation type="vanished">Datum výroby kvasnic</translation>
     </message>
     <message>
         <source>Yeast Viability</source>
-        <translation>Životaschopnost kvasnic</translation>
+        <translation type="vanished">Životaschopnost kvasnic</translation>
     </message>
     <message>
         <source>None</source>
-        <translation>Žádný</translation>
+        <translation type="vanished">Žádný</translation>
     </message>
     <message>
         <source>O2 At Start</source>
-        <translation>Kyslík na začátku</translation>
+        <translation type="vanished">Kyslík na začátku</translation>
     </message>
     <message>
         <source>Stir Plate</source>
-        <translation>Míchadlo</translation>
+        <translation type="vanished">Míchadlo</translation>
     </message>
     <message>
         <source>MM/dd/yyyy</source>
-        <translation>MM/dd/yyyy</translation>
+        <translation type="vanished">MM/dd/yyyy</translation>
     </message>
     <message>
         <source>%</source>
-        <translation>%</translation>
+        <translation type="vanished">%</translation>
     </message>
     <message>
         <source>TextLabel</source>
-        <translation>TextovýPopis</translation>
+        <translation type="vanished">TextovýPopis</translation>
     </message>
     <message>
         <source>Calculate Viability From Date</source>
-        <translation>Spočítat životaschopnost ze zadaného data</translation>
+        <translation type="vanished">Spočítat životaschopnost ze zadaného data</translation>
     </message>
     <message>
         <source># Vials/Smack Packs Pitched</source>
-        <translation>Použito balíčků</translation>
+        <translation type="vanished">Použito balíčků</translation>
     </message>
     <message>
         <source>Output</source>
-        <translation>Výstup</translation>
+        <translation type="vanished">Výstup</translation>
     </message>
     <message>
         <source>Billions of Yeast Cells Required</source>
-        <translation>Žádaný počet miliard kvasinek</translation>
+        <translation type="vanished">Žádaný počet miliard kvasinek</translation>
     </message>
     <message>
         <source># Vials/Smack Packs w/o Starter</source>
-        <translation>Balíčků bez rozkvašení</translation>
+        <translation type="vanished">Balíčků bez rozkvašení</translation>
     </message>
     <message>
         <source>Dry Yeast</source>
-        <translation>Sušené kvasnice</translation>
+        <translation type="vanished">Sušené kvasnice</translation>
     </message>
     <message>
         <source>Starter Volume</source>
-        <translation>Počáteční objem</translation>
-    </message>
-    <message>
-        <source>Volume of wort</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Starting gravity of the wort</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Aeration method</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Production date (Best By date less three months)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Estimated viability of the yeast</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Desired pitch rate</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Number of vials/smack packs added to starter</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>How much yeast you will need</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>How many smack packs or vials required to reach pitch rate</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Amount of dry yeast needed to reach pitch rate</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Starter size to reach pitch rate</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Počáteční objem</translation>
     </message>
 </context>
 <context>
     <name>primingDialog</name>
     <message>
         <source>Priming Calculator</source>
-        <translation>Výpočet kvasných cukrů</translation>
+        <translation type="vanished">Výpočet kvasných cukrů</translation>
     </message>
     <message>
         <source>Input</source>
-        <translation>Vstup</translation>
+        <translation type="vanished">Vstup</translation>
     </message>
     <message>
         <source>Collected Beer Volume</source>
-        <translation>Množství piva</translation>
+        <translation type="vanished">Množství piva</translation>
     </message>
     <message>
         <source>Amount of beer to prime</source>
-        <translation>Množství piva pro přidání kvasných cukrů</translation>
+        <translation type="vanished">Množství piva pro přidání kvasných cukrů</translation>
     </message>
     <message>
         <source>Beer Temperature</source>
-        <translation>Teplota piva</translation>
+        <translation type="vanished">Teplota piva</translation>
     </message>
     <message>
         <source>Temp of the beer</source>
-        <translation>Teplota piva</translation>
+        <translation type="vanished">Teplota piva</translation>
     </message>
     <message>
         <source>Desired Volumes</source>
-        <translation>Požadované nasycení</translation>
+        <translation type="vanished">Požadované nasycení</translation>
     </message>
     <message>
         <source>How many volumes of CO2 you want (1 L CO2 @ STP per L beer)</source>
-        <translation>Kolik objemů (volumes) CO2, chcete získat (1l CO2 na l piva)</translation>
+        <translation type="vanished">Kolik objemů (volumes) CO2, chcete získat (1l CO2 na l piva)</translation>
     </message>
     <message>
         <source>Glucose Monohydrate (corn sugar)</source>
-        <translation>Monohydrát glukózy (kukuřičný cukr)</translation>
+        <translation type="vanished">Monohydrát glukózy (kukuřičný cukr)</translation>
     </message>
     <message>
         <source>Anhydrous Glucose</source>
-        <translation>Bezvodá glukóza</translation>
+        <translation type="vanished">Bezvodá glukóza</translation>
     </message>
     <message>
         <source>Sucrose (table sugar)</source>
-        <translation>Sacharóza (řepný cukr)</translation>
+        <translation type="vanished">Sacharóza (řepný cukr)</translation>
     </message>
     <message>
         <source>Dry Malt Extract</source>
-        <translation>Sušený sladový výtažek</translation>
+        <translation type="vanished">Sušený sladový výtažek</translation>
     </message>
     <message>
         <source>Output</source>
-        <translation>Výstup</translation>
+        <translation type="vanished">Výstup</translation>
     </message>
     <message>
         <source>Prime with</source>
-        <translation>Přidejte</translation>
+        <translation type="vanished">Přidejte</translation>
     </message>
     <message>
         <source>How much priming ingredient to use</source>
-        <translation>Kolik přísady přidat</translation>
+        <translation type="vanished">Kolik přísady přidat</translation>
     </message>
     <message>
         <source>Calculate</source>
-        <translation>Spočítat</translation>
+        <translation type="vanished">Spočítat</translation>
     </message>
 </context>
 <context>
     <name>recipeExtrasWidget</name>
     <message>
         <source>Form</source>
-        <translation>Formulář</translation>
+        <translation type="vanished">Formulář</translation>
     </message>
     <message>
         <source>Brewer</source>
-        <translation>Sládek</translation>
+        <translation type="vanished">Sládek</translation>
     </message>
     <message>
         <source>Asst. Brewer</source>
-        <translation>Asistent sládka</translation>
+        <translation type="vanished">Asistent sládka</translation>
     </message>
     <message>
         <source>Taste Rating</source>
-        <translation>Hodnocení ochutnávky</translation>
+        <translation type="vanished">Hodnocení ochutnávky</translation>
     </message>
     <message>
         <source>Primary Age (days)</source>
-        <translation>Délka hlav. kvašení (dny)</translation>
+        <translation type="vanished">Délka hlav. kvašení (dny)</translation>
     </message>
     <message>
         <source>Primary Temp</source>
-        <translation>Teplota hlavního kvašení</translation>
+        <translation type="vanished">Teplota hlavního kvašení</translation>
     </message>
     <message>
         <source>Secondary Age (days)</source>
-        <translation>Délka dokvašování</translation>
+        <translation type="vanished">Délka dokvašování</translation>
     </message>
     <message>
         <source>Secondary Temp</source>
-        <translation>Teplota dokvašování</translation>
+        <translation type="vanished">Teplota dokvašování</translation>
     </message>
     <message>
         <source>Tertiary Age (days)</source>
-        <translation>Délka ležení (dny)</translation>
+        <translation type="vanished">Délka ležení (dny)</translation>
     </message>
     <message>
         <source>Tertiary Temp</source>
-        <translation>Teplota ležení</translation>
+        <translation type="vanished">Teplota ležení</translation>
     </message>
     <message>
         <source>Bottle/Keg Age (days)</source>
-        <translation>V lahvi/KEGu (dny)</translation>
+        <translation type="vanished">V lahvi/KEGu (dny)</translation>
     </message>
     <message>
         <source>Bottle/Keg Temp</source>
-        <translation>Teplota lahve/KEGu</translation>
+        <translation type="vanished">Teplota lahve/KEGu</translation>
     </message>
     <message>
         <source>Date First Brewed</source>
-        <translation>Poprvé uvařeno</translation>
+        <translation type="vanished">Poprvé uvařeno</translation>
     </message>
     <message>
         <source>dd MMM yyyy</source>
-        <translation>dd MMM yyyy</translation>
+        <translation type="vanished">dd MMM yyyy</translation>
     </message>
     <message>
         <source>Carbonation Volumes</source>
-        <translation>Nasycení</translation>
+        <translation type="vanished">Nasycení</translation>
     </message>
     <message>
         <source>Taste Notes</source>
-        <translation>Poznámky k chuti</translation>
+        <translation type="vanished">Poznámky k chuti</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Poznámky</translation>
+        <translation type="vanished">Poznámky</translation>
     </message>
 </context>
 <context>
     <name>refractoDialog</name>
     <message>
         <source>Refractometer Tools</source>
-        <translation>Nástroje pro refraktometr</translation>
+        <translation type="vanished">Nástroje pro refraktometr</translation>
     </message>
     <message>
         <source>Inputs</source>
-        <translation>Vstupy</translation>
+        <translation type="vanished">Vstupy</translation>
     </message>
     <message>
         <source>Original Plato</source>
-        <translation>Původní Plato</translation>
+        <translation type="vanished">Původní Plato</translation>
     </message>
     <message>
         <source>OG (20 C)</source>
-        <translation>Hustota (20C)</translation>
+        <translation type="vanished">Hustota (20C)</translation>
     </message>
     <message>
         <source>Current Plato</source>
-        <translation>Aktuální Plato</translation>
+        <translation type="vanished">Aktuální Plato</translation>
     </message>
     <message>
         <source>Calculate</source>
-        <translation>Spočítat</translation>
+        <translation type="vanished">Spočítat</translation>
     </message>
     <message>
         <source>Outputs</source>
-        <translation>Výstupy</translation>
+        <translation type="vanished">Výstupy</translation>
     </message>
     <message>
         <source>SG (20C)</source>
-        <translation>Hustota (20C)</translation>
+        <translation type="vanished">Hustota (20C)</translation>
     </message>
     <message>
         <source>ABV</source>
-        <translation>Obsah alk. (obj.)</translation>
+        <translation type="vanished">Obsah alk. (obj.)</translation>
     </message>
     <message>
         <source>ABW</source>
-        <translation>Obsah alk. (hm.)</translation>
+        <translation type="vanished">Obsah alk. (hm.)</translation>
     </message>
     <message>
         <source>Refractive Index</source>
-        <translation>Index lomu</translation>
+        <translation type="vanished">Index lomu</translation>
     </message>
     <message>
         <source>Real Extract (Plato)</source>
-        <translation>Skutečný extrakt (P.)</translation>
+        <translation type="vanished">Skutečný extrakt (P.)</translation>
     </message>
     <message>
         <source>OG (20C)</source>
-        <translation>Pův. hustota (20C)</translation>
-    </message>
-    <message>
-        <source>Measured original plato</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Measured original gravity</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Current measured plato</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Pův. hustota (20C)</translation>
     </message>
 </context>
 <context>
     <name>strikeWaterDialog</name>
     <message>
         <source>Strike Water Calculator</source>
-        <translation>Výpočet nálevu</translation>
-    </message>
-    <message>
-        <source>Initial Infusion</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Výpočet nálevu</translation>
     </message>
     <message>
         <source>Original Grain Temperature</source>
-        <translation>Teplota sladu</translation>
+        <translation type="vanished">Teplota sladu</translation>
     </message>
     <message>
         <source>Target Mash Temperature</source>
-        <translation>Cílová teplota rmutu</translation>
+        <translation type="vanished">Cílová teplota rmutu</translation>
     </message>
     <message>
         <source>Weight of Grain</source>
-        <translation>Hmožnost sladu</translation>
+        <translation type="vanished">Hmožnost sladu</translation>
     </message>
     <message>
         <source>Volume of Water</source>
-        <translation>Objem vody</translation>
-    </message>
-    <message>
-        <source>Mash Infusion</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Objem vody</translation>
     </message>
     <message>
         <source>Total Volume of Water</source>
-        <translation>Celkový objem vody</translation>
+        <translation type="vanished">Celkový objem vody</translation>
     </message>
     <message>
         <source>Grain Weight</source>
-        <translation>Hmotnost sladu</translation>
+        <translation type="vanished">Hmotnost sladu</translation>
     </message>
     <message>
         <source>Actual Mash Temperature</source>
-        <translation>Skutečná teplota rmutu</translation>
-    </message>
-    <message>
-        <source>Infusion Water Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Skutečná teplota rmutu</translation>
     </message>
     <message>
         <source>Calculate</source>
-        <translation>Vypočítat</translation>
+        <translation type="vanished">Vypočítat</translation>
     </message>
     <message>
         <source>Strike Water Temperature</source>
-        <translation>Teplota nálevu</translation>
+        <translation type="vanished">Teplota nálevu</translation>
     </message>
     <message>
         <source>Volume to add</source>
-        <translation>Množství k přidání</translation>
+        <translation type="vanished">Množství k přidání</translation>
     </message>
     <message>
         <source>Note: This calculator assumes a preheated mash tun.</source>
-        <translation>Pozn.: Tato kalkulačka uvažuje předehřátou rmutovací pánev.</translation>
+        <translation type="vanished">Pozn.: Tato kalkulačka uvažuje předehřátou rmutovací pánev.</translation>
     </message>
 </context>
 <context>
     <name>styleEditor</name>
     <message>
         <source>Style Editor</source>
-        <translation>Editor stylů</translation>
+        <translation type="vanished">Editor stylů</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation>Styl</translation>
+        <translation type="vanished">Styl</translation>
     </message>
     <message>
         <source>Delete selected style</source>
-        <translation>Odstranit vybraný styl</translation>
+        <translation type="vanished">Odstranit vybraný styl</translation>
     </message>
     <message>
         <source>Basic Information</source>
-        <translation>Základní informace</translation>
+        <translation type="vanished">Základní informace</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Název</translation>
+        <translation type="vanished">Název</translation>
     </message>
     <message>
         <source>Category</source>
-        <translation>Kategorie</translation>
+        <translation type="vanished">Kategorie</translation>
     </message>
     <message>
         <source>Category number</source>
-        <translation>Číslo kategorie</translation>
+        <translation type="vanished">Číslo kategorie</translation>
     </message>
     <message>
         <source>Style letter</source>
-        <translation>Písmeno stylu</translation>
+        <translation type="vanished">Písmeno stylu</translation>
     </message>
     <message>
         <source>Style guide</source>
-        <translation>Katalog stylů</translation>
+        <translation type="vanished">Katalog stylů</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Druh</translation>
+        <translation type="vanished">Druh</translation>
     </message>
     <message>
         <source>Type of beverage</source>
-        <translation>Druh nápoje</translation>
+        <translation type="vanished">Druh nápoje</translation>
     </message>
     <message>
         <source>Lager</source>
-        <translation>Ležák</translation>
+        <translation type="vanished">Ležák</translation>
     </message>
     <message>
         <source>Ale</source>
-        <translation>Ale</translation>
+        <translation type="vanished">Ale</translation>
     </message>
     <message>
         <source>Mead</source>
-        <translation>Medovina</translation>
+        <translation type="vanished">Medovina</translation>
     </message>
     <message>
         <source>Wheat</source>
-        <translation>Pšenice</translation>
+        <translation type="vanished">Pšenice</translation>
     </message>
     <message>
         <source>Mixed</source>
-        <translation>Mix</translation>
+        <translation type="vanished">Mix</translation>
     </message>
     <message>
         <source>Cider</source>
-        <translation>Cider</translation>
+        <translation type="vanished">Cider</translation>
     </message>
     <message>
         <source>Vital Statistics</source>
-        <translation>Číselná charakteristika</translation>
+        <translation type="vanished">Číselná charakteristika</translation>
     </message>
     <message>
         <source>Max</source>
-        <translation>Maximálně</translation>
+        <translation type="vanished">Maximálně</translation>
     </message>
     <message>
         <source>Min</source>
-        <translation>Minimálně</translation>
+        <translation type="vanished">Minimálně</translation>
     </message>
     <message>
         <source>OG</source>
-        <translation>Počát. hustota</translation>
+        <translation type="vanished">Počát. hustota</translation>
     </message>
     <message>
         <source>FG</source>
-        <translation>Konečná hustota</translation>
+        <translation type="vanished">Konečná hustota</translation>
     </message>
     <message>
         <source>IBUs</source>
-        <translation>IBU</translation>
+        <translation type="vanished">IBU</translation>
     </message>
     <message>
         <source>Color (SRM)</source>
-        <translation>Barva (SRM)</translation>
+        <translation type="vanished">Barva (SRM)</translation>
     </message>
     <message>
         <source>Carb (vols)</source>
-        <translation>Nasycení (obj.)</translation>
+        <translation type="vanished">Nasycení (obj.)</translation>
     </message>
     <message>
         <source>ABV (pct)</source>
-        <translation>Alkohol (%)</translation>
+        <translation type="vanished">Alkohol (%)</translation>
     </message>
     <message>
         <source>Profile</source>
-        <translation>Profil</translation>
+        <translation type="vanished">Profil</translation>
     </message>
     <message>
         <source>Ingredients</source>
-        <translation>Přísady</translation>
+        <translation type="vanished">Přísady</translation>
     </message>
     <message>
         <source>Examples</source>
-        <translation>Příklady</translation>
+        <translation type="vanished">Příklady</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Poznámky</translation>
+        <translation type="vanished">Poznámky</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>Nový</translation>
+        <translation type="vanished">Nový</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation>Uložit</translation>
+        <translation type="vanished">Uložit</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Zrušit</translation>
+        <translation type="vanished">Zrušit</translation>
     </message>
 </context>
 <context>
@@ -5518,218 +6499,183 @@ Celkový objem pro hlavní kvašení je %1.</translation>
         <source>Timers</source>
         <translation type="vanished">Časovače</translation>
     </message>
-    <message>
-        <source>Addition Timers</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>timerWidget</name>
-    <message>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Add:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Notes...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>At:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>mins</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>waterEditor</name>
     <message>
         <source>Dialog</source>
-        <translation>Dialog</translation>
+        <translation type="vanished">Dialog</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Název</translation>
+        <translation type="vanished">Název</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Poznámky</translation>
+        <translation type="vanished">Poznámky</translation>
     </message>
 </context>
 <context>
     <name>yeastEditor</name>
     <message>
         <source>Yeast Editor</source>
-        <translation>Editor kvasnic</translation>
+        <translation type="vanished">Editor kvasnic</translation>
     </message>
     <message>
         <source>Required Fields</source>
-        <translation>Povinná pole</translation>
+        <translation type="vanished">Povinná pole</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Název</translation>
+        <translation type="vanished">Název</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Druh</translation>
+        <translation type="vanished">Druh</translation>
     </message>
     <message>
         <source>Ale</source>
-        <translation>Ale</translation>
+        <translation type="vanished">Ale</translation>
     </message>
     <message>
         <source>Lager</source>
-        <translation>Ležák</translation>
+        <translation type="vanished">Ležák</translation>
     </message>
     <message>
         <source>Wheat</source>
-        <translation>Pšenice</translation>
+        <translation type="vanished">Pšenice</translation>
     </message>
     <message>
         <source>Wine</source>
-        <translation>Víno</translation>
+        <translation type="vanished">Víno</translation>
     </message>
     <message>
         <source>Champagne</source>
-        <translation>Šampaňské</translation>
+        <translation type="vanished">Šampaňské</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation>Druh</translation>
+        <translation type="vanished">Druh</translation>
     </message>
     <message>
         <source>Liquid</source>
-        <translation>Tekuté</translation>
+        <translation type="vanished">Tekuté</translation>
     </message>
     <message>
         <source>Dry</source>
-        <translation>Sušené</translation>
+        <translation type="vanished">Sušené</translation>
     </message>
     <message>
         <source>Slant</source>
-        <translation>Agar</translation>
+        <translation type="vanished">Agar</translation>
     </message>
     <message>
         <source>Culture</source>
-        <translation>Kultura</translation>
+        <translation type="vanished">Kultura</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation>Množství</translation>
+        <translation type="vanished">Množství</translation>
     </message>
     <message>
         <source>Check it if the amount given is in kg instead of L.</source>
-        <translation>Zaškrtněte, pokud je objem v kg místo l.</translation>
+        <translation type="vanished">Zaškrtněte, pokud je objem v kg místo l.</translation>
     </message>
     <message>
         <source>Amount is weight?</source>
-        <translation>Možství je hmotnost?</translation>
+        <translation type="vanished">Možství je hmotnost?</translation>
     </message>
     <message>
         <source>Checked if the given amount is weight instead of volume</source>
-        <translation>Zaškrtněte, pokud je zadané množství hmotnostní, nikoli objemové</translation>
+        <translation type="vanished">Zaškrtněte, pokud je zadané množství hmotnostní, nikoli objemové</translation>
     </message>
     <message>
         <source>Lab</source>
-        <translation>Laboratoř</translation>
+        <translation type="vanished">Laboratoř</translation>
     </message>
     <message>
         <source>Product ID</source>
-        <translation>ID produktu</translation>
+        <translation type="vanished">ID produktu</translation>
     </message>
     <message>
         <source>Min Temp</source>
-        <translation>Min. teplota</translation>
+        <translation type="vanished">Min. teplota</translation>
     </message>
     <message>
         <source>Min temp</source>
-        <translation>Min. teplota</translation>
+        <translation type="vanished">Min. teplota</translation>
     </message>
     <message>
         <source>Max Temp</source>
-        <translation>Max. teplota</translation>
+        <translation type="vanished">Max. teplota</translation>
     </message>
     <message>
         <source>Max temp</source>
-        <translation>Maximální teplota</translation>
+        <translation type="vanished">Maximální teplota</translation>
     </message>
     <message>
         <source>Flocculation</source>
-        <translation>Flokulace</translation>
+        <translation type="vanished">Flokulace</translation>
     </message>
     <message>
         <source>Low</source>
-        <translation>Nízká</translation>
+        <translation type="vanished">Nízká</translation>
     </message>
     <message>
         <source>Medium</source>
-        <translation>Střední</translation>
+        <translation type="vanished">Střední</translation>
     </message>
     <message>
         <source>High</source>
-        <translation>Vysoká</translation>
+        <translation type="vanished">Vysoká</translation>
     </message>
     <message>
         <source>Very High</source>
-        <translation>Velmi vysoké</translation>
+        <translation type="vanished">Velmi vysoké</translation>
     </message>
     <message>
         <source>Attenuation (%)</source>
-        <translation>Prokvašení (%)</translation>
+        <translation type="vanished">Prokvašení (%)</translation>
     </message>
     <message>
         <source>Apparent attenuation as percentage of OG points</source>
-        <translation>Zdánlivé prokvašení v procentech bodů hustoty</translation>
+        <translation type="vanished">Zdánlivé prokvašení v procentech bodů hustoty</translation>
     </message>
     <message>
         <source>Times Recultured</source>
-        <translation>Počet použití</translation>
+        <translation type="vanished">Počet použití</translation>
     </message>
     <message>
         <source>Times this yeast has been recultured</source>
-        <translation>Kolikrát byly již kvasnice použity</translation>
+        <translation type="vanished">Kolikrát byly již kvasnice použity</translation>
     </message>
     <message>
         <source>Max Recultures</source>
-        <translation>Max. počet použití</translation>
+        <translation type="vanished">Max. počet použití</translation>
     </message>
     <message>
         <source>Max recultures</source>
-        <translation>Maximální počet použití</translation>
+        <translation type="vanished">Maximální počet použití</translation>
     </message>
     <message>
         <source>Add to Secondary</source>
-        <translation>Přidat při dokvašování</translation>
+        <translation type="vanished">Přidat při dokvašování</translation>
     </message>
     <message>
         <source>Checked means add this yeast to secondary instead of primary</source>
-        <translation>Zaškrtněte, pokud přidáváte tyto kvasnice do dokvašování místo hlavního kvašení</translation>
+        <translation type="vanished">Zaškrtněte, pokud přidáváte tyto kvasnice do dokvašování místo hlavního kvašení</translation>
     </message>
     <message>
         <source>Best For:</source>
-        <translation>Nejvhodnější pro:</translation>
+        <translation type="vanished">Nejvhodnější pro:</translation>
     </message>
     <message>
         <source>Notes:</source>
-        <translation>Poznámky:</translation>
+        <translation type="vanished">Poznámky:</translation>
     </message>
     <message>
         <source>Default Amount</source>
-        <translation>Výchozí množství</translation>
-    </message>
-    <message>
-        <source>Quanta in Inventory</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Quanta in inventory</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Výchozí množství</translation>
     </message>
 </context>
 </TS>
