@@ -1,6 +1,6 @@
 /*
  * MainWindow.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2022
  * - Dan Cavanagh <dan@dancavanagh.com>
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Matt Young <mfsy@yahoo.com>
@@ -125,7 +125,7 @@ public:
    /**
     * \brief This needs to be called immediately after the constructor.  It does the remaining initialisation of the
     *        object.  This function cannot be called from the constructor as, in certain circumstances, it will invoke
-    *        code that calls Brewtarget::mainWindow() which returns a pointer to the MainWindow and therefore needs the
+    *        code that calls Application::mainWindow() which returns a pointer to the MainWindow and therefore needs the
     *        MainWindow constructor to have returned!
     */
    void init();
@@ -269,9 +269,6 @@ public slots:
 
    //! \brief Open the default browser to view Brewtarget manual.
     void openManual();
-
-   //! \brief Catches a QNetworkReply signal and gets info about any new version available.
-   void finishCheckingVersion();
 
    void redisplayLabel();
 

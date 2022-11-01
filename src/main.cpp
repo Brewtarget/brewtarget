@@ -31,7 +31,7 @@
 #include <QSharedMemory>
 
 #include "xml/BeerXml.h"
-#include "brewtarget.h"
+#include "Application.h"
 #include "config.h"
 #include "database/Database.h"
 #include "Logging.h"
@@ -117,11 +117,13 @@ int main(int argc, char **argv) {
    // Having initialised various QApplication settings and read command line options, we can now allow Qt to work out where to get config from
    //
    PersistentSettings::initialise(parser.value(userDirectoryOption));
+   qDebug() << Q_FUNC_INFO << "Persistent Settings initialised";
 
    //
    // And once we have config, we can initialise logging
    //
    Logging::initializeLogging();
+   qDebug() << Q_FUNC_INFO << "Logging initialised";
 
    // Initialize Xerces XML tools
    // NB: This is also where where we would initialise xalanc::XalanTransformer if we were using it
@@ -186,9 +188,10 @@ int main(int argc, char **argv) {
       qInfo() << "Using Qt runtime v" << qVersion() << " (compiled against Qt v" << QT_VERSION_STR << ")";
       qInfo() << "Configuration directory:" << PersistentSettings::getConfigDir().absolutePath();
       qInfo() << "Data directory:" << PersistentSettings::getUserDataDir().absolutePath();
+      qInfo() << "Resource directory:" << Application::getResourceDir().absolutePath();
       qDebug() << Q_FUNC_INFO << "Library Paths:" << qApp->libraryPaths();
 
-      auto mainAppReturnValue = Brewtarget::run();
+      auto mainAppReturnValue = Application::run();
 
       //
       // Clean exit of Xerces XML tools

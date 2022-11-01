@@ -133,8 +133,8 @@ void Testing::initTestCase() {
       PersistentSettings::insert(PersistentSettings::Names::ibu_formula, "tinseth");
 
    // Tell Brewtarget not to require any "user" input on starting
-   Brewtarget::setInteractive(false);
-   QVERIFY( Brewtarget::initialize() );
+   Application::setInteractive(false);
+   QVERIFY( Application::initialize() );
 
       // 5 gallon equipment
       this->equipFiveGalNoLoss = std::make_shared<Equipment>();
@@ -427,7 +427,7 @@ void Testing::testLogRotation() {
 
 void Testing::cleanupTestCase()
 {
-   Brewtarget::cleanup();
+   Application::cleanup();
    Logging::terminateLogging();
    //Clean up the gibberish logs from disk by removing the
    QFileInfoList fileList = Logging::getLogFileList();
@@ -474,7 +474,7 @@ void Testing::runTest()
 {
    QVERIFY( 1==1 );
    /*
-   MainWindow* mw = Brewtarget::mainWindow();
+   MainWindow* mw = Application::mainWindow();
    QVERIFY( mw );
    */
 }

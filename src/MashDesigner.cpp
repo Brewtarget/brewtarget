@@ -637,7 +637,7 @@ double MashDesigner::getDecoctionAmount_l() {
    r = ((MC)*(tf-t1)) / ((m_w*c_w + m_g*c_g)*(maxTemp_c()-tf) + (m_w*c_w + m_g*c_g)*(tf-t1));
    if (r < 0 || r > 1) {
       //QMessageBox::critical(this, tr("Decoction error"), tr("Something went wrong in decoction calculation."));
-      //Brewtarget::log(Brewtarget::ERROR, QString("MashDesigner Decoction: r=%1").arg(r));
+      //Application::log(Application::ERROR, QString("MashDesigner Decoction: r=%1").arg(r));
       return 0;
    }
 

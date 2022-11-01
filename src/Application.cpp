@@ -1,6 +1,6 @@
 /*
- * brewtarget.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * Application.cpp is part of Brewtarget, and is Copyright the following
+ * authors 2009-2022
  * - A.J. Drobnich <aj.drobnich@gmail.com>
  * - Dan Cavanagh <dan@dancavanagh.com>
  * - Matt Young <mfsy@yahoo.com>
@@ -24,11 +24,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "brewtarget.h"
+#include "Application.h"
 
 #include <iostream>
 
 #include <QDebug>
+#include <QDesktopServices>
+#include <QJsonObject>
+#include <QJsonParseError>
 #include <QMessageBox>
 #include <QObject>
 #include <QString>
@@ -66,7 +69,13 @@
 namespace {
 
    bool interactive = true;
+
+   //! \brief If this option is false, do not bother the user about new versions.
    bool checkVersion = true;
+
+   void setCheckVersion(bool value) {
+      checkVersion = value;
+   }
 
    //! \brief Where the user says the database files are
    QDir userDataDir;
@@ -86,7 +95,7 @@ namespace {
 
          QString errText{QObject::tr("\"%1\" cannot be read.")};
          qWarning() << errText.arg(dir.path());
-         if (Brewtarget::isInteractive()) {
+         if (Application::isInteractive()) {
             QString errTitle(QObject::tr("Directory Problem"));
             QMessageBox::information(
                nullptr,
@@ -108,7 +117,7 @@ namespace {
       // translations.  We could attempt to create it, like the other config/data directories, but an empty resource
       // dir is just as bad as a missing one.  So, instead, we'll display a little more dire warning, and not try to
       // create it.
-      QDir resourceDir = Brewtarget::getResourceDir();
+      QDir resourceDir = Application::getResourceDir();
       bool resourceDirSuccess = resourceDir.exists();
       if (!resourceDirSuccess) {
          QString errMsg{
@@ -116,7 +125,7 @@ namespace {
          };
          qCritical() << Q_FUNC_INFO << errMsg;
 
-         if (Brewtarget::isInteractive()) {
+         if (Application::isInteractive()) {
             QMessageBox::critical(
                nullptr,
                QObject::tr("Directory Problem"),
@@ -130,34 +139,139 @@ namespace {
              createDir(PersistentSettings::getUserDataDir());
    }
 
+   /**
+    * \brief Every so often, we need to update the config file itself. This does that.
+    */
+   void updateConfig() {
+      int cVersion = PersistentSettings::value(PersistentSettings::Names::config_version, QVariant(0)).toInt();
+      while ( cVersion < CONFIG_VERSION ) {
+         switch ( ++cVersion ) {
+            case 1:
+               // Update the dbtype, because I had to increase the NODB value from -1 to 0
+               Database::DbType newType =
+                  static_cast<Database::DbType>(
+                     PersistentSettings::value(PersistentSettings::Names::dbType,
+                                             static_cast<int>(Database::DbType::NODB)).toInt() + 1
+                  );
+               // Write that back to the config file
+               PersistentSettings::insert(PersistentSettings::Names::dbType, static_cast<int>(newType));
+               // and make sure we don't do it again.
+               PersistentSettings::insert(PersistentSettings::Names::config_version, QVariant(cVersion));
+               break;
+         }
+      }
+      return;
+   }
+
+   QNetworkReply * responseToCheckForNewVersion = nullptr;
 
    /**
-    * \brief Checks for a newer version and prompts user to download.
-    *.:TODO:. This needs to be updated
+    * \brief Once the response is received to the web request to get latest version info, this parses it and, if
+    *        necessary, prompts the user to upgrade.
+    *        See \c initiateCheckForNewVersion.
     */
-   void checkForNewVersion(MainWindow* mw) {
-
-      // Don't do anything if the checkVersion flag was set false
-      if (checkVersion == false ) {
+   void finishCheckForNewVersion() {
+      if (!responseToCheckForNewVersion) {
+         qDebug() << Q_FUNC_INFO << "Invalid sender";
          return;
       }
 
-      QNetworkAccessManager manager;
-   QUrl url("http://brewtarget.sourceforge.net/version");
-      QNetworkReply* reply = manager.get( QNetworkRequest(url) );
-      QObject::connect( reply, &QNetworkReply::finished, mw, &MainWindow::finishCheckingVersion );
+      // If there is an error, just return.
+      if (responseToCheckForNewVersion->error() != QNetworkReply::NoError) {
+         qDebug() << Q_FUNC_INFO << "Error checking for update:" << responseToCheckForNewVersion->error();
+         return;
+      }
+
+      //
+      // Checking a version number on Sourceforge is easy, eg a GET request to
+      // https://brewtarget.sourceforge.net/version just returns the last version of Brewtarget that was hosted on
+      // Sourceforge (quite an old one).
+      //
+      // On GitHub, it's a bit harder as there's a REST API that gives back loads of info in JSON format.  We don't want
+      // to do anything clever with the JSON response, just extract one field, so the Qt JSON support suffices here.
+      // (See comments elsewhere for why we don't use it for BeerJSON.)
+      //
+      QByteArray rawContent = responseToCheckForNewVersion->readAll();
+      QJsonParseError jsonParseError{};
+
+      QJsonDocument jsonDocument = QJsonDocument::fromJson(rawContent, &jsonParseError);
+      if (QJsonParseError::ParseError::NoError != jsonParseError.error) {
+         qWarning() <<
+            Q_FUNC_INFO << "Error parsing JSON from version check response:" << jsonParseError.error << "at offset" <<
+            jsonParseError.offset;
+         return;
+
+      }
+
+      QJsonObject jsonObject = jsonDocument.object();
+
+      QString remoteVersion = jsonObject.value("name").toString();
+      qDebug() << Q_FUNC_INFO << "Latest release is" << remoteVersion << "; this release is" << VERSIONSTRING;
+
+      // Version names are usually "v3.0.2" etc, so we want to strip the 'v' off the front
+      if (remoteVersion.startsWith("v", Qt::CaseInsensitive)) {
+         remoteVersion.remove(0, 1);
+      }
+
+      // If the remote version is newer...
+      if (!remoteVersion.startsWith(VERSIONSTRING)) {
+         // ...and the user wants to download the new version...
+         if( QMessageBox::information(&MainWindow::instance(),
+                                    QObject::tr("New Version"),
+                                    QObject::tr("Version %1 is now available. Download it?").arg(remoteVersion),
+                                    QMessageBox::Yes | QMessageBox::No,
+                                    QMessageBox::Yes) == QMessageBox::Yes ) {
+            // ...take them to the website.
+            QDesktopServices::openUrl(QUrl("https://github.com/Brewtarget/brewtarget/releases"));
+         } else  {
+            // ... and the user does NOT want to download the new version...
+            // ... and they want us to stop bothering them...
+            if( QMessageBox::question(&MainWindow::instance(),
+                                    QObject::tr("New Version"),
+                                    QObject::tr("Stop bothering you about new versions?"),
+                                    QMessageBox::Yes | QMessageBox::No,
+                                    QMessageBox::Yes) == QMessageBox::Yes) {
+               // ... make a note to stop bothering the user about the new version.
+               setCheckVersion(false);
+            }
+         }
+         return;
+      }
+
+      // The current version is newest so make a note to bother users about future new versions.
+      // This means that when a user downloads the new version, this variable will always get reset to true.
+      setCheckVersion(true);
+      return;
+   }
+
+
+   /**
+    * \brief Sends a web request to check whether there is a newer version of the software available
+    */
+   void initiateCheckForNewVersion(MainWindow* mw) {
+
+      // Don't do anything if the checkVersion flag was set false
+      if (!checkVersion) {
+         qDebug() << Q_FUNC_INFO << "Check for new version is disabled";
+         return;
+      }
+
+      // Nobody else needs to access this QNetworkAccessManager object, but it needs to carry on existing after this
+      // function returns (otherwise the HTTP GET request will get cancelled), hence why we make it static.
+      static QNetworkAccessManager * manager = new QNetworkAccessManager();
+      QUrl url("https://api.github.com/repos/Brewtarget/brewtarget/releases/latest");
+      responseToCheckForNewVersion = manager->get(QNetworkRequest(url));
+      // Since Qt5, you can connect signals to simple functions (see https://wiki.qt.io/New_Signal_Slot_Syntax)
+      QObject::connect(responseToCheckForNewVersion, &QNetworkReply::finished, mw, &finishCheckForNewVersion);
+      qDebug() <<
+         Q_FUNC_INFO << "Sending request to check for new version (request running =" <<
+         responseToCheckForNewVersion->isRunning() << ")";
       return;
    }
 
 }
 
-void Brewtarget::setCheckVersion(bool value) {
-   checkVersion = value;
-   return;
-}
-
-QDir Brewtarget::getDataDir()
-{
+QDir Application::getDataDir() {
    QString dir = qApp->applicationDirPath();
 #if defined(Q_OS_LINUX) // Linux OS.
 
@@ -182,8 +296,7 @@ QDir Brewtarget::getDataDir()
    return dir;
 }
 
-QDir Brewtarget::getDocDir()
-{
+QDir Application::getDocDir() {
    QString dir = qApp->applicationDirPath();
 #if defined(Q_OS_LINUX) // Linux OS.
 
@@ -208,8 +321,7 @@ QDir Brewtarget::getDocDir()
    return dir;
 }
 
-const QDir Brewtarget::getConfigDir()
-{
+const QDir Application::getConfigDir() {
 #if defined(Q_OS_LINUX) || defined(Q_OS_MAC) // Linux OS or Mac OS.
    QDir dir;
    QFileInfo fileInfo;
@@ -248,13 +360,11 @@ const QDir Brewtarget::getConfigDir()
 
 }
 
-QDir Brewtarget::getUserDataDir()
-{
+QDir Application::getUserDataDir() {
    return userDataDir;
 }
 
-QDir Brewtarget::getDefaultUserDataDir()
-{
+QDir Application::getDefaultUserDataDir() {
 #if defined(Q_OS_LINUX) || defined(Q_OS_MAC) // Linux OS or Mac OS.#if defined(Q_OS_LINUX) || defined(Q_OS_MAC) // Linux OS or Mac OS.
    return getConfigDir();
 #elif defined(Q_OS_WIN) // Windows OS.
@@ -272,7 +382,7 @@ QDir Brewtarget::getDefaultUserDataDir()
 #endif
 }
 
-QDir Brewtarget::getResourceDir() {
+QDir Application::getResourceDir() {
    // Unlike some of the other directories, the resource dir needs to be something that can be determined at
    // compile-time
    QString dir = qApp->applicationDirPath();
@@ -300,8 +410,7 @@ QDir Brewtarget::getResourceDir() {
    return dir;
 }
 
-bool Brewtarget::initialize()
-{
+bool Application::initialize() {
    // Need these for changed(QMetaProperty,QVariant) to be emitted across threads.
    qRegisterMetaType<QMetaProperty>();
    qRegisterMetaType<Equipment*>();
@@ -330,12 +439,19 @@ bool Brewtarget::initialize()
 
    // Check if the database was successfully loaded before
    // loading the main window.
-   qDebug() << "Loading Database...";
+   qDebug() << Q_FUNC_INFO << "Loading Database...";
    return Database::instance().loadSuccessful();
 }
 
-void Brewtarget::cleanup() {
-   qDebug() << "Brewtarget is cleaning up.";
+void Application::cleanup() {
+   qDebug() << Q_FUNC_INFO << "Brewtarget is cleaning up.";
+
+//   if (responseToCheckForNewVersion) {
+//      qDebug() <<
+//         Q_FUNC_INFO << "Request to check for new version (" << responseToCheckForNewVersion->request().url() << ") "
+//         "running =" << responseToCheckForNewVersion->isRunning() << ", error =" << responseToCheckForNewVersion->error();
+//   }
+
    // Should I do qApp->removeTranslator() first?
    MainWindow::DeleteMainWindow();
 
@@ -343,16 +459,16 @@ void Brewtarget::cleanup() {
    return;
 }
 
-bool Brewtarget::isInteractive() {
+bool Application::isInteractive() {
    return interactive;
 }
 
-void Brewtarget::setInteractive(bool val) {
+void Application::setInteractive(bool val) {
    interactive = val;
    return;
 }
 
-int Brewtarget::run() {
+int Application::run() {
    int ret = 0;
 
    BtSplashScreen splashScreen;
@@ -372,7 +488,7 @@ int Brewtarget::run() {
    mainWindow.setVisible(true);
    splashScreen.finish(&mainWindow);
 
-   checkForNewVersion(&mainWindow);
+   initiateCheckForNewVersion(&mainWindow);
    do {
       ret = qApp->exec();
    } while (ret == 1000);
@@ -384,29 +500,13 @@ int Brewtarget::run() {
    return ret;
 }
 
-void Brewtarget::updateConfig() {
-   int cVersion = PersistentSettings::value(PersistentSettings::Names::config_version, QVariant(0)).toInt();
-   while ( cVersion < CONFIG_VERSION ) {
-      switch ( ++cVersion ) {
-         case 1:
-            // Update the dbtype, because I had to increase the NODB value from -1 to 0
-            int newType = static_cast<Database::DbType>(PersistentSettings::value(PersistentSettings::Names::dbType, Database::NODB).toInt() + 1);
-            // Write that back to the config file
-            PersistentSettings::insert(PersistentSettings::Names::dbType, static_cast<int>(newType));
-            // and make sure we don't do it again.
-            PersistentSettings::insert(PersistentSettings::Names::config_version, QVariant(cVersion));
-            break;
-      }
-   }
-   return;
-}
-
-void Brewtarget::readSystemOptions() {
+void Application::readSystemOptions() {
    // update the config file before we do anything
    updateConfig();
 
    //================Version Checking========================
-   checkVersion = PersistentSettings::value(PersistentSettings::Names::check_version, QVariant(false)).toBool();
+   checkVersion = PersistentSettings::value(PersistentSettings::Names::check_version, QVariant(true)).toBool();
+   qDebug() << Q_FUNC_INFO << "checkVersion=" << checkVersion;
 
    //=====================Last DB Merge Request======================
    if (PersistentSettings::contains(PersistentSettings::Names::last_db_merge_req)) {
@@ -428,7 +528,7 @@ void Brewtarget::readSystemOptions() {
 
 }
 
-void Brewtarget::saveSystemOptions() {
+void Application::saveSystemOptions() {
    PersistentSettings::insert(PersistentSettings::Names::check_version, checkVersion);
    PersistentSettings::insert(PersistentSettings::Names::last_db_merge_req, Database::lastDbMergeRequest.toString(Qt::ISODate));
    //setOption("user_data_dir", userDataDir);

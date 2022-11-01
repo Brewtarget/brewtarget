@@ -33,7 +33,7 @@
 #include <QTextStream>
 #include <QVariant>
 
-#include "brewtarget.h"
+#include "Application.h"
 #include "database/BtSqlQuery.h"
 #include "database/Database.h"
 #include "database/DbTransaction.h"
@@ -765,7 +765,7 @@ bool DatabaseSchemaHelper::updateDatabase(QTextStream & userMessage) {
    QList<Recipe *> allRecipesBeforeImport = ObjectStoreWrapper::getAllRaw<Recipe>();
    qDebug() << Q_FUNC_INFO << allRecipesBeforeImport.size() << "Recipes before import";
 
-   QString const defaultDataFileName = Brewtarget::getResourceDir().filePath("DefaultData.xml");
+   QString const defaultDataFileName = Application::getResourceDir().filePath("DefaultData.xml");
    bool succeeded = BeerXML::getInstance().importFromXML(defaultDataFileName, userMessage);
 
    if (succeeded) {

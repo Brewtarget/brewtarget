@@ -30,7 +30,7 @@
 #include <QLocale>
 #include <QTranslator>
 
-#include "brewtarget.h"
+#include "Application.h"
 #include "model/NamedEntity.h"
 #include "PersistentSettings.h"
 #include "utils/BtStringConst.h"
@@ -87,7 +87,7 @@ void Localization::setLanguage(QString twoLetterLanguage) {
    qApp->removeTranslator(&btTrans);
 
    QString filename = QString("bt_%1").arg(twoLetterLanguage);
-   QDir translations = QDir(Brewtarget::getResourceDir().canonicalPath() + "/translations_qm");
+   QDir translations = QDir(Application::getResourceDir().canonicalPath() + "/translations_qm");
 
    if (btTrans.load(filename, translations.canonicalPath())) {
       qApp->installTranslator(&btTrans);
