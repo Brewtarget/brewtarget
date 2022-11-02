@@ -27,6 +27,7 @@
 #include "Application.h"
 
 #include <iostream>
+#include <mutex> // For std::call_once etc
 
 #include <QDebug>
 #include <QDesktopServices>
@@ -269,56 +270,73 @@ namespace {
       return;
    }
 
-}
+   /**
+    * \brief This is only called from \c Application::getResourceDir to initialise the variable it returns
+    *
+    * \param resourceDirVar The static local variable inside Application::getResourceDir that is normally not accessible
+    *        outside that function, and which needs to be initialised exactly once.
+    */
+   void initResourceDir(QDir & resourceDirVar) {
+      //
+      // Directory locations are complicated on Linux because different distros can do things differently.  (See comment
+      // in main CMakeLists.txt for more info.)  Also the documentation for QCoreApplication::applicationDirPath() says
+      // "Warning: On Linux, this function will try to get the path from the /proc file system. If that fails, it
+      // assumes that argv[0] contains the absolute file name of the executable. The function also assumes that the
+      // current directory has not been changed by the application."
+      //
+      // So, on Linux, our choices are:
+      //   (1) Assume that binary is in /usr/bin and resources are in /usr/share/[application name].  This should be
+      //       right most of the time, because it's what most of the big distros do.  But it could be a problem, eg,
+      //       someone compiling from source might want to use:
+      //         - /usr/local/bin and /usr/local/share/[application name], or
+      //         - $HOME/.local/bin and $HOME/.local/share/[application name]
+      //   (2) Get the directory at run-time from Qt.  If Qt is able to read from the /proc pseudo file system then the
+      //       info will be spot on as it comes from the kernel.  AFAICT the warning in the Qt doco is only because,
+      //       technically, we can't guarantee that /proc will always be mounted in every instance of every Linux
+      //       install.
+      //   (3) Set the install directory at compile time and inject that value into the code.  This is fine if you're
+      //       building and installing on the same machine, but might be problematic if we're building multiple target
+      //       packages on one machine and they don't all have the same install directory.
+      //
+      // Historically we did (3) for Linux (and (2) for other platforms), but this occasionally led to problems when
+      // people were doing their own compilation.   So, now, we do (2) for everything but use (3) as the back-up on
+      // Linux in the (hopefully extremely rare) case that /proc is not available.
+      //
 
-QDir Application::getDataDir() {
-   QString dir = qApp->applicationDirPath();
-#if defined(Q_OS_LINUX) // Linux OS.
 
-   dir = QString(CONFIGDATADIR);
+      QString path = QCoreApplication::applicationDirPath();
+      if (!path.endsWith('/')) {
+         path += "/";
+      }
 
-#elif defined(Q_OS_MAC) // MAC OS.
-
-   // We should be inside an app bundle.
-   dir += "/../Resources/";
-
-#elif defined(Q_OS_WIN) // Windows OS.
-
-   dir += "/../data/";
-
+#if defined(Q_OS_LINUX)
+      // === Linux ===
+      // We'll assume the return value from QCoreApplication::applicationDirPath is invalid if it does not end in /bin
+      // (because there's no way it would make sense for us to be in an sbin directory
+      if (path.endsWith("/bin/")) {
+         path += "../share/brewtarget/";
+      } else {
+         qWarning() <<
+            Q_FUNC_INFO << "Cannot determine application binary location (got" << path << ") so using compile-time "
+            "constant for resource dir:" << CONFIGDATADIR;
+         path = QString(CONFIGDATADIR);
+      }
+#elif defined(Q_OS_MAC)
+      // === Mac ===
+      // We should be inside an app bundle.
+      path += "../Resources/";
+#elif defined(Q_OS_WIN)
+      // === Windows ===
+      path += "../data/";
 #else
-# error "Unsupported OS"
+#error "Unsupported OS"
 #endif
 
-   if( ! dir.endsWith('/') )
-      dir += "/";
+      resourceDirVar = QDir{path};
 
-   return dir;
-}
-
-QDir Application::getDocDir() {
-   QString dir = qApp->applicationDirPath();
-#if defined(Q_OS_LINUX) // Linux OS.
-
-   dir = QString(CONFIGDOCDIR);
-
-#elif defined(Q_OS_MAC) // MAC OS.
-
-   // We should be inside an app bundle.
-   dir += "/../Resources/en.lproj/";
-
-#elif defined(Q_OS_WIN) // Windows OS.
-
-   dir += "/../doc/";
-
-#else
-# error "Unsupported OS"
-#endif
-
-   if( ! dir.endsWith('/') )
-      dir += "/";
-
-   return dir;
+      qInfo() << Q_FUNC_INFO << "Determined resource directory is" << resourceDirVar.absolutePath();
+      return;
+   }
 }
 
 const QDir Application::getConfigDir() {
@@ -383,31 +401,16 @@ QDir Application::getDefaultUserDataDir() {
 }
 
 QDir Application::getResourceDir() {
-   // Unlike some of the other directories, the resource dir needs to be something that can be determined at
-   // compile-time
-   QString dir = qApp->applicationDirPath();
-#if defined(Q_OS_LINUX) // Linux OS.
+   //
+   // We want to initialise the resourceDir exactly once.  Using std::call_once means that happens even in a
+   // multi-threaded application.
+   //
+   static std::once_flag initFlag_resourceDir;
+   static QDir resourceDir;
 
-   dir = QString(CONFIGDATADIR);
+   std::call_once(initFlag_resourceDir, initResourceDir, resourceDir);
 
-#elif defined(Q_OS_MAC) // MAC OS.
-
-   // We should be inside an app bundle.
-   dir += "/../Resources/";
-
-#elif defined(Q_OS_WIN) // Windows OS.
-
-   dir += "/../data/";
-
-#else
-# error "Unsupported OS"
-#endif
-
-   if (!dir.endsWith('/')) {
-      dir += "/";
-   }
-
-   return dir;
+   return resourceDir;
 }
 
 bool Application::initialize() {

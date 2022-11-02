@@ -30,12 +30,14 @@
 #include <QMessageBox>
 #include <QSharedMemory>
 
-#include "xml/BeerXml.h"
+#include <QStandardPaths> // DELETE
+
 #include "Application.h"
 #include "config.h"
 #include "database/Database.h"
 #include "Logging.h"
 #include "PersistentSettings.h"
+#include "xml/BeerXml.h"
 
 namespace {
    /*!
@@ -114,7 +116,12 @@ int main(int argc, char **argv) {
    parser.process(app);
 
    //
-   // Having initialised various QApplication settings and read command line options, we can now allow Qt to work out where to get config from
+   // Having initialised various QApplication settings and read command line options, we can now allow Qt to work out
+   // where to get config from.
+   //
+   // Note that we need to initialise PersistentSettings before we initialise Logging as the latter needs settings from
+   // the former.  (We _can_ still log before Logging is initialised, it's just that such log messages will only go to
+   // Qt's default logging location (eg console on Linux) and won't end up in our log file.)
    //
    PersistentSettings::initialise(parser.value(userDirectoryOption));
    qDebug() << Q_FUNC_INFO << "Persistent Settings initialised";
@@ -206,13 +213,13 @@ int main(int argc, char **argv) {
 
       return mainAppReturnValue;
    }
-   catch (const QString &error)
+   catch (const QString & error)
    {
       QMessageBox::critical(0,
             QApplication::tr("Application terminates"),
             QApplication::tr("The application encountered a fatal error.\nError message:\n%1").arg(error));
    }
-   catch (std::exception &exception)
+   catch (std::exception & exception)
    {
       QMessageBox::critical(0,
             QApplication::tr("Application terminates"),

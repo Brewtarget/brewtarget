@@ -65,8 +65,8 @@
 #include "AlcoholTool.h"
 #include "Algorithms.h"
 #include "AncestorDialog.h"
-#include "BrewNoteWidget.h"
 #include "Application.h"
+#include "BrewNoteWidget.h"
 #include "BtDatePopup.h"
 #include "BtDigitWidget.h"
 #include "BtFolder.h"
@@ -92,11 +92,11 @@
 #include "MashListModel.h"
 #include "MashStepEditor.h"
 #include "MashWizard.h"
+#include "measurement/Measurement.h"
 #include "measurement/Unit.h"
 #include "MiscDialog.h"
 #include "MiscEditor.h"
 #include "MiscSortFilterProxyModel.h"
-#include "measurement/Measurement.h"
 #include "model/BrewNote.h"
 #include "model/Equipment.h"
 #include "model/Fermentable.h"
@@ -2856,7 +2856,7 @@ void MainWindow::saveMash() {
 void MainWindow::openManual()
    {
    // TODO: open language-dependent manual when we have more than the English version
-   QDesktopServices::openUrl(QUrl::fromLocalFile(Application::getDataDir().filePath("manual-en.pdf")));
+   QDesktopServices::openUrl(QUrl::fromLocalFile(Application::getResourceDir().filePath("manual-en.pdf")));
 }
 
 // We build the menus at start up time.  This just needs to exec the proper

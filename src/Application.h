@@ -43,7 +43,7 @@ Q_DECLARE_METATYPE( QMetaProperty )
  */
 namespace Application {
    //! \return the data directory
-   QDir getDataDir();
+   QDir getResourceDir();
    //! \return the doc directory
    QDir getDocDir();
    //! \return the config directory
