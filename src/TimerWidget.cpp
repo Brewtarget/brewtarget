@@ -29,7 +29,7 @@
 #include <QUrl>
 #include <QVBoxLayout>
 
-#include "brewtarget.h"
+#include "Application.h"
 #include "TimerMainDialog.h"
 #include "utils/TimerUtils.h"
 
@@ -150,9 +150,8 @@ void TimerWidget::decrementTime() {
 }
 
 void TimerWidget::on_setSoundButton_clicked() {
-   //Taken form old brewtarget timers
-   QDir soundsDir(Brewtarget::getDataDir().canonicalPath() + "/sounds");
-   //QDir soundsDir = QString("%1sounds/").arg(Brewtarget::getDataDir());
+   // Taken form old brewtarget timers
+   QDir soundsDir(Application::getResourceDir().canonicalPath() + "/sounds");
    QString soundFile =
       QFileDialog::getOpenFileName(qobject_cast<QWidget*>(this),
                                    tr("Open Sound"), soundsDir.exists() ? soundsDir.canonicalPath() : "",
@@ -171,7 +170,7 @@ void TimerWidget::on_setSoundButton_clicked() {
 }
 
 void TimerWidget::setDefualtAlarmSound() {
-   QDir soundsDir(Brewtarget::getDataDir().canonicalPath() + "/sounds");
+   QDir soundsDir(Application::getResourceDir().canonicalPath() + "/sounds");
    QString soundFile = soundsDir.absoluteFilePath("beep.wav");
    this->setSound(soundFile);
    return;

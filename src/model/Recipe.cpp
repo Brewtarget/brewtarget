@@ -2624,7 +2624,7 @@ double Recipe::ibuFromHop(Hop const * hop) {
    // up for plugs and pellets.
    //
    // - http://www.realbeer.com/hops/FAQ.html
-   // - https://groups.google.com/forum/#!topic"brewtarget.h"lp/mv2qvWBC4sU
+   // - https://groups.google.com/forum/#!topic"Application.h"lp/mv2qvWBC4sU
    switch (hop->form()) {
       case Hop::Form::Plug:
          hopUtilization *= 1.02;

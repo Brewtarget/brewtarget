@@ -39,10 +39,6 @@
 #include <QBrush>
 #include <QDesktopServices>
 #include <QDesktopWidget>
-#include <QDomDocument>
-#include <QDomElement>
-#include <QDomNode>
-#include <QDomNodeList>
 #include <QFile>
 #include <QFileDialog>
 #include <QIcon>
@@ -53,7 +49,6 @@
 #include <QList>
 #include <QMainWindow>
 #include <QMessageBox>
-#include <QNetworkReply>
 #include <QPen>
 #include <QPixmap>
 #include <QSize>
@@ -70,8 +65,8 @@
 #include "AlcoholTool.h"
 #include "Algorithms.h"
 #include "AncestorDialog.h"
+#include "Application.h"
 #include "BrewNoteWidget.h"
-#include "brewtarget.h"
 #include "BtDatePopup.h"
 #include "BtDigitWidget.h"
 #include "BtFolder.h"
@@ -97,11 +92,11 @@
 #include "MashListModel.h"
 #include "MashStepEditor.h"
 #include "MashWizard.h"
+#include "measurement/Measurement.h"
 #include "measurement/Unit.h"
 #include "MiscDialog.h"
 #include "MiscEditor.h"
 #include "MiscSortFilterProxyModel.h"
-#include "measurement/Measurement.h"
 #include "model/BrewNote.h"
 #include "model/Equipment.h"
 #include "model/Fermentable.h"
@@ -2795,7 +2790,7 @@ void MainWindow::removeMash() {
 
 void MainWindow::closeEvent(QCloseEvent* /*event*/)
 {
-   Brewtarget::saveSystemOptions();
+   Application::saveSystemOptions();
    PersistentSettings::insert(PersistentSettings::Names::geometry, saveGeometry());
    PersistentSettings::insert(PersistentSettings::Names::windowState, saveState());
    if ( recipeObs )
@@ -2861,7 +2856,7 @@ void MainWindow::saveMash() {
 void MainWindow::openManual()
    {
    // TODO: open language-dependent manual when we have more than the English version
-   QDesktopServices::openUrl(QUrl::fromLocalFile(Brewtarget::getDataDir().filePath("manual-en.pdf")));
+   QDesktopServices::openUrl(QUrl::fromLocalFile(Application::getResourceDir().filePath("manual-en.pdf")));
 }
 
 // We build the menus at start up time.  This just needs to exec the proper
@@ -3092,54 +3087,6 @@ void MainWindow::exportSelected() {
    return;
 }
 
-void MainWindow::finishCheckingVersion()
-{
-   QNetworkReply* reply = qobject_cast<QNetworkReply*>(sender());
-   if( reply == nullptr )
-      return;
-
-   QString remoteVersion(reply->readAll());
-
-   // If there is an error, just return.
-   if( reply->error() != QNetworkReply::NoError )
-      return;
-
-   // If the remote version is newer...
-   if( !remoteVersion.startsWith(VERSIONSTRING) )
-   {
-      // ...and the user wants to download the new version...
-      if( QMessageBox::information(this,
-                                   QObject::tr("New Version"),
-                                   QObject::tr("Version %1 is now available. Download it?").arg(remoteVersion),
-                                   QMessageBox::Yes | QMessageBox::No,
-                                   QMessageBox::Yes) == QMessageBox::Yes )
-      {
-         // ...take them to the website.
-         QDesktopServices::openUrl(QUrl("http://www.brewtarget.org/download.html"));
-      }
-      else // ... and the user does NOT want to download the new version...
-      {
-         // ... and they want us to stop bothering them...
-         if( QMessageBox::question(this,
-                                   QObject::tr("New Version"),
-                                   QObject::tr("Stop bothering you about new versions?"),
-                                   QMessageBox::Yes | QMessageBox::No,
-                                   QMessageBox::Yes) == QMessageBox::Yes)
-         {
-            // ... make a note to stop bothering the user about the new version.
-            Brewtarget::setCheckVersion(false);
-         }
-      }
-   }
-   else // The current version is newest so...
-   {
-      // ...make a note to bother users about future new versions.
-      // This means that when a user downloads the new version, this
-      // variable will always get reset to true.
-      Brewtarget::setCheckVersion(true);
-   }
-}
-
 void MainWindow::redisplayLabel()
 {
    // There is a lot of magic going on in the showChanges(). I can either
@@ -3191,7 +3138,7 @@ void MainWindow::convertedMsg()
 
    QMessageBox msgBox;
    msgBox.setText( tr("The database has been converted/upgraded."));
-   msgBox.setInformativeText( tr("The original XML files can be found in ") + Brewtarget::getUserDataDir().canonicalPath() + "obsolete");
+   msgBox.setInformativeText( tr("The original XML files can be found in ") + Application::getUserDataDir().canonicalPath() + "obsolete");
    msgBox.exec();
 
 }

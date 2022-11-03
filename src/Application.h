@@ -1,6 +1,6 @@
 /*
- * brewtarget.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * Application.h is part of Brewtarget, and is Copyright the following
+ * authors 2009-2022
  * - Dan Cavanagh <dan@dancavanagh.com>
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
@@ -21,8 +21,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef BREWTARGET_H
-#define BREWTARGET_H
+#ifndef APPLICATION_H
+#define APPLICATION_H
+#pragma once
 
 #define CONFIG_VERSION 1
 
@@ -39,12 +40,10 @@ Q_DECLARE_METATYPE( QMetaProperty )
 
 /*!
  * \brief Figures out stuff from the system etc.
- *
- * TODO: The config & system options stuff probably belongs in a separate class, and the remainder of what's here might go in main or MainWindow...
  */
-namespace Brewtarget {
+namespace Application {
    //! \return the data directory
-   QDir getDataDir();
+   QDir getResourceDir();
    //! \return the doc directory
    QDir getDocDir();
    //! \return the config directory
@@ -55,7 +54,8 @@ namespace Brewtarget {
    QDir getDefaultUserDataDir();
 
    /**
-    * \return the resource directory where some files that ship with Brewtarget live (default DB, sounds, translations)
+    * \return the resource directory where some files that ship with the application live (default DB, sounds,
+    *         translations)
     *
     *         Most resources are compiled into the app with the Qt Resource System (see
     *         https://doc.qt.io/qt-5/resources.html) but, for some files, we want the user also to be able to access
@@ -70,15 +70,10 @@ namespace Brewtarget {
     */
    int run();
 
-   //! \brief Every so often, we need to update the config file itself. This does that.
-   void updateConfig();
    //! \brief Read options from options. This replaces readPersistentOptions()
    void readSystemOptions();
-   //! \brief Writes the persisten options back to the options store
+   //! \brief Writes the persistent options back to the options store
    void saveSystemOptions();
-
-   //! \brief If this option is false, do not bother the user about new versions.
-   void setCheckVersion(bool value);
 
    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -99,10 +94,10 @@ namespace Brewtarget {
    void cleanup();
 
    /*!
-    * \brief If false, run Brewtarget in a way that requires no user interaction
+    * \brief If false, run the application in a way that requires no user interaction
     *
-    * For example, if running a test case, ensure that no dialogs pop up that
-    * prevent Brewtarget from starting
+    *        For example, if running a test case, ensure that no dialogs pop up that prevent the application from
+    *        starting
     */
    bool isInteractive();
 
