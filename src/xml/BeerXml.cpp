@@ -30,7 +30,7 @@
 #include <QTextCodec>
 #include <QTextStream>
 
-#include "config.h" // For VERSIONSTRING
+#include "config.h" // For CONFIG_VERSION_STRING
 #include "model/BrewNote.h"
 #include "model/Equipment.h"
 #include "model/Fermentable.h"
@@ -92,8 +92,8 @@ namespace {
       {"Aroma",      Hop::Use::UseAroma}
    };
    EnumStringMapping const BEER_XML_HOP_TYPE_MAPPER {
-      {"Bittering", Hop::Type::Bittering},
-      {"Aroma",     Hop::Type::Aroma},
+      {"Bittering",                          Hop::Type::Bittering},
+      {"Aroma",                              Hop::Type::Aroma},
       {"Both",      Hop::Type::Both}
    };
    EnumStringMapping const BEER_XML_HOP_FORM_MAPPER {
@@ -102,26 +102,26 @@ namespace {
       {"Leaf",   Hop::Form::Leaf}
    };
    template<> XmlRecord::FieldDefinitions const BEER_XML_RECORD_FIELDS<Hop> {
-      // Type                                  XPath             Q_PROPERTY                             Enum Mapper
-      {XmlRecord::FieldType::String,           "NAME",           PropertyNames::NamedEntity::name,      nullptr},
-      {XmlRecord::FieldType::RequiredConstant, "VERSION",        VERSION1,                              nullptr},
-      {XmlRecord::FieldType::Double,           "ALPHA",          PropertyNames::Hop::alpha_pct,         nullptr},
-      {XmlRecord::FieldType::Double,           "AMOUNT",         PropertyNames::Hop::amount_kg,         nullptr},
+      // Type                                  XPath                    Q_PROPERTY                             Enum Mapper
+      {XmlRecord::FieldType::String,           "NAME",                  PropertyNames::NamedEntity::name,      nullptr},
+      {XmlRecord::FieldType::RequiredConstant, "VERSION",               VERSION1,                              nullptr},
+      {XmlRecord::FieldType::Double,           "ALPHA",                 PropertyNames::Hop::alpha_pct,         nullptr},
+      {XmlRecord::FieldType::Double,           "AMOUNT",                PropertyNames::Hop::amount_kg,         nullptr},
       {XmlRecord::FieldType::Enum,             "USE",            PropertyNames::Hop::use,               &BEER_XML_HOP_USE_MAPPER},
-      {XmlRecord::FieldType::Double,           "TIME",           PropertyNames::Hop::time_min,          nullptr},
-      {XmlRecord::FieldType::String,           "NOTES",          PropertyNames::Hop::notes,             nullptr},
-      {XmlRecord::FieldType::Enum,             "TYPE",           PropertyNames::Hop::type,              &BEER_XML_HOP_TYPE_MAPPER},
-      {XmlRecord::FieldType::Enum,             "FORM",           PropertyNames::Hop::form,              &BEER_XML_HOP_FORM_MAPPER},
-      {XmlRecord::FieldType::Double,           "BETA",           PropertyNames::Hop::beta_pct,          nullptr},
-      {XmlRecord::FieldType::Double,           "HSI",            PropertyNames::Hop::hsi_pct,           nullptr},
-      {XmlRecord::FieldType::String,           "ORIGIN",         PropertyNames::Hop::origin,            nullptr},
-      {XmlRecord::FieldType::String,           "SUBSTITUTES",    PropertyNames::Hop::substitutes,       nullptr},
-      {XmlRecord::FieldType::Double,           "HUMULENE",       PropertyNames::Hop::humulene_pct,      nullptr},
-      {XmlRecord::FieldType::Double,           "CARYOPHYLLENE",  PropertyNames::Hop::caryophyllene_pct, nullptr},
-      {XmlRecord::FieldType::Double,           "COHUMULONE",     PropertyNames::Hop::cohumulone_pct,    nullptr},
-      {XmlRecord::FieldType::Double,           "MYRCENE",        PropertyNames::Hop::myrcene_pct,       nullptr},
-      {XmlRecord::FieldType::String,           "DISPLAY_AMOUNT", BtString::NULL_STR,                    nullptr}, // Extension tag
-      {XmlRecord::FieldType::String,           "INVENTORY",      BtString::NULL_STR,                    nullptr}, // Extension tag
+      {XmlRecord::FieldType::Double,           "TIME",                  PropertyNames::Hop::time_min,          nullptr},
+      {XmlRecord::FieldType::String,           "NOTES",                 PropertyNames::Hop::notes,             nullptr},
+      {XmlRecord::FieldType::Enum,             "TYPE",                  PropertyNames::Hop::type,              &BEER_XML_HOP_TYPE_MAPPER},
+      {XmlRecord::FieldType::Enum,             "FORM",                  PropertyNames::Hop::form,              &BEER_XML_HOP_FORM_MAPPER},
+      {XmlRecord::FieldType::Double,           "BETA",                  PropertyNames::Hop::beta_pct,          nullptr},
+      {XmlRecord::FieldType::Double,           "HSI",                   PropertyNames::Hop::hsi_pct,           nullptr},
+      {XmlRecord::FieldType::String,           "ORIGIN",                PropertyNames::Hop::origin,            nullptr},
+      {XmlRecord::FieldType::String,           "SUBSTITUTES",           PropertyNames::Hop::substitutes,       nullptr},
+      {XmlRecord::FieldType::Double,           "HUMULENE",              PropertyNames::Hop::humulene_pct,      nullptr},
+      {XmlRecord::FieldType::Double,           "CARYOPHYLLENE",         PropertyNames::Hop::caryophyllene_pct, nullptr},
+      {XmlRecord::FieldType::Double,           "COHUMULONE",            PropertyNames::Hop::cohumulone_pct,    nullptr},
+      {XmlRecord::FieldType::Double,           "MYRCENE",               PropertyNames::Hop::myrcene_pct,       nullptr},
+      {XmlRecord::FieldType::String,           "DISPLAY_AMOUNT",        BtString::NULL_STR,                    nullptr}, // Extension tag
+      {XmlRecord::FieldType::String,           "INVENTORY",             BtString::NULL_STR,                    nullptr}, // Extension tag
       {XmlRecord::FieldType::String,           "DISPLAY_TIME",   BtString::NULL_STR,                    nullptr}  // Extension tag
    };
 
@@ -742,13 +742,13 @@ void BeerXML::createXmlFile(QFile & outFile) const {
 
    out <<
       "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n"
-      "<!-- BeerXML Format generated by Brewtarget " << VERSIONSTRING << " on " <<
+      "<!-- BeerXML Format generated by Brewtarget " << CONFIG_VERSION_STRING << " on " <<
       QDateTime::currentDateTime().date().toString(Qt::ISODate) << " -->\n";
 
    return;
 }
 
-template<class NE> void BeerXML::toXml(QList<NE *> & nes, QFile & outFile) const {
+template<class NE> void BeerXML::toXml(QList<NE *> const & nes, QFile & outFile) const {
    // We don't want to output empty container records
    if (nes.empty()) {
       return;
@@ -760,6 +760,8 @@ template<class NE> void BeerXML::toXml(QList<NE *> & nes, QFile & outFile) const
    // <MISCS>...</MISCS> tags and so on.
    QTextStream out(&outFile);
    // BeerXML specifies the ISO-8859-1 encoding
+   // .:TODO:. In Qt6, QTextCodec and QTextStream::setCodec have been removed and are replaced by QStringConverter
+   // (which is new in Qt6).
    out.setCodec(QTextCodec::codecForMib(CharacterSets::ISO_8859_1_1987));
    out << "<" << BEER_XML_RECORD_NAME<NE> << "S>\n";
    for (auto ne : nes) {
@@ -773,18 +775,18 @@ template<class NE> void BeerXML::toXml(QList<NE *> & nes, QFile & outFile) const
 // (This is all just a trick to allow the template definition to be here in the .cpp file and not in the header, which
 // means, amongst other things, that we can reference the pimpl.)
 //
-template void BeerXML::toXml(QList<Hop *> &        nes, QFile & outFile) const;
-template void BeerXML::toXml(QList<Fermentable *> &nes, QFile & outFile) const;
-template void BeerXML::toXml(QList<Yeast *> &      nes, QFile & outFile) const;
-template void BeerXML::toXml(QList<Misc *> &       nes, QFile & outFile) const;
-template void BeerXML::toXml(QList<Water *> &      nes, QFile & outFile) const;
-template void BeerXML::toXml(QList<Style *> &      nes, QFile & outFile) const;
-template void BeerXML::toXml(QList<MashStep *> &   nes, QFile & outFile) const;
-template void BeerXML::toXml(QList<Mash *> &       nes, QFile & outFile) const;
-template void BeerXML::toXml(QList<Equipment *> &  nes, QFile & outFile) const;
-template void BeerXML::toXml(QList<Instruction *> &nes, QFile & outFile) const;
-template void BeerXML::toXml(QList<BrewNote *> &   nes, QFile & outFile) const;
-template void BeerXML::toXml(QList<Recipe *> &     nes, QFile & outFile) const;
+template void BeerXML::toXml(QList<Hop *> const &        nes, QFile & outFile) const;
+template void BeerXML::toXml(QList<Fermentable *> const &nes, QFile & outFile) const;
+template void BeerXML::toXml(QList<Yeast *> const &      nes, QFile & outFile) const;
+template void BeerXML::toXml(QList<Misc *> const &       nes, QFile & outFile) const;
+template void BeerXML::toXml(QList<Water *> const &      nes, QFile & outFile) const;
+template void BeerXML::toXml(QList<Style *> const &      nes, QFile & outFile) const;
+template void BeerXML::toXml(QList<MashStep *> const &   nes, QFile & outFile) const;
+template void BeerXML::toXml(QList<Mash *> const &       nes, QFile & outFile) const;
+template void BeerXML::toXml(QList<Equipment *> const &  nes, QFile & outFile) const;
+template void BeerXML::toXml(QList<Instruction *> const &nes, QFile & outFile) const;
+template void BeerXML::toXml(QList<BrewNote *> const &   nes, QFile & outFile) const;
+template void BeerXML::toXml(QList<Recipe *> const &     nes, QFile & outFile) const;
 
 // fromXml ====================================================================
 bool BeerXML::importFromXML(QString const & filename, QTextStream & userMessage) {

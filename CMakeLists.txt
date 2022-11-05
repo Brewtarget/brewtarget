@@ -149,8 +149,13 @@ if(UNIX AND NOT APPLE)
    #   - /usr/local                           on Linux (& Mac)
    #   - c:/Program Files/${PROJECT_NAME}     on Windows
    #
-   # On Debian and derived systems (such as Ubuntu), it's more normal for apps to go in /usr/bin than /usr/local/bin, so
-   # CMAKE_INSTALL_PREFIX can be overridden on the command line via "--prefix usr"
+   # On a lot of Linux distros, including Debian and derived systems (such as Ubuntu), it's more normal for pretty much
+   # all user-installed apps to go in /usr/bin rather than /usr/local/bin, so CMAKE_INSTALL_PREFIX can be overridden on
+   # the command line via "--prefix usr"
+   #
+   # (See http://lists.busybox.net/pipermail/busybox/2010-December/074114.html for a great, albeit slightly depressing,
+   # explanation of why there are so many places for binaries to live on Unix/Linux systems.  FWIW, the current
+   # "standards" for Linux are at https://refspecs.linuxfoundation.org/fhs.shtml but these are open to interpretation.)
    #
    # .:TBD: We also allow -DEXEC_PREFIX=/usr (used in .github/workflows/linux-ubuntu.yml) but I'm not sure if this is
    #        needed or could be replaced by "--prefix usr"
@@ -664,7 +669,7 @@ if(WIN32)
    if(WIN32)
       execute_process(COMMAND uname OUTPUT_VARIABLE uname)
       message(STATUS "Uname is " ${uname})
-      if (uname MATCHES "^MSYS" OR uname MATCHES "^MINGW")
+      if(uname MATCHES "^MSYS" OR uname MATCHES "^MINGW")
          message(STATUS "Running on MSYS/MinGW")
          set(MINGW true)
       endif()
@@ -677,8 +682,8 @@ if(WIN32)
          FIND_PATH(MINGW_BIN_DIR "mingw32-make.exe")
       endif()
       if(NOT EXISTS ${MINGW_BIN_DIR})
-         MESSAGE(FATAL_ERROR "MinGW bin dir not found. Run cmake again with the option -DMINGW_BIN_DIR=c:/path/to/mingw/bin")
-      ELSE()
+         message(FATAL_ERROR "MinGW bin dir not found. Run cmake again with the option -DMINGW_BIN_DIR=c:/path/to/mingw/bin")
+      else()
          get_filename_component(Mingw_Path ${CMAKE_CXX_COMPILER} PATH)
       endif()
       message(STATUS "MINGW_BIN_DIR " ${MINGW_BIN_DIR})
@@ -698,11 +703,11 @@ include(InstallRequiredSystemLibraries)
 # variables into the code.
 #
 # All variables written as "${VAR}" in config.in  will be replaced by the value of VAR in config.h.
-# Eg "#define CONFIGDATADIR ${CONFIGDATADIR}" in config.in will be replaced by the below corresponding value in
-# ${CONFIGDATADIR} below when configure_file() is called.
+# Eg "#define CONFIG_DATA_DIR ${CONFIG_DATA_DIR}" in config.in will be replaced by the below corresponding value in
+# ${CONFIG_DATA_DIR} below when configure_file() is called.
 #
-set(CONFIGDATADIR "${CMAKE_INSTALL_PREFIX}/${installSubDir_data}/")
-set(CONFIGDOCDIR "${CMAKE_INSTALL_PREFIX}/${installSubDir_doc}/")
+set(CONFIG_DATA_DIR "${CMAKE_INSTALL_PREFIX}/${installSubDir_data}/")
+string(TIMESTAMP BUILD_TIMESTAMP "%Y-%m-%d %H:%M:%S (UTC)" UTC)
 configure_file(src/config.in src/config.h)
 
 #=======================================================================================================================
@@ -889,20 +894,20 @@ add_library(btobjlib
             ${filesToCompile_qrc})
 
 set_source_files_properties(${filesToInstall_macIcons}
-                              PROPERTIES
-                              MACOSX_PACKAGE_LOCATION "Resources")
+                            PROPERTIES
+                            MACOSX_PACKAGE_LOCATION "Resources")
 set_source_files_properties(${filesToInstall_data}
-                              PROPERTIES
-                              MACOSX_PACKAGE_LOCATION "Resources")
+                            PROPERTIES
+                            MACOSX_PACKAGE_LOCATION "Resources")
 set_source_files_properties(${filesToInstall_docs}
-                              PROPERTIES
-                              MACOSX_PACKAGE_LOCATION "Resources/en.lproj")
+                            PROPERTIES
+                            MACOSX_PACKAGE_LOCATION "Resources/en.lproj")
 set_source_files_properties(${filesToInstall_sounds}
-                              PROPERTIES
-                              MACOSX_PACKAGE_LOCATION "Resources/sounds")
+                            PROPERTIES
+                            MACOSX_PACKAGE_LOCATION "Resources/sounds")
 set_source_files_properties(${QM_FILES}
-                              PROPERTIES
-                              MACOSX_PACKAGE_LOCATION "Resources/translations_qm")
+                            PROPERTIES
+                            MACOSX_PACKAGE_LOCATION "Resources/translations_qm")
 
 if(APPLE)
    add_executable(${fileName_executable}
