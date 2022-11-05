@@ -30,8 +30,6 @@
 #include <QMessageBox>
 #include <QSharedMemory>
 
-#include <QStandardPaths> // DELETE
-
 #include "Application.h"
 #include "config.h"
 #include "database/Database.h"
@@ -41,10 +39,10 @@
 
 namespace {
    /*!
-   * \brief Imports the content of an xml file to the database.
-   *
-   * Use at your own risk.
-   */
+    * \brief Imports the content of an xml file to the database.
+    *
+    * Use at your own risk.
+    */
    void importFromXml(const QString & filename) {
 
       QString errorMessage;
@@ -92,8 +90,8 @@ int main(int argc, char **argv) {
    app.setOrganizationDomain("brewtarget.com");
    // We used to vary the application name (and therefore location of config files etc) depending on whether we're
    // building with debug or release version of Qt, but on the whole I don't think this is helpful
-   app.setApplicationName("brewtarget");
-   app.setApplicationVersion(VERSIONSTRING);
+   app.setApplicationName(CONFIG_APPLICATION_NAME_LC);
+   app.setApplicationVersion(CONFIG_VERSION_STRING);
 
    // Process command-line options relatively early as some may override other settings
    QCommandLineParser parser;
@@ -109,7 +107,12 @@ int main(int argc, char **argv) {
     * This is mostly useful for developers who want to have an easy way of running an instance of the app against a
     * test database without messing anything up with their real database.
     */
-   QCommandLineOption const userDirectoryOption("user-dir", "Override the user data directory used by the application with <directory>", "directory", QString());
+   QCommandLineOption const userDirectoryOption{
+      "user-dir",
+      "Override the user data directory used by the application with <directory>",
+      "directory",
+      QString()
+   };
    parser.addOption(userDirectoryOption);
    parser.addHelpOption();
    parser.addVersionOption();
@@ -156,7 +159,7 @@ int main(int argc, char **argv) {
    // get cleaned up.  We do attempt to detect and rectify such cases, with the double-check below, but it still seems
    // wise to allow the user to override the warning if for any reason it is triggered incorrectly.
    //
-   QSharedMemory sharedMemory("Brewtarget");
+   QSharedMemory sharedMemory(CONFIG_APPLICATION_NAME_UC);
    if (!sharedMemory.create(1)) {
       //
       // According to
@@ -189,8 +192,11 @@ int main(int argc, char **argv) {
 
    try {
       qInfo() <<
-         "Starting Brewtarget v" << VERSIONSTRING << " (app name" << app.applicationName() << ") on " <<
-         QSysInfo::prettyProductName();
+         "Starting" << CONFIG_APPLICATION_NAME_UC << "v" << CONFIG_VERSION_STRING << " (app name" <<
+         app.applicationName() << ") on " << QSysInfo::prettyProductName();
+      qInfo() <<
+         "Built at" << BUILD_TIMESTAMP << "on" << CMAKE_HOST_SYSTEM << "for" << CMAKE_SYSTEM << "with" <<
+         CMAKE_CXX_COMPILER_ID << "compiler";
       qInfo() << "Log directory:" << Logging::getDirectory().absolutePath();
       qInfo() << "Using Qt runtime v" << qVersion() << " (compiled against Qt v" << QT_VERSION_STR << ")";
       qInfo() << "Configuration directory:" << PersistentSettings::getConfigDir().absolutePath();
