@@ -467,8 +467,11 @@ if(Qt5_POSITION_INDEPENDENT_CODE)
    set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 endif()
 
-# There's apparently a whole bunch of extra work we need to do to use Qt on Windows
+# There's apparently a whole bunch of extra work we need to do to use Qt on Windows and Mac
 if(WIN32)
+   #====================================================================================================================
+   #================================================= Windows Qt Stuff =================================================
+   #====================================================================================================================
    # .:TBD:.  Not sure whether/why we need these additional Qt components on Windows
    find_package(Qt5MultimediaWidgets REQUIRED)
    find_package(Qt5OpenGL REQUIRED)
@@ -532,6 +535,8 @@ if(WIN32)
    #
    find_program(WINDEPLOYQT_EXECUTABLE windeployqt HINTS "${QT5_BIN_DIR}")
    if(EXISTS ${WINDEPLOYQT_EXECUTABLE})
+      # Per https://cmake.org/cmake/help/latest/command/add_executable.html, "IMPORTED executables are useful for
+      # convenient reference from commands like add_custom_command()".
       add_executable(Qt5::windeployqt IMPORTED)
       set_target_properties(Qt5::windeployqt PROPERTIES IMPORTED_LOCATION ${WINDEPLOYQT_EXECUTABLE})
    endif()
@@ -910,6 +915,10 @@ set_source_files_properties(${QM_FILES}
                             MACOSX_PACKAGE_LOCATION "Resources/translations_qm")
 
 if(APPLE)
+   # The MACOSX_BUNDLE parameter here sets the MACOSX_BUNDLE property on the created target.  This means the executable
+   # is built as an Application Bundle, which makes it a GUI executable that can be launched from the Finder.
+   #
+   # TBD: When we move to Qt6, look at qt_add_executable
    add_executable(${fileName_executable}
                   MACOSX_BUNDLE
                   ${repoDir}/src/main.cpp
@@ -937,8 +946,16 @@ if(WIN32 AND MINGW)
    ############################################################################
 
    # MinGW-specific flags.
-   #    '-Wl,-subsystem,windows' supresses the output command window.
-   #    '-Wl,-s' strips the executable of symbols.
+   #    -Wl,-subsystem,windows - suppresses the output command window.
+   #    -Wl,-enable-stdcall-fixup - If the link finds a symbol that it cannot resolve, it will attempt to do “fuzzy
+   #                                linking” by looking for another defined symbol that differs only in the format of
+   #                                the symbol name (cdecl vs stdcall) and will resolve that symbol by linking to the
+   #                                match (and also print a warning).
+   #    -Wl,-enable-auto-import - Do sophisticated linking of _symbol to __imp__symbol for DATA imports from DLLs, and
+   #                              create the necessary thunking symbols when building the import libraries with those
+   #                              DATA exports.
+   #    -Wl,-enable-runtime-pseudo-reloc - Fixes some of the problems that can occur with -enable-auto-import
+   #    -mthreads - specifies that MinGW-specific thread support is to be used
    set_target_properties(
       ${fileName_executable}
       PROPERTIES
@@ -1199,7 +1216,7 @@ if(WIN32)
    #
    # Now, because we're also not assuming that the person running the code will have MSYS2/MinGW installed, we need to
    # include the DLLs that ship with them and get pulled in by GCC.  I am hoping to find a less manual way of doing this
-   # but have not yet paydirt.
+   # but have not yet hit paydirt.
    #
    set(msys2Dlls
       libbrotli
@@ -1314,6 +1331,30 @@ if(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS)
            DESTINATION bin
            COMPONENT System)
 endif()
+
+#=======================================================================================================================
+#=============================================== Post-compilation message ==============================================
+#=======================================================================================================================
+#
+# After running `make`, you usually want to run `make install`.  This is an easy step to miss for someone compiling from
+# source for the first time, so it's common practice to give a reminder about it.  This trick of making a special cmake
+# target comes from https://stackoverflow.com/questions/25240105/how-to-print-messages-after-make-done-with-cmake.  It
+# does mean the message also gets printed during `sudo make install` which is, at best, unnecessary.  But I think, on
+# balance, it's better than not having a message.
+#
+# Putting the message in a different color is usually helpful because it makes it stand out from all the other CMake
+# output.  Hard-coding the color here is a small risk in that we don't know how well it will show up on whatever color
+# scheme the terminal is using.  OTOH, AIUI the color of CMake's own messages is hard-coded, so, if we use one of the
+# same colors, we're not making things any worse.
+# (BTW, I cannot find reference to cmake_echo_color in the CMake documentation, but it seems to work!)
+#
+add_custom_target(
+   FinalMessage ALL
+   ${CMAKE_COMMAND} -E cmake_echo_color --bold --green "*** Finished compiling ${capitalisedProjectName}.  Please run  sudo make install  to install. ***"
+   COMMENT "Final Message"
+)
+add_dependencies(FinalMessage ${fileName_executable})
+
 
 #=======================================================================================================================
 #====================================================== Packaging ======================================================
@@ -1504,31 +1545,48 @@ elseif(WIN32)
    #  )
 elseif(APPLE)
    #================================================== Mac Packaging ===================================================
-   # It seems like there are two CPack generators that could potentially be used for Mac:
+   # Broadly speaking, what we want for Mac is a a DMG disk image which the end user can mount and from s/he can copy
+   # the application bundle to her/his Applications folder.  (On MacOS, a bundle a directory structure that appears as a
+   # single entity when viewed in the Finder.)
+   #
+   # It seems like there are two CPack generators that could potentially be used for this:
    #   - Bundle (https://cmake.org/cmake/help/latest/cpack_gen/bundle.html) which I think is used in conjunction with
    #     the DragNDrop generator
    #   - DragNDrop (https://cmake.org/cmake/help/latest/cpack_gen/dmg.html) which generates a DMG disk image from which
    #     the end user copies the application to her/his Applications folder
-   #   - IFW (https://cmake.org/cmake/help/latest/cpack_gen/ifw.html) which generates a Qt installer
-   # Historically it looks like DMG images were what we released.
    #
-   # See some info at https://doc.qt.io/qt-6/macos-deployment.html for "official" Qt way to do things, but this is using
-   # qmake.  This page https://gitlab.kitware.com/cmake/community/-/wikis/doc/cpack/PackageGenerators is more helpful.
-   set(CPACK_GENERATOR "Bundle")
+   # According to
+   # https://stackoverflow.com/questions/46011440/cmake-cpack-preferred-package-generators-for-different-platforms, it's
+   # best to "Avoid the Bundle generator, it is older and more limited in what it supports, [compared with] the DMG
+   # [aka DragNDrop] generator."
+   #
+   # There is also the "official" Qt way to do things for Mac at https://doc.qt.io/qt-6/macos-deployment.html.  This
+   # does not use CPack but does offer options for doing things more directly in CMake.  (NB: As of January 2021, Qt is
+   # migrating from qmake to cmake -- see https://www.qt.io/blog/qt-and-cmake-the-past-the-present-and-the-future.)  We
+   # have to be a bit careful about mixing and matching approaches as we don't want to end up eg with a bundle inside a
+   # bundle.
+   #
+   # Another potential option would be the Qt Installation Framework (IFW) -- see
+   # https://doc.qt.io/qtinstallerframework/ --  for which there is a CPack generator
+   # (https://cmake.org/cmake/help/latest/cpack_gen/ifw.html).  This creates a cross-platform GUI installer using Qt.
+   # However, there are downsides to having a custom tool for install and upgrade, and, additionally, there's not a huge
+   # amount of info about how to get the CPack IFW generator working on Mac.
+   #
+   # Since we're using CPack for Windows and Linux, it feels like it makes sense to use it for Mac too, we we go with
+   # the DragNDrop generator.  Creation of the bundle is handled prior in CMake, prior to invocation of CPack, by the
+   # MACOSX_BUNDLE target property etc (per https://cmake.org/cmake/help/latest/prop_tgt/MACOSX_BUNDLE_INFO_PLIST.html).
+   #
+   # NOTE If you are on Linux and you want to check the contents of a Mac disk image file called, say, foo.dmg, you can
+   #      extract it into regular files from the command line with:
+   #         7z x foo.dmg
+   #
+   set(CPACK_GENERATOR "DragNDrop")
 
-   # Bundle name (displayed in the finder underneath the bundle icon).
-   set(CPACK_BUNDLE_NAME            "${CMAKE_PROJECT_NAME}_${PROJECT_VERSION}")
-   # Bundle icon (displayed in the /Applications folder, on the dock, etc).
-   set(CPACK_BUNDLE_ICON            "${filesToInstall_macIcons}")
-   # XML format Information Property List file containing application metadata
-   # Note that CFBundleVersion in this file should be the same as PROJECT_VERSION in this one
-   set(CPACK_BUNDLE_PLIST           "${filesToInstall_macPropertyList}")
-   # Path to a startup script. This is a path to an executable or script that will be run whenever an end-user double-clicks the generated bundle in the OSX Finder. Optional.
-   #set(CPACK_BUNDLE_STARTUP_COMMAND "${fileName_executable}")
+   # The volume name of the generated disk image. Defaults to CPACK_PACKAGE_FILE_NAME, which we set above to be
+   # something very specific for the benefit of Linux packages.  We choose a simpler/nicer name for the Mac disk image.
+   set(CPACK_DMG_VOLUME_NAME "${CMAKE_PROJECT_NAME} ${PROJECT_VERSION}")
 
    message(STATUS "Building Mac package")
-   #set(CPACK_GENERATOR "DragNDrop")
-   #set(CPACK_DMG_FORMAT "UDBZ")
 endif()
 
 # The documentation implies that all the CPACK_* variables need to be set before we include the CPack module, so that's
