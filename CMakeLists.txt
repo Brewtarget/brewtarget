@@ -215,18 +215,6 @@ set(DATA_INSTALL_COMPONENT "Data")
 set(RUNTIME_INSTALL_COMPONENT "Runtime")
 
 #=======================================================================================================================
-#================================================= Mac Bundle Settings =================================================
-#=======================================================================================================================
-set(MACOSX_BUNDLE_BUNDLE_NAME "${capitalisedProjectName}")
-#set(MACOSX_BUNDLE_GUI_IDENTIFIER)
-#set(MACOSX_BUNDLE_INFO_STRING)
-#set(MACOSX_BUNDLE_BUNDLE_VERSION)
-#set(MACOSX_BUNDLE_SHORT_VERSION_STRING)
-set(MACOSX_BUNDLE_LONG_VERSION_STRING ${PROJECT_VERSION})
-set(MACOSX_BUNDLE_ICON_FILE "BrewtargetIcon.icns")
-set(MACOSX_BUNDLE_COPYRIGHT "GPLv3")
-
-#=======================================================================================================================
 #============================================== Compiler settings & flags ==============================================
 #=======================================================================================================================
 # We use different compilers on different platforms.  Where possible, we want to let CMake handle the actual compiler
@@ -350,16 +338,6 @@ MACRO (ADD_PCH_RULE  _header_filename _src_list)
                       COMMAND ${CMAKE_CXX_COMPILER} ${CMAKE_CXX_COMPILER_ARG1} ${_args}
                       DEPENDS ${_header})
 ENDMACRO(ADD_PCH_RULE _src_list _header_filename)
-
-# See discussion at https://stackoverflow.com/questions/1138301/precompiled-headers-do-we-really-need-them about the
-# pros and cons of using pre-compiles headers.  For now we keep them turned off.
-#if( UNIX AND NOT APPLE )
-#   SET( precompiled_h "equipment.h" "fermentable.h" "hop.h" "instruction.h" "mash.h" "mashstep.h" "misc.h" "recipe.h" "style.h" "unit.h" "water.h" "yeast.h" "database.h" "brewtarget.h" )
-#   FOREACH( header ${precompiled_h} )
-#      ADD_PCH_RULE( ${header} brewtarget_SRCS )
-#   ENDFOREACH()
-#endif()
-
 
 #=======================================================================================================================
 #=================================================== Set build type ====================================================
@@ -543,6 +521,26 @@ if(WIN32)
 
    # International Components for Unicode
    file(GLOB IcuDlls "${QT5_BIN_DIR}/libicu*.dll")
+elseif(APPLE)
+   #====================================================================================================================
+   #=================================================== Mac Qt Stuff ===================================================
+   #====================================================================================================================
+
+   # The macdeployqt executable shipped with Qt does for Mac what windeployqt does for Windows -- see
+   # https://doc.qt.io/qt-6/macos-deployment.html#the-mac-deployment-tool
+   #
+   # At first glance, you might thanks that, with a few name changes, we might share all the CMake code for macdeployqt
+   # and windeployqt.  However, as you will see below, the two programs share _only_ a top-level goal ("automate the
+   # process of creating a deployable [folder / applicaiton bundle] that contains [the necessary Qt dependencies]" - ie
+   # so that the end user does not have to install Qt to run our software).  They have completely different
+   # implementations and command line options, so it would be unhelpful to try to treat them identically.
+   find_program(MACDEPLOYQT_EXECUTABLE macdeployqt HINTS "${QT5_BIN_DIR}")
+   if(EXISTS ${MACDEPLOYQT_EXECUTABLE})
+      # Per https://cmake.org/cmake/help/latest/command/add_executable.html, "IMPORTED executables are useful for
+      # convenient reference from commands like add_custom_command()".
+      add_executable(Qt5::macdeployqt IMPORTED)
+      set_target_properties(Qt5::macdeployqt PROPERTIES IMPORTED_LOCATION ${MACDEPLOYQT_EXECUTABLE})
+   endif()
 
 endif()
 
@@ -720,7 +718,7 @@ configure_file(src/config.in src/config.h)
 #=======================================================================================================================
 # We don't need to list the embedded resource files themselves here, just the "Resource Collection File" that lists what
 # they are.
-set(filesToCompile_qrc "${CMAKE_CURRENT_SOURCE_DIR}/brewtarget.qrc")
+set(filesToCompile_qrc "${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.qrc")
 
 #=======================================================================================================================
 #=========================================== Files included with the program ===========================================
@@ -739,10 +737,10 @@ set(filesToInstall_data ${repoDir}/data/default_db.sqlite
                         ${repoDir}/doc/manual-en.pdf)
 
 # Desktop files to install.
-set(filesToInstall_desktop ${repoDir}/brewtarget.desktop)
+set(filesToInstall_desktop ${repoDir}/${PROJECT_NAME}.desktop)
 
 # Icon files to install.
-set(filesToInstall_icons ${repoDir}/images/brewtarget.svg)
+set(filesToInstall_icons ${repoDir}/images/${PROJECT_NAME}.svg)
 
 # This is the list of translation files to update (from translatable strings in the source code) and from which the
 # binary .qm files will be generated and shipped.  Note that src/OptionDialog.cpp controls which languages are shown to
@@ -898,23 +896,28 @@ add_library(btobjlib
             ${filesToCompile_cpp}
             ${filesToCompile_qrc})
 
-set_source_files_properties(${filesToInstall_macIcons}
-                            PROPERTIES
-                            MACOSX_PACKAGE_LOCATION "Resources")
-set_source_files_properties(${filesToInstall_data}
-                            PROPERTIES
-                            MACOSX_PACKAGE_LOCATION "Resources")
-set_source_files_properties(${filesToInstall_docs}
-                            PROPERTIES
-                            MACOSX_PACKAGE_LOCATION "Resources/en.lproj")
-set_source_files_properties(${filesToInstall_sounds}
-                            PROPERTIES
-                            MACOSX_PACKAGE_LOCATION "Resources/sounds")
-set_source_files_properties(${QM_FILES}
-                            PROPERTIES
-                            MACOSX_PACKAGE_LOCATION "Resources/translations_qm")
+
 
 if(APPLE)
+   #
+   # We have to tell CMake what things other than the executable etc to include in the Mac Applicaiton Bundle
+   #
+   set_source_files_properties(${filesToInstall_macIcons}
+                              PROPERTIES
+                              MACOSX_PACKAGE_LOCATION "Resources")
+   set_source_files_properties(${filesToInstall_data}
+                              PROPERTIES
+                              MACOSX_PACKAGE_LOCATION "Resources")
+   set_source_files_properties(${filesToInstall_docs}
+                              PROPERTIES
+                              MACOSX_PACKAGE_LOCATION "Resources/en.lproj")
+   set_source_files_properties(${filesToInstall_sounds}
+                              PROPERTIES
+                              MACOSX_PACKAGE_LOCATION "Resources/sounds")
+   set_source_files_properties(${QM_FILES}
+                              PROPERTIES
+                              MACOSX_PACKAGE_LOCATION "Resources/translations_qm")
+
    # The MACOSX_BUNDLE parameter here sets the MACOSX_BUNDLE property on the created target.  This means the executable
    # is built as an Application Bundle, which makes it a GUI executable that can be launched from the Finder.
    #
@@ -929,6 +932,52 @@ if(APPLE)
                   ${filesToInstall_docs}
                   ${filesToInstall_sounds}
                   $<TARGET_OBJECTS:btobjlib>)
+
+   #====================================================================================================================
+   #================================================ Mac Bundle Settings ===============================================
+   #====================================================================================================================
+   # See https://cmake.org/cmake/help/latest/prop_tgt/MACOSX_BUNDLE_INFO_PLIST.html for the CMake doco and
+   # https://developer.apple.com/documentation/bundleresources/information_property_list/bundle_configuration for the
+   # Apple documentation
+   #
+
+   # Sets the CFBundleName bundle property.  "This name can contain up to 15 characters. The system may display it to
+   # users if CFBundleDisplayName isn't set."  (I can't see a way in CMake for us to set CFBundleDisplayName.)
+   set(MACOSX_BUNDLE_BUNDLE_NAME "${capitalisedProjectName}")
+
+   # Sets the CFBundleIdentifier bundle property which is a case-insensitive string that "uniquely identifies a single
+   # app throughout the system ... Typically ... a reverse-DNS format".  It is used when "applying specified
+   # preferences" (whatever that means), to "locate an app capable of opening a particular file", and for validating an
+   # app's signature.
+   set(MACOSX_BUNDLE_GUI_IDENTIFIER "com.${PROJECT_NAME}.${fileName_executable}")
+
+   # We do not set MACOSX_BUNDLE_INFO_STRING, which sets the CFBundleGetInfoString bundle property, as AFAICT
+   # CFBundleGetInfoString is obsolete.
+
+   # Sets the CFBundleVersion, which is "a machine-readable string composed of one to three period-separated integers,
+   # such as 10.14.1. The string can only contain numeric characters (0-9) and periods."
+   set(MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION})
+
+   #
+   # This sets the bundle property key CFBundleShortVersionString, which is "a user-visible string for the version of
+   # the bundle. The required format is three period-separated integers, such as 10.14.1. The string can only contain
+   # numeric characters (0-9) and periods."
+   #
+   # One might think that CFBundleShortVersionString and CFBundleVersion are so similar as not to merit being separate
+   # keys, but it is not for us to question whether the left hand of Apple knows what the right hand is doing.
+   #
+   # Confusingly there is also a CMake target property called MACOSX_BUNDLE_LONG_VERSION_STRING which claims to set a
+   # CFBundleLongVersionString bundle property key.  However, it seems this bundle property key is long obsolete.
+   #
+   set(MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION})
+
+   # Sets the CFBundleIconFile bundle property key
+   set(MACOSX_BUNDLE_ICON_FILE "BrewkenIcon.icns")
+
+   # Sets the NSHumanReadableCopyright bundle property key, which is "a human-readable copyright notice for the bundle".
+   set(MACOSX_BUNDLE_COPYRIGHT
+       "Copyright 2009-2022.  Distributed under the terms of the GNU General Public License (version 3).")
+
 else()
    add_executable(${fileName_executable}
                   ${repoDir}/src/main.cpp
@@ -938,6 +987,8 @@ else()
                   $<TARGET_OBJECTS:btobjlib>)
 endif()
 
+#=======================================================================================================================
+#=======================================================================================================================
 # Windows-specific library linking
 if(WIN32 AND MINGW)
    ############################################################################
@@ -979,6 +1030,55 @@ if(WIN32 AND MINGW)
          copy-runtime-files ALL
          COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_BINARY_DIR}/windeployqt/" "${CMAKE_BINARY_DIR}/bin"
          DEPENDS ${fileName_executable}
+      )
+   endif()
+elseif(APPLE)
+   #
+   # We want to achieve the same goal as with Qt5::windeployqt above, but note that the Qt5::macdeployqt functions
+   # rather differently, with different options, so our CMake code here is correspondingly different
+   #
+   # Note that although macdeployqt can create the disk image file, we do that part with CPack to be consistent with our
+   # approach to packaging on other platforms
+   #
+   # Using the MACOSX_BUNDLE paramater on add_executable() above will have created a directory tree akin to the
+   # following:
+   #
+   #    ${fileName_executable}.app   # Top level folder that the desktop user sees as "the application"
+   #    └── Contents
+   #        ├── Info.plist
+   #        ├── MacOS
+   #        │   └── ${fileName_executable}    # The main executable
+   #        └──  Resources
+   #            ├── en.lproj
+   #            ├── sounds
+   #            └── translations_qm
+   #
+   # Running macdeployqt will add "Frameworks" and "Plugins" directory trees inside the "Contents" directory, and
+   # populate these with the various Qt shared libraries etc (including database drivers) needed for the code to run.
+   # It will also copy some, but not all, of the other shared libraries we need.
+   #
+   # We still need to:
+   #    - Copy across some non-Qt libraries we need (part of Xalan that macdeployqt does not detect)
+   #    - Copy sound files into Contents/Resources/sounds and translation files into Contents/Resources/translations_qm
+   #    - Copy default DB and default data into Contents/Resources (which is also where the user manual lives for
+   #      Brewtarget)
+   # The last two should happen courtesy of the set_source_files_properties(... MACOSX_PACKAGE_LOCATION ...) commands
+   # above.  (They won't show up in the diagnostic here because that copying happens _after_ building the executable.
+   #
+   if(TARGET Qt5::macdeployqt)
+      # Note that macdeployqt needs any options flags to be _after_ the name of the app.  The only flag we use is:
+      #   -verbose=<0-3>   0 = no output, 1 = error/warning (default), 2 = normal, 3 = debug
+      add_custom_command(TARGET ${fileName_executable}
+         POST_BUILD
+         # Uncomment the  echo  and  tree  lines to provide extra diagnostics.  These are useful eg if you don't own a
+         # Mac, and are relying on GitHub actions to do Mac builds.  (Just make sure  tree  is installed, usually via
+         # brew install tree.
+#         COMMAND echo "Contents of ${fileName_executable}.app before running macdeployqt"
+#         COMMAND tree -sh ${fileName_executable}.app
+         COMMAND Qt5::macdeployqt "$<TARGET_FILE_NAME:${fileName_executable}>.app" -verbose=2
+#         COMMAND echo "Contents of ${fileName_executable}.app after running macdeployqt"
+#         COMMAND tree -sh ${fileName_executable}.app
+         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
       )
    endif()
 endif()
@@ -1149,6 +1249,9 @@ install(TARGETS ${fileName_executable}
         RUNTIME DESTINATION ${installSubDir_bin}
         COMPONENT ${RUNTIME_INSTALL_COMPONENT})
 
+#=======================================================================================================================
+#==================================== Shipping shared libraries on Windows and Mac =====================================
+#=======================================================================================================================
 if(WIN32)
    #
    # Shared libraries (DLLs) are a bit complicated on Windows.  Because there is not really a standard package
@@ -1250,6 +1353,101 @@ if(WIN32)
       TARGET ${fileName_executable} POST_BUILD
       COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::Widgets> $<TARGET_FILE_DIR:brewtarget>
    )
+elseif(APPLE)
+   #
+   # For similar reasons to Windows, the Mac Bundle needs to have shared libraries copied into it.  Mostly this is done
+   # automatically with macdeployqt, which picks up Qt shared libraries, and other obvious dependencies such as
+   # libxerces-c.dylib and libxalan-c.dylib, and puts them in the Contents/Frameworks folder inside the bundle.
+   #
+   # However, where a library depends on another library, this is not picked up by macdeployqt.  In particular,
+   # libxalan-c.dylib depends on libxalanMsg.dylib.  The latter does not show up in XalanC_LIBRARIES either.  So we
+   # have to take a more manual approach.
+   #
+   # Firstly, as https://stackoverflow.com/questions/63310608/find-library-cannot-find-basic-shared-library-macos-clion
+   # explains you must remove the "lib" prefix from the library name before asking CMake to find it.
+   #
+   # Then, once you have the path to the library, you have to deal with the case that it will probably be a symbolic
+   # link, so you need to dereference it rather than let CMake just copy the symlink -- see
+   # https://stackoverflow.com/questions/11487638/cmake-fileinstall-files-destination-dir-with-symbolic-links.  (Except
+   # you also need to pay attention that the get_filename_component() command is now "superseded by cmake_path()
+   # command, except REALPATH now offered by file(REAL_PATH) command and PROGRAM now available in
+   # separate_arguments(PROGRAM) command".  And because it's CMake, you have to pay close attention to which parameters
+   # are values (eg expanded variables) and which are variable names.)
+   #
+   # Subsequently, you discover that you need to rename things because:
+   #    /usr/local/lib/libxalanMsg.dylib     is a symbolic link to /usr/local/lib/libxalanMsg.112.dylib
+   #    /usr/local/lib/libxalanMsg.112.dylib is a symbolic link to /usr/local/lib/libxalanMsg.112.0.dylib
+   # but when otool is run by fixup_bundle, it looks for @rpath/libxalanMsg.112.dylib and will not accept any other
+   # name for the library.   So, we change ".0.dylib" at the end of the library file name to ".dylib".
+   #
+   # One day, I hope we will find a more elegant and less brittle way to do all this!
+   #
+   find_library(XalanCMessage_LIBRARY NAMES xalanMsg)
+   file(REAL_PATH "${XalanCMessage_LIBRARY}" XalanCMessage_LIBRARY_resolved)
+   cmake_path(GET XalanCMessage_LIBRARY_resolved FILENAME XalanCMessage_LIBRARY_withoutPath)
+   string(REGEX REPLACE "\.0\.dylib$" ".dylib" XalanCMessage_LIBRARY_tweaked "${XalanCMessage_LIBRARY_withoutPath}")
+   message(STATUS "Found libxalanMsg at ${XalanCMessage_LIBRARY} which resolves to ${XalanCMessage_LIBRARY_resolved}")
+   message(STATUS "Tweaked libxalanMsg file name from ${XalanCMessage_LIBRARY_withoutPath} to ${XalanCMessage_LIBRARY_tweaked}")
+   install(FILES ${XalanCMessage_LIBRARY_resolved}
+           DESTINATION ${CMAKE_BINARY_DIR}/${fileName_executable}.app/Contents/Frameworks/
+           RENAME ${XalanCMessage_LIBRARY_tweaked})
+
+   #
+   # On MacOS, if you are shipping dynamic libraries with your application, you can tell the application where to look
+   # for those dynamic libraries via "Runpath Search Path" aka "@rpath".  See
+   # https://gitlab.kitware.com/cmake/community/-/wikis/doc/cmake/RPATH-handling for more details.
+   #
+   #
+   # Setting CMAKE_BUILD_WITH_INSTALL_RPATH to true means "the software is always built with the install path for the
+   # RPATH and does not need to be relinked when installed".  This is recommended at
+   # https://discourse.cmake.org/t/osx-frameworks-rpath-and-image-not-found/3094/9
+   #
+   # Setting CMAKE_INSTALL_RPATH_USE_LINK_PATH to true "will append to the runtime search path (rpath) of installed
+   # binaries any directories outside the project that are in the linker search path or contain linked library files".
+   #
+   # CMAKE_INSTALL_RPATH is "a semicolon-separated list specifying the rpath to use in installed targets".
+   #
+   set(CMAKE_BUILD_WITH_INSTALL_RPATH    true)
+   set(CMAKE_INSTALL_RPATH_USE_LINK_PATH true)
+   message(STATUS "CMAKE_INSTALL_RPATH = ${CMAKE_INSTALL_RPATH}, End Of Line")
+
+   #
+   # Having copied the shared libraries into the bundle, we now need to use CMake's fixup_bundle
+   # (see https://cmake.org/cmake/help/latest/module/BundleUtilities.html) to make sure the application inside the
+   # bundle looks in the bundle, not the system, for each of these shared libraries.
+   #
+   # After this, there is a verify_app command which checks that everything "appears valid".
+   #
+   # Note that the CMake doco says "DO NOT USE THESE FUNCTIONS AT CONFIGURE TIME (from CMakeLists.txt)! Instead, invoke
+   # them from an install(CODE) or install(SCRIPT) rule."  Note that this means we have to be careful about which
+   # variables are available to us.  A lot of things are simply not set inside install(CODE).  As explained at
+   # https://stackoverflow.com/questions/73815300/how-do-i-get-project-root-dir-in-the-cmake-install-code-section, there
+   # are various techniques to inject variables into install(CODE).  We use the string(CONFIGURE) approach as it avoids
+   # too much escaping.
+   #
+   # The include(BundleUtilities) line is the bit the CMake documentation doesn't tell you about (or at least, not in as
+   # obvious a way as one might like).  Without it you'll get an error about fixup_bundle being an unknown CMake
+   # command.
+   #
+   # Another thing you have to find out the hard way is that the first parameter to fixup_bundle ("<app>") cannot be a
+   # relative path.  If you pass in "foo.app", then fixup_bundle will look for "/foo.app".
+   #
+   # Besides the full path to the bundle to fix, fixup_bundle takes two other parameters --
+   # fixup_bundle(<app> <libs> <dirs>).  The <libs> parameter "is a list of libraries that must be fixed up, but that
+   # cannot be determined by otool output analysis (i.e. plugins)".  The <dirs> parameter is undocumented (welcome to
+   # the joy of CMake) and often appears to be set to empty string in examples on stackoverflow etc.
+   #
+   # For diagnostics, it's often helpful to add lines such as the following in the code block below:
+   #    execute_process(COMMAND echo "Pre fixup_bundle - build tree")
+   #    execute_process(COMMAND pwd)
+   #    execute_process(COMMAND tree -sh .)
+   #
+   string(CONFIGURE [[
+      include(BundleUtilities)
+      fixup_bundle("${CMAKE_BINARY_DIR}/${fileName_executable}.app" "" "${CMAKE_BINARY_DIR}/${fileName_executable}.app/Contents/Frameworks")
+      verify_app("${CMAKE_BINARY_DIR}/${fileName_executable}.app")
+   ]] installCode)
+   install(CODE "${installCode}")
 endif()
 
 # Install the translations.
@@ -1350,11 +1548,10 @@ endif()
 #
 add_custom_target(
    FinalMessage ALL
-   ${CMAKE_COMMAND} -E cmake_echo_color --bold --green "*** Finished compiling ${capitalisedProjectName}.  Please run  sudo make install  to install. ***"
+   ${CMAKE_COMMAND} -E cmake_echo_color --bold --green "⭐⭐⭐ Finished compiling ${capitalisedProjectName}.  Please run  sudo make install  to install. ⭐⭐⭐"
    COMMENT "Final Message"
 )
 add_dependencies(FinalMessage ${fileName_executable})
-
 
 #=======================================================================================================================
 #====================================================== Packaging ======================================================
@@ -1381,7 +1578,7 @@ add_dependencies(FinalMessage ${fileName_executable})
 #   - CPACK_PACKAGING_INSTALL_PREFIX as the defaults from each generator should usually be fine
 #   - CPACK_PACKAGE_CONTACT as, AFAICT, it's only used to provide a default value for CPACK_DEBIAN_PACKAGE_MAINTAINER
 #
-set(CPACK_PACKAGE_VENDOR "The Brewtarget Team")
+set(CPACK_PACKAGE_VENDOR "The ${capitalisedProjectName} Team")
 string(
    CONCAT
    CPACK_PACKAGE_DESCRIPTION
@@ -1398,16 +1595,16 @@ set(CPACK_PACKAGE_HOMEPAGE_URL "https://github.com/Brewtarget/brewtarget")
 message("CMAKE_PROJECT_NAME = ${CMAKE_PROJECT_NAME}")
 message("PROJECT_VERSION = ${PROJECT_VERSION}")
 set(CPACK_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME}_${PROJECT_VERSION}_${CMAKE_SYSTEM_PROCESSOR}")
-set(CPACK_PACKAGE_INSTALL_DIRECTORY "brewtarget-${PROJECT_VERSION}")
+set(CPACK_PACKAGE_INSTALL_DIRECTORY "${capitalisedProjectName}-${PROJECT_VERSION}")
 if(NOT WIN32)
    # Setting this on Windows breaks the NSIS packager with some confusing message saying it can't find the file
-   set(CPACK_PACKAGE_ICON "${repoDir}/images/brewtarget.svg")
+   set(CPACK_PACKAGE_ICON "${repoDir}/images/${PROJECT_NAME}.svg")
 endif()
 set(CPACK_PACKAGE_CHECKSUM "SHA256")
 set(CPACK_RESOURCE_FILE_LICENSE "${repoDir}/COPYING.GPLv3")
 set(CPACK_STRIP_FILES true)
 set(CPACK_VERBATIM_VARIABLES true)
-set(CPACK_PACKAGE_EXECUTABLES "${fileName_executable}" "Brewtarget")
+set(CPACK_PACKAGE_EXECUTABLES "${fileName_executable}" "${capitalisedProjectName}")
 
 #
 # Variables for Source Package Generators
@@ -1418,16 +1615,16 @@ set(CPACK_SOURCE_IGNORE_FILES "/.svn/"
                               "~$"
                               "/CMakeFiles/"
                               "/_CPack_Packages/"
-                              "^brewtarget.*deb$"
-                              "^brewtarget.*rpm$"
-                              "^brewtarget.*tar.*$"
+                              "^${PROJECT_NAME}.*deb$"
+                              "^${PROJECT_NAME}.*rpm$"
+                              "^${PROJECT_NAME}.*tar.*$"
                               "CPack.*"
                               "Makefile"
                               "cmake_install.*"
                               "\\\\.o$"
-                              "/brewtarget.dir/"
+                              "/${PROJECT_NAME}.dir/"
                               "moc_.*"
-                              "qrc_brewtarget.*"
+                              "qrc_${PROJECT_NAME}.*"
                               "ui_.*h"
                               "install_manifest.*"
                               "config\\\\.h")
@@ -1505,11 +1702,11 @@ elseif(WIN32)
    set(CPACK_GENERATOR "NSIS")
 
    # The title displayed at the top of the installer.
-   set(CPACK_NSIS_PACKAGE_NAME "Brewtarget-${PROJECT_VERSION}")
+   set(CPACK_NSIS_PACKAGE_NAME "${capitalisedProjectName}-${PROJECT_VERSION}")
    # The display name string that appears in the Windows Apps & features in Control Panel
-   set(CPACK_NSIS_DISPLAY_NAME "Brewtarget-${PROJECT_VERSION}")
+   set(CPACK_NSIS_DISPLAY_NAME "${capitalisedProjectName}-${PROJECT_VERSION}")
    # ?
-   set(CPACK_PACKAGE_INSTALL_REGISTRY_KEY "Brewtarget-${PROJECT_VERSION}")
+   set(CPACK_PACKAGE_INSTALL_REGISTRY_KEY "${capitalisedProjectName}-${PROJECT_VERSION}")
    # URL to a web site providing more information about your application
    set(CPACK_NSIS_URL_INFO_ABOUT "https://github.com/Brewtarget/brewtarget")
    # The name of a *.ico file used as the main icon for the generated install program
@@ -1539,10 +1736,6 @@ elseif(WIN32)
 
    set(CPACK_NSIS_MODIFY_PATH ON)
 
-   # Extra start menu items.
-   #set(CPACK_NSIS_MENU_LINKS
-   #     "bin/${fileName_executable}" "My Brewtarget"
-   #  )
 elseif(APPLE)
    #================================================== Mac Packaging ===================================================
    # Broadly speaking, what we want for Mac is a a DMG disk image which the end user can mount and from s/he can copy
@@ -1644,17 +1837,6 @@ set_property(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
                                              ${packagesRpmFiles}
                                              ${packagesTarBz2Files}
                                              ${packagesChecksumFiles})
-
-# make addframeworks should copy the Qt libraries to the app.
-if(APPLE)
-   set(QT_BINARY_DIR "${_qt5Core_install_prefix}/bin")
-   add_custom_target(
-      addframeworks ALL
-      COMMAND ${QT_BINARY_DIR}/macdeployqt "Brewtarget.app" -dmg
-      WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-      DEPENDS ${fileName_executable}
-   )
-endif()
 
 if(UNIX AND NOT APPLE)
    add_custom_target(
