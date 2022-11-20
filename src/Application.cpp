@@ -114,15 +114,20 @@ namespace {
     * \brief Ensure our directories exist.
     */
    bool ensureDirectoriesExist() {
+      //
       // A missing resource directory is a serious issue, without it we're missing the default DB, sound files &
       // translations.  We could attempt to create it, like the other config/data directories, but an empty resource
-      // dir is just as bad as a missing one.  So, instead, we'll display a little more dire warning, and not try to
-      // create it.
+      // dir is just as bad as a missing one.  So, instead, we'll display a little more dire warning.
+      //
+      // .:TBD:. Maybe we should terminate the app here as it's likely that there's some problem with the install and
+      //         users are going to hit other problems.
+      //
       QDir resourceDir = Application::getResourceDir();
       bool resourceDirSuccess = resourceDir.exists();
       if (!resourceDirSuccess) {
          QString errMsg{
-            QObject::tr("Resource directory \"%1\" is missing.  Some features will be unavailable.").arg(resourceDir.path())
+            QObject::tr("Resource directory \"%1\" is missing.  The software might not operate correctly without this "
+                        "directory and its contents.").arg(resourceDir.path())
          };
          qCritical() << Q_FUNC_INFO << errMsg;
 

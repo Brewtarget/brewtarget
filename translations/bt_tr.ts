@@ -2686,8 +2686,8 @@ Günlük dosyası daha fazla detay içerebilir.</translation>
         <translation>Su</translation>
     </message>
     <message>
-        <source>Resource directory &quot;%1&quot; is missing.  Some features will be unavailable.</source>
-        <translation>Kaynak klasör &quot;%1&quot; kayıp.  Bazı özellikler kullanılamayacaktır.</translation>
+        <source>Resource directory &quot;%1&quot; is missing.  The software might not operate correctly without this directory and its contents.</source>
+        <translation type="unfinished">Kaynak klasör &quot;%1&quot; kayıp.  Bazı özellikler kullanılamayacaktır.</translation>
     </message>
 </context>
 <context>
