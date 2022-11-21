@@ -165,9 +165,19 @@ if(UNIX AND NOT APPLE)
       set(EXEC_PREFIX ${CMAKE_INSTALL_PREFIX})
    endif()
 
-   set(installSubDir_data "share/${CMAKE_PROJECT_NAME}")
-   set(installSubDir_doc  "share/doc/${CMAKE_PROJECT_NAME}")
-   set(installSubDir_bin  "bin")
+   set(installSubDir_data         "share/${CMAKE_PROJECT_NAME}")
+   set(installSubDir_doc          "share/doc/${CMAKE_PROJECT_NAME}")
+   set(installSubDir_bin          "bin")
+   # According to https://specifications.freedesktop.org/menu-spec/menu-spec-1.0.html#paths, .desktop files need to live
+   # in one of the $XDG_DATA_DIRS/applications/.  (Note that $XDG_DATA_DIRS is a colon-separated list of directories, typically
+   # defaulting to /usr/local/share/:/usr/share/. but on another system it might be
+   # /usr/share/plasma:/usr/local/share:/usr/share:/var/lib/snapd/desktop:/var/lib/snapd/desktop).  When combined with
+   # CMAKE_INSTALL_PREFIX, "share/applications" should end up being one of these.
+   set(installSubDir_applications "share/applications")
+   # It's a similar but slightly more complicated story for where to put icons.  (See
+   # https://specifications.freedesktop.org/icon-theme-spec/icon-theme-spec-latest.html#directory_layout for all the
+   # details.)
+   set(installSubDir_icons        "share/icons")
 
 elseif(WIN32)
    #============================================ Windows Install Directories ===========================================
@@ -1380,6 +1390,20 @@ elseif(APPLE)
    # but when otool is run by fixup_bundle, it looks for @rpath/libxalanMsg.112.dylib and will not accept any other
    # name for the library.   So, we change ".0.dylib" at the end of the library file name to ".dylib".
    #
+   # Then you have to remember, as commented elsewhere, the DESTINATION option of the install() command must be a
+   # relative path; otherwise installed files are ignored by CPack - ie won't end up in the DMG file.  (Yes, this does
+   # contrast with the requirement of fixup_bundle to have an absolute path.  You have to stay on your toes with CMake.)
+   # This is where it gets a bit confusing(!)  We seem to have two copies of the bundle in the build tree:
+   #    1: ${fileName_executable}.app
+   #    2: _CPack_Packages/Darwin/DragNDrop/${CMAKE_PROJECT_NAME}_${PROJECT_VERSION}_x86_64/ALL_IN_ONE/${fileName_executable}.app
+   # They look to be the same, except that installing with an absolute path beginning
+   # ${CMAKE_BINARY_DIR}/${fileName_executable}.app/ puts things in the first of these (but not the second), while
+   # installing with a relative path puts them in the second (but not the first).
+   #
+   # AFAICT it's the second bundle that ends up in the DMG file even though it's the first one that we're running
+   # fixup_bundle on.  For the moment I'm just going to install libxalanMsg.112.dylib into both, on the grounds that it
+   # surely can't hurt.
+   #
    # One day, I hope we will find a more elegant and less brittle way to do all this!
    #
    find_library(XalanCMessage_LIBRARY NAMES xalanMsg)
@@ -1388,6 +1412,9 @@ elseif(APPLE)
    string(REGEX REPLACE "\.0\.dylib$" ".dylib" XalanCMessage_LIBRARY_tweaked "${XalanCMessage_LIBRARY_withoutPath}")
    message(STATUS "Found libxalanMsg at ${XalanCMessage_LIBRARY} which resolves to ${XalanCMessage_LIBRARY_resolved}")
    message(STATUS "Tweaked libxalanMsg file name from ${XalanCMessage_LIBRARY_withoutPath} to ${XalanCMessage_LIBRARY_tweaked}")
+   install(FILES ${XalanCMessage_LIBRARY_resolved}
+           DESTINATION ${fileName_executable}.app/Contents/Frameworks/
+           RENAME ${XalanCMessage_LIBRARY_tweaked})
    install(FILES ${XalanCMessage_LIBRARY_resolved}
            DESTINATION ${CMAKE_BINARY_DIR}/${fileName_executable}.app/Contents/Frameworks/
            RENAME ${XalanCMessage_LIBRARY_tweaked})
@@ -1484,13 +1511,16 @@ install(FILES ${filesToInstall_sounds}
 if(UNIX AND NOT APPLE)
    #----------- Linux -----------
    # Install the icons
+   # Per https://specifications.freedesktop.org/icon-theme-spec/icon-theme-spec-latest.html#install_icons, "installing a
+   # svg icon in $prefix/share/icons/hicolor/scalable/apps means most desktops will have one icon that works for all
+   # sizes".
    install(FILES ${filesToInstall_icons}
-           DESTINATION "${installSubDir_data}/icons/hicolor/scalable/apps/"
+           DESTINATION "${installSubDir_icons}/hicolor/scalable/apps/"
            COMPONENT ${DATA_INSTALL_COMPONENT})
 
    # Install the .desktop file
    install(FILES ${filesToInstall_desktop}
-           DESTINATION "${installSubDir_data}/applications"
+           DESTINATION "${installSubDir_applications}"
            COMPONENT ${DATA_INSTALL_COMPONENT})
 
    # Install friendly-format change log aka release notes
