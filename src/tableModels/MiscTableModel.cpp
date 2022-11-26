@@ -1,6 +1,6 @@
 /*
  * MiscTableModel.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2022
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -31,7 +31,6 @@
 #include "measurement/Measurement.h"
 #include "measurement/Unit.h"
 #include "model/Inventory.h"
-#include "model/Misc.h"
 #include "model/Recipe.h"
 #include "PersistentSettings.h"
 #include "utils/BtStringConst.h"
@@ -148,7 +147,8 @@ void MiscTableModel::addMiscs(QList<std::shared_ptr<Misc> > miscs) {
 }
 
 // Returns true when misc is successfully found and removed.
-void MiscTableModel::removeMisc(int miscId, std::shared_ptr<QObject> object) {
+void MiscTableModel::removeMisc([[maybe_unused]] int miscId,
+                                std::shared_ptr<QObject> object) {
    this->remove(std::static_pointer_cast<Misc>(object));
    return;
 }
@@ -208,7 +208,7 @@ QVariant MiscTableModel::data(QModelIndex const & index, int role) const {
             return QVariant(row->typeStringTr());
          }
          if (role == Qt::UserRole) {
-            return QVariant(row->type());
+            return QVariant(static_cast<int>(row->type()));
          }
          break;
       case MISCUSECOL:
@@ -216,7 +216,7 @@ QVariant MiscTableModel::data(QModelIndex const & index, int role) const {
             return QVariant(row->useStringTr());
          }
          if (role == Qt::UserRole) {
-            return QVariant(row->use());
+            return QVariant(static_cast<int>(row->use()));
          }
          return QVariant();
       case MISCTIMECOL:
@@ -260,7 +260,7 @@ QVariant MiscTableModel::data(QModelIndex const & index, int role) const {
             return QVariant(row->amountTypeStringTr());
          }
          if (role == Qt::UserRole) {
-            return QVariant(row->amountType());
+            return QVariant(static_cast<int>(row->amountType()));
          }
          break;
       default:
@@ -290,7 +290,9 @@ Qt::ItemFlags MiscTableModel::flags(QModelIndex const & index) const {
    }
 }
 
-bool MiscTableModel::setData(QModelIndex const & index, QVariant const & value, int role) {
+bool MiscTableModel::setData(QModelIndex const & index,
+                             QVariant const & value,
+                             [[maybe_unused]] int role) {
 
    if (index.row() >= static_cast<int>(this->rows.size())) {
       return false;
@@ -402,17 +404,14 @@ void MiscTableModel::changedInventory(int invKey, BtStringConst const & property
    return;
 }
 
-void MiscTableModel::changed(QMetaProperty prop, QVariant /*val*/) {
+void MiscTableModel::changed(QMetaProperty prop, [[maybe_unused]] QVariant val) {
    Misc * miscSender = qobject_cast<Misc*>(sender());
    if (miscSender) {
-      auto spMiscSender = ObjectStoreWrapper::getSharedFromRaw(miscSender);
-      int i = this->rows.indexOf(spMiscSender);
-      if (i < 0) {
-         return;
+      int ii = this->findIndexOf(miscSender);
+      if (ii >= 0) {
+         emit dataChanged( QAbstractItemModel::createIndex(ii, 0),
+                           QAbstractItemModel::createIndex(ii, MISCNUMCOLS-1) );
       }
-
-      emit dataChanged( QAbstractItemModel::createIndex(i, 0),
-                        QAbstractItemModel::createIndex(i, MISCNUMCOLS-1) );
       return;
    }
 
@@ -521,6 +520,6 @@ void MiscItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, 
 
 void MiscItemDelegate::updateEditorGeometry(QWidget * editor,
                                             QStyleOptionViewItem const & option,
-                                            QModelIndex const & index) const {
+                                            [[maybe_unused]] QModelIndex const & index) const {
    editor->setGeometry(option.rect);
 }

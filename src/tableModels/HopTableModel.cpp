@@ -1,6 +1,6 @@
 /*
  * HopTableModel.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2022
  * - Luke Vincent <luke.r.vincent@gmail.com>
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
@@ -189,7 +189,8 @@ bool HopTableModel::remove(std::shared_ptr<Hop> hop) {
    return false;
 }
 
-void HopTableModel::removeHop(int hopId, std::shared_ptr<QObject> object) {
+void HopTableModel::removeHop([[maybe_unused]] int hopId,
+                              std::shared_ptr<QObject> object) {
    this->remove(std::static_pointer_cast<Hop>(object));
    return;
 }
@@ -220,13 +221,12 @@ void HopTableModel::changedInventory(int invKey, BtStringConst const & propertyN
    return;
 }
 
-void HopTableModel::changed(QMetaProperty prop, QVariant /*val*/) {
+void HopTableModel::changed(QMetaProperty prop, [[maybe_unused]] QVariant val) {
 
    // Find the notifier in the list
    Hop * hopSender = qobject_cast<Hop *>(sender());
    if (hopSender) {
-      auto spHopSender = ObjectStoreWrapper::getSharedFromRaw(hopSender);
-      int ii = this->rows.indexOf(spHopSender);
+      int ii = this->findIndexOf(hopSender);
       if (ii < 0) {
          return;
       }
@@ -299,7 +299,7 @@ QVariant HopTableModel::data(const QModelIndex & index, int role) const {
             return QVariant(row->useStringTr());
          }
          if (role == Qt::UserRole) {
-            return QVariant(row->use());
+            return QVariant(static_cast<int>(row->use()));
          }
          break;
       case HOPTIMECOL:
@@ -314,7 +314,7 @@ QVariant HopTableModel::data(const QModelIndex & index, int role) const {
          if (role == Qt::DisplayRole) {
             return QVariant(row->formStringTr());
          } else if (role == Qt::UserRole) {
-            return QVariant(row->form());
+            return QVariant(static_cast<int>(row->form()));
          }
          break;
       default :

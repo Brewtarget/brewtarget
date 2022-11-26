@@ -1,6 +1,6 @@
 /*
  * WaterTableModel.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2022
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -37,7 +37,6 @@
 #include "measurement/Measurement.h"
 #include "measurement/Unit.h"
 #include "model/Recipe.h"
-#include "model/Water.h"
 #include "PersistentSettings.h"
 #include "WaterTableWidget.h"
 
@@ -149,7 +148,8 @@ void WaterTableModel::addWaters(QList<std::shared_ptr<Water> > waters) {
 
 }
 
-void WaterTableModel::removeWater(int waterId, std::shared_ptr<QObject> object) {
+void WaterTableModel::removeWater([[maybe_unused]] int waterId,
+                                  std::shared_ptr<QObject> object) {
    auto water = std::static_pointer_cast<Water>(object);
    int i = rows.indexOf(water);
    if (i >= 0) {
@@ -179,11 +179,10 @@ void WaterTableModel::changed(QMetaProperty prop, QVariant val) {
    // Find the notifier in the list
    Water * waterSender = qobject_cast<Water *>(sender());
    if (waterSender) {
-      auto spWaterSender = ObjectStoreWrapper::getSharedFromRaw(waterSender);
-      int i = rows.indexOf(spWaterSender);
-      if (i >= 0) {
-         emit dataChanged(QAbstractItemModel::createIndex(i, 0),
-                          QAbstractItemModel::createIndex(i, WATERNUMCOLS - 1));
+      int ii = findIndexOf(waterSender);
+      if (ii >= 0) {
+         emit dataChanged(QAbstractItemModel::createIndex(ii, 0),
+                          QAbstractItemModel::createIndex(ii, WATERNUMCOLS - 1));
       }
    }
    return;

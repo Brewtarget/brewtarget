@@ -1,6 +1,6 @@
 /*
  * SaltTableModel.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2022
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -42,7 +42,6 @@
 #include "model/Mash.h"
 #include "model/MashStep.h"
 #include "model/Recipe.h"
-#include "model/Salt.h"
 #include "PersistentSettings.h"
 #include "WaterDialog.h"
 
@@ -346,33 +345,31 @@ void SaltTableModel::removeAll() {
    endRemoveRows();
 }
 
-void SaltTableModel::changed(QMetaProperty prop, QVariant /*val*/)
-{
-   int i;
-
+void SaltTableModel::changed(QMetaProperty prop, [[maybe_unused]] QVariant val) {
    // Find the notifier in the list
-   Salt* saltSender = qobject_cast<Salt*>(sender());
-   if (saltSender ) {
-      auto spSaltSender = ObjectStoreWrapper::getSharedFromRaw(saltSender);
-      i = this->rows.indexOf(spSaltSender);
-      if (i >= 0 )
-         emit dataChanged( QAbstractItemModel::createIndex(i, 0),
-                           QAbstractItemModel::createIndex(i, SALTNUMCOLS-1));
-         emit headerDataChanged( Qt::Vertical, i, i);
+   Salt * saltSender = qobject_cast<Salt*>(sender());
+   if (saltSender) {
+      int ii = this->findIndexOf(saltSender);
+      if (ii >= 0) {
+         emit dataChanged(QAbstractItemModel::createIndex(ii, 0),
+                          QAbstractItemModel::createIndex(ii, SALTNUMCOLS-1));
+         emit headerDataChanged(Qt::Vertical, ii, ii);
+      }
       return;
    }
 
    // See if sender is our recipe.
    Recipe* recSender = qobject_cast<Recipe*>(sender());
-   if (recSender && recSender == this->recObs )
-   {
-      if (QString(prop.name()) == "salts" ) {
+   if (recSender && recSender == this->recObs ) {
+      if (QString(prop.name()) == "salts") {
          removeAll();
          addSalts(this->recObs->getAll<Salt>());
       }
-      if (rowCount() > 0 )
+      if (rowCount() > 0) {
          emit headerDataChanged( Qt::Vertical, 0, rowCount()-1 );
+      }
    }
+   return;
 }
 
 int SaltTableModel::rowCount(const QModelIndex& /*parent*/) const

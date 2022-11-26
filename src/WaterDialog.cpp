@@ -348,8 +348,7 @@ void WaterDialog::newTotals() {
       }
       btDigit_ph->setText( calculateMashpH(), 2 );
 
-   }
-   else {
+   } else {
       for (int i = 0; i < static_cast<int>(Water::Ions::numIons); ++i ) {
          Water::Ions ion = static_cast<Water::Ions>(i);
          m_ppm_digits[i]->setText( m_salt_table_model->total(ion) / allTheWaters, 0 );
@@ -365,6 +364,7 @@ void WaterDialog::removeSalts() {
       deadSalts.append( i.row() );
    }
    m_salt_table_model->removeSalts(deadSalts);
+   return;
 }
 
 //! \brief Calcuates the residual alkalinity of the mash water.
@@ -411,8 +411,7 @@ double WaterDialog::calculateSaltpH() {
 }
 
 //! \brief Calculates the pH delta caused by any salt additions.
-double WaterDialog::calculateAddedSaltpH()
-{
+double WaterDialog::calculateAddedSaltpH() {
 
    // We need the value from the salt table model, because we need all the
    // added salts, but not the base.

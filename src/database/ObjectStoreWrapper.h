@@ -104,9 +104,12 @@ namespace ObjectStoreWrapper {
       if (id > 0 && objectStore.contains(id)) {
          return objectStore.getById(id);
       }
-      qDebug() <<
+      // If the object isn't stored in the DB then we can create a shared pointer for it, but this is dangerous as there
+      // might already be another shared pointer to it.  At minimum we should log a warning.  In the long run we should
+      // Q_ASSERT(false) here.
+      qWarning() <<
          Q_FUNC_INFO << "Creating new shared_ptr for unstored" << ne->metaObject()->className() << "#" << id << " :" <<
-         ne->name();
+         ne->name() << ".  This may be a bug - eg if a shared_ptr already exists for this object!";
       return std::shared_ptr<NE>{ne};
    }
 
