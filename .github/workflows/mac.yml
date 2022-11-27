@@ -99,7 +99,8 @@ jobs:
         cd build
         pwd
         make package
-        ls -ltr
+        pwd
+        tree -sh
 
     - name: Upload Mac Packages (Installers)
       if: ${{ success() }}

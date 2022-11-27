@@ -1,6 +1,6 @@
 /*
  * FermentableTableModel.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2022
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -44,7 +44,6 @@
 #include "MainWindow.h"
 #include "measurement/Measurement.h"
 #include "measurement/Unit.h"
-#include "model/Fermentable.h"
 #include "model/Inventory.h"
 #include "model/Recipe.h"
 #include "PersistentSettings.h"
@@ -172,7 +171,8 @@ void FermentableTableModel::addFermentables(QList<std::shared_ptr<Fermentable> >
    }
 }
 
-void FermentableTableModel::removeFermentable(int fermId, std::shared_ptr<QObject> object) {
+void FermentableTableModel::removeFermentable([[maybe_unused]] int fermId,
+                                              std::shared_ptr<QObject> object) {
    this->remove(std::static_pointer_cast<Fermentable>(object));
    return;
 }
@@ -235,14 +235,13 @@ void FermentableTableModel::changedInventory(int invKey, BtStringConst const & p
    return;
 }
 
-void FermentableTableModel::changed(QMetaProperty prop, QVariant /*val*/) {
+void FermentableTableModel::changed(QMetaProperty prop, [[maybe_unused]] QVariant val) {
    qDebug() << Q_FUNC_INFO << prop.name();
 
    // Is sender one of our fermentables?
    Fermentable* fermSender = qobject_cast<Fermentable*>(sender());
    if (fermSender) {
-      auto spFermSender = ObjectStoreWrapper::getSharedFromRaw(fermSender);
-      int ii = this->rows.indexOf(spFermSender);
+      int ii = this->findIndexOf(fermSender);
       if (ii < 0) {
          return;
       }
@@ -295,7 +294,7 @@ QVariant FermentableTableModel::data(QModelIndex const & index, int role) const 
             return QVariant(row->typeStringTr());
          }
          if (role == Qt::UserRole) {
-            return QVariant(row->type());
+            return QVariant(static_cast<int>(row->type()));
          }
          break;
       case FERMINVENTORYCOL:
@@ -325,7 +324,7 @@ QVariant FermentableTableModel::data(QModelIndex const & index, int role) const 
             return QVariant(row->additionMethodStringTr());
          }
          if (role == Qt::UserRole) {
-            return QVariant(row->additionMethod());
+            return QVariant(static_cast<int>(row->additionMethod()));
          }
          break;
       case FERMAFTERBOIL:
@@ -333,7 +332,7 @@ QVariant FermentableTableModel::data(QModelIndex const & index, int role) const 
             return QVariant(row->additionTimeStringTr());
          }
          if (role == Qt::UserRole) {
-            return QVariant(row->additionTime());
+            return QVariant(static_cast<int>(row->additionTime()));
          }
          break;
       case FERMYIELDCOL:
@@ -402,7 +401,9 @@ Qt::ItemFlags FermentableTableModel::flags(const QModelIndex& index ) const {
 }
 
 
-bool FermentableTableModel::setData(QModelIndex const & index, QVariant const & value, int role) {
+bool FermentableTableModel::setData(QModelIndex const & index,
+                                    QVariant const & value,
+                                    [[maybe_unused]] int role) {
    if (index.row() >= static_cast<int>(this->rows.size())) {
       return false;
    }
@@ -525,7 +526,7 @@ FermentableItemDelegate::FermentableItemDelegate(QObject* parent) : QItemDelegat
 }
 
 QWidget* FermentableItemDelegate::createEditor(QWidget *parent,
-                                               QStyleOptionViewItem const & option,
+                                               [[maybe_unused]] QStyleOptionViewItem const & option,
                                                QModelIndex const & index) const {
    if (index.column() == FERMTYPECOL )
    {
@@ -564,13 +565,10 @@ QWidget* FermentableItemDelegate::createEditor(QWidget *parent,
       int type = index.model()->index(index.row(), FERMTYPECOL).data(Qt::UserRole).toInt();
 
       // Hide the unsuitable item keeping the same enumeration
-      if(type == Fermentable::Grain)
-      {
-         list->item(Fermentable::Not_Mashed)->setHidden(true);
-      }
-      else
-      {
-         list->item(Fermentable::Steeped)->setHidden(true);
+      if (type == static_cast<int>(Fermentable::Type::Grain)) {
+         list->item(static_cast<int>(Fermentable::AdditionMethod::Not_Mashed))->setHidden(true);
+      } else {
+         list->item(static_cast<int>(Fermentable::AdditionMethod::Steeped))->setHidden(true);
       }
 
       return box;
@@ -645,7 +643,8 @@ void FermentableItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *
    }
 }
 
-void FermentableItemDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const
-{
+void FermentableItemDelegate::updateEditorGeometry(QWidget * editor,
+                                                   QStyleOptionViewItem const & option,
+                                                   [[maybe_unused]] QModelIndex const & index) const {
    editor->setGeometry(option.rect);
 }

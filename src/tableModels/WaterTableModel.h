@@ -32,6 +32,7 @@
 #include <QWidget>
 
 #include "measurement/Unit.h"
+#include "model/Water.h"
 #include "tableModels/BtTableModel.h"
 
 // Forward declarations.

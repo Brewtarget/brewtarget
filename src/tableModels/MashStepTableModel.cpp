@@ -1,6 +1,6 @@
 /*
  * MashStepTableModel.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2022
  * - Matt Young <mfsy@yahoo.com>
  * - Maxime Lavigne <duguigne@gmail.com>
  * - Mik Firestone <mikfire@gmail.com>
@@ -200,12 +200,12 @@ void MashStepTableModel::mashChanged() {
    return;
 }
 
-void MashStepTableModel::mashStepChanged(QMetaProperty prop, QVariant val) {
+void MashStepTableModel::mashStepChanged(QMetaProperty prop,
+                                         [[maybe_unused]] QVariant val) {
    qDebug() << Q_FUNC_INFO;
 
-   MashStep* stepSenderRaw = qobject_cast<MashStep*>(sender());
-   if (stepSenderRaw) {
-      auto stepSender = ObjectStoreWrapper::getSharedFromRaw(stepSenderRaw);
+   MashStep* stepSender = qobject_cast<MashStep*>(sender());
+   if (stepSender) {
       if (stepSender->getMashId() != this->mashObs->key()) {
          // It really shouldn't happen that we get a notification for a MashStep that's not in the Mash we're watching,
          // but, if we do, then stop trying to process the update.
@@ -216,10 +216,10 @@ void MashStepTableModel::mashStepChanged(QMetaProperty prop, QVariant val) {
          return;
       }
 
-      int ii = this->rows.indexOf(stepSender);
+      int ii = this->findIndexOf(stepSender);
       if (ii >= 0) {
          if (prop.name() == PropertyNames::MashStep::stepNumber) {
-            this->reorderMashStep(stepSender, ii);
+            this->reorderMashStep(this->rows.at(ii), ii);
          }
 
          emit dataChanged( QAbstractItemModel::createIndex(ii, 0),
@@ -267,7 +267,7 @@ QVariant MashStepTableModel::data(QModelIndex const & index, int role) const {
          return QVariant(
             Measurement::displayAmount(
                Measurement::Amount{
-                  row->type() == MashStep::Decoction ? row->decoctionAmount_l() : row->infuseAmount_l(),
+                  row->type() == MashStep::Type::Decoction ? row->decoctionAmount_l() : row->infuseAmount_l(),
                   Measurement::Units::liters
                },
                3,
@@ -276,7 +276,7 @@ QVariant MashStepTableModel::data(QModelIndex const & index, int role) const {
             )
          );
       case MASHSTEPTEMPCOL:
-         if (row->type() == MashStep::Decoction) {
+         if (row->type() == MashStep::Type::Decoction) {
             return QVariant("---");
          }
          return QVariant(
@@ -361,7 +361,7 @@ bool MashStepTableModel::setData(QModelIndex const & index, QVariant const & val
 
       case MASHSTEPAMOUNTCOL:
          if (value.canConvert(QVariant::String)) {
-            if (row->type() == MashStep::Decoction ) {
+            if (row->type() == MashStep::Type::Decoction ) {
                MainWindow::instance().doOrRedoUpdate(
                   *row,
                   PropertyNames::MashStep::decoctionAmount_l,
@@ -387,7 +387,7 @@ bool MashStepTableModel::setData(QModelIndex const & index, QVariant const & val
          return false;
 
       case MASHSTEPTEMPCOL:
-         if (value.canConvert(QVariant::String) && row->type() != MashStep::Decoction) {
+         if (value.canConvert(QVariant::String) && row->type() != MashStep::Type::Decoction) {
             MainWindow::instance().doOrRedoUpdate(
                *row,
                PropertyNames::MashStep::infuseTemp_c,

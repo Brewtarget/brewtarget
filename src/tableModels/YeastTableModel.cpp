@@ -1,6 +1,6 @@
 /*
  * YeastTableModel.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2022
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -41,7 +41,6 @@
 #include "measurement/Unit.h"
 #include "model/Inventory.h"
 #include "model/Recipe.h"
-#include "model/Yeast.h"
 #include "PersistentSettings.h"
 #include "utils/BtStringConst.h"
 
@@ -159,7 +158,8 @@ void YeastTableModel::addYeasts(QList<std::shared_ptr<Yeast> > yeasts) {
    return;
 }
 
-void YeastTableModel::removeYeast(int yeastId, std::shared_ptr<QObject> object) {
+void YeastTableModel::removeYeast([[maybe_unused]] int yeastId,
+                                  std::shared_ptr<QObject> object) {
    this->remove(std::static_pointer_cast<Yeast>(object));
    return;
 }
@@ -204,14 +204,11 @@ void YeastTableModel::changed(QMetaProperty prop, QVariant /*val*/) {
    // Find the notifier in the list
    Yeast * yeastSender = qobject_cast<Yeast *>(sender());
    if (yeastSender) {
-      auto spYeastSender = ObjectStoreWrapper::getSharedFromRaw(yeastSender);
-      int ii = this->rows.indexOf(spYeastSender);
-      if (ii < 0) {
-         return;
+      int ii = this->findIndexOf(yeastSender);
+      if (ii >= 0) {
+         emit dataChanged(QAbstractItemModel::createIndex(ii, 0),
+                          QAbstractItemModel::createIndex(ii, YEASTNUMCOLS - 1));
       }
-
-      emit dataChanged(QAbstractItemModel::createIndex(ii, 0),
-                       QAbstractItemModel::createIndex(ii, YEASTNUMCOLS - 1));
       return;
    }
 
@@ -254,7 +251,7 @@ QVariant YeastTableModel::data(QModelIndex const & index, int role) const {
             return QVariant(row->typeStringTr());
          }
          if (role == Qt::UserRole) {
-            return QVariant(row->type());
+            return QVariant(static_cast<int>(row->type()));
          }
          break;
       case YEASTLABCOL:
@@ -272,7 +269,7 @@ QVariant YeastTableModel::data(QModelIndex const & index, int role) const {
             return QVariant(row->formStringTr());
          }
          if (role == Qt::UserRole) {
-            return QVariant(row->form());
+            return QVariant(static_cast<int>(row->form()));
          }
          break;
       case YEASTINVENTORYCOL:

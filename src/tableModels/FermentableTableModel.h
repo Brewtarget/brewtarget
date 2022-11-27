@@ -35,6 +35,7 @@
 #include <QWidget>
 
 #include "measurement/Unit.h"
+#include "model/Fermentable.h"
 #include "tableModels/BtTableModelInventory.h"
 
 // Forward declarations.

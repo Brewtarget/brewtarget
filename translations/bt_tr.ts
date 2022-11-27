@@ -6541,7 +6541,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">isim</translation>
     </message>
     <message>
         <source>Ranges</source>

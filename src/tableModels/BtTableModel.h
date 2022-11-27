@@ -32,9 +32,9 @@
 
 #include "BtFieldType.h"
 #include "measurement/UnitSystem.h"
+#include "model/NamedEntity.h"
 
 class Recipe;
-class NamedEntity;
 
 /**
  * \class BtTableModelData
@@ -75,8 +75,9 @@ class NamedEntity;
  *
  *        (I did start trying to do something clever with a common base class to try to expose functions from
  *        \c BtTableModelData to the implementation of \c BtTableModel / \c BtTableModelRecipeObserver /
- *        \c BtTableModelInventory, but it quickly starts getting more complicated than it's worth IMHO because (a)
- *        \c BtTableModelData is templated but a common base class cannot be and (b) templated functions cannot be virtual.)
+ *        \c BtTableModelInventory, but it quickly gets more complicated than it's worth IMHO because (a)
+ *        \c BtTableModelData is templated but a common base class cannot be and (b) templated functions cannot be
+ *        virtual.)
  */
 template<class NE>
 class BtTableModelData {
@@ -84,12 +85,14 @@ protected:
    BtTableModelData() : rows{} {
       return;
    }
+   // Need a virtual destructor as we have a virtual member function
+   virtual ~BtTableModelData() = default;
 public:
    /**
     * \brief Return the \c i-th row in the model.
     *        Returns \c nullptr on failure.
     */
-   std::shared_ptr<NE> getRow(int ii) {
+   std::shared_ptr<NE> getRow(int ii) const {
       if (!(this->rows.isEmpty())) {
          if (ii >= 0 && ii < this->rows.size()) {
             return this->rows[ii];
@@ -118,11 +121,36 @@ public:
       return tmp;
    }
 
+   /**
+    * \brief Given a raw pointer, find the index of the corresponding shared pointer in \c this->rows
+    *
+    *        This is useful because the Qt signals and slots framework allows the slot receiving a signal to get a raw
+    *        pointer to the object that sent the signal, and we often want to find the corresponding shared pointer in
+    *        our list.
+    *
+    *        Note that using this function is a lot safer than, say, calling ObjectStoreWrapper::getSharedFromRaw(), as
+    *        that only works for objects that are already stored in the database, something which is not guaranteed to
+    *        be the case with our rows.  (Eg in SaltTableModel, new Salts are only stored in the DB when the window is
+    *        closed with OK.)
+    *
+    *        Function name is for consistency with \c QList::indexOf
+    *
+    * \param object  what to search for
+    * \return index of object in this->rows or -1 if it's not found
+    */
+   int findIndexOf(NE const * object) const {
+      for (int index = 0; index < this->rows.size(); ++index) {
+         if (this->rows.at(index).get() == object) {
+            return index;
+         }
+      }
+      return -1;
+   }
+
 protected:
    virtual std::shared_ptr<NamedEntity> getRowAsNamedEntity(int ii) {
       return std::static_pointer_cast<NamedEntity>(this->getRow(ii));
    }
-
 
    QList< std::shared_ptr<NE> > rows;
 };
