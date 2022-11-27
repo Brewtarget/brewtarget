@@ -19,6 +19,7 @@
  */
 #ifndef XML_BEERXML_H
 #define XML_BEERXML_H
+#pragma once
 
 #include <memory> // For PImpl
 
@@ -52,7 +53,7 @@ public:
    /**
     * \brief Write a list of objects to the supplied file
     */
-   template<class NE> void toXml(QList<NE *> & nes, QFile & outFile) const;
+   template<class NE> void toXml(QList<NE *> const & nes, QFile & outFile) const;
 
    /*! Import ingredients, recipes, etc from BeerXML documents.
     * \param filename

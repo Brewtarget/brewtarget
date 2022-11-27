@@ -1,0 +1,64 @@
+#
+# packaging/rpmLintFilters.toml is part of Brewtarget, and is Copyright the following
+# authors 2022
+#  - Matt Young <mfsy@yahoo.com>
+#
+# Brewtarget is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Brewtarget is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# See CMakeLists.txt for where this file is used.  Note that if you have other rpmlint config files on your system, my
+# understanding is that this will _add_ to those settings rather than replace them.
+
+#
+# Filter out the following errors and warnings:
+#
+#   - statically-linked-binary   This is expected and not an error because we statically link with Boost for the reasons
+#                                explained in CMakeLists.txt
+#
+#   - no-signature               There's a whole process (see https://access.redhat.com/articles/3359321) where you can
+#                                cryptographically sign an rpm.  Might be a bit complicated to try to do it as part of
+#                                CMake / CPack though.  For now we don't do it.
+#
+#   - no-packager-tag            According to https://rpm-software-management.github.io/rpm/manual/tags.html, an rpm is
+#                                supposed to have a "Packager" tag containing "Packager contact information".  I cannot
+#                                see a way to set this via CPack or the CPack RPM Generator, and searching the web for
+#                                more info just yields a few pages telling you to ignore this error.  I don't see why
+#                                anything should break just because this tag is not present, so we filter it for now at
+#                                least.
+#   - missing-PT_GNU_STACK-section  In an ideal world our binary would be marked as having a non-executable stack.  In
+#                                   practice this seems to be hard to achieve (see comment on linker flags in
+#                                   CMakeLists.txt).  So, for the moment, we suppress this rpmlint error about stack not
+#                                   being marked non-executable.
+#
+Filters = ["statically-linked-binary", "no-signature", "no-packager-tag", "missing-PT_GNU_STACK-section"]
+
+#
+# By default, rpmlint does not know what licenses are valid and will generate and invalid-license warning for any
+# license.  (See https://github.com/rpm-software-management/rpmlint/blob/main/rpmlint/configdefaults.toml where
+# ValidLicenses is set to [].)  I imagine that, if you're running on OpenSUSE or Fedora or some other distro that uses
+# RPMs natively, there will already be a setting for it in some /etc/xdg/rpmlint/*toml or $XDG_CONFIG_HOME/rpmlint/*toml
+# file.  (You could check by running "rpmlint -e invalid-license" from the command line as it will list what it thinks
+# are valid.)  But on a Debian-based distro, we have to explicitly say what licenses rpmlint should accept.
+#
+# Of course, there are several ways of describing the exact same license.  We want GPL v3 or later, which can be
+# described as:
+#   "GPLv3+" in https://docs.fedoraproject.org/en-US/legal/allowed-licenses/ and
+#               https://github.com/rpm-software-management/rpmlint/blob/main/configs/Fedora/licenses.toml
+#   "GPL-3.0+" in https://github.com/rpm-software-management/rpmlint/blob/main/configs/openSUSE/licenses.toml and
+#                 https://spdx.org/licenses/ (but NB marked deprecated here)
+#   "GPL-3.0-or-later" in https://spdx.org/licenses/ and
+#                         https://github.com/rpm-software-management/rpmlint/blob/main/configs/openSUSE/licenses.toml
+# We'll go with the last of these as Software Package Data Exchange is distro-agnostic and operates under the auspices
+# of the Linux Foundation.
+#
+ValidLicenses = ["GPL-3.0-or-later"]

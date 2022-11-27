@@ -32,6 +32,7 @@
 #include <QWidget>
 
 #include "measurement/Unit.h"
+#include "model/Water.h"
 #include "tableModels/BtTableModel.h"
 
 // Forward declarations.
@@ -50,14 +51,14 @@ enum{ WATERNAMECOL, WATERAMOUNTCOL, WATERCALCIUMCOL, WATERBICARBONATECOL,
  *
  * \brief Table model for waters.
  */
-class WaterTableModel : public BtTableModel {
+class WaterTableModel : public BtTableModelRecipeObserver, public BtTableModelData<Water> {
    Q_OBJECT
 
 public:
-   WaterTableModel(WaterTableWidget* parent=0);
+   WaterTableModel(WaterTableWidget* parent = nullptr);
    virtual ~WaterTableModel();
 
-   void addWaters(QList<Water*> waters);
+   void addWaters(QList<std::shared_ptr<Water> > waters);
    void observeRecipe(Recipe* rec);
    void observeDatabase(bool val);
    void removeAll();
@@ -77,10 +78,6 @@ public slots:
    void changed(QMetaProperty,QVariant);
    void addWater(int waterId);
    void removeWater(int waterId, std::shared_ptr<QObject> object);
-
-private:
-   QList<Water*> waterObs;
-   Recipe* recObs;
 };
 
 /*!

@@ -68,7 +68,9 @@ std::optional<Measurement::SystemOfMeasurement> UiAmountWithUnits::getForcedSyst
 }
 
 void UiAmountWithUnits::setForcedSystemOfMeasurementViaString(QString systemOfMeasurementAsString) {
-   qDebug() << Q_FUNC_INFO << systemOfMeasurementAsString;
+   qDebug() <<
+      Q_FUNC_INFO << "Measurement system" << systemOfMeasurementAsString << "for" << this->configSection << ">" <<
+      this->editField;
    this->setForcedSystemOfMeasurement(Measurement::getFromUniqueName(systemOfMeasurementAsString));
    return;
 }
@@ -88,7 +90,8 @@ std::optional<Measurement::UnitSystem::RelativeScale> UiAmountWithUnits::getForc
 }
 
 void UiAmountWithUnits::setForcedRelativeScaleViaString(QString relativeScaleAsString) {
-   qDebug() << Q_FUNC_INFO << relativeScaleAsString;
+   qDebug() <<
+      Q_FUNC_INFO << "Scale" << relativeScaleAsString << "for" << this->configSection << ">" << this->editField;
    this->setForcedRelativeScale(Measurement::UnitSystem::getScaleFromUniqueName(relativeScaleAsString));
    return;
 }
@@ -196,7 +199,7 @@ void UiAmountWithUnits::textOrUnitsChanged(PreviousScaleInfo previousScaleInfo) 
    QString correctedText;
 
    QString rawValue = this->getWidgetText();
-   qDebug() << Q_FUNC_INFO << "rawValue" << rawValue;
+   qDebug() << Q_FUNC_INFO << "rawValue:" << rawValue;
 
    if (rawValue.isEmpty()) {
       return;

@@ -22,27 +22,45 @@ jobs:
 
     steps:
 
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 0
 
     - name: Install Qt
-      uses: jurplel/install-qt-action@v2
+      # Version 5.15.2 is, according to https://github.com/jurplel/install-qt-action, the last Qt 5 LTS
+      # When we're ready to migrate to Qt 6, we'll need to tweak this
+      uses: jurplel/install-qt-action@v3
       with:
-          version: 5.9.5
+          version: 5.15.2
 
     - name: Install dependencies
+      #
       # Installing Xalan-C will cause Xerces-C to be installed too (as the former depends on the latter)
       # .:TBD:. Installing Boost here doesn't seem to give us libboost_stacktrace_backtrace
       #         Also, trying to use the "--cc=clang" option to install boost gives an error ("Error: boost: no bottle
       #         available!")  For the moment, we're just using Boost header files on Mac though, so this should be OK.
+      #
+      # The `brew doctor` command just checks that Homebrew (https://brew.sh/) is installed OK (expected output is "Your
+      # system is ready to brew".  Having Homebrew installed should imply the Xcode Command Line Tools are also
+      # installed, but `xcode-select -p` confirms this (expected output "/Library/Developer/CommandLineTools").  As
+      # elsewhere we use the echo trick to ensure that a non-zero return value from these diagnostic commands is not
+      # treated as a build script failure.
+      #
+      # We use the tree command for diagnosing certain build problems (specifically to see what changes certain parts of
+      # the build have made to the build directory tree).  (If need be, you can also download the entire build directory
+      # within a day of a failed build running, but you need a decent internet connection for this as it's quite large.)
+      #
       run: |
+        echo "Output from brew doctor: $(brew doctor)"
+        echo "Output from xcode-select -p: $(xcode-select -p)"
         brew install xalan-c
         brew install boost
+        brew install tree
 
     - name: Build
       env:
         QT_QPA_PLATFORM: offscreen
+      # Change `make` to `make VERBOSE=1` to get hugely detailed output
       run: |
         mkdir build
         cd build
@@ -76,34 +94,45 @@ jobs:
         ctest --extra-verbose --output-on-failure 2>&1
 
     - name: Make package
+      # Change `make package` to `make package VERBOSE=1` to get hugely detailed output
       run: |
         cd build
+        pwd
         make package
+        pwd
+        tree -sh
 
-    - name: Upload Mac
+    - name: Upload Mac Packages (Installers)
       if: ${{ success() }}
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: brewtarget-dev-mac
         path: |
-          ${{github.workspace}}/build/brewtarget*.sh
+          ${{github.workspace}}/build/brewtarget*.dmg
+          ${{github.workspace}}/build/brewtarget*.dmg.sha256
         retention-days: 7
 
-    - name: Post-processing on cores
+    - name: Post-processing on any core dump
       if: ${{ failure() }}
       # It's all very well capturing core files, but if you don't have a Mac to analyse them on they are not a fat lot
       # of use.  So, if we did get a core, let's at least get a stack trace out of it.
+      #
+      # The loop in the last line should run either 0 or 1 times, depending on whether the build failure did or did not
+      # generate a core file.
+      #    ls -1 | while read ii; do echo "bt" | lldb -c $ii; done
       run: |
+        pwd
+        tree -sh
         sudo chmod -R +rwx /cores
         sudo chmod -R +rwx /Library/Logs/DiagnosticReports
         echo "Contents of /cores directory: $(ls -ltr /cores)"
         echo "Contents of /Library/Logs/DiagnosticReports directory: $(ls -ltr /Library/Logs/DiagnosticReports)"
         cd /cores
-        echo "bt" | lldb -c $(ls -1)
+        ls -1 | while read ii; do echo "bt" | lldb -c $ii; done
 
     - name: Recover Debris Artifacts (aka build output)
       if: ${{ failure() }}
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: build-results
         path: ${{github.workspace}}/build
@@ -111,7 +140,7 @@ jobs:
 
     - name: Recover DiagnosticReports (if any)
       if: ${{ failure() }}
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: DiagnosticReports
         path: /Library/Logs/DiagnosticReports
@@ -119,7 +148,7 @@ jobs:
 
     - name: Recover Cores (if any)
       if: ${{ failure() }}
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: cores
         path: /cores

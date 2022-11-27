@@ -135,7 +135,7 @@ void YeastDialog::removeYeast() {
    // We need to translate from the view's index to the model's index.  The
    // proxy model does the heavy lifting, as long as we do the call.
    QModelIndex translated = yeastTableProxy->mapToSource(selected[0]);
-   Yeast *yeast = yeastTableModel->getYeast(translated.row());
+   auto yeast = yeastTableModel->getRow(translated.row());
    ObjectStoreWrapper::softDelete(*yeast);
    return;
 }
@@ -175,34 +175,31 @@ void YeastDialog::addYeast(const QModelIndex& index)
    }
 
    // Adds a copy of yeast.
-   MainWindow::instance().addYeastToRecipe(yeastTableModel->getYeast(translated.row()));
+   MainWindow::instance().addYeastToRecipe(yeastTableModel->getRow(translated.row()));
 
    return;
 }
 
-void YeastDialog::editSelected()
-{
+void YeastDialog::editSelected() {
    QModelIndexList selected = tableWidget->selectionModel()->selectedIndexes();
-   QModelIndex translated;
-
-   int row, size, i;
-
-   size = selected.size();
-   if( size == 0 )
+   int size = selected.size();
+   if (size == 0) {
       return;
+   }
 
    // Make sure only one row is selected.
-   row = selected[0].row();
+   int row = selected[0].row();
 
-   for( i = 1; i < size; ++i )
-   {
-      if( selected[i].row() != row )
+   for (int i = 1; i < size; ++i ) {
+      if (selected[i].row() != row ) {
          return;
+      }
    }
-   translated = yeastTableProxy->mapToSource(selected[0]);
-   Yeast *yeast = yeastTableModel->getYeast(translated.row());
-   yeastEditor->setYeast(yeast);
+   QModelIndex translated = yeastTableProxy->mapToSource(selected[0]);
+   auto yeast = yeastTableModel->getRow(translated.row());
+   yeastEditor->setYeast(yeast.get());
    yeastEditor->show();
+   return;
 }
 
 void YeastDialog::newYeast()

@@ -26,7 +26,7 @@
    <bool>false</bool>
   </property>
   <property name="windowTitle">
-   <string notr="true">Brewtarget - $VERSIONSTRING</string>
+   <string notr="true">Brewtarget - $CONFIG_VERSION_STRING</string>
   </property>
   <property name="windowIcon">
    <iconset resource="../brewtarget.qrc">
@@ -487,7 +487,7 @@
                      </widget>
                     </item>
                     <item row="6" column="1">
-                     <widget class="BtGenericEdit" name="lineEdit_efficiency">
+                     <widget class="BtPercentageEdit" name="lineEdit_efficiency">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                         <horstretch>0</horstretch>
@@ -1700,7 +1700,7 @@
     <addaction name="actionExportToXml"/>
     <addaction name="menuDatabase"/>
     <addaction name="separator"/>
-    <addaction name="actionPrint" />
+    <addaction name="actionPrint"/>
     <addaction name="separator"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
@@ -1880,7 +1880,7 @@
     <string>Ctrl+T</string>
    </property>
   </action>
-  <action name="actionPrint">
+    <action name="actionPrint">
    <property name="icon">
     <iconset resource="../brewtarget.qrc">
      <normaloff>:/images/printer.png</normaloff>:/images/printer.png</iconset>
@@ -2195,6 +2195,11 @@
   </customwidget>
   <customwidget>
    <class>BtGenericEdit</class>
+   <extends>QLineEdit</extends>
+   <header>BtLineEdit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>BtPercentageEdit</class>
    <extends>QLineEdit</extends>
    <header>BtLineEdit.h</header>
   </customwidget>

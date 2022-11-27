@@ -109,6 +109,6 @@ bool FermentableSortFilterProxyModel::filterAcceptsRow( int source_row, const QM
    return !filter
           ||
           (  sourceModel()->data(index).toString().contains(filterRegExp())
-             && model->getFermentable(source_row)->display()
+             && model->getRow(source_row)->display()
           );
 }

@@ -33,7 +33,7 @@
 
 #include "model/Hop.h"
 #include "model/Recipe.h"
-#include "tableModels/BtTableModel.h"
+#include "tableModels/BtTableModelInventory.h"
 
 class BtStringConst;
 class HopTableModel;
@@ -46,7 +46,7 @@ enum{HOPNAMECOL, HOPALPHACOL, HOPAMOUNTCOL, HOPINVENTORYCOL, HOPFORMCOL, HOPUSEC
  *
  * \brief Model class for a list of hops.
  */
-class HopTableModel : public BtTableModel {
+class HopTableModel : public BtTableModelInventory, public BtTableModelData<Hop> {
    Q_OBJECT
 
 public:
@@ -60,18 +60,9 @@ public:
    //! \brief Show ibus in the vertical header.
    void setShowIBUs( bool var );
    //! \brief Watch all the \c hops for changes.
-   void addHops(QList<Hop*> hops);
-   //! \brief Return the \c i-th hop in the model.
-   Hop* getHop(int i);
+   void addHops(QList< std::shared_ptr<Hop> > hops);
    //! \brief Clear the model.
    void removeAll();
-
-   /*!
-    * \brief True if the inventory column should be editable, false otherwise.
-    *
-    * The default is that the inventory column is not editable
-    */
-   void setInventoryEditable( bool var ) { _inventoryEditable = var; colFlags[HOPINVENTORYCOL] = Qt::ItemIsEnabled | (_inventoryEditable ? Qt::ItemIsEditable : Qt::NoItemFlags); }
 
    //! \brief Reimplemented from QAbstractTableModel.
    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
@@ -85,7 +76,7 @@ public:
    virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
 
    //! \returns true if "hop" is successfully found and removed.
-   bool remove(Hop* hop);
+   bool remove(std::shared_ptr<Hop> hop);
 
 public slots:
    void changed(QMetaProperty, QVariant);
@@ -95,10 +86,6 @@ public slots:
    void removeHop(int hopId, std::shared_ptr<QObject> object);
 
 private:
-   QVector<Qt::ItemFlags> colFlags;
-   bool _inventoryEditable;
-   QList<Hop*> hopObs;
-   Recipe* recObs;
    bool showIBUs; // True if you want to show the IBU contributions in the table rows.
 };
 

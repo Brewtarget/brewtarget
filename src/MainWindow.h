@@ -1,6 +1,6 @@
 /*
  * MainWindow.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2022
  * - Dan Cavanagh <dan@dancavanagh.com>
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Matt Young <mfsy@yahoo.com>
@@ -125,7 +125,7 @@ public:
    /**
     * \brief This needs to be called immediately after the constructor.  It does the remaining initialisation of the
     *        object.  This function cannot be called from the constructor as, in certain circumstances, it will invoke
-    *        code that calls Brewtarget::mainWindow() which returns a pointer to the MainWindow and therefore needs the
+    *        code that calls Application::mainWindow() which returns a pointer to the MainWindow and therefore needs the
     *        MainWindow constructor to have returned!
     */
    void init();
@@ -175,7 +175,7 @@ public slots:
    //! \brief Close a brewnote tab if we must (because of the BrewNote being deleted)
    void closeBrewNote(int brewNoteId, std::shared_ptr<QObject> object);
    //! \brief Add given Fermentable to the Recipe.
-   void addFermentableToRecipe(Fermentable* ferm);
+   void addFermentableToRecipe(std::shared_ptr<Fermentable> ferm);
    //! \brief Remove selected Fermentable(s) from the Recipe.
    void removeSelectedFermentable();
    //! \brief Edit selected Fermentable.
@@ -185,21 +185,21 @@ public slots:
    void showPitchDialog();
 
    //! \brief Add given Hop to the Recipe.
-   void addHopToRecipe(Hop *hop);
+   void addHopToRecipe(std::shared_ptr<Hop> hop);
    //! \brief Remove selected Hop(s) from the Recipe.
    void removeSelectedHop();
    //! \brief Edit selected Hop.
    void editSelectedHop();
 
    //! \brief Add given Misc to the Recipe.
-   void addMiscToRecipe(Misc* misc);
+   void addMiscToRecipe(std::shared_ptr<Misc> misc);
    //! \brief Remove selected Misc(s) from the Recipe.
    void removeSelectedMisc();
    //! \brief Edit selected Misc.
    void editSelectedMisc();
 
    //! \brief Add given Yeast to the Recipe.
-   void addYeastToRecipe(Yeast* yeast);
+   void addYeastToRecipe(std::shared_ptr<Yeast> yeast);
    //! \brief Remove selected Yeast(s) from the Recipe.
    void removeSelectedYeast();
    //! \brief Edit selected Yeast
@@ -270,9 +270,6 @@ public slots:
    //! \brief Open the default browser to view Brewtarget manual.
     void openManual();
 
-   //! \brief Catches a QNetworkReply signal and gets info about any new version available.
-   void finishCheckingVersion();
-
    void redisplayLabel();
 
    void showEquipmentEditor();
@@ -339,13 +336,11 @@ private:
    //! No move assignment
    MainWindow & operator=(MainWindow &&) = delete;
 
-   void removeHop(Hop & itemToRemove);
-   void removeFermentable(Fermentable & itemToRemove);
-   void removeMisc(Misc & itemToRemove);
-   void removeYeast(Yeast & itemToRemove);
-   void removeMashStep(MashStep & itemToRemove);
-//   void removeWater(Water * itemToRemove);
-//   void removeSalt(Salt * itemToRemove);
+   void removeHop(std::shared_ptr<Hop> itemToRemove);
+   void removeFermentable(std::shared_ptr<Fermentable> itemToRemove);
+   void removeMisc(std::shared_ptr<Misc> itemToRemove);
+   void removeYeast(std::shared_ptr<Yeast> itemToRemove);
+   void removeMashStep(std::shared_ptr<MashStep> itemToRemove);
 
    Recipe* recipeObs;
    // TBD: (MY 2020-11-24) Not sure whether we need to store recipe style (since it ought to be available from the

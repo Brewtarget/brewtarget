@@ -36,8 +36,7 @@
 #include "model/MashStep.h"
 #include "PhysicalConstants.h"
 
-MashWizard::MashWizard(QWidget* parent) : QDialog(parent)
-{
+MashWizard::MashWizard(QWidget* parent) : QDialog(parent) {
    setupUi(this);
    bGroup = new QButtonGroup();
    recObs = nullptr;
@@ -54,25 +53,23 @@ MashWizard::MashWizard(QWidget* parent) : QDialog(parent)
    return;
 }
 
-void MashWizard::toggleSpinBox(QAbstractButton* button)
-{
+void MashWizard::toggleSpinBox(QAbstractButton* button) {
    if ( button == radioButton_noSparge ) {
       widget_batches->setEnabled(false);
       widget_mashThickness->setEnabled(false);
-   }
-   else if ( button == radioButton_flySparge ) {
+   } else if ( button == radioButton_flySparge ) {
       widget_batches->setEnabled(false);
       widget_mashThickness->setEnabled(true);
-   }
-   else {
+   } else {
       widget_batches->setEnabled(true);
       widget_mashThickness->setEnabled(true);
    }
+   return;
 }
 
-void MashWizard::setRecipe(Recipe* rec)
-{
+void MashWizard::setRecipe(Recipe* rec) {
    recObs = rec;
+   return;
 }
 
 void MashWizard::show()
@@ -91,8 +88,8 @@ void MashWizard::show()
    Measurement::getThicknessUnits(&volumeUnit,&weightUnit);
    label_mashThickness->setText(tr("Mash thickness (%1/%2)").arg(volumeUnit->name, weightUnit->name));
 
-   MashStep * firstStep = recObs->mash()->mashSteps().first();
-   MashStep * lastStep  = recObs->mash()->mashSteps().last();
+   auto firstStep = recObs->mash()->mashSteps().first();
+   auto lastStep  = recObs->mash()->mashSteps().last();
 
    // Recalculate the mash thickness
    double thickNum = firstStep->infuseAmount_l()/recObs->grainsInMash_kg();
@@ -104,17 +101,15 @@ void MashWizard::show()
       radioButton_noSparge->setChecked(true);
       widget_batches->setEnabled(false);
       widget_mashThickness->setEnabled(false);
-   }
-   else if ( lastStep->type() == MashStep::flySparge ) {
+   } else if ( lastStep->type() == MashStep::flySparge ) {
       radioButton_flySparge->setChecked(true);
       widget_batches->setEnabled(false);
       widget_mashThickness->setEnabled(true);
-   }
-   else {
+   } else {
       int countSteps = 0;
-      QList<MashStep*> steps = recObs->mash()->mashSteps();
-      foreach( MashStep* step, steps) {
-         if ( step->isSparge() ) {
+      auto steps = recObs->mash()->mashSteps();
+      for(auto step : steps) {
+         if (step->isSparge()) {
             countSteps++;
          }
       }
@@ -125,6 +120,7 @@ void MashWizard::show()
    }
 
    setVisible(true);
+   return;
 }
 
 double MashWizard::calcDecoctionAmount( MashStep* step, Mash* mash, double waterMass, double grainMass, double lastTemp, double boiling)
@@ -177,27 +173,26 @@ void MashWizard::wizardry() {
       lauterDeadspace = recObs->equipment()->lauterDeadspace_l();
    }
 
-   QList<MashStep*> steps = mash->mashSteps();
-   QList<MashStep*> tmp;
+   auto steps = mash->mashSteps();
+   decltype(steps) tmp;
 
    // We ensured that there was at least one mash step when we displayed the thickness dialog in show().
-   MashStep* mashStep = steps.at(0);
-   if ( mashStep == nullptr ) {
+   auto mashStep = steps.at(0);
+   if (!mashStep) {
       qCritical() << "MashWizard::wizardry(): first mash step was null.";
       return;
    }
 
    // Ensure first mash step is an infusion.
-   if ( ! mashStep->isInfusion() && ! mashStep->isSparge() ) {
+   if (!mashStep->isInfusion() && !mashStep->isSparge()) {
       QMessageBox::information(this, tr("First step"), tr("Your first mash step must be an infusion."));
       return;
    }
 
    // Find any batch sparges and remove them
-   for (int i = 0; i < steps.size(); ++i) {
-      MashStep* step = steps[i];
+   for (auto step : steps) {
       if (step->isSparge()) {
-         mash->removeMashStep(ObjectStoreWrapper::getSharedFromRaw(step));
+         mash->removeMashStep(step);
       } else {
          tmp.append(step);
       }
@@ -208,8 +203,7 @@ void MashWizard::wizardry() {
    if ( bGroup->checkedButton() != radioButton_noSparge ) {
       thickNum = doubleSpinBox_thickness->value();
       thickness_LKg = thickNum * volumeUnit->toSI(1).quantity / weightUnit->toSI(1).quantity;
-   }
-   else {
+   } else {
       // not sure I like this. Why is this here and not somewhere later?
       if (steps.size() == 1 ) {
          mashStep->setInfuseAmount_l(recObs->targetTotalMashVol_l());
@@ -376,7 +370,7 @@ void MashWizard::wizardry() {
             newMashStep->setStepTime_min(15);
             newMashStep->setMashId(mash->key());
             ObjectStoreWrapper::insert(newMashStep);
-            steps.append(newMashStep.get());
+            steps.append(newMashStep);
             newMashStep->setStepNumber(steps.size());
             emit newMashStep->changed(
                newMashStep->metaObject()->property(
@@ -397,7 +391,7 @@ void MashWizard::wizardry() {
          newMashStep->setStepTime_min(15);
          newMashStep->setMashId(mash->key());
          ObjectStoreWrapper::insert(newMashStep);
-         steps.append(newMashStep.get());
+         steps.append(newMashStep);
          newMashStep->setStepNumber(steps.size());
          emit newMashStep->changed(
             newMashStep->metaObject()->property(

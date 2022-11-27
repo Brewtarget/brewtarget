@@ -33,7 +33,7 @@ class Equipment;
 class Hop;
 class Fermentable;
 
-#include "brewtarget.h"
+#include "Application.h"
 #include "Logging.h"
 
 class Testing : public QObject {

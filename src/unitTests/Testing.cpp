@@ -61,7 +61,7 @@ namespace {
    bool fuzzyComp(double a, double b, double tolerance) {
       bool ret = inRange(a, b - tolerance, b + tolerance);
       if (!ret) {
-         qDebug() << Q_FUNC_INFO << "a:" << a << ", b:" << b << ", tolerance:" << tolerance;
+         qDebug() << Q_FUNC_INFO << "a:" << a << ", b:" << b << ", diff:" << abs(a - b) << ", tolerance:" << tolerance;
       }
       return ret;
    }
@@ -86,6 +86,12 @@ namespace {
 
 }
 
+//
+// NB: To have unit tests run via "make test", you also need to add "ADD_TEST" lines to src/CMakeLists.txt
+//
+// Also, although make test does not dump a lot of output on the screen, if a test fails, you can get the debug log
+// output from build/Testing/Temporary/LastTest.log
+//
 QTEST_MAIN(Testing)
 
 void Testing::initTestCase() {
@@ -127,8 +133,8 @@ void Testing::initTestCase() {
       PersistentSettings::insert(PersistentSettings::Names::ibu_formula, "tinseth");
 
    // Tell Brewtarget not to require any "user" input on starting
-   Brewtarget::setInteractive(false);
-   QVERIFY( Brewtarget::initialize() );
+   Application::setInteractive(false);
+   QVERIFY( Application::initialize() );
 
       // 5 gallon equipment
       this->equipFiveGalNoLoss = std::make_shared<Equipment>();
@@ -151,15 +157,15 @@ void Testing::initTestCase() {
       ObjectStoreWrapper::insert(this->cascade_4pct);
       this->cascade_4pct->setName("Cascade 4pct");
       this->cascade_4pct->setAlpha_pct(4.0);
-      this->cascade_4pct->setUse(Hop::Boil);
+      this->cascade_4pct->setUse(Hop::Use::Boil);
       this->cascade_4pct->setTime_min(60);
-      this->cascade_4pct->setType(Hop::Both);
-      this->cascade_4pct->setForm(Hop::Leaf);
+      this->cascade_4pct->setType(Hop::Type::Both);
+      this->cascade_4pct->setForm(Hop::Form::Leaf);
 
       // 70% yield, no moisture, 2 SRM
       this->twoRow = std::make_shared<Fermentable>();
       this->twoRow->setName("Two Row");
-      this->twoRow->setType(Fermentable::Grain);
+      this->twoRow->setType(Fermentable::Type::Grain);
       this->twoRow->setYield_pct(70.0);
       this->twoRow->setColor_srm(2.0);
       this->twoRow->setMoisture_pct(0);
@@ -194,12 +200,12 @@ void Testing::recipeCalcTest_allGrain()
    singleConversion->setSpargeTemp_c(80.0);
    auto singleConversion_convert = std::make_shared<MashStep>();
    singleConversion_convert->setName("Conversion");
-   singleConversion_convert->setType(MashStep::Infusion);
+   singleConversion_convert->setType(MashStep::Type::Infusion);
    singleConversion_convert->setInfuseAmount_l(conversion_l);
    singleConversion->addMashStep(singleConversion_convert);
    auto singleConversion_sparge = std::make_shared<MashStep>();
    singleConversion_sparge->setName("Sparge");
-   singleConversion_sparge->setType(MashStep::Infusion);
+   singleConversion_sparge->setType(MashStep::Type::Infusion);
    singleConversion_sparge->setInfuseAmount_l(
       rec->boilSize_l()
       + equipFiveGalNoLoss->grainAbsorption_LKg() * grain_kg // Grain absorption
@@ -307,7 +313,7 @@ void Testing::postBoilLossOgTest()
 
    auto singleConversion_convert = std::make_shared<MashStep>();
    singleConversion_convert->setName("Conversion");
-   singleConversion_convert->setType(MashStep::Infusion);
+   singleConversion_convert->setType(MashStep::Type::Infusion);
    singleConversion->addMashStep(singleConversion_convert);
 
    // Infusion for recNoLoss
@@ -330,30 +336,57 @@ void Testing::postBoilLossOgTest()
 }
 
 void Testing::testUnitConversions() {
-   // This is assuming '.' is the decimal separator and ',' is the digit group separator.  Might need to tweak this test
-   // a bit for systems with locales where ',' is the decimal separator and '.' or ' ' is the digit group separator.
-   // (Both can be got from QLocale::system().decimalPoint(), QLocale::system().groupSeparator().)
-   QVERIFY2(fuzzyComp(Measurement::UnitSystems::volume_UsCustomary.qstringToSI("5.500 gal", Measurement::Units::liters).quantity,
+   //
+   // Originally, some of these tests assumed '.' is the decimal separator and ',' is the digit group separator.  This
+   // meant they would fail on locales where this is not the case.  Plan A was just to force the locale to be one that
+   // makes the tests work (because we are testing conversions rather than number parsing, eg via:
+   //    QLocale::setDefault(QLocale::C);
+   // However, this didn't seem to have any effect on a French locale Windows.
+   // So Plan B is to construct test data based on the current locale settings.
+   //
+   QString const decimalSeparator   = QLocale::system().decimalPoint();
+   QString const thousandsSeparator = QLocale::system().groupSeparator();
+   qDebug() <<
+      Q_FUNC_INFO << "Decimal separator is " << decimalSeparator << " | Thousands separator is " << thousandsSeparator;
+   QString testInput{};
+   QTextStream testInputAsStream{&testInput};
+   // "5.500 gal"
+   testInput.clear();
+   testInputAsStream << "5" << decimalSeparator << "500 gal";
+   QVERIFY2(fuzzyComp(Measurement::UnitSystems::volume_UsCustomary.qstringToSI(testInput, // "5.500 gal"
+                                                                               Measurement::Units::liters).quantity,
                       20.820,
                       0.001),
             "Unit conversion error (US gallons to Litres v1)");
-   QVERIFY2(fuzzyComp(Measurement::UnitSystems::volume_UsCustomary.qstringToSI("5.500",
+   // "5.500"
+   testInput.clear();
+   testInputAsStream << "5" << decimalSeparator << "500";
+   QVERIFY2(fuzzyComp(Measurement::UnitSystems::volume_UsCustomary.qstringToSI(testInput, // "5.500"
                                                                                Measurement::Units::us_gallons).quantity,
                       20.820,
                       0.001),
             "Unit conversion error (US gallons to Litres v2)");
-   QVERIFY2(fuzzyComp(Measurement::qStringToSI("5.500 gal",
+   // "5.500 gal"
+   testInput.clear();
+   testInputAsStream << "5" << decimalSeparator << "500 gal";
+   QVERIFY2(fuzzyComp(Measurement::qStringToSI(testInput, // "5.500 gal"
                                                Measurement::PhysicalQuantity::Volume).quantity,
                       20.820,
                       0.001),
                       "Unit conversion error (US gallons to Litres v3)");
-   QVERIFY2(fuzzyComp(Measurement::UnitSystems::density_Plato.qstringToSI("9.994 P",
+   // "9.994 P"
+   testInput.clear();
+   testInputAsStream << "9" << decimalSeparator << "994 P";
+   QVERIFY2(fuzzyComp(Measurement::UnitSystems::density_Plato.qstringToSI(testInput, // "9.994 P"
                                                                           Measurement::Units::sp_grav).quantity,
                       1.040,
                       0.001),
             "Unit conversion error (Plato to SG)");
+   // "1,083 ebc"
+   testInput.clear();
+   testInputAsStream << "1" << thousandsSeparator << "083 ebc";
    QVERIFY2(
-      fuzzyComp(Measurement::UnitSystems::color_StandardReferenceMethod.qstringToSI("1,083 ebc",
+      fuzzyComp(Measurement::UnitSystems::color_StandardReferenceMethod.qstringToSI(testInput, // "1,083 ebc"
                                                                                     Measurement::Units::srm).quantity,
                 550,
                 1),
@@ -394,7 +427,7 @@ void Testing::testLogRotation() {
 
 void Testing::cleanupTestCase()
 {
-   Brewtarget::cleanup();
+   Application::cleanup();
    Logging::terminateLogging();
    //Clean up the gibberish logs from disk by removing the
    QFileInfoList fileList = Logging::getLogFileList();
@@ -441,7 +474,7 @@ void Testing::runTest()
 {
    QVERIFY( 1==1 );
    /*
-   MainWindow* mw = Brewtarget::mainWindow();
+   MainWindow* mw = Application::mainWindow();
    QVERIFY( mw );
    */
 }

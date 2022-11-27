@@ -22,7 +22,7 @@
 #include <QDate>
 #include <QDialog>
 
-#include "brewtarget.h"
+#include "Application.h"
 #include "database/ObjectStoreWrapper.h"
 #include "Html.h"
 #include "Localization.h"

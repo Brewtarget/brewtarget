@@ -73,6 +73,6 @@ bool MiscSortFilterProxyModel::filterAcceptsRow( int source_row, const QModelInd
    return !filter
           ||
           (  sourceModel()->data(index).toString().contains(filterRegExp())
-             && model->getMisc(source_row)->display()
+             && model->getRow(source_row)->display()
           );
 }

@@ -19,18 +19,31 @@
  */
 #ifndef CONFIG_IN
 #define CONFIG_IN
+#pragma once
 
 /**
- * This file gets converted to build/src/config.h by CMake (see CMakeLists.txt in top-level directory)
+ * This file gets converted to build/src/config.h by CMake (see configure_file command in CMakeLists.txt in top-level
+ * directory)
  *
- * I _think_ this is a way to pass things back into the code that CMake has figured out
+ * This is a way to pass CMake variables into the code
  */
-//===Things that will get configured by cmake===
 
-// These two only get used by Linux OS version.
-#define CONFIGDATADIR "${CONFIGDATADIR}"
-#define CONFIGDOCDIR "${CONFIGDOCDIR}"
+//! Used on Linux as a fallback way of determining where to look for resources - see Application.cpp
+constexpr char const * CONFIG_DATA_DIR = "${CONFIG_DATA_DIR}";
 
-#define VERSIONSTRING "${brewtarget_VERSION_MAJOR}.${brewtarget_VERSION_MINOR}.${brewtarget_VERSION_PATCH}"
+//! This constant makes sharing code between Brewtarget and Brewken slightly easier
+// (Here, UC means upper case first letter, LC means lower case first letter)
+constexpr char const * CONFIG_APPLICATION_NAME_UC = "${capitalisedProjectName}";
+constexpr char const * CONFIG_APPLICATION_NAME_LC = "${CMAKE_PROJECT_NAME}";
+
+// This one has to be a #define rather than a constexpr because it's used in ui/mainWindow.ui which is processed into
+// C++ code by the Qt Meta Object Compiler (MOC) and the MOC can't handle use of a constexpr const in a ui file.
+#define CONFIG_VERSION_STRING "${PROJECT_VERSION}"
+
+// Build info
+constexpr char const * CMAKE_HOST_SYSTEM     = "${CMAKE_HOST_SYSTEM}";
+constexpr char const * CMAKE_SYSTEM          = "${CMAKE_SYSTEM}";
+constexpr char const * CMAKE_CXX_COMPILER_ID = "${CMAKE_CXX_COMPILER_ID}";
+constexpr char const * BUILD_TIMESTAMP       = "${BUILD_TIMESTAMP}";
 
 #endif

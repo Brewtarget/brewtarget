@@ -1,6 +1,6 @@
 /*
  * MiscTableModel.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2022
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -31,14 +31,13 @@
 #include "measurement/Measurement.h"
 #include "measurement/Unit.h"
 #include "model/Inventory.h"
-#include "model/Misc.h"
 #include "model/Recipe.h"
 #include "PersistentSettings.h"
 #include "utils/BtStringConst.h"
 
 
 MiscTableModel::MiscTableModel(QTableView* parent, bool editable) :
-   BtTableModel{
+   BtTableModelInventory{
       parent,
       editable,
       {{MISCNAMECOL,      {tr("Name"),        NonPhysicalQuantity::String,          ""                                                 }},
@@ -49,9 +48,8 @@ MiscTableModel::MiscTableModel(QTableView* parent, bool editable) :
        {MISCINVENTORYCOL, {tr("Inventory"),   Measurement::PhysicalQuantity::Mixed, *PropertyNames::NamedEntityWithInventory::inventory}},
        {MISCISWEIGHT,     {tr("Amount Type"), NonPhysicalQuantity::String,          ""                                                 }}}
    },
-   _inventoryEditable(false),
-   recObs(nullptr) {
-   miscObs.clear();
+   BtTableModelData<Misc>{} {
+   this->rows.clear();
    setObjectName("miscTableModel");
 
    QHeaderView* headerView = parentTableWidget->horizontalHeader();
@@ -70,19 +68,18 @@ MiscTableModel::MiscTableModel(QTableView* parent, bool editable) :
 
 MiscTableModel::~MiscTableModel() = default;
 
-void MiscTableModel::observeRecipe(Recipe* rec)
-{
-   if( recObs )
-   {
-      disconnect( recObs, nullptr, this, nullptr );
+void MiscTableModel::observeRecipe(Recipe* rec) {
+   if (this->recObs) {
+      qDebug() << Q_FUNC_INFO << "Unwatching Recipe" << this->recObs;
+      disconnect(this->recObs, nullptr, this, nullptr);
       removeAll();
    }
 
-   recObs = rec;
-   if( recObs )
-   {
-      connect( recObs, &NamedEntity::changed, this, &MiscTableModel::changed );
-      addMiscs( recObs->miscs() );
+   this->recObs = rec;
+   if (this->recObs) {
+      qDebug() << Q_FUNC_INFO << "Watching Recipe" << this->recObs;
+      connect(this->recObs, &NamedEntity::changed, this, &MiscTableModel::changed);
+      this->addMiscs(this->recObs->getAll<Misc>());
    }
 }
 
@@ -92,7 +89,7 @@ void MiscTableModel::observeDatabase(bool val) {
       removeAll();
       connect(&ObjectStoreTyped<Misc>::getInstance(), &ObjectStoreTyped<Misc>::signalObjectInserted,  this, &MiscTableModel::addMisc);
       connect(&ObjectStoreTyped<Misc>::getInstance(), &ObjectStoreTyped<Misc>::signalObjectDeleted,   this, &MiscTableModel::removeMisc);
-      addMiscs( ObjectStoreTyped<Misc>::getInstance().getAllRaw() );
+      this->addMiscs(ObjectStoreWrapper::getAll<Misc>());
    } else {
       removeAll();
       disconnect(&ObjectStoreTyped<Misc>::getInstance(), nullptr, this, nullptr );
@@ -101,22 +98,21 @@ void MiscTableModel::observeDatabase(bool val) {
 }
 
 void MiscTableModel::addMisc(int miscId) {
-   Misc* misc = ObjectStoreWrapper::getByIdRaw<Misc>(miscId);
+   auto misc = ObjectStoreWrapper::getById<Misc>(miscId);
 
-   if( miscObs.contains(misc) ) {
+   if (this->rows.contains(misc) ) {
       return;
    }
 
    // If we are observing the database, ensure that the item is undeleted and
    // fit to display.
-   if (recObs == nullptr &&
-       (misc->deleted() || !misc->display())) {
+   if (recObs == nullptr && (misc->deleted() || !misc->display())) {
       return;
    }
 
    // If we are watching a Recipe and the new Misc does not belong to it then there is nothing for us to do
    if (this->recObs) {
-      Recipe * recipeOfNewMisc = misc->getOwningRecipe();
+      auto recipeOfNewMisc = misc->getOwningRecipe();
       if (recipeOfNewMisc && this->recObs->key() != recipeOfNewMisc->key()) {
          qDebug() <<
             Q_FUNC_INFO << "Ignoring signal about new Misc #" << misc->key() << "as it belongs to Recipe #" <<
@@ -125,53 +121,44 @@ void MiscTableModel::addMisc(int miscId) {
       }
    }
 
-   int size = miscObs.size();
+   int size = this->rows.size();
    beginInsertRows( QModelIndex(), size, size );
-   miscObs.append(misc);
-   connect( misc, &NamedEntity::changed, this, &MiscTableModel::changed );
+   this->rows.append(misc);
+   connect(misc.get(), &NamedEntity::changed, this, &MiscTableModel::changed );
    //reset(); // Tell everybody that the table has changed.
    endInsertRows();
    return;
 }
 
-void MiscTableModel::addMiscs(QList<Misc*> miscs)
-{
-   QList<Misc*>::iterator i;
-   QList<Misc*> tmp;
+void MiscTableModel::addMiscs(QList<std::shared_ptr<Misc> > miscs) {
+   auto tmp = this->removeDuplicates(miscs, this->recObs);
 
-   for( i = miscs.begin(); i != miscs.end(); i++ )
-   {
-      if( recObs == nullptr && ( (*i)->deleted() || !(*i)->display() ) )
-         continue;
-      if( !miscObs.contains(*i) )
-         tmp.append(*i);
-   }
-
-   int size = miscObs.size();
-   if (size+tmp.size())
-   {
+   int size = this->rows.size();
+   if (size+tmp.size()) {
       beginInsertRows( QModelIndex(), size, size+tmp.size()-1 );
-      miscObs.append(tmp);
+      this->rows.append(tmp);
 
-      for( i = tmp.begin(); i != tmp.end(); i++ )
-         connect( *i, &NamedEntity::changed, this, &MiscTableModel::changed );
+      for (auto ii : tmp) {
+         connect(ii.get(), &NamedEntity::changed, this, &MiscTableModel::changed);
+      }
 
       endInsertRows();
    }
 }
 
 // Returns true when misc is successfully found and removed.
-void MiscTableModel::removeMisc(int miscId, std::shared_ptr<QObject> object) {
-   this->remove(std::static_pointer_cast<Misc>(object).get());
+void MiscTableModel::removeMisc([[maybe_unused]] int miscId,
+                                std::shared_ptr<QObject> object) {
+   this->remove(std::static_pointer_cast<Misc>(object));
    return;
 }
 
-bool MiscTableModel::remove(Misc * misc) {
-   int i = miscObs.indexOf(misc);
-   if( i >= 0 ) {
+bool MiscTableModel::remove(std::shared_ptr<Misc> misc) {
+   int i = this->rows.indexOf(misc);
+   if (i >= 0 ) {
       beginRemoveRows( QModelIndex(), i, i );
-      disconnect( misc, nullptr, this, nullptr );
-      miscObs.removeAt(i);
+      disconnect(misc.get(), nullptr, this, nullptr);
+      this->rows.removeAt(i);
       //reset(); // Tell everybody the table has changed.
       endRemoveRows();
 
@@ -183,30 +170,30 @@ bool MiscTableModel::remove(Misc * misc) {
 
 void MiscTableModel::removeAll()
 {
-   if (miscObs.size())
+   if (this->rows.size())
    {
-      beginRemoveRows( QModelIndex(), 0, miscObs.size()-1 );
-      while( !miscObs.isEmpty() )
+      beginRemoveRows( QModelIndex(), 0, this->rows.size()-1 );
+      while( !this->rows.isEmpty() )
       {
-         disconnect( miscObs.takeLast(), nullptr, this, nullptr );
+         disconnect( this->rows.takeLast().get(), nullptr, this, nullptr );
       }
       endRemoveRows();
    }
 }
 
 int MiscTableModel::rowCount(const QModelIndex& /*parent*/) const {
-   return miscObs.size();
+   return this->rows.size();
 }
 
 QVariant MiscTableModel::data(QModelIndex const & index, int role) const {
 
    // Ensure the row is ok.
-   if (index.row() >= static_cast<int>(this->miscObs.size())) {
+   if (index.row() >= static_cast<int>(this->rows.size())) {
       qWarning() << Q_FUNC_INFO << "Bad model index. row = " << index.row();
       return QVariant();
    }
 
-   Misc * row = this->miscObs[index.row()];
+   auto row = this->rows[index.row()];
 
    // Deal with the column and return the right data.
    int const column = index.column();
@@ -221,7 +208,7 @@ QVariant MiscTableModel::data(QModelIndex const & index, int role) const {
             return QVariant(row->typeStringTr());
          }
          if (role == Qt::UserRole) {
-            return QVariant(row->type());
+            return QVariant(static_cast<int>(row->type()));
          }
          break;
       case MISCUSECOL:
@@ -229,7 +216,7 @@ QVariant MiscTableModel::data(QModelIndex const & index, int role) const {
             return QVariant(row->useStringTr());
          }
          if (role == Qt::UserRole) {
-            return QVariant(row->use());
+            return QVariant(static_cast<int>(row->use()));
          }
          return QVariant();
       case MISCTIMECOL:
@@ -273,7 +260,7 @@ QVariant MiscTableModel::data(QModelIndex const & index, int role) const {
             return QVariant(row->amountTypeStringTr());
          }
          if (role == Qt::UserRole) {
-            return QVariant(row->amountType());
+            return QVariant(static_cast<int>(row->amountType()));
          }
          break;
       default:
@@ -297,20 +284,21 @@ Qt::ItemFlags MiscTableModel::flags(QModelIndex const & index) const {
       case MISCNAMECOL:
          return defaults;
       case MISCINVENTORYCOL:
-         return (defaults | (_inventoryEditable ? Qt::ItemIsEditable : Qt::NoItemFlags));
+         return (defaults | (this->isInventoryEditable() ? Qt::ItemIsEditable : Qt::NoItemFlags));
       default:
          return defaults | (editable ? Qt::ItemIsEditable : Qt::NoItemFlags);
    }
 }
 
-bool MiscTableModel::setData(QModelIndex const & index, QVariant const & value, int role) {
+bool MiscTableModel::setData(QModelIndex const & index,
+                             QVariant const & value,
+                             [[maybe_unused]] int role) {
 
-   if (index.row() >= static_cast<int>(miscObs.size())) {
+   if (index.row() >= static_cast<int>(this->rows.size())) {
       return false;
    }
 
-   Misc *row = miscObs[index.row()];
-
+   auto row = this->rows[index.row()];
 
    Measurement::PhysicalQuantity physicalQuantity =
       row->amountIsWeight() ? Measurement::PhysicalQuantity::Mass: Measurement::PhysicalQuantity::Volume;
@@ -406,38 +394,33 @@ bool MiscTableModel::setData(QModelIndex const & index, QVariant const & value, 
 
 void MiscTableModel::changedInventory(int invKey, BtStringConst const & propertyName) {
    if (propertyName == PropertyNames::Inventory::amount) {
-      for( int i = 0; i < miscObs.size(); ++i ) {
-         Misc* holdmybeer = miscObs.at(i);
-
-         if ( invKey == holdmybeer->inventoryId() ) {
-            // No need to update amount as it's only stored in one place (the inventory object) now
-            emit dataChanged( QAbstractItemModel::createIndex(i,MISCINVENTORYCOL),
-                              QAbstractItemModel::createIndex(i,MISCINVENTORYCOL) );
+      for (int ii = 0; ii < this->rows.size(); ++ii) {
+         if (invKey == this->rows.at(ii)->inventoryId()) {
+            emit dataChanged(QAbstractItemModel::createIndex(ii, MISCINVENTORYCOL),
+                             QAbstractItemModel::createIndex(ii, MISCINVENTORYCOL));
          }
       }
    }
    return;
 }
 
-void MiscTableModel::changed(QMetaProperty prop, QVariant /*val*/) {
+void MiscTableModel::changed(QMetaProperty prop, [[maybe_unused]] QVariant val) {
    Misc * miscSender = qobject_cast<Misc*>(sender());
    if (miscSender) {
-      int i = miscObs.indexOf(miscSender);
-      if (i < 0) {
-         return;
+      int ii = this->findIndexOf(miscSender);
+      if (ii >= 0) {
+         emit dataChanged( QAbstractItemModel::createIndex(ii, 0),
+                           QAbstractItemModel::createIndex(ii, MISCNUMCOLS-1) );
       }
-
-      emit dataChanged( QAbstractItemModel::createIndex(i, 0),
-                        QAbstractItemModel::createIndex(i, MISCNUMCOLS-1) );
       return;
    }
 
    // See if sender is our recipe.
    Recipe* recSender = qobject_cast<Recipe*>(sender());
-   if (recSender && recSender == recObs) {
+   if (recSender && recSender == this->recObs) {
       if (QString(prop.name()) == PropertyNames::Recipe::miscIds) {
-         removeAll();
-         addMiscs( recObs->miscs() );
+         this->removeAll();
+         this->addMiscs(this->recObs->getAll<Misc>());
       }
       if (rowCount() > 0) {
          emit headerDataChanged( Qt::Vertical, 0, rowCount()-1 );
@@ -446,10 +429,6 @@ void MiscTableModel::changed(QMetaProperty prop, QVariant /*val*/) {
    }
 
    return;
-}
-
-Misc * MiscTableModel::getMisc(unsigned int i) {
-   return miscObs[static_cast<int>(i)];
 }
 
 //======================CLASS MiscItemDelegate===========================
@@ -504,10 +483,10 @@ QWidget* MiscItemDelegate::createEditor(QWidget *parent,
 void MiscItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const {
    int const column = index.column();
 
-   if( column == MISCTYPECOL || column == MISCUSECOL || column == MISCISWEIGHT)
+   if (column == MISCTYPECOL || column == MISCUSECOL || column == MISCISWEIGHT)
    {
       QComboBox* box = qobject_cast<QComboBox*>(editor);
-      if( box == nullptr )
+      if (box == nullptr )
          return;
       box->setCurrentIndex(index.model()->data(index, Qt::UserRole).toInt());
    }
@@ -521,7 +500,7 @@ void MiscItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) 
 
 void MiscItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const {
    int column = index.column();
-   if( column == MISCTYPECOL || column == MISCUSECOL || column == MISCISWEIGHT)
+   if (column == MISCTYPECOL || column == MISCUSECOL || column == MISCISWEIGHT)
    {
       QComboBox* box = static_cast<QComboBox*>(editor);
       int ndx = box->currentIndex();
@@ -541,6 +520,6 @@ void MiscItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, 
 
 void MiscItemDelegate::updateEditorGeometry(QWidget * editor,
                                             QStyleOptionViewItem const & option,
-                                            QModelIndex const & index) const {
+                                            [[maybe_unused]] QModelIndex const & index) const {
    editor->setGeometry(option.rect);
 }

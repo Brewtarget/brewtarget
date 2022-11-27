@@ -1,6 +1,6 @@
 /*
  * OptionDialog.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2022
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -134,30 +134,33 @@ public:
       label_frequency            {optionDialog.groupBox_dbConfig},
       spinBox_frequency          {optionDialog.groupBox_dbConfig},
       languageInfo {
-      {"ca", QIcon(":images/flagCatalonia.svg"),   "Catalan",          tr("Catalan")          },
-      {"cs", QIcon(":images/flagCzech.svg"),       "Czech",            tr("Czech")            },
-      {"da", QIcon(":images/flagDenmark.svg"),     "Danish",           tr("Danish")           },
-      {"de", QIcon(":images/flagGermany.svg"),     "German",           tr("German")           },
-      {"el", QIcon(":images/flagGreece.svg"),      "Greek",            tr("Greek")            },
-      {"en", QIcon(":images/flagUK.svg"),          "English",          tr("English")          },
-      {"es", QIcon(":images/flagSpain.svg"),       "Spanish",          tr("Spanish")          },
-      {"et", QIcon(),                              "Estonian",         tr("Estonian")         },
-      {"eu", QIcon(),                              "Basque",           tr("Basque")           },
-      {"fr", QIcon(":images/flagFrance.svg"),      "French",           tr("French")           },
-      {"gl", QIcon(),                              "Galician",         tr("Galician")         },
-      {"hu", QIcon(),                              "Hungarian",        tr("Hungarian")        },
-      {"it", QIcon(":images/flagItaly.svg"),       "Italian",          tr("Italian")          },
-      {"lv", QIcon(),                              "Latvian",          tr("Latvian")          },
-      {"nb", QIcon(":images/flagNorway.svg"),      "Norwegian Bokmål", tr("Norwegian Bokmål") },
-      {"nl", QIcon(":images/flagNetherlands.svg"), "Dutch",            tr("Dutch")            },
-      {"pl", QIcon(":images/flagPoland.svg"),      "Polish",           tr("Polish")           },
-      {"pt", QIcon(":images/flagBrazil.svg"),      "Portuguese",       tr("Portuguese")       },
-      {"ru", QIcon(":images/flagRussia.svg"),      "Russian",          tr("Russian")          },
-      {"sr", QIcon(),                              "Serbian",          tr("Serbian")          },
-      {"sv", QIcon(":images/flagSweden.svg"),      "Swedish",          tr("Swedish")          },
-      {"tr", QIcon(),                              "Turkish",          tr("Turkish")          },
-      {"zh", QIcon(":images/flagChina.svg"),       "Chinese",          tr("Chinese")          }
-   } {
+         //
+         // See also CmakeLists.txt for list of translation source files (in ../translations directory)
+         //
+         {"ca", QIcon(":images/flagCatalonia.svg"),   "Catalan",          tr("Catalan")          },
+         {"cs", QIcon(":images/flagCzech.svg"),       "Czech",            tr("Czech")            },
+         {"da", QIcon(":images/flagDenmark.svg"),     "Danish",           tr("Danish")           },
+         {"de", QIcon(":images/flagGermany.svg"),     "German",           tr("German")           },
+         {"el", QIcon(":images/flagGreece.svg"),      "Greek",            tr("Greek")            },
+         {"en", QIcon(":images/flagUK.svg"),          "English",          tr("English")          },
+         {"es", QIcon(":images/flagSpain.svg"),       "Spanish",          tr("Spanish")          },
+         {"et", QIcon(":images/flagEstonia.svg"),     "Estonian",         tr("Estonian")         },
+         {"eu", QIcon(":images/flagBasque.svg"),      "Basque",           tr("Basque")           },
+         {"fr", QIcon(":images/flagFrance.svg"),      "French",           tr("French")           },
+         {"gl", QIcon(":images/flagGalicia.svg"),     "Galician",         tr("Galician")         },
+         {"hu", QIcon(":images/flagHungary.svg"),     "Hungarian",        tr("Hungarian")        },
+         {"it", QIcon(":images/flagItaly.svg"),       "Italian",          tr("Italian")          },
+         {"lv", QIcon(":images/flagLatvia.svg"),      "Latvian",          tr("Latvian")          },
+         {"nb", QIcon(":images/flagNorway.svg"),      "Norwegian Bokmål", tr("Norwegian Bokmål") },
+         {"nl", QIcon(":images/flagNetherlands.svg"), "Dutch",            tr("Dutch")            },
+         {"pl", QIcon(":images/flagPoland.svg"),      "Polish",           tr("Polish")           },
+         {"pt", QIcon(":images/flagBrazil.svg"),      "Portuguese",       tr("Portuguese")       },
+         {"ru", QIcon(":images/flagRussia.svg"),      "Russian",          tr("Russian")          },
+         {"sr", QIcon(":images/flagSerbia.svg"),      "Serbian",          tr("Serbian")          },
+         {"sv", QIcon(":images/flagSweden.svg"),      "Swedish",          tr("Swedish")          },
+         {"tr", QIcon(":images/flagTurkey.svg"),      "Turkish",          tr("Turkish")          },
+         {"zh", QIcon(":images/flagChina.svg"),       "Chinese",          tr("Chinese")          }
+      } {
       //
       // Optimise the select file dialog to select directories
       //
@@ -212,6 +215,18 @@ public:
       for (auto langInfo : this->languageInfo) {
          optionDialog.comboBox_lang->addItem(langInfo.countryFlag, langInfo.nameInCurrentLang, langInfo.iso639_1Code);
       }
+
+      //
+      // Default icon size is 16 × 16, which, besides being the wrong shape for flags, is really too small on HDPI
+      // screens.  (Most country flags are 3:2 width:height, or thereabouts.  And even those that are 2:1 width:height
+      // will usually still be pretty recognisable in 3:2 format.
+      //
+      // We probably should adapt the icon size to the display resolution by creating a font in a given (display
+      // independent) point size and then querying its actual display size in pixels etc etc, as is done in
+      // RangedSlider.cpp.  But in the meantime, hopefully 36 wide × 24 high is an OK compromise for the various
+      // different screen resolutions commonly in use.
+      //
+      optionDialog.comboBox_lang->setIconSize(QSize(36, 24));
 
       return;
    }
@@ -273,7 +288,7 @@ public:
       optionDialog.groupBox_dbConfig->setVisible(false);
 
       this->clearLayout(optionDialog);
-      if (db == Database::PGSQL) {
+      if (db == Database::DbType::PGSQL) {
          this->postgresVisible(true);
          this->sqliteVisible(false);
 
@@ -484,7 +499,8 @@ public:
 
       // Database stuff -- this looks weird, but trust me. We want SQLITE to be
       // the default for this field
-      int tmp = PersistentSettings::value(PersistentSettings::Names::dbType, Database::SQLITE).toInt() - 1;
+      int tmp = PersistentSettings::value(PersistentSettings::Names::dbType,
+                                          static_cast<int>(Database::DbType::SQLITE)).toInt() - 1;
       optionDialog.comboBox_engine->setCurrentIndex(tmp);
 
       this->input_pgHostname.setText(PersistentSettings::value(PersistentSettings::Names::dbHostname, "localhost").toString());
@@ -584,11 +600,12 @@ OptionDialog::OptionDialog(QWidget * parent) : QDialog{},
    configure_logging();
 
    // database panel stuff
-   comboBox_engine->addItem(tr("SQLite (default)"), QVariant(Database::SQLITE));
-   comboBox_engine->addItem(tr("PostgreSQL"), QVariant(Database::PGSQL));
+   comboBox_engine->addItem(tr("SQLite (default)"), QVariant(static_cast<int>(Database::DbType::SQLITE)));
+   comboBox_engine->addItem(tr("PostgreSQL"), QVariant(static_cast<int>(Database::DbType::PGSQL)));
 
    // figure out which database we have
-   int idx = comboBox_engine->findData(PersistentSettings::value(PersistentSettings::Names::dbType, Database::SQLITE).toInt());
+   int idx = comboBox_engine->findData(PersistentSettings::value(PersistentSettings::Names::dbType,
+                                                                 static_cast<int>(Database::DbType::SQLITE)).toInt());
    this->pimpl->setDbDialog(*this, static_cast<Database::DbType>(idx));
 
    // connect all the signals
@@ -666,7 +683,8 @@ void OptionDialog::connect_signals() {
    connect(pushButton_testConnection, &QAbstractButton::clicked, this, &OptionDialog::testConnection);
 
    // figure out which database we have
-   int idx = comboBox_engine->findData(PersistentSettings::value(PersistentSettings::Names::dbType, Database::SQLITE).toInt());
+   int idx = comboBox_engine->findData(PersistentSettings::value(PersistentSettings::Names::dbType,
+                                                                 static_cast<int>(Database::DbType::SQLITE)).toInt());
    this->pimpl->setDbDialog(*this, static_cast<Database::DbType>(idx));
 
    // Set the signals
@@ -738,7 +756,7 @@ void OptionDialog::setLogDir() {
 
 void OptionDialog::resetToDefault() {
    Database::DbType engine = static_cast<Database::DbType>(comboBox_engine->currentData().toInt());
-   if (engine == Database::PGSQL) {
+   if (engine == Database::DbType::PGSQL) {
       this->pimpl->input_pgHostname.setText(QString("localhost"));
       this->pimpl->input_pgPortNum.setText(QString("5432"));
       this->pimpl->input_pgSchema.setText(QString("public"));
@@ -796,7 +814,7 @@ void OptionDialog::testConnection() {
    }
 
    switch (newType) {
-      case Database::PGSQL:
+      case Database::DbType::PGSQL:
          hostname = this->pimpl->input_pgHostname.text();
          schema   = this->pimpl->input_pgSchema.text();
          database = this->pimpl->input_pgDbName.text();
@@ -928,9 +946,12 @@ bool OptionDialog::saveDatabaseConfig() {
 
    // TODO:: FIX THIS UI. I am really not sure what the best approach is here.
    if (this->pimpl->dbConnectionTestState == NEEDS_TEST || this->pimpl->dbConnectionTestState == TEST_FAILED) {
-      QMessageBox::critical(nullptr,
+      QMessageBox::critical(
+         nullptr,
                             tr("Test connection or cancel"),
-                            tr("Saving the options without testing the connection can cause Brewtarget to not restart. Your changes have been discarded, which is likely really, really crappy UX. Please open a bug explaining exactly how you got to this message.")
+         tr("Saving the options without testing the connection can cause Brewtarget to not restart.  Your changes have "
+            "been discarded, which is likely really, really crappy UX.  Please open a bug explaining exactly how you "
+            "got to this message.")
                            );
       return false;
    }
@@ -947,7 +968,7 @@ bool OptionDialog::saveDatabaseConfig() {
    }
 
    Database::DbType dbEngine = static_cast<Database::DbType>(comboBox_engine->currentData().toInt());
-   if (dbEngine == Database::SQLITE) {
+   if (dbEngine == Database::DbType::SQLITE) {
       saveSqliteConfig();
    }
 
@@ -974,7 +995,7 @@ bool OptionDialog::transferDatabase() {
       int engine = comboBox_engine->currentData().toInt();
       PersistentSettings::insert(PersistentSettings::Names::dbType, engine);
       // only write these changes when switching TO pgsql
-      if (engine == Database::PGSQL) {
+      if (engine == static_cast<int>(Database::DbType::PGSQL)) {
          PersistentSettings::insert(PersistentSettings::Names::dbHostname, this->pimpl->input_pgHostname.text());
          PersistentSettings::insert(PersistentSettings::Names::dbPortnum,  this->pimpl->input_pgPortNum.text());
          PersistentSettings::insert(PersistentSettings::Names::dbSchema,   this->pimpl->input_pgSchema.text());

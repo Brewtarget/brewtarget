@@ -61,13 +61,13 @@ public:
     * \param parent This is for grouping updates together.
     */
    explicit UndoableAddOrRemove(UU & updatee,
-                       std::shared_ptr<VV> (UU::*doer)(std::shared_ptr<VV>),
-                       std::shared_ptr<VV> whatToAddOrRemove,
-                       std::shared_ptr<VV> (UU::*undoer)(std::shared_ptr<VV>),
-                       void (MainWindow::*doCallback)(VV &),
-                       void (MainWindow::*undoCallback)(VV &),
-                       QString const & description,
-                       QUndoCommand * parent = nullptr) :
+                                std::shared_ptr<VV> (UU::*doer)(std::shared_ptr<VV>),
+                                std::shared_ptr<VV> whatToAddOrRemove,
+                                std::shared_ptr<VV> (UU::*undoer)(std::shared_ptr<VV>),
+                                void (MainWindow::*doCallback)(std::shared_ptr<VV>),
+                                void (MainWindow::*undoCallback)(std::shared_ptr<VV>),
+                                QString const & description,
+                                QUndoCommand * parent = nullptr) :
       QUndoCommand(parent),
       updatee(updatee),
       doer(doer),
@@ -142,7 +142,7 @@ private:
             this->whatToAddOrRemove->metaObject()->className() << "#" << this->whatToAddOrRemove->key();
 
          if (this->doCallback != nullptr) {
-            (MainWindow::instance().*(this->doCallback))(*this->whatToAddOrRemove);
+            (MainWindow::instance().*(this->doCallback))(this->whatToAddOrRemove);
          }
 
          // In this implementation "Do" and "Redo" are identical, but it's nonetheless useful for debugging purposes to
@@ -159,7 +159,7 @@ private:
             this->whatToAddOrRemove->key();
 
          if (this->undoCallback != nullptr) {
-            (MainWindow::instance().*(this->undoCallback))(*this->whatToAddOrRemove);
+            (MainWindow::instance().*(this->undoCallback))(this->whatToAddOrRemove);
          }
       }
 
@@ -175,8 +175,8 @@ private:
    std::shared_ptr<VV> (UU::*doer)(std::shared_ptr<VV>);
    std::shared_ptr<VV> whatToAddOrRemove;
    std::shared_ptr<VV> (UU::*undoer)(std::shared_ptr<VV>);
-   void (MainWindow::*doCallback)(VV &);
-   void (MainWindow::*undoCallback)(VV &);
+   void (MainWindow::*doCallback)(std::shared_ptr<VV>);
+   void (MainWindow::*undoCallback)(std::shared_ptr<VV>);
    bool everDone;
 };
 
@@ -191,8 +191,8 @@ UndoableAddOrRemove<UU, VV> * newUndoableAddOrRemove(UU & updatee,
                                                      std::shared_ptr<VV> (UU::*doer)(std::shared_ptr<VV>),
                                                      std::shared_ptr<VV> whatToAddOrRemove,
                                                      std::shared_ptr<VV> (UU::*undoer)(std::shared_ptr<VV>),
-                                                     void (MainWindow::*doCallback)(VV &),
-                                                     void (MainWindow::*undoCallback)(VV &),
+                                                     void (MainWindow::*doCallback)(std::shared_ptr<VV>),
+                                                     void (MainWindow::*undoCallback)(std::shared_ptr<VV>),
                                                      QString const & description,
                                                      QUndoCommand * parent = nullptr) {
    return new UndoableAddOrRemove<UU, VV>(updatee,
@@ -213,8 +213,8 @@ UndoableAddOrRemove<UU, VV> * newUndoableAddOrRemove(UU & updatee,
                                                      std::shared_ptr<VV> (UU::*doer)(std::shared_ptr<VV>),
                                                      VV * const whatToAddOrRemove,
                                                      std::shared_ptr<VV> (UU::*undoer)(std::shared_ptr<VV>),
-                                                     void (MainWindow::*doCallback)(VV &),
-                                                     void (MainWindow::*undoCallback)(VV &),
+                                                     void (MainWindow::*doCallback)(std::shared_ptr<VV>),
+                                                     void (MainWindow::*undoCallback)(std::shared_ptr<VV>),
                                                      QString const & description,
                                                      QUndoCommand * parent = nullptr) {
    return new UndoableAddOrRemove<UU, VV>(updatee,
@@ -243,8 +243,8 @@ UndoableAddOrRemove<UU, VV> * newUndoableAddOrRemove(UU & updatee,
                                           doer,
                                           whatToAddOrRemove,
                                           undoer,
-                                          static_cast<void (MainWindow::*)(VV &)>(nullptr),
-                                          static_cast<void (MainWindow::*)(VV &)>(nullptr),
+                                          static_cast<void (MainWindow::*)(std::shared_ptr<VV>)>(nullptr),
+                                          static_cast<void (MainWindow::*)(std::shared_ptr<VV>)>(nullptr),
                                           description,
                                           parent);
 }
@@ -263,8 +263,8 @@ UndoableAddOrRemove<UU, VV> * newUndoableAddOrRemove(UU & updatee,
                                           doer,
                                           ObjectStoreWrapper::getSharedFromRaw(whatToAddOrRemove),
                                           undoer,
-                                          static_cast<void (MainWindow::*)(VV &)>(nullptr),
-                                          static_cast<void (MainWindow::*)(VV &)>(nullptr),
+                                          static_cast<void (MainWindow::*)(std::shared_ptr<VV>)>(nullptr),
+                                          static_cast<void (MainWindow::*)(std::shared_ptr<VV>)>(nullptr),
                                           description,
                                           parent);
 }

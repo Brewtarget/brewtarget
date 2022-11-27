@@ -36,8 +36,8 @@
 #include <QWidget>
 
 #include "measurement/Unit.h"
-#include "tableModels/BtTableModel.h"
-
+#include "model/Misc.h"
+#include "tableModels/BtTableModelInventory.h"
 
 // Forward declarations.
 class BtStringConst;
@@ -53,7 +53,7 @@ enum{MISCNAMECOL, MISCTYPECOL, MISCUSECOL, MISCTIMECOL, MISCAMOUNTCOL, MISCINVEN
  *
  * \brief Table model for a list of miscs.
  */
-class MiscTableModel : public BtTableModel {
+class MiscTableModel : public BtTableModelInventory, public BtTableModelData<Misc> {
    Q_OBJECT
 
 public:
@@ -65,18 +65,9 @@ public:
    //! \brief If true, we model the database's list of miscs.
    void observeDatabase(bool val);
    //! \brief Add \c miscs to the model.
-   void addMiscs(QList<Misc*> miscs);
-   //! \returns the \c Misc at model index \b i.
-   Misc* getMisc(unsigned int i);
+   void addMiscs(QList<std::shared_ptr<Misc> > miscs);
    //! \brief Clear the model.
    void removeAll();
-
-   /*!
-    * \brief True if the inventory column should be editable, false otherwise.
-    *
-    * The default is that the inventory column is not editable
-    */
-   void setInventoryEditable( bool var ) { _inventoryEditable = var; }
 
    //! \brief Reimplemented from QAbstractTableModel
    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
@@ -88,7 +79,7 @@ public:
    virtual Qt::ItemFlags flags(const QModelIndex& index ) const;
    //! \brief Reimplemented from QAbstractTableModel
    virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
-   bool remove(Misc * misc);
+   bool remove(std::shared_ptr<Misc> misc);
 
 public slots:
    //! \brief Add a misc to the model.
@@ -100,11 +91,6 @@ private slots:
    //! \brief Catch changes to Recipe, Database, and Misc.
    void changed(QMetaProperty, QVariant);
    void changedInventory(int invKey, BtStringConst const & propertyName);
-
-private:
-   bool _inventoryEditable;
-   QList<Misc*> miscObs;
-   Recipe* recObs;
 };
 
 /*!

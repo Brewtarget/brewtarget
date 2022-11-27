@@ -51,15 +51,17 @@ enum{ SALTNAMECOL,
  *
  * \brief Table model for salts.
  */
-class SaltTableModel : public BtTableModel {
+class SaltTableModel : public BtTableModelRecipeObserver, public BtTableModelData<Salt> {
    Q_OBJECT
 
 public:
    SaltTableModel(QTableView* parent = nullptr);
    ~SaltTableModel();
    void observeRecipe(Recipe* rec);
-   void addSalt(Salt* salt);
-   void addSalts(QList<Salt*> salts);
+private:
+   void addSalt(std::shared_ptr<Salt> salt);
+public:
+   void addSalts(QList<std::shared_ptr<Salt> > salts);
    void removeAll();
 
    //! Reimplemented from QAbstractTableModel.
@@ -90,19 +92,15 @@ public:
 
 public slots:
    void changed(QMetaProperty,QVariant);
-   void removeSalt(Salt* salt);
+   void remove(std::shared_ptr<Salt> salt);
    void catchSalt();
 
 signals:
    void newTotals();
 
 private:
-   QList<Salt*> saltObs;
-   Recipe* m_rec;
    double spargePct;
-
-   double multiplier(Salt *s) const;
-
+   double multiplier(Salt & salt) const;
 };
 
 /*!

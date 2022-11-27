@@ -35,11 +35,11 @@
 #include <QWidget>
 
 #include "measurement/Unit.h"
-#include "tableModels/BtTableModel.h"
+#include "tableModels/BtTableModelInventory.h"
+#include "model/Yeast.h"
 
 // Forward declarations.
 class BtStringConst;
-class Yeast;
 class YeastTableWidget;
 class YeastItemDelegate;
 class Recipe;
@@ -51,7 +51,7 @@ enum{ YEASTNAMECOL, YEASTLABCOL, YEASTPRODIDCOL, YEASTTYPECOL, YEASTFORMCOL, YEA
  *
  * \brief Table model for yeasts.
  */
-class YeastTableModel : public BtTableModel {
+class YeastTableModel : public BtTableModelInventory, public BtTableModelData<Yeast> {
    Q_OBJECT
 
 public:
@@ -63,18 +63,9 @@ public:
    //! \brief If true, we model the database's list of yeasts.
    void observeDatabase(bool val);
    //! \brief Add \c yeasts to the model.
-   void addYeasts(QList<Yeast*> yeasts);
-   //! \brief Get the yeast at model index \c i.
-   Yeast* getYeast(unsigned int i);
+   void addYeasts(QList<std::shared_ptr<Yeast> > yeasts);
    //! \brief Clear the model.
    void removeAll();
-
-   /*!
-    * \brief True if the inventory column should be editable, false otherwise.
-    *
-    * The default is that the inventory column is not editable
-    */
-   void setInventoryEditable( bool var ) { _inventoryEditable = var; }
 
    //! \brief Reimplemented from QAbstractTableModel.
    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
@@ -87,7 +78,7 @@ public:
    //! \brief Reimplemented from QAbstractTableModel.
    virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
 
-   void remove(Yeast * yeast);
+   void remove(std::shared_ptr<Yeast> yeast);
 
 public slots:
    //! \brief Add a \c yeast to the model.
@@ -99,11 +90,6 @@ private slots:
    //! \brief Catch changes to Recipe, Database, and Yeast.
    void changed(QMetaProperty, QVariant);
    void changedInventory(int invKey, BtStringConst const & propertyName);
-
-private:
-   bool _inventoryEditable;
-   QList<Yeast*> yeastObs;
-   Recipe* recObs;
 };
 
 /*!

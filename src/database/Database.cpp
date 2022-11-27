@@ -58,7 +58,7 @@
 #include <QString>
 #include <QThread>
 
-#include "brewtarget.h"
+#include "Application.h"
 #include "config.h"
 #include "database/BtSqlQuery.h"
 #include "database/DatabaseSchemaHelper.h"
@@ -239,7 +239,7 @@ public:
 
       // Set file names.
       this->dbFileName = PersistentSettings::getUserDataDir().filePath("database.sqlite");
-      this->dataDbFileName = Brewtarget::getResourceDir().filePath("default_db.sqlite");
+      this->dataDbFileName = Application::getResourceDir().filePath("default_db.sqlite");
       qDebug().noquote() <<
          Q_FUNC_INFO << "dbFileName = \"" << this->dbFileName << "\"\ndataDbFileName=\"" << this->dataDbFileName << "\"";
       // Set the files.
@@ -607,7 +607,7 @@ QSqlDatabase Database::sqlDatabase() const {
       }
       qCritical() << Q_FUNC_INFO << errorMessage;
 
-      if (Brewtarget::isInteractive()) {
+      if (Application::isInteractive()) {
          QMessageBox::critical(nullptr,
                                QObject::tr("Database Failure"),
                                errorMessage);
@@ -625,6 +625,10 @@ bool Database::load() {
    this->pimpl->createFromScratch = false;
    this->pimpl->schemaUpdated = false;
    this->pimpl->loadWasSuccessful = false;
+
+   // We have had problems on Windows with the DB driver not being found in certain circumstances.  This is some extra
+   // diagnostic to help resolve that.
+   qInfo() << Q_FUNC_INFO << "Known DB drivers: " << QSqlDatabase::drivers();
 
    bool dbIsOpen;
    if (this->dbType() == Database::PGSQL ) {
@@ -654,8 +658,8 @@ bool Database::load() {
    bool schemaErr = false;
    this->pimpl->schemaUpdated = this->pimpl->updateSchema(*this, &schemaErr);
 
-   if( schemaErr ) {
-      if (Brewtarget::isInteractive()) {
+   if (schemaErr ) {
+      if (Application::isInteractive()) {
          QMessageBox::critical(
             nullptr,
             QObject::tr("Database Failure"),
@@ -675,7 +679,7 @@ void Database::checkForNewDefaultData() {
    if (this->pimpl->dataDbFile.fileName() != this->pimpl->dbFile.fileName() &&
        !this->pimpl->userDatabaseDidNotExist &&
        QFileInfo(this->pimpl->dataDbFile).lastModified() > Database::lastDbMergeRequest) {
-      if( Brewtarget::isInteractive() &&
+      if( Application::isInteractive() &&
          QMessageBox::question(
             nullptr,
             tr("Merge Database"),
@@ -725,7 +729,7 @@ bool Database::createBlank(QString const& filename)
       QSqlDatabase sqldb = QSqlDatabase::addDatabase("QSQLITE", "blank");
       sqldb.setDatabaseName(filename);
       bool dbIsOpen = sqldb.open();
-      if( ! dbIsOpen )
+      if (! dbIsOpen )
       {
          qWarning() << QString("Database::createBlank(): could not open '%1'").arg(filename);
          return false;

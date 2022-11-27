@@ -1,6 +1,6 @@
 /*
  * HopTableModel.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2022
  * - Luke Vincent <luke.r.vincent@gmail.com>
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
@@ -47,7 +47,7 @@
 #include "utils/BtStringConst.h"
 
 HopTableModel::HopTableModel(QTableView * parent, bool editable) :
-   BtTableModel{
+   BtTableModelInventory{
       parent,
       editable,
       {{HOPNAMECOL,      {tr("Name"),      NonPhysicalQuantity::String,          ""                                                 }},
@@ -58,22 +58,9 @@ HopTableModel::HopTableModel(QTableView * parent, bool editable) :
        {HOPUSECOL,       {tr("Use"),       NonPhysicalQuantity::String,          ""                                                 }},
        {HOPTIMECOL,      {tr("Time"),      Measurement::PhysicalQuantity::Time,  *PropertyNames::Hop::time_min                      }}}
    },
-   colFlags(HOPNUMCOLS),
-   _inventoryEditable(false),
-   recObs(nullptr),
    showIBUs(false) {
-   this->hopObs.clear();
+   this->rows.clear();
    this->setObjectName("hopTable");
-
-   for (int i = 0; i < HOPNUMCOLS; ++i) {
-      if (i == HOPNAMECOL) {
-         colFlags[i] = Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
-      } else if (i == HOPINVENTORYCOL) {
-         colFlags[i] = Qt::ItemIsEnabled;
-      } else
-         colFlags[i] = Qt::ItemIsSelectable | (editable ? Qt::ItemIsEditable : Qt::NoItemFlags) | Qt::ItemIsDragEnabled |
-                       Qt::ItemIsEnabled;
-   }
 
    QHeaderView * headerView = parentTableWidget->horizontalHeader();
    headerView->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -88,7 +75,7 @@ HopTableModel::HopTableModel(QTableView * parent, bool editable) :
 }
 
 HopTableModel::~HopTableModel() {
-   this->hopObs.clear();
+   this->rows.clear();
    return;
 }
 
@@ -101,7 +88,7 @@ void HopTableModel::observeRecipe(Recipe * rec) {
    this->recObs = rec;
    if (this->recObs) {
       connect(this->recObs, &NamedEntity::changed, this, &HopTableModel::changed);
-      this->addHops(this->recObs->hops());
+      this->addHops(this->recObs->getAll<Hop>());
    }
 }
 
@@ -115,12 +102,12 @@ void HopTableModel::observeDatabase(bool val) {
               &ObjectStoreTyped<Hop>::signalObjectDeleted,
               this,
               &HopTableModel::removeHop);
-      this->addHops(ObjectStoreTyped<Hop>::getInstance().getAllRaw());
+      this->addHops(ObjectStoreWrapper::getAll<Hop>());
    } else {
       removeAll();
       disconnect(&ObjectStoreTyped<Hop>::getInstance(), nullptr, this, nullptr);
-
    }
+   return;
 }
 
 void HopTableModel::addHop(int hopId) {
@@ -132,57 +119,54 @@ void HopTableModel::addHop(int hopId) {
       return;
    }
 
-   // .:TODO:. For the moment at least, the rest of this class uses raw pointers, but would be good to refactor to use
-   // shared pointers.
-   Hop * hop = hopAdded.get();
-   if (this->hopObs.contains(hop)) {
+   if (this->rows.contains(hopAdded)) {
       return;
    }
 
    // If we are observing the database, ensure that the item is undeleted and
    // fit to display.
-   if (this->recObs == nullptr && (hop->deleted() || !hop->display())) {
+   if (this->recObs == nullptr && (hopAdded->deleted() || !hopAdded->display())) {
       return;
    }
 
    // If we are watching a Recipe and the new Hop does not belong to it then there is nothing for us to do
    if (this->recObs) {
-      Recipe * recipeOfNewHop = hop->getOwningRecipe();
+      Recipe * recipeOfNewHop = hopAdded->getOwningRecipe();
       if (recipeOfNewHop && this->recObs->key() != recipeOfNewHop->key()) {
          qDebug() <<
-            Q_FUNC_INFO << "Ignoring signal about new Hop #" << hop->key() << "as it belongs to Recipe #" <<
+            Q_FUNC_INFO << "Ignoring signal about new Hop #" << hopAdded->key() << "as it belongs to Recipe #" <<
             recipeOfNewHop->key() << "and we are watching Recipe #" << this->recObs->key();
          return;
       }
    }
 
-   int size = hopObs.size();
+   int size = this->rows.size();
    beginInsertRows(QModelIndex(), size, size);
-   hopObs.append(hop);
-   connect(hop, &NamedEntity::changed, this, &HopTableModel::changed);
+   this->rows.append(hopAdded);
+   connect(hopAdded.get(), &NamedEntity::changed, this, &HopTableModel::changed);
    endInsertRows();
    return;
 }
 
-void HopTableModel::addHops(QList<Hop *> hops) {
-   QList<Hop *> tmp;
+void HopTableModel::addHops(QList< std::shared_ptr<Hop> > hops) {
+   decltype(hops) tmp;
 
    for (auto hop : hops) {
       if (recObs == nullptr && (hop->deleted() || !hop->display())) {
          continue;
       }
-      if (!hopObs.contains(hop)) {
+      if (!this->rows.contains(hop)) {
          tmp.append(hop);
       }
    }
 
-   int size = hopObs.size();
+   int size = this->rows.size();
    if (size + tmp.size()) {
       beginInsertRows(QModelIndex(), size, size + tmp.size() - 1);
-      hopObs.append(tmp);
+      this->rows.append(tmp);
 
       for (auto hop : tmp) {
-         connect(hop, &NamedEntity::changed, this, &HopTableModel::changed);
+         connect(hop.get(), &NamedEntity::changed, this, &HopTableModel::changed);
       }
 
       endInsertRows();
@@ -190,12 +174,12 @@ void HopTableModel::addHops(QList<Hop *> hops) {
    return;
 }
 
-bool HopTableModel::remove(Hop * hop) {
-   int i = hopObs.indexOf(hop);
+bool HopTableModel::remove(std::shared_ptr<Hop> hop) {
+   int i = this->rows.indexOf(hop);
    if (i >= 0) {
       beginRemoveRows(QModelIndex(), i, i);
-      disconnect(hop, nullptr, this, nullptr);
-      hopObs.removeAt(i);
+      disconnect(hop.get(), nullptr, this, nullptr);
+      this->rows.removeAt(i);
       //reset(); // Tell everybody the table has changed.
       endRemoveRows();
 
@@ -205,8 +189,9 @@ bool HopTableModel::remove(Hop * hop) {
    return false;
 }
 
-void HopTableModel::removeHop(int hopId, std::shared_ptr<QObject> object) {
-   this->remove(std::static_pointer_cast<Hop>(object).get());
+void HopTableModel::removeHop([[maybe_unused]] int hopId,
+                              std::shared_ptr<QObject> object) {
+   this->remove(std::static_pointer_cast<Hop>(object));
    return;
 }
 
@@ -215,10 +200,10 @@ void HopTableModel::setShowIBUs(bool var) {
 }
 
 void HopTableModel::removeAll() {
-   if (hopObs.size()) {
-      beginRemoveRows(QModelIndex(), 0, hopObs.size() - 1);
-      while (!hopObs.isEmpty()) {
-         disconnect(hopObs.takeLast(), nullptr, this, nullptr);
+   if (this->rows.size()) {
+      beginRemoveRows(QModelIndex(), 0, this->rows.size() - 1);
+      while (!this->rows.isEmpty()) {
+         disconnect(this->rows.takeLast().get(), nullptr, this, nullptr);
       }
       endRemoveRows();
    }
@@ -226,35 +211,29 @@ void HopTableModel::removeAll() {
 
 void HopTableModel::changedInventory(int invKey, BtStringConst const & propertyName) {
    if (propertyName == PropertyNames::Inventory::amount) {
-///      double newAmount = ObjectStoreWrapper::getById<InventoryHop>()->getAmount();
-      for (int i = 0; i < hopObs.size(); ++i) {
-         Hop * holdmybeer = hopObs.at(i);
-
-         if (invKey == holdmybeer->inventoryId()) {
-/// No need to update amount as it's only stored in one place (the inventory object) now
-///            holdmybeer->setInventoryAmount(newAmount);
-            emit dataChanged(QAbstractItemModel::createIndex(i, HOPINVENTORYCOL),
-                             QAbstractItemModel::createIndex(i, HOPINVENTORYCOL));
+      for (int ii = 0; ii < this->rows.size(); ++ii) {
+         if (invKey == this->rows.at(ii)->inventoryId()) {
+            emit dataChanged(QAbstractItemModel::createIndex(ii, HOPINVENTORYCOL),
+                             QAbstractItemModel::createIndex(ii, HOPINVENTORYCOL));
          }
       }
    }
    return;
 }
 
-void HopTableModel::changed(QMetaProperty prop, QVariant /*val*/) {
-   int i;
+void HopTableModel::changed(QMetaProperty prop, [[maybe_unused]] QVariant val) {
 
    // Find the notifier in the list
    Hop * hopSender = qobject_cast<Hop *>(sender());
    if (hopSender) {
-      i = hopObs.indexOf(hopSender);
-      if (i < 0) {
+      int ii = this->findIndexOf(hopSender);
+      if (ii < 0) {
          return;
       }
 
-      emit dataChanged(QAbstractItemModel::createIndex(i, 0),
-                       QAbstractItemModel::createIndex(i, HOPNUMCOLS - 1));
-      emit headerDataChanged(Qt::Vertical, i, i);
+      emit dataChanged(QAbstractItemModel::createIndex(ii, 0),
+                       QAbstractItemModel::createIndex(ii, HOPNUMCOLS - 1));
+      emit headerDataChanged(Qt::Vertical, ii, ii);
       return;
    }
 
@@ -263,7 +242,7 @@ void HopTableModel::changed(QMetaProperty prop, QVariant /*val*/) {
    if (recSender && recSender == recObs) {
       if (QString(prop.name()) == PropertyNames::Recipe::hopIds) {
          removeAll();
-         addHops(recObs->hops());
+         this->addHops(recObs->getAll<Hop>());
       }
       if (rowCount() > 0) {
          emit headerDataChanged(Qt::Vertical, 0, rowCount() - 1);
@@ -273,19 +252,19 @@ void HopTableModel::changed(QMetaProperty prop, QVariant /*val*/) {
 }
 
 int HopTableModel::rowCount(const QModelIndex & /*parent*/) const {
-   return hopObs.size();
+   return this->rows.size();
 }
 
 QVariant HopTableModel::data(const QModelIndex & index, int role) const {
 
 
    // Ensure the row is ok.
-   if (index.row() >= static_cast<int>(hopObs.size())) {
+   if (index.row() >= static_cast<int>(this->rows.size())) {
       qWarning() << Q_FUNC_INFO << "Bad model index. row =" << index.row();
       return QVariant();
    }
 
-   Hop * row = hopObs[index.row()];
+   auto row = this->rows[index.row()];
 
    int const column = index.column();
    switch (column) {
@@ -320,7 +299,7 @@ QVariant HopTableModel::data(const QModelIndex & index, int role) const {
             return QVariant(row->useStringTr());
          }
          if (role == Qt::UserRole) {
-            return QVariant(row->use());
+            return QVariant(static_cast<int>(row->use()));
          }
          break;
       case HOPTIMECOL:
@@ -335,7 +314,7 @@ QVariant HopTableModel::data(const QModelIndex & index, int role) const {
          if (role == Qt::DisplayRole) {
             return QVariant(row->formStringTr());
          } else if (role == Qt::UserRole) {
-            return QVariant(row->form());
+            return QVariant(static_cast<int>(row->form()));
          }
          break;
       default :
@@ -361,20 +340,26 @@ QVariant HopTableModel::headerData(int section, Qt::Orientation orientation, int
 
 Qt::ItemFlags HopTableModel::flags(const QModelIndex & index) const {
    int col = index.column();
-
-   return colFlags[col];
+   switch (col) {
+      case HOPNAMECOL:
+         return Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
+      case HOPINVENTORYCOL:
+         return Qt::ItemIsEnabled | (this->isInventoryEditable() ? Qt::ItemIsEditable : Qt::NoItemFlags);
+      default:
+         return Qt::ItemIsSelectable | (this->editable ? Qt::ItemIsEditable : Qt::NoItemFlags) | Qt::ItemIsDragEnabled |
+                       Qt::ItemIsEnabled;
+   }
 }
 
 bool HopTableModel::setData(const QModelIndex & index, const QVariant & value, int role) {
-   Hop * row;
    bool retVal = false;
    double amt;
 
-   if (index.row() >= static_cast<int>(hopObs.size()) || role != Qt::EditRole) {
+   if (index.row() >= static_cast<int>(this->rows.size()) || role != Qt::EditRole) {
       return false;
    }
 
-   row = hopObs[index.row()];
+   auto row = this->rows[index.row()];
 
    int const column = index.column();
    switch (column) {
@@ -471,18 +456,6 @@ bool HopTableModel::setData(const QModelIndex & index, const QVariant & value, i
    }
 
    return retVal;
-}
-
-// Returns null on failure.
-Hop * HopTableModel::getHop(int i) {
-   if (!(hopObs.isEmpty())) {
-      if (i >= 0 && i < hopObs.size()) {
-         return hopObs[i];
-      }
-   } else {
-      qWarning() << Q_FUNC_INFO << "this->hopObs is empty (" << i << "/" << hopObs.size() << ")";
-   }
-   return nullptr;
 }
 
 //==========================CLASS HopItemDelegate===============================

@@ -1,6 +1,6 @@
 /*
  * BrewDayScrollWidget.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2022
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -63,15 +63,19 @@ BrewDayScrollWidget::BrewDayScrollWidget(QWidget* parent) : QWidget{parent},
    this->setupUi(this);
    this->setObjectName("BrewDayScrollWidget");
 
-   connect(listWidget,                      SIGNAL(currentRowChanged(int)), this, SLOT(showInstruction(int)) );
-   connect(btTextEdit,                      SIGNAL(textModified()),         this, SLOT(saveInstruction()));
-   connect(pushButton_insert,               SIGNAL(clicked()),              this, SLOT(insertInstruction()) );
-   connect(pushButton_remove,               SIGNAL(clicked()),              this, SLOT(removeSelectedInstruction()) );
-   connect(pushButton_up,                   SIGNAL(clicked()),              this, SLOT(pushInstructionUp()) );
-   connect(pushButton_down,                 SIGNAL(clicked()),              this, SLOT(pushInstructionDown()) );
-   connect(pushButton_generateInstructions, SIGNAL(clicked()),              this, SLOT(generateInstructions()) );
+   connect(listWidget,                      &QListWidget::currentRowChanged, this, &BrewDayScrollWidget::showInstruction          );
+   connect(btTextEdit,                      SIGNAL(textModified()),          this, SLOT(saveInstruction())                        );
+//   connect(btTextEdit,                      &BtLineEdit::textModified,       this, &BrewDayScrollWidget::saveInstruction          );
+   connect(pushButton_insert,               &QAbstractButton::clicked,       this, &BrewDayScrollWidget::insertInstruction        );
+   connect(pushButton_remove,               &QAbstractButton::clicked,       this, &BrewDayScrollWidget::removeSelectedInstruction);
+   connect(pushButton_up,                   &QAbstractButton::clicked,       this, &BrewDayScrollWidget::pushInstructionUp        );
+   connect(pushButton_down,                 &QAbstractButton::clicked,       this, &BrewDayScrollWidget::pushInstructionDown      );
+   connect(pushButton_generateInstructions, &QAbstractButton::clicked,       this, &BrewDayScrollWidget::generateInstructions     );
+
    return;
 }
+
+BrewDayScrollWidget::~BrewDayScrollWidget() = default;
 
 void BrewDayScrollWidget::saveInstruction() {
   this->recObs->instructions()[ listWidget->currentRow() ]->setDirections( btTextEdit->toPlainText() );
@@ -116,12 +120,21 @@ void BrewDayScrollWidget::removeSelectedInstruction() {
    if (row < 0) {
       return;
    }
-   this->recObs->remove(ObjectStoreWrapper::getSharedFromRaw(recIns[row]));
+   this->recObs->remove(ObjectStoreWrapper::getSharedFromRaw(this->recIns[row]));
 
-   if (recIns.isEmpty()) {
+   // After updating the model, this is the simplest way to update the display
+   this->setRecipe(this->recObs);
+
+   if (this->recIns.isEmpty()) {
       btTextEdit->clear();
       btTextEdit->setEnabled(false);
+   } else {
+      if (row > this->recIns.size()) {
+         row = this->recIns.size();
+      }
+      listWidget->setCurrentRow(row);
    }
+
    return;
 }
 
@@ -135,7 +148,11 @@ void BrewDayScrollWidget::pushInstructionUp() {
       return;
    }
 
-   this->recObs->swapInstructions(recIns[row], recIns[row-1]);
+   this->recObs->swapInstructions(this->recIns[row], this->recIns[row-1]);
+
+   // After updating the model, this is the simplest way to update the display
+   this->setRecipe(this->recObs);
+
    listWidget->setCurrentRow(row-1);
    return;
 }
@@ -146,75 +163,72 @@ void BrewDayScrollWidget::pushInstructionDown() {
    }
 
    int row = listWidget->currentRow();
-
    if (row >= listWidget->count() - 1 || row < 0) {
       return;
    }
 
-   this->recObs->swapInstructions(recIns[row], recIns[row+1]);
+   this->recObs->swapInstructions(this->recIns[row], this->recIns[row+1]);
+
+   // After updating the model, this is the simplest way to update the display
+   this->setRecipe(this->recObs);
+
    listWidget->setCurrentRow(row+1);
    return;
 }
 
-bool BrewDayScrollWidget::loadComplete(bool ok)
-{
-   doc->print(printer);
+bool BrewDayScrollWidget::loadComplete(bool ok) {
+   this->doc->print(this->printer);
    return ok;
 }
 
-void BrewDayScrollWidget::print(QPrinter *mainPrinter,
-      int action, QFile* outFile)
-{
-   QString pDoc;
-
-   if( recObs == nullptr )
+void BrewDayScrollWidget::print(QPrinter *mainPrinter, int action, QFile* outFile) {
+   if (this->recObs == nullptr) {
       return;
+   }
 
-   /* Connect the webview's signal */
-   if ( action == PRINT )
-   {
-      printer = mainPrinter;
+   // Connect the webview's signal
+   if (action == PRINT) {
+      this->printer = mainPrinter;
    }
 
    // Start building the document to be printed.  The HTML doesn't work with
    // the image since it is a compiled resource
-   pDoc = buildTitleTable( action != HTML );
+   QString pDoc = buildTitleTable(action != HTML);
    pDoc += buildInstructionTable();
    pDoc += buildFooterTable();
 
    pDoc += tr("<h2>Notes</h2>");
-   if ( recObs->notes() != "" )
+   if (this->recObs->notes() != "" )
       pDoc += QString("<div id=\"customNote\">%1</div>\n").arg(recObs->notes());
 
    pDoc += "</body></html>";
 
-   doc->setHtml(pDoc);
-   if ( action == PREVIEW )
-      doc->show();
-   else if ( action == HTML )
-{
+   this->doc->setHtml(pDoc);
+   if (action == PREVIEW) {
+      this->doc->show();
+   } else if ( action == HTML ) {
       QTextStream out(outFile);
       out << pDoc;
       outFile->close();
+   } else {
+       this->loadComplete(true);
    }
-   else
-   {
-       loadComplete(true);
-   }
+   return;
 }
 
 void BrewDayScrollWidget::setRecipe(Recipe* rec) {
    // Disconnect old notifier.
-   if (recObs) {
+   if (this->recObs) {
       disconnect(this->recObs, &Recipe::changed, this, &BrewDayScrollWidget::acceptChanges );
    }
 
-  this->recObs = rec;
-   connect(this->recObs, &Recipe::changed, this, &BrewDayScrollWidget::acceptChanges );
+   this->recObs = rec;
+   connect(this->recObs, &Recipe::changed, this, &BrewDayScrollWidget::acceptChanges);
 
-   recIns =this->recObs->instructions();
-   foreach( Instruction* ins, recIns )
-         connect( ins, &Instruction::changed, this, &BrewDayScrollWidget::acceptInsChanges );
+   recIns = this->recObs->instructions();
+   for (Instruction* ins : recIns) {
+      connect(ins, &Instruction::changed, this, &BrewDayScrollWidget::acceptInsChanges);
+   }
 
    btTextEdit->clear();
    if (recIns.isEmpty()) {
@@ -243,13 +257,19 @@ void BrewDayScrollWidget::insertInstruction() {
       pos = lineEdit_step->text().toInt();
       lineEdit_step->clear();
    }
+
+   qDebug() << Q_FUNC_INFO << "Inserting instruction '" << lineEdit_name->text() << "' at posistion" << pos;
    auto ins = std::make_shared<Instruction>();
    ins->setName(lineEdit_name->text());
    ObjectStoreWrapper::insert(ins);
    lineEdit_name->clear();
 
    pos = qBound(1, pos, this->recIns.size());
-   this->recObs->insertInstruction(ins.get(), pos);
+   this->recObs->insertInstruction(*ins.get(), pos);
+
+   // After updating the model, this is the simplest way to update the display
+   this->setRecipe(this->recObs);
+
    listWidget->setCurrentRow(pos-1);
    return;
 }
@@ -266,6 +286,7 @@ void BrewDayScrollWidget::acceptChanges(QMetaProperty prop, QVariant /*value*/) 
       }
       showChanges();
    }
+   return;
 }
 
 void BrewDayScrollWidget::acceptInsChanges(QMetaProperty prop, QVariant /*value*/) {
@@ -276,8 +297,9 @@ void BrewDayScrollWidget::acceptInsChanges(QMetaProperty prop, QVariant /*value*
       showChanges();
    } else if (propName == PropertyNames::Instruction::directions) {
       // This will make the displayed text directions update.
-      listWidget->setCurrentRow( listWidget->currentRow() );
+      listWidget->setCurrentRow(listWidget->currentRow());
    }
+   return;
 }
 
 void BrewDayScrollWidget::clear() {
@@ -325,7 +347,7 @@ QString BrewDayScrollWidget::buildTitleTable(bool includeImage) {
    QString header = Html::createHeader(BrewDayScrollWidget::tr("Brewday"), cssName);
 
    QString body = QString("<h1>%1</h1>").arg(recObs->name());
-   if ( includeImage ) {
+   if (includeImage) {
       body += QString("<img src=\"%1\" />").arg("qrc:/images/title.svg");
    }
 
@@ -409,7 +431,7 @@ QString BrewDayScrollWidget::buildInstructionTable() {
          .arg(tr("Step"));
 
    QList<Instruction*> instructions = this->recObs->instructions();
-   QList<MashStep*> mashSteps = this->recObs->mash()->mashSteps();
+   auto mashSteps = this->recObs->mash()->mashSteps();
    int size = instructions.size();
    for (int i = 0; i < size; ++i ) {
 

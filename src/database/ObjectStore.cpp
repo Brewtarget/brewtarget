@@ -1,6 +1,6 @@
 /*
  * database/ObjectStore.cpp is part of Brewtarget, and is copyright the following
- * authors 2021:
+ * authors 2021-2022:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -30,13 +30,14 @@
 #include "database/BtSqlQuery.h"
 #include "database/Database.h"
 #include "database/DbTransaction.h"
+#include "Logging.h"
 #include "model/NamedParameterBundle.h"
 
 // Private implementation details that don't need access to class member variables
 namespace {
 
    /**
-    * For a given field type, get the native database typename
+    * \brief For a given field type, get the native database typename
     */
    char const * getDatabaseNativeTypeName(Database const & database, ObjectStore::FieldType const fieldType) {
       switch (fieldType) {
@@ -54,7 +55,6 @@ namespace {
       }
       return nullptr; // Should never get here
    }
-
 
    /**
     * \brief Create a database table without foreign key constraints (allowing tables to be created in any order)
@@ -198,11 +198,11 @@ namespace {
    }
 
    /**
-    * Return a string containing all the bound values on a query.   This is quite a useful thing to have logged when
-    * you get an error!
+    * \brief Return a string containing all the bound values on a query.   This is quite a useful thing to have logged
+    *        when you get an error!
     *
-    * NB: This can be a long string.  It includes newlines, and is intended to be logged with qDebug().noquote() or
-    *     similar.
+    *        NOTE: This can be a long string.  It includes newlines, and is intended to be logged with
+    *              qDebug().noquote() or similar.
     */
    QString BoundValuesToString(BtSqlQuery const & sqlQuery) {
       QString result;
@@ -217,12 +217,12 @@ namespace {
    }
 
    /**
-    * Given a (QVariant-wrapped) string value pulled out of the DB for an enum, look up and return its internal
-    * numerical enum equivalent
+    * \brief Given a (QVariant-wrapped) string value pulled out of the DB for an enum, look up and return its internal
+    *        numerical enum equivalent
     */
    int stringToEnum(ObjectStore::TableField const & fieldDefn, QVariant const & valueFromDb) {
       // It's a coding error if we called this function for a non-enum field
-      Q_ASSERT(fieldDefn.fieldType == ObjectStore::Enum);
+      Q_ASSERT(fieldDefn.fieldType == ObjectStore::FieldType::Enum);
       Q_ASSERT(fieldDefn.enumMapping != nullptr);
 
       if (valueFromDb.isNull()) {
@@ -245,12 +245,12 @@ namespace {
    }
 
    /**
-    * Given a (QVariant-wrapped) int value of a native enum, look up and return the corresponding string we use to
-    * store it in the DB
+    * \brief Given a (QVariant-wrapped) int value of a native enum, look up and return the corresponding string we use
+    *        to store it in the DB
     */
    QString enumToString(ObjectStore::TableField const & fieldDefn, QVariant const & propertyValue) {
       // It's a coding error if we called this function for a non-enum field
-      Q_ASSERT(fieldDefn.fieldType == ObjectStore::Enum);
+      Q_ASSERT(fieldDefn.fieldType == ObjectStore::FieldType::Enum);
       Q_ASSERT(fieldDefn.enumMapping != nullptr);
 
       auto match = fieldDefn.enumMapping->enumToString(propertyValue.toInt());
@@ -344,11 +344,13 @@ namespace {
          queryStringAsStream << ", " << orderByBindName;
       }
       queryStringAsStream << ");";
+      qDebug() << Q_FUNC_INFO << "Using query string" << queryString;
 
       //
       // Note that, when we are using bind values, we do NOT want to call the
-      // BtSqlQuery::BtSqlQuery(const QString &, QSqlDatabase db) version of the BtSqlQuery constructor because that would
-      // result in the supplied query being executed immediately (ie before we've had a chance to bind parameters).
+      // BtSqlQuery::BtSqlQuery(const QString &, QSqlDatabase db) version of the BtSqlQuery constructor because that
+      // would result in the supplied query being executed immediately (ie before we've had a chance to bind
+      // parameters).
       //
       BtSqlQuery sqlQuery{connection};
       sqlQuery.prepare(queryString);
@@ -390,8 +392,8 @@ namespace {
          propertyValues.append(theValue);
       } else {
          //
-         // The propertyValuesWrapper QVariant should hold QVector<int>.  If it doesn't it's a coding error (because we have a
-         // property getter that's returning something else).
+         // The propertyValuesWrapper QVariant should hold QVector<int>.  If it doesn't it's a coding error (because we
+         // have a property getter that's returning something else).
          //
          // Note that QVariant::toList() is NOT going to be useful to us here because that ONLY works if the contained
          // type is QList<QVariant> (aka QVariantList) or QStringList.  If your QVariant contains some other list-like
@@ -409,9 +411,9 @@ namespace {
       // Now loop through and bind/run the insert query once for each item in the list
       int itemNumber = 1;
       qDebug() <<
-         Q_FUNC_INFO << propertyValues.size() << "value(s) (in" << propertyValuesWrapper.typeName() << ") for property" <<
-         GetJunctionTableDefinitionPropertyName(junctionTable) << "of" << object.metaObject()->className() <<
-         "#" << primaryKey.toInt();
+         Q_FUNC_INFO << propertyValues.size() << "value(s) (in" << propertyValuesWrapper.typeName() <<
+         ") for property" << GetJunctionTableDefinitionPropertyName(junctionTable) << "of" <<
+         object.metaObject()->className() << "#" << primaryKey.toInt();
       for (int curValue : propertyValues) {
          sqlQuery.bindValue(thisPrimaryKeyBindName, primaryKey);
          sqlQuery.bindValue(otherPrimaryKeyBindName, curValue);
@@ -419,9 +421,9 @@ namespace {
             sqlQuery.bindValue(orderByBindName, itemNumber);
          }
          qDebug() <<
-            Q_FUNC_INFO << itemNumber << ": " <<
-            GetJunctionTableDefinitionThisPrimaryKeyColumn(junctionTable) << " #" << primaryKey.toInt() << " <-> " <<
-            GetJunctionTableDefinitionOtherPrimaryKeyColumn(junctionTable) << " #" << curValue;
+            Q_FUNC_INFO <<
+            GetJunctionTableDefinitionThisPrimaryKeyColumn(junctionTable) << " #" << primaryKey.toInt() << ":" <<
+            GetJunctionTableDefinitionOtherPrimaryKeyColumn(junctionTable) << "N°" << itemNumber << " is #" << curValue;
 
          if (!sqlQuery.exec()) {
             qCritical() <<
@@ -451,7 +453,8 @@ namespace {
          Q_FUNC_INFO << "Deleting property " << GetJunctionTableDefinitionPropertyName(junctionTable) <<
          " in junction table " << junctionTable.tableName;
 
-      QString const thisPrimaryKeyBindName = QString{":"} + *GetJunctionTableDefinitionThisPrimaryKeyColumn(junctionTable);
+      QString const thisPrimaryKeyBindName =
+         QString{":"} + *GetJunctionTableDefinitionThisPrimaryKeyColumn(junctionTable);
 
       // Construct the DELETE query
       QString queryString{"DELETE FROM "};
@@ -493,7 +496,6 @@ public:
                                                            database{nullptr} {
       return;
    }
-
 
    /**
     * Destructor
@@ -566,7 +568,8 @@ public:
       QVariant const        primaryKey       {this->getPrimaryKey(object)};
 
       //
-      // First check whether this is a simple property.  (If not we look for it in the ones we store in junction tables.)
+      // First check whether this is a simple property.  (If not we look for it in the ones we store in junction
+      // tables.)
       //
       auto matchingFieldDefn = std::find_if(
          this->primaryTable.tableFields.begin(),
@@ -603,7 +606,6 @@ public:
          BtSqlQuery sqlQuery{connection};
          sqlQuery.prepare(queryString);
          QVariant propertyBindValue{object.property(*propertyName)};
-         // Enums need to be converted to strings first
          auto fieldDefn = std::find_if(
             this->primaryTable.tableFields.begin(),
             this->primaryTable.tableFields.end(),
@@ -611,8 +613,24 @@ public:
          );
          // It's a coding error if we're trying to update a property that's not in the field definitions
          Q_ASSERT(fieldDefn != this->primaryTable.tableFields.end());
-         if (fieldDefn->fieldType == ObjectStore::Enum) {
+         if (fieldDefn->fieldType == ObjectStore::FieldType::Enum) {
+            // Enums need to be converted to strings first
             propertyBindValue = QVariant{enumToString(*fieldDefn, propertyBindValue)};
+         } else if (fieldDefn->foreignKeyTo) {
+            //
+            // If the columns if a foreign key and the caller is setting it to a non-positive value then we actually
+            // need to store NULL in the DB.  (In the code we store foreign key IDs as ints, and use -1 to mean null.
+            // In the DB we need to store NULL explicitly because, if we try to store -1, we'll get a foreign key
+            // constraint violation as the DB is unable to find a row in the related table with primary key -1.)
+            //
+            // Firstly, we assert it's a coding error if we've created a foreign key column that's not an int.  For the
+            // moment at least, we don't support other types of primary/foreign key.
+            //
+            Q_ASSERT(ObjectStore::FieldType::Int == fieldDefn->fieldType);
+            if (propertyBindValue.toInt() <= 0) {
+               qDebug() << Q_FUNC_INFO << "Treating" << propertyBindValue << "foreign key value as NULL";
+               propertyBindValue = QVariant(QVariant::Int);
+            }
          }
          sqlQuery.bindValue(QString{":%1"}.arg(*columnToUpdateInDb), propertyBindValue);
          sqlQuery.bindValue(QString{":%1"}.arg(*primaryKeyColumn), primaryKey);
@@ -628,7 +646,8 @@ public:
          }
       } else {
          //
-         // The property we've been given isn't a simple property, so look for it in the ones we store in junction tables
+         // The property we've been given isn't a simple property, so look for it in the ones we store in junction
+         // tables
          //
          auto matchingJunctionTableDefinitionDefn = std::find_if(
             this->junctionTables.begin(),
@@ -647,8 +666,8 @@ public:
          }
 
          //
-         // As elsewhere, the simplest way to update a junction table is to blat any rows relating to the current object and then
-         // write out data based on the current property values.
+         // As elsewhere, the simplest way to update a junction table is to blat any rows relating to the current object
+         // and then write out data based on the current property values.
          //
          qDebug() <<
             Q_FUNC_INFO << "Updating" << object.metaObject()->className() << "property" << propertyName <<
@@ -714,7 +733,7 @@ public:
          auto const & fieldDefn = this->primaryTable.tableFields[ii];
 
          QVariant bindValue{object.property(*fieldDefn.propertyName)};
-         if (fieldDefn.fieldType == ObjectStore::Enum) {
+         if (fieldDefn.fieldType == ObjectStore::FieldType::Enum) {
             // Enums need to be converted to strings first
             bindValue = QVariant{enumToString(fieldDefn, bindValue)};
          } else if (fieldDefn.foreignKeyTo && bindValue.toInt() <= 0) {
@@ -811,14 +830,17 @@ public:
    Database * database;
 };
 
-
 ObjectStore::ObjectStore(TableDefinition const &           primaryTable,
                          JunctionTableDefinitions const & junctionTables) :
    pimpl{ std::make_unique<impl>(primaryTable, junctionTables) } {
    qDebug() << Q_FUNC_INFO << "Construct of object store for primary table" << this->pimpl->primaryTable.tableName;
+   // We have seen a circumstance where primaryTable.tableName is null, which shouldn't be possible.  This is some
+   // diagnostic to try to find out why.
+   if (this->pimpl->primaryTable.tableName.isNull()) {
+      qCritical().noquote() << Q_FUNC_INFO << "Primary table without name.  Call stack is:" << Logging::getStackTrace();
+   }
    return;
 }
-
 
 // See https://herbsutter.com/gotw/_100/ for why we need to explicitly define the destructor here (and not in the
 // header file)
@@ -828,6 +850,16 @@ ObjectStore::~ObjectStore() {
    //qDebug() <<
    //   Q_FUNC_INFO << "Destruct of object store for primary table" << this->pimpl->primaryTable.tableName <<
    //   "(containing" << this->pimpl->allObjects.size() << "objects)";
+   return;
+}
+
+void ObjectStore::logDiagnostics() const {
+   for (int key : this->pimpl->allObjects.keys()) {
+      std::shared_ptr<QObject> object = this->pimpl->allObjects.value(key);
+      qDebug() <<
+         Q_FUNC_INFO << "Object @" << static_cast<void *>(object.get()) << "stored as #" << key << "has key" <<
+         this->pimpl->getPrimaryKey(*object) << "and shared pointer use count" << object.use_count();
+   }
    return;
 }
 
@@ -974,7 +1006,7 @@ void ObjectStore::loadAll(Database * database) {
          }
 
          // Enums need to be converted from their string representation in the DB to a numeric value
-         if (fieldDefn.fieldType == ObjectStore::Enum) {
+         if (fieldDefn.fieldType == ObjectStore::FieldType::Enum) {
             fieldValue = QVariant(stringToEnum(fieldDefn, fieldValue));
             //qDebug() <<
             //   Q_FUNC_INFO << "Value for property" << fieldDefn.propertyName << "after enum conversion: " <<
@@ -1053,43 +1085,54 @@ void ObjectStore::loadAll(Database * database) {
       qDebug() << Q_FUNC_INFO << "Reading junction table rows from database query " << queryString;
 
       //
-      // The simplest way to process the data is first to build the raw ID-to-ID map in memory...
+      // The simplest way to process the data is first to build the ID-to-ordered-list-of-IDs map in memory, then loop
+      // through this to pass the data to the relevant objects.
       //
-      QMultiHash<int, QVariant> thisToOtherKeys;
+      int previousPrimaryKey = -1;
+      QMap< int, QVector<int> > thisToOtherKeys;
       while (sqlQuery.next()) {
-         thisToOtherKeys.insert(sqlQuery.value(*GetJunctionTableDefinitionThisPrimaryKeyColumn(junctionTable)).toInt(),
-                                sqlQuery.value(*GetJunctionTableDefinitionOtherPrimaryKeyColumn(junctionTable)));
+         int thisPrimaryKey = sqlQuery.value(*GetJunctionTableDefinitionThisPrimaryKeyColumn(junctionTable)).toInt();
+         int otherPrimaryKey = sqlQuery.value(*GetJunctionTableDefinitionOtherPrimaryKeyColumn(junctionTable)).toInt();
+         qDebug() << Q_FUNC_INFO << "Interim store of" << thisPrimaryKey << "<->" << otherPrimaryKey;
+
+         if (thisPrimaryKey != previousPrimaryKey) {
+            thisToOtherKeys.insert(thisPrimaryKey, QVector<int>{});
+            previousPrimaryKey = thisPrimaryKey;
+         }
+         Q_ASSERT(thisToOtherKeys.contains(thisPrimaryKey));
+         thisToOtherKeys[thisPrimaryKey].append(otherPrimaryKey);
       }
 
-      //
-      // ...then loop through the map to pass the data to the relevant objects
-      //
-      for (int const currentKey : thisToOtherKeys.uniqueKeys()) {
+      for (auto currentMapping = thisToOtherKeys.cbegin();
+           currentMapping != thisToOtherKeys.cend();
+           ++currentMapping) {
          //
          // It's probably a coding error somewhere if there's an associative entry for an object that doesn't exist,
          // but we can recover by ignoring the associative entry
          //
-         if (!this->contains(currentKey)) {
+         if (!this->contains(currentMapping.key())) {
             qCritical() <<
                Q_FUNC_INFO << "Ignoring record in table " << junctionTable.tableName <<
-               " for non-existent object with primary key " << currentKey;
+               " for non-existent object with primary key " << currentMapping.key();
             continue;
          }
 
-         auto currentObject = this->getById(currentKey);
+         auto currentObject = this->getById(currentMapping.key());
+
+         // We assert that we could not have created a mapping without at least one entry
+         Q_ASSERT(currentMapping.value().size() > 0);
 
          //
          // Normally we'd pass a list of all the "other" keys for each "this" object, but if we've been told to assume
          // there is at most one "other" per "this", then we'll pass just the first one we get back for each "this".
          //
-         QList<QVariant> otherKeys = thisToOtherKeys.values(currentKey);
          bool success = false;
          if (junctionTable.assumedNumEntries == ObjectStore::MAX_ONE_ENTRY) {
             qDebug() <<
-               Q_FUNC_INFO << currentObject->metaObject()->className() << " #" << currentKey << ", " <<
-               GetJunctionTableDefinitionPropertyName(junctionTable) << "=" << otherKeys.first();
+               Q_FUNC_INFO << currentObject->metaObject()->className() << " #" << currentMapping.key() << ", " <<
+               GetJunctionTableDefinitionPropertyName(junctionTable) << "=" << currentMapping.value().first();
             success = currentObject->setProperty(*GetJunctionTableDefinitionPropertyName(junctionTable),
-                                                 otherKeys.first());
+                                                 currentMapping.value().first());
          } else {
             //
             // The setProperty function always takes a QVariant, so we need to create one from the QList<QVariant> we
@@ -1098,18 +1141,18 @@ void ObjectStore::loadAll(Database * database) {
             //
             // In particular, we can't just shove a QList<QVariant> (ie otherKeys) inside a QVariant, because passing
             // this to setProperty() (or equivalent calls via the metaObject) will cause Qt to attempt (and fail) to
-            // access a setter that takes QList<QVariant>.  We need to create QVector<int> (ie what the setter expects)
-            // and then wrap that in a QVariant.
+            // access a setter that takes QList<QVariant>.  We need a QVector<int> (ie what the setter expects) wrapped
+            // in a QVariant.
             //
             // To add to the challenge, despite QVariant having a huge number of constructors, none of them will accept
             // QVector<int>, so, instead, you have to use the static function QVariant::fromValue to create a QVariant
             // wrapper around QVector<int>.
             //
-            QVector<int> convertedOtherKeys;
-            for (auto ii : otherKeys) {
-               convertedOtherKeys.append(ii.toInt());
-            }
-            QVariant wrappedConvertedOtherKeys = QVariant::fromValue(convertedOtherKeys);
+            QVariant wrappedConvertedOtherKeys = QVariant::fromValue(currentMapping.value());
+            qDebug() <<
+               Q_FUNC_INFO << currentObject->metaObject()->className() << " #" << currentMapping.key() << ", " <<
+               GetJunctionTableDefinitionPropertyName(junctionTable) << "=" << currentMapping.value() << "(" <<
+               wrappedConvertedOtherKeys << ")";
             success = currentObject->setProperty(*GetJunctionTableDefinitionPropertyName(junctionTable),
                                                  wrappedConvertedOtherKeys);
          }
@@ -1123,7 +1166,8 @@ void ObjectStore::loadAll(Database * database) {
             return;          // Continue but abort the transaction on a non-debug build
          }
 
-         // This is useful for debugging but I usually leave it commented out as it generates a lot of logging at start-up
+         // This is useful for debugging but I usually leave it commented out as it generates a lot of logging at
+         // start-up
 //         qDebug() <<
 //            Q_FUNC_INFO << "Set" <<
 //            (junctionTable.assumedNumEntries == ObjectStore::MAX_ONE_ENTRY ? 1 : otherKeys.size()) <<
@@ -1163,7 +1207,6 @@ QList<std::shared_ptr<QObject> > ObjectStore::getByIds(QVector<int> const & list
    }
    return listToReturn;
 }
-
 
 int ObjectStore::insert(std::shared_ptr<QObject> object) {
    // Start transaction
@@ -1253,7 +1296,7 @@ void ObjectStore::update(std::shared_ptr<QObject> object) {
       QVariant bindValue{object->property(*fieldDefn.propertyName)};
 
       // Enums need to be converted to strings first
-      if (fieldDefn.fieldType == ObjectStore::Enum) {
+      if (fieldDefn.fieldType == ObjectStore::FieldType::Enum) {
          bindValue = QVariant{enumToString(fieldDefn, bindValue)};
       }
 
@@ -1296,6 +1339,16 @@ void ObjectStore::update(std::shared_ptr<QObject> object) {
    return;
 }
 
+void ObjectStore::update(QObject & object) {
+   // It's a coding error to call this function for something that's not already stored in the DB
+   int const primaryKey = this->pimpl->getPrimaryKey(object).toInt();
+   Q_ASSERT(primaryKey > 0);
+
+   // Since the object is already stored, we want a copy of the shared_ptr that we already have for it
+   auto sharedPointer = this->getById(primaryKey);
+   this->update(sharedPointer);
+   return;
+}
 
 std::shared_ptr<QObject> ObjectStore::insertOrUpdate(std::shared_ptr<QObject> object) {
    QVariant const primaryKey = this->pimpl->getPrimaryKey(*object);
@@ -1308,8 +1361,17 @@ std::shared_ptr<QObject> ObjectStore::insertOrUpdate(std::shared_ptr<QObject> ob
 }
 
 int ObjectStore::insertOrUpdate(QObject & object) {
-   std::shared_ptr<QObject> sharedPointer{&object};
-   this->insertOrUpdate(sharedPointer);
+   QVariant const primaryKey = this->pimpl->getPrimaryKey(object);
+   if (primaryKey.toInt() > 0) {
+      // If the object is already stored, then we want a copy of the shared_ptr that we already have for it
+      auto sharedPointer = this->getById(primaryKey.toInt());
+      this->update(sharedPointer);
+   } else {
+      // If the object is NOT already stored, then we are assuming (because calling this member function rather than
+      // the one with the shared_ptr parameter) that no-one has yet made a shared_ptr for it and we are safe to do so.
+      std::shared_ptr<QObject> sharedPointer{&object};
+      this->insert(sharedPointer);
+   }
    return this->pimpl->getPrimaryKey(object).toInt();
 }
 
@@ -1333,7 +1395,6 @@ void ObjectStore::updateProperty(QObject const & object, BtStringConst const & p
    return;
 }
 
-
 std::shared_ptr<QObject>  ObjectStore::defaultSoftDelete(int id) {
    //
    // We assume on soft-delete that there is nothing to do on related objects - eg if a Mash is soft deleted (ie marked
@@ -1351,7 +1412,6 @@ std::shared_ptr<QObject>  ObjectStore::defaultSoftDelete(int id) {
    return object;
 }
 
-//
 std::shared_ptr<QObject>  ObjectStore::defaultHardDelete(int id) {
    //
    // We assume on hard-delete that the subclass ObjectStore (specifically ObjectStoreTyped) will override this member
@@ -1422,7 +1482,6 @@ std::shared_ptr<QObject>  ObjectStore::defaultHardDelete(int id) {
    return object;
 }
 
-
 std::optional< std::shared_ptr<QObject> > ObjectStore::findFirstMatching(
    std::function<bool(std::shared_ptr<QObject>)> const & matchFunction
 ) const {
@@ -1454,7 +1513,9 @@ QList<std::shared_ptr<QObject> > ObjectStore::findAllMatching(
    // rest of the code expects it and (b) from Qt 6, QList will become the same as QVector (see
    // https://www.qt.io/blog/qlist-changes-in-qt-6)
    QList<std::shared_ptr<QObject> > results;
-   std::copy_if(this->pimpl->allObjects.cbegin(), this->pimpl->allObjects.cend(), std::back_inserter(results), matchFunction);
+   std::copy_if(this->pimpl->allObjects.cbegin(),
+                this->pimpl->allObjects.cend(),
+                std::back_inserter(results), matchFunction);
    return results;
 }
 

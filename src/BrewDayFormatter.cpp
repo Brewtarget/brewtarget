@@ -235,7 +235,7 @@ QString BrewDayFormatter::buildInstructionHtml() {
              .arg(tr("Step"));
 
    QList<Instruction *> instructions = recObs->instructions();
-   QList<MashStep *> mashSteps = recObs->mash()->mashSteps();
+   auto mashSteps = recObs->mash()->mashSteps();
    int size = instructions.size();
    for (int i = 0; i < size; ++i) {
       QString stepTime, tmp;
@@ -300,7 +300,7 @@ QList<QStringList> BrewDayFormatter::buildInstructionList() {
    row.clear();
 
    QList<Instruction *> instructions = recObs->instructions();
-   QList<MashStep *> mashSteps = recObs->mash()->mashSteps();
+   auto mashSteps = recObs->mash()->mashSteps();
    size = instructions.size();
    for (i = 0; i < size; ++i) {
       QString stepTime, tmp;

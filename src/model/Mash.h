@@ -72,7 +72,7 @@ class Mash : public NamedEntity {
 public:
    Mash(QString name = "");
    Mash(NamedParameterBundle const & namedParameterBundle);
-   Mash(Mash const& other);
+   Mash(Mash const & other);
 
    virtual ~Mash();
 
@@ -97,7 +97,7 @@ public:
    //! \brief The total mash time in minutes. Calculated.
    Q_PROPERTY( double totalTime READ totalTime /*NOTIFY changed*/ /*changedTotalTime*/ STORED false )
    //! \brief The individual mash steps.
-   Q_PROPERTY( QList<MashStep*> mashSteps  READ mashSteps /*WRITE*/ /*NOTIFY changed*/ /*changedTotalTime*/ STORED false )
+   Q_PROPERTY( QList< std::shared_ptr<MashStep> > mashSteps  READ mashSteps /*WRITE*/ /*NOTIFY changed*/ /*changedTotalTime*/ STORED false )
 
    /**
     * \brief Connect MashStep changed signals to their parent Mashes.
@@ -141,7 +141,7 @@ public:
    bool hasSparge() const;
 
    // Relational getters
-   QList<MashStep*> mashSteps() const;
+   QList< std::shared_ptr<MashStep> > mashSteps() const;
 
    /*!
     * \brief Swap MashSteps \c ms1 and \c ms2

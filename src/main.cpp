@@ -1,6 +1,6 @@
 /*
  * main.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2022
  * - A.J. Drobnich <aj.drobnich@gmail.com>
  * - Matt Young <mfsy@yahoo.com>
  * - Maxime Lavigne <duguigne@gmail.com>
@@ -30,17 +30,46 @@
 #include <QMessageBox>
 #include <QSharedMemory>
 
-#include "xml/BeerXml.h"
-#include "brewtarget.h"
+#include "Application.h"
 #include "config.h"
 #include "database/Database.h"
 #include "Logging.h"
 #include "PersistentSettings.h"
+#include "xml/BeerXml.h"
 
-void importFromXml(const QString & filename);
-void createBlankDb(const QString & filename);
+namespace {
+   /*!
+    * \brief Imports the content of an xml file to the database.
+    *
+    * Use at your own risk.
+    */
+   void importFromXml(const QString & filename) {
+
+      QString errorMessage;
+      QTextStream errorMessageAsStream{&errorMessage};
+      if (!BeerXML::getInstance().importFromXML(filename, errorMessageAsStream)) {
+         qCritical() << "Unable to import" << filename << "Error: " << errorMessage;
+         exit(1);
+      }
+      Database::instance().unload();
+      PersistentSettings::insert(PersistentSettings::Names::converted, QDate().currentDate().toString());
+      exit(0);
+   }
+
+   //! \brief Creates a blank database using the given filename.
+   void createBlankDb(const QString & filename) {
+      Database::instance().createBlank(filename);
+      exit(0);
+   }
+}
 
 int main(int argc, char **argv) {
+   // Uncomment this line to debug problems loading Qt plug-ins.  (If you're launching from the command line, you can
+   // also just set the QT_DEBUG_PLUGINS environment variable from the shell, but we have had a bug that only appeared
+   // when launching from Windows GUI.)  The output goes to the same place as Qt logs, so will be interspersed with our
+   // own logging.
+   //qputenv("QT_DEBUG_PLUGINS", QByteArray("1"));
+
    QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling, true);
 
    //
@@ -59,14 +88,10 @@ int main(int argc, char **argv) {
    //
    QApplication app(argc, argv);
    app.setOrganizationDomain("brewtarget.com");
-   app.setApplicationName(
-#ifdef QT_DEBUG
-      "brewtarget-debug"
-#else
-      "brewtarget"
-#endif
-   );
-   app.setApplicationVersion(VERSIONSTRING);
+   // We used to vary the application name (and therefore location of config files etc) depending on whether we're
+   // building with debug or release version of Qt, but on the whole I don't think this is helpful
+   app.setApplicationName(CONFIG_APPLICATION_NAME_LC);
+   app.setApplicationVersion(CONFIG_VERSION_STRING);
 
    // Process command-line options relatively early as some may override other settings
    QCommandLineParser parser;
@@ -82,21 +107,33 @@ int main(int argc, char **argv) {
     * This is mostly useful for developers who want to have an easy way of running an instance of the app against a
     * test database without messing anything up with their real database.
     */
-   QCommandLineOption const userDirectoryOption("user-dir", "Override the user data directory used by the application with <directory>", "directory", QString());
+   QCommandLineOption const userDirectoryOption{
+      "user-dir",
+      "Override the user data directory used by the application with <directory>",
+      "directory",
+      QString()
+   };
    parser.addOption(userDirectoryOption);
    parser.addHelpOption();
    parser.addVersionOption();
    parser.process(app);
 
    //
-   // Having initialised various QApplication settings and read command line options, we can now allow Qt to work out where to get config from
+   // Having initialised various QApplication settings and read command line options, we can now allow Qt to work out
+   // where to get config from.
+   //
+   // Note that we need to initialise PersistentSettings before we initialise Logging as the latter needs settings from
+   // the former.  (We _can_ still log before Logging is initialised, it's just that such log messages will only go to
+   // Qt's default logging location (eg console on Linux) and won't end up in our log file.)
    //
    PersistentSettings::initialise(parser.value(userDirectoryOption));
+   qDebug() << Q_FUNC_INFO << "Persistent Settings initialised";
 
    //
    // And once we have config, we can initialise logging
    //
    Logging::initializeLogging();
+   qDebug() << Q_FUNC_INFO << "Logging initialised";
 
    // Initialize Xerces XML tools
    // NB: This is also where where we would initialise xalanc::XalanTransformer if we were using it
@@ -122,7 +159,7 @@ int main(int argc, char **argv) {
    // get cleaned up.  We do attempt to detect and rectify such cases, with the double-check below, but it still seems
    // wise to allow the user to override the warning if for any reason it is triggered incorrectly.
    //
-   QSharedMemory sharedMemory("Brewtarget");
+   QSharedMemory sharedMemory(CONFIG_APPLICATION_NAME_UC);
    if (!sharedMemory.create(1)) {
       //
       // According to
@@ -153,9 +190,21 @@ int main(int argc, char **argv) {
    if (parser.isSet(importFromXmlOption)) importFromXml(parser.value(importFromXmlOption));
    if (parser.isSet(createBlankDBOption)) createBlankDb(parser.value(createBlankDBOption));
 
-   try
-   {
-      auto mainAppReturnValue = Brewtarget::run();
+   try {
+      qInfo() <<
+         "Starting" << CONFIG_APPLICATION_NAME_UC << "v" << CONFIG_VERSION_STRING << " (app name" <<
+         app.applicationName() << ") on " << QSysInfo::prettyProductName();
+      qInfo() <<
+         "Built at" << BUILD_TIMESTAMP << "on" << CMAKE_HOST_SYSTEM << "for" << CMAKE_SYSTEM << "with" <<
+         CMAKE_CXX_COMPILER_ID << "compiler";
+      qInfo() << "Log directory:" << Logging::getDirectory().absolutePath();
+      qInfo() << "Using Qt runtime v" << qVersion() << " (compiled against Qt v" << QT_VERSION_STR << ")";
+      qInfo() << "Configuration directory:" << PersistentSettings::getConfigDir().absolutePath();
+      qInfo() << "Data directory:" << PersistentSettings::getUserDataDir().absolutePath();
+      qInfo() << "Resource directory:" << Application::getResourceDir().absolutePath();
+      qDebug() << Q_FUNC_INFO << "Library Paths:" << qApp->libraryPaths();
+
+      auto mainAppReturnValue = Application::run();
 
       //
       // Clean exit of Xerces XML tools
@@ -170,13 +219,13 @@ int main(int argc, char **argv) {
 
       return mainAppReturnValue;
    }
-   catch (const QString &error)
+   catch (const QString & error)
    {
       QMessageBox::critical(0,
             QApplication::tr("Application terminates"),
             QApplication::tr("The application encountered a fatal error.\nError message:\n%1").arg(error));
    }
-   catch (std::exception &exception)
+   catch (std::exception & exception)
    {
       QMessageBox::critical(0,
             QApplication::tr("Application terminates"),
@@ -189,28 +238,4 @@ int main(int argc, char **argv) {
             QApplication::tr("The application encountered a fatal error."));
    }
    return EXIT_FAILURE;
-}
-
-/*!
- * \brief Imports the content of an xml file to the database.
- *
- * Use at your own risk.
- */
-void importFromXml(const QString & filename) {
-
-   QString errorMessage;
-   QTextStream errorMessageAsStream{&errorMessage};
-   if (!BeerXML::getInstance().importFromXML(filename, errorMessageAsStream)) {
-      qCritical() << "Unable to import" << filename << "Error: " << errorMessage;
-      exit(1);
-   }
-   Database::instance().unload();
-   PersistentSettings::insert(PersistentSettings::Names::converted, QDate().currentDate().toString());
-   exit(0);
-}
-
-//! \brief Creates a blank database using the given filename.
-void createBlankDb(const QString & filename) {
-    Database::instance().createBlank(filename);
-    exit(0);
 }

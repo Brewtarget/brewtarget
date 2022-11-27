@@ -1,6 +1,6 @@
 /**
  * PersistentSettings.cpp is part of Brewtarget, and is copyright the following
- * authors 2009-2021:
+ * authors 2009-2022:
  *   • A.J. Drobnich <aj.drobnich@gmail.com>
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Chris Pavetto <chrispavetto@gmail.com>
@@ -36,6 +36,9 @@
  */
 #include "PersistentSettings.h"
 
+#include <memory>
+
+#include <QDebug>
 #include <QSettings>
 #include <QStandardPaths>
 
@@ -89,11 +92,11 @@ namespace {
    //
    // This is set by PersistentSettings::initialise()
    //
-   QSettings * qSettings = nullptr;
+   std::unique_ptr<QSettings> qSettings{nullptr};
 
    // These also get set by PersistentSettings::initialise()
-   QDir configDir;
-   QDir userDataDir;
+   QDir configDir{""};
+   QDir userDataDir{""};
 
 }
 
@@ -112,11 +115,24 @@ void PersistentSettings::initialise(QString customUserDataDir) {
    // Pretty sure this needs to be done after calls to QApplication::setOrganizationName() etc in main(), which is why
    // we don't just use static initialisation.
    //
+   // Yes, we are knowingly logging before Logging::initializeLogging() has been called (as the latter needs
+   // PersistentSettings::initialise() to be called first.  This is OK as it just means the log message will go to the
+   // default Qt-0determined location (eg stderr on Linux).
+   //
+   // The value in this logging is that we have seen instances where the software is unable to determine a value for
+   // configDir, and we would like to diagnose why (eg whether it is some permissions problem).
+   //
+   qInfo() <<
+      Q_FUNC_INFO << "Qt-proposed directories for user-specific configuration files are:" <<
+      QStandardPaths::standardLocations(QStandardPaths::AppConfigLocation);
    configDir.setPath(QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation));
+   qInfo() <<
+      Q_FUNC_INFO << "Preferred writeable directory for user-specific configuration files is:" <<
+      configDir.absolutePath();
 
    // Now we can set the full path of the persistent settings file
-   qSettings = new QSettings{configDir.absoluteFilePath("brewtarget.conf"),
-                             QSettings::IniFormat};
+   qSettings = std::make_unique<QSettings>(configDir.absoluteFilePath("brewkenPersistentSettings.conf"),
+                                           QSettings::IniFormat);
 
    // We've done enough now for calls to contains()/insert()/value() etc to work.  Mark that we're initialised so we
    // can (potentially) use one of those calls to initialise the user data directory.
@@ -128,8 +144,13 @@ void PersistentSettings::initialise(QString customUserDataDir) {
       userDataDir.setPath(customUserDataDir);
    } else {
       userDataDir.setPath(
+         // Note that Brewtarget differs from Brewken in its default location for the database.  Specifically,
+         // Brewtarget puts it in the same directory as the logging and conf files (~/.config/brewtarget/ on Linux)
+         // Brewken puts it QStandardPaths::AppDataLocation (which, for Brewtarget, would be ~/.local/share/brewtarget/
+         // on Linux).  This is a slightly more logical location, but we don't want to change directories for existing
+         // Brewtarget users.
          PersistentSettings::value(PersistentSettings::Names::UserDataDirectory,
-                                   QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)).toString()
+                                   QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation)).toString()
       );
    }
 

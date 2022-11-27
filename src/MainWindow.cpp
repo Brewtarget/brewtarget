@@ -39,10 +39,6 @@
 #include <QBrush>
 #include <QDesktopServices>
 #include <QDesktopWidget>
-#include <QDomDocument>
-#include <QDomElement>
-#include <QDomNode>
-#include <QDomNodeList>
 #include <QFile>
 #include <QFileDialog>
 #include <QIcon>
@@ -53,7 +49,6 @@
 #include <QList>
 #include <QMainWindow>
 #include <QMessageBox>
-#include <QNetworkReply>
 #include <QPen>
 #include <QPixmap>
 #include <QSize>
@@ -70,8 +65,8 @@
 #include "AlcoholTool.h"
 #include "Algorithms.h"
 #include "AncestorDialog.h"
+#include "Application.h"
 #include "BrewNoteWidget.h"
-#include "brewtarget.h"
 #include "BtDatePopup.h"
 #include "BtDigitWidget.h"
 #include "BtFolder.h"
@@ -97,11 +92,11 @@
 #include "MashListModel.h"
 #include "MashStepEditor.h"
 #include "MashWizard.h"
+#include "measurement/Measurement.h"
 #include "measurement/Unit.h"
 #include "MiscDialog.h"
 #include "MiscEditor.h"
 #include "MiscSortFilterProxyModel.h"
-#include "measurement/Measurement.h"
 #include "model/BrewNote.h"
 #include "model/Equipment.h"
 #include "model/Fermentable.h"
@@ -115,6 +110,7 @@
 #include "PersistentSettings.h"
 #include "PitchDialog.h"
 #include "PrimingDialog.h"
+#include "PrintAndPreviewDialog.h"
 #include "RangedSlider.h"
 #include "RecipeFormatter.h"
 #include "RefractoDialog.h"
@@ -133,6 +129,7 @@
 #include "UndoableAddOrRemove.h"
 #include "UndoableAddOrRemoveList.h"
 #include "utils/BtStringConst.h"
+#include "utils/OptionalToStream.h"
 #include "WaterDialog.h"
 #include "WaterEditor.h"
 #include "WaterListModel.h"
@@ -333,7 +330,7 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), pimpl{std::make_u
       exit(1);
 
    // Set the window title.
-   setWindowTitle( QString("Brewtarget - %1").arg(VERSIONSTRING) );
+   setWindowTitle( QString("Brewtarget - %1").arg(CONFIG_VERSION_STRING) );
 
    // Null out the recipe
    recipeObs = nullptr;
@@ -907,6 +904,7 @@ void MainWindow::setupTriggers() {
       connect( actionBackup_Database, &QAction::triggered, this, &MainWindow::backup );                                 // > File > Database > Backup
       connect( actionRestore_Database, &QAction::triggered, this, &MainWindow::restoreFromBackup );                     // > File > Database > Restore
    }
+   return;
 }
 
 // pushbuttons with a SIGNAL of clicked() should go in here.
@@ -980,131 +978,157 @@ void MainWindow::setupDrops() {
    return;
 }
 
-void MainWindow::deleteSelected()
-{
+void MainWindow::deleteSelected() {
    QModelIndexList selected;
    BtTreeView* active = qobject_cast<BtTreeView*>(tabWidget_Trees->currentWidget()->focusWidget());
 
    // This happens after startup when nothing is selected
-   if (!active)
+   if (!active) {
+      qDebug() << Q_FUNC_INFO << "Nothing selected, so nothing to delete";
       return;
-
-   QModelIndex start = active->selectionModel()->selectedRows().first();
-   active->deleteSelected(active->selectionModel()->selectedRows());
-
-   if ( ! start.isValid() ) {
-      start = active->first();
    }
 
-   if ( start.isValid() ) {
-      if (active->type(start) == BtTreeItem::RECIPE)
-         setRecipe(treeView_recipe->recipe(start));
-      setTreeSelection(start);
+   QModelIndex start = active->selectionModel()->selectedRows().first();
+   qDebug() << Q_FUNC_INFO << "Delete starting from row" << start.row();
+   active->deleteSelected(active->selectionModel()->selectedRows());
+
+   //
+   // Now that we deleted the selected recipe, we don't want it to appear in the main window any more, so let's select
+   // another one.
+   //
+   // Most of the time, after deleting the nth recipe, the new nth item is also a recipe.  If there isn't an nth item
+   // (eg because the recipe(s) we deleted were at the end of the list) then let's go back to the 1st item.  But then
+   // we have to make sure to skip over folders.
+   //
+   // .:TBD:. This works if you have plenty of recipes outside folders.  If all your recipes are inside folders, then
+   // we should so a proper search through the tree to find the first recipe and then expand the folder that it's in.
+   // Doesn't feel like that logic belongs here.  Would be better to create BtTreeView::firstNonFolder() or similar.
+   //
+   if (!start.isValid() || !active->type(start)) {
+      int oldRow = start.row();
+      start = active->first();
+      qDebug() << Q_FUNC_INFO << "Row" << oldRow << "no longer valid, so returning to first (" << start.row() << ")";
+   }
+
+   while (start.isValid() && active->type(start) == BtTreeItem::Type::FOLDER) {
+      qDebug() << Q_FUNC_INFO << "Skipping over folder at row" << start.row();
+      // Once all platforms are on Qt 5.11 or later, we can write:
+      // start = start.siblingAtRow(start.row() + 1);
+      start = start.sibling(start.row() + 1, start.column());
+   }
+
+   if (start.isValid()) {
+      qDebug() << Q_FUNC_INFO << "Row" << start.row() << "is" << active->type(start);
+      if (active->type(start) == BtTreeItem::Type::RECIPE) {
+         this->setRecipe(treeView_recipe->getItem<Recipe>(start));
+      }
+      this->setTreeSelection(start);
    }
 
    return;
 }
 
-void MainWindow::treeActivated(const QModelIndex &index)
-{
-   Equipment *kit;
-   Fermentable *ferm;
-   Hop* h;
-   Misc *m;
-   Yeast *y;
-   Style *s;
-   Water *w;
-
+void MainWindow::treeActivated(const QModelIndex &index) {
    QObject* calledBy = sender();
-   BtTreeView* active;
-
    // Not sure how this could happen, but better safe the sigsegv'd
-   if ( calledBy == nullptr )
+   if (!calledBy) {
       return;
+   }
 
-   active = qobject_cast<BtTreeView*>(calledBy);
-
+   BtTreeView* active = qobject_cast<BtTreeView*>(calledBy);
    // If the sender cannot be morphed into a BtTreeView object
-   if ( active == nullptr )
+   if (!active) {
+      qWarning() << Q_FUNC_INFO << "Unrecognised sender" << calledBy->metaObject()->className();
       return;
+   }
 
-   switch( active->type(index))
-   {
-      case BtTreeItem::RECIPE:
-         setRecipe(treeView_recipe->recipe(index));
-         break;
-      case BtTreeItem::EQUIPMENT:
-         kit = active->equipment(index);
-         if ( kit )
-         {
-            singleEquipEditor->setEquipment(kit);
-            singleEquipEditor->show();
-         }
-         break;
-      case BtTreeItem::FERMENTABLE:
-         ferm = active->fermentable(index);
-         if ( ferm )
-         {
-            fermEditor->setFermentable(ferm);
-            fermEditor->show();
-         }
-         break;
-      case BtTreeItem::HOP:
-         h = active->hop(index);
-         if (h)
-         {
-            hopEditor->setHop(h);
-            hopEditor->show();
-         }
-         break;
-      case BtTreeItem::MISC:
-         m = active->misc(index);
-         if (m)
-         {
-            miscEditor->setMisc(m);
-            miscEditor->show();
-         }
-         break;
-      case BtTreeItem::STYLE:
-         s = active->style(index);
-         if ( s )
-         {
-            singleStyleEditor->setStyle(s);
-            singleStyleEditor->show();
-         }
-         break;
-      case BtTreeItem::YEAST:
-         y = active->yeast(index);
-         if (y)
-         {
-            yeastEditor->setYeast(y);
-            yeastEditor->show();
-         }
-         break;
-      case BtTreeItem::BREWNOTE:
-         setBrewNoteByIndex(index);
-         break;
-      case BtTreeItem::FOLDER:  // default behavior is fine, but no warning
-         break;
-      case BtTreeItem::WATER:
-         w = active->water(index);
-         if (w)
-         {
-            waterEditor->setWater(w);
-            waterEditor->show();
-         }
-         break;
-      default:
-         qWarning() << QString("MainWindow::treeActivated Unknown type %1.").arg(treeView_recipe->type(index));
+   auto itemType = active->type(index);
+   if (!itemType) {
+      qWarning() << Q_FUNC_INFO << "Unknown type for index" << index;
+   } else {
+      switch (*itemType) {
+         case BtTreeItem::Type::RECIPE:
+            setRecipe(treeView_recipe->getItem<Recipe>(index));
+            break;
+         case BtTreeItem::Type::EQUIPMENT:
+            {
+               Equipment * kit = active->getItem<Equipment>(index);
+               if ( kit ) {
+                  singleEquipEditor->setEquipment(kit);
+                  singleEquipEditor->show();
+               }
+            }
+            break;
+         case BtTreeItem::Type::FERMENTABLE:
+            {
+               Fermentable * ferm = active->getItem<Fermentable>(index);
+               if (ferm) {
+                  fermEditor->setFermentable(ferm);
+                  fermEditor->show();
+               }
+            }
+            break;
+         case BtTreeItem::Type::HOP:
+            {
+               Hop* h = active->getItem<Hop>(index);
+               if (h) {
+                  hopEditor->setHop(h);
+                  hopEditor->show();
+               }
+            }
+            break;
+         case BtTreeItem::Type::MISC:
+            {
+               Misc * m = active->getItem<Misc>(index);
+               if (m) {
+                  miscEditor->setMisc(m);
+                  miscEditor->show();
+               }
+            }
+            break;
+         case BtTreeItem::Type::STYLE:
+            {
+               Style * s = active->getItem<Style>(index);
+               if ( s ) {
+                  singleStyleEditor->setStyle(s);
+                  singleStyleEditor->show();
+               }
+            }
+            break;
+         case BtTreeItem::Type::YEAST:
+            {
+               Yeast * y = active->getItem<Yeast>(index);
+               if (y) {
+                  yeastEditor->setYeast(y);
+                  yeastEditor->show();
+               }
+            }
+            break;
+         case BtTreeItem::Type::BREWNOTE:
+            setBrewNoteByIndex(index);
+            break;
+         case BtTreeItem::Type::FOLDER:  // default behavior is fine, but no warning
+            break;
+         case BtTreeItem::Type::WATER:
+            {
+               Water * w = active->getItem<Water>(index);
+               if (w) {
+                  waterEditor->setWater(ObjectStoreWrapper::getSharedFromRaw(w));
+                  waterEditor->show();
+               }
+            }
+            break;
+      }
    }
    treeView_recipe->setCurrentIndex(index);
+   return;
 }
 
 void MainWindow::setBrewNoteByIndex(const QModelIndex &index)
 {
    BrewNoteWidget* ni;
 
-   BrewNote* bNote = treeView_recipe->brewNote(index);
+   auto bNote = treeView_recipe->getItem<BrewNote>(index);
 
    if ( ! bNote )
       return;
@@ -1195,7 +1219,7 @@ void MainWindow::setAncestor()
       rec = this->recipeObs;
    } else {
       QModelIndexList indexes = treeView_recipe->selectionModel()->selectedRows();
-      rec = treeView_recipe->recipe(indexes[0]);
+      rec = treeView_recipe->getItem<Recipe>(indexes[0]);
    }
 
    ancestorDialog->setAncestor(rec);
@@ -1204,17 +1228,21 @@ void MainWindow::setAncestor()
 
 
 // Can handle null recipes.
-void MainWindow::setRecipe(Recipe* recipe)
-{
-   int tabs = 0;
+void MainWindow::setRecipe(Recipe* recipe) {
    // Don't like void pointers.
-   if( recipe == nullptr )
+   if (!recipe) {
       return;
+   }
+
+   qDebug() << Q_FUNC_INFO << "Recipe #" << recipe->key() << ":" << recipe->name();
+
+   int tabs = 0;
 
    // Make sure this MainWindow is paying attention...
-   if( recipeObs )
-      disconnect( recipeObs, nullptr, this, nullptr );
-   recipeObs = recipe;
+   if (this->recipeObs) {
+      disconnect(this->recipeObs, nullptr, this, nullptr);
+   }
+   this->recipeObs = recipe;
 
    this->recStyle = recipe->style();
    recEquip = recipe->equipment();
@@ -1789,19 +1817,20 @@ void MainWindow::updateRecipeBoilTime() {
 }
 
 void MainWindow::updateRecipeEfficiency() {
+   qDebug() << Q_FUNC_INFO << lineEdit_efficiency->getWidgetText();
    if (!this->recipeObs) {
       return;
    }
 
    this->doOrRedoUpdate(*this->recipeObs,
                         PropertyNames::Recipe::efficiency_pct,
-                        lineEdit_efficiency->toSI().quantity,
+                        lineEdit_efficiency->getValueAs<unsigned int>(),
                         tr("Change Recipe Efficiency"));
    return;
 }
 
-void MainWindow::addFermentableToRecipe(Fermentable* ferm) {
-   Q_ASSERT(nullptr != ferm);
+void MainWindow::addFermentableToRecipe(std::shared_ptr<Fermentable> ferm) {
+   Q_ASSERT(ferm);
    this->doOrRedoUpdate(
       newUndoableAddOrRemove(*this->recipeObs,
                              &Recipe::add<Fermentable>,
@@ -1814,8 +1843,8 @@ void MainWindow::addFermentableToRecipe(Fermentable* ferm) {
    return;
 }
 
-void MainWindow::addHopToRecipe(Hop *hop) {
-   Q_ASSERT(nullptr != hop);
+void MainWindow::addHopToRecipe(std::shared_ptr<Hop> hop) {
+   Q_ASSERT(hop);
    this->doOrRedoUpdate(
       newUndoableAddOrRemove(*this->recipeObs,
                              &Recipe::add<Hop>,
@@ -1827,8 +1856,8 @@ void MainWindow::addHopToRecipe(Hop *hop) {
    // triggered the necessary updates to hopTableModel.
 }
 
-void MainWindow::addMiscToRecipe(Misc* misc) {
-   Q_ASSERT(nullptr != misc);
+void MainWindow::addMiscToRecipe(std::shared_ptr<Misc> misc) {
+   Q_ASSERT(misc);
    this->doOrRedoUpdate(
       newUndoableAddOrRemove(*this->recipeObs,
                              &Recipe::add<Misc>,
@@ -1841,8 +1870,8 @@ void MainWindow::addMiscToRecipe(Misc* misc) {
    return;
 }
 
-void MainWindow::addYeastToRecipe(Yeast* yeast) {
-   Q_ASSERT(nullptr != yeast);
+void MainWindow::addYeastToRecipe(std::shared_ptr<Yeast> yeast) {
+   Q_ASSERT(yeast);
    this->doOrRedoUpdate(
       newUndoableAddOrRemove(*this->recipeObs,
                              &Recipe::add<Yeast>,
@@ -1961,163 +1990,139 @@ void MainWindow::editRedo()
    return;
 }
 
-Fermentable* MainWindow::selectedFermentable()
-{
+Fermentable* MainWindow::selectedFermentable() {
    QModelIndexList selected = fermentableTable->selectionModel()->selectedIndexes();
-   QModelIndex modelIndex, viewIndex;
-   int row, size, i;
 
-   size = selected.size();
-   if( size == 0 )
+   int size = selected.size();
+   if (size == 0) {
       return nullptr;
-
-   // Make sure only one row is selected.
-   viewIndex = selected[0];
-   row = viewIndex.row();
-   for( i = 1; i < size; ++i )
-   {
-      if( selected[i].row() != row )
-         return nullptr;
    }
 
-   modelIndex = fermTableProxy->mapToSource(viewIndex);
-   Fermentable* ferm = fermTableModel->getFermentable(static_cast<unsigned int>(modelIndex.row()));
+   // Make sure only one row is selected.
+   QModelIndex viewIndex = selected[0];
+   int row = viewIndex.row();
+   for (int i = 1; i < size; ++i ) {
+      if (selected[i].row() != row) {
+         return nullptr;
+      }
+   }
 
-   return ferm;
+   QModelIndex modelIndex = fermTableProxy->mapToSource(viewIndex);
+   return fermTableModel->getRow(modelIndex.row()).get();
 }
 
-Hop* MainWindow::selectedHop()
-{
+Hop* MainWindow::selectedHop() {
    QModelIndexList selected = hopTable->selectionModel()->selectedIndexes();
-   QModelIndex modelIndex, viewIndex;
-   int row, size, i;
 
-   size = selected.size();
-   if( size == 0 )
+   int size = selected.size();
+   if (size == 0) {
       return nullptr;
-
-   // Make sure only one row is selected.
-   viewIndex = selected[0];
-   row = viewIndex.row();
-   for( i = 1; i < size; ++i )
-   {
-      if( selected[i].row() != row )
-         return nullptr;
    }
 
-   modelIndex = hopTableProxy->mapToSource(viewIndex);
+   // Make sure only one row is selected.
+   QModelIndex viewIndex = selected[0];
+   int row = viewIndex.row();
+   for (int i = 1; i < size; ++i ) {
+      if (selected[i].row() != row) {
+         return nullptr;
+      }
+   }
 
-   Hop* h = hopTableModel->getHop(modelIndex.row());
-
-   return h;
+   QModelIndex modelIndex = hopTableProxy->mapToSource(viewIndex);
+   return hopTableModel->getRow(modelIndex.row()).get();
 }
 
-Misc* MainWindow::selectedMisc()
-{
+Misc* MainWindow::selectedMisc() {
    QModelIndexList selected = miscTable->selectionModel()->selectedIndexes();
-   QModelIndex modelIndex, viewIndex;
-   int row, size, i;
 
-   size = selected.size();
-   if( size == 0 )
+   int size = selected.size();
+   if (size == 0) {
       return nullptr;
-
-   // Make sure only one row is selected.
-   viewIndex = selected[0];
-   row = viewIndex.row();
-   for( i = 1; i < size; ++i )
-   {
-      if( selected[i].row() != row )
-         return nullptr;
    }
 
-   modelIndex = miscTableProxy->mapToSource(viewIndex);
+   // Make sure only one row is selected.
+   QModelIndex viewIndex = selected[0];
+   int row = viewIndex.row();
+   for (int i = 1; i < size; ++i ) {
+      if (selected[i].row() != row) {
+         return nullptr;
+      }
+   }
 
-   Misc* m = miscTableModel->getMisc(static_cast<unsigned int>(modelIndex.row()));
-
-   return m;
+   QModelIndex modelIndex = miscTableProxy->mapToSource(viewIndex);
+   return miscTableModel->getRow(modelIndex.row()).get();
 }
 
-Yeast* MainWindow::selectedYeast()
-{
+Yeast* MainWindow::selectedYeast() {
    QModelIndexList selected = yeastTable->selectionModel()->selectedIndexes();
-   QModelIndex modelIndex, viewIndex;
-   int row, size, i;
 
-   size = selected.size();
-   if( size == 0 )
+   int size = selected.size();
+   if (size == 0) {
       return nullptr;
-
-   // Make sure only one row is selected.
-   viewIndex = selected[0];
-   row = viewIndex.row();
-   for( i = 1; i < size; ++i )
-   {
-      if( selected[i].row() != row )
-         return nullptr;
    }
 
-   modelIndex = yeastTableProxy->mapToSource(viewIndex);
+   // Make sure only one row is selected.
+   QModelIndex viewIndex = selected[0];
+   int row = viewIndex.row();
+   for (int i = 1; i < size; ++i ) {
+      if (selected[i].row() != row) {
+         return nullptr;
+      }
+   }
 
-   Yeast* y = yeastTableModel->getYeast(static_cast<unsigned int>(modelIndex.row()));
-
-   return y;
-}
-
-void MainWindow::removeHop(Hop & itemToRemove) {
-   this->hopTableModel->remove(&itemToRemove);
-   return;
-}
-void MainWindow::removeFermentable(Fermentable & itemToRemove) {
-   this->fermTableModel->remove(&itemToRemove);
-   return;
-}
-void MainWindow::removeMisc(Misc & itemToRemove) {
-   this->miscTableModel->remove(&itemToRemove);
-   return;
-}
-void MainWindow::removeYeast(Yeast & itemToRemove) {
-   this->yeastTableModel->remove(&itemToRemove);
-   return;
+   QModelIndex modelIndex = yeastTableProxy->mapToSource(viewIndex);
+   return yeastTableModel->getRow(modelIndex.row()).get();
 }
 
-void MainWindow::removeMashStep(MashStep & itemToRemove) {
-   this->mashStepTableModel->remove(&itemToRemove);
+void MainWindow::removeHop(std::shared_ptr<Hop> itemToRemove) {
+   this->hopTableModel->remove(itemToRemove);
+   return;
+}
+void MainWindow::removeFermentable(std::shared_ptr<Fermentable> itemToRemove) {
+   this->fermTableModel->remove(itemToRemove);
+   return;
+}
+void MainWindow::removeMisc(std::shared_ptr<Misc> itemToRemove) {
+   this->miscTableModel->remove(itemToRemove);
+   return;
+}
+void MainWindow::removeYeast(std::shared_ptr<Yeast> itemToRemove) {
+   this->yeastTableModel->remove(itemToRemove);
    return;
 }
 
-void MainWindow::removeSelectedFermentable()
-{
+void MainWindow::removeMashStep(std::shared_ptr<MashStep> itemToRemove) {
+   this->mashStepTableModel->remove(itemToRemove);
+   return;
+}
+
+void MainWindow::removeSelectedFermentable() {
 
    QModelIndexList selected = fermentableTable->selectionModel()->selectedIndexes();
-   QModelIndex viewIndex, modelIndex;
-   QList<Fermentable *> itemsToRemove;
-   int size, i;
-
-   size = selected.size();
+   int size = selected.size();
 
    qDebug() << QString("MainWindow::removeSelectedFermentable() %1 items selected to remove").arg(size);
 
-   if( size == 0 )
+   if (size == 0) {
       return;
-
-   for(int i = 0; i < size; i++)
-   {
-      viewIndex = selected.at(i);
-      modelIndex = fermTableProxy->mapToSource(viewIndex);
-
-      itemsToRemove.append(fermTableModel->getFermentable(static_cast<unsigned int>(modelIndex.row())));
    }
 
-   for(i = 0; i < itemsToRemove.size(); i++)
-   {
+   QList< std::shared_ptr<Fermentable> > itemsToRemove;
+   for(int i = 0; i < size; i++) {
+      QModelIndex viewIndex = selected.at(i);
+      QModelIndex modelIndex = fermTableProxy->mapToSource(viewIndex);
+
+      itemsToRemove.append(fermTableModel->getRow(modelIndex.row()));
+   }
+
+   for (auto item : itemsToRemove) {
       this->doOrRedoUpdate(
          newUndoableAddOrRemove(*this->recipeObs,
                                 &Recipe::remove<Fermentable>,
-                                itemsToRemove.at(i),
+                                item,
                                 &Recipe::add<Fermentable>,
                                 &MainWindow::removeFermentable,
-                                static_cast<void (MainWindow::*)(Fermentable &)>(nullptr),
+                                static_cast<void (MainWindow::*)(std::shared_ptr<Fermentable>)>(nullptr),
                                 tr("Remove fermentable from recipe"))
       );
     }
@@ -2125,8 +2130,7 @@ void MainWindow::removeSelectedFermentable()
     return;
 }
 
-void MainWindow::editSelectedFermentable()
-{
+void MainWindow::editSelectedFermentable() {
    Fermentable* f = selectedFermentable();
    if( f == nullptr )
       return;
@@ -2135,8 +2139,7 @@ void MainWindow::editSelectedFermentable()
    fermEditor->show();
 }
 
-void MainWindow::editSelectedMisc()
-{
+void MainWindow::editSelectedMisc() {
    Misc* m = selectedMisc();
    if( m == nullptr )
       return;
@@ -2165,104 +2168,89 @@ void MainWindow::editSelectedYeast()
    yeastEditor->show();
 }
 
-void MainWindow::removeSelectedHop()
-{
+void MainWindow::removeSelectedHop() {
    QModelIndexList selected = hopTable->selectionModel()->selectedIndexes();
-   QModelIndex modelIndex, viewIndex;
-   QList<Hop *> itemsToRemove;
-   int size, i;
+   QList< std::shared_ptr<Hop> > itemsToRemove;
 
-   size = selected.size();
-
-   if( size == 0 )
+   int size = selected.size();
+   if (size == 0) {
       return;
-
-   for(int i = 0; i < size; i++)
-   {
-      viewIndex = selected.at(i);
-      modelIndex = hopTableProxy->mapToSource(viewIndex);
-
-      itemsToRemove.append(hopTableModel->getHop(modelIndex.row()));
    }
 
-   for(i = 0; i < itemsToRemove.size(); i++)
-   {
+   for (int i = 0; i < size; i++) {
+      QModelIndex viewIndex = selected.at(i);
+      QModelIndex modelIndex = hopTableProxy->mapToSource(viewIndex);
+      itemsToRemove.append(hopTableModel->getRow(modelIndex.row()));
+   }
+
+   for (auto item : itemsToRemove) {
       this->doOrRedoUpdate(
          newUndoableAddOrRemove(*this->recipeObs,
                                  &Recipe::remove<Hop>,
-                                 itemsToRemove.at(i),
+                                 item,
                                  &Recipe::add<Hop>,
                                  &MainWindow::removeHop,
-                                 static_cast<void (MainWindow::*)(Hop &)>(nullptr),
+                                 static_cast<void (MainWindow::*)(std::shared_ptr<Hop>)>(nullptr),
                                  tr("Remove hop from recipe"))
       );
    }
 
 }
 
-void MainWindow::removeSelectedMisc()
-{
+
+void MainWindow::removeSelectedMisc() {
    QModelIndexList selected = miscTable->selectionModel()->selectedIndexes();
-   QModelIndex modelIndex, viewIndex;
-   QList<Misc *> itemsToRemove;
-   int size, i;
+   QList< std::shared_ptr<Misc> > itemsToRemove;
 
-   size = selected.size();
-
-   if( size == 0 )
+   int size = selected.size();
+   if (size == 0) {
       return;
-
-   for(int i = 0; i < size; i++)
-   {
-      viewIndex = selected.at(i);
-      modelIndex = miscTableProxy->mapToSource(viewIndex);
-
-      itemsToRemove.append(miscTableModel->getMisc(static_cast<unsigned int>(modelIndex.row())));
    }
 
-   for(i = 0; i < itemsToRemove.size(); i++)
-   {
+   for (int i = 0; i < size; i++) {
+      QModelIndex viewIndex = selected.at(i);
+      QModelIndex modelIndex = miscTableProxy->mapToSource(viewIndex);
+
+      itemsToRemove.append(miscTableModel->getRow(modelIndex.row()));
+   }
+
+   for (auto item : itemsToRemove) {
       this->doOrRedoUpdate(
          newUndoableAddOrRemove(*this->recipeObs,
                                  &Recipe::remove<Misc>,
-                                 itemsToRemove.at(i),
+                                 item,
                                  &Recipe::add<Misc>,
                                  &MainWindow::removeMisc,
-                                 static_cast<void (MainWindow::*)(Misc &)>(nullptr),
+                                 static_cast<void (MainWindow::*)(std::shared_ptr<Misc>)>(nullptr),
                                  tr("Remove misc from recipe"))
       );
    }
 }
 
-void MainWindow::removeSelectedYeast()
-{
+void MainWindow::removeSelectedYeast() {
    QModelIndexList selected = yeastTable->selectionModel()->selectedIndexes();
-   QModelIndex modelIndex, viewIndex;
-   QList<Yeast *> itemsToRemove;
-   int size, i;
+   QList< std::shared_ptr<Yeast> > itemsToRemove;
 
-   size = selected.size();
-
-   if( size == 0 )
+   int size = selected.size();
+   if (size == 0) {
       return;
-
-   for(int i = 0; i < size; i++)
-   {
-      viewIndex = selected.at(i);
-      modelIndex = yeastTableProxy->mapToSource(viewIndex);
-
-      itemsToRemove.append(yeastTableModel->getYeast(static_cast<unsigned int>(modelIndex.row())));
    }
 
-   for(i = 0; i < itemsToRemove.size(); i++)
-   {
+   for(int i = 0; i < size; i++) {
+      QModelIndex viewIndex = selected.at(i);
+      QModelIndex modelIndex = yeastTableProxy->mapToSource(viewIndex);
+
+      itemsToRemove.append(yeastTableModel->getRow(modelIndex.row()));
+   }
+
+   for (auto item : itemsToRemove) {
       this->doOrRedoUpdate(
          newUndoableAddOrRemove(*this->recipeObs,
                                  &Recipe::remove<Yeast>,
-                                 itemsToRemove.at(i),
+                                 item,
                                  &Recipe::add<Yeast>,
                                  &MainWindow::removeYeast,
-                                 static_cast<void (MainWindow::*)(Yeast &)>(nullptr),
+                                 static_cast<void (MainWindow::*)(std::shared_ptr<Yeast>)>(nullptr),
                                  tr("Remove yeast from recipe"))
       );
    }
@@ -2319,46 +2307,44 @@ void MainWindow::newRecipe()
          // selected and you click the big blue + button.
          if ( indexes.size() > 0 )
          {
-            if ( sent->type(indexes.at(0)) == BtTreeItem::RECIPE )
+            if ( sent->type(indexes.at(0)) == BtTreeItem::Type::RECIPE )
             {
-               Recipe* foo = sent->recipe(indexes.at(0));
+               auto foo = sent->getItem<Recipe>(indexes.at(0));
 
-               if ( foo && ! foo->folder().isEmpty())
+               if ( foo && ! foo->folder().isEmpty()) {
                   newRec->setFolder( foo->folder() );
+               }
             }
-            else if ( sent->type(indexes.at(0)) == BtTreeItem::FOLDER )
+            else if ( sent->type(indexes.at(0)) == BtTreeItem::Type::FOLDER )
             {
-               BtFolder* foo = sent->folder(indexes.at(0));
-               if ( foo )
+               BtFolder* foo = sent->getItem<BtFolder>(indexes.at(0));
+               if ( foo ) {
                   newRec->setFolder( foo->fullPath() );
+               }
             }
          }
       }
    }
    setTreeSelection(treeView_recipe->findElement(newRec));
    setRecipe(newRec);
+   return;
 }
 
-void MainWindow::newFolder()
-{
-   QString dPath;
-   QModelIndexList indexes;
-   QModelIndex starter;
+void MainWindow::newFolder() {
    // get the currently active tree
    BtTreeView* active = qobject_cast<BtTreeView*>(tabWidget_Trees->currentWidget()->focusWidget());
 
-   if (! active )
+   if (!active) {
       return;
+   }
 
-   indexes = active->selectionModel()->selectedRows();
-   starter = indexes.at(0);
+   QModelIndexList indexes = active->selectionModel()->selectedRows();
+   QModelIndex starter = indexes.at(0);
 
    // Where to start from
-   dPath = active->folderName(starter);
+   QString dPath = active->folderName(starter);
 
-   QString name = QInputDialog::getText(this, tr("Folder name"),
-                                          tr("Folder name:"),
-                                           QLineEdit::Normal, dPath);
+   QString name = QInputDialog::getText(this, tr("Folder name"), tr("Folder name:"), QLineEdit::Normal, dPath);
    // User clicks cancel
    if (name.isEmpty())
       return;
@@ -2366,8 +2352,7 @@ void MainWindow::newFolder()
 
    // Nice little builtin to collapse leading and following white space
    name = name.simplified();
-   if ( name.isEmpty() )
-   {
+   if ( name.isEmpty() ) {
       QMessageBox::critical( this, tr("Bad Name"),
                              tr("A folder name must have at least one non-whitespace character in it"));
       return;
@@ -2378,48 +2363,48 @@ void MainWindow::newFolder()
 #else
    Qt::SplitBehaviorFlags skip = Qt::SkipEmptyParts;
 #endif
-   if ( name.split("/", skip).isEmpty() )
-   {
+   if ( name.split("/", skip).isEmpty() ) {
       QMessageBox::critical( this, tr("Bad Name"), tr("A folder name must have at least one non-/ character in it"));
       return;
    }
    active->addFolder(name);
 }
 
-void MainWindow::renameFolder()
-{
+void MainWindow::renameFolder() {
    BtTreeView* active = qobject_cast<BtTreeView*>(tabWidget_Trees->currentWidget()->focusWidget());
-   BtFolder* victim;
-   QModelIndexList indexes;
-   QModelIndex starter;
 
    // If the sender cannot be morphed into a BtTreeView object
-   if ( active == nullptr )
+   if ( active == nullptr ) {
       return;
+   }
 
    // I don't think I can figure out what the behavior will be if you select
    // many items
-   indexes = active->selectionModel()->selectedRows();
-   starter = indexes.at(0);
+   QModelIndexList indexes = active->selectionModel()->selectedRows();
+   QModelIndex starter = indexes.at(0);
 
    // The item to be renamed
    // Don't rename anything other than a folder
-   if ( active->type(starter) != BtTreeItem::FOLDER )
+   if ( active->type(starter) != BtTreeItem::Type::FOLDER) {
       return;
+   }
 
-   victim = active->folder(starter);
-   QString newName = QInputDialog::getText(this, tr("Folder name"), tr("Folder name:"),
-                                           QLineEdit::Normal, victim->name());
+   BtFolder* victim = active->getItem<BtFolder>(starter);
+   QString newName = QInputDialog::getText(this,
+                                           tr("Folder name"),
+                                           tr("Folder name:"),
+                                           QLineEdit::Normal,
+                                           victim->name());
 
    // User clicks cancel
-   if (newName.isEmpty())
+   if (newName.isEmpty()) {
       return;
+   }
    // Do some input validation here.
 
    // Nice little builtin to collapse leading and following white space
    newName = newName.simplified();
-   if ( newName.isEmpty() )
-   {
+   if (newName.isEmpty()) {
       QMessageBox::critical( this, tr("Bad Name"),
                              tr("A folder name must have at least one non-whitespace character in it"));
       return;
@@ -2430,8 +2415,7 @@ void MainWindow::renameFolder()
 #else
    Qt::SplitBehaviorFlags skip = Qt::SkipEmptyParts;
 #endif
-   if ( newName.split("/", skip).isEmpty() )
-   {
+   if ( newName.split("/", skip).isEmpty() ) {
       QMessageBox::critical( this, tr("Bad Name"), tr("A folder name must have at least one non-/ character in it"));
       return;
    }
@@ -2463,7 +2447,7 @@ void MainWindow::setTreeSelection(QModelIndex item) {
    QModelIndex parent = active->parent(item);
 
    active->setCurrentIndex(item);
-   if ( active->type(parent) == BtTreeItem::FOLDER && ! active->isExpanded(parent) ) {
+   if ( active->type(parent) == BtTreeItem::Type::FOLDER && ! active->isExpanded(parent) ) {
       active->setExpanded(parent, true);
    }
    active->scrollTo(item,QAbstractItemView::PositionAtCenter);
@@ -2476,18 +2460,19 @@ void MainWindow::reduceInventory(){
    QModelIndexList indexes = treeView_recipe->selectionModel()->selectedRows();
 
    foreach(QModelIndex selected, indexes) {
-      Recipe* rec   = treeView_recipe->recipe(selected);
+      Recipe* rec = treeView_recipe->getItem<Recipe>(selected);
       if ( rec == nullptr ) {
          //try the parent recipe
-         rec = treeView_recipe->recipe(treeView_recipe->parent(selected));
+         rec = treeView_recipe->getItem<Recipe>(treeView_recipe->parent(selected));
          if ( rec == nullptr ) {
             continue;
          }
       }
 
       // Make sure everything is properly set and selected
-      if( rec != recipeObs )
+      if( rec != recipeObs ) {
          setRecipe(rec);
+      }
 
       int i = 0;
       //reduce fermentables
@@ -2538,15 +2523,16 @@ void MainWindow::newBrewNote() {
    QModelIndexList indexes = treeView_recipe->selectionModel()->selectedRows();
    QModelIndex bIndex;
 
-   for(QModelIndex selected : indexes) {
-      Recipe*   rec   = treeView_recipe->recipe(selected);
-
-      if( rec == nullptr )
+   for (QModelIndex selected : indexes) {
+      Recipe*   rec   = treeView_recipe->getItem<Recipe>(selected);
+      if (!rec) {
          continue;
+      }
 
       // Make sure everything is properly set and selected
-      if( rec != recipeObs )
+      if (rec != recipeObs) {
          setRecipe(rec);
+      }
 
       auto bNote = std::make_shared<BrewNote>(*rec);
       bNote->populateNote(rec);
@@ -2561,13 +2547,11 @@ void MainWindow::newBrewNote() {
    }
 }
 
-void MainWindow::reBrewNote()
-{
+void MainWindow::reBrewNote() {
    QModelIndexList indexes = treeView_recipe->selectionModel()->selectedRows();
-   foreach(QModelIndex selected, indexes)
-   {
-      BrewNote* old   = treeView_recipe->brewNote(selected);
-      Recipe* rec     = treeView_recipe->recipe(treeView_recipe->parent(selected));
+   for (QModelIndex selected : indexes) {
+      BrewNote* old   = treeView_recipe->getItem<BrewNote>(selected);
+      Recipe* rec     = treeView_recipe->getItem<Recipe>(treeView_recipe->parent(selected));
 
       if (! old || ! rec) {
          return;
@@ -2577,8 +2561,9 @@ void MainWindow::reBrewNote()
       bNote->setBrewDate();
       ObjectStoreWrapper::insert(bNote);
 
-      if (rec != recipeObs)
+      if (rec != recipeObs) {
          setRecipe(rec);
+      }
 
       setBrewNote(bNote.get());
 
@@ -2586,20 +2571,17 @@ void MainWindow::reBrewNote()
    }
 }
 
-void MainWindow::brewItHelper()
-{
+void MainWindow::brewItHelper() {
    newBrewNote();
    reduceInventory();
 }
 
-void MainWindow::brewAgainHelper()
-{
+void MainWindow::brewAgainHelper() {
    reBrewNote();
    reduceInventory();
 }
 
-void MainWindow::backup()
-{
+void MainWindow::backup() {
    // NB: QDir does all the necessary magic of translating '/' to whatever current platform's directory separator is
    QString defaultBackupFileName = QDir::currentPath() + "/" + Database::getDefaultBackupFileName();
    QString backupFileName = QFileDialog::getSaveFileName(this, tr("Backup Database"), defaultBackupFileName);
@@ -2664,36 +2646,38 @@ void MainWindow::addMashStep() {
    return;
 }
 
-void MainWindow::removeSelectedMashStep()
-{
-   Mash* mash = recipeObs == nullptr ? nullptr : recipeObs->mash();
-   if( mash == nullptr )
+void MainWindow::removeSelectedMashStep() {
+   if (!this->recipeObs) {
       return;
-
-   QModelIndexList selected = mashStepTableWidget->selectionModel()->selectedIndexes();
-   int row, size, i;
-
-   size = selected.size();
-   if( size == 0 )
+   }
+   Mash* mash = this->recipeObs->mash();
+   if (!mash) {
       return;
-
-   // Make sure only one row is selected.
-   row = selected[0].row();
-   for( i = 1; i < size; ++i )
-   {
-      if( selected[i].row() != row )
-         return;
    }
 
-   MashStep* step = mashStepTableModel->getMashStep(static_cast<unsigned int>(row));
+   QModelIndexList selected = mashStepTableWidget->selectionModel()->selectedIndexes();
 
+   int size = selected.size();
+   if (size == 0) {
+      return;
+   }
+
+   // Make sure only one row is selected.
+   int row = selected[0].row();
+   for (int i = 1; i < size; ++i) {
+      if (selected[i].row() != row) {
+         return;
+      }
+   }
+
+   auto step = mashStepTableModel->getRow(row);
    this->doOrRedoUpdate(
       newUndoableAddOrRemove(*this->recipeObs->mash(),
                               &Mash::removeMashStep,
                               step,
                               &Mash::addMashStep,
                               &MainWindow::removeMashStep,
-                              static_cast<void (MainWindow::*)(MashStep&)>(nullptr),
+                              static_cast<void (MainWindow::*)(std::shared_ptr<MashStep>)>(nullptr),
                               tr("Remove mash step"))
    );
 
@@ -2772,9 +2756,8 @@ void MainWindow::editSelectedMashStep() {
       }
    }
 
-   MashStep* step = mashStepTableModel->getMashStep(static_cast<unsigned int>(row));
-   auto stepPointer = ObjectStoreWrapper::getSharedFromRaw(step);
-   mashStepEditor->setMashStep(stepPointer);
+   auto step = mashStepTableModel->getRow(static_cast<unsigned int>(row));
+   mashStepEditor->setMashStep(step);
    mashStepEditor->setVisible(true);
    return;
 }
@@ -2807,7 +2790,7 @@ void MainWindow::removeMash() {
 
 void MainWindow::closeEvent(QCloseEvent* /*event*/)
 {
-   Brewtarget::saveSystemOptions();
+   Application::saveSystemOptions();
    PersistentSettings::insert(PersistentSettings::Names::geometry, saveGeometry());
    PersistentSettings::insert(PersistentSettings::Names::windowState, saveState());
    if ( recipeObs )
@@ -2873,7 +2856,7 @@ void MainWindow::saveMash() {
 void MainWindow::openManual()
    {
    // TODO: open language-dependent manual when we have more than the English version
-   QDesktopServices::openUrl(QUrl::fromLocalFile(Brewtarget::getDataDir().filePath("manual-en.pdf")));
+   QDesktopServices::openUrl(QUrl::fromLocalFile(Application::getResourceDir().filePath("manual-en.pdf")));
 }
 
 // We build the menus at start up time.  This just needs to exec the proper
@@ -3012,51 +2995,54 @@ void MainWindow::exportSelected() {
 
    int count = 0;
    for (auto & selection : selected) {
-      int type = active->type(selection);
-
-      switch(type) {
-         case BtTreeItem::RECIPE:
-            recipes.append(treeView_recipe->recipe(selection));
-            ++count;
-            break;
-         case BtTreeItem::EQUIPMENT:
-            equipments.append(treeView_equip->equipment(selection));
-            ++count;
-            break;
-         case BtTreeItem::FERMENTABLE:
-            fermentables.append(treeView_ferm->fermentable(selection));
-            ++count;
-            break;
-         case BtTreeItem::HOP:
-            hops.append(treeView_hops->hop(selection));
-            ++count;
-            break;
-         case BtTreeItem::MISC:
-            miscs.append(treeView_misc->misc(selection));
-            ++count;
-            break;
-         case BtTreeItem::STYLE:
-            styles.append(treeView_style->style(selection));
-            ++count;
-            break;
-         case BtTreeItem::WATER:
-            waters.append(treeView_water->water(selection));
-            ++count;
-            break;
-         case BtTreeItem::YEAST:
-            yeasts.append(treeView_yeast->yeast(selection));
-            ++count;
-            break;
-         case BtTreeItem::FOLDER:
-            qDebug() << Q_FUNC_INFO << "Can't export selected Folder to XML as BeerXML does not support it";
-            break;
-         case BtTreeItem::BREWNOTE:
-            qDebug() << Q_FUNC_INFO << "Can't export selected BrewNote to XML as BeerXML does not support it";
-            break;
-         default:
-            // This shouldn't happen, because we should explicitly cover all the types above
-            qWarning() << Q_FUNC_INFO << "Don't know how to export BtTreeItem type" << type;
-            break;
+      auto itemType = active->type(selection);
+      if (!itemType) {
+         qWarning() << Q_FUNC_INFO << "Unknown type for selection" << selection;
+      } else {
+         switch(*itemType) {
+            case BtTreeItem::Type::RECIPE:
+               recipes.append(treeView_recipe->getItem<Recipe>(selection));
+               ++count;
+               break;
+            case BtTreeItem::Type::EQUIPMENT:
+               equipments.append(treeView_equip->getItem<Equipment>(selection));
+               ++count;
+               break;
+            case BtTreeItem::Type::FERMENTABLE:
+               fermentables.append(treeView_ferm->getItem<Fermentable>(selection));
+               ++count;
+               break;
+            case BtTreeItem::Type::HOP:
+               hops.append(treeView_hops->getItem<Hop>(selection));
+               ++count;
+               break;
+            case BtTreeItem::Type::MISC:
+               miscs.append(treeView_misc->getItem<Misc>(selection));
+               ++count;
+               break;
+            case BtTreeItem::Type::STYLE:
+               styles.append(treeView_style->getItem<Style>(selection));
+               ++count;
+               break;
+            case BtTreeItem::Type::WATER:
+               waters.append(treeView_water->getItem<Water>(selection));
+               ++count;
+               break;
+            case BtTreeItem::Type::YEAST:
+               yeasts.append(treeView_yeast->getItem<Yeast>(selection));
+               ++count;
+               break;
+            case BtTreeItem::Type::FOLDER:
+               qDebug() << Q_FUNC_INFO << "Can't export selected Folder to XML as BeerXML does not support it";
+               break;
+            case BtTreeItem::Type::BREWNOTE:
+               qDebug() << Q_FUNC_INFO << "Can't export selected BrewNote to XML as BeerXML does not support it";
+               break;
+            default:
+               // This shouldn't happen, because we should explicitly cover all the types above
+               qWarning() << Q_FUNC_INFO << "Don't know how to export BtTreeItem type" << static_cast<int>(*itemType);
+               break;
+         }
       }
    }
 
@@ -3099,54 +3085,6 @@ void MainWindow::exportSelected() {
 
    outFile->close();
    return;
-}
-
-void MainWindow::finishCheckingVersion()
-{
-   QNetworkReply* reply = qobject_cast<QNetworkReply*>(sender());
-   if( reply == nullptr )
-      return;
-
-   QString remoteVersion(reply->readAll());
-
-   // If there is an error, just return.
-   if( reply->error() != QNetworkReply::NoError )
-      return;
-
-   // If the remote version is newer...
-   if( !remoteVersion.startsWith(VERSIONSTRING) )
-   {
-      // ...and the user wants to download the new version...
-      if( QMessageBox::information(this,
-                                   QObject::tr("New Version"),
-                                   QObject::tr("Version %1 is now available. Download it?").arg(remoteVersion),
-                                   QMessageBox::Yes | QMessageBox::No,
-                                   QMessageBox::Yes) == QMessageBox::Yes )
-      {
-         // ...take them to the website.
-         QDesktopServices::openUrl(QUrl("http://www.brewtarget.org/download.html"));
-      }
-      else // ... and the user does NOT want to download the new version...
-      {
-         // ... and they want us to stop bothering them...
-         if( QMessageBox::question(this,
-                                   QObject::tr("New Version"),
-                                   QObject::tr("Stop bothering you about new versions?"),
-                                   QMessageBox::Yes | QMessageBox::No,
-                                   QMessageBox::Yes) == QMessageBox::Yes)
-         {
-            // ... make a note to stop bothering the user about the new version.
-            Brewtarget::setCheckVersion(false);
-         }
-      }
-   }
-   else // The current version is newest so...
-   {
-      // ...make a note to bother users about future new versions.
-      // This means that when a user downloads the new version, this
-      // variable will always get reset to true.
-      Brewtarget::setCheckVersion(true);
-   }
 }
 
 void MainWindow::redisplayLabel()
@@ -3200,7 +3138,7 @@ void MainWindow::convertedMsg()
 
    QMessageBox msgBox;
    msgBox.setText( tr("The database has been converted/upgraded."));
-   msgBox.setInformativeText( tr("The original XML files can be found in ") + Brewtarget::getUserDataDir().canonicalPath() + "obsolete");
+   msgBox.setInformativeText( tr("The original XML files can be found in ") + Application::getUserDataDir().canonicalPath() + "obsolete");
    msgBox.exec();
 
 }
@@ -3210,9 +3148,8 @@ void MainWindow::changeBrewDate()
    QModelIndexList indexes = treeView_recipe->selectionModel()->selectedRows();
    QDate newDate;
 
-   foreach(QModelIndex selected, indexes)
-   {
-      BrewNote* target = treeView_recipe->brewNote(selected);
+   for (QModelIndex selected : indexes) {
+      auto target = treeView_recipe->getItem<BrewNote>(selected);
 
       // No idea how this could happen, but I've seen stranger things
       if ( ! target )
@@ -3240,18 +3177,19 @@ void MainWindow::fixBrewNote()
    QModelIndexList indexes = treeView_recipe->selectionModel()->selectedRows();
    QDate newDate;
 
-   foreach(QModelIndex selected, indexes)
-   {
-      BrewNote* target = treeView_recipe->brewNote(selected);
+   for (QModelIndex selected : indexes) {
+      auto target = treeView_recipe->getItem<BrewNote>(selected);
 
       // No idea how this could happen, but I've seen stranger things
-      if ( ! target )
+      if ( ! target ) {
          continue;
+      }
 
-      Recipe* noteParent = treeView_recipe->recipe( treeView_recipe->parent(selected));
+      auto noteParent = treeView_recipe->getItem<Recipe>( treeView_recipe->parent(selected));
 
-      if ( ! noteParent )
+      if ( ! noteParent ) {
          continue;
+      }
 
       target->recalculateEff(noteParent);
    }

@@ -24,9 +24,10 @@
 
 namespace {
    EnumStringMapping const nonPhysicalQuantityToName {
-      {QT_TR_NOOP("Date")  , NonPhysicalQuantity::Date  },
-      {QT_TR_NOOP("String"), NonPhysicalQuantity::String},
-      {QT_TR_NOOP("Count") , NonPhysicalQuantity::Count }
+      {"Date"      , NonPhysicalQuantity::Date      },
+      {"String"    , NonPhysicalQuantity::String    },
+      {"Count"     , NonPhysicalQuantity::Count     },
+      {"Percentage", NonPhysicalQuantity::Percentage}
    };
 }
 

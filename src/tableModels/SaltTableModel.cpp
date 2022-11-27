@@ -1,6 +1,6 @@
 /*
  * SaltTableModel.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2022
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -42,7 +42,6 @@
 #include "model/Mash.h"
 #include "model/MashStep.h"
 #include "model/Recipe.h"
-#include "model/Salt.h"
 #include "PersistentSettings.h"
 #include "WaterDialog.h"
 
@@ -64,7 +63,7 @@ static QStringList saltNames = QStringList() << QObject::tr("None")
                                              << QObject::tr("Acid malt");
 
 SaltTableModel::SaltTableModel(QTableView* parent) :
-   BtTableModel{
+   BtTableModelRecipeObserver{
       parent,
       false,
       {{SALTNAMECOL,    {tr("Name"),     NonPhysicalQuantity::String,          ""      }},
@@ -72,8 +71,7 @@ SaltTableModel::SaltTableModel(QTableView* parent) :
        {SALTADDTOCOL,   {tr("Added To"), NonPhysicalQuantity::String,          ""      }},
        {SALTPCTACIDCOL, {tr("% Acid"),   NonPhysicalQuantity::Percentage,      ""      }}}
    },
-   m_rec{nullptr} {
-   saltObs.clear();
+   BtTableModelData<Salt>{} {
    setObjectName("saltTable");
 
    QHeaderView* headerView = parentTableWidget->horizontalHeader();
@@ -87,39 +85,35 @@ SaltTableModel::SaltTableModel(QTableView* parent) :
 }
 
 SaltTableModel::~SaltTableModel() {
-   saltObs.clear();
+   this->rows.clear();
    return;
 }
 
 void SaltTableModel::observeRecipe(Recipe* rec)
 {
-   if ( m_rec ) {
-      QObject::disconnect( m_rec, nullptr, this, nullptr );
+   if ( this->recObs ) {
+      QObject::disconnect( this->recObs, nullptr, this, nullptr );
       removeAll();
    }
 
-   m_rec = rec;
-   if ( m_rec ) {
-      QList<Salt*> salts = m_rec->salts();
-      connect( m_rec, &NamedEntity::changed, this, &SaltTableModel::changed );
-      if (salts.size() > 0 ) {
-         addSalts( salts );
-      }
-      if ( m_rec->mash() ) {
-         spargePct = m_rec->mash()->totalSpargeAmount_l()/m_rec->mash()->totalInfusionAmount_l();
+   this->recObs = rec;
+   if ( this->recObs ) {
+      connect( this->recObs, &NamedEntity::changed, this, &SaltTableModel::changed );
+      this->addSalts(this->recObs->getAll<Salt>());
+      if ( this->recObs->mash() ) {
+         spargePct = this->recObs->mash()->totalSpargeAmount_l()/this->recObs->mash()->totalInfusionAmount_l();
       }
    }
 }
 
-void SaltTableModel::addSalt(Salt* salt)
-{
-   if( saltObs.contains(salt) ) {
+void SaltTableModel::addSalt(std::shared_ptr<Salt> salt) {
+   if (this->rows.contains(salt) ) {
       return;
    }
 
-   beginInsertRows( QModelIndex(), saltObs.size(), saltObs.size() );
-   saltObs.append(salt);
-   connect( salt, &NamedEntity::changed, this, &SaltTableModel::changed );
+   beginInsertRows( QModelIndex(), this->rows.size(), this->rows.size() );
+   this->rows.append(salt);
+   connect(salt.get(), &NamedEntity::changed, this, &SaltTableModel::changed );
    endInsertRows();
 
    if (parentTableWidget) {
@@ -128,54 +122,47 @@ void SaltTableModel::addSalt(Salt* salt)
    }
 }
 
-void SaltTableModel::addSalts(QList<Salt*> salts)
-{
-   QList<Salt*> tmp;
+void SaltTableModel::addSalts(QList<std::shared_ptr<Salt> > salts) {
+   auto tmp = this->removeDuplicates(salts);
 
-   foreach (Salt* i, salts) {
-      if( !saltObs.contains(i) )
-         tmp.append(i);
-   }
-
-   int size = saltObs.size();
+   int size = this->rows.size();
    if (size+tmp.size()) {
       beginInsertRows( QModelIndex(), size, size+tmp.size()-1 );
-      saltObs.append(tmp);
+      this->rows.append(tmp);
       endInsertRows();
 
-      foreach (Salt* i, tmp) {
-         connect( i, &NamedEntity::changed, this, &SaltTableModel::changed );
+      for (auto salt : tmp) {
+         connect(salt.get(), &NamedEntity::changed, this, &SaltTableModel::changed);
       }
 
    }
 
-   if( parentTableWidget ) {
+   if (parentTableWidget ) {
       parentTableWidget->resizeColumnsToContents();
       parentTableWidget->resizeRowsToContents();
    }
 }
 
 void SaltTableModel::catchSalt() {
-   // .:TODO:. Change to shared_ptr as potential memory leak
-   Salt* gaq = new Salt("");
-   addSalt(gaq);
+   // This gets stored in the DB in saveAndClose()
+   auto gaq = std::make_shared<Salt>("");
+   this->addSalt(gaq);
    return;
 }
 
-double SaltTableModel::multiplier(Salt *s) const
-{
+double SaltTableModel::multiplier(Salt & salt) const {
    double ret = 1.0;
 
-   if ( ! m_rec->mash()->hasSparge() ) {
+   if ( ! this->recObs->mash()->hasSparge() ) {
       return ret;
    }
 
-   if ( s->addTo() == Salt::EQUAL ) {
+   if (salt.addTo() == Salt::WhenToAdd::EQUAL ) {
       ret = 2.0;
    }
    // If we are adding a proportional amount to both,
    // this should handle that math.
-   else if ( s->addTo() == Salt::RATIO ) {
+   else if (salt.addTo() == Salt::WhenToAdd::RATIO ) {
       ret = 1.0 + spargePct;
    }
 
@@ -183,104 +170,89 @@ double SaltTableModel::multiplier(Salt *s) const
 }
 
 // total salt in ppm. Not sure this is helping.
-double SaltTableModel::total_Ca() const
-{
+double SaltTableModel::total_Ca() const {
    double ret = 0.0;
-   foreach(Salt* i, saltObs) {
-      double mult  = multiplier(i);
-      ret += mult * i->Ca();
+   for (auto salt : this->rows) {
+      double mult = this->multiplier(*salt);
+      ret += mult * salt->Ca();
    }
    return ret;
 }
 
-double SaltTableModel::total_Cl() const
-{
+double SaltTableModel::total_Cl() const {
    double ret = 0.0;
-   foreach(Salt* i, saltObs) {
-      double mult  = multiplier(i);
-      ret += mult * i->Cl();
+   for (auto salt : this->rows) {
+      double mult  = multiplier(*salt);
+      ret += mult * salt->Cl();
    }
-
    return ret;
 }
 
-double SaltTableModel::total_CO3() const
-{
+double SaltTableModel::total_CO3() const {
    double ret = 0.0;
-   foreach(Salt* i, saltObs) {
-      double mult  = multiplier(i);
-      ret += mult * i->CO3();
+   for (auto salt : this->rows) {
+      double mult  = multiplier(*salt);
+      ret += mult * salt->CO3();
    }
-
    return ret;
 }
 
-double SaltTableModel::total_HCO3() const
-{
+double SaltTableModel::total_HCO3() const {
    double ret = 0.0;
-   foreach(Salt* i, saltObs) {
-      double mult  = multiplier(i);
-      ret += mult * i->HCO3();
+   for (auto salt : this->rows) {
+      double mult  = multiplier(*salt);
+      ret += mult * salt->HCO3();
    }
-
    return ret;
 }
 
-double SaltTableModel::total_Mg() const
-{
+double SaltTableModel::total_Mg() const {
    double ret = 0.0;
-   foreach(Salt* i, saltObs) {
-      double mult  = multiplier(i);
-      ret += mult * i->Mg();
+   for (auto salt : this->rows) {
+      double mult  = multiplier(*salt);
+      ret += mult * salt->Mg();
    }
-
    return ret;
 }
 
-double SaltTableModel::total_Na() const
-{
+double SaltTableModel::total_Na() const {
    double ret = 0.0;
-   foreach(Salt* i, saltObs) {
-      double mult  = multiplier(i);
-      ret += mult * i->Na();
+   for (auto salt : this->rows) {
+      double mult  = multiplier(*salt);
+      ret += mult * salt->Na();
    }
-
    return ret;
 }
 
-double SaltTableModel::total_SO4() const
-{
+double SaltTableModel::total_SO4() const {
    double ret = 0.0;
-   foreach(Salt* i, saltObs) {
-      double mult  = multiplier(i);
-      ret += mult * i->SO4();
+   for (auto salt : this->rows) {
+      double mult  = multiplier(*salt);
+      ret += mult * salt->SO4();
    }
-
    return ret;
 }
 
-double SaltTableModel::total(Water::Ions ion) const
-{
+double SaltTableModel::total(Water::Ions ion) const {
    switch(ion) {
-      case Water::Ca: return total_Ca();
-      case Water::Cl: return total_Cl();
-      case Water::HCO3: return total_HCO3();
-      case Water::Mg: return total_Mg();
-      case Water::Na: return total_Na();
-      case Water::SO4: return total_SO4();
+      case Water::Ions::Ca:   return total_Ca();
+      case Water::Ions::Cl:   return total_Cl();
+      case Water::Ions::HCO3: return total_HCO3();
+      case Water::Ions::Mg:   return total_Mg();
+      case Water::Ions::Na:   return total_Na();
+      case Water::Ions::SO4:  return total_SO4();
       default: return 0.0;
    }
    return 0.0;
 }
 
-double SaltTableModel::total(Salt::Types type) const
-{
+double SaltTableModel::total(Salt::Types type) const {
    double ret = 0.0;
-   if (type != Salt::NONE) {
-      foreach(Salt* i, saltObs) {
-         if ( i->type() == type && i->addTo() != Salt::NEVER) {
-            double mult  = multiplier(i);
-            ret += mult * i->amount();
+   if (type != Salt::Types::NONE) {
+      for (auto salt : this->rows) {
+         if (salt->type() == type && salt->addTo() != Salt::WhenToAdd::NEVER) {
+            double mult  = multiplier(*salt);
+            ret += mult * salt->amount();
          }
       }
    }
@@ -293,24 +265,24 @@ double SaltTableModel::totalAcidWeight(Salt::Types type) const
    const double lactic_density = 1.2;
 
    double ret = 0.0;
-   if (type != Salt::NONE) {
-      foreach(Salt* i, saltObs) {
-         if ( i->type() == type && i->addTo() != Salt::NEVER) {
-            double mult  = multiplier(i);
+   if (type != Salt::Types::NONE) {
+      for (auto salt : this->rows) {
+         if ( salt->type() == type && salt->addTo() != Salt::WhenToAdd::NEVER) {
+            double mult  = multiplier(*salt);
             // Acid malts are easy
-            if ( type == Salt::ACIDMLT ) {
-               ret += 1000.0 * i->amount() * i->percentAcid();
+            if ( type == Salt::Types::ACIDMLT ) {
+               ret += 1000.0 * salt->amount() * salt->percentAcid();
             }
             // Lactic acid isn't quite so easy
-            else if ( type == Salt::LACTIC ) {
-               double density = i->percentAcid()/88.0 * (lactic_density - 1.0) + 1.0;
-               double lactic_wgt = 1000.0 * i->amount() * mult * density;
-               ret += (i->percentAcid()/100.0) * lactic_wgt;
+            else if ( type == Salt::Types::LACTIC ) {
+               double density = salt->percentAcid()/88.0 * (lactic_density - 1.0) + 1.0;
+               double lactic_wgt = 1000.0 * salt->amount() * mult * density;
+               ret += (salt->percentAcid()/100.0) * lactic_wgt;
             }
-            else if ( type == Salt::H3PO4 ) {
-               double density = i->percentAcid()/85.0 * (H3PO4_density - 1.0) + 1.0;
-               double H3PO4_wgt = 1000.0 * i->amount() * density;
-               ret += (i->percentAcid()/100.0) * H3PO4_wgt;
+            else if ( type == Salt::Types::H3PO4 ) {
+               double density = salt->percentAcid()/85.0 * (H3PO4_density - 1.0) + 1.0;
+               double H3PO4_wgt = 1000.0 * salt->amount() * density;
+               ret += (salt->percentAcid()/100.0) * H3PO4_wgt;
             }
          }
       }
@@ -318,16 +290,13 @@ double SaltTableModel::totalAcidWeight(Salt::Types type) const
    return ret;
 }
 
-void SaltTableModel::removeSalt(Salt* salt)
-{
-   int i;
+void SaltTableModel::remove(std::shared_ptr<Salt> salt) {
+   int i = this->rows.indexOf(salt);
 
-   i = saltObs.indexOf(salt);
-
-   if( i >= 0 ) {
+   if (i >= 0 ) {
       beginRemoveRows( QModelIndex(), i, i );
-      disconnect( salt, nullptr, this, nullptr );
-      saltObs.removeAt(i);
+      disconnect(salt.get(), nullptr, this, nullptr);
+      this->rows.removeAt(i);
       endRemoveRows();
 
       if(parentTableWidget) {
@@ -339,28 +308,27 @@ void SaltTableModel::removeSalt(Salt* salt)
 }
 
 void SaltTableModel::removeSalts(QList<int>deadSalts) {
-   QList<Salt*> dead;
+   decltype(this->rows) dead;
 
    // I am removing the salts so the index of any salt
    // will change. I think this will work
-   for (int i : deadSalts) {
-      dead.append( saltObs.at(i));
+   for (auto rowNum : deadSalts) {
+      dead.append( this->rows.at(rowNum));
    }
 
-   for(Salt * zombie : dead) {
-      int i = saltObs.indexOf(zombie);
+   for (auto zombie : dead) {
+      int i = this->rows.indexOf(zombie);
 
       if ( i >= 0 ) {
          beginRemoveRows( QModelIndex(), i, i );
-         disconnect( zombie, nullptr, this, nullptr );
-         saltObs.removeAt(i);
+         disconnect(zombie.get(), nullptr, this, nullptr );
+         this->rows.removeAt(i);
          endRemoveRows();
 
          // Dead salts do not malinger in the database. This will
          // delete the thing, not just mark it deleted
          if (zombie->key() > 0) {
-            auto zombiePtr{ObjectStoreWrapper::getSharedFromRaw(zombie)};
-            this->m_rec->remove(zombiePtr);
+            this->recObs->remove(zombie);
             ObjectStoreWrapper::hardDelete(*zombie);
          }
       }
@@ -369,65 +337,63 @@ void SaltTableModel::removeSalts(QList<int>deadSalts) {
    return;
 }
 
-void SaltTableModel::removeAll()
-{
-   beginRemoveRows( QModelIndex(), 0, saltObs.size()-1 );
-   while( !saltObs.isEmpty() ) {
-      disconnect( saltObs.takeLast(), nullptr, this, nullptr );
+void SaltTableModel::removeAll() {
+   beginRemoveRows( QModelIndex(), 0, this->rows.size()-1 );
+   while (!this->rows.isEmpty() ) {
+      disconnect(this->rows.takeLast().get(), nullptr, this, nullptr );
    }
    endRemoveRows();
 }
 
-void SaltTableModel::changed(QMetaProperty prop, QVariant /*val*/)
-{
-   int i;
-
+void SaltTableModel::changed(QMetaProperty prop, [[maybe_unused]] QVariant val) {
    // Find the notifier in the list
-   Salt* saltSender = qobject_cast<Salt*>(sender());
-   if( saltSender ) {
-      i = saltObs.indexOf(saltSender);
-      if( i >= 0 )
-         emit dataChanged( QAbstractItemModel::createIndex(i, 0),
-                           QAbstractItemModel::createIndex(i, SALTNUMCOLS-1));
-         emit headerDataChanged( Qt::Vertical, i, i);
+   Salt * saltSender = qobject_cast<Salt*>(sender());
+   if (saltSender) {
+      int ii = this->findIndexOf(saltSender);
+      if (ii >= 0) {
+         emit dataChanged(QAbstractItemModel::createIndex(ii, 0),
+                          QAbstractItemModel::createIndex(ii, SALTNUMCOLS-1));
+         emit headerDataChanged(Qt::Vertical, ii, ii);
+      }
       return;
    }
 
    // See if sender is our recipe.
    Recipe* recSender = qobject_cast<Recipe*>(sender());
-   if( recSender && recSender == m_rec )
-   {
-      if( QString(prop.name()) == "salts" ) {
+   if (recSender && recSender == this->recObs ) {
+      if (QString(prop.name()) == "salts") {
          removeAll();
-         addSalts( m_rec->salts() );
+         addSalts(this->recObs->getAll<Salt>());
       }
-      if( rowCount() > 0 )
+      if (rowCount() > 0) {
          emit headerDataChanged( Qt::Vertical, 0, rowCount()-1 );
+      }
    }
+   return;
 }
 
 int SaltTableModel::rowCount(const QModelIndex& /*parent*/) const
 {
-   return saltObs.size();
+   return this->rows.size();
 }
 
 QVariant SaltTableModel::data(QModelIndex const & index, int role) const {
    // Ensure the row is ok.
-   if (index.row() >= static_cast<int>(this->saltObs.size())) {
+   if (index.row() >= static_cast<int>(this->rows.size())) {
       qWarning() << Q_FUNC_INFO << "Bad model index. row = " << index.row();
       return QVariant();
    }
 
-   Salt* row = this->saltObs[index.row()];
+   auto row = this->rows[index.row()];
 
    int column = index.column();
    switch (column) {
       case SALTNAMECOL:
          if (role == Qt::DisplayRole) {
-            return QVariant( saltNames.at(row->type()));
+            return QVariant(saltNames.at(static_cast<int>(row->type())));
          }
          if (role == Qt::UserRole) {
-            return QVariant( row->type());
+            return QVariant(static_cast<int>(row->type()));
          }
          return QVariant();
       case SALTAMOUNTCOL:
@@ -447,10 +413,10 @@ QVariant SaltTableModel::data(QModelIndex const & index, int role) const {
          );
       case SALTADDTOCOL:
          if (role == Qt::DisplayRole) {
-            return QVariant( addToName.at(row->addTo()));
+            return QVariant( addToName.at(static_cast<int>(row->addTo())));
          }
          if (role == Qt::UserRole) {
-            return QVariant( row->addTo());
+            return QVariant(static_cast<int>(row->addTo()));
          }
          return QVariant();
       case SALTPCTACIDCOL:
@@ -474,10 +440,10 @@ QVariant SaltTableModel::headerData( int section, Qt::Orientation orientation, i
 Qt::ItemFlags SaltTableModel::flags(const QModelIndex& index ) const
 {
    // Q_UNUSED(index)
-   if( index.row() >= saltObs.size() )
+   if (index.row() >= this->rows.size() )
       return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
 
-   Salt* row = saltObs[index.row()];
+   auto row = this->rows[index.row()];
 
    if ( !row->isAcid() && index.column() == SALTPCTACIDCOL )  {
       return Qt::NoItemFlags;
@@ -486,13 +452,13 @@ Qt::ItemFlags SaltTableModel::flags(const QModelIndex& index ) const
 }
 
 bool SaltTableModel::setData(QModelIndex const & index, QVariant const & value, int role) {
-   if (index.row() >= this->saltObs.size() || role != Qt::EditRole) {
+   if (index.row() >= this->rows.size() || role != Qt::EditRole) {
       return false;
    }
 
    bool retval = false;
 
-   Salt * row = saltObs[index.row()];
+   auto row = this->rows[index.row()];
 
    int const column = index.column();
    switch (column) {
@@ -503,11 +469,11 @@ bool SaltTableModel::setData(QModelIndex const & index, QVariant const & value, 
             Salt::Types oldType = row->type();
             row->setType(static_cast<Salt::Types>(newType));
             row->setName(saltNames.at(newType));
-            if ( oldType == Salt::NONE ) {
+            if ( oldType == Salt::Types::NONE ) {
                switch(  static_cast<Salt::Types>(newType) ) {
-                  case Salt::LACTIC: row->setPercentAcid(88); break;
-                  case Salt::H3PO4:  row->setPercentAcid(10); break;
-                  case Salt::ACIDMLT: row->setPercentAcid(2); break;
+                  case Salt::Types::LACTIC: row->setPercentAcid(88); break;
+                  case Salt::Types::H3PO4:  row->setPercentAcid(10); break;
+                  case Salt::Types::ACIDMLT: row->setPercentAcid(2); break;
                   default: row->setPercentAcid(0);
                }
             }
@@ -543,7 +509,7 @@ bool SaltTableModel::setData(QModelIndex const & index, QVariant const & value, 
          qWarning() << tr("Bad column: %1").arg(index.column());
    }
 
-   if ( retval && row->addTo() != Salt::NEVER ) {
+   if ( retval && row->addTo() != Salt::WhenToAdd::NEVER ) {
       emit newTotals();
    }
    emit dataChanged(index,index);
@@ -556,11 +522,10 @@ bool SaltTableModel::setData(QModelIndex const & index, QVariant const & value, 
 void SaltTableModel::saveAndClose() {
    // all of the writes should have been instantaneous unless
    // we've added a new salt. Wonder if this will work?
-   for (Salt* salt : saltObs) {
-      if (salt->key() < 0 && salt->type() != Salt::NONE && salt->addTo() != Salt::NEVER) {
-         std::shared_ptr<Salt> saltPtr{salt};
-         ObjectStoreWrapper::insert(saltPtr);
-         this->m_rec->add(saltPtr);
+   for (auto salt : this->rows) {
+      if (salt->key() < 0 && salt->type() != Salt::Types::NONE && salt->addTo() != Salt::WhenToAdd::NEVER) {
+         ObjectStoreWrapper::insert(salt);
+         this->recObs->add(salt);
       }
    }
    return;
@@ -579,16 +544,16 @@ QWidget* SaltItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
    if ( index.column() == SALTNAMECOL ) {
       QComboBox *box = new QComboBox(parent);
 
-      box->addItem(tr("NONE")  ,      Salt::NONE);
-      box->addItem(tr("CaCl2") ,      Salt::CACL2);
-      box->addItem(tr("CaCO3") ,      Salt::CACO3);
-      box->addItem(tr("CaSO4") ,      Salt::CASO4);
-      box->addItem(tr("MgSO4") ,      Salt::MGSO4);
-      box->addItem(tr("NaCl")  ,      Salt::NACL);
-      box->addItem(tr("NaHCO3"),      Salt::NAHCO3);
-      box->addItem(tr("Lactic acid"), Salt::LACTIC);
-      box->addItem(tr("H3PO4"),       Salt::H3PO4);
-      box->addItem(tr("Acid malt"),   Salt::ACIDMLT);
+      box->addItem(tr("NONE")  ,      static_cast<int>(Salt::Types::NONE   ));
+      box->addItem(tr("CaCl2") ,      static_cast<int>(Salt::Types::CACL2  ));
+      box->addItem(tr("CaCO3") ,      static_cast<int>(Salt::Types::CACO3  ));
+      box->addItem(tr("CaSO4") ,      static_cast<int>(Salt::Types::CASO4  ));
+      box->addItem(tr("MgSO4") ,      static_cast<int>(Salt::Types::MGSO4  ));
+      box->addItem(tr("NaCl")  ,      static_cast<int>(Salt::Types::NACL   ));
+      box->addItem(tr("NaHCO3"),      static_cast<int>(Salt::Types::NAHCO3 ));
+      box->addItem(tr("Lactic acid"), static_cast<int>(Salt::Types::LACTIC ));
+      box->addItem(tr("H3PO4"),       static_cast<int>(Salt::Types::H3PO4  ));
+      box->addItem(tr("Acid malt"),   static_cast<int>(Salt::Types::ACIDMLT));
       box->setMinimumWidth( box->minimumSizeHint().width());
       box->setSizeAdjustPolicy(QComboBox::AdjustToContents);
       return box;
@@ -597,11 +562,11 @@ QWidget* SaltItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
    else if ( index.column() == SALTADDTOCOL ) {
       QComboBox *box = new QComboBox(parent);
 
-      box->addItem(tr("Never"),  Salt::NEVER);
-      box->addItem(tr("Mash"),   Salt::MASH);
-      box->addItem(tr("Sparge"), Salt::SPARGE);
-      box->addItem(tr("Ratio"),  Salt::RATIO);
-      box->addItem(tr("Equal"),  Salt::EQUAL);
+      box->addItem(tr("Never"),  static_cast<int>(Salt::WhenToAdd::NEVER ));
+      box->addItem(tr("Mash"),   static_cast<int>(Salt::WhenToAdd::MASH  ));
+      box->addItem(tr("Sparge"), static_cast<int>(Salt::WhenToAdd::SPARGE));
+      box->addItem(tr("Ratio"),  static_cast<int>(Salt::WhenToAdd::RATIO ));
+      box->addItem(tr("Equal"),  static_cast<int>(Salt::WhenToAdd::EQUAL ));
       box->setMinimumWidth( box->minimumSizeHint().width());
       box->setSizeAdjustPolicy(QComboBox::AdjustToContents);
 

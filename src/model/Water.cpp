@@ -1,6 +1,6 @@
 /*
  * model/Water.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2022
  * - Matt Young <mfsy@yahoo.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -54,7 +54,7 @@ Water::Water(QString name) :
    m_ph                {0.0},
    m_alkalinity        {0.0},
    m_notes             {""},
-   m_type              {NONE},
+   m_type              {Water::Types::NONE},
    m_mash_ro           {0.0},
    m_sparge_ro         {0.0},
    m_alkalinity_as_hco3{true} {
@@ -62,125 +62,148 @@ Water::Water(QString name) :
 }
 
 Water::Water(Water const& other) :
-   NamedEntity         {other                        },
-   m_amount            {other.m_amount               },
-   m_calcium_ppm       {other.m_calcium_ppm          },
-   m_bicarbonate_ppm   {other.m_bicarbonate_ppm      },
-   m_sulfate_ppm       {other.m_sulfate_ppm          },
-   m_chloride_ppm      {other.m_chloride_ppm         },
-   m_sodium_ppm        {other.m_sodium_ppm           },
-   m_magnesium_ppm     {other.m_magnesium_ppm        },
-   m_ph                {other.m_ph                   },
-   m_alkalinity        {other.m_alkalinity           },
-   m_notes             {other.m_notes                },
-   m_type              {other.m_type                 },
-   m_mash_ro           {other.m_mash_ro              },
-   m_sparge_ro         {other.m_sparge_ro            },
-   m_alkalinity_as_hco3{other.m_alkalinity_as_hco3   } {
+   NamedEntity         {other                     },
+   m_amount            {other.m_amount            },
+   m_calcium_ppm       {other.m_calcium_ppm       },
+   m_bicarbonate_ppm   {other.m_bicarbonate_ppm   },
+   m_sulfate_ppm       {other.m_sulfate_ppm       },
+   m_chloride_ppm      {other.m_chloride_ppm      },
+   m_sodium_ppm        {other.m_sodium_ppm        },
+   m_magnesium_ppm     {other.m_magnesium_ppm     },
+   m_ph                {other.m_ph                },
+   m_alkalinity        {other.m_alkalinity        },
+   m_notes             {other.m_notes             },
+   m_type              {other.m_type              },
+   m_mash_ro           {other.m_mash_ro           },
+   m_sparge_ro         {other.m_sparge_ro         },
+   m_alkalinity_as_hco3{other.m_alkalinity_as_hco3} {
    return;
 }
 
 Water::Water(NamedParameterBundle const & namedParameterBundle) :
    NamedEntity         {namedParameterBundle},
-   m_amount            {namedParameterBundle(PropertyNames::Water::amount).toDouble()},
-   m_calcium_ppm       {namedParameterBundle(PropertyNames::Water::calcium_ppm).toDouble()},
-   m_bicarbonate_ppm   {namedParameterBundle(PropertyNames::Water::bicarbonate_ppm).toDouble()},
-   m_sulfate_ppm       {namedParameterBundle(PropertyNames::Water::sulfate_ppm).toDouble()},
-   m_chloride_ppm      {namedParameterBundle(PropertyNames::Water::chloride_ppm).toDouble()},
-   m_sodium_ppm        {namedParameterBundle(PropertyNames::Water::sodium_ppm).toDouble()},
-   m_magnesium_ppm     {namedParameterBundle(PropertyNames::Water::magnesium_ppm).toDouble()},
-   m_ph                {namedParameterBundle(PropertyNames::Water::ph).toDouble()},
-   m_alkalinity        {namedParameterBundle(PropertyNames::Water::alkalinity).toDouble()},
-   m_notes             {namedParameterBundle(PropertyNames::Water::notes).toString()},
+   m_amount            {namedParameterBundle(PropertyNames::Water::amount).toDouble()                      },
+   m_calcium_ppm       {namedParameterBundle(PropertyNames::Water::calcium_ppm).toDouble()                 },
+   m_bicarbonate_ppm   {namedParameterBundle(PropertyNames::Water::bicarbonate_ppm).toDouble()             },
+   m_sulfate_ppm       {namedParameterBundle(PropertyNames::Water::sulfate_ppm).toDouble()                 },
+   m_chloride_ppm      {namedParameterBundle(PropertyNames::Water::chloride_ppm).toDouble()                },
+   m_sodium_ppm        {namedParameterBundle(PropertyNames::Water::sodium_ppm).toDouble()                  },
+   m_magnesium_ppm     {namedParameterBundle(PropertyNames::Water::magnesium_ppm).toDouble()               },
+   m_ph                {namedParameterBundle(PropertyNames::Water::ph).toDouble()                          },
+   m_alkalinity        {namedParameterBundle(PropertyNames::Water::alkalinity).toDouble()                  },
+   m_notes             {namedParameterBundle(PropertyNames::Water::notes).toString()                       },
    m_type              {static_cast<Water::Types>(namedParameterBundle(PropertyNames::Water::type).toInt())},
-   m_mash_ro           {namedParameterBundle(PropertyNames::Water::mashRO).toDouble()},
-   m_sparge_ro         {namedParameterBundle(PropertyNames::Water::spargeRO).toDouble()},
-   m_alkalinity_as_hco3{namedParameterBundle(PropertyNames::Water::alkalinityAsHCO3).toBool()} {
+   m_mash_ro           {namedParameterBundle(PropertyNames::Water::mashRO).toDouble()                      },
+   m_sparge_ro         {namedParameterBundle(PropertyNames::Water::spargeRO).toDouble()                    },
+   m_alkalinity_as_hco3{namedParameterBundle(PropertyNames::Water::alkalinityAsHCO3).toBool()              } {
    return;
 }
 
+void Water::swap(Water & other) noexcept {
+   this->NamedEntity::swap(other);
+   std::swap(this->m_amount            , other.m_amount            );
+   std::swap(this->m_calcium_ppm       , other.m_calcium_ppm       );
+   std::swap(this->m_bicarbonate_ppm   , other.m_bicarbonate_ppm   );
+   std::swap(this->m_sulfate_ppm       , other.m_sulfate_ppm       );
+   std::swap(this->m_chloride_ppm      , other.m_chloride_ppm      );
+   std::swap(this->m_sodium_ppm        , other.m_sodium_ppm        );
+   std::swap(this->m_magnesium_ppm     , other.m_magnesium_ppm     );
+   std::swap(this->m_ph                , other.m_ph                );
+   std::swap(this->m_alkalinity        , other.m_alkalinity        );
+   std::swap(this->m_notes             , other.m_notes             );
+   std::swap(this->m_type              , other.m_type              );
+   std::swap(this->m_mash_ro           , other.m_mash_ro           );
+   std::swap(this->m_sparge_ro         , other.m_sparge_ro         );
+   std::swap(this->m_alkalinity_as_hco3, other.m_alkalinity_as_hco3);
+   return;
+}
+
+Water::~Water() = default;
+/*Water::~Water() {
+   qDebug() << Q_FUNC_INFO << "Deleting Water #" << this->key() << ":" << this->name() << "@" << static_cast<void *>(this);
+   ObjectStoreWrapper::logDiagnostics<Water>();
+   return;
+}*/
+
+Water & Water::operator=(Water other) {
+   // Per https://en.wikibooks.org/wiki/More_C++_Idioms/Copy-and-swap and other places, the safest way to do assignment
+   // is via the copy-and-swap idiom
+
+   // I think it's a coding error if we're trying to assign to ourselves
+   Q_ASSERT(this != &other);
+
+   this->swap(other);
+
+   // Using swap means we have bypassed all the magic of setAndNotify.  So we need to do a couple of things here:
+   //   - if we are already stored in the DB then we need to update the data there
+   //   - we need to issue the notifications for properties that changed as a result of the assignment
+   if (this->key() > 0) {
+      // We have to be careful not to create a new shared pointer for the object, but instead to get a copy of the one
+      // held by the object store.
+      qDebug() <<
+         Q_FUNC_INFO << "After assignment, updating Water #" << this->key() << "(" << this->name() << ") @" <<
+         static_cast<void *>(this) << "in DB";
+      ObjectStoreWrapper::update(*this);
+   }
+   if (this->m_amount             != other.m_amount            ) { this->propagatePropertyChange(PropertyNames::Water::amount          ); }
+   if (this->m_calcium_ppm        != other.m_calcium_ppm       ) { this->propagatePropertyChange(PropertyNames::Water::calcium_ppm     ); }
+   if (this->m_bicarbonate_ppm    != other.m_bicarbonate_ppm   ) { this->propagatePropertyChange(PropertyNames::Water::bicarbonate_ppm ); }
+   if (this->m_sulfate_ppm        != other.m_sulfate_ppm       ) { this->propagatePropertyChange(PropertyNames::Water::chloride_ppm    ); }
+   if (this->m_chloride_ppm       != other.m_chloride_ppm      ) { this->propagatePropertyChange(PropertyNames::Water::sodium_ppm      ); }
+   if (this->m_sodium_ppm         != other.m_sodium_ppm        ) { this->propagatePropertyChange(PropertyNames::Water::magnesium_ppm   ); }
+   if (this->m_magnesium_ppm      != other.m_magnesium_ppm     ) { this->propagatePropertyChange(PropertyNames::Water::ph              ); }
+   if (this->m_ph                 != other.m_ph                ) { this->propagatePropertyChange(PropertyNames::Water::alkalinity      ); }
+   if (this->m_alkalinity         != other.m_alkalinity        ) { this->propagatePropertyChange(PropertyNames::Water::sulfate_ppm     ); }
+   if (this->m_notes              != other.m_notes             ) { this->propagatePropertyChange(PropertyNames::Water::notes           ); }
+   if (this->m_type               != other.m_type              ) { this->propagatePropertyChange(PropertyNames::Water::type            ); }
+   if (this->m_mash_ro            != other.m_mash_ro           ) { this->propagatePropertyChange(PropertyNames::Water::mashRO          ); }
+   if (this->m_sparge_ro          != other.m_sparge_ro         ) { this->propagatePropertyChange(PropertyNames::Water::spargeRO        ); }
+   if (this->m_alkalinity_as_hco3 != other.m_alkalinity_as_hco3) { this->propagatePropertyChange(PropertyNames::Water::alkalinityAsHCO3); }
+
+   return *this;
+}
+
+
 //================================"SET" METHODS=================================
-void Water::setAmount(double var) {
-   this->setAndNotify(PropertyNames::Water::amount, this->m_amount, var);
-}
-
-void Water::setCalcium_ppm(double var) {
-   this->setAndNotify(PropertyNames::Water::calcium_ppm, this->m_calcium_ppm, var);
-}
-
-void Water::setBicarbonate_ppm(double var) {
-   this->setAndNotify(PropertyNames::Water::bicarbonate_ppm, this->m_bicarbonate_ppm, var);
-}
-
-void Water::setChloride_ppm(double var) {
-   this->setAndNotify(PropertyNames::Water::chloride_ppm, this->m_chloride_ppm, var);
-}
-
-void Water::setSodium_ppm(double var) {
-   this->setAndNotify(PropertyNames::Water::sodium_ppm, this->m_sodium_ppm, var);
-}
-
-void Water::setMagnesium_ppm(double var) {
-   this->setAndNotify(PropertyNames::Water::magnesium_ppm, this->m_magnesium_ppm, var);
-}
-
-void Water::setPh(double var) {
-   this->setAndNotify(PropertyNames::Water::ph, this->m_ph, var);
-}
-
-void Water::setAlkalinity(double var) {
-   this->setAndNotify(PropertyNames::Water::alkalinity, this->m_alkalinity, var);
-}
-
-void Water::setSulfate_ppm(double var) {
-   this->setAndNotify(PropertyNames::Water::sulfate_ppm, this->m_sulfate_ppm, var);
-}
-
-void Water::setNotes(QString const & var) {
-   this->setAndNotify(PropertyNames::Water::notes, this->m_notes, var);
-}
-
-void Water::setType(Types type) {
-   this->setAndNotify(PropertyNames::Water::type, this->m_type, type);
-}
-
-void Water::setMashRO(double var) {
-   this->setAndNotify(PropertyNames::Water::mashRO, this->m_mash_ro, var);
-}
-
-void Water::setSpargeRO(double var) {
-   this->setAndNotify(PropertyNames::Water::spargeRO, this->m_sparge_ro, var);
-}
-
-void Water::setAlkalinityAsHCO3(bool var) {
-   this->setAndNotify(PropertyNames::Water::alkalinityAsHCO3, this->m_alkalinity_as_hco3, var);
-}
+void Water::setAmount(double var)          { this->setAndNotify(PropertyNames::Water::amount,           this->m_amount,             var); }
+void Water::setCalcium_ppm(double var)     { this->setAndNotify(PropertyNames::Water::calcium_ppm,      this->m_calcium_ppm,        var); }
+void Water::setBicarbonate_ppm(double var) { this->setAndNotify(PropertyNames::Water::bicarbonate_ppm,  this->m_bicarbonate_ppm,    var); }
+void Water::setChloride_ppm(double var)    { this->setAndNotify(PropertyNames::Water::chloride_ppm,     this->m_chloride_ppm,       var); }
+void Water::setSodium_ppm(double var)      { this->setAndNotify(PropertyNames::Water::sodium_ppm,       this->m_sodium_ppm,         var); }
+void Water::setMagnesium_ppm(double var)   { this->setAndNotify(PropertyNames::Water::magnesium_ppm,    this->m_magnesium_ppm,      var); }
+void Water::setPh(double var)              { this->setAndNotify(PropertyNames::Water::ph,               this->m_ph,                 var); }
+void Water::setAlkalinity(double var)      { this->setAndNotify(PropertyNames::Water::alkalinity,       this->m_alkalinity,         var); }
+void Water::setSulfate_ppm(double var)     { this->setAndNotify(PropertyNames::Water::sulfate_ppm,      this->m_sulfate_ppm,        var); }
+void Water::setNotes(QString const & var)  { this->setAndNotify(PropertyNames::Water::notes,            this->m_notes,              var); }
+void Water::setType(Types var)             { this->setAndNotify(PropertyNames::Water::type,             this->m_type,               var); }
+void Water::setMashRO(double var)          { this->setAndNotify(PropertyNames::Water::mashRO,           this->m_mash_ro,            var); }
+void Water::setSpargeRO(double var)        { this->setAndNotify(PropertyNames::Water::spargeRO,         this->m_sparge_ro,          var); }
+void Water::setAlkalinityAsHCO3(bool var)  { this->setAndNotify(PropertyNames::Water::alkalinityAsHCO3, this->m_alkalinity_as_hco3, var); }
 
 //=========================="GET" METHODS=======================================
-QString Water::notes() const { return m_notes; }
-double Water::sulfate_ppm() const { return m_sulfate_ppm; }
-double Water::amount() const { return m_amount; }
-double Water::calcium_ppm() const { return m_calcium_ppm; }
-double Water::bicarbonate_ppm() const { return m_bicarbonate_ppm; }
-double Water::chloride_ppm() const { return m_chloride_ppm; }
-double Water::sodium_ppm() const { return m_sodium_ppm; }
-double Water::magnesium_ppm() const { return m_magnesium_ppm; }
-double Water::ph() const { return m_ph; }
-double Water::alkalinity() const { return m_alkalinity; }
-Water::Types Water::type() const { return m_type; }
-double Water::mashRO() const { return m_mash_ro; }
-double Water::spargeRO() const { return m_sparge_ro; }
-bool Water::alkalinityAsHCO3() const { return m_alkalinity_as_hco3; }
+QString      Water::notes()            const { return this->m_notes;              }
+double       Water::sulfate_ppm()      const { return this->m_sulfate_ppm;        }
+double       Water::amount()           const { return this->m_amount;             }
+double       Water::calcium_ppm()      const { return this->m_calcium_ppm;        }
+double       Water::bicarbonate_ppm()  const { return this->m_bicarbonate_ppm;    }
+double       Water::chloride_ppm()     const { return this->m_chloride_ppm;       }
+double       Water::sodium_ppm()       const { return this->m_sodium_ppm;         }
+double       Water::magnesium_ppm()    const { return this->m_magnesium_ppm;      }
+double       Water::ph()               const { return this->m_ph;                 }
+double       Water::alkalinity()       const { return this->m_alkalinity;         }
+Water::Types Water::type()             const { return this->m_type;               }
+double       Water::mashRO()           const { return this->m_mash_ro;            }
+double       Water::spargeRO()         const { return this->m_sparge_ro;          }
+bool         Water::alkalinityAsHCO3() const { return this->m_alkalinity_as_hco3; }
 
-double Water::ppm( Water::Ions ion )
-{
+double Water::ppm(Water::Ions const ion) const {
    switch(ion) {
-      case Water::Ca:   return m_calcium_ppm;
-      case Water::Cl:   return m_chloride_ppm;
-      case Water::HCO3: return m_bicarbonate_ppm;
-      case Water::Mg:   return m_magnesium_ppm;
-      case Water::Na:   return m_sodium_ppm;
-      case Water::SO4:  return m_sulfate_ppm;
+      case Water::Ions::Ca:   return this->m_calcium_ppm;
+      case Water::Ions::Cl:   return this->m_chloride_ppm;
+      case Water::Ions::HCO3: return this->m_bicarbonate_ppm;
+      case Water::Ions::Mg:   return this->m_magnesium_ppm;
+      case Water::Ions::Na:   return this->m_sodium_ppm;
+      case Water::Ions::SO4:  return this->m_sulfate_ppm;
       default: return 0.0;
    }
 

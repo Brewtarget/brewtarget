@@ -121,74 +121,69 @@ void FermentableDialog::retranslateUi()
 #endif // QT_NO_TOOLTIP
 }
 
-void FermentableDialog::removeFermentable()
-{
+void FermentableDialog::removeFermentable() {
    QModelIndexList selected = tableWidget->selectionModel()->selectedIndexes();
-   QModelIndex translated;
-   int row, size, i;
 
-   size = selected.size();
-   if( size == 0 )
+   int size = selected.size();
+   if (size == 0) {
       return;
-
-   // Make sure only one row is selected.
-   row = selected[0].row();
-   for( i = 1; i < size; ++i )
-   {
-      if( selected[i].row() != row )
-         return;
    }
 
-   translated = fermTableProxy->mapToSource(selected[0]);
-   Fermentable* ferm = fermTableModel->getFermentable(translated.row());
+   // Make sure only one row is selected.
+   int row = selected[0].row();
+   for (int i = 1; i < size; ++i) {
+      if (selected[i].row() != row) {
+         return;
+      }
+   }
+
+   QModelIndex translated = fermTableProxy->mapToSource(selected[0]);
+   auto ferm = fermTableModel->getRow(translated.row());
    ObjectStoreWrapper::softDelete(*ferm);
    return;
 }
 
-void FermentableDialog::editSelected()
-{
+void FermentableDialog::editSelected() {
    QModelIndexList selected = tableWidget->selectionModel()->selectedIndexes();
-   QModelIndex translated;
-   int row, size, i;
 
-   size = selected.size();
-   if( size == 0 )
+   int size = selected.size();
+   if (size == 0) {
       return;
-
-   // Make sure only one row is selected.
-   row = selected[0].row();
-   for( i = 1; i < size; ++i )
-   {
-      if( selected[i].row() != row )
-         return;
    }
 
-   translated = fermTableProxy->mapToSource(selected[0]);
-   Fermentable* ferm = fermTableModel->getFermentable(translated.row());
-   fermEdit->setFermentable(ferm);
+   // Make sure only one row is selected.
+   int row = selected[0].row();
+   for (int i = 1; i < size; ++i) {
+      if (selected[i].row() != row) {
+         return;
+      }
+   }
+
+   QModelIndex translated = fermTableProxy->mapToSource(selected[0]);
+   auto ferm = fermTableModel->getRow(translated.row());
+   fermEdit->setFermentable(ferm.get());
    fermEdit->show();
+   return;
 }
 
-void FermentableDialog::addFermentable(const QModelIndex& index)
-{
+void FermentableDialog::addFermentable(const QModelIndex& index) {
    QModelIndex translated;
 
    // If there is no provided index, get the selected index.
-   if( !index.isValid() )
-   {
+   if (!index.isValid()) {
       QModelIndexList selected = tableWidget->selectionModel()->selectedIndexes();
-      int row, size, i;
 
-      size = selected.size();
-      if( size == 0 )
+      int size = selected.size();
+      if (size == 0) {
          return;
+      }
 
       // Make sure only one row is selected.
-      row = selected[0].row();
-      for( i = 1; i < size; ++i )
-      {
-         if( selected[i].row() != row )
+      int row = selected[0].row();
+      for (int i = 1; i < size; ++i) {
+         if (selected[i].row() != row) {
             return;
+         }
       }
 
       translated = fermTableProxy->mapToSource(selected[0]);
@@ -204,7 +199,7 @@ void FermentableDialog::addFermentable(const QModelIndex& index)
          return;
    }
 
-   MainWindow::instance().addFermentableToRecipe(fermTableModel->getFermentable(translated.row()));
+   MainWindow::instance().addFermentableToRecipe(fermTableModel->getRow(translated.row()));
 
    return;
 }

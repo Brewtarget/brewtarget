@@ -45,7 +45,7 @@ AboutDialog::AboutDialog(QWidget * parent) :
          ""
          " <h1>Brewtarget %1</h1>"
          " <p>"
-         "  Brewtarget, for developing beer recipes, is Copyright 2009-2021"
+         "  Brewtarget, for developing beer recipes, is Copyright 2009-2022"
          "  by the following developers."
          " </p>"
          " <h2>Developers</h2>"
@@ -107,11 +107,10 @@ AboutDialog::AboutDialog(QWidget * parent) :
          " </p>"
          "</html>"
       )
-      .arg(VERSIONSTRING)
+      .arg(CONFIG_VERSION_STRING)
    );
    return;
 }
-
 
 
 void AboutDialog::changeEvent(QEvent* event) {
