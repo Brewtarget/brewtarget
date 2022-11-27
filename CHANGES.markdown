@@ -9,7 +9,7 @@ format therein).
 
 ### New Features
 
-* It is now possible to print and export your inventory.
+* We'll list new features here...
 
 ## v3.0.4
 Minor bug fixes for the 3.0.3 release (ie bugs in 3.0.3 are fixed in this 3.0.4 release).
