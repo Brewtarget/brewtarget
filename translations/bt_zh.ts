@@ -1327,7 +1327,7 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Both</source>
-        <translation>两</translation>
+        <translation type="vanished">两</translation>
     </message>
     <message>
         <source>Leaf</source>
@@ -1340,6 +1340,42 @@ Log file may contain more details.</source>
     <message>
         <source>Plug</source>
         <translation>塞插头Plug</translation>
+    </message>
+    <message>
+        <source>Flavor</source>
+        <translation type="unfinished">味Flavor</translation>
+    </message>
+    <message>
+        <source>Aroma &amp; Bittering</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bittering &amp; Flavor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Aroma &amp; Flavor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Aroma, Bittering &amp; Flavor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Extract</source>
+        <translation type="unfinished">提取</translation>
+    </message>
+    <message>
+        <source>WetLeaf</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Powder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Post-Boil</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1390,6 +1426,78 @@ Log file may contain more details.</source>
     <message>
         <source>Hop name:</source>
         <translation type="unfinished">合名称合名</translation>
+    </message>
+    <message>
+        <source>Bittering</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Aroma</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Aroma &amp; Bittering</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Flavor</source>
+        <translation type="unfinished">味Flavor</translation>
+    </message>
+    <message>
+        <source>Bittering &amp; Flavor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Aroma &amp; Flavor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Aroma, Bittering &amp; Flavor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Extract</source>
+        <translation type="unfinished">提取</translation>
+    </message>
+    <message>
+        <source>Leaf</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Leaf (wet)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pellet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Powder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Plug</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>First Wort</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Boil</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Post-Boil</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dry Hop</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1549,6 +1657,35 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Way Hoppy</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ImportRecordCount</name>
+    <message>
+        <source>Couldn&apos;t find any recognisable data in the file!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>🗸 Read </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> record</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> records</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>
+
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>↷ Skipped </source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2916,10 +3053,6 @@ Log file may contain more details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Standard Time Units</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>SRM (Standard Reference Method)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3043,6 +3176,58 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Resource directory &quot;%1&quot; is missing.  The software might not operate correctly without this directory and its contents.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Universal Standard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>floz</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>week</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>lovibond</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>brix</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>pH</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>IBU</source>
+        <translation type="unfinished">IBU</translation>
+    </message>
+    <message>
+        <source>vol</source>
+        <translation type="unfinished">卷vol</translation>
+    </message>
+    <message>
+        <source>mg/L</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ppm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ppb</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>cP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>mPa-s</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4173,35 +4358,6 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Could not understand file format</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>XmlRecordCount</name>
-    <message>
-        <source>Couldn&apos;t find any recognisable data in the file!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>🗸 Read </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source> record</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source> records</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>
-
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>↷ Skipped </source>
         <translation type="unfinished"></translation>
     </message>
 </context>

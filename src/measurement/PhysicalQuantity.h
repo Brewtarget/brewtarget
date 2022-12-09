@@ -94,9 +94,25 @@ namespace Measurement {
       Time,           // Note this is durations of time, NOT dates or times of day
       Temperature,
       Color,
-      Density,        // Sometimes referred to in comments as "gravity" as a shorthand for "specific gravity"
+      // Density is sometimes referred to as "gravity" as a shorthand for "specific gravity".  Strictly, what we're
+      // measuring as brewers is relative density (aka "ratio of the density ... with respect to water at its densest
+      // (at 4 °C)" per https://en.wikipedia.org/wiki/Relative_density) in order to find % sugar content (see
+      // https://en.wikipedia.org/wiki/Brix and https://en.wikipedia.org/wiki/Beer_measurement#Other_density_scales).
+      // So we could call this RelativeDensity or SugarConcentration or Gravity.  But I think Density is truest to the
+      // idea of a measurable physical quantity described above.
+      Density,
       Mixed,          // This is used for quantities where we allow measurement as either Mass or Volume
-      DiastaticPower
+      DiastaticPower,
+      Acidity,
+      Bitterness,
+      // Per https://www.sciencedirect.com/topics/agricultural-and-biological-sciences/carbonation, "Carbonation is
+      // measured as either ‘volumes’ or grams per litre. One volume means 1 L of CO2 in 1 L of drink.  This is
+      // equivalent to 1.96 g/L (normally quoted as 2 g/L)."  Thus, although we're using similar units to measures of
+      // concentration, the equivalences are different and, in practice, it's easiest to treat them as a completely
+      // separate.
+      Carbonation,
+      Concentration,
+      Viscosity
    };
 
    /**

@@ -1,6 +1,6 @@
 /*
  * Testing.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2022
  * - Mattias Måhl <mattias@kejsarsten.com>
  * - Matt Young <mfsy@yahoo.com>
  * - Philip Lee <rocketman768@gmail.com>
@@ -20,6 +20,7 @@
  */
 #include "Testing.h"
 
+#include <cmath>
 #include <exception>
 #include <iostream> // For std::cout
 #include <math.h>
@@ -28,7 +29,6 @@
 #include <xercesc/util/PlatformUtils.hpp>
 
 #include <QDebug>
-#include <QDir>
 #include <QString>
 #include <QtTest/QtTest>
 #if QT_VERSION < QT_VERSION_CHECK(5,10,0)
@@ -36,7 +36,10 @@
 #else
 #include <QRandomGenerator>
 #endif
+#include <QVector>
 
+#include "Algorithms.h"
+#include "config.h"
 #include "database/ObjectStoreWrapper.h"
 #include "Logging.h"
 #include "measurement/Measurement.h"
@@ -51,6 +54,176 @@
 #include "PersistentSettings.h"
 
 namespace {
+
+   struct SgBrixEquivalance {
+      double sg;
+      double brix;
+      double errorMarginSgToBrix;
+      double errorMarginBrixToSg;
+   };
+
+   //
+   // We test conversion in both directions Brix -> SG and SG -> Brix.  As commented elsewhere, I don't think many
+   // brewers use Brix.  We need Brix -> SG at least to be able to read any BeerJSON file that uses Brix.  I think our
+   // method (of interpolating the USDA published data) is likely more accurate than the best-fit cubic equation that
+   // most folks use.  However, for now, we're just testing here that our method is not hugely different than those
+   // used to generate tables on popular homebrew sites.
+   //
+   QVector<SgBrixEquivalance> const sgBrixEquivalances {
+      //
+      // With a few exceptions, the data below come from
+      // https://winning-homebrew.com/wp-content/uploads/2021/03/sgtobrix_conv_table.pdf (linked to from
+      // https://winning-homebrew.com/specific-gravity-to-brix.html).  It's not clear exactly how those figures were
+      // obtained, so it's not necessarily an error if we get slightly different results.  Still, it would be surprising
+      // if we were a long way adrift from these numbers.
+      //
+
+      //                Error Margins
+      // SG    Brix   SG->Brix  Brix->SG
+      {1.00156,  0.4, 0.00001, 0.00001},
+      {0.990,  0.00,  0.005,    0.0110},  // ===========================================================================
+      {0.991,  0.00,  0.005,    0.0100},  //
+      {0.992,  0.00,  0.005,    0.0090},  // For SG < 1.0, the conversion between Brix and SG is not very meaningful:
+      {0.993,  0.00,  0.005,    0.0080},  //  - SG to Brix will always give 0
+      {0.994,  0.00,  0.005,    0.0070},  //  - Brix to SG will always give 1.0
+      {0.995,  0.00,  0.005,    0.0060},  //
+      {0.996,  0.00,  0.005,    0.0050},  // We leave these test cases in for now, but with larger error bars then the
+      {0.997,  0.00,  0.005,    0.0040},  // more meaningful conversions below
+      {0.998,  0.00,  0.005,    0.0030},  //
+      {0.999,  0.00,  0.005,    0.0020},  // ===========================================================================
+      {1.000,  0.00,  0.005,    0.0002},
+      {1.001,  0.26,  0.010,    0.0002},
+      {1.002,  0.51,  0.010,    0.0002},
+      {1.003,  0.77,  0.010,    0.0002},
+      {1.004,  1.03,  0.010,    0.0002},
+      {1.005,  1.28,  0.010,    0.0002},
+      {1.006,  1.54,  0.010,    0.0002},
+      {1.007,  1.80,  0.010,    0.0002},
+      {1.008,  2.05,  0.010,    0.0002},
+      {1.009,  2.31,  0.010,    0.0002},
+      {1.010,  2.56,  0.010,    0.0002},
+      {1.011,  2.81,  0.010,    0.0002},
+      {1.012,  3.07,  0.010,    0.0002},
+      {1.013,  3.32,  0.010,    0.0002},
+      {1.014,  3.57,  0.010,    0.0002},
+      {1.015,  3.82,  0.010,    0.0002},
+      {1.016,  4.08,  0.010,    0.0002},
+      {1.017,  4.33,  0.010,    0.0002},
+      {1.018,  4.58,  0.010,    0.0002},
+      {1.019,  4.83,  0.010,    0.0002},
+      {1.020,  5.08,  0.010,    0.0002},
+      {1.021,  5.33,  0.010,    0.0002},
+      {1.022,  5.57,  0.020,    0.0002},
+      {1.023,  5.82,  0.020,    0.0002},
+      {1.024,  6.07,  0.020,    0.0002},
+      {1.025,  6.32,  0.020,    0.0002},
+      {1.026,  6.57,  0.020,    0.0002},
+      {1.027,  6.81,  0.020,    0.0002},
+      {1.028,  7.06,  0.020,    0.0002},
+      {1.029,  7.30,  0.020,    0.0002},
+      {1.030,  7.55,  0.020,    0.0002},
+      {1.031,  7.80,  0.020,    0.0002},
+      {1.032,  8.04,  0.020,    0.0002},
+      {1.033,  8.28,  0.020,    0.0002},
+      {1.034,  8.53,  0.020,    0.0002},
+      {1.035,  8.77,  0.020,    0.0002},
+      {1.036,  9.01,  0.020,    0.0002},
+      {1.037,  9.26,  0.020,    0.0002},
+      {1.038,  9.50,  0.020,    0.0002},
+      {1.039,  9.74,  0.020,    0.0002},
+      {1.040,  9.98,  0.020,    0.0002},
+      {1.041, 10.22,  0.020,    0.0002},
+      {1.042, 10.46,  0.020,    0.0002},
+      {1.043, 10.70,  0.020,    0.0002},
+      {1.044, 10.94,  0.020,    0.0002},
+      {1.045, 11.18,  0.020,    0.0002},
+      {1.046, 11.42,  0.020,    0.0002},
+      {1.047, 11.66,  0.020,    0.0002},
+      {1.048, 11.90,  0.020,    0.0002},
+      {1.049, 12.14,  0.020,    0.0002},
+      {1.050, 12.37,  0.030,    0.0002},
+      {1.051, 12.61,  0.030,    0.0002},
+      {1.052, 12.85,  0.030,    0.0002},
+      {1.053, 13.08,  0.030,    0.0002},
+      {1.054, 13.32,  0.030,    0.0002},
+      {1.055, 13.55,  0.030,    0.0002},
+      {1.056, 13.79,  0.030,    0.0002},
+      {1.057, 14.02,  0.030,    0.0002},
+      {1.058, 14.26,  0.030,    0.0002},
+      {1.059, 14.49,  0.030,    0.0002},
+      {1.060, 14.72,  0.030,    0.0002},
+      {1.061, 14.96,  0.030,    0.0002},
+      {1.062, 15.19,  0.030,    0.0002},
+      {1.063, 15.42,  0.030,    0.0002},
+      {1.064, 15.65,  0.030,    0.0002},
+      {1.065, 15.88,  0.030,    0.0002},
+      {1.066, 16.11,  0.030,    0.0002},
+      {1.067, 16.34,  0.030,    0.0002},
+      {1.068, 16.57,  0.030,    0.0002},
+      {1.069, 16.80,  0.030,    0.0002},
+      {1.070, 17.03,  0.030,    0.0002},
+      {1.071, 17.26,  0.030,    0.0002},
+      {1.072, 17.49,  0.030,    0.0002},
+      {1.073, 17.72,  0.030,    0.0002},
+      {1.074, 17.95,  0.030,    0.0002},
+      {1.075, 18.18,  0.030,    0.0002},
+      {1.076, 18.40,  0.030,    0.0002},
+      {1.077, 18.63,  0.030,    0.0002},
+      {1.078, 18.86,  0.030,    0.0002},
+      {1.079, 19.08,  0.030,    0.0002},
+      {1.080, 19.31,  0.030,    0.0002},
+      {1.081, 19.53,  0.030,    0.0002},
+      {1.082, 19.76,  0.030,    0.0002},
+      {1.083, 19.98,  0.030,    0.0002},
+      {1.084, 20.21,  0.030,    0.0002},
+      {1.085, 20.43,  0.030,    0.0002},
+      {1.086, 20.65,  0.030,    0.0002},
+      {1.087, 20.88,  0.030,    0.0002},
+      {1.088, 21.10,  0.030,    0.0002},
+      {1.089, 21.32,  0.030,    0.0002},
+      {1.090, 21.54,  0.032,    0.0002},  // <- Wider difference on SG->Brix
+      {1.091, 21.77,  0.030,    0.0002},
+      {1.092, 21.99,  0.030,    0.0002},
+      {1.093, 22.21,  0.030,    0.0002},
+      {1.094, 22.43,  0.030,    0.0002},
+      {1.095, 22.65,  0.030,    0.0002},
+      {1.096, 22.87,  0.030,    0.0002},
+      {1.097, 23.09,  0.030,    0.0002},
+      {1.098, 23.31,  0.030,    0.0002},
+      {1.099, 23.53,  0.030,    0.0002},
+      {1.100, 23.75,  0.030,    0.0002},
+      {1.101, 23.96,  0.035,    0.0002},
+      {1.102, 24.18,  0.035,    0.0002},
+      {1.103, 24.40,  0.035,    0.0002},
+      {1.104, 24.62,  0.035,    0.0002},
+      {1.105, 24.83,  0.035,    0.0002},
+      {1.106, 25.05,  0.035,    0.0002},
+      {1.107, 25.27,  0.035,    0.0002},
+      {1.108, 25.48,  0.035,    0.0002},
+      {1.109, 25.70,  0.035,    0.0002},
+      {1.110, 25.91,  0.035,    0.0002},
+      {1.111, 26.13,  0.035,    0.0002},
+      {1.112, 26.34,  0.035,    0.0002},
+      {1.113, 26.56,  0.035,    0.0002},
+      {1.114, 26.77,  0.035,    0.0002},
+      {1.115, 26.98,  0.035,    0.0002},
+      {1.116, 27.20,  0.035,    0.0002},
+      {1.117, 27.41,  0.035,    0.0002},
+      {1.118, 27.62,  0.035,    0.0002},
+      {1.119, 27.83,  0.036,    0.0002},  // <- Wider difference on SG->Brix
+      {1.120, 28.05,  0.035,    0.0002},
+      {1.121, 28.26,  0.035,    0.0002},
+      {1.122, 28.47,  0.035,    0.0002},
+      {1.123, 28.68,  0.035,    0.0002},
+      {1.124, 28.89,  0.035,    0.0002},
+      {1.125, 29.10,  0.035,    0.0002},
+      {1.126, 29.31,  0.035,    0.0002},
+      {1.127, 29.52,  0.035,    0.0002},
+      {1.128, 29.73,  0.035,    0.0002},
+      {1.129, 29.94,  0.035,    0.0002},
+      {1.130, 30.15,  0.035,    0.0002},
+   };
+
 
    //! \brief True iff a <= c <= b
    constexpr bool inRange(double c, double a, double b) {
@@ -86,11 +259,72 @@ namespace {
 
 }
 
+Testing::Testing() :
+   QObject(),
+   tempDir{QDir::tempPath()},
+   equipFiveGalNoLoss{},
+   cascade_4pct{},
+   twoRow{} {
+   //
+   // Create a unique temporary directory using the current thread ID as part of a subdirectory name inside whatever
+   // system-standard temp directory Qt proposes to us.  (We also put the application name in the subdirectory name so
+   // that anyone doing a manual clean up of their temp directory doesn't have to guess or wonder what created it.
+   // Mostly our temp subdirectories will be deleted in our destructor, but core dumps happen etc.)
+   //
+   // This is important when using the Meson build system because Meson runs several unit tests in parallel (whereas
+   // CMake executes them sequentially).  We are guaranteed a separate instance of this class for each run because
+   // both CMake and Meson invoke unit tests by running a program.
+   //
+   QString subDirName;
+   QTextStream{&subDirName} << CONFIG_APPLICATION_NAME_UC << "-UnitTestRun-" << QThread::currentThreadId();
+   if (!this->tempDir.mkdir(subDirName)) {
+      qCritical() <<
+         Q_FUNC_INFO << "Unable to create" << subDirName << "sub-directory of" << this->tempDir.absolutePath();
+      throw std::runtime_error{"Unable to create unique temp directory"};
+   }
+   if (!this->tempDir.cd(subDirName)) {
+      qCritical() <<
+         Q_FUNC_INFO << "Unable to access" << this->tempDir.absolutePath() << "after creating it";
+      throw std::runtime_error{"Unable to access unique temp directory"};
+   }
+
+   qDebug() << Q_FUNC_INFO << "Using" << this->tempDir.absolutePath() << "as temporary directory";
+   return;
+}
+
+Testing::~Testing() {
+   //
+   // We have to be a bit careful in our cleaning up.  We only want to try to remove the unique temporary directory we
+   // created, not the system-wide one.  (It shouldn't be possible for this->tempDir to be the root directory, but it
+   // doesn't hurt to check!)
+   //
+   if (this->tempDir.exists() &&
+       this->tempDir.absolutePath() != QDir::tempPath() &&
+       !this->tempDir.isRoot()) {
+      qInfo() << Q_FUNC_INFO << "Removing temporary directory" << this->tempDir.absolutePath() << "and its contents";
+      if (!this->tempDir.removeRecursively()) {
+         //
+         // It's not the end of the world if we couldn't remove a temporary directory so, if it happens, just log an
+         // error rather than throwing an exception (which might prevent other clean-up from happening).
+         //
+         qInfo() << Q_FUNC_INFO << "Unable to remove temporary directory" << this->tempDir.absolutePath();
+      }
+   }
+   return;
+};
+
 //
-// NB: To have unit tests run via "make test", you also need to add "ADD_TEST" lines to src/CMakeLists.txt
+// If you're building with CMake:
+//   - Ensure each unit test has an "ADD_TEST" line in the main CMakeLists.txt
+//   - Run unit tests with  make test
+//   - Debug log output is in build/Testing/Temporary/LastTest.log (assuming "build" is your CMake build directory)
 //
-// Also, although make test does not dump a lot of output on the screen, if a test fails, you can get the debug log
-// output from build/Testing/Temporary/LastTest.log
+// If you're building with Meson (which NB is not yet fully supported!):
+//   - Ensure each unit test has a "test" line in meson.build
+//   - Run unit tests with  meson test
+//   - Debug log output is in mbuild/meson-logs/testlog.txt (assuming "mbuild" is your Meson build directory)
+//
+// QTEST_MAIN generates (via horrible macros) a main() function for the unit test runner
 //
 QTEST_MAIN(Testing)
 
@@ -112,7 +346,7 @@ void Testing::initTestCase() {
       QCoreApplication::setApplicationName("brewtarget-test");
 
       // Set options so that any data modification does not affect any other data
-      PersistentSettings::initialise(QDir::tempPath());
+      PersistentSettings::initialise(this->tempDir.absolutePath());
 
       // Log test setup
       // Verify that the Logging initializes normally
@@ -122,7 +356,7 @@ void Testing::initTestCase() {
       // We always want debug logging for tests as it's useful when a test fails
       Logging::setLogLevel(Logging::LogLevel_DEBUG);
       // Test logs go to a /tmp (or equivalent) so as not to clutter the application path with dummy data.
-      Logging::setDirectory(QDir::tempPath(), Logging::NewDirectoryIsTemporary);
+      Logging::setDirectory(this->tempDir.absolutePath(), Logging::NewDirectoryIsTemporary);
       qDebug() << "logging initialized";
 
       // Inside initializeLogging(), there's a check to see whether we're the test application.  If so, it turns off
@@ -133,8 +367,14 @@ void Testing::initTestCase() {
       PersistentSettings::insert(PersistentSettings::Names::ibu_formula, "tinseth");
 
    // Tell Brewtarget not to require any "user" input on starting
-   Application::setInteractive(false);
-   QVERIFY( Application::initialize() );
+      Application::setInteractive(false);
+
+      //
+      // Application::initialize() will initialise a bunch of things, including creating a default database in
+      // this->tempDir courtesy of the call to PersistentSettings::initialise() above.  If there is a problem creating the DB,
+      // it will return false.
+      //
+      QVERIFY(Application::initialize());
 
       // 5 gallon equipment
       this->equipFiveGalNoLoss = std::make_shared<Equipment>();
@@ -159,7 +399,7 @@ void Testing::initTestCase() {
       this->cascade_4pct->setAlpha_pct(4.0);
       this->cascade_4pct->setUse(Hop::Use::Boil);
       this->cascade_4pct->setTime_min(60);
-      this->cascade_4pct->setType(Hop::Type::Both);
+      this->cascade_4pct->setType(Hop::Type::AromaAndBittering);
       this->cascade_4pct->setForm(Hop::Form::Leaf);
 
       // 70% yield, no moisture, 2 SRM
@@ -393,6 +633,25 @@ void Testing::testUnitConversions() {
       "Unit conversion error (EBC to SRM)"
    );
 
+   return;
+}
+
+void Testing::testAlgorithms() {
+   for (auto const & ii : sgBrixEquivalances) {
+      qDebug() <<
+         Q_FUNC_INFO << "Testing conversions between" << ii.sg << "SG = " << ii.brix << "Brix; SG->Brix=" <<
+         Algorithms::SgAt20CToBrix(ii.sg) << "(" << std::abs(ii.brix - Algorithms::SgAt20CToBrix(ii.sg)) <<
+         "); Brix->SG=" << Algorithms::BrixToSgAt20C(ii.brix) << "(" <<
+         std::abs(Algorithms::BrixToSgAt20C(ii.brix) - ii.sg) << ")";
+      QVERIFY2(
+         fuzzyComp(Algorithms::BrixToSgAt20C(ii.brix), ii.sg, ii.errorMarginBrixToSg),
+         "Error converting Brix to Specific Gravity"
+      );
+      QVERIFY2(
+         fuzzyComp(Algorithms::SgAt20CToBrix(ii.sg), ii.brix, ii.errorMarginSgToBrix),
+         "Error converting Specific Gravity to Brix"
+      );
+   }
    return;
 }
 

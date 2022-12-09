@@ -1,6 +1,6 @@
 /*
- * xml/XmlRecordCount.cpp is part of Brewtarget, and is Copyright the following
- * authors 2020-2022
+ * utils/ImportRecordCount.cpp is part of Brewtarget, and is Copyright the following
+ * authors 2020-2022:
  * - Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -16,13 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "xml/XmlRecordCount.h"
+#include "utils/ImportRecordCount.h"
 
-XmlRecordCount::XmlRecordCount() : skips{}, oks{} {
+ImportRecordCount::ImportRecordCount() : skips{}, oks{} {
    return;
 }
 
-void XmlRecordCount::skipped(QString recordName) {
+void ImportRecordCount::skipped(QString recordName) {
    // If we already have a count, get it and add one, otherwise start from 1
    // If QMap holds an item with key recordName then insert() will just replace its existing value
    this->skips.insert(recordName,
@@ -30,7 +30,7 @@ void XmlRecordCount::skipped(QString recordName) {
    return;
 }
 
-void XmlRecordCount::processedOk(QString recordName) {
+void ImportRecordCount::processedOk(QString recordName) {
    // Same implementation as skipped() above, but not (IMHO) enough code duplication to pull out into a common
    // function
    this->oks.insert(recordName,
@@ -38,12 +38,12 @@ void XmlRecordCount::processedOk(QString recordName) {
    return;
 }
 
-bool XmlRecordCount::writeToUserMessage(QTextStream & userMessage) {
+bool ImportRecordCount::writeToUserMessage(QTextStream & userMessage) {
 
    if (this->oks.isEmpty() && this->skips.isEmpty()) {
       //
-      // Haven't managed to get the XSD to enforce that there is at least some recognisable content in the file, so we
-      // need to handle this case ourselves.
+      // For BeerXML imports, we haven't managed to get the XSD to enforce that there is at least some recognisable
+      // content in the file, so we need to handle this case ourselves.
       //
       userMessage << tr("Couldn't find any recognisable data in the file!");
       return false;
@@ -57,7 +57,9 @@ bool XmlRecordCount::writeToUserMessage(QTextStream & userMessage) {
          if (0 != typesOfRecordsRead) {
             userMessage << ", ";
          }
-         userMessage << ii.value() << " " << ii.key();
+         // NB key will typically be class name, so force lower case in the output to get "3 hop records" rather than
+         // "3 Hop records" etc.
+         userMessage << ii.value() << " " << ii.key().toLower();
          totalRecordsRead += ii.value();
       }
       userMessage << (1 == totalRecordsRead ? tr(" record") : tr(" records"));
@@ -77,7 +79,9 @@ bool XmlRecordCount::writeToUserMessage(QTextStream & userMessage) {
          if (0 != typesOfRecordsSkipped) {
             userMessage << ", ";
          }
-         userMessage << ii.value() << " " << ii.key();
+         // NB key will typically be class name, so force lower case in the output to get "3 hop records" rather than
+         // "3 Hop records" etc.
+         userMessage << ii.value() << " " << ii.key().toLower();
          totalRecordsSkipped += ii.value();
       }
       userMessage <<

@@ -26,6 +26,7 @@
 #include <cstdint>
 #include <memory>
 
+#include <QDir>
 #include <QObject>
 #include <QtTest/QtTest>
 
@@ -40,11 +41,15 @@ class Testing : public QObject {
    Q_OBJECT
 
 public:
+   Testing();
+   virtual ~Testing();
 
 private:
+   //! \brief Where we write database and log files etc
+   QDir tempDir;
 
    std::shared_ptr<Equipment> equipFiveGalNoLoss;
-   std::shared_ptr<Hop> cascade_4pct;
+   std::shared_ptr<Hop>       cascade_4pct;
    //! \brief 70% yield, no moisture, 2 SRM
    std::shared_ptr<Fermentable> twoRow;
 
@@ -71,8 +76,17 @@ private slots:
    //! \brief Verify conversion between US Customary & Metric units etc
    void testUnitConversions();
 
+   /**
+    * \brief Verify other conversions that warrant their own algorithms.
+    *
+    *        This is usually things where we have a formula in one direction but do some root-finding for the inverse
+    *        function because there isn't a non-horrible formula in that direction.
+    */
+   void testAlgorithms();
+
    //! \brief Verify Log rotation is working
    void testLogRotation();
+
 };
 
 #endif

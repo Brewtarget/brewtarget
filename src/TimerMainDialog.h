@@ -30,11 +30,10 @@
 #include <QString>
 #include <QWidget>
 
-#include "boiltime.h"
-
+class BoilTime;
 class MainWindow;
-class TimerListDialog;
 class TimerWidget;
+class TimerListDialog;
 
 /*!
  * \class TimerMainDialog
@@ -70,17 +69,10 @@ private slots:
    void timesUp();
 
 private:
-   MainWindow* mainWindow; //To get currently selected recipe
-   QList<TimerWidget*> * timers;
-   TimerListDialog* timerWindow;
-   BoilTime* boilTime;
-   bool stopped;
-   bool limitAlarmRing;
-   unsigned int alarmLimit;
-
    void removeAllTimers();
    void resetTimers();
    void updateTime();
+   QString timeToString(int t);
    void setRingLimits(bool l, unsigned int a);
    void sortTimers();
    TimerWidget* createNewTimer();
@@ -89,6 +81,14 @@ private:
    void createTimer(QString n, int t);
    //Overload QDialog::reject()
    void reject();
+
+   MainWindow* mainWindow; //To get currently selected recipe
+   QList<TimerWidget*> * timers;
+   TimerListDialog* timerWindow;
+   BoilTime* boilTime;
+   bool stopped;
+   bool limitAlarmRing;
+   unsigned int alarmLimit; // In seconds
 };
 
 #endif

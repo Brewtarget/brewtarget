@@ -32,7 +32,7 @@
 #include "model/NamedEntity.h"
 #include "model/NamedParameterBundle.h"
 #include "utils/EnumStringMapping.h"
-#include "xml/XmlRecordCount.h"
+#include "utils/ImportRecordCount.h"
 #include "xml/XQString.h"
 
 class XmlCoding;
@@ -52,16 +52,16 @@ public:
     *                       DB, in which case we should skip over this record and carry on processing the rest of the
     *                       file
     */
-   enum ProcessingResult {
+   enum class ProcessingResult {
       Succeeded,
       Failed,
       FoundDuplicate
    };
 
    /**
-    * \brief The types of fields that we know how to process.  Used in \b Field records
+    * \brief The types of fields that we know how to process.  Used in \b FieldDefinition records
     */
-   enum FieldType {
+   enum class FieldType {
       Bool,
       Int,
       UInt,
@@ -84,7 +84,11 @@ public:
       XQString            xPath;
       BtStringConst const & propertyName;  // If fieldType == RecordComplex, then this is used only on export
                                            // If fieldType == RequiredConstant, then this is actually the constant value
-      EnumStringMapping const * enumMapping;
+      EnumStringMapping const * enumMapping; // Only used if fieldType == Enum, otherwise should be nullptr
+      FieldDefinition(FieldType           fieldType,
+                      XQString            xPath,
+                      BtStringConst const & propertyName,
+                      EnumStringMapping const * enumMapping = nullptr);
    };
 
    typedef QVector<FieldDefinition> FieldDefinitions;
@@ -104,6 +108,9 @@ public:
              XmlCoding const & xmlCoding,
              FieldDefinitions const & fieldDefinitions,
              QString const & namedEntityClassName);
+
+   // Need a virtual destructor as we have virtual member functions
+   virtual ~XmlRecord();
 
    /**
     * \brief Get the record name (in this coding)
@@ -165,7 +172,7 @@ public:
     */
    virtual ProcessingResult normaliseAndStoreInDb(std::shared_ptr<NamedEntity> containingEntity,
                                                   QTextStream & userMessage,
-                                                  XmlRecordCount & stats);
+                                                  ImportRecordCount & stats);
    /**
     * \brief Export to XML
     * \param namedEntityToExport The object that we want to export to XML
@@ -211,17 +218,21 @@ public:
 
 protected:
    bool normaliseAndStoreChildRecordsInDb(QTextStream & userMessage,
-                                          XmlRecordCount & stats);
+                                          ImportRecordCount & stats);
 
    /**
-    * \brief Checks whether the \b NamedEntity for this record is, in all the ways that count, a duplicate of one we
+    * \brief Checks whether the \c NamedEntity for this record is, in all the ways that count, a duplicate of one we
     *        already have stored in the DB
+    *
+    *        Note that this is \b not a \c const function as, in the case that we do find a duplicate, we will update
+    *        some of our internal data to point to the existing stored \c NamedEntity.
+    *
     * \return \b true if this is a duplicate and should be skipped rather than stored
     */
    virtual bool isDuplicate();
 
    /**
-    * \brief If the \b NamedEntity for this record is supposed to have globally unique names, then this method will
+    * \brief If the \c NamedEntity for this record is supposed to have globally unique names, then this method will
     *        check the current name and modify it if necessary.  NB: This function should be called _after_
     *        \b isDuplicate().
     */

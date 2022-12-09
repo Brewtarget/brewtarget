@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>778</width>
+    <width>800</width>
     <height>450</height>
    </rect>
   </property>
@@ -54,7 +54,7 @@
           <string>Use</string>
          </property>
          <property name="buddy">
-          <cstring>comboBox_use</cstring>
+          <cstring>comboBox_hopUse</cstring>
          </property>
         </widget>
        </item>
@@ -115,35 +115,35 @@
         </spacer>
        </item>
        <item row="0" column="3">
-        <widget class="QComboBox" name="comboBox_use">
+        <widget class="QComboBox" name="comboBox_hopUse">
          <property name="toolTip">
           <string>Use</string>
          </property>
          <item>
-          <property name="text">
+         <property name="text">
            <string>Mash</string>
-          </property>
-         </item>
+         </property>
+       </item>
          <item>
-          <property name="text">
+         <property name="text">
            <string>First Wort</string>
-          </property>
-         </item>
+         </property>
+       </item>
          <item>
-          <property name="text">
+         <property name="text">
            <string>Boil</string>
-          </property>
-         </item>
+         </property>
+       </item>
          <item>
-          <property name="text">
+         <property name="text">
            <string>Aroma</string>
-          </property>
-         </item>
+         </property>
+       </item>
          <item>
-          <property name="text">
+         <property name="text">
            <string>Dry Hop</string>
-          </property>
-         </item>
+         </property>
+       </item>
         </widget>
        </item>
        <item row="1" column="2">
@@ -152,12 +152,12 @@
           <string>Type</string>
          </property>
          <property name="buddy">
-          <cstring>comboBox_type</cstring>
+          <cstring>comboBox_hopType</cstring>
          </property>
         </widget>
        </item>
        <item row="1" column="3">
-        <widget class="QComboBox" name="comboBox_type">
+        <widget class="QComboBox" name="comboBox_hopType">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -168,20 +168,20 @@
           <string>Type</string>
          </property>
          <item>
-          <property name="text">
+         <property name="text">
            <string>Bittering</string>
-          </property>
-         </item>
+         </property>
+       </item>
          <item>
-          <property name="text">
+         <property name="text">
            <string>Aroma</string>
-          </property>
-         </item>
+         </property>
+       </item>
          <item>
-          <property name="text">
+         <property name="text">
            <string>Both</string>
-          </property>
-         </item>
+         </property>
+       </item>
         </widget>
        </item>
        <item row="2" column="2">
@@ -190,12 +190,12 @@
           <string>Form</string>
          </property>
          <property name="buddy">
-          <cstring>comboBox_form</cstring>
+          <cstring>comboBox_hopForm</cstring>
          </property>
         </widget>
        </item>
        <item row="2" column="3">
-        <widget class="QComboBox" name="comboBox_form">
+        <widget class="QComboBox" name="comboBox_hopForm">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -206,19 +206,19 @@
           <string>Form</string>
          </property>
          <item>
-          <property name="text">
+         <property name="text">
            <string>Leaf</string>
-          </property>
-         </item>
+         </property>
+       </item>
          <item>
-          <property name="text">
+         <property name="text">
            <string>Pellet</string>
-          </property>
-         </item>
+         </property>
+       </item>
          <item>
-          <property name="text">
+         <property name="text">
            <string>Plug</string>
-          </property>
+         </property>
          </item>
         </widget>
        </item>
@@ -252,7 +252,7 @@
         </widget>
        </item>
       </layout>
-     </widget>
+        </widget>
      <widget class="QWidget" name="tabWidget_editorPage2">
       <attribute name="title">
        <string>Extras</string>
@@ -677,9 +677,9 @@
   <tabstop>tabWidget_editor</tabstop>
   <tabstop>lineEdit_name</tabstop>
   <tabstop>lineEdit_alpha</tabstop>
-  <tabstop>comboBox_use</tabstop>
-  <tabstop>comboBox_type</tabstop>
-  <tabstop>comboBox_form</tabstop>
+  <tabstop>comboBox_hopUse</tabstop>
+  <tabstop>comboBox_hopType</tabstop>
+  <tabstop>comboBox_hopForm</tabstop>
   <tabstop>lineEdit_beta</tabstop>
   <tabstop>lineEdit_humulene</tabstop>
   <tabstop>lineEdit_caryophyllene</tabstop>

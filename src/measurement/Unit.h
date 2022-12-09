@@ -49,8 +49,6 @@ namespace Measurement {
    class Unit {
 
    public:
-      // Did you know you need these various enums to be *INSIDE* the class definition for Qt to see them? TBD DO WE CARE ABOUT THIS ANY MORE?
-
       /**
        * \brief Construct a type of unit.  Note that it is \b not intended that users of this class construct their own
        *        \c Unit objects.  Rather they should use pointers or references to the constants defined in the \c Units
@@ -187,37 +185,78 @@ namespace Measurement {
       // === Volume ===
       extern Unit const liters;
       extern Unit const milliliters;
-      extern Unit const us_barrels;
-      extern Unit const us_gallons;
-      extern Unit const us_quarts;
-      extern Unit const us_cups;
-      extern Unit const us_tablespoons;
-      extern Unit const us_teaspoons;
-      extern Unit const imperial_barrels;
-      extern Unit const imperial_gallons;
-      extern Unit const imperial_quarts;
-      extern Unit const imperial_cups;
+      extern Unit const us_barrels;     // =  31 × us_gallons (for beer; different for other things!)
+      extern Unit const us_gallons;     // =   4 × us_quarts
+      extern Unit const us_quarts;      // =   2 × us_pints
+      extern Unit const us_pints;       // =  16 × us_fluidOunces
+      extern Unit const us_cups;        // =   8 × us_fluidOunces
+      extern Unit const us_fluidOunces;
+      extern Unit const us_tablespoons; // = 1/2 × us_fluidOunces
+      extern Unit const us_teaspoons;   // = 1/6 × us_fluidOunces
+      extern Unit const imperial_barrels;     // = 36 × imperial_gallons
+      extern Unit const imperial_gallons;     // =  4 × imperial_quarts
+      extern Unit const imperial_quarts;      // =  2 × imperial_pints
+      extern Unit const imperial_pints;       // = 20 × imperial_fluidOunces
+      extern Unit const imperial_cups;        // = 10 × imperial_fluidOunces
+      extern Unit const imperial_fluidOunces;
       extern Unit const imperial_tablespoons;
       extern Unit const imperial_teaspoons;
       // === Time ===
-      extern Unit const seconds;
       extern Unit const minutes;
-      extern Unit const hours;
+      extern Unit const weeks;
       extern Unit const days;
+      extern Unit const hours;
+      extern Unit const seconds;
       // === Temperature ===
       extern Unit const celsius;
       extern Unit const fahrenheit;
       // === Color ===
       extern Unit const srm;
       extern Unit const ebc;
+      extern Unit const lovibond;
       // == Density ===
+      // Strictly speaking, Plato and Brix are not measures of density but of percentage sugar content, and we're
+      // usually interested in density in order to get % sugar content to do calculations about how much sugar turned to
+      // alcohol.  However, since our primary measurement (specific gravity) is of density, that's the physical quantity
+      // under which we'll group all three units.
       extern Unit const sp_grav;
       extern Unit const plato;
+      extern Unit const brix;
       // == Diastatic power ==
       extern Unit const lintner;
       extern Unit const wk;
+      // == Acidity ==
+      // Because it's such a universal unit, in most of the code we use a pH number directly without going via this Unit
+      // object, but it's here for completeness and possible future use.
+      extern Unit const pH;
+      // == Bitterness ==
+      extern Unit const ibu;
+      // == Carbonation ==
+      extern Unit const carbonationVolumes;
+      extern Unit const carbonationGramsPerLiter;
+      // == Concentration ==
+      extern Unit const milligramsPerLiter;
+      extern Unit const partsPerMillion;
+      extern Unit const partsPerBillion;
+      // == Viscosity ==
+      // Per https://en.wikipedia.org/wiki/Viscosity#Measurement, the SI unit of dynamic viscosity is the newton-second
+      // per square meter (N·s/m2), which is (by definition) equivalent to a pascal-second (Pa·s).  An alternate metric
+      // unit is the poise (P), which is g·cm−1·s−1.  So 1P = 0.1 Pa·s.  More commonly used, including in brewing, is
+      // the centipoise (cP), which is convenient because the viscosity of water at 20 °C is about 1 cP.  One centipoise
+      // is equal to one millipascal-second (mPa·s).
+      //
+      // See eg https://www.brewingwithbriess.com/blog/understanding-a-malt-analysis/ for reference to common use of
+      // centipoise as viscosity measurement in the brewing industry.
+      //
+      // (US Customary and Imperial offer us pound-seconds per square foot (lb·s/ft2), but thankfully this does not seem
+      // to be much used in brewing, so we do not implement it.)
+      extern Unit const centipoise;
+      extern Unit const millipascalSecond;
    }
 }
+
+//.:TODO:.     "SpecificVolumeType": "Specific volume is the inverse of density, with units of volume over mass, ie qt/lb or L/kg. Commonly used for mash thickness.",
+
 
 /**
  * \brief Convenience function to allow output of \c Measurement::Unit to \c QDebug or \c QTextStream stream etc
