@@ -225,8 +225,7 @@ public:
 
          // Connect signals so that we are notified when there are changes to the Hop/Fermentable/etc we just added to
          // our recipe.
-         connect(ourIngredient.get(), SIGNAL(changed(QMetaProperty, QVariant)), &us,
-                 SLOT(acceptChangeToContainedObject(QMetaProperty, QVariant)));
+         connect(ourIngredient.get(), &NamedEntity::changed, &us, &Recipe::acceptChangeToContainedObject);
       }
       return;
    }
@@ -268,6 +267,40 @@ public:
       return ObjectStoreTyped<NE>::getInstance().getByIdsRaw(this->accessIds<NE>());
    }
 
+   /**
+    * \brief Connect signals for this Recipe.  See comment for \c Recipe::connectSignalsForAllRecipes for more
+    *        explanation.
+    */
+   void connectSignals() {
+      Equipment * equipment = this->recipe.equipment();
+      if (equipment) {
+         connect(equipment, &NamedEntity::changed,           &this->recipe, &Recipe::acceptChangeToContainedObject);
+         connect(equipment, &Equipment::changedBoilSize_l,   &this->recipe, &Recipe::setBoilSize_l);
+         connect(equipment, &Equipment::changedBoilTime_min, &this->recipe, &Recipe::setBoilTime_min);
+      }
+
+      QList<Fermentable *> fermentables = this->recipe.fermentables();
+      for (auto fermentable : fermentables) {
+         connect(fermentable, &NamedEntity::changed, &this->recipe, &Recipe::acceptChangeToContainedObject);
+      }
+
+      QList<Hop *> hops = this->recipe.hops();
+      for (auto hop : hops) {
+         connect(hop, &NamedEntity::changed, &this->recipe, &Recipe::acceptChangeToContainedObject);
+      }
+
+      QList<Yeast *> yeasts = this->recipe.yeasts();
+      for (auto yeast : yeasts) {
+         connect(yeast, &NamedEntity::changed, &this->recipe, &Recipe::acceptChangeToContainedObject);
+      }
+
+      Mash * mash = this->recipe.mash();
+      if (mash) {
+         connect(mash, &NamedEntity::changed, &this->recipe, &Recipe::acceptChangeToContainedObject);
+      }
+
+      return;
+   }
 
    // Member variables
    Recipe & recipe;
@@ -294,32 +327,32 @@ bool Recipe::isEqualTo(NamedEntity const & other) const {
    Recipe const & rhs = static_cast<Recipe const &>(other);
    // Base class will already have ensured names are equal
    return (
-             this->m_type              == rhs.m_type              &&
-             this->m_batchSize_l       == rhs.m_batchSize_l       &&
-             this->m_boilSize_l        == rhs.m_boilSize_l        &&
-             this->m_boilTime_min      == rhs.m_boilTime_min      &&
-             this->m_efficiency_pct    == rhs.m_efficiency_pct    &&
-             this->m_primaryAge_days   == rhs.m_primaryAge_days   &&
-             this->m_primaryTemp_c     == rhs.m_primaryTemp_c     &&
-             this->m_secondaryAge_days == rhs.m_secondaryAge_days &&
-             this->m_secondaryTemp_c   == rhs.m_secondaryTemp_c   &&
-             this->m_tertiaryAge_days  == rhs.m_tertiaryAge_days  &&
-             this->m_tertiaryTemp_c    == rhs.m_tertiaryTemp_c    &&
-             this->m_age               == rhs.m_age               &&
-             this->m_ageTemp_c         == rhs.m_ageTemp_c         &&
-             ObjectStoreWrapper::compareById<Style>(    this->styleId,     rhs.styleId)     &&
-             ObjectStoreWrapper::compareById<Mash>(     this->mashId,      rhs.mashId)      &&
-             ObjectStoreWrapper::compareById<Equipment>(this->equipmentId, rhs.equipmentId) &&
-             this->m_og                == rhs.m_og                &&
-             this->m_fg                == rhs.m_fg                &&
-             ObjectStoreWrapper::compareListByIds<Fermentable>(this->pimpl->fermentableIds, rhs.pimpl->fermentableIds) &&
-             ObjectStoreWrapper::compareListByIds<Hop>(        this->pimpl->hopIds,         rhs.pimpl->hopIds)         &&
-             ObjectStoreWrapper::compareListByIds<Instruction>(this->pimpl->instructionIds, rhs.pimpl->instructionIds) &&
-             ObjectStoreWrapper::compareListByIds<Misc>(       this->pimpl->miscIds,        rhs.pimpl->miscIds)        &&
-             ObjectStoreWrapper::compareListByIds<Salt>(       this->pimpl->saltIds,        rhs.pimpl->saltIds)        &&
-             ObjectStoreWrapper::compareListByIds<Water>(      this->pimpl->waterIds,       rhs.pimpl->waterIds)       &&
-             ObjectStoreWrapper::compareListByIds<Yeast>(      this->pimpl->yeastIds,       rhs.pimpl->yeastIds)
-          );
+      this->m_type              == rhs.m_type              &&
+      this->m_batchSize_l       == rhs.m_batchSize_l       &&
+      this->m_boilSize_l        == rhs.m_boilSize_l        &&
+      this->m_boilTime_min      == rhs.m_boilTime_min      &&
+      this->m_efficiency_pct    == rhs.m_efficiency_pct    &&
+      this->m_primaryAge_days   == rhs.m_primaryAge_days   &&
+      this->m_primaryTemp_c     == rhs.m_primaryTemp_c     &&
+      this->m_secondaryAge_days == rhs.m_secondaryAge_days &&
+      this->m_secondaryTemp_c   == rhs.m_secondaryTemp_c   &&
+      this->m_tertiaryAge_days  == rhs.m_tertiaryAge_days  &&
+      this->m_tertiaryTemp_c    == rhs.m_tertiaryTemp_c    &&
+      this->m_age               == rhs.m_age               &&
+      this->m_ageTemp_c         == rhs.m_ageTemp_c         &&
+      ObjectStoreWrapper::compareById<Style>(    this->styleId,     rhs.styleId)     &&
+      ObjectStoreWrapper::compareById<Mash>(     this->mashId,      rhs.mashId)      &&
+      ObjectStoreWrapper::compareById<Equipment>(this->equipmentId, rhs.equipmentId) &&
+      this->m_og                == rhs.m_og                &&
+      this->m_fg                == rhs.m_fg                &&
+      ObjectStoreWrapper::compareListByIds<Fermentable>(this->pimpl->fermentableIds, rhs.pimpl->fermentableIds) &&
+      ObjectStoreWrapper::compareListByIds<Hop>(        this->pimpl->hopIds,         rhs.pimpl->hopIds)         &&
+      ObjectStoreWrapper::compareListByIds<Instruction>(this->pimpl->instructionIds, rhs.pimpl->instructionIds) &&
+      ObjectStoreWrapper::compareListByIds<Misc>(       this->pimpl->miscIds,        rhs.pimpl->miscIds)        &&
+      ObjectStoreWrapper::compareListByIds<Salt>(       this->pimpl->saltIds,        rhs.pimpl->saltIds)        &&
+      ObjectStoreWrapper::compareListByIds<Water>(      this->pimpl->waterIds,       rhs.pimpl->waterIds)       &&
+      ObjectStoreWrapper::compareListByIds<Yeast>(      this->pimpl->yeastIds,       rhs.pimpl->yeastIds)
+   );
 }
 
 ObjectStore & Recipe::getObjectStoreTypedInstance() const {
@@ -374,40 +407,40 @@ Recipe::Recipe(NamedParameterBundle const & namedParameterBundle) :
       // .:TODO:. Change so we store enum not string!
       RECIPE_TYPE_STRING_TO_TYPE.key(static_cast<Recipe::Type>(namedParameterBundle(PropertyNames::Recipe::recipeType).toInt()))
    },
-   m_brewer            {namedParameterBundle(PropertyNames::Recipe::brewer).toString()},
-   m_asstBrewer        {namedParameterBundle(PropertyNames::Recipe::asstBrewer).toString()},
-   m_batchSize_l       {namedParameterBundle(PropertyNames::Recipe::batchSize_l).toDouble()},
-   m_boilSize_l        {namedParameterBundle(PropertyNames::Recipe::boilSize_l).toDouble()},
-   m_boilTime_min      {namedParameterBundle(PropertyNames::Recipe::boilTime_min).toDouble()},
-   m_efficiency_pct    {namedParameterBundle(PropertyNames::Recipe::efficiency_pct).toDouble()},
-   m_fermentationStages{namedParameterBundle(PropertyNames::Recipe::fermentationStages).toInt()},
-   m_primaryAge_days   {namedParameterBundle(PropertyNames::Recipe::primaryAge_days).toDouble()},
-   m_primaryTemp_c     {namedParameterBundle(PropertyNames::Recipe::primaryTemp_c).toDouble()},
+   m_brewer            {namedParameterBundle(PropertyNames::Recipe::brewer).toString()           },
+   m_asstBrewer        {namedParameterBundle(PropertyNames::Recipe::asstBrewer).toString()       },
+   m_batchSize_l       {namedParameterBundle(PropertyNames::Recipe::batchSize_l).toDouble()      },
+   m_boilSize_l        {namedParameterBundle(PropertyNames::Recipe::boilSize_l).toDouble()       },
+   m_boilTime_min      {namedParameterBundle(PropertyNames::Recipe::boilTime_min).toDouble()     },
+   m_efficiency_pct    {namedParameterBundle(PropertyNames::Recipe::efficiency_pct).toDouble()   },
+   m_fermentationStages{namedParameterBundle(PropertyNames::Recipe::fermentationStages).toInt()  },
+   m_primaryAge_days   {namedParameterBundle(PropertyNames::Recipe::primaryAge_days).toDouble()  },
+   m_primaryTemp_c     {namedParameterBundle(PropertyNames::Recipe::primaryTemp_c).toDouble()    },
    m_secondaryAge_days {namedParameterBundle(PropertyNames::Recipe::secondaryAge_days).toDouble()},
-   m_secondaryTemp_c   {namedParameterBundle(PropertyNames::Recipe::secondaryTemp_c).toDouble()},
-   m_tertiaryAge_days  {namedParameterBundle(PropertyNames::Recipe::tertiaryAge_days).toDouble()},
-   m_tertiaryTemp_c    {namedParameterBundle(PropertyNames::Recipe::tertiaryTemp_c).toDouble()},
-   m_age               {namedParameterBundle(PropertyNames::Recipe::age).toDouble()},
-   m_ageTemp_c         {namedParameterBundle(PropertyNames::Recipe::ageTemp_c).toDouble()},
-   m_date              {namedParameterBundle(PropertyNames::Recipe::date).toDate()},
-   m_carbonation_vols  {namedParameterBundle(PropertyNames::Recipe::carbonation_vols).toDouble()},
-   m_forcedCarbonation {namedParameterBundle(PropertyNames::Recipe::forcedCarbonation).toBool()},
-   m_primingSugarName  {namedParameterBundle(PropertyNames::Recipe::primingSugarName).toString()},
+   m_secondaryTemp_c   {namedParameterBundle(PropertyNames::Recipe::secondaryTemp_c).toDouble()  },
+   m_tertiaryAge_days  {namedParameterBundle(PropertyNames::Recipe::tertiaryAge_days).toDouble() },
+   m_tertiaryTemp_c    {namedParameterBundle(PropertyNames::Recipe::tertiaryTemp_c).toDouble()   },
+   m_age               {namedParameterBundle(PropertyNames::Recipe::age).toDouble()              },
+   m_ageTemp_c         {namedParameterBundle(PropertyNames::Recipe::ageTemp_c).toDouble()        },
+   m_date              {namedParameterBundle(PropertyNames::Recipe::date).toDate()               },
+   m_carbonation_vols  {namedParameterBundle(PropertyNames::Recipe::carbonation_vols).toDouble() },
+   m_forcedCarbonation {namedParameterBundle(PropertyNames::Recipe::forcedCarbonation).toBool()  },
+   m_primingSugarName  {namedParameterBundle(PropertyNames::Recipe::primingSugarName).toString() },
    m_carbonationTemp_c {namedParameterBundle(PropertyNames::Recipe::carbonationTemp_c).toDouble()},
    m_primingSugarEquiv {namedParameterBundle(PropertyNames::Recipe::primingSugarEquiv).toDouble()},
-   m_kegPrimingFactor  {namedParameterBundle(PropertyNames::Recipe::kegPrimingFactor).toDouble()},
-   m_notes             {namedParameterBundle(PropertyNames::Recipe::notes).toString()},
-   m_tasteNotes        {namedParameterBundle(PropertyNames::Recipe::tasteNotes).toString()},
-   m_tasteRating       {namedParameterBundle(PropertyNames::Recipe::tasteRating).toDouble()},
-   styleId             {namedParameterBundle(PropertyNames::Recipe::styleId).toInt()},
-   mashId              {namedParameterBundle(PropertyNames::Recipe::mashId).toInt()},
-   equipmentId         {namedParameterBundle(PropertyNames::Recipe::equipmentId).toInt()},
-   m_og                {namedParameterBundle(PropertyNames::Recipe::og).toDouble()},
-   m_fg                {namedParameterBundle(PropertyNames::Recipe::fg).toDouble()},
-   m_locked            {namedParameterBundle(PropertyNames::Recipe::locked).toBool()},
-   m_ancestor_id       {namedParameterBundle(PropertyNames::Recipe::ancestorId).toInt()},
+   m_kegPrimingFactor  {namedParameterBundle(PropertyNames::Recipe::kegPrimingFactor).toDouble() },
+   m_notes             {namedParameterBundle(PropertyNames::Recipe::notes).toString()            },
+   m_tasteNotes        {namedParameterBundle(PropertyNames::Recipe::tasteNotes).toString()       },
+   m_tasteRating       {namedParameterBundle(PropertyNames::Recipe::tasteRating).toDouble()      },
+   styleId             {namedParameterBundle(PropertyNames::Recipe::styleId).toInt()             },
+   mashId              {namedParameterBundle(PropertyNames::Recipe::mashId).toInt()              },
+   equipmentId         {namedParameterBundle(PropertyNames::Recipe::equipmentId).toInt()         },
+   m_og                {namedParameterBundle(PropertyNames::Recipe::og).toDouble()               },
+   m_fg                {namedParameterBundle(PropertyNames::Recipe::fg).toDouble()               },
+   m_locked            {namedParameterBundle(PropertyNames::Recipe::locked).toBool()             },
+   m_ancestor_id       {namedParameterBundle(PropertyNames::Recipe::ancestorId).toInt()          },
    m_ancestors         {},
-   m_hasDescendants    {false                                                                     } {
+   m_hasDescendants    {false                                                                    } {
    // At this stage, we haven't set any Hops, Fermentables, etc.  This is deliberate because the caller typically needs
    // to access subsidiary records to obtain this info.   Callers will usually use setters (setHopIds, etc but via
    // setProperty) to finish constructing the object.
@@ -487,23 +520,19 @@ Recipe::Recipe(Recipe const & other) :
    if (other.equipmentId > 0) {
       auto equipment = copyIfNeeded(*ObjectStoreWrapper::getById<Equipment>(other.equipmentId));
       this->equipmentId = equipment->key();
-      connect(equipment.get(), SIGNAL(changed(QMetaProperty, QVariant)), this,
-              SLOT(acceptChangeToContainedObject(QMetaProperty, QVariant)));
    }
 
    if (other.mashId > 0) {
       auto mash = copyIfNeeded(*ObjectStoreWrapper::getById<Mash>(other.mashId));
       this->mashId = mash->key();
-      connect(mash.get(), SIGNAL(changed(QMetaProperty, QVariant)), this, SLOT(acceptChangeToContainedObject(QMetaProperty,
-                                                                                                             QVariant)));
    }
 
    if (other.styleId > 0) {
       auto style = copyIfNeeded(*ObjectStoreWrapper::getById<Style>(other.styleId));
       this->styleId = style->key();
-      connect(style.get(), SIGNAL(changed(QMetaProperty, QVariant)), this, SLOT(acceptChangeToContainedObject(QMetaProperty,
-                                                                                                              QVariant)));
    }
+
+   this->pimpl->connectSignals();
 
    this->recalcAll();
 
@@ -534,41 +563,12 @@ void Recipe::setKey(int key) {
 }
 
 
-void Recipe::connectSignals() {
-   qDebug() << Q_FUNC_INFO << "Connecting signals for Recipes";
+void Recipe::connectSignalsForAllRecipes() {
+   qDebug() << Q_FUNC_INFO << "Connecting signals for all Recipes";
    // Connect fermentable, hop changed signals to their parent recipe
    for (auto recipe : ObjectStoreTyped<Recipe>::getInstance().getAllRaw()) {
 //      qDebug() << Q_FUNC_INFO << "Connecting signals for Recipe #" << recipe->key();
-      Equipment * equipment = recipe->equipment();
-      if (equipment != nullptr) {
-         connect(equipment, &NamedEntity::changed,           recipe, &Recipe::acceptChangeToContainedObject);
-         connect(equipment, &Equipment::changedBoilSize_l,   recipe, &Recipe::setBoilSize_l);
-         connect(equipment, &Equipment::changedBoilTime_min, recipe, &Recipe::setBoilTime_min);
-      }
-
-      QList<Fermentable *> fermentables = recipe->fermentables();
-      for (auto fermentable : fermentables) {
-         connect(fermentable, SIGNAL(changed(QMetaProperty, QVariant)), recipe, SLOT(acceptChangeToContainedObject(QMetaProperty,
-                                                                                                                   QVariant)));
-      }
-
-      QList<Hop *> hops = recipe->hops();
-      for (auto hop : hops) {
-         connect(hop, SIGNAL(changed(QMetaProperty, QVariant)), recipe, SLOT(acceptChangeToContainedObject(QMetaProperty,
-                                                                                                           QVariant)));
-      }
-
-      QList<Yeast *> yeasts = recipe->yeasts();
-      for (auto yeast : yeasts) {
-         connect(yeast, SIGNAL(changed(QMetaProperty, QVariant)), recipe, SLOT(acceptChangeToContainedObject(QMetaProperty,
-                                                                                                             QVariant)));
-      }
-
-      Mash * mash = recipe->mash();
-      if (mash != nullptr) {
-         connect(mash, SIGNAL(changed(QMetaProperty, QVariant)), recipe, SLOT(acceptChangeToContainedObject(QMetaProperty,
-                                                                                                            QVariant)));
-      }
+      recipe->pimpl->connectSignals();
    }
 
    return;
@@ -1261,8 +1261,7 @@ template<class NE> std::shared_ptr<NE> Recipe::add(std::shared_ptr<NE> ne) {
    }
 
    this->pimpl->accessIds<NE>().append(ne->key());
-   connect(ne.get(), SIGNAL(changed(QMetaProperty, QVariant)), this, SLOT(acceptChangeToContainedObject(QMetaProperty,
-                                                                                                        QVariant)));
+   connect(ne.get(), &NamedEntity::changed, this, &Recipe::acceptChangeToContainedObject);
    this->propagatePropertyChange(propertyToPropertyName<NE>());
 
    this->recalcIfNeeded(ne->metaObject()->className());
@@ -1456,8 +1455,7 @@ void Recipe::setMash(Mash * var) {
    this->mashId = mashToAdd->key();
    this->propagatePropertyChange(propertyToPropertyName<Mash>());
 
-   connect(mashToAdd.get(), SIGNAL(changed(QMetaProperty, QVariant)), this, SLOT(acceptMashChange(QMetaProperty,
-                                                                                                  QVariant)));
+   connect(mashToAdd.get(), &NamedEntity::changed, this, &Recipe::acceptChangeToContainedObject);
    emit this->changed(this->metaProperty(*PropertyNames::Recipe::mash), QVariant::fromValue<Mash *>(mashToAdd.get()));
 
    this->recalcAll();
@@ -2057,6 +2055,7 @@ double Recipe::batchSizeNoLosses_l() {
 //==============================Recalculators==================================
 
 void Recipe::recalcIfNeeded(QString classNameOfWhatWasAddedOrChanged) {
+   qDebug() << Q_FUNC_INFO << classNameOfWhatWasAddedOrChanged;
    // We could just compare with "Hop", "Equipment", etc but there's then no compile-time checking of typos.  Using
    // ::staticMetaObject.className() is a bit more clunky but it's safer.
 
@@ -2065,14 +2064,14 @@ void Recipe::recalcIfNeeded(QString classNameOfWhatWasAddedOrChanged) {
       return;
    }
 
-   if (classNameOfWhatWasAddedOrChanged == "Equipment" ||
-       classNameOfWhatWasAddedOrChanged == "Fermentable" ||
-       classNameOfWhatWasAddedOrChanged == "Mash") {
+   if (classNameOfWhatWasAddedOrChanged == Equipment::staticMetaObject.className() ||
+       classNameOfWhatWasAddedOrChanged == Fermentable::staticMetaObject.className() ||
+       classNameOfWhatWasAddedOrChanged == Mash::staticMetaObject.className()) {
       this->recalcAll();
       return;
    }
 
-   if (classNameOfWhatWasAddedOrChanged == "Yeast") {
+   if (classNameOfWhatWasAddedOrChanged == Yeast::staticMetaObject.className()) {
       this->recalcOgFg();
       this->recalcABV_pct();
       return;

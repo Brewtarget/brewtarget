@@ -135,9 +135,7 @@ class Recipe : public NamedEntity {
    Q_OBJECT
    Q_CLASSINFO("signal", "recipes")
 
-   friend class RecipeFormatter;
    friend class MainWindow;
-   friend class WaterDialog;
 public:
 
    Recipe(QString name);
@@ -310,7 +308,7 @@ public:
     *
     *        Needs to be called \b after all the calls to ObjectStoreTyped<FooBar>::getInstance().loadAll()
     */
-   static void connectSignals();
+   static void connectSignalsForAllRecipes();
 
    /*!
     * \brief Add (a copy if necessary of) a Hop/Fermentable/Instruction etc (that may or may not already be in an
