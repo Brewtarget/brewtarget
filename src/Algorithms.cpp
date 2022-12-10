@@ -20,15 +20,22 @@
  */
 #include "Algorithms.h"
 
+#include <algorithm> // Of course we stand on the shoulders of the standard library, rather than reinvent the wheel
 #include <cmath>
 
 #include <QDebug>
 #include <QVector>
 
 #include "PhysicalConstants.h"
+#include "measurement/SucroseConversion.h"
 #include "measurement/Unit.h"
 
 namespace {
+
+   double constexpr ROOT_PRECISION = 0.0000001;
+
+   double constexpr minPlausibleSpecificGravity = 0.900;
+   double constexpr maxPlausibleSpecificGravity = 1.150;
 
    /**
     * \brief returns base^pow for the special case when pow is a positive integer
@@ -98,6 +105,80 @@ namespace {
       {789,  897, 10.5, 12.0, 0.134},
       {898, 1007, 12.0, 13.6, 0.135}
    };
+
+   /**
+    * \brief Extension of std::lower_bound to find an interpolated conversion in a sorted range
+    *
+    * \param first As \c std::lower_bound, first \c T in the sorted range
+    * \param last  Different from \c std::lower_bound, last \c T in the sorted range
+    * \param value As \c std::lower_bound, a \c T struct containing the value to convert
+    * \param getFrom Lambda to extract the "from" value from a struct of the type \c T
+    * \param getTo Lambda to extract the "to" value from a struct of the type \c T
+    * \param whatFrom Description for logging of what we're converting from
+    * \param whatTo   Description for logging of what we're converting from
+    */
+   template<class ForwardIt, class T, class GetFrom, class GetTo>
+   double interpolatedConversion(ForwardIt first,
+                                    ForwardIt last,
+                                    T const & value,
+                                    GetFrom getFrom,
+                                    GetTo getTo,
+                                    char const * const whatFrom,
+                                    char const * const whatTo) {
+      auto const firstLarger = std::lower_bound(
+         first,
+         last + 1,
+         value,
+         [& getFrom, & getTo](T const & lhs, T const & rhs) {return getFrom(lhs) < getFrom(rhs);}
+      );
+
+      if (firstLarger == last + 1) {
+         // We're off the end of the array
+         qWarning() <<
+            Q_FUNC_INFO << whatFrom << getFrom(value) << "too large to convert to " << whatTo <<
+            " so using max value of" << getTo(*last);
+         return getTo(*last);
+      }
+
+      // The lower bound is the first element that does not satisfy "element < value" (where value is what we're searching
+      // for.
+      Q_ASSERT(getFrom(*firstLarger) >= getFrom(value));
+
+      // If we found an exact match, then return that
+      if (getFrom(*firstLarger) == getFrom(value)) {
+         return getTo(*firstLarger);
+      }
+
+      if (firstLarger == first) {
+         qWarning() <<
+            Q_FUNC_INFO << whatFrom << getFrom(value) << "too small to convert to " << whatTo <<
+            " so using min value of" << getTo(*first);
+         return getTo(*first);
+      }
+
+      // Since firstLarger is the first element not to satisfy element < value, its predecessor must, by definition,
+      // satisfy this
+      auto const lastSmaller = firstLarger - 1;
+      Q_ASSERT(getFrom(*lastSmaller) < getFrom(value));
+
+      // Now we just do a linear interpolation
+      // positionInRange will be between 0 and 1 and tells us, in relative terms, where the supplied SG is in relation to
+      // lastSmaller and firstLarger.  Eg 0.5 would mean it was exactly half-way between the two.
+      Q_ASSERT(getFrom(*lastSmaller) < getFrom(*firstLarger));
+
+      double const positionInRange =
+         (getFrom(value) - getFrom(*lastSmaller)) / (getFrom(*firstLarger) - getFrom(*lastSmaller));
+      qDebug() <<
+         Q_FUNC_INFO << "Supplied value" << getFrom(value) << whatFrom << " lies" << (100 * positionInRange) << "% "
+         "between" << getFrom(*lastSmaller) << whatFrom << "(=" << getTo(*lastSmaller) << whatTo << ") and" <<
+         getFrom(*firstLarger) << whatFrom << "(=" << getTo(*firstLarger) << whatTo << ")";
+
+      Q_ASSERT(positionInRange >= 0.0);
+      Q_ASSERT(positionInRange <= 1.0);
+
+      return positionInRange * (getTo(*firstLarger) - getTo(*lastSmaller)) + getTo(*lastSmaller);
+   }
+
 }
 
 Polynomial::Polynomial() :
@@ -223,7 +304,110 @@ double Algorithms::PlatoToSG_20C20C(double plato) {
    // After this, finding the root of the polynomial will be finding the SG.
    poly[0] -= plato;
 
-   return poly.rootFind( 1.000, 1.050 );
+   return poly.rootFind(minPlausibleSpecificGravity, maxPlausibleSpecificGravity);
+}
+
+double Algorithms::SgAt20CToBrix(double sg) {
+   // Since Brix is "the sugar content of an aqueous solution", there isn't really a meaningful conversion for SG below
+   // 1.000, so we just always return 0 brix in this case.
+   if (sg <= 1.0) {
+      qWarning() << Q_FUNC_INFO << "Specific gravity" << sg << "does not have a meaningful conversion to Brix";
+      return 0.0;
+   }
+
+   //
+   // A lot of people use the Wikipedia conversion formula from specific gravity to Brix (well, the more accurate of the
+   // two offered on https://en.wikipedia.org/wiki/Brix.  See eg
+   // https://beermaverick.com/brix-plato-specific-gravity-converter/).
+   //
+   // Note that Wikipedia says this formula "should not be used above S = 1.17874 (40 °Bx)".
+   //
+   // You can simplify the calculation by using Horner's method (https://en.wikipedia.org/wiki/Horner%27s_method) to
+   // evaluate the formula (as offered at
+   // https://www.vcalc.com/wiki/MichaelBartmess/Degrees+Brix%2C+Bx%2C+to+SG and in various other places) to give code
+   // as follows:
+   //
+   //    if (sg <= 1.17874) {
+   //       return ((182.4601*sg - 775.6821)*sg + 1262.7794)*sg - 669.5622;
+   //    }
+   //
+   // There is a different formula (brix = 143.254 * sg^3 - 648.670 * sg^2 + 1125.805 * sg - 620.389) at
+   // https://www.vinolab.hr/calculator/gravity-density-sugar-conversions-en19, that is "based on an expression from a
+   // polynomial fit to a large data set", but it doesn't say what data set was used.  I don't know whether that's more
+   // or less accurate than the Wikipedia formula.
+   //
+   // In either case, such formulae are a "best fit curve" to observed data.  Since we have 800 points of observed data,
+   // we can do something more accurate.  We search that data and either find an exact match or we find the two nearest
+   // values above and below the one we are looking for, and we then do a linear interpolation on those.  Effectively,
+   // we're drawing straight lines between all the observed data points.  For the number of points we have, I think it's
+   // a good approximation.
+   //
+
+
+   //
+   // The zeros in searchingFor are dummy values.  We need the struct for std::lower_bound below
+   //
+   // The advantage of using std::lower_bound over std::find_if is that, provided you give it random-access iterators,
+   // the former does O(log N) binary search rather than O(N) linear search.
+   //
+   Measurement::SucroseConversion const searchingFor{0, 0, sg};
+   return interpolatedConversion(
+      &Measurement::sucroseConversions[0],
+      &Measurement::sucroseConversions[Measurement::sucroseConversions_size - 1],
+      searchingFor,
+      [](Measurement::SucroseConversion const & value) {return value.apparentSgAt2020C; },
+      [](Measurement::SucroseConversion const & value) {return value.degreesBrix; },
+      "Specific gravity",
+      "Brix"
+   );
+
+}
+
+double Algorithms::BrixToSgAt20C(double brix) {
+   //
+   // Converting Brix to Specific Gravity is "just" the inverse of SgAt20CToBrix()
+   //
+   // If we were taking the formulaic approach, we might think of algebraically finding the inverse of the "best fit"
+   // cubic function.  However, doing this directly would give something horrifically unwieldy.  Eg, if you ask
+   // Wolfram Alpha (https://www.wolframalpha.com/) for the inverse function of
+   //    y = ((182.4601*x - 775.6821)*x + 1262.7794)*x - 669.5622
+   // it gives you:
+   //    y = 1.41708 - 2.63482×10^-7 (
+   //           4.46934×10^6 sqrt(1.12359×10^21 x^2 - 1.8305×10^23 x + 1.14483×10^25)
+   //           - 1.49813×10^17 x + 1.22034×10^19
+   //        )^(1/3) + (1.13417×10^6) / (
+   //          4.46934×10^6 sqrt(1.12359×10^21 x^2 - 1.8305×10^23 x + 1.14483×10^25) - 1.49813×10^17 x + 1.22034×10^19
+   //        )^(1/3)
+   // as the simpler of two answers!
+   //
+   // Apparently, according to BYO Magazine, there is also SG = (Brix / (258.6-((Brix / 258.2)*227.1))) + 1, but I've
+   // only found indirect reference to that at https://www.brewersfriend.com/brix-converter/
+   // The same formula is offered at https://brucrafter.com/convert-brix-to-sg/
+   //
+   // We could use an approximate method to find the roots of the "best fit" cubic function, as is done in
+   // Algorithms::ogFgToPlato.  Code would be:
+   //
+   //    Polynomial sgToBrixFormula {
+   //       Polynomial() << -669.5622 << 1262.7794 << -775.6821 << 182.4601
+   //    };
+   //    sgToBrixFormula[0] -= brix;
+   //    return sgToBrixFormula.rootFind(minPlausibleSpecificGravity, maxPlausibleSpecificGravity);
+   //
+   // However, instead, we use the same approach as in SgAt20CToBrix of interpolating the USDA observed data.
+   //
+   Measurement::SucroseConversion const searchingFor{0, brix, 0};
+
+   return interpolatedConversion(
+      &Measurement::sucroseConversions[0],
+      &Measurement::sucroseConversions[Measurement::sucroseConversions_size - 1],
+      searchingFor,
+      [](Measurement::SucroseConversion const & value) {return value.degreesBrix; },
+      [](Measurement::SucroseConversion const & value) {return value.apparentSgAt2020C; },
+      "Brix",
+      "Specific gravity"
+   );
+
+
 }
 
 double Algorithms::getPlato(double sugar_kg, double wort_l) {

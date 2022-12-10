@@ -23,8 +23,6 @@
 #define ALGORITHMS_H
 #pragma once
 
-#define ROOT_PRECISION 0.0000001
-
 #include <cmath>
 #include <limits> // For std::numeric_limits
 #include <string.h>
@@ -115,6 +113,13 @@ namespace Algorithms {
    double SG_20C20C_toPlato( double sg );
    //! \returns sg of \b plato
    double PlatoToSG_20C20C( double plato );
+
+   //! \brief Convert Specific Gravity (measured at 20°C) to Brix
+   double SgAt20CToBrix(double sg);
+
+   //! \brief Convert Brix to Specific Gravity (measured at 20°C)
+   double BrixToSgAt20C(double brix);
+
    //! \returns water density in kg/L at temperature \b celsius
    double getWaterDensity_kgL( double celsius );
    //! \returns additive correction to the 15C hydrometer reading if read at \b celsius

@@ -44,23 +44,50 @@ namespace Measurement {
       UsCustomary,
 
       /**
-       * This is similar to the "International System of Units (SI)" (which is derived from the original Metric system)
-       * but is more practical for use by brewers.  It differs for instance in using Celsius for temperature rather than
-       * Kelvin, and in including a volume scale (liters) which, strictly-speaking, SI does not.
+       * Despite the fact that the metric system offers many benefits over its imperial predecessors, it's not quite as
+       * simple as one might imagine.  In short, there have been multiple metric systems (eg see
+       * https://en.wikipedia.org/wiki/Metric_system#Common_metric_systems).  The "International System of Units (SI)"
+       * is the official one adopted by all countries except Myanmar, Liberia, and the United States.  But it is not
+       * always convenient or practical for brewers to use strict SI units -- eg it's far more likely you want to
+       * measure wort temperature in Celsius than in Kelvin.
        *
-       * Covers Length, Area, Volume, Mass, Weight, Temperature and Time (duration) -- of which we use Volume, Mass and
-       * Temperature
+       * So, \c Measurement::SystemOfMeasurement::Metric is probably best thought of as "metric for brewers".
+       * Differences from SI include:
+       *
+       *    - We use Celsius for temperature rather than Kelvin
+       *    - We include a volume scale (liters) which, strictly-speaking, SI does not (because you'd use cubic metres)
+       *    - We use centipoise for viscosity rather than newton-seconds per square meter
+       *      (Poise/centipoise comes from the "Centimetre–gram–second (CGS)" metric system, whose other units have
+       *      largely fallen out of use --
+       *      see https://en.wikipedia.org/wiki/Centimetre%E2%80%93gram%E2%80%93second_system_of_units.)
+       *
+       * Covers Length, Area, Volume, Mass, Weight, Temperature, Time (duration), and Viscosity -- of which we use
+       * Volume, Mass and Temperature.  (See comment below in \c Measurement::SystemOfMeasurement::UniversalStandard for
+       * why do not use a metric system of time.)
        */
       Metric,
+
+      /**
+       * It turns out we occasionally need to support and classify "other" metric units.  In particular, BeerJSON
+       * supports both millipascal-seconds and centipoise as viscosity measurements.  Neither of these is an SI unit,
+       * so a "MetricSi" category wouldn't help us.  Instead we have this slightly ugly catch-all for "metric systems we
+       * might need to deal with but which we don't use"!
+       */
+      MetricAlternate,
 
       /**
        * There isn't an obviously sensible system of measurement for duration because, strictly speaking:
        *   • the metric system only measures time in seconds, decaseconds and such.
        *   • Coordinated Universal Time (aka UTC) defines time of day but not duration
        * Of course we know we only want to measure duration in seconds/minutes/hours/etc, so we'll just call that
-       * "Standard" and be done with it, especially as it's not something we're going to offer the user a choice about.
+       * "Universal Standard" and be done with it, especially as it's not something we're going to offer the user a
+       * choice about.
+       *
+       * We'll also use this pseudo system of measurement for all other cases where we are not going to offer the user
+       * a choice of systems of measurement - eg acidity is always measured in pH (at least in all the circumstances we
+       * care about).
        */
-      StandardTimeUnits,
+      UniversalStandard,
 
       //
       // General systems of measurement do not tend to include measures of:
@@ -71,12 +98,44 @@ namespace Measurement {
       // So, for these things we'll just use the names of the various scales as the names of our pseudo systems of
       // measurement.
       //
+      // .:TBD:. Should we have IBUs here too?
+      //
+
+      // Color
       StandardReferenceMethod,
       EuropeanBreweryConvention,
+      Lovibond,
+
+      // Density
       SpecificGravity,
       Plato,
+      Brix,
+
+      // Diastatic power
       Lintner,
-      WindischKolbach
+      WindischKolbach,
+
+      // Carbonation
+      CarbonationVolumes,
+      CarbonationMassPerVolume,
+
+      // Concentration is a dimensionless measurement and so does not strictly merit either a unit system or a system of
+      // measurement.  However, in practice, it is useful, not least for BeerJSON processing, to be able to convert
+      // between parts-per-million, parts-per-billion, milligrams-per-litre and so on.
+      //
+      // Of course, strictly speaking, there is NOT a generic conversion between milligrams-per-litre and parts-per-xxx
+      // because converting mass-per-volume to volume-per-volume (or mass-per-mass) involves temperature and the molar
+      // masses of the two substances in question.  Hence why a chemist would use
+      // https://en.wikipedia.org/wiki/Molar_concentration instead.
+      //
+      // However, in practice, in brewing, for small concentrations, it's not hugely wrong to approximate 1
+      // milligram-per-litre with 1 part-per-million.
+      //
+      // See https://en.wikipedia.org/wiki/Parts-per_notation for more info
+      ConcentrationPartsPer,
+      ConcentrationMassPerVolume
+
+      // See comment in measurement/Unit.h about the different viscosity units
    };
 
 

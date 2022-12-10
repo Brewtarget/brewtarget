@@ -104,6 +104,7 @@ set(filesToCompile_cpp
     ${repoDir}/src/measurement/IbuMethods.cpp
     ${repoDir}/src/measurement/Measurement.cpp
     ${repoDir}/src/measurement/PhysicalQuantity.cpp
+    ${repoDir}/src/measurement/SucroseConversion.cpp
     ${repoDir}/src/measurement/SystemOfMeasurement.cpp
     ${repoDir}/src/measurement/Unit.cpp
     ${repoDir}/src/measurement/UnitSystem.cpp
@@ -166,6 +167,7 @@ set(filesToCompile_cpp
     ${repoDir}/src/utils/BtStringConst.cpp
     ${repoDir}/src/utils/BtStringStream.cpp
     ${repoDir}/src/utils/EnumStringMapping.cpp
+    ${repoDir}/src/utils/ImportRecordCount.cpp
     ${repoDir}/src/utils/TimerUtils.cpp
     ${repoDir}/src/WaterButton.cpp
     ${repoDir}/src/WaterDialog.cpp
@@ -184,7 +186,6 @@ set(filesToCompile_cpp
     ${repoDir}/src/xml/XmlMashRecord.cpp
     ${repoDir}/src/xml/XmlMashStepRecord.cpp
     ${repoDir}/src/xml/XmlRecipeRecord.cpp
-    ${repoDir}/src/xml/XmlRecordCount.cpp
     ${repoDir}/src/xml/XmlRecord.cpp
     ${repoDir}/src/YeastDialog.cpp
     ${repoDir}/src/YeastEditor.cpp

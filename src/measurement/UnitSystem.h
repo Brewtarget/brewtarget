@@ -44,22 +44,23 @@ namespace Measurement {
     *        subset of a system of measurement that relates to an individual physical quantity.
     *
     *        From Wikipedia: "A system of measurement is a collection of units of measurement and rules relating them to
-    *        each other. ... Systems of measurement in use include the International System of Units (SI), the modern form
-    *        of the metric system, the British imperial system, and the United States customary system."
+    *        each other. ... Systems of measurement in use include the International System of Units (SI), the modern
+    *        form of the metric system, the British imperial system, and the United States customary system."
     *
     *        We don't use systems of measurement directly for two reasons:
-    *         - Some things we need to measure, such as diastatic power, color, or density aren't covered by some or all of
-    *           the common systems of measurement
+    *         - Some things we need to measure, such as diastatic power, color, or density aren't covered by some or all
+    *           of the common systems of measurement
     *         - Users want to be able to mix-and-match (eg using US customary for volume but metric for temperature)
     *
-    *        For each physical quantity (mass, volume, temperature) where we support more than one way of measuring it, we
-    *        allow the user to choose a \c UnitSystem that corresponds to (and is named after) the system of measurement or
-    *        scale they want to see things displayed in.  This will also determine the units we will assume for user input
-    *        if none are specified.  (Thus if the user has chosen to show temperatures in Fahrenheit then we assume any
-    *        temperature they input is in Fahrenheit unless they specify that it's in Celsius.)
+    *        For each physical quantity (mass, volume, temperature) where we support more than one way of measuring it,
+    *        we allow the user to choose a \c UnitSystem that corresponds to (and is named after) the system of
+    *        measurement or scale they want to see things displayed in.  This will also determine the units we will
+    *        assume for user input if none are specified.  (Thus if the user has chosen to show temperatures in
+    *        Fahrenheit then we assume any temperature they input is in Fahrenheit unless they specify that it's in
+    *        Celsius.)
     *
-    *        Internally we store things in metric / SI units, and do the appropriate conversions for input/display on
-    *        other scales.  Conversion is handled by \c Unit objects.
+    *        Internally we store things in metric (usually, but not always, SI) units, and do the appropriate
+    *        conversions for input/display on other scales.  Conversion is handled by \c Unit objects.
     *
     *        See also \c Measurement.
     */
@@ -68,44 +69,39 @@ namespace Measurement {
       /**
        * \enum RelativeScale
        *
-       * \brief For some types of quantity, a given system of measurement will have multiple units, so we need to be able
-       *        to order these units by relative size, eg, for fluid volume:
+       * \brief For some types of quantity, a given system of measurement will have multiple units, so we need to be
+       *        able to order these units by relative size, eg, for fluid volume:
        *           fluid teaspoon < tablespoon < cup < pint < quart < gallon   (in both Imperial and US Customary systems)
        *           milliliters < liters                                        (in Metric/SI system)
        *        We only worry about units we actually use/permit, thus we don't, for example, care about where minims,
        *        fluid drams, gills etc fit in on the imperial / US customary volume scales, as we don't support them.
-       *
-       *        The \c scaleWithout value is used when a \c UnitSystem only has one \c Unit (eg as is typically the case
-       *        with temperature, color and density).
        */
-      enum RelativeScale {
-         scaleExtraSmall = 0,
-         scaleSmall      = 1,
-         scaleMedium     = 2,
-         scaleLarge      = 3,
-         scaleExtraLarge = 4,
-         scaleHuge       = 5,
-         scaleWithout    = 1000
+      enum class RelativeScale {
+         ExtraSmall = 0,
+         Small      = 1,
+         Medium     = 2,
+         Large      = 3,
+         ExtraLarge = 4,
+         Huge       = 5
       };
 
       /*!
        * \brief Constructor
        *
        * \param type
-       * \param thickness
        * \param defaultUnit
-       * \param scaleToUnitEntries
-       * \param qstringToUnitEntries
        * \param uniqueName
        * \param systemOfMeasurementName
+       * \param scaleToUnitEntries Will be empty if there is only one unit in this unit system
+       * \param thickness Used only for volume and mass unit systems, otherwise will be null
        */
       UnitSystem(Measurement::PhysicalQuantity const physicalQuantity,
-                 Measurement::Unit const * const thickness,
                  Measurement::Unit const * const defaultUnit,
-                 std::initializer_list<std::pair<Measurement::UnitSystem::RelativeScale const,
-                                                 Measurement::Unit const *> > scaleToUnit,
                  char const * const uniqueName,
-                 SystemOfMeasurement const systemOfMeasurement);
+                 SystemOfMeasurement const systemOfMeasurement = Measurement::SystemOfMeasurement::UniversalStandard,
+                 std::initializer_list<std::pair<Measurement::UnitSystem::RelativeScale const,
+                                                 Measurement::Unit const *> > scaleToUnit = {},
+                 Measurement::Unit const * const thickness = nullptr);
 
       ~UnitSystem();
 
@@ -261,12 +257,35 @@ namespace Measurement {
 
       extern UnitSystem const color_StandardReferenceMethod;
       extern UnitSystem const color_EuropeanBreweryConvention;
+      extern UnitSystem const color_Lovibond;
 
       extern UnitSystem const density_SpecificGravity;
       extern UnitSystem const density_Plato;
+      extern UnitSystem const density_Brix;
 
       extern UnitSystem const diastaticPower_Lintner;
       extern UnitSystem const diastaticPower_WindischKolbach;
+
+      // Note that we break the capitalisation rules here as "pH" is more readable than "PH", "Ph" or
+      // "PotentialOfHydrogen"!
+      extern UnitSystem const acidity_pH;
+
+      // In theory, there are two sets of units for bitterness: International Bitterness Units (IBUs) and European
+      // Bitterness Units (EBUs).  In practice they are both the same measure of iso-alpha acids in the beer (rather
+      // than perceived bitterness), and the only difference is the exact process of doing the measurements.  So, like
+      // a lot of other brewing software, we just use IBUs.
+      extern UnitSystem const bitterness_InternationalBitternessUnits;
+
+      extern UnitSystem const carbonation_Volumes;
+      extern UnitSystem const carbonation_MassPerVolume;
+
+      extern UnitSystem const concentration_PartsPer;
+      extern UnitSystem const concentration_MassPerVolume;
+
+      // This is one of the few places we need to pay attention that there is more than one metric system -- see
+      // comments in measurement/SystemOfMeasurement.h
+      extern UnitSystem const viscosity_Metric;
+      extern UnitSystem const viscosity_MetricAlternate;
 
    }
 }
@@ -275,18 +294,19 @@ namespace Measurement {
  * \brief Convenience function to allow output of \c Measurement::UnitSystem to \c QDebug or \c QTextStream stream etc
  */
 template<class S>
-S & operator<<(S & stream, Measurement::UnitSystem const & unitSystem) {
-   stream << unitSystem.uniqueName;
-   return stream;
-}
+S & operator<<(S & stream, Measurement::UnitSystem const & unitSystem);
+
+/**
+ * \brief Convenience function to allow output of \c Measurement::UnitSystem to \c QDebug or \c QTextStream stream etc
+ */
 template<class S>
-S & operator<<(S & stream, Measurement::UnitSystem const * unitSystem) {
-   if (unitSystem) {
-      stream << *unitSystem;
-   } else {
-      stream << "NULL";
-   }
-   return stream;
-}
+S & operator<<(S & stream, Measurement::UnitSystem const * unitSystem);
+
+/**
+ * \brief Convenience function to allow output of \c Measurement::UnitSystem::RelativeScale to \c QDebug or
+ *        \c QTextStream stream etc
+ */
+template<class S>
+S & operator<<(S & stream, Measurement::UnitSystem::RelativeScale const relativeScale);
 
 #endif

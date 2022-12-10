@@ -321,7 +321,7 @@ bool MiscTableModel::setData(QModelIndex const & index,
          }
          MainWindow::instance().doOrRedoUpdate(*row,
                                                PropertyNames::Misc::type,
-                                               static_cast<Misc::Type>(value.toInt()),
+                                               value.toInt(),
                                                tr("Change Misc Type"));
          break;
       case MISCUSECOL:
@@ -330,7 +330,7 @@ bool MiscTableModel::setData(QModelIndex const & index,
          }
          MainWindow::instance().doOrRedoUpdate(*row,
                                                PropertyNames::Misc::use,
-                                               static_cast<Misc::Use>(value.toInt()),
+                                               value.toInt(),
                                                tr("Change Misc Use"));
          break;
       case MISCTIMECOL:
@@ -381,7 +381,7 @@ bool MiscTableModel::setData(QModelIndex const & index,
          }
          MainWindow::instance().doOrRedoUpdate(*row,
                                                PropertyNames::Misc::amountType,
-                                               static_cast<Misc::AmountType>(value.toInt()),
+                                               value.toInt(),
                                                tr("Change Misc Amount Type"));
          break;
       default:

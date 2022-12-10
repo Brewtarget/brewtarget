@@ -606,7 +606,7 @@ void Recipe::saltWater(Salt::WhenToAdd when) {
    }
 
    auto ins = std::make_shared<Instruction>();
-   QString tmp = when == Salt::MASH ? tr("mash") : tr("sparge");
+   QString tmp = when == Salt::WhenToAdd::MASH ? tr("mash") : tr("sparge");
    ins->setName(tr("Modify %1 water").arg(tmp));
    QString str = tr("Dissolve ");
 
@@ -645,7 +645,9 @@ void Recipe::mashWaterIns() {
    return;
 }
 
-QVector<PreInstruction> Recipe::mashInstructions(double timeRemaining, double totalWaterAdded_l, unsigned int size) {
+QVector<PreInstruction> Recipe::mashInstructions(double timeRemaining,
+                                                 double totalWaterAdded_l,
+                                                 [[maybe_unused]] unsigned int size) {
    QVector<PreInstruction> preins;
 
    if (mash() == nullptr) {
@@ -712,7 +714,7 @@ QVector<PreInstruction> Recipe::hopSteps(Hop::Use type) {
             str = tr("Put %1 %2 into first wort for %3.");
          } else if (type == Hop::Use::Mash) {
             str = tr("Put %1 %2 into mash for %3.");
-         } else if (type == Hop::Use::UseAroma) {
+         } else if (type == Hop::Use::Aroma) {
             str = tr("Steep %1 %2 in wort for %3.");
          } else {
             qWarning() << "Recipe::hopSteps(): Unrecognized hop use.";
@@ -1025,8 +1027,8 @@ void Recipe::generateInstructions() {
       this->mashFermentableIns();
 
       /*** salt the water ***/
-      saltWater(Salt::MASH);
-      saltWater(Salt::SPARGE);
+      saltWater(Salt::WhenToAdd::MASH);
+      saltWater(Salt::WhenToAdd::SPARGE);
 
       /*** Prepare water additions ***/
       this->mashWaterIns();
@@ -1108,7 +1110,7 @@ void Recipe::generateInstructions() {
 
    // Steeped aroma hops
    preinstructions.clear();
-   preinstructions += hopSteps(Hop::Use::UseAroma);
+   preinstructions += hopSteps(Hop::Use::Aroma);
    addPreinstructions(preinstructions);
 
    // Fermentation instructions
@@ -1290,7 +1292,7 @@ template<class NE> bool Recipe::uses(NE const & var) const {
       // the ID of the thing from which they were copied).
       //
       qCritical() <<
-                  Q_FUNC_INFO << "Trying to search for use of" << var.metaObject()->className() << "that is not stored!";
+         Q_FUNC_INFO << "Trying to search for use of" << var.metaObject()->className() << "that is not stored!";
       return false;
    }
 
@@ -2736,15 +2738,15 @@ QStringList Recipe::getReagents(QList<Salt *> salts, Salt::WhenToAdd wanted) {
                                                PersistentSettings::Sections::saltTable,
                                                PropertyNames::Salt::amount))
                .arg(salts[i]->name());
-      } else if (what == Salt::EQUAL) {
+      } else if (what == Salt::WhenToAdd::EQUAL) {
          tmp = tr("%1 %2, ")
                .arg(Measurement::displayAmount(Measurement::Amount{salts[i]->amount(), rightUnit},
                                                PersistentSettings::Sections::saltTable,
                                                PropertyNames::Salt::amount))
                .arg(salts[i]->name());
-      } else if (what == Salt::RATIO) {
+      } else if (what == Salt::WhenToAdd::RATIO) {
          double ratio = 1.0;
-         if (wanted == Salt::SPARGE) {
+         if (wanted == Salt::WhenToAdd::SPARGE) {
             ratio = mash()->totalSpargeAmount_l() / mash()->totalInfusionAmount_l();
          }
          double amt = salts[i]->amount() * ratio;
@@ -2770,7 +2772,8 @@ QStringList Recipe::getReagents(QList<Salt *> salts, Salt::WhenToAdd wanted) {
 
 //==========================Accept changes from ingredients====================
 
-void Recipe::acceptChangeToContainedObject(QMetaProperty prop, QVariant val) {
+void Recipe::acceptChangeToContainedObject([[maybe_unused]] QMetaProperty prop,
+                                           [[maybe_unused]] QVariant val) {
    // This tells us which object sent us the signal
    QObject * signalSender = this->sender();
    if (signalSender != nullptr) {

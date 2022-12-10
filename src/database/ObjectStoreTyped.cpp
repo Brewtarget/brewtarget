@@ -167,50 +167,30 @@ namespace {
    };
    template<> ObjectStore::JunctionTableDefinitions const JUNCTION_TABLES<InventoryHop> {};
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-   // Database field mappings for Hop TODO Check the strings!
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-   EnumStringMapping const DB_HOP_USE_ENUM {
-      {"Boil",       Hop::Use::Boil},
-      {"Dry Hop",    Hop::Use::Dry_Hop},
-      {"Mash",       Hop::Use::Mash},
-      {"First Wort", Hop::Use::First_Wort},
-      {"Aroma",      Hop::Use::UseAroma}
-   };
-   EnumStringMapping const DB_HOP_TYPE_ENUM {
-      {"Bittering", Hop::Type::Bittering},
-      {"Aroma",     Hop::Type::Aroma},
-      {"Both",      Hop::Type::Both}
-   };
-   EnumStringMapping const DB_HOP_FORM_ENUM {
-      {"Pellet", Hop::Form::Pellet},
-      {"Plug",   Hop::Form::Plug},
-      {"Leaf",   Hop::Form::Leaf}
-   };
    template<> ObjectStore::TableDefinition const PRIMARY_TABLE<Hop> {
       "hop",
       {
-         {ObjectStore::FieldType::Int,    "id",            PropertyNames::NamedEntity::key                     },
-         {ObjectStore::FieldType::String, "name",          PropertyNames::NamedEntity::name                    },
-         {ObjectStore::FieldType::Bool,   "display",       PropertyNames::NamedEntity::display                 },
-         {ObjectStore::FieldType::Bool,   "deleted",       PropertyNames::NamedEntity::deleted                 },
-         {ObjectStore::FieldType::String, "folder",        PropertyNames::NamedEntity::folder                  },
-         {ObjectStore::FieldType::Int,    "inventory_id",  PropertyNames::NamedEntityWithInventory::inventoryId, nullptr,           &PRIMARY_TABLE<InventoryHop>},
-         {ObjectStore::FieldType::Double, "alpha",         PropertyNames::Hop::alpha_pct                       },
-         {ObjectStore::FieldType::Double, "amount",        PropertyNames::Hop::amount_kg                       },
-         {ObjectStore::FieldType::Double, "beta",          PropertyNames::Hop::beta_pct                        },
-         {ObjectStore::FieldType::Double, "caryophyllene", PropertyNames::Hop::caryophyllene_pct               },
-         {ObjectStore::FieldType::Double, "cohumulone",    PropertyNames::Hop::cohumulone_pct                  },
-         {ObjectStore::FieldType::Enum,   "form",          PropertyNames::Hop::form,                             &DB_HOP_FORM_ENUM},
-         {ObjectStore::FieldType::Double, "hsi",           PropertyNames::Hop::hsi_pct                         },
-         {ObjectStore::FieldType::Double, "humulene",      PropertyNames::Hop::humulene_pct                    },
-         {ObjectStore::FieldType::Double, "myrcene",       PropertyNames::Hop::myrcene_pct                     },
-         {ObjectStore::FieldType::String, "notes",         PropertyNames::Hop::notes                           },
-         {ObjectStore::FieldType::String, "origin",        PropertyNames::Hop::origin                          },
-         {ObjectStore::FieldType::String, "substitutes",   PropertyNames::Hop::substitutes                     },
-         {ObjectStore::FieldType::Double, "time",          PropertyNames::Hop::time_min                        },
-         {ObjectStore::FieldType::Enum,   "htype",         PropertyNames::Hop::type,                             &DB_HOP_TYPE_ENUM},
-         {ObjectStore::FieldType::Enum,   "use",           PropertyNames::Hop::use,                              &DB_HOP_USE_ENUM}
+         {ObjectStore::FieldType::Int,    "id",                    PropertyNames::NamedEntity::key                       },
+         {ObjectStore::FieldType::String, "name",                  PropertyNames::NamedEntity::name                      },
+         {ObjectStore::FieldType::Bool,   "display",               PropertyNames::NamedEntity::display                   },
+         {ObjectStore::FieldType::Bool,   "deleted",               PropertyNames::NamedEntity::deleted                   },
+         {ObjectStore::FieldType::String, "folder",                PropertyNames::NamedEntity::folder                    },
+         {ObjectStore::FieldType::Int,    "inventory_id",          PropertyNames::NamedEntityWithInventory::inventoryId, nullptr,           &PRIMARY_TABLE<InventoryHop>},
+         {ObjectStore::FieldType::Double, "alpha",                 PropertyNames::Hop::alpha_pct                         },
+         {ObjectStore::FieldType::Double, "amount",                PropertyNames::Hop::amount_kg                         },
+         {ObjectStore::FieldType::Double, "beta",                  PropertyNames::Hop::beta_pct                          },
+         {ObjectStore::FieldType::Double, "caryophyllene",         PropertyNames::Hop::caryophyllene_pct                 },
+         {ObjectStore::FieldType::Double, "cohumulone",            PropertyNames::Hop::cohumulone_pct                    },
+         {ObjectStore::FieldType::Enum,   "form",                  PropertyNames::Hop::form,                             &Hop::formStringMapping},
+         {ObjectStore::FieldType::Double, "hsi",                   PropertyNames::Hop::hsi_pct                           },
+         {ObjectStore::FieldType::Double, "humulene",              PropertyNames::Hop::humulene_pct                      },
+         {ObjectStore::FieldType::Double, "myrcene",               PropertyNames::Hop::myrcene_pct                       },
+         {ObjectStore::FieldType::String, "notes",                 PropertyNames::Hop::notes                             },
+         {ObjectStore::FieldType::String, "origin",                PropertyNames::Hop::origin                            },
+         {ObjectStore::FieldType::String, "substitutes",           PropertyNames::Hop::substitutes                       },
+         {ObjectStore::FieldType::Double, "time",                  PropertyNames::Hop::time_min                          },
+         {ObjectStore::FieldType::Enum,   "htype",                 PropertyNames::Hop::type,                             &Hop::typeStringMapping},
+         {ObjectStore::FieldType::Enum,   "use",                   PropertyNames::Hop::use,                              &Hop::useStringMapping},
       }
    };
    template<> ObjectStore::JunctionTableDefinitions const JUNCTION_TABLES<Hop> {

@@ -26,7 +26,7 @@ EnumAndItsString::EnumAndItsString(QString string, int native) :
    return;
 }
 
-std::optional<int> EnumStringMapping::stringToEnum(QString const & stringValue) const {
+std::optional<int> EnumStringMapping::stringToEnumAsInt(QString const & stringValue) const {
    auto match = std::find_if(this->begin(),
                              this->end(),
                              [stringValue](EnumAndItsString const & ii){return stringValue == ii.string;});
@@ -37,7 +37,7 @@ std::optional<int> EnumStringMapping::stringToEnum(QString const & stringValue) 
    return std::optional<int>{match->native};
 }
 
-std::optional<QString> EnumStringMapping::enumToString(int const enumValue) const {
+std::optional<QString> EnumStringMapping::enumAsIntToString(int const enumValue) const {
    auto match = std::find_if(this->begin(),
                              this->end(),
                              [enumValue](EnumAndItsString const & ii){return enumValue == ii.native;});

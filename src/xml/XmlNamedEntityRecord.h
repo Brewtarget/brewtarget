@@ -53,10 +53,15 @@ public:
       return;
    }
 
+   // Need a virtual destructor as we have virtual member functions
+   virtual ~XmlNamedEntityRecord() = default;
+
 protected:
    virtual void constructNamedEntity() {
       // It's a coding error if this function is called when we already have a NamedEntity
       Q_ASSERT(nullptr == this->namedEntity.get());
+      qDebug() <<
+         Q_FUNC_INFO << "Constructing" << NE::staticMetaObject.className() << "from" << this->namedParameterBundle;
 
       this->namedEntity = std::make_shared<NE>(this->namedParameterBundle);
    }
@@ -163,7 +168,7 @@ protected:
    /**
     * \brief Implementation of the general case where the object is independent of its containing entity
     */
-   virtual void setContainingEntity(std::shared_ptr<NamedEntity> containingEntity) {
+   virtual void setContainingEntity([[maybe_unused]] std::shared_ptr<NamedEntity> containingEntity) {
       return;
    }
 
@@ -176,15 +181,15 @@ protected:
 
 // Specialisations for cases where duplicates are allowed
 template<> inline bool XmlNamedEntityRecord<Instruction>::isDuplicate() { return false; }
-template<> inline bool XmlNamedEntityRecord<Mash>::isDuplicate() { return false; }
-template<> inline bool XmlNamedEntityRecord<MashStep>::isDuplicate() { return false; }
-template<> inline bool XmlNamedEntityRecord<BrewNote>::isDuplicate() { return false; }
+template<> inline bool XmlNamedEntityRecord<Mash       >::isDuplicate() { return false; }
+template<> inline bool XmlNamedEntityRecord<MashStep   >::isDuplicate() { return false; }
+template<> inline bool XmlNamedEntityRecord<BrewNote   >::isDuplicate() { return false; }
 
 // Specialisations for cases where name is not required to be unique
 template<> inline void XmlNamedEntityRecord<Instruction>::normaliseName() { return; }
-template<> inline void XmlNamedEntityRecord<Mash>::normaliseName() { return; }
-template<> inline void XmlNamedEntityRecord<MashStep>::normaliseName() { return; }
-template<> inline void XmlNamedEntityRecord<BrewNote>::normaliseName() { return; }
+template<> inline void XmlNamedEntityRecord<Mash       >::normaliseName() { return; }
+template<> inline void XmlNamedEntityRecord<MashStep   >::normaliseName() { return; }
+template<> inline void XmlNamedEntityRecord<BrewNote   >::normaliseName() { return; }
 
 // Specialisations for cases where object is owned by its containing entity
 template<> inline void XmlNamedEntityRecord<BrewNote>::setContainingEntity(std::shared_ptr<NamedEntity> containingEntity) {
@@ -198,8 +203,8 @@ template<> inline void XmlNamedEntityRecord<BrewNote>::setContainingEntity(std::
 
 // Specialisations for cases where we don't want the objects included in the stats
 template<> inline bool XmlNamedEntityRecord<Instruction>::includedInStats() const { return false; }
-template<> inline bool XmlNamedEntityRecord<BrewNote>::includedInStats() const { return false; }
-template<> inline bool XmlNamedEntityRecord<MashStep>::includedInStats() const { return false; }
+template<> inline bool XmlNamedEntityRecord<BrewNote   >::includedInStats() const { return false; }
+template<> inline bool XmlNamedEntityRecord<MashStep   >::includedInStats() const { return false; }
 
 
 #endif

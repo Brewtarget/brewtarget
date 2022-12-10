@@ -30,7 +30,7 @@ namespace {
       {QObject::tr("British Imperial")                 , Measurement::SystemOfMeasurement::Imperial                 },
       {QObject::tr("US Customary")                     , Measurement::SystemOfMeasurement::UsCustomary              },
       {QObject::tr("Metric")                           , Measurement::SystemOfMeasurement::Metric                   },
-      {QObject::tr("Standard Time Units")              , Measurement::SystemOfMeasurement::StandardTimeUnits        },
+      {QObject::tr("Universal Standard")               , Measurement::SystemOfMeasurement::UniversalStandard        },
       {QObject::tr("SRM (Standard Reference Method)")  , Measurement::SystemOfMeasurement::StandardReferenceMethod  },
       {QObject::tr("EBC (European Brewery Convention)"), Measurement::SystemOfMeasurement::EuropeanBreweryConvention},
       {QObject::tr("SG (Specific Gravity)")            , Measurement::SystemOfMeasurement::SpecificGravity          },
@@ -42,7 +42,7 @@ namespace {
       {"Imperial"                 , Measurement::SystemOfMeasurement::Imperial                 },
       {"UsCustomary"              , Measurement::SystemOfMeasurement::UsCustomary              },
       {"Metric"                   , Measurement::SystemOfMeasurement::Metric                   },
-      {"StandardTimeUnits"        , Measurement::SystemOfMeasurement::StandardTimeUnits        },
+      {"UniversalStandard"        , Measurement::SystemOfMeasurement::UniversalStandard        },
       {"StandardReferenceMethod"  , Measurement::SystemOfMeasurement::StandardReferenceMethod  },
       {"EuropeanBreweryConvention", Measurement::SystemOfMeasurement::EuropeanBreweryConvention},
       {"SpecificGravity"          , Measurement::SystemOfMeasurement::SpecificGravity          },
@@ -53,27 +53,17 @@ namespace {
 }
 
 QString Measurement::getDisplayName(Measurement::SystemOfMeasurement systemOfMeasurement) {
-   auto returnValue = systemOfMeasurementToDisplayName.enumToString(systemOfMeasurement);
-   // It's a coding error if we don't find a result!
-   if (!returnValue) {
-      qCritical() <<
-         Q_FUNC_INFO << "No mapping defined for SystemOfMeasurement #" << static_cast<int>(systemOfMeasurement);
-      Q_ASSERT(false); // Stop here on debug builds
-   }
-   return *returnValue;
+   // It's a coding error if we don't find a result (in which case EnumStringMapping::enumToString will log an error and
+   // throw an exception).
+   return systemOfMeasurementToDisplayName.enumToString(systemOfMeasurement);
 }
 
 QString Measurement::getUniqueName(SystemOfMeasurement systemOfMeasurement) {
-   auto returnValue = systemOfMeasurementToUniqueName.enumToString(systemOfMeasurement);
-   // It's a coding error if we don't find a result!
-   if (!returnValue) {
-      qCritical() <<
-         Q_FUNC_INFO << "No mapping defined for SystemOfMeasurement #" << static_cast<int>(systemOfMeasurement);
-      Q_ASSERT(false); // Stop here on debug builds
-   }
-   return *returnValue;
+   // It's a coding error if we don't find a result (in which case EnumStringMapping::enumToString will log an error and
+   // throw an exception).
+   return systemOfMeasurementToUniqueName.enumToString(systemOfMeasurement);
 }
 
 std::optional<Measurement::SystemOfMeasurement> Measurement::getFromUniqueName(QString const & uniqueName) {
-   return systemOfMeasurementToUniqueName.stringToEnum<Measurement::SystemOfMeasurement>(uniqueName);
+   return systemOfMeasurementToUniqueName.stringToEnumOrNull<Measurement::SystemOfMeasurement>(uniqueName);
 }
