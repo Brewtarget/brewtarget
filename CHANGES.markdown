@@ -11,6 +11,21 @@ format therein).
 
 * We'll list new features here...
 
+## v3.0.5
+Minor bug fixes for the 3.0.4 release (ie bugs in 3.0.5 are fixed in this 3.0.5 release).
+
+### New Features
+
+* None
+
+### Bug Fixes
+* macOS release v3.0.3 is damaged [#679](https://github.com/Brewtarget/brewtarget/issues/679)
+* Boil Time not saved when you edit a copied recipe [#688](https://github.com/Brewtarget/brewtarget/issues/688)
+* Imported recipes are inconsistent and inaccurate [#689](https://github.com/Brewtarget/brewtarget/issues/689)
+
+### Release Timestamp
+Tue, 20 Dec 2022 09:03:12 +0100
+
 ## v3.0.4
 Minor bug fixes for the 3.0.3 release (ie bugs in 3.0.3 are fixed in this 3.0.4 release).
 
