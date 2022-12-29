@@ -399,7 +399,7 @@ void Testing::initTestCase() {
       this->cascade_4pct->setAlpha_pct(4.0);
       this->cascade_4pct->setUse(Hop::Use::Boil);
       this->cascade_4pct->setTime_min(60);
-      this->cascade_4pct->setType(Hop::Type::AromaAndBittering);
+      this->cascade_4pct->setType(Hop::Type::Both);
       this->cascade_4pct->setForm(Hop::Form::Leaf);
 
       // 70% yield, no moisture, 2 SRM

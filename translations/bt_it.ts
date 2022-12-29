@@ -1398,36 +1398,12 @@ Log file may contain more details.</source>
         <translation>Plug</translation>
     </message>
     <message>
-        <source>Flavor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Aroma &amp; Bittering</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Bittering &amp; Flavor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Aroma &amp; Flavor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Aroma, Bittering &amp; Flavor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Extract</source>
-        <translation type="unfinished">Estratto</translation>
-    </message>
-    <message>
-        <source>WetLeaf</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Powder</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Estratto</translation>
     </message>
     <message>
         <source>Post-Boil</source>
@@ -1496,40 +1472,16 @@ Log file may contain more details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Flavor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Bittering &amp; Flavor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Aroma &amp; Flavor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Aroma, Bittering &amp; Flavor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Extract</source>
-        <translation type="unfinished">Estratto</translation>
+        <translation type="obsolete">Estratto</translation>
     </message>
     <message>
         <source>Leaf</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Leaf (wet)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Pellet</source>
         <translation type="unfinished">Pellet</translation>
-    </message>
-    <message>
-        <source>Powder</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Plug</source>
