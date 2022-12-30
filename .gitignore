@@ -8,3 +8,8 @@ build/*
 
 .vagrant
 *.user
+
+# ccls files
+.ccls-cache/
+src/.ccls-cache/
+src/compile_commands.json
