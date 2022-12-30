@@ -47,17 +47,10 @@ HopEditor::HopEditor(QWidget * parent) :
    //
    this->comboBox_hopType->addItem(tr("Bittering"                ), Hop::typeStringMapping.enumToString(Hop::Type::Bittering              ));
    this->comboBox_hopType->addItem(tr("Aroma"                    ), Hop::typeStringMapping.enumToString(Hop::Type::Aroma                  ));
-   this->comboBox_hopType->addItem(tr("Aroma & Bittering"        ), Hop::typeStringMapping.enumToString(Hop::Type::AromaAndBittering      ));
-   this->comboBox_hopType->addItem(tr("Flavor"                   ), Hop::typeStringMapping.enumToString(Hop::Type::Flavor                 ));
-   this->comboBox_hopType->addItem(tr("Bittering & Flavor"       ), Hop::typeStringMapping.enumToString(Hop::Type::BitteringAndFlavor     ));
-   this->comboBox_hopType->addItem(tr("Aroma & Flavor"           ), Hop::typeStringMapping.enumToString(Hop::Type::AromaAndFlavor         ));
-   this->comboBox_hopType->addItem(tr("Aroma, Bittering & Flavor"), Hop::typeStringMapping.enumToString(Hop::Type::AromaBitteringAndFlavor));
+   this->comboBox_hopType->addItem(tr("Aroma & Bittering"        ), Hop::typeStringMapping.enumToString(Hop::Type::Both                   ));
 
-   this->comboBox_hopForm->addItem(tr("Extract"   ), Hop::formStringMapping.enumToString(Hop::Form::Extract));
    this->comboBox_hopForm->addItem(tr("Leaf"      ), Hop::formStringMapping.enumToString(Hop::Form::Leaf   ));
-   this->comboBox_hopForm->addItem(tr("Leaf (wet)"), Hop::formStringMapping.enumToString(Hop::Form::WetLeaf));
    this->comboBox_hopForm->addItem(tr("Pellet"    ), Hop::formStringMapping.enumToString(Hop::Form::Pellet ));
-   this->comboBox_hopForm->addItem(tr("Powder"    ), Hop::formStringMapping.enumToString(Hop::Form::Powder ));
    this->comboBox_hopForm->addItem(tr("Plug"      ), Hop::formStringMapping.enumToString(Hop::Form::Plug   ));
 
    // Same comment for hop use, even thought it's not stored in BeerJSON

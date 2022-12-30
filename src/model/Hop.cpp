@@ -35,19 +35,12 @@
 EnumStringMapping const Hop::typeStringMapping {
    {"aroma",                  Hop::Type::Aroma},
    {"bittering",              Hop::Type::Bittering},
-   {"flavor",                 Hop::Type::Flavor},
-   {"aroma/bittering",        Hop::Type::AromaAndBittering}, // Previous seralisation (still used for BeerXML) was "Both"
-   {"bittering/flavor",       Hop::Type::BitteringAndFlavor},
-   {"aroma/flavor",           Hop::Type::AromaAndFlavor},
-   {"aroma/bittering/flavor", Hop::Type::AromaBitteringAndFlavor},
+   {"both",                   Hop::Type::Both},
 };
 
 EnumStringMapping const Hop::formStringMapping {
-   {"extract",    Hop::Form::Extract},
    {"leaf",       Hop::Form::Leaf},
-   {"leaf (wet)", Hop::Form::WetLeaf},
    {"pellet",     Hop::Form::Pellet},
-   {"powder",     Hop::Form::Powder},
    {"plug",       Hop::Form::Plug}
 };
 
@@ -62,20 +55,13 @@ EnumStringMapping const Hop::useStringMapping {
 QMap<Hop::Type, QString> const Hop::typeDisplayNames {
    {Hop::Type::Aroma,                   tr("Aroma"                    )},
    {Hop::Type::Bittering,               tr("Bittering"                )},
-   {Hop::Type::Flavor,                  tr("Flavor"                   )},
-   {Hop::Type::AromaAndBittering,       tr("Aroma & Bittering"        )},
-   {Hop::Type::BitteringAndFlavor,      tr("Bittering & Flavor"       )},
-   {Hop::Type::AromaAndFlavor,          tr("Aroma & Flavor"           )},
-   {Hop::Type::AromaBitteringAndFlavor, tr("Aroma, Bittering & Flavor")},
+   {Hop::Type::Both             ,       tr("Aroma & Bittering"        )},
 };
 
 QMap<Hop::Form, QString> const Hop::formDisplayNames {
    {Hop::Form::Leaf,    tr("Leaf"   )},
    {Hop::Form::Pellet,  tr("Pellet" )},
    {Hop::Form::Plug,    tr("Plug"   )},
-   {Hop::Form::Extract, tr("Extract")},
-   {Hop::Form::WetLeaf, tr("WetLeaf")},
-   {Hop::Form::Powder,  tr("Powder" )},
 };
 
 QMap<Hop::Use, QString> const Hop::useDisplayNames {

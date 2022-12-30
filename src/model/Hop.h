@@ -65,33 +65,18 @@ class Hop : public NamedEntityWithInventory {
 
 public:
 
-   /*!
-    * \brief The type of hop, meaning for what properties it is used.  Arguably we should have three binary flags
-    *        (aroma, bittering and flavor), but keeping a single enum makes the mappings to/from BeerXML and BeerJSON
-    *        easier.
-    */
-   enum class Type {Bittering,
-                    Aroma,
-                    AromaAndBittering, // was Both
-                    Flavor,
-                    BitteringAndFlavor,
-                    AromaAndFlavor,
-                    AromaBitteringAndFlavor};
+   //! \brief The type of hop, meaning for what properties it is used.
+   enum class Type {Bittering, Aroma, Both};
+
    /*!
     * \brief Mapping between \c Hop::Type and string values suitable for serialisation in DB, BeerJSON, etc (but \b not
     *        BeerXML)
     */
    static EnumStringMapping const typeStringMapping;
 
-   /*!
-    * \brief The form of the hop.
-    */
-   enum class Form {Leaf,
-                    Pellet,
-                    Plug,
-                    Extract,
-                    WetLeaf,
-                    Powder};
+   //! \brief The form of the hop.
+   enum class Form {Leaf, Pellet, Plug};
+
    /*!
     * \brief Mapping between \c Hop::Form and string values suitable for serialisation in DB, BeerJSON, etc (but \b not
     *        BeerXML)

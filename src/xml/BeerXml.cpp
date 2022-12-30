@@ -87,25 +87,12 @@ namespace {
    EnumStringMapping const BEER_XML_HOP_TYPE_MAPPER {
       {"Bittering",                          Hop::Type::Bittering},
       {"Aroma",                              Hop::Type::Aroma},
-      {"Both",                               Hop::Type::AromaAndBittering},
-      // These other types are in BeerJSON but are not mentioned in the BeerXML 1.0 Standard.  They get an approximate
-      // mapping when we write to BeerXML
-      // Note that we include a comment here to ensure we don't have multiple mappings for the same strings
-      {"Aroma<!--Flavor-->",                 Hop::Type::Flavor},
-      {"Both<!--BitteringAndFlavor-->",      Hop::Type::BitteringAndFlavor},
-      {"Aroma<!--AromaAndFlavor-->",         Hop::Type::AromaAndFlavor},
-      {"Both<!--AromaBitteringAndFlavor-->", Hop::Type::AromaBitteringAndFlavor}
+      {"Both",                               Hop::Type::Both},
    };
    EnumStringMapping const BEER_XML_HOP_FORM_MAPPER {
       {"Pellet", Hop::Form::Pellet},
       {"Plug",   Hop::Form::Plug},
       {"Leaf",   Hop::Form::Leaf},
-      // These other types are in BeerJSON but are not mentioned in the BeerXML 1.0 Standard.  They get an approximate
-      // mapping when we write to BeerXML
-      // Note that we include a comment here to ensure we don't have multiple mappings for the same strings
-      {"Pellet<!--Extract-->", Hop::Form::Extract},
-      {"Leaf<!--WetLeaf-->",   Hop::Form::WetLeaf},
-      {"Pellet<!--Powder-->",  Hop::Form::Powder}
    };
    template<> XmlRecord::FieldDefinitions const BEER_XML_RECORD_FIELDS<Hop> {
       // Type                                  XPath                    Q_PROPERTY                             Enum Mapper
