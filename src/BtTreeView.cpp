@@ -266,15 +266,21 @@ QMimeData * BtTreeView::mimeData(QModelIndexList indexes) {
       stream << static_cast<int>(*itemType) << id << name;
    }
 
-   if (!itsa) {
-      // Everything other than folders get dropped on the ingredients pane
-      name = "application/x-brewtarget-ingredient";
-   } else if (*itsa == BtTreeItem::Type::RECIPE || *itsa == BtTreeItem::Type::STYLE || *itsa == BtTreeItem::Type::EQUIPMENT) {
+   if (*itsa == BtTreeItem::Type::RECIPE || *itsa == BtTreeItem::Type::STYLE || *itsa == BtTreeItem::Type::EQUIPMENT) {
       // Recipes, equipment and styles get dropped on the recipe pane
       name = "application/x-brewtarget-recipe";
-   } else {
+   } 
+   else if ( *itsa == BtTreeItem::Type::FOLDER ) {
       // folders will be handled by themselves.
       name = "application/x-brewtarget-folder";
+   }
+   else if ( *itsa != BtTreeItem::Type::WATER ) {
+      // Everything other than folders get dropped on the ingredients pane
+      name = "application/x-brewtarget-ingredient";
+   }
+   else {
+      // This isn't used yet, but maybe some day I will fix that
+      name = "application/x-brewtarget-water";
    }
 
    QMimeData * mimeData = new QMimeData();
