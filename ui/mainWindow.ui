@@ -259,8 +259,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>849</width>
-           <height>462</height>
+           <width>853</width>
+           <height>437</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -1114,8 +1114,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>849</width>
-           <height>324</height>
+           <width>853</width>
+           <height>356</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -1154,6 +1154,9 @@
                <widget class="QTableView" name="fermentableTable">
                 <property name="contextMenuPolicy">
                  <enum>Qt::CustomContextMenu</enum>
+                </property>
+                <property name="acceptDrops">
+                 <bool>true</bool>
                 </property>
                </widget>
               </item>
@@ -1667,7 +1670,7 @@
      <x>0</x>
      <y>0</y>
      <width>1200</width>
-     <height>24</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAbout">
@@ -1880,7 +1883,7 @@
     <string>Ctrl+T</string>
    </property>
   </action>
-    <action name="actionPrint">
+  <action name="actionPrint">
    <property name="icon">
     <iconset resource="../brewtarget.qrc">
      <normaloff>:/images/printer.png</normaloff>:/images/printer.png</iconset>
@@ -2192,11 +2195,6 @@
    <slots>
     <signal>(PreviousScaleInfo)</signal>
    </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtGenericEdit</class>
-   <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
   </customwidget>
   <customwidget>
    <class>BtPercentageEdit</class>
