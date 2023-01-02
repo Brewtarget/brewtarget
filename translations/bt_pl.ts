@@ -6015,6 +6015,10 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
         <source>Brew It!</source>
         <translation type="unfinished">Uwarz!</translation>
     </message>
+    <message>
+        <source>application/x-brewtarget-folder</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>mashDesigner</name>

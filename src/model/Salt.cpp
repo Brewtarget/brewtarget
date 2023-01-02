@@ -54,10 +54,10 @@ Salt::Salt(NamedParameterBundle const & namedParameterBundle) :
    NamedEntity       {namedParameterBundle},
    m_amount          {namedParameterBundle(PropertyNames::Salt::amount         ).toDouble()},
    m_add_to          {static_cast<Salt::WhenToAdd>(namedParameterBundle(PropertyNames::Salt::addTo).toInt())},
-   m_type            {static_cast<Salt::Types>(namedParameterBundle(PropertyNames::Salt::amountIsWeight).toInt())},
+   m_type            {static_cast<Salt::Types>(namedParameterBundle(PropertyNames::Salt::type).toInt())},
    m_amount_is_weight{namedParameterBundle(PropertyNames::Salt::amountIsWeight).toBool()},
    m_percent_acid    {namedParameterBundle(PropertyNames::Salt::percentAcid   ).toDouble()},
-   m_is_acid         {namedParameterBundle(PropertyNames::Salt::type          ).toBool()} {
+   m_is_acid         {namedParameterBundle(PropertyNames::Salt::isAcid          ).toBool()} {
    return;
 }
 

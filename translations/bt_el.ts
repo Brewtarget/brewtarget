@@ -6015,6 +6015,10 @@ The final volume in the primary is %1.</source>
         <source>Brew It!</source>
         <translation type="unfinished">Ζυθοποίησε!</translation>
     </message>
+    <message>
+        <source>application/x-brewtarget-folder</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>mashDesigner</name>

@@ -6019,6 +6019,10 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
         <source>Brew It!</source>
         <translation type="unfinished">Kezdődjön a főzés!</translation>
     </message>
+    <message>
+        <source>application/x-brewtarget-folder</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>mashDesigner</name>

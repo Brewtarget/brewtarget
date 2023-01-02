@@ -1411,7 +1411,7 @@ void BtTreeModel::observeElement(NamedEntity * d) {
       connect(d, SIGNAL(brewDateChanged(QDateTime)), this, SLOT(elementChanged()));
    } else {
       connect(d, SIGNAL(changedName(QString)), this, SLOT(elementChanged()));
-      connect(d, SIGNAL(changedFolder(QString)), this, SLOT(folderChanged(QString)));
+      // connect(d, SIGNAL(changedFolder(QString)), this, SLOT(folderChanged(QString)));
    }
 }
 
@@ -1424,7 +1424,7 @@ bool BtTreeModel::dropMimeData(QMimeData const * data,
                                int row,
                                int column,
                                QModelIndex const & parent) {
-   qDebug() << Q_FUNC_INFO;
+   qInfo() << Q_FUNC_INFO;
 
    QByteArray encodedData;
 
