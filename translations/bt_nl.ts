@@ -6002,6 +6002,10 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
         <source>Brew It!</source>
         <translation type="unfinished">Brouw het!</translation>
     </message>
+    <message>
+        <source>application/x-brewtarget-folder</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>mashDesigner</name>

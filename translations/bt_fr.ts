@@ -6057,6 +6057,10 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
         <source>Brew It!</source>
         <translation type="unfinished">Brassons !</translation>
     </message>
+    <message>
+        <source>application/x-brewtarget-folder</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>mashDesigner</name>
