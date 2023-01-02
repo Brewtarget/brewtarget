@@ -123,7 +123,7 @@ void SaltTableModel::addSalt(std::shared_ptr<Salt> salt) {
 }
 
 void SaltTableModel::addSalts(QList<std::shared_ptr<Salt> > salts) {
-   auto tmp = this->removeDuplicates(salts);
+   auto tmp = this->removeDuplicatesIgnoreDisplay(salts);
 
    int size = this->rows.size();
    if (size+tmp.size()) {

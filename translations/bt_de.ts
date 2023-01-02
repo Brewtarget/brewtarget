@@ -6023,6 +6023,10 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
         <source>Brew It!</source>
         <translation type="unfinished">Dieses brauen!</translation>
     </message>
+    <message>
+        <source>application/x-brewtarget-folder</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>mashDesigner</name>

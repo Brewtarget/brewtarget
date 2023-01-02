@@ -122,6 +122,22 @@ public:
    }
 
    /**
+    * \brief Remove duplicates, ignoring if the item is displayed
+    */
+   QList< std::shared_ptr<NE> > removeDuplicatesIgnoreDisplay(QList< std::shared_ptr<NE> > items, Recipe const * recipe = nullptr) {
+      decltype(items) tmp;
+
+      for (auto ii : items) {
+         if (!recipe && ii->deleted() ) {
+               continue;
+         }
+         if (!this->rows.contains(ii) ) {
+            tmp.append(ii);
+         }
+      }
+      return tmp;
+   }
+   /**
     * \brief Given a raw pointer, find the index of the corresponding shared pointer in \c this->rows
     *
     *        This is useful because the Qt signals and slots framework allows the slot receiving a signal to get a raw

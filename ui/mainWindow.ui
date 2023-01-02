@@ -80,6 +80,9 @@
             <height>16</height>
            </size>
           </property>
+          <property name="mimeAccepted" stdset="0">
+           <string>application/x-brewtarget-folder</string>
+          </property>
           <widget class="QWidget" name="tabTree_recipe">
            <property name="acceptDrops">
             <bool>true</bool>

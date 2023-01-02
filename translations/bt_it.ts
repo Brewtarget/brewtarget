@@ -6059,6 +6059,10 @@ Il Volume finale del primo è %1.</translation>
         <source>Brew It!</source>
         <translation type="unfinished">Birrifica!</translation>
     </message>
+    <message>
+        <source>application/x-brewtarget-folder</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>mashDesigner</name>

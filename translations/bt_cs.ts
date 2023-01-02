@@ -6017,6 +6017,10 @@ Celkový objem pro hlavní kvašení je %1.</translation>
         <source>Brew It!</source>
         <translation type="unfinished">Uvařit!</translation>
     </message>
+    <message>
+        <source>application/x-brewtarget-folder</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>mashDesigner</name>
