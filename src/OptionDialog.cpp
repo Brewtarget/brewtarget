@@ -284,7 +284,8 @@ public:
     * Determine which set of DB config params to show, based on whether PostgresSQL or SQLite is selected
     */
    void setDbDialog(OptionDialog & optionDialog, Database::DbType db) {
-      qDebug() << Q_FUNC_INFO << "Set " << (db == Database::PGSQL ? "PostgresSQL" : "SQLite") << " config params visible";
+      qDebug() <<
+         Q_FUNC_INFO << "Set " << (db == Database::DbType::PGSQL ? "PostgresSQL" : "SQLite") << " config params visible";
       optionDialog.groupBox_dbConfig->setVisible(false);
 
       this->clearLayout(optionDialog);
@@ -792,7 +793,7 @@ void OptionDialog::changeEvent(QEvent * e) {
    return;
 }
 
-void OptionDialog::setEngine(int selected) {
+void OptionDialog::setEngine([[maybe_unused]] int selected) {
 
    QVariant data = comboBox_engine->currentData();
    Database::DbType newEngine = static_cast<Database::DbType>(data.toInt());
