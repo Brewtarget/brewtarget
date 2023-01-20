@@ -305,12 +305,12 @@ QVariant BtTreeItem::dataHop(int column) {
          }
       case HOPFORMCOL:
          if (hop) {
-            return QVariant(hop->formStringTr());
+            return QVariant(Hop::formDisplayNames[hop->form()]);
          }
          break;
       case HOPUSECOL:
          if (hop) {
-            return QVariant(hop->useStringTr());
+            return QVariant(Hop::useDisplayNames[hop->use()]);
          }
          break;
       default :
@@ -369,12 +369,12 @@ QVariant BtTreeItem::dataYeast(int column) {
    return QVariant();
 }
 
-QVariant BtTreeItem::dataBrewNote(int column) {
-   if (! _thing) {
+QVariant BtTreeItem::dataBrewNote([[maybe_unused]] int column) {
+   if (!this->_thing) {
       return QVariant();
    }
 
-   BrewNote * bNote = qobject_cast<BrewNote *>(_thing);
+   BrewNote * bNote = qobject_cast<BrewNote *>(this->_thing);
 
    return bNote->brewDate_short();
 }

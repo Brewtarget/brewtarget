@@ -58,7 +58,7 @@ ObjectStore & Fermentable::getObjectStoreTypedInstance() const {
 Fermentable::Fermentable(QString name) :
    NamedEntityWithInventory{name, true},
    m_typeStr       {QString()         },
-   m_type          {Fermentable::Grain},
+   m_type          {Fermentable::Type::Grain},
    m_amountKg      {0.0               },
    m_yieldPct      {0.0               },
    m_colorSrm      {0.0               },
@@ -140,90 +140,72 @@ bool Fermentable::recommendMash() const { return m_recommendMash; }
 double Fermentable::ibuGalPerLb() const { return m_ibuGalPerLb; }
 bool Fermentable::isMashed() const { return m_isMashed; }
 
-Fermentable::AdditionMethod Fermentable::additionMethod() const
-{
-   Fermentable::AdditionMethod additionMethod;
-   if(isMashed())
-      additionMethod = Fermentable::Mashed;
-   else
-   {
-      if(type() == Fermentable::Grain)
-         additionMethod = Fermentable::Steeped;
-      else
-         additionMethod = Fermentable::Not_Mashed;
+Fermentable::AdditionMethod Fermentable::additionMethod() const {
+   if (this->isMashed()) {
+      return Fermentable::AdditionMethod::Mashed;
    }
-   return additionMethod;
+
+   if (this->type() == Fermentable::Type::Grain) {
+      return Fermentable::AdditionMethod::Steeped;
+   }
+
+   return Fermentable::AdditionMethod::Not_Mashed;
 }
 
-Fermentable::AdditionTime Fermentable::additionTime() const
-{
-   Fermentable::AdditionTime additionTime;
-   if(addAfterBoil())
-      additionTime = Fermentable::Late;
-   else
-      additionTime = Fermentable::Normal;
+Fermentable::AdditionTime Fermentable::additionTime() const {
+   if (this->addAfterBoil()) {
+      return Fermentable::AdditionTime::Late;
+   }
 
-   return additionTime;
+   return Fermentable::AdditionTime::Normal;
 }
 
-const QString Fermentable::typeString() const
-{
-   if ( m_type > types.length()) {
+const QString Fermentable::typeString() const {
+   int myType = static_cast<int>(this->type());
+   if (myType > types.length()) {
       return "";
    }
-   return types.at(type());
+   return types.at(myType);
 }
 
-const QString Fermentable::typeStringTr() const
-{
+const QString Fermentable::typeStringTr() const {
+   int myType = static_cast<int>(this->type());
    static QStringList typesTr = QStringList () << QObject::tr("Grain") << QObject::tr("Sugar") << QObject::tr("Extract") << QObject::tr("Dry Extract") << QObject::tr("Adjunct");
-   if ( m_type > typesTr.length() || m_type < 0 ) {
+   if (myType > typesTr.length() || myType < 0) {
       return "";
    }
 
-   return typesTr.at(m_type);
+   return typesTr.at(myType);
 }
 
-const QString Fermentable::additionMethodStringTr() const
-{
-    QString retString;
+const QString Fermentable::additionMethodStringTr() const {
+   if (this->isMashed()) {
+      return tr("Mashed");
+   }
 
-    if(isMashed())
-       retString = tr("Mashed");
-    else
-    {
-       if(type() == Fermentable::Grain)
-          retString = tr("Steeped");
-       else
-          retString = tr("Not mashed");
-    }
-    return retString;
+   if (this->type() == Fermentable::Type::Grain) {
+      return tr("Steeped");
+   }
+
+   return tr("Not mashed");
 }
 
-const QString Fermentable::additionTimeStringTr() const
-{
-    QString retString;
-
-    if(addAfterBoil())
-       retString = tr("Late");
-    else
-       retString = tr("Normal");
-
-    return retString;
+const QString Fermentable::additionTimeStringTr() const {
+   if (this->addAfterBoil()) {
+      return tr("Late");
+   }
+   return tr("Normal");
 }
 
-bool Fermentable::isExtract() const
-{
-   return ((type() == Extract) || (type() == Dry_Extract));
+bool Fermentable::isExtract() const {
+   return ((type() == Fermentable::Type::Extract) || (type() == Fermentable::Type::Dry_Extract));
 }
 
-bool Fermentable::isSugar() const
-{
-   return (type() == Sugar);
+bool Fermentable::isSugar() const {
+   return (type() == Fermentable::Type::Sugar);
 }
 
-bool Fermentable::isValidType( const QString& str )
-{
+bool Fermentable::isValidType( const QString& str ) {
    return (types.indexOf(str) >= 0);
 }
 
@@ -234,11 +216,11 @@ void Fermentable::setType( Type t ) {
 }
 
 void Fermentable::setAdditionMethod( Fermentable::AdditionMethod m ) {
-   this->setIsMashed(m == Fermentable::Mashed);
+   this->setIsMashed(m == Fermentable::AdditionMethod::Mashed);
 }
 
 void Fermentable::setAdditionTime( Fermentable::AdditionTime t ) {
-   this->setAddAfterBoil(t == Fermentable::Late);
+   this->setAddAfterBoil(t == Fermentable::AdditionTime::Late);
 }
 
 void Fermentable::setAddAfterBoil( bool b ) {
@@ -269,12 +251,11 @@ void Fermentable::setIbuGalPerLb( double num ) {
    this->setAndNotify( PropertyNames::Fermentable::ibuGalPerLb, this->m_ibuGalPerLb, num);
 }
 
-double Fermentable::equivSucrose_kg() const
-{
+double Fermentable::equivSucrose_kg() const {
    double ret = amount_kg() * yield_pct() * (1.0-moisture_pct()/100.0) / 100.0;
 
    // If this is a steeped grain...
-   if( type() == Grain && !isMashed() )
+   if (type() == Fermentable::Type::Grain && !isMashed() )
       return 0.60 * ret; // Reduce the yield by 60%.
    else
       return ret;

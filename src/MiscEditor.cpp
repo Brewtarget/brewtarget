@@ -119,13 +119,13 @@ void MiscEditor::showChanges(QMetaProperty * metaProp) {
       }
    }
    if (propName == PropertyNames::Misc::type || updateAll) {
-      comboBox_type->setCurrentIndex(obsMisc->type());
+      comboBox_type->setCurrentIndex(static_cast<int>(obsMisc->type()));
       if (!updateAll) {
          return;
       }
    }
    if (propName == PropertyNames::Misc::use || updateAll) {
-      comboBox_use->setCurrentIndex(obsMisc->use());
+      comboBox_use->setCurrentIndex(static_cast<int>(obsMisc->use()));
       if (!updateAll) {
          return;
       }

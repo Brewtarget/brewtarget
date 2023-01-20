@@ -39,7 +39,7 @@ protected:
     */
    virtual XmlRecord::ProcessingResult normaliseAndStoreInDb(std::shared_ptr<NamedEntity> containingEntity,
                                                              QTextStream & userMessage,
-                                                             XmlRecordCount & stats);
+                                                             ImportRecordCount & stats);
    /**
     * \brief We need this override a MashStep is owned by its Mash
     */

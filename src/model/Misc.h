@@ -56,16 +56,14 @@ class Misc : public NamedEntityWithInventory {
    Q_OBJECT
    Q_CLASSINFO("signal", "miscs")
 
-
-   friend class MiscDialog;
 public:
 
    //! \brief The type of ingredient.
-   enum Type {Spice, Fining, Water_Agent, Herb, Flavor, Other};
+   enum class Type {Spice, Fining, Water_Agent, Herb, Flavor, Other};
    //! \brief Where the ingredient is used.
-   enum Use { Boil, Mash, Primary, Secondary, Bottling };
+   enum class Use { Boil, Mash, Primary, Secondary, Bottling };
    //! \brief What is the type of amount.
-   enum AmountType { AmountType_Weight, AmountType_Volume };
+   enum class AmountType { Weight, Volume };
    Q_ENUMS( Type Use AmountType )
 
    Misc(QString name = "");
@@ -149,7 +147,7 @@ protected:
 
 private:
    Type m_type;
-   Use m_use;
+   Use  m_use;  // Primarily valid in "Use Of" instance
    double m_time;
    double m_amount;
    bool m_amountIsWeight;

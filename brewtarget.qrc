@@ -75,6 +75,8 @@
       <file alias="images/smallYeast.svg">images/smallYeast.svg</file>
       <file alias="images/sound.png">images/sound.png</file>
       <file alias="images/testtube.svg">images/testtube.svg</file>
+      <file alias="images/title.svg">images/title.svg</file>
+      <file alias="images/title.png">images/title.png</file>
       <file alias="images/yeastVial.svg">images/yeastVial.svg</file>
       <file alias="schemas/beerxml/v1/BeerXml.xsd">schemas/beerxml/v1/BeerXml.xsd</file>
    </qresource>

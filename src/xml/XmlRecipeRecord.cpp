@@ -1,6 +1,6 @@
 /*
  * xml/XmlRecipeRecord.cpp is part of Brewtarget, and is Copyright the following
- * authors 2020-2021
+ * authors 2020-2022
  * - Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -36,7 +36,7 @@ namespace {
    // functions.
    //
    template<typename CNE>
-   void setAmountsEtc(CNE & ingredient, NamedParameterBundle const & npb) {
+   void setAmountsEtc([[maybe_unused]] CNE & ingredient, [[maybe_unused]] NamedParameterBundle const & npb) {
       return;
    }
    template<> void setAmountsEtc(Hop & hop, NamedParameterBundle const & npb) {
@@ -45,7 +45,9 @@ namespace {
       return;
    }
    template<> void setAmountsEtc(Fermentable & fermentable, NamedParameterBundle const & npb) {
-      fermentable.setAmount_kg(npb(PropertyNames::Fermentable::amount_kg).toDouble());
+      fermentable.setAmount_kg(   npb(PropertyNames::Fermentable::amount_kg).toDouble());
+      fermentable.setAddAfterBoil(npb(PropertyNames::Fermentable::addAfterBoil).toBool());
+      fermentable.setIsMashed(    npb(PropertyNames::Fermentable::isMashed).toBool());
       return;
    }
    template<> void setAmountsEtc(Misc & misc, NamedParameterBundle const & npb) {
@@ -84,7 +86,8 @@ void XmlRecipeRecord::addChildren() {
    //
    for (auto ii : this->childRecords) {
       if (ii.xmlRecord->namedEntityClassName == childClassName) {
-         qDebug() << Q_FUNC_INFO << "Adding " << childClassName << " to Recipe";
+         qDebug() <<
+            Q_FUNC_INFO << "Adding " << childClassName << "#" << ii.xmlRecord->getNamedEntity()->key() << "to Recipe";
 
          // It would be a (pretty unexpected) coding error if the NamedEntity subclass object isn't of the class it's
          // supposed to be.
@@ -112,7 +115,11 @@ void XmlRecipeRecord::addChildren() {
          // Recipe, we need to set the "how much and when to add" info based on the fields we retained from XML record.
          //
          Q_ASSERT(added);
-         setAmountsEtc(*added, ii.xmlRecord->getNamedParameterBundle());
+         NamedParameterBundle const & npb = ii.xmlRecord->getNamedParameterBundle();
+         qDebug() <<
+            Q_FUNC_INFO << "Setting amounts for" << childClassName << "#" << added->key() <<
+            "to Recipe, using bundle" << npb;
+         setAmountsEtc(*added, npb);
       }
    }
    return;
@@ -121,11 +128,11 @@ void XmlRecipeRecord::addChildren() {
 
 XmlRecord::ProcessingResult XmlRecipeRecord::normaliseAndStoreInDb(std::shared_ptr<NamedEntity> containingEntity,
                                                                    QTextStream & userMessage,
-                                                                   XmlRecordCount & stats) {
+                                                                   ImportRecordCount & stats) {
    // This call to the base class function will store the Recipe and all the objects it contains, as well as link the
    // Recipe to its Style and Equipment.
    XmlRecord::ProcessingResult result = XmlRecord::normaliseAndStoreInDb(containingEntity, userMessage, stats);
-   if (result != XmlRecord::Succeeded) {
+   if (result != XmlRecord::ProcessingResult::Succeeded) {
       // The result was either Failed (= abort) or FoundDuplicate (= stop trying to process the current record), so we
       // bail here.
       return result;
@@ -147,7 +154,7 @@ XmlRecord::ProcessingResult XmlRecipeRecord::normaliseAndStoreInDb(std::shared_p
    // Recipe class does not (currently) have an interface for adding BrewNotes.  It suffices to tell each BrewNote what
    // its Recipe is, something we achieve via template specialisation of XmlNamedEntityRecord::setContainingEntity
 
-   return XmlRecord::Succeeded;
+   return XmlRecord::ProcessingResult::Succeeded;
 }
 
 template<typename CNE>

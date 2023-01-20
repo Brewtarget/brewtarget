@@ -1,6 +1,6 @@
 /*
  * xml/XmlRecipeRecord.h is part of Brewtarget, and is Copyright the following
- * authors 2020-2021
+ * authors 2020-2022
  * - Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -40,7 +40,7 @@ protected:
     */
    virtual XmlRecord::ProcessingResult normaliseAndStoreInDb(std::shared_ptr<NamedEntity> containingEntity,
                                                              QTextStream & userMessage,
-                                                             XmlRecordCount & stats);
+                                                             ImportRecordCount & stats);
 
    /**
     * \brief We need to override \c XmlRecord::propertiesToXml for similar reasons that we override

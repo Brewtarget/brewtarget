@@ -29,6 +29,7 @@
 #include <QSqlRecord>
 
 #include "model/NamedEntityWithInventory.h"
+#include "utils/EnumStringMapping.h"
 
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
@@ -39,7 +40,6 @@ AddPropertyName(beta_pct)
 AddPropertyName(caryophyllene_pct)
 AddPropertyName(cohumulone_pct)
 AddPropertyName(form)
-AddPropertyName(formString)
 AddPropertyName(hsi_pct)
 AddPropertyName(humulene_pct)
 AddPropertyName(myrcene_pct)
@@ -47,9 +47,7 @@ AddPropertyName(notes)
 AddPropertyName(origin)
 AddPropertyName(substitutes)
 AddPropertyName(time_min)
-AddPropertyName(typeString)
 AddPropertyName(type)
-AddPropertyName(useString)
 AddPropertyName(use)
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
@@ -65,22 +63,58 @@ class Hop : public NamedEntityWithInventory {
    Q_OBJECT
    Q_CLASSINFO("signal", "hops")
 
-
-   friend class HopDialog;
 public:
 
    //! \brief The type of hop, meaning for what properties it is used.
-   enum Type {Bittering, Aroma, Both};
-   //! \brief The form of the hop.
-   enum Form {Leaf, Pellet, Plug};
+   enum class Type {Bittering, Aroma, Both};
 
-   //! \brief The way the hop is used.
-   // .:TBD:. (MY 2021-01-01) Shall we perhaps change "UseAroma" to "PostBoil", since this is what BeerXML means by
-   // Aroma in this context?
-   //         (MF 2021-04-09) Nope. These fields MUST remain as they are until we are certain that we have converted
-   //                         all existing bt v1.0 XML databases. You know.  Forever.
-   enum Use {Mash, First_Wort, Boil, UseAroma, Dry_Hop }; // NOTE: way bad. We have a duplicate enum (Aroma)
-   Q_ENUMS( Type Form Use )
+   /*!
+    * \brief Mapping between \c Hop::Type and string values suitable for serialisation in DB, BeerJSON, etc (but \b not
+    *        BeerXML)
+    */
+   static EnumStringMapping const typeStringMapping;
+
+   //! \brief The form of the hop.
+   enum class Form {Leaf, Pellet, Plug};
+
+   /*!
+    * \brief Mapping between \c Hop::Form and string values suitable for serialisation in DB, BeerJSON, etc (but \b not
+    *        BeerXML)
+    */
+   static EnumStringMapping const formStringMapping;
+
+   /*!
+    * \brief The way the hop is used.
+    *        NOTE that this is not stored in BeerJSON
+    */
+   enum class Use {Mash,
+                   First_Wort,
+                   Boil,
+                   Aroma,
+                   Dry_Hop};
+
+   /*!
+    * \brief Mapping between \c Hop::Form and string values suitable for serialisation in DB, BeerXML, etc (but \b not
+    *        used in BeerJSON)
+    */
+   static EnumStringMapping const useStringMapping;
+
+   /*!
+    * \brief Localised names of \c Hop::Type values suitable for displaying to the end user
+    */
+   static QMap<Hop::Type, QString> const typeDisplayNames;
+
+   /*!
+    * \brief Localised names of \c Hop::Form values suitable for displaying to the end user
+    */
+   static QMap<Hop::Form, QString> const formDisplayNames;
+
+   /*!
+    * \brief Localised names of \c Hop::Use values suitable for displaying to the end user
+    */
+   static QMap<Hop::Use, QString> const useDisplayNames;
+
+   Q_ENUMS(Type Form Use)
 
    Hop(QString name = "");
    Hop(NamedParameterBundle const & namedParameterBundle);
@@ -88,91 +122,75 @@ public:
 
    virtual ~Hop();
 
-   //! \brief The percent alpha.
-   Q_PROPERTY( double alpha_pct READ alpha_pct WRITE setAlpha_pct /*NOTIFY changed*/ /*changedAlpha_pct*/ )
+   //! \brief The percent alpha acid
+   Q_PROPERTY(double alpha_pct READ alpha_pct WRITE setAlpha_pct /*NOTIFY changed*/ /*changedAlpha_pct*/ )
    //! \brief The amount in kg.
-   Q_PROPERTY( double amount_kg READ amount_kg WRITE setAmount_kg /*NOTIFY changed*/ /*changedAmount_kg*/ )
+   Q_PROPERTY(double amount_kg READ amount_kg WRITE setAmount_kg /*NOTIFY changed*/ /*changedAmount_kg*/ )
    //! \brief The \c Use.
-   Q_PROPERTY( Use use READ use WRITE setUse /*NOTIFY changed*/ /*changedUse*/ )
-   //! \brief The untranslated \c Use string.
-   Q_PROPERTY( QString useString READ useString /* WRITE setUse NOTIFY changed*/ /*changedUse*/ )
+   Q_PROPERTY(Use use READ use WRITE setUse /*NOTIFY changed*/ /*changedUse*/ )
    //! \brief The time in minutes that the hop is used.
-   Q_PROPERTY( double time_min READ time_min WRITE setTime_min /*NOTIFY changed*/ /*changedTime_min*/ )
+   Q_PROPERTY(double time_min READ time_min WRITE setTime_min /*NOTIFY changed*/ /*changedTime_min*/ )
    //! \brief The notes.
-   Q_PROPERTY( QString notes READ notes WRITE setNotes /*NOTIFY changed*/ /*changedNotes*/ )
+   Q_PROPERTY(QString notes READ notes WRITE setNotes /*NOTIFY changed*/ /*changedNotes*/ )
    //! \brief The \c Type.
-   Q_PROPERTY( Type type READ type WRITE setType /*NOTIFY changed*/ /*changedType*/ )
-   //! \brief The untranslated string type
-   Q_PROPERTY( QString typeString READ typeString /* WRITE setType NOTIFY changed*/ /*changedType*/ )
+   Q_PROPERTY(Type type READ type WRITE setType /*NOTIFY changed*/ /*changedType*/ )
    //! \brief The \c Form.
-   Q_PROPERTY( Form form READ form WRITE setForm /*NOTIFY changed*/ /*changedForm*/ )
-   //! \brief The untranslated \c Form string.
-   Q_PROPERTY( QString formString READ formString /* WRITE setForm NOTIFY changed*/ /*changedForm*/ )
+   Q_PROPERTY(Form form READ form WRITE setForm /*NOTIFY changed*/ /*changedForm*/ )
    //! \brief The percent of beta acids.
-   Q_PROPERTY( double beta_pct READ beta_pct WRITE setBeta_pct /*NOTIFY changed*/ /*changedBeta_pct*/ )
-   //! \brief The hop stability index in percent.
-   Q_PROPERTY( double hsi_pct READ hsi_pct WRITE setHsi_pct /*NOTIFY changed*/ /*changedHsi_pct*/ )
+   Q_PROPERTY(double beta_pct READ beta_pct WRITE setBeta_pct /*NOTIFY changed*/ /*changedBeta_pct*/ )
+   //! \brief The hop stability index in percent.  The Hop Stability Index (HSI) is defined as the percentage of hop
+   //         alpha lost in 6 months of storage.  It may be related to the Hop Storage Index...
+   Q_PROPERTY(double hsi_pct READ hsi_pct WRITE setHsi_pct /*NOTIFY changed*/ /*changedHsi_pct*/ )
    //! \brief The origin.
-   Q_PROPERTY( QString origin READ origin WRITE setOrigin /*NOTIFY changed*/ /*changedOrigin*/ )
+   Q_PROPERTY(QString origin READ origin WRITE setOrigin /*NOTIFY changed*/ /*changedOrigin*/ )
    //! \brief The list of substitutes.
-   Q_PROPERTY( QString substitutes READ substitutes WRITE setSubstitutes /*NOTIFY changed*/ /*changedSubstitutes*/ )
+   Q_PROPERTY(QString substitutes READ substitutes WRITE setSubstitutes /*NOTIFY changed*/ /*changedSubstitutes*/ )
    //! \brief Humulene as a percentage of total hop oil.
-   Q_PROPERTY( double humulene_pct READ humulene_pct WRITE setHumulene_pct /*NOTIFY changed*/ /*changedHumulene_pct*/ )
+   Q_PROPERTY(double humulene_pct READ humulene_pct WRITE setHumulene_pct /*NOTIFY changed*/ /*changedHumulene_pct*/ )
    //! \brief Caryophyllene as a percentage of total hop oil.
-   Q_PROPERTY( double caryophyllene_pct READ caryophyllene_pct WRITE setCaryophyllene_pct /*NOTIFY changed*/ /*changedCaryophyllene_pct*/ )
+   Q_PROPERTY(double caryophyllene_pct READ caryophyllene_pct WRITE setCaryophyllene_pct /*NOTIFY changed*/ /*changedCaryophyllene_pct*/ )
    //! \brief Cohumulone as a percentage of total hop oil.
-   Q_PROPERTY( double cohumulone_pct READ cohumulone_pct WRITE setCohumulone_pct /*NOTIFY changed*/ /*changedCohumulone_pct*/ )
+   Q_PROPERTY(double cohumulone_pct READ cohumulone_pct WRITE setCohumulone_pct /*NOTIFY changed*/ /*changedCohumulone_pct*/ )
    //! \brief Myrcene as a percentage of total hop oil.
-   Q_PROPERTY( double myrcene_pct READ myrcene_pct WRITE setMyrcene_pct /*NOTIFY changed*/ /*changedMyrcene_pct*/ )
+   Q_PROPERTY(double myrcene_pct READ myrcene_pct WRITE setMyrcene_pct /*NOTIFY changed*/ /*changedMyrcene_pct*/ )
 
-   double alpha_pct() const;
-   double amount_kg() const;
-   virtual double inventory() const;
-   // Use in enumerated, untranslated and translated versions
-   Use use() const;
-   const QString useString() const;
-   const QString useStringTr() const;
+   //============================="GET" METHODS====================================
+   double  alpha_pct()             const;
+   double  amount_kg()             const;
+   Use     use()                   const;
+   double  time_min()              const;
+   QString notes()                 const;
+   Type    type()                  const;
+   Form    form()                  const;
+   double  beta_pct()              const;
+   double  hsi_pct()               const;
+   QString origin()                const;
+   QString substitutes()           const;
+   double  humulene_pct()          const;
+   double  caryophyllene_pct()     const;
+   double  cohumulone_pct()        const;
+   double  myrcene_pct()           const;
 
-   double time_min() const;
-   const QString notes() const;
+   virtual double inventory()  const;
 
-   // Type in enumerated, untranslated and translated versions
-   Type type() const;
-   const QString typeString() const;
-   const QString typeStringTr() const;
+   //============================="SET" METHODS====================================
+   void setAlpha_pct            (double  const   val);
+   void setAmount_kg            (double  const   val);
+   void setUse                  (Use     const   val);
+   void setTime_min             (double  const   val);
+   void setNotes                (QString const & val);
+   void setType                 (Type    const   val);
+   void setForm                 (Form    const   val);
+   void setBeta_pct             (double  const   val);
+   void setHsi_pct              (double  const   val);
+   void setOrigin               (QString const & val);
+   void setSubstitutes          (QString const & val);
+   void setHumulene_pct         (double  const   val);
+   void setCaryophyllene_pct    (double  const   val);
+   void setCohumulone_pct       (double  const   val);
+   void setMyrcene_pct          (double  const   val);
 
-   // Form in enumerated, untranslated and translated versions
-   Form form() const;
-   const QString formString() const;
-   const QString formStringTr() const;
-
-   double beta_pct() const;
-   double hsi_pct() const;
-   const QString origin() const;
-   const QString substitutes() const;
-   double humulene_pct() const;
-   double caryophyllene_pct() const;
-   double cohumulone_pct() const;
-   double myrcene_pct() const;
-
-   //set
-   void setAlpha_pct( double num);
-   void setAmount_kg( double num);
-   virtual void setInventoryAmount(double amount);
-   void setUse( Use u);
-   void setTime_min( double num);
-
-   void setNotes( const QString& str);
-   void setType( Type t);
-   void setForm( Form f);
-   void setBeta_pct( double num);
-   void setHsi_pct( double num);
-   void setOrigin( const QString& str);
-   void setSubstitutes( const QString& str);
-   void setHumulene_pct( double num);
-   void setCaryophyllene_pct( double num);
-   void setCohumulone_pct( double num);
-   void setMyrcene_pct( double num);
+   virtual void setInventoryAmount(double const val);
 
    virtual Recipe * getOwningRecipe();
 
@@ -183,37 +201,26 @@ protected:
    virtual ObjectStore & getObjectStoreTypedInstance() const;
 
 private:
-   Use m_use;
-   Type m_type;
-   Form m_form;
-   double m_alpha_pct;
-   double m_amount_kg;
-   double m_time_min;
+   Use     m_use;
+   Type    m_type;
+   Form    m_form;
+   double  m_alpha_pct;
+   double  m_amount_kg;
+   double  m_time_min;
    QString m_notes;
-   double m_beta_pct;
-   double m_hsi_pct;
+   double  m_beta_pct;
+   double  m_hsi_pct;
    QString m_origin;
    QString m_substitutes;
-   double m_humulene_pct;
-   double m_caryophyllene_pct;
-   double m_cohumulone_pct;
-   double m_myrcene_pct;
+   double  m_humulene_pct;
+   double  m_caryophyllene_pct;
+   double  m_cohumulone_pct;
+   double  m_myrcene_pct;
 
    void setDefaults();
 };
 
 Q_DECLARE_METATYPE( QList<Hop*> )
 
-inline bool hopLessThanByTime(const Hop* lhs, const Hop* rhs)
-{
-   if ( lhs->use() == rhs->use() )
-   {
-      if ( lhs->time_min() == rhs->time_min() )
-         return lhs->name() < rhs->name();
-
-      return lhs->time_min() > rhs->time_min();
-   }
-   return lhs->use() < rhs->use();
-}
-
+bool hopLessThanByTime(const Hop* lhs, const Hop* rhs);
 #endif
