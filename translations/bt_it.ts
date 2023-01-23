@@ -968,6 +968,22 @@ Log file may contain more details.</source>
         <source>Username</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>NODB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SQLITE</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PGSQL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ALLDB</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>EquipmentEditor</name>

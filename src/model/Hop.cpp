@@ -30,18 +30,16 @@
 #include "model/NamedParameterBundle.h"
 #include "model/Recipe.h"
 
-// Note that Hop::typeStringMapping and Hop::FormMapping are as defined by BeerJSON, but we also use them for the DB and for
-// the UI.  We can't use them for BeerXML as it only supports subsets of these types.
 EnumStringMapping const Hop::typeStringMapping {
-   {"aroma",                  Hop::Type::Aroma},
-   {"bittering",              Hop::Type::Bittering},
-   {"both",                   Hop::Type::Both},
+   {"Aroma",                  Hop::Type::Aroma},
+   {"Bittering",              Hop::Type::Bittering},
+   {"Both",                   Hop::Type::Both},
 };
 
 EnumStringMapping const Hop::formStringMapping {
-   {"leaf",       Hop::Form::Leaf},
-   {"pellet",     Hop::Form::Pellet},
-   {"plug",       Hop::Form::Plug}
+   {"Leaf",       Hop::Form::Leaf},
+   {"Pellet",     Hop::Form::Pellet},
+   {"Plug",       Hop::Form::Plug}
 };
 
 EnumStringMapping const Hop::useStringMapping {
