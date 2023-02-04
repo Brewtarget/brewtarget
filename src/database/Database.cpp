@@ -1,6 +1,6 @@
 /*
  * database/Database.cpp is part of Brewtarget, and is copyright the following
- * authors 2009-2021:
+ * authors 2009-2023:
  *   • Aidan Roberts <aidanr67@gmail.com>
  *   • A.J. Drobnich <aj.drobnich@gmail.com>
  *   • Brian Rower <brian.rower@gmail.com>
@@ -682,7 +682,12 @@ bool Database::load() {
 
 void Database::checkForNewDefaultData() {
    // See if there are new ingredients that we need to merge from the data-space db.
-   // Don't do this if we JUST copied the dataspace database.
+   // Don't do this if we JUST copied the default database.
+   qDebug() <<
+      Q_FUNC_INFO << "dataDbFile:" << this->pimpl->dataDbFile.fileName() << ", dbFile:" <<
+      this->pimpl->dbFile.fileName() << ", userDatabaseDidNotExist: " <<
+      (this->pimpl->userDatabaseDidNotExist ? "True" : "False") << ", dataDbFile.lastModified:" <<
+      QFileInfo(this->pimpl->dataDbFile).lastModified() << ", lastDbMergeRequest" << Database::lastDbMergeRequest;
    if (this->pimpl->dataDbFile.fileName() != this->pimpl->dbFile.fileName() &&
        !this->pimpl->userDatabaseDidNotExist &&
        QFileInfo(this->pimpl->dataDbFile).lastModified() > Database::lastDbMergeRequest) {

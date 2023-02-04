@@ -11,8 +11,29 @@ format therein).
 
 * We'll list new features here...
 
+## v3.0.6
+Minor bug fixes for the 3.0.5 release (ie bugs in 3.0.5 are fixed in this 3.0.6 release).
+
+### New Features
+
+* None
+
+### Bug Fixes
+* brewkenPersistentSettings.conf? [#694](https://github.com/Brewtarget/brewtarget/issues/694)
+* Could not decode "Pellet" to enum and others [#695](https://github.com/Brewtarget/brewtarget/issues/695)
+* Brewtarget logo is missing from main window [#697](https://github.com/Brewtarget/brewtarget/issues/697)
+* Drag and drop is broken [#701](https://github.com/Brewtarget/brewtarget/issues/701)
+* WARNING : QObject::connect: No such signal BrewNote::brewDateChanged(QDateTime) in /home/mik/brewtarget/mik/src/BtTreeModel.cpp [#703](https://github.com/Brewtarget/brewtarget/issues/703)
+* Water chemistry was misbehaving [#705](https://github.com/Brewtarget/brewtarget/issues/705)
+* core dump when right clicking the OG label on the main screen [#708](https://github.com/Brewtarget/brewtarget/issues/708)
+* Hop calculation issues [#715](https://github.com/Brewtarget/brewtarget/issues/715)
+* Hop editor crashes App [#717](https://github.com/Brewtarget/brewtarget/issues/717)
+
+### Release Timestamp
+Sun, 5 Feb 2023 10:04:23 +0100
+
 ## v3.0.5
-Minor bug fixes for the 3.0.4 release (ie bugs in 3.0.5 are fixed in this 3.0.5 release).
+Minor bug fixes for the 3.0.4 release (ie bugs in 3.0.4 are fixed in this 3.0.5 release).
 
 ### New Features
 
