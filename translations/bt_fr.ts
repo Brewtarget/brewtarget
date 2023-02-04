@@ -5325,23 +5325,23 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation>Empâtage</translation>
+        <translation type="vanished">Empâtage</translation>
     </message>
     <message>
         <source>First Wort</source>
-        <translation>Pré-ébullition</translation>
+        <translation type="vanished">Pré-ébullition</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation>Ébullition</translation>
+        <translation type="vanished">Ébullition</translation>
     </message>
     <message>
         <source>Aroma</source>
-        <translation>Arômatique</translation>
+        <translation type="vanished">Arômatique</translation>
     </message>
     <message>
         <source>Dry Hop</source>
-        <translation>Houblonnage à cru</translation>
+        <translation type="vanished">Houblonnage à cru</translation>
     </message>
     <message>
         <source>Time</source>
@@ -5353,11 +5353,11 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Bittering</source>
-        <translation>Amérisant</translation>
+        <translation type="vanished">Amérisant</translation>
     </message>
     <message>
         <source>Both</source>
-        <translation>Les deux</translation>
+        <translation type="vanished">Les deux</translation>
     </message>
     <message>
         <source>Form</source>
@@ -5365,15 +5365,15 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Leaf</source>
-        <translation>Cône</translation>
+        <translation type="vanished">Cône</translation>
     </message>
     <message>
         <source>Pellet</source>
-        <translation>Pellet</translation>
+        <translation type="vanished">Pellet</translation>
     </message>
     <message>
         <source>Plug</source>
-        <translation>Plug</translation>
+        <translation type="vanished">Plug</translation>
     </message>
     <message>
         <source>Beta (%)</source>

@@ -5327,23 +5327,23 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Mash</source>
-        <translation>Затор</translation>
+        <translation type="vanished">Затор</translation>
     </message>
     <message>
         <source>First Wort</source>
-        <translation>Первое сусло</translation>
+        <translation type="vanished">Первое сусло</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation>Кипячение</translation>
+        <translation type="vanished">Кипячение</translation>
     </message>
     <message>
         <source>Aroma</source>
-        <translation>Аромат</translation>
+        <translation type="vanished">Аромат</translation>
     </message>
     <message>
         <source>Dry Hop</source>
-        <translation>Сухое охмеление</translation>
+        <translation type="vanished">Сухое охмеление</translation>
     </message>
     <message>
         <source>Time</source>
@@ -5355,11 +5355,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Bittering</source>
-        <translation>Горечь</translation>
+        <translation type="vanished">Горечь</translation>
     </message>
     <message>
         <source>Both</source>
-        <translation>Оба</translation>
+        <translation type="vanished">Оба</translation>
     </message>
     <message>
         <source>Form</source>
@@ -5367,15 +5367,15 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Leaf</source>
-        <translation>Шишковой</translation>
+        <translation type="vanished">Шишковой</translation>
     </message>
     <message>
         <source>Pellet</source>
-        <translation>Гранулы</translation>
+        <translation type="vanished">Гранулы</translation>
     </message>
     <message>
         <source>Plug</source>
-        <translation>Пробка</translation>
+        <translation type="vanished">Пробка</translation>
     </message>
     <message>
         <source>Beta (%)</source>

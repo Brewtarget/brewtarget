@@ -5323,23 +5323,23 @@ El volumen final en el primario es %1.</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation>Maceración</translation>
+        <translation type="vanished">Maceración</translation>
     </message>
     <message>
         <source>First Wort</source>
-        <translation>First Wort</translation>
+        <translation type="vanished">First Wort</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation>Hervor</translation>
+        <translation type="vanished">Hervor</translation>
     </message>
     <message>
         <source>Aroma</source>
-        <translation>Aroma</translation>
+        <translation type="vanished">Aroma</translation>
     </message>
     <message>
         <source>Dry Hop</source>
-        <translation>Dry Hop</translation>
+        <translation type="vanished">Dry Hop</translation>
     </message>
     <message>
         <source>Time</source>
@@ -5351,11 +5351,11 @@ El volumen final en el primario es %1.</translation>
     </message>
     <message>
         <source>Bittering</source>
-        <translation>Amargor</translation>
+        <translation type="vanished">Amargor</translation>
     </message>
     <message>
         <source>Both</source>
-        <translation>Los dos</translation>
+        <translation type="vanished">Los dos</translation>
     </message>
     <message>
         <source>Form</source>
@@ -5363,15 +5363,15 @@ El volumen final en el primario es %1.</translation>
     </message>
     <message>
         <source>Leaf</source>
-        <translation>Flor</translation>
+        <translation type="vanished">Flor</translation>
     </message>
     <message>
         <source>Pellet</source>
-        <translation>Pellet</translation>
+        <translation type="vanished">Pellet</translation>
     </message>
     <message>
         <source>Plug</source>
-        <translation>Plug</translation>
+        <translation type="vanished">Plug</translation>
     </message>
     <message>
         <source>Beta (%)</source>

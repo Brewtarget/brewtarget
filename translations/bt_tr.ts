@@ -4759,23 +4759,19 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Mash</source>
-        <translation>Mayşe</translation>
+        <translation type="vanished">Mayşe</translation>
     </message>
     <message>
         <source>First Wort</source>
-        <translation>İlk Şıra</translation>
+        <translation type="vanished">İlk Şıra</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation>Kaynama</translation>
-    </message>
-    <message>
-        <source>Aroma</source>
-        <translation></translation>
+        <translation type="vanished">Kaynama</translation>
     </message>
     <message>
         <source>Dry Hop</source>
-        <translation>Kuru Şot</translation>
+        <translation type="vanished">Kuru Şot</translation>
     </message>
     <message>
         <source>Time</source>
@@ -4787,11 +4783,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Bittering</source>
-        <translation>Acılık</translation>
+        <translation type="vanished">Acılık</translation>
     </message>
     <message>
         <source>Both</source>
-        <translation>Herbiri</translation>
+        <translation type="vanished">Herbiri</translation>
     </message>
     <message>
         <source>Form</source>
@@ -4799,15 +4795,15 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Leaf</source>
-        <translation>Yaprak</translation>
+        <translation type="vanished">Yaprak</translation>
     </message>
     <message>
         <source>Pellet</source>
-        <translation>Pelet</translation>
+        <translation type="vanished">Pelet</translation>
     </message>
     <message>
         <source>Plug</source>
-        <translation>Kozalak</translation>
+        <translation type="vanished">Kozalak</translation>
     </message>
     <message>
         <source>Beta acids as percent by mass</source>

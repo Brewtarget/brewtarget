@@ -5283,23 +5283,23 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Mash</source>
-        <translation>Στο σκεύος σακχαροποίησης</translation>
+        <translation type="vanished">Στο σκεύος σακχαροποίησης</translation>
     </message>
     <message>
         <source>First Wort</source>
-        <translation>Πρίν το βράσιμο</translation>
+        <translation type="vanished">Πρίν το βράσιμο</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation>Στο Βράσιμο</translation>
+        <translation type="vanished">Στο Βράσιμο</translation>
     </message>
     <message>
         <source>Aroma</source>
-        <translation>Για άρωμα</translation>
+        <translation type="vanished">Για άρωμα</translation>
     </message>
     <message>
         <source>Dry Hop</source>
-        <translation>στον κάδο ζύμωσης</translation>
+        <translation type="vanished">στον κάδο ζύμωσης</translation>
     </message>
     <message>
         <source>Time</source>
@@ -5311,11 +5311,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Bittering</source>
-        <translation>Πικράδα</translation>
+        <translation type="vanished">Πικράδα</translation>
     </message>
     <message>
         <source>Both</source>
-        <translation>Και τα δύο</translation>
+        <translation type="vanished">Και τα δύο</translation>
     </message>
     <message>
         <source>Form</source>
@@ -5323,15 +5323,15 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Leaf</source>
-        <translation>σε φύλλα</translation>
+        <translation type="vanished">σε φύλλα</translation>
     </message>
     <message>
         <source>Pellet</source>
-        <translation>Σφαιρίδια</translation>
+        <translation type="vanished">Σφαιρίδια</translation>
     </message>
     <message>
         <source>Plug</source>
-        <translation>Ανθός</translation>
+        <translation type="vanished">Ανθός</translation>
     </message>
     <message>
         <source>Beta (%)</source>

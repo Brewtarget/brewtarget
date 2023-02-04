@@ -5285,23 +5285,23 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation>Vystírka (mash hop)</translation>
+        <translation type="vanished">Vystírka (mash hop)</translation>
     </message>
     <message>
         <source>First Wort</source>
-        <translation>Vyslazování (first wort)</translation>
+        <translation type="vanished">Vyslazování (first wort)</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation>Chmelovar</translation>
+        <translation type="vanished">Chmelovar</translation>
     </message>
     <message>
         <source>Aroma</source>
-        <translation>Aromatický</translation>
+        <translation type="vanished">Aromatický</translation>
     </message>
     <message>
         <source>Dry Hop</source>
-        <translation>Dry hopping</translation>
+        <translation type="vanished">Dry hopping</translation>
     </message>
     <message>
         <source>Time</source>
@@ -5313,11 +5313,11 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
     <message>
         <source>Bittering</source>
-        <translation>Hořký</translation>
+        <translation type="vanished">Hořký</translation>
     </message>
     <message>
         <source>Both</source>
-        <translation>Oboje</translation>
+        <translation type="vanished">Oboje</translation>
     </message>
     <message>
         <source>Form</source>
@@ -5325,15 +5325,15 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
     <message>
         <source>Leaf</source>
-        <translation>Hlávkový</translation>
+        <translation type="vanished">Hlávkový</translation>
     </message>
     <message>
         <source>Pellet</source>
-        <translation>Granulovaný</translation>
+        <translation type="vanished">Granulovaný</translation>
     </message>
     <message>
         <source>Plug</source>
-        <translation>Lisovaný</translation>
+        <translation type="vanished">Lisovaný</translation>
     </message>
     <message>
         <source>Beta (%)</source>

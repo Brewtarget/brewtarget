@@ -114,7 +114,7 @@ endif()
 #=======================================================================================================================
 # It's simplest to keep the project name all lower-case as it means we can use a lot more of the default settings for
 # Linux packaging (where directory names etc are expected to be all lower-case)
-project(brewtarget VERSION 3.0.5 LANGUAGES CXX)
+project(brewtarget VERSION 3.0.6 LANGUAGES CXX)
 message(STATUS "Building ${PROJECT_NAME} version ${PROJECT_VERSION}")
 message(STATUS "PROJECT_SOURCE_DIR is ${PROJECT_SOURCE_DIR}")
 # Sometimes we do need the capitalised version of the project name
@@ -301,9 +301,18 @@ endif()
 # Windows-specific compilation settings
 if(WIN32)
    # See https://gcc.gnu.org/onlinedocs/gcc-12.2.0/gcc/Link-Options.html#Link-Options for more on GCC linker options
-   # In theory, this statically links all the GCC and MinGW libraries, so we don't have to ship DLLs for them.  In
-   # practice, it seems we still need a fair few other DLLs.
-   set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++ -static")
+   # In theory, we could specify "-static-libgcc -static-libstdc++ -static" to statically link all the GCC and MinGW
+   # libraries, so we don't have to ship DLLs for them.  In practice, this (a) does not prevent us needing a fair few
+   # other DLLs and (b) per https://gcc.gnu.org/onlinedocs/gcc-12.2.0/gcc/Link-Options.html#Link-Options it's advised
+   # not to because:
+   #    "There are several situations in which an application should use the shared libgcc instead of the static
+   #    version. The most common of these is when the application wishes to throw and catch exceptions across different
+   #    shared libraries. In that case, each of the libraries as well as the application itself should use the shared
+   #    libgcc.
+   #       "Therefore, the G++ driver automatically adds -shared-libgcc whenever you build a shared library or a main
+   #    executable, because C++ programs typically use exceptions, so this is the right thing to do."
+   #
+#   set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++ -static")
 endif()
 
 if(APPLE)
@@ -311,7 +320,7 @@ if(APPLE)
    # gives access to various non-standard GNU/Linux extension functions and changes the behaviour of some POSIX
    # functions.
    #
-   # .:TBD:. Not sure exactly why we need this set on Mac builds
+   # This is needed for Boost stacktrace on Mac
    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GNU_SOURCE")
 endif()
 
@@ -668,7 +677,12 @@ if(NOT APPLE)
    endif()
 #   add_compile_definitions(BOOST_STACKTRACE_USE_BACKTRACE)
 endif()
-message("Backtrace libs " ${DL_LIBRARY} " | " ${Backtrace_LIBRARIES} " | " ${Boost_LIBRARIES})
+message("Backtrace libs  ${DL_LIBRARY}  |  ${Backtrace_LIBRARIES}  |  ${Boost_LIBRARIES}")
+
+# Defining BOOST_JSON_STANDALONE tells Boost.JSON to use std::string_view (requires C++17) rather than
+# boost::string_view (part of Boost.Utility).  However, as of recent versions of Boost.JSON, this is "deprecated and
+# will be removed in a future release of Boost.JSON".
+#ADD_COMPILE_DEFINITIONS(BOOST_JSON_STANDALONE)
 
 #=================================================== Find Xerces-C++ ===================================================
 # CMake already knows how to find and configure Xerces-C++, see
@@ -1358,22 +1372,37 @@ if(WIN32)
    # but have not yet hit paydirt.
    #
    set(msys2Dlls
-      libbrotli
-      libbz2
-      libdouble-conversion
-      libfreetype
-      libglib
+      libbrotli                ###
+      libbrotlicommon        # Brotli compression -- see https://en.wikipedia.org/wiki/Brotli
+      libbrotlidec           # Brotli compression
+      libbrotlienc           # Brotli compression
+      libbz2                 # BZip2 compression -- see https://en.wikipedia.org/wiki/Bzip2
+      libdouble-conversion   # See https://github.com/google/double-conversion
+      libfreetype            # See https://freetype.org/
+      libgcc_s_dw2
+      libglib                  ###
+      libglib-2.0
       libgraphite
-      libharfbuzz
-      libiconv
-      libintl
-      libmd4c
-      libpcre
-      libpng16
-      libsqlite3    # You need this IN ADDITION to bin/sqldrivers/qsqlite.dll, which gets installed by windeployqt
+      libharfbuzz            # HarfBuzz text shaping engine -- see https://github.com/harfbuzz/harfbuzz
+      libiconv               # See https://www.gnu.org/software/libiconv/
+      libicudt               # Part of International Components for Unicode
+      libicuin               # Part of International Components for Unicode
+      libicuuc               # Part of International Components for Unicode
+      libintl                # See https://www.gnu.org/software/gettext/
+      libmd4c                # Markdown for C -- see https://github.com/mity/md4c
+      libpcre2-16            # Perl Compatible Regular Expressions
+      libpcre2-32            # Perl Compatible Regular Expressions
+      libpcre2-8             # Perl Compatible Regular Expressions
+      libpng16               # Official PNG reference library -- see http://www.libpng.org/pub/png/libpng.html
+      libsqlite3             # Need this IN ADDITION to bin/sqldrivers/qsqlite.dll, which gets installed by windeployqt
+      libstdc++
+      libwinpthread
+      libxalan-c
       libxalanMsg
-      libzstd
-      zlib1
+      libxerces-c-3
+      libzstd                # ZStandard (aka zstd) = fast lossless compression algorithm
+      zlib1                    ###
+      zlib                   # ZLib compression library
    )
    foreach(dynamicLib IN LISTS msys2Dlls)
       file(GLOB dynamicallyLinkedLibrary ${dynamicLibDir}/${dynamicLib}*.dll)

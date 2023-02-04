@@ -119,31 +119,6 @@
          <property name="toolTip">
           <string>Use</string>
          </property>
-         <item>
-         <property name="text">
-           <string>Mash</string>
-         </property>
-       </item>
-         <item>
-         <property name="text">
-           <string>First Wort</string>
-         </property>
-       </item>
-         <item>
-         <property name="text">
-           <string>Boil</string>
-         </property>
-       </item>
-         <item>
-         <property name="text">
-           <string>Aroma</string>
-         </property>
-       </item>
-         <item>
-         <property name="text">
-           <string>Dry Hop</string>
-         </property>
-       </item>
         </widget>
        </item>
        <item row="1" column="2">
@@ -167,21 +142,6 @@
          <property name="toolTip">
           <string>Type</string>
          </property>
-         <item>
-         <property name="text">
-           <string>Bittering</string>
-         </property>
-       </item>
-         <item>
-         <property name="text">
-           <string>Aroma</string>
-         </property>
-       </item>
-         <item>
-         <property name="text">
-           <string>Both</string>
-         </property>
-       </item>
         </widget>
        </item>
        <item row="2" column="2">
@@ -205,21 +165,6 @@
          <property name="toolTip">
           <string>Form</string>
          </property>
-         <item>
-         <property name="text">
-           <string>Leaf</string>
-         </property>
-       </item>
-         <item>
-         <property name="text">
-           <string>Pellet</string>
-         </property>
-       </item>
-         <item>
-         <property name="text">
-           <string>Plug</string>
-         </property>
-         </item>
         </widget>
        </item>
        <item row="2" column="1">

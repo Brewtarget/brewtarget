@@ -5283,23 +5283,23 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation>Zacieranie</translation>
+        <translation type="vanished">Zacieranie</translation>
     </message>
     <message>
         <source>First Wort</source>
-        <translation>Chmielenie przedniej brzeczki</translation>
+        <translation type="vanished">Chmielenie przedniej brzeczki</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation>Gotowanie</translation>
+        <translation type="vanished">Gotowanie</translation>
     </message>
     <message>
         <source>Aroma</source>
-        <translation>Chmielenie na aromat</translation>
+        <translation type="vanished">Chmielenie na aromat</translation>
     </message>
     <message>
         <source>Dry Hop</source>
-        <translation>Chmielenie na zimno</translation>
+        <translation type="vanished">Chmielenie na zimno</translation>
     </message>
     <message>
         <source>Time</source>
@@ -5311,11 +5311,11 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Bittering</source>
-        <translation>Goryczkowy</translation>
+        <translation type="vanished">Goryczkowy</translation>
     </message>
     <message>
         <source>Both</source>
-        <translation>Uniwersalny</translation>
+        <translation type="vanished">Uniwersalny</translation>
     </message>
     <message>
         <source>Form</source>
@@ -5323,15 +5323,15 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Leaf</source>
-        <translation>Szyszka</translation>
+        <translation type="vanished">Szyszka</translation>
     </message>
     <message>
         <source>Pellet</source>
-        <translation>Granulat</translation>
+        <translation type="vanished">Granulat</translation>
     </message>
     <message>
         <source>Plug</source>
-        <translation>Tabletka</translation>
+        <translation type="vanished">Tabletka</translation>
     </message>
     <message>
         <source>Beta (%)</source>

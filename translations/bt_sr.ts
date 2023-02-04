@@ -4988,23 +4988,23 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Mash</source>
-        <translation>Укомљавање</translation>
+        <translation type="vanished">Укомљавање</translation>
     </message>
     <message>
         <source>First Wort</source>
-        <translation>Прва сладовина</translation>
+        <translation type="vanished">Прва сладовина</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation>Кључање</translation>
+        <translation type="vanished">Кључање</translation>
     </message>
     <message>
         <source>Aroma</source>
-        <translation>Арома</translation>
+        <translation type="vanished">Арома</translation>
     </message>
     <message>
         <source>Dry Hop</source>
-        <translation>Суво хмељње</translation>
+        <translation type="vanished">Суво хмељње</translation>
     </message>
     <message>
         <source>Time</source>
@@ -5016,11 +5016,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Bittering</source>
-        <translation>Горчина</translation>
+        <translation type="vanished">Горчина</translation>
     </message>
     <message>
         <source>Both</source>
-        <translation>Обе</translation>
+        <translation type="vanished">Обе</translation>
     </message>
     <message>
         <source>Form</source>
@@ -5028,15 +5028,15 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Leaf</source>
-        <translation>Лист</translation>
+        <translation type="vanished">Лист</translation>
     </message>
     <message>
         <source>Pellet</source>
-        <translation>Грануле</translation>
+        <translation type="vanished">Грануле</translation>
     </message>
     <message>
         <source>Plug</source>
-        <translation>Чеп</translation>
+        <translation type="vanished">Чеп</translation>
     </message>
     <message>
         <source>Beta acids as percent by mass</source>
