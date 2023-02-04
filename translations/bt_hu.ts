@@ -5287,23 +5287,23 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation>Cefre</translation>
+        <translation type="vanished">Cefre</translation>
     </message>
     <message>
         <source>First Wort</source>
-        <translation>Színlé komlózása (forralás előtt)</translation>
+        <translation type="vanished">Színlé komlózása (forralás előtt)</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation>Forralás</translation>
+        <translation type="vanished">Forralás</translation>
     </message>
     <message>
         <source>Aroma</source>
-        <translation>Aroma</translation>
+        <translation type="vanished">Aroma</translation>
     </message>
     <message>
         <source>Dry Hop</source>
-        <translation>Hidegkomló</translation>
+        <translation type="vanished">Hidegkomló</translation>
     </message>
     <message>
         <source>Time</source>
@@ -5315,11 +5315,11 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source>Bittering</source>
-        <translation>Keserűkomló</translation>
+        <translation type="vanished">Keserűkomló</translation>
     </message>
     <message>
         <source>Both</source>
-        <translation>Mindkettő</translation>
+        <translation type="vanished">Mindkettő</translation>
     </message>
     <message>
         <source>Form</source>
@@ -5327,15 +5327,15 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source>Leaf</source>
-        <translation>leveles</translation>
+        <translation type="vanished">leveles</translation>
     </message>
     <message>
         <source>Pellet</source>
-        <translation>Pellet</translation>
+        <translation type="vanished">Pellet</translation>
     </message>
     <message>
         <source>Plug</source>
-        <translation>Nagy pellet (komlódugó)</translation>
+        <translation type="vanished">Nagy pellet (komlódugó)</translation>
     </message>
     <message>
         <source>Beta (%)</source>

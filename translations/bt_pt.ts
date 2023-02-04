@@ -5299,23 +5299,23 @@ O volume final do fermentador primário é %1.</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation>Mosto</translation>
+        <translation type="vanished">Mosto</translation>
     </message>
     <message>
         <source>First Wort</source>
-        <translation>Primeiro mosto</translation>
+        <translation type="vanished">Primeiro mosto</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation>Ferver</translation>
+        <translation type="vanished">Ferver</translation>
     </message>
     <message>
         <source>Aroma</source>
-        <translation>Aroma</translation>
+        <translation type="vanished">Aroma</translation>
     </message>
     <message>
         <source>Dry Hop</source>
-        <translation>Dry Hop</translation>
+        <translation type="vanished">Dry Hop</translation>
     </message>
     <message>
         <source>Time</source>
@@ -5327,11 +5327,11 @@ O volume final do fermentador primário é %1.</translation>
     </message>
     <message>
         <source>Bittering</source>
-        <translation>Amargor</translation>
+        <translation type="vanished">Amargor</translation>
     </message>
     <message>
         <source>Both</source>
-        <translation>Ambos</translation>
+        <translation type="vanished">Ambos</translation>
     </message>
     <message>
         <source>Form</source>
@@ -5339,15 +5339,15 @@ O volume final do fermentador primário é %1.</translation>
     </message>
     <message>
         <source>Leaf</source>
-        <translation>Folha</translation>
+        <translation type="vanished">Folha</translation>
     </message>
     <message>
         <source>Pellet</source>
-        <translation>Pellet</translation>
+        <translation type="vanished">Pellet</translation>
     </message>
     <message>
         <source>Plug</source>
-        <translation>Plug</translation>
+        <translation type="vanished">Plug</translation>
     </message>
     <message>
         <source>Beta (%)</source>

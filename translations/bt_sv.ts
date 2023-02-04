@@ -5283,23 +5283,23 @@ Primärens slutgiltiga volym är %1.</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation>Mäsk</translation>
+        <translation type="vanished">Mäsk</translation>
     </message>
     <message>
         <source>First Wort</source>
-        <translation>Första Vörten</translation>
+        <translation type="vanished">Första Vörten</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation>Kokning</translation>
+        <translation type="vanished">Kokning</translation>
     </message>
     <message>
         <source>Aroma</source>
-        <translation>Arom</translation>
+        <translation type="vanished">Arom</translation>
     </message>
     <message>
         <source>Dry Hop</source>
-        <translation>Torrhumling</translation>
+        <translation type="vanished">Torrhumling</translation>
     </message>
     <message>
         <source>Time</source>
@@ -5311,11 +5311,11 @@ Primärens slutgiltiga volym är %1.</translation>
     </message>
     <message>
         <source>Bittering</source>
-        <translation>Bitter</translation>
+        <translation type="vanished">Bitter</translation>
     </message>
     <message>
         <source>Both</source>
-        <translation>Både</translation>
+        <translation type="vanished">Både</translation>
     </message>
     <message>
         <source>Form</source>
@@ -5323,15 +5323,15 @@ Primärens slutgiltiga volym är %1.</translation>
     </message>
     <message>
         <source>Leaf</source>
-        <translation>Löv</translation>
+        <translation type="vanished">Löv</translation>
     </message>
     <message>
         <source>Pellet</source>
-        <translation>Pellets</translation>
+        <translation type="vanished">Pellets</translation>
     </message>
     <message>
         <source>Plug</source>
-        <translation>Puck</translation>
+        <translation type="vanished">Puck</translation>
     </message>
     <message>
         <source>Beta (%)</source>

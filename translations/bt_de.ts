@@ -5291,23 +5291,23 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation>Maische</translation>
+        <translation type="vanished">Maische</translation>
     </message>
     <message>
         <source>First Wort</source>
-        <translation>Vorderwürze</translation>
+        <translation type="vanished">Vorderwürze</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation>Kochen</translation>
+        <translation type="vanished">Kochen</translation>
     </message>
     <message>
         <source>Aroma</source>
-        <translation>Aroma</translation>
+        <translation type="vanished">Aroma</translation>
     </message>
     <message>
         <source>Dry Hop</source>
-        <translation>Stopfhopfen</translation>
+        <translation type="vanished">Stopfhopfen</translation>
     </message>
     <message>
         <source>Time</source>
@@ -5319,11 +5319,11 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
     <message>
         <source>Bittering</source>
-        <translation>Bitterung</translation>
+        <translation type="vanished">Bitterung</translation>
     </message>
     <message>
         <source>Both</source>
-        <translation>Beide</translation>
+        <translation type="vanished">Beide</translation>
     </message>
     <message>
         <source>Form</source>
@@ -5331,15 +5331,15 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
     <message>
         <source>Leaf</source>
-        <translation>Blatt</translation>
+        <translation type="vanished">Blatt</translation>
     </message>
     <message>
         <source>Pellet</source>
-        <translation>Pellet</translation>
+        <translation type="vanished">Pellet</translation>
     </message>
     <message>
         <source>Plug</source>
-        <translation>Niederdruckpellet</translation>
+        <translation type="vanished">Niederdruckpellet</translation>
     </message>
     <message>
         <source>Beta (%)</source>

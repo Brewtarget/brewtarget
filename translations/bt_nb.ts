@@ -5283,23 +5283,23 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation>Mesk</translation>
+        <translation type="vanished">Mesk</translation>
     </message>
     <message>
         <source>First Wort</source>
-        <translation>Skylling</translation>
+        <translation type="vanished">Skylling</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation>Kok</translation>
+        <translation type="vanished">Kok</translation>
     </message>
     <message>
         <source>Aroma</source>
-        <translation>Aroma</translation>
+        <translation type="vanished">Aroma</translation>
     </message>
     <message>
         <source>Dry Hop</source>
-        <translation>Tørrhumle</translation>
+        <translation type="vanished">Tørrhumle</translation>
     </message>
     <message>
         <source>Time</source>
@@ -5311,11 +5311,11 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Bittering</source>
-        <translation>Forbitrende</translation>
+        <translation type="vanished">Forbitrende</translation>
     </message>
     <message>
         <source>Both</source>
-        <translation>Begge</translation>
+        <translation type="vanished">Begge</translation>
     </message>
     <message>
         <source>Form</source>
@@ -5323,15 +5323,15 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Leaf</source>
-        <translation>Blad</translation>
+        <translation type="vanished">Blad</translation>
     </message>
     <message>
         <source>Pellet</source>
-        <translation>Pellet</translation>
+        <translation type="vanished">Pellet</translation>
     </message>
     <message>
         <source>Plug</source>
-        <translation>Plugg</translation>
+        <translation type="vanished">Plugg</translation>
     </message>
     <message>
         <source>Beta (%)</source>

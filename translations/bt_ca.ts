@@ -5323,23 +5323,23 @@ El volum final al primari és de %1.</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation>Maceració</translation>
+        <translation type="vanished">Maceració</translation>
     </message>
     <message>
         <source>First Wort</source>
-        <translation>Primera most</translation>
+        <translation type="vanished">Primera most</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation>Bullit</translation>
+        <translation type="vanished">Bullit</translation>
     </message>
     <message>
         <source>Aroma</source>
-        <translation>Aroma</translation>
+        <translation type="vanished">Aroma</translation>
     </message>
     <message>
         <source>Dry Hop</source>
-        <translation>«Dry Hop»</translation>
+        <translation type="vanished">«Dry Hop»</translation>
     </message>
     <message>
         <source>Time</source>
@@ -5351,11 +5351,11 @@ El volum final al primari és de %1.</translation>
     </message>
     <message>
         <source>Bittering</source>
-        <translation>Amargor</translation>
+        <translation type="vanished">Amargor</translation>
     </message>
     <message>
         <source>Both</source>
-        <translation>Ambdós</translation>
+        <translation type="vanished">Ambdós</translation>
     </message>
     <message>
         <source>Form</source>
@@ -5363,15 +5363,15 @@ El volum final al primari és de %1.</translation>
     </message>
     <message>
         <source>Leaf</source>
-        <translation>Flor</translation>
+        <translation type="vanished">Flor</translation>
     </message>
     <message>
         <source>Pellet</source>
-        <translation>Pèl·let</translation>
+        <translation type="vanished">Pèl·let</translation>
     </message>
     <message>
         <source>Plug</source>
-        <translation>«Plug»</translation>
+        <translation type="vanished">«Plug»</translation>
     </message>
     <message>
         <source>Beta (%)</source>
