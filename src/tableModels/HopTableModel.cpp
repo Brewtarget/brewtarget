@@ -395,7 +395,7 @@ bool HopTableModel::setData(const QModelIndex & index, const QVariant & value, i
                Measurement::qStringToSI(value.toString(),
                                         Measurement::PhysicalQuantity::Mass,
                                         this->getForcedSystemOfMeasurementForColumn(column),
-                                        this->getForcedRelativeScaleForColumn(column)).quantity,
+                                        this->getForcedRelativeScaleForColumn(column)).quantity(),
                tr("Change Hop Inventory Amount")
             );
          }
@@ -409,7 +409,7 @@ bool HopTableModel::setData(const QModelIndex & index, const QVariant & value, i
                Measurement::qStringToSI(value.toString(),
                                         Measurement::PhysicalQuantity::Mass,
                                         this->getForcedSystemOfMeasurementForColumn(column),
-                                        this->getForcedRelativeScaleForColumn(column)).quantity,
+                                        this->getForcedRelativeScaleForColumn(column)).quantity(),
                tr("Change Hop Amount")
             );
          }
@@ -441,7 +441,7 @@ bool HopTableModel::setData(const QModelIndex & index, const QVariant & value, i
                Measurement::qStringToSI(value.toString(),
                                         Measurement::PhysicalQuantity::Time,
                                         std::nullopt,
-                                        this->getForcedRelativeScaleForColumn(column)).quantity,
+                                        this->getForcedRelativeScaleForColumn(column)).quantity(),
                tr("Change Hop Time")
             );
          }

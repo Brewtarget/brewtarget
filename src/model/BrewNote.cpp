@@ -22,7 +22,6 @@
 
 #include <algorithm>
 #include <QDebug>
-#include <QLocale>
 #include <QObject>
 #include <QRegExp>
 #include <QString>
@@ -83,79 +82,81 @@ BrewNote::BrewNote(Recipe const & recipe) :
    return;
 }
 
+BrewNote::BrewNote(QDate dateNow, QString const & name) :
+   NamedEntity        {name, true},
+   loading            {false  },
+   m_brewDate         {dateNow},
+   m_fermentDate      {       },
+   m_notes            {""     },
+   m_sg               {0.0    },
+   m_abv              {0.0    },
+   m_effIntoBK_pct    {0.0    },
+   m_brewhouseEff_pct {0.0    },
+   m_volumeIntoBK_l   {0.0    },
+   m_strikeTemp_c     {0.0    },
+   m_mashFinTemp_c    {0.0    },
+   m_og               {0.0    },
+   m_postBoilVolume_l {0.0    },
+   m_volumeIntoFerm_l {0.0    },
+   m_pitchTemp_c      {0.0    },
+   m_fg               {0.0    },
+   m_attenuation      {0.0    },
+   m_finalVolume_l    {0.0    },
+   m_boilOff_l        {0.0    },
+   m_projBoilGrav     {0.0    },
+   m_projVolIntoBK_l  {0.0    },
+   m_projStrikeTemp_c {0.0    },
+   m_projMashFinTemp_c{0.0    },
+   m_projOg           {0.0    },
+   m_projVolIntoFerm_l{0.0    },
+   m_projFg           {0.0    },
+   m_projEff_pct      {0.0    },
+   m_projABV_pct      {0.0    },
+   m_projPoints       {0.0    },
+   m_projFermPoints   {0.0    },
+   m_projAtten        {0.0    },
+   m_recipeId         {-1     } {
+   return;
+}
+
 BrewNote::BrewNote(NamedParameterBundle const & namedParameterBundle) :
    NamedEntity{namedParameterBundle},
    loading            {false},
-   m_brewDate         {namedParameterBundle(PropertyNames::BrewNote::brewDate         ).toDate()},
-   m_fermentDate      {namedParameterBundle(PropertyNames::BrewNote::fermentDate      ).toDate()},
-   m_notes            {namedParameterBundle(PropertyNames::BrewNote::notes            ).toString()},
-   m_sg               {namedParameterBundle(PropertyNames::BrewNote::sg               ).toDouble()},
-   m_abv              {namedParameterBundle(PropertyNames::BrewNote::abv              ).toDouble()},
-   m_effIntoBK_pct    {namedParameterBundle(PropertyNames::BrewNote::effIntoBK_pct    ).toDouble()},
-   m_brewhouseEff_pct {namedParameterBundle(PropertyNames::BrewNote::brewhouseEff_pct ).toDouble()},
-   m_volumeIntoBK_l   {namedParameterBundle(PropertyNames::BrewNote::volumeIntoBK_l   ).toDouble()},
-   m_strikeTemp_c     {namedParameterBundle(PropertyNames::BrewNote::strikeTemp_c     ).toDouble()},
-   m_mashFinTemp_c    {namedParameterBundle(PropertyNames::BrewNote::mashFinTemp_c    ).toDouble()},
-   m_og               {namedParameterBundle(PropertyNames::BrewNote::og               ).toDouble()},
-   m_postBoilVolume_l {namedParameterBundle(PropertyNames::BrewNote::postBoilVolume_l ).toDouble()},
-   m_volumeIntoFerm_l {namedParameterBundle(PropertyNames::BrewNote::volumeIntoFerm_l ).toDouble()},
-   m_pitchTemp_c      {namedParameterBundle(PropertyNames::BrewNote::pitchTemp_c      ).toDouble()},
-   m_fg               {namedParameterBundle(PropertyNames::BrewNote::fg               ).toDouble()},
-   m_attenuation      {namedParameterBundle(PropertyNames::BrewNote::attenuation      ).toDouble()},
-   m_finalVolume_l    {namedParameterBundle(PropertyNames::BrewNote::finalVolume_l    ).toDouble()},
-   m_boilOff_l        {namedParameterBundle(PropertyNames::BrewNote::boilOff_l        ).toDouble()},
-   m_projBoilGrav     {namedParameterBundle(PropertyNames::BrewNote::projBoilGrav     ).toDouble()},
-   m_projVolIntoBK_l  {namedParameterBundle(PropertyNames::BrewNote::projVolIntoBK_l  ).toDouble()},
-   m_projStrikeTemp_c {namedParameterBundle(PropertyNames::BrewNote::projStrikeTemp_c ).toDouble()},
-   m_projMashFinTemp_c{namedParameterBundle(PropertyNames::BrewNote::projMashFinTemp_c).toDouble()},
-   m_projOg           {namedParameterBundle(PropertyNames::BrewNote::projOg           ).toDouble()},
-   m_projVolIntoFerm_l{namedParameterBundle(PropertyNames::BrewNote::projVolIntoFerm_l).toDouble()},
-   m_projFg           {namedParameterBundle(PropertyNames::BrewNote::projFg           ).toDouble()},
-   m_projEff_pct      {namedParameterBundle(PropertyNames::BrewNote::projEff_pct      ).toDouble()},
-   m_projABV_pct      {namedParameterBundle(PropertyNames::BrewNote::projABV_pct      ).toDouble()},
-   m_projPoints       {namedParameterBundle(PropertyNames::BrewNote::projPoints       ).toDouble()},
-   m_projFermPoints   {namedParameterBundle(PropertyNames::BrewNote::projFermPoints   ).toDouble()},
-   m_projAtten        {namedParameterBundle(PropertyNames::BrewNote::projAtten        ).toDouble()},
-   m_recipeId         {namedParameterBundle(PropertyNames::BrewNote::recipeId         ).toInt()} {
+   m_brewDate         {namedParameterBundle.val<QDate  >(PropertyNames::BrewNote::brewDate         )},
+   m_fermentDate      {namedParameterBundle.val<QDate  >(PropertyNames::BrewNote::fermentDate      )},
+   m_notes            {namedParameterBundle.val<QString>(PropertyNames::BrewNote::notes            )},
+   m_sg               {namedParameterBundle.val<double >(PropertyNames::BrewNote::sg               )},
+   m_abv              {namedParameterBundle.val<double >(PropertyNames::BrewNote::abv              )},
+   m_effIntoBK_pct    {namedParameterBundle.val<double >(PropertyNames::BrewNote::effIntoBK_pct    )},
+   m_brewhouseEff_pct {namedParameterBundle.val<double >(PropertyNames::BrewNote::brewhouseEff_pct )},
+   m_volumeIntoBK_l   {namedParameterBundle.val<double >(PropertyNames::BrewNote::volumeIntoBK_l   )},
+   m_strikeTemp_c     {namedParameterBundle.val<double >(PropertyNames::BrewNote::strikeTemp_c     )},
+   m_mashFinTemp_c    {namedParameterBundle.val<double >(PropertyNames::BrewNote::mashFinTemp_c    )},
+   m_og               {namedParameterBundle.val<double >(PropertyNames::BrewNote::og               )},
+   m_postBoilVolume_l {namedParameterBundle.val<double >(PropertyNames::BrewNote::postBoilVolume_l )},
+   m_volumeIntoFerm_l {namedParameterBundle.val<double >(PropertyNames::BrewNote::volumeIntoFerm_l )},
+   m_pitchTemp_c      {namedParameterBundle.val<double >(PropertyNames::BrewNote::pitchTemp_c      )},
+   m_fg               {namedParameterBundle.val<double >(PropertyNames::BrewNote::fg               )},
+   m_attenuation      {namedParameterBundle.val<double >(PropertyNames::BrewNote::attenuation      )},
+   m_finalVolume_l    {namedParameterBundle.val<double >(PropertyNames::BrewNote::finalVolume_l    )},
+   m_boilOff_l        {namedParameterBundle.val<double >(PropertyNames::BrewNote::boilOff_l        )},
+   m_projBoilGrav     {namedParameterBundle.val<double >(PropertyNames::BrewNote::projBoilGrav     )},
+   m_projVolIntoBK_l  {namedParameterBundle.val<double >(PropertyNames::BrewNote::projVolIntoBK_l  )},
+   m_projStrikeTemp_c {namedParameterBundle.val<double >(PropertyNames::BrewNote::projStrikeTemp_c )},
+   m_projMashFinTemp_c{namedParameterBundle.val<double >(PropertyNames::BrewNote::projMashFinTemp_c)},
+   m_projOg           {namedParameterBundle.val<double >(PropertyNames::BrewNote::projOg           )},
+   m_projVolIntoFerm_l{namedParameterBundle.val<double >(PropertyNames::BrewNote::projVolIntoFerm_l)},
+   m_projFg           {namedParameterBundle.val<double >(PropertyNames::BrewNote::projFg           )},
+   m_projEff_pct      {namedParameterBundle.val<double >(PropertyNames::BrewNote::projEff_pct      )},
+   m_projABV_pct      {namedParameterBundle.val<double >(PropertyNames::BrewNote::projABV_pct      )},
+   m_projPoints       {namedParameterBundle.val<double >(PropertyNames::BrewNote::projPoints       )},
+   m_projFermPoints   {namedParameterBundle.val<double >(PropertyNames::BrewNote::projFermPoints   )},
+   m_projAtten        {namedParameterBundle.val<double >(PropertyNames::BrewNote::projAtten        )},
+   m_recipeId         {namedParameterBundle.val<int    >(PropertyNames::BrewNote::recipeId         )} {
    return;
 }
 
-
-BrewNote::BrewNote(QDate dateNow, QString const & name) :
-   NamedEntity        {name, true},
-   loading            {false},
-   m_brewDate         {dateNow},
-   m_fermentDate      {},
-   m_notes            {""},
-   m_sg               {0.0},
-   m_abv              {0.0},
-   m_effIntoBK_pct    {0.0},
-   m_brewhouseEff_pct {0.0},
-   m_volumeIntoBK_l   {0.0},
-   m_strikeTemp_c     {0.0},
-   m_mashFinTemp_c    {0.0},
-   m_og               {0.0},
-   m_postBoilVolume_l {0.0},
-   m_volumeIntoFerm_l {0.0},
-   m_pitchTemp_c      {0.0},
-   m_fg               {0.0},
-   m_attenuation      {0.0},
-   m_finalVolume_l    {0.0},
-   m_boilOff_l        {0.0},
-   m_projBoilGrav     {0.0},
-   m_projVolIntoBK_l  {0.0},
-   m_projStrikeTemp_c {0.0},
-   m_projMashFinTemp_c{0.0},
-   m_projOg           {0.0},
-   m_projVolIntoFerm_l{0.0},
-   m_projFg           {0.0},
-   m_projEff_pct      {0.0},
-   m_projABV_pct      {0.0},
-   m_projPoints       {0.0},
-   m_projFermPoints   {0.0},
-   m_projAtten        {0.0} {
-   return;
-}
+BrewNote::~BrewNote() = default;
 
 void BrewNote::populateNote(Recipe* parent)
 {

@@ -27,7 +27,7 @@
 #include "measurement/Measurement.h"
 #include "measurement/Unit.h"
 #include "measurement/UnitSystem.h"
-#include "utils/OptionalToStream.h"
+#include "utils/OptionalHelpers.h"
 #include "widgets/UnitAndScalePopUpMenu.h"
 
 BtTableModelRecipeObserver::BtTableModelRecipeObserver(QTableView * parent,

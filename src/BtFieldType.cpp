@@ -24,10 +24,12 @@
 
 namespace {
    EnumStringMapping const nonPhysicalQuantityToName {
-      {"Date"      , NonPhysicalQuantity::Date      },
-      {"String"    , NonPhysicalQuantity::String    },
-      {"Count"     , NonPhysicalQuantity::Count     },
-      {"Percentage", NonPhysicalQuantity::Percentage}
+      {"Date"         , NonPhysicalQuantity::Date         },
+      {"String"       , NonPhysicalQuantity::String       },
+      {"Count"        , NonPhysicalQuantity::Count        },
+      {"Percentage"   , NonPhysicalQuantity::Percentage   },
+      {"Bool"         , NonPhysicalQuantity::Bool         },
+      {"Dimensionless", NonPhysicalQuantity::Dimensionless},
    };
 }
 

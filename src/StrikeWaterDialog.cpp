@@ -23,61 +23,74 @@
 
 #include <Algorithms.h>
 
-// From Northern Brewer ~0.38 but Jon Palmer suggest 0.41
-// to compensate for the lost to the tun even if the tun is pre-heaten
-const double StrikeWaterDialog::specificHeatBarley = 0.41;
+namespace {
+   // From Northern Brewer ~0.38 but Jon Palmer suggest 0.41
+   // to compensate for the lost to the tun even if the tun is pre-heated
+   double const specificHeatBarley = 0.41;
 
-StrikeWaterDialog::StrikeWaterDialog(QWidget* parent) : QDialog(parent)
-{
-   setupUi(this);
-   connect(pushButton_calculate, &QAbstractButton::clicked, this, &StrikeWaterDialog::calculate);
+   /**
+    * \brief
+    */
+   double initialInfusionSi(double grainTemp, double targetTemp, double waterToGrain) {
+      if (waterToGrain == 0.0) {
+         return 0.0;
+      }
+      return (specificHeatBarley / waterToGrain) * (targetTemp - grainTemp) + targetTemp;
+   }
+
+   /**
+    * \brief
+    */
+   double mashInfusionSi(double initialTemp,
+                         double targetTemp,
+                         double grainWeight,
+                         double infusionWater,
+                         double mashVolume) {
+      if (infusionWater - targetTemp == 0.0) {
+         return 0.0;
+      }
+
+      return ((targetTemp - initialTemp) * (specificHeatBarley * grainWeight + mashVolume)) / (infusionWater - targetTemp);
+   }
+
 }
 
-StrikeWaterDialog::~StrikeWaterDialog() {}
+StrikeWaterDialog::StrikeWaterDialog(QWidget* parent) : QDialog(parent) {
+   setupUi(this);
+   connect(pushButton_calculate, &QAbstractButton::clicked, this, &StrikeWaterDialog::calculate);
+   return;
+}
 
-void StrikeWaterDialog::calculate()
-{
+StrikeWaterDialog::~StrikeWaterDialog() = default;
+
+void StrikeWaterDialog::calculate() {
   double initial = computeInitialInfusion();
   double mash = computeMashInfusion();
 
-  initialResultTxt->setText(initial);
-  mashResultTxt->setText(mash);
+  this->initialResultTxt->setText(initial);
+  this->mashResultTxt->setText(mash);
+  return;
 }
 
-double StrikeWaterDialog::computeInitialInfusion()
-{
-  double grainTemp   = grainTempVal->toSI().quantity;
-  double targetMash  = targetMashVal->toSI().quantity;
-  double waterVolume = waterVolumeVal->toSI().quantity;
-  double grainWeight = grainWeightInitVal->toSI().quantity;
+double StrikeWaterDialog::computeInitialInfusion() {
+   double grainTemp   = this->grainTempVal->toCanonical().quantity();
+   double targetMash  = this->targetMashVal->toCanonical().quantity();
+   double waterVolume = this->waterVolumeVal->toCanonical().quantity();
+   double grainWeight = this->grainWeightInitVal->toCanonical().quantity();
 
-  if ( grainWeight == 0.0 )
-     return 0.0;
-
-  return initialInfusionSi( grainTemp, targetMash, waterVolume / grainWeight);
-}
-
-double StrikeWaterDialog::computeMashInfusion()
-{
-  double mashVol       = mashVolVal->toSI().quantity;
-  double grainWeight   = grainWeightVal->toSI().quantity;
-  double actualMash    = actualMashVal->toSI().quantity;
-  double targetMashInf = targetMashInfVal->toSI().quantity;
-  double infusionWater = infusionWaterVal->toSI().quantity;
-
-  return mashInfusionSi(actualMash, targetMashInf, grainWeight, infusionWater, mashVol);
-}
-
-double StrikeWaterDialog::initialInfusionSi(double grainTemp, double targetTemp, double waterToGrain)
-{
-   if ( waterToGrain == 0.0 )
+   if (grainWeight == 0.0) {
       return 0.0;
-   return (specificHeatBarley / waterToGrain) * (targetTemp - grainTemp) + targetTemp;
-}
-double StrikeWaterDialog::mashInfusionSi(double initialTemp, double targetTemp, double grainWeight, double infusionWater, double mashVolume)
-{
-   if ( infusionWater - targetTemp == 0.0 )
-      return 0.0;
+   }
 
-  return ((targetTemp - initialTemp) * (specificHeatBarley * grainWeight + mashVolume)) / (infusionWater - targetTemp);
+   return initialInfusionSi(grainTemp, targetMash, waterVolume / grainWeight);
+}
+
+double StrikeWaterDialog::computeMashInfusion() {
+   double mashVol       = this->mashVolVal->toCanonical().quantity();
+   double grainWeight   = this->grainWeightVal->toCanonical().quantity();
+   double actualMash    = this->actualMashVal->toCanonical().quantity();
+   double targetMashInf = this->targetMashInfVal->toCanonical().quantity();
+   double infusionWater = this->infusionWaterVal->toCanonical().quantity();
+
+   return mashInfusionSi(actualMash, targetMashInf, grainWeight, infusionWater, mashVol);
 }

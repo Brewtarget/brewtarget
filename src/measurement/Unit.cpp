@@ -1,6 +1,6 @@
 /*
  * measurement/Unit.cpp is part of Brewtarget, and is copyright the following
- * authors 2009-2022:
+ * authors 2009-2023:
  * - Mark de Wever <koraq@xs4all.nl>
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
@@ -42,8 +42,8 @@ namespace {
       // Make sure we get the right decimal point (. or ,) and the right grouping
       // separator (, or .). Some locales write 1.000,10 and other write
       // 1,000.10. We need to catch both
-      QString decimal =  QRegExp::escape(QLocale::system().decimalPoint());
-      QString grouping = QRegExp::escape(QLocale::system().groupSeparator());
+      QString const decimal =  QRegExp::escape(Localization::getLocale().decimalPoint());
+      QString const grouping = QRegExp::escape(Localization::getLocale().groupSeparator());
 
       amtUnit.setPattern("((?:\\d+" + grouping + ")?\\d+(?:" + decimal + "\\d+)?|" + decimal + "\\d+)\\s*(\\w+)?");
       amtUnit.setCaseSensitivity(Qt::CaseInsensitive);
@@ -159,11 +159,11 @@ Measurement::Unit const & Measurement::Unit::getCanonical() const {
    return Measurement::Unit::getCanonicalUnit(this->getPhysicalQuantity());
 }
 
-Measurement::Amount Measurement::Unit::toSI(double amt) const {
+Measurement::Amount Measurement::Unit::toCanonical(double amt) const {
    return Measurement::Amount{this->pimpl->convertToCanonical(amt), this->getCanonical()};
 }
 
-double Measurement::Unit::fromSI(double amt) const {
+double Measurement::Unit::fromCanonical(double amt) const {
    return this->pimpl->convertFromCanonical(amt);
 }
 
@@ -196,7 +196,7 @@ QString Measurement::Unit::convert(QString qstr, QString toUnit) {
    double si;
    if (f) {
       double amt = valueFromString(qstr);
-      si = f->toSI(amt).quantity;
+      si = f->toCanonical(amt).quantity();
    } else {
       si = 0.0;
    }
@@ -209,7 +209,7 @@ QString Measurement::Unit::convert(QString qstr, QString toUnit) {
       return QString("%1 ?").arg(Measurement::displayQuantity(si, 3));
    }
 
-   return QString("%1 %2").arg(Measurement::displayQuantity(u->fromSI(si), 3)).arg(toUnit);
+   return QString("%1 %2").arg(Measurement::displayQuantity(u->fromCanonical(si), 3)).arg(toUnit);
 }
 
 Measurement::Unit const * Measurement::Unit::getUnit(QString const & name,
@@ -365,4 +365,9 @@ namespace Measurement::Units {
    // Yes, 1 centipoise = 1 millipascal-second, but a poise and a pascal-second are NOT equal so we have two different units
    Unit const centipoise          {Measurement::UnitSystems::viscosity_Metric,                        QObject::tr("cP"),    [](double x){return x;},              [](double y){return y;},                1.0};
    Unit const millipascalSecond   {Measurement::UnitSystems::viscosity_MetricAlternate,               QObject::tr("mPa-s"), [](double x){return x;},              [](double y){return y;},                1.0,  &centipoise};
+   // == Specific heat capacity ==
+   // See comment in measurement/Unith for why the non-metric units are the canonical ones
+   Unit const caloriesPerCelsiusPerGram{Measurement::UnitSystems::specificHeatCapacity_Calories,      QObject::tr("c/g·C" ), [](double x){return x;},             [](double y){return y;},                1.0};
+   Unit const joulesPerKelvinPerKg     {Measurement::UnitSystems::specificHeatCapacity_Joules  ,      QObject::tr("J/kg·K"), [](double x){return x / 4184.0;},    [](double y){return y * 4184.0;},       1.0, &caloriesPerCelsiusPerGram};
+
 }

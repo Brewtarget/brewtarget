@@ -1,6 +1,6 @@
 /*
  * xml/XmlRecipeRecord.cpp is part of Brewtarget, and is Copyright the following
- * authors 2020-2022
+ * authors 2020-2023
  * - Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -40,29 +40,29 @@ namespace {
       return;
    }
    template<> void setAmountsEtc(Hop & hop, NamedParameterBundle const & npb) {
-      hop.setAmount_kg(npb(PropertyNames::Hop::amount_kg).toDouble());
-      hop.setTime_min( npb(PropertyNames::Hop::time_min).toDouble());
+      hop.setAmount_kg(npb.val<double>(PropertyNames::Hop::amount_kg));
+      hop.setTime_min (npb.val<double>(PropertyNames::Hop::time_min ));
       return;
    }
    template<> void setAmountsEtc(Fermentable & fermentable, NamedParameterBundle const & npb) {
-      fermentable.setAmount_kg(   npb(PropertyNames::Fermentable::amount_kg).toDouble());
-      fermentable.setAddAfterBoil(npb(PropertyNames::Fermentable::addAfterBoil).toBool());
-      fermentable.setIsMashed(    npb(PropertyNames::Fermentable::isMashed).toBool());
+      fermentable.setAmount_kg   (npb.val<double>(PropertyNames::Fermentable::amount_kg   ));
+      fermentable.setAddAfterBoil(npb.val<bool  >(PropertyNames::Fermentable::addAfterBoil));
+      fermentable.setIsMashed    (npb.val<bool  >(PropertyNames::Fermentable::isMashed    ));
       return;
    }
    template<> void setAmountsEtc(Misc & misc, NamedParameterBundle const & npb) {
-      misc.setAmount(        npb(PropertyNames::Misc::amount).toDouble());
-      misc.setAmountIsWeight(npb(PropertyNames::Misc::amountIsWeight).toBool());
-      misc.setTime(          npb(PropertyNames::Misc::time).toDouble());
+      misc.setAmount        (npb.val<double>(PropertyNames::Misc::amount        ));
+      misc.setAmountIsWeight(npb.val<bool  >(PropertyNames::Misc::amountIsWeight));
+      misc.setTime          (npb.val<double>(PropertyNames::Misc::time          ));
       return;
    }
    template<> void setAmountsEtc(Yeast & yeast, NamedParameterBundle const & npb) {
-      yeast.setAmount(        npb(PropertyNames::Yeast::amount).toDouble());
-      yeast.setAmountIsWeight(npb(PropertyNames::Yeast::amountIsWeight).toBool());
+      yeast.setAmount        (npb.val<double>(PropertyNames::Yeast::amount        ));
+      yeast.setAmountIsWeight(npb.val<bool  >(PropertyNames::Yeast::amountIsWeight));
       return;
    }
    template<> void setAmountsEtc(Water & water, NamedParameterBundle const & npb) {
-      water.setAmount(        npb(PropertyNames::Water::amount).toDouble());
+      water.setAmount(npb.val<double>(PropertyNames::Water::amount));
       return;
    }
 

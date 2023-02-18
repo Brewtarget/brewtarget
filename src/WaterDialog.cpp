@@ -456,22 +456,22 @@ double WaterDialog::calculateGristpH() {
 
    if ( m_rec && m_rec->fermentables().size() ) {
 
-      double platoRatio = 1/Measurement::Units::plato.fromSI(m_rec->og());
+      double platoRatio = 1/Measurement::Units::plato.fromCanonical(m_rec->og());
       double color = m_rec->color_srm();
       double colorFromGrain = 0.0;
 
       for (Fermentable * i : m_rec->fermentables()) {
-         // I am counting anything that doesn't have diastatic
-         // power as a roasted/crystal malt. I am sure my assumption will
-         // haunt me later, but I have no way of knowing what kind of malt
-         // (base, crystal, roasted) this is.
+               // I am counting anything that doesn't have diastatic
+               // power as a roasted/crystal malt. I am sure my assumption will
+               // haunt me later, but I have no way of knowing what kind of malt
+               // (base, crystal, roasted) this is.
          if ( i->diastaticPower_lintner() < 1 ) {
-            double lovi = 19.0;
+                  double lovi = 19.0;
             if ( i->color_srm() <= 120 ) {
                lovi = ( i->color_srm() + 0.6)/1.35;
-            }
+               }
             colorFromGrain = ( i->amount_kg() / m_total_grains ) * lovi;
-          }
+         }
       }
       double colorRatio = colorFromGrain/m_weighted_colors;
       pHAdjustment = platoRatio * ( pHSlopeLight * (1-colorRatio) + pHSlopeDark * colorRatio) *color;

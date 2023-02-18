@@ -72,9 +72,9 @@ MashDesigner::MashDesigner(QWidget * parent) : QDialog     {parent},
    return;
 }
 
-void MashDesigner::proceed()
-{
+void MashDesigner::proceed() {
    nextStep(++curStep);
+   return;
 }
 
 void MashDesigner::setRecipe(Recipe* rec) {
@@ -154,8 +154,8 @@ void MashDesigner::saveStep() {
    this->mashStep->setName(this->lineEdit_name->text());
    this->mashStep->setType(static_cast<MashStep::Type>(comboBox_type->currentIndex()));
    // Bound the target temperature to what can be achieved
-   this->mashStep->setStepTemp_c(this->bound_temp_c(this->lineEdit_temp->toSI().quantity));
-   this->mashStep->setStepTime_min(lineEdit_time->toSI().quantity);
+   this->mashStep->setStepTemp_c(this->bound_temp_c(this->lineEdit_temp->toCanonical().quantity()));
+   this->mashStep->setStepTime_min(lineEdit_time->toCanonical().quantity());
 
    // finish a few things -- this may be premature optimization
    if (isInfusion()) {
@@ -169,7 +169,7 @@ void MashDesigner::saveStep() {
 }
 
 double MashDesigner::stepTemp_c() {
-   return lineEdit_temp->toSI().quantity;
+   return lineEdit_temp->toCanonical().quantity();
 }
 
 bool MashDesigner::heating() {
@@ -351,7 +351,7 @@ bool MashDesigner::initializeMash() {
    // Order matters. Don't do this until every that could return false has
    this->mash->setTunSpecificHeat_calGC(this->equip->tunSpecificHeat_calGC());
    this->mash->setTunWeight_kg(this->equip->tunWeight_kg());
-   this->mash->setTunTemp_c(Measurement::qStringToSI(dialogText, Measurement::PhysicalQuantity::Temperature).quantity);
+   this->mash->setTunTemp_c(Measurement::qStringToSI(dialogText, Measurement::PhysicalQuantity::Temperature).quantity());
 
    this->curStep = 0;
    this->addedWater_l = 0;
@@ -646,12 +646,12 @@ double MashDesigner::getDecoctionAmount_l() {
 
 bool MashDesigner::isBatchSparge() const {
    MashStep::Type stepType = type();
-   return (stepType == MashStep::batchSparge);
+   return (stepType == MashStep::Type::batchSparge);
 }
 
 bool MashDesigner::isFlySparge() const {
    MashStep::Type stepType = type();
-   return (stepType == MashStep::flySparge);
+   return (stepType == MashStep::Type::flySparge);
 }
 
 bool MashDesigner::isSparge() const {
@@ -660,17 +660,17 @@ bool MashDesigner::isSparge() const {
 
 bool MashDesigner::isInfusion() const {
    MashStep::Type stepType = type();
-   return (stepType == MashStep::Infusion || isSparge());
+   return (stepType == MashStep::Type::Infusion || isSparge());
 }
 
 bool MashDesigner::isDecoction() const {
    MashStep::Type stepType = type();
-   return (stepType == MashStep::Decoction);
+   return (stepType == MashStep::Type::Decoction);
 }
 
 bool MashDesigner::isTemperature() const {
    MashStep::Type stepType = type();
-   return (stepType == MashStep::Temperature);
+   return (stepType == MashStep::Type::Temperature);
 }
 
 MashStep::Type MashDesigner::type() const {

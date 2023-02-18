@@ -1,6 +1,6 @@
 /*
  * measurement/Amount.h is part of Brewtarget, and is copyright the following
- * authors 2022:
+ * authors 2022-2023:
  * - Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -31,11 +31,69 @@ namespace Measurement {
     *        know what units we're getting back from a function (eg \c qstringToSI), it helps reduce bugs to have
     *        quantity and units together in a single struct.
     */
-   struct Amount {
-      double quantity;
-      Unit const & unit;
+   class Amount {
+   public:
+      //! Regular constructor
+      Amount(double quantity, Unit const & unit);
+
+      //! Copy constructor
+      Amount(Amount const & other);
+
+      //! Assignment operator
+      Amount & operator=(Amount const & other);
+
+      //! Move constructor.
+      Amount(Amount && other);
+
+      //! Move assignment.
+      Amount & operator=(Amount && other);
+
+      double       quantity() const;
+      Unit const * unit    () const;
+
+   private:
+      void setQuantity(double const   val);
+      void setUnit    (Unit   const & val);
+
+   protected:
+      double       m_quantity;
+      Unit const * m_unit;
    };
 }
+
+/**
+ * \brief A version of \c Measurement::Amount that is "constrained" to be either a
+ *        \c Measurement::PhysicalQuantity::Mass or a \c Measurement::PhysicalQuantity::Volume.
+ *        The constraint is not bullet-proof but you will get an assert (on a debug build) if you try to construct /
+ *        assign / move it with a \c Measurement::Unit of the wrong \c Measurement::PhysicalQuantity
+ */
+class MassOrVolumeAmt : public Measurement::Amount {
+public:
+   /**
+    * \brief Default constructor is needed so we can store in \c QVariant which is needed to use this type in the Qt
+    *        Properties system.  The default-constructed type will be an invalid amount (eg a negative mass).
+    */
+   MassOrVolumeAmt();
+
+   //! Regular constructor
+   MassOrVolumeAmt(double quantity, Measurement::Unit const & unit);
+
+   //! Copy constructor
+   MassOrVolumeAmt(Measurement::Amount const & other);
+
+   //! Assignment operator
+   MassOrVolumeAmt & operator=(Measurement::Amount const & other);
+
+   //! Move constructor.
+   MassOrVolumeAmt(Measurement::Amount && other);
+
+   //! Move assignment.
+   MassOrVolumeAmt & operator=(Measurement::Amount && other);
+
+   bool isMass() const;
+private:
+   bool wasConstructAssignOrMoveOK();
+};
 
 bool operator<(Measurement::Amount const & lhs, Measurement::Amount const & rhs);
 bool operator==(Measurement::Amount const & lhs, Measurement::Amount const & rhs);

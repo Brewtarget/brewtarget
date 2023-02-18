@@ -1,6 +1,6 @@
 /*
  * measurement/IbuMethods.cpp is part of Brewtarget, and is copyright the following
- * authors 2009-2022:
+ * authors 2009-2023:
  * - Daniel Pettersson <pettson81@gmail.com>
  * - Mattias Måhl <mattias@kejsarsten.com>
  * - Matt Young <mfsy@yahoo.com>
@@ -66,8 +66,8 @@ namespace {
                  double finalVolume_liters,
                  double wort_grav,
                  double minutes) {
-      double volumeFactor = (Measurement::Units::us_gallons.toSI(5.0).quantity)/ finalVolume_liters;
-      double hopsFactor = hops_grams/ (Measurement::Units::ounces.toSI(1.0).quantity * 1000.0);
+      double volumeFactor = (Measurement::Units::us_gallons.toCanonical(5.0).quantity())/ finalVolume_liters;
+      double hopsFactor = hops_grams/ (Measurement::Units::ounces.toCanonical(1.0).quantity() * 1000.0);
       static Polynomial p(Polynomial() << 0.7000029428 << -0.08868853463 << 0.02720809386 << -0.002340415323 << 0.00009925450081 << -0.000002102006144 << 0.00000002132644293 << -0.00000000008229488217);
 
       //using 60 minutes as a general table

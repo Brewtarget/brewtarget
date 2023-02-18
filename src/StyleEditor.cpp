@@ -29,15 +29,14 @@
 #include "StyleListModel.h"
 #include "StyleSortFilterProxyModel.h"
 
-StyleEditor::StyleEditor(QWidget* parent, bool singleStyleEditor) : QDialog(parent), obsStyle(nullptr) {
+StyleEditor::StyleEditor(QWidget* parent, bool singleStyleEditor) : QDialog{parent}, obsStyle{nullptr} {
    setupUi(this);
-   if ( singleStyleEditor )
-   {
-      for(int i = 0; i < horizontalLayout_styles->count(); ++i)
-      {
+   if (singleStyleEditor) {
+      for (int i = 0; i < horizontalLayout_styles->count(); ++i) {
          QWidget* w = horizontalLayout_styles->itemAt(i)->widget();
-         if(w)
+         if (w) {
             w->setVisible(false);
+         }
       }
 
       pushButton_new->setVisible(false);
@@ -58,21 +57,22 @@ StyleEditor::StyleEditor(QWidget* parent, bool singleStyleEditor) : QDialog(pare
    connect( styleComboBox, SIGNAL(activated( const QString& )), this, SLOT( styleSelected(const QString&) ) );
 
    setStyle( styleListModel->at(styleComboBox->currentIndex()));
+   return;
 }
 
-void StyleEditor::setStyle( Style* s )
-{
-   if( obsStyle )
+void StyleEditor::setStyle( Style* s ) {
+   if (obsStyle) {
       disconnect( obsStyle, 0, this, 0 );
+   }
 
    obsStyle = s;
-   if( obsStyle )
-   {
+   if (obsStyle) {
       connect( obsStyle, &NamedEntity::changed, this, &StyleEditor::changed );
       showChanges();
    }
 
    styleComboBox->setCurrentIndex(styleListModel->indexOf(obsStyle));
+   return;
 }
 
 void StyleEditor::removeStyle() {
@@ -84,11 +84,11 @@ void StyleEditor::removeStyle() {
    return;
 }
 
-void StyleEditor::styleSelected( const QString& /*text*/ )
-{
+void StyleEditor::styleSelected( const QString& /*text*/ ) {
    QModelIndex proxyIndex( styleProxyModel->index(styleComboBox->currentIndex(),0) );
    QModelIndex sourceIndex( styleProxyModel->mapToSource(proxyIndex) );
    setStyle( styleListModel->at(sourceIndex.row()) );
+   return;
 }
 
 void StyleEditor::save() {
@@ -103,18 +103,18 @@ void StyleEditor::save() {
    this->obsStyle->setStyleLetter( lineEdit_styleLetter->text() );
    this->obsStyle->setStyleGuide( lineEdit_styleGuide->text() );
    this->obsStyle->setType( static_cast<Style::Type>(comboBox_type->currentIndex()) );
-   this->obsStyle->setOgMin( lineEdit_ogMin->toSI().quantity );
-   this->obsStyle->setOgMax( lineEdit_ogMax->toSI().quantity );
-   this->obsStyle->setFgMin( lineEdit_fgMin->toSI().quantity );
-   this->obsStyle->setFgMax( lineEdit_fgMax->toSI().quantity );
-   this->obsStyle->setIbuMin( lineEdit_ibuMin->toSI().quantity );
-   this->obsStyle->setIbuMax( lineEdit_ibuMax->toSI().quantity );
-   this->obsStyle->setColorMin_srm( lineEdit_colorMin->toSI().quantity );
-   this->obsStyle->setColorMax_srm( lineEdit_colorMax->toSI().quantity );
-   this->obsStyle->setCarbMin_vol( lineEdit_carbMin->toSI().quantity );
-   this->obsStyle->setCarbMax_vol( lineEdit_carbMax->toSI().quantity );
-   this->obsStyle->setAbvMin_pct( lineEdit_abvMin->toSI().quantity );
-   this->obsStyle->setAbvMax_pct( lineEdit_abvMax->toSI().quantity );
+   this->obsStyle->setOgMin( lineEdit_ogMin->toCanonical().quantity() );
+   this->obsStyle->setOgMax( lineEdit_ogMax->toCanonical().quantity() );
+   this->obsStyle->setFgMin( lineEdit_fgMin->toCanonical().quantity() );
+   this->obsStyle->setFgMax( lineEdit_fgMax->toCanonical().quantity() );
+   this->obsStyle->setIbuMin( lineEdit_ibuMin->toCanonical().quantity() );
+   this->obsStyle->setIbuMax( lineEdit_ibuMax->toCanonical().quantity() );
+   this->obsStyle->setColorMin_srm( lineEdit_colorMin->toCanonical().quantity() );
+   this->obsStyle->setColorMax_srm( lineEdit_colorMax->toCanonical().quantity() );
+   this->obsStyle->setCarbMin_vol( lineEdit_carbMin->toCanonical().quantity() );
+   this->obsStyle->setCarbMax_vol( lineEdit_carbMax->toCanonical().quantity() );
+   this->obsStyle->setAbvMin_pct( lineEdit_abvMin->toCanonical().quantity() );
+   this->obsStyle->setAbvMax_pct( lineEdit_abvMax->toCanonical().quantity() );
    this->obsStyle->setProfile( textEdit_profile->toPlainText() );
    this->obsStyle->setIngredients( textEdit_ingredients->toPlainText() );
    this->obsStyle->setExamples( textEdit_examples->toPlainText() );
@@ -184,35 +184,22 @@ void StyleEditor::clear()
    textEdit_notes->setText(QString(""));
 }
 
-void StyleEditor::showChanges(QMetaProperty* metaProp)
-{
-   bool updateAll = false;
-   QString propName;
-   QVariant val;
+void StyleEditor::showChanges(QMetaProperty* metaProp) {
    Style *s = obsStyle;
-   if( s == 0 )
-   {
+   if (s == 0 ) {
       clear();
       return;
    }
 
-   if( metaProp == 0 )
-      updateAll = true;
-   else
-   {
-      propName = metaProp->name();
-      val = metaProp->read(s);
-   }
-
-   if( updateAll )
-   {
+   if (metaProp == 0) {
+      // updateAll = true;
       lineEdit_name->setText(s->name());
       tabWidget_profile->setTabText(0, s->name() );
       lineEdit_category->setText(s->category());
       lineEdit_categoryNumber->setText(s->categoryNumber());
       lineEdit_styleLetter->setText(s->styleLetter());
       lineEdit_styleGuide->setText(s->styleGuide());
-      comboBox_type->setCurrentIndex(s->type());
+      comboBox_type->setCurrentIndex(static_cast<int>(s->type()));
       lineEdit_ogMin->setText(s);
       lineEdit_ogMax->setText(s);
       lineEdit_fgMin->setText(s);
@@ -233,7 +220,10 @@ void StyleEditor::showChanges(QMetaProperty* metaProp)
       return;
    }
 
-   if( propName == PropertyNames::NamedEntity::name ) {
+   QString propName = metaProp->name();
+   QVariant val = metaProp->read(s);
+
+   if (propName == PropertyNames::NamedEntity::name ) {
       lineEdit_name->setText(val.toString());
       tabWidget_profile->setTabText(0, s->name() );
    } else if( propName == PropertyNames::Style::category ) {

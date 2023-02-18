@@ -1,6 +1,6 @@
 /*
  * model/Recipe.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2022
+ * authors 2009-2023
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Kregg K <gigatropolis@yahoo.com>
  * - Matt Young <mfsy@yahoo.com>
@@ -152,7 +152,7 @@ public:
 
    //! \brief The type of recipe
    enum class Type { Extract, PartialMash, AllGrain };
-   Q_ENUMS(Type)
+   Q_ENUM(Type)
 
    //! \brief The \b Type
    Q_PROPERTY(Type recipeType READ recipeType WRITE setRecipeType /*NOTIFY changed*/ /*changedType*/)

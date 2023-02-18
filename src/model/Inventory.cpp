@@ -60,8 +60,8 @@ public:
    }
 
    impl(NamedParameterBundle const & namedParameterBundle) :
-      id    {namedParameterBundle(PropertyNames::Inventory::id).toInt()       },
-      amount{namedParameterBundle(PropertyNames::Inventory::amount).toDouble()} {
+      id    {namedParameterBundle.val<int   >(PropertyNames::Inventory::id    )},
+      amount{namedParameterBundle.val<double>(PropertyNames::Inventory::amount)} {
       return;
    }
 
@@ -81,12 +81,12 @@ public:
 };
 
 
-Inventory::Inventory() : pimpl{ new impl{} } {
+Inventory::Inventory() : pimpl{std::make_unique<impl>()} {
    return;
 }
 
 Inventory::Inventory(NamedParameterBundle const & namedParameterBundle) :
-   pimpl{ new impl{namedParameterBundle} } {
+   pimpl{std::make_unique<impl>(namedParameterBundle)} {
    return;
 }
 
@@ -123,13 +123,13 @@ void Inventory::setAmount(double amount) {
    return;
 }
 
-void Inventory::setDeleted(bool var) {
+void Inventory::setDeleted([[maybe_unused]] bool var) {
    // See comment in header.  This is not currently implemented and it's therefore a coding error if it gets called
    Q_ASSERT(false);
    return;
 }
 
-void Inventory::setDisplay(bool var) {
+void Inventory::setDisplay([[maybe_unused]] bool var) {
    // See comment in header.  This is not currently implemented and it's therefore a coding error if it gets called
    Q_ASSERT(false);
    return;
@@ -142,14 +142,14 @@ void Inventory::hardDeleteOwnedEntities() {
 
 
 char const * InventoryFermentable::getIngredientClass() const { return "Fermentable"; }
-char const * InventoryHop::getIngredientClass() const         { return "Hop"; }
-char const * InventoryMisc::getIngredientClass() const        { return "Misc"; }
-char const * InventoryYeast::getIngredientClass() const       { return "Yeast"; }
+char const * InventoryHop::getIngredientClass()         const { return "Hop";         }
+char const * InventoryMisc::getIngredientClass()        const { return "Misc";        }
+char const * InventoryYeast::getIngredientClass()       const { return "Yeast";       }
 
 ObjectStore & InventoryFermentable::getObjectStoreTypedInstance() const { return ObjectStoreTyped<InventoryFermentable>::getInstance(); }
-ObjectStore & InventoryHop::getObjectStoreTypedInstance() const         { return ObjectStoreTyped<InventoryHop>::getInstance(); }
-ObjectStore & InventoryMisc::getObjectStoreTypedInstance() const        { return ObjectStoreTyped<InventoryMisc>::getInstance(); }
-ObjectStore & InventoryYeast::getObjectStoreTypedInstance() const       { return ObjectStoreTyped<InventoryYeast>::getInstance(); }
+ObjectStore & InventoryHop::getObjectStoreTypedInstance()         const { return ObjectStoreTyped<InventoryHop        >::getInstance(); }
+ObjectStore & InventoryMisc::getObjectStoreTypedInstance()        const { return ObjectStoreTyped<InventoryMisc       >::getInstance(); }
+ObjectStore & InventoryYeast::getObjectStoreTypedInstance()       const { return ObjectStoreTyped<InventoryYeast      >::getInstance(); }
 
 template<class Ing>
 void InventoryUtils::setAmount(Ing & ing, double amount) {

@@ -129,7 +129,7 @@
 #include "UndoableAddOrRemove.h"
 #include "UndoableAddOrRemoveList.h"
 #include "utils/BtStringConst.h"
-#include "utils/OptionalToStream.h"
+#include "utils/OptionalHelpers.h"
 #include "WaterDialog.h"
 #include "WaterEditor.h"
 #include "WaterListModel.h"
@@ -778,7 +778,7 @@ void MainWindow::restoreSavedState() {
    } else {
       auto firstRecipeWeFind = ObjectStoreTyped<Recipe>::getInstance().findFirstMatching(
          // This trivial lambda gives us the first recipe in the list, if there is one
-         [](std::shared_ptr<Recipe> obj) {return true;}
+         []([[maybe_unused]] std::shared_ptr<Recipe> obj) {return true;}
       );
       if (firstRecipeWeFind) {
          key = firstRecipeWeFind.value()->key();
@@ -1780,7 +1780,7 @@ void MainWindow::updateRecipeBatchSize() {
 
    this->doOrRedoUpdate(*this->recipeObs,
                         PropertyNames::Recipe::batchSize_l,
-                        lineEdit_batchSize->toSI().quantity,
+                        lineEdit_batchSize->toCanonical().quantity(),
                         tr("Change Batch Size"));
 }
 
@@ -1791,7 +1791,7 @@ void MainWindow::updateRecipeBoilSize() {
 
    this->doOrRedoUpdate(*this->recipeObs,
                         PropertyNames::Recipe::boilSize_l,
-                        lineEdit_boilSize->toSI().quantity,
+                        lineEdit_boilSize->toCanonical().quantity(),
                         tr("Change Boil Size"));
 }
 
@@ -1801,7 +1801,7 @@ void MainWindow::updateRecipeBoilTime() {
    }
 
    Equipment* kit = recipeObs->equipment();
-   double boilTime = Measurement::qStringToSI(lineEdit_boilTime->text(), Measurement::PhysicalQuantity::Time).quantity;
+   double boilTime = Measurement::qStringToSI(lineEdit_boilTime->text(), Measurement::PhysicalQuantity::Time).quantity();
 
    // Here, we rely on a signal/slot connection to propagate the equipment changes to recipeObs->boilTime_min and maybe
    // recipeObs->boilSize_l
@@ -1955,7 +1955,7 @@ void MainWindow::doOrRedoUpdate(QObject & updatee,
                                 BtStringConst const & propertyName,
                                 QVariant newValue,
                                 QString const & description,
-                                QUndoCommand * parent) {
+                                [[maybe_unused]] QUndoCommand * parent) {
 ///   qDebug() << Q_FUNC_INFO << "Updating" << propertyName << "on" << updatee.metaObject()->className();
 ///   qDebug() << Q_FUNC_INFO << "this=" << static_cast<void *>(this);
    this->doOrRedoUpdate(new SimpleUndoableUpdate(updatee, propertyName, newValue, description));
@@ -2454,67 +2454,40 @@ void MainWindow::setTreeSelection(QModelIndex item) {
 }
 
 // reduces the inventory by the selected recipes
-void MainWindow::reduceInventory(){
+void MainWindow::reduceInventory() {
 
-   QModelIndexList indexes = treeView_recipe->selectionModel()->selectedRows();
-
-   foreach(QModelIndex selected, indexes) {
+   for (QModelIndex selected : treeView_recipe->selectionModel()->selectedRows()) {
       Recipe* rec = treeView_recipe->getItem<Recipe>(selected);
-      if ( rec == nullptr ) {
-         //try the parent recipe
+      if (rec == nullptr) {
+         // Try the parent recipe
          rec = treeView_recipe->getItem<Recipe>(treeView_recipe->parent(selected));
-         if ( rec == nullptr ) {
+         if (rec == nullptr) {
             continue;
          }
       }
 
       // Make sure everything is properly set and selected
-      if( rec != recipeObs ) {
+      if (rec != recipeObs) {
          setRecipe(rec);
       }
 
-      int i = 0;
-      //reduce fermentables
-      QList<Fermentable*> flist = rec->fermentables();
-      if ( flist.size() > 0 ){
-         for( i = 0; static_cast<int>(i) < flist.size(); ++i ) {
-            double newVal=flist[i]->inventory() - flist[i]->amount_kg();
-            newVal = (newVal < 0) ? 0 : newVal;
-            flist[i]->setInventoryAmount(newVal);
-         }
-      }
-
-      //reduce misc
-      QList<Misc*> mlist = rec->miscs();
-      if ( mlist.size() > 0 ) {
-         for( i = 0; static_cast<int>(i) < mlist.size(); ++i ) {
-            double newVal=mlist[i]->inventory() - mlist[i]->amount();
-            newVal = (newVal < 0) ? 0 : newVal;
-            mlist[i]->setInventoryAmount(newVal);
-         }
-      }
-      //reduce hops
-      QList<Hop*> hlist = rec->hops();
-      if( hlist.size() > 0 ) {
-         for( i = 0; static_cast<int>(i) < hlist.size(); ++i ) {
-            double newVal = hlist[i]->inventory() - hlist[i]->amount_kg();
-            newVal = (newVal < 0) ? 0 : newVal;
-            hlist[i]->setInventoryAmount(newVal);
-         }
-      }
-      //reduce yeast
-      QList<Yeast*> ylist = rec->yeasts();
-      if(ylist.size() > 0){
-         for( i = 0; static_cast<int>(i) < ylist.size(); ++i )
-         {
-            //Yeast inventory is done by quanta not amount
-            // .:TBD:. I think "quanta" is being used to mean "number of packets" or something
-            int newVal = ylist[i]->inventory() - 1;
-            newVal = (newVal < 0) ? 0 : newVal;
-            ylist[i]->setInventoryQuanta(newVal);
-         }
-      }
+      //
+      // Reduce fermentables, miscs, hops, yeasts
+      //
+      // Note that yeast inventory is done by "quanta" not amount, probably trying to indicate number of packets rather
+      // than weight.  Of course, even though quanta implies an integer measurement, inventory() still returns a double
+      // so there's some heroic casting going on here.
+      //
+      // For fermentables and miscs, the amount can be either mass or volume, but we don't worry about which here as we
+      // assume that a given type of fermentable/misc is always measured in the same way.
+      //
+      for (auto ii : rec->fermentables()) { ii->setInventoryAmount(std::max(                 ii->inventory()  - ii->amount_kg(),    0.0)); }
+      for (auto ii : rec->miscs       ()) { ii->setInventoryAmount(std::max(                 ii->inventory()  - ii->amount(),    0.0)); }
+      for (auto ii : rec->hops        ()) { ii->setInventoryAmount(std::max(                 ii->inventory()  - ii->amount_kg(), 0.0)); }
+      for (auto ii : rec->yeasts      ()) { ii->setInventoryQuanta(std::max(static_cast<int>(ii->inventory()) - 1,               0  )); }
    }
+
+   return;
 }
 
 // Need to make sure the recipe tree is active, I think
@@ -2814,10 +2787,8 @@ void MainWindow::closeEvent(QCloseEvent* /*event*/)
 
 }
 
-void MainWindow::copyRecipe()
-{
+void MainWindow::copyRecipe() {
    QString name = QInputDialog::getText( this, tr("Copy Recipe"), tr("Enter a unique name for the copy.") );
-
    if (name.isEmpty()) {
       return;
    }
@@ -3206,19 +3177,21 @@ void MainWindow::versionedRecipe(Recipe* descendant)
    treeView_recipe->setCurrentIndex(ndx);
 }
 
-void MainWindow::closeBrewNote(int brewNoteId, std::shared_ptr<QObject> object) {
+// .:TBD:. Seems redundant to pass both the brewnote ID and a pointer to it; we only need one of these
+void MainWindow::closeBrewNote([[maybe_unused]] int brewNoteId, std::shared_ptr<QObject> object) {
    BrewNote* b = std::static_pointer_cast<BrewNote>(object).get();
    Recipe* parent = ObjectStoreWrapper::getByIdRaw<Recipe>(b->getRecipeId());
 
    // If this isn't the focused recipe, do nothing because there are no tabs
    // to close.
-   if ( parent != recipeObs )
+   if (parent != recipeObs) {
       return;
+   }
 
    BrewNoteWidget* ni = findBrewNoteWidget(b);
-
-   if ( ni )
+   if (ni) {
       tabWidget_recipeView->removeTab( tabWidget_recipeView->indexOf(ni));
+   }
 
    return;
 

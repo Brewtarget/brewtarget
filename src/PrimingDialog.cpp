@@ -39,58 +39,40 @@ PrimingDialog::PrimingDialog(QWidget* parent) : QDialog(parent) {
 
 PrimingDialog::~PrimingDialog() = default;
 
-void PrimingDialog::calculate()
-{
-   QAbstractButton* button;
+void PrimingDialog::calculate() {
 
-   double beer_l;
-   double temp_c;
-   double desiredVols;
+   double beer_l = lineEdit_beerVol->toCanonical().quantity();
+   double temp_c = lineEdit_temp->toCanonical().quantity();
+   double desiredVols = lineEdit_vols->toCanonical().quantity();
 
-   double addedVols;
-   double residualVols;
-
-   double co2_l;
-   double co2_mol;
+   double residualVols = 1.57 * pow( 0.97, temp_c ); // Amount of CO2 still in suspension.
+   double addedVols = desiredVols - residualVols;
+   double co2_l = addedVols * beer_l; // Liters of CO2 we need to generate (at 273 K and 1 atm).
+   double co2_mol = co2_l / 22.4; // Mols of CO2 we need.
 
    double sugar_mol;
    double sugar_g;
 
-   beer_l = lineEdit_beerVol->toSI().quantity;
-   temp_c = lineEdit_temp->toSI().quantity;
-   desiredVols = lineEdit_vols->toSI().quantity;
-
-   residualVols = 1.57 * pow( 0.97, temp_c ); // Amount of CO2 still in suspension.
-   addedVols = desiredVols - residualVols;
-   co2_l = addedVols * beer_l; // Liters of CO2 we need to generate (at 273 K and 1 atm).
-   co2_mol = co2_l / 22.4; // Mols of CO2 we need.
-
-   button = sugarGroup->checkedButton();
-
-   if( button == radioButton_glucMono )
-   {
+   QAbstractButton* button = sugarGroup->checkedButton();
+   if (button == radioButton_glucMono) {
       sugar_mol = co2_mol / 2;
       sugar_g = sugar_mol * 198; // Glucose monohydrate is 198 g/mol.
-   }
-   else if( button == radioButton_gluc )
-   {
+   } else if (button == radioButton_gluc) {
       sugar_mol = co2_mol / 2;
       sugar_g = sugar_mol * 180; // Glucose is 180g/mol.
-   }
-   else if( button == radioButton_sucrose )
-   {
+   } else if (button == radioButton_sucrose) {
       sugar_mol = co2_mol / 4;
       sugar_g = sugar_mol * 342; // Sucrose is 342 g/mol.
-   }
-   else if( button == radioButton_dme )
-   {
+   } else if (button == radioButton_dme) {
       sugar_mol = co2_mol / 2;
       sugar_g = sugar_mol * 180 / 0.60; // DME is equivalently about 60% glucose.
-   }
-   else
+   } else {
       sugar_g = 0;
+   }
 
    //The amount have to be set in default unit to BtLineEdit.
    //We should find a better solution, but until it is not, we must do it this way.
    lineEdit_output->setText( sugar_g/1000 );
+
+   return;
 }

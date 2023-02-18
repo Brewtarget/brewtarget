@@ -54,13 +54,13 @@ FermentableTableModel::FermentableTableModel(QTableView* parent, bool editable) 
    BtTableModelInventory{
       parent,
       editable,
-      {{FERMNAMECOL,      {tr("Name"),      NonPhysicalQuantity::String,          ""            }},
-       {FERMTYPECOL,      {tr("Type"),      NonPhysicalQuantity::String,          ""            }},
+      {{FERMNAMECOL,      {tr("Name"),        NonPhysicalQuantity::String,          ""                                                 }},
+       {FERMTYPECOL,      {tr("Type"),        NonPhysicalQuantity::String,          ""                                                 }},
        {FERMAMOUNTCOL,    {tr("Amount"),    Measurement::PhysicalQuantity::Mass,  "amount_kg"   }},
        {FERMINVENTORYCOL, {tr("Inventory"), Measurement::PhysicalQuantity::Mass,  "inventory_kg"}},
-       {FERMISMASHEDCOL,  {tr("Method"),    NonPhysicalQuantity::String,          ""            }},
-       {FERMAFTERBOIL,    {tr("Addition"),  NonPhysicalQuantity::String,          ""            }},
-       {FERMYIELDCOL,     {tr("Yield %"),   NonPhysicalQuantity::Percentage,      ""            }},
+       {FERMISMASHEDCOL,  {tr("Method"),      NonPhysicalQuantity::String,          ""                                                 }},
+       {FERMAFTERBOIL,    {tr("Addition"),    NonPhysicalQuantity::String,          ""                                                 }},
+       {FERMYIELDCOL,     {tr("Yield %"),     NonPhysicalQuantity::Percentage,      ""                                                 }},
        {FERMCOLORCOL,     {tr("Color"),     Measurement::PhysicalQuantity::Color, "color_srm"   }}}
    },
    BtTableModelData<Fermentable>{},
@@ -443,8 +443,8 @@ bool FermentableTableModel::setData(QModelIndex const & index,
                Measurement::qStringToSI(value.toString(),
                                         Measurement::PhysicalQuantity::Mass,
                                         this->getForcedSystemOfMeasurementForColumn(column),
-                                        this->getForcedRelativeScaleForColumn(column)).quantity,
-               tr("Change Inventory Amount")
+                                        this->getForcedRelativeScaleForColumn(column)).quantity(),
+               tr("Change Fermentable Inventory Amount")
             );
          }
          break;
@@ -459,7 +459,7 @@ bool FermentableTableModel::setData(QModelIndex const & index,
                Measurement::qStringToSI(value.toString(),
                                         Measurement::PhysicalQuantity::Mass,
                                         this->getForcedSystemOfMeasurementForColumn(column),
-                                        this->getForcedRelativeScaleForColumn(column)).quantity,
+                                        this->getForcedRelativeScaleForColumn(column)).quantity(),
                tr("Change Fermentable Amount")
             );
             if (rowCount() > 0) {
@@ -507,7 +507,7 @@ bool FermentableTableModel::setData(QModelIndex const & index,
                Measurement::qStringToSI(value.toString(),
                                         Measurement::PhysicalQuantity::Color,
                                         this->getForcedSystemOfMeasurementForColumn(column),
-                                        this->getForcedRelativeScaleForColumn(column)).quantity,
+                                        this->getForcedRelativeScaleForColumn(column)).quantity(),
                tr("Change Color")
             );
          }
@@ -620,28 +620,28 @@ void FermentableItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *
       int value = box->currentIndex();
       int ndx = model->data(index, Qt::UserRole).toInt();
 
-     // Only do something when something needs to be done
+      // Only do something when something needs to be done
       if ( value != ndx )
          model->setData(index, value, Qt::EditRole);
-   }
+      }
    else if (col == FERMISMASHEDCOL || col == FERMAFTERBOIL )
    {
       QComboBox* box = qobject_cast<QComboBox*>(editor);
       int value = box->currentIndex();
       int ndx = model->data(index, Qt::UserRole).toInt();
 
-     // Only do something when something needs to be done
+      // Only do something when something needs to be done
       if ( value != ndx )
          model->setData(index, value, Qt::EditRole);
-   }
+      }
    else
    {
       QLineEdit* line = qobject_cast<QLineEdit*>(editor);
 
       if ( line->isModified() )
           model->setData(index, line->text(), Qt::EditRole);
+      }
    }
-}
 
 void FermentableItemDelegate::updateEditorGeometry(QWidget * editor,
                                                    QStyleOptionViewItem const & option,

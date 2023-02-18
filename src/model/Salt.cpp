@@ -1,6 +1,6 @@
 /*
  * model/Salt.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2023
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  *
@@ -52,12 +52,12 @@ Salt::Salt(QString name) :
 
 Salt::Salt(NamedParameterBundle const & namedParameterBundle) :
    NamedEntity       {namedParameterBundle},
-   m_amount          {namedParameterBundle(PropertyNames::Salt::amount         ).toDouble()},
-   m_add_to          {static_cast<Salt::WhenToAdd>(namedParameterBundle(PropertyNames::Salt::addTo).toInt())},
-   m_type            {static_cast<Salt::Types>(namedParameterBundle(PropertyNames::Salt::type).toInt())},
-   m_amount_is_weight{namedParameterBundle(PropertyNames::Salt::amountIsWeight).toBool()},
-   m_percent_acid    {namedParameterBundle(PropertyNames::Salt::percentAcid   ).toDouble()},
-   m_is_acid         {namedParameterBundle(PropertyNames::Salt::isAcid          ).toBool()} {
+   m_amount          {namedParameterBundle.val<double         >(PropertyNames::Salt::amount        )},
+   m_add_to          {namedParameterBundle.val<Salt::WhenToAdd>(PropertyNames::Salt::addTo         )},
+   m_type            {namedParameterBundle.val<Salt::Types    >(PropertyNames::Salt::type          )},
+   m_amount_is_weight{namedParameterBundle.val<bool           >(PropertyNames::Salt::amountIsWeight)},
+   m_percent_acid    {namedParameterBundle.val<double         >(PropertyNames::Salt::percentAcid   )},
+   m_is_acid         {namedParameterBundle.val<bool           >(PropertyNames::Salt::isAcid        )} {
    return;
 }
 
@@ -71,6 +71,8 @@ Salt::Salt(Salt const & other) :
    m_is_acid         {other.m_is_acid         } {
    return;
 }
+
+Salt::~Salt() = default;
 
 //================================"SET" METHODS=================================
 void Salt::setAmount(double var) {

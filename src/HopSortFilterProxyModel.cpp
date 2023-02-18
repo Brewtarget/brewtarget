@@ -48,7 +48,7 @@ bool HopSortFilterProxyModel::lessThan(QModelIndex const & left,
          }
 
       case HOPINVENTORYCOL:
-         if (Measurement::qStringToSI(leftHop.toString(), Measurement::PhysicalQuantity::Mass).quantity == 0.0 &&
+         if (Measurement::qStringToSI(leftHop.toString(), Measurement::PhysicalQuantity::Mass).quantity() == 0.0 &&
             this->sortOrder() == Qt::AscendingOrder) {
             return false;
          }

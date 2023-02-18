@@ -1,6 +1,6 @@
 /*
  * model/Style.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2023
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
@@ -75,11 +75,11 @@ public:
    Style(NamedParameterBundle const & namedParameterBundle);
    Style(Style const & other);
 
-   virtual ~Style() = default;
+   virtual ~Style();
 
    //! \brief The type of beverage.
    enum Type {Lager, Ale, Mead, Wheat, Mixed, Cider};
-   Q_ENUMS( Type )
+   Q_ENUM(Type)
 
    //! \brief The category.
    Q_PROPERTY( QString category READ category WRITE setCategory /*NOTIFY changed*/ /*changedCategory*/ )

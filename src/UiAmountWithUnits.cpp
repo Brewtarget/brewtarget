@@ -31,7 +31,7 @@
 
 #include "Localization.h"
 #include "measurement/Measurement.h"
-#include "utils/OptionalToStream.h"
+#include "utils/OptionalHelpers.h"
 
 UiAmountWithUnits::UiAmountWithUnits(QWidget * parent,
                                      BtFieldType fieldType,
@@ -140,14 +140,14 @@ double UiAmountWithUnits::toDoubleRaw(bool * ok) const {
    // Make sure we get the right decimal point (. or ,) and the right grouping
    // separator (, or .). Some locales write 1.000,10 and other write
    // 1,000.10. We need to catch both
-   QString decimal = QRegExp::escape(QLocale::system().decimalPoint());
-   QString grouping = QRegExp::escape(QLocale::system().groupSeparator());
+   QString const decimal = QRegExp::escape(Localization::getLocale().decimalPoint());
+   QString const grouping = QRegExp::escape(Localization::getLocale().groupSeparator());
 
    QRegExp amtUnit;
    amtUnit.setPattern("((?:\\d+" + grouping + ")?\\d+(?:" + decimal + "\\d+)?|" + decimal + "\\d+)\\s*(\\w+)?");
    amtUnit.setCaseSensitivity(Qt::CaseInsensitive);
 
-   // if the regex dies, return 0.0
+   // If the regex dies, return 0.0
    if (amtUnit.indexIn(this->getWidgetText()) == -1) {
       if (ok) {
          *ok = false;
@@ -158,14 +158,14 @@ double UiAmountWithUnits::toDoubleRaw(bool * ok) const {
    return Localization::toDouble(amtUnit.cap(1), Q_FUNC_INFO);
 }
 
-Measurement::Amount UiAmountWithUnits::toSI() {
+Measurement::Amount UiAmountWithUnits::toCanonical() {
    // It's a coding error to call this function if we are not dealing with a physical quantity
    // However, we can often recover by returning just the numeric part of the field and pretending it is seconds.
    // If caller ignores the units and just used the quantity, then it will probably be OK.  Of course, we log an error
-   // and hope this prompts caller to call toDoubleRaw() instead of toSI().quantity!
+   // and hope this prompts caller to call toDoubleRaw() instead of toCanonical().quantity()!
    if (!std::holds_alternative<Measurement::PhysicalQuantity>(this->getFieldType())) {
       qCritical() <<
-         Q_FUNC_INFO << "Coding error - call to toSI() for" << this->getFieldType() << "for field with contents:" <<
+         Q_FUNC_INFO << "Coding error - call to toCanonical() for" << this->getFieldType() << "for field with contents:" <<
          this->getWidgetText();
       return Measurement::Amount{this->getWidgetText().toDouble(), Measurement::Units::seconds};
    }
@@ -217,7 +217,7 @@ void UiAmountWithUnits::textOrUnitsChanged(PreviousScaleInfo previousScaleInfo) 
       if (physicalQuantity == Measurement::PhysicalQuantity::Color) {
          precision = 0;
       }
-      correctedText = this->displayAmount(amountAsCanonical.quantity, precision);
+      correctedText = this->displayAmount(amountAsCanonical.quantity(), precision);
       qDebug() <<
          Q_FUNC_INFO << "Interpreted" << rawValue << "as" << amountAsCanonical << "and corrected to" << correctedText;
       qDebug() << Q_FUNC_INFO << "this->units=" << this->units;

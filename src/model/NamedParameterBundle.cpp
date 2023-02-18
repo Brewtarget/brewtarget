@@ -28,14 +28,6 @@
 #include <QString>
 #include <QTextStream>
 
-namespace {
-   template <class T> T valueFromQVariant(QVariant const & qv);
-   template <>  QString valueFromQVariant(QVariant const & qv) {return qv.toString();}
-   template <>  bool    valueFromQVariant(QVariant const & qv) {return qv.toBool();}
-   template <>  int     valueFromQVariant(QVariant const & qv) {return qv.toInt();}
-   template <>  double  valueFromQVariant(QVariant const & qv) {return qv.toDouble();}
-}
-
 NamedParameterBundle::NamedParameterBundle(NamedParameterBundle::OperationMode mode) :
    QHash<QString, QVariant>(),
    mode{mode} {
@@ -50,7 +42,7 @@ NamedParameterBundle::iterator NamedParameterBundle::insert(BtStringConst const 
 }
 
 
-QVariant NamedParameterBundle::operator()(BtStringConst const & parameterName) const {
+QVariant NamedParameterBundle::get(BtStringConst const & parameterName) const {
    if (!this->contains(*parameterName)) {
       QString errorMessage = QString("No value supplied for required parameter, %1.").arg(*parameterName);
       QTextStream errorMessageAsStream(&errorMessage);
@@ -97,22 +89,6 @@ QVariant NamedParameterBundle::operator()(BtStringConst const & parameterName) c
    }
    return returnValue;
 }
-
-template <class T> T NamedParameterBundle::operator()(BtStringConst const & parameterName,
-                                                      T const & defaultValue) const {
-   Q_ASSERT(!parameterName.isNull());
-   return this->contains(*parameterName) ? valueFromQVariant<T>(this->value(*parameterName)) : defaultValue;
-}
-
-//
-// Instantiate the above template function for the types that are going to use it
-// (This is all just a trick to allow the template definition to be here in the .cpp file and not in the header.)
-//
-template QString NamedParameterBundle::operator()(BtStringConst const & parameterName, QString const & defaultValue) const;
-template bool    NamedParameterBundle::operator()(BtStringConst const & parameterName, bool    const & defaultValue) const;
-template int     NamedParameterBundle::operator()(BtStringConst const & parameterName, int     const & defaultValue) const;
-template double  NamedParameterBundle::operator()(BtStringConst const & parameterName, double  const & defaultValue) const;
-
 
 template<class S>
 S & operator<<(S & stream, NamedParameterBundle const & namedParameterBundle);

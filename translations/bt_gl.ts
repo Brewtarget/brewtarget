@@ -1115,10 +1115,6 @@ Log file may contain more details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Change Inventory Amount</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Change Fermentable Amount</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1136,6 +1132,10 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Change Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Fermentable Inventory Amount</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2801,10 +2801,6 @@ Log file may contain more details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>DiastaticPower</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Unknown</source>
         <translation type="unfinished">Descoñecido</translation>
     </message>
@@ -2980,6 +2976,30 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Concentration Mass Per Volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Diastatic Power</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Specific Heat Capacity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Specific Heat Capacity Calories per</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Specific Heat Capacity Joules per</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>c/g·C</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>J/kg·K</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

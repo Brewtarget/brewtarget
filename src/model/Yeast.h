@@ -1,6 +1,6 @@
 /*
- * yeast.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * model/Yeast.h is part of Brewtarget, and is Copyright the following
+ * authors 2009-2023
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
@@ -74,13 +74,15 @@ public:
    enum Form {Liquid, Dry, Slant, Culture};
    //! \brief How flocculant the strain is.
    enum Flocculation {Low, Medium, High, Very_High}; // NOTE: BeerXML expects a space in "Very High", but not possible with enum. What to do?
-   Q_ENUMS( Type Form Flocculation )
+   Q_ENUM(Type)
+   Q_ENUM(Form)
+   Q_ENUM(Flocculation)
 
    Yeast(QString name = "");
    Yeast(NamedParameterBundle const & namedParameterBundle);
    Yeast(Yeast const & other);
 
-   virtual ~Yeast() = default;
+   virtual ~Yeast();
 
    //! \brief The \c Type.
    Q_PROPERTY( Type type READ type WRITE setType /*NOTIFY changed*/ /*changedType*/ )

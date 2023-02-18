@@ -61,6 +61,7 @@ AddSettingName(deletewhat)
 AddSettingName(directory)                        // backups section
 AddSettingName(files)                            // backups section
 AddSettingName(firstWortHopAdjustment)
+AddSettingName(forcedLocale)
 AddSettingName(frequency)                        // backups section
 AddSettingName(geometry)
 AddSettingName(ibu_formula)

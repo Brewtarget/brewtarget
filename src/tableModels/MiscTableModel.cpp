@@ -343,7 +343,7 @@ bool MiscTableModel::setData(QModelIndex const & index,
             Measurement::qStringToSI(value.toString(),
                                      Measurement::PhysicalQuantity::Time,
                                      this->getForcedSystemOfMeasurementForColumn(column),
-                                     this->getForcedRelativeScaleForColumn(column)).quantity,
+                                     this->getForcedRelativeScaleForColumn(column)).quantity(),
             tr("Change Misc Time")
          );
          break;
@@ -357,7 +357,7 @@ bool MiscTableModel::setData(QModelIndex const & index,
             Measurement::qStringToSI(value.toString(),
                                      physicalQuantity,
                                      this->getForcedSystemOfMeasurementForColumn(column),
-                                     this->getForcedRelativeScaleForColumn(column)).quantity,
+                                     this->getForcedRelativeScaleForColumn(column)).quantity(),
             tr("Change Misc Inventory Amount")
          );
          break;
@@ -371,7 +371,7 @@ bool MiscTableModel::setData(QModelIndex const & index,
             Measurement::qStringToSI(value.toString(),
                                      physicalQuantity,
                                      this->getForcedSystemOfMeasurementForColumn(column),
-                                     this->getForcedRelativeScaleForColumn(column)).quantity,
+                                     this->getForcedRelativeScaleForColumn(column)).quantity(),
             tr("Change Misc Amount")
          );
          break;

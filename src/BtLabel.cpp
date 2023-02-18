@@ -28,7 +28,7 @@
 #include "model/Style.h"
 #include "model/Recipe.h"
 #include "PersistentSettings.h"
-#include "utils/OptionalToStream.h"
+#include "utils/OptionalHelpers.h"
 #include "widgets/UnitAndScalePopUpMenu.h"
 
 BtLabel::BtLabel(QWidget *parent,
@@ -43,12 +43,12 @@ BtLabel::BtLabel(QWidget *parent,
 
 BtLabel::~BtLabel() = default;
 
-void BtLabel::enterEvent(QEvent* event) {
+void BtLabel::enterEvent([[maybe_unused]] QEvent * event) {
    this->textEffect(true);
    return;
 }
 
-void BtLabel::leaveEvent(QEvent* event) {
+void BtLabel::leaveEvent([[maybe_unused]] QEvent * event) {
    this->textEffect(false);
    return;
 }
@@ -141,9 +141,9 @@ void BtLabel::initializeMenu() {
    Measurement::PhysicalQuantity physicalQuantity = std::get<Measurement::PhysicalQuantity>(this->fieldType);
 
    this->contextMenu = UnitAndScalePopUpMenu::create(this->btParent,
-                                                      physicalQuantity,
-                                                      forcedSystemOfMeasurement,
-                                                      forcedRelativeScale);
+                                                     physicalQuantity,
+                                                     forcedSystemOfMeasurement,
+                                                     forcedRelativeScale);
    return;
 }
 

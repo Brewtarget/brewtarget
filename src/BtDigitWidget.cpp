@@ -23,7 +23,6 @@
 
 #include <QDebug>
 #include <QFrame>
-#include <QLocale>
 #include <QSettings>
 
 #include "Localization.h"
@@ -138,7 +137,7 @@ void BtDigitWidget::display(QString str) {
    static bool converted;
 
    this->pimpl->m_lastNum = Localization::toDouble(str, &converted);
-   this->pimpl->m_lastPrec = str.length() - str.lastIndexOf(QLocale().decimalPoint()) - 1;
+   this->pimpl->m_lastPrec = str.length() - str.lastIndexOf(Localization::getLocale().decimalPoint()) - 1;
    if (converted) {
       this->display(this->pimpl->m_lastNum, this->pimpl->m_lastPrec);
    } else {

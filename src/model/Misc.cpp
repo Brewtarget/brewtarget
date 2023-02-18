@@ -59,6 +59,31 @@ ObjectStore & Misc::getObjectStoreTypedInstance() const {
 }
 
 //============================CONSTRUCTORS======================================
+
+Misc::Misc(QString name) :
+   NamedEntityWithInventory{name, true},
+   m_type          {Misc::Type::Spice},
+   m_use           {Misc::Use::Boil  },
+   m_time          {0.0              },
+   m_amount        {0.0              },
+   m_amountIsWeight{false            },
+   m_useFor        {""               },
+   m_notes         {""               } {
+   return;
+}
+
+Misc::Misc(NamedParameterBundle const & namedParameterBundle) :
+   NamedEntityWithInventory{namedParameterBundle},
+   m_type                  {namedParameterBundle.val<Misc::Type>(PropertyNames::Misc::type          )},
+   m_use                   {namedParameterBundle.val<Misc::Use >(PropertyNames::Misc::use           )},
+   m_time                  {namedParameterBundle.val<double    >(PropertyNames::Misc::time          )},
+   m_amount                {namedParameterBundle.val<double    >(PropertyNames::Misc::amount        )},
+   m_amountIsWeight        {namedParameterBundle.val<bool      >(PropertyNames::Misc::amountIsWeight)},
+   m_useFor                {namedParameterBundle.val<QString   >(PropertyNames::Misc::useFor        )},
+   m_notes                 {namedParameterBundle.val<QString   >(PropertyNames::Misc::notes         )} {
+   return;
+}
+
 Misc::Misc(Misc const & other) :
    NamedEntityWithInventory{other                 },
    m_type                  {other.m_type          },
@@ -71,30 +96,7 @@ Misc::Misc(Misc const & other) :
    return;
 }
 
-Misc::Misc(QString name) :
-   NamedEntityWithInventory{name, true},
-   m_type                  {Misc::Type::Spice},
-   m_use                   {Misc::Use::Boil },
-   m_time                  {0.0        },
-   m_amount                {0.0        },
-   m_amountIsWeight        {false      },
-   m_useFor                {""         },
-   m_notes                 {""         } {
-   return;
-}
-
-Misc::Misc(NamedParameterBundle const & namedParameterBundle) :
-   NamedEntityWithInventory{namedParameterBundle},
-   m_type                  {static_cast<Misc::Type>(namedParameterBundle(PropertyNames::Misc::type).toInt())},
-   m_use                   {static_cast<Misc::Use>(namedParameterBundle(PropertyNames::Misc::use).toInt())},
-   m_time                  {namedParameterBundle(PropertyNames::Misc::time          ).toDouble()},
-   m_amount                {namedParameterBundle(PropertyNames::Misc::amount        ).toDouble()},
-   m_amountIsWeight        {namedParameterBundle(PropertyNames::Misc::amountIsWeight).toBool()},
-   m_useFor                {namedParameterBundle(PropertyNames::Misc::useFor        ).toString()},
-   m_notes                 {namedParameterBundle(PropertyNames::Misc::notes         ).toString()} {
-   return;
-}
-
+Misc::~Misc() = default;
 
 //============================"GET" METHODS=====================================
 Misc::Type Misc::type() const { return m_type; }

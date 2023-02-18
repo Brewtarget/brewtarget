@@ -54,7 +54,7 @@ void MashStepEditor::showChanges(QMetaProperty* metaProp) {
 
    if (updateAll) {
       lineEdit_name->setText(obs->name());
-      comboBox_type->setCurrentIndex(obs->type());
+      comboBox_type->setCurrentIndex(static_cast<int>(obs->type()));
       lineEdit_infuseAmount->setText(this->obs.get());
       lineEdit_infuseTemp->setText(this->obs.get());
       lineEdit_decoctionAmount->setText(this->obs.get());
@@ -65,7 +65,7 @@ void MashStepEditor::showChanges(QMetaProperty* metaProp) {
    } else if (propName == PropertyNames::NamedEntity::name) {
       lineEdit_name->setText(obs->name());
    } else if (propName == PropertyNames::MashStep::type) {
-      comboBox_type->setCurrentIndex(obs->type());
+      comboBox_type->setCurrentIndex(static_cast<int>(obs->type()));
    } else if (propName == PropertyNames::MashStep::infuseAmount_l) {
       lineEdit_infuseAmount->setText(this->obs.get());
    } else if (propName == PropertyNames::MashStep::infuseTemp_c) {
@@ -128,13 +128,13 @@ void MashStepEditor::setMashStep(std::shared_ptr<MashStep> step) {
 void MashStepEditor::saveAndClose() {
    obs->setName(lineEdit_name->text());
    obs->setType(static_cast<MashStep::Type>(comboBox_type->currentIndex()));
-   obs->setInfuseAmount_l(lineEdit_infuseAmount->toSI().quantity);
-   obs->setInfuseTemp_c(lineEdit_infuseTemp->toSI().quantity);
-   obs->setDecoctionAmount_l(lineEdit_decoctionAmount->toSI().quantity);
-   obs->setStepTemp_c(lineEdit_stepTemp->toSI().quantity);
-   obs->setStepTime_min(lineEdit_stepTime->toSI().quantity);
-   obs->setRampTime_min(lineEdit_rampTime->toSI().quantity);
-   obs->setEndTemp_c(lineEdit_endTemp->toSI().quantity);
+   obs->setInfuseAmount_l(lineEdit_infuseAmount->toCanonical().quantity());
+   obs->setInfuseTemp_c(lineEdit_infuseTemp->toCanonical().quantity());
+   obs->setDecoctionAmount_l(lineEdit_decoctionAmount->toCanonical().quantity());
+   obs->setStepTemp_c(lineEdit_stepTemp->toCanonical().quantity());
+   obs->setStepTime_min(lineEdit_stepTime->toCanonical().quantity());
+   obs->setRampTime_min(lineEdit_rampTime->toCanonical().quantity());
+   obs->setEndTemp_c(lineEdit_endTemp->toCanonical().quantity());
 
    if (this->obs->key() < 0) {
       // This is a new MashStep, so we need to store it.

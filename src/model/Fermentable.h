@@ -1,6 +1,6 @@
 /*
  * model/Fermentable.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2023
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Kregg K <gigatropolis@yahoo.com>
  * - Matt Young <mfsy@yahoo.com>
@@ -77,13 +77,15 @@ public:
    enum AdditionMethod {Mashed, Steeped, Not_Mashed};
    //! \brief The addition time.
    enum AdditionTime {Normal, Late};
-   Q_ENUMS( Type AdditionMethod AdditionTime )
+   Q_ENUM(Type)
+   Q_ENUM(AdditionMethod)
+   Q_ENUM(AdditionTime)
 
    Fermentable(QString name = "");
    Fermentable(NamedParameterBundle const & namedParameterBundle);
    Fermentable(Fermentable const & other);
 
-   virtual ~Fermentable() = default;
+   virtual ~Fermentable();
 
    //! \brief The \c Type.
    Q_PROPERTY( Type type                     READ type                   WRITE setType                   /*NOTIFY changed*/ /*changedType*/ )

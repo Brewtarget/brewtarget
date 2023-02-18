@@ -86,14 +86,28 @@ ObjectStore & Mash::getObjectStoreTypedInstance() const {
 Mash::Mash(QString name) :
    NamedEntity{name, true},
    pimpl{std::make_unique<impl>(*this)},
-   m_grainTemp_c(0.0),
-   m_notes(QString()),
-   m_tunTemp_c(0.0),
-   m_spargeTemp_c(0.0),
-   m_ph(0.0),
-   m_tunWeight_kg(0.0),
-   m_tunSpecificHeat_calGC(0.0),
-   m_equipAdjust(true) {
+   m_grainTemp_c          {0.0 },
+   m_notes                {""  },
+   m_tunTemp_c            {0.0 },
+   m_spargeTemp_c         {0.0 },
+   m_ph                   {0.0 },
+   m_tunWeight_kg         {0.0 },
+   m_tunSpecificHeat_calGC{0.0 },
+   m_equipAdjust          {true} {
+   return;
+}
+
+Mash::Mash(NamedParameterBundle const & namedParameterBundle) :
+   NamedEntity            {namedParameterBundle},
+   pimpl{std::make_unique<impl>(*this)},
+   m_grainTemp_c          {namedParameterBundle.val<double >(PropertyNames::Mash::grainTemp_c          )},
+   m_notes                {namedParameterBundle.val<QString>(PropertyNames::Mash::notes                )},
+   m_tunTemp_c            {namedParameterBundle.val<double >(PropertyNames::Mash::tunTemp_c            )},
+   m_spargeTemp_c         {namedParameterBundle.val<double >(PropertyNames::Mash::spargeTemp_c         )},
+   m_ph                   {namedParameterBundle.val<double >(PropertyNames::Mash::ph                   )},
+   m_tunWeight_kg         {namedParameterBundle.val<double >(PropertyNames::Mash::tunWeight_kg         )},
+   m_tunSpecificHeat_calGC{namedParameterBundle.val<double >(PropertyNames::Mash::tunSpecificHeat_calGC)},
+   m_equipAdjust          {namedParameterBundle.val<bool   >(PropertyNames::Mash::equipAdjust          )} {
    return;
 }
 
@@ -131,21 +145,6 @@ Mash::Mash(Mash const & other) :
       connect(mashStepToAdd.get(), &NamedEntity::changed, this, &Mash::acceptMashStepChange);
    }
 
-   return;
-}
-
-
-Mash::Mash(NamedParameterBundle const & namedParameterBundle) :
-   NamedEntity            {namedParameterBundle},
-   pimpl{std::make_unique<impl>(*this)},
-   m_grainTemp_c          {namedParameterBundle(PropertyNames::Mash::grainTemp_c          ).toDouble()},
-   m_notes                {namedParameterBundle(PropertyNames::Mash::notes                ).toString()},
-   m_tunTemp_c            {namedParameterBundle(PropertyNames::Mash::tunTemp_c            ).toDouble()},
-   m_spargeTemp_c         {namedParameterBundle(PropertyNames::Mash::spargeTemp_c         ).toDouble()},
-   m_ph                   {namedParameterBundle(PropertyNames::Mash::ph                   ).toDouble()},
-   m_tunWeight_kg         {namedParameterBundle(PropertyNames::Mash::tunWeight_kg         ).toDouble()},
-   m_tunSpecificHeat_calGC{namedParameterBundle(PropertyNames::Mash::tunSpecificHeat_calGC).toDouble()},
-   m_equipAdjust          {namedParameterBundle(PropertyNames::Mash::equipAdjust          ).toBool()} {
    return;
 }
 
@@ -361,7 +360,8 @@ QList< std::shared_ptr<MashStep> > Mash::mashSteps() const {
    return mashSteps;
 }
 
-void Mash::acceptMashStepChange(QMetaProperty prop, QVariant /*val*/) {
+void Mash::acceptMashStepChange([[maybe_unused]] QMetaProperty prop,
+                                [[maybe_unused]] QVariant      val) {
    MashStep* stepSender = qobject_cast<MashStep*>(sender());
    if (stepSender == nullptr) {
       return;

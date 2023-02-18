@@ -1,6 +1,6 @@
 /*
  * model/Misc.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2023
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
@@ -64,13 +64,15 @@ public:
    enum class Use { Boil, Mash, Primary, Secondary, Bottling };
    //! \brief What is the type of amount.
    enum class AmountType { Weight, Volume };
-   Q_ENUMS( Type Use AmountType )
+   Q_ENUM(Type)
+   Q_ENUM(Use)
+   Q_ENUM(AmountType)
 
    Misc(QString name = "");
    Misc(NamedParameterBundle const & namedParameterBundle);
    Misc(Misc const & other);
 
-   virtual ~Misc() = default;
+   virtual ~Misc();
 
    //! \brief The \c Type.
    Q_PROPERTY( Type type READ type WRITE setType /*NOTIFY changed*/ /*changedType*/ )

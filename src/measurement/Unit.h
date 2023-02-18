@@ -1,6 +1,6 @@
 /*
  * measurement/Unit.h is part of Brewtarget, and is copyright the following
- * authors 2009-2022:
+ * authors 2009-2023:
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Mark de Wever <koraq@xs4all.nl>
  * - Matt Young <mfsy@yahoo.com>
@@ -92,19 +92,22 @@ namespace Measurement {
       QString const name;
 
       /**
-       * \brief Returns the canonical units we use for \c PhysicalQuantity this \c Unit relates to
+       * \brief Returns the canonical units we use for \c PhysicalQuantity this \c Unit relates to.  These are the units
+       *        we use for internal storage and (for the most part) for calculations.
        */
       Measurement::Unit const & getCanonical() const;
 
       /**
-       * \brief Convert an amount of this unit to its canonical system of measurement (usually, but not always, an SI measure)
+       * \brief Convert an amount of this unit to its canonical system of measurement (usually, but not always, an SI or
+       *        other metric measure)
        */
-      Measurement::Amount toSI(double amt) const;
+      Measurement::Amount toCanonical(double amt) const;
 
       /**
-       * \brief Convert an amount of this unit from its canonical system of measurement (usually, but not always, an SI measure)
+       * \brief Convert an amount of this unit from its canonical system of measurement (usually, but not always, an SI
+       *        or other metric measure)
        */
-      double fromSI(double amt) const;
+      double fromCanonical(double amt) const;
 
       /**
        * \brief Returns the \c Measurement::PhysicalQuantity that this \c Measurement::Unit measures.  This is a
@@ -252,11 +255,30 @@ namespace Measurement {
       // to be much used in brewing, so we do not implement it.)
       extern Unit const centipoise;
       extern Unit const millipascalSecond;
+      // == Specific Heat Capacity ==
+      // Per https://en.wikipedia.org/wiki/Specific_heat_capacity SI units are "joules per kelvin per kilogram" (which
+      // is the same as "joules per degree Celsius per kilogram").  However, historically a measurement involving
+      // calories instead of joules was used in chemistry, nutrition and, it seems, brewing.  There are two types of
+      // calorie:
+      //   - the "small calorie" (or "gram-calorie", "cal") = 4.184 J
+      //   - The "grand calorie" (aka "kilocalorie", "kcal" or "Cal") = 1000 small calories = 4184 J
+      //
+      // However, the specific heat measurement using "cal" is the same as that for "Cal":
+      //   1 cal / (°C × g) = 1 Cal / (°C × kg) = 4184 J / (°K × kg) = the specific heat capacity of liquid water
+      //
+      // So, we only implement "calories per degree Celsius per gram" as it's identical to "kilocalories per degree
+      // Celsius per kilogram".
+      //
+      // NOTE: This is one instance where our "canonical" unit is NOT the metric one.  Historically, the code has always
+      //       used "calories per Celsius per gram" rather than "joules per Celsius per kilogram", including for storing
+      //       amounts in the DB.   Also the "calories" version is what is used by BeerJSON and BeerXML.
+      //
+      extern Unit const caloriesPerCelsiusPerGram;
+      extern Unit const joulesPerKelvinPerKg;
    }
 }
 
 //.:TODO:.     "SpecificVolumeType": "Specific volume is the inverse of density, with units of volume over mass, ie qt/lb or L/kg. Commonly used for mash thickness.",
-
 
 /**
  * \brief Convenience function to allow output of \c Measurement::Unit to \c QDebug or \c QTextStream stream etc

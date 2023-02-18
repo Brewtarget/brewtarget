@@ -76,6 +76,9 @@ private slots:
    //! \brief Verify conversion between US Customary & Metric units etc
    void testUnitConversions();
 
+   //! \brief Test that NamedParameterBundle is behaving as we expect
+   void testNamedParameterBundle();
+
    /**
     * \brief Verify other conversions that warrant their own algorithms.
     *

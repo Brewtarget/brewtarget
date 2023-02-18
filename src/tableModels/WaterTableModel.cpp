@@ -268,7 +268,7 @@ bool WaterTableModel::setData(QModelIndex const & index, QVariant const & value,
          row->setAmount(Measurement::qStringToSI(value.toString(),
                                                  Measurement::PhysicalQuantity::Volume,
                                                  this->getForcedSystemOfMeasurementForColumn(column),
-                                                 this->getForcedRelativeScaleForColumn(column)).quantity);
+                                                 this->getForcedRelativeScaleForColumn(column)).quantity());
          break;
       case WATERCALCIUMCOL:
          row->setCalcium_ppm(Localization::toDouble(value.toString(), Q_FUNC_INFO));

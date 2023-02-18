@@ -1,6 +1,6 @@
 /*
  * model/Instruction.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2023
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -107,12 +107,12 @@ Instruction::Instruction(QString name) :
 
 Instruction::Instruction(NamedParameterBundle const & namedParameterBundle) :
    NamedEntity {namedParameterBundle},
-   pimpl       {new impl{*this}},
-   m_directions{namedParameterBundle(PropertyNames::Instruction::directions).toString()},
-   m_hasTimer  {namedParameterBundle(PropertyNames::Instruction::hasTimer  ).toBool()},
-   m_timerValue{namedParameterBundle(PropertyNames::Instruction::timerValue).toString()},
-   m_completed {namedParameterBundle(PropertyNames::Instruction::completed ).toBool()},
-   m_interval  {namedParameterBundle(PropertyNames::Instruction::interval  ).toDouble()} {
+   pimpl       {std::make_unique<impl>(*this)},
+   m_directions{namedParameterBundle.val<QString>(PropertyNames::Instruction::directions)},
+   m_hasTimer  {namedParameterBundle.val<bool   >(PropertyNames::Instruction::hasTimer  )},
+   m_timerValue{namedParameterBundle.val<QString>(PropertyNames::Instruction::timerValue)},
+   m_completed {namedParameterBundle.val<bool   >(PropertyNames::Instruction::completed )},
+   m_interval  {namedParameterBundle.val<double >(PropertyNames::Instruction::interval  )} {
    return;
 }
 

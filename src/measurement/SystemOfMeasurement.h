@@ -1,6 +1,6 @@
 /*
  * measurement/SystemOfMeasurement.h is part of Brewtarget, and is copyright the following
- * authors 2022:
+ * authors 2022-2023:
  * - Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -133,9 +133,13 @@ namespace Measurement {
       //
       // See https://en.wikipedia.org/wiki/Parts-per_notation for more info
       ConcentrationPartsPer,
-      ConcentrationMassPerVolume
+      ConcentrationMassPerVolume,
 
       // See comment in measurement/Unit.h about the different viscosity units
+
+      // Specific Heat Capacity
+      SpecificHeatCapacityCalories,
+      SpecificHeatCapacityJoules,
    };
 
 
