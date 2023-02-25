@@ -40,7 +40,7 @@ bool YeastSortFilterProxyModel::lessThan(const QModelIndex &left,
 
     switch (left.column()) {
       case YEASTINVENTORYCOL:
-         if (Measurement::qStringToSI(leftYeast.toString(), Measurement::PhysicalQuantity::Volume).quantity == 0.0 &&
+         if (Measurement::qStringToSI(leftYeast.toString(), Measurement::PhysicalQuantity::Volume).quantity() == 0.0 &&
             this->sortOrder() == Qt::AscendingOrder) {
             return false;
          }

@@ -146,7 +146,7 @@ void BrewNoteWidget::updateSG() {
       return;
    }
 
-   this->bNoteObs->setSg(lineEdit_SG->toSI().quantity);
+   this->bNoteObs->setSg(lineEdit_SG->toCanonical().quantity());
    return;
 }
 
@@ -155,7 +155,7 @@ void BrewNoteWidget::updateVolumeIntoBK_l() {
       return;
    }
 
-   this->bNoteObs->setVolumeIntoBK_l(lineEdit_volIntoBK->toSI().quantity);
+   this->bNoteObs->setVolumeIntoBK_l(lineEdit_volIntoBK->toCanonical().quantity());
    return;
 }
 
@@ -164,7 +164,7 @@ void BrewNoteWidget::updateStrikeTemp_c() {
       return;
    }
 
-   this->bNoteObs->setStrikeTemp_c(lineEdit_strikeTemp->toSI().quantity);
+   this->bNoteObs->setStrikeTemp_c(lineEdit_strikeTemp->toCanonical().quantity());
    return;
 }
 
@@ -173,7 +173,7 @@ void BrewNoteWidget::updateMashFinTemp_c() {
       return;
    }
 
-   this->bNoteObs->setMashFinTemp_c(lineEdit_mashFinTemp->toSI().quantity);
+   this->bNoteObs->setMashFinTemp_c(lineEdit_mashFinTemp->toCanonical().quantity());
    return;
 }
 
@@ -182,7 +182,7 @@ void BrewNoteWidget::updateOG() {
       return;
    }
 
-   this->bNoteObs->setOg(lineEdit_OG->toSI().quantity);
+   this->bNoteObs->setOg(lineEdit_OG->toCanonical().quantity());
    return;
 }
 
@@ -191,7 +191,7 @@ void BrewNoteWidget::updatePostBoilVolume_l() {
       return;
    }
 
-   this->bNoteObs->setPostBoilVolume_l(lineEdit_postBoilVol->toSI().quantity);
+   this->bNoteObs->setPostBoilVolume_l(lineEdit_postBoilVol->toCanonical().quantity());
    this->showChanges();
    return;
 }
@@ -201,7 +201,7 @@ void BrewNoteWidget::updateVolumeIntoFerm_l() {
       return;
    }
 
-   this->bNoteObs->setVolumeIntoFerm_l(lineEdit_volIntoFerm->toSI().quantity);
+   this->bNoteObs->setVolumeIntoFerm_l(lineEdit_volIntoFerm->toCanonical().quantity());
    this->showChanges();
    return;
 }
@@ -211,7 +211,7 @@ void BrewNoteWidget::updatePitchTemp_c() {
       return;
    }
 
-   this->bNoteObs->setPitchTemp_c(lineEdit_pitchTemp->toSI().quantity);
+   this->bNoteObs->setPitchTemp_c(lineEdit_pitchTemp->toCanonical().quantity());
    this->showChanges();
    return;
 }
@@ -221,7 +221,7 @@ void BrewNoteWidget::updateFG() {
       return;
    }
 
-   this->bNoteObs->setFg(lineEdit_FG->toSI().quantity);
+   this->bNoteObs->setFg(lineEdit_FG->toCanonical().quantity());
    this->showChanges();
    return;
 }
@@ -231,7 +231,7 @@ void BrewNoteWidget::updateFinalVolume_l() {
       return;
    }
 
-   this->bNoteObs->setFinalVolume_l(lineEdit_finalVol->toSI().quantity);
+   this->bNoteObs->setFinalVolume_l(lineEdit_finalVol->toCanonical().quantity());
 //   this->showChanges();
    return;
 }
@@ -254,7 +254,8 @@ void BrewNoteWidget::updateNotes() {
    return;
 }
 
-void BrewNoteWidget::changed(QMetaProperty /*prop*/, QVariant /*val*/) {
+void BrewNoteWidget::changed([[maybe_unused]] QMetaProperty prop,
+                             [[maybe_unused]] QVariant val) {
    if (this->sender() != this->bNoteObs) {
       return;
    }
@@ -263,7 +264,7 @@ void BrewNoteWidget::changed(QMetaProperty /*prop*/, QVariant /*val*/) {
    return;
 }
 
-void BrewNoteWidget::showChanges(QString field) {
+void BrewNoteWidget::showChanges([[maybe_unused]] QString field) {
    if (this->bNoteObs == nullptr) {
       return;
    }
@@ -296,6 +297,6 @@ void BrewNoteWidget::showChanges(QString field) {
    return;
 }
 
-void BrewNoteWidget::focusOutEvent(QFocusEvent *e) {
+void BrewNoteWidget::focusOutEvent([[maybe_unused]] QFocusEvent * e) {
    return;
 }

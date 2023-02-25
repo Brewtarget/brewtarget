@@ -67,6 +67,8 @@ HopEditor::HopEditor(QWidget * parent) :
    return;
 }
 
+HopEditor::~HopEditor() = default;
+
 void HopEditor::setHop(Hop * h) {
    if (obsHop) {
       disconnect(obsHop, nullptr, this, nullptr);
@@ -77,6 +79,7 @@ void HopEditor::setHop(Hop * h) {
       connect(obsHop, &NamedEntity::changed, this, &HopEditor::changed);
       showChanges();
    }
+   return;
 }
 
 void HopEditor::save() {
@@ -86,34 +89,33 @@ void HopEditor::save() {
    }
 
    this->obsHop->setName(lineEdit_name->text());
-   this->obsHop->setAlpha_pct(lineEdit_alpha->toSI().quantity);
-   this->obsHop->setTime_min(lineEdit_time->toSI().quantity);
+   this->obsHop->setAlpha_pct(lineEdit_alpha->toCanonical().quantity());
+   this->obsHop->setTime_min(lineEdit_time->toCanonical().quantity());
 
    //
    // It's a coding error if we don't recognise the values in our own combo boxes, so it's OK that we'd get a
    // std::bad_optional_access exception in such a case
    //
-   this->obsHop->setUse (Hop::useStringMapping.stringToEnum<Hop::Use>  (comboBox_hopUse->currentData().toString()));
    this->obsHop->setType(Hop::typeStringMapping.stringToEnum<Hop::Type>(comboBox_hopType->currentData().toString()));
    this->obsHop->setForm(Hop::formStringMapping.stringToEnum<Hop::Form>(comboBox_hopForm->currentData().toString()));
+   this->obsHop->setUse (Hop::useStringMapping.stringToEnum<Hop::Use>  (comboBox_hopUse->currentData().toString()));
 
-   this->obsHop->setBeta_pct(lineEdit_beta->toSI().quantity);
-   this->obsHop->setHsi_pct(lineEdit_HSI->toSI().quantity);
-   this->obsHop->setOrigin(lineEdit_origin->text());
-   this->obsHop->setHumulene_pct(lineEdit_humulene->toSI().quantity);
-   this->obsHop->setCaryophyllene_pct(lineEdit_caryophyllene->toSI().quantity);
-   this->obsHop->setCohumulone_pct(lineEdit_cohumulone->toSI().quantity);
-   this->obsHop->setMyrcene_pct(lineEdit_myrcene->toSI().quantity);
-
-   this->obsHop->setSubstitutes(textEdit_substitutes->toPlainText());
-   this->obsHop->setNotes(textEdit_notes->toPlainText());
+   this->obsHop->setBeta_pct         (lineEdit_beta         ->toCanonical().quantity());
+   this->obsHop->setHsi_pct          (lineEdit_HSI          ->toCanonical().quantity());
+   this->obsHop->setOrigin           (lineEdit_origin       ->text()           );
+   this->obsHop->setHumulene_pct     (lineEdit_humulene     ->toCanonical().quantity());
+   this->obsHop->setCaryophyllene_pct(lineEdit_caryophyllene->toCanonical().quantity());
+   this->obsHop->setCohumulone_pct   (lineEdit_cohumulone   ->toCanonical().quantity());
+   this->obsHop->setMyrcene_pct      (lineEdit_myrcene      ->toCanonical().quantity());
+   this->obsHop->setSubstitutes      (textEdit_substitutes  ->toPlainText()    );
+   this->obsHop->setNotes            (textEdit_notes        ->toPlainText()    );
 
    if (this->obsHop->key() < 0) {
       ObjectStoreWrapper::insert(*this->obsHop);
    }
 
    // do this late to make sure we've the row in the inventory table
-   this->obsHop->setInventoryAmount(lineEdit_inventory->toSI().quantity);
+   this->obsHop->setInventoryAmount(lineEdit_inventory->toCanonical().quantity());
    setVisible(false);
    return;
 }
@@ -189,8 +191,7 @@ void HopEditor::showChanges(QMetaProperty * prop) {
 
 
 void HopEditor::newHop(QString folder) {
-   QString name = QInputDialog::getText(this, tr("Hop name"),
-                                        tr("Hop name:"));
+   QString name = QInputDialog::getText(this, tr("Hop name"), tr("Hop name:"));
    if (name.isEmpty()) {
       return;
    }

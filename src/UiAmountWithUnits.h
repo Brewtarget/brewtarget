@@ -126,7 +126,7 @@ public:
    /**
     * \brief Returns the field converted to canonical units for the relevant \c Measurement::PhysicalQuantity
     */
-   Measurement::Amount toSI();
+   Measurement::Amount toCanonical();
 
    /**
     * \brief Use this when you want to do something with the returned QString

@@ -127,32 +127,32 @@ void HydrometerTool::doLayout() {
 
 void HydrometerTool::retranslateUi() {
    setWindowTitle(tr("Hydrometer Tool"));
-   label_inputSg->setText(tr("SG Reading")); //TODO translation
-   label_inputTemp->setText(tr("Temperature"));  //TODO translation
-   label_calibratedTemp->setText(tr("Hydrometer Calibration")); //TODO translation
-   label_outputSg->setText(tr("Adjust SG"));  //TODO translation
+   label_inputSg->setText(tr("SG Reading"));
+   label_inputTemp->setText(tr("Temperature"));
+   label_calibratedTemp->setText(tr("Hydrometer Calibration"));
+   label_outputSg->setText(tr("Adjust SG"));
 
    pushButton_convert->setText(tr("Convert"));
 #ifndef QT_NO_TOOLTIP
-   lineEdit_inputSg->setToolTip(tr("Measured gravity"));  //TODO translate
-   lineEdit_inputTemp->setToolTip(tr("Temperature"));  //TODO translate
-   lineEdit_outputSg->setToolTip(tr("Corrected gravity"));  //TODO translate
+   lineEdit_inputSg->setToolTip(tr("Measured gravity"));
+   lineEdit_inputTemp->setToolTip(tr("Temperature"));
+   lineEdit_outputSg->setToolTip(tr("Corrected gravity"));
 #endif
    return;
 }
 
 void HydrometerTool::convert() {
    double correctedGravity = Algorithms::correctSgForTemperature(
-      lineEdit_inputSg->toSI().quantity,       // measured gravity
-      lineEdit_inputTemp->toSI().quantity,     // temperature at time of reading in Celsius
-      lineEdit_calibratedTemp->toSI().quantity // calibration temperature of hydrometer in Celsius
+      lineEdit_inputSg->toCanonical().quantity(),       // measured gravity
+      lineEdit_inputTemp->toCanonical().quantity(),     // temperature at time of reading in Celsius
+      lineEdit_calibratedTemp->toCanonical().quantity() // calibration temperature of hydrometer in Celsius
    );
 
    lineEdit_outputSg->setText(correctedGravity);
    return;
 }
 
-void HydrometerTool::changeEvent(QEvent* event) {
+void HydrometerTool::changeEvent(QEvent * event) {
    if (event->type() == QEvent::LanguageChange) {
       this->retranslateUi();
    }

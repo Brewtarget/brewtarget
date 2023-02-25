@@ -69,10 +69,10 @@ void YeastEditor::save() {
 
    this->obsYeast->setLaboratory(lineEdit_laboratory->text());
    this->obsYeast->setProductID(lineEdit_productID->text());
-   this->obsYeast->setMinTemperature_c(lineEdit_minTemperature->toSI().quantity);
-   this->obsYeast->setMaxTemperature_c(lineEdit_maxTemperature->toSI().quantity);
+   this->obsYeast->setMinTemperature_c(lineEdit_minTemperature->toCanonical().quantity());
+   this->obsYeast->setMaxTemperature_c(lineEdit_maxTemperature->toCanonical().quantity());
    this->obsYeast->setFlocculation(static_cast<Yeast::Flocculation>(comboBox_flocculation->currentIndex()));
-   this->obsYeast->setAttenuation_pct(lineEdit_attenuation->toSI().quantity);
+   this->obsYeast->setAttenuation_pct(lineEdit_attenuation->toCanonical().quantity());
 
    this->obsYeast->setTimesCultured(lineEdit_timesCultured->text().toInt());
    this->obsYeast->setMaxReuse(lineEdit_maxReuse->text().toInt());
@@ -126,13 +126,13 @@ void YeastEditor::showChanges(QMetaProperty * metaProp) {
       }
    }
    if (propName == PropertyNames::Yeast::type || updateAll) {
-      comboBox_type->setCurrentIndex(obsYeast->type());
+      comboBox_type->setCurrentIndex(static_cast<int>(obsYeast->type()));
       if (!updateAll) {
          return;
       }
    }
    if (propName == PropertyNames::Yeast::form || updateAll) {
-      comboBox_form->setCurrentIndex(obsYeast->form());
+      comboBox_form->setCurrentIndex(static_cast<int>(obsYeast->form()));
       if (!updateAll) {
          return;
       }
@@ -176,7 +176,7 @@ void YeastEditor::showChanges(QMetaProperty * metaProp) {
       }
    }
    if (propName == PropertyNames::Yeast::flocculation || updateAll) {
-      comboBox_flocculation->setCurrentIndex(obsYeast->flocculation());
+      comboBox_flocculation->setCurrentIndex(static_cast<int>(obsYeast->flocculation()));
       if (!updateAll) {
          return;
       }

@@ -55,6 +55,7 @@ void MiscEditor::setMisc(Misc * m) {
       connect(obsMisc, SIGNAL(changed(QMetaProperty, QVariant)), this, SLOT(changed(QMetaProperty, QVariant)));
       showChanges();
    }
+   return;
 }
 
 void MiscEditor::save() {
@@ -69,7 +70,7 @@ void MiscEditor::save() {
    this->obsMisc->setName(lineEdit_name->text());
    this->obsMisc->setType(static_cast<Misc::Type>(comboBox_type->currentIndex()));
    this->obsMisc->setUse(static_cast<Misc::Use>(comboBox_use->currentIndex()));
-   this->obsMisc->setTime(lineEdit_time->toSI().quantity);
+   this->obsMisc->setTime(lineEdit_time->toCanonical().quantity());
    this->obsMisc->setAmountIsWeight((checkBox_isWeight->checkState() == Qt::Checked) ? true : false);
    this->obsMisc->setUseFor(textEdit_useFor->toPlainText());
    this->obsMisc->setNotes(textEdit_notes->toPlainText());
@@ -79,7 +80,7 @@ void MiscEditor::save() {
       ObjectStoreWrapper::insert(*this->obsMisc);
    }
    // do this late to make sure we've the row in the inventory table
-   this->obsMisc->setInventoryAmount(lineEdit_inventory->toSI().quantity);
+   this->obsMisc->setInventoryAmount(lineEdit_inventory->toCanonical().quantity());
    setVisible(false);
    return;
 }

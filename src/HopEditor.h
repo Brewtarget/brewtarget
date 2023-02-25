@@ -1,6 +1,6 @@
 /*
  * HopEditor.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2023
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
@@ -41,7 +41,7 @@ class HopEditor : public QDialog, private Ui::hopEditor
 
 public:
    HopEditor( QWidget *parent=nullptr );
-   virtual ~HopEditor() {}
+   virtual ~HopEditor();
    //! Edit the given hop.
    void setHop( Hop* h );
    //! Create a new hop

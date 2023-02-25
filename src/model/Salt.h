@@ -1,6 +1,6 @@
 /*
  * model/Salt.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2023
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
@@ -79,13 +79,14 @@ public:
       numTypes
    };
 
-   Q_ENUMS(WhenToAdd Types)
+   Q_ENUM(WhenToAdd)
+   Q_ENUM(Types)
 
    Salt(QString name = "");
    Salt(NamedParameterBundle const & namedParameterBundle);
    Salt(Salt const & other);
 
-   virtual ~Salt() = default;
+   virtual ~Salt();
 
    // On a base or target profile, bicarbonate and alkalinity cannot both be used. I'm gonna have fun figuring that out
    //! \brief The amount of salt to be added (always a weight)

@@ -488,7 +488,7 @@ bool SaltTableModel::setData(QModelIndex const & index, QVariant const & value, 
                   row->amountIsWeight() ? Measurement::PhysicalQuantity::Mass : Measurement::PhysicalQuantity::Volume,
                   this->getForcedSystemOfMeasurementForColumn(column),
                   this->getForcedRelativeScaleForColumn(column)
-               ).quantity
+               ).quantity()
             );
          }
          break;

@@ -39,6 +39,7 @@
 // Anonymous namespace for constants, global variables and functions used only in this file
 //
 namespace {
+
    Localization::NumericDateFormat dateFormat = Localization::YearMonthDay;
 
    QString currentLanguage = "en";
@@ -46,6 +47,53 @@ namespace {
    QTranslator defaultTrans;
    QTranslator btTrans;
 
+   QLocale initSystemLocale() {
+      //
+      // At the moment, you need to manually edit the config file to set a forced locale (which is a step up from having
+      // to hard-code something and recompile).  Potentially in future we'll allow this to be set via the UI.
+      //
+      // Per the Qt doco, the meaningful part of the specifier for a locale has the format
+      // "language[_script][_country]" or "C", where:
+      //
+      //    - language is a lowercase, two-letter, ISO 639 language code (also some three-letter codes),
+      //    - script is a titlecase, four-letter, ISO 15924 script code (eg Latn, Cyrl, Hebr)
+      //    - country is an uppercase, two-letter, ISO 3166 country code (also "419" as defined by United Nations),
+      //
+      // The separator can be either underscore (the standard) or a minus sign (as used in Java).
+      //
+      // If the string violates the locale format, or language is not a valid ISO 639 code, the "C" locale is used
+      // instead.  If country is not present, or is not a valid ISO 3166 code, the most appropriate country is chosen
+      // for the specified language.
+      //
+      // So, eg, to force French/France locale, add the following line to the [General] section of the
+      // xxxPersistentSettings.conf file:
+      //    forcedLocale=fr_FR
+      //
+      if (PersistentSettings::contains(PersistentSettings::Names::forcedLocale)) {
+         QLocale forcedLocale =
+            QLocale(PersistentSettings::value(PersistentSettings::Names::forcedLocale, "").toString());
+         // This probably isn't needed, but should force this locale into places where QLocale::system() is being called
+         // instead of Localization::getLocale().  Note that QLocale::setDefault() is not reentrant, but that's OK as
+         // we are guaranteed to be single-threaded here.
+         QLocale::setDefault(forcedLocale);
+         return forcedLocale;
+      }
+      return QLocale::system();
+   }
+
+}
+
+
+QLocale const & Localization::getLocale() {
+   //
+   // Note that we can't use std::call_once to initialise systemLocale because it runs too early, ie before
+   // PersistentSettings has been initialised.  Using a static local variable is thread-safe and (at the cost of a very
+   // small runtime overhead) means that the variable will not be initialised until the first call of this function
+   // (which should be after PersistentSettings::initialise() has been called).
+   //
+   static QLocale systemLocale = initSystemLocale();
+
+   return systemLocale;
 }
 
 void Localization::setDateFormat(NumericDateFormat newDateFormat) {
@@ -71,10 +119,8 @@ QString Localization::numericToStringDateFormat(NumericDateFormat numericDateFor
    }
 }
 
-QString Localization::displayDate(QDate const& date )
-{
-   QLocale loc(QLocale::system().name());
-   return date.toString(loc.dateFormat(QLocale::ShortFormat));
+QString Localization::displayDate(QDate const& date) {
+   return date.toString(Localization::getLocale().dateFormat(QLocale::ShortFormat));
 }
 
 QString Localization::displayDateUserFormated(QDate const & date) {
@@ -103,12 +149,12 @@ QString const & Localization::getSystemLanguage() {
    // QLocale::name() is of the form language_country,
    // where 'language' is a lowercase 2-letter ISO 639-1 language code,
    // and 'country' is an uppercase 2-letter ISO 3166 country code.
-   return QLocale::system().name().split("_")[0];
+   return Localization::getLocale().name().split("_")[0];
 }
 
 bool Localization::hasUnits(QString qstr) {
-   QString decimal = QRegExp::escape(QLocale::system().decimalPoint());
-   QString grouping = QRegExp::escape(QLocale::system().groupSeparator());
+   QString decimal = QRegExp::escape(Localization::getLocale().decimalPoint());
+   QString grouping = QRegExp::escape(Localization::getLocale().groupSeparator());
 
    QRegExp amtUnit("((?:\\d+" + grouping + ")?\\d+(?:" + decimal + "\\d+)?|" + decimal + "\\d+)\\s*(\\w+)?");
    amtUnit.indexIn(qstr);
@@ -177,7 +223,7 @@ void Localization::loadTranslations() {
    }
 
    // Load translators.
-   defaultTrans.load("qt_" + QLocale::system().name(), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+   defaultTrans.load("qt_" + Localization::getLocale().name(), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
    if (getCurrentLanguage().isEmpty()) {
       setLanguage(getSystemLanguage());
    }

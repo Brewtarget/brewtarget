@@ -587,8 +587,8 @@ double Algorithms::correctSgForTemperature(double measuredSg, double readingTemp
    // https://onlinelibrary.wiley.com/doi/pdf/10.1002/j.2050-0416.1970.tb03327.x for a rather old example.)  Hence the
    // use of non-SI units -- because the people in question were working in Fahrenheit.
    //
-   double tr = Measurement::Units::fahrenheit.fromSI(readingTempInC);
-   double tc = Measurement::Units::fahrenheit.fromSI(calibrationTempInC);
+   double tr = Measurement::Units::fahrenheit.fromCanonical(readingTempInC);
+   double tc = Measurement::Units::fahrenheit.fromCanonical(calibrationTempInC);
 
    double correctedSg = measuredSg * (
       (1.00130346 - 0.000134722124 * tr + 0.00000204052596 * intPow(tr,2) - 0.00000000232820948 * intPow(tr,3)) /

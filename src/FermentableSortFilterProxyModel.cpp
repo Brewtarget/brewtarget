@@ -47,7 +47,7 @@ bool FermentableSortFilterProxyModel::lessThan(QModelIndex const & left,
              Measurement::qStringToSI(rightFermentable.toString(), Measurement::PhysicalQuantity::Mass)) {
             return getName(right) < getName(left);
          } else if (Measurement::qStringToSI(leftFermentable.toString(),
-                                             Measurement::PhysicalQuantity::Mass).quantity == 0.0 &&
+                                             Measurement::PhysicalQuantity::Mass).quantity() == 0.0 &&
                     this->sortOrder() == Qt::AscendingOrder) {
             // Show non-zero entries first.
             return false;

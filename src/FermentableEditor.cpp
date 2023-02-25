@@ -30,30 +30,30 @@
 #include "measurement/Unit.h"
 #include "model/Fermentable.h"
 
-FermentableEditor::FermentableEditor( QWidget* parent ) :
+FermentableEditor::FermentableEditor(QWidget* parent) :
    QDialog(parent), obsFerm(nullptr) {
    setupUi(this);
 
-   this->tabWidget_editor->tabBar()->setStyle( new BtHorizontalTabs );
+   this->tabWidget_editor->tabBar()->setStyle(new BtHorizontalTabs);
 
    connect( pushButton_new,    SIGNAL( clicked() ),       this, SLOT( newFermentable() ) );
-   connect( pushButton_save,   &QAbstractButton::clicked, this, &FermentableEditor::save );
-   connect( pushButton_cancel, &QAbstractButton::clicked, this, &FermentableEditor::clearAndClose );
+   connect(pushButton_save,   &QAbstractButton::clicked, this, &FermentableEditor::save);
+   connect(pushButton_cancel, &QAbstractButton::clicked, this, &FermentableEditor::clearAndClose);
    return;
 }
 
-void FermentableEditor::setFermentable( Fermentable* newFerm ) {
-   if(newFerm) {
+FermentableEditor::~FermentableEditor() = default;
+
+void FermentableEditor::setFermentable(Fermentable * newFerm) {
+   if (newFerm) {
       obsFerm = newFerm;
       showChanges();
    }
    return;
 }
 
-void FermentableEditor::save()
-{
-   if( !obsFerm )
-   {
+void FermentableEditor::save() {
+   if (!obsFerm) {
       setVisible(false);
       return;
    }
@@ -64,20 +64,20 @@ void FermentableEditor::save()
    // order as the combobox.
    obsFerm->setType( static_cast<Fermentable::Type>(comboBox_type->currentIndex()) );
 
-   obsFerm->setYield_pct(lineEdit_yield->toSI().quantity);
-   obsFerm->setColor_srm(lineEdit_color->toSI().quantity);
-   obsFerm->setAddAfterBoil( (checkBox_addAfterBoil->checkState() == Qt::Checked)? true : false );
-   obsFerm->setOrigin( lineEdit_origin->text() );
-   obsFerm->setSupplier( lineEdit_supplier->text() );
-   obsFerm->setCoarseFineDiff_pct( lineEdit_coarseFineDiff->toSI().quantity );
-   obsFerm->setMoisture_pct( lineEdit_moisture->toSI().quantity );
-   obsFerm->setDiastaticPower_lintner( lineEdit_diastaticPower->toSI().quantity );
-   obsFerm->setProtein_pct( lineEdit_protein->toSI().quantity );
-   obsFerm->setMaxInBatch_pct( lineEdit_maxInBatch->toSI().quantity );
-   obsFerm->setRecommendMash( (checkBox_recommendMash->checkState() == Qt::Checked) ? true : false );
-   obsFerm->setIsMashed( (checkBox_isMashed->checkState() == Qt::Checked) ? true : false );
-   obsFerm->setIbuGalPerLb( lineEdit_ibuGalPerLb->toSI().quantity );
-   obsFerm->setNotes( textEdit_notes->toPlainText() );
+   obsFerm->setYield_pct(lineEdit_yield->toCanonical().quantity());
+   obsFerm->setColor_srm(lineEdit_color->toCanonical().quantity());
+   obsFerm->setAddAfterBoil((checkBox_addAfterBoil->checkState() == Qt::Checked)? true : false);
+   obsFerm->setOrigin(lineEdit_origin->text());
+   obsFerm->setSupplier(lineEdit_supplier->text());
+   obsFerm->setCoarseFineDiff_pct(lineEdit_coarseFineDiff->toCanonical().quantity());
+   obsFerm->setMoisture_pct(lineEdit_moisture->toCanonical().quantity());
+   obsFerm->setDiastaticPower_lintner(lineEdit_diastaticPower->toCanonical().quantity());
+   obsFerm->setProtein_pct(lineEdit_protein->toCanonical().quantity());
+   obsFerm->setMaxInBatch_pct(lineEdit_maxInBatch->toCanonical().quantity());
+   obsFerm->setRecommendMash((checkBox_recommendMash->checkState() == Qt::Checked) ? true : false);
+   obsFerm->setIsMashed((checkBox_isMashed->checkState() == Qt::Checked) ? true : false);
+   obsFerm->setIbuGalPerLb(lineEdit_ibuGalPerLb->toCanonical().quantity());
+   obsFerm->setNotes(textEdit_notes->toPlainText());
 
    if (this->obsFerm->key() < 0) {
       ObjectStoreWrapper::insert(*this->obsFerm);
@@ -85,7 +85,7 @@ void FermentableEditor::save()
 
    // Since inventory amount isn't really an attribute of the Fermentable, it's best to store it after we know the
    // Fermentable has a DB record.
-   this->obsFerm->setInventoryAmount(lineEdit_inventory->toSI().quantity);
+   this->obsFerm->setInventoryAmount(lineEdit_inventory->toCanonical().quantity());
 
    setVisible(false);
    return;
@@ -103,7 +103,7 @@ void FermentableEditor::showChanges(QMetaProperty* metaProp) {
 
    QString propName;
    bool updateAll = false;
-   if( metaProp == nullptr ) {
+   if (metaProp == nullptr) {
       updateAll = true;
    } else {
       propName = metaProp->name();
@@ -223,14 +223,14 @@ void FermentableEditor::showChanges(QMetaProperty* metaProp) {
 void FermentableEditor::newFermentable(QString folder)  {
    QString name = QInputDialog::getText(this, tr("Fermentable name"),
                                           tr("Fermentable name:"));
-   if( name.isEmpty() ) {
+   if (name.isEmpty()) {
       return;
    }
 
    // .:TODO:. Change to shared_ptr as currently leads to memory leak in clearAndClose()
    Fermentable * f = new Fermentable(name);
 
-   if ( ! folder.isEmpty() ) {
+   if (! folder.isEmpty()) {
       f->setFolder(folder);
    }
 

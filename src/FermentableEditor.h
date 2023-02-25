@@ -1,6 +1,6 @@
 /*
  * FermentableEditor.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2023
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
@@ -42,7 +42,7 @@ class FermentableEditor : public QDialog, private Ui::fermentableEditor
 
 public:
    FermentableEditor( QWidget *parent=nullptr );
-   virtual ~FermentableEditor() {}
+   virtual ~FermentableEditor();
    void setFermentable( Fermentable* f );
    void newFermentable( QString folder );
 

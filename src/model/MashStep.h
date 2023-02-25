@@ -1,6 +1,6 @@
 /*
  * model/MashStep.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2023
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Matt Young <mfsy@yahoo.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -66,7 +66,7 @@ public:
 
    //! \brief The type of step.
    enum Type { Infusion, Temperature, Decoction, flySparge, batchSparge };
-   Q_ENUMS( Type )
+   Q_ENUM(Type)
 
    MashStep(QString name = "");
    MashStep(NamedParameterBundle const & namedParameterBundle);
@@ -150,7 +150,7 @@ private:
    double m_infuseTemp_c;
    double m_decoctionAmount_l;
    int m_stepNumber;
-   int mashId;
+   int m_mashId;
 };
 
 #endif

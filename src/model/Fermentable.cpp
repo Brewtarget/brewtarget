@@ -1,6 +1,6 @@
 /*
  * model/Fermentable.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2023
  * - Kregg K <gigatropolis@yahoo.com>
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
@@ -79,23 +79,23 @@ Fermentable::Fermentable(QString name) :
 
 Fermentable::Fermentable(NamedParameterBundle const & namedParameterBundle) :
    NamedEntityWithInventory{namedParameterBundle},
-   m_typeStr       {QString()                        },
-   m_type          {static_cast<Fermentable::Type>(namedParameterBundle(PropertyNames::Fermentable::type).toInt())},
-   m_amountKg      {namedParameterBundle(PropertyNames::Fermentable::amount_kg             ).toDouble()},
-   m_yieldPct      {namedParameterBundle(PropertyNames::Fermentable::yield_pct             ).toDouble()},
-   m_colorSrm      {namedParameterBundle(PropertyNames::Fermentable::color_srm             ).toDouble()},
-   m_isAfterBoil   {namedParameterBundle(PropertyNames::Fermentable::addAfterBoil          ).toBool()  },
-   m_origin        {namedParameterBundle(PropertyNames::Fermentable::origin,      QString())           },
-   m_supplier      {namedParameterBundle(PropertyNames::Fermentable::supplier,    QString())           },
-   m_notes         {namedParameterBundle(PropertyNames::Fermentable::notes,       QString())           },
-   m_coarseFineDiff{namedParameterBundle(PropertyNames::Fermentable::coarseFineDiff_pct    ).toDouble()},
-   m_moisturePct   {namedParameterBundle(PropertyNames::Fermentable::moisture_pct          ).toDouble()},
-   m_diastaticPower{namedParameterBundle(PropertyNames::Fermentable::diastaticPower_lintner).toDouble()},
-   m_proteinPct    {namedParameterBundle(PropertyNames::Fermentable::protein_pct           ).toDouble()},
-   m_maxInBatchPct {namedParameterBundle(PropertyNames::Fermentable::maxInBatch_pct        ).toDouble()},
-   m_recommendMash {namedParameterBundle(PropertyNames::Fermentable::recommendMash         ).toBool()  },
-   m_ibuGalPerLb   {namedParameterBundle(PropertyNames::Fermentable::ibuGalPerLb           ).toDouble()},
-   m_isMashed      {namedParameterBundle(PropertyNames::Fermentable::isMashed,        false)           } {
+   m_typeStr               {QString()},
+   m_type                  {namedParameterBundle.val<Fermentable::Type>(PropertyNames::Fermentable::type                             )},
+   m_amountKg              {namedParameterBundle.val<double           >(PropertyNames::Fermentable::amount_kg                        )},
+   m_yieldPct              {namedParameterBundle.val<double           >(PropertyNames::Fermentable::yield_pct                        )},
+   m_colorSrm              {namedParameterBundle.val<double           >(PropertyNames::Fermentable::color_srm                        )},
+   m_isAfterBoil           {namedParameterBundle.val<bool             >(PropertyNames::Fermentable::addAfterBoil                     )},
+   m_origin                {namedParameterBundle.val<QString          >(PropertyNames::Fermentable::origin                , QString())},
+   m_supplier              {namedParameterBundle.val<QString          >(PropertyNames::Fermentable::supplier              , QString())},
+   m_notes                 {namedParameterBundle.val<QString          >(PropertyNames::Fermentable::notes                 , QString())},
+   m_coarseFineDiff        {namedParameterBundle.val<double           >(PropertyNames::Fermentable::coarseFineDiff_pct               )},
+   m_moisturePct           {namedParameterBundle.val<double           >(PropertyNames::Fermentable::moisture_pct                     )},
+   m_diastaticPower        {namedParameterBundle.val<double           >(PropertyNames::Fermentable::diastaticPower_lintner           )},
+   m_proteinPct            {namedParameterBundle.val<double           >(PropertyNames::Fermentable::protein_pct                      )},
+   m_maxInBatchPct         {namedParameterBundle.val<double           >(PropertyNames::Fermentable::maxInBatch_pct                   )},
+   m_recommendMash         {namedParameterBundle.val<bool             >(PropertyNames::Fermentable::recommendMash                    )},
+   m_ibuGalPerLb           {namedParameterBundle.val<double           >(PropertyNames::Fermentable::ibuGalPerLb                      )},
+   m_isMashed              {namedParameterBundle.val<bool             >(PropertyNames::Fermentable::isMashed              , false    )} {
    return;
 }
 
@@ -120,6 +120,8 @@ Fermentable::Fermentable(Fermentable const & other) :
    m_isMashed      {other.m_isMashed      } {
    return;
 }
+
+Fermentable::~Fermentable() = default;
 
 // Gets
 

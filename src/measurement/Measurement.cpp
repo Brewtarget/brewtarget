@@ -1,6 +1,6 @@
 /*
  * measurement/Measurement.cpp is part of Brewtarget, and is copyright the following
- * authors 2010-2022:
+ * authors 2010-2023:
  * - Mark de Wever <koraq@xs4all.nl>
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
@@ -32,7 +32,7 @@
 #include "model/Style.h" // For PropertyNames::Style::colorMin_srm, PropertyNames::Style::colorMax_srm
 #include "PersistentSettings.h"
 #include "utils/BtStringConst.h"
-#include "utils/OptionalToStream.h"
+#include "utils/OptionalHelpers.h"
 
 namespace {
 
@@ -163,13 +163,13 @@ QString Measurement::displayAmount(Measurement::Amount const & amount,
                                    std::optional<Measurement::SystemOfMeasurement> forcedSystemOfMeasurement,
                                    std::optional<Measurement::UnitSystem::RelativeScale> forcedScale) {
    // Check for insane values.
-   if (Algorithms::isNan(amount.quantity) || Algorithms::isInf(amount.quantity)) {
+   if (Algorithms::isNan(amount.quantity()) || Algorithms::isInf(amount.quantity())) {
       return "-";
    }
 
    // If the caller told us (via forced system of measurement) what UnitSystem to use, use that, otherwise get whatever
    // one we're using generally for related physical property.
-   PhysicalQuantity const physicalQuantity = amount.unit.getPhysicalQuantity();
+   PhysicalQuantity const physicalQuantity = amount.unit()->getPhysicalQuantity();
    Measurement::UnitSystem const & displayUnitSystem =
       forcedSystemOfMeasurement ? UnitSystem::getInstance(*forcedSystemOfMeasurement, physicalQuantity) :
                                   Measurement::getDisplayUnitSystem(physicalQuantity);
@@ -220,13 +220,13 @@ double Measurement::amountDisplay(Measurement::Amount const & amount,
                                   std::optional<Measurement::UnitSystem::RelativeScale> forcedScale) {
 
    // Check for insane values.
-   if (Algorithms::isNan(amount.quantity) || Algorithms::isInf(amount.quantity)) {
+   if (Algorithms::isNan(amount.quantity()) || Algorithms::isInf(amount.quantity())) {
       return -1.0;
    }
 
    // If the caller told us (via forced system of measurement) what UnitSystem to use, use that, otherwise get whatever
    // one we're using generally for related physical property.
-   PhysicalQuantity const physicalQuantity = amount.unit.getPhysicalQuantity();
+   PhysicalQuantity const physicalQuantity = amount.unit()->getPhysicalQuantity();
    Measurement::UnitSystem const & displayUnitSystem =
       forcedSystemOfMeasurement ? UnitSystem::getInstance(*forcedSystemOfMeasurement, physicalQuantity) :
                                   Measurement::getDisplayUnitSystem(physicalQuantity);
@@ -311,8 +311,8 @@ QString Measurement::displayThickness( double thick_lkg, bool showUnits ) {
    Measurement::Unit const * weightUnit;
    Measurement::getThicknessUnits(&volUnit, &weightUnit);
 
-   double num = volUnit->fromSI(thick_lkg);
-   double den = weightUnit->fromSI(1.0);
+   double num = volUnit->fromCanonical(thick_lkg);
+   double den = weightUnit->fromCanonical(1.0);
 
    if (showUnits) {
       return QString("%L1 %2/%3").arg(num/den, fieldWidth, format, precision).arg(volUnit->name).arg(weightUnit->name);
@@ -325,17 +325,22 @@ Measurement::Amount Measurement::qStringToSI(QString qstr,
                                              Measurement::PhysicalQuantity const physicalQuantity,
                                              std::optional<Measurement::SystemOfMeasurement> forcedSystemOfMeasurement,
                                              std::optional<Measurement::UnitSystem::RelativeScale> forcedScale) {
+   qDebug() <<
+      Q_FUNC_INFO << "Input" << qstr << "of" << physicalQuantity << "; forcedSystemOfMeasurement=" <<
+      forcedSystemOfMeasurement << "; forcedScale=" << forcedScale;
+
    //
    // If the caller told us that the SystemOfMeasurement and/or RelativeScale on the input (qstr) are "forced" then that
    // information can be used to interpret a case where no (valid) unit is supplied in the input (ie it's just a number
    // rather than number plus units) or where the supplied unit is ambiguous (eg US pints are different than Imperial
    // pints).  Otherwise, just otherwise get whatever UnitSystem we're using generally for related physical property.
    //
-   Measurement::UnitSystem const & displayUnitSystem =
+   Measurement::UnitSystem const & displayUnitSystem {
       forcedSystemOfMeasurement ? UnitSystem::getInstance(*forcedSystemOfMeasurement, physicalQuantity) :
-                                  Measurement::getDisplayUnitSystem(physicalQuantity);
+                                  Measurement::getDisplayUnitSystem(physicalQuantity)
+   };
    Measurement::Unit const * defaultUnit {
-      forcedScale ? displayUnitSystem.scaleUnit(*forcedScale) : &Measurement::getUnitForInternalStorage(physicalQuantity)
+      forcedScale ? displayUnitSystem.scaleUnit(*forcedScale) : displayUnitSystem.unit()
    };
    // It's a coding error if defaultUnit is null, because it means previousScaleInfo.oldForcedScale was not valid for
    // oldUnitSystem.  However, we can recover.

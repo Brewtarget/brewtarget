@@ -464,7 +464,7 @@
         </widget>
        </item>
        <item row="5" column="3">
-        <widget class="BtGenericEdit" name="lineEdit_tunSpecificHeat">
+        <widget class="BtDimensionlessEdit" name="lineEdit_tunSpecificHeat">
          <property name="editField" stdset="0">
           <string>tunSpecificHeat_calGC</string>
          </property>
@@ -636,6 +636,14 @@
   </customwidget>
   <customwidget>
    <class>BtVolumeEdit</class>
+   <extends>QLineEdit</extends>
+   <header>BtLineEdit.h</header>
+   <slots>
+    <slot>lineChanged(PreviousScaleInfo)</slot>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>BtDimensionlessEdit</class>
    <extends>QLineEdit</extends>
    <header>BtLineEdit.h</header>
    <slots>

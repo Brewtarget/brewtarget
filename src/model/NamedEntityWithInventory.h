@@ -1,6 +1,6 @@
 /*
  * model/NamedEntityWithInventory.h is part of Brewtarget, and is Copyright the following
- * authors 2021
+ * authors 2021-2023
  * - Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -44,7 +44,7 @@ public:
    NamedEntityWithInventory(NamedEntityWithInventory const & other);
    NamedEntityWithInventory(NamedParameterBundle const & namedParameterBundle);
 
-   virtual ~NamedEntityWithInventory() = default;
+   virtual ~NamedEntityWithInventory();
 
    //! \brief The amount in inventory (usually in kg)
    Q_PROPERTY( double inventory              READ inventory              WRITE setInventoryAmount        /*NOTIFY changed*/ /*changedInventory*/ )

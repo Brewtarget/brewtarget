@@ -1,6 +1,6 @@
 /*
  * measurement/PhysicalQuantity.h is part of Brewtarget, and is copyright the following
- * authors 2021-2022:
+ * authors 2021-2023:
  * - Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -112,7 +112,9 @@ namespace Measurement {
       // separate.
       Carbonation,
       Concentration,
-      Viscosity
+      Viscosity,
+      // Specific heat capacity -- see https://en.wikipedia.org/wiki/Specific_heat_capacity
+      SpecificHeatCapacity,
    };
 
    /**

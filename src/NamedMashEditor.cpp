@@ -86,6 +86,7 @@ void NamedMashEditor::showEditor() {
 
 void NamedMashEditor::closeEditor() {
    this->setVisible(false);
+   return;
 }
 
 void NamedMashEditor::saveAndClose() {
@@ -95,41 +96,41 @@ void NamedMashEditor::saveAndClose() {
 
    qDebug() << Q_FUNC_INFO << "Saving mash (#" << this->mashObs->key() << ")";
 
-   // using toSI aon the spargePh is something of a cheat, but the btLineEdit
+   // using toCanonical aon the spargePh is something of a cheat, but the btLineEdit
    // class will do the right thing. That is how a plan comes together.
 
    this->mashObs->setEquipAdjust(true); // BeerXML won't like me, but it's just stupid not to adjust for the equipment when you're able.
    this->mashObs->setName(lineEdit_name->text());
-   this->mashObs->setGrainTemp_c(lineEdit_grainTemp->toSI().quantity);
-   this->mashObs->setSpargeTemp_c(lineEdit_spargeTemp->toSI().quantity);
-   this->mashObs->setPh(lineEdit_spargePh->toSI().quantity);
-   this->mashObs->setTunTemp_c(lineEdit_tunTemp->toSI().quantity);
-   this->mashObs->setTunWeight_kg(lineEdit_tunMass->toSI().quantity);
-   this->mashObs->setTunSpecificHeat_calGC(lineEdit_tunSpHeat->toSI().quantity);
+   this->mashObs->setGrainTemp_c(lineEdit_grainTemp->toCanonical().quantity());
+   this->mashObs->setSpargeTemp_c(lineEdit_spargeTemp->toCanonical().quantity());
+   this->mashObs->setPh(lineEdit_spargePh->toCanonical().quantity());
+   this->mashObs->setTunTemp_c(lineEdit_tunTemp->toCanonical().quantity());
+   this->mashObs->setTunWeight_kg(lineEdit_tunMass->toCanonical().quantity());
+   this->mashObs->setTunSpecificHeat_calGC(lineEdit_tunSpHeat->toCanonical().quantity());
 
    this->mashObs->setNotes( textEdit_notes->toPlainText() );
    return;
 }
 
-void NamedMashEditor::setMash(Mash* mash)
-{
-   if( mashObs )
+void NamedMashEditor::setMash(Mash* mash) {
+   if( mashObs ) {
       disconnect( mashObs, 0, this, 0 );
+   }
 
    mashObs = mash;
    mashStepTableModel->setMash(mashObs);
 
-   if( mashObs )
-   {
+   if (mashObs) {
       connect( mashObs, &NamedEntity::changed, this, &NamedMashEditor::changed );
       showChanges();
    }
 }
 
-void NamedMashEditor::changed(QMetaProperty prop, QVariant /*val*/)
-{
-   if( sender() == mashObs )
+void NamedMashEditor::changed(QMetaProperty prop, QVariant /*val*/) {
+   if (sender() == mashObs) {
       showChanges(&prop);
+   }
+   return;
 }
 
 void NamedMashEditor::showChanges(QMetaProperty* prop) {
@@ -190,8 +191,7 @@ void NamedMashEditor::showChanges(QMetaProperty* prop) {
    }
 }
 
-void NamedMashEditor::clear()
-{
+void NamedMashEditor::clear() {
    lineEdit_name->setText(QString(""));
    lineEdit_grainTemp->setText(QString(""));
    lineEdit_spargeTemp->setText(QString(""));
@@ -201,7 +201,7 @@ void NamedMashEditor::clear()
    lineEdit_tunSpHeat->setText(QString(""));
 
    textEdit_notes->setPlainText("");
-
+   return;
 }
 
 void NamedMashEditor::addMashStep() {
@@ -217,30 +217,30 @@ void NamedMashEditor::addMashStep() {
    return;
 }
 
-bool NamedMashEditor::justOne(QModelIndexList selected)
-{
-   int row, size, i;
-
-   size = selected.size();
-   if ( ! size )
+bool NamedMashEditor::justOne(QModelIndexList selected) {
+   int size = selected.size();
+   if ( ! size ) {
       return false;
+   }
 
-   row = selected[0].row();
-   for( i = 1; i < size; ++i )
-   {
-      if ( selected[i].row() != row )
+   int row = selected[0].row();
+   for (int ii = 1; ii < size; ++ii) {
+      if (selected[ii].row() != row) {
          return false;
+      }
    }
    return true;
 }
 
 void NamedMashEditor::removeMashStep() {
-   if ( ! mashObs )
+   if ( ! mashObs ) {
       return;
+   }
 
    QModelIndexList selected = mashStepTableWidget->selectionModel()->selectedIndexes();
-   if ( !justOne(selected) )
+   if ( !justOne(selected) ) {
       return;
+   }
 
    auto step = mashStepTableModel->getRow(selected[0].row());
    this->mashObs->removeMashStep(step);
@@ -281,15 +281,13 @@ void NamedMashEditor::moveMashStepDown()
    return;
 }
 
-void NamedMashEditor::mashSelected(const QString& name)
-{
+void NamedMashEditor::mashSelected([[maybe_unused]] QString const & name) {
    Mash* selected = mashListModel->at(mashComboBox->currentIndex());
    if (selected && selected != mashObs)
       setMash(selected);
 }
 
-void NamedMashEditor::fromEquipment(const QString& name)
-{
+void NamedMashEditor::fromEquipment([[maybe_unused]] QString const & name) {
    if( mashObs == 0 )
       return;
    Equipment* selected = equipListModel->at(equipmentComboBox->currentIndex());

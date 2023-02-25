@@ -35,7 +35,14 @@ enum class NonPhysicalQuantity {
    Date,
    String,
    Count,
-   Percentage
+   Percentage,
+   Bool,
+   /**
+    * \brief This is for a number that has no units, not even pseudo ones.  It is currently a bit over-used -- ie there
+    *        are places we are using this (typically via BtNumberOnlyEdit) where we probably should be using a
+    *        \c PhysicalQuantity.  We should fix these over time.
+    */
+   Dimensionless,
 };
 
 /**

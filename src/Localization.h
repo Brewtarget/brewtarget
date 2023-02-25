@@ -24,12 +24,19 @@
 #pragma once
 
 #include <QDate>
+#include <QLocale>
 #include <QString>
 
 class BtStringConst;
 class NamedEntity;
 
 namespace Localization {
+   /**
+    * \brief Returns the locale to use for formatting numbers etc.  Usually this is the same as \c QLocale::system(),
+    *        but can be overridden for testing purposes.
+    */
+   QLocale const & getLocale();
+
    /**
     * \brief Coding for the three main numeric date formats
     *        See https://en.wikipedia.org/wiki/Date_format_by_country for which countries use which date formats

@@ -1,6 +1,6 @@
 /*
  * model/Equipment.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2023
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
@@ -31,23 +31,23 @@
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
 #define AddPropertyName(property) namespace PropertyNames::Equipment { BtStringConst const property{#property}; }
-AddPropertyName(boilTime_min)
-AddPropertyName(boilSize_l)
-AddPropertyName(batchSize_l)
+AddPropertyName(batchSize_l          )
+AddPropertyName(boilingPoint_c       )
+AddPropertyName(boilSize_l           )
+AddPropertyName(boilTime_min         )
+AddPropertyName(calcBoilVolume       )
+AddPropertyName(evapRate_lHr         )
+AddPropertyName(evapRate_pctHr       )
+AddPropertyName(grainAbsorption_LKg  )
+AddPropertyName(hopUtilization_pct   )
+AddPropertyName(lauterDeadspace_l    )
+AddPropertyName(notes                )
+AddPropertyName(topUpKettle_l        )
+AddPropertyName(topUpWater_l         )
+AddPropertyName(trubChillerLoss_l    )
 AddPropertyName(tunSpecificHeat_calGC)
-AddPropertyName(tunWeight_kg)
-AddPropertyName(notes)
-AddPropertyName(boilingPoint_c)
-AddPropertyName(grainAbsorption_LKg)
-AddPropertyName(hopUtilization_pct)
-AddPropertyName(topUpKettle_l)
-AddPropertyName(lauterDeadspace_l)
-AddPropertyName(calcBoilVolume)
-AddPropertyName(evapRate_lHr)
-AddPropertyName(evapRate_pctHr)
-AddPropertyName(trubChillerLoss_l)
-AddPropertyName(topUpWater_l)
-AddPropertyName(tunVolume_l)
+AddPropertyName(tunVolume_l          )
+AddPropertyName(tunWeight_kg         )
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
 //======================================================================================================================
@@ -61,17 +61,15 @@ AddPropertyName(tunVolume_l)
 class Equipment : public NamedEntity {
    Q_OBJECT
 
+public:
    Q_CLASSINFO("signal", "equipments")
 
 
-   friend class EquipmentEditor;
-
-public:
    Equipment(QString t_name = "");
    Equipment(NamedParameterBundle const & namedParameterBundle);
    Equipment(Equipment const & other);
 
-   virtual ~Equipment() = default;
+   virtual ~Equipment();
 
    //! \brief The boil size in liters.
    Q_PROPERTY( double boilSize_l            READ boilSize_l            WRITE setBoilSize_l            NOTIFY changedBoilSize_l )
@@ -81,7 +79,7 @@ public:
    Q_PROPERTY( double tunVolume_l           READ tunVolume_l           WRITE setTunVolume_l           NOTIFY changedTunVolume_l )
    //! \brief Set the tun mass in kg.
    Q_PROPERTY( double tunWeight_kg          READ tunWeight_kg          WRITE setTunWeight_kg          NOTIFY changedTunWeight_kg )
-   //! \brief Set the tun specific heat in kcal/(g*C)
+   //! \brief Set the tun specific heat in cal/(g*C)
    Q_PROPERTY( double tunSpecificHeat_calGC READ tunSpecificHeat_calGC WRITE setTunSpecificHeat_calGC NOTIFY changedTunSpecificHeat_calGC )
    //! \brief Set the top-up water in liters.
    Q_PROPERTY( double topUpWater_l          READ topUpWater_l          WRITE setTopUpWater_l          NOTIFY changedTopUpWater_l )
@@ -94,7 +92,7 @@ public:
    //! \brief Set the boil time in minutes.
    Q_PROPERTY( double boilTime_min          READ boilTime_min          WRITE setBoilTime_min          NOTIFY changedBoilTime_min )
    //! \brief Set whether you want the boil volume to be automatically calculated.
-   Q_PROPERTY( bool calcBoilVolume          READ calcBoilVolume        WRITE setCalcBoilVolume        NOTIFY changedCalcBoilVolume )
+   Q_PROPERTY( bool   calcBoilVolume        READ calcBoilVolume        WRITE setCalcBoilVolume        NOTIFY changedCalcBoilVolume )
    //! \brief Set the lauter tun's deadspace in liters.
    Q_PROPERTY( double lauterDeadspace_l     READ lauterDeadspace_l     WRITE setLauterDeadspace_l     NOTIFY changedLauterDeadspace_l )
    //! \brief Set the kettle top up in liters.
@@ -128,23 +126,23 @@ public:
    void setBoilingPoint_c(double var);
 
    // Get
-   double boilSize_l() const;
-   double batchSize_l() const;
-   double tunVolume_l() const;
-   double tunWeight_kg() const;
-   double tunSpecificHeat_calGC() const;
-   double topUpWater_l() const;
-   double trubChillerLoss_l() const;
-   double evapRate_pctHr() const;
-   double evapRate_lHr() const;
-   double boilTime_min() const;
-   bool calcBoilVolume() const;
-   double lauterDeadspace_l() const;
-   double topUpKettle_l() const;
-   double hopUtilization_pct() const;
-   QString notes() const;
-   double grainAbsorption_LKg();
-   double boilingPoint_c() const;
+   double  boilSize_l           () const;
+   double  batchSize_l          () const;
+   double  tunVolume_l          () const;
+   double  tunWeight_kg         () const;
+   double  tunSpecificHeat_calGC() const;
+   double  topUpWater_l         () const;
+   double  trubChillerLoss_l    () const;
+   double  evapRate_pctHr       () const;
+   double  evapRate_lHr         () const;
+   double  boilTime_min         () const;
+   bool    calcBoilVolume       () const;
+   double  lauterDeadspace_l    () const;
+   double  topUpKettle_l        () const;
+   double  hopUtilization_pct   () const;
+   QString notes                () const;
+   double  grainAbsorption_LKg  ();
+   double  boilingPoint_c       () const;
 
    //! \brief Calculate how much wort is left immediately at knockout.
    double wortEndOfBoil_l( double kettleWort_l ) const;

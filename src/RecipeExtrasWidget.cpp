@@ -90,7 +90,7 @@ void RecipeExtrasWidget::updateBrewerAsst()
    return;
 }
 
-void RecipeExtrasWidget::changeRatings(int rating) { ratingChanged = true; }
+void RecipeExtrasWidget::changeRatings([[maybe_unused]] int rating) { ratingChanged = true; }
 
 void RecipeExtrasWidget::updateTasteRating()
 {
@@ -109,7 +109,7 @@ void RecipeExtrasWidget::updatePrimaryAge()
    if( recipe == 0 )
       return;
 
-   MainWindow::instance().doOrRedoUpdate(*recipe, PropertyNames::Recipe::primaryAge_days, lineEdit_primaryAge->toSI().quantity, tr("Change Primary Age"));
+   MainWindow::instance().doOrRedoUpdate(*recipe, PropertyNames::Recipe::primaryAge_days, lineEdit_primaryAge->toCanonical().quantity(), tr("Change Primary Age"));
 }
 
 void RecipeExtrasWidget::updatePrimaryTemp()
@@ -117,7 +117,7 @@ void RecipeExtrasWidget::updatePrimaryTemp()
    if( recipe == 0 )
       return;
 
-   MainWindow::instance().doOrRedoUpdate(*recipe, PropertyNames::Recipe::primaryTemp_c, lineEdit_primaryTemp->toSI().quantity, tr("Change Primary Temp"));
+   MainWindow::instance().doOrRedoUpdate(*recipe, PropertyNames::Recipe::primaryTemp_c, lineEdit_primaryTemp->toCanonical().quantity(), tr("Change Primary Temp"));
 }
 
 void RecipeExtrasWidget::updateSecondaryAge()
@@ -125,7 +125,7 @@ void RecipeExtrasWidget::updateSecondaryAge()
    if( recipe == 0 )
       return;
 
-   MainWindow::instance().doOrRedoUpdate(*recipe, PropertyNames::Recipe::secondaryAge_days, lineEdit_secAge->toSI().quantity, tr("Change Secondary Age"));
+   MainWindow::instance().doOrRedoUpdate(*recipe, PropertyNames::Recipe::secondaryAge_days, lineEdit_secAge->toCanonical().quantity(), tr("Change Secondary Age"));
 }
 
 void RecipeExtrasWidget::updateSecondaryTemp()
@@ -133,7 +133,7 @@ void RecipeExtrasWidget::updateSecondaryTemp()
    if( recipe == 0 )
       return;
 
-   MainWindow::instance().doOrRedoUpdate(*recipe, PropertyNames::Recipe::secondaryTemp_c, lineEdit_secTemp->toSI().quantity, tr("Change Secondary Temp"));
+   MainWindow::instance().doOrRedoUpdate(*recipe, PropertyNames::Recipe::secondaryTemp_c, lineEdit_secTemp->toCanonical().quantity(), tr("Change Secondary Temp"));
 }
 
 void RecipeExtrasWidget::updateTertiaryAge()
@@ -141,7 +141,7 @@ void RecipeExtrasWidget::updateTertiaryAge()
    if( recipe == 0 )
       return;
 
-   MainWindow::instance().doOrRedoUpdate(*recipe, PropertyNames::Recipe::tertiaryAge_days, lineEdit_tertAge->toSI().quantity, tr("Change Tertiary Age"));
+   MainWindow::instance().doOrRedoUpdate(*recipe, PropertyNames::Recipe::tertiaryAge_days, lineEdit_tertAge->toCanonical().quantity(), tr("Change Tertiary Age"));
 }
 
 void RecipeExtrasWidget::updateTertiaryTemp()
@@ -149,7 +149,7 @@ void RecipeExtrasWidget::updateTertiaryTemp()
    if( recipe == 0 )
       return;
 
-   MainWindow::instance().doOrRedoUpdate(*recipe, PropertyNames::Recipe::tertiaryTemp_c, lineEdit_tertTemp->toSI().quantity, tr("Change Tertiary Temp"));
+   MainWindow::instance().doOrRedoUpdate(*recipe, PropertyNames::Recipe::tertiaryTemp_c, lineEdit_tertTemp->toCanonical().quantity(), tr("Change Tertiary Temp"));
 }
 
 void RecipeExtrasWidget::updateAge()
@@ -157,7 +157,7 @@ void RecipeExtrasWidget::updateAge()
    if( recipe == 0 )
       return;
 
-   MainWindow::instance().doOrRedoUpdate(*recipe, PropertyNames::Recipe::age, lineEdit_age->toSI().quantity, tr("Change Age"));
+   MainWindow::instance().doOrRedoUpdate(*recipe, PropertyNames::Recipe::age, lineEdit_age->toCanonical().quantity(), tr("Change Age"));
 }
 
 void RecipeExtrasWidget::updateAgeTemp()
@@ -165,7 +165,7 @@ void RecipeExtrasWidget::updateAgeTemp()
    if( recipe == 0 )
       return;
 
-   MainWindow::instance().doOrRedoUpdate(*recipe, PropertyNames::Recipe::ageTemp_c, lineEdit_ageTemp->toSI().quantity, tr("Change Age Temp"));
+   MainWindow::instance().doOrRedoUpdate(*recipe, PropertyNames::Recipe::ageTemp_c, lineEdit_ageTemp->toCanonical().quantity(), tr("Change Age Temp"));
 }
 
 void RecipeExtrasWidget::updateDate(QDate const & date) {
@@ -193,7 +193,7 @@ void RecipeExtrasWidget::updateCarbonation()
 
    MainWindow::instance().doOrRedoUpdate(*recipe,
                                          PropertyNames::Recipe::carbonation_vols,
-                                         lineEdit_carbVols->toSI().quantity,
+                                         lineEdit_carbVols->toCanonical().quantity(),
                                          tr("Change Carbonation"));
 }
 

@@ -44,7 +44,7 @@ bool MiscSortFilterProxyModel::lessThan(const QModelIndex &left,
 
    switch (left.column()) {
        case MISCINVENTORYCOL:
-         if (Measurement::qStringToSI(leftMisc.toString(), Measurement::PhysicalQuantity::Mass).quantity == 0.0 &&
+         if (Measurement::qStringToSI(leftMisc.toString(), Measurement::PhysicalQuantity::Mass).quantity() == 0.0 &&
              this->sortOrder() == Qt::AscendingOrder) {
             return false;
          }

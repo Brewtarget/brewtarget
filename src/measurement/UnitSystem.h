@@ -1,6 +1,6 @@
 /*
  * measurement/UnitSystem.h is part of Brewtarget, and is copyright the following
- * authors 2009-2022:
+ * authors 2009-2023:
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
@@ -286,6 +286,11 @@ namespace Measurement {
       // comments in measurement/SystemOfMeasurement.h
       extern UnitSystem const viscosity_Metric;
       extern UnitSystem const viscosity_MetricAlternate;
+
+      // As explained in measurement/Unit.h, our canonical unit system for specific heat capacity is calories per ...
+      // rather than joules per ...
+      extern UnitSystem const specificHeatCapacity_Calories;
+      extern UnitSystem const specificHeatCapacity_Joules;
 
    }
 }

@@ -1,6 +1,6 @@
 /*
  * measurement/Measurement.h is part of Brewtarget, and is copyright the following
- * authors 2010-2022:
+ * authors 2010-2023:
  * - Mark de Wever <koraq@xs4all.nl>
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
@@ -104,7 +104,7 @@ namespace Measurement {
     *
     * \param amount the amount to display
     * \param section the name of the object to reference to get unit system & scales from the config file
-    * \param propertyName the property name to complete the lookup for units&scales
+    * \param propertyName the property name to complete the lookup for units & scales
     * \param precision how many decimal places to use, defaulting to 3
     */
    QString displayAmount(Measurement::Amount const & amount,
@@ -191,6 +191,11 @@ namespace Measurement {
                                    std::optional<Measurement::SystemOfMeasurement> forcedSystemOfMeasurement = std::nullopt,
                                    std::optional<Measurement::UnitSystem::RelativeScale> forcedScale = std::nullopt);
 
+
+   /**
+    * \brief .:TODO:. Need some additional thought on how \c getForcedSystemOfMeasurementForField and
+    *        \c getForcedRelativeScaleForField should work for fields that can be either mass or volume.
+    */
    std::optional<Measurement::SystemOfMeasurement> getForcedSystemOfMeasurementForField(QString const & field,
                                                                                         QString const & section);
    std::optional<Measurement::UnitSystem::RelativeScale> getForcedRelativeScaleForField(QString const & field,

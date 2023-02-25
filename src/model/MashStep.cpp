@@ -57,31 +57,31 @@ ObjectStore & MashStep::getObjectStoreTypedInstance() const {
 
 MashStep::MashStep(QString name) :
    NamedEntity        {name, true},
-   m_type             {MashStep::Infusion},
-   m_infuseAmount_l   {0.0},
-   m_stepTemp_c       {0.0},
-   m_stepTime_min     {0.0},
-   m_rampTime_min     {0.0},
-   m_endTemp_c        {0.0},
-   m_infuseTemp_c     {0.0},
-   m_decoctionAmount_l{0.0},
-   m_stepNumber       {0},
-   mashId             {-1} {
+   m_type             {MashStep::Type::Infusion},
+   m_infuseAmount_l   {0.0                     },
+   m_stepTemp_c       {0.0                     },
+   m_stepTime_min     {0.0                     },
+   m_rampTime_min     {0.0                     },
+   m_endTemp_c        {0.0                     },
+   m_infuseTemp_c     {0.0                     },
+   m_decoctionAmount_l{0.0                     },
+   m_stepNumber       {0                       },
+   m_mashId           {-1                      } {
    return;
 }
 
 MashStep::MashStep(NamedParameterBundle const & namedParameterBundle) :
-   NamedEntity        {namedParameterBundle},
-   m_type             {static_cast<MashStep::Type>(namedParameterBundle(PropertyNames::MashStep::type).toInt())},
-   m_infuseAmount_l   {namedParameterBundle(PropertyNames::MashStep::infuseAmount_l   ).toDouble()},
-   m_stepTemp_c       {namedParameterBundle(PropertyNames::MashStep::stepTemp_c       ).toDouble()},
-   m_stepTime_min     {namedParameterBundle(PropertyNames::MashStep::stepTime_min     ).toDouble()},
-   m_rampTime_min     {namedParameterBundle(PropertyNames::MashStep::rampTime_min     ).toDouble()},
-   m_endTemp_c        {namedParameterBundle(PropertyNames::MashStep::endTemp_c        ).toDouble()},
-   m_infuseTemp_c     {namedParameterBundle(PropertyNames::MashStep::infuseTemp_c     ).toDouble()},
-   m_decoctionAmount_l{namedParameterBundle(PropertyNames::MashStep::decoctionAmount_l).toDouble()},
-   m_stepNumber       {namedParameterBundle(PropertyNames::MashStep::stepNumber       ).toInt()},
-   mashId             {namedParameterBundle(PropertyNames::MashStep::mashId           ).toInt()} {
+   NamedEntity        (namedParameterBundle                                                                ),
+   m_type             (namedParameterBundle.val<MashStep::Type>(PropertyNames::MashStep::type             )),
+   m_infuseAmount_l   (namedParameterBundle.val<double        >(PropertyNames::MashStep::infuseAmount_l   )),
+   m_stepTemp_c       (namedParameterBundle.val<double        >(PropertyNames::MashStep::stepTemp_c       )),
+   m_stepTime_min     (namedParameterBundle.val<double        >(PropertyNames::MashStep::stepTime_min     )),
+   m_rampTime_min     (namedParameterBundle.val<double        >(PropertyNames::MashStep::rampTime_min     )),
+   m_endTemp_c        (namedParameterBundle.val<double        >(PropertyNames::MashStep::endTemp_c        )),
+   m_infuseTemp_c     (namedParameterBundle.val<double        >(PropertyNames::MashStep::infuseTemp_c     )),
+   m_decoctionAmount_l(namedParameterBundle.val<double        >(PropertyNames::MashStep::decoctionAmount_l)),
+   m_stepNumber       (namedParameterBundle.val<int           >(PropertyNames::MashStep::stepNumber       )),
+   m_mashId           (namedParameterBundle.val<int           >(PropertyNames::MashStep::mashId           )) {
    return;
 }
 
@@ -96,104 +96,67 @@ MashStep::MashStep(MashStep const & other) :
    m_infuseTemp_c     {other.m_infuseTemp_c     },
    m_decoctionAmount_l{other.m_decoctionAmount_l},
    m_stepNumber       {other.m_stepNumber       },
-   mashId             {other.mashId             } {
+   m_mashId           {other.m_mashId           } {
    return;
 }
-
 
 MashStep::~MashStep() = default;
 
 
 //================================"SET" METHODS=================================
-void MashStep::setInfuseTemp_c(double var) {
-   this->setAndNotify(PropertyNames::MashStep::infuseTemp_c, this->m_infuseTemp_c, var);
-}
+void MashStep::setInfuseTemp_c     (double val) { this->setAndNotify(PropertyNames::MashStep::infuseTemp_c     , this->m_infuseTemp_c     , val                                                                ); }
+void MashStep::setType             (Type   val) { this->setAndNotify(PropertyNames::MashStep::type             , this->m_type             , val                                                                ); }
+void MashStep::setInfuseAmount_l   (double val) { this->setAndNotify(PropertyNames::MashStep::infuseAmount_l   , this->m_infuseAmount_l   , this->enforceMin(val, "infuse amount"                             )); }
+void MashStep::setStepTemp_c       (double val) { this->setAndNotify(PropertyNames::MashStep::stepTemp_c       , this->m_stepTemp_c       , this->enforceMin(val, "step temp", PhysicalConstants::absoluteZero)); }
+void MashStep::setStepTime_min     (double val) { this->setAndNotify(PropertyNames::MashStep::stepTime_min     , this->m_stepTime_min     , this->enforceMin(val, "step time"                                 )); }
+void MashStep::setRampTime_min     (double val) { this->setAndNotify(PropertyNames::MashStep::rampTime_min     , this->m_rampTime_min     , this->enforceMin(val, "ramp time"                                 )); }
+void MashStep::setEndTemp_c        (double val) { this->setAndNotify(PropertyNames::MashStep::endTemp_c        , this->m_endTemp_c        , this->enforceMin(val, "end temp" , PhysicalConstants::absoluteZero)); }
+void MashStep::setDecoctionAmount_l(double val) { this->setAndNotify(PropertyNames::MashStep::decoctionAmount_l, this->m_decoctionAmount_l, val                                                                ); }
+void MashStep::setStepNumber       (int    val) { this->setAndNotify(PropertyNames::MashStep::stepNumber       , this->m_stepNumber       , val                                                                ); }
 
-void MashStep::setType(Type t) {
-   this->setAndNotify(PropertyNames::MashStep::type, this->m_type, t);
-}
-
-void MashStep::setInfuseAmount_l(double var) {
-   this->setAndNotify(PropertyNames::MashStep::infuseAmount_l, this->m_infuseAmount_l, this->enforceMin(var, "infuse amount"));
-}
-
-void MashStep::setStepTemp_c(double var) {
-   this->setAndNotify(PropertyNames::MashStep::stepTemp_c, this->m_stepTemp_c, this->enforceMin(var, "step temp", PhysicalConstants::absoluteZero));
-}
-
-void MashStep::setStepTime_min(double var) {
-   this->setAndNotify(PropertyNames::MashStep::stepTime_min, this->m_stepTime_min, this->enforceMin(var, "step time"));
-}
-
-void MashStep::setRampTime_min(double var) {
-   this->setAndNotify(PropertyNames::MashStep::rampTime_min, this->m_rampTime_min, this->enforceMin(var, "ramp time"));
-}
-
-void MashStep::setEndTemp_c(double var) {
-   this->setAndNotify(PropertyNames::MashStep::endTemp_c, this->m_endTemp_c, this->enforceMin(var, "end temp", PhysicalConstants::absoluteZero));
-}
-
-void MashStep::setDecoctionAmount_l(double var) {
-   this->setAndNotify(PropertyNames::MashStep::decoctionAmount_l, this->m_decoctionAmount_l, var);
-}
-
-
-void MashStep::setStepNumber(int stepNumber) {
-   this->setAndNotify(PropertyNames::MashStep::stepNumber, this->m_stepNumber, stepNumber);
-}
-
-void MashStep::setMashId(int mashId) {
-   this->mashId = mashId;
-   this->propagatePropertyChange(PropertyNames::MashStep::mashId, false);
-   return;
-}
+void MashStep::setMashId           (int    val) { this->m_mashId = val;    this->propagatePropertyChange(PropertyNames::MashStep::mashId, false);    return; }
 
 //============================="GET" METHODS====================================
 MashStep::Type MashStep::type() const { return m_type; }
-const QString MashStep::typeString() const { return types.at(m_type); }
+const QString MashStep::typeString() const { return types.at(static_cast<int>(this->m_type)); }
 const QString MashStep::typeStringTr() const {
-   if ( m_type < 0 || m_type > typesTr.length() ) {
-      return "";
-   }
-   return typesTr.at(m_type);
+   int myType = static_cast<int>(this->m_type);
+   Q_ASSERT(myType >= 0);
+   Q_ASSERT(myType < typesTr.length());
+   return typesTr.at(myType);
 }
-double MashStep::infuseTemp_c() const { return m_infuseTemp_c; }
-double MashStep::infuseAmount_l() const { return m_infuseAmount_l; }
-double MashStep::stepTemp_c() const { return m_stepTemp_c; }
-double MashStep::stepTime_min() const { return m_stepTime_min; }
-double MashStep::rampTime_min() const { return m_rampTime_min; }
-double MashStep::endTemp_c() const { return m_endTemp_c; }
-double MashStep::decoctionAmount_l() const { return m_decoctionAmount_l; }
-int MashStep::stepNumber() const { return m_stepNumber; }
-//Mash * MashStep::mash( ) const { return m_mash; }
-int MashStep::getMashId() const { return this->mashId; }
+double MashStep::infuseTemp_c     () const { return this->m_infuseTemp_c     ; }
+double MashStep::infuseAmount_l   () const { return this->m_infuseAmount_l   ; }
+double MashStep::stepTemp_c       () const { return this->m_stepTemp_c       ; }
+double MashStep::stepTime_min     () const { return this->m_stepTime_min     ; }
+double MashStep::rampTime_min     () const { return this->m_rampTime_min     ; }
+double MashStep::endTemp_c        () const { return this->m_endTemp_c        ; }
+double MashStep::decoctionAmount_l() const { return this->m_decoctionAmount_l; }
+int    MashStep::stepNumber       () const { return this->m_stepNumber       ; }
+int    MashStep::getMashId        () const { return this->m_mashId           ; }
 
-bool MashStep::isInfusion() const
-{
-   return ( m_type == MashStep::Infusion    ||
-            m_type == MashStep::batchSparge ||
-            m_type == MashStep::flySparge );
+bool MashStep::isInfusion() const {
+   return ( m_type == MashStep::Type::Infusion    ||
+            m_type == MashStep::Type::batchSparge ||
+            m_type == MashStep::Type::flySparge );
 }
 
-bool MashStep::isSparge() const
-{
-   return ( m_type == MashStep::batchSparge ||
-            m_type == MashStep::flySparge   ||
+bool MashStep::isSparge() const {
+   return ( m_type == MashStep::Type::batchSparge ||
+            m_type == MashStep::Type::flySparge   ||
             name() == "Final Batch Sparge" );
 }
 
-bool MashStep::isTemperature() const
-{
-   return ( m_type == MashStep::Temperature );
+bool MashStep::isTemperature() const {
+   return ( m_type == MashStep::Type::Temperature );
 }
 
-bool MashStep::isDecoction() const
-{
-   return ( m_type == MashStep::Decoction );
+bool MashStep::isDecoction() const {
+   return ( m_type == MashStep::Type::Decoction );
 }
 
 Recipe * MashStep::getOwningRecipe() {
-   Mash * mash = ObjectStoreWrapper::getByIdRaw<Mash>(this->mashId);
+   Mash * mash = ObjectStoreWrapper::getByIdRaw<Mash>(this->m_mashId);
    if (!mash) {
       return nullptr;
    }

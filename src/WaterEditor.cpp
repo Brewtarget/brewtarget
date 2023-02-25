@@ -242,15 +242,15 @@ void WaterEditor::inputFieldModified() {
       //         feels wrong that we just set both from the same input, but probably needs some more profound thought
       //         about what exactly correct behaviour should be.
       if      (signalSender == this->comboBox_alk)         {this->pimpl->editedWater->setAlkalinityAsHCO3(this->comboBox_alk->currentText() == QString("HCO3"));}
-      else if (signalSender == this->lineEdit_alk)         {this->pimpl->editedWater->setBicarbonate_ppm (this->lineEdit_alk->toSI().quantity);  // NB continues on next line!
-                                                            this->pimpl->editedWater->setAlkalinity      (this->lineEdit_alk->toSI().quantity);                 }
-      else if (signalSender == this->lineEdit_ca)          {this->pimpl->editedWater->setCalcium_ppm     (this->lineEdit_ca->toSI().quantity);                  }
-      else if (signalSender == this->lineEdit_cl)          {this->pimpl->editedWater->setChloride_ppm    (this->lineEdit_cl->toSI().quantity);                  }
-      else if (signalSender == this->lineEdit_mg)          {this->pimpl->editedWater->setMagnesium_ppm   (this->lineEdit_mg->toSI().quantity);                  }
-      else if (signalSender == this->lineEdit_na)          {this->pimpl->editedWater->setSodium_ppm      (this->lineEdit_na->toSI().quantity);                  }
+      else if (signalSender == this->lineEdit_alk)         {this->pimpl->editedWater->setBicarbonate_ppm (this->lineEdit_alk->toCanonical().quantity());  // NB continues on next line!
+                                                            this->pimpl->editedWater->setAlkalinity      (this->lineEdit_alk->toCanonical().quantity());                 }
+      else if (signalSender == this->lineEdit_ca)          {this->pimpl->editedWater->setCalcium_ppm     (this->lineEdit_ca->toCanonical().quantity());                  }
+      else if (signalSender == this->lineEdit_cl)          {this->pimpl->editedWater->setChloride_ppm    (this->lineEdit_cl->toCanonical().quantity());                  }
+      else if (signalSender == this->lineEdit_mg)          {this->pimpl->editedWater->setMagnesium_ppm   (this->lineEdit_mg->toCanonical().quantity());                  }
+      else if (signalSender == this->lineEdit_na)          {this->pimpl->editedWater->setSodium_ppm      (this->lineEdit_na->toCanonical().quantity());                  }
       else if (signalSender == this->lineEdit_name)        {this->pimpl->editedWater->setName            (this->lineEdit_name->text());                         }
-      else if (signalSender == this->lineEdit_ph)          {this->pimpl->editedWater->setPh              (this->lineEdit_ph->toSI().quantity);                  }
-      else if (signalSender == this->lineEdit_so4)         {this->pimpl->editedWater->setSulfate_ppm     (this->lineEdit_so4->toSI().quantity);                 }
+      else if (signalSender == this->lineEdit_ph)          {this->pimpl->editedWater->setPh              (this->lineEdit_ph->toCanonical().quantity());                  }
+      else if (signalSender == this->lineEdit_so4)         {this->pimpl->editedWater->setSulfate_ppm     (this->lineEdit_so4->toCanonical().quantity());                 }
       else if (signalSender == this->plainTextEdit_notes)  {this->pimpl->editedWater->setNotes           (this->plainTextEdit_notes->toPlainText());            }
       else {
          // If we get here, it's probably a coding error

@@ -114,7 +114,9 @@ public:
     */
    static QMap<Hop::Use, QString> const useDisplayNames;
 
-   Q_ENUMS(Type Form Use)
+   Q_ENUM(Type)
+   Q_ENUM(Form)
+   Q_ENUM(Use)
 
    Hop(QString name = "");
    Hop(NamedParameterBundle const & namedParameterBundle);

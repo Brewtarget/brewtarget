@@ -1,6 +1,6 @@
 /*
  * model/Hop.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2023
  * - Kregg K <gigatropolis@yahoo.com>
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
@@ -115,21 +115,21 @@ Hop::Hop(QString name) :
 
 Hop::Hop(NamedParameterBundle const & namedParameterBundle) :
    NamedEntityWithInventory{namedParameterBundle},
-   m_use                  {static_cast<Hop::Use> (namedParameterBundle(PropertyNames::Hop::use ).toInt())},
-   m_type                 {static_cast<Hop::Type>(namedParameterBundle(PropertyNames::Hop::type).toInt())},
-   m_form                 {static_cast<Hop::Form>(namedParameterBundle(PropertyNames::Hop::form).toInt())},
-   m_alpha_pct            {namedParameterBundle(PropertyNames::Hop::alpha_pct            ).toDouble()},
-   m_amount_kg            {namedParameterBundle(PropertyNames::Hop::amount_kg            ).toDouble()},
-   m_time_min             {namedParameterBundle(PropertyNames::Hop::time_min             ).toDouble()},
-   m_notes                {namedParameterBundle(PropertyNames::Hop::notes                ).toString()},
-   m_beta_pct             {namedParameterBundle(PropertyNames::Hop::beta_pct             ).toDouble()},
-   m_hsi_pct              {namedParameterBundle(PropertyNames::Hop::hsi_pct              ).toDouble()},
-   m_origin               {namedParameterBundle(PropertyNames::Hop::origin               ).toString()},
-   m_substitutes          {namedParameterBundle(PropertyNames::Hop::substitutes          ).toString()},
-   m_humulene_pct         {namedParameterBundle(PropertyNames::Hop::humulene_pct         ).toDouble()},
-   m_caryophyllene_pct    {namedParameterBundle(PropertyNames::Hop::caryophyllene_pct    ).toDouble()},
-   m_cohumulone_pct       {namedParameterBundle(PropertyNames::Hop::cohumulone_pct       ).toDouble()},
-   m_myrcene_pct           {namedParameterBundle(PropertyNames::Hop::myrcene_pct      ).toDouble()} {
+   m_use                  {namedParameterBundle.val<Hop::Use >(PropertyNames::Hop::use                  )},
+   m_type                 {namedParameterBundle.val<Hop::Type>(PropertyNames::Hop::type                 )},
+   m_form                 {namedParameterBundle.val<Hop::Form>(PropertyNames::Hop::form                 )},
+   m_alpha_pct            {namedParameterBundle.val<double   >(PropertyNames::Hop::alpha_pct            )},
+   m_amount_kg            {namedParameterBundle.val<double   >(PropertyNames::Hop::amount_kg            )},
+   m_time_min             {namedParameterBundle.val<double   >(PropertyNames::Hop::time_min             )},
+   m_notes                {namedParameterBundle.val<QString  >(PropertyNames::Hop::notes                )},
+   m_beta_pct             {namedParameterBundle.val<double   >(PropertyNames::Hop::beta_pct             )},
+   m_hsi_pct              {namedParameterBundle.val<double   >(PropertyNames::Hop::hsi_pct              )},
+   m_origin               {namedParameterBundle.val<QString  >(PropertyNames::Hop::origin               )},
+   m_substitutes          {namedParameterBundle.val<QString  >(PropertyNames::Hop::substitutes          )},
+   m_humulene_pct         {namedParameterBundle.val<double   >(PropertyNames::Hop::humulene_pct         )},
+   m_caryophyllene_pct    {namedParameterBundle.val<double   >(PropertyNames::Hop::caryophyllene_pct    )},
+   m_cohumulone_pct       {namedParameterBundle.val<double   >(PropertyNames::Hop::cohumulone_pct       )},
+   m_myrcene_pct          {namedParameterBundle.val<double   >(PropertyNames::Hop::myrcene_pct          )} {
    return;
 }
 

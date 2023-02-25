@@ -68,25 +68,22 @@ void PitchDialog::updateProductionDate() {
    this->dateEdit_ProductionDate->setDisplayFormat(format);
 }
 
-void PitchDialog::setWortVolume_l(double volume)
-{
+void PitchDialog::setWortVolume_l(double volume) {
    lineEdit_vol->setText(volume);
 }
 
-void PitchDialog::setWortDensity(double sg)
-{
+void PitchDialog::setWortDensity(double sg) {
    lineEdit_OG->setText(sg);
 }
 
-void PitchDialog::calculate()
-{
+void PitchDialog::calculate() {
 
    // Allow selection of 0.75 to 2 million cells per mL per degree P.
    double rate_MpermLP = (2-0.75) * ((double)slider_pitchRate->value()) / 100.0 + 0.75;
 
    // This isn't right.
-   double og = lineEdit_OG->toSI().quantity;
-   double vol_l = lineEdit_vol->toSI().quantity;
+   double og = lineEdit_OG->toCanonical().quantity();
+   double vol_l = lineEdit_vol->toCanonical().quantity();
 
    // I somewhat aribtrarily defined "SI" for density to be specific gravity.
    // Since these calcs need plato, convert
@@ -101,8 +98,7 @@ void PitchDialog::calculate()
 
    // Set the aeration factor for the starter size
    double aerationFactor;
-   switch (comboBox_AerationMethod->currentIndex())
-   {
+   switch (comboBox_AerationMethod->currentIndex()) {
       case 1:   // O2 at the start
          aerationFactor = 1.33;
          break;
@@ -125,47 +121,45 @@ void PitchDialog::calculate()
    lineEdit_starterVol->setText(starterVol_l);
    lineEdit_yeast->setText(dry_g/1000); //Needs to be converted into default unit (kg)
    lineEdit_vials->setText(vials,0);
+   return;
 }
 
-void PitchDialog::updateShownPitchRate(int percent)
-{
+void PitchDialog::updateShownPitchRate(int percent) {
    // Allow selection of 0.75 to 2 million cells per mL per degree P.
    double rate_MpermLP = (2-0.75) * ((double)percent) / 100.0 + 0.75;
 
    // NOTE: We are changing the LABEL here, not the LineEdit. Leave it be
    label_pitchRate->setText( QString("%L1").arg(rate_MpermLP, 1, 'f', 2, QChar('0')) );
+   return;
 }
 
 /*
  * Toggles whether or not the viability box and date edit
  * is enabled or disabled.
  */
-void PitchDialog::toggleViabilityFromDate(int state)
-{
-   if (state == Qt::Unchecked)
-   {
+void PitchDialog::toggleViabilityFromDate(int state) {
+   if (state == Qt::Unchecked) {
       // If the box is not checked, disable the date and allow
       // the user to manually set the viability.
       spinBox_Viability->setEnabled(true);
       dateEdit_ProductionDate->setEnabled(false);
-   }
-   else if (state == Qt::Checked)
-   {
+   } else if (state == Qt::Checked) {
       // If the box is checked, prevent the user from manually setting
       // the viability.  Use the date editor instead.
       spinBox_Viability->setEnabled(false);
       dateEdit_ProductionDate->setEnabled(true);
       updateViabilityFromDate(dateEdit_ProductionDate->date());
    }
+   return;
 }
 
 /*
  * Updates the current viability based on the date.
  */
-void PitchDialog::updateViabilityFromDate(QDate date)
-{
+void PitchDialog::updateViabilityFromDate(QDate date) {
    // Set the viability based on the number of days since the yeast
    // production date.
    int daysDifference = date.daysTo(QDate::currentDate());
    spinBox_Viability->setValue(97 - 0.7 * daysDifference);
+   return;
 }

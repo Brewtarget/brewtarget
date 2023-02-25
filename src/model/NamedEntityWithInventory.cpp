@@ -34,7 +34,7 @@ NamedEntityWithInventory::NamedEntityWithInventory(QString t_name,
 NamedEntityWithInventory::NamedEntityWithInventory(NamedParameterBundle const & namedParameterBundle) :
    NamedEntity   {namedParameterBundle},
    // If we're reading in from a BeerXML file, there won't be an inventory ID
-   m_inventory_id{namedParameterBundle(PropertyNames::NamedEntityWithInventory::inventoryId, -1)} {
+   m_inventory_id{namedParameterBundle.val(PropertyNames::NamedEntityWithInventory::inventoryId, -1)} {
    return;
 }
 
@@ -45,6 +45,8 @@ NamedEntityWithInventory::NamedEntityWithInventory(NamedEntityWithInventory cons
    m_inventory_id {-1} {
    return;
 }
+
+NamedEntityWithInventory::~NamedEntityWithInventory() = default;
 
 void NamedEntityWithInventory::makeChild(NamedEntity const & copiedFrom) {
    // First do the base class work
