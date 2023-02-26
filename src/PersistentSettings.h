@@ -1,6 +1,6 @@
 /**
  * PersistentSettings.h is part of Brewtarget, and is copyright the following
- * authors 2009-2021:
+ * authors 2009-2023
  *   • Dan Cavanagh <dan@dancavanagh.com>
  *   • Daniel Pettersson <pettson81@gmail.com>
  *   • Greg Meess <Daedalus12@gmail.com>

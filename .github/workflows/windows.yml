@@ -1,3 +1,21 @@
+#
+# .github/workflows/windows.yml is part of Brewtarget, and is copyright the following authors 2021-2023:
+#   • Artem Martynov <martynov-a@polyplastic.by>
+#   • Chris Speck <cgspeck@gmail.com>
+#   • Mattias Måhl <mattias@kejsarsten.com>
+#   • Matt Young <mfsy@yahoo.com>
+#
+# Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+# version.
+#
+# Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+# warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+# details.
+#
+# You should have received a copy of the GNU General Public License along with this program.  If not, see
+# <http://www.gnu.org/licenses/>.
+#
 name: Windows
 
 on:
@@ -35,63 +53,169 @@ jobs:
           fetch-depth: 0
           submodules: recursive
 
+      #
+      # Install MSYS2, then Python, then Pip
+      #
+      # We need Python 3.10 or later to run the bt script
+      #
+      # I tried using the separate actions/setup-python@v4 action, but it doesn't seem to result in the Python
+      # executable being visible in the MSYS2 environment.  So, instead, we install from inside MSYS2.  (According to
+      # https://packages.msys2.org/package/mingw-w64-x86_64-python, this is Python 3.10.9 as of 2022-12-10.)
+      #
+      # (In theory, an alternative approach would be to install Python, then run 'python -m ensurepip --upgrade' which,
+      # per https://docs.python.org/3/library/ensurepip.html, is the official Python way to bootstrap Pip.  However,
+      # this did not seem to work properly in MSYS2 when I tried it.)
+      #
+      # Note that you _don't_ want to install the 'python' package here as it has some subtle differences from
+      # installing 'mingw-w64-i686-python'.  (Same applies for 'python-pip' vs 'mingw-w64-i686-python-pip'.)  Some of
+      # these differences are about where things are installed, but some are about how Python behaves, eg what
+      # platform.system() returns.  See comments at https://github.com/conan-io/conan/issues/2638 for more.)
+      #
+      # We install the tree command here as, although it's not needed to do the build itself, it's useful for diagnosing
+      # certain build problems (eg to see what changes certain parts of the build have made to the build directory
+      # tree) when the build is running as a GitHub action.  (If need be, you can also download the entire build
+      # directory within a day of a failed build running, but you need a decent internet connection for this as it's
+      # quite large.)
+      #
       - uses: msys2/setup-msys2@v2
         with:
           msystem: ${{ matrix.msystem }}
           install: >-
-            mingw-w64-${{ matrix.arch }}-boost
-            mingw-w64-${{ matrix.arch }}-cmake
-            mingw-w64-${{ matrix.arch }}-doxygen
-            mingw-w64-${{ matrix.arch }}-gcc
-            mingw-w64-${{ matrix.arch }}-libbacktrace
-            mingw-w64-${{ matrix.arch }}-make
-            mingw-w64-${{ matrix.arch }}-nsis
-            mingw-w64-${{ matrix.arch }}-qt5
-            mingw-w64-${{ matrix.arch }}-xalan-c
-            mingw-w64-${{ matrix.arch }}-xerces-c
+            mingw-w64-${{ matrix.arch }}-python
+            mingw-w64-${{ matrix.arch }}-python-pip
+            tree
           update: true
           release: true
           path-type: strict
-
-      - name: Download nsis plugins
-        run: |
-          New-Item -ItemType Directory -Force -Path .\temp\build
-          Invoke-WebRequest -Uri https://nsis.sourceforge.io/mediawiki/images/a/af/Locate.zip -OutFile .\temp\build\Locate.zip
-          Expand-Archive -Path .\temp\build\Locate.zip -DestinationPath .\temp\build\Locate
-          Invoke-WebRequest -Uri https://nsis.sourceforge.io/mediawiki/images/7/76/Nsislog.zip -OutFile .\temp\build\Nsislog.zip
-          Expand-Archive -Path .\temp\build\Nsislog.zip -DestinationPath .\temp\build\Nsislog
 
       - name: Move Checkout
         run: |
           Copy-Item -Path ".\temp" -Destination "C:\_" -Recurse
 
-      - name: CMake config
+      #
+      # On Windows, there are a couple of extra things we need to do before running the bt script:
+      #
+      #  - For historical reasons, Linux and other platforms need to run both Python v2 (still used by some bits of
+      #    system) and Python v3 (eg that you installed yourself) so there are usually two corresponding Python
+      #    executables, python2 and python3.  On Windows there is only whatever Python you installed and it's called
+      #    python.exe.  To keep the shebang in the bt script working, we just make a softlink to python called python3.
+      #
+      #  - Getting Unicode input/output to work is fun.  We should already have a Unicode locale, but it seems we also
+      #    need to set PYTHONIOENCODING (see https://docs.python.org/3/using/cmdline.html#envvar-PYTHONIOENCODING, even
+      #    though it seems to imply you don't need to set it on recent versions of Python).
+      #
+      #  - The version of Pip we install above does not put it in the "right" place.  Specifically it will not be in the
+      #    PATH when we run bt.  The following seems to be the least hacky way around this:
+      #       curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+      #       python get-pip.py
+      #       python -m pip install -U --force-reinstall pip
+      #    See https://stackoverflow.com/questions/48087004/installing-pip-on-msys for more discussion on this.
+      #
+      - name: Install Frameworks and Libraries, and set up Meson build environment
         shell: msys2 {0}
         run: |
-          cd /C/_/build
-          cp ./Locate/Include/Locate.nsh /mingw32/share/nsis/Include/
-          cp ./Locate/Plugin/locate.dll /mingw32/share/nsis/Plugins/ansi/
-          cp ./Nsislog/plugin/nsislog.dll /mingw32/share/nsis/Plugins/ansi
+          cd /C/_/
+          echo "Working directory is:"
+          pwd
+          echo "Installed Python is:"
+          which python
+          python --version
+          echo "Installed pip is:"
+          which pip
+          pip --version
+          curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+          python get-pip.py
+          python -m pip install -U --force-reinstall pip
+          pip --version
+          echo "Locale:"
+          locale
+          export PYTHONIOENCODING=utf8
+          echo "Ensuring that python3 symlink / executable exists"
+          if [[ ! -f $(dirname $(which python))/python3 ]]; then ln -s $(which python) $(dirname $(which python))/python3; fi
+          echo "Running ./bt -v setup all"
+          ./bt -v setup all
+
+      #- name: Download nsis plugins
+      #  run: |
+      #    New-Item -ItemType Directory -Force -Path /C/_/build/nsis
+      #    Invoke-WebRequest -Uri https://nsis.sourceforge.io/mediawiki/images/a/af/Locate.zip -OutFile /C/_/build/nsis/Locate.zip
+      #    Expand-Archive -Path /C/_/build/nsis/Locate.zip -DestinationPath /C/_/build/nsis/Locate
+      #    Invoke-WebRequest -Uri https://nsis.sourceforge.io/mediawiki/images/7/76/Nsislog.zip -OutFile /C/_/build/nsis/Nsislog.zip
+      #    Expand-Archive -Path /C/_/build/nsis/Nsislog.zip -DestinationPath /C/_/build/nsis/Nsislog
+
+      # Somehow, running the configure script sets up CMake to use Ninja rather than Makefiles, which is then in
+      # conflict with our other assumptions about CMake.  Error message says remove CMakeCache.txt before running CMake,
+      # so we do that as a short-term fix (on the assumption that, longer term, we'll be moving to Meson).
+      - name: CMake Config
+        shell: msys2 {0}
+        run: |
+          cd /C/_
+          ./configure
+          cd build
+          rm CMakeCache.txt
           cmake .. -DCMAKE_RC_COMPILER:FILEPATH=windres.exe -G "MinGW Makefiles"
 
-      - name: Build
+      # The pwd and find ../third-party commands below are just diagnostics, but it's generally useful to have too
+      # much rather than not enough diagnostic info on these GitHub action builds
+      - name: Build (with CMake)
         shell: msys2 {0}
         run: |
           cd /C/_/build
           pwd
           cmake --build .
 
-      - name: Test
+      - name: Build (with Meson)
+        shell: msys2 {0}
+        run: |
+          cd /C/_/mbuild
+          pwd
+          meson compile
+
+      - name: Test (via CMake)
         shell: msys2 {0}
         run: |
           cd /C/_/build
           cmake --build . --target test
 
-      - name: Package
+      # The 'export QT_DEBUG_PLUGINS=1' give us diagnostics in the event that there are problems initialising QT
+      # The 'export QT_QPA_PLATFORM=offscreen' stops Qt's xcb sub-module trying to connect to a non-existent display
+      # (which would cause the test runner to abort before running any tests).
+      - name: Test (via Meson)
+        shell: msys2 {0}
+        run: |
+          cd /C/_/mbuild
+          export QT_DEBUG_PLUGINS=1
+          export QT_QPA_PLATFORM=offscreen
+          meson test
+
+      - name: Package (via CMake/CPack)
         shell: msys2 {0}
         run: |
           cd /C/_/build
           cmake --build . --target package --verbose
+
+      #
+      # See above for explanation of the extra things we need to do on Windows before running the bt script.  Most of
+      # that does not need doing again here, but PYTHONIOENCODING does need setting again.
+      #
+      - name: Package (New)
+        shell: msys2 {0}
+        run: |
+          cd /C/_/
+          echo "Working directory is:"
+          pwd
+          echo "Installed Python is:"
+          which python
+          python --version
+          echo "Installed pip is:"
+          which pip
+          pip --version
+          export PYTHONIOENCODING=utf8
+          echo "Running ./bt -v package"
+          ./bt -v package
+          cd mbuild/packages
+          pwd
+          tree -sh
 
       - name: Upload Windows binaries (installers)
         if: ${{ success()}}
@@ -101,6 +225,8 @@ jobs:
           path: |
             C:/_/build/brewtarget*.exe
             C:/_/build/brewtarget*.exe.sha256
+            C:/_/mbuild/packages/windows/Brewtarget*Installer.exe
+            C:/_/mbuild/packages/windows/Brewtarget*Installer.exe.sha256sum
           retention-days: 7
 
       - name: Upload error info from failed build

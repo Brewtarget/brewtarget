@@ -1,3 +1,22 @@
+#
+# .github/workflows/linux-ubuntu.yml is part of Brewtarget, and is copyright the following authors 2021-2023:
+#   • Artem Martynov <martynov-a@polyplastic.by>
+#   • Chris Speck <cgspeck@gmail.com>
+#   • Mattias Måhl <mattias@kejsarsten.com>
+#   • Matt Young <mfsy@yahoo.com>
+#   • Mik Firestone <mikfire@gmail.com>
+#
+# Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+# version.
+#
+# Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+# warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+# details.
+#
+# You should have received a copy of the GNU General Public License along with this program.  If not, see
+# <http://www.gnu.org/licenses/>.
+#
 name: Linux
 
 on:
@@ -21,45 +40,40 @@ jobs:
         # for info on runner images
         #
         # Usually "ubuntu-latest" is the most recent LTS version of Ubuntu, but there can be a bit of lag between a new
-        # LTS release and the update of ubuntu-latest (eg in October 2022, it was still Ubuntu 20.04 rather than 22.04.
+        # LTS release and the update of ubuntu-latest (eg in October 2022, it was still Ubuntu 20.04 rather than 22.04).
         # So we explicitly specify here which versions we want to build on.
         #
-        # Note that ubuntu-18.04 is deprecated and we need to remove it by April 2023
-        #
-        os: [ubuntu-18.04, ubuntu-20.04, ubuntu-22.04]
+        os: [ubuntu-20.04, ubuntu-22.04]
     steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
-      - name: Dependencies
+      #
+      # See https://github.com/Brewtarget/brewtarget/wiki/Development:-Getting-Started for more on what is needed to build
+      # the software.  Most of this is now automated in 'bt setup all'.
+      #
+      # Some of the things that the bt script installs could be installed via actions (eg jurplel/install-qt-action@v3)
+      # and some are already installed by default for GitHub actions (eg cmake, git, debhelper, rpm) but there's an
+      # advantage, where we can, in doing the exact same steps that give as instructions to developers to set up their
+      # build environment.
+      #
+      # Of course, since 'bt' is a Python script, it can't install Python, so we need to do that first.  We need Python
+      # 3.10 or newer, which means you can't just use `sudo apt install` on older Ubuntus.  (Eg Ubuntu 18.04 packages
+      # have only Python 3.6.7 and Ubuntu 20.04 only have Python 3.8.2.  However Ubuntu 22.04 has Python 3.10.6.)  There
+      # are ways to get around this, but, in this context, it's simplest to use a canned GitHub action.
+      #
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Install Frameworks and Libraries, and set up Meson build environment
+        working-directory: ${{github.workspace}}
         shell: bash
         run: |
-          sudo apt-get update && sudo apt-get install -y \
-            libqt5multimedia5-plugins \
-            libqt5sql5-psql \
-            libqt5sql5-sqlite \
-            libqt5svg5-dev \
-            libxalan-c-dev \
-            libxerces-c-dev \
-            lintian \
-            qtbase5-dev \
-            qtmultimedia5-dev \
-            qttools5-dev \
-            qttools5-dev-tools \
-            rpmlint
-          cd ~
-          mkdir ~/boost-tmp
-          cd ~/boost-tmp
-          wget https://boostorg.jfrog.io/artifactory/main/release/1.79.0/source/boost_1_79_0.tar.bz2
-          tar --bzip2 -xf boost_1_79_0.tar.bz2
-          cd boost_1_79_0
-          ./bootstrap.sh --prefix=/usr
-          sudo ./b2 install
-          cd ~
-          sudo rm -rf ~/boost-tmp
+          pwd
+          ./bt -v setup all
 
-      - name: Create Build Environment
+      - name: Create CMake build environment
         run: cmake -E make_directory ${{github.workspace}}/build
 
       - name: Configure CMake
@@ -73,13 +87,20 @@ jobs:
             -DNO_MESSING_WITH_FLAGS=ON \
             $GITHUB_WORKSPACE
 
-      - name: Build
+      - name: Build (with CMake)
         working-directory: ${{github.workspace}}/build
         shell: bash
         run: |
           make
 
-      - name: Test
+      - name: Build (with Meson)
+        working-directory: ${{github.workspace}}/mbuild
+        shell: bash
+        run: |
+          pwd
+          meson compile
+
+      - name: Test (via CMake)
         working-directory: ${{github.workspace}}/build
         shell: bash
         env:
@@ -88,12 +109,30 @@ jobs:
         run: |
           make test
 
-      - name: Package
+      # The 'export QT_DEBUG_PLUGINS=1' give us diagnostics in the event that there are problems initialising QT
+      # The 'export QT_QPA_PLATFORM=offscreen' stops Qt's xcb sub-module trying to connect to a non-existent display
+      # (which would cause the test runner to abort before running any tests).
+      - name: Test (via Meson)
+        working-directory: ${{github.workspace}}/mbuild
+        shell: bash
+        run: |
+          export QT_DEBUG_PLUGINS=1
+          export QT_QPA_PLATFORM=offscreen
+          meson test
+
+      - name: Package (via CMake/CPack)
         working-directory: ${{github.workspace}}/build
         shell: bash
         run: |
           umask 022
           make package
+
+      - name: Package (New)
+        working-directory: ${{github.workspace}}/mbuild
+        shell: bash
+        run: |
+          umask 022
+          ../bt package
 
       - name: LintianAndRpmLint
         continue-on-error: true
@@ -113,12 +152,36 @@ jobs:
             build/brewtarget*.deb.sha256
             build/brewtarget*.tar.bz2
             build/brewtarget*.tar.bz2.sha256
+            mbuild/packages/source/brewtarget*.tar.xz
+            mbuild/packages/source/brewtarget*.tar.xz.sha256sum
+            mbuild/packages/linux/brewtarget*.deb
+            mbuild/packages/linux/brewtarget*.deb.sha256sum
+            mbuild/packages/linux/brewtarget*.rpm
+            mbuild/packages/linux/brewtarget*.rpm.sha256sum
           retention-days: 7
 
-      - name: Recover Debris Artifacts
+      - name: Recover Debris Artifacts (CMake)
         if: ${{ failure() }}
         uses: actions/upload-artifact@v3
         with:
           name: build-results-${{matrix.os}}
           path: build
           retention-days: 1
+
+      - name: Recover Debris Artifacts (Meson)
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: mbuild-results-${{matrix.os}}
+          path: mbuild
+          retention-days: 1
+
+      # Meson test doesn't show log output on the terminal, but puts it straight to a log file.  We don't want to have
+      # to download the whole compressed mbuild tree just to see the log in event of a test failure, so we show it here
+      # (provided it exists).
+      - name: Show Meson test logs
+        if: ${{ failure() }}
+        working-directory: ${{github.workspace}}
+        shell: bash
+        run: |
+          if [[ -f mbuild/meson-logs/testlog.txt ]]; then cat mbuild/meson-logs/testlog.txt; fi

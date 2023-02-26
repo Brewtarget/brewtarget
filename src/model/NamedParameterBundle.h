@@ -1,6 +1,6 @@
 /*
  * model/NamedParameterBundle.h is part of Brewtarget, and is Copyright the following
- * authors 2021
+ * authors 2021-2023
  * - Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify

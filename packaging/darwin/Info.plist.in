@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+#
+# packaging/mac/Info.plist.in is part of Brewtarget, and is copyright the following authors 2023:
+#   • Matt Young <mfsy@yahoo.com>
+#
+# Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+# version.
+#
+# Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+# warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+# details.
+#
+# You should have received a copy of the GNU General Public License along with this program.  If not, see
+# <http://www.gnu.org/licenses/>.
+#
+
+#
+# See comments in meson.build for how this file gets processed into mbuild/Info.plist.  Then see comments in the build
+# tool for how it ends up in the Mac application bundle.
+#
+-->
+<plist version="1.0">
+<dict>
+   <!--
+   Language the system if it can't locate a resource for the user’s preferred language.  Value should be a language ID
+   (ideally the two-letter ISO 639-1 standard) that identifies a language, dialect, or script.
+   -->
+   <key>CFBundleDevelopmentRegion</key>
+   <string>en</string>
+   <!--
+   Name of the executable (which is assumed to be in Contents/MacOS/ sub-folder)
+   -->
+   <key>CFBundleExecutable</key>
+   <string>@CONFIG_APPLICATION_NAME_UC@</string>
+   <key>CFBundleGetInfoString</key>
+   <string></string>
+   <!--
+   Icon file assumed to be in Contents/Resources dir
+   -->
+   <key>CFBundleIconFile</key>
+   <string>@CONFIG_INSTALLER_APPLICATION_ICON@</string>
+   <key>CFBundleIdentifier</key>
+   <string>com.brewtarget.Brewtarget</string>
+   <key>CFBundleInfoDictionaryVersion</key>
+   <string>6.0</string>
+   <key>CFBundleLongVersionString</key>
+   <string></string>
+   <key>CFBundleName</key>
+   <string>@CONFIG_APPLICATION_NAME_UC@</string>
+   <key>CFBundlePackageType</key>
+   <string>APPL</string>
+   <key>CFBundleShortVersionString</key>
+   <string>@CONFIG_VERSION_STRING@</string>
+   <key>CFBundleSignature</key>
+   <string>????</string>
+   <key>CFBundleVersion</key>
+   <string>@CONFIG_VERSION_STRING@</string>
+   <key>CSResourcesFileMapped</key>
+   <true/>
+   <key>NSHumanReadableCopyright</key>
+   <string>@CONFIG_COPYRIGHT_STRING@</string>
+</dict>
+</plist>

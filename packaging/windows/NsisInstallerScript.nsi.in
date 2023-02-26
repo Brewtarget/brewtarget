@@ -1,0 +1,564 @@
+#
+# packaging/windows/NsisInstallerScript.nsi.in is part of Brewtarget, and is copyright the following authors 2023:
+#   • Matt Young <mfsy@yahoo.com>
+#
+# Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+# version.
+#
+# Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+# warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+# details.
+#
+# You should have received a copy of the GNU General Public License along with this program.  If not, see
+# <http://www.gnu.org/licenses/>.
+#
+
+#
+# See comments in meson.build for how this file gets processed into mbuild/packaging/NsisInstallerScript.nsi
+# This latter is then what we pass in to NSIS (aka nullsoft scriptable install system -- see
+# https://nsis.sourceforge.io/) to tell it how to make the Windows installer.
+#
+# Note that, despite what it says at https://nsis.sourceforge.io/Simple_tutorials, I could not get trivial "Hello World"
+# verions of a .nsi script to work properly.  The generation of the installer would only appear to work and we'll then
+# get a cryptic "cannot execute binary file: Exec format error" message when trying to run it.  So, we started with one
+# of the longer examples.
+#
+
+#=======================================================================================================================
+#================================================ Pre-Include Settings =================================================
+#=======================================================================================================================
+# Without this appearing in the script, we'll get a '7998: ANSI targets are deprecated' error.  If it appears too late
+# in the script, eg after `!include MultiUser.nsh` below, we'll get a 'Can't change target charset after data already
+# got compressed or header already changed!' error
+Unicode True
+
+# Set the compression algorithm used to compress files/data in the installer.  Options are zlib, bzip2 and lzma.  This
+# command can only be used outside of sections and functions and before any data is compressed.  "It is recommended to
+# use it on the very top of the script to avoid compilation errors."
+SetCompressor lzma
+
+# Specifies the requested execution level of the installer.  In particular, this helps determine whether the installer
+# can install the software for all users or only for the current user.  Possible values are: none, user, highest, &
+# admin.  "Installers that need not install anything into system folders or write to the local machine registry (HKLM)
+# should specify user execution level."
+#
+# TBD: I think we need admin level, or at least we won't go far wrong by requesting it, but we could revisit this in
+#      future if need be.
+RequestExecutionLevel admin
+
+#=======================================================================================================================
+#====================================================== Includes =======================================================
+#=======================================================================================================================
+
+# Use the latest version of the "Modern User Interface" -- see
+# https://nsis.sourceforge.io/Docs/Modern%20UI%202/Readme.html
+!include "MUI2.nsh"
+
+# Allows us to detect the version of Windows on which we are running -- see
+# https://nsis.sourceforge.io/Get_Windows_version
+!include "WinVer.nsh"
+
+# Logic Lib adds some "familiar" flow control and logic to NSI Scripts, eg if, else, while loops, for loops and similar.
+# Also known as the NSIS Logic Library.  See https://nsis.sourceforge.io/LogicLib which mentions that it is "appallingly
+# non-documented, but certainly handy".  Sigh.
+!include "LogicLib.nsh"
+
+# Allows us to detect whether we're running on 32-bit or 64-bit Windows
+!include "x64.nsh"
+
+# Defines and macros for section control
+!include "Sections.nsh"
+
+# File Functions Header
+!include "FileFunc.nsh"
+
+# Installer configuration for multi-user Windows environments
+# See https://nsis.sourceforge.io/Docs/MultiUser/Readme.html for more info
+# `MULTIUSER_EXECUTIONLEVEL Highest` is for "Mixed-mode installer that can both be installed per-machine or per-user"
+!define MULTIUSER_EXECUTIONLEVEL Highest
+!include MultiUser.nsh
+
+#=======================================================================================================================
+#================================================= Injected variables ==================================================
+#=======================================================================================================================
+#
+# Paths - from Meson
+#
+# Most of the time, because the MSYS2 environments makes things work more like Linux, we can use forward slashes in file
+# system paths on the Windows build and everything works.  However, inside the NSIS scripts, this is not universally the
+# case.  In some circumstances forward slashes work and in others they don't.  (In particular, I think it's a problem to
+# have a mixture of forward and back slashes in a single path.  But this is a common need where we're combining an NSIS
+# built-in variable such as $INSTDIR or $PROGRAMFILES with something we've injected from Meson.)  To keep life simple we
+# convert all forward slashes to back slashes in any file system path that we inject from Meson.
+#
+# This means that, instead of, eg, using "@CONFIG_LICENSE_TEXT_PATH@" directly, we use the !searchreplace variant of
+# !define to create a compile-time constant holding a modified version of the injected string:
+#    !searchreplace INJECTED_LICENSE_TEXT_PATH "@CONFIG_LICENSE_TEXT_PATH@" "\" "/"
+# Then when we need to use the injected string, we refer to "${INJECTED_LICENSE_TEXT_PATH}"
+#
+# Note too that NSIS distinguishes between compile-time defines and run-time variables.
+#
+!searchreplace INJECTED_INSTALLER_APPLICATION_ICON_PATH "@CONFIG_INSTALLER_APPLICATION_ICON_PATH@" "/" "\"
+!searchreplace INJECTED_LICENSE_TEXT_PATH               "@CONFIG_LICENSE_TEXT_PATH@"               "/" "\"
+#
+# Paths from the bt (build tool) Python script
+#
+# Per the comment in the bt script, some paths are not easily exportable from Meson.  We work them out in the bt script
+# and pass them in to NSIS as command-line defines.  We still do the forward slash - backslash substututions here in the
+# NSIS script because (a) it's consistent to do them all in one place and (b) the escaping is easier (because you don't
+# need any!)
+#
+# For some reason, NSIS doesn't like quotes around the inputs here so, I think we have to hope they don't have any
+# spaces in.
+#
+!searchreplace INJECTED_PACKAGING_BIN_DIR   ${BT_PACKAGING_BIN_DIR}   "/"  "\"
+!searchreplace INJECTED_PACKAGING_DATA_DIR  ${BT_PACKAGING_DATA_DIR}  "/"  "\"
+!searchreplace INJECTED_PACKAGING_DOC_DIR   ${BT_PACKAGING_DOC_DIR}   "/"  "\"
+
+#
+# Other variables injected from Meson
+#
+# Similarly, although we could use other injected variables directly, we don't to avoid another gotcha.  When Meson
+# is processing the file to do @BLAH@ substitutions, if it sees a backslash followed by an @, then it will think you're
+# escaping the first @ symbol, so, eg "C:\Blah\@CONFIG_APPLICATION_NAME_UC@" will not get converted to
+# "C:\Blah\Brewtarget" or "C:\Blah\Brewken".  Instead, we take the injected variable into an NSIS compile-time constant
+# (aka a 'define') via:
+#    !define INJECTED_APPLICATION_NAME_UC "@CONFIG_APPLICATION_NAME_UC@"
+# and then we can write "C:\Blah\${INJECTED_APPLICATION_NAME_UC}" and the right substitutions will happen.  (The
+# alternative, of adding an extra slash, eg "C:\Blah\\@CONFIG_APPLICATION_NAME_UC@", would work but seems a bit less
+# robust.
+#
+!define INJECTED_APPLICATION_NAME_UC "@CONFIG_APPLICATION_NAME_UC@"
+!define INJECTED_APPLICATION_NAME_LC "@CONFIG_APPLICATION_NAME_LC@"
+!define INJECTED_EXECUTABLE_NAME     "@CONFIG_EXECUTABLE_NAME@"
+!define INJECTED_VERSION_STRING      "@CONFIG_VERSION_STRING@"
+!define INJECTED_DESCRIPTION_STRING  "@CONFIG_DESCRIPTION_STRING@"
+!define INJECTED_COPYRIGHT_STRING    "@CONFIG_COPYRIGHT_STRING@"
+!define INJECTED_ORGANIZATION_NAME   "@CONFIG_ORGANIZATION_NAME@"
+!define INJECTED_HOMEPAGE_URL        "@CONFIG_HOMEPAGE_URL@"
+
+#=======================================================================================================================
+#==================================================== Our Constants ====================================================
+#=======================================================================================================================
+# Some things get used in multiple places and it's convenient to have a single define for consistency
+
+#
+# There are two schools of thought about whether we should include the version number in the application name.  The
+# advantage of doing it is that it makes super clear which version is installed.  The disadvantage is that it makes
+# upgrades not so easy.
+#
+!define APPLICATION_DISPLAY_NAME "${INJECTED_APPLICATION_NAME_UC} ${INJECTED_VERSION_STRING}"
+!define APPLICATION_FOLDER_NAME  "${INJECTED_APPLICATION_NAME_UC}-${INJECTED_VERSION_STRING}"
+
+#
+# In some places, eg VIProductVersion, we'll get an error if the version is not in X.X.X.X format.  Our version strings
+# are X.X.X format.  If we were a Windows-only product, we'd probably define the version as
+# ${PRODUCT_MAJOR}.${PRODUCT_MINOR}.${PRODUCT_TIMESTAMP}.${PRODUCT_BUILD}.  But if we did this, we'd either break things
+# on other platforms or have to have different version numbers for different platforms.  So we don't.  Instead, for
+# Windows, we just add a '.0' on the end and call it done
+#
+!define PRODUCT_VERSION "${INJECTED_VERSION_STRING}.0"
+
+#
+# In theory, the installer can have a separate version number from the program it's installing.  We don't need that
+# level of sophistication, so we just give it the same version number as the program.
+#
+!define INSTALLER_VERSION "${PRODUCT_VERSION}"
+
+#=======================================================================================================================
+#======================================================= Macros ========================================================
+#=======================================================================================================================
+# See https://nsis.sourceforge.io/Macro_vs_Function for the differences between a function and a macro in NSIS
+#
+# We define our macros before our functions because some of our functions use macros.
+#
+#-----------------------------------------------------------------------------------------------------------------------
+# VerifyUserIsAdmin
+#
+# We currently use this during install and uninstall, following the model at
+# https://nsis.sourceforge.io/A_simple_installer_with_start_menu_shortcut_and_uninstaller
+#-----------------------------------------------------------------------------------------------------------------------
+!macro VerifyUserIsAdmin
+UserInfo::GetAccountType
+pop $0
+${If} $0 != "admin"
+   messageBox mb_iconstop "Administrator rights required!"
+   setErrorLevel 740 ;ERROR_ELEVATION_REQUIRED
+   quit
+${EndIf}
+!macroend
+
+#=======================================================================================================================
+#====================================================== Functions ======================================================
+#=======================================================================================================================
+#
+# Functions are relatively primitive in NSIS.  Amongst the things to be aware of are:
+#
+#    - Parameters have to be passed on the stack (so the order the function retrieves them is the opposite of that in
+#      which the caller supplied them).
+#
+#    - Functions do not have their own scope for variables.  You either declare variables with names that you hope are
+#      globally unique, or you use the "register variables" ($0, $1, $2, $3, $4, $5, $6, $7, $8, $9, $R0, $R1, $R2, $R3,
+#      $R4, $R5, $R6, $R7, $R8, $R9) which do not have to be declared and "are usually used in shared functions or
+#      macros".  Of course, if one function calls another then you might be in trouble with both functions using the
+#      same register variables, so "it's recommended [to] use the stack to save and restore their original values".
+#      Yes, that's the same global stack that you're using to pass parameters in to functions.
+#
+
+#-----------------------------------------------------------------------------------------------------------------------
+# un.onInit
+#
+# Per https://nsis.sourceforge.io/Reference/.onInit, this is a special callback function that is invoked "when the
+# installer is nearly finished initializing. If the '.onInit' function calls Abort, the installer will quit instantly".
+#-----------------------------------------------------------------------------------------------------------------------
+function .onInit
+   setShellVarContext all
+   !insertmacro VerifyUserIsAdmin
+functionEnd
+
+#-----------------------------------------------------------------------------------------------------------------------
+# un.onInit
+#
+# Per https://nsis.sourceforge.io/Reference/un.onInit, this is a special callback function that is invoked "when the
+# uninstaller is nearly finished initializing.  If the 'un.onInit' function calls Abort, the uninstaller will quit
+# instantly.  Note that this function can verify and/or modify $INSTDIR if necessary".
+#-----------------------------------------------------------------------------------------------------------------------
+function un.onInit
+   SetShellVarContext all
+
+   # Verify the uninstaller - last chance to back out
+   MessageBox MB_OKCANCEL "Permanantly remove ${APPLICATION_DISPLAY_NAME}?" IDOK next
+            Abort
+   next:
+   !insertmacro VerifyUserIsAdmin
+functionEnd
+
+#=======================================================================================================================
+#=================================================== Global Settings ===================================================
+#=======================================================================================================================
+
+# Name of the installer, usually the same as the product name.  We put the version number in here too so that people can
+# be clear that they're installing the version they want.
+Name "${APPLICATION_DISPLAY_NAME}"
+
+# Name of the installer executable to create
+OutFile "${APPLICATION_DISPLAY_NAME} Installer.exe"
+
+#
+# Default installation directory
+#
+# See https://nsis.sourceforge.io/Reference/InstallDir
+#
+# Note that omitting a trailling backslash means that, even if the user chooses a different installation location, the
+# last folder in this path (the one called "${APPLICATION_FOLDER_NAME}") will be appended to that location.  In other
+# words, it ensures we always install inside a folder named after our application.  The makes uninstall a lot easier
+# because it's safe to remove "$INSTDIR" because it should only contain stuff we installed.
+#
+# TODO: Per https://nsis.sourceforge.io/Docs/Chapter4.html#varconstant both $PROGRAMFILES and $PROGRAMFILES32 point to
+# the 32-bit program folder.  If we were installing a 64-bit application, this would need to be replaced by
+# $PROGRAMFILES64
+#
+InstallDir "$PROGRAMFILES\${APPLICATION_FOLDER_NAME}"
+
+#
+# Remembered installation directory
+#
+# See https://nsis.sourceforge.io/Reference/InstallDirRegKey
+#
+# If the given Windows registry setting is found it is used to override the default installation directory set with
+# InstallDir above.  AIUI this means that, if the software was installed before, we can "remember" that location and
+# propose it to the user as the default location.  This means when the user re-installs or installs a new version of the
+# app it will overwrite/upgrade the existing install.
+#
+# Windows Registry settings are grouped into "hives", which have abbreviations as listed at
+# https://nsis.sourceforge.io/Reference/WriteRegExpandStr:
+#    HKCR  = HKEY_CLASSES_ROOT
+#    HKLM  = HKEY_LOCAL_MACHINE
+#    HKCU  = HKEY_CURRENT_USER
+#    HKU   = HKEY_USERS
+#    HKCC  = HKEY_CURRENT_CONFIG
+#    HKDD  = HKEY_DYN_DATA
+#    HKPD  = HKEY_PERFORMANCE_DATA
+#    SHCTX = SHELL_CONTEXT <-- This is an NSIS pseudo registry root key that will evaluate to HKLM or HKCU depending
+#                              on whether SetShellVarContext is set to all or current (the default)
+#
+# .:TBD:. For the moment, I am leaving this commented out as it rather conflicts with using the version number in the
+#         install folder name.  There are pros and cons to both approaches, but I don't think we can have our cake and
+#         eat it!
+#
+#InstallDirRegKey SHCTX "Software\${INJECTED_ORGANIZATION_NAME}\${INJECTED_APPLICATION_NAME_UC}" ""
+
+#=======================================================================================================================
+#================================================= Modern UI Settings ==================================================
+#=======================================================================================================================
+# See https://nsis.sourceforge.io/Docs/Modern%20UI/Readme.html for details on a lot of the settings and options
+
+# Icon for the installer
+!define MUI_ICON "${INJECTED_INSTALLER_APPLICATION_ICON_PATH}"
+
+# Setting this tells the installer to display an image on the header of the page
+!define MUI_HEADERIMAGE
+
+# Bitmap image to display on the header of installers pages (recommended size: 150x57 pixels)
+!define MUI_HEADERIMAGE_BITMAP "${NSISDIR}\Contrib\Graphics\Header\orange.bmp"
+
+# Bitmap for the Welcome page and the Finish page (recommended size: 164x314 pixels)
+!define MUI_WELCOMEFINISHPAGE_BITMAP "${NSISDIR}\Contrib\Graphics\Wizard\orange.bmp"
+
+# Setting this tells the installer not to automatically jump to the finish page.  This allows the user to check the
+# install log.
+!define MUI_FINISHPAGE_NOAUTOCLOSE
+
+# Setting this tells the installer to show a message box with a warning when the user wants to close the installer.
+!define MUI_ABORTWARNING
+
+# Include WinMessages.nsh to have all of Windows messages defined in your script.
+!include "WinMessages.NSH"
+
+#
+# These macros control which pages appear in the installer.  Available pages are:
+#
+#    MUI_PAGE_WELCOME
+#    MUI_PAGE_LICENSE textfile           <-- Shows the license (in English because legal reasons)
+#    MUI_PAGE_COMPONENTS                 <-- Don't need as we don't really have bits of the program that the user can
+#                                            choose whether to install
+#    MUI_PAGE_DIRECTORY                  <-- Allows the user to override the default install directory
+#    MUI_PAGE_STARTMENU pageid variable  <-- Don't offer this as it's extra complexity for very small benefit (IMHO)
+#    MUI_PAGE_INSTFILES                  <-- Shows progress of the actual install
+#    MUI_PAGE_FINISH
+#
+!insertmacro MUI_PAGE_WELCOME
+!insertmacro MUI_PAGE_LICENSE "${INJECTED_LICENSE_TEXT_PATH}"
+!insertmacro MUI_PAGE_DIRECTORY
+!insertmacro MUI_PAGE_INSTFILES
+!insertmacro MUI_PAGE_FINISH
+
+#
+# These macros control which pages appear in the uninstaller.  It's pretty self-explanatory
+#
+!insertmacro MUI_UNPAGE_WELCOME
+!insertmacro MUI_UNPAGE_CONFIRM
+!insertmacro MUI_UNPAGE_INSTFILES
+!insertmacro MUI_UNPAGE_FINISH
+
+#=======================================================================================================================
+#=============================================== Installer UI Languages ================================================
+#=======================================================================================================================
+#
+# Insert the Modern UI language files for the languages we want to include.  The first one is the default one.
+# These calls obviate the need to call LoadLanguageFile directly, and also set language-related variables such as
+# LANG_ENGLISH.
+#
+# Here, we try to list only the languages that we have translations for in the app itself (eg as listed in
+# src/OptionDialog.cpp).  It's a bit approximate as, eg, NSIS has both "SimpChinese" and "TradChinese", whereas we have
+# just "Chinese", but the general idea is not to frustrate the user by presenting the installer in a language that is
+# not available in the application they are trying to install.
+#
+# You can see the complete list of languages supported in NSIS at
+# https://sourceforge.net/p/nsis/code/HEAD/tree/NSIS/trunk/Contrib/Language%20files/
+#
+# *********************************************************************************************************************
+# * Note that this section needs to go _after_ the MUI_PAGE_* and MUI_UNPAGE_* macro invocations, otherwise we'll get *
+# * a bunch of warnings when we run MakeNSIS.exe                                                                      *
+# *********************************************************************************************************************
+#
+!insertmacro MUI_LANGUAGE "English"   # Default
+!insertmacro MUI_LANGUAGE "Basque"
+!insertmacro MUI_LANGUAGE "Catalan"
+!insertmacro MUI_LANGUAGE "Czech"
+!insertmacro MUI_LANGUAGE "Danish"
+!insertmacro MUI_LANGUAGE "Dutch"
+!insertmacro MUI_LANGUAGE "Estonian"
+!insertmacro MUI_LANGUAGE "French"
+!insertmacro MUI_LANGUAGE "Galician"
+!insertmacro MUI_LANGUAGE "German"
+!insertmacro MUI_LANGUAGE "Greek"
+!insertmacro MUI_LANGUAGE "Hungarian"
+!insertmacro MUI_LANGUAGE "Italian"
+!insertmacro MUI_LANGUAGE "Latvian"
+!insertmacro MUI_LANGUAGE "Norwegian"
+!insertmacro MUI_LANGUAGE "Polish"
+!insertmacro MUI_LANGUAGE "Portuguese"
+!insertmacro MUI_LANGUAGE "PortugueseBR"
+!insertmacro MUI_LANGUAGE "Russian"
+!insertmacro MUI_LANGUAGE "Serbian"
+!insertmacro MUI_LANGUAGE "SimpChinese"
+!insertmacro MUI_LANGUAGE "Spanish"
+!insertmacro MUI_LANGUAGE "SpanishInternational"
+!insertmacro MUI_LANGUAGE "Swedish"
+!insertmacro MUI_LANGUAGE "TradChinese"
+!insertmacro MUI_LANGUAGE "Turkish"
+
+#=======================================================================================================================
+#==================================================== Version Info =====================================================
+#=======================================================================================================================
+# Add the Product Version on top of the Version Tab in the Properties of the file.
+#
+VIProductVersion "${PRODUCT_VERSION}"
+
+# VIAddVersionKey adds a field in the Version Tab of the File Properties.  This can either be a field provided by the
+# system or a user defined field.  The following fields are provided by the System:
+#
+#    ProductName
+#    Comments
+#    CompanyName
+#    LegalCopyright
+#    FileDescription
+#    FileVersion
+#    ProductVersion
+#    InternalName
+#    LegalTrademarks
+#    OriginalFilename
+#    PrivateBuild
+#    SpecialBuild
+#
+# The name of these fields are translated on the target system, whereas user defined fields remain untranslated.
+#
+# *********************************************************************************************************************
+# * Note that this needs to go after the calls to MUI_LANGUAGE, otherwise LANG_ENGLISH won't be set and we'll get an  *
+# * error saying '"/LANG=${LANG_ENGLISH}" is not a valid language code!'                                              *
+# *********************************************************************************************************************
+#
+VIAddVersionKey /LANG=${LANG_ENGLISH} "ProductName"     "${INJECTED_APPLICATION_NAME_UC}"
+VIAddVersionKey /LANG=${LANG_ENGLISH} "ProductVersion"  "${PRODUCT_VERSION}"
+VIAddVersionKey /LANG=${LANG_ENGLISH} "FileDescription" "${INJECTED_DESCRIPTION_STRING}"
+VIAddVersionKey /LANG=${LANG_ENGLISH} "FileVersion"     "${INSTALLER_VERSION}"
+VIAddVersionKey /LANG=${LANG_ENGLISH} "CompanyName"     "${INJECTED_ORGANIZATION_NAME}"
+VIAddVersionKey /LANG=${LANG_ENGLISH} "LegalCopyright"  "${INJECTED_COPYRIGHT_STRING}"
+
+#
+# This is where we tell the installer what files to install where
+#
+# On Windows, applications typically get installed in an application-specific subdirectory of the relevant program files
+# directory (typically "C:\Program Files (x86)" or something similar for 32-bit applications on 64-bit Windows).  We
+# don't have to know exactly where as NSIS can figure it out for us at run-time via $PROGRAMFILES, $PROGRAMFILES32,
+# $PROGRAMFILES64.  In fact, we don't even use these variables directly.  Instead, we use $INSTDIR, which is a special
+# variable holding the installation directory (see https://nsis.sourceforge.io/Reference/$INSTDIR). A sane default value
+# is proposed to the user on the MUI_PAGE_DIRECTORY page, but the user can modify it to install the program somewhere
+# else.
+#
+# Inside $INSTDIR, we want a folder named for the app and its version (eg "Brewtarget 3.1.0" or "Brewken 0.1.0").  And
+# inside this folder we want:
+#
+#    ├── bin               # Directory containing the executable and any shared libraries (DLLs) that we need to ship
+#    │                     # with it.  This is the directory whose path will be returned by
+#    │                     # QCoreApplication::applicationDirPath() to the application code at runtime
+#    │
+#    ├── data              # Directory containing any data files that are not built-in to the executable as resources
+#    │
+#    ├── docs              # Directory containing any documentation or read-me files that we want to ship
+#    │
+#    └── Uninstall.exe     # The uninstaller generated by NSIS
+#
+!define ADD_REMOVE_PROGRAMS_REG_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPLICATION_FOLDER_NAME}"
+
+#
+# See https://nsis.sourceforge.io/A_simple_installer_with_start_menu_shortcut_and_uninstaller for a good starting point
+# for install and uninstall.
+#
+# We could probably actually do a single recursive copy, but splitting it into three sticks with our general approach
+# to packaging and opens the possibility that we might put, eg, docs, somewhere else at a future date.
+#
+Section "Install"
+
+   SetOutPath "$INSTDIR"
+   !echo "Using icon ${INJECTED_PACKAGING_BIN_DIR}"
+   File /oname=logo.ico ${INJECTED_INSTALLER_APPLICATION_ICON_PATH}
+
+   SetOutPath "$INSTDIR\bin"
+   !echo "Taking executable, DLLs and Qt stuff from ${INJECTED_PACKAGING_BIN_DIR}"
+   File /r "${INJECTED_PACKAGING_BIN_DIR}\*.*"
+
+   SetOutPath "$INSTDIR\data"
+   !echo "Data files from ${INJECTED_PACKAGING_DATA_DIR}"
+   File /r "${INJECTED_PACKAGING_DATA_DIR}\*.*"
+
+   SetOutPath "$INSTDIR\doc"
+   !echo "Documentation files from ${INJECTED_PACKAGING_DOC_DIR}"
+   File /r "${INJECTED_PACKAGING_DOC_DIR}\*.*"
+
+   #
+   # Uninstall info
+   #
+   # Per https://nsis.sourceforge.io/Add_uninstall_information_to_Add/Remove_Programs, in order for the app to appear in
+   # the Windows add/remove program list, we need to set at least a couple of registry keys
+   #
+   WriteRegStr   SHCTX "${ADD_REMOVE_PROGRAMS_REG_KEY}" "DisplayName"          "${APPLICATION_DISPLAY_NAME}"
+   WriteRegStr   SHCTX "${ADD_REMOVE_PROGRAMS_REG_KEY}" "UninstallString"      "$\"$INSTDIR\uninstall.exe$\" /$MultiUser.InstallMode"
+   WriteRegStr   SHCTX "${ADD_REMOVE_PROGRAMS_REG_KEY}" "QuietUninstallString" "$\"$INSTDIR\uninstall.exe$\" /$MultiUser.InstallMode /S"
+   WriteRegStr   SHCTX "${ADD_REMOVE_PROGRAMS_REG_KEY}" "InstallLocation"      "$\"$INSTDIR$\""
+   WriteRegStr   SHCTX "${ADD_REMOVE_PROGRAMS_REG_KEY}" "DisplayIcon"          "$\"$INSTDIR\logo.ico$\""
+   WriteRegStr   SHCTX "${ADD_REMOVE_PROGRAMS_REG_KEY}" "Publisher"            "$\"${INJECTED_ORGANIZATION_NAME}$\""
+   WriteRegStr   SHCTX "${ADD_REMOVE_PROGRAMS_REG_KEY}" "HelpLink"             "$\"${INJECTED_HOMEPAGE_URL}$\""
+   WriteRegStr   SHCTX "${ADD_REMOVE_PROGRAMS_REG_KEY}" "URLUpdateInfo"        "$\"${INJECTED_HOMEPAGE_URL}$\""
+   WriteRegStr   SHCTX "${ADD_REMOVE_PROGRAMS_REG_KEY}" "URLInfoAbout"         "$\"${INJECTED_HOMEPAGE_URL}$\""
+   WriteRegStr   SHCTX "${ADD_REMOVE_PROGRAMS_REG_KEY}" "DisplayVersion"       "$\"${INJECTED_VERSION_STRING}$\""
+   # These tell Windows there is no option for modifying or repairing the install
+   WriteRegDWORD SHCTX "${ADD_REMOVE_PROGRAMS_REG_KEY}" "NoModify"             1
+   WriteRegDWORD SHCTX "${ADD_REMOVE_PROGRAMS_REG_KEY}" "NoRepair"             1
+   # We don't (yet) pass in major/minor version.  If we did, here's where we'd note them in the registry
+#   WriteRegDWORD SHCTX "${ADD_REMOVE_PROGRAMS_REG_KEY}" "VersionMajor"         ${INJECTED_VERSION_MAJOR}
+#   WriteRegDWORD SHCTX "${ADD_REMOVE_PROGRAMS_REG_KEY}" "VersionMinor"         ${INJECTED_VERSION_MINOR}
+
+   #
+   # Start Menu
+   #
+   # $SMPROGRAMS is the start menu programs folder.  Per https://nsis.sourceforge.io/Docs/Chapter4.html#varconstant, the
+   # context of this constant (All Users or Current user) depends on the SetShellVarContext setting. The default is the
+   # current user.
+   #
+   # (I know it's traditional to ask the user whether they want the program added to the Start Menu, but surely >99.99%
+   # of people either just select the default or actively choose "Yes".  The rest can remove the start menu shortcut
+   # manually if they really want.)
+   #
+   createDirectory "$SMPROGRAMS\${INJECTED_ORGANIZATION_NAME}"
+   createShortCut  "$SMPROGRAMS\${INJECTED_ORGANIZATION_NAME}\${APPLICATION_DISPLAY_NAME}.lnk" "$INSTDIR\bin\${INJECTED_EXECUTABLE_NAME}" "" "$INSTDIR\logo.ico"
+
+   #
+   # Put the estimated size of the program in the registry so that Windows can show on the add/remove programs menu how
+   # much space uninstalling it will free up
+   #
+   ${GetSize} "$INSTDIR" "/S=0K" $0 $1 $2
+   IntFmt $0 "0x%08X" $0
+   WriteRegDWORD SHCTX "${ADD_REMOVE_PROGRAMS_REG_KEY}" "EstimatedSize" "$0"
+
+   #
+   # Write out the actual uninstaller
+   #
+   WriteUninstaller $INSTDIR\Uninstall.exe
+
+SectionEnd
+
+
+Section
+SectionEnd
+
+#-------------------------------------------------------------------------------
+# Uninstaller Sections
+Section "Uninstall"
+
+   # Remove Start Menu short-cut
+   Delete "$SMPROGRAMS\${INJECTED_ORGANIZATION_NAME}\${APPLICATION_DISPLAY_NAME}.lnk"
+   # Remove the Start Menu folder, but only if it is empty
+   RMDir "$SMPROGRAMS\${INJECTED_ORGANIZATION_NAME}"
+
+   # Remove the substance of the install: docs, default data files, executable, DLLs, and icon
+   RMDir /r "$INSTDIR\doc"
+   RMDir /r "$INSTDIR\data"
+   RMDir /r "$INSTDIR\bin"
+   Delete   "$INSTDIR\logo.ico"
+
+   # Note that we do _not_ delete any user data
+
+   # Remove all the uninstall info from the registry
+   DeleteRegKey SHCTX "${ADD_REMOVE_PROGRAMS_REG_KEY}"
+
+   # Always delete the uninstaller as the all-but-last action
+   Delete "$INSTDIR\Uninstall.exe"
+
+   # This directory removal will only succeed if the directory is empty (which it should be, but it's best to be
+   # cautious).
+   RMDir "$INSTDIR"
+
+SectionEnd

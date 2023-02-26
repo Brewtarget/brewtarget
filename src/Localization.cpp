@@ -1,6 +1,6 @@
 /*
  * Localization.cpp is part of Brewtarget, and is copyright the following
- * authors 2011-2021:
+ * authors 2011-2023
  *   • Greg Meess <Daedalus12@gmail.com>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>

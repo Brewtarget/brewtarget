@@ -1,6 +1,6 @@
 /*
  * UiAmountWithUnits.h is part of Brewtarget, and is copyright the following
- * authors 2009-2022:
+ * authors 2009-2023
  * - Brian Rower <brian.rower@gmail.com>
  * - Mark de Wever <koraq@xs4all.nl>
  * - Matt Young <mfsy@yahoo.com>

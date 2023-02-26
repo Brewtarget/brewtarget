@@ -1,0 +1,124 @@
+#
+# packaging/linux/control.in is part of Brewtarget, and is copyright the following authors 2023:
+#   • Matt Young <mfsy@yahoo.com>
+#
+# Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+# version.
+#
+# Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+# warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+# details.
+#
+# You should have received a copy of the GNU General Public License along with this program.  If not, see
+# <http://www.gnu.org/licenses/>.
+#
+
+#
+# See comments in meson.build for how this file gets processed into mbuild/control.  Then see comments in the build tool
+# script (bt) for how we strip out comments, join "folded" lines and output to
+# mbuild/packaging/linux/[projectName]-[versionNumber]_amd64/DEBIAN/control.
+#
+# See https://www.debian.org/doc/debian-policy/ch-controlfields.html the format of a Debian package control file
+#
+# NB: The lack of blank lines below is deliberate!   A control file consists of one or more "stanzas" of fields.  The
+# stanzas are separated by empty lines.  Some control files allow only one stanza; others allow several (eg one for a
+# source package and another for the binary packages generated from that source).  To keep things simple, we only ship
+# the binaries in the deb package, because the source code is easily available by other routes.  So we only want one
+# stanza.  So, no blank lines.  (I'm very much hoping that comments are OK inside a stanza.)
+#
+# See https://www.debian.org/doc/debian-policy/ch-controlfields.html#binary-package-control-files-debian-control for the
+# fields in the stanza of a binary package control file.
+#
+#
+# Package (Mandatory) : name of the binary package
+#    Package names (both source and binary) must consist only of lower case letters (a-z), digits (0-9), plus (+) and
+#    minus (-) signs, and periods (.). They must be at least two characters long and must start with an alphanumeric
+#    character.
+#
+Package: @CONFIG_APPLICATION_NAME_LC@
+#
+# Source (Optional) : source package name
+#    We don't specify this as we don't ship the source as a deb package
+#
+# Version (Mandatory) : version number of a package. The format is: [epoch:]upstream_version[-debian_revision].
+#
+Version: @CONFIG_VERSION_STRING@-1
+#
+# Section (Recommended) : application area into which the package has been classified
+#    See https://packages.debian.org/unstable/ for a list of all the sections.  TLDR is that misc is the closest fit for
+#    us.
+#
+Section: misc
+#
+# Priority (Recommended) : Represents how important it is that the user have the package installed
+#    Since not all Linux users brew beer, optional seems pretty reasonable here, especially as it is "the default
+#    priority for the majority of the [Debian] archive"
+#
+Priority: optional
+#
+# Architecture (Mandatory) : in this context it's "a unique single word identifying a Debian machine architecture"
+#    Fortunately we don't have to worry about catering to every possibility (which you can see eg by running
+#    `dpkg-architecture -L` on the command line on Ubuntu.
+#
+Architecture: amd64
+#
+# Essential (Optional) : We don't need this.  It's only for packages that aren't supposed to be removeable
+#
+# Depends, Recommends, Suggests, Enhances, Pre-Depends : Dependencies on, conflicts with, other packages
+#    If we were doing everything the true Debian way, including shipping a source package and its makefile (yikes!) then
+#    there are various tools such as `dh_makeshlibs` and `dh_shlibdeps` that help us generate the right dependencies.
+#    All we would have to put here is 'Depends: ${shlibs:Depends}' or some such.  However, if we only want to ship a
+#    binary and not maintain a separate build with its own makefile for the source code, then those tools won't help and
+#    we need to maintain things manually here.  Fortunately our list of dependencies is not horrendous.
+#
+#    Note that you can see the version of a package libfoobar by running the following command from the shell:
+#       apt-cache show foobar | grep Version
+#
+#    Note too that we need either libqt5gui5 or libqt5gui5-gles, not both (which is not possible as they conflict).
+#
+#    Normally, this field is (surprisingly) not allowed to be "folded" (ie split across multiple lines).  However, we do
+#    our own folding in the bt build script, so the backslash line continuations are OK here!
+#
+Depends: \
+   libc6               (>= 2.34 ),  \
+   libgcc-s1           (>= 3.3  ),  \
+   libqt5core5a        (>= 5.9.5),  \
+   libqt5gui5          (>= 5.9.5) | \
+   libqt5gui5-gles     (>= 5.9.5),  \
+   libqt5multimedia5   (>= 5.9.5),  \
+   libqt5network5      (>= 5.9.5),  \
+   libqt5printsupport5 (>= 5.9.5),  \
+   libqt5sql5          (>= 5.9.5),  \
+   libqt5widgets5      (>= 5.9.5),  \
+   libstdc++6          (>= 11   ),  \
+   libxalan-c112       (>= 1.12 ),  \
+   libxerces-c3.2      (>= 3.2  )
+#
+# Installed-Size (Optional) : an estimate of the total amount of disk space required to install the named package
+#    The disk space is given as the integer value of the estimated installed size in bytes, divided by 1024 and rounded
+#    up.  .:TODO:. At some point we should implement this, ideally by having the build system calculate the value
+#
+#Installed-Size: 17758
+#
+# Maintainer (Mandatory) : The package maintainer’s name and email address.
+#    The name must come first, then the email address inside angle brackets <> (in RFC822 format).  If the maintainer’s
+#    name contains a full stop then the whole field will not work directly as an email address due to a misfeature in
+#    the syntax specified in RFC822; a program using this field as an address must check for this and correct the
+#    problem if necessary (for example by putting the name in round brackets and moving it to the end, and bringing the
+#    email address forward).
+#
+Maintainer: @CONFIG_PACKAGE_MAINTAINER@
+#
+# Description (Mandatory) : a description of the binary package, consisting of two parts, the synopsis or the short
+# description, and the long description
+#
+Description: GUI beer brewing software
+ @CONFIG_APPLICATION_NAME_UC@ is a calculator for brewing beer. It is a Qt-based program which
+ allows you to create recipes from a database of ingredients. It calculates
+ all the important parameters, helps you with mash temperatures, and just
+ makes the process of recipe formulation much easier.
+#
+# Homepage (Optional)
+#
+Homepage: @CONFIG_HOMEPAGE_URL@

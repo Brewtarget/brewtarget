@@ -321,7 +321,7 @@ Testing::~Testing() {
 //   - Run unit tests with  make test
 //   - Debug log output is in build/Testing/Temporary/LastTest.log (assuming "build" is your CMake build directory)
 //
-// If you're building with Meson (which NB is not yet fully supported!):
+// If you're building with Meson:
 //   - Ensure each unit test has a "test" line in meson.build
 //   - Run unit tests with  meson test
 //   - Debug log output is in mbuild/meson-logs/testlog.txt (assuming "mbuild" is your Meson build directory)
@@ -725,10 +725,12 @@ void Testing::testAlgorithms() {
 }
 
 void Testing::testLogRotation() {
+   qDebug() << Q_FUNC_INFO << "Logging to" << Logging::getDirectory();
+
    // Turning off logging to stderr console, this is so you won't have to watch 100k rows generate in the console.
    Logging::setLoggingToStderr(false);
 
-   //generate 40 000 log rows giving roughly 10 files with dummy/random logs
+   // Generate 40 000 log rows giving roughly 10 files with dummy/random logs
    // This should have to log rotate a few times leaving 5 log files in the directory which we can test for size and number of files.
    for (int i=0; i < 8000; i++) {
       qDebug() << QString("iteration %1-1; (%2)").arg(i).arg(randomStringGenerator());
@@ -740,21 +742,24 @@ void Testing::testLogRotation() {
    // Put logging back to normal
    Logging::setLoggingToStderr(true);
 
+
    QFileInfoList fileList = Logging::getLogFileList();
+   qDebug() << Q_FUNC_INFO << "Logging::getLogFileList() has" << fileList.size() << "entries";
+   qDebug() << Q_FUNC_INFO << "Logging::logFileCount =" << Logging::logFileCount;
    //There is always a "logFileCount" number of old files + 1 current file
    QCOMPARE(fileList.size(), Logging::logFileCount + 1);
 
-   for (int i = 0; i < fileList.size(); i++)
-   {
+   qDebug() << Q_FUNC_INFO << "Logging::logFileSize =" << Logging::logFileSize;
+   for (int i = 0; i < fileList.size(); i++) {
       QFile f(QString(fileList.at(i).canonicalFilePath()));
+      qDebug() << Q_FUNC_INFO << "File" << f << "has size" << f.size();
       //Here we test if the file is more than 10% bigger than the specified logFileSize", if so, fail.
       QVERIFY2(f.size() <= (Logging::logFileSize * 1.1), "Wrong Sized file");
    }
    return;
 }
 
-void Testing::cleanupTestCase()
-{
+void Testing::cleanupTestCase() {
    Application::cleanup();
    Logging::terminateLogging();
    //Clean up the gibberish logs from disk by removing the

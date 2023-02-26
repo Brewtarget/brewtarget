@@ -1,6 +1,6 @@
 /*
  * RecipeExtrasWidget.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2023
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Peter Buelow <goballstate@gmail.com>

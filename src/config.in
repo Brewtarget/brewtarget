@@ -26,6 +26,8 @@
  * directory)
  *
  * This is a way to pass CMake variables into the code
+ *
+ * See config.h.in for the equivalent for Meson
  */
 
 //! Used on Linux as a fallback way of determining where to look for resources - see Application.cpp
@@ -41,9 +43,9 @@ constexpr char const * CONFIG_APPLICATION_NAME_LC = "${CMAKE_PROJECT_NAME}";
 #define CONFIG_VERSION_STRING "${PROJECT_VERSION}"
 
 // Build info
-constexpr char const * CMAKE_HOST_SYSTEM     = "${CMAKE_HOST_SYSTEM}";
-constexpr char const * CMAKE_SYSTEM          = "${CMAKE_SYSTEM}";
-constexpr char const * CMAKE_CXX_COMPILER_ID = "${CMAKE_CXX_COMPILER_ID}";
-constexpr char const * BUILD_TIMESTAMP       = "${BUILD_TIMESTAMP}";
+constexpr char const * CONFIG_BUILD_SYSTEM    = "${CMAKE_HOST_SYSTEM}";
+constexpr char const * CONFIG_RUN_SYSTEM      = "${CMAKE_SYSTEM}";
+constexpr char const * CONFIG_CXX_COMPILER_ID = "${CMAKE_CXX_COMPILER_ID}";
+constexpr char const * CONFIG_BUILD_TIMESTAMP = "${BUILD_TIMESTAMP}";
 
 #endif

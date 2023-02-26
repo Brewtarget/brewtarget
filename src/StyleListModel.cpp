@@ -76,7 +76,8 @@ void StyleListModel::addStyles(QList<Style*> s)
    }
 }
 
-void StyleListModel::removeStyle(int styleId, std::shared_ptr<QObject> object) {
+void StyleListModel::removeStyle([[maybe_unused]] int styleId,
+                                 std::shared_ptr<QObject> object) {
    this->remove(std::static_pointer_cast<Style>(object).get());
    return;
 }
@@ -104,8 +105,8 @@ void StyleListModel::removeAll()
    }
 }
 
-void StyleListModel::styleChanged(QMetaProperty prop, QVariant val)
-{
+void StyleListModel::styleChanged(QMetaProperty prop,
+                                  [[maybe_unused]] QVariant val) {
    Style* sSend = qobject_cast<Style*>(sender());
 
    // NOTE: how to get around the issue that the sender might live in
@@ -141,22 +142,22 @@ int StyleListModel::indexOf(Style* s)
    return styles.indexOf(s);
 }
 
-int StyleListModel::rowCount( QModelIndex const& parent ) const
-{
+int StyleListModel::rowCount([[maybe_unused]] QModelIndex const & parent) const {
    return styles.size();
 }
 
-QVariant StyleListModel::data( QModelIndex const& index, int role ) const
-{
+QVariant StyleListModel::data(QModelIndex const& index, int role) const {
    int row = index.row();
    int col = index.column();
-   if( col == 0 && role == Qt::DisplayRole )
+   if( col == 0 && role == Qt::DisplayRole ) {
       return QVariant(styles.at(row)->name());
-   else
-      return QVariant();
+   }
+
+   return QVariant();
 }
 
-QVariant StyleListModel::headerData( int section, Qt::Orientation orientation, int role ) const
-{
+QVariant StyleListModel::headerData([[maybe_unused]] int section,
+                                    [[maybe_unused]] Qt::Orientation orientation,
+                                    [[maybe_unused]] int role) const {
    return QVariant(QString("Header Data..."));
 }

@@ -1,6 +1,6 @@
 /*
  * tableModels/BtTableModel.cpp is part of Brewtarget, and is copyright the following
- * authors 2021-2022:
+ * authors 2021-2023
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  *

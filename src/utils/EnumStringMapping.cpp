@@ -1,6 +1,6 @@
 /*
  * utils/EnumStringMapping.cpp is part of Brewtarget, and is Copyright the following
- * authors 2021
+ * authors 2021-2023
  * - Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -26,10 +26,23 @@ EnumAndItsString::EnumAndItsString(QString string, int native) :
    return;
 }
 
-std::optional<int> EnumStringMapping::stringToEnumAsInt(QString const & stringValue) const {
+std::optional<int> EnumStringMapping::stringToEnumAsInt(QString const & stringValue,
+                                                        bool const caseInensitiveFallback) const {
    auto match = std::find_if(this->begin(),
                              this->end(),
                              [stringValue](EnumAndItsString const & ii){return stringValue == ii.string;});
+   //
+   // If we didn't find an exact match, we'll try a case-insensitive one if so-configured.  (We don't do this by
+   // default as the assumption is that it's rare we'll need the case insensitivity.
+   //
+   if (match == this->end() && caseInensitiveFallback) {
+      match = std::find_if(
+         this->begin(),
+         this->end(),
+         [stringValue](EnumAndItsString const & ii){return stringValue.toLower() == ii.string.toLower();}
+      );
+   }
+
    if (match == this->end()) {
       return std::nullopt;
    }

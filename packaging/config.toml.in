@@ -1,0 +1,28 @@
+#
+# packaging/config.toml.in is part of Brewtarget, and is copyright the following authors 2023:
+#   • Matt Young <mfsy@yahoo.com>
+#
+# Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+# version.
+#
+# Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+# warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+# details.
+#
+# You should have received a copy of the GNU General Public License along with this program.  If not, see
+# <http://www.gnu.org/licenses/>.
+#
+
+#
+# This file is used by meson.build to export build system config into a TOML (https://toml.io/en/) file in the build
+# directory that the bt Python script can use during packaging
+#
+CONFIG_VERSION_STRING       = "@CONFIG_VERSION_STRING@"
+CONFIG_APPLICATION_NAME_UC  = "@CONFIG_APPLICATION_NAME_UC@"
+CONFIG_APPLICATION_NAME_LC  = "@CONFIG_APPLICATION_NAME_LC@"
+# NB: This is an array so we don't want it in quotes!
+CONFIG_SHARED_LIBRARY_PATHS = @CONFIG_SHARED_LIBRARY_PATHS@
+
+CONFIG_CHANGE_LOG_UNCOMPRESSED = "@CONFIG_CHANGE_LOG_UNCOMPRESSED@"
+CONFIG_PACKAGE_MAINTAINER      = "@CONFIG_PACKAGE_MAINTAINER@"

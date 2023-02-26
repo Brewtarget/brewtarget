@@ -22,18 +22,21 @@
 #include "model/Style.h"
 
 StyleSortFilterProxyModel::StyleSortFilterProxyModel(QObject* parent)
-   : QSortFilterProxyModel(parent)
-{
+   : QSortFilterProxyModel(parent) {
+   return;
 }
 
-bool StyleSortFilterProxyModel::filterAcceptsRow( int source_row, const QModelIndex &source_parent) const
-{
+bool StyleSortFilterProxyModel::filterAcceptsRow(int source_row,
+                                                 [[maybe_unused]] QModelIndex const & source_parent) const {
    StyleListModel* m = qobject_cast<StyleListModel*>(sourceModel());
-   if( !m )
+   if (!m) {
       return true;
+   }
+
    Style* s = m->at(source_row);
-   if( !s )
+   if (!s) {
       return true;
+   }
 
    return s->display() && !s->deleted();
 }

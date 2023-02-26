@@ -1,6 +1,6 @@
 /*
  * EquipmentEditor.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2022
+ * authors 2009-2023
  * - A.J. Drobnich <aj.drobnich@gmail.com>
  * - David Grundberg <individ@acc.umu.se>
  * - Matt Young <mfsy@yahoo.com>

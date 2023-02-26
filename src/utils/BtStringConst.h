@@ -1,6 +1,6 @@
 /*
  * utils/BtStringConst.h is part of Brewtarget, and is Copyright the following
- * authors 2021
+ * authors 2021-2023
  * - Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -57,9 +57,20 @@ public:
    ~BtStringConst();
 
    /**
-    * \brief Compare two \c BtStringConst for equality using \c std::strcmp internally after checking for null pointers
+    * \brief Compare two \c BtStringConst for equality using \c std::strcmp internally after doing short-cut checks (eg
+    *        are lhs and rhs references to the same object, does either/both sides contain null pointer to its C
+    *        string).
+    *
+    *        Note that, in general, it's best \b not to compare \b pointers to \c BtStringConst because it's not
+    *        possible to provide an overload for operator== that handles such a case (and we might have two instances of
+    *        \c BtStringConst at different memory addresses that are "the same" - depending on how the compiler
+    *        optimises instances of \c BtStringConst defined in header files).
     */
    bool operator==(BtStringConst const & rhs) const;
+
+   /**
+    * \brief Comparison for inequality is defined in terms of that for equality.
+    */
    template<class T>
    bool operator!=(T const & rhs) const {
       return !(*this == rhs);
@@ -71,9 +82,9 @@ public:
    bool isNull() const;
 
    /**
-    * \brief Returns the contained char const * const pointer
+    * \brief Returns a copy of the contained char const * const pointer
     */
-   char const * const operator*() const;
+   char const * operator*() const;
 
    /**
     * \brief Generic output streaming for \c BtStringConst, including sensible output if the contained pointer is null

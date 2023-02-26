@@ -1,6 +1,6 @@
 /*
  * BtFieldType.cpp is part of Brewtarget, and is copyright the following
- * authors 2022:
+ * authors 2022-2023
  * - Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify

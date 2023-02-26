@@ -114,7 +114,7 @@ endif()
 #=======================================================================================================================
 # It's simplest to keep the project name all lower-case as it means we can use a lot more of the default settings for
 # Linux packaging (where directory names etc are expected to be all lower-case)
-project(brewtarget VERSION 3.0.6 LANGUAGES CXX)
+project(brewtarget VERSION 3.0.7 LANGUAGES CXX)
 message(STATUS "Building ${PROJECT_NAME} version ${PROJECT_VERSION}")
 message(STATUS "PROJECT_SOURCE_DIR is ${PROJECT_SOURCE_DIR}")
 # Sometimes we do need the capitalised version of the project name
@@ -274,7 +274,7 @@ if(NOT ${NO_MESSING_WITH_FLAGS})
       # "Marks the object as not requiring executable stack".
       #
       # However, this is not sufficient.  So, for the moment, we suppress the rpmlint error (see
-      # packaging/rpmLintFilters.toml).
+      # packaging/linux/rpmLintFilters.toml).
       #
       set(CMAKE_CXX_FLAGS_RELEASE "-Wall -ansi -pedantic -Wno-long-long -O2 -z noexecstack")
       #
@@ -626,21 +626,36 @@ message(STATUS "Using Qt version " ${Qt5Core_VERSION})
 #    .:TODO:. So far don't have stacktraces working properly on Windows (everything shows as register_frame_ctor), so
 #    that needs some more investigation.  (It could be that it's a bug in Boost, at least according to
 #    https://stackoverflow.com/questions/54333608/boost-stacktrace-not-demangling-names-when-cross-compiled)
+#
+#    ******************
+#    *** Boost JSON ***
+#    ******************
+#
+#    Boost JSON is an (optionally) header-only library that was introduced in Boost 1.75 in December 2020.  One of the
+#    features we use, JSON pointers (the equivalent of XML's XPaths) was only introduced in Boost 1.79.  As of March
+#    2022, Ubunutu 20.04 LTS only has packages for Boost 1.71 from August 2019, hence the need to manually install a
+#    newer Boost.
+#
+#    ******************
+#    *** Boost.Core ***
+#    ******************
+#
+#    Boost.Core, part of collection of the Boost C++ Libraries, is a collection of core utilities used by other Boost
+#    libraries.  Boost JSON needs a more recent version than 1.71.
+#
 set(Boost_USE_STATIC_LIBS ON)
 if(WIN32)
-find_package(Boost REQUIRED)
+   find_package(Boost 1.79.0 REQUIRED)
 elseif(APPLE)
-find_package(Boost REQUIRED)
+   find_package(Boost 1.79.0 REQUIRED)
 else()
-# TBD Some users report problems getting CMake to find libboost_stacktrace_backtrace on Ubuntu and Gentoo, so disable it
-# for now and fallback to the header-only version
-#find_package(Boost REQUIRED COMPONENTS stacktrace_backtrace)
-find_package(Boost REQUIRED)
+   # Note that header-only libraries don't have a component
+   find_package(Boost 1.79.0 REQUIRED COMPONENTS stacktrace_backtrace)
 endif()
 include_directories(${Boost_INCLUDE_DIRS})
 # Uncomment the next two lines if you want to find where Boost headers and DLLs are on your system
-message( "Boost include directories: " ${Boost_INCLUDE_DIRS} )
-message( "Boost libraries: " ${Boost_LIBRARIES} )
+message("Boost include directories: ${Boost_INCLUDE_DIRS}")
+message("Boost libraries: ${Boost_LIBRARIES}")
 
 #
 # Extra requirements for Boost Stacktrace
@@ -777,7 +792,7 @@ set(filesToInstall_data ${repoDir}/data/default_db.sqlite
                         ${repoDir}/doc/manual-en.pdf)
 
 # Desktop files to install.
-set(filesToInstall_desktop ${repoDir}/${PROJECT_NAME}.desktop)
+set(filesToInstall_desktop ${repoDir}/linux/${PROJECT_NAME}.desktop)
 
 # Icon files to install.
 set(filesToInstall_icons ${repoDir}/images/${PROJECT_NAME}.svg)
@@ -1765,7 +1780,7 @@ if(UNIX AND NOT APPLE)
    # so we have to set it explicitly here
    set(CPACK_RPM_PACKAGE_DESCRIPTION ${CPACK_PACKAGE_DESCRIPTION})
 
-   # This has to match one of the ValidLicenses values in packaging/rpmLintFilters.toml.  (See comment in that file for
+   # This has to match one of the ValidLicenses values in packaging/linux/rpmLintFilters.toml.  (See comment in that file for
    # more info.)
    set(CPACK_RPM_PACKAGE_LICENSE "GPL-3.0-or-later")
 
@@ -1938,7 +1953,7 @@ if(UNIX AND NOT APPLE)
       COMMAND lintian --no-tag-display-limit *.deb
       # Running rpmlint is the equivalent exercise for RPMs.  Most common error and warning codes are listed at
       # https://fedoraproject.org/wiki/Common_Rpmlint_issues
-      COMMAND rpmlint --config ${repoDir}/packaging *.rpm
+      COMMAND rpmlint --config ${repoDir}/packaging/linux *.rpm
       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
       COMMENT "Running lintian and on deb package and rpmlint on rpm package.  Warnings about man pages are expected!"
    )

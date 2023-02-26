@@ -1,6 +1,6 @@
 /*
  * PitchDialog.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2023
  * - A.J. Drobnich <aj.drobnich@gmail.com>
  * - Matt Young <mfsy@yahoo.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>

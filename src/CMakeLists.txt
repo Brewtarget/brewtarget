@@ -1,6 +1,6 @@
 #
 # src/CMakeLists.txt is part of Brewtarget, and is Copyright the following
-# authors 2009-2022:
+# authors 2009-2023:
 #  - Aidan Roberts <aidanr67@gmail.com>
 #  - Daniel Moreno <danielm5@users.noreply.github.com>
 #  - Mark de Wever <koraq@xs4all.nl>

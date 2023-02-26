@@ -252,12 +252,11 @@ QModelIndex BtTreeModel::parent(QModelIndex const & index) const {
 }
 
 QModelIndex BtTreeModel::first() {
-   BtTreeItem * pItem;
 
    // get the first item in the list, which is the place holder
-   pItem = rootItem->child(0);
+   BtTreeItem * pItem = rootItem->child(0);
    if (pItem->childCount() > 0) {
-      return createIndex(0, 0, pItem->child(0));
+      return this->createIndex(0, 0, pItem->child(0));
    }
 
    return QModelIndex();
@@ -725,7 +724,7 @@ template BtFolder    * BtTreeModel::getItem<BtFolder   >(QModelIndex const & ind
 template Water       * BtTreeModel::getItem<Water      >(QModelIndex const & index) const;
 
 NamedEntity * BtTreeModel::thing(const QModelIndex & index) const {
-   return index.isValid() ? item(index)->thing() : nullptr;
+   return index.isValid() ? this->item(index)->thing() : nullptr;
 }
 
 template<class T>
@@ -1316,31 +1315,31 @@ void BtTreeModel::elementAdded(NamedEntity * victim) {
    return;
 }
 
-void BtTreeModel::elementRemovedRecipe(int victimId, std::shared_ptr<QObject> victim) {
+void BtTreeModel::elementRemovedRecipe([[maybe_unused]] int victimId, std::shared_ptr<QObject> victim) {
    this->elementRemoved(qobject_cast<NamedEntity *>(victim.get()));
 }
-void BtTreeModel::elementRemovedEquipment(int victimId, std::shared_ptr<QObject> victim) {
+void BtTreeModel::elementRemovedEquipment([[maybe_unused]] int victimId, std::shared_ptr<QObject> victim) {
    this->elementRemoved(qobject_cast<NamedEntity *>(victim.get()));
 }
-void BtTreeModel::elementRemovedFermentable(int victimId, std::shared_ptr<QObject> victim) {
+void BtTreeModel::elementRemovedFermentable([[maybe_unused]] int victimId, std::shared_ptr<QObject> victim) {
    this->elementRemoved(qobject_cast<NamedEntity *>(victim.get()));
 }
-void BtTreeModel::elementRemovedHop(int victimId, std::shared_ptr<QObject> victim) {
+void BtTreeModel::elementRemovedHop([[maybe_unused]] int victimId, std::shared_ptr<QObject> victim) {
    this->elementRemoved(qobject_cast<NamedEntity *>(victim.get()));
 }
-void BtTreeModel::elementRemovedMisc(int victimId, std::shared_ptr<QObject> victim) {
+void BtTreeModel::elementRemovedMisc([[maybe_unused]] int victimId, std::shared_ptr<QObject> victim) {
    this->elementRemoved(qobject_cast<NamedEntity *>(victim.get()));
 }
-void BtTreeModel::elementRemovedStyle(int victimId, std::shared_ptr<QObject> victim) {
+void BtTreeModel::elementRemovedStyle([[maybe_unused]] int victimId, std::shared_ptr<QObject> victim) {
    this->elementRemoved(qobject_cast<NamedEntity *>(victim.get()));
 }
-void BtTreeModel::elementRemovedYeast(int victimId, std::shared_ptr<QObject> victim) {
+void BtTreeModel::elementRemovedYeast([[maybe_unused]] int victimId, std::shared_ptr<QObject> victim) {
    this->elementRemoved(qobject_cast<NamedEntity *>(victim.get()));
 }
-void BtTreeModel::elementRemovedBrewNote(int victimId, std::shared_ptr<QObject> victim) {
+void BtTreeModel::elementRemovedBrewNote([[maybe_unused]] int victimId, std::shared_ptr<QObject> victim) {
    this->elementRemoved(qobject_cast<NamedEntity *>(victim.get()));
 }
-void BtTreeModel::elementRemovedWater(int victimId, std::shared_ptr<QObject> victim) {
+void BtTreeModel::elementRemovedWater([[maybe_unused]] int victimId, std::shared_ptr<QObject> victim) {
    this->elementRemoved(qobject_cast<NamedEntity *>(victim.get()));
 }
 
@@ -1408,7 +1407,7 @@ void BtTreeModel::observeElement(NamedEntity * d) {
    }
 
    if (qobject_cast<BrewNote *>(d)) {
-      connect(d, SIGNAL(brewDateChanged(const QDate &)), this, SLOT(elementChanged()));
+      connect(qobject_cast<BrewNote *>(d), &BrewNote::brewDateChanged, this, &BtTreeModel::elementChanged);
    } else {
       connect(d, SIGNAL(changedName(QString)), this, SLOT(elementChanged()));
       // connect(d, SIGNAL(changedFolder(QString)), this, SLOT(folderChanged(QString)));
@@ -1420,11 +1419,14 @@ void BtTreeModel::observeElement(NamedEntity * d) {
 // ===================== DRAG AND DROP STUFF ===============================
 // =========================================================================
 bool BtTreeModel::dropMimeData(QMimeData const * data,
-                               Qt::DropAction action,
-                               int row,
-                               int column,
+                               [[maybe_unused]] Qt::DropAction action,
+                               [[maybe_unused]] int row,
+                               [[maybe_unused]] int column,
                                QModelIndex const & parent) {
-   qInfo() << Q_FUNC_INFO;
+   // See https://en.wikipedia.org/wiki/Media_type for more on MIME types (now called media types)
+   qDebug() <<
+      Q_FUNC_INFO << "MIME Data:" << (data ? data->text() : "NULL") << ".  "
+      "Parent" << (parent.isValid() ? "valid" : "invalid");
 
    QByteArray encodedData;
 
@@ -1433,12 +1435,15 @@ bool BtTreeModel::dropMimeData(QMimeData const * data,
    } else if (data->hasFormat("application/x-brewtarget-folder")) {
       encodedData = data->data("application/x-brewtarget-folder");
    } else {
+      qDebug() << Q_FUNC_INFO << "Unrecognised MIME type";
       return false;   // Don't know what we got, but we don't want it
    }
 
-   if (! parent.isValid()) {
+   if (!parent.isValid()) {
       return false;
    }
+
+   qDebug() << Q_FUNC_INFO << "Parent row:" << parent.row() << ", column:" << parent.column();
 
    QString target = "";
    if (this->itemIs<BtFolder>(parent)) {
@@ -1450,23 +1455,27 @@ bool BtTreeModel::dropMimeData(QMimeData const * data,
       // actually drop things there? If somebody drops something there, don't
       // do anything
       if (! something) {
+         qDebug() << Q_FUNC_INFO << "Invalid drop location";
          return false;
       }
 
       target = something->folder();
    }
 
+   qDebug() << Q_FUNC_INFO << "Target:" << target;
+
    // Pull the stream apart and do that which needs done. Late binding ftw!
    for (QDataStream stream{&encodedData, QIODevice::ReadOnly}; !stream.atEnd(); ) {
       int oTypeRaw;
       int id;
       QString name = "";
-      QString text;
       stream >> oTypeRaw >> id >> name;
       BtTreeItem::Type oType = static_cast<BtTreeItem::Type>(oTypeRaw);
-      NamedEntity * elem = getElement(oType, id);
+      qDebug() << Q_FUNC_INFO << "Name:" << name << ", ID:" << id << ", Type:" << oTypeRaw;
 
+      NamedEntity * elem = getElement(oType, id);
       if (elem == nullptr && oType != BtTreeItem::Type::FOLDER) {
+         qDebug() << Q_FUNC_INFO << "No matching element";
          return false;
       }
 

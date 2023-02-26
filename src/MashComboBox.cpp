@@ -52,7 +52,8 @@ void MashComboBox::add(Mash * m) {
    return;
 }
 
-void MashComboBox::removeMash(int mashId, std::shared_ptr<QObject> object) {
+void MashComboBox::removeMash([[maybe_unused]] int mashId,
+                              std::shared_ptr<QObject> object) {
    this->remove(std::static_pointer_cast<Mash>(object).get());
    return;
 }
@@ -77,7 +78,8 @@ void MashComboBox::removeAllMashs() {
    }
 }
 
-void MashComboBox::changed(QMetaProperty prop, QVariant /*val*/) {
+void MashComboBox::changed([[maybe_unused]] QMetaProperty prop,
+                           [[maybe_unused]] QVariant      val) {
    int i = mashObs.indexOf(qobject_cast<Mash *>(sender()));
    if (i >= 0) {
       // Notice we assume 'i' is an index into both 'mashObs' and also

@@ -1,0 +1,29 @@
+% @CONFIG_APPLICATION_NAME_AC@(1) @CONFIG_APPLICATION_NAME_LC@ @CONFIG_VERSION_STRING@
+% @CONFIG_ORGANIZATION_NAME@
+% @CONFIG_BUILD_MONTH_AND_YEAR@
+
+# NAME
+@CONFIG_APPLICATION_NAME_LC@ - GUI beer brewing software
+
+# SYNOPSIS
+**@CONFIG_APPLICATION_NAME_LC@**
+
+# DESCRIPTION
+@CONFIG_APPLICATION_NAME_UC@ is a calculator for brewing beer. It is a Qt-based program which
+allows you to create recipes from a database of ingredients. It calculates
+all the important parameters, helps you with mash temperatures, and just
+makes the process of recipe formulation much easier.
+
+# COPYRIGHT
+Copyright © various authors 2009-2023 -- see accompanying documentation
+
+@CONFIG_APPLICATION_NAME_UC@ is free software: you can redistribute it and/or modify it under the terms of the GNU
+General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
+option) any later version.
+
+@CONFIG_APPLICATION_NAME_UC@ is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+more details.
+
+You should have received a copy of the GNU General Public License along with this program.  If not, see
+<http://www.gnu.org/licenses/>.
