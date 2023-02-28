@@ -154,7 +154,10 @@
 #                     bindings, and C++11 or later for lambdas.
 #
 #   - warning_level   3 is the highest level ie warns about the most things.  For gcc it translates to
-#                        -Wall -Winvalid-pch -Wnon-virtual-dtor -Wextra -Wpedantic
+#                        -Wall -Winvalid-pch -Wextra -Wpedantic
+#                     (Prior to Meson 1.0.0, it also included -Wnon-virtual-dtor, but this was removed because "GCC devs
+#                     think it's a bad idea to force projects to use it [and] it belongs in -Weffc++ rather than being
+#                     lumped in with -Wall.)
 #
 #   - prefer_static   We want to try static linking before shared linking because it makes packaging a lot easier on
 #                     Windows and Mac.   NB: This requires meson 0.63.0 or newer.  Current version of meson in Ubuntu
@@ -195,7 +198,8 @@ project('brewtarget', 'cpp',
 #
 projectName = meson.project_name().to_lower()
 capitalisedProjectName = projectName.substring(0, 1).to_upper() + projectName.substring(1)
-
+# Most of the info we print out here is also available in various logs Meson itself generates, but it's helpful to have
+# it in the main output, particularly for diagnosing problems in builds run in a GitHub action.
 message('⭐ Building', projectName, 'version', meson.project_version(), 'for', host_machine.system(),
         'on', build_machine.system(), 'in', meson.project_source_root(), '⭐')
 compiler = meson.get_compiler('cpp')
@@ -203,9 +207,17 @@ message('Using Meson', meson.version(), ', ', compiler.get_id(), 'compiler and',
 
 #
 # We need two versions of the main executable name because they are different on Windows:
-#    - We need a "target" name _without_ the '.exe' suffix for the executable() command because, on Windows, Meson will
-#      always add its own '.exe' suffix and we don't want to end up with '.exe.exe' as the suffix!
-#    - Everywhere else, we want the actual name of the file, including the '.exe' suffix.
+#
+#    mainExecutableTargetName = "target" name _without_ the '.exe' suffix, which we pass to the executable() command.
+#                               On Windows, Meson will always add its own '.exe' suffix and we don't want to end up
+#                               with '.exe.exe' as the suffix!
+#
+#    mainExecutableTargetName = The actual name of the file, including the '.exe' suffix.  We export this as
+#                               CONFIG_EXECUTABLE_NAME for anywhere else that needs it (currently only the NSIS
+#                               packaging scripts on Windows)
+#
+# (We could also obtain mainExecutableTargetName via the full_path() method on the return object from the executable()
+# command, but we'd have to strip off the path.)
 #
 # The default (on Windows and Linux) is to use Unix-style executable names, ie all lower case
 #
@@ -403,31 +415,43 @@ message('Boost:', boostDependency.name(), 'found =', boostDependency.found(), 'v
 # If we _don't_ need libdl, we just create an "unrequired" dependency.  This saves having to repeat a bunch of logic
 # later on when we get to the main build.
 #
-needLibdl = false
-if compiler.get_id() == 'gcc'
-   lddOutput = run_command('ldd', '--version', check: true).stdout().strip()
-   lddOutputLine1 = lddOutput.split('\n')[0]
-   message('ldd --version gives:', lddOutputLine1)
-   libcVersion = lddOutputLine1.split(' ')[-1]
-   message('libc version is:', libcVersion)
-   if libcVersion.version_compare('<2.34')
-      needLibdl = true
-   endif
-endif
-dlDependency = dependency('dl', required : needLibdl, static : true)
+# On newer versions of Meson (>= 0.62.0), the dependency() command has special-case code for dealing with libdl being
+# built into the compiler.  This means if we write:
 #
-# On newer versions of Meson (0.62.0 and newer), the dependency has special-case code for dealing with libdl being built
-# into the compiler.  This means on Mac, for instance, we can have dlDependency.found() is true without there being any
-# cmake variable such as PACKAGE_LIBRARIES (because the library was found by Meson special case code, not by cmake).
+#    dlDependency = dependency('dl', required : needLibdl, static : true)
 #
-# This is why we have to supply a default dummy value, which we then check for.
+# then, on Mac for instance, dlDependency.found() can be true without there being any cmake variable such as
+# PACKAGE_LIBRARIES (because the library was found by Meson special case code, not by cmake).
 #
-if dlDependency.found()
-   dlLibraryPath = dlDependency.get_variable(default_value : '', cmake : 'PACKAGE_LIBRARIES')
-   message('dlLibraryPath is:', dlLibraryPath)
-   if dlLibraryPath != ''
-      sharedLibraryPaths += dlLibraryPath
-   endif
+# Previously, the code here was:
+#
+#    needLibdl = false
+#    if compiler.get_id() == 'gcc'
+#       lddOutput = run_command('ldd', '--version', check: true).stdout().strip()
+#       lddOutputLine1 = lddOutput.split('\n')[0]
+#       message('ldd --version gives:', lddOutputLine1)
+#       libcVersion = lddOutputLine1.split(' ')[-1]
+#       message('libc version is:', libcVersion)
+#       if libcVersion.version_compare('<2.34')
+#          needLibdl = true
+#       endif
+#    endif
+#    dlDependency = dependency('dl', required : needLibdl, static : true)
+#    if dlDependency.found()
+#       dlLibraryPath = dlDependency.get_variable(default_value : '', cmake : 'PACKAGE_LIBRARIES')
+#       message('dlLibraryPath is:', dlLibraryPath)
+#       if dlLibraryPath != ''
+#          sharedLibraryPaths += dlLibraryPath
+#       endif
+#    endif
+#
+# However, there is a neater approach, which relies on the fact that opening a shared library is a POSIX operation with
+# calls declared in a POSIX-defined header (see eg https://man7.org/linux/man-pages/man0/dlfcn.h.0p.html).  We just ask
+# the compiler whether it has dlopen() built-in, and, if not, please can it tell us where to find it!
+#
+dlDependency = declare_dependency()
+if not compiler.has_function('dlopen', prefix: '#include <dlfcn.h>')
+  dlDependency = compiler.find_library('dl', has_headers: 'dlfcn.h')
 endif
 
 # Note that, unlike, say, the parameters to include_directories(), the dirs argument to find_library() must be absolute
@@ -442,7 +466,10 @@ backtraceDependency = compiler.find_library('backtrace',
 #
 # See https://mesonbuild.com/Reference-manual_returned_dep.html for what info we can pull from a dependency object
 #
-# For BeerXML processing we need Xerces-C++ and Xalan-C++.  Meson can find both of these automatically using CMake's
+# For BeerXML processing we need Xerces-C++ and Xalan-C++.  Meson can find both of these automatically in a couple of
+# different ways.  The official way is to use `dependency('xerces-c')` and `dependency('xalan-c')`.  However, I don't
+# think this gives us access to the paths of the libraries (which we want to export for the packaging scripts -- see
+# various comments about shared libraries in the `bt` build tool script).  Instead, we can have Meson use CMake's
 # find_package(), as long as (a) CMake is installed(!) and (b) we provide the right library names ('XercesC' per
 # https://cmake.org/cmake/help/latest/module/FindXercesC.html and 'XalanC' per
 # https://cmake.org/cmake/help/latest/module/FindXalanC.html)
@@ -476,6 +503,7 @@ includeDirs = include_directories('src', 'third-party/libbacktrace')
 #=======================================================================================================================
 #============================================= Extra Windows dependencies ==============================================
 #=======================================================================================================================
+# .:TBD:. Don't think we need this bit any more
 if host_machine.system() == 'windows'
    #
    # We can't assume that the person running the code will have MSYS2/MinGW installed, so we need to include the DLLs
@@ -1204,21 +1232,13 @@ configure_file(input  : 'packaging/config.toml.in',
                configuration : exportedVariables,
                install : false)
 
-# On Linux (and TBD Mac) we inject build system variables into the markdown text that will be used to generate the man
-# page for the application.  The bt build tool script will then turn this markdown into a man page and include it in
-# the package.  (.:TBD:. This means man pages don't get installed locally, but that could be fixed by extending bt to
-# wrap around all meson operations.)
-configure_file(input  : 'doc/manpage.1.md.in',
-               output : 'manpage.1.md',
-               configuration : exportedVariables,
-               install : false)
-
 #
 # We also want to inject build-system variables into various platform-specific packaging scripts, control files and so
 # on.
 #
-# We ultimately want the generated files inside the 'packaging' subtree of the the build directory, but that is not
-# permitted by configure_file, so, that gets done by the bt script.
+# .:TODO:.: We ultimately want the generated files inside the 'packaging' subtree of the the build directory.  Currently,
+# that gets done by the bt script, but we could use the subdir('packaging') command here to have Meson put the file in
+# the right place.  We should do this at some point (and make the corresponding changes to the bt script).
 #
 if host_machine.system() == 'linux'
    #
@@ -1254,12 +1274,29 @@ elif host_machine.system() == 'darwin'
 endif
 
 #=======================================================================================================================
-#============================================= Generate manpage for Linux ==============================================
+#========================================= Generate manpage for Linux and Mac ==========================================
 #=======================================================================================================================
-if host_machine.system() == 'linux'
+if host_machine.system() == 'linux' or host_machine.system() == 'darwin'
+   message('Generating man page')
    #
-   # Generate man page from markdown (which already had build system variables injected into it via meson.build)
-   # using the pandoc utility:
+   # On Linux (and TBD Mac) we inject build system variables into the markdown text that will be used to generate the
+   # man page for the application.
+   #
+   manPageMarkdown = configure_file(input  : 'doc/manpage.1.md.in',
+                                    output : 'manpage.1.md',
+                                    configuration : exportedVariables,
+                                    install : false)
+
+   #
+   # Now we take that markdown-with-injected-variables and generate a man page from it using the pandoc utility.
+   #
+   # We use Meson's configure_file() command again here, but this time to wrap pandoc, which means we can use Meson file
+   # objects.  Note that, although configure_file() can take stdout and turn it into the 'output' file, I have yet to
+   # find a way to have it pass the contents of the 'input' file to the command as stdin.  This just means we need to
+   # specify the input file twice -- once for configure_file() (so it knows about the dependency) and once for pandoc
+   # (so it knows where to get its input).
+   #
+   # The pandoc options we use are:
    #    --verbose      = give verbose debugging output (though currently this does not have much effect)
    #    -t man         = generate output in man format
    #    -s             = generate a complete man page (rather than just some text in man format)
@@ -1272,22 +1309,13 @@ if host_machine.system() == 'linux'
    # TODO: For the moment we are only producing an English man page.  It would not be huge effort to produce them for
    # non-English locales, so we should do that at some point.
    #
-   pandocResult = run_command(
-      'pandoc',
-      join_paths(meson.current_build_dir(), 'manpage.1.md'),
-      '--verbose',
-      '-t', 'man',
-      '-s',
-      '-o', join_paths(meson.current_build_dir(), projectName + '.1'),
+   generatedManPage = configure_file(
+      input: manPageMarkdown,
+      output: projectName + '.1',
       capture : true,
-      check : true
+      command: ['pandoc', manPageMarkdown, '--verbose', '-t', 'man', '-s'],
    )
-   message('Generating man page output:', pandocResult.stdout().strip())
-   if pandocResult.returncode() != 0
-      error('Generating man page ERRORS:', pandocResult.stderr().strip())
-   else
-      install_man(join_paths(meson.current_build_dir(), projectName + '.1'))
-   endif
+   install_man(generatedManPage)
 endif
 
 #=======================================================================================================================
