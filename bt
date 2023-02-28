@@ -775,6 +775,7 @@ def installDependencies():
                         'llvm',
                         'meson',
                         'ninja',
+                        'pandoc',
                         'qt@5',
                         'xalan-c',
                         'xerces-c']
@@ -1039,9 +1040,10 @@ def doPackage():
    # options:
    #    --no-tests  = stops Meson doing a full build and test, on the assumption that we've already done this by the
    #                  time we come to packaging
-   #    --allow-dirty  = allow uncommitted changes, which is needed more often than you think (eg for the automatic
-   #                     builds done when a commit is pushed up to github).  HOWEVER, note this option is only available
-   #                     in Meson 0.62 and later.
+   #    --allow-dirty  = allow uncommitted changes, which is needed in Meson 0.62 and later to prevent Meson emitting a
+   #                     fatal error if there are uncommitted changes on the current git branch.  (In previous versions
+   #                     of Meson, this was just a warning.)  NOTE that, even with this option specified, uncommitted
+   #                     changes will be ignored (ie excluded from the source tarball).
    #
    # Of course, we could create a compressed tarball directly in this script, but the advantage of having Meson do it is
    # that it will (I believe) include only source & data files actually in the git repository in meson.build, so you
@@ -1443,7 +1445,7 @@ def doPackage():
                # newline!), otherwise rpmlint will complain about "incoherent-version-in-changelog".
                if (line.startswith('## v')):
                   nextVersionNumber = line.removeprefix('## v').replace('\n', '-1\n')
-                  log.debug('Extracted version "' + nextVersionNumber + '" from ' + line)
+                  log.debug('Extracted version "' + nextVersionNumber.rstrip() + '" from ' + line.rstrip())
                   if (len(changes) > 0):
                      specFile.write('* ' + releaseDate + ' ' + buildConfig['CONFIG_PACKAGE_MAINTAINER'] + ' - ' +
                                     versionNumber)
@@ -1457,7 +1459,7 @@ def doPackage():
                # says "* None" it probably means this is a release with no new features -- just bug fixes.  So we don't
                # want to include the "* None" line!
                if (line.startswith('* ')):
-                  if (line != '* None'):
+                  if (line.rstrip() != '* None'):
                      changes.append(line.removeprefix('* '))
                   continue
                # If this line is '### Release Timestamp' then we want to grab the next line as the release timestamp
@@ -1474,7 +1476,7 @@ def doPackage():
                   #
                   line = next(markdownChangeLog)
                   releaseDate = re.compile(r', (\d{1,2}) ([A-Z][a-z][a-z]) (\d\d\d\d).*\n$').sub(r' \2 \1 \3', line)
-                  log.debug('Extracted date "' + releaseDate + '" from ' + line)
+                  log.debug('Extracted date "' + releaseDate + '" from ' + line.rstrip())
                   continue
             # Once we got to the end of the input, we need to write the last change block
             if (len(changes) > 0):
