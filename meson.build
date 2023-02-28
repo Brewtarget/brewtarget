@@ -423,6 +423,16 @@ message('Boost:', boostDependency.name(), 'found =', boostDependency.found(), 'v
 # then, on Mac for instance, dlDependency.found() can be true without there being any cmake variable such as
 # PACKAGE_LIBRARIES (because the library was found by Meson special case code, not by cmake).
 #
+# At this point, there's good news and bad news:
+#    - The good news is that, on Mac and Linux, there's a more elegant way of handling the dl dependency, which relies
+#      on the fact that opening a shared library is a POSIX operation with calls declared in a POSIX-defined header (see
+#      eg https://man7.org/linux/man-pages/man0/dlfcn.h.0p.html).  We just ask the compiler whether it has dlopen()
+#      built-in, and, if not, please can it tell us where to find it!
+#    - The bad news is that, Windows doesn't have the POSIX interface for shared library opening, so it does not ship
+#      with the dlfcn.h header.  I think/hope we can get round this by installing dlfcn-win32 (see
+#      https://github.com/dlfcn-win32/dlfcn-win32) via its MSYS2 package (see
+#      https://packages.msys2.org/base/mingw-w64-dlfcn and mentions of dlfcn in the `bt` build tool script)...
+#
 # Previously, the code here was:
 #
 #    needLibdl = false

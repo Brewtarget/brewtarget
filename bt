@@ -705,6 +705,7 @@ def installDependencies():
                         'git',
                         'mingw-w64-' + arch + '-boost',
                         'mingw-w64-' + arch + '-cmake',
+                        'mingw-w64-' + arch + '-dlfcn',
                         'mingw-w64-' + arch + '-libbacktrace',
                         'mingw-w64-' + arch + '-meson',
                         'mingw-w64-' + arch + '-nsis',
