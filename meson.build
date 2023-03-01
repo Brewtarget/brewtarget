@@ -198,12 +198,37 @@ project('brewtarget', 'cpp',
 #
 projectName = meson.project_name().to_lower()
 capitalisedProjectName = projectName.substring(0, 1).to_upper() + projectName.substring(1)
-# Most of the info we print out here is also available in various logs Meson itself generates, but it's helpful to have
-# it in the main output, particularly for diagnosing problems in builds run in a GitHub action.
+#
+# Meson writes out a lot of useful info straight away, eg:
+#
+#    The Meson build system
+#    Version: 1.0.1
+#    Source dir: /home/runner/work/brewtarget/brewtarget
+#    Build dir: /home/runner/work/brewtarget/brewtarget/mbuild
+#    Build type: native build
+#    Project name: brewtarget
+#    Project version: 3.0.7
+#    C++ compiler for the host machine: c++ (gcc 9.4.0 "c++ (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0")
+#    C++ linker for the host machine: c++ ld.bfd 2.34
+#    Host machine cpu family: x86_64
+#    Host machine cpu: x86_64
+#
+# You can get this info inside the script too:
+#
+#    Version:                           = meson.version()
+#    Source dir:                        = meson.project_source_root()
+#    Build dir:                         = meson.project_build_root()
+#    Build type:                        ≈ meson.can_run_host_binaries()
+#    Project name:                      = meson.project_name()
+#    Project version:                   = meson.project_version()
+#    C++ compiler for the host machine: = compiler.get_id() and related commands
+#    C++ linker for the host machine:   = compiler.get_linker_id() and related commands
+#    Host machine cpu family:           = build_machine.cpu_family()
+#    Host machine cpu:                  = build_machine.cpu()
+#
 message('⭐ Building', projectName, 'version', meson.project_version(), 'for', host_machine.system(),
-        'on', build_machine.system(), 'in', meson.project_source_root(), '⭐')
+        'on', build_machine.system(), '⭐')
 compiler = meson.get_compiler('cpp')
-message('Using Meson', meson.version(), ', ', compiler.get_id(), 'compiler and', compiler.get_linker_id(), 'linker')
 
 #
 # We need two versions of the main executable name because they are different on Windows:
@@ -433,6 +458,8 @@ message('Boost:', boostDependency.name(), 'found =', boostDependency.found(), 'v
 #      https://github.com/dlfcn-win32/dlfcn-win32) via its MSYS2 package (see
 #      https://packages.msys2.org/base/mingw-w64-dlfcn and mentions of dlfcn in the `bt` build tool script)...
 #
+# BUT MAYBE WE DON'T NEED DL AT ALL ON WINDOWS, SO LET'S TRY THAT!
+#
 # Previously, the code here was:
 #
 #    needLibdl = false
@@ -460,8 +487,10 @@ message('Boost:', boostDependency.name(), 'found =', boostDependency.found(), 'v
 # the compiler whether it has dlopen() built-in, and, if not, please can it tell us where to find it!
 #
 dlDependency = declare_dependency()
-if not compiler.has_function('dlopen', prefix: '#include <dlfcn.h>')
-  dlDependency = compiler.find_library('dl', has_headers: 'dlfcn.h')
+if host_machine.system() != 'windows'
+   if not compiler.has_function('dlopen', prefix: '#include <dlfcn.h>')
+      dlDependency = compiler.find_library('dl', has_headers: 'dlfcn.h')
+   endif
 endif
 
 # Note that, unlike, say, the parameters to include_directories(), the dirs argument to find_library() must be absolute
@@ -1302,9 +1331,8 @@ if host_machine.system() == 'linux' or host_machine.system() == 'darwin'
    #
    # We use Meson's configure_file() command again here, but this time to wrap pandoc, which means we can use Meson file
    # objects.  Note that, although configure_file() can take stdout and turn it into the 'output' file, I have yet to
-   # find a way to have it pass the contents of the 'input' file to the command as stdin.  This just means we need to
-   # specify the input file twice -- once for configure_file() (so it knows about the dependency) and once for pandoc
-   # (so it knows where to get its input).
+   # find a way to have it pass the contents of the 'input' file to the command as stdin.  However, it can pass the name
+   # of the input file via '@INPUT@', and this is all we need in this instance.
    #
    # The pandoc options we use are:
    #    --verbose      = give verbose debugging output (though currently this does not have much effect)
@@ -1323,7 +1351,7 @@ if host_machine.system() == 'linux' or host_machine.system() == 'darwin'
       input: manPageMarkdown,
       output: projectName + '.1',
       capture : true,
-      command: ['pandoc', manPageMarkdown, '--verbose', '-t', 'man', '-s'],
+      command: ['pandoc', '@INPUT@', '--verbose', '-t', 'man', '-s'],
    )
    install_man(generatedManPage)
 endif
