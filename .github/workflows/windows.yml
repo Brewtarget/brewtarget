@@ -138,13 +138,16 @@ jobs:
       # In theory we don't need the next bit, as the bt script does it.  In practice, for reasons I haven't yet bottomed
       # out, but which are probably to do with search paths, when called from CMake/CPack, NSIS sometimes complains it
       # can't find Locate.nsh, so we need this bit to put it inside the CMake build directory tree.
+      #
+      # Note that this is PowerShell, so absolute paths on the C drive begin C:/ rather than /C/ in MSYS2
       - name: Download NSIS plugins
         run: |
-          New-Item -ItemType Directory -Force -Path /C/_/build/nsis
-          Invoke-WebRequest -Uri https://nsis.sourceforge.io/mediawiki/images/a/af/Locate.zip -OutFile /C/_/build/nsis/Locate.zip
-          Expand-Archive -Path /C/_/build/nsis/Locate.zip -DestinationPath /C/_/build/nsis/Locate
-          Invoke-WebRequest -Uri https://nsis.sourceforge.io/mediawiki/images/7/76/Nsislog.zip -OutFile /C/_/build/nsis/Nsislog.zip
-          Expand-Archive -Path /C/_/build/nsis/Nsislog.zip -DestinationPath /C/_/build/nsis/Nsislog
+          New-Item -ItemType Directory -Force -Path C:/_/build/nsis
+          Invoke-WebRequest -Uri https://nsis.sourceforge.io/mediawiki/images/a/af/Locate.zip -OutFile C:/_/build/nsis/Locate.zip
+          Expand-Archive -Path C:/_/build/nsis/Locate.zip -DestinationPath C:/_/build/nsis/Locate
+          Invoke-WebRequest -Uri https://nsis.sourceforge.io/mediawiki/images/7/76/Nsislog.zip -OutFile C:/_/build/nsis/Nsislog.zip
+          Expand-Archive -Path C:/_/build/nsis/Nsislog.zip -DestinationPath C:/_/build/nsis/Nsislog
+          Tree /f C:/_/build
 
       # Somehow, running the configure script sets up CMake to use Ninja rather than Makefiles, which is then in
       # conflict with our other assumptions about CMake.  Error message says remove CMakeCache.txt before running CMake,
