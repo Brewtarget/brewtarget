@@ -145,11 +145,8 @@ jobs:
           New-Item -ItemType Directory -Force -Path C:/_/build/nsis
           Invoke-WebRequest -Uri https://nsis.sourceforge.io/mediawiki/images/a/af/Locate.zip -OutFile C:/_/build/nsis/Locate.zip
           Expand-Archive -Path C:/_/build/nsis/Locate.zip -DestinationPath C:/_/build/nsis/Locate
-          cp C:/_/build/nsis/Locate/Include/Locate.nsh C:/msys64/mingw32/share/nsis/Include/.
-          cp C:/_/build/nsis/Locate/Plugin/locate.dll C:/msys64/mingw32/share/nsis/Plugins/ansi/.
           Invoke-WebRequest -Uri https://nsis.sourceforge.io/mediawiki/images/7/76/Nsislog.zip -OutFile C:/_/build/nsis/Nsislog.zip
           Expand-Archive -Path C:/_/build/nsis/Nsislog.zip -DestinationPath C:/_/build/nsis/Nsislog
-          cp C:/_/build/nsis/Nsislog/plugin/nsislog.dll  C:/msys64/mingw32/share/nsis/Plugins/ansi/.
           Tree /f C:/_/build
 
       # Somehow, running the configure script sets up CMake to use Ninja rather than Makefiles, which is then in
@@ -162,6 +159,9 @@ jobs:
           ./configure
           cd build
           rm CMakeCache.txt
+          cp ./nsis/Locate/Include/Locate.nsh /mingw32/share/nsis/Include/
+          cp ./nsis/Locate/Plugin/locate.dll /mingw32/share/nsis/Plugins/ansi/
+          cp ./nsis/Nsislog/plugin/nsislog.dll /mingw32/share/nsis/Plugins/ansi
           cmake .. -DCMAKE_RC_COMPILER:FILEPATH=windres.exe -G "MinGW Makefiles"
 
       # The pwd and find ../third-party commands below are just diagnostics, but it's generally useful to have too
