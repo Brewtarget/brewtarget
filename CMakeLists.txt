@@ -1027,7 +1027,7 @@ if(APPLE)
    set(MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION})
 
    # Sets the CFBundleIconFile bundle property key
-   set(MACOSX_BUNDLE_ICON_FILE "BrewkenIcon.icns")
+   set(MACOSX_BUNDLE_ICON_FILE "Brewtarget.icns")
 
    # Sets the NSHumanReadableCopyright bundle property key, which is "a human-readable copyright notice for the bundle".
    set(MACOSX_BUNDLE_COPYRIGHT
