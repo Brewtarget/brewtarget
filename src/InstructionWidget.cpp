@@ -64,10 +64,11 @@ void InstructionWidget::showChanges()
    checkBox_completed->setCheckState( insObs->completed() ? Qt::Checked : Qt::Unchecked );
 }
 
-void InstructionWidget::changed(QMetaProperty prop, QVariant /*val*/)
-{
-   if( sender() != insObs )
+void InstructionWidget::changed([[maybe_unused]] QMetaProperty prop,
+                                [[maybe_unused]] QVariant      val) {
+   if (sender() != insObs) {
       return;
+   }
 
    showChanges();
 }

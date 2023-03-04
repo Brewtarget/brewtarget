@@ -1,0 +1,50 @@
+/*
+ * config.in.h is part of Brewtarget, and is copyright the following authors 2009-2022:
+ *   • Aidan Roberts <aidanr67@gmail.com>
+ *   • Matt Young <mfsy@yahoo.com>
+ *   • Maxime Lavigne <duguigne@gmail.com>
+ *   • Philip Greggory Lee <rocketman768@gmail.com>
+ *
+ * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
+ *
+ * Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ */
+#ifndef CONFIG_IN
+#define CONFIG_IN
+#pragma once
+
+/**
+ * This file gets converted to mbuild/config.h by Meson (see configure_file command in meson.build in top-level
+ * directory)
+ *
+ * (Note that src/config.in serves the same purpose for CMake builds and should be retired if/when we stop using CMake.)
+ *
+ * This is a way to pass Meson variables into the code
+ */
+
+//! Used on Linux as a fallback way of determining where to look for resources - see Application.cpp
+constexpr char const * CONFIG_DATA_DIR            = "@CONFIG_DATA_DIR@";
+
+// These constants make sharing code between Brewtarget and Brewken slightly easier
+// (Here, UC means upper case first letter, LC means lower case first letter)
+constexpr char const * CONFIG_APPLICATION_NAME_UC = "@CONFIG_APPLICATION_NAME_UC@";
+constexpr char const * CONFIG_APPLICATION_NAME_LC = "@CONFIG_APPLICATION_NAME_LC@";
+
+// This one has to be a #define rather than a constexpr because it's used in ui/mainWindow.ui which is processed into
+// C++ code by the Qt Meta Object Compiler (MOC) and the MOC can't handle use of a constexpr const in a ui file.
+#define CONFIG_VERSION_STRING "@CONFIG_VERSION_STRING@"
+
+// Build info
+constexpr char const * CONFIG_BUILD_SYSTEM        = "@CONFIG_BUILD_SYSTEM@";
+constexpr char const * CONFIG_RUN_SYSTEM          = "@CONFIG_RUN_SYSTEM@";
+constexpr char const * CONFIG_CXX_COMPILER_ID     = "@CONFIG_CXX_COMPILER_ID@";
+constexpr char const * CONFIG_BUILD_TIMESTAMP     = "@CONFIG_BUILD_TIMESTAMP@";
+
+#endif

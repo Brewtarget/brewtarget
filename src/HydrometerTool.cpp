@@ -1,7 +1,10 @@
 /*
- * HydrometerTool.cpp is part of Brewtarget and was written by Ryan Hoobler
- * (rhoob@yahoo.com).  Copyright is granted to Philip G. Lee
- * (rocketman768@gmail.com), 2016.
+ * HydrometerTool.cpp is part of Brewtarget and is copyright the following authors
+ * 2016-2023
+ *   - Brian Rower <brian.rower@gmail.com>
+ *   - Jamie Daws <jdelectronics1@gmail.com>
+ *   - Matt Young <mfsy@yahoo.com>
+ *   - Ryan Hoobler <rhoob@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

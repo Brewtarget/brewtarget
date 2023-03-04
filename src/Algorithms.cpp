@@ -1,6 +1,6 @@
 /*
  * Algorithms.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2023
  * - Eric Tamme <etamme@gmail.com>
  * - Matt Young <mfsy@yahoo.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>

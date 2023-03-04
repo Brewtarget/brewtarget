@@ -42,9 +42,9 @@ namespace {
                                    T * lhs,
                                    T * rhs);
 
-   template<> bool lessThan<Recipe>(BtTreeModel * model,
+   template<> bool lessThan<Recipe>([[maybe_unused]] BtTreeModel * model,
                                     QModelIndex const & left,
-                                    QModelIndex const & right,
+                                    [[maybe_unused]] QModelIndex const & right,
                                     Recipe * lhs,
                                     Recipe * rhs) {
       // Yog-Sothoth knows the gate
@@ -72,9 +72,9 @@ namespace {
       return lhs->name() < rhs->name();
    }
 
-   template<> bool lessThan<Equipment>(BtTreeModel * model,
+   template<> bool lessThan<Equipment>([[maybe_unused]] BtTreeModel * model,
                                        QModelIndex const & left,
-                                       QModelIndex const & right,
+                                       [[maybe_unused]] QModelIndex const & right,
                                        Equipment * lhs,
                                        Equipment * rhs) {
       switch (left.column()) {
@@ -86,9 +86,9 @@ namespace {
       return lhs->name() < rhs->name();
    }
 
-   template<> bool lessThan<Fermentable>(BtTreeModel * model,
+   template<> bool lessThan<Fermentable>([[maybe_unused]] BtTreeModel * model,
                                          QModelIndex const & left,
-                                         QModelIndex const & right,
+                                         [[maybe_unused]] QModelIndex const & right,
                                          Fermentable * lhs,
                                          Fermentable * rhs) {
       switch (left.column()) {
@@ -102,9 +102,9 @@ namespace {
       return lhs->name() < rhs->name();
    }
 
-   template<> bool lessThan<Hop>(BtTreeModel * model,
+   template<> bool lessThan<Hop>([[maybe_unused]] BtTreeModel * model,
                                  QModelIndex const & left,
-                                 QModelIndex const & right,
+                                 [[maybe_unused]] QModelIndex const & right,
                                  Hop * lhs,
                                  Hop * rhs) {
       switch (left.column()) {
@@ -118,9 +118,9 @@ namespace {
       return lhs->name() < rhs->name();
    }
 
-   template<> bool lessThan<Misc>(BtTreeModel * model,
+   template<> bool lessThan<Misc>([[maybe_unused]] BtTreeModel * model,
                                   QModelIndex const & left,
-                                  QModelIndex const & right,
+                                  [[maybe_unused]] QModelIndex const & right,
                                   Misc * lhs,
                                   Misc * rhs) {
       switch (left.column()) {
@@ -134,9 +134,9 @@ namespace {
       return lhs->name() < rhs->name();
    }
 
-   template<> bool lessThan<Style>(BtTreeModel * model,
+   template<> bool lessThan<Style>([[maybe_unused]] BtTreeModel * model,
                                    QModelIndex const & left,
-                                   QModelIndex const & right,
+                                   [[maybe_unused]] QModelIndex const & right,
                                    Style * lhs,
                                    Style * rhs) {
       switch (left.column()) {
@@ -154,9 +154,9 @@ namespace {
       return lhs->name() < rhs->name();
    }
 
-   template<> bool lessThan<Yeast>(BtTreeModel * model,
+   template<> bool lessThan<Yeast>([[maybe_unused]] BtTreeModel * model,
                                    QModelIndex const & left,
-                                   QModelIndex const & right,
+                                   [[maybe_unused]] QModelIndex const & right,
                                    Yeast * lhs,
                                    Yeast * rhs) {
       switch (left.column()) {
@@ -170,9 +170,9 @@ namespace {
       return lhs->name() < rhs->name();
    }
 
-   template<> bool lessThan<Water>(BtTreeModel * model,
+   template<> bool lessThan<Water>([[maybe_unused]] BtTreeModel * model,
                                    QModelIndex const & left,
-                                   QModelIndex const & right,
+                                   [[maybe_unused]] QModelIndex const & right,
                                    Water * lhs,
                                    Water * rhs) {
       switch (left.column()) {

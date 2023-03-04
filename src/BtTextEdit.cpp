@@ -22,42 +22,37 @@
 #include <QDebug>
 #include <QSettings>
 
-BtTextEdit::BtTextEdit(QWidget *parent)
-{
-   wasModified = false;
+BtTextEdit::BtTextEdit([[maybe_unused]] QWidget * parent) : wasModified{false} {
 
    // We will see if this works...
    connect(this, &BtTextEdit::textChanged, this, &BtTextEdit::setTextChanged);
-
+   return;
 }
 
-BtTextEdit::BtTextEdit(const QString &text, QWidget *parent)
-{
+BtTextEdit::BtTextEdit(QString const & text,
+                       [[maybe_unused]] QWidget * parent) : wasModified{false} {
    setPlainText(text);
-
-   wasModified = false;
 
    // We will see if this works...
    connect(this, &BtTextEdit::textChanged, this, &BtTextEdit::setTextChanged);
-
+   return;
 }
 
 // I don't have faith in this. The concept is to call the super and then clear
 // the modified flag. The intent is that this is only done via the code, not
 // the user (e.g., loads and things)
-void BtTextEdit::setPlainText(const QString & text)
-{
+void BtTextEdit::setPlainText(const QString & text) {
    QPlainTextEdit::setPlainText(text);
    wasModified = false;
+   return;
 }
 
-void BtTextEdit::focusOutEvent(QFocusEvent *e)
-{
-   if ( wasModified )
-   {
+void BtTextEdit::focusOutEvent([[maybe_unused]] QFocusEvent * e) {
+   if (wasModified) {
       wasModified = false;
       emit textModified();
    }
+   return;
 }
 
 bool BtTextEdit::isModified()  { return wasModified; }

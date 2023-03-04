@@ -1,3 +1,20 @@
+#
+# .github/workflows/mac.yml is part of Brewtarget, and is copyright the following authors 2021-2023:
+#   • Artem Martynov <martynov-a@polyplastic.by>
+#   • Mattias Måhl <mattias@kejsarsten.com>
+#   • Matt Young <mfsy@yahoo.com>
+#
+# Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+# version.
+#
+# Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+# warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+# details.
+#
+# You should have received a copy of the GNU General Public License along with this program.  If not, see
+# <http://www.gnu.org/licenses/>.
+#
 name: Mac
 
 on:
@@ -5,7 +22,6 @@ on:
     branches:
       - develop
       - "stable/**"
-
   pull_request:
     branches:
       - develop
@@ -19,26 +35,11 @@ env:
 jobs:
   build-mac:
     runs-on: macos-latest
-
     steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
-    - uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
-
-    - name: Install Qt
-      # Version 5.15.2 is, according to https://github.com/jurplel/install-qt-action, the last Qt 5 LTS
-      # When we're ready to migrate to Qt 6, we'll need to tweak this
-      uses: jurplel/install-qt-action@v3
-      with:
-          version: 5.15.2
-
-    - name: Install dependencies
-      #
-      # Installing Xalan-C will cause Xerces-C to be installed too (as the former depends on the latter)
-      # .:TBD:. Installing Boost here doesn't seem to give us libboost_stacktrace_backtrace
-      #         Also, trying to use the "--cc=clang" option to install boost gives an error ("Error: boost: no bottle
-      #         available!")  For the moment, we're just using Boost header files on Mac though, so this should be OK.
       #
       # The `brew doctor` command just checks that Homebrew (https://brew.sh/) is installed OK (expected output is "Your
       # system is ready to brew".  Having Homebrew installed should imply the Xcode Command Line Tools are also
@@ -46,110 +47,168 @@ jobs:
       # elsewhere we use the echo trick to ensure that a non-zero return value from these diagnostic commands is not
       # treated as a build script failure.
       #
-      # We use the tree command for diagnosing certain build problems (specifically to see what changes certain parts of
-      # the build have made to the build directory tree).  (If need be, you can also download the entire build directory
-      # within a day of a failed build running, but you need a decent internet connection for this as it's quite large.)
+      # We install the tree command here as, although it's not needed to do the build itself, it's useful for diagnosing
+      # certain build problems (eg to see what changes certain parts of the build have made to the build directory
+      # tree) when the build is running as a GitHub action.  (If need be, you can also download the entire build
+      # directory within a day of a failed build running, but you need a decent internet connection for this as it's
+      # quite large.)
       #
-      run: |
-        echo "Output from brew doctor: $(brew doctor)"
-        echo "Output from xcode-select -p: $(xcode-select -p)"
-        brew install xalan-c
-        brew install boost
-        brew install tree
+      - name: Install Frameworks and Libraries, and set up Meson build environment
+        run: |
+           echo "Output from brew doctor: $(brew doctor)"
+           echo "Output from xcode-select -p: $(xcode-select -p)"
+           brew install tree
+           brew install python@3.11
+           echo "Python3 ($(which python3)) version"
+           /usr/bin/env python3 --version
+           echo "Running ./bt -v setup all"
+           ./bt -v setup all
 
-    - name: Build
-      env:
-        QT_QPA_PLATFORM: offscreen
-      # Change `make` to `make VERBOSE=1` to get hugely detailed output
-      run: |
-        mkdir build
-        cd build
-        cmake ..
-        make
+      - name: Build (with CMake)
+        env:
+           QT_QPA_PLATFORM: offscreen
+        # Change `make` to `make VERBOSE=1` to get hugely detailed output
+        run: |
+           export PATH=/usr/local/opt/qt5/bin:$PATH
+           mkdir build
+           cd build
+           cmake ..
+           make
 
-    - name: Prep for tests
-      # If a test fails and we get a core, we'd like to analyse it.  This will be easier if we have access to the
-      # relevant directories and there aren't any other files cluttering up the place.
-      #
-      # Running the commands inside an echo statement is a bit of a trick to ensure failure of the rm command (eg
-      # because there are no files to delete) does not count as a build script failure (because the echo command will
-      # return 0 = success).
-      run: |
-        sudo chmod -R +rwx /cores
-        sudo chmod -R +rwx /Library/Logs/DiagnosticReports
-        echo "Clearing contents of /cores directory: $(ls -ltr /cores) $(rm -rf /cores/*)"
-        echo "Clearing contents of /Library/Logs/DiagnosticReports directory: $(ls -ltr /Library/Logs/DiagnosticReports) $(rm -rf /Library/Logs/DiagnosticReports/*)"
+      - name: Build (with Meson)
+        run: |
+           cd mbuild
+           pwd
+           meson compile
 
-    - name: Automated tests
-      # If something does crash we'd like to capture the core, so we need to enable core dumps - hence the call to
-      # ulimit.
-      #
-      # Running "make test" boils down to running ctest (because the invocation of make in the Build step above will
-      # have done all the necessary prep.  Running ctest directly allows us to pass in extra parameters to try to get as
-      # much diagnostics as possible out of a remote build such as this.
-      run: |
-        ulimit -c unlimited
-        echo "Core size limit is $(ulimit -c)"
-        cd build
-        ctest --extra-verbose --output-on-failure 2>&1
+      - name: Prep for tests
+        # If a test fails and we get a core, we'd like to analyse it.  This will be easier if we have access to the
+        # relevant directories and there aren't any other files cluttering up the place.
+        #
+        # Running the commands inside an echo statement is a bit of a trick to ensure failure of the rm command (eg
+        # because there are no files to delete) does not count as a build script failure (because the echo command will
+        # return 0 = success).
+        run: |
+           sudo chmod -R +rwx /cores
+           sudo chmod -R +rwx /Library/Logs/DiagnosticReports
+           echo "Clearing contents of /cores directory: $(ls -ltr /cores) $(rm -rf /cores/*)"
+           echo "Clearing contents of /Library/Logs/DiagnosticReports directory: $(ls -ltr /Library/Logs/DiagnosticReports) $(rm -rf /Library/Logs/DiagnosticReports/*)"
 
-    - name: Make package
-      # Change `make package` to `make package VERBOSE=1` to get hugely detailed output
-      run: |
-        cd build
-        pwd
-        make package
-        pwd
-        tree -sh
+      - name: Automated tests (via CMake)
+        # If something does crash we'd like to capture the core, so we need to enable core dumps - hence the call to
+        # ulimit.
+        #
+        # Running "make test" boils down to running ctest (because the invocation of make in the Build step above will
+        # have done all the necessary prep.  Running ctest directly allows us to pass in extra parameters to try to get as
+        # much diagnostics as possible out of a remote build such as this.
+        run: |
+           ulimit -c unlimited
+           echo "Core size limit is $(ulimit -c)"
+           cd build
+           ctest --extra-verbose --output-on-failure 2>&1
 
-    - name: Upload Mac Packages (Installers)
-      if: ${{ success() }}
-      uses: actions/upload-artifact@v3
-      with:
-        name: brewtarget-dev-mac
-        path: |
-          ${{github.workspace}}/build/brewtarget*.dmg
-          ${{github.workspace}}/build/brewtarget*.dmg.sha256
-        retention-days: 7
+      - name: Automated tests (via Meson)
+        # If something does crash we'd like to capture the core, so we need to enable core dumps - hence the call to
+        # ulimit.
+        #
+        # The 'export QT_DEBUG_PLUGINS=1' give us diagnostics in the event that there are problems initialising QT
+        # The 'export QT_QPA_PLATFORM=offscreen' stops Qt's xcb sub-module trying to connect to a non-existent display
+        # (which would cause the test runner to abort before running any tests).
+        run: |
+           ulimit -c unlimited
+           echo "Core size limit is $(ulimit -c)"
+           cd mbuild
+           export QT_DEBUG_PLUGINS=1
+           export QT_QPA_PLATFORM=offscreen
+           meson test
 
-    - name: Post-processing on any core dump
-      if: ${{ failure() }}
-      # It's all very well capturing core files, but if you don't have a Mac to analyse them on they are not a fat lot
-      # of use.  So, if we did get a core, let's at least get a stack trace out of it.
-      #
-      # The loop in the last line should run either 0 or 1 times, depending on whether the build failure did or did not
-      # generate a core file.
-      #    ls -1 | while read ii; do echo "bt" | lldb -c $ii; done
-      run: |
-        pwd
-        tree -sh
-        sudo chmod -R +rwx /cores
-        sudo chmod -R +rwx /Library/Logs/DiagnosticReports
-        echo "Contents of /cores directory: $(ls -ltr /cores)"
-        echo "Contents of /Library/Logs/DiagnosticReports directory: $(ls -ltr /Library/Logs/DiagnosticReports)"
-        cd /cores
-        ls -1 | while read ii; do echo "bt" | lldb -c $ii; done
+      - name: Package (via CMake/CPack)
+        # Change `make package` to `make package VERBOSE=1` to get hugely detailed output
+        run: |
+           cd build
+           pwd
+           make package
+           pwd
+           tree -sh
 
-    - name: Recover Debris Artifacts (aka build output)
-      if: ${{ failure() }}
-      uses: actions/upload-artifact@v3
-      with:
-        name: build-results
-        path: ${{github.workspace}}/build
-        retention-days: 1
+      - name: Package (New)
+        shell: bash
+        run: |
+           cd mbuild
+           umask 022
+           ../bt -v package
+           cd packages
+           pwd
+           tree -sh
 
-    - name: Recover DiagnosticReports (if any)
-      if: ${{ failure() }}
-      uses: actions/upload-artifact@v3
-      with:
-        name: DiagnosticReports
-        path: /Library/Logs/DiagnosticReports
-        retention-days: 1
+      - name: Upload Mac Packages (Installers)
+        if: ${{ success() }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: brewtarget-dev-mac
+          path: |
+             ${{github.workspace}}/build/brewtarget*.dmg
+             ${{github.workspace}}/build/brewtarget*.dmg.sha256
+             ${{github.workspace}}/mbuild/packages/darwin/Brewtarget*.dmg
+             ${{github.workspace}}/mbuild/packages/darwin/Brewtarget*.dmg.sha256sum
+          retention-days: 7
 
-    - name: Recover Cores (if any)
-      if: ${{ failure() }}
-      uses: actions/upload-artifact@v3
-      with:
-        name: cores
-        path: /cores
-        retention-days: 1
+      - name: Post-processing on any core dump
+        if: ${{ failure() }}
+        # It's all very well capturing core files, but if you don't have a Mac to analyse them on they are not a fat lot
+        # of use.  So, if we did get a core, let's at least get a stack trace out of it.
+        #
+        # The loop in the last line should run either 0 or 1 times, depending on whether the build failure did or did not
+        # generate a core file.
+        #    ls -1 | while read ii; do echo "bt" | lldb -c $ii; done
+        run: |
+           pwd
+           tree -sh
+           sudo chmod -R +rwx /cores
+           sudo chmod -R +rwx /Library/Logs/DiagnosticReports
+           echo "Contents of /cores directory: $(ls -ltr /cores)"
+           echo "Contents of /Library/Logs/DiagnosticReports directory: $(ls -ltr /Library/Logs/DiagnosticReports)"
+           cd /cores
+           ls -1 | while read ii; do echo "bt" | lldb -c $ii; done
+
+      - name: Recover Debris Artifacts (aka build output) - CMake
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-results
+          path: ${{github.workspace}}/build
+          retention-days: 1
+
+      - name: Recover Debris Artifacts (aka build output) - Meson
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: mbuild-results
+          path: ${{github.workspace}}/mbuild
+          retention-days: 1
+
+      - name: Recover DiagnosticReports (if any)
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: DiagnosticReports
+          path: /Library/Logs/DiagnosticReports
+          retention-days: 1
+
+      - name: Recover Cores (if any)
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: cores
+          path: /cores
+          retention-days: 1
+
+      # Meson test doesn't show log output on the terminal, but puts it straight to a log file.  We don't want to have
+      # to download the whole compressed mbuild tree just to see the log in event of a test failure, so we show it here
+      # (provided it exists).
+      - name: Show Meson test logs
+        if: ${{ failure() }}
+        working-directory: ${{github.workspace}}
+        shell: bash
+        run: |
+           if [[ -f mbuild/meson-logs/testlog.txt ]]; then cat mbuild/meson-logs/testlog.txt; fi

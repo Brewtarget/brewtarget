@@ -84,7 +84,8 @@ void EquipmentListModel::addEquipments(QList<Equipment*> equips)
 }
 
 
-void EquipmentListModel::removeEquipment(int equipmentId, std::shared_ptr<QObject> object) {
+void EquipmentListModel::removeEquipment([[maybe_unused]] int equipmentId,
+                                         std::shared_ptr<QObject> object) {
    auto equipment = std::static_pointer_cast<Equipment>(object);
    int ndx = equipments.indexOf(equipment.get());
    if( ndx > 0 )
@@ -110,8 +111,8 @@ void EquipmentListModel::removeAll()
    }
 }
 
-void EquipmentListModel::equipChanged(QMetaProperty prop, QVariant val)
-{
+void EquipmentListModel::equipChanged(QMetaProperty prop,
+                                      [[maybe_unused]] QVariant val) {
    Equipment* eSend = qobject_cast<Equipment*>(sender());
 
    // NOTE: how to get around the issue that the sender might live in
@@ -175,12 +176,11 @@ void EquipmentListModel::observeRecipe(Recipe* rec)
       connect( recipe, &NamedEntity::changed, this, &EquipmentListModel::recChanged );
 }
 
-int EquipmentListModel::rowCount( QModelIndex const& parent ) const
-{
+int EquipmentListModel::rowCount([[maybe_unused]] QModelIndex const & parent ) const {
    return equipments.size();
 }
 
-QVariant EquipmentListModel::data( QModelIndex const& index, int role ) const
+QVariant EquipmentListModel::data( QModelIndex const & index, int role ) const
 {
    int row = index.row();
    int col = index.column();
@@ -190,7 +190,8 @@ QVariant EquipmentListModel::data( QModelIndex const& index, int role ) const
       return QVariant();
 }
 
-QVariant EquipmentListModel::headerData( int section, Qt::Orientation orientation, int role ) const
-{
+QVariant EquipmentListModel::headerData([[maybe_unused]] int section,
+                                        [[maybe_unused]] Qt::Orientation orientation,
+                                        [[maybe_unused]] int role ) const {
    return QVariant(QString("Testing..."));
 }

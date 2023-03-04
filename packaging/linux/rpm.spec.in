@@ -1,0 +1,102 @@
+#
+# packaging/linux/rpm.spec.in is part of Brewtarget, and is copyright the following authors 2023:
+#   • Matt Young <mfsy@yahoo.com>
+#
+# Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+# version.
+#
+# Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+# warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+# details.
+#
+# You should have received a copy of the GNU General Public License along with this program.  If not, see
+# <http://www.gnu.org/licenses/>.
+#
+
+#
+# See comments in meson.build for how this file gets processed into mbuild/packaging/linux/rpm.spec.  Then see comments
+#
+# See https://rpm-software-management.github.io/rpm/manual/spec.html for format of an RPM spec file
+#
+# From the command line, you can use `rpm -qi` to query a lot of this info for an existing RPM package (without having
+# to install it)
+#
+
+# Proper name of the package.  Must not include whitespace or any numeric operators (‘<’, ‘>’,’=’) but may include a
+# hyphen ‘-‘
+Name        : @CONFIG_APPLICATION_NAME_LC@
+
+# Version
+Version     : @CONFIG_VERSION_STRING@
+
+# Package release: used for distinguishing between different builds of the same software version.
+Release     : 1
+
+# Short (< 70 characters) summary of the package license
+License     : GPL-3.0-or-later
+
+# Optional, short (< 70 characters) group of the package.
+Group       : Applications/Productivity
+
+# Short (< 70 characters) summary of the package.
+Summary     : GUI beer brewing software
+
+# URL supplying further information about the package, typically upstream website.
+URL         : @CONFIG_HOMEPAGE_URL@
+Vendor      : @CONFIG_ORGANIZATION_NAME@
+
+# Specifies the architecture which the resulting binary package will run on. Typically this is a CPU architecture.
+BuildArch   : x86_64
+
+#
+# Dependencies
+#
+# Format is similar to Dependencies in Debian (.deb) package control file, but (a) without brackets around version
+# numbers and (b) '-' and '.' are sometimes replaced by '_' in package names.
+#
+# You can search online for rpm packages at, eg, http://download.opensuse.org/tumbleweed/repo/oss/x86_64/
+#
+# As with .deb package control file, we do our own line folding in the bt build script, so the backslash line
+# continuations are OK here!
+#
+Requires    : \
+   libgcc_s1           >= 3.3  ,  \
+   libqt5core5         >= 5.9.5,  \
+   libqt5gui5          >= 5.9.5,  \
+   libqt5multimedia5   >= 5.9.5,  \
+   libqt5network5      >= 5.9.5,  \
+   libqt5printsupport5 >= 5.9.5,  \
+   libqt5sql5          >= 5.9.5,  \
+   libqt5widgets5      >= 5.9.5,  \
+   libstdc++6          >= 11   ,  \
+   libxalan-c112       >= 1.12 ,  \
+   libxerces-c3_2      >= 3.2
+
+# Description is done in a different way, perhaps because it's a multi-line field
+%description
+@CONFIG_APPLICATION_NAME_UC@ is a calculator for brewing beer. It is a Qt-based program which
+allows you to create recipes from a database of ingredients. It calculates
+all the important parameters, helps you with mash temperatures, and just
+makes the process of recipe formulation much easier.
+
+# The files in the package
+# These are specified by where they will be installed, hence the absolute paths but we can use glob patterns based on
+# what's in the build tree
+%files
+/usr/bin/*
+/usr/share/applications/*
+/usr/share/brewtarget/*
+/usr/share/doc/brewtarget/*
+/usr/share/icons/hicolor/scalable/apps/*
+/usr/share/man/man1/*
+
+#
+# Change log is a required section
+# By default, you are expected to have the full change log right here in this spec file.  (I think there might be a way
+# to pull in the change log data from a separate file, but I didn't yet figure it out.)  So, for now at least, we get
+# the `bt` build tool script to append the changelog data after this file is processed.
+#
+# *** NB: THIS MEANS %changelog MUST BE THE LAST ENTRY IN THE FILE.  DO NOT ADD ANY LINES AFTER IT. ***
+#
+%changelog

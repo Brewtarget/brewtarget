@@ -32,17 +32,17 @@
 //========================================== Start of property name constants ==========================================
 #define AddPropertyName(property) namespace PropertyNames::Water { BtStringConst const property{#property}; }
 AddPropertyName(ph)
-AddPropertyName(amount)
+AddPropertyName(amount          )
 AddPropertyName(type)
-AddPropertyName(notes)
+AddPropertyName(notes           )
 AddPropertyName(alkalinityAsHCO3)
-AddPropertyName(spargeRO)
+AddPropertyName(spargeRO        )
 AddPropertyName(mashRO)
 AddPropertyName(alkalinity)
 AddPropertyName(magnesium_ppm)
 AddPropertyName(sodium_ppm)
 AddPropertyName(chloride_ppm)
-AddPropertyName(sulfate_ppm)
+AddPropertyName(sulfate_ppm     )
 AddPropertyName(bicarbonate_ppm)
 AddPropertyName(calcium_ppm)
 #undef AddPropertyName
@@ -77,11 +77,17 @@ public:
       numIons
    };
 
-   Q_ENUM(Types Ions)
+   Q_ENUM(Types)
+   Q_ENUM(Ions)
 
    Water(QString name = "");
    Water(NamedParameterBundle const & namedParameterBundle);
    Water(Water const & other);
+
+   virtual ~Water();
+
+   // It is useful to be able to assign one Water to another - see eg WaterEditor.cpp
+   Water & operator=(Water other);
 
 protected:
    /**
@@ -90,11 +96,6 @@ protected:
    void swap(Water & other) noexcept;
 
 public:
-   virtual ~Water();
-
-   // It is useful to be able to assign one Water to another - see eg WaterEditor.cpp
-   Water & operator=(Water other);
-
    // .:TODO:. On a base or target profile, bicarbonate and alkalinity cannot both be used. I'm gonna have fun figuring that out
 
    //! \brief The amount in liters.

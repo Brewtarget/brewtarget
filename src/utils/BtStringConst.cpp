@@ -1,6 +1,6 @@
 /*
  * utils/BtStringConst.cpp is part of Brewtarget, and is Copyright the following
- * authors 2021
+ * authors 2021-2023
  * - Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -24,7 +24,7 @@
 #include <QString>
 #include <QTextStream>
 
-BtStringConst const BtString::NULL_STR{static_cast<char const * const>(nullptr)};
+BtStringConst const BtString::NULL_STR{static_cast<char const *>(nullptr)};
 BtStringConst const BtString::EMPTY_STR{""};
 
 BtStringConst::BtStringConst(char const * const cString) : cString(cString) {
@@ -37,7 +37,16 @@ BtStringConst::BtStringConst(BtStringConst &&) = default;
 BtStringConst::~BtStringConst() = default;
 
 bool BtStringConst::operator==(BtStringConst const & rhs) const {
-   if (this->cString == nullptr && rhs.cString == nullptr) { return true; }
+   // A very common case of equality should be that two strings are in fact the same constant, so checking whether the
+   // addresses match is the first thing we do.
+   //
+   // Note, however, that we cannot guarantee the reverse of this.  Two strings at different memory addresses might be
+   // the same eg if they are defined in headers that are included in multiple translation units and the compiler does
+   // not optimise that away.
+   if (this == &rhs) {
+      return true;
+   }
+   if (this->cString == nullptr && rhs.cString == nullptr) { return true;  }
    if (this->cString == nullptr || rhs.cString == nullptr) { return false; }
    return 0 == std::strcmp(this->cString, rhs.cString);
 }
@@ -46,7 +55,7 @@ bool BtStringConst::isNull() const {
    return (nullptr == this->cString);
 }
 
-char const * const BtStringConst::operator*() const {
+char const * BtStringConst::operator*() const {
    return this->cString;
 }
 

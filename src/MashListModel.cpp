@@ -78,17 +78,17 @@ void MashListModel::addMashes(QList<Mash*> m)
    }
 }
 
-void MashListModel::removeMash(int mashId, std::shared_ptr<QObject> object) {
-
+void MashListModel::removeMash([[maybe_unused]] int mashId,
+                               std::shared_ptr<QObject> object) {
    Mash* mash = std::static_pointer_cast<Mash>(object).get();
    int ndx = mashes.indexOf(mash);
-   if( ndx >= 0 )
-   {
+   if (ndx >= 0) {
       beginRemoveRows( QModelIndex(), ndx, ndx );
       disconnect( mash, 0, this, 0 );
       mashes.removeAt(ndx);
       endRemoveRows();
    }
+   return;
 }
 
 void MashListModel::removeAll()
@@ -102,8 +102,8 @@ void MashListModel::removeAll()
    }
 }
 
-void MashListModel::mashChanged(QMetaProperty prop, QVariant val)
-{
+void MashListModel::mashChanged(QMetaProperty prop,
+                                [[maybe_unused]] QVariant val) {
    Mash* mSend = qobject_cast<Mash*>(sender());
 
    // NOTE: how to get around the issue that the sender might live in
@@ -133,13 +133,11 @@ Mash* MashListModel::at(int ndx)
       return 0;
 }
 
-int MashListModel::indexOf(Mash* m)
-{
+int MashListModel::indexOf(Mash* m) {
    return mashes.indexOf(m);
 }
 
-int MashListModel::rowCount( QModelIndex const& parent ) const
-{
+int MashListModel::rowCount([[maybe_unused]] QModelIndex const & parent ) const {
    return mashes.size();
 }
 
@@ -153,7 +151,8 @@ QVariant MashListModel::data( QModelIndex const& index, int role ) const
       return QVariant();
 }
 
-QVariant MashListModel::headerData( int section, Qt::Orientation orientation, int role ) const
-{
+QVariant MashListModel::headerData([[maybe_unused]] int section,
+                                   [[maybe_unused]] Qt::Orientation orientation,
+                                   [[maybe_unused]] int role) const {
    return QVariant(QString("Header Data..."));
 }

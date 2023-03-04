@@ -1,6 +1,6 @@
 /*
  * HopTableModel.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2022
+ * authors 2009-2023
  * - Luke Vincent <luke.r.vincent@gmail.com>
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>

@@ -3,13 +3,30 @@
 This change log is for high-level user-visible changes to Brewtarget, intended for consumption by the typical end-user.
 Note however that we also process it into a Debian-compliant text change log, so we need to keep the format consistent.
 In particular, the Release Timestamp section is needed as part of this (and you need to be meticulous about the date
-format therein).
+format therein, otherwise you'll get, eg, no-changelogname-tag error from rpmlint).
 
 ## Forthcoming in v3.1.0
 
 ### New Features
 
 * We'll list new features here...
+
+
+## v3.0.7
+Minor bug fixes for the 3.0.5 release (ie bugs in 3.0.5 are fixed in this 3.0.6 release).
+
+### New Features
+
+* None
+
+### Bug Fixes
+* import or export xml records crashes 3.0.x Win app [#711](https://github.com/Brewtarget/brewtarget/issues/711)
+* win10 native MSYS2 build make package error [714](https://github.com/Brewtarget/brewtarget/issues/714)
+* Hop calculation issues [715](https://github.com/Brewtarget/brewtarget/issues/715)
+* Reset values of Specific Heat [719](https://github.com/Brewtarget/brewtarget/issues/719)
+
+### Release Timestamp
+Tue, 28 Feb 2023 05:51:36 +0100
 
 ## v3.0.6
 Minor bug fixes for the 3.0.5 release (ie bugs in 3.0.5 are fixed in this 3.0.6 release).
