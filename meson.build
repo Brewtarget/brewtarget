@@ -97,6 +97,10 @@
 #    sudo meson install
 # which avoids the pop-up window
 #
+# Note that, on Linux, using `sudo meson install` sometimes creates problems with file permissions - eg
+# mbuild/meson-logs/install-log.txt ends up being writable only by root and that results in an error when you run
+# `bt package`, but this should be fixed in Meson 1.1.0.
+#
 # To build source packages (in the meson-dist subdirectory of the build directory):
 #    meson dist
 # This will build a .tar.xz file and create a corresponding .tar.xz.sha256sum file for it.
@@ -448,43 +452,13 @@ message('Boost:', boostDependency.name(), 'found =', boostDependency.found(), 'v
 # then, on Mac for instance, dlDependency.found() can be true without there being any cmake variable such as
 # PACKAGE_LIBRARIES (because the library was found by Meson special case code, not by cmake).
 #
-# At this point, there's good news and bad news:
-#    - The good news is that, on Mac and Linux, there's a more elegant way of handling the dl dependency, which relies
-#      on the fact that opening a shared library is a POSIX operation with calls declared in a POSIX-defined header (see
-#      eg https://man7.org/linux/man-pages/man0/dlfcn.h.0p.html).  We just ask the compiler whether it has dlopen()
-#      built-in, and, if not, please can it tell us where to find it!
-#    - The bad news is that, Windows doesn't have the POSIX interface for shared library opening, so it does not ship
-#      with the dlfcn.h header.  I think/hope we can get round this by installing dlfcn-win32 (see
-#      https://github.com/dlfcn-win32/dlfcn-win32) via its MSYS2 package (see
-#      https://packages.msys2.org/base/mingw-w64-dlfcn and mentions of dlfcn in the `bt` build tool script)...
+# The good news is that, on Mac and Linux, there's a more elegant way of handling the dl dependency, which relies on the
+# fact that opening a shared library is a POSIX operation with calls declared in a POSIX-defined header (see eg
+# https://man7.org/linux/man-pages/man0/dlfcn.h.0p.html).  We just ask the compiler whether it has dlopen() built-in,
+# and, if not, please can it tell us where to find it!
 #
-# BUT MAYBE WE DON'T NEED DL AT ALL ON WINDOWS, SO LET'S TRY THAT!
-#
-# Previously, the code here was:
-#
-#    needLibdl = false
-#    if compiler.get_id() == 'gcc'
-#       lddOutput = run_command('ldd', '--version', check: true).stdout().strip()
-#       lddOutputLine1 = lddOutput.split('\n')[0]
-#       message('ldd --version gives:', lddOutputLine1)
-#       libcVersion = lddOutputLine1.split(' ')[-1]
-#       message('libc version is:', libcVersion)
-#       if libcVersion.version_compare('<2.34')
-#          needLibdl = true
-#       endif
-#    endif
-#    dlDependency = dependency('dl', required : needLibdl, static : true)
-#    if dlDependency.found()
-#       dlLibraryPath = dlDependency.get_variable(default_value : '', cmake : 'PACKAGE_LIBRARIES')
-#       message('dlLibraryPath is:', dlLibraryPath)
-#       if dlLibraryPath != ''
-#          sharedLibraryPaths += dlLibraryPath
-#       endif
-#    endif
-#
-# However, there is a neater approach, which relies on the fact that opening a shared library is a POSIX operation with
-# calls declared in a POSIX-defined header (see eg https://man7.org/linux/man-pages/man0/dlfcn.h.0p.html).  We just ask
-# the compiler whether it has dlopen() built-in, and, if not, please can it tell us where to find it!
+# (On Windows, we don't need the dl dependency because Windows doesn't have the POSIX interface for shared library
+# opening, and Boost Stacktrace doesn't seem to need anything in its place.)
 #
 dlDependency = declare_dependency()
 if host_machine.system() != 'windows'

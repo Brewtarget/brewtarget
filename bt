@@ -271,6 +271,7 @@ def abortOnRunFail(runResult: subprocess.CompletedProcess):
 def copyFilesToDir(files, directory):
    os.makedirs(directory, exist_ok=True)
    for currentFile in files:
+      log.debug('Copying ' + currentFile + ' to ' + directory)
       shutil.copy2(currentFile, directory)
    return
 
@@ -705,7 +706,6 @@ def installDependencies():
                         'git',
                         'mingw-w64-' + arch + '-boost',
                         'mingw-w64-' + arch + '-cmake',
-#                        'mingw-w64-' + arch + '-dlfcn', MAYBE WE DON'T NEED THIS AFTER ALL...
                         'mingw-w64-' + arch + '-libbacktrace',
                         'mingw-w64-' + arch + '-meson',
                         'mingw-w64-' + arch + '-nsis',
@@ -767,6 +767,10 @@ def installDependencies():
          #         available!")  For the moment, we're just using Boost header files on Mac though, so this should be
          #         OK.
          #
+         # We install the tree command here as, although it's not needed to do the build itself, it's useful for
+         # diagnosing certain build problems (eg to see what changes certain parts of the build have made to the build
+         # directory tree) when the build is running as a GitHub action.
+         #
          installList = ['boost',
                         'cmake',
                         'coreutils',
@@ -777,6 +781,7 @@ def installDependencies():
                         'meson',
                         'ninja',
                         'pandoc',
+                        'tree',
                         'qt@5',
                         'xalan-c',
                         'xerces-c']
@@ -935,7 +940,7 @@ def doSetup(setupOption):
    if (platform.system() == 'Linux'):
       print('   sudo meson install')
    else:
-      print('   meson install')
+   print('   meson install')
    print('   ' + projectName)
 
 
@@ -1806,7 +1811,7 @@ def doPackage():
       #------------------------------------------------- Mac Packaging -------------------------------------------------
       #-----------------------------------------------------------------------------------------------------------------
       case 'Darwin':
-         log.debug('Mac Packaging - TODO!')
+         log.debug('Mac Packaging')
          #
          # See https://stackoverflow.com/questions/1596945/building-osx-app-bundle for essential info on building Mac
          # app bundles.  Also https://mesonbuild.com/Creating-OSX-packages.html suggests how to do this with Meson,
@@ -1893,6 +1898,7 @@ def doPackage():
          #            ├── en.lproj        <── Localized resources
          #            │   ├── COPYRIGHT ✅
          #            │   └── README.md ✅
+         #            ├── qt.conf ✅
          #            ├── sounds
          #            │   └── [All the filesToInstall_sounds .wav files] ✅
          #            └── translations_qm
@@ -2044,6 +2050,18 @@ def doPackage():
          #
          # Now let macdeployqt do most of the heavy lifting
          #
+         # Note that it is best to run macdeployqt in the directory that contains the [projectName]_[versionNumber].app
+         # folder (otherwise, eg, the dmg name it creates will be wrong, as explained at
+         # https://doc.qt.io/qt-6/macos-deployment.html.
+         #
+         # In a previous iteration of this script, I skipped the -dmg option and tried to build the disk image with
+         # dmgbuild (code at https://github.com/dmgbuild/dmgbuild, docs at
+         # https://dmgbuild.readthedocs.io/en/latest/index.html).  The advantages of this would be that it would make it
+         # possible to do further fix-up work on the directory tree (if needed) and, potentially, give us more control
+         # over the disk image (eg to specify an icon for it).  However, it seemed to be fiddly to get it to work.  It's
+         # a lot simpler to let macdeployqt create the disk image, and we currently don't think we need to do further
+         # fix-up work after it's run.  A custom icon on the disk image would be nice, but is far from essential.
+         #
          log.debug('Running macdeployqt')
          os.chdir(dir_packages_platform)
          abortOnRunFail(
@@ -2052,78 +2070,42 @@ def doPackage():
             # The -executable argument is to automatically alter the search path of the executable for the Qt libraries
             # (ie so the executable knows where to find them inside the bundle)
             #
-            # We do not use the -dmg option, partly because we might still have some more fix-up work to do before
-            # packaging up the directory tree (although so far I think we can do it all beforehand) and partly because
-            # we want more control over the dmg (eg to specify an icon for it).
-            #
             subprocess.run(['macdeployqt',
                             macBundleDirName,
                             '-verbose=2',        # 0 = no output, 1 = error/warning (default), 2 = normal, 3 = debug
-                            '-executable=' + macBundleDirName + '/Contents/MacOS/' + capitalisedProjectName],
+                            '-executable=' + macBundleDirName + '/Contents/MacOS/' + capitalisedProjectName,
+                            '-dmg'],
                            capture_output=False)
          )
+
+         #
+         # The result of specifying the `-dmg' flag should be a [projectName]_[versionNumber].dmg file
+         #
+         log.debug('Directory tree after running macdeployqt')
+         abortOnRunFail(subprocess.run(['tree', '-sh'], capture_output=False))
+         dmgFileName = macBundleDirName.replace('.app', '.dmg')
 
          log.debug('Running otool after macdeployqt')
          os.chdir(dir_packages_mac_bin)
          abortOnRunFail(subprocess.run(['otool', '-L', capitalisedProjectName], capture_output=False))
          abortOnRunFail(subprocess.run(['otool', '-l', capitalisedProjectName], capture_output=False))
 
-         #
-         # Now that we have the app bundle directory structure, we need to compress it into a dmg file
-         #
-         # You can pass parameters in to dmgbuild on the command line, but it gets a bit unwieldy if you have a lot of
-         # them.  We use the alternative method of providing a configuration file (which is actually just a Python
-         # script).  So we generate that first.
-         #
-         # It would be neat if we could invoke dmgbuild directly from Python, but I haven't found a way to do this.
-         #
-         log.debug('Creating .dmg file')
+         log.info('Created ' + dmgFileName + ' in directory ' + dir_packages_platform.as_posix())
+         log.debug('Running hdiutil on ' + dmgFileName)
          os.chdir(dir_packages_platform)
-         settingsFileName = 'dmgSettings.py'
-         dmgFileName = capitalisedProjectName + '-' + buildConfig['CONFIG_VERSION_STRING'] + '.dmg'
-         with open(settingsFileName, 'wt') as sf:
-            sf.write('#------------------------------------------------------------------------------------\n')
-            sf.write('# Settings file for dmgbuild to generate ' + dmgFileName + '\n')
-            sf.write('#------------------------------------------------------------------------------------\n')
-            sf.write('\n')
-            sf.write('# Compressed (bzip2) format\n')
-            sf.write('format = "UDBZ"\n')
-            sf.write('\n')
-            sf.write('# This is the default file system, but no harm to be explicit\n')
-            sf.write('filesystem = "HFS+"\n')
-            sf.write('\n')
-            sf.write('# Disk image holds just one folder\n')
-            sf.write('file = "'+ macBundleDirName + '"\n')
-            sf.write('\n')
-            sf.write('# Icon used to badge the system’s standard external disk icon\n')
-            sf.write('# This is a convenient way to construct a suitable icon from your application\’s icon\n')
-            # Doco implies path should start with /Applications/, but this does not work
-            sf.write('badge_icon = "'+ macBundleDirName + '/Contents/Resources/' + capitalisedProjectName + 'Icon.icns"\n')
-            sf.write('\n')
-            sf.write('# Expected usage is drag to install, so default view of icons makes most sense\n')
-            sf.write('default_view = "icon-view"\n')
-         #
-         # Confusingly, although the .dmg file name and the volume name can be passed in via the settings file they are
-         # nonetheless required parameters on the command line.  Specifically, usage is:
-         #    dmgbuild [-h] [-s SETTINGS] [-D DEFINES] [--no-hidpi] volume-name output.dmg
-         #
          abortOnRunFail(
             subprocess.run(
-               ['dmgbuild',
-                '-s', settingsFileName,
-                capitalisedProjectName + ' ' + buildConfig['CONFIG_VERSION_STRING'],
-                dmgFileName],
-               capture_output=False
+               ['hdiutil', 'attach', '-verbose', dmgFileName]
             )
          )
-         os.chdir(previousWorkingDirectory)
-         log.info('Created ' + dmgFileName + ' in directory ' + dir_packages_platform.as_posix())
 
          #
          # Make the checksum file
          #
          log.info('Generating checksum file for ' + dmgFileName)
          writeSha256sum(dir_packages_platform, dmgFileName)
+
+         os.chdir(previousWorkingDirectory)
 
       case _:
          log.critical('Unrecognised platform: ' + platform.system())
