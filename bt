@@ -940,7 +940,7 @@ def doSetup(setupOption):
    if (platform.system() == 'Linux'):
       print('   sudo meson install')
    else:
-   print('   meson install')
+      print('   meson install')
    print('   ' + projectName)
 
 
