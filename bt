@@ -2026,6 +2026,22 @@ def doPackage():
          # We use otool to get the right name for libxalanMsg, which is typically listed as a relative path dependency
          # eg '@rpath/libxalanMsg.112.dylib'.
          #
+         # Per https://www.mikeash.com/pyblog/friday-qa-2009-11-06-linking-and-install-names.html:
+         #
+         #    @executable_path - will expand at run time to the absolute path of the app bundle's executable directory,
+         #                       ie [projectName]_[versionNumber].app/Contents/MacOS for us
+         #
+         #    @loader_path     - will expand at run time to the absolute path of whatever is loading the library,
+         #                       typically either the executable directory (if it's the executable loading the library
+         #                       directly) or, for us, the [projectName]_[versionNumber].app/Contents/Frameworks
+         #                       directory if it's another shared library requesting the load
+         #
+         #    @rpath           - means search a list of locations specified at the point the application was linked (by
+         #                       means of the -rpath linker flag), so, eg, including
+         #                       '-rpath @executable_path/../Frameworks' at link time means, for us, that
+         #                       [projectName]_[versionNumber].app/Contents/Frameworks is one of the places to search
+         #                       when @rpath is specified
+         #
          log.debug('Running otool -L on ' + xalanLibName)
          otoolOutputXalan = abortOnRunFail(
             subprocess.run(['otool',
@@ -2046,6 +2062,24 @@ def doPackage():
             xalanMsgLibName = 'libxalanMsg.112.dylib'
          log.debug('Copying ' + xalanDir + xalanMsgLibName + ' to ' + dir_packages_mac_frm.as_posix())
          shutil.copy2(xalanDir + xalanMsgLibName, dir_packages_mac_frm)
+
+###         #
+###         # Let's copy libxalan-c.112.dylib to where it needs to go and hope that macdeployqt does not overwrite it
+###         #
+###         shutil.copy2(xalanDir + xalanLibName, dir_packages_mac_frm)
+###
+###         #
+###         # We need to fix up libxalan-c.112.dylib so that it looks for libxalanMsg.112.dylib in the right place.  Long
+###         # story short, this means changing '@rpath/libxalanMsg.112.dylib' to '@loader_path/libxalanMsg.112.dylib'
+###         #
+###         os.chdir(dir_packages_mac_frm)
+###         abortOnRunFail(
+###            subprocess.run(['install_name_tool',
+###                            '-change',
+###                            xalanMsgLibName,
+###                            '@loader_path/' + xalanMsgLibName],
+###                           capture_output=False)
+###         )
 
          #
          # Now let macdeployqt do most of the heavy lifting
@@ -2085,17 +2119,38 @@ def doPackage():
          abortOnRunFail(subprocess.run(['tree', '-sh'], capture_output=False))
          dmgFileName = macBundleDirName.replace('.app', '.dmg')
 
-         log.debug('Running otool after macdeployqt')
+         log.debug('Running otool on ' + capitalisedProjectName + ' executable after macdeployqt')
          os.chdir(dir_packages_mac_bin)
          abortOnRunFail(subprocess.run(['otool', '-L', capitalisedProjectName], capture_output=False))
          abortOnRunFail(subprocess.run(['otool', '-l', capitalisedProjectName], capture_output=False))
+         log.debug('Running otool on ' + xalanLibName + ' library after macdeployqt')
+         os.chdir(dir_packages_mac_frm)
+         abortOnRunFail(subprocess.run(['otool', '-L', xalanLibName], capture_output=False))
 
          log.info('Created ' + dmgFileName + ' in directory ' + dir_packages_platform.as_posix())
-         log.debug('Running hdiutil on ' + dmgFileName)
+
+         #
+         # We can now mount the disk image and check its contents.  (I don't think we can modify the contents though.)
+         #
+         # By default, a disk image called foobar.dmg will get mounted at /Volumes/foobar.
+         #
+         log.debug('Running hdiutil to mount ' + dmgFileName)
          os.chdir(dir_packages_platform)
          abortOnRunFail(
             subprocess.run(
                ['hdiutil', 'attach', '-verbose', dmgFileName]
+            )
+         )
+         mountPoint = '/Volumes/' + dmgFileName.replace('.dmg', '')
+         log.debug('Directory tree of disk image')
+         abortOnRunFail(
+            subprocess.run(['tree', '-sh', mountPoint], capture_output=False)
+         )
+         log.debug('Running hdiutil to unmount ' + mountPoint)
+         os.chdir(dir_packages_platform)
+         abortOnRunFail(
+            subprocess.run(
+               ['hdiutil', 'detach', '-verbose', mountPoint]
             )
          )
 

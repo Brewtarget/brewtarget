@@ -233,7 +233,7 @@ void BtLineEdit::setText(QString amount, int precision) {
             Q_FUNC_INFO << "Could not convert" << amount << "(" << this->configSection << ":" << this->editField <<
             ") to double";
       }
-      this->setWidgetText(displayAmount(amt, precision));
+      this->setWidgetText(this->displayAmount(amt, precision));
    }
 
    this->setDisplaySize(force);

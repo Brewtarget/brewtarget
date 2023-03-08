@@ -180,7 +180,7 @@
 #
 #
 project('brewtarget', 'cpp',
-        version: '3.0.7',
+        version: '3.0.8',
         license: 'GPL-3.0-or-later',
         meson_version: '>=0.60.0',
         default_options : ['cpp_std=c++20',

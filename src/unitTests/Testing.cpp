@@ -228,12 +228,12 @@ namespace {
 
 
    //! \brief True iff a <= c <= b
-   constexpr bool inRange(double c, double a, double b) {
+   constexpr bool inRange(double const c, double const a, double const b) {
       return (a <= c) && (c <= b);
    }
 
    //! \brief True iff b - tolerance <= a <= b + tolerance
-   bool fuzzyComp(double a, double b, double tolerance) {
+   bool fuzzyComp(double const a, double const b, double const tolerance) {
       bool ret = inRange(a, b - tolerance, b + tolerance);
       if (!ret) {
          qDebug() << Q_FUNC_INFO << "a:" << a << ", b:" << b << ", diff:" << abs(a - b) << ", tolerance:" << tolerance;
@@ -609,13 +609,18 @@ void Testing::testUnitConversions() {
                       0.001),
             "Unit conversion error (US gallons to Litres v2)");
    // "5.500 gal"
+   // This is an ambiguous case where the units could be US gallons or Imperial gallons.  At the moment, we say either
+   // interpretation is valid (in the absence of any other context).
+   // 5.5 US gallons       ≈ 20.820 litres
+   // 5.5 Imperial gallons ≈ 25.004 litres
    testInput.clear();
    testInputAsStream << "5" << decimalSeparator << "500 gal";
-   QVERIFY2(fuzzyComp(Measurement::qStringToSI(testInput, // "5.500 gal"
-                                               Measurement::PhysicalQuantity::Volume).quantity(),
-                      20.820,
-                      0.001),
-                      "Unit conversion error (US gallons to Litres v3)");
+   auto converted = Measurement::qStringToSI(testInput, // "5.500 gal"
+                                             Measurement::PhysicalQuantity::Volume);
+   qDebug() << Q_FUNC_INFO << testInput << "converted to" << converted;
+   QVERIFY2(fuzzyComp(converted.quantity(), 20.820, 0.001) ||
+            fuzzyComp(converted.quantity(), 25.004, 0.001),
+            "Unit conversion error (US or Imperial gallons to Litres v3)");
    // "9.994 P"
    testInput.clear();
    testInputAsStream << "9" << decimalSeparator << "994 P";

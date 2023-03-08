@@ -22,8 +22,9 @@
  */
 #include "measurement/Unit.h"
 
-#include <string>
 #include <iostream>
+#include <mutex>    // For std::once_flag etc
+#include <string>
 
 #include <QStringList>
 #include <QRegExp>
@@ -51,7 +52,7 @@ namespace {
       return amtUnit;
    }
 
-   QString unitFromString(QString qstr) {
+   QString unitNameFromAmountString(QString const & qstr) {
       QRegExp amtUnit = getRegExpToMatchAmountPlusUnits();
 
       // if the regex dies, return ?
@@ -63,7 +64,7 @@ namespace {
       return amtUnit.cap(2);
    }
 
-   double valueFromString(QString qstr) {
+   double quantityFromAmountString(QString const & qstr) {
       QRegExp amtUnit = getRegExpToMatchAmountPlusUnits();
 
       // if the regex dies, return 0.0
@@ -74,21 +75,111 @@ namespace {
       return Localization::toDouble(amtUnit.cap(1), Q_FUNC_INFO);
    }
 
-   // Note that, although Unit names (ie abbreviations) are unique within a UnitSystem, they are not globally unique. Eg
-   // "L" is the abbreviation/name of both Liters and Lintner; "gal" is the abbreviation/name of the Imperial gallon and
-   // the US Customary one; etc.
-   QMultiMap<QString, Measurement::Unit const *> nameToUnit;
+   /**
+    * \brief This is useful to allow us to initialise \c unitNameLookup and \c physicalQuantityToCanonicalUnit after
+    *        all \c Unit and \c UnitSystem objects have been created.
+    */
+   QVector<Measurement::Unit const *> listOfAllUnits;
+
+   /**
+    * \brief This allows us to ensure that \c Unit::initialiseLookups is called exactly once
+    */
+   std::once_flag initFlag_Lookups;
+
+   //
+   // Note that, although Unit names (ie abbreviations) are unique within an individual UnitSystem, some are are not
+   // globally unique, and some are not even unique within a PhysicalQuantity.   For example:
+   //    - "L" is the abbreviation/name of both Liters and Lintner
+   //    - "gal" is the abbreviation/name of the Imperial gallon and the US Customary one
+   //
+   // Almost all of the time when we are doing look-ups, we know the PhysicalQuantity (and it is not meaningful for the
+   // user to specify units relating to a different PhysicalQuantity) so it makes sense to group look-ups by that.
+   //
+   struct NameLookupKey {
+      Measurement::PhysicalQuantity physicalQuantity;
+      QString                       lowerCaseUnitName;
+      //
+      // We need an ordering on the struct to use it as a key of QMap / QMultiMap.  In theory, in C++20, we should be
+      // able to ask the compiler to do all the work to give a suitable default ordering, by writing:
+      //
+      //    friend auto operator<=>(NameLookupKey const & lhs, NameLookupKey const & rhs) = default;
+      //
+      // However, in practice, this requires the spaceship operator to be defined for QString, which it isn't in Qt5.
+      // So, for now, define our own operator<, which will suffice for QMultiMap.
+      //
+      bool operator<(NameLookupKey const & rhs) const {
+         NameLookupKey const & lhs = *this;
+         if (lhs.physicalQuantity != rhs.physicalQuantity) {
+            return (lhs.physicalQuantity < rhs.physicalQuantity);
+         }
+         return (lhs.lowerCaseUnitName < rhs.lowerCaseUnitName);
+      }
+   };
+   QMultiMap<NameLookupKey, Measurement::Unit const *> unitNameLookup;
 
    // NB: There is no canonical unit for Measurement::PhysicalQuantity::Mixed
-   QMap<Measurement::PhysicalQuantity, Measurement::Unit const *> const physicalQuantityToCanonicalUnit {
-      {Measurement::PhysicalQuantity::Mass,            &Measurement::Units::kilograms},
-      {Measurement::PhysicalQuantity::Volume,          &Measurement::Units::liters},
-      {Measurement::PhysicalQuantity::Time,            &Measurement::Units::minutes},
-      {Measurement::PhysicalQuantity::Temperature,     &Measurement::Units::celsius},
-      {Measurement::PhysicalQuantity::Color,           &Measurement::Units::srm},
-      {Measurement::PhysicalQuantity::Density,         &Measurement::Units::sp_grav},
-      {Measurement::PhysicalQuantity::DiastaticPower,  &Measurement::Units::lintner}
-   };
+   QMap<Measurement::PhysicalQuantity, Measurement::Unit const *> physicalQuantityToCanonicalUnit;
+
+   /**
+    * \brief Get all units matching a given name and physical quantity
+    *
+    * \param name
+    * \param physicalQuantity
+    * \param caseInensitiveMatching If \c true, do a case-insensitive search.  Eg, match "ml" for milliliters, even
+    *                               though the correct name is "mL".  This should always be safe to do, as AFAICT there
+    *                               are no current or foreseeable units that _we_ use whose names only differ by case --
+    *                               or, at least, that's the case in English...
+    */
+   QList<Measurement::Unit const *> getUnitsByNameAndPhysicalQuantity(QString const & name,
+                                                                      Measurement::PhysicalQuantity const & physicalQuantity,
+                                                                      bool const caseInensitiveMatching) {
+      // Need this before we reference unitNameLookup or physicalQuantityToCanonicalUnit
+      std::call_once(initFlag_Lookups, &Measurement::Unit::initialiseLookups);
+
+      auto matches = unitNameLookup.values(NameLookupKey{physicalQuantity, name.toLower()});
+      qDebug() << Q_FUNC_INFO << name << "has" << matches.length() << "case-insensitive match(es)";
+      if (caseInensitiveMatching) {
+         return matches;
+      }
+
+      // If we ever want to do case insensitive matching (which we think should be rare), the simplest thing is just to
+      // go through all the case-insensitive matches and exclude those that aren't an exact match
+      decltype(matches) filteredMatches;
+      for (auto match : matches) {
+         if (match->name == name) {
+            filteredMatches.append(match);
+         }
+      }
+      qDebug() << Q_FUNC_INFO << name << "has" << filteredMatches.length() << "case-sensitive match(es)";
+      return filteredMatches;
+   }
+
+   /**
+    * \brief Get all units matching a given name, but without knowing the physical quantity.  Pretty much the only time
+    *        we need this is in \c ConverterTool to do contextless conversions.
+    *
+    * \param name
+    * \param caseInensitiveMatching If \c true, do a case-insensitive search.  Eg, match "ml" for milliliters, even
+    *                               though the correct name is "mL".
+    */
+   QList<Measurement::Unit const *> getUnitsOnlyByName(QString const & name,
+                                                       bool const caseInensitiveMatching = true) {
+      // Need this before we reference unitNameLookup or physicalQuantityToCanonicalUnit
+      std::call_once(initFlag_Lookups, &Measurement::Unit::initialiseLookups);
+
+      QList<Measurement::Unit const *> allMatches;
+      for (auto key : unitNameLookup.uniqueKeys()) {
+         //
+         // Although it's slightly clunky to call getUnitsByNameAndPhysicalQuantity() here, it saves us re-implementing
+         // all the case-insensitive logic.
+         //
+         auto matches = getUnitsByNameAndPhysicalQuantity(name, key.physicalQuantity, caseInensitiveMatching);
+         if (matches.length() > 0) {
+            allMatches.append(matches);
+         }
+      }
+      return allMatches;
+   }
 }
 
 // This private implementation class holds all private non-virtual members of Unit
@@ -101,14 +192,14 @@ public:
         UnitSystem const & unitSystem,
         std::function<double(double)> convertToCanonical,
         std::function<double(double)> convertFromCanonical,
-        double boundaryValue,
-        Measurement::Unit const & canonical) :
+        double const boundaryValue,
+        bool const isCanonical) :
       self                {self},
       unitSystem          {unitSystem},
       convertToCanonical  {convertToCanonical},
       convertFromCanonical{convertFromCanonical},
       boundaryValue       {boundaryValue},
-      canonical           {canonical} {
+      isCanonical         {isCanonical} {
       return;
    }
 
@@ -123,10 +214,9 @@ public:
 
    std::function<double(double)> convertToCanonical;
    std::function<double(double)> convertFromCanonical;
-   double boundaryValue;
-   Measurement::Unit const & canonical; //,:TODO:. Get rid of this
+   double const boundaryValue;
+   bool const isCanonical;
 };
-
 
 Measurement::Unit::Unit(UnitSystem const & unitSystem,
                         QString const unitName,
@@ -140,12 +230,30 @@ Measurement::Unit::Unit(UnitSystem const & unitSystem,
                                 convertToCanonical,
                                 convertFromCanonical,
                                 boundaryValue,
-                                canonical ? *canonical : *this)} {
-   nameToUnit.insert(this->name, this);
+                                (canonical == nullptr) )} {
+   //
+   // You might think here would be a neat place to the Unit we are constructing to unitNameLookup and, if appropriate,
+   // physicalQuantityToCanonicalUnit.  However, there is not guarantee that unitSystem is constructed at this point, so
+   // unitSystem.getPhysicalQuantity() could result in a core dump.
+   //
+   // What we can do safely is add ourselves to listOfAllUnits
+   //
+   listOfAllUnits.append(this);
    return;
 }
 
 Measurement::Unit::~Unit() = default;
+
+void Measurement::Unit::initialiseLookups() {
+   for (auto const unit : listOfAllUnits) {
+      Measurement::PhysicalQuantity const physicalQuantity = unit->pimpl->unitSystem.getPhysicalQuantity();
+      unitNameLookup.insert(NameLookupKey{physicalQuantity, unit->name.toLower()}, unit);
+      if (unit->pimpl->isCanonical) {
+         physicalQuantityToCanonicalUnit.insert(physicalQuantity, unit);
+      }
+   }
+   return;
+}
 
 bool Measurement::Unit::operator==(Unit const & other) const {
    // Since we're not intending to create multiple instances of any given UnitSystem, it should be enough to check
@@ -181,6 +289,9 @@ double Measurement::Unit::boundary() const {
 }
 
 Measurement::Unit const & Measurement::Unit::getCanonicalUnit(Measurement::PhysicalQuantity const physicalQuantity) {
+   // Need this before we reference unitNameLookup or physicalQuantityToCanonicalUnit
+   std::call_once(initFlag_Lookups, &Measurement::Unit::initialiseLookups);
+
    // It's a coding error if there is no canonical unit for a real physical quantity (ie not Mixed).  (And of course
    // there should be no Unit or UnitSystem for Mixed.)
    Q_ASSERT(physicalQuantityToCanonicalUnit.contains(physicalQuantity));
@@ -188,49 +299,56 @@ Measurement::Unit const & Measurement::Unit::getCanonicalUnit(Measurement::Physi
    return *canonical;
 }
 
-QString Measurement::Unit::convert(QString qstr, QString toUnit) {
+QString Measurement::Unit::convertWithoutContext(QString const & qstr, QString const & toUnitName) {
 
-   QString fName = unitFromString(qstr);
-   Unit const * f = Measurement::Unit::getUnit(fName);
+   qDebug() << Q_FUNC_INFO << "Trying to convert" << qstr << "to" << toUnitName;
+   double fromQuantity = quantityFromAmountString(qstr);
 
-   double si;
-   if (f) {
-      double amt = valueFromString(qstr);
-      si = f->toCanonical(amt).quantity();
-   } else {
-      si = 0.0;
+   QString const fromUnitName = unitNameFromAmountString(qstr);
+   auto const fromUnits = getUnitsOnlyByName(fromUnitName);
+   auto const toUnits   = getUnitsOnlyByName(toUnitName);
+   qDebug() <<
+      Q_FUNC_INFO << "Found" << fromUnits.length() << "matches for" << fromUnitName << "and" << toUnits.length() <<
+      "matches for" << toUnitName;
+
+   if (fromUnits.length() > 0 && toUnits.length() > 0) {
+      // We found at least one match for both "from" and "to" unit names.  We need to check search amongst these to find
+      // one where both units relate to the same physical quantity.
+      for (auto const fromUnit : fromUnits) {
+         for (auto const toUnit : toUnits) {
+            // Stop at the first match.  If there's more than one match then we don't have a means to disambiguate.
+            if (fromUnit->getPhysicalQuantity() == toUnit->getPhysicalQuantity()) {
+               double canonicalQuantity = fromUnit->toCanonical(fromQuantity).quantity();
+               double toQuantity        = toUnit->fromCanonical(canonicalQuantity);
+               return QString("%1 %2").arg(Measurement::displayQuantity(toQuantity, 3)).arg(toUnit->name);
+            }
+         }
+      }
    }
 
-   Unit const * u = Measurement::Unit::getUnit(toUnit);
-
-   // If we couldn't find either unit, or the two units don't match (eg, you
-   // cannot convert L to lb)
-   if (u == nullptr || f == nullptr || u->getPhysicalQuantity() != f->getPhysicalQuantity()) {
-      return QString("%1 ?").arg(Measurement::displayQuantity(si, 3));
-   }
-
-   return QString("%1 %2").arg(Measurement::displayQuantity(u->fromCanonical(si), 3)).arg(toUnit);
+   // If we didn't recognise from or to units, or we couldn't find a pair for the same PhysicalQuantity, the we return
+   // the original amount with a question mark.
+   return QString("%1 ?").arg(Measurement::displayQuantity(fromQuantity, 3));
 }
 
 Measurement::Unit const * Measurement::Unit::getUnit(QString const & name,
-                                                     std::optional<Measurement::PhysicalQuantity> physicalQuantity) {
-   auto const numMatches = nameToUnit.count(name);
+                                                     Measurement::PhysicalQuantity const & physicalQuantity,
+                                                     bool const caseInensitiveMatching) {
+   auto matches = getUnitsByNameAndPhysicalQuantity(name, physicalQuantity, caseInensitiveMatching);
+
+   auto const numMatches = matches.length();
    if (0 == numMatches) {
-      qDebug() << Q_FUNC_INFO << name << "does not match any Unit";
       return nullptr;
    }
-
-   qDebug() << Q_FUNC_INFO << name << "has" << numMatches << "match(es)";
 
    // Under most circumstances, there is a one-to-one relationship between unit string and Unit. C will only map to
    // Measurement::Unit::Celsius, for example. If there's only one match, just return it.
    if (1 == numMatches) {
-      Measurement::Unit const * unitToReturn = nameToUnit.value(name);
-      if (physicalQuantity && unitToReturn->getPhysicalQuantity() != *physicalQuantity) {
+      auto unitToReturn = matches.at(0);
+      if (unitToReturn->getPhysicalQuantity() != physicalQuantity) {
          qWarning() <<
-            Q_FUNC_INFO << "Unit" << name << "matches a unit of type" <<
-            Measurement::getDisplayName(unitToReturn->getPhysicalQuantity()) << "but caller specified" <<
-            Measurement::getDisplayName(*physicalQuantity);
+            Q_FUNC_INFO << "Unit" << name << "matches a unit of type" << unitToReturn->getPhysicalQuantity() <<
+            "but caller specified" << physicalQuantity;
          return nullptr;
       }
       return unitToReturn;
@@ -240,16 +358,15 @@ Measurement::Unit const * Measurement::Unit::getUnit(QString const & name,
    // Loop through the found Units, like Measurement::Unit::us_quart and
    // Measurement::Unit::imperial_quart, and try to find one that matches the global default.
    Measurement::Unit const * defUnit = nullptr;
-   for (auto ii = nameToUnit.find(name); ii != nameToUnit.end() && ii.key() == name; ++ii) {
-      Measurement::Unit const * unit = ii.value();
+   for (auto const unit : matches) {
       auto const & displayUnitSystem = Measurement::getDisplayUnitSystem(unit->getPhysicalQuantity());
       qDebug() <<
          Q_FUNC_INFO << "Look at" << *unit << "from" << unit->getUnitSystem() << "(Display Unit System for" <<
          unit->getPhysicalQuantity() << "is" << displayUnitSystem << ")";
-      if (physicalQuantity && unit->getPhysicalQuantity() != *physicalQuantity) {
+      if (unit->getPhysicalQuantity() != physicalQuantity) {
          // If the caller knows the amount is, say, a Volume, don't bother trying to match against units for any other
          // physical quantity.
-         qDebug() << Q_FUNC_INFO << "Ignoring match in" << unit->getPhysicalQuantity() << "as not" << *physicalQuantity;
+         qDebug() << Q_FUNC_INFO << "Ignoring match in" << unit->getPhysicalQuantity() << "as not" << physicalQuantity;
          continue;
       }
 
@@ -268,14 +385,46 @@ Measurement::Unit const * Measurement::Unit::getUnit(QString const & name,
    return defUnit;
 }
 
+Measurement::Unit const * Measurement::Unit::getUnit(QString const & name,
+                                                     Measurement::UnitSystem const & unitSystem,
+                                                     bool const caseInensitiveMatching) {
+   auto matches = getUnitsByNameAndPhysicalQuantity(name, unitSystem.getPhysicalQuantity(), caseInensitiveMatching);
+
+   //
+   // At this point, matches is a list of all units matching the supplied name and the PhysicalQuantity of the supplied
+   // UnitSystem.  If we have more than one match, then we prefer the first one we find (if any) in the supplied
+   // UnitSystem, otherwise, first in the list will have to do.
+   //
+
+   auto const numMatches = matches.length();
+   if (0 == numMatches) {
+      return nullptr;
+   }
+
+   if (1 == numMatches) {
+      return matches.at(0);
+   }
+
+   for (auto const match : matches) {
+      if (match->getUnitSystem() == unitSystem) {
+         return match;
+      }
+   }
+
+   return matches.at(0);
+}
 
 // This is where we actually define all the different units and how to convert them to/from their canonical equivalents
 // Previously this was done with a huge number of subclasses, but lambdas mean that's no longer necessary
 // Note that we always need to define the canonical Unit for a given PhysicalQuantity before any others
 //
 namespace Measurement::Units {
-   //: NOTE FOR TRANSLATORS: The abbreviated name of each unit (eg "kg" for kilograms, "g" for grams, etc) must be
-   //  unique for that type of unit.  Eg you cannot have two units of weight with the same abbreviated name.
+   // :NOTE FOR TRANSLATORS: The abbreviated name of each unit (eg "kg" for kilograms, "g" for grams, etc) must be
+   //                        unique for that type of unit.  Eg you cannot have two units of weight with the same
+   //                        abbreviated name.  Ideally, this should also be true on a case insensitive basis, eg it is
+   //                        undesirable for "foo" and "Foo" to be the abbreviated names of two different units of
+   //                        the same type.
+   //
 
    // === Mass ===
    // See comment in measurement/UnitSystem.cpp for why we have separate entities for US Customary pounds/ounces and Imperials ones, even though they are, in fact, the same

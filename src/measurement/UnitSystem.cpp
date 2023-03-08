@@ -91,22 +91,6 @@ public:
    }
 
    /**
-    * \brief Maps from unit name (in this \c UnitSystem) to \c Unit
-    */
-   Unit const * getUnitFromName(QString const & name) const {
-      auto const unitsForThisSystem = this->scaleToUnit.values();
-      auto matchingUnit = std::find_if(
-         unitsForThisSystem.begin(),
-         unitsForThisSystem.end(),
-         [name](Measurement::Unit const * unit) {return unit->name == name;}
-      );
-      if (matchingUnit != unitsForThisSystem.end()) {
-         return *matchingUnit;
-      }
-      return nullptr;
-   }
-
-   /**
     * \brief This does most of the work for displayAmount() and amountDisplay()
     *
     * \param amount the amount to display
@@ -227,12 +211,10 @@ Measurement::Amount Measurement::UnitSystem::qstringToSI(QString qstr, Unit cons
 
    Unit const * unitToUse = nullptr;
    if (!unitName.isEmpty()) {
-      // The supplied string specifies units, so see if they are ones we recognise in this unit system
-      unitToUse = this->pimpl->getUnitFromName(unitName);
-      // If we didn't find the specified units in this UnitSystem, broaden the search and look in all units
-      if (!unitToUse) {
-         unitToUse = Measurement::Unit::getUnit(unitName, this->pimpl->physicalQuantity);
-      }
+      // Unit::getUnit() will, by preference, match to a unit in the current UnitSystem if possible.  If not, it will
+      // match to a unit in another UnitSystem for the same PhysicalQuantity.  If there are no matches that way, it will
+      // return nullptr;
+      unitToUse = Unit::getUnit(unitName, *this, true);
       if (unitToUse) {
          qDebug() << Q_FUNC_INFO << this->uniqueName << ":" << unitName << "interpreted as" << unitToUse->name;
       } else {
@@ -248,8 +230,8 @@ Measurement::Amount Measurement::UnitSystem::qstringToSI(QString qstr, Unit cons
 
    Measurement::Amount siAmount = unitToUse->toCanonical(amt);
    qDebug() <<
-      Q_FUNC_INFO << this->uniqueName << ": " << qstr << "is" << amt << " " << unitToUse->name << "=" << siAmount.quantity() <<
-      "in" << siAmount.unit()->name;
+      Q_FUNC_INFO << this->uniqueName << ": " << qstr << "is" << amt << " " << unitToUse->name << "=" <<
+      siAmount.quantity() << "in" << siAmount.unit()->name;
 
    return siAmount;
 }
