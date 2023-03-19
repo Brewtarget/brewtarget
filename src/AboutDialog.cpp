@@ -1,6 +1,7 @@
 /*
  * AboutDialog.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2016
+ * authors 2009-2023
+ * - Matt Young <mfsy@yahoo.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -32,23 +33,68 @@ AboutDialog::AboutDialog(QWidget * parent) :
    setObjectName("aboutDialog");
    doLayout();
 
-   // Do not translate this. It is important that the copyright/license
-   // text is not altered.
+   //
+   // Do not translate this. It is important that the copyright/license text is not altered.
+   //
+   // This is the master list of copyrights from which we construct the one in the COPYRIGHT file in the root directory.
+   // (We do it that way around because it's easier to add comments here!)  This is our best effort at constructing the
+   // full list of contributors but there are omissions where we don't have sufficient information to attribute someone.
+   // IF YOUR NAME SHOULD BE ON THIS LIST AND ISN'T OR IF YOU KNOW OF ANY OTHER CORRECTIONS, PLEASE CONTACT US (VIA
+   // https://github.com/Brewtarget/brewtarget/issues) SO WE CAN RECTIFY IT.
+   //
+   // We need the years in which people made their contributions so that we can abide by the expected copyright format
+   // in deb package files on Linux.
+   //
+   // Constructing this list was a bit fun.  The primary sources of information were:
+   //   - Git commits to the Brewtarget project - which need a bit of manual wrangling because different commits by the
+   //                                             same person sometimes have different variations on their name or
+   //                                             email.
+   //   - Git commits to the Brewken project
+   //   - Comment headers in the source code - which are sometimes missing info (eg because someone omitted to update
+   //                                          the comment when they made a change) but also contain authors not present
+   //                                          in the Git commits, such as when other open-source code is copied-and-
+   //                                          pasted into our code base.  (We do _not_ include all the copyrights from
+   //                                          libraries and frameworks because that would be unmanageable.)
+   //
+   // For the git commits, we ran this command:
+   //
+   //    git log --format='%aN <%aE> ÷÷%ai' | sed 's/÷÷\([0-9]*\)-.*$/\1/' | sort -u
+   //
+   // and then did some manual de-duplication and tidying up.  In particular, note that we have dropped entries where we
+   // don't have both real name and a valid email address and have not been able to determine them with a few searches.
+   // These are marked in comments below.
+   //
+   // For the comments, we ran this command from the source directory (this gets most C++ header comments, but not from
+   // make files and shell scripts etc):
+   //
+   //    find . -type f -name "*.cpp" -o -type f -name "*.h" | while read ii;
+   //    do awk '/@/{print} /\*\//{exit}' $ii
+   //    done | sort -u | sed 's/^[^A-Za-z]*//' | uniq
+   //
+   // Process for annual updates is simpler.  Eg, if you want committers from 2022:
+   //
+   //    git log --format='%aN <%aE> ÷÷%ai' | grep ÷÷2022 | sed 's/÷÷\([0-9]*\)-.*$/\1/' | sort -u
+   //
+   // Finally, to process this source file(!) into the format we use in the COPYRIGHT file, it's:
+   //
+   //    cat src/AboutDialog.cpp | awk '/"  <li>.*@/{print}' | sed 's/.*<li>/   /; s+</li>.*$++; s/&lt;/</; s/&gt;/>/'
+   //
+   // .:TODO:. We should probably get Meson or the `bt` build script to do some of the processing
+   //
    label->setText(
       QString::fromUtf8(
          "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">"
          "<html>"
          " <head>"
          "  <style type=\"text/css\">"
+         "  li {font-family: \"Lucida Console\", \"Courier New\", monospace;}"
          "  </style>"
          " </head>"
          ""
          " <h1>Brewtarget %1</h1>"
          " <p>"
-         "  Brewtarget, for developing beer recipes, is Copyright 2009-2022"
-         "  by the following developers."
+         "  Brewtarget, free software for developing beer recipes, is copyright:"
          " </p>"
-         " <h2>Developers</h2>"
          " <ul>"
          "  <li>2018      Adam Hawes &lt;ach@hawes.net.au&gt;</li>"
          "  <li>2015-2016 Aidan Roberts &lt;aidanr67@gmail.com&gt;</li>"
@@ -118,6 +164,16 @@ AboutDialog::AboutDialog(QWidget * parent) :
          //     2013      U-CHIMCHIM\mik <mik@chimchim.(none)>               // Incomplete name and email
          " </ul>"
          ""
+         // **********************************************************************************************************
+         // * Note that the HTML source indentation here is different than above so that we don't pick up testers as *
+         // * copyright holders in the awk command above!                                                            *
+         // **********************************************************************************************************
+         " <p>The following people have made notable contributions with testing and bug reports:</p>"
+         " <ul>"
+         "  <li>Mik Firestone &lt;mikfire@gmail.com&gt;</li>"
+         "  <li>Nikolas &quot;Jazzbeerman&quot; </li>"
+         " </ul>"
+         ""
          " <h2>License (GPLv3)</h2>"
          " <p>"
          "  Brewtarget is free software: you can redistribute it and/or modify<br/>"
@@ -136,7 +192,7 @@ AboutDialog::AboutDialog(QWidget * parent) :
          ""
          " <h2>Source Code</h2>"
          " <p>"
-         "  Brewtarget's source code is located at <a href=\"https://github.com/Brewtarget/brewtarget\">github.com/Brewtarget/brewtarget</a>"
+         "  Brewtarget's source code is available at <a href=\"https://github.com/Brewtarget/brewtarget\">github.com/Brewtarget/brewtarget</a>"
          " </p>"
          "</html>"
       )
