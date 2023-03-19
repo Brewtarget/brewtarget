@@ -858,41 +858,41 @@ void MainWindow::restoreSavedState() {
 // menu items with a SIGNAL of triggered() should go in here.
 void MainWindow::setupTriggers() {
    // Connect actions defined in *.ui files to methods in code
-   connect( actionExit, &QAction::triggered, this, &QWidget::close );                                                   // > File > Exit
-   connect( actionAbout_BrewTarget, &QAction::triggered, dialog_about, &QWidget::show );                                // > About > About Brewtarget
-   connect( actionNewRecipe, &QAction::triggered, this, &MainWindow::newRecipe );                                       // > File > New Recipe
-   connect( actionImportFromXml, &QAction::triggered, this, &MainWindow::importFiles );                                // > File > Import Recipes
-   connect( actionExportToXml, &QAction::triggered, this, &MainWindow::exportRecipe );                                 // > File > Export Recipes
-   connect( actionUndo, &QAction::triggered, this, &MainWindow::editUndo );                                             // > Edit > Undo
-   connect( actionRedo, &QAction::triggered, this, &MainWindow::editRedo );                                             // > Edit > Redo
+   connect( actionExit,                       &QAction::triggered, this,                 &QWidget::close                   ); // > File > Exit
+   connect( actionAbout_Brewtarget,           &QAction::triggered, dialog_about,         &QWidget::show                    ); // > About > About Brewtarget
+   connect( actionNewRecipe,                  &QAction::triggered, this,                 &MainWindow::newRecipe            ); // > File > New Recipe
+   connect( actionImportFromXml,              &QAction::triggered, this,                 &MainWindow::importFiles          ); // > File > Import Recipes
+   connect( actionExportToXml,                &QAction::triggered, this,                 &MainWindow::exportRecipe         ); // > File > Export Recipes
+   connect( actionUndo,                       &QAction::triggered, this,                 &MainWindow::editUndo             ); // > Edit > Undo
+   connect( actionRedo,                       &QAction::triggered, this,                 &MainWindow::editRedo             ); // > Edit > Redo
    setUndoRedoEnable();
-   connect( actionEquipments, &QAction::triggered, equipEditor, &QWidget::show );                                       // > View > Equipments
-   connect( actionMashs, &QAction::triggered, namedMashEditor, &QWidget::show );                                        // > View > Mashs
-   connect( actionStyles, &QAction::triggered, styleEditor, &QWidget::show );                                           // > View > Styles
-   connect( actionFermentables, &QAction::triggered, fermDialog, &QWidget::show );                                      // > View > Fermentables
-   connect( actionHops, &QAction::triggered, hopDialog, &QWidget::show );                                               // > View > Hops
-   connect( actionMiscs, &QAction::triggered, miscDialog, &QWidget::show );                                             // > View > Miscs
-   connect( actionYeasts, &QAction::triggered, yeastDialog, &QWidget::show );                                           // > View > Yeasts
-   connect( actionOptions, &QAction::triggered, optionDialog, &OptionDialog::show );                                    // > Tools > Options
-   connect( actionManual, &QAction::triggered, this, &MainWindow::openManual );                                         // > About > Manual
-   connect( actionScale_Recipe, &QAction::triggered, recipeScaler, &QWidget::show );                                    // > Tools > Scale Recipe
-   connect( action_recipeToTextClipboard, &QAction::triggered, recipeFormatter, &RecipeFormatter::toTextClipboard );    // > Tools > Recipe to Clipboard as Text
-   connect( actionConvert_Units, &QAction::triggered, converterTool, &QWidget::show );                                  // > Tools > Convert Units
-   connect( actionHydrometer_Temp_Adjustment, &QAction::triggered, hydrometerTool, &QWidget::show );                    // > Tools > Hydrometer Temp Adjustment
-   connect( actionAlcohol_Percentage_Tool, &QAction::triggered, alcoholTool, &QWidget::show );                          // > Tools > Alcohol
-   connect( actionOG_Correction_Help, &QAction::triggered, ogAdjuster, &QWidget::show );                                // > Tools > OG Correction Help
-   connect( actionCopy_Recipe, &QAction::triggered, this, &MainWindow::copyRecipe );                                    // > File > Copy Recipe
-   connect( actionPriming_Calculator, &QAction::triggered, primingDialog, &QWidget::show );                             // > Tools > Priming Calculator
-   connect( actionStrikeWater_Calculator, &QAction::triggered, strikeWaterDialog, &QWidget::show );                     // > Tools > Strike Water Calculator
-   connect( actionRefractometer_Tools, &QAction::triggered, refractoDialog, &QWidget::show );                           // > Tools > Refractometer Tools
-   connect( actionPitch_Rate_Calculator, &QAction::triggered, this, &MainWindow::showPitchDialog);                      // > Tools > Pitch Rate Calculator
-   connect( actionTimers, &QAction::triggered, timerMainDialog, &QWidget::show );                                       // > Tools > Timers
-   connect( actionDeleteSelected, &QAction::triggered, this, &MainWindow::deleteSelected );
-   connect( actionWater_Chemistry, &QAction::triggered, this, &MainWindow::popChemistry);                               // > Tools > Water Chemistry
-   connect( actionAncestors, &QAction::triggered, this, &MainWindow::setAncestor);                                      // > Tools > Ancestors
-   connect( action_brewit, &QAction::triggered, this, &MainWindow::brewItHelper );
+   connect( actionEquipments,                 &QAction::triggered, equipEditor,           &QWidget::show                   ); // > View > Equipments
+   connect( actionMashs,                      &QAction::triggered, namedMashEditor,       &QWidget::show                   ); // > View > Mashs
+   connect( actionStyles,                     &QAction::triggered, styleEditor,           &QWidget::show                   ); // > View > Styles
+   connect( actionFermentables,               &QAction::triggered, fermDialog,            &QWidget::show                   ); // > View > Fermentables
+   connect( actionHops,                       &QAction::triggered, hopDialog,             &QWidget::show                   ); // > View > Hops
+   connect( actionMiscs,                      &QAction::triggered, miscDialog,            &QWidget::show                   ); // > View > Miscs
+   connect( actionYeasts,                     &QAction::triggered, yeastDialog,           &QWidget::show                   ); // > View > Yeasts
+   connect( actionOptions,                    &QAction::triggered, optionDialog,          &OptionDialog::show              ); // > Tools > Options
+   connect( actionManual,                     &QAction::triggered, this,                  &MainWindow::openManual          ); // > About > Manual
+   connect( actionScale_Recipe,               &QAction::triggered, recipeScaler,          &QWidget::show                   ); // > Tools > Scale Recipe
+   connect( action_recipeToTextClipboard,     &QAction::triggered, recipeFormatter,       &RecipeFormatter::toTextClipboard); // > Tools > Recipe to Clipboard as Text
+   connect( actionConvert_Units,              &QAction::triggered, converterTool,         &QWidget::show                   ); // > Tools > Convert Units
+   connect( actionHydrometer_Temp_Adjustment, &QAction::triggered, hydrometerTool,        &QWidget::show                   ); // > Tools > Hydrometer Temp Adjustment
+   connect( actionAlcohol_Percentage_Tool,    &QAction::triggered, alcoholTool,           &QWidget::show                   ); // > Tools > Alcohol
+   connect( actionOG_Correction_Help,         &QAction::triggered, ogAdjuster,            &QWidget::show                   ); // > Tools > OG Correction Help
+   connect( actionCopy_Recipe,                &QAction::triggered, this,                  &MainWindow::copyRecipe          ); // > File > Copy Recipe
+   connect( actionPriming_Calculator,         &QAction::triggered, primingDialog,         &QWidget::show                   ); // > Tools > Priming Calculator
+   connect( actionStrikeWater_Calculator,     &QAction::triggered, strikeWaterDialog,     &QWidget::show                   ); // > Tools > Strike Water Calculator
+   connect( actionRefractometer_Tools,        &QAction::triggered, refractoDialog,        &QWidget::show                   ); // > Tools > Refractometer Tools
+   connect( actionPitch_Rate_Calculator,      &QAction::triggered, this,                  &MainWindow::showPitchDialog     ); // > Tools > Pitch Rate Calculator
+   connect( actionTimers,                     &QAction::triggered, timerMainDialog,       &QWidget::show                   ); // > Tools > Timers
+   connect( actionDeleteSelected,             &QAction::triggered, this,                  &MainWindow::deleteSelected      );
+   connect( actionWater_Chemistry,            &QAction::triggered, this,                  &MainWindow::popChemistry        ); // > Tools > Water Chemistry
+   connect( actionAncestors,                  &QAction::triggered, this,                  &MainWindow::setAncestor         ); // > Tools > Ancestors
+   connect( action_brewit,                    &QAction::triggered, this,                  &MainWindow::brewItHelper        );
    //One Dialog to rule them all, at least all printing and export.
-   connect( actionPrint, &QAction::triggered, printAndPreviewDialog, &QWidget::show);                                   // > File > Print and Preview
+   connect( actionPrint,                      &QAction::triggered, printAndPreviewDialog, &QWidget::show                   ); // > File > Print and Preview
 
    // postgresql cannot backup or restore yet. I would like to find some way
    // around this, but for now just disable
