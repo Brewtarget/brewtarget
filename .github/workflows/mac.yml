@@ -47,17 +47,12 @@ jobs:
       # elsewhere we use the echo trick to ensure that a non-zero return value from these diagnostic commands is not
       # treated as a build script failure.
       #
-      # We install the tree command here as, although it's not needed to do the build itself, it's useful for diagnosing
-      # certain build problems (eg to see what changes certain parts of the build have made to the build directory
-      # tree) when the build is running as a GitHub action.  (If need be, you can also download the entire build
-      # directory within a day of a failed build running, but you need a decent internet connection for this as it's
-      # quite large.)
+      # Running `bt setup all` will, amongst other things install the tree command.
       #
       - name: Install Frameworks and Libraries, and set up Meson build environment
         run: |
            echo "Output from brew doctor: $(brew doctor)"
            echo "Output from xcode-select -p: $(xcode-select -p)"
-           brew install tree
            brew install python@3.11
            echo "Python3 ($(which python3)) version"
            /usr/bin/env python3 --version
@@ -149,8 +144,8 @@ jobs:
           path: |
              ${{github.workspace}}/build/brewtarget*.dmg
              ${{github.workspace}}/build/brewtarget*.dmg.sha256
-             ${{github.workspace}}/mbuild/packages/darwin/Brewtarget*.dmg
-             ${{github.workspace}}/mbuild/packages/darwin/Brewtarget*.dmg.sha256sum
+             ${{github.workspace}}/mbuild/packages/darwin/brewtarget*.dmg
+             ${{github.workspace}}/mbuild/packages/darwin/brewtarget*.dmg.sha256sum
           retention-days: 7
 
       - name: Post-processing on any core dump

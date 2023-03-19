@@ -33,7 +33,7 @@ std::optional<int> EnumStringMapping::stringToEnumAsInt(QString const & stringVa
                              [stringValue](EnumAndItsString const & ii){return stringValue == ii.string;});
    //
    // If we didn't find an exact match, we'll try a case-insensitive one if so-configured.  (We don't do this by
-   // default as the assumption is that it's rare we'll need the case insensitivity.
+   // default as the assumption is that it's rare we'll need the case insensitivity.)
    //
    if (match == this->end() && caseInensitiveFallback) {
       match = std::find_if(

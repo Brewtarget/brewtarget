@@ -11,9 +11,20 @@ format therein, otherwise you'll get, eg, no-changelogname-tag error from rpmlin
 
 * We'll list new features here...
 
+## v3.0.8
+Minor bug fixes for the 3.0.7 release (ie bugs in 3.0.7 are fixed in this 3.0.8 release).
+
+### New Features
+* Case insensitive matching of unit names (mL vs ml etc) [#725](https://github.com/Brewtarget/brewtarget/issues/725)
+
+### Bug Fixes
+* None
+
+### Release Timestamp
+Wed, 8 Mar 2023 11:29:08 +0100
 
 ## v3.0.7
-Minor bug fixes for the 3.0.5 release (ie bugs in 3.0.5 are fixed in this 3.0.6 release).
+Minor bug fixes for the 3.0.6 release (ie bugs in 3.0.6 are fixed in this 3.0.7 release).
 
 ### New Features
 

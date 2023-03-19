@@ -49,8 +49,8 @@ struct PreviousScaleInfo {
 class UiAmountWithUnits {
 public:
    /**
-    * \param
-    * \param
+    * \param parent
+    * \param fieldType
     * \param units
     */
    UiAmountWithUnits(QWidget * parent,

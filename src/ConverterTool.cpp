@@ -1,6 +1,7 @@
 /*
  * ConverterTool.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2015
+ * authors 2009-2023
+ * - Matt Young <mfsy@yahoo.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -28,12 +29,12 @@
 ConverterTool::ConverterTool(QWidget* parent) : QDialog(parent) {
    this->doLayout();
 
-   connect( pushButton_convert, &QAbstractButton::clicked, this, &ConverterTool::convert );
+   connect(pushButton_convert, &QAbstractButton::clicked, this, &ConverterTool::convert);
    return;
 }
 
 void ConverterTool::convert() {
-   this->outputLineEdit->setText(Measurement::Unit::convert(inputLineEdit->text(), outputUnitsLineEdit->text()));
+   this->outputLineEdit->setText(Measurement::Unit::convertWithoutContext(inputLineEdit->text(), outputUnitsLineEdit->text()));
    return;
 }
 
