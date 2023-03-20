@@ -91,13 +91,12 @@ Inventory::Inventory(NamedParameterBundle const & namedParameterBundle) :
 }
 
 Inventory::Inventory(Inventory const & other) :
-   pimpl{ new impl{*other.pimpl} } {
+   QObject{},
+   pimpl{std::make_unique<impl>(*other.pimpl)} {
    return;
 }
 
-
 Inventory::~Inventory() = default;
-
 
 int    Inventory::getId() const      { return this->pimpl->id; }
 double Inventory::getAmount() const  { return this->pimpl->amount; }

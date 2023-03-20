@@ -1682,7 +1682,7 @@
     </property>
     <addaction name="actionManual"/>
     <addaction name="separator"/>
-    <addaction name="actionAbout_BrewTarget"/>
+    <addaction name="actionAbout_Brewtarget"/>
    </widget>
    <widget class="QMenu" name="menuFile">
     <property name="title">
@@ -1793,13 +1793,13 @@
    <addaction name="separator"/>
    <addaction name="action_brewit"/>
   </widget>
-  <action name="actionAbout_BrewTarget">
+  <action name="actionAbout_Brewtarget">
    <property name="icon">
     <iconset resource="../brewtarget.qrc">
      <normaloff>:/images/smallInfo.svg</normaloff>:/images/smallInfo.svg</iconset>
    </property>
    <property name="text">
-    <string>About &amp;BrewTarget</string>
+    <string>About &amp;Brewtarget</string>
    </property>
    <property name="toolTip">
     <string>About Brewtarget</string>
