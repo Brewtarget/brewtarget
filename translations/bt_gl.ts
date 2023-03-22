@@ -5237,10 +5237,6 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>About &amp;BrewTarget</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>About Brewtarget</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5514,6 +5510,10 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>application/x-brewtarget-folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About &amp;Brewtarget</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

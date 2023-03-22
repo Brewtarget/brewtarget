@@ -47,6 +47,36 @@ ObjectStore & Style::getObjectStoreTypedInstance() const {
    return ObjectStoreTyped<Style>::getInstance();
 }
 
+TypeLookup const Style::typeLookup {
+   "Style",
+   {
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::abvMax_pct    , Style::m_abvMax_pct    ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::abvMin_pct    , Style::m_abvMin_pct    ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::carbMax_vol   , Style::m_carbMax_vol   ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::carbMin_vol   , Style::m_carbMin_vol   ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::category      , Style::m_category      ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::categoryNumber, Style::m_categoryNumber),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::colorMax_srm  , Style::m_colorMax_srm  ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::colorMin_srm  , Style::m_colorMin_srm  ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::examples      , Style::m_examples      ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::fgMax         , Style::m_fgMax         ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::fgMin         , Style::m_fgMin         ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::ibuMax        , Style::m_ibuMax        ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::ibuMin        , Style::m_ibuMin        ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::ingredients   , Style::m_ingredients   ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::notes         , Style::m_notes         ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::ogMax         , Style::m_ogMax         ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::ogMin         , Style::m_ogMin         ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::profile       , Style::m_profile       ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::styleGuide    , Style::m_styleGuide    ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::styleLetter   , Style::m_styleLetter   ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::type          , Style::m_type          ),
+//      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::typeString    , Style::m_typeString    ),
+   },
+   // Parent class lookup
+   &NamedEntity::typeLookup
+};
+
 //====== Constructors =========
 
 // suitable for something that will be written to the db later

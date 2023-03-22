@@ -5841,7 +5841,7 @@ El volum final al primari és de %1.</translation>
     </message>
     <message>
         <source>About &amp;BrewTarget</source>
-        <translation>Quant a &amp;Brewtarget</translation>
+        <translation type="vanished">Quant a &amp;Brewtarget</translation>
     </message>
     <message>
         <source>About Brewtarget</source>
@@ -6169,6 +6169,10 @@ El volum final al primari és de %1.</translation>
     </message>
     <message>
         <source>application/x-brewtarget-folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About &amp;Brewtarget</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

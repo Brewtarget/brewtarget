@@ -48,13 +48,13 @@ YeastTableModel::YeastTableModel(QTableView * parent, bool editable) :
    BtTableModelInventory{
       parent,
       editable,
-      {{YEASTNAMECOL,      {tr("Name"),       NonPhysicalQuantity::String,          ""      }},
-       {YEASTLABCOL,       {tr("Laboratory"), NonPhysicalQuantity::String,          ""      }},
-       {YEASTPRODIDCOL,    {tr("Product ID"), NonPhysicalQuantity::String,          ""      }},
-       {YEASTTYPECOL,      {tr("Type"),       NonPhysicalQuantity::String,          ""      }},
-       {YEASTFORMCOL,      {tr("Form"),       NonPhysicalQuantity::String,          ""      }},
+      {{YEASTNAMECOL,      {tr("Name"),       NonPhysicalQuantity::String                   , ""                           }},
+       {YEASTLABCOL,       {tr("Laboratory"), NonPhysicalQuantity::String                   , ""                           }},
+       {YEASTPRODIDCOL,    {tr("Product ID"), NonPhysicalQuantity::String                   , ""                           }},
+       {YEASTTYPECOL,      {tr("Type"),       NonPhysicalQuantity::String                   , ""                           }},
+       {YEASTFORMCOL,      {tr("Form"),       NonPhysicalQuantity::String                   , ""                           }},
        {YEASTAMOUNTCOL,    {tr("Amount"),     Measurement::PhysicalQuantity::Mixed, "amount"}},
-       {YEASTINVENTORYCOL, {tr("Inventory"),  NonPhysicalQuantity::Count,           ""      }}}
+       {YEASTINVENTORYCOL, {tr("Inventory"),  NonPhysicalQuantity::Count                    , ""                           }}}
    },
    BtTableModelData<Yeast>{} {
 
@@ -361,7 +361,7 @@ bool YeastTableModel::setData(QModelIndex const & index, QVariant const & value,
          }
          MainWindow::instance().doOrRedoUpdate(*row,
                                                PropertyNames::Yeast::type,
-                                               static_cast<Yeast::Type>(value.toInt()),
+                                               value.toInt(),
                                                tr("Change Yeast Type"));
          break;
       case YEASTFORMCOL:
@@ -370,7 +370,7 @@ bool YeastTableModel::setData(QModelIndex const & index, QVariant const & value,
          }
          MainWindow::instance().doOrRedoUpdate(*row,
                                                PropertyNames::Yeast::form,
-                                               static_cast<Yeast::Form>(value.toInt()),
+                                               value.toInt(),
                                                tr("Change Yeast Form"));
          break;
       case YEASTINVENTORYCOL:

@@ -5805,7 +5805,7 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source>About &amp;BrewTarget</source>
-        <translation>A Brewtargetről</translation>
+        <translation type="vanished">A Brewtargetről</translation>
     </message>
     <message>
         <source>About Brewtarget</source>
@@ -6133,6 +6133,10 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source>application/x-brewtarget-folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About &amp;Brewtarget</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

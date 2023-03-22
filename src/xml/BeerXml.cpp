@@ -123,10 +123,10 @@ namespace {
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
    template<> QString const BEER_XML_RECORD_NAME<Fermentable>{"FERMENTABLE"};
    EnumStringMapping const BEER_XML_FERMENTABLE_TYPE_MAPPER {
-      {"Grain",       Fermentable::Type::Grain},
-      {"Sugar",       Fermentable::Type::Sugar},
-      {"Extract",     Fermentable::Type::Extract},
-      {"Dry Extract", Fermentable::Type::Dry_Extract},
+      {"Grain",               Fermentable::Type::Grain},
+      {"Sugar",               Fermentable::Type::Sugar},
+      {"Extract",             Fermentable::Type::Extract},
+      {"Dry Extract",         Fermentable::Type::Dry_Extract},
       {"Adjunct",     Fermentable::Type::Adjunct}
    };
    template<> XmlRecord::FieldDefinitions const BEER_XML_RECORD_FIELDS<Fermentable> {
@@ -473,7 +473,7 @@ namespace {
       // Type                                  XPath                       Q_PROPERTY                                 Enum Mapper
       {XmlRecord::FieldType::String,           "NAME",                     PropertyNames::NamedEntity::name,          nullptr},
       {XmlRecord::FieldType::RequiredConstant, "VERSION",                  VERSION1,                                  nullptr},
-      {XmlRecord::FieldType::Enum,             "TYPE",                     PropertyNames::Recipe::recipeType,         &BEER_XML_RECIPE_STEP_TYPE_MAPPER},
+      {XmlRecord::FieldType::Enum,             "TYPE",                     PropertyNames::Recipe::type,               &BEER_XML_RECIPE_STEP_TYPE_MAPPER},
       {XmlRecord::FieldType::RecordSimple,     "STYLE",                    PropertyNames::Recipe::style,              nullptr},
       {XmlRecord::FieldType::RecordSimple,     "EQUIPMENT",                PropertyNames::Recipe::equipment,          nullptr},
       {XmlRecord::FieldType::String,           "BREWER",                   PropertyNames::Recipe::brewer,             nullptr},
@@ -502,7 +502,7 @@ namespace {
       {XmlRecord::FieldType::Double,           "SECONDARY_TEMP",           PropertyNames::Recipe::secondaryTemp_c,    nullptr},
       {XmlRecord::FieldType::Double,           "TERTIARY_AGE",             PropertyNames::Recipe::tertiaryAge_days,   nullptr},
       {XmlRecord::FieldType::Double,           "TERTIARY_TEMP",            PropertyNames::Recipe::tertiaryTemp_c,     nullptr},
-      {XmlRecord::FieldType::Double,           "AGE",                      PropertyNames::Recipe::age,                nullptr},
+      {XmlRecord::FieldType::Double,           "AGE",                      PropertyNames::Recipe::age_days,           nullptr},
       {XmlRecord::FieldType::Double,           "AGE_TEMP",                 PropertyNames::Recipe::ageTemp_c,          nullptr},
       {XmlRecord::FieldType::Date,             "DATE",                     PropertyNames::Recipe::date,               nullptr},
       {XmlRecord::FieldType::Double,           "CARBONATION",              PropertyNames::Recipe::carbonation_vols,   nullptr},
@@ -717,7 +717,7 @@ BeerXML & BeerXML::getInstance() {
 }
 
 
-BeerXML::BeerXML() : pimpl{ new impl{} } {
+BeerXML::BeerXML() : pimpl{std::make_unique<impl>()} {
    return;
 }
 
@@ -741,7 +741,7 @@ void BeerXML::createXmlFile(QFile & outFile) const {
    return;
 }
 
-template<class NE> void BeerXML::toXml(QList<NE *> const & nes, QFile & outFile) const {
+template<class NE> void BeerXML::toXml(QList<NE const *> const & nes, QFile & outFile) const {
    // We don't want to output empty container records
    if (nes.empty()) {
       return;
@@ -768,18 +768,18 @@ template<class NE> void BeerXML::toXml(QList<NE *> const & nes, QFile & outFile)
 // (This is all just a trick to allow the template definition to be here in the .cpp file and not in the header, which
 // means, amongst other things, that we can reference the pimpl.)
 //
-template void BeerXML::toXml(QList<Hop *> const &        nes, QFile & outFile) const;
-template void BeerXML::toXml(QList<Fermentable *> const &nes, QFile & outFile) const;
-template void BeerXML::toXml(QList<Yeast *> const &      nes, QFile & outFile) const;
-template void BeerXML::toXml(QList<Misc *> const &       nes, QFile & outFile) const;
-template void BeerXML::toXml(QList<Water *> const &      nes, QFile & outFile) const;
-template void BeerXML::toXml(QList<Style *> const &      nes, QFile & outFile) const;
-template void BeerXML::toXml(QList<MashStep *> const &   nes, QFile & outFile) const;
-template void BeerXML::toXml(QList<Mash *> const &       nes, QFile & outFile) const;
-template void BeerXML::toXml(QList<Equipment *> const &  nes, QFile & outFile) const;
-template void BeerXML::toXml(QList<Instruction *> const &nes, QFile & outFile) const;
-template void BeerXML::toXml(QList<BrewNote *> const &   nes, QFile & outFile) const;
-template void BeerXML::toXml(QList<Recipe *> const &     nes, QFile & outFile) const;
+template void BeerXML::toXml(QList<Hop         const *> const & nes, QFile & outFile) const;
+template void BeerXML::toXml(QList<Fermentable const *> const & nes, QFile & outFile) const;
+template void BeerXML::toXml(QList<Yeast       const *> const & nes, QFile & outFile) const;
+template void BeerXML::toXml(QList<Misc        const *> const & nes, QFile & outFile) const;
+template void BeerXML::toXml(QList<Water       const *> const & nes, QFile & outFile) const;
+template void BeerXML::toXml(QList<Style       const *> const & nes, QFile & outFile) const;
+template void BeerXML::toXml(QList<MashStep    const *> const & nes, QFile & outFile) const;
+template void BeerXML::toXml(QList<Mash        const *> const & nes, QFile & outFile) const;
+template void BeerXML::toXml(QList<Equipment   const *> const & nes, QFile & outFile) const;
+template void BeerXML::toXml(QList<Instruction const *> const & nes, QFile & outFile) const;
+template void BeerXML::toXml(QList<BrewNote    const *> const & nes, QFile & outFile) const;
+template void BeerXML::toXml(QList<Recipe      const *> const & nes, QFile & outFile) const;
 
 // fromXml ====================================================================
 bool BeerXML::importFromXML(QString const & filename, QTextStream & userMessage) {

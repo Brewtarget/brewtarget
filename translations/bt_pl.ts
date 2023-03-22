@@ -5801,7 +5801,7 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>About &amp;BrewTarget</source>
-        <translation>O &amp;BrewTarget</translation>
+        <translation type="vanished">O &amp;BrewTarget</translation>
     </message>
     <message>
         <source>About Brewtarget</source>
@@ -6129,6 +6129,10 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>application/x-brewtarget-folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About &amp;Brewtarget</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

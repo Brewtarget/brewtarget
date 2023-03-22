@@ -32,11 +32,11 @@
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
 #define AddPropertyName(property) namespace PropertyNames::Salt { BtStringConst const property{#property}; }
-AddPropertyName(amount)
+AddPropertyName(amount        )
 AddPropertyName(amountIsWeight)
 AddPropertyName(type)
-AddPropertyName(isAcid)
-AddPropertyName(percentAcid)
+AddPropertyName(isAcid        )
+AddPropertyName(percentAcid   )
 AddPropertyName(addTo)
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
@@ -52,20 +52,19 @@ class Salt : public NamedEntity {
    Q_OBJECT
    Q_CLASSINFO("signal", "salts")
 
-
-   friend class WaterDialog;
-   friend class SaltTableModel;
 public:
 
-   enum WhenToAdd {
+   enum class WhenToAdd {
       NEVER,
       MASH,
       SPARGE,
       RATIO,
       EQUAL
    };
+   // This allows us to store the above enum class in a QVariant
+   Q_ENUM(WhenToAdd)
 
-   enum Types {
+   enum class Types {
       NONE,
       CACL2,
       CACO3,
@@ -78,9 +77,14 @@ public:
       ACIDMLT,
       numTypes
    };
-
-   Q_ENUM(WhenToAdd)
+   // This allows us to store the above enum class in a QVariant
    Q_ENUM(Types)
+
+   /**
+    * \brief Mapping of names to types for the Qt properties of this class.  See \c NamedEntity::typeLookup for more
+    *        info.
+    */
+   static TypeLookup const typeLookup;
 
    Salt(QString name = "");
    Salt(NamedParameterBundle const & namedParameterBundle);
@@ -102,13 +106,13 @@ public:
    //! \brief Is this an acid or salt?
    Q_PROPERTY( bool isAcid READ isAcid WRITE setIsAcid /*NOTIFY changed*/ /*changedIsAcid*/ )
 
-   double amount() const;
+   double          amount()         const;
    Salt::WhenToAdd addTo() const;
-   Salt::Types type() const;
-   bool amountIsWeight() const;
-   double percentAcid() const;
-   bool isAcid() const;
-   int miscId() const;
+   Salt::Types     type()           const;
+   bool            amountIsWeight() const;
+   double          percentAcid()    const;
+   bool            isAcid()         const;
+   int             miscId()         const;
 
    void setAmount( double var );
    void setAddTo( Salt::WhenToAdd var );
@@ -117,13 +121,13 @@ public:
    void setPercentAcid(double var);
    void setIsAcid( bool var );
 
-   double Ca() const;
-   double Cl() const;
-   double CO3() const;
+   double Ca  () const;
+   double Cl  () const;
+   double CO3 () const;
    double HCO3() const;
-   double Mg() const;
-   double Na() const;
-   double SO4() const;
+   double Mg  () const;
+   double Na  () const;
+   double SO4 () const;
 
    virtual Recipe * getOwningRecipe();
 

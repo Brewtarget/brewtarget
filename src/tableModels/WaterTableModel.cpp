@@ -44,14 +44,14 @@ WaterTableModel::WaterTableModel(WaterTableWidget * parent) :
    BtTableModelRecipeObserver{
       parent,
       false,
-      {  {WATERNAMECOL,        {tr("Name"),              NonPhysicalQuantity::String,           ""      }},
-         {WATERAMOUNTCOL,      {tr("Amount"),            Measurement::PhysicalQuantity::Volume, "amount"}},
-         {WATERCALCIUMCOL,     {tr("Calcium (ppm)"),     NonPhysicalQuantity::Count,            ""      }},
-         {WATERBICARBONATECOL, {tr("Bicarbonate (ppm)"), NonPhysicalQuantity::Count,            ""      }},
-         {WATERSULFATECOL,     {tr("Sulfate (ppm)"),     NonPhysicalQuantity::Count,            ""      }},
-         {WATERCHLORIDECOL,    {tr("Chloride (ppm)"),    NonPhysicalQuantity::Count,            ""      }},
-         {WATERSODIUMCOL,      {tr("Sodium (ppm)"),      NonPhysicalQuantity::Count,            ""      }},
-         {WATERMAGNESIUMCOL,   {tr("Magnesium (ppm)"),   NonPhysicalQuantity::Count,            ""      }}}
+      {{WATERNAMECOL,        {tr("Name"),              NonPhysicalQuantity::String          , ""                           }},
+       {WATERAMOUNTCOL,      {tr("Amount"),            Measurement::PhysicalQuantity::Volume, *PropertyNames::Water::amount}},
+       {WATERCALCIUMCOL,     {tr("Calcium (ppm)"),     NonPhysicalQuantity::Count           , ""                           }},
+       {WATERBICARBONATECOL, {tr("Bicarbonate (ppm)"), NonPhysicalQuantity::Count           , ""                           }},
+       {WATERSULFATECOL,     {tr("Sulfate (ppm)"),     NonPhysicalQuantity::Count           , ""                           }},
+       {WATERCHLORIDECOL,    {tr("Chloride (ppm)"),    NonPhysicalQuantity::Count           , ""                           }},
+       {WATERSODIUMCOL,      {tr("Sodium (ppm)"),      NonPhysicalQuantity::Count           , ""                           }},
+       {WATERMAGNESIUMCOL,   {tr("Magnesium (ppm)"),   NonPhysicalQuantity::Count           , ""                           }}}
    },
    BtTableModelData<Water>{} {
    return;

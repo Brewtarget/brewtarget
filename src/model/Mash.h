@@ -38,17 +38,17 @@
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
 #define AddPropertyName(property) namespace PropertyNames::Mash { BtStringConst const property{#property}; }
-AddPropertyName(equipAdjust)
-AddPropertyName(grainTemp_c)
-AddPropertyName(mashSteps)
-AddPropertyName(notes)
-AddPropertyName(ph)
-AddPropertyName(spargeTemp_c)
-AddPropertyName(totalMashWater_l)
-AddPropertyName(totalTime)
+AddPropertyName(equipAdjust          )
+AddPropertyName(grainTemp_c          )
+AddPropertyName(mashSteps            )
+AddPropertyName(notes                )
+AddPropertyName(ph                   )
+AddPropertyName(spargeTemp_c         )
+AddPropertyName(totalMashWater_l     )
+AddPropertyName(totalTime            )
 AddPropertyName(tunSpecificHeat_calGC)
-AddPropertyName(tunTemp_c)
-AddPropertyName(tunWeight_kg)
+AddPropertyName(tunTemp_c            )
+AddPropertyName(tunWeight_kg         )
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
 //======================================================================================================================
@@ -70,6 +70,12 @@ class Mash : public NamedEntity {
    Q_CLASSINFO("signal", "mashs")
 
 public:
+   /**
+    * \brief Mapping of names to types for the Qt properties of this class.  See \c NamedEntity::typeLookup for more
+    *        info.
+    */
+   static TypeLookup const typeLookup;
+
    Mash(QString name = "");
    Mash(NamedParameterBundle const & namedParameterBundle);
    Mash(Mash const & other);

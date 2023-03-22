@@ -64,6 +64,11 @@ class Hop : public NamedEntityWithInventory {
    Q_CLASSINFO("signal", "hops")
 
 public:
+   /**
+    * \brief Mapping of names to types for the Qt properties of this class.  See \c NamedEntity::typeLookup for more
+    *        info.
+    */
+   static TypeLookup const typeLookup;
 
    //! \brief The type of hop, meaning for what properties it is used.
    enum class Type {Bittering, Aroma, Both};

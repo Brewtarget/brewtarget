@@ -47,8 +47,8 @@ set(filesToCompile_cpp
     ${repoDir}/src/Application.cpp
     ${repoDir}/src/BeerColorWidget.cpp
     ${repoDir}/src/boiltime.cpp
-    ${repoDir}/src/BrewDayScrollWidget.cpp
     ${repoDir}/src/BrewDayFormatter.cpp
+    ${repoDir}/src/BrewDayScrollWidget.cpp
     ${repoDir}/src/BrewNoteWidget.cpp
     ${repoDir}/src/BtColor.cpp
     ${repoDir}/src/BtDatePopup.cpp
@@ -169,6 +169,7 @@ set(filesToCompile_cpp
     ${repoDir}/src/utils/EnumStringMapping.cpp
     ${repoDir}/src/utils/ImportRecordCount.cpp
     ${repoDir}/src/utils/TimerUtils.cpp
+    ${repoDir}/src/utils/TypeLookup.cpp
     ${repoDir}/src/WaterButton.cpp
     ${repoDir}/src/WaterDialog.cpp
     ${repoDir}/src/WaterEditor.cpp
