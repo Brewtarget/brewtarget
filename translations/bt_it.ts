@@ -5845,7 +5845,7 @@ Il Volume finale del primo è %1.</translation>
     </message>
     <message>
         <source>About &amp;BrewTarget</source>
-        <translation>About &amp;BrewTarget</translation>
+        <translation type="vanished">About &amp;BrewTarget</translation>
     </message>
     <message>
         <source>About Brewtarget</source>
@@ -6173,6 +6173,10 @@ Il Volume finale del primo è %1.</translation>
     </message>
     <message>
         <source>application/x-brewtarget-folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About &amp;Brewtarget</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -5801,7 +5801,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>About &amp;BrewTarget</source>
-        <translation>Om &amp;BrewTarget</translation>
+        <translation type="vanished">Om &amp;BrewTarget</translation>
     </message>
     <message>
         <source>About Brewtarget</source>
@@ -6129,6 +6129,10 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>application/x-brewtarget-folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About &amp;Brewtarget</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

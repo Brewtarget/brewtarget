@@ -35,30 +35,26 @@ RecipeExtrasWidget::RecipeExtrasWidget(QWidget* parent) : QWidget(parent), recip
 
    ratingChanged = false;
 
-   connect(lineEdit_age,        &BtLineEdit::textModified, this, &RecipeExtrasWidget::updateAge);
-   connect(lineEdit_ageTemp,    &BtLineEdit::textModified, this, &RecipeExtrasWidget::updateAgeTemp);
-   connect(lineEdit_asstBrewer, &BtLineEdit::textModified, this, &RecipeExtrasWidget::updateBrewerAsst );
-   connect(lineEdit_brewer,     &BtLineEdit::textModified, this, &RecipeExtrasWidget::updateBrewer );
-   connect(lineEdit_carbVols,   &BtLineEdit::textModified, this, &RecipeExtrasWidget::updateCarbonation );
-   connect(lineEdit_primaryAge, &BtLineEdit::textModified, this, &RecipeExtrasWidget::updatePrimaryAge );
-   connect(lineEdit_primaryTemp,&BtLineEdit::textModified, this, &RecipeExtrasWidget::updatePrimaryTemp );
-   connect(lineEdit_secAge,     &BtLineEdit::textModified, this, &RecipeExtrasWidget::updateSecondaryAge );
-   connect(lineEdit_secTemp,    &BtLineEdit::textModified, this, &RecipeExtrasWidget::updateSecondaryTemp );
-   connect(lineEdit_tertAge,    &BtLineEdit::textModified, this, &RecipeExtrasWidget::updateTertiaryAge );
-   connect(lineEdit_tertTemp,   &BtLineEdit::textModified, this, &RecipeExtrasWidget::updateTertiaryTemp );
-
-   connect(spinBox_tasteRating, SIGNAL(valueChanged(int)), this, SLOT(changeRatings(int)) );
-   connect(spinBox_tasteRating, &QAbstractSpinBox::editingFinished, this, &RecipeExtrasWidget::updateTasteRating );
-
-   connect(dateEdit_date, &QDateTimeEdit::dateChanged, this, &RecipeExtrasWidget::updateDate );
-
-   connect(btTextEdit_notes, &BtTextEdit::textModified, this, &RecipeExtrasWidget::updateNotes);
-   connect(btTextEdit_tasteNotes, &BtTextEdit::textModified, this, &RecipeExtrasWidget::updateTasteNotes);
-
+   connect(lineEdit_age,          &BtLineEdit::textModified                  , this, &RecipeExtrasWidget::updateAge          );
+   connect(lineEdit_ageTemp,      &BtLineEdit::textModified                  , this, &RecipeExtrasWidget::updateAgeTemp      );
+   connect(lineEdit_asstBrewer,   &BtLineEdit::textModified                  , this, &RecipeExtrasWidget::updateBrewerAsst   );
+   connect(lineEdit_brewer,       &BtLineEdit::textModified                  , this, &RecipeExtrasWidget::updateBrewer       );
+   connect(lineEdit_carbVols,     &BtLineEdit::textModified                  , this, &RecipeExtrasWidget::updateCarbonation  );
+   connect(lineEdit_primaryAge,   &BtLineEdit::textModified                  , this, &RecipeExtrasWidget::updatePrimaryAge   );
+   connect(lineEdit_primaryTemp,  &BtLineEdit::textModified                  , this, &RecipeExtrasWidget::updatePrimaryTemp  );
+   connect(lineEdit_secAge,       &BtLineEdit::textModified                  , this, &RecipeExtrasWidget::updateSecondaryAge );
+   connect(lineEdit_secTemp,      &BtLineEdit::textModified                  , this, &RecipeExtrasWidget::updateSecondaryTemp);
+   connect(lineEdit_tertAge,      &BtLineEdit::textModified                  , this, &RecipeExtrasWidget::updateTertiaryAge  );
+   connect(lineEdit_tertTemp,     &BtLineEdit::textModified                  , this, &RecipeExtrasWidget::updateTertiaryTemp );
+   connect(spinBox_tasteRating,   QOverload<int>::of(&QSpinBox::valueChanged), this, &RecipeExtrasWidget::changeRatings      );
+   connect(spinBox_tasteRating,   &QAbstractSpinBox::editingFinished         , this, &RecipeExtrasWidget::updateTasteRating  );
+   connect(dateEdit_date,         &QDateTimeEdit::dateChanged                , this, &RecipeExtrasWidget::updateDate         );
+   connect(btTextEdit_notes,      &BtTextEdit::textModified                  , this, &RecipeExtrasWidget::updateNotes        );
+   connect(btTextEdit_tasteNotes, &BtTextEdit::textModified                  , this, &RecipeExtrasWidget::updateTasteNotes   );
+   return;
 }
 
-void RecipeExtrasWidget::setRecipe(Recipe* rec)
-{
+void RecipeExtrasWidget::setRecipe(Recipe* rec) {
    if (this->recipe) {
       disconnect(this->recipe, 0, this, 0);
    }
@@ -71,19 +67,14 @@ void RecipeExtrasWidget::setRecipe(Recipe* rec)
    return;
 }
 
-void RecipeExtrasWidget::updateBrewer()
-{
-   if( recipe == 0 )
-      return;
-
+void RecipeExtrasWidget::updateBrewer() {
+   if (!this->recipe) { return;}
    MainWindow::instance().doOrRedoUpdate(*recipe, PropertyNames::Recipe::brewer, lineEdit_brewer->text(), tr("Change Brewer"));
+   return;
 }
 
-void RecipeExtrasWidget::updateBrewerAsst()
-{
-   if( recipe == 0 )
-      return;
-
+void RecipeExtrasWidget::updateBrewerAsst() {
+   if (!this->recipe) { return;}
    if ( lineEdit_asstBrewer->isModified() ) {
       MainWindow::instance().doOrRedoUpdate(*recipe, PropertyNames::Recipe::asstBrewer, lineEdit_asstBrewer->text(), tr("Change Assistant Brewer"));
    }
@@ -92,86 +83,58 @@ void RecipeExtrasWidget::updateBrewerAsst()
 
 void RecipeExtrasWidget::changeRatings([[maybe_unused]] int rating) { ratingChanged = true; }
 
-void RecipeExtrasWidget::updateTasteRating()
-{
-   if( recipe == 0 )
-      return;
-
+void RecipeExtrasWidget::updateTasteRating() {
+   if (!this->recipe) { return;}
    if ( ratingChanged )
    {
       MainWindow::instance().doOrRedoUpdate(*recipe, PropertyNames::Recipe::tasteRating, spinBox_tasteRating->value(), tr("Change Taste Rating"));
       ratingChanged = false;
    }
+   return;
 }
 
-void RecipeExtrasWidget::updatePrimaryAge()
-{
-   if( recipe == 0 )
-      return;
-
+void RecipeExtrasWidget::updatePrimaryAge() {
+   if (!this->recipe) { return;}
    MainWindow::instance().doOrRedoUpdate(*recipe, PropertyNames::Recipe::primaryAge_days, lineEdit_primaryAge->toCanonical().quantity(), tr("Change Primary Age"));
 }
 
-void RecipeExtrasWidget::updatePrimaryTemp()
-{
-   if( recipe == 0 )
-      return;
-
+void RecipeExtrasWidget::updatePrimaryTemp() {
+   if (!this->recipe) { return;}
    MainWindow::instance().doOrRedoUpdate(*recipe, PropertyNames::Recipe::primaryTemp_c, lineEdit_primaryTemp->toCanonical().quantity(), tr("Change Primary Temp"));
 }
 
-void RecipeExtrasWidget::updateSecondaryAge()
-{
-   if( recipe == 0 )
-      return;
-
+void RecipeExtrasWidget::updateSecondaryAge() {
+   if (!this->recipe) { return;}
    MainWindow::instance().doOrRedoUpdate(*recipe, PropertyNames::Recipe::secondaryAge_days, lineEdit_secAge->toCanonical().quantity(), tr("Change Secondary Age"));
 }
 
-void RecipeExtrasWidget::updateSecondaryTemp()
-{
-   if( recipe == 0 )
-      return;
-
+void RecipeExtrasWidget::updateSecondaryTemp() {
+   if (!this->recipe) { return;}
    MainWindow::instance().doOrRedoUpdate(*recipe, PropertyNames::Recipe::secondaryTemp_c, lineEdit_secTemp->toCanonical().quantity(), tr("Change Secondary Temp"));
 }
 
-void RecipeExtrasWidget::updateTertiaryAge()
-{
-   if( recipe == 0 )
-      return;
-
+void RecipeExtrasWidget::updateTertiaryAge() {
+   if (!this->recipe) { return;}
    MainWindow::instance().doOrRedoUpdate(*recipe, PropertyNames::Recipe::tertiaryAge_days, lineEdit_tertAge->toCanonical().quantity(), tr("Change Tertiary Age"));
 }
 
-void RecipeExtrasWidget::updateTertiaryTemp()
-{
-   if( recipe == 0 )
-      return;
-
+void RecipeExtrasWidget::updateTertiaryTemp() {
+   if (!this->recipe) { return;}
    MainWindow::instance().doOrRedoUpdate(*recipe, PropertyNames::Recipe::tertiaryTemp_c, lineEdit_tertTemp->toCanonical().quantity(), tr("Change Tertiary Temp"));
 }
 
-void RecipeExtrasWidget::updateAge()
-{
-   if( recipe == 0 )
-      return;
-
-   MainWindow::instance().doOrRedoUpdate(*recipe, PropertyNames::Recipe::age, lineEdit_age->toCanonical().quantity(), tr("Change Age"));
+void RecipeExtrasWidget::updateAge() {
+   if (!this->recipe) { return;}
+   MainWindow::instance().doOrRedoUpdate(*recipe, PropertyNames::Recipe::age_days, lineEdit_age->toCanonical().quantity(), tr("Change Age"));
 }
 
-void RecipeExtrasWidget::updateAgeTemp()
-{
-   if( recipe == 0 )
-      return;
-
+void RecipeExtrasWidget::updateAgeTemp() {
+   if (!this->recipe) { return;}
    MainWindow::instance().doOrRedoUpdate(*recipe, PropertyNames::Recipe::ageTemp_c, lineEdit_ageTemp->toCanonical().quantity(), tr("Change Age Temp"));
 }
 
 void RecipeExtrasWidget::updateDate(QDate const & date) {
-   if (!this->recipe) {
-      return;
-   }
+   if (!this->recipe) { return;}
 
    if (date.isNull()) {
       MainWindow::instance().doOrRedoUpdate(*recipe, PropertyNames::Recipe::date, dateEdit_date->date(), tr("Change Date"));
@@ -186,10 +149,8 @@ void RecipeExtrasWidget::updateDate(QDate const & date) {
    return;
 }
 
-void RecipeExtrasWidget::updateCarbonation()
-{
-   if( recipe == 0 )
-      return;
+void RecipeExtrasWidget::updateCarbonation() {
+   if (!this->recipe) { return;}
 
    MainWindow::instance().doOrRedoUpdate(*recipe,
                                          PropertyNames::Recipe::carbonation_vols,
@@ -197,10 +158,8 @@ void RecipeExtrasWidget::updateCarbonation()
                                          tr("Change Carbonation"));
 }
 
-void RecipeExtrasWidget::updateTasteNotes()
-{
-   if( recipe == 0 )
-      return;
+void RecipeExtrasWidget::updateTasteNotes() {
+   if (!this->recipe) { return;}
 
    MainWindow::instance().doOrRedoUpdate(*recipe,
                                          PropertyNames::Recipe::tasteNotes,
@@ -208,10 +167,8 @@ void RecipeExtrasWidget::updateTasteNotes()
                                          tr("Edit Taste Notes"));
 }
 
-void RecipeExtrasWidget::updateNotes()
-{
-   if( recipe == 0 )
-      return;
+void RecipeExtrasWidget::updateNotes() {
+   if (!this->recipe) { return;}
 
    MainWindow::instance().doOrRedoUpdate(*recipe,
                                          PropertyNames::Recipe::notes,
@@ -219,16 +176,16 @@ void RecipeExtrasWidget::updateNotes()
                                          tr("Edit Notes"));
 }
 
-void RecipeExtrasWidget::changed(QMetaProperty prop, QVariant /*val*/)
-{
-   if( sender() != recipe )
+void RecipeExtrasWidget::changed(QMetaProperty prop, QVariant /*val*/) {
+   if (sender() != this->recipe) {
       return;
+   }
 
    showChanges(&prop);
+   return;
 }
 
-void RecipeExtrasWidget::saveAll()
-{
+void RecipeExtrasWidget::saveAll() {
    //recObs->disableNotification();
 
    updateBrewer();
@@ -251,21 +208,18 @@ void RecipeExtrasWidget::saveAll()
    //recObs->forceNotify();
 
    hide();
+   return;
 }
 
-void RecipeExtrasWidget::showChanges(QMetaProperty* prop)
-{
-   bool updateAll = (prop == 0);
-   QString propName;
-   QVariant val;
-   if( prop )
-   {
-      propName = prop->name();
-      val = prop->read(recipe);
-   }
+void RecipeExtrasWidget::showChanges(QMetaProperty* prop) {
+   if (!this->recipe) { return;}
 
-   if( ! recipe )
-      return;
+   bool updateAll = true;
+   QString propName;
+   if (prop) {
+      updateAll = false;
+      propName = prop->name();
+   }
 
    // I think we may be going circular here? LineEdit says "change is made",
    // which signals the widget which changes the db, which signals "change is
@@ -273,55 +227,21 @@ void RecipeExtrasWidget::showChanges(QMetaProperty* prop)
    // "change is made" ... rinse, lather, repeat
    // Unlike other editors, this one needs to read from recipe when it gets an
    // updateAll
-   if ( updateAll )
-   {
+   if (updateAll || propName == PropertyNames::Recipe::age_days         ) { lineEdit_age         ->setText     (recipe->age_days         ()); }
+   if (updateAll || propName == PropertyNames::Recipe::ageTemp_c        ) { lineEdit_ageTemp     ->setText     (recipe->ageTemp_c        ()); }
+   if (updateAll || propName == PropertyNames::Recipe::asstBrewer       ) { lineEdit_asstBrewer  ->setText     (recipe->asstBrewer       ()); }
+   if (updateAll || propName == PropertyNames::Recipe::brewer           ) { lineEdit_brewer      ->setText     (recipe->brewer           ()); }
+   if (updateAll || propName == PropertyNames::Recipe::carbonation_vols ) { lineEdit_carbVols    ->setText     (recipe->carbonation_vols ()); }
+   if (updateAll || propName == PropertyNames::Recipe::primaryAge_days  ) { lineEdit_primaryAge  ->setText     (recipe->primaryAge_days  ()); }
+   if (updateAll || propName == PropertyNames::Recipe::primaryTemp_c    ) { lineEdit_primaryTemp ->setText     (recipe->primaryTemp_c    ()); }
+   if (updateAll || propName == PropertyNames::Recipe::secondaryAge_days) { lineEdit_secAge      ->setText     (recipe->secondaryAge_days()); }
+   if (updateAll || propName == PropertyNames::Recipe::secondaryTemp_c  ) { lineEdit_secTemp     ->setText     (recipe->secondaryTemp_c  ()); }
+   if (updateAll || propName == PropertyNames::Recipe::tertiaryAge_days ) { lineEdit_tertAge     ->setText     (recipe->tertiaryAge_days ()); }
+   if (updateAll || propName == PropertyNames::Recipe::tertiaryTemp_c   ) { lineEdit_tertTemp    ->setText     (recipe->tertiaryTemp_c   ()); }
+   if (updateAll || propName == PropertyNames::Recipe::tasteRating      ) { spinBox_tasteRating  ->setValue    (recipe->tasteRating      ()); }
+   if (updateAll || propName == PropertyNames::Recipe::date             ) { dateEdit_date        ->setDate     (recipe->date             ()); }
+   if (updateAll || propName == PropertyNames::Recipe::notes            ) { btTextEdit_notes     ->setPlainText(recipe->notes            ()); }
+   if (updateAll || propName == PropertyNames::Recipe::tasteNotes       ) { btTextEdit_tasteNotes->setPlainText(recipe->tasteNotes       ()); }
 
-      lineEdit_age->setText(recipe);
-      lineEdit_ageTemp->setText(recipe);
-      lineEdit_asstBrewer->setText(recipe);
-      lineEdit_brewer->setText(recipe);
-      lineEdit_carbVols->setText(recipe);
-      lineEdit_primaryAge->setText(recipe);
-      lineEdit_primaryTemp->setText(recipe);
-
-      lineEdit_secAge->setText(recipe);
-      lineEdit_secTemp->setText(recipe);
-      lineEdit_tertAge->setText(recipe);
-      lineEdit_tertTemp->setText(recipe);
-      spinBox_tasteRating->setValue((int)(recipe->tasteRating()));
-      dateEdit_date->setDate(recipe->date());
-      btTextEdit_notes->setPlainText(recipe->notes());
-      btTextEdit_tasteNotes->setPlainText(recipe->tasteNotes());
-   }
-   else if( propName == "age_days" )
-      lineEdit_age->setText(recipe);
-   else if( propName == PropertyNames::Recipe::ageTemp_c )
-      lineEdit_ageTemp->setText(recipe);
-   else if( propName == PropertyNames::Recipe::asstBrewer )
-      lineEdit_asstBrewer->setText(recipe);
-   else if( propName == PropertyNames::Recipe::brewer )
-      lineEdit_brewer->setText(recipe);
-   else if( propName == PropertyNames::Recipe::carbonation_vols )
-      lineEdit_carbVols->setText(recipe);
-   else if( propName == PropertyNames::Recipe::primaryAge_days )
-      lineEdit_primaryAge->setText(recipe);
-   else if( propName == PropertyNames::Recipe::primaryTemp_c )
-      lineEdit_primaryTemp->setText(recipe);
-   else if( propName == PropertyNames::Recipe::secondaryAge_days )
-      lineEdit_secAge->setText(recipe);
-   else if( propName == PropertyNames::Recipe::secondaryTemp_c )
-      lineEdit_secTemp->setText(recipe);
-   else if( propName == PropertyNames::Recipe::tertiaryAge_days )
-      lineEdit_tertAge->setText(recipe);
-   else if( propName == PropertyNames::Recipe::tertiaryTemp_c )
-      lineEdit_tertTemp->setText(recipe);
-   else if( propName == PropertyNames::Recipe::tasteRating )
-      spinBox_tasteRating->setValue( val.toInt() );
-   else if( propName == PropertyNames::Recipe::date )
-      dateEdit_date->setDate( val.toDate() );
-   else if( propName == "notes" )
-      btTextEdit_notes->setPlainText( val.toString() );
-   else if( propName == PropertyNames::Recipe::tasteNotes )
-      btTextEdit_tasteNotes->setPlainText( val.toString() );
-
+   return;
 }

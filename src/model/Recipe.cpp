@@ -359,10 +359,82 @@ ObjectStore & Recipe::getObjectStoreTypedInstance() const {
    return ObjectStoreTyped<Recipe>::getInstance();
 }
 
+TypeLookup const Recipe::typeLookup {
+   "Recipe",
+   {
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::ABV_pct           , Recipe::m_ABV_pct           ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::age_days               , Recipe::m_age               ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::ageTemp_c         , Recipe::m_ageTemp_c         ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::ancestorId        , Recipe::m_ancestor_id       ), //<<
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::asstBrewer        , Recipe::m_asstBrewer        ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::batchSize_l       , Recipe::m_batchSize_l       ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::boilGrav          , Recipe::m_boilGrav          ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::boilSize_l        , Recipe::m_boilSize_l        ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::boilTime_min      , Recipe::m_boilTime_min      ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::boilVolume_l      , Recipe::m_boilVolume_l      ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::brewer            , Recipe::m_brewer            ),
+//      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::brewNotes         , Recipe::m_brewNotes         ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::calories          , Recipe::m_calories          ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::carbonationTemp_c , Recipe::m_carbonationTemp_c ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::carbonation_vols  , Recipe::m_carbonation_vols  ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::color_srm         , Recipe::m_color_srm         ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::date              , Recipe::m_date              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::efficiency_pct    , Recipe::m_efficiency_pct    ),
+//      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::equipment         , Recipe::m_equipment         ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::equipmentId       , Recipe::equipmentId         ), //<<
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::fermentableIds    , Recipe::impl::fermentableIds),
+//      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::fermentables      , Recipe::m_fermentables      ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::fermentationStages, Recipe::m_fermentationStages),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::fg                , Recipe::m_fg                ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::finalVolume_l     , Recipe::m_finalVolume_l     ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::forcedCarbonation , Recipe::m_forcedCarbonation ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::grainsInMash_kg   , Recipe::m_grainsInMash_kg   ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::grains_kg         , Recipe::m_grains_kg         ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::hopIds            , Recipe::impl::hopIds            ),
+//      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::hops              , Recipe::m_hops              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::IBU               , Recipe::m_IBU               ),
+//      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::IBUs              , Recipe::m_IBUs              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::instructionIds    , Recipe::impl::instructionIds),
+//      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::instructions      , Recipe::m_instructions      ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::kegPrimingFactor  , Recipe::m_kegPrimingFactor  ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::locked            , Recipe::m_locked            ),
+//      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::mash              , Recipe::m_mash              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::mashId            , Recipe::mashId              ), //<<
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::miscIds           , Recipe::impl::miscIds           ),
+//      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::miscs             , Recipe::m_miscs             ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::notes             , Recipe::m_notes             ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::og                , Recipe::m_og                ),
+//      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::points            , Recipe::m_points            ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::postBoilVolume_l  , Recipe::m_postBoilVolume_l  ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::primaryAge_days   , Recipe::m_primaryAge_days   ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::primaryTemp_c     , Recipe::m_primaryTemp_c     ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::primingSugarEquiv , Recipe::m_primingSugarEquiv ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::primingSugarName  , Recipe::m_primingSugarName  ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::saltIds           , Recipe::impl::saltIds       ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::secondaryAge_days , Recipe::m_secondaryAge_days ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::secondaryTemp_c   , Recipe::m_secondaryTemp_c   ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::SRMColor          , Recipe::m_SRMColor          ),
+//      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::style             , Recipe::m_style             ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::styleId           , Recipe::styleId             ), //<<
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::tasteNotes        , Recipe::m_tasteNotes        ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::tasteRating       , Recipe::m_tasteRating       ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::tertiaryAge_days  , Recipe::m_tertiaryAge_days  ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::tertiaryTemp_c    , Recipe::m_tertiaryTemp_c    ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::type              , Recipe::m_type              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::waterIds          , Recipe::impl::waterIds      ),
+//      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::waters            , Recipe::m_waters            ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::wortFromMash_l    , Recipe::m_wortFromMash_l    ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::yeastIds          , Recipe::impl::yeastIds      ),
+//      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::yeasts            , Recipe::m_yeasts            ),
+   },
+   // Parent class lookup
+   &NamedEntity::typeLookup
+};
+
 Recipe::Recipe(QString name) :
    NamedEntity         {name, true                   },
    pimpl               {std::make_unique<impl>(*this)},
-   m_type              {"All Grain"                  },
+   m_type              {Recipe::Type::AllGrain       },
    m_brewer            {""                           },
    m_asstBrewer        {"Brewtarget: free beer software"},
    m_batchSize_l       {0.0                          },
@@ -403,10 +475,7 @@ Recipe::Recipe(QString name) :
 Recipe::Recipe(NamedParameterBundle const & namedParameterBundle) :
    NamedEntity         {namedParameterBundle         },
    pimpl               {std::make_unique<impl>(*this)},
-   m_type              {
-      // .:TODO:. Change so we store enum not string!
-      RECIPE_TYPE_STRING_TO_TYPE.key(namedParameterBundle.val<Recipe::Type>(PropertyNames::Recipe::recipeType))
-   },
+   m_type              {namedParameterBundle.val<Recipe::Type>(PropertyNames::Recipe::type              )},
    m_brewer            {namedParameterBundle.val<QString     >(PropertyNames::Recipe::brewer            )},
    m_asstBrewer        {namedParameterBundle.val<QString     >(PropertyNames::Recipe::asstBrewer        )},
    m_batchSize_l       {namedParameterBundle.val<double      >(PropertyNames::Recipe::batchSize_l       )},
@@ -420,7 +489,7 @@ Recipe::Recipe(NamedParameterBundle const & namedParameterBundle) :
    m_secondaryTemp_c   {namedParameterBundle.val<double      >(PropertyNames::Recipe::secondaryTemp_c   )},
    m_tertiaryAge_days  {namedParameterBundle.val<double      >(PropertyNames::Recipe::tertiaryAge_days  )},
    m_tertiaryTemp_c    {namedParameterBundle.val<double      >(PropertyNames::Recipe::tertiaryTemp_c    )},
-   m_age               {namedParameterBundle.val<double      >(PropertyNames::Recipe::age               )},
+   m_age               {namedParameterBundle.val<double      >(PropertyNames::Recipe::age_days          )},
    m_ageTemp_c         {namedParameterBundle.val<double      >(PropertyNames::Recipe::ageTemp_c         )},
    m_date              {namedParameterBundle.val<QDate       >(PropertyNames::Recipe::date              )},
    m_carbonation_vols  {namedParameterBundle.val<double      >(PropertyNames::Recipe::carbonation_vols  )},
@@ -1505,20 +1574,8 @@ void Recipe::setYeastIds(QVector<int> yeastIds) {
 
 
 //==============================="SET" METHODS=================================
-void Recipe::setRecipeType(Recipe::Type var) {
-   this->setType(RECIPE_TYPE_STRING_TO_TYPE.key(var));
-   return;
-}
-
-void Recipe::setType(const QString & var) {
-   QString tmp;
-   if (! isValidType(var)) {
-      qWarning() << QString("Recipe: invalid type: %1").arg(var);
-      tmp = "All Grain";
-   } else {
-      tmp = QString(var);
-   }
-   this->setAndNotify(PropertyNames::Recipe::type, this->m_type, tmp);
+void Recipe::setType(Recipe::Type const val) {
+   this->setAndNotify(PropertyNames::Recipe::type, this->m_type, val);
    return;
 }
 
@@ -1642,7 +1699,7 @@ void Recipe::setTertiaryTemp_c(double var) {
 }
 
 void Recipe::setAge_days(double var) {
-   this->setAndNotify(PropertyNames::Recipe::age, this->m_age, this->enforceMin(var, "age"));
+   this->setAndNotify(PropertyNames::Recipe::age_days, this->m_age, this->enforceMin(var, "age"));
    return;
 }
 
@@ -2000,10 +2057,7 @@ QVector<int>         Recipe::getSaltIds()        const { return this->pimpl->sal
 int                  Recipe::getAncestorId()     const { return this->m_ancestor_id;                     }
 
 //==============================Getters===================================
-Recipe::Type Recipe::recipeType() const {
-   return RECIPE_TYPE_STRING_TO_TYPE.value(this->type());
-}
-QString Recipe::type() const               { return m_type;               }
+Recipe::Type Recipe::type()          const { return m_type;               }
 QString Recipe::brewer()             const { return m_brewer;             }
 QString Recipe::asstBrewer()         const { return m_asstBrewer;         }
 QString Recipe::notes()              const { return m_notes;              }
@@ -2622,7 +2676,7 @@ double Recipe::ibuFromHop(Hop const * hop) {
    // up for plugs and pellets.
    //
    // - http://www.realbeer.com/hops/FAQ.html
-   // - https://groups.google.com/forum/#!topic"Application.h"lp/mv2qvWBC4sU
+   // - https://groups.google.com/forum/#!topic"brewtarget.h"lp/mv2qvWBC4sU
    switch (hop->form()) {
       case Hop::Form::Plug:
          hopUtilization *= 1.02;
@@ -2785,7 +2839,7 @@ void Recipe::acceptChangeToContainedObject([[maybe_unused]] QMetaProperty prop,
 double Recipe::targetCollectedWortVol_l() {
 
    // Need to account for extract/sugar volume also.
-   float postMashAdditionVolume_l = 0;
+   double postMashAdditionVolume_l = 0;
 
    QList<Fermentable *> ferms = fermentables();
    foreach (Fermentable * f, ferms) {
@@ -2800,9 +2854,9 @@ double Recipe::targetCollectedWortVol_l() {
    }
 
    if (equipment()) {
-      return boilSize_l() - equipment()->topUpKettle_l() - static_cast<double>(postMashAdditionVolume_l);
+      return boilSize_l() - equipment()->topUpKettle_l() - postMashAdditionVolume_l;
    } else {
-      return boilSize_l() - static_cast<double>(postMashAdditionVolume_l);
+      return boilSize_l() - postMashAdditionVolume_l;
    }
 }
 

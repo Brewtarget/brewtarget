@@ -60,10 +60,14 @@ AddPropertyName(tunWeight_kg         )
  */
 class Equipment : public NamedEntity {
    Q_OBJECT
-
-public:
    Q_CLASSINFO("signal", "equipments")
 
+public:
+   /**
+    * \brief Mapping of names to types for the Qt properties of this class.  See \c NamedEntity::typeLookup for more
+    *        info.
+    */
+   static TypeLookup const typeLookup;
 
    Equipment(QString t_name = "");
    Equipment(NamedParameterBundle const & namedParameterBundle);

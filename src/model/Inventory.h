@@ -27,6 +27,7 @@
 #include "model/NamedParameterBundle.h"
 
 class ObjectStore;
+class TypeLookup;
 
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
@@ -63,6 +64,12 @@ AddPropertyName(amount)
 class Inventory : public QObject {
    Q_OBJECT
 public:
+   /**
+    * \brief Mapping of names to types for the Qt properties of this class.  See \c NamedEntity::typeLookup for more
+    *        info.
+    */
+   static TypeLookup const typeLookup;
+
    Inventory();
    Inventory(NamedParameterBundle const & namedParameterBundle);
    Inventory(Inventory const & other);

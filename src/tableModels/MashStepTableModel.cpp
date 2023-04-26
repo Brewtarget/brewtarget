@@ -353,7 +353,7 @@ bool MashStepTableModel::setData(QModelIndex const & index, QVariant const & val
          if (value.canConvert(QVariant::Int)) {
             MainWindow::instance().doOrRedoUpdate(*row,
                                                   PropertyNames::MashStep::type,
-                                                  static_cast<MashStep::Type>(value.toInt()),
+                                                  value.toInt(),
                                                   tr("Change Mash Step Type"));
             return true;
          }

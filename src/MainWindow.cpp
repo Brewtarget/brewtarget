@@ -1921,7 +1921,7 @@ void MainWindow::exportRecipe() {
    BeerXML & bxml = BeerXML::getInstance();
    bxml.createXmlFile(*outFile);
 
-   QList<Recipe *> recipes{recipeObs};
+   QList<Recipe const *> recipes{recipeObs};
    bxml.toXml(recipes, *outFile);
 
    outFile->close();
@@ -2954,14 +2954,14 @@ void MainWindow::exportSelected() {
    // We therefore gather all the selected things together so that we write out all the Hops together, all the Styles
    // together and so on, because BeerXML wants them all in group tags (<HOPS>...</HOPS>, etc).
    //
-   QList<Equipment *>   equipments;
-   QList<Fermentable *> fermentables;
-   QList<Hop *>         hops;
-   QList<Misc *>        miscs;
-   QList<Recipe *>      recipes;
-   QList<Style *>       styles;
-   QList<Water *>       waters;
-   QList<Yeast *>       yeasts;
+   QList<Equipment   const *> equipments;
+   QList<Fermentable const *> fermentables;
+   QList<Hop         const *> hops;
+   QList<Misc        const *> miscs;
+   QList<Recipe      const *> recipes;
+   QList<Style       const *> styles;
+   QList<Water       const *> waters;
+   QList<Yeast       const *> yeasts;
 
    int count = 0;
    for (auto & selection : selected) {

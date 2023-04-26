@@ -83,20 +83,22 @@ ObjectStore & Instruction::getObjectStoreTypedInstance() const {
    return ObjectStoreTyped<Instruction>::getInstance();
 }
 
-Instruction::Instruction(Instruction const & other) :
-   NamedEntity {other},
-   pimpl       {new impl{*this}},
-   m_directions{other.m_directions},
-   m_hasTimer  {other.m_hasTimer  },
-   m_timerValue{other.m_timerValue},
-   m_completed {other.m_completed },
-   m_interval  {other.m_interval  } {
-   return;
-}
+TypeLookup const Instruction::typeLookup {
+   "Instruction",
+   {
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Instruction::completed , Instruction::m_completed ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Instruction::directions, Instruction::m_directions),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Instruction::hasTimer  , Instruction::m_hasTimer  ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Instruction::interval  , Instruction::m_interval  ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Instruction::timerValue, Instruction::m_timerValue),
+   },
+   // Parent class lookup
+   &NamedEntity::typeLookup
+};
 
 Instruction::Instruction(QString name) :
    NamedEntity (name, true),
-   pimpl       {new impl{*this}},
+   pimpl       {std::make_unique<impl>(*this)},
    m_directions(""),
    m_hasTimer  (false),
    m_timerValue(""),
@@ -113,6 +115,17 @@ Instruction::Instruction(NamedParameterBundle const & namedParameterBundle) :
    m_timerValue{namedParameterBundle.val<QString>(PropertyNames::Instruction::timerValue)},
    m_completed {namedParameterBundle.val<bool   >(PropertyNames::Instruction::completed )},
    m_interval  {namedParameterBundle.val<double >(PropertyNames::Instruction::interval  )} {
+   return;
+}
+
+Instruction::Instruction(Instruction const & other) :
+   NamedEntity {other},
+   pimpl       {std::make_unique<impl>(*this)},
+   m_directions{other.m_directions},
+   m_hasTimer  {other.m_hasTimer  },
+   m_timerValue{other.m_timerValue},
+   m_completed {other.m_completed },
+   m_interval  {other.m_interval  } {
    return;
 }
 

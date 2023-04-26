@@ -66,6 +66,8 @@ public:
       BASE,
       TARGET
    };
+   // This allows us to store the above enum class in a QVariant
+   Q_ENUM(Types)
 
    enum class Ions {
       Ca,
@@ -76,9 +78,14 @@ public:
       SO4,
       numIons
    };
-
-   Q_ENUM(Types)
+   // This allows us to store the above enum class in a QVariant
    Q_ENUM(Ions)
+
+   /**
+    * \brief Mapping of names to types for the Qt properties of this class.  See \c NamedEntity::typeLookup for more
+    *        info.
+    */
+   static TypeLookup const typeLookup;
 
    Water(QString name = "");
    Water(NamedParameterBundle const & namedParameterBundle);

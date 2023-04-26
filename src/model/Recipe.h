@@ -44,71 +44,70 @@
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
 #define AddPropertyName(property) namespace PropertyNames::Recipe { BtStringConst const property{#property}; }
-AddPropertyName(ABV_pct)
-AddPropertyName(age)
-AddPropertyName(ageTemp_c)
-AddPropertyName(ancestorId)
-AddPropertyName(asstBrewer)
-AddPropertyName(batchSize_l)
-AddPropertyName(boilGrav)
-AddPropertyName(boilSize_l)
-AddPropertyName(boilTime_min)
-AddPropertyName(boilVolume_l)
-AddPropertyName(brewer)
-AddPropertyName(brewNotes)
-AddPropertyName(calories)
-AddPropertyName(carbonationTemp_c)
-AddPropertyName(carbonation_vols)
-AddPropertyName(color_srm)
-AddPropertyName(date)
-AddPropertyName(efficiency_pct)
-AddPropertyName(equipment)
-AddPropertyName(equipmentId)
-AddPropertyName(fermentableIds)
-AddPropertyName(fermentables)
+AddPropertyName(ABV_pct           )
+AddPropertyName(age_days          )
+AddPropertyName(ageTemp_c         )
+AddPropertyName(ancestorId        )
+AddPropertyName(asstBrewer        )
+AddPropertyName(batchSize_l       )
+AddPropertyName(boilGrav          )
+AddPropertyName(boilSize_l        )
+AddPropertyName(boilTime_min      )
+AddPropertyName(boilVolume_l      )
+AddPropertyName(brewer            )
+AddPropertyName(brewNotes         )
+AddPropertyName(calories          )
+AddPropertyName(carbonationTemp_c )
+AddPropertyName(carbonation_vols  )
+AddPropertyName(color_srm         )
+AddPropertyName(date              )
+AddPropertyName(efficiency_pct    )
+AddPropertyName(equipment         )
+AddPropertyName(equipmentId       )
+AddPropertyName(fermentableIds    )
+AddPropertyName(fermentables      )
 AddPropertyName(fermentationStages)
-AddPropertyName(fg)
-AddPropertyName(finalVolume_l)
-AddPropertyName(forcedCarbonation)
-AddPropertyName(grainsInMash_kg)
-AddPropertyName(grains_kg)
-AddPropertyName(hopIds)
-AddPropertyName(hops)
-AddPropertyName(IBU)
-AddPropertyName(IBUs)
-AddPropertyName(instructionIds)
-AddPropertyName(instructions)
-AddPropertyName(kegPrimingFactor)
-AddPropertyName(locked)
-AddPropertyName(mash)
-AddPropertyName(mashId)
-AddPropertyName(miscIds)
-AddPropertyName(miscs)
-AddPropertyName(notes)
-AddPropertyName(og)
-AddPropertyName(points)
-AddPropertyName(postBoilVolume_l)
-AddPropertyName(primaryAge_days)
-AddPropertyName(primaryTemp_c)
-AddPropertyName(primingSugarEquiv)
-AddPropertyName(primingSugarName)
-AddPropertyName(recipeType)
-AddPropertyName(saltIds)
-AddPropertyName(secondaryAge_days)
-AddPropertyName(secondaryTemp_c)
-AddPropertyName(SRMColor)
-AddPropertyName(style)
-AddPropertyName(styleId)
-AddPropertyName(tasteNotes)
-AddPropertyName(tasteRating)
-AddPropertyName(tertiaryAge_days)
-AddPropertyName(tertiaryTemp_c)
-AddPropertyName(type)
-AddPropertyName(waterIds)
-AddPropertyName(waters)
-AddPropertyName(wortFromMash_l)
-AddPropertyName(yeastIds)
-AddPropertyName(yeasts)
+AddPropertyName(fg                )
+AddPropertyName(finalVolume_l     )
+AddPropertyName(forcedCarbonation )
+AddPropertyName(grainsInMash_kg   )
+AddPropertyName(grains_kg         )
+AddPropertyName(hopIds            )
+AddPropertyName(hops              )
+AddPropertyName(IBU               )
+AddPropertyName(IBUs              )
+AddPropertyName(instructionIds    )
+AddPropertyName(instructions      )
+AddPropertyName(kegPrimingFactor  )
+AddPropertyName(locked            )
+AddPropertyName(mash              )
+AddPropertyName(mashId            )
+AddPropertyName(miscIds           )
+AddPropertyName(miscs             )
+AddPropertyName(notes             )
+AddPropertyName(og                )
+AddPropertyName(points            )
+AddPropertyName(postBoilVolume_l  )
+AddPropertyName(primaryAge_days   )
+AddPropertyName(primaryTemp_c     )
+AddPropertyName(primingSugarEquiv )
+AddPropertyName(primingSugarName  )
+AddPropertyName(saltIds           )
+AddPropertyName(secondaryAge_days )
+AddPropertyName(secondaryTemp_c   )
+AddPropertyName(SRMColor          )
+AddPropertyName(style             )
+AddPropertyName(styleId           )
+AddPropertyName(tasteNotes        )
+AddPropertyName(tasteRating       )
+AddPropertyName(tertiaryAge_days  )
+AddPropertyName(tertiaryTemp_c    )
+AddPropertyName(type              )
+AddPropertyName(waterIds          )
+AddPropertyName(waters            )
+AddPropertyName(wortFromMash_l    )
+AddPropertyName(yeastIds          )
+AddPropertyName(yeasts            )
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
 //======================================================================================================================
@@ -137,6 +136,11 @@ class Recipe : public NamedEntity {
 
    friend class MainWindow;
 public:
+   /**
+    * \brief Mapping of names to types for the Qt properties of this class.  See \c NamedEntity::typeLookup for more
+    *        info.
+    */
+   static TypeLookup const typeLookup;
 
    Recipe(QString name);
    Recipe(NamedParameterBundle const & namedParameterBundle);
@@ -152,14 +156,11 @@ public:
 
    //! \brief The type of recipe
    enum class Type { Extract, PartialMash, AllGrain };
+   // This allows us to store the above enum class in a QVariant
    Q_ENUM(Type)
 
    //! \brief The \b Type
-   Q_PROPERTY(Type recipeType READ recipeType WRITE setRecipeType /*NOTIFY changed*/ /*changedType*/)
-
-   //! \brief The type (extract, partial mash, all grain) stored as a string
-   //         TBD (MY 2021-01-18) Not sure why this is stored as a string rather than an enum.  Have created an enum wrapper above
-   Q_PROPERTY(QString type READ type WRITE setType /*NOTIFY changed*/ /*changedType*/)
+   Q_PROPERTY(Type type READ type WRITE setType /*NOTIFY changed*/ /*changedType*/)
    //! \brief The brewer.
    Q_PROPERTY(QString brewer READ brewer WRITE setBrewer /*NOTIFY changed*/ /*changedBrewer*/)
    //! \brief The batch size in liters.
@@ -193,7 +194,7 @@ public:
    //! \brief The temp in C in tertiary.
    Q_PROPERTY(double tertiaryTemp_c READ tertiaryTemp_c WRITE setTertiaryTemp_c /*NOTIFY changed*/ /*changedTertiaryTemp_c*/)
    //! \brief The number of days to age the beer after bottling.
-   Q_PROPERTY(double age READ age_days WRITE setAge_days /*NOTIFY changed*/ /*changedAge_days*/)
+   Q_PROPERTY(double age_days READ age_days WRITE setAge_days /*NOTIFY changed*/ /*changedAge_days*/)
    //! \brief The temp in C as beer is aging after bottling.
    Q_PROPERTY(double ageTemp_c READ ageTemp_c WRITE setAgeTemp_c /*NOTIFY changed*/ /*changedAgeTemp_c*/)
    //! \brief The date the recipe was created or brewed. I'm not sure yet.
@@ -384,36 +385,35 @@ public:
    Recipe * revertToPreviousVersion();
 
    // Getters
-   Type recipeType() const;
-   QString type() const;
-   QString brewer() const;
-   double batchSize_l() const;
-   double boilSize_l() const;
-   double boilTime_min() const;
-   double efficiency_pct() const;
-   QString asstBrewer() const;
-   QString notes() const;
-   QString tasteNotes() const;
-   double tasteRating() const;
-   double og();
-   double fg();
-   int fermentationStages() const;
-   double primaryAge_days() const;
-   double primaryTemp_c() const;
-   double secondaryAge_days() const;
-   double secondaryTemp_c() const;
-   double tertiaryAge_days() const;
-   double tertiaryTemp_c() const;
-   double age_days() const;
-   double ageTemp_c() const;
-   QDate date() const;
-   double carbonation_vols() const;
-   bool forcedCarbonation() const;
-   QString primingSugarName() const;
-   double carbonationTemp_c() const;
-   double primingSugarEquiv() const;
-   double kegPrimingFactor() const;
-   bool locked() const;
+   Type    type()               const;
+   QString brewer()             const;
+   double  batchSize_l()        const;
+   double  boilSize_l()         const;
+   double  boilTime_min()       const;
+   double  efficiency_pct()     const;
+   QString asstBrewer()         const;
+   QString notes()              const;
+   QString tasteNotes()         const;
+   double  tasteRating()        const;
+   double  og();
+   double  fg();
+   int     fermentationStages() const;
+   double  primaryAge_days()    const;
+   double  primaryTemp_c()      const;
+   double  secondaryAge_days()  const;
+   double  secondaryTemp_c()    const;
+   double  tertiaryAge_days()   const;
+   double  tertiaryTemp_c()     const;
+   double  age_days()           const;
+   double  ageTemp_c()          const;
+   QDate   date()               const;
+   double  carbonation_vols()   const;
+   bool    forcedCarbonation()  const;
+   QString primingSugarName()   const;
+   double  carbonationTemp_c()  const;
+   double  primingSugarEquiv()  const;
+   double  kegPrimingFactor()   const;
+   bool    locked()             const;
 
    // Calculated getters.
    double points();
@@ -436,31 +436,31 @@ public:
 
    // Relational getters
    template<typename NE> QList< std::shared_ptr<NE> > getAll() const;
-   QList<Hop *> hops() const;
-   QVector<int> getHopIds() const;
-   QList<Instruction *> instructions() const;
-   QVector<int> getInstructionIds() const;
-   QList<Fermentable *> fermentables() const;
-   QVector<int> getFermentableIds() const;
-   QList<Misc *>  miscs() const;
-   QVector<int> getMiscIds() const;
-   QList<Yeast *> yeasts() const;
-   QVector<int> getYeastIds() const;
-   QList<Water *> waters() const;
-   QVector<int> getWaterIds() const;
-   QList<Salt *>  salts() const;
-   QVector<int> getSaltIds() const;
-   QList<BrewNote *> brewNotes() const;
-   QList<Recipe *> ancestors() const;
-   std::shared_ptr<Mash> getMash() const;
-   Mash * mash() const;
-   int getMashId() const;
-   Equipment * equipment() const;
-   int getEquipmentId() const;
-   Style * style() const;
-   int getStyleId() const;
+   QList<Hop *>          hops()                                const;
+   QVector<int>          getHopIds()                           const;
+   QList<Instruction *>  instructions()                        const;
+   QVector<int>          getInstructionIds()                   const;
+   QList<Fermentable *>  fermentables()                        const;
+   QVector<int>          getFermentableIds()                   const;
+   QList<Misc *>         miscs()                               const;
+   QVector<int>          getMiscIds()                          const;
+   QList<Yeast *>        yeasts()                              const;
+   QVector<int>          getYeastIds()                         const;
+   QList<Water *>        waters()                              const;
+   QVector<int>          getWaterIds()                         const;
+   QList<Salt *>         salts()                               const;
+   QVector<int>          getSaltIds()                          const;
+   QList<BrewNote *>     brewNotes()                           const;
+   QList<Recipe *>       ancestors()                           const;
+   std::shared_ptr<Mash> getMash()                             const;
+   Mash *                mash()                                const;
+   int                   getMashId()                           const;
+   Equipment *           equipment()                           const;
+   int                   getEquipmentId()                      const;
+   Style *               style()                               const;
+   int                   getStyleId()                          const;
 
-   int getAncestorId() const;
+   int                   getAncestorId()                       const;
 
    // Relational setters
    void setEquipment(Equipment * equipment);
@@ -472,17 +472,17 @@ public:
    // The following calls are intended for use by the ObjectStore when pulling data from the database.  As such they do
    // not do additional work (eg to ensure that an ingredient being added is a child).
    //
-   void setEquipmentId(int equipmentId);
-   void setMashId(int mashId);
-   void setStyleId(int styleId);
+   void setEquipmentId   (int equipmentId);
+   void setMashId        (int mashId);
+   void setStyleId       (int styleId);
    void setFermentableIds(QVector<int> fermentableIds);
-   void setHopIds(QVector<int> hopIds);
+   void setHopIds        (QVector<int> hopIds);
    void setInstructionIds(QVector<int> instructionIds);
-   void setMiscIds(QVector<int> miscIds);
-   void setSaltIds(QVector<int> saltIds);
-   void setWaterIds(QVector<int> waterIds);
-   void setYeastIds(QVector<int> yeastIds);
-   void setAncestorId(int ancestorId, bool notify = true);
+   void setMiscIds       (QVector<int> miscIds);
+   void setSaltIds       (QVector<int> saltIds);
+   void setWaterIds      (QVector<int> waterIds);
+   void setYeastIds      (QVector<int> yeastIds);
+   void setAncestorId    (int ancestorId, bool notify = true);
 
    // Other junk.
    QVector<PreInstruction> mashInstructions(double timeRemaining, double totalWaterAdded_l, unsigned int size);
@@ -512,37 +512,36 @@ public:
    QHash<QString, double> calcTotalPoints();
 
    // Setters that are not slots
-   void setRecipeType(Type var);
-   void setType(const QString & var);
-   void setBrewer(const QString & var);
-   void setBatchSize_l(double var);
-   void setBoilSize_l(double var);
-   void setBoilTime_min(double var);
-   void setEfficiency_pct(double var);
-   void setAsstBrewer(const QString & var);
-   void setNotes(const QString & var);
-   void setTasteNotes(const QString & var);
-   void setTasteRating(double var);
-   void setOg(double var);
-   void setFg(double var);
-   void setFermentationStages(int var);
-   void setPrimaryAge_days(double var);
-   void setPrimaryTemp_c(double var);
-   void setSecondaryAge_days(double var);
-   void setSecondaryTemp_c(double var);
-   void setTertiaryAge_days(double var);
-   void setTertiaryTemp_c(double var);
-   void setAge_days(double var);
-   void setAgeTemp_c(double var);
-   void setDate(const QDate & var);
-   void setCarbonation_vols(double var);
-   void setForcedCarbonation(bool var);
-   void setPrimingSugarName(const QString & var);
-   void setCarbonationTemp_c(double var);
-   void setPrimingSugarEquiv(double var);
-   void setKegPrimingFactor(double var);
-   void setLocked(bool isLocked);
-   void setHasDescendants(bool spawned);
+   void setType              (Type    const   val);
+   void setBrewer            (QString const & val);
+   void setBatchSize_l       (double  const   val);
+   void setBoilSize_l        (double  const   val);
+   void setBoilTime_min      (double  const   val);
+   void setEfficiency_pct    (double  const   val);
+   void setAsstBrewer        (QString const & val);
+   void setNotes             (QString const & val);
+   void setTasteNotes        (QString const & val);
+   void setTasteRating       (double  const   val);
+   void setOg                (double  const   val);
+   void setFg                (double  const   val);
+   void setFermentationStages(int     const   val);
+   void setPrimaryAge_days   (double  const   val);
+   void setPrimaryTemp_c     (double  const   val);
+   void setSecondaryAge_days (double  const   val);
+   void setSecondaryTemp_c   (double  const   val);
+   void setTertiaryAge_days  (double  const   val);
+   void setTertiaryTemp_c    (double  const   val);
+   void setAge_days          (double  const   val);
+   void setAgeTemp_c         (double  const   val);
+   void setDate              (QDate   const & val);
+   void setCarbonation_vols  (double  const   val);
+   void setForcedCarbonation (bool    const   val);
+   void setPrimingSugarName  (QString const & val);
+   void setCarbonationTemp_c (double  const   val);
+   void setPrimingSugarEquiv (double  const   val);
+   void setKegPrimingFactor  (double  const   val);
+   void setLocked            (bool    const   val);
+   void setHasDescendants    (bool    const   val);
 
    virtual Recipe * getOwningRecipe();
 
@@ -573,7 +572,7 @@ private:
    std::unique_ptr<impl> pimpl;
 
    // Cached properties that are written directly to db
-   QString m_type;
+   Type m_type;
    QString m_brewer;
    QString m_asstBrewer;
    double m_batchSize_l;

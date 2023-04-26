@@ -32,16 +32,16 @@
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
 #define AddPropertyName(property) namespace PropertyNames::Misc { BtStringConst const property{#property}; }
-AddPropertyName(amount)
+AddPropertyName(amount        )
 AddPropertyName(amountIsWeight)
-AddPropertyName(amountType)
-AddPropertyName(notes)
-AddPropertyName(time)
-AddPropertyName(typeString)
-AddPropertyName(type)
-AddPropertyName(useFor)
-AddPropertyName(useString)
-AddPropertyName(use)
+AddPropertyName(amountType    )
+AddPropertyName(notes         )
+AddPropertyName(time          )
+AddPropertyName(typeString    )
+AddPropertyName(type          )
+AddPropertyName(useFor        )
+AddPropertyName(useString     )
+AddPropertyName(use           )
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
 //======================================================================================================================
@@ -60,13 +60,24 @@ public:
 
    //! \brief The type of ingredient.
    enum class Type {Spice, Fining, Water_Agent, Herb, Flavor, Other};
+   // This allows us to store the above enum class in a QVariant
+   Q_ENUM(Type)
+
    //! \brief Where the ingredient is used.
    enum class Use { Boil, Mash, Primary, Secondary, Bottling };
+   // This allows us to store the above enum class in a QVariant
+   Q_ENUM(Use)
+
    //! \brief What is the type of amount.
    enum class AmountType { Weight, Volume };
-   Q_ENUM(Type)
-   Q_ENUM(Use)
+   // This allows us to store the above enum class in a QVariant
    Q_ENUM(AmountType)
+
+   /**
+    * \brief Mapping of names to types for the Qt properties of this class.  See \c NamedEntity::typeLookup for more
+    *        info.
+    */
+   static TypeLookup const typeLookup;
 
    Misc(QString name = "");
    Misc(NamedParameterBundle const & namedParameterBundle);
@@ -152,7 +163,7 @@ private:
    Use  m_use;  // Primarily valid in "Use Of" instance
    double m_time;
    double m_amount;
-   bool m_amountIsWeight;
+   bool   m_amountIsWeight;
    QString m_useFor;
    QString m_notes;
 

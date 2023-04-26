@@ -70,6 +70,11 @@ class Fermentable : public NamedEntityWithInventory {
 
    friend class FermentableDialog;
 public:
+   /**
+    * \brief Mapping of names to types for the Qt properties of this class.  See \c NamedEntity::typeLookup for more
+    *        info.
+    */
+   static TypeLookup const typeLookup;
 
    //! \brief The type of Fermentable.
    enum Type {Grain, Sugar, Extract, Dry_Extract, Adjunct};

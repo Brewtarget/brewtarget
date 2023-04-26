@@ -5809,7 +5809,7 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
     <message>
         <source>About &amp;BrewTarget</source>
-        <translation>Über &amp;Brewtarget</translation>
+        <translation type="vanished">Über &amp;Brewtarget</translation>
     </message>
     <message>
         <source>About Brewtarget</source>
@@ -6137,6 +6137,10 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
     <message>
         <source>application/x-brewtarget-folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About &amp;Brewtarget</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

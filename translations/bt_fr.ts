@@ -5843,7 +5843,7 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>About &amp;BrewTarget</source>
-        <translation>À propos de &amp;Brewtarget</translation>
+        <translation type="vanished">À propos de &amp;Brewtarget</translation>
     </message>
     <message>
         <source>About Brewtarget</source>
@@ -6171,6 +6171,10 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>application/x-brewtarget-folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About &amp;Brewtarget</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

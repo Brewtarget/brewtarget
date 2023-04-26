@@ -5817,7 +5817,7 @@ O volume final do fermentador primário é %1.</translation>
     </message>
     <message>
         <source>About &amp;BrewTarget</source>
-        <translation>Sobre &amp;BrewTarget</translation>
+        <translation type="vanished">Sobre &amp;BrewTarget</translation>
     </message>
     <message>
         <source>About Brewtarget</source>
@@ -6145,6 +6145,10 @@ O volume final do fermentador primário é %1.</translation>
     </message>
     <message>
         <source>application/x-brewtarget-folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About &amp;Brewtarget</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

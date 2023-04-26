@@ -5801,7 +5801,7 @@ Primärens slutgiltiga volym är %1.</translation>
     </message>
     <message>
         <source>About &amp;BrewTarget</source>
-        <translation>Om &amp;BrewTarget</translation>
+        <translation type="vanished">Om &amp;BrewTarget</translation>
     </message>
     <message>
         <source>About Brewtarget</source>
@@ -6133,6 +6133,10 @@ Primärens slutgiltiga volym är %1.</translation>
     </message>
     <message>
         <source>application/x-brewtarget-folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About &amp;Brewtarget</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -26,6 +26,7 @@
 
 #include <cstdint>
 #include <memory>
+#include <optional>
 #include <type_traits>
 
 #include <QDateTime>
@@ -36,6 +37,7 @@
 #include <QVariant>
 
 #include "utils/BtStringConst.h"
+#include "utils/TypeLookup.h"
 
 class NamedParameterBundle;
 class ObjectStore;
@@ -45,6 +47,11 @@ class Recipe;
 //========================================== Start of property name constants ==========================================
 // Make this class's property names available via constants in sub-namespace of PropertyNames
 // One advantage of using these constants is you get compile-time checking for typos etc
+//
+// Note that, because we are both declaring and defining these in the header file, I don't think we can guarantee on
+// every platform there is always exactly one instance of each property name.  So, whilst it's always valid to compare
+// the values of two property names, we cannot _guarantee_ that two identical property names always have the same
+// address in memory.  In other words, _don't_ do `if (&somePropName == &PropertyNames::NamedEntity::Folder) ...`.
 #define AddPropertyName(property) namespace PropertyNames::NamedEntity { BtStringConst const property{#property}; }
 AddPropertyName(deleted)
 AddPropertyName(display)
@@ -96,6 +103,22 @@ class NamedEntity : public QObject {
    Q_CLASSINFO("version","1")
 
 public:
+
+   /**
+    * \brief Type lookup info for this class.  Note this is intentionally static, public and const.  Subclasses need to
+    *        override this member with one that chains to it.  (See \c TypeLookup constructor for more info.)
+    *
+    *        Note that this is a static member variable and is \b not intended to do run-time validation (eg to say
+    *        whether the object is in a state where the property is allowed to be null).  It just allows us to tell
+    *        (amongst other things) whether, in principle, a given field can ever be null.
+    *
+    *        Why is this a static member variable and not a virtual function?  It's because we need to be able to access
+    *        it \b before we have created the object.  Eg, if we are reading a \c Fermentable from the DB, we first read
+    *        all the fields and construct a \c NamedParameterBundle, and then use that \c NamedParameterBundle to
+    *        construct the \c Fermentable.
+    */
+   static TypeLookup const typeLookup;
+
    NamedEntity(QString t_name, bool t_display = false, QString folder = QString());
    NamedEntity(NamedEntity const & other);
 
@@ -269,9 +292,10 @@ public:
 
 signals:
    /*!
-    * Passes the meta property that has changed about this object.
-    * NOTE: when subclassing, be \em extra careful not to create a method with
-    * the same signature. Otherwise, everything will silently break.
+    * \brief Passes the meta property that has changed about this object.
+    *
+    * NOTE: When subclassing, be \em extra careful not to create a member function with the same signature.
+    *       Otherwise, everything will silently break.
     */
    void changed(QMetaProperty, QVariant value = QVariant()) const;
    void changedFolder(QString);
@@ -326,6 +350,19 @@ protected:
    }
 
    /**
+    * \brief Partial specialisation for optional value
+    */
+   template<typename T> std::optional<T> enforceMin(std::optional<T> const value,
+                                                    char const * const name,
+                                                    T const minValue = 0,
+                                                    T const defaultValue = 0) {
+      if (value) {
+         return this->enforceMin(*value, name, minValue, defaultValue);
+      }
+      return value;
+   }
+
+   /**
     * \brief Like \c enforceMin, but for a range
     *
     *        (We often want \c minValue = 0 and \c maxValue = 100, but I don't default them here as I want it to be
@@ -341,6 +378,20 @@ protected:
             Q_FUNC_INFO << this->metaObject()->className() << ":" << name << "value" << value <<
             "outside range min of" << minValue << "-" << maxValue << "so using" << defaultValue << "instead";
          return defaultValue;
+      }
+      return value;
+   }
+
+   /**
+    * \brief Partial specialisation for optional value
+    */
+   template<typename T> std::optional<T> enforceMinAndMax(std::optional<T> const value,
+                                                          char const * const name,
+                                                          T const minValue,
+                                                          T const maxValue,
+                                                          T const defaultValue = 0) {
+      if (value) {
+         return this->enforceMinAndMax(*value, name, minValue, maxValue, defaultValue);
       }
       return value;
    }
@@ -407,6 +458,10 @@ private:
   bool m_beingModified;
 };
 
+/**
+ * \brief Convenience typedef for pointer to \c isOptional();
+ */
+using IsOptionalFnPtr = bool (*)(BtStringConst const &);
 
 /**
  * \class NamedEntityModifyingMarker
@@ -466,6 +521,28 @@ S & operator<<(S & stream, NE const * namedEntity) {
       stream << "Null " << NE::staticMetaObject.metaObject()->className();
    }
    return stream;
+}
+
+/**
+ * \brief Convenience function for, in effect, casting std::optional<int> to std::optional<T> where T is an enum class
+ */
+template <class T>
+std::optional<T> castFromOptInt(std::optional<int> const & val) {
+   if (val.has_value()) {
+      return static_cast<T>(val.value());
+   }
+   return std::nullopt;
+}
+
+/**
+ * \brief Convenience function for, in effect, casting std::optional<T> to std::optional<int> where T is an enum class
+ */
+template <class T>
+std::optional<int> castToOptInt(std::optional<T> const & val) {
+   if (val.has_value()) {
+      return static_cast<int>(val.value());
+   }
+   return std::nullopt;
 }
 
 #endif

@@ -5803,7 +5803,7 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
     <message>
         <source>About &amp;BrewTarget</source>
-        <translation>&amp;O aplikaci Brewtarget</translation>
+        <translation type="vanished">&amp;O aplikaci Brewtarget</translation>
     </message>
     <message>
         <source>About Brewtarget</source>
@@ -6131,6 +6131,10 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
     <message>
         <source>application/x-brewtarget-folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About &amp;Brewtarget</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
