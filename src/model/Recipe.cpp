@@ -2627,7 +2627,7 @@ double Recipe::ibuFromHop(Hop const * hop) {
    // up for plugs and pellets.
    //
    // - http://www.realbeer.com/hops/FAQ.html
-   // - https://groups.google.com/forum/#!topic"Application.h"lp/mv2qvWBC4sU
+   // - https://groups.google.com/forum/#!topic"brewtarget.h"lp/mv2qvWBC4sU
    switch (hop->form()) {
       case Hop::Form::Plug:
          hopUtilization *= 1.02;
@@ -2770,7 +2770,7 @@ void Recipe::acceptChangeToContainedObject([[maybe_unused]] QMetaProperty prop,
 double Recipe::targetCollectedWortVol_l() {
 
    // Need to account for extract/sugar volume also.
-   float postMashAdditionVolume_l = 0;
+   double postMashAdditionVolume_l = 0;
 
    QList<Fermentable *> ferms = fermentables();
    foreach (Fermentable * f, ferms) {
@@ -2785,9 +2785,9 @@ double Recipe::targetCollectedWortVol_l() {
    }
 
    if (equipment()) {
-      return boilSize_l() - equipment()->topUpKettle_l() - static_cast<double>(postMashAdditionVolume_l);
+      return boilSize_l() - equipment()->topUpKettle_l() - postMashAdditionVolume_l;
    } else {
-      return boilSize_l() - static_cast<double>(postMashAdditionVolume_l);
+      return boilSize_l() - postMashAdditionVolume_l;
    }
 }
 

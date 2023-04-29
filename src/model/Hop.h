@@ -65,7 +65,6 @@ class Hop : public NamedEntityWithInventory {
    Q_CLASSINFO("signal", "hops")
 
 public:
-
    //! \brief The type of hop, meaning for what properties it is used.
    enum class Type {Bittering, Aroma, Both};
    // This allows us to store the above enum class in a QVariant

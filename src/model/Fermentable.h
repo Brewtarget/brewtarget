@@ -74,7 +74,6 @@ class Fermentable : public NamedEntityWithInventory {
 
    friend class FermentableDialog;
 public:
-
    //! \brief The type of Fermentable.
    enum class Type {Grain,
                     Sugar,

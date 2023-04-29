@@ -127,19 +127,19 @@ Fermentable::Fermentable(QString name) :
 Fermentable::Fermentable(NamedParameterBundle const & namedParameterBundle) :
    NamedEntityWithInventory{namedParameterBundle},
    m_typeStr               {QString()},
-   m_type                  {namedParameterBundle.val<Fermentable::Type             >(PropertyNames::Fermentable::type                             )},
-   m_amount_kg              {namedParameterBundle.val<double           >(PropertyNames::Fermentable::amount_kg                        )},
-   m_yield_pct              {namedParameterBundle.val<double           >(PropertyNames::Fermentable::yield_pct                        )},
-   m_color_srm              {namedParameterBundle.val<double           >(PropertyNames::Fermentable::color_srm                        )},
-   m_addAfterBoil           {namedParameterBundle.val<bool             >(PropertyNames::Fermentable::addAfterBoil                     )},
+   m_type                  {namedParameterBundle.val<Fermentable::Type>(PropertyNames::Fermentable::type                             )},
+   m_amount_kg             {namedParameterBundle.val<double           >(PropertyNames::Fermentable::amount_kg                        )},
+   m_yield_pct             {namedParameterBundle.val<double           >(PropertyNames::Fermentable::yield_pct                        )},
+   m_color_srm             {namedParameterBundle.val<double           >(PropertyNames::Fermentable::color_srm                        )},
+   m_addAfterBoil          {namedParameterBundle.val<bool             >(PropertyNames::Fermentable::addAfterBoil                     )},
    m_origin                {namedParameterBundle.val<QString          >(PropertyNames::Fermentable::origin                , QString())},
    m_supplier              {namedParameterBundle.val<QString          >(PropertyNames::Fermentable::supplier              , QString())},
    m_notes                 {namedParameterBundle.val<QString          >(PropertyNames::Fermentable::notes                 , QString())},
-   m_coarseFineDiff_pct        {namedParameterBundle.val<double           >(PropertyNames::Fermentable::coarseFineDiff_pct               )},
-   m_moisture_pct           {namedParameterBundle.val<double           >(PropertyNames::Fermentable::moisture_pct                     )},
-   m_diastaticPower_lintner        {namedParameterBundle.val<double           >(PropertyNames::Fermentable::diastaticPower_lintner           )},
-   m_protein_pct            {namedParameterBundle.val<double           >(PropertyNames::Fermentable::protein_pct                      )},
-   m_maxInBatch_pct         {namedParameterBundle.val<double           >(PropertyNames::Fermentable::maxInBatch_pct                   )},
+   m_coarseFineDiff_pct    {namedParameterBundle.val<double           >(PropertyNames::Fermentable::coarseFineDiff_pct               )},
+   m_moisture_pct          {namedParameterBundle.val<double           >(PropertyNames::Fermentable::moisture_pct                     )},
+   m_diastaticPower_lintner{namedParameterBundle.val<double           >(PropertyNames::Fermentable::diastaticPower_lintner           )},
+   m_protein_pct           {namedParameterBundle.val<double           >(PropertyNames::Fermentable::protein_pct                      )},
+   m_maxInBatch_pct        {namedParameterBundle.val<double           >(PropertyNames::Fermentable::maxInBatch_pct                   )},
    m_recommendMash         {namedParameterBundle.val<bool             >(PropertyNames::Fermentable::recommendMash                    )},
    m_ibuGalPerLb           {namedParameterBundle.val<double           >(PropertyNames::Fermentable::ibuGalPerLb                      )},
    m_isMashed              {namedParameterBundle.val<bool             >(PropertyNames::Fermentable::isMashed              , false    )} {
@@ -148,23 +148,23 @@ Fermentable::Fermentable(NamedParameterBundle const & namedParameterBundle) :
 
 Fermentable::Fermentable(Fermentable const & other) :
    NamedEntityWithInventory{other                         },
-   m_typeStr       {other.m_typeStr       },
+   m_typeStr               {other.m_typeStr               },
    m_type                  {other.m_type                  },
-   m_amount_kg      {other.m_amount_kg      },
-   m_yield_pct      {other.m_yield_pct      },
-   m_color_srm      {other.m_color_srm      },
-   m_addAfterBoil   {other.m_addAfterBoil   },
+   m_amount_kg             {other.m_amount_kg             },
+   m_yield_pct             {other.m_yield_pct             },
+   m_color_srm             {other.m_color_srm             },
+   m_addAfterBoil          {other.m_addAfterBoil          },
    m_origin                {other.m_origin                },
    m_supplier              {other.m_supplier              },
    m_notes                 {other.m_notes                 },
-   m_coarseFineDiff_pct{other.m_coarseFineDiff_pct},
-   m_moisture_pct   {other.m_moisture_pct   },
+   m_coarseFineDiff_pct    {other.m_coarseFineDiff_pct    },
+   m_moisture_pct          {other.m_moisture_pct          },
    m_diastaticPower_lintner{other.m_diastaticPower_lintner},
-   m_protein_pct    {other.m_protein_pct    },
-   m_maxInBatch_pct {other.m_maxInBatch_pct },
+   m_protein_pct           {other.m_protein_pct           },
+   m_maxInBatch_pct        {other.m_maxInBatch_pct        },
    m_recommendMash         {other.m_recommendMash         },
    m_ibuGalPerLb           {other.m_ibuGalPerLb           },
-   m_isMashed      {other.m_isMashed      } {
+   m_isMashed              {other.m_isMashed              } {
    return;
 }
 
@@ -307,7 +307,7 @@ void Fermentable::setYield_pct(double var) {
 
 void Fermentable::setColor_srm(double var) {
    this->setAndNotify(PropertyNames::Fermentable::color_srm, this->m_color_srm, this->enforceMin(var, "color"));
-   }
+}
 
 void Fermentable::setCoarseFineDiff_pct(double var) {
    this->setAndNotify(PropertyNames::Fermentable::coarseFineDiff_pct, this->m_coarseFineDiff_pct, this->enforceMinAndMax(var, "coarseFineDiff", 0.0, 100.0));
