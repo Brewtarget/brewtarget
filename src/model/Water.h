@@ -1,6 +1,6 @@
 /*
  * model/Water.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2022
+ * authors 2009-2023
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
@@ -30,21 +30,22 @@
 
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
+// See comment in model/NamedEntity.h
 #define AddPropertyName(property) namespace PropertyNames::Water { BtStringConst const property{#property}; }
-AddPropertyName(ph)
-AddPropertyName(amount          )
-AddPropertyName(type)
-AddPropertyName(notes           )
+AddPropertyName(alkalinity      )
 AddPropertyName(alkalinityAsHCO3)
+AddPropertyName(amount          )
+AddPropertyName(bicarbonate_ppm )
+AddPropertyName(calcium_ppm     )
+AddPropertyName(chloride_ppm    )
+AddPropertyName(magnesium_ppm   )
+AddPropertyName(mashRO          )
+AddPropertyName(notes           )
+AddPropertyName(ph              )
+AddPropertyName(sodium_ppm      )
 AddPropertyName(spargeRO        )
-AddPropertyName(mashRO)
-AddPropertyName(alkalinity)
-AddPropertyName(magnesium_ppm)
-AddPropertyName(sodium_ppm)
-AddPropertyName(chloride_ppm)
 AddPropertyName(sulfate_ppm     )
-AddPropertyName(bicarbonate_ppm)
-AddPropertyName(calcium_ppm)
+AddPropertyName(type            )
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
 //======================================================================================================================
@@ -66,6 +67,8 @@ public:
       BASE,
       TARGET
    };
+   // This allows us to store the above enum class in a QVariant
+   Q_ENUM(Types)
 
    enum class Ions {
       Ca,
@@ -74,11 +77,16 @@ public:
       Mg,
       Na,
       SO4,
-      numIons
+      numIons      // .:TODO:. Get rid of this pseudo enum value
    };
-
-   Q_ENUM(Types)
+   // This allows us to store the above enum class in a QVariant
    Q_ENUM(Ions)
+
+   /**
+    * \brief Mapping of names to types for the Qt properties of this class.  See \c NamedEntity::typeLookup for more
+    *        info.
+    */
+   static TypeLookup const typeLookup;
 
    Water(QString name = "");
    Water(NamedParameterBundle const & namedParameterBundle);
@@ -100,33 +108,33 @@ public:
 
    //! \brief The amount in liters.
    // .:TBD:. (MY 2020-01-03) In Hop we have amount_kg, so might be more consistent here to have amount_l or similar
-   Q_PROPERTY( double amount READ amount WRITE setAmount /*NOTIFY changed*/ /*changedAmount_l*/ )
+   Q_PROPERTY(double amount READ amount WRITE setAmount)
    //! \brief The ppm of calcium.
-   Q_PROPERTY( double calcium_ppm READ calcium_ppm WRITE setCalcium_ppm /*NOTIFY changed*/ /*changedCalcium_ppm*/ )
+   Q_PROPERTY(double calcium_ppm READ calcium_ppm WRITE setCalcium_ppm)
    //! \brief The ppm of bicarbonate.
-   Q_PROPERTY( double bicarbonate_ppm READ bicarbonate_ppm WRITE setBicarbonate_ppm /*NOTIFY changed*/ /*changedBicarbonate_ppm*/ )
+   Q_PROPERTY(double bicarbonate_ppm READ bicarbonate_ppm WRITE setBicarbonate_ppm)
    //! \brief The ppm of sulfate.
-   Q_PROPERTY( double sulfate_ppm READ sulfate_ppm WRITE setSulfate_ppm /*NOTIFY changed*/ /*changedSulfate_ppm*/ )
+   Q_PROPERTY(double sulfate_ppm READ sulfate_ppm WRITE setSulfate_ppm)
    //! \brief The ppm of chloride.
-   Q_PROPERTY( double chloride_ppm READ chloride_ppm WRITE setChloride_ppm /*NOTIFY changed*/ /*changedChloride_ppm*/ )
+   Q_PROPERTY(double chloride_ppm READ chloride_ppm WRITE setChloride_ppm)
    //! \brief The ppm of sodium.
-   Q_PROPERTY( double sodium_ppm READ sodium_ppm WRITE setSodium_ppm /*NOTIFY changed*/ /*changedSodium_ppm*/ )
+   Q_PROPERTY(double sodium_ppm READ sodium_ppm WRITE setSodium_ppm)
    //! \brief The ppm of magnesium.
-   Q_PROPERTY( double magnesium_ppm READ magnesium_ppm WRITE setMagnesium_ppm /*NOTIFY changed*/ /*changedMagnesium_ppm*/ )
+   Q_PROPERTY(double magnesium_ppm READ magnesium_ppm WRITE setMagnesium_ppm)
    //! \brief The pH.
-   Q_PROPERTY( double ph READ ph WRITE setPh /*NOTIFY changed*/ /*changedPh*/ )
-   //! \brief The residual alkalinity
-   Q_PROPERTY( double alkalinity READ alkalinity WRITE setAlkalinity /*NOTIFY changed*/ /*changedAlkalinity*/ )
+   Q_PROPERTY(double ph READ ph WRITE setPh)
+   //! \brief The residual alkalinity.  Units are ppm  .:TBD:. Probably should change name to reflect units!
+   Q_PROPERTY(double alkalinity READ alkalinity WRITE setAlkalinity)
    //! \brief The notes.
-   Q_PROPERTY( QString notes READ notes WRITE setNotes /*NOTIFY changed*/ /*changedNotes*/ )
+   Q_PROPERTY(QString notes READ notes WRITE setNotes)
    //! \brief What kind of water is this
-   Q_PROPERTY( Water::Types type READ type WRITE setType /*NOTIFY changed*/ /*changedType*/ )
-   //! \brief percent of the mash water that is RO
-   Q_PROPERTY( double mashRO READ mashRO WRITE setMashRO /*NOTIFY changed*/ /*changedMashRO*/ )
-   //! \brief percent of the sparge water that is RO
-   Q_PROPERTY( double spargeRO READ spargeRO WRITE setSpargeRO /*NOTIFY changed*/ /*changedSpargeRO*/ )
-   //! \brief is the alkalinity measured as HCO3 or CO3?
-   Q_PROPERTY( bool alkalinityAsHCO3 READ alkalinityAsHCO3 WRITE setAlkalinityAsHCO3 /*NOTIFY changed*/ /*changedSpargeRO*/ )
+   Q_PROPERTY(Water::Types type READ type WRITE setType)
+   //! \brief percent of the mash water that is RO (reverse osmosis) .:TBD:. Probably should add _pct suffix
+   Q_PROPERTY(double mashRO READ mashRO WRITE setMashRO)
+   //! \brief percent of the sparge water that is RO (reverse osmosis) .:TBD:. Probably should add _pct suffix
+   Q_PROPERTY(double spargeRO READ spargeRO WRITE setSpargeRO)
+   //! \brief is the alkalinity measured as HCO3 (bicarbonate) or CO3 (carbonate)?
+   Q_PROPERTY(bool alkalinityAsHCO3 READ alkalinityAsHCO3 WRITE setAlkalinityAsHCO3)
 
    // Getters
    double       amount()           const;

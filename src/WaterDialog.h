@@ -1,6 +1,6 @@
 /*
  * WaterDialog.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2023
  * - Matt Young <mfsy@yahoo.com>
  * - Maxime Lavigne <duguigne@gmail.com>
  * - Philip G. Lee <rocketman768@gmail.com>
@@ -33,7 +33,6 @@
 
 #include "measurement/Unit.h"
 #include "model/Water.h"
-#include "model/Salt.h"
 
 class WaterListModel;
 class WaterSortFilterProxyModel;
@@ -74,27 +73,6 @@ signals:
 
 private:
 
-   QVector<BtDigitWidget*> m_ppm_digits;
-   QVector<BtDigitWidget*> m_total_digits;
-
-   WaterListModel *m_base_combo_list;
-   WaterListModel *m_target_combo_list;
-   SaltTableModel *m_salt_table_model;
-   SaltItemDelegate *m_salt_delegate;
-   WaterEditor* m_base_editor;
-   WaterEditor* m_target_editor;
-   Recipe* m_rec;
-   std::shared_ptr<Water> m_base;
-   std::shared_ptr<Water> m_target;
-   double m_mashRO;
-   double m_spargeRO;
-   double m_total_grains;
-   double m_thickness;
-   double m_weighted_colors;
-
-   WaterSortFilterProxyModel *m_base_filter;
-   WaterSortFilterProxyModel *m_target_filter;
-
    void setDigits();
    void calculateGrainEquivalent();
 
@@ -105,6 +83,24 @@ private:
    double calculateAddedSaltpH();
    double calculateAcidpH();
 
+   QVector<SmartDigitWidget *>    m_ppm_digits;
+   QVector<SmartDigitWidget *>    m_total_digits;
+   WaterListModel *            m_base_combo_list;
+   WaterListModel *            m_target_combo_list;
+   SaltTableModel *            m_salt_table_model;
+   SaltItemDelegate *          m_salt_delegate;
+   WaterEditor *               m_base_editor;
+   WaterEditor *               m_target_editor;
+   Recipe *                    m_rec;
+   std::shared_ptr<Water>      m_base;
+   std::shared_ptr<Water>      m_target;
+   double                      m_mashRO;
+   double                      m_spargeRO;
+   double                      m_total_grains;
+   double                      m_thickness;
+   double                      m_weighted_colors;
+   WaterSortFilterProxyModel * m_base_filter;
+   WaterSortFilterProxyModel * m_target_filter;
 };
 
 #endif

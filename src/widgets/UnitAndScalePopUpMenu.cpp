@@ -1,6 +1,6 @@
 /*
  * widgets/UnitAndScalePopUpMenu.cpp is part of Brewtarget, and is copyright the following
- * authors 2012-2022:
+ * authors 2012-2023:
  * - Mark de Wever <koraq@xs4all.nl>
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
@@ -104,7 +104,7 @@ template std::optional<Measurement::SystemOfMeasurement> UnitAndScalePopUpMenu::
 template std::optional<Measurement::UnitSystem::RelativeScale> UnitAndScalePopUpMenu::dataFromQAction(QAction const & action);
 
 QMenu * UnitAndScalePopUpMenu::create(QWidget * parent,
-                                      Measurement::PhysicalQuantity physicalQuantity,
+                                      Measurement::PhysicalQuantities physicalQuantities,
                                       std::optional<Measurement::SystemOfMeasurement> forcedSystemOfMeasurement,
                                       std::optional<Measurement::UnitSystem::RelativeScale> forcedRelativeScale) {
    QMenu * menu = new QMenu{parent};
@@ -119,27 +119,31 @@ QMenu * UnitAndScalePopUpMenu::create(QWidget * parent,
    // the corresponding choice of UnitSystem.  Equally, a choice of RelativeScale corresponds to this UnitSystem and
    // UnitSystem + RelativeScale gives us a Unit.
    //
-   // However, we have to handle the special case of Measurement::PhysicalQuantity::Mixed.  This "fake" physical
-   // quantity means the user has the choice to measure by mass or by volume on a per-item basis.  This is useful
-   // because, eg some Misc ingredients are best measured by volume and others by mass.  Similarly, dry yeast is
-   // probably measured by mass whereas wet yeast is usually measured by volume.
+   // However, we have to handle the special case of Mixed2PhysicalQuantities, which means the user has the choice to
+   // measure two different ways, eg by mass or by volume, on a per-item basis.  This is useful because, eg some Misc
+   // ingredients are best measured by volume and others by mass.  Similarly, dry yeast is probably measured by mass
+   // whereas wet yeast is usually measured by volume.
    //
-   // For Mixed, where PhysicalQuantity varies per-item between two possibilities (Mass and Volume), the choice of
-   // SystemOfMeasurement is going to imply a different UnitSystem per-item depending on, eg Misc::amountIsWeight,
-   // Yeast::amountIsWeight, etc for that item.  So this is why we select/store SystemOfMeasurement rather than
-   // UnitSystem.  We nonetheless get to SystemOfMeasurement via UnitSystem because it is the latter class that holds
-   // all the various relations.
+   // For Mixed2PhysicalQuantities, where PhysicalQuantity varies per-item between two possibilities (eg Mass and
+   // Volume), the choice of SystemOfMeasurement is going to imply a different UnitSystem per-item depending on, eg
+   // Misc::amountIsWeight, Yeast::amountIsWeight, etc for that item.  So this is why we select/store
+   // SystemOfMeasurement rather than UnitSystem.  We nonetheless get to SystemOfMeasurement via UnitSystem because it
+   // is the latter class that holds all the various relations.
    //
-   // Also, in the case of Mixed, it doesn't make sense to offer the user a choice of RelativeScale, so we suppress that
-   // option.
+   // Also, in the case of Mixed2PhysicalQuantities, it doesn't make sense to offer the user a choice of RelativeScale,
+   // so we suppress that option.
    //
 
    // If we have > 1 UnitSystem/SystemOfMeasurement for the PhysicalQuantity then we want the user to be able to select
-   // between them.  Note for PhysicalQuantity == Mixed we have to go via Mass or Volume (both giving the same result)
-   // because Mixed is not a "real" physical quantity.
-   auto unitSystems = Measurement::UnitSystem::getUnitSystems(
-      Measurement::PhysicalQuantity::Mixed == physicalQuantity ? Measurement::PhysicalQuantity::Mass : physicalQuantity
-   );
+   // between them.  NOTE for physicalQuantities == Mixed2PhysicalQuantities we currently assume that it does not matter
+   // which of the two PhysicalQuantity values we go via to get the result.  This is true for Mass & Volume (because
+   // they share UnitSystems) and for MassConcentration & VolumeConcentration (because they each only have one
+   // UnitSystem).  If we find cases where this is not true, then we'd need to rethink the UI here a bit.
+   Measurement::PhysicalQuantity const physicalQuantity =
+      std::holds_alternative<Measurement::PhysicalQuantity>(physicalQuantities) ?
+         std::get<Measurement::PhysicalQuantity>(physicalQuantities) :
+         std::get<0>(std::get<Measurement::Mixed2PhysicalQuantities>(physicalQuantities));
+   auto unitSystems = Measurement::UnitSystem::getUnitSystems(physicalQuantity);
    if (unitSystems.size() > 1) {
       generateAction(menu,
                      QApplication::translate("UnitAndScalePopUpMenu", "Default"),
@@ -155,8 +159,8 @@ QMenu * UnitAndScalePopUpMenu::create(QWidget * parent,
       }
    }
 
-   // Don't even think about a scale menu for Mixed as there isn't a sensible way to combine the Mass and Volume scales!
-   if (Measurement::PhysicalQuantity::Mixed == physicalQuantity) {
+   // Don't even think about a scale menu for "mixed" as there isn't a sensible way to combine the Mass and Volume scales!
+   if (std::holds_alternative<Measurement::Mixed2PhysicalQuantities>(physicalQuantities)) {
       return menu;
    }
 

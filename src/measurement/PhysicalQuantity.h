@@ -20,7 +20,14 @@
 #define MEASUREMENT_PHYSICALQUANTITY_H
 #pragma once
 
+#include <array>
+#include <tuple>
+#include <utility>
+#include <variant>
+
 #include <QString>
+
+#include "utils/BtStringConst.h"
 
 namespace Measurement {
    /**
@@ -59,9 +66,9 @@ namespace Measurement {
     *       metric mass has scales (ie const \c Unit objects) for milligrams, grams and kilograms; the one for US
     *       Customary mass has pounds and ounces.
     *
-    *       Thus, each \c Unit belongs to exactly one \c UnitSystem and, with one exception discussed below, each
-    *       \c UnitSystem relates to exactly one \c Measurement::PhysicalQuantity (which also means, of course, that
-    *       \c Unit relates to exactly one \c Measurement::PhysicalQuantity, as you would expect).
+    *       Thus, each \c Unit belongs to exactly one \c UnitSystem and each \c UnitSystem relates to exactly one
+    *       \c Measurement::PhysicalQuantity (which also means, of course, that \c Unit relates to exactly one
+    *       \c Measurement::PhysicalQuantity, as you would expect).
     *
     *       Additionally, each \c Unit knows how to convert itself to and from the canonical metric \c Unit that we
     *       use for internal storage of the corresponding physical quantity type.
@@ -76,12 +83,12 @@ namespace Measurement {
     *       each only have one scale).  In this case, it will feel to the user as though s/he is choosing a scale (aka
     *       \c Unit) directly rather than a \c UnitSystem, but of course the \c UnitSystem is still there and used.
     *
-    *       The exception mentioned above is \c Measurement::PhysicalQuantity::Mixed which is used when we are allowing
-    *       a quantity to be measured either by mass or by volume, according to the user's choice.  Eg for \c Misc
-    *       ingredients, some will be best measured by weight and some by volume.  So, eg in \c MiscTableModel, we need
-    *       to offer the options of "Imperial", "US Customary" and "Metric/SI" for the amount column without
-    *       predetermining whether these will be volume or weight because that will depend on a per-row basis.)  This is
-    *       what motivates us to model \c SystemOfMeasurement explicitly.
+    *       There is, however, one additional complication.  In certain places, we need to allow a quantity to be
+    *       measured either by mass or by volume, according to the user's choice.  Eg for \c Misc ingredients, some will
+    *       be best measured by weight and some by volume.  So, eg in \c MiscTableModel, we need to offer the options of
+    *       "Imperial", "US Customary" and "Metric/SI" for the amount column without predetermining whether these will
+    *       be volume or weight because that will depend on a per-row basis.)  This is what motivates us to model
+    *       \c SystemOfMeasurement explicitly.
     *
     *       NOTE that there are other things that users can configure that do not belong with this group of classes
     *       because they do not related to physical quantities, eg date & time format and language choice do not fit
@@ -91,7 +98,7 @@ namespace Measurement {
       Mass,           // Elsewhere we use weight instead of mass because it's more idiomatic (despite being,
                       // strictly speaking, not the same thing)
       Volume,
-      Time,           // Note this is durations of time, NOT dates or times of day
+      Time,           // Note this is durations of time, NOT dates or times of day  .:TBD:. Rename to TimeDuration
       Temperature,
       Color,
       // Density is sometimes referred to as "gravity" as a shorthand for "specific gravity".  Strictly, what we're
@@ -101,7 +108,6 @@ namespace Measurement {
       // So we could call this RelativeDensity or SugarConcentration or Gravity.  But I think Density is truest to the
       // idea of a measurable physical quantity described above.
       Density,
-      Mixed,          // This is used for quantities where we allow measurement as either Mass or Volume
       DiastaticPower,
       Acidity,
       Bitterness,
@@ -111,16 +117,90 @@ namespace Measurement {
       // concentration, the equivalences are different and, in practice, it's easiest to treat them as a completely
       // separate.
       Carbonation,
-      Concentration,
+      // As explained at https://en.wikipedia.org/wiki/Concentration, there are several types of concentration,
+      // including "mass concentration", which is expressed as mass-per-volume, and "volume concentration", which is
+      // strictly-speaking a dimensionless number (because volume-per-volume cancels out) but is often expressed as
+      // parts per million (or similar) or sometimes as a percentage.
+      //
+      // BeerJSON just bundles mass concentration and volume concentration scales together under "concentration", which
+      // is sufficient for its purposes.  However, we don't want to do that, as we'd end up doing some contrived and
+      // incorrect conversion between the two -- because there is no generic conversion between milligrams-per-litre and
+      // parts-per-xxx.  (Converting mass-per-volume to volume-per-volume (or mass-per-mass) involves temperature and
+      // the molar masses of the two substances in question.  Hence why a chemist would use
+      // https://en.wikipedia.org/wiki/Molar_concentration instead.
+      //
+      // (Various converters on the internet will tell you that 1 mg/L is "the same as" 1 ppm, but this is only really
+      // true if everything has the density of water.  In fairness to such converters, in practice, in brewing, for
+      // small concentrations, it's often not hugely wrong to approximate 1 milligram-per-litre with 1
+      // part-per-million.)
+      //
+      // See also https://en.wikipedia.org/wiki/Parts-per_notation.
+      MassConcentration,
+      VolumeConcentration,
+      // Viscosity -- see https://en.wikipedia.org/wiki/Viscosity
       Viscosity,
       // Specific heat capacity -- see https://en.wikipedia.org/wiki/Specific_heat_capacity
       SpecificHeatCapacity,
+      // .:TBD:. Should we add Energy for PropertyNames::Recipe::calories (in which case, should canonical measure be
+      //         Joules)?
    };
+
+   /**
+    * \brief Array of all possible values of \c Measurement::PhysicalQuantity.  NB: This is \b not guaranteed to be in
+    *        the same order as the values of the enum.
+    *
+    *        This is the least ugly way I could think of to allow other parts of the code to iterate over all values
+    *        of enum class \c Measurement::PhysicalQuantity.  Hopefully, one day, when reflection
+    *        (https://en.cppreference.com/w/cpp/experimental/reflect) gets incorporated into C++, this will ultimately
+    *        be unnecessary.
+    */
+   extern std::array<Measurement::PhysicalQuantity, 14> const allPhysicalQuantites;
 
    /**
     * \brief Return the name of a \c PhysicalQuantity suitable either for display to the user or logging
     */
-   QString getDisplayName(PhysicalQuantity physicalQuantity);
+   QString getDisplayName(Measurement::PhysicalQuantity const physicalQuantity);
+
+   /**
+    * \brief Return the \c PersistentSettings name for looking up the display \c UnitSystem for the specified
+    *        \c PhysicalQuantity
+    */
+   BtStringConst const & getSettingsName(Measurement::PhysicalQuantity const physicalQuantity);
+
+
+   /**
+    * \brief In a few cases, we want to be able to handle two different ways of measuring a thing (eg Mass and Volume,
+    *        or MassConcentration and VolumeConcentration).
+    *
+    *        We adopt the convention that members of the tuple are in alphabetical order.
+    *
+    *        At the moment, we don't envisage a need for having more than two ways of measuring the same thing, but it's
+    *        relatively obvious how to extend the approach here if we did need to.
+    *
+    *        Maybe a better name would be EitherOf2PhysicalQuantities of some such, but we retain Mixed for now as
+    *        that's the word we used to use when the only pair was Mass and Volume.
+    */
+   using Mixed2PhysicalQuantities = std::tuple<Measurement::PhysicalQuantity, Measurement::PhysicalQuantity>;
+
+   /**
+    * \brief Of course, once we have \c Mixed2PhysicalQuantities, we need a way to store either that or a
+    *        \c Measurement::PhysicalQuantity.
+    *
+    *        (Note that, \c BtFieldType is one place we \b don't use this as we need to add a third possibility there of
+    *        \c NonPhysicalQuantity.)
+    */
+   using PhysicalQuantities = std::variant<Measurement::PhysicalQuantity, Mixed2PhysicalQuantities>;
+
+   /**
+    * \brief It's more concise to have a constant for Mass & Volume
+    */
+   extern Mixed2PhysicalQuantities const PqEitherMassOrVolume;
+
+   /**
+    * \brief It's more concise to have a constant for MassConcentration & VolumeConcentration
+    */
+   extern Mixed2PhysicalQuantities const PqEitherMassOrVolumeConcentration;
+
 }
 
 /**
@@ -133,4 +213,28 @@ S & operator<<(S & stream, Measurement::PhysicalQuantity const physicalQuantity)
       Measurement::getDisplayName(physicalQuantity) << ")";
    return stream;
 }
+
+/**
+ * \brief Convenience function for logging
+ */
+template<class S>
+S & operator<<(S & stream, Measurement::Mixed2PhysicalQuantities const mixed2PhysicalQuantities) {
+   stream <<
+      "Mixed2PhysicalQuantities:" << std::get<0>(mixed2PhysicalQuantities) << std::get<1>(mixed2PhysicalQuantities);
+   return stream;
+}
+
+/**
+ * \brief Convenience function for logging
+ */
+template<class S>
+S & operator<<(S & stream, Measurement::PhysicalQuantities const & physicalQuantities) {
+   if (std::holds_alternative<Measurement::PhysicalQuantity>(physicalQuantities)) {
+      stream << "PhysicalQuantities:" << std::get<Measurement::PhysicalQuantity>(physicalQuantities);
+   } else {
+      stream << "PhysicalQuantities:" << std::get<Measurement::Mixed2PhysicalQuantities>(physicalQuantities);
+   }
+   return stream;
+}
+
 #endif

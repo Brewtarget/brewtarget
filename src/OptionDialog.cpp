@@ -1,6 +1,6 @@
 /*
  * OptionDialog.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2022
+ * authors 2009-2023
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -35,7 +35,6 @@
 #include <QVector>
 #include <QWidget>
 
-#include "BtLineEdit.h"
 #include "database/Database.h"
 #include "Localization.h"
 #include "Logging.h"

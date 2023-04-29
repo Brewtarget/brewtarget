@@ -43,8 +43,9 @@ bool MiscSortFilterProxyModel::lessThan(const QModelIndex &left,
       rightMisc = source->data(right);
    }
 
-   switch (left.column()) {
-       case MISCINVENTORYCOL:
+   auto const columnIndex = static_cast<MiscTableModel::ColumnIndex>(left.column());
+   switch (columnIndex) {
+       case MiscTableModel::ColumnIndex::Inventory:
          if (Measurement::qStringToSI(leftMisc.toString(), Measurement::PhysicalQuantity::Mass).quantity() == 0.0 &&
              this->sortOrder() == Qt::AscendingOrder) {
             return false;
@@ -52,11 +53,11 @@ bool MiscSortFilterProxyModel::lessThan(const QModelIndex &left,
          return (Measurement::qStringToSI(leftMisc.toString(), Measurement::PhysicalQuantity::Mass) <
                  Measurement::qStringToSI(rightMisc.toString(), Measurement::PhysicalQuantity::Mass));
 
-      case MISCAMOUNTCOL:
+      case MiscTableModel::ColumnIndex::Amount:
          return (Measurement::qStringToSI(leftMisc.toString(), Measurement::PhysicalQuantity::Mass) <
                  Measurement::qStringToSI(rightMisc.toString(), Measurement::PhysicalQuantity::Mass));
 
-      case MISCTIMECOL:
+      case MiscTableModel::ColumnIndex::Time:
          return (Measurement::qStringToSI(leftMisc.toString(), Measurement::PhysicalQuantity::Time) <
                  Measurement::qStringToSI(rightMisc.toString(), Measurement::PhysicalQuantity::Time));
 

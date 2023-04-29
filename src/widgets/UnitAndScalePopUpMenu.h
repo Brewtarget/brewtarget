@@ -1,6 +1,6 @@
 /*
  * widgets/UnitAndScalePopUpMenu.h is part of Brewtarget, and is copyright the following
- * authors 2012-2022:
+ * authors 2012-2023:
  * - Mark de Wever <koraq@xs4all.nl>
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
@@ -40,16 +40,18 @@ namespace UnitAndScalePopUpMenu {
     *        manage the effects of menu choices on how the field is displayed.
     *
     * \param parent the Qt Widget that is to "own" the newly-created \c QMenu, or \c nullptr if there is none
-    * \param physicalQuantity the physical quantity of the value(s) in the UI field
+    * \param physicalQuantities the physical quantity (or quantities) of the value(s) in the UI field.  If there is more
+    *                           than one physical quantity here, it means we can measure in more than one way, eg by
+    *                           Mass or by Volume
     * \param forcedSystemOfMeasurement the current \c SystemOfMeasurement, if any, specified for the UI field.  (If none
     *                                  is specified then the global default is used.)
     * \param forcedRelativeScale the forced scale, if any, for displaying the field.  (NB: Should always be
-    *                            \c std::nullopt_t if \c physicalQuantity is \c Measurement::PhysicalQuantity::Mixed.)
+    *                            \c std::nullopt_t if \c physicalQuantity is \c Mixed2PhysicalQuantities.)
     *
     * \return New \c QMenu owned by \c parent
     */
    QMenu * create(QWidget * parent,
-                  Measurement::PhysicalQuantity physicalQuantity,
+                  Measurement::PhysicalQuantities physicalQuantities,
                   std::optional<Measurement::SystemOfMeasurement> forcedSystemOfMeasurement,
                   std::optional<Measurement::UnitSystem::RelativeScale> forcedRelativeScale);
 

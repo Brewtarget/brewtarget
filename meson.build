@@ -133,7 +133,7 @@
 #   - Meson 0.60.0 or newer to use + to append items to lists (aka 'list.<plus>' feature -- at least that's what the
 #     warning message says if you've specified a lower minimum version of Meson)
 # We would/will need:
-#   - Meson 0.62.0 or newer for dep 'dl' custom lookup
+#   - Meson 0.62.0 or newer for dep 'dl' custom lookup, but current version of Meson on Ubuntu 22.04 LTS is only 0.61.2
 #
 # NB: Per https://mesonbuild.com/Reference-manual_functions.html#project the default_options settings "are only used
 #     when running Meson for the first time"!  So if you change any of the default_options settings you *MUST* delete
@@ -585,16 +585,13 @@ commonSourceFiles = files([
    'src/Application.cpp',
    'src/BeerColorWidget.cpp',
    'src/boiltime.cpp',
-   'src/BrewDayScrollWidget.cpp',
    'src/BrewDayFormatter.cpp',
+   'src/BrewDayScrollWidget.cpp',
    'src/BrewNoteWidget.cpp',
    'src/BtColor.cpp',
    'src/BtDatePopup.cpp',
-   'src/BtDigitWidget.cpp',
    'src/BtFieldType.cpp',
    'src/BtFolder.cpp',
-   'src/BtLabel.cpp',
-   'src/BtLineEdit.cpp',
    'src/BtSplashScreen.cpp',
    'src/BtTabWidget.cpp',
    'src/BtTextEdit.cpp',
@@ -682,6 +679,8 @@ commonSourceFiles = files([
    'src/RefractoDialog.cpp',
    'src/ScaleRecipeTool.cpp',
    'src/SimpleUndoableUpdate.cpp',
+   'src/SmartAmounts.cpp',
+   'src/SmartField.cpp',
    'src/StrikeWaterDialog.cpp',
    'src/StyleButton.cpp',
    'src/StyleEditor.cpp',
@@ -700,13 +699,13 @@ commonSourceFiles = files([
    'src/TimerListDialog.cpp',
    'src/TimerMainDialog.cpp',
    'src/TimerWidget.cpp',
-   'src/UiAmountWithUnits.cpp',
    'src/utils/BtException.cpp',
    'src/utils/BtStringConst.cpp',
    'src/utils/BtStringStream.cpp',
    'src/utils/EnumStringMapping.cpp',
    'src/utils/ImportRecordCount.cpp',
    'src/utils/TimerUtils.cpp',
+   'src/utils/TypeLookup.cpp',
    'src/WaterButton.cpp',
    'src/WaterDialog.cpp',
    'src/WaterEditor.cpp',
@@ -715,6 +714,9 @@ commonSourceFiles = files([
    'src/WaterTableWidget.cpp',
    'src/widgets/Animator.cpp',
    'src/widgets/SelectionControl.cpp',
+   'src/widgets/SmartDigitWidget.cpp',
+   'src/widgets/SmartLabel.cpp',
+   'src/widgets/SmartLineEdit.cpp',
    'src/widgets/ToggleSwitch.cpp',
    'src/widgets/UnitAndScalePopUpMenu.cpp',
    'src/xml/BeerXml.cpp',
@@ -727,7 +729,7 @@ commonSourceFiles = files([
    'src/xml/XmlRecord.cpp',
    'src/YeastDialog.cpp',
    'src/YeastEditor.cpp',
-   'src/YeastSortFilterProxyModel.cpp'
+   'src/YeastSortFilterProxyModel.cpp',
 ])
 
 applicationMainSourceFile = files([
@@ -755,10 +757,7 @@ mocHeaders = files([
    'src/BrewDayScrollWidget.h',
    'src/BrewNoteWidget.h',
    'src/BtDatePopup.h',
-   'src/BtDigitWidget.h',
    'src/BtFolder.h',
-   'src/BtLabel.h',
-   'src/BtLineEdit.h',
    'src/BtSplashScreen.h',
    'src/BtTabWidget.h',
    'src/BtTextEdit.h',
@@ -846,6 +845,9 @@ mocHeaders = files([
    'src/WaterTableWidget.h',
    'src/widgets/Animator.h',
    'src/widgets/SelectionControl.h',
+   'src/widgets/SmartDigitWidget.h',
+   'src/widgets/SmartLabel.h',
+   'src/widgets/SmartLineEdit.h',
    'src/widgets/ToggleSwitch.h',
    'src/YeastDialog.h',
    'src/YeastEditor.h',
@@ -892,7 +894,7 @@ uiFiles = files([
    'ui/timerWidget.ui',
    'ui/waterDialog.ui',
    'ui/waterEditor.ui',
-   'ui/yeastEditor.ui'
+   'ui/yeastEditor.ui',
 ])
 
 #
@@ -1395,6 +1397,9 @@ if compiler.get_id() == 'gcc'
    #                    However, even this is not sufficient(!).  So, for the moment, we suppress the rpmlint error (see
    #                 packaging/rpmLintFilters.toml).
    #
+   # -fconcepts  Is needed on older versions of GCC to enable C++20 concepts (because specifying C++20 was not enough
+   #             for some reason).
+   #
    # The following are, according to some comments at
    # https://stackoverflow.com/questions/52583544/boost-stack-trace-not-showing-function-names-and-line-numbers, needed
    # for Boost stacktrace to work properly:
@@ -1410,6 +1415,7 @@ if compiler.get_id() == 'gcc'
    add_global_arguments(['-g3',
                          '-O2',
                          '-z', 'noexecstack', # NB Not '-z noexecstack' as otherwise will be passed to gcc in quotes!
+                         '-fconcepts'
                          ], language : 'cpp')
    if host_machine.system() == 'windows'
       add_global_arguments     (['-no-pie', '-fno-pie'], language : 'cpp')
@@ -1442,6 +1448,21 @@ endif
 #=======================================================================================================================
 #========================================== Linker-specific settings & flags ===========================================
 #=======================================================================================================================
+#
+# On MacOS, there are some extra linker flags to tell the OS where to look for shared libraries that we ship in the app
+# bundle.  These are passed in via the install_rpath parameter on Meson's `executable` function.  We don't want to pass
+# this parameter on Windows or Linux.  (I think it's harmless on Windows but might have some undesirable effect on
+# Linux.)  Fortunately we can put additional arguments in a platform-specific dictionary that can be passed to any
+# Meson function via the special 'kwargs' argument (provided there is no overlap between arguments specified directly in
+# the function call and those included in the dictionary).
+#
+# See comments in the `bt` build tool script for more on where/how MacOS searches for shared libraries.
+#
+if host_machine.system() == 'darwin'
+   platformSpecificArgs = {'install_rpath': '@executable_path/../Frameworks'}
+else
+   platformSpecificArgs = {}
+endif
 
 #=======================================================================================================================
 #===================================================== Main builds =====================================================
@@ -1465,6 +1486,7 @@ mainExecutable = executable(mainExecutableTargetName,
                             include_directories : includeDirs,
                             dependencies : mainExeDependencies,
                             link_with : commonCodeStaticLib,
+                            kwargs : platformSpecificArgs,
                             install : true)
 
 testRunner = executable(testRunnerTargetName,
@@ -1484,6 +1506,8 @@ test('Test recipe calculations - all grain', testRunner, args : ['recipeCalcTest
 test('Test post boil loss OG',               testRunner, args : ['postBoilLossOgTest'])
 test('Test unit conversions',                testRunner, args : ['testUnitConversions'])
 test('Test NamedParameterBundle',            testRunner, args : ['testNamedParameterBundle'])
+test('Test number display and parsing',      testRunner, args : ['testNumberDisplayAndParsing'])
 test('Test algorithms',                      testRunner, args : ['testAlgorithms'])
+test('Test type lookups',                    testRunner, args : ['testTypeLookups'])
 # Need a bit longer than the default 30 second timeout for the log rotation test on some platforms
 test('Test log rotation',                    testRunner, args : ['testLogRotation'], timeout : 60)

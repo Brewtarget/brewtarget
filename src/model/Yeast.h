@@ -32,25 +32,26 @@
 
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
+// See comment in model/NamedEntity.h
 #define AddPropertyName(property) namespace PropertyNames::Yeast { BtStringConst const property{#property}; }
-AddPropertyName(addToSecondary)
-AddPropertyName(amount)
-AddPropertyName(amountIsWeight)
-AddPropertyName(attenuation_pct)
-AddPropertyName(bestFor)
-AddPropertyName(flocculation)
+AddPropertyName(addToSecondary    )
+AddPropertyName(amount            )
+AddPropertyName(amountIsWeight    )
+AddPropertyName(attenuation_pct   )
+AddPropertyName(bestFor           )
+AddPropertyName(flocculation      )
 AddPropertyName(flocculationString)
-AddPropertyName(form)
-AddPropertyName(formString)
-AddPropertyName(laboratory)
-AddPropertyName(maxReuse)
-AddPropertyName(maxTemperature_c)
-AddPropertyName(minTemperature_c)
-AddPropertyName(notes)
-AddPropertyName(productID)
-AddPropertyName(timesCultured)
-AddPropertyName(typeString)
-AddPropertyName(type)
+AddPropertyName(form              )
+AddPropertyName(formString        )
+AddPropertyName(laboratory        )
+AddPropertyName(maxReuse          )
+AddPropertyName(maxTemperature_c  )
+AddPropertyName(minTemperature_c  )
+AddPropertyName(notes             )
+AddPropertyName(productID         )
+AddPropertyName(timesCultured     )
+AddPropertyName(typeString        )
+AddPropertyName(type              )
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
 //======================================================================================================================
@@ -65,18 +66,27 @@ class Yeast : public NamedEntityWithInventory {
    Q_OBJECT
    Q_CLASSINFO("signal", "yeasts")
 
-
-   friend class YeastDialog;
 public:
    //! \brief What beverage the yeast is for.
-   enum Type {Ale, Lager, Wheat, Wine, Champagne};
-   //! \brief What form the yeast comes in.
-   enum Form {Liquid, Dry, Slant, Culture};
-   //! \brief How flocculant the strain is.
-   enum Flocculation {Low, Medium, High, Very_High}; // NOTE: BeerXML expects a space in "Very High", but not possible with enum. What to do?
+   enum class Type {Ale, Lager, Wheat, Wine, Champagne};
+   // This allows us to store the above enum class in a QVariant
    Q_ENUM(Type)
+
+   //! \brief What form the yeast comes in.
+   enum class Form {Liquid, Dry, Slant, Culture};
+   // This allows us to store the above enum class in a QVariant
    Q_ENUM(Form)
+
+   //! \brief How flocculant the strain is.
+   enum class Flocculation {Low, Medium, High, Very_High};
+   // This allows us to store the above enum class in a QVariant
    Q_ENUM(Flocculation)
+
+   /**
+    * \brief Mapping of names to types for the Qt properties of this class.  See \c NamedEntity::typeLookup for more
+    *        info.
+    */
+   static TypeLookup const typeLookup;
 
    Yeast(QString name = "");
    Yeast(NamedParameterBundle const & namedParameterBundle);

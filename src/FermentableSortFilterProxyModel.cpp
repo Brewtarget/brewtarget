@@ -41,8 +41,9 @@ bool FermentableSortFilterProxyModel::lessThan(QModelIndex const & left,
    QVariant leftFermentable = sourceModel()->data(left);
    QVariant rightFermentable = sourceModel()->data(right);
 
-   switch (left.column()) {
-      case FERMINVENTORYCOL:
+   auto const columnIndex = static_cast<FermentableTableModel::ColumnIndex>(left.column());
+   switch (columnIndex) {
+      case FermentableTableModel::ColumnIndex::Inventory:
          // If the numbers are equal, compare the names and be done with it
          if (Measurement::qStringToSI(leftFermentable.toString(), Measurement::PhysicalQuantity::Mass) ==
              Measurement::qStringToSI(rightFermentable.toString(), Measurement::PhysicalQuantity::Mass)) {
@@ -56,7 +57,7 @@ bool FermentableSortFilterProxyModel::lessThan(QModelIndex const & left,
          return Measurement::qStringToSI(leftFermentable.toString(), Measurement::PhysicalQuantity::Mass) <
                 Measurement::qStringToSI(rightFermentable.toString(), Measurement::PhysicalQuantity::Mass);
 
-      case FERMAMOUNTCOL:
+      case FermentableTableModel::ColumnIndex::Amount:
          // If the numbers are equal, compare the names and be done with it
          if (Measurement::qStringToSI(leftFermentable.toString(), Measurement::PhysicalQuantity::Mass) ==
              Measurement::qStringToSI(rightFermentable.toString(), Measurement::PhysicalQuantity::Mass)) {
@@ -65,7 +66,7 @@ bool FermentableSortFilterProxyModel::lessThan(QModelIndex const & left,
          return Measurement::qStringToSI(leftFermentable.toString(), Measurement::PhysicalQuantity::Mass) <
                 Measurement::qStringToSI(rightFermentable.toString(), Measurement::PhysicalQuantity::Mass);
 
-      case FERMYIELDCOL:
+      case FermentableTableModel::ColumnIndex::Yield:
          {
             double leftDouble = toDouble(leftFermentable);
             double rightDouble = toDouble(rightFermentable);
@@ -76,7 +77,7 @@ bool FermentableSortFilterProxyModel::lessThan(QModelIndex const & left,
             return leftDouble < rightDouble;
          }
 
-      case FERMCOLORCOL:
+      case FermentableTableModel::ColumnIndex::Color:
          {
             auto leftAmount = Measurement::qStringToSI(leftFermentable.toString(),
                                                          Measurement::PhysicalQuantity::Color);
@@ -87,6 +88,13 @@ bool FermentableSortFilterProxyModel::lessThan(QModelIndex const & left,
             }
             return leftAmount < rightAmount;
          }
+
+      case FermentableTableModel::ColumnIndex::Name     :
+      case FermentableTableModel::ColumnIndex::Type     :
+      case FermentableTableModel::ColumnIndex::IsMashed :
+      case FermentableTableModel::ColumnIndex::AfterBoil:
+         // Nothing to do for these cases
+         break;
    }
 
    return leftFermentable.toString() < rightFermentable.toString();
@@ -96,14 +104,15 @@ double FermentableSortFilterProxyModel::toDouble(QVariant side) const {
    return Localization::toDouble(side.toString(), Q_FUNC_INFO);
 }
 
-QString FermentableSortFilterProxyModel::getName( const QModelIndex &index ) const
-{
-   QVariant info = sourceModel()->data(QAbstractItemModel::createIndex(index.row(),FERMNAMECOL));
+QString FermentableSortFilterProxyModel::getName( const QModelIndex &index ) const {
+   QVariant info = sourceModel()->data(
+      QAbstractItemModel::createIndex(index.row(),
+                                      static_cast<int>(FermentableTableModel::ColumnIndex::Name)))
+   ;
    return info.toString();
 }
 
-bool FermentableSortFilterProxyModel::filterAcceptsRow( int source_row, const QModelIndex &source_parent) const
-{
+bool FermentableSortFilterProxyModel::filterAcceptsRow( int source_row, const QModelIndex &source_parent) const {
    FermentableTableModel* model = qobject_cast<FermentableTableModel*>(sourceModel());
    QModelIndex index = sourceModel()->index(source_row, 0, source_parent);
 

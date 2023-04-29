@@ -467,22 +467,15 @@
     <name>BtDigitWidget</name>
     <message>
         <source>Too low for style.</source>
-        <translation>过低的风格。</translation>
+        <translation type="vanished">过低的风格。</translation>
     </message>
     <message>
         <source>In range for style.</source>
-        <translation>在范围的风格</translation>
+        <translation type="vanished">在范围的风格</translation>
     </message>
     <message>
         <source>Too high for style.</source>
-        <translation>过高的风格。</translation>
-    </message>
-</context>
-<context>
-    <name>BtLabel</name>
-    <message>
-        <source>Color (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">过高的风格。</translation>
     </message>
 </context>
 <context>
@@ -1201,43 +1194,31 @@ Log file may contain more details.</source>
     <name>FermentableItemDelegate</name>
     <message>
         <source>Grain</source>
-        <translation>粮食</translation>
+        <translation type="vanished">粮食</translation>
     </message>
     <message>
         <source>Sugar</source>
-        <translation>糖</translation>
+        <translation type="vanished">糖</translation>
     </message>
     <message>
         <source>Extract</source>
-        <translation>提取</translation>
+        <translation type="vanished">提取</translation>
     </message>
     <message>
         <source>Dry Extract</source>
-        <translation>干浸膏</translation>
+        <translation type="vanished">干浸膏</translation>
     </message>
     <message>
         <source>Adjunct</source>
-        <translation>附属物</translation>
+        <translation type="vanished">附属物</translation>
     </message>
     <message>
         <source>Mashed</source>
-        <translation type="unfinished">捣碎Mashed</translation>
-    </message>
-    <message>
-        <source>Steeped</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Not mashed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Normal</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">捣碎Mashed</translation>
     </message>
     <message>
         <source>Late</source>
-        <translation type="unfinished">晚Late</translation>
+        <translation type="obsolete">晚Late</translation>
     </message>
 </context>
 <context>
@@ -1295,14 +1276,6 @@ Log file may contain more details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Change Addition Method</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Change Addition Time</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Change Yield</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1312,6 +1285,18 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Change Fermentable Inventory Amount</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount Type</source>
+        <translation type="unfinished">金额类型MiscTableModel |</translation>
+    </message>
+    <message>
+        <source>Change Fermentable Is Mashed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Add After Boil</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1424,56 +1409,12 @@ Log file may contain more details.</source>
         <translation type="unfinished">合名称合名</translation>
     </message>
     <message>
-        <source>Bittering</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Aroma</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Aroma &amp; Bittering</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Flavor</source>
         <translation type="obsolete">味Flavor</translation>
     </message>
     <message>
         <source>Extract</source>
         <translation type="obsolete">提取</translation>
-    </message>
-    <message>
-        <source>Leaf</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Pellet</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Plug</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mash</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>First Wort</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Boil</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Post-Boil</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Dry Hop</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2774,55 +2715,55 @@ Error message:
     </message>
     <message>
         <source>Ale</source>
-        <translation>爱尔Ale</translation>
+        <translation type="vanished">爱尔Ale</translation>
     </message>
     <message>
         <source>Lager</source>
-        <translation>拉格Lager</translation>
+        <translation type="vanished">拉格Lager</translation>
     </message>
     <message>
         <source>Wheat</source>
-        <translation>小麦Wheat</translation>
+        <translation type="vanished">小麦Wheat</translation>
     </message>
     <message>
         <source>Wine</source>
-        <translation>酒酒Wine</translation>
+        <translation type="vanished">酒酒Wine</translation>
     </message>
     <message>
         <source>Champagne</source>
-        <translation>香槟Champagne</translation>
+        <translation type="vanished">香槟Champagne</translation>
     </message>
     <message>
         <source>Liquid</source>
-        <translation>Liquid液体</translation>
+        <translation type="vanished">Liquid液体</translation>
     </message>
     <message>
         <source>Dry</source>
-        <translation>Dry干</translation>
+        <translation type="vanished">Dry干</translation>
     </message>
     <message>
         <source>Slant</source>
-        <translation>Slant偏</translation>
+        <translation type="vanished">Slant偏</translation>
     </message>
     <message>
         <source>Culture</source>
-        <translation>Culture文化</translation>
+        <translation type="vanished">Culture文化</translation>
     </message>
     <message>
         <source>Low</source>
-        <translation>低</translation>
+        <translation type="vanished">低</translation>
     </message>
     <message>
         <source>Medium</source>
-        <translation>Medium中</translation>
+        <translation type="vanished">Medium中</translation>
     </message>
     <message>
         <source>High</source>
-        <translation>High高</translation>
+        <translation type="vanished">High高</translation>
     </message>
     <message>
         <source>Very High</source>
-        <translation>Very High非常高</translation>
+        <translation type="vanished">Very High非常高</translation>
     </message>
     <message>
         <source>Recipes</source>
@@ -3301,6 +3242,22 @@ Error message:
     <message>
         <source>J/kg·K</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Late</source>
+        <translation type="unfinished">晚Late</translation>
+    </message>
+    <message>
+        <source>Not mashed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mashed</source>
+        <translation type="unfinished">捣碎Mashed</translation>
+    </message>
+    <message>
+        <source>Weight</source>
+        <translation type="unfinished">重量</translation>
     </message>
 </context>
 <context>
@@ -4022,10 +3979,6 @@ The final volume in the primary is %1.</source>
         <source>% Acid</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Bad column: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>ScaleRecipeEquipmentPage</name>
@@ -4066,6 +4019,21 @@ The final volume in the primary is %1.</source>
     <message>
         <source>The equipment and mash have been reset due to the fact that mash temperatures do not scale easily. Please re-run the mash wizard.</source>
         <translation>设备和土豆泥已复位由于这样的事实醪的温度不容易扩展。请重新运行醪向导。</translation>
+    </message>
+</context>
+<context>
+    <name>SmartDigitWidget</name>
+    <message>
+        <source>Too low for style.</source>
+        <translation type="unfinished">过低的风格。</translation>
+    </message>
+    <message>
+        <source>In range for style.</source>
+        <translation type="unfinished">在范围的风格</translation>
+    </message>
+    <message>
+        <source>Too high for style.</source>
+        <translation type="unfinished">过高的风格。</translation>
     </message>
 </context>
 <context>
@@ -4431,6 +4399,61 @@ The final volume in the primary is %1.</source>
     <message>
         <source>Could not understand file format</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Yeast</name>
+    <message>
+        <source>Ale</source>
+        <translation type="unfinished">爱尔Ale</translation>
+    </message>
+    <message>
+        <source>Lager</source>
+        <translation type="unfinished">拉格Lager</translation>
+    </message>
+    <message>
+        <source>Wheat</source>
+        <translation type="unfinished">小麦Wheat</translation>
+    </message>
+    <message>
+        <source>Wine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Champagne</source>
+        <translation type="unfinished">香槟Champagne</translation>
+    </message>
+    <message>
+        <source>Liquid</source>
+        <translation type="unfinished">Liquid液体</translation>
+    </message>
+    <message>
+        <source>Dry</source>
+        <translation type="unfinished">Dry干</translation>
+    </message>
+    <message>
+        <source>Slant</source>
+        <translation type="unfinished">Slant偏</translation>
+    </message>
+    <message>
+        <source>Culture</source>
+        <translation type="unfinished">Culture文化</translation>
+    </message>
+    <message>
+        <source>Low</source>
+        <translation type="unfinished">低</translation>
+    </message>
+    <message>
+        <source>Medium</source>
+        <translation type="unfinished">Medium中</translation>
+    </message>
+    <message>
+        <source>High</source>
+        <translation type="unfinished">High高</translation>
+    </message>
+    <message>
+        <source>Very High</source>
+        <translation type="unfinished">Very High非常高</translation>
     </message>
 </context>
 <context>
@@ -4948,19 +4971,7 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Required</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>boilSize_l</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>batchSize_l</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4980,35 +4991,15 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished">蒸发率（每小时）Evaporation rate (per hr)</translation>
     </message>
     <message>
-        <source>evapRate_lHr</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Final top-up water</source>
         <translation type="unfinished">最终补足水Final top-up water</translation>
-    </message>
-    <message>
-        <source>topUpWater_l</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Kettle top-up water</source>
         <translation type="unfinished">水壶补足水Kettle top-up water</translation>
     </message>
     <message>
-        <source>topUpKettle_l</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Kettle to Fermenter Loss</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>trubChillerLoss_l</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>lauterDeadspace_l</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5028,10 +5019,6 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>grainAbsorption_LKg</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Boiling Point of Water</source>
         <translation type="unfinished">水的沸点</translation>
     </message>
@@ -5048,23 +5035,7 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished">糖化桶体积</translation>
     </message>
     <message>
-        <source>hopUtilization_pct</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>boilingPoint_c</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>tunWeight_kg</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Specific Heat (Cal/(g*C))</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>tunSpecificHeat_calGC</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5104,23 +5075,23 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Grain</source>
-        <translation>粮食</translation>
+        <translation type="vanished">粮食</translation>
     </message>
     <message>
         <source>Sugar</source>
-        <translation>糖</translation>
+        <translation type="vanished">糖</translation>
     </message>
     <message>
         <source>Extract</source>
-        <translation>提取</translation>
+        <translation type="vanished">提取</translation>
     </message>
     <message>
         <source>Dry Extract</source>
-        <translation>干浸膏Dry Extract</translation>
+        <translation type="vanished">干浸膏Dry Extract</translation>
     </message>
     <message>
         <source>Adjunct</source>
-        <translation>附属物</translation>
+        <translation type="vanished">附属物</translation>
     </message>
     <message>
         <source>Amount</source>
@@ -5243,10 +5214,6 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Yield %</source>
         <translation type="unfinished">率％</translation>
     </message>
@@ -5255,15 +5222,7 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished">额外Extras</translation>
     </message>
     <message>
-        <source>origin</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Diastatic power</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>supplier</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5280,6 +5239,10 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Discard and close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fermantable Type</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -5781,7 +5744,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>About &amp;BrewTarget</source>
-        <translation>关于BrewTargetAbout &amp;BrewTarget</translation>
+        <translation type="vanished">关于BrewTargetAbout &amp;BrewTarget</translation>
     </message>
     <message>
         <source>About Brewtarget</source>
@@ -6105,6 +6068,10 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>application/x-brewtarget-folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About &amp;Brewtarget</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -7548,26 +7515,6 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>styleLetter</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>styleGuide</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>categoryNumber</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>category</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Ranges</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7673,31 +7620,11 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>nappm</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Ca</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>so4ppm</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Mg</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>cappm</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>ph</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>hco3ppm</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -7717,14 +7644,6 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>mgppm</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>clppm</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>HCO&lt;sub&gt;3&lt;/sub&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7737,15 +7656,7 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>cacl</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>MgSO&lt;sub&gt;4&lt;/sub&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>mgso4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -7753,15 +7664,7 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>caco3</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>NaCl</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>nacl</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -7769,15 +7672,7 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>caso4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>NaHCO&lt;sub&gt;3&lt;/sub&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>nahco3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -7809,6 +7704,14 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Edit Water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alkalinity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alkalinity measured as</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -1,6 +1,6 @@
 /*
  * FermentableDialog.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2023
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Matt Young <mfsy@yahoo.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -20,15 +20,16 @@
  */
 #ifndef FERMENTABLEDIALOG_H
 #define FERMENTABLEDIALOG_H
+#pragma once
 
-#include <QWidget>
 #include <QDialog>
 #include <QEvent>
-#include <QVBoxLayout>
 #include <QHBoxLayout>
-#include <QTableView>
-#include <QSpacerItem>
 #include <QPushButton>
+#include <QSpacerItem>
+#include <QTableView>
+#include <QVBoxLayout>
+#include <QWidget>
 
 // Forward declarations.
 class MainWindow;
@@ -41,8 +42,7 @@ class FermentableSortFilterProxyModel;
  *
  * \brief View/controller class that shows the list of fermentables in the database.
  */
-class FermentableDialog : public QDialog
-{
+class FermentableDialog : public QDialog {
    Q_OBJECT
 
 public:
@@ -62,7 +62,6 @@ public:
    QPushButton *pushButton_remove;
    //! @}
 
-   void newFermentable(QString folder);
 public slots:
    /*! If \b index is the default, will add the selected fermentable to list.
     *  Otherwise, will add the fermentable at the specified index.
@@ -73,7 +72,7 @@ public slots:
 
    void filterFermentables(QString searchExpression);
    //void changed(QMetaProperty,QVariant);
-   void newFermentable();
+   void newFermentable(QString folder = "");
 
 protected:
 
@@ -95,4 +94,4 @@ private:
    void retranslateUi();
 };
 
-#endif   /* FERMENTABLEDIALOG_H */
+#endif

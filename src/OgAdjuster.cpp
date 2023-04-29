@@ -21,16 +21,26 @@
 #include "OgAdjuster.h"
 
 #include "Algorithms.h"
+#include "measurement/Measurement.h"
 #include "measurement/Unit.h"
 #include "model/Equipment.h"
 #include "model/Recipe.h"
 
-OgAdjuster::OgAdjuster( QWidget* parent ) : QDialog(parent) {
+OgAdjuster::OgAdjuster( QWidget* parent ) :
+   QDialog{parent},
+   recObs {nullptr} {
    setupUi(this);
 
-   recObs = 0;
+   SMART_FIELD_INIT_FIXED(OgAdjuster, label_sg       , lineEdit_sg       , double, Measurement::Units::specificGravity       , 3); // Input: SG
+   SMART_FIELD_INIT_FS   (OgAdjuster, label_temp     , lineEdit_temp     , double, Measurement::PhysicalQuantity::Temperature, 1); // Input: Temp
+   SMART_FIELD_INIT_FS   (OgAdjuster, label_calTemp  , lineEdit_calTemp  , double, Measurement::PhysicalQuantity::Temperature, 1); // Input: Calibration Temp
+   SMART_FIELD_INIT_FIXED(OgAdjuster, label_plato    , lineEdit_plato    , double, Measurement::Units::plato                 , 1); // Input: Plato
+   SMART_FIELD_INIT_FS   (OgAdjuster, label_volume   , lineEdit_volume   , double, Measurement::PhysicalQuantity::Volume        ); // Input: Pre-Boil Volume
+   SMART_FIELD_INIT_FIXED(OgAdjuster, label_og       , lineEdit_og       , double, Measurement::Units::specificGravity       , 3); // Output: OG w/o Correction
+   SMART_FIELD_INIT_FS   (OgAdjuster, label_add      , lineEdit_add      , double, Measurement::PhysicalQuantity::Volume        ); // Output: Add to Boil
+   SMART_FIELD_INIT_FS   (OgAdjuster, label_batchSize, lineEdit_batchSize, double, Measurement::PhysicalQuantity::Volume        ); // Output: Final Batch Size
 
-   connect( pushButton_calculate, &QAbstractButton::clicked, this, &OgAdjuster::calculate );
+   connect(this->pushButton_calculate, &QAbstractButton::clicked, this, &OgAdjuster::calculate );
    return;
 }
 
@@ -47,8 +57,8 @@ void OgAdjuster::calculate() {
 
    // Get inputs.
    double sg          = lineEdit_sg->toCanonical().quantity();
-   bool   okPlato = true;
-   double plato       = lineEdit_plato->toDoubleRaw(&okPlato);
+   bool   okPlato     = true;
+   double plato       = Measurement::extractRawFromString<double>(lineEdit_plato->text(), &okPlato);
    double temp_c      = lineEdit_temp->toCanonical().quantity();
    double hydroTemp_c = lineEdit_calTemp->toCanonical().quantity();
    double wort_l      = lineEdit_volume->toCanonical().quantity();
@@ -73,17 +83,14 @@ void OgAdjuster::calculate() {
 
    // Calculate missing input parameters.
    double sg_20C = 0.0;
-   if( gotSG )
-   {
+   if (gotSG) {
       double sg_15C = sg * Algorithms::getWaterDensity_kgL(hydroTemp_c)/Algorithms::getWaterDensity_kgL(15) + Algorithms::hydrometer15CCorrection( temp_c );
       sg_20C = sg_15C * Algorithms::getWaterDensity_kgL(15)/Algorithms::getWaterDensity_kgL(20);
 
-      plato = Algorithms::SG_20C20C_toPlato( sg_20C );
-      lineEdit_plato->setText( sg_20C ); //Event if the display is in Plato, we must send it in default unit
-   }
-   else
-   {
-      sg_20C = Algorithms::PlatoToSG_20C20C( plato );
+      plato = Algorithms::SG_20C20C_toPlato(sg_20C);
+      lineEdit_plato->setAmount(sg_20C); // Event if the display is in Plato, we must send it in default unit
+   } else {
+      sg_20C = Algorithms::PlatoToSG_20C20C(plato);
    }
 
    // Calculate intermediate parameters.
@@ -115,8 +122,8 @@ void OgAdjuster::calculate() {
    finalVolume_l += waterToAdd_l;
 
    // Display output.
-   lineEdit_og->setText(finalUncorrectedSg_20C);
-   lineEdit_add->setText(waterToAdd_l);
-   lineEdit_batchSize->setText(finalVolume_l);
+   this->lineEdit_og       ->setAmount(finalUncorrectedSg_20C);
+   this->lineEdit_add      ->setAmount(waterToAdd_l);
+   this->lineEdit_batchSize->setAmount(finalVolume_l);
    return;
 }

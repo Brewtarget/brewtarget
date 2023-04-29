@@ -1,6 +1,6 @@
 /*
  * MainWindow.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2022
+ * authors 2009-2023
  * - Dan Cavanagh <dan@dancavanagh.com>
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Matt Young <mfsy@yahoo.com>
@@ -296,6 +296,16 @@ public slots:
    //! \brief prepopulate the ancestorDialog when the menu is selected
    void setAncestor();
 
+   /*!
+    * \brief Make the widgets in the window update changes.
+    *
+    * Updates all the widgets with info about the currently
+    * selected Recipe, except for the tables.
+    *
+    * \param prop Not yet used. Will indicate which Recipe property has changed.
+    */
+   void showChanges(QMetaProperty* prop = nullptr);
+
 public:
    //! \brief Doing updates via this method makes them undoable (and redoable).  This is the simplified version
    //         which suffices for modifications to most individual non-relational attributes.
@@ -309,16 +319,6 @@ protected:
    virtual void closeEvent(QCloseEvent* event);
 
 private slots:
-   /*!
-    * \brief Make the widgets in the window update changes.
-    *
-    * Updates all the widgets with info about the currently
-    * selected Recipe, except for the tables.
-    *
-    * \param prop Not yet used. Will indicate which Recipe property has changed.
-    */
-   void showChanges(QMetaProperty* prop = nullptr);
-
    //! \brief Set whether undo / redo commands are enabled
    void setUndoRedoEnable();
 
@@ -467,16 +467,6 @@ private:
    void setupDrops();
    //! \brief Connect signal/slots for check boxes
    void setUpStateChanges();
-
-   void updateDensitySlider(BtStringConst const & propertyNameMin,
-                            BtStringConst const & propertyNameMax,
-                            BtStringConst const & propertyNameCurrent,
-                            RangedSlider* slider,
-                            double max);
-   void updateColorSlider(BtStringConst const & propertyNameMin,
-                          BtStringConst const & propertyNameMax,
-                          BtStringConst const & propertyNameCurrent,
-                          RangedSlider* slider);
 
    void convertedMsg();
 };

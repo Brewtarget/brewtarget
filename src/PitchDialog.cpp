@@ -33,24 +33,30 @@ PitchDialog::PitchDialog(QWidget* parent) : QDialog(parent) {
    setupUi(this);
 
    // Set default dates
-   dateEdit_ProductionDate->setMaximumDate(QDate::currentDate());
-   dateEdit_ProductionDate->setDate(QDate::currentDate());
-   updateViabilityFromDate(QDate::currentDate());
+   this->dateEdit_ProductionDate->setMaximumDate(QDate::currentDate());
+   this->dateEdit_ProductionDate->setDate(QDate::currentDate());
+   this->updateViabilityFromDate(QDate::currentDate());
 
-   connect(lineEdit_vol,                &BtLineEdit::textModified,                           this, &PitchDialog::calculate);
-   connect(lineEdit_OG,                 &BtLineEdit::textModified,                           this, &PitchDialog::calculate);
-   connect(slider_pitchRate,            &QAbstractSlider::valueChanged,                      this, &PitchDialog::calculate);
-   connect(slider_pitchRate,            &QAbstractSlider::valueChanged,                      this, &PitchDialog::updateShownPitchRate);
-   connect(spinBox_Viability,           QOverload<int>::of(&QSpinBox::valueChanged),         this, &PitchDialog::calculate);
-   connect(spinBox_VialsPitched,        QOverload<int>::of(&QSpinBox::valueChanged),         this, &PitchDialog::calculate);
-   connect(comboBox_AerationMethod,     QOverload<int>::of(&QComboBox::currentIndexChanged), this, &PitchDialog::calculate);
-   connect(dateEdit_ProductionDate,     &QDateTimeEdit::dateChanged,                         this, &PitchDialog::updateViabilityFromDate);
-   connect(checkBox_CalculateViability, &QCheckBox::stateChanged,                            this, &PitchDialog::toggleViabilityFromDate);
+   SMART_FIELD_INIT_FS(PitchDialog, label_vol       , lineEdit_vol       , double, Measurement::PhysicalQuantity::Volume          ); // Input: Wort Volume
+   SMART_FIELD_INIT_FS(PitchDialog, label_og        , lineEdit_OG        , double, Measurement::PhysicalQuantity::Density         ); // Input: OG
+   SMART_FIELD_INIT_FS(PitchDialog, label_cells     , lineEdit_cells     , double,           NonPhysicalQuantity::Dimensionless, 1); // Output: Billions of Yeast Cells Required
+   SMART_FIELD_INIT_FS(PitchDialog, label_vials     , lineEdit_vials     , double,           NonPhysicalQuantity::Dimensionless, 0); // Output: # Vials/Smack Packs w/o Starter
+   SMART_FIELD_INIT_FS(PitchDialog, label_yeast     , lineEdit_yeast     , double, Measurement::PhysicalQuantity::Mass            ); // Output: Dry Yeast
+   SMART_FIELD_INIT_FS(PitchDialog, label_starterVol, lineEdit_starterVol, double, Measurement::PhysicalQuantity::Volume          ); // Output: Starter Volume
+
+   connect(this->lineEdit_vol,                &SmartLineEdit::textModified,                        this, &PitchDialog::calculate              );
+   connect(this->lineEdit_OG,                 &SmartLineEdit::textModified,                        this, &PitchDialog::calculate              );
+   connect(this->slider_pitchRate,            &QAbstractSlider::valueChanged,                      this, &PitchDialog::calculate              );
+   connect(this->slider_pitchRate,            &QAbstractSlider::valueChanged,                      this, &PitchDialog::updateShownPitchRate   );
+   connect(this->spinBox_Viability,           QOverload<int>::of(&QSpinBox::valueChanged),         this, &PitchDialog::calculate              );
+   connect(this->spinBox_VialsPitched,        QOverload<int>::of(&QSpinBox::valueChanged),         this, &PitchDialog::calculate              );
+   connect(this->comboBox_AerationMethod,     QOverload<int>::of(&QComboBox::currentIndexChanged), this, &PitchDialog::calculate              );
+   connect(this->dateEdit_ProductionDate,     &QDateTimeEdit::dateChanged,                         this, &PitchDialog::updateViabilityFromDate);
+   connect(this->checkBox_CalculateViability, &QCheckBox::stateChanged,                            this, &PitchDialog::toggleViabilityFromDate);
 
    // Dates are a little more cranky
-///   connect(label_productionDate,        &BtLabel::changedSystemOfMeasurementOrScale,                  this, &PitchDialog::updateProductionDate);
    this->updateProductionDate();
-   updateShownPitchRate(0);
+   this->updateShownPitchRate(0);
    return;
 }
 
@@ -69,11 +75,11 @@ void PitchDialog::updateProductionDate() {
 }
 
 void PitchDialog::setWortVolume_l(double volume) {
-   lineEdit_vol->setText(volume);
+   this->lineEdit_vol->setAmount(volume);
 }
 
 void PitchDialog::setWortDensity(double sg) {
-   lineEdit_OG->setText(sg);
+   this->lineEdit_OG->setAmount(sg);
 }
 
 void PitchDialog::calculate() {
@@ -94,7 +100,7 @@ void PitchDialog::calculate() {
    double dry_g = cells / 20e9; // 20 billion cells per dry gram.
 
    // Set the maximum number of vials pitched based on # of vials needed without a starter.
-   spinBox_VialsPitched->setMaximum(vials < 1 ? 1 : floor(vials));
+   this->spinBox_VialsPitched->setMaximum(vials < 1 ? 1 : floor(vials));
 
    // Set the aeration factor for the starter size
    double aerationFactor;
@@ -117,10 +123,10 @@ void PitchDialog::calculate() {
    double inoculationRate = pow((12.522 / growthRate), 2.18);
    double starterVol_l = totalCellsPitched / (inoculationRate * aerationFactor);
 
-   lineEdit_cells->setText(cells/1e9, 1);
-   lineEdit_starterVol->setText(starterVol_l);
-   lineEdit_yeast->setText(dry_g/1000); //Needs to be converted into default unit (kg)
-   lineEdit_vials->setText(vials,0);
+   this->lineEdit_cells     ->setAmount(cells/1e9);
+   this->lineEdit_starterVol->setAmount(starterVol_l);
+   this->lineEdit_yeast     ->setAmount(dry_g/1000); //Needs to be converted into default unit (kg)
+   this->lineEdit_vials     ->setAmount(vials);
    return;
 }
 
@@ -129,7 +135,7 @@ void PitchDialog::updateShownPitchRate(int percent) {
    double rate_MpermLP = (2-0.75) * ((double)percent) / 100.0 + 0.75;
 
    // NOTE: We are changing the LABEL here, not the LineEdit. Leave it be
-   label_pitchRate->setText( QString("%L1").arg(rate_MpermLP, 1, 'f', 2, QChar('0')) );
+   this->label_pitchRate->setText( QString("%L1").arg(rate_MpermLP, 1, 'f', 2, QChar('0')) );
    return;
 }
 
@@ -141,14 +147,14 @@ void PitchDialog::toggleViabilityFromDate(int state) {
    if (state == Qt::Unchecked) {
       // If the box is not checked, disable the date and allow
       // the user to manually set the viability.
-      spinBox_Viability->setEnabled(true);
-      dateEdit_ProductionDate->setEnabled(false);
+      this->spinBox_Viability->setEnabled(true);
+      this->dateEdit_ProductionDate->setEnabled(false);
    } else if (state == Qt::Checked) {
       // If the box is checked, prevent the user from manually setting
       // the viability.  Use the date editor instead.
-      spinBox_Viability->setEnabled(false);
-      dateEdit_ProductionDate->setEnabled(true);
-      updateViabilityFromDate(dateEdit_ProductionDate->date());
+      this->spinBox_Viability->setEnabled(false);
+      this->dateEdit_ProductionDate->setEnabled(true);
+      this->updateViabilityFromDate(dateEdit_ProductionDate->date());
    }
    return;
 }
@@ -160,6 +166,6 @@ void PitchDialog::updateViabilityFromDate(QDate date) {
    // Set the viability based on the number of days since the yeast
    // production date.
    int daysDifference = date.daysTo(QDate::currentDate());
-   spinBox_Viability->setValue(97 - 0.7 * daysDifference);
+   this->spinBox_Viability->setValue(97 - 0.7 * daysDifference);
    return;
 }

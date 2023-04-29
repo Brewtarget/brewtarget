@@ -90,7 +90,7 @@
         </widget>
        </item>
        <item row="3" column="0">
-        <widget class="BtTemperatureLabel" name="label_targetTemp">
+        <widget class="SmartLabel" name="label_targetTemp">
          <property name="contextMenuPolicy">
           <enum>Qt::CustomContextMenu</enum>
          </property>
@@ -103,20 +103,17 @@
         </widget>
        </item>
        <item row="3" column="1">
-        <widget class="BtTemperatureEdit" name="lineEdit_temp">
+        <widget class="SmartLineEdit" name="lineEdit_temp">
          <property name="maximumSize">
           <size>
            <width>150</width>
            <height>16777215</height>
           </size>
          </property>
-         <property name="editField" stdset="0">
-          <string notr="true">stepTemp_c</string>
-         </property>
         </widget>
        </item>
        <item row="4" column="0">
-        <widget class="BtTimeLabel" name="label_stepTime">
+        <widget class="SmartLabel" name="label_stepTime">
          <property name="contextMenuPolicy">
           <enum>Qt::CustomContextMenu</enum>
          </property>
@@ -129,15 +126,12 @@
         </widget>
        </item>
        <item row="4" column="1">
-        <widget class="BtTimeEdit" name="lineEdit_time">
+        <widget class="SmartLineEdit" name="lineEdit_time">
          <property name="maximumSize">
           <size>
            <width>150</width>
            <height>16777215</height>
           </size>
-         </property>
-         <property name="editField" stdset="0">
-          <string notr="true">stepTime_min</string>
          </property>
         </widget>
        </item>
@@ -492,35 +486,19 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>BtTemperatureEdit</class>
-   <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
-   <slots>
-    <slot>lineChanged(PreviousScaleInfo)</slot>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtTimeEdit</class>
-   <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
-   <slots>
-    <slot>lineChanged(PreviousScaleInfo)</slot>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtTimeLabel</class>
+   <class>SmartLabel</class>
    <extends>QLabel</extends>
-   <header>BtLabel.h</header>
+   <header>widgets/SmartLabel.h</header>
    <slots>
     <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    </slots>
   </customwidget>
   <customwidget>
-   <class>BtTemperatureLabel</class>
-   <extends>QLabel</extends>
-   <header>BtLabel.h</header>
+   <class>SmartLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>widgets/SmartLineEdit.h</header>
    <slots>
-    <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
+    <slot>lineChanged(PreviousScaleInfo)</slot>
    </slots>
   </customwidget>
  </customwidgets>
@@ -535,38 +513,4 @@
   <tabstop>pushButton_finish</tabstop>
  </tabstops>
  <resources/>
- <connections>
-  <connection>
-   <sender>label_targetTemp</sender>
-   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   <receiver>lineEdit_temp</receiver>
-   <slot>lineChanged(PreviousScaleInfo)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>39</x>
-     <y>98</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>131</x>
-     <y>98</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>label_stepTime</sender>
-   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   <receiver>lineEdit_time</receiver>
-   <slot>lineChanged(PreviousScaleInfo)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>56</x>
-     <y>126</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>94</x>
-     <y>125</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
 </ui>

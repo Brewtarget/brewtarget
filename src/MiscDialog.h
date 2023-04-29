@@ -1,6 +1,6 @@
 /*
  * MiscDialog.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2023
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Matt Young <mfsy@yahoo.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -20,15 +20,16 @@
  */
 #ifndef MISCDIALOG_H
 #define MISCDIALOG_H
+#pragma once
 
-#include <QWidget>
 #include <QDialog>
 #include <QEvent>
-#include <QVBoxLayout>
 #include <QHBoxLayout>
-#include <QTableView>
-#include <QSpacerItem>
 #include <QPushButton>
+#include <QSpacerItem>
+#include <QTableView>
+#include <QVBoxLayout>
+#include <QWidget>
 
 // Forward declarations.
 class MainWindow;
@@ -41,8 +42,7 @@ class MiscSortFilterProxyModel;
  *
  * \brief View/controller dialog for the miscs in the database.
  */
-class MiscDialog : public QDialog
-{
+class MiscDialog : public QDialog {
    Q_OBJECT
 
 public:
@@ -62,7 +62,6 @@ public:
    QPushButton *pushButton_remove;
    //! @}
 
-   void newMisc(QString folder);
 public slots:
    //! Add the selected misc to the current recipe.
    void addMisc(const QModelIndex& = QModelIndex());
@@ -71,18 +70,13 @@ public slots:
    //! Bring up the editor for the selected misc.
    void editSelected();
    //! Add a new misc to the database.
-   void newMisc();
+   void newMisc(QString folder = "");
    //! Filter out the matching miscs.
    void filterMisc(QString searchExpression);
 
 protected:
 
-   virtual void changeEvent(QEvent* event)
-   {
-      if(event->type() == QEvent::LanguageChange)
-         retranslateUi();
-      QDialog::changeEvent(event);
-   }
+   virtual void changeEvent(QEvent* event);
 
 private:
    MainWindow* mainWindow;
@@ -95,4 +89,4 @@ private:
    void retranslateUi();
 };
 
-#endif   /* MISCDIALOG_H */
+#endif

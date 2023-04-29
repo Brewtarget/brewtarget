@@ -44,7 +44,7 @@
         </widget>
        </item>
        <item row="0" column="0">
-        <widget class="QLabel" name="label">
+        <widget class="QLabel" name="label_name">
          <property name="toolTip">
           <string>Required</string>
          </property>
@@ -83,7 +83,7 @@
         </spacer>
        </item>
        <item row="2" column="1">
-        <widget class="QComboBox" name="comboBox_type">
+        <widget class="QComboBox" name="comboBox_fermentableType">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -97,33 +97,8 @@
           </size>
          </property>
          <property name="toolTip">
-          <string>Type</string>
+          <string>Fermantable Type</string>
          </property>
-         <item>
-          <property name="text">
-           <string>Grain</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Sugar</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Extract</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Dry Extract</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Adjunct</string>
-          </property>
-         </item>
         </widget>
        </item>
        <item row="2" column="3">
@@ -175,7 +150,7 @@
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="BtStringEdit" name="lineEdit_name">
+        <widget class="SmartLineEdit" name="lineEdit_name">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -191,9 +166,6 @@
          <property name="toolTip">
           <string>Name</string>
          </property>
-         <property name="editField" stdset="0">
-          <string>name</string>
-         </property>
         </widget>
        </item>
        <item row="2" column="0">
@@ -205,7 +177,7 @@
           <string>Type</string>
          </property>
          <property name="buddy">
-          <cstring>comboBox_type</cstring>
+          <cstring>comboBox_fermentableType</cstring>
          </property>
         </widget>
        </item>
@@ -236,7 +208,7 @@
         </widget>
        </item>
        <item row="7" column="0">
-        <widget class="BtMassLabel" name="label_inventory">
+        <widget class="SmartLabel" name="label_inventory">
          <property name="contextMenuPolicy">
           <enum>Qt::CustomContextMenu</enum>
          </property>
@@ -252,7 +224,7 @@
         </widget>
        </item>
        <item row="7" column="1">
-        <widget class="BtMassEdit" name="lineEdit_inventory">
+        <widget class="SmartLineEdit" name="lineEdit_inventory">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -268,13 +240,10 @@
          <property name="toolTip">
           <string>Amount in inventory</string>
          </property>
-         <property name="editField" stdset="0">
-          <string notr="true">inventory</string>
-         </property>
         </widget>
        </item>
        <item row="3" column="0">
-        <widget class="BtColorLabel" name="label_color">
+        <widget class="SmartLabel" name="label_color">
          <property name="contextMenuPolicy">
           <enum>Qt::CustomContextMenu</enum>
          </property>
@@ -290,7 +259,7 @@
         </widget>
        </item>
        <item row="3" column="1">
-        <widget class="BtColorEdit" name="lineEdit_color">
+        <widget class="SmartLineEdit" name="lineEdit_color">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -305,9 +274,6 @@
          </property>
          <property name="toolTip">
           <string>Lovibond rating</string>
-         </property>
-         <property name="editField" stdset="0">
-          <string notr="true">color_srm</string>
          </property>
         </widget>
        </item>
@@ -325,7 +291,7 @@
         </widget>
        </item>
        <item row="5" column="1">
-        <widget class="BtGenericEdit" name="lineEdit_yield">
+        <widget class="SmartLineEdit" name="lineEdit_yield">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -341,9 +307,6 @@
          <property name="toolTip">
           <string>Yield as compared to glucose</string>
          </property>
-         <property name="editField" stdset="0">
-          <string notr="true">yield_pct</string>
-         </property>
         </widget>
        </item>
       </layout>
@@ -354,7 +317,7 @@
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
        <item row="2" column="1">
-        <widget class="BtGenericEdit" name="lineEdit_moisture">
+        <widget class="SmartLineEdit" name="lineEdit_moisture">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -370,9 +333,6 @@
          <property name="toolTip">
           <string>Moisture percentage by mass</string>
          </property>
-         <property name="editField" stdset="0">
-          <string notr="true">moisture_pct</string>
-         </property>
         </widget>
        </item>
        <item row="3" column="3">
@@ -386,7 +346,7 @@
         </widget>
        </item>
        <item row="3" column="4">
-        <widget class="BtGenericEdit" name="lineEdit_ibuGalPerLb">
+        <widget class="SmartLineEdit" name="lineEdit_ibuGalPerLb">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -402,9 +362,6 @@
          <property name="toolTip">
           <string>Bitterness of pre-hopped extracts</string>
          </property>
-         <property name="editField" stdset="0">
-          <string notr="true">ibuGalPerLb</string>
-         </property>
         </widget>
        </item>
        <item row="2" column="0">
@@ -418,7 +375,7 @@
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="BtStringEdit" name="lineEdit_origin">
+        <widget class="SmartLineEdit" name="lineEdit_origin">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -433,9 +390,6 @@
          </property>
          <property name="toolTip">
           <string>Origin</string>
-         </property>
-         <property name="editField" stdset="0">
-          <string>origin</string>
          </property>
         </widget>
        </item>
@@ -460,7 +414,7 @@
         </widget>
        </item>
        <item row="3" column="0">
-        <widget class="BtDiastaticPowerLabel" name="label_diastaticPower">
+        <widget class="SmartLabel" name="label_diastaticPower">
          <property name="contextMenuPolicy">
           <enum>Qt::CustomContextMenu</enum>
          </property>
@@ -473,7 +427,7 @@
         </widget>
        </item>
        <item row="3" column="1">
-        <widget class="BtDiastaticPowerEdit" name="lineEdit_diastaticPower">
+        <widget class="SmartLineEdit" name="lineEdit_diastaticPower">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -488,9 +442,6 @@
          </property>
          <property name="toolTip">
           <string>Diastatic power</string>
-         </property>
-         <property name="editField" stdset="0">
-          <string notr="true">diastaticPower_lintner</string>
          </property>
         </widget>
        </item>
@@ -518,7 +469,7 @@
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="BtStringEdit" name="lineEdit_supplier">
+        <widget class="SmartLineEdit" name="lineEdit_supplier">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -534,13 +485,10 @@
          <property name="toolTip">
           <string>Supplier</string>
          </property>
-         <property name="editField" stdset="0">
-          <string>supplier</string>
-         </property>
         </widget>
        </item>
        <item row="1" column="4">
-        <widget class="BtGenericEdit" name="lineEdit_maxInBatch">
+        <widget class="SmartLineEdit" name="lineEdit_maxInBatch">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -555,9 +503,6 @@
          </property>
          <property name="toolTip">
           <string>Maximum recommended percentage of total grist</string>
-         </property>
-         <property name="editField" stdset="0">
-          <string notr="true">maxInBatch_pct</string>
          </property>
         </widget>
        </item>
@@ -575,7 +520,7 @@
         </spacer>
        </item>
        <item row="0" column="4">
-        <widget class="BtGenericEdit" name="lineEdit_protein">
+        <widget class="SmartLineEdit" name="lineEdit_protein">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -591,9 +536,6 @@
          <property name="toolTip">
           <string>Protein percentage by mass</string>
          </property>
-         <property name="editField" stdset="0">
-          <string notr="true">protein_pct</string>
-         </property>
         </widget>
        </item>
        <item row="1" column="3">
@@ -607,7 +549,7 @@
         </widget>
        </item>
        <item row="2" column="4">
-        <widget class="BtGenericEdit" name="lineEdit_coarseFineDiff">
+        <widget class="SmartLineEdit" name="lineEdit_coarseFineDiff">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -622,9 +564,6 @@
          </property>
          <property name="toolTip">
           <string>Yield difference between coarse and fine grind</string>
-         </property>
-         <property name="editField" stdset="0">
-          <string notr="true">coarseFineDiff_pct</string>
          </property>
         </widget>
        </item>
@@ -725,71 +664,29 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>BtGenericEdit</class>
-   <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
-  </customwidget>
-  <customwidget>
-   <class>BtStringEdit</class>
-   <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
-  </customwidget>
-  <customwidget>
-   <class>BtColorLabel</class>
+   <class>SmartLabel</class>
    <extends>QLabel</extends>
-   <header>BtLabel.h</header>
-   <slots>
-    <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtColorEdit</class>
-   <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
-   <slots>
-    <slot>lineChanged(PreviousScaleInfo)</slot>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtMassEdit</class>
-   <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
-   <slots>
-    <signal>textModified()</signal>
-    <slot>lineChanged()</slot>
-    <slot>lineChanged(PreviousScaleInfo)</slot>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtMassLabel</class>
-   <extends>QLabel</extends>
-   <header>BtLabel.h</header>
+   <header>widgets/SmartLabel.h</header>
    <slots>
     <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
     <slot>popContextMenu(QPoint)</slot>
    </slots>
   </customwidget>
   <customwidget>
-   <class>BtDiastaticPowerEdit</class>
+   <class>SmartLineEdit</class>
    <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
+   <header>widgets/SmartLineEdit.h</header>
    <slots>
+    <signal>textModified()</signal>
+    <slot>lineChanged()</slot>
     <slot>lineChanged(PreviousScaleInfo)</slot>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtDiastaticPowerLabel</class>
-   <extends>QLabel</extends>
-   <header>BtLabel.h</header>
-   <slots>
-    <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    </slots>
   </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>tabWidget_editor</tabstop>
   <tabstop>lineEdit_name</tabstop>
-  <tabstop>comboBox_type</tabstop>
+  <tabstop>comboBox_fermentableType</tabstop>
   <tabstop>lineEdit_color</tabstop>
   <tabstop>lineEdit_yield</tabstop>
   <tabstop>lineEdit_inventory</tabstop>
@@ -812,70 +709,4 @@
  <resources>
   <include location="../brewtarget.qrc"/>
  </resources>
- <connections>
-  <connection>
-   <sender>label_inventory</sender>
-   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   <receiver>lineEdit_inventory</receiver>
-   <slot>lineChanged(PreviousScaleInfo)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>66</x>
-     <y>220</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>177</x>
-     <y>220</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>label_color</sender>
-   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   <receiver>lineEdit_color</receiver>
-   <slot>lineChanged(PreviousScaleInfo)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>67</x>
-     <y>133</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>169</x>
-     <y>133</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>label_diastaticPower</sender>
-   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   <receiver>lineEdit_diastaticPower</receiver>
-   <slot>cut()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>301</x>
-     <y>46</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>393</x>
-     <y>49</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>label_diastaticPower</sender>
-   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   <receiver>lineEdit_diastaticPower</receiver>
-   <slot>lineChanged(PreviousScaleInfo)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>346</x>
-     <y>52</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>411</x>
-     <y>48</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
 </ui>

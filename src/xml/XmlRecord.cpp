@@ -1,6 +1,6 @@
 /*
  * xml/XmlRecord.cpp is part of Brewtarget, and is Copyright the following
- * authors 2020-2022
+ * authors 2020-2023
  * - Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -28,6 +28,7 @@
 #include <xalanc/XalanDOM/XalanNamedNodeMap.hpp>
 
 #include "xml/XmlCoding.h"
+#include "utils/OptionalHelpers.h"
 
 //
 // Variables and constant definitions that we need only in this file
@@ -78,10 +79,12 @@ XmlRecord::FieldDefinition::FieldDefinition(FieldType           fieldType,
 XmlRecord::XmlRecord(QString const & recordName,
                      XmlCoding const & xmlCoding,
                      FieldDefinitions const & fieldDefinitions,
-                     QString const & namedEntityClassName) :
+                     TypeLookup       const * const typeLookup,
+                     QString          const & namedEntityClassName) :
    recordName{recordName},
    xmlCoding{xmlCoding},
    fieldDefinitions{fieldDefinitions},
+   typeLookup{typeLookup},
    namedEntityClassName{namedEntityClassName},
    namedParameterBundle{NamedParameterBundle::NotStrict},
    namedEntity{nullptr},
@@ -201,15 +204,36 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
                Q_ASSERT((XmlRecord::FieldType::Enum == fieldDefinition->fieldType) !=
                         (nullptr == fieldDefinition->enumMapping));
 
-               switch(fieldDefinition->fieldType) {
+               //
+               // We're going to need to know whether this field is "optional" in our internal data model.  If it is,
+               // then, for whatever underlying type T it is, we need the parsedValue QVariant to hold std::optional<T>
+               // instead of just T.
+               //
+               // (Note we can't do this mapping inside NamedParameterBundle, as we don't have the type information
+               // there.  We could conceivably do it in the constructors that take a NamedParameterBundle parameter, but
+               // I think it gets messy to have different types there than on the QProperty setters.  It's not much
+               // overhead to do things here IMHO.)
+               //
+               // Note that:
+               //    - propertyName is not actually a property name when fieldType is RequiredConstant
+               //    - when propertyName is not set, there is nothing to look up (because this is a field we don't
+               //      support, usually an "Extension tag")
+               //
+               bool const propertyIsOptional {
+                  (fieldDefinition->fieldType == XmlRecord::FieldType::RequiredConstant ||
+                   fieldDefinition->propertyName.isNull()) ?
+                     false : this->typeLookup->isOptional(fieldDefinition->propertyName)
+               };
+
+               switch (fieldDefinition->fieldType) {
 
                   case XmlRecord::FieldType::Bool:
                      // Unlike other XML documents, boolean fields in BeerXML are caps, so we have to accommodate that
                      if (value.toLower() == "true") {
-                        parsedValue.setValue(true);
+                        parsedValue = Optional::variantFromRaw(true, propertyIsOptional);
                         parsedValueOk = true;
                      } else if (value.toLower() == "false") {
-                        parsedValue.setValue(false);
+                        parsedValue = Optional::variantFromRaw(false, propertyIsOptional);
                         parsedValueOk = true;
                      } else {
                         // This is almost certainly a coding error, as we should have already validated that the field
@@ -221,49 +245,58 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
                      break;
 
                   case XmlRecord::FieldType::Int:
-                     // QString's toInt method will report success/failure of parsing straight back into our flag
-                     parsedValue.setValue(value.toInt(&parsedValueOk));
-                     if (!parsedValueOk) {
-                        // This is almost certainly a coding error, as we should have already validated the field via
-                        // XSD parsing.
-                        qWarning() <<
-                           Q_FUNC_INFO << "Ignoring " << this->namedEntityClassName << " node " <<
-                           fieldDefinition->xPath << "=" << value << " as could not be parsed as integer";
+                     {
+                        // QString's toInt method will report success/failure of parsing straight back into our flag
+                        auto const rawValue = value.toInt(&parsedValueOk);
+                        parsedValue = Optional::variantFromRaw(rawValue, propertyIsOptional);
+                        if (!parsedValueOk) {
+                           // This is almost certainly a coding error, as we should have already validated the field via
+                           // XSD parsing.
+                           qWarning() <<
+                              Q_FUNC_INFO << "Ignoring " << this->namedEntityClassName << " node " <<
+                              fieldDefinition->xPath << "=" << value << " as could not be parsed as integer";
+                        }
                      }
                      break;
 
                   case XmlRecord::FieldType::UInt:
-                     // QString's toUInt method will report success/failure of parsing straight back into our flag
-                     parsedValue.setValue(value.toUInt(&parsedValueOk));
-                     if (!parsedValueOk) {
-                        // This is almost certainly a coding error, as we should have already validated the field via
-                        // XSD parsing.
-                        qWarning() <<
-                           Q_FUNC_INFO << "Ignoring " << this->namedEntityClassName << " node " <<
-                           fieldDefinition->xPath << "=" << value << " as could not be parsed as unsigned integer";
+                     {
+                        // QString's toUInt method will report success/failure of parsing straight back into our flag
+                        auto const rawValue = value.toUInt(&parsedValueOk);
+                        parsedValue = Optional::variantFromRaw(rawValue, propertyIsOptional);
+                        if (!parsedValueOk) {
+                           // This is almost certainly a coding error, as we should have already validated the field via
+                           // XSD parsing.
+                           qWarning() <<
+                              Q_FUNC_INFO << "Ignoring " << this->namedEntityClassName << " node " <<
+                              fieldDefinition->xPath << "=" << value << " as could not be parsed as unsigned integer";
+                        }
                      }
                      break;
 
                   case XmlRecord::FieldType::Double:
-                     // QString's toDouble method will report success/failure of parsing straight back into our flag
-                     parsedValue.setValue(value.toDouble(&parsedValueOk));
-                     if (!parsedValueOk) {
-                        //
-                        // Although it is not explicitly stated in the BeerXML 1.0 standard, it is clear from the
-                        // sample files downloadable from www.beerxml.com that some "ignorable" percentage and decimal
-                        // values can be specified as "-".  I haven't found a straightforward way to filter or
-                        // transform these during XSD validation.  Nor, as yet, do I know whether it's possible from a
-                        // xalanc::XalanNode to get back to the Post-Schema-Validation Infoset (PSVI) information in
-                        // Xerces that might allow us to examine the XSD rules applied to the current node.
-                        //
-                        // For the moment, we assume that, if a "-" didn't get filtered out by XSD then it's allowed
-                        // and should be interpreted as NULL, which therefore means we store 0.0.
-                        //
-                        qInfo() <<
-                           Q_FUNC_INFO << "Treating " << this->namedEntityClassName << " node " <<
-                           fieldDefinition->xPath << "=" << value << " as 0.0";
-                        parsedValue.setValue(0.0);
-                        parsedValueOk = true;
+                     {
+                        // QString's toDouble method will report success/failure of parsing straight back into our flag
+                        auto rawValue = value.toDouble(&parsedValueOk);
+                        if (!parsedValueOk) {
+                           //
+                           // Although it is not explicitly stated in the BeerXML 1.0 standard, it is clear from the
+                           // sample files downloadable from www.beerxml.com that some "ignorable" percentage and decimal
+                           // values can be specified as "-".  I haven't found a straightforward way to filter or
+                           // transform these during XSD validation.  Nor, as yet, do I know whether it's possible from a
+                           // xalanc::XalanNode to get back to the Post-Schema-Validation Infoset (PSVI) information in
+                           // Xerces that might allow us to examine the XSD rules applied to the current node.
+                           //
+                           // For the moment, we assume that, if a "-" didn't get filtered out by XSD then it's allowed
+                           // and should be interpreted as NULL, which therefore means we store 0.0.
+                           //
+                           qInfo() <<
+                              Q_FUNC_INFO << "Treating " << this->namedEntityClassName << " node " <<
+                              fieldDefinition->xPath << "=" << value << " as 0.0";
+                           parsedValueOk = true;
+                           rawValue = 0.0;
+                        }
+                        parsedValue = Optional::variantFromRaw(rawValue, propertyIsOptional);
                      }
                      break;
 
@@ -331,8 +364,7 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
                            parsedValueOk = date.isValid();
                         }
                         // .:TBD:. Maybe we could try some more formats here
-
-                        parsedValue.setValue(date);
+                        parsedValue = Optional::variantFromRaw(date, propertyIsOptional);
                      }
                      if (!parsedValueOk) {
                         // This is almost certainly a coding error, as we should have already validated the field via
@@ -355,7 +387,8 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
                               Q_FUNC_INFO << "Ignoring " << this->namedEntityClassName << " node " <<
                               fieldDefinition->xPath << "=" << value << " as value not recognised";
                         } else {
-                              parsedValue.setValue(match.value());
+                           auto const rawValue = match.value();
+                           parsedValue = Optional::variantFromRaw(rawValue, propertyIsOptional);
                            parsedValueOk = true;
                         }
                      }
@@ -380,16 +413,19 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
                   // By default we assume it's a string
                   case XmlRecord::FieldType::String:
                   default:
-                     if (fieldDefinition->fieldType != XmlRecord::FieldType::String) {
-                        // This is almost certainly a coding error in this class as we should be able to parse all the
-                        // types callers need us to.
-                        qWarning() <<
-                           Q_FUNC_INFO << "Treating " << this->namedEntityClassName << " node " <<
-                           fieldDefinition->xPath << "=" << value << " as string because did not recognise requested "
-                           "parse type " << static_cast<int>(fieldDefinition->fieldType);
+                     {
+                        if (fieldDefinition->fieldType != XmlRecord::FieldType::String) {
+                           // This is almost certainly a coding error in this class as we should be able to parse all the
+                           // types callers need us to.
+                           qWarning() <<
+                              Q_FUNC_INFO << "Treating " << this->namedEntityClassName << " node " <<
+                              fieldDefinition->xPath << "=" << value << " as string because did not recognise requested "
+                              "parse type " << static_cast<int>(fieldDefinition->fieldType);
+                        }
+                        auto const rawValue = static_cast<QString>(value);
+                        parsedValue = Optional::variantFromRaw(rawValue, propertyIsOptional);
+                        parsedValueOk = true;
                      }
-                     parsedValue.setValue(static_cast<QString>(value));
-                     parsedValueOk = true;
                      break;
                }
 
@@ -723,7 +759,8 @@ void XmlRecord::toXml(NamedEntity const & namedEntityToExport,
    // Callers are not allowed to supply null indent string
    Q_ASSERT(nullptr != indentString);
    qDebug() <<
-      Q_FUNC_INFO << "Exporting XML for" << namedEntityToExport.metaObject()->className() << "#" << namedEntityToExport.key();
+      Q_FUNC_INFO << "Exporting XML for" << namedEntityToExport.metaObject()->className() << "#" <<
+      namedEntityToExport.key();
    writeIndents(out, indentLevel, indentString);
    out << "<" << this->recordName << ">\n";
 
@@ -738,14 +775,14 @@ void XmlRecord::toXml(NamedEntity const & namedEntityToExport,
       if (fieldDefinition.propertyName.isNull()) {
          // At the moment at least, we support all XmlRecord::RecordSimple and XmlRecord::RecordComplex fields, so it's
          // a coding error if one of them does not have a property name.
-         Q_ASSERT(XmlRecord::FieldType::RecordSimple != fieldDefinition.fieldType);
+         Q_ASSERT(XmlRecord::FieldType::RecordSimple  != fieldDefinition.fieldType);
          Q_ASSERT(XmlRecord::FieldType::RecordComplex != fieldDefinition.fieldType);
          continue;
       }
 
       // Nested record fields are of two types.  XmlRecord::RecordSimple can be handled generically.
       // XmlRecord::RecordComplex need to be handled in part by subclasses.
-      if (XmlRecord::FieldType::RecordSimple == fieldDefinition.fieldType ||
+      if (XmlRecord::FieldType::RecordSimple  == fieldDefinition.fieldType ||
           XmlRecord::FieldType::RecordComplex == fieldDefinition.fieldType) {
          //
          // Some of the work is generic, so we do it here.  In particular, we can work out what tags are needed to
@@ -811,6 +848,7 @@ void XmlRecord::toXml(NamedEntity const & namedEntityToExport,
       } else {
          QVariant value = namedEntityToExport.property(*fieldDefinition.propertyName);
          Q_ASSERT(value.isValid());
+
          // It's a coding error if we are trying here to write out some field with a complex XPath
          if (fieldDefinition.xPath.contains("/")) {
             qCritical() << Q_FUNC_INFO <<
@@ -820,37 +858,72 @@ void XmlRecord::toXml(NamedEntity const & namedEntityToExport,
             continue;        // Soldier on in a prod build
          }
 
+         //
+         // If the Qt property is an optional value, we need to unwrap it from std::optional and then, if it's null,
+         // skip writing it out.  Strong typing of std::optional makes this a bit more work here (but it helps us in
+         // other ways elsewhere).
+         //
+         // Note that:
+         //    - propertyName is not actually a property name when fieldType is RequiredConstant
+         //    - when propertyName is not set, there is nothing to look up (because this is a field we don't support,
+         //      usually an "Extension tag")
+         //
+         bool const propertyIsOptional {
+            (fieldDefinition.fieldType == XmlRecord::FieldType::RequiredConstant ||
+               fieldDefinition.propertyName.isNull()) ?
+               false : this->typeLookup->isOptional(fieldDefinition.propertyName)
+         };
          switch (fieldDefinition.fieldType) {
 
             case XmlRecord::FieldType::Bool:
-               // Unlike other XML documents, boolean fields in BeerXML are caps, so we have to accommodate that
-               valueAsText = value.toBool() ? "TRUE" : "FALSE";
+               if (Optional::removeOptionalWrapperIfPresent<bool>(value, propertyIsOptional)) {
+                  // Unlike other XML documents, boolean fields in BeerXML are caps, so we have to accommodate that
+                  valueAsText = value.toBool() ? "TRUE" : "FALSE";
+               }
                break;
 
             case XmlRecord::FieldType::Int:
+               if (Optional::removeOptionalWrapperIfPresent<int>(value, propertyIsOptional)) {
+                  // QVariant knows how to convert a number to a string
+                  valueAsText = value.toString();
+               }
+               break;
+
             case XmlRecord::FieldType::UInt:
+               if (Optional::removeOptionalWrapperIfPresent<unsigned int>(value, propertyIsOptional)) {
+                  // QVariant knows how to convert a number to a string
+                  valueAsText = value.toString();
+               }
+               break;
+
             case XmlRecord::FieldType::Double:
-               // QVariant knows how to convert a number to a string
-               valueAsText = value.toString();
+               if (Optional::removeOptionalWrapperIfPresent<double>(value, propertyIsOptional)) {
+                  // QVariant knows how to convert a number to a string
+                  valueAsText = value.toString();
+               }
                break;
 
             case XmlRecord::FieldType::Date:
-               // There is only one true date format :-)
-               valueAsText = value.toDate().toString(Qt::ISODate);
+               if (Optional::removeOptionalWrapperIfPresent<QDate>(value, propertyIsOptional)) {
+                  // There is only one true date format :-)
+                  valueAsText = value.toDate().toString(Qt::ISODate);
+               }
                break;
 
             case XmlRecord::FieldType::Enum:
                // It's definitely a coding error if there is no enumMapping for a field declared as Enum!
                Q_ASSERT(nullptr != fieldDefinition.enumMapping);
-               // It's a coding error if we don't find a result (in which case EnumStringMapping::enumToString will log
-               // an error and throw an exception).
-               valueAsText = fieldDefinition.enumMapping->enumToString(value.toInt());
+               if (Optional::removeOptionalWrapperIfPresent<int>(value, propertyIsOptional)) {
+                  // It's a coding error if we don't find a result (in which case EnumStringMapping::enumToString will
+                  // log an error and throw an exception).
+                  valueAsText = fieldDefinition.enumMapping->enumToString(value.toInt());
+               }
                break;
 
             // By default we assume it's a string
             case XmlRecord::FieldType::String:
             default:
-               {
+               if (Optional::removeOptionalWrapperIfPresent<QString>(value, propertyIsOptional)) {
                   // We use this to escape "&" to "&amp;" and so on in string content.  (Other data types should not
                   // have anything in their string representation that needs escaping in XML.)
                   QXmlStreamWriter qXmlStreamWriter(&valueAsText);
@@ -858,7 +931,15 @@ void XmlRecord::toXml(NamedEntity const & namedEntityToExport,
                }
                break;
          }
+
+         if (propertyIsOptional && value.isNull()) {
+            qDebug() <<
+               Q_FUNC_INFO << "Not writing XPath" << fieldDefinition.xPath << "as property" <<
+               fieldDefinition.propertyName << "is unset, ie set to std::nullopt";
+            continue;
+         }
       }
+
       writeIndents(out, indentLevel + 1, indentString);
       out << "<" << fieldDefinition.xPath << ">" << valueAsText << "</" << fieldDefinition.xPath << ">\n";
    }

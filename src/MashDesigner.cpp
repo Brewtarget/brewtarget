@@ -40,34 +40,38 @@ MashDesigner::MashDesigner(QWidget * parent) : QDialog     {parent},
                                                addedWater_l{0} {
    this->setupUi(this);
 
-   this->label_zeroVol->setText(Measurement::displayAmount(Measurement::Amount{0, Measurement::Units::liters}));
+   // .:TODO:. Would be good to make the label & field naming a bit more consistent in the .ui file
+   SMART_FIELD_INIT_FS(MashDesigner, label_targetTemp, lineEdit_temp, double, Measurement::PhysicalQuantity::Temperature, 1); // Target temp.
+   SMART_FIELD_INIT_FS(MashDesigner, label_stepTime,   lineEdit_time, double, Measurement::PhysicalQuantity::Time,        0); // Time
+
+   this->label_zeroVol ->setText(Measurement::displayAmount(Measurement::Amount{0, Measurement::Units::liters}));
    this->label_zeroWort->setText(Measurement::displayAmount(Measurement::Amount{0, Measurement::Units::liters}));
 
    // Update temp slider when we move amount slider.
    connect(horizontalSlider_amount, &QAbstractSlider::sliderMoved, this, &MashDesigner::updateTempSlider);
    // Update amount slider when we move temp slider.
-   connect(horizontalSlider_temp, &QAbstractSlider::sliderMoved, this, &MashDesigner::updateAmtSlider);
+   connect(horizontalSlider_temp,   &QAbstractSlider::sliderMoved, this, &MashDesigner::updateAmtSlider);
    // Update tun fullness bar when either slider moves.
    connect(horizontalSlider_amount, &QAbstractSlider::sliderMoved, this, &MashDesigner::updateFullness);
-   connect(horizontalSlider_temp, &QAbstractSlider::sliderMoved, this, &MashDesigner::updateFullness);
+   connect(horizontalSlider_temp,   &QAbstractSlider::sliderMoved, this, &MashDesigner::updateFullness);
    // Update amount/temp text when sliders move.
    connect(horizontalSlider_amount, &QAbstractSlider::sliderMoved, this, &MashDesigner::updateAmt);
    connect(horizontalSlider_amount, &QAbstractSlider::sliderMoved, this, &MashDesigner::updateTemp);
-   connect(horizontalSlider_temp, &QAbstractSlider::sliderMoved, this, &MashDesigner::updateAmt);
-   connect(horizontalSlider_temp, &QAbstractSlider::sliderMoved, this, &MashDesigner::updateTemp);
+   connect(horizontalSlider_temp,   &QAbstractSlider::sliderMoved, this, &MashDesigner::updateAmt);
+   connect(horizontalSlider_temp,   &QAbstractSlider::sliderMoved, this, &MashDesigner::updateTemp);
    // Update collected wort when sliders move.
    connect(horizontalSlider_amount, &QAbstractSlider::sliderMoved, this, &MashDesigner::updateCollectedWort);
-   connect(horizontalSlider_temp, &QAbstractSlider::sliderMoved, this, &MashDesigner::updateCollectedWort);
+   connect(horizontalSlider_temp,   &QAbstractSlider::sliderMoved, this, &MashDesigner::updateCollectedWort);
    // Save the target temp whenever it's changed.
-   connect(lineEdit_temp, &BtLineEdit::textModified, this, &MashDesigner::saveTargetTemp);
+   connect(lineEdit_temp,           &SmartLineEdit::textModified,  this, &MashDesigner::saveTargetTemp);
    // Move to next step.
-   connect(pushButton_next, &QAbstractButton::clicked, this, &MashDesigner::proceed);
+   connect(pushButton_next,         &QAbstractButton::clicked,     this, &MashDesigner::proceed);
    // Do correct calcs when the mash step type is selected.
    connect(comboBox_type, static_cast<void (QComboBox::*)(int)>(&QComboBox::activated), this, &MashDesigner::typeChanged);
 
    // I still dislike this part. But I also need to "fix" the form
    // connect(checkBox_batchSparge, SIGNAL(clicked()), this, SLOT(updateMaxAmt()));
-   connect(pushButton_finish, &QAbstractButton::clicked, this, &MashDesigner::saveAndClose);
+   connect(pushButton_finish,       &QAbstractButton::clicked,     this, &MashDesigner::saveAndClose);
 
    return;
 }
@@ -586,7 +590,7 @@ void MashDesigner::saveTargetTemp() {
    double temp = this->bound_temp_c(this->stepTemp_c());
 
    // be nice and reset the field so it displays in proper units
-   this->lineEdit_temp->setText(temp);
+   this->lineEdit_temp->setAmount(temp);
    if (this->mashStep) {
       this->mashStep->setStepTemp_c(temp);
    }

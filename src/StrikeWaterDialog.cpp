@@ -58,6 +58,20 @@ namespace {
 
 StrikeWaterDialog::StrikeWaterDialog(QWidget* parent) : QDialog(parent) {
    setupUi(this);
+
+   // .:TBD:. These label and lineEdit fields could be slightly better named...
+   SMART_FIELD_INIT_FS(StrikeWaterDialog, grainTempLbl      , grainTempVal      , double, Measurement::PhysicalQuantity::Temperature); // Initial Infusion: Original Grain Temperature
+   SMART_FIELD_INIT_FS(StrikeWaterDialog, targetMashLbl     , targetMashVal     , double, Measurement::PhysicalQuantity::Temperature); // Initial Infusion: Target Mash Temperature
+   SMART_FIELD_INIT_FS(StrikeWaterDialog, grainWeightInitLbl, grainWeightInitVal, double, Measurement::PhysicalQuantity::Mass       ); // Initial Infusion: Weight of Grain
+   SMART_FIELD_INIT_FS(StrikeWaterDialog, waterVolumeLbl    , waterVolumeVal    , double, Measurement::PhysicalQuantity::Volume     ); // Initial Infusion: Volume of Water
+   SMART_FIELD_INIT_FS(StrikeWaterDialog, mashVolLbl        , mashVolVal        , double, Measurement::PhysicalQuantity::Volume     ); // Mash Infusion: Total Volume of Water
+   SMART_FIELD_INIT_FS(StrikeWaterDialog, grainWeightLbl    , grainWeightVal    , double, Measurement::PhysicalQuantity::Mass       ); // Mash Infusion: Grain Weight
+   SMART_FIELD_INIT_FS(StrikeWaterDialog, actualMashLbl     , actualMashVal     , double, Measurement::PhysicalQuantity::Temperature); // Mash Infusion: Actual Mash Temperature
+   SMART_FIELD_INIT_FS(StrikeWaterDialog, targetMashInfLbl  , targetMashInfVal  , double, Measurement::PhysicalQuantity::Temperature); // Mash Infusion: Target Mash Temperature
+   SMART_FIELD_INIT_FS(StrikeWaterDialog, infusionWaterLbl  , infusionWaterVal  , double, Measurement::PhysicalQuantity::Temperature); // Mash Infusion: Infusion Water Temperature
+   SMART_FIELD_INIT_FS(StrikeWaterDialog, initialResultLbl  , initialResultTxt  , double, Measurement::PhysicalQuantity::Temperature); // Result: Strike Water Temperature
+   SMART_FIELD_INIT_FS(StrikeWaterDialog, mashResultLbl     , mashResultTxt     , double, Measurement::PhysicalQuantity::Volume     ); // Result: Volume to add
+
    connect(pushButton_calculate, &QAbstractButton::clicked, this, &StrikeWaterDialog::calculate);
    return;
 }
@@ -65,18 +79,18 @@ StrikeWaterDialog::StrikeWaterDialog(QWidget* parent) : QDialog(parent) {
 StrikeWaterDialog::~StrikeWaterDialog() = default;
 
 void StrikeWaterDialog::calculate() {
-  double initial = computeInitialInfusion();
-  double mash = computeMashInfusion();
+  double strikeWaterTemp = computeInitialInfusion();
+  double volumeToAdd     = computeMashInfusion();
 
-  this->initialResultTxt->setText(initial);
-  this->mashResultTxt->setText(mash);
+  this->initialResultTxt->setAmount(strikeWaterTemp);
+  this->mashResultTxt   ->setAmount(volumeToAdd);
   return;
 }
 
 double StrikeWaterDialog::computeInitialInfusion() {
-   double grainTemp   = this->grainTempVal->toCanonical().quantity();
-   double targetMash  = this->targetMashVal->toCanonical().quantity();
-   double waterVolume = this->waterVolumeVal->toCanonical().quantity();
+   double grainTemp   = this->grainTempVal      ->toCanonical().quantity();
+   double targetMash  = this->targetMashVal     ->toCanonical().quantity();
+   double waterVolume = this->waterVolumeVal    ->toCanonical().quantity();
    double grainWeight = this->grainWeightInitVal->toCanonical().quantity();
 
    if (grainWeight == 0.0) {
@@ -87,9 +101,9 @@ double StrikeWaterDialog::computeInitialInfusion() {
 }
 
 double StrikeWaterDialog::computeMashInfusion() {
-   double mashVol       = this->mashVolVal->toCanonical().quantity();
-   double grainWeight   = this->grainWeightVal->toCanonical().quantity();
-   double actualMash    = this->actualMashVal->toCanonical().quantity();
+   double mashVol       = this->mashVolVal      ->toCanonical().quantity();
+   double grainWeight   = this->grainWeightVal  ->toCanonical().quantity();
+   double actualMash    = this->actualMashVal   ->toCanonical().quantity();
    double targetMashInf = this->targetMashInfVal->toCanonical().quantity();
    double infusionWater = this->infusionWaterVal->toCanonical().quantity();
 

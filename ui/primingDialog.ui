@@ -26,7 +26,7 @@
       <item>
        <layout class="QFormLayout" name="formLayout">
         <item row="0" column="0">
-         <widget class="BtVolumeLabel" name="label_beerVol">
+         <widget class="SmartLabel" name="label_beerVol">
           <property name="contextMenuPolicy">
            <enum>Qt::CustomContextMenu</enum>
           </property>
@@ -39,7 +39,7 @@
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="BtVolumeEdit" name="lineEdit_beerVol">
+         <widget class="SmartLineEdit" name="lineEdit_beerVol">
           <property name="minimumSize">
            <size>
             <width>40</width>
@@ -55,13 +55,10 @@
           <property name="toolTip">
            <string>Amount of beer to prime</string>
           </property>
-          <property name="editField" stdset="0">
-           <string notr="true">beerVol</string>
-          </property>
          </widget>
         </item>
         <item row="1" column="0">
-         <widget class="BtTemperatureLabel" name="label_temp">
+         <widget class="SmartLabel" name="label_temp">
           <property name="text">
            <string>Beer Temperature</string>
           </property>
@@ -71,7 +68,7 @@
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="BtTemperatureEdit" name="lineEdit_temp">
+         <widget class="SmartLineEdit" name="lineEdit_temp">
           <property name="minimumSize">
            <size>
             <width>40</width>
@@ -87,13 +84,10 @@
           <property name="toolTip">
            <string>Temp of the beer</string>
           </property>
-          <property name="editField" stdset="0">
-           <string notr="true">beerTemp</string>
-          </property>
          </widget>
         </item>
         <item row="2" column="0">
-         <widget class="QLabel" name="label_vols">
+         <widget class="SmartLabel" name="label_vols">
           <property name="text">
            <string>Desired Volumes</string>
           </property>
@@ -103,7 +97,7 @@
          </widget>
         </item>
         <item row="2" column="1">
-         <widget class="BtGenericEdit" name="lineEdit_vols">
+         <widget class="SmartLineEdit" name="lineEdit_vols">
           <property name="minimumSize">
            <size>
             <width>40</width>
@@ -179,7 +173,7 @@
       <item>
        <layout class="QFormLayout" name="formLayout_2">
         <item row="0" column="0">
-         <widget class="BtMassLabel" name="label_output">
+         <widget class="SmartLabel" name="label_output">
           <property name="contextMenuPolicy">
            <enum>Qt::CustomContextMenu</enum>
           </property>
@@ -192,7 +186,7 @@
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="BtMassEdit" name="lineEdit_output">
+         <widget class="SmartLineEdit" name="lineEdit_output">
           <property name="minimumSize">
            <size>
             <width>80</width>
@@ -210,9 +204,6 @@
           </property>
           <property name="readOnly">
            <bool>true</bool>
-          </property>
-          <property name="editField" stdset="0">
-           <string notr="true">primeMass</string>
           </property>
          </widget>
         </item>
@@ -254,55 +245,18 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>BtGenericEdit</class>
-   <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
-  </customwidget>
-  <customwidget>
-   <class>BtTemperatureEdit</class>
-   <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
-   <slots>
-    <slot>lineChanged(PreviousScaleInfo)</slot>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtTemperatureLabel</class>
+   <class>SmartLabel</class>
    <extends>QLabel</extends>
-   <header>BtLabel.h</header>
-   <slots>
-    <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtVolumeLabel</class>
-   <extends>QLabel</extends>
-   <header>BtLabel.h</header>
-   <slots>
-    <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtVolumeEdit</class>
-   <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
-   <slots>
-    <slot>lineChanged(PreviousScaleInfo)</slot>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtMassLabel</class>
-   <extends>QLabel</extends>
-   <header>BtLabel.h</header>
+   <header>widgets/SmartLabel.h</header>
    <slots>
     <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
     <slot>popContextMenu(QPoint)</slot>
    </slots>
   </customwidget>
   <customwidget>
-   <class>BtMassEdit</class>
+   <class>SmartLineEdit</class>
    <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
+   <header>widgets/SmartLineEdit.h</header>
    <slots>
     <signal>textModified()</signal>
     <slot>lineChanged()</slot>
@@ -322,54 +276,4 @@
   <tabstop>pushButton_calculate</tabstop>
  </tabstops>
  <resources/>
- <connections>
-  <connection>
-   <sender>label_beerVol</sender>
-   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   <receiver>lineEdit_beerVol</receiver>
-   <slot>lineChanged(PreviousScaleInfo)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>68</x>
-     <y>44</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>169</x>
-     <y>44</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>label_temp</sender>
-   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   <receiver>lineEdit_temp</receiver>
-   <slot>lineChanged(PreviousScaleInfo)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>80</x>
-     <y>70</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>169</x>
-     <y>70</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>label_output</sender>
-   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   <receiver>lineEdit_output</receiver>
-   <slot>lineChanged(PreviousScaleInfo)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>258</x>
-     <y>44</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>349</x>
-     <y>44</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
 </ui>

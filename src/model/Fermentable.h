@@ -29,31 +29,35 @@
 #include <QString>
 #include <QSqlRecord>
 
+#include "measurement/Amount.h"
+#include "measurement/ConstrainedAmount.h"
 #include "measurement/Unit.h"
 #include "model/NamedEntityWithInventory.h"
+#include "utils/EnumStringMapping.h"
 
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
+// See comment in model/NamedEntity.h
 #define AddPropertyName(property) namespace PropertyNames::Fermentable { BtStringConst const property{#property}; }
-AddPropertyName(addAfterBoil)
-AddPropertyName(additionMethod)
-AddPropertyName(additionTime)
-AddPropertyName(amount_kg)
-AddPropertyName(coarseFineDiff_pct)
-AddPropertyName(color_srm)
+AddPropertyName(addAfterBoil          )
+AddPropertyName(additionMethod        )
+AddPropertyName(additionTime          )
+AddPropertyName(amount_kg             )
+AddPropertyName(coarseFineDiff_pct    )
+AddPropertyName(color_srm             )
 AddPropertyName(diastaticPower_lintner)
-AddPropertyName(ibuGalPerLb)
-AddPropertyName(isMashed)
-AddPropertyName(maxInBatch_pct)
-AddPropertyName(moisture_pct)
-AddPropertyName(notes)
-AddPropertyName(origin)
-AddPropertyName(protein_pct)
-AddPropertyName(recommendMash)
-AddPropertyName(supplier)
-AddPropertyName(typeString)
-AddPropertyName(type)
-AddPropertyName(yield_pct)
+AddPropertyName(ibuGalPerLb           )
+AddPropertyName(isMashed              )
+AddPropertyName(maxInBatch_pct        )
+AddPropertyName(moisture_pct          )
+AddPropertyName(notes                 )
+AddPropertyName(origin                )
+AddPropertyName(protein_pct           )
+AddPropertyName(recommendMash         )
+AddPropertyName(supplier              )
+AddPropertyName(typeString            )
+AddPropertyName(type                  )
+AddPropertyName(yield_pct             )
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
 //======================================================================================================================
@@ -72,14 +76,47 @@ class Fermentable : public NamedEntityWithInventory {
 public:
 
    //! \brief The type of Fermentable.
-   enum Type {Grain, Sugar, Extract, Dry_Extract, Adjunct};
+   enum class Type {Grain,
+                    Sugar,
+                    Extract,
+                    Dry_Extract,
+                    Adjunct};
+   // This allows us to store the above enum class in a QVariant
+   Q_ENUM(Type)
+
+   /**
+    * \brief Array of all possible values of \c Fermentable::Type.  NB: This is \b not guaranteed to be in the same
+    *        order as the values of the enum.
+    *
+    *        This is the least ugly way I could think of to allow other parts of the code to iterate over all values
+    *        of enum class \c Type.   Hopefully, if Reflection makes it into C++23, then this will ultimately be
+    *        unnecessary.
+    */
+   static std::array<Type, 5> const allTypes;
+
+   /*!
+    * \brief Mapping between \c Fermentable::Type and string values suitable for serialisation in DB, BeerJSON, etc (but
+    *        \b not BeerXML)
+    */
+   static EnumStringMapping const typeStringMapping;
+
+   /*!
+    * \brief Localised names of \c Fermentable::Type values suitable for displaying to the end user
+    */
+   static QMap<Fermentable::Type, QString> const typeDisplayNames;
+
    //! \brief The addition method.
    enum AdditionMethod {Mashed, Steeped, Not_Mashed};
+   Q_ENUM(AdditionMethod)
    //! \brief The addition time.
    enum AdditionTime {Normal, Late};
-   Q_ENUM(Type)
-   Q_ENUM(AdditionMethod)
    Q_ENUM(AdditionTime)
+
+   /**
+    * \brief Mapping of names to types for the Qt properties of this class.  See \c NamedEntity::typeLookup for more
+    *        info.
+    */
+   static TypeLookup const typeLookup;
 
    Fermentable(QString name = "");
    Fermentable(NamedParameterBundle const & namedParameterBundle);
@@ -89,10 +126,6 @@ public:
 
    //! \brief The \c Type.
    Q_PROPERTY( Type type                     READ type                   WRITE setType                   /*NOTIFY changed*/ /*changedType*/ )
-   //! \brief The \c Type string.
-   Q_PROPERTY( QString typeString            READ typeString             /*WRITE*/                       /*NOTIFY changed*/ /*changedTypeString*/             STORED false )
-   //! \brief The translated \c Type string.
-   Q_PROPERTY( QString typeStringTr          READ typeStringTr           /*WRITE*/                       /*NOTIFY changed*/ /*changedTypeStringTr*/           STORED false )
    //! \brief The \c addition method.
    Q_PROPERTY( AdditionMethod additionMethod READ additionMethod         WRITE setAdditionMethod         /*NOTIFY changed*/ /*changedAdditionMethod*/         STORED false )
    //! \brief The translated \c Method string.
@@ -134,31 +167,28 @@ public:
    //! \brief Whether the grains actually is mashed.
    Q_PROPERTY( bool isMashed                 READ isMashed               WRITE setIsMashed               /*NOTIFY changed*/ /*changedIsMashed*/ )
    //! \brief Whether this fermentable is an extract.
-   Q_PROPERTY( bool isExtract                READ isExtract STORED false)
+   Q_PROPERTY(bool           isExtract              READ isExtract                                              STORED false)
    //! \brief Whether this fermentable is a sugar. Somewhat redundant, but it makes for nice symetry elsewhere
-   Q_PROPERTY( bool isSugar                  READ isSugar STORED false)
+   Q_PROPERTY(bool           isSugar                READ isSugar                                                STORED false)
 
-   Type type() const;
+   Type    type                                    () const;
    double amount_kg() const;
    virtual double inventory() const;
-   double yield_pct() const;
-   double color_srm() const;
-   bool addAfterBoil() const;
+   double  yield_pct                               () const;
+   double  color_srm                               () const;
+   bool    addAfterBoil                            () const;
    const QString origin() const;
    const QString supplier() const;
    const QString notes() const;
-   double coarseFineDiff_pct() const;
-   double moisture_pct() const;
-   double diastaticPower_lintner() const;
-   double protein_pct() const;
-   double maxInBatch_pct() const;
-   bool recommendMash() const;
-   double ibuGalPerLb() const;
-   bool isMashed() const;
+   double  coarseFineDiff_pct                      () const;
+   double  moisture_pct                            () const;
+   double  diastaticPower_lintner                  () const;
+   double  protein_pct                             () const;
+   double  maxInBatch_pct                          () const;
+   bool    recommendMash                           () const;
+   double  ibuGalPerLb                             () const;
+   bool    isMashed                                () const;
 
-   const QString typeString() const;
-   //! Returns a translated type string.
-   const QString typeStringTr() const;
    AdditionMethod additionMethod() const;
    //! Returns a translated addition method string.
    const QString additionMethodStringTr() const;
@@ -166,9 +196,9 @@ public:
    //! Returns a translated addition time string.
    const QString additionTimeStringTr() const;
    // Calculated getters.
-   double equivSucrose_kg() const;
-   bool isExtract() const;
-   bool isSugar() const;
+   double  equivSucrose_kg       () const;
+   bool    isExtract             () const;
+   bool    isSugar               () const;
 
 
    void setType( Type t );
@@ -185,11 +215,11 @@ public:
    void setCoarseFineDiff_pct( double num );
    void setMoisture_pct( double num );
    void setDiastaticPower_lintner( double num );
-   void setProtein_pct( double num );
-   void setMaxInBatch_pct( double num );
-   void setRecommendMash( bool b );
-   void setIbuGalPerLb( double num );
-   void setIsMashed(bool var );
+   void setProtein_pct   (double num );
+   void setMaxInBatch_pct(double num );
+   void setRecommendMash (bool b );
+   void setIbuGalPerLb   (double num );
+   void setIsMashed      (bool var );
 
    void save();
 
@@ -202,29 +232,26 @@ protected:
    virtual ObjectStore & getObjectStoreTypedInstance() const;
 
 private:
-   static bool isValidType( const QString& str );
-   static QStringList types;
-
-   QString m_typeStr;
-   Type m_type;
-   double m_amountKg;
-   double m_yieldPct;
-   double m_colorSrm;
-   bool m_isAfterBoil;
-   QString m_origin;
-   QString m_supplier;
-   QString m_notes;
-   double m_coarseFineDiff;
-   double m_moisturePct;
-   double m_diastaticPower;
-   double m_proteinPct;
-   double m_maxInBatchPct;
-   bool m_recommendMash;
-   double m_ibuGalPerLb;
-   bool m_isMashed;
+   QString m_typeStr               ;
+   Type    m_type                  ;
+   double  m_amount_kg             ;
+   double  m_yield_pct             ;
+   double  m_color_srm             ;
+   bool    m_addAfterBoil          ;
+   QString m_origin                ;
+   QString m_supplier              ;
+   QString m_notes                 ;
+   double  m_coarseFineDiff_pct    ;
+   double  m_moisture_pct          ;
+   double  m_diastaticPower_lintner;
+   double  m_protein_pct           ;
+   double  m_maxInBatch_pct        ;
+   bool    m_recommendMash         ;
+   double  m_ibuGalPerLb           ;
+   bool    m_isMashed              ;
 };
 
-Q_DECLARE_METATYPE( QList<Fermentable*> )
+Q_DECLARE_METATYPE(QList<Fermentable*>)
 
 /**
  * This function is used for sorting in the recipe formatter

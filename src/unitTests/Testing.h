@@ -80,12 +80,23 @@ private slots:
    void testNamedParameterBundle();
 
    /**
+    * \brief Verify various number extractions and conversions, including with localisation.
+    */
+   void testNumberDisplayAndParsing();
+
+   /**
     * \brief Verify other conversions that warrant their own algorithms.
     *
     *        This is usually things where we have a formula in one direction but do some root-finding for the inverse
     *        function because there isn't a non-horrible formula in that direction.
     */
    void testAlgorithms();
+
+   /**
+    * \brief Verify the mechanism we use for looking up type info about a parameter in the "model" classes (ie
+    *        \c NamedEntity and subclasses thereof).
+    */
+   void testTypeLookups();
 
    //! \brief Verify Log rotation is working
    void testLogRotation();

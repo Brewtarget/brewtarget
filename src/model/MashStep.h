@@ -30,18 +30,19 @@
 
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
+// See comment in model/NamedEntity.h
 #define AddPropertyName(property) namespace PropertyNames::MashStep { BtStringConst const property{#property}; }
 AddPropertyName(decoctionAmount_l)
-AddPropertyName(endTemp_c)
-AddPropertyName(infuseAmount_l)
-AddPropertyName(infuseTemp_c)
-AddPropertyName(mashId)
-AddPropertyName(rampTime_min)
-AddPropertyName(stepNumber)
-AddPropertyName(stepTemp_c)
-AddPropertyName(stepTime_min)
-AddPropertyName(typeString)
-AddPropertyName(type)
+AddPropertyName(endTemp_c        )
+AddPropertyName(infuseAmount_l   )
+AddPropertyName(infuseTemp_c     )
+AddPropertyName(mashId           )
+AddPropertyName(rampTime_min     )
+AddPropertyName(stepNumber       )
+AddPropertyName(stepTemp_c       )
+AddPropertyName(stepTime_min     )
+AddPropertyName(type             )
+AddPropertyName(typeString       )
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
 //======================================================================================================================
@@ -57,7 +58,6 @@ class MashStep : public NamedEntity {
    Q_CLASSINFO("signal", "mashsteps")
 
    // this seems to be a class with a lot of friends
-
    friend class MashStepItemDelegate;
    friend class MashWizard;
    friend class MashDesigner;
@@ -65,8 +65,15 @@ class MashStep : public NamedEntity {
 public:
 
    //! \brief The type of step.
-   enum Type { Infusion, Temperature, Decoction, flySparge, batchSparge };
+   enum class Type { Infusion, Temperature, Decoction, flySparge, batchSparge };
+   // This allows us to store the above enum class in a QVariant
    Q_ENUM(Type)
+
+   /**
+    * \brief Mapping of names to types for the Qt properties of this class.  See \c NamedEntity::typeLookup for more
+    *        info.
+    */
+   static TypeLookup const typeLookup;
 
    MashStep(QString name = "");
    MashStep(NamedParameterBundle const & namedParameterBundle);
@@ -133,6 +140,7 @@ public:
 
    virtual Recipe * getOwningRecipe();
 
+   // .:TODO:.  Rework this
    static QStringList const types;
 signals:
 
@@ -141,7 +149,7 @@ protected:
    virtual ObjectStore & getObjectStoreTypedInstance() const;
 
 private:
-   Type m_type;
+   Type   m_type;
    double m_infuseAmount_l;
    double m_stepTemp_c;
    double m_stepTime_min;
@@ -149,8 +157,8 @@ private:
    double m_endTemp_c;
    double m_infuseTemp_c;
    double m_decoctionAmount_l;
-   int m_stepNumber;
-   int m_mashId;
+   int    m_stepNumber;
+   int    m_mashId;
 };
 
 #endif

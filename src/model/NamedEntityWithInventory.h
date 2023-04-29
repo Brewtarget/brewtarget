@@ -24,8 +24,9 @@
 
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
+// See comment in model/NamedEntity.h
 #define AddPropertyName(property) namespace PropertyNames::NamedEntityWithInventory { BtStringConst const property{#property}; }
-AddPropertyName(inventory)
+AddPropertyName(inventory  )
 AddPropertyName(inventoryId)
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
@@ -40,6 +41,12 @@ AddPropertyName(inventoryId)
 class NamedEntityWithInventory : public NamedEntity {
    Q_OBJECT
 public:
+   /**
+    * \brief Mapping of names to types for the Qt properties of this class.  See \c NamedEntity::typeLookup for more
+    *        info.
+    */
+   static TypeLookup const typeLookup;
+
    NamedEntityWithInventory(QString t_name, bool t_display = false, QString folder = QString());
    NamedEntityWithInventory(NamedEntityWithInventory const & other);
    NamedEntityWithInventory(NamedParameterBundle const & namedParameterBundle);
@@ -47,9 +54,9 @@ public:
    virtual ~NamedEntityWithInventory();
 
    //! \brief The amount in inventory (usually in kg)
-   Q_PROPERTY( double inventory              READ inventory              WRITE setInventoryAmount        /*NOTIFY changed*/ /*changedInventory*/ )
+   Q_PROPERTY(double inventory    READ inventory    WRITE setInventoryAmount)
    //! \brief The inventory table id, needed for signals
-   Q_PROPERTY( double inventoryId            READ inventoryId            WRITE setInventoryId            /*NOTIFY changed*/ /*changedInventoryId*/ )
+   Q_PROPERTY(int    inventoryId  READ inventoryId  WRITE setInventoryId    )
 
    /**
     * \brief Override \c NamedEntity::makeChild() as we have additional work to do for objects with inventory.

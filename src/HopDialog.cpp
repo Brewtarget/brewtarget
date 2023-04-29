@@ -1,6 +1,6 @@
 /*
  * HopDialog.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2023
  * - Luke Vincent <luke.r.vincent@gmail.com>
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
@@ -40,8 +40,7 @@ HopDialog::HopDialog(MainWindow* parent) :
    QDialog(parent),
    mainWindow(parent),
    hopEditor(new HopEditor(this)),
-   numHops(0)
-{
+   numHops(0) {
    doLayout();
 
    hopTableModel = new HopTableModel(tableWidget, false);
@@ -50,22 +49,24 @@ HopDialog::HopDialog(MainWindow* parent) :
    hopTableProxy->setSourceModel(hopTableModel);
    tableWidget->setModel(hopTableProxy);
    tableWidget->setSortingEnabled(true);
-   tableWidget->sortByColumn( HOPNAMECOL, Qt::AscendingOrder );
+   tableWidget->sortByColumn(static_cast<int>(HopTableModel::ColumnIndex::Name), Qt::AscendingOrder );
    hopTableProxy->setDynamicSortFilter(true);
    hopTableProxy->setFilterKeyColumn(1);
 
-   connect( pushButton_addToRecipe, SIGNAL( clicked() ), this, SLOT( addHop() ) );
-   connect( pushButton_edit, &QAbstractButton::clicked, this, &HopDialog::editSelected );
-   connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newHop() ) );
-   connect( pushButton_remove, &QAbstractButton::clicked, this, &HopDialog::removeHop);
-   connect( tableWidget, &QAbstractItemView::doubleClicked, this, &HopDialog::addHop );
-   connect( qLineEdit_searchBox, &QLineEdit::textEdited, this, &HopDialog::filterHops);
+   // Note, per https://wiki.qt.io/New_Signal_Slot_Syntax#Default_arguments_in_slot, the use of a trivial lambda
+   // function to allow use of default argument on newHop() slot
+///   connect(this->pushButton_addToRecipe, &QAbstractButton::clicked,         this, &HopDialog::addHop      ); .:TODO:. Work out what this is supposed to do!
+   connect(this->pushButton_edit,        &QAbstractButton::clicked,         this, &HopDialog::editSelected);
+   connect(this->pushButton_new,         &QAbstractButton::clicked,         this, [this]() { this->newHop(); return; } );
+   connect(this->pushButton_remove,      &QAbstractButton::clicked,         this, &HopDialog::removeHop   );
+   connect(this->tableWidget,            &QAbstractItemView::doubleClicked, this, &HopDialog::addHop      );
+   connect(this->qLineEdit_searchBox,    &QLineEdit::textEdited,            this, &HopDialog::filterHops  );
 
    hopTableModel->observeDatabase(true);
+   return;
 }
 
-void HopDialog::doLayout()
-{
+void HopDialog::doLayout() {
    resize(800, 300);
    verticalLayout = new QVBoxLayout(this);
       tableWidget = new QTableView(this);
@@ -145,11 +146,9 @@ void HopDialog::removeHop() {
    return;
 }
 
-void HopDialog::addHop(const QModelIndex& index)
-{
+void HopDialog::addHop(const QModelIndex& index) {
    QModelIndex translated;
-   if( !index.isValid() )
-   {
+   if (!index.isValid()) {
       QModelIndexList selected = tableWidget->selectionModel()->selectedIndexes();
       int row, size, i;
 
@@ -166,16 +165,15 @@ void HopDialog::addHop(const QModelIndex& index)
       }
 
       translated = hopTableProxy->mapToSource(selected.value(0));
-   }
-   else
-   {
+   } else {
       // Only respond if the name is selected. Since we connect to double-click signal,
       // this keeps us from adding something to the recipe when we just want to edit
       // one of the other columns.
-      if( index.column() == HOPNAMECOL )
+      if (index.column() == static_cast<int>(HopTableModel::ColumnIndex::Name)) {
          translated = hopTableProxy->mapToSource(index);
-      else
+      } else {
          return;
+      }
    }
 
    MainWindow::instance().addHopToRecipe(hopTableModel->getRow(translated.row()));
@@ -208,25 +206,22 @@ void HopDialog::editSelected()
    return;
 }
 
-void HopDialog::newHop()
-{
-   newHop(QString());
-}
-
-void HopDialog::newHop(QString folder)
-{
+void HopDialog::newHop(QString folder) {
    QString name = QInputDialog::getText(this, tr("Hop name"),
                                           tr("Hop name:"));
-   if( name.isEmpty() )
+   if( name.isEmpty() ) {
       return;
+   }
 
    // .:TODO:. Change to shared_ptr as potential memory leak
    Hop* hop = new Hop(name);
-   if ( ! folder.isEmpty() )
+   if ( ! folder.isEmpty() ) {
       hop->setFolder(folder);
+   }
 
    hopEditor->setHop(hop);
    hopEditor->show();
+   return;
 }
 
 void HopDialog::filterHops(QString searchExpression)

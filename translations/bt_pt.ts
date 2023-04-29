@@ -503,22 +503,22 @@
     <name>BtDigitWidget</name>
     <message>
         <source>Too low for style.</source>
-        <translation>Muito baixo para o estilo.</translation>
+        <translation type="vanished">Muito baixo para o estilo.</translation>
     </message>
     <message>
         <source>In range for style.</source>
-        <translation>Dentro da Variação do Estilo.</translation>
+        <translation type="vanished">Dentro da Variação do Estilo.</translation>
     </message>
     <message>
         <source>Too high for style.</source>
-        <translation>Muito Alto para o Estilo.</translation>
+        <translation type="vanished">Muito Alto para o Estilo.</translation>
     </message>
 </context>
 <context>
     <name>BtLabel</name>
     <message>
         <source>Color (%1)</source>
-        <translation>Cor (%1)</translation>
+        <translation type="vanished">Cor (%1)</translation>
     </message>
 </context>
 <context>
@@ -1237,43 +1237,31 @@ Log file may contain more details.</source>
     <name>FermentableItemDelegate</name>
     <message>
         <source>Grain</source>
-        <translation>Grão</translation>
+        <translation type="vanished">Grão</translation>
     </message>
     <message>
         <source>Sugar</source>
-        <translation>Açúcar</translation>
+        <translation type="vanished">Açúcar</translation>
     </message>
     <message>
         <source>Extract</source>
-        <translation>Extrato</translation>
+        <translation type="vanished">Extrato</translation>
     </message>
     <message>
         <source>Dry Extract</source>
-        <translation>Extrato Seco</translation>
+        <translation type="vanished">Extrato Seco</translation>
     </message>
     <message>
         <source>Adjunct</source>
-        <translation>Adjunto</translation>
+        <translation type="vanished">Adjunto</translation>
     </message>
     <message>
         <source>Mashed</source>
-        <translation type="unfinished">Mosturação</translation>
-    </message>
-    <message>
-        <source>Steeped</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Not mashed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Normal</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Mosturação</translation>
     </message>
     <message>
         <source>Late</source>
-        <translation type="unfinished">Tarde</translation>
+        <translation type="obsolete">Tarde</translation>
     </message>
 </context>
 <context>
@@ -1331,14 +1319,6 @@ Log file may contain more details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Change Addition Method</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Change Addition Time</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Change Yield</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1348,6 +1328,18 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Change Fermentable Inventory Amount</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount Type</source>
+        <translation type="unfinished">Tipo Quantidade</translation>
+    </message>
+    <message>
+        <source>Change Fermentable Is Mashed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Add After Boil</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1453,47 +1445,23 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Bittering</source>
-        <translation type="unfinished">Amargor</translation>
+        <translation type="obsolete">Amargor</translation>
     </message>
     <message>
         <source>Aroma</source>
-        <translation type="unfinished">Aroma</translation>
-    </message>
-    <message>
-        <source>Aroma &amp; Bittering</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Aroma</translation>
     </message>
     <message>
         <source>Leaf</source>
-        <translation type="unfinished">Folha</translation>
-    </message>
-    <message>
-        <source>Pellet</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Plug</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Folha</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished">Mosto</translation>
+        <translation type="obsolete">Mosto</translation>
     </message>
     <message>
         <source>First Wort</source>
-        <translation type="unfinished">Primeiro mosto</translation>
-    </message>
-    <message>
-        <source>Boil</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Post-Boil</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Dry Hop</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Primeiro mosto</translation>
     </message>
 </context>
 <context>
@@ -2798,55 +2766,55 @@ Error message:
     </message>
     <message>
         <source>Ale</source>
-        <translation>Ale</translation>
+        <translation type="vanished">Ale</translation>
     </message>
     <message>
         <source>Lager</source>
-        <translation>Lager</translation>
+        <translation type="vanished">Lager</translation>
     </message>
     <message>
         <source>Wheat</source>
-        <translation>Trigo</translation>
+        <translation type="vanished">Trigo</translation>
     </message>
     <message>
         <source>Wine</source>
-        <translation>Vinho</translation>
+        <translation type="vanished">Vinho</translation>
     </message>
     <message>
         <source>Champagne</source>
-        <translation>Champanhe</translation>
+        <translation type="vanished">Champanhe</translation>
     </message>
     <message>
         <source>Liquid</source>
-        <translation>Líquido</translation>
+        <translation type="vanished">Líquido</translation>
     </message>
     <message>
         <source>Dry</source>
-        <translation>Seco</translation>
+        <translation type="vanished">Seco</translation>
     </message>
     <message>
         <source>Slant</source>
-        <translation>inclinação</translation>
+        <translation type="vanished">inclinação</translation>
     </message>
     <message>
         <source>Culture</source>
-        <translation>Cultura</translation>
+        <translation type="vanished">Cultura</translation>
     </message>
     <message>
         <source>Low</source>
-        <translation>Baixo</translation>
+        <translation type="vanished">Baixo</translation>
     </message>
     <message>
         <source>Medium</source>
-        <translation>Médio</translation>
+        <translation type="vanished">Médio</translation>
     </message>
     <message>
         <source>High</source>
-        <translation>Alto</translation>
+        <translation type="vanished">Alto</translation>
     </message>
     <message>
         <source>Very High</source>
-        <translation>Muito Alto</translation>
+        <translation type="vanished">Muito Alto</translation>
     </message>
     <message>
         <source>Recipes</source>
@@ -3325,6 +3293,22 @@ Error message:
     <message>
         <source>J/kg·K</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Late</source>
+        <translation type="unfinished">Tarde</translation>
+    </message>
+    <message>
+        <source>Not mashed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mashed</source>
+        <translation type="unfinished">Mosturação</translation>
+    </message>
+    <message>
+        <source>Weight</source>
+        <translation type="unfinished">Peso</translation>
     </message>
 </context>
 <context>
@@ -4046,10 +4030,6 @@ O volume final do fermentador primário é %1.</translation>
         <source>% Acid</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Bad column: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>ScaleRecipeEquipmentPage</name>
@@ -4090,6 +4070,21 @@ O volume final do fermentador primário é %1.</translation>
     <message>
         <source>The equipment and mash have been reset due to the fact that mash temperatures do not scale easily. Please re-run the mash wizard.</source>
         <translation>O equipamento e esquema de mosturação devem ser redefinidos devido à dificuldade de dimensionar as temperaturas de mosturação. Por favor, execute novamente o assistente de mosturação.</translation>
+    </message>
+</context>
+<context>
+    <name>SmartDigitWidget</name>
+    <message>
+        <source>Too low for style.</source>
+        <translation type="unfinished">Muito baixo para o estilo.</translation>
+    </message>
+    <message>
+        <source>In range for style.</source>
+        <translation type="unfinished">Dentro da Variação do Estilo.</translation>
+    </message>
+    <message>
+        <source>Too high for style.</source>
+        <translation type="unfinished">Muito Alto para o Estilo.</translation>
     </message>
 </context>
 <context>
@@ -4455,6 +4450,61 @@ O volume final do fermentador primário é %1.</translation>
     <message>
         <source>Could not understand file format</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Yeast</name>
+    <message>
+        <source>Ale</source>
+        <translation type="unfinished">Ale</translation>
+    </message>
+    <message>
+        <source>Lager</source>
+        <translation type="unfinished">Lager</translation>
+    </message>
+    <message>
+        <source>Wheat</source>
+        <translation type="unfinished">Trigo</translation>
+    </message>
+    <message>
+        <source>Wine</source>
+        <translation type="unfinished">Vinho</translation>
+    </message>
+    <message>
+        <source>Champagne</source>
+        <translation type="unfinished">Champanhe</translation>
+    </message>
+    <message>
+        <source>Liquid</source>
+        <translation type="unfinished">Líquido</translation>
+    </message>
+    <message>
+        <source>Dry</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Slant</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Culture</source>
+        <translation type="unfinished">Cultura</translation>
+    </message>
+    <message>
+        <source>Low</source>
+        <translation type="unfinished">Baixo</translation>
+    </message>
+    <message>
+        <source>Medium</source>
+        <translation type="unfinished">Médio</translation>
+    </message>
+    <message>
+        <source>High</source>
+        <translation type="unfinished">Alto</translation>
+    </message>
+    <message>
+        <source>Very High</source>
+        <translation type="unfinished">Muito Alto</translation>
     </message>
 </context>
 <context>
@@ -4976,19 +5026,7 @@ O volume final do fermentador primário é %1.</translation>
         <translation type="unfinished">Nome</translation>
     </message>
     <message>
-        <source>name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Required</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>boilSize_l</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>batchSize_l</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5008,35 +5046,15 @@ O volume final do fermentador primário é %1.</translation>
         <translation type="unfinished">Taxa de evaporação por hora</translation>
     </message>
     <message>
-        <source>evapRate_lHr</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Final top-up water</source>
         <translation type="unfinished">Água para encher até o fim</translation>
-    </message>
-    <message>
-        <source>topUpWater_l</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Kettle top-up water</source>
         <translation type="unfinished">Água adicionada à panela</translation>
     </message>
     <message>
-        <source>topUpKettle_l</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Kettle to Fermenter Loss</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>trubChillerLoss_l</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>lauterDeadspace_l</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5056,10 +5074,6 @@ O volume final do fermentador primário é %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>grainAbsorption_LKg</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Boiling Point of Water</source>
         <translation type="unfinished">Ponto de Ebolição da Água</translation>
     </message>
@@ -5076,23 +5090,7 @@ O volume final do fermentador primário é %1.</translation>
         <translation type="unfinished">Volume da panela de mosturação</translation>
     </message>
     <message>
-        <source>hopUtilization_pct</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>boilingPoint_c</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>tunWeight_kg</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Specific Heat (Cal/(g*C))</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>tunSpecificHeat_calGC</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5132,23 +5130,23 @@ O volume final do fermentador primário é %1.</translation>
     </message>
     <message>
         <source>Grain</source>
-        <translation>Grão</translation>
+        <translation type="vanished">Grão</translation>
     </message>
     <message>
         <source>Sugar</source>
-        <translation>Açúcar</translation>
+        <translation type="vanished">Açúcar</translation>
     </message>
     <message>
         <source>Extract</source>
-        <translation>Extrato</translation>
+        <translation type="vanished">Extrato</translation>
     </message>
     <message>
         <source>Dry Extract</source>
-        <translation>Extrato Seco</translation>
+        <translation type="vanished">Extrato Seco</translation>
     </message>
     <message>
         <source>Adjunct</source>
-        <translation>Adjunto</translation>
+        <translation type="vanished">Adjunto</translation>
     </message>
     <message>
         <source>Amount</source>
@@ -5275,10 +5273,6 @@ O volume final do fermentador primário é %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Yield %</source>
         <translation type="unfinished">Rendimento %</translation>
     </message>
@@ -5287,15 +5281,7 @@ O volume final do fermentador primário é %1.</translation>
         <translation type="unfinished">Extras</translation>
     </message>
     <message>
-        <source>origin</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Diastatic power</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>supplier</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5312,6 +5298,10 @@ O volume final do fermentador primário é %1.</translation>
     </message>
     <message>
         <source>Discard and close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fermantable Type</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -5817,7 +5807,7 @@ O volume final do fermentador primário é %1.</translation>
     </message>
     <message>
         <source>About &amp;BrewTarget</source>
-        <translation>Sobre &amp;BrewTarget</translation>
+        <translation type="vanished">Sobre &amp;BrewTarget</translation>
     </message>
     <message>
         <source>About Brewtarget</source>
@@ -6145,6 +6135,10 @@ O volume final do fermentador primário é %1.</translation>
     </message>
     <message>
         <source>application/x-brewtarget-folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About &amp;Brewtarget</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -7604,26 +7598,6 @@ O volume final do fermentador primário é %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>styleLetter</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>styleGuide</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>categoryNumber</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>category</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Ranges</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7729,31 +7703,11 @@ O volume final do fermentador primário é %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>nappm</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Ca</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>so4ppm</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Mg</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>cappm</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>ph</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>hco3ppm</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -7773,14 +7727,6 @@ O volume final do fermentador primário é %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>mgppm</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>clppm</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>HCO&lt;sub&gt;3&lt;/sub&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7793,15 +7739,7 @@ O volume final do fermentador primário é %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>cacl</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>MgSO&lt;sub&gt;4&lt;/sub&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>mgso4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -7809,15 +7747,7 @@ O volume final do fermentador primário é %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>caco3</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>NaCl</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>nacl</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -7825,15 +7755,7 @@ O volume final do fermentador primário é %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>caso4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>NaHCO&lt;sub&gt;3&lt;/sub&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>nahco3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -7865,6 +7787,14 @@ O volume final do fermentador primário é %1.</translation>
     </message>
     <message>
         <source>Edit Water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alkalinity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alkalinity measured as</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

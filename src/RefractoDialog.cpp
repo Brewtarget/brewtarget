@@ -1,7 +1,8 @@
 /*
  * RefractoDialog.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2023
  * - Eric Tamme <etamme@gmail.com>
+ * - Matt Young <mfsy@yahoo.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -31,7 +32,18 @@
 RefractoDialog::RefractoDialog(QWidget* parent) : QDialog(parent) {
    setupUi(this);
 
-   connect( pushButton_calculate, &QAbstractButton::clicked, this, &RefractoDialog::calculate );
+   // Note that the labels here are QLabel, not SmartLabel, because we want the units fixed, not user-selectable
+   SMART_FIELD_INIT_FIXED(RefractoDialog, label_op     , lineEdit_op     , double, Measurement::Units::plato          , 1); // Original Plato
+   SMART_FIELD_INIT_FIXED(RefractoDialog, label_inputOG, lineEdit_inputOG, double, Measurement::Units::specificGravity, 3); // Original gravity in
+   SMART_FIELD_INIT_FIXED(RefractoDialog, label_cp     , lineEdit_cp     , double, Measurement::Units::plato          , 1); // Current Plato
+   SMART_FIELD_INIT_FIXED(RefractoDialog, label_og     , lineEdit_og     , double, Measurement::Units::specificGravity, 3); // Original gravity out
+   SMART_FIELD_INIT_FIXED(RefractoDialog, label_sg     , lineEdit_sg     , double, Measurement::Units::specificGravity, 3); // Specific gravity out
+   SMART_FIELD_INIT_FIXED(RefractoDialog, label_re     , lineEdit_re     , double, Measurement::Units::plato          , 1); // Real extract Plato
+   SMART_FIELD_INIT_FS   (RefractoDialog, label_ri     , lineEdit_ri     , double, NonPhysicalQuantity::Dimensionless    ); // Refractive index
+   SMART_FIELD_INIT_FS   (RefractoDialog, label_abv    , lineEdit_abv    , double, NonPhysicalQuantity::Percentage       ); // Alcohol by volume
+   SMART_FIELD_INIT_FS   (RefractoDialog, label_abw    , lineEdit_abw    , double, NonPhysicalQuantity::Percentage       ); // Alcohol by weight
+
+   connect(this->pushButton_calculate, &QAbstractButton::clicked, this, &RefractoDialog::calculate );
    return;
 }
 
@@ -44,11 +56,11 @@ void RefractoDialog::calculate() {
 
    // User can enter in specific gravity or Plato, but the lineEdit is going to convert it to Plato, so we can just
    // grab the number
-   double originalPlato = lineEdit_op->toDoubleRaw(&haveOP);
-   double inputOG       = lineEdit_inputOG->toDoubleRaw(&haveOG);
-   double currentPlato  = lineEdit_cp->toDoubleRaw(&haveCP);
+   double originalPlato = Measurement::extractRawFromString<double>(lineEdit_op     ->text(), &haveOP);
+   double inputOG       = Measurement::extractRawFromString<double>(lineEdit_inputOG->text(), &haveOG);
+   double currentPlato  = Measurement::extractRawFromString<double>(lineEdit_cp     ->text(), &haveCP);
 
-   clearOutputFields();
+   this->clearOutputFields();
 
    // Abort if we don't have the current plato.
    // I really dislike just doing nothing as the user is POUNDING on the
@@ -59,14 +71,14 @@ void RefractoDialog::calculate() {
    }
 
    double ri = Algorithms::refractiveIndex(currentPlato);
-   lineEdit_ri->setText(Measurement::displayQuantity(ri, 3));
+   this->lineEdit_ri->setText(Measurement::displayQuantity(ri, 3));
 
    if (!haveOG && haveOP) {
-      inputOG = Algorithms::PlatoToSG_20C20C( originalPlato );
-      lineEdit_inputOG->setText(inputOG);
+      inputOG = Algorithms::PlatoToSG_20C20C(originalPlato);
+      this->lineEdit_inputOG->setAmount(inputOG);
    } else if (!haveOP && haveOG) {
-      originalPlato = Algorithms::SG_20C20C_toPlato( inputOG );
-      lineEdit_op->setText(inputOG);
+      originalPlato = Algorithms::SG_20C20C_toPlato(inputOG);
+      this->lineEdit_op->setAmount(inputOG);
    } else if (!haveOP && !haveOG) {
       qDebug() << Q_FUNC_INFO << "no plato or og";
       return; // Can't do much if we don't have OG or OP.
@@ -80,9 +92,9 @@ void RefractoDialog::calculate() {
      sg = og;
    }
 
-   double re = Algorithms::realExtract( sg, currentPlato );
-   double abv = Algorithms::getABVBySGPlato( sg, currentPlato );
-   double abw = Algorithms::getABWBySGPlato( sg, currentPlato );
+   double re  = Algorithms::realExtract    (sg, currentPlato);
+   double abv = Algorithms::getABVBySGPlato(sg, currentPlato);
+   double abw = Algorithms::getABWBySGPlato(sg, currentPlato);
 
    // Warn the user if the inputOG and calculated og don't match.
    if( qAbs(og - inputOG) > 0.002 ) {
@@ -94,22 +106,22 @@ void RefractoDialog::calculate() {
       );
    }
 
-   lineEdit_og->setText(og);
-   lineEdit_sg->setText(sg);
-   //Even if the real extract if display in Plato, it must be given in system unit.
-   //Conversion is made by BtLineEdit
-   lineEdit_re->setText(Algorithms::PlatoToSG_20C20C(re));
-   lineEdit_abv->setText(abv);
-   lineEdit_abw->setText(abw);
+   this->lineEdit_og->setAmount(og);
+   this->lineEdit_sg->setAmount(sg);
+   // Even if the real extract if display in Plato, it must be given in system unit.
+   // Conversion is made by SmartLineEdit
+   this->lineEdit_re ->setAmount(Algorithms::PlatoToSG_20C20C(re));
+   this->lineEdit_abv->setAmount(abv);
+   this->lineEdit_abw->setAmount(abw);
    return;
 }
 
 void RefractoDialog::clearOutputFields() {
-   lineEdit_ri->clear();
-   lineEdit_og->clear();
-   lineEdit_sg->clear();
-   lineEdit_re->clear();
-   lineEdit_abv->clear();
-   lineEdit_abw->clear();
+   this->lineEdit_ri ->clear();
+   this->lineEdit_og ->clear();
+   this->lineEdit_sg ->clear();
+   this->lineEdit_re ->clear();
+   this->lineEdit_abv->clear();
+   this->lineEdit_abw->clear();
    return;
 }

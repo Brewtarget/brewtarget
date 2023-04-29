@@ -34,7 +34,7 @@
       </attribute>
       <layout class="QGridLayout" name="gridLayout">
        <item row="5" column="1">
-        <widget class="BtTimeEdit" name="lineEdit_time">
+        <widget class="SmartLineEdit" name="lineEdit_time">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>100</horstretch>
@@ -55,9 +55,6 @@
          </property>
          <property name="toolTip">
           <string>Time</string>
-         </property>
-         <property name="editField" stdset="0">
-          <string notr="true">time</string>
          </property>
         </widget>
        </item>
@@ -137,7 +134,7 @@
         </widget>
        </item>
        <item row="5" column="0">
-        <widget class="BtTimeLabel" name="label_time">
+        <widget class="SmartLabel" name="label_time">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -159,7 +156,7 @@
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="BtStringEdit" name="lineEdit_name">
+        <widget class="SmartLineEdit" name="lineEdit_name">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>100</horstretch>
@@ -248,7 +245,7 @@
         </spacer>
        </item>
        <item row="4" column="2">
-        <widget class="BtMixedLabel" name="label_inventory">
+        <widget class="SmartLabel" name="label_inventory">
          <property name="contextMenuPolicy">
           <enum>Qt::CustomContextMenu</enum>
          </property>
@@ -261,7 +258,7 @@
         </widget>
        </item>
        <item row="4" column="4">
-        <widget class="BtMixedEdit" name="lineEdit_inventory">
+        <widget class="SmartLineEdit" name="lineEdit_inventory">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -276,9 +273,6 @@
          </property>
          <property name="toolTip">
           <string>Amount in inventory</string>
-         </property>
-         <property name="editField" stdset="0">
-          <string notr="true">inventory</string>
          </property>
         </widget>
        </item>
@@ -404,41 +398,19 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>BtStringEdit</class>
-   <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
-  </customwidget>
-  <customwidget>
-   <class>BtTimeEdit</class>
-   <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
-   <slots>
-    <slot>lineChanged(PreviousScaleInfo)</slot>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtTimeLabel</class>
+   <class>SmartLabel</class>
    <extends>QLabel</extends>
-   <header>BtLabel.h</header>
+   <header>widgets/SmartLabel.h</header>
    <slots>
     <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    </slots>
   </customwidget>
   <customwidget>
-   <class>BtMixedLabel</class>
-   <extends>QLabel</extends>
-   <header>BtLabel.h</header>
-   <slots>
-    <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtMixedEdit</class>
+   <class>SmartLineEdit</class>
    <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
+   <header>widgets/SmartLineEdit.h</header>
    <slots>
     <slot>lineChanged(PreviousScaleInfo)</slot>
-    <slot>setIsWeight(bool)</slot>
    </slots>
   </customwidget>
  </customwidgets>
@@ -458,54 +430,4 @@
  <resources>
   <include location="../brewtarget.qrc"/>
  </resources>
- <connections>
-  <connection>
-   <sender>label_time</sender>
-   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   <receiver>lineEdit_time</receiver>
-   <slot>lineChanged(PreviousScaleInfo)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>20</x>
-     <y>108</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>186</x>
-     <y>108</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>label_inventory</sender>
-   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   <receiver>lineEdit_inventory</receiver>
-   <slot>lineChanged(PreviousScaleInfo)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>108</x>
-     <y>195</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>151</x>
-     <y>195</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>checkBox_isWeight</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>lineEdit_inventory</receiver>
-   <slot>setIsWeight(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>231</x>
-     <y>168</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>227</x>
-     <y>197</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
 </ui>

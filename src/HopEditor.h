@@ -35,15 +35,14 @@ class Hop;
  *
  * \brief View/controller class for modifying hops.
  */
-class HopEditor : public QDialog, private Ui::hopEditor
-{
+class HopEditor : public QDialog, private Ui::hopEditor {
    Q_OBJECT
 
 public:
-   HopEditor( QWidget *parent=nullptr );
+   HopEditor(QWidget * parent = nullptr);
    virtual ~HopEditor();
    //! Edit the given hop.
-   void setHop( Hop* h );
+   void setHop(Hop * h);
    //! Create a new hop
    void newHop(QString folder);
 
@@ -53,7 +52,7 @@ public slots:
    //! Clear the dialog and close it.
    void clearAndClose();
    void changed(QMetaProperty,QVariant);
-   void newHop();
+   void clickedNewHop();
 
 private:
    Hop* obsHop;

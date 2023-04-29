@@ -98,7 +98,7 @@
       </attribute>
       <layout class="QGridLayout" name="gridLayout">
        <item row="2" column="0">
-        <widget class="BtVolumeLabel" name="label_boilSize">
+        <widget class="SmartLabel" name="label_boilSize">
          <property name="contextMenuPolicy">
           <enum>Qt::CustomContextMenu</enum>
          </property>
@@ -111,7 +111,7 @@
         </widget>
        </item>
        <item row="1" column="0">
-        <widget class="BtVolumeLabel" name="label_batchSize">
+        <widget class="SmartLabel" name="label_batchSize">
          <property name="contextMenuPolicy">
           <enum>Qt::CustomContextMenu</enum>
          </property>
@@ -124,12 +124,9 @@
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="BtStringEdit" name="lineEdit_name">
+        <widget class="SmartLineEdit" name="lineEdit_name">
          <property name="toolTip">
           <string>Name</string>
-         </property>
-         <property name="editField" stdset="0">
-          <string>name</string>
          </property>
         </widget>
        </item>
@@ -144,21 +141,15 @@
         </widget>
        </item>
        <item row="2" column="1">
-        <widget class="BtVolumeEdit" name="lineEdit_boilSize">
-         <property name="editField" stdset="0">
-          <string>boilSize_l</string>
-         </property>
+        <widget class="SmartLineEdit" name="lineEdit_boilSize">
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="BtVolumeEdit" name="lineEdit_batchSize">
-         <property name="editField" stdset="0">
-          <string>batchSize_l</string>
-         </property>
+        <widget class="SmartLineEdit" name="lineEdit_batchSize">
         </widget>
        </item>
        <item row="4" column="1">
-        <widget class="BtTimeEdit" name="lineEdit_boilTime">
+        <widget class="SmartLineEdit" name="lineEdit_boilTime">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -167,9 +158,6 @@
          </property>
          <property name="toolTip">
           <string>Time</string>
-         </property>
-         <property name="editField" stdset="0">
-          <string notr="true">boilTime_min</string>
          </property>
         </widget>
        </item>
@@ -194,7 +182,7 @@
         </spacer>
        </item>
        <item row="4" column="0">
-        <widget class="BtTimeLabel" name="label_boilTime">
+        <widget class="SmartLabel" name="label_boilTime">
          <property name="contextMenuPolicy">
           <enum>Qt::CustomContextMenu</enum>
          </property>
@@ -214,7 +202,7 @@
         </widget>
        </item>
        <item row="4" column="2">
-        <widget class="BtVolumeLabel" name="label_evaporationRate">
+        <widget class="SmartLabel" name="label_evaporationRate">
          <property name="contextMenuPolicy">
           <enum>Qt::CustomContextMenu</enum>
          </property>
@@ -227,14 +215,11 @@
         </widget>
        </item>
        <item row="4" column="3">
-        <widget class="BtVolumeEdit" name="lineEdit_evaporationRate">
-         <property name="editField" stdset="0">
-          <string>evapRate_lHr</string>
-         </property>
+        <widget class="SmartLineEdit" name="lineEdit_evaporationRate">
         </widget>
        </item>
        <item row="1" column="2">
-        <widget class="BtVolumeLabel" name="label_topUpWater">
+        <widget class="SmartLabel" name="label_topUpWater">
          <property name="contextMenuPolicy">
           <enum>Qt::CustomContextMenu</enum>
          </property>
@@ -247,14 +232,11 @@
         </widget>
        </item>
        <item row="1" column="3">
-        <widget class="BtVolumeEdit" name="lineEdit_topUpWater">
-         <property name="editField" stdset="0">
-          <string>topUpWater_l</string>
-         </property>
+        <widget class="SmartLineEdit" name="lineEdit_topUpWater">
         </widget>
        </item>
        <item row="0" column="2">
-        <widget class="BtVolumeLabel" name="label_topUpKettle">
+        <widget class="SmartLabel" name="label_topUpKettle">
          <property name="contextMenuPolicy">
           <enum>Qt::CustomContextMenu</enum>
          </property>
@@ -267,14 +249,11 @@
         </widget>
        </item>
        <item row="0" column="3">
-        <widget class="BtVolumeEdit" name="lineEdit_topUpKettle">
-         <property name="editField" stdset="0">
-          <string>topUpKettle_l</string>
-         </property>
+        <widget class="SmartLineEdit" name="lineEdit_topUpKettle">
         </widget>
        </item>
        <item row="5" column="0">
-        <widget class="BtVolumeLabel" name="label_trubChillerLoss">
+        <widget class="SmartLabel" name="label_trubChillerLoss">
          <property name="contextMenuPolicy">
           <enum>Qt::CustomContextMenu</enum>
          </property>
@@ -287,14 +266,11 @@
         </widget>
        </item>
        <item row="5" column="1">
-        <widget class="BtVolumeEdit" name="lineEdit_trubChillerLoss">
-         <property name="editField" stdset="0">
-          <string>trubChillerLoss_l</string>
-         </property>
+        <widget class="SmartLineEdit" name="lineEdit_trubChillerLoss">
         </widget>
        </item>
        <item row="5" column="2">
-        <widget class="BtVolumeLabel" name="label_lauterDeadspace">
+        <widget class="SmartLabel" name="label_lauterDeadspace">
          <property name="contextMenuPolicy">
           <enum>Qt::CustomContextMenu</enum>
          </property>
@@ -307,10 +283,7 @@
         </widget>
        </item>
        <item row="5" column="3">
-        <widget class="BtVolumeEdit" name="lineEdit_lauterDeadspace">
-         <property name="editField" stdset="0">
-          <string>lauterDeadspace_l</string>
-         </property>
+        <widget class="SmartLineEdit" name="lineEdit_lauterDeadspace">
         </widget>
        </item>
       </layout>
@@ -328,7 +301,7 @@
         </widget>
        </item>
        <item row="7" column="0">
-        <widget class="QLabel" name="label_absorption">
+        <widget class="QLabel" name="label_grainAbsorption">
          <property name="text">
           <string>Grain absorption (L/kg)</string>
          </property>
@@ -348,14 +321,11 @@
         </widget>
        </item>
        <item row="7" column="1">
-        <widget class="BtGenericEdit" name="lineEdit_grainAbsorption">
-         <property name="editField" stdset="0">
-          <string>grainAbsorption_LKg</string>
-         </property>
+        <widget class="SmartLineEdit" name="lineEdit_grainAbsorption">
         </widget>
        </item>
        <item row="6" column="0">
-        <widget class="BtTemperatureLabel" name="label_boilingPoint">
+        <widget class="SmartLabel" name="label_boilingPoint">
          <property name="contextMenuPolicy">
           <enum>Qt::CustomContextMenu</enum>
          </property>
@@ -368,7 +338,7 @@
         </widget>
        </item>
        <item row="3" column="0">
-        <widget class="BtVolumeLabel" name="label_tunVolume">
+        <widget class="SmartLabel" name="label_tunVolume">
          <property name="contextMenuPolicy">
           <enum>Qt::CustomContextMenu</enum>
          </property>
@@ -381,7 +351,7 @@
         </widget>
        </item>
        <item row="3" column="2">
-        <widget class="BtMassLabel" name="label_tunWeight">
+        <widget class="SmartLabel" name="label_tunWeight">
          <property name="contextMenuPolicy">
           <enum>Qt::CustomContextMenu</enum>
          </property>
@@ -394,7 +364,7 @@
         </widget>
        </item>
        <item row="3" column="1">
-        <widget class="BtVolumeEdit" name="lineEdit_tunVolume">
+        <widget class="SmartLineEdit" name="lineEdit_tunVolume">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -404,16 +374,10 @@
          <property name="toolTip">
           <string>Volume of mash tun</string>
          </property>
-         <property name="editField" stdset="0">
-          <string notr="true">tunVolume_l</string>
-         </property>
         </widget>
        </item>
        <item row="5" column="1">
-        <widget class="BtGenericEdit" name="lineEdit_hopUtilization">
-         <property name="editField" stdset="0">
-          <string>hopUtilization_pct</string>
-         </property>
+        <widget class="SmartLineEdit" name="lineEdit_hopUtilization">
         </widget>
        </item>
        <item row="7" column="3">
@@ -430,10 +394,7 @@
         </spacer>
        </item>
        <item row="6" column="1">
-        <widget class="BtTemperatureEdit" name="lineEdit_boilingPoint">
-         <property name="editField" stdset="0">
-          <string>boilingPoint_c</string>
-         </property>
+        <widget class="SmartLineEdit" name="lineEdit_boilingPoint">
         </widget>
        </item>
        <item row="8" column="1">
@@ -450,24 +411,18 @@
         </spacer>
        </item>
        <item row="3" column="3">
-        <widget class="BtMassEdit" name="lineEdit_tunWeight">
-         <property name="editField" stdset="0">
-          <string>tunWeight_kg</string>
-         </property>
+        <widget class="SmartLineEdit" name="lineEdit_tunWeight">
         </widget>
        </item>
        <item row="5" column="2">
-        <widget class="QLabel" name="label_tunSpecificHeat">
+        <widget class="SmartLabel" name="label_tunSpecificHeat">
          <property name="text">
           <string>Specific Heat (Cal/(g*C))</string>
          </property>
         </widget>
        </item>
        <item row="5" column="3">
-        <widget class="BtDimensionlessEdit" name="lineEdit_tunSpecificHeat">
-         <property name="editField" stdset="0">
-          <string>tunSpecificHeat_calGC</string>
-         </property>
+        <widget class="SmartLineEdit" name="lineEdit_tunSpecificHeat">
         </widget>
        </item>
       </layout>
@@ -566,89 +521,17 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>BtGenericEdit</class>
-   <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
-  </customwidget>
-  <customwidget>
-   <class>BtTemperatureEdit</class>
-   <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
-   <slots>
-    <slot>lineChanged(PreviousScaleInfo)</slot>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtTemperatureLabel</class>
+   <class>SmartLabel</class>
    <extends>QLabel</extends>
-   <header>BtLabel.h</header>
+   <header>widgets/SmartLabel.h</header>
    <slots>
     <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    </slots>
   </customwidget>
   <customwidget>
-   <class>BtStringEdit</class>
+   <class>SmartLineEdit</class>
    <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
-  </customwidget>
-  <customwidget>
-   <class>BtTimeEdit</class>
-   <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
-   <slots>
-    <slot>lineChanged(PreviousScaleInfo)</slot>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtTimeLabel</class>
-   <extends>QLabel</extends>
-   <header>BtLabel.h</header>
-   <slots>
-    <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtMassEdit</class>
-   <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
-   <slots>
-    <signal>textModified()</signal>
-    <slot>lineChanged()</slot>
-    <slot>lineChanged(PreviousScaleInfo)</slot>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtMassLabel</class>
-   <extends>QLabel</extends>
-   <header>BtLabel.h</header>
-   <slots>
-    <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-    <slot>popContextMenu(QPoint)</slot>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtVolumeLabel</class>
-   <extends>QLabel</extends>
-   <header>BtLabel.h</header>
-   <slots>
-    <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtVolumeEdit</class>
-   <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
-   <slots>
-    <slot>lineChanged(PreviousScaleInfo)</slot>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtDimensionlessEdit</class>
-   <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
-   <slots>
-    <slot>lineChanged(PreviousScaleInfo)</slot>
-   </slots>
+   <header>widgets/SmartLineEdit.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>
@@ -681,182 +564,4 @@
  <resources>
   <include location="../brewtarget.qrc"/>
  </resources>
- <connections>
-  <connection>
-   <sender>label_tunWeight</sender>
-   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   <receiver>lineEdit_tunWeight</receiver>
-   <slot>lineChanged(PreviousScaleInfo)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>120</x>
-     <y>101</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>269</x>
-     <y>101</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>label_boilTime</sender>
-   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   <receiver>lineEdit_boilTime</receiver>
-   <slot>lineChanged(PreviousScaleInfo)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>119</x>
-     <y>68</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>258</x>
-     <y>68</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>label_batchSize</sender>
-   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   <receiver>lineEdit_batchSize</receiver>
-   <slot>lineChanged(PreviousScaleInfo)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>121</x>
-     <y>101</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>271</x>
-     <y>101</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>label_boilSize</sender>
-   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   <receiver>lineEdit_boilSize</receiver>
-   <slot>lineChanged(PreviousScaleInfo)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>121</x>
-     <y>134</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>271</x>
-     <y>134</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>label_evaporationRate</sender>
-   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   <receiver>lineEdit_evaporationRate</receiver>
-   <slot>lineChanged(PreviousScaleInfo)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>119</x>
-     <y>101</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>258</x>
-     <y>101</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>label_topUpKettle</sender>
-   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   <receiver>lineEdit_topUpKettle</receiver>
-   <slot>lineChanged(PreviousScaleInfo)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>119</x>
-     <y>134</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>258</x>
-     <y>134</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>label_topUpWater</sender>
-   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   <receiver>lineEdit_topUpWater</receiver>
-   <slot>lineChanged(PreviousScaleInfo)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>119</x>
-     <y>167</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>258</x>
-     <y>167</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>label_boilingPoint</sender>
-   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   <receiver>lineEdit_boilingPoint</receiver>
-   <slot>lineChanged(PreviousScaleInfo)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>119</x>
-     <y>233</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>258</x>
-     <y>233</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>label_tunVolume</sender>
-   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   <receiver>lineEdit_tunWeight</receiver>
-   <slot>lineChanged(PreviousScaleInfo)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>120</x>
-     <y>68</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>269</x>
-     <y>101</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>label_trubChillerLoss</sender>
-   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   <receiver>lineEdit_trubChillerLoss</receiver>
-   <slot>lineChanged(PreviousScaleInfo)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>120</x>
-     <y>192</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>269</x>
-     <y>192</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>label_lauterDeadspace</sender>
-   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   <receiver>lineEdit_lauterDeadspace</receiver>
-   <slot>lineChanged(PreviousScaleInfo)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>120</x>
-     <y>225</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>269</x>
-     <y>225</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
 </ui>

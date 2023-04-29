@@ -47,6 +47,36 @@ ObjectStore & Style::getObjectStoreTypedInstance() const {
    return ObjectStoreTyped<Style>::getInstance();
 }
 
+TypeLookup const Style::typeLookup {
+   "Style",
+   {
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::category      , Style::m_category      ,           NonPhysicalQuantity::String        ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::categoryNumber, Style::m_categoryNumber,           NonPhysicalQuantity::String        ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::styleLetter   , Style::m_styleLetter   ,           NonPhysicalQuantity::String        ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::styleGuide    , Style::m_styleGuide    ,           NonPhysicalQuantity::String        ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::type          , Style::m_type          ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::ogMin         , Style::m_ogMin         , Measurement::PhysicalQuantity::Density       ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::ogMax         , Style::m_ogMax         , Measurement::PhysicalQuantity::Density       ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::fgMin         , Style::m_fgMin         , Measurement::PhysicalQuantity::Density       ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::fgMax         , Style::m_fgMax         , Measurement::PhysicalQuantity::Density       ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::ibuMin        , Style::m_ibuMin        , Measurement::PhysicalQuantity::Bitterness    ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::ibuMax        , Style::m_ibuMax        , Measurement::PhysicalQuantity::Bitterness    ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::colorMin_srm  , Style::m_colorMin_srm  , Measurement::PhysicalQuantity::Color         ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::colorMax_srm  , Style::m_colorMax_srm  , Measurement::PhysicalQuantity::Color         ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::carbMin_vol   , Style::m_carbMin_vol   , Measurement::PhysicalQuantity::Carbonation   ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::carbMax_vol   , Style::m_carbMax_vol   , Measurement::PhysicalQuantity::Carbonation   ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::abvMin_pct    , Style::m_abvMin_pct    ,           NonPhysicalQuantity::Percentage    ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::abvMax_pct    , Style::m_abvMax_pct    ,           NonPhysicalQuantity::Percentage    ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::notes         , Style::m_notes         ,           NonPhysicalQuantity::String        ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::profile       , Style::m_profile       ,           NonPhysicalQuantity::String        ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::ingredients   , Style::m_ingredients   ,           NonPhysicalQuantity::String        ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::examples      , Style::m_examples      ,           NonPhysicalQuantity::String        ),
+//      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::typeString    , Style::m_typeString    ),
+   },
+   // Parent class lookup
+   &NamedEntity::typeLookup
+};
+
 //====== Constructors =========
 
 // suitable for something that will be written to the db later

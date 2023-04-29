@@ -116,7 +116,7 @@
         </widget>
        </item>
        <item row="5" column="3">
-        <widget class="BtStringEdit" name="lineEdit_styleLetter">
+        <widget class="SmartLineEdit" name="lineEdit_styleLetter">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>100</horstretch>
@@ -138,13 +138,10 @@
          <property name="toolTip">
           <string>Style letter</string>
          </property>
-         <property name="editField" stdset="0">
-          <string>styleLetter</string>
-         </property>
         </widget>
        </item>
        <item row="6" column="3">
-        <widget class="BtStringEdit" name="lineEdit_styleGuide">
+        <widget class="SmartLineEdit" name="lineEdit_styleGuide">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>100</horstretch>
@@ -166,13 +163,10 @@
          <property name="toolTip">
           <string>Style guide</string>
          </property>
-         <property name="editField" stdset="0">
-          <string>styleGuide</string>
-         </property>
         </widget>
        </item>
        <item row="4" column="3">
-        <widget class="BtStringEdit" name="lineEdit_categoryNumber">
+        <widget class="SmartLineEdit" name="lineEdit_categoryNumber">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>100</horstretch>
@@ -194,13 +188,10 @@
          <property name="toolTip">
           <string>Category number</string>
          </property>
-         <property name="editField" stdset="0">
-          <string>categoryNumber</string>
-         </property>
         </widget>
        </item>
        <item row="2" column="3">
-        <widget class="BtStringEdit" name="lineEdit_category">
+        <widget class="SmartLineEdit" name="lineEdit_category">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>100</horstretch>
@@ -221,9 +212,6 @@
          </property>
          <property name="toolTip">
           <string>Category</string>
-         </property>
-         <property name="editField" stdset="0">
-          <string>category</string>
          </property>
         </widget>
        </item>
@@ -356,7 +344,7 @@
         </widget>
        </item>
        <item row="0" column="3">
-        <widget class="BtStringEdit" name="lineEdit_name">
+        <widget class="SmartLineEdit" name="lineEdit_name">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>100</horstretch>
@@ -377,9 +365,6 @@
          </property>
          <property name="toolTip">
           <string>Name</string>
-         </property>
-         <property name="editField" stdset="0">
-          <string>name</string>
          </property>
         </widget>
        </item>
@@ -423,7 +408,7 @@
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
        <item row="3" column="2">
-        <widget class="BtGenericEdit" name="lineEdit_ibuMax">
+        <widget class="SmartLineEdit" name="lineEdit_ibuMax">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>100</horstretch>
@@ -435,14 +420,11 @@
            <width>100</width>
            <height>0</height>
           </size>
-         </property>
-         <property name="editField" stdset="0">
-          <string notr="true">ibuMax</string>
          </property>
         </widget>
        </item>
        <item row="4" column="1">
-        <widget class="BtColorEdit" name="lineEdit_colorMin">
+        <widget class="SmartLineEdit" name="lineEdit_colorMin">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>100</horstretch>
@@ -454,14 +436,11 @@
            <width>100</width>
            <height>0</height>
           </size>
-         </property>
-         <property name="editField" stdset="0">
-          <string notr="true">colorMin_srm</string>
          </property>
         </widget>
        </item>
        <item row="6" column="2">
-        <widget class="BtGenericEdit" name="lineEdit_abvMax">
+        <widget class="SmartLineEdit" name="lineEdit_abvMax">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>100</horstretch>
@@ -473,9 +452,6 @@
            <width>100</width>
            <height>0</height>
           </size>
-         </property>
-         <property name="editField" stdset="0">
-          <string notr="true">abvMax_pct</string>
          </property>
         </widget>
        </item>
@@ -487,7 +463,7 @@
         </widget>
        </item>
        <item row="5" column="1">
-        <widget class="BtGenericEdit" name="lineEdit_carbMin">
+        <widget class="SmartLineEdit" name="lineEdit_carbMin">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>100</horstretch>
@@ -500,21 +476,15 @@
            <height>0</height>
           </size>
          </property>
-         <property name="editField" stdset="0">
-          <string notr="true">carbMin_vol</string>
-         </property>
         </widget>
        </item>
        <item row="2" column="0">
-        <widget class="BtDensityLabel" name="label_fg">
+        <widget class="SmartLabel" name="label_fg">
          <property name="contextMenuPolicy">
           <enum>Qt::CustomContextMenu</enum>
          </property>
          <property name="text">
           <string>FG</string>
-         </property>
-         <property name="editField" stdset="0">
-          <string notr="true">fg</string>
          </property>
         </widget>
        </item>
@@ -526,7 +496,7 @@
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="BtDensityEdit" name="lineEdit_ogMin">
+        <widget class="SmartLineEdit" name="lineEdit_ogMin">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>100</horstretch>
@@ -538,14 +508,11 @@
            <width>100</width>
            <height>0</height>
           </size>
-         </property>
-         <property name="editField" stdset="0">
-          <string notr="true">ogMin</string>
          </property>
         </widget>
        </item>
        <item row="3" column="1">
-        <widget class="BtGenericEdit" name="lineEdit_ibuMin">
+        <widget class="SmartLineEdit" name="lineEdit_ibuMin">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>100</horstretch>
@@ -557,14 +524,11 @@
            <width>100</width>
            <height>0</height>
           </size>
-         </property>
-         <property name="editField" stdset="0">
-          <string notr="true">ibuMin</string>
          </property>
         </widget>
        </item>
        <item row="1" column="2">
-        <widget class="BtDensityEdit" name="lineEdit_ogMax">
+        <widget class="SmartLineEdit" name="lineEdit_ogMax">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>100</horstretch>
@@ -576,14 +540,11 @@
            <width>100</width>
            <height>0</height>
           </size>
-         </property>
-         <property name="editField" stdset="0">
-          <string notr="true">ogMax</string>
          </property>
         </widget>
        </item>
        <item row="4" column="2">
-        <widget class="BtColorEdit" name="lineEdit_colorMax">
+        <widget class="SmartLineEdit" name="lineEdit_colorMax">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>100</horstretch>
@@ -595,14 +556,11 @@
            <width>100</width>
            <height>0</height>
           </size>
-         </property>
-         <property name="editField" stdset="0">
-          <string notr="true">colorMax_srm</string>
          </property>
         </widget>
        </item>
        <item row="2" column="1">
-        <widget class="BtDensityEdit" name="lineEdit_fgMin">
+        <widget class="SmartLineEdit" name="lineEdit_fgMin">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>100</horstretch>
@@ -615,20 +573,17 @@
            <height>0</height>
           </size>
          </property>
-         <property name="editField" stdset="0">
-          <string notr="true">fgMin</string>
-         </property>
         </widget>
        </item>
        <item row="5" column="0">
-        <widget class="QLabel" name="label_carb">
+        <widget class="SmartLabel" name="label_carb">
          <property name="text">
           <string>Carb (vols)</string>
          </property>
         </widget>
        </item>
        <item row="2" column="2">
-        <widget class="BtDensityEdit" name="lineEdit_fgMax">
+        <widget class="SmartLineEdit" name="lineEdit_fgMax">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>100</horstretch>
@@ -641,26 +596,20 @@
            <height>0</height>
           </size>
          </property>
-         <property name="editField" stdset="0">
-          <string notr="true">fgMax</string>
-         </property>
         </widget>
        </item>
        <item row="4" column="0">
-        <widget class="BtColorLabel" name="label_color">
+        <widget class="SmartLabel" name="label_color">
          <property name="contextMenuPolicy">
           <enum>Qt::CustomContextMenu</enum>
          </property>
          <property name="text">
           <string>Color (SRM)</string>
          </property>
-         <property name="editField" stdset="0">
-          <string notr="true">color_srm</string>
-         </property>
         </widget>
        </item>
        <item row="6" column="1">
-        <widget class="BtGenericEdit" name="lineEdit_abvMin">
+        <widget class="SmartLineEdit" name="lineEdit_abvMin">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>100</horstretch>
@@ -673,26 +622,20 @@
            <height>0</height>
           </size>
          </property>
-         <property name="editField" stdset="0">
-          <string notr="true">abvMin_pct</string>
-         </property>
         </widget>
        </item>
        <item row="1" column="0">
-        <widget class="BtDensityLabel" name="label_og">
+        <widget class="SmartLabel" name="label_og">
          <property name="contextMenuPolicy">
           <enum>Qt::CustomContextMenu</enum>
          </property>
          <property name="text">
           <string>OG</string>
          </property>
-         <property name="editField" stdset="0">
-          <string notr="true">og</string>
-         </property>
         </widget>
        </item>
        <item row="5" column="2">
-        <widget class="BtGenericEdit" name="lineEdit_carbMax">
+        <widget class="SmartLineEdit" name="lineEdit_carbMax">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>100</horstretch>
@@ -704,9 +647,6 @@
            <width>100</width>
            <height>0</height>
           </size>
-         </property>
-         <property name="editField" stdset="0">
-          <string notr="true">carbMax_vol</string>
          </property>
         </widget>
        </item>
@@ -718,7 +658,7 @@
         </widget>
        </item>
        <item row="3" column="0">
-        <widget class="QLabel" name="label_ibu">
+        <widget class="SmartLabel" name="label_ibu">
          <property name="text">
           <string>IBUs</string>
          </property>
@@ -883,43 +823,17 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>BtGenericEdit</class>
-   <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
-  </customwidget>
-  <customwidget>
-   <class>BtStringEdit</class>
-   <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
-  </customwidget>
-  <customwidget>
-   <class>BtColorLabel</class>
+   <class>SmartLabel</class>
    <extends>QLabel</extends>
-   <header>BtLabel.h</header>
+   <header>widgets/SmartLabel.h</header>
    <slots>
     <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    </slots>
   </customwidget>
   <customwidget>
-   <class>BtColorEdit</class>
+   <class>SmartLineEdit</class>
    <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
-   <slots>
-    <slot>lineChanged(PreviousScaleInfo)</slot>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtDensityLabel</class>
-   <extends>QLabel</extends>
-   <header>BtLabel.h</header>
-   <slots>
-    <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtDensityEdit</class>
-   <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
+   <header>widgets/SmartLineEdit.h</header>
    <slots>
     <slot>lineChanged(PreviousScaleInfo)</slot>
    </slots>
@@ -958,102 +872,4 @@
  <resources>
   <include location="../brewtarget.qrc"/>
  </resources>
- <connections>
-  <connection>
-   <sender>label_og</sender>
-   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   <receiver>lineEdit_ogMin</receiver>
-   <slot>lineChanged(PreviousScaleInfo)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>43</x>
-     <y>284</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>128</x>
-     <y>284</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>label_og</sender>
-   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   <receiver>lineEdit_ogMax</receiver>
-   <slot>lineChanged(PreviousScaleInfo)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>43</x>
-     <y>284</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>232</x>
-     <y>284</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>label_fg</sender>
-   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   <receiver>lineEdit_fgMin</receiver>
-   <slot>lineChanged(PreviousScaleInfo)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>43</x>
-     <y>310</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>128</x>
-     <y>310</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>label_fg</sender>
-   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   <receiver>lineEdit_fgMax</receiver>
-   <slot>lineChanged(PreviousScaleInfo)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>43</x>
-     <y>310</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>232</x>
-     <y>310</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>label_color</sender>
-   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   <receiver>lineEdit_colorMin</receiver>
-   <slot>lineChanged(PreviousScaleInfo)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>43</x>
-     <y>362</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>128</x>
-     <y>362</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>label_color</sender>
-   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   <receiver>lineEdit_colorMax</receiver>
-   <slot>lineChanged(PreviousScaleInfo)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>43</x>
-     <y>362</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>232</x>
-     <y>362</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
 </ui>

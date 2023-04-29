@@ -53,6 +53,25 @@ ObjectStore & MashStep::getObjectStoreTypedInstance() const {
    return ObjectStoreTyped<MashStep>::getInstance();
 }
 
+TypeLookup const MashStep::typeLookup {
+   "MashStep",
+   {
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::MashStep::decoctionAmount_l, MashStep::m_decoctionAmount_l, Measurement::PhysicalQuantity::Volume       ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::MashStep::endTemp_c        , MashStep::m_endTemp_c        , Measurement::PhysicalQuantity::Temperature  ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::MashStep::infuseAmount_l   , MashStep::m_infuseAmount_l   , Measurement::PhysicalQuantity::Volume       ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::MashStep::infuseTemp_c     , MashStep::m_infuseTemp_c     , Measurement::PhysicalQuantity::Temperature  ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::MashStep::mashId           , MashStep::m_mashId           ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::MashStep::rampTime_min     , MashStep::m_rampTime_min     , Measurement::PhysicalQuantity::Time         ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::MashStep::stepNumber       , MashStep::m_stepNumber       ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::MashStep::stepTemp_c       , MashStep::m_stepTemp_c       , Measurement::PhysicalQuantity::Temperature  ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::MashStep::stepTime_min     , MashStep::m_stepTime_min     , Measurement::PhysicalQuantity::Time         ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::MashStep::type             , MashStep::m_type             ),
+//      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::MashStep::typeString       , MashStep::m_typeString       ),
+   },
+   // Parent class lookup
+   &NamedEntity::typeLookup
+};
+
 //==============================CONSTRUCTORS====================================
 
 MashStep::MashStep(QString name) :

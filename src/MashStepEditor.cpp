@@ -29,8 +29,16 @@ MashStepEditor::MashStepEditor(QWidget* parent) : QDialog{parent}, obs(nullptr) 
 
    this->comboBox_type->setCurrentIndex(-1);
 
-   connect(buttonBox, &QDialogButtonBox::accepted, this, &MashStepEditor::saveAndClose);
-   connect(buttonBox, &QDialogButtonBox::rejected, this, &MashStepEditor::close);
+   SMART_FIELD_INIT(MashStepEditor, label_stepTemp       , lineEdit_stepTemp       , MashStep, PropertyNames::MashStep::stepTemp_c       , 1);
+   SMART_FIELD_INIT(MashStepEditor, label_infuseAmount   , lineEdit_infuseAmount   , MashStep, PropertyNames::MashStep::infuseAmount_l      );
+   SMART_FIELD_INIT(MashStepEditor, label_infuseTemp     , lineEdit_infuseTemp     , MashStep, PropertyNames::MashStep::infuseTemp_c     , 1);
+   SMART_FIELD_INIT(MashStepEditor, label_decoctionAmount, lineEdit_decoctionAmount, MashStep, PropertyNames::MashStep::decoctionAmount_l   );
+   SMART_FIELD_INIT(MashStepEditor, label_stepTime       , lineEdit_stepTime       , MashStep, PropertyNames::MashStep::stepTime_min     , 0);
+   SMART_FIELD_INIT(MashStepEditor, label_rampTime       , lineEdit_rampTime       , MashStep, PropertyNames::MashStep::rampTime_min     , 0);
+   SMART_FIELD_INIT(MashStepEditor, label_endTemp        , lineEdit_endTemp        , MashStep, PropertyNames::MashStep::endTemp_c        , 1);
+
+   connect(this->buttonBox,     &QDialogButtonBox::accepted,    this, &MashStepEditor::saveAndClose);
+   connect(this->buttonBox,     &QDialogButtonBox::rejected,    this, &MashStepEditor::close       );
    connect(this->comboBox_type, &QComboBox::currentTextChanged, this, &MashStepEditor::grayOutStuff);
    return;
 }
@@ -52,48 +60,28 @@ void MashStepEditor::showChanges(QMetaProperty* metaProp) {
       value = metaProp->read(this->obs.get());
    }
 
-   if (updateAll) {
-      lineEdit_name->setText(obs->name());
-      comboBox_type->setCurrentIndex(static_cast<int>(obs->type()));
-      lineEdit_infuseAmount->setText(this->obs.get());
-      lineEdit_infuseTemp->setText(this->obs.get());
-      lineEdit_decoctionAmount->setText(this->obs.get());
-      lineEdit_stepTemp->setText(this->obs.get());
-      lineEdit_stepTime->setText(this->obs.get());
-      lineEdit_rampTime->setText(this->obs.get());
-      lineEdit_endTemp->setText(this->obs.get());
-   } else if (propName == PropertyNames::NamedEntity::name) {
-      lineEdit_name->setText(obs->name());
-   } else if (propName == PropertyNames::MashStep::type) {
-      comboBox_type->setCurrentIndex(static_cast<int>(obs->type()));
-   } else if (propName == PropertyNames::MashStep::infuseAmount_l) {
-      lineEdit_infuseAmount->setText(this->obs.get());
-   } else if (propName == PropertyNames::MashStep::infuseTemp_c) {
-      lineEdit_infuseTemp->setText(this->obs.get());
-   } else if (propName == PropertyNames::MashStep::decoctionAmount_l) {
-      lineEdit_decoctionAmount->setText(this->obs.get());
-   } else if (propName == PropertyNames::MashStep::stepTemp_c) {
-      lineEdit_stepTemp->setText(this->obs.get());
-   } else if (propName == PropertyNames::MashStep::stepTime_min) {
-      lineEdit_stepTime->setText(this->obs.get());
-   } else if (propName == PropertyNames::MashStep::rampTime_min) {
-      lineEdit_rampTime->setText(this->obs.get());
-   } else if (propName == PropertyNames::MashStep::endTemp_c) {
-      lineEdit_endTemp->setText(this->obs.get());
-   }
+   if (updateAll || propName == PropertyNames::NamedEntity::name          ) { this->lineEdit_name           ->setText        (this->obs->name())             ; if (!updateAll) { return; } }
+   if (updateAll || propName == PropertyNames::MashStep::type             ) { this->comboBox_type           ->setCurrentIndex(static_cast<int>(obs->type())) ; if (!updateAll) { return; } }
+   if (updateAll || propName == PropertyNames::MashStep::infuseAmount_l   ) { this->lineEdit_infuseAmount   ->setAmount      (this->obs->infuseAmount_l   ()); if (!updateAll) { return; } }
+   if (updateAll || propName == PropertyNames::MashStep::infuseTemp_c     ) { this->lineEdit_infuseTemp     ->setAmount      (this->obs->infuseTemp_c     ()); if (!updateAll) { return; } }
+   if (updateAll || propName == PropertyNames::MashStep::decoctionAmount_l) { this->lineEdit_decoctionAmount->setAmount      (this->obs->decoctionAmount_l()); if (!updateAll) { return; } }
+   if (updateAll || propName == PropertyNames::MashStep::stepTemp_c       ) { this->lineEdit_stepTemp       ->setAmount      (this->obs->stepTemp_c       ()); if (!updateAll) { return; } }
+   if (updateAll || propName == PropertyNames::MashStep::stepTime_min     ) { this->lineEdit_stepTime       ->setAmount      (this->obs->stepTime_min     ()); if (!updateAll) { return; } }
+   if (updateAll || propName == PropertyNames::MashStep::rampTime_min     ) { this->lineEdit_rampTime       ->setAmount      (this->obs->rampTime_min     ()); if (!updateAll) { return; } }
+   if (updateAll || propName == PropertyNames::MashStep::endTemp_c        ) { this->lineEdit_endTemp        ->setAmount      (this->obs->endTemp_c        ()); if (!updateAll) { return; } }
    return;
 }
 
 void MashStepEditor::clear() {
-   lineEdit_name->setText(QString(""));
-   comboBox_type->setCurrentIndex(0);
-   lineEdit_infuseAmount->setText(QString(""));
-   lineEdit_infuseTemp->setText(QString(""));
-   lineEdit_decoctionAmount->setText(QString(""));
-   lineEdit_stepTemp->setText(QString(""));
-   lineEdit_stepTime->setText(QString(""));
-   lineEdit_rampTime->setText(QString(""));
-   lineEdit_endTemp->setText(QString(""));
+   this->lineEdit_name           ->setText(QString(""));
+   this->comboBox_type           ->setCurrentIndex(0);
+   this->lineEdit_infuseAmount   ->setText(QString(""));
+   this->lineEdit_infuseTemp     ->setText(QString(""));
+   this->lineEdit_decoctionAmount->setText(QString(""));
+   this->lineEdit_stepTemp       ->setText(QString(""));
+   this->lineEdit_stepTime       ->setText(QString(""));
+   this->lineEdit_rampTime       ->setText(QString(""));
+   this->lineEdit_endTemp        ->setText(QString(""));
    return;
 }
 
@@ -126,15 +114,15 @@ void MashStepEditor::setMashStep(std::shared_ptr<MashStep> step) {
 }
 
 void MashStepEditor::saveAndClose() {
-   obs->setName(lineEdit_name->text());
-   obs->setType(static_cast<MashStep::Type>(comboBox_type->currentIndex()));
-   obs->setInfuseAmount_l(lineEdit_infuseAmount->toCanonical().quantity());
-   obs->setInfuseTemp_c(lineEdit_infuseTemp->toCanonical().quantity());
-   obs->setDecoctionAmount_l(lineEdit_decoctionAmount->toCanonical().quantity());
-   obs->setStepTemp_c(lineEdit_stepTemp->toCanonical().quantity());
-   obs->setStepTime_min(lineEdit_stepTime->toCanonical().quantity());
-   obs->setRampTime_min(lineEdit_rampTime->toCanonical().quantity());
-   obs->setEndTemp_c(lineEdit_endTemp->toCanonical().quantity());
+   this->obs->setName             (lineEdit_name->text());
+   this->obs->setType             (static_cast<MashStep::Type>(comboBox_type->currentIndex()));
+   this->obs->setInfuseAmount_l   (lineEdit_infuseAmount   ->toCanonical().quantity());
+   this->obs->setInfuseTemp_c     (lineEdit_infuseTemp     ->toCanonical().quantity());
+   this->obs->setDecoctionAmount_l(lineEdit_decoctionAmount->toCanonical().quantity());
+   this->obs->setStepTemp_c       (lineEdit_stepTemp       ->toCanonical().quantity());
+   this->obs->setStepTime_min     (lineEdit_stepTime       ->toCanonical().quantity());
+   this->obs->setRampTime_min     (lineEdit_rampTime       ->toCanonical().quantity());
+   this->obs->setEndTemp_c        (lineEdit_endTemp        ->toCanonical().quantity());
 
    if (this->obs->key() < 0) {
       // This is a new MashStep, so we need to store it.

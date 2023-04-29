@@ -46,7 +46,7 @@
              </widget>
             </item>
             <item>
-             <widget class="BtDensityEdit" name="lineEdit_sg">
+             <widget class="SmartLineEdit" name="lineEdit_sg">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -75,7 +75,7 @@
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout">
             <item>
-             <widget class="BtTemperatureLabel" name="label_temp">
+             <widget class="SmartLabel" name="label_temp">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                 <horstretch>0</horstretch>
@@ -94,7 +94,7 @@
              </widget>
             </item>
             <item>
-             <widget class="BtTemperatureEdit" name="lineEdit_temp">
+             <widget class="SmartLineEdit" name="lineEdit_temp">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -116,9 +116,6 @@
               <property name="toolTip">
                <string>Temperature of SG reading</string>
               </property>
-              <property name="editField" stdset="0">
-               <string notr="true">temperature</string>
-              </property>
              </widget>
             </item>
            </layout>
@@ -126,7 +123,7 @@
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_3">
             <item>
-             <widget class="BtTemperatureLabel" name="label_calTemp">
+             <widget class="SmartLabel" name="label_calTemp">
               <property name="contextMenuPolicy">
                <enum>Qt::CustomContextMenu</enum>
               </property>
@@ -139,7 +136,7 @@
              </widget>
             </item>
             <item>
-             <widget class="BtTemperatureEdit" name="lineEdit_calTemp">
+             <widget class="SmartLineEdit" name="lineEdit_calTemp">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -154,9 +151,6 @@
               </property>
               <property name="toolTip">
                <string>Temp to which the hydrometer is calibrated</string>
-              </property>
-              <property name="editField" stdset="0">
-               <string notr="true">calTemp</string>
               </property>
              </widget>
             </item>
@@ -232,7 +226,7 @@
              </widget>
             </item>
             <item>
-             <widget class="BtDensityEdit" name="lineEdit_plato">
+             <widget class="SmartLineEdit" name="lineEdit_plato">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -253,9 +247,6 @@
               </property>
               <property name="toolTip">
                <string>Plato (percent by mass of equivalent sucrose)</string>
-              </property>
-              <property name="editField" stdset="0">
-               <string notr="true">plato</string>
               </property>
               <property name="forcedSystemOfMeasurement" stdset="0">
                <string notr="true">Plato</string>
@@ -297,7 +288,7 @@
          </spacer>
         </item>
         <item>
-         <widget class="BtVolumeLabel" name="label_volume">
+         <widget class="SmartLabel" name="label_volume">
           <property name="contextMenuPolicy">
            <enum>Qt::CustomContextMenu</enum>
           </property>
@@ -310,7 +301,7 @@
          </widget>
         </item>
         <item>
-         <widget class="BtVolumeEdit" name="lineEdit_volume">
+         <widget class="SmartLineEdit" name="lineEdit_volume">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -331,9 +322,6 @@
           </property>
           <property name="toolTip">
            <string>Measured pre-boil volume</string>
-          </property>
-          <property name="editField" stdset="0">
-           <string notr="true">volume</string>
           </property>
          </widget>
         </item>
@@ -369,7 +357,7 @@
            </widget>
           </item>
           <item>
-           <widget class="BtDensityEdit" name="lineEdit_og">
+           <widget class="SmartLineEdit" name="lineEdit_og">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -401,7 +389,7 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_7">
           <item>
-           <widget class="BtVolumeLabel" name="label_add">
+           <widget class="SmartLabel" name="label_add">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
               <horstretch>0</horstretch>
@@ -420,7 +408,7 @@
            </widget>
           </item>
           <item>
-           <widget class="BtVolumeEdit" name="lineEdit_add">
+           <widget class="SmartLineEdit" name="lineEdit_add">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -445,9 +433,6 @@
             <property name="readOnly">
              <bool>true</bool>
             </property>
-            <property name="editField" stdset="0">
-             <string notr="true">add</string>
-            </property>
            </widget>
           </item>
          </layout>
@@ -455,7 +440,7 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_8">
           <item>
-           <widget class="BtVolumeLabel" name="label_batchsize">
+           <widget class="SmartLabel" name="label_batchSize">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
               <horstretch>0</horstretch>
@@ -474,7 +459,7 @@
            </widget>
           </item>
           <item>
-           <widget class="BtVolumeEdit" name="lineEdit_batchSize">
+           <widget class="SmartLineEdit" name="lineEdit_batchSize">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -498,9 +483,6 @@
             </property>
             <property name="readOnly">
              <bool>true</bool>
-            </property>
-            <property name="editField" stdset="0">
-             <string notr="true">batchsize</string>
             </property>
            </widget>
           </item>
@@ -574,127 +556,21 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>BtDensityEdit</class>
-   <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
-   <slots>
-    <slot>lineChanged(PreviousScaleInfo)</slot>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtTemperatureEdit</class>
-   <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
-   <slots>
-    <slot>lineChanged(PreviousScaleInfo)</slot>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtTemperatureLabel</class>
+   <class>SmartLabel</class>
    <extends>QLabel</extends>
-   <header>BtLabel.h</header>
+   <header>widgets/SmartLabel.h</header>
    <slots>
     <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    </slots>
   </customwidget>
   <customwidget>
-   <class>BtVolumeLabel</class>
-   <extends>QLabel</extends>
-   <header>BtLabel.h</header>
-   <slots>
-    <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtVolumeEdit</class>
+   <class>SmartLineEdit</class>
    <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
+   <header>widgets/SmartLineEdit.h</header>
    <slots>
     <slot>lineChanged(PreviousScaleInfo)</slot>
    </slots>
   </customwidget>
  </customwidgets>
  <resources/>
- <connections>
-  <connection>
-   <sender>label_temp</sender>
-   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   <receiver>lineEdit_temp</receiver>
-   <slot>lineChanged(PreviousScaleInfo)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>30</x>
-     <y>86</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>101</x>
-     <y>85</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>label_calTemp</sender>
-   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   <receiver>lineEdit_calTemp</receiver>
-   <slot>lineChanged(PreviousScaleInfo)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>55</x>
-     <y>121</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>126</x>
-     <y>121</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>label_batchsize</sender>
-   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   <receiver>lineEdit_batchSize</receiver>
-   <slot>lineChanged(PreviousScaleInfo)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>411</x>
-     <y>101</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>537</x>
-     <y>101</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>label_add</sender>
-   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   <receiver>lineEdit_add</receiver>
-   <slot>lineChanged(PreviousScaleInfo)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>411</x>
-     <y>73</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>537</x>
-     <y>73</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>label_volume</sender>
-   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   <receiver>lineEdit_volume</receiver>
-   <slot>lineChanged(PreviousScaleInfo)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>174</x>
-     <y>155</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>268</x>
-     <y>155</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
 </ui>

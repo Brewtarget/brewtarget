@@ -34,6 +34,7 @@
 
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
+// See comment in model/NamedEntity.h
 #define AddPropertyName(property) namespace PropertyNames::BrewNote { BtStringConst const property{#property}; }
 AddPropertyName(abv              )
 AddPropertyName(attenuation      )
@@ -82,6 +83,12 @@ class BrewNote : public NamedEntity {
    Q_OBJECT
 
 public:
+   /**
+    * \brief Mapping of names to types for the Qt properties of this class.  See \c NamedEntity::typeLookup for more
+    *        info.
+    */
+   static TypeLookup const typeLookup;
+
    BrewNote(QString name = "");
    BrewNote(Recipe const & recipe);
    BrewNote(QDate dateNow, QString const & name = "");

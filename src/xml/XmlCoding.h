@@ -1,6 +1,6 @@
 /*
  * xml/XmlCoding.h is part of Brewtarget, and is Copyright the following
- * authors 2020-2021
+ * authors 2020-2023
  * - Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -41,7 +41,7 @@
  * \brief An instance of this class holds information about a particular XML encoding (eg BeerXML 1.0) including the
  *        parameters needed to construct the various \b XmlRecord objects used to parse a document of this encoding.
  *
- * Broadly speaking we think of an "brewing" XML document (eg a BeerXML document) as a tree of "records" represented by
+ * Broadly speaking we think of a "brewing" XML document (eg a BeerXML document) as a tree of "records" represented by
  * \b XmlRecord and its child classes.  (Note that this is a simpler, and subtly different, way of abstracting things
  * than the traditional BeerXML terminology, which distinguishes between "records" and "record sets".)
  *
@@ -133,7 +133,7 @@ public:
     *        a create-on-the-heap constructor for that subclass, (provided it takes the same parameters as this
     *        function).
     *
-    *        To make it easier for callers, we also typedef \b XmlCoding::XmlRecordConstructorWrapperto be a pointer to
+    *        To make it easier for callers, we also typedef \b XmlCoding::XmlRecordConstructorWrapper to be a pointer to
     *        a function of this type.
     *
     * \param recordName passed into the constructor of T (which should be \b XmlRecord or a subclass thereof)
@@ -145,7 +145,7 @@ public:
     *           XmlCoding::construct<Hop>() will construct an XmlNamedEntityRecord<Hop> object
     *           XmlCoding::construct<Yeast>() will construct an XmlNamedEntityRecord<Yeast> object
     *           XmlCoding::construct<Recipe>() will construct an XmlRecipeRecord object ‡
-    *           XmlCoding::construct<void>() will construct an XmlRecipe object ‡
+    *           XmlCoding::construct<void>() will construct an XmlRecord object ‡
     *         ‡ courtesy of template specialisation below
     *
     *         NB: The caller owns this object and is responsible for its deletion.
@@ -244,7 +244,7 @@ template<> inline
 XmlRecord * XmlCoding::construct<void>(QString const & recordName,
                                        XmlCoding const & xmlCoding,
                                        XmlRecord::FieldDefinitions const & fieldDefinitions) {
-   return new XmlRecord{recordName, xmlCoding, fieldDefinitions, ""};
+   return new XmlRecord{recordName, xmlCoding, fieldDefinitions, nullptr, ""};
 }
 template<> inline
 XmlRecord * XmlCoding::construct<Mash>(QString const & recordName,

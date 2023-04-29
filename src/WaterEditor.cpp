@@ -58,20 +58,28 @@ WaterEditor::WaterEditor(QWidget *parent,
                                                      pimpl{std::make_unique<impl>(editorName)} {
    setupUi(this);
 
+   SMART_FIELD_INIT(WaterEditor, label_ca , lineEdit_ca , Water, PropertyNames::Water::calcium_ppm  , 2);
+   SMART_FIELD_INIT(WaterEditor, label_cl , lineEdit_cl , Water, PropertyNames::Water::chloride_ppm , 2);
+   SMART_FIELD_INIT(WaterEditor, label_mg , lineEdit_mg , Water, PropertyNames::Water::magnesium_ppm, 2);
+   SMART_FIELD_INIT(WaterEditor, label_so4, lineEdit_so4, Water, PropertyNames::Water::sulfate_ppm  , 2);
+   SMART_FIELD_INIT(WaterEditor, label_na , lineEdit_na , Water, PropertyNames::Water::sodium_ppm   , 2);
+   SMART_FIELD_INIT(WaterEditor, label_alk, lineEdit_alk, Water, PropertyNames::Water::alkalinity   , 2);
+   SMART_FIELD_INIT(WaterEditor, label_pH , lineEdit_ph , Water, PropertyNames::Water::ph           , 2);
+
    // .:TBD:. The QLineEdit::textEdited and QPlainTextEdit::textChanged signals below are sent somewhat more frequently
    // than we really need - ie every time you type a character in the name or notes field.  We should perhaps look at
    // changing the corresponding field types...
-   connect(this->buttonBox,           &QDialogButtonBox::accepted,    this, &WaterEditor::saveAndClose);
-   connect(this->buttonBox,           &QDialogButtonBox::rejected,    this, &WaterEditor::clearAndClose);
+   connect(this->buttonBox,           &QDialogButtonBox::accepted,    this, &WaterEditor::saveAndClose      );
+   connect(this->buttonBox,           &QDialogButtonBox::rejected,    this, &WaterEditor::clearAndClose     );
    connect(this->comboBox_alk,        &QComboBox::currentTextChanged, this, &WaterEditor::inputFieldModified);
-   connect(this->lineEdit_alk,        &BtLineEdit::textModified,      this, &WaterEditor::inputFieldModified);
-   connect(this->lineEdit_ca,         &BtLineEdit::textModified,      this, &WaterEditor::inputFieldModified);
-   connect(this->lineEdit_cl,         &BtLineEdit::textModified,      this, &WaterEditor::inputFieldModified);
-   connect(this->lineEdit_mg,         &BtLineEdit::textModified,      this, &WaterEditor::inputFieldModified);
-   connect(this->lineEdit_na,         &BtLineEdit::textModified,      this, &WaterEditor::inputFieldModified);
+   connect(this->lineEdit_alk,        &SmartLineEdit::textModified,   this, &WaterEditor::inputFieldModified);
+   connect(this->lineEdit_ca,         &SmartLineEdit::textModified,   this, &WaterEditor::inputFieldModified);
+   connect(this->lineEdit_cl,         &SmartLineEdit::textModified,   this, &WaterEditor::inputFieldModified);
+   connect(this->lineEdit_mg,         &SmartLineEdit::textModified,   this, &WaterEditor::inputFieldModified);
+   connect(this->lineEdit_na,         &SmartLineEdit::textModified,   this, &WaterEditor::inputFieldModified);
    connect(this->lineEdit_name,       &QLineEdit::textEdited,         this, &WaterEditor::inputFieldModified);
-   connect(this->lineEdit_ph,         &BtLineEdit::textModified,      this, &WaterEditor::inputFieldModified);
-   connect(this->lineEdit_so4,        &BtLineEdit::textModified,      this, &WaterEditor::inputFieldModified);
+   connect(this->lineEdit_ph,         &SmartLineEdit::textModified,   this, &WaterEditor::inputFieldModified);
+   connect(this->lineEdit_so4,        &SmartLineEdit::textModified,   this, &WaterEditor::inputFieldModified);
    connect(this->plainTextEdit_notes, &QPlainTextEdit::textChanged,   this, &WaterEditor::inputFieldModified);
 
    this->waterEditRadarChart->init(
@@ -172,53 +180,25 @@ void WaterEditor::showChanges(QMetaProperty const * prop) {
    if (prop == nullptr) {
       qDebug() << Q_FUNC_INFO << this->pimpl->editorName << ": Update all";
       updateAll = true;
-   }
-   else {
+   } else {
       propName = prop->name();
       qDebug() << Q_FUNC_INFO << this->pimpl->editorName << ": Changed" << propName;
    }
 
-   if (propName == PropertyNames::NamedEntity::name || updateAll) {
-      lineEdit_name->setText(this->pimpl->observedWater->name());
-      if (!updateAll) return;
-   }
-   if (propName == PropertyNames::Water::calcium_ppm || updateAll) {
-      lineEdit_ca->setText(this->pimpl->observedWater->calcium_ppm(),2);
-      if (!updateAll) return;
-   }
-   if (propName == PropertyNames::Water::magnesium_ppm || updateAll) {
-      lineEdit_mg->setText(this->pimpl->observedWater->magnesium_ppm(),2);
-      if (!updateAll) return;
-   }
-   if (propName == PropertyNames::Water::sulfate_ppm || updateAll) {
-      lineEdit_so4->setText(this->pimpl->observedWater->sulfate_ppm(),2);
-      if (!updateAll) return;
-   }
-   if (propName == PropertyNames::Water::sodium_ppm || updateAll) {
-      lineEdit_na->setText(this->pimpl->observedWater->sodium_ppm(),2);
-      if (!updateAll) return;
-   }
-   if (propName == PropertyNames::Water::chloride_ppm || updateAll) {
-      lineEdit_cl->setText(this->pimpl->observedWater->chloride_ppm(),2);
-      if (!updateAll) return;
-   }
-   if (propName == PropertyNames::Water::bicarbonate_ppm || updateAll) {
-      lineEdit_alk->setText(this->pimpl->observedWater->bicarbonate_ppm(),2);
-      if (!updateAll) return;
-   }
-   if (propName == PropertyNames::Water::ph || updateAll) {
-      lineEdit_ph->setText(this->pimpl->observedWater->ph(),2);
-      if (!updateAll) return;
-   }
-   if (propName == PropertyNames::Water::alkalinityAsHCO3 || updateAll) {
+   if (updateAll || propName == PropertyNames::NamedEntity::name      ) { this->lineEdit_name->setText  (this->pimpl->observedWater->name()           ); if (!updateAll) { return; } }
+   if (updateAll || propName == PropertyNames::Water::calcium_ppm     ) { this->lineEdit_ca  ->setAmount(this->pimpl->observedWater->calcium_ppm()    ); if (!updateAll) { return; } }
+   if (updateAll || propName == PropertyNames::Water::magnesium_ppm   ) { this->lineEdit_mg  ->setAmount(this->pimpl->observedWater->magnesium_ppm()  ); if (!updateAll) { return; } }
+   if (updateAll || propName == PropertyNames::Water::sulfate_ppm     ) { this->lineEdit_so4 ->setAmount(this->pimpl->observedWater->sulfate_ppm()    ); if (!updateAll) { return; } }
+   if (updateAll || propName == PropertyNames::Water::sodium_ppm      ) { this->lineEdit_na  ->setAmount(this->pimpl->observedWater->sodium_ppm()     ); if (!updateAll) { return; } }
+   if (updateAll || propName == PropertyNames::Water::chloride_ppm    ) { this->lineEdit_cl  ->setAmount(this->pimpl->observedWater->chloride_ppm()   ); if (!updateAll) { return; } }
+   if (updateAll || propName == PropertyNames::Water::bicarbonate_ppm ) { this->lineEdit_alk ->setAmount(this->pimpl->observedWater->bicarbonate_ppm()); if (!updateAll) { return; } }
+   if (updateAll || propName == PropertyNames::Water::ph              ) { this->lineEdit_ph  ->setAmount(this->pimpl->observedWater->ph()             ); if (!updateAll) { return; } }
+   if (updateAll || propName == PropertyNames::Water::alkalinityAsHCO3) {
       bool typeless = this->pimpl->observedWater->alkalinityAsHCO3();
-      comboBox_alk->setCurrentIndex(comboBox_alk->findText(typeless ? "HCO3" : "CaCO3"));
-      if (!updateAll) return;
+      this->comboBox_alk->setCurrentIndex(comboBox_alk->findText(typeless ? "HCO3" : "CaCO3"));
+      if (!updateAll) { return; }
    }
-   if (propName == PropertyNames::Water::notes || updateAll) {
-      plainTextEdit_notes->setPlainText(this->pimpl->observedWater->notes());
-      if (!updateAll) return;
-   }
+   if (updateAll || propName == PropertyNames::Water::notes           ) { this->plainTextEdit_notes->setPlainText(this->pimpl->observedWater->notes() );    if (!updateAll) { return; } }
 
    return;
 }
@@ -241,17 +221,17 @@ void WaterEditor::inputFieldModified() {
       // .:TBD:. Need to get to the bottom of the relationship between Water::alkalinity and Water::bicarbonate_ppm.  It
       //         feels wrong that we just set both from the same input, but probably needs some more profound thought
       //         about what exactly correct behaviour should be.
-      if      (signalSender == this->comboBox_alk)         {this->pimpl->editedWater->setAlkalinityAsHCO3(this->comboBox_alk->currentText() == QString("HCO3"));}
-      else if (signalSender == this->lineEdit_alk)         {this->pimpl->editedWater->setBicarbonate_ppm (this->lineEdit_alk->toCanonical().quantity());  // NB continues on next line!
-                                                            this->pimpl->editedWater->setAlkalinity      (this->lineEdit_alk->toCanonical().quantity());                 }
-      else if (signalSender == this->lineEdit_ca)          {this->pimpl->editedWater->setCalcium_ppm     (this->lineEdit_ca->toCanonical().quantity());                  }
-      else if (signalSender == this->lineEdit_cl)          {this->pimpl->editedWater->setChloride_ppm    (this->lineEdit_cl->toCanonical().quantity());                  }
-      else if (signalSender == this->lineEdit_mg)          {this->pimpl->editedWater->setMagnesium_ppm   (this->lineEdit_mg->toCanonical().quantity());                  }
-      else if (signalSender == this->lineEdit_na)          {this->pimpl->editedWater->setSodium_ppm      (this->lineEdit_na->toCanonical().quantity());                  }
-      else if (signalSender == this->lineEdit_name)        {this->pimpl->editedWater->setName            (this->lineEdit_name->text());                         }
-      else if (signalSender == this->lineEdit_ph)          {this->pimpl->editedWater->setPh              (this->lineEdit_ph->toCanonical().quantity());                  }
-      else if (signalSender == this->lineEdit_so4)         {this->pimpl->editedWater->setSulfate_ppm     (this->lineEdit_so4->toCanonical().quantity());                 }
-      else if (signalSender == this->plainTextEdit_notes)  {this->pimpl->editedWater->setNotes           (this->plainTextEdit_notes->toPlainText());            }
+      if      (signalSender == this->comboBox_alk)         {this->pimpl->editedWater->setAlkalinityAsHCO3(this->comboBox_alk ->currentText() == QString("HCO3"));}
+      else if (signalSender == this->lineEdit_alk)         {this->pimpl->editedWater->setBicarbonate_ppm (this->lineEdit_alk ->toCanonical().quantity());  // NB continues on next line!
+                                                            this->pimpl->editedWater->setAlkalinity      (this->lineEdit_alk ->toCanonical().quantity());        }
+      else if (signalSender == this->lineEdit_ca)          {this->pimpl->editedWater->setCalcium_ppm     (this->lineEdit_ca  ->toCanonical().quantity());        }
+      else if (signalSender == this->lineEdit_cl)          {this->pimpl->editedWater->setChloride_ppm    (this->lineEdit_cl  ->toCanonical().quantity());        }
+      else if (signalSender == this->lineEdit_mg)          {this->pimpl->editedWater->setMagnesium_ppm   (this->lineEdit_mg  ->toCanonical().quantity());        }
+      else if (signalSender == this->lineEdit_na)          {this->pimpl->editedWater->setSodium_ppm      (this->lineEdit_na  ->toCanonical().quantity());        }
+      else if (signalSender == this->lineEdit_name)        {this->pimpl->editedWater->setName            (this->lineEdit_name->text());                          }
+      else if (signalSender == this->lineEdit_ph)          {this->pimpl->editedWater->setPh              (this->lineEdit_ph  ->toCanonical().quantity());        }
+      else if (signalSender == this->lineEdit_so4)         {this->pimpl->editedWater->setSulfate_ppm     (this->lineEdit_so4 ->toCanonical().quantity());        }
+      else if (signalSender == this->plainTextEdit_notes)  {this->pimpl->editedWater->setNotes           (this->plainTextEdit_notes->toPlainText());             }
       else {
          // If we get here, it's probably a coding error
          qWarning() << Q_FUNC_INFO << "Unrecognised child";
@@ -293,13 +273,15 @@ void WaterEditor::saveAndClose() {
          ":" << this->pimpl->observedWater->name();
    }
 
-   // This is deliberately commented out for now at least as, when we're called from WaterDialog, it is that window that
-   // is responsible for adding new Water objects to the Recipe (which results in the Water object being saved in the
-   // DB).  If we save the Water object here then the current logic in WaterDialog won't pick up that it needs to be added to the Recipe.
-//   if (this->pimpl->observedWater->key() < 0) {
-//      qDebug() << Q_FUNC_INFO << "Writing new Water:" << this->pimpl->observedWater->name();
-//      ObjectStoreWrapper::insert(this->pimpl->observedWater);
-//   }
+   //
+   // TBD: When we're called from WaterDialog, it is that window that is responsible for adding new Water objects to the
+   //      Recipe (which results in the Water object being saved in the DB).  Saving the Water object means the current
+   //      logic in WaterDialog won't pick up that it needs to be added to the Recipe.
+   //
+   if (this->pimpl->observedWater->key() < 0) {
+      qDebug() << Q_FUNC_INFO << "Writing new Water:" << this->pimpl->observedWater->name();
+      ObjectStoreWrapper::insert(this->pimpl->observedWater);
+   }
 
    setVisible(false);
    return;

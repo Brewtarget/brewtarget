@@ -25,7 +25,7 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="QLabel" name="label">
+        <widget class="QLabel" name="label_name">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -41,7 +41,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit_name">
+        <widget class="SmartLineEdit" name="lineEdit_name">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -64,7 +64,7 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
-        <widget class="BtTemperatureLabel" name="label_grainTemp">
+        <widget class="SmartLabel" name="label_grainTemp">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -83,7 +83,7 @@
         </widget>
        </item>
        <item>
-        <widget class="BtTemperatureEdit" name="lineEdit_grainTemp">
+        <widget class="SmartLineEdit" name="lineEdit_grainTemp">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -99,9 +99,6 @@
          <property name="toolTip">
           <string>Initial grain temp</string>
          </property>
-         <property name="editField" stdset="0">
-          <string notr="true">grainTemp_c</string>
-         </property>
         </widget>
        </item>
       </layout>
@@ -109,7 +106,7 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_4">
        <item>
-        <widget class="BtTemperatureLabel" name="label_spargeTemp">
+        <widget class="SmartLabel" name="label_spargeTemp">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -128,7 +125,7 @@
         </widget>
        </item>
        <item>
-        <widget class="BtTemperatureEdit" name="lineEdit_spargeTemp">
+        <widget class="SmartLineEdit" name="lineEdit_spargeTemp">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -144,9 +141,6 @@
          <property name="toolTip">
           <string>Sparge temp target</string>
          </property>
-         <property name="editField" stdset="0">
-          <string notr="true">spargeTemp_c</string>
-         </property>
         </widget>
        </item>
       </layout>
@@ -154,7 +148,7 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_5">
        <item>
-        <widget class="QLabel" name="label_spargePh">
+        <widget class="SmartLabel" name="label_spargePh">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -170,7 +164,7 @@
         </widget>
        </item>
        <item>
-        <widget class="BtGenericEdit" name="lineEdit_spargePh">
+        <widget class="SmartLineEdit" name="lineEdit_spargePh">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -185,9 +179,6 @@
          </property>
          <property name="toolTip">
           <string>Sparge pH</string>
-         </property>
-         <property name="editField" stdset="0">
-          <string notr="true">ph</string>
          </property>
         </widget>
        </item>
@@ -252,7 +243,7 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_3">
           <item>
-           <widget class="BtTemperatureLabel" name="label_tunTemp">
+           <widget class="SmartLabel" name="label_tunTemp">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
               <horstretch>0</horstretch>
@@ -271,7 +262,7 @@
            </widget>
           </item>
           <item>
-           <widget class="BtTemperatureEdit" name="lineEdit_tunTemp">
+           <widget class="SmartLineEdit" name="lineEdit_tunTemp">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -286,9 +277,6 @@
             </property>
             <property name="toolTip">
              <string>Initial tun temp</string>
-            </property>
-            <property name="editField" stdset="0">
-             <string notr="true">tunTemp_c</string>
             </property>
            </widget>
           </item>
@@ -316,7 +304,7 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_6">
           <item>
-           <widget class="BtMassLabel" name="label_tunMass">
+           <widget class="SmartLabel" name="label_tunMass">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
               <horstretch>0</horstretch>
@@ -335,7 +323,7 @@
            </widget>
           </item>
           <item>
-           <widget class="BtMassEdit" name="lineEdit_tunMass">
+           <widget class="SmartLineEdit" name="lineEdit_tunMass">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -351,9 +339,6 @@
             <property name="toolTip">
              <string>Tun mass</string>
             </property>
-            <property name="editField" stdset="0">
-             <string notr="true">tunWeight_kg</string>
-            </property>
            </widget>
           </item>
          </layout>
@@ -361,7 +346,7 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_7">
           <item>
-           <widget class="QLabel" name="label_tunSpHeat">
+           <widget class="SmartLabel" name="label_tunSpHeat">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
               <horstretch>0</horstretch>
@@ -377,7 +362,7 @@
            </widget>
           </item>
           <item>
-           <widget class="BtGenericEdit" name="lineEdit_tunSpHeat">
+           <widget class="SmartLineEdit" name="lineEdit_tunSpHeat">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -392,9 +377,6 @@
             </property>
             <property name="toolTip">
              <string>Tun specific heat (cal/(g*K))</string>
-            </property>
-            <property name="editField" stdset="0">
-             <string notr="true">tunSpecificHeat_calGC</string>
             </property>
            </widget>
           </item>
@@ -432,42 +414,21 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>BtGenericEdit</class>
-   <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
-  </customwidget>
-  <customwidget>
-   <class>BtMassEdit</class>
-   <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
-   <slots>
-    <signal>textModified()</signal>
-    <slot>lineChanged()</slot>
-    <slot>lineChanged(PreviousScaleInfo)</slot>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtMassLabel</class>
+   <class>SmartLabel</class>
    <extends>QLabel</extends>
-   <header>BtLabel.h</header>
+   <header>widgets/SmartLabel.h</header>
    <slots>
     <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
     <slot>popContextMenu(QPoint)</slot>
    </slots>
   </customwidget>
   <customwidget>
-   <class>BtTemperatureLabel</class>
-   <extends>QLabel</extends>
-   <header>BtLabel.h</header>
-   <slots>
-    <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtTemperatureEdit</class>
+   <class>SmartLineEdit</class>
    <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
+   <header>widgets/SmartLineEdit.h</header>
    <slots>
+    <signal>textModified()</signal>
+    <slot>lineChanged()</slot>
     <slot>lineChanged(PreviousScaleInfo)</slot>
    </slots>
   </customwidget>
@@ -503,70 +464,6 @@
     <hint type="destinationlabel">
      <x>286</x>
      <y>274</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>label_grainTemp</sender>
-   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   <receiver>lineEdit_grainTemp</receiver>
-   <slot>lineChanged(PreviousScaleInfo)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>87</x>
-     <y>42</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>223</x>
-     <y>42</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>label_spargeTemp</sender>
-   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   <receiver>lineEdit_spargeTemp</receiver>
-   <slot>lineChanged(PreviousScaleInfo)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>87</x>
-     <y>68</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>223</x>
-     <y>68</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>label_tunTemp</sender>
-   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   <receiver>lineEdit_tunTemp</receiver>
-   <slot>lineChanged(PreviousScaleInfo)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>326</x>
-     <y>45</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>418</x>
-     <y>45</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>label_tunMass</sender>
-   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   <receiver>lineEdit_tunMass</receiver>
-   <slot>lineChanged(PreviousScaleInfo)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>326</x>
-     <y>96</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>418</x>
-     <y>96</y>
     </hint>
    </hints>
   </connection>

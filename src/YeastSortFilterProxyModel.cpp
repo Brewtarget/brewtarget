@@ -39,8 +39,9 @@ bool YeastSortFilterProxyModel::lessThan(const QModelIndex &left,
     QVariant rightYeast = sourceModel()->data(right);
     double lAmt, rAmt;
 
-    switch (left.column()) {
-      case YEASTINVENTORYCOL:
+   auto const columnIndex = static_cast<YeastTableModel::ColumnIndex>(left.column());
+    switch (columnIndex) {
+      case YeastTableModel::ColumnIndex::Inventory:
          if (Measurement::qStringToSI(leftYeast.toString(), Measurement::PhysicalQuantity::Volume).quantity() == 0.0 &&
             this->sortOrder() == Qt::AscendingOrder) {
             return false;
@@ -51,10 +52,10 @@ bool YeastSortFilterProxyModel::lessThan(const QModelIndex &left,
          // This is a lie. I need to figure out if they are weights or volumes.
          // and then figure some reasonable way to compare weights to volumes.
          // Maybe lying isn't such a bad idea
-      case YEASTAMOUNTCOL:
+      case YeastTableModel::ColumnIndex::Amount:
          return Measurement::qStringToSI(leftYeast.toString(), Measurement::PhysicalQuantity::Volume) <
                 Measurement::qStringToSI(rightYeast.toString(), Measurement::PhysicalQuantity::Volume);
-      case YEASTPRODIDCOL:
+      case YeastTableModel::ColumnIndex::ProdId:
          lAmt = Localization::toDouble(leftYeast.toString(), Q_FUNC_INFO);
          rAmt = Localization::toDouble(rightYeast.toString(), Q_FUNC_INFO);
          return lAmt < rAmt;

@@ -32,6 +32,19 @@ namespace {
    QStringList const types{"Ale", "Lager", "Wheat", "Wine", "Champagne"};
    QStringList const forms{"Liquid", "Dry", "Slant", "Culture"};
    QStringList const flocculations{"Low", "Medium", "High", "Very High"};
+   QStringList const typesTr{Yeast::tr("Ale"),
+                             Yeast::tr("Lager"),
+                             Yeast::tr("Wheat"),
+                             Yeast::tr("Wine"),
+                             Yeast::tr("Champagne")};
+   QStringList const formsTr {Yeast::tr("Liquid"),
+                              Yeast::tr("Dry"),
+                              Yeast::tr("Slant"),
+                              Yeast::tr("Culture")};
+   QStringList const flocculationsTr{Yeast::tr("Low"),
+                                     Yeast::tr("Medium"),
+                                     Yeast::tr("High"),
+                                     Yeast::tr("Very High")};
 }
 
 bool Yeast::isEqualTo(NamedEntity const & other) const {
@@ -50,6 +63,34 @@ bool Yeast::isEqualTo(NamedEntity const & other) const {
 ObjectStore & Yeast::getObjectStoreTypedInstance() const {
    return ObjectStoreTyped<Yeast>::getInstance();
 }
+
+TypeLookup const Yeast::typeLookup {
+   "Yeast",
+   {
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Yeast::addToSecondary    , Yeast::m_addToSecondary    ,           NonPhysicalQuantity::Bool         ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Yeast::amount            , Yeast::m_amount            ,           NonPhysicalQuantity::Dimensionless), // Not really Dimensionless
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Yeast::amountIsWeight    , Yeast::m_amountIsWeight    ,           NonPhysicalQuantity::Bool         ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Yeast::attenuation_pct   , Yeast::m_attenuation_pct   ,           NonPhysicalQuantity::Percentage   ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Yeast::bestFor           , Yeast::m_bestFor           ,           NonPhysicalQuantity::String       ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Yeast::flocculation      , Yeast::m_flocculation      ),
+//      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Yeast::flocculationString, Yeast::m_flocculationString),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Yeast::form              , Yeast::m_form              ),
+//      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Yeast::formString        , Yeast::m_formString        ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Yeast::laboratory        , Yeast::m_laboratory        ,           NonPhysicalQuantity::String       ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Yeast::maxReuse          , Yeast::m_maxReuse          ,           NonPhysicalQuantity::Count        ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Yeast::maxTemperature_c  , Yeast::m_maxTemperature_c  , Measurement::PhysicalQuantity::Temperature  ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Yeast::minTemperature_c  , Yeast::m_minTemperature_c  , Measurement::PhysicalQuantity::Temperature  ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Yeast::notes             , Yeast::m_notes             ,           NonPhysicalQuantity::String       ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Yeast::productID         , Yeast::m_productID         ,           NonPhysicalQuantity::String       ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Yeast::timesCultured     , Yeast::m_timesCultured     ,           NonPhysicalQuantity::Count        ),
+//      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Yeast::typeString        , Yeast::m_typeString        ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Yeast::type              , Yeast::m_type              ),
+   },
+   // Parent class lookup.  NB: NamedEntityWithInventory not NamedEntity!
+   &NamedEntityWithInventory::typeLookup
+};
+static_assert(std::is_base_of<NamedEntityWithInventory, Yeast>::value);
+
 
 //============================CONSTRUCTORS======================================
 
@@ -157,38 +198,24 @@ Yeast::Flocculation Yeast::flocculation() const { return m_flocculation; }
 Yeast::Type Yeast::type() const { return m_type; }
 
 const QString Yeast::typeStringTr() const {
-   static QStringList typesTr = QStringList() << QObject::tr("Ale")
-                                       << QObject::tr("Lager")
-                                       << QObject::tr("Wheat")
-                                       << QObject::tr("Wine")
-                                       << QObject::tr("Champagne");
-
-   if ( m_type < typesTr.size() && m_type >= 0 ) {
-      return typesTr.at(m_type);
-   }
-   return typesTr.at(0);
+   int myType = static_cast<int>(this->m_type);
+   Q_ASSERT(myType >= 0);
+   Q_ASSERT(myType < typesTr.size());
+   return typesTr.at(myType);
 }
 
 const QString Yeast::formStringTr() const {
-   static QStringList formsTr = QStringList() << QObject::tr("Liquid")
-                                       << QObject::tr("Dry")
-                                       << QObject::tr("Slant")
-                                       << QObject::tr("Culture");
-   if ( m_form < formsTr.size() && m_form >= 0  ) {
-      return formsTr.at(m_form);
-   }
-   return formsTr.at(0);
+   int myForm = static_cast<int>(this->m_form);
+   Q_ASSERT(myForm >= 0);
+   Q_ASSERT(myForm < formsTr.size());
+   return formsTr.at(myForm);
 }
 
 const QString Yeast::flocculationStringTr() const {
-   static QStringList flocculationsTr = QStringList() << QObject::tr("Low")
-                                               << QObject::tr("Medium")
-                                               << QObject::tr("High")
-                                               << QObject::tr("Very High");
-   if ( m_flocculation < flocculationsTr.size() && m_flocculation >= 0 ) {
-      return flocculationsTr.at(m_flocculation);
-   }
-   return flocculationsTr.at(0);
+   int myFlocculation = static_cast<int>(this->m_flocculation);
+   Q_ASSERT(myFlocculation >= 0);
+   Q_ASSERT(myFlocculation < flocculationsTr.size());
+   return flocculationsTr.at(myFlocculation);
 }
 
 //============================="SET" METHODS====================================

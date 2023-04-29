@@ -1,6 +1,6 @@
 /*
  * database/DatabaseSchemaHelper.cpp is part of Brewtarget, and is copyright the following
- * authors 2009-2021:
+ * authors 2009-2023:
  *   • Jonatan Pålsson <jonatan.p@gmail.com>
  *   • Mattias Måhl <mattias@kejsarsten.com>
  *   • Matt Young <mfsy@yahoo.com>
@@ -210,7 +210,7 @@ namespace {
       return executeSqlQueries(q, migrationQueries);
    }
 
-   bool migrate_to_5(Database & db, BtSqlQuery q) {
+   bool migrate_to_5([[maybe_unused]] Database & db, BtSqlQuery q) {
       QVector<QueryAndParameters> const migrationQueries{
          // Drop the previous bugged TRIGGER
          {QString("DROP TRIGGER dec_ins_num")},
@@ -227,13 +227,12 @@ namespace {
    }
 
    //
-   bool migrate_to_6(Database & db, BtSqlQuery q) {
-      bool ret = true;
+   bool migrate_to_6([[maybe_unused]] Database & db, [[maybe_unused]] BtSqlQuery q) {
       // I drop this table in version 8. There is no sense doing anything here, and it breaks other things.
-      return ret;
+      return true;
    }
 
-   bool migrate_to_7(Database & db, BtSqlQuery q) {
+   bool migrate_to_7([[maybe_unused]] Database & db, BtSqlQuery q) {
       QVector<QueryAndParameters> const migrationQueries{
          // Add "attenuation" to brewnote table
          {"ALTER TABLE brewnote ADD COLUMN attenuation real"} // Previously DEFAULT 0.0
@@ -540,8 +539,7 @@ namespace {
       bool ret = true;
 
       // NOTE: Add a new case when adding a new schema change
-      switch(oldVersion)
-      {
+      switch(oldVersion) {
          case 1: // == '2.0.0'
             ret &= migrate_to_202(database, sqlQuery);
             break;
@@ -575,7 +573,7 @@ namespace {
       }
 
       // Set the db version
-      if( oldVersion > 3 )
+      if (oldVersion > 3 )
       {
          QString queryString{"UPDATE settings SET version=:version WHERE id=1"};
          sqlQuery.prepare(queryString);
@@ -644,7 +642,7 @@ bool DatabaseSchemaHelper::create(Database & database, QSqlDatabase connection) 
 }
 
 bool DatabaseSchemaHelper::migrate(Database & database, int oldVersion, int newVersion, QSqlDatabase connection) {
-   if( oldVersion >= newVersion || newVersion > dbVersion ) {
+   if (oldVersion >= newVersion || newVersion > dbVersion ) {
       qDebug() << Q_FUNC_INFO <<
          QString("Requested backwards migration from %1 to %2: You are an imbecile").arg(oldVersion).arg(newVersion);
       return false;
@@ -676,7 +674,7 @@ int DatabaseSchemaHelper::currentVersion(QSqlDatabase db) {
    // We'll read it into a QVariant and then work out whether it's a string or an integer
    BtSqlQuery q("SELECT version FROM settings WHERE id=1", db);
    QVariant ver;
-   if( q.next() ) {
+   if (q.next() ) {
       ver = q.value("version");
    } else {
       // No settings table in version 2.0.0
@@ -693,15 +691,15 @@ int DatabaseSchemaHelper::currentVersion(QSqlDatabase db) {
       return ver.toInt();
    }
 
-   if( stringVer == "2.0.0" ) {
+   if (stringVer == "2.0.0" ) {
       return 1;
    }
 
-   if( stringVer == "2.0.2" ) {
+   if (stringVer == "2.0.2" ) {
       return 2;
    }
 
-   if( stringVer == "2.1.0" ) {
+   if (stringVer == "2.1.0" ) {
       return 3;
    }
 

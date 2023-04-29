@@ -29,8 +29,6 @@
 #include <QMessageBox>
 
 #include "BtHorizontalTabs.h"
-#include "BtLabel.h"
-#include "BtLineEdit.h"
 #include "database/ObjectStoreWrapper.h"
 #include "EquipmentListModel.h"
 #include "HeatCalculations.h"
@@ -48,11 +46,11 @@ EquipmentEditor::EquipmentEditor(QWidget* parent, bool singleEquipEditor) :
 
    if (singleEquipEditor) {
       //horizontalLayout_equipments->setVisible(false);
-      for(int i = 0; i < horizontalLayout_equipments->count(); ++i)
-      {
+      for (int i = 0; i < horizontalLayout_equipments->count(); ++i) {
          QWidget* w = horizontalLayout_equipments->itemAt(i)->widget();
-         if(w)
+         if (w) {
             w->setVisible(false);
+         }
       }
 
    }
@@ -62,7 +60,7 @@ EquipmentEditor::EquipmentEditor(QWidget* parent, bool singleEquipEditor) :
    Measurement::Unit const * weightUnit = nullptr;
    Measurement::Unit const * volumeUnit = nullptr;
    Measurement::getThicknessUnits(&volumeUnit, &weightUnit);
-   label_absorption->setText(tr("Grain absorption (%1/%2)").arg(volumeUnit->name).arg(weightUnit->name));
+   label_grainAbsorption->setText(tr("Grain absorption (%1/%2)").arg(volumeUnit->name).arg(weightUnit->name));
 
    equipmentListModel = new EquipmentListModel(equipmentComboBox);
    equipmentSortProxyModel = new NamedEntitySortProxyModel(equipmentListModel);
@@ -70,45 +68,64 @@ EquipmentEditor::EquipmentEditor(QWidget* parent, bool singleEquipEditor) :
 
    obsEquip = nullptr;
 
+   SMART_FIELD_INIT(EquipmentEditor, label_tunSpecificHeat, lineEdit_tunSpecificHeat, Equipment, PropertyNames::Equipment::tunSpecificHeat_calGC   );
+   SMART_FIELD_INIT(EquipmentEditor, label_grainAbsorption, lineEdit_grainAbsorption, Equipment, PropertyNames::Equipment::grainAbsorption_LKg     );
+   SMART_FIELD_INIT(EquipmentEditor, label_hopUtilization , lineEdit_hopUtilization , Equipment, PropertyNames::Equipment::hopUtilization_pct   , 0);
+   SMART_FIELD_INIT(EquipmentEditor, label_tunWeight      , lineEdit_tunWeight      , Equipment, PropertyNames::Equipment::tunWeight_kg            );
+   SMART_FIELD_INIT(EquipmentEditor, label_name           , lineEdit_name           , Equipment, PropertyNames::NamedEntity::name                  );
+   SMART_FIELD_INIT(EquipmentEditor, label_boilingPoint   , lineEdit_boilingPoint   , Equipment, PropertyNames::Equipment::boilingPoint_c       , 1);
+   SMART_FIELD_INIT(EquipmentEditor, label_boilTime       , lineEdit_boilTime       , Equipment, PropertyNames::Equipment::boilTime_min            );
+   SMART_FIELD_INIT(EquipmentEditor, label_batchSize      , lineEdit_batchSize      , Equipment, PropertyNames::Equipment::batchSize_l             );
+   SMART_FIELD_INIT(EquipmentEditor, label_boilSize       , lineEdit_boilSize       , Equipment, PropertyNames::Equipment::boilSize_l              );
+   SMART_FIELD_INIT(EquipmentEditor, label_evaporationRate, lineEdit_evaporationRate, Equipment, PropertyNames::Equipment::evapRate_lHr            );
+   SMART_FIELD_INIT(EquipmentEditor, label_lauterDeadspace, lineEdit_lauterDeadspace, Equipment, PropertyNames::Equipment::lauterDeadspace_l       );
+   SMART_FIELD_INIT(EquipmentEditor, label_topUpKettle    , lineEdit_topUpKettle    , Equipment, PropertyNames::Equipment::topUpKettle_l           );
+   SMART_FIELD_INIT(EquipmentEditor, label_topUpWater     , lineEdit_topUpWater     , Equipment, PropertyNames::Equipment::topUpWater_l            );
+   SMART_FIELD_INIT(EquipmentEditor, label_trubChillerLoss, lineEdit_trubChillerLoss, Equipment, PropertyNames::Equipment::trubChillerLoss_l       );
+   SMART_FIELD_INIT(EquipmentEditor, label_tunVolume      , lineEdit_tunVolume      , Equipment, PropertyNames::Equipment::tunVolume_l             );
+
    // Connect all the edit boxen
-   connect(lineEdit_boilTime,        &BtLineEdit::textModified, this, &EquipmentEditor::updateCheckboxRecord);
-   connect(lineEdit_evaporationRate, &BtLineEdit::textModified, this, &EquipmentEditor::updateCheckboxRecord);
-   connect(lineEdit_topUpWater,      &BtLineEdit::textModified, this, &EquipmentEditor::updateCheckboxRecord);
-   connect(lineEdit_trubChillerLoss, &BtLineEdit::textModified, this, &EquipmentEditor::updateCheckboxRecord);
-   connect(lineEdit_batchSize,       &BtLineEdit::textModified, this, &EquipmentEditor::updateCheckboxRecord);
-
+   connect(lineEdit_boilTime,         &SmartLineEdit::textModified,  this, &EquipmentEditor::updateCheckboxRecord     );
+   connect(lineEdit_evaporationRate,  &SmartLineEdit::textModified,  this, &EquipmentEditor::updateCheckboxRecord     );
+   connect(lineEdit_topUpWater,       &SmartLineEdit::textModified,  this, &EquipmentEditor::updateCheckboxRecord     );
+   connect(lineEdit_trubChillerLoss,  &SmartLineEdit::textModified,  this, &EquipmentEditor::updateCheckboxRecord     );
+   connect(lineEdit_batchSize,        &SmartLineEdit::textModified,  this, &EquipmentEditor::updateCheckboxRecord     );
    // Set up the buttons
-   connect(pushButton_save,       &QAbstractButton::clicked,         this, &EquipmentEditor::save );
-   connect(pushButton_new,        SIGNAL( clicked() ),               this, SLOT( newEquipment() ) );
-   connect(pushButton_cancel,     &QAbstractButton::clicked,         this, &EquipmentEditor::cancel );
-   connect(pushButton_remove,     &QAbstractButton::clicked,         this, &EquipmentEditor::removeEquipment );
-   connect(pushButton_absorption, &QAbstractButton::clicked,         this, &EquipmentEditor::resetAbsorption );
-   connect(equipmentComboBox,     SIGNAL(activated(const QString&)), this, SLOT( equipmentSelected() ) );
-
+   // Note, per https://wiki.qt.io/New_Signal_Slot_Syntax#Default_arguments_in_slot, the use of a trivial lambda
+   // function to allow use of default argument on newEquipment() slot
+   connect(pushButton_save,           &QAbstractButton::clicked,      this, &EquipmentEditor::save                     );
+   connect(pushButton_new,            &QAbstractButton::clicked,      this, [this]() { this->newEquipment(); return; } );
+   connect(pushButton_cancel,         &QAbstractButton::clicked,      this, &EquipmentEditor::cancel                   );
+   connect(pushButton_remove,         &QAbstractButton::clicked,      this, &EquipmentEditor::removeEquipment          );
+   connect(pushButton_absorption,     &QAbstractButton::clicked,      this, &EquipmentEditor::resetAbsorption          );
+   connect(equipmentComboBox,         &QComboBox::currentTextChanged, this, &EquipmentEditor::equipmentSelected        );
    // Check boxen
-   connect(checkBox_calcBoilVolume,   &QCheckBox::stateChanged, this, &EquipmentEditor::updateCheckboxRecord);
-   connect(checkBox_defaultEquipment, &QCheckBox::stateChanged, this, &EquipmentEditor::updateDefaultEquipment);
+   connect(checkBox_calcBoilVolume,   &QCheckBox::stateChanged,       this, &EquipmentEditor::updateCheckboxRecord     );
+   connect(checkBox_defaultEquipment, &QCheckBox::stateChanged,       this, &EquipmentEditor::updateDefaultEquipment   );
 
    // make sure the dialog gets populated the first time it's opened from the menu
    equipmentSelected();
    // Ensure correct state of Boil Volume edit box.
    updateCheckboxRecord();
+   return;
 }
 
-void EquipmentEditor::setEquipment( Equipment* e )
-{
-   if( e )
-   {
+EquipmentEditor::~EquipmentEditor() = default;
+
+void EquipmentEditor::setEquipment(Equipment* e) {
+   if (e) {
       obsEquip = e;
 
       // Make sure the combo box gets set to the right place.
       QModelIndex modelIndex(equipmentListModel->find(e));
       QModelIndex viewIndex(equipmentSortProxyModel->mapFromSource(modelIndex));
-      if( viewIndex.isValid() )
+      if (viewIndex.isValid()) {
          equipmentComboBox->setCurrentIndex(viewIndex.row());
+      }
 
       showChanges();
    }
+   return;
 }
 
 void EquipmentEditor::removeEquipment() {
@@ -118,48 +135,43 @@ void EquipmentEditor::removeEquipment() {
 
    equipmentComboBox->setCurrentIndex(-1);
    setEquipment(nullptr);
+   return;
 }
 
-void EquipmentEditor::clear()
-{
-   lineEdit_name->setText(QString(""));
-   lineEdit_name->setCursorPosition(0);
-   lineEdit_boilSize->setText(QString(""));
-   checkBox_calcBoilVolume->setCheckState( Qt::Unchecked );
-   lineEdit_batchSize->setText(QString(""));
-
-   lineEdit_tunVolume->setText(QString(""));
-   lineEdit_tunWeight->setText(QString(""));
+void EquipmentEditor::clear() {
+   lineEdit_name           ->setText(QString(""));
+   lineEdit_name           ->setCursorPosition(0);
+   lineEdit_boilSize       ->setText(QString(""));
+   checkBox_calcBoilVolume ->setCheckState(Qt::Unchecked);
+   lineEdit_batchSize      ->setText(QString(""));
+   lineEdit_tunVolume      ->setText(QString(""));
+   lineEdit_tunWeight      ->setText(QString(""));
    lineEdit_tunSpecificHeat->setText(QString(""));
-
-   lineEdit_boilTime->setText(QString(""));
+   lineEdit_boilTime       ->setText(QString(""));
    lineEdit_evaporationRate->setText(QString(""));
-   lineEdit_topUpKettle->setText(QString(""));
-   lineEdit_topUpWater->setText(QString(""));
-
+   lineEdit_topUpKettle    ->setText(QString(""));
+   lineEdit_topUpWater     ->setText(QString(""));
    lineEdit_trubChillerLoss->setText(QString(""));
    lineEdit_lauterDeadspace->setText(QString(""));
-
-   lineEdit_hopUtilization->setText(QString(""));
-   textEdit_notes->setText("");
-
+   lineEdit_hopUtilization ->setText(QString(""));
+   textEdit_notes          ->setText(QString(""));
    lineEdit_grainAbsorption->setText(QString(""));
+   return;
 }
 
-void EquipmentEditor::equipmentSelected()
-{
-   QModelIndex modelIndex;
+void EquipmentEditor::equipmentSelected() {
    QModelIndex viewIndex(
       equipmentComboBox->model()->index(equipmentComboBox->currentIndex(),0)
    );
 
-   modelIndex = equipmentSortProxyModel->mapToSource(viewIndex);
+   QModelIndex modelIndex = equipmentSortProxyModel->mapToSource(viewIndex);
 
    setEquipment( equipmentListModel->at(modelIndex.row()) );
+   return;
 }
 
 void EquipmentEditor::save() {
-   if( obsEquip == nullptr ) {
+   if (obsEquip == nullptr) {
       setVisible(false);
       return;
    }
@@ -172,15 +184,13 @@ void EquipmentEditor::save() {
 
    double ga_LKg = grainAbs * volumeUnit->toCanonical(1.0).quantity() * weightUnit->fromCanonical(1.0);
 
-   QString message,inform,describe;
+//   QString describe;
    bool problems=false;
 
    // Do some prewarning things. I would prefer to do this only on change, but
    // we need to be worried about new equipment too.
-   message = tr("This equipment profile may break Brewtarget's maths");
-   inform = QString("%1%2")
-            .arg(tr("The following values are not set:"))
-            .arg(QString("<ul>"));
+   QString message = tr("This equipment profile may break Brewtarget's maths");
+   QString inform = QString("%1%2").arg(tr("The following values are not set:")).arg(QString("<ul>"));
    if ( qFuzzyCompare(lineEdit_tunVolume->toCanonical().quantity(), 0.0) ) {
       problems = true;
       inform = inform + QString("<li>%1</li>").arg(tr("mash tun volume (all-grain and BIAB only)"));
@@ -191,48 +201,42 @@ void EquipmentEditor::save() {
       inform = inform + QString("<li>%1</li>").arg(tr("batch size"));
    }
 
-   if ( qFuzzyCompare(lineEdit_hopUtilization->toDoubleRaw(), 0.0) ) {
+   if ( qFuzzyCompare(lineEdit_hopUtilization->getValueAs<double>(), 0.0) ) {
       problems = true;
       inform = inform + QString("<li>%1</li>").arg(tr("hop utilization"));
    }
-   inform = inform + QString("</ul");
+   inform = inform + QString("</ul>");
 
-   if ( problems ) {
+   if (problems) {
       QMessageBox theQuestion;
-      int retcon;
-
       theQuestion.setWindowTitle( tr("Calculation Warnings") );
       theQuestion.setText( message );
       theQuestion.setInformativeText( inform );
       theQuestion.setStandardButtons(QMessageBox::Save | QMessageBox::Cancel);
       theQuestion.setDefaultButton(QMessageBox::Save);
       theQuestion.setIcon(QMessageBox::Warning);
-
-      retcon = theQuestion.exec();
-      if ( retcon == QMessageBox::Cancel )
+      if (theQuestion.exec() == QMessageBox::Cancel) {
          return;
+      }
    }
 
-   this->obsEquip->setName( lineEdit_name->text() );
-   this->obsEquip->setBoilSize_l( lineEdit_boilSize->toCanonical().quantity() );
-   this->obsEquip->setBatchSize_l( lineEdit_batchSize->toCanonical().quantity() );
-   this->obsEquip->setTunVolume_l( lineEdit_tunVolume->toCanonical().quantity() );
-
-   this->obsEquip->setTunWeight_kg( lineEdit_tunWeight->toCanonical().quantity() );
-
-   this->obsEquip->setTunSpecificHeat_calGC( lineEdit_tunSpecificHeat->toDoubleRaw() );
-   this->obsEquip->setBoilTime_min( lineEdit_boilTime->toCanonical().quantity());
-   this->obsEquip->setEvapRate_lHr(  lineEdit_evaporationRate->toCanonical().quantity() );
-   this->obsEquip->setTopUpKettle_l( lineEdit_topUpKettle->toCanonical().quantity() );
-   this->obsEquip->setTopUpWater_l(  lineEdit_topUpWater->toCanonical().quantity() );
-   this->obsEquip->setTrubChillerLoss_l( lineEdit_trubChillerLoss->toCanonical().quantity() );
-   this->obsEquip->setLauterDeadspace_l( lineEdit_lauterDeadspace->toCanonical().quantity() );
-   this->obsEquip->setGrainAbsorption_LKg( ga_LKg );
-   this->obsEquip->setBoilingPoint_c( lineEdit_boilingPoint->toCanonical().quantity() );
-   this->obsEquip->setHopUtilization_pct( lineEdit_hopUtilization->toDoubleRaw() );
-
-   this->obsEquip->setNotes(textEdit_notes->toPlainText());
-   this->obsEquip->setCalcBoilVolume(checkBox_calcBoilVolume->checkState() == Qt::Checked);
+   this->obsEquip->setName                 (lineEdit_name           ->text() );
+   this->obsEquip->setBoilSize_l           (lineEdit_boilSize       ->toCanonical().quantity() );
+   this->obsEquip->setBatchSize_l          (lineEdit_batchSize      ->toCanonical().quantity() );
+   this->obsEquip->setTunVolume_l          (lineEdit_tunVolume      ->toCanonical().quantity() );
+   this->obsEquip->setTunWeight_kg         (lineEdit_tunWeight      ->toCanonical().quantity() );
+   this->obsEquip->setTunSpecificHeat_calGC(lineEdit_tunSpecificHeat->getValueAs<double>() );  // TODO Convert this to real units!
+   this->obsEquip->setBoilTime_min         (lineEdit_boilTime       ->toCanonical().quantity());
+   this->obsEquip->setEvapRate_lHr         (lineEdit_evaporationRate->toCanonical().quantity() );
+   this->obsEquip->setTopUpKettle_l        (lineEdit_topUpKettle    ->toCanonical().quantity() );
+   this->obsEquip->setTopUpWater_l         (lineEdit_topUpWater     ->toCanonical().quantity() );
+   this->obsEquip->setTrubChillerLoss_l    (lineEdit_trubChillerLoss->toCanonical().quantity() );
+   this->obsEquip->setLauterDeadspace_l    (lineEdit_lauterDeadspace->toCanonical().quantity() );
+   this->obsEquip->setGrainAbsorption_LKg  (ga_LKg );
+   this->obsEquip->setBoilingPoint_c       (lineEdit_boilingPoint   ->toCanonical().quantity() );
+   this->obsEquip->setHopUtilization_pct   (lineEdit_hopUtilization ->getValueAs<double>() );
+   this->obsEquip->setNotes                (textEdit_notes          ->toPlainText());
+   this->obsEquip->setCalcBoilVolume       (checkBox_calcBoilVolume ->checkState() == Qt::Checked);
 
    if (this->obsEquip->key() < 0) {
       ObjectStoreWrapper::insert(*obsEquip);
@@ -241,10 +245,10 @@ void EquipmentEditor::save() {
    return;
 }
 
-void EquipmentEditor::newEquipment() {
-   newEquipment(QString());
-   return;
-}
+//void EquipmentEditor::newEquipment() {
+//   newEquipment(QString());
+//   return;
+//}
 
 void EquipmentEditor::newEquipment(QString folder) {
    QString name = QInputDialog::getText(this, tr("Equipment name"),
@@ -279,19 +283,19 @@ void EquipmentEditor::resetAbsorption() {
    Measurement::getThicknessUnits(&volumeUnit, &weightUnit);
    double gaCustomUnits = PhysicalConstants::grainAbsorption_Lkg * volumeUnit->fromCanonical(1.0) * weightUnit->toCanonical(1.0).quantity();
 
-   lineEdit_grainAbsorption->setText(gaCustomUnits);
+   lineEdit_grainAbsorption->setAmount(gaCustomUnits);
    return;
 }
 
-void EquipmentEditor::changed(QMetaProperty /*prop*/, QVariant /*val*/)
-{
-   if( sender() == obsEquip )
+void EquipmentEditor::changed(QMetaProperty /*prop*/, QVariant /*val*/) {
+   if( sender() == obsEquip ) {
       showChanges();
+   }
+   return;
 }
 
 void EquipmentEditor::showChanges() {
-   Equipment *e = obsEquip;
-   if( e == nullptr ) {
+   if( this->obsEquip == nullptr ) {
       clear();
       return;
    }
@@ -300,42 +304,38 @@ void EquipmentEditor::showChanges() {
    Measurement::Unit const * weightUnit = nullptr;
    Measurement::Unit const * volumeUnit = nullptr;
    Measurement::getThicknessUnits( &volumeUnit, &weightUnit );
-   label_absorption->setText(tr("Grain absorption (%1/%2)").arg(volumeUnit->name).arg(weightUnit->name));
+   this->label_grainAbsorption->setText(tr("Grain absorption (%1/%2)").arg(volumeUnit->name).arg(weightUnit->name));
 
-   //equipmentComboBox->setIndexByEquipment(e);
+   //equipmentComboBox->setIndexByEquipment(this->obsEquip);
 
-   lineEdit_name->setText(e->name());
-   lineEdit_name->setCursorPosition(0);
-   tabWidget_editor->setTabText(0, e->name() );
-   lineEdit_boilSize->setText(e->boilSize_l());
+   this->lineEdit_name            ->setText(this->obsEquip->name());
+   this->lineEdit_name            ->setCursorPosition(0);
+   this->tabWidget_editor         ->setTabText(0, this->obsEquip->name());
+   this->lineEdit_boilSize        ->setAmount(this->obsEquip->boilSize_l());
 
-   checkBox_calcBoilVolume->blockSignals(true); // Keep next line from emitting a signal and changing e.
-   checkBox_calcBoilVolume->setCheckState( (e->calcBoilVolume())? Qt::Checked : Qt::Unchecked );
-   checkBox_calcBoilVolume->blockSignals(false);
+   this->checkBox_calcBoilVolume  ->blockSignals(true); // Keep next line from emitting a signal and changing this->obsEquip.
+   this->checkBox_calcBoilVolume  ->setCheckState( (this->obsEquip->calcBoilVolume())? Qt::Checked : Qt::Unchecked );
+   this->checkBox_calcBoilVolume  ->blockSignals(false);
 
-   lineEdit_batchSize->setText(e);
-   lineEdit_tunVolume->setText(e);
-   lineEdit_tunWeight->setText(e);
-   lineEdit_tunSpecificHeat->setText(e);
+   this->lineEdit_batchSize       ->setAmount(this->obsEquip->batchSize_l          ());
+   this->lineEdit_tunVolume       ->setAmount(this->obsEquip->tunVolume_l          ());
+   this->lineEdit_tunWeight       ->setAmount(this->obsEquip->tunWeight_kg         ());
+   this->lineEdit_tunSpecificHeat ->setAmount(this->obsEquip->tunSpecificHeat_calGC());
+   this->lineEdit_boilTime        ->setAmount(this->obsEquip->boilTime_min         ());
+   this->lineEdit_evaporationRate ->setAmount(this->obsEquip->evapRate_lHr         ());
+   this->lineEdit_topUpKettle     ->setAmount(this->obsEquip->topUpKettle_l        ());
+   this->lineEdit_topUpWater      ->setAmount(this->obsEquip->topUpWater_l         ());
+   this->lineEdit_trubChillerLoss ->setAmount(this->obsEquip->trubChillerLoss_l    ());
+   this->lineEdit_lauterDeadspace ->setAmount(this->obsEquip->lauterDeadspace_l    ());
+   this->textEdit_notes           ->setText  (this->obsEquip->notes                ());
 
-   lineEdit_boilTime->setText(e);
-   lineEdit_evaporationRate->setText(e);
-   lineEdit_topUpKettle->setText(e);
-   lineEdit_topUpWater->setText(e);
+   double gaCustomUnits = this->obsEquip->grainAbsorption_LKg() * volumeUnit->fromCanonical(1.0) * weightUnit->toCanonical(1.0).quantity();
+   this->lineEdit_grainAbsorption ->setAmount(gaCustomUnits);
 
-   lineEdit_trubChillerLoss->setText(e);
-   lineEdit_lauterDeadspace->setText(e);
-
-   textEdit_notes->setText( e->notes() );
-
-   double gaCustomUnits = e->grainAbsorption_LKg() * volumeUnit->fromCanonical(1.0) * weightUnit->toCanonical(1.0).quantity();
-   lineEdit_grainAbsorption->setText(gaCustomUnits);
-
-   lineEdit_boilingPoint->setText(e);
-
-   lineEdit_hopUtilization->setText(e);
-   checkBox_defaultEquipment->blockSignals(true);
-   if (PersistentSettings::value(PersistentSettings::Names::defaultEquipmentKey, -1) == e->key()) {
+   this->lineEdit_boilingPoint    ->setAmount(this->obsEquip->boilingPoint_c    ());
+   this->lineEdit_hopUtilization  ->setAmount(this->obsEquip->hopUtilization_pct());
+   this->checkBox_defaultEquipment->blockSignals(true);
+   if (PersistentSettings::value(PersistentSettings::Names::defaultEquipmentKey, -1) == this->obsEquip->key()) {
       checkBox_defaultEquipment->setCheckState(Qt::Checked);
    } else {
       checkBox_defaultEquipment->setCheckState(Qt::Unchecked);
@@ -346,24 +346,22 @@ void EquipmentEditor::showChanges() {
 }
 
 void EquipmentEditor::updateCheckboxRecord() {
-   int state = checkBox_calcBoilVolume->checkState();
-   if ( state == Qt::Checked ) {
-      double bar = calcBatchSize();
-      lineEdit_boilSize->setText(bar);
-      lineEdit_boilSize->setEnabled(false);
+   if (Qt::Checked == this->checkBox_calcBoilVolume->checkState()) {
+      this->lineEdit_boilSize->setAmount(this->calcBatchSize());
+      this->lineEdit_boilSize->setEnabled(false);
    } else {
-      lineEdit_boilSize->setText(lineEdit_batchSize->toCanonical().quantity());
-      lineEdit_boilSize->setEnabled(true);
+      this->lineEdit_boilSize->setAmount(this->lineEdit_batchSize->toCanonical().quantity());
+      this->lineEdit_boilSize->setEnabled(true);
    }
    return;
 }
 
 double EquipmentEditor::calcBatchSize() {
-   double size     = lineEdit_batchSize->toCanonical().quantity();
-   double topUp    = lineEdit_topUpWater->toCanonical().quantity();
+   double size     = lineEdit_batchSize      ->toCanonical().quantity();
+   double topUp    = lineEdit_topUpWater     ->toCanonical().quantity();
    double trubLoss = lineEdit_trubChillerLoss->toCanonical().quantity();
    double evapRate = lineEdit_evaporationRate->toCanonical().quantity();
-   double time     = lineEdit_boilTime->toCanonical().quantity();
+   double time     = lineEdit_boilTime       ->toCanonical().quantity();
 
    return size - topUp + trubLoss + (time/60.0)*evapRate;
 }

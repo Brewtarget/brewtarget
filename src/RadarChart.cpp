@@ -1,6 +1,6 @@
 /*
  * RadarChart.cpp is part of Brewtarget, and is Copyright the following
- * authors 2021-2022
+ * authors 2021-2023
  * - Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -19,12 +19,8 @@
 #include "RadarChart.h"
 
 #include <algorithm>
-// We need an extra define on Windows to access the M_PI constant in cmath.  (More details in comment below.)
-#ifdef Q_OS_WIN
-#define _USE_MATH_DEFINES
-#endif
 #include <cmath>
-//#include <numbers> Uncomment this when we switch to C++20
+#include <numbers> // For std::numbers::pi
 
 #include <QPainter>
 #include <QPaintEvent>
@@ -42,12 +38,7 @@ namespace {
    //
    // For <cmath> functions, angles are all in radians, and the "natural" coordinate system measures anti-clockwise
    // starting from 3 o'clock as 0rad.  There are 2π radians in a circle.
-   //
-   // When we switch to C++20, we should replace M_PI (non-standard but usually defined in cmath) with std::numbers::pi
-   // (standard as of C++20).  Note that, on Windows,
-   // per https://docs.microsoft.com/en-us/cpp/c-runtime-library/math-constants?view=msvc-160, we also have to
-   // #define _USE_MATH_DEFINES to use M_PI.
-   double const RadiansInACircle = 2 * M_PI;
+   double const RadiansInACircle = 2 * std::numbers::pi;
 
    double const StartingAngleInRadians = RadiansInACircle / 4;
 

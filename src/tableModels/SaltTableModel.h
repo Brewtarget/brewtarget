@@ -1,6 +1,6 @@
 /*
  * SaltTableModel.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2023
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Matt Young <mfsy@yahoo.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -41,11 +41,6 @@ class Recipe;
 class SaltItemDelegate;
 class WaterDialog;
 
-enum{ SALTNAMECOL,
-      SALTAMOUNTCOL,
-      SALTADDTOCOL,
-      SALTPCTACIDCOL,
-      SALTNUMCOLS /*This one MUST be last*/};
 /*!
  * \class SaltTableModel
  *
@@ -55,8 +50,19 @@ class SaltTableModel : public BtTableModelRecipeObserver, public BtTableModelDat
    Q_OBJECT
 
 public:
+   enum class ColumnIndex {
+      Name   ,
+      Amount ,
+      AddTo  ,
+      PctAcid,
+   };
+
    SaltTableModel(QTableView* parent = nullptr);
    ~SaltTableModel();
+
+   //! \brief Casting wrapper for \c BtTableModel::getColumnInfo
+   ColumnInfo const & getColumnInfo(ColumnIndex const columnIndex) const;
+
    void observeRecipe(Recipe* rec);
 private:
    void addSalt(std::shared_ptr<Salt> salt);

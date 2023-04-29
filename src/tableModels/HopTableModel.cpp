@@ -50,13 +50,15 @@ HopTableModel::HopTableModel(QTableView * parent, bool editable) :
    BtTableModelInventory{
       parent,
       editable,
-      {{HOPNAMECOL,      {tr("Name"),      NonPhysicalQuantity::String,          ""                                                 }},
-       {HOPALPHACOL,     {tr("Alpha %"),   NonPhysicalQuantity::Percentage,      ""                                                 }},
-       {HOPAMOUNTCOL,    {tr("Amount"),    Measurement::PhysicalQuantity::Mass,  *PropertyNames::Hop::amount_kg                     }},
-       {HOPINVENTORYCOL, {tr("Inventory"), Measurement::PhysicalQuantity::Mass,  *PropertyNames::NamedEntityWithInventory::inventory}},
-       {HOPFORMCOL,      {tr("Form"),      NonPhysicalQuantity::String,          ""                                                 }},
-       {HOPUSECOL,       {tr("Use"),       NonPhysicalQuantity::String,          ""                                                 }},
-       {HOPTIMECOL,      {tr("Time"),      Measurement::PhysicalQuantity::Time,  *PropertyNames::Hop::time_min                      }}}
+      {
+         SMART_COLUMN_HEADER_DEFN(HopTableModel, Name     , tr("Name"     ),           NonPhysicalQuantity::String    ),
+         SMART_COLUMN_HEADER_DEFN(HopTableModel, Alpha    , tr("Alpha %"  ),           NonPhysicalQuantity::Percentage),
+         SMART_COLUMN_HEADER_DEFN(HopTableModel, Amount   , tr("Amount"   ), Measurement::PhysicalQuantity::Mass      ),
+         SMART_COLUMN_HEADER_DEFN(HopTableModel, Inventory, tr("Inventory"), Measurement::PhysicalQuantity::Mass      ),
+         SMART_COLUMN_HEADER_DEFN(HopTableModel, Form     , tr("Form"     ),           NonPhysicalQuantity::String    ),
+         SMART_COLUMN_HEADER_DEFN(HopTableModel, Use      , tr("Use"      ),           NonPhysicalQuantity::String    ),
+         SMART_COLUMN_HEADER_DEFN(HopTableModel, Time     , tr("Time"     ), Measurement::PhysicalQuantity::Time      ),
+      }
    },
    showIBUs(false) {
    this->rows.clear();
@@ -77,6 +79,10 @@ HopTableModel::HopTableModel(QTableView * parent, bool editable) :
 HopTableModel::~HopTableModel() {
    this->rows.clear();
    return;
+}
+
+BtTableModel::ColumnInfo const & HopTableModel::getColumnInfo(HopTableModel::ColumnIndex const columnIndex) const {
+   return this->BtTableModel::getColumnInfo(static_cast<size_t>(columnIndex));
 }
 
 void HopTableModel::observeRecipe(Recipe * rec) {
@@ -213,8 +219,8 @@ void HopTableModel::changedInventory(int invKey, BtStringConst const & propertyN
    if (propertyName == PropertyNames::Inventory::amount) {
       for (int ii = 0; ii < this->rows.size(); ++ii) {
          if (invKey == this->rows.at(ii)->inventoryId()) {
-            emit dataChanged(QAbstractItemModel::createIndex(ii, HOPINVENTORYCOL),
-                             QAbstractItemModel::createIndex(ii, HOPINVENTORYCOL));
+            emit dataChanged(QAbstractItemModel::createIndex(ii, static_cast<int>(HopTableModel::ColumnIndex::Inventory)),
+                             QAbstractItemModel::createIndex(ii, static_cast<int>(HopTableModel::ColumnIndex::Inventory)));
          }
       }
    }
@@ -232,7 +238,7 @@ void HopTableModel::changed(QMetaProperty prop, [[maybe_unused]] QVariant val) {
       }
 
       emit dataChanged(QAbstractItemModel::createIndex(ii, 0),
-                       QAbstractItemModel::createIndex(ii, HOPNUMCOLS - 1));
+                       QAbstractItemModel::createIndex(ii, this->columnCount() - 1));
       emit headerDataChanged(Qt::Vertical, ii, ii);
       return;
    }
@@ -266,35 +272,35 @@ QVariant HopTableModel::data(const QModelIndex & index, int role) const {
 
    auto row = this->rows[index.row()];
 
-   int const column = index.column();
-   switch (column) {
-      case HOPNAMECOL:
+   auto const columnIndex = static_cast<HopTableModel::ColumnIndex>(index.column());
+   switch (columnIndex) {
+      case HopTableModel::ColumnIndex::Name:
          if (role == Qt::DisplayRole) {
             return QVariant(row->name());
          }
          break;
-      case HOPALPHACOL:
+      case HopTableModel::ColumnIndex::Alpha:
          if (role == Qt::DisplayRole) {
             return QVariant(Measurement::displayQuantity(row->alpha_pct(), 3));
          }
          break;
-      case HOPINVENTORYCOL:
+      case HopTableModel::ColumnIndex::Inventory:
          if (role == Qt::DisplayRole) {
             return QVariant(Measurement::displayAmount(Measurement::Amount{row->inventory(), Measurement::Units::kilograms},
                                                        3,
-                                                       this->getForcedSystemOfMeasurementForColumn(column),
-                                                       this->getForcedRelativeScaleForColumn(column)));
+                                                       this->getColumnInfo(columnIndex).getForcedSystemOfMeasurement(),
+                                                       this->getColumnInfo(columnIndex).getForcedRelativeScale()));
          }
          break;
-      case HOPAMOUNTCOL:
+      case HopTableModel::ColumnIndex::Amount:
          if (role == Qt::DisplayRole) {
             return QVariant(Measurement::displayAmount(Measurement::Amount{row->amount_kg(), Measurement::Units::kilograms},
                                                        3,
-                                                       this->getForcedSystemOfMeasurementForColumn(column),
-                                                       this->getForcedRelativeScaleForColumn(column)));
+                                                       this->getColumnInfo(columnIndex).getForcedSystemOfMeasurement(),
+                                                       this->getColumnInfo(columnIndex).getForcedRelativeScale()));
          }
          break;
-      case HOPUSECOL:
+      case HopTableModel::ColumnIndex::Use:
          if (role == Qt::DisplayRole) {
             return QVariant(Hop::useDisplayNames[row->use()]);
          }
@@ -302,15 +308,15 @@ QVariant HopTableModel::data(const QModelIndex & index, int role) const {
             return QVariant(static_cast<int>(row->use()));
          }
          break;
-      case HOPTIMECOL:
+      case HopTableModel::ColumnIndex::Time:
          if (role == Qt::DisplayRole) {
             return QVariant(Measurement::displayAmount(Measurement::Amount{row->time_min(), Measurement::Units::minutes},
                                                        3,
                                                        std::nullopt,
-                                                       this->getForcedRelativeScaleForColumn(column)));
+                                                       this->getColumnInfo(columnIndex).getForcedRelativeScale()));
          }
          break;
-      case HOPFORMCOL:
+      case HopTableModel::ColumnIndex::Form:
          if (role == Qt::DisplayRole) {
             return QVariant(Hop::formDisplayNames[row->form()]);
          } else if (role == Qt::UserRole) {
@@ -318,7 +324,7 @@ QVariant HopTableModel::data(const QModelIndex & index, int role) const {
          }
          break;
       default :
-         qWarning() << Q_FUNC_INFO << "Bad column: " << column;
+         qWarning() << Q_FUNC_INFO << "Bad column: " << index.column();
          break;
    }
    return QVariant();
@@ -326,7 +332,7 @@ QVariant HopTableModel::data(const QModelIndex & index, int role) const {
 
 QVariant HopTableModel::headerData(int section, Qt::Orientation orientation, int role) const {
    if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
-      return this->getColumName(section);
+      return this->getColumnLabel(section);
    }
    if (showIBUs && recObs && orientation == Qt::Vertical && role == Qt::DisplayRole) {
       QList<double> ibus = recObs->IBUs();
@@ -339,16 +345,15 @@ QVariant HopTableModel::headerData(int section, Qt::Orientation orientation, int
 }
 
 Qt::ItemFlags HopTableModel::flags(const QModelIndex & index) const {
-   int col = index.column();
-   switch (col) {
-      case HOPNAMECOL:
-         return Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
-      case HOPINVENTORYCOL:
-         return Qt::ItemIsEnabled | (this->isInventoryEditable() ? Qt::ItemIsEditable : Qt::NoItemFlags);
-      default:
-         return Qt::ItemIsSelectable | (this->editable ? Qt::ItemIsEditable : Qt::NoItemFlags) | Qt::ItemIsDragEnabled |
-                       Qt::ItemIsEnabled;
+   auto const columnIndex = static_cast<HopTableModel::ColumnIndex>(index.column());
+   if (columnIndex == HopTableModel::ColumnIndex::Name) {
+      return Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
    }
+   if (columnIndex == HopTableModel::ColumnIndex::Inventory) {
+      return Qt::ItemIsEnabled | (this->isInventoryEditable() ? Qt::ItemIsEditable : Qt::NoItemFlags);
+   }
+   return Qt::ItemIsSelectable |
+          (this->editable ? Qt::ItemIsEditable : Qt::NoItemFlags) | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
 }
 
 bool HopTableModel::setData(const QModelIndex & index, const QVariant & value, int role) {
@@ -361,9 +366,9 @@ bool HopTableModel::setData(const QModelIndex & index, const QVariant & value, i
 
    auto row = this->rows[index.row()];
 
-   int const column = index.column();
-   switch (column) {
-      case HOPNAMECOL:
+   auto const columnIndex = static_cast<HopTableModel::ColumnIndex>(index.column());
+   switch (columnIndex) {
+      case HopTableModel::ColumnIndex::Name:
          retVal = value.canConvert(QVariant::String);
          if (retVal) {
             MainWindow::instance().doOrRedoUpdate(*row,
@@ -372,7 +377,7 @@ bool HopTableModel::setData(const QModelIndex & index, const QVariant & value, i
                                                   tr("Change Hop Name"));
          }
          break;
-      case HOPALPHACOL:
+      case HopTableModel::ColumnIndex::Alpha:
          retVal = value.canConvert(QVariant::Double);
          if (retVal) {
             amt = Localization::toDouble(value.toString(), &retVal);
@@ -386,7 +391,7 @@ bool HopTableModel::setData(const QModelIndex & index, const QVariant & value, i
          }
          break;
 
-      case HOPINVENTORYCOL:
+      case HopTableModel::ColumnIndex::Inventory:
          retVal = value.canConvert(QVariant::String);
          if (retVal) {
             MainWindow::instance().doOrRedoUpdate(
@@ -394,13 +399,13 @@ bool HopTableModel::setData(const QModelIndex & index, const QVariant & value, i
                PropertyNames::NamedEntityWithInventory::inventory,
                Measurement::qStringToSI(value.toString(),
                                         Measurement::PhysicalQuantity::Mass,
-                                        this->getForcedSystemOfMeasurementForColumn(column),
-                                        this->getForcedRelativeScaleForColumn(column)).quantity(),
+                                        this->getColumnInfo(columnIndex).getForcedSystemOfMeasurement(),
+                                        this->getColumnInfo(columnIndex).getForcedRelativeScale()).quantity(),
                tr("Change Hop Inventory Amount")
             );
          }
          break;
-      case HOPAMOUNTCOL:
+      case HopTableModel::ColumnIndex::Amount:
          retVal = value.canConvert(QVariant::String);
          if (retVal) {
             MainWindow::instance().doOrRedoUpdate(
@@ -408,13 +413,13 @@ bool HopTableModel::setData(const QModelIndex & index, const QVariant & value, i
                PropertyNames::Hop::amount_kg,
                Measurement::qStringToSI(value.toString(),
                                         Measurement::PhysicalQuantity::Mass,
-                                        this->getForcedSystemOfMeasurementForColumn(column),
-                                        this->getForcedRelativeScaleForColumn(column)).quantity(),
+                                        this->getColumnInfo(columnIndex).getForcedSystemOfMeasurement(),
+                                        this->getColumnInfo(columnIndex).getForcedRelativeScale()).quantity(),
                tr("Change Hop Amount")
             );
          }
          break;
-      case HOPUSECOL:
+      case HopTableModel::ColumnIndex::Use:
          retVal = value.canConvert(QVariant::Int);
          if (retVal) {
             MainWindow::instance().doOrRedoUpdate(*row,
@@ -423,7 +428,7 @@ bool HopTableModel::setData(const QModelIndex & index, const QVariant & value, i
                                                   tr("Change Hop Use"));
          }
          break;
-      case HOPFORMCOL:
+      case HopTableModel::ColumnIndex::Form:
          retVal = value.canConvert(QVariant::Int);
          if (retVal) {
             MainWindow::instance().doOrRedoUpdate(*row,
@@ -432,7 +437,7 @@ bool HopTableModel::setData(const QModelIndex & index, const QVariant & value, i
                                                   tr("Change Hop Form"));
          }
          break;
-      case HOPTIMECOL:
+      case HopTableModel::ColumnIndex::Time:
          retVal = value.canConvert(QVariant::String);
          if (retVal) {
             MainWindow::instance().doOrRedoUpdate(
@@ -441,13 +446,13 @@ bool HopTableModel::setData(const QModelIndex & index, const QVariant & value, i
                Measurement::qStringToSI(value.toString(),
                                         Measurement::PhysicalQuantity::Time,
                                         std::nullopt,
-                                        this->getForcedRelativeScaleForColumn(column)).quantity(),
+                                        this->getColumnInfo(columnIndex).getForcedRelativeScale()).quantity(),
                tr("Change Hop Time")
             );
          }
          break;
       default:
-         qWarning() << Q_FUNC_INFO << "Bad column: " << column;
+         qWarning() << Q_FUNC_INFO << "Bad columnIndex: " << index.column();
          return false;
    }
 
@@ -466,7 +471,8 @@ HopItemDelegate::HopItemDelegate(QObject * parent)
 
 QWidget * HopItemDelegate::createEditor(QWidget * parent, const QStyleOptionViewItem & /*option*/,
                                         const QModelIndex & index) const {
-   if (index.column() == HOPUSECOL) {
+   auto const columnIndex = static_cast<HopTableModel::ColumnIndex>(index.column());
+   if (columnIndex == HopTableModel::ColumnIndex::Use) {
       QComboBox * box = new QComboBox(parent);
 
       // NOTE: these need to be in the same order as the Hop::Use enum.
@@ -479,7 +485,7 @@ QWidget * HopItemDelegate::createEditor(QWidget * parent, const QStyleOptionView
       box->setSizeAdjustPolicy(QComboBox::AdjustToContents);
 
       return box;
-   } else if (index.column() == HOPFORMCOL) {
+   } else if (columnIndex == HopTableModel::ColumnIndex::Form) {
       QComboBox * box = new QComboBox(parent);
 
       box->addItem(tr("Leaf"));
@@ -495,12 +501,13 @@ QWidget * HopItemDelegate::createEditor(QWidget * parent, const QStyleOptionView
 }
 
 void HopItemDelegate::setEditorData(QWidget * editor, const QModelIndex & index) const {
-   if (index.column() == HOPUSECOL) {
+   auto const columnIndex = static_cast<HopTableModel::ColumnIndex>(index.column());
+   if (columnIndex == HopTableModel::ColumnIndex::Use) {
       QComboBox * box = static_cast<QComboBox *>(editor);
       int ndx = index.model()->data(index, Qt::UserRole).toInt();
 
       box->setCurrentIndex(ndx);
-   } else if (index.column() == HOPFORMCOL) {
+   } else if (columnIndex == HopTableModel::ColumnIndex::Form) {
       QComboBox * box = static_cast<QComboBox *>(editor);
       int ndx = index.model()->data(index, Qt::UserRole).toInt();
 
@@ -509,10 +516,12 @@ void HopItemDelegate::setEditorData(QWidget * editor, const QModelIndex & index)
       QLineEdit * line = static_cast<QLineEdit *>(editor);
       line->setText(index.model()->data(index, Qt::DisplayRole).toString());
    }
+   return;
 }
 
 void HopItemDelegate::setModelData(QWidget * editor, QAbstractItemModel * model, const QModelIndex & index) const {
-   if (index.column() == HOPUSECOL) {
+   auto const columnIndex = static_cast<HopTableModel::ColumnIndex>(index.column());
+   if (columnIndex == HopTableModel::ColumnIndex::Use) {
       QComboBox * box = static_cast<QComboBox *>(editor);
       int value = box->currentIndex();
       int ndx = model->data(index, Qt::UserRole).toInt();
@@ -520,7 +529,7 @@ void HopItemDelegate::setModelData(QWidget * editor, QAbstractItemModel * model,
       if (value != ndx) {
          model->setData(index, value, Qt::EditRole);
       }
-   } else if (index.column() == HOPFORMCOL) {
+   } else if (columnIndex == HopTableModel::ColumnIndex::Form) {
       QComboBox * box = static_cast<QComboBox *>(editor);
       int value = box->currentIndex();
       int ndx = model->data(index, Qt::UserRole).toInt();
@@ -534,9 +543,11 @@ void HopItemDelegate::setModelData(QWidget * editor, QAbstractItemModel * model,
          model->setData(index, line->text(), Qt::EditRole);
       }
    }
+   return;
 }
 
 void HopItemDelegate::updateEditorGeometry(QWidget * editor, const QStyleOptionViewItem & option,
                                            const QModelIndex & /*index*/) const {
    editor->setGeometry(option.rect);
+   return;
 }

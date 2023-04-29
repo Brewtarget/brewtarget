@@ -1,6 +1,6 @@
 /*
  * model/Mash.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2023
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Kregg K <gigatropolis@yahoo.com>
  * - Matt Young <mfsy@yahoo.com>
@@ -37,18 +37,19 @@
 
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
+// See comment in model/NamedEntity.h
 #define AddPropertyName(property) namespace PropertyNames::Mash { BtStringConst const property{#property}; }
-AddPropertyName(equipAdjust)
-AddPropertyName(grainTemp_c)
-AddPropertyName(mashSteps)
-AddPropertyName(notes)
-AddPropertyName(ph)
-AddPropertyName(spargeTemp_c)
-AddPropertyName(totalMashWater_l)
-AddPropertyName(totalTime)
+AddPropertyName(equipAdjust          )
+AddPropertyName(grainTemp_c          )
+AddPropertyName(mashSteps            )
+AddPropertyName(notes                )
+AddPropertyName(ph                   )
+AddPropertyName(spargeTemp_c         )
+AddPropertyName(totalMashWater_l     )
+AddPropertyName(totalTime            )
 AddPropertyName(tunSpecificHeat_calGC)
-AddPropertyName(tunTemp_c)
-AddPropertyName(tunWeight_kg)
+AddPropertyName(tunTemp_c            )
+AddPropertyName(tunWeight_kg         )
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
 //======================================================================================================================
@@ -70,6 +71,12 @@ class Mash : public NamedEntity {
    Q_CLASSINFO("signal", "mashs")
 
 public:
+   /**
+    * \brief Mapping of names to types for the Qt properties of this class.  See \c NamedEntity::typeLookup for more
+    *        info.
+    */
+   static TypeLookup const typeLookup;
+
    Mash(QString name = "");
    Mash(NamedParameterBundle const & namedParameterBundle);
    Mash(Mash const & other);
@@ -77,27 +84,27 @@ public:
    virtual ~Mash();
 
    //! \brief The initial grain temp in Celsius.
-   Q_PROPERTY( double grainTemp_c READ grainTemp_c WRITE setGrainTemp_c /*NOTIFY changed*/ /*changedGrainTemp_c*/ )
+   Q_PROPERTY(double grainTemp_c READ grainTemp_c WRITE setGrainTemp_c  )
    //! \brief The notes.
-   Q_PROPERTY( QString notes READ notes WRITE setNotes /*NOTIFY changed*/ /*changedNotes*/ )
+   Q_PROPERTY(QString notes READ notes WRITE setNotes  )
    //! \brief The initial tun temp in Celsius.
-   Q_PROPERTY( double tunTemp_c READ tunTemp_c WRITE setTunTemp_c /*NOTIFY changed*/ /*changedTunTemp_c*/ )
+   Q_PROPERTY(double tunTemp_c READ tunTemp_c WRITE setTunTemp_c  )
    //! \brief The sparge temp in C.
-   Q_PROPERTY( double spargeTemp_c READ spargeTemp_c WRITE setSpargeTemp_c /*NOTIFY changed*/ /*changedSpargeTemp_c*/ )
+   Q_PROPERTY(double spargeTemp_c READ spargeTemp_c WRITE setSpargeTemp_c  )
    //! \brief The pH.
-   Q_PROPERTY( double ph READ ph WRITE setPh /*NOTIFY changed*/ /*changedPh*/ )
+   Q_PROPERTY(double ph READ ph WRITE setPh  )
    //! \brief The mass of the tun in kg.
-   Q_PROPERTY( double tunWeight_kg READ tunWeight_kg WRITE setTunWeight_kg /*NOTIFY changed*/ /*changedTunWeight_kg*/ )
+   Q_PROPERTY(double tunWeight_kg READ tunWeight_kg WRITE setTunWeight_kg  )
    //! \brief The tun's specific heat in kcal/(g*C).
-   Q_PROPERTY( double tunSpecificHeat_calGC READ tunSpecificHeat_calGC WRITE setTunSpecificHeat_calGC /*NOTIFY changed*/ /*changedTunSpecificHeat_calGC*/ )
+   Q_PROPERTY(double tunSpecificHeat_calGC READ tunSpecificHeat_calGC WRITE setTunSpecificHeat_calGC  )
    //! \brief Whether to adjust strike temperatures to account for the tun.
-   Q_PROPERTY( bool equipAdjust READ equipAdjust WRITE setEquipAdjust /*NOTIFY changed*/ /*changedEquipAdjust*/ )
+   Q_PROPERTY(bool equipAdjust READ equipAdjust WRITE setEquipAdjust  )
    //! \brief The total water that went into the mash in liters. Calculated.
-   Q_PROPERTY( double totalMashWater_l READ totalMashWater_l /*WRITE*/ /*NOTIFY changed*/ /*changedTotalMashWater_l*/ STORED false )
+   Q_PROPERTY(double totalMashWater_l READ totalMashWater_l  STORED false )
    //! \brief The total mash time in minutes. Calculated.
-   Q_PROPERTY( double totalTime READ totalTime /*NOTIFY changed*/ /*changedTotalTime*/ STORED false )
+   Q_PROPERTY(double totalTime READ totalTime  STORED false )
    //! \brief The individual mash steps.
-   Q_PROPERTY( QList< std::shared_ptr<MashStep> > mashSteps  READ mashSteps /*WRITE*/ /*NOTIFY changed*/ /*changedTotalTime*/ STORED false )
+   Q_PROPERTY(QList< std::shared_ptr<MashStep> > mashSteps  READ mashSteps  STORED false )
 
    /**
     * \brief Connect MashStep changed signals to their parent Mashes.

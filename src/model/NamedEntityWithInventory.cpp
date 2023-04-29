@@ -23,6 +23,18 @@
 #include "model/Inventory.h"
 #include "model/NamedParameterBundle.h"
 
+
+TypeLookup const NamedEntityWithInventory::typeLookup {
+   "NamedEntityWithInventory",
+   {
+//      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::NamedEntityWithInventory::inventory, NamedEntityWithInventory::m_inventory   ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::NamedEntityWithInventory::inventoryId, NamedEntityWithInventory::m_inventory_id),
+   },
+   // Parent class lookup
+   &NamedEntity::typeLookup
+};
+static_assert(std::is_base_of<NamedEntity, NamedEntityWithInventory>::value);
+
 NamedEntityWithInventory::NamedEntityWithInventory(QString t_name,
                                                    bool t_display,
                                                    QString folder) :
