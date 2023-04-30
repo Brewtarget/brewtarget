@@ -1,6 +1,6 @@
 /*
  * StyleEditor.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2023
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
@@ -42,27 +42,30 @@ class StyleEditor : public QDialog, public Ui::styleEditor {
    Q_OBJECT
 
 public:
-   StyleEditor( QWidget *parent=0, bool singleSyleEditor = false );
-   virtual ~StyleEditor() {}
-   void setStyle( Style* s );
+   StyleEditor(QWidget *parent = nullptr, bool singleSyleEditor = false);
+   virtual ~StyleEditor();
 
-   void newStyle(QString folder);
+   void setStyle(Style * s);
 
 public slots:
    void save();
-   void newStyle();
+   void newStyle(QString folder = "");
    void removeStyle();
    void clear();
    void clearAndClose();
 
-   void styleSelected( const QString& text );
-   void changed(QMetaProperty,QVariant);
+   void styleSelected(QString const & text);
+
+   /**
+    * \brief Receives the \c NamedEntity::changed signal emitted by the \c Style (or its base class)
+    */
+   void changed(QMetaProperty const property, QVariant const value);
 
 private:
-   Style* obsStyle;
-   StyleListModel* styleListModel;
-   StyleSortFilterProxyModel* styleProxyModel;
-   void showChanges(QMetaProperty* prop = 0);
+   Style * obsStyle;
+   StyleListModel * styleListModel;
+   StyleSortFilterProxyModel * styleProxyModel;
+   void showChanges(QMetaProperty const * prop = nullptr);
 };
 
 #endif

@@ -119,21 +119,13 @@ namespace Measurement {
       CarbonationVolumes,
       CarbonationMassPerVolume,
 
-      // Concentration is a dimensionless measurement and so does not strictly merit either a unit system or a system of
-      // measurement.  However, in practice, it is useful, not least for BeerJSON processing, to be able to convert
-      // between parts-per-million, parts-per-billion, milligrams-per-litre and so on.
-      //
-      // Of course, strictly speaking, there is NOT a generic conversion between milligrams-per-litre and parts-per-xxx
-      // because converting mass-per-volume to volume-per-volume (or mass-per-mass) involves temperature and the molar
-      // masses of the two substances in question.  Hence why a chemist would use
-      // https://en.wikipedia.org/wiki/Molar_concentration instead.
-      //
-      // However, in practice, in brewing, for small concentrations, it's not hugely wrong to approximate 1
-      // milligram-per-litre with 1 part-per-million.
-      //
-      // See https://en.wikipedia.org/wiki/Parts-per_notation for more info
-      ConcentrationPartsPer,
-      ConcentrationMassPerVolume,
+      // As explained in measurement/PhysicalQuantity.h, concentration can be "mass concentration" or "volume
+      // concentration" (or even other things which we ignore, for now at least).  So, somewhat by analogy with where we
+      // allow a choice of measuring certain ingredients by Mass or by Volume, we allow concentration to be measured by
+      // MassConcentration or VolumeConcentration.  For the same reasons as with Mass & Volume, we want the
+      // SystemOfMeasurement options to be the same for MassConcentration & VolumeConcentration (though, unlike with
+      // Mass & Volume, we don't support imperial or US customary systems of measurement for concentration).
+      MetricConcentration,
 
       // See comment in measurement/Unit.h about the different viscosity units
 

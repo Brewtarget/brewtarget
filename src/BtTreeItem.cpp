@@ -1,6 +1,6 @@
 /*
  * BtTreeItem.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2022
+ * authors 2009-2023
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  *
@@ -276,15 +276,13 @@ QVariant BtTreeItem::dataFermentable(int column) {
          }
       case FERMENTABLETYPECOL:
          if (ferm) {
-            return QVariant(ferm->typeStringTr());
+            return QVariant(Fermentable::typeDisplayNames[ferm->type()]);
          }
          break;
       case FERMENTABLECOLORCOL:
          if (ferm) {
-            return QVariant(Measurement::displayAmount(Measurement::Amount{ferm->color_srm(), Measurement::Units::srm},
-                                                       BtString::EMPTY_STR,
-                                                       PropertyNames::Fermentable::color_srm,
-                                                       0));
+            return QVariant(Measurement::displayAmount(Measurement::Amount{ferm->color_srm(),
+                                                                           Measurement::Units::srm}, 0));
          }
          break;
       default :

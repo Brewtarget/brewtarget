@@ -358,7 +358,7 @@ namespace {
          {ObjectStore::FieldType::Bool,   "deleted",          PropertyNames::NamedEntity::deleted },
          {ObjectStore::FieldType::Bool,   "display",          PropertyNames::NamedEntity::display },
          {ObjectStore::FieldType::String, "folder",           PropertyNames::NamedEntity::folder  },
-         {ObjectStore::FieldType::Int,    "addTo",            PropertyNames::Salt::addTo          }, // TODO: Really an Enum.  Would be less fragile to store this as text than a number
+         {ObjectStore::FieldType::Int,    "addTo",            PropertyNames::Salt::whenToAdd      }, // TODO: Really an Enum.  Would be less fragile to store this as text than a number.  Also, column name...
          {ObjectStore::FieldType::Double, "amount",           PropertyNames::Salt::amount         },
          {ObjectStore::FieldType::Bool,   "amount_is_weight", PropertyNames::Salt::amountIsWeight },
          {ObjectStore::FieldType::Bool,   "is_acid",          PropertyNames::Salt::isAcid         },

@@ -1,6 +1,6 @@
 /*
  * HopDialog.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2023
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Matt Young <mfsy@yahoo.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -63,7 +63,6 @@ public:
    QLineEdit *qLineEdit_searchBox;
    //! @}
 
-   void newHop(QString folder);
 
 public slots:
    //! Add selected hop to current recipe.
@@ -73,7 +72,7 @@ public slots:
    //! Bring up the editor for the selected hop.
    void editSelected();
    //! Create a new hop.
-   void newHop();
+   void newHop(QString folder = "");
    //! FIlters the shown hops
    void filterHops(QString searchExpression);
 
@@ -97,4 +96,4 @@ private:
    void retranslateUi();
 };
 
-#endif   /* _HOPDIALOG_H */
+#endif

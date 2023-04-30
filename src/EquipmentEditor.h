@@ -1,6 +1,6 @@
 /*
  * EquipmentEditor.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2023
  * - David Grundberg <individ@acc.umu.se>
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Matt Young <mfsy@yahoo.com>
@@ -22,6 +22,7 @@
  */
 #ifndef EQUIPMENTEDITOR_H
 #define EQUIPMENTEDITOR_H
+#pragma once
 
 #include "ui_equipmentEditor.h"
 
@@ -44,18 +45,16 @@ class EquipmentEditor : public QDialog, private Ui::equipmentEditor {
 public:
    //! \param singleEquipEditor true if you do not want the necessary elements for viewing all the database elements.
    EquipmentEditor( QWidget *parent=nullptr, bool singleEquipEditor=false );
-   virtual ~EquipmentEditor() {}
+   virtual ~EquipmentEditor();
 
    //! Edit the given equipment.
    void setEquipment( Equipment* e );
-
-   void newEquipment(QString folder);
+   //! Create a new equipment record
+   void newEquipment(QString folder = "");
 
 public slots:
    //! Save the changes to the equipment.
    void save();
-   //! Create a new equipment record.
-   void newEquipment();
    //! Delete the equipment from the database.
    void removeEquipment();
    //! Set the equipment to default values.
@@ -72,7 +71,7 @@ public slots:
    //! \brief set the default equipment, or unset the current equipment as the default
    void updateDefaultEquipment(int state);
 
-   void changed(QMetaProperty,QVariant);
+   void changed(QMetaProperty, QVariant);
 
    double calcBatchSize();
 
@@ -80,12 +79,11 @@ protected:
    void closeEvent(QCloseEvent *event);
 
 private:
+   void showChanges();
+
    Equipment* obsEquip;
    EquipmentListModel* equipmentListModel;
    NamedEntitySortProxyModel* equipmentSortProxyModel;
-
-   void showChanges();
-
 };
 
 #endif

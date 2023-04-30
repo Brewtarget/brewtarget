@@ -34,6 +34,7 @@
 
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
+// See comment in model/NamedEntity.h
 #define AddPropertyName(property) namespace PropertyNames::BrewNote { BtStringConst const property{#property}; }
 AddPropertyName(abv              )
 AddPropertyName(attenuation      )

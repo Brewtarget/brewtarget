@@ -1,6 +1,6 @@
 /*
  * xml/XmlCoding.cpp is part of Brewtarget, and is Copyright the following
- * authors 2020-2022
+ * authors 2020-2023
  * - Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -555,7 +555,7 @@ XmlCoding::XmlCoding(QString const name,
                      QHash<QString, XmlRecordDefinition> const & entityNameToXmlRecordDefinition) :
    name{name},
    entityNameToXmlRecordDefinition{entityNameToXmlRecordDefinition},
-   pimpl{ new impl{schemaResource} } {
+   pimpl{std::make_unique<impl>(schemaResource)} {
    qDebug() << Q_FUNC_INFO;
    return;
 }

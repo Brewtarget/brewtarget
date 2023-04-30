@@ -28,6 +28,7 @@
 #include <QVariant>
 
 #include "measurement/Amount.h"
+#include "measurement/ConstrainedAmount.h"
 #include "utils/BtStringConst.h"
 
 //
@@ -61,8 +62,8 @@ Q_DECLARE_METATYPE(std::optional<QString     >)
 Q_DECLARE_METATYPE(std::optional<unsigned int>)
 
 // Need these to be able to use MassOrVolumeAmt in Qt Properties system
-Q_DECLARE_METATYPE(MassOrVolumeAmt);
-Q_DECLARE_METATYPE(std::optional<MassOrVolumeAmt>);
+Q_DECLARE_METATYPE(MassOrVolumeAmt               )
+Q_DECLARE_METATYPE(std::optional<MassOrVolumeAmt>)
 
 /**
  * \brief This allows constructors to be called without a long list of positional parameters and, more importantly, for

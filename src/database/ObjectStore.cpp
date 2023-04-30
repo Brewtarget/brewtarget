@@ -682,12 +682,14 @@ public:
             TableColumnAndType tableColumnAndType{*primaryTable.tableName, *fieldDefn.columnName, fieldDefn.fieldType};
             if (legacyBadTypes.contains(tableColumnAndType) &&
                legacyBadTypes.value(tableColumnAndType).contains(propertyType)) {
-               // It's technically wrong but we know about it and it works, so just log a warning
-               qWarning() <<
-                  Q_FUNC_INFO << fieldDefn.fieldType << "property" << fieldDefn.propertyName << "on table" <<
-                  primaryTable.tableName << "(value " << propertyValue << ") is stored as " <<
-                  propertyValue.typeName() << "(" << propertyType << ") in column" << fieldDefn.columnName <<
-                  ".  This is a known ugliness that we intend to fix one day.";
+               // It's technically wrong but we know about it and it works, so just log it.  If this logging is
+               // uncommented, you can get a list of all the things we need to fix with:
+               //   grep "known ugliness" *.log | sed 's/^.*property /Property /; s/This is a known ugliness .*$//' | sort -u
+///               qDebug() <<
+///                  Q_FUNC_INFO << fieldDefn.fieldType << "property" << fieldDefn.propertyName << "on table" <<
+///                  primaryTable.tableName << "(value " << propertyValue << ") is stored as " <<
+///                  propertyValue.typeName() << "(" << propertyType << ") in column" << fieldDefn.columnName <<
+///                  ".  This is a known ugliness that we intend to fix one day.";
             } else {
                // It's not a known exception, so it's a coding error
                qCritical() <<

@@ -25,9 +25,9 @@
 
 namespace Measurement {
 
-   Amount::Amount(double quantity, Unit const & unit) : m_quantity{quantity}, m_unit{&unit} {
+   Amount::Amount(double const quantity, Unit const & unit) : m_quantity{quantity}, m_unit{&unit} {
       return;
-   };
+   }
 
    //! Copy constructor
    Amount::Amount(Amount const & other) = default;
@@ -48,71 +48,6 @@ namespace Measurement {
    void Amount::setUnit    (Unit   const & val) { this->m_unit     = &val; return; }
 
 }
-
-// Default constructor - constructs an invalid Amount
-MassOrVolumeAmt::MassOrVolumeAmt() : Measurement::Amount{-999.999, Measurement::Units::kilograms} {
-   return;
-}
-
-// Regular constructor
-MassOrVolumeAmt::MassOrVolumeAmt(double quantity,
-                                 Measurement::Unit const & unit) :
-   Measurement::Amount{quantity, unit} {
-   if (!this->wasConstructAssignOrMoveOK()) {
-      qCritical() << Q_FUNC_INFO << "Trying to construct MassOrVolumeAmt with " << this->m_unit->name;
-      Q_ASSERT(false);
-   }
-   return;
-}
-
-// Copy constructor
-MassOrVolumeAmt::MassOrVolumeAmt(Measurement::Amount const & other) : Measurement::Amount{other} {
-   if (!this->wasConstructAssignOrMoveOK()) {
-      qCritical() << Q_FUNC_INFO << "Trying to copy construct MassOrVolumeAmt with " << this->m_unit->name;
-      Q_ASSERT(false);
-   }
-   return;
-}
-
-// Assignment operator
-MassOrVolumeAmt & MassOrVolumeAmt::operator=(Measurement::Amount const & other) {
-   Measurement::Amount::operator=(other);
-   if (!this->wasConstructAssignOrMoveOK()) {
-      qCritical() << Q_FUNC_INFO << "Trying to assign to MassOrVolumeAmt with " << this->m_unit->name;
-      Q_ASSERT(false);
-   }
-   return *this;
-}
-
-// Move constructor
-MassOrVolumeAmt::MassOrVolumeAmt(Measurement::Amount && other) : Measurement::Amount{other} {
-   if (!this->wasConstructAssignOrMoveOK()) {
-      qCritical() << Q_FUNC_INFO << "Trying to move construct MassOrVolumeAmt with " << this->m_unit->name;
-      Q_ASSERT(false);
-   }
-   return;
-}
-
-//! Move assignment.
-MassOrVolumeAmt & MassOrVolumeAmt::operator=(Measurement::Amount && other) {
-   Measurement::Amount::operator=(other);
-   if (!this->wasConstructAssignOrMoveOK()) {
-      qCritical() << Q_FUNC_INFO << "Trying to move assign MassOrVolumeAmt with " << this->m_unit->name;
-      Q_ASSERT(false);
-   }
-   return *this;
-}
-
-bool MassOrVolumeAmt::isMass() const {
-   return this->Measurement::Amount::m_unit->getPhysicalQuantity() == Measurement::PhysicalQuantity::Mass;
-}
-
-
-bool MassOrVolumeAmt::wasConstructAssignOrMoveOK() {
-   return (this->Measurement::Amount::m_unit->getPhysicalQuantity() == Measurement::PhysicalQuantity::Mass ||
-           this->Measurement::Amount::m_unit->getPhysicalQuantity() == Measurement::PhysicalQuantity::Volume);
-}
-
 
 bool operator<(Measurement::Amount const & lhs, Measurement::Amount const & rhs) {
    // Amounts in the same units are trivial to compare
@@ -151,5 +86,5 @@ S & operator<<(S & stream, Measurement::Amount const amount) {
 // (This is all just a trick to allow the template definition to be here in the .cpp file and not in the header, which
 // means, amongst other things, that we can reference member functions of Measurement::Unit.)
 //
-template QDebug & operator<<(QDebug & stream, Measurement::Amount const amount);
+template QDebug      & operator<<(QDebug      & stream, Measurement::Amount const amount);
 template QTextStream & operator<<(QTextStream & stream, Measurement::Amount const amount);

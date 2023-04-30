@@ -471,22 +471,15 @@
     <name>BtDigitWidget</name>
     <message>
         <source>Too low for style.</source>
-        <translation>For lav for øltypen</translation>
+        <translation type="vanished">For lav for øltypen</translation>
     </message>
     <message>
         <source>In range for style.</source>
-        <translation>Innenfor område til øltypen</translation>
+        <translation type="vanished">Innenfor område til øltypen</translation>
     </message>
     <message>
         <source>Too high for style.</source>
-        <translation>For høy for øltypen</translation>
-    </message>
-</context>
-<context>
-    <name>BtLabel</name>
-    <message>
-        <source>Color (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">For høy for øltypen</translation>
     </message>
 </context>
 <context>
@@ -1205,43 +1198,31 @@ Log file may contain more details.</source>
     <name>FermentableItemDelegate</name>
     <message>
         <source>Grain</source>
-        <translation>Korn</translation>
+        <translation type="vanished">Korn</translation>
     </message>
     <message>
         <source>Sugar</source>
-        <translation>Sukker</translation>
+        <translation type="vanished">Sukker</translation>
     </message>
     <message>
         <source>Extract</source>
-        <translation>Ekstrakt</translation>
+        <translation type="vanished">Ekstrakt</translation>
     </message>
     <message>
         <source>Dry Extract</source>
-        <translation>Tørr ekstrakt</translation>
+        <translation type="vanished">Tørr ekstrakt</translation>
     </message>
     <message>
         <source>Adjunct</source>
-        <translation>Adjunkt</translation>
+        <translation type="vanished">Adjunkt</translation>
     </message>
     <message>
         <source>Mashed</source>
-        <translation type="unfinished">Mesket</translation>
-    </message>
-    <message>
-        <source>Steeped</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Not mashed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Normal</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Mesket</translation>
     </message>
     <message>
         <source>Late</source>
-        <translation type="unfinished">Sen</translation>
+        <translation type="obsolete">Sen</translation>
     </message>
 </context>
 <context>
@@ -1299,14 +1280,6 @@ Log file may contain more details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Change Addition Method</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Change Addition Time</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Change Yield</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1316,6 +1289,18 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Change Fermentable Inventory Amount</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount Type</source>
+        <translation type="unfinished">Enhetstype</translation>
+    </message>
+    <message>
+        <source>Change Fermentable Is Mashed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Add After Boil</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1428,16 +1413,8 @@ Log file may contain more details.</source>
         <translation type="unfinished">Humlenavn:</translation>
     </message>
     <message>
-        <source>Bittering</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Aroma</source>
-        <translation type="unfinished">Aroma</translation>
-    </message>
-    <message>
-        <source>Aroma &amp; Bittering</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Aroma</translation>
     </message>
     <message>
         <source>Flavor</source>
@@ -1448,36 +1425,24 @@ Log file may contain more details.</source>
         <translation type="obsolete">Ekstrakt</translation>
     </message>
     <message>
-        <source>Leaf</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Pellet</source>
-        <translation type="unfinished">Pellet</translation>
+        <translation type="obsolete">Pellet</translation>
     </message>
     <message>
         <source>Plug</source>
-        <translation type="unfinished">Plugg</translation>
+        <translation type="obsolete">Plugg</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished">Mesk</translation>
-    </message>
-    <message>
-        <source>First Wort</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Mesk</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation type="unfinished">Kok</translation>
-    </message>
-    <message>
-        <source>Post-Boil</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Kok</translation>
     </message>
     <message>
         <source>Dry Hop</source>
-        <translation type="unfinished">Tørrhumle</translation>
+        <translation type="obsolete">Tørrhumle</translation>
     </message>
 </context>
 <context>
@@ -2782,55 +2747,55 @@ Error message:
     </message>
     <message>
         <source>Ale</source>
-        <translation>Ale</translation>
+        <translation type="vanished">Ale</translation>
     </message>
     <message>
         <source>Lager</source>
-        <translation>Lager</translation>
+        <translation type="vanished">Lager</translation>
     </message>
     <message>
         <source>Wheat</source>
-        <translation>Hvete</translation>
+        <translation type="vanished">Hvete</translation>
     </message>
     <message>
         <source>Wine</source>
-        <translation>Vin</translation>
+        <translation type="vanished">Vin</translation>
     </message>
     <message>
         <source>Champagne</source>
-        <translation>Champagne</translation>
+        <translation type="vanished">Champagne</translation>
     </message>
     <message>
         <source>Liquid</source>
-        <translation>Væske</translation>
+        <translation type="vanished">Væske</translation>
     </message>
     <message>
         <source>Dry</source>
-        <translation>Tørt</translation>
+        <translation type="vanished">Tørt</translation>
     </message>
     <message>
         <source>Slant</source>
-        <translation>Prøverør</translation>
+        <translation type="vanished">Prøverør</translation>
     </message>
     <message>
         <source>Culture</source>
-        <translation>Kultur</translation>
+        <translation type="vanished">Kultur</translation>
     </message>
     <message>
         <source>Low</source>
-        <translation>Lav</translation>
+        <translation type="vanished">Lav</translation>
     </message>
     <message>
         <source>Medium</source>
-        <translation>Medium</translation>
+        <translation type="vanished">Medium</translation>
     </message>
     <message>
         <source>High</source>
-        <translation>Høy</translation>
+        <translation type="vanished">Høy</translation>
     </message>
     <message>
         <source>Very High</source>
-        <translation>Meget høy</translation>
+        <translation type="vanished">Meget høy</translation>
     </message>
     <message>
         <source>Recipes</source>
@@ -3309,6 +3274,22 @@ Error message:
     <message>
         <source>J/kg·K</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Late</source>
+        <translation type="unfinished">Sen</translation>
+    </message>
+    <message>
+        <source>Not mashed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mashed</source>
+        <translation type="unfinished">Mesket</translation>
+    </message>
+    <message>
+        <source>Weight</source>
+        <translation type="unfinished">Vekt</translation>
     </message>
 </context>
 <context>
@@ -4030,10 +4011,6 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
         <source>% Acid</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Bad column: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>ScaleRecipeEquipmentPage</name>
@@ -4074,6 +4051,21 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     <message>
         <source>The equipment and mash have been reset due to the fact that mash temperatures do not scale easily. Please re-run the mash wizard.</source>
         <translation>Utstyret og mesken har blitt resatt fordi mesketemperaturen ikke lar seg skalere enkelt. Vær vennlig og kjør meskeveillederen på nytt.</translation>
+    </message>
+</context>
+<context>
+    <name>SmartDigitWidget</name>
+    <message>
+        <source>Too low for style.</source>
+        <translation type="unfinished">For lav for øltypen</translation>
+    </message>
+    <message>
+        <source>In range for style.</source>
+        <translation type="unfinished">Innenfor område til øltypen</translation>
+    </message>
+    <message>
+        <source>Too high for style.</source>
+        <translation type="unfinished">For høy for øltypen</translation>
     </message>
 </context>
 <context>
@@ -4438,6 +4430,61 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Could not understand file format</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Yeast</name>
+    <message>
+        <source>Ale</source>
+        <translation type="unfinished">Ale</translation>
+    </message>
+    <message>
+        <source>Lager</source>
+        <translation type="unfinished">Lager</translation>
+    </message>
+    <message>
+        <source>Wheat</source>
+        <translation type="unfinished">Hvete</translation>
+    </message>
+    <message>
+        <source>Wine</source>
+        <translation type="unfinished">Vin</translation>
+    </message>
+    <message>
+        <source>Champagne</source>
+        <translation type="unfinished">Champagne</translation>
+    </message>
+    <message>
+        <source>Liquid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dry</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Slant</source>
+        <translation type="unfinished">Prøverør</translation>
+    </message>
+    <message>
+        <source>Culture</source>
+        <translation type="unfinished">Kultur</translation>
+    </message>
+    <message>
+        <source>Low</source>
+        <translation type="unfinished">Lav</translation>
+    </message>
+    <message>
+        <source>Medium</source>
+        <translation type="unfinished">Medium</translation>
+    </message>
+    <message>
+        <source>High</source>
+        <translation type="unfinished">Høy</translation>
+    </message>
+    <message>
+        <source>Very High</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4960,19 +5007,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
         <translation type="unfinished">Navn</translation>
     </message>
     <message>
-        <source>name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Required</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>boilSize_l</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>batchSize_l</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4992,35 +5027,15 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
         <translation type="unfinished">Frodampningsrate (pr time)</translation>
     </message>
     <message>
-        <source>evapRate_lHr</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Final top-up water</source>
         <translation type="unfinished">Endelig etterfyllingsvann</translation>
-    </message>
-    <message>
-        <source>topUpWater_l</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Kettle top-up water</source>
         <translation type="unfinished">Etterfyllingsvann kjele</translation>
     </message>
     <message>
-        <source>topUpKettle_l</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Kettle to Fermenter Loss</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>trubChillerLoss_l</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>lauterDeadspace_l</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5040,10 +5055,6 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>grainAbsorption_LKg</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Boiling Point of Water</source>
         <translation type="unfinished">Kokepunkt for vann</translation>
     </message>
@@ -5060,23 +5071,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
         <translation type="unfinished">Volum på meskekar</translation>
     </message>
     <message>
-        <source>hopUtilization_pct</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>boilingPoint_c</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>tunWeight_kg</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Specific Heat (Cal/(g*C))</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>tunSpecificHeat_calGC</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5116,23 +5111,23 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Grain</source>
-        <translation>Korn</translation>
+        <translation type="vanished">Korn</translation>
     </message>
     <message>
         <source>Sugar</source>
-        <translation>Sukker</translation>
+        <translation type="vanished">Sukker</translation>
     </message>
     <message>
         <source>Extract</source>
-        <translation>Ekstrakt</translation>
+        <translation type="vanished">Ekstrakt</translation>
     </message>
     <message>
         <source>Dry Extract</source>
-        <translation>Tørr ekstrakt</translation>
+        <translation type="vanished">Tørr ekstrakt</translation>
     </message>
     <message>
         <source>Adjunct</source>
-        <translation>Adjunkt</translation>
+        <translation type="vanished">Adjunkt</translation>
     </message>
     <message>
         <source>Amount</source>
@@ -5259,10 +5254,6 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Yield %</source>
         <translation type="unfinished">Utbytte %</translation>
     </message>
@@ -5271,15 +5262,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
         <translation type="unfinished">Ekstra</translation>
     </message>
     <message>
-        <source>origin</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Diastatic power</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>supplier</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5296,6 +5279,10 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Discard and close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fermantable Type</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -7579,26 +7566,6 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>styleLetter</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>styleGuide</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>categoryNumber</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>category</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Ranges</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7704,31 +7671,11 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>nappm</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Ca</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>so4ppm</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Mg</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>cappm</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>ph</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>hco3ppm</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -7748,14 +7695,6 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>mgppm</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>clppm</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>HCO&lt;sub&gt;3&lt;/sub&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7768,15 +7707,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>cacl</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>MgSO&lt;sub&gt;4&lt;/sub&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>mgso4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -7784,15 +7715,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>caco3</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>NaCl</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>nacl</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -7800,15 +7723,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>caso4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>NaHCO&lt;sub&gt;3&lt;/sub&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>nahco3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -7840,6 +7755,14 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Edit Water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alkalinity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alkalinity measured as</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

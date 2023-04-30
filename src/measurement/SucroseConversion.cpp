@@ -1,6 +1,6 @@
 /*
  * measurement/SucroseConversion.cpp is part of Brewtarget, and is copyright the following
- * authors 2022:
+ * authors 2022-2023:
  * - Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -44,7 +44,7 @@
 //         I found to avoid copying this data on to the heap (which would be unnecessary since it's const and known at
 //         compile time).
 //
-Measurement::SucroseConversion constexpr Measurement::sucroseConversions[] = {
+Measurement::SucroseConversion const Measurement::sucroseConversions[] = {
    // Refractive Index at 20°C  ||  % sucrose or degree Brix  ||  Apparent specific gravity @ 20/20 °C
    {  1.3330,                       0.0,                          1.00000  },
    {  1.3331,                       0.1,                          1.00039  }, // The PDF has this as 0.0 Brix, but I think that's clearly a typo

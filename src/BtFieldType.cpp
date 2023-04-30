@@ -22,19 +22,39 @@
 
 #include "utils/EnumStringMapping.h"
 
-namespace {
-   EnumStringMapping const nonPhysicalQuantityToName {
-      {"Date"         , NonPhysicalQuantity::Date         },
-      {"String"       , NonPhysicalQuantity::String       },
-      {"Count"        , NonPhysicalQuantity::Count        },
-      {"Percentage"   , NonPhysicalQuantity::Percentage   },
-      {"Bool"         , NonPhysicalQuantity::Bool         },
-      {"Dimensionless", NonPhysicalQuantity::Dimensionless},
-   };
+QString GetDisplayName(NonPhysicalQuantity nonPhysicalQuantity) {
+   // See comment in measurement/PhysicalQuantity.cpp for why we use a switch and not an EnumStringMapping here
+   switch (nonPhysicalQuantity) {
+      case NonPhysicalQuantity::Date         : return "Date"         ;
+      case NonPhysicalQuantity::String       : return "String"       ;
+      case NonPhysicalQuantity::Count        : return "Count"        ;
+      case NonPhysicalQuantity::Percentage   : return "Percentage"   ;
+      case NonPhysicalQuantity::Bool         : return "Bool"         ;
+      case NonPhysicalQuantity::Dimensionless: return "Dimensionless";
+      // In C++23, we'd add:
+      // default: std::unreachable();
+   }
+   // In C++23, we'd add:
+   // std::unreachable()
+   // It's a coding error if we get here!
+   Q_ASSERT(false);
 }
 
-QString GetDisplayName(NonPhysicalQuantity nonPhysicalQuantity) {
-   // It's a coding error if we don't find a result (in which case EnumStringMapping::enumToString will log an error and
-   // throw an exception).
-   return nonPhysicalQuantityToName.enumToString(nonPhysicalQuantity);
+Measurement::PhysicalQuantities ConvertToPhysicalQuantities(BtFieldType const & btFieldType) {
+   // It's a coding error to call this function if btFieldType holds NonPhysicalQuantity
+   Q_ASSERT(!std::holds_alternative<NonPhysicalQuantity>(btFieldType));
+
+   if (std::holds_alternative<Measurement::PhysicalQuantity>(btFieldType)) {
+      return std::get<Measurement::PhysicalQuantity>(btFieldType);
+   }
+
+   return std::get<Measurement::Mixed2PhysicalQuantities>(btFieldType);
+}
+
+BtFieldType ConvertToBtFieldType(Measurement::PhysicalQuantities const & physicalQuantities) {
+   if (std::holds_alternative<Measurement::PhysicalQuantity>(physicalQuantities)) {
+      return std::get<Measurement::PhysicalQuantity>(physicalQuantities);
+   }
+
+   return std::get<Measurement::Mixed2PhysicalQuantities>(physicalQuantities);
 }

@@ -248,8 +248,9 @@ set(RUNTIME_INSTALL_COMPONENT "Runtime")
 # We use different compilers on different platforms.  Where possible, we want to let CMake handle the actual compiler
 # settings
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-# We need C++17 or later for nested namespaces (and C++11 or later for lambdas)
-set(CMAKE_CXX_STANDARD 17)
+# We need C++20 for std::map::contains() and concepts, C++17 or later for nested namespaces and structured bindings, and
+# C++11 or later for lambdas.
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
@@ -296,6 +297,13 @@ if(NOT ${NO_MESSING_WITH_FLAGS})
       set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -pipe")
       set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -pipe")
    endif()
+endif()
+if(CMAKE_COMPILER_IS_GNUCXX)
+   #
+   # On older versions of GCC, it is not sufficient to specify C++20 to enable concepts, you also have to set a
+   # special compiler flag.
+   #
+   add_compile_options(-fconcepts)
 endif()
 
 # Windows-specific compilation settings
@@ -1177,26 +1185,15 @@ set_target_properties(${fileName_unitTestRunner} PROPERTIES RUNTIME_OUTPUT_DIREC
 # Test app needs all the same libraries as the main app, plus Qt5::Test
 target_link_libraries(${fileName_unitTestRunner} ${appAndTestCommonLibraries} Qt5::Test)
 
-add_test(
-   NAME pstdintTest
-   COMMAND bin/${fileName_unitTestRunner} pstdintTest
-)
-add_test(
-   NAME recipeCalcTest_allGrain
-   COMMAND bin/${fileName_unitTestRunner} recipeCalcTest_allGrain
-)
-add_test(
-   NAME postBoilLossOgTest
-   COMMAND bin/${fileName_unitTestRunner} postBoilLossOgTest
-)
-add_test(
-   NAME testUnitConversions
-   COMMAND bin/${fileName_unitTestRunner} testUnitConversions
-)
-add_test(
-   NAME testLogRotation
-   COMMAND bin/${fileName_unitTestRunner} testLogRotation
-)
+add_test(NAME pstdintTest                 COMMAND bin/${fileName_unitTestRunner} pstdintTest                )
+add_test(NAME recipeCalcTest_allGrain     COMMAND bin/${fileName_unitTestRunner} recipeCalcTest_allGrain    )
+add_test(NAME postBoilLossOgTest          COMMAND bin/${fileName_unitTestRunner} postBoilLossOgTest         )
+add_test(NAME testUnitConversions         COMMAND bin/${fileName_unitTestRunner} testUnitConversions        )
+add_test(NAME testNamedParameterBundle    COMMAND bin/${fileName_unitTestRunner} testNamedParameterBundle   )
+add_test(NAME testNumberDisplayAndParsing COMMAND bin/${fileName_unitTestRunner} testNumberDisplayAndParsing)
+add_test(NAME testAlgorithms              COMMAND bin/${fileName_unitTestRunner} testAlgorithms             )
+add_test(NAME testTypeLookups             COMMAND bin/${fileName_unitTestRunner} testTypeLookups            )
+add_test(NAME testLogRotation             COMMAND bin/${fileName_unitTestRunner} testLogRotation            )
 
 #=======================================================================================================================
 #============================================== Debian-friendly ChangeLog ==============================================
@@ -1751,7 +1748,7 @@ if(UNIX AND NOT APPLE)
    #
    # Also note, per https://www.debian.org/doc/debian-policy/ch-controlfields.html#s-f-maintainer, that it's simplest
    # to avoid having full stops in the maintainer's name.
-   set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Philip Greggory Lee <rocketman768@gmail.com>")
+   set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Matt Young <mfsy@yahoo.com>")
 
    # This should save us having to set CPACK_DEBIAN_PACKAGE_DEPENDS manually
    set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)

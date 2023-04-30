@@ -1,7 +1,6 @@
 /*
- * utils/TypeLookup.cpp is part of Brewtarget, and is Copyright the following
- * authors 2023
- * - Matt Young <mfsy@yahoo.com>
+ * utils/TypeLookup.cpp is part of Brewtarget, and is copyright the following authors 2023:
+ *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

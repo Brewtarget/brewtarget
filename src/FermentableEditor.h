@@ -36,20 +36,19 @@ class Fermentable;
  *
  * \brief Fermentable view/controller dialog that allows you to edit Fermentables.
  */
-class FermentableEditor : public QDialog, private Ui::fermentableEditor
-{
+class FermentableEditor : public QDialog, private Ui::fermentableEditor {
    Q_OBJECT
 
 public:
-   FermentableEditor( QWidget *parent=nullptr );
+   FermentableEditor(QWidget *parent=nullptr);
    virtual ~FermentableEditor();
-   void setFermentable( Fermentable* f );
-   void newFermentable( QString folder );
+   void setFermentable(Fermentable* f);
+   void newFermentable(QString folder);
 
 public slots:
    void save();
    void clearAndClose();
-   void newFermentable();
+   void clickedNewFermentable();
 
 private:
    Fermentable* obsFerm;

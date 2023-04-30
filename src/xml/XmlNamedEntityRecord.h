@@ -1,6 +1,6 @@
 /*
  * xml/XmlNamedEntityRecord.h is part of Brewtarget, and is Copyright the following
- * authors 2020-2021
+ * authors 2020-2023
  * - Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -31,6 +31,7 @@
 #include "model/MashStep.h"
 #include "model/NamedEntity.h"
 #include "model/Recipe.h"
+#include "utils/TypeLookup.h"
 #include "xml/XmlRecord.h"
 #include "xml/XQString.h"
 
@@ -48,7 +49,7 @@ public:
    XmlNamedEntityRecord(QString const & recordName,
                         XmlCoding const & xmlCoding,
                         XmlRecord::FieldDefinitions const & fieldDefinitions) :
-      XmlRecord{recordName, xmlCoding, fieldDefinitions, NE::staticMetaObject.className()} {
+      XmlRecord{recordName, xmlCoding, fieldDefinitions, &NE::typeLookup, NE::staticMetaObject.className()} {
       this->includeInStats = this->includedInStats();
       return;
    }

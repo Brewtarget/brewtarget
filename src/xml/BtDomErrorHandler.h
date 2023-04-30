@@ -1,6 +1,6 @@
 /*
  * xml/BtDomErrorHandler.h is part of Brewtarget, and is Copyright the following
- * authors 2020-2021
+ * authors 2020-2023
  * - Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -20,7 +20,6 @@
 #define XML_BTDOMERRORHANDLER_H
 #pragma once
 
-class QString;
 
 #include <memory> // For std::unique_ptr for PImpl
 #include <utility> // For std:pair
@@ -28,6 +27,8 @@ class QString;
 #include <QVector>
 
 #include <xercesc/dom/DOMErrorHandler.hpp>
+
+class QString;
 
 /**
  * Although some Xerces errors generate exceptions, others are handled through a callback to an object you provide

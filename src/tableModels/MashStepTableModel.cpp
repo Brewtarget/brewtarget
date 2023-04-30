@@ -45,12 +45,14 @@ MashStepTableModel::MashStepTableModel(QTableView* parent) :
    BtTableModel{
       parent,
       false,
-      {{MASHSTEPNAMECOL,       {tr("Name"),          NonPhysicalQuantity::String,                ""                                    }},
-       {MASHSTEPTYPECOL,       {tr("Type"),          NonPhysicalQuantity::String,                ""                                    }},
-       {MASHSTEPAMOUNTCOL,     {tr("Amount"),        Measurement::PhysicalQuantity::Volume,      "amount"                              }}, // Not a real property name
-       {MASHSTEPTEMPCOL,       {tr("Infusion Temp"), Measurement::PhysicalQuantity::Temperature, *PropertyNames::MashStep::infuseTemp_c}},
-       {MASHSTEPTARGETTEMPCOL, {tr("Target Temp"),   Measurement::PhysicalQuantity::Temperature, *PropertyNames::MashStep::stepTemp_c  }},
-       {MASHSTEPTIMECOL,       {tr("Time"),          Measurement::PhysicalQuantity::Time,        *PropertyNames::Misc::time            }}}
+      {
+         SMART_COLUMN_HEADER_DEFN(MashStepTableModel, Name      , tr("Name"         ),           NonPhysicalQuantity::String     ),
+         SMART_COLUMN_HEADER_DEFN(MashStepTableModel, Type      , tr("Type"         ),           NonPhysicalQuantity::String     ),
+         SMART_COLUMN_HEADER_DEFN(MashStepTableModel, Amount    , tr("Amount"       ), Measurement::PhysicalQuantity::Volume     ),
+         SMART_COLUMN_HEADER_DEFN(MashStepTableModel, Temp      , tr("Infusion Temp"), Measurement::PhysicalQuantity::Temperature),
+         SMART_COLUMN_HEADER_DEFN(MashStepTableModel, TargetTemp, tr("Target Temp"  ), Measurement::PhysicalQuantity::Temperature),
+         SMART_COLUMN_HEADER_DEFN(MashStepTableModel, Time      , tr("Time"         ), Measurement::PhysicalQuantity::Time       ),
+      }
    },
    mashObs(nullptr) {
    setObjectName("mashStepTableModel");
@@ -73,6 +75,10 @@ MashStepTableModel::MashStepTableModel(QTableView* parent) :
 }
 
 MashStepTableModel::~MashStepTableModel() = default;
+
+BtTableModel::ColumnInfo const & MashStepTableModel::getColumnInfo(MashStepTableModel::ColumnIndex const columnIndex) const {
+   return this->BtTableModel::getColumnInfo(static_cast<size_t>(columnIndex));
+}
 
 bool MashStepTableModel::remove(std::shared_ptr<MashStep> mashStep) {
 
@@ -222,8 +228,8 @@ void MashStepTableModel::mashStepChanged(QMetaProperty prop,
             this->reorderMashStep(this->rows.at(ii), ii);
          }
 
-         emit dataChanged( QAbstractItemModel::createIndex(ii, 0),
-                           QAbstractItemModel::createIndex(ii, MASHSTEPNUMCOLS-1));
+         emit dataChanged(QAbstractItemModel::createIndex(ii, 0),
+                          QAbstractItemModel::createIndex(ii, this->columnCount() - 1));
       }
 
    }
@@ -257,13 +263,13 @@ QVariant MashStepTableModel::data(QModelIndex const & index, int role) const {
 
    auto row = this->rows[index.row()];
 
-   int const column = index.column();
-   switch (column) {
-      case MASHSTEPNAMECOL:
+   auto const columnIndex = static_cast<MashStepTableModel::ColumnIndex>(index.column());
+   switch (columnIndex) {
+      case MashStepTableModel::ColumnIndex::Name:
          return QVariant(row->name());
-      case MASHSTEPTYPECOL:
+      case MashStepTableModel::ColumnIndex::Type:
          return QVariant(row->typeStringTr());
-      case MASHSTEPAMOUNTCOL:
+      case MashStepTableModel::ColumnIndex::Amount:
          return QVariant(
             Measurement::displayAmount(
                Measurement::Amount{
@@ -271,58 +277,53 @@ QVariant MashStepTableModel::data(QModelIndex const & index, int role) const {
                   Measurement::Units::liters
                },
                3,
-               this->getForcedSystemOfMeasurementForColumn(column),
-               this->getForcedRelativeScaleForColumn(column)
+               this->getColumnInfo(columnIndex).getForcedSystemOfMeasurement(),
+               this->getColumnInfo(columnIndex).getForcedRelativeScale()
             )
          );
-      case MASHSTEPTEMPCOL:
+      case MashStepTableModel::ColumnIndex::Temp:
          if (row->type() == MashStep::Type::Decoction) {
             return QVariant("---");
          }
          return QVariant(
             Measurement::displayAmount(Measurement::Amount{row->infuseTemp_c(), Measurement::Units::celsius},
                                        3,
-                                       this->getForcedSystemOfMeasurementForColumn(column),
+                                       this->getColumnInfo(columnIndex).getForcedSystemOfMeasurement(),
                                        std::nullopt)
          );
-      case MASHSTEPTARGETTEMPCOL:
+      case MashStepTableModel::ColumnIndex::TargetTemp:
          return QVariant(
             Measurement::displayAmount(Measurement::Amount{row->stepTemp_c(), Measurement::Units::celsius},
                                        3,
-                                       this->getForcedSystemOfMeasurementForColumn(column),
+                                       this->getColumnInfo(columnIndex).getForcedSystemOfMeasurement(),
                                        std::nullopt)
          );
-      case MASHSTEPTIMECOL:
+      case MashStepTableModel::ColumnIndex::Time:
          return QVariant(
             Measurement::displayAmount(Measurement::Amount{row->stepTime_min(), Measurement::Units::minutes},
                                        3,
                                        std::nullopt,
-                                       this->getForcedRelativeScaleForColumn(column))
+                                       this->getColumnInfo(columnIndex).getForcedRelativeScale())
          );
       default :
-         qWarning() << Q_FUNC_INFO << "Bad column: " << column;
+         qWarning() << Q_FUNC_INFO << "Bad column: " << index.column();
          return QVariant();
    }
 }
 
 QVariant MashStepTableModel::headerData( int section, Qt::Orientation orientation, int role ) const {
    if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
-      return this->getColumName(section);
+      return this->getColumnLabel(section);
    }
    return QVariant();
 }
 
-Qt::ItemFlags MashStepTableModel::flags(const QModelIndex& index ) const
-{
-   int col = index.column();
-   switch(col)
-   {
-      case MASHSTEPNAMECOL:
-         return Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
-      default:
-         return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled |
-            Qt::ItemIsEnabled;
+Qt::ItemFlags MashStepTableModel::flags(const QModelIndex& index ) const {
+   auto const columnIndex = static_cast<MashStepTableModel::ColumnIndex>(index.column());
+   if (columnIndex == MashStepTableModel::ColumnIndex::Name) {
+      return Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
    }
+   return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
 }
 
 bool MashStepTableModel::setData(QModelIndex const & index, QVariant const & value, int role) {
@@ -337,9 +338,9 @@ bool MashStepTableModel::setData(QModelIndex const & index, QVariant const & val
 
    auto row = this->rows[index.row()];
 
-   int const column = index.column();
-   switch (column) {
-      case MASHSTEPNAMECOL:
+   auto const columnIndex = static_cast<MashStepTableModel::ColumnIndex>(index.column());
+   switch (columnIndex) {
+      case MashStepTableModel::ColumnIndex::Name:
          if (value.canConvert(QVariant::String)) {
             MainWindow::instance().doOrRedoUpdate(*row,
                                                      PropertyNames::NamedEntity::name,
@@ -349,7 +350,7 @@ bool MashStepTableModel::setData(QModelIndex const & index, QVariant const & val
          }
          return false;
 
-      case MASHSTEPTYPECOL:
+      case MashStepTableModel::ColumnIndex::Type:
          if (value.canConvert(QVariant::Int)) {
             MainWindow::instance().doOrRedoUpdate(*row,
                                                   PropertyNames::MashStep::type,
@@ -359,7 +360,7 @@ bool MashStepTableModel::setData(QModelIndex const & index, QVariant const & val
          }
          return false;
 
-      case MASHSTEPAMOUNTCOL:
+      case MashStepTableModel::ColumnIndex::Amount:
          if (value.canConvert(QVariant::String)) {
             if (row->type() == MashStep::Type::Decoction ) {
                MainWindow::instance().doOrRedoUpdate(
@@ -367,8 +368,8 @@ bool MashStepTableModel::setData(QModelIndex const & index, QVariant const & val
                   PropertyNames::MashStep::decoctionAmount_l,
                   Measurement::qStringToSI(value.toString(),
                                            Measurement::PhysicalQuantity::Volume,
-                                           this->getForcedSystemOfMeasurementForColumn(column),
-                                           this->getForcedRelativeScaleForColumn(column)).quantity(),
+                                           this->getColumnInfo(columnIndex).getForcedSystemOfMeasurement(),
+                                           this->getColumnInfo(columnIndex).getForcedRelativeScale()).quantity(),
                   tr("Change Mash Step Decoction Amount")
                );
             } else {
@@ -377,8 +378,8 @@ bool MashStepTableModel::setData(QModelIndex const & index, QVariant const & val
                   PropertyNames::MashStep::infuseAmount_l,
                   Measurement::qStringToSI(value.toString(),
                                            Measurement::PhysicalQuantity::Volume,
-                                           this->getForcedSystemOfMeasurementForColumn(column),
-                                           this->getForcedRelativeScaleForColumn(column)).quantity(),
+                                           this->getColumnInfo(columnIndex).getForcedSystemOfMeasurement(),
+                                           this->getColumnInfo(columnIndex).getForcedRelativeScale()).quantity(),
                   tr("Change Mash Step Infuse Amount")
                );
             }
@@ -386,22 +387,22 @@ bool MashStepTableModel::setData(QModelIndex const & index, QVariant const & val
          }
          return false;
 
-      case MASHSTEPTEMPCOL:
+      case MashStepTableModel::ColumnIndex::Temp:
          if (value.canConvert(QVariant::String) && row->type() != MashStep::Type::Decoction) {
             MainWindow::instance().doOrRedoUpdate(
                *row,
                PropertyNames::MashStep::infuseTemp_c,
                Measurement::qStringToSI(value.toString(),
                                         Measurement::PhysicalQuantity::Temperature,
-                                        this->getForcedSystemOfMeasurementForColumn(column),
-                                        this->getForcedRelativeScaleForColumn(column)).quantity(),
+                                        this->getColumnInfo(columnIndex).getForcedSystemOfMeasurement(),
+                                        this->getColumnInfo(columnIndex).getForcedRelativeScale()).quantity(),
                tr("Change Mash Step Infuse Temp")
             );
             return true;
          }
          return false;
 
-      case MASHSTEPTARGETTEMPCOL:
+      case MashStepTableModel::ColumnIndex::TargetTemp:
          if (value.canConvert(QVariant::String)) {
             // Two changes, but we want to group together as one undo/redo step
             //
@@ -412,16 +413,16 @@ bool MashStepTableModel::setData(QModelIndex const & index, QVariant const & val
                PropertyNames::MashStep::stepTemp_c,
                Measurement::qStringToSI(value.toString(),
                                         Measurement::PhysicalQuantity::Temperature,
-                                        this->getForcedSystemOfMeasurementForColumn(column),
-                                        this->getForcedRelativeScaleForColumn(column)).quantity(),
+                                        this->getColumnInfo(columnIndex).getForcedSystemOfMeasurement(),
+                                        this->getColumnInfo(columnIndex).getForcedRelativeScale()).quantity(),
                tr("Change Mash Step Temp")
             );
             new SimpleUndoableUpdate(*row,
                                      PropertyNames::MashStep::endTemp_c,
                                      Measurement::qStringToSI(value.toString(),
                                                               Measurement::PhysicalQuantity::Temperature,
-                                                              this->getForcedSystemOfMeasurementForColumn(column),
-                                                              this->getForcedRelativeScaleForColumn(column)).quantity(),
+                                                              this->getColumnInfo(columnIndex).getForcedSystemOfMeasurement(),
+                                                              this->getColumnInfo(columnIndex).getForcedRelativeScale()).quantity(),
                                      tr("Change Mash Step End Temp"),
                                      targetTempUpdate);
             MainWindow::instance().doOrRedoUpdate(targetTempUpdate);
@@ -429,15 +430,15 @@ bool MashStepTableModel::setData(QModelIndex const & index, QVariant const & val
          }
          return false;
 
-      case MASHSTEPTIMECOL:
+      case MashStepTableModel::ColumnIndex::Time:
          if (value.canConvert(QVariant::String)) {
             MainWindow::instance().doOrRedoUpdate(
                *row,
                PropertyNames::MashStep::stepTime_min,
                Measurement::qStringToSI(value.toString(),
                                         Measurement::PhysicalQuantity::Time,
-                                        this->getForcedSystemOfMeasurementForColumn(column),
-                                        this->getForcedRelativeScaleForColumn(column)).quantity(),
+                                        this->getColumnInfo(columnIndex).getForcedSystemOfMeasurement(),
+                                        this->getColumnInfo(columnIndex).getForcedRelativeScale()).quantity(),
                tr("Change Mash Step Time")
             );
             return true;
@@ -473,10 +474,11 @@ MashStepItemDelegate::MashStepItemDelegate(QObject* parent) : QItemDelegate(pare
    return;
 }
 
-QWidget* MashStepItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &/*option*/, const QModelIndex &index) const
-{
-   if (index.column() == MASHSTEPTYPECOL )
-   {
+QWidget* MashStepItemDelegate::createEditor(QWidget * parent,
+                                            QStyleOptionViewItem const &/*option*/,
+                                            QModelIndex const & index) const {
+   auto const columnIndex = static_cast<MashStepTableModel::ColumnIndex>(index.column());
+   if (columnIndex == MashStepTableModel::ColumnIndex::Type) {
       QComboBox *box = new QComboBox(parent);
 
       foreach( QString mtype, MashStep::types )
@@ -486,51 +488,50 @@ QWidget* MashStepItemDelegate::createEditor(QWidget *parent, const QStyleOptionV
 
       return box;
    }
-   else
-      return new QLineEdit(parent);
+
+   return new QLineEdit(parent);
 }
 
-void MashStepItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
-{
-   if (index.column() == MASHSTEPTYPECOL )
-   {
+void MashStepItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const {
+   auto const columnIndex = static_cast<MashStepTableModel::ColumnIndex>(index.column());
+   if (columnIndex == MashStepTableModel::ColumnIndex::Type) {
       QComboBox* box = qobject_cast<QComboBox*>(editor);
       QString text = index.model()->data(index, Qt::DisplayRole).toString();
 
       int index = box->findText(text);
       box->setCurrentIndex(index);
-   }
-   else
-   {
+   } else {
       QLineEdit* line = qobject_cast<QLineEdit*>(editor);
 
       line->setText(index.model()->data(index, Qt::DisplayRole).toString());
    }
-
+   return;
 }
 
-void MashStepItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
-{
+void MashStepItemDelegate::setModelData(QWidget * editor,
+                                        QAbstractItemModel * model,
+                                        QModelIndex const & index) const {
    QStringList typesTr = QStringList() << QObject::tr("Infusion") << QObject::tr("Temperature") << QObject::tr("Decoction");
-   if (index.column() == MASHSTEPTYPECOL )
-   {
+   auto const columnIndex = static_cast<MashStepTableModel::ColumnIndex>(index.column());
+   if (columnIndex == MashStepTableModel::ColumnIndex::Type) {
       QComboBox* box = qobject_cast<QComboBox*>(editor);
       int ndx = box->currentIndex();
       int curr  = typesTr.indexOf(model->data(index,Qt::DisplayRole).toString());
-
-      if ( ndx != curr )
+      if ( ndx != curr ) {
          model->setData(index, ndx, Qt::EditRole);
-   }
-   else
-   {
+      }
+   } else {
       QLineEdit* line = qobject_cast<QLineEdit*>(editor);
-
-      if ( line->isModified() )
+      if ( line->isModified() ) {
          model->setData(index, line->text(), Qt::EditRole);
+      }
    }
+   return;
 }
 
-void MashStepItemDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex& /*index*/) const
-{
+void MashStepItemDelegate::updateEditorGeometry(QWidget *editor,
+                                                QStyleOptionViewItem const & option,
+                                                QModelIndex const & /*index*/) const {
    editor->setGeometry(option.rect);
+   return;
 }

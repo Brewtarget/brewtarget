@@ -336,22 +336,22 @@
     <name>BtDigitWidget</name>
     <message>
         <source>Too low for style.</source>
-        <translation>Stil için çok düşük.</translation>
+        <translation type="vanished">Stil için çok düşük.</translation>
     </message>
     <message>
         <source>In range for style.</source>
-        <translation>Stil için uygun.</translation>
+        <translation type="vanished">Stil için uygun.</translation>
     </message>
     <message>
         <source>Too high for style.</source>
-        <translation>Stil için çok yüksek.</translation>
+        <translation type="vanished">Stil için çok yüksek.</translation>
     </message>
 </context>
 <context>
     <name>BtLabel</name>
     <message>
         <source>Color (%1)</source>
-        <translation>Renk (%1)</translation>
+        <translation type="vanished">Renk (%1)</translation>
     </message>
 </context>
 <context>
@@ -914,43 +914,43 @@ Log file may contain more details.</source>
     <name>FermentableItemDelegate</name>
     <message>
         <source>Grain</source>
-        <translation>Tahıl</translation>
+        <translation type="vanished">Tahıl</translation>
     </message>
     <message>
         <source>Sugar</source>
-        <translation>Şeker</translation>
+        <translation type="vanished">Şeker</translation>
     </message>
     <message>
         <source>Extract</source>
-        <translation>Ekstrakt</translation>
+        <translation type="vanished">Ekstrakt</translation>
     </message>
     <message>
         <source>Dry Extract</source>
-        <translation>Kuru Ekstrakt</translation>
+        <translation type="vanished">Kuru Ekstrakt</translation>
     </message>
     <message>
         <source>Adjunct</source>
-        <translation>Yardımcı</translation>
+        <translation type="vanished">Yardımcı</translation>
     </message>
     <message>
         <source>Mashed</source>
-        <translation>Mayşelenmiş</translation>
+        <translation type="vanished">Mayşelenmiş</translation>
     </message>
     <message>
         <source>Steeped</source>
-        <translation>Adımlanmış</translation>
+        <translation type="vanished">Adımlanmış</translation>
     </message>
     <message>
         <source>Not mashed</source>
-        <translation>Mayşelenmemiş</translation>
+        <translation type="vanished">Mayşelenmemiş</translation>
     </message>
     <message>
         <source>Normal</source>
-        <translation>Normal</translation>
+        <translation type="vanished">Normal</translation>
     </message>
     <message>
         <source>Late</source>
-        <translation>Geç katkı</translation>
+        <translation type="vanished">Geç katkı</translation>
     </message>
 </context>
 <context>
@@ -1005,11 +1005,11 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Change Addition Method</source>
-        <translation>Ekleme Yöntemini Değiştir</translation>
+        <translation type="vanished">Ekleme Yöntemini Değiştir</translation>
     </message>
     <message>
         <source>Change Addition Time</source>
-        <translation>Ekleme Zamanını Değiştir</translation>
+        <translation type="vanished">Ekleme Zamanını Değiştir</translation>
     </message>
     <message>
         <source>Change Yield</source>
@@ -1021,6 +1021,18 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Change Fermentable Inventory Amount</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount Type</source>
+        <translation type="unfinished">Miktar Türü</translation>
+    </message>
+    <message>
+        <source>Change Fermentable Is Mashed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Add After Boil</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1134,15 +1146,11 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Bittering</source>
-        <translation type="unfinished">Acılık</translation>
+        <translation type="obsolete">Acılık</translation>
     </message>
     <message>
         <source>Aroma</source>
-        <translation type="unfinished">Aroma</translation>
-    </message>
-    <message>
-        <source>Aroma &amp; Bittering</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Aroma</translation>
     </message>
     <message>
         <source>Flavor</source>
@@ -1154,35 +1162,27 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Leaf</source>
-        <translation type="unfinished">Yaprak</translation>
+        <translation type="obsolete">Yaprak</translation>
     </message>
     <message>
         <source>Pellet</source>
-        <translation type="unfinished">Pelet</translation>
+        <translation type="obsolete">Pelet</translation>
     </message>
     <message>
         <source>Plug</source>
-        <translation type="unfinished">Kozalak</translation>
+        <translation type="obsolete">Kozalak</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished">Mayşe</translation>
+        <translation type="obsolete">Mayşe</translation>
     </message>
     <message>
         <source>First Wort</source>
-        <translation type="unfinished">İlk Şıra</translation>
+        <translation type="obsolete">İlk Şıra</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation type="unfinished">Kaynama</translation>
-    </message>
-    <message>
-        <source>Post-Boil</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Dry Hop</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Kaynama</translation>
     </message>
 </context>
 <context>
@@ -2419,56 +2419,48 @@ Error message:
         <translation>Kaynatma(Decoction)</translation>
     </message>
     <message>
-        <source>Ale</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Lager</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Wheat</source>
-        <translation>Buğday</translation>
+        <translation type="vanished">Buğday</translation>
     </message>
     <message>
         <source>Wine</source>
-        <translation>Şarap</translation>
+        <translation type="vanished">Şarap</translation>
     </message>
     <message>
         <source>Champagne</source>
-        <translation>Şampanya</translation>
+        <translation type="vanished">Şampanya</translation>
     </message>
     <message>
         <source>Liquid</source>
-        <translation>Sıvı</translation>
+        <translation type="vanished">Sıvı</translation>
     </message>
     <message>
         <source>Dry</source>
-        <translation>Kuru</translation>
+        <translation type="vanished">Kuru</translation>
     </message>
     <message>
         <source>Slant</source>
-        <translation>Meyilli</translation>
+        <translation type="vanished">Meyilli</translation>
     </message>
     <message>
         <source>Culture</source>
-        <translation>Kültür</translation>
+        <translation type="vanished">Kültür</translation>
     </message>
     <message>
         <source>Low</source>
-        <translation>Düşük</translation>
+        <translation type="vanished">Düşük</translation>
     </message>
     <message>
         <source>Medium</source>
-        <translation>Orta</translation>
+        <translation type="vanished">Orta</translation>
     </message>
     <message>
         <source>High</source>
-        <translation>Yüksek</translation>
+        <translation type="vanished">Yüksek</translation>
     </message>
     <message>
         <source>Very High</source>
-        <translation>Çok Yüksek</translation>
+        <translation type="vanished">Çok Yüksek</translation>
     </message>
     <message>
         <source>Recipes</source>
@@ -2957,6 +2949,22 @@ Error message:
     <message>
         <source>J/kg·K</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Late</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Not mashed</source>
+        <translation type="unfinished">Mayşelenmemiş</translation>
+    </message>
+    <message>
+        <source>Mashed</source>
+        <translation type="unfinished">Mayşelenmiş</translation>
+    </message>
+    <message>
+        <source>Weight</source>
+        <translation type="unfinished">Ağırlık</translation>
     </message>
 </context>
 <context>
@@ -3680,7 +3688,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Bad column: %1</source>
-        <translation>Kötü kolon: %1</translation>
+        <translation type="vanished">Kötü kolon: %1</translation>
     </message>
 </context>
 <context>
@@ -3722,6 +3730,21 @@ The final volume in the primary is %1.</source>
     <message>
         <source>The equipment and mash have been reset due to the fact that mash temperatures do not scale easily. Please re-run the mash wizard.</source>
         <translation>Mayşe sıcaklıkları kolaylıkla ölçeklendirilemedikleri için teçhizat ve mayşe durumu sıfırlandı. Lütfen mayşe sihirbazını tekrar çalıştırın.</translation>
+    </message>
+</context>
+<context>
+    <name>SmartDigitWidget</name>
+    <message>
+        <source>Too low for style.</source>
+        <translation type="unfinished">Stil için çok düşük.</translation>
+    </message>
+    <message>
+        <source>In range for style.</source>
+        <translation type="unfinished">Stil için uygun.</translation>
+    </message>
+    <message>
+        <source>Too high for style.</source>
+        <translation type="unfinished">Stil için çok yüksek.</translation>
     </message>
 </context>
 <context>
@@ -4074,6 +4097,61 @@ The final volume in the primary is %1.</source>
     <message>
         <source>↷ Skipped </source>
         <translation type="vanished">↷ Atlandı </translation>
+    </message>
+</context>
+<context>
+    <name>Yeast</name>
+    <message>
+        <source>Ale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lager</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wheat</source>
+        <translation type="unfinished">Buğday</translation>
+    </message>
+    <message>
+        <source>Wine</source>
+        <translation type="unfinished">Şarap</translation>
+    </message>
+    <message>
+        <source>Champagne</source>
+        <translation type="unfinished">Şampanya</translation>
+    </message>
+    <message>
+        <source>Liquid</source>
+        <translation type="unfinished">Sıvı</translation>
+    </message>
+    <message>
+        <source>Dry</source>
+        <translation type="unfinished">Kuru</translation>
+    </message>
+    <message>
+        <source>Slant</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Culture</source>
+        <translation type="unfinished">Kültür</translation>
+    </message>
+    <message>
+        <source>Low</source>
+        <translation type="unfinished">Düşük</translation>
+    </message>
+    <message>
+        <source>Medium</source>
+        <translation type="unfinished">Orta</translation>
+    </message>
+    <message>
+        <source>High</source>
+        <translation type="unfinished">Yüksek</translation>
+    </message>
+    <message>
+        <source>Very High</source>
+        <translation type="unfinished">Çok Yüksek</translation>
     </message>
 </context>
 <context>
@@ -4485,19 +4563,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>name</source>
-        <translation>isim</translation>
+        <translation type="vanished">isim</translation>
     </message>
     <message>
         <source>Required</source>
         <translation>Gerekli</translation>
-    </message>
-    <message>
-        <source>boilSize_l</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>batchSize_l</source>
-        <translation></translation>
     </message>
     <message>
         <source>Time</source>
@@ -4516,36 +4586,16 @@ The final volume in the primary is %1.</source>
         <translation>Buharlaşma oranı (saat başı)</translation>
     </message>
     <message>
-        <source>evapRate_lHr</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Final top-up water</source>
         <translation>Son tamamlama suyu</translation>
-    </message>
-    <message>
-        <source>topUpWater_l</source>
-        <translation></translation>
     </message>
     <message>
         <source>Kettle top-up water</source>
         <translation>Kazana su eklenerek tamamlanması</translation>
     </message>
     <message>
-        <source>topUpKettle_l</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Kettle to Fermenter Loss</source>
         <translation>Kazandan Mayalayıcıya Kayıp</translation>
-    </message>
-    <message>
-        <source>trubChillerLoss_l</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>lauterDeadspace_l</source>
-        <translation></translation>
     </message>
     <message>
         <source>Physics</source>
@@ -4564,10 +4614,6 @@ The final volume in the primary is %1.</source>
         <translation>Şerbetçi Otu Etki Yüzdesi %</translation>
     </message>
     <message>
-        <source>grainAbsorption_LKg</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Boiling Point of Water</source>
         <translation>Suyun Kaynama Noktası</translation>
     </message>
@@ -4584,24 +4630,8 @@ The final volume in the primary is %1.</source>
         <translation>Mayşe kazanının hacmi</translation>
     </message>
     <message>
-        <source>hopUtilization_pct</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>boilingPoint_c</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>tunWeight_kg</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Specific Heat (Cal/(g*C))</source>
         <translation>Spesifik Isı(Kalori/(g*C))</translation>
-    </message>
-    <message>
-        <source>tunSpecificHeat_calGC</source>
-        <translation></translation>
     </message>
     <message>
         <source>Notes</source>
@@ -4636,23 +4666,23 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Grain</source>
-        <translation>Tahıl</translation>
+        <translation type="vanished">Tahıl</translation>
     </message>
     <message>
         <source>Sugar</source>
-        <translation>Şeker</translation>
+        <translation type="vanished">Şeker</translation>
     </message>
     <message>
         <source>Extract</source>
-        <translation>Ekstrakt</translation>
+        <translation type="vanished">Ekstrakt</translation>
     </message>
     <message>
         <source>Dry Extract</source>
-        <translation>Kuru Ekstrakt</translation>
+        <translation type="vanished">Kuru Ekstrakt</translation>
     </message>
     <message>
         <source>Adjunct</source>
-        <translation>Yardımcı mayalanabilen</translation>
+        <translation type="vanished">Yardımcı mayalanabilen</translation>
     </message>
     <message>
         <source>Yield as compared to glucose</source>
@@ -4756,7 +4786,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>name</source>
-        <translation>isim</translation>
+        <translation type="vanished">isim</translation>
     </message>
     <message>
         <source>Yield %</source>
@@ -4768,7 +4798,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>origin</source>
-        <translation>köken</translation>
+        <translation type="vanished">köken</translation>
     </message>
     <message>
         <source>Diastatic power</source>
@@ -4776,7 +4806,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>supplier</source>
-        <translation>sağlayıcı</translation>
+        <translation type="vanished">sağlayıcı</translation>
     </message>
     <message>
         <source>Notes</source>
@@ -4793,6 +4823,10 @@ The final volume in the primary is %1.</source>
     <message>
         <source>Discard and close</source>
         <translation>Kaydetmeden çık</translation>
+    </message>
+    <message>
+        <source>Fermantable Type</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -6791,24 +6825,8 @@ The final volume in the primary is %1.</source>
         <translation>Gerekli</translation>
     </message>
     <message>
-        <source>styleLetter</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>styleGuide</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>categoryNumber</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>category</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>name</source>
-        <translation type="unfinished">isim</translation>
+        <translation type="obsolete">isim</translation>
     </message>
     <message>
         <source>Ranges</source>
@@ -6912,31 +6930,11 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>nappm</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Ca</source>
         <translation></translation>
     </message>
     <message>
-        <source>so4ppm</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Mg</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>cappm</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>ph</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>hco3ppm</source>
         <translation></translation>
     </message>
     <message>
@@ -6956,14 +6954,6 @@ The final volume in the primary is %1.</source>
         <translation></translation>
     </message>
     <message>
-        <source>mgppm</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>clppm</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>HCO&lt;sub&gt;3&lt;/sub&gt;</source>
         <translation></translation>
     </message>
@@ -6976,15 +6966,7 @@ The final volume in the primary is %1.</source>
         <translation></translation>
     </message>
     <message>
-        <source>cacl</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>MgSO&lt;sub&gt;4&lt;/sub&gt;</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>mgso4</source>
         <translation></translation>
     </message>
     <message>
@@ -6992,15 +6974,7 @@ The final volume in the primary is %1.</source>
         <translation></translation>
     </message>
     <message>
-        <source>caco3</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>NaCl</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>nacl</source>
         <translation></translation>
     </message>
     <message>
@@ -7008,15 +6982,7 @@ The final volume in the primary is %1.</source>
         <translation></translation>
     </message>
     <message>
-        <source>caso4</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>NaHCO&lt;sub&gt;3&lt;/sub&gt;</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>nahco3</source>
         <translation></translation>
     </message>
     <message>
@@ -7045,6 +7011,14 @@ The final volume in the primary is %1.</source>
     <message>
         <source>Edit Water</source>
         <translation>Suyu Düzenle</translation>
+    </message>
+    <message>
+        <source>Alkalinity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alkalinity measured as</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

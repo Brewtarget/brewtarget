@@ -1,6 +1,6 @@
 /*
  * InventoryFormatter.cpp is part of Brewtarget, and is Copyright the following
- * authors 2016-2021
+ * authors 2016-2023
  * - Mark de Wever <koraq@xs4all.nl>
  * - Matt Young <mfsy@yahoo.com>
  *
@@ -19,10 +19,10 @@
  */
 #include "InventoryFormatter.h"
 
-#include <QDate>
-#include <QDialog>
+#include <QList>
+#include <QMap>
+#include <QStringList>
 
-#include "Application.h"
 #include "database/ObjectStoreWrapper.h"
 #include "Html.h"
 #include "Localization.h"
@@ -30,13 +30,11 @@
 #include "measurement/Measurement.h"
 #include "model/Fermentable.h"
 #include "model/Hop.h"
-#include "model/Inventory.h"
 #include "model/Misc.h"
 #include "model/Yeast.h"
 #include "PersistentSettings.h"
 
 namespace {
-
    /**
     * @brief Create Inventory HTML Header
     *
@@ -50,7 +48,7 @@ namespace {
    }
 
    /**
-    * Create Inventory HTML Table of Fermentables
+    * \brief Create Inventory HTML Table of \c Fermentable
     */
    QString createInventoryTableFermentable() {
       QString result;
@@ -61,7 +59,6 @@ namespace {
          [](std::shared_ptr<Fermentable> ff) { return (ff->getParent() == nullptr && ff->inventory() > 0.0); }
       );
       if (!inventory.empty()) {
-
          result += QString("<h2>%1</h2>").arg(QObject::tr("Fermentables"));
          result += "<table id=\"fermentables\">";
          result += QString("<tr>"
@@ -77,9 +74,8 @@ namespace {
                               "<td>%2</td>"
                               "</tr>")
                            .arg(fermentable->name())
-                           .arg(Measurement::displayAmount(Measurement::Amount{fermentable->inventory(), Measurement::Units::kilograms},
-                                                           PersistentSettings::Sections::fermentableTable,
-                                                           PropertyNames::NamedEntityWithInventory::inventory));
+                           .arg(Measurement::displayAmount(Measurement::Amount{fermentable->inventory(),
+                                                                               Measurement::Units::kilograms}));
          }
          result += "</table>";
       }
@@ -87,7 +83,7 @@ namespace {
    }
 
    /**
-    * Create Inventory HTML Table of Hops
+    * \brief Create Inventory HTML Table of \c Hop
     */
    QString createInventoryTableHop() {
       QString result;
@@ -116,9 +112,8 @@ namespace {
                               "</tr>")
                            .arg(hop->name())
                            .arg(hop->alpha_pct())
-                           .arg(Measurement::displayAmount(Measurement::Amount{hop->inventory(), Measurement::Units::kilograms},
-                                                           PersistentSettings::Sections::hopTable,
-                                                           PropertyNames::NamedEntityWithInventory::inventory));
+                           .arg(Measurement::displayAmount(Measurement::Amount{hop->inventory(),
+                                                                               Measurement::Units::kilograms}));
          }
          result += "</table>";
       }
@@ -126,7 +121,7 @@ namespace {
    }
 
    /**
-    * Create Inventory HTML Table of Misc
+    * \brief Create Inventory HTML Table of \c Misc
     */
    QString createInventoryTableMiscellaneous() {
       QString result;
@@ -150,9 +145,7 @@ namespace {
                Measurement::Amount{
                   miscellaneous->inventory(),
                   miscellaneous->amountIsWeight() ? Measurement::Units::kilograms : Measurement::Units::liters
-               },
-               PersistentSettings::Sections::miscTable,
-               PropertyNames::NamedEntityWithInventory::inventory
+               }
             );
             result += QString("<tr>"
                               "<td>%1</td>"
@@ -167,7 +160,7 @@ namespace {
    }
 
    /**
-    * Create Inventory HTML Table of Yeast
+    * \brief Create Inventory HTML Table of \c Yeast
     */
    QString createInventoryTableYeast() {
       QString result;
@@ -189,9 +182,7 @@ namespace {
                Measurement::Amount{
                   yeast->inventory(),
                   yeast->amountIsWeight() ? Measurement::Units::kilograms : Measurement::Units::liters
-               },
-               PersistentSettings::Sections::yeastTable,
-               PropertyNames::NamedEntityWithInventory::inventory
+               }
             );
 
             result += QString("<tr>"
@@ -206,6 +197,7 @@ namespace {
       return result;
    }
 
+
    /**
     * Create Inventory HTML Body
     */
@@ -217,7 +209,7 @@ namespace {
          ((InventoryFormatter::MISCELLANEOUS & flags) ? createInventoryTableMiscellaneous() : "") +
          ((InventoryFormatter::YEAST         & flags) ? createInventoryTableYeast() : "");
 
-         // If user selects no printout or if there are no inventory for the selected ingredients.
+      // If user selects no printout or if there are no inventory for the selected ingredients
       if (result.size() == 0) {
          result = QObject::tr("No inventory available.");
       }
@@ -232,8 +224,7 @@ namespace {
       return Html::createFooter();
    }
 
-   }
-
+}
 
 InventoryFormatter::HtmlGenerationFlags InventoryFormatter::operator|(InventoryFormatter::HtmlGenerationFlags a,
                                                                       InventoryFormatter::HtmlGenerationFlags b) {
@@ -244,7 +235,6 @@ bool InventoryFormatter::operator&(InventoryFormatter::HtmlGenerationFlags a,
                                    InventoryFormatter::HtmlGenerationFlags b) {
    return (static_cast<int>(a) & static_cast<int>(b));
 }
-
 
 QString InventoryFormatter::createInventoryHtml(HtmlGenerationFlags flags) {
    return createInventoryHeader() +

@@ -23,32 +23,6 @@
 #include "utils/EnumStringMapping.h"
 
 namespace {
-   //
-   // One day we should probably combine these two mapping tables
-   //
-   EnumStringMapping const systemOfMeasurementToDisplayName {
-      {QObject::tr("British Imperial"                   ), Measurement::SystemOfMeasurement::Imperial                    },
-      {QObject::tr("US Customary"                       ), Measurement::SystemOfMeasurement::UsCustomary                 },
-      {QObject::tr("Metric"                             ), Measurement::SystemOfMeasurement::Metric                      },
-      {QObject::tr("Metric Alternate"                   ), Measurement::SystemOfMeasurement::MetricAlternate             },
-      {QObject::tr("Universal Standard"                 ), Measurement::SystemOfMeasurement::UniversalStandard           },
-      {QObject::tr("SRM (Standard Reference Method)"    ), Measurement::SystemOfMeasurement::StandardReferenceMethod     },
-      {QObject::tr("EBC (European Brewery Convention)"  ), Measurement::SystemOfMeasurement::EuropeanBreweryConvention   },
-      {QObject::tr("Lovibond"                           ), Measurement::SystemOfMeasurement::Lovibond                    },
-      {QObject::tr("SG (Specific Gravity)"              ), Measurement::SystemOfMeasurement::SpecificGravity             },
-      {QObject::tr("Plato"                              ), Measurement::SystemOfMeasurement::Plato                       },
-      {QObject::tr("Brix"                               ), Measurement::SystemOfMeasurement::Brix                        },
-      {QObject::tr("Lintner"                            ), Measurement::SystemOfMeasurement::Lintner                     },
-      {QObject::tr("Windisch Kolbach"                   ), Measurement::SystemOfMeasurement::WindischKolbach             },
-      {QObject::tr("Carbonation Volumes"                ), Measurement::SystemOfMeasurement::CarbonationVolumes          },
-      {QObject::tr("Carbonation Mass Per Volume"        ), Measurement::SystemOfMeasurement::CarbonationMassPerVolume    },
-      {QObject::tr("Concentration Parts Per"            ), Measurement::SystemOfMeasurement::ConcentrationPartsPer       },
-      {QObject::tr("Concentration Mass Per Volume"      ), Measurement::SystemOfMeasurement::ConcentrationMassPerVolume  },
-      {QObject::tr("Specific Heat Capacity Calories per"), Measurement::SystemOfMeasurement::SpecificHeatCapacityCalories},
-      {QObject::tr("Specific Heat Capacity Joules per"  ), Measurement::SystemOfMeasurement::SpecificHeatCapacityJoules  },
-
-
-   };
    EnumStringMapping const systemOfMeasurementToUniqueName {
       {"Imperial"                    , Measurement::SystemOfMeasurement::Imperial                    },
       {"UsCustomary"                 , Measurement::SystemOfMeasurement::UsCustomary                 },
@@ -65,17 +39,39 @@ namespace {
       {"WindischKolbach"             , Measurement::SystemOfMeasurement::WindischKolbach             },
       {"CarbonationVolumes"          , Measurement::SystemOfMeasurement::CarbonationVolumes          },
       {"CarbonationMassPerVolume"    , Measurement::SystemOfMeasurement::CarbonationMassPerVolume    },
-      {"ConcentrationPartsPer"       , Measurement::SystemOfMeasurement::ConcentrationPartsPer       },
-      {"ConcentrationMassPerVolume"  , Measurement::SystemOfMeasurement::ConcentrationMassPerVolume  },
+      {"MetricConcentration"         , Measurement::SystemOfMeasurement::MetricConcentration         },
       {"SpecificHeatCapacityCalories", Measurement::SystemOfMeasurement::SpecificHeatCapacityCalories},
       {"SpecificHeatCapacityJoules"  , Measurement::SystemOfMeasurement::SpecificHeatCapacityJoules  },
    };
 }
 
-QString Measurement::getDisplayName(Measurement::SystemOfMeasurement systemOfMeasurement) {
-   // It's a coding error if we don't find a result (in which case EnumStringMapping::enumToString will log an error and
-   // throw an exception).
-   return systemOfMeasurementToDisplayName.enumToString(systemOfMeasurement);
+QString Measurement::getDisplayName(Measurement::SystemOfMeasurement const systemOfMeasurement) {
+   switch (systemOfMeasurement) {
+      case Measurement::SystemOfMeasurement::Imperial                    : return QObject::tr("British Imperial"                   );
+      case Measurement::SystemOfMeasurement::UsCustomary                 : return QObject::tr("US Customary"                       );
+      case Measurement::SystemOfMeasurement::Metric                      : return QObject::tr("Metric"                             );
+      case Measurement::SystemOfMeasurement::MetricAlternate             : return QObject::tr("Metric Alternate"                   );
+      case Measurement::SystemOfMeasurement::UniversalStandard           : return QObject::tr("Universal Standard"                 );
+      case Measurement::SystemOfMeasurement::StandardReferenceMethod     : return QObject::tr("SRM (Standard Reference Method)"    );
+      case Measurement::SystemOfMeasurement::EuropeanBreweryConvention   : return QObject::tr("EBC (European Brewery Convention)"  );
+      case Measurement::SystemOfMeasurement::Lovibond                    : return QObject::tr("Lovibond"                           );
+      case Measurement::SystemOfMeasurement::SpecificGravity             : return QObject::tr("SG (Specific Gravity)"              );
+      case Measurement::SystemOfMeasurement::Plato                       : return QObject::tr("Plato"                              );
+      case Measurement::SystemOfMeasurement::Brix                        : return QObject::tr("Brix"                               );
+      case Measurement::SystemOfMeasurement::Lintner                     : return QObject::tr("Lintner"                            );
+      case Measurement::SystemOfMeasurement::WindischKolbach             : return QObject::tr("Windisch Kolbach"                   );
+      case Measurement::SystemOfMeasurement::CarbonationVolumes          : return QObject::tr("Carbonation Volumes"                );
+      case Measurement::SystemOfMeasurement::CarbonationMassPerVolume    : return QObject::tr("Carbonation Mass Per Volume"        );
+      case Measurement::SystemOfMeasurement::MetricConcentration         : return QObject::tr("Metric Concentration"               );
+      case Measurement::SystemOfMeasurement::SpecificHeatCapacityCalories: return QObject::tr("Specific Heat Capacity Calories per");
+      case Measurement::SystemOfMeasurement::SpecificHeatCapacityJoules  : return QObject::tr("Specific Heat Capacity Joules per"  );
+      // In C++23, we'd add:
+      // default: std::unreachable();
+   }
+   // In C++23, we'd add:
+   // std::unreachable()
+   // It's a coding error if we get here
+   Q_ASSERT(false);
 }
 
 QString Measurement::getUniqueName(SystemOfMeasurement systemOfMeasurement) {

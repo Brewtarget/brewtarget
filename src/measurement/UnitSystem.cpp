@@ -40,6 +40,8 @@ namespace {
    // Used by UnitSystem::getInstanceByName()
    QMap<QString, Measurement::UnitSystem const *> nameToUnitSystem;
 
+   // .:TBD:. See if we can eliminate all this and get compile-time checking benefits
+   //
    // We sometimes want to be able to access RelativeScale enum values via a string name (eg code generated from .ui
    // files) so it's useful to be able to map between them.  There is some functionality built in to Qt to do this via
    // QMetaEnum, but this is at the cost of inheriting from QObject, which seems overkill here.  Alternatively, we could
@@ -364,7 +366,7 @@ template QTextStream & operator<<(QTextStream & stream, Measurement::UnitSystem:
 //---------------------------------------------------------------------------------------------------------------------
 namespace Measurement::UnitSystems {
    //
-   // NB: For the mass_Xxxx and volume_Xxxx unit systems, to make Measurement::PhysicalQuantity::Mixed work, we rely on
+   // NB: For the mass_Xxxx and volume_Xxxx unit systems, to make Measurement::Mixed2PhysicalQuantities work, we rely on
    //     systemOfMeasurementName being identical for identical systems of measurement (because, for reasons explained
    //     in comments in measurement/PhysicalQuantity.h, we don't explicitly model system of measurement).
    //
@@ -459,7 +461,7 @@ namespace Measurement::UnitSystems {
                                    Measurement::SystemOfMeasurement::Lovibond};
 
    UnitSystem const density_SpecificGravity{PhysicalQuantity::Density,
-                                            &Measurement::Units::sp_grav,
+                                            &Measurement::Units::specificGravity,
                                             "density_SpecificGravity",
                                             Measurement::SystemOfMeasurement::SpecificGravity};
 
@@ -502,17 +504,17 @@ namespace Measurement::UnitSystems {
                                               "carbonation_MassPerVolume",
                                               Measurement::SystemOfMeasurement::CarbonationMassPerVolume};
 
-   UnitSystem const concentration_PartsPer{PhysicalQuantity::Concentration,
+   UnitSystem const concentration_PartsPer{PhysicalQuantity::VolumeConcentration,
                                            &Measurement::Units::partsPerMillion,
                                            "concentration_PartsPer",
-                                           Measurement::SystemOfMeasurement::ConcentrationPartsPer,
+                                           Measurement::SystemOfMeasurement::MetricConcentration,
                                            {{UnitSystem::RelativeScale::Small,  &Measurement::Units::partsPerBillion},
                                             {UnitSystem::RelativeScale::Medium, &Measurement::Units::partsPerMillion}}};
 
-   UnitSystem const concentration_MassPerVolume{PhysicalQuantity::Concentration,
+   UnitSystem const concentration_MassPerVolume{PhysicalQuantity::MassConcentration,
                                                 &Measurement::Units::milligramsPerLiter,
                                                 "concentration_MassPerVolume",
-                                                Measurement::SystemOfMeasurement::ConcentrationMassPerVolume};
+                                                Measurement::SystemOfMeasurement::MetricConcentration};
 
    UnitSystem const viscosity_Metric{PhysicalQuantity::Viscosity,
                                      &Measurement::Units::centipoise,

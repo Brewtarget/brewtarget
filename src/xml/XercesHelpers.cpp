@@ -1,6 +1,6 @@
 /*
  * xml/XercesHelpers.cpp is part of Brewtarget, and is Copyright the following
- * authors 2020-2021
+ * authors 2020-2023
  * - Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -18,7 +18,6 @@
  */
 
 #include "xml/XercesHelpers.h"
-
 
 #include <QString>
 #include <QTextStream>

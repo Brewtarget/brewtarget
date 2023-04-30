@@ -1,7 +1,7 @@
 /*
- * BtDigitWidget.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
- * - Philip Greggory Lee <rocketman768@gmail.com>
+ * widgets/SmartDigitWidget.h is part of Brewtarget, and is Copyright the following authors 2009-2023:
+ *   • Matt Young <mfsy@yahoo.com>
+ *   • Philip Greggory Lee <rocketman768@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,11 +13,11 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
  */
-#ifndef BTDIGITWIDGET_H
-#define BTDIGITWIDGET_H
+#ifndef WIDGETS_BTDIGITWIDGET_H
+#define WIDGETS_BTDIGITWIDGET_H
 #pragma once
 
 #include <memory> // For PImpl
@@ -30,10 +30,10 @@
 #include "measurement/PhysicalQuantity.h"
 #include "measurement/Unit.h"
 #include "measurement/UnitSystem.h"
-#include "UiAmountWithUnits.h"
+#include "SmartField.h"
 
 /*!
- * \class BtDigitWidget
+ * \class SmartDigitWidget
  *
  * \brief Widget that displays colored numbers, depending on if the number is ok, high, or low.  Currently only used in
  *        waterDialog.ui (ie Water Chemistry Dialog).
@@ -43,26 +43,21 @@
  *        NB: Per https://doc.qt.io/qt-5/moc.html#multiple-inheritance-requires-qobject-to-be-first, "If you are using
  *        multiple inheritance, moc [Qt's Meta-Object Compiler] assumes that the first inherited class is a subclass of
  *        QObject. Also, be sure that only the first inherited class is a QObject."  In particular, this means we must
- *        put Q_PROPERTY declarations for UiAmountWithUnits attributes here rather than in UiAmountWithUnits itself.
+ *        put Q_PROPERTY declarations for SmartField attributes here rather than in SmartField itself.
  */
-class BtDigitWidget : public QLabel, public UiAmountWithUnits {
+class SmartDigitWidget : public QLabel, public SmartField {
    Q_OBJECT
-///   Q_PROPERTY(int     type                      READ type                                  WRITE setType                               STORED false)
-   Q_PROPERTY(QString configSection             READ getConfigSection                      WRITE setConfigSection                      STORED false)
-   Q_PROPERTY(QString editField                 READ getEditField                          WRITE setEditField                          STORED false)
-   Q_PROPERTY(QString forcedSystemOfMeasurement READ getForcedSystemOfMeasurementViaString WRITE setForcedSystemOfMeasurementViaString STORED false)
-   Q_PROPERTY(QString forcedRelativeScale       READ getForcedRelativeScaleViaString       WRITE setForcedRelativeScaleViaString       STORED false)
 
 public:
-   enum ColorType{ NONE, LOW, GOOD, HIGH, BLACK };
+   enum ColorType{NONE, LOW, GOOD, HIGH, BLACK};
 
-   BtDigitWidget(QWidget * parent,
-                 BtFieldType fieldType,
-                 Measurement::Unit const * units = nullptr);
-   virtual ~BtDigitWidget();
+   SmartDigitWidget(QWidget * parent);
+   virtual ~SmartDigitWidget();
 
-   virtual QString getWidgetText() const;
-   virtual void setWidgetText(QString text);
+   virtual QString getRawText() const;
+   virtual void setRawText(QString const & text);
+   virtual void connectSmartLabelSignal(SmartLabel & smartLabel);
+   virtual void doPostInitWork();
 
    //! \brief Displays the given \c num with precision \c prec.
    void display(double num, int prec = 0);
@@ -76,11 +71,12 @@ public:
    //! \brief Set the upper limit of the "good" range.
    void setHighLim(double num);
 
-   //! \brief Always use a constant color. Use a constantColor of NONE to
-   //!  unset
+   /**
+    * \brief Always use a constant color. Use a constantColor of NONE to unset
+    */
    void setConstantColor(ColorType c);
 
-   //! \brief Convience method to set high and low limits in one call
+   //! \brief Convenience method to set high and low limits in one call
    void setLimits(double low, double high);
 
    //! \brief Methods to set the low, good and high messages
@@ -92,15 +88,26 @@ public:
    void setMessages(QStringList msgs);
 
    void setText(QString amount, int precision = 2);
-   void setText(double amount, int precision = 2);
+   void setText(double  amount, int precision = 2);
+
+   /**
+    * \brief Use this when you want to get the text as a number (and ignore any units or other trailling letters or
+    *        symbols)
+    */
+   template<typename T> T getValueAs() const;
 
 public slots:
    /**
-    * \brief Received from \c BtLabel when the user has change \c UnitSystem
+    * \brief Received from \c SmartLabel when the user has change \c UnitSystem
     *
     * This is mostly referenced in .ui files.  (NB this means that the signal connections are only checked at run-time.)
     */
-   void displayChanged(PreviousScaleInfo previousScaleInfo);
+   void displayChanged(SmartAmounts::ScaleInfo previousScaleInfo);
+
+protected:
+   int getPrecision() const;
+
+   BtFieldType fieldType;
 
 private:
    // Private implementation details - see https://herbsutter.com/gotw/_100/
@@ -109,9 +116,8 @@ private:
 };
 
 //
-// See comment in BtLabel.h for why we need these trivial child classes to use in .ui files
+// See comment in widgets/BtAmountDigitWidget.h for why we need these trivial child classes to use in .ui files
 //
-class BtMassDigit :    public BtDigitWidget { Q_OBJECT public: BtMassDigit(QWidget * parent); };
-class BtGenericDigit : public BtDigitWidget { Q_OBJECT public: BtGenericDigit(QWidget * parent); };
+class BtGenericDigit : public SmartDigitWidget { Q_OBJECT public: BtGenericDigit(QWidget * parent); };
 
 #endif

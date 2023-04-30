@@ -85,17 +85,14 @@
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="BtGenericEdit" name="lineEdit_alpha">
+        <widget class="SmartLineEdit" name="lineEdit_alpha">
          <property name="toolTip">
           <string>Alpha acids as percent by mass</string>
-         </property>
-         <property name="editField" stdset="0">
-          <string notr="true">alpha_pct</string>
          </property>
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="BtStringEdit" name="lineEdit_name">
+        <widget class="SmartLineEdit" name="lineEdit_name">
          <property name="toolTip">
           <string>Name</string>
          </property>
@@ -168,7 +165,7 @@
         </widget>
        </item>
        <item row="2" column="1">
-        <widget class="BtMassEdit" name="lineEdit_inventory">
+        <widget class="SmartLineEdit" name="lineEdit_inventory">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -178,13 +175,10 @@
          <property name="toolTip">
           <string>Amount in inventory</string>
          </property>
-         <property name="editField" stdset="0">
-          <string notr="true">inventory</string>
-         </property>
         </widget>
        </item>
        <item row="2" column="0">
-        <widget class="BtMassLabel" name="label_inventory">
+        <widget class="SmartLabel" name="label_inventory">
          <property name="contextMenuPolicy">
           <enum>Qt::CustomContextMenu</enum>
          </property>
@@ -197,14 +191,14 @@
         </widget>
        </item>
       </layout>
-        </widget>
+     </widget>
      <widget class="QWidget" name="tabWidget_editorPage2">
       <attribute name="title">
        <string>Extras</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
        <item row="0" column="2">
-        <widget class="BtTimeLabel" name="label_time">
+        <widget class="SmartLabel" name="label_time">
          <property name="contextMenuPolicy">
           <enum>Qt::CustomContextMenu</enum>
          </property>
@@ -217,7 +211,7 @@
         </widget>
        </item>
        <item row="6" column="1">
-        <widget class="BtGenericEdit" name="lineEdit_cohumulone">
+        <widget class="SmartLineEdit" name="lineEdit_cohumulone">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -227,13 +221,10 @@
          <property name="toolTip">
           <string>Cohumulone</string>
          </property>
-         <property name="editField" stdset="0">
-          <string notr="true">cohumulone_pct</string>
-         </property>
         </widget>
        </item>
        <item row="7" column="1">
-        <widget class="BtGenericEdit" name="lineEdit_myrcene">
+        <widget class="SmartLineEdit" name="lineEdit_myrcene">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -242,9 +233,6 @@
          </property>
          <property name="toolTip">
           <string>Myrcene</string>
-         </property>
-         <property name="editField" stdset="0">
-          <string notr="true">myrcene_pct</string>
          </property>
         </widget>
        </item>
@@ -294,7 +282,7 @@
         </widget>
        </item>
        <item row="0" column="3">
-        <widget class="BtTimeEdit" name="lineEdit_time">
+        <widget class="SmartLineEdit" name="lineEdit_time">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -303,9 +291,6 @@
          </property>
          <property name="toolTip">
           <string>Time</string>
-         </property>
-         <property name="editField" stdset="0">
-          <string notr="true">time_min</string>
          </property>
         </widget>
        </item>
@@ -320,7 +305,7 @@
         </widget>
        </item>
        <item row="1" column="3">
-        <widget class="BtGenericEdit" name="lineEdit_HSI">
+        <widget class="SmartLineEdit" name="lineEdit_HSI">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -329,9 +314,6 @@
          </property>
          <property name="toolTip">
           <string>Hop Stability/Storage index</string>
-         </property>
-         <property name="editField" stdset="0">
-          <string notr="true">hsi_pct</string>
          </property>
         </widget>
        </item>
@@ -346,7 +328,7 @@
         </widget>
        </item>
        <item row="2" column="3">
-        <widget class="BtStringEdit" name="lineEdit_origin">
+        <widget class="SmartLineEdit" name="lineEdit_origin">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -369,7 +351,7 @@
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="BtGenericEdit" name="lineEdit_beta">
+        <widget class="SmartLineEdit" name="lineEdit_beta">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -378,9 +360,6 @@
          </property>
          <property name="toolTip">
           <string>Beta acids as percent by mass</string>
-         </property>
-         <property name="editField" stdset="0">
-          <string notr="true">beta_pct</string>
          </property>
         </widget>
        </item>
@@ -401,7 +380,7 @@
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="BtGenericEdit" name="lineEdit_humulene">
+        <widget class="SmartLineEdit" name="lineEdit_humulene">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -410,9 +389,6 @@
          </property>
          <property name="toolTip">
           <string>Humulene</string>
-         </property>
-         <property name="editField" stdset="0">
-          <string notr="true">humulene_pct</string>
          </property>
         </widget>
        </item>
@@ -433,7 +409,7 @@
         </widget>
        </item>
        <item row="2" column="1">
-        <widget class="BtGenericEdit" name="lineEdit_caryophyllene">
+        <widget class="SmartLineEdit" name="lineEdit_caryophyllene">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -442,9 +418,6 @@
          </property>
          <property name="toolTip">
           <string>Caryophyllene %</string>
-         </property>
-         <property name="editField" stdset="0">
-          <string notr="true">caryophyllene_pct</string>
          </property>
         </widget>
        </item>
@@ -573,48 +546,21 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>BtGenericEdit</class>
-   <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
-  </customwidget>
-  <customwidget>
-   <class>BtStringEdit</class>
-   <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
-  </customwidget>
-  <customwidget>
-   <class>BtTimeEdit</class>
-   <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
-   <slots>
-    <slot>lineChanged(PreviousScaleInfo)</slot>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtTimeLabel</class>
+   <class>SmartLabel</class>
    <extends>QLabel</extends>
-   <header>BtLabel.h</header>
+   <header>widgets/SmartLabel.h</header>
    <slots>
     <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    </slots>
   </customwidget>
   <customwidget>
-   <class>BtMassEdit</class>
+   <class>SmartLineEdit</class>
    <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
+   <header>widgets/SmartLineEdit.h</header>
    <slots>
     <signal>textModified()</signal>
     <slot>lineChanged()</slot>
     <slot>lineChanged(PreviousScaleInfo)</slot>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtMassLabel</class>
-   <extends>QLabel</extends>
-   <header>BtLabel.h</header>
-   <slots>
-    <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-    <slot>popContextMenu(QPoint)</slot>
    </slots>
   </customwidget>
  </customwidgets>

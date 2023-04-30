@@ -362,68 +362,76 @@ ObjectStore & Recipe::getObjectStoreTypedInstance() const {
 TypeLookup const Recipe::typeLookup {
    "Recipe",
    {
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::ABV_pct           , Recipe::m_ABV_pct           ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::age_days               , Recipe::m_age               ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::ageTemp_c         , Recipe::m_ageTemp_c         ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::ancestorId        , Recipe::m_ancestor_id       ), //<<
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::asstBrewer        , Recipe::m_asstBrewer        ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::batchSize_l       , Recipe::m_batchSize_l       ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::boilGrav          , Recipe::m_boilGrav          ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::boilSize_l        , Recipe::m_boilSize_l        ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::boilTime_min      , Recipe::m_boilTime_min      ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::boilVolume_l      , Recipe::m_boilVolume_l      ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::brewer            , Recipe::m_brewer            ),
-//      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::brewNotes         , Recipe::m_brewNotes         ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::calories          , Recipe::m_calories          ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::carbonationTemp_c , Recipe::m_carbonationTemp_c ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::carbonation_vols  , Recipe::m_carbonation_vols  ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::color_srm         , Recipe::m_color_srm         ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::date              , Recipe::m_date              ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::efficiency_pct    , Recipe::m_efficiency_pct    ),
+      // Note that the age_days, primaryAge_days, secondaryAge_days, tertiaryAge_days properties are dimensionless
+      // because:
+      //    - It's not meaningful to measure them with greater precision
+      //    - The canonical unit for Measurement::PhysicalQuantity::Time is Measurement::Units::minutes, so we'd have to
+      //      either store as minutes or do some special-case handling to say we're not storing in canonical units.
+      //      Both would be ugly
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::type              , Recipe::m_type              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::brewer            , Recipe::m_brewer            ,           NonPhysicalQuantity::String        ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::asstBrewer        , Recipe::m_asstBrewer        ,           NonPhysicalQuantity::String        ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::batchSize_l       , Recipe::m_batchSize_l       , Measurement::PhysicalQuantity::Volume        ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::boilTime_min      , Recipe::m_boilTime_min      , Measurement::PhysicalQuantity::Time          ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::efficiency_pct    , Recipe::m_efficiency_pct    ,           NonPhysicalQuantity::Percentage    ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::fermentationStages, Recipe::m_fermentationStages,           NonPhysicalQuantity::Count         ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::primaryAge_days   , Recipe::m_primaryAge_days   ,           NonPhysicalQuantity::Dimensionless ), // See comment above for why Dimensionless, not Time
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::primaryTemp_c     , Recipe::m_primaryTemp_c     , Measurement::PhysicalQuantity::Temperature   ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::secondaryAge_days , Recipe::m_secondaryAge_days ,           NonPhysicalQuantity::Dimensionless ), // See comment above for why Dimensionless, not Time
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::secondaryTemp_c   , Recipe::m_secondaryTemp_c   , Measurement::PhysicalQuantity::Temperature   ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::tertiaryAge_days  , Recipe::m_tertiaryAge_days  ,           NonPhysicalQuantity::Dimensionless ), // See comment above for why Dimensionless, not Time
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::tertiaryTemp_c    , Recipe::m_tertiaryTemp_c    , Measurement::PhysicalQuantity::Temperature   ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::age_days          , Recipe::m_age               ,           NonPhysicalQuantity::Dimensionless ), // See comment above for why Dimensionless, not Time
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::ageTemp_c         , Recipe::m_ageTemp_c         , Measurement::PhysicalQuantity::Temperature   ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::date              , Recipe::m_date              ,           NonPhysicalQuantity::Date          ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::carbonation_vols  , Recipe::m_carbonation_vols  , Measurement::PhysicalQuantity::Carbonation   ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::forcedCarbonation , Recipe::m_forcedCarbonation ,           NonPhysicalQuantity::Bool          ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::primingSugarName  , Recipe::m_primingSugarName  ,           NonPhysicalQuantity::String        ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::carbonationTemp_c , Recipe::m_carbonationTemp_c , Measurement::PhysicalQuantity::Temperature   ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::primingSugarEquiv , Recipe::m_primingSugarEquiv ,           NonPhysicalQuantity::Dimensionless ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::kegPrimingFactor  , Recipe::m_kegPrimingFactor  ,           NonPhysicalQuantity::Dimensionless ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::notes             , Recipe::m_notes             ,           NonPhysicalQuantity::String        ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::tasteNotes        , Recipe::m_tasteNotes        ,           NonPhysicalQuantity::String        ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::tasteRating       , Recipe::m_tasteRating       ,           NonPhysicalQuantity::Dimensionless ),
+//      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::style             , Recipe::m_style             ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::styleId           , Recipe::styleId             ), //<<
+//      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::mash              , Recipe::m_mash              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::mashId            , Recipe::mashId              ), //<<
 //      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::equipment         , Recipe::m_equipment         ),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::equipmentId       , Recipe::equipmentId         ), //<<
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::og                , Recipe::m_og                , Measurement::PhysicalQuantity::Density       ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::fg                , Recipe::m_fg                , Measurement::PhysicalQuantity::Density       ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::locked            , Recipe::m_locked            ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::ancestorId        , Recipe::m_ancestor_id       ), //<<
+//      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::ancestors        , Recipe::m_ancestor_id       ), //<<
+
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::ABV_pct           , Recipe::m_ABV_pct           ,           NonPhysicalQuantity::Percentage    ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::boilGrav          , Recipe::m_boilGrav          , Measurement::PhysicalQuantity::Density       ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::boilSize_l        , Recipe::m_boilSize_l        , Measurement::PhysicalQuantity::Volume        ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::boilVolume_l      , Recipe::m_boilVolume_l      , Measurement::PhysicalQuantity::Volume        ),
+//      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::brewNotes         , Recipe::m_brewNotes         ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::calories          , Recipe::m_calories          ,           NonPhysicalQuantity::Dimensionless ), // .:TBD:. One day this should perhaps become Measurement::PhysicalQuantity::Energy
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::color_srm         , Recipe::m_color_srm         , Measurement::PhysicalQuantity::Color         ),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::fermentableIds    , Recipe::impl::fermentableIds),
 //      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::fermentables      , Recipe::m_fermentables      ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::fermentationStages, Recipe::m_fermentationStages),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::fg                , Recipe::m_fg                ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::finalVolume_l     , Recipe::m_finalVolume_l     ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::forcedCarbonation , Recipe::m_forcedCarbonation ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::grainsInMash_kg   , Recipe::m_grainsInMash_kg   ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::grains_kg         , Recipe::m_grains_kg         ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::finalVolume_l     , Recipe::m_finalVolume_l     , Measurement::PhysicalQuantity::Volume        ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::grainsInMash_kg   , Recipe::m_grainsInMash_kg   , Measurement::PhysicalQuantity::Mass          ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::grains_kg         , Recipe::m_grains_kg         , Measurement::PhysicalQuantity::Mass          ),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::hopIds            , Recipe::impl::hopIds            ),
 //      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::hops              , Recipe::m_hops              ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::IBU               , Recipe::m_IBU               ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::IBU               , Recipe::m_IBU               , Measurement::PhysicalQuantity::Bitterness    ),
 //      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::IBUs              , Recipe::m_IBUs              ),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::instructionIds    , Recipe::impl::instructionIds),
 //      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::instructions      , Recipe::m_instructions      ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::kegPrimingFactor  , Recipe::m_kegPrimingFactor  ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::locked            , Recipe::m_locked            ),
-//      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::mash              , Recipe::m_mash              ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::mashId            , Recipe::mashId              ), //<<
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::miscIds           , Recipe::impl::miscIds           ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::miscIds           , Recipe::impl::miscIds       ),
 //      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::miscs             , Recipe::m_miscs             ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::notes             , Recipe::m_notes             ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::og                , Recipe::m_og                ),
 //      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::points            , Recipe::m_points            ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::postBoilVolume_l  , Recipe::m_postBoilVolume_l  ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::primaryAge_days   , Recipe::m_primaryAge_days   ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::primaryTemp_c     , Recipe::m_primaryTemp_c     ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::primingSugarEquiv , Recipe::m_primingSugarEquiv ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::primingSugarName  , Recipe::m_primingSugarName  ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::postBoilVolume_l  , Recipe::m_postBoilVolume_l  , Measurement::PhysicalQuantity::Volume        ),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::saltIds           , Recipe::impl::saltIds       ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::secondaryAge_days , Recipe::m_secondaryAge_days ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::secondaryTemp_c   , Recipe::m_secondaryTemp_c   ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::SRMColor          , Recipe::m_SRMColor          ),
-//      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::style             , Recipe::m_style             ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::styleId           , Recipe::styleId             ), //<<
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::tasteNotes        , Recipe::m_tasteNotes        ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::tasteRating       , Recipe::m_tasteRating       ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::tertiaryAge_days  , Recipe::m_tertiaryAge_days  ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::tertiaryTemp_c    , Recipe::m_tertiaryTemp_c    ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::type              , Recipe::m_type              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::SRMColor          , Recipe::m_SRMColor          ), // NB: This is an RGB display color
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::waterIds          , Recipe::impl::waterIds      ),
 //      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::waters            , Recipe::m_waters            ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::wortFromMash_l    , Recipe::m_wortFromMash_l    ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::wortFromMash_l    , Recipe::m_wortFromMash_l    , Measurement::PhysicalQuantity::Volume        ),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::yeastIds          , Recipe::impl::yeastIds      ),
 //      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::yeasts            , Recipe::m_yeasts            ),
    },
@@ -727,36 +735,22 @@ QVector<PreInstruction> Recipe::mashInstructions(double timeRemaining,
       QString str;
       if (step->isInfusion()) {
          str = tr("Add %1 water at %2 to mash to bring it to %3.")
-               .arg(Measurement::displayAmount(Measurement::Amount{step->infuseAmount_l(), Measurement::Units::liters},
-                                               PersistentSettings::Sections::mashStepTableModel,
-                                               PropertyNames::MashStep::infuseAmount_l))
-               .arg(Measurement::displayAmount(Measurement::Amount{step->infuseTemp_c(), Measurement::Units::celsius},
-                                               PersistentSettings::Sections::mashStepTableModel,
-                                               PropertyNames::MashStep::infuseTemp_c))
-               .arg(Measurement::displayAmount(Measurement::Amount{step->stepTemp_c(), Measurement::Units::celsius},
-                                               PersistentSettings::Sections::mashStepTableModel,
-                                               PropertyNames::MashStep::stepTemp_c));
+               .arg(Measurement::displayAmount(Measurement::Amount{step->infuseAmount_l(), Measurement::Units::liters}))
+               .arg(Measurement::displayAmount(Measurement::Amount{step->infuseTemp_c(), Measurement::Units::celsius}))
+               .arg(Measurement::displayAmount(Measurement::Amount{step->stepTemp_c(), Measurement::Units::celsius}));
          totalWaterAdded_l += step->infuseAmount_l();
       } else if (step->isTemperature()) {
          str = tr("Heat mash to %1.").arg(Measurement::displayAmount(Measurement::Amount{step->stepTemp_c(),
-                                                                                         Measurement::Units::celsius},
-                                                                     PersistentSettings::Sections::mashStepTableModel,
-                                                                     PropertyNames::MashStep::stepTemp_c));
+                                                                                         Measurement::Units::celsius}));
       } else if (step->isDecoction()) {
          str = tr("Bring %1 of the mash to a boil and return to the mash tun to bring it to %2.")
                .arg(Measurement::displayAmount(Measurement::Amount{step->decoctionAmount_l(),
-                                                                   Measurement::Units::liters},
-                                               PersistentSettings::Sections::mashStepTableModel,
-                                               PropertyNames::MashStep::decoctionAmount_l))
-               .arg(Measurement::displayAmount(Measurement::Amount{step->stepTemp_c(), Measurement::Units::celsius},
-                                               PersistentSettings::Sections::mashStepTableModel,
-                                               PropertyNames::MashStep::stepTemp_c));
+                                                                   Measurement::Units::liters}))
+               .arg(Measurement::displayAmount(Measurement::Amount{step->stepTemp_c(), Measurement::Units::celsius}));
       }
 
       str += tr(" Hold for %1.").arg(Measurement::displayAmount(Measurement::Amount{step->stepTime_min(),
-                                                                                    Measurement::Units::minutes},
-                                                                PersistentSettings::Sections::mashStepTableModel,
-                                                                PropertyNames::MashStep::stepTime_min));
+                                                                                    Measurement::Units::minutes}));
 
       preins.push_back(PreInstruction(str, QString("%1 - %2").arg(step->typeStringTr()).arg(step->name()),
                                       timeRemaining));
@@ -790,13 +784,9 @@ QVector<PreInstruction> Recipe::hopSteps(Hop::Use type) {
             str = tr("Use %1 %2 for %3");
          }
 
-         str = str.arg(Measurement::displayAmount(Measurement::Amount{hop->amount_kg(), Measurement::Units::kilograms},
-                                                  PersistentSettings::Sections::hopTable,
-                                                  PropertyNames::Hop::amount_kg))
+         str = str.arg(Measurement::displayAmount(Measurement::Amount{hop->amount_kg(), Measurement::Units::kilograms}))
                .arg(hop->name())
-               .arg(Measurement::displayAmount(Measurement::Amount{hop->time_min(), Measurement::Units::minutes},
-                                               PersistentSettings::Sections::hopTable,
-                                               PropertyNames::Misc::time));
+               .arg(Measurement::displayAmount(Measurement::Amount{hop->time_min(), Measurement::Units::minutes}));
 
          preins.push_back(PreInstruction(str, tr("Hop addition"), hop->time_min()));
       }
@@ -831,13 +821,9 @@ QVector<PreInstruction> Recipe::miscSteps(Misc::Use type) {
          str = str .arg(Measurement::displayAmount(Measurement::Amount{
                                                       misc->amount(),
                                                       misc->amountIsWeight() ? Measurement::Units::kilograms : Measurement::Units::liters
-                                                   },
-                                                   PersistentSettings::Sections::miscTableModel,
-                                                   PropertyNames::Misc::amount))
+                                                   }))
                .arg(misc->name())
-               .arg(Measurement::displayAmount(Measurement::Amount{misc->time(), Measurement::Units::minutes},
-                                               PersistentSettings::Sections::miscTableModel,
-                                               PropertyNames::Misc::time));
+               .arg(Measurement::displayAmount(Measurement::Amount{misc->time(), Measurement::Units::minutes}));
 
          preins.push_back(PreInstruction(str, tr("Misc addition"), misc->time()));
       }
@@ -875,21 +861,15 @@ void Recipe::topOffIns() {
 
    double wortInBoil_l = wortFromMash_l() - e->lauterDeadspace_l();
    QString str = tr("You should now have %1 wort.")
-                 .arg(Measurement::displayAmount(Measurement::Amount{wortInBoil_l, Measurement::Units::liters},
-                                                 PersistentSettings::Sections::tab_recipe,
-                                                 PropertyNames::Recipe::boilSize_l));
+                 .arg(Measurement::displayAmount(Measurement::Amount{wortInBoil_l, Measurement::Units::liters}));
    if (e->topUpKettle_l() != 0.0) {
       return;
    }
 
    wortInBoil_l += e->topUpKettle_l();
    QString tmp = tr(" Add %1 water to the kettle, bringing pre-boil volume to %2.")
-                 .arg(Measurement::displayAmount(Measurement::Amount{e->topUpKettle_l(), Measurement::Units::liters},
-                                                 PersistentSettings::Sections::tab_recipe,
-                                                 PropertyNames::Recipe::boilSize_l))
-                 .arg(Measurement::displayAmount(Measurement::Amount{wortInBoil_l, Measurement::Units::liters},
-                                                 PersistentSettings::Sections::tab_recipe,
-                                                 PropertyNames::Recipe::boilSize_l));
+                 .arg(Measurement::displayAmount(Measurement::Amount{e->topUpKettle_l(), Measurement::Units::liters}))
+                 .arg(Measurement::displayAmount(Measurement::Amount{wortInBoil_l, Measurement::Units::liters}));
 
    str += tmp;
 
@@ -940,9 +920,7 @@ PreInstruction Recipe::boilFermentablesPre(double timeRemaining) {
       }
 
       str += QString("%1 %2, ")
-             .arg(Measurement::displayAmount(Measurement::Amount{ferm->amount_kg(), Measurement::Units::kilograms},
-                                             PersistentSettings::Sections::fermentableTable,
-                                             PropertyNames::Fermentable::amount_kg))
+             .arg(Measurement::displayAmount(Measurement::Amount{ferm->amount_kg(), Measurement::Units::kilograms}))
              .arg(ferm->name());
    }
    str += ".";
@@ -966,9 +944,7 @@ PreInstruction Recipe::addExtracts(double timeRemaining) const {
       const Fermentable * ferm = flist[i];
       if (ferm->isExtract()) {
          str += QString("%1 %2, ")
-                .arg(Measurement::displayAmount(Measurement::Amount{ferm->amount_kg(), Measurement::Units::kilograms},
-                                                PersistentSettings::Sections::fermentableTable,
-                                                PropertyNames::Fermentable::amount_kg))
+                .arg(Measurement::displayAmount(Measurement::Amount{ferm->amount_kg(), Measurement::Units::kilograms}))
                 .arg(ferm->name());
       }
    }
@@ -992,9 +968,7 @@ void Recipe::postboilFermentablesIns() {
 
       hasFerms = true;
       tmp = QString("%1 %2, ")
-            .arg(Measurement::displayAmount(Measurement::Amount{ferm->amount_kg(), Measurement::Units::kilograms},
-                                            PersistentSettings::Sections::fermentableTable,
-                                            PropertyNames::Fermentable::amount_kg))
+            .arg(Measurement::displayAmount(Measurement::Amount{ferm->amount_kg(), Measurement::Units::kilograms}))
             .arg(ferm->name());
       str += tmp;
    }
@@ -1027,24 +1001,16 @@ void Recipe::postboilIns() {
 
    double wort_l = e->wortEndOfBoil_l(wortInBoil_l);
    QString str = tr("You should have %1 wort post-boil.")
-                 .arg(Measurement::displayAmount(Measurement::Amount{wort_l, Measurement::Units::liters},
-                                                 PersistentSettings::Sections::tab_recipe,
-                                                 PropertyNames::Recipe::batchSize_l));
+                 .arg(Measurement::displayAmount(Measurement::Amount{wort_l, Measurement::Units::liters}));
    str += tr("\nYou anticipate losing %1 to trub and chiller loss.")
-          .arg(Measurement::displayAmount(Measurement::Amount{e->trubChillerLoss_l(), Measurement::Units::liters},
-                                          PersistentSettings::Sections::tab_recipe,
-                                          PropertyNames::Recipe::batchSize_l));
+          .arg(Measurement::displayAmount(Measurement::Amount{e->trubChillerLoss_l(), Measurement::Units::liters}));
    wort_l -= e->trubChillerLoss_l();
    if (e->topUpWater_l() > 0.0)
       str += tr("\nAdd %1 top up water into primary.")
-             .arg(Measurement::displayAmount(Measurement::Amount{e->topUpWater_l(), Measurement::Units::liters},
-                                             PersistentSettings::Sections::tab_recipe,
-                                             PropertyNames::Recipe::batchSize_l));
+             .arg(Measurement::displayAmount(Measurement::Amount{e->topUpWater_l(), Measurement::Units::liters}));
    wort_l += e->topUpWater_l();
    str += tr("\nThe final volume in the primary is %1.")
-          .arg(Measurement::displayAmount(Measurement::Amount{wort_l, Measurement::Units::liters},
-                                          PersistentSettings::Sections::tab_recipe,
-                                          PropertyNames::Recipe::batchSize_l));
+          .arg(Measurement::displayAmount(Measurement::Amount{wort_l, Measurement::Units::liters}));
 
    auto ins = std::make_shared<Instruction>();
    ins->setName(tr("Post boil"));
@@ -1131,9 +1097,7 @@ void Recipe::generateInstructions() {
    }
 
    QString str = tr("Bring the wort to a boil and hold for %1.").arg(
-      Measurement::displayAmount(Measurement::Amount{timeRemaining, Measurement::Units::minutes},
-                                 PersistentSettings::Sections::tab_recipe,
-                                 PropertyNames::Recipe::boilTime_min)
+      Measurement::displayAmount(Measurement::Amount{timeRemaining, Measurement::Units::minutes})
    );
 
    auto startBoilIns = std::make_shared<Instruction>();
@@ -1204,10 +1168,7 @@ void Recipe::generateInstructions() {
    addPreinstructions(miscSteps(Misc::Use::Primary));
 
    str = tr("Let ferment until FG is %1.").arg(
-      Measurement::displayAmount(Measurement::Amount{fg(), Measurement::Units::sp_grav},
-                                 PersistentSettings::Sections::tab_recipe,
-                                 PropertyNames::Recipe::fg,
-                                 3)
+      Measurement::displayAmount(Measurement::Amount{fg(), Measurement::Units::specificGravity}, 3)
    );
 
    auto fermentIns = std::make_shared<Instruction>();
@@ -1253,13 +1214,9 @@ QString Recipe::nextAddToBoil(double & time) {
       }
       if (h->time_min() < time && h->time_min() > max) {
          ret = tr("Add %1 %2 to boil at %3.")
-               .arg(Measurement::displayAmount(Measurement::Amount{h->amount_kg(), Measurement::Units::kilograms},
-                                               PersistentSettings::Sections::hopTable,
-                                               PropertyNames::Hop::amount_kg))
+               .arg(Measurement::displayAmount(Measurement::Amount{h->amount_kg(), Measurement::Units::kilograms}))
                .arg(h->name())
-               .arg(Measurement::displayAmount(Measurement::Amount{h->time_min(), Measurement::Units::minutes},
-                                               PersistentSettings::Sections::hopTable,
-                                               PropertyNames::Misc::time));
+               .arg(Measurement::displayAmount(Measurement::Amount{h->time_min(), Measurement::Units::minutes}));
 
          max = h->time_min();
          foundSomething = true;
@@ -1276,19 +1233,13 @@ QString Recipe::nextAddToBoil(double & time) {
       if (m->time() < time && m->time() > max) {
          ret = tr("Add %1 %2 to boil at %3.");
          if (m->amountIsWeight()) {
-            ret = ret.arg(Measurement::displayAmount(Measurement::Amount{m->amount(), Measurement::Units::kilograms},
-                                                     PersistentSettings::Sections::miscTableModel,
-                                                     PropertyNames::Misc::amount));
+            ret = ret.arg(Measurement::displayAmount(Measurement::Amount{m->amount(), Measurement::Units::kilograms}));
          } else {
-            ret = ret.arg(Measurement::displayAmount(Measurement::Amount{m->amount(), Measurement::Units::liters},
-                                                     PersistentSettings::Sections::miscTableModel,
-                                                     PropertyNames::Misc::amount));
+            ret = ret.arg(Measurement::displayAmount(Measurement::Amount{m->amount(), Measurement::Units::liters}));
          }
 
          ret = ret.arg(m->name());
-         ret = ret.arg(Measurement::displayAmount(Measurement::Amount{m->time(), Measurement::Units::minutes},
-                                                  PersistentSettings::Sections::miscTableModel,
-                                                  PropertyNames::Misc::time));
+         ret = ret.arg(Measurement::displayAmount(Measurement::Amount{m->time(), Measurement::Units::minutes}));
          max = m->time();
          foundSomething = true;
       }
@@ -2703,20 +2654,16 @@ QList<QString> Recipe::getReagents(QList<Fermentable *> ferms) {
    QList<QString> reagents;
    QString format, tmp;
 
-   for (int i = 0; i < ferms.size(); ++i) {
-      if (ferms[i]->isMashed()) {
-         if (i + 1 < ferms.size()) {
+   for (int ii = 0; ii < ferms.size(); ++ii) {
+      if (ferms[ii]->isMashed()) {
+         if (ii + 1 < ferms.size()) {
             tmp = QString("%1 %2, ")
-                  .arg(Measurement::displayAmount(Measurement::Amount{ferms[i]->amount_kg(), Measurement::Units::kilograms},
-                                                  PersistentSettings::Sections::fermentableTable,
-                                                  PropertyNames::Fermentable::amount_kg))
-                  .arg(ferms[i]->name());
+                  .arg(Measurement::displayAmount(Measurement::Amount{ferms[ii]->amount_kg(), Measurement::Units::kilograms}))
+                  .arg(ferms[ii]->name());
          } else {
             tmp = QString("%1 %2 ")
-                  .arg(Measurement::displayAmount(Measurement::Amount{ferms[i]->amount_kg(), Measurement::Units::kilograms},
-                                                  PersistentSettings::Sections::fermentableTable,
-                                                  PropertyNames::Fermentable::amount_kg))
-                  .arg(ferms[i]->name());
+                  .arg(Measurement::displayAmount(Measurement::Amount{ferms[ii]->amount_kg(), Measurement::Units::kilograms}))
+                  .arg(ferms[ii]->name());
          }
          reagents.append(tmp);
       }
@@ -2728,13 +2675,11 @@ QList<QString> Recipe::getReagents(QList<Hop *> hops, bool firstWort) {
    QString tmp;
    QList<QString> reagents;
 
-   for (int i = 0; i < hops.size(); ++i) {
-      if (firstWort && (hops[i]->use() == Hop::Use::First_Wort)) {
+   for (int ii = 0; ii < hops.size(); ++ii) {
+      if (firstWort && (hops[ii]->use() == Hop::Use::First_Wort)) {
          tmp = QString("%1 %2,")
-               .arg(Measurement::displayAmount(Measurement::Amount{hops[i]->amount_kg(), Measurement::Units::kilograms},
-                                               PersistentSettings::Sections::hopTable,
-                                               PropertyNames::Hop::amount_kg))
-               .arg(hops[i]->name());
+               .arg(Measurement::displayAmount(Measurement::Amount{hops[ii]->amount_kg(), Measurement::Units::kilograms}))
+               .arg(hops[ii]->name());
          reagents.append(tmp);
       }
    }
@@ -2744,28 +2689,20 @@ QList<QString> Recipe::getReagents(QList<Hop *> hops, bool firstWort) {
 QList<QString> Recipe::getReagents(QList< std::shared_ptr<MashStep> > msteps) {
    QList<QString> reagents;
 
-   for (int i = 0; i < msteps.size(); ++i) {
-      if (!msteps[i]->isInfusion()) {
+   for (int ii = 0; ii < msteps.size(); ++ii) {
+      if (!msteps[ii]->isInfusion()) {
          continue;
       }
 
       QString tmp;
-      if (i + 1 < msteps.size()) {
+      if (ii + 1 < msteps.size()) {
          tmp = tr("%1 water to %2, ")
-               .arg(Measurement::displayAmount(Measurement::Amount{msteps[i]->infuseAmount_l(), Measurement::Units::liters},
-                                               PersistentSettings::Sections::mashStepTableModel,
-                                               PropertyNames::MashStep::infuseAmount_l))
-               .arg(Measurement::displayAmount(Measurement::Amount{msteps[i]->infuseTemp_c(), Measurement::Units::celsius},
-                                               PersistentSettings::Sections::mashStepTableModel,
-                                               PropertyNames::MashStep::infuseTemp_c));
+               .arg(Measurement::displayAmount(Measurement::Amount{msteps[ii]->infuseAmount_l(), Measurement::Units::liters}))
+               .arg(Measurement::displayAmount(Measurement::Amount{msteps[ii]->infuseTemp_c(), Measurement::Units::celsius}));
       } else {
          tmp = tr("%1 water to %2 ")
-               .arg(Measurement::displayAmount(Measurement::Amount{msteps[i]->infuseAmount_l(), Measurement::Units::liters},
-                                               PersistentSettings::Sections::mashStepTableModel,
-                                               PropertyNames::MashStep::infuseAmount_l))
-               .arg(Measurement::displayAmount(Measurement::Amount{msteps[i]->infuseTemp_c(), Measurement::Units::celsius},
-                                               PersistentSettings::Sections::mashStepTableModel,
-                                               PropertyNames::MashStep::infuseTemp_c));
+               .arg(Measurement::displayAmount(Measurement::Amount{msteps[ii]->infuseAmount_l(), Measurement::Units::liters}))
+               .arg(Measurement::displayAmount(Measurement::Amount{msteps[ii]->infuseTemp_c(), Measurement::Units::celsius}));
       }
       reagents.append(tmp);
    }
@@ -2780,19 +2717,15 @@ QStringList Recipe::getReagents(QList<Salt *> salts, Salt::WhenToAdd wanted) {
    QStringList reagents = QStringList();
 
    for (int i = 0; i < salts.size(); ++i) {
-      Salt::WhenToAdd what = salts[i]->addTo();
+      Salt::WhenToAdd what = salts[i]->whenToAdd();
       Measurement::Unit const & rightUnit = salts[i]->amountIsWeight() ? Measurement::Units::kilograms : Measurement::Units::liters;
       if (what == wanted) {
          tmp = tr("%1 %2, ")
-               .arg(Measurement::displayAmount(Measurement::Amount{salts[i]->amount(), rightUnit},
-                                               PersistentSettings::Sections::saltTable,
-                                               PropertyNames::Salt::amount))
+               .arg(Measurement::displayAmount(Measurement::Amount{salts[i]->amount(), rightUnit}))
                .arg(salts[i]->name());
       } else if (what == Salt::WhenToAdd::EQUAL) {
          tmp = tr("%1 %2, ")
-               .arg(Measurement::displayAmount(Measurement::Amount{salts[i]->amount(), rightUnit},
-                                               PersistentSettings::Sections::saltTable,
-                                               PropertyNames::Salt::amount))
+               .arg(Measurement::displayAmount(Measurement::Amount{salts[i]->amount(), rightUnit}))
                .arg(salts[i]->name());
       } else if (what == Salt::WhenToAdd::RATIO) {
          double ratio = 1.0;
@@ -2801,9 +2734,7 @@ QStringList Recipe::getReagents(QList<Salt *> salts, Salt::WhenToAdd wanted) {
          }
          double amt = salts[i]->amount() * ratio;
          tmp = tr("%1 %2, ")
-               .arg(Measurement::displayAmount(Measurement::Amount{amt, rightUnit},
-                                               PersistentSettings::Sections::saltTable,
-                                               PropertyNames::Salt::amount))
+               .arg(Measurement::displayAmount(Measurement::Amount{amt, rightUnit}))
                .arg(salts[i]->name());
       } else {
          continue;

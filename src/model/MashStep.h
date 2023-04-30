@@ -30,6 +30,7 @@
 
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
+// See comment in model/NamedEntity.h
 #define AddPropertyName(property) namespace PropertyNames::MashStep { BtStringConst const property{#property}; }
 AddPropertyName(decoctionAmount_l)
 AddPropertyName(endTemp_c        )
@@ -139,6 +140,7 @@ public:
 
    virtual Recipe * getOwningRecipe();
 
+   // .:TODO:.  Rework this
    static QStringList const types;
 signals:
 

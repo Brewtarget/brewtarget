@@ -45,6 +45,8 @@
 #include "PersistentSettings.h"
 #include "WaterDialog.h"
 
+// .:TODO:. Need to move these display names into the Salt class
+
 static QStringList addToName = QStringList() << QObject::tr("Never")
                                              << QObject::tr("Mash")
                                              << QObject::tr("Sparge")
@@ -66,17 +68,19 @@ SaltTableModel::SaltTableModel(QTableView* parent) :
    BtTableModelRecipeObserver{
       parent,
       false,
-      {{SALTNAMECOL,    {tr("Name"),     NonPhysicalQuantity::String,          ""      }},
-       {SALTAMOUNTCOL,  {tr("Amount"),   Measurement::PhysicalQuantity::Mixed, "amount"}},
-       {SALTADDTOCOL,   {tr("Added To"), NonPhysicalQuantity::String,          ""      }},
-       {SALTPCTACIDCOL, {tr("% Acid"),   NonPhysicalQuantity::Percentage,      ""      }}}
+      {
+         SMART_COLUMN_HEADER_DEFN(SaltTableModel, Name   , tr("Name"    ), NonPhysicalQuantity::String                   ),
+         SMART_COLUMN_HEADER_DEFN(SaltTableModel, Amount , tr("Amount"  ), Measurement::PqEitherMassOrVolumeConcentration),
+         SMART_COLUMN_HEADER_DEFN(SaltTableModel, AddTo  , tr("Added To"), NonPhysicalQuantity::String                   ),
+         SMART_COLUMN_HEADER_DEFN(SaltTableModel, PctAcid, tr("% Acid"  ), NonPhysicalQuantity::Percentage               ),
+      }
    },
    BtTableModelData<Salt>{} {
    setObjectName("saltTable");
 
    QHeaderView* headerView = parentTableWidget->horizontalHeader();
    headerView->setContextMenuPolicy(Qt::CustomContextMenu);
-   headerView->setMinimumSectionSize(parent->width()/SALTNUMCOLS);
+   headerView->setMinimumSectionSize(parent->width()/this->columnCount());
    headerView->setSectionResizeMode(QHeaderView::ResizeToContents);
    parentTableWidget->setWordWrap(false);
 
@@ -89,8 +93,11 @@ SaltTableModel::~SaltTableModel() {
    return;
 }
 
-void SaltTableModel::observeRecipe(Recipe* rec)
-{
+BtTableModel::ColumnInfo const & SaltTableModel::getColumnInfo(SaltTableModel::ColumnIndex const columnIndex) const {
+   return this->BtTableModel::getColumnInfo(static_cast<size_t>(columnIndex));
+}
+
+void SaltTableModel::observeRecipe(Recipe* rec) {
    if ( this->recObs ) {
       QObject::disconnect( this->recObs, nullptr, this, nullptr );
       removeAll();
@@ -104,6 +111,7 @@ void SaltTableModel::observeRecipe(Recipe* rec)
          spargePct = this->recObs->mash()->totalSpargeAmount_l()/this->recObs->mash()->totalInfusionAmount_l();
       }
    }
+   return;
 }
 
 void SaltTableModel::addSalt(std::shared_ptr<Salt> salt) {
@@ -120,6 +128,7 @@ void SaltTableModel::addSalt(std::shared_ptr<Salt> salt) {
       parentTableWidget->resizeColumnsToContents();
       parentTableWidget->resizeRowsToContents();
    }
+   return;
 }
 
 void SaltTableModel::addSalts(QList<std::shared_ptr<Salt> > salts) {
@@ -141,6 +150,7 @@ void SaltTableModel::addSalts(QList<std::shared_ptr<Salt> > salts) {
       parentTableWidget->resizeColumnsToContents();
       parentTableWidget->resizeRowsToContents();
    }
+   return;
 }
 
 void SaltTableModel::catchSalt() {
@@ -157,12 +167,12 @@ double SaltTableModel::multiplier(Salt & salt) const {
       return ret;
    }
 
-   if (salt.addTo() == Salt::WhenToAdd::EQUAL ) {
+   if (salt.whenToAdd() == Salt::WhenToAdd::EQUAL ) {
       ret = 2.0;
    }
    // If we are adding a proportional amount to both,
    // this should handle that math.
-   else if (salt.addTo() == Salt::WhenToAdd::RATIO ) {
+   else if (salt.whenToAdd() == Salt::WhenToAdd::RATIO ) {
       ret = 1.0 + spargePct;
    }
 
@@ -250,7 +260,7 @@ double SaltTableModel::total(Salt::Types type) const {
    double ret = 0.0;
    if (type != Salt::Types::NONE) {
       for (auto salt : this->rows) {
-         if (salt->type() == type && salt->addTo() != Salt::WhenToAdd::NEVER) {
+         if (salt->type() == type && salt->whenToAdd() != Salt::WhenToAdd::NEVER) {
             double mult  = multiplier(*salt);
             ret += mult * salt->amount();
          }
@@ -267,7 +277,7 @@ double SaltTableModel::totalAcidWeight(Salt::Types type) const
    double ret = 0.0;
    if (type != Salt::Types::NONE) {
       for (auto salt : this->rows) {
-         if ( salt->type() == type && salt->addTo() != Salt::WhenToAdd::NEVER) {
+         if ( salt->type() == type && salt->whenToAdd() != Salt::WhenToAdd::NEVER) {
             double mult  = multiplier(*salt);
             // Acid malts are easy
             if ( type == Salt::Types::ACIDMLT ) {
@@ -352,7 +362,7 @@ void SaltTableModel::changed(QMetaProperty prop, [[maybe_unused]] QVariant val) 
       int ii = this->findIndexOf(saltSender);
       if (ii >= 0) {
          emit dataChanged(QAbstractItemModel::createIndex(ii, 0),
-                          QAbstractItemModel::createIndex(ii, SALTNUMCOLS-1));
+                          QAbstractItemModel::createIndex(ii, this->columnCount()-1));
          emit headerDataChanged(Qt::Vertical, ii, ii);
       }
       return;
@@ -386,9 +396,9 @@ QVariant SaltTableModel::data(QModelIndex const & index, int role) const {
 
    auto row = this->rows[index.row()];
 
-   int column = index.column();
-   switch (column) {
-      case SALTNAMECOL:
+   auto const columnIndex = static_cast<SaltTableModel::ColumnIndex>(index.column());
+   switch (columnIndex) {
+      case SaltTableModel::ColumnIndex::Name:
          if (role == Qt::DisplayRole) {
             return QVariant(saltNames.at(static_cast<int>(row->type())));
          }
@@ -396,7 +406,7 @@ QVariant SaltTableModel::data(QModelIndex const & index, int role) const {
             return QVariant(static_cast<int>(row->type()));
          }
          return QVariant();
-      case SALTAMOUNTCOL:
+      case SaltTableModel::ColumnIndex::Amount:
          if (role != Qt::DisplayRole) {
             return QVariant();
          }
@@ -407,45 +417,44 @@ QVariant SaltTableModel::data(QModelIndex const & index, int role) const {
                   row->amountIsWeight() ? Measurement::Units::kilograms : Measurement::Units::liters
                },
                3,
-               this->getForcedSystemOfMeasurementForColumn(column),
+               this->getColumnInfo(columnIndex).getForcedSystemOfMeasurement(),
                std::nullopt
             )
          );
-      case SALTADDTOCOL:
+      case SaltTableModel::ColumnIndex::AddTo:
          if (role == Qt::DisplayRole) {
-            return QVariant( addToName.at(static_cast<int>(row->addTo())));
+            return QVariant( addToName.at(static_cast<int>(row->whenToAdd())));
          }
          if (role == Qt::UserRole) {
-            return QVariant(static_cast<int>(row->addTo()));
+            return QVariant(static_cast<int>(row->whenToAdd()));
          }
          return QVariant();
-      case SALTPCTACIDCOL:
+      case SaltTableModel::ColumnIndex::PctAcid:
          if (role == Qt::DisplayRole && row->isAcid()) {
             return QVariant( row->percentAcid() );
          }
          return QVariant();
       default :
-         qWarning() << Q_FUNC_INFO << "Bad column: " << column;
+         qWarning() << Q_FUNC_INFO << "Bad column: " << index.column();
          return QVariant();
    }
 }
 
 QVariant SaltTableModel::headerData( int section, Qt::Orientation orientation, int role ) const {
    if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
-      return this->getColumName(section);
+      return this->getColumnLabel(section);
    }
    return QVariant();
 }
 
-Qt::ItemFlags SaltTableModel::flags(const QModelIndex& index ) const
-{
+Qt::ItemFlags SaltTableModel::flags(const QModelIndex& index) const {
    // Q_UNUSED(index)
-   if (index.row() >= this->rows.size() )
+   if (index.row() >= this->rows.size() ) {
       return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
+   }
 
-   auto row = this->rows[index.row()];
-
-   if ( !row->isAcid() && index.column() == SALTPCTACIDCOL )  {
+   auto const row = this->rows[index.row()];
+   if (!row->isAcid() && index.column() == static_cast<int>(SaltTableModel::ColumnIndex::PctAcid))  {
       return Qt::NoItemFlags;
    }
    return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
@@ -460,9 +469,9 @@ bool SaltTableModel::setData(QModelIndex const & index, QVariant const & value, 
 
    auto row = this->rows[index.row()];
 
-   int const column = index.column();
-   switch (column) {
-      case SALTNAMECOL:
+   auto const columnIndex = static_cast<SaltTableModel::ColumnIndex>(index.column());
+   switch (columnIndex) {
+      case SaltTableModel::ColumnIndex::Name:
          retval = value.canConvert(QVariant::Int);
          if (retval) {
             int newType = value.toInt();
@@ -479,26 +488,26 @@ bool SaltTableModel::setData(QModelIndex const & index, QVariant const & value, 
             }
          }
          break;
-      case SALTAMOUNTCOL:
+      case SaltTableModel::ColumnIndex::Amount:
          retval = value.canConvert(QVariant::Double);
          if (retval) {
             row->setAmount(
                Measurement::qStringToSI(
                   value.toString(),
                   row->amountIsWeight() ? Measurement::PhysicalQuantity::Mass : Measurement::PhysicalQuantity::Volume,
-                  this->getForcedSystemOfMeasurementForColumn(column),
-                  this->getForcedRelativeScaleForColumn(column)
+                  this->getColumnInfo(columnIndex).getForcedSystemOfMeasurement(),
+                  this->getColumnInfo(columnIndex).getForcedRelativeScale()
                ).quantity()
             );
          }
          break;
-      case SALTADDTOCOL:
+      case SaltTableModel::ColumnIndex::AddTo:
          retval = value.canConvert(QVariant::Int);
          if (retval) {
-            row->setAddTo( static_cast<Salt::WhenToAdd>(value.toInt()) );
+            row->setWhenToAdd( static_cast<Salt::WhenToAdd>(value.toInt()) );
          }
          break;
-      case SALTPCTACIDCOL:
+      case SaltTableModel::ColumnIndex::PctAcid:
          retval = row->isAcid() && value.canConvert(QVariant::Double);
          if (retval) {
             row->setPercentAcid(value.toDouble());
@@ -506,10 +515,10 @@ bool SaltTableModel::setData(QModelIndex const & index, QVariant const & value, 
          break;
       default:
          retval = false;
-         qWarning() << tr("Bad column: %1").arg(index.column());
+         qWarning() << Q_FUNC_INFO << "Bad column:" << index.column();
    }
 
-   if ( retval && row->addTo() != Salt::WhenToAdd::NEVER ) {
+   if ( retval && row->whenToAdd() != Salt::WhenToAdd::NEVER ) {
       emit newTotals();
    }
    emit dataChanged(index,index);
@@ -523,7 +532,7 @@ void SaltTableModel::saveAndClose() {
    // all of the writes should have been instantaneous unless
    // we've added a new salt. Wonder if this will work?
    for (auto salt : this->rows) {
-      if (salt->key() < 0 && salt->type() != Salt::Types::NONE && salt->addTo() != Salt::WhenToAdd::NEVER) {
+      if (salt->key() < 0 && salt->type() != Salt::Types::NONE && salt->whenToAdd() != Salt::WhenToAdd::NEVER) {
          ObjectStoreWrapper::insert(salt);
          this->recObs->add(salt);
       }
@@ -534,14 +543,16 @@ void SaltTableModel::saveAndClose() {
 
 SaltItemDelegate::SaltItemDelegate(QObject* parent)
         : QItemDelegate(parent),
-        m_mash(nullptr)
-{
+        m_mash(nullptr) {
+   return;
 }
 
-QWidget* SaltItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem& option, const QModelIndex& index) const
-{
+QWidget* SaltItemDelegate::createEditor(QWidget *parent,
+                                        const QStyleOptionViewItem& option,
+                                        const QModelIndex& index) const {
    Q_UNUSED(option)
-   if ( index.column() == SALTNAMECOL ) {
+   auto const columnIndex = static_cast<SaltTableModel::ColumnIndex>(index.column());
+   if (columnIndex == SaltTableModel::ColumnIndex::Name) {
       QComboBox *box = new QComboBox(parent);
 
       box->addItem(tr("NONE")  ,      static_cast<int>(Salt::Types::NONE   ));
@@ -557,9 +568,9 @@ QWidget* SaltItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
       box->setMinimumWidth( box->minimumSizeHint().width());
       box->setSizeAdjustPolicy(QComboBox::AdjustToContents);
       return box;
-
    }
-   else if ( index.column() == SALTADDTOCOL ) {
+
+   if (columnIndex == SaltTableModel::ColumnIndex::AddTo) {
       QComboBox *box = new QComboBox(parent);
 
       box->addItem(tr("Never"),  static_cast<int>(Salt::WhenToAdd::NEVER ));
@@ -583,30 +594,27 @@ QWidget* SaltItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
 
       return box;
    }
-   else {
-      return new QLineEdit(parent);
-   }
+
+   return new QLineEdit(parent);
 }
 
-void SaltItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
-{
-   int column = index.column();
-
-   if ( column == SALTNAMECOL || column == SALTADDTOCOL ) {
+void SaltItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const {
+   auto const columnIndex = static_cast<SaltTableModel::ColumnIndex>(index.column());
+   if (columnIndex == SaltTableModel::ColumnIndex::Name ||
+       columnIndex == SaltTableModel::ColumnIndex::AddTo) {
       QComboBox *box = qobject_cast<QComboBox*>(editor);
       box->setCurrentIndex(index.model()->data(index,Qt::UserRole).toInt());
-   }
-   else {
+   } else {
       QLineEdit* line = qobject_cast<QLineEdit*>(editor);
       line->setText(index.model()->data(index, Qt::DisplayRole).toString());
    }
+   return;
 }
 
-void SaltItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
-{
-   int column = index.column();
-
-   if ( column == SALTNAMECOL || column == SALTADDTOCOL ) {
+void SaltItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const {
+   auto const columnIndex = static_cast<SaltTableModel::ColumnIndex>(index.column());
+   if (columnIndex == SaltTableModel::ColumnIndex::Name ||
+       columnIndex == SaltTableModel::ColumnIndex::AddTo) {
       QComboBox* box = static_cast<QComboBox*>(editor);
       int selected = box->currentData().toInt();
       int stored = model->data(index,Qt::UserRole).toInt();
@@ -614,21 +622,24 @@ void SaltItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, 
       if ( selected != stored ) {
          model->setData(index,selected,Qt::EditRole);
       }
-   }
-   else {
+   } else {
       QLineEdit* line = static_cast<QLineEdit*>(editor);
 
-      if ( line->isModified() )
+      if ( line->isModified() ) {
          model->setData(index, line->text(), Qt::EditRole);
+      }
    }
+   return;
 }
 
-void SaltItemDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex& /*index*/) const
-{
+void SaltItemDelegate::updateEditorGeometry(QWidget * editor,
+                                            const QStyleOptionViewItem & option,
+                                            const QModelIndex & /*index*/) const {
    editor->setGeometry(option.rect);
+   return;
 }
 
-void SaltItemDelegate::observeRecipe( Recipe* rec )
-{
+void SaltItemDelegate::observeRecipe( Recipe* rec ) {
    m_mash = rec->mash();
+   return;
 }

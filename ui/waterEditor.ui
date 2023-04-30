@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1071</width>
+    <width>1287</width>
     <height>518</height>
    </rect>
   </property>
@@ -70,7 +70,7 @@
         </widget>
        </item>
        <item row="1" column="0">
-        <widget class="QLabel" name="label_ca">
+        <widget class="SmartLabel" name="label_ca">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -86,7 +86,7 @@
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="BtGenericEdit" name="lineEdit_ca">
+        <widget class="SmartLineEdit" name="lineEdit_ca">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -108,7 +108,7 @@
         </widget>
        </item>
        <item row="1" column="2">
-        <widget class="QLabel" name="label_cl">
+        <widget class="SmartLabel" name="label_cl">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -124,7 +124,7 @@
         </widget>
        </item>
        <item row="1" column="3">
-        <widget class="BtGenericEdit" name="lineEdit_cl">
+        <widget class="SmartLineEdit" name="lineEdit_cl">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -146,7 +146,7 @@
         </widget>
        </item>
        <item row="2" column="0">
-        <widget class="QLabel" name="label_mg">
+        <widget class="SmartLabel" name="label_mg">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -162,7 +162,7 @@
         </widget>
        </item>
        <item row="2" column="1">
-        <widget class="BtGenericEdit" name="lineEdit_mg">
+        <widget class="SmartLineEdit" name="lineEdit_mg">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -184,7 +184,7 @@
         </widget>
        </item>
        <item row="2" column="2">
-        <widget class="QLabel" name="label_so4">
+        <widget class="SmartLabel" name="label_so4">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -203,7 +203,7 @@
         </widget>
        </item>
        <item row="2" column="3">
-        <widget class="BtGenericEdit" name="lineEdit_so4">
+        <widget class="SmartLineEdit" name="lineEdit_so4">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -225,7 +225,7 @@
         </widget>
        </item>
        <item row="3" column="0">
-        <widget class="QLabel" name="label_na">
+        <widget class="SmartLabel" name="label_na">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -241,7 +241,7 @@
         </widget>
        </item>
        <item row="3" column="1">
-        <widget class="BtGenericEdit" name="lineEdit_na">
+        <widget class="SmartLineEdit" name="lineEdit_na">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -263,27 +263,26 @@
         </widget>
        </item>
        <item row="3" column="2">
-        <widget class="QComboBox" name="comboBox_alk">
+        <widget class="SmartLabel" name="label_alk">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
-         <item>
-          <property name="text">
-           <string notr="true">HCO3</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string notr="true">CaCO3</string>
-          </property>
-         </item>
+         <property name="text">
+          <string>Alkalinity</string>
+         </property>
+         <property name="textFormat">
+          <enum>Qt::RichText</enum>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading</set>
+         </property>
         </widget>
        </item>
        <item row="3" column="3">
-        <widget class="BtGenericEdit" name="lineEdit_alk">
+        <widget class="SmartLineEdit" name="lineEdit_alk">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -305,7 +304,7 @@
         </widget>
        </item>
        <item row="4" column="0">
-        <widget class="QLabel" name="label_pH">
+        <widget class="SmartLabel" name="label_pH">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -321,7 +320,7 @@
         </widget>
        </item>
        <item row="4" column="1">
-        <widget class="BtGenericEdit" name="lineEdit_ph">
+        <widget class="SmartLineEdit" name="lineEdit_ph">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -340,6 +339,45 @@
            <height>16777215</height>
           </size>
          </property>
+        </widget>
+       </item>
+       <item row="4" column="2">
+        <widget class="QLabel" name="label_alkCombo">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Alkalinity measured as</string>
+         </property>
+         <property name="textFormat">
+          <enum>Qt::RichText</enum>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading</set>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="3">
+        <widget class="QComboBox" name="comboBox_alk">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <item>
+          <property name="text">
+           <string notr="true">HCO3</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string notr="true">CaCO3</string>
+          </property>
+         </item>
         </widget>
        </item>
       </layout>
@@ -387,9 +425,17 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>BtGenericEdit</class>
+   <class>SmartLabel</class>
+   <extends>QLabel</extends>
+   <header>widgets/SmartLabel.h</header>
+   <slots>
+    <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>SmartLineEdit</class>
    <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
+   <header>widgets/SmartLineEdit.h</header>
   </customwidget>
   <customwidget>
    <class>RadarChart</class>
@@ -404,7 +450,6 @@
   <tabstop>lineEdit_na</tabstop>
   <tabstop>lineEdit_cl</tabstop>
   <tabstop>lineEdit_so4</tabstop>
-  <tabstop>comboBox_alk</tabstop>
   <tabstop>lineEdit_alk</tabstop>
   <tabstop>lineEdit_ph</tabstop>
   <tabstop>plainTextEdit_notes</tabstop>

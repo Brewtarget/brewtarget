@@ -1,6 +1,6 @@
 /*
  * xml/BtDomErrorHandler.cpp is part of Brewtarget, and is Copyright the following
- * authors 2020-2021
+ * authors 2020-2023
  * - Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -70,9 +70,7 @@ constexpr char const * const BtDomErrorHandler::impl::XercesErrorSeverities[] {
 BtDomErrorHandler::BtDomErrorHandler(QVector<BtDomErrorHandler::PatternAndReason> const * errorPatternsToIgnore,
                                      unsigned int numberOfLinesInserted,
                                      unsigned int lineAfterWhichInserted) :
-   pimpl{ new impl{errorPatternsToIgnore,
-                   numberOfLinesInserted,
-                   lineAfterWhichInserted} } {
+   pimpl{std::make_unique<impl>(errorPatternsToIgnore, numberOfLinesInserted, lineAfterWhichInserted) } {
    return;
 }
 

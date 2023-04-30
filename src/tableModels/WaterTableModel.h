@@ -1,6 +1,6 @@
 /*
  * WaterTableModel.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2023
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Matt Young <mfsy@yahoo.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -42,10 +42,6 @@ class Recipe;
 
 class WaterItemDelegate;
 
-enum{ WATERNAMECOL, WATERAMOUNTCOL, WATERCALCIUMCOL, WATERBICARBONATECOL,
-      WATERSULFATECOL, WATERCHLORIDECOL, WATERSODIUMCOL, WATERMAGNESIUMCOL,
-      WATERNUMCOLS /*This one MUST be last*/};
-
 /*!
  * \class WaterTableModel
  *
@@ -55,8 +51,21 @@ class WaterTableModel : public BtTableModelRecipeObserver, public BtTableModelDa
    Q_OBJECT
 
 public:
+   enum class ColumnIndex {
+      Name       ,
+      Amount     ,
+      Calcium    ,
+      Bicarbonate,
+      Sulfate    ,
+      Chloride   ,
+      Sodium     ,
+      Magnesium  ,
+   };
    WaterTableModel(WaterTableWidget* parent = nullptr);
    virtual ~WaterTableModel();
+
+   //! \brief Casting wrapper for \c BtTableModel::getColumnInfo
+   ColumnInfo const & getColumnInfo(ColumnIndex const columnIndex) const;
 
    void addWaters(QList<std::shared_ptr<Water> > waters);
    void observeRecipe(Recipe* rec);

@@ -28,27 +28,29 @@
 #include "model/Hop.h"
 #include "tableModels/HopTableModel.h"
 
-HopSortFilterProxyModel::HopSortFilterProxyModel(QObject *parent, bool filt)
-: QSortFilterProxyModel(parent)
-{
-   filter = filt;
+HopSortFilterProxyModel::HopSortFilterProxyModel(QObject *parent, bool filt) :
+   QSortFilterProxyModel(parent),
+   filter{filt} {
+   return;
 }
 
 bool HopSortFilterProxyModel::lessThan(QModelIndex const & left,
                                        QModelIndex const & right) const {
    QVariant leftHop = sourceModel()->data(left);
    QVariant rightHop = sourceModel()->data(right);
+   // .:TODO:. Change this to use Hop::useDisplayNames
    QStringList uses = QStringList() << "Dry Hop" << "Aroma" << "Boil" << "First Wort" << "Mash";
 
-   switch (left.column()) {
-      case HOPALPHACOL:
+   auto const columnIndex = static_cast<HopTableModel::ColumnIndex>(left.column());
+   switch (columnIndex) {
+      case HopTableModel::ColumnIndex::Alpha:
          {
             double lAlpha = Localization::toDouble(leftHop.toString(), Q_FUNC_INFO);
             double rAlpha = Localization::toDouble(rightHop.toString(), Q_FUNC_INFO);
             return lAlpha < rAlpha;
          }
 
-      case HOPINVENTORYCOL:
+      case HopTableModel::ColumnIndex::Inventory:
          if (Measurement::qStringToSI(leftHop.toString(), Measurement::PhysicalQuantity::Mass).quantity() == 0.0 &&
             this->sortOrder() == Qt::AscendingOrder) {
             return false;
@@ -56,35 +58,40 @@ bool HopSortFilterProxyModel::lessThan(QModelIndex const & left,
          return Measurement::qStringToSI(leftHop.toString(), Measurement::PhysicalQuantity::Mass) <
                 Measurement::qStringToSI(rightHop.toString(), Measurement::PhysicalQuantity::Mass);
 
-      case HOPAMOUNTCOL:
+      case HopTableModel::ColumnIndex::Amount:
          return Measurement::qStringToSI(leftHop.toString(), Measurement::PhysicalQuantity::Mass) <
                 Measurement::qStringToSI(rightHop.toString(), Measurement::PhysicalQuantity::Mass);
 
-      case HOPTIMECOL:
+      case HopTableModel::ColumnIndex::Time:
          {
-         // Get the indexes of the Use column
-         QModelIndex lSibling = left.sibling(left.row(), HOPUSECOL);
-         QModelIndex rSibling = right.sibling(right.row(), HOPUSECOL);
-         // We are talking to the model, so we get the strings associated with
-         // the names, not the Hop::Use enums. We need those translated into
-         // ints to make this work
-         int lUse = uses.indexOf( (sourceModel()->data(lSibling)).toString() );
-         int rUse = uses.indexOf( (sourceModel()->data(rSibling)).toString() );
+            // Get the indexes of the Use column
+            QModelIndex lSibling =  left.sibling( left.row(), static_cast<int>(HopTableModel::ColumnIndex::Use));
+            QModelIndex rSibling = right.sibling(right.row(), static_cast<int>(HopTableModel::ColumnIndex::Use));
+            // We are talking to the model, so we get the strings associated with
+            // the names, not the Hop::Use enums. We need those translated into
+            // ints to make this work
+            int lUse = uses.indexOf( (sourceModel()->data(lSibling)).toString() );
+            int rUse = uses.indexOf( (sourceModel()->data(rSibling)).toString() );
 
-         if (lUse == rUse) {
-               return Measurement::qStringToSI(leftHop.toString(), Measurement::PhysicalQuantity::Time) <
-                      Measurement::qStringToSI(rightHop.toString(), Measurement::PhysicalQuantity::Time);
+            if (lUse == rUse) {
+                  return Measurement::qStringToSI(leftHop.toString(), Measurement::PhysicalQuantity::Time) <
+                        Measurement::qStringToSI(rightHop.toString(), Measurement::PhysicalQuantity::Time);
+            }
+
+            return lUse < rUse;
          }
 
-         return lUse < rUse;
-         }
+      case HopTableModel::ColumnIndex::Name:
+      case HopTableModel::ColumnIndex::Form:
+      case HopTableModel::ColumnIndex::Use :
+         // Nothing to do for these cases
+         break;
    }
 
    return leftHop.toString() < rightHop.toString();
 }
 
-bool HopSortFilterProxyModel::filterAcceptsRow( int source_row, const QModelIndex &source_parent) const
-{
+bool HopSortFilterProxyModel::filterAcceptsRow( int source_row, const QModelIndex &source_parent) const {
    HopTableModel* model = qobject_cast<HopTableModel*>(sourceModel());
    QModelIndex index = sourceModel()->index(source_row, 0, source_parent);
 

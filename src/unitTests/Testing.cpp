@@ -1,9 +1,12 @@
 /*
- * Testing.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2023
- * - Mattias Måhl <mattias@kejsarsten.com>
- * - Matt Young <mfsy@yahoo.com>
- * - Philip Lee <rocketman768@gmail.com>
+ * unitTests/Testing.cpp is part of Brewtarget, and is copyright the following authors 2009-2023:
+ *   • Brian Rower <brian.rower@gmail.com>
+ *   • Mattias Måhl <mattias@kejsarsten.com>
+ *   • Matt Young <mfsy@yahoo.com>
+ *   • Maxime Lavigne <duguigne@gmail.com>
+ *   • Mike Evans <mikee@saxicola.co.uk>
+ *   • Mik Firestone <mikfire@gmail.com>
+ *   • Philip Greggory Lee <rocketman768@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,10 +18,10 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
  */
-#include "Testing.h"
+#include "unitTests/Testing.h"
 
 #include <cmath>
 #include <exception>
@@ -365,8 +368,11 @@ void Testing::initTestCase() {
       // logging output to stderr.
       qDebug() << Q_FUNC_INFO << "Initialised";
 
-      PersistentSettings::insert(PersistentSettings::Names::color_formula, "morey");
-      PersistentSettings::insert(PersistentSettings::Names::ibu_formula, "tinseth");
+      // Setting French locale below forces ',' as decimal separator and '.' as thousands separator.  Hopefully this
+      // helps catch cases where we incorrectly assume locale 'C' etc.
+      PersistentSettings::insert(PersistentSettings::Names::color_formula, "morey"  );
+      PersistentSettings::insert(PersistentSettings::Names::ibu_formula  , "tinseth");
+      PersistentSettings::insert(PersistentSettings::Names::forcedLocale , "fr_FR"  );
 
    // Tell Brewtarget not to require any "user" input on starting
       Application::setInteractive(false);
@@ -625,7 +631,7 @@ void Testing::testUnitConversions() {
    testInput.clear();
    testInputAsStream << "9" << decimalSeparator << "994 P";
    QVERIFY2(fuzzyComp(Measurement::UnitSystems::density_Plato.qstringToSI(testInput, // "9.994 P"
-                                                                          Measurement::Units::sp_grav).quantity(),
+                                                                          Measurement::Units::specificGravity).quantity(),
                       1.040,
                       0.001),
             "Unit conversion error (Plato to SG)");
@@ -672,41 +678,53 @@ void Testing::testNamedParameterBundle() {
                       3.1415926535897932384626433,
                       0.0000000001),
             "Error retrieving double");
-/*
-   //
-   // Test that we can store an int and get it back as a strongly-typed enum
-   //
-   npb.insert(PropertyNames::Hop::type, static_cast<int>(Hop::Type::AromaAndFlavor));
-   Hop::Type retrievedHopType = npb.val<Hop::Type>(PropertyNames::Hop::type);
-   QVERIFY2(retrievedHopType == Hop::Type::AromaAndFlavor, "Int -> Strongly-typed enum failed");
 
-   //
-   // Now test explicitly nullable fields -- UNCOMMENT THIS ONCE OPTIONAL FIELDS IMPLEMENTED IN BREWTARGET
-   //
-   QVERIFY2(
-      npb.optEnumVal<Fermentable::GrainGroup>(PropertyNames::Fermentable::grainGroup) == std::nullopt,
-      "Error getting default value for optional enum"
-   );
-   std::optional<int> myOptional{static_cast<int>(Fermentable::GrainGroup::Smoked)};
-   QVariant myVariant = QVariant::fromValue(myOptional);
-   npb.insert(PropertyNames::Fermentable::grainGroup, myVariant);
+///   //
+///   // Test that we can store an int and get it back as a strongly-typed enum
+///   //
+///   npb.insert(PropertyNames::Hop::type, static_cast<int>(Hop::Type::AromaAndFlavor));
+///   Hop::Type retrievedHopType = npb.val<Hop::Type>(PropertyNames::Hop::type);
+///   QVERIFY2(retrievedHopType == Hop::Type::AromaAndFlavor, "Int -> Strongly-typed enum failed");
+///
+///   //
+///   // Now test explicitly nullable fields
+///   //
+///   QVERIFY2(
+///      npb.optEnumVal<Fermentable::GrainGroup>(PropertyNames::Fermentable::grainGroup) == std::nullopt,
+///      "Error getting default value for optional enum"
+///   );
+///   std::optional<int> myOptional{static_cast<int>(Fermentable::GrainGroup::Smoked)};
+///   QVariant myVariant = QVariant::fromValue(myOptional);
+///   npb.insert(PropertyNames::Fermentable::grainGroup, myVariant);
+///
+///   QVariant retrievedValueA = npb.get(PropertyNames::Fermentable::grainGroup);
+///   std::optional<int> castValueA = retrievedValueA.value< std::optional<int> >();
+///   QVERIFY2(castValueA.has_value(), "Error retrieving optional enum");
+///   QVERIFY2(castValueA.value() == static_cast<int>(Fermentable::GrainGroup::Smoked),
+///            "Error retrieving optional enum as int");
+///
+///   auto retrievedValueB = npb.optEnumVal<Fermentable::GrainGroup>(PropertyNames::Fermentable::grainGroup);
+///   qDebug() <<
+///      Q_FUNC_INFO << "retrievedValueB=" << (retrievedValueB.has_value() ? static_cast<int>(*retrievedValueB) : -999) <<
+///      "; Fermentable::GrainGroup::Smoked = " << static_cast<int>(Fermentable::GrainGroup::Smoked);
+///   QVERIFY2(retrievedValueB.has_value(), "Expected value, got none");
+///   QVERIFY2(
+///      retrievedValueB.value() == Fermentable::GrainGroup::Smoked,
+///      "Error retrieving optional enum"
+///   );
 
-   QVariant retrievedValueA = npb.get(PropertyNames::Fermentable::grainGroup);
-   std::optional<int> castValueA = retrievedValueA.value< std::optional<int> >();
-   QVERIFY2(castValueA.has_value(), "Error retrieving optional enum");
-   QVERIFY2(castValueA.value() == static_cast<int>(Fermentable::GrainGroup::Smoked),
-            "Error retrieving optional enum as int");
+   return;
+}
 
-   auto retrievedValueB = npb.optEnumVal<Fermentable::GrainGroup>(PropertyNames::Fermentable::grainGroup);
-   qDebug() <<
-      Q_FUNC_INFO << "retrievedValueB=" << (retrievedValueB.has_value() ? static_cast<int>(*retrievedValueB) : -999) <<
-      "; Fermentable::GrainGroup::Smoked = " << static_cast<int>(Fermentable::GrainGroup::Smoked);
-   QVERIFY2(retrievedValueB.has_value(), "Expected value, got none");
-   QVERIFY2(
-      retrievedValueB.value() == Fermentable::GrainGroup::Smoked,
-      "Error retrieving optional enum"
-   );
-*/
+void Testing::testNumberDisplayAndParsing() {
+   // Per comment above, we should be seeing number formats in French locale here
+   // Eg: 1,234.56 in US locale = 1.234,56 in French locale
+   QVERIFY(1.23 == Measurement::extractRawFromString<double>("1,23 %"));
+   QVERIFY(3.45 == Measurement::extractRawFromString<double>("  03,45 srm  "));
+   QVERIFY(6.78 == Measurement::extractRawFromString<double>("\t6,78000000    bananas!"));
+   QVERIFY(1    == Measurement::extractRawFromString<int>   ("1,23 %"));
+   QVERIFY(3    == Measurement::extractRawFromString<int>   ("  03,45 srm  "));
+   QVERIFY(6    == Measurement::extractRawFromString<int>   ("\t6,78000000    bananas!"));
    return;
 }
 
@@ -729,6 +747,16 @@ void Testing::testAlgorithms() {
    return;
 }
 
+void Testing::testTypeLookups() {
+///   QVERIFY2(Hop::typeLookup.getType(PropertyNames::Hop::alpha_pct).typeIndex == typeid(double),
+///            "PropertyNames::Hop::alpha_pct not a double");
+///   auto const & grainGroupTypeInfo = Fermentable::typeLookup.getType(PropertyNames::Fermentable::grainGroup);
+///   QVERIFY2(grainGroupTypeInfo.isOptional(),
+///            "PropertyNames::Fermentable::grainGroup not optional");
+///   QVERIFY2(grainGroupTypeInfo.classification == TypeInfo::Classification::OptionalEnum,
+///            "PropertyNames::Fermentable::grainGroup not optional enum");
+   return;
+}
 void Testing::testLogRotation() {
    qDebug() << Q_FUNC_INFO << "Logging to" << Logging::getDirectory();
 

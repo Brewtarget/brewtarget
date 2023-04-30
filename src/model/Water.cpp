@@ -45,20 +45,20 @@ ObjectStore & Water::getObjectStoreTypedInstance() const {
 TypeLookup const Water::typeLookup {
    "Water",
    {
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::alkalinity      , Water::m_alkalinity      ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::alkalinityAsHCO3, Water::m_alkalinity_as_hco3), //<<
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::amount          , Water::m_amount          ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::bicarbonate_ppm , Water::m_bicarbonate_ppm ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::calcium_ppm     , Water::m_calcium_ppm     ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::chloride_ppm    , Water::m_chloride_ppm    ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::magnesium_ppm   , Water::m_magnesium_ppm   ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::mashRO          , Water::m_mash_ro          ), //<<
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::notes           , Water::m_notes           ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::ph              , Water::m_ph              ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::sodium_ppm      , Water::m_sodium_ppm      ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::spargeRO        , Water::m_sparge_ro        ), //<<
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::sulfate_ppm     , Water::m_sulfate_ppm     ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::type            , Water::m_type            ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::alkalinity      , Water::m_alkalinity        , Measurement::PhysicalQuantity::VolumeConcentration),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::alkalinityAsHCO3, Water::m_alkalinity_as_hco3,           NonPhysicalQuantity::Bool               ), //<<
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::amount          , Water::m_amount            , Measurement::PhysicalQuantity::Volume             ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::bicarbonate_ppm , Water::m_bicarbonate_ppm   , Measurement::PhysicalQuantity::VolumeConcentration),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::calcium_ppm     , Water::m_calcium_ppm       , Measurement::PhysicalQuantity::VolumeConcentration),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::chloride_ppm    , Water::m_chloride_ppm      , Measurement::PhysicalQuantity::VolumeConcentration),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::magnesium_ppm   , Water::m_magnesium_ppm     , Measurement::PhysicalQuantity::VolumeConcentration),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::mashRO          , Water::m_mash_ro           ,           NonPhysicalQuantity::Percentage         ), //<<
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::notes           , Water::m_notes             ,           NonPhysicalQuantity::String             ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::ph              , Water::m_ph                , Measurement::PhysicalQuantity::Acidity            ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::sodium_ppm      , Water::m_sodium_ppm        , Measurement::PhysicalQuantity::VolumeConcentration),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::spargeRO        , Water::m_sparge_ro         ,           NonPhysicalQuantity::Percentage         ), //<<
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::sulfate_ppm     , Water::m_sulfate_ppm       , Measurement::PhysicalQuantity::VolumeConcentration),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::type            , Water::m_type              ),
    },
    // Parent class lookup
    &NamedEntity::typeLookup

@@ -86,17 +86,17 @@ ObjectStore & Mash::getObjectStoreTypedInstance() const {
 TypeLookup const Mash::typeLookup {
    "Mash",
    {
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Mash::equipAdjust          , Mash::m_equipAdjust          ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Mash::grainTemp_c          , Mash::m_grainTemp_c          ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Mash::equipAdjust          , Mash::m_equipAdjust          ,           NonPhysicalQuantity::Bool                ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Mash::grainTemp_c          , Mash::m_grainTemp_c          , Measurement::PhysicalQuantity::Temperature         ),
 //      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Mash::mashSteps            , Mash::m_mashSteps            ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Mash::notes                , Mash::m_notes                ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Mash::ph                   , Mash::m_ph                   ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Mash::spargeTemp_c         , Mash::m_spargeTemp_c         ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Mash::notes                , Mash::m_notes                ,           NonPhysicalQuantity::String              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Mash::ph                   , Mash::m_ph                   , Measurement::PhysicalQuantity::Acidity             ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Mash::spargeTemp_c         , Mash::m_spargeTemp_c         , Measurement::PhysicalQuantity::Temperature         ),
 //      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Mash::totalMashWater_l     , Mash::m_totalMashWater_l     ), // Calculated, not stored
 //      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Mash::totalTime            , Mash::m_totalTime            ), // Calculated, not stored
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Mash::tunSpecificHeat_calGC, Mash::m_tunSpecificHeat_calGC),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Mash::tunTemp_c            , Mash::m_tunTemp_c            ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Mash::tunWeight_kg         , Mash::m_tunWeight_kg         ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Mash::tunSpecificHeat_calGC, Mash::m_tunSpecificHeat_calGC, Measurement::PhysicalQuantity::SpecificHeatCapacity),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Mash::tunTemp_c            , Mash::m_tunTemp_c            , Measurement::PhysicalQuantity::Temperature         ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Mash::tunWeight_kg         , Mash::m_tunWeight_kg         , Measurement::PhysicalQuantity::Mass                ),
    },
    // Parent class lookup
    &NamedEntity::typeLookup

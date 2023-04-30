@@ -1,6 +1,6 @@
 /*
  * model/NamedEntity.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2022
+ * authors 2009-2023
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
@@ -52,6 +52,13 @@ class Recipe;
 // every platform there is always exactly one instance of each property name.  So, whilst it's always valid to compare
 // the values of two property names, we cannot _guarantee_ that two identical property names always have the same
 // address in memory.  In other words, _don't_ do `if (&somePropName == &PropertyNames::NamedEntity::Folder) ...`.
+//
+// I did also think about creating a macro that would combine this with Q_PROPERTY, but I didn't see an elegant way to
+// do it given that these need to be outside the class and Q_PROPERTY needs to be inside it.
+//
+// IMPORTANT: These property names are unique within a class, but they are not globally unique, so we have to be a bit
+//            careful about how we use them in look-ups.
+//
 #define AddPropertyName(property) namespace PropertyNames::NamedEntity { BtStringConst const property{#property}; }
 AddPropertyName(deleted)
 AddPropertyName(display)
@@ -83,20 +90,70 @@ AddPropertyName(parentKey)
  *           \b Water
  *           \b Yeast
  *
- * Note that this class has previously been called \b Ingredient and \b BeerXMLElement.  We've changed the name to try
- * to best reflect what the class represents.  Although some of this class's subclasses (eg \b Hop, \b Fermentable,
- * \b Yeast) are ingredients in the normal sense of the word, others (eg \b Instruction, \b Equipment, \b Style,
- * \b Mash) are not really.  Equally, the fact that derived classes can be instantiated from BeerXML is not their
- * defining characteristic.
+ *        I know \b NamedEntity isn't the snappiest name, but it's the best we've come up with so far.  If you look at
+ *        older versions of the code, you'll see that this class has previously been called \b Ingredient and
+ *        \b BeerXMLElement.  The current name tries to best reflect what the class represents.  Although some of this
+ *        class's subclasses (eg \b Hop, \b Fermentable, \b Yeast) are ingredients in the normal sense of the word,
+ *        others (eg \b Instruction, \b Equipment, \b Style, \b Mash) are not really.  Equally, the fact that derived
+ *        classes can be instantiated from BeerXML is not their defining characteristic.
  *
- * NB: Although we can template individual member functions, we cannot make this a template class (eg to use
- * https://en.wikipedia.org/wiki/Curiously_recurring_template_pattern) because the Qt Meta-Object Compiler (moc) cannot
- * handle templates, and we want to be able to use the Qt Property system as well as signals and slots.
+ *        NOTE: One of the things that can be confusing about our class and DB structure is that we are often
+ *        doubling-up two different concepts: a global "variety" record/object and a recipe-specific "use of"
+ *        record/object.  Eg, there might be one global "variety" record/object for Fuggle hops, with information about
+ *        origin, average alpha acid etc.  Then, each time this type of hop is used in a recipe, there will be a
+ *        related record with information about quantity used, actual alpha acid, etc PLUS a COPY of all the information
+ *        in the variety record.  The "use of" and "variety" records are stored in the same DB table and the
+ *        relationship between them is tracked via parent_id/child_id - where "variety" is the parent and "use of" is
+ *        the child.
+ *           This structure exists for historical reasons because the code was originally modelled on the BeerXML data
+ *        structure (which doesn't really distinguish between "variety" and "use of") and, in the beginning, did not use
+ *        a relational database (operating directly on BeerXML files instead).
+ *           If we were starting today from a blank sheet of paper, you might, quite reasonably, argue that we should
+ *        have separate DB tables and classes for "variety" and "use of" -- eg HopVariety and HopUse (or HopAddition).
+ *        However, given where we actually are at the moment, it would be a very considerable amount of work to get to
+ *        such a structure -- and it feels like we have a lot more important issues to which we should devote our
+ *        efforts.
+ *           Moreover, such a would actually remove some potentially valuable flexibility from the code.  It is open to
+ *        debate exactly which fields belong in the "variety" record, which ones belong in the "use of" record, and
+ *        which ones should be should be in both, and we might want to leave it open (within reason) for different users
+ *        to do different things.  Eg, for hops, BeerJSON requires name and alpha acid in both types of records, allows
+ *        (but does not require) producer, product ID, origin, year, form (ie leaf/pellet/etc) and beta acid in either
+ *        type, but only allows oil content and inventory information in the "variety" record.  This isn't wrong per se,
+ *        but it means that, if you want separate BeerJSON inventory records for Fuggle 2021 harvest and Fuggle 2022
+ *        harvest, then you need two separate Fuggle variety records, which might not be what you want.  (This also then
+ *        makes you think there should be three types of Hop record, but I'm not going to go there!)
+ *           So, for the moment at least, we (mostly) retain the idea that a single class/table for both "variety" and
+ *        "use of" objects/records.  You just have to be mindful of this when looking at the code and the DB -- eg
+ *        the amount field of a Hop can be either inventory or how much to add to a recipe, depending on whether it's a
+ *        "variety" or "use of" record.
+ *        .:TODO:. It would be good to make explicit which member variables (and their getters/setters) are valid ONLY
+ *        for "use of".
  *
- * NB: Because NamedEntity inherits from QObject, no extra work is required to store pointers to NamedEntity objects
- *     inside QVariant.  We also get to have Qt properties for free.  Because we do not use any state in the QObject
- *     from which we inherit, we can get away with not trying to move/copy such state in our copy constructor,
- *     assignment operator, etc.  This is good because there isn't a handy way to do such moves or copies.
+ *        NOTE: Although we can template individual member functions, we cannot make this a template class (eg to use
+ *        https://en.wikipedia.org/wiki/Curiously_recurring_template_pattern) because the Qt Meta-Object Compiler (moc)
+ *        cannot handle templates, and we want to be able to use the Qt Property system as well as signals and slots.
+ *
+ *        NOTE: Because NamedEntity inherits from QObject, no extra work is required to store pointers to NamedEntity
+ *        objects inside QVariant.  We also get to have Qt properties for free.  Because we do not use any state in the
+ *        QObject from which we inherit, we can get away with not trying to move/copy such state in our copy
+ *        constructor, assignment operator, etc.  This is good because there isn't a handy way to do such moves or
+ *        copies.
+ *
+ *        NOTE: When modifying or extending subclasses of \c NamedEntity, there are mostly plenty of examples to guide
+ *        you, but a couple of things are worth knowing in advance:
+ *          - Attributes that we want to be able to store, eg in the DB and/or in an XML or JSON file, need to be Qt
+ *            properties.  There are then mappings in xml/BeerXml.cpp, json/BeerJson.cpp and
+ *            database/ObjectStoreTyped.cpp that determine how these properties are read/written.
+ *          - Our data structures have, for obvious reasons, been quite heavily influenced by BeerXML and BeerJSON.  The
+ *            latter is a much larger data model than the former, so there are a few minor contortions in the BeerXML
+ *            mappings (as you'll see from the comments in xml/BeerXml.cpp).
+ *          - Because Qt properties don't really handle Null (or std::optional), there are a few places in the code
+ *            where we say "we'll treat this value as null".  Eg, for any int that's a DB key, -1 means it's null.
+ *          - Mostly the order of enum values should not matter, eg for serialisation where we generally to convert to
+ *            strings.  \b However, the .ui files and the .conf file still contain a lot of instances where the order
+ *            and/or the int value of an enum do matter, so it's best to avoid changing this, for now at least.
+ *
+ * .:TODO:. It would be nice to have a canonical serialisation of enums
  */
 class NamedEntity : public QObject {
    Q_OBJECT

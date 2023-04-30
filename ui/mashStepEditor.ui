@@ -122,7 +122,7 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_4">
        <item>
-        <widget class="BtTemperatureLabel" name="label_stepTemp">
+        <widget class="SmartLabel" name="label_stepTemp">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -141,7 +141,7 @@
         </widget>
        </item>
        <item>
-        <widget class="BtTemperatureEdit" name="lineEdit_stepTemp">
+        <widget class="SmartLineEdit" name="lineEdit_stepTemp">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
            <horstretch>100</horstretch>
@@ -163,9 +163,6 @@
          <property name="toolTip">
           <string>Target temp. of this step</string>
          </property>
-         <property name="editField" stdset="0">
-          <string notr="true">stepTemp_c</string>
-         </property>
         </widget>
        </item>
       </layout>
@@ -173,7 +170,7 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_5">
        <item>
-        <widget class="BtVolumeLabel" name="label_infuseAmount">
+        <widget class="SmartLabel" name="label_infuseAmount">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -192,7 +189,7 @@
         </widget>
        </item>
        <item>
-        <widget class="BtVolumeEdit" name="lineEdit_infuseAmount">
+        <widget class="SmartLineEdit" name="lineEdit_infuseAmount">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
            <horstretch>100</horstretch>
@@ -214,9 +211,6 @@
          <property name="toolTip">
           <string>Amount of water to infuse</string>
          </property>
-         <property name="editField" stdset="0">
-          <string notr="true">infuseAmount_l</string>
-         </property>
         </widget>
        </item>
       </layout>
@@ -224,7 +218,7 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_9">
        <item>
-        <widget class="BtTemperatureLabel" name="label_infuseTemp">
+        <widget class="SmartLabel" name="label_infuseTemp">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -243,7 +237,7 @@
         </widget>
        </item>
        <item>
-        <widget class="BtTemperatureEdit" name="lineEdit_infuseTemp">
+        <widget class="SmartLineEdit" name="lineEdit_infuseTemp">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
            <horstretch>100</horstretch>
@@ -259,9 +253,6 @@
          <property name="toolTip">
           <string>Temperature of infusion water</string>
          </property>
-         <property name="editField" stdset="0">
-          <string notr="true">infuseTemp_c</string>
-         </property>
         </widget>
        </item>
       </layout>
@@ -276,7 +267,7 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_11">
        <item>
-        <widget class="BtVolumeLabel" name="label_decoctionAmount">
+        <widget class="SmartLabel" name="label_decoctionAmount">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -295,7 +286,7 @@
         </widget>
        </item>
        <item>
-        <widget class="BtVolumeEdit" name="lineEdit_decoctionAmount">
+        <widget class="SmartLineEdit" name="lineEdit_decoctionAmount">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
            <horstretch>100</horstretch>
@@ -317,9 +308,6 @@
          <property name="toolTip">
           <string>Amount of mash to decoct</string>
          </property>
-         <property name="editField" stdset="0">
-          <string notr="true">decoctionAmount_l</string>
-         </property>
         </widget>
        </item>
       </layout>
@@ -327,7 +315,7 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_3">
        <item>
-        <widget class="BtTimeLabel" name="label_stepTime">
+        <widget class="SmartLabel" name="label_stepTime">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -346,7 +334,7 @@
         </widget>
        </item>
        <item>
-        <widget class="BtTimeEdit" name="lineEdit_stepTime">
+        <widget class="SmartLineEdit" name="lineEdit_stepTime">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
            <horstretch>100</horstretch>
@@ -368,9 +356,6 @@
          <property name="toolTip">
           <string>Time to conduct the step</string>
          </property>
-         <property name="editField" stdset="0">
-          <string notr="true">stepTime_min</string>
-         </property>
         </widget>
        </item>
       </layout>
@@ -378,7 +363,7 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
-        <widget class="BtTimeLabel" name="label_rampTime">
+        <widget class="SmartLabel" name="label_rampTime">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -397,7 +382,7 @@
         </widget>
        </item>
        <item>
-        <widget class="BtTimeEdit" name="lineEdit_rampTime">
+        <widget class="SmartLineEdit" name="lineEdit_rampTime">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
            <horstretch>100</horstretch>
@@ -419,9 +404,6 @@
          <property name="toolTip">
           <string>Lag time</string>
          </property>
-         <property name="editField" stdset="0">
-          <string notr="true">rampTime_min</string>
-         </property>
         </widget>
        </item>
       </layout>
@@ -429,7 +411,7 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="BtTemperatureLabel" name="label_endTemp">
+        <widget class="SmartLabel" name="label_endTemp">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -448,7 +430,7 @@
         </widget>
        </item>
        <item>
-        <widget class="BtTemperatureEdit" name="lineEdit_endTemp">
+        <widget class="SmartLineEdit" name="lineEdit_endTemp">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
            <horstretch>100</horstretch>
@@ -470,9 +452,6 @@
          <property name="toolTip">
           <string>Final temp. of this step</string>
          </property>
-         <property name="editField" stdset="0">
-          <string notr="true">endTemp_c</string>
-         </property>
         </widget>
        </item>
       </layout>
@@ -493,49 +472,17 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>BtTimeEdit</class>
-   <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
-   <slots>
-    <slot>lineChanged(PreviousScaleInfo)</slot>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtTimeLabel</class>
+   <class>SmartLabel</class>
    <extends>QLabel</extends>
-   <header>BtLabel.h</header>
+   <header>widgets/SmartLabel.h</header>
    <slots>
     <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
    </slots>
   </customwidget>
   <customwidget>
-   <class>BtVolumeLabel</class>
-   <extends>QLabel</extends>
-   <header>BtLabel.h</header>
-   <slots>
-    <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtVolumeEdit</class>
+   <class>SmartLineEdit</class>
    <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
-   <slots>
-    <slot>lineChanged(PreviousScaleInfo)</slot>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtTemperatureLabel</class>
-   <extends>QLabel</extends>
-   <header>BtLabel.h</header>
-   <slots>
-    <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtTemperatureEdit</class>
-   <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
+   <header>widgets/SmartLineEdit.h</header>
    <slots>
     <slot>lineChanged(PreviousScaleInfo)</slot>
    </slots>
@@ -572,118 +519,6 @@
     <hint type="destinationlabel">
      <x>286</x>
      <y>274</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>label_stepTemp</sender>
-   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   <receiver>lineEdit_stepTemp</receiver>
-   <slot>lineChanged(PreviousScaleInfo)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>29</x>
-     <y>85</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>155</x>
-     <y>88</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>label_infuseAmount</sender>
-   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   <receiver>lineEdit_infuseAmount</receiver>
-   <slot>lineChanged(PreviousScaleInfo)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>53</x>
-     <y>126</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>178</x>
-     <y>126</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>label_infuseTemp</sender>
-   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   <receiver>lineEdit_infuseTemp</receiver>
-   <slot>lineChanged(PreviousScaleInfo)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>40</x>
-     <y>159</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>172</x>
-     <y>160</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>label_decoctionAmount</sender>
-   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   <receiver>lineEdit_decoctionAmount</receiver>
-   <slot>lineChanged(PreviousScaleInfo)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>310</x>
-     <y>26</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>415</x>
-     <y>24</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>label_endTemp</sender>
-   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   <receiver>lineEdit_endTemp</receiver>
-   <slot>lineChanged(PreviousScaleInfo)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>310</x>
-     <y>133</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>406</x>
-     <y>133</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>label_stepTime</sender>
-   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   <receiver>lineEdit_stepTime</receiver>
-   <slot>lineChanged(PreviousScaleInfo)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>282</x>
-     <y>57</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>402</x>
-     <y>61</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>label_rampTime</sender>
-   <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
-   <receiver>lineEdit_rampTime</receiver>
-   <slot>lineChanged(PreviousScaleInfo)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>301</x>
-     <y>96</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>403</x>
-     <y>93</y>
     </hint>
    </hints>
   </connection>

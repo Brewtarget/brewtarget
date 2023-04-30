@@ -1,6 +1,6 @@
 /*
  * tableModels/BtTableModelInventory.cpp is part of Brewtarget, and is copyright the following
- * authors 2021-2022:
+ * authors 2021-2023:
  * - Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -20,8 +20,8 @@
 
 BtTableModelInventory::BtTableModelInventory(QTableView * parent,
                                              bool editable,
-                                             std::initializer_list<std::pair<int const, ColumnInfo> > columnIdToInfo) :
-   BtTableModelRecipeObserver{parent, editable, columnIdToInfo},
+                                             std::initializer_list<BtTableModel::ColumnInfo> columnInfos) :
+   BtTableModelRecipeObserver{parent, editable, columnInfos},
    inventoryEditable{false} {
    return;
 }

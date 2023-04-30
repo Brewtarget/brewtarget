@@ -61,11 +61,11 @@ ObjectStore & Misc::getObjectStoreTypedInstance() const {
 TypeLookup const Misc::typeLookup {
    "Misc",
    {
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Misc::amount        , Misc::m_amount        ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Misc::amount        , Misc::m_amount        , Measurement::PqEitherMassOrVolume),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Misc::amountIsWeight, Misc::m_amountIsWeight),
 //      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Misc::amountType    , Misc::m_amountType    ),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Misc::notes         , Misc::m_notes         ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Misc::time          , Misc::m_time          ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Misc::time          , Misc::m_time          , Measurement::PhysicalQuantity::Time),
 //      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Misc::typeString    , Misc::m_typeString    ),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Misc::type          , Misc::m_type          ),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Misc::useFor        , Misc::m_useFor        ),

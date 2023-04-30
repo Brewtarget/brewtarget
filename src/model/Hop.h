@@ -33,22 +33,23 @@
 
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
+// See comment in model/NamedEntity.h
 #define AddPropertyName(property) namespace PropertyNames::Hop { BtStringConst const property{#property}; }
-AddPropertyName(alpha_pct)
-AddPropertyName(amount_kg)
-AddPropertyName(beta_pct)
-AddPropertyName(caryophyllene_pct)
-AddPropertyName(cohumulone_pct)
-AddPropertyName(form)
-AddPropertyName(hsi_pct)
-AddPropertyName(humulene_pct)
-AddPropertyName(myrcene_pct)
-AddPropertyName(notes)
-AddPropertyName(origin)
-AddPropertyName(substitutes)
-AddPropertyName(time_min)
-AddPropertyName(type)
-AddPropertyName(use)
+AddPropertyName(alpha_pct            )
+AddPropertyName(amount_kg            )
+AddPropertyName(beta_pct             )
+AddPropertyName(caryophyllene_pct    )
+AddPropertyName(cohumulone_pct       )
+AddPropertyName(form                 )
+AddPropertyName(hsi_pct              )
+AddPropertyName(humulene_pct         )
+AddPropertyName(myrcene_pct          )
+AddPropertyName(notes                )
+AddPropertyName(origin               )
+AddPropertyName(substitutes          )
+AddPropertyName(time_min             )
+AddPropertyName(type                 )
+AddPropertyName(use                  )
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
 //======================================================================================================================
@@ -64,14 +65,10 @@ class Hop : public NamedEntityWithInventory {
    Q_CLASSINFO("signal", "hops")
 
 public:
-   /**
-    * \brief Mapping of names to types for the Qt properties of this class.  See \c NamedEntity::typeLookup for more
-    *        info.
-    */
-   static TypeLookup const typeLookup;
-
    //! \brief The type of hop, meaning for what properties it is used.
    enum class Type {Bittering, Aroma, Both};
+   // This allows us to store the above enum class in a QVariant
+   Q_ENUM(Type)
 
    /*!
     * \brief Mapping between \c Hop::Type and string values suitable for serialisation in DB, BeerJSON, etc (but \b not
@@ -81,6 +78,8 @@ public:
 
    //! \brief The form of the hop.
    enum class Form {Leaf, Pellet, Plug};
+   // This allows us to store the above enum class in a QVariant
+   Q_ENUM(Form)
 
    /*!
     * \brief Mapping between \c Hop::Form and string values suitable for serialisation in DB, BeerJSON, etc (but \b not
@@ -97,6 +96,8 @@ public:
                    Boil,
                    Aroma,
                    Dry_Hop};
+   // This allows us to store the above enum class in a QVariant
+   Q_ENUM(Use)
 
    /*!
     * \brief Mapping between \c Hop::Form and string values suitable for serialisation in DB, BeerXML, etc (but \b not
@@ -119,9 +120,11 @@ public:
     */
    static QMap<Hop::Use, QString> const useDisplayNames;
 
-   Q_ENUM(Type)
-   Q_ENUM(Form)
-   Q_ENUM(Use)
+   /**
+    * \brief Mapping of names to types for the Qt properties of this class.  See \c NamedEntity::typeLookup for more
+    *        info.
+    */
+   static TypeLookup const typeLookup;
 
    Hop(QString name = "");
    Hop(NamedParameterBundle const & namedParameterBundle);
@@ -162,23 +165,23 @@ public:
    Q_PROPERTY(double myrcene_pct READ myrcene_pct WRITE setMyrcene_pct /*NOTIFY changed*/ /*changedMyrcene_pct*/ )
 
    //============================="GET" METHODS====================================
-   double  alpha_pct()             const;
-   double  amount_kg()             const;
-   Use     use()                   const;
-   double  time_min()              const;
-   QString notes()                 const;
-   Type    type()                  const;
-   Form    form()                  const;
-   double  beta_pct()              const;
-   double  hsi_pct()               const;
-   QString origin()                const;
-   QString substitutes()           const;
-   double  humulene_pct()          const;
-   double  caryophyllene_pct()     const;
-   double  cohumulone_pct()        const;
-   double  myrcene_pct()           const;
+   double  alpha_pct            () const;
+   double  amount_kg            () const;
+   Use     use                  () const;
+   double  time_min             () const;
+   QString notes                () const;
+   Type    type                 () const;
+   Form    form                 () const;
+   double  beta_pct             () const;
+   double  hsi_pct              () const;
+   QString origin               () const;
+   QString substitutes          () const;
+   double  humulene_pct         () const;
+   double  caryophyllene_pct    () const;
+   double  cohumulone_pct       () const;
+   double  myrcene_pct          () const;
 
-   virtual double inventory()  const;
+   virtual double inventory() const;
 
    //============================="SET" METHODS====================================
    void setAlpha_pct            (double  const   val);

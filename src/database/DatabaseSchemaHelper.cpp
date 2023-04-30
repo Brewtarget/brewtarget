@@ -1,6 +1,6 @@
 /*
  * database/DatabaseSchemaHelper.cpp is part of Brewtarget, and is copyright the following
- * authors 2009-2021:
+ * authors 2009-2023:
  *   • Jonatan Pålsson <jonatan.p@gmail.com>
  *   • Mattias Måhl <mattias@kejsarsten.com>
  *   • Matt Young <mfsy@yahoo.com>
@@ -539,8 +539,7 @@ namespace {
       bool ret = true;
 
       // NOTE: Add a new case when adding a new schema change
-      switch(oldVersion)
-      {
+      switch(oldVersion) {
          case 1: // == '2.0.0'
             ret &= migrate_to_202(database, sqlQuery);
             break;

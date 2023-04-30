@@ -590,11 +590,8 @@ commonSourceFiles = files([
    'src/BrewNoteWidget.cpp',
    'src/BtColor.cpp',
    'src/BtDatePopup.cpp',
-   'src/BtDigitWidget.cpp',
    'src/BtFieldType.cpp',
    'src/BtFolder.cpp',
-   'src/BtLabel.cpp',
-   'src/BtLineEdit.cpp',
    'src/BtSplashScreen.cpp',
    'src/BtTabWidget.cpp',
    'src/BtTextEdit.cpp',
@@ -682,6 +679,8 @@ commonSourceFiles = files([
    'src/RefractoDialog.cpp',
    'src/ScaleRecipeTool.cpp',
    'src/SimpleUndoableUpdate.cpp',
+   'src/SmartAmounts.cpp',
+   'src/SmartField.cpp',
    'src/StrikeWaterDialog.cpp',
    'src/StyleButton.cpp',
    'src/StyleEditor.cpp',
@@ -700,7 +699,6 @@ commonSourceFiles = files([
    'src/TimerListDialog.cpp',
    'src/TimerMainDialog.cpp',
    'src/TimerWidget.cpp',
-   'src/UiAmountWithUnits.cpp',
    'src/utils/BtException.cpp',
    'src/utils/BtStringConst.cpp',
    'src/utils/BtStringStream.cpp',
@@ -716,6 +714,9 @@ commonSourceFiles = files([
    'src/WaterTableWidget.cpp',
    'src/widgets/Animator.cpp',
    'src/widgets/SelectionControl.cpp',
+   'src/widgets/SmartDigitWidget.cpp',
+   'src/widgets/SmartLabel.cpp',
+   'src/widgets/SmartLineEdit.cpp',
    'src/widgets/ToggleSwitch.cpp',
    'src/widgets/UnitAndScalePopUpMenu.cpp',
    'src/xml/BeerXml.cpp',
@@ -756,10 +757,7 @@ mocHeaders = files([
    'src/BrewDayScrollWidget.h',
    'src/BrewNoteWidget.h',
    'src/BtDatePopup.h',
-   'src/BtDigitWidget.h',
    'src/BtFolder.h',
-   'src/BtLabel.h',
-   'src/BtLineEdit.h',
    'src/BtSplashScreen.h',
    'src/BtTabWidget.h',
    'src/BtTextEdit.h',
@@ -847,6 +845,9 @@ mocHeaders = files([
    'src/WaterTableWidget.h',
    'src/widgets/Animator.h',
    'src/widgets/SelectionControl.h',
+   'src/widgets/SmartDigitWidget.h',
+   'src/widgets/SmartLabel.h',
+   'src/widgets/SmartLineEdit.h',
    'src/widgets/ToggleSwitch.h',
    'src/YeastDialog.h',
    'src/YeastEditor.h',
@@ -1396,6 +1397,9 @@ if compiler.get_id() == 'gcc'
    #                    However, even this is not sufficient(!).  So, for the moment, we suppress the rpmlint error (see
    #                 packaging/rpmLintFilters.toml).
    #
+   # -fconcepts  Is needed on older versions of GCC to enable C++20 concepts (because specifying C++20 was not enough
+   #             for some reason).
+   #
    # The following are, according to some comments at
    # https://stackoverflow.com/questions/52583544/boost-stack-trace-not-showing-function-names-and-line-numbers, needed
    # for Boost stacktrace to work properly:
@@ -1411,6 +1415,7 @@ if compiler.get_id() == 'gcc'
    add_global_arguments(['-g3',
                          '-O2',
                          '-z', 'noexecstack', # NB Not '-z noexecstack' as otherwise will be passed to gcc in quotes!
+                         '-fconcepts'
                          ], language : 'cpp')
    if host_machine.system() == 'windows'
       add_global_arguments     (['-no-pie', '-fno-pie'], language : 'cpp')
@@ -1501,6 +1506,8 @@ test('Test recipe calculations - all grain', testRunner, args : ['recipeCalcTest
 test('Test post boil loss OG',               testRunner, args : ['postBoilLossOgTest'])
 test('Test unit conversions',                testRunner, args : ['testUnitConversions'])
 test('Test NamedParameterBundle',            testRunner, args : ['testNamedParameterBundle'])
+test('Test number display and parsing',      testRunner, args : ['testNumberDisplayAndParsing'])
 test('Test algorithms',                      testRunner, args : ['testAlgorithms'])
+test('Test type lookups',                    testRunner, args : ['testTypeLookups'])
 # Need a bit longer than the default 30 second timeout for the log rotation test on some platforms
 test('Test log rotation',                    testRunner, args : ['testLogRotation'], timeout : 60)

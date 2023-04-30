@@ -53,23 +53,23 @@ ObjectStore & Equipment::getObjectStoreTypedInstance() const {
 TypeLookup const Equipment::typeLookup {
    "Equipment",
    {
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::batchSize_l          , Equipment::m_batchSize_l          ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::boilingPoint_c       , Equipment::m_boilingPoint_c       ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::boilSize_l           , Equipment::m_boilSize_l           ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::boilTime_min         , Equipment::m_boilTime_min         ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::calcBoilVolume       , Equipment::m_calcBoilVolume       ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::evapRate_lHr         , Equipment::m_evapRate_lHr         ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::evapRate_pctHr       , Equipment::m_evapRate_pctHr       ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::grainAbsorption_LKg  , Equipment::m_grainAbsorption_LKg  ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::hopUtilization_pct   , Equipment::m_hopUtilization_pct   ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::lauterDeadspace_l    , Equipment::m_lauterDeadspace_l    ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::notes                , Equipment::m_notes                ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::topUpKettle_l        , Equipment::m_topUpKettle_l        ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::topUpWater_l         , Equipment::m_topUpWater_l         ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::trubChillerLoss_l    , Equipment::m_trubChillerLoss_l    ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::tunSpecificHeat_calGC, Equipment::m_tunSpecificHeat_calGC),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::tunVolume_l          , Equipment::m_tunVolume_l          ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::tunWeight_kg         , Equipment::m_tunWeight_kg         ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::batchSize_l          , Equipment::m_batchSize_l          , Measurement::PhysicalQuantity::Volume              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::boilingPoint_c       , Equipment::m_boilingPoint_c       , Measurement::PhysicalQuantity::Temperature         ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::boilSize_l           , Equipment::m_boilSize_l           , Measurement::PhysicalQuantity::Volume              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::boilTime_min         , Equipment::m_boilTime_min         , Measurement::PhysicalQuantity::Time                ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::calcBoilVolume       , Equipment::m_calcBoilVolume       ,           NonPhysicalQuantity::Bool                ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::evapRate_lHr         , Equipment::m_evapRate_lHr         , Measurement::PhysicalQuantity::Volume              ), // The "per hour" bit is fixed, so we simplify
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::evapRate_pctHr       , Equipment::m_evapRate_pctHr       ,           NonPhysicalQuantity::Percentage          ), // The "per hour" bit is fixed, so we simplify
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::grainAbsorption_LKg  , Equipment::m_grainAbsorption_LKg  ,           NonPhysicalQuantity::Dimensionless       ), // Not really dimensionless...
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::hopUtilization_pct   , Equipment::m_hopUtilization_pct   ,           NonPhysicalQuantity::Percentage          ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::lauterDeadspace_l    , Equipment::m_lauterDeadspace_l    , Measurement::PhysicalQuantity::Volume              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::notes                , Equipment::m_notes                                                                     ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::topUpKettle_l        , Equipment::m_topUpKettle_l        , Measurement::PhysicalQuantity::Volume              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::topUpWater_l         , Equipment::m_topUpWater_l         , Measurement::PhysicalQuantity::Volume              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::trubChillerLoss_l    , Equipment::m_trubChillerLoss_l    , Measurement::PhysicalQuantity::Volume              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::tunSpecificHeat_calGC, Equipment::m_tunSpecificHeat_calGC, Measurement::PhysicalQuantity::SpecificHeatCapacity),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::tunVolume_l          , Equipment::m_tunVolume_l          , Measurement::PhysicalQuantity::Volume              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::tunWeight_kg         , Equipment::m_tunWeight_kg         , Measurement::PhysicalQuantity::Mass                ),
    },
    // Parent class lookup
    &NamedEntity::typeLookup

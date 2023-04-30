@@ -38,7 +38,7 @@
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="BtDensityEdit" name="lineEdit_op">
+           <widget class="SmartLineEdit" name="lineEdit_op">
             <property name="maximumSize">
              <size>
               <width>128</width>
@@ -50,12 +50,6 @@
             </property>
             <property name="toolTip">
              <string>Measured original plato</string>
-            </property>
-            <property name="editField" stdset="0">
-             <string notr="true">origPlato</string>
-            </property>
-            <property name="forcedSystemOfMeasurement" stdset="0">
-             <string notr="true">Plato</string>
             </property>
            </widget>
           </item>
@@ -70,7 +64,7 @@
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="BtDensityEdit" name="lineEdit_inputOG">
+           <widget class="SmartLineEdit" name="lineEdit_inputOG">
             <property name="maximumSize">
              <size>
               <width>128</width>
@@ -79,12 +73,6 @@
             </property>
             <property name="toolTip">
              <string>Measured original gravity</string>
-            </property>
-            <property name="editField" stdset="0">
-             <string notr="true">inputOG</string>
-            </property>
-            <property name="forcedSystemOfMeasurement" stdset="0">
-             <string notr="true">SpecificGravity</string>
             </property>
            </widget>
           </item>
@@ -110,7 +98,7 @@
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="BtDensityEdit" name="lineEdit_cp">
+           <widget class="SmartLineEdit" name="lineEdit_cp">
             <property name="maximumSize">
              <size>
               <width>128</width>
@@ -119,12 +107,6 @@
             </property>
             <property name="toolTip">
              <string>Current measured plato</string>
-            </property>
-            <property name="editField" stdset="0">
-             <string notr="true">curP</string>
-            </property>
-            <property name="forcedSystemOfMeasurement" stdset="0">
-             <string notr="true">Plato</string>
             </property>
            </widget>
           </item>
@@ -181,7 +163,7 @@
      </property>
      <layout class="QFormLayout" name="formLayout_2">
       <item row="1" column="1">
-       <widget class="BtGenericEdit" name="lineEdit_ri">
+       <widget class="SmartLineEdit" name="lineEdit_ri">
         <property name="maximumSize">
          <size>
           <width>128</width>
@@ -204,7 +186,7 @@
        </widget>
       </item>
       <item row="3" column="1">
-       <widget class="BtDensityEdit" name="lineEdit_sg">
+       <widget class="SmartLineEdit" name="lineEdit_sg">
         <property name="maximumSize">
          <size>
           <width>128</width>
@@ -213,9 +195,6 @@
         </property>
         <property name="readOnly">
          <bool>true</bool>
-        </property>
-        <property name="forcedSystemOfMeasurement" stdset="0">
-         <string notr="true">SpecificGravity</string>
         </property>
        </widget>
       </item>
@@ -230,7 +209,7 @@
        </widget>
       </item>
       <item row="5" column="1">
-       <widget class="BtGenericEdit" name="lineEdit_abv">
+       <widget class="SmartLineEdit" name="lineEdit_abv">
         <property name="maximumSize">
          <size>
           <width>128</width>
@@ -253,7 +232,7 @@
        </widget>
       </item>
       <item row="6" column="1">
-       <widget class="BtGenericEdit" name="lineEdit_abw">
+       <widget class="SmartLineEdit" name="lineEdit_abw">
         <property name="maximumSize">
          <size>
           <width>128</width>
@@ -286,7 +265,7 @@
        </widget>
       </item>
       <item row="4" column="1">
-       <widget class="BtDensityEdit" name="lineEdit_re">
+       <widget class="SmartLineEdit" name="lineEdit_re">
         <property name="maximumSize">
          <size>
           <width>128</width>
@@ -295,9 +274,6 @@
         </property>
         <property name="readOnly">
          <bool>true</bool>
-        </property>
-        <property name="forcedSystemOfMeasurement" stdset="0">
-         <string notr="true">Plato</string>
         </property>
        </widget>
       </item>
@@ -312,7 +288,7 @@
        </widget>
       </item>
       <item row="2" column="1">
-       <widget class="BtDensityEdit" name="lineEdit_og">
+       <widget class="SmartLineEdit" name="lineEdit_og">
         <property name="maximumSize">
          <size>
           <width>128</width>
@@ -321,9 +297,6 @@
         </property>
         <property name="readOnly">
          <bool>true</bool>
-        </property>
-        <property name="forcedSystemOfMeasurement" stdset="0">
-         <string notr="true">SpecificGravity</string>
         </property>
        </widget>
       </item>
@@ -334,17 +307,12 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>BtDensityEdit</class>
+   <class>SmartLineEdit</class>
    <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
+   <header>widgets/SmartLineEdit.h</header>
    <slots>
     <slot>lineChanged(PreviousScaleInfo)</slot>
    </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtGenericEdit</class>
-   <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

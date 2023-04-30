@@ -39,6 +39,18 @@ HopEditor::HopEditor(QWidget * parent) :
 
    this->tabWidget_editor->tabBar()->setStyle(new BtHorizontalTabs);
 
+   SMART_FIELD_INIT(HopEditor, label_name                 , lineEdit_name                 , Hop, PropertyNames::NamedEntity::name            );
+   SMART_FIELD_INIT(HopEditor, label_alpha                , lineEdit_alpha                , Hop, PropertyNames::Hop::alpha_pct            , 0);
+   SMART_FIELD_INIT(HopEditor, label_inventory            , lineEdit_inventory            , Hop, PropertyNames::Hop::amount_kg               );
+   SMART_FIELD_INIT(HopEditor, label_time                 , lineEdit_time                 , Hop, PropertyNames::Hop::time_min             , 0);
+   SMART_FIELD_INIT(HopEditor, label_beta                 , lineEdit_beta                 , Hop, PropertyNames::Hop::beta_pct             , 0);
+   SMART_FIELD_INIT(HopEditor, label_HSI                  , lineEdit_HSI                  , Hop, PropertyNames::Hop::hsi_pct              , 0);
+   SMART_FIELD_INIT(HopEditor, label_origin               , lineEdit_origin               , Hop, PropertyNames::Hop::origin                  );
+   SMART_FIELD_INIT(HopEditor, label_humulene             , lineEdit_humulene             , Hop, PropertyNames::Hop::humulene_pct         , 0);
+   SMART_FIELD_INIT(HopEditor, label_caryophyllene        , lineEdit_caryophyllene        , Hop, PropertyNames::Hop::caryophyllene_pct    , 0);
+   SMART_FIELD_INIT(HopEditor, label_cohumulone           , lineEdit_cohumulone           , Hop, PropertyNames::Hop::cohumulone_pct       , 0);
+   SMART_FIELD_INIT(HopEditor, label_myrcene              , lineEdit_myrcene              , Hop, PropertyNames::Hop::myrcene_pct          , 0);
+
    //
    // According to https://bugreports.qt.io/browse/QTBUG-50823 it is never going to be possible to specify the data (as
    // opposed to display text) for a combo box via the .ui file.  So we have to do it in code instead.
@@ -60,9 +72,9 @@ HopEditor::HopEditor(QWidget * parent) :
    this->comboBox_hopUse->addItem(tr("Post-Boil" ), Hop::useStringMapping.enumToString(Hop::Use::Aroma     ));
    this->comboBox_hopUse->addItem(tr("Dry Hop"   ), Hop::useStringMapping.enumToString(Hop::Use::Dry_Hop   ));
 
-   connect(pushButton_new, SIGNAL(clicked()), this, SLOT(newHop()));
-   connect(pushButton_save,   &QAbstractButton::clicked, this, &HopEditor::save);
-   connect(pushButton_cancel, &QAbstractButton::clicked, this, &HopEditor::clearAndClose);
+   connect(this->pushButton_new,    &QAbstractButton::clicked, this, &HopEditor::clickedNewHop);
+   connect(this->pushButton_save,   &QAbstractButton::clicked, this, &HopEditor::save);
+   connect(this->pushButton_cancel, &QAbstractButton::clicked, this, &HopEditor::clearAndClose);
 
    return;
 }
@@ -88,9 +100,18 @@ void HopEditor::save() {
       return;
    }
 
-   this->obsHop->setName(lineEdit_name->text());
-   this->obsHop->setAlpha_pct(lineEdit_alpha->toCanonical().quantity());
-   this->obsHop->setTime_min(lineEdit_time->toCanonical().quantity());
+   this->obsHop->setName             (this->lineEdit_name         ->text                  ());
+   this->obsHop->setAlpha_pct        (this->lineEdit_alpha        ->getValueAs<double>    ());
+   this->obsHop->setTime_min         (this->lineEdit_time         ->toCanonical().quantity());
+   this->obsHop->setBeta_pct         (this->lineEdit_beta         ->getValueAs<double>    ());
+   this->obsHop->setHsi_pct          (this->lineEdit_HSI          ->getValueAs<double>    ());
+   this->obsHop->setOrigin           (this->lineEdit_origin       ->text                  ());
+   this->obsHop->setHumulene_pct     (this->lineEdit_humulene     ->getValueAs<double>    ());
+   this->obsHop->setCaryophyllene_pct(this->lineEdit_caryophyllene->getValueAs<double>    ());
+   this->obsHop->setCohumulone_pct   (this->lineEdit_cohumulone   ->getValueAs<double>    ());
+   this->obsHop->setMyrcene_pct      (this->lineEdit_myrcene      ->getValueAs<double>    ());
+   this->obsHop->setSubstitutes      (this->textEdit_substitutes  ->toPlainText           ());
+   this->obsHop->setNotes            (this->textEdit_notes        ->toPlainText           ());
 
    //
    // It's a coding error if we don't recognise the values in our own combo boxes, so it's OK that we'd get a
@@ -99,16 +120,6 @@ void HopEditor::save() {
    this->obsHop->setType(Hop::typeStringMapping.stringToEnum<Hop::Type>(comboBox_hopType->currentData().toString()));
    this->obsHop->setForm(Hop::formStringMapping.stringToEnum<Hop::Form>(comboBox_hopForm->currentData().toString()));
    this->obsHop->setUse (Hop::useStringMapping.stringToEnum<Hop::Use>  (comboBox_hopUse->currentData().toString()));
-
-   this->obsHop->setBeta_pct         (lineEdit_beta         ->toCanonical().quantity());
-   this->obsHop->setHsi_pct          (lineEdit_HSI          ->toCanonical().quantity());
-   this->obsHop->setOrigin           (lineEdit_origin       ->text()           );
-   this->obsHop->setHumulene_pct     (lineEdit_humulene     ->toCanonical().quantity());
-   this->obsHop->setCaryophyllene_pct(lineEdit_caryophyllene->toCanonical().quantity());
-   this->obsHop->setCohumulone_pct   (lineEdit_cohumulone   ->toCanonical().quantity());
-   this->obsHop->setMyrcene_pct      (lineEdit_myrcene      ->toCanonical().quantity());
-   this->obsHop->setSubstitutes      (textEdit_substitutes  ->toPlainText()    );
-   this->obsHop->setNotes            (textEdit_notes        ->toPlainText()    );
 
    if (this->obsHop->key() < 0) {
       ObjectStoreWrapper::insert(*this->obsHop);
@@ -172,19 +183,22 @@ void HopEditor::showChanges(QMetaProperty * prop) {
          return;
       }
    }
-   if (updateAll || propName == PropertyNames::NamedEntity::name     ) { lineEdit_name         ->setText(obsHop->name());   lineEdit_name  ->setCursorPosition(0); tabWidget_editor->setTabText(0, obsHop->name()); if (!updateAll) { return; } }
-   if (updateAll || propName == PropertyNames::Hop::origin           ) { lineEdit_origin       ->setText(obsHop->origin()); lineEdit_origin->setCursorPosition(0); if (!updateAll) { return; } }
-   if (updateAll || propName == PropertyNames::Hop::alpha_pct        ) { lineEdit_alpha        ->setText(obsHop); if (!updateAll) { return; } }
-   if (updateAll || propName == PropertyNames::Hop::time_min         ) { lineEdit_time         ->setText(obsHop); if (!updateAll) { return; } }
-   if (updateAll || propName == PropertyNames::Hop::beta_pct         ) { lineEdit_beta         ->setText(obsHop); if (!updateAll) { return; } }
-   if (updateAll || propName == PropertyNames::Hop::hsi_pct          ) { lineEdit_HSI          ->setText(obsHop); if (!updateAll) { return; } }
-   if (updateAll || propName == PropertyNames::Hop::humulene_pct     ) { lineEdit_humulene     ->setText(obsHop); if (!updateAll) { return; } }
-   if (updateAll || propName == PropertyNames::Hop::caryophyllene_pct) { lineEdit_caryophyllene->setText(obsHop); if (!updateAll) { return; } }
-   if (updateAll || propName == PropertyNames::Hop::cohumulone_pct   ) { lineEdit_cohumulone   ->setText(obsHop); if (!updateAll) { return; } }
-   if (updateAll || propName == PropertyNames::Hop::myrcene_pct      ) { lineEdit_myrcene      ->setText(obsHop); if (!updateAll) { return; } }
-   if (updateAll || propName == PropertyNames::Hop::substitutes      ) { textEdit_substitutes  ->setPlainText(obsHop->substitutes()); if (!updateAll) { return; }}
-   if (updateAll || propName == PropertyNames::Hop::notes            ) { textEdit_notes        ->setPlainText(obsHop->notes());       if (!updateAll) { return; } }
-   if (updateAll || propName == PropertyNames::NamedEntityWithInventory::inventory) { lineEdit_inventory->setText(obsHop); if (!updateAll) { return; } }
+   if (updateAll || propName == PropertyNames::NamedEntity::name                  ) { this->lineEdit_name                 ->setText     (obsHop->name                 ()); // Continues to next line
+                                                                                      this->lineEdit_name                 ->setCursorPosition(0);                          // Continues to next line
+                                                                                      this->tabWidget_editor              ->setTabText(0, obsHop->name());                 if (!updateAll) { return; } }
+   if (updateAll || propName == PropertyNames::Hop::origin                        ) { this->lineEdit_origin               ->setText     (obsHop->origin               ()); // Continues to next line
+                                                                                      this->lineEdit_origin               ->setCursorPosition(0);                          if (!updateAll) { return; } }
+   if (updateAll || propName == PropertyNames::Hop::alpha_pct                     ) { this->lineEdit_alpha                ->setAmount   (obsHop->alpha_pct            ()); if (!updateAll) { return; } }
+   if (updateAll || propName == PropertyNames::Hop::time_min                      ) { this->lineEdit_time                 ->setAmount   (obsHop->time_min             ()); if (!updateAll) { return; } }
+   if (updateAll || propName == PropertyNames::Hop::beta_pct                      ) { this->lineEdit_beta                 ->setAmount   (obsHop->beta_pct             ()); if (!updateAll) { return; } }
+   if (updateAll || propName == PropertyNames::Hop::hsi_pct                       ) { this->lineEdit_HSI                  ->setAmount   (obsHop->hsi_pct              ()); if (!updateAll) { return; } }
+   if (updateAll || propName == PropertyNames::Hop::humulene_pct                  ) { this->lineEdit_humulene             ->setAmount   (obsHop->humulene_pct         ()); if (!updateAll) { return; } }
+   if (updateAll || propName == PropertyNames::Hop::caryophyllene_pct             ) { this->lineEdit_caryophyllene        ->setAmount   (obsHop->caryophyllene_pct    ()); if (!updateAll) { return; } }
+   if (updateAll || propName == PropertyNames::Hop::cohumulone_pct                ) { this->lineEdit_cohumulone           ->setAmount   (obsHop->cohumulone_pct       ()); if (!updateAll) { return; } }
+   if (updateAll || propName == PropertyNames::Hop::myrcene_pct                   ) { this->lineEdit_myrcene              ->setAmount   (obsHop->myrcene_pct          ()); if (!updateAll) { return; } }
+   if (updateAll || propName == PropertyNames::Hop::substitutes                   ) { this->textEdit_substitutes          ->setPlainText(obsHop->substitutes          ()); if (!updateAll) { return; } }
+   if (updateAll || propName == PropertyNames::Hop::notes                         ) { this->textEdit_notes                ->setPlainText(obsHop->notes                ()); if (!updateAll) { return; } }
+   if (updateAll || propName == PropertyNames::NamedEntityWithInventory::inventory) { this->lineEdit_inventory            ->setAmount   (obsHop->inventory            ()); if (!updateAll) { return; } }
 
    return;
 }
@@ -208,7 +222,7 @@ void HopEditor::newHop(QString folder) {
    return;
 }
 
-void HopEditor::newHop() {
+void HopEditor::clickedNewHop() {
    newHop(QString());
    return;
 }

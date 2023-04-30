@@ -43,6 +43,7 @@
 
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
+// See comment in model/NamedEntity.h
 #define AddPropertyName(property) namespace PropertyNames::Recipe { BtStringConst const property{#property}; }
 AddPropertyName(ABV_pct           )
 AddPropertyName(age_days          )
@@ -134,7 +135,9 @@ class Recipe : public NamedEntity {
    Q_OBJECT
    Q_CLASSINFO("signal", "recipes")
 
+   // .:TODO:. Would be good to eliminate all these friend declarations, or at least to document why they are needed
    friend class MainWindow;
+
 public:
    /**
     * \brief Mapping of names to types for the Qt properties of this class.  See \c NamedEntity::typeLookup for more
@@ -177,7 +180,10 @@ public:
    Q_PROPERTY(QString notes READ notes WRITE setNotes /*NOTIFY changed*/ /*changedNotes*/)
    //! \brief The tasting notes.
    Q_PROPERTY(QString tasteNotes READ tasteNotes WRITE setTasteNotes /*NOTIFY changed*/ /*changedTasteNotes*/)
-   //! \brief The taste rating.
+   /** \brief Decimal number between zero and 50.0 denoting the taste rating – corresponds to the 50 point BJCP rating
+    *         system.
+    *         .:TBD:. This is stored as a double but the UI constrains it to an unsigned int.
+    */
    Q_PROPERTY(double tasteRating READ tasteRating WRITE setTasteRating /*NOTIFY changed*/ /*changedTasteRating*/)
    //! \brief The number of fermentation stages.
    Q_PROPERTY(int fermentationStages READ fermentationStages WRITE setFermentationStages /*NOTIFY changed*/ /*changedFermentationStages*/)
@@ -229,7 +235,7 @@ public:
    Q_PROPERTY(double ABV_pct READ ABV_pct /*WRITE*/ /*NOTIFY changed*/ /*changedABV*/ STORED false)
    //! \brief The calculated color in SRM.
    Q_PROPERTY(double color_srm READ color_srm /*WRITE*/ /*NOTIFY changed*/ /*changedColor_srm*/ STORED false)
-   //! \brief The calculated boil gravity.
+   //! \brief The calculated boil gravity. .:TBD:. This should perhaps be renamed boilSg for consistency
    Q_PROPERTY(double boilGrav READ boilGrav /*WRITE*/ /*NOTIFY changed*/ /*changedBoilGrav*/ STORED false)
    //! \brief The calculated IBUs.
    Q_PROPERTY(double IBU READ IBU /*WRITE*/ /*NOTIFY changed*/ /*changedIBU*/)

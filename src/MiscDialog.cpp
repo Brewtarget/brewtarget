@@ -1,6 +1,6 @@
 /*
  * MiscDialog.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2023
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -39,8 +39,7 @@ MiscDialog::MiscDialog(MainWindow* parent) :
    QDialog(parent),
    mainWindow(parent),
    numMiscs(0),
-   miscEdit(new MiscEditor(this))
-{
+   miscEdit(new MiscEditor(this)) {
    doLayout();
 
    miscTableModel = new MiscTableModel(tableWidget, false);
@@ -49,22 +48,24 @@ MiscDialog::MiscDialog(MainWindow* parent) :
    miscTableProxy->setSourceModel(miscTableModel);
    tableWidget->setModel(miscTableProxy);
    tableWidget->setSortingEnabled(true);
-   tableWidget->sortByColumn( MISCNAMECOL, Qt::AscendingOrder );
+   tableWidget->sortByColumn(static_cast<int>(MiscTableModel::ColumnIndex::Name), Qt::AscendingOrder);
    miscTableProxy->setDynamicSortFilter(true);
    miscTableProxy->setFilterKeyColumn(1);
 
-   connect( pushButton_addToRecipe, SIGNAL( clicked() ), this, SLOT( addMisc() ) );
-   connect( pushButton_new, SIGNAL(clicked()), this, SLOT( newMisc() ) );
-   connect( pushButton_edit, &QAbstractButton::clicked, this, &MiscDialog::editSelected );
-   connect( pushButton_remove, &QAbstractButton::clicked, this, &MiscDialog::removeMisc );
-   connect( tableWidget, &QAbstractItemView::doubleClicked, this, &MiscDialog::addMisc );
-   connect( qLineEdit_searchBox, &QLineEdit::textEdited, this, &MiscDialog::filterMisc);
+   // Note, per https://wiki.qt.io/New_Signal_Slot_Syntax#Default_arguments_in_slot, the use of a trivial lambda
+   // function to allow use of default argument on newHop() slot
+///   connect(this->pushButton_addToRecipe, &QAbstractButton::clicked,         this, &MiscDialog::addMisc     ); .:TODO:. Work out what this is supposed to do!
+   connect(this->pushButton_new,         &QAbstractButton::clicked,         this, [this]() { this->newMisc(); return; } );
+   connect(this->pushButton_edit,        &QAbstractButton::clicked,         this, &MiscDialog::editSelected);
+   connect(this->pushButton_remove,      &QAbstractButton::clicked,         this, &MiscDialog::removeMisc  );
+   connect(this->tableWidget,            &QAbstractItemView::doubleClicked, this, &MiscDialog::addMisc     );
+   connect(this->qLineEdit_searchBox,    &QLineEdit::textEdited,            this, &MiscDialog::filterMisc  );
 
    miscTableModel->observeDatabase(true);
+   return;
 }
 
-void MiscDialog::doLayout()
-{
+void MiscDialog::doLayout() {
    resize(800, 300);
    verticalLayout = new QVBoxLayout(this);
       tableWidget = new QTableView(this);
@@ -103,10 +104,10 @@ void MiscDialog::doLayout()
 
    retranslateUi();
    QMetaObject::connectSlotsByName(this);
+   return;
 }
 
-void MiscDialog::retranslateUi()
-{
+void MiscDialog::retranslateUi() {
    setWindowTitle(tr("Misc Database"));
    pushButton_addToRecipe->setText(tr("Add to Recipe"));
    pushButton_new->setText(tr("New"));
@@ -118,23 +119,23 @@ void MiscDialog::retranslateUi()
    pushButton_edit->setToolTip(tr("Edit selected ingredient"));
    pushButton_remove->setToolTip(tr("Remove selected ingredient"));
 #endif // QT_NO_TOOLTIP
+   return;
 }
 
-void MiscDialog::removeMisc()
-{
+void MiscDialog::removeMisc() {
    QModelIndexList selected = tableWidget->selectionModel()->selectedIndexes();
-   int row, size, i;
 
-   size = selected.size();
-   if( size == 0 )
+   int size = selected.size();
+   if( size == 0 ) {
       return;
+   }
 
    // Make sure only one row is selected.
-   row = selected[0].row();
-   for( i = 1; i < size; ++i )
-   {
-      if( selected[i].row() != row )
+   int row = selected[0].row();
+   for (int i = 1; i < size; ++i ) {
+      if( selected[i].row() != row ) {
          return;
+      }
    }
 
    auto m = miscTableModel->getRow(miscTableProxy->mapToSource(selected[0]).row());
@@ -142,39 +143,37 @@ void MiscDialog::removeMisc()
    return;
 }
 
-void MiscDialog::addMisc(const QModelIndex& index)
-{
+void MiscDialog::addMisc(const QModelIndex& index) {
    QModelIndex translated;
 
-   if( !index.isValid() )
-   {
+   if ( !index.isValid() ) {
       QModelIndexList selected = tableWidget->selectionModel()->selectedIndexes();
       int row, size, i;
 
       size = selected.size();
-      if( size == 0 )
+      if( size == 0 ) {
          return;
+      }
 
       // Make sure only one row is selected.
       row = selected[0].row();
-      for( i = 1; i < size; ++i )
-      {
-         if( selected[i].row() != row )
+      for( i = 1; i < size; ++i ) {
+         if( selected[i].row() != row ) {
             return;
+         }
       }
 
       // Always need to translate indices through the proxy
       translated = miscTableProxy->mapToSource(selected[0]);
-   }
-   else
-   {
+   } else {
       // Only respond if the name is selected. Since we connect to double-click signal,
       // this keeps us from adding something to the recipe when we just want to edit
       // one of the other columns.
-      if( index.column() == MISCNAMECOL )
+      if (static_cast<MiscTableModel::ColumnIndex>(index.column()) == MiscTableModel::ColumnIndex::Name) {
          translated = miscTableProxy->mapToSource(index);
-      else
+      } else {
          return;
+      }
    }
 
    MainWindow::instance().addMiscToRecipe(miscTableModel->getRow(translated.row()));
@@ -205,13 +204,7 @@ void MiscDialog::editSelected()
    return;
 }
 
-void MiscDialog::newMisc()
-{
-   newMisc(QString());
-}
-
-void MiscDialog::newMisc(QString folder)
-{
+void MiscDialog::newMisc(QString folder) {
    QString name = QInputDialog::getText(this, tr("Misc name"),
                                               tr("Misc name:"));
    if(name.isEmpty())
@@ -223,10 +216,19 @@ void MiscDialog::newMisc(QString folder)
 
    miscEdit->setMisc(m);
    miscEdit->show();
+   return;
 }
 
-void MiscDialog::filterMisc(QString searchExpression)
-{
+void MiscDialog::filterMisc(QString searchExpression) {
     miscTableProxy->setFilterCaseSensitivity(Qt::CaseInsensitive);
     miscTableProxy->setFilterFixedString(searchExpression);
+   return;
+}
+
+void MiscDialog::changeEvent(QEvent* event) {
+   if(event->type() == QEvent::LanguageChange) {
+      retranslateUi();
+   }
+   QDialog::changeEvent(event);
+   return;
 }

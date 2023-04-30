@@ -507,22 +507,22 @@
     <name>BtDigitWidget</name>
     <message>
         <source>Too low for style.</source>
-        <translation>Слишком низко для стиля.</translation>
+        <translation type="vanished">Слишком низко для стиля.</translation>
     </message>
     <message>
         <source>In range for style.</source>
-        <translation>В пределах стиля.</translation>
+        <translation type="vanished">В пределах стиля.</translation>
     </message>
     <message>
         <source>Too high for style.</source>
-        <translation>Слишком высоко для стиля.</translation>
+        <translation type="vanished">Слишком высоко для стиля.</translation>
     </message>
 </context>
 <context>
     <name>BtLabel</name>
     <message>
         <source>Color (%1)</source>
-        <translation>Цвет (%1)</translation>
+        <translation type="vanished">Цвет (%1)</translation>
     </message>
 </context>
 <context>
@@ -1245,43 +1245,31 @@ Log file may contain more details.</source>
     <name>FermentableItemDelegate</name>
     <message>
         <source>Grain</source>
-        <translation>Солод</translation>
+        <translation type="vanished">Солод</translation>
     </message>
     <message>
         <source>Sugar</source>
-        <translation>Сахар</translation>
+        <translation type="vanished">Сахар</translation>
     </message>
     <message>
         <source>Extract</source>
-        <translation>Экстракт</translation>
+        <translation type="vanished">Экстракт</translation>
     </message>
     <message>
         <source>Dry Extract</source>
-        <translation>Сухой экстракт</translation>
+        <translation type="vanished">Сухой экстракт</translation>
     </message>
     <message>
         <source>Adjunct</source>
-        <translation>Дополнение</translation>
+        <translation type="vanished">Дополнение</translation>
     </message>
     <message>
         <source>Mashed</source>
-        <translation type="unfinished">Затёрто</translation>
-    </message>
-    <message>
-        <source>Steeped</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Not mashed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Normal</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Затёрто</translation>
     </message>
     <message>
         <source>Late</source>
-        <translation type="unfinished">Поздно</translation>
+        <translation type="obsolete">Поздно</translation>
     </message>
 </context>
 <context>
@@ -1339,14 +1327,6 @@ Log file may contain more details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Change Addition Method</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Change Addition Time</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Change Yield</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1356,6 +1336,18 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Change Fermentable Inventory Amount</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Fermentable Is Mashed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Add After Boil</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1465,51 +1457,35 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Bittering</source>
-        <translation type="unfinished">Горечь</translation>
+        <translation type="obsolete">Горечь</translation>
     </message>
     <message>
         <source>Aroma</source>
-        <translation type="unfinished">Аромат</translation>
-    </message>
-    <message>
-        <source>Aroma &amp; Bittering</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Аромат</translation>
     </message>
     <message>
         <source>Extract</source>
         <translation type="obsolete">Экстракт</translation>
     </message>
     <message>
-        <source>Leaf</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Pellet</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Plug</source>
-        <translation type="unfinished">Пробка</translation>
+        <translation type="obsolete">Пробка</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished">Затор</translation>
+        <translation type="obsolete">Затор</translation>
     </message>
     <message>
         <source>First Wort</source>
-        <translation type="unfinished">Первое сусло</translation>
+        <translation type="obsolete">Первое сусло</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation type="unfinished">Кипячение</translation>
-    </message>
-    <message>
-        <source>Post-Boil</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Кипячение</translation>
     </message>
     <message>
         <source>Dry Hop</source>
-        <translation type="unfinished">Сухое охмеление</translation>
+        <translation type="obsolete">Сухое охмеление</translation>
     </message>
 </context>
 <context>
@@ -2822,55 +2798,55 @@ Error message:
     </message>
     <message>
         <source>Ale</source>
-        <translation>Эль</translation>
+        <translation type="vanished">Эль</translation>
     </message>
     <message>
         <source>Lager</source>
-        <translation>Лагер</translation>
+        <translation type="vanished">Лагер</translation>
     </message>
     <message>
         <source>Wheat</source>
-        <translation>Пшеница</translation>
+        <translation type="vanished">Пшеница</translation>
     </message>
     <message>
         <source>Wine</source>
-        <translation>Вино</translation>
+        <translation type="vanished">Вино</translation>
     </message>
     <message>
         <source>Champagne</source>
-        <translation>Шампанское</translation>
+        <translation type="vanished">Шампанское</translation>
     </message>
     <message>
         <source>Liquid</source>
-        <translation>Жидкость</translation>
+        <translation type="vanished">Жидкость</translation>
     </message>
     <message>
         <source>Dry</source>
-        <translation>Сухой</translation>
+        <translation type="vanished">Сухой</translation>
     </message>
     <message>
         <source>Slant</source>
-        <translation>Уклон</translation>
+        <translation type="vanished">Уклон</translation>
     </message>
     <message>
         <source>Culture</source>
-        <translation>Культура</translation>
+        <translation type="vanished">Культура</translation>
     </message>
     <message>
         <source>Low</source>
-        <translation>Низкий</translation>
+        <translation type="vanished">Низкий</translation>
     </message>
     <message>
         <source>Medium</source>
-        <translation>Средний</translation>
+        <translation type="vanished">Средний</translation>
     </message>
     <message>
         <source>High</source>
-        <translation>Высокий</translation>
+        <translation type="vanished">Высокий</translation>
     </message>
     <message>
         <source>Very High</source>
-        <translation>Очень высокий</translation>
+        <translation type="vanished">Очень высокий</translation>
     </message>
     <message>
         <source>Recipes</source>
@@ -3353,6 +3329,22 @@ Error message:
     <message>
         <source>J/kg·K</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Late</source>
+        <translation type="unfinished">Поздно</translation>
+    </message>
+    <message>
+        <source>Not mashed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mashed</source>
+        <translation type="unfinished">Затёрто</translation>
+    </message>
+    <message>
+        <source>Weight</source>
+        <translation type="unfinished">Вес</translation>
     </message>
 </context>
 <context>
@@ -4074,10 +4066,6 @@ The final volume in the primary is %1.</source>
         <source>% Acid</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Bad column: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>ScaleRecipeEquipmentPage</name>
@@ -4118,6 +4106,21 @@ The final volume in the primary is %1.</source>
     <message>
         <source>The equipment and mash have been reset due to the fact that mash temperatures do not scale easily. Please re-run the mash wizard.</source>
         <translation>Оборудование и затор были сброшены т.к. температура затора не маштабируется. Пожалуйсто перезапустите визард затора.</translation>
+    </message>
+</context>
+<context>
+    <name>SmartDigitWidget</name>
+    <message>
+        <source>Too low for style.</source>
+        <translation type="unfinished">Слишком низко для стиля.</translation>
+    </message>
+    <message>
+        <source>In range for style.</source>
+        <translation type="unfinished">В пределах стиля.</translation>
+    </message>
+    <message>
+        <source>Too high for style.</source>
+        <translation type="unfinished">Слишком высоко для стиля.</translation>
     </message>
 </context>
 <context>
@@ -4482,6 +4485,61 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Could not understand file format</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Yeast</name>
+    <message>
+        <source>Ale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lager</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wheat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Champagne</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Liquid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dry</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Slant</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Culture</source>
+        <translation type="unfinished">Культура</translation>
+    </message>
+    <message>
+        <source>Low</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Medium</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>High</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Very High</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -5004,19 +5062,7 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Required</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>boilSize_l</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>batchSize_l</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5036,35 +5082,15 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished">Скорость испарения (в час)</translation>
     </message>
     <message>
-        <source>evapRate_lHr</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Final top-up water</source>
         <translation type="unfinished">Доливаемая в сусловарник вода</translation>
-    </message>
-    <message>
-        <source>topUpWater_l</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Kettle top-up water</source>
         <translation type="unfinished">Доливка воды в котёл</translation>
     </message>
     <message>
-        <source>topUpKettle_l</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Kettle to Fermenter Loss</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>trubChillerLoss_l</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>lauterDeadspace_l</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5084,10 +5110,6 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>grainAbsorption_LKg</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Boiling Point of Water</source>
         <translation type="unfinished">Точка кипения воды</translation>
     </message>
@@ -5104,23 +5126,7 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished">Объём заторника</translation>
     </message>
     <message>
-        <source>hopUtilization_pct</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>boilingPoint_c</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>tunWeight_kg</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Specific Heat (Cal/(g*C))</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>tunSpecificHeat_calGC</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5160,23 +5166,23 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Grain</source>
-        <translation>Солод</translation>
+        <translation type="vanished">Солод</translation>
     </message>
     <message>
         <source>Sugar</source>
-        <translation>Сахар</translation>
+        <translation type="vanished">Сахар</translation>
     </message>
     <message>
         <source>Extract</source>
-        <translation>Экстракт</translation>
+        <translation type="vanished">Экстракт</translation>
     </message>
     <message>
         <source>Dry Extract</source>
-        <translation>Сухой экстракт</translation>
+        <translation type="vanished">Сухой экстракт</translation>
     </message>
     <message>
         <source>Adjunct</source>
-        <translation>Дополнение</translation>
+        <translation type="vanished">Дополнение</translation>
     </message>
     <message>
         <source>Amount</source>
@@ -5303,10 +5309,6 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Yield %</source>
         <translation type="unfinished">Выход %</translation>
     </message>
@@ -5315,15 +5317,7 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished">Дополнительно</translation>
     </message>
     <message>
-        <source>origin</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Diastatic power</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>supplier</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5340,6 +5334,10 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Discard and close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fermantable Type</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -7612,26 +7610,6 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>styleLetter</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>styleGuide</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>categoryNumber</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>category</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Ranges</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7737,31 +7715,11 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>nappm</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Ca</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>so4ppm</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Mg</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>cappm</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>ph</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>hco3ppm</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -7781,14 +7739,6 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>mgppm</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>clppm</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>HCO&lt;sub&gt;3&lt;/sub&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7801,15 +7751,7 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>cacl</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>MgSO&lt;sub&gt;4&lt;/sub&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>mgso4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -7817,15 +7759,7 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>caco3</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>NaCl</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>nacl</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -7833,15 +7767,7 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>caso4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>NaHCO&lt;sub&gt;3&lt;/sub&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>nahco3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -7873,6 +7799,14 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Edit Water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alkalinity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alkalinity measured as</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

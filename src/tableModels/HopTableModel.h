@@ -1,6 +1,6 @@
 /*
  * HopTableModel.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2023
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
@@ -39,8 +39,6 @@ class BtStringConst;
 class HopTableModel;
 class HopItemDelegate;
 
-enum{HOPNAMECOL, HOPALPHACOL, HOPAMOUNTCOL, HOPINVENTORYCOL, HOPFORMCOL, HOPUSECOL, HOPTIMECOL, HOPNUMCOLS /*This one MUST be last*/};
-
 /*!
  * \class HopTableModel
  *
@@ -50,8 +48,21 @@ class HopTableModel : public BtTableModelInventory, public BtTableModelData<Hop>
    Q_OBJECT
 
 public:
+   enum class ColumnIndex {
+      Name     ,
+      Alpha    ,
+      Amount   ,
+      Inventory,
+      Form     ,
+      Use      ,
+      Time     ,
+   };
+
    HopTableModel(QTableView* parent=nullptr, bool editable=true);
    virtual ~HopTableModel();
+
+   //! \brief Casting wrapper for \c BtTableModel::getColumnInfo
+   ColumnInfo const & getColumnInfo(ColumnIndex const columnIndex) const;
 
    //! \brief Observe a recipe's list of fermentables.
    void observeRecipe(Recipe* rec);

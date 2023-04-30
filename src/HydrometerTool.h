@@ -1,6 +1,6 @@
 /*
  * HydrometerTool.h is part of Brewtarget, and is Copyright the following
- * authors 2016-2021
+ * authors 2016-2023
  * - Matt Young <mfsy@yahoo.com>
  * - Ryan Hoobler (rhoob@yahoo.com)
  *
@@ -23,36 +23,32 @@
 
 #include <QDialog>
 
+#include "widgets/SmartLabel.h"
+#include "widgets/SmartLineEdit.h"
+
 class QEvent;
 class QGroupBox;
 class QPushButton;
 class QWidget;
 
-
-#include "BtLabel.h"
-#include "BtLineEdit.h"
-
-
 class HydrometerTool : public QDialog {
    Q_OBJECT
 public:
-
    HydrometerTool(QWidget* parent = nullptr);
 
    //! \name Public UI Variables
    //! @{
-   QPushButton* pushButton_convert;
-   BtDensityLabel* label_inputSg;
-   BtDensityEdit* lineEdit_inputSg;
-   BtDensityLabel* label_outputSg;
-   BtLineEdit* lineEdit_outputSg;
+   QPushButton   * pushButton_convert;
+   SmartLabel    * label_inputSg;
+   SmartLineEdit * lineEdit_inputSg;
+   SmartLabel    * label_outputSg;
+   SmartLineEdit * lineEdit_outputSg;
 
-
-   BtTemperatureLabel *label_inputTemp;
-   BtTemperatureEdit *lineEdit_inputTemp;
-   BtTemperatureLabel *label_calibratedTemp;
-   BtTemperatureEdit *lineEdit_calibratedTemp;
-   QGroupBox *groupBox_inputSg;
+   SmartLabel    * label_inputTemp;
+   SmartLineEdit * lineEdit_inputTemp;
+   SmartLabel    * label_calibratedTemp;
+   SmartLineEdit * lineEdit_calibratedTemp;
+   QGroupBox     * groupBox_inputSg;
    //! @}
 
 public slots:

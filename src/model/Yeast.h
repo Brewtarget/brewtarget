@@ -32,6 +32,7 @@
 
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
+// See comment in model/NamedEntity.h
 #define AddPropertyName(property) namespace PropertyNames::Yeast { BtStringConst const property{#property}; }
 AddPropertyName(addToSecondary    )
 AddPropertyName(amount            )

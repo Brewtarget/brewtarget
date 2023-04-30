@@ -117,7 +117,6 @@ namespace {
    };
    QMultiMap<NameLookupKey, Measurement::Unit const *> unitNameLookup;
 
-   // NB: There is no canonical unit for Measurement::PhysicalQuantity::Mixed
    QMap<Measurement::PhysicalQuantity, Measurement::Unit const *> physicalQuantityToCanonicalUnit;
 
    /**
@@ -478,19 +477,19 @@ namespace Measurement::Units {
    // Per https://en.wikipedia.org/wiki/Beer_measurement, Plato and Brix are "essentially ... the same ([both based on
    // mass fraction of sucrose) [and only] differ in their conversion from weight percentage to specific gravity in the
    // fifth and sixth decimal places"
-   Unit const sp_grav             {Measurement::UnitSystems::density_SpecificGravity,             QObject::tr("sg"),       [](double x){return x;},               [](double y){return y;},                1.0};
+   Unit const specificGravity             {Measurement::UnitSystems::density_SpecificGravity,             QObject::tr("sg"),       [](double x){return x;},               [](double y){return y;},                1.0};
    Unit const plato               {Measurement::UnitSystems::density_Plato,
                                    QObject::tr("P"),
                                           [](double x){return x == 0.0 ? 0.0 : Algorithms::PlatoToSG_20C20C(x);},
                                           [](double y){return y == 0.0 ? 0.0 : Algorithms::SG_20C20C_toPlato(y);},
                                           1.0,
-                                          &sp_grav};
+                                          &specificGravity};
    Unit const brix                {Measurement::UnitSystems::density_Brix,
                                    QObject::tr("brix"),
                                    [](double x){return x == 0.0 ? 0.0 : Algorithms::BrixToSgAt20C(x);},
                                    [](double y){return y == 0.0 ? 0.0 : Algorithms::SgAt20CToBrix(y);},
                                    1.0,
-                                   &sp_grav};
+                                   &specificGravity};
    // == Diastatic power ==
    Unit const lintner             {Measurement::UnitSystems::diastaticPower_Lintner,                  QObject::tr("L"),    [](double x){return x;},               [](double y){return y;},                1.0};
    Unit const wk                  {Measurement::UnitSystems::diastaticPower_WindischKolbach,          QObject::tr("WK"),   [](double x){return (x + 16) / 3.5;},  [](double y){return 3.5 * y - 16;},     1.0,  &lintner};
@@ -506,12 +505,13 @@ namespace Measurement::Units {
    // 1.96, so we use that.
    Unit const carbonationVolumes      {Measurement::UnitSystems::carbonation_Volumes,                 QObject::tr("vol"),  [](double x){return x;},               [](double y){return y;},                1.0};
    Unit const carbonationGramsPerLiter{Measurement::UnitSystems::carbonation_MassPerVolume,           QObject::tr("mg/L"), [](double x){return x / 1.96;},        [](double y){return y * 1.96;},         1.0,  &carbonationVolumes};
-   // == Concentration ==
+   // == Mass Concentration ==
    Unit const milligramsPerLiter  {Measurement::UnitSystems::concentration_MassPerVolume,             QObject::tr("mg/L"), [](double x){return x;},               [](double y){return y;},                1.0};
-   Unit const partsPerMillion     {Measurement::UnitSystems::concentration_PartsPer,                  QObject::tr("ppm"),  [](double x){return x;},               [](double y){return y;},                1.0,  &milligramsPerLiter};
-   Unit const partsPerBillion     {Measurement::UnitSystems::concentration_PartsPer,                  QObject::tr("ppb"),  [](double x){return x * 1000.0;},      [](double y){return y/1000.0;},         1.0,  &milligramsPerLiter};
+   // == Volume Concentration ==
+   Unit const partsPerMillion     {Measurement::UnitSystems::concentration_PartsPer,                  QObject::tr("ppm"),  [](double x){return x;},               [](double y){return y;},                1.0};
+   Unit const partsPerBillion     {Measurement::UnitSystems::concentration_PartsPer,                  QObject::tr("ppb"),  [](double x){return x * 1000.0;},      [](double y){return y/1000.0;},         1.0,  &partsPerMillion};
    // == Viscosity ==
-   // Yes, 1 centipoise = 1 millipascal-second, but a poise and a pascal-second are NOT equal so we have two different units
+   // Yes, 1 centipoise = 1 millipascal-second.  See comment in measurement/Unit.h for more info
    Unit const centipoise          {Measurement::UnitSystems::viscosity_Metric,                        QObject::tr("cP"),    [](double x){return x;},              [](double y){return y;},                1.0};
    Unit const millipascalSecond   {Measurement::UnitSystems::viscosity_MetricAlternate,               QObject::tr("mPa-s"), [](double x){return x;},              [](double y){return y;},                1.0,  &centipoise};
    // == Specific heat capacity ==

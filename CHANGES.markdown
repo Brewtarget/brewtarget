@@ -16,12 +16,16 @@ Minor bug fixes for the 3.0.7 release (ie bugs in 3.0.7 are fixed in this 3.0.8 
 
 ### New Features
 * Case insensitive matching of unit names (mL vs ml etc) [#725](https://github.com/Brewtarget/brewtarget/issues/725)
+* More fields show their units (eg "%", "vol", etc) and number of decimal places on some fields is amended
 
 ### Bug Fixes
-* None
+* Errors in SucroseConversion.cpp when Compiling on Windows 10 under Visual Studio 2022 [#743](https://github.com/Brewtarget/brewtarget/issues/743)
+* M_PI undefined when Compiling on Windows 10 under Visual Studio 2022 [#741](https://github.com/Brewtarget/brewtarget/issues/741)
+* Water chemistry is still broken [#736](https://github.com/Brewtarget/brewtarget/issues/736)
+* Some more confusion about decimal separators [#733](https://github.com/Brewtarget/brewtarget/issues/733)
 
 ### Release Timestamp
-Wed, 8 Mar 2023 11:29:08 +0100
+Sun, 30 Apr 2023 09:29:08 +0100
 
 ## v3.0.7
 Minor bug fixes for the 3.0.6 release (ie bugs in 3.0.6 are fixed in this 3.0.7 release).
@@ -522,7 +526,7 @@ This is a minor bugfix release.
 * Fixed strange boil kettle efficiency calculations in brewnotes [#1121200](https://bugs.launchpad.net/bugs/1121200)
 
 ### Release Timestamp
-Mon, 17 Mar 2013 20:41:21 -0600
+Sun, 17 Mar 2013 20:41:21 -0600
 
 ## v2.0.0
 

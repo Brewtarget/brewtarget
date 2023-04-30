@@ -30,7 +30,8 @@
 #include <QWidget>
 
 #include "Algorithms.h"
-#include "BtLineEdit.h"
+#include "widgets/SmartLabel.h"
+#include "widgets/SmartLineEdit.h"
 #include "Localization.h"
 #include "PersistentSettings.h"
 #include "measurement/SystemOfMeasurement.h"
@@ -51,27 +52,35 @@ public:
     */
    impl(AlcoholTool & self) :
       self                         {self},
-      label_reading                {new QLabel           (&self)},
-      label_temperature            {new QLabel           (&self)},
-      label_corrected              {new QLabel           (&self)},
-      enableAdvancedInputs         {new ToggleSwitch     (&self)},
-      label_og                     {new QLabel           (&self)},
-      input_og                     {new BtDensityEdit    (&self)},
-      input_og_temperature         {new BtTemperatureEdit(&self)},
-      corrected_og                 {new QLabel           (&self)},
-      label_fg                     {new QLabel           (&self)},
-      input_fg                     {new BtDensityEdit    (&self)},
-      input_fg_temperature         {new BtTemperatureEdit(&self)},
-      corrected_fg                 {new QLabel           (&self)},
-      label_calibration_temperature{new QLabel           (&self)},
-      input_calibration_temperature{new BtTemperatureEdit(&self)},
-      label_result                 {new QLabel           (&self)},
-      output_result                {new QLabel           (&self)},
-      gridLayout                   {new QGridLayout      (&self)} {
+      label_reading                {new QLabel       (&self)},
+      label_temperature            {new SmartLabel   (&self)},
+      label_corrected              {new QLabel       (&self)},
+      enableAdvancedInputs         {new ToggleSwitch (&self)},
+      label_og                     {new SmartLabel   (&self)},
+      input_og                     {new SmartLineEdit(&self)},
+      input_og_temperature         {new SmartLineEdit(&self)},
+      corrected_og                 {new QLabel       (&self)},
+      label_fg                     {new SmartLabel   (&self)},
+      input_fg                     {new SmartLineEdit(&self)},
+      input_fg_temperature         {new SmartLineEdit(&self)},
+      corrected_fg                 {new QLabel       (&self)},
+      label_calibration_temperature{new SmartLabel   (&self)},
+      input_calibration_temperature{new SmartLineEdit(&self)},
+      label_result                 {new QLabel       (&self)},
+      output_result                {new QLabel       (&self)},
+      gridLayout                   {new QGridLayout  (&self)} {
+
+      SMART_FIELD_INIT_FS(AlcoholTool, label_og                     , input_og                     , double, Measurement::PhysicalQuantity::Density    );
+      SMART_FIELD_INIT_FS(AlcoholTool, label_fg                     , input_fg                     , double, Measurement::PhysicalQuantity::Density    );
+      SMART_FIELD_INIT_FS(AlcoholTool, label_temperature            , input_og_temperature         , double, Measurement::PhysicalQuantity::Temperature);
+      SMART_FIELD_INIT_FS(AlcoholTool, label_temperature            , input_fg_temperature         , double, Measurement::PhysicalQuantity::Temperature);
+      SMART_FIELD_INIT_FS(AlcoholTool, label_calibration_temperature, input_calibration_temperature, double, Measurement::PhysicalQuantity::Temperature);
+
       this->restoreSettings();
       this->enableAdvancedInputs->setFont(QFont("Roboto medium", 13));
       this->output_result->setText("%");
       this->doLayout();
+
       this->connectSignals();
       return;
    }
@@ -89,10 +98,10 @@ public:
 
    void doLayout() {
       this->input_og->setMinimumSize(QSize(80, 0));
-      this->input_og->setForcedSystemOfMeasurement(Measurement::SystemOfMeasurement::SpecificGravity);
+///      this->input_og->setForcedSystemOfMeasurement(Measurement::SystemOfMeasurement::SpecificGravity);
 
       this->input_fg->setMinimumSize(QSize(80, 0));
-      this->input_fg->setForcedSystemOfMeasurement(Measurement::SystemOfMeasurement::SpecificGravity);
+///      this->input_fg->setForcedSystemOfMeasurement(Measurement::SystemOfMeasurement::SpecificGravity);
 
       this->label_result->setObjectName(QStringLiteral("label_results"));
       this->label_result->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -129,12 +138,12 @@ public:
 
    void showOrHideAdvancedControls() {
       bool visible = this->enableAdvancedInputs->isChecked();
-      this->label_temperature->setVisible(visible);
-      this->label_corrected->setVisible(visible);
-      this->input_og_temperature->setVisible(visible);
-      this->corrected_og->setVisible(visible);
-      this->input_fg_temperature->setVisible(visible);
-      this->corrected_fg->setVisible(visible);
+      this->label_temperature            ->setVisible(visible);
+      this->label_corrected              ->setVisible(visible);
+      this->input_og_temperature         ->setVisible(visible);
+      this->corrected_og                 ->setVisible(visible);
+      this->input_fg_temperature         ->setVisible(visible);
+      this->corrected_fg                 ->setVisible(visible);
       this->label_calibration_temperature->setVisible(visible);
       this->input_calibration_temperature->setVisible(visible);
 
@@ -191,13 +200,11 @@ public:
 
    void connectSignals() {
       // If every input field triggers recalculation on modification then we don't need a "Convert" button
-      for (BtLineEdit const * ii : std::initializer_list<BtLineEdit const *>{this->input_og,
-                                                                             this->input_fg,
-                                                                             this->input_og_temperature,
-                                                                             this->input_fg_temperature,
-                                                                             this->input_calibration_temperature}) {
-         connect(ii, &BtLineEdit::textModified, &self, &AlcoholTool::calculate);
-      }
+      connect(this->input_og                     , &SmartLineEdit::textModified, &self, &AlcoholTool::calculate);
+      connect(this->input_fg                     , &SmartLineEdit::textModified, &self, &AlcoholTool::calculate);
+      connect(this->input_og_temperature         , &SmartLineEdit::textModified, &self, &AlcoholTool::calculate);
+      connect(this->input_fg_temperature         , &SmartLineEdit::textModified, &self, &AlcoholTool::calculate);
+      connect(this->input_calibration_temperature, &SmartLineEdit::textModified, &self, &AlcoholTool::calculate);
       // This will also make the recalculation call after toggling the visibility of advanced controls
       connect(this->enableAdvancedInputs, &QAbstractButton::clicked, &self, &AlcoholTool::toggleAdvancedControls);
 
@@ -206,13 +213,13 @@ public:
 
    void retranslateUi() {
       self.setWindowTitle(tr("Alcohol Tool"));
-      this->label_og->setText(tr("Original Gravity (OG)"));
-      this->label_result->setText(tr("ABV"));
-      this->label_fg->setText(tr("Final Gravity (FG)"));
-      this->label_reading->setText(tr("Reading"));
-      this->label_temperature->setText(tr("Temperature"));
-      this->label_corrected->setText(tr("Corrected Reading"));
-      this->enableAdvancedInputs->setText(tr("Advanced Mode"));
+      this->label_og                     ->setText(tr("Original Gravity (OG)"));
+      this->label_result                 ->setText(tr("ABV"));
+      this->label_fg                     ->setText(tr("Final Gravity (FG)"));
+      this->label_reading                ->setText(tr("Reading"));
+      this->label_temperature            ->setText(tr("Temperature"));
+      this->label_corrected              ->setText(tr("Corrected Reading"));
+      this->enableAdvancedInputs         ->setText(tr("Advanced Mode"));
       this->label_calibration_temperature->setText(tr("Hydrometer Calibration Temperature"));
 
 #ifndef QT_NO_TOOLTIP
@@ -240,10 +247,10 @@ public:
 
       // Hydrometer calibration temperature -- default is 20°C, or 68°F in the old money.
       // Working out which units to use is already solved elsewhere in the code base, but you just have to be careful
-      // not to do the conversion twice (ie 20°C -> 68°F ... 68°C -> 154°F) as both BtLineEdit::setText() and
-      // Measurement::amountDisplay() take SI unit and convert them to whatever the user has chosen to display.  So you just
-      // need BtLineEdit::setText().
-      this->input_calibration_temperature->setText(
+      // not to do the conversion twice (ie 20°C -> 68°F ... 68°C -> 154°F) as both SmartLineEdit::setAmount() and
+      // Measurement::amountDisplay() take SI unit and convert them to whatever the user has chosen to display.  So you
+      // just need SmartLineEdit::setAmount().
+      this->input_calibration_temperature->setAmount(
          PersistentSettings::value(hydrometerCalibrationTemperatureInC,
                                     20.0,
                                     PersistentSettings::Sections::alcoholTool).toDouble()
@@ -263,25 +270,25 @@ public:
    }
 
    // Member variables for impl
-   AlcoholTool       & self;
-   QLabel            * label_reading;
-   QLabel            * label_temperature;
-   QLabel            * label_corrected;
-   ToggleSwitch      * enableAdvancedInputs;
-   QLabel            * label_og;
-   BtDensityEdit     * input_og;
-   BtTemperatureEdit * input_og_temperature;
-   QLabel            * corrected_og;
-   QLabel            * label_fg;
-   BtDensityEdit     * input_fg;
-   BtTemperatureEdit * input_fg_temperature;
-   QLabel            * corrected_fg;
-   QLabel            * label_calibration_temperature;
-   BtTemperatureEdit * input_calibration_temperature;
-   QPushButton       * pushButton_convert;
-   QLabel            * label_result;
-   QLabel            * output_result;
-   QGridLayout       * gridLayout;
+   AlcoholTool   & self;
+   QLabel        * label_reading;
+   SmartLabel    * label_temperature;
+   QLabel        * label_corrected;
+   ToggleSwitch  * enableAdvancedInputs;
+   SmartLabel    * label_og;
+   SmartLineEdit * input_og;
+   SmartLineEdit * input_og_temperature;
+   QLabel        * corrected_og;
+   SmartLabel    * label_fg;
+   SmartLineEdit * input_fg;
+   SmartLineEdit * input_fg_temperature;
+   QLabel        * corrected_fg;
+   SmartLabel    * label_calibration_temperature;
+   SmartLineEdit * input_calibration_temperature;
+   QPushButton   * pushButton_convert;
+   QLabel        * label_result;
+   QLabel        * output_result;
+   QGridLayout   * gridLayout;
 };
 
 AlcoholTool::AlcoholTool(QWidget* parent) : QDialog(parent),

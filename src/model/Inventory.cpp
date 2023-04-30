@@ -95,7 +95,7 @@ TypeLookup const Inventory::typeLookup {
    "Inventory",
    {
       // Note that we need Enums to be treated as ints for the purposes of type lookup
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Inventory::amount               , Inventory::impl::amount),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Inventory::amount               , Inventory::impl::amount, Measurement::PqEitherMassOrVolume),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Inventory::id                   , Inventory::impl::id    ),
    },
    // Parent class lookup

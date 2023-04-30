@@ -1,6 +1,6 @@
 /*
  * MashStepTableModel.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
+ * authors 2009-2023
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
@@ -38,8 +38,6 @@
 
 class MashStepItemDelegate;
 
-enum{ MASHSTEPNAMECOL, MASHSTEPTYPECOL, MASHSTEPAMOUNTCOL, MASHSTEPTEMPCOL, MASHSTEPTARGETTEMPCOL, MASHSTEPTIMECOL, MASHSTEPNUMCOLS /*This one MUST be last*/};
-
 /*!
  * \class MashStepTableModel
  *
@@ -49,8 +47,20 @@ class MashStepTableModel : public BtTableModel, public BtTableModelData<MashStep
    Q_OBJECT
 
 public:
+   enum class ColumnIndex {
+      Name      ,
+      Type      ,
+      Amount    ,
+      Temp      ,
+      TargetTemp,
+      Time      ,
+   };
+
    MashStepTableModel(QTableView* parent = nullptr);
    virtual ~MashStepTableModel();
+
+   //! \brief Casting wrapper for \c BtTableModel::getColumnInfo
+   ColumnInfo const & getColumnInfo(ColumnIndex const columnIndex) const;
 
    /**
     * \brief Set the mash whose mash steps we want to model or reload steps from an existing mash after they were

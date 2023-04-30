@@ -44,20 +44,26 @@ WaterTableModel::WaterTableModel(WaterTableWidget * parent) :
    BtTableModelRecipeObserver{
       parent,
       false,
-      {{WATERNAMECOL,        {tr("Name"),              NonPhysicalQuantity::String          , ""                           }},
-       {WATERAMOUNTCOL,      {tr("Amount"),            Measurement::PhysicalQuantity::Volume, *PropertyNames::Water::amount}},
-       {WATERCALCIUMCOL,     {tr("Calcium (ppm)"),     NonPhysicalQuantity::Count           , ""                           }},
-       {WATERBICARBONATECOL, {tr("Bicarbonate (ppm)"), NonPhysicalQuantity::Count           , ""                           }},
-       {WATERSULFATECOL,     {tr("Sulfate (ppm)"),     NonPhysicalQuantity::Count           , ""                           }},
-       {WATERCHLORIDECOL,    {tr("Chloride (ppm)"),    NonPhysicalQuantity::Count           , ""                           }},
-       {WATERSODIUMCOL,      {tr("Sodium (ppm)"),      NonPhysicalQuantity::Count           , ""                           }},
-       {WATERMAGNESIUMCOL,   {tr("Magnesium (ppm)"),   NonPhysicalQuantity::Count           , ""                           }}}
+      {
+         SMART_COLUMN_HEADER_DEFN(WaterTableModel, Name       , tr("Name"             ), NonPhysicalQuantity::String                       ),
+         SMART_COLUMN_HEADER_DEFN(WaterTableModel, Amount     , tr("Amount"           ), Measurement::PhysicalQuantity::Volume             ),
+         SMART_COLUMN_HEADER_DEFN(WaterTableModel, Calcium    , tr("Calcium (ppm)"    ), Measurement::PhysicalQuantity::VolumeConcentration),
+         SMART_COLUMN_HEADER_DEFN(WaterTableModel, Bicarbonate, tr("Bicarbonate (ppm)"), Measurement::PhysicalQuantity::VolumeConcentration),
+         SMART_COLUMN_HEADER_DEFN(WaterTableModel, Sulfate    , tr("Sulfate (ppm)"    ), Measurement::PhysicalQuantity::VolumeConcentration),
+         SMART_COLUMN_HEADER_DEFN(WaterTableModel, Chloride   , tr("Chloride (ppm)"   ), Measurement::PhysicalQuantity::VolumeConcentration),
+         SMART_COLUMN_HEADER_DEFN(WaterTableModel, Sodium     , tr("Sodium (ppm)"     ), Measurement::PhysicalQuantity::VolumeConcentration),
+         SMART_COLUMN_HEADER_DEFN(WaterTableModel, Magnesium  , tr("Magnesium (ppm)"  ), Measurement::PhysicalQuantity::VolumeConcentration),
+      }
    },
    BtTableModelData<Water>{} {
    return;
 }
 
 WaterTableModel::~WaterTableModel() = default;
+
+BtTableModel::ColumnInfo const & WaterTableModel::getColumnInfo(WaterTableModel::ColumnIndex const columnIndex) const {
+   return this->BtTableModel::getColumnInfo(static_cast<size_t>(columnIndex));
+}
 
 void WaterTableModel::observeRecipe(Recipe * rec) {
    if (recObs) {
@@ -70,6 +76,7 @@ void WaterTableModel::observeRecipe(Recipe * rec) {
       connect(recObs, &NamedEntity::changed, this, &WaterTableModel::changed);
       addWaters(recObs->getAll<Water>());
    }
+   return;
 }
 
 void WaterTableModel::observeDatabase(bool val) {
@@ -182,7 +189,7 @@ void WaterTableModel::changed(QMetaProperty prop, QVariant val) {
       int ii = findIndexOf(waterSender);
       if (ii >= 0) {
          emit dataChanged(QAbstractItemModel::createIndex(ii, 0),
-                          QAbstractItemModel::createIndex(ii, WATERNUMCOLS - 1));
+                          QAbstractItemModel::createIndex(ii, this->columnCount() - 1));
       }
    }
    return;
@@ -206,45 +213,43 @@ QVariant WaterTableModel::data(const QModelIndex & index, int role) const {
       return QVariant();
    }
 
-   switch (index.column()) {
-      case WATERNAMECOL:
+   auto const columnIndex = static_cast<WaterTableModel::ColumnIndex>(index.column());
+   switch (columnIndex) {
+      case WaterTableModel::ColumnIndex::Name:
          return QVariant(row->name());
-      case WATERAMOUNTCOL:
+      case WaterTableModel::ColumnIndex::Amount:
          return QVariant(Measurement::displayAmount(Measurement::Amount{row->amount(), Measurement::Units::liters}));
-      case WATERCALCIUMCOL:
+      case WaterTableModel::ColumnIndex::Calcium:
          return QVariant(Measurement::displayQuantity(row->calcium_ppm(), 3));
-      case WATERBICARBONATECOL:
+      case WaterTableModel::ColumnIndex::Bicarbonate:
          return QVariant(Measurement::displayQuantity(row->bicarbonate_ppm(), 3));
-      case WATERSULFATECOL:
+      case WaterTableModel::ColumnIndex::Sulfate:
          return QVariant(Measurement::displayQuantity(row->sulfate_ppm(), 3));
-      case WATERCHLORIDECOL:
+      case WaterTableModel::ColumnIndex::Chloride:
          return QVariant(Measurement::displayQuantity(row->chloride_ppm(), 3));
-      case WATERSODIUMCOL:
+      case WaterTableModel::ColumnIndex::Sodium:
          return QVariant(Measurement::displayQuantity(row->sodium_ppm(), 3));
-      case WATERMAGNESIUMCOL:
+      case WaterTableModel::ColumnIndex::Magnesium:
          return QVariant(Measurement::displayQuantity(row->magnesium_ppm(), 3));
       default :
-         qWarning() << tr("Bad column: %1").arg(index.column());
+         qWarning() << Q_FUNC_INFO << tr("Bad column: %1").arg(index.column());
          return QVariant();
    }
 }
 
 QVariant WaterTableModel::headerData(int section, Qt::Orientation orientation, int role) const {
    if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
-      return this->getColumName(section);
+      return this->getColumnLabel(section);
    }
    return QVariant();
 }
 
 Qt::ItemFlags WaterTableModel::flags(const QModelIndex & index) const {
-   int col = index.column();
-   switch (col) {
-      case WATERNAMECOL:
-         return Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
-      default:
-         return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled |
-                Qt::ItemIsEnabled;
+   auto const columnIndex = static_cast<WaterTableModel::ColumnIndex>(index.column());
+   if (columnIndex == WaterTableModel::ColumnIndex::Name) {
+      return Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
    }
+   return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
 }
 
 bool WaterTableModel::setData(QModelIndex const & index, QVariant const & value, int role) {
@@ -259,38 +264,38 @@ bool WaterTableModel::setData(QModelIndex const & index, QVariant const & value,
 
    auto row = this->rows[index.row()];
 
-   int const column = index.column();
-   switch (column) {
-      case WATERNAMECOL:
+   auto const columnIndex = static_cast<WaterTableModel::ColumnIndex>(index.column());
+   switch (columnIndex) {
+      case WaterTableModel::ColumnIndex::Name:
          row->setName(value.toString());
          break;
-      case WATERAMOUNTCOL:
+      case WaterTableModel::ColumnIndex::Amount:
          row->setAmount(Measurement::qStringToSI(value.toString(),
                                                  Measurement::PhysicalQuantity::Volume,
-                                                 this->getForcedSystemOfMeasurementForColumn(column),
-                                                 this->getForcedRelativeScaleForColumn(column)).quantity());
+                                                 this->getColumnInfo(columnIndex).getForcedSystemOfMeasurement(),
+                                                 this->getColumnInfo(columnIndex).getForcedRelativeScale()).quantity());
          break;
-      case WATERCALCIUMCOL:
+      case WaterTableModel::ColumnIndex::Calcium:
          row->setCalcium_ppm(Localization::toDouble(value.toString(), Q_FUNC_INFO));
          break;
-      case WATERBICARBONATECOL:
+      case WaterTableModel::ColumnIndex::Bicarbonate:
          row->setBicarbonate_ppm(Localization::toDouble(value.toString(), Q_FUNC_INFO));
          break;
-      case WATERSULFATECOL:
+      case WaterTableModel::ColumnIndex::Sulfate:
          row->setSulfate_ppm(Localization::toDouble(value.toString(), Q_FUNC_INFO));
          break;
-      case WATERCHLORIDECOL:
+      case WaterTableModel::ColumnIndex::Chloride:
          row->setChloride_ppm(Localization::toDouble(value.toString(), Q_FUNC_INFO));
          break;
-      case WATERSODIUMCOL:
+      case WaterTableModel::ColumnIndex::Sodium:
          row->setSodium_ppm(Localization::toDouble(value.toString(), Q_FUNC_INFO));
          break;
-      case WATERMAGNESIUMCOL:
+      case WaterTableModel::ColumnIndex::Magnesium:
          row->setMagnesium_ppm(Localization::toDouble(value.toString(), Q_FUNC_INFO));
          break;
       default:
          retval = false;
-         qWarning() << Q_FUNC_INFO << "Bad column: " << column;
+         qWarning() << Q_FUNC_INFO << "Bad column: " << index.column();
          break;
    }
 
@@ -301,6 +306,7 @@ bool WaterTableModel::setData(QModelIndex const & index, QVariant const & value,
 
 WaterItemDelegate::WaterItemDelegate(QObject * parent)
    : QItemDelegate(parent) {
+   return;
 }
 
 QWidget * WaterItemDelegate::createEditor(QWidget * parent, const QStyleOptionViewItem & /*option*/,
@@ -311,6 +317,7 @@ QWidget * WaterItemDelegate::createEditor(QWidget * parent, const QStyleOptionVi
 void WaterItemDelegate::setEditorData(QWidget * editor, const QModelIndex & index) const {
    QLineEdit * line = qobject_cast<QLineEdit *>(editor);
    line->setText(index.model()->data(index, Qt::DisplayRole).toString());
+   return;
 }
 
 void WaterItemDelegate::setModelData(QWidget * editor, QAbstractItemModel * model, const QModelIndex & index) const {
@@ -319,9 +326,11 @@ void WaterItemDelegate::setModelData(QWidget * editor, QAbstractItemModel * mode
    if (line->isModified()) {
       model->setData(index, line->text(), Qt::EditRole);
    }
+   return;
 }
 
 void WaterItemDelegate::updateEditorGeometry(QWidget * editor, const QStyleOptionViewItem & option,
                                              const QModelIndex & /*index*/) const {
    editor->setGeometry(option.rect);
+   return;
 }
