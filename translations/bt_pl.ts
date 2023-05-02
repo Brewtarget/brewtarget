@@ -1143,6 +1143,26 @@ Log file may contain more details.</source>
         <source>Normal</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Dry Extract</source>
+        <translation type="unfinished">Suchy ekstrakt</translation>
+    </message>
+    <message>
+        <source>Extract</source>
+        <translation type="unfinished">Ekstrakt</translation>
+    </message>
+    <message>
+        <source>Grain</source>
+        <translation type="unfinished">Słód</translation>
+    </message>
+    <message>
+        <source>Sugar</source>
+        <translation type="unfinished">Cukier</translation>
+    </message>
+    <message>
+        <source>Adjunct</source>
+        <translation type="unfinished">Dodatek</translation>
+    </message>
 </context>
 <context>
     <name>FermentableDialog</name>
@@ -1293,7 +1313,7 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Amount Type</source>
-        <translation type="unfinished">Rodzaj kwoty</translation>
+        <translation type="obsolete">Rodzaj kwoty</translation>
     </message>
     <message>
         <source>Change Fermentable Is Mashed</source>
@@ -1414,7 +1434,7 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Bittering</source>
-        <translation type="obsolete">Goryczkowy</translation>
+        <translation type="unfinished">Goryczkowy</translation>
     </message>
     <message>
         <source>Flavor</source>
@@ -1426,23 +1446,43 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Leaf</source>
-        <translation type="obsolete">Szyszka</translation>
+        <translation type="unfinished">Szyszka</translation>
     </message>
     <message>
         <source>Pellet</source>
-        <translation type="obsolete">Granulat</translation>
+        <translation type="unfinished">Granulat</translation>
     </message>
     <message>
         <source>Plug</source>
-        <translation type="obsolete">Tabletka</translation>
+        <translation type="unfinished">Tabletka</translation>
     </message>
     <message>
         <source>First Wort</source>
-        <translation type="obsolete">Chmielenie przedniej brzeczki</translation>
+        <translation type="unfinished">Chmielenie przedniej brzeczki</translation>
     </message>
     <message>
         <source>Dry Hop</source>
-        <translation type="obsolete">Chmielenie na zimno</translation>
+        <translation type="unfinished">Chmielenie na zimno</translation>
+    </message>
+    <message>
+        <source>Aroma</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Aroma &amp; Bittering</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Boil</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Post-Boil</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2715,23 +2755,23 @@ Error message:
     </message>
     <message>
         <source>Grain</source>
-        <translation>Słód</translation>
+        <translation type="vanished">Słód</translation>
     </message>
     <message>
         <source>Sugar</source>
-        <translation>Cukier</translation>
+        <translation type="vanished">Cukier</translation>
     </message>
     <message>
         <source>Extract</source>
-        <translation>Ekstrakt</translation>
+        <translation type="vanished">Ekstrakt</translation>
     </message>
     <message>
         <source>Dry Extract</source>
-        <translation>Suchy ekstrakt</translation>
+        <translation type="vanished">Suchy ekstrakt</translation>
     </message>
     <message>
         <source>Adjunct</source>
-        <translation>Dodatek</translation>
+        <translation type="vanished">Dodatek</translation>
     </message>
     <message>
         <source>Infusion</source>
@@ -3071,7 +3111,7 @@ Error message:
     </message>
     <message>
         <source>Mixed</source>
-        <translation type="unfinished">Mieszane</translation>
+        <translation type="obsolete">Mieszane</translation>
     </message>
     <message>
         <source>Unknown</source>
@@ -3212,10 +3252,6 @@ Error message:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Concentration</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Viscosity</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3241,14 +3277,6 @@ Error message:
     </message>
     <message>
         <source>Carbonation Mass Per Volume</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Concentration Parts Per</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Concentration Mass Per Volume</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3290,6 +3318,18 @@ Error message:
     <message>
         <source>Weight</source>
         <translation type="unfinished">Waga</translation>
+    </message>
+    <message>
+        <source>Mass Concentration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Volume Concentration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Metric Concentration</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

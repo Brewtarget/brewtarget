@@ -859,6 +859,26 @@ Log file may contain more details.</source>
         <source>Normal</source>
         <translation>Normal</translation>
     </message>
+    <message>
+        <source>Dry Extract</source>
+        <translation type="unfinished">Kuru Ekstrakt</translation>
+    </message>
+    <message>
+        <source>Extract</source>
+        <translation type="unfinished">Ekstrakt</translation>
+    </message>
+    <message>
+        <source>Grain</source>
+        <translation type="unfinished">Tahıl</translation>
+    </message>
+    <message>
+        <source>Sugar</source>
+        <translation type="unfinished">Şeker</translation>
+    </message>
+    <message>
+        <source>Adjunct</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FermentableDialog</name>
@@ -1025,7 +1045,7 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Amount Type</source>
-        <translation type="unfinished">Miktar Türü</translation>
+        <translation type="obsolete">Miktar Türü</translation>
     </message>
     <message>
         <source>Change Fermentable Is Mashed</source>
@@ -1146,11 +1166,11 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Bittering</source>
-        <translation type="obsolete">Acılık</translation>
+        <translation type="unfinished">Acılık</translation>
     </message>
     <message>
         <source>Aroma</source>
-        <translation type="obsolete">Aroma</translation>
+        <translation type="unfinished">Aroma</translation>
     </message>
     <message>
         <source>Flavor</source>
@@ -1162,27 +1182,39 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Leaf</source>
-        <translation type="obsolete">Yaprak</translation>
+        <translation type="unfinished">Yaprak</translation>
     </message>
     <message>
         <source>Pellet</source>
-        <translation type="obsolete">Pelet</translation>
+        <translation type="unfinished">Pelet</translation>
     </message>
     <message>
         <source>Plug</source>
-        <translation type="obsolete">Kozalak</translation>
+        <translation type="unfinished">Kozalak</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="obsolete">Mayşe</translation>
+        <translation type="unfinished">Mayşe</translation>
     </message>
     <message>
         <source>First Wort</source>
-        <translation type="obsolete">İlk Şıra</translation>
+        <translation type="unfinished">İlk Şıra</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation type="obsolete">Kaynama</translation>
+        <translation type="unfinished">Kaynama</translation>
+    </message>
+    <message>
+        <source>Aroma &amp; Bittering</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Post-Boil</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dry Hop</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2388,23 +2420,23 @@ Error message:
     </message>
     <message>
         <source>Grain</source>
-        <translation>Tahıl</translation>
+        <translation type="vanished">Tahıl</translation>
     </message>
     <message>
         <source>Sugar</source>
-        <translation>Şeker</translation>
+        <translation type="vanished">Şeker</translation>
     </message>
     <message>
         <source>Extract</source>
-        <translation>Ekstrakt</translation>
+        <translation type="vanished">Ekstrakt</translation>
     </message>
     <message>
         <source>Dry Extract</source>
-        <translation>Kuru Ekstrakt</translation>
+        <translation type="vanished">Kuru Ekstrakt</translation>
     </message>
     <message>
         <source>Adjunct</source>
-        <translation>Yardımcı mayalanabilen</translation>
+        <translation type="vanished">Yardımcı mayalanabilen</translation>
     </message>
     <message>
         <source>Infusion</source>
@@ -2740,7 +2772,7 @@ Error message:
     </message>
     <message>
         <source>Mixed</source>
-        <translation>Karışık</translation>
+        <translation type="vanished">Karışık</translation>
     </message>
     <message>
         <source>DiastaticPower</source>
@@ -2887,10 +2919,6 @@ Error message:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Concentration</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Viscosity</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2916,14 +2944,6 @@ Error message:
     </message>
     <message>
         <source>Carbonation Mass Per Volume</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Concentration Parts Per</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Concentration Mass Per Volume</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2965,6 +2985,18 @@ Error message:
     <message>
         <source>Weight</source>
         <translation type="unfinished">Ağırlık</translation>
+    </message>
+    <message>
+        <source>Mass Concentration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Volume Concentration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Metric Concentration</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

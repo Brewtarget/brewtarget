@@ -132,14 +132,14 @@ void StyleEditor::save() {
    this->obsStyle->setOgMax         (lineEdit_ogMax         ->toCanonical().quantity()      );
    this->obsStyle->setFgMin         (lineEdit_fgMin         ->toCanonical().quantity()      );
    this->obsStyle->setFgMax         (lineEdit_fgMax         ->toCanonical().quantity()      );
-   this->obsStyle->setIbuMin        (lineEdit_ibuMin        ->getValueAs<double>()          );
-   this->obsStyle->setIbuMax        (lineEdit_ibuMax        ->getValueAs<double>()          );
+   this->obsStyle->setIbuMin        (lineEdit_ibuMin        ->getNonOptValueAs<double>()          );
+   this->obsStyle->setIbuMax        (lineEdit_ibuMax        ->getNonOptValueAs<double>()          );
    this->obsStyle->setColorMin_srm  (lineEdit_colorMin      ->toCanonical().quantity()      );
    this->obsStyle->setColorMax_srm  (lineEdit_colorMax      ->toCanonical().quantity()      );
    this->obsStyle->setCarbMin_vol   (lineEdit_carbMin       ->toCanonical().quantity()      );
    this->obsStyle->setCarbMax_vol   (lineEdit_carbMax       ->toCanonical().quantity()      );
-   this->obsStyle->setAbvMin_pct    (lineEdit_abvMin        ->getValueAs<double>()          );
-   this->obsStyle->setAbvMax_pct    (lineEdit_abvMax        ->getValueAs<double>()          );
+   this->obsStyle->setAbvMin_pct    (lineEdit_abvMin        ->getNonOptValueAs<double>()          );
+   this->obsStyle->setAbvMax_pct    (lineEdit_abvMax        ->getNonOptValueAs<double>()          );
    this->obsStyle->setProfile       (textEdit_profile       ->toPlainText()                 );
    this->obsStyle->setIngredients   (textEdit_ingredients   ->toPlainText()                 );
    this->obsStyle->setExamples      (textEdit_examples      ->toPlainText()                 );

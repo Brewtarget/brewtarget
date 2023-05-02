@@ -49,15 +49,15 @@ BrewNoteWidget::BrewNoteWidget(QWidget *parent) : QWidget(parent) {
    SMART_FIELD_INIT(BrewNoteWidget, label_postBoilVol, lineEdit_postBoilVol , BrewNote, PropertyNames::BrewNote::postBoilVolume_l);
    SMART_FIELD_INIT(BrewNoteWidget, label_volIntoBk  , lineEdit_volIntoBk   , BrewNote, PropertyNames::BrewNote::volumeIntoBK_l  );
    SMART_FIELD_INIT(BrewNoteWidget, label_volIntoFerm, lineEdit_volIntoFerm , BrewNote, PropertyNames::BrewNote::volumeIntoFerm_l);
-   SMART_FIELD_INIT(BrewNoteWidget, label_projectedOg, lcdnumber_projectedOG, BrewNote, PropertyNames::BrewNote::projOg          );
-
 //   SMART_FIELD_INIT(BrewNoteWidget, label_fermentDate   , lineEdit_fermentDate  , BrewNote, PropertyNames::BrewNote::fermentDate     ); No specialisation for QDateTimeEdit
-   SMART_FIELD_INIT(BrewNoteWidget, label_effInfoBk     , lcdnumber_effBK       , BrewNote, PropertyNames::BrewNote::effIntoBK_pct   );
-   SMART_FIELD_INIT(BrewNoteWidget, label_brewHouseEff  , lcdnumber_brewhouseEff, BrewNote, PropertyNames::BrewNote::brewhouseEff_pct);
-   SMART_FIELD_INIT(BrewNoteWidget, label_projectedAbv  , lcdnumber_projABV     , BrewNote, PropertyNames::BrewNote::projABV_pct     );
-   SMART_FIELD_INIT(BrewNoteWidget, label_Abv           , lcdnumber_abv         , BrewNote, PropertyNames::BrewNote::abv             );
-   SMART_FIELD_INIT(BrewNoteWidget, label_yeastProjAtten, lcdnumber_projAtten   , BrewNote, PropertyNames::BrewNote::projAtten       );
-   SMART_FIELD_INIT(BrewNoteWidget, label_yeastAtten    , lcdnumber_atten       , BrewNote, PropertyNames::BrewNote::attenuation     );
+   SMART_FIELD_INIT(BrewNoteWidget, label_projectedOg   , lcdnumber_projectedOG , BrewNote, PropertyNames::BrewNote::projOg          );
+   SMART_FIELD_INIT(BrewNoteWidget, label_effInfoBk     , lcdnumber_effBK       , BrewNote, PropertyNames::BrewNote::effIntoBK_pct   , 2);
+   SMART_FIELD_INIT(BrewNoteWidget, label_brewHouseEff  , lcdnumber_brewhouseEff, BrewNote, PropertyNames::BrewNote::brewhouseEff_pct, 2);
+   SMART_FIELD_INIT(BrewNoteWidget, label_projectedAbv  , lcdnumber_projABV     , BrewNote, PropertyNames::BrewNote::projABV_pct     , 2);
+   SMART_FIELD_INIT(BrewNoteWidget, label_Abv           , lcdnumber_abv         , BrewNote, PropertyNames::BrewNote::abv             , 2);
+   SMART_FIELD_INIT(BrewNoteWidget, label_yeastProjAtten, lcdnumber_projAtten   , BrewNote, PropertyNames::BrewNote::projAtten       , 2);
+   SMART_FIELD_INIT(BrewNoteWidget, label_yeastAtten    , lcdnumber_atten       , BrewNote, PropertyNames::BrewNote::attenuation     , 2);
+
 
    connect(this->lineEdit_Sg,          &SmartLineEdit::textModified,   this, &BrewNoteWidget::updateSG              );
    connect(this->lineEdit_volIntoBk,   &SmartLineEdit::textModified,   this, &BrewNoteWidget::updateVolumeIntoBK_l  );
@@ -98,21 +98,23 @@ void BrewNoteWidget::updateDateFormat() {
 
 
 void BrewNoteWidget::updateProjOg() {
-   // Density UnitSystems only have one scale, so we don't bother looking up UnitSystem::RelativeScale
-   auto forcedSystemOfMeasurement = this->label_projectedOg->getForcedSystemOfMeasurement();
-   double quant = Measurement::amountDisplay(Measurement::Amount{this->bNoteObs->projOg(), Measurement::Units::specificGravity},
-                                             forcedSystemOfMeasurement);
+   // SmartDigitWidget::setLowLim and SmartDigitWidget::setHighLim take their parameter in canonical units -- in this
+   // case, SG.
+   double const quant = this->bNoteObs->projOg();
    this->lcdnumber_projectedOG->setLowLim( lowLimitPct  * quant);
    this->lcdnumber_projectedOG->setHighLim(highLimitPct * quant);
 
    Measurement::UnitSystem const & displayUnitSystem = this->label_projectedOg->getDisplayUnitSystem();
    int precision = (displayUnitSystem == Measurement::UnitSystems::density_Plato) ? 0 : 3;
 
-   this->lcdnumber_projectedOG->display(quant, precision);
+   // Set precision before setting amount as setPrecision does not update the display, whereas setAmount does
+   this->lcdnumber_projectedOG->setPrecision(precision);
+   this->lcdnumber_projectedOG->setAmount(quant);
    return;
 }
 
 void BrewNoteWidget::setBrewNote(BrewNote* bNote) {
+   qDebug() << Q_FUNC_INFO << "BrewNote:" << bNote;
 
    if (this->bNoteObs) {
       disconnect(this->bNoteObs, nullptr, this, nullptr);
@@ -123,28 +125,28 @@ void BrewNoteWidget::setBrewNote(BrewNote* bNote) {
       connect(this->bNoteObs, &NamedEntity::changed, this, &BrewNoteWidget::changed);
 
       // Set the highs and the lows for the lcds
-      lcdnumber_effBK->setLowLim (bNoteObs->projEff_pct() * lowLimitPct);
-      lcdnumber_effBK->setHighLim(bNoteObs->projEff_pct() * highLimitPct);
+      this->lcdnumber_effBK->setLowLim (bNoteObs->projEff_pct() * lowLimitPct);
+      this->lcdnumber_effBK->setHighLim(bNoteObs->projEff_pct() * highLimitPct);
 
-      lcdnumber_projectedOG->setLowLim (bNoteObs->projOg() * lowLimitPct);
-      lcdnumber_projectedOG->setHighLim(bNoteObs->projOg() * highLimitPct);
+      this->lcdnumber_projectedOG->setLowLim (bNoteObs->projOg() * lowLimitPct);
+      this->lcdnumber_projectedOG->setHighLim(bNoteObs->projOg() * highLimitPct);
 
-      lcdnumber_brewhouseEff->setLowLim (bNoteObs->projEff_pct() * lowLimitPct);
-      lcdnumber_brewhouseEff->setHighLim(bNoteObs->projEff_pct() * highLimitPct);
+      this->lcdnumber_brewhouseEff->setLowLim (bNoteObs->projEff_pct() * lowLimitPct);
+      this->lcdnumber_brewhouseEff->setHighLim(bNoteObs->projEff_pct() * highLimitPct);
 
-      lcdnumber_projABV->setLowLim (bNoteObs->projABV_pct() * lowLimitPct);
-      lcdnumber_projABV->setHighLim(bNoteObs->projABV_pct() * highLimitPct);
+      this->lcdnumber_projABV->setLowLim (bNoteObs->projABV_pct() * lowLimitPct);
+      this->lcdnumber_projABV->setHighLim(bNoteObs->projABV_pct() * highLimitPct);
 
-      lcdnumber_abv->setLowLim (bNoteObs->projABV_pct() * lowLimitPct);
-      lcdnumber_abv->setHighLim(bNoteObs->projABV_pct() * highLimitPct);
+      this->lcdnumber_abv->setLowLim (bNoteObs->projABV_pct() * lowLimitPct);
+      this->lcdnumber_abv->setHighLim(bNoteObs->projABV_pct() * highLimitPct);
 
-      lcdnumber_atten->setLowLim (bNoteObs->projAtten() * lowLimitPct);
-      lcdnumber_atten->setHighLim(bNoteObs->projAtten() * highLimitPct);
+      this->lcdnumber_atten->setLowLim (bNoteObs->projAtten() * lowLimitPct);
+      this->lcdnumber_atten->setHighLim(bNoteObs->projAtten() * highLimitPct);
 
-      lcdnumber_projAtten->setLowLim (bNoteObs->projAtten() * lowLimitPct);
-      lcdnumber_projAtten->setHighLim(bNoteObs->projAtten() * highLimitPct);
+      this->lcdnumber_projAtten->setLowLim (bNoteObs->projAtten() * lowLimitPct);
+      this->lcdnumber_projAtten->setHighLim(bNoteObs->projAtten() * highLimitPct);
 
-      showChanges();
+      this->showChanges();
    }
    return;
 }
@@ -190,21 +192,21 @@ void BrewNoteWidget::showChanges([[maybe_unused]] QString field) {
    this->lineEdit_volIntoFerm->setAmount   (bNoteObs->volumeIntoFerm_l());
    this->lineEdit_pitchTemp  ->setAmount   (bNoteObs->pitchTemp_c     ());
    this->lineEdit_Fg         ->setAmount   (bNoteObs->fg              ());
-   this->lineEdit_finalVolume   ->setAmount   (bNoteObs->finalVolume_l   ());
+   this->lineEdit_finalVolume->setAmount   (bNoteObs->finalVolume_l   ());
    this->lineEdit_fermentDate->setDate     (bNoteObs->fermentDate     ());
    this->btTextEdit_brewNotes->setPlainText(bNoteObs->notes           ());
 
    // Now with the calculated stuff
-   this->lcdnumber_effBK->display(bNoteObs->effIntoBK_pct(),2);
+   this->lcdnumber_effBK->setAmount(bNoteObs->effIntoBK_pct());
 
    // Need to think about these? Maybe use the bubbles?
    this->updateProjOg(); // this requires more work, but updateProj does it
 
-   this->lcdnumber_brewhouseEff->display(bNoteObs->brewhouseEff_pct(), 2);
-   this->lcdnumber_projABV     ->display(bNoteObs->projABV_pct     (), 2);
-   this->lcdnumber_abv         ->display(bNoteObs->abv             (), 2);
-   this->lcdnumber_atten       ->display(bNoteObs->attenuation     (), 2);
-   this->lcdnumber_projAtten   ->display(bNoteObs->projAtten       (), 2);
+   this->lcdnumber_brewhouseEff->setAmount(bNoteObs->brewhouseEff_pct());
+   this->lcdnumber_projABV     ->setAmount(bNoteObs->projABV_pct     ());
+   this->lcdnumber_abv         ->setAmount(bNoteObs->abv             ());
+   this->lcdnumber_atten       ->setAmount(bNoteObs->attenuation     ());
+   this->lcdnumber_projAtten   ->setAmount(bNoteObs->projAtten       ());
    return;
 }
 

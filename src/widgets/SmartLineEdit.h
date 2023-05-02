@@ -33,8 +33,8 @@
 
 #include "BtFieldType.h"
 #include "utils/TypeLookup.h"
-#include "SmartField.h"
-#include "SmartAmounts.h"
+#include "widgets/SmartField.h"
+#include "widgets/SmartAmounts.h"
 
 class QLabel;
 class SmartLabel;

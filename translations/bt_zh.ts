@@ -1139,6 +1139,26 @@ Log file may contain more details.</source>
         <source>Normal</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Dry Extract</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Extract</source>
+        <translation type="unfinished">提取</translation>
+    </message>
+    <message>
+        <source>Grain</source>
+        <translation type="unfinished">粮食</translation>
+    </message>
+    <message>
+        <source>Sugar</source>
+        <translation type="unfinished">糖</translation>
+    </message>
+    <message>
+        <source>Adjunct</source>
+        <translation type="unfinished">附属物</translation>
+    </message>
 </context>
 <context>
     <name>FermentableDialog</name>
@@ -1289,7 +1309,7 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Amount Type</source>
-        <translation type="unfinished">金额类型MiscTableModel |</translation>
+        <translation type="obsolete">金额类型MiscTableModel |</translation>
     </message>
     <message>
         <source>Change Fermentable Is Mashed</source>
@@ -1415,6 +1435,50 @@ Log file may contain more details.</source>
     <message>
         <source>Extract</source>
         <translation type="obsolete">提取</translation>
+    </message>
+    <message>
+        <source>Bittering</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Aroma</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Aroma &amp; Bittering</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Leaf</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pellet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Plug</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>First Wort</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Boil</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Post-Boil</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dry Hop</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2683,23 +2747,23 @@ Error message:
     </message>
     <message>
         <source>Grain</source>
-        <translation>粮食</translation>
+        <translation type="vanished">粮食</translation>
     </message>
     <message>
         <source>Sugar</source>
-        <translation>糖</translation>
+        <translation type="vanished">糖</translation>
     </message>
     <message>
         <source>Extract</source>
-        <translation>提取</translation>
+        <translation type="vanished">提取</translation>
     </message>
     <message>
         <source>Dry Extract</source>
-        <translation>干浸膏Dry Extract</translation>
+        <translation type="vanished">干浸膏Dry Extract</translation>
     </message>
     <message>
         <source>Adjunct</source>
-        <translation>附属物</translation>
+        <translation type="vanished">附属物</translation>
     </message>
     <message>
         <source>Infusion</source>
@@ -3039,7 +3103,7 @@ Error message:
     </message>
     <message>
         <source>Mixed</source>
-        <translation type="unfinished">混合Mixed</translation>
+        <translation type="obsolete">混合Mixed</translation>
     </message>
     <message>
         <source>Unknown</source>
@@ -3180,10 +3244,6 @@ Error message:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Concentration</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Viscosity</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3209,14 +3269,6 @@ Error message:
     </message>
     <message>
         <source>Carbonation Mass Per Volume</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Concentration Parts Per</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Concentration Mass Per Volume</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3258,6 +3310,18 @@ Error message:
     <message>
         <source>Weight</source>
         <translation type="unfinished">重量</translation>
+    </message>
+    <message>
+        <source>Mass Concentration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Volume Concentration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Metric Concentration</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

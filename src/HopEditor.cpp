@@ -101,15 +101,15 @@ void HopEditor::save() {
    }
 
    this->obsHop->setName             (this->lineEdit_name         ->text                  ());
-   this->obsHop->setAlpha_pct        (this->lineEdit_alpha        ->getValueAs<double>    ());
+   this->obsHop->setAlpha_pct        (this->lineEdit_alpha        ->getNonOptValueAs<double>    ());
    this->obsHop->setTime_min         (this->lineEdit_time         ->toCanonical().quantity());
-   this->obsHop->setBeta_pct         (this->lineEdit_beta         ->getValueAs<double>    ());
-   this->obsHop->setHsi_pct          (this->lineEdit_HSI          ->getValueAs<double>    ());
+   this->obsHop->setBeta_pct         (this->lineEdit_beta         ->getNonOptValueAs<double>    ());
+   this->obsHop->setHsi_pct          (this->lineEdit_HSI          ->getNonOptValueAs<double>    ());
    this->obsHop->setOrigin           (this->lineEdit_origin       ->text                  ());
-   this->obsHop->setHumulene_pct     (this->lineEdit_humulene     ->getValueAs<double>    ());
-   this->obsHop->setCaryophyllene_pct(this->lineEdit_caryophyllene->getValueAs<double>    ());
-   this->obsHop->setCohumulone_pct   (this->lineEdit_cohumulone   ->getValueAs<double>    ());
-   this->obsHop->setMyrcene_pct      (this->lineEdit_myrcene      ->getValueAs<double>    ());
+   this->obsHop->setHumulene_pct     (this->lineEdit_humulene     ->getNonOptValueAs<double>    ());
+   this->obsHop->setCaryophyllene_pct(this->lineEdit_caryophyllene->getNonOptValueAs<double>    ());
+   this->obsHop->setCohumulone_pct   (this->lineEdit_cohumulone   ->getNonOptValueAs<double>    ());
+   this->obsHop->setMyrcene_pct      (this->lineEdit_myrcene      ->getNonOptValueAs<double>    ());
    this->obsHop->setSubstitutes      (this->textEdit_substitutes  ->toPlainText           ());
    this->obsHop->setNotes            (this->textEdit_notes        ->toPlainText           ());
 

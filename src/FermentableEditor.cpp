@@ -88,19 +88,19 @@ void FermentableEditor::save() {
       Fermentable::typeStringMapping.stringToEnum<Fermentable::Type>(comboBox_fermentableType->currentData().toString())
    );
 
-   obsFerm->setYield_pct             (lineEdit_yield         ->getValueAs<double>());
+   obsFerm->setYield_pct             (lineEdit_yield         ->getNonOptValueAs<double>());
    obsFerm->setColor_srm             (lineEdit_color         ->toCanonical().quantity());
    obsFerm->setAddAfterBoil          (checkBox_addAfterBoil  ->checkState() == Qt::Checked);
    obsFerm->setOrigin                (lineEdit_origin        ->text());
    obsFerm->setSupplier              (lineEdit_supplier      ->text());
-   obsFerm->setCoarseFineDiff_pct    (lineEdit_coarseFineDiff->getValueAs<double>());
-   obsFerm->setMoisture_pct          (lineEdit_moisture      ->getValueAs<double>());
+   obsFerm->setCoarseFineDiff_pct    (lineEdit_coarseFineDiff->getNonOptValueAs<double>());
+   obsFerm->setMoisture_pct          (lineEdit_moisture      ->getNonOptValueAs<double>());
    obsFerm->setDiastaticPower_lintner(lineEdit_diastaticPower->toCanonical().quantity());
-   obsFerm->setProtein_pct           (lineEdit_protein       ->getValueAs<double>());
-   obsFerm->setMaxInBatch_pct        (lineEdit_maxInBatch    ->getValueAs<double>());
+   obsFerm->setProtein_pct           (lineEdit_protein       ->getNonOptValueAs<double>());
+   obsFerm->setMaxInBatch_pct        (lineEdit_maxInBatch    ->getNonOptValueAs<double>());
    obsFerm->setRecommendMash         (checkBox_recommendMash ->checkState() == Qt::Checked);
    obsFerm->setIsMashed              (checkBox_isMashed      ->checkState() == Qt::Checked);
-   obsFerm->setIbuGalPerLb           (lineEdit_ibuGalPerLb   ->getValueAs<double>()); // .:TBD:. No metric measure?
+   obsFerm->setIbuGalPerLb           (lineEdit_ibuGalPerLb   ->getNonOptValueAs<double>()); // .:TBD:. No metric measure?
    obsFerm->setNotes                 (textEdit_notes         ->toPlainText());
 
    if (this->obsFerm->key() < 0) {

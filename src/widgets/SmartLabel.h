@@ -33,8 +33,8 @@
 
 #include "BtFieldType.h"
 #include "measurement/UnitSystem.h"
-#include "SmartField.h" // For SmartAmounts::ScaleInfo
-#include "SmartAmounts.h"
+#include "widgets/SmartField.h" // For SmartAmounts::ScaleInfo
+#include "widgets/SmartAmounts.h"
 
 class SmartField;
 

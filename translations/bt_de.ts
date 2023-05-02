@@ -1174,6 +1174,26 @@ Log file may contain more details.</source>
         <source>Normal</source>
         <translation>Normal</translation>
     </message>
+    <message>
+        <source>Dry Extract</source>
+        <translation type="unfinished">Trockenextrakt</translation>
+    </message>
+    <message>
+        <source>Extract</source>
+        <translation type="unfinished">Extrakt</translation>
+    </message>
+    <message>
+        <source>Grain</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sugar</source>
+        <translation type="unfinished">Zucker</translation>
+    </message>
+    <message>
+        <source>Adjunct</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FermentableDialog</name>
@@ -1328,7 +1348,7 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Amount Type</source>
-        <translation type="unfinished">Mengenangabe</translation>
+        <translation type="obsolete">Mengenangabe</translation>
     </message>
     <message>
         <source>Change Fermentable Is Mashed</source>
@@ -1449,11 +1469,11 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Bittering</source>
-        <translation type="obsolete">Bitterung</translation>
+        <translation type="unfinished">Bitterung</translation>
     </message>
     <message>
         <source>Aroma</source>
-        <translation type="obsolete">Aroma</translation>
+        <translation type="unfinished">Aroma</translation>
     </message>
     <message>
         <source>Flavor</source>
@@ -1465,23 +1485,39 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Leaf</source>
-        <translation type="obsolete">Blatt</translation>
+        <translation type="unfinished">Blatt</translation>
     </message>
     <message>
         <source>Pellet</source>
-        <translation type="obsolete">Pellet</translation>
+        <translation type="unfinished">Pellet</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="obsolete">Maische</translation>
+        <translation type="unfinished">Maische</translation>
     </message>
     <message>
         <source>First Wort</source>
-        <translation type="obsolete">Vorderwürze</translation>
+        <translation type="unfinished">Vorderwürze</translation>
     </message>
     <message>
         <source>Dry Hop</source>
-        <translation type="obsolete">Stopfhopfen</translation>
+        <translation type="unfinished">Stopfhopfen</translation>
+    </message>
+    <message>
+        <source>Aroma &amp; Bittering</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Plug</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Boil</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Post-Boil</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2754,23 +2790,23 @@ Error message:
     </message>
     <message>
         <source>Grain</source>
-        <translation>Korn</translation>
+        <translation type="vanished">Korn</translation>
     </message>
     <message>
         <source>Sugar</source>
-        <translation>Zucker</translation>
+        <translation type="vanished">Zucker</translation>
     </message>
     <message>
         <source>Extract</source>
-        <translation>Extrakt</translation>
+        <translation type="vanished">Extrakt</translation>
     </message>
     <message>
         <source>Dry Extract</source>
-        <translation>Trockenextrakt</translation>
+        <translation type="vanished">Trockenextrakt</translation>
     </message>
     <message>
         <source>Adjunct</source>
-        <translation>Zusatz</translation>
+        <translation type="vanished">Zusatz</translation>
     </message>
     <message>
         <source>Infusion</source>
@@ -3110,7 +3146,7 @@ Error message:
     </message>
     <message>
         <source>Mixed</source>
-        <translation type="unfinished">Gemischt</translation>
+        <translation type="obsolete">Gemischt</translation>
     </message>
     <message>
         <source>Unknown</source>
@@ -3251,10 +3287,6 @@ Error message:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Concentration</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Viscosity</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3280,14 +3312,6 @@ Error message:
     </message>
     <message>
         <source>Carbonation Mass Per Volume</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Concentration Parts Per</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Concentration Mass Per Volume</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3329,6 +3353,18 @@ Error message:
     <message>
         <source>Weight</source>
         <translation type="unfinished">Gewicht</translation>
+    </message>
+    <message>
+        <source>Mass Concentration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Volume Concentration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Metric Concentration</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

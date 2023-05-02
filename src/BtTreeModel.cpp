@@ -528,6 +528,7 @@ bool BtTreeModel::removeRows(int row, int count, const QModelIndex & parent) {
 
 // One find method for all things. This .. is nice
 QModelIndex BtTreeModel::findElement(NamedEntity * thing, BtTreeItem * parent) {
+   qDebug() << Q_FUNC_INFO << "Find" << thing << "in" << parent;
    BtTreeItem * pItem;
    QList<BtTreeItem *> folders;
 
@@ -551,6 +552,7 @@ QModelIndex BtTreeModel::findElement(NamedEntity * thing, BtTreeItem * parent) {
       for (i = 0; i < target->childCount(); ++i) {
          // If we've found what we are looking for, return
          if (target->child(i)->thing() == thing) {
+            qDebug() << Q_FUNC_INFO << "Found at" << i;
             return createIndex(i, 0, target->child(i));
          }
 
@@ -1409,8 +1411,8 @@ void BtTreeModel::observeElement(NamedEntity * d) {
    if (qobject_cast<BrewNote *>(d)) {
       connect(qobject_cast<BrewNote *>(d), &BrewNote::brewDateChanged, this, &BtTreeModel::elementChanged);
    } else {
-      connect(d, SIGNAL(changedName(QString)), this, SLOT(elementChanged()));
-      // connect(d, SIGNAL(changedFolder(QString)), this, SLOT(folderChanged(QString)));
+      connect(d, &NamedEntity::changedName,   this, &BtTreeModel::elementChanged);
+      connect(d, &NamedEntity::changedFolder, this, static_cast<void (BtTreeModel::*)(QString)>(&BtTreeModel::folderChanged));
    }
 }
 

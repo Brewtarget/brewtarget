@@ -1174,6 +1174,26 @@ Log file may contain more details.</source>
         <source>Normal</source>
         <translation>Normaal</translation>
     </message>
+    <message>
+        <source>Dry Extract</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Extract</source>
+        <translation type="unfinished">Extract</translation>
+    </message>
+    <message>
+        <source>Grain</source>
+        <translation type="unfinished">Graan</translation>
+    </message>
+    <message>
+        <source>Sugar</source>
+        <translation type="unfinished">Suiker</translation>
+    </message>
+    <message>
+        <source>Adjunct</source>
+        <translation type="unfinished">Aanvulling</translation>
+    </message>
 </context>
 <context>
     <name>FermentableDialog</name>
@@ -1336,7 +1356,7 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Amount Type</source>
-        <translation type="unfinished">Hoeveelheid Type</translation>
+        <translation type="obsolete">Hoeveelheid Type</translation>
     </message>
     <message>
         <source>Change Fermentable Is Mashed</source>
@@ -1457,11 +1477,11 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Bittering</source>
-        <translation type="obsolete">Bitterhop</translation>
+        <translation type="unfinished">Bitterhop</translation>
     </message>
     <message>
         <source>Aroma</source>
-        <translation type="obsolete">Aroma</translation>
+        <translation type="unfinished">Aroma</translation>
     </message>
     <message>
         <source>Flavor</source>
@@ -1473,31 +1493,39 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Leaf</source>
-        <translation type="obsolete">Blad</translation>
+        <translation type="unfinished">Blad</translation>
     </message>
     <message>
         <source>Pellet</source>
-        <translation type="obsolete">Pellet</translation>
+        <translation type="unfinished">Pellet</translation>
     </message>
     <message>
         <source>Plug</source>
-        <translation type="obsolete">Geperste hop</translation>
+        <translation type="unfinished">Geperste hop</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="obsolete">Maisch</translation>
+        <translation type="unfinished">Maisch</translation>
     </message>
     <message>
         <source>First Wort</source>
-        <translation type="obsolete">Eerste Wort</translation>
+        <translation type="unfinished">Eerste Wort</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation type="obsolete">Koken</translation>
+        <translation type="unfinished">Koken</translation>
     </message>
     <message>
         <source>Dry Hop</source>
-        <translation type="obsolete">Dry Hop</translation>
+        <translation type="unfinished">Dry Hop</translation>
+    </message>
+    <message>
+        <source>Aroma &amp; Bittering</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Post-Boil</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2756,23 +2784,23 @@ Press OK to quit.</source>
     </message>
     <message>
         <source>Grain</source>
-        <translation>Graan</translation>
+        <translation type="vanished">Graan</translation>
     </message>
     <message>
         <source>Sugar</source>
-        <translation>Suiker</translation>
+        <translation type="vanished">Suiker</translation>
     </message>
     <message>
         <source>Extract</source>
-        <translation>Extract</translation>
+        <translation type="vanished">Extract</translation>
     </message>
     <message>
         <source>Dry Extract</source>
-        <translation>Gedroogd Extract</translation>
+        <translation type="vanished">Gedroogd Extract</translation>
     </message>
     <message>
         <source>Adjunct</source>
-        <translation>Aanvulling</translation>
+        <translation type="vanished">Aanvulling</translation>
     </message>
     <message>
         <source>Infusion</source>
@@ -3136,7 +3164,7 @@ Press OK to quit.</source>
     </message>
     <message>
         <source>Mixed</source>
-        <translation type="unfinished">Gemengd</translation>
+        <translation type="obsolete">Gemengd</translation>
     </message>
     <message>
         <source>Unknown</source>
@@ -3261,10 +3289,6 @@ Press OK to quit.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Concentration</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Viscosity</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3290,14 +3314,6 @@ Press OK to quit.</source>
     </message>
     <message>
         <source>Carbonation Mass Per Volume</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Concentration Parts Per</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Concentration Mass Per Volume</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3339,6 +3355,18 @@ Press OK to quit.</source>
     <message>
         <source>Weight</source>
         <translation type="unfinished">Gewicht</translation>
+    </message>
+    <message>
+        <source>Mass Concentration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Volume Concentration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Metric Concentration</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

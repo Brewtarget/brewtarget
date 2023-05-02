@@ -142,8 +142,6 @@ set(filesToCompile_cpp
     ${repoDir}/src/RefractoDialog.cpp
     ${repoDir}/src/ScaleRecipeTool.cpp
     ${repoDir}/src/SimpleUndoableUpdate.cpp
-    ${repoDir}/src/SmartAmounts.cpp
-    ${repoDir}/src/SmartField.cpp
     ${repoDir}/src/StrikeWaterDialog.cpp
     ${repoDir}/src/StyleButton.cpp
     ${repoDir}/src/StyleEditor.cpp
@@ -177,7 +175,9 @@ set(filesToCompile_cpp
     ${repoDir}/src/WaterTableWidget.cpp
     ${repoDir}/src/widgets/Animator.cpp
     ${repoDir}/src/widgets/SelectionControl.cpp
+    ${repoDir}/src/widgets/SmartAmounts.cpp
     ${repoDir}/src/widgets/SmartDigitWidget.cpp
+    ${repoDir}/src/widgets/SmartField.cpp
     ${repoDir}/src/widgets/SmartLabel.cpp
     ${repoDir}/src/widgets/SmartLineEdit.cpp
     ${repoDir}/src/widgets/ToggleSwitch.cpp

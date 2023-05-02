@@ -1143,6 +1143,26 @@ Log file may contain more details.</source>
         <source>Normal</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Dry Extract</source>
+        <translation type="unfinished">Sušený výtažek</translation>
+    </message>
+    <message>
+        <source>Extract</source>
+        <translation type="unfinished">Výtažek</translation>
+    </message>
+    <message>
+        <source>Grain</source>
+        <translation type="unfinished">Slad</translation>
+    </message>
+    <message>
+        <source>Sugar</source>
+        <translation type="unfinished">Cukr</translation>
+    </message>
+    <message>
+        <source>Adjunct</source>
+        <translation type="unfinished">Surogát</translation>
+    </message>
 </context>
 <context>
     <name>FermentableDialog</name>
@@ -1293,7 +1313,7 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Amount Type</source>
-        <translation type="unfinished">Druh množství</translation>
+        <translation type="obsolete">Druh množství</translation>
     </message>
     <message>
         <source>Change Fermentable Is Mashed</source>
@@ -1414,11 +1434,11 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Bittering</source>
-        <translation type="obsolete">Hořký</translation>
+        <translation type="unfinished">Hořký</translation>
     </message>
     <message>
         <source>Aroma</source>
-        <translation type="obsolete">Aromatický</translation>
+        <translation type="unfinished">Aromatický</translation>
     </message>
     <message>
         <source>Flavor</source>
@@ -1430,19 +1450,39 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Leaf</source>
-        <translation type="obsolete">Hlávkový</translation>
+        <translation type="unfinished">Hlávkový</translation>
     </message>
     <message>
         <source>Pellet</source>
-        <translation type="obsolete">Granulovaný</translation>
+        <translation type="unfinished">Granulovaný</translation>
     </message>
     <message>
         <source>Plug</source>
-        <translation type="obsolete">Lisovaný</translation>
+        <translation type="unfinished">Lisovaný</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation type="obsolete">Chmelovar</translation>
+        <translation type="unfinished">Chmelovar</translation>
+    </message>
+    <message>
+        <source>Aroma &amp; Bittering</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>First Wort</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Post-Boil</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dry Hop</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2715,23 +2755,23 @@ Error message:
     </message>
     <message>
         <source>Grain</source>
-        <translation>Slad</translation>
+        <translation type="vanished">Slad</translation>
     </message>
     <message>
         <source>Sugar</source>
-        <translation>Cukr</translation>
+        <translation type="vanished">Cukr</translation>
     </message>
     <message>
         <source>Extract</source>
-        <translation>Výtažek</translation>
+        <translation type="vanished">Výtažek</translation>
     </message>
     <message>
         <source>Dry Extract</source>
-        <translation>Sušený výtažek</translation>
+        <translation type="vanished">Sušený výtažek</translation>
     </message>
     <message>
         <source>Adjunct</source>
-        <translation>Surogát</translation>
+        <translation type="vanished">Surogát</translation>
     </message>
     <message>
         <source>Infusion</source>
@@ -3071,7 +3111,7 @@ Error message:
     </message>
     <message>
         <source>Mixed</source>
-        <translation type="unfinished">Mix</translation>
+        <translation type="obsolete">Mix</translation>
     </message>
     <message>
         <source>Unknown</source>
@@ -3212,10 +3252,6 @@ Error message:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Concentration</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Viscosity</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3241,14 +3277,6 @@ Error message:
     </message>
     <message>
         <source>Carbonation Mass Per Volume</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Concentration Parts Per</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Concentration Mass Per Volume</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3290,6 +3318,18 @@ Error message:
     <message>
         <source>Weight</source>
         <translation type="unfinished">Hmotnost</translation>
+    </message>
+    <message>
+        <source>Mass Concentration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Volume Concentration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Metric Concentration</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -1252,22 +1252,27 @@ BrewNoteWidget* MainWindow::findBrewNoteWidget(BrewNote* b)
    return nullptr;
 }
 
-void MainWindow::setBrewNote(BrewNote* bNote)
-{
+void MainWindow::setBrewNote(BrewNote* bNote) {
+   qDebug() << Q_FUNC_INFO << bNote;
+
    QString tabname;
    BrewNoteWidget* ni = findBrewNoteWidget(bNote);
+   qDebug() << Q_FUNC_INFO << "Found" << ni;
 
-   if ( ni )
-   {
+   if ( ni ) {
       tabWidget_recipeView->setCurrentWidget(ni);
       return;
    }
 
-   ni = new BrewNoteWidget(tabWidget_recipeView);
+   qDebug() << Q_FUNC_INFO << "Creating new BrewNoteWidget for" << this->tabWidget_recipeView;
+   ni = new BrewNoteWidget(this->tabWidget_recipeView);
+   qDebug() << Q_FUNC_INFO << "Created new BrewNoteWidget";
    ni->setBrewNote(bNote);
+   qDebug() << Q_FUNC_INFO;
 
-   tabWidget_recipeView->addTab(ni,bNote->brewDate_short());
-   tabWidget_recipeView->setCurrentWidget(ni);
+   this->tabWidget_recipeView->addTab(ni,bNote->brewDate_short());
+   this->tabWidget_recipeView->setCurrentWidget(ni);
+   return;
 }
 
 void MainWindow::setAncestor()
@@ -1815,14 +1820,14 @@ void MainWindow::updateRecipeBoilTime() {
 }
 
 void MainWindow::updateRecipeEfficiency() {
-   qDebug() << Q_FUNC_INFO << lineEdit_efficiency->getValueAs<double>();
+   qDebug() << Q_FUNC_INFO << lineEdit_efficiency->getNonOptValueAs<double>();
    if (!this->recipeObs) {
       return;
    }
 
    this->doOrRedoUpdate(*this->recipeObs,
                         PropertyNames::Recipe::efficiency_pct,
-                        lineEdit_efficiency->getValueAs<unsigned int>(),
+                        lineEdit_efficiency->getNonOptValueAs<unsigned int>(),
                         tr("Change Recipe Efficiency"));
    return;
 }
@@ -2491,19 +2496,21 @@ void MainWindow::reduceInventory() {
 
 // Need to make sure the recipe tree is active, I think
 void MainWindow::newBrewNote() {
-   QModelIndexList indexes = treeView_recipe->selectionModel()->selectedRows();
-   QModelIndex bIndex;
+   qDebug() << Q_FUNC_INFO;
+   QModelIndexList indexes = this->treeView_recipe->selectionModel()->selectedRows();
 
    for (QModelIndex selected : indexes) {
-      Recipe*   rec   = treeView_recipe->getItem<Recipe>(selected);
+      Recipe*   rec   = this->treeView_recipe->getItem<Recipe>(selected);
       if (!rec) {
          continue;
       }
 
       // Make sure everything is properly set and selected
-      if (rec != recipeObs) {
-         setRecipe(rec);
+      if (rec != this->recipeObs) {
+         this->setRecipe(rec);
       }
+
+      qDebug() << Q_FUNC_INFO << "Creating BrewNote for Recipe #" << rec->key();
 
       auto bNote = std::make_shared<BrewNote>(*rec);
       bNote->populateNote(rec);
@@ -2512,10 +2519,13 @@ void MainWindow::newBrewNote() {
 
       this->setBrewNote(bNote.get());
 
-      bIndex = treeView_recipe->findElement(bNote.get());
-      if ( bIndex.isValid() )
+      QModelIndex bIndex = this->treeView_recipe->findElement(bNote.get());
+      qDebug() << Q_FUNC_INFO << "bIndex:" << bIndex;
+      if ( bIndex.isValid() ) {
          setTreeSelection(bIndex);
+      }
    }
+   return;
 }
 
 void MainWindow::reBrewNote() {
@@ -2543,8 +2553,10 @@ void MainWindow::reBrewNote() {
 }
 
 void MainWindow::brewItHelper() {
-   newBrewNote();
-   reduceInventory();
+   qDebug() << Q_FUNC_INFO;
+   this->newBrewNote();
+   this->reduceInventory();
+   return;
 }
 
 void MainWindow::brewAgainHelper() {

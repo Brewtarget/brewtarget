@@ -1027,6 +1027,26 @@ Log file may contain more details.</source>
         <source>Normal</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Dry Extract</source>
+        <translation type="unfinished">Суви екстракт</translation>
+    </message>
+    <message>
+        <source>Extract</source>
+        <translation type="unfinished">Екстракт</translation>
+    </message>
+    <message>
+        <source>Grain</source>
+        <translation type="unfinished">Житарица</translation>
+    </message>
+    <message>
+        <source>Sugar</source>
+        <translation type="unfinished">Шећер</translation>
+    </message>
+    <message>
+        <source>Adjunct</source>
+        <translation type="unfinished">Прилог</translation>
+    </message>
 </context>
 <context>
     <name>FermentableDialog</name>
@@ -1177,7 +1197,7 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Amount Type</source>
-        <translation type="unfinished">Тип количине</translation>
+        <translation type="obsolete">Тип количине</translation>
     </message>
     <message>
         <source>Change Fermentable Is Mashed</source>
@@ -1298,11 +1318,11 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Bittering</source>
-        <translation type="obsolete">Горчина</translation>
+        <translation type="unfinished">Горчина</translation>
     </message>
     <message>
         <source>Aroma</source>
-        <translation type="obsolete">Арома</translation>
+        <translation type="unfinished">Арома</translation>
     </message>
     <message>
         <source>Flavor</source>
@@ -1314,31 +1334,39 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Leaf</source>
-        <translation type="obsolete">Лист</translation>
+        <translation type="unfinished">Лист</translation>
     </message>
     <message>
         <source>Pellet</source>
-        <translation type="obsolete">Грануле</translation>
+        <translation type="unfinished">Грануле</translation>
     </message>
     <message>
         <source>Plug</source>
-        <translation type="obsolete">Чеп</translation>
+        <translation type="unfinished">Чеп</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="obsolete">Укомљавање</translation>
+        <translation type="unfinished">Укомљавање</translation>
     </message>
     <message>
         <source>First Wort</source>
-        <translation type="obsolete">Прва сладовина</translation>
+        <translation type="unfinished">Прва сладовина</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation type="obsolete">Кључање</translation>
+        <translation type="unfinished">Кључање</translation>
     </message>
     <message>
         <source>Dry Hop</source>
-        <translation type="obsolete">Суво хмељње</translation>
+        <translation type="unfinished">Суво хмељње</translation>
+    </message>
+    <message>
+        <source>Aroma &amp; Bittering</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Post-Boil</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2595,23 +2623,23 @@ Error message:
     </message>
     <message>
         <source>Grain</source>
-        <translation>Житарица</translation>
+        <translation type="vanished">Житарица</translation>
     </message>
     <message>
         <source>Sugar</source>
-        <translation>Шећер</translation>
+        <translation type="vanished">Шећер</translation>
     </message>
     <message>
         <source>Extract</source>
-        <translation>Екстракт</translation>
+        <translation type="vanished">Екстракт</translation>
     </message>
     <message>
         <source>Dry Extract</source>
-        <translation>Суви екстракт</translation>
+        <translation type="vanished">Суви екстракт</translation>
     </message>
     <message>
         <source>Adjunct</source>
-        <translation>Прилог</translation>
+        <translation type="vanished">Прилог</translation>
     </message>
     <message>
         <source>Infusion</source>
@@ -2950,10 +2978,6 @@ Error message:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Mixed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Unknown</source>
         <translation type="unfinished">Непознато</translation>
     </message>
@@ -3092,10 +3116,6 @@ Error message:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Concentration</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Viscosity</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3121,14 +3141,6 @@ Error message:
     </message>
     <message>
         <source>Carbonation Mass Per Volume</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Concentration Parts Per</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Concentration Mass Per Volume</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3170,6 +3182,18 @@ Error message:
     <message>
         <source>Weight</source>
         <translation type="unfinished">Тежина</translation>
+    </message>
+    <message>
+        <source>Mass Concentration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Volume Concentration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Metric Concentration</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -79,9 +79,6 @@ WaterDialog::WaterDialog(QWidget* parent) :
    m_spargeRO{0.0},
    m_total_grains{0.0},
    m_thickness{0.0} {
-   QStringList msgs = QStringList() << tr("Too low for target profile.")
-                                    << tr("In range for target profile.")
-                                    << tr("Too high for target profile.");
 
    setupUi(this);
    // initialize the two buttons and lists (I think)
@@ -101,36 +98,53 @@ WaterDialog::WaterDialog(QWidget* parent) :
    m_target_filter->sort(0);
    targetProfileCombo->setModel(m_target_filter);
 
-   // not sure if this is better or worse, but we will try it out
-   m_ppm_digits[static_cast<int>(Water::Ions::Ca)]   = btDigit_ca;
-   m_ppm_digits[static_cast<int>(Water::Ions::Cl)]   = btDigit_cl;
-   m_ppm_digits[static_cast<int>(Water::Ions::HCO3)] = btDigit_hco3;
-   m_ppm_digits[static_cast<int>(Water::Ions::Mg)]   = btDigit_mg;
-   m_ppm_digits[static_cast<int>(Water::Ions::Na)]   = btDigit_na;
-   m_ppm_digits[static_cast<int>(Water::Ions::SO4)]  = btDigit_so4;
+   SMART_FIELD_INIT_FS(WaterDialog, label_ca  , btDigit_ca  , double, Measurement::PhysicalQuantity::VolumeConcentration, 2);
+   SMART_FIELD_INIT_FS(WaterDialog, label_cl  , btDigit_cl  , double, Measurement::PhysicalQuantity::VolumeConcentration, 2);
+   SMART_FIELD_INIT_FS(WaterDialog, label_hco3, btDigit_hco3, double, Measurement::PhysicalQuantity::VolumeConcentration, 2);
+   SMART_FIELD_INIT_FS(WaterDialog, label_mg  , btDigit_mg  , double, Measurement::PhysicalQuantity::VolumeConcentration, 2);
+   SMART_FIELD_INIT_FS(WaterDialog, label_na  , btDigit_na  , double, Measurement::PhysicalQuantity::VolumeConcentration, 2);
+   SMART_FIELD_INIT_FS(WaterDialog, label_so4 , btDigit_so4 , double, Measurement::PhysicalQuantity::VolumeConcentration, 2);
+   SMART_FIELD_INIT_FS(WaterDialog, label_pH  , btDigit_ph  , double, Measurement::PhysicalQuantity::Acidity            , 1);
 
-   m_total_digits[static_cast<int>(Salt::Types::CACL2 )] = btDigit_totalcacl2;
-   m_total_digits[static_cast<int>(Salt::Types::CACO3 )] = btDigit_totalcaco3;
-   m_total_digits[static_cast<int>(Salt::Types::CASO4 )] = btDigit_totalcaso4;
-   m_total_digits[static_cast<int>(Salt::Types::MGSO4 )] = btDigit_totalmgso4;
-   m_total_digits[static_cast<int>(Salt::Types::NACL  )] = btDigit_totalnacl;
+   SMART_FIELD_INIT_FS(WaterDialog, label_totalcacl2 , btDigit_totalcacl2 , double, Measurement::PhysicalQuantity::Mass, 2);
+   SMART_FIELD_INIT_FS(WaterDialog, label_totalcaco3 , btDigit_totalcaco3 , double, Measurement::PhysicalQuantity::Mass, 2);
+   SMART_FIELD_INIT_FS(WaterDialog, label_totalcaso4 , btDigit_totalcaso4 , double, Measurement::PhysicalQuantity::Mass, 2);
+   SMART_FIELD_INIT_FS(WaterDialog, label_totalmgso4 , btDigit_totalmgso4 , double, Measurement::PhysicalQuantity::Mass, 2);
+   SMART_FIELD_INIT_FS(WaterDialog, label_totalnacl  , btDigit_totalnacl  , double, Measurement::PhysicalQuantity::Mass, 2);
+   SMART_FIELD_INIT_FS(WaterDialog, label_totalnahco3, btDigit_totalnahco3, double, Measurement::PhysicalQuantity::Mass, 2);
+
+   // not sure if this is better or worse, but we will try it out
+   m_ppm_digits[static_cast<int>(Water::Ions::Ca)]   = btDigit_ca  ;
+   m_ppm_digits[static_cast<int>(Water::Ions::Cl)]   = btDigit_cl  ;
+   m_ppm_digits[static_cast<int>(Water::Ions::HCO3)] = btDigit_hco3;
+   m_ppm_digits[static_cast<int>(Water::Ions::Mg)]   = btDigit_mg  ;
+   m_ppm_digits[static_cast<int>(Water::Ions::Na)]   = btDigit_na  ;
+   m_ppm_digits[static_cast<int>(Water::Ions::SO4)]  = btDigit_so4 ;
+
+   m_total_digits[static_cast<int>(Salt::Types::CACL2 )] = btDigit_totalcacl2 ;
+   m_total_digits[static_cast<int>(Salt::Types::CACO3 )] = btDigit_totalcaco3 ;
+   m_total_digits[static_cast<int>(Salt::Types::CASO4 )] = btDigit_totalcaso4 ;
+   m_total_digits[static_cast<int>(Salt::Types::MGSO4 )] = btDigit_totalmgso4 ;
+   m_total_digits[static_cast<int>(Salt::Types::NACL  )] = btDigit_totalnacl  ;
    m_total_digits[static_cast<int>(Salt::Types::NAHCO3)] = btDigit_totalnahco3;
 
    // foreach( SmartDigitWidget* i, m_ppm_digits ) {
    for (int i = 0; i < static_cast<int>(Water::Ions::numIons); ++i ) {
       m_ppm_digits[i]->setLimits(0.0,1000.0);
-      m_ppm_digits[i]->setText(0.0, 1);
-      m_ppm_digits[i]->setMessages(msgs);
+      m_ppm_digits[i]->setAmount(0.0);
+      m_ppm_digits[i]->setMessages(tr("Too low for target profile."),
+                                   tr("In range for target profile."),
+                                   tr("Too high for target profile."));
    }
    // we can be a bit more specific with pH
    btDigit_ph->setLowLim(5.0);
    btDigit_ph->setHighLim(5.5);
-   btDigit_ph->display(7.0,1);
+   btDigit_ph->setAmount(7.0);
 
    // since all the things are now digits, lets get the totals configured
    for (int i = static_cast<int>(Salt::Types::CACL2); i < static_cast<int>(Salt::Types::NAHCO3); ++i ) {
-      m_total_digits[i]->setConstantColor(SmartDigitWidget::BLACK);
-      m_total_digits[i]->setText(0.0,1);
+      m_total_digits[i]->setConstantColor(SmartDigitWidget::ColorType::Black);
+      m_total_digits[i]->setAmount(0.0);
    }
    // and now let's see what the table does.
    m_salt_table_model = new SaltTableModel(tableView_salts);
@@ -140,13 +154,6 @@ WaterDialog::WaterDialog(QWidget* parent) :
 
    m_base_editor   = new WaterEditor(this, "Base");
    m_target_editor = new WaterEditor(this, "Target");
-
-   SMART_FIELD_INIT_FS(WaterDialog, label_totalcacl2 , btDigit_totalcacl2 , double, Measurement::PhysicalQuantity::Mass, 2);
-   SMART_FIELD_INIT_FS(WaterDialog, label_totalcaco3 , btDigit_totalcaco3 , double, Measurement::PhysicalQuantity::Mass, 2);
-   SMART_FIELD_INIT_FS(WaterDialog, label_totalcaso4 , btDigit_totalcaso4 , double, Measurement::PhysicalQuantity::Mass, 2);
-   SMART_FIELD_INIT_FS(WaterDialog, label_totalmgso4 , btDigit_totalmgso4 , double, Measurement::PhysicalQuantity::Mass, 2);
-   SMART_FIELD_INIT_FS(WaterDialog, label_totalnacl  , btDigit_totalnacl  , double, Measurement::PhysicalQuantity::Mass, 2);
-   SMART_FIELD_INIT_FS(WaterDialog, label_totalnahco3, btDigit_totalnahco3, double, Measurement::PhysicalQuantity::Mass, 2);
 
    // all the signals
    connect(baseProfileCombo,   QOverload<int>::of(&QComboBox::activated), this, &WaterDialog::update_baseProfile  );
@@ -193,12 +200,10 @@ void WaterDialog::setDigits() {
       double ppm = this->m_target->ppm(static_cast<Water::Ions>(i));
       double min_ppm = ppm * 0.95;
       double max_ppm = ppm * 1.05;
-      QStringList msgs = QStringList()
-         << tr("Minimum expected concentration is %1 ppm").arg(min_ppm)
-         << tr("In range for target profile.")
-         << tr("Maximum expected concentration is %1 ppm").arg(max_ppm);
       m_ppm_digits[i]->setLimits(min_ppm,max_ppm);
-      m_ppm_digits[i]->setMessages(msgs);
+      m_ppm_digits[i]->setMessages(tr("Minimum expected concentration is %1 ppm").arg(min_ppm),
+                                   tr("In range for target profile."),
+                                   tr("Maximum expected concentration is %1 ppm").arg(max_ppm));
    }
 
    // oddly, pH doesn't change with the target water
@@ -206,7 +211,7 @@ void WaterDialog::setDigits() {
 }
 
 void WaterDialog::setRecipe(Recipe *rec) {
-   if ( rec == nullptr ) {
+   if (!rec) {
       return;
    }
 
@@ -334,7 +339,7 @@ void WaterDialog::newTotals() {
 
    for (int i = static_cast<int>(Salt::Types::CACL2); i < static_cast<int>(Salt::Types::LACTIC); ++i ) {
       Salt::Types type = static_cast<Salt::Types>(i);
-      m_total_digits[i]->setText(m_salt_table_model->total(type), 2);
+      m_total_digits[i]->setAmount(m_salt_table_model->total(type));
    }
 
    // the total_* method return the numerator, we supply the denominator and
@@ -352,15 +357,15 @@ void WaterDialog::newTotals() {
       for (int i = 0; i < static_cast<int>(Water::Ions::numIons); ++i ) {
          Water::Ions ion = static_cast<Water::Ions>(i);
          double mPPM = modifier * this->m_base->ppm(ion);
-         m_ppm_digits[i]->setText( m_salt_table_model->total(ion) / allTheWaters + mPPM, 0 );
+         m_ppm_digits[i]->setAmount( m_salt_table_model->total(ion) / allTheWaters + mPPM);
 
       }
-      btDigit_ph->setText( calculateMashpH(), 2 );
+      btDigit_ph->setAmount(calculateMashpH());
 
    } else {
       for (int i = 0; i < static_cast<int>(Water::Ions::numIons); ++i ) {
          Water::Ions ion = static_cast<Water::Ions>(i);
-         m_ppm_digits[i]->setText( m_salt_table_model->total(ion) / allTheWaters, 0 );
+         m_ppm_digits[i]->setAmount( m_salt_table_model->total(ion) / allTheWaters);
       }
    }
    return;

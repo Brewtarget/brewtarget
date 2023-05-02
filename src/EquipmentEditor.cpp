@@ -201,7 +201,7 @@ void EquipmentEditor::save() {
       inform = inform + QString("<li>%1</li>").arg(tr("batch size"));
    }
 
-   if ( qFuzzyCompare(lineEdit_hopUtilization->getValueAs<double>(), 0.0) ) {
+   if ( qFuzzyCompare(lineEdit_hopUtilization->getNonOptValueAs<double>(), 0.0) ) {
       problems = true;
       inform = inform + QString("<li>%1</li>").arg(tr("hop utilization"));
    }
@@ -225,7 +225,7 @@ void EquipmentEditor::save() {
    this->obsEquip->setBatchSize_l          (lineEdit_batchSize      ->toCanonical().quantity() );
    this->obsEquip->setTunVolume_l          (lineEdit_tunVolume      ->toCanonical().quantity() );
    this->obsEquip->setTunWeight_kg         (lineEdit_tunWeight      ->toCanonical().quantity() );
-   this->obsEquip->setTunSpecificHeat_calGC(lineEdit_tunSpecificHeat->getValueAs<double>() );  // TODO Convert this to real units!
+   this->obsEquip->setTunSpecificHeat_calGC(lineEdit_tunSpecificHeat->getNonOptValueAs<double>() );  // TODO Convert this to real units!
    this->obsEquip->setBoilTime_min         (lineEdit_boilTime       ->toCanonical().quantity());
    this->obsEquip->setEvapRate_lHr         (lineEdit_evaporationRate->toCanonical().quantity() );
    this->obsEquip->setTopUpKettle_l        (lineEdit_topUpKettle    ->toCanonical().quantity() );
@@ -234,7 +234,7 @@ void EquipmentEditor::save() {
    this->obsEquip->setLauterDeadspace_l    (lineEdit_lauterDeadspace->toCanonical().quantity() );
    this->obsEquip->setGrainAbsorption_LKg  (ga_LKg );
    this->obsEquip->setBoilingPoint_c       (lineEdit_boilingPoint   ->toCanonical().quantity() );
-   this->obsEquip->setHopUtilization_pct   (lineEdit_hopUtilization ->getValueAs<double>() );
+   this->obsEquip->setHopUtilization_pct   (lineEdit_hopUtilization ->getNonOptValueAs<double>() );
    this->obsEquip->setNotes                (textEdit_notes          ->toPlainText());
    this->obsEquip->setCalcBoilVolume       (checkBox_calcBoilVolume ->checkState() == Qt::Checked);
 
