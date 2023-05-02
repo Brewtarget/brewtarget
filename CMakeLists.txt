@@ -1,6 +1,6 @@
 #
 # CMakeLists.txt is part of Brewtarget, and is Copyright the following
-# authors 2009-2022
+# authors 2009-2023
 #  - Chris Pavetto <chrispavetto@gmail.com>
 #  - Dan Cavanagh <dan@dancavanagh.com>
 #  - Daniel Moreno <danielm5@users.noreply.github.com>
@@ -27,6 +27,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+# ⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐
+# NB: Meson and the `bt` build tool Python script are now the primary way of building and packaging the software.  You
+#     can also still CMake to compile the product and install it locally, but we no longer support using CMake to do
+#     packaging.
+# ⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐
+
+#
 #
 # Creates a Makefile in the build directory, from where you can do builds and installs.
 #
