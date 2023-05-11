@@ -32,7 +32,7 @@
 #include "model/Recipe.h"
 #include "PersistentSettings.h"
 #include "utils/OptionalHelpers.h"
-#include "SmartField.h"
+#include "widgets/SmartField.h"
 #include "widgets/UnitAndScalePopUpMenu.h"
 
 // This private implementation class holds all private non-virtual members of SmartLabel
@@ -109,7 +109,7 @@ SmartLabel::~SmartLabel() = default;
 void SmartLabel::init(char const * const   editorName,
                       char const * const   labelName,
                       char const * const   labelFqName,
-                      SmartField *         smartField,
+                      [[maybe_unused]] SmartField *         smartField,
                       TypeInfo     const & typeInfo) {
    qDebug() << Q_FUNC_INFO << labelFqName << ":" << typeInfo;
 

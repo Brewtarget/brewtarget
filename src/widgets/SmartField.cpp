@@ -1,5 +1,5 @@
 /*
- * SmartField.cpp is part of Brewtarget, and is copyright the following authors 2009-2023:
+ * widgets/SmartField.cpp is part of Brewtarget, and is copyright the following authors 2009-2023:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Mark de Wever <koraq@xs4all.nl>
  *   • Mattias Måhl <mattias@kejsarsten.com>
@@ -22,7 +22,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "SmartField.h"
+#include "widgets/SmartField.h"
 
 #include <tuple>
 
@@ -36,6 +36,21 @@
 #include "utils/OptionalHelpers.h"
 #include "utils/TypeLookup.h"
 #include "widgets/SmartLabel.h"
+
+namespace {
+   /**
+    * \return \c true if \c input is empty or blank (ie contains only whitespace), \c false otherwise
+    */
+   [[nodiscard]] bool isEmptyOrBlank(QString const & input) {
+      if (input.isEmpty()) {
+         return true;
+      }
+      if (input.trimmed().isEmpty()) {
+         return true;
+      }
+      return false;
+   }
+}
 
 // This private implementation class holds all private non-virtual members of SmartField
 class SmartField::impl {
@@ -183,6 +198,26 @@ public:
       return amount;
    }
 
+   /**
+    * \brief Use this when you want to do something with the returned QString
+    *
+    * \param amount Must be in canonical units eg kilograms for mass, liters for volume
+    */
+   [[nodiscard]] QString displayAmount(double amount) const {
+      // It's a coding error to call this for NonPhysicalQuantity
+      Q_ASSERT(!std::holds_alternative<NonPhysicalQuantity>(*this->m_typeInfo->fieldType));
+
+      // I find this a nice level of abstraction. This lets all of the setText()
+      // methods make a single call w/o having to do the logic for finding the
+      // unit and scale.
+      return Measurement::displayAmount(
+         Measurement::Amount{amount, Measurement::Unit::getCanonicalUnit(*this->m_currentPhysicalQuantity)},
+         this->m_precision,
+         this->m_self.getForcedSystemOfMeasurement(),
+         this->m_self.getForcedRelativeScale()
+      );
+   }
+
    SmartField &              m_self;
    bool                      m_initialised;
    char const *              m_editorName;
@@ -234,7 +269,7 @@ template<> void SmartField::init<SmartLabel>(char const *                const  
 template<> void SmartField::init<QLabel>(char const *                const   editorName,
                                          char const *                const   fieldName,
                                          char const *                const   fieldFqName,
-                                         QLabel                            & regularBuddyLabel,
+                                         [[maybe_unused]] QLabel           & regularBuddyLabel,
                                          TypeInfo                    const & typeInfo,
                                          std::optional<unsigned int> const   precision,
                                          QString                     const & maximalDisplayString) {
@@ -256,7 +291,7 @@ template<> void SmartField::init<QLabel>(char const *                const   edi
 void SmartField::initFixed(char const *                const   editorName,
                            char const *                const   fieldName,
                            char const *                const   fieldFqName,
-                           QLabel                            & buddyLabel,
+                           [[maybe_unused]] QLabel           & buddyLabel,
                            TypeInfo                    const & typeInfo,
                            Measurement::Unit           const & fixedDisplayUnit,
                            std::optional<unsigned int> const   precision,
@@ -372,14 +407,17 @@ SmartAmounts::ScaleInfo SmartField::getScaleInfo() const {
                                      ConvertToPhysicalQuantities(*this->pimpl->m_typeInfo->fieldType));
 }
 
-template<typename T>
-void SmartField::setAmount(std::optional<T> amount) {
+// Note that, because partial specialisation of _functions_ is not allowed, we actually have two overloads of setAmount
+// This shouldn't make any difference to callers.
+template<typename T, typename> void SmartField::setAmount(std::optional<T> amount) {
    Q_ASSERT(this->pimpl->m_initialised);
 
    if (this->pimpl->m_typeInfo->typeIndex != typeid(T)) {
+      // This is a coding error
       qCritical() <<
          Q_FUNC_INFO << this->pimpl->m_fieldFqName << ": Trying to set wrong type; m_typeInfo=" <<
-         this->pimpl->m_typeInfo;
+         this->pimpl->m_typeInfo << ", typeid(T)=" << typeid(T).name();
+      Q_ASSERT(false);
    }
 
    if (!amount) {
@@ -391,26 +429,16 @@ void SmartField::setAmount(std::optional<T> amount) {
    return;
 }
 
-//
-// Instantiate the above template function for the types that are going to use it
-// (This is all just a trick to allow the template definition to be here in the .cpp file and not in the header, which
-// saves having to put a bunch of std::string stuff there.)
-//
-template void SmartField::setAmount(std::optional<int         > amount);
-template void SmartField::setAmount(std::optional<unsigned int> amount);
-template void SmartField::setAmount(std::optional<double      > amount);
-
-template<typename T> void SmartField::setAmount(T amount) {
-   // Only need next bit for debugging!
-//   if (!this->pimpl->m_initialised) {
-//      qCritical().noquote() << Q_FUNC_INFO << this->pimpl->m_fieldFqName << "Stack trace:" << Logging::getStackTrace();
-//   }
+template<typename T, typename> void SmartField::setAmount(T amount) {
    Q_ASSERT(this->pimpl->m_initialised);
    qDebug() << Q_FUNC_INFO << this->pimpl->m_fieldFqName << "amount =" << amount;
 
    if (this->pimpl->m_typeInfo->typeIndex != typeid(T)) {
+      // This is a coding error
       qCritical() <<
-         Q_FUNC_INFO << this->pimpl->m_fieldFqName << ": Trying to set wrong type; m_typeInfo=" << this->pimpl->m_typeInfo;
+         Q_FUNC_INFO << this->pimpl->m_fieldFqName << ": Trying to set wrong type; m_typeInfo=" <<
+         this->pimpl->m_typeInfo << ", typeid(T)=" << typeid(T).name();
+      Q_ASSERT(false);
    }
 
    if (std::holds_alternative<NonPhysicalQuantity>(*this->pimpl->m_typeInfo->fieldType)) {
@@ -436,30 +464,86 @@ template<typename T> void SmartField::setAmount(T amount) {
          Q_FUNC_INFO << this->pimpl->m_fieldFqName << "forcedSystemOfMeasurement:" <<
          this->getForcedSystemOfMeasurement() << ", forcedRelativeScale:" <<
          this->getForcedRelativeScale();
-      this->setRawText(this->displayAmount(amount));
+      this->setRawText(this->pimpl->displayAmount(amount));
    }
 
    return;
 }
 
+// Instantiate the above template functions for the types that are going to use it
+// (This is all just a trick to allow the template definition to be here in the .cpp file and not in the header, which
+// saves having to put a bunch of std::string stuff there.)
+template void SmartField::setAmount(std::optional<int         > amount);
+template void SmartField::setAmount(std::optional<unsigned int> amount);
+template void SmartField::setAmount(std::optional<double      > amount);
 template void SmartField::setAmount(int          amount);
 template void SmartField::setAmount(unsigned int amount);
 template void SmartField::setAmount(double       amount);
 
-template<typename T> T SmartField::getValueAs() const {
-   qDebug() <<
-      Q_FUNC_INFO << this->pimpl->m_fieldFqName << ": Converting" << this->getRawText() << "to" <<
-      Measurement::extractRawFromString<T>(this->getRawText());
-   return Measurement::extractRawFromString<T>(this->getRawText());
+void SmartField::setPrecision(unsigned int const precision) {
+   this->pimpl->m_precision = precision;
+   return;
 }
-//
+
+[[nodiscard]] unsigned int SmartField::getPrecision() const {
+   return this->pimpl->m_precision;
+}
+
+// We can't do the same trick on get-value-as as we do for set-amount because we can't overload base on return type,
+// hence two different function names.
+template<typename T> T SmartField::getNonOptValueAs(bool * const ok) const {
+   Q_ASSERT(this->pimpl->m_initialised);
+
+   QString const rawText = this->getRawText();
+   qDebug() << Q_FUNC_INFO << this->pimpl->m_fieldFqName << ": Converting" << rawText;
+
+   // It's a coding error to call this for ann optional value.  We put the assert after the log statement to help
+   // with debugging!
+   Q_ASSERT(!this->pimpl->m_typeInfo->isOptional());
+
+   // Note that Measurement::extractRawFromString returns 0 if it can't parse the text
+   return Measurement::extractRawFromString<T>(rawText, ok);
+}
 // Instantiate the above template function for the types that are going to use it
-// (This is all just a trick to allow the template definition to be here in the .cpp file and not in the header, which
-// saves having to put a bunch of std::string stuff there.)
-//
-template int          SmartField::getValueAs<int         >() const;
-template unsigned int SmartField::getValueAs<unsigned int>() const;
-template double       SmartField::getValueAs<double      >() const;
+template int          SmartField::getNonOptValueAs<int         >(bool * const ok) const;
+template unsigned int SmartField::getNonOptValueAs<unsigned int>(bool * const ok) const;
+template double       SmartField::getNonOptValueAs<double      >(bool * const ok) const;
+
+template<typename T> std::optional<T> SmartField::getOptValueAs(bool * const ok) const {
+
+   Q_ASSERT(this->pimpl->m_initialised);
+
+   QString const rawText = this->getRawText();
+   qDebug() << Q_FUNC_INFO << this->pimpl->m_fieldFqName << ": Converting" << rawText;
+
+   // It's a coding error to call this for a non optional value.  We put the assert after the log statement to help
+   // with debugging!
+   Q_ASSERT(this->pimpl->m_typeInfo->isOptional());
+
+   // Optional values are allowed to be blank
+   if (isEmptyOrBlank(rawText)) {
+      if (ok) {
+         *ok = true;
+      }
+      return std::optional<T>{std::nullopt};
+   }
+
+   bool parseOk = false;
+   T amount = Measurement::extractRawFromString<T>(rawText, &parseOk);
+   if (ok) {
+      *ok = parseOk;
+   }
+   // If we couldn't parse something, return null
+   if (!parseOk) {
+      return std::optional<T>{std::nullopt};
+   }
+
+   return std::make_optional<T>(amount);
+}
+// Instantiate the above template function for the types that are going to use it
+template std::optional<int         > SmartField::getOptValueAs<int         >(bool * const ok) const;
+template std::optional<unsigned int> SmartField::getOptValueAs<unsigned int>(bool * const ok) const;
+template std::optional<double      > SmartField::getOptValueAs<double      >(bool * const ok) const;
 
 
 Measurement::PhysicalQuantity SmartField::getPhysicalQuantity() const {
@@ -485,67 +569,6 @@ void SmartField::selectPhysicalQuantity(Measurement::PhysicalQuantity const phys
    return;
 }
 
-///void SmartField::setForcedSystemOfMeasurement(std::optional<Measurement::SystemOfMeasurement> systemOfMeasurement) {
-///   qDebug() <<
-///      Q_FUNC_INFO << "Measurement system" << systemOfMeasurement << "for" << this->pimpl->m_configSection << ">" <<
-///      this->pimpl->m_editField;
-///   Measurement::setForcedSystemOfMeasurementForField(this->pimpl->m_editField,
-///                                                     this->pimpl->m_configSection,
-///                                                     systemOfMeasurement);
-///   return;
-///}
-///
-///std::optional<Measurement::SystemOfMeasurement> SmartField::getForcedSystemOfMeasurement() const {
-///   return Measurement::getForcedSystemOfMeasurementForField(this->pimpl->m_editField, this->pimpl->m_configSection);
-///}
-///
-///void SmartField::setForcedRelativeScale(std::optional<Measurement::UnitSystem::RelativeScale> relativeScale) {
-///   qDebug() <<
-///      Q_FUNC_INFO << "Scale" << relativeScale << "for" << this->pimpl->m_configSection << ">" <<
-///      this->pimpl->m_editField;
-///   Measurement::setForcedRelativeScaleForField(this->pimpl->m_editField, this->pimpl->m_configSection, relativeScale);
-///   return;
-///}
-///
-///std::optional<Measurement::UnitSystem::RelativeScale> SmartField::getForcedRelativeScale() const {
-///   return Measurement::getForcedRelativeScaleForField(this->pimpl->m_editField, this->pimpl->m_configSection);
-///}
-///
-///SmartAmounts::ScaleInfo SmartField::getPreviousScaleInfo() const {
-///   qDebug() <<
-///      Q_FUNC_INFO << "Edit Field / Property Name:" << this->pimpl->m_editField << ", Config Section" <<
-///      this->pimpl->m_configSection;
-///
-///
-///   SmartAmounts::ScaleInfo previousScaleInfo{
-///      Measurement::getSystemOfMeasurementForField(this->pimpl->m_editField, this->pimpl->m_configSection, this->pimpl->m_currentPhysicalQuantity),
-///      Measurement::getForcedRelativeScaleForField(this->pimpl->m_editField, this->pimpl->m_configSection)
-///   };
-///   return previousScaleInfo;
-///}
-
-///Measurement::Amount SmartField::rawToCanonical(QString const & rawValue) const {
-///   return Measurement::qStringToSI(rawValue,
-///                                   this->pimpl->m_currentPhysicalQuantity,
-///                                   this->getForcedSystemOfMeasurement(),
-///                                   this->getForcedRelativeScale());
-///}
-
-QString SmartField::displayAmount(double amount) const {
-   // It's a coding error to call this for NonPhysicalQuantity
-   Q_ASSERT(!std::holds_alternative<NonPhysicalQuantity>(*this->pimpl->m_typeInfo->fieldType));
-
-   // I find this a nice level of abstraction. This lets all of the setText()
-   // methods make a single call w/o having to do the logic for finding the
-   // unit and scale.
-   return Measurement::displayAmount(
-      Measurement::Amount{amount, Measurement::Unit::getCanonicalUnit(*this->pimpl->m_currentPhysicalQuantity)},
-      this->pimpl->m_precision,
-      this->getForcedSystemOfMeasurement(),
-      this->getForcedRelativeScale()
-   );
-}
-
 void SmartField::correctEnteredText(SmartAmounts::ScaleInfo previousScaleInfo) {
    Q_ASSERT(this->pimpl->m_initialised);
 
@@ -564,7 +587,7 @@ void SmartField::correctEnteredText(SmartAmounts::ScaleInfo previousScaleInfo) {
    // amount (aka to SI) and then into the unit we want.
    Measurement::Amount amountAsCanonical = this->pimpl->toCanonical(enteredText, previousScaleInfo);
 
-   QString const correctedText = this->displayAmount(amountAsCanonical.quantity());
+   QString const correctedText = this->pimpl->displayAmount(amountAsCanonical.quantity());
    qDebug() <<
       Q_FUNC_INFO << this->getFqFieldName() << "Interpreted" << enteredText << "as" << amountAsCanonical <<
       "and corrected to" << correctedText;
@@ -584,97 +607,27 @@ void SmartField::correctEnteredText() {
    NonPhysicalQuantity const nonPhysicalQuantity =
       std::get<NonPhysicalQuantity>(*this->pimpl->m_typeInfo->fieldType);
    if (nonPhysicalQuantity != NonPhysicalQuantity::String) {
+      QString const rawText = this->getRawText();
+
+      auto const type = this->pimpl->m_typeInfo->typeIndex;
+      bool const optional = this->pimpl->m_typeInfo->isOptional();
       bool ok = false;
-      if (this->pimpl->m_typeInfo->typeIndex == typeid(double)) {
-         double amount = Measurement::extractRawFromString<double>(this->getRawText(), &ok);
-         this->setAmount(amount);
-      } else if (this->pimpl->m_typeInfo->typeIndex == typeid(int)) {
-         int amount = Measurement::extractRawFromString<int>(this->getRawText(), &ok);
-         this->setAmount(amount);
-      } else if (this->pimpl->m_typeInfo->typeIndex == typeid(unsigned int)) {
-         unsigned int amount = Measurement::extractRawFromString<unsigned int>(this->getRawText(), &ok);
-         this->setAmount(amount);
-      } else {
+      if (type == typeid(double      )) { if (optional) { this->setAmount(this->getOptValueAs<double      >(&ok)); } else { this->setAmount(this->getNonOptValueAs<double      >(&ok)); } } else
+      if (type == typeid(int         )) { if (optional) { this->setAmount(this->getOptValueAs<int         >(&ok)); } else { this->setAmount(this->getNonOptValueAs<int         >(&ok)); } } else
+      if (type == typeid(unsigned int)) { if (optional) { this->setAmount(this->getOptValueAs<unsigned int>(&ok)); } else { this->setAmount(this->getNonOptValueAs<unsigned int>(&ok)); } } else {
          // It's a coding error if we get here
          qCritical() <<
             Q_FUNC_INFO << this->getFqFieldName() << ": Don't know how to parse" << this->pimpl->m_typeInfo;
          Q_ASSERT(false);
       }
+
       if (!ok) {
          qWarning() <<
-            Q_FUNC_INFO << this->getFqFieldName() << ": Unable to extract number from" << this->getRawText() <<
-            "for" << this->pimpl->m_typeInfo;
-         this->setAmount(0);
+            Q_FUNC_INFO << this->getFqFieldName() << ": Unable to extract number from" << rawText << "for" <<
+            this->pimpl->m_typeInfo;
+         // setAmount will already have been called with 0 or std::nullopt as appropriate
       }
    }
 
    return;
 }
-
-///void SmartField::textOrUnitsChanged(SmartAmounts::ScaleInfo previousScaleInfo) {
-///   // This is where it gets hard
-///   //
-///   // We may need to fix the text that the user entered, eg if this field is set to show US Customary volumes and user
-///   // enters an amount in litres then we need to convert it to display in pints or quarts etc.
-///   QString correctedText;
-///
-///   QString rawValue = this->getWidgetRawText();
-///   qDebug() << Q_FUNC_INFO << "rawValue:" << rawValue;
-///
-///   if (rawValue.isEmpty()) {
-///      return;
-///   }
-///
-///   // The idea here is we need to first translate the field into a known
-///   // amount (aka to SI) and then into the unit we want.
-///   Measurement::Amount amountAsCanonical = this->convertToSI(previousScaleInfo);
-///
-///   Measurement::PhysicalQuantity physicalQuantity = this->getPhysicalQuantity();
-///   int precision = 3;
-///   if (physicalQuantity == Measurement::PhysicalQuantity::Color) {
-///      precision = 0;
-///   }
-///   correctedText = this->displayAmount(amountAsCanonical.quantity(), precision);
-///   qDebug() <<
-///      Q_FUNC_INFO << "Interpreted" << rawValue << "as" << amountAsCanonical << "and corrected to" << correctedText;
-///
-///   this->setWidgetRawText(correctedText);
-///   return;
-///}
-
-///Measurement::Amount SmartField::convertToSI(SmartAmounts::ScaleInfo previousScaleInfo) {
-///   QString rawValue = this->getWidgetRawText();
-///   qDebug() <<
-///      Q_FUNC_INFO << "rawValue:" << rawValue <<  ", old SystemOfMeasurement:" <<
-///      previousScaleInfo.oldSystemOfMeasurement << ", old ForcedScale: " << previousScaleInfo.oldForcedScale;
-///
-///   Measurement::UnitSystem const & oldUnitSystem =
-///      Measurement::UnitSystem::getInstance(previousScaleInfo.oldSystemOfMeasurement, this->pimpl->m_currentPhysicalQuantity);
-///
-///   Measurement::Unit const * defaultUnit{
-///      previousScaleInfo.oldForcedScale ? oldUnitSystem.scaleUnit(*previousScaleInfo.oldForcedScale) : oldUnitSystem.unit()
-///   };
-///
-///   // It's a coding error if defaultUnit is null, because it means previousScaleInfo.oldForcedScale was not valid for
-///   // oldUnitSystem.  However, we can recover.
-///   if (!defaultUnit) {
-///      qWarning() << Q_FUNC_INFO << "previousScaleInfo.oldForcedScale invalid?" << previousScaleInfo.oldForcedScale;
-///      defaultUnit = oldUnitSystem.unit();
-///   }
-///
-///   //
-///   // Normally, we display units with the text.  If the user just edits the number, then the units will still be there.
-///   // Alternatively, if the user specifies different units in the text, we should try to honour those.  Otherwise, if,
-///   // no units are specified in the text, we need to go to defaults.  Defaults are either what is "forced" for this
-///   // specific field or, failing that, what is configured globally.
-///   //
-///   // Measurement::UnitSystem::qStringToSI will handle all the logic to deal with any units specified by the user in the
-///   // string.  (In theory, we just grab the units that the user has specified in the input text.  In reality, it's not
-///   // that easy as we sometimes need to disambiguate - eg between Imperial gallons and US customary ones.  So, if we
-///   // have old or current units then that helps with this - eg, if current units are US customary cups and user enters
-///   // gallons, then we'll go with US customary gallons over Imperial ones.)
-///   //
-///   auto amount = oldUnitSystem.qstringToSI(rawValue, *defaultUnit);
-///   qDebug() << Q_FUNC_INFO << "Converted to" << amount;
-///   return amount;
-///}

@@ -31,7 +31,7 @@
 #include <QStyle>
 
 #include "measurement/Measurement.h"
-#include "SmartField.h"
+#include "widgets/SmartField.h"
 #include "utils/OptionalHelpers.h"
 #include "utils/TypeLookup.h"
 #include "widgets/SmartLabel.h"
@@ -117,9 +117,7 @@ SmartLineEdit::SmartLineEdit(QWidget * parent) :
    QLineEdit(parent),
    SmartField{},
    pimpl{std::make_unique<impl>(*this)} {
-
    connect(this, &QLineEdit::editingFinished, this, &SmartLineEdit::onLineChanged);
-
    return;
 }
 
@@ -150,14 +148,11 @@ void SmartLineEdit::doPostInitWork() {
 
 void SmartLineEdit::onLineChanged() {
    Q_ASSERT(this->isInitialised());
+   qDebug() << Q_FUNC_INFO;
 
-   // .:TODO:. Finish work on optional
-   if ("" == this->getRawText() && this->getTypeInfo().isOptional()) {
-      this->pimpl->setNoAmount();
-   } else if (std::holds_alternative<NonPhysicalQuantity>(*this->getTypeInfo().fieldType)) {
+   if (std::holds_alternative<NonPhysicalQuantity>(*this->getTypeInfo().fieldType)) {
       // The field is not measuring a physical quantity so there are no units or unit conversions to handle
       // However, for anything other than a string, we still want to parse out the numeric part of the input
-      qDebug() << Q_FUNC_INFO;
       this->correctEnteredText();
 
       if (sender() == this) {
@@ -166,7 +161,7 @@ void SmartLineEdit::onLineChanged() {
       return;
    }
 
-   // The field is measuring a physical quantity
+   // The field must be measuring a physical quantity, because we dealt with the other case above!
    Q_ASSERT(!std::holds_alternative<NonPhysicalQuantity>(*this->getTypeInfo().fieldType));
 
    auto const previousScaleInfo = this->getScaleInfo();

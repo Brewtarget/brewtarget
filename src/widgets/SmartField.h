@@ -1,5 +1,5 @@
 /*
- * SmartField.h is part of Brewtarget, and is copyright the following authors 2009-2023:
+ * widgets/SmartField.h is part of Brewtarget, and is copyright the following authors 2009-2023:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Mark de Wever <koraq@xs4all.nl>
  *   • Matt Young <mfsy@yahoo.com>
@@ -35,7 +35,8 @@
 #include "measurement/Unit.h"
 #include "measurement/UnitSystem.h"
 #include "utils/BtStringConst.h"
-#include "SmartAmounts.h"
+#include "utils/TypeLookup.h"
+#include "widgets/SmartAmounts.h"
 
 class QWidget;
 
@@ -87,7 +88,7 @@ public:
     *        above), it also ensures, if necessary, that the \c changedSystemOfMeasurementOrScale signal from the
     *        \c SmartLabel buddy is connected to the \c lineChanged slot of this \c SmartField.
     *
-    *        Note, in reality, you actually use the \c SMART_FIELD_INIT macro (see \c SmartAmounts.h).
+    *        Note, in reality, you actually use the \c SMART_FIELD_INIT macro (see \c widgets/SmartAmounts.h).
     *
     * \param editorName Name of the owning editor (eg "FermentableEditor").  Together with \c fieldName, should
     *                   uniquely identify this field.
@@ -120,7 +121,7 @@ public:
     * \param precision For a decimal field, this determines the number of decimal places to show.  If not specified, we
     *                  show 3 decimal places.  TBD: IDK if one day we might need to be more sophisticated about this, ie
     *                  with number of decimal places dependent on the units that the user has chosen, but for now we
-    *                  assume it's the same for everything.
+    *                  assume it's the same for everything, but allow modification via \c setPrecision.
     *
     * \param maximalDisplayString Used for determining the width of the widget (because a fixed pixel width isn't great
     *                             in a world where there are varying display DPIs).
@@ -201,12 +202,30 @@ public:
    Measurement::Amount toCanonical() const;
 
    /**
-    * \brief Set the amount for a numeric field
+    * \brief Version of \c setAmount, for an optional amount.
     *
-    * \param amount is the amount to display, but the field should be blank if this is \b std::nullopt
+    *        It looks a bit funky disabling this specialisation for a T that is optional, but the point is that we don't
+    *        want the compiler to ever create a \c std::optional<std::optional<T>> type.  (Eg, we don't want to write
+    *        `\c setAmount<std::optional<T>>(\c std::nullopt)` when we mean
+    *        `\c setAmount<T>(\c std::optional<T>{std::nullopt})`.
+    *
     */
-   template<typename T> void setAmount(std::optional<T> amount);
-   template<typename T> void setAmount(T                amount);
+   template<typename T, typename = std::enable_if_t<is_not_optional<T>::value> > void setAmount(std::optional<T> amount);
+
+   /**
+    * \brief Set the amount for a non-optional numeric field
+    *
+    * \param amount is the amount to display, which may be optional
+    */
+   template<typename T, typename = std::enable_if_t<is_not_optional<T>::value> > void setAmount(T amount);
+
+   /**
+    * \brief Normally, you set precision once when \c init is called via \c SMART_FIELD_INIT or similar.  However, if
+    *        you really want to modify it on the fly, eg to have different precision for different units, this is what
+    *        you call.  Note that you should call this before calling \c setAmount.
+    */
+   void setPrecision(unsigned int const precision);
+   [[nodiscard]] unsigned int getPrecision() const;
 
    void setForcedSystemOfMeasurement(std::optional<Measurement::SystemOfMeasurement> systemOfMeasurement);
    void setForcedRelativeScale(std::optional<Measurement::UnitSystem::RelativeScale> relativeScale);
@@ -221,9 +240,26 @@ public:
 
    /**
     * \brief Use this when you want to get the text as a number (and ignore any units or other trailling letters or
-    *        symbols)
+    *        symbols).
+    *
+    *        This version is for non-optional (aka required) values.
+    *
+    *        Valid instantiations are \c int, \c unsigned \c int, \c double
+    *
+    * \param ok If set, used to return \c true if parsing of raw text went OK and \c false otherwise (in which case,
+    *           function return value will be 0).
     */
-   template<typename T> T getValueAs() const;
+   template<typename T> T getNonOptValueAs(bool * const ok = nullptr) const;
+
+   /**
+    * \brief As \c getNonOptValueAs but for std::optional values
+    *
+    *        Valid instantiations are \c int, \c unsigned \c int, \c double
+    *
+    * \param ok If set, used to return \c true if parsing of raw text went OK and \c false otherwise (in which case,
+    *           function return value will be \c std::nullopt).
+    */
+   template<typename T> std::optional<T> getOptValueAs(bool * const ok = nullptr) const;
 
    /**
     * \brief Returns what type of field this is - except that, if it is \c Mixed2PhysicalQuantities, will one of the two
@@ -240,21 +276,6 @@ public:
     *        constructor.
     */
    void selectPhysicalQuantity(Measurement::PhysicalQuantity const physicalQuantity);
-
-   /**
-    * \brief Returns the field converted to canonical units for the relevant \c Measurement::PhysicalQuantity
-    *
-    * \param rawValue field text to process
-    * \return
-    */
-///   Measurement::Amount rawToCanonical(QString const & rawValue) const;
-
-   /**
-    * \brief Use this when you want to do something with the returned QString
-    *
-    * \param amount Must be in canonical units eg kilograms for mass, liters for volume
-    */
-   [[nodiscard]] QString displayAmount(double amount) const;
 
    /**
     * \brief When the user has finished entering some text, this function does the corrections, eg if the field is set

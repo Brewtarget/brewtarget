@@ -1174,6 +1174,26 @@ Log file may contain more details.</source>
         <source>Normal</source>
         <translation>Normal</translation>
     </message>
+    <message>
+        <source>Dry Extract</source>
+        <translation type="unfinished">torrextrakt</translation>
+    </message>
+    <message>
+        <source>Extract</source>
+        <translation type="unfinished">Extrakt</translation>
+    </message>
+    <message>
+        <source>Grain</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sugar</source>
+        <translation type="unfinished">Socker</translation>
+    </message>
+    <message>
+        <source>Adjunct</source>
+        <translation type="unfinished">Tillsats</translation>
+    </message>
 </context>
 <context>
     <name>FermentableDialog</name>
@@ -1336,7 +1356,7 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Amount Type</source>
-        <translation type="unfinished">Mängdbeteckning</translation>
+        <translation type="obsolete">Mängdbeteckning</translation>
     </message>
     <message>
         <source>Change Fermentable Is Mashed</source>
@@ -1457,11 +1477,11 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Bittering</source>
-        <translation type="obsolete">Bitter</translation>
+        <translation type="unfinished">Bitter</translation>
     </message>
     <message>
         <source>Aroma</source>
-        <translation type="obsolete">Arom</translation>
+        <translation type="unfinished">Arom</translation>
     </message>
     <message>
         <source>Flavor</source>
@@ -1473,27 +1493,39 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Leaf</source>
-        <translation type="obsolete">Löv</translation>
+        <translation type="unfinished">Löv</translation>
     </message>
     <message>
         <source>Pellet</source>
-        <translation type="obsolete">Pellets</translation>
+        <translation type="unfinished">Pellets</translation>
     </message>
     <message>
         <source>Plug</source>
-        <translation type="obsolete">Puck</translation>
+        <translation type="unfinished">Puck</translation>
     </message>
     <message>
         <source>First Wort</source>
-        <translation type="obsolete">Första Vörten</translation>
+        <translation type="unfinished">Första Vörten</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation type="obsolete">Kokning</translation>
+        <translation type="unfinished">Kokning</translation>
     </message>
     <message>
         <source>Dry Hop</source>
-        <translation type="obsolete">Torrhumling</translation>
+        <translation type="unfinished">Torrhumling</translation>
+    </message>
+    <message>
+        <source>Aroma &amp; Bittering</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Post-Boil</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2746,23 +2778,23 @@ Error message:
     </message>
     <message>
         <source>Grain</source>
-        <translation>Korn</translation>
+        <translation type="vanished">Korn</translation>
     </message>
     <message>
         <source>Sugar</source>
-        <translation>Socker</translation>
+        <translation type="vanished">Socker</translation>
     </message>
     <message>
         <source>Extract</source>
-        <translation>Extrakt</translation>
+        <translation type="vanished">Extrakt</translation>
     </message>
     <message>
         <source>Dry Extract</source>
-        <translation>torrextrakt</translation>
+        <translation type="vanished">torrextrakt</translation>
     </message>
     <message>
         <source>Adjunct</source>
-        <translation>Tillsats</translation>
+        <translation type="vanished">Tillsats</translation>
     </message>
     <message>
         <source>Infusion</source>
@@ -3106,7 +3138,7 @@ Error message:
     </message>
     <message>
         <source>Mixed</source>
-        <translation type="unfinished">Blandad</translation>
+        <translation type="obsolete">Blandad</translation>
     </message>
     <message>
         <source>Unknown</source>
@@ -3247,10 +3279,6 @@ Error message:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Concentration</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Viscosity</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3276,14 +3304,6 @@ Error message:
     </message>
     <message>
         <source>Carbonation Mass Per Volume</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Concentration Parts Per</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Concentration Mass Per Volume</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3325,6 +3345,18 @@ Error message:
     <message>
         <source>Weight</source>
         <translation type="unfinished">Vikt</translation>
+    </message>
+    <message>
+        <source>Mass Concentration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Volume Concentration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Metric Concentration</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

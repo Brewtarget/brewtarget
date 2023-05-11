@@ -86,9 +86,9 @@ void YeastEditor::save() {
    this->obsYeast->setMinTemperature_c(lineEdit_minTemperature->toCanonical().quantity()                      );
    this->obsYeast->setMaxTemperature_c(lineEdit_maxTemperature->toCanonical().quantity()                      );
    this->obsYeast->setFlocculation    (static_cast<Yeast::Flocculation>(comboBox_flocculation->currentIndex()));
-   this->obsYeast->setAttenuation_pct (lineEdit_attenuation   ->getValueAs<double>()                          );
-   this->obsYeast->setTimesCultured   (lineEdit_timesCultured ->getValueAs<int>()                             );
-   this->obsYeast->setMaxReuse        (lineEdit_maxReuse      ->getValueAs<int>()                             );
+   this->obsYeast->setAttenuation_pct (lineEdit_attenuation   ->getNonOptValueAs<double>()                          );
+   this->obsYeast->setTimesCultured   (lineEdit_timesCultured ->getNonOptValueAs<int>()                             );
+   this->obsYeast->setMaxReuse        (lineEdit_maxReuse      ->getNonOptValueAs<int>()                             );
    this->obsYeast->setAddToSecondary  (checkBox_addToSecondary->checkState() == Qt::Checked                   );
    this->obsYeast->setBestFor         (textEdit_bestFor       ->toPlainText()                                 );
    this->obsYeast->setNotes           (textEdit_notes         ->toPlainText()                                 );
