@@ -511,11 +511,13 @@ namespace {
     *            case of SQLite).
     *          - Some integer foreign key columns were created without a type in SQLite, which means they get treated as
     *            strings
+    *          - In another case, a foreign key was created as a double instead of an int
     *        Rather than just say anything goes, we store the known problem columns here and log a warning about them.
     */
    QMap<TableColumnAndType, QVector<int>> const legacyBadTypes {
       {{"equipment",   "calc_boil_volume", ObjectStore::FieldType::Bool}, {QMetaType::QString}},
       {{"fermentable", "add_after_boil"  , ObjectStore::FieldType::Bool}, {QMetaType::QString}},
+      {{"fermentable", "inventory_id"    , ObjectStore::FieldType::Int }, {QMetaType::Double }},
       {{"fermentable", "is_mashed"       , ObjectStore::FieldType::Bool}, {QMetaType::QString}},
       {{"fermentable", "recommend_mash"  , ObjectStore::FieldType::Bool}, {QMetaType::QString}},
       {{"mash",        "equip_adjust"    , ObjectStore::FieldType::Bool}, {QMetaType::QString}},
