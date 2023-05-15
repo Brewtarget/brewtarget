@@ -11,6 +11,20 @@ format therein, otherwise you'll get, eg, no-changelogname-tag error from rpmlin
 
 * We'll list new features here...
 
+## v3.0.9
+Minor bug fixes for the 3.0.8 release (ie bugs in 3.0.8 are fixed in this 3.0.9 release).
+
+### New Features
+* None
+
+### Bug Fixes
+* Broken build on Linux Mint [#738](https://github.com/Brewtarget/brewtarget/issues/738)
+* "Brew it" crashes Mac app [#747](https://github.com/Brewtarget/brewtarget/issues/747)
+* Memory access crash on create new recipe [#748](https://github.com/Brewtarget/brewtarget/issues/748)
+
+### Release Timestamp
+Mon, 15 May 2023 08:29:09 +0100
+
 ## v3.0.8
 Minor bug fixes for the 3.0.7 release (ie bugs in 3.0.7 are fixed in this 3.0.8 release).
 
