@@ -117,16 +117,10 @@ jobs:
            export QT_QPA_PLATFORM=offscreen
            meson test
 
-      - name: Package (via CMake/CPack)
-        # Change `make package` to `make package VERBOSE=1` to get hugely detailed output
-        run: |
-           cd build
-           pwd
-           make package
-           pwd
-           tree -sh
-
-      - name: Package (New)
+      # Note that, although we continue to support CMake for local builds and installs, we no longer support packaging
+      # with CPack/CMake -- not least because it was very hard to get things working on Mac.  The bt build script
+      # packaging works fine and gives us better control over the packaging process.
+      - name: Package
         shell: bash
         run: |
            cd mbuild
@@ -142,8 +136,6 @@ jobs:
         with:
           name: brewtarget-dev-mac
           path: |
-             ${{github.workspace}}/build/brewtarget*.dmg
-             ${{github.workspace}}/build/brewtarget*.dmg.sha256
              ${{github.workspace}}/mbuild/packages/darwin/brewtarget*.dmg
              ${{github.workspace}}/mbuild/packages/darwin/brewtarget*.dmg.sha256sum
           retention-days: 7

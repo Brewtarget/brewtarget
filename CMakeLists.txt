@@ -30,10 +30,10 @@
 # ⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐
 # NB: Meson and the `bt` build tool Python script are now the primary way of building and packaging the software.  You
 #     can also still CMake to compile the product and install it locally, but we no longer support using CMake to do
-#     packaging.
+#     packaging.  (Over time the intention is to remove packaging-specific code from this script, not least as it does
+#     not work properly on Mac and Windows.)
 # ⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐
 
-#
 #
 # Creates a Makefile in the build directory, from where you can do builds and installs.
 #
@@ -57,27 +57,12 @@
 #   * make clean            -  Delete compiled objects so next build starts from scratch
 #   * sudo make install     -  Install locally
 #   * make test             -  Run unit tests via CTest
-#   * make package          -  Makes .deb, .rpm, NSIS Installer, and .tar.bz2 binary packages.  (TBD What about Mac?)
-#
-#                              On Linux, after make package, it's one of the following to install, if you want to
-#                              install from the package rather than direct from the build tree (with sudo make install).
-#                              (This would typically be for installing the package on a different machine then where the
-#                              build was done.)
-#                                 $ sudo dpkg -i brewtarget*.deb
-#                                 $ sudo rpm -i brewtarget*.rpm
-#
-#                              On Mac and Windows environments, the `package` target will create an installer
-#                              that may be executed to finish the installation.
-#
-#   * make package_source   -  Makes a .tar.bz2 source package.
 #
 # Custom make targets:
 #   * make plugins          -  Builds the Qt Designer plugins
 #   * make source_doc       -  Makes Doxygen HTML documentation of the source in doc/html
 #   * make install-data
 #   * make install-runtime
-#   * make package_lint     -  Runs lintian and rpmlint on packages
-#
 #
 # CMake options
 #   * CMAKE_INSTALL_PREFIX  - /usr/local by default. Set this to /usr on Debian-based systems like Ubuntu.
@@ -121,7 +106,7 @@ endif()
 #=======================================================================================================================
 # It's simplest to keep the project name all lower-case as it means we can use a lot more of the default settings for
 # Linux packaging (where directory names etc are expected to be all lower-case)
-project(brewtarget VERSION 3.0.9 LANGUAGES CXX)
+project(brewtarget VERSION 3.0.10 LANGUAGES CXX)
 message(STATUS "Building ${PROJECT_NAME} version ${PROJECT_VERSION}")
 message(STATUS "PROJECT_SOURCE_DIR is ${PROJECT_SOURCE_DIR}")
 # Sometimes we do need the capitalised version of the project name
@@ -201,13 +186,6 @@ if(UNIX AND NOT APPLE)
 
 elseif(WIN32)
    #============================================ Windows Install Directories ===========================================
-
-   # For some damn reason, for the NSIS installer,
-   # the prefix needs to be empty. Also, seems that the .exe
-   # needs to be in bin/. Fucking piece of shit CPack...
-   # Can anybody shed some light on this situation?
-   #set(CMAKE_INSTALL_PREFIX "")
-   set(CPACK_INSTALL_PREFIX "")
 
    set(installSubDir_data "data")
    set(installSubDir_doc  "doc")

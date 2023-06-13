@@ -199,17 +199,14 @@ jobs:
           export QT_QPA_PLATFORM=offscreen
           meson test
 
-      - name: Package (via CMake/CPack)
-        shell: msys2 {0}
-        run: |
-          cd /C/_/build
-          cmake --build . --target package --verbose
-
       #
       # See above for explanation of the extra things we need to do on Windows before running the bt script.  Most of
       # that does not need doing again here, but PYTHONIOENCODING does need setting again.
       #
-      - name: Package (New)
+      # Note that, although we continue to support CMake for local builds and installs, we no longer support packaging
+      # with CPack/CMake.  The bt build script packaging gives us better control over the packaging process.
+      #
+      - name: Package
         shell: msys2 {0}
         run: |
           cd /C/_/
@@ -234,8 +231,6 @@ jobs:
         with:
           name: brewtarget-dev-${{ matrix.msystem }}
           path: |
-            C:/_/build/brewtarget*.exe
-            C:/_/build/brewtarget*.exe.sha256
             C:/_/mbuild/packages/windows/Brewtarget*Installer.exe
             C:/_/mbuild/packages/windows/Brewtarget*Installer.exe.sha256sum
           retention-days: 7

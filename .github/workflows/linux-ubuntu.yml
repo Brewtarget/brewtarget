@@ -120,25 +120,14 @@ jobs:
           export QT_QPA_PLATFORM=offscreen
           meson test
 
-      - name: Package (via CMake/CPack)
-        working-directory: ${{github.workspace}}/build
-        shell: bash
-        run: |
-          umask 022
-          make package
-
-      - name: Package (New)
+      # Note that, although we continue to support CMake for local builds and installs, we no longer support packaging
+      # with CPack/CMake.  The bt build script packaging gives us better control over the packaging process.
+      - name: Package
         working-directory: ${{github.workspace}}/mbuild
         shell: bash
         run: |
           umask 022
           ../bt package
-
-      - name: LintianAndRpmLint
-        continue-on-error: true
-        working-directory: ${{github.workspace}}/build
-        shell: bash
-        run: make package_lint
 
       - name: Upload Linux Packages (Installers)
         if: ${{ success() }}
@@ -146,12 +135,6 @@ jobs:
         with:
           name: brewtarget-${{matrix.os}}
           path: |
-            build/brewtarget*.rpm
-            build/brewtarget*.rpm.sha256
-            build/brewtarget*.deb
-            build/brewtarget*.deb.sha256
-            build/brewtarget*.tar.bz2
-            build/brewtarget*.tar.bz2.sha256
             mbuild/packages/source/brewtarget*.tar.xz
             mbuild/packages/source/brewtarget*.tar.xz.sha256sum
             mbuild/packages/linux/brewtarget*.deb
