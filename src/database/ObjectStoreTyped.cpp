@@ -563,7 +563,7 @@ namespace {
          {ObjectStore::FieldType::Date,   "date",                PropertyNames::Recipe::date                },
          {ObjectStore::FieldType::Double, "efficiency",          PropertyNames::Recipe::efficiency_pct      },
          {ObjectStore::FieldType::Int,    "equipment_id",        PropertyNames::Recipe::equipmentId,          nullptr,                &PRIMARY_TABLE<Equipment>},
-         {ObjectStore::FieldType::UInt,   "fermentation_stages", PropertyNames::Recipe::fermentationStages  },
+         {ObjectStore::FieldType::Int,   "fermentation_stages", PropertyNames::Recipe::fermentationStages  },
          {ObjectStore::FieldType::Double, "fg",                  PropertyNames::Recipe::fg                  },
          {ObjectStore::FieldType::Bool,   "forced_carb",         PropertyNames::Recipe::forcedCarbonation   },
          {ObjectStore::FieldType::Double, "keg_priming_factor",  PropertyNames::Recipe::kegPrimingFactor    },
