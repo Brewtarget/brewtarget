@@ -695,15 +695,46 @@ public:
 ///                  propertyValue.typeName() << "(" << propertyType << ") in column" << fieldDefn.columnName <<
 ///                  ".  This is a known ugliness that we intend to fix one day.";
             } else {
-               // It's not a known exception, so it's a coding error
-               qCritical() <<
-                  Q_FUNC_INFO << "Unexpected type #" << propertyType << "=" << propertyValue.typeName() <<
-                  "in QVariant for property" << fieldDefn.propertyName << ", field type" << fieldDefn.fieldType <<
-                  ", value" << propertyValue << ", table" << primaryTable.tableName << ", column" <<
-                  fieldDefn.columnName;
-               qCritical().noquote() << Q_FUNC_INFO << "Call stack is:" << Logging::getStackTrace();
-               // Stop here on debug build
-               Q_ASSERT(false);
+               // It's not a known exception, so it's a coding error.  However, we may still be able to recover.
+               // If we are expecting a boolean and we get a string holding "true" or "false" etc, then we know what to
+               // do.
+               bool recovered = false;
+               if (propertyType == QMetaType::QString && fieldDefn.fieldType == ObjectStore::FieldType::Bool) {
+                  // We'll take any reasonable string representation of true/false.  For the moment, at least, I'm not
+                  // worrying about optional fields here.  I think it's pretty rare, if ever, that we'd want an optional
+                  // boolean.
+                  QString propertyAsLcString = propertyValue.toString().trimmed().toLower();
+                  bool interpretedValue = false;
+                  if (propertyAsLcString == "true" || propertyAsLcString == "t" || propertyAsLcString == "1") {
+                     recovered = true;
+                     interpretedValue = true;
+                  } else if (propertyAsLcString == "false" || propertyAsLcString == "f" || propertyAsLcString == "0") {
+                     recovered = true;
+                     interpretedValue = false;
+                  }
+                  if (recovered) {
+                     qWarning() <<
+                        Q_FUNC_INFO << "Recovered from unexpected type #" << propertyType << "=" <<
+                        propertyValue.typeName() << "in QVariant for property" << fieldDefn.propertyName <<
+                        ", field type" << fieldDefn.fieldType << ", value" << propertyValue << ", table" <<
+                        primaryTable.tableName << ", column" << fieldDefn.columnName << ".  Interpreted value as" <<
+                        interpretedValue;
+                     // Now we overwrite the supplied variant with what we worked out it should be, so processing can
+                     // continue.
+                     propertyValue = QVariant(interpretedValue);
+                  }
+               }
+               if (!recovered) {
+                  qCritical() <<
+                     Q_FUNC_INFO << "Unexpected type #" << propertyType << "=" << propertyValue.typeName() <<
+                     "in QVariant for property" << fieldDefn.propertyName << ", field type" << fieldDefn.fieldType <<
+                     ", value" << propertyValue << ", table" << primaryTable.tableName << ", column" <<
+                     fieldDefn.columnName;
+                  qCritical().noquote() << Q_FUNC_INFO << "Call stack is:" << Logging::getStackTrace();
+                  // Stop here on debug build
+                  Q_ASSERT(false);
+               }
+
             }
          }
       }
