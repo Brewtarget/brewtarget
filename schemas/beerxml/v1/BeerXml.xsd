@@ -182,11 +182,21 @@
 
    <!-- BeerXML 1.0 wants all boolean values to be IN CAPITALS.
         The W3C XML Schema specification wants them to be in lower case.
-        So we have to roll our own shouty boolean type for BeerXML. -->
-   <xs:simpleType name="CapsBoolean">
+        So we have to roll our own shouty boolean type for BeerXML.
+
+        But wait, it gets better.  Some brewing software ignores the (admitedly bonkers) BeerXML specifications and
+        writes out booleans in lower case.  So, in the spirit of Postel's Law, we ought to support that too.
+
+        And since we're being all liberal about what we accept, let's cover off "True" and "False", just in case.
+         -->
+   <xs:simpleType name="RobustBoolean">
       <xs:restriction base="xs:string">
          <xs:enumeration value="TRUE"/>
          <xs:enumeration value="FALSE"/>
+         <xs:enumeration value="true"/>
+         <xs:enumeration value="false"/>
+         <xs:enumeration value="True"/>
+         <xs:enumeration value="False"/>
       </xs:restriction>
    </xs:simpleType>
 
@@ -323,7 +333,7 @@
          <xs:element name="TRUB_CHILLER_LOSS" type="VolumeInLiters" minOccurs="0" maxOccurs="1"/>
          <xs:element name="EVAP_RATE" type="SimplePercentage" minOccurs="0" maxOccurs="1"/> <!-- % of wort lost to evaporation per hour of the boil -->
          <xs:element name="BOIL_TIME" type="DurationInMinutes" minOccurs="0" maxOccurs="1"/>
-         <xs:element name="CALC_BOIL_VOLUME" type="CapsBoolean" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="CALC_BOIL_VOLUME" type="RobustBoolean" minOccurs="0" maxOccurs="1"/>
          <xs:element name="LAUTER_DEADSPACE" type="VolumeInLiters" minOccurs="0" maxOccurs="1"/>
          <xs:element name="TOP_UP_KETTLE" type="VolumeInLiters" minOccurs="0" maxOccurs="1"/>
          <xs:element name="HOP_UTILIZATION" type="xs:decimal" minOccurs="0" maxOccurs="1"/> <!-- This is a percentage but can be greater than 100% -->
@@ -441,7 +451,7 @@
          <xs:element name="AMOUNT" type="xs:decimal"/> <!-- In kg -->
          <xs:element name="YIELD" type="SimplePercentage"/>
          <xs:element name="COLOR" type="xs:decimal"/> <!-- In Lovibond Units (SRM for liquid extracts) -->
-         <xs:element name="ADD_AFTER_BOIL" type="CapsBoolean" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="ADD_AFTER_BOIL" type="RobustBoolean" minOccurs="0" maxOccurs="1"/>
          <xs:element name="ORIGIN" type="xs:string" minOccurs="0" maxOccurs="1"/>
          <xs:element name="SUPPLIER" type="xs:string" minOccurs="0" maxOccurs="1"/>
          <xs:element name="NOTES" type="xs:string" minOccurs="0" maxOccurs="1"/>
@@ -453,7 +463,7 @@
          <xs:element name="PROTEIN" type="NullableSimplePercentage" minOccurs="0" maxOccurs="1"/>
 
          <xs:element name="MAX_IN_BATCH" type="SimplePercentage" minOccurs="0" maxOccurs="1"/>
-         <xs:element name="RECOMMEND_MASH" type="CapsBoolean" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="RECOMMEND_MASH" type="RobustBoolean" minOccurs="0" maxOccurs="1"/>
 
          <!-- The next field is only appropriate for a "Extract" type, otherwise its value is ignored -->
          <xs:element name="IBU_GAL_PER_LB" type="xs:decimal" minOccurs="0" maxOccurs="1"/> <!-- The BeerXML standard does not say why this field is not in a metric measurement -->
@@ -467,7 +477,7 @@
          <!-- ***********************************************************************************
               *** Extra field not included in the BeerXML 1.0 standard but used by Brewtarget ***
               *********************************************************************************** -->
-         <xs:element name="IS_MASHED" type="CapsBoolean" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="IS_MASHED" type="RobustBoolean" minOccurs="0" maxOccurs="1"/>
       </xs:all>
    </xs:complexType>
 
@@ -514,7 +524,7 @@
          <xs:element name="TIME" type="DurationInMinutes"/>
          <xs:element name="AMOUNT" type="xs:decimal"/> <!-- In liters (litres) unless next field is present and set to TRUE, in which case in kg.
                                                             NB: We ingore the obvious nonsensical error in the BeerXML description of this field. -->
-         <xs:element name="AMOUNT_IS_WEIGHT" type="CapsBoolean" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="AMOUNT_IS_WEIGHT" type="RobustBoolean" minOccurs="0" maxOccurs="1"/>
          <xs:element name="USE_FOR" type="xs:string" minOccurs="0" maxOccurs="1"/>
          <xs:element name="NOTES" type="xs:string" minOccurs="0" maxOccurs="1"/>
 
@@ -565,7 +575,7 @@
             </xs:simpleType>
          </xs:element>
          <xs:element name="AMOUNT" type="xs:decimal"/> <!-- In liters (litres) unless next field is present and set to TRUE, in which case in kg. -->
-         <xs:element name="AMOUNT_IS_WEIGHT" type="CapsBoolean" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="AMOUNT_IS_WEIGHT" type="RobustBoolean" minOccurs="0" maxOccurs="1"/>
          <xs:element name="LABORATORY" type="xs:string" minOccurs="0" maxOccurs="1"/>
          <xs:element name="PRODUCT_ID" type="xs:string" minOccurs="0" maxOccurs="1"/>
          <xs:element name="MIN_TEMPERATURE" type="TemperatureInCelsius" minOccurs="0" maxOccurs="1"/>
@@ -585,7 +595,7 @@
          <xs:element name="BEST_FOR" type="xs:string" minOccurs="0" maxOccurs="1"/>
          <xs:element name="TIMES_CULTURED" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1"/>
          <xs:element name="MAX_REUSE" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1"/>
-         <xs:element name="ADD_TO_SECONDARY" type="CapsBoolean" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="ADD_TO_SECONDARY" type="RobustBoolean" minOccurs="0" maxOccurs="1"/>
 
          <!-- The next five fields are listed under "Yeast Extensions" in the BeerXML 1.0 standard -->
          <xs:element name="DISPLAY_AMOUNT" type="xs:string" minOccurs="0" maxOccurs="1"/>
@@ -704,7 +714,7 @@
          <xs:element name="PH" type="AcidityOrBasicityIn_pH" minOccurs="0" maxOccurs="1"/>
          <xs:element name="TUN_WEIGHT" type="WeightInKg" minOccurs="0" maxOccurs="1"/>
          <xs:element name="TUN_SPECIFIC_HEAT" type="xs:decimal" minOccurs="0" maxOccurs="1"/> <!-- In calories per gram-degree C -->
-         <xs:element name="EQUIP_ADJUST" type="CapsBoolean" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="EQUIP_ADJUST" type="RobustBoolean" minOccurs="0" maxOccurs="1"/>
 
          <!-- The next four fields are listed under "Mash Extensions" in the BeerXML 1.0 standard -->
          <xs:element name="DISPLAY_GRAIN_TEMP" type="xs:string" minOccurs="0" maxOccurs="1"/>
@@ -733,9 +743,9 @@
          <xs:element name="NAME" type="NonBlankString"/>
          <xs:element name="VERSION" type="xs:positiveInteger"/>
          <xs:element name="directions" type="xs:string"/>
-         <xs:element name="hasTimer" type="CapsBoolean"/>
+         <xs:element name="hasTimer" type="RobustBoolean"/>
          <xs:element name="timervalue" type="xs:string"/> <!-- NB lowercase not camelCase. AFAICT this is a display-only value and should be blank if hasTimer is FALSE -->
-         <xs:element name="completed" type="CapsBoolean"/>
+         <xs:element name="completed" type="RobustBoolean"/>
          <xs:element name="interval" type="DurationInMinutes"/>
       </xs:all>
    </xs:complexType>
@@ -862,7 +872,7 @@
          <xs:element name="AGE_TEMP" type="TemperatureInCelsius" minOccurs="0" maxOccurs="1"/>
          <xs:element name="DATE" type="xs:string" minOccurs="0" maxOccurs="1"/> <!-- Has to be string as BeerXML Standard only says "in [an] easily recognizable format" -->
          <xs:element name="CARBONATION" type="xs:decimal" minOccurs="0" maxOccurs="1"/>
-         <xs:element name="FORCED_CARBONATION" type="CapsBoolean" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="FORCED_CARBONATION" type="RobustBoolean" minOccurs="0" maxOccurs="1"/>
          <!-- The next field should only be present if the previous one was present and set to TRUE
               See comments elsewhere about the desirability of enforcing this in future via xs:assert tags -->
          <xs:element name="PRIMING_SUGAR_NAME" type="xs:string" minOccurs="0" maxOccurs="1"/>
