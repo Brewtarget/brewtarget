@@ -4,6 +4,9 @@
 
 ![Windows Workflow](https://github.com/brewtarget/brewtarget/actions/workflows/windows.yml/badge.svg)
 
+### *** Please note that the latest Brewtarget releases are here on [Github](https://github.com/Brewtarget/brewtarget/). ***
+### (The old brewtarget.org website is out-of-date but we do not have access to modify it.)
+
 Brewtarget is free open-source brewing software, and a beer recipe creation
 tool available for Linux, Mac, and Windows. It automatically calculates color,
 bitterness, and other parameters for you while you drag and drop ingredients
@@ -13,7 +16,6 @@ export and import recipes in BeerXML, allowing you to easily share recipes with
 friends who use BeerSmith or other programs. All of this means that Brewtarget
 is your single, free, go-to tool when crafting your beer recipes.
 
-### Please note that the latest releases are [Github](https://github.com/Brewtarget/brewtarget/) and that the old brewtarget.org website is no longer maintained.
 
 ## Authors
 
