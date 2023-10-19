@@ -2785,7 +2785,7 @@ double Recipe::targetCollectedWortVol_l() {
    }
 
    if (equipment()) {
-      return boilSize_l() - equipment()->topUpKettle_l() - postMashAdditionVolume_l;
+      return boilSize_l() - equipment()->lauterDeadspace_l() - equipment()->topUpKettle_l() - postMashAdditionVolume_l;
    } else {
       return boilSize_l() - postMashAdditionVolume_l;
    }
