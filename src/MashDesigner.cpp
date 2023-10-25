@@ -48,20 +48,23 @@ MashDesigner::MashDesigner(QWidget * parent) : QDialog     {parent},
    this->label_zeroWort->setText(Measurement::displayAmount(Measurement::Amount{0, Measurement::Units::liters}));
 
    // Update temp slider when we move amount slider.
-   connect(horizontalSlider_amount, &QAbstractSlider::sliderMoved, this, &MashDesigner::updateTempSlider);
+   //
+   // Here and below, we connect to valueChanged rather than sliderMoved as, otherwise, we don't receive any signal if
+   // the keyboard is used to move the slider.
+   connect(horizontalSlider_amount, &QAbstractSlider::valueChanged, this, &MashDesigner::updateTempSlider);
    // Update amount slider when we move temp slider.
-   connect(horizontalSlider_temp,   &QAbstractSlider::sliderMoved, this, &MashDesigner::updateAmtSlider);
+   connect(horizontalSlider_temp,   &QAbstractSlider::valueChanged, this, &MashDesigner::updateAmtSlider);
    // Update tun fullness bar when either slider moves.
-   connect(horizontalSlider_amount, &QAbstractSlider::sliderMoved, this, &MashDesigner::updateFullness);
-   connect(horizontalSlider_temp,   &QAbstractSlider::sliderMoved, this, &MashDesigner::updateFullness);
+   connect(horizontalSlider_amount, &QAbstractSlider::valueChanged, this, &MashDesigner::updateFullness);
+   connect(horizontalSlider_temp,   &QAbstractSlider::valueChanged, this, &MashDesigner::updateFullness);
    // Update amount/temp text when sliders move.
-   connect(horizontalSlider_amount, &QAbstractSlider::sliderMoved, this, &MashDesigner::updateAmt);
-   connect(horizontalSlider_amount, &QAbstractSlider::sliderMoved, this, &MashDesigner::updateTemp);
-   connect(horizontalSlider_temp,   &QAbstractSlider::sliderMoved, this, &MashDesigner::updateAmt);
-   connect(horizontalSlider_temp,   &QAbstractSlider::sliderMoved, this, &MashDesigner::updateTemp);
+   connect(horizontalSlider_amount, &QAbstractSlider::valueChanged, this, &MashDesigner::updateAmt);
+   connect(horizontalSlider_amount, &QAbstractSlider::valueChanged, this, &MashDesigner::updateTemp);
+   connect(horizontalSlider_temp,   &QAbstractSlider::valueChanged, this, &MashDesigner::updateAmt);
+   connect(horizontalSlider_temp,   &QAbstractSlider::valueChanged, this, &MashDesigner::updateTemp);
    // Update collected wort when sliders move.
-   connect(horizontalSlider_amount, &QAbstractSlider::sliderMoved, this, &MashDesigner::updateCollectedWort);
-   connect(horizontalSlider_temp,   &QAbstractSlider::sliderMoved, this, &MashDesigner::updateCollectedWort);
+   connect(horizontalSlider_amount, &QAbstractSlider::valueChanged, this, &MashDesigner::updateCollectedWort);
+   connect(horizontalSlider_temp,   &QAbstractSlider::valueChanged, this, &MashDesigner::updateCollectedWort);
    // Save the target temp whenever it's changed.
    connect(lineEdit_temp,           &SmartLineEdit::textModified,  this, &MashDesigner::saveTargetTemp);
    // Move to next step.
