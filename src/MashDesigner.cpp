@@ -51,7 +51,8 @@ MashDesigner::MashDesigner(QWidget * parent) : QDialog     {parent},
    //
    // Here and below, we connect to valueChanged rather than sliderMoved as, otherwise, we don't receive any signal if
    // the keyboard is used to move the slider.
-   connect(horizontalSlider_amount, &QAbstractSlider::valueChanged, this, &MashDesigner::updateTempSlider);   // Update amount slider when we move temp slider.
+   connect(horizontalSlider_amount, &QAbstractSlider::valueChanged, this, &MashDesigner::updateTempSlider);
+   // Update amount slider when we move temp slider.
    connect(horizontalSlider_temp,   &QAbstractSlider::valueChanged, this, &MashDesigner::updateAmtSlider);
    // Update tun fullness bar when either slider moves.
    connect(horizontalSlider_amount, &QAbstractSlider::valueChanged, this, &MashDesigner::updateFullness);
