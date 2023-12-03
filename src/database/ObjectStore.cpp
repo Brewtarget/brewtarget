@@ -695,44 +695,57 @@ public:
 ///                  propertyValue.typeName() << "(" << propertyType << ") in column" << fieldDefn.columnName <<
 ///                  ".  This is a known ugliness that we intend to fix one day.";
             } else {
-               // It's not a known exception, so it's a coding error.  However, we may still be able to recover.
-               // If we are expecting a boolean and we get a string holding "true" or "false" etc, then we know what to
-               // do.
+               //
+               // It's not a known exception, so it's a coding error.  However, we can recover in the following cases:
+               //    - If we are expecting a boolean and we get a string holding "true" or "false" etc, then we know
+               //      what to do.
+               //    - If we are expecting an int and we get a double then we can just ignore the non-integer part of
+               //      the number.
+               //    - If we are expecting an double and we got an int then we can just upcast it.
+               //
                bool recovered = false;
+               QVariant readPropertyValue = propertyValue;
                if (propertyType == QMetaType::QString && fieldDefn.fieldType == ObjectStore::FieldType::Bool) {
                   // We'll take any reasonable string representation of true/false.  For the moment, at least, I'm not
                   // worrying about optional fields here.  I think it's pretty rare, if ever, that we'd want an optional
                   // boolean.
                   QString propertyAsLcString = propertyValue.toString().trimmed().toLower();
-                  bool interpretedValue = false;
                   if (propertyAsLcString == "true" || propertyAsLcString == "t" || propertyAsLcString == "1") {
                      recovered = true;
-                     interpretedValue = true;
+                     propertyValue = QVariant(true);
                   } else if (propertyAsLcString == "false" || propertyAsLcString == "f" || propertyAsLcString == "0") {
                      recovered = true;
-                     interpretedValue = false;
+                     propertyValue = QVariant(false);
                   }
-                  if (recovered) {
-                     qWarning() <<
-                        Q_FUNC_INFO << "Recovered from unexpected type #" << propertyType << "=" <<
-                        propertyValue.typeName() << "in QVariant for property" << fieldDefn.propertyName <<
-                        ", field type" << fieldDefn.fieldType << ", value" << propertyValue << ", table" <<
-                        primaryTable.tableName << ", column" << fieldDefn.columnName << ".  Interpreted value as" <<
-                        interpretedValue;
-                     // Now we overwrite the supplied variant with what we worked out it should be, so processing can
-                     // continue.
-                     propertyValue = QVariant(interpretedValue);
-                  }
+               } else if (propertyType == QMetaType::Double && fieldDefn.fieldType == ObjectStore::FieldType::Int) {
+                  propertyValue = QVariant(propertyValue.toInt(&recovered));
+               } else if (propertyType == QMetaType::Int && fieldDefn.fieldType == ObjectStore::FieldType::Double) {
+                  propertyValue = QVariant(propertyValue.toDouble(&recovered));
                }
-               if (!recovered) {
+               if (recovered) {
+                  qWarning() <<
+                     Q_FUNC_INFO << "Recovered from unexpected type #" << propertyType << "=" <<
+                     readPropertyValue.typeName() << "in QVariant for property" << fieldDefn.propertyName <<
+                     ", field type" << fieldDefn.fieldType << ", value" << readPropertyValue << ", table" <<
+                     primaryTable.tableName << ", column" << fieldDefn.columnName << ".  Interpreted value as" <<
+                     propertyValue;
+               } else {
+                  //
+                  // Even in the case where we do not have a reasonable way to interpret the data in this column, we
+                  // should probably NOT terminate the program.  We are still discovering lots of cases where folks
+                  // using the software have old Brewtarget databases with quirky values in some columns.  It's better
+                  // from a user point of view that the software carries on working even if some (hopefully) obscure
+                  // field could not be read from the DB.
+                  //
                   qCritical() <<
                      Q_FUNC_INFO << "Unexpected type #" << propertyType << "=" << propertyValue.typeName() <<
                      "in QVariant for property" << fieldDefn.propertyName << ", field type" << fieldDefn.fieldType <<
                      ", value" << propertyValue << ", table" << primaryTable.tableName << ", column" <<
                      fieldDefn.columnName;
-                  qCritical().noquote() << Q_FUNC_INFO << "Call stack is:" << Logging::getStackTrace();
-                  // Stop here on debug build
-                  Q_ASSERT(false);
+                  // If, during development or debugging, you want to have the program stop when it cannot interpret
+                  // one of the DB fields, then uncomment the following two lines.
+///                  qCritical().noquote() << Q_FUNC_INFO << "Call stack is:" << Logging::getStackTrace();
+///                  Q_ASSERT(false);
                }
 
             }
