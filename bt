@@ -756,6 +756,20 @@ def installDependencies():
       case 'Darwin':
          log.debug('Mac')
          #
+         # We install most of the Mac dependencies via Homebrew (https://brew.sh/) using the `brew` command below.
+         # However, as at 2023-12-01, Homebrew has stopped supplying a package for Xalan-C.  So, we install that using
+         # MacPorts (https://ports.macports.org/), which provides the `port` command.
+         #
+         # Note that MacPorts (port) requires sudo but Homebrew (brew) does not.
+         #
+         # At the moment, it's outside the scope of this script to install Homebrew and MacPorts.  The former can be
+         # done in one line from the command line.  The latter is a bit more complicated because you have to check what
+         # version of MacOS you're on and then download the correct package for it.  For now, we assume both are already
+         # available.
+         #
+         abortOnRunFail(subprocess.run(['sudo', 'port', 'install', 'xalanc']))
+
+         #
          # We could make this list shorter if we wanted as, eg, installing Xalan-C will cause Xerces-C to be installed
          # too (as the former depends on the latter).  However, I think it's clearer to explicitly list all the direct
          # dependencies (eg we do make calls directly into Xerces).
@@ -783,7 +797,7 @@ def installDependencies():
                         'pandoc',
                         'tree',
                         'qt@5',
-                        'xalan-c',
+#                        'xalan-c',
                         'xerces-c']
          for packageToInstall in installList:
             log.debug('Installing ' + packageToInstall)
