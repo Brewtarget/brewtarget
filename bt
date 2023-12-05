@@ -764,29 +764,11 @@ def installDependencies():
          #
 
          #
-         # First, install MacPorts - per instructions at https://guide.macports.org/#installing.macports.source
+         # Installing Homebrew is somewhat easier and more self-contained than MacPorts.  We do all the Homebrew stuff
+         # first because some of the packages we install with Homebrew will be needed for the installation of MacPorts
+         # to work.
          #
-         # (This is a source install.  In principle, we could install a precompiled binary, but it's a bit painful to do
-         # programatically as even to download the right package you have to know not just the the Darwin version of
-         # MacOS you are running, but also its "release name" (aka "friendly name").  See
-         # https://apple.stackexchange.com/questions/333452/how-can-i-find-the-friendly-name-of-the-operating-system-from-the-shell-term
-         # for various ways to do this if we had to, though we might just as easily copy the info
-         # from https://en.wikipedia.org/wiki/MacOS#Timeline_of_releases
-         #
-         abortOnRunFail(subprocess.run(['curl', '-O', 'https://distfiles.macports.org/MacPorts/MacPorts-2.8.1.tar.bz2']))
-         abortOnRunFail(subprocess.run(['tar', 'xf', 'MacPorts-2.8.1.tar.bz2']))
-         abortOnRunFail(subprocess.run(['cd', 'MacPorts-2.8.1/']))
-         abortOnRunFail(subprocess.run(['./configure']))
-         abortOnRunFail(subprocess.run(['make']))
-         abortOnRunFail(subprocess.run(['sudo', 'make', 'install']))
-         abortOnRunFail(subprocess.run(['export', 'PATH=/opt/local/bin:/opt/local/sbin:$PATH']))
-
-         # Now install Xalan-C via MacPorts
-         abortOnRunFail(subprocess.run(['sudo', 'port', 'install', 'xalanc']))
-
-         #
-         # Installing Homebrew is somewhat easier
-         #
+         log.debug('Installing Homebrew')
          abortOnRunFail(subprocess.run(['/bin/bash', '-c', '"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"']))
 
          #
@@ -822,7 +804,7 @@ def installDependencies():
 #                        'xalan-c',
                         'xerces-c']
          for packageToInstall in installList:
-            log.debug('Installing ' + packageToInstall)
+            log.debug('Installing ' + packageToInstall + ' via Homebrew')
             abortOnRunFail(subprocess.run(['brew', 'install', packageToInstall]))
          #
          # By default, even once Qt5 is installed, Meson will not find it
@@ -840,6 +822,29 @@ def installDependencies():
          # The former gives permission errors, so we do the latter in mac.yml
          #
          abortOnRunFail(subprocess.run(['brew', 'link', '--force', 'qt5']))
+
+         #
+         # Now, install MacPorts - per instructions at https://guide.macports.org/#installing.macports.source
+         #
+         # (This is a source install.  In principle, we could install a precompiled binary, but it's a bit painful to do
+         # programatically as even to download the right package you have to know not just the the Darwin version of
+         # MacOS you are running, but also its "release name" (aka "friendly name").  See
+         # https://apple.stackexchange.com/questions/333452/how-can-i-find-the-friendly-name-of-the-operating-system-from-the-shell-term
+         # for various ways to do this if we had to, though we might just as easily copy the info
+         # from https://en.wikipedia.org/wiki/MacOS#Timeline_of_releases
+         #
+         log.debug('Installing MacPorts')
+         abortOnRunFail(subprocess.run(['curl', '-O', 'https://distfiles.macports.org/MacPorts/MacPorts-2.8.1.tar.bz2']))
+         abortOnRunFail(subprocess.run(['tar', 'xf', 'MacPorts-2.8.1.tar.bz2']))
+         abortOnRunFail(subprocess.run(['cd', 'MacPorts-2.8.1/']))
+         abortOnRunFail(subprocess.run(['./configure']))
+         abortOnRunFail(subprocess.run(['make']))
+         abortOnRunFail(subprocess.run(['sudo', 'make', 'install']))
+         abortOnRunFail(subprocess.run(['export', 'PATH=/opt/local/bin:/opt/local/sbin:$PATH']))
+
+         # Now install Xalan-C via MacPorts
+         log.debug('Installing xalanc via MacPorts')
+         abortOnRunFail(subprocess.run(['sudo', 'port', 'install', 'xalanc']))
 
          #
          # dmgbuild is a Python package that provides a command line tool to create macOS disk images (aka .dmg
