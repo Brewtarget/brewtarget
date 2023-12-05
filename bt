@@ -764,15 +764,16 @@ def installDependencies():
          #
 
          #
-         # Installing Homebrew is somewhat easier and more self-contained than MacPorts.  We do all the Homebrew stuff
-         # first because some of the packages we install with Homebrew will be needed for the installation of MacPorts
-         # to work.
+         # Installing Homebrew is, in theory, somewhat easier and more self-contained than MacPorts as you just run the
+         # following:
+         #    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+         # In practice, invoking that command from this script is a bit fiddly to get right.  For the moment, we simply
+         # assume Homebrew is already installed (because it is on the GitHub actions).
          #
-         log.debug('Installing Homebrew')
-         abortOnRunFail(subprocess.run(['/bin/bash', '-c', '"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"']))
 
          #
-         # Install everything else with Homebrew
+         # We install as many of our dependencies as possible with with Homebrew, and do this first, because some of
+         # these packages will also be needed for the installation of MacPorts to work.
          #
          # We could make this list shorter if we wanted as, eg, installing Xalan-C will cause Xerces-C to be installed
          # too (as the former depends on the latter).  However, I think it's clearer to explicitly list all the direct
