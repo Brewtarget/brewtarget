@@ -50,6 +50,7 @@ jobs:
       # Running `bt setup all` will, amongst other things install the tree command.
       #
       - name: Install Frameworks and Libraries, and set up Meson build environment
+        uses: melusina-org/setup-macports@v1
         run: |
            echo "Output from brew doctor: $(brew doctor)"
            echo "Output from xcode-select -p: $(xcode-select -p)"
