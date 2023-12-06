@@ -790,13 +790,13 @@ def installDependencies():
          # diagnosing certain build problems (eg to see what changes certain parts of the build have made to the build
          # directory tree) when the build is running as a GitHub action.
          #
-         installList = ['boost',
+         installList = ['llvm',
+                        'gcc',
                         'cmake',
                         'coreutils',
+                        'boost',
                         'doxygen',
-                        'gcc',
                         'git',
-                        'llvm',
                         'meson',
                         'ninja',
                         'pandoc',

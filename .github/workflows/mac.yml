@@ -53,7 +53,7 @@ jobs:
         run: |
            echo "Output from brew doctor: $(brew doctor)"
            echo "Output from xcode-select -p: $(xcode-select -p)"
-           brew install python@3.11
+           brew install python@3.12
            echo "Python3 ($(which python3)) version"
            /usr/bin/env python3 --version
            echo "Running ./bt -v setup all"
