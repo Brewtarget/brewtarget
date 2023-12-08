@@ -760,7 +760,12 @@ def installDependencies():
          # However, as at 2023-12-01, Homebrew has stopped supplying a package for Xalan-C.  So, we install that using
          # MacPorts (https://ports.macports.org/), which provides the `port` command.
          #
-         # Note that MacPorts (port) requires sudo but Homebrew (brew) does not.
+         # Note that MacPorts (port) requires sudo but Homebrew (brew) does not.   Perhaps more importantly, they two
+         # package managers install things to different locations:
+         #  - Homebrew packages are installed under /usr/local/Cellar/ with symlinks in /usr/local/opt/
+         #  - MacPorts packages are installed under /opt/local
+         # This means we need to have both directories in the include path when we come to compile.  Thankfully, both
+         # CMake and Meson take care of finding a library automatically once given its name.
          #
 
          #
@@ -848,7 +853,7 @@ def installDependencies():
 
          # Now install Xalan-C via MacPorts
          log.debug('Installing xalanc via MacPorts')
-         abortOnRunFail(subprocess.run(['sudo', 'port', 'install', 'xalanc']))
+         abortOnRunFail(subprocess.run(['sudo', 'port', 'install', 'xalanc', 'configure.compiler=clang']))
 
          #
          # dmgbuild is a Python package that provides a command line tool to create macOS disk images (aka .dmg
