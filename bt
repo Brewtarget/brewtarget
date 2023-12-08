@@ -767,6 +767,9 @@ def installDependencies():
          # This means we need to have both directories in the include path when we come to compile.  Thankfully, both
          # CMake and Meson take care of finding a library automatically once given its name.
          #
+         # Note too that package names vary slightly between HomeBrew and MacPorts.  Don't assume you can guess one from
+         # the other, as it's not always evident.
+         #
 
          #
          # Installing Homebrew is, in theory, somewhat easier and more self-contained than MacPorts as you just run the
@@ -795,21 +798,22 @@ def installDependencies():
          # diagnosing certain build problems (eg to see what changes certain parts of the build have made to the build
          # directory tree) when the build is running as a GitHub action.
          #
-         installList = ['llvm',
-                        'gcc',
-                        'cmake',
-                        'coreutils',
-                        'boost',
-                        'doxygen',
-                        'git',
-                        'meson',
-                        'ninja',
-                        'pandoc',
-                        'tree',
-                        'qt@5',
-#                        'xalan-c',
-                        'xerces-c']
-         for packageToInstall in installList:
+         installListBrew = ['llvm',
+                            'gcc',
+                            'cmake',
+                            'coreutils',
+                            'boost',
+                            'doxygen',
+                            'git',
+                            'meson',
+                            'ninja',
+                            'pandoc',
+                            'tree',
+                            'qt@5',
+#                            'xalan-c',
+#                            'xerces-c'
+                            ]
+         for packageToInstall in installListBrew:
             log.debug('Installing ' + packageToInstall + ' via Homebrew')
             abortOnRunFail(subprocess.run(['brew', 'install', packageToInstall]))
          #
@@ -851,9 +855,14 @@ def installDependencies():
 ##         abortOnRunFail(subprocess.run(['sudo', 'make', 'install']))
 ##         abortOnRunFail(subprocess.run(['export', 'PATH=/opt/local/bin:/opt/local/sbin:$PATH']))
 
+         #
          # Now install Xalan-C via MacPorts
-         log.debug('Installing xalanc via MacPorts')
-         abortOnRunFail(subprocess.run(['sudo', 'port', 'install', 'xalanc', 'configure.compiler=clang']))
+         #
+         installListPort = ['xalanc',
+                            'xercesc3']
+         for packageToInstall in installListPort:
+            log.debug('Installing ' + packageToInstall + ' via MacPorts')
+            abortOnRunFail(subprocess.run(['sudo', 'port', 'install', packageToInstall]))
 
          #
          # dmgbuild is a Python package that provides a command line tool to create macOS disk images (aka .dmg
