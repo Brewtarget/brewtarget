@@ -24,6 +24,9 @@ Minor bug fixes for the 3.0.9 release (ie bugs in 3.0.9 are fixed in this 3.0.10
 * Postgres issue w/ fresh install [#760](https://github.com/Brewtarget/brewtarget/issues/760)
 * Import Error [#751](https://github.com/Brewtarget/brewtarget/issues/751)
 
+### Release Timestamp
+Fri, 29 Dec 2023 10:10:10 +0100
+
 ## v3.0.9
 Minor bug fixes for the 3.0.8 release (ie bugs in 3.0.8 are fixed in this 3.0.9 release).
 
