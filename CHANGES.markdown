@@ -11,6 +11,19 @@ format therein, otherwise you'll get, eg, no-changelogname-tag error from rpmlin
 
 * We'll list new features here...
 
+
+## v3.0.10
+Minor bug fixes for the 3.0.9 release (ie bugs in 3.0.9 are fixed in this 3.0.10 release).
+
+### New Features
+* None
+
+### Bug Fixes
+* Database error since 3.0.7 [#780](https://github.com/Brewtarget/brewtarget/issues/780)
+* Restoring database from another version of Brewtarget (self-compiled version 2.0.4 from 2018 codebase) on MacOS 11.7.8 causes application to fail to load on Brewtarget 3.0.9 on Linux Mint 21.1 [#766](https://github.com/Brewtarget/brewtarget/issues/766)
+* Postgres issue w/ fresh install [#760](https://github.com/Brewtarget/brewtarget/issues/760)
+* Import Error [#751](https://github.com/Brewtarget/brewtarget/issues/751)
+
 ## v3.0.9
 Minor bug fixes for the 3.0.8 release (ie bugs in 3.0.8 are fixed in this 3.0.9 release).
 
