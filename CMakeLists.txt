@@ -106,7 +106,7 @@ endif()
 #=======================================================================================================================
 # It's simplest to keep the project name all lower-case as it means we can use a lot more of the default settings for
 # Linux packaging (where directory names etc are expected to be all lower-case).
-project(brewtarget VERSION 3.0.10 LANGUAGES CXX)
+project(brewtarget VERSION 3.0.11 LANGUAGES CXX)
 message(STATUS "Building ${PROJECT_NAME} version ${PROJECT_VERSION}")
 message(STATUS "PROJECT_SOURCE_DIR is ${PROJECT_SOURCE_DIR}")
 # Sometimes we do need the capitalised version of the project name
