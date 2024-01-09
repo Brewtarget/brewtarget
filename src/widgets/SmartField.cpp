@@ -158,7 +158,8 @@ public:
    Measurement::Amount toCanonical(QString const & enteredText, SmartAmounts::ScaleInfo previousScaleInfo) {
       Q_ASSERT(this->m_initialised);
 
-      // It's a coding error to call this for a NonPhysicalQuantity
+      // It's a coding error to call this for a NonPhysicalQuantity.  (Instead call getNonOptValueAs<double> or
+      // similar.)
       Q_ASSERT(!std::holds_alternative<NonPhysicalQuantity>(*this->m_typeInfo->fieldType));
       Q_ASSERT(this->m_currentPhysicalQuantity);
 
@@ -400,6 +401,12 @@ SmartAmounts::ScaleInfo SmartField::getScaleInfo() const {
    } else if (this->pimpl->m_fixedDisplayUnit) {
       return SmartAmounts::ScaleInfo{this->pimpl->m_fixedDisplayUnit->getUnitSystem().systemOfMeasurement, std::nullopt};
    }
+
+   // Only need next bit for debugging!
+//   if (std::holds_alternative<NonPhysicalQuantity>(*this->pimpl->m_typeInfo->fieldType)) {
+//      qCritical() << Q_FUNC_INFO << this->pimpl->m_typeInfo;
+//      qCritical().noquote() << Q_FUNC_INFO << "Stack trace:" << Logging::getStackTrace();
+//   }
 
    Q_ASSERT(!std::holds_alternative<NonPhysicalQuantity>(*this->pimpl->m_typeInfo->fieldType));
    return SmartAmounts::getScaleInfo(this->pimpl->m_editorName,
