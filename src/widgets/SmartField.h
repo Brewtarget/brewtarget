@@ -38,8 +38,6 @@
 #include "utils/TypeLookup.h"
 #include "widgets/SmartAmounts.h"
 
-class QWidget;
-
 class SmartLabel;
 class TypeInfo;
 
