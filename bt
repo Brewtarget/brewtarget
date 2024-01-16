@@ -16,7 +16,11 @@
 #
 
 #-----------------------------------------------------------------------------------------------------------------------
-# This build tool (bt) script helps with Git setup, meson build configuration and packaging.  Usage is:
+# This build tool (bt) script helps with Git setup, meson build configuration and packaging.  You need to have Python
+# 3.10 or newer installed first.  On Windows you also need to have Pip installed and to do some extra manual stuff noted
+# below.
+#
+# Usage is:
 #
 #    ./bt setup                  Sets up Git options and configures the 'mbuild' meson build directory
 #
@@ -27,7 +31,8 @@
 #                                need to be for a local install).  Then creates a distributable package, making use
 #                                of various build variables passed back from Meson.
 #
-#
+# NOTE: This tool, used in conjunction with Meson, is now the official way to build and package the software.  We
+#       continue to support CMake for local compiles and installs, but not for packaging.
 #
 # .:TODO:. At some point we should be able to retire:
 #    configure
@@ -40,6 +45,37 @@
 # Note that Python allows both single and double quotes for delimiting strings.  In Meson, we need single quotes, in
 # C++, we need double quotes.  We mostly try to use single quotes below for consistency with Meson, except where using
 # double quotes avoids having to escape a single quote.
+#-----------------------------------------------------------------------------------------------------------------------
+
+#-----------------------------------------------------------------------------------------------------------------------
+# **********************************************************************************************************************
+# *
+# * WINDOWS USERS PLEASE NOTE that, on Windows, we assume you are running in the MSYS2 MINGW32 environment.  There are
+# * also a couple of extra things you need to do before running this bt script:
+# *
+# *    - For historical reasons, Linux and other platforms need to run both Python v2 (still used by some bits of
+# *      system) and Python v3 (eg that you installed yourself) so there are usually two corresponding Python
+# *      executables, python2 and python3.  On Windows there is only whatever Python you installed and it's called
+# *      python.exe.  To keep the shebang in the bt script working, we just make a softlink to python called python3:
+# *
+# *         if [[ ! -f $(dirname $(which python))/python3 ]]; then ln -s $(which python) $(dirname $(which python))/python3; fi
+# *
+# *    - Getting Unicode input/output to work is fun.  We should already have a Unicode locale, but it seems we also
+# *      need to set PYTHONIOENCODING (see https://docs.python.org/3/using/cmdline.html#envvar-PYTHONIOENCODING, even
+# *      though it seems to imply you don't need to set it on recent versions of Python).
+# *
+# *         export PYTHONIOENCODING=utf8
+# *
+# *    - The version of Pip we install above does not put it in the "right" place.  Specifically it will not be in the
+# *      PATH when we run bt.  The following seems to be the least hacky way around this:
+# *
+# *         curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+# *         python get-pip.py
+# *         python -m pip install -U --force-reinstall pip
+# *
+# *      See https://stackoverflow.com/questions/48087004/installing-pip-on-msys for more discussion on this.
+# *
+# **********************************************************************************************************************
 #-----------------------------------------------------------------------------------------------------------------------
 
 #-----------------------------------------------------------------------------------------------------------------------
@@ -1217,7 +1253,7 @@ def doPackage():
          #
          # Debian and RPM both want the debugging information stripped from the executable.
          #
-         # .:TBD:. One day perhaps we could be friendlyi and still ship the debugging info, just in a separate .dbg
+         # .:TBD:. One day perhaps we could be friendly and still ship the debugging info, just in a separate .dbg
          # file.  The procedure to do this is described in the 'only-keep-debug' section of `man objcopy`.  However, we
          # need to work out where to put the .dbg file so that it remains usable but lintian does not complain about it.
          #
