@@ -39,6 +39,11 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
+      #
+      # Tried to install MacPorts from the bt script, but get errors running its configure script, so trying from GitHub
+      # actions.
+      #
+      - uses: melusina-org/setup-macports@v1
 
       #
       # The `brew doctor` command just checks that Homebrew (https://brew.sh/) is installed OK (expected output is "Your
@@ -53,7 +58,7 @@ jobs:
         run: |
            echo "Output from brew doctor: $(brew doctor)"
            echo "Output from xcode-select -p: $(xcode-select -p)"
-           brew install python@3.11
+           brew install python@3.12
            echo "Python3 ($(which python3)) version"
            /usr/bin/env python3 --version
            echo "Running ./bt -v setup all"
