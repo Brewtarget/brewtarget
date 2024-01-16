@@ -50,8 +50,11 @@
 #-----------------------------------------------------------------------------------------------------------------------
 # **********************************************************************************************************************
 # *
-# * WINDOWS USERS PLEASE NOTE that, on Windows, we assume you are running in the MSYS2 MINGW32 environment.  There are
-# * also a couple of extra things you need to do before running this bt script:
+# * WINDOWS USERS PLEASE NOTE that, on Windows, we assume you are running in the MSYS2 MINGW32 environment.  This is one
+# * of, typically, four different environments available to you after installing MSYS2.  You must run this script from
+# * the "MSYS2 MinGW 32-bit" shell, and not one of the other ones.
+# *
+# * Additionally on Windows, there are also a couple of extra things you need to do before running this bt script:
 # *
 # *    - For historical reasons, Linux and other platforms need to run both Python v2 (still used by some bits of
 # *      system) and Python v3 (eg that you installed yourself) so there are usually two corresponding Python
@@ -72,6 +75,7 @@
 # *         curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 # *         python get-pip.py
 # *         python -m pip install -U --force-reinstall pip
+# *         rm get-pip.py
 # *
 # *      See https://stackoverflow.com/questions/48087004/installing-pip-on-msys for more discussion on this.
 # *
@@ -733,6 +737,9 @@ def installDependencies():
          # debugging a bit harder when there is a pacman problem, because it doesn't always give the most explanatory
          # error messages.  So we loop round and install one thing at a time.
          #
+         # Note that the --disable-download-timeout option on Pacman proved often necessary because of slow mirror
+         # sites, so we now specify it routinely.
+         #
          arch = 'i686'
          installList = ['base-devel',
                         'cmake',
@@ -753,7 +760,7 @@ def installDependencies():
             log.debug('Installing ' + packageToInstall)
             abortOnRunFail(
                subprocess.run(
-                  ['pacman', '-S', '--needed', '--noconfirm', packageToInstall]
+                  ['pacman', '-S', '--needed', '--noconfirm', '--disable-download-timeout', packageToInstall]
                )
             )
 
