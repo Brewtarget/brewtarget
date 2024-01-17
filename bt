@@ -753,6 +753,7 @@ def installDependencies():
                         'mingw-w64-' + arch + '-meson',
                         'mingw-w64-' + arch + '-nsis',
                         'mingw-w64-' + arch + '-qt5-base',
+                        'mingw-w64-' + arch + '-qt5-static',
                         'mingw-w64-' + arch + '-toolchain',
                         'mingw-w64-' + arch + '-xalan-c',
                         'mingw-w64-' + arch + '-xerces-c']
