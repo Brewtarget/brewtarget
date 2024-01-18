@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# bt is part of Brewtarget, and is copyright the following authors 2022-2023:
+# bt is part of Brewtarget, and is copyright the following authors 2022-2024:
 #   • Matt Young <mfsy@yahoo.com>
 #
 # Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -710,12 +710,17 @@ def installDependencies():
          # We just need the bit before the first underscore, eg
          #    MINGW64
          terminalVersion = unameResult.split(sep='_', maxsplit=1)[0]
-         if (terminalVersion != 'MINGW32'):
-            # One day we'll try to get the 64-bit build working on Windows.  I think it's just the packaging step that's
-            # the problem.  For now, it's easier to insist on 32-bit at set-up.  (Obviously 32-bit apps run just fine on
-            # 64-bit Windows.  I don't think there would be any noticeable difference to the end user in having a 64-bit
-            # version of the app.)
-            log.critical('Running in ' + terminalVersion + ' but need to run in MINGW32 (ie 32-bit build environment)')
+##         if (terminalVersion != 'MINGW32'):
+##            # One day we'll try to get the 64-bit build working on Windows.  I think it's just the packaging step that's
+##            # the problem.  For now, it's easier to insist on 32-bit at set-up.  (Obviously 32-bit apps run just fine on
+##            # 64-bit Windows.  I don't think there would be any noticeable difference to the end user in having a 64-bit
+##            # version of the app.)
+##            log.critical('Running in ' + terminalVersion + ' but need to run in MINGW32 (ie 32-bit build environment)')
+##            exit(1)
+         if (terminalVersion != 'MINGW64'):
+            # Support for 32-bit packages in MSYS2 is getting patchy, so we finally had to bite the bullet and get the
+            # 64-bit build working.  This means we are stopping support of the 32-bit build.
+            log.critical('Running in ' + terminalVersion + ' but need to run in MINGW64 (ie 64-bit build environment)')
             exit(1)
 
          log.info('Ensuring required libraries and frameworks are installed')
@@ -740,7 +745,8 @@ def installDependencies():
          # Note that the --disable-download-timeout option on Pacman proved often necessary because of slow mirror
          # sites, so we now specify it routinely.
          #
-         arch = 'i686'
+##         arch = 'i686'
+         arch = 'x86_64'
          installList = ['base-devel',
                         'cmake',
                         'coreutils',
@@ -1063,9 +1069,9 @@ def doPackage():
    # designed etc.)
    #
    # At first, this seemed disappointing, but I've rather come around to thinking a different way about it.  Although
-   # CPack has lots of features it is also very painful to use.  Some of the things you can do are undocumented; some of
-   # the things you want to be able to do seem nigh on impossible.  So perhaps taking a completely different approach,
-   # eg using a scripting language rather than a build tool to do packaging, is ultimately a good thing.
+   # CPack has lots of features, it is also very painful to use.  Some of the things you can do are undocumented; some
+   # of the things you want to be able to do seem nigh on impossible.  So perhaps taking a completely different
+   # approach, eg using a scripting language rather than a build tool to do packaging, is ultimately a good thing.
    #
    # I spent some time looking at and trying to use the Qt-Installer-Framework (QtIFW).  Upsides are:
    #   - In principle we could write one set of install config that would then create install packages for Windows, Mac
@@ -1099,8 +1105,8 @@ def doPackage():
    #     https://blog.devgenius.io/how-to-build-debian-packages-from-meson-ninja-d1c28b60e709 gives some sketchy
    #     starting info on how to build deb packages.  Maybe we could find the equivalent for creating RPMs.  Also look
    #     at https://openbuildservice.org/.
-   #   - For Windows, we could probably use NSIS (Nullsoft Scriptable Install System -- see
-   #     https://nsis.sourceforge.io/) -- or similar to create a Windows installer.
+   #   - For Windows, we use NSIS (Nullsoft Scriptable Install System -- see https://nsis.sourceforge.io/) -- to create
+   #     a Windows installer.
    #
    # Although a lot of packaging is platform-specific, the initial set-up is generic.
    #
@@ -1825,7 +1831,13 @@ def doPackage():
             'libbz2',               # BZip2 compression -- see https://en.wikipedia.org/wiki/Bzip2
             'libdouble-conversion', # See https://github.com/google/double-conversion
             'libfreetype',          # See https://freetype.org/
-            'libgcc_s_dw2',
+            #
+            # 32-bit and 64-bit MinGW use different exception handling (see
+            # https://sourceforge.net/p/mingw-w64/wiki2/Exception%20Handling/) hence the different naming of libgcc in
+            # the 32-bit and 64-bit environments.
+            #
+#            'libgcc_s_dw2',    # 32-bit GCC library
+            'libgcc_s_seh',    # 64-bit GCC library
             'libglib-2.0',
             'libgraphite',
             'libharfbuzz',   # HarfBuzz text shaping engine -- see https://github.com/harfbuzz/harfbuzz
