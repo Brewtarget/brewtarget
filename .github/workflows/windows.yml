@@ -1,5 +1,5 @@
 #
-# .github/workflows/windows.yml is part of Brewtarget, and is copyright the following authors 2021-2023:
+# .github/workflows/windows.yml is part of Brewtarget, and is copyright the following authors 2021-2024:
 #   • Artem Martynov <martynov-a@polyplastic.by>
 #   • Chris Speck <cgspeck@gmail.com>
 #   • Mattias Måhl <mattias@kejsarsten.com>
@@ -42,8 +42,8 @@ jobs:
       matrix:
         include: [
           # Current installer NSIS with required plugins don't support x64 package
-          #{ msystem: MINGW64, arch: x86_64 },
-          { msystem: MINGW32, arch: i686 }
+          { msystem: MINGW64, arch: x86_64 },
+          #{ msystem: MINGW32, arch: i686 }
         ]
     steps:
 
