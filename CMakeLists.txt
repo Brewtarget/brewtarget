@@ -1,6 +1,6 @@
 #
 # CMakeLists.txt is part of Brewtarget, and is Copyright the following
-# authors 2009-2023
+# authors 2009-2024
 #  - Chris Pavetto <chrispavetto@gmail.com>
 #  - Dan Cavanagh <dan@dancavanagh.com>
 #  - Daniel Moreno <danielm5@users.noreply.github.com>
@@ -135,9 +135,6 @@ option(NO_MESSING_WITH_FLAGS "On means do not add any build flags whatsoever. Ma
 # ${repoDir}/packaging         = Packaging-related config
 #
 set(repoDir "${CMAKE_CURRENT_SOURCE_DIR}")
-
-# AFAICT this is used only in cmake/modules/NSIS.template.in
-set(WINDIR "${repoDir}/win")
 
 # Location of custom CMake modules. (At the moment, there is only one, which is used for Windows packaging
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules")
@@ -1024,7 +1021,7 @@ if(APPLE)
 
    # Sets the NSHumanReadableCopyright bundle property key, which is "a human-readable copyright notice for the bundle".
    set(MACOSX_BUNDLE_COPYRIGHT
-       "Copyright 2009-2022.  Distributed under the terms of the GNU General Public License (version 3).")
+       "Copyright 2009-2024.  Distributed under the terms of the GNU General Public License (version 3).")
 
 else()
    add_executable(${fileName_executable}
@@ -1061,74 +1058,6 @@ if(WIN32 AND MINGW)
       LINK_FLAGS "-Wl,-enable-stdcall-fixup -Wl,-enable-auto-import -Wl,-enable-runtime-pseudo-reloc -mthreads -Wl,-subsystem,windows"
    )
 
-   # This is from https://stackoverflow.com/questions/41193584/deploy-all-qt-dependencies-when-building
-   if(TARGET Qt5::windeployqt)
-      # First, execute windeployqt in a temporary directory after the build to create the directory structure and files
-      # that Qt needs on Windows...
-      add_custom_command(TARGET ${fileName_executable}
-         POST_BUILD
-         COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_CURRENT_BINARY_DIR}/windeployqt"
-         COMMAND Qt5::windeployqt --dir "${CMAKE_CURRENT_BINARY_DIR}/windeployqt" --no-translations --compiler-runtime "$<TARGET_FILE_DIR:${fileName_executable}>/$<TARGET_FILE_NAME:${fileName_executable}>"
-      )
-
-      # ...then we copy that directory tree to (a) the installation directory (when "make install" is run) and (b)
-      # the directory where we run the test executable (straight away)
-      install(DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/windeployqt/" DESTINATION bin)
-      add_custom_target(
-         copy-runtime-files ALL
-         COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_BINARY_DIR}/windeployqt/" "${CMAKE_BINARY_DIR}/bin"
-         DEPENDS ${fileName_executable}
-      )
-   endif()
-elseif(APPLE)
-   #
-   # We want to achieve the same goal as with Qt5::windeployqt above, but note that the Qt5::macdeployqt functions
-   # rather differently, with different options, so our CMake code here is correspondingly different
-   #
-   # Note that although macdeployqt can create the disk image file, we do that part with CPack to be consistent with our
-   # approach to packaging on other platforms
-   #
-   # Using the MACOSX_BUNDLE paramater on add_executable() above will have created a directory tree akin to the
-   # following:
-   #
-   #    ${fileName_executable}.app   # Top level folder that the desktop user sees as "the application"
-   #    └── Contents
-   #        ├── Info.plist
-   #        ├── MacOS
-   #        │   └── ${fileName_executable}    # The main executable
-   #        └──  Resources
-   #            ├── en.lproj
-   #            ├── sounds
-   #            └── translations_qm
-   #
-   # Running macdeployqt will add "Frameworks" and "Plugins" directory trees inside the "Contents" directory, and
-   # populate these with the various Qt shared libraries etc (including database drivers) needed for the code to run.
-   # It will also copy some, but not all, of the other shared libraries we need.
-   #
-   # We still need to:
-   #    - Copy across some non-Qt libraries we need (part of Xalan that macdeployqt does not detect)
-   #    - Copy sound files into Contents/Resources/sounds and translation files into Contents/Resources/translations_qm
-   #    - Copy default DB and default data into Contents/Resources (which is also where the user manual lives for
-   #      Brewtarget)
-   # The last two should happen courtesy of the set_source_files_properties(... MACOSX_PACKAGE_LOCATION ...) commands
-   # above.  (They won't show up in the diagnostic here because that copying happens _after_ building the executable.
-   #
-   if(TARGET Qt5::macdeployqt)
-      # Note that macdeployqt needs any options flags to be _after_ the name of the app.  The only flag we use is:
-      #   -verbose=<0-3>   0 = no output, 1 = error/warning (default), 2 = normal, 3 = debug
-      add_custom_command(TARGET ${fileName_executable}
-         POST_BUILD
-         # Uncomment the  echo  and  tree  lines to provide extra diagnostics.  These are useful eg if you don't own a
-         # Mac, and are relying on GitHub actions to do Mac builds.  (Just make sure  tree  is installed, usually via
-         # brew install tree.
-#         COMMAND echo "Contents of ${fileName_executable}.app before running macdeployqt"
-#         COMMAND tree -sh ${fileName_executable}.app
-         COMMAND Qt5::macdeployqt "$<TARGET_FILE_NAME:${fileName_executable}>.app" -verbose=2
-#         COMMAND echo "Contents of ${fileName_executable}.app after running macdeployqt"
-#         COMMAND tree -sh ${fileName_executable}.app
-         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-      )
-   endif()
 endif()
 
 add_dependencies(${fileName_executable} translationsTarget)
@@ -1180,114 +1109,6 @@ add_test(NAME testAlgorithms              COMMAND bin/${fileName_unitTestRunner}
 add_test(NAME testTypeLookups             COMMAND bin/${fileName_unitTestRunner} testTypeLookups            )
 add_test(NAME testLogRotation             COMMAND bin/${fileName_unitTestRunner} testLogRotation            )
 
-#=======================================================================================================================
-#============================================== Debian-friendly ChangeLog ==============================================
-#=======================================================================================================================
-#
-# This is to create a compressed changelog in a Debian-friendly format
-#
-# NB: Even though this is a target you build (with make changelog) before doing make package, this section needs to
-#     appear below the stuff for make package so that we can reuse variables such as CPACK_DEBIAN_PACKAGE_MAINTAINER
-#
-# Our change log (CHANGES.markdown) uses markdown format, with the following raw structure:
-#    ## v1.2.3
-#
-#    Optional one-line description of the release.
-#
-#    ### New Features
-#
-#    * Blah blah blah
-#    * etc
-#
-#    ### Bug Fixes
-#
-#    * Blah blah blah
-#    * etc
-#
-#    ### Incompatibilities
-#
-#    None
-#
-#    ### Release Timestamp
-#    Sun, 06 Feb 2022 12:02:58 +0100
-#
-# However, per https://www.debian.org/doc/debian-policy/ch-source.html#debian-changelog-debian-changelog, Debian
-# change logs need to be in the following format:
-#    package (version) distribution(s); urgency=urgency
-#      [optional blank line(s), stripped]
-#      * change details
-#      more change details
-#      [blank line(s), included in output of dpkg-parsechangelog]
-#      * even more change details
-#      [optional blank line(s), stripped]
-#     -- maintainer name <email address>[two spaces]  date
-#
-# We are being a bit fast-and-loose in hard-coding the same maintainer name for each release, but I don't thing it's a
-# huge issue.
-#
-# Note that, to keep us on our toes, Debian change log lines are not supposed to be more than 80 characters long.  This
-# is non-trivial, but the ghastly bit of awk below gets us most of the way there.
-#
-if(UNIX AND NOT APPLE)
-   # Note that, whilst using VERBATIM below makes things a lot less painful, we still have to double-escape things -
-   # once for CMake and once for bash.  (Where something is single-escaped it probably means either that CMake needs the
-   # escape and the bash command does not, or vice versa.)  Also, we have more invocations of sed that we strictly need
-   # because it makes things slightly easier to follow and debug.
-   string(
-      CONCAT changeLogProcessCommands
-      "cat ${filesToInstall_changeLogUncompressed} | "
-      # Skip over the introductory headings and paragraphs of CHANGES.markdown until we get to the first version line
-      "sed -n '/^## v/,$p' | "
-      # We want to change the release timestamp to maintainer + timestamp, but we don't want to create too long a line
-      # before we do the fold command below, so use "÷÷maintainer÷÷" as a placeholder for
-      # " -- ${CPACK_DEBIAN_PACKAGE_MAINTAINER}  "
-      "sed -z 's/\\n### Release Timestamp\\n\\([^\\n]*\\)\\n/\\n÷÷maintainer÷÷\\1\\n/g' | "
-      # Join continued lines in bullet lists
-      "sed -z 's/\\n  / /g' | "
-      # Change the version to package (version) etc.  Stick a '÷' on the front of the line to protect it from
-      # modification below
-      "sed 's/^## v\\(.*\\)$/÷${PROJECT_NAME} (\\1-1) unstable\; urgency=low/' | "
-      # Change bullets to sub-bullets
-      "sed 's/^\\* /    - /' | "
-      # Change headings to bullets
-      "sed 's/^### /  * /' | "
-      # Change any lines that don't start with space OR a ÷ character to be bullets
-      "sed 's/^\\([^ ÷]\\)/  * \\1/' | "
-      # Split any long lines.  Make the width less than 80 so we've got a margin go insert spaces at the start of
-      # bullet continuation lines.
-      "fold -s --width=72 | "
-      # With a lot of help from awk, reindent the lines that were split off from a long bullet line so that they align
-      # with that previous line.
-      "awk 'BEGIN { inBullet=0 } "
-      "{"
-         "if (!inBullet) {"
-            "inBullet=match($0, \"^( +)[^ ] \", spaces)\;"
-            "print\;"
-         "} else {"
-            "bulletContinues=match($0, \"^[^ ]\")\;"
-            "if (!bulletContinues) {"
-               "inBullet=match($0, \"^( +)[^ ] \", spaces)\;"
-               "print\;"
-            "} else {"
-               "print spaces[1] \"  \" $0\;"
-            "}"
-         "}"
-      "}' | "
-      # Fix the "÷÷maintainer÷÷" placeholders
-      "sed 's/÷÷maintainer÷÷/ -- ${CPACK_DEBIAN_PACKAGE_MAINTAINER}  /' | "
-      # Remove the protective '÷' from the start of any other lines
-      "sed 's/^÷//' | "
-      "gzip --best -n --to-stdout > ${filesToInstall_changeLogCompressed}"
-   )
-   add_custom_command(
-      TARGET ${fileName_executable} POST_BUILD
-      COMMAND bash -c ${changeLogProcessCommands}
-      VERBATIM
-      COMMENT "Processing ${filesToInstall_changeLogUncompressed} to ${filesToInstall_changeLogCompressed}"
-      MAIN_DEPENDENCY ${filesToInstall_changeLogUncompressed}
-   )
-endif()
-
 #=================================Installs=====================================
 
 # Install executable.
@@ -1296,251 +1117,15 @@ install(TARGETS ${fileName_executable}
         RUNTIME DESTINATION ${installSubDir_bin}
         COMPONENT ${RUNTIME_INSTALL_COMPONENT})
 
-#=======================================================================================================================
-#==================================== Shipping shared libraries on Windows and Mac =====================================
-#=======================================================================================================================
-if(WIN32)
-   #
-   # Shared libraries (DLLs) are a bit complicated on Windows.  Because there is not really a standard package
-   # management system, we can't easily just say "we require libraries X, Y and Z".  Instead, we need to ship said
-   # libraries in the same directory as our application's executable.
-   #
-   # (Of course, if you're just running on the same machine where you built the software, you could simply set the PATH
-   # variable to include all the directories where the DLLs are.  But, in the general case, we're trying to create a
-   # package that does not require people to have pre-installed Qt, Xerces, Xalan, etc.)
-   #
-   # In theory, CMake can work out what DLLs we need and thereby generate a list of files that we need to ensure are
-   # copied as part of the install/packaging.  In practice, everything seems to be a bit more complicated.
-   #
-   # See https://cmake.org/cmake/help/latest/manual/cmake-generator-expressions.7.html#genex:TARGET_RUNTIME_DLLS
-   # (This replaces use of GET_RUNTIME_DEPENDENCIES which I just could not get to work correctly, despite following all
-   # sorts of helpful advice at
-   # https://stackoverflow.com/questions/62884439/how-to-use-cmake-file-get-runtime-dependencies-in-an-install-statement
-   # I always hit a "Failed to start objdump" error.)
-   #
-   # Note, however that this does not find all the DLLs we need.  Perhaps this is related to the mention in the CMake
-   # doco that "Many Find Modules produce imported targets with the UNKNOWN type and therefore will be ignored."
-   #
-   add_custom_command(
-      TARGET ${fileName_executable} POST_BUILD
-      COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_RUNTIME_DLLS:brewtarget> $<TARGET_FILE_DIR:brewtarget>
-      COMMAND_EXPAND_LISTS
-   )
-
-   #
-   # On MSYS2/MinGW, static libraries (including .dll.a files) live in /mingw64/lib (usually = C:/msys64/mingw64/lib/)
-   # and dynamically linked libraries (aka DLLs) live in /mingw64/bin (usually = C:/msys64/mingw64/bin/).
-   #
-   # First, we do a bit of a hack to get to the bin directory from the lib one, without hard-coding either (in case
-   # your 64-bit instance of MSYS2 is not installed at C:/msys64/).  XercesC_LIBRARIES will be the .dll.a file for
-   # Xerces.  Usually only one library for Xerces, but we take first in the list in case.
-   #
-   list(GET XercesC_LIBRARIES 0 xercesFirstLibrary)
-   get_filename_component(staticLibDir ${xercesFirstLibrary} DIRECTORY)
-   set(dynamicLibDir ${staticLibDir}/../bin)
-   message(STATUS "dynamicLibDir=" ${dynamicLibDir})
-
-   #
-   # Now, for each static library (/mingw64/lib/BlahBlah.dll.a) we know about, we get the corresponding dynamic one
-   # (/mingw64/bin/BlahBlah.dll) and copy it into the same directory as the .exe file.
-   #
-   # Just to make our lives fun, sometimes the static and dynamic versions of the library will have slightly different
-   # naming conventions.  Eg, for Xalan, we have:
-   #    /mingw64/bin/libxalan-c.dll
-   #    /mingw64/lib/libxalan-c.dll.a
-   # But for Xerces, we have:
-   #    /mingw64/lib/libxerces-c.dll.a
-   #    /mingw64/bin/libxerces-c-3-2.dll
-   # Hence the extra '*' in the glob expression below.
-   #
-   # Finally, note that, to make debugging more interesting, the message command below outputs during "make" rather
-   # than during "make install".
-   #
-   foreach(staticLib IN LISTS XercesC_LIBRARIES XalanC_LIBRARIES)
-      get_filename_component(libBaseName ${staticLib} NAME_WE)
-      file(GLOB dynamicallyLinkedLibrary ${dynamicLibDir}/${libBaseName}*.dll)
-      message(STATUS "Install will copy DLL ${dynamicallyLinkedLibrary} to ${installSubDir_bin}")
-      install(FILES ${dynamicallyLinkedLibrary} DESTINATION ${installSubDir_bin})
-   endforeach()
-
-   #
-   # Now, because we're also not assuming that the person running the code will have MSYS2/MinGW installed, we need to
-   # include the DLLs that ship with them and get pulled in by GCC.  I am hoping to find a less manual way of doing this
-   # but have not yet hit paydirt.
-   #
-   set(msys2Dlls
-      libbrotli                ###
-      libbrotlicommon        # Brotli compression -- see https://en.wikipedia.org/wiki/Brotli
-      libbrotlidec           # Brotli compression
-      libbrotlienc           # Brotli compression
-      libbz2                 # BZip2 compression -- see https://en.wikipedia.org/wiki/Bzip2
-      libdouble-conversion   # See https://github.com/google/double-conversion
-      libfreetype            # See https://freetype.org/
-      libgcc_s_dw2
-      libglib                  ###
-      libglib-2.0
-      libgraphite
-      libharfbuzz            # HarfBuzz text shaping engine -- see https://github.com/harfbuzz/harfbuzz
-      libiconv               # See https://www.gnu.org/software/libiconv/
-      libicudt               # Part of International Components for Unicode
-      libicuin               # Part of International Components for Unicode
-      libicuuc               # Part of International Components for Unicode
-      libintl                # See https://www.gnu.org/software/gettext/
-      libmd4c                # Markdown for C -- see https://github.com/mity/md4c
-      libpcre2-16            # Perl Compatible Regular Expressions
-      libpcre2-32            # Perl Compatible Regular Expressions
-      libpcre2-8             # Perl Compatible Regular Expressions
-      libpng16               # Official PNG reference library -- see http://www.libpng.org/pub/png/libpng.html
-      libsqlite3             # Need this IN ADDITION to bin/sqldrivers/qsqlite.dll, which gets installed by windeployqt
-      libstdc++
-      libwinpthread
-      libxalan-c
-      libxalanMsg
-      libxerces-c-3
-      libzstd                # ZStandard (aka zstd) = fast lossless compression algorithm
-      zlib1                    ###
-      zlib                   # ZLib compression library
-   )
-   foreach(dynamicLib IN LISTS msys2Dlls)
-      file(GLOB dynamicallyLinkedLibrary ${dynamicLibDir}/${dynamicLib}*.dll)
-      message(STATUS "Install will also copy DLL ${dynamicallyLinkedLibrary} to ${installSubDir_bin}")
-      install(FILES ${dynamicallyLinkedLibrary} DESTINATION ${installSubDir_bin})
-   endforeach()
-
-   # These are something to do with International Components for Unicode
-   message(STATUS "Install will copy ${IcuDlls} to ${installSubDir_bin}")
-   install(FILES ${IcuDlls} DESTINATION ${installSubDir_bin})
-
-   add_custom_command(
-      TARGET ${fileName_executable} POST_BUILD
-      COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::Widgets> $<TARGET_FILE_DIR:brewtarget>
-   )
-elseif(APPLE)
-   #
-   # For similar reasons to Windows, the Mac Bundle needs to have shared libraries copied into it.  Mostly this is done
-   # automatically with macdeployqt, which picks up Qt shared libraries, and other obvious dependencies such as
-   # libxerces-c.dylib and libxalan-c.dylib, and puts them in the Contents/Frameworks folder inside the bundle.
-   #
-   # However, where a library depends on another library, this is not picked up by macdeployqt.  In particular,
-   # libxalan-c.dylib depends on libxalanMsg.dylib.  The latter does not show up in XalanC_LIBRARIES either.  So we
-   # have to take a more manual approach.
-   #
-   # Firstly, as https://stackoverflow.com/questions/63310608/find-library-cannot-find-basic-shared-library-macos-clion
-   # explains you must remove the "lib" prefix from the library name before asking CMake to find it.
-   #
-   # Then, once you have the path to the library, you have to deal with the case that it will probably be a symbolic
-   # link, so you need to dereference it rather than let CMake just copy the symlink -- see
-   # https://stackoverflow.com/questions/11487638/cmake-fileinstall-files-destination-dir-with-symbolic-links.  (Except
-   # you also need to pay attention that the get_filename_component() command is now "superseded by cmake_path()
-   # command, except REALPATH now offered by file(REAL_PATH) command and PROGRAM now available in
-   # separate_arguments(PROGRAM) command".  And because it's CMake, you have to pay close attention to which parameters
-   # are values (eg expanded variables) and which are variable names.)
-   #
-   # Subsequently, you discover that you need to rename things because:
-   #    /usr/local/lib/libxalanMsg.dylib     is a symbolic link to /usr/local/lib/libxalanMsg.112.dylib
-   #    /usr/local/lib/libxalanMsg.112.dylib is a symbolic link to /usr/local/lib/libxalanMsg.112.0.dylib
-   # but when otool is run by fixup_bundle, it looks for @rpath/libxalanMsg.112.dylib and will not accept any other
-   # name for the library.   So, we change ".0.dylib" at the end of the library file name to ".dylib".
-   #
-   # Then you have to remember, as commented elsewhere, the DESTINATION option of the install() command must be a
-   # relative path; otherwise installed files are ignored by CPack - ie won't end up in the DMG file.  (Yes, this does
-   # contrast with the requirement of fixup_bundle to have an absolute path.  You have to stay on your toes with CMake.)
-   # This is where it gets a bit confusing(!)  We seem to have two copies of the bundle in the build tree:
-   #    1: ${fileName_executable}.app
-   #    2: _CPack_Packages/Darwin/DragNDrop/${CMAKE_PROJECT_NAME}_${PROJECT_VERSION}_x86_64/ALL_IN_ONE/${fileName_executable}.app
-   # They look to be the same, except that installing with an absolute path beginning
-   # ${CMAKE_BINARY_DIR}/${fileName_executable}.app/ puts things in the first of these (but not the second), while
-   # installing with a relative path puts them in the second (but not the first).
-   #
-   # AFAICT it's the second bundle that ends up in the DMG file even though it's the first one that we're running
-   # fixup_bundle on.  For the moment I'm just going to install libxalanMsg.112.dylib into both, on the grounds that it
-   # surely can't hurt.
-   #
-   # One day, I hope we will find a more elegant and less brittle way to do all this!
-   #
-   find_library(XalanCMessage_LIBRARY NAMES xalanMsg)
-   file(REAL_PATH "${XalanCMessage_LIBRARY}" XalanCMessage_LIBRARY_resolved)
-   cmake_path(GET XalanCMessage_LIBRARY_resolved FILENAME XalanCMessage_LIBRARY_withoutPath)
-   string(REGEX REPLACE "\.0\.dylib$" ".dylib" XalanCMessage_LIBRARY_tweaked "${XalanCMessage_LIBRARY_withoutPath}")
-   message(STATUS "Found libxalanMsg at ${XalanCMessage_LIBRARY} which resolves to ${XalanCMessage_LIBRARY_resolved}")
-   message(STATUS "Tweaked libxalanMsg file name from ${XalanCMessage_LIBRARY_withoutPath} to ${XalanCMessage_LIBRARY_tweaked}")
-   install(FILES ${XalanCMessage_LIBRARY_resolved}
-           DESTINATION ${fileName_executable}.app/Contents/Frameworks/
-           RENAME ${XalanCMessage_LIBRARY_tweaked})
-   install(FILES ${XalanCMessage_LIBRARY_resolved}
-           DESTINATION ${CMAKE_BINARY_DIR}/${fileName_executable}.app/Contents/Frameworks/
-           RENAME ${XalanCMessage_LIBRARY_tweaked})
-
-   #
-   # On MacOS, if you are shipping dynamic libraries with your application, you can tell the application where to look
-   # for those dynamic libraries via "Runpath Search Path" aka "@rpath".  See
-   # https://gitlab.kitware.com/cmake/community/-/wikis/doc/cmake/RPATH-handling for more details.
-   #
-   #
-   # Setting CMAKE_BUILD_WITH_INSTALL_RPATH to true means "the software is always built with the install path for the
-   # RPATH and does not need to be relinked when installed".  This is recommended at
-   # https://discourse.cmake.org/t/osx-frameworks-rpath-and-image-not-found/3094/9
-   #
-   # Setting CMAKE_INSTALL_RPATH_USE_LINK_PATH to true "will append to the runtime search path (rpath) of installed
-   # binaries any directories outside the project that are in the linker search path or contain linked library files".
-   #
-   # CMAKE_INSTALL_RPATH is "a semicolon-separated list specifying the rpath to use in installed targets".
-   #
-   set(CMAKE_BUILD_WITH_INSTALL_RPATH    true)
-   set(CMAKE_INSTALL_RPATH_USE_LINK_PATH true)
-   message(STATUS "CMAKE_INSTALL_RPATH = ${CMAKE_INSTALL_RPATH}, End Of Line")
-
-   #
-   # Having copied the shared libraries into the bundle, we now need to use CMake's fixup_bundle
-   # (see https://cmake.org/cmake/help/latest/module/BundleUtilities.html) to make sure the application inside the
-   # bundle looks in the bundle, not the system, for each of these shared libraries.
-   #
-   # After this, there is a verify_app command which checks that everything "appears valid".
-   #
-   # Note that the CMake doco says "DO NOT USE THESE FUNCTIONS AT CONFIGURE TIME (from CMakeLists.txt)! Instead, invoke
-   # them from an install(CODE) or install(SCRIPT) rule."  Note that this means we have to be careful about which
-   # variables are available to us.  A lot of things are simply not set inside install(CODE).  As explained at
-   # https://stackoverflow.com/questions/73815300/how-do-i-get-project-root-dir-in-the-cmake-install-code-section, there
-   # are various techniques to inject variables into install(CODE).  We use the string(CONFIGURE) approach as it avoids
-   # too much escaping.
-   #
-   # The include(BundleUtilities) line is the bit the CMake documentation doesn't tell you about (or at least, not in as
-   # obvious a way as one might like).  Without it you'll get an error about fixup_bundle being an unknown CMake
-   # command.
-   #
-   # Another thing you have to find out the hard way is that the first parameter to fixup_bundle ("<app>") cannot be a
-   # relative path.  If you pass in "foo.app", then fixup_bundle will look for "/foo.app".
-   #
-   # Besides the full path to the bundle to fix, fixup_bundle takes two other parameters --
-   # fixup_bundle(<app> <libs> <dirs>).  The <libs> parameter "is a list of libraries that must be fixed up, but that
-   # cannot be determined by otool output analysis (i.e. plugins)".  The <dirs> parameter is undocumented (welcome to
-   # the joy of CMake) and often appears to be set to empty string in examples on stackoverflow etc.
-   #
-   # For diagnostics, it's often helpful to add lines such as the following in the code block below:
-   #    execute_process(COMMAND echo "Pre fixup_bundle - build tree")
-   #    execute_process(COMMAND pwd)
-   #    execute_process(COMMAND tree -sh .)
-   #
-   string(CONFIGURE [[
-      include(BundleUtilities)
-      fixup_bundle("${CMAKE_BINARY_DIR}/${fileName_executable}.app" "" "${CMAKE_BINARY_DIR}/${fileName_executable}.app/Contents/Frameworks")
-      verify_app("${CMAKE_BINARY_DIR}/${fileName_executable}.app")
-   ]] installCode)
-   install(CODE "${installCode}")
-endif()
-
 # Install the translations.
 install(FILES ${QM_FILES}
         DESTINATION "${installSubDir_data}/translations_qm"
         COMPONENT ${DATA_INSTALL_COMPONENT} )
 
 #=======================================================================================================================
-#======================================= Install (both locally and for packages) =======================================
+#================================================== Install (locally) ==================================================
 #=======================================================================================================================
-# This is for "make install" (or "sudo make install") AND for "make package" and "make package_source".
-#
-# Note that, per https://cmake.org/cmake/help/latest/module/CPack.html, DESTINATION option of the install() command must
-# be a relative path; otherwise installed files are ignored by CPack.
+# This is for "make install" (or "sudo make install")
 #
 # When a relative path is given in the DESTINATION option of the install() command, it is interpreted relative to the
 # value of the CMAKE_INSTALL_PREFIX variable.
@@ -1574,36 +1159,6 @@ if(UNIX AND NOT APPLE)
    install(FILES ${filesToInstall_desktop}
            DESTINATION "${installSubDir_applications}"
            COMPONENT ${DATA_INSTALL_COMPONENT})
-
-   # Install friendly-format change log aka release notes
-   # Note that lintian does not like having a file called CHANGES.markdown in the doc directory, as it thinks it is a
-   # misnamed changelog.Debian.gz (even when changelog.Debian.gz is also present!) so you get a
-   # wrong-name-for-upstream-changelog warning.
-   # The simplest way round this is to rename CHANGES.markdown to RelaseNotes.markdown
-   install(FILES ${filesToInstall_changeLogUncompressed}
-           RENAME "RelaseNotes.markdown"
-           DESTINATION ${installSubDir_doc}
-           COMPONENT ${DATA_INSTALL_COMPONENT})
-
-   # Debian packages need to have the copyright file in a particular place (/usr/share/doc/PACKAGE/copyright)
-   # RPM packages don't like having duplicate files in the same directory (eg copyright and COPYRIGHT with same
-   # contents).  So the simplest thing is to rename COPYRIGHT to copyright for both.
-   install(FILES "${repoDir}/COPYRIGHT"
-           RENAME "copyright"
-           DESTINATION ${installSubDir_doc}
-           COMPONENT ${DATA_INSTALL_COMPONENT})
-
-   # Each Debian package (which provides a /usr/share/doc/pkg directory) must install a Debian changelog file in
-   # /usr/share/doc/pkg/changelog.Debian.gz
-   install(FILES ${filesToInstall_changeLogCompressed}
-           RENAME "changelog.Debian.gz"
-           DESTINATION ${installSubDir_doc}
-           COMPONENT ${DATA_INSTALL_COMPONENT})
-else()
-   #----------- Windows and Mac -----------
-   install(FILES "${repoDir}/COPYRIGHT"
-           DESTINATION ${installSubDir_doc}
-           COMPONENT ${DATA_INSTALL_COMPONENT})
 endif()
 
 if(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS)
@@ -1630,243 +1185,10 @@ endif()
 #
 add_custom_target(
    FinalMessage ALL
-   ${CMAKE_COMMAND} -E cmake_echo_color --bold --green "⭐⭐⭐ Finished compiling ${capitalisedProjectName}.  Please run  sudo make install  to install. ⭐⭐⭐"
+   ${CMAKE_COMMAND} -E cmake_echo_color --bold --green "⭐⭐⭐ Finished compiling ${capitalisedProjectName}.  Please run  sudo make install  to install locally. ⭐⭐⭐"
    COMMENT "Final Message"
 )
 add_dependencies(FinalMessage ${fileName_executable})
-
-#=======================================================================================================================
-#====================================================== Packaging ======================================================
-#=======================================================================================================================
-# To make the packages, "make package". For source packages, "make package_source"
-#
-# We use CMake's CPack module (see https://cmake.org/cmake/help/latest/module/CPack.html and
-# https://cmake.org/cmake/help/book/mastering-cmake/chapter/Packaging%20With%20CPack.html) as our preferred way of
-# creating install packages.  You have slightly less control compared with doing things more manually,
-# but it's a lot less hassle.
-#
-
-#
-# Cross-platform packaging options
-#
-# Note that we don't bother setting the following
-#   - CPACK_PACKAGE_NAME as it defaults to the project name, which is what we want
-#   - CPACK_PACKAGE_DIRECTORY as it defaults to the build directory, which is what we want
-#   - CPACK_PACKAGE_VERSION_MAJOR as it defaults to the version given in the project command above, which is what we
-#                                 want
-#   - CPACK_PACKAGE_VERSION_MINOR for the same reason
-#   - CPACK_PACKAGE_VERSION_PATCH for the same reason
-#   - CPACK_SET_DESTDIR as it is only needed to is to "install software at non-default location"
-#   - CPACK_PACKAGING_INSTALL_PREFIX as the defaults from each generator should usually be fine
-#   - CPACK_PACKAGE_CONTACT as, AFAICT, it's only used to provide a default value for CPACK_DEBIAN_PACKAGE_MAINTAINER
-#
-set(CPACK_PACKAGE_VENDOR "The ${capitalisedProjectName} Team")
-string(
-   CONCAT
-   CPACK_PACKAGE_DESCRIPTION
-   # Note that the lines here are not supposed to be more than 79 characters long, otherwise rpmlint will spew an error.
-   # (If they are more than 80 characters long, then lintian will also complain, though only with a warning.)
-   "Brewtarget is a calculator for brewing beer. It is a Qt-based program which\n"
-   "allows you to create recipes from a database of ingredients. It calculates\n"
-   "all the important parameters, helps you with mash temperatures, and just\n"
-   "makes the process of recipe formulation much easier."
-)
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "GUI beer brewing software")
-set(CPACK_PACKAGE_HOMEPAGE_URL "https://github.com/Brewtarget/brewtarget")
-#
-message("CMAKE_PROJECT_NAME = ${CMAKE_PROJECT_NAME}")
-message("PROJECT_VERSION = ${PROJECT_VERSION}")
-set(CPACK_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME}_${PROJECT_VERSION}_${CMAKE_SYSTEM_PROCESSOR}")
-set(CPACK_PACKAGE_INSTALL_DIRECTORY "${capitalisedProjectName}-${PROJECT_VERSION}")
-if(NOT WIN32)
-   # Setting this on Windows breaks the NSIS packager with some confusing message saying it can't find the file
-   set(CPACK_PACKAGE_ICON "${repoDir}/images/${PROJECT_NAME}.svg")
-endif()
-set(CPACK_PACKAGE_CHECKSUM "SHA256")
-set(CPACK_RESOURCE_FILE_LICENSE "${repoDir}/COPYING.GPLv3")
-set(CPACK_STRIP_FILES true)
-set(CPACK_VERBATIM_VARIABLES true)
-set(CPACK_PACKAGE_EXECUTABLES "${fileName_executable}" "${capitalisedProjectName}")
-
-#
-# Variables for Source Package Generators
-#
-set(CPACK_SOURCE_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME}_${PROJECT_VERSION}_source")
-set(CPACK_SOURCE_GENERATOR "TBZ2;")
-set(CPACK_SOURCE_IGNORE_FILES "/.svn/"
-                              "~$"
-                              "/CMakeFiles/"
-                              "/_CPack_Packages/"
-                              "^${PROJECT_NAME}.*deb$"
-                              "^${PROJECT_NAME}.*rpm$"
-                              "^${PROJECT_NAME}.*tar.*$"
-                              "CPack.*"
-                              "Makefile"
-                              "cmake_install.*"
-                              "\\\\.o$"
-                              "/${PROJECT_NAME}.dir/"
-                              "moc_.*"
-                              "qrc_${PROJECT_NAME}.*"
-                              "ui_.*h"
-                              "install_manifest.*"
-                              "config\\\\.h")
-
-if(UNIX AND NOT APPLE)
-   #================================================= Linux Packaging ==================================================
-   set(CPACK_GENERATOR "DEB;RPM;TBZ2;")
-
-   #-----------------DEB----------------
-   # See https://cmake.org/cmake/help/latest/cpack_gen/deb.html
-
-   # We don't set CPACK_DEBIAN_PACKAGE_NAME as it defaults to CMAKE_PROJECT_NAME, which is what we want
-   # (We don't want to put the version in the package name as it gets added to the file name automatically, so you'd
-   # end up with it twice.  Plus you'd get a bad-package-name error from lintian.)
-
-   set(CPACK_DEBIAN_FILE_NAME DEB-DEFAULT)
-
-   set(CPACK_DEBIAN_PACKAGE_VERSION "${PROJECT_VERSION}-1")
-
-   # See https://www.debian.org/doc/debian-policy/ch-binary.html#s-maintainer for more on the "maintainer", but
-   # essentially it's a required package property that needs to be either one person or a group mailing list.  In the
-   # latter case, the individual maintainers need be listed in a separate property called "uploaders", though I can't
-   # see a way to set this via CPack.
-   #
-   # Also note, per https://www.debian.org/doc/debian-policy/ch-controlfields.html#s-f-maintainer, that it's simplest
-   # to avoid having full stops in the maintainer's name.
-   set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Matt Young <mfsy@yahoo.com>")
-
-   # This should save us having to set CPACK_DEBIAN_PACKAGE_DEPENDS manually
-   set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
-
-   set(CPACK_DEBIAN_PACKAGE_SECTION "misc")
-   set(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
-
-   # By default, CPack sets directory permissions with group_write enabled (775 in the old money).  Lintian doesn't like
-   # this and wants only the owner to have write permission (755 in the old money).  So we have to tell CPack here what
-   # permissions to use.
-   set(CPACK_INSTALL_DEFAULT_DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
-                                                   GROUP_READ GROUP_EXECUTE
-                                                   WORLD_READ WORLD_EXECUTE)
-   #-----------------RPM-----------------
-   # See https://cmake.org/cmake/help/latest/cpack_gen/rpm.html
-
-   set(CPACK_RPM_FILE_NAME RPM-DEFAULT)
-
-   # RPM file name is supposed to be <NAME>-<VERSION>-<RELEASE>.<ARCH>.rpm.  However, CPack doesn't, by default, stick
-   # RELEASE in there, so we add it to version.  (The reason for having both version and release is that "version is
-   # controlled by the original author and release is controlled by whoever constructed the RPM".  So we always set
-   # release to 1.)
-   set(CPACK_RPM_PACKAGE_VERSION "${PROJECT_VERSION}-1")
-
-   # CPACK_RPM_PACKAGE_DESCRIPTION defaults to CPACK_PACKAGE_DESCRIPTION_FILE rather than CPACK_PACKAGE_DESCRIPTION,
-   # so we have to set it explicitly here
-   set(CPACK_RPM_PACKAGE_DESCRIPTION ${CPACK_PACKAGE_DESCRIPTION})
-
-   # This has to match one of the ValidLicenses values in packaging/linux/rpmLintFilters.toml.  (See comment in that file for
-   # more info.)
-   set(CPACK_RPM_PACKAGE_LICENSE "GPL-3.0-or-later")
-
-   set(CPACK_RPM_PACKAGE_GROUP "Applications/Productivity")
-
-   # This should (I think) save us having to set CPACK_RPM_PACKAGE_REQUIRES manually
-   set(CPACK_RPM_PACKAGE_AUTOREQ yes)
-
-   # .:TBD:. Not sure what these are for...
-   set(CPACK_RPM_SPEC_MORE_DEFINE "%define ignore \#")
-   set(CPACK_RPM_USER_FILELIST "%ignore /usr"
-                               "%ignore /usr/local"
-                               "%ignore /usr/local/bin"
-                               "%ignore /usr/local/share"
-                               "%ignore /usr/local/share/applications")
-elseif(WIN32)
-   #================================================ Windows Packaging =================================================
-   # http://www.thegigsite.com/cmake-2.6.0/CMakeCPackOptions.cmake
-   set(CPACK_GENERATOR "NSIS")
-
-   # The title displayed at the top of the installer.
-   set(CPACK_NSIS_PACKAGE_NAME "${capitalisedProjectName}-${PROJECT_VERSION}")
-   # The display name string that appears in the Windows Apps & features in Control Panel
-   set(CPACK_NSIS_DISPLAY_NAME "${capitalisedProjectName}-${PROJECT_VERSION}")
-   # ?
-   set(CPACK_PACKAGE_INSTALL_REGISTRY_KEY "${capitalisedProjectName}-${PROJECT_VERSION}")
-   # URL to a web site providing more information about your application
-   set(CPACK_NSIS_URL_INFO_ABOUT "https://github.com/Brewtarget/brewtarget")
-   # The name of a *.ico file used as the main icon for the generated install program
-   set(CPACK_NSIS_MUI_ICON ${repoDir}/win/BrewtargetIcon_96.ico)
-
-   # Lists each of the executables and associated text label to be used to create Start Menu shortcuts.
-   # For example, setting this to the list ccmake;CMake would create a shortcut named "CMake" that would execute the
-   # installed executable ccmake.
-   set(CPACK_PACKAGE_EXECUTABLES "${fileName_executable};${capitalisedProjectName}")
-
-   # List of desktop links to create. Each desktop link requires a corresponding start menu shortcut as created by
-   # CPACK_PACKAGE_EXECUTABLES.
-   set(CPACK_CREATE_DESKTOP_LINKS ${fileName_executable})
-
-   # In theory CMake should work out for itself which tool to use for dependency resolution.  In practice, on Windows,
-   # it seems there are issues.  In an MSYS2/MinGW environment we want to use objdump rather than the Visual Studio
-   # dumpbin.
-   #
-   # .:TBD:. This is not sufficient to get objdump used...
-   set(CMAKE_OBJDUMP "objdump")
-   set(CMAKE_GET_RUNTIME_DEPENDENCIES_TOOL objdump)
-   set(CMAKE_GET_RUNTIME_DEPENDENCIES_COMMAND /usr/bin/objdump)
-
-   message(STATUS "CMAKE_GET_RUNTIME_DEPENDENCIES_PLATFORM is " ${CMAKE_GET_RUNTIME_DEPENDENCIES_PLATFORM})
-   message(STATUS "CMAKE_GET_RUNTIME_DEPENDENCIES_TOOL is "     ${CMAKE_GET_RUNTIME_DEPENDENCIES_TOOL})
-   message(STATUS "CMAKE_GET_RUNTIME_DEPENDENCIES_COMMAND is "  ${CMAKE_GET_RUNTIME_DEPENDENCIES_COMMAND})
-
-   set(CPACK_NSIS_MODIFY_PATH ON)
-
-elseif(APPLE)
-   #================================================== Mac Packaging ===================================================
-   # Broadly speaking, what we want for Mac is a a DMG disk image which the end user can mount and from s/he can copy
-   # the application bundle to her/his Applications folder.  (On MacOS, a bundle a directory structure that appears as a
-   # single entity when viewed in the Finder.)
-   #
-   # It seems like there are two CPack generators that could potentially be used for this:
-   #   - Bundle (https://cmake.org/cmake/help/latest/cpack_gen/bundle.html) which I think is used in conjunction with
-   #     the DragNDrop generator
-   #   - DragNDrop (https://cmake.org/cmake/help/latest/cpack_gen/dmg.html) which generates a DMG disk image from which
-   #     the end user copies the application to her/his Applications folder
-   #
-   # According to
-   # https://stackoverflow.com/questions/46011440/cmake-cpack-preferred-package-generators-for-different-platforms, it's
-   # best to "Avoid the Bundle generator, it is older and more limited in what it supports, [compared with] the DMG
-   # [aka DragNDrop] generator."
-   #
-   # There is also the "official" Qt way to do things for Mac at https://doc.qt.io/qt-6/macos-deployment.html.  This
-   # does not use CPack but does offer options for doing things more directly in CMake.  (NB: As of January 2021, Qt is
-   # migrating from qmake to cmake -- see https://www.qt.io/blog/qt-and-cmake-the-past-the-present-and-the-future.)  We
-   # have to be a bit careful about mixing and matching approaches as we don't want to end up eg with a bundle inside a
-   # bundle.
-   #
-   # Another potential option would be the Qt Installation Framework (IFW) -- see
-   # https://doc.qt.io/qtinstallerframework/ --  for which there is a CPack generator
-   # (https://cmake.org/cmake/help/latest/cpack_gen/ifw.html).  This creates a cross-platform GUI installer using Qt.
-   # However, there are downsides to having a custom tool for install and upgrade, and, additionally, there's not a huge
-   # amount of info about how to get the CPack IFW generator working on Mac.
-   #
-   # Since we're using CPack for Windows and Linux, it feels like it makes sense to use it for Mac too, we we go with
-   # the DragNDrop generator.  Creation of the bundle is handled prior in CMake, prior to invocation of CPack, by the
-   # MACOSX_BUNDLE target property etc (per https://cmake.org/cmake/help/latest/prop_tgt/MACOSX_BUNDLE_INFO_PLIST.html).
-   #
-   # NOTE If you are on Linux and you want to check the contents of a Mac disk image file called, say, foo.dmg, you can
-   #      extract it into regular files from the command line with:
-   #         7z x foo.dmg
-   #
-   set(CPACK_GENERATOR "DragNDrop")
-
-   # The volume name of the generated disk image. Defaults to CPACK_PACKAGE_FILE_NAME, which we set above to be
-   # something very specific for the benefit of Linux packages.  We choose a simpler/nicer name for the Mac disk image.
-   set(CPACK_DMG_VOLUME_NAME "${CMAKE_PROJECT_NAME} ${PROJECT_VERSION}")
-
-   message(STATUS "Building Mac package")
-endif()
-
-# The documentation implies that all the CPACK_* variables need to be set before we include the CPack module, so that's
-# what we do.
-INCLUDE(CPack)
 
 #=======================================================================================================================
 #================================================= Custom Make Targets =================================================
@@ -1906,8 +1228,7 @@ set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
              APPEND
              PROPERTY ADDITIONAL_CLEAN_FILES ".*~$" # Kate backup files.
                                              "CMakeLists.txt.user" # From QtCreator I think.
-                                             "CPackConfig.cmake"
-                                             "CPackSourceConfig.cmake")
+                                             )
 file(GLOB packagesDebFiles      "${CMAKE_CURRENT_BINARY_DIR}/*.deb")
 file(GLOB packagesRpmFiles      "${CMAKE_CURRENT_BINARY_DIR}/*.rpm")
 file(GLOB packagesTarBz2Files   "${CMAKE_CURRENT_BINARY_DIR}/*.tar.bz2")
@@ -1919,24 +1240,3 @@ set_property(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
                                              ${packagesRpmFiles}
                                              ${packagesTarBz2Files}
                                              ${packagesChecksumFiles})
-
-if(UNIX AND NOT APPLE)
-   add_custom_target(
-      package_lint
-      # Running lintian does a very strict check on the Debian package.  You can find a list of all the error and
-      # warning codes at https://lintian.debian.org/tags.
-      #
-      # Some of the warnings are things that only matter for packages that actually ship with Debian itself - ie they
-      # won't stop the package working but are not strictly within the standards that the Debian project sets for the
-      # packages included in the distro.
-      #
-      # Still, we try to fix as many warnings as possible.  As at 2022-08-11 we currently have one warning that we do
-      # not ship a man page.  We should get to this at some point.
-      COMMAND lintian --no-tag-display-limit *.deb
-      # Running rpmlint is the equivalent exercise for RPMs.  Most common error and warning codes are listed at
-      # https://fedoraproject.org/wiki/Common_Rpmlint_issues
-      COMMAND rpmlint --config ${repoDir}/packaging/linux *.rpm
-      WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-      COMMENT "Running lintian and on deb package and rpmlint on rpm package.  Warnings about man pages are expected!"
-   )
-endif()

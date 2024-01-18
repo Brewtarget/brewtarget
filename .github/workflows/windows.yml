@@ -159,9 +159,6 @@ jobs:
           ./configure
           cd build
           rm CMakeCache.txt
-          cp ./nsis/Locate/Include/Locate.nsh /mingw32/share/nsis/Include/
-          cp ./nsis/Locate/Plugin/locate.dll /mingw32/share/nsis/Plugins/ansi/
-          cp ./nsis/Nsislog/plugin/nsislog.dll /mingw32/share/nsis/Plugins/ansi
           cmake .. -DCMAKE_RC_COMPILER:FILEPATH=windres.exe -G "MinGW Makefiles"
 
       # The pwd and find ../third-party commands below are just diagnostics, but it's generally useful to have too
