@@ -1,5 +1,5 @@
 #
-# .github/workflows/windows.yml is part of Brewtarget, and is copyright the following authors 2021-2023:
+# .github/workflows/windows.yml is part of Brewtarget, and is copyright the following authors 2021-2024:
 #   • Artem Martynov <martynov-a@polyplastic.by>
 #   • Chris Speck <cgspeck@gmail.com>
 #   • Mattias Måhl <mattias@kejsarsten.com>
@@ -41,9 +41,14 @@ jobs:
       fail-fast: false
       matrix:
         include: [
-          # Current installer NSIS with required plugins don't support x64 package
-          #{ msystem: MINGW64, arch: x86_64 },
-          { msystem: MINGW32, arch: i686 }
+          # In the past, we built only 32-bit packages (i686 architecture) on Windows because of problems getting 64-bit
+          # versions of NSIS plugins to work.  However, we now invoke NSIS without plugins, so the 64-bit build seems to
+          # be working.
+          #
+          # As of January 2024, some of the 32-bit MSYS2 packages/groups we were previously relying on previously are no
+          # longer available.  So now, we only build 64-bit packages (x86_64 architecture) on Windows.
+          { msystem: MINGW64, arch: x86_64 },
+          #{ msystem: MINGW32, arch: i686 }
         ]
     steps:
 
@@ -159,9 +164,6 @@ jobs:
           ./configure
           cd build
           rm CMakeCache.txt
-          cp ./nsis/Locate/Include/Locate.nsh /mingw32/share/nsis/Include/
-          cp ./nsis/Locate/Plugin/locate.dll /mingw32/share/nsis/Plugins/ansi/
-          cp ./nsis/Nsislog/plugin/nsislog.dll /mingw32/share/nsis/Plugins/ansi
           cmake .. -DCMAKE_RC_COMPILER:FILEPATH=windres.exe -G "MinGW Makefiles"
 
       # The pwd and find ../third-party commands below are just diagnostics, but it's generally useful to have too

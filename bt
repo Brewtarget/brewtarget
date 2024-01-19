@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# bt is part of Brewtarget, and is copyright the following authors 2022-2023:
+# bt is part of Brewtarget, and is copyright the following authors 2022-2024:
 #   • Matt Young <mfsy@yahoo.com>
 #
 # Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -16,7 +16,11 @@
 #
 
 #-----------------------------------------------------------------------------------------------------------------------
-# This build tool (bt) script helps with Git setup, meson build configuration and packaging.  Usage is:
+# This build tool (bt) script helps with Git setup, meson build configuration and packaging.  You need to have Python
+# 3.10 or newer installed first.  On Windows you also need to have Pip installed and to do some extra manual stuff noted
+# below.
+#
+# Usage is:
 #
 #    ./bt setup                  Sets up Git options and configures the 'mbuild' meson build directory
 #
@@ -27,7 +31,8 @@
 #                                need to be for a local install).  Then creates a distributable package, making use
 #                                of various build variables passed back from Meson.
 #
-#
+# NOTE: This tool, used in conjunction with Meson, is now the official way to build and package the software.  We
+#       continue to support CMake for local compiles and installs, but not for packaging.
 #
 # .:TODO:. At some point we should be able to retire:
 #    configure
@@ -40,6 +45,42 @@
 # Note that Python allows both single and double quotes for delimiting strings.  In Meson, we need single quotes, in
 # C++, we need double quotes.  We mostly try to use single quotes below for consistency with Meson, except where using
 # double quotes avoids having to escape a single quote.
+#-----------------------------------------------------------------------------------------------------------------------
+
+#-----------------------------------------------------------------------------------------------------------------------
+# **********************************************************************************************************************
+# *
+# * WINDOWS USERS PLEASE NOTE that, on Windows, we assume you are running in the MSYS2 MINGW32 environment.  This is one
+# * of, typically, four different environments available to you after installing MSYS2.  You must run this script from
+# * the "MSYS2 MinGW 64-bit" shell, and not one of the other ones.  (As of 2024-01, we no longer support 32-bit builds
+# * because some libraries we rely on are no longer available as 32-bit MSYS2 packages.)
+# *
+# * Additionally on Windows, there are also a couple of extra things you need to do before running this bt script:
+# *
+# *    - For historical reasons, Linux and other platforms need to run both Python v2 (still used by some bits of
+# *      system) and Python v3 (eg that you installed yourself) so there are usually two corresponding Python
+# *      executables, python2 and python3.  On Windows there is only whatever Python you installed and it's called
+# *      python.exe.  To keep the shebang in the bt script working, we just make a softlink to python called python3:
+# *
+# *         if [[ ! -f $(dirname $(which python))/python3 ]]; then ln -s $(which python) $(dirname $(which python))/python3; fi
+# *
+# *    - Getting Unicode input/output to work is fun.  We should already have a Unicode locale, but it seems we also
+# *      need to set PYTHONIOENCODING (see https://docs.python.org/3/using/cmdline.html#envvar-PYTHONIOENCODING, even
+# *      though it seems to imply you don't need to set it on recent versions of Python).
+# *
+# *         export PYTHONIOENCODING=utf8
+# *
+# *    - The version of Pip we install above does not put it in the "right" place.  Specifically it will not be in the
+# *      PATH when we run bt.  The following seems to be the least hacky way around this:
+# *
+# *         curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+# *         python get-pip.py
+# *         python -m pip install -U --force-reinstall pip
+# *         rm get-pip.py
+# *
+# *      See https://stackoverflow.com/questions/48087004/installing-pip-on-msys for more discussion on this.
+# *
+# **********************************************************************************************************************
 #-----------------------------------------------------------------------------------------------------------------------
 
 #-----------------------------------------------------------------------------------------------------------------------
@@ -670,12 +711,17 @@ def installDependencies():
          # We just need the bit before the first underscore, eg
          #    MINGW64
          terminalVersion = unameResult.split(sep='_', maxsplit=1)[0]
-         if (terminalVersion != 'MINGW32'):
-            # One day we'll try to get the 64-bit build working on Windows.  I think it's just the packaging step that's
-            # the problem.  For now, it's easier to insist on 32-bit at set-up.  (Obviously 32-bit apps run just fine on
-            # 64-bit Windows.  I don't think there would be any noticeable difference to the end user in having a 64-bit
-            # version of the app.)
-            log.critical('Running in ' + terminalVersion + ' but need to run in MINGW32 (ie 32-bit build environment)')
+##         if (terminalVersion != 'MINGW32'):
+##            # One day we'll try to get the 64-bit build working on Windows.  I think it's just the packaging step that's
+##            # the problem.  For now, it's easier to insist on 32-bit at set-up.  (Obviously 32-bit apps run just fine on
+##            # 64-bit Windows.  I don't think there would be any noticeable difference to the end user in having a 64-bit
+##            # version of the app.)
+##            log.critical('Running in ' + terminalVersion + ' but need to run in MINGW32 (ie 32-bit build environment)')
+##            exit(1)
+         if (terminalVersion != 'MINGW64'):
+            # Support for 32-bit packages in MSYS2 is getting patchy, so we finally had to bite the bullet and get the
+            # 64-bit build working.  This means we are stopping support of the 32-bit build.
+            log.critical('Running in ' + terminalVersion + ' but need to run in MINGW64 (ie 64-bit build environment)')
             exit(1)
 
          log.info('Ensuring required libraries and frameworks are installed')
@@ -697,7 +743,11 @@ def installDependencies():
          # debugging a bit harder when there is a pacman problem, because it doesn't always give the most explanatory
          # error messages.  So we loop round and install one thing at a time.
          #
-         arch = 'i686'
+         # Note that the --disable-download-timeout option on Pacman proved often necessary because of slow mirror
+         # sites, so we now specify it routinely.
+         #
+##         arch = 'i686'
+         arch = 'x86_64'
          installList = ['base-devel',
                         'cmake',
                         'coreutils',
@@ -709,6 +759,8 @@ def installDependencies():
                         'mingw-w64-' + arch + '-libbacktrace',
                         'mingw-w64-' + arch + '-meson',
                         'mingw-w64-' + arch + '-nsis',
+                        'mingw-w64-' + arch + '-qt5-base',
+                        'mingw-w64-' + arch + '-qt5-static',
                         'mingw-w64-' + arch + '-qt5',
                         'mingw-w64-' + arch + '-toolchain',
                         'mingw-w64-' + arch + '-xalan-c',
@@ -717,7 +769,7 @@ def installDependencies():
             log.debug('Installing ' + packageToInstall)
             abortOnRunFail(
                subprocess.run(
-                  ['pacman', '-S', '--needed', '--noconfirm', packageToInstall]
+                  ['pacman', '-S', '--needed', '--noconfirm', '--disable-download-timeout', packageToInstall]
                )
             )
 
@@ -1018,9 +1070,9 @@ def doPackage():
    # designed etc.)
    #
    # At first, this seemed disappointing, but I've rather come around to thinking a different way about it.  Although
-   # CPack has lots of features it is also very painful to use.  Some of the things you can do are undocumented; some of
-   # the things you want to be able to do seem nigh on impossible.  So perhaps taking a completely different approach,
-   # eg using a scripting language rather than a build tool to do packaging, is ultimately a good thing.
+   # CPack has lots of features, it is also very painful to use.  Some of the things you can do are undocumented; some
+   # of the things you want to be able to do seem nigh on impossible.  So perhaps taking a completely different
+   # approach, eg using a scripting language rather than a build tool to do packaging, is ultimately a good thing.
    #
    # I spent some time looking at and trying to use the Qt-Installer-Framework (QtIFW).  Upsides are:
    #   - In principle we could write one set of install config that would then create install packages for Windows, Mac
@@ -1054,8 +1106,8 @@ def doPackage():
    #     https://blog.devgenius.io/how-to-build-debian-packages-from-meson-ninja-d1c28b60e709 gives some sketchy
    #     starting info on how to build deb packages.  Maybe we could find the equivalent for creating RPMs.  Also look
    #     at https://openbuildservice.org/.
-   #   - For Windows, we could probably use NSIS (Nullsoft Scriptable Install System -- see
-   #     https://nsis.sourceforge.io/) -- or similar to create a Windows installer.
+   #   - For Windows, we use NSIS (Nullsoft Scriptable Install System -- see https://nsis.sourceforge.io/) -- to create
+   #     a Windows installer.
    #
    # Although a lot of packaging is platform-specific, the initial set-up is generic.
    #
@@ -1217,7 +1269,7 @@ def doPackage():
          #
          # Debian and RPM both want the debugging information stripped from the executable.
          #
-         # .:TBD:. One day perhaps we could be friendlyi and still ship the debugging info, just in a separate .dbg
+         # .:TBD:. One day perhaps we could be friendly and still ship the debugging info, just in a separate .dbg
          # file.  The procedure to do this is described in the 'only-keep-debug' section of `man objcopy`.  However, we
          # need to work out where to put the .dbg file so that it remains usable but lintian does not complain about it.
          #
@@ -1686,6 +1738,13 @@ def doPackage():
          #
          # For the moment, we're sticking with NSIS, which is the devil we know, aka what we've historically used.
          #
+         # In the past, we built only 32-bit packages (i686 architecture) on Windows because of problems getting 64-bit
+         # versions of NSIS plugins to work.  However, we now invoke NSIS without plugins, so the 64-bit build seems to
+         # be working.
+         #
+         # As of January 2024, some of the 32-bit MSYS2 packages/groups we were previously relying on previously are no
+         # longer available.  So now, we only build 64-bit packages (x86_64 architecture) on Windows.
+         #
 
          #
          # As mentioned above, not all information about what Meson does is readily exportable.   In particular, I can
@@ -1780,7 +1839,13 @@ def doPackage():
             'libbz2',               # BZip2 compression -- see https://en.wikipedia.org/wiki/Bzip2
             'libdouble-conversion', # See https://github.com/google/double-conversion
             'libfreetype',          # See https://freetype.org/
-            'libgcc_s_dw2',
+            #
+            # 32-bit and 64-bit MinGW use different exception handling (see
+            # https://sourceforge.net/p/mingw-w64/wiki2/Exception%20Handling/) hence the different naming of libgcc in
+            # the 32-bit and 64-bit environments.
+            #
+#            'libgcc_s_dw2',    # 32-bit GCC library
+            'libgcc_s_seh',    # 64-bit GCC library
             'libglib-2.0',
             'libgraphite',
             'libharfbuzz',   # HarfBuzz text shaping engine -- see https://github.com/harfbuzz/harfbuzz

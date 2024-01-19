@@ -1,5 +1,5 @@
 /*
- * widgets/SmartField.h is part of Brewtarget, and is copyright the following authors 2009-2023:
+ * widgets/SmartField.h is part of Brewtarget, and is copyright the following authors 2009-2024:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Mark de Wever <koraq@xs4all.nl>
  *   • Matt Young <mfsy@yahoo.com>
@@ -38,8 +38,6 @@
 #include "utils/TypeLookup.h"
 #include "widgets/SmartAmounts.h"
 
-class QWidget;
-
 class SmartLabel;
 class TypeInfo;
 
@@ -62,7 +60,7 @@ class TypeInfo;
  *                                              /       SmartField    \
  *                                        QLabel        /        \     \
  *                                       /       \     /          \     \
- *                             SmartLabel      SmartDigitWidget    SmartField
+ *                             SmartLabel      SmartDigitWidget    SmartLineEdit
  *
  *        A number of helper functions exist in the \c SmartAmounts namespace.
  *
