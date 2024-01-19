@@ -52,7 +52,8 @@
 # *
 # * WINDOWS USERS PLEASE NOTE that, on Windows, we assume you are running in the MSYS2 MINGW32 environment.  This is one
 # * of, typically, four different environments available to you after installing MSYS2.  You must run this script from
-# * the "MSYS2 MinGW 32-bit" shell, and not one of the other ones.
+# * the "MSYS2 MinGW 64-bit" shell, and not one of the other ones.  (As of 2024-01, we no longer support 32-bit builds
+# * because some libraries we rely on are no longer available as 32-bit MSYS2 packages.)
 # *
 # * Additionally on Windows, there are also a couple of extra things you need to do before running this bt script:
 # *
@@ -1736,6 +1737,13 @@ def doPackage():
          #      have to do it in Pascal, so a trip back to the 1980s rather than the 1970s.
          #
          # For the moment, we're sticking with NSIS, which is the devil we know, aka what we've historically used.
+         #
+         # In the past, we built only 32-bit packages (i686 architecture) on Windows because of problems getting 64-bit
+         # versions of NSIS plugins to work.  However, we now invoke NSIS without plugins, so the 64-bit build seems to
+         # be working.
+         #
+         # As of January 2024, some of the 32-bit MSYS2 packages/groups we were previously relying on previously are no
+         # longer available.  So now, we only build 64-bit packages (x86_64 architecture) on Windows.
          #
 
          #

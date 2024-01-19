@@ -41,7 +41,12 @@ jobs:
       fail-fast: false
       matrix:
         include: [
-          # Current installer NSIS with required plugins don't support x64 package
+          # In the past, we built only 32-bit packages (i686 architecture) on Windows because of problems getting 64-bit
+          # versions of NSIS plugins to work.  However, we now invoke NSIS without plugins, so the 64-bit build seems to
+          # be working.
+          #
+          # As of January 2024, some of the 32-bit MSYS2 packages/groups we were previously relying on previously are no
+          # longer available.  So now, we only build 64-bit packages (x86_64 architecture) on Windows.
           { msystem: MINGW64, arch: x86_64 },
           #{ msystem: MINGW32, arch: i686 }
         ]

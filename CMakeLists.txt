@@ -183,7 +183,6 @@ if(UNIX AND NOT APPLE)
 
 elseif(WIN32)
    #============================================ Windows Install Directories ===========================================
-
    set(installSubDir_data "data")
    set(installSubDir_doc  "doc")
    set(installSubDir_bin  "bin")
@@ -392,9 +391,9 @@ message(STATUS "Doing ${CMAKE_BUILD_TYPE} build (DO_RELEASE_BUILD = ${DO_RELEASE
 # Note that if you change the minimum Qt version, you need to make corresponding changes to the .github/workflows/*.yml
 # files so that GitHub uses the appropriate version of Qt for the automated builds.
 #
-# For the moment, max version we can have here is 5.9.5, because that's what Ubuntu 18.04 topped out at
+# For the moment, max version we can have here is 5.12.8, because that's what Ubuntu 20.04 topped out at
 #
-set(QT5_MIN_VERSION 5.9.5)
+set(QT5_MIN_VERSION 5.12.8)
 
 # Set the AUTOMOC property on all targets.  This tells CMake to automatically handle the Qt Meta-Object Compiler (moc)
 # preprocessor (ie the thing that handles Qt's C++ extensions), without having to use commands such as QT4_WRAP_CPP(),
