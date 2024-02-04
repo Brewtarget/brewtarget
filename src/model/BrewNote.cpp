@@ -553,7 +553,7 @@ double BrewNote::pitchTemp_c() const { return m_pitchTemp_c; }
 double BrewNote::fg() const { return m_fg; }
 double BrewNote::finalVolume_l() const { return m_finalVolume_l; }
 double BrewNote::projBoilGrav() const { return m_projBoilGrav; }
-double BrewNote::projVolIntoBK_l() const { return m_projVolIntoFerm_l; }
+double BrewNote::projVolIntoBK_l() const { return m_projVolIntoBK_l; }
 double BrewNote::projStrikeTemp_c() const { return m_projStrikeTemp_c; }
 double BrewNote::projMashFinTemp_c() const { return m_projMashFinTemp_c; }
 double BrewNote::projOg() const { return m_projOg; }
@@ -569,22 +569,24 @@ int    BrewNote::getRecipeId() const { return this->m_recipeId; }
 
 // calculators -- these kind of act as both setters and getters.  Likely bad
 // form
-double BrewNote::calculateEffIntoBK_pct()
-{
-   double effIntoBK;
-   double maxPoints, actualPoints;
-
+double BrewNote::calculateEffIntoBK_pct() {
    // I don't think we need a lot of math here. Points has already been
    // translated from SG into pure glucose points
-   maxPoints = m_projPoints * m_projVolIntoBK_l;
+   double maxPoints = m_projPoints * m_projVolIntoBK_l;
+//   qDebug() <<
+//      Q_FUNC_INFO << "m_projPoints: " << m_projPoints << ", m_projVolIntoBK_l:" << m_projVolIntoBK_l <<
+//      ", maxPoints:" << maxPoints;
 
-   actualPoints = (m_sg - 1) * 1000 * m_volumeIntoBK_l;
-
+   double actualPoints = (m_sg - 1) * 1000 * m_volumeIntoBK_l;
+//   qDebug() <<
+//      Q_FUNC_INFO << "m_sg:" << m_sg << ", m_volumeIntoBK_l:" << m_volumeIntoBK_l << ", actualPoints:" << actualPoints;
    // this can happen under normal circumstances (eg, load)
-   if (maxPoints <= 0.0)
+   if (maxPoints <= 0.0) {
       return 0.0;
+   }
 
-   effIntoBK = actualPoints/maxPoints * 100;
+   double effIntoBK = actualPoints/maxPoints * 100;
+//   qDebug() << Q_FUNC_INFO << "effIntoBK:" << effIntoBK;
    setEffIntoBK_pct(effIntoBK);
 
    return effIntoBK;
