@@ -1,6 +1,6 @@
 /*
  * MainWindow.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2023
+ * authors 2009-2024
  * - A.J. Drobnich <aj.drobnich@gmail.com>
  * - Dan Cavanagh <dan@dancavanagh.com>
  * - David Grundberg <individ@acc.umu.se>
@@ -368,8 +368,8 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), pimpl{std::make_u
    // Stop things looking ridiculously tiny on high DPI displays
    this->setSizesInPixelsBasedOnDpi();
 
-   // Horizontal tabs, please
-   tabWidget_Trees->tabBar()->setStyle(new BtHorizontalTabs);
+   // Horizontal tabs, please -- even on Mac OS, as the tabs contain square icons
+   tabWidget_Trees->tabBar()->setStyle(new BtHorizontalTabs(true));
 
    /* PLEASE DO NOT REMOVE.
     This code is left here, commented out, intentionally. The only way I can

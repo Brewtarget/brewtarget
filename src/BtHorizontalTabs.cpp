@@ -22,15 +22,45 @@
 #include <QDebug>
 #include <QStyleOptionTab>
 
+BtHorizontalTabs::BtHorizontalTabs([[maybe_unused]] bool const forceRotate) :
+   QProxyStyle{},
+   m_forceRotate{
+//
+// This may look a bit odd, but it saves having lots of other #ifdefs below
+//
+// You can sort of simulate Mac behaviour by changing this #ifdef to #ifndef
+//
+#ifdef Q_OS_MACOS
+      // On Mac, we only attempt to rotate the side tabs if you insist (eg because you know they are icons)
+      forceRotate
+#else
+      // On other platforms, it's safe always to rotate the size tabs
+      true
+#endif
+   } {
+   return;
+}
+
+BtHorizontalTabs::~BtHorizontalTabs() = default;
+
+
 QSize BtHorizontalTabs::sizeFromContents(ContentsType type,
                                          QStyleOption const * option,
                                          QSize const & contentsSize,
                                          QWidget const * widget) const {
    // By default, we're just going to return the same size as our parent class...
    QSize size = QProxyStyle::sizeFromContents(type, option, contentsSize, widget);
-   if (type == QStyle::CT_TabBarTab) {
+
+   //
+   // On Mac, the results of this function are correctly used by QTabBar to reserve the right size and shape space to
+   // draw a horizontal-oriented tab.  However, when QTabBar comes to draw the tab, it seems to ignore the width
+   // returned from this function.
+   //
+   // See https://github.com/Brewtarget/brewtarget/issues/787#issuecomment-1921341649 for example screenshot (after
+   // overriding the behaviour that would otherwise prevent text that does not fit in the tab from being displayed).
+   //
+   if (this->m_forceRotate && type == QStyle::CT_TabBarTab ) {
       // ...but, if it's a tab, then we want to swap the X and Y of the size rectangle we return
-//      qDebug() << Q_FUNC_INFO << "Transposing width:" << size.width() << ", height:" << size.height();
       size.transpose();
    }
    return size;
@@ -40,8 +70,17 @@ void BtHorizontalTabs::drawControl(ControlElement element,
                                    QStyleOption const * option,
                                    QPainter * painter,
                                    QWidget const * widget) const {
-   // Special handling is only for tabs
-   if (element == QStyle::CE_TabBarTabLabel) {
+   //
+   // Special handling is only for the text or icon inside tabs.  We want the tab itself (and the highlighting for
+   // "current tab") to be drawn as a "side" tab -- so we leave default handling for QStyle::CE_TabBarTabShape and
+   // QStyle::CE_TabBarTab.
+   //
+   // Of course, it would be cute, on Mac OS, to be able to force the correct widths of QStyle::CE_TabBarTabShape and
+   // QStyle::CE_TabBarTab by consulting widget->rect() (yes, of course, rect is a member function on QWidget even
+   // though it's a member variable on QStyleOption).  However, we cannot modify option.rect because option is read-only
+   // for us, and we do not own the QStyleOption object, so it is not safe for us to cast away its "const".
+   //
+   if (this->m_forceRotate && element == QStyle::CE_TabBarTabLabel) {
       QStyleOptionTab const * tabOption = qstyleoption_cast<QStyleOptionTab const *>(option);
       if (tabOption) {
          QStyleOptionTab modifiedTabOption{*tabOption};
@@ -51,14 +90,12 @@ void BtHorizontalTabs::drawControl(ControlElement element,
          //   - QTabBar::RoundedNorth = The normal rounded look above the pages
          //   - QTabBar::RoundedWest  = The normal rounded look on the left side of the pages
          //
-         // Normally, when the tabs are on the left (QTabBar::RoundedWest), the text is rotated so that (in
-         // left-to-right languages such as English) it reads bottom-to-top.  If we change the shape attribute for
-         // drawing the tab label to QTabBar::RoundedNorth, then the text should be drawn unrotated as though the tab
-         // were above the widget.
+         // Normally, when the tabs are on the left (QTabBar::RoundedWest), the text or icon is rotated 90°
+         // anticlockwise, so that (in left-to-right languages such as English) the text reads bottom-to-top.  If we
+         // change the shape attribute for drawing the tab label to QTabBar::RoundedNorth, then the text or icon should
+         // be drawn unrotated as though the tab were above the widget.  And, the work in sizeFromContents() above
+         // should have ensured there is enough space for this.
          //
-         // Normally keep the debug statements below commented out as they generates a lot of output!
-         //
-//         qDebug() << Q_FUNC_INFO << "Changing shape from" << modifiedTabOption.shape << "to" << QTabBar::RoundedNorth;
          modifiedTabOption.shape = QTabBar::RoundedNorth;
          QProxyStyle::drawControl(element, &modifiedTabOption, painter, widget);
          return;
