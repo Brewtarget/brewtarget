@@ -1,5 +1,5 @@
 #
-# meson.build is part of Brewtarget, and is copyright the following authors 2022-2023:
+# meson.build is part of Brewtarget, and is copyright the following authors 2022-2024:
 #   • Matt Young <mfsy@yahoo.com>
 #
 # Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -591,6 +591,7 @@ commonSourceFiles = files([
    'src/BtDatePopup.cpp',
    'src/BtFieldType.cpp',
    'src/BtFolder.cpp',
+   'src/BtHorizontalTabs.cpp',
    'src/BtSplashScreen.cpp',
    'src/BtTabWidget.cpp',
    'src/BtTextEdit.cpp',

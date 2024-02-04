@@ -1,6 +1,7 @@
 /*
  * BtHorizontalTabs.h is part of Brewtarget, and is Copyright the following
- * authors 2021-2025
+ * authors 2021-2024
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -23,37 +24,32 @@
 
 #include <QProxyStyle>
 #include <QStyleOption>
-#include <QStyleOptionTab>
 #include <QSize>
 
 /**
- * \brief A quick little bit to handle a tab bar with the tabs on the west.
+ * \brief A custom style class for \c QTabWidget with tabs on the left (\c QTabBar::RoundedWest) to rotate the tab so
+ *        that its text is horizontal instead of the default vertical.  This looks neater when we have potentially long
+ *        tab text on a widget that is not hugely tall.
  */
-class BtHorizontalTabs : public QProxyStyle
-{
+class BtHorizontalTabs : public QProxyStyle {
 public:
-   QSize sizeFromContents( ContentsType type, const QStyleOption* option,
-                           const QSize& size, const QWidget* widget ) const
-   {
-      QSize s = QProxyStyle::sizeFromContents(type,option,size,widget);
-      if ( type == QStyle::CT_TabBarTab ) {
-         s.transpose();
-      }
-      return s;
-   }
+   /**
+    * \brief Reimplements \c QStyle::sizeFromContents (and various derivatives thereof)
+    *
+    * \return the size of the element described by the specified option and type, based on the provided \c contentsSize.
+    */
+   virtual QSize sizeFromContents(ContentsType type,
+                                  QStyleOption const * option,
+                                  QSize const & contentsSize,
+                                  QWidget const * widget) const;
 
-   void drawControl( ControlElement element, const QStyleOption* option, QPainter* painter, const QWidget* widget ) const
-   {
-      if ( element == CE_TabBarTabLabel ) {
-         if ( const QStyleOptionTab* tab = qstyleoption_cast<const QStyleOptionTab*>(option)) {
-            QStyleOptionTab opt(*tab);
-            // this looks wrong, but it isn't. No idea why.
-            opt.shape = QTabBar::RoundedNorth;
-            QProxyStyle::drawControl(element,&opt,painter,widget);
-            return;
-         }
-      }
-      QProxyStyle::drawControl(element,option,painter,widget);
-   }
+   /**
+    * \brief Reimplements \c QStyle::drawControl (and various derivatives thereof) to draw the given \c element with the
+    *        provided \c painter with the style options specified by \c option.
+    */
+   virtual void drawControl(ControlElement element,
+                            QStyleOption const * option,
+                            QPainter * painter,
+                            QWidget const * widget) const;
 };
 #endif
