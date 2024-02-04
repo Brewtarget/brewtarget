@@ -11,6 +11,19 @@ format therein, otherwise you'll get, eg, no-changelogname-tag error from rpmlin
 
 * We'll list new features here...
 
+## v3.0.11
+Minor bug fixes for the 3.0.10 release (ie bugs in 3.0.10 are fixed in this 3.0.11 release).
+
+### New Features
+* None
+
+### Bug Fixes
+* Crash changing fermentation duration [785](https://github.com/Brewtarget/brewtarget/issues/785)
+* Tabs on Editor Windows not displaying correctly on macOS [787](https://github.com/Brewtarget/brewtarget/issues/787)
+* Efficiency into boil kettle calculation unstable after closing and re-opening Brewtarget [789](https://github.com/Brewtarget/brewtarget/issues/789)
+
+### Release Timestamp
+Sun, 4 Feb 2024 15:46:47 +0100
 
 ## v3.0.10
 Minor bug fixes for the 3.0.9 release (ie bugs in 3.0.9 are fixed in this 3.0.10 release).
