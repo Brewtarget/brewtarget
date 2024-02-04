@@ -1,6 +1,6 @@
 /*
  * Application.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2022
+ * authors 2009-2024
  * - A.J. Drobnich <aj.drobnich@gmail.com>
  * - Dan Cavanagh <dan@dancavanagh.com>
  * - Matt Young <mfsy@yahoo.com>
@@ -326,7 +326,7 @@ namespace {
             "constant for resource dir:" << CONFIG_DATA_DIR;
          path = QString(CONFIG_DATA_DIR);
       }
-#elif defined(Q_OS_MAC)
+#elif defined(Q_OS_MACOS)
       // === Mac ===
       // We should be inside an app bundle.
       path += "../Resources/";
@@ -345,7 +345,7 @@ namespace {
 }
 
 const QDir Application::getConfigDir() {
-#if defined(Q_OS_LINUX) || defined(Q_OS_MAC) // Linux OS or Mac OS.
+#if defined(Q_OS_LINUX) || defined(Q_OS_MACOS) // Linux OS or Mac OS.
    QDir dir;
    QFileInfo fileInfo;
 
@@ -388,7 +388,7 @@ QDir Application::getUserDataDir() {
 }
 
 QDir Application::getDefaultUserDataDir() {
-#if defined(Q_OS_LINUX) || defined(Q_OS_MAC) // Linux OS or Mac OS.#if defined(Q_OS_LINUX) || defined(Q_OS_MAC) // Linux OS or Mac OS.
+#if defined(Q_OS_LINUX) || defined(Q_OS_MACOS) // Linux OS or Mac OS
    return getConfigDir();
 #elif defined(Q_OS_WIN) // Windows OS.
    // On Windows the Programs directory is normally not writable so we need to get the appData path from the environment instead.
@@ -441,7 +441,7 @@ bool Application::initialize() {
 
    Localization::loadTranslations(); // Do internationalization.
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_MACOS)
    qt_set_sequence_auto_mnemonic(true); // turns on Mac Keyboard shortcuts
 #endif
 
