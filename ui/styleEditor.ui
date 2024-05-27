@@ -6,84 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>466</width>
-    <height>509</height>
+    <width>800</width>
+    <height>450</height>
    </rect>
-  </property>
-  <property name="sizePolicy">
-   <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-    <horstretch>0</horstretch>
-    <verstretch>0</verstretch>
-   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>Style Editor</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_styles">
-     <item>
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Style</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QComboBox" name="styleComboBox">
-       <property name="minimumSize">
-        <size>
-         <width>140</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="sizeAdjustPolicy">
-        <enum>QComboBox::AdjustToContents</enum>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pushButton_remove">
-       <property name="toolTip">
-        <string>Delete selected style</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="icon">
-        <iconset resource="../brewtarget.qrc">
-         <normaloff>:/images/smallMinus.svg</normaloff>:/images/smallMinus.svg</iconset>
-       </property>
-       <property name="autoDefault">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <widget class="QTabWidget" name="tabWidget_profile">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
+    <widget class="QTabWidget" name="tabWidget_editor">
      <property name="tabPosition">
       <enum>QTabWidget::West</enum>
+     </property>
+     <property name="tabShape">
+      <enum>QTabWidget::Rounded</enum>
      </property>
      <property name="currentIndex">
       <number>0</number>
@@ -91,19 +28,36 @@
      <property name="usesScrollButtons">
       <bool>false</bool>
      </property>
+     <property name="movable">
+      <bool>true</bool>
+     </property>
      <widget class="QWidget" name="tab_main">
       <attribute name="title">
        <string>Main</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_name">
+         <property name="toolTip">
+          <string>Required</string>
+         </property>
+         <property name="text">
+          <string>Name</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_name</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="3">
+        <widget class="SmartLineEdit" name="lineEdit_name">
+         <property name="toolTip">
+          <string>Name</string>
+         </property>
+        </widget>
+       </item>
        <item row="2" column="0">
         <widget class="QLabel" name="label_category">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
          <property name="toolTip">
           <string>Required</string>
          </property>
@@ -115,193 +69,10 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="3">
-        <widget class="SmartLineEdit" name="lineEdit_styleLetter">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>100</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>100</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>100</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="toolTip">
-          <string>Style letter</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="3">
-        <widget class="SmartLineEdit" name="lineEdit_styleGuide">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>100</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>100</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>100</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="toolTip">
-          <string>Style guide</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="3">
-        <widget class="SmartLineEdit" name="lineEdit_categoryNumber">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>100</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>100</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>100</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="toolTip">
-          <string>Category number</string>
-         </property>
-        </widget>
-       </item>
        <item row="2" column="3">
         <widget class="SmartLineEdit" name="lineEdit_category">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>100</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>100</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>100</width>
-           <height>16777215</height>
-          </size>
-         </property>
          <property name="toolTip">
           <string>Category</string>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="0">
-        <widget class="QLabel" name="label_type">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="toolTip">
-          <string>Required</string>
-         </property>
-         <property name="text">
-          <string>Type</string>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="3">
-        <widget class="QComboBox" name="comboBox_type">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>100</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>100</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>100</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="toolTip">
-          <string>Type of beverage</string>
-         </property>
-         <item>
-          <property name="text">
-           <string>Lager</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Ale</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Mead</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Wheat</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Mixed</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Cider</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="label_name">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="toolTip">
-          <string>Required</string>
-         </property>
-         <property name="text">
-          <string>Name</string>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit_name</cstring>
          </property>
         </widget>
        </item>
@@ -324,6 +95,13 @@
          </property>
         </widget>
        </item>
+       <item row="4" column="3">
+        <widget class="SmartLineEdit" name="lineEdit_categoryNumber">
+         <property name="toolTip">
+          <string>Category number</string>
+         </property>
+        </widget>
+       </item>
        <item row="5" column="0" colspan="2">
         <widget class="QLabel" name="label_styleLetter">
          <property name="sizePolicy">
@@ -343,28 +121,10 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="3">
-        <widget class="SmartLineEdit" name="lineEdit_name">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>100</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>100</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>100</width>
-           <height>16777215</height>
-          </size>
-         </property>
+       <item row="5" column="3">
+        <widget class="SmartLineEdit" name="lineEdit_styleLetter">
          <property name="toolTip">
-          <string>Name</string>
+          <string>Style letter</string>
          </property>
         </widget>
        </item>
@@ -384,6 +144,36 @@
          </property>
          <property name="buddy">
           <cstring>lineEdit_styleGuide</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="3">
+        <widget class="SmartLineEdit" name="lineEdit_styleGuide">
+         <property name="toolTip">
+          <string>Style guide</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0">
+        <widget class="QLabel" name="label_type">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string>Required</string>
+         </property>
+         <property name="text">
+          <string>Type</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="3">
+        <widget class="BtComboBox" name="comboBox_type">
+         <property name="toolTip">
+          <string>Type of beverage</string>
          </property>
         </widget>
        </item>
@@ -407,54 +197,6 @@
        <string>Ranges</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
-       <item row="3" column="2">
-        <widget class="SmartLineEdit" name="lineEdit_ibuMax">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>100</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>100</width>
-           <height>0</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="1">
-        <widget class="SmartLineEdit" name="lineEdit_colorMin">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>100</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>100</width>
-           <height>0</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="2">
-        <widget class="SmartLineEdit" name="lineEdit_abvMax">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>100</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>100</width>
-           <height>0</height>
-          </size>
-         </property>
-        </widget>
-       </item>
        <item row="0" column="2">
         <widget class="QLabel" name="label_max">
          <property name="text">
@@ -462,57 +204,25 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="1">
-        <widget class="SmartLineEdit" name="lineEdit_carbMin">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>100</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>100</width>
-           <height>0</height>
-          </size>
+       <item row="0" column="1">
+        <widget class="QLabel" name="label_min">
+         <property name="text">
+          <string>Min</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
-        <widget class="SmartLabel" name="label_fg">
+       <item row="1" column="0">
+        <widget class="SmartLabel" name="label_og">
          <property name="contextMenuPolicy">
           <enum>Qt::CustomContextMenu</enum>
          </property>
          <property name="text">
-          <string>FG</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0">
-        <widget class="QLabel" name="label_abv">
-         <property name="text">
-          <string>ABV (pct)</string>
+          <string>OG</string>
          </property>
         </widget>
        </item>
        <item row="1" column="1">
         <widget class="SmartLineEdit" name="lineEdit_ogMin">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>100</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>100</width>
-           <height>0</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1">
-        <widget class="SmartLineEdit" name="lineEdit_ibuMin">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>100</horstretch>
@@ -543,19 +253,13 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="2">
-        <widget class="SmartLineEdit" name="lineEdit_colorMax">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>100</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
+       <item row="2" column="0">
+        <widget class="SmartLabel" name="label_fg">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
          </property>
-         <property name="minimumSize">
-          <size>
-           <width>100</width>
-           <height>0</height>
-          </size>
+         <property name="text">
+          <string>FG</string>
          </property>
         </widget>
        </item>
@@ -575,15 +279,47 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="0">
-        <widget class="SmartLabel" name="label_carb">
-         <property name="text">
-          <string>Carb (vols)</string>
+       <item row="2" column="2">
+        <widget class="SmartLineEdit" name="lineEdit_fgMax">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>100</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>0</height>
+          </size>
          </property>
         </widget>
        </item>
-       <item row="2" column="2">
-        <widget class="SmartLineEdit" name="lineEdit_fgMax">
+       <item row="3" column="0">
+        <widget class="SmartLabel" name="label_ibu">
+         <property name="text">
+          <string>IBUs</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="SmartLineEdit" name="lineEdit_ibuMin">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>100</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>0</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="2">
+        <widget class="SmartLineEdit" name="lineEdit_ibuMax">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>100</horstretch>
@@ -608,8 +344,8 @@
          </property>
         </widget>
        </item>
-       <item row="6" column="1">
-        <widget class="SmartLineEdit" name="lineEdit_abvMin">
+       <item row="4" column="1">
+        <widget class="SmartLineEdit" name="lineEdit_colorMin">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>100</horstretch>
@@ -624,13 +360,42 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
-        <widget class="SmartLabel" name="label_og">
-         <property name="contextMenuPolicy">
-          <enum>Qt::CustomContextMenu</enum>
+       <item row="4" column="2">
+        <widget class="SmartLineEdit" name="lineEdit_colorMax">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>100</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
          </property>
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>0</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="SmartLabel" name="label_carb">
          <property name="text">
-          <string>OG</string>
+          <string>Carb (vols)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="SmartLineEdit" name="lineEdit_carbMin">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>100</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>0</height>
+          </size>
          </property>
         </widget>
        </item>
@@ -650,17 +415,42 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
-        <widget class="QLabel" name="label_min">
+       <item row="6" column="0">
+        <widget class="QLabel" name="label_abv">
          <property name="text">
-          <string>Min</string>
+          <string>ABV (pct)</string>
          </property>
         </widget>
        </item>
-       <item row="3" column="0">
-        <widget class="SmartLabel" name="label_ibu">
-         <property name="text">
-          <string>IBUs</string>
+       <item row="6" column="1">
+        <widget class="SmartLineEdit" name="lineEdit_abvMin">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>100</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>0</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="2">
+        <widget class="SmartLineEdit" name="lineEdit_abvMax">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>100</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>0</height>
+          </size>
          </property>
         </widget>
        </item>
@@ -679,68 +469,94 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab">
+
+     <widget class="QWidget" name="tab_aroma">
       <attribute name="title">
-       <string>Profile</string>
+       <string>Aroma</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_9">
+      <layout class="QVBoxLayout" name="verticalLayout_aroma">
        <item>
-        <widget class="QTextEdit" name="textEdit_profile">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>16777215</height>
-          </size>
-         </property>
+        <widget class="QTextEdit" name="textEdit_aroma">
         </widget>
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_2">
+
+     <widget class="QWidget" name="tab_appearance">
+      <attribute name="title">
+       <string>Appearance</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_appearance">
+       <item>
+        <widget class="QTextEdit" name="textEdit_appearance">
+        </widget>
+       </item>
+      </layout>
+     </widget>
+
+     <widget class="QWidget" name="tab_flavor">
+      <attribute name="title">
+       <string>Flavor</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_flavor">
+       <item>
+        <widget class="QTextEdit" name="textEdit_flavor">
+        </widget>
+       </item>
+      </layout>
+     </widget>
+
+     <widget class="QWidget" name="tab_mouthfeel">
+      <attribute name="title">
+       <string>Mouthfeel</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_mouthfeel">
+       <item>
+        <widget class="QTextEdit" name="textEdit_mouthfeel">
+        </widget>
+       </item>
+      </layout>
+     </widget>
+
+     <widget class="QWidget" name="tab_overallImpression">
+      <attribute name="title">
+       <string>Overall Impression</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_overallImpression">
+       <item>
+        <widget class="QTextEdit" name="textEdit_overallImpression">
+        </widget>
+       </item>
+      </layout>
+     </widget>
+
+     <widget class="QWidget" name="tab_ingredients">
       <attribute name="title">
        <string>Ingredients</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_10">
+      <layout class="QVBoxLayout" name="verticalLayout_ingredients">
        <item>
         <widget class="QTextEdit" name="textEdit_ingredients">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
         </widget>
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_3">
+     <widget class="QWidget" name="tab_examples">
       <attribute name="title">
        <string>Examples</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_11">
+      <layout class="QVBoxLayout" name="verticalLayout_examples">
        <item>
         <widget class="QTextEdit" name="textEdit_examples">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
         </widget>
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_4">
+     <widget class="QWidget" name="tab_notes">
       <attribute name="title">
        <string>Notes</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_12">
+      <layout class="QVBoxLayout" name="verticalLayout_notes">
        <item>
         <widget class="QTextEdit" name="textEdit_notes"/>
        </item>
@@ -823,6 +639,11 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>BtComboBox</class>
+   <extends>QComboBox</extends>
+   <header>widgets/BtComboBox.h</header>
+  </customwidget>
+  <customwidget>
    <class>SmartLabel</class>
    <extends>QLabel</extends>
    <header>widgets/SmartLabel.h</header>
@@ -840,9 +661,6 @@
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>tabWidget_profile</tabstop>
-  <tabstop>styleComboBox</tabstop>
-  <tabstop>pushButton_remove</tabstop>
   <tabstop>lineEdit_name</tabstop>
   <tabstop>lineEdit_category</tabstop>
   <tabstop>lineEdit_categoryNumber</tabstop>
@@ -864,7 +682,11 @@
   <tabstop>pushButton_new</tabstop>
   <tabstop>pushButton_save</tabstop>
   <tabstop>pushButton_cancel</tabstop>
-  <tabstop>textEdit_profile</tabstop>
+  <tabstop>textEdit_aroma</tabstop>
+  <tabstop>textEdit_appearance</tabstop>
+  <tabstop>textEdit_flavor</tabstop>
+  <tabstop>textEdit_mouthfeel</tabstop>
+  <tabstop>textEdit_overallImpression</tabstop>
   <tabstop>textEdit_ingredients</tabstop>
   <tabstop>textEdit_examples</tabstop>
   <tabstop>textEdit_notes</tabstop>

@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/beerjson/beerjson/master/json/fermentation_step.json",
+  "type": "object",
+  "additionalProperties": false,
+  "definitions": {
+    "FermentationStepType": {
+      "type": "object",
+      "description": "FermentationStepType - a per step representation of a fermentation action.",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "start_temperature": {
+          "$ref": "measureable_units.json#/definitions/TemperatureType"
+        },
+        "end_temperature": {
+          "$ref": "measureable_units.json#/definitions/TemperatureType"
+        },
+        "step_time": {
+          "$ref": "measureable_units.json#/definitions/TimeType"
+        },
+        "free_rise": {
+          "description": "Free rise is used to indicate a fermentation step where the exothermic fermentation is allowed to raise the temperature without restriction This is either True or false.",
+          "type": "boolean"
+        },
+        "start_gravity": {
+          "$ref": "measureable_units.json#/definitions/GravityType"
+        },
+        "end_gravity": {
+          "$ref": "measureable_units.json#/definitions/GravityType"
+        },
+        "start_ph": {
+          "$ref": "measureable_units.json#/definitions/AcidityType"
+        },
+        "end_ph": {
+          "$ref": "measureable_units.json#/definitions/AcidityType"
+        },
+        "vessel": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ]
+    }
+  }
+}

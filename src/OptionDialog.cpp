@@ -1,24 +1,29 @@
-/*
- * OptionDialog.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2023
- * - Matt Young <mfsy@yahoo.com>
- * - Mik Firestone <mikfire@gmail.com>
- * - Philip Greggory Lee <rocketman768@gmail.com>
- * - Rob Taylor <robtaylor@floopily.org>
+/*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ * OptionDialog.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ *   • Brian Rower <brian.rower@gmail.com>
+ *   • Daniel Pettersson <pettson81@gmail.com>
+ *   • Greg Meess <Daedalus12@gmail.com>
+ *   • Idar Lund <idarlund@gmail.com>
+ *   • Mark de Wever <koraq@xs4all.nl>
+ *   • Mattias Måhl <mattias@kejsarsten.com>
+ *   • Matt Young <mfsy@yahoo.com>
+ *   • Maxime Lavigne <duguigne@gmail.com>
+ *   • Mik Firestone <mikfire@gmail.com>
+ *   • Philip Greggory Lee <rocketman768@gmail.com>
+ *   • Rob Taylor <robtaylor@floopily.org>
+ *   • Théophane Martin <theophane.m@gmail.com>
  *
- * Brewtarget is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * Brewtarget is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "OptionDialog.h"
 
 #include <optional>
@@ -35,6 +40,7 @@
 #include <QVector>
 #include <QWidget>
 
+#include "config.h"
 #include "database/Database.h"
 #include "Localization.h"
 #include "Logging.h"
@@ -85,8 +91,7 @@ namespace {
       for (auto unitSystem : unitSystems) {
          if (selection == unitSystem->uniqueName) {
             qDebug() <<
-               Q_FUNC_INFO << "Setting UnitSystem for" << Measurement::getDisplayName(physicalQuantity) << "to" <<
-               unitSystem->uniqueName;
+               Q_FUNC_INFO << "Setting UnitSystem for" << physicalQuantity << "to" << unitSystem->uniqueName;
             Measurement::setDisplayUnitSystem(physicalQuantity, *unitSystem);
             return true;
          }
@@ -94,7 +99,7 @@ namespace {
 
       qWarning() <<
          Q_FUNC_INFO << "Unable to interpret value " << selection << "of" << comboBoxName << "as UnitSystem name for" <<
-         Measurement::getDisplayName(physicalQuantity);
+         physicalQuantity;
       return false;
    }
 
@@ -371,7 +376,7 @@ public:
                                                                 "Number of backups to keep: -1 means never remove, 0 means never backup", nullptr));
       // Actually the backups happen after every X times the program is closed, but the tooltip is already long enough!
       this->label_frequency.setToolTip(QApplication::translate("optionsDialog",
-                                                               "How many times Brewtarget needs to be run to trigger another backup: 1 means always backup", nullptr));
+                                                               "How many times %1 needs to be run to trigger another backup: 1 means always backup", nullptr).arg(CONFIG_APPLICATION_NAME_UC));
 #endif
       return;
    }
@@ -470,12 +475,12 @@ public:
       );
 
       // User data directory
-      this->input_userDataDir.setText(PersistentSettings::getUserDataDir().canonicalPath());
+      this->input_userDataDir.setText(PersistentSettings::getUserDataDir().absolutePath());
 
       // Backup stuff
       // By default backups go in the same directory as the DB
       this->input_backupDir.setText(PersistentSettings::value(PersistentSettings::Names::directory,
-                                                              PersistentSettings::getUserDataDir().canonicalPath(),
+                                                              PersistentSettings::getUserDataDir().absolutePath(),
                                                               PersistentSettings::Sections::backups).toString());
       this->spinBox_numBackups.setValue(PersistentSettings::value(PersistentSettings::Names::maximum,
                                                                   10,
@@ -506,8 +511,8 @@ public:
       this->input_pgHostname.setText(PersistentSettings::value(PersistentSettings::Names::dbHostname, "localhost").toString());
       this->input_pgPortNum.setText(PersistentSettings::value(PersistentSettings::Names::dbPortnum, "5432").toString());
       this->input_pgSchema.setText(PersistentSettings::value(PersistentSettings::Names::dbSchema, "public").toString());
-      this->input_pgDbName.setText(PersistentSettings::value(PersistentSettings::Names::dbName, "brewtarget").toString());
-      this->input_pgUsername.setText(PersistentSettings::value(PersistentSettings::Names::dbUsername, "brewtarget").toString());
+      this->input_pgDbName.setText(PersistentSettings::value(PersistentSettings::Names::dbName, CONFIG_APPLICATION_NAME_LC).toString());
+      this->input_pgUsername.setText(PersistentSettings::value(PersistentSettings::Names::dbUsername, CONFIG_APPLICATION_NAME_LC).toString());
       this->input_pgPassword.setText(PersistentSettings::value(PersistentSettings::Names::dbPassword, "").toString());
       this->checkBox_savePgPassword.setChecked(PersistentSettings::contains(PersistentSettings::Names::dbPassword));
 
@@ -760,13 +765,13 @@ void OptionDialog::resetToDefault() {
       this->pimpl->input_pgHostname.setText(QString("localhost"));
       this->pimpl->input_pgPortNum.setText(QString("5432"));
       this->pimpl->input_pgSchema.setText(QString("public"));
-      this->pimpl->input_pgDbName.setText(QString("brewtarget"));
-      this->pimpl->input_pgUsername.setText(QString("brewtarget"));
+      this->pimpl->input_pgDbName.setText(QString(CONFIG_APPLICATION_NAME_LC));
+      this->pimpl->input_pgUsername.setText(QString(CONFIG_APPLICATION_NAME_LC));
       this->pimpl->input_pgPassword.setText(QString(""));
       this->pimpl->checkBox_savePgPassword.setChecked(false);
    } else {
-      this->pimpl->input_userDataDir.setText(PersistentSettings::getConfigDir().canonicalPath());
-      this->pimpl->input_backupDir.setText(PersistentSettings::getConfigDir().canonicalPath());
+      this->pimpl->input_userDataDir.setText(PersistentSettings::getConfigDir().absolutePath());
+      this->pimpl->input_backupDir.setText(PersistentSettings::getConfigDir().absolutePath());
       this->pimpl->spinBox_frequency.setValue(4);
       this->pimpl->spinBox_numBackups.setValue(10);
    }
@@ -948,10 +953,10 @@ bool OptionDialog::saveDatabaseConfig() {
    if (this->pimpl->dbConnectionTestState == NEEDS_TEST || this->pimpl->dbConnectionTestState == TEST_FAILED) {
       QMessageBox::critical(
          nullptr,
-                            tr("Test connection or cancel"),
-         tr("Saving the options without testing the connection can cause Brewtarget to not restart.  Your changes have "
+         tr("Test connection or cancel"),
+         tr("Saving the options without testing the connection can cause %1 to not restart.  Your changes have "
             "been discarded, which is likely really, really crappy UX.  Please open a bug explaining exactly how you "
-            "got to this message.")
+            "got to this message.").arg(CONFIG_APPLICATION_NAME_UC)
                            );
       return false;
    }
@@ -982,7 +987,8 @@ bool OptionDialog::transferDatabase() {
    // preserve the information required.
    try {
       QString theQuestion =
-         tr("Would you like Brewtarget to transfer your data to the new database? NOTE: If you've already loaded the data, say No");
+         tr("Would you like %1 to transfer your data to the new database? "
+            "NOTE: If you've already loaded the data, say No").arg(CONFIG_APPLICATION_NAME_UC);
       if (QMessageBox::Yes == QMessageBox::question(this, tr("Transfer database"), theQuestion)) {
          Database::instance().convertDatabase(this->pimpl->input_pgHostname.text(),
                                               this->pimpl->input_pgDbName.text(),
@@ -1002,7 +1008,11 @@ bool OptionDialog::transferDatabase() {
          PersistentSettings::insert(PersistentSettings::Names::dbName,     this->pimpl->input_pgDbName.text());
          PersistentSettings::insert(PersistentSettings::Names::dbUsername, this->pimpl->input_pgUsername.text());
       }
-      QMessageBox::information(this, tr("Restart"), tr("Please restart Brewtarget to connect to the new database"));
+      QMessageBox::information(
+         this,
+         tr("Restart"),
+         tr("Please restart %1 to connect to the new database").arg(CONFIG_APPLICATION_NAME_UC)
+      );
    } catch (QString e) {
       qCritical() << Q_FUNC_INFO << e;
       success = false;
@@ -1032,7 +1042,7 @@ void OptionDialog::saveSqliteConfig() {
       QMessageBox::information(
          this,
          tr("Restart"),
-         tr("Please restart Brewtarget.")
+         tr("Please restart %1.").arg(CONFIG_APPLICATION_NAME_UC)
       );
    }
 

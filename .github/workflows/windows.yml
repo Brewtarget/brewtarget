@@ -1,4 +1,4 @@
-#
+#-----------------------------------------------------------------------------------------------------------------------
 # .github/workflows/windows.yml is part of Brewtarget, and is copyright the following authors 2021-2024:
 #   • Artem Martynov <martynov-a@polyplastic.by>
 #   • Chris Speck <cgspeck@gmail.com>
@@ -15,7 +15,7 @@
 #
 # You should have received a copy of the GNU General Public License along with this program.  If not, see
 # <http://www.gnu.org/licenses/>.
-#
+#-----------------------------------------------------------------------------------------------------------------------
 name: Windows
 
 on:
@@ -184,12 +184,6 @@ jobs:
           pwd
           meson compile
 
-      - name: Test (via CMake)
-        shell: msys2 {0}
-        run: |
-          cd /C/_/build
-          cmake --build . --target test
-
       # The 'export QT_DEBUG_PLUGINS=1' give us diagnostics in the event that there are problems initialising QT
       # The 'export QT_QPA_PLATFORM=offscreen' stops Qt's xcb sub-module trying to connect to a non-existent display
       # (which would cause the test runner to abort before running any tests).
@@ -200,6 +194,12 @@ jobs:
           export QT_DEBUG_PLUGINS=1
           export QT_QPA_PLATFORM=offscreen
           meson test
+
+      - name: Test (via CMake)
+        shell: msys2 {0}
+        run: |
+          cd /C/_/build
+          cmake --build . --target test
 
       #
       # See above for explanation of the extra things we need to do on Windows before running the bt script.  Most of
@@ -229,7 +229,7 @@ jobs:
 
       - name: Upload Windows binaries (installers)
         if: ${{ success()}}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: brewtarget-dev-${{ matrix.msystem }}
           path: |
@@ -239,16 +239,16 @@ jobs:
 
       - name: Upload CMake error info from failed build
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.msystem }}-build
+          name: ${{ matrix.msystem }}-build-windows
           path: C:/_/build/
           retention-days: 1
 
       - name: Upload Meson error info from failed build
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.msystem }}-mbuild
+          name: ${{ matrix.msystem }}-mbuild-windows
           path: C:/_/mbuild/
           retention-days: 1

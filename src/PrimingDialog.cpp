@@ -1,22 +1,22 @@
-/*
- * PrimingDialog.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2023
- * - Matt Young <mfsy@yahoo.com>
- * - Philip Greggory Lee <rocketman768@gmail.com>
+/*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ * PrimingDialog.cpp is part of Brewtarget, and is copyright the following authors 2009-2023:
+ *   • Brian Rower <brian.rower@gmail.com>
+ *   • Matt Young <mfsy@yahoo.com>
+ *   • Mik Firestone <mikfire@gmail.com>
+ *   • Philip Greggory Lee <rocketman768@gmail.com>
+ *   • Théophane Martin <theophane.m@gmail.com>
  *
- * Brewtarget is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * Brewtarget is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "PrimingDialog.h"
 
 #include <cmath>
@@ -51,9 +51,9 @@ PrimingDialog::~PrimingDialog() = default;
 
 void PrimingDialog::calculate() {
 
-   double const beer_l      = lineEdit_beerVol->toCanonical().quantity();
-   double const temp_c      = lineEdit_temp   ->toCanonical().quantity();
-   double const desiredVols = lineEdit_vols   ->toCanonical().quantity();
+   double const beer_l      = lineEdit_beerVol->getNonOptCanonicalQty();
+   double const temp_c      = lineEdit_temp   ->getNonOptCanonicalQty();
+   double const desiredVols = lineEdit_vols   ->getNonOptCanonicalQty();
    qDebug() <<
       Q_FUNC_INFO << "Beer volume (liters):" << beer_l << ", Temp (°C):" << temp_c << ", Desired Volumes:" <<
       desiredVols;
@@ -90,7 +90,7 @@ void PrimingDialog::calculate() {
 
    // The amount have to be set in default unit to SmartLineEdit.
    // We should find a better solution, but until it is not, we must do it this way.
-   lineEdit_output->setAmount(sugar_g/1000);
+   lineEdit_output->setQuantity(sugar_g/1000);
 
    return;
 }

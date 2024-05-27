@@ -1,0 +1,194 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/beerjson/beerjson/master/json/culture.json",
+  "type": "object",
+  "additionalProperties": false,
+  "definitions": {
+    "CultureBase": {
+      "type": "object",
+      "description": "Provides unique properties to identify individual records of a culture.",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "ale",
+            "bacteria",
+            "brett",
+            "champagne",
+            "kveik",
+            "lacto",
+            "lager",
+            "malolactic",
+            "mixed-culture",
+            "other",
+            "pedio",
+            "spontaneous",
+            "wine"
+          ]
+        },
+        "form": {
+          "type": "string",
+          "enum": [
+            "liquid",
+            "dry",
+            "slant",
+            "culture",
+            "dregs"
+          ]
+        },
+        "producer": {
+          "type": "string"
+        },
+        "product_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "type",
+        "form"
+      ]
+    },
+    "CultureInformation": {
+      "type": "object",
+      "description": "CultureInformation collects the attributes of a microbial culture.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/CultureBase"
+        },
+        {
+          "properties": {
+            "temperature_range": {
+              "description": "The recommended temperature range of fermentation by the culture producer.",
+              "$ref": "measureable_units.json#/definitions/TemperatureRangeType"
+            },
+            "alcohol_tolerance": {
+              "description": "The recommended limit of abv by the culture producer before attenuation stops.",
+              "$ref": "measureable_units.json#/definitions/PercentType"
+            },
+            "flocculation": {
+              "description": "Floculation refers to the ability of yeast to aggregate to form large flocs which drop out of suspension.",
+              "$ref": "measureable_units.json#/definitions/QualitativeRangeType"
+            },
+            "attenuation_range": {
+              "$ref": "measureable_units.json#/definitions/PercentRangeType"
+            },
+            "notes": {
+              "type": "string"
+            },
+            "best_for": {
+              "description": "Recommended styles for a particular culture.",
+              "type": "string"
+            },
+            "max_reuse": {
+              "description": "Maximum number of times to reuse a culture before a new lab source is recommended.",
+              "type": "integer"
+            },
+            "pof": {
+              "description": "A POF+ culture is capable of producing phenols, which is a common distinctive property of saison, and brett yeasts.",
+              "type": "boolean"
+            },
+            "glucoamylase": {
+              "description": "A glucoamylase positive culture is capable of producing glucoamylase, the enzyme produced through expression of the diastatic gene, which allows yeast to attenuate dextrins and starches leading to a very low FG. This is positive in some saison/brett yeasts as well as the new gulo hybrid by Omega yeast labs.",
+              "type": "boolean"
+            },
+            "inventory": {
+              "$ref": "#/definitions/CultureInventoryType"
+            },
+            "zymocide": {
+              "$ref": "#/definitions/Zymocide"
+            }
+          }
+        }
+      ]
+    },
+    "CultureAdditionType": {
+      "type": "object",
+      "description": "CultureAdditionType collects the attributes of each culture ingredient for use in a recipe.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/CultureBase"
+        },
+        {
+          "properties": {
+            "attenuation": {
+              "description": "The expected, or measured apparent attenuation for a given culture in a given recipe. In comparison to attenuation range, this is a single value.",
+              "$ref": "measureable_units.json#/definitions/PercentType"
+            },
+            "times_cultured": {
+              "type": "integer"
+            },
+            "timing": {
+              "description": "The timing object fully describes the timing of an addition with options for basis on time, gravity, or pH at any process step.",
+              "$ref": "timing.json#/definitions/TimingType"
+            },
+            "cell_count_billions": {
+              "type": "integer"
+            },
+            "amount": {
+              "oneOf": [
+                {
+                  "$ref": "measureable_units.json#/definitions/VolumeType"
+                },
+                {
+                  "$ref": "measureable_units.json#/definitions/MassType"
+                },
+                {
+                  "$ref": "measureable_units.json#/definitions/UnitType"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "required": [
+            "amount"
+          ]
+        }
+      ]
+    },
+    "CultureInventoryType": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "liquid": {
+          "$ref": "measureable_units.json#/definitions/VolumeType"
+        },
+        "dry": {
+          "$ref": "measureable_units.json#/definitions/MassType"
+        },
+        "slant": {
+          "$ref": "measureable_units.json#/definitions/VolumeType"
+        },
+        "culture": {
+          "$ref": "measureable_units.json#/definitions/VolumeType"
+        }
+      }
+    },
+    "Zymocide": {
+      "type": "object",
+      "description": "Zymocide, also known as killer yeast properties, is common among wine yeast. There are also some ale and brett yeasts that are immune to some zymocidic properties, these are known as killer neutral.",
+      "additionalProperties": false,
+      "properties": {
+        "no1": {
+          "type": "boolean"
+        },
+        "no2": {
+          "type": "boolean"
+        },
+        "no28": {
+          "type": "boolean"
+        },
+        "klus": {
+          "type": "boolean"
+        },
+        "neutral": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

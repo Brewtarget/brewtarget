@@ -1,0 +1,104 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/beerjson/beerjson/master/json/style.json",
+  "type": "object",
+  "additionalProperties": false,
+  "definitions": {
+    "StyleBase": {
+      "type": "object",
+      "description": "The descriptive base type for both style guideline records, and recipe style provisions. Provides unique properties to identify individual styles",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string"
+        },
+        "category_number": {
+          "type": "integer"
+        },
+        "style_letter": {
+          "type": "string",
+          "maxLength": 1,
+          "minLength": 1,
+          "pattern": "[A-Z ]"
+        },
+        "style_guide": {
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/definitions/StyleCategories"
+        }
+      },
+      "required": ["name", "category", "style_guide", "type"]
+    },
+    "StyleType": {
+      "type": "object",
+      "description": "StyleType provide information for Style categorization",
+      "allOf": [
+        {
+          "$ref": "#/definitions/StyleBase"
+        },
+        {
+          "properties": {
+            "original_gravity": {
+              "$ref": "measureable_units.json#/definitions/GravityRangeType"
+            },
+            "final_gravity": {
+              "$ref": "measureable_units.json#/definitions/GravityRangeType"
+            },
+            "international_bitterness_units": {
+              "$ref": "measureable_units.json#/definitions/BitternessRangeType"
+            },
+            "color": {
+              "$ref": "measureable_units.json#/definitions/ColorRangeType"
+            },
+            "carbonation": {
+              "$ref": "measureable_units.json#/definitions/CarbonationRangeType"
+            },
+            "alcohol_by_volume": {
+              "$ref": "measureable_units.json#/definitions/PercentRangeType"
+            },
+            "notes": {
+              "type": "string"
+            },
+            "aroma": {
+              "type": "string"
+            },
+            "appearance": {
+              "type": "string"
+            },
+            "flavor": {
+              "type": "string"
+            },
+            "mouthfeel": {
+              "type": "string"
+            },
+            "overall_impression": {
+              "type": "string"
+            },
+            "ingredients": {
+              "type": "string"
+            },
+            "examples": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "RecipeStyleType": {
+      "type": "object",
+      "description": "RecipeStyleType defines style information stored in a recipe record",
+      "allOf": [
+        {
+          "$ref": "#/definitions/StyleBase"
+        }
+      ]
+    },
+    "StyleCategories": {
+      "type": "string",
+      "enum": ["beer", "cider", "kombucha", "mead", "other", "soda", "wine"]
+    }
+  }
+}

@@ -1,6 +1,5 @@
-/**
- * PersistentSettings.cpp is part of Brewtarget, and is copyright the following
- * authors 2009-2022:
+/*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ * PersistentSettings.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
  *   • A.J. Drobnich <aj.drobnich@gmail.com>
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Chris Pavetto <chrispavetto@gmail.com>
@@ -21,19 +20,17 @@
  *   • Ted Wright <tedwright@users.sourceforge.net>
  *   • Théophane Martin <theophane.m@gmail.com>
  *
- * Brewtarget is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * Brewtarget is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "PersistentSettings.h"
 
 #include <memory>
@@ -153,6 +150,8 @@ void PersistentSettings::initialise(QString customUserDataDir) {
    // can (potentially) use one of those calls to initialise the user data directory.
    initialised = true;
 
+   qInfo() << Q_FUNC_INFO << "Config dir:" << configDir.canonicalPath() << "(" << configDir.absolutePath() << ")";
+
    // For dev and testing purposes, the user data directory can be overridden via a command-line option, hence the
    // parameter to this function
    if (!customUserDataDir.isEmpty()) {
@@ -165,7 +164,7 @@ void PersistentSettings::initialise(QString customUserDataDir) {
          // on Linux).  This is a slightly more logical location, but we don't want to change directories for existing
          // Brewtarget users.
          PersistentSettings::value(PersistentSettings::Names::UserDataDirectory,
-                                   QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation)).toString()
+                                   QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)).toString()
       );
    }
 
@@ -174,11 +173,15 @@ void PersistentSettings::initialise(QString customUserDataDir) {
 
 QDir PersistentSettings::getConfigDir() {
    Q_ASSERT(initialised);
+   // Note that it can be valid for canonicalPath() to return empty string -- if config dir is current dir
+   Q_ASSERT(!configDir.absolutePath().isEmpty());
    return configDir;
 }
 
 QDir PersistentSettings::getUserDataDir() {
    Q_ASSERT(initialised);
+   // Note that it can be valid for canonicalPath() to return empty string -- if user data dir is current dir
+   Q_ASSERT(!userDataDir.absolutePath().isEmpty());
    return userDataDir;
 }
 
@@ -188,7 +191,6 @@ void PersistentSettings::setUserDataDir(QDir newDirectory) {
    PersistentSettings::insert(PersistentSettings::Names::UserDataDirectory, userDataDir.absolutePath());
    return;
 }
-
 
 bool PersistentSettings::contains(QString const & key,
                                   QString const section,

@@ -1,23 +1,21 @@
-/*
- * Logging.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
- * - Maxime Lavigne <duguigne@gmail.com>
- * - Mattias Måhl <mattias@kejsarsten.com>
- * - Matt Young <mfsy@yahoo.com>
+/*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ * Logging.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ *   • Mattias Måhl <mattias@kejsarsten.com>
+ *   • Matt Young <mfsy@yahoo.com>
+ *   • Maxime Lavigne <duguigne@gmail.com>
+ *   • Mik Firestone <mikfire@gmail.com>
  *
- * Brewtarget is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * Brewtarget is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "Logging.h"
 
 #include <sstream>      // For std::ostringstream
@@ -34,6 +32,7 @@
 #include <QThread>
 #include <QTime>
 
+#include "config.h"
 #include "PersistentSettings.h"
 
 // Qt has changed how you do endl in writing to a QTextStream
@@ -51,9 +50,9 @@ namespace {
    Logging::Level currentLoggingLevel = Logging::LogLevel_INFO;
 
    // We decompose the log filename into its body and suffix for log rotation
-   // The _current_ log file is always "brewtarget.log"
-   QString const logFilename{"brewtarget"};
-   QString const logFilenameExtension{"log"};
+   // The _current_ log file is always "[applicaiton name].log"
+   static QString const logFilename = QString{CONFIG_APPLICATION_NAME_LC};
+   static QString const logFilenameExtension{"log"};
 
    // Stores the path to the log files
    QDir logDirectory;
@@ -202,7 +201,7 @@ namespace {
          if (!renameLogFileWithTimestamp(logDirectory)) {
             errStream <<
                "Could not rename the log file " << logFileFullName() << " in directory " <<
-               logDirectory.canonicalPath() << END_OF_LINE;
+               logDirectory.absolutePath() << END_OF_LINE;
          }
       }
 
@@ -373,7 +372,7 @@ bool Logging::initializeLogging() {
    );
 
    qInstallMessageHandler(logMessageHandler);
-   qDebug() << Q_FUNC_INFO << "Logging initialized.  Logs will be written to" << logDirectory.canonicalPath();
+   qDebug() << Q_FUNC_INFO << "Logging initialized.  Logs will be written to" << logDirectory.absolutePath();
 
    // It's quite useful on debug builds to check that stack trace logging is working, rather than to find out it's not
    // when you need the info to fix another bug.
@@ -398,17 +397,22 @@ bool Logging::setDirectory(std::optional<QDir> newDirectory, Logging::PersistNew
    // Supplying no directory in the parameter means use the default location, ie the config directory
    if (newDirectory.has_value()) {
       logDirectory = *newDirectory;
-      qDebug() << Q_FUNC_INFO << "Logging to specified directory: " << logDirectory.canonicalPath();
+      qDebug() << Q_FUNC_INFO << "Logging to specified directory: " << logDirectory.absolutePath();
    } else {
       logDirectory = PersistentSettings::getConfigDir();
-      qDebug() << Q_FUNC_INFO << "Logging to configuration directory: " << logDirectory.canonicalPath();
+      qDebug() << Q_FUNC_INFO << "Logging to configuration directory: " << logDirectory.absolutePath();
    }
+
+   // We assert that, one way or another, we have above set the log directory to something.
+   // Note that we must use absolutePath here.  It can be valid for canonicalPath() to return empty string -- if log dir
+   // is current dir.
+   Q_ASSERT(!logDirectory.absolutePath().isEmpty());
 
    // Check if the new directory exists, if not create it.
    QString errorReason;
    if (!logDirectory.exists()) {
-      qDebug() << Q_FUNC_INFO << logDirectory.canonicalPath() << "does not exist, creating";
-      if (!logDirectory.mkpath(logDirectory.canonicalPath())) {
+      qDebug() << Q_FUNC_INFO << logDirectory.absolutePath() << "does not exist, creating";
+      if (!logDirectory.mkpath(logDirectory.absolutePath())) {
          errorReason = QObject::tr("Could not create new log file directory");
       }
    }
@@ -424,8 +428,8 @@ bool Logging::setDirectory(std::optional<QDir> newDirectory, Logging::PersistNew
 
    if (!errorReason.isEmpty()) {
       qCritical() <<
-         errorReason << logDirectory.canonicalPath() << QObject::tr(" reverting to ") <<
-         oldDirectory.canonicalPath();
+         errorReason << logDirectory.absolutePath() << QObject::tr(" reverting to ") <<
+         oldDirectory.absolutePath();
       logDirectory = oldDirectory;
       return false;
    }
@@ -471,15 +475,15 @@ bool Logging::setDirectory(std::optional<QDir> newDirectory, Logging::PersistNew
          if (logDirectory.exists(fileName)) {
             if (!renameLogFileWithTimestamp(logDirectory)) {
                errStream <<
-                  Q_FUNC_INFO << "Unable to rename " << fileName << " in directory " << logDirectory.canonicalPath() <<
+                  Q_FUNC_INFO << "Unable to rename " << fileName << " in directory " << logDirectory.absolutePath() <<
                   END_OF_LINE;
                return false;
             }
          }
          if (!logFile.rename(logDirectory.filePath(fileName))) {
             errStream <<
-               Q_FUNC_INFO << "Unable to move " << fileName << " from " << oldDirectory.canonicalPath() << " to " <<
-               logDirectory.canonicalPath() << END_OF_LINE;
+               Q_FUNC_INFO << "Unable to move " << fileName << " from " << oldDirectory.absolutePath() << " to " <<
+               logDirectory.absolutePath() << END_OF_LINE;
             return false;
          }
       }

@@ -1,23 +1,26 @@
-/*
- * TimerWidget.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2022
- * - Aidan Roberts <aidanr67@gmail.com>
- * - Matt Young <mfsy@yahoo.com>
- * - Philip Greggory Lee <rocketman768@gmail.com>
+/*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ * TimerWidget.cpp is part of Brewtarget, and is copyright the following authors 2009-2022:
+ *   • Aidan Roberts <aidanr67@gmail.com>
+ *   • Brian Rower <brian.rower@gmail.com>
+ *   • Julein <j2bweb@gmail.com>
+ *   • Mattias Måhl <mattias@kejsarsten.com>
+ *   • Maxime Lavigne <duguigne@gmail.com>
+ *   • Mik Firestone <mikfire@gmail.com>
+ *   • Philip Greggory Lee <rocketman768@gmail.com>
+ *   • Ted Wright <tedwright@users.sourceforge.net>
+ *   • Théophane Martin <theophane.m@gmail.com>
  *
- * Brewtarget is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * Brewtarget is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "TimerWidget.h"
 
 #include <QChar>
@@ -150,7 +153,7 @@ void TimerWidget::decrementTime() {
 }
 
 void TimerWidget::on_setSoundButton_clicked() {
-   // Taken form old brewtarget timers
+   // Taken from old brewtarget timers
    QDir soundsDir(Application::getResourceDir().canonicalPath() + "/sounds");
    QString soundFile =
       QFileDialog::getOpenFileName(qobject_cast<QWidget*>(this),

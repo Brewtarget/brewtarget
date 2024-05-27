@@ -1,34 +1,27 @@
-/*
- * BtTreeItem.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2022
- * - Matt Young <mfsy@yahoo.com>
- * - Mik Firestone <mikfire@gmail.com>
- * - Philip G. Lee <rocketman768@gmail.com>
+/*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ * BtTreeItem.h is part of Brewtarget, and is copyright the following authors 2009-2024:
+ *   • Matt Young <mfsy@yahoo.com>
+ *   • Mik Firestone <mikfire@gmail.com>
+ *   • Philip Greggory Lee <rocketman768@gmail.com>
  *
- * Brewtarget is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * Brewtarget is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #ifndef BTTTREEITEM_H
 #define BTTTREEITEM_H
 #pragma once
 
 #include <QList>
-#include <QModelIndex>
 #include <QObject>
-#include <QSharedPointer>
 #include <QVariant>
-#include <QVector>
-#include <QWidget>
 
 #include "model/NamedEntity.h"
 
@@ -62,154 +55,156 @@ public:
    /*!
     * The columns being displayed for recipes
     */
-   enum RECIPEITEM {
+   enum class RecipeColumn {
       //! Recipe name
-      RECIPENAMECOL,
+      Name,
       //! Recipe ancestors
-      RECIPEANCCOUNT,
+      NumberOfAncestors,
       //! Recipe brewdate
-      RECIPEBREWDATECOL,
+      BrewDate,
       //! Recipe style
-      RECIPESTYLECOL,
+      Style,
       //! the number of columns available for recipes
-      RECIPENUMCOLS
+      NumberOfColumns
    };
    /*!
     * The columns being displayed for equipment
     */
-   enum EQUIPITEM {
+   enum class EquipmentColumn {
       //! Equipment name
-      EQUIPMENTNAMECOL,
+      Name,
       //! Equipment boil time
-      EQUIPMENTBOILTIMECOL,
+      BoilTime,
       //! the number of columns available for equipment
-      EQUIPMENTNUMCOLS
+      NumberOfColumns
    };
    /*!
     * The columns being displayed for fermentables
     */
-   enum FERMITEM {
+   enum class FermentableColumn {
       //! Fermentable name
-      FERMENTABLENAMECOL,
+      Name,
       //! Fermentable type
-      FERMENTABLETYPECOL,
+      Type,
       //! Fermentable color
-      FERMENTABLECOLORCOL,
+      Color,
       //! the number of columns available for fermentables
-      FERMENTABLENUMCOLS
+      NumberOfColumns
    };
    /*!
     * The columns being displayed for hops
     */
-   enum HOPITEM {
+   enum class HopColumn {
       //! Hop name
-      HOPNAMECOL,
+      Name,
       //! Hop form
-      HOPFORMCOL,
-      //! Hop use
-      HOPUSECOL,
+      Form,
+      //! % Alpha Acid
+      AlphaPct,
+      //! Country of origin
+      Origin,
       //! the number of columns available for hops
-      HOPNUMCOLS
+      NumberOfColumns
    };
    /*!
     * The columns being displayed for misc
     */
-   enum MISCITEM {
+   enum class MiscColumn {
       //! Misc name
-      MISCNAMECOL,
+      Name,
       //! Misc type
-      MISCTYPECOL,
-      //! Misc user
-      MISCUSECOL,
+      Type,
+///      //! Misc use
+///      MISCUSECOL,
       //! the number of columns available for misc
-      MISCNUMCOLS
+      NumberOfColumns
    };
    /*!
     * The columns being displayed for yeast
     */
-   enum YEASTITEM {
+   enum class YeastColumn {
       //! Yeast name
-      YEASTNAMECOL,
+      Name,
       //! Yeast type
-      YEASTTYPECOL,
+      Type,
       //! Yeast form
-      YEASTFORMCOL,
+      Form,
       //! the number of columns available for yeast
-      YEASTNUMCOLS
+      NumberOfColumns
    };
    /*!
-    * The columns being displayed for brewnotes
+    * The columns being displayed for brewNotes
     */
-   enum BREWNOTEITEM {
+   enum class BrewNoteColumn {
       //! Brew date
-      BREWDATE,
-      //! the number of columns available for brewnote
-      BREWNUMCOLS
+      BrewDate,
+      //! the number of columns available for brewNote
+      NumberOfColumns
    };
    /*!
     * The columns to display for styles
     */
-   enum STYLEITEM {
+   enum class StyleColumn {
       //! Name
-      STYLENAMECOL,
+      Name,
       //! Category
-      STYLECATEGORYCOL,
+      Category,
       //! category number
-      STYLENUMBERCOL,
+      CategoryNumber,
       //! category letter
-      STYLELETTERCOL,
+      CategoryLetter,
       //! which style guide definition comes from
-      STYLEGUIDECOL,
+      StyleGuide,
       //! And the standard number of columns
-      STYLENUMCOLS
+      NumberOfColumns
    };
 
-   enum FOLDERITEM {
+   enum class FolderColumn {
       //! Name
-      FOLDERNAMECOL,
+      Name,
       //! Path
-      FOLDERPATHCOL,
+      Path,
       //! Full path
-      FOLDERFULLCOL,
+      FullPath,
       //! and the standard for the number of columns
-      FOLDERNUMCOLS
+      NumberOfColumns
    };
 
-   enum WATERITEM {
+   enum class WaterColumn {
       //! Name
-      WATERNAMECOL,
+      Name,
       //! Ca
-      WATERCACOL,
+      Calcium,
       //! HCO3
-      WATERHCO3COL,
+      Bicarbonate,
       //! SO4
-      WATERSO4COL,
+      Sulfate,
       //! Cl
-      WATERCLCOL,
+      Chloride,
       //! NA
-      WATERNACOL,
+      Sodium,
       //! MG
-      WATERMGCOL,
+      Magnesium,
       //! pH
-      WATERpHCOL,
+      pH,
       //! and the standard for the number of columns
-      WATERNUMCOLS
+      NumberOfColumns
    };
 
    /*!
     * This enum lists the different things that we can store in an item
     */
    enum class Type {
-      RECIPE,
-      EQUIPMENT,
-      FERMENTABLE,
-      HOP,
-      MISC,
-      YEAST,
-      BREWNOTE,
-      STYLE,
-      FOLDER,
-      WATER
+      Recipe,
+      Equipment,
+      Fermentable,
+      Hop,
+      Misc,
+      Yeast,
+      BrewNote,
+      Style,
+      Folder,
+      Water
    };
 
    /**
@@ -223,7 +218,7 @@ public:
 
    //! \brief A constructor that sets the \c type of the BtTreeItem and
    // the \c parent
-   BtTreeItem(BtTreeItem::Type itemType = BtTreeItem::Type::FOLDER, BtTreeItem * parent = nullptr);
+   BtTreeItem(BtTreeItem::Type itemType = BtTreeItem::Type::Folder, BtTreeItem * parent = nullptr);
    virtual ~BtTreeItem();
 
    //! \brief returns the child at \c number
@@ -252,7 +247,7 @@ public:
    NamedEntity * thing();
 
    //! \brief inserts \c count new items of \c type, starting at \c position
-   bool insertChildren(int position, int count, BtTreeItem::Type itemType = BtTreeItem::Type::RECIPE);
+   bool insertChildren(int position, int count, BtTreeItem::Type itemType = BtTreeItem::Type::Recipe);
    //! \brief removes \c count items starting at \c position
    bool removeChildren(int position, int count);
 
@@ -273,7 +268,7 @@ private:
    BtTreeItem::Type itemType;
 
    /*! the data associated with this item */
-   QObject * _thing;
+   QObject * m_thing;
    //! \b overrides the display()
    bool m_showMe;
 

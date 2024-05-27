@@ -1,20 +1,18 @@
-/*
+/*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
  * widgets/SmartAmounts.cpp is part of Brewtarget, and is copyright the following authors 2023:
  *   • Matt Young <mfsy@yahoo.com>
  *
- * Brewtarget is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * Brewtarget is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "widgets/SmartAmounts.h"
 
 #include <QLabel>
@@ -31,7 +29,7 @@ template<> void SmartAmounts::Init<SmartLabel>(char const * const editorName,
                                                SmartLabel &       label,
                                                char const * const fieldName,
                                                char const * const fieldlFqName,
-                                               SmartField &    field,
+                                               SmartField &       field,
                                                TypeInfo                    const & typeInfo,
                                                std::optional<unsigned int> const   precision,
                                                QString                     const & maximalDisplayString) {
@@ -55,7 +53,7 @@ template<> void SmartAmounts::Init<QLabel    >(char const * const editorName,
 }
 
 // .:TBD:. I think it is unnecessary to have precision and maximalDisplayString when there is no SmartField, but leaving
-// them in for the moment, until I'm 100% sure.`
+// them in for the moment, until I'm 100% sure.
 void SmartAmounts::InitNoSf(char const * const   editorName,
                             char const * const   labelName,
                             char const * const   labelFqName,
@@ -150,7 +148,7 @@ Measurement::SystemOfMeasurement SmartAmounts::getSystemOfMeasurement(char const
    Measurement::PhysicalQuantity const physicalQuantity =
       std::holds_alternative<Measurement::PhysicalQuantity>(physicalQuantities) ?
          std::get<Measurement::PhysicalQuantity>(physicalQuantities) :
-         std::get<0>(std::get<Measurement::Mixed2PhysicalQuantities>(physicalQuantities));
+         Measurement::defaultPhysicalQuantity(std::get<Measurement::ChoiceOfPhysicalQuantity>(physicalQuantities));
 
    return Measurement::getDisplayUnitSystem(physicalQuantity).systemOfMeasurement;
 }

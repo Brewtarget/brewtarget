@@ -33,6 +33,7 @@
        <widget class="QWidget" name="widget_buttons" native="true">
         <layout class="QVBoxLayout" name="verticalLayout_2">
          <item>
+          <!-- The ampersands here are QRadioButton shortcut keys.  They show up when you press Alt. -->
           <widget class="QRadioButton" name="radioButton_noSparge">
            <property name="text">
             <string>No Spar&amp;ge</string>
@@ -209,6 +210,25 @@
     </widget>
    </item>
    <item>
+    <widget class="QWidget" name="widget_2" native="true">
+     <layout class="QGridLayout" name="gridLayout_help">
+      <item row="0" column="0">
+        <widget class="InfoButton" name="infoButton_help"></widget>
+      </item>
+      <item row="0" column="1" colspan="5">
+        <widget class="InfoText" name="infoText_help">
+         <property name="buddy">
+          <cstring>infoButton_help</cstring>
+         </property>
+         <property name="text">
+          <string>This wizard calculates the correct mash temperatures and volumes for a single batch sparge mash.</string>
+         </property>
+        </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -223,6 +243,18 @@
   <zorder>widget</zorder>
   <zorder>widget_mashThickness</zorder>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>InfoButton</class>
+   <extends>QPushButton</extends>
+   <header>widgets/InfoButton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>InfoText</class>
+   <extends>QLabel</extends>
+   <header>widgets/InfoText.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>buttonBox</tabstop>
  </tabstops>

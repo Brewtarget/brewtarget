@@ -1,24 +1,23 @@
-/*
- * WaterTableModel.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2023
- * - Matt Young <mfsy@yahoo.com>
- * - Mik Firestone <mikfire@gmail.com>
- * - Philip Greggory Lee <rocketman768@gmail.com>
- * - swstim <swstim@gmail.com>
+/*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ * tableModels/WaterTableModel.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ *   • Brian Rower <brian.rower@gmail.com>
+ *   • Mattias Måhl <mattias@kejsarsten.com>
+ *   • Matt Young <mfsy@yahoo.com>
+ *   • Mik Firestone <mikfire@gmail.com>
+ *   • Philip Greggory Lee <rocketman768@gmail.com>
+ *   • Tim Payne <swstim@gmail.com>
  *
- * Brewtarget is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * Brewtarget is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "tableModels/WaterTableModel.h"
 
 #include <QAbstractItemModel>
@@ -37,22 +36,22 @@
 #include "measurement/Measurement.h"
 #include "measurement/Unit.h"
 #include "model/Recipe.h"
+#include "model/RecipeUseOfWater.h"
 #include "PersistentSettings.h"
-#include "WaterTableWidget.h"
 
-WaterTableModel::WaterTableModel(WaterTableWidget * parent) :
+WaterTableModel::WaterTableModel(QTableView * parent) :
    BtTableModelRecipeObserver{
       parent,
       false,
       {
-         SMART_COLUMN_HEADER_DEFN(WaterTableModel, Name       , tr("Name"             ), NonPhysicalQuantity::String                       ),
-         SMART_COLUMN_HEADER_DEFN(WaterTableModel, Amount     , tr("Amount"           ), Measurement::PhysicalQuantity::Volume             ),
-         SMART_COLUMN_HEADER_DEFN(WaterTableModel, Calcium    , tr("Calcium (ppm)"    ), Measurement::PhysicalQuantity::VolumeConcentration),
-         SMART_COLUMN_HEADER_DEFN(WaterTableModel, Bicarbonate, tr("Bicarbonate (ppm)"), Measurement::PhysicalQuantity::VolumeConcentration),
-         SMART_COLUMN_HEADER_DEFN(WaterTableModel, Sulfate    , tr("Sulfate (ppm)"    ), Measurement::PhysicalQuantity::VolumeConcentration),
-         SMART_COLUMN_HEADER_DEFN(WaterTableModel, Chloride   , tr("Chloride (ppm)"   ), Measurement::PhysicalQuantity::VolumeConcentration),
-         SMART_COLUMN_HEADER_DEFN(WaterTableModel, Sodium     , tr("Sodium (ppm)"     ), Measurement::PhysicalQuantity::VolumeConcentration),
-         SMART_COLUMN_HEADER_DEFN(WaterTableModel, Magnesium  , tr("Magnesium (ppm)"  ), Measurement::PhysicalQuantity::VolumeConcentration),
+         TABLE_MODEL_HEADER(Water, Name       , tr("Name"             ), PropertyNames::NamedEntity::name     ),
+///         TABLE_MODEL_HEADER(Water, Amount     , tr("Amount"           ), PropertyNames::Water::amount         ),
+         TABLE_MODEL_HEADER(Water, Calcium    , tr("Calcium (ppm)"    ), PropertyNames::Water::calcium_ppm    ),
+         TABLE_MODEL_HEADER(Water, Bicarbonate, tr("Bicarbonate (ppm)"), PropertyNames::Water::bicarbonate_ppm),
+         TABLE_MODEL_HEADER(Water, Sulfate    , tr("Sulfate (ppm)"    ), PropertyNames::Water::sulfate_ppm    ),
+         TABLE_MODEL_HEADER(Water, Chloride   , tr("Chloride (ppm)"   ), PropertyNames::Water::chloride_ppm   ),
+         TABLE_MODEL_HEADER(Water, Sodium     , tr("Sodium (ppm)"     ), PropertyNames::Water::sodium_ppm     ),
+         TABLE_MODEL_HEADER(Water, Magnesium  , tr("Magnesium (ppm)"  ), PropertyNames::Water::magnesium_ppm  ),
       }
    },
    BtTableModelData<Water>{} {
@@ -66,15 +65,15 @@ BtTableModel::ColumnInfo const & WaterTableModel::getColumnInfo(WaterTableModel:
 }
 
 void WaterTableModel::observeRecipe(Recipe * rec) {
-   if (recObs) {
-      disconnect(recObs, nullptr, this, nullptr);
+   if (this->recObs) {
+      disconnect(this->recObs, nullptr, this, nullptr);
       removeAll();
    }
 
-   recObs = rec;
-   if (recObs) {
-      connect(recObs, &NamedEntity::changed, this, &WaterTableModel::changed);
-      addWaters(recObs->getAll<Water>());
+   this->recObs = rec;
+   if (this->recObs) {
+      connect(this->recObs, &NamedEntity::changed, this, &WaterTableModel::changed);
+      this->addWaters(*this->recObs);
    }
    return;
 }
@@ -113,11 +112,18 @@ void WaterTableModel::addWater(int waterId) {
 
    // If we are watching a Recipe and the new Water does not belong to it then there is nothing for us to do
    if (this->recObs) {
-      Recipe * recipeOfNewWater = water->getOwningRecipe();
-      if (recipeOfNewWater && this->recObs->key() != recipeOfNewWater->key()) {
+      bool waterIsInRecipe = false;
+      for (auto waterUse : this->recObs->waterUses()) {
+         if (waterUse->water()->key() == waterId) {
+            waterIsInRecipe = true;
+            break;
+         }
+      }
+
+      if (!waterIsInRecipe) {
          qDebug() <<
-            Q_FUNC_INFO << "Ignoring signal about new Water #" << water->key() << "as it belongs to Recipe #" <<
-            recipeOfNewWater->key() << "and we are watching Recipe #" << this->recObs->key();
+            Q_FUNC_INFO << "Ignoring signal about new Water #" << water->key() <<
+            "as it is not used in the Recipe we are watching: #" << this->recObs->key();
          return;
       }
    }
@@ -127,9 +133,9 @@ void WaterTableModel::addWater(int waterId) {
    connect(water.get(), &NamedEntity::changed, this, &WaterTableModel::changed);
    endInsertRows();
 
-   if (parentTableWidget) {
-      parentTableWidget->resizeColumnsToContents();
-      parentTableWidget->resizeRowsToContents();
+   if (m_parentTableWidget) {
+      m_parentTableWidget->resizeColumnsToContents();
+      m_parentTableWidget->resizeRowsToContents();
    }
 }
 
@@ -148,12 +154,22 @@ void WaterTableModel::addWaters(QList<std::shared_ptr<Water> > waters) {
       endInsertRows();
    }
 
-   if (parentTableWidget) {
-      parentTableWidget->resizeColumnsToContents();
-      parentTableWidget->resizeRowsToContents();
+   if (m_parentTableWidget) {
+      m_parentTableWidget->resizeColumnsToContents();
+      m_parentTableWidget->resizeRowsToContents();
    }
-
+   return;
 }
+
+void WaterTableModel::addWaters(Recipe const & recipe) {
+   QList<std::shared_ptr<Water> > waters;
+   for (auto waterUse : recipe.waterUses()) {
+      waters.append(ObjectStoreWrapper::getSharedFromRaw<Water>(waterUse->water()));
+   }
+   this->addWaters(waters);
+   return;
+}
+
 
 void WaterTableModel::removeWater([[maybe_unused]] int waterId,
                                   std::shared_ptr<QObject> object) {
@@ -165,9 +181,9 @@ void WaterTableModel::removeWater([[maybe_unused]] int waterId,
       rows.removeAt(i);
       endRemoveRows();
 
-      if (parentTableWidget) {
-         parentTableWidget->resizeColumnsToContents();
-         parentTableWidget->resizeRowsToContents();
+      if (m_parentTableWidget) {
+         m_parentTableWidget->resizeColumnsToContents();
+         m_parentTableWidget->resizeRowsToContents();
       }
    }
 }
@@ -217,8 +233,8 @@ QVariant WaterTableModel::data(const QModelIndex & index, int role) const {
    switch (columnIndex) {
       case WaterTableModel::ColumnIndex::Name:
          return QVariant(row->name());
-      case WaterTableModel::ColumnIndex::Amount:
-         return QVariant(Measurement::displayAmount(Measurement::Amount{row->amount(), Measurement::Units::liters}));
+///      case WaterTableModel::ColumnIndex::Amount:
+///         return QVariant(Measurement::displayAmount(Measurement::Amount{row->amount(), Measurement::Units::liters}));
       case WaterTableModel::ColumnIndex::Calcium:
          return QVariant(Measurement::displayQuantity(row->calcium_ppm(), 3));
       case WaterTableModel::ColumnIndex::Bicarbonate:
@@ -269,12 +285,12 @@ bool WaterTableModel::setData(QModelIndex const & index, QVariant const & value,
       case WaterTableModel::ColumnIndex::Name:
          row->setName(value.toString());
          break;
-      case WaterTableModel::ColumnIndex::Amount:
-         row->setAmount(Measurement::qStringToSI(value.toString(),
-                                                 Measurement::PhysicalQuantity::Volume,
-                                                 this->getColumnInfo(columnIndex).getForcedSystemOfMeasurement(),
-                                                 this->getColumnInfo(columnIndex).getForcedRelativeScale()).quantity());
-         break;
+///      case WaterTableModel::ColumnIndex::Amount:
+///         row->setAmount(Measurement::qStringToSI(value.toString(),
+///                                                 Measurement::PhysicalQuantity::Volume,
+///                                                 this->getColumnInfo(columnIndex).getForcedSystemOfMeasurement(),
+///                                                 this->getColumnInfo(columnIndex).getForcedRelativeScale()).quantity);
+///         break;
       case WaterTableModel::ColumnIndex::Calcium:
          row->setCalcium_ppm(Localization::toDouble(value.toString(), Q_FUNC_INFO));
          break;
@@ -302,7 +318,7 @@ bool WaterTableModel::setData(QModelIndex const & index, QVariant const & value,
    return retval;
 }
 
-//==========================CLASS HopItemDelegate===============================
+//==========================CLASS WaterItemDelegate===============================
 
 WaterItemDelegate::WaterItemDelegate(QObject * parent)
    : QItemDelegate(parent) {

@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/beerjson/beerjson/master/json/timing.json",
+  "type": "object",
+  "additionalProperties": false,
+  "definitions": {
+    "UseType": {
+      "type": "string",
+      "description": "Differentiates the specific process type when this ingredient addition is used.",
+      "enum": [
+        "add_to_mash",
+        "add_to_boil",
+        "add_to_fermentation",
+        "add_to_package"
+      ]
+    },
+    "TimingType": {
+      "type": "object",
+      "description": "The timing object fully describes the timing of an addition with options for basis on time, gravity, or pH at any process step.",
+      "additionalProperties": false,
+      "properties": {
+        "time": {
+          "description": "What time during a process step is added, eg a value of 2 days for a dry hop addition would be added 2 days into the fermentation step.",
+          "$ref": "measureable_units.json#/definitions/TimeType"
+        },
+        "duration": {
+          "description": "How long an ingredient addition remains, this was referred to as time in the BeerXML standard. E.G. A 40 minute hop boil additions means to boil for 40 minutes, and a 2 day duration for a dry hop means to remove it after 2 days.",
+          "$ref": "measureable_units.json#/definitions/TimeType"
+        },
+        "continuous": {
+          "description": "A continuous addition is spread out evenly and added during the entire process step, eg 60 minute IPA by dogfish head takes all ofthe hop additions and adds them throughout the entire boil.",
+          "type": "boolean"
+        },
+        "specific_gravity": {
+          "description": "Used to indicate when an addition is added based on a desired specific gravity. E.G. Add dry hop at when SG is 1.018.",
+          "$ref": "measureable_units.json#/definitions/GravityType"
+        },
+        "pH": {
+          "description": "Used to indicate when an addition is added based on a desired specific pH. eg Add brett when pH is 3.4.",
+          "$ref": "measureable_units.json#/definitions/AcidityType"
+        },
+        "step": {
+          "description": "Used to indicate what step this ingredient timing addition is referencing. EG A value of 2 for add_to_fermentation would mean to add during the second fermentation step.",
+          "type": "integer"
+        },
+        "use": {
+          "$ref": "#/definitions/UseType"
+        }
+      }
+    }
+  }
+}

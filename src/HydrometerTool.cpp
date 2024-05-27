@@ -1,24 +1,21 @@
-/*
- * HydrometerTool.cpp is part of Brewtarget and is copyright the following authors
- * 2016-2023
- *   - Brian Rower <brian.rower@gmail.com>
- *   - Jamie Daws <jdelectronics1@gmail.com>
- *   - Matt Young <mfsy@yahoo.com>
- *   - Ryan Hoobler <rhoob@yahoo.com>
+/*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ * HydrometerTool.cpp is part of Brewtarget, and is copyright the following authors 2016-2023:
+ *   • Brian Rower <brian.rower@gmail.com>
+ *   • Jamie Daws <jdelectronics1@gmail.com>
+ *   • Matt Young <mfsy@yahoo.com>
+ *   • Ryan Hoobler <rhoob@yahoo.com>
  *
- * Brewtarget is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * Brewtarget is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "HydrometerTool.h"
 
 #include <cmath>
@@ -43,7 +40,7 @@ HydrometerTool::HydrometerTool(QWidget* parent) : QDialog(parent) {
    SMART_FIELD_INIT_FS(HydrometerTool, label_calibratedTemp, lineEdit_calibratedTemp, double, Measurement::PhysicalQuantity::Temperature, 1);
    SMART_FIELD_INIT_FS(HydrometerTool, label_inputTemp     , lineEdit_inputTemp     , double, Measurement::PhysicalQuantity::Temperature);
 
-   this->lineEdit_calibratedTemp->setAmount(15.55555556);
+   this->lineEdit_calibratedTemp->setQuantity(15.55555556);
 ///      lineEdit_outputSg->setForcedSystemOfMeasurement(Measurement::SystemOfMeasurement::SpecificGravity);
 
    connect(this->pushButton_convert,   &QAbstractButton::clicked,                      this,                          &HydrometerTool::convert   );
@@ -152,12 +149,12 @@ void HydrometerTool::retranslateUi() {
 
 void HydrometerTool::convert() {
    double correctedGravity = Algorithms::correctSgForTemperature(
-      lineEdit_inputSg       ->toCanonical().quantity(),       // measured gravity
-      lineEdit_inputTemp     ->toCanonical().quantity(),     // temperature at time of reading in Celsius
-      lineEdit_calibratedTemp->toCanonical().quantity() // calibration temperature of hydrometer in Celsius
+      lineEdit_inputSg       ->getNonOptCanonicalQty(),       // measured gravity
+      lineEdit_inputTemp     ->getNonOptCanonicalQty(),     // temperature at time of reading in Celsius
+      lineEdit_calibratedTemp->getNonOptCanonicalQty() // calibration temperature of hydrometer in Celsius
    );
 
-   lineEdit_outputSg->setAmount(correctedGravity);
+   lineEdit_outputSg->setQuantity(correctedGravity);
    return;
 }
 

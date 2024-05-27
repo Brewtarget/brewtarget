@@ -1,25 +1,25 @@
-/*
- * main.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2022
- * - A.J. Drobnich <aj.drobnich@gmail.com>
- * - Matt Young <mfsy@yahoo.com>
- * - Maxime Lavigne <duguigne@gmail.com>
- * - Mik Firestone <mikfire@gmail.com>
- * - Philip Greggory Lee <rocketman768@gmail.com>
+/*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ * main.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ *   • A.J. Drobnich <aj.drobnich@gmail.com>
+ *   • Mark de Wever <koraq@xs4all.nl>
+ *   • Matt Young <mfsy@yahoo.com>
+ *   • Maxime Lavigne <duguigne@gmail.com>
+ *   • Mik Firestone <mikfire@gmail.com>
+ *   • Philip Greggory Lee <rocketman768@gmail.com>
  *
- * Brewtarget is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * Brewtarget is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
+#include <boost/json/src.hpp> // Needs to be included exactly once in the code to use header-only version of Boost.JSON
+
 #include <xercesc/util/PlatformUtils.hpp>
 #include <xalanc/Include/PlatformDefinitions.hpp>
 
@@ -36,9 +36,11 @@
 #include "Localization.h"
 #include "Logging.h"
 #include "PersistentSettings.h"
-#include "xml/BeerXml.h"
+#include "serialization/xml/BeerXml.h"
+#include "utils/MetaTypes.h"
 
 namespace {
+
    /*!
     * \brief Imports the content of an xml file to the database.
     *
@@ -62,6 +64,33 @@ namespace {
       Database::instance().createBlank(filename);
       exit(0);
    }
+
+   /**
+    * \brief Uncaught exceptions in a Qt application will terminate the program with a generic error message that does
+    *        not give as much info about the exception as we might like.  This small extension of Qt's \c QApplication
+    *        class allows us to attempt to log some additional info in such an event.
+    *
+    *        NOTE that the info logged here will not be anywhere near as helpful as when we can catch exceptions in the
+    *        thread where they are thrown, so this is very much a last resort.
+    */
+   class ExceptionCatchingQApplication : public QApplication {
+   public:
+      using QApplication::QApplication;
+      virtual bool notify(QObject * receiver, QEvent * event) override {
+         try {
+            return QApplication::notify(receiver, event);
+         } catch (std::exception & e) {
+            qCritical() << Q_FUNC_INFO << "Uncaught exception: " << e.what();
+            qCritical().noquote() << Q_FUNC_INFO << "Stacktrace:" << Logging::getStackTrace();
+
+            // If we wanted the application to keep running here, we could just drop through to `return false`.  But we
+            // don't know whether continuing is a good idea.  So the safest thing is to exit now that we've logged some
+            // diagnostics.
+            this->exit();
+         }
+         return false;
+      }
+   };
 }
 
 int main(int argc, char **argv) {
@@ -80,15 +109,15 @@ int main(int argc, char **argv) {
    // time, but it seems these run-time calls are always required.
    //
    // We take advantage of this to allow different persistent settings in debug mode, so that changes made will not
-   // interfere with another installed instance of Brewtarget
+   // interfere with another installed instance of the application.
    //
    // We deliberately do not call app.setOrganizationName() as it just creates an extra level of directories in the Qt
    // default file locations (eg on Linux config location is ~/.config/orgName/appName if both organization and
    // application name are set on the QApplication object, but omitting the call to setOrganizationName() takes out the
    // extra directory layer).
    //
-   QApplication app(argc, argv);
-   app.setOrganizationDomain("brewtarget.com");
+   ExceptionCatchingQApplication app(argc, argv);
+   app.setOrganizationDomain(CONFIG_ORGANIZATION_DOMAIN);
    // We used to vary the application name (and therefore location of config files etc) depending on whether we're
    // building with debug or release version of Qt, but on the whole I don't think this is helpful
    app.setApplicationName(CONFIG_APPLICATION_NAME_LC);
@@ -146,14 +175,14 @@ int main(int argc, char **argv) {
    }
 
    //
-   // Check whether another instance of Brewtarget is running.  We want to avoid two instances running at the same time
-   // because, at best, one of them will be locked out of the database (if using SQLite) and, at worst, race conditions
-   // etc between the two instances could lead to data loss/corruption.
+   // Check whether another instance of the application is running.  We want to avoid two instances running at the same
+   // time because, at best, one of them will be locked out of the database (if using SQLite) and, at worst, race
+   // conditions etc between the two instances could lead to data loss/corruption.
    //
    // Using QSharedMemory seems to be the standard way to do this in Qt according to various discussions on Stack
-   // Overflow and Qt forums.  Essentially, we try to create one byte of cross-process shared memory with identifier
-   // "Brewtarget".  If this fails, it means another process (ie another instance of Brewtarget) has already created
-   // such shared memory (which gets automatically destroyed when the application exits).
+   // Overflow and Qt forums.  Essentially, we try to create one byte of cross-process shared memory with application
+   // name as the identifier.  If this fails, it means another process (ie another instance of the application) has
+   // already created such shared memory (which gets automatically destroyed when the application exits).
    //
    // We want to allow the user to override this warning because, according to the Qt documentation, it is possible, on
    // Linux, that we get a "false positive".  Specifically, if the application crashed, then the shared memory will not
@@ -173,10 +202,10 @@ int main(int argc, char **argv) {
       if (!sharedMemory.create(1)) {
          enum QMessageBox::StandardButton buttonPressed =
             QMessageBox::warning(NULL,
-                                 QApplication::tr("Brewtarget is already running!"),
-                                 QApplication::tr("Another instance of Brewtarget is already running.\n\n"
-                                                "Running two copies of the program at once may lead to data loss.\n\n"
-                                                "Press OK to quit."),
+                                 QApplication::tr("%1 is already running!").arg(CONFIG_APPLICATION_NAME_UC),
+                                 QApplication::tr("Another instance of %1 is already running.\n\n"
+                                                  "Running two copies of the program at once may lead to data loss.\n\n"
+                                                  "Press OK to quit.").arg(CONFIG_APPLICATION_NAME_UC),
                                  QMessageBox::Ignore | QMessageBox::Ok,
                                  QMessageBox::Ok);
          if (buttonPressed == QMessageBox::Ok) {
@@ -205,6 +234,8 @@ int main(int argc, char **argv) {
       qInfo() << "Resource directory:" << Application::getResourceDir().absolutePath();
 
       qDebug() << Q_FUNC_INFO << "Library Paths:" << qApp->libraryPaths();
+
+      registerMetaTypes();
 
       auto mainAppReturnValue = Application::run();
 

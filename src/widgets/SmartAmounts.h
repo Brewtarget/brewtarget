@@ -1,20 +1,18 @@
-/*
- * widgets/SmartAmounts.h is part of Brewtarget, and is copyright the following authors 2023:
+/*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ * widgets/SmartAmounts.h is part of Brewtarget, and is copyright the following authors 2023-2024:
  *   • Matt Young <mfsy@yahoo.com>
  *
- * Brewtarget is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * Brewtarget is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #ifndef SMARTAMOUNTS_H
 #define SMARTAMOUNTS_H
 #pragma once
@@ -30,7 +28,7 @@ class QLabel;
 
 class SmartLabel;
 class SmartField;
-class TypeInfo;
+struct TypeInfo;
 
 namespace SmartAmounts {
    /**
@@ -170,10 +168,9 @@ namespace SmartAmounts {
  *
  *           SMART_FIELD_INIT(FermentableEditor, label_color, field_color, Fermentable, PropertyNames::Fermentable::color_srm, 0);
  *
- * \param editorClass The class name of the class holding the field we're initialising, eg \c HopEditor.  (In theory we
+ * \param editorClass The class name of the class holding the field we're initialising, eg \c editors/HopEditor.  (In theory we
  *                    could pick this up via \c staticMetaObject.className(), but then we wouldn't be able to do the
  *                    macro concatenation here.)
- * \param modelClass The subclass of \c NamedEntity that we're editing.  Eg in \c HopEditor, this will be \c Hop
  * \param labelName  The name of the member variable for the corresponding label (\c QLabel or \c SmartLabel) for this
  *                   field.  NB we cannot always deduce this from fieldName, as sometimes two fields share a label, eg
  *                   for a min/max range on a \c Style.
@@ -185,6 +182,7 @@ namespace SmartAmounts {
  *                       always include their canonical unit names (eg \c PropertyNames::Fermentable::color_srm) whereas
  *                       the former do not (eg \c field_color) because the user can enter data in any supported
  *                       units.
+ * \param modelClass The subclass of \c NamedEntity that we're editing.  Eg in \c HopEditor, this will be \c Hop
  * \param propertyName The name of the property to which this field relates, eg in \c HopEditor, this could be
  *                     \c PropertyNames::NamedEntity::name, \c PropertyNames::Hop::alpha_pct, etc.  (Note, as above, we
  *                     intentionally do \b not automatically insert the \c PropertyNames:: prefix.)
@@ -244,7 +242,7 @@ namespace SmartAmounts {
  * \param ...  Any remaining arguments are passed through to \c SmartField::init in fourth position and above
  */
 #define SMART_FIELD_INIT_FS(editorClass, labelName, fieldName, nativeType, btFieldType, ...) \
-   static auto const typeInfoFor_##fieldName = TypeInfo::construct<nativeType>(btFieldType); \
+   static auto const typeInfoFor_##fieldName = TypeInfo::construct<nativeType>(PropertyNames::None::none, nullptr, btFieldType); \
    SmartAmounts::Init(#editorClass, \
                       #labelName, \
                       SFI_FQ_NAME(editorClass, labelName), \
@@ -261,7 +259,8 @@ namespace SmartAmounts {
  *        fixed.
  */
 #define SMART_FIELD_INIT_FIXED(editorClass, labelName, fieldName, nativeType, fixedUnit, ...) \
-   static auto const typeInfoFor_##fieldName = TypeInfo::construct<nativeType>(fixedUnit.getPhysicalQuantity()); \
+   static auto const typeInfoFor_##fieldName = \
+      TypeInfo::construct<nativeType>(PropertyNames::None::none, nullptr, fixedUnit.getPhysicalQuantity()); \
    SmartAmounts::InitFixed(#editorClass, \
                            *this->labelName, \
                            #fieldName, \

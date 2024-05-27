@@ -5,9 +5,6 @@
   <property name="windowTitle">
    <string>Print And Preview</string>
   </property>
-  <property name="configSection" stdset="0">
-   <string notr="true">btPrintAndPreview</string>
-  </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
     <layout class="QVBoxLayout" name="verticalLayout_3">

@@ -1,4 +1,4 @@
-/*
+/*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
  * widgets/SmartLineEdit.h is part of Brewtarget, and is copyright the following authors 2009-2023:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Mark de Wever <koraq@xs4all.nl>
@@ -8,19 +8,17 @@
  *   • Philip Greggory Lee <rocketman768@gmail.com>
  *   • Scott Peshak <scott@peshak.net>
  *
- * Brewtarget is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * Brewtarget is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
  * You should have received a copy of the GNU General Public License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
- */
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #ifndef WIDGETS_SMARTLINEEDIT_H
 #define WIDGETS_SMARTLINEEDIT_H
 #pragma once
@@ -72,7 +70,6 @@ class SmartLineEdit : public QLineEdit, public SmartField {
    Q_OBJECT
 
 public:
-
    SmartLineEdit(QWidget* parent = nullptr);
    virtual ~SmartLineEdit();
 
@@ -80,6 +77,14 @@ public:
    virtual void setRawText(QString const & text);
    virtual void connectSmartLabelSignal(SmartLabel & smartLabel);
    virtual void doPostInitWork();
+
+   /**
+    * \brief This combines \c QLineEdit::setText and \c QLineEdit::setCursorPosition
+    *
+    *        Maybe should be called setTextAndCursor, but that's a bit long next to setValue and setAmount.  And, say,
+    *        setTxtAndCrsr just looks horrible to me!
+    */
+   void setTextCursor(QString const & text, int cursorPosition = 0);
 
 public slots:
    /**

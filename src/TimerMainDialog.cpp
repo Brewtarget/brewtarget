@@ -1,22 +1,20 @@
-/*
- * TimerMainDialog.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2022:
- * - Aidan Roberts <aidanr67@gmail.com>
- * - Matt Young <mfsy@yahoo.com>
+/*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ * TimerMainDialog.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ *   • Aidan Roberts <aidanr67@gmail.com>
+ *   • Brian Rower <brian.rower@gmail.com>
+ *   • Matt Young <mfsy@yahoo.com>
  *
- * Brewtarget is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * Brewtarget is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "TimerMainDialog.h"
 
 #include <QMessageBox>
@@ -26,6 +24,8 @@
 #include "MainWindow.h"
 #include "measurement/Unit.h"
 #include "measurement/Measurement.h"
+#include "model/Boil.h"
+#include "model/RecipeAdditionHop.h"
 #include "TimerListDialog.h"
 #include "TimerWidget.h"
 
@@ -243,8 +243,8 @@ void TimerMainDialog::timesUp() {
 }
 
 void TimerMainDialog::on_loadRecipesButton_clicked() {
-   //Load current recipes
-   if (!timers->isEmpty()) {
+   // Load current recipes
+   if (!this->timers->isEmpty()) {
       QMessageBox mb;
       mb.setText(tr("Active Timers"));
       mb.setInformativeText(tr("You currently have active timers, would you like to replace them or add to them?"));
@@ -257,42 +257,35 @@ void TimerMainDialog::on_loadRecipesButton_clicked() {
          removeAllTimers();
       }
    }
-   Recipe* recipe = mainWindow->currentRecipe();
-   setBoilTimeBox->setValue(recipe->boilTime_min());
+   Recipe * recipe = mainWindow->currentRecipe();
+   this->setBoilTimeBox->setValue(recipe->boil() ? recipe->boil()->boilTime_mins() : 0.0);
    bool timerFound = false;
    int duplicates = 0;
    int timersGenerated = 0;
-   bool duplicatesFound = false;
-   QString note;
-   QList<Hop*> hops = recipe->hops();
-   for (Hop * h : hops) {
-      if (h->use() == Hop::Use::Boil) {
-         note = tr("%1 of %2").arg(
-            Measurement::displayAmount(Measurement::Amount{h->amount_kg(), Measurement::Units::kilograms})
-         ).arg(h->name());
-         int newTime = h->time_min() * 60;
-         for (TimerWidget* td : *timers) {
-               if (td->getTime() == newTime){
-                  if (!td->getNote().contains(note, Qt::CaseInsensitive)) {
-                     td->setNote(note); //append note to existing timer
-                  } else {
-                     duplicates++;
-                     if (!duplicatesFound) {
-                           duplicatesFound = true;
-                     }
-                  }
-                  timerFound = true;
+   for (auto hopAddition : recipe->hopAdditions()) {
+      if (hopAddition->stage() == RecipeAddition::Stage::Boil &&
+          hopAddition->addAtTime_mins()) {
+         QString note = tr("%1 of %2").arg(Measurement::displayAmount(hopAddition->amount())).arg(hopAddition->hop()->name());
+         int addAtTime_seconds = *hopAddition->addAtTime_mins() * 60;
+         for (TimerWidget * td : *this->timers) {
+            if (td->getTime() == addAtTime_seconds) {
+               if (!td->getNote().contains(note, Qt::CaseInsensitive)) {
+                  td->setNote(note); // append note to existing timer
+               } else {
+                  ++duplicates;
                }
+               timerFound = true;
+            }
          }
          if (!timerFound) {
-               createTimer(note, h->time_min()*60);
-               timersGenerated++;
+            createTimer(note, addAtTime_seconds);
+            ++timersGenerated;
          }
          timerFound = false;
       }
    }
 
-   if (duplicatesFound) {
+   if (duplicates > 0) {
       QString timerText;
       if (duplicates == 1) {
          timerText = tr("%1 hop addition is already timed and has been ignored.").arg(duplicates);
@@ -302,7 +295,7 @@ void TimerMainDialog::on_loadRecipesButton_clicked() {
 
       QMessageBox::warning(this, tr("Duplicate Timers Ignored"), timerText, QMessageBox::Ok);
    }
-   if (timersGenerated == 0 && !duplicatesFound) {
+   if (timersGenerated == 0 && duplicates == 0) {
       QMessageBox::warning(this,
                            tr("No Addition Timers"),
                            tr("There are no boil addition, no timers generated."),
@@ -317,7 +310,7 @@ void TimerMainDialog::on_cancelButton_clicked() {
 }
 
 void TimerMainDialog::removeAllTimers() {
-   qDeleteAll(*timers);
+   qDeleteAll(*this->timers);
    this->timers->clear();
    this->timerWindow->close();
    return;
@@ -387,7 +380,7 @@ void TimerMainDialog::setTimerVisible(TimerWidget *t) {
 void TimerMainDialog::sortTimers() {
    if (!this->timers->isEmpty()) {
       QList<TimerWidget*>* sortedTimers = new QList<TimerWidget*>;
-      TimerWidget* biggest = timers->front();
+      TimerWidget* biggest = this->timers->front();
       while (!this->timers->isEmpty()) {
          for (TimerWidget* t : *this->timers) {
             if (t->getTime() > biggest->getTime()) {
@@ -397,7 +390,7 @@ void TimerMainDialog::sortTimers() {
          sortedTimers->append(biggest);
          this->timers->removeOne(biggest);
          if (!this->timers->isEmpty()) {
-            biggest = timers->front();
+            biggest = this->timers->front();
          }
       }
       this->timers = sortedTimers;

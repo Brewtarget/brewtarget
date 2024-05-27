@@ -1,6 +1,5 @@
-/*
- * database/Database.cpp is part of Brewtarget, and is copyright the following
- * authors 2009-2023:
+/*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ * database/Database.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
  *   • Aidan Roberts <aidanr67@gmail.com>
  *   • A.J. Drobnich <aj.drobnich@gmail.com>
  *   • Brian Rower <brian.rower@gmail.com>
@@ -24,21 +23,20 @@
  *   • Samuel Östling <MrOstling@gmail.com>
  *   • Théophane Martin <theophane.m@gmail.com>
  *
- * Brewtarget is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * Brewtarget is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "database/Database.h"
 
+#include <filesystem>
 #include <iostream> // For writing to std::cerr in destructor
 #include <mutex>    // For std::once_flag etc
 
@@ -65,13 +63,14 @@
 #include "PersistentSettings.h"
 #include "utils/BtStringConst.h"
 #include "utils/EnumStringMapping.h"
+#include "utils/ErrorCodeToStream.h"
 
 namespace {
    EnumStringMapping const dbTypeToName {
-      {Database::tr("NODB"  ), Database::DbType::NODB  },
-      {Database::tr("SQLITE"), Database::DbType::SQLITE},
-      {Database::tr("PGSQL" ), Database::DbType::PGSQL },
-      {Database::tr("ALLDB" ), Database::DbType::ALLDB },
+      {Database::DbType::NODB  , Database::tr("NODB"  )},
+      {Database::DbType::SQLITE, Database::tr("SQLITE")},
+      {Database::DbType::PGSQL , Database::tr("PGSQL" )},
+      {Database::DbType::ALLDB , Database::tr("ALLDB" )},
    };
 
    //
@@ -98,8 +97,11 @@ namespace {
    // SQLite actually lets you store any type in any column, and only offers five "affinities" for "the recommended
    // type for data stored in a column".   There are no special types for boolean or date.  However, it also allows you
    // to use traditional SQL type names in create table statements etc (and does the mapping down to the affinities
-   // under the hood) and retains those names when you're browsing the database   We therefore use those traditional
+   // under the hood) and retains those names when you're browsing the database.   We therefore use those traditional
    // SQL typenames here as it makes the intent clearer for anyone looking directly at the database.
+   //
+   // NOTE HOWEVER, using BOOLEAN as a column type on a table in SQLite precludes us from creating that table as a
+   // "STRICT Table" (see https://www.sqlite.org/stricttables.html).
    //
    // PostgreSQL is the other extreme and has all sorts of specialised types (including for networking addresses,
    // geometric shapes and XML).  We need only a small subset of these.
@@ -401,6 +403,78 @@ public:
 
       bool doUpdate = currentVersion < newVersion;
       if (doUpdate) {
+         //
+         // Before we do a DB upgrade, we should back-up the DB (if we can).
+         //
+         // If we're in interactive mode (rather than, eg, running unit tests), we should tell the user, including
+         // giving them a chance to abort.
+         //
+         QString backupDir = PersistentSettings::value(
+            PersistentSettings::Names::directory,
+            PersistentSettings::getUserDataDir().canonicalPath(),
+            PersistentSettings::Sections::backups
+         ).toString();
+         //
+         // It's probably enough for most users to put the date on the backup file name to make it unique.  But we put
+         // the time too just in case.  Note that we cannot format the time as hh:mm:ss because Windows does not accept
+         // colons in filenames.  We can however use the ratio symbol (∶) which looks almost the same.  There is a
+         // precendent for doing this:
+         // https://web.archive.org/web/20190108033419/https://blogs.msdn.microsoft.com/oldnewthing/20180913-00/?p=99725
+         //
+         // NOTE: We do not currently check whether the file we are creating already exists...
+         //
+         QString backupName = QString(
+            "%1 database.sqlite backup (before upgrade from v%2 to v%3)"
+         ).arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh∶mm∶ss")).arg(currentVersion).arg(newVersion);
+         bool succeeded = database.backupToDir(backupDir, backupName);
+         if (!succeeded) {
+            qCritical() << Q_FUNC_INFO << "Unable to create DB backup";
+            if (Application::isInteractive()) {
+               QMessageBox upgradeBackupFailedMessageBox;
+               upgradeBackupFailedMessageBox.setIcon(QMessageBox::Icon::Critical);
+               upgradeBackupFailedMessageBox.setWindowTitle(tr("Unable to back up database before upgrading"));
+               upgradeBackupFailedMessageBox.setText(
+                  tr("Could not backup database prior to required upgrade.  See logs for more details.")
+               );
+               upgradeBackupFailedMessageBox.exec();
+            }
+            exit(1);
+         }
+
+         if (Application::isInteractive()) {
+            QMessageBox dbUpgradeMessageBox;
+            dbUpgradeMessageBox.setWindowTitle(tr("Software Upgraded"));
+            dbUpgradeMessageBox.setText(
+               tr("Before continuing, %1 %2 needs to upgrade your database schema "
+                  "(from v%3 to v%4).\n").arg(CONFIG_APPLICATION_NAME_UC).arg(CONFIG_VERSION_STRING).arg(currentVersion).arg(newVersion)
+            );
+            dbUpgradeMessageBox.setInformativeText(
+               tr("DON'T PANIC: Your existing data will be retained!")
+            );
+            if (this->dbType == Database::DbType::PGSQL) {
+               dbUpgradeMessageBox.setDetailedText(
+                  tr("The upgrade should retain all your existing data.\n\nEven so, it's a good idea to make a manual "
+                     "backup of your PostgreSQL database just in case.\n\nIf you didn't yet do this, click Abort.")
+               );
+            } else {
+               dbUpgradeMessageBox.setDetailedText(
+                  tr("Pre-upgrade database backup is in:\n%1").arg(backupDir)
+               );
+            }
+            dbUpgradeMessageBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Abort);
+            dbUpgradeMessageBox.setDefaultButton(QMessageBox::Ok);
+            int ret = dbUpgradeMessageBox.exec();
+            if (ret == QMessageBox::Abort) {
+               qDebug() << Q_FUNC_INFO << "User clicked \"Abort\".  Exiting.";
+               // Ask the application nicely to quit
+               QCoreApplication::quit();
+               // If it didn't, we have to insist!
+               QCoreApplication::exit(1);
+               // If insisting doesn't work, there's one final option
+               exit(1);
+            }
+         }
+
          bool success = DatabaseSchemaHelper::migrate(database, currentVersion, newVersion, database.sqlDatabase() );
          if (!success) {
             qCritical() << Q_FUNC_INFO << QString("Database migration %1->%2 failed").arg(currentVersion).arg(newVersion);
@@ -443,9 +517,8 @@ public:
 
       QString halfName = QString("%1.%2").arg("databaseBackup").arg(QDate::currentDate().toString("yyyyMMdd"));
       QString newName = halfName;
-      // Unique filenames are a pain in the ass. In the case you open Brewtarget
-      // twice in a day, this loop makes sure we don't over write (or delete) the
-      // wrong thing
+      // Unique filenames are a pain in the ass. In the case you open the application twice in a day, this loop makes
+      // sure we don't over write (or delete) the wrong thing.
       int foobar = 0;
       while ( foobar < 10000 && QFile::exists( backupDir + "/" + newName ) ) {
          foobar++;
@@ -496,7 +569,11 @@ public:
       // finally, reset the counter and save the new list of files
       PersistentSettings::insert(PersistentSettings::Names::count, 0, PersistentSettings::Sections::backups);
       PersistentSettings::insert(PersistentSettings::Names::files, listOfFiles, PersistentSettings::Sections::backups);
+
+      return;
    }
+
+   //============================================== impl member variables ==============================================
 
    Database::DbType dbType;
    QString dbConName;
@@ -670,7 +747,7 @@ bool Database::load() {
          QMessageBox::critical(
             nullptr,
             QObject::tr("Database Failure"),
-            QObject::tr("Failed to update the database")
+            QObject::tr("Failed to update the database.\n\nSee log file for details.\n\nProgram will now exit.")
          );
       }
       return false;
@@ -866,16 +943,60 @@ char const * Database::getDefaultBackupFileName() {
     return "database.sqlite";
 }
 
-bool Database::backupToFile(QString newDbFileName) {
-   // Remove the files if they already exist so that
-   // the copy() operation will succeed.
-   QFile::remove(newDbFileName);
+bool Database::backupToFile(QString const & newDbFileName) {
+   QString const curDbFileName = this->pimpl->dbFile.fileName();
 
-   bool success = this->pimpl->dbFile.copy(newDbFileName);
+   qDebug() << Q_FUNC_INFO << "Database backup from" << curDbFileName << "to" << newDbFileName;
 
-   qDebug() << QString("Database backup to \"%1\" %2").arg(newDbFileName, success ? "succeeded" : "failed");
+   //
+   // In earlier versions of the code, we just used the copy() member function of QFile.  When this works it is fine,
+   // but when there is an error, the diagnostics are not always very helpful.  Eg getting QFileDevice::CopyError back
+   // from the error() member function doesn't really tell us why the file could not be copied.
+   //
+   // Using the Filesystem library from the C++ standard library gives us better (albeit not perfect) diagnostics when
+   // things go wrong.
+   //
+   // The std::filesystem functions typically come in two versions: one using an error code and one throwing an
+   // exception.  Since we're going to abort on the first error, the exception-throwing versions make the code a bit
+   // simpler.  The `operation` variable keeps track of what we were doing when the exception occurred so we can give a
+   // clue about what caused the error.
+   //
+   this->pimpl->dbFile.close();
+   char const * operation = "Allocate";
+   try {
+      std::filesystem::path source{curDbFileName.toStdString()};
+      std::filesystem::path target{newDbFileName.toStdString()};
+      // Note that std::filesystem::canonical needs its parameter to exist, whereas std::filesystem::weakly_canonical
+      // does not.
+      source = std::filesystem::canonical(source);
+      target = std::filesystem::weakly_canonical(target);
+      operation = "See if target already exists";
+      if (std::filesystem::exists(target)) {
+         // AFAICT std::filesystem::copy should overwrite its target if it exists, but it's helpful for diagnostics to
+         // pull that case out as a separate step.
+         operation = "Remove existing target";
+         qInfo() <<
+            Q_FUNC_INFO << "Removing existing file" << newDbFileName << "before copying" << curDbFileName;
+         std::filesystem::remove(target);
+      }
+      operation = "Copy";
+      std::filesystem::copy(source, target);
+   } catch (std::filesystem::filesystem_error & fsError) {
+      std::error_code errorCode = fsError.code();
+      qWarning() <<
+         Q_FUNC_INFO << "Error backing up database file " << curDbFileName << "to" << newDbFileName << ":" <<
+         operation << "failed with" << errorCode << ".  Error message:" << fsError.what();
+      return false;
+   } catch (std::exception & exception) {
+      // Most probably this would be std::bad_alloc, in which case we'd probably even have difficulty logging, but we
+      // might as well try!
+      qCritical() <<
+         Q_FUNC_INFO << "Unexpected error backing up database file " << curDbFileName << "to" << newDbFileName << ":" <<
+         operation << "failed:" << exception.what();
+      return false;
+   }
 
-   return success;
+   return true;
 }
 
 bool Database::backupToDir(QString dir, QString filename) {
@@ -1153,9 +1274,9 @@ S & operator<<(S & stream, Database::DbType const dbType) {
 template QDebug &      operator<<(QDebug &      stream, Database::DbType const dbType);
 template QTextStream & operator<<(QTextStream & stream, Database::DbType const dbType);
 
-//======================================================================================================================
+//╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 //====================================== Start of Functions in Helper Namespace ========================================
-//======================================================================================================================
+//╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 char const * DatabaseHelper::getNameFromDbTypeName(Database::DbType whichDb) {
    return getDbNativeName(displayableDbType, whichDb);
 }

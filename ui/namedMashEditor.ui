@@ -13,9 +13,6 @@
   <property name="windowTitle">
    <string>Named Mash Editor</string>
   </property>
-  <property name="configSection" stdset="0">
-   <string notr="true">namedMashEditor</string>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout_6">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_mashs">
@@ -275,9 +272,6 @@
         <widget class="QGroupBox" name="groupBox_2">
          <property name="title">
           <string>Tun</string>
-         </property>
-         <property name="configSection" stdset="0">
-          <string notr="true">namedMashEditor</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <property name="spacing">
@@ -611,7 +605,7 @@
   <customwidget>
    <class>CustomComboBox</class>
    <extends>QComboBox</extends>
-   <header>CustomComboBox.h</header>
+   <header>widgets/CustomComboBox.h</header>
   </customwidget>
  </customwidgets>
  <resources>

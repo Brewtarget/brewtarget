@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/beerjson/beerjson/master/json/packaging.json",
+  "type": "object",
+  "additionalProperties": false,
+  "definitions": {
+    "PackagingProcedureType": {
+      "type": "object",
+      "description": "Describes the procedure for packaging your beverage.",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "packaged_volume": {
+          "$ref": "measureable_units.json#/definitions/VolumeType"
+        },
+        "description": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        },
+        "packaging_vessels": {
+          "type": "array",
+          "items": {
+            "$ref": "packaging_vessel.json#/definitions/PackagingVesselType"
+          }
+        }
+      },
+      "required": [
+        "name"
+      ]
+    }
+  }
+}

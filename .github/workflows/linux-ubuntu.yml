@@ -1,5 +1,5 @@
-#
-# .github/workflows/linux-ubuntu.yml is part of Brewtarget, and is copyright the following authors 2021-2023:
+#-----------------------------------------------------------------------------------------------------------------------
+# .github/workflows/linux-ubuntu.yml is part of Brewtarget, and is copyright the following authors 2021-2024:
 #   • Artem Martynov <martynov-a@polyplastic.by>
 #   • Chris Speck <cgspeck@gmail.com>
 #   • Mattias Måhl <mattias@kejsarsten.com>
@@ -16,7 +16,7 @@
 #
 # You should have received a copy of the GNU General Public License along with this program.  If not, see
 # <http://www.gnu.org/licenses/>.
-#
+#-----------------------------------------------------------------------------------------------------------------------
 name: Linux
 
 on:
@@ -43,7 +43,7 @@ jobs:
         # LTS release and the update of ubuntu-latest (eg in October 2022, it was still Ubuntu 20.04 rather than 22.04).
         # So we explicitly specify here which versions we want to build on.
         #
-        os: [ubuntu-20.04, ubuntu-22.04]
+        os: [ubuntu-22.04, ubuntu-24.04]
     steps:
       - uses: actions/checkout@v3
         with:
@@ -87,27 +87,12 @@ jobs:
             -DNO_MESSING_WITH_FLAGS=ON \
             $GITHUB_WORKSPACE
 
-      - name: Build (with CMake)
-        working-directory: ${{github.workspace}}/build
-        shell: bash
-        run: |
-          make
-
       - name: Build (with Meson)
         working-directory: ${{github.workspace}}/mbuild
         shell: bash
         run: |
           pwd
           meson compile
-
-      - name: Test (via CMake)
-        working-directory: ${{github.workspace}}/build
-        shell: bash
-        env:
-          CTEST_OUTPUT_ON_FAILURE: TRUE
-          QT_QPA_PLATFORM: minimal
-        run: |
-          make test
 
       # The 'export QT_DEBUG_PLUGINS=1' give us diagnostics in the event that there are problems initialising QT
       # The 'export QT_QPA_PLATFORM=offscreen' stops Qt's xcb sub-module trying to connect to a non-existent display
@@ -120,6 +105,21 @@ jobs:
           export QT_QPA_PLATFORM=offscreen
           meson test
 
+      - name: Build (with CMake)
+        working-directory: ${{github.workspace}}/build
+        shell: bash
+        run: |
+          make
+
+      - name: Test (via CMake)
+        working-directory: ${{github.workspace}}/build
+        shell: bash
+        env:
+          CTEST_OUTPUT_ON_FAILURE: TRUE
+          QT_QPA_PLATFORM: minimal
+        run: |
+          make test
+
       # Note that, although we continue to support CMake for local builds and installs, we no longer support packaging
       # with CPack/CMake.  The bt build script packaging gives us better control over the packaging process.
       - name: Package
@@ -131,7 +131,7 @@ jobs:
 
       - name: Upload Linux Packages (Installers)
         if: ${{ success() }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: brewtarget-${{matrix.os}}
           path: |
@@ -145,7 +145,7 @@ jobs:
 
       - name: Recover Debris Artifacts (CMake)
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: build-results-${{matrix.os}}
           path: build
@@ -153,7 +153,7 @@ jobs:
 
       - name: Recover Debris Artifacts (Meson)
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: mbuild-results-${{matrix.os}}
           path: mbuild

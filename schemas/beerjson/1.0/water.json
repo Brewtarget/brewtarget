@@ -1,0 +1,100 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/beerjson/beerjson/master/json/water.json",
+  "type": "object",
+  "additionalProperties": false,
+  "definitions": {
+    "WaterBase": {
+      "type": "object",
+      "description": "WaterBase provides unique properties to identify individual records of  brewing water.",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "producer": {
+          "type": "string"
+        },
+        "calcium": {
+          "$ref": "measureable_units.json#/definitions/ConcentrationType"
+        },
+        "bicarbonate": {
+          "$ref": "measureable_units.json#/definitions/ConcentrationType"
+        },
+        "carbonate": {
+          "$ref": "measureable_units.json#/definitions/ConcentrationType"
+        },
+        "potassium": {
+          "$ref": "measureable_units.json#/definitions/ConcentrationType"
+        },
+        "iron": {
+          "$ref": "measureable_units.json#/definitions/ConcentrationType"
+        },
+        "nitrate": {
+          "$ref": "measureable_units.json#/definitions/ConcentrationType"
+        },
+        "nitrite": {
+          "$ref": "measureable_units.json#/definitions/ConcentrationType"
+        },
+        "flouride": {
+          "$ref": "measureable_units.json#/definitions/ConcentrationType"
+        },
+        "sulfate": {
+          "$ref": "measureable_units.json#/definitions/ConcentrationType"
+        },
+        "chloride": {
+          "$ref": "measureable_units.json#/definitions/ConcentrationType"
+        },
+        "sodium": {
+          "$ref": "measureable_units.json#/definitions/ConcentrationType"
+        },
+        "magnesium": {
+          "$ref": "measureable_units.json#/definitions/ConcentrationType"
+        }
+      },
+      "required": [
+        "name",
+        "calcium",
+        "bicarbonate",
+        "sulfate",
+        "chloride",
+        "sodium",
+        "magnesium"
+      ]
+    },
+    "WaterType": {
+      "type": "object",
+      "description": "WaterType collects the attributes of a brewing water to store as record information",
+      "allOf": [
+        {
+          "$ref": "#/definitions/WaterBase"
+        },
+        {
+          "properties": {
+            "pH": {
+              "type": "number"
+            },
+            "notes": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "WaterAdditionType": {
+      "type": "object",
+      "description": "WaterAdditionType collects the attributes of each water addition for use in a recipe",
+      "allOf": [
+        {
+          "$ref": "#/definitions/WaterBase"
+        },
+        {
+          "properties": {
+            "amount": {
+              "$ref": "measureable_units.json#/definitions/VolumeType"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

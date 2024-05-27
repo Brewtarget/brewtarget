@@ -1,23 +1,23 @@
-/*
- * RefractoDialog.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2023
- * - Eric Tamme <etamme@gmail.com>
- * - Matt Young <mfsy@yahoo.com>
- * - Philip Greggory Lee <rocketman768@gmail.com>
+/*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ * RefractoDialog.cpp is part of Brewtarget, and is copyright the following authors 2009-2023:
+ *   • Brian Rower <brian.rower@gmail.com>
+ *   • Eric Tamme <etamme@gmail.com>
+ *   • Matt Young <mfsy@yahoo.com>
+ *   • Mik Firestone <mikfire@gmail.com>
+ *   • Philip Greggory Lee <rocketman768@gmail.com>
+ *   • Théophane Martin <theophane.m@gmail.com>
  *
- * Brewtarget is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * Brewtarget is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "RefractoDialog.h"
 
 #include <cmath>
@@ -75,10 +75,10 @@ void RefractoDialog::calculate() {
 
    if (!haveOG && haveOP) {
       inputOG = Algorithms::PlatoToSG_20C20C(originalPlato);
-      this->lineEdit_inputOG->setAmount(inputOG);
+      this->lineEdit_inputOG->setQuantity(inputOG);
    } else if (!haveOP && haveOG) {
       originalPlato = Algorithms::SG_20C20C_toPlato(inputOG);
-      this->lineEdit_op->setAmount(inputOG);
+      this->lineEdit_op->setQuantity(inputOG);
    } else if (!haveOP && !haveOG) {
       qDebug() << Q_FUNC_INFO << "no plato or og";
       return; // Can't do much if we don't have OG or OP.
@@ -106,13 +106,13 @@ void RefractoDialog::calculate() {
       );
    }
 
-   this->lineEdit_og->setAmount(og);
-   this->lineEdit_sg->setAmount(sg);
+   this->lineEdit_og->setQuantity(og);
+   this->lineEdit_sg->setQuantity(sg);
    // Even if the real extract if display in Plato, it must be given in system unit.
    // Conversion is made by SmartLineEdit
-   this->lineEdit_re ->setAmount(Algorithms::PlatoToSG_20C20C(re));
-   this->lineEdit_abv->setAmount(abv);
-   this->lineEdit_abw->setAmount(abw);
+   this->lineEdit_re ->setQuantity(Algorithms::PlatoToSG_20C20C(re));
+   this->lineEdit_abv->setQuantity(abv);
+   this->lineEdit_abw->setQuantity(abw);
    return;
 }
 

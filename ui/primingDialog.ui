@@ -19,9 +19,6 @@
      <property name="title">
       <string>Input</string>
      </property>
-     <property name="configSection" stdset="0">
-      <string notr="true">primingCalculator</string>
-     </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
        <layout class="QFormLayout" name="formLayout">
@@ -165,9 +162,6 @@
     <widget class="QGroupBox" name="primingdialog">
      <property name="title">
       <string>Output</string>
-     </property>
-     <property name="configSection" stdset="0">
-      <string notr="true">primingCalculator</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>

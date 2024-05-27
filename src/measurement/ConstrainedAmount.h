@@ -1,4 +1,4 @@
-/*
+/*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
  * measurement/ConstrainedAmount.h is part of Brewtarget, and is copyright the following authors 2022-2023:
  *   • Matt Young <mfsy@yahoo.com>
  *
@@ -12,7 +12,7 @@
  *
  * You should have received a copy of the GNU General Public License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
- */
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #ifndef MEASUREMENT_CONSTRAINEDAMOUNT_H
 #define MEASUREMENT_CONSTRAINEDAMOUNT_H
 #pragma once
@@ -20,16 +20,17 @@
 #include <QDebug>
 
 #include "measurement/Amount.h"
+#include "measurement/PhysicalQuantity.h"
 #include "measurement/Unit.h"
 
 namespace Measurement {
    /**
-    * \brief A version of \c Measurement::Amount that is "constrained" to be hold units of one of the two specified
+    * \brief A version of \c Measurement::Amount that is "constrained" to be hold units of one of the specified
     *        physical quantities.  The constraint is not bullet-proof but you will get an assert (on a debug build) if
     *        you try to construct / assign / move it with a \c Measurement::Unit of the wrong
     *        \c Measurement::PhysicalQuantity
     */
-   template<PhysicalQuantity PQ1, PhysicalQuantity PQ2>
+   template<Measurement::PhysicalQuantityConstTypes PQT, PQT const pqt>
    class ConstrainedAmount : public Measurement::Amount {
    public:
       /**
@@ -37,7 +38,9 @@ namespace Measurement {
        *        Properties system.  The default-constructed type will be, as far as possible, an invalid amount (a
        *        negative quantity of PQ1).
        */
-      ConstrainedAmount() : Measurement::Amount{-999.999, Measurement::Unit::getCanonicalUnit(PQ1)} {
+      ConstrainedAmount() :
+         Measurement::Amount{-999.999,
+                             Measurement::Unit::getCanonicalUnit(Measurement::defaultPhysicalQuantity<PQT, pqt>())} {
          return;
       }
 
@@ -78,8 +81,8 @@ namespace Measurement {
       /**
        * \brief Returns \c true if the unit is of type \c PQ1, \c false otherwise
        */
-      bool isFirst() const {
-         return this->Measurement::Amount::m_unit->getPhysicalQuantity() == PQ1;
+      [[deprecated]] bool isFirst() const {
+         return this->Measurement::Amount::unit->getPhysicalQuantity() == Measurement::defaultPhysicalQuantity<PQT, pqt>();
       }
 
    private:
@@ -87,11 +90,17 @@ namespace Measurement {
        * \brief Checks the object is valid after a construction, assignment or move.  If not, logs an error and asserts.
        */
       void checkConstructAssignOrMoveOK(char const * const operation) {
-         auto const currentPhysicalQuantity = this->Measurement::Amount::m_unit->getPhysicalQuantity();
-         if (currentPhysicalQuantity != PQ1 && currentPhysicalQuantity != PQ2) {
+         if (!this->Measurement::Amount::unit) {
             qCritical() <<
-               Q_FUNC_INFO << "Trying to" << operation << "ConstrainedAmount<" << PQ1 << "," << PQ2 << "> with " <<
-               this->m_unit->name << "which is" << currentPhysicalQuantity;
+               Q_FUNC_INFO << "Trying to" << operation << "ConstrainedAmount<" << pqt << "> with null unit";
+            Q_ASSERT(false);
+            return;
+         }
+         auto const currentPhysicalQuantity = this->Measurement::Amount::unit->getPhysicalQuantity();
+         if (!Measurement::isValid<PQT, pqt>(currentPhysicalQuantity)) {
+            qCritical() <<
+               Q_FUNC_INFO << "Trying to" << operation << "ConstrainedAmount<" << pqt << "> with " <<
+               this->unit->name << "which is" << currentPhysicalQuantity;
             Q_ASSERT(false);
          }
          return;
@@ -99,30 +108,10 @@ namespace Measurement {
    };
 }
 
-using MassOrVolumeAmtBase = Measurement::ConstrainedAmount<Measurement::PhysicalQuantity::Mass,
-                                                           Measurement::PhysicalQuantity::Volume>;
-/**
- * \brief A version of \c Measurement::Amount that is "constrained" to be either a
- *        \c Measurement::PhysicalQuantity::Mass or a \c Measurement::PhysicalQuantity::Volume.
- */
-class MassOrVolumeAmt : public MassOrVolumeAmtBase {
-public:
-   using MassOrVolumeAmtBase::MassOrVolumeAmtBase;
-   bool isMass() const;
-};
+using MassOrVolumeAmt = Measurement::ConstrainedAmount<Measurement::ChoiceOfPhysicalQuantity const,
+                                                       Measurement::ChoiceOfPhysicalQuantity::Mass_Volume>;;
 
-using MassOrVolumeConcentrationAmtBase =
-   Measurement::ConstrainedAmount<Measurement::PhysicalQuantity::MassConcentration,
-                                  Measurement::PhysicalQuantity::VolumeConcentration>;
-/**
- * \brief A version of \c Measurement::Amount that is "constrained" to be either a
- *        \c Measurement::PhysicalQuantity::MassConcentration or a \c Measurement::PhysicalQuantity::VolumeConcentration.
- */
-class MassOrVolumeConcentrationAmt : public MassOrVolumeConcentrationAmtBase {
-public:
-   using MassOrVolumeConcentrationAmtBase::MassOrVolumeConcentrationAmtBase;
-   bool isMassConcentration() const;
-};
-
+using MassVolumeOrCountAmt = Measurement::ConstrainedAmount<Measurement::ChoiceOfPhysicalQuantity const,
+                                                            Measurement::ChoiceOfPhysicalQuantity::Mass_Volume_Count>;
 
 #endif

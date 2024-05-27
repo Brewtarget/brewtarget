@@ -259,7 +259,7 @@
    &lt;br&gt;&lt;br&gt;
    Or, would you like to improve a translation? Help us out and
   &lt;a href=&quot;https://github.com/Brewtarget/brewtarget/wiki/Translations&quot;&gt;
-  provide a translation&lt;/a&gt; so that your friends can use brewtarget!
+  provide a translation&lt;/a&gt; so that your friends can use Brewtarget!
 &lt;/qt&gt;</string>
            </property>
            <property name="wordWrap">
@@ -328,9 +328,6 @@
          </property>
          <property name="title">
           <string>Configuration</string>
-         </property>
-         <property name="configSection" stdset="0">
-          <string notr="true">optionsDialog</string>
          </property>
          <layout class="QGridLayout" name="gridLayout"/>
         </widget>
@@ -446,13 +443,6 @@
            </layout>
           </item>
          </layout>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QCheckBox" name="checkBox_enableLogging">
-         <property name="text">
-          <string>Enable logging</string>
-         </property>
         </widget>
        </item>
        <item row="4" column="0">

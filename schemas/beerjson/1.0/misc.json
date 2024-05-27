@@ -1,0 +1,118 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/beerjson/beerjson/master/json/misc.json",
+  "type": "object",
+  "definitions": {
+    "MiscellaneousBase": {
+      "type": "object",
+      "description": "MiscellaneousBase provides unique properties to identify individual records of ingredients that are neither hops, nor provide a contribution to the gravity of wort.",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "producer": {
+          "type": "string"
+        },
+        "product_id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "spice",
+            "fining",
+            "water agent",
+            "herb",
+            "flavor",
+            "wood",
+            "other"
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "type"
+      ]
+    },
+    "MiscellaneousType": {
+      "type": "object",
+      "description": "MiscellaneousType collects the attributes of an ingredient to store as record information.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/MiscellaneousBase"
+        },
+        {
+          "properties": {
+            "use_for": {
+              "description": "Used to describe the purpose of the miscellaneous ingredient, e.g. whirlfloc is used for clarity.",
+              "type": "string"
+            },
+            "notes": {
+              "type": "string"
+            },
+            "inventory": {
+              "$ref": "#/definitions/MiscellaneousInventoryType"
+            }
+          }
+        }
+      ]
+    },
+    "MiscellaneousAdditionType": {
+      "type": "object",
+      "description": "MiscellaneousAdditionType collects the attributes of each miscellaneous ingredient for use in a recipe.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/MiscellaneousBase"
+        },
+        {
+          "properties": {
+            "timing": {
+              "description": "The timing object fully describes the timing of an addition with options for basis on time, gravity, or pH at any process step.",
+              "$ref": "timing.json#/definitions/TimingType"
+            },
+            "amount": {
+              "oneOf": [
+                {
+                  "$ref": "measureable_units.json#/definitions/VolumeType"
+                },
+                {
+                  "$ref": "measureable_units.json#/definitions/MassType"
+                },
+                {
+                  "$ref": "measureable_units.json#/definitions/UnitType"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "required": [
+            "amount"
+          ]
+        }
+      ]
+    },
+    "MiscellaneousInventoryType": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "amount": {
+          "oneOf": [
+            {
+              "$ref": "measureable_units.json#/definitions/VolumeType"
+            },
+            {
+              "$ref": "measureable_units.json#/definitions/MassType"
+            },
+            {
+              "$ref": "measureable_units.json#/definitions/UnitType"
+            }
+          ]
+        }
+      },
+      "required": [
+        "amount"
+      ]
+    }
+  }
+}

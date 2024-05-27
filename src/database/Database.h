@@ -1,6 +1,5 @@
-/*
- * database/Database.h is part of Brewtarget, and is copyright the following
- * authors 2009-2021:
+/*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ * database/Database.h is part of Brewtarget, and is copyright the following authors 2009-2024:
  *   • Aidan Roberts <aidanr67@gmail.com>
  *   • A.J. Drobnich <aj.drobnich@gmail.com>
  *   • Brian Rower <brian.rower@gmail.com>
@@ -15,19 +14,17 @@
  *   • Philip Greggory Lee <rocketman768@gmail.com>
  *   • Samuel Östling <MrOstling@gmail.com>
  *
- * Brewtarget is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * Brewtarget is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #ifndef DATABASE_H
 #define DATABASE_H
 #pragma once
@@ -38,6 +35,9 @@
 #include <QDir>
 #include <QSqlDatabase>
 #include <QString>
+
+#include "config.h"
+#include "utils/NoCopy.h"
 
 class BtStringConst;
 
@@ -121,7 +121,7 @@ public:
    static char const * getDefaultBackupFileName();
 
    //! backs up database to chosen file
-   bool backupToFile(QString newDbFileName);
+   bool backupToFile(QString const & newDbFileName);
 
    //! backs up database to 'dir' in chosen directory
    bool backupToDir(QString dir, QString filename="");
@@ -132,10 +132,16 @@ public:
    static bool verifyDbConnection(Database::DbType testDb,
                                   QString const& hostname,
                                   int portnum = 5432,
-                                  QString const & schema="public",
-                                  QString const & database="brewtarget",
-                                  QString const & username="brewtarget",
-                                  QString const & password="brewtarget");
+                                  QString const & schema   = "public",
+                                  QString const & database = QString{CONFIG_APPLICATION_NAME_LC},
+                                  QString const & username = QString{CONFIG_APPLICATION_NAME_LC},
+                                  QString const & password = QString{CONFIG_APPLICATION_NAME_LC});
+
+   /**
+    * \brief This returns \c true if the \c Database object connected to the DB and was able to check the schema version
+    *        (and do any necessary upgrades to it).  It does \b not mean that we yet read any substantive data out of
+    *        the database, because that's done by the layer above us (\c ObjectStore, \c ObjectStoreTyped).
+    */
    bool loadSuccessful();
 
    //! \brief Figures out what databases we are copying to and from, opens what
@@ -223,16 +229,11 @@ private:
 
    //! Hidden constructor.
    Database(DbType dbType);
-   //! No copy constructor, as never want anyone, not even our friends, to make copies of a singleton.
-   Database(Database const&) = delete;
-   //! No assignment operator, as never want anyone, not even our friends, to make copies of a singleton.
-   Database& operator=(Database const&) = delete;
-   //! No move constructor.
-   Database(Database &&) = delete;
-   //! No move assignment.
-   Database& operator=(Database &&) = delete;
    //! Destructor hidden.
    ~Database();
+
+   // Insert all the usual boilerplate to prevent copy/assignment/move
+   NO_COPY_DECLARATIONS(Database)
 
    //! Load database from file.
    bool load();

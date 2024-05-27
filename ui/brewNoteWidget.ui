@@ -35,9 +35,6 @@
         <height>438</height>
        </rect>
       </property>
-      <property name="configSection" stdset="0">
-       <string notr="true">page_preboil</string>
-      </property>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -75,9 +72,6 @@
               <width>242</width>
               <height>349</height>
              </rect>
-            </property>
-            <property name="configSection" stdset="0">
-             <string notr="true">page_preboil</string>
             </property>
             <attribute name="label">
              <string>Preboil</string>
@@ -260,9 +254,6 @@
               <width>242</width>
               <height>349</height>
              </rect>
-            </property>
-            <property name="configSection" stdset="0">
-             <string notr="true">page_postboil</string>
             </property>
             <attribute name="label">
              <string>Postboil</string>
@@ -455,9 +446,6 @@
               <height>349</height>
              </rect>
             </property>
-            <property name="configSection" stdset="0">
-             <string notr="true">page_postferment</string>
-            </property>
             <attribute name="label">
              <string>Postferment</string>
             </attribute>
@@ -606,9 +594,6 @@
                </property>
                <property name="text">
                 <string>Projected OG</string>
-               </property>
-               <property name="configSection" stdset="0">
-                <string notr="true">page_preboil</string>
                </property>
               </widget>
              </item>

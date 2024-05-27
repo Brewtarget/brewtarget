@@ -1,29 +1,36 @@
-/*
- * Application.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2024
- * - A.J. Drobnich <aj.drobnich@gmail.com>
- * - Dan Cavanagh <dan@dancavanagh.com>
- * - Matt Young <mfsy@yahoo.com>
- * - Maxime Lavigne <duguigne@gmail.com>
- * - Mik Firestone <mikfire@gmail.com>
- * - Philip Greggory Lee <rocketman768@gmail.com>
- * - Rob Taylor <robtaylor@floopily.org>
- * - Ted Wright <unsure>
- * - Mattias Måhl <mattias@kejsarsten.com>
+/*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ * Application.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ *   • A.J. Drobnich <aj.drobnich@gmail.com>
+ *   • Brian Rower <brian.rower@gmail.com>
+ *   • Chris Pavetto <chrispavetto@gmail.com>
+ *   • Dan Cavanagh <dan@dancavanagh.com>
+ *   • Daniel Moreno <danielm5@users.noreply.github.com>
+ *   • Daniel Pettersson <pettson81@gmail.com>
+ *   • Greg Meess <Daedalus12@gmail.com>
+ *   • Mark de Wever <koraq@xs4all.nl>
+ *   • Mattias Måhl <mattias@kejsarsten.com>
+ *   • Matt Young <mfsy@yahoo.com>
+ *   • Maxime Lavigne <duguigne@gmail.com>
+ *   • Medic Momcilo <medicmomcilo@gmail.com>
+ *   • Mik Firestone <mikfire@gmail.com>
+ *   • Mikhail Gorbunov <mikhail@sirena2000.ru>
+ *   • Philip Greggory Lee <rocketman768@gmail.com>
+ *   • Rob Taylor <robtaylor@floopily.org>
+ *   • Scott Peshak <scott@peshak.net>
+ *   • Ted Wright <tedwright@users.sourceforge.net>
+ *   • Théophane Martin <theophane.m@gmail.com>
  *
- * Brewtarget is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * Brewtarget is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "Application.h"
 
 #include <iostream>
@@ -31,12 +38,12 @@
 
 #include <QDebug>
 #include <QDesktopServices>
+#include <QDirIterator>
 #include <QJsonObject>
 #include <QJsonParseError>
 #include <QMessageBox>
 #include <QObject>
 #include <QString>
-#include <QStandardPaths>
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QNetworkRequest>
@@ -51,10 +58,13 @@
 #include "measurement/ColorMethods.h"
 #include "measurement/IbuMethods.h"
 #include "measurement/Measurement.h"
+#include "model/BrewNote.h"
 #include "model/Equipment.h"
 #include "model/Fermentable.h"
+#include "model/Hop.h"
 #include "model/Instruction.h"
 #include "model/Mash.h"
+#include "model/Misc.h"
 #include "model/Salt.h"
 #include "model/Style.h"
 #include "model/Water.h"
@@ -77,9 +87,6 @@ namespace {
    void setCheckVersion(bool value) {
       checkVersion = value;
    }
-
-   //! \brief Where the user says the database files are
-   QDir userDataDir;
 
    /**
     * \brief Create a directory if it doesn't exist, popping a error dialog if creation fails
@@ -120,14 +127,14 @@ namespace {
       // dir is just as bad as a missing one.  So, instead, we'll display a little more dire warning.
       //
       // .:TBD:. Maybe we should terminate the app here as it's likely that there's some problem with the install and
-      //         users are going to hit other problems.
+      //         users are going to hit other problems, including the program crashing.
       //
       QDir resourceDir = Application::getResourceDir();
       bool resourceDirSuccess = resourceDir.exists();
       if (!resourceDirSuccess) {
          QString errMsg{
-            QObject::tr("Resource directory \"%1\" is missing.  The software might not operate correctly without this "
-                        "directory and its contents.").arg(resourceDir.path())
+            QObject::tr("Resource directory %1 is missing.  Without this directory and its contents, the software "
+                        "will not operate correctly and may terminate abruptly.").arg(resourceDir.absolutePath())
          };
          qCritical() << Q_FUNC_INFO << errMsg;
 
@@ -138,6 +145,25 @@ namespace {
                errMsg
             );
          }
+      } else {
+         qInfo() << Q_FUNC_INFO << "Resource directory" << resourceDir.absolutePath() << "exists";
+         QString directoryListing;
+         QTextStream dirListStream{&directoryListing};
+         QDirIterator ii(resourceDir.absolutePath(), QDirIterator::Subdirectories);
+         while (ii.hasNext()) {
+            // For the moment, the output format is a bit clunky, and we do not correctly skip over things we should
+            // omit such as the parent directory from the ".." link, or multiple visits to the current directory by the
+            // iterator.
+            auto fileName = ii.next();
+            if (fileName != "..") {
+               auto fileInfo = ii.fileInfo();
+               dirListStream <<
+                  "   " << fileInfo.absoluteFilePath() << "\t\t(" << fileInfo.permissions() << ") " << fileInfo.size() <<
+                  " bytes\n";
+            }
+
+         }
+         qDebug().noquote() << Q_FUNC_INFO << "Resource directory contents:" << '\n' << directoryListing;
       }
 
       return resourceDirSuccess &&
@@ -228,7 +254,8 @@ namespace {
                                     QMessageBox::Yes | QMessageBox::No,
                                     QMessageBox::Yes) == QMessageBox::Yes ) {
             // ...take them to the website.
-            QDesktopServices::openUrl(QUrl("https://github.com/Brewtarget/brewtarget/releases"));
+            static QString const releasesPage = QString{"%1/releases"}.arg(CONFIG_HOMEPAGE_URL);
+            QDesktopServices::openUrl(QUrl(releasesPage));
          } else  {
             // ... and the user does NOT want to download the new version...
             // ... and they want us to stop bothering them...
@@ -265,7 +292,8 @@ namespace {
       // Nobody else needs to access this QNetworkAccessManager object, but it needs to carry on existing after this
       // function returns (otherwise the HTTP GET request will get cancelled), hence why we make it static.
       static QNetworkAccessManager * manager = new QNetworkAccessManager();
-      QUrl url("https://api.github.com/repos/Brewtarget/brewtarget/releases/latest");
+      static QString const releasesLatest = QString{"https://api.github.com/repos/%1/%2/releases/latest"}.arg(CONFIG_APPLICATION_NAME_UC, CONFIG_APPLICATION_NAME_LC);
+      QUrl url(releasesLatest);
       responseToCheckForNewVersion = manager->get(QNetworkRequest(url));
       // Since Qt5, you can connect signals to simple functions (see https://wiki.qt.io/New_Signal_Slot_Syntax)
       QObject::connect(responseToCheckForNewVersion, &QNetworkReply::finished, mw, &finishCheckForNewVersion);
@@ -279,7 +307,7 @@ namespace {
     * \brief This is only called from \c Application::getResourceDir to initialise the variable it returns
     *
     * \param resourceDirVar The static local variable inside Application::getResourceDir that is normally not accessible
-    *        outside that function, and which needs to be initialised exactly once.
+    *                       outside that function, and which needs to be initialised exactly once.
     */
    void initResourceDir(QDir & resourceDirVar) {
       //
@@ -307,102 +335,53 @@ namespace {
       // people were doing their own compilation.   So, now, we do (2) for everything but use (3) as the back-up on
       // Linux in the (hopefully extremely rare) case that /proc is not available.
       //
-
-
+      // ADDITIONALLY, we need to handle the case of the brewtarget_tests application we build to run unit tests.  This
+      // lives in the mbuild (meson) or build (CMake) directory and needs to get its resources from the source tree
+      // (../data directory).
+      //
       QString path = QCoreApplication::applicationDirPath();
       if (!path.endsWith('/')) {
          path += "/";
       }
 
-#if defined(Q_OS_LINUX)
-      // === Linux ===
-      // We'll assume the return value from QCoreApplication::applicationDirPath is invalid if it does not end in /bin
-      // (because there's no way it would make sense for us to be in an sbin directory
-      if (path.endsWith("/bin/")) {
-         path += "../share/brewtarget/";
+      // Note that the Qt "application name" is not the same as the executable name on disk; it is what is set by the
+      // call to QCoreApplication::setApplicationName when the application is started.
+      QString applicationName = QCoreApplication::applicationName();
+      qInfo() << Q_FUNC_INFO << "Application name" << applicationName;
+      if (applicationName.endsWith("-test")) {
+         qInfo() << Q_FUNC_INFO << "Assuming this is Unit Testing executable and resources are in ../data directory";
+         path += "../data/";
       } else {
-         qWarning() <<
-            Q_FUNC_INFO << "Cannot determine application binary location (got" << path << ") so using compile-time "
-            "constant for resource dir:" << CONFIG_DATA_DIR;
-         path = QString(CONFIG_DATA_DIR);
-      }
+
+#if defined(Q_OS_LINUX)
+         // === Linux ===
+         // We'll assume the return value from QCoreApplication::applicationDirPath is invalid if it does not end in
+         // /bin (because there's no way it would make sense for us to be in an sbin directory
+         if (path.endsWith("/bin/")) {
+            path += QString{"../share/%1/"}.arg(CONFIG_APPLICATION_NAME_LC);
+         } else {
+            qWarning() <<
+               Q_FUNC_INFO << "Cannot determine application binary location (got" << path << ") so using compile-time "
+               "constant for resource dir:" << CONFIG_DATA_DIR;
+            path = QString(CONFIG_DATA_DIR);
+         }
 #elif defined(Q_OS_MACOS)
-      // === Mac ===
-      // We should be inside an app bundle.
-      path += "../Resources/";
+         // === Mac ===
+         // We should be inside an app bundle.
+         path += "../Resources/";
 #elif defined(Q_OS_WIN)
-      // === Windows ===
-      path += "../data/";
+         // === Windows ===
+         path += "../data/";
 #else
 #error "Unsupported OS"
 #endif
-
+      }
       resourceDirVar = QDir{path};
 
       qInfo() << Q_FUNC_INFO << "Determined resource directory is" << resourceDirVar.absolutePath();
       return;
    }
-}
 
-const QDir Application::getConfigDir() {
-#if defined(Q_OS_LINUX) || defined(Q_OS_MACOS) // Linux OS or Mac OS.
-   QDir dir;
-   QFileInfo fileInfo;
-
-   // First, try XDG_CONFIG_HOME.
-   // If that variable doesn't exist, create ~/.config
-   char* xdg_config_home = getenv("XDG_CONFIG_HOME");
-
-   if (xdg_config_home) {
-     qInfo() << QString("XDG_CONFIG_HOME directory is %1").arg(xdg_config_home);
-     dir.setPath(QString(xdg_config_home).append("/brewtarget"));
-   }
-   else {
-     // If XDG_CONFIG_HOME doesn't exist, config goes in ~/.config/brewtarget
-      qInfo() << QString("XDG_CONFIG_HOME not set.  HOME directory is %1").arg(QDir::homePath());
-     QString dirPath = QDir::homePath().append("/.config/brewtarget");
-     dir = QDir(dirPath);
-   }
-
-   return dir.absolutePath() + "/";
-
-#elif defined(Q_OS_WIN) // Windows OS.
-
-   QDir dir;
-   // This is the bin/ directory.
-   dir = QDir(QCoreApplication::applicationDirPath());
-   dir.cdUp();
-   // Now we should be in the base directory (i.e. Brewtarget-2.0.0/)
-
-   dir.cd("data");
-   return dir.absolutePath() + "/";
-
-#else
-# error "Unsupported OS"
-#endif
-
-}
-
-QDir Application::getUserDataDir() {
-   return userDataDir;
-}
-
-QDir Application::getDefaultUserDataDir() {
-#if defined(Q_OS_LINUX) || defined(Q_OS_MACOS) // Linux OS or Mac OS
-   return getConfigDir();
-#elif defined(Q_OS_WIN) // Windows OS.
-   // On Windows the Programs directory is normally not writable so we need to get the appData path from the environment instead.
-   userDataDir.setPath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
-   qDebug() << QString("userDataDir=%1").arg(userDataDir.path());
-   if (!userDataDir.exists()) {
-      qDebug() << QString("User data dir \"%1\" does not exist, trying to create").arg(userDataDir.path());
-      createDir(userDataDir);
-      qDebug() << "UserDatadit Created";
-   }
-   return userDataDir;
-#else
-# error "Unsupported OS"
-#endif
 }
 
 QDir Application::getResourceDir() {
@@ -419,47 +398,52 @@ QDir Application::getResourceDir() {
 }
 
 bool Application::initialize() {
-   // Need these for changed(QMetaProperty,QVariant) to be emitted across threads.
+   // Need these for changed(QMetaProperty, QVariant) to be emitted across threads.
    qRegisterMetaType<QMetaProperty>();
-   qRegisterMetaType<Equipment*>();
-   qRegisterMetaType<Mash*>();
-   qRegisterMetaType<Style*>();
-   qRegisterMetaType<Salt*>();
-   qRegisterMetaType< QList<BrewNote*> >();
-   qRegisterMetaType< QList<Hop*> >();
-   qRegisterMetaType< QList<Instruction*> >();
-   qRegisterMetaType< QList<Fermentable*> >();
-   qRegisterMetaType< QList<Misc*> >();
-   qRegisterMetaType< QList<Yeast*> >();
-   qRegisterMetaType< QList<Water*> >();
-   qRegisterMetaType< QList<Salt*> >();
+   qRegisterMetaType<Equipment *>();
+   qRegisterMetaType<Mash      *>();
+   qRegisterMetaType<Style     *>();
+   qRegisterMetaType<Salt      *>();
+   qRegisterMetaType<QList<BrewNote    *>>();
+   qRegisterMetaType<QList<Hop         *>>();
+   qRegisterMetaType<QList<Instruction *>>();
+   qRegisterMetaType<QList<Fermentable *>>();
+   qRegisterMetaType<QList<Misc        *>>();
+   qRegisterMetaType<QList<Yeast       *>>();
+   qRegisterMetaType<QList<Water       *>>();
+   qRegisterMetaType<QList<Salt        *>>();
 
    // Make sure all the necessary directories and files we need exist before starting.
    ensureDirectoriesExist();
 
-   readSystemOptions();
+   Application::readSystemOptions();
 
    Localization::loadTranslations(); // Do internationalization.
+
+   QLocale const & locale = Localization::getLocale();
+   qInfo() <<
+      "Locale:" << locale.name() << "(Decimal point:" << locale.decimalPoint() << "/ Thousands separator:" <<
+      locale.groupSeparator() << ")";
 
 #if defined(Q_OS_MACOS)
    qt_set_sequence_auto_mnemonic(true); // turns on Mac Keyboard shortcuts
 #endif
 
+   // Uncomment the following to list all the entries in our resource bundle.  This can be helpful at certain points in
+   // debugging, but is not normally needed.
+//   QDirIterator resource(":", QDirIterator::Subdirectories);
+//   while (resource.hasNext()) {
+//      qDebug() << "Resource:" << resource.next();
+//   }
+
    // Check if the database was successfully loaded before
    // loading the main window.
-   qDebug() << Q_FUNC_INFO << "Loading Database...";
+   qInfo() << Q_FUNC_INFO << "Loading Database...";
    return Database::instance().loadSuccessful();
 }
 
 void Application::cleanup() {
-   qDebug() << Q_FUNC_INFO << "Brewtarget is cleaning up.";
-
-//   if (responseToCheckForNewVersion) {
-//      qDebug() <<
-//         Q_FUNC_INFO << "Request to check for new version (" << responseToCheckForNewVersion->request().url() << ") "
-//         "running =" << responseToCheckForNewVersion->isRunning() << ", error =" << responseToCheckForNewVersion->error();
-//   }
-
+   qDebug() << Q_FUNC_INFO << CONFIG_APPLICATION_NAME_UC << "is cleaning up.";
    // Should I do qApp->removeTranslator() first?
    MainWindow::DeleteMainWindow();
 
@@ -482,8 +466,7 @@ int Application::run() {
    BtSplashScreen splashScreen;
    splashScreen.show();
    qApp->processEvents();
-   if( !initialize() )
-   {
+   if (!Application::initialize()) {
       cleanup();
       return 1;
    }

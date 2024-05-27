@@ -104,8 +104,18 @@
 #    meson dist
 # This will build a .tar.xz file and create a corresponding .tar.xz.sha256sum file for it.
 #
+# STEP 5 (OPTIONAL): Build code documentation
+# -------------------------------------------
+# To build Doxygen-generated HTML code documentation (from the comments in the source files) to the mbuild/doc
+# directory, use:
+#    meson compile doc
+# Then open the file mbuild/doc/html/index.html in a web browser.
 #
-# STEP 5 (OPTIONAL): Build distributable packages
+# NOTE that as, at 2023-08-05, there are quite a lot of things that Doxygen is unable to parse in the code, which means
+#      the generated documentation, whilst extensive, is missing quite a few classes (even though they have Doxygen
+#      comments).  It would be good to fix this, but I fear it is not trivial... :-/
+#
+# STEP 6 (OPTIONAL): Build distributable packages
 # -----------------------------------------------
 # To build binary packages:
 #    ../bt package             ⭐⭐⭐ This is the bit that is not yet working on all platforms ⭐⭐⭐
@@ -179,7 +189,7 @@
 #
 #
 project('brewtarget', 'cpp',
-        version: '3.0.11',
+        version: '4.0.0',
         license: 'GPL-3.0-or-later',
         meson_version: '>=0.60.0',
         default_options : ['cpp_std=c++20',
@@ -315,11 +325,16 @@ sharedLibraryPaths = []
 # Note that if you change the minimum Qt version, you need to make corresponding changes to the .github/workflows/*.yml
 # files so that GitHub uses the appropriate version of Qt for the automated builds.
 #
-# For the moment, max version we can have here is 5.9.5, because that's what Ubuntu 18.04 topped out at
+# 2024-05-19: Removed support for Ubuntu 20.04 because the latest version of Qt available in its packages is 5.12.8,
+#             which is no longer supported (and, amongst other things, has an old version of SQLite that does not
+#             support "DROP COLUMN").  Qt 5.15 is the long-term support version of Qt5.
+#
+# For the moment, max version we can have here is 5.15.3, because that's what Ubuntu 22.04 topped out at.  But note
+# that Meson will be happy with newer versions (5.15.13 on Windows & Mac).
 
 # Tell meson which Qt modules we need
 qtCommonDependencies = dependency('qt5',
-                                  version : '>=5.9.5',
+                                  version : '>=5.15.3',
                                   modules : ['Core',
                                              'Gui',          # Needed for QColor on Mac?
                                              'Multimedia',
@@ -333,9 +348,9 @@ qtCommonDependencies = dependency('qt5',
                                   static : true)
 # The Qt Gui module is only needed for the main program.  (We don't want the tests to try to load it or it could barf
 # in a GitHub action that does not have a display running.)
-qtMainExeDependencies = dependency('qt5', version : '>=5.9.5', modules: ['Gui'])
+qtMainExeDependencies = dependency('qt5', version : '>=5.15.3', modules: ['Gui'])
 # The Qt Test module is only needed for the unit tests
-qtTestRunnerDependencies = dependency('qt5', version : '>=5.9.5', modules: ['Test'])
+qtTestRunnerDependencies = dependency('qt5', version : '>=5.15.3', modules: ['Test'])
 
 #===================================================== Find Boost ======================================================
 # Boost is a collection of separate libraries, some, but not all, of which are header-only.  We only specify the Boost
@@ -509,7 +524,7 @@ sharedLibraryPaths += xalanLibPaths
 
 #==================================================== Other headers ====================================================
 # Other directories to search in for headers.  Meson will barf an error if any of these directories does not exist.
-includeDirs = include_directories('src', 'third-party/libbacktrace')
+includeDirs = include_directories('src', 'third-party/valijson/include', 'third-party/libbacktrace')
 
 
 #=======================================================================================================================
@@ -571,7 +586,9 @@ endif
 # not to use wildcard specification.  (This is common to many build systems.)
 #
 # You can recreate the body of this list by running the following from the bash prompt in the mbuild directory:
-#    find ../src -name '*.cpp' | grep -v 'src/unitTests/' | grep -v '/main.cpp$' | sed "s+^../+   \'+; s+$+\',+" | sort
+#    find ../src -name '*.cpp' | grep -v 'src/unitTests/' | grep -v '/main.cpp$' | sed "s+^../+   \'+; s+$+\',+" | LC_ALL=C sort
+#
+# (See https://stackoverflow.com/questions/68319427/bash-sort-command-do-not-treat-dots for why LC_ALL=C is needed!)
 #
 # The files() wrapper around the array ensures that all the files exist and means you don't have to worry as much about
 # subdirectories as you might otherwise -- see https://mesonbuild.com/Reference-manual_functions.html#files
@@ -583,7 +600,6 @@ commonSourceFiles = files([
    'src/AncestorDialog.cpp',
    'src/Application.cpp',
    'src/BeerColorWidget.cpp',
-   'src/boiltime.cpp',
    'src/BrewDayFormatter.cpp',
    'src/BrewDayScrollWidget.cpp',
    'src/BrewNoteWidget.cpp',
@@ -595,82 +611,28 @@ commonSourceFiles = files([
    'src/BtSplashScreen.cpp',
    'src/BtTabWidget.cpp',
    'src/BtTextEdit.cpp',
-   'src/BtTreeFilterProxyModel.cpp',
    'src/BtTreeItem.cpp',
    'src/BtTreeModel.cpp',
    'src/BtTreeView.cpp',
    'src/ConverterTool.cpp',
-   'src/CustomComboBox.cpp',
-   'src/database/BtSqlQuery.cpp',
-   'src/database/Database.cpp',
-   'src/database/DatabaseSchemaHelper.cpp',
-   'src/database/DbTransaction.cpp',
-   'src/database/ObjectStore.cpp',
-   'src/database/ObjectStoreTyped.cpp',
-   'src/EquipmentButton.cpp',
-   'src/EquipmentEditor.cpp',
-   'src/EquipmentListModel.cpp',
-   'src/FermentableDialog.cpp',
-   'src/FermentableEditor.cpp',
-   'src/FermentableSortFilterProxyModel.cpp',
    'src/HeatCalculations.cpp',
-   'src/HopDialog.cpp',
-   'src/HopEditor.cpp',
-   'src/HopSortFilterProxyModel.cpp',
+   'src/HelpDialog.cpp',
    'src/Html.cpp',
    'src/HydrometerTool.cpp',
    'src/IbuGuSlider.cpp',
+   'src/ImportExport.cpp',
    'src/InstructionWidget.cpp',
    'src/InventoryFormatter.cpp',
    'src/Localization.cpp',
    'src/Logging.cpp',
    'src/MainWindow.cpp',
-   'src/MashButton.cpp',
-   'src/MashComboBox.cpp',
    'src/MashDesigner.cpp',
-   'src/MashEditor.cpp',
-   'src/MashListModel.cpp',
-   'src/MashStepEditor.cpp',
-   'src/MashStepTableWidget.cpp',
    'src/MashWizard.cpp',
-   'src/matrix.cpp',
-   'src/measurement/Amount.cpp',
-   'src/measurement/ColorMethods.cpp',
-   'src/measurement/ConstrainedAmount.cpp',
-   'src/measurement/IbuMethods.cpp',
-   'src/measurement/Measurement.cpp',
-   'src/measurement/PhysicalQuantity.cpp',
-   'src/measurement/SucroseConversion.cpp',
-   'src/measurement/SystemOfMeasurement.cpp',
-   'src/measurement/Unit.cpp',
-   'src/measurement/UnitSystem.cpp',
-   'src/MiscDialog.cpp',
-   'src/MiscEditor.cpp',
-   'src/MiscSortFilterProxyModel.cpp',
-   'src/model/BrewNote.cpp',
-   'src/model/Equipment.cpp',
-   'src/model/Fermentable.cpp',
-   'src/model/Hop.cpp',
-   'src/model/Instruction.cpp',
-   'src/model/Inventory.cpp',
-   'src/model/Mash.cpp',
-   'src/model/MashStep.cpp',
-   'src/model/Misc.cpp',
-   'src/model/NamedEntity.cpp',
-   'src/model/NamedEntityWithInventory.cpp',
-   'src/model/NamedParameterBundle.cpp',
-   'src/model/Recipe.cpp',
-   'src/model/Salt.cpp',
-   'src/model/Style.cpp',
-   'src/model/Water.cpp',
-   'src/model/Yeast.cpp',
    'src/NamedEntitySortProxyModel.cpp',
-   'src/NamedMashEditor.cpp',
    'src/OgAdjuster.cpp',
    'src/OptionDialog.cpp',
    'src/PersistentSettings.cpp',
    'src/PitchDialog.cpp',
-   'src/PreInstruction.cpp',
    'src/PrimingDialog.cpp',
    'src/PrintAndPreviewDialog.cpp',
    'src/RadarChart.cpp',
@@ -679,58 +641,183 @@ commonSourceFiles = files([
    'src/RecipeFormatter.cpp',
    'src/RefractoDialog.cpp',
    'src/ScaleRecipeTool.cpp',
-   'src/SimpleUndoableUpdate.cpp',
    'src/StrikeWaterDialog.cpp',
-   'src/StyleButton.cpp',
-   'src/StyleEditor.cpp',
-   'src/StyleListModel.cpp',
    'src/StyleRangeWidget.cpp',
-   'src/StyleSortFilterProxyModel.cpp',
-   'src/tableModels/BtTableModel.cpp',
-   'src/tableModels/BtTableModelInventory.cpp',
-   'src/tableModels/FermentableTableModel.cpp',
-   'src/tableModels/HopTableModel.cpp',
-   'src/tableModels/MashStepTableModel.cpp',
-   'src/tableModels/MiscTableModel.cpp',
-   'src/tableModels/SaltTableModel.cpp',
-   'src/tableModels/WaterTableModel.cpp',
-   'src/tableModels/YeastTableModel.cpp',
    'src/TimerListDialog.cpp',
    'src/TimerMainDialog.cpp',
    'src/TimerWidget.cpp',
+   'src/WaterDialog.cpp',
+   'src/boiltime.cpp',
+   'src/buttons/EquipmentButton.cpp',
+   'src/buttons/BoilButton.cpp',
+   'src/buttons/FermentationButton.cpp',
+   'src/buttons/MashButton.cpp',
+   'src/buttons/RecipeAttributeButton.cpp',
+   'src/buttons/StyleButton.cpp',
+   'src/buttons/WaterButton.cpp',
+   'src/catalogs/EquipmentCatalog.cpp',
+   'src/catalogs/FermentableCatalog.cpp',
+   'src/catalogs/HopCatalog.cpp',
+   'src/catalogs/MiscCatalog.cpp',
+   'src/catalogs/StyleCatalog.cpp',
+   'src/catalogs/YeastCatalog.cpp',
+   'src/database/BtSqlQuery.cpp',
+   'src/database/Database.cpp',
+   'src/database/DatabaseSchemaHelper.cpp',
+   'src/database/DbTransaction.cpp',
+   'src/database/ObjectStore.cpp',
+   'src/database/ObjectStoreTyped.cpp',
+   'src/editors/BoilEditor.cpp',
+   'src/editors/BoilStepEditor.cpp',
+   'src/editors/EquipmentEditor.cpp',
+   'src/editors/FermentableEditor.cpp',
+   'src/editors/FermentationEditor.cpp',
+   'src/editors/FermentationStepEditor.cpp',
+   'src/editors/HopEditor.cpp',
+   'src/editors/MashEditor.cpp',
+   'src/editors/MashStepEditor.cpp',
+   'src/editors/MiscEditor.cpp',
+   'src/editors/NamedMashEditor.cpp',
+   'src/editors/StyleEditor.cpp',
+   'src/editors/WaterEditor.cpp',
+   'src/editors/YeastEditor.cpp',
+   'src/listModels/EquipmentListModel.cpp',
+   'src/listModels/FermentableListModel.cpp',
+   'src/listModels/HopListModel.cpp',
+   'src/listModels/MashListModel.cpp',
+   'src/listModels/MashStepListModel.cpp',
+   'src/listModels/MiscListModel.cpp',
+   'src/listModels/RecipeAdditionFermentableListModel.cpp',
+   'src/listModels/RecipeAdditionHopListModel.cpp',
+   'src/listModels/RecipeAdditionMiscListModel.cpp',
+   'src/listModels/RecipeAdditionYeastListModel.cpp',
+   'src/listModels/RecipeAdjustmentSaltListModel.cpp',
+   'src/listModels/SaltListModel.cpp',
+   'src/listModels/StyleListModel.cpp',
+   'src/listModels/WaterListModel.cpp',
+   'src/listModels/YeastListModel.cpp',
+   'src/measurement/Amount.cpp',
+   'src/measurement/ColorMethods.cpp',
+   'src/measurement/IbuMethods.cpp',
+   'src/measurement/Measurement.cpp',
+   'src/measurement/PhysicalQuantity.cpp',
+   'src/measurement/SucroseConversion.cpp',
+   'src/measurement/SystemOfMeasurement.cpp',
+   'src/measurement/Unit.cpp',
+   'src/measurement/UnitSystem.cpp',
+   'src/model/Boil.cpp',
+   'src/model/BoilStep.cpp',
+   'src/model/BrewNote.cpp',
+   'src/model/Equipment.cpp',
+   'src/model/Fermentable.cpp',
+   'src/model/Fermentation.cpp',
+   'src/model/FermentationStep.cpp',
+   'src/model/Hop.cpp',
+   'src/model/Ingredient.cpp',
+   'src/model/IngredientInRecipe.cpp',
+   'src/model/Instruction.cpp',
+   'src/model/Inventory.cpp',               # NB: No model/InventoryFermentable.cpp, model/InventoryHop.cpp
+   'src/model/Mash.cpp',
+   'src/model/MashStep.cpp',
+   'src/model/Misc.cpp',
+   'src/model/NamedEntity.cpp',
+   'src/model/NamedParameterBundle.cpp',
+   'src/model/OutlineableNamedEntity.cpp',
+   'src/model/OwnedByRecipe.cpp',
+   'src/model/Recipe.cpp',
+   'src/model/RecipeAddition.cpp',
+   'src/model/RecipeAdditionFermentable.cpp',
+   'src/model/RecipeAdditionHop.cpp',
+   'src/model/RecipeAdditionMisc.cpp',
+   'src/model/RecipeAdditionYeast.cpp',
+   'src/model/RecipeAdjustmentSalt.cpp',
+   'src/model/RecipeUseOfWater.cpp',
+   'src/model/Salt.cpp',
+   'src/model/Step.cpp',
+   'src/model/StepExtended.cpp',
+   'src/model/Style.cpp',
+   'src/model/Water.cpp',
+   'src/model/Yeast.cpp',
+   'src/serialization/SerializationRecord.cpp',
+   'src/serialization/json/BeerJson.cpp',
+   'src/serialization/json/JsonCoding.cpp',
+   'src/serialization/json/JsonMeasureableUnitsMapping.cpp',
+   'src/serialization/json/JsonRecord.cpp',
+   'src/serialization/json/JsonRecordDefinition.cpp',
+   'src/serialization/json/JsonSchema.cpp',
+   'src/serialization/json/JsonUtils.cpp',
+   'src/serialization/json/JsonXPath.cpp',
+   'src/serialization/xml/BeerXml.cpp',
+   'src/serialization/xml/BtDomErrorHandler.cpp',
+   'src/serialization/xml/XercesHelpers.cpp',
+   'src/serialization/xml/XmlCoding.cpp',
+   'src/serialization/xml/XmlMashRecord.cpp',
+   'src/serialization/xml/XmlMashStepRecord.cpp',
+   'src/serialization/xml/XmlRecipeRecord.cpp',
+   'src/serialization/xml/XmlRecord.cpp',
+   'src/serialization/xml/XmlRecordDefinition.cpp',
+   'src/sortFilterProxyModels/BtTreeFilterProxyModel.cpp',
+   'src/sortFilterProxyModels/EquipmentSortFilterProxyModel.cpp',
+   'src/sortFilterProxyModels/FermentableSortFilterProxyModel.cpp',
+   'src/sortFilterProxyModels/HopSortFilterProxyModel.cpp',
+   'src/sortFilterProxyModels/MiscSortFilterProxyModel.cpp',
+   'src/sortFilterProxyModels/RecipeAdditionFermentableSortFilterProxyModel.cpp',
+   'src/sortFilterProxyModels/RecipeAdditionHopSortFilterProxyModel.cpp',
+   'src/sortFilterProxyModels/RecipeAdditionMiscSortFilterProxyModel.cpp',
+   'src/sortFilterProxyModels/RecipeAdditionYeastSortFilterProxyModel.cpp',
+   'src/sortFilterProxyModels/StyleSortFilterProxyModel.cpp',
+   'src/sortFilterProxyModels/WaterSortFilterProxyModel.cpp',
+   'src/sortFilterProxyModels/YeastSortFilterProxyModel.cpp',
+   'src/tableModels/BoilStepTableModel.cpp',
+   'src/tableModels/BtTableModel.cpp',
+   'src/tableModels/BtTableModelInventory.cpp',
+   'src/tableModels/EquipmentTableModel.cpp',
+   'src/tableModels/FermentableTableModel.cpp',
+   'src/tableModels/FermentationStepTableModel.cpp',
+   'src/tableModels/HopTableModel.cpp',
+   'src/tableModels/MashStepTableModel.cpp',
+   'src/tableModels/MiscTableModel.cpp',
+   'src/tableModels/RecipeAdditionFermentableTableModel.cpp',
+   'src/tableModels/RecipeAdditionHopTableModel.cpp',
+   'src/tableModels/RecipeAdditionMiscTableModel.cpp',
+   'src/tableModels/RecipeAdditionYeastTableModel.cpp',
+   'src/tableModels/RecipeAdjustmentSaltTableModel.cpp',
+   'src/tableModels/SaltTableModel.cpp',
+   'src/tableModels/StyleTableModel.cpp',
+   'src/tableModels/WaterTableModel.cpp',
+   'src/tableModels/YeastTableModel.cpp',
+   'src/undoRedo/SimpleUndoableUpdate.cpp',
    'src/utils/BtException.cpp',
    'src/utils/BtStringConst.cpp',
    'src/utils/BtStringStream.cpp',
    'src/utils/EnumStringMapping.cpp',
+   'src/utils/FileSystemHelpers.cpp',
+   'src/utils/Fonts.cpp',
    'src/utils/ImportRecordCount.cpp',
+   'src/utils/MetaTypes.cpp',
+   'src/utils/OStreamWriterForQFile.cpp',
+   'src/utils/OptionalHelpers.cpp',
+   'src/utils/PropertyPath.cpp',
    'src/utils/TimerUtils.cpp',
    'src/utils/TypeLookup.cpp',
-   'src/WaterButton.cpp',
-   'src/WaterDialog.cpp',
-   'src/WaterEditor.cpp',
-   'src/WaterListModel.cpp',
-   'src/WaterSortFilterProxyModel.cpp',
-   'src/WaterTableWidget.cpp',
    'src/widgets/Animator.cpp',
+   'src/widgets/BtBoolComboBox.cpp',
+   'src/widgets/BtComboBox.cpp',
+   'src/widgets/BtOptionalDateEdit.cpp',
+   'src/widgets/CustomComboBox.cpp',
+   'src/widgets/InfoButton.cpp',
+   'src/widgets/InfoText.cpp',
+   'src/widgets/MashComboBox.cpp',
    'src/widgets/SelectionControl.cpp',
+   'src/widgets/SmartAmountSettings.cpp',
    'src/widgets/SmartAmounts.cpp',
+   'src/widgets/SmartCheckBox.cpp',
    'src/widgets/SmartDigitWidget.cpp',
    'src/widgets/SmartField.cpp',
    'src/widgets/SmartLabel.cpp',
    'src/widgets/SmartLineEdit.cpp',
    'src/widgets/ToggleSwitch.cpp',
    'src/widgets/UnitAndScalePopUpMenu.cpp',
-   'src/xml/BeerXml.cpp',
-   'src/xml/BtDomErrorHandler.cpp',
-   'src/xml/XercesHelpers.cpp',
-   'src/xml/XmlCoding.cpp',
-   'src/xml/XmlMashRecord.cpp',
-   'src/xml/XmlMashStepRecord.cpp',
-   'src/xml/XmlRecipeRecord.cpp',
-   'src/xml/XmlRecord.cpp',
-   'src/YeastDialog.cpp',
-   'src/YeastEditor.cpp',
-   'src/YeastSortFilterProxyModel.cpp',
 ])
 
 applicationMainSourceFile = files([
@@ -746,14 +833,15 @@ unitTestMainSourceFile = files([
 # headers in the project.  Also, note that there is a separate (trivial) list of MOC headers for the unit test runner.
 #
 # You can recreate the body of this list by running the following from the bash prompt in the mbuild directory:
-#    grep -rl Q_OBJECT ../src | grep -v Testing.h | sort | sed "s+^../src/+   \'src/+; s/$/\',/"
+#    grep -rl '^ *Q_OBJECT' ../src | grep -v Testing.h | LC_ALL=C sort | sed "s+^../src/+   \'src/+; s/$/\',/"
+#
+# (See https://stackoverflow.com/questions/68319427/bash-sort-command-do-not-treat-dots for why LC_ALL=C is needed!)
 #
 mocHeaders = files([
    'src/AboutDialog.h',
    'src/AlcoholTool.h',
    'src/AncestorDialog.h',
    'src/BeerColorWidget.h',
-   'src/boiltime.h',
    'src/BrewDayFormatter.h',
    'src/BrewDayScrollWidget.h',
    'src/BrewNoteWidget.h',
@@ -762,54 +850,17 @@ mocHeaders = files([
    'src/BtSplashScreen.h',
    'src/BtTabWidget.h',
    'src/BtTextEdit.h',
-   'src/BtTreeFilterProxyModel.h',
    'src/BtTreeModel.h',
    'src/BtTreeView.h',
    'src/ConverterTool.h',
-   'src/CustomComboBox.h',
-   'src/database/ObjectStore.h',
-   'src/EquipmentButton.h',
-   'src/EquipmentEditor.h',
-   'src/EquipmentListModel.h',
-   'src/FermentableDialog.h',
-   'src/FermentableEditor.h',
-   'src/FermentableSortFilterProxyModel.h',
-   'src/HopDialog.h',
-   'src/HopEditor.h',
-   'src/HopSortFilterProxyModel.h',
+   'src/HelpDialog.h',
    'src/HydrometerTool.h',
    'src/IbuGuSlider.h',
    'src/InstructionWidget.h',
    'src/MainWindow.h',
-   'src/MashButton.h',
-   'src/MashComboBox.h',
    'src/MashDesigner.h',
-   'src/MashEditor.h',
-   'src/MashListModel.h',
-   'src/MashStepEditor.h',
-   'src/MashStepTableWidget.h',
    'src/MashWizard.h',
-   'src/MiscDialog.h',
-   'src/MiscEditor.h',
-   'src/MiscSortFilterProxyModel.h',
-   'src/model/BrewNote.h',
-   'src/model/Equipment.h',
-   'src/model/Fermentable.h',
-   'src/model/Hop.h',
-   'src/model/Instruction.h',
-   'src/model/Inventory.h',
-   'src/model/Mash.h',
-   'src/model/MashStep.h',
-   'src/model/Misc.h',
-   'src/model/NamedEntity.h',
-   'src/model/NamedEntityWithInventory.h',
-   'src/model/Recipe.h',
-   'src/model/Salt.h',
-   'src/model/Style.h',
-   'src/model/Water.h',
-   'src/model/Yeast.h',
    'src/NamedEntitySortProxyModel.h',
-   'src/NamedMashEditor.h',
    'src/OgAdjuster.h',
    'src/OptionDialog.h',
    'src/PitchDialog.h',
@@ -820,39 +871,136 @@ mocHeaders = files([
    'src/RecipeFormatter.h',
    'src/RefractoDialog.h',
    'src/ScaleRecipeTool.h',
-   'src/SimpleUndoableUpdate.h',
    'src/StrikeWaterDialog.h',
-   'src/StyleButton.h',
-   'src/StyleEditor.h',
-   'src/StyleListModel.h',
    'src/StyleRangeWidget.h',
-   'src/StyleSortFilterProxyModel.h',
-   'src/tableModels/BtTableModel.h',
-   'src/tableModels/FermentableTableModel.h',
-   'src/tableModels/HopTableModel.h',
-   'src/tableModels/MashStepTableModel.h',
-   'src/tableModels/MiscTableModel.h',
-   'src/tableModels/SaltTableModel.h',
-   'src/tableModels/WaterTableModel.h',
-   'src/tableModels/YeastTableModel.h',
    'src/TimerListDialog.h',
    'src/TimerMainDialog.h',
    'src/TimerWidget.h',
-   'src/WaterButton.h',
    'src/WaterDialog.h',
-   'src/WaterEditor.h',
-   'src/WaterListModel.h',
-   'src/WaterSortFilterProxyModel.h',
-   'src/WaterTableWidget.h',
+   'src/boiltime.h',
+   'src/buttons/BoilButton.h',
+   'src/buttons/EquipmentButton.h',
+   'src/buttons/FermentationButton.h',
+   'src/buttons/MashButton.h',
+   'src/buttons/RecipeAttributeButton.h',
+   'src/buttons/StyleButton.h',
+   'src/buttons/WaterButton.h',
+   'src/catalogs/EquipmentCatalog.h',
+   'src/catalogs/FermentableCatalog.h',
+   'src/catalogs/HopCatalog.h',
+   'src/catalogs/MiscCatalog.h',
+   'src/catalogs/StyleCatalog.h',
+   'src/catalogs/YeastCatalog.h',
+   'src/database/ObjectStore.h',
+   'src/editors/BoilEditor.h',
+   'src/editors/BoilStepEditor.h',
+   'src/editors/EquipmentEditor.h',
+   'src/editors/FermentableEditor.h',
+   'src/editors/FermentationEditor.h',
+   'src/editors/FermentationStepEditor.h',
+   'src/editors/HopEditor.h',
+   'src/editors/MashEditor.h',
+   'src/editors/MashStepEditor.h',
+   'src/editors/MiscEditor.h',
+   'src/editors/NamedMashEditor.h',
+   'src/editors/StyleEditor.h',
+   'src/editors/WaterEditor.h',
+   'src/editors/YeastEditor.h',
+   'src/listModels/EquipmentListModel.h',
+   'src/listModels/FermentableListModel.h',
+   'src/listModels/HopListModel.h',
+   'src/listModels/MashListModel.h',
+   'src/listModels/MashStepListModel.h',
+   'src/listModels/MiscListModel.h',
+   'src/listModels/RecipeAdditionFermentableListModel.h',
+   'src/listModels/RecipeAdditionHopListModel.h',
+   'src/listModels/RecipeAdditionMiscListModel.h',
+   'src/listModels/RecipeAdditionYeastListModel.h',
+   'src/listModels/RecipeAdjustmentSaltListModel.h',
+   'src/listModels/SaltListModel.h',
+   'src/listModels/StyleListModel.h',
+   'src/listModels/WaterListModel.h',
+   'src/listModels/YeastListModel.h',
+   'src/model/Boil.h',
+   'src/model/BoilStep.h',
+   'src/model/BrewNote.h',
+   'src/model/Equipment.h',
+   'src/model/Fermentable.h',
+   'src/model/Fermentation.h',
+   'src/model/FermentationStep.h',
+   'src/model/Hop.h',
+   'src/model/Ingredient.h',
+   'src/model/IngredientInRecipe.h',
+   'src/model/Instruction.h',
+   'src/model/Inventory.h',
+   'src/model/InventoryFermentable.h',  # NB: Function definitions in model/Inventory.cpp
+   'src/model/InventoryHop.h',          # NB: Function definitions in model/Inventory.cpp
+   'src/model/InventoryMisc.h',         # NB: Function definitions in model/Inventory.cpp
+   'src/model/InventorySalt.h',         # NB: Function definitions in model/Inventory.cpp
+   'src/model/InventoryYeast.h',        # NB: Function definitions in model/Inventory.cpp
+   'src/model/Mash.h',
+   'src/model/MashStep.h',
+   'src/model/Misc.h',
+   'src/model/NamedEntity.h',
+   'src/model/OutlineableNamedEntity.h',
+   'src/model/OwnedByRecipe.h',
+   'src/model/Recipe.h',
+   'src/model/RecipeAddition.h',
+   'src/model/RecipeAdditionFermentable.h',
+   'src/model/RecipeAdditionHop.h',
+   'src/model/RecipeAdditionMisc.h',
+   'src/model/RecipeAdditionYeast.h',
+   'src/model/RecipeAdjustmentSalt.h',
+   'src/model/RecipeUseOfWater.h',
+   'src/model/Salt.h',
+   'src/model/Step.h',
+   'src/model/StepExtended.h',
+   'src/model/Style.h',
+   'src/model/Water.h',
+   'src/model/Yeast.h',
+   'src/sortFilterProxyModels/BtTreeFilterProxyModel.h',
+   'src/sortFilterProxyModels/EquipmentSortFilterProxyModel.h',
+   'src/sortFilterProxyModels/FermentableSortFilterProxyModel.h',
+   'src/sortFilterProxyModels/HopSortFilterProxyModel.h',
+   'src/sortFilterProxyModels/MiscSortFilterProxyModel.h',
+   'src/sortFilterProxyModels/RecipeAdditionFermentableSortFilterProxyModel.h',
+   'src/sortFilterProxyModels/RecipeAdditionHopSortFilterProxyModel.h',
+   'src/sortFilterProxyModels/RecipeAdditionMiscSortFilterProxyModel.h',
+   'src/sortFilterProxyModels/RecipeAdditionYeastSortFilterProxyModel.h',
+   'src/sortFilterProxyModels/StyleSortFilterProxyModel.h',
+   'src/sortFilterProxyModels/WaterSortFilterProxyModel.h',
+   'src/sortFilterProxyModels/YeastSortFilterProxyModel.h',
+   'src/tableModels/BoilStepTableModel.h',
+   'src/tableModels/BtTableModel.h',
+   'src/tableModels/EquipmentTableModel.h',
+   'src/tableModels/FermentableTableModel.h',
+   'src/tableModels/FermentationStepTableModel.h',
+   'src/tableModels/HopTableModel.h',
+   'src/tableModels/MashStepTableModel.h',
+   'src/tableModels/MiscTableModel.h',
+   'src/tableModels/RecipeAdditionFermentableTableModel.h',
+   'src/tableModels/RecipeAdditionHopTableModel.h',
+   'src/tableModels/RecipeAdditionMiscTableModel.h',
+   'src/tableModels/RecipeAdditionYeastTableModel.h',
+   'src/tableModels/RecipeAdjustmentSaltTableModel.h',
+   'src/tableModels/SaltTableModel.h',
+   'src/tableModels/StyleTableModel.h',
+   'src/tableModels/WaterTableModel.h',
+   'src/tableModels/YeastTableModel.h',
    'src/widgets/Animator.h',
+   'src/widgets/BtBoolComboBox.h',
+   'src/widgets/BtComboBox.h',
+   'src/widgets/BtOptionalDateEdit.h',
+   'src/widgets/CustomComboBox.h',
+   'src/widgets/InfoButton.h',
+   'src/widgets/InfoText.h',
    'src/widgets/SelectionControl.h',
+   'src/widgets/SmartCheckBox.h',
    'src/widgets/SmartDigitWidget.h',
    'src/widgets/SmartLabel.h',
    'src/widgets/SmartLineEdit.h',
    'src/widgets/ToggleSwitch.h',
-   'src/YeastDialog.h',
-   'src/YeastEditor.h',
-   'src/YeastSortFilterProxyModel.h',
+
 ])
 
 unitTestMocHeaders = files([
@@ -867,11 +1015,15 @@ unitTestMocHeaders = files([
 #
 uiFiles = files([
    'ui/ancestorDialog.ui',
+   'ui/boilEditor.ui',
+   'ui/boilStepEditor.ui',
    'ui/brewDayScrollWidget.ui',
    'ui/brewNoteWidget.ui',
    'ui/BtPrintAndPreview.ui',
    'ui/equipmentEditor.ui',
    'ui/fermentableEditor.ui',
+   'ui/fermentationEditor.ui',
+   'ui/fermentationStepEditor.ui',
    'ui/hopEditor.ui',
    'ui/instructionWidget.ui',
    'ui/mainWindow.ui',
@@ -936,7 +1088,7 @@ translationSourceFiles = files([
 # case handling below.
 
 filesToInstall_docs = files([
-  'README.markdown'
+  'README.md'
 ])
 
 filesToInstall_data = files([
@@ -1184,8 +1336,9 @@ exportedVariables = {
    # Installers often want the name of the organisation supplying the product, so we need something to put there
    'CONFIG_ORGANIZATION_NAME' : 'The ' + capitalisedProjectName + ' Team',
 
-   # Similarly, installers often want a URL link
+   # Similarly, installers often want a URL link.  We also use this in the program, to tell users where to get support.
    'CONFIG_HOMEPAGE_URL' : 'https://github.com/' + capitalisedProjectName + '/' + projectName,
+   'CONFIG_ORGANIZATION_DOMAIN' : 'brewtarget.com',
 
    #
    # On Windows and Mac, the external packaging step (managed by the `bt` build tool script) needs to know about all the
@@ -1196,6 +1349,9 @@ exportedVariables = {
    # strictly correct when the list is empty, but we hereby assert that it never will be, so it doesn't matter.
    #
    'CONFIG_SHARED_LIBRARY_PATHS' : '["' + '", "'.join(sharedLibraryPaths) + '"]',
+
+   # This is used by the Doxygen configuration file (see docs/Doxyfile.meson.in)
+   'CONFIG_BUILD_DIR' : meson.project_build_root(),
 
 }
 
@@ -1510,5 +1666,28 @@ test('Test NamedParameterBundle',            testRunner, args : ['testNamedParam
 test('Test number display and parsing',      testRunner, args : ['testNumberDisplayAndParsing'])
 test('Test algorithms',                      testRunner, args : ['testAlgorithms'])
 test('Test type lookups',                    testRunner, args : ['testTypeLookups'])
+test('Test inventory',                       testRunner, args : ['testInventory'])
 # Need a bit longer than the default 30 second timeout for the log rotation test on some platforms
 test('Test log rotation',                    testRunner, args : ['testLogRotation'], timeout : 60)
+
+#===
+
+
+doxygen = find_program('doxygen', required : false)
+if not doxygen.found()
+   warning('Doxygen not found - continuing without Doxygen support')
+else
+##   src_doxygen = files(
+##      # source files
+##      join_paths(meson.source_root(), 'src'),
+##   )
+   doxyfile = configure_file(input : 'doc/Doxyfile.meson.in',
+                             output : 'Doxyfile',
+                             configuration : exportedVariables,
+                             install : false)
+   custom_target('doc',
+                 command: [doxygen, doxyfile],
+                 input: doxyfile,
+                 output: 'html',
+                 install: false)
+endif

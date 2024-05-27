@@ -1,5 +1,5 @@
-/*
- * config.in.h is part of Brewtarget, and is copyright the following authors 2009-2022:
+/*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ * config.in.h is part of Brewtarget, and is copyright the following authors 2009-2024:
  *   • Aidan Roberts <aidanr67@gmail.com>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Maxime Lavigne <duguigne@gmail.com>
@@ -15,7 +15,7 @@
  *
  * You should have received a copy of the GNU General Public License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
- */
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #ifndef CONFIG_IN
 #define CONFIG_IN
 #pragma once
@@ -36,6 +36,7 @@ constexpr char const * CONFIG_DATA_DIR            = "@CONFIG_DATA_DIR@";
 // (Here, UC means upper case first letter, LC means lower case first letter)
 constexpr char const * CONFIG_APPLICATION_NAME_UC = "@CONFIG_APPLICATION_NAME_UC@";
 constexpr char const * CONFIG_APPLICATION_NAME_LC = "@CONFIG_APPLICATION_NAME_LC@";
+constexpr char const * CONFIG_ORGANIZATION_DOMAIN = "@CONFIG_ORGANIZATION_DOMAIN@";
 
 // This one has to be a #define rather than a constexpr because it's used in ui/mainWindow.ui which is processed into
 // C++ code by the Qt Meta Object Compiler (MOC) and the MOC can't handle use of a constexpr const in a ui file.
@@ -46,5 +47,8 @@ constexpr char const * CONFIG_BUILD_SYSTEM        = "@CONFIG_BUILD_SYSTEM@";
 constexpr char const * CONFIG_RUN_SYSTEM          = "@CONFIG_RUN_SYSTEM@";
 constexpr char const * CONFIG_CXX_COMPILER_ID     = "@CONFIG_CXX_COMPILER_ID@";
 constexpr char const * CONFIG_BUILD_TIMESTAMP     = "@CONFIG_BUILD_TIMESTAMP@";
+
+// Support info
+constexpr char const * CONFIG_HOMEPAGE_URL        = "@CONFIG_HOMEPAGE_URL@";
 
 #endif

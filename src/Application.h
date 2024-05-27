@@ -1,26 +1,30 @@
-/*
- * Application.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2022
- * - Dan Cavanagh <dan@dancavanagh.com>
- * - Matt Young <mfsy@yahoo.com>
- * - Mik Firestone <mikfire@gmail.com>
- * - Philip Greggory Lee <rocketman768@gmail.com>
- * - Rob Taylor <robtaylor@floopily.org>
- * - Samuel Östling <MrOstling@gmail.com>
+/*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ * Application.h is part of Brewtarget, and is copyright the following authors 2009-2022:
+ *   • Dan Cavanagh <dan@dancavanagh.com>
+ *   • Daniel Pettersson <pettson81@gmail.com>
+ *   • Greg Meess <Daedalus12@gmail.com>
+ *   • Mark de Wever <koraq@xs4all.nl>
+ *   • Matt Young <mfsy@yahoo.com>
+ *   • Mattias Måhl <mattias@kejsarsten.com>
+ *   • Maxime Lavigne <duguigne@gmail.com>
+ *   • Mik Firestone <mikfire@gmail.com>
+ *   • Philip Greggory Lee <rocketman768@gmail.com>
+ *   • Rob Taylor <robtaylor@floopily.org>
+ *   • Samuel Östling <MrOstling@gmail.com>
+ *   • Scott Peshak <scott@peshak.net>
+ *   • Théophane Martin <theophane.m@gmail.com>
  *
- * Brewtarget is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * Brewtarget is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #ifndef APPLICATION_H
 #define APPLICATION_H
 #pragma once
@@ -42,16 +46,6 @@ Q_DECLARE_METATYPE( QMetaProperty )
  * \brief Figures out stuff from the system etc.
  */
 namespace Application {
-   //! \return the data directory
-   QDir getResourceDir();
-   //! \return the doc directory
-   QDir getDocDir();
-   //! \return the config directory
-   const QDir getConfigDir();
-   //! \return user-specified directory where the database files reside.
-   QDir getUserDataDir();
-   //! \return The System path for users applicationpath. on windows: c:\\users\\<USERNAME>\\AppData\\Roaming\\<APPNAME>
-   QDir getDefaultUserDataDir();
 
    /**
     * \return the resource directory where some files that ship with the application live (default DB, sounds,

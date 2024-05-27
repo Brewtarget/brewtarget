@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>fermentationStepEditor</class>
+ <widget class="QDialog" name="fermentationStepEditor">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>476</width>
+    <height>182</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Fermentation Step Editor</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="1">
+      <widget class="QLabel" name="label_name">
+       <property name="text">
+        <string>Name</string>
+       </property>
+       <property name="buddy">
+        <cstring>lineEdit_name</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="SmartLineEdit" name="lineEdit_name">
+       <property name="toolTip">
+        <string>Name</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="3">
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="2" column="1">
+      <widget class="SmartLabel" name="label_startTemp">
+       <property name="contextMenuPolicy">
+        <enum>Qt::CustomContextMenu</enum>
+       </property>
+       <property name="text">
+        <string>Target temp.</string>
+       </property>
+       <property name="buddy">
+        <cstring>lineEdit_startTemp</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="SmartLineEdit" name="lineEdit_startTemp">
+       <property name="toolTip">
+        <string>Target temp. of this step</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="4">
+      <widget class="SmartLabel" name="label_stepTime">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="contextMenuPolicy">
+        <enum>Qt::CustomContextMenu</enum>
+       </property>
+       <property name="text">
+        <string>Time</string>
+       </property>
+       <property name="buddy">
+        <cstring>lineEdit_stepTime</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="5">
+      <widget class="SmartLineEdit" name="lineEdit_stepTime">
+       <property name="toolTip">
+        <string>Time to conduct the step</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QLabel" name="label_freeRise">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Free rise</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="2">
+      <widget class="BtBoolComboBox" name="boolCombo_freeRise">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string>Free rise is used to indicate a fermentation step where the exothermic fermentation is allowed to raise the temperature without restriction</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="4">
+      <widget class="SmartLabel" name="label_rampTime">
+       <property name="contextMenuPolicy">
+        <enum>Qt::CustomContextMenu</enum>
+       </property>
+       <property name="text">
+        <string>Temp. lag time</string>
+       </property>
+       <property name="buddy">
+        <cstring>lineEdit_rampTime</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="5">
+      <widget class="SmartLineEdit" name="lineEdit_rampTime">
+       <property name="toolTip">
+        <string>Lag time</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="4">
+      <widget class="SmartLabel" name="label_endTemp">
+       <property name="contextMenuPolicy">
+        <enum>Qt::CustomContextMenu</enum>
+       </property>
+       <property name="text">
+        <string>End temp.</string>
+       </property>
+       <property name="buddy">
+        <cstring>lineEdit_endTemp</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="5">
+      <widget class="SmartLineEdit" name="lineEdit_endTemp">
+       <property name="toolTip">
+        <string>Final temp. of this step</string>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="1">
+      <widget class="SmartLabel" name="label_startGravity">
+       <property name="text">
+        <string>Start Gravity</string>
+       </property>
+       <property name="buddy">
+        <cstring>lineEdit_startGravity</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="2">
+      <widget class="SmartLineEdit" name="lineEdit_startGravity">
+      </widget>
+     </item>
+     <item row="8" column="4">
+      <widget class="SmartLabel" name="label_endGravity">
+       <property name="text">
+        <string>End Gravity</string>
+       </property>
+       <property name="buddy">
+        <cstring>lineEdit_endGravity</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="5">
+      <widget class="SmartLineEdit" name="lineEdit_endGravity">
+      </widget>
+     </item>
+     <item row="10" column="1">
+      <widget class="SmartLabel" name="label_startAcidity">
+       <property name="text">
+        <string>Start Acidity</string>
+       </property>
+       <property name="buddy">
+        <cstring>lineEdit_startAcidity</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="10" column="2">
+      <widget class="SmartLineEdit" name="lineEdit_startAcidity">
+      </widget>
+     </item>
+     <item row="10" column="4">
+      <widget class="SmartLabel" name="label_endAcidity">
+       <property name="text">
+        <string>End Acidity</string>
+       </property>
+       <property name="buddy">
+        <cstring>lineEdit_endAcidity</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="10" column="5">
+      <widget class="SmartLineEdit" name="lineEdit_endAcidity">
+      </widget>
+     </item>
+     <item row="12" column="1">
+      <widget class="QLabel" name="label_vessel">
+       <property name="text">
+        <string>Vessel</string>
+       </property>
+       <property name="buddy">
+        <cstring>lineEdit_vessel</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="12" column="2">
+      <widget class="SmartLineEdit" name="lineEdit_vessel">
+       <property name="toolTip">
+        <string>Vessel</string>
+       </property>
+      </widget>
+     </item>
+     <item row="14" column="1">
+      <widget class="QLabel" name="label_description">
+       <property name="toolTip">
+        <string>Optional description of this fermentation step</string>
+       </property>
+       <property name="text">
+        <string>Description</string>
+       </property>
+       <property name="buddy">
+        <cstring>textEdit_description</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="14" column="2" colspan="4">
+      <widget class="QTextEdit" name="textEdit_description">
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <property name="spacing">
+      <number>2</number>
+     </property>
+     <item>
+      <widget class="QPushButton" name="pushButton_new">
+       <property name="toolTip">
+        <string>New</string>
+       </property>
+       <property name="text">
+        <string>New</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../brewtarget.qrc">
+         <normaloff>:/images/smallPlus.svg</normaloff>:/images/smallPlus.svg</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_save">
+       <property name="toolTip">
+        <string>Save and close</string>
+       </property>
+       <property name="text">
+        <string>Save</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../brewtarget.qrc">
+         <normaloff>:/images/filesave.svg</normaloff>:/images/filesave.svg</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_cancel">
+       <property name="toolTip">
+        <string>Discard and close</string>
+       </property>
+       <property name="text">
+        <string>Cancel</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../brewtarget.qrc">
+         <normaloff>:/images/exit.svg</normaloff>:/images/exit.svg</iconset>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>BtComboBox</class>
+   <extends>QComboBox</extends>
+   <header>widgets/BtComboBox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>BtBoolComboBox</class>
+   <extends>QComboBox</extends>
+   <header>widgets/BtBoolComboBox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>InfoButton</class>
+   <extends>QPushButton</extends>
+   <header>widgets/InfoButton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>InfoText</class>
+   <extends>QLabel</extends>
+   <header>widgets/InfoText.h</header>
+  </customwidget>
+  <customwidget>
+   <class>SmartLabel</class>
+   <extends>QLabel</extends>
+   <header>widgets/SmartLabel.h</header>
+   <slots>
+    <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>SmartLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>widgets/SmartLineEdit.h</header>
+   <slots>
+    <slot>lineChanged(PreviousScaleInfo)</slot>
+   </slots>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+</ui>

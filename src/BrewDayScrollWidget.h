@@ -1,47 +1,41 @@
-/*
- * BrewDayScrollWidget.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2021
- * - Jeff Bailey <skydvr38@verizon.net>
- * - Matt Young <mfsy@yahoo.com>
- * - Mik Firestone <mikfire@gmail.com>
- * - Philip Greggory Lee <rocketman768@gmail.com>
+/*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ * BrewDayScrollWidget.h is part of Brewtarget, and is copyright the following authors 2009-2022:
+ *   • Jeff Bailey <skydvr38@verizon.net>
+ *   • Mark de Wever <koraq@xs4all.nl>
+ *   • Matt Young <mfsy@yahoo.com>
+ *   • Mik Firestone <mikfire@gmail.com>
+ *   • Philip Greggory Lee <rocketman768@gmail.com>
  *
- * Brewtarget is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * Brewtarget is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #ifndef BREWDAYSCROLLWIDGET_H
 #define BREWDAYSCROLLWIDGET_H
 #pragma once
 
 #include "ui_brewDayScrollWidget.h"
 
+
 #include <QFile>
-#include <QPrinter>
-#include <QSize>
-#include <QWidget>
-
-#include "model/Recipe.h"
-
-
-class BrewDayScrollWidget;
-
-#include "ui_brewDayScrollWidget.h"
-#include <QWidget>
-#include <QSize>
-#include <QTextBrowser>
-#include <QPrinter>
+#include <QList>
+#include <QMetaProperty>
+#include <QObject>
 #include <QPrintDialog>
-#include <QFile>
+#include <QPrinter>
+#include <QSize>
+#include <QString>
+#include <QTextBrowser>
+#include <QVariant>
+#include <QWidget>
+
 #include "model/Recipe.h"
 
 
@@ -57,6 +51,7 @@ public:
 
    BrewDayScrollWidget(QWidget* parent=nullptr);
    virtual ~BrewDayScrollWidget();
+
    //! \brief Sets the observed recipe.
    void setRecipe(Recipe* rec);
 
@@ -100,6 +95,7 @@ private:
    Recipe* recObs;
    QPrinter* printer;
    QTextBrowser* doc;
+
    //! Internal list of recipe instructions, always sorted by instruction number.
    QList<Instruction*> recIns;
 

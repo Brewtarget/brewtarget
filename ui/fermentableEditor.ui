@@ -10,11 +10,14 @@
     <height>348</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
   <property name="windowTitle">
    <string>Fermentable Editor</string>
-  </property>
-  <property name="configSection" stdset="0">
-   <string notr="true">fermentableEditor</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
@@ -33,16 +36,6 @@
        <string>Main</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout">
-       <item row="2" column="4">
-        <widget class="QCheckBox" name="checkBox_recommendMash">
-         <property name="toolTip">
-          <string>Recommend this be mashed</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
        <item row="0" column="0">
         <widget class="QLabel" name="label_name">
          <property name="toolTip">
@@ -56,18 +49,18 @@
          </property>
         </widget>
        </item>
-       <item row="8" column="1">
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
+       <item row="0" column="1">
+        <widget class="SmartLineEdit" name="lineEdit_name">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
          </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
+         <property name="toolTip">
+          <string>Name</string>
          </property>
-        </spacer>
+        </widget>
        </item>
        <item row="0" column="2">
         <spacer name="horizontalSpacer">
@@ -81,41 +74,6 @@
           </size>
          </property>
         </spacer>
-       </item>
-       <item row="2" column="1">
-        <widget class="QComboBox" name="comboBox_fermentableType">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>100</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="toolTip">
-          <string>Fermantable Type</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="3">
-        <widget class="QLabel" name="label_recommendMash">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Recommend Mash</string>
-         </property>
-         <property name="buddy">
-          <cstring>checkBox_recommendMash</cstring>
-         </property>
-        </widget>
        </item>
        <item row="0" column="3">
         <widget class="QLabel" name="label_addAfterBoil">
@@ -149,10 +107,10 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
-        <widget class="SmartLineEdit" name="lineEdit_name">
+       <item row="2" column="1">
+        <widget class="BtComboBox" name="comboBox_type">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -164,25 +122,12 @@
           </size>
          </property>
          <property name="toolTip">
-          <string>Name</string>
+          <string>Fermantable Type</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label_2">
-         <property name="toolTip">
-          <string>Required</string>
-         </property>
-         <property name="text">
-          <string>Type</string>
-         </property>
-         <property name="buddy">
-          <cstring>comboBox_fermentableType</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="3">
-        <widget class="QLabel" name="label_isMashed">
+       <item row="2" column="3">
+        <widget class="QLabel" name="label_recommendMash">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -190,55 +135,33 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>Is Mashed</string>
+          <string>Recommend Mash</string>
          </property>
          <property name="buddy">
-          <cstring>checkBox_isMashed</cstring>
+          <cstring>checkBox_recommendMash</cstring>
          </property>
         </widget>
        </item>
-       <item row="3" column="4">
-        <widget class="QCheckBox" name="checkBox_isMashed">
+       <item row="2" column="4">
+        <widget class="QCheckBox" name="checkBox_recommendMash">
          <property name="toolTip">
-          <string>Checked if it is present in mash</string>
+          <string>Recommend this be mashed</string>
          </property>
          <property name="text">
           <string/>
          </property>
         </widget>
        </item>
-       <item row="7" column="0">
-        <widget class="SmartLabel" name="label_inventory">
-         <property name="contextMenuPolicy">
-          <enum>Qt::CustomContextMenu</enum>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_fermentableType">
+         <property name="toolTip">
+          <string>Required</string>
          </property>
          <property name="text">
-          <string>Amount in Inventory</string>
-         </property>
-         <property name="wordWrap">
-          <bool>true</bool>
+          <string>Type</string>
          </property>
          <property name="buddy">
-          <cstring>lineEdit_inventory</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="1">
-        <widget class="SmartLineEdit" name="lineEdit_inventory">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>100</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="toolTip">
-          <string>Amount in inventory</string>
+          <cstring>comboBox_type</cstring>
          </property>
         </widget>
        </item>
@@ -277,105 +200,76 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="label_yield">
-         <property name="toolTip">
-          <string>Required</string>
-         </property>
-         <property name="text">
-          <string>Yield %</string>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit_yield</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="1">
-        <widget class="SmartLineEdit" name="lineEdit_yield">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>100</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="toolTip">
-          <string>Yield as compared to glucose</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="tab_extras">
-      <attribute name="title">
-       <string>Extras</string>
-      </attribute>
-      <layout class="QGridLayout" name="gridLayout_2">
-       <item row="2" column="1">
-        <widget class="SmartLineEdit" name="lineEdit_moisture">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>100</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="toolTip">
-          <string>Moisture percentage by mass</string>
-         </property>
-        </widget>
-       </item>
        <item row="3" column="3">
-        <widget class="QLabel" name="label_ibuGalPerLb">
+        <widget class="QLabel" name="label_isMashed">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="text">
-          <string>Bitterness (IBU*gal/lb)</string>
+          <string>Is Mashed</string>
          </property>
          <property name="buddy">
-          <cstring>lineEdit_ibuGalPerLb</cstring>
+          <cstring>checkBox_isMashed</cstring>
          </property>
         </widget>
        </item>
        <item row="3" column="4">
-        <widget class="SmartLineEdit" name="lineEdit_ibuGalPerLb">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>100</width>
-           <height>16777215</height>
-          </size>
-         </property>
+        <widget class="QCheckBox" name="checkBox_isMashed">
          <property name="toolTip">
-          <string>Bitterness of pre-hopped extracts</string>
+          <string>Checked if it is present in mash</string>
+         </property>
+         <property name="text">
+          <string/>
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label_moisture">
+       <item row="5" column="3">
+        <widget class="QLabel" name="label_fermentableGrainGroup">
+         <property name="toolTip">
+          <string>Required</string>
+         </property>
          <property name="text">
-          <string>Moisture (%)</string>
+          <string>GrainGroup</string>
          </property>
          <property name="buddy">
-          <cstring>lineEdit_moisture</cstring>
+          <cstring>comboBox_grainGroup</cstring>
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
-        <widget class="SmartLineEdit" name="lineEdit_origin">
+       <item row="5" column="4">
+        <widget class="BtComboBox" name="comboBox_grainGroup">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string>Fermantable Grain Group</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0">
+        <widget class="SmartLabel" name="label_inventory">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
+         <property name="text">
+          <string>Amount in Inventory</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_inventory</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="1">
+        <widget class="SmartLineEdit" name="lineEdit_inventory">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -389,11 +283,46 @@
           </size>
          </property>
          <property name="toolTip">
-          <string>Origin</string>
+          <string>Amount in inventory</string>
          </property>
         </widget>
        </item>
-       <item row="0" column="0">
+       <item row="6" column="3">
+        <widget class="QLabel" name="label_amountIsWeight">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string>Check it if the amount listed is in kg instead of L.</string>
+         </property>
+         <property name="text">
+          <string>Amount is weight?</string>
+         </property>
+         <property name="buddy">
+          <cstring>checkBox_amountIsWeight</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="4">
+        <widget class="SmartCheckBox" name="checkBox_amountIsWeight">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string>Checked if the given amount is weight instead of volume</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0">
         <widget class="QLabel" name="label_origin">
          <property name="text">
           <string>Origin</string>
@@ -403,7 +332,20 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="3">
+       <item row="7" column="1">
+        <widget class="SmartLineEdit" name="lineEdit_origin">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string>Origin</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="3">
         <widget class="QLabel" name="label_protein">
          <property name="text">
           <string>Protein (%)</string>
@@ -413,39 +355,89 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="0">
-        <widget class="SmartLabel" name="label_diastaticPower">
-         <property name="contextMenuPolicy">
-          <enum>Qt::CustomContextMenu</enum>
-         </property>
-         <property name="text">
-          <string>Diastatic power</string>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit_diastaticPower</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1">
-        <widget class="SmartLineEdit" name="lineEdit_diastaticPower">
+       <item row="7" column="4">
+        <widget class="SmartLineEdit" name="lineEdit_protein">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
-         <property name="maximumSize">
-          <size>
-           <width>100</width>
-           <height>16777215</height>
-          </size>
-         </property>
          <property name="toolTip">
-          <string>Diastatic power</string>
+          <string>Protein percentage by mass</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="3">
+       <item row="8" column="0">
+        <widget class="QLabel" name="label_supplier">
+         <property name="text">
+          <string>Supplier</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_supplier</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="1">
+        <widget class="SmartLineEdit" name="lineEdit_supplier">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string>Supplier</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="3">
+        <widget class="QLabel" name="label_maxInBatch">
+         <property name="text">
+          <string>Max In Batch (%)</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_maxInBatch</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="4">
+        <widget class="SmartLineEdit" name="lineEdit_maxInBatch">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string>Maximum recommended percentage of total grist</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="0">
+        <widget class="QLabel" name="label_moisture">
+         <property name="text">
+          <string>Moisture (%)</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_moisture</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="1">
+        <widget class="SmartLineEdit" name="lineEdit_moisture">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string>Moisture percentage by mass</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="3">
         <widget class="QLabel" name="label_coarseFineDiff">
          <property name="text">
           <string>Coarse/Fine Diff (%)</string>
@@ -458,54 +450,122 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_supplier">
+       <item row="9" column="4">
+        <widget class="SmartLineEdit" name="lineEdit_coarseFineDiff">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string>Yield difference between coarse and fine grind</string>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="0">
+        <widget class="SmartLabel" name="label_diastaticPower">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
          <property name="text">
-          <string>Supplier</string>
+          <string>Diastatic power</string>
          </property>
          <property name="buddy">
-          <cstring>lineEdit_supplier</cstring>
+          <cstring>lineEdit_diastaticPower</cstring>
          </property>
         </widget>
        </item>
-       <item row="1" column="1">
-        <widget class="SmartLineEdit" name="lineEdit_supplier">
+       <item row="10" column="1">
+        <widget class="SmartLineEdit" name="lineEdit_diastaticPower">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
-         <property name="maximumSize">
-          <size>
-           <width>100</width>
-           <height>16777215</height>
-          </size>
-         </property>
          <property name="toolTip">
-          <string>Supplier</string>
+          <string>Diastatic power</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="4">
-        <widget class="SmartLineEdit" name="lineEdit_maxInBatch">
+       <item row="10" column="3">
+        <widget class="QLabel" name="label_ibuGalPerLb">
+         <property name="text">
+          <string>Bitterness (IBU*gal/lb)</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_ibuGalPerLb</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="4">
+        <widget class="SmartLineEdit" name="lineEdit_ibuGalPerLb">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
-         <property name="maximumSize">
-          <size>
-           <width>100</width>
-           <height>16777215</height>
-          </size>
-         </property>
          <property name="toolTip">
-          <string>Maximum recommended percentage of total grist</string>
+          <string>Bitterness of pre-hopped extracts</string>
          </property>
         </widget>
        </item>
+       <item row="11" column="0">
+        <widget class="QLabel" name="label_producer">
+         <property name="text">
+          <string>Producer</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_producer</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="1">
+        <widget class="SmartLineEdit" name="lineEdit_producer">
+         <property name="toolTip">
+          <string>Producer</string>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="3">
+        <widget class="QLabel" name="label_productId">
+         <property name="text">
+          <string>Product ID</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_productId</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="4">
+        <widget class="SmartLineEdit" name="lineEdit_productId">
+         <property name="toolTip">
+          <string>Product ID</string>
+         </property>
+        </widget>
+       </item>
+       <item row="12" column="1">
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_extras">
+      <attribute name="title">
+       <string>Extras</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_2">
        <item row="0" column="2">
         <spacer name="horizontalSpacer_2">
          <property name="orientation">
@@ -519,55 +579,296 @@
          </property>
         </spacer>
        </item>
-       <item row="0" column="4">
-        <widget class="SmartLineEdit" name="lineEdit_protein">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_fineGrindYield_pct">
+         <property name="text">
+          <string>Extract Yield Dry Basis Fine Grind</string>
          </property>
-         <property name="maximumSize">
-          <size>
-           <width>100</width>
-           <height>16777215</height>
-          </size>
+         <property name="buddy">
+          <cstring>lineEdit_fineGrindYield_pct</cstring>
          </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="SmartLineEdit" name="lineEdit_fineGrindYield_pct">
          <property name="toolTip">
-          <string>Protein percentage by mass</string>
+          <string>Extract Yield Dry Basis Fine Grind (DBFG)</string>
          </property>
         </widget>
        </item>
        <item row="1" column="3">
-        <widget class="QLabel" name="label_maxInBatch">
+        <widget class="QLabel" name="label_coarseGrindYield_pct">
          <property name="text">
-          <string>Max In Batch (%)</string>
+          <string>Extract Yield Dry Basis Coarse Grind</string>
          </property>
          <property name="buddy">
-          <cstring>lineEdit_maxInBatch</cstring>
+          <cstring>lineEdit_coarseGrindYield_pct</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="4">
+        <widget class="SmartLineEdit" name="lineEdit_coarseGrindYield_pct">
+         <property name="toolTip">
+          <string>Extract Yield Dry Basis Coarse Grind (DBCG)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="SmartLabel" name="label_potentialYield_sg">
+         <property name="text">
+          <string>Potential yield</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_potentialYield_sg</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="SmartLineEdit" name="lineEdit_potentialYield_sg">
+         <property name="toolTip">
+          <string>Potential yield</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="3">
+        <widget class="QLabel" name="label_alphaAmylase_dextUnits">
+         <property name="text">
+          <string>Total alpha-amylase in malted grain</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_alphaAmylase_dextUnits</cstring>
          </property>
         </widget>
        </item>
        <item row="2" column="4">
-        <widget class="SmartLineEdit" name="lineEdit_coarseFineDiff">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>100</width>
-           <height>16777215</height>
-          </size>
-         </property>
+        <widget class="SmartLineEdit" name="lineEdit_alphaAmylase_dextUnits">
          <property name="toolTip">
-          <string>Yield difference between coarse and fine grind</string>
+          <string>Total alpha-amylase in the malted grain</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_kolbachIndex_pct">
+         <property name="text">
+          <string>Kolbach Index</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_kolbachIndex_pct</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="SmartLineEdit" name="lineEdit_kolbachIndex_pct">
+         <property name="toolTip">
+          <string>Kolbach Index</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="3">
+        <widget class="QLabel" name="label_hardnessPrpGlassy_pct">
+         <property name="text">
+          <string>Percentage of malt that is "glassy"</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_hardnessPrpGlassy_pct</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="4">
+        <widget class="SmartLineEdit" name="lineEdit_hardnessPrpGlassy_pct">
+         <property name="toolTip">
+          <string>Percentage of malt that is "glassy"</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="label_hardnessPrpHalf_pct">
+         <property name="text">
+          <string>Percentage of malt that is "half glassy"</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_hardnessPrpHalf_pct</cstring>
          </property>
         </widget>
        </item>
        <item row="4" column="1">
+        <widget class="SmartLineEdit" name="lineEdit_hardnessPrpHalf_pct">
+         <property name="toolTip">
+          <string>Percentage of malt that is "half glassy"</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="3">
+        <widget class="QLabel" name="label_hardnessPrpMealy_pct">
+         <property name="text">
+          <string>Percentage of malt that is "mealy"</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_hardnessPrpMealy_pct</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="4">
+        <widget class="SmartLineEdit" name="lineEdit_hardnessPrpMealy_pct">
+         <property name="toolTip">
+          <string>Percentage of malt that is "mealy"</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="label_kernelSizePrpPlump_pct">
+         <property name="text">
+          <string>Percentage of grain that is "plump"</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_kernelSizePrpPlump_pct</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="SmartLineEdit" name="lineEdit_kernelSizePrpPlump_pct">
+         <property name="toolTip">
+          <string>Percentage of grain that is "plump"</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="3">
+        <widget class="QLabel" name="label_kernelSizePrpThin_pct">
+         <property name="text">
+          <string>Percentage of grain that is "tine"</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_kernelSizePrpThin_pct</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="4">
+        <widget class="SmartLineEdit" name="lineEdit_kernelSizePrpThin_pct">
+         <property name="toolTip">
+          <string>Percentage of grain that is "tine"</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0">
+        <widget class="QLabel" name="label_friability_pct">
+         <property name="text">
+          <string>Friability</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_friability_pct</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="1">
+        <widget class="SmartLineEdit" name="lineEdit_friability_pct">
+         <property name="toolTip">
+          <string>Friability</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="3">
+        <widget class="SmartLabel" name="label_di_ph">
+         <property name="text">
+          <string>DI pH</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_di_ph</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="4">
+        <widget class="SmartLineEdit" name="lineEdit_di_ph">
+         <property name="toolTip">
+          <string>DI pH</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0">
+        <widget class="SmartLabel" name="label_viscosity_cP">
+         <property name="text">
+          <string>Viscosity of this malt in a "congress mash"</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_viscosity_cP</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="1">
+        <widget class="SmartLineEdit" name="lineEdit_viscosity_cP">
+         <property name="toolTip">
+          <string>Viscosity of this malt in a "congress mash"</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="3">
+        <widget class="QLabel" name="label_fermentability_pct">
+         <property name="text">
+          <string>Fermentability</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_fermentability_pct</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="4">
+        <widget class="SmartLineEdit" name="lineEdit_fermentability_pct">
+         <property name="toolTip">
+          <string>Fermentability</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="0">
+        <widget class="SmartLabel" name="label_dmsP">
+         <property name="text">
+          <string>DMS precursors</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_dmsP</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="1">
+        <widget class="SmartLineEdit" name="lineEdit_dmsP">
+         <property name="toolTip">
+          <string>DMS precursors</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="0">
+        <widget class="SmartLabel" name="label_fan">
+         <property name="text">
+          <string>Free Amino Nitrogen (FAN)</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_fan</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="1">
+        <widget class="SmartLineEdit" name="lineEdit_fan">
+         <property name="toolTip">
+          <string>Free Amino Nitrogen (FAN)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="0">
+        <widget class="SmartLabel" name="label_betaGlucan">
+         <property name="text">
+          <string>Beta-glucans</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_betaGlucan</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="1">
+        <widget class="SmartLineEdit" name="lineEdit_betaGlucan">
+         <property name="toolTip">
+          <string>Beta-glucans</string>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="1">
         <spacer name="verticalSpacer_2">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -664,6 +965,16 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>BtComboBox</class>
+   <extends>QComboBox</extends>
+   <header>widgets/BtComboBox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>SmartCheckBox</class>
+   <extends>QCheckBox</extends>
+   <header>widgets/SmartCheckBox.h</header>
+  </customwidget>
+  <customwidget>
    <class>SmartLabel</class>
    <extends>QLabel</extends>
    <header>widgets/SmartLabel.h</header>
@@ -686,7 +997,7 @@
  <tabstops>
   <tabstop>tabWidget_editor</tabstop>
   <tabstop>lineEdit_name</tabstop>
-  <tabstop>comboBox_fermentableType</tabstop>
+  <tabstop>comboBox_type</tabstop>
   <tabstop>lineEdit_color</tabstop>
   <tabstop>lineEdit_yield</tabstop>
   <tabstop>lineEdit_inventory</tabstop>

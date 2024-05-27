@@ -1,3 +1,6 @@
 [submodule "third-party/libbacktrace"]
         path = third-party/libbacktrace
         url = https://github.com/ianlancetaylor/libbacktrace
+[submodule "third-party/valijson"]
+        path = third-party/valijson
+        url = https://github.com/tristanpenman/valijson

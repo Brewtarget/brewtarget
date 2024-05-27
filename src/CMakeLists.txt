@@ -1,38 +1,36 @@
+#----------------------------------------------------------------------------------------------------------------------
+# src/CMakeLists.txt is part of Brewtarget, and is copyright the following authors 2009-2024:
+#   • Aidan Roberts <aidanr67@gmail.com>
+#   • Daniel Moreno <danielm5@users.noreply.github.com>
+#   • Mark de Wever <koraq@xs4all.nl>
+#   • Mattias Måhl <mattias@kejsarsten.com>
+#   • Matt Young<mfsy@yahoo.com>
+#   • Maxime Lavigne <duguigne@gmail.com>
+#   • Mik Firestone <mikfire@gmail.com>
+#   • Philip Greggory Lee <rocketman768@gmail.com>
+#   • Ryan Hoobler <rhoob@yahoo.com>
+#   • Théophane Martin <theophane.m@gmail.com>
 #
-# src/CMakeLists.txt is part of Brewtarget, and is Copyright the following
-# authors 2009-2023:
-#  - Aidan Roberts <aidanr67@gmail.com>
-#  - Daniel Moreno <danielm5@users.noreply.github.com>
-#  - Mark de Wever <koraq@xs4all.nl>
-#  - Mattias Måhl <mattias@kejsarsten.com>
-#  - Matt Young<mfsy@yahoo.com>
-#  - Maxime Lavigne <duguigne@gmail.com>
-#  - Mik Firestone <mikfire@gmail.com>
-#  - Philip Greggory Lee <rocketman768@gmail.com>
-#  - Ryan Hoobler <rhoob@yahoo.com>
-#  - Théophane Martin <theophane.m@gmail.com>
+# Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+# version.
 #
-# Brewtarget is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
+# Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+# warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+# details.
 #
-# Brewtarget is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+# You should have received a copy of the GNU General Public License along with this program.  If not, see
+# <http://www.gnu.org/licenses/>.
+#----------------------------------------------------------------------------------------------------------------------
 #
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-# See also ../CMakeLists.txt, which is the master CMake file from which this one gets included
+# See also ../CMakeLists.txt
 #
 
 #
 # Variable that contains all the .cpp files in this project.
 #
 # You can recreate the body of this list by running the following from the bash prompt in the build directory:
-#    find ../src -name '*.cpp' | sort  | sed 's+^../src+    ${repoDir}/src+' | grep -v Testing.cpp | grep -v main.cpp
+#    find ../src -name '*.cpp' | LC_ALL=C sort | sed 's+^../src+    ${repoDir}/src+' | grep -v Testing.cpp | grep -v main.cpp
 #
 # It is tempting to ask ourselves why we don't have CMake figure out this list itself.  Well, according to the
 # documentation (https://cmake.org/cmake/help/latest/command/file.html#filesystem) "We do not recommend using GLOB to
@@ -46,7 +44,6 @@ set(filesToCompile_cpp
     ${repoDir}/src/AncestorDialog.cpp
     ${repoDir}/src/Application.cpp
     ${repoDir}/src/BeerColorWidget.cpp
-    ${repoDir}/src/boiltime.cpp
     ${repoDir}/src/BrewDayFormatter.cpp
     ${repoDir}/src/BrewDayScrollWidget.cpp
     ${repoDir}/src/BrewNoteWidget.cpp
@@ -58,82 +55,28 @@ set(filesToCompile_cpp
     ${repoDir}/src/BtSplashScreen.cpp
     ${repoDir}/src/BtTabWidget.cpp
     ${repoDir}/src/BtTextEdit.cpp
-    ${repoDir}/src/BtTreeFilterProxyModel.cpp
     ${repoDir}/src/BtTreeItem.cpp
     ${repoDir}/src/BtTreeModel.cpp
     ${repoDir}/src/BtTreeView.cpp
     ${repoDir}/src/ConverterTool.cpp
-    ${repoDir}/src/CustomComboBox.cpp
-    ${repoDir}/src/database/BtSqlQuery.cpp
-    ${repoDir}/src/database/Database.cpp
-    ${repoDir}/src/database/DatabaseSchemaHelper.cpp
-    ${repoDir}/src/database/DbTransaction.cpp
-    ${repoDir}/src/database/ObjectStore.cpp
-    ${repoDir}/src/database/ObjectStoreTyped.cpp
-    ${repoDir}/src/EquipmentButton.cpp
-    ${repoDir}/src/EquipmentEditor.cpp
-    ${repoDir}/src/EquipmentListModel.cpp
-    ${repoDir}/src/FermentableDialog.cpp
-    ${repoDir}/src/FermentableEditor.cpp
-    ${repoDir}/src/FermentableSortFilterProxyModel.cpp
     ${repoDir}/src/HeatCalculations.cpp
-    ${repoDir}/src/HopDialog.cpp
-    ${repoDir}/src/HopEditor.cpp
-    ${repoDir}/src/HopSortFilterProxyModel.cpp
+    ${repoDir}/src/HelpDialog.cpp
     ${repoDir}/src/Html.cpp
     ${repoDir}/src/HydrometerTool.cpp
     ${repoDir}/src/IbuGuSlider.cpp
+    ${repoDir}/src/ImportExport.cpp
     ${repoDir}/src/InstructionWidget.cpp
     ${repoDir}/src/InventoryFormatter.cpp
     ${repoDir}/src/Localization.cpp
     ${repoDir}/src/Logging.cpp
     ${repoDir}/src/MainWindow.cpp
-    ${repoDir}/src/MashButton.cpp
-    ${repoDir}/src/MashComboBox.cpp
     ${repoDir}/src/MashDesigner.cpp
-    ${repoDir}/src/MashEditor.cpp
-    ${repoDir}/src/MashListModel.cpp
-    ${repoDir}/src/MashStepEditor.cpp
-    ${repoDir}/src/MashStepTableWidget.cpp
     ${repoDir}/src/MashWizard.cpp
-    ${repoDir}/src/matrix.cpp
-    ${repoDir}/src/measurement/Amount.cpp
-    ${repoDir}/src/measurement/ColorMethods.cpp
-    ${repoDir}/src/measurement/ConstrainedAmount.cpp
-    ${repoDir}/src/measurement/IbuMethods.cpp
-    ${repoDir}/src/measurement/Measurement.cpp
-    ${repoDir}/src/measurement/PhysicalQuantity.cpp
-    ${repoDir}/src/measurement/SucroseConversion.cpp
-    ${repoDir}/src/measurement/SystemOfMeasurement.cpp
-    ${repoDir}/src/measurement/Unit.cpp
-    ${repoDir}/src/measurement/UnitSystem.cpp
-    ${repoDir}/src/MiscDialog.cpp
-    ${repoDir}/src/MiscEditor.cpp
-    ${repoDir}/src/MiscSortFilterProxyModel.cpp
-    ${repoDir}/src/model/BrewNote.cpp
-    ${repoDir}/src/model/Equipment.cpp
-    ${repoDir}/src/model/Fermentable.cpp
-    ${repoDir}/src/model/Hop.cpp
-    ${repoDir}/src/model/Instruction.cpp
-    ${repoDir}/src/model/Inventory.cpp
-    ${repoDir}/src/model/Mash.cpp
-    ${repoDir}/src/model/MashStep.cpp
-    ${repoDir}/src/model/Misc.cpp
-    ${repoDir}/src/model/NamedEntity.cpp
-    ${repoDir}/src/model/NamedEntityWithInventory.cpp
-    ${repoDir}/src/model/NamedParameterBundle.cpp
-    ${repoDir}/src/model/Recipe.cpp
-    ${repoDir}/src/model/Salt.cpp
-    ${repoDir}/src/model/Style.cpp
-    ${repoDir}/src/model/Water.cpp
-    ${repoDir}/src/model/Yeast.cpp
     ${repoDir}/src/NamedEntitySortProxyModel.cpp
-    ${repoDir}/src/NamedMashEditor.cpp
     ${repoDir}/src/OgAdjuster.cpp
     ${repoDir}/src/OptionDialog.cpp
     ${repoDir}/src/PersistentSettings.cpp
     ${repoDir}/src/PitchDialog.cpp
-    ${repoDir}/src/PreInstruction.cpp
     ${repoDir}/src/PrimingDialog.cpp
     ${repoDir}/src/PrintAndPreviewDialog.cpp
     ${repoDir}/src/RadarChart.cpp
@@ -142,56 +85,181 @@ set(filesToCompile_cpp
     ${repoDir}/src/RecipeFormatter.cpp
     ${repoDir}/src/RefractoDialog.cpp
     ${repoDir}/src/ScaleRecipeTool.cpp
-    ${repoDir}/src/SimpleUndoableUpdate.cpp
     ${repoDir}/src/StrikeWaterDialog.cpp
-    ${repoDir}/src/StyleButton.cpp
-    ${repoDir}/src/StyleEditor.cpp
-    ${repoDir}/src/StyleListModel.cpp
     ${repoDir}/src/StyleRangeWidget.cpp
-    ${repoDir}/src/StyleSortFilterProxyModel.cpp
-    ${repoDir}/src/tableModels/BtTableModel.cpp
-    ${repoDir}/src/tableModels/BtTableModelInventory.cpp
-    ${repoDir}/src/tableModels/FermentableTableModel.cpp
-    ${repoDir}/src/tableModels/HopTableModel.cpp
-    ${repoDir}/src/tableModels/MashStepTableModel.cpp
-    ${repoDir}/src/tableModels/MiscTableModel.cpp
-    ${repoDir}/src/tableModels/SaltTableModel.cpp
-    ${repoDir}/src/tableModels/WaterTableModel.cpp
-    ${repoDir}/src/tableModels/YeastTableModel.cpp
     ${repoDir}/src/TimerListDialog.cpp
     ${repoDir}/src/TimerMainDialog.cpp
     ${repoDir}/src/TimerWidget.cpp
+    ${repoDir}/src/WaterDialog.cpp
+    ${repoDir}/src/boiltime.cpp
+    ${repoDir}/src/buttons/EquipmentButton.cpp
+    ${repoDir}/src/buttons/BoilButton.cpp
+    ${repoDir}/src/buttons/FermentationButton.cpp
+    ${repoDir}/src/buttons/MashButton.cpp
+    ${repoDir}/src/buttons/RecipeAttributeButton.cpp
+    ${repoDir}/src/buttons/StyleButton.cpp
+    ${repoDir}/src/buttons/WaterButton.cpp
+    ${repoDir}/src/catalogs/EquipmentCatalog.cpp
+    ${repoDir}/src/catalogs/FermentableCatalog.cpp
+    ${repoDir}/src/catalogs/HopCatalog.cpp
+    ${repoDir}/src/catalogs/MiscCatalog.cpp
+    ${repoDir}/src/catalogs/StyleCatalog.cpp
+    ${repoDir}/src/catalogs/YeastCatalog.cpp
+    ${repoDir}/src/database/BtSqlQuery.cpp
+    ${repoDir}/src/database/Database.cpp
+    ${repoDir}/src/database/DatabaseSchemaHelper.cpp
+    ${repoDir}/src/database/DbTransaction.cpp
+    ${repoDir}/src/database/ObjectStore.cpp
+    ${repoDir}/src/database/ObjectStoreTyped.cpp
+    ${repoDir}/src/editors/BoilEditor.cpp
+    ${repoDir}/src/editors/BoilStepEditor.cpp
+    ${repoDir}/src/editors/EquipmentEditor.cpp
+    ${repoDir}/src/editors/FermentableEditor.cpp
+    ${repoDir}/src/editors/FermentationEditor.cpp
+    ${repoDir}/src/editors/FermentationStepEditor.cpp
+    ${repoDir}/src/editors/HopEditor.cpp
+    ${repoDir}/src/editors/MashEditor.cpp
+    ${repoDir}/src/editors/MashStepEditor.cpp
+    ${repoDir}/src/editors/MiscEditor.cpp
+    ${repoDir}/src/editors/NamedMashEditor.cpp
+    ${repoDir}/src/editors/StyleEditor.cpp
+    ${repoDir}/src/editors/WaterEditor.cpp
+    ${repoDir}/src/editors/YeastEditor.cpp
+    ${repoDir}/src/listModels/EquipmentListModel.cpp
+    ${repoDir}/src/listModels/FermentableListModel.cpp
+    ${repoDir}/src/listModels/HopListModel.cpp
+    ${repoDir}/src/listModels/MashListModel.cpp
+    ${repoDir}/src/listModels/MashStepListModel.cpp
+    ${repoDir}/src/listModels/MiscListModel.cpp
+    ${repoDir}/src/listModels/RecipeAdditionFermentableListModel.cpp
+    ${repoDir}/src/listModels/RecipeAdditionHopListModel.cpp
+    ${repoDir}/src/listModels/RecipeAdditionMiscListModel.cpp
+    ${repoDir}/src/listModels/RecipeAdditionYeastListModel.cpp
+    ${repoDir}/src/listModels/RecipeAdjustmentSaltListModel.cpp
+    ${repoDir}/src/listModels/SaltListModel.cpp
+    ${repoDir}/src/listModels/StyleListModel.cpp
+    ${repoDir}/src/listModels/WaterListModel.cpp
+    ${repoDir}/src/listModels/YeastListModel.cpp
+    ${repoDir}/src/measurement/Amount.cpp
+    ${repoDir}/src/measurement/ColorMethods.cpp
+    ${repoDir}/src/measurement/IbuMethods.cpp
+    ${repoDir}/src/measurement/Measurement.cpp
+    ${repoDir}/src/measurement/PhysicalQuantity.cpp
+    ${repoDir}/src/measurement/SucroseConversion.cpp
+    ${repoDir}/src/measurement/SystemOfMeasurement.cpp
+    ${repoDir}/src/measurement/Unit.cpp
+    ${repoDir}/src/measurement/UnitSystem.cpp
+    ${repoDir}/src/model/Boil.cpp
+    ${repoDir}/src/model/BoilStep.cpp
+    ${repoDir}/src/model/BrewNote.cpp
+    ${repoDir}/src/model/Equipment.cpp
+    ${repoDir}/src/model/Fermentable.cpp
+    ${repoDir}/src/model/Fermentation.cpp
+    ${repoDir}/src/model/FermentationStep.cpp
+    ${repoDir}/src/model/Hop.cpp
+    ${repoDir}/src/model/Ingredient.cpp
+    ${repoDir}/src/model/IngredientInRecipe.cpp
+    ${repoDir}/src/model/Instruction.cpp
+    ${repoDir}/src/model/Inventory.cpp
+    ${repoDir}/src/model/Mash.cpp
+    ${repoDir}/src/model/MashStep.cpp
+    ${repoDir}/src/model/Misc.cpp
+    ${repoDir}/src/model/NamedEntity.cpp
+    ${repoDir}/src/model/NamedParameterBundle.cpp
+    ${repoDir}/src/model/OutlineableNamedEntity.cpp
+    ${repoDir}/src/model/OwnedByRecipe.cpp
+    ${repoDir}/src/model/Recipe.cpp
+    ${repoDir}/src/model/RecipeAddition.cpp
+    ${repoDir}/src/model/RecipeAdditionFermentable.cpp
+    ${repoDir}/src/model/RecipeAdditionHop.cpp
+    ${repoDir}/src/model/RecipeAdditionMisc.cpp
+    ${repoDir}/src/model/RecipeAdditionYeast.cpp
+    ${repoDir}/src/model/RecipeAdjustmentSalt.cpp
+    ${repoDir}/src/model/RecipeUseOfWater.cpp
+    ${repoDir}/src/model/Salt.cpp
+    ${repoDir}/src/model/Step.cpp
+    ${repoDir}/src/model/StepExtended.cpp
+    ${repoDir}/src/model/Style.cpp
+    ${repoDir}/src/model/Water.cpp
+    ${repoDir}/src/model/Yeast.cpp
+    ${repoDir}/src/serialization/SerializationRecord.cpp
+    ${repoDir}/src/serialization/json/BeerJson.cpp
+    ${repoDir}/src/serialization/json/JsonCoding.cpp
+    ${repoDir}/src/serialization/json/JsonMeasureableUnitsMapping.cpp
+    ${repoDir}/src/serialization/json/JsonRecord.cpp
+    ${repoDir}/src/serialization/json/JsonRecordDefinition.cpp
+    ${repoDir}/src/serialization/json/JsonSchema.cpp
+    ${repoDir}/src/serialization/json/JsonUtils.cpp
+    ${repoDir}/src/serialization/json/JsonXPath.cpp
+    ${repoDir}/src/serialization/xml/BeerXml.cpp
+    ${repoDir}/src/serialization/xml/BtDomErrorHandler.cpp
+    ${repoDir}/src/serialization/xml/XercesHelpers.cpp
+    ${repoDir}/src/serialization/xml/XmlCoding.cpp
+    ${repoDir}/src/serialization/xml/XmlMashRecord.cpp
+    ${repoDir}/src/serialization/xml/XmlMashStepRecord.cpp
+    ${repoDir}/src/serialization/xml/XmlRecipeRecord.cpp
+    ${repoDir}/src/serialization/xml/XmlRecord.cpp
+    ${repoDir}/src/serialization/xml/XmlRecordDefinition.cpp
+    ${repoDir}/src/sortFilterProxyModels/BtTreeFilterProxyModel.cpp
+    ${repoDir}/src/sortFilterProxyModels/EquipmentSortFilterProxyModel.cpp
+    ${repoDir}/src/sortFilterProxyModels/FermentableSortFilterProxyModel.cpp
+    ${repoDir}/src/sortFilterProxyModels/HopSortFilterProxyModel.cpp
+    ${repoDir}/src/sortFilterProxyModels/MiscSortFilterProxyModel.cpp
+    ${repoDir}/src/sortFilterProxyModels/RecipeAdditionFermentableSortFilterProxyModel.cpp
+    ${repoDir}/src/sortFilterProxyModels/RecipeAdditionHopSortFilterProxyModel.cpp
+    ${repoDir}/src/sortFilterProxyModels/RecipeAdditionMiscSortFilterProxyModel.cpp
+    ${repoDir}/src/sortFilterProxyModels/RecipeAdditionYeastSortFilterProxyModel.cpp
+    ${repoDir}/src/sortFilterProxyModels/StyleSortFilterProxyModel.cpp
+    ${repoDir}/src/sortFilterProxyModels/WaterSortFilterProxyModel.cpp
+    ${repoDir}/src/sortFilterProxyModels/YeastSortFilterProxyModel.cpp
+    ${repoDir}/src/tableModels/BoilStepTableModel.cpp
+    ${repoDir}/src/tableModels/BtTableModel.cpp
+    ${repoDir}/src/tableModels/BtTableModelInventory.cpp
+    ${repoDir}/src/tableModels/EquipmentTableModel.cpp
+    ${repoDir}/src/tableModels/FermentableTableModel.cpp
+    ${repoDir}/src/tableModels/FermentationStepTableModel.cpp
+    ${repoDir}/src/tableModels/HopTableModel.cpp
+    ${repoDir}/src/tableModels/MashStepTableModel.cpp
+    ${repoDir}/src/tableModels/MiscTableModel.cpp
+    ${repoDir}/src/tableModels/RecipeAdditionFermentableTableModel.cpp
+    ${repoDir}/src/tableModels/RecipeAdditionHopTableModel.cpp
+    ${repoDir}/src/tableModels/RecipeAdditionMiscTableModel.cpp
+    ${repoDir}/src/tableModels/RecipeAdditionYeastTableModel.cpp
+    ${repoDir}/src/tableModels/RecipeAdjustmentSaltTableModel.cpp
+    ${repoDir}/src/tableModels/SaltTableModel.cpp
+    ${repoDir}/src/tableModels/StyleTableModel.cpp
+    ${repoDir}/src/tableModels/WaterTableModel.cpp
+    ${repoDir}/src/tableModels/YeastTableModel.cpp
+    ${repoDir}/src/undoRedo/SimpleUndoableUpdate.cpp
     ${repoDir}/src/utils/BtException.cpp
     ${repoDir}/src/utils/BtStringConst.cpp
     ${repoDir}/src/utils/BtStringStream.cpp
     ${repoDir}/src/utils/EnumStringMapping.cpp
+    ${repoDir}/src/utils/FileSystemHelpers.cpp
+    ${repoDir}/src/utils/Fonts.cpp
     ${repoDir}/src/utils/ImportRecordCount.cpp
+    ${repoDir}/src/utils/MetaTypes.cpp
+    ${repoDir}/src/utils/OStreamWriterForQFile.cpp
+    ${repoDir}/src/utils/OptionalHelpers.cpp
+    ${repoDir}/src/utils/PropertyPath.cpp
     ${repoDir}/src/utils/TimerUtils.cpp
     ${repoDir}/src/utils/TypeLookup.cpp
-    ${repoDir}/src/WaterButton.cpp
-    ${repoDir}/src/WaterDialog.cpp
-    ${repoDir}/src/WaterEditor.cpp
-    ${repoDir}/src/WaterListModel.cpp
-    ${repoDir}/src/WaterSortFilterProxyModel.cpp
-    ${repoDir}/src/WaterTableWidget.cpp
     ${repoDir}/src/widgets/Animator.cpp
+    ${repoDir}/src/widgets/BtBoolComboBox.cpp
+    ${repoDir}/src/widgets/BtComboBox.cpp
+    ${repoDir}/src/widgets/BtOptionalDateEdit.cpp
+    ${repoDir}/src/widgets/CustomComboBox.cpp
+    ${repoDir}/src/widgets/InfoButton.cpp
+    ${repoDir}/src/widgets/InfoText.cpp
+    ${repoDir}/src/widgets/MashComboBox.cpp
     ${repoDir}/src/widgets/SelectionControl.cpp
+    ${repoDir}/src/widgets/SmartAmountSettings.cpp
     ${repoDir}/src/widgets/SmartAmounts.cpp
+    ${repoDir}/src/widgets/SmartCheckBox.cpp
     ${repoDir}/src/widgets/SmartDigitWidget.cpp
     ${repoDir}/src/widgets/SmartField.cpp
     ${repoDir}/src/widgets/SmartLabel.cpp
     ${repoDir}/src/widgets/SmartLineEdit.cpp
     ${repoDir}/src/widgets/ToggleSwitch.cpp
     ${repoDir}/src/widgets/UnitAndScalePopUpMenu.cpp
-    ${repoDir}/src/xml/BeerXml.cpp
-    ${repoDir}/src/xml/BtDomErrorHandler.cpp
-    ${repoDir}/src/xml/XercesHelpers.cpp
-    ${repoDir}/src/xml/XmlCoding.cpp
-    ${repoDir}/src/xml/XmlMashRecord.cpp
-    ${repoDir}/src/xml/XmlMashStepRecord.cpp
-    ${repoDir}/src/xml/XmlRecipeRecord.cpp
-    ${repoDir}/src/xml/XmlRecord.cpp
-    ${repoDir}/src/YeastDialog.cpp
-    ${repoDir}/src/YeastEditor.cpp
-    ${repoDir}/src/YeastSortFilterProxyModel.cpp
 )

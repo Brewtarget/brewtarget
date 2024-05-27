@@ -30,9 +30,6 @@
        <property name="title">
         <string>Initial Infusion</string>
        </property>
-       <property name="configSection" stdset="0">
-        <string notr="true">strikeWaterCalc</string>
-       </property>
        <layout class="QFormLayout" name="formLayout_2">
         <property name="fieldGrowthPolicy">
          <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
@@ -139,9 +136,6 @@
       <widget class="QGroupBox" name="mashInfusion">
        <property name="title">
         <string>Mash Infusion</string>
-       </property>
-       <property name="configSection" stdset="0">
-        <string notr="true">strikeWaterCalc</string>
        </property>
        <layout class="QFormLayout" name="formLayout">
         <property name="fieldGrowthPolicy">

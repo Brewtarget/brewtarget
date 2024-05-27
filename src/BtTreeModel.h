@@ -1,22 +1,21 @@
-/*
- * BtTreeModel.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2022
- * - Matt Young <mfsy@yahoo.com>
- * - Mik Firestone <mikfire@gmail.com>
+/*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ * BtTreeModel.h is part of Brewtarget, and is copyright the following authors 2009-2024:
+ *   • Matt Young <mfsy@yahoo.com>
+ *   • Maxime Lavigne <duguigne@gmail.com>
+ *   • Mik Firestone <mikfire@gmail.com>
+ *   • Philip Greggory Lee <rocketman768@gmail.com>
  *
- * Brewtarget is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * Brewtarget is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #ifndef BTTREEMODEL_H
 #define BTTREEMODEL_H
 #pragma once
@@ -25,11 +24,12 @@
 #include <optional>
 
 #include <QAbstractItemModel>
+#include <QFlags> // For Q_DECLARE_FLAGS
 #include <QList>
 #include <QMetaProperty>
 #include <QModelIndex>
 #include <QObject>
-#include <QSqlRelationalTableModel>
+//#include <QSqlRelationalTableModel>
 #include <QVariant>
 
 #include "BtTreeItem.h"
@@ -63,30 +63,21 @@ class BtTreeModel : public QAbstractItemModel {
 
 public:
    //! \brief Describes what items this tree will show.
-   enum TypeMasks {
-      //! Show recipes
-      RECIPEMASK        = 1,
-      //! Show equipments
-      EQUIPMASK         = 2,
-      //! Show fermentables
-      FERMENTMASK       = 4,
-      //! Show hops
-      HOPMASK           = 8,
-      //! Show miscs
-      MISCMASK          = 16,
-      //! Show yeasts
-      YEASTMASK         = 32,
-      //! Show brewnotes
-      BREWNOTEMASK      = 64,
-      //! Show styles
-      STYLEMASK         = 128,
-      //! folders. This may actually have worked better than expected.
-      FOLDERMASK        = 256,
-      //! waters.
-      WATERMASK         = 512,
+   enum class TypeMask {
+      Recipe      = (1 << 0),
+      Equipment   = (1 << 1),
+      Fermentable = (1 << 2),
+      Hop         = (1 << 3),
+      Misc        = (1 << 4),
+      Yeast       = (1 << 5),
+      BrewNote    = (1 << 6),
+      Style       = (1 << 7),
+      Folder      = (1 << 8),
+      Water       = (1 << 9),
    };
+   Q_DECLARE_FLAGS(TypeMasks, TypeMask)
 
-   BtTreeModel(BtTreeView * parent = nullptr, TypeMasks type = RECIPEMASK);
+   BtTreeModel(BtTreeView * parent = nullptr, TypeMasks type = TypeMask::Recipe);
    virtual ~BtTreeModel();
 
    //! \brief Reimplemented from QAbstractItemModel
@@ -196,27 +187,27 @@ private slots:
 
    //! \brief This is as best as I can see to do it. Qt signaling mechanism is
    //   doing, as I recall, string compares on the signatures. Sigh.
-   void elementAddedRecipe(int victimId);
-   void elementAddedEquipment(int victimId);
+   void elementAddedRecipe     (int victimId);
+   void elementAddedEquipment  (int victimId);
    void elementAddedFermentable(int victimId);
-   void elementAddedHop(int victimId);
-   void elementAddedMisc(int victimId);
-   void elementAddedStyle(int victimId);
-   void elementAddedYeast(int victimId);
-   void elementAddedBrewNote(int victimId);
-   void elementAddedWater(int victimId);
+   void elementAddedHop        (int victimId);
+   void elementAddedMisc       (int victimId);
+   void elementAddedStyle      (int victimId);
+   void elementAddedYeast      (int victimId);
+   void elementAddedBrewNote   (int victimId);
+   void elementAddedWater      (int victimId);
 
    void elementChanged();
 
-   void elementRemovedRecipe(int victimId, std::shared_ptr<QObject> victim);
-   void elementRemovedEquipment(int victimId, std::shared_ptr<QObject> victim);
+   void elementRemovedRecipe     (int victimId, std::shared_ptr<QObject> victim);
+   void elementRemovedEquipment  (int victimId, std::shared_ptr<QObject> victim);
    void elementRemovedFermentable(int victimId, std::shared_ptr<QObject> victim);
-   void elementRemovedHop(int victimId, std::shared_ptr<QObject> victim);
-   void elementRemovedMisc(int victimId, std::shared_ptr<QObject> victim);
-   void elementRemovedStyle(int victimId, std::shared_ptr<QObject> victim);
-   void elementRemovedYeast(int victimId, std::shared_ptr<QObject> victim);
-   void elementRemovedBrewNote(int victimId, std::shared_ptr<QObject> victim);
-   void elementRemovedWater(int victimId, std::shared_ptr<QObject> victim);
+   void elementRemovedHop        (int victimId, std::shared_ptr<QObject> victim);
+   void elementRemovedMisc       (int victimId, std::shared_ptr<QObject> victim);
+   void elementRemovedStyle      (int victimId, std::shared_ptr<QObject> victim);
+   void elementRemovedYeast      (int victimId, std::shared_ptr<QObject> victim);
+   void elementRemovedBrewNote   (int victimId, std::shared_ptr<QObject> victim);
+   void elementRemovedWater      (int victimId, std::shared_ptr<QObject> victim);
 
    void recipePropertyChanged(int recipeId, BtStringConst const & propertyName);
 
@@ -276,11 +267,18 @@ private:
 
    BtTreeItem * rootItem;
    BtTreeView * parentTree;
-   TypeMasks treeMask;
+   TypeMasks m_treeMask;
    BtTreeItem::Type itemType;
    int m_maxColumns;
-   QString _mimeType;
+   QString m_mimeType;
 
 };
+
+// This is a bit ugly, but will ultimately be refactored away, once we stop having to decide at runtime whether
+// something can have a folder.
+namespace FolderUtils {
+   std::optional<QString> getFolder(NamedEntity const * ne);
+   void setFolder(NamedEntity * ne, QString const & val);
+}
 
 #endif

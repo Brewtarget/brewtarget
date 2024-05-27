@@ -1,25 +1,23 @@
-/*
- * PrintAndPreviewDialog.cpp is part of Brewtarget, and is Copyright the following
- * authors 2021
- * - Mattias Måhl <mattias@kejsarsten.com>
- * - Matt Young <mfsy@yahoo.com>
+/*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ * PrintAndPreviewDialog.cpp is part of Brewtarget, and is copyright the following authors 2021-2022:
+ *   • Mattias Måhl <mattias@kejsarsten.com>
+ *   • Matt Young <mfsy@yahoo.com>
  *
- * Brewtarget is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * Brewtarget is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "PrintAndPreviewDialog.h"
 
 #include <QDebug>
+#include <QFileDialog>
 #include <QFont>
 #include <QList>
 #include <QMessageBox>
@@ -343,12 +341,18 @@ void PrintAndPreviewDialog::updatePreview() {
             pDoc += brewDayFormatter->buildHtml();
          }
       } else if (verticalTabWidget->currentIndex() == 1) {
-         InventoryFormatter::HtmlGenerationFlags flags  = static_cast<InventoryFormatter::HtmlGenerationFlags>(
-            checkBox_inventoryFermentables->isChecked() * InventoryFormatter::FERMENTABLES   +
-            checkBox_inventoryHops->isChecked()         * InventoryFormatter::HOPS           +
-            checkBox_inventoryYeast->isChecked()        * InventoryFormatter::YEAST          +
-            checkBox_inventoryMicellaneous->isChecked() * InventoryFormatter::MISCELLANEOUS
-         );
+///         InventoryFormatter::HtmlGenerationFlags flags  = static_cast<InventoryFormatter::HtmlGenerationFlag::HtmlGenerationFlags>(
+///            checkBox_inventoryFermentables->isChecked() * InventoryFormatter::HtmlGenerationFlag::FERMENTABLES   +
+///            checkBox_inventoryHops->isChecked()         * InventoryFormatter::HtmlGenerationFlag::HOPS           +
+///            checkBox_inventoryYeast->isChecked()        * InventoryFormatter::HtmlGenerationFlag::YEAST          +
+///            checkBox_inventoryMicellaneous->isChecked() * InventoryFormatter::HtmlGenerationFlag::MISCELLANEOUS
+///         );
+         InventoryFormatter::HtmlGenerationFlags flags;
+         if (checkBox_inventoryFermentables->isChecked()) { flags |= InventoryFormatter::HtmlGenerationFlag::FERMENTABLES ; }
+         if (checkBox_inventoryHops->isChecked()        ) { flags |= InventoryFormatter::HtmlGenerationFlag::HOPS         ; }
+         if (checkBox_inventoryYeast->isChecked()       ) { flags |= InventoryFormatter::HtmlGenerationFlag::YEAST        ; }
+         if (checkBox_inventoryMicellaneous->isChecked()) { flags |= InventoryFormatter::HtmlGenerationFlag::MISCELLANEOUS; }
+
          pDoc = InventoryFormatter::createInventoryHtml(flags);
       }
       // adding the generated HTML to the QTexBrowser.
@@ -514,12 +518,18 @@ void PrintAndPreviewDialog::printDocument(QPrinter * printer) {
 
       hDoc += recipeFormatter->buildHtmlFooter();
    } else if (verticalTabWidget->currentIndex() == 1) {
-      InventoryFormatter::HtmlGenerationFlags flags = static_cast<InventoryFormatter::HtmlGenerationFlags>(
-         checkBox_inventoryFermentables->isChecked() * InventoryFormatter::FERMENTABLES   +
-         checkBox_inventoryHops->isChecked()         * InventoryFormatter::HOPS           +
-         checkBox_inventoryYeast->isChecked()        * InventoryFormatter::YEAST          +
-         checkBox_inventoryMicellaneous->isChecked() * InventoryFormatter::MISCELLANEOUS
-      );
+///      InventoryFormatter::HtmlGenerationFlags flags = static_cast<InventoryFormatter::HtmlGenerationFlags>(
+///         checkBox_inventoryFermentables->isChecked() * InventoryFormatter::FERMENTABLES   +
+///         checkBox_inventoryHops->isChecked()         * InventoryFormatter::HOPS           +
+///         checkBox_inventoryYeast->isChecked()        * InventoryFormatter::YEAST          +
+///         checkBox_inventoryMicellaneous->isChecked() * InventoryFormatter::MISCELLANEOUS
+///      );
+      InventoryFormatter::HtmlGenerationFlags flags;
+      if (checkBox_inventoryFermentables->isChecked()) { flags |= InventoryFormatter::HtmlGenerationFlag::FERMENTABLES ; }
+      if (checkBox_inventoryHops->isChecked()        ) { flags |= InventoryFormatter::HtmlGenerationFlag::HOPS         ; }
+      if (checkBox_inventoryYeast->isChecked()       ) { flags |= InventoryFormatter::HtmlGenerationFlag::YEAST        ; }
+      if (checkBox_inventoryMicellaneous->isChecked()) { flags |= InventoryFormatter::HtmlGenerationFlag::MISCELLANEOUS; }
+
       hDoc += InventoryFormatter::createInventoryHtml(flags);
    }
 
