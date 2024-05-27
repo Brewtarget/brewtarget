@@ -1,23 +1,23 @@
-/*
- * OgAdjuster.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2023
- * - Eric Tamme <etamme@gmail.com>
- * - Matt Young <mfsy@yahoo.com>
- * - Philip Greggory Lee <rocketman768@gmail.com>
+/*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ * OgAdjuster.cpp is part of Brewtarget, and is copyright the following authors 2009-2023:
+ *   • Brian Rower <brian.rower@gmail.com>
+ *   • Eric Tamme <etamme@gmail.com>
+ *   • Matt Young <mfsy@yahoo.com>
+ *   • Mik Firestone <mikfire@gmail.com>
+ *   • Philip Greggory Lee <rocketman768@gmail.com>
+ *   • Théophane Martin <theophane.m@gmail.com>
  *
- * Brewtarget is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * Brewtarget is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "OgAdjuster.h"
 
 #include "Algorithms.h"
@@ -56,12 +56,12 @@ void OgAdjuster::setRecipe(Recipe* rec) {
 void OgAdjuster::calculate() {
 
    // Get inputs.
-   double sg          = lineEdit_sg->toCanonical().quantity();
+   double sg          = lineEdit_sg->getNonOptCanonicalQty();
    bool   okPlato     = true;
    double plato       = Measurement::extractRawFromString<double>(lineEdit_plato->text(), &okPlato);
-   double temp_c      = lineEdit_temp->toCanonical().quantity();
-   double hydroTemp_c = lineEdit_calTemp->toCanonical().quantity();
-   double wort_l      = lineEdit_volume->toCanonical().quantity();
+   double temp_c      = lineEdit_temp->getNonOptCanonicalQty();
+   double hydroTemp_c = lineEdit_calTemp->getNonOptCanonicalQty();
+   double wort_l      = lineEdit_volume->getNonOptCanonicalQty();
 
    // Make sure we got enough info.
    bool gotSG = sg != 0 && temp_c != 0 && hydroTemp_c != 0;
@@ -78,8 +78,8 @@ void OgAdjuster::calculate() {
       return;
    }
 
-   Equipment* equip = recObs->equipment();
-   double evapRate_lHr = equip->evapRate_lHr();
+   auto equip = recObs->equipment();
+   double evapRate_lHr = equip->kettleEvaporationPerHour_l().value_or(Equipment::default_kettleEvaporationPerHour_l);
 
    // Calculate missing input parameters.
    double sg_20C = 0.0;
@@ -88,7 +88,7 @@ void OgAdjuster::calculate() {
       sg_20C = sg_15C * Algorithms::getWaterDensity_kgL(15)/Algorithms::getWaterDensity_kgL(20);
 
       plato = Algorithms::SG_20C20C_toPlato(sg_20C);
-      lineEdit_plato->setAmount(sg_20C); // Event if the display is in Plato, we must send it in default unit
+      lineEdit_plato->setQuantity(sg_20C); // Event if the display is in Plato, we must send it in default unit
    } else {
       sg_20C = Algorithms::PlatoToSG_20C20C(plato);
    }
@@ -101,7 +101,7 @@ void OgAdjuster::calculate() {
 
    // Calculate OG w/o correction.
    double finalVolume_l = equip->wortEndOfBoil_l(wort_l);
-   double finalWater_kg = water_kg - equip->boilTime_min()/(double)60 * evapRate_lHr * Algorithms::getWaterDensity_kgL(20);
+   double finalWater_kg = water_kg - equip->boilTime_min().value_or(Equipment::default_boilTime_mins)/(double)60 * evapRate_lHr * Algorithms::getWaterDensity_kgL(20);
    //std::cerr << "finalWater_kg = " << finalWater_kg << std::endl;
    //std::cerr << "boilTime = " << equip->getBoilTime_min() << std::endl;
    //std::cerr << "evapRate_lHr = " << evapRate_lHr << std::endl;
@@ -122,8 +122,8 @@ void OgAdjuster::calculate() {
    finalVolume_l += waterToAdd_l;
 
    // Display output.
-   this->lineEdit_og       ->setAmount(finalUncorrectedSg_20C);
-   this->lineEdit_add      ->setAmount(waterToAdd_l);
-   this->lineEdit_batchSize->setAmount(finalVolume_l);
+   this->lineEdit_og       ->setQuantity(finalUncorrectedSg_20C);
+   this->lineEdit_add      ->setQuantity(waterToAdd_l);
+   this->lineEdit_batchSize->setQuantity(finalVolume_l);
    return;
 }

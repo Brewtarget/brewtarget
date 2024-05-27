@@ -1,30 +1,30 @@
-/*
- * AboutDialog.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2023
- * - Matt Young <mfsy@yahoo.com>
- * - Philip Greggory Lee <rocketman768@gmail.com>
+/*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ * AboutDialog.cpp is part of Brewtarget, and is copyright the following authors 2009-2022:
+ *   • Matt Young <mfsy@yahoo.com>
+ *   • Philip Greggory Lee <rocketman768@gmail.com>
  *
- * Brewtarget is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * Brewtarget is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "AboutDialog.h"
 
-#include <QWidget>
+#include <QEvent>
 #include <QHBoxLayout>
-#include <QVBoxLayout>
+#include <QLabel>
 #include <QPushButton>
 #include <QScrollArea>
 #include <QSpacerItem>
+#include <QVBoxLayout>
+#include <QWidget>
+
 #include "config.h"
 
 AboutDialog::AboutDialog(QWidget * parent) :
@@ -91,9 +91,9 @@ AboutDialog::AboutDialog(QWidget * parent) :
          "  </style>"
          " </head>"
          ""
-         " <h1>Brewtarget %1</h1>"
+         " <h1>%1 %2</h1>"
          " <p>"
-         "  Brewtarget, free software for developing beer recipes, is copyright:"
+         "  %1, free software for developing beer recipes, is copyright:"
          " </p>"
          " <ul>"
          "  <li>2018      Adam Hawes &lt;ach@hawes.net.au&gt;</li>"
@@ -139,7 +139,7 @@ AboutDialog::AboutDialog(QWidget * parent) :
          "  <li>2015      Markus Mårtensson &lt;mackan.90@gmail.com&gt;</li>"
          "  <li>2017      Matt Anderson &lt;matt.anderson@is4s.com&gt;</li>" // Commit is "andersonm <matt.anderson@is4s.com>", but second name clear from email
          "  <li>2020-2022 Mattias Måhl &lt;mattias@kejsarsten.com&gt;</li>"
-         "  <li>2020-2023 Matt Young &lt;mfsy@yahoo.com&gt;</li>"
+         "  <li>2020-2024 Matt Young &lt;mfsy@yahoo.com&gt;</li>"
          "  <li>2014-2017 Maxime Lavigne &lt;duguigne@gmail.com&gt;</li>"
          "  <li>2018      Medic Momcilo &lt;medicmomcilo@gmail.com&gt;</li>"
          "  <li>2016      Mike Evans &lt;mikee@saxicola.co.uk&gt;</li>"
@@ -176,27 +176,27 @@ AboutDialog::AboutDialog(QWidget * parent) :
          ""
          " <h2>License (GPLv3)</h2>"
          " <p>"
-         "  Brewtarget is free software: you can redistribute it and/or modify<br/>"
+         "  %1 is free software: you can redistribute it and/or modify<br/>"
          "  it under the terms of the GNU General Public License as published by<br/>"
          "  the Free Software Foundation, either version 3 of the License, or<br/>"
          "  (at your option) any later version.<br/>"
          "  <br/>"
-         "  Brewtarget is distributed in the hope that it will be useful,<br/>"
+         "  %1 is distributed in the hope that it will be useful,<br/>"
          "  but WITHOUT ANY WARRANTY; without even the implied warranty of<br/>"
          "  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the<br/>"
          "  GNU General Public License for more details.<br/>"
          "  <br/>"
          "  You should have received a copy of the GNU General Public License<br/>"
-         "  along with Brewtarget.  If not, see &lt;<a href=\"http://www.gnu.org/licenses/\">http://www.gnu.org/licenses/</a>&gt;"
+         "  along with %1.  If not, see &lt;<a href=\"http://www.gnu.org/licenses/\">http://www.gnu.org/licenses/</a>&gt;"
          " </p>"
          ""
          " <h2>Source Code</h2>"
          " <p>"
-         "  Brewtarget's source code is available at <a href=\"https://github.com/Brewtarget/brewtarget\">github.com/Brewtarget/brewtarget</a>"
+         "  %1's source code is available at <a href=\"%3\">%3</a>"
          " </p>"
          "</html>"
       )
-      .arg(CONFIG_VERSION_STRING)
+      .arg(CONFIG_APPLICATION_NAME_UC, CONFIG_VERSION_STRING, CONFIG_HOMEPAGE_URL)
    );
    return;
 }
@@ -227,6 +227,6 @@ void AboutDialog::doLayout()  {
 }
 
 void AboutDialog::retranslateUi() {
-   setWindowTitle(tr("About Brewtarget"));
+   setWindowTitle(tr("About %1").arg(CONFIG_APPLICATION_NAME_UC));
    return;
 }

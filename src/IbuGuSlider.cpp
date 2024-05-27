@@ -1,21 +1,18 @@
-/*
- * IbuGuSlider.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
- * - Philip G. Lee <rocketman768@gmail.com>
+/*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ * IbuGuSlider.cpp is part of Brewtarget, and is copyright the following authors 2009-2014:
+ *   • Philip Greggory Lee <rocketman768@gmail.com>
  *
- * Brewtarget is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * Brewtarget is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 
 #include "IbuGuSlider.h"
 
@@ -25,7 +22,7 @@ IbuGuSlider::IbuGuSlider(QWidget* parent)
    setRange(0,1);
    setPreferredRange(0,0);
    setPrecision(2);
-   
+
    QLinearGradient bgGrad( QPointF(0,0), QPointF(1,0) );
    bgGrad.setCoordinateMode(QGradient::ObjectBoundingMode);
    //bgGrad.setColorAt( 0, QColor(255,255,255) );
@@ -35,16 +32,16 @@ IbuGuSlider::IbuGuSlider(QWidget* parent)
    bgGrad.setColorAt( (.53+.64)/2.0, QColor(185,240,120) );
    bgGrad.setColorAt( (.64+.85)/2.0, QColor(121,201,121) );
    //bgGrad.setColorAt( .85, QColor(255,255,255) );
-   
+
    setBackgroundBrush(bgGrad);
    setMarkerBrush(QColor(0,0,0));
    setTickMarks(0,0);
 }
-   
+
 void IbuGuSlider::setValue(double value)
 {
    QString text;
-   
+
    if( value < 0.28 )
       text = tr("Cloying");
    else if( value < 0.36 )
@@ -59,7 +56,7 @@ void IbuGuSlider::setValue(double value)
       text = tr("Extra Hoppy");
    else
       text = tr("Way Hoppy");
-   
+
    setMarkerText(text);
    RangedSlider::setValue(value);
 }

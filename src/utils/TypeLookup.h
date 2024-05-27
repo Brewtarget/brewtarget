@@ -1,90 +1,43 @@
-/*
- * utils/TypeLookup.h is part of Brewtarget, and is copyright the following authors 2023:
+/*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ * utils/TypeLookup.h is part of Brewtarget, and is copyright the following authors 2023-2024:
  *   • Matt Young <mfsy@yahoo.com>
  *
- * Brewtarget is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * Brewtarget is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #ifndef UTILS_TYPELOOKUP_H
 #define UTILS_TYPELOOKUP_H
 #pragma once
 
+#include <concepts>
 #include <map>
 #include <optional>
 #include <typeindex>
 #include <typeinfo>
+#include <type_traits>
+#include <vector>
 
 #include "BtFieldType.h"
 #include "utils/BtStringConst.h"
 #include "utils/OptionalHelpers.h"
+#include "utils/TypeTraits.h"
 
-/**
- * \brief Together with \c std::is_enum from \c <type_traits>, the \c is_optional and \c is_optional_enum templates
- *        defined here give us a generic way at compile time to determine whether a type T is:
- *           1. an enum
- *           2. an instance of std::optional< U > for some enum U
- *           3. an instance of std::optional< U > for some other type U
- *           4. neither an instance of std::optional nor an enum
- *        The four cases:
- *
- *           --------------------------------------------------------------------------------
- *           |     T               | std::is_enum<T> | is_optional<T> | is_optional_enum<T> |
- *           --------------------------------------------------------------------------------
- *           |                     |                 |                |                     |
- *           | an enum             |      true       |     false      |        false        |
- *           |                     |                 |                |                     |
- *           | other non optional  |      false      |     false      |        false        |
- *           |                     |                 |                |                     |
- *           | std::optional enum  |      false      |     true       |        true         |
- *           |                     |                 |                |                     |
- *           | other std::optional |      false      |     true       |        false        |
- *           |                     |                 |                |                     |
- *           --------------------------------------------------------------------------------
- *
- *        Template metaprogramming is sometimes very useful but can be a bit painful to follow.  What we've done here
- *        (at the simple end of things!) is somewhat inspired by the examples at:
- *        https://www.boost.org/doc/libs/1_81_0/libs/type_traits/doc/html/boost_typetraits/background.html
- *
- *        Mostly we shouldn't need to use these templates directly outside of the \c TypeLookup class because the
- *        \c PROPERTY_TYPE_LOOKUP_ENTRY macro below takes care of everything for constructor calls where you would
- *        otherwise need them.  However, they are sometimes useful for, eg, declaring templated functions where we need
- *        different versions for optional and non-optional, such as \c SmartField::setAmount.
- */
-template <typename T> struct is_optional : public std::false_type{};
-template <typename T> struct is_optional< std::optional<T> > : public std::true_type{};
+class BtStringConst;
+class NamedEntity;
 
-template <typename T> struct is_not_optional : public std::true_type{};
-template <typename T> struct is_not_optional< std::optional<T> > : public std::false_type{};
+namespace PropertyNames::None {
+   extern BtStringConst const none;
+}
 
-template <typename T> struct is_optional_enum : public std::false_type{};
-template <typename T> struct is_optional_enum< std::optional<T> > : public std::is_enum<T>{};
-
-//
-// This bit requires C++20 or later.  It makes the specialisations of TypeInfo::construct() below a bit less clunky
-// Older versions of GCC (eg as shipped with Ubuntu 20.04 LTS) have a sort of pre-release support for concepts so we
-// have to use non-standard syntax there
-//
-#if defined(__linux__ ) && defined(__GNUC__) && (__GNUC__ < 10)
-template <typename T> concept bool IsRequiredEnum  = std::is_enum<T>::value;
-template <typename T> concept bool IsRequiredOther = !std::is_enum<T>::value && !is_optional<T>::value;
-template <typename T> concept bool IsOptionalEnum  = is_optional_enum<T>::value;
-template <typename T> concept bool IsOptionalOther = !is_optional_enum<T>::value && is_optional<T>::value;
-#else
-template <typename T> concept IsRequiredEnum  = std::is_enum<T>::value;
-template <typename T> concept IsRequiredOther = !std::is_enum<T>::value && !is_optional<T>::value;
-template <typename T> concept IsOptionalEnum  = is_optional_enum<T>::value;
-template <typename T> concept IsOptionalOther = !is_optional_enum<T>::value && is_optional<T>::value;
-#endif
+class TypeLookup;
 
 /**
  * \brief Extends \c std::type_index with some other info we need about a type for serialisation, specifically whether
@@ -105,17 +58,47 @@ struct TypeInfo {
    std::type_index typeIndex;
 
    /**
+    * \brief Templated factory function strips out the `std::optional` wrapper
+    */
+   template<typename   T> static std::type_index makeTypeIndex() {return typeid(T                     ); }
+   template<IsOptional T> static std::type_index makeTypeIndex() {return typeid(typename T::value_type); }
+
+   /**
     * \brief This classification covers the main special cases we need to deal with, viz whether a property is optional
     *        (so we have to deal with std::optional wrapper around the underlying type) and whether it is an enum (where
     *        we treat it as an int for generic handling because it makes the serialisation code a lot simpler).
     */
    enum class Classification {
-      RequiredEnum,
+      RequiredEnum ,
       RequiredOther,
-      OptionalEnum,
-      OptionalOther
+      OptionalEnum ,
+      OptionalOther,
    };
    Classification classification;
+   template<typename        T> static Classification makeClassification(); // Only specialisations
+   template<IsRequiredEnum  T> static Classification makeClassification() {return Classification::RequiredEnum ;}
+   template<IsRequiredOther T> static Classification makeClassification() {return Classification::RequiredOther;}
+   template<IsOptionalEnum  T> static Classification makeClassification() {return Classification::OptionalEnum ;}
+   template<IsOptionalOther T> static Classification makeClassification() {return Classification::OptionalOther;}
+
+   /**
+    * \brief For fields that are pointers, we need to be able to distinguish the type of pointer.
+    */
+   enum class PointerType {
+      NotPointer   ,
+      RawPointer   ,
+      SharedPointer,
+   };
+   template<typename        T> static PointerType makePointerType() {return PointerType::NotPointer   ;}
+   template<IsRawPointer    T> static PointerType makePointerType() {return PointerType::RawPointer   ;}
+   template<IsSharedPointer T> static PointerType makePointerType() {return PointerType::SharedPointer;}
+   PointerType pointerType;
+
+   /**
+    * \brief If the type is a subclass of \c NamedEntity (or a raw or smart pointer to one) then this will point to the
+    *        \c TypeLookup for that class.  This is used in \c PropertyPath.  Otherwise this will hold \c nullptr.
+    */
+   TypeLookup const * typeLookup;
 
    /**
     * \brief Where appropriate, this tells us what is actually being stored.  Eg, \c typeIndex might tells us that a
@@ -140,6 +123,18 @@ struct TypeInfo {
    std::optional<BtFieldType> fieldType;
 
    /**
+    * \brief Sometimes it's useful to be able to get the property name from the \c TypeInfo object.  NOTE that there are
+    *        valid circumstances where this will be \c PropertyNames::None::none
+    */
+   BtStringConst const & propertyName;
+
+   /**
+    * \return \c true if \c classification is \c RequiredEnum or \c OptionalEnum, \c false otherwise (ie if
+    *         \c classification is \c RequiredOther or \c OptionalOther
+    */
+   bool isEnum() const;
+
+   /**
     * \return \c true if \c classification is \c OptionalEnum or \c OptionalOther, \c false otherwise (ie if
     *         \c classification is \c RequiredEnum or \c RequiredOther
     */
@@ -150,12 +145,16 @@ struct TypeInfo {
     *
     *        Note that if \c T is \c std::optional<U> then U can be extracted by \c typename \c T::value_type.
     */
-   template<typename T>        const static TypeInfo construct(std::optional<BtFieldType> fieldType);  // No general case, only specialisations
-   template<IsRequiredEnum  T> const static TypeInfo construct(std::optional<BtFieldType> fieldType = std::nullopt) { return TypeInfo{typeid(T), Classification::RequiredEnum , fieldType}; }
-   template<IsRequiredOther T> const static TypeInfo construct(std::optional<BtFieldType> fieldType = std::nullopt) { return TypeInfo{typeid(T), Classification::RequiredOther, fieldType}; }
-   template<IsOptionalEnum  T> const static TypeInfo construct(std::optional<BtFieldType> fieldType = std::nullopt) { return TypeInfo{typeid(typename T::value_type), Classification::OptionalEnum , fieldType}; }
-   template<IsOptionalOther T> const static TypeInfo construct(std::optional<BtFieldType> fieldType = std::nullopt) { return TypeInfo{typeid(typename T::value_type), Classification::OptionalOther, fieldType}; }
-
+   template<typename T> const static TypeInfo construct(BtStringConst const & propertyName,
+                                                        TypeLookup const * typeLookup,
+                                                        std::optional<BtFieldType> fieldType = std::nullopt) {
+      return TypeInfo{makeTypeIndex<T>(),
+                      makeClassification<T>(),
+                      makePointerType<T>(),
+                      typeLookup,
+                      fieldType,
+                      propertyName};
+   }
 };
 
 
@@ -174,6 +173,10 @@ struct TypeInfo {
  *        of type \c T or \c std::optional<T>.  But I _think_ the approach here is easier to debug.
  */
 class TypeLookup {
+
+   template<class S> friend S & operator<<(S & stream, TypeLookup const & typeLookup);
+   template<class S> friend S & operator<<(S & stream, TypeLookup const * typeLookup);
+
 public:
 
    /**
@@ -189,30 +192,45 @@ public:
     * \param initializerList The mappings for this \c TypeLookup.  Eg for the \c TypeLookup for \c Hop, this would be
     *                        the type mappings for PropertyNames::Hop::... properties (but not the
     *                        PropertyNames::NamedEntity::... properties
-    * \param parentClassLookup Pointer to the \c TypeLookup for the parent class, or \c nullptr if there is none.  Eg
-    *                          for the \c TypeLookup for \c Hop,
-    *                          this should point to the \c TypeLookup for \c NamedEntity because \c Hop inherits from
-    *                          \c NamedEntity.
+    * \param parentClassLookup Pointer(s) to the \c TypeLookup for the parent class(es), or \c {} if there is none.
+    *                          Usually there is a single pointer; multiple pointers are only needed to handle multiple
+    *                          inheritance.
+    *
+    *                          Eg for the \c TypeLookup for \c Hop, this should point to the \c TypeLookup for
+    *                          \c Ingredient because \c Hop inherits directly from \c Ingredient.  (And, in turn the
+    *                          \c parentClassLookup of the \c TypeLookup for \c Ingredient should point to
+    *                          \c NamedEntity.)
     */
    TypeLookup(char       const * const                     className,
               std::initializer_list<LookupMap::value_type> initializerList,
-              TypeLookup const * const                     parentClassLookup = nullptr);
+              std::initializer_list<TypeLookup const *>    parentClassLookups = {});
 
    /**
     * \brief Get the type ID (and whether it's an enum) for a given property name
     */
    TypeInfo const & getType(BtStringConst const & propertyName) const;
 
-   /**
-    * \brief Returns whether the attribute for a given property name is optional (ie std::optional<T> rather than T)
-    */
-   bool isOptional(BtStringConst const & propertyName) const;
-
 private:
-   char       const * const className;
-   LookupMap          const lookupMap;
-   TypeLookup const * const parentClassLookup;
+   /**
+    * \brief Used by \c getType when doing parent class lookup
+    */
+   TypeInfo const * typeInfoFor(BtStringConst const & propertyName) const;
+
+   char const * const m_className;
+   LookupMap const m_lookupMap;
+   std::vector<TypeLookup const *> const m_parentClassLookups;
 };
+
+/**
+ * \brief This is an additional concept for determining whether a class has a `static TypeLookup const typeLookup`
+ *        member.
+ */
+template <typename T> concept HasTypeLookup = (std::is_base_of_v<NamedEntity, T> &&
+                                               std::same_as<decltype(T::typeLookup), TypeLookup const>);
+
+template<typename      T> struct TypeLookupOf      : std::integral_constant<TypeLookup const *, nullptr       > {};
+template<HasTypeLookup T> struct TypeLookupOf<T>   : std::integral_constant<TypeLookup const *, &T::typeLookup> {};
+template<HasTypeLookup T> struct TypeLookupOf<T *> : std::integral_constant<TypeLookup const *, &T::typeLookup> {};
 
 /**
  * \brief This macro simplifies the entries in the \c initializerList parameter of a \c TypeLookup constructor call.  It
@@ -224,13 +242,31 @@ private:
  *        which it is stored, and, if appropriate, the BtFieldType for the property eg:
  *           PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Hop::notes    , Hop::m_notes                                     ),
  *           PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Hop::alpha_pct, Hop::m_alpha_pct, NonPhysicalQuantity::Percentage),
- *           PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Hop::amount_kg, Hop::m_amount_kg, Measurment::Mass               ),
+ *           PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Hop::amount_kg, Hop::m_amount_kg, Measurement::Mass              ),
  *        The macro and the templates above etc then do the necessary.
  *
  *        Note that the introduction of __VA_OPT__ in C++20 makes dealing with the optional third argument a LOT less
  *        painful than it would otherwise be!
  */
-#define PROPERTY_TYPE_LOOKUP_ENTRY(propNameConstVar, memberVar, ...) {&propNameConstVar, TypeInfo::construct<decltype(memberVar)>(__VA_OPT__ (__VA_ARGS__))}
+#define PROPERTY_TYPE_LOOKUP_ENTRY(propNameConstVar, memberVar, ...) \
+   {&propNameConstVar, TypeInfo::construct<decltype(memberVar)>(propNameConstVar, TypeLookupOf<decltype(memberVar)>::value __VA_OPT__ (, __VA_ARGS__))}
+
+/**
+ * \brief This is a trick to allow us to get the return type of a pointer to a member function with a similar syntax
+ *        to the way we get it for a member variable.
+ *
+ *        See https://stackoverflow.com/questions/76325552/c-get-return-type-of-a-pointer-to-a-member-function
+ */
+//! @{
+template<typename MembFnPtr> struct MemberFunctionReturnType;
+template<typename Ret, typename Obj, typename... Args> struct MemberFunctionReturnType<Ret(Obj::*)(Args...)> {
+   using type = Ret;
+};
+template<typename Ret, typename Obj, typename... Args> struct MemberFunctionReturnType<Ret(Obj::*)(Args...) const> {
+   using type = Ret;
+};
+template<auto MembFnPtr> using MemberFunctionReturnType_t = typename MemberFunctionReturnType<decltype(MembFnPtr)>::type;
+//! @}
 
 /**
  * \brief Similar to \c PROPERTY_TYPE_LOOKUP_ENTRY but used when we do not have a member variable and instead must use
@@ -242,26 +278,24 @@ private:
  *
  *           PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Fermentable::betaGlucanWithUnits, Fermentable::betaGlucanWithUnits, Measurement::PqEitherMassOrVolumeConcentration),
  *
- *        Note that, although very similar to \c PROPERTY_TYPE_LOOKUP_ENTRY, the macro is slightly different.  We need
- *        an & in front of MyClass::memberFunction to pass it to decltype (to get the type of the return type of that
- *        function), whereas we can pass MyClass::memberVariable in direct.
  */
-#define PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(propNameConstVar, getterFunction, ...) {&propNameConstVar, TypeInfo::construct< decltype(&getterFunction)>(__VA_OPT__ (__VA_ARGS__))}
+#define PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(propNameConstVar, getterMemberFunction, ...) \
+   {&propNameConstVar, TypeInfo::construct<MemberFunctionReturnType_t<&getterMemberFunction>>(propNameConstVar, TypeLookupOf<MemberFunctionReturnType_t<&getterMemberFunction>>::value __VA_OPT__ (, __VA_ARGS__))}
+
 
 /**
- * \brief Convenience function for logging
+ * \brief Convenience functions for logging
  */
+//! @{
 template<class S>
 S & operator<<(S & stream, TypeInfo const & typeInfo) {
    stream <<
-      "TypeInfo " << (typeInfo.isOptional() ? "" : "non-") << "optional \"" << typeInfo.typeIndex.name() <<
-      "\" fieldType:" << typeInfo.fieldType;
+      "«TypeInfo " << (typeInfo.isOptional() ? "optional" : "non-optional") << " \"" << typeInfo.typeIndex.name() <<
+      "\"; fieldType:" << typeInfo.fieldType << "; property name:" << *typeInfo.propertyName << "; typeLookup:" <<
+      typeInfo.typeLookup << "»";
    return stream;
 }
 
-/**
- * \brief Convenience function for logging
- */
 template<class S>
 S & operator<<(S & stream, TypeInfo const * typeInfo) {
    if (!typeInfo) {
@@ -271,5 +305,24 @@ S & operator<<(S & stream, TypeInfo const * typeInfo) {
    }
    return stream;
 }
+
+template<class S>
+S & operator<<(S & stream, TypeLookup const & typeLookup) {
+   stream << "TypeLookup for " << typeLookup.m_className;
+   return stream;
+}
+
+template<class S>
+S & operator<<(S & stream, TypeLookup const * typeLookup) {
+   if (!typeLookup) {
+      stream << "nullptr";
+   } else {
+      stream << *typeLookup;
+   }
+   return stream;
+}
+
+//! @}
+
 
 #endif

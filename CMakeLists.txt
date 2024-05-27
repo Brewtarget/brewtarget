@@ -1,4 +1,4 @@
-#
+#╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 # CMakeLists.txt is part of Brewtarget, and is Copyright the following
 # authors 2009-2024
 #  - Chris Pavetto <chrispavetto@gmail.com>
@@ -25,7 +25,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
+#╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 
 # ⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐
 # NB: Meson and the `bt` build tool Python script are now the primary way of building and packaging the software.  You
@@ -41,7 +41,6 @@
 # will install to /foo/tmp/blah.
 #
 # See also - src/CMakeLists.txt
-#          - QtDesignerPlugins/CMakeLists.txt
 #
 # Standard make targets:
 #   * make                  -  Regenerate the makefile if necessary and compile the source code.  (On Linux, also
@@ -59,7 +58,6 @@
 #   * make test             -  Run unit tests via CTest
 #
 # Custom make targets:
-#   * make plugins          -  Builds the Qt Designer plugins
 #   * make source_doc       -  Makes Doxygen HTML documentation of the source in doc/html
 #   * make install-data
 #   * make install-runtime
@@ -106,11 +104,14 @@ endif()
 #=======================================================================================================================
 # It's simplest to keep the project name all lower-case as it means we can use a lot more of the default settings for
 # Linux packaging (where directory names etc are expected to be all lower-case).
-project(brewtarget VERSION 3.0.11 LANGUAGES CXX)
+project(brewtarget VERSION 4.0.0 LANGUAGES CXX)
 message(STATUS "Building ${PROJECT_NAME} version ${PROJECT_VERSION}")
 message(STATUS "PROJECT_SOURCE_DIR is ${PROJECT_SOURCE_DIR}")
 # Sometimes we do need the capitalised version of the project name
 set(capitalisedProjectName Brewtarget)
+# We use this in the program, to tell users where to get support.
+set(CONFIG_HOMEPAGE_URL "https://github.com/${capitalisedProjectName}/${projectName}")
+set(CONFIG_ORGANIZATION_DOMAIN "brewtarget.com")
 
 #=======================================================================================================================
 #======================================================= Options =======================================================
@@ -125,8 +126,7 @@ option(NO_MESSING_WITH_FLAGS "On means do not add any build flags whatsoever. Ma
 #================================================== Source directories =================================================
 #
 # ${repoDir}                   = the directory containing this (CMakeLists.txt) file
-# ${repoDir}/src               = C++ source code (with the exception of Qt Designer Plugins)
-# ${repoDir}/QtDesignerPlugins = Qt Designer Plugins
+# ${repoDir}/src               = C++ source code
 # ${repoDir}/ui                = QML UI layout files
 # ${repoDir}/data              = Binary files, including sounds and default database
 # ${repoDir}/translations      = Translated texts
@@ -235,9 +235,10 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+include_directories(${repoDir}/third-party/valijson/include/)
+
 include_directories(${repoDir}/src)
 include_directories("${CMAKE_BINARY_DIR}/src") # In case of out-of-source build.
-include_directories("${CMAKE_BINARY_DIR}/QtDesignerPlugins")
 
 # GCC-specific flags
 if(NOT ${NO_MESSING_WITH_FLAGS})
@@ -391,9 +392,27 @@ message(STATUS "Doing ${CMAKE_BUILD_TYPE} build (DO_RELEASE_BUILD = ${DO_RELEASE
 # Note that if you change the minimum Qt version, you need to make corresponding changes to the .github/workflows/*.yml
 # files so that GitHub uses the appropriate version of Qt for the automated builds.
 #
-# For the moment, max version we can have here is 5.12.8, because that's what Ubuntu 20.04 topped out at
-#
-set(QT5_MIN_VERSION 5.12.8)
+if(UNIX AND NOT APPLE)
+   execute_process(COMMAND lsb_release -rs OUTPUT_VARIABLE RELEASE_VERSION OUTPUT_STRIP_TRAILING_WHITESPACE)
+   # This is the latest version of Qt5 available on Ubuntu 22.04
+   set(QT5_MIN_VERSION 5.15.3)
+else()
+   # Windows and Mac have a slightly newer version of Qt 5.15 LTS
+   set(QT5_MIN_VERSION 5.15.13)
+endif()
+
+if(APPLE)
+   #
+   # The Qt5 documentation to using CMake at https://doc.qt.io/qt-5/cmake-get-started.html says we need to set
+   # CMAKE_PREFIX_PATH environment variable to the Qt 5 installation prefix.  In theory, setting the corresponding CMake
+   # variable should do the same job (per https://cmake.org/cmake/help/latest/variable/CMAKE_PREFIX_PATH.html).
+   #
+   # It seems this is only needed on MacOS.  According to ./third-party/valijson/README.md we are not the only ones to
+   # experience this!
+   #
+   execute_process(COMMAND brew --prefix qt5 OUTPUT_VARIABLE CMAKE_PREFIX_PATH)
+   message(STATUS "CMAKE_PREFIX_PATH = ${CMAKE_PREFIX_PATH}")
+endif()
 
 # Set the AUTOMOC property on all targets.  This tells CMake to automatically handle the Qt Meta-Object Compiler (moc)
 # preprocessor (ie the thing that handles Qt's C++ extensions), without having to use commands such as QT4_WRAP_CPP(),
@@ -710,6 +729,29 @@ if(APPLE)
 find_package(CURL REQUIRED)
 endif()
 
+#=======================================================Valijson========================================================
+# Since Valijson is also hosted at github (https://github.com/tristanpenman/valijson) we just add it as a submodule
+# (via git clone https://github.com/tristanpenman/valijson third-party/valijson).  Then the following also come from
+# https://github.com/tristanpenman/valijson#readme
+#
+# Valijson is a header-only library, so we don't need to build or link to any libraries etc (unless you want to build
+# its test suite - in which case, uncomment the add_subdirectory line and add ValiJSON::valijson to both lists of
+# target_link_libraries in src/CMakeLists.txt).
+#
+# Previously we were using CMake ExternalProject_Add to pull Valijson in, but this is unnecessary (because we don't need
+# to build Valijson) and somewhat harder to debug when it goes wrong.  So, instead, per the readme at
+# https://github.com/tristanpenman/valijson, we just added ValiJSON as a git submodule from the command line.
+#
+message(STATUS "Valijson source at  ${CMAKE_CURRENT_SOURCE_DIR}/third-party/valijson")
+# Per comment above, leave the next line commented out unless you want to build the ValiJSON test suite
+#add_subdirectory(third-party/valijson)
+add_compile_definitions(VALIJSON_USE_EXCEPTIONS)
+include_directories(${ROOTDIR}/third-party/valijson/include)
+execute_process(COMMAND git config --global --add safe.directory third-party/valijson
+                WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
+execute_process(COMMAND git submodule update --init --recursive
+                WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
+
 #========================================= Find MinGW (only needed on Windows) =========================================
 if(WIN32)
    # This is to detect whether we're using MSYS2 and/or MinGW
@@ -771,14 +813,11 @@ set(filesToCompile_qrc "${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.qrc")
 #
 # List of documentation files to be installed.  Note that ${repoDir}/COPYRIGHT is NOT included here as it needs special
 # case handling below.
-set(filesToInstall_docs ${repoDir}/README.markdown)
+set(filesToInstall_docs ${repoDir}/README.md)
 
 # List of data files to be installed.
 set(filesToInstall_data ${repoDir}/data/default_db.sqlite
-                        ${repoDir}/data/DefaultData.xml
-                        # Yes, I know this is 'documentation', but Debian policy suggests it should be
-                        # with the data (see section 12.3 of the policy manual).
-                        ${repoDir}/doc/manual-en.pdf)
+                        ${repoDir}/data/DefaultData.xml)
 
 # Desktop files to install.
 set(filesToInstall_desktop ${repoDir}/linux/${PROJECT_NAME}.desktop)
@@ -862,9 +901,8 @@ set(filesToInstall_changeLogCompressed "${CMAKE_CURRENT_BINARY_DIR}/changelog.gz
 #=======================================================================================================================
 #=========================================== Process other CMakeList.txt files =========================================
 #=======================================================================================================================
-# We try to restrict QtDesignerPlugins/CMakeLists.txt and src/CMakeLists.txt to just holding lists of source files,
+# We try to restrict src/CMakeLists.txt to just holding lists of source files,
 # otherwise the dependencies and interactions between those files and this one get a bit hard to follow.
-include(QtDesignerPlugins/CMakeLists.txt)
 include(src/CMakeLists.txt)
 
 #=======================================================================================================================
@@ -1088,25 +1126,30 @@ message("appAndTestCommonLibraries: ${appAndTestCommonLibraries}")
 target_link_libraries(${fileName_executable} ${appAndTestCommonLibraries})
 
 #=================================Tests========================================
-# We build the unit test executable in the bin subdirectory because, on Windows, we're going to copy a lot of other
-# files in there (see below).
+# We used to build the unit test executable in the bin subdirectory because, on Windows, we're going to copy a lot of
+# other files in there (see below).  HOWEVER, we've never done that on the Meson build and it's a pain in the neck to
+# do things differently on the CMake build: when we're running the unit tests because of the way we look for the data
+# directory (see initResourceDir() function in Application.cpp).
 add_executable(${fileName_unitTestRunner}
                ${repoDir}/src/unitTests/Testing.cpp
                $<TARGET_OBJECTS:btobjlib>)
-set_target_properties(${fileName_unitTestRunner} PROPERTIES RUNTIME_OUTPUT_DIRECTORY bin)
+#set_target_properties(${fileName_unitTestRunner} PROPERTIES RUNTIME_OUTPUT_DIRECTORY bin)
 
 # Test app needs all the same libraries as the main app, plus Qt5::Test
 target_link_libraries(${fileName_unitTestRunner} ${appAndTestCommonLibraries} Qt5::Test)
 
-add_test(NAME pstdintTest                 COMMAND bin/${fileName_unitTestRunner} pstdintTest                )
-add_test(NAME recipeCalcTest_allGrain     COMMAND bin/${fileName_unitTestRunner} recipeCalcTest_allGrain    )
-add_test(NAME postBoilLossOgTest          COMMAND bin/${fileName_unitTestRunner} postBoilLossOgTest         )
-add_test(NAME testUnitConversions         COMMAND bin/${fileName_unitTestRunner} testUnitConversions        )
-add_test(NAME testNamedParameterBundle    COMMAND bin/${fileName_unitTestRunner} testNamedParameterBundle   )
-add_test(NAME testNumberDisplayAndParsing COMMAND bin/${fileName_unitTestRunner} testNumberDisplayAndParsing)
-add_test(NAME testAlgorithms              COMMAND bin/${fileName_unitTestRunner} testAlgorithms             )
-add_test(NAME testTypeLookups             COMMAND bin/${fileName_unitTestRunner} testTypeLookups            )
-add_test(NAME testLogRotation             COMMAND bin/${fileName_unitTestRunner} testLogRotation            )
+message("Unit Test Runner: ./${fileName_unitTestRunner}")
+
+add_test(NAME pstdintTest                 COMMAND ./${fileName_unitTestRunner} pstdintTest                )
+add_test(NAME recipeCalcTest_allGrain     COMMAND ./${fileName_unitTestRunner} recipeCalcTest_allGrain    )
+add_test(NAME postBoilLossOgTest          COMMAND ./${fileName_unitTestRunner} postBoilLossOgTest         )
+add_test(NAME testUnitConversions         COMMAND ./${fileName_unitTestRunner} testUnitConversions        )
+add_test(NAME testNamedParameterBundle    COMMAND ./${fileName_unitTestRunner} testNamedParameterBundle   )
+add_test(NAME testNumberDisplayAndParsing COMMAND ./${fileName_unitTestRunner} testNumberDisplayAndParsing)
+add_test(NAME testAlgorithms              COMMAND ./${fileName_unitTestRunner} testAlgorithms             )
+add_test(NAME testTypeLookups             COMMAND ./${fileName_unitTestRunner} testTypeLookups            )
+add_test(NAME testInventory               COMMAND ./${fileName_unitTestRunner} testInventory              )
+add_test(NAME testLogRotation             COMMAND ./${fileName_unitTestRunner} testLogRotation            )
 
 #=================================Installs=====================================
 
@@ -1213,7 +1256,7 @@ add_custom_target(
 FIND_PROGRAM(DOXYGEN_CMD doxygen)
 if(DOXYGEN_CMD)
   set(DOXYFILE "${CMAKE_CURRENT_BINARY_DIR}/doc/Doxyfile")
-  CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/doc/Doxyfile.in" ${DOXYFILE})
+  CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/doc/Doxyfile.cmake.in" ${DOXYFILE})
   add_custom_target(source_doc
                      COMMAND ${DOXYGEN_CMD} ${DOXYFILE}
                      WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/doc"

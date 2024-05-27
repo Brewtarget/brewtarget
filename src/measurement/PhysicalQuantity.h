@@ -1,21 +1,18 @@
-/*
- * measurement/PhysicalQuantity.h is part of Brewtarget, and is copyright the following
- * authors 2021-2023:
- * - Matt Young <mfsy@yahoo.com>
+/*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ * measurement/PhysicalQuantity.h is part of Brewtarget, and is copyright the following authors 2021-2024:
+ *   • Matt Young <mfsy@yahoo.com>
  *
- * Brewtarget is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * Brewtarget is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #ifndef MEASUREMENT_PHYSICALQUANTITY_H
 #define MEASUREMENT_PHYSICALQUANTITY_H
 #pragma once
@@ -24,10 +21,14 @@
 #include <tuple>
 #include <utility>
 #include <variant>
+#include <vector>
 
 #include <QString>
 
 #include "utils/BtStringConst.h"
+#include "utils/TypeTraits.h"
+
+class EnumStringMapping;
 
 namespace Measurement {
    /**
@@ -91,16 +92,30 @@ namespace Measurement {
     *       \c SystemOfMeasurement explicitly.
     *
     *       NOTE that there are other things that users can configure that do not belong with this group of classes
-    *       because they do not related to physical quantities, eg date & time format and language choice do not fit
-    *       well in here -- see \c NonPhysicalQuantity in \headerfile BtFieldType.h
+    *       because they do not relate to physical quantities, eg date & time format and language choice do not fit well
+    *       in here -- see \c NonPhysicalQuantity in \headerfile BtFieldType.h
     */
    enum class PhysicalQuantity {
-      Mass,           // Elsewhere we use weight instead of mass because it's more idiomatic (despite being,
-                      // strictly speaking, not the same thing)
+      // Elsewhere we use weight instead of mass because it's more idiomatic (despite being, strictly speaking, not the
+      // same thing)
+      Mass,
+
       Volume,
-      Time,           // Note this is durations of time, NOT dates or times of day  .:TBD:. Rename to TimeDuration
+
+      // This is not really a physical quantity.  However, in our domain, it makes life simpler for us to pretend that
+      // it is.  This is because "mass", "volume" and "number of" are the three canonical ways of measuring ingredients.
+      // Note that this _is_ allowed to be fractional because you might want to add 1½ cinnamon sticks or 2.5 packets of
+      // yeast.  In reality, this means we store it in a double and, typically, would want to show the number to 1
+      // decimal place.
+      Count,
+
       Temperature,
+
+      // Note this is durations of time, NOT dates or times of day  .:TBD:. Rename to TimeDuration
+      Time,
+
       Color,
+
       // Density is sometimes referred to as "gravity" as a shorthand for "specific gravity".  Strictly, what we're
       // measuring as brewers is relative density (aka "ratio of the density ... with respect to water at its densest
       // (at 4 °C)" per https://en.wikipedia.org/wiki/Relative_density) in order to find % sugar content (see
@@ -108,58 +123,83 @@ namespace Measurement {
       // So we could call this RelativeDensity or SugarConcentration or Gravity.  But I think Density is truest to the
       // idea of a measurable physical quantity described above.
       Density,
+
       DiastaticPower,
+
       Acidity,
+
       Bitterness,
+
       // Per https://www.sciencedirect.com/topics/agricultural-and-biological-sciences/carbonation, "Carbonation is
       // measured as either ‘volumes’ or grams per litre. One volume means 1 L of CO2 in 1 L of drink.  This is
       // equivalent to 1.96 g/L (normally quoted as 2 g/L)."  Thus, although we're using similar units to measures of
       // concentration, the equivalences are different and, in practice, it's easiest to treat them as a completely
       // separate.
       Carbonation,
+
+      //
       // As explained at https://en.wikipedia.org/wiki/Concentration, there are several types of concentration,
       // including "mass concentration", which is expressed as mass-per-volume, and "volume concentration", which is
       // strictly-speaking a dimensionless number (because volume-per-volume cancels out) but is often expressed as
       // parts per million (or similar) or sometimes as a percentage.
       //
-      // BeerJSON just bundles mass concentration and volume concentration scales together under "concentration", which
-      // is sufficient for its purposes.  However, we don't want to do that, as we'd end up doing some contrived and
-      // incorrect conversion between the two -- because there is no generic conversion between milligrams-per-litre and
-      // parts-per-xxx.  (Converting mass-per-volume to volume-per-volume (or mass-per-mass) involves temperature and
-      // the molar masses of the two substances in question.  Hence why a chemist would use
-      // https://en.wikipedia.org/wiki/Molar_concentration instead.
+      // Additionally, there is "mass fraction" (see https://en.wikipedia.org/wiki/Mass_fraction_(chemistry)) and
+      // "volume fraction" (see https://en.wikipedia.org/wiki/Volume_fraction), both of which are dimensionless (because
+      // mass-per-mass and volume-per-volume cancel out).
       //
-      // (Various converters on the internet will tell you that 1 mg/L is "the same as" 1 ppm, but this is only really
-      // true if everything has the density of water.  In fairness to such converters, in practice, in brewing, for
-      // small concentrations, it's often not hugely wrong to approximate 1 milligram-per-litre with 1
-      // part-per-million.)
+      // Volume fraction is, strictly, different than volume concentration because the former is measured before mixing
+      // everything together and the latter afterwards.  So they are only the same in an "ideal solution", where the
+      // volumes of the constituents are additive (the volume of the solution is equal to the sum of the volumes of its
+      // ingredients).
       //
-      // See also https://en.wikipedia.org/wiki/Parts-per_notation.
-      MassConcentration,
-      VolumeConcentration,
+      // In BeerJSON, there is only ConcentrationType, and its units are "ppm", "ppb" and "mg/l".  Since the last of
+      // these is mass concentration, we assume that the first two are mass fraction.  In the context of brewing, the
+      // concentrations we are measuring are typically dilute aqueous solutions -- ie mostly water.  In that context,
+      // it's approximately true that 1 mg/L mass concentration = 1 parts per million (ppm) mass fraction.  This is
+      // because one liter of water weighs about a kilogram.  (Of course it actually depends on the water temperature
+      // and pressure -- eg see table at https://en.wikipedia.org/wiki/Density#Water, but this is a reasonable
+      // approximation.)
+      //
+      // So, we go with the flow and treat "ppm", "ppb" and "mg/l" as all measures of mass fraction or mass
+      // concentration.  Moreover, we assume that, in the context of brewing software we can convert between mass
+      // fraction and mass concentration per the formula above.  (We _could_ insist that mass fraction and mass
+      // concentration are different things, but the implication of the BeerJSON unit groupings is that it's not what
+      // users would want or expect.)
+      //
+      // Per https://en.wikipedia.org/wiki/Parts-per_notation, strictly speaking for a mass fraction, we should use
+      // "mg/kg" as instead of the more ambiguous "ppm" and "μg/kg" instead of "ppb".  However, users are going to
+      // expect to be able to type "ppm" and "ppb" as these are the more day-to-day terms used in brewing.  So, again we
+      // take the pragmatic rather than pedantic route.
+      //
+      MassFractionOrConc,
+
       // Viscosity -- see https://en.wikipedia.org/wiki/Viscosity
       Viscosity,
+
       // Specific heat capacity -- see https://en.wikipedia.org/wiki/Specific_heat_capacity
       SpecificHeatCapacity,
+
+      // Specific volume (= the reciprocal of density) -- see https://en.wikipedia.org/wiki/Specific_volume
+      SpecificVolume,
+
+
       // .:TBD:. Should we add Energy for PropertyNames::Recipe::calories (in which case, should canonical measure be
       //         Joules)?
    };
 
    /**
-    * \brief Array of all possible values of \c Measurement::PhysicalQuantity.  NB: This is \b not guaranteed to be in
-    *        the same order as the values of the enum.
+    * \brief Mapping between \c Measurement::PhysicalQuantity and string values suitable for logging or serialisation in
+    *        the DB.
     *
-    *        This is the least ugly way I could think of to allow other parts of the code to iterate over all values
-    *        of enum class \c Measurement::PhysicalQuantity.  Hopefully, one day, when reflection
-    *        (https://en.cppreference.com/w/cpp/experimental/reflect) gets incorporated into C++, this will ultimately
-    *        be unnecessary.
+    *        This can also be used to obtain the number of values of \c PhysicalQuantity, albeit at run-time rather than
+    *        compile-time.  (One day, C++ will have reflection and we won't need to do things this way.)
     */
-   extern std::array<Measurement::PhysicalQuantity, 14> const allPhysicalQuantites;
+   extern EnumStringMapping const physicalQuantityStringMapping;
 
    /**
-    * \brief Return the name of a \c PhysicalQuantity suitable either for display to the user or logging
+    * \brief Localised names of \c Hop::Form values suitable for displaying to the end user
     */
-   QString getDisplayName(Measurement::PhysicalQuantity const physicalQuantity);
+   extern EnumStringMapping const physicalQuantityDisplayNames;
 
    /**
     * \brief Return the \c PersistentSettings name for looking up the display \c UnitSystem for the specified
@@ -167,74 +207,107 @@ namespace Measurement {
     */
    BtStringConst const & getSettingsName(Measurement::PhysicalQuantity const physicalQuantity);
 
-
    /**
-    * \brief In a few cases, we want to be able to handle two different ways of measuring a thing (eg Mass and Volume,
-    *        or MassConcentration and VolumeConcentration).
+    * \brief In a few cases, we want to be able to handle two or three different ways of measuring a thing (eg \c Mass,
+    *        \c Volume and \c Count; or \c MassConcentration and \c VolumeConcentration).
     *
-    *        We adopt the convention that members of the tuple are in alphabetical order.
+    *        We could try to do a lot of really clever compile-time stuff with flags and templates to cover all possible
+    *        permutations.  However, I don't think the complexity would be justified, as there are actually very few
+    *        cases:
+    *          \c Mass || \c Volume (eg measurements of \c Fermentable and \c Hop)
+    *          \c Mass || \c Volume || \c Count (eg measurements of \c Misc and \c Yeast)
     *
-    *        At the moment, we don't envisage a need for having more than two ways of measuring the same thing, but it's
-    *        relatively obvious how to extend the approach here if we did need to.
-    *
-    *        Maybe a better name would be EitherOf2PhysicalQuantities of some such, but we retain Mixed for now as
-    *        that's the word we used to use when the only pair was Mass and Volume.
+    *        Since it also seems unlikely that the number of cases will grow very much (even if we change our minds
+    *        about distinguishing between Mass Concentration and Mass Fraction), I think this enum is simpler and
+    *        sufficient (with the helper functions below).
     */
-   using Mixed2PhysicalQuantities = std::tuple<Measurement::PhysicalQuantity, Measurement::PhysicalQuantity>;
+   enum class ChoiceOfPhysicalQuantity {
+      Mass_Volume        ,
+      Mass_Volume_Count  ,
+   };
+
+   /*!
+    * \brief Mapping between \c Measurement::ChoiceOfPhysicalQuantity and string values suitable for logging (or
+    *        serialisation, though this is not currently needed).
+    */
+   extern EnumStringMapping const choiceOfPhysicalQuantityStringMapping;
+
+   /*!
+    * \brief Localised names of \c Hop::Form values suitable for displaying to the end user
+    */
+   extern EnumStringMapping const choiceOfPhysicalQuantityDisplayNames;
 
    /**
-    * \brief Of course, once we have \c Mixed2PhysicalQuantities, we need a way to store either that or a
+    * \brief Of course, once we have \c Measurement::ChoiceOfPhysicalQuantity, we need a way to store either that or a
     *        \c Measurement::PhysicalQuantity.
     *
     *        (Note that, \c BtFieldType is one place we \b don't use this as we need to add a third possibility there of
     *        \c NonPhysicalQuantity.)
     */
-   using PhysicalQuantities = std::variant<Measurement::PhysicalQuantity, Mixed2PhysicalQuantities>;
+   using PhysicalQuantities = std::variant<Measurement::PhysicalQuantity, Measurement::ChoiceOfPhysicalQuantity>;
+
+   //
+   // It's also useful to be able to template on "either PhysicalQuantity or ChoiceOfPhysicalQuantity".
+   //
+   // See comment in utils/TypeTraits.h for definition of CONCEPT_FIX_UP (and why, for now, we need it)
+   template <typename T>
+   concept CONCEPT_FIX_UP PhysicalQuantityConstTypes =
+      std::same_as<T, Measurement::PhysicalQuantity const> ||
+      std::same_as<T, Measurement::ChoiceOfPhysicalQuantity const>;
 
    /**
-    * \brief It's more concise to have a constant for Mass & Volume
+    * \brief For each set of alternates implied by a value of \c ChoiceOfPhysicalQuantity, there needs to be a default
+    *        \c PhysicalQuantity that we assume in the absence of other information (eg to default construct a
+    *        \c ConstrainedAmount).  When we know this at compile time, we can do it all through template
+    *        specialisations.
+    *
+    *        Note that we have two template parameters, so we can handle cases where we are writing general "constrained
+    *        to a particular PhysicalQuantity or ChoiceOfPhysicalQuantity" code.
+    *
+    *        Default case is for \c PhysicalQuantity; specialisations are for all \c ChoiceOfPhysicalQuantity
+    *        possibilities.  Note that, because this is a function template, we are not allowed \b partial
+    *        specialisations.
     */
-   extern Mixed2PhysicalQuantities const PqEitherMassOrVolume;
+   template<PhysicalQuantityConstTypes PQT, PQT pqt> PhysicalQuantity defaultPhysicalQuantity();
 
    /**
-    * \brief It's more concise to have a constant for MassConcentration & VolumeConcentration
+    * \brief We also need to handle the case where things need to be resolved at run-time
     */
-   extern Mixed2PhysicalQuantities const PqEitherMassOrVolumeConcentration;
+   PhysicalQuantity defaultPhysicalQuantity(ChoiceOfPhysicalQuantity const val);
+
+   /**
+    * \brief And for generic programming, it's helpful to be able to list all the \c PhysicalQuantity values
+    *        corresponding to a \c ChoiceOfPhysicalQuantity
+    */
+   std::vector<PhysicalQuantity> const & allPossibilities(ChoiceOfPhysicalQuantity const val);
+   std::vector<int> const & allPossibilitiesAsInt(ChoiceOfPhysicalQuantity const val);
+
+   /**
+    * \return \c true if \c physicalQuantity is a valid option for \c variantPhysicalQuantity, false otherwise
+    */
+   template<PhysicalQuantityConstTypes PQT, PQT pqt> bool isValid(PhysicalQuantity const physicalQuantity);
+   bool isValid(ChoiceOfPhysicalQuantity const choiceOfPhysicalQuantity, PhysicalQuantity const physicalQuantity);
 
 }
 
-/**
- * \brief Convenience function for logging
- */
-template<class S>
-S & operator<<(S & stream, Measurement::PhysicalQuantity const physicalQuantity) {
-   stream <<
-      "PhysicalQuantity #" << static_cast<int>(physicalQuantity) << ": (" <<
-      Measurement::getDisplayName(physicalQuantity) << ")";
-   return stream;
-}
 
 /**
- * \brief Convenience function for logging
+ * \brief Convenience functions for logging
  */
-template<class S>
-S & operator<<(S & stream, Measurement::Mixed2PhysicalQuantities const mixed2PhysicalQuantities) {
-   stream <<
-      "Mixed2PhysicalQuantities:" << std::get<0>(mixed2PhysicalQuantities) << std::get<1>(mixed2PhysicalQuantities);
-   return stream;
-}
+/**@{*/
+template<class S> S & operator<<(S & stream, Measurement::PhysicalQuantity         const val);
+template<class S> S & operator<<(S & stream, Measurement::ChoiceOfPhysicalQuantity const val);
 
-/**
- * \brief Convenience function for logging
- */
 template<class S>
-S & operator<<(S & stream, Measurement::PhysicalQuantities const & physicalQuantities) {
-   if (std::holds_alternative<Measurement::PhysicalQuantity>(physicalQuantities)) {
-      stream << "PhysicalQuantities:" << std::get<Measurement::PhysicalQuantity>(physicalQuantities);
+S & operator<<(S & stream, Measurement::PhysicalQuantities const & val) {
+   if (std::holds_alternative<Measurement::PhysicalQuantity>(val)) {
+      stream << "PhysicalQuantities:" << std::get<Measurement::PhysicalQuantity>(val);
    } else {
-      stream << "PhysicalQuantities:" << std::get<Measurement::Mixed2PhysicalQuantities>(physicalQuantities);
+      Q_ASSERT(std::holds_alternative<Measurement::ChoiceOfPhysicalQuantity>(val));
+      stream << "PhysicalQuantities:" << std::get<Measurement::ChoiceOfPhysicalQuantity>(val);
    }
    return stream;
 }
 
+/**@}*/
 #endif

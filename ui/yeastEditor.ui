@@ -13,14 +13,14 @@
   <property name="windowTitle">
    <string>Yeast Editor</string>
   </property>
-  <property name="configSection" stdset="0">
-   <string notr="true">yeastEditor</string>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QTabWidget" name="tabWidget_editor">
      <property name="tabPosition">
       <enum>QTabWidget::West</enum>
+     </property>
+     <property name="tabShape">
+      <enum>QTabWidget::Rounded</enum>
      </property>
      <property name="currentIndex">
       <number>0</number>
@@ -43,213 +43,39 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="1">
-        <widget class="SmartLineEdit" name="lineEdit_laboratory">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>100</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="toolTip">
-          <string>Lab</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="label_laboratory">
-         <property name="text">
-          <string>Lab</string>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit_laboratory</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label_form">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Form</string>
-         </property>
-         <property name="buddy">
-          <cstring>comboBox_form</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="3">
-        <widget class="SmartLineEdit" name="lineEdit_inventory">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>100</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="toolTip">
-          <string>Quanta in inventory</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="2">
-        <widget class="QLabel" name="label_inventory">
-         <property name="text">
-          <string>Quanta in Inventory</string>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit_inventory</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QComboBox" name="comboBox_type">
-         <property name="toolTip">
-          <string>Type</string>
-         </property>
-         <item>
-          <property name="text">
-           <string>Ale</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Lager</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Wheat</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Wine</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Champagne</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_type">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Type</string>
-         </property>
-         <property name="buddy">
-          <cstring>comboBox_type</cstring>
-         </property>
-        </widget>
-       </item>
        <item row="0" column="1">
         <widget class="SmartLineEdit" name="lineEdit_name">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>100</width>
-           <height>16777215</height>
-          </size>
          </property>
          <property name="toolTip">
           <string>Name</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="1">
-        <widget class="QComboBox" name="comboBox_form">
-         <property name="toolTip">
-          <string>Form</string>
-         </property>
-         <item>
-          <property name="text">
-           <string>Liquid</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Dry</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Slant</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Culture</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-       <item row="5" column="1">
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="label_productID">
-         <property name="text">
-          <string>Product ID</string>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit_productID</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="1">
-        <widget class="SmartLineEdit" name="lineEdit_productID">
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_type">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
-         <property name="maximumSize">
-          <size>
-           <width>100</width>
-           <height>16777215</height>
-          </size>
+         <property name="text">
+          <string>Type</string>
          </property>
+         <property name="buddy">
+          <cstring>comboBox_yeastType</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="BtComboBox" name="comboBox_yeastType">
          <property name="toolTip">
-          <string>Product ID</string>
+          <string>Type</string>
          </property>
         </widget>
        </item>
@@ -272,7 +98,7 @@
        <item row="1" column="3">
         <widget class="QCheckBox" name="checkBox_amountIsWeight">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -285,6 +111,145 @@
          </property>
         </widget>
        </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_form">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Form</string>
+         </property>
+         <property name="buddy">
+          <cstring>comboBox_yeastForm</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="BtComboBox" name="comboBox_yeastForm">
+         <property name="toolTip">
+          <string>Form</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="SmartLabel" name="label_inventory">
+         <property name="text">
+          <string>Total amount in Inventory</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_inventory</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="3">
+        <widget class="SmartLineEdit" name="lineEdit_inventory">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string>Total amount in inventory</string>
+         </property>
+        </widget>
+       </item>
+
+       <item row="2" column="4">
+        <widget class="QLabel" name="label_amountType">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string>Whether the amount is weight or volume</string>
+         </property>
+         <property name="text">
+          <string>Amount Type</string>
+         </property>
+         <property name="buddy">
+          <cstring>comboBox_amountType</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="5">
+        <widget class="BtComboBox" name="comboBox_amountType">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string>Whether the amount is weight or volume</string>
+         </property>
+        </widget>
+       </item>
+
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_laboratory">
+         <property name="text">
+          <string>Lab</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_laboratory</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="SmartLineEdit" name="lineEdit_laboratory">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string>Lab</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="label_productId">
+         <property name="text">
+          <string>Product ID</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_productId</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="SmartLineEdit" name="lineEdit_productId">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string>Product ID</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="tab_extra">
@@ -292,50 +257,7 @@
        <string>Extras</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
-       <item row="8" column="3">
-        <widget class="QCheckBox" name="checkBox_addToSecondary">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="toolTip">
-          <string>Checked means add this yeast to secondary instead of primary</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="5">
-        <widget class="QComboBox" name="comboBox_flocculation">
-         <property name="toolTip">
-          <string>Flocculation</string>
-         </property>
-         <item>
-          <property name="text">
-           <string>Low</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Medium</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>High</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Very High</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-       <item row="3" column="0">
+       <item row="0" column="0">
         <widget class="QLabel" name="label_attenuation">
          <property name="text">
           <string>Attenuation (%)</string>
@@ -345,7 +267,20 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="4">
+       <item row="0" column="1">
+        <widget class="SmartLineEdit" name="lineEdit_attenuation">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string>Apparent attenuation as percentage of OG points</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
         <widget class="QLabel" name="label_flocculation">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -358,45 +293,48 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="3">
-        <widget class="SmartLineEdit" name="lineEdit_minTemperature">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>100</width>
-           <height>16777215</height>
-          </size>
-         </property>
+       <item row="0" column="3">
+        <widget class="BtComboBox" name="comboBox_yeastFlocculation">
          <property name="toolTip">
-          <string>Min temp</string>
+          <string>Flocculation</string>
          </property>
         </widget>
        </item>
-       <item row="3" column="3">
-        <widget class="SmartLineEdit" name="lineEdit_attenuation">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_attenuationMin">
+         <property name="text">
+          <string>Min Attenuation (%)</string>
          </property>
-         <property name="maximumSize">
-          <size>
-           <width>100</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="toolTip">
-          <string>Apparent attenuation as percentage of OG points</string>
+         <property name="buddy">
+          <cstring>lineEdit_attenuationMin</cstring>
          </property>
         </widget>
        </item>
-       <item row="5" column="0">
+       <item row="1" column="1">
+        <widget class="SmartLineEdit" name="lineEdit_attenuationMin">
+         <property name="toolTip">
+          <string>Minimum apparent attenuation as percentage of OG points</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QLabel" name="label_attenuationMax">
+         <property name="text">
+          <string>Max Attenuation (%)</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_attenuationMax</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="3">
+        <widget class="SmartLineEdit" name="lineEdit_attenuationMax">
+         <property name="toolTip">
+          <string>Maximum apparent attenuation as percentage of OG points</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
         <widget class="SmartLabel" name="label_minTemperature">
          <property name="contextMenuPolicy">
           <enum>Qt::CustomContextMenu</enum>
@@ -409,33 +347,43 @@
          </property>
         </widget>
        </item>
-       <item row="8" column="0" colspan="3">
-        <widget class="QLabel" name="label_addToSecondary">
+       <item row="2" column="1">
+        <widget class="SmartLineEdit" name="lineEdit_minTemperature">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
-         <property name="text">
-          <string>Add to Secondary</string>
+         <property name="toolTip">
+          <string>Min temp</string>
          </property>
         </widget>
        </item>
-       <item row="9" column="3">
-        <spacer name="verticalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
+       <item row="2" column="2">
+        <widget class="QLabel" name="label_maxReuse">
+         <property name="text">
+          <string>Max Recultures</string>
          </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
+         <property name="buddy">
+          <cstring>lineEdit_maxReuse</cstring>
          </property>
-        </spacer>
+        </widget>
        </item>
-       <item row="6" column="0">
+       <item row="2" column="3">
+        <widget class="SmartLineEdit" name="lineEdit_maxReuse">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string>Max recultures</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
         <widget class="SmartLabel" name="label_maxTemperature">
          <property name="contextMenuPolicy">
           <enum>Qt::CustomContextMenu</enum>
@@ -448,26 +396,20 @@
          </property>
         </widget>
        </item>
-       <item row="6" column="3">
+       <item row="3" column="1">
         <widget class="SmartLineEdit" name="lineEdit_maxTemperature">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>100</width>
-           <height>16777215</height>
-          </size>
          </property>
          <property name="toolTip">
           <string>Max temp</string>
          </property>
         </widget>
        </item>
-       <item row="6" column="4">
+       <item row="3" column="2">
         <widget class="QLabel" name="label_timesCultured">
          <property name="text">
           <string>Times Recultured</string>
@@ -477,53 +419,173 @@
          </property>
         </widget>
        </item>
-       <item row="6" column="5">
+       <item row="3" column="3">
         <widget class="SmartLineEdit" name="lineEdit_timesCultured">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>100</width>
-           <height>16777215</height>
-          </size>
          </property>
          <property name="toolTip">
           <string>Times this yeast has been recultured</string>
          </property>
         </widget>
        </item>
-       <item row="5" column="4">
-        <widget class="QLabel" name="label_maxReuse">
-         <property name="text">
-          <string>Max Recultures</string>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit_maxReuse</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="5">
-        <widget class="SmartLineEdit" name="lineEdit_maxReuse">
+       <item row="4" column="0">
+        <widget class="QLabel" name="label_addToSecondary">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
-         <property name="maximumSize">
-          <size>
-           <width>100</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="toolTip">
-          <string>Max recultures</string>
+         <property name="text">
+          <string>Add to Secondary</string>
          </property>
         </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="BtBoolComboBox" name="boolCombo_addToSecondary">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string>Whether to add this yeast to secondary instead of primary</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2">
+        <widget class="QLabel" name="label_alcoholTolerance">
+         <property name="text">
+          <string>Alcohol Tolerance</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_alcoholTolerance</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="3">
+        <widget class="SmartLineEdit" name="lineEdit_alcoholTolerance">
+         <property name="toolTip">
+          <string>Recommended limit of ABV by the culture producer before attenuation stops</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="label_phenolicOffFlavorPositive">
+         <property name="text">
+          <string>Phenolic Off-Flavor Positive</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="BtBoolComboBox" name="boolCombo_phenolicOffFlavorPositive">
+         <property name="toolTip">
+          <string>Whether culture is capable of producing phenols, which is a common distinctive property of saison, and brett yeasts</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="2">
+        <widget class="QLabel" name="label_glucoamylasePositive">
+         <property name="text">
+          <string>Glucoamylase Positive</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="3">
+        <widget class="BtBoolComboBox" name="boolCombo_glucoamylasePositive">
+         <property name="toolTip">
+          <string>A glucoamylase positive culture is capable of producing glucoamylase, the enzyme produced through expression of the diastatic gene, which allows yeast to attenuate dextrins and starches leading to a very low FG. This is positive in some saison/brett yeasts as well as the new gulo hybrid by Omega yeast labs.</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0">
+        <widget class="QLabel" name="label_killerProducingK1Toxin">
+         <property name="text">
+          <string>K1 Killer</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="1">
+        <widget class="BtBoolComboBox" name="boolCombo_killerProducingK1Toxin">
+         <property name="toolTip">
+          <string>Produces K1 killer toxin</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="2">
+        <widget class="QLabel" name="label_killerProducingK2Toxin">
+         <property name="text">
+          <string>K2 Killer</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="3">
+        <widget class="BtBoolComboBox" name="boolCombo_killerProducingK2Toxin">
+         <property name="toolTip">
+          <string>Produces K2 killer toxin</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0">
+        <widget class="QLabel" name="label_killerProducingK28Toxin">
+         <property name="text">
+          <string>K28 Killer</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="1">
+        <widget class="BtBoolComboBox" name="boolCombo_killerProducingK28Toxin">
+         <property name="toolTip">
+          <string>Produces K28 killer toxin</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="2">
+        <widget class="QLabel" name="label_killerProducingKlusToxin">
+         <property name="text">
+          <string>Klus Killer</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="3">
+        <widget class="BtBoolComboBox" name="boolCombo_killerProducingKlusToxin">
+         <property name="toolTip">
+          <string>Produces Klus killer toxin</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="0">
+        <widget class="QLabel" name="label_killerNeutral">
+         <property name="text">
+          <string>Killer Neutral</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="1">
+        <widget class="BtBoolComboBox" name="boolCombo_killerNeutral">
+         <property name="toolTip">
+          <string>Neutral strains do not produce toxins, nor are they killed by them</string>
+         </property>
+        </widget>
+       </item>
+
+       <item row="9" column="1">
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>
@@ -612,6 +674,16 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>BtComboBox</class>
+   <extends>QComboBox</extends>
+   <header>widgets/BtComboBox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>BtBoolComboBox</class>
+   <extends>QComboBox</extends>
+   <header>widgets/BtBoolComboBox.h</header>
+  </customwidget>
+  <customwidget>
    <class>SmartLabel</class>
    <extends>QLabel</extends>
    <header>widgets/SmartLabel.h</header>
@@ -631,18 +703,18 @@
  <tabstops>
   <tabstop>tabWidget_editor</tabstop>
   <tabstop>lineEdit_name</tabstop>
-  <tabstop>comboBox_type</tabstop>
-  <tabstop>comboBox_form</tabstop>
+  <tabstop>comboBox_yeastType</tabstop>
+  <tabstop>comboBox_yeastForm</tabstop>
   <tabstop>lineEdit_laboratory</tabstop>
-  <tabstop>lineEdit_productID</tabstop>
+  <tabstop>lineEdit_productId</tabstop>
   <tabstop>lineEdit_inventory</tabstop>
   <tabstop>lineEdit_attenuation</tabstop>
   <tabstop>lineEdit_minTemperature</tabstop>
   <tabstop>lineEdit_maxTemperature</tabstop>
-  <tabstop>comboBox_flocculation</tabstop>
+  <tabstop>comboBox_yeastFlocculation</tabstop>
   <tabstop>lineEdit_maxReuse</tabstop>
   <tabstop>lineEdit_timesCultured</tabstop>
-  <tabstop>checkBox_addToSecondary</tabstop>
+  <tabstop>boolCombo_addToSecondary</tabstop>
   <tabstop>pushButton_new</tabstop>
   <tabstop>pushButton_save</tabstop>
   <tabstop>pushButton_cancel</tabstop>

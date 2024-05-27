@@ -13,9 +13,6 @@
   <property name="windowTitle">
    <string>Misc Editor</string>
   </property>
-  <property name="configSection" stdset="0">
-   <string notr="true">miscEditor</string>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QTabWidget" name="tabWidget_editor">
@@ -33,33 +30,8 @@
        <string>Main</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout">
-       <item row="5" column="1">
-        <widget class="SmartLineEdit" name="lineEdit_time">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>100</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>100</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>100</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="toolTip">
-          <string>Time</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label_type">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_name">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -67,91 +39,13 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>Type</string>
+          <string>Name</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
          </property>
          <property name="buddy">
-          <cstring>comboBox_type</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="label_use">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Use</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-         </property>
-         <property name="buddy">
-          <cstring>comboBox_use</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="QComboBox" name="comboBox_type">
-         <property name="toolTip">
-          <string>Type</string>
-         </property>
-         <item>
-          <property name="text">
-           <string>Spice</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Fining</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Water Agent</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Herb</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Flavor</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Other</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-       <item row="5" column="0">
-        <widget class="SmartLabel" name="label_time">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="contextMenuPolicy">
-          <enum>Qt::CustomContextMenu</enum>
-         </property>
-         <property name="text">
-          <string>Time</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit_time</cstring>
+          <cstring>lineEdit_name</cstring>
          </property>
         </widget>
        </item>
@@ -180,40 +74,8 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="1">
-        <widget class="QComboBox" name="comboBox_use">
-         <property name="toolTip">
-          <string>Use</string>
-         </property>
-         <item>
-          <property name="text">
-           <string>Boil</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Mash</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Primary</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Secondary</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Bottling</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="label_name">
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_type">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -221,29 +83,59 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>Name</string>
+          <string>Type</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
          </property>
          <property name="buddy">
-          <cstring>lineEdit_name</cstring>
+          <cstring>comboBox_type</cstring>
          </property>
         </widget>
        </item>
-       <item row="6" column="1">
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
+       <item row="2" column="1">
+        <widget class="BtComboBox" name="comboBox_type">
+         <property name="toolTip">
+          <string>Type</string>
          </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
+        </widget>
        </item>
+       <item row="2" column="2">
+        <widget class="QLabel" name="label_amountIsWeight">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string>Check it if the amount listed is in kg instead of L.</string>
+         </property>
+         <property name="text">
+          <string>Amount is weight?</string>
+         </property>
+         <property name="buddy">
+          <cstring>checkBox_amountIsWeight</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="4">
+        <widget class="QCheckBox" name="checkBox_amountIsWeight">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string>Checked if the given amount is weight instead of volume</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+
        <item row="4" column="2">
         <widget class="SmartLabel" name="label_inventory">
          <property name="contextMenuPolicy">
@@ -276,8 +168,9 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="2">
-        <widget class="QLabel" name="label_isWeight">
+
+       <item row="4" column="5">
+        <widget class="QLabel" name="label_amountType">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -285,18 +178,18 @@
           </sizepolicy>
          </property>
          <property name="toolTip">
-          <string>Check it if the amount listed is in kg instead of L.</string>
+          <string>Whether the amount is weight or volume</string>
          </property>
          <property name="text">
-          <string>Amount is weight?</string>
+          <string>Amount Type</string>
          </property>
          <property name="buddy">
-          <cstring>checkBox_isWeight</cstring>
+          <cstring>comboBox_amountType</cstring>
          </property>
         </widget>
        </item>
-       <item row="2" column="4">
-        <widget class="QCheckBox" name="checkBox_isWeight">
+       <item row="4" column="6">
+        <widget class="BtComboBox" name="comboBox_amountType">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -304,12 +197,104 @@
           </sizepolicy>
          </property>
          <property name="toolTip">
-          <string>Checked if the given amount is weight instead of volume</string>
-         </property>
-         <property name="text">
-          <string/>
+          <string>Whether the amount is weight or volume</string>
          </property>
         </widget>
+       </item>
+
+       <item row="5" column="0">
+        <widget class="SmartLabel" name="label_time">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
+         <property name="text">
+          <string>Time</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_time</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="SmartLineEdit" name="lineEdit_time">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>100</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>100</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string>Time</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0">
+        <widget class="QLabel" name="label_producer">
+         <property name="text">
+          <string>Producer</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_producer</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="1">
+        <widget class="SmartLineEdit" name="lineEdit_producer">
+         <property name="toolTip">
+          <string>Producer</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="3">
+        <widget class="QLabel" name="label_productId">
+         <property name="text">
+          <string>Product ID</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_productId</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="4">
+        <widget class="SmartLineEdit" name="lineEdit_productId">
+         <property name="toolTip">
+          <string>Product ID</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="1">
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>
@@ -398,6 +383,11 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>BtComboBox</class>
+   <extends>QComboBox</extends>
+   <header>widgets/BtComboBox.h</header>
+  </customwidget>
+  <customwidget>
    <class>SmartLabel</class>
    <extends>QLabel</extends>
    <header>widgets/SmartLabel.h</header>
@@ -418,7 +408,6 @@
   <tabstop>tabWidget_editor</tabstop>
   <tabstop>lineEdit_name</tabstop>
   <tabstop>comboBox_type</tabstop>
-  <tabstop>comboBox_use</tabstop>
   <tabstop>lineEdit_time</tabstop>
   <tabstop>lineEdit_inventory</tabstop>
   <tabstop>pushButton_new</tabstop>

@@ -1,23 +1,23 @@
-/*
- * PitchDialog.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2023
- * - A.J. Drobnich <aj.drobnich@gmail.com>
- * - Matt Young <mfsy@yahoo.com>
- * - Philip Greggory Lee <rocketman768@gmail.com>
+/*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ * PitchDialog.cpp is part of Brewtarget, and is copyright the following authors 2009-2023:
+ *   • A.J. Drobnich <aj.drobnich@gmail.com>
+ *   • Brian Rower <brian.rower@gmail.com>
+ *   • Matt Young <mfsy@yahoo.com>
+ *   • Mik Firestone <mikfire@gmail.com>
+ *   • Philip Greggory Lee <rocketman768@gmail.com>
+ *   • Théophane Martin <theophane.m@gmail.com>
  *
- * Brewtarget is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * Brewtarget is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "PitchDialog.h"
 
 #include <math.h>
@@ -75,11 +75,11 @@ void PitchDialog::updateProductionDate() {
 }
 
 void PitchDialog::setWortVolume_l(double volume) {
-   this->lineEdit_vol->setAmount(volume);
+   this->lineEdit_vol->setQuantity(volume);
 }
 
 void PitchDialog::setWortDensity(double sg) {
-   this->lineEdit_OG->setAmount(sg);
+   this->lineEdit_OG->setQuantity(sg);
 }
 
 void PitchDialog::calculate() {
@@ -88,8 +88,8 @@ void PitchDialog::calculate() {
    double rate_MpermLP = (2-0.75) * ((double)slider_pitchRate->value()) / 100.0 + 0.75;
 
    // This isn't right.
-   double og = lineEdit_OG->toCanonical().quantity();
-   double vol_l = lineEdit_vol->toCanonical().quantity();
+   double og = lineEdit_OG->getNonOptCanonicalQty();
+   double vol_l = lineEdit_vol->getNonOptCanonicalQty();
 
    // I somewhat aribtrarily defined "SI" for density to be specific gravity.
    // Since these calcs need plato, convert
@@ -123,10 +123,10 @@ void PitchDialog::calculate() {
    double inoculationRate = pow((12.522 / growthRate), 2.18);
    double starterVol_l = totalCellsPitched / (inoculationRate * aerationFactor);
 
-   this->lineEdit_cells     ->setAmount(cells/1e9);
-   this->lineEdit_starterVol->setAmount(starterVol_l);
-   this->lineEdit_yeast     ->setAmount(dry_g/1000); //Needs to be converted into default unit (kg)
-   this->lineEdit_vials     ->setAmount(vials);
+   this->lineEdit_cells     ->setQuantity(cells/1e9);
+   this->lineEdit_starterVol->setQuantity(starterVol_l);
+   this->lineEdit_yeast     ->setQuantity(dry_g/1000); //Needs to be converted into default unit (kg)
+   this->lineEdit_vials     ->setQuantity(vials);
    return;
 }
 

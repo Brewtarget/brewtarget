@@ -1,41 +1,70 @@
-/*
- * model/NamedEntity.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2023
- * - Kregg K <gigatropolis@yahoo.com>
- * - Matt Young <mfsy@yahoo.com>
- * - Mik Firestone <mikfire@gmail.com>
- * - Philip Greggory Lee <rocketman768@gmail.com>
- * - Samuel Östling <MrOstling@gmail.com>
+/*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ * model/NamedEntity.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ *   • Kregg Kemper <gigatropolis@yahoo.com>
+ *   • Matt Young <mfsy@yahoo.com>
+ *   • Mik Firestone <mikfire@gmail.com>
+ *   • Philip Greggory Lee <rocketman768@gmail.com>
+ *   • Samuel Östling <MrOstling@gmail.com>
  *
- * Brewtarget is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * Brewtarget is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "model/NamedEntity.h"
 
+#include <compare>
 #include <typeinfo>
+#include <string>
 
 #include <QDebug>
 #include <QMetaProperty>
 
 #include "database/ObjectStore.h"
+#include "measurement/ConstrainedAmount.h"
 #include "model/NamedParameterBundle.h"
-#include "model/Recipe.h"
 
-NamedEntity::NamedEntity(QString t_name, bool t_display, QString folder) :
+#include "model/Boil.h"
+#include "model/BoilStep.h"
+#include "model/BrewNote.h"
+#include "model/Equipment.h"
+#include "model/Fermentable.h"
+#include "model/Fermentation.h"
+#include "model/FermentationStep.h"
+#include "model/Hop.h"
+#include "model/Instruction.h"
+#include "model/InventoryFermentable.h"
+#include "model/InventoryHop.h"
+#include "model/InventoryMisc.h"
+#include "model/InventoryYeast.h"
+#include "model/Mash.h"
+#include "model/MashStep.h"
+#include "model/Misc.h"
+#include "model/RecipeAdditionFermentable.h"
+#include "model/RecipeAdditionHop.h"
+#include "model/RecipeAdditionMisc.h"
+#include "model/RecipeAdditionYeast.h"
+#include "model/Recipe.h"
+#include "model/RecipeUseOfWater.h"
+#include "model/Salt.h"
+#include "model/Style.h"
+#include "model/Water.h"
+#include "model/Yeast.h"
+
+
+QString NamedEntity::localisedName() { return tr("Named Entity"); }
+
+
+NamedEntity::NamedEntity(QString t_name, bool t_display) :
    QObject        {nullptr  },
    m_key          {-1       },
    parentKey      {-1       },
-   m_folder       {folder   },
    m_name         {t_name   },
    m_display      {t_display},
    m_deleted      {false    },
@@ -49,7 +78,7 @@ NamedEntity::NamedEntity(QString t_name, bool t_display, QString folder) :
 // The "key", "display" and "deleted" properties are optional because they will be set if we're creating from a DB
 // record, but not if we're creating from an XML record.
 //
-// The "folder", "name" and "parent" properties have to be optional because not all subclasses have them.  (BrewNote is
+// The "name" and "parent" properties have to be optional because not all subclasses have them.  (BrewNote is
 // the subclass without a name, and, yes, I know the existence of a NamedEntity without a name calls into question our
 // class naming! :->)
 //
@@ -59,29 +88,33 @@ NamedEntity::NamedEntity(QString t_name, bool t_display, QString folder) :
 //
 NamedEntity::NamedEntity(NamedParameterBundle const & namedParameterBundle) :
    QObject        {nullptr},
-   m_key          {namedParameterBundle.val(PropertyNames::NamedEntity::key,       -1       )},
-   parentKey      {namedParameterBundle.val(PropertyNames::NamedEntity::parentKey, -1       )},
-   m_folder       {namedParameterBundle.val(PropertyNames::NamedEntity::folder,    QString{})},
-   m_name         {namedParameterBundle.val(PropertyNames::NamedEntity::name,      QString{})},
-   m_display      {namedParameterBundle.val(PropertyNames::NamedEntity::display,   true     )},
-   m_deleted      {namedParameterBundle.val(PropertyNames::NamedEntity::deleted,   false    )},
+   SET_REGULAR_FROM_NPB (m_key    , namedParameterBundle, PropertyNames::NamedEntity::key,       -1       ),
+   SET_REGULAR_FROM_NPB (parentKey, namedParameterBundle, PropertyNames::NamedEntity::parentKey, -1       ),
+   SET_REGULAR_FROM_NPB (m_name   , namedParameterBundle, PropertyNames::NamedEntity::name,      QString{}),
+   SET_REGULAR_FROM_NPB (m_display, namedParameterBundle, PropertyNames::NamedEntity::display,   true     ),
+   SET_REGULAR_FROM_NPB (m_deleted, namedParameterBundle, PropertyNames::NamedEntity::deleted,   false    ),
    m_beingModified{false} {
    return;
 }
 
+// Strictly speaking a QObject is not allowed to be copied, which would mean that since we do not use any state in the
+// QObject from which we inherit, we allow NamedEntity to be copied and just default-initialise the QObject base class
+// in the copy.  Hopefully this will never come back to bite us...
 NamedEntity::NamedEntity(NamedEntity const & other) :
-   QObject     {nullptr        }, // QObject doesn't have a copy constructor, so just make a new one
-   m_key       {-1             }, // We don't want to copy the other object's key/ID
-   parentKey   {other.parentKey},
-   m_folder    {other.m_folder },
-   m_name      {other.m_name   },
-   m_display   {other.m_display},
-   m_deleted   {other.m_deleted},
+   QObject        {nullptr        }, // QObject doesn't have a copy constructor, so just make a new one
+   m_key          {-1             }, // We don't want to copy the other object's key/ID
+   parentKey      {other.parentKey},
+   m_name         {other.m_name   },
+   m_display      {other.m_display},
+   m_deleted      {other.m_deleted},
    m_beingModified{false} {
    return;
 }
 
 void NamedEntity::swap(NamedEntity & other) noexcept {
+   // We assert that we only swap two objects of the same class.  We never want to swap a Hop with a Recipe etc.
+   Q_ASSERT(typeid(*this) == typeid(other));
+
    // Assume nothing important to swap in QObject (see comment in model/NamedEntity.h
    //
    // Since we're only using this for assignment operator, which in turn uses copy constructor, we're assuming we are
@@ -92,7 +125,6 @@ void NamedEntity::swap(NamedEntity & other) noexcept {
    Q_ASSERT(!other.m_beingModified);
    // Now do the actual swapping
    std::swap(this->parentKey, other.parentKey);
-   std::swap(this->m_folder , other.m_folder );
    std::swap(this->m_name   , other.m_name   );
    std::swap(this->m_display, other.m_display);
    std::swap(this->m_deleted, other.m_deleted);
@@ -108,13 +140,12 @@ TypeLookup const NamedEntity::typeLookup {
       // the code to separately register every different enum that we use.)
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::NamedEntity::deleted  , NamedEntity::m_deleted                             ),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::NamedEntity::display  , NamedEntity::m_display                             ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::NamedEntity::folder   , NamedEntity::m_folder                              ),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::NamedEntity::key      , NamedEntity::m_key                                 ),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::NamedEntity::name     , NamedEntity::m_name   , NonPhysicalQuantity::String),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::NamedEntity::parentKey, NamedEntity::parentKey                             ),
    },
    // Parent class lookup - none as we're top of the tree
-   nullptr
+   {}
 };
 
 NamedEntity::~NamedEntity() = default;
@@ -212,8 +243,17 @@ bool NamedEntity::operator!=(NamedEntity const & other) const {
    return !(*this == other);
 }
 
-bool NamedEntity::operator<(const NamedEntity & other) const { return (this->m_name < other.m_name); }
-bool NamedEntity::operator>(const NamedEntity & other) const { return (this->m_name > other.m_name); }
+auto NamedEntity::operator<=>(NamedEntity const & other) const {
+   // The spaceship operator is not defined for two QString objects, but it is defined for a pair of std::u16string,
+   // which is close to the same thing (in that QString stores "a string of 16-bit QChars, where each QChar corresponds
+   // to one UTF-16 code unit".
+#ifdef __clang__
+   // As of 2023-09-01 Apple Clang is version 14 and does not support operator <=> on std::u16string
+   return this->m_name.data() <=> other.m_name.data();
+#else
+   return this->m_name.toStdU16String() <=> other.m_name.toStdU16String();
+#endif
+}
 
 bool NamedEntity::deleted() const {
    return this->m_deleted;
@@ -243,25 +283,12 @@ void NamedEntity::setDisplay(bool var) {
    return;
 }
 
-QString NamedEntity::folder() const {
-   return this->m_folder;
-}
-
-void NamedEntity::setFolder(QString const & var) {
-   if (this->newValueMatchesExisting(PropertyNames::NamedEntity::folder, this->m_folder, var)) {
-      return;
-   }
-   this->m_folder = var;
-   this->propagatePropertyChange(PropertyNames::NamedEntity::folder);
-   return;
-}
-
 QString NamedEntity::name() const {
    return this->m_name;
 }
 
 void NamedEntity::setName(QString const & var) {
-   this->setAndNotify(PropertyNames::NamedEntity::name, this->m_name, var);
+   SET_AND_NOTIFY(PropertyNames::NamedEntity::name, this->m_name, var);
    return;
 }
 
@@ -343,6 +370,75 @@ QMetaProperty NamedEntity::metaProperty(char const * const name) const {
    return this->metaObject()->property(this->metaObject()->indexOfProperty(name));
 }
 
+void NamedEntity::setEitherOrReqParams(NamedParameterBundle const & namedParameterBundle,
+                                       BtStringConst const & quantityParameterName,
+                                       BtStringConst const & isFirstUnitParameterName,
+                                       BtStringConst const & combinedWithUnitsParameterName,
+                                       Measurement::PhysicalQuantity const firstUnitPhysicalQuantity,
+                                       double & quantityReturn,
+                                       bool & isFirstUnitReturn,
+                                       std::optional<bool> const defaultIsFirstUnit) {
+   if (namedParameterBundle.contains(quantityParameterName)) {
+      quantityReturn    = namedParameterBundle.val<double>(quantityParameterName   );
+      if (defaultIsFirstUnit) {
+         isFirstUnitReturn = namedParameterBundle.val<bool>(isFirstUnitParameterName, *defaultIsFirstUnit);
+      } else {
+         isFirstUnitReturn = namedParameterBundle.val<bool>(isFirstUnitParameterName);
+      }
+   } else {
+      auto const combinedWithUnits = namedParameterBundle.val<Measurement::Amount>(combinedWithUnitsParameterName);
+      // It is the caller's responsibility to have converted to canonical units -- ie a coding error if this did not
+      // happen.  Asserting without the diagnostic info is not much use, so we do the check first, then the assert.
+      auto const * suppliedUnit = combinedWithUnits.unit;
+      if (!suppliedUnit->isCanonical()) {
+         qCritical() <<
+            Q_FUNC_INFO << this->name() << "CODING ERROR:" << combinedWithUnitsParameterName << "supplied in" <<
+            suppliedUnit << "instead of" << suppliedUnit->getCanonical();
+         Q_ASSERT(false);
+      } else {
+         quantityReturn    = combinedWithUnits.quantity;
+         isFirstUnitReturn = combinedWithUnits.unit->getPhysicalQuantity() == firstUnitPhysicalQuantity;
+      }
+   }
+   return;
+}
+
+void NamedEntity::setEitherOrOptParams(NamedParameterBundle const & namedParameterBundle,
+                                       BtStringConst const & quantityParameterName,
+                                       BtStringConst const & isFirstUnitParameterName,
+                                       BtStringConst const & combinedWithUnitsParameterName,
+                                       Measurement::PhysicalQuantity const firstUnitPhysicalQuantity,
+                                       std::optional<double> & quantityReturn,
+                                       bool & isFirstUnitReturn) {
+   if (namedParameterBundle.contains(quantityParameterName)) {
+      quantityReturn    = namedParameterBundle.val<std::optional<double>>(quantityParameterName   );
+      isFirstUnitReturn = namedParameterBundle.val<bool                 >(isFirstUnitParameterName);
+      return;
+   }
+
+   auto const combinedWithUnits = namedParameterBundle.val<std::optional<Measurement::Amount>>(combinedWithUnitsParameterName);
+   if (!combinedWithUnits) {
+      // Strictly the isFirstUnitReturn is meaningless / ignored in this case, but we use true as the "default" value
+      // by convention.  (Other than increased complexity, having it std::optional<bool> wouldn't buy us much.)
+      quantityReturn    = std::nullopt;
+      isFirstUnitReturn = true;
+      return;
+   }
+
+   // It is the caller's responsibility to have converted to canonical units -- ie a coding error if this did not
+   // happen.  Asserting without the diagnostic info is not much use, so we do the check first, then the assert.
+   if (!combinedWithUnits->unit->isCanonical()) {
+      qCritical() <<
+         Q_FUNC_INFO << this->name() << "CODING ERROR:" << combinedWithUnitsParameterName << "supplied in" <<
+         combinedWithUnits->unit << "instead of" << combinedWithUnits->unit->getCanonical();
+      Q_ASSERT(false);
+   }
+   quantityReturn    = combinedWithUnits->quantity;
+   isFirstUnitReturn = combinedWithUnits->unit->getPhysicalQuantity() == firstUnitPhysicalQuantity;
+
+   return;
+}
+
 void NamedEntity::prepareForPropertyChange(BtStringConst const & propertyName) {
    //
    // At the moment, the only thing we want to do in this pre-change check is to see whether we need to version a
@@ -350,7 +446,8 @@ void NamedEntity::prepareForPropertyChange(BtStringConst const & propertyName) {
    //
    // Obviously nothing gets versioned if it's not yet in the DB
    //
-   if (this->key() > 0) {
+   auto owningRecipe = this->owningRecipe();
+   if (owningRecipe) {
       RecipeHelper::prepareForPropertyChange(*this, propertyName);
    }
    return;
@@ -377,6 +474,11 @@ void NamedEntity::propagatePropertyChange(BtStringConst const & propertyName, bo
    return;
 }
 
+std::shared_ptr<Recipe> NamedEntity::owningRecipe() const {
+   // Default is for NamedEntity not to be owned.
+   return nullptr;
+}
+
 NamedEntity * NamedEntity::getParent() const {
    if (this->parentKey <= 0) {
       return nullptr;
@@ -386,7 +488,7 @@ NamedEntity * NamedEntity::getParent() const {
 }
 
 void NamedEntity::setParent(NamedEntity const & parentNamedEntity) {
-   this->setAndNotify(PropertyNames::NamedEntity::parentKey, this->parentKey, parentNamedEntity.m_key);
+   SET_AND_NOTIFY(PropertyNames::NamedEntity::parentKey, this->parentKey, parentNamedEntity.m_key);
    return;
 }
 
@@ -402,9 +504,19 @@ void NamedEntity::hardDeleteOrphanedEntities() {
    return;
 }
 
-//======================================================================================================================
+NamedEntity * NamedEntity::ensureExists(BtStringConst const & property) {
+   // It's a coding error if this gets called and is not overridden.  (We can't make the function pure virtual because
+   // not all child classes need to override it.
+   qCritical() <<
+      Q_FUNC_INFO << this->metaObject()->className() << "does not know how to ensure property" << property << "exists";
+   // Stop here on debug builds
+   Q_ASSERT(false);
+   return nullptr;
+}
+
+//╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 // NamedEntityModifyingMarker
-//======================================================================================================================
+//╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 NamedEntityModifyingMarker::NamedEntityModifyingMarker(NamedEntity & namedEntity) :
    namedEntity{namedEntity},
    savedModificationState{namedEntity.isBeingModified()} {

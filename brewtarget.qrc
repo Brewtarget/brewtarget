@@ -1,83 +1,134 @@
-<RCC>
+<!DOCTYPE RCC>
+<!--
+ * brewtarget.qrc is part of Brewtarget, and is copyright the following authors 2009-2024:
+ *   • Aidan Roberts <aidanr67@gmail.com>
+ *   • Idar Lund <idarlund@gmail.com>
+ *   • Mark de Wever <koraq@xs4all.nl>
+ *   • Matt Young <mfsy@yahoo.com>
+ *   • Maxime Lavigne <duguigne@gmail.com>
+ *   • Mik Firestone <mikfire@gmail.com>
+ *   • Philip Greggory Lee <rocketman768@gmail.com>
+ *   • Robby Workman <rworkman@slackware.com>
+ *
+ * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
+ *
+ * Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
+-->
+<RCC version="1.0">
    <qresource prefix="/">
-      <file alias="css/brewday.css">css/brewday.css</file>
+      <!-- Stylesheets -->
+      <file alias="css/brewday.css"  >css/brewday.css</file>
       <file alias="css/inventory.css">css/inventory.css</file>
-      <file alias="css/recipe.css">css/recipe.css</file>
-      <file alias="css/tooltip.css">css/tooltip.css</file>
-      <file alias="images/alarm_stop.png">images/alarm_stop.png</file>
-      <file alias="images/backup.png">images/backup.png</file>
+      <file alias="css/recipe.css"   >css/recipe.css</file>
+      <file alias="css/tooltip.css"  >css/tooltip.css</file>
+      <!-- Fonts -->
+      <file alias="fonts/TexGyreSchola-BoldItalic.otf">fonts/TexGyreSchola-BoldItalic.otf</file>
+      <file alias="fonts/TexGyreSchola-Bold.otf"      >fonts/TexGyreSchola-Bold.otf</file>
+      <file alias="fonts/TexGyreSchola-Italic.otf"    >fonts/TexGyreSchola-Italic.otf</file>
+      <file alias="fonts/TexGyreSchola-Regular.otf"   >fonts/TexGyreSchola-Regular.otf</file>
+      <!-- Images -->
+      <file alias="images/alarm_stop.png"            >images/alarm_stop.png</file>
+      <file alias="images/backup.png"                >images/backup.png</file>
       <file alias="images/brewtarget.svg">images/brewtarget.svg</file>
-      <file alias="images/bubbles.svg">images/bubbles.svg</file>
-      <file alias="images/circle.png">images/circle.png</file>
-      <file alias="images/clipboard.svg">images/clipboard.svg</file>
-      <file alias="images/clock.svg">images/clock.svg</file>
-      <file alias="images/convert.svg">images/convert.svg</file>
-      <file alias="images/document-export.png">images/document-export.png</file>
+      <file alias="images/bubbles.svg"               >images/bubbles.svg</file>
+      <file alias="images/circle.png"                >images/circle.png</file>
+      <file alias="images/clipboard.svg"             >images/clipboard.svg</file>
+      <file alias="images/clear.svg"                 >images/clear.svg</file>
+      <file alias="images/clock.svg"                 >images/clock.svg</file>
+      <file alias="images/convert.svg"               >images/convert.svg</file>
+      <file alias="images/document-export.png"       >images/document-export.png</file>
       <file alias="images/document-print-preview.png">images/document-print-preview.png</file>
       <file alias="images/donate.svg">images/donate.svg</file>
-      <file alias="images/edit-copy.png">images/edit-copy.png</file>
-      <file alias="images/editshred.svg">images/editshred.svg</file>
-      <file alias="images/edit.svg">images/edit.svg</file>
-      <file alias="images/exit.svg">images/exit.svg</file>
-      <file alias="images/filesavedirty.svg">images/filesavedirty.svg</file>
-      <file alias="images/filesave.svg">images/filesave.svg</file>
-      <file alias="images/flagBasque.svg">images/flagBasque.svg</file>
-      <file alias="images/flagBrazil.svg">images/flagBrazil.svg</file>
-      <file alias="images/flagCatalonia.svg">images/flagCatalonia.svg</file>
-      <file alias="images/flagChina.svg">images/flagChina.svg</file>
-      <file alias="images/flagCzech.svg">images/flagCzech.svg</file>
-      <file alias="images/flagDenmark.svg">images/flagDenmark.svg</file>
-      <file alias="images/flagEstonia.svg">images/flagEstonia.svg</file>
-      <file alias="images/flagFrance.svg">images/flagFrance.svg</file>
-      <file alias="images/flagGalicia.svg">images/flagGalicia.svg</file>
-      <file alias="images/flagGermany.svg">images/flagGermany.svg</file>
-      <file alias="images/flagGreece.svg">images/flagGreece.svg</file>
-      <file alias="images/flagHungary.svg">images/flagHungary.svg</file>
-      <file alias="images/flagItaly.svg">images/flagItaly.svg</file>
-      <file alias="images/flagLatvia.svg">images/flagLatvia.svg</file>
-      <file alias="images/flagNetherlands.svg">images/flagNetherlands.svg</file>
-      <file alias="images/flagNorway.svg">images/flagNorway.svg</file>
-      <file alias="images/flagPoland.svg">images/flagPoland.svg</file>
-      <file alias="images/flagPortugal.svg">images/flagPortugal.svg</file>
-      <file alias="images/flagRussia.svg">images/flagRussia.svg</file>
-      <file alias="images/flagSerbia.svg">images/flagSerbia.svg</file>
-      <file alias="images/flagSpain.svg">images/flagSpain.svg</file>
-      <file alias="images/flagSweden.svg">images/flagSweden.svg</file>
-      <file alias="images/flagTurkey.svg">images/flagTurkey.svg</file>
-      <file alias="images/flagUK.svg">images/flagUK.svg</file>
-      <file alias="images/folder.png">images/folder.png</file>
-      <file alias="images/glass2.png">images/glass2.png</file>
-      <file alias="images/grain2glass.svg">images/grain2glass.svg</file>
-      <file alias="images/help-contents.png">images/help-contents.png</file>
-      <file alias="images/hydrometer.svg">images/hydrometer.svg</file>
-      <file alias="images/kbruch.png">images/kbruch.png</file>
-      <file alias="images/mashpaddle.svg">images/mashpaddle.svg</file>
-      <file alias="images/merge.png">images/merge.png</file>
-      <file alias="images/play.png">images/play.png</file>
-      <file alias="images/preferences-other.png">images/preferences-other.png</file>
-      <file alias="images/printer.png">images/printer.png</file>
-      <file alias="images/refractometer.svg">images/refractometer.svg</file>
-      <file alias="images/restore.svg">images/restore.svg</file>
-      <file alias="images/server-database.png">images/server-database.png</file>
-      <file alias="images/smallArrow.svg">images/smallArrow.svg</file>
-      <file alias="images/smallBarley.svg">images/smallBarley.svg</file>
-      <file alias="images/smallDownArrow.svg">images/smallDownArrow.svg</file>
-      <file alias="images/smallHop.svg">images/smallHop.svg</file>
-      <file alias="images/smallInfo.svg">images/smallInfo.svg</file>
-      <file alias="images/smallKettle.svg">images/smallKettle.svg</file>
-      <file alias="images/smallMinus.svg">images/smallMinus.svg</file>
-      <file alias="images/smallOutArrow.svg">images/smallOutArrow.svg</file>
-      <file alias="images/smallPlus.svg">images/smallPlus.svg</file>
-      <file alias="images/smallQuestion.svg">images/smallQuestion.svg</file>
-      <file alias="images/smallStyle.svg">images/smallStyle.svg</file>
-      <file alias="images/smallUpArrow.svg">images/smallUpArrow.svg</file>
-      <file alias="images/smallWater.svg">images/smallWater.svg</file>
-      <file alias="images/smallYeast.svg">images/smallYeast.svg</file>
-      <file alias="images/sound.png">images/sound.png</file>
-      <file alias="images/testtube.svg">images/testtube.svg</file>
+      <file alias="images/edit-copy.png"             >images/edit-copy.png</file>
+      <file alias="images/editshred.svg"             >images/editshred.svg</file>
+      <file alias="images/edit.svg"                  >images/edit.svg</file>
+      <file alias="images/exit.svg"                  >images/exit.svg</file>
+      <file alias="images/filesavedirty.svg"         >images/filesavedirty.svg</file>
+      <file alias="images/filesave.svg"              >images/filesave.svg</file>
+      <file alias="images/flagBasque.svg"            >images/flagBasque.svg</file>
+      <file alias="images/flagBrazil.svg"            >images/flagBrazil.svg</file>
+      <file alias="images/flagCatalonia.svg"         >images/flagCatalonia.svg</file>
+      <file alias="images/flagChina.svg"             >images/flagChina.svg</file>
+      <file alias="images/flagCzech.svg"             >images/flagCzech.svg</file>
+      <file alias="images/flagDenmark.svg"           >images/flagDenmark.svg</file>
+      <file alias="images/flagEstonia.svg"           >images/flagEstonia.svg</file>
+      <file alias="images/flagFrance.svg"            >images/flagFrance.svg</file>
+      <file alias="images/flagGalicia.svg"           >images/flagGalicia.svg</file>
+      <file alias="images/flagGermany.svg"           >images/flagGermany.svg</file>
+      <file alias="images/flagGreece.svg"            >images/flagGreece.svg</file>
+      <file alias="images/flagHungary.svg"           >images/flagHungary.svg</file>
+      <file alias="images/flagItaly.svg"             >images/flagItaly.svg</file>
+      <file alias="images/flagLatvia.svg"            >images/flagLatvia.svg</file>
+      <file alias="images/flagNetherlands.svg"       >images/flagNetherlands.svg</file>
+      <file alias="images/flagNorway.svg"            >images/flagNorway.svg</file>
+      <file alias="images/flagPoland.svg"            >images/flagPoland.svg</file>
+      <file alias="images/flagPortugal.svg"          >images/flagPortugal.svg</file>
+      <file alias="images/flagRussia.svg"            >images/flagRussia.svg</file>
+      <file alias="images/flagSerbia.svg"            >images/flagSerbia.svg</file>
+      <file alias="images/flagSpain.svg"             >images/flagSpain.svg</file>
+      <file alias="images/flagSweden.svg"            >images/flagSweden.svg</file>
+      <file alias="images/flagTurkey.svg"            >images/flagTurkey.svg</file>
+      <file alias="images/flagUK.svg"                >images/flagUK.svg</file>
+      <file alias="images/folder.png"                >images/folder.png</file>
+      <file alias="images/glass2.png"                >images/glass2.png</file>
+      <file alias="images/grain2glass.svg"           >images/grain2glass.svg</file>
+      <file alias="images/help-contents.png"         >images/help-contents.png</file>
+      <file alias="images/hydrometer.svg"            >images/hydrometer.svg</file>
+      <file alias="images/kbruch.png"                >images/kbruch.png</file>
+      <file alias="images/mashpaddle.svg"            >images/mashpaddle.svg</file>
+      <file alias="images/merge.png"                 >images/merge.png</file>
+      <file alias="images/play.png"                  >images/play.png</file>
+      <file alias="images/preferences-other.png"     >images/preferences-other.png</file>
+      <file alias="images/printer.png"               >images/printer.png</file>
+      <file alias="images/refractometer.svg"         >images/refractometer.svg</file>
+      <file alias="images/restore.svg"               >images/restore.svg</file>
+      <file alias="images/server-database.png"       >images/server-database.png</file>
+      <file alias="images/smallArrow.svg"            >images/smallArrow.svg</file>
+      <file alias="images/smallBarley.svg"           >images/smallBarley.svg</file>
+      <file alias="images/smallDownArrow.svg"        >images/smallDownArrow.svg</file>
+      <file alias="images/smallHop.svg"              >images/smallHop.svg</file>
+      <file alias="images/smallInfo.svg"             >images/smallInfo.svg</file>
+      <file alias="images/smallKettle.svg"           >images/smallKettle.svg</file>
+      <file alias="images/smallMinus.svg"            >images/smallMinus.svg</file>
+      <file alias="images/smallOutArrow.svg"         >images/smallOutArrow.svg</file>
+      <file alias="images/smallPlus.svg"             >images/smallPlus.svg</file>
+      <file alias="images/smallQuestion.svg"         >images/smallQuestion.svg</file>
+      <file alias="images/smallStyle.svg"            >images/smallStyle.svg</file>
+      <file alias="images/smallUpArrow.svg"          >images/smallUpArrow.svg</file>
+      <file alias="images/smallWater.svg"            >images/smallWater.svg</file>
+      <file alias="images/smallYeast.svg"            >images/smallYeast.svg</file>
+      <file alias="images/sound.png"                 >images/sound.png</file>
+      <file alias="images/testtube.svg"              >images/testtube.svg</file>
       <file alias="images/title.svg">images/title.svg</file>
       <file alias="images/title.png">images/title.png</file>
-      <file alias="images/yeastVial.svg">images/yeastVial.svg</file>
-      <file alias="schemas/beerxml/v1/BeerXml.xsd">schemas/beerxml/v1/BeerXml.xsd</file>
+      <file alias="images/yeastVial.svg"             >images/yeastVial.svg</file>
+      <!-- Schemas -->
+      <file alias="schemas/beerxml/v1/BeerXml.xsd"             >schemas/beerxml/v1/BeerXml.xsd</file>
+      <file alias="schemas/beerjson/1.0/beer.json"             >schemas/beerjson/1.0/beer.json</file>
+      <file alias="schemas/beerjson/1.0/boil.json"             >schemas/beerjson/1.0/boil.json</file>
+      <file alias="schemas/beerjson/1.0/boil_step.json"        >schemas/beerjson/1.0/boil_step.json</file>
+      <file alias="schemas/beerjson/1.0/culture.json"          >schemas/beerjson/1.0/culture.json</file>
+      <file alias="schemas/beerjson/1.0/equipment.json"        >schemas/beerjson/1.0/equipment.json</file>
+      <file alias="schemas/beerjson/1.0/fermentable.json"      >schemas/beerjson/1.0/fermentable.json</file>
+      <file alias="schemas/beerjson/1.0/fermentation.json"     >schemas/beerjson/1.0/fermentation.json</file>
+      <file alias="schemas/beerjson/1.0/fermentation_step.json">schemas/beerjson/1.0/fermentation_step.json</file>
+      <file alias="schemas/beerjson/1.0/hop.json"              >schemas/beerjson/1.0/hop.json</file>
+      <file alias="schemas/beerjson/1.0/mash.json"             >schemas/beerjson/1.0/mash.json</file>
+      <file alias="schemas/beerjson/1.0/mash_step.json"        >schemas/beerjson/1.0/mash_step.json</file>
+      <file alias="schemas/beerjson/1.0/measureable_units.json">schemas/beerjson/1.0/measureable_units.json</file>
+      <file alias="schemas/beerjson/1.0/misc.json"             >schemas/beerjson/1.0/misc.json</file>
+      <file alias="schemas/beerjson/1.0/packaging.json"        >schemas/beerjson/1.0/packaging.json</file>
+      <file alias="schemas/beerjson/1.0/packaging_vessel.json" >schemas/beerjson/1.0/packaging_vessel.json</file>
+      <file alias="schemas/beerjson/1.0/recipe.json"           >schemas/beerjson/1.0/recipe.json</file>
+      <file alias="schemas/beerjson/1.0/style.json"            >schemas/beerjson/1.0/style.json</file>
+      <file alias="schemas/beerjson/1.0/timing.json"           >schemas/beerjson/1.0/timing.json</file>
+      <file alias="schemas/beerjson/1.0/water.json"            >schemas/beerjson/1.0/water.json</file>
    </qresource>
 </RCC>

@@ -158,9 +158,6 @@
          <property name="title">
           <string>PPM</string>
          </property>
-         <property name="configSection" stdset="0">
-          <string>totalSalts</string>
-         </property>
          <layout class="QGridLayout" name="gridLayout_ppm" rowstretch="0,0,0,0">
           <item row="0" column="3">
            <widget class="SmartDigitWidget" name="btDigit_na">
@@ -246,9 +243,6 @@
         <widget class="QGroupBox" name="groupBox_total">
          <property name="title">
           <string>Total Salts</string>
-         </property>
-         <property name="configSection" stdset="0">
-          <string>totalSalts</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_total">
           <item row="0" column="0">
@@ -370,7 +364,7 @@
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_3">
           <item>
-           <widget class="QTableView" name="tableView_salts">
+           <widget class="QTableView" name="tableView_saltAdjustments">
             <property name="alternatingRowColors">
              <bool>true</bool>
             </property>
@@ -457,12 +451,12 @@
   <customwidget>
    <class>CustomComboBox</class>
    <extends>QComboBox</extends>
-   <header>CustomComboBox.h</header>
+   <header>widgets/CustomComboBox.h</header>
   </customwidget>
   <customwidget>
    <class>WaterButton</class>
    <extends>QPushButton</extends>
-   <header>WaterButton.h</header>
+   <header>buttons/WaterButton.h</header>
   </customwidget>
   <customwidget>
    <class>SmartLabel</class>

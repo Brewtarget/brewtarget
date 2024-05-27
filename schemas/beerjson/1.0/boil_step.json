@@ -1,0 +1,57 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/beerjson/beerjson/master/json/boil_step.json",
+  "type": "object",
+  "additionalProperties": false,
+  "definitions": {
+    "BoilStepType": {
+      "type": "object",
+      "description": "BoilStepType - a per step representation of a boil process, can be used to support preboil steps, non-boiling pasteurization steps, boiling, whirlpool steps, and chilling.",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "start_temperature": {
+          "$ref": "measureable_units.json#/definitions/TemperatureType"
+        },
+        "end_temperature": {
+          "$ref": "measureable_units.json#/definitions/TemperatureType"
+        },
+        "ramp_time": {
+          "description": "The amount of time that passes before this step begins. eg moving from a boiling step (step 1) to a whirlpool step (step 2) may take 5 minutes. Step 2 would have a ramp time of 5 minutes, hop isomerization and bitterness calculations will need to account for this accordingly.",
+          "$ref": "measureable_units.json#/definitions/TimeType"
+        },
+        "step_time": {
+          "$ref": "measureable_units.json#/definitions/TimeType"
+        },
+        "start_gravity": {
+          "$ref": "measureable_units.json#/definitions/GravityType"
+        },
+        "end_gravity": {
+          "$ref": "measureable_units.json#/definitions/GravityType"
+        },
+        "start_ph": {
+          "$ref": "measureable_units.json#/definitions/AcidityType"
+        },
+        "end_ph": {
+          "$ref": "measureable_units.json#/definitions/AcidityType"
+        },
+        "chilling_type": {
+          "description": "Chilling type seperates batch chilling, eg immersion chillers, where the entire volume of wort is brought down in temperture as a whole, vs inline chilling where the wort is chilled while it is being drained, which can leave a significant amount of hop isomerization occuring in the boil kettle.",
+          "type": "string",
+          "enum": [
+            "batch",
+            "inline"
+          ]
+        }
+      },
+      "required": [
+        "name"
+      ]
+    }
+  }
+}

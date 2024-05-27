@@ -1,27 +1,25 @@
-/*
- * widgets/UnitAndScalePopUpMenu.h is part of Brewtarget, and is copyright the following
- * authors 2012-2023:
- * - Mark de Wever <koraq@xs4all.nl>
- * - Matt Young <mfsy@yahoo.com>
- * - Mik Firestone <mikfire@gmail.com>
+/*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ * widgets/UnitAndScalePopUpMenu.h is part of Brewtarget, and is copyright the following authors 2012-2023:
+ *   • Mark de Wever <koraq@xs4all.nl>
+ *   • Matt Young <mfsy@yahoo.com>
+ *   • Mik Firestone <mikfire@gmail.com>
  *
- * Brewtarget is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * Brewtarget is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #ifndef WIDGETS_UNITANDSCALEPOPUPMENU_H
 #define WIDGETS_UNITANDSCALEPOPUPMENU_H
 #pragma once
 
+#include <memory>
 #include <optional>
 
 #include <QMenu>
@@ -48,12 +46,14 @@ namespace UnitAndScalePopUpMenu {
     * \param forcedRelativeScale the forced scale, if any, for displaying the field.  (NB: Should always be
     *                            \c std::nullopt_t if \c physicalQuantity is \c Mixed2PhysicalQuantities.)
     *
-    * \return New \c QMenu owned by \c parent
+    * \return New \c QMenu "owned" by \c parent, but see comment in \c widgets/SmartLabel.cpp for why we return
+    *         unique pointer so that caller really owns the object -- essentially the returned object typically has a
+    *         much shorter lifetime than the parent.
     */
-   QMenu * create(QWidget * parent,
-                  Measurement::PhysicalQuantities physicalQuantities,
-                  std::optional<Measurement::SystemOfMeasurement> forcedSystemOfMeasurement,
-                  std::optional<Measurement::UnitSystem::RelativeScale> forcedRelativeScale);
+   std::unique_ptr<QMenu> create(QWidget * parent,
+                                 Measurement::PhysicalQuantities physicalQuantities,
+                                 std::optional<Measurement::SystemOfMeasurement> forcedSystemOfMeasurement,
+                                 std::optional<Measurement::UnitSystem::RelativeScale> forcedRelativeScale);
 
    /**
     * \brief When a pop-up \c QMenu is displayed, by calling its \c exec function, the return value is a \c QAction

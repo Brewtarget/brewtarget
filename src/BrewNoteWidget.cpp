@@ -1,24 +1,23 @@
-/*
- * BrewNoteWidget.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2023
- * - Jeff Bailey <skydvr38@verizon.net>
- * - Matt Young <mfsy@yahoo.com>
- * - Mik Firestone <mikfire@gmail.com>
- * - Philip Greggory Lee <rocketman768@gmail.com>
+/*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ * BrewNoteWidget.cpp is part of Brewtarget, and is copyright the following authors 2009-2023:
+ *   • Brian Rower <brian.rower@gmail.com>
+ *   • Jeff Bailey <skydvr38@verizon.net>
+ *   • Jonatan Pålsson <jonatan.p@gmail.com>
+ *   • Matt Young <mfsy@yahoo.com>
+ *   • Mik Firestone <mikfire@gmail.com>
+ *   • Philip Greggory Lee <rocketman768@gmail.com>
  *
- * Brewtarget is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * Brewtarget is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "BrewNoteWidget.h"
 
 #include <QDate>
@@ -85,11 +84,7 @@ BrewNoteWidget::~BrewNoteWidget() = default;
 
 //.:TBD:. See comment in PitchDialog::updateProductionDate() for how we might re-implement per-field date format
 // selection
-// I should really do this better, but I really cannot bring myself to do
-// another UnitSystem for one input field.
 void BrewNoteWidget::updateDateFormat() {
-//   auto dateFormat = Localization::getDateFormatForField(PersistentSettings::BrewNote::fermentDate,
-//                                                         PersistentSettings::Sections::page_postferment);
    auto dateFormat = Localization::getDateFormat();
    QString format = Localization::numericToStringDateFormat(dateFormat);
    this->lineEdit_fermentDate->setDisplayFormat(format);
@@ -107,9 +102,9 @@ void BrewNoteWidget::updateProjOg() {
    Measurement::UnitSystem const & displayUnitSystem = this->label_projectedOg->getDisplayUnitSystem();
    int precision = (displayUnitSystem == Measurement::UnitSystems::density_Plato) ? 0 : 3;
 
-   // Set precision before setting amount as setPrecision does not update the display, whereas setAmount does
+   // Set precision before setting amount as setPrecision does not update the display, whereas setQuantity does
    this->lcdnumber_projectedOG->setPrecision(precision);
-   this->lcdnumber_projectedOG->setAmount(quant);
+   this->lcdnumber_projectedOG->setQuantity(quant);
    return;
 }
 
@@ -155,18 +150,18 @@ bool BrewNoteWidget::isBrewNote(BrewNote* note) {
    return this->bNoteObs == note;
 }
 
-void BrewNoteWidget::updateSG()                                { if (this->bNoteObs) { this->bNoteObs->setSg              (this->lineEdit_Sg         ->toCanonical().quantity());                      } return; }
-void BrewNoteWidget::updateVolumeIntoBK_l()                    { if (this->bNoteObs) { this->bNoteObs->setVolumeIntoBK_l  (this->lineEdit_volIntoBk  ->toCanonical().quantity());                      } return; }
-void BrewNoteWidget::updateStrikeTemp_c()                      { if (this->bNoteObs) { this->bNoteObs->setStrikeTemp_c    (this->lineEdit_strikeTemp ->toCanonical().quantity());                      } return; }
-void BrewNoteWidget::updateMashFinTemp_c()                     { if (this->bNoteObs) { this->bNoteObs->setMashFinTemp_c   (this->lineEdit_mashFinTemp->toCanonical().quantity());                      } return; }
-void BrewNoteWidget::updateOG()                                { if (this->bNoteObs) { this->bNoteObs->setOg              (this->lineEdit_Og         ->toCanonical().quantity());                      } return; }
-void BrewNoteWidget::updatePostBoilVolume_l()                  { if (this->bNoteObs) { this->bNoteObs->setPostBoilVolume_l(this->lineEdit_postBoilVol->toCanonical().quantity()); this->showChanges(); } return; }
-void BrewNoteWidget::updateVolumeIntoFerm_l()                  { if (this->bNoteObs) { this->bNoteObs->setVolumeIntoFerm_l(this->lineEdit_volIntoFerm->toCanonical().quantity()); this->showChanges(); } return; }
-void BrewNoteWidget::updatePitchTemp_c()                       { if (this->bNoteObs) { this->bNoteObs->setPitchTemp_c     (this->lineEdit_pitchTemp  ->toCanonical().quantity()); this->showChanges(); } return; }
-void BrewNoteWidget::updateFG()                                { if (this->bNoteObs) { this->bNoteObs->setFg              (this->lineEdit_Fg         ->toCanonical().quantity()); this->showChanges(); } return; }
-void BrewNoteWidget::updateFinalVolume_l()                     { if (this->bNoteObs) { this->bNoteObs->setFinalVolume_l   (this->lineEdit_finalVolume->toCanonical().quantity());                      } return; }
-void BrewNoteWidget::updateFermentDate(QDate const & datetime) { if (this->bNoteObs) { this->bNoteObs->setFermentDate     (datetime);                                                                  } return; }
-void BrewNoteWidget::updateNotes()                             { if (this->bNoteObs) { this->bNoteObs->setNotes           (this->btTextEdit_brewNotes->toPlainText() );                                } return; }
+void BrewNoteWidget::updateSG()                                { if (this->bNoteObs) { this->bNoteObs->setSg              (this->lineEdit_Sg         ->getNonOptCanonicalQty());                      } return; }
+void BrewNoteWidget::updateVolumeIntoBK_l()                    { if (this->bNoteObs) { this->bNoteObs->setVolumeIntoBK_l  (this->lineEdit_volIntoBk  ->getNonOptCanonicalQty());                      } return; }
+void BrewNoteWidget::updateStrikeTemp_c()                      { if (this->bNoteObs) { this->bNoteObs->setStrikeTemp_c    (this->lineEdit_strikeTemp ->getNonOptCanonicalQty());                      } return; }
+void BrewNoteWidget::updateMashFinTemp_c()                     { if (this->bNoteObs) { this->bNoteObs->setMashFinTemp_c   (this->lineEdit_mashFinTemp->getNonOptCanonicalQty());                      } return; }
+void BrewNoteWidget::updateOG()                                { if (this->bNoteObs) { this->bNoteObs->setOg              (this->lineEdit_Og         ->getNonOptCanonicalQty());                      } return; }
+void BrewNoteWidget::updatePostBoilVolume_l()                  { if (this->bNoteObs) { this->bNoteObs->setPostBoilVolume_l(this->lineEdit_postBoilVol->getNonOptCanonicalQty()); this->showChanges(); } return; }
+void BrewNoteWidget::updateVolumeIntoFerm_l()                  { if (this->bNoteObs) { this->bNoteObs->setVolumeIntoFerm_l(this->lineEdit_volIntoFerm->getNonOptCanonicalQty()); this->showChanges(); } return; }
+void BrewNoteWidget::updatePitchTemp_c()                       { if (this->bNoteObs) { this->bNoteObs->setPitchTemp_c     (this->lineEdit_pitchTemp  ->getNonOptCanonicalQty()); this->showChanges(); } return; }
+void BrewNoteWidget::updateFG()                                { if (this->bNoteObs) { this->bNoteObs->setFg              (this->lineEdit_Fg         ->getNonOptCanonicalQty()); this->showChanges(); } return; }
+void BrewNoteWidget::updateFinalVolume_l()                     { if (this->bNoteObs) { this->bNoteObs->setFinalVolume_l   (this->lineEdit_finalVolume->getNonOptCanonicalQty());                      } return; }
+void BrewNoteWidget::updateFermentDate(QDate const & datetime) { if (this->bNoteObs) { this->bNoteObs->setFermentDate     (datetime);                                                                } return; }
+void BrewNoteWidget::updateNotes()                             { if (this->bNoteObs) { this->bNoteObs->setNotes           (this->btTextEdit_brewNotes->toPlainText() );                              } return; }
 
 void BrewNoteWidget::changed([[maybe_unused]] QMetaProperty prop,
                              [[maybe_unused]] QVariant val) {
@@ -183,30 +178,30 @@ void BrewNoteWidget::showChanges([[maybe_unused]] QString field) {
       return;
    }
 
-   this->lineEdit_Sg         ->setAmount   (bNoteObs->sg              ());
-   this->lineEdit_volIntoBk  ->setAmount   (bNoteObs->volumeIntoBK_l  ());
-   this->lineEdit_strikeTemp ->setAmount   (bNoteObs->strikeTemp_c    ());
-   this->lineEdit_mashFinTemp->setAmount   (bNoteObs->mashFinTemp_c   ());
-   this->lineEdit_Og         ->setAmount   (bNoteObs->og              ());
-   this->lineEdit_postBoilVol->setAmount   (bNoteObs->postBoilVolume_l());
-   this->lineEdit_volIntoFerm->setAmount   (bNoteObs->volumeIntoFerm_l());
-   this->lineEdit_pitchTemp  ->setAmount   (bNoteObs->pitchTemp_c     ());
-   this->lineEdit_Fg         ->setAmount   (bNoteObs->fg              ());
-   this->lineEdit_finalVolume->setAmount   (bNoteObs->finalVolume_l   ());
+   this->lineEdit_Sg         ->setQuantity   (bNoteObs->sg              ());
+   this->lineEdit_volIntoBk  ->setQuantity   (bNoteObs->volumeIntoBK_l  ());
+   this->lineEdit_strikeTemp ->setQuantity   (bNoteObs->strikeTemp_c    ());
+   this->lineEdit_mashFinTemp->setQuantity   (bNoteObs->mashFinTemp_c   ());
+   this->lineEdit_Og         ->setQuantity   (bNoteObs->og              ());
+   this->lineEdit_postBoilVol->setQuantity   (bNoteObs->postBoilVolume_l());
+   this->lineEdit_volIntoFerm->setQuantity   (bNoteObs->volumeIntoFerm_l());
+   this->lineEdit_pitchTemp  ->setQuantity   (bNoteObs->pitchTemp_c     ());
+   this->lineEdit_Fg         ->setQuantity   (bNoteObs->fg              ());
+   this->lineEdit_finalVolume->setQuantity   (bNoteObs->finalVolume_l   ());
    this->lineEdit_fermentDate->setDate     (bNoteObs->fermentDate     ());
    this->btTextEdit_brewNotes->setPlainText(bNoteObs->notes           ());
 
    // Now with the calculated stuff
-   this->lcdnumber_effBK->setAmount(bNoteObs->effIntoBK_pct());
+   this->lcdnumber_effBK->setQuantity(bNoteObs->effIntoBK_pct());
 
    // Need to think about these? Maybe use the bubbles?
    this->updateProjOg(); // this requires more work, but updateProj does it
 
-   this->lcdnumber_brewhouseEff->setAmount(bNoteObs->brewhouseEff_pct());
-   this->lcdnumber_projABV     ->setAmount(bNoteObs->projABV_pct     ());
-   this->lcdnumber_abv         ->setAmount(bNoteObs->abv             ());
-   this->lcdnumber_atten       ->setAmount(bNoteObs->attenuation     ());
-   this->lcdnumber_projAtten   ->setAmount(bNoteObs->projAtten       ());
+   this->lcdnumber_brewhouseEff->setQuantity(bNoteObs->brewhouseEff_pct());
+   this->lcdnumber_projABV     ->setQuantity(bNoteObs->projABV_pct     ());
+   this->lcdnumber_abv         ->setQuantity(bNoteObs->abv             ());
+   this->lcdnumber_atten       ->setQuantity(bNoteObs->attenuation     ());
+   this->lcdnumber_projAtten   ->setQuantity(bNoteObs->projAtten       ());
    return;
 }
 

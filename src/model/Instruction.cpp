@@ -1,23 +1,21 @@
-/*
- * model/Instruction.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2023
- * - Matt Young <mfsy@yahoo.com>
- * - Mik Firestone <mikfire@gmail.com>
- * - Philip Greggory Lee <rocketman768@gmail.com>
+/*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ * model/Instruction.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ *   • Brian Rower <brian.rower@gmail.com>
+ *   • Matt Young <mfsy@yahoo.com>
+ *   • Mik Firestone <mikfire@gmail.com>
+ *   • Philip Greggory Lee <rocketman768@gmail.com>
  *
- * Brewtarget is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * Brewtarget is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "model/Instruction.h"
 
 #include "database/ObjectStoreWrapper.h"
@@ -53,20 +51,22 @@ public:
          [this](std::shared_ptr<Recipe> rec) {return rec->uses(instruction);}
       );
 
-      if (!result.has_value()) {
+      if (!result) {
          qCritical() << Q_FUNC_INFO << "Unable to find Recipe for Instruction #" << this->instruction.key();
          return nullptr;
       }
 
-      this->recipe = result.value();
+      this->recipe = result;
 
-      return result.value();
+      return result;
    }
 
 private:
    Instruction & instruction;
    std::shared_ptr<Recipe> recipe;
 };
+
+QString Instruction::localisedName() { return tr("Instruction"); }
 
 bool Instruction::isEqualTo(NamedEntity const & other) const {
    // Base class (NamedEntity) will have ensured this cast is valid
@@ -93,7 +93,7 @@ TypeLookup const Instruction::typeLookup {
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Instruction::timerValue, Instruction::m_timerValue),
    },
    // Parent class lookup
-   &NamedEntity::typeLookup
+   {&NamedEntity::typeLookup}
 };
 
 Instruction::Instruction(QString name) :
@@ -110,11 +110,11 @@ Instruction::Instruction(QString name) :
 Instruction::Instruction(NamedParameterBundle const & namedParameterBundle) :
    NamedEntity {namedParameterBundle},
    pimpl       {std::make_unique<impl>(*this)},
-   m_directions{namedParameterBundle.val<QString>(PropertyNames::Instruction::directions)},
-   m_hasTimer  {namedParameterBundle.val<bool   >(PropertyNames::Instruction::hasTimer  )},
-   m_timerValue{namedParameterBundle.val<QString>(PropertyNames::Instruction::timerValue)},
-   m_completed {namedParameterBundle.val<bool   >(PropertyNames::Instruction::completed )},
-   m_interval  {namedParameterBundle.val<double >(PropertyNames::Instruction::interval  )} {
+   SET_REGULAR_FROM_NPB (m_directions, namedParameterBundle, PropertyNames::Instruction::directions),
+   SET_REGULAR_FROM_NPB (m_hasTimer  , namedParameterBundle, PropertyNames::Instruction::hasTimer  ),
+   SET_REGULAR_FROM_NPB (m_timerValue, namedParameterBundle, PropertyNames::Instruction::timerValue),
+   SET_REGULAR_FROM_NPB (m_completed , namedParameterBundle, PropertyNames::Instruction::completed ),
+   SET_REGULAR_FROM_NPB (m_interval  , namedParameterBundle, PropertyNames::Instruction::interval  ) {
    return;
 }
 
@@ -135,19 +135,19 @@ Instruction::~Instruction() = default;
 
 // Setters ====================================================================
 void Instruction::setDirections(QString const & dir) {
-   this->setAndNotify(PropertyNames::Instruction::directions, this->m_directions, dir);
+   SET_AND_NOTIFY(PropertyNames::Instruction::directions, this->m_directions, dir);
 }
 
 void Instruction::setHasTimer(bool has) {
-   this->setAndNotify(PropertyNames::Instruction::hasTimer, this->m_hasTimer, has);
+   SET_AND_NOTIFY(PropertyNames::Instruction::hasTimer, this->m_hasTimer, has);
 }
 
 void Instruction::setTimerValue(QString const & timerVal) {
-   this->setAndNotify(PropertyNames::Instruction::timerValue, this->m_timerValue, timerVal);
+   SET_AND_NOTIFY(PropertyNames::Instruction::timerValue, this->m_timerValue, timerVal);
 }
 
 void Instruction::setCompleted(bool comp) {
-   this->setAndNotify(PropertyNames::Instruction::completed, this->m_completed, comp);
+   SET_AND_NOTIFY(PropertyNames::Instruction::completed, this->m_completed, comp);
 }
 
 // TODO: figure out.
@@ -159,7 +159,7 @@ void Instruction::setReagent(const QString& reagent)
 */
 
 void Instruction::setInterval(double time) {
-   this->setAndNotify(PropertyNames::Instruction::interval, this->m_interval, time);
+   SET_AND_NOTIFY(PropertyNames::Instruction::interval, this->m_interval, time);
 }
 
 void Instruction::addReagent(QString const & reagent) {
@@ -184,6 +184,6 @@ int Instruction::instructionNumber() const {
    return this->pimpl->getRecipe()->instructionNumber(*this);
 }
 
-Recipe * Instruction::getOwningRecipe() {
-   return ObjectStoreWrapper::findFirstMatching<Recipe>( [this](Recipe * rec) {return rec->uses(*this);} );
+std::shared_ptr<Recipe> Instruction::owningRecipe() const {
+   return ObjectStoreWrapper::findFirstMatching<Recipe>( [this](std::shared_ptr<Recipe> rec) {return rec->uses(*this);} );
 }

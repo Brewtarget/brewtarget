@@ -1,6 +1,5 @@
-/**
- * PersistentSettings.h is part of Brewtarget, and is copyright the following
- * authors 2009-2023
+/*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ * PersistentSettings.h is part of Brewtarget, and is copyright the following authors 2009-2024:
  *   • Dan Cavanagh <dan@dancavanagh.com>
  *   • Daniel Pettersson <pettson81@gmail.com>
  *   • Greg Meess <Daedalus12@gmail.com>
@@ -15,19 +14,17 @@
  *   • Scott Peshak <scott@peshak.net>
  *   • Théophane Martin <theophane.m@gmail.com>
  *
- * Brewtarget is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * Brewtarget is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #ifndef PERSISTENTSETTINGS_H
 #define PERSISTENTSETTINGS_H
 #pragma once
@@ -38,7 +35,7 @@
 
 #include "utils/BtStringConst.h"
 
-//======================================================================================================================
+//╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 //========================================== Start of setting NAME constants ===========================================
 //===== (Note that we only need to add here names that have no section or are used in multiple places in the code) =====
 //===== (Note too that property names are often used as setting names and, in such cases, are not redefined here) ======
@@ -71,6 +68,8 @@ AddSettingName(LogDirectory)
 AddSettingName(LoggingLevel)
 AddSettingName(mashHopAdjustment)
 AddSettingName(mashStepTableWidget_headerState)  // MainWindow section
+AddSettingName(boilStepTableWidget_headerState)  // MainWindow section
+AddSettingName(fermentationStepTableWidget_headerState)  // MainWindow section
 AddSettingName(maximum)                          // backups section
 AddSettingName(productionDate)
 AddSettingName(recipeKey)
@@ -84,40 +83,30 @@ AddSettingName(treeView_misc_headerState)        // MainWindow section
 AddSettingName(treeView_recipe_headerState)      // MainWindow section
 AddSettingName(treeView_style_headerState)       // MainWindow section
 AddSettingName(treeView_yeast_headerState)       // MainWindow section
-AddSettingName(unitSystem_color)
-AddSettingName(unitSystem_density)
-AddSettingName(unitSystem_diastaticPower)
-AddSettingName(unitSystem_temperature)
-AddSettingName(unitSystem_volume)
-AddSettingName(unitSystem_weight)
 AddSettingName(UserDataDirectory)
 AddSettingName(versioning)
 AddSettingName(windowState)
 #undef AddSettingName
 //=========================================== End of setting NAME constants ============================================
-//======================================================================================================================
-//======================================================================================================================
+//╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+//╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 //======================================== Start of setting SECTION constants ==========================================
+// .:TODO:. I think most of these are no longer used and can be deleted
 #define AddSettingSection(section) namespace PersistentSettings::Sections { BtStringConst const section{#section}; }
 AddSettingSection(alcoholTool)
 AddSettingSection(backups)
-AddSettingSection(fermentableTable)
-AddSettingSection(hopTable)
+///AddSettingSection(fermentableTable)
+///AddSettingSection(hopTable)
 AddSettingSection(MainWindow)
 AddSettingSection(mashStepTableModel)
 AddSettingSection(miscTable)
 AddSettingSection(miscTableModel)
-AddSettingSection(page_postboil)
-AddSettingSection(page_postferment)
-AddSettingSection(page_preboil)
-AddSettingSection(pitchRateCalc)
 AddSettingSection(saltTable)
-AddSettingSection(tab_recipe)
 AddSettingSection(yeastTable)
 AddSettingSection(yeastTableModel)
 #undef AddSettingName
 //========================================= End of setting SECTION constants ===========================================
-//======================================================================================================================
+//╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 
 
 /**

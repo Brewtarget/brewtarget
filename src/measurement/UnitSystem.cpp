@@ -1,25 +1,22 @@
-/*
- * measurement/UnitSystem.cpp is part of Brewtarget, and is copyright the following
- * authors 2009-2023:
- * - Jeff Bailey <skydvr38@verizon.net>
- * - Matt Young <mfsy@yahoo.com>
- * - Mik Firestone <mikfire@gmail.com>
- * - Philip Greggory Lee <rocketman768@gmail.com>
- * - Théophane Martin <theophane.m@gmail.com>
+/*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ * measurement/UnitSystem.cpp is part of Brewtarget, and is copyright the following authors 2009-2023:
+ *   • Jeff Bailey <skydvr38@verizon.net>
+ *   • Matt Young <mfsy@yahoo.com>
+ *   • Mik Firestone <mikfire@gmail.com>
+ *   • Philip Greggory Lee <rocketman768@gmail.com>
+ *   • Théophane Martin <theophane.m@gmail.com>
  *
- * Brewtarget is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * Brewtarget is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "measurement/UnitSystem.h"
 
 #include <QApplication>
@@ -49,12 +46,12 @@ namespace {
    // std::string and QString.  For the moment, this more manual approach seems appropriate to the scale of what we
    // need.
    EnumStringMapping const relativeScaleToName {
-      {"scaleExtraSmall", Measurement::UnitSystem::RelativeScale::ExtraSmall},
-      {"scaleSmall"     , Measurement::UnitSystem::RelativeScale::Small     },
-      {"scaleMedium"    , Measurement::UnitSystem::RelativeScale::Medium    },
-      {"scaleLarge"     , Measurement::UnitSystem::RelativeScale::Large     },
-      {"scaleExtraLarge", Measurement::UnitSystem::RelativeScale::ExtraLarge},
-      {"scaleHuge"      , Measurement::UnitSystem::RelativeScale::Huge      }
+      {Measurement::UnitSystem::RelativeScale::ExtraSmall, "scaleExtraSmall"},
+      {Measurement::UnitSystem::RelativeScale::Small     , "scaleSmall"     },
+      {Measurement::UnitSystem::RelativeScale::Medium    , "scaleMedium"    },
+      {Measurement::UnitSystem::RelativeScale::Large     , "scaleLarge"     },
+      {Measurement::UnitSystem::RelativeScale::ExtraLarge, "scaleExtraLarge"},
+      {Measurement::UnitSystem::RelativeScale::Huge      , "scaleHuge"      },
    };
 }
 
@@ -103,16 +100,16 @@ public:
    std::pair<double, QString> displayableAmount(Measurement::Amount const & amount,
                                                 std::optional<Measurement::UnitSystem::RelativeScale> forcedScale) const {
       // Special cases
-      if (amount.unit()->getPhysicalQuantity() != this->physicalQuantity) {
-         return std::pair(amount.quantity(), "");
+      if (amount.unit->getPhysicalQuantity() != this->physicalQuantity) {
+         return std::pair(amount.quantity, "");
       }
 
-      auto siAmount = amount.unit()->toCanonical(amount.quantity());
+      auto siAmount = amount.unit->toCanonical(amount.quantity);
 
       // If there is only one unit in this unit system, then the scale to unit mapping will be empty as there's nothing
       // to choose from
       if (this->scaleToUnit.size() == 0) {
-         return std::pair(this->defaultUnit->fromCanonical(siAmount.quantity()), this->defaultUnit->name);
+         return std::pair(this->defaultUnit->fromCanonical(siAmount.quantity), this->defaultUnit->name);
       }
 
       // Conversely, if we have a non-empty mapping then it's a coding error if it only has one entry!
@@ -123,7 +120,7 @@ public:
          // It's a coding error to specify a forced scale that is not in the UnitSystem
          Q_ASSERT(this->scaleToUnit.contains(*forcedScale));
          Measurement::Unit const * bb = this->scaleToUnit.value(*forcedScale);
-         return std::pair(bb->fromCanonical(siAmount.quantity()), bb->name);
+         return std::pair(bb->fromCanonical(siAmount.quantity), bb->name);
       }
 
       // Search for the smallest measure in this system that's not too big to show the supplied value
@@ -131,7 +128,7 @@ public:
       // (e.g., mg, g, kg).
       Measurement::Unit const * last  = nullptr;
       for (auto it : this->scaleToUnit) {
-         if (last != nullptr && qAbs(siAmount.quantity()) < it->toCanonical(it->boundary()).quantity()) {
+         if (last != nullptr && qAbs(siAmount.quantity) < it->toCanonical(it->boundary()).quantity) {
             // Stop looping as we've found a unit that's too big to use (so we'll return the last one, ie the one smaller,
             // below)
             break;
@@ -141,7 +138,7 @@ public:
 
       // It is a programming error if the map was empty (ie we didn't go through the loop at all)
       Q_ASSERT(last != nullptr);
-      return std::pair(last->fromCanonical(siAmount.quantity()), last->name);
+      return std::pair(last->fromCanonical(siAmount.quantity), last->name);
    }
 
    // Member variables for impl
@@ -184,25 +181,9 @@ bool Measurement::UnitSystem::operator==(UnitSystem const & other) const {
 }
 
 Measurement::Amount Measurement::UnitSystem::qstringToSI(QString qstr, Unit const & defUnit) const {
-   // All functions in QRegExp are reentrant, so it should be safe to use as a shared const in multi-threaded code.
-   static QRegExp const amtUnit {
-      // Make sure we get the right decimal point (. or ,) and the right grouping separator (, or .).  Some locales
-      // write 1.000,10 and others write 1,000.10.  We need to catch both.
-      "((?:\\d+" + QRegExp::escape(Localization::getLocale().groupSeparator()) + ")?\\d+(?:" +
-      QRegExp::escape(Localization::getLocale().decimalPoint()) + "\\d+)?|" +
-      QRegExp::escape(Localization::getLocale().decimalPoint()) + "\\d+)\\s*(\\w+)?",
-      Qt::CaseInsensitive
-   };
-
-   // make sure we can parse the string
-   if (amtUnit.indexIn(qstr) == -1) {
-      qDebug() << Q_FUNC_INFO << "Unable to parse" << qstr;
-      return Amount{0.0, Measurement::Unit::getCanonicalUnit(this->pimpl->physicalQuantity)};
-   }
-
-   double const amt = Localization::toDouble(amtUnit.cap(1), Q_FUNC_INFO);
-
-   QString const unitName = amtUnit.cap(2);
+   // Structured binding declarations are a pretty neat feature from C++17 that make it easier to have a function return
+   // more than one thing.
+   auto const [amt, unitName] = Measurement::Unit::splitAmountString(qstr);
 
    // Look first in this unit system. If you can't find it here, find it
    // globally. I *think* this finally has all the weird magic right. If the
@@ -217,23 +198,23 @@ Measurement::Amount Measurement::UnitSystem::qstringToSI(QString qstr, Unit cons
       // match to a unit in another UnitSystem for the same PhysicalQuantity.  If there are no matches that way, it will
       // return nullptr;
       unitToUse = Unit::getUnit(unitName, *this, true);
-      if (unitToUse) {
-         qDebug() << Q_FUNC_INFO << this->uniqueName << ":" << unitName << "interpreted as" << unitToUse->name;
-      } else {
-         qDebug() <<
-            Q_FUNC_INFO << this->uniqueName << ":" << unitName << "not recognised for" << this->pimpl->physicalQuantity;
-      }
+//      if (unitToUse) {
+//         qDebug() << Q_FUNC_INFO << this->uniqueName << ":" << unitName << "interpreted as" << unitToUse->name;
+//      } else {
+//         qDebug() <<
+//            Q_FUNC_INFO << this->uniqueName << ":" << unitName << "not recognised for" << this->pimpl->physicalQuantity;
+//      }
    }
 
    if (!unitToUse) {
-      qDebug() << Q_FUNC_INFO << "Defaulting to" << defUnit;
+//      qDebug() << Q_FUNC_INFO << "Defaulting to" << defUnit;
       unitToUse = &defUnit;
    }
 
    Measurement::Amount siAmount = unitToUse->toCanonical(amt);
-   qDebug() <<
-      Q_FUNC_INFO << this->uniqueName << ": " << qstr << "is" << amt << " " << unitToUse->name << "=" <<
-      siAmount.quantity() << "in" << siAmount.unit()->name;
+//   qDebug() <<
+//      Q_FUNC_INFO << this->uniqueName << ": " << qstr << "is" << amt << " " << unitToUse->name << "=" <<
+//      siAmount.quantity << "in" << siAmount.unit->name;
 
    return siAmount;
 }
@@ -249,7 +230,7 @@ QString Measurement::UnitSystem::displayAmount(Measurement::Amount const & amoun
    auto result = this->pimpl->displayableAmount(amount, forcedScale);
 
    if (result.second.isEmpty()) {
-      return QString("%L1").arg(this->amountDisplay(Measurement::Amount{result.first, *amount.unit()}, forcedScale),
+      return QString("%L1").arg(this->amountDisplay(Measurement::Amount{result.first, *amount.unit}, forcedScale),
                                 fieldWidth,
                                 format,
                                 precision);
@@ -304,7 +285,7 @@ Measurement::UnitSystem const & Measurement::UnitSystem::getInstance(SystemOfMea
       qCritical() <<
          Q_FUNC_INFO << "Unable to find a UnitSystem for SystemOfMeasurement" <<
          Measurement::getDisplayName(systemOfMeasurement) << "and PhysicalQuantity" <<
-         Measurement::getDisplayName(physicalQuantity);
+         Measurement::physicalQuantityStringMapping[physicalQuantity];
       Q_ASSERT(false); // Stop here on a debug build
    }
 
@@ -366,9 +347,8 @@ template QTextStream & operator<<(QTextStream & stream, Measurement::UnitSystem:
 //---------------------------------------------------------------------------------------------------------------------
 namespace Measurement::UnitSystems {
    //
-   // NB: For the mass_Xxxx and volume_Xxxx unit systems, to make Measurement::Mixed2PhysicalQuantities work, we rely on
-   //     systemOfMeasurementName being identical for identical systems of measurement (because, for reasons explained
-   //     in comments in measurement/PhysicalQuantity.h, we don't explicitly model system of measurement).
+   // NB: For the mass_Xxxx and volume_Xxxx unit systems, to make Measurement::MixedPhysicalQuantities work, we rely on
+   //     them sharing systemOfMeasurement. TODO: This will need to change for PhysicalQuantity::Count
    //
    UnitSystem const mass_Metric{PhysicalQuantity::Mass,
                                 &Measurement::Units::kilograms,
@@ -408,11 +388,11 @@ namespace Measurement::UnitSystems {
                                        "volume_UsCustomary",
                                        Measurement::SystemOfMeasurement::UsCustomary,
                                        {{UnitSystem::RelativeScale::ExtraSmall, &Measurement::Units::us_teaspoons  },
-                                        {UnitSystem::RelativeScale::Small,      &Measurement::Units::us_tablespoons},
-                                        {UnitSystem::RelativeScale::Medium,     &Measurement::Units::us_cups       },
-                                        {UnitSystem::RelativeScale::Large,      &Measurement::Units::us_quarts     },
+                                        {UnitSystem::RelativeScale::Small     , &Measurement::Units::us_tablespoons},
+                                        {UnitSystem::RelativeScale::Medium    , &Measurement::Units::us_cups       },
+                                        {UnitSystem::RelativeScale::Large     , &Measurement::Units::us_quarts     },
                                         {UnitSystem::RelativeScale::ExtraLarge, &Measurement::Units::us_gallons    },
-                                        {UnitSystem::RelativeScale::Huge,       &Measurement::Units::us_barrels    }},
+                                        {UnitSystem::RelativeScale::Huge      , &Measurement::Units::us_barrels    }},
                                        &Measurement::Units::us_quarts};
 
    UnitSystem const volume_Imperial{PhysicalQuantity::Volume,
@@ -426,6 +406,11 @@ namespace Measurement::UnitSystems {
                                      {UnitSystem::RelativeScale::ExtraLarge, &Measurement::Units::imperial_gallons    },
                                      {UnitSystem::RelativeScale::Huge,       &Measurement::Units::imperial_barrels    }},
                                     &Measurement::Units::imperial_quarts};
+
+   UnitSystem const count_NumberOf{PhysicalQuantity::Count,
+                                   &Measurement::Units::numberOf,
+                                   "count_NumberOf",
+                                   Measurement::SystemOfMeasurement::UniversalStandard};
 
    UnitSystem const temperature_MetricIsCelsius{PhysicalQuantity::Temperature,
                                                 &Measurement::Units::celsius,
@@ -504,17 +489,13 @@ namespace Measurement::UnitSystems {
                                               "carbonation_MassPerVolume",
                                               Measurement::SystemOfMeasurement::CarbonationMassPerVolume};
 
-   UnitSystem const concentration_PartsPer{PhysicalQuantity::VolumeConcentration,
-                                           &Measurement::Units::partsPerMillion,
-                                           "concentration_PartsPer",
-                                           Measurement::SystemOfMeasurement::MetricConcentration,
-                                           {{UnitSystem::RelativeScale::Small,  &Measurement::Units::partsPerBillion},
-                                            {UnitSystem::RelativeScale::Medium, &Measurement::Units::partsPerMillion}}};
-
-   UnitSystem const concentration_MassPerVolume{PhysicalQuantity::MassConcentration,
-                                                &Measurement::Units::milligramsPerLiter,
-                                                "concentration_MassPerVolume",
-                                                Measurement::SystemOfMeasurement::MetricConcentration};
+   UnitSystem const massFractionOrConc_Brewing{PhysicalQuantity::MassFractionOrConc,
+                                               &Measurement::Units::partsPerMillionMass,
+                                               "massFractionOrConc_Brewing",
+                                               Measurement::SystemOfMeasurement::BrewingConcentration,
+                                               {{UnitSystem::RelativeScale::Small,  &Measurement::Units::partsPerBillionMass},
+                                                {UnitSystem::RelativeScale::Medium, &Measurement::Units::partsPerMillionMass},
+                                                {UnitSystem::RelativeScale::Large , &Measurement::Units::milligramsPerLiter}}};
 
    UnitSystem const viscosity_Metric{PhysicalQuantity::Viscosity,
                                      &Measurement::Units::centipoise,
@@ -536,4 +517,26 @@ namespace Measurement::UnitSystems {
                                                 "specificHeatCapacity_Joules",
                                                 Measurement::SystemOfMeasurement::SpecificHeatCapacityJoules};
 
+   UnitSystem const specificHeatCapacity_Btus{PhysicalQuantity::SpecificHeatCapacity,
+                                              &Measurement::Units::btuPerFahrenheitPerPound,
+                                              "specificHeatCapacity_Btus",
+                                              Measurement::SystemOfMeasurement::SpecificHeatCapacityBtus};
+
+   UnitSystem const specificVolume_Metric{PhysicalQuantity::SpecificVolume,
+                                          &Measurement::Units::litresPerKilogram,
+                                          "specificVolume_Metric",
+                                          Measurement::SystemOfMeasurement::Metric,
+                                          {{UnitSystem::RelativeScale::ExtraSmall, &Measurement::Units::litresPerKilogram     },
+                                           {UnitSystem::RelativeScale::Small     , &Measurement::Units::cubicMetersPerKilogram},
+                                           {UnitSystem::RelativeScale::Medium    , &Measurement::Units::litresPerGram         }}};
+
+   UnitSystem const specificVolume_UsCustomary{PhysicalQuantity::SpecificVolume,
+                                               &Measurement::Units::us_quartsPerPound,
+                                               "specificVolume_UsCustomary",
+                                               Measurement::SystemOfMeasurement::UsCustomary,
+                                               {{UnitSystem::RelativeScale::ExtraSmall,  &Measurement::Units::us_fluidOuncesPerOunce},
+                                                {UnitSystem::RelativeScale::Small     ,  &Measurement::Units::cubicFeetPerPound     },
+                                                {UnitSystem::RelativeScale::Medium    ,  &Measurement::Units::us_gallonsPerPound    },
+                                                {UnitSystem::RelativeScale::Large     ,  &Measurement::Units::us_quartsPerPound     },
+                                                {UnitSystem::RelativeScale::ExtraLarge,  &Measurement::Units::us_gallonsPerOunce    }}};
 }

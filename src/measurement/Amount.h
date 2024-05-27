@@ -1,21 +1,18 @@
-/*
- * measurement/Amount.h is part of Brewtarget, and is copyright the following
- * authors 2022-2023:
- * - Matt Young <mfsy@yahoo.com>
+/*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ * measurement/Amount.h is part of Brewtarget, and is copyright the following authors 2022-2023:
+ *   • Matt Young <mfsy@yahoo.com>
  *
- * Brewtarget is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * Brewtarget is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #ifndef MEASUREMENT_AMOUNT_H
 #define MEASUREMENT_AMOUNT_H
 #pragma once
@@ -30,72 +27,48 @@ namespace Measurement {
     *        5.5 US gallons is \b quantity 5.5 and \b unit \c Measurement::Units::us_gallons.  Even where we think we
     *        know what units we're getting back from a function (eg \c qstringToSI), it helps reduce bugs to have
     *        quantity and units together in a single struct.
+    *
+    *        NOTE: Although, in everyday conversation, "quantity" and "amount" are often used interchangeably, in this
+    *              code base it is useful to us to make the distinction between:
+    *
+    *                 \b quantity = a numerical value without units; the units not being present because either:
+    *                                  - there are no units, or
+    *                                  - the units are stored in another field, or
+    *                                  - the units are "fixed" for a certain field (eg it's always a percentage or it's
+    *                                    always kilograms)
+    *
+    *                 \b amount = a quantity plus units -- ie an instance of \c Amount
     */
-   class Amount {
-   public:
+   struct Amount {
+      double       quantity;
+      Unit const * unit;
+
       //! Regular constructor
       Amount(double const quantity, Unit const & unit);
+
+      /**
+       * Default constructor is required if we are passing things through the Qt Property system.
+       * NOTE that this will construct an invalid amount
+       */
+      Amount();
 
       //! Copy constructor
       Amount(Amount const & other);
 
-      //! Assignment operator
+      //! Copy assignment operator
       Amount & operator=(Amount const & other);
 
-      //! Move constructor.
-      Amount(Amount && other);
+      //! Move constructor
+      Amount(Amount && other) noexcept;
 
-      //! Move assignment.
-      Amount & operator=(Amount && other);
+      //! Move assignment operator
+      Amount & operator=(Amount && other) noexcept;
 
-      double       quantity() const;
-      Unit const * unit    () const;
-
-   private:
-      void setQuantity(double const   val);
-      void setUnit    (Unit   const & val);
-
-   protected:
-      double       m_quantity;
-      Unit const * m_unit;
+      //! Checks for an uninitialised (or badly initialised) amount
+      bool isValid() const;
    };
 
 }
-
-
-//// /** TODO We should template this so that we can then do using for massorvolume and massconcorvolconc
-////  * \brief A version of \c Measurement::Amount that is "constrained" to be either a
-////  *        \c Measurement::PhysicalQuantity::Mass or a \c Measurement::PhysicalQuantity::Volume.
-////  *        The constraint is not bullet-proof but you will get an assert (on a debug build) if you try to construct /
-////  *        assign / move it with a \c Measurement::Unit of the wrong \c Measurement::PhysicalQuantity
-////  */
-//// class MassOrVolumeAmt : public Measurement::Amount {
-//// public:
-////    /**
-////     * \brief Default constructor is needed so we can store in \c QVariant which is needed to use this type in the Qt
-////     *        Properties system.  The default-constructed type will be an invalid amount (eg a negative mass).
-////     */
-////    MassOrVolumeAmt();
-////
-////    //! Regular constructor
-////    MassOrVolumeAmt(double quantity, Measurement::Unit const & unit);
-////
-////    //! Copy constructor
-////    MassOrVolumeAmt(Measurement::Amount const & other);
-////
-////    //! Assignment operator
-////    MassOrVolumeAmt & operator=(Measurement::Amount const & other);
-////
-////    //! Move constructor.
-////    MassOrVolumeAmt(Measurement::Amount && other);
-////
-////    //! Move assignment.
-////    MassOrVolumeAmt & operator=(Measurement::Amount && other);
-////
-////    bool isMass() const;
-//// private:
-////    bool wasConstructAssignOrMoveOK();
-//// };
 
 bool operator<(Measurement::Amount const & lhs, Measurement::Amount const & rhs);
 bool operator==(Measurement::Amount const & lhs, Measurement::Amount const & rhs);

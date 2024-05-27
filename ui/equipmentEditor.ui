@@ -10,46 +10,12 @@
     <height>315</height>
    </rect>
   </property>
-  <property name="sizePolicy">
-   <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-    <horstretch>0</horstretch>
-    <verstretch>0</verstretch>
-   </sizepolicy>
-  </property>
   <property name="windowTitle">
    <string>Equipment Editor</string>
-  </property>
-  <property name="configSection" stdset="0">
-   <string notr="true">equipmentEditor</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_equipments">
-     <item>
-      <widget class="QLabel" name="label_equipment">
-       <property name="text">
-        <string>Equipment</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QComboBox" name="equipmentComboBox">
-       <property name="sizeAdjustPolicy">
-        <enum>QComboBox::AdjustToContents</enum>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pushButton_remove">
-       <property name="text">
-        <string/>
-       </property>
-       <property name="icon">
-        <iconset resource="../brewtarget.qrc">
-         <normaloff>:/images/smallMinus.svg</normaloff>:/images/smallMinus.svg</iconset>
-       </property>
-      </widget>
-     </item>
      <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
@@ -63,13 +29,6 @@
        </property>
       </spacer>
      </item>
-     <item>
-      <widget class="QCheckBox" name="checkBox_defaultEquipment">
-       <property name="text">
-        <string>Set as Default</string>
-       </property>
-      </widget>
-     </item>
     </layout>
    </item>
    <item>
@@ -81,7 +40,7 @@
       <enum>QTabWidget::Rounded</enum>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <property name="usesScrollButtons">
       <bool>false</bool>
@@ -89,48 +48,15 @@
      <property name="movable">
       <bool>true</bool>
      </property>
-     <property name="configSection" stdset="0">
-      <string>equipmentEditor</string>
-     </property>
-     <widget class="QWidget" name="tabWidget_editorPage1">
+     <widget class="QWidget" name="tab_general">
       <attribute name="title">
-       <string>Main</string>
+       <string>General</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout">
-       <item row="2" column="0">
-        <widget class="SmartLabel" name="label_boilSize">
-         <property name="contextMenuPolicy">
-          <enum>Qt::CustomContextMenu</enum>
-         </property>
-         <property name="text">
-          <string>Pre-boil Volume</string>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit_boilSize</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="SmartLabel" name="label_batchSize">
-         <property name="contextMenuPolicy">
-          <enum>Qt::CustomContextMenu</enum>
-         </property>
-         <property name="text">
-          <string>Batch Size</string>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit_batchSize</cstring>
-         </property>
-        </widget>
+       <item row="0" column="0">
+        <widget class="InfoButton" name="infoButton_name"></widget>
        </item>
        <item row="0" column="1">
-        <widget class="SmartLineEdit" name="lineEdit_name">
-         <property name="toolTip">
-          <string>Name</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
         <widget class="QLabel" name="label_name">
          <property name="toolTip">
           <string>Required</string>
@@ -140,15 +66,85 @@
          </property>
         </widget>
        </item>
+       <item row="0" column="2" colspan="4">
+        <widget class="SmartLineEdit" name="lineEdit_name">
+         <property name="toolTip">
+          <string>Name to identify this equipment profile</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1" colspan="5">
+        <widget class="InfoText" name="infoText_name">
+         <property name="buddy">
+          <cstring>infoButton_name</cstring>
+         </property>
+         <property name="text">
+          <string>Use a different name for each equipment profile.  If you brew different batch sizes on the same equipment, you need a separate equipment profile for each batch size.</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="InfoButton" name="infoButton_optionalVessels"></widget>
+       </item>
        <item row="2" column="1">
-        <widget class="SmartLineEdit" name="lineEdit_boilSize">
+        <widget class="QLabel" name="label_optionalVessels">
+         <property name="text">
+          <string>Optional Vessels</string>
+         </property>
         </widget>
        </item>
-       <item row="1" column="1">
-        <widget class="SmartLineEdit" name="lineEdit_batchSize">
+       <item row="2" column="2" colspan="4">
+        <widget class="QCheckBox" name="checkBox_showHlt">
+         <property name="text">
+           <string>Hot Liquor Tank</string>
+         </property>
         </widget>
        </item>
-       <item row="4" column="1">
+       <item row="3" column="2" colspan="4">
+        <widget class="QCheckBox" name="checkBox_showLauterTun">
+         <property name="text">
+           <string>Lauter Tun</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2" colspan="4">
+        <widget class="QCheckBox" name="checkBox_showAgingVessel">
+         <property name="text">
+           <string>Aging Vessel</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="2" colspan="4">
+        <widget class="QCheckBox" name="checkBox_showPackagingVessel">
+         <property name="text">
+           <string>Packaging Vessel</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="1" colspan="5">
+        <widget class="InfoText" name="infoText_optionalVessels">
+         <property name="buddy">
+          <cstring>infoButton_optionalVessels</cstring>
+         </property>
+         <property name="text">
+          <string>Attributes of "optional" vessels will not be saved if their volumes are set to 0.</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="1">
+        <widget class="SmartLabel" name="label_boilTime">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
+         <property name="text">
+          <string>Default boil time</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_boilTime</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="2">
         <widget class="SmartLineEdit" name="lineEdit_boilTime">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -161,156 +157,54 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="2">
-        <widget class="QLabel" name="label_calcBoilVolume">
-         <property name="text">
-          <string>Calculate pre-boil volume</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="1">
-        <spacer name="verticalSpacer">
+       <item row="8" column="3">
+        <spacer name="horizontalSpacer_general">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Horizontal</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
-           <width>20</width>
-           <height>40</height>
+           <width>40</width>
+           <height>20</height>
           </size>
          </property>
         </spacer>
        </item>
-       <item row="4" column="0">
-        <widget class="SmartLabel" name="label_boilTime">
-         <property name="contextMenuPolicy">
-          <enum>Qt::CustomContextMenu</enum>
-         </property>
-         <property name="text">
-          <string>Boil time</string>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit_boilTime</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="3">
-        <widget class="QCheckBox" name="checkBox_calcBoilVolume">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="2">
-        <widget class="SmartLabel" name="label_evaporationRate">
-         <property name="contextMenuPolicy">
-          <enum>Qt::CustomContextMenu</enum>
-         </property>
-         <property name="text">
-          <string>Evaporation rate (per hr)</string>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit_evaporationRate</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="3">
-        <widget class="SmartLineEdit" name="lineEdit_evaporationRate">
-        </widget>
-       </item>
-       <item row="1" column="2">
+       <item row="8" column="5">
         <widget class="SmartLabel" name="label_topUpWater">
          <property name="contextMenuPolicy">
           <enum>Qt::CustomContextMenu</enum>
          </property>
          <property name="text">
-          <string>Final top-up water</string>
+          <string>Default final top-up water</string>
          </property>
          <property name="buddy">
           <cstring>lineEdit_topUpWater</cstring>
          </property>
         </widget>
        </item>
-       <item row="1" column="3">
+       <item row="8" column="6">
         <widget class="SmartLineEdit" name="lineEdit_topUpWater">
         </widget>
        </item>
-       <item row="0" column="2">
+       <item row="9" column="5">
         <widget class="SmartLabel" name="label_topUpKettle">
          <property name="contextMenuPolicy">
           <enum>Qt::CustomContextMenu</enum>
          </property>
          <property name="text">
-          <string>Kettle top-up water</string>
+          <string>Default Kettle top-up water</string>
          </property>
          <property name="buddy">
           <cstring>lineEdit_topUpKettle</cstring>
          </property>
         </widget>
        </item>
-       <item row="0" column="3">
+       <item row="9" column="6">
         <widget class="SmartLineEdit" name="lineEdit_topUpKettle">
         </widget>
        </item>
-       <item row="5" column="0">
-        <widget class="SmartLabel" name="label_trubChillerLoss">
-         <property name="contextMenuPolicy">
-          <enum>Qt::CustomContextMenu</enum>
-         </property>
-         <property name="text">
-          <string>Kettle to Fermenter Loss</string>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit_trubChillerLoss</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="1">
-        <widget class="SmartLineEdit" name="lineEdit_trubChillerLoss">
-        </widget>
-       </item>
-       <item row="5" column="2">
-        <widget class="SmartLabel" name="label_lauterDeadspace">
-         <property name="contextMenuPolicy">
-          <enum>Qt::CustomContextMenu</enum>
-         </property>
-         <property name="text">
-          <string>Lauter deadspace</string>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit_lauterDeadspace</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="3">
-        <widget class="SmartLineEdit" name="lineEdit_lauterDeadspace">
-        </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="tabWidget_editorPage2">
-      <attribute name="title">
-       <string>Physics</string>
-      </attribute>
-      <layout class="QGridLayout" name="gridLayout_2">
-       <item row="7" column="2">
-        <widget class="QPushButton" name="pushButton_absorption">
-         <property name="text">
-          <string>Default Absorption</string>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="0">
-        <widget class="QLabel" name="label_grainAbsorption">
-         <property name="text">
-          <string>Grain absorption (L/kg)</string>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit_grainAbsorption</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="0">
+       <item row="11" column="1">
         <widget class="QLabel" name="label_hopUtilization">
          <property name="text">
           <string>Hop % Utilization</string>
@@ -320,11 +214,14 @@
          </property>
         </widget>
        </item>
-       <item row="7" column="1">
-        <widget class="SmartLineEdit" name="lineEdit_grainAbsorption">
+       <item row="11" column="2">
+        <widget class="SmartLineEdit" name="lineEdit_hopUtilization">
         </widget>
        </item>
-       <item row="6" column="0">
+       <item row="11" column="4">
+        <widget class="InfoButton" name="infoButton_boilingPoint"></widget>
+       </item>
+       <item row="11" column="5">
         <widget class="SmartLabel" name="label_boilingPoint">
          <property name="contextMenuPolicy">
           <enum>Qt::CustomContextMenu</enum>
@@ -337,68 +234,22 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="0">
-        <widget class="SmartLabel" name="label_tunVolume">
-         <property name="contextMenuPolicy">
-          <enum>Qt::CustomContextMenu</enum>
-         </property>
-         <property name="text">
-          <string>Mash tun Volume</string>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit_tunVolume</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="2">
-        <widget class="SmartLabel" name="label_tunWeight">
-         <property name="contextMenuPolicy">
-          <enum>Qt::CustomContextMenu</enum>
-         </property>
-         <property name="text">
-          <string>Mash tun Weight</string>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit_tunWeight</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1">
-        <widget class="SmartLineEdit" name="lineEdit_tunVolume">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="toolTip">
-          <string>Volume of mash tun</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="1">
-        <widget class="SmartLineEdit" name="lineEdit_hopUtilization">
-        </widget>
-       </item>
-       <item row="7" column="3">
-        <spacer name="horizontalSpacer_4">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="6" column="1">
+       <item row="11" column="6">
         <widget class="SmartLineEdit" name="lineEdit_boilingPoint">
         </widget>
        </item>
-       <item row="8" column="1">
-        <spacer name="verticalSpacer_2">
+       <item row="12" column="5" colspan="2">
+        <widget class="InfoText" name="infoText_boilingPoint">
+         <property name="buddy">
+          <cstring>infoButton_boilingPoint</cstring>
+         </property>
+         <property name="text">
+          <string>The default value is 100°C (212°F), but the actual value will vary with altitude.</string>
+         </property>
+        </widget>
+       </item>
+       <item row="13" column="1">
+        <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -410,30 +261,555 @@
          </property>
         </spacer>
        </item>
-       <item row="3" column="3">
-        <widget class="SmartLineEdit" name="lineEdit_tunWeight">
-        </widget>
-       </item>
-       <item row="5" column="2">
-        <widget class="SmartLabel" name="label_tunSpecificHeat">
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_hlt">
+      <attribute name="title">
+       <string>Hot Liquor Tank</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_hlt">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_hltType">
          <property name="text">
-          <string>Specific Heat (Cal/(g*C))</string>
+          <string>Hot Liquor Tank Type</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_hltType</cstring>
          </property>
         </widget>
        </item>
-       <item row="5" column="3">
-        <widget class="SmartLineEdit" name="lineEdit_tunSpecificHeat">
+       <item row="0" column="1" colspan="4">
+        <widget class="SmartLineEdit" name="lineEdit_hltType">
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <spacer name="horizontalSpacer_hlt">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="1" column="0">
+        <widget class="SmartLabel" name="label_hltVolume">
+         <property name="text">
+          <string>Volume</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_hltVolume</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="SmartLineEdit" name="lineEdit_hltVolume">
+        </widget>
+       </item>
+       <item row="1" column="3">
+        <widget class="SmartLabel" name="label_hltLoss">
+         <property name="text">
+          <string>Evaporation Loss</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_hltLoss</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="4">
+        <widget class="SmartLineEdit" name="lineEdit_hltLoss">
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="SmartLabel" name="label_hltWeight">
+         <property name="text">
+          <string>Weight</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_hltWeight</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="SmartLineEdit" name="lineEdit_hltWeight">
+        </widget>
+       </item>
+       <item row="2" column="3">
+        <widget class="SmartLabel" name="label_hltSpecificHeat">
+         <property name="text">
+          <string>Specific Heat Capacity</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_hltSpecificHeat</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="4">
+        <widget class="SmartLineEdit" name="lineEdit_hltSpecificHeat">
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_hltNotes">
+         <property name="toolTip">
+          <string>HLT Notes</string>
+         </property>
+         <property name="text">
+          <string>Notes</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1" colspan="4">
+        <widget class="QTextEdit" name="textEdit_hltNotes">
         </widget>
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tabWidget_editorPage5">
+     <widget class="QWidget" name="tab_mashTun">
       <attribute name="title">
-       <string>Notes</string>
+       <string>Mash Tun</string>
       </attribute>
-      <layout class="QHBoxLayout" name="horizontalLayout_2">
-       <item>
-        <widget class="QTextEdit" name="textEdit_notes">
+      <layout class="QGridLayout" name="gridLayout_mashTun">
+       <item row="0" column="1">
+        <widget class="QLabel" name="label_mashTunType">
+         <property name="toolTip">
+          <string>Mash Tun Type</string>
+         </property>
+         <property name="text">
+          <string>Mash Tun Type</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2" colspan="4">
+        <widget class="SmartLineEdit" name="lineEdit_mashTunType">
+         <property name="toolTip">
+          <string>Mash Tun Type</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="3">
+        <spacer name="horizontalSpacer_mashTun">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="1" column="1">
+        <widget class="SmartLabel" name="label_mashTunVolume">
+         <property name="text">
+          <string>Volume</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_mashTunVolume</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="SmartLineEdit" name="lineEdit_mashTunVolume">
+         <property name="toolTip">
+          <string>Volume of mash tun</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="4">
+        <widget class="SmartLabel" name="label_mashTunWeight">
+         <property name="text">
+          <string>Weight</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_mashTunWeight</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="5">
+        <widget class="SmartLineEdit" name="lineEdit_mashTunWeight">
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="InfoButton" name="infoButton_mashTunSpecificHeat"></widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="SmartLabel" name="label_mashTunSpecificHeat">
+         <property name="text">
+          <string>Specific Heat Capacity</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_mashTunSpecificHeat</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="SmartLineEdit" name="lineEdit_mashTunSpecificHeat">
+        </widget>
+       </item>
+       <item row="3" column="1" colspan="5">
+        <widget class="InfoText" name="infoText_mashTunSpecificHeat">
+         <property name="buddy">
+          <cstring>infoButton_mashTunSpecificHeat</cstring>
+         </property>
+         <property name="text">
+          <string>This is equal to the vessel's Heat Capacity divided by its weight.  Typical values are • Aluminum - 0.215 c/g·C  • Copper - 0.092 c/g·C  • Iron/Steel - 0.108 c/g·C  • Plastic - 0.359 c/g·C.</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="InfoButton" name="infoButton_mashTunGrainAbsorption"></widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="SmartLabel" name="label_mashTunGrainAbsorption">
+         <property name="text">
+          <string>Grain absorption</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_mashTunGrainAbsorption</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2">
+        <widget class="SmartLineEdit" name="lineEdit_mashTunGrainAbsorption">
+        </widget>
+       </item>
+       <item row="4" column="4">
+        <widget class="QPushButton" name="pushButton_absorption">
+         <property name="text">
+          <string>Default Absorption</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1" colspan="5">
+        <widget class="InfoText" name="infoText_mashTunGrainAbsorption">
+         <property name="buddy">
+          <cstring>infoButton_mashTunGrainAbsorption</cstring>
+         </property>
+         <property name="text">
+          <string>How much water is permanently lost to each unit of weight of grain during mashing. The default value is 1.0875 liters per kilogram. This can fluctuate due to the fine-ness of your grind, humidity, brand, and other factors. Pressing the "Default Absorption" button will reset the value to this default.</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0">
+        <widget class="InfoButton" name="infoButton_mashTunLoss"></widget>
+       </item>
+       <item row="6" column="1">
+        <widget class="SmartLabel" name="label_mashTunLoss">
+         <property name="text">
+          <string>Other Mashing losses</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_mashTunLoss</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="2">
+        <widget class="SmartLineEdit" name="lineEdit_mashTunLoss">
+         <property name="toolTip">
+          <string>Mashing losses not included in grain absorption</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="1" colspan="5">
+        <widget class="InfoText" name="infoText_mashTunLoss">
+         <property name="buddy">
+          <cstring>infoButton_mashTunLoss</cstring>
+         </property>
+         <property name="text">
+          <string>If you do not have a separate lauter tun, then this should include the lautering deadspace.</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="1">
+        <widget class="QLabel" name="label_mashTunNotes">
+         <property name="toolTip">
+          <string>Mash Tun Notes</string>
+         </property>
+         <property name="text">
+          <string>Notes</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="2" colspan="4">
+        <widget class="QTextEdit" name="textEdit_mashTunNotes">
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_lauterTun">
+      <attribute name="title">
+       <string>Lauter Tun</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_lauterTun">
+       <item row="0" column="1">
+        <widget class="QLabel" name="label_lauterTunType">
+         <property name="text">
+          <string>Lauter Tun Type</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_lauterTunType</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2" colspan="4">
+        <widget class="SmartLineEdit" name="lineEdit_lauterTunType">
+        </widget>
+       </item>
+       <item row="1" column="3">
+        <spacer name="horizontalSpacer_lauterTun">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="1" column="1">
+        <widget class="SmartLabel" name="label_lauterTunVolume">
+         <property name="text">
+          <string>Lauter Tun Volume</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_lauterTunVolume</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="SmartLineEdit" name="lineEdit_lauterTunVolume">
+        </widget>
+       </item>
+       <item row="1" column="4">
+        <widget class="SmartLabel" name="label_lauterTunWeight">
+         <property name="text">
+          <string>Weight</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_lauterTunWeight</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="5">
+        <widget class="SmartLineEdit" name="lineEdit_lauterTunWeight">
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="SmartLabel" name="label_lauterTunSpecificHeat">
+         <property name="text">
+          <string>Specific Heat Capacity</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_lauterTunSpecificHeat</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="SmartLineEdit" name="lineEdit_lauterTunSpecificHeat">
+        </widget>
+       </item>
+       <item row="2" column="4">
+        <widget class="SmartLabel" name="label_lauterTunDeadspaceLoss">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
+         <property name="text">
+          <string>Deadspace Losses</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_lauterTunDeadspaceLoss</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="5">
+        <widget class="SmartLineEdit" name="lineEdit_lauterTunDeadspaceLoss">
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QLabel" name="label_lauterTunNotes">
+         <property name="toolTip">
+          <string>Lauter Tun Notes</string>
+         </property>
+         <property name="text">
+          <string>Notes</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="2" colspan="4">
+        <widget class="QTextEdit" name="textEdit_lauterTunNotes">
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_kettle">
+      <attribute name="title">
+       <string>Boil Kettle</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_kettle">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_kettleType">
+         <property name="toolTip">
+          <string>Boil Kettle Type</string>
+         </property>
+         <property name="text">
+          <string>Boil Kettle Type</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1" colspan="4">
+        <widget class="SmartLineEdit" name="lineEdit_kettleType">
+         <property name="toolTip">
+          <string>Boil Kettle Type</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <spacer name="horizontalSpacer_kettle">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="1" column="0">
+        <widget class="SmartLabel" name="label_kettleBoilSize">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
+         <property name="text">
+          <string>Pre-boil Volume</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_kettleBoilSize</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="SmartLineEdit" name="lineEdit_kettleBoilSize">
+        </widget>
+       </item>
+       <item row="1" column="3">
+        <widget class="QLabel" name="label_calcBoilVolume">
+         <property name="text">
+          <string>Calculate pre-boil volume</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="4">
+        <widget class="QCheckBox" name="checkBox_calcBoilVolume">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="SmartLabel" name="label_kettleEvaporationPerHour">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
+         <property name="text">
+          <string>Evaporation rate per hour</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_kettleEvaporationPerHour</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="SmartLineEdit" name="lineEdit_kettleEvaporationPerHour">
+        </widget>
+       </item>
+       <item row="2" column="3">
+        <widget class="SmartLabel" name="label_kettleTrubChillerLoss">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
+         <property name="text">
+          <string>Kettle to Fermenter Loss</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_kettleTrubChillerLoss</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="4">
+        <widget class="SmartLineEdit" name="lineEdit_kettleTrubChillerLoss">
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="SmartLabel" name="label_kettleWeight">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
+         <property name="text">
+          <string>Weight</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_kettleWeight</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="SmartLineEdit" name="lineEdit_kettleWeight">
+        </widget>
+       </item>
+       <item row="3" column="3">
+        <widget class="SmartLabel" name="label_kettleSpecificHeat">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
+         <property name="text">
+          <string>Specific Heat Capacity</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_kettleSpecificHeat</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="4">
+        <widget class="SmartLineEdit" name="lineEdit_kettleSpecificHeat">
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="SmartLabel" name="label_kettleOutflowPerMinute">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
+         <property name="text">
+          <string>Outflow per minute</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_kettleOutflowPerMinute</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="SmartLineEdit" name="lineEdit_kettleOutflowPerMinute">
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="label_kettleNotes">
+         <property name="toolTip">
+          <string>Brew Kettle Notes</string>
+         </property>
+         <property name="text">
+          <string>Notes</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1" colspan="4">
+        <widget class="QTextEdit" name="textEdit_kettleNotes">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
            <horstretch>0</horstretch>
@@ -443,15 +819,240 @@
          <property name="minimumSize">
           <size>
            <width>100</width>
-           <height>100</height>
+           <height>50</height>
           </size>
          </property>
-         <property name="maximumSize">
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_fermenter">
+      <attribute name="title">
+       <string>Fermenter</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_fermenter">
+       <item row="0" column="1">
+        <widget class="QLabel" name="label_fermenterType">
+         <property name="text">
+          <string>Fermenter Type</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_fermenterType</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2" colspan="4">
+        <widget class="SmartLineEdit" name="lineEdit_fermenterType">
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="InfoButton" name="infoButton_fermenterBatchSize"></widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="SmartLabel" name="label_fermenterBatchSize">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
+         <property name="text">
+          <string>Volume</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_fermenterBatchSize</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="SmartLineEdit" name="lineEdit_fermenterBatchSize">
+        </widget>
+       </item>
+       <item row="2" column="4">
+        <widget class="SmartLabel" name="label_fermenterLoss">
+         <property name="text">
+          <string>Deadspace Losses</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_fermenterLoss</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="5">
+        <widget class="SmartLineEdit" name="lineEdit_fermenterLoss">
+        </widget>
+       </item>
+       <item row="3" column="1" colspan="5">
+        <widget class="InfoText" name="infoText_fermenterBatchSize">
+         <property name="buddy">
+          <cstring>infoButton_fermenterBatchSize</cstring>
+         </property>
+         <property name="text">
+          <string>This is also known as the batch size.</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QLabel" name="label_fermenterNotes">
+         <property name="toolTip">
+          <string>Fermenter Notes</string>
+         </property>
+         <property name="text">
+          <string>Notes</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2" colspan="4">
+        <widget class="QTextEdit" name="textEdit_fermenterNotes">
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_agingVessel">
+      <attribute name="title">
+       <string>Aging Vessel</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_agingVessel">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_agingVesselType">
+         <property name="text">
+          <string>Aging Vessel Type</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_agingVesselType</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1" colspan="4">
+        <widget class="SmartLineEdit" name="lineEdit_agingVesselType">
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <spacer name="horizontalSpacer_agingVessel">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
           <size>
-           <width>1000</width>
-           <height>1000</height>
+           <width>40</width>
+           <height>20</height>
           </size>
          </property>
+        </spacer>
+       </item>
+       <item row="1" column="0">
+        <widget class="SmartLabel" name="label_agingVesselVolume">
+         <property name="text">
+          <string>Volume</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_agingVesselVolume</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="SmartLineEdit" name="lineEdit_agingVesselVolume">
+        </widget>
+       </item>
+       <item row="1" column="3">
+        <widget class="SmartLabel" name="label_agingVesselLoss">
+         <property name="text">
+          <string>Losses</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_agingVesselLoss</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="4">
+        <widget class="SmartLineEdit" name="lineEdit_agingVesselLoss">
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_agingVesselNotes">
+         <property name="toolTip">
+          <string>Packaging Vessel Notes</string>
+         </property>
+         <property name="text">
+          <string>Notes</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1" colspan="3">
+        <widget class="QTextEdit" name="textEdit_agingVesselNotes">
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_packagingVessel">
+      <attribute name="title">
+       <string>Packaging Vessel</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_packagingVessel">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_packagingVesselType">
+         <property name="text">
+          <string>Packaging Vessel Type</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_packagingVesselType</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1" colspan="4">
+        <widget class="SmartLineEdit" name="lineEdit_packagingVesselType">
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <spacer name="horizontalSpacer_packagingVessel">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="1" column="0">
+        <widget class="SmartLabel" name="label_packagingVesselVolume">
+         <property name="text">
+          <string>Volume</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_packagingVesselVolume</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="SmartLineEdit" name="lineEdit_packagingVesselVolume">
+        </widget>
+       </item>
+       <item row="1" column="3">
+        <widget class="SmartLabel" name="label_packagingVesselLoss">
+         <property name="text">
+          <string>Losses</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_packagingVesselLoss</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="4">
+        <widget class="SmartLineEdit" name="lineEdit_packagingVesselLoss">
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_packagingVesselNotes">
+         <property name="toolTip">
+          <string>Packaging Vessel Notes</string>
+         </property>
+         <property name="text">
+          <string>Notes</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1" colspan="4">
+        <widget class="QTextEdit" name="textEdit_packagingVesselNotes">
         </widget>
        </item>
       </layout>
@@ -460,6 +1061,13 @@
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <item>
+      <widget class="QCheckBox" name="checkBox_defaultEquipment">
+       <property name="text">
+        <string>Set as Default</string>
+       </property>
+      </widget>
+     </item>
      <item>
       <spacer name="horizontalSpacer_2">
        <property name="orientation">
@@ -521,6 +1129,16 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>InfoButton</class>
+   <extends>QPushButton</extends>
+   <header>widgets/InfoButton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>InfoText</class>
+   <extends>QLabel</extends>
+   <header>widgets/InfoText.h</header>
+  </customwidget>
+  <customwidget>
    <class>SmartLabel</class>
    <extends>QLabel</extends>
    <header>widgets/SmartLabel.h</header>
@@ -536,30 +1154,28 @@
  </customwidgets>
  <tabstops>
   <tabstop>tabWidget_editor</tabstop>
-  <tabstop>equipmentComboBox</tabstop>
-  <tabstop>pushButton_remove</tabstop>
   <tabstop>checkBox_defaultEquipment</tabstop>
   <tabstop>lineEdit_name</tabstop>
-  <tabstop>lineEdit_batchSize</tabstop>
-  <tabstop>lineEdit_boilSize</tabstop>
+  <tabstop>lineEdit_fermenterBatchSize</tabstop>
+  <tabstop>lineEdit_kettleBoilSize</tabstop>
   <tabstop>checkBox_calcBoilVolume</tabstop>
   <tabstop>lineEdit_boilTime</tabstop>
-  <tabstop>lineEdit_trubChillerLoss</tabstop>
+  <tabstop>lineEdit_kettleTrubChillerLoss</tabstop>
   <tabstop>lineEdit_topUpKettle</tabstop>
   <tabstop>lineEdit_topUpWater</tabstop>
-  <tabstop>lineEdit_evaporationRate</tabstop>
-  <tabstop>lineEdit_lauterDeadspace</tabstop>
-  <tabstop>lineEdit_tunVolume</tabstop>
+  <tabstop>lineEdit_kettleEvaporationPerHour</tabstop>
+  <tabstop>lineEdit_lauterTunDeadspaceLoss</tabstop>
+  <tabstop>lineEdit_mashTunVolume</tabstop>
   <tabstop>lineEdit_hopUtilization</tabstop>
   <tabstop>lineEdit_boilingPoint</tabstop>
-  <tabstop>lineEdit_grainAbsorption</tabstop>
+  <tabstop>lineEdit_mashTunGrainAbsorption</tabstop>
   <tabstop>pushButton_absorption</tabstop>
-  <tabstop>lineEdit_tunWeight</tabstop>
-  <tabstop>lineEdit_tunSpecificHeat</tabstop>
+  <tabstop>lineEdit_mashTunWeight</tabstop>
+  <tabstop>lineEdit_mashTunSpecificHeat</tabstop>
   <tabstop>pushButton_new</tabstop>
   <tabstop>pushButton_save</tabstop>
   <tabstop>pushButton_cancel</tabstop>
-  <tabstop>textEdit_notes</tabstop>
+  <tabstop>textEdit_kettleNotes</tabstop>
  </tabstops>
  <resources>
   <include location="../brewtarget.qrc"/>

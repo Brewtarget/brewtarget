@@ -1,27 +1,31 @@
-/*
- * model/Recipe.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2023
- * - Kregg K <gigatropolis@yahoo.com>
- * - Matt Young <mfsy@yahoo.com>
- * - Mik Firestone <mikfire@gmail.com>
- * - Philip Greggory Lee <rocketman768@gmail.com>
+/*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ * model/Recipe.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ *   • Brian Rower <brian.rower@gmail.com>
+ *   • Greg Greenaae <ggreenaae@gmail.com>
+ *   • Greg Meess <Daedalus12@gmail.com>
+ *   • Jonathon Harding <github@jrhardin.net>
+ *   • Kregg Kemper <gigatropolis@yahoo.com>
+ *   • Mattias Måhl <mattias@kejsarsten.com>
+ *   • Matt Young <mfsy@yahoo.com>
+ *   • Mik Firestone <mikfire@gmail.com>
+ *   • Philip Greggory Lee <rocketman768@gmail.com>
+ *   • Théophane Martin <theophane.m@gmail.com>
  *
- * Brewtarget is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * Brewtarget is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "model/Recipe.h"
 
 #include <cmath> // For pow/log
+#include <compare> //
 
 #include <QDate>
 #include <QDebug>
@@ -30,29 +34,59 @@
 #include <QObject>
 
 #include "Algorithms.h"
+#include "config.h"
 #include "database/ObjectStoreWrapper.h"
 #include "HeatCalculations.h"
 #include "Localization.h"
+#include "measurement/Amount.h"
 #include "measurement/ColorMethods.h"
 #include "measurement/IbuMethods.h"
 #include "measurement/Measurement.h"
+#include "measurement/Unit.h"
+#include "model/Boil.h"
+#include "model/BoilStep.h"
 #include "model/Equipment.h"
 #include "model/Fermentable.h"
+#include "model/Fermentation.h"
+#include "model/FermentationStep.h"
 #include "model/Hop.h"
 #include "model/Instruction.h"
 #include "model/Mash.h"
 #include "model/MashStep.h"
 #include "model/Misc.h"
 #include "model/NamedParameterBundle.h"
+#include "model/RecipeAdditionFermentable.h"
+#include "model/RecipeAdditionHop.h"
+#include "model/RecipeAdditionMisc.h"
+#include "model/RecipeAdjustmentSalt.h"
+#include "model/RecipeAdditionYeast.h"
+#include "model/RecipeUseOfWater.h"
 #include "model/Salt.h"
 #include "model/Style.h"
 #include "model/Water.h"
 #include "model/Yeast.h"
 #include "PersistentSettings.h"
 #include "PhysicalConstants.h"
-#include "PreInstruction.h"
 
 namespace {
+
+   /**
+    * \brief This is used to assist the creation of instructions.
+    */
+   struct PreInstruction {
+      PreInstruction(QString text, QString title, double  time) : text{text}, title{title}, time{time} { return; }
+      // Since we'll, amongst other things, be storing PreInstruction in a QVector, it needs to be default-constructable
+      PreInstruction() : text{""}, title{""}, time{0.0} { return; }
+      ~PreInstruction() = default;
+
+      QString text;
+      QString title;
+      double  time;
+   };
+   auto operator<=>(PreInstruction const & lhs, PreInstruction const & rhs) {
+      return lhs.time <=> rhs.time;
+   }
+
    /**
     * \brief Check whether the supplied instance of (subclass of) NamedEntity (a) is an "instance of use of" (ie has a
     *        parent) and (b) is not used in any Recipe.
@@ -136,49 +170,51 @@ namespace {
       ObjectStoreWrapper::insert(copy);
       return copy;
    }
+   template<> std::shared_ptr<RecipeAdditionFermentable> copyIfNeeded(RecipeAdditionFermentable & var) = delete;
+   template<> std::shared_ptr<RecipeAdditionHop        > copyIfNeeded(RecipeAdditionHop         & var) = delete;
+   template<> std::shared_ptr<RecipeAdditionMisc       > copyIfNeeded(RecipeAdditionMisc        & var) = delete;
+   template<> std::shared_ptr<RecipeAdditionYeast      > copyIfNeeded(RecipeAdditionYeast       & var) = delete;
+   template<> std::shared_ptr<RecipeAdjustmentSalt     > copyIfNeeded(RecipeAdjustmentSalt      & var) = delete;
+   template<> std::shared_ptr<RecipeUseOfWater         > copyIfNeeded(RecipeUseOfWater          & var) = delete;
+   template<> std::shared_ptr<Fermentable> copyIfNeeded(Fermentable & var) = delete;
+   template<> std::shared_ptr<Hop        > copyIfNeeded(Hop         & var) = delete;
+   template<> std::shared_ptr<Misc       > copyIfNeeded(Misc        & var) = delete;
+   template<> std::shared_ptr<Yeast      > copyIfNeeded(Yeast       & var) = delete;
+   template<> std::shared_ptr<Salt       > copyIfNeeded(Salt        & var) = delete;
+   template<> std::shared_ptr<Water      > copyIfNeeded(Water       & var) = delete;
 
-   //
-   // After we modified a property via a templated member function of Recipe, we need to tell the object store to
-   // update the database.  These template specialisations map from property type to property name.
-   //
-   template<class NE> BtStringConst const & propertyToPropertyName();
-   template<> BtStringConst const & propertyToPropertyName<Equipment>()   {
-      return PropertyNames::Recipe::equipmentId;
-   }
-   template<> BtStringConst const & propertyToPropertyName<Fermentable>() {
-      return PropertyNames::Recipe::fermentableIds;
-   }
-   template<> BtStringConst const & propertyToPropertyName<Hop>()         {
-      return PropertyNames::Recipe::hopIds;
-   }
-   template<> BtStringConst const & propertyToPropertyName<Instruction>() {
-      return PropertyNames::Recipe::instructionIds;
-   }
-   template<> BtStringConst const & propertyToPropertyName<Mash>()        {
-      return PropertyNames::Recipe::mashId;
-   }
-   template<> BtStringConst const & propertyToPropertyName<Misc>()        {
-      return PropertyNames::Recipe::miscIds;
-   }
-   template<> BtStringConst const & propertyToPropertyName<Salt>()        {
-      return PropertyNames::Recipe::saltIds;
-   }
-   template<> BtStringConst const & propertyToPropertyName<Style>()       {
-      return PropertyNames::Recipe::styleId;
-   }
-   template<> BtStringConst const & propertyToPropertyName<Water>()       {
-      return PropertyNames::Recipe::waterIds;
-   }
-   template<> BtStringConst const & propertyToPropertyName<Yeast>()       {
-      return PropertyNames::Recipe::yeastIds;
-   }
+   bool isFermentableSugar(Fermentable * fermy) {
+      // TODO: This probably doesn't work in languages other than English!
+      if (fermy->type() == Fermentable::Type::Sugar && fermy->name() == "Milk Sugar (Lactose)") {
+         return false;
+      }
 
-   QHash<QString, Recipe::Type> const RECIPE_TYPE_STRING_TO_TYPE {
-      {"Extract",      Recipe::Type::Extract},
-      {"Partial Mash", Recipe::Type::PartialMash},
-      {"All Grain",    Recipe::Type::AllGrain}
-   };
+      return true;
+   }
 }
+
+//
+// These specialisations are above the impl class because need to be defined before they are used in this file,
+// otherwise we'll get a "specialization after instantiation" error on GCC.
+//
+// After we modified a property via a templated member function of Recipe, we need to tell the object store to
+// update the database.  These template specialisations map from property type to property name.
+//
+template<> BtStringConst const & Recipe::propertyNameFor<Boil                     >() { return PropertyNames::Recipe::boilId                ; }
+template<> BtStringConst const & Recipe::propertyNameFor<Equipment                >() { return PropertyNames::Recipe::equipmentId           ; }
+template<> BtStringConst const & Recipe::propertyNameFor<Fermentation             >() { return PropertyNames::Recipe::fermentationId        ; }
+template<> BtStringConst const & Recipe::propertyNameFor<Instruction              >() { return PropertyNames::Recipe::instructionIds        ; }
+template<> BtStringConst const & Recipe::propertyNameFor<Mash                     >() { return PropertyNames::Recipe::mashId                ; }
+template<> BtStringConst const & Recipe::propertyNameFor<RecipeAdditionFermentable>() { return PropertyNames::Recipe::fermentableAdditionIds; }
+template<> BtStringConst const & Recipe::propertyNameFor<RecipeAdditionHop        >() { return PropertyNames::Recipe::hopAdditionIds        ; }
+template<> BtStringConst const & Recipe::propertyNameFor<RecipeAdditionMisc       >() { return PropertyNames::Recipe::miscAdditionIds       ; }
+template<> BtStringConst const & Recipe::propertyNameFor<RecipeAdditionYeast      >() { return PropertyNames::Recipe::yeastAdditionIds      ; }
+template<> BtStringConst const & Recipe::propertyNameFor<RecipeAdjustmentSalt     >() { return PropertyNames::Recipe::saltAdjustmentIds     ; }
+template<> BtStringConst const & Recipe::propertyNameFor<RecipeUseOfWater         >() { return PropertyNames::Recipe::waterUseIds           ; }
+template<> BtStringConst const & Recipe::propertyNameFor<Style                    >() { return PropertyNames::Recipe::styleId               ; }
+
+// TBD: This is needed for WaterButton, but we should have a proper look at that some day
+template<> BtStringConst const & Recipe::propertyNameFor<Water                    >() { return PropertyNames::Recipe::waterUses             ; }
 
 
 // This private implementation class holds all private non-virtual members of Recipe
@@ -188,15 +224,25 @@ public:
    /**
     * Constructor
     */
-   impl(Recipe & recipe) :
-      recipe{recipe},
-      fermentableIds{},
-      hopIds{},
-      instructionIds{},
-      miscIds{},
-      saltIds{},
-      waterIds{},
-      yeastIds{} {
+   impl(Recipe & self) :
+      m_self                 {self},
+      instructionIds         {}   ,
+      m_ABV_pct              {0.0},
+      m_color_srm            {0.0},
+      m_boilGrav             {0.0},
+      m_IBU                  {0.0},
+      m_ibus                 {}   ,
+      m_wortFromMash_l       {0.0},
+      m_boilVolume_l         {0.0},
+      m_postBoilVolume_l     {0.0},
+      m_finalVolume_l        {0.0},
+      m_finalVolumeNoLosses_l{0.0},
+      m_caloriesPerLiter     {0.0},
+      m_grainsInMash_kg      {0.0},
+      m_grains_kg            {0.0},
+      m_SRMColor             {},
+      m_og_fermentable       {0.0},
+      m_fg_fermentable       {0.0} {
       return;
    }
 
@@ -206,8 +252,22 @@ public:
    ~impl() = default;
 
    /**
-    * \brief Make copies of the ingredients of a particular type (Hop, Fermentable, etc) from one Recipe and add them
-    *        to another - typically because we are copying the Recipe.
+    * \brief Make copies of the additions of a particular type (\c RecipeAdditionHop, \c RecipeAdditionFermentable,
+    *        etc) from one \c Recipe and add them to another - typically because we are copying the \c Recipe.
+    *
+    *        This also works for \c RecipeAdjustmentSalt and \c RecipeUseOfWater.
+    */
+   template<class RA> void copyAdditions(Recipe const & other) {
+      for (RA * otherAddition : other.pimpl->allMyRaw<RA>()) {
+         std::shared_ptr<RA> ourAddition = std::make_shared<RA>(*otherAddition);
+         this->m_self.addAddition(ourAddition);
+      }
+      return;
+   }
+
+   /**
+    * \brief Make copies of the Instructions from one Recipe and add them to another - typically
+    *        because we are copying the Recipe.
     */
    template<class NE> void copyList(Recipe & us, Recipe const & other) {
       qDebug() << Q_FUNC_INFO;
@@ -231,6 +291,17 @@ public:
    }
 
    /**
+    * \brief If the Recipe is about to be deleted, we delete all the things that belong to it.
+    */
+   template<class NE> void hardDeleteAdditions() {
+      qDebug() << Q_FUNC_INFO;
+      for (int id : this->allMyIds<NE>()) {
+         qDebug() << Q_FUNC_INFO << "Hard deleting" << NE::staticMetaObject.className() << "#" << id;
+         ObjectStoreWrapper::hardDelete<NE>(id);
+      }
+   }
+
+   /**
     * \brief If the Recipe is about to be deleted, we delete all the things that belong to it.  Note that, with the
     *        exception of Instruction, what we are actually deleting here is not the Hops/Fermentables/etc but the "use
     *        of" Hops/Fermentables/etc records (which are distinguished by having a parent ID.
@@ -243,6 +314,53 @@ public:
       return;
    }
 
+   template<typename T>
+   T getCalculated(T & memberVariable) {
+      if (this->m_self.m_uninitializedCalcs) {
+         this->m_self.recalcAll();
+      }
+      return memberVariable;
+   }
+
+   /**
+    * \brief Get shared pointers to all this Recipe's BrewNotes or RecipeAdditions of a particular type
+    *        (RecipeAdditionHop, RecipeAdditionFermentable, etc).
+    */
+   template<class NE>
+   QList<std::shared_ptr<NE>> allMy() const {
+      int const recipeId = this->m_self.key();
+      return ObjectStoreWrapper::findAllMatching<NE>([recipeId](std::shared_ptr<NE> ne) {
+                                                        return ne->recipeId() == recipeId;
+                                                     });
+   }
+
+   /**
+    * \brief Get raw pointers to all this Recipe's BrewNotes or RecipeAdditions of a particular type (RecipeAdditionHop,
+    *        RecipeAdditionFermentable, etc).
+    */
+   template<class NE>
+   QList<NE *> allMyRaw() const {
+      int const recipeId = this->m_self.key();
+      return ObjectStoreWrapper::findAllMatching<NE>([recipeId](NE const * ne) {
+                                                        return ne->recipeId() == recipeId;
+                                                     });
+   }
+
+   /**
+    * \brief Get IDs of all this Recipe's BrewNotes or RecipeAdditions of a particular type (RecipeAdditionHop,
+    *        RecipeAdditionFermentable, etc).
+    */
+   template<class NE>
+   QVector<int> allMyIds() const {
+      int const recipeId = this->m_self.key();
+      return ObjectStoreWrapper::idsOfAllMatching<NE>([recipeId](NE const * ne) {
+                                                         return ne->recipeId() == recipeId;
+                                                      });
+   }
+
+   //
+   // .:TODO:. This will go away once we lose junction tables etc for Fermentables, Miscs and replace them with proper
+   //          RecipeAddition objects.
    //
    // Inside the class implementation, it's useful to be able to access fermentableIds, hopIds, etc in templated
    // functions.  This allows us to write this->accessIds<NE>() in such a function and have it resolve to
@@ -268,59 +386,1177 @@ public:
    }
 
    /**
-    * \brief Connect signals for this Recipe.  See comment for \c Recipe::connectSignalsForAllRecipes for more
-    *        explanation.
+    * \brief Called from Recipe::hardDeleteOrphanedEntities
     */
-   void connectSignals() {
-      Equipment * equipment = this->recipe.equipment();
-      if (equipment) {
-         connect(equipment, &NamedEntity::changed,           &this->recipe, &Recipe::acceptChangeToContainedObject);
-         connect(equipment, &Equipment::changedBoilSize_l,   &this->recipe, &Recipe::setBoilSize_l);
-         connect(equipment, &Equipment::changedBoilTime_min, &this->recipe, &Recipe::setBoilTime_min);
-      }
-
-      QList<Fermentable *> fermentables = this->recipe.fermentables();
-      for (auto fermentable : fermentables) {
-         connect(fermentable, &NamedEntity::changed, &this->recipe, &Recipe::acceptChangeToContainedObject);
-      }
-
-      QList<Hop *> hops = this->recipe.hops();
-      for (auto hop : hops) {
-         connect(hop, &NamedEntity::changed, &this->recipe, &Recipe::acceptChangeToContainedObject);
-      }
-
-      QList<Yeast *> yeasts = this->recipe.yeasts();
-      for (auto yeast : yeasts) {
-         connect(yeast, &NamedEntity::changed, &this->recipe, &Recipe::acceptChangeToContainedObject);
-      }
-
-      Mash * mash = this->recipe.mash();
-      if (mash) {
-         connect(mash, &NamedEntity::changed, &this->recipe, &Recipe::acceptChangeToContainedObject);
+   template<class NE> void hardDeleteOrphanedStepOwner() {
+      auto stepOwner = this->m_self.get<NE>();
+      if (stepOwner && stepOwner->name() == "") {
+         qDebug() <<
+            Q_FUNC_INFO << "Checking whether our unnamed" << NE::staticMetaObject.className() << "is used elsewhere";
+         auto recipesUsingThisStepOwner = ObjectStoreWrapper::findAllMatching<Recipe>(
+            [stepOwner](Recipe const * rec) {
+               return rec->uses(*stepOwner);
+            }
+         );
+         if (1 == recipesUsingThisStepOwner.size()) {
+            qDebug() <<
+               Q_FUNC_INFO << "Deleting unnamed" << NE::staticMetaObject.className() << "# " << stepOwner->key() <<
+               " used only by Recipe #" << this->m_self.key();
+            Q_ASSERT(recipesUsingThisStepOwner.at(0)->key() == this->m_self.key());
+            ObjectStoreWrapper::hardDelete<NE>(*stepOwner);
+         }
       }
 
       return;
    }
 
-   // Member variables
-   Recipe & recipe;
-   QVector<int> fermentableIds;
-   QVector<int> hopIds;
+   /**
+    * \brief Connect signals for this Recipe.  See comment for \c Recipe::connectSignalsForAllRecipes for more
+    *        explanation.
+    */
+   void connectSignals() {
+      auto equipment = this->m_self.equipment();
+      if (equipment) {
+         // We used to have special signals for changes to Equipment's boilSize_l and boilTime_min properties, but these
+         // are now picked up in Recipe::acceptChangeToContainedObject from the generic `changed` signal
+         connect(equipment.get(), &NamedEntity::changed, &this->m_self, &Recipe::acceptChangeToContainedObject);
+      }
+
+      auto fermentableAdditions = this->m_self.fermentableAdditions();
+      for (auto fermentableAddition : fermentableAdditions) {
+         connect(fermentableAddition->fermentable(),
+                 &NamedEntity::changed,
+                 &this->m_self,
+                 &Recipe::acceptChangeToContainedObject);
+      }
+
+      auto hopAdditions = this->m_self.hopAdditions();
+      for (auto hopAddition : hopAdditions) {
+         connect(hopAddition->hop(),
+                 &NamedEntity::changed,
+                 &this->m_self,
+                 &Recipe::acceptChangeToContainedObject);
+      }
+
+      auto yeastAdditions = this->m_self.yeastAdditions();
+      for (auto yeastAddition : yeastAdditions) {
+         connect(yeastAddition->yeast(),
+                 &NamedEntity::changed,
+                 &this->m_self,
+                 &Recipe::acceptChangeToContainedObject);
+      }
+
+      auto mash = this->m_self.mash();
+      if (mash) {
+         connect(mash.get(), &NamedEntity::changed, &this->m_self, &Recipe::acceptChangeToContainedObject);
+      }
+
+      return;
+   }
+
+   template<class NE>
+   void set(std::shared_ptr<NE> val, int & ourId) {
+      if (!val && ourId < 0) {
+         // No change (from "not set" to "not set")
+         return;
+      }
+      if (val && val->key() == ourId) {
+         // No change (same object as we already have)
+         return;
+      }
+
+      if (ourId > 0) {
+         std::shared_ptr<NE> oldVal = ObjectStoreWrapper::getById<NE>(ourId);
+         disconnect(oldVal.get(), nullptr, &this->m_self, nullptr);
+      }
+
+      if (!val) {
+         ourId = -1;
+         return;
+      }
+
+      // TBD: Would be nice to get rid of this call to copyIfNeeded
+      std::shared_ptr<NE> valToAdd = copyIfNeeded(*val);
+      ourId = valToAdd->key();
+      BtStringConst const & property = Recipe::propertyNameFor<NE>();
+      qDebug() << Q_FUNC_INFO << "Setting" << property << "to" << ourId;
+      this->m_self.propagatePropertyChange(property);
+
+      connect(valToAdd.get(), &NamedEntity::changed, &this->m_self, &Recipe::acceptChangeToContainedObject);
+      emit this->m_self.changed(this->m_self.metaProperty(*property), QVariant::fromValue<NE *>(valToAdd.get()));
+
+      this->m_self.recalcAll();
+      return;
+   }
+
+   /**
+    * \brief Getting a recipe's \c Boil, \c Fermentation, etc is pretty much the same logic, so we template it
+    *
+    *        In BeerJSON, each of mash, boil and fermentation is optional.  I guess no fermentation is for recipes for
+    *        making hop water etc.  Equally, there are people making beer without boiling -- eg see
+    *        https://byo.com/article/raw-ale/.  In both cases, our current support for "no boil" and/or "no ferment" is
+    *        somewhat limited and untested for now.
+    */
+   template<class NE>
+   std::shared_ptr<NE> get(int const & ourId) const {
+      // Normally leave the next line commented out otherwise it generates too much logging
+//      qDebug() << Q_FUNC_INFO << "Recipe #" << this->m_self.key() << NE::staticMetaObject.className() << "ID" << ourId;
+      if (ourId < 0) {
+         // Negative ID just means there isn't one -- because this is how we store "NULL" for a foreign key
+         qDebug() << Q_FUNC_INFO << "No" << NE::staticMetaObject.className() << "on Recipe #" << this->m_self.key();
+         return nullptr;
+      }
+      auto retVal = ObjectStoreWrapper::getById<NE>(ourId);
+      if (!retVal) {
+         // I would think it's a coding error to have a seemingly valid boil/etc ID that's not in the database, but we
+         // try to recover as best we can.
+         qCritical() <<
+            Q_FUNC_INFO << "Invalid" << NE::staticMetaObject.className() << "ID (" << ourId << ") on Recipe #" <<
+            this->m_self.key();
+         return nullptr;
+      }
+      return retVal;
+   }
+
+   QVector<PreInstruction> mashInstructions(double timeRemaining,
+                                            double totalWaterAdded_l,
+                                            [[maybe_unused]] unsigned int size) {
+      QVector<PreInstruction> preins;
+      if (!m_self.mash()) {
+         return preins;
+      }
+
+      for (auto step : m_self.mash()->mashSteps()) {
+         QString str;
+         if (step->isInfusion()) {
+            str = tr("Add %1 water at %2 to mash to bring it to %3.")
+                  .arg(Measurement::displayAmount(Measurement::Amount{step->amount_l(), Measurement::Units::liters}))
+                  .arg(Measurement::displayAmount(Measurement::Amount{step->infuseTemp_c().value_or(step->startTemp_c().value_or(0.0)), Measurement::Units::celsius}))
+                  .arg(Measurement::displayAmount(Measurement::Amount{step->startTemp_c().value_or(0.0), Measurement::Units::celsius}));
+            totalWaterAdded_l += step->amount_l();
+         } else if (step->isTemperature()) {
+            str = tr("Heat mash to %1.").arg(Measurement::displayAmount(Measurement::Amount{step->startTemp_c().value_or(0.0),
+                                                                                          Measurement::Units::celsius}));
+         } else if (step->isDecoction()) {
+            str = tr("Bring %1 of the mash to a boil and return to the mash tun to bring it to %2.")
+                  .arg(Measurement::displayAmount(Measurement::Amount{step->amount_l(),
+                                                                     Measurement::Units::liters}))
+                  .arg(Measurement::displayAmount(Measurement::Amount{step->startTemp_c().value_or(0.0), Measurement::Units::celsius}));
+         }
+
+         str += tr(" Hold for %1.").arg(Measurement::displayAmount(Measurement::Amount{step->stepTime_mins().value_or(0.0),
+                                                                                       Measurement::Units::minutes}));
+
+         preins.push_back(PreInstruction(str, QString("%1 - %2").arg(MashStep::typeDisplayNames[step->type()]).arg(step->name()),
+                                       timeRemaining));
+         timeRemaining -= step->stepTime_mins().value_or(0.0);
+      }
+      return preins;
+   }
+
+   QVector<PreInstruction> hopSteps(RecipeAddition::Stage const stage) {
+      // TBD: What about hopAddition->addAtTime_mins()?
+      QVector<PreInstruction> preins;
+      for (auto hopAddition : m_self.hopAdditions()) {
+         auto hop = hopAddition->hop();
+         if (hopAddition->stage() == stage) {
+            QString str;
+            switch (stage) {
+               case RecipeAddition::Stage::Mash:
+                  str = tr("Put %1 %2 into mash for %3.");
+                  break;
+               case RecipeAddition::Stage::Boil:
+                  if (hopAddition->isFirstWort()) {
+                     str = tr("Put %1 %2 into first wort for %3.");
+                  } else if (hopAddition->isAroma()) {
+                     str = tr("Steep %1 %2 in wort for %3.");
+                  } else {
+                     str = tr("Put %1 %2 into boil for %3.");
+                  }
+                  break;
+               case RecipeAddition::Stage::Fermentation:
+                  str = tr("Put %1 %2 into fermenter for %3.");
+                  break;
+               case RecipeAddition::Stage::Packaging:
+                  // We don't really support this yet, but best to say something if we read in a recipe that has this
+                  str = tr("Put %1 %2 into packaging for %3.");
+                  break;
+               // NB: No default case as we want compiler to warn us if we missed a value above
+            }
+
+            str = str.arg(Measurement::displayAmount(hopAddition->amount()))
+                     .arg(hop->name())
+                     .arg(Measurement::displayAmount(Measurement::Amount{hopAddition->duration_mins().value_or(0.0), Measurement::Units::minutes}));
+
+            preins.push_back(PreInstruction(str, tr("Hop addition"), hopAddition->duration_mins().value_or(0.0)));
+         }
+      }
+      return preins;
+   }
+
+   QVector<PreInstruction> miscSteps(RecipeAdditionMisc::Use type) {
+      QVector<PreInstruction> preins;
+      for (auto miscAddition : m_self.miscAdditions()) {
+         QString str;
+         auto misc = miscAddition->misc();
+         if (miscAddition->use() == type) {
+            if (type == RecipeAdditionMisc::Use::Boil) {
+               str = tr("Put %1 %2 into boil for %3.");
+            } else if (type == RecipeAdditionMisc::Use::Bottling) {
+               str = tr("Use %1 %2 at bottling for %3.");
+            } else if (type == RecipeAdditionMisc::Use::Mash) {
+               str = tr("Put %1 %2 into mash for %3.");
+            } else if (type == RecipeAdditionMisc::Use::Primary) {
+               str = tr("Put %1 %2 into primary for %3.");
+            } else if (type == RecipeAdditionMisc::Use::Secondary) {
+               str = tr("Put %1 %2 into secondary for %3.");
+            } else {
+               qWarning() << Q_FUNC_INFO << "Unrecognized misc use.";
+               str = tr("Use %1 %2 for %3.");
+            }
+
+            str = str.arg(Measurement::displayAmount(miscAddition->amount()))
+                     .arg(misc->name())
+                     .arg(Measurement::displayAmount(Measurement::Amount{miscAddition->duration_mins().value_or(0.0), Measurement::Units::minutes}));
+
+            preins.push_back(PreInstruction(str, tr("Misc addition"), miscAddition->duration_mins().value_or(0.0)));
+         }
+      }
+      return preins;
+   }
+
+   PreInstruction boilFermentablesPre(double timeRemaining) {
+      QString str = tr("Boil or steep ");
+      for (auto const & fermentableAddition : m_self.fermentableAdditions()) {
+         if (fermentableAddition->stage() != RecipeAddition::Stage::Boil ||
+            fermentableAddition->addAfterBoil() || fermentableAddition->fermentable()->isExtract()) {
+            continue;
+         }
+
+         str += QString("%1 %2, ")
+               .arg(Measurement::displayAmount(fermentableAddition->amount()))
+               .arg(fermentableAddition->name());
+      }
+      str += ".";
+
+      return PreInstruction(str, tr("Boil/steep fermentables"), timeRemaining);
+   }
+
+   bool hasBoilFermentable() {
+      for (auto const & fermentableAddition : m_self.fermentableAdditions()) {
+         if (fermentableAddition->stage() == RecipeAddition::Stage::Mash || fermentableAddition->addAfterBoil()) {
+            continue;
+         } else {
+            return true;
+         }
+      }
+      return false;
+   }
+
+   bool hasBoilExtract() {
+      for (auto const & fermentableAddition : m_self.fermentableAdditions()) {
+         if (fermentableAddition->fermentable()->isExtract()) {
+            return true;
+         } else {
+            continue;
+         }
+      }
+      return false;
+   }
+
+   PreInstruction addExtracts(double timeRemaining) const {
+      QString str = tr("Raise water to boil and then remove from heat. Stir in  ");
+      for (auto const & fermentableAddition : m_self.fermentableAdditions()) {
+         if (fermentableAddition->fermentable()->isExtract()) {
+            str += QString("%1 %2, ")
+                  .arg(Measurement::displayAmount(fermentableAddition->amount()))
+                  .arg(fermentableAddition->fermentable()->name());
+         }
+      }
+      str += ".";
+
+      return PreInstruction(str, tr("Add Extracts to water"), timeRemaining);
+   }
+
+   void addPreinstructions(QVector<PreInstruction> preins) {
+      // Add instructions in descending mash time order.
+      std::sort(preins.begin(), preins.end(), std::greater<PreInstruction>());
+      for (int ii = 0; ii < preins.size(); ++ii) {
+         PreInstruction pi = preins[ii];
+
+         auto ins = std::make_shared<Instruction>();
+         ins->setName(pi.title);
+         ins->setDirections(pi.text);
+         ins->setInterval(pi.time);
+
+         m_self.add(ins);
+      }
+      return;
+   }
+
+
+   /**
+    * \brief This does the logic for \c nonOptBoil, \c nonOptFermentation, etc
+    *
+    * \param itemId IN/OUT
+    */
+   template<class T>
+   std::shared_ptr<T> nonOptionalItem(int & itemId) {
+      if (itemId < 0) {
+         std::shared_ptr<T> item{std::make_shared<T>()};
+         BtStringConst const & propertyName = Recipe::propertyNameFor<T>();
+         this->m_self.setAndNotify(propertyName, itemId, ObjectStoreWrapper::insert(item));
+      }
+      return ObjectStoreWrapper::getById<T>(itemId);
+   }
+
+   /**
+    * \brief Returns the boil size in liters, or the supplied value if there is either no boil or no boil size set on
+    *        the boil.
+    */
+   double boilSizeInLitersOr(double const defaultValue) const {
+      auto boil = this->m_self.boil();
+      if (!boil) {
+         return defaultValue;
+      }
+      return boil->preBoilSize_l().value_or(defaultValue);
+   }
+
+   /**
+    * \brief Returns the boil time in minutes, or the supplied value if there is no boil.
+    */
+   double boilTimeInMinutesOr(double const defaultValue) const {
+      auto boil = this->m_self.boil();
+      if (!boil) {
+         return defaultValue;
+      }
+      return boil->boilTime_mins();
+   }
+
+   //! \brief send me a list of salts and if we are wanting to add to the
+   //! mash or the sparge, and I will return a list of instructions
+   QStringList getReagents(QList<std::shared_ptr<RecipeAdjustmentSalt>> saltAdditions,
+                           RecipeAdjustmentSalt::WhenToAdd wanted) {
+      QStringList reagents = QStringList();
+
+      for (auto saltAddition : saltAdditions ) {
+         auto const whenToAdd = saltAddition->whenToAdd();
+         auto const salt      = saltAddition->salt();
+         QString tmp;
+
+         if (whenToAdd == wanted || whenToAdd == RecipeAdjustmentSalt::WhenToAdd::Equal) {
+            tmp = tr("%1 %2").arg(Measurement::displayAmount(saltAddition->amount())).arg(salt->name());
+         } else if (whenToAdd == RecipeAdjustmentSalt::WhenToAdd::Ratio) {
+            double ratio = 1.0;
+            if (wanted == RecipeAdjustmentSalt::WhenToAdd::Sparge) {
+               ratio = this->m_self.mash()->totalSpargeAmount_l() / this->m_self.mash()->totalInfusionAmount_l();
+            }
+
+            auto adjustedAmount = saltAddition->amount();
+            adjustedAmount.quantity *= ratio;
+            tmp = tr("%1 %2").arg(Measurement::displayAmount(adjustedAmount)).arg(salt->name());
+         } else {
+            continue;
+         }
+
+         if (reagents.size() > 0) {
+            reagents.append(tr(", "));
+         }
+         reagents.append(tmp);
+      }
+      return reagents;
+   }
+
+   // Adds instructions to the recipe.
+   void postboilFermentablesIns() {
+      QString tmp;
+      bool hasFerms = false;
+
+      QString str = tr("Add ");
+      for (auto const & fermentableAddition : this->m_self.fermentableAdditions()) {
+         if (!fermentableAddition->addAfterBoil()) {
+            continue;
+         }
+
+         hasFerms = true;
+         tmp = QString("%1 %2, ")
+               .arg(Measurement::displayAmount(fermentableAddition->amount()))
+               .arg(fermentableAddition->fermentable()->name());
+         str += tmp;
+      }
+      str += tr("to the boil at knockout.");
+
+      if (!hasFerms) {
+         return;
+      }
+
+      auto ins = std::make_shared<Instruction>();
+      ins->setName(tr("Knockout additions"));
+      ins->setDirections(str);
+      ins->addReagent(tmp);
+
+      this->m_self.add(ins);
+
+      return;
+   }
+
+   void postboilIns() {
+      auto equipment = this->m_self.equipment();
+      if (!equipment) {
+         return;
+      }
+
+      double wortInBoil_l = this->m_self.wortFromMash_l() - equipment->getLauteringDeadspaceLoss_l();
+      wortInBoil_l += equipment->topUpKettle_l().value_or(0.0);
+
+      double wort_l = equipment->wortEndOfBoil_l(wortInBoil_l);
+      QString str = tr("You should have %1 wort post-boil.")
+                  .arg(Measurement::displayAmount(Measurement::Amount{wort_l, Measurement::Units::liters}));
+      str += tr("\nYou anticipate losing %1 to trub and chiller loss.")
+            .arg(Measurement::displayAmount(Measurement::Amount{equipment->kettleTrubChillerLoss_l(), Measurement::Units::liters}));
+      wort_l -= equipment->kettleTrubChillerLoss_l();
+      if (equipment->topUpWater_l() > 0.0)
+         str += tr("\nAdd %1 top up water into primary.")
+               .arg(Measurement::displayAmount(Measurement::Amount{equipment->topUpWater_l().value_or(Equipment::default_topUpWater_l), Measurement::Units::liters}));
+      wort_l += equipment->topUpWater_l().value_or(Equipment::default_topUpWater_l);
+      str += tr("\nThe final volume in the primary is %1.")
+            .arg(Measurement::displayAmount(Measurement::Amount{wort_l, Measurement::Units::liters}));
+
+      auto ins = std::make_shared<Instruction>();
+      ins->setName(tr("Post boil"));
+      ins->setDirections(str);
+      this->m_self.add(ins);
+
+      return;
+   }
+
+   void mashFermentableIns() {
+      /*** Add grains ***/
+      auto ins = std::make_shared<Instruction>();
+      ins->setName(tr("Add grains"));
+      QString str = tr("Add ");
+      QList<QString> reagents = this->m_self.getReagents(this->m_self.fermentableAdditions());
+
+      for (int ii = 0; ii < reagents.size(); ++ii) {
+         str += reagents.at(ii);
+      }
+
+      str += tr("to the mash tun.");
+      ins->setDirections(str);
+
+      this->m_self.add(ins);
+
+      return;
+   }
+
+   void mashWaterIns() {
+
+      if (this->m_self.mash() == nullptr) {
+         return;
+      }
+
+      auto ins = std::make_shared<Instruction>();
+      ins->setName(tr("Heat water"));
+      QString str = tr("Bring ");
+      QList<QString> reagents = this->m_self.getReagents(this->m_self.mash()->mashSteps());
+
+      for (int ii = 0; ii < reagents.size(); ++ii) {
+         str += reagents.at(ii);
+      }
+
+      str += tr("for upcoming infusions.");
+      ins->setDirections(str);
+
+      this->m_self.add(ins);
+
+      return;
+   }
+
+   void firstWortHopsIns() {
+      QList<QString> reagents = this->m_self.getReagents(this->m_self.hopAdditions(), true);
+      if (reagents.size() == 0) {
+         return;
+      }
+
+      QString str = tr("Do first wort hopping with ");
+
+      for (int ii = 0; ii < reagents.size(); ++ii) {
+         str += reagents.at(ii);
+      }
+      str += ".";
+
+      auto ins = std::make_shared<Instruction>();
+      ins->setName(tr("First wort hopping"));
+      ins->setDirections(str);
+
+      this->m_self.add(ins);
+
+      return;
+   }
+
+   void topOffIns() {
+      auto equipment = this->m_self.equipment();
+      if (!equipment) {
+         return;
+      }
+
+      double wortInBoil_l = this->m_self.wortFromMash_l() - equipment->getLauteringDeadspaceLoss_l();
+      QString str = tr("You should now have %1 wort.")
+                  .arg(Measurement::displayAmount(Measurement::Amount{wortInBoil_l, Measurement::Units::liters}));
+      if (!equipment->topUpKettle_l() || *equipment->topUpKettle_l() == 0.0) {
+         return;
+      }
+
+      wortInBoil_l += *equipment->topUpKettle_l();
+      QString tmp = tr(" Add %1 water to the kettle, bringing pre-boil volume to %2.")
+                  .arg(Measurement::displayAmount(Measurement::Amount{*equipment->topUpKettle_l(), Measurement::Units::liters}))
+                  .arg(Measurement::displayAmount(Measurement::Amount{wortInBoil_l, Measurement::Units::liters}));
+
+      str += tmp;
+
+      auto ins = std::make_shared<Instruction>();
+      ins->setName(tr("Pre-boil"));
+      ins->setDirections(str);
+      ins->addReagent(tmp);
+
+      this->m_self.add(ins);
+
+      return;
+   }
+
+   void saltWater(RecipeAdjustmentSalt::WhenToAdd when) {
+
+      if (!this->m_self.mash() || this->m_self.saltAdjustmentIds().size() == 0) {
+         return;
+      }
+
+      QStringList reagents = this->getReagents(this->m_self.saltAdjustments(), when);
+      if (reagents.size() == 0) {
+         return;
+      }
+
+      auto ins = std::make_shared<Instruction>();
+      QString tmp = when == RecipeAdjustmentSalt::WhenToAdd::Mash ? tr("mash") : tr("sparge");
+      ins->setName(tr("Modify %1 water").arg(tmp));
+      QString str = tr("Dissolve ");
+
+      for (int ii = 0; ii < reagents.size(); ++ii) {
+         str += reagents.at(ii);
+      }
+
+      str += QString(tr(" into the %1 water").arg(tmp));
+      ins->setDirections(str);
+
+      this->m_self.add(ins);
+
+      return;
+   }
+
+   // Batch size without losses.
+   double batchSizeNoLosses_l() {
+      double ret = this->m_self.batchSize_l();
+      auto equipment = this->m_self.equipment();
+      if (equipment) {
+         ret += equipment->kettleTrubChillerLoss_l();
+      }
+
+      return ret;
+   }
+
+   //============================================== Calculation Functions ==============================================
+   /**
+    * Emits changed(grains_kg), changed(grainsInMash_kg). Depends on: --.
+    */
+   void recalcGrains() {
+      double calculatedGrains_kg = 0.0;
+      double calculatedGrainsInMash_kg = 0.0;
+
+      for (auto const & fermentableAddition : this->m_self.fermentableAdditions()) {
+         if (fermentableAddition->fermentable() &&
+             fermentableAddition->fermentable()->type() == Fermentable::Type::Grain) {
+            // I wouldn't have thought you would want to measure grain by volume, but best to check
+            if (fermentableAddition->amountIsWeight()) {
+               calculatedGrains_kg += fermentableAddition->amount().quantity;
+               if (fermentableAddition->stage() == RecipeAddition::Stage::Mash) {
+                  calculatedGrainsInMash_kg += fermentableAddition->amount().quantity;
+               }
+            } else {
+               qWarning() <<
+                  Q_FUNC_INFO << "Ignoring grain fermentable addition #" << fermentableAddition->key() << "(" <<
+                  fermentableAddition->name() << ") as measured by volume";
+            }
+         }
+      }
+
+      if (!qFuzzyCompare(calculatedGrains_kg, this->m_grains_kg)) {
+         qDebug() <<
+            Q_FUNC_INFO << "Recipe #" << this->m_self.key() << "(" << this->m_self.name() << ") "
+            "Calculated weight of grains: " << calculatedGrains_kg << ", stored weight: " << this->m_grains_kg;
+         this->m_grains_kg = calculatedGrains_kg;
+         if (!this->m_self.m_uninitializedCalcs) {
+            emit this->m_self.changed(this->m_self.metaProperty(*PropertyNames::Recipe::grains_kg),
+                                      this->m_grains_kg);
+         }
+      }
+
+      if (!qFuzzyCompare(calculatedGrainsInMash_kg, this->m_grainsInMash_kg)) {
+         qDebug() <<
+            Q_FUNC_INFO << "Recipe #" << this->m_self.key() << "(" << this->m_self.name() << ") "
+            "Calculated weight of grains in mash: " << calculatedGrainsInMash_kg << ", stored weight: " <<
+            this->m_grainsInMash_kg;
+         this->m_grainsInMash_kg = calculatedGrainsInMash_kg;
+         if (!this->m_self.m_uninitializedCalcs) {
+            emit this->m_self.changed(this->m_self.metaProperty(*PropertyNames::Recipe::grainsInMash_kg),
+                                      this->m_grainsInMash_kg);
+         }
+      }
+      return;
+   }
+
+
+   /**
+    * Emits changed(wortFromMash_l), changed(boilVolume_l), changed(finalVolume_l), changed(postBoilVolume_l).
+    * Depends on: m_grainsInMash_kg
+    */
+   void recalcVolumeEstimates() {
+      double tmp = 0.0;
+      double calculatedWortFromMash_l = 0.0;
+      double calculatedBoilVolume_l = 0.0;
+      double calculatedFinalVolume_l = 0.0;
+      double calculatedPostBoilVolume_l = 0.0;
+
+      auto equipment = this->m_self.equipment();
+
+      // wortFromMash_l ==========================
+      if (!this->m_self.mash()) {
+         this->m_wortFromMash_l = 0.0;
+      } else {
+         double waterAdded_l = this->m_self.mash()->totalMashWater_l();
+         double absorption_lKg;
+         if (equipment) {
+            absorption_lKg = equipment->mashTunGrainAbsorption_LKg().value_or(Equipment::default_mashTunGrainAbsorption_LKg);
+         } else {
+            absorption_lKg = PhysicalConstants::grainAbsorption_Lkg;
+         }
+
+         calculatedWortFromMash_l = (waterAdded_l - absorption_lKg * this->m_grainsInMash_kg);
+      }
+
+      // boilVolume_l ==============================
+
+      if (equipment) {
+         tmp = calculatedWortFromMash_l - equipment->getLauteringDeadspaceLoss_l() + equipment->topUpKettle_l().value_or(Equipment::default_topUpKettle_l);
+      } else {
+         tmp = calculatedWortFromMash_l;
+      }
+
+      // .:TODO:. Assumptions below about liquids are almost certainly wrong, also TBD what other cases we have to cover
+      // Need to account for extract/sugar volume also.
+      for (auto const & fermentableAddition : this->m_self.fermentableAdditions()) {
+         auto const & fermentable = fermentableAddition->fermentable();
+         switch (fermentable->type()) {
+            case Fermentable::Type::Extract:
+               if (fermentableAddition->amountIsWeight()) {
+                  tmp += fermentableAddition->amount().quantity / PhysicalConstants::liquidExtractDensity_kgL;
+               } else {
+                  tmp += fermentableAddition->amount().quantity;
+               }
+               break;
+            case Fermentable::Type::Sugar:
+               if (fermentableAddition->amountIsWeight()) {
+                  tmp += fermentableAddition->amount().quantity / PhysicalConstants::sucroseDensity_kgL;
+               } else {
+                  tmp += fermentableAddition->amount().quantity;
+               }
+               break;
+            case Fermentable::Type::Dry_Extract:
+               if (fermentableAddition->amountIsWeight()) {
+                  tmp += fermentableAddition->amount().quantity / PhysicalConstants::dryExtractDensity_kgL;
+               } else {
+                  tmp += fermentableAddition->amount().quantity;
+               }
+               break;
+         }
+      }
+
+      if (tmp <= 0.0) {
+         // Give up.
+         tmp = this->boilSizeInLitersOr(0.0);
+      }
+
+      calculatedBoilVolume_l = tmp;
+
+      // finalVolume_l ==============================
+
+      // NOTE: the following figure is not based on the other volume estimates
+      // since we want to show og,fg,ibus,etc. as if the collected wort is correct.
+      this->m_finalVolumeNoLosses_l = this->batchSizeNoLosses_l();
+      if (equipment) {
+         //_finalVolumeNoLosses_l = equipment->wortEndOfBoil_l(calculatedBoilVolume_l) + equipment->topUpWater_l();
+         calculatedFinalVolume_l =
+            equipment->wortEndOfBoil_l(calculatedBoilVolume_l) +
+            equipment->topUpWater_l().value_or(Equipment::default_topUpWater_l) -
+            equipment->kettleTrubChillerLoss_l();
+      } else {
+         this->m_finalVolume_l = calculatedBoilVolume_l - 4.0; // This is just shooting in the dark. Can't do much without an equipment.
+         //_finalVolumeNoLosses_l = _finalVolume_l;
+      }
+
+      // postBoilVolume_l ===========================
+
+      if (equipment) {
+         calculatedPostBoilVolume_l = equipment->wortEndOfBoil_l(calculatedBoilVolume_l);
+      } else {
+         calculatedPostBoilVolume_l = this->m_self.batchSize_l(); // Give up.
+      }
+
+      if (!qFuzzyCompare(calculatedWortFromMash_l, this->m_wortFromMash_l)) {
+//         qDebug() <<
+//            Q_FUNC_INFO << "Recipe #" << this->m_self.key() << "(" << this->m_self.name() << ") "
+//            "Calculated wort from mash: " << calculatedWortFromMash_l << ", stored: " << this->m_wortFromMash_l;
+         this->m_wortFromMash_l = calculatedWortFromMash_l;
+         if (!this->m_self.m_uninitializedCalcs) {
+            emit this->m_self.changed(this->m_self.metaProperty(*PropertyNames::Recipe::wortFromMash_l),
+                                      this->m_wortFromMash_l);
+         }
+      }
+
+      // TODO: Still need to get rid of m_boilVolume_l
+      if (!qFuzzyCompare(calculatedBoilVolume_l, this->m_boilVolume_l)) {
+//         qDebug() <<
+//            Q_FUNC_INFO << "Recipe #" << this->m_self.key() << "(" << this->m_self.name() << ") "
+//            "Calculated boil volume: " << calculatedBoilVolume_l << ", stored: " << this->m_boilVolume_l;
+         this->m_boilVolume_l = calculatedBoilVolume_l;
+         if (!this->m_self.m_uninitializedCalcs) {
+            emit this->m_self.changed(this->m_self.metaProperty(*PropertyNames::Recipe::boilVolume_l),
+                                      this->m_boilVolume_l);
+         }
+      }
+
+      if (! qFuzzyCompare(calculatedFinalVolume_l, this->m_finalVolume_l)) {
+//         qDebug() <<
+//            Q_FUNC_INFO << "Recipe #" << this->m_self.key() << "(" << this->m_self.name() << ") "
+//            "Calculated final volume: " << calculatedFinalVolume_l << ", stored: " << this->m_finalVolume_l;
+         this->m_finalVolume_l = calculatedFinalVolume_l;
+         if (!this->m_self.m_uninitializedCalcs) {
+            emit this->m_self.changed(this->m_self.metaProperty(*PropertyNames::Recipe::finalVolume_l),
+                                      this->m_finalVolume_l);
+         }
+      }
+
+      if (! qFuzzyCompare(calculatedPostBoilVolume_l, this->m_postBoilVolume_l)) {
+         qDebug() <<
+            Q_FUNC_INFO << "Recipe #" << this->m_self.key() << "(" << this->m_self.name() << ") "
+            "Calculated post boil volume: " << calculatedPostBoilVolume_l << ", stored: " << this->m_postBoilVolume_l;
+         this->m_postBoilVolume_l = calculatedPostBoilVolume_l;
+         if (!this->m_self.m_uninitializedCalcs) {
+            emit this->m_self.changed(this->m_self.metaProperty(*PropertyNames::Recipe::postBoilVolume_l),
+                                      this->m_postBoilVolume_l);
+         }
+      }
+      return;
+   }
+
+   /**
+    * Emits changed(color_srm). Depends on: m_finalVolume_l
+    */
+   void recalcColor_srm() {
+      double mcu = 0.0;
+
+      for (auto const & fermentableAddition : this->m_self.fermentableAdditions()) {
+         if (fermentableAddition->amountIsWeight()) {
+            // Conversion factor for lb/gal to kg/l = 8.34538.
+            mcu += fermentableAddition->fermentable()->color_srm() * 8.34538 * fermentableAddition->amount().quantity / m_finalVolumeNoLosses_l;
+         } else {
+            // .:TBD:. What do do about liquids
+            qWarning() <<
+               Q_FUNC_INFO << "Unimplemented branch for handling color of liquid fermentables - #" <<
+               fermentableAddition->fermentable()->key() << ":" << fermentableAddition->name();
+         }
+      }
+
+      double calculatedColor_srm = ColorMethods::mcuToSrm(mcu);
+      if (!qFuzzyCompare(this->m_color_srm, calculatedColor_srm)) {
+//         qDebug() <<
+//            Q_FUNC_INFO << "Recipe #" << this->m_self.key() << "(" << this->m_self.name() << ") "
+//            "Calculated color: " << calculatedColor_srm << ", stored: " << this->m_color_srm;
+         this->m_color_srm = calculatedColor_srm;
+         if (!this->m_self.m_uninitializedCalcs) {
+            emit this->m_self.changed(this->m_self.metaProperty(*PropertyNames::Recipe::color_srm), this->m_color_srm);
+         }
+      }
+
+      return;
+   }
+
+   /**
+    * Emits changed(SRMColor). Depends on: m_color_srm.
+    */
+   void recalcSRMColor() {
+      QColor calculatedSRMColor = Algorithms::srmToColor(this->m_color_srm);
+      if (calculatedSRMColor != this->m_SRMColor) {
+         this->m_SRMColor = calculatedSRMColor;
+         if (!this->m_self.m_uninitializedCalcs) {
+            emit this->m_self.changed(this->m_self.metaProperty(*PropertyNames::Recipe::SRMColor), this->m_SRMColor);
+         }
+      }
+      return;
+   }
+
+   /**
+    * Emits changed(og), changed(fg).
+    * Depends on: m_wortFromMash_l, m_finalVolume_l
+    */
+   void recalcOgFg() {
+
+      this->m_og_fermentable = this->m_fg_fermentable = 0.0;
+
+      // The first time through really has to get the m_og and m_fg from the
+      // database, not use the initialized values of 1. I (maf) tried putting
+      // this in the initialize, but it just hung. So I moved it here, but only
+      // if we aren't initialized yet.
+      //
+      // GSG: This doesn't work, this og and fg are already set to 1.0 so
+      // until we load these values from the database on startup, we have
+      // to calculate.
+      if (this->m_self.m_uninitializedCalcs) {
+         this->m_self.m_og = Localization::toDouble(this->m_self, PropertyNames::Recipe::og, Q_FUNC_INFO);
+         this->m_self.m_fg = Localization::toDouble(this->m_self, PropertyNames::Recipe::fg, Q_FUNC_INFO);
+      }
+
+      // Find out how much sugar we have.
+      auto const sugars = this->m_self.calcTotalPoints();
+      double sugar_kg                  = sugars.sugar_kg;  // Mass of sugar that *is* affected by mash efficiency
+      double sugar_kg_ignoreEfficiency = sugars.sugar_kg_ignoreEfficiency;  // Mass of sugar that *is not* affected by mash efficiency
+      double nonFermentableSugars_kg   = sugars.nonFermentableSugars_kg;  // Mass of sugar that is not fermentable (also counted in sugar_kg_ignoreEfficiency)
+
+      // Uncomment for diagnosing problems with calculations
+//      qDebug() <<
+//         Q_FUNC_INFO << "Recipe #" << this->m_self.key() << "(" << this->m_self.name() << ") "
+//         "sugar_kg: " << sugar_kg << ", sugar_kg_ignoreEfficiency: " << sugar_kg_ignoreEfficiency <<
+//         ", nonFermentableSugars_kg:" << nonFermentableSugars_kg;
+
+      // We might lose some sugar in the form of Trub/Chiller loss and lauter deadspace.
+      auto equipment = this->m_self.equipment();
+      if (equipment) {
+         double const kettleWort_l = (this->m_wortFromMash_l - equipment->getLauteringDeadspaceLoss_l()) +
+                                     equipment->topUpKettle_l().value_or(Equipment::default_topUpKettle_l);
+         double const postBoilWort_l = equipment->wortEndOfBoil_l(kettleWort_l);
+         double ratio = (postBoilWort_l - equipment->kettleTrubChillerLoss_l()) / postBoilWort_l;
+         if (ratio > 1.0) { // Usually happens when we don't have a mash yet.
+            ratio = 1.0;
+         } else if (ratio < 0.0) {
+            ratio = 0.0;
+         } else if (Algorithms::isNan(ratio)) {
+            ratio = 1.0;
+         }
+         // Ignore this again since it should be included in efficiency.
+         //sugar_kg *= ratio;
+         sugar_kg_ignoreEfficiency *= ratio;
+         if (nonFermentableSugars_kg != 0.0) {
+            nonFermentableSugars_kg *= ratio;
+         }
+      }
+
+      // Total sugars after accounting for efficiency and mash losses. Implicitly includes non-fermentable sugars
+      sugar_kg = sugar_kg * this->m_self.efficiency_pct() / 100.0 + sugar_kg_ignoreEfficiency;
+      double plato = Algorithms::getPlato(sugar_kg, this->m_finalVolumeNoLosses_l);
+
+      double calculatedOg = Algorithms::PlatoToSG_20C20C(plato);    // og from all sugars
+      double tmp_pnts = (calculatedOg - 1) * 1000.0; // points from all sugars
+      double tmp_nonferm_pnts;
+      if (nonFermentableSugars_kg != 0.0) {
+         double ferm_kg = sugar_kg - nonFermentableSugars_kg;  // Mass of only fermentable sugars
+         plato = Algorithms::getPlato(ferm_kg, this->m_finalVolumeNoLosses_l);   // Plato from fermentable sugars
+         this->m_og_fermentable = Algorithms::PlatoToSG_20C20C(plato);    // og from only fermentable sugars
+         plato = Algorithms::getPlato(nonFermentableSugars_kg, this->m_finalVolumeNoLosses_l);   // Plate from non-fermentable sugars
+         tmp_nonferm_pnts = ((Algorithms::PlatoToSG_20C20C(plato)) - 1) * 1000.0; // og points from non-fermentable sugars
+      } else {
+         this->m_og_fermentable = calculatedOg;
+         tmp_nonferm_pnts = 0.0;
+      }
+
+      // Calculage FG
+      double attenuation_pct = 0.0;
+      for (auto yeastAddition : this->m_self.yeastAdditions()) {
+         // Get the yeast with the greatest attenuation.
+         if (yeastAddition->attenuation_pct() > attenuation_pct) {
+            attenuation_pct = yeastAddition->yeast()->getTypicalAttenuation_pct();
+         }
+      }
+      // This means we have yeast, but they neglected to provide attenuation percentages.
+      if (this->m_self.yeastAdditions().size() > 0 && attenuation_pct <= 0.0)  {
+         attenuation_pct = Yeast::DefaultAttenuation_pct; // Use an average attenuation.
+      }
+
+      double calculatedFg;
+      if (nonFermentableSugars_kg != 0.0) {
+         double tmp_ferm_pnts = (tmp_pnts - tmp_nonferm_pnts) * (1.0 - attenuation_pct / 100.0); // fg points from fermentable sugars
+         tmp_pnts = tmp_ferm_pnts + tmp_nonferm_pnts;  // FG points from both fermentable and non-fermentable sugars
+         //tmp_pnts *= (1.0 - attenuation_pct/100.0);  // WTF, this completely ignores all the calculations about non-fermentable sugars and just converts everything!
+         calculatedFg =  1 + tmp_pnts / 1000.0; // new FG value
+         this->m_fg_fermentable =  1 + tmp_ferm_pnts / 1000.0; // FG from fermentables only
+      } else {
+         tmp_pnts *= (1.0 - attenuation_pct / 100.0);
+         calculatedFg =  1 + tmp_pnts / 1000.0;
+         this->m_fg_fermentable = calculatedFg;
+      }
+
+      // Uncomment for diagnosing problems with calculations
+//      qDebug() <<
+//         Q_FUNC_INFO << "Recipe #" << this->m_self.key() << "(" << this->m_self.name() << ") "
+//         "m_og_fermentable: " << m_og_fermentable << ", m_fg_fermentable: " << m_fg_fermentable;
+
+      if (!qFuzzyCompare(this->m_self.m_og, calculatedOg)) {
+         qDebug() <<
+            Q_FUNC_INFO << "Recipe #" << this->m_self.key() << "(" << this->m_self.name() << ") "
+            "Calculated OG: " << calculatedOg << ", stored: " << this->m_self.m_og;
+         this->m_self.m_og = calculatedOg;
+         // NOTE: We don't want to do this on the first load of the recipe.
+         // NOTE: We are we recalculating all of these on load? Shouldn't we be
+         // reading these values from the database somehow?
+         //
+         // GSG: Yes we can, but until the code is added to intialize these calculated
+         // values from the database, we can calculate them on load. They should be
+         // the same as the database values since the database values were set with
+         // these functions in the first place.
+         if (!this->m_self.m_uninitializedCalcs) {
+            this->m_self.propagatePropertyChange(PropertyNames::Recipe::og, false);
+            emit this->m_self.changed(this->m_self.metaProperty(*PropertyNames::Recipe::og    ), this->m_self.m_og);
+            emit this->m_self.changed(this->m_self.metaProperty(*PropertyNames::Recipe::points), (this->m_self.m_og - 1.0) * 1e3);
+         }
+      }
+
+      if (!qFuzzyCompare(this->m_self.m_fg, calculatedFg)) {
+         qDebug() <<
+            Q_FUNC_INFO << "Recipe #" << this->m_self.key() << "(" << this->m_self.name() << ") "
+            "Calculated FG: " << calculatedFg << ", stored: " << this->m_self.m_fg;
+         this->m_self.m_fg = calculatedFg;
+         if (!this->m_self.m_uninitializedCalcs) {
+            this->m_self.propagatePropertyChange(PropertyNames::Recipe::fg, false);
+            emit this->m_self.changed(this->m_self.metaProperty(*PropertyNames::Recipe::fg), this->m_self.m_fg);
+         }
+      }
+      return;
+   }
+
+
+   /**
+    * Emits changed(ABV_pct). Depends on: m_og, m_fg
+    */
+   void recalcABV_pct() {
+      // The complex formula, and variations comes from Ritchie Products Ltd, (Zymurgy, Summer 1995, vol. 18, no. 2)
+      // Michael L. Hall’s article Brew by the Numbers: Add Up What’s in Your Beer, and Designing Great Beers by Daniels.
+      double calculatedABV_pct =
+         (76.08 * (this->m_og_fermentable - this->m_fg_fermentable) / (1.775 - this->m_og_fermentable)) *
+         (this->m_fg_fermentable / 0.794);
+
+      if (!qFuzzyCompare(calculatedABV_pct, m_ABV_pct)) {
+         qDebug() <<
+            Q_FUNC_INFO << "Recipe #" << this->m_self.key() << "(" << this->m_self.name() << ") "
+            "Calculated ABV: " << calculatedABV_pct << ", stored: " << this->m_ABV_pct;
+         this->m_ABV_pct = calculatedABV_pct;
+         if (!this->m_self.m_uninitializedCalcs) {
+            emit this->m_self.changed(this->m_self.metaProperty(*PropertyNames::Recipe::ABV_pct), this->m_ABV_pct);
+         }
+      }
+      return;
+   }
+
+   /**
+    * Emits changed(boilGrav). Depends on: _postBoilVolume_l, _boilVolume_l
+    */
+   void recalcBoilGrav() {
+      auto const sugars = this->m_self.calcTotalPoints();
+      double sugar_kg                  = sugars.sugar_kg;
+      double sugar_kg_ignoreEfficiency = sugars.sugar_kg_ignoreEfficiency;
+      double lateAddition_kg           = sugars.lateAddition_kg;
+      double lateAddition_kg_ignoreEff = sugars.lateAddition_kg_ignoreEff;
+
+      // Since the efficiency refers to how much sugar we get into the fermenter,
+      // we need to adjust for that here.
+      sugar_kg = (this->m_self.efficiency_pct() / 100.0 * (sugar_kg - lateAddition_kg) + sugar_kg_ignoreEfficiency -
+                  lateAddition_kg_ignoreEff);
+
+      double calculatedBoilGrav = Algorithms::PlatoToSG_20C20C(Algorithms::getPlato(sugar_kg,
+                                                                                    this->boilSizeInLitersOr(0.0)));
+      if (! qFuzzyCompare(calculatedBoilGrav, this->m_boilGrav)) {
+         qDebug() <<
+            Q_FUNC_INFO << "Recipe #" << this->m_self.key() << "(" << this->m_self.name() << ") "
+            "Calculated Boil Grav: " << calculatedBoilGrav << ", stored: " << this->m_boilGrav;
+         this->m_boilGrav = calculatedBoilGrav;
+         if (!this->m_self.m_uninitializedCalcs) {
+            emit this->m_self.changed(this->m_self.metaProperty(*PropertyNames::Recipe::boilGrav), this->m_boilGrav);
+         }
+      }
+      return;
+   }
+
+   /**
+    * Emits changed(IBU). Depends on: _batchSize_l, _boilGrav, _boilVolume_l, _finalVolume_l
+    */
+   void recalcIBU() {
+      double calculatedIbu = 0.0;
+
+      // Bitterness due to hops...
+      //
+      // Note that, normally, we don't want to take a reference to a smart pointer.  However, in this context, it's safe
+      // (because the hop additions aren't going to change while we look at them) and it gets rid of a compiler warning.
+      this->m_ibus.clear();
+      for (auto const & hopAddition : this->m_self.hopAdditions()) {
+         double tmp = this->m_self.ibuFromHopAddition(*hopAddition);
+         this->m_ibus.append(tmp);
+         calculatedIbu += tmp;
+      }
+
+      // Bitterness due to hopped extracts...
+      for (auto const & fermentableAddition : this->m_self.fermentableAdditions()) {
+         if (fermentableAddition->amountIsWeight()) {
+            // Conversion factor for lb/gal to kg/l = 8.34538.
+            calculatedIbu += fermentableAddition->fermentable()->ibuGalPerLb().value_or(0.0) * (fermentableAddition->amount().quantity / this->m_self.batchSize_l()) / 8.34538;
+         } else {
+            // .:TBD:. What do do about liquids
+            qWarning() <<
+               Q_FUNC_INFO << "Unimplemented branch for handling IBU of liquid fermentables - #" <<
+               fermentableAddition->fermentable()->key() << ":" << fermentableAddition->name();
+         }
+      }
+
+      if (! qFuzzyCompare(calculatedIbu, this->m_IBU)) {
+         qDebug() <<
+            Q_FUNC_INFO << "Recipe #" << this->m_self.key() << "(" << this->m_self.name() << ") "
+            "Calculated IBU: " << calculatedIbu << ", stored: " << this->m_IBU;
+         this->m_IBU = calculatedIbu;
+         if (!this->m_self.m_uninitializedCalcs) {
+            emit this->m_self.changed(this->m_self.metaProperty(*PropertyNames::Recipe::IBU), this->m_IBU);
+         }
+      }
+
+      return;
+   }
+
+   /**
+    * Emits changed(calories). Depends on: m_og, m_fg.
+    */
+   void recalcCalories() {
+      //
+      // The Journal of the Institute of Brewing (JIB) is published by the Institute of Brewing and Distilling.
+      // On pages 320-321 of Volume 88 of the JIB, dated "September - October 1982", there is an article on "Calculation of
+      // Calorific Value of Beer" submitted by P A Martin on behalf of the IOB (Institute of Brewing) Analysis Committee.
+      //
+      // The article discusses four methods for calculating the calories in beer, and, in summary, recommends calculating
+      // Calories/100ml as follows:
+      //    1.1 Estimate the alcohol content of the beer ... [and] convert ... to alcohol g/100ml
+      //    1.2 Estimate total carbohydrate of the beer (g/100ml as glucose) ...
+      //    1.3 Estimate protein content of the beer (g/100ml)
+      //    2.1 Calories/100ml = [alcohol (g/100ml) × 7] +
+      //                         [total carbohydrate (as glucose g/100ml) × 3.75] +
+      //                         [protein (g/100ml) × 4]
+      //    2.2 In a collaborative trial the precision of the method was ±2.02 Calories for highly attenuated beers and
+      //        ±3.06 Calories for normally fermented products.
+      //
+      // We should come back to this at some point...
+      //
+      // the formula in here are taken from http://hbd.org/ensmingr/
+      //
+
+      // Need to translate OG and FG into plato
+
+      double const better_startPlato  = Measurement::Units::plato.fromCanonical(this->m_self.m_og);
+      double const better_finishPlato = Measurement::Units::plato.fromCanonical(this->m_self.m_fg);
+      double const startPlato  = -463.37 + (668.72 * this->m_self.m_og) - (205.35 * this->m_self.m_og * this->m_self.m_og);
+      double const finishPlato = -463.37 + (668.72 * this->m_self.m_fg) - (205.35 * this->m_self.m_fg * this->m_self.m_fg);
+
+      qCritical() << Q_FUNC_INFO << "better_startPlato:" << better_startPlato << ", startPlato:" << startPlato;
+      qCritical() << Q_FUNC_INFO << "better_finishPlato:" << better_finishPlato << ", finishPlato:" << finishPlato;
+
+      double const realExtract = (0.1808 * startPlato) + (0.8192 * finishPlato);
+
+      // Alcohol by weight?
+      double const abw = (startPlato - realExtract) / (2.0665 - (0.010665 * startPlato));
+
+      // The final results of this formula are calories per 100 ml.
+      // The 10.0 puts it in terms of liters.
+      double calculatedCaloriesPerLiter = ((6.9 * abw) + 4.0 * (realExtract - 0.1)) * this->m_self.m_fg * 10.0;
+
+      //! If there are no fermentables in the recipe, if there is no mash, etc.,
+      //  then the calories/12 oz ends up negative. Since negative doesn't make
+      //  sense, set it to 0
+      if (calculatedCaloriesPerLiter < 0) {
+         calculatedCaloriesPerLiter = 0;
+      }
+
+      if (!qFuzzyCompare(calculatedCaloriesPerLiter, this->m_caloriesPerLiter)) {
+         qDebug() <<
+            Q_FUNC_INFO << "Recipe #" << this->m_self.key() << "(" << this->m_self.name() << ") "
+            "Calculated calories/liter: " << calculatedCaloriesPerLiter << ", stored: " << this->m_caloriesPerLiter;
+         this->m_caloriesPerLiter = calculatedCaloriesPerLiter;
+         if (!this->m_self.m_uninitializedCalcs) {
+            emit this->m_self.changed(this->m_self.metaProperty(*PropertyNames::Recipe::caloriesPerLiter),
+                                      this->m_caloriesPerLiter);
+         }
+      }
+      return;
+   }
+
+
+   //================================================ Member variables =================================================
+   Recipe & m_self;
    QVector<int> instructionIds;
-   QVector<int> miscIds;
-   QVector<int> saltIds;
-   QVector<int> waterIds;
-   QVector<int> yeastIds;
+
+   // Calculated properties.
+   double        m_ABV_pct              ;
+   double        m_color_srm            ;
+   double        m_boilGrav             ;
+   double        m_IBU                  ;
+   QList<double> m_ibus                 ;
+   double        m_wortFromMash_l       ;
+   double        m_boilVolume_l         ;
+   double        m_postBoilVolume_l     ;
+   double        m_finalVolume_l        ;
+   // Final volume before any losses out of the kettle, used in calculations for sg/ibu/etc.
+   double        m_finalVolumeNoLosses_l;
+   double        m_caloriesPerLiter     ;
+   double        m_grainsInMash_kg      ;
+   double        m_grains_kg            ;
+   QColor        m_SRMColor             ;
+   double        m_og_fermentable       ;
+   double        m_fg_fermentable       ;
 
 };
 
-template<> QVector<int> & Recipe::impl::accessIds<Fermentable>() { return this->fermentableIds; }
-template<> QVector<int> & Recipe::impl::accessIds<Hop>()         { return this->hopIds; }
 template<> QVector<int> & Recipe::impl::accessIds<Instruction>() { return this->instructionIds; }
-template<> QVector<int> & Recipe::impl::accessIds<Misc>()        { return this->miscIds; }
-template<> QVector<int> & Recipe::impl::accessIds<Salt>()        { return this->saltIds; }
-template<> QVector<int> & Recipe::impl::accessIds<Water>()       { return this->waterIds; }
-template<> QVector<int> & Recipe::impl::accessIds<Yeast>()       { return this->yeastIds; }
+
+QString Recipe::localisedName() { return tr("Recipe"); }
+
+// Note that Recipe::typeStringMapping and Recipe::FormMapping are as defined by BeerJSON, but we also use them for the DB and
+// for the UI.  We can't use them for BeerXML as it only supports subsets of these types.
+EnumStringMapping const Recipe::typeStringMapping {
+   {Recipe::Type::Extract    , "extract"     },
+   {Recipe::Type::PartialMash, "partial mash"},
+   {Recipe::Type::AllGrain   , "all grain"   },
+   // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
+   {Recipe::Type::Cider      , "cider"       },
+   {Recipe::Type::Kombucha   , "kombucha"    },
+   {Recipe::Type::Soda       , "soda"        },
+   {Recipe::Type::Other      , "other"       },
+   {Recipe::Type::Mead       , "mead"        },
+   {Recipe::Type::Wine       , "wine"        },
+};
+
+EnumStringMapping const Recipe::typeDisplayNames {
+   {Recipe::Type::Extract    , tr("Extract"     )},
+   {Recipe::Type::PartialMash, tr("Partial Mash")},
+   {Recipe::Type::AllGrain   , tr("All Grain"   )},
+   // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
+   {Recipe::Type::Cider      , tr("Cider"       )},
+   {Recipe::Type::Kombucha   , tr("Kombucha"    )},
+   {Recipe::Type::Soda       , tr("Soda"        )},
+   {Recipe::Type::Other      , tr("Other"       )},
+   {Recipe::Type::Mead       , tr("Mead"        )},
+   {Recipe::Type::Wine       , tr("Wine"        )},
+};
+
 
 bool Recipe::isEqualTo(NamedEntity const & other) const {
    // Base class (NamedEntity) will have ensured this cast is valid
@@ -329,29 +1565,18 @@ bool Recipe::isEqualTo(NamedEntity const & other) const {
    return (
       this->m_type              == rhs.m_type              &&
       this->m_batchSize_l       == rhs.m_batchSize_l       &&
-      this->m_boilSize_l        == rhs.m_boilSize_l        &&
-      this->m_boilTime_min      == rhs.m_boilTime_min      &&
       this->m_efficiency_pct    == rhs.m_efficiency_pct    &&
-      this->m_primaryAge_days   == rhs.m_primaryAge_days   &&
-      this->m_primaryTemp_c     == rhs.m_primaryTemp_c     &&
-      this->m_secondaryAge_days == rhs.m_secondaryAge_days &&
-      this->m_secondaryTemp_c   == rhs.m_secondaryTemp_c   &&
-      this->m_tertiaryAge_days  == rhs.m_tertiaryAge_days  &&
-      this->m_tertiaryTemp_c    == rhs.m_tertiaryTemp_c    &&
       this->m_age               == rhs.m_age               &&
       this->m_ageTemp_c         == rhs.m_ageTemp_c         &&
-      ObjectStoreWrapper::compareById<Style>(    this->styleId,     rhs.styleId)     &&
-      ObjectStoreWrapper::compareById<Mash>(     this->mashId,      rhs.mashId)      &&
-      ObjectStoreWrapper::compareById<Equipment>(this->equipmentId, rhs.equipmentId) &&
+      ObjectStoreWrapper::compareById<Style    >(this->m_styleId,     rhs.m_styleId    ) &&
+      ObjectStoreWrapper::compareById<Mash     >(this->m_mashId,      rhs.m_mashId     ) &&
+      ObjectStoreWrapper::compareById<Boil     >(this->m_boilId,      rhs.m_boilId     ) &&
+      ObjectStoreWrapper::compareById<Equipment>(this->m_equipmentId, rhs.m_equipmentId) &&
       this->m_og                == rhs.m_og                &&
       this->m_fg                == rhs.m_fg                &&
-      ObjectStoreWrapper::compareListByIds<Fermentable>(this->pimpl->fermentableIds, rhs.pimpl->fermentableIds) &&
-      ObjectStoreWrapper::compareListByIds<Hop>(        this->pimpl->hopIds,         rhs.pimpl->hopIds)         &&
-      ObjectStoreWrapper::compareListByIds<Instruction>(this->pimpl->instructionIds, rhs.pimpl->instructionIds) &&
-      ObjectStoreWrapper::compareListByIds<Misc>(       this->pimpl->miscIds,        rhs.pimpl->miscIds)        &&
-      ObjectStoreWrapper::compareListByIds<Salt>(       this->pimpl->saltIds,        rhs.pimpl->saltIds)        &&
-      ObjectStoreWrapper::compareListByIds<Water>(      this->pimpl->waterIds,       rhs.pimpl->waterIds)       &&
-      ObjectStoreWrapper::compareListByIds<Yeast>(      this->pimpl->yeastIds,       rhs.pimpl->yeastIds)
+      ObjectStoreWrapper::compareListByIds<Instruction      >(this->pimpl->instructionIds  , rhs.pimpl->instructionIds  )
+
+      // TODO: What about BrewNote, RecipeAdditionFermentable, RecipeAdditionHop, RecipeAdditionMisc, RecipeAdditionYeast, RecipeAdjustmentSalt, RecipeUseOfWater
    );
 }
 
@@ -362,25 +1587,16 @@ ObjectStore & Recipe::getObjectStoreTypedInstance() const {
 TypeLookup const Recipe::typeLookup {
    "Recipe",
    {
-      // Note that the age_days, primaryAge_days, secondaryAge_days, tertiaryAge_days properties are dimensionless
-      // because:
-      //    - It's not meaningful to measure them with greater precision
+      // Note that the age_days properties is dimensionless because:
+      //    - It's not meaningful to measure it with greater precision
       //    - The canonical unit for Measurement::PhysicalQuantity::Time is Measurement::Units::minutes, so we'd have to
       //      either store as minutes or do some special-case handling to say we're not storing in canonical units.
-      //      Both would be ugly
+      //      Both would be ugly -- but doable, as we have done elsewhere
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::type              , Recipe::m_type              ),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::brewer            , Recipe::m_brewer            ,           NonPhysicalQuantity::String        ),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::asstBrewer        , Recipe::m_asstBrewer        ,           NonPhysicalQuantity::String        ),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::batchSize_l       , Recipe::m_batchSize_l       , Measurement::PhysicalQuantity::Volume        ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::boilTime_min      , Recipe::m_boilTime_min      , Measurement::PhysicalQuantity::Time          ),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::efficiency_pct    , Recipe::m_efficiency_pct    ,           NonPhysicalQuantity::Percentage    ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::fermentationStages, Recipe::m_fermentationStages,           NonPhysicalQuantity::Count         ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::primaryAge_days   , Recipe::m_primaryAge_days   ,           NonPhysicalQuantity::Dimensionless ), // See comment above for why Dimensionless, not Time
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::primaryTemp_c     , Recipe::m_primaryTemp_c     , Measurement::PhysicalQuantity::Temperature   ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::secondaryAge_days , Recipe::m_secondaryAge_days ,           NonPhysicalQuantity::Dimensionless ), // See comment above for why Dimensionless, not Time
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::secondaryTemp_c   , Recipe::m_secondaryTemp_c   , Measurement::PhysicalQuantity::Temperature   ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::tertiaryAge_days  , Recipe::m_tertiaryAge_days  ,           NonPhysicalQuantity::Dimensionless ), // See comment above for why Dimensionless, not Time
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::tertiaryTemp_c    , Recipe::m_tertiaryTemp_c    , Measurement::PhysicalQuantity::Temperature   ),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::age_days          , Recipe::m_age               ,           NonPhysicalQuantity::Dimensionless ), // See comment above for why Dimensionless, not Time
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::ageTemp_c         , Recipe::m_ageTemp_c         , Measurement::PhysicalQuantity::Temperature   ),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::date              , Recipe::m_date              ,           NonPhysicalQuantity::Date          ),
@@ -393,178 +1609,188 @@ TypeLookup const Recipe::typeLookup {
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::notes             , Recipe::m_notes             ,           NonPhysicalQuantity::String        ),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::tasteNotes        , Recipe::m_tasteNotes        ,           NonPhysicalQuantity::String        ),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::tasteRating       , Recipe::m_tasteRating       ,           NonPhysicalQuantity::Dimensionless ),
-//      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::style             , Recipe::m_style             ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::styleId           , Recipe::styleId             ), //<<
-//      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::mash              , Recipe::m_mash              ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::mashId            , Recipe::mashId              ), //<<
-//      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::equipment         , Recipe::m_equipment         ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::equipmentId       , Recipe::equipmentId         ), //<<
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::styleId           , Recipe::m_styleId           ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::mashId            , Recipe::m_mashId            ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::boilId            , Recipe::m_boilId            ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::fermentationId    , Recipe::m_fermentationId    ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::equipmentId       , Recipe::m_equipmentId       ),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::og                , Recipe::m_og                , Measurement::PhysicalQuantity::Density       ),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::fg                , Recipe::m_fg                , Measurement::PhysicalQuantity::Density       ),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::locked            , Recipe::m_locked            ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::ancestorId        , Recipe::m_ancestor_id       ), //<<
-//      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::ancestors        , Recipe::m_ancestor_id       ), //<<
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::ancestorId        , Recipe::m_ancestor_id       ),
 
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::ABV_pct           , Recipe::m_ABV_pct           ,           NonPhysicalQuantity::Percentage    ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::boilGrav          , Recipe::m_boilGrav          , Measurement::PhysicalQuantity::Density       ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::boilSize_l        , Recipe::m_boilSize_l        , Measurement::PhysicalQuantity::Volume        ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::boilVolume_l      , Recipe::m_boilVolume_l      , Measurement::PhysicalQuantity::Volume        ),
-//      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::brewNotes         , Recipe::m_brewNotes         ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::calories          , Recipe::m_calories          ,           NonPhysicalQuantity::Dimensionless ), // .:TBD:. One day this should perhaps become Measurement::PhysicalQuantity::Energy
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::color_srm         , Recipe::m_color_srm         , Measurement::PhysicalQuantity::Color         ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::fermentableIds    , Recipe::impl::fermentableIds),
-//      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::fermentables      , Recipe::m_fermentables      ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::finalVolume_l     , Recipe::m_finalVolume_l     , Measurement::PhysicalQuantity::Volume        ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::grainsInMash_kg   , Recipe::m_grainsInMash_kg   , Measurement::PhysicalQuantity::Mass          ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::grains_kg         , Recipe::m_grains_kg         , Measurement::PhysicalQuantity::Mass          ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::hopIds            , Recipe::impl::hopIds            ),
-//      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::hops              , Recipe::m_hops              ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::IBU               , Recipe::m_IBU               , Measurement::PhysicalQuantity::Bitterness    ),
+      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::ABV_pct          , Recipe::ABV_pct         ,           NonPhysicalQuantity::Percentage   ), // Calculated, not in DB
+      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::boilGrav         , Recipe::boilGrav        , Measurement::PhysicalQuantity::Density      ), // Calculated, not in DB
+      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::boilVolume_l     , Recipe::boilVolume_l    , Measurement::PhysicalQuantity::Volume       ), // Calculated, not in DB
+      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::caloriesPerLiter , Recipe::caloriesPerLiter,           NonPhysicalQuantity::Dimensionless), // Calculated, not in DB .:TBD:. One day this should perhaps become Measurement::PhysicalQuantity::Energy
+      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::caloriesPerUs12oz, Recipe::caloriesPerUs12oz,         NonPhysicalQuantity::Dimensionless),
+      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::caloriesPerUsPint, Recipe::caloriesPerUsPint,         NonPhysicalQuantity::Dimensionless),
+      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::color_srm        , Recipe::color_srm         , Measurement::PhysicalQuantity::Color     ), // Calculated, not in DB
+      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::finalVolume_l    , Recipe::finalVolume_l     , Measurement::PhysicalQuantity::Volume    ), // Calculated, not in DB
+      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::grainsInMash_kg  , Recipe::grainsInMash_kg   , Measurement::PhysicalQuantity::Mass      ), // Calculated, not in DB
+      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::grains_kg        , Recipe::grains_kg         , Measurement::PhysicalQuantity::Mass      ), // Calculated, not in DB
+      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::IBU              , Recipe::IBU               , Measurement::PhysicalQuantity::Bitterness), // Calculated, not in DB
 //      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::IBUs              , Recipe::m_IBUs              ),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::instructionIds    , Recipe::impl::instructionIds),
 //      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::instructions      , Recipe::m_instructions      ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::miscIds           , Recipe::impl::miscIds       ),
-//      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::miscs             , Recipe::m_miscs             ),
 //      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::points            , Recipe::m_points            ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::postBoilVolume_l  , Recipe::m_postBoilVolume_l  , Measurement::PhysicalQuantity::Volume        ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::saltIds           , Recipe::impl::saltIds       ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::SRMColor          , Recipe::m_SRMColor          ), // NB: This is an RGB display color
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::waterIds          , Recipe::impl::waterIds      ),
-//      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::waters            , Recipe::m_waters            ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::wortFromMash_l    , Recipe::m_wortFromMash_l    , Measurement::PhysicalQuantity::Volume        ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::yeastIds          , Recipe::impl::yeastIds      ),
-//      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::yeasts            , Recipe::m_yeasts            ),
+      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::postBoilVolume_l, Recipe::postBoilVolume_l  , Measurement::PhysicalQuantity::Volume     ), // Calculated, not in DB
+      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::SRMColor        , Recipe::SRMColor          ),  // Calculated, not in DB.  NB: This is an RGB display color
+      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::wortFromMash_l  , Recipe::wortFromMash_l    , Measurement::PhysicalQuantity::Volume     ), // Calculated, not in DB
+
+      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::style               , Recipe::style               ),
+      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::mash                , Recipe::mash                ),
+      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::boil                , Recipe::boil                ),
+      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::fermentation        , Recipe::fermentation        ),
+      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::equipment           , Recipe::equipment           ),
+      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::brewNotes           , Recipe::brewNotes           ),
+      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::fermentableAdditions, Recipe::fermentableAdditions),
+      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::hopAdditions        , Recipe::hopAdditions        ),
+      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::miscAdditions       , Recipe::miscAdditions       ),
+      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::waterUses           , Recipe::waterUses           ),
+      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::yeastAdditions      , Recipe::yeastAdditions      ),
+
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::beerAcidity_pH         , Recipe::m_beerAcidity_pH         , Measurement::PhysicalQuantity::Acidity   ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::apparentAttenuation_pct, Recipe::m_apparentAttenuation_pct,           NonPhysicalQuantity::Percentage),
+
+      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::fermentableAdditionIds, Recipe::fermentableAdditionIds),
+      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::hopAdditionIds        , Recipe::hopAdditionIds        ),
+      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::miscAdditionIds       , Recipe::miscAdditionIds       ),
+      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::yeastAdditionIds      , Recipe::yeastAdditionIds      ),
+      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::saltAdjustmentIds     , Recipe::saltAdjustmentIds     ),
+      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::waterUseIds           , Recipe::waterUseIds           ),
    },
-   // Parent class lookup
-   &NamedEntity::typeLookup
+   // Parent classes lookup
+   {&NamedEntity::typeLookup,
+    std::addressof(FolderBase<Recipe>::typeLookup)}
 };
+static_assert(std::is_base_of<FolderBase<Recipe>, Recipe>::value);
 
 Recipe::Recipe(QString name) :
-   NamedEntity         {name, true                   },
-   pimpl               {std::make_unique<impl>(*this)},
-   m_type              {Recipe::Type::AllGrain       },
-   m_brewer            {""                           },
-   m_asstBrewer        {"Brewtarget: free beer software"},
-   m_batchSize_l       {0.0                          },
-   m_boilSize_l        {0.0                          },
-   m_boilTime_min      {0.0                          },
-   m_efficiency_pct    {0.0                          },
-   m_fermentationStages{1                            },
-   m_primaryAge_days   {0.0                          },
-   m_primaryTemp_c     {0.0                          },
-   m_secondaryAge_days {0.0                          },
-   m_secondaryTemp_c   {0.0                          },
-   m_tertiaryAge_days  {0.0                          },
-   m_tertiaryTemp_c    {0.0                          },
-   m_age               {0.0                          },
-   m_ageTemp_c         {0.0                          },
-   m_date              {QDate::currentDate()         },
-   m_carbonation_vols  {0.0                          },
-   m_forcedCarbonation {false                        },
-   m_primingSugarName  {""                           },
-   m_carbonationTemp_c {0.0                          },
-   m_primingSugarEquiv {0.0                          },
-   m_kegPrimingFactor  {0.0                          },
-   m_notes             {""                           },
-   m_tasteNotes        {""                           },
-   m_tasteRating       {0.0                          },
-   styleId             {-1                           },
-   mashId              {-1                           },
-   equipmentId         {-1                           },
-   m_og                {1.0                          },
-   m_fg                {1.0                          },
-   m_locked            {false                        },
-   m_ancestor_id       {-1                           },
-   m_ancestors         {},
-   m_hasDescendants    {false                        } {
+   NamedEntity              {name, true                   },
+   FolderBase<Recipe>       {},
+   pimpl                    {std::make_unique<impl>(*this)},
+   m_type                   {Recipe::Type::AllGrain       },
+   m_brewer                 {""                           },
+   m_asstBrewer             {QString{"%1: free beer software"}.arg(CONFIG_APPLICATION_NAME_UC)},
+   m_batchSize_l            {0.0                 },
+   m_efficiency_pct         {0.0                 },
+   m_age                    {0.0                 },
+   m_ageTemp_c              {0.0                 },
+   m_date                   {QDate::currentDate()}, // Date is allowed to be blank, but we default it to today
+   m_carbonation_vols       {std::nullopt        },
+   m_forcedCarbonation      {false               },
+   m_primingSugarName       {""                  },
+   m_carbonationTemp_c      {0.0                 },
+   m_primingSugarEquiv      {0.0                 },
+   m_kegPrimingFactor       {0.0                 },
+   m_notes                  {""                  },
+   m_tasteNotes             {""                  },
+   m_tasteRating            {0.0                 },
+   m_styleId                {-1                  },
+   m_equipmentId            {-1                  },
+   m_mashId                 {-1                  },
+   m_boilId                 {-1                  },
+   m_fermentationId         {-1                  },
+   m_beerAcidity_pH         {std::nullopt        },
+   m_apparentAttenuation_pct{std::nullopt        },
+   m_og                     {1.0                 },
+   m_fg                     {1.0                 },
+   m_locked                 {false               },
+   m_uninitializedCalcs     {true                },
+   m_uninitializedCalcsMutex{},
+   m_recalcMutex            {},
+   m_ancestor_id            {-1                  },
+   m_ancestors              {},
+   m_hasDescendants         {false               } {
    return;
 }
 
 Recipe::Recipe(NamedParameterBundle const & namedParameterBundle) :
-   NamedEntity         {namedParameterBundle         },
-   pimpl               {std::make_unique<impl>(*this)},
-   m_type              {namedParameterBundle.val<Recipe::Type>(PropertyNames::Recipe::type              )},
-   m_brewer            {namedParameterBundle.val<QString     >(PropertyNames::Recipe::brewer            )},
-   m_asstBrewer        {namedParameterBundle.val<QString     >(PropertyNames::Recipe::asstBrewer        )},
-   m_batchSize_l       {namedParameterBundle.val<double      >(PropertyNames::Recipe::batchSize_l       )},
-   m_boilSize_l        {namedParameterBundle.val<double      >(PropertyNames::Recipe::boilSize_l        )},
-   m_boilTime_min      {namedParameterBundle.val<double      >(PropertyNames::Recipe::boilTime_min      )},
-   m_efficiency_pct    {namedParameterBundle.val<double      >(PropertyNames::Recipe::efficiency_pct    )},
-   m_fermentationStages{namedParameterBundle.val<int         >(PropertyNames::Recipe::fermentationStages)},
-   m_primaryAge_days   {namedParameterBundle.val<double      >(PropertyNames::Recipe::primaryAge_days   )},
-   m_primaryTemp_c     {namedParameterBundle.val<double      >(PropertyNames::Recipe::primaryTemp_c     )},
-   m_secondaryAge_days {namedParameterBundle.val<double      >(PropertyNames::Recipe::secondaryAge_days )},
-   m_secondaryTemp_c   {namedParameterBundle.val<double      >(PropertyNames::Recipe::secondaryTemp_c   )},
-   m_tertiaryAge_days  {namedParameterBundle.val<double      >(PropertyNames::Recipe::tertiaryAge_days  )},
-   m_tertiaryTemp_c    {namedParameterBundle.val<double      >(PropertyNames::Recipe::tertiaryTemp_c    )},
-   m_age               {namedParameterBundle.val<double      >(PropertyNames::Recipe::age_days          )},
-   m_ageTemp_c         {namedParameterBundle.val<double      >(PropertyNames::Recipe::ageTemp_c         )},
-   m_date              {namedParameterBundle.val<QDate       >(PropertyNames::Recipe::date              )},
-   m_carbonation_vols  {namedParameterBundle.val<double      >(PropertyNames::Recipe::carbonation_vols  )},
-   m_forcedCarbonation {namedParameterBundle.val<bool        >(PropertyNames::Recipe::forcedCarbonation )},
-   m_primingSugarName  {namedParameterBundle.val<QString     >(PropertyNames::Recipe::primingSugarName  )},
-   m_carbonationTemp_c {namedParameterBundle.val<double      >(PropertyNames::Recipe::carbonationTemp_c )},
-   m_primingSugarEquiv {namedParameterBundle.val<double      >(PropertyNames::Recipe::primingSugarEquiv )},
-   m_kegPrimingFactor  {namedParameterBundle.val<double      >(PropertyNames::Recipe::kegPrimingFactor  )},
-   m_notes             {namedParameterBundle.val<QString     >(PropertyNames::Recipe::notes             )},
-   m_tasteNotes        {namedParameterBundle.val<QString     >(PropertyNames::Recipe::tasteNotes        )},
-   m_tasteRating       {namedParameterBundle.val<double      >(PropertyNames::Recipe::tasteRating       )},
-   styleId             {namedParameterBundle.val<int         >(PropertyNames::Recipe::styleId           )},
-   mashId              {namedParameterBundle.val<int         >(PropertyNames::Recipe::mashId            )},
-   equipmentId         {namedParameterBundle.val<int         >(PropertyNames::Recipe::equipmentId       )},
-   m_og                {namedParameterBundle.val<double      >(PropertyNames::Recipe::og                )},
-   m_fg                {namedParameterBundle.val<double      >(PropertyNames::Recipe::fg                )},
-   m_locked            {namedParameterBundle.val<bool        >(PropertyNames::Recipe::locked            )},
-   m_ancestor_id       {namedParameterBundle.val<int         >(PropertyNames::Recipe::ancestorId        )},
-   m_ancestors         {},
-   m_hasDescendants    {false} {
+   NamedEntity          {namedParameterBundle},
+   FolderBase<Recipe>   {namedParameterBundle},
+   pimpl                {std::make_unique<impl>(*this)},
+   SET_REGULAR_FROM_NPB (m_type                   , namedParameterBundle, PropertyNames::Recipe::type                   ),
+   SET_REGULAR_FROM_NPB (m_brewer                 , namedParameterBundle, PropertyNames::Recipe::brewer                 ),
+   SET_REGULAR_FROM_NPB (m_asstBrewer             , namedParameterBundle, PropertyNames::Recipe::asstBrewer             ),
+   SET_REGULAR_FROM_NPB (m_batchSize_l            , namedParameterBundle, PropertyNames::Recipe::batchSize_l            ),
+   SET_REGULAR_FROM_NPB (m_efficiency_pct         , namedParameterBundle, PropertyNames::Recipe::efficiency_pct         ),
+   SET_REGULAR_FROM_NPB (m_age                    , namedParameterBundle, PropertyNames::Recipe::age_days               ),
+   SET_REGULAR_FROM_NPB (m_ageTemp_c              , namedParameterBundle, PropertyNames::Recipe::ageTemp_c              ),
+   SET_REGULAR_FROM_NPB (m_date                   , namedParameterBundle, PropertyNames::Recipe::date                   ),
+   SET_REGULAR_FROM_NPB (m_carbonation_vols       , namedParameterBundle, PropertyNames::Recipe::carbonation_vols       ),
+   SET_REGULAR_FROM_NPB (m_forcedCarbonation      , namedParameterBundle, PropertyNames::Recipe::forcedCarbonation      ),
+   SET_REGULAR_FROM_NPB (m_primingSugarName       , namedParameterBundle, PropertyNames::Recipe::primingSugarName       , ""),
+   SET_REGULAR_FROM_NPB (m_carbonationTemp_c      , namedParameterBundle, PropertyNames::Recipe::carbonationTemp_c      ),
+   SET_REGULAR_FROM_NPB (m_primingSugarEquiv      , namedParameterBundle, PropertyNames::Recipe::primingSugarEquiv      ),
+   SET_REGULAR_FROM_NPB (m_kegPrimingFactor       , namedParameterBundle, PropertyNames::Recipe::kegPrimingFactor       ),
+   SET_REGULAR_FROM_NPB (m_notes                  , namedParameterBundle, PropertyNames::Recipe::notes                  ),
+   SET_REGULAR_FROM_NPB (m_tasteNotes             , namedParameterBundle, PropertyNames::Recipe::tasteNotes             ),
+   SET_REGULAR_FROM_NPB (m_tasteRating            , namedParameterBundle, PropertyNames::Recipe::tasteRating            ),
+   SET_REGULAR_FROM_NPB (m_styleId                , namedParameterBundle, PropertyNames::Recipe::styleId                ),
+   SET_REGULAR_FROM_NPB (m_equipmentId            , namedParameterBundle, PropertyNames::Recipe::equipmentId            ),
+   SET_REGULAR_FROM_NPB (m_mashId                 , namedParameterBundle, PropertyNames::Recipe::mashId                 ),
+   SET_REGULAR_FROM_NPB (m_boilId                 , namedParameterBundle, PropertyNames::Recipe::boilId                 , -1),
+   SET_REGULAR_FROM_NPB (m_fermentationId         , namedParameterBundle, PropertyNames::Recipe::fermentationId         , -1),
+   SET_REGULAR_FROM_NPB (m_beerAcidity_pH         , namedParameterBundle, PropertyNames::Recipe::beerAcidity_pH         ),
+   SET_REGULAR_FROM_NPB (m_apparentAttenuation_pct, namedParameterBundle, PropertyNames::Recipe::apparentAttenuation_pct),
+   // Note that, although we read them in here, the OG and FG are going to get recalculated when someone first tries to
+   // access them.
+   SET_REGULAR_FROM_NPB (m_og                     , namedParameterBundle, PropertyNames::Recipe::og                     ),
+   SET_REGULAR_FROM_NPB (m_fg                     , namedParameterBundle, PropertyNames::Recipe::fg                     ),
+   SET_REGULAR_FROM_NPB (m_locked                 , namedParameterBundle, PropertyNames::Recipe::locked                 ),
+                         m_uninitializedCalcs     {true},
+                         m_uninitializedCalcsMutex{},
+                         m_recalcMutex            {},
+   SET_REGULAR_FROM_NPB (m_ancestor_id            , namedParameterBundle, PropertyNames::Recipe::ancestorId             ),
+                         m_ancestors              {},
+                         m_hasDescendants         {false} {
    // At this stage, we haven't set any Hops, Fermentables, etc.  This is deliberate because the caller typically needs
    // to access subsidiary records to obtain this info.   Callers will usually use setters (setHopIds, etc but via
    // setProperty) to finish constructing the object.
+
    return;
 }
 
-
 Recipe::Recipe(Recipe const & other) :
    NamedEntity{other},
+   FolderBase<Recipe>{other},
    pimpl{std::make_unique<impl>(*this)},
-   m_type              {other.m_type              },
-   m_brewer            {other.m_brewer            },
-   m_asstBrewer        {other.m_asstBrewer        },
-   m_batchSize_l       {other.m_batchSize_l       },
-   m_boilSize_l        {other.m_boilSize_l        },
-   m_boilTime_min      {other.m_boilTime_min      },
-   m_efficiency_pct    {other.m_efficiency_pct    },
-   m_fermentationStages{other.m_fermentationStages},
-   m_primaryAge_days   {other.m_primaryAge_days   },
-   m_primaryTemp_c     {other.m_primaryTemp_c     },
-   m_secondaryAge_days {other.m_secondaryAge_days },
-   m_secondaryTemp_c   {other.m_secondaryTemp_c   },
-   m_tertiaryAge_days  {other.m_tertiaryAge_days  },
-   m_tertiaryTemp_c    {other.m_tertiaryTemp_c    },
-   m_age               {other.m_age               },
-   m_ageTemp_c         {other.m_ageTemp_c         },
-   m_date              {other.m_date              },
-   m_carbonation_vols  {other.m_carbonation_vols  },
-   m_forcedCarbonation {other.m_forcedCarbonation },
-   m_primingSugarName  {other.m_primingSugarName  },
-   m_carbonationTemp_c {other.m_carbonationTemp_c },
-   m_primingSugarEquiv {other.m_primingSugarEquiv },
-   m_kegPrimingFactor  {other.m_kegPrimingFactor  },
-   m_notes             {other.m_notes             },
-   m_tasteNotes        {other.m_tasteNotes        },
-   m_tasteRating       {other.m_tasteRating       },
-   styleId             {other.styleId             },  // But see additional logic in body
-   mashId              {other.mashId              },  // But see additional logic in body
-   equipmentId         {other.equipmentId         },  // But see additional logic in body
-   m_og                {other.m_og                },
-   m_fg                {other.m_fg                },
-   m_locked            {other.m_locked            },
+   m_type                   {other.m_type              },
+   m_brewer                 {other.m_brewer            },
+   m_asstBrewer             {other.m_asstBrewer        },
+   m_batchSize_l            {other.m_batchSize_l       },
+   m_efficiency_pct         {other.m_efficiency_pct    },
+   m_age                    {other.m_age               },
+   m_ageTemp_c              {other.m_ageTemp_c         },
+   m_date                   {other.m_date              },
+   m_carbonation_vols       {other.m_carbonation_vols  },
+   m_forcedCarbonation      {other.m_forcedCarbonation },
+   m_primingSugarName       {other.m_primingSugarName  },
+   m_carbonationTemp_c      {other.m_carbonationTemp_c },
+   m_primingSugarEquiv      {other.m_primingSugarEquiv },
+   m_kegPrimingFactor       {other.m_kegPrimingFactor  },
+   m_notes                  {other.m_notes             },
+   m_tasteNotes             {other.m_tasteNotes        },
+   m_tasteRating            {other.m_tasteRating       },
+   m_styleId                {other.m_styleId           },  // But see additional logic in body
+   m_equipmentId            {other.m_equipmentId       },  // But see additional logic in body
+   m_mashId                 {other.m_mashId            },  // But see additional logic in body
+   m_boilId                 {other.m_boilId            },  // But see additional logic in body
+   m_fermentationId         {other.m_fermentationId    },  // But see additional logic in body
+   m_beerAcidity_pH         {other.m_beerAcidity_pH    },
+   m_apparentAttenuation_pct{other.m_apparentAttenuation_pct},
+   m_og                     {other.m_og                },
+   m_fg                     {other.m_fg                },
+   m_locked                 {other.m_locked            },
+   m_uninitializedCalcs     {true                      },
+   m_uninitializedCalcsMutex{},
+   m_recalcMutex            {},
    // Copying a Recipe doesn't copy its descendants
-   m_ancestor_id       {-1                        },
-   m_ancestors         {},
-   m_hasDescendants    {false                     } {
-   setObjectName("Recipe"); // .:TBD:. Would be good to understand why we need this
+   m_ancestor_id            {-1                        },
+   m_ancestors              {},
+   m_hasDescendants         {false                     } {
+   setObjectName("Recipe"); // .:TBD:. Would be good to understand whether/why we need this
 
    //
    // We don't want to be versioning something while we're still constructing it
@@ -579,13 +1805,13 @@ Recipe::Recipe(Recipe const & other) :
    // We _don't_ want to copy BrewNotes (an instance of brewing the Recipe).  (This is easy not to do as we don't
    // currently store BrewNote IDs in Recipe.)
    //
-   this->pimpl->copyList<Fermentable>(*this, other);
-   this->pimpl->copyList<Hop> (*this, other);
+   this->pimpl->copyAdditions<RecipeAdditionFermentable>(other);
+   this->pimpl->copyAdditions<RecipeAdditionHop        >(other);
+   this->pimpl->copyAdditions<RecipeAdditionMisc       >(other);
+   this->pimpl->copyAdditions<RecipeAdditionYeast      >(other);
+   this->pimpl->copyAdditions<RecipeAdjustmentSalt     >(other);
+   this->pimpl->copyAdditions<RecipeUseOfWater         >(other);
    this->pimpl->copyList<Instruction>(*this, other);
-   this->pimpl->copyList<Misc> (*this, other);
-   this->pimpl->copyList<Salt> (*this, other);
-   this->pimpl->copyList<Water> (*this, other);
-   this->pimpl->copyList<Yeast> (*this, other);
 
    //
    // You might think that Style, Mash and Equipment could safely be shared between Recipes.   However, AFAICT, none of
@@ -594,20 +1820,11 @@ Recipe::Recipe(Recipe const & other) :
    //
    // We also need to be careful here as one or more of these may not be set to a valid value.
    //
-   if (other.equipmentId > 0) {
-      auto equipment = copyIfNeeded(*ObjectStoreWrapper::getById<Equipment>(other.equipmentId));
-      this->equipmentId = equipment->key();
-   }
-
-   if (other.mashId > 0) {
-      auto mash = copyIfNeeded(*ObjectStoreWrapper::getById<Mash>(other.mashId));
-      this->mashId = mash->key();
-   }
-
-   if (other.styleId > 0) {
-      auto style = copyIfNeeded(*ObjectStoreWrapper::getById<Style>(other.styleId));
-      this->styleId = style->key();
-   }
+   if (other.m_styleId        > 0) { auto item = copyIfNeeded(*ObjectStoreWrapper::getById<Style       >(other.m_styleId       )); this->m_styleId        = item->key(); }
+   if (other.m_equipmentId    > 0) { auto item = copyIfNeeded(*ObjectStoreWrapper::getById<Equipment   >(other.m_equipmentId   )); this->m_equipmentId    = item->key(); }
+   if (other.m_mashId         > 0) { auto item = copyIfNeeded(*ObjectStoreWrapper::getById<Mash        >(other.m_mashId        )); this->m_mashId         = item->key(); }
+   if (other.m_boilId         > 0) { auto item = copyIfNeeded(*ObjectStoreWrapper::getById<Boil        >(other.m_boilId        )); this->m_boilId         = item->key(); }
+   if (other.m_fermentationId > 0) { auto item = copyIfNeeded(*ObjectStoreWrapper::getById<Fermentation>(other.m_fermentationId)); this->m_fermentationId = item->key(); }
 
    this->pimpl->connectSignals();
 
@@ -639,7 +1856,6 @@ void Recipe::setKey(int key) {
    return;
 }
 
-
 void Recipe::connectSignalsForAllRecipes() {
    qDebug() << Q_FUNC_INFO << "Connecting signals for all Recipes";
    // Connect fermentable, hop changed signals to their parent recipe
@@ -648,391 +1864,6 @@ void Recipe::connectSignalsForAllRecipes() {
       recipe->pimpl->connectSignals();
    }
 
-   return;
-}
-
-
-void Recipe::mashFermentableIns() {
-   /*** Add grains ***/
-   auto ins = std::make_shared<Instruction>();
-   ins->setName(tr("Add grains"));
-   QString str = tr("Add ");
-   QList<QString> reagents = this->getReagents(this->fermentables());
-
-   for (int ii = 0; ii < reagents.size(); ++ii) {
-      str += reagents.at(ii);
-   }
-
-   str += tr("to the mash tun.");
-   ins->setDirections(str);
-
-   this->add(ins);
-
-   return;
-}
-
-void Recipe::saltWater(Salt::WhenToAdd when) {
-
-   if (this->mash() == nullptr || this->salts().size() == 0) {
-      return;
-   }
-
-   QStringList reagents = this->getReagents(salts(), when);
-   if (reagents.size() == 0) {
-      return;
-   }
-
-   auto ins = std::make_shared<Instruction>();
-   QString tmp = when == Salt::WhenToAdd::MASH ? tr("mash") : tr("sparge");
-   ins->setName(tr("Modify %1 water").arg(tmp));
-   QString str = tr("Dissolve ");
-
-   for (int ii = 0; ii < reagents.size(); ++ii) {
-      str += reagents.at(ii);
-   }
-
-   str += QString(tr(" into the %1 water").arg(tmp));
-   ins->setDirections(str);
-
-   this->add(ins);
-
-   return;
-}
-
-void Recipe::mashWaterIns() {
-
-   if (this->mash() == nullptr) {
-      return;
-   }
-
-   auto ins = std::make_shared<Instruction>();
-   ins->setName(tr("Heat water"));
-   QString str = tr("Bring ");
-   QList<QString> reagents = getReagents(mash()->mashSteps());
-
-   for (int ii = 0; ii < reagents.size(); ++ii) {
-      str += reagents.at(ii);
-   }
-
-   str += tr("for upcoming infusions.");
-   ins->setDirections(str);
-
-   this->add(ins);
-
-   return;
-}
-
-QVector<PreInstruction> Recipe::mashInstructions(double timeRemaining,
-                                                 double totalWaterAdded_l,
-                                                 [[maybe_unused]] unsigned int size) {
-   QVector<PreInstruction> preins;
-
-   if (mash() == nullptr) {
-      return preins;
-   }
-
-   for (auto step : this->mash()->mashSteps()) {
-      QString str;
-      if (step->isInfusion()) {
-         str = tr("Add %1 water at %2 to mash to bring it to %3.")
-               .arg(Measurement::displayAmount(Measurement::Amount{step->infuseAmount_l(), Measurement::Units::liters}))
-               .arg(Measurement::displayAmount(Measurement::Amount{step->infuseTemp_c(), Measurement::Units::celsius}))
-               .arg(Measurement::displayAmount(Measurement::Amount{step->stepTemp_c(), Measurement::Units::celsius}));
-         totalWaterAdded_l += step->infuseAmount_l();
-      } else if (step->isTemperature()) {
-         str = tr("Heat mash to %1.").arg(Measurement::displayAmount(Measurement::Amount{step->stepTemp_c(),
-                                                                                         Measurement::Units::celsius}));
-      } else if (step->isDecoction()) {
-         str = tr("Bring %1 of the mash to a boil and return to the mash tun to bring it to %2.")
-               .arg(Measurement::displayAmount(Measurement::Amount{step->decoctionAmount_l(),
-                                                                   Measurement::Units::liters}))
-               .arg(Measurement::displayAmount(Measurement::Amount{step->stepTemp_c(), Measurement::Units::celsius}));
-      }
-
-      str += tr(" Hold for %1.").arg(Measurement::displayAmount(Measurement::Amount{step->stepTime_min(),
-                                                                                    Measurement::Units::minutes}));
-
-      preins.push_back(PreInstruction(str, QString("%1 - %2").arg(step->typeStringTr()).arg(step->name()),
-                                      timeRemaining));
-      timeRemaining -= step->stepTime_min();
-   }
-   return preins;
-}
-
-QVector<PreInstruction> Recipe::hopSteps(Hop::Use type) {
-   QVector<PreInstruction> preins;
-
-   preins.clear();
-   QList<Hop *> hlist = hops();
-   int size = hlist.size();
-   for (int i = 0; static_cast<int>(i) < size; ++i) {
-      Hop * hop = hlist[static_cast<int>(i)];
-      if (hop->use() == type) {
-         QString str;
-         if (type == Hop::Use::Boil) {
-            str = tr("Put %1 %2 into boil for %3.");
-         } else if (type == Hop::Use::Dry_Hop) {
-            str = tr("Put %1 %2 into fermenter for %3.");
-         } else if (type == Hop::Use::First_Wort) {
-            str = tr("Put %1 %2 into first wort for %3.");
-         } else if (type == Hop::Use::Mash) {
-            str = tr("Put %1 %2 into mash for %3.");
-         } else if (type == Hop::Use::Aroma) {
-            str = tr("Steep %1 %2 in wort for %3.");
-         } else {
-            qWarning() << "Recipe::hopSteps(): Unrecognized hop use.";
-            str = tr("Use %1 %2 for %3");
-         }
-
-         str = str.arg(Measurement::displayAmount(Measurement::Amount{hop->amount_kg(), Measurement::Units::kilograms}))
-               .arg(hop->name())
-               .arg(Measurement::displayAmount(Measurement::Amount{hop->time_min(), Measurement::Units::minutes}));
-
-         preins.push_back(PreInstruction(str, tr("Hop addition"), hop->time_min()));
-      }
-   }
-   return preins;
-}
-
-QVector<PreInstruction> Recipe::miscSteps(Misc::Use type) {
-   QVector<PreInstruction> preins;
-
-   QList<Misc *> mlist = miscs();
-   int size = mlist.size();
-   for (unsigned int i = 0; static_cast<int>(i) < size; ++i) {
-      QString str;
-      Misc * misc = mlist[static_cast<int>(i)];
-      if (misc->use() == type) {
-         if (type == Misc::Use::Boil) {
-            str = tr("Put %1 %2 into boil for %3.");
-         } else if (type == Misc::Use::Bottling) {
-            str = tr("Use %1 %2 at bottling for %3.");
-         } else if (type == Misc::Use::Mash) {
-            str = tr("Put %1 %2 into mash for %3.");
-         } else if (type == Misc::Use::Primary) {
-            str = tr("Put %1 %2 into primary for %3.");
-         } else if (type == Misc::Use::Secondary) {
-            str = tr("Put %1 %2 into secondary for %3.");
-         } else {
-            qWarning() << "Recipe::getMiscSteps(): Unrecognized misc use.";
-            str = tr("Use %1 %2 for %3.");
-         }
-
-         str = str .arg(Measurement::displayAmount(Measurement::Amount{
-                                                      misc->amount(),
-                                                      misc->amountIsWeight() ? Measurement::Units::kilograms : Measurement::Units::liters
-                                                   }))
-               .arg(misc->name())
-               .arg(Measurement::displayAmount(Measurement::Amount{misc->time(), Measurement::Units::minutes}));
-
-         preins.push_back(PreInstruction(str, tr("Misc addition"), misc->time()));
-      }
-   }
-   return preins;
-}
-
-void Recipe::firstWortHopsIns() {
-   QList<QString> reagents = getReagents(hops(), true);
-   if (reagents.size() == 0) {
-      return;
-   }
-
-   QString str = tr("Do first wort hopping with ");
-
-   for (int ii = 0; ii < reagents.size(); ++ii) {
-      str += reagents.at(ii);
-   }
-   str += ".";
-
-   auto ins = std::make_shared<Instruction>();
-   ins->setName(tr("First wort hopping"));
-   ins->setDirections(str);
-
-   this->add(ins);
-
-   return;
-}
-
-void Recipe::topOffIns() {
-   Equipment * e = this->equipment();
-   if (e == nullptr) {
-      return;
-   }
-
-   double wortInBoil_l = wortFromMash_l() - e->lauterDeadspace_l();
-   QString str = tr("You should now have %1 wort.")
-                 .arg(Measurement::displayAmount(Measurement::Amount{wortInBoil_l, Measurement::Units::liters}));
-   if (e->topUpKettle_l() != 0.0) {
-      return;
-   }
-
-   wortInBoil_l += e->topUpKettle_l();
-   QString tmp = tr(" Add %1 water to the kettle, bringing pre-boil volume to %2.")
-                 .arg(Measurement::displayAmount(Measurement::Amount{e->topUpKettle_l(), Measurement::Units::liters}))
-                 .arg(Measurement::displayAmount(Measurement::Amount{wortInBoil_l, Measurement::Units::liters}));
-
-   str += tmp;
-
-   auto ins = std::make_shared<Instruction>();
-   ins->setName(tr("Pre-boil"));
-   ins->setDirections(str);
-   ins->addReagent(tmp);
-
-   this->add(ins);
-
-   return;
-}
-
-bool Recipe::hasBoilFermentable() {
-   int i;
-   for (i = 0; static_cast<int>(i) < fermentables().size(); ++i) {
-      Fermentable * ferm = fermentables()[i];
-      if (ferm->isMashed() || ferm->addAfterBoil()) {
-         continue;
-      } else {
-         return true;
-      }
-   }
-   return false;
-}
-
-bool Recipe::hasBoilExtract() {
-   int i;
-   for (i = 0; static_cast<int>(i) < fermentables().size(); ++i) {
-      Fermentable * ferm = fermentables()[i];
-      if (ferm->isExtract()) {
-         return true;
-      } else {
-         continue;
-      }
-   }
-   return false;
-}
-
-PreInstruction Recipe::boilFermentablesPre(double timeRemaining) {
-   QString str = tr("Boil or steep ");
-   QList<Fermentable *> flist = fermentables();
-   int size = flist.size();
-   for (int i = 0; static_cast<int>(i) < size; ++i) {
-      Fermentable * ferm = flist[i];
-      if (ferm->isMashed() || ferm->addAfterBoil() || ferm->isExtract()) {
-         continue;
-      }
-
-      str += QString("%1 %2, ")
-             .arg(Measurement::displayAmount(Measurement::Amount{ferm->amount_kg(), Measurement::Units::kilograms}))
-             .arg(ferm->name());
-   }
-   str += ".";
-
-   return PreInstruction(str, tr("Boil/steep fermentables"), timeRemaining);
-}
-
-bool Recipe::isFermentableSugar(Fermentable * fermy) {
-   if (fermy->type() == Fermentable::Type::Sugar && fermy->name() == "Milk Sugar (Lactose)") {
-      return false;
-   }
-
-   return true;
-}
-
-PreInstruction Recipe::addExtracts(double timeRemaining) const {
-   QString str = tr("Raise water to boil and then remove from heat. Stir in  ");
-   const QList<Fermentable *> flist = fermentables();
-   int size = flist.size();
-   for (int i = 0; static_cast<int>(i) < size; ++i) {
-      const Fermentable * ferm = flist[i];
-      if (ferm->isExtract()) {
-         str += QString("%1 %2, ")
-                .arg(Measurement::displayAmount(Measurement::Amount{ferm->amount_kg(), Measurement::Units::kilograms}))
-                .arg(ferm->name());
-      }
-   }
-   str += ".";
-
-   return PreInstruction(str, tr("Add Extracts to water"), timeRemaining);
-}
-
-void Recipe::postboilFermentablesIns() {
-   QString tmp;
-   bool hasFerms = false;
-
-   QString str = tr("Add ");
-   QList<Fermentable *> flist = this->fermentables();
-   int size = flist.size();
-   for (int ii = 0; ii < size; ++ii) {
-      Fermentable * ferm = flist[ii];
-      if (!ferm->addAfterBoil()) {
-         continue;
-      }
-
-      hasFerms = true;
-      tmp = QString("%1 %2, ")
-            .arg(Measurement::displayAmount(Measurement::Amount{ferm->amount_kg(), Measurement::Units::kilograms}))
-            .arg(ferm->name());
-      str += tmp;
-   }
-   str += tr("to the boil at knockout.");
-
-   if (!hasFerms) {
-      return;
-   }
-
-   auto ins = std::make_shared<Instruction>();
-   ins->setName(tr("Knockout additions"));
-   ins->setDirections(str);
-   ins->addReagent(tmp);
-
-   this->add(ins);
-
-   return;
-}
-
-void Recipe::postboilIns() {
-   Equipment * e = equipment();
-   if (e == nullptr) {
-      return;
-   }
-
-   double wortInBoil_l = wortFromMash_l() - e->lauterDeadspace_l();
-   if (e->topUpKettle_l() != 0.0) {
-      wortInBoil_l += e->topUpKettle_l();
-   }
-
-   double wort_l = e->wortEndOfBoil_l(wortInBoil_l);
-   QString str = tr("You should have %1 wort post-boil.")
-                 .arg(Measurement::displayAmount(Measurement::Amount{wort_l, Measurement::Units::liters}));
-   str += tr("\nYou anticipate losing %1 to trub and chiller loss.")
-          .arg(Measurement::displayAmount(Measurement::Amount{e->trubChillerLoss_l(), Measurement::Units::liters}));
-   wort_l -= e->trubChillerLoss_l();
-   if (e->topUpWater_l() > 0.0)
-      str += tr("\nAdd %1 top up water into primary.")
-             .arg(Measurement::displayAmount(Measurement::Amount{e->topUpWater_l(), Measurement::Units::liters}));
-   wort_l += e->topUpWater_l();
-   str += tr("\nThe final volume in the primary is %1.")
-          .arg(Measurement::displayAmount(Measurement::Amount{wort_l, Measurement::Units::liters}));
-
-   auto ins = std::make_shared<Instruction>();
-   ins->setName(tr("Post boil"));
-   ins->setDirections(str);
-   this->add(ins);
-
-   return;
-}
-
-void Recipe::addPreinstructions(QVector<PreInstruction> preins) {
-   // Add instructions in descending mash time order.
-   std::sort(preins.begin(), preins.end(), std::greater<PreInstruction>());
-   for (int ii = 0; ii < preins.size(); ++ii) {
-      PreInstruction pi = preins[ii];
-
-      auto ins = std::make_shared<Instruction>();
-      ins->setName(pi.getTitle());
-      ins->setDirections(pi.getText());
-      ins->setInterval(pi.getTime());
-
-      this->add(ins);
-   }
    return;
 }
 
@@ -1051,49 +1882,49 @@ void Recipe::generateInstructions() {
    int size = (mash() == nullptr) ? 0 : mash()->mashSteps().size();
    if (size > 0) {
       /*** prepare mashed fermentables ***/
-      this->mashFermentableIns();
+      this->pimpl->mashFermentableIns();
 
       /*** salt the water ***/
-      saltWater(Salt::WhenToAdd::MASH);
-      saltWater(Salt::WhenToAdd::SPARGE);
+      this->pimpl->saltWater(RecipeAdjustmentSalt::WhenToAdd::Mash);
+      this->pimpl->saltWater(RecipeAdjustmentSalt::WhenToAdd::Sparge);
 
       /*** Prepare water additions ***/
-      this->mashWaterIns();
+      this->pimpl->mashWaterIns();
 
       timeRemaining = mash()->totalTime();
 
       /*** Generate the mash instructions ***/
-      preinstructions = mashInstructions(timeRemaining, totalWaterAdded_l, size);
+      preinstructions = this->pimpl->mashInstructions(timeRemaining, totalWaterAdded_l, size);
 
       /*** Hops mash additions ***/
-      preinstructions += hopSteps(Hop::Use::Mash);
+      preinstructions += this->pimpl->hopSteps(RecipeAddition::Stage::Mash);
 
       /*** Misc mash additions ***/
-      preinstructions += miscSteps(Misc::Use::Mash);
+      preinstructions += this->pimpl->miscSteps(RecipeAdditionMisc::Use::Mash);
 
       /*** Add the preinstructions into the instructions ***/
-      addPreinstructions(preinstructions);
+      this->pimpl->addPreinstructions(preinstructions);
 
    } // END mash instructions.
 
    // First wort hopping
-   this->firstWortHopsIns();
+   this->pimpl->firstWortHopsIns();
 
    // Need to top up the kettle before boil?
-   topOffIns();
+   this->pimpl->topOffIns();
 
    // Boil instructions
    preinstructions.clear();
 
    // Find boil time.
    if (equipment() != nullptr) {
-      timeRemaining = equipment()->boilTime_min();
+      timeRemaining = equipment()->boilTime_min().value_or(Equipment::default_boilTime_mins);
    } else {
       timeRemaining =
          Measurement::qStringToSI(QInputDialog::getText(nullptr,
                                                         tr("Boil time"),
                                                         tr("You did not configure an equipment (which you really should), so tell me the boil time.")),
-                                  Measurement::PhysicalQuantity::Time).quantity();
+                                  Measurement::PhysicalQuantity::Time).quantity;
    }
 
    QString str = tr("Bring the wort to a boil and hold for %1.").arg(
@@ -1107,25 +1938,25 @@ void Recipe::generateInstructions() {
    this->add(startBoilIns);
 
    /*** Get fermentables unless we haven't added yet ***/
-   if (hasBoilFermentable()) {
-      preinstructions.push_back(boilFermentablesPre(timeRemaining));
+   if (this->pimpl->hasBoilFermentable()) {
+      preinstructions.push_back(this->pimpl->boilFermentablesPre(timeRemaining));
    }
 
    // add the intructions for including Extracts to wort
-   if (hasBoilExtract()) {
-      preinstructions.push_back(addExtracts(timeRemaining - 1));
+   if (this->pimpl->hasBoilExtract()) {
+      preinstructions.push_back(this->pimpl->addExtracts(timeRemaining - 1));
    }
 
    /*** Boiled hops ***/
-   preinstructions += hopSteps(Hop::Use::Boil);
+   preinstructions += this->pimpl->hopSteps(RecipeAddition::Stage::Boil);
 
    /*** Boiled miscs ***/
-   preinstructions += miscSteps(Misc::Use::Boil);
+   preinstructions += this->pimpl->miscSteps(RecipeAdditionMisc::Use::Boil);
 
    // END boil instructions.
 
    // Add instructions in descending mash time order.
-   addPreinstructions(preinstructions);
+   this->pimpl->addPreinstructions(preinstructions);
 
    // FLAMEOUT
    auto flameoutIns = std::make_shared<Instruction>();
@@ -1133,27 +1964,27 @@ void Recipe::generateInstructions() {
    flameoutIns->setDirections(tr("Stop boiling the wort."));
    this->add(flameoutIns);
 
+   // TODO: These get included in RecipeAddition::Stage::Boil above.  But we're going to want to rework this anyway to
+   //       order by stage, step, time.
    // Steeped aroma hops
-   preinstructions.clear();
-   preinstructions += hopSteps(Hop::Use::Aroma);
-   addPreinstructions(preinstructions);
+   // preinstructions = this->pimpl->hopSteps(Hop::Use::Aroma);
+   this->pimpl->addPreinstructions(preinstructions);
 
    // Fermentation instructions
    preinstructions.clear();
 
    /*** Fermentables added after boil ***/
-   postboilFermentablesIns();
+   this->pimpl->postboilFermentablesIns();
 
    /*** post boil ***/
-   postboilIns();
+   this->pimpl->postboilIns();
 
    /*** Primary yeast ***/
    str = tr("Cool wort and pitch ");
-   QList<Yeast *> ylist = yeasts();
-   for (int ii = 0; ii < ylist.size(); ++ii) {
-      Yeast * yeast = ylist[ii];
-      if (! yeast->addToSecondary()) {
-         str += tr("%1 %2 yeast, ").arg(yeast->name()).arg(yeast->typeStringTr());
+   for (auto yeastAddition : this->yeastAdditions()) {
+      if (1 == yeastAddition->step()) {
+         auto yeast = yeastAddition->yeast();
+         str += tr("%1 %2 yeast, ").arg(yeast->name()).arg(Yeast::typeDisplayNames[yeast->type()]);
       }
    }
    str += tr("to the primary.");
@@ -1165,7 +1996,7 @@ void Recipe::generateInstructions() {
    /*** End primary yeast ***/
 
    /*** Primary misc ***/
-   addPreinstructions(miscSteps(Misc::Use::Primary));
+   this->pimpl->addPreinstructions(this->pimpl->miscSteps(RecipeAdditionMisc::Use::Primary));
 
    str = tr("Let ferment until FG is %1.").arg(
       Measurement::displayAmount(Measurement::Amount{fg(), Measurement::Units::specificGravity}, 3)
@@ -1183,10 +2014,10 @@ void Recipe::generateInstructions() {
    this->add(transferIns);
 
    /*** Secondary misc ***/
-   addPreinstructions(miscSteps(Misc::Use::Secondary));
+   this->pimpl->addPreinstructions(this->pimpl->miscSteps(RecipeAdditionMisc::Use::Secondary));
 
    /*** Dry hopping ***/
-   addPreinstructions(hopSteps(Hop::Use::Dry_Hop));
+   this->pimpl->addPreinstructions(this->pimpl->hopSteps(RecipeAddition::Stage::Fermentation));
 
    // END fermentation instructions. Let everybody know that now is the time
    // to update instructions
@@ -1196,51 +2027,45 @@ void Recipe::generateInstructions() {
 }
 
 QString Recipe::nextAddToBoil(double & time) {
-   int i, size;
    double max = 0;
    bool foundSomething = false;
-   Hop * h;
-   QList<Hop *> hhops = hops();
-   Misc * m;
-   QList<Misc *> mmiscs = miscs();
    QString ret;
 
-   // Search hops
-   size = hhops.size();
-   for (i = 0; i < size; ++i) {
-      h = hhops[i];
-      if (h->use() != Hop::Use::Boil) {
+   // Search hop additions
+   for (auto hopAddition : this->hopAdditions()) {
+      if (hopAddition->stage() != RecipeAddition::Stage::Boil) {
          continue;
       }
-      if (h->time_min() < time && h->time_min() > max) {
+      if (!hopAddition->addAtTime_mins()) {
+         continue;
+      }
+      double const addAtTime_mins = *hopAddition->addAtTime_mins();
+      if (addAtTime_mins < time && addAtTime_mins > max) {
          ret = tr("Add %1 %2 to boil at %3.")
-               .arg(Measurement::displayAmount(Measurement::Amount{h->amount_kg(), Measurement::Units::kilograms}))
-               .arg(h->name())
-               .arg(Measurement::displayAmount(Measurement::Amount{h->time_min(), Measurement::Units::minutes}));
+               .arg(Measurement::displayAmount(hopAddition->amount()))
+               .arg(hopAddition->hop()->name())
+               .arg(Measurement::displayAmount(Measurement::Amount{addAtTime_mins, Measurement::Units::minutes}));
 
-         max = h->time_min();
+         max = addAtTime_mins;
          foundSomething = true;
       }
    }
 
-   // Search miscs
-   size = mmiscs.size();
-   for (i = 0; i < size; ++i) {
-      m = mmiscs[i];
-      if (m->use() != Misc::Use::Boil) {
+   // Search misc additions
+   for (auto miscAddition : this->miscAdditions()) {
+      if (miscAddition->stage() != RecipeAddition::Stage::Boil) {
          continue;
       }
-      if (m->time() < time && m->time() > max) {
+      if (!miscAddition->addAtTime_mins()) {
+         continue;
+      }
+      double const addAtTime_mins = *miscAddition->addAtTime_mins();
+      if (addAtTime_mins < time && addAtTime_mins > max) {
          ret = tr("Add %1 %2 to boil at %3.");
-         if (m->amountIsWeight()) {
-            ret = ret.arg(Measurement::displayAmount(Measurement::Amount{m->amount(), Measurement::Units::kilograms}));
-         } else {
-            ret = ret.arg(Measurement::displayAmount(Measurement::Amount{m->amount(), Measurement::Units::liters}));
-         }
-
-         ret = ret.arg(m->name());
-         ret = ret.arg(Measurement::displayAmount(Measurement::Amount{m->time(), Measurement::Units::minutes}));
-         max = m->time();
+         ret = ret.arg(Measurement::displayAmount(miscAddition->amount()));
+         ret = ret.arg(miscAddition->misc()->name());
+         ret = ret.arg(Measurement::displayAmount(Measurement::Amount{addAtTime_mins, Measurement::Units::minutes}));
+         max = addAtTime_mins;
          foundSomething = true;
       }
    }
@@ -1274,7 +2099,7 @@ template<class NE> std::shared_ptr<NE> Recipe::add(std::shared_ptr<NE> ne) {
 
    this->pimpl->accessIds<NE>().append(ne->key());
    connect(ne.get(), &NamedEntity::changed, this, &Recipe::acceptChangeToContainedObject);
-   this->propagatePropertyChange(propertyToPropertyName<NE>());
+   this->propagatePropertyChange(Recipe::propertyNameFor<NE>());
 
    this->recalcIfNeeded(ne->metaObject()->className());
    return ne;
@@ -1285,25 +2110,54 @@ template<class NE> std::shared_ptr<NE> Recipe::add(std::shared_ptr<NE> ne) {
 // (This is all just a trick to allow the template definition to be here in the .cpp file and not in the header, which
 // means, amongst other things, that we can reference the pimpl.)
 //
-template std::shared_ptr<Hop        > Recipe::add(std::shared_ptr<Hop        > var);
-template std::shared_ptr<Fermentable> Recipe::add(std::shared_ptr<Fermentable> var);
-template std::shared_ptr<Misc       > Recipe::add(std::shared_ptr<Misc       > var);
-template std::shared_ptr<Yeast      > Recipe::add(std::shared_ptr<Yeast      > var);
-template std::shared_ptr<Water      > Recipe::add(std::shared_ptr<Water      > var);
-template std::shared_ptr<Salt       > Recipe::add(std::shared_ptr<Salt       > var);
 template std::shared_ptr<Instruction> Recipe::add(std::shared_ptr<Instruction> var);
+template<> std::shared_ptr<Fermentable> Recipe::add(std::shared_ptr<Fermentable> var) = delete;
+template<> std::shared_ptr<Hop        > Recipe::add(std::shared_ptr<Hop        > var) = delete;
+template<> std::shared_ptr<Misc       > Recipe::add(std::shared_ptr<Misc       > var) = delete;
+template<> std::shared_ptr<Yeast      > Recipe::add(std::shared_ptr<Yeast      > var) = delete;
+template<> std::shared_ptr<Salt       > Recipe::add(std::shared_ptr<Salt       > var) = delete;
+template<> std::shared_ptr<Water      > Recipe::add(std::shared_ptr<Water      > var) = delete;
 
-template<class NE> bool Recipe::uses(NE const & var) const {
-   int idToLookFor = var.key();
+template<class RA> std::shared_ptr<RA> Recipe::addAddition(std::shared_ptr<RA> addition) {
+   // It's a coding error if we've ended up with a null shared_ptr
+   Q_ASSERT(addition);
+
+   // Tell the addition that it belongs to this recipe
+   addition->setRecipeId(this->key());
+
+   // Recipe additions are owned by the Recipe, so, if the object being added is not already in the ObjectStore, we need
+   // to add it.
+   if (addition->key() <= 0) {
+      // With shared pointer parameter, ObjectStoreWrapper::insert returns what we passed it (ie our shared pointer
+      // remains valid after the call).
+      qDebug() <<
+         Q_FUNC_INFO << "Inserting" << addition->metaObject()->className() << "for" <<
+         addition->ingredient()->metaObject()->className() << "#" << addition->ingredient()->key() << "in object store";
+      ObjectStoreWrapper::insert(addition);
+   }
+
+   connect(addition->ingredient().get(), &NamedEntity::changed, this, &Recipe::acceptChangeToContainedObject);
+   this->propagatePropertyChange(Recipe::propertyNameFor<RA>());
+
+   this->recalcIfNeeded(addition->ingredient()->metaObject()->className());
+   return addition;
+}
+template std::shared_ptr<RecipeAdditionFermentable> Recipe::addAddition(std::shared_ptr<RecipeAdditionFermentable> addition);
+template std::shared_ptr<RecipeAdditionHop        > Recipe::addAddition(std::shared_ptr<RecipeAdditionHop        > addition);
+template std::shared_ptr<RecipeAdditionMisc       > Recipe::addAddition(std::shared_ptr<RecipeAdditionMisc       > addition);
+template std::shared_ptr<RecipeAdditionYeast      > Recipe::addAddition(std::shared_ptr<RecipeAdditionYeast      > addition);
+template std::shared_ptr<RecipeAdjustmentSalt     > Recipe::addAddition(std::shared_ptr<RecipeAdjustmentSalt     > addition);
+template std::shared_ptr<RecipeUseOfWater         > Recipe::addAddition(std::shared_ptr<RecipeUseOfWater         > addition);
+
+template<class NE> bool Recipe::uses(NE const & val) const {
+   int idToLookFor = val.key();
    if (idToLookFor <= 0) {
       //
-      // We shouldn't be trying to look for a Fermentable/Hop/etc that hasn't even been stored (and therefore does not
-      // yet have an ID).  The most likely reason for this happening would be a coding error that results in a copy of
-      // a Fermentable/Hop/etc being taken and passed in as the parameter to this function (because copies do not take
-      // the ID of the thing from which they were copied).
+      // We shouldn't be trying to look for something that hasn't even been stored (and therefore does not yet have an
+      // ID).
       //
       qCritical() <<
-         Q_FUNC_INFO << "Trying to search for use of" << var.metaObject()->className() << "that is not stored!";
+         Q_FUNC_INFO << "Trying to search for use of" << val.metaObject()->className() << "that is not stored!";
       return false;
    }
 
@@ -1315,22 +2169,24 @@ template<class NE> bool Recipe::uses(NE const & var) const {
 
    return match != this->pimpl->accessIds<NE>().cend();
 }
-template bool Recipe::uses(Fermentable  const & var) const;
-template bool Recipe::uses(Hop          const & var) const;
-template bool Recipe::uses(Instruction  const & var) const;
-template bool Recipe::uses(Misc         const & var) const;
-template bool Recipe::uses(Salt         const & var) const;
-template bool Recipe::uses(Water        const & var) const;
-template bool Recipe::uses(Yeast        const & var) const;
-template<> bool Recipe::uses<Equipment> (Equipment  const & var) const {
-   return var.key() == this->equipmentId;
-}
-template<> bool Recipe::uses<Mash> (Mash const & var) const {
-   return var.key() == this->mashId;
-}
-template<> bool Recipe::uses<Style> (Style const & var) const {
-   return var.key() == this->styleId;
-}
+template bool Recipe::uses(Instruction  const & val) const;
+template<> bool Recipe::uses(Fermentable  const & val) const = delete;
+template<> bool Recipe::uses(Misc         const & val) const = delete;
+template<> bool Recipe::uses(Salt         const & val) const = delete;
+template<> bool Recipe::uses(Water        const & val) const = delete;
+template<> bool Recipe::uses(Yeast        const & val) const = delete;
+template<> bool Recipe::uses<Equipment   > (Equipment    const & val) const { return val.key() == this->m_equipmentId   ; }
+template<> bool Recipe::uses<Style       > (Style        const & val) const { return val.key() == this->m_styleId       ; }
+template<> bool Recipe::uses<Mash        > (Mash         const & val) const { return val.key() == this->m_mashId        ; }
+// ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
+template<> bool Recipe::uses<Boil        > (Boil         const & val) const { return val.key() == this->m_boilId        ; }
+template<> bool Recipe::uses<Fermentation> (Fermentation const & val) const { return val.key() == this->m_fermentationId; }
+template<> bool Recipe::uses<RecipeAdditionFermentable>(RecipeAdditionFermentable const & val) const { return val.recipeId() == this->key(); }
+template<> bool Recipe::uses<RecipeAdditionHop        >(RecipeAdditionHop         const & val) const { return val.recipeId() == this->key(); }
+template<> bool Recipe::uses<RecipeAdditionMisc       >(RecipeAdditionMisc        const & val) const { return val.recipeId() == this->key(); }
+template<> bool Recipe::uses<RecipeAdditionYeast      >(RecipeAdditionYeast       const & val) const { return val.recipeId() == this->key(); }
+template<> bool Recipe::uses<RecipeAdjustmentSalt     >(RecipeAdjustmentSalt      const & val) const { return val.recipeId() == this->key(); }
+template<> bool Recipe::uses<RecipeUseOfWater         >(RecipeUseOfWater          const & val) const { return val.recipeId() == this->key(); }
 
 template<class NE> std::shared_ptr<NE> Recipe::remove(std::shared_ptr<NE> var) {
    // It's a coding error to supply a null shared pointer
@@ -1344,8 +2200,8 @@ template<class NE> std::shared_ptr<NE> Recipe::remove(std::shared_ptr<NE> var) {
          "but couldn't find it in Recipe #" << this->key();
       Q_ASSERT(false);
    } else {
-      this->propagatePropertyChange(propertyToPropertyName<NE>());
-      this->recalcIBU(); // .:TODO:. Don't need to do this recalculation when it's Instruction
+      this->propagatePropertyChange(Recipe::propertyNameFor<NE>());
+      this->pimpl->recalcIBU(); // .:TODO:. Don't need to do this recalculation when it's Instruction
    }
 
    //
@@ -1364,13 +2220,39 @@ template<class NE> std::shared_ptr<NE> Recipe::remove(std::shared_ptr<NE> var) {
    // remove).
    return var;
 }
-template std::shared_ptr<Hop        > Recipe::remove(std::shared_ptr<Hop        > var);
-template std::shared_ptr<Fermentable> Recipe::remove(std::shared_ptr<Fermentable> var);
-template std::shared_ptr<Misc       > Recipe::remove(std::shared_ptr<Misc       > var);
-template std::shared_ptr<Yeast      > Recipe::remove(std::shared_ptr<Yeast      > var);
-template std::shared_ptr<Water      > Recipe::remove(std::shared_ptr<Water      > var);
-template std::shared_ptr<Salt       > Recipe::remove(std::shared_ptr<Salt       > var);
 template std::shared_ptr<Instruction> Recipe::remove(std::shared_ptr<Instruction> var);
+
+template<class RA> std::shared_ptr<RA> Recipe::removeAddition(std::shared_ptr<RA> addition) {
+   // It's a coding error to supply a null shared pointer
+   Q_ASSERT(addition);
+
+   // It's a coding error if we try to remove something from the Recipe that wasn't in it in the first place!
+   Q_ASSERT(addition->recipeId() == this->key());
+
+   addition->setRecipeId(-1);
+
+   disconnect(addition->ingredient().get(), &NamedEntity::changed, this, &Recipe::acceptChangeToContainedObject);
+   this->propagatePropertyChange(Recipe::propertyNameFor<RA>());
+
+   this->recalcIfNeeded(addition->ingredient()->metaObject()->className());
+
+   //
+   // Because RecipeAdditionHop etc objects are owned by their Recipe, we need to delete the object from the ObjectStore
+   // at this point.
+   //
+   qDebug() << Q_FUNC_INFO << "Deleting" << addition->metaObject()->className() << "#" << addition->key();
+   ObjectStoreWrapper::hardDelete<RA>(addition->key());
+
+   // The caller now owns the removed object unless and until they pass it in to Recipe::add() (typically to undo the
+   // remove).
+   return addition;
+}
+template std::shared_ptr<RecipeAdditionFermentable> Recipe::removeAddition(std::shared_ptr<RecipeAdditionFermentable> addition);
+template std::shared_ptr<RecipeAdditionHop        > Recipe::removeAddition(std::shared_ptr<RecipeAdditionHop        > addition);
+template std::shared_ptr<RecipeAdditionMisc       > Recipe::removeAddition(std::shared_ptr<RecipeAdditionMisc       > addition);
+template std::shared_ptr<RecipeAdditionYeast      > Recipe::removeAddition(std::shared_ptr<RecipeAdditionYeast      > addition);
+template std::shared_ptr<RecipeAdjustmentSalt     > Recipe::removeAddition(std::shared_ptr<RecipeAdjustmentSalt     > addition);
+template std::shared_ptr<RecipeUseOfWater         > Recipe::removeAddition(std::shared_ptr<RecipeUseOfWater         > addition);
 
 int Recipe::instructionNumber(Instruction const & ins) const {
    // C++ arrays etc are indexed from 0, but for end users we want instruction numbers to start from 1
@@ -1403,7 +2285,7 @@ void Recipe::clearInstructions() {
       ObjectStoreTyped<Instruction>::getInstance().softDelete(ii);
    }
    this->pimpl->instructionIds.clear();
-   this->propagatePropertyChange(propertyToPropertyName<Instruction>());
+   this->propagatePropertyChange(Recipe::propertyNameFor<Instruction>());
    return;
 }
 
@@ -1423,123 +2305,59 @@ void Recipe::insertInstruction(Instruction const & ins, int pos) {
       Q_FUNC_INFO << "Inserting instruction #" << ins.key() << "(" << ins.name() << ") at position" << pos <<
       "in list of" << this->pimpl->instructionIds.size();
    this->pimpl->instructionIds.insert(pos - 1, ins.key());
-   this->propagatePropertyChange(propertyToPropertyName<Instruction>());
+   this->propagatePropertyChange(Recipe::propertyNameFor<Instruction>());
    return;
 }
 
-void Recipe::setStyle(Style * var) {
-   if (var->key() == this->styleId) {
-      return;
+// .:TBD:. We need to think about when/how we're going to detect changes to the Boil object referred to by this->m_boilId...
+
+void Recipe::setMash        (std::shared_ptr<Mash        > val) { this->pimpl->set<Mash        >(val, this->m_mashId        ); return; }
+void Recipe::setBoil        (std::shared_ptr<Boil        > val) { this->pimpl->set<Boil        >(val, this->m_boilId        ); return; }
+void Recipe::setFermentation(std::shared_ptr<Fermentation> val) { this->pimpl->set<Fermentation>(val, this->m_fermentationId); return; }
+void Recipe::setStyle       (std::shared_ptr<Style       > val) { this->pimpl->set<Style       >(val, this->m_styleId       ); return; }
+void Recipe::setEquipment   (std::shared_ptr<Equipment   > val) { this->pimpl->set<Equipment   >(val, this->m_equipmentId   ); return; }
+
+template<typename RA> void Recipe::setAdditions(QList<std::shared_ptr<RA>> val) {
+//   qDebug() << Q_FUNC_INFO << "Adding" << val.size() << RA::staticMetaObject.className() << "entries";
+   for (auto ii : val) {
+//      qDebug() << Q_FUNC_INFO << "Setting Recipe ID #" << this->key() << "on" << RA::staticMetaObject.className() << "#" << ii->key();
+      ii->setRecipeId(this->key());
    }
-
-   std::shared_ptr<Style> styleToAdd = copyIfNeeded(*var);
-   this->styleId = styleToAdd->key();
-   this->propagatePropertyChange(propertyToPropertyName<Style>());
    return;
 }
 
-void Recipe::setEquipment(Equipment * var) {
-   if (var->key() == this->equipmentId) {
-      return;
-   }
+void Recipe::setFermentableAdditions(QList<std::shared_ptr<RecipeAdditionFermentable>> val) { this->setAdditions(val); return; }
+void Recipe::setHopAdditions        (QList<std::shared_ptr<RecipeAdditionHop        >> val) { this->setAdditions(val); return; }
+void Recipe::setMiscAdditions       (QList<std::shared_ptr<RecipeAdditionMisc       >> val) { this->setAdditions(val); return; }
+void Recipe::setYeastAdditions      (QList<std::shared_ptr<RecipeAdditionYeast      >> val) { this->setAdditions(val); return; }
+void Recipe::setSaltAdjustments     (QList<std::shared_ptr<RecipeAdjustmentSalt     >> val) { this->setAdditions(val); return; }
+void Recipe::setWaterUses           (QList<std::shared_ptr<RecipeUseOfWater         >> val) { this->setAdditions(val); return; }
 
-   std::shared_ptr<Equipment> equipmentToAdd = copyIfNeeded(*var);
-   this->equipmentId = equipmentToAdd->key();
-   this->propagatePropertyChange(propertyToPropertyName<Equipment>());
-   return;
-}
+// Note that, because these setBlahId member functions are supposed only to be used by by ObjectStore, and are not
+// intended for more general use, they do not call setAndNofify
+void Recipe::setStyleId       (int const id) { this->m_styleId        = id; return; }
+void Recipe::setEquipmentId   (int const id) { this->m_equipmentId    = id; return; }
+void Recipe::setMashId        (int const id) { this->m_mashId         = id; return; }
+void Recipe::setBoilId        (int const id) { this->m_boilId         = id; return; }
+void Recipe::setFermentationId(int const id) { this->m_fermentationId = id; return; }
 
-void Recipe::setMash(std::shared_ptr<Mash> mash) {
-   // In the long run we'll keep this setter and retire the raw pointer version.  For now though, they pretty much
-   // share the same implementation.
-   this->setMash(mash.get());
-   return;
-}
-
-void Recipe::setMash(Mash * var) {
-   if (var->key() == this->mashId) {
-      return;
-   }
-
-   // .:TBD:. Do we need to disconnect the old Mash?
-
-   std::shared_ptr<Mash> mashToAdd = copyIfNeeded(*var);
-   this->mashId = mashToAdd->key();
-   this->propagatePropertyChange(propertyToPropertyName<Mash>());
-
-   connect(mashToAdd.get(), &NamedEntity::changed, this, &Recipe::acceptChangeToContainedObject);
-   emit this->changed(this->metaProperty(*PropertyNames::Recipe::mash), QVariant::fromValue<Mash *>(mashToAdd.get()));
-
-   this->recalcAll();
-
-   return;
-}
-
-void Recipe::setStyleId(int id) {
-   this->styleId = id;
-}
-
-void Recipe::setEquipmentId(int id) {
-   this->equipmentId = id;
-}
-
-void Recipe::setMashId(int id) {
-   this->mashId = id;
-   return;
-}
-
-void Recipe::setFermentableIds(QVector<int> fermentableIds) {
-   this->pimpl->fermentableIds = fermentableIds;
-   return;
-}
-
-void Recipe::setHopIds(QVector<int> hopIds) {
-   this->pimpl->hopIds = hopIds;
-   return;
-}
-
-void Recipe::setInstructionIds(QVector<int> instructionIds) {
-   this->pimpl->instructionIds = instructionIds;
-   return;
-}
-
-void Recipe::setMiscIds(QVector<int> miscIds) {
-   this->pimpl->miscIds = miscIds;
-   return;
-}
-
-void Recipe::setSaltIds(QVector<int> saltIds) {
-   this->pimpl->saltIds = saltIds;
-   return;
-}
-
-void Recipe::setWaterIds(QVector<int> waterIds) {
-   this->pimpl->waterIds = waterIds;
-   return;
-}
-
-void Recipe::setYeastIds(QVector<int> yeastIds) {
-   this->pimpl->yeastIds = yeastIds;
-   return;
-}
-
+void Recipe::setInstructionIds(QVector<int> ids) {    this->pimpl->instructionIds = ids; return; }
 
 //==============================="SET" METHODS=================================
 void Recipe::setType(Recipe::Type const val) {
-   this->setAndNotify(PropertyNames::Recipe::type, this->m_type, val);
+   SET_AND_NOTIFY(PropertyNames::Recipe::type, this->m_type, val);
    return;
 }
 
 void Recipe::setBrewer(QString const & var) {
-   this->setAndNotify(PropertyNames::Recipe::brewer, this->m_brewer, var);
+   SET_AND_NOTIFY(PropertyNames::Recipe::brewer, this->m_brewer, var);
    return;
 }
 
 void Recipe::setBatchSize_l(double var) {
-   this->setAndNotify(
-                                   PropertyNames::Recipe::batchSize_l,
-                                   this->m_batchSize_l,
-                                   this->enforceMin(var, "batch size"));
+   SET_AND_NOTIFY(PropertyNames::Recipe::batchSize_l,
+                      this->m_batchSize_l,
+                      this->enforceMin(var, "batch size"));
 
    // NOTE: this is bad, but we have to call recalcAll(), because the estimated
    // boil/batch volumes depend on the target volumes when there are no mash
@@ -1547,32 +2365,10 @@ void Recipe::setBatchSize_l(double var) {
    recalcAll();
 }
 
-void Recipe::setBoilSize_l(double var) {
-   this->setAndNotify(
-                                   PropertyNames::Recipe::boilSize_l,
-                                   this->m_boilSize_l,
-                                   this->enforceMin(var, "boil size"));
-
-   // NOTE: this is bad, but we have to call recalcAll(), because the estimated
-   // boil/batch volumes depend on the target volumes when there are no mash
-   // steps to actually provide an estimate for the volumes.
-   recalcAll();
-   return;
-}
-
-void Recipe::setBoilTime_min(double var) {
-   this->setAndNotify(
-                                   PropertyNames::Recipe::boilTime_min,
-                                   this->m_boilTime_min,
-                                   this->enforceMin(var, "boil time"));
-   return;
-}
-
-void Recipe::setEfficiency_pct(double var) {
-   this->setAndNotify(
-                                   PropertyNames::Recipe::efficiency_pct,
-                                   this->m_efficiency_pct,
-                                   this->enforceMinAndMax(var, "efficiency", 0.0, 100.0, 70.0));
+void Recipe::setEfficiency_pct(double val) {
+   SET_AND_NOTIFY(PropertyNames::Recipe::efficiency_pct,
+                      this->m_efficiency_pct,
+                      this->enforceMinAndMax(val, "efficiency", 0.0, 100.0, 70.0));
 
    // If you change the efficency, you really should recalc. And I'm afraid it
    // means recalc all, since og and fg will change, which means your ratios
@@ -1580,119 +2376,85 @@ void Recipe::setEfficiency_pct(double var) {
    recalcAll();
 }
 
-void Recipe::setAsstBrewer(const QString & var) {
-   this->setAndNotify(
-                                   PropertyNames::Recipe::asstBrewer,
-                                   this->m_asstBrewer,
-                                   var);
+void Recipe::setAsstBrewer(const QString & val) {
+   SET_AND_NOTIFY(PropertyNames::Recipe::asstBrewer,
+                      this->m_asstBrewer,
+                      val);
    return;
 }
 
-void Recipe::setNotes(const QString & var) {
-   this->setAndNotify(PropertyNames::Recipe::notes, this->m_notes, var);
+void Recipe::setNotes(const QString & val) {
+   SET_AND_NOTIFY(PropertyNames::Recipe::notes, this->m_notes, val);
    return;
 }
 
-void Recipe::setTasteNotes(const QString & var) {
-   this->setAndNotify(PropertyNames::Recipe::tasteNotes, this->m_tasteNotes, var);
+void Recipe::setTasteNotes(const QString & val) {
+   SET_AND_NOTIFY(PropertyNames::Recipe::tasteNotes, this->m_tasteNotes, val);
    return;
 }
 
-void Recipe::setTasteRating(double var) {
-   this->setAndNotify(PropertyNames::Recipe::tasteRating, this->m_tasteRating, this->enforceMinAndMax(var, "taste rating", 0.0, 50.0, 0.0));
+void Recipe::setTasteRating(double val) {
+   SET_AND_NOTIFY(PropertyNames::Recipe::tasteRating, this->m_tasteRating, this->enforceMinAndMax(val, "taste rating", 0.0, 50.0, 0.0));
    return;
 }
 
-void Recipe::setOg(double var) {
-   this->setAndNotify(PropertyNames::Recipe::og, this->m_og, this->enforceMin(var, "og", 0.0, 1.0));
+void Recipe::setOg(double val) {
+   SET_AND_NOTIFY(PropertyNames::Recipe::og, this->m_og, this->enforceMin(val, "og", 0.0, 1.0));
    return;
 }
 
-void Recipe::setFg(double var) {
-   this->setAndNotify(PropertyNames::Recipe::fg, this->m_fg, this->enforceMin(var, "fg", 0.0, 1.0));
+void Recipe::setFg(double val) {
+   SET_AND_NOTIFY(PropertyNames::Recipe::fg, this->m_fg, this->enforceMin(val, "fg", 0.0, 1.0));
    return;
 }
 
-void Recipe::setFermentationStages(int var) {
-   this->setAndNotify(PropertyNames::Recipe::fermentationStages, this->m_fermentationStages,
-                                   this->enforceMin(var, "stages"));
+void Recipe::setAge_days(double val) {
+   SET_AND_NOTIFY(PropertyNames::Recipe::age_days, this->m_age, this->enforceMin(val, "age"));
    return;
 }
 
-void Recipe::setPrimaryAge_days(double var) {
-   this->setAndNotify(PropertyNames::Recipe::primaryAge_days, this->m_primaryAge_days, this->enforceMin(var, "primary age"));
+void Recipe::setAgeTemp_c(double val) {
+   SET_AND_NOTIFY(PropertyNames::Recipe::ageTemp_c, this->m_ageTemp_c, val);
    return;
 }
 
-void Recipe::setPrimaryTemp_c(double var) {
-   this->setAndNotify(PropertyNames::Recipe::primaryTemp_c, this->m_primaryTemp_c, var);
+void Recipe::setDate(std::optional<QDate> const val) {
+   SET_AND_NOTIFY(PropertyNames::Recipe::date, this->m_date, val);
    return;
 }
 
-void Recipe::setSecondaryAge_days(double var) {
-   this->setAndNotify(PropertyNames::Recipe::secondaryAge_days, this->m_secondaryAge_days, this->enforceMin(var, "secondary age"));
+void Recipe::setCarbonation_vols(std::optional<double> const val) {
+   SET_AND_NOTIFY(PropertyNames::Recipe::carbonation_vols, this->m_carbonation_vols, this->enforceMin(val, "carb"));
    return;
 }
 
-void Recipe::setSecondaryTemp_c(double var) {
-   this->setAndNotify(PropertyNames::Recipe::secondaryTemp_c, this->m_secondaryTemp_c, var);
+void Recipe::setForcedCarbonation(bool val) {
+   SET_AND_NOTIFY(PropertyNames::Recipe::forcedCarbonation, this->m_forcedCarbonation, val);
    return;
 }
 
-void Recipe::setTertiaryAge_days(double var) {
-   this->setAndNotify(PropertyNames::Recipe::tertiaryAge_days, this->m_tertiaryAge_days, this->enforceMin(var, "tertiary age"));
+void Recipe::setPrimingSugarName(const QString & val) {
+   SET_AND_NOTIFY(PropertyNames::Recipe::primingSugarName, this->m_primingSugarName, val);
    return;
 }
 
-void Recipe::setTertiaryTemp_c(double var) {
-   this->setAndNotify(PropertyNames::Recipe::tertiaryTemp_c, this->m_tertiaryTemp_c, var);
+void Recipe::setCarbonationTemp_c(double val) {
+   SET_AND_NOTIFY(PropertyNames::Recipe::carbonationTemp_c, this->m_carbonationTemp_c, val);
    return;
 }
 
-void Recipe::setAge_days(double var) {
-   this->setAndNotify(PropertyNames::Recipe::age_days, this->m_age, this->enforceMin(var, "age"));
+void Recipe::setPrimingSugarEquiv(double val) {
+   SET_AND_NOTIFY(PropertyNames::Recipe::primingSugarEquiv, this->m_primingSugarEquiv, this->enforceMin(val, "priming sugar equiv", 0.0, 1.0));
    return;
 }
 
-void Recipe::setAgeTemp_c(double var) {
-   this->setAndNotify(PropertyNames::Recipe::ageTemp_c, this->m_ageTemp_c, var);
+void Recipe::setKegPrimingFactor(double val) {
+   SET_AND_NOTIFY(PropertyNames::Recipe::kegPrimingFactor, this->m_kegPrimingFactor, this->enforceMin(val, "keg priming factor", 0.0, 1.0));
    return;
 }
 
-void Recipe::setDate(const QDate & var) {
-   this->setAndNotify(PropertyNames::Recipe::date, this->m_date, var);
-   return;
-}
-
-void Recipe::setCarbonation_vols(double var) {
-   this->setAndNotify(PropertyNames::Recipe::carbonation_vols, this->m_carbonation_vols, this->enforceMin(var, "carb"));
-   return;
-}
-
-void Recipe::setForcedCarbonation(bool var) {
-   this->setAndNotify(PropertyNames::Recipe::forcedCarbonation, this->m_forcedCarbonation, var);
-   return;
-}
-
-void Recipe::setPrimingSugarName(const QString & var) {
-   this->setAndNotify(PropertyNames::Recipe::primingSugarName, this->m_primingSugarName, var);
-   return;
-}
-
-void Recipe::setCarbonationTemp_c(double var) {
-   this->setAndNotify(PropertyNames::Recipe::carbonationTemp_c, this->m_carbonationTemp_c, var);
-   return;
-}
-
-void Recipe::setPrimingSugarEquiv(double var) {
-   this->setAndNotify(PropertyNames::Recipe::primingSugarEquiv, this->m_primingSugarEquiv, this->enforceMin(var, "priming sugar equiv", 0.0, 1.0));
-   return;
-}
-
-void Recipe::setKegPrimingFactor(double var) {
-   this->setAndNotify(PropertyNames::Recipe::kegPrimingFactor, this->m_kegPrimingFactor, this->enforceMin(var, "keg priming factor", 0.0, 1.0));
-   return;
-}
+void Recipe::setBeerAcidity_pH         (std::optional<double> const val) { SET_AND_NOTIFY(PropertyNames::Recipe::beerAcidity_pH         , this->m_beerAcidity_pH         , val); return; }
+void Recipe::setApparentAttenuation_pct(std::optional<double> const val) { SET_AND_NOTIFY(PropertyNames::Recipe::apparentAttenuation_pct, this->m_apparentAttenuation_pct, val); return; }
 
 void Recipe::setLocked(bool isLocked) {
    // Locking a Recipe doesn't count as changing it for the purposes of versioning or the UI, so no call to setAndNotify
@@ -1819,147 +2581,65 @@ Recipe * Recipe::revertToPreviousVersion() {
 
 //==========================Calculated Getters============================
 
-double Recipe::og() {
-   if (m_uninitializedCalcs) {
-      recalcAll();
-   }
-   return m_og;
+double        Recipe::og              () { return this->pimpl->getCalculated(this->m_og); }
+double        Recipe::fg              () { return this->pimpl->getCalculated(this->m_fg); }
+double        Recipe::color_srm       () { return this->pimpl->getCalculated(this->pimpl->m_color_srm       ); }
+double        Recipe::ABV_pct         () { return this->pimpl->getCalculated(this->pimpl->m_ABV_pct         ); }
+double        Recipe::IBU             () { return this->pimpl->getCalculated(this->pimpl->m_IBU             ); }
+QList<double> Recipe::IBUs            () { return this->pimpl->getCalculated(this->pimpl->m_ibus            ); }
+double        Recipe::boilGrav        () { return this->pimpl->getCalculated(this->pimpl->m_boilGrav        ); }
+double        Recipe::caloriesPerLiter() { return this->pimpl->getCalculated(this->pimpl->m_caloriesPerLiter); }
+double        Recipe::caloriesPer33cl  () { return this->caloriesPerLiter() * 0.33          ; }
+double        Recipe::caloriesPerUs12oz() {
+   static double const us12ozInLiters = Measurement::Units::us_fluidOunces.toCanonical(12.0).quantity;
+   return this->caloriesPerLiter() * us12ozInLiters;
 }
-
-double Recipe::fg() {
-   if (m_uninitializedCalcs) {
-      recalcAll();
-   }
-   return m_fg;
+double        Recipe::caloriesPerUsPint() {
+   static double const usPintInLiters = Measurement::Units::us_fluidOunces.toCanonical(16.0).quantity;
+   return this->caloriesPerLiter() * usPintInLiters;
 }
-
-double Recipe::color_srm() {
-   if (m_uninitializedCalcs) {
-      recalcAll();
-   }
-   return m_color_srm;
-}
-
-double Recipe::ABV_pct() {
-   if (m_uninitializedCalcs) {
-      recalcAll();
-   }
-   return m_ABV_pct;
-}
-
-double Recipe::IBU() {
-   if (m_uninitializedCalcs) {
-      recalcAll();
-   }
-   return m_IBU;
-}
-
-QList<double> Recipe::IBUs() {
-   if (m_uninitializedCalcs) {
-      recalcAll();
-   }
-   return m_ibus;
-}
-
-double Recipe::boilGrav() {
-   if (m_uninitializedCalcs) {
-      recalcAll();
-   }
-   return m_boilGrav;
-}
-
-double Recipe::calories12oz() {
-   if (m_uninitializedCalcs) {
-      recalcAll();
-   }
-   return m_calories;
-}
-
-double Recipe::calories33cl() {
-   if (m_uninitializedCalcs) {
-      recalcAll();
-   }
-   return m_calories * 3.3 / 3.55;
-}
-
-double Recipe::wortFromMash_l() {
-   if (m_uninitializedCalcs) {
-      recalcAll();
-   }
-   return m_wortFromMash_l;
-}
-
-double Recipe::boilVolume_l() {
-   if (m_uninitializedCalcs) {
-      recalcAll();
-   }
-   return m_boilVolume_l;
-}
-
-double Recipe::postBoilVolume_l() {
-   if (m_uninitializedCalcs) {
-      recalcAll();
-   }
-   return m_postBoilVolume_l;
-}
-
-double Recipe::finalVolume_l() {
-   if (m_uninitializedCalcs) {
-      recalcAll();
-   }
-   return m_finalVolume_l;
-}
-
-QColor Recipe::SRMColor() {
-   if (m_uninitializedCalcs) {
-      recalcAll();
-   }
-   return m_SRMColor;
-}
-
-double Recipe::grainsInMash_kg() {
-   if (m_uninitializedCalcs) {
-      recalcAll();
-   }
-   return m_grainsInMash_kg;
-}
-
-double Recipe::grains_kg() {
-   if (m_uninitializedCalcs) {
-      recalcAll();
-   }
-   return m_grains_kg;
-}
+double        Recipe::wortFromMash_l  () { return this->pimpl->getCalculated(this->pimpl->m_wortFromMash_l  );}
+double        Recipe::boilVolume_l    () { return this->pimpl->getCalculated(this->pimpl->m_boilVolume_l    );}
+double        Recipe::postBoilVolume_l() { return this->pimpl->getCalculated(this->pimpl->m_postBoilVolume_l);}
+double        Recipe::finalVolume_l   () { return this->pimpl->getCalculated(this->pimpl->m_finalVolume_l   );}
+QColor        Recipe::SRMColor        () { return this->pimpl->getCalculated(this->pimpl->m_SRMColor        );}
+double        Recipe::grainsInMash_kg () { return this->pimpl->getCalculated(this->pimpl->m_grainsInMash_kg );}
+double        Recipe::grains_kg       () { return this->pimpl->getCalculated(this->pimpl->m_grains_kg       );}
 
 double Recipe::points() {
-   if (m_uninitializedCalcs) {
-      recalcAll();
-   }
-   return (m_og - 1.0) * 1e3;
+   return (this->og() - 1.0) * 1e3;
 }
 
 //=========================Relational Getters=============================
-Style * Recipe::style() const {
-   return ObjectStoreWrapper::getByIdRaw<Style>(this->styleId);
+
+template<> std::shared_ptr<Mash        > Recipe::get<Mash        >() const { return this->pimpl->get<Mash        >(this->m_mashId        ); }
+template<> std::shared_ptr<Boil        > Recipe::get<Boil        >() const { return this->pimpl->get<Boil        >(this->m_boilId        ); }
+template<> std::shared_ptr<Fermentation> Recipe::get<Fermentation>() const { return this->pimpl->get<Fermentation>(this->m_fermentationId); }
+template<> std::shared_ptr<Style       > Recipe::get<Style       >() const { return this->pimpl->get<Style       >(this->m_styleId       ); }
+template<> std::shared_ptr<Equipment   > Recipe::get<Equipment   >() const { return this->pimpl->get<Equipment   >(this->m_equipmentId   ); }
+template<> std::shared_ptr<Water       > Recipe::get<Water       >() const {
+   // Water is a bit different as there can be more than one
+   auto waterUses = this->waterUses();
+   if (waterUses.size() > 0) {
+      return ObjectStoreWrapper::getSharedFromRaw(waterUses.at(0)->water());
+   }
+   return nullptr;
 }
-int Recipe::getStyleId() const {
-   return this->styleId;
-}
-std::shared_ptr<Mash> Recipe::getMash() const {
-   return ObjectStoreWrapper::getById<Mash>(this->mashId);
-}
-Mash * Recipe::mash() const {
-   return ObjectStoreWrapper::getByIdRaw<Mash>(this->mashId);
-}
-int Recipe::getMashId() const {
-   return this->mashId;
-}
-Equipment * Recipe::equipment() const {
-   return ObjectStoreWrapper::getByIdRaw<Equipment>(this->equipmentId);
-}
-int Recipe::getEquipmentId() const {
-   return this->equipmentId;
-}
+
+std::shared_ptr<Mash        > Recipe::mash        () const { return this->get<Mash        >(); }
+std::shared_ptr<Boil        > Recipe::boil        () const { return this->get<Boil        >(); }
+std::shared_ptr<Fermentation> Recipe::fermentation() const { return this->get<Fermentation>(); }
+std::shared_ptr<Style       > Recipe::style       () const { return this->get<Style       >(); }
+std::shared_ptr<Equipment   > Recipe::equipment   () const { return this->get<Equipment   >(); }
+
+std::shared_ptr<Boil        > Recipe::nonOptBoil        () { return this->pimpl->nonOptionalItem<Boil        >(this->m_boilId        ); }
+std::shared_ptr<Fermentation> Recipe::nonOptFermentation() { return this->pimpl->nonOptionalItem<Fermentation>(this->m_fermentationId); }
+
+int Recipe::getStyleId       () const { return this->m_styleId       ; }
+int Recipe::getEquipmentId   () const { return this->m_equipmentId   ; }
+int Recipe::getMashId        () const { return this->m_mashId        ; }
+int Recipe::getBoilId        () const { return this->m_boilId        ; }
+int Recipe::getFermentationId() const { return this->m_fermentationId; }
 
 QList<Instruction *> Recipe::instructions() const {
    return this->pimpl->getAllMyRaw<Instruction>();
@@ -1973,39 +2653,40 @@ QList<BrewNote *> Recipe::brewNotes() const {
    int const recipeId = this->key();
    return ObjectStoreTyped<BrewNote>::getInstance().findAllMatching(
       [recipeId](BrewNote const * bn) {
-         return bn->getRecipeId() == recipeId;
+         return bn->recipeId() == recipeId;
       }
    );
 }
 
 template<typename NE> QList< std::shared_ptr<NE> > Recipe::getAll() const {
-   return this->pimpl->getAllMy<NE>();
+   return this->pimpl->allMy<NE>();
 }
 //
 // Instantiate the above template function for the types that are going to use it
 // (This is all just a trick to allow the template definition to be here in the .cpp file and not in the header, which
 // means, amongst other things, that we can reference the pimpl.)
 //
-template QList< std::shared_ptr<Hop> > Recipe::getAll<Hop>() const;
-template QList< std::shared_ptr<Fermentable> > Recipe::getAll<Fermentable>() const;
-template QList< std::shared_ptr<Misc> > Recipe::getAll<Misc>() const;
-template QList< std::shared_ptr<Salt> > Recipe::getAll<Salt>() const;
-template QList< std::shared_ptr<Yeast> > Recipe::getAll<Yeast>() const;
-template QList< std::shared_ptr<Water> > Recipe::getAll<Water>() const;
+template QList< std::shared_ptr<RecipeAdditionFermentable> > Recipe::getAll<RecipeAdditionFermentable>() const;
+template QList< std::shared_ptr<RecipeAdditionHop        > > Recipe::getAll<RecipeAdditionHop        >() const;
+template QList< std::shared_ptr<RecipeAdditionMisc       > > Recipe::getAll<RecipeAdditionMisc       >() const;
+template QList< std::shared_ptr<RecipeAdditionYeast      > > Recipe::getAll<RecipeAdditionYeast      >() const;
+template QList< std::shared_ptr<RecipeAdjustmentSalt     > > Recipe::getAll<RecipeAdjustmentSalt     >() const;
+template QList< std::shared_ptr<RecipeUseOfWater         > > Recipe::getAll<RecipeUseOfWater         >() const;
 
-QList<Hop *>         Recipe::hops()              const { return this->pimpl->getAllMyRaw<Hop>();         }
-QVector<int>         Recipe::getHopIds()         const { return this->pimpl->hopIds;                     }
-QList<Fermentable *> Recipe::fermentables()      const { return this->pimpl->getAllMyRaw<Fermentable>(); }
-QVector<int>         Recipe::getFermentableIds() const { return this->pimpl->fermentableIds;             }
-QList<Misc *>        Recipe::miscs()             const { return this->pimpl->getAllMyRaw<Misc>();        }
-QVector<int>         Recipe::getMiscIds()        const { return this->pimpl->miscIds;                    }
-QList<Yeast *>       Recipe::yeasts()            const { return this->pimpl->getAllMyRaw<Yeast>();       }
-QVector<int>         Recipe::getYeastIds()       const { return this->pimpl->yeastIds;                   }
-QList<Water *>       Recipe::waters()            const { return this->pimpl->getAllMyRaw<Water>();       }
-QVector<int>         Recipe::getWaterIds()       const { return this->pimpl->waterIds;                   }
-QList<Salt *>        Recipe::salts()             const { return this->pimpl->getAllMyRaw<Salt>();        }
-QVector<int>         Recipe::getSaltIds()        const { return this->pimpl->saltIds;                    }
-int                  Recipe::getAncestorId()     const { return this->m_ancestor_id;                     }
+QList<std::shared_ptr<RecipeAdditionFermentable>> Recipe::fermentableAdditions() const { return this->pimpl->allMy<RecipeAdditionFermentable>(); }
+QList<std::shared_ptr<RecipeAdditionHop        >> Recipe::        hopAdditions() const { return this->pimpl->allMy<RecipeAdditionHop        >(); }
+QList<std::shared_ptr<RecipeAdditionMisc       >> Recipe::       miscAdditions() const { return this->pimpl->allMy<RecipeAdditionMisc       >(); }
+QList<std::shared_ptr<RecipeAdditionYeast      >> Recipe::      yeastAdditions() const { return this->pimpl->allMy<RecipeAdditionYeast      >(); }
+QList<std::shared_ptr<RecipeAdjustmentSalt     >> Recipe::     saltAdjustments() const { return this->pimpl->allMy<RecipeAdjustmentSalt     >(); }
+QList<std::shared_ptr<RecipeUseOfWater         >> Recipe::           waterUses() const { return this->pimpl->allMy<RecipeUseOfWater         >(); }
+QVector<int>         Recipe::fermentableAdditionIds() const { return this->pimpl->allMyIds<RecipeAdditionFermentable>(); }
+QVector<int>         Recipe::        hopAdditionIds() const { return this->pimpl->allMyIds<RecipeAdditionHop        >(); }
+QVector<int>         Recipe::       miscAdditionIds() const { return this->pimpl->allMyIds<RecipeAdditionMisc       >(); }
+QVector<int>         Recipe::      yeastAdditionIds() const { return this->pimpl->allMyIds<RecipeAdditionYeast      >(); }
+QVector<int>         Recipe::     saltAdjustmentIds() const { return this->pimpl->allMyIds<RecipeAdjustmentSalt     >(); }
+QVector<int>         Recipe::           waterUseIds() const { return this->pimpl->allMyIds<RecipeUseOfWater         >(); }
+
+int Recipe::getAncestorId() const { return this->m_ancestor_id; }
 
 //==============================Getters===================================
 Recipe::Type Recipe::type()          const { return m_type;               }
@@ -2016,38 +2697,19 @@ QString Recipe::tasteNotes()         const { return m_tasteNotes;         }
 QString Recipe::primingSugarName()   const { return m_primingSugarName;   }
 bool    Recipe::forcedCarbonation()  const { return m_forcedCarbonation;  }
 double  Recipe::batchSize_l()        const { return m_batchSize_l;        }
-double  Recipe::boilSize_l()         const { return m_boilSize_l;         }
-double  Recipe::boilTime_min()       const { return m_boilTime_min;       }
 double  Recipe::efficiency_pct()     const { return m_efficiency_pct;     }
 double  Recipe::tasteRating()        const { return m_tasteRating;        }
-double  Recipe::primaryAge_days()    const { return m_primaryAge_days;    }
-double  Recipe::primaryTemp_c()      const { return m_primaryTemp_c;      }
-double  Recipe::secondaryAge_days()  const { return m_secondaryAge_days;  }
-double  Recipe::secondaryTemp_c()    const { return m_secondaryTemp_c;    }
-double  Recipe::tertiaryAge_days()   const { return m_tertiaryAge_days;   }
-double  Recipe::tertiaryTemp_c()     const { return m_tertiaryTemp_c;     }
 double  Recipe::age_days()           const { return m_age;                }
 double  Recipe::ageTemp_c()          const { return m_ageTemp_c;          }
-double  Recipe::carbonation_vols()   const { return m_carbonation_vols;   }
 double  Recipe::carbonationTemp_c()  const { return m_carbonationTemp_c;  }
 double  Recipe::primingSugarEquiv()  const { return m_primingSugarEquiv;  }
 double  Recipe::kegPrimingFactor()   const { return m_kegPrimingFactor;   }
-int     Recipe::fermentationStages() const { return m_fermentationStages; }
-QDate   Recipe::date()               const { return m_date;               }
+std::optional<QDate>   Recipe::date()               const { return m_date;               }
+std::optional<double>  Recipe::carbonation_vols()   const { return m_carbonation_vols;   }
 bool    Recipe::locked()             const { return m_locked;             }
-
-//=============================Adders and Removers========================================
-
-
-double Recipe::batchSizeNoLosses_l() {
-   double ret = batchSize_l();
-   Equipment * e = equipment();
-   if (e) {
-      ret += e->trubChillerLoss_l();
-   }
-
-   return ret;
-}
+// ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
+std::optional<double> Recipe::beerAcidity_pH         () const { return m_beerAcidity_pH         ; }
+std::optional<double> Recipe::apparentAttenuation_pct() const { return m_apparentAttenuation_pct; }
 
 //==============================Recalculators==================================
 
@@ -2057,7 +2719,7 @@ void Recipe::recalcIfNeeded(QString classNameOfWhatWasAddedOrChanged) {
    // ::staticMetaObject.className() is a bit more clunky but it's safer.
 
    if (classNameOfWhatWasAddedOrChanged == Hop::staticMetaObject.className()) {
-      this->recalcIBU();
+      this->pimpl->recalcIBU();
       return;
    }
 
@@ -2069,8 +2731,8 @@ void Recipe::recalcIfNeeded(QString classNameOfWhatWasAddedOrChanged) {
    }
 
    if (classNameOfWhatWasAddedOrChanged == Yeast::staticMetaObject.className()) {
-      this->recalcOgFg();
-      this->recalcABV_pct();
+      this->pimpl->recalcOgFg();
+      this->pimpl->recalcABV_pct();
       return;
    }
 
@@ -2083,503 +2745,74 @@ void Recipe::recalcAll() {
    // causing other objects to call finalVolume_l() for example, which may
    // cause another call to recalcAll() and so on.
    //
-   // GSG: Now only emit when _uninitializedCalcs is true, which helps some.
+   // GSG: Now only emit when m_uninitializedCalcs is true, which helps some.
 
    // Someone has already called this function back in the call stack, so return to avoid recursion.
-   if (! m_recalcMutex.tryLock()) {
+   if (!this->m_recalcMutex.tryLock()) {
       return;
    }
 
    // Times are in seconds, and are cumulative.
-   recalcGrainsInMash_kg(); // 0.01
-   recalcGrains_kg(); // 0.03
-   recalcVolumeEstimates(); // 0.06
-   recalcColor_srm(); // 0.08
-   recalcSRMColor(); // 0.08
-   recalcOgFg(); // 0.11
-   recalcABV_pct(); // 0.12
-   recalcBoilGrav(); // 0.14
-   recalcIBU(); // 0.15
-   recalcCalories();
+   this->pimpl->recalcGrains(); // 0.03
+   this->pimpl->recalcVolumeEstimates(); // 0.06
+   this->pimpl->recalcColor_srm(); // 0.08
+   this->pimpl->recalcSRMColor(); // 0.08
+   this->pimpl->recalcOgFg(); // 0.11
+   this->pimpl->recalcABV_pct(); // 0.12
+   this->pimpl->recalcBoilGrav(); // 0.14
+   this->pimpl->recalcIBU(); // 0.15
+   this->pimpl->recalcCalories();
 
-   m_uninitializedCalcs = false;
+   this->m_uninitializedCalcs = false;
 
-   m_recalcMutex.unlock();
-}
-
-void Recipe::recalcABV_pct() {
-   double ret;
-
-   // The complex formula, and variations comes from Ritchie Products Ltd, (Zymurgy, Summer 1995, vol. 18, no. 2)
-   // Michael L. Hall’s article Brew by the Numbers: Add Up What’s in Your Beer, and Designing Great Beers by Daniels.
-   ret = (76.08 * (m_og_fermentable - m_fg_fermentable) / (1.775 - m_og_fermentable)) * (m_fg_fermentable / 0.794);
-
-   if (! qFuzzyCompare(ret, m_ABV_pct)) {
-      m_ABV_pct = ret;
-      if (!m_uninitializedCalcs) {
-         emit changed(metaProperty(*PropertyNames::Recipe::ABV_pct), m_ABV_pct);
-      }
-   }
-}
-
-void Recipe::recalcColor_srm() {
-   Fermentable * ferm;
-   double mcu = 0.0;
-   double ret;
-   int i;
-
-   QList<Fermentable *> ferms = fermentables();
-   for (i = 0; static_cast<int>(i) < ferms.size(); ++i) {
-      ferm = ferms[i];
-         // Conversion factor for lb/gal to kg/l = 8.34538.
-      mcu += ferm->color_srm() * 8.34538 * ferm->amount_kg() / m_finalVolumeNoLosses_l;
-   }
-
-   ret = ColorMethods::mcuToSrm(mcu);
-
-   if (! qFuzzyCompare(m_color_srm, ret)) {
-      m_color_srm = ret;
-      if (!m_uninitializedCalcs) {
-         emit changed(metaProperty(*PropertyNames::Recipe::color_srm), m_color_srm);
-      }
-   }
-
+   this->m_recalcMutex.unlock();
    return;
 }
 
-void Recipe::recalcIBU() {
-   int i;
-   double ibus = 0.0;
-   double tmp = 0.0;
-
-   // Bitterness due to hops...
-   m_ibus.clear();
-   QList<Hop *> hhops = hops();
-   for (i = 0; i < hhops.size(); ++i) {
-      tmp = ibuFromHop(hhops[i]);
-      m_ibus.append(tmp);
-      ibus += tmp;
-   }
-
-   // Bitterness due to hopped extracts...
-   QList<Fermentable *> ferms = fermentables();
-   for (i = 0; static_cast<int>(i) < ferms.size(); ++i) {
-         // Conversion factor for lb/gal to kg/l = 8.34538.
-      ibus +=
-         ferms[i]->ibuGalPerLb() *
-         (ferms[i]->amount_kg() / batchSize_l()) / 8.34538;
-   }
-
-   if (! qFuzzyCompare(ibus, m_IBU)) {
-      m_IBU = ibus;
-      if (!m_uninitializedCalcs) {
-         emit changed(metaProperty(*PropertyNames::Recipe::IBU), m_IBU);
-      }
-   }
-
-   return;
-}
-
-void Recipe::recalcVolumeEstimates() {
-   double waterAdded_l;
-   double absorption_lKg;
-   double tmp = 0.0;
-   double tmp_wfm = 0.0;
-   double tmp_bv = 0.0;
-   double tmp_fv = 0.0;
-   double tmp_pbv = 0.0;
-
-   // wortFromMash_l ==========================
-   if (mash() == nullptr) {
-      m_wortFromMash_l = 0.0;
-   } else {
-      waterAdded_l = mash()->totalMashWater_l();
-      if (equipment() != nullptr) {
-         absorption_lKg = equipment()->grainAbsorption_LKg();
-      } else {
-         absorption_lKg = PhysicalConstants::grainAbsorption_Lkg;
-      }
-
-      tmp_wfm = (waterAdded_l - absorption_lKg * m_grainsInMash_kg);
-   }
-
-   // boilVolume_l ==============================
-
-   if (equipment() != nullptr) {
-      tmp = tmp_wfm - equipment()->lauterDeadspace_l() + equipment()->topUpKettle_l();
-   } else {
-      tmp = tmp_wfm;
-   }
-
-   // Need to account for extract/sugar volume also.
-   QList<Fermentable *> ferms = fermentables();
-   foreach (Fermentable * f, ferms) {
-      Fermentable::Type type = f->type();
-      if (type == Fermentable::Type::Extract) {
-         tmp += f->amount_kg() / PhysicalConstants::liquidExtractDensity_kgL;
-      } else if (type == Fermentable::Type::Sugar) {
-         tmp += f->amount_kg() / PhysicalConstants::sucroseDensity_kgL;
-      } else if (type == Fermentable::Type::Dry_Extract) {
-         tmp += f->amount_kg() / PhysicalConstants::dryExtractDensity_kgL;
-      }
-   }
-
-   if (tmp <= 0.0) {
-      tmp = boilSize_l();   // Give up.
-   }
-
-   tmp_bv = tmp;
-
-   // finalVolume_l ==============================
-
-   // NOTE: the following figure is not based on the other volume estimates
-   // since we want to show og,fg,ibus,etc. as if the collected wort is correct.
-   m_finalVolumeNoLosses_l = batchSizeNoLosses_l();
-   if (equipment() != nullptr) {
-      //_finalVolumeNoLosses_l = equipment()->wortEndOfBoil_l(tmp_bv) + equipment()->topUpWater_l();
-      tmp_fv = equipment()->wortEndOfBoil_l(tmp_bv) + equipment()->topUpWater_l() - equipment()->trubChillerLoss_l();
-   } else {
-      m_finalVolume_l = tmp_bv - 4.0; // This is just shooting in the dark. Can't do much without an equipment.
-      //_finalVolumeNoLosses_l = _finalVolume_l;
-   }
-
-   // postBoilVolume_l ===========================
-
-   if (equipment() != nullptr) {
-      tmp_pbv = equipment()->wortEndOfBoil_l(tmp_bv);
-   } else {
-      tmp_pbv = batchSize_l(); // Give up.
-   }
-
-   if (! qFuzzyCompare(tmp_wfm, m_wortFromMash_l)) {
-      m_wortFromMash_l = tmp_wfm;
-      if (!m_uninitializedCalcs) {
-         emit changed(metaProperty(*PropertyNames::Recipe::wortFromMash_l), m_wortFromMash_l);
-      }
-   }
-
-   if (! qFuzzyCompare(tmp_bv, m_boilVolume_l)) {
-      m_boilVolume_l = tmp_bv;
-      if (!m_uninitializedCalcs) {
-         emit changed(metaProperty(*PropertyNames::Recipe::boilVolume_l), m_boilVolume_l);
-      }
-   }
-
-   if (! qFuzzyCompare(tmp_fv, m_finalVolume_l)) {
-      m_finalVolume_l = tmp_fv;
-      if (!m_uninitializedCalcs) {
-         emit changed(metaProperty(*PropertyNames::Recipe::finalVolume_l), m_finalVolume_l);
-      }
-   }
-
-   if (! qFuzzyCompare(tmp_pbv, m_postBoilVolume_l)) {
-      m_postBoilVolume_l = tmp_pbv;
-      if (!m_uninitializedCalcs) {
-         emit changed(metaProperty(*PropertyNames::Recipe::postBoilVolume_l), m_postBoilVolume_l);
-      }
-   }
-   return;
-}
-
-void Recipe::recalcGrainsInMash_kg() {
-   int i, size;
-   double ret = 0.0;
-   Fermentable * ferm;
-
-   QList<Fermentable *> ferms = fermentables();
-   size = ferms.size();
-   for (i = 0; i < size; ++i) {
-      ferm = ferms[i];
-
-      if (ferm->type() == Fermentable::Type::Grain && ferm->isMashed()) {
-         ret += ferm->amount_kg();
-      }
-   }
-
-   if (! qFuzzyCompare(ret, m_grainsInMash_kg)) {
-      m_grainsInMash_kg = ret;
-      if (!m_uninitializedCalcs) {
-         emit changed(metaProperty(*PropertyNames::Recipe::grainsInMash_kg), m_grainsInMash_kg);
-      }
-   }
-   return;
-}
-
-void Recipe::recalcGrains_kg() {
-   int i, size;
-   double ret = 0.0;
-
-   QList<Fermentable *> ferms = fermentables();
-   size = ferms.size();
-   for (i = 0; i < size; ++i) {
-      ret += ferms[i]->amount_kg();
-   }
-
-   if (! qFuzzyCompare(ret, m_grains_kg)) {
-      m_grains_kg = ret;
-      if (!m_uninitializedCalcs) {
-         emit changed(metaProperty(*PropertyNames::Recipe::grains_kg), m_grains_kg);
-      }
-   }
-}
-
-void Recipe::recalcSRMColor() {
-   QColor tmp = Algorithms::srmToColor(m_color_srm);
-
-   if (tmp != m_SRMColor) {
-      m_SRMColor = tmp;
-      if (!m_uninitializedCalcs) {
-         emit changed(metaProperty(*PropertyNames::Recipe::SRMColor), m_SRMColor);
-      }
-   }
-}
-
-// the formula in here are taken from http://hbd.org/ensmingr/
-void Recipe::recalcCalories() {
-   double startPlato, finishPlato, RE, abw, oog, ffg, tmp;
-
-   oog = m_og;
-   ffg = m_fg;
-
-   // Need to translate OG and FG into plato
-   startPlato  = -463.37 + (668.72 * oog) - (205.35 * oog * oog);
-   finishPlato = -463.37 + (668.72 * ffg) - (205.35 * ffg * ffg);
-
-   // RE (real extract)
-   RE = (0.1808 * startPlato) + (0.8192 * finishPlato);
-
-   // Alcohol by weight?
-   abw = (startPlato - RE) / (2.0665 - (0.010665 * startPlato));
-
-   // The final results of this formular are calories per 100 ml.
-   // The 3.55 puts it in terms of 12 oz. I really should have stored it
-   // without that adjust.
-   tmp = ((6.9 * abw) + 4.0 * (RE - 0.1)) * ffg * 3.55;
-
-   //! If there are no fermentables in the recipe, if there is no mash, etc.,
-   //  then the calories/12 oz ends up negative. Since negative doesn't make
-   //  sense, set it to 0
-   if (tmp < 0) {
-      tmp = 0;
-   }
-
-   if (! qFuzzyCompare(tmp, m_calories)) {
-      m_calories = tmp;
-      if (!m_uninitializedCalcs) {
-         emit changed(metaProperty(*PropertyNames::Recipe::calories), m_calories);
-      }
-   }
-}
-
-// other efficiency calculations need access to the maximum theoretical sugars
+// Other efficiency calculations need access to the maximum theoretical sugars
 // available. The only way I can see of doing that which doesn't suck is to
-// split that calcuation out of recalcOgFg();
-QHash<QString, double> Recipe::calcTotalPoints() {
-   int i;
-   double sugar_kg_ignoreEfficiency = 0.0;
-   double sugar_kg                  = 0.0;
-   double nonFermentableSugars_kg    = 0.0;
-   double lateAddition_kg           = 0.0;
-   double lateAddition_kg_ignoreEff = 0.0;
+// split that calculation out of recalcOgFg();
+Recipe::Sugars Recipe::calcTotalPoints() {
+   Recipe::Sugars ret;
 
-   Fermentable * ferm;
-
-   QList<Fermentable *> ferms = fermentables();
-   QHash<QString, double> ret;
-
-   for (i = 0; static_cast<int>(i) < ferms.size(); ++i) {
-      ferm = ferms[i];
+   for (auto const & fermentableAddition : this->fermentableAdditions()) {
+      auto const & fermentable = fermentableAddition->fermentable();
+      qDebug() <<
+         "calcTotalPoints Rec" << this->key() << "(" << this->name() << ") "
+         "Ferm Add" << fermentable->key() << "(" << fermentable->name() << ") equivSucrose_kg" <<
+         fermentableAddition->equivSucrose_kg() << ", isSugar?" << fermentable->isSugar() << ", isExtract?" <<
+         fermentable->isExtract() << ", addAfterBoil?" <<
+         fermentableAddition->addAfterBoil() << ", isFermentableSugar?" << isFermentableSugar(fermentable);
 
       // If we have some sort of non-grain, we have to ignore efficiency.
-      if (ferm->isSugar() || ferm->isExtract()) {
-         sugar_kg_ignoreEfficiency += ferm->equivSucrose_kg();
+      if (fermentable->isSugar() || fermentable->isExtract()) {
+         ret.sugar_kg_ignoreEfficiency += fermentableAddition->equivSucrose_kg();
 
-         if (ferm->addAfterBoil()) {
-            lateAddition_kg_ignoreEff += ferm->equivSucrose_kg();
+         if (fermentableAddition->addAfterBoil()) {
+            ret.lateAddition_kg_ignoreEff += fermentableAddition->equivSucrose_kg();
          }
 
-         if (!isFermentableSugar(ferm)) {
-            nonFermentableSugars_kg += ferm->equivSucrose_kg();
+         if (!isFermentableSugar(fermentable)) {
+            ret.nonFermentableSugars_kg += fermentableAddition->equivSucrose_kg();
          }
       } else {
-         sugar_kg += ferm->equivSucrose_kg();
+         ret.sugar_kg += fermentableAddition->equivSucrose_kg();
 
-         if (ferm->addAfterBoil()) {
-            lateAddition_kg += ferm->equivSucrose_kg();
+         if (fermentableAddition->addAfterBoil()) {
+            ret.lateAddition_kg += fermentableAddition->equivSucrose_kg();
          }
       }
    }
 
-   ret.insert("sugar_kg", sugar_kg);
-   ret.insert("nonFermentableSugars_kg", nonFermentableSugars_kg);
-   ret.insert("sugar_kg_ignoreEfficiency", sugar_kg_ignoreEfficiency);
-   ret.insert("lateAddition_kg", lateAddition_kg);
-   ret.insert("lateAddition_kg_ignoreEff", lateAddition_kg_ignoreEff);
-
    return ret;
-
 }
 
-void Recipe::recalcBoilGrav() {
-   double sugar_kg = 0.0;
-   double sugar_kg_ignoreEfficiency = 0.0;
-   double lateAddition_kg           = 0.0;
-   double lateAddition_kg_ignoreEff = 0.0;
-   double ret;
-   QHash<QString, double> sugars;
 
-   sugars = calcTotalPoints();
-   sugar_kg = sugars.value("sugar_kg");
-   sugar_kg_ignoreEfficiency = sugars.value("sugar_kg_ignoreEfficiency");
-   lateAddition_kg = sugars.value("lateAddition_kg");
-   lateAddition_kg_ignoreEff = sugars.value("lateAddition_kg_ignoreEff");
-
-   // Since the efficiency refers to how much sugar we get into the fermenter,
-   // we need to adjust for that here.
-   sugar_kg = (efficiency_pct() / 100.0 * (sugar_kg - lateAddition_kg) + sugar_kg_ignoreEfficiency -
-               lateAddition_kg_ignoreEff);
-
-   ret = Algorithms::PlatoToSG_20C20C(Algorithms::getPlato(sugar_kg, boilSize_l()));
-
-   if (! qFuzzyCompare(ret, m_boilGrav)) {
-      m_boilGrav = ret;
-      if (!m_uninitializedCalcs) {
-         emit changed(metaProperty(*PropertyNames::Recipe::boilGrav), m_boilGrav);
-      }
-   }
-}
-
-void Recipe::recalcOgFg() {
-   int i;
-   double plato;
-   double sugar_kg = 0;
-   double sugar_kg_ignoreEfficiency = 0.0;
-   double nonFermentableSugars_kg = 0.0;
-   double kettleWort_l = 0.0;
-   double postBoilWort_l = 0.0;
-   double ratio = 0.0;
-   double ferm_kg = 0.0;
-   double attenuation_pct = 0.0;
-   double tmp_og, tmp_fg, tmp_pnts, tmp_ferm_pnts, tmp_nonferm_pnts;
-   Yeast * yeast;
-
-   m_og_fermentable = m_fg_fermentable = 0.0;
-
-   // The first time through really has to get the _og and _fg from the
-   // database, not use the initialized values of 1. I (maf) tried putting
-   // this in the initialize, but it just hung. So I moved it here, but only
-   // if if we aren't initialized yet.
-   //
-   // GSG: This doesn't work, this og and fg are already set to 1.0 so
-   // until we load these values from the database on startup, we have
-   // to calculate.
-   if (m_uninitializedCalcs) {
-      m_og = Localization::toDouble(*this, PropertyNames::Recipe::og, Q_FUNC_INFO);
-      m_fg = Localization::toDouble(*this, PropertyNames::Recipe::fg, Q_FUNC_INFO);
-   }
-
-   // Find out how much sugar we have.
-   QHash<QString, double> sugars = calcTotalPoints();
-   sugar_kg                  = sugars.value("sugar_kg");  // Mass of sugar that *is* affected by mash efficiency
-   sugar_kg_ignoreEfficiency =
-      sugars.value("sugar_kg_ignoreEfficiency");  // Mass of sugar that *is not* affected by mash efficiency
-   nonFermentableSugars_kg    =
-      sugars.value("nonFermentableSugars_kg");  // Mass of sugar that is not fermentable (also counted in sugar_kg_ignoreEfficiency)
-
-   // We might lose some sugar in the form of Trub/Chiller loss and lauter deadspace.
-   if (equipment() != nullptr) {
-
-      kettleWort_l = (m_wortFromMash_l - equipment()->lauterDeadspace_l()) + equipment()->topUpKettle_l();
-      postBoilWort_l = equipment()->wortEndOfBoil_l(kettleWort_l);
-      ratio = (postBoilWort_l - equipment()->trubChillerLoss_l()) / postBoilWort_l;
-      if (ratio > 1.0) { // Usually happens when we don't have a mash yet.
-         ratio = 1.0;
-      } else if (ratio < 0.0) {
-         ratio = 0.0;
-      } else if (Algorithms::isNan(ratio)) {
-         ratio = 1.0;
-      }
-      // Ignore this again since it should be included in efficiency.
-      //sugar_kg *= ratio;
-      sugar_kg_ignoreEfficiency *= ratio;
-      if (nonFermentableSugars_kg != 0.0) {
-         nonFermentableSugars_kg *= ratio;
-      }
-   }
-
-   // Total sugars after accounting for efficiency and mash losses. Implicitly includes non-fermentable sugars
-   sugar_kg = sugar_kg * efficiency_pct() / 100.0 + sugar_kg_ignoreEfficiency;
-   plato = Algorithms::getPlato(sugar_kg, m_finalVolumeNoLosses_l);
-
-   tmp_og = Algorithms::PlatoToSG_20C20C(plato);    // og from all sugars
-   tmp_pnts = (tmp_og - 1) * 1000.0; // points from all sugars
-   if (nonFermentableSugars_kg != 0.0) {
-      ferm_kg = sugar_kg - nonFermentableSugars_kg;  // Mass of only fermentable sugars
-      plato = Algorithms::getPlato(ferm_kg, m_finalVolumeNoLosses_l);   // Plato from fermentable sugars
-      m_og_fermentable = Algorithms::PlatoToSG_20C20C(plato);    // og from only fermentable sugars
-      plato = Algorithms::getPlato(nonFermentableSugars_kg, m_finalVolumeNoLosses_l);   // Plate from non-fermentable sugars
-      tmp_nonferm_pnts = ((Algorithms::PlatoToSG_20C20C(plato)) - 1) * 1000.0; // og points from non-fermentable sugars
-   } else {
-      m_og_fermentable = tmp_og;
-      tmp_nonferm_pnts = 0;
-   }
-
-   // Calculage FG
-   QList<Yeast *> yeasties = yeasts();
-   for (i = 0; static_cast<int>(i) < yeasties.size(); ++i) {
-      yeast = yeasties[i];
-      // Get the yeast with the greatest attenuation.
-      if (yeast->attenuation_pct() > attenuation_pct) {
-         attenuation_pct = yeast->attenuation_pct();
-      }
-   }
-   // This means we have yeast, but they neglected to provide attenuation percentages.
-   if (yeasties.size() > 0 && attenuation_pct <= 0.0)  {
-      attenuation_pct = 75.0; // 75% is an average attenuation.
-   }
-
-   if (nonFermentableSugars_kg != 0.0) {
-      tmp_ferm_pnts = (tmp_pnts - tmp_nonferm_pnts) * (1.0 - attenuation_pct / 100.0); // fg points from fermentable sugars
-      tmp_pnts = tmp_ferm_pnts + tmp_nonferm_pnts;  // FG points from both fermentable and non-fermentable sugars
-      //tmp_pnts *= (1.0 - attenuation_pct/100.0);  // WTF, this completely ignores all the calculations about non-fermentable sugars and just converts everything!
-      tmp_fg =  1 + tmp_pnts / 1000.0; // new FG value
-      m_fg_fermentable =  1 + tmp_ferm_pnts / 1000.0; // FG from fermentables only
-   } else {
-      tmp_pnts *= (1.0 - attenuation_pct / 100.0);
-      tmp_fg =  1 + tmp_pnts / 1000.0;
-      m_fg_fermentable = tmp_fg;
-   }
-
-   if (! qFuzzyCompare(m_og, tmp_og)) {
-      m_og     = tmp_og;
-      // NOTE: We don't want to do this on the first load of the recipe.
-      // NOTE: We are we recalculating all of these on load? Shouldn't we be
-      // reading these values from the database somehow?
-      //
-      // GSG: Yes we can, but until the code is added to intialize these calculated
-      // values from the database, we can calculate them on load. They should be
-      // the same as the database values since the database values were set with
-      // these functions in the first place.
-      if (!m_uninitializedCalcs) {
-         this->propagatePropertyChange(PropertyNames::Recipe::og, false);
-         emit changed(metaProperty(*PropertyNames::Recipe::og), m_og);
-         emit changed(metaProperty(*PropertyNames::Recipe::points), (m_og - 1.0) * 1e3);
-      }
-   }
-
-   if (! qFuzzyCompare(tmp_fg, m_fg)) {
-      m_fg     = tmp_fg;
-      if (!m_uninitializedCalcs) {
-         this->propagatePropertyChange(PropertyNames::Recipe::fg, false);
-         emit changed(metaProperty(*PropertyNames::Recipe::fg), m_fg);
-      }
-   }
-}
 
 //====================================Helpers===========================================
 
-double Recipe::ibuFromHop(Hop const * hop) {
-   Equipment * equip = equipment();
+double Recipe::ibuFromHopAddition(RecipeAdditionHop const & hopAddition) {
+   auto equipment = this->equipment();
    double ibus = 0.0;
    double fwhAdjust = Localization::toDouble(
       PersistentSettings::value(PersistentSettings::Names::firstWortHopAdjustment, 1.1).toString(),
@@ -2590,13 +2823,16 @@ double Recipe::ibuFromHop(Hop const * hop) {
       Q_FUNC_INFO
    );
 
-   if (hop == nullptr) {
-      return 0.0;
-   }
+   // It's a coding error to ask one recipe about another's hop additions!
+   Q_ASSERT(hopAddition.recipeId() == this->key());
 
-   double AArating = hop->alpha_pct() / 100.0;
-   double grams = hop->amount_kg() * 1000.0;
-   double minutes = hop->time_min();
+   double AArating = hopAddition.hop()->alpha_pct() / 100.0;
+   // .:TBD.JSON:.  What to do if hopAddition is measured by volume?
+   if (hopAddition.amountIsWeight()) {
+      qCritical() << Q_FUNC_INFO << "Using Hop volume as weight - THIS IS PROBABLY WRONG!";
+   }
+   double grams = hopAddition.quantity() * 1000.0;
+   double minutes = hopAddition.addAtTime_mins().value_or(0.0);
    // Assume 100% utilization until further notice
    double hopUtilization = 1.0;
    // Assume 60 min boil until further notice
@@ -2604,82 +2840,82 @@ double Recipe::ibuFromHop(Hop const * hop) {
 
    // NOTE: we used to carefully calculate the average boil gravity and use it in the
    // IBU calculations. However, due to John Palmer
-   // (http://homebrew.stackexchange.com/questions/7343/does-wort-gravity-affect-hop-utilization),
+   // (http://homebrew.stackexchange.com/questions/7343/does-wort-gravity-affect-hopAddition-utilization),
    // it seems more appropriate to just use the OG directly, since it is the total
    // amount of break material that truly affects the IBUs.
 
-   if (equip) {
-      hopUtilization = equip->hopUtilization_pct() / 100.0;
-      boilTime = static_cast<int>(equip->boilTime_min());
+   if (equipment) {
+      hopUtilization = equipment->hopUtilization_pct().value_or(Equipment::default_hopUtilization_pct) / 100.0;
+      boilTime = static_cast<int>(equipment->boilTime_min().value_or(Equipment::default_boilTime_mins));
    }
 
-   if (hop->use() == Hop::Use::Boil) {
-      ibus = IbuMethods::getIbus(AArating, grams, m_finalVolumeNoLosses_l, m_og, minutes);
-   } else if (hop->use() == Hop::Use::First_Wort) {
-      ibus = fwhAdjust * IbuMethods::getIbus(AArating, grams, m_finalVolumeNoLosses_l, m_og, boilTime);
-   } else if (hop->use() == Hop::Use::Mash && mashHopAdjust > 0.0) {
-      ibus = mashHopAdjust * IbuMethods::getIbus(AArating, grams, m_finalVolumeNoLosses_l, m_og, boilTime);
+   if (hopAddition.isFirstWort()) {
+      ibus = fwhAdjust * IbuMethods::getIbus(AArating, grams, this->pimpl->m_finalVolumeNoLosses_l, m_og, boilTime);
+   } else if (hopAddition.stage() == RecipeAddition::Stage::Boil) {
+      ibus = IbuMethods::getIbus(AArating, grams, this->pimpl->m_finalVolumeNoLosses_l, m_og, minutes);
+   } else if (hopAddition.stage() == RecipeAddition::Stage::Mash && mashHopAdjust > 0.0) {
+      ibus = mashHopAdjust * IbuMethods::getIbus(AArating, grams, this->pimpl->m_finalVolumeNoLosses_l, m_og, boilTime);
    }
 
-   // Adjust for hop form. Tinseth's table was created from whole cone data,
+   // Adjust for hopAddition form. Tinseth's table was created from whole cone data,
    // and it seems other formulae are optimized that way as well. So, the
    // utilization is considered unadjusted for whole cones, and adjusted
    // up for plugs and pellets.
    //
    // - http://www.realbeer.com/hops/FAQ.html
    // - https://groups.google.com/forum/#!topic"brewtarget.h"lp/mv2qvWBC4sU
-   switch (hop->form()) {
-      case Hop::Form::Plug:
-         hopUtilization *= 1.02;
-         break;
-      case Hop::Form::Pellet:
-         hopUtilization *= 1.10;
-         break;
-      default:
-         break;
+   auto const hopForm = hopAddition.hop()->form();
+   if (hopForm) {
+      switch (*hopForm) {
+         case Hop::Form::Plug:
+            hopUtilization *= 1.02;
+            break;
+         case Hop::Form::Pellet:
+            hopUtilization *= 1.10;
+            break;
+         default:
+            break;
+      }
    }
 
-   // Adjust for hop utilization.
+   // Adjust for hopAddition utilization.
    ibus *= hopUtilization;
 
    return ibus;
 }
 
-// this was fixed, but not with an at
-bool Recipe::isValidType(const QString & str) {
-   return RECIPE_TYPE_STRING_TO_TYPE.contains(str);
-}
-
-QList<QString> Recipe::getReagents(QList<Fermentable *> ferms) {
+QList<QString> Recipe::getReagents(QList<std::shared_ptr<RecipeAdditionFermentable>> fermentableAdditions) {
    QList<QString> reagents;
-   QString format, tmp;
-
-   for (int ii = 0; ii < ferms.size(); ++ii) {
-      if (ferms[ii]->isMashed()) {
-         if (ii + 1 < ferms.size()) {
-            tmp = QString("%1 %2, ")
-                  .arg(Measurement::displayAmount(Measurement::Amount{ferms[ii]->amount_kg(), Measurement::Units::kilograms}))
-                  .arg(ferms[ii]->name());
+   bool firstTime = true;
+   for (auto const & fermentableAddition : fermentableAdditions) {
+      if (fermentableAddition->stage() == RecipeAddition::Stage::Mash) {
+         // .:TBD:.  This isn't the most elegant or accurate way of handling commas.  If we're returning a list, we
+         // should probably leave it to the caller to put commas in for display.
+         QString format;
+         if (firstTime) {
+            format = "%1 %2";
+            firstTime = false;
          } else {
-            tmp = QString("%1 %2 ")
-                  .arg(Measurement::displayAmount(Measurement::Amount{ferms[ii]->amount_kg(), Measurement::Units::kilograms}))
-                  .arg(ferms[ii]->name());
+            format = ", %1 %2";
          }
-         reagents.append(tmp);
+         reagents.append(
+            format.arg(Measurement::displayAmount(fermentableAddition->amount()))
+                  .arg(fermentableAddition->fermentable()->name())
+         );
       }
    }
    return reagents;
 }
 
-QList<QString> Recipe::getReagents(QList<Hop *> hops, bool firstWort) {
-   QString tmp;
+
+QList<QString> Recipe::getReagents(QList<std::shared_ptr<RecipeAdditionHop>> hopAdditions, bool firstWort) {
    QList<QString> reagents;
 
-   for (int ii = 0; ii < hops.size(); ++ii) {
-      if (firstWort && (hops[ii]->use() == Hop::Use::First_Wort)) {
-         tmp = QString("%1 %2,")
-               .arg(Measurement::displayAmount(Measurement::Amount{hops[ii]->amount_kg(), Measurement::Units::kilograms}))
-               .arg(hops[ii]->name());
+   for (auto hopAddition : hopAdditions) {
+      if (firstWort && (hopAddition->isFirstWort())) {
+         QString tmp = QString("%1 %2,")
+               .arg(Measurement::displayAmount(hopAddition->amount()))
+               .arg(hopAddition->hop()->name());
          reagents.append(tmp);
       }
    }
@@ -2697,69 +2933,46 @@ QList<QString> Recipe::getReagents(QList< std::shared_ptr<MashStep> > msteps) {
       QString tmp;
       if (ii + 1 < msteps.size()) {
          tmp = tr("%1 water to %2, ")
-               .arg(Measurement::displayAmount(Measurement::Amount{msteps[ii]->infuseAmount_l(), Measurement::Units::liters}))
-               .arg(Measurement::displayAmount(Measurement::Amount{msteps[ii]->infuseTemp_c(), Measurement::Units::celsius}));
+               .arg(Measurement::displayAmount(Measurement::Amount{msteps[ii]->amount_l(), Measurement::Units::liters}))
+               .arg(Measurement::displayAmount(Measurement::Amount{msteps[ii]->infuseTemp_c().value_or(msteps[ii]->startTemp_c().value_or(0.0)), Measurement::Units::celsius}));
       } else {
          tmp = tr("%1 water to %2 ")
-               .arg(Measurement::displayAmount(Measurement::Amount{msteps[ii]->infuseAmount_l(), Measurement::Units::liters}))
-               .arg(Measurement::displayAmount(Measurement::Amount{msteps[ii]->infuseTemp_c(), Measurement::Units::celsius}));
+               .arg(Measurement::displayAmount(Measurement::Amount{msteps[ii]->amount_l(), Measurement::Units::liters}))
+               .arg(Measurement::displayAmount(Measurement::Amount{msteps[ii]->infuseTemp_c().value_or(msteps[ii]->startTemp_c().value_or(0.0)), Measurement::Units::celsius}));
       }
       reagents.append(tmp);
    }
    return reagents;
 }
 
-
-//! \brief send me a list of salts and if we are wanting to add to the
-//! mash or the sparge, and I will return a list of instructions
-QStringList Recipe::getReagents(QList<Salt *> salts, Salt::WhenToAdd wanted) {
-   QString tmp;
-   QStringList reagents = QStringList();
-
-   for (int i = 0; i < salts.size(); ++i) {
-      Salt::WhenToAdd what = salts[i]->whenToAdd();
-      Measurement::Unit const & rightUnit = salts[i]->amountIsWeight() ? Measurement::Units::kilograms : Measurement::Units::liters;
-      if (what == wanted) {
-         tmp = tr("%1 %2, ")
-               .arg(Measurement::displayAmount(Measurement::Amount{salts[i]->amount(), rightUnit}))
-               .arg(salts[i]->name());
-      } else if (what == Salt::WhenToAdd::EQUAL) {
-         tmp = tr("%1 %2, ")
-               .arg(Measurement::displayAmount(Measurement::Amount{salts[i]->amount(), rightUnit}))
-               .arg(salts[i]->name());
-      } else if (what == Salt::WhenToAdd::RATIO) {
-         double ratio = 1.0;
-         if (wanted == Salt::WhenToAdd::SPARGE) {
-            ratio = mash()->totalSpargeAmount_l() / mash()->totalInfusionAmount_l();
-         }
-         double amt = salts[i]->amount() * ratio;
-         tmp = tr("%1 %2, ")
-               .arg(Measurement::displayAmount(Measurement::Amount{amt, rightUnit}))
-               .arg(salts[i]->name());
-      } else {
-         continue;
-      }
-      reagents.append(tmp);
-   }
-   // How many ways can we remove the trailing ", " because it really, really
-   // annoys me?
-   if (reagents.size() > 0) {
-      QString fixin = reagents.takeLast();
-      fixin.remove(fixin.lastIndexOf(","), 2);
-      reagents.append(fixin);
-   }
-   return reagents;
-}
 
 //==========================Accept changes from ingredients====================
 
-void Recipe::acceptChangeToContainedObject([[maybe_unused]] QMetaProperty prop,
-                                           [[maybe_unused]] QVariant val) {
+void Recipe::acceptChangeToContainedObject(QMetaProperty prop, QVariant val) {
    // This tells us which object sent us the signal
    QObject * signalSender = this->sender();
    if (signalSender != nullptr) {
       QString signalSenderClassName = signalSender->metaObject()->className();
-      qDebug() << Q_FUNC_INFO << "Signal received from " << signalSenderClassName;
+      QString propName = prop.name();
+      qDebug() <<
+         Q_FUNC_INFO << "Signal received from " << signalSenderClassName << ": changed" << propName << "to" << val;;
+      Equipment * equipment = qobject_cast<Equipment *>(signalSender);
+      if (equipment) {
+         qDebug() << Q_FUNC_INFO << "Equipment #" << equipment->key() << "(ours=" << this->m_equipmentId << ")";
+         Q_ASSERT(equipment->key() == this->m_equipmentId);
+         if (propName == *PropertyNames::Equipment::kettleBoilSize_l) {
+            Q_ASSERT(val.canConvert<double>());
+            qDebug() << Q_FUNC_INFO << "We" << (this->boil() ? "have" : "don't have") << "a boil";
+            if (this->boil()) {
+               this->boil()->setPreBoilSize_l(val.value<double>());
+            }
+         } else if (propName == PropertyNames::Equipment::boilTime_min) {
+            Q_ASSERT(val.canConvert<double>());
+            if (this->boil()) {
+               this->boil()->setBoilTime_mins(val.value<double>());
+            }
+         }
+      }
       this->recalcIfNeeded(signalSenderClassName);
    } else {
       qDebug() << Q_FUNC_INFO << "No sender";
@@ -2772,22 +2985,47 @@ double Recipe::targetCollectedWortVol_l() {
    // Need to account for extract/sugar volume also.
    double postMashAdditionVolume_l = 0;
 
-   QList<Fermentable *> ferms = fermentables();
-   foreach (Fermentable * f, ferms) {
-      Fermentable::Type type = f->type();
-      if (type == Fermentable::Type::Extract) {
-         postMashAdditionVolume_l  += static_cast<float>(f->amount_kg() / PhysicalConstants::liquidExtractDensity_kgL);
-      } else if (type == Fermentable::Type::Sugar) {
-         postMashAdditionVolume_l  += static_cast<float>(f->amount_kg() / PhysicalConstants::sucroseDensity_kgL);
-      } else if (type == Fermentable::Type::Dry_Extract) {
-         postMashAdditionVolume_l  += static_cast<float>(f->amount_kg() / PhysicalConstants::dryExtractDensity_kgL);
+   for (auto const & fermentableAddition : this->fermentableAdditions()) {
+      auto const & fermentable = fermentableAddition->fermentable();
+      switch (fermentable->type()) {
+         case Fermentable::Type::Extract:
+            if (fermentableAddition->amountIsWeight()) {
+               postMashAdditionVolume_l += fermentableAddition->amount().quantity / PhysicalConstants::liquidExtractDensity_kgL;
+            } else {
+               // .:TBD:. This is probably incorrect!
+               postMashAdditionVolume_l += fermentableAddition->amount().quantity;
+            }
+            break;
+         case Fermentable::Type::Sugar:
+            if (fermentableAddition->amountIsWeight()) {
+               postMashAdditionVolume_l += fermentableAddition->amount().quantity / PhysicalConstants::sucroseDensity_kgL;
+            } else {
+               // .:TBD:. This is probably incorrect!
+               postMashAdditionVolume_l += fermentableAddition->amount().quantity;
+            }
+            break;
+         case Fermentable::Type::Dry_Extract:
+            if (fermentableAddition->amountIsWeight()) {
+               postMashAdditionVolume_l += fermentableAddition->amount().quantity / PhysicalConstants::dryExtractDensity_kgL;
+            } else {
+               // .:TBD:. This is probably incorrect!
+               postMashAdditionVolume_l += fermentableAddition->amount().quantity;
+            }
+            break;
+         // .:TODO:. Need to handle other types of Fermentable here, even if it's just to add a NO-OP to show the
+         // compiler we didn't forget about them.  For now the compiler warning will help us remember this to-do!
       }
    }
 
-   if (equipment()) {
-      return boilSize_l() - equipment()->lauterDeadspace_l() - equipment()->topUpKettle_l() - postMashAdditionVolume_l;
+   double boilSize_liters = this->pimpl->boilSizeInLitersOr(0.0);
+   qDebug() << Q_FUNC_INFO << "Boil size:" << boilSize_liters;
+
+   if (this->equipment()) {
+      return boilSize_liters - this->equipment()->getLauteringDeadspaceLoss_l()
+                             - this->equipment()->topUpKettle_l().value_or(Equipment::default_topUpKettle_l)
+                             - postMashAdditionVolume_l;
    } else {
-      return boilSize_l() - postMashAdditionVolume_l;
+      return boilSize_liters - postMashAdditionVolume_l;
    }
 }
 
@@ -2796,16 +3034,12 @@ double Recipe::targetTotalMashVol_l() {
    double absorption_lKg;
 
    if (equipment()) {
-      absorption_lKg = equipment()->grainAbsorption_LKg();
+      absorption_lKg = equipment()->mashTunGrainAbsorption_LKg().value_or(Equipment::default_mashTunGrainAbsorption_LKg);
    } else {
       absorption_lKg = PhysicalConstants::grainAbsorption_Lkg;
    }
 
-   return targetCollectedWortVol_l() + absorption_lKg * grainsInMash_kg();
-}
-
-Recipe * Recipe::getOwningRecipe() {
-   return this;
+   return this->targetCollectedWortVol_l() + absorption_lKg * this->grainsInMash_kg();
 }
 
 void Recipe::hardDeleteOwnedEntities() {
@@ -2816,50 +3050,40 @@ void Recipe::hardDeleteOwnedEntities() {
       ObjectStoreWrapper::hardDelete<BrewNote>(*brewNote);
    }
 
-   this->pimpl->hardDeleteAllMy<Fermentable>();
-   this->pimpl->hardDeleteAllMy<Hop>        ();
+   this->pimpl->hardDeleteAdditions<RecipeAdditionFermentable>();
+   this->pimpl->hardDeleteAdditions<RecipeAdditionHop        >();
+   this->pimpl->hardDeleteAdditions<RecipeAdditionMisc       >();
+   this->pimpl->hardDeleteAdditions<RecipeAdditionYeast      >();
+   this->pimpl->hardDeleteAdditions<RecipeAdjustmentSalt     >();
+   this->pimpl->hardDeleteAdditions<RecipeUseOfWater         >();
    this->pimpl->hardDeleteAllMy<Instruction>();
-   this->pimpl->hardDeleteAllMy<Misc>       ();
-   this->pimpl->hardDeleteAllMy<Salt>       ();
-   this->pimpl->hardDeleteAllMy<Water>      ();
-   this->pimpl->hardDeleteAllMy<Yeast>      ();
 
    return;
 }
 
 void Recipe::hardDeleteOrphanedEntities() {
    //
-   // Strictly a Recipe does not own its Mash.  However, if our Mash does not have a name and is not used by any other
-   // Recipe, then we want to delete it, on the grounds that it's not one the user intended to reuse across multiple
-   // Recipes.
+   // Strictly a Recipe does not own its Mash, Boil or Fermentation.  However, if our Mash/Boil/Fermentation does not
+   // have a name and is not used by any other Recipe, then we want to delete it, on the grounds that it's not one the
+   // user intended to reuse across multiple Recipes.
    //
-   // However, if we try to just delete the Mash Recipe::hardDeleteOwnedEntities(), we'd get a foreign key constraint
-   // violation error from the DB as, at that point, the Mash ID is still referenced by this Recipe.  (Unsetting the
-   // Mash ID in the Recipe record would be a bit tricky as we'd have to set it to NULL rather than just, say, -1 as,
-   // otherwise we'll get a different foreign key constraint violation error (because the DB can't find a Mash row with
-   // ID -1!).)
+   // However, if we try to just delete the Mash/etc in Recipe::hardDeleteOwnedEntities(), we'd get a foreign key
+   // constraint violation error from the DB as, at that point, the Mash ID is still referenced by this Recipe.
+   // (Unsetting the Mash ID in the Recipe record would be a bit tricky as we'd have to set it to NULL rather than just,
+   // say, -1 as, otherwise we'll get a different foreign key constraint violation error (because the DB can't find a
+   // Mash/etc row with ID -1!).)
    //
-   // At this point, however, the Recipe record has been removed from the database, so we can safely delete any orphaned
-   // Mash record.
+   // At this point, however, the Recipe record has been removed from the database, so we can safely delete any
+   // orphaned Mash/etc record.
    //
-   Mash * mash = this->mash();
-   if (mash && mash->name() == "") {
-      qDebug() << Q_FUNC_INFO << "Checking whether our unnamed Mash is used elsewhere";
-      auto recipesUsingThisMash = ObjectStoreWrapper::findAllMatching<Recipe>(
-         [mash](Recipe const * rec) {
-            return rec->uses(*mash);
-         }
-      );
-      if (1 == recipesUsingThisMash.size()) {
-         qDebug() <<
-            Q_FUNC_INFO << "Deleting unnamed Mash # " << mash->key() << " used only by Recipe #" << this->key();
-         Q_ASSERT(recipesUsingThisMash.at(0)->key() == this->key());
-         ObjectStoreWrapper::hardDelete<Mash>(*mash);
-      }
-   }
+   this->pimpl->hardDeleteOrphanedStepOwner<Mash        >();
+   this->pimpl->hardDeleteOrphanedStepOwner<Boil        >();
+   this->pimpl->hardDeleteOrphanedStepOwner<Fermentation>();
    return;
 }
 
+// Boilerplate code for FolderBase
+FOLDER_BASE_COMMON_CODE(Recipe)
 
 //======================================================================================================================
 //====================================== Start of Functions in Helper Namespace ========================================
@@ -2889,8 +3113,11 @@ void RecipeHelper::prepareForPropertyChange(NamedEntity & ne, BtStringConst cons
    // If the object we're about to change a property on is a Recipe or is used in a Recipe, then it might need a new
    // version -- unless it's already being versioned.
    //
-   Recipe * owner = ne.getOwningRecipe();
-   if (!owner || owner->isBeingModified()) {
+   auto owningRecipe = ne.owningRecipe();
+   if (!owningRecipe) {
+      return;
+   }
+   if (owningRecipe->isBeingModified()) {
       // Change is not related to a recipe or the recipe is already being modified
       return;
    }
@@ -2899,21 +3126,21 @@ void RecipeHelper::prepareForPropertyChange(NamedEntity & ne, BtStringConst cons
    // Automatic versioning means that, once a recipe is brewed, it is "soft locked" and the first change should spawn a
    // new version.  Any subsequent change should not spawn a new version until it is brewed again.
    //
-   if (owner->brewNotes().empty()) {
+   if (owningRecipe->brewNotes().empty()) {
       // Recipe hasn't been brewed
       return;
    }
 
    // If the object we're about to change already has descendants, then we don't want to create new ones.
-   if (owner->hasDescendants()) {
-      qDebug() << Q_FUNC_INFO << "Recipe #" << owner->key() << "already has descendants, so not creating any more";
+   if (owningRecipe->hasDescendants()) {
+      qDebug() << Q_FUNC_INFO << "Recipe #" << owningRecipe->key() << "already has descendants, so not creating any more";
       return;
    }
 
    //
    // Once we've started doing versioning, we don't want to trigger it again on the same Recipe until we've finished
    //
-   NamedEntityModifyingMarker ownerModifyingMarker(*owner);
+   NamedEntityModifyingMarker ownerModifyingMarker(*owningRecipe);
 
    //
    // Versioning when modifying something in a recipe is *hard*.  If we copy the recipe, there is no easy way to say
@@ -2924,14 +3151,14 @@ void RecipeHelper::prepareForPropertyChange(NamedEntity & ne, BtStringConst cons
 
    // Create a deep copy of the Recipe, and put it in the DB, so it has an ID.
    // (This will also emit signalObjectInserted for the new Recipe from ObjectStoreTyped<Recipe>.)
-   qDebug() << Q_FUNC_INFO << "Copying Recipe" << owner->key();
+   qDebug() << Q_FUNC_INFO << "Copying Recipe" << owningRecipe->key();
 
    // We also don't want to trigger versioning on the newly spawned Recipe until we're completely done here!
-   std::shared_ptr<Recipe> spawn = std::make_shared<Recipe>(*owner);
+   std::shared_ptr<Recipe> spawn = std::make_shared<Recipe>(*owningRecipe);
    NamedEntityModifyingMarker spawnModifyingMarker(*spawn);
    ObjectStoreWrapper::insert(spawn);
 
-   qDebug() << Q_FUNC_INFO << "Copied Recipe #" << owner->key() << "to new Recipe #" << spawn->key();
+   qDebug() << Q_FUNC_INFO << "Copied Recipe #" << owningRecipe->key() << "to new Recipe #" << spawn->key();
 
    // We assert that the newly created version of the recipe has not yet been brewed (and therefore will not get
    // automatically versioned on subsequent changes before it is brewed).
@@ -2942,7 +3169,7 @@ void RecipeHelper::prepareForPropertyChange(NamedEntity & ne, BtStringConst cons
    // previous version).  This will also emit a signalPropertyChanged from ObjectStoreTyped<Recipe>, which the UI can
    // pick up to update tree display of Recipes etc.
    //
-   owner->setAncestor(*spawn);
+   owningRecipe->setAncestor(*spawn);
 
    return;
 }

@@ -1,0 +1,69 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/beerjson/beerjson/master/json/mash_step.json",
+  "type": "object",
+  "additionalProperties": false,
+  "definitions": {
+    "MashStepType": {
+      "type": "object",
+      "description": "MashStepType - a per step representation occurring during the mash.",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "infusion",
+            "temperature",
+            "decoction",
+            "souring mash",
+            "souring wort",
+            "drain mash tun",
+            "sparge"
+          ]
+        },
+        "amount": {
+          "$ref": "measureable_units.json#/definitions/VolumeType"
+        },
+        "step_temperature": {
+          "$ref": "measureable_units.json#/definitions/TemperatureType"
+        },
+        "step_time": {
+          "$ref": "measureable_units.json#/definitions/TimeType"
+        },
+        "ramp_time": {
+          "description": "The amount of time  that passes before this step begins. eg moving from a mash step (step 1) of 148F, to a new temperature step of 156F (step 2) may take 8 minutes to heat the mash. Step 2 would have a ramp time of 8 minutes.",
+          "$ref": "measureable_units.json#/definitions/TimeType"
+        },
+        "end_temperature": {
+          "$ref": "measureable_units.json#/definitions/TemperatureType"
+        },
+        "description": {
+          "type": "string"
+        },
+        "water_grain_ratio": {
+          "description": "Also known as the mash thickness. eg 1.75 qt/lb or 3.65 L/kg.",
+          "$ref": "measureable_units.json#/definitions/SpecificVolumeType"
+        },
+        "infuse_temperature": {
+          "description": "Temperature of the water for an infusion step.",
+          "$ref": "measureable_units.json#/definitions/TemperatureType"
+        },
+        "start_ph": {
+          "$ref": "measureable_units.json#/definitions/AcidityType"
+        },
+        "end_ph": {
+          "$ref": "measureable_units.json#/definitions/AcidityType"
+        }
+      },
+      "required": [
+        "name",
+        "type",
+        "step_temperature",
+        "step_time"
+      ]
+    }
+  }
+}

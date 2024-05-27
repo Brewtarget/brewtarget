@@ -1,0 +1,68 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/beerjson/beerjson/master/json/packaging_vessel.json",
+  "type": "object",
+  "additionalProperties": false,
+  "definitions": {
+    "PackagingVesselType": {
+      "type": "object",
+      "description": "PackagingVesselType - a per vessel representation of a packaging process.",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "keg",
+            "bottle",
+            "cask",
+            "tank",
+            "firkin",
+            "other"
+          ]
+        },
+        "description": {
+          "type": "string"
+        },
+        "package_date": {
+          "$ref": "measureable_units.json#/definitions/DateType"
+        },
+        "start_temperature": {
+          "$ref": "measureable_units.json#/definitions/TemperatureType"
+        },
+        "end_temperature": {
+          "$ref": "measureable_units.json#/definitions/TemperatureType"
+        },
+        "step_time": {
+          "$ref": "measureable_units.json#/definitions/TimeType"
+        },
+        "start_gravity": {
+          "$ref": "measureable_units.json#/definitions/GravityType"
+        },
+        "end_gravity": {
+          "$ref": "measureable_units.json#/definitions/GravityType"
+        },
+        "start_ph": {
+          "$ref": "measureable_units.json#/definitions/AcidityType"
+        },
+        "end_ph": {
+          "$ref": "measureable_units.json#/definitions/AcidityType"
+        },
+        "carbonation": {
+          "type": "number"
+        },
+        "vessel_volume": {
+          "$ref": "measureable_units.json#/definitions/VolumeType"
+        },
+        "vessel_quantity": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "name"
+      ]
+    }
+  }
+}

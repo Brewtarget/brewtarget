@@ -1,24 +1,21 @@
-/*
- * measurement/Measurement.h is part of Brewtarget, and is copyright the following
- * authors 2010-2023:
- * - Mark de Wever <koraq@xs4all.nl>
- * - Matt Young <mfsy@yahoo.com>
- * - Mik Firestone <mikfire@gmail.com>
- * - Philip Greggory Lee <rocketman768@gmail.com>
+/*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ * measurement/Measurement.h is part of Brewtarget, and is copyright the following authors 2010-2023:
+ *   • Mark de Wever <koraq@xs4all.nl>
+ *   • Matt Young <mfsy@yahoo.com>
+ *   • Mik Firestone <mikfire@gmail.com>
+ *   • Philip Greggory Lee <rocketman768@gmail.com>
  *
- * Brewtarget is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * Brewtarget is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #ifndef MEASUREMENT_MEASUREMENT_H
 #define MEASUREMENT_MEASUREMENT_H
 #pragma once
@@ -31,17 +28,27 @@
 
 #include "measurement/Unit.h"
 #include "measurement/UnitSystem.h"
+#include "BtFieldType.h"
 
 class BtStringConst;
 class NamedEntity;
+struct TypeInfo;
 
 namespace Measurement {
 
    /**
     * \brief Use this when you want to get the text as a number (and ignore any units or other trailling letters or
-    *        symbols)
+    *        symbols).  Valid specialisations are \c int, \c unsigned \c int, and \c double.
+    *
+    * \param ok If set, used to return \c true if parsing of raw text went OK and \c false otherwise (in which case,
+    *           function return value will be 0).
     */
-   template<typename T> T extractRawFromString(QString const & input, bool * ok = nullptr);
+   template<typename T> [[nodiscard]] T extractRawFromString(QString const & input, bool * ok = nullptr);
+
+   /**
+    * \brief Alternate version of \c extractRawFromString for when you need a \c QVariant
+    */
+   [[nodiscard]] QVariant extractRawFromString(QString const & input, TypeInfo const & typeInfo, bool * ok = nullptr);
 
    void loadDisplayScales();
    void saveDisplayScales();
@@ -69,6 +76,8 @@ namespace Measurement {
     * \param precision how many decimal places
     */
    QString displayQuantity(double quantity, int precision);
+
+   QString displayQuantity(double quantity, int precision, NonPhysicalQuantity const nonPhysicalQuantity);
 
    /*!
     * \brief Converts a measurement (aka amount) to a displayable string in the appropriate units.

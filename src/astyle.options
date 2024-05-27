@@ -1,0 +1,98 @@
+#
+# astyle.options configuration file for Brewtarget
+#
+# For use with the AStyle tool (http://astyle.sourceforge.net/) to format code consistently
+#
+# Once you have installed astyle (eg sudo apt install astyle on Debian/Ubuntu/etc), run the following command IN THE
+# SAME DIRECTORY AS THIS FILE:
+#
+#    astyle --project=./astyle.options [List of files to modify]
+#
+# If you don't list files, it will do everything, which may take a while.
+# The original version of any file modified will be stored with ".bak" appended to the filename (eg original of Foo.h
+# will be in Foo.h.bak).
+#
+
+#
+# We use the One True Brace Style (see https://en.wikipedia.org/wiki/Indentation_style#Variant:_1TBS_(OTBS) and
+# https://2ality.com/2013/01/brace-styles.html), but, of course, there are multiple interpretations of this. :D
+#
+# Essentially we want the compactness of open braces not being on their own line, and the safety of usually not
+# allowing braces to be omitted for a control statement with only a single statement in its scope.  Specifically,
+# we don't want to force people to remember to add the braces if they extend a single-line block to multiple lines.
+# Eg, we prefer
+#    if (foo) {
+#       bar(foo);
+#    }
+# over
+#    if (foo)
+#       bar(foo);
+# because it forces you to be clear when you add another line whether you intend it to be part of the if statement:
+#    if (foo) {
+#       bar(foo);
+#       hum(foo);
+#    }
+# or
+#    if (foo) {
+#       bar(foo);
+#    }
+#    hum(foo);
+#
+--style=attach
+--add-braces
+--attach-namespaces
+--attach-classes
+--attach-inlines
+--attach-extern-c
+--attach-closing-while
+
+#
+# Indent with spaces, so the indentation is consistent everywhere
+# Four spaces is too much IMHO.  Two is probably enough, but almost all the Brewtarget code uses three space
+# indentation, so we stick with that to make sharing code easier.
+#
+# We don't indent 'class' and 'struct' access modifiers ('public:', 'private:' 'protected:' and 'private:')
+# We do indent switch blocks and namespace blocks
+#
+--indent=spaces=3
+--indent-switches
+--indent-namespaces
+--min-conditional-indent=0
+--max-continuation-indent=120
+--convert-tabs
+
+# Insert space padding around operators and commas
+--pad-oper
+
+#
+# Insert space padding between a header (e.g. 'if', 'for', 'while'...) and the following parenthesis, but remove such
+# space padding elsewhere, eg:
+#    if( foo ( bar )) {...
+# becomes:
+#    if (foo(bar)) {...
+#
+--pad-header
+--unpad-paren
+
+# We prefer 'int * foo;' and 'int & bar;' over 'int* foo;' and 'int& bar;' or 'int *foo;' and 'int &bar;'
+--align-pointer=middle
+--align-reference=middle
+
+# Closing the ending angle brackets is now allowed by the C++11 standard, so we can have:
+#    Stack<int, List<int>> stack1;
+# instead of:
+#    Stack<int, List<int> > stack1;
+--close-templates
+
+# Limit lines to 120 characters (because very long lines are hard to read).
+--max-code-length=120
+
+# However, break this rule for code that has been deliberately kept on a single line for readability
+--keep-one-line-blocks
+
+# Where breaking at a logical conditional (||, &&), put the break afterwards, not before, as it makes it clearer that
+# the line continues
+--break-after-logical
+
+# When we modify a file, keep the original version with .bak appended to the filename
+--suffix=.bak

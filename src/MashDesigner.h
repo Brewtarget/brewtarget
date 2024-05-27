@@ -1,23 +1,22 @@
-/*
- * MashDesigner.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
- * - Mik Firestone <mikfire@gmail.com>
- * - Philip Greggory Lee <rocketman768@gmail.com>
- * - Jonathon Harding <github@jrhardin.net>
+/*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ * MashDesigner.h is part of Brewtarget, and is copyright the following authors 2009-2022:
+ *   • Greg Meess <Daedalus12@gmail.com>
+ *   • Jonathon Harding <github@jrhardin.net>
+ *   • Matt Young <mfsy@yahoo.com>
+ *   • Mik Firestone <mikfire@gmail.com>
+ *   • Philip Greggory Lee <rocketman768@gmail.com>
  *
- * Brewtarget is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * Brewtarget is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #ifndef MASHDESIGNER_H
 #define MASHDESIGNER_H
 #pragma once
@@ -94,15 +93,15 @@ private:
    bool isDecoction() const;
 
 
-   Recipe* recObs;
-   std::shared_ptr<Mash> mash;
-   Equipment* equip;
-   std::shared_ptr<MashStep> mashStep;
-   std::shared_ptr<MashStep> prevStep;
-   double addedWater_l;
-   double grain_kg;
-   double MC;
-   int curStep;
+   Recipe* m_recObs;
+   std::shared_ptr<Mash     > m_mash;
+   std::shared_ptr<Equipment> m_equipment;
+   std::shared_ptr<MashStep> m_mashStep;
+   std::shared_ptr<MashStep> m_prevStep;
+   double m_addedWater_l;
+   double m_grain_kg;
+   double m_MC;
+   int m_curStep;
 };
 
 #endif

@@ -1,4 +1,4 @@
-/*
+/*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
  * widgets/SmartField.h is part of Brewtarget, and is copyright the following authors 2009-2024:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Mark de Wever <koraq@xs4all.nl>
@@ -8,21 +8,19 @@
  *   • Philip Greggory Lee <rocketman768@gmail.com>
  *   • Scott Peshak <scott@peshak.net>
  *
- * Brewtarget is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * Brewtarget is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-#ifndef SMARTFIELD_H
-#define SMARTFIELD_H
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
+#ifndef WIDGETS_SMARTFIELD_H
+#define WIDGETS_SMARTFIELD_H
 #pragma once
 
 #include <memory> // For PImpl
@@ -37,9 +35,11 @@
 #include "utils/BtStringConst.h"
 #include "utils/TypeLookup.h"
 #include "widgets/SmartAmounts.h"
+#include "widgets/SmartBase.h"
 
+class SmartAmountSettings;
 class SmartLabel;
-class TypeInfo;
+struct TypeInfo;
 
 /**
  * \class SmartField
@@ -55,12 +55,14 @@ class TypeInfo;
  *
  *                                                   QWidget
  *                                                  /       \
- *                                               ...        QLineEdit
- *                                               /                   \
- *                                              /       SmartField    \
- *                                        QLabel        /        \     \
- *                                       /       \     /          \     \
- *                             SmartLabel      SmartDigitWidget    SmartLineEdit
+ *                                               ...         QLineEdit
+ *                                              /                     \
+ *                                             /        SmartBase      \
+ *                                        QLabel        /      \        \
+ *                                         \    \      /    SmartField   \
+ *                                          \  SmartLabel    /      \     \
+ *                                           \              /        \     \
+ *                                          SmartDigitWidget        SmartLineEdit
  *
  *        A number of helper functions exist in the \c SmartAmounts namespace.
  *
@@ -70,12 +72,31 @@ class TypeInfo;
  *        other hand shows the value of a field, eg the total amount of NaCl in a water profile.
  *
  *        A \c SmartLabel and a \c SmartField typically work in conjunction with each other, but there are a number of
- *        edge cases.  See comment in \c widgets/SmartLabel.h for more details.
+ *        edge cases.  You cannot assume that a \c SmartLabel will always have a \c SmartField or vice versa.  See
+ *        comment in \c widgets/SmartLabel.h for more details.  This is why \c SmartAmountSettings exists to hold the
+ *        information that is usually in \c SmartLabel but can be held in \c SmartField if there is no \c SmartLabel.
+ *        The \c SmartBase class mostly just provides a convenient way to access \c SmartAmountSettings member
+ *        functions.
  *
  *        .:TBD:. There is still a certain amount of code duplication between \c SmartLabel and \c SmartField, which it
- *        would be nice to eliminate somehow.
+ *        would be nice to eliminate somehow:
+ *              setForcedSystemOfMeasurement
+ *              setForcedRelativeScale
+ *              getForcedSystemOfMeasurement
+ *              getForcedRelativeScale
+ *              getScaleInfo
+ *
+ *              getPhysicalQuantity
+ *              selectPhysicalQuantity
+ *
+ *        ××× SmartWidgetSettings or something.  One is the interface, other is the implementation/storage.  Logic is,
+ *        if Field has a Label then ask the Label; otherwise use our own.  The storage is:
+ *              TypeInfo const *          m_typeInfo
+ *              std::optional<Measurement::PhysicalQuantity> m_currentPhysicalQuantity
+ *
+ *              Measurement::Unit const * m_fixedDisplayUnit       BUT ONLY IN SMART_fIELD
  */
-class SmartField {
+class SmartField : public SmartBase<SmartField> {
 public:
    SmartField();
    virtual ~SmartField();
@@ -92,17 +113,17 @@ public:
     *                   uniquely identify this field.
     *
     * \param fieldName Name of the member variable of this field in its owning editor (eg "field_color").
-    *                     Together with \c editorName, should uniquely identify this field.
+    *                  Together with \c editorName, should uniquely identify this field.
     *
-    * \param fieldlFqName This should uniquely identify this field in the application.  (Usually, it's a combination
-    *                        of the owning widget and the member variable, eg "FermentableEditor->field_color".)
-    *                        This is mainly used for logging, where it helps a lot with debugging.  (We have hundreds of
-    *                        instances of this object and if we detect that one of them is misconfigured, it's very
-    *                        useful to be able to log which one!)
-    *                           We \b could construct this at run-time from \c editorName and \c fieldName, but,
-    *                        since we're being invoked via a macro (\c SMART_FIELD_INIT etc), we might as well have the
-    *                        compiler/preprocessor do the necessary concatenation at compile-time and hand the results
-    *                        in via this parameter.
+    * \param fieldFqName This should uniquely identify this field in the application.  (Usually, it's a combination
+    *                    of the owning widget and the member variable, eg "FermentableEditor->field_color".)
+    *                    This is mainly used for logging, where it helps a lot with debugging.  (We have hundreds of
+    *                    instances of this object and if we detect that one of them is misconfigured, it's very useful
+    *                    to be able to log which one!)
+    *                       We \b could construct this at run-time from \c editorName and \c fieldName, but, since we're
+    *                    being invoked via a macro (\c SMART_FIELD_INIT etc), we might as well have the
+    *                    compiler/preprocessor do the necessary concatenation at compile-time and hand the results in
+    *                    via this parameter.
     *
     * \param typeInfo Tells us what data type we use to store the contents of the field (when converted to canonical
     *                 units if it is a \c PhysicalQuantity) and, whether this is an optional field (in which case we
@@ -184,61 +205,82 @@ public:
     */
    virtual void doPostInitWork() = 0;
 
-   BtFieldType const getFieldType() const;
-
-   TypeInfo const & getTypeInfo() const;
+   /**
+    * \brief Maybe for consistency this should be \c getSettings() but that jars somewhat!
+    */
+   [[nodiscard]] SmartAmountSettings & settings();
 
    QString const & getMaximalDisplayString() const;
 
    char const * getFqFieldName() const;
 
    /**
-    * \brief If our field type is \b not \c NonPhysicalQuantity, then this returns the field converted to canonical
-    *        units for the relevant \c Measurement::PhysicalQuantity.  (It is a coding error to call this function if
-    *        our field type \c is \c NonPhysicalQuantity.)
-    */
-   Measurement::Amount toCanonical() const;
-
-   /**
-    * \brief Version of \c setAmount, for an optional amount.
+    * \brief Version of \c setQuantity, for an optional quantity.
     *
     *        It looks a bit funky disabling this specialisation for a T that is optional, but the point is that we don't
     *        want the compiler to ever create a \c std::optional<std::optional<T>> type.  (Eg, we don't want to write
-    *        `\c setAmount<std::optional<T>>(\c std::nullopt)` when we mean
-    *        `\c setAmount<T>(\c std::optional<T>{std::nullopt})`.
+    *        `\c setQuantity<std::optional<T>>(\c std::nullopt)` when we mean
+    *        `\c setQuantity<T>(\c std::optional<T>{std::nullopt})`.
     *
+    *        Note that, if you are explicitly providing std::nullopt as the parameter, you need to provide type
+    *        information, eg myField->setQuantity<double>(std::nullopt);
+    *
+    * \param quantity is the quantity to display
     */
-   template<typename T, typename = std::enable_if_t<is_not_optional<T>::value> > void setAmount(std::optional<T> amount);
+   template<typename T, typename = std::enable_if_t<is_non_optional<T>::value> > void setQuantity(std::optional<T> quantity);
 
    /**
-    * \brief Set the amount for a non-optional numeric field
+    * \brief Set the quantity for a non-optional numeric field
     *
-    * \param amount is the amount to display, which may be optional
+    * \param quantity is the quantity to display
     */
-   template<typename T, typename = std::enable_if_t<is_not_optional<T>::value> > void setAmount(T amount);
+   template<typename T, typename = std::enable_if_t<is_non_optional<T>::value> > void setQuantity(T quantity);
+
+   /**
+    * \brief Usually a field is set via \c setQuantity because the units can be obtained from \c TypeInfo.  However, in
+    *        certain circumstances, we need the caller to be able to supply both quantity and units, ie an Amount.  In
+    *        particular, when the field type is \c Measurement::ChoiceOfPhysicalQuantity, it is not sufficient to call
+    *        \c setQuantity as we will not be able determine units from field type.
+    */
+   void setAmount(Measurement::Amount const & amount);
 
    /**
     * \brief Normally, you set precision once when \c init is called via \c SMART_FIELD_INIT or similar.  However, if
     *        you really want to modify it on the fly, eg to have different precision for different units, this is what
-    *        you call.  Note that you should call this before calling \c setAmount.
+    *        you call.  Note that you should call this before calling \c setQuantity.
     */
    void setPrecision(unsigned int const precision);
    [[nodiscard]] unsigned int getPrecision() const;
 
-   void setForcedSystemOfMeasurement(std::optional<Measurement::SystemOfMeasurement> systemOfMeasurement);
-   void setForcedRelativeScale(std::optional<Measurement::UnitSystem::RelativeScale> relativeScale);
-   std::optional<Measurement::SystemOfMeasurement> getForcedSystemOfMeasurement() const;
-   std::optional<Measurement::UnitSystem::RelativeScale> getForcedRelativeScale() const;
+   /**
+    * \brief If our field type is \b not \c NonPhysicalQuantity, then this returns the field converted to canonical
+    *        units for the relevant \c Measurement::PhysicalQuantity.  (It is a coding error to call this function if
+    *        our field type \c is \c NonPhysicalQuantity.)
+    */
+   Measurement::Amount getNonOptCanonicalAmt() const;
 
    /**
-    * \brief Get the current settings (which may come from system-wide defaults) for \c SystemOfMeasurement and
-    *        \c RelativeScale.
+    * \brief As \c getNonOptCanonicalAmt but for optional fields
     */
-   SmartAmounts::ScaleInfo getScaleInfo() const;
+   std::optional<Measurement::Amount> getOptCanonicalAmt() const;
+
+   /**
+    * \brief Same as calling \c quantity() on the result of \c getNonOptCanonicalAmt().
+    */
+   double getNonOptCanonicalQty() const;
+
+   /**
+    * \brief As \c getNonOptCanonicalQty but (with the obvious changes) for optional fields
+    */
+   std::optional<double> getOptCanonicalQty() const;
+
 
    /**
     * \brief Use this when you want to get the text as a number (and ignore any units or other trailling letters or
     *        symbols).
+    *
+    *        NOTE: If the field holds a \c PhysicalQuantity or \c PhysicalQuantities then this will return the same
+    *              value as \c this->toCanonical().quantity().
     *
     *        This version is for non-optional (aka required) values.
     *
@@ -247,33 +289,21 @@ public:
     * \param ok If set, used to return \c true if parsing of raw text went OK and \c false otherwise (in which case,
     *           function return value will be 0).
     */
-   template<typename T> T getNonOptValueAs(bool * const ok = nullptr) const;
+   template<typename T> T getNonOptValue(bool * const ok = nullptr) const;
 
    /**
-    * \brief As \c getNonOptValueAs but for std::optional values
+    * \brief As \c getNonOptValue but for std::optional values
+    *
+    *        NOTE: If the field holds a \c PhysicalQuantity or \c PhysicalQuantities then this will return the same
+    *              value as \c this->toCanonical().quantity() for a non-blank field and \c std::nullopt for a blank
+    *              field.
     *
     *        Valid instantiations are \c int, \c unsigned \c int, \c double
     *
     * \param ok If set, used to return \c true if parsing of raw text went OK and \c false otherwise (in which case,
     *           function return value will be \c std::nullopt).
     */
-   template<typename T> std::optional<T> getOptValueAs(bool * const ok = nullptr) const;
-
-   /**
-    * \brief Returns what type of field this is - except that, if it is \c Mixed2PhysicalQuantities, will one of the two
-    *        possible \c Measurement::PhysicalQuantity values depending on the value of \c this->units.
-    *
-    *        It is a coding error to call this function if our field type \c is \c NonPhysicalQuantity.)
-    */
-   Measurement::PhysicalQuantity getPhysicalQuantity() const;
-
-   /**
-    * \brief If the \c Measurement::PhysicalQuantities supplied in the \c init call was not a single
-    *        \c Measurement::PhysicalQuantity, then this member function permits selecting the current
-    *        \c Measurement::PhysicalQuantity from two in the \c Measurement::Mixed2PhysicalQuantities supplied in the
-    *        constructor.
-    */
-   void selectPhysicalQuantity(Measurement::PhysicalQuantity const physicalQuantity);
+   template<typename T> std::optional<T> getOptValue(bool * const ok = nullptr) const;
 
    /**
     * \brief When the user has finished entering some text, this function does the corrections, eg if the field is set

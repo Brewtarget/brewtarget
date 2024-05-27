@@ -1,24 +1,21 @@
-/*
- * measurement/IbuMethods.cpp is part of Brewtarget, and is copyright the following
- * authors 2009-2023:
- * - Daniel Pettersson <pettson81@gmail.com>
- * - Mattias Måhl <mattias@kejsarsten.com>
- * - Matt Young <mfsy@yahoo.com>
- * - Philip Greggory Lee <rocketman768@gmail.com>
+/*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ * measurement/IbuMethods.cpp is part of Brewtarget, and is copyright the following authors 2009-2023:
+ *   • Daniel Pettersson <pettson81@gmail.com>
+ *   • Mattias Måhl <mattias@kejsarsten.com>
+ *   • Matt Young <mfsy@yahoo.com>
+ *   • Philip Greggory Lee <rocketman768@gmail.com>
  *
- * Brewtarget is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * Brewtarget is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "measurement/IbuMethods.h"
 
 #include <cmath>
@@ -30,7 +27,6 @@
 #include "Algorithms.h"
 #include "measurement/Unit.h"
 #include "PersistentSettings.h"
-
 
 namespace {
    // The Tinseth, Rager and Garetz methods are explained and discussed at http://www.realbeer.com/hops/FAQ.html
@@ -66,8 +62,8 @@ namespace {
                  double finalVolume_liters,
                  double wort_grav,
                  double minutes) {
-      double volumeFactor = (Measurement::Units::us_gallons.toCanonical(5.0).quantity())/ finalVolume_liters;
-      double hopsFactor = hops_grams/ (Measurement::Units::ounces.toCanonical(1.0).quantity() * 1000.0);
+      double volumeFactor = (Measurement::Units::us_gallons.toCanonical(5.0).quantity)/ finalVolume_liters;
+      double hopsFactor = hops_grams/ (Measurement::Units::ounces.toCanonical(1.0).quantity * 1000.0);
       static Polynomial p(Polynomial() << 0.7000029428 << -0.08868853463 << 0.02720809386 << -0.002340415323 << 0.00009925450081 << -0.000002102006144 << 0.00000002132644293 << -0.00000000008229488217);
 
       //using 60 minutes as a general table

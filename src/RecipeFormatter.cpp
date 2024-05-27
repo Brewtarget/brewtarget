@@ -1,33 +1,35 @@
-/*
- * RecipeFormatter.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2023
- * - Matt Young <mfsy@yahoo.com>
- * - Mik Firestone <mikfire@gmail.com>
- * - Philip Greggory Lee <rocketman768@gmail.com>
+/*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ * RecipeFormatter.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ *   • Brian Rower <brian.rower@gmail.com>
+ *   • Daniel Pettersson <pettson81@gmail.com>
+ *   • Greg Greenaae <ggreenaae@gmail.com>
+ *   • Mark de Wever <koraq@xs4all.nl>
+ *   • Matt Young <mfsy@yahoo.com>
+ *   • Mik Firestone <mikfire@gmail.com>
+ *   • Philip Greggory Lee <rocketman768@gmail.com>
+ *   • Théophane Martin <theophane.m@gmail.com>
  *
- * Brewtarget is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * Brewtarget is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "RecipeFormatter.h"
 
 #include <QClipboard>
 #include <QDebug>
 #include <QHBoxLayout>
 #include <QObject>
-#include <QPrintDialog>
 #include <QPrinter>
 #include <QPushButton>
 #include <QStringList>
+#include <QTextBrowser>
 #include <QTextDocument>
 #include <QVBoxLayout>
 
@@ -46,6 +48,10 @@
 #include "model/Mash.h"
 #include "model/MashStep.h"
 #include "model/Misc.h"
+#include "model/RecipeAdditionFermentable.h"
+#include "model/RecipeAdditionHop.h"
+#include "model/RecipeAdditionMisc.h"
+#include "model/RecipeAdditionYeast.h"
 #include "model/Style.h"
 #include "model/Water.h"
 #include "model/Yeast.h"
@@ -53,11 +59,11 @@
 
 namespace {
    //! Get the maximum number of characters in a list of strings.
-   unsigned int getMaxLength( QStringList* list ) {
+   unsigned int getMaxLength(QStringList & list) {
       int maxlen = 0;
-      for (int ii = 0; ii < list->count(); ++ii) {
-         if (list->at(ii).size() > maxlen) {
-            maxlen = list->at(ii).size();
+      for (int ii = 0; ii < list.count(); ++ii) {
+         if (list.at(ii).size() > maxlen) {
+            maxlen = list.at(ii).size();
          }
       }
 
@@ -65,18 +71,18 @@ namespace {
    }
 
    //! Prepend a string with spaces until its final length is the given length.
-   QString padToLength( const QString &str, unsigned int length ) {
+   QString padToLength(QString const & str, unsigned int length ) {
       // The 0 is redundant. It makes me feel better
       return QString("%1").arg(str, 0 - static_cast<int>(length), ' ');
    }
 
    //! Same as \b padToLength but with multiple strings.
-   void padAllToMaxLength( QStringList* list, unsigned int padding = 2) {
-      unsigned int maxlen = getMaxLength( list );
-      int size = list->count();
+   void padAllToMaxLength(QStringList & list, unsigned int padding = 2) {
+      unsigned int maxlen = getMaxLength(list);
+      int size = list.count();
       for (int ii = 0; ii < size; ++ii) {
          // Add a padding so that text doesn't run together.
-         list->replace(ii, padToLength( list->at(ii), maxlen + padding ) );
+         list.replace(ii, padToLength( list.at(ii), maxlen + padding ) );
       }
       return;
    }
@@ -122,17 +128,17 @@ namespace {
       return wrappedText;
    }
 
-   QList<Hop*> sortHopsByTime(Recipe* rec) {
-      QList<Hop*> sorted = rec->hops();
+   QList<std::shared_ptr<RecipeAdditionHop>> sortHopAdditionsByTime(Recipe * rec) {
+      QList<std::shared_ptr<RecipeAdditionHop>> sorted = rec->hopAdditions();
 
-      std::sort(sorted.begin(), sorted.end(), hopLessThanByTime);
+      std::sort(sorted.begin(), sorted.end(), RecipeAddition::lessThanByTime<RecipeAdditionHop>);
       return sorted;
    }
 
-   QList<Fermentable*> sortFermentablesByWeight(Recipe* rec) {
-      QList<Fermentable*> sorted = rec->fermentables();
+   QList<std::shared_ptr<RecipeAdditionFermentable>> sortFermentableAdditionsByWeight(Recipe* rec) {
+      QList<std::shared_ptr<RecipeAdditionFermentable>> sorted = rec->fermentableAdditions();
 
-      std::sort(sorted.begin(), sorted.end(), fermentablesLessThanByWeight);
+      std::sort(sorted.begin(), sorted.end(), RecipeAdditionFermentable::lessThanByWeight<RecipeAdditionFermentable>);
       return sorted;
    }
 
@@ -165,7 +171,7 @@ public:
          return "";
       }
 
-      Style* style = this->rec->style();
+      auto style = this->rec->style();
 
       ret += QString("%1 - %2 (%3%4)\n").arg( rec->name())
             .arg( style ? style->name() : tr("unknown style"))
@@ -256,15 +262,15 @@ public:
          return "";
       }
 
-      Style* style = rec->style();
+      auto style = rec->style();
 
       body += QString("<div id=\"headerdiv\">");
       // NOTE: QTextBrowser does not support the caption tag
       body += QString("<h1>%1 - %2 (%3%4)</h1>")
-            .arg( rec->name())
-            .arg( style ? style->name() : tr("unknown style"))
-            .arg( style ? style->categoryNumber() : tr("N/A") )
-            .arg( style ? style->styleLetter() : "" );
+            .arg(this->rec->name())
+            .arg(style ? style->name() : tr("unknown style"))
+            .arg(style ? style->categoryNumber() : tr("N/A") )
+            .arg(style ? style->styleLetter() : "" );
 
       body += QString("<table id=\"header\">");
       body += QString("<tr>"
@@ -272,13 +278,18 @@ public:
                      "<td class=\"value\">%2</td>"
                      "</tr>")
             .arg(tr("Brewer"))
-            .arg(rec->brewer());
+            .arg(this->rec->brewer());
+      QString dateToDisplay = "";
+      auto recipeDate = this->rec->date();
+      if (recipeDate) {
+         dateToDisplay = Localization::displayDate(*recipeDate);
+      }
       body += QString("<tr>"
                      "<td class=\"label\">%1</td>"
                      "<td class=\"value \">%2</td>"
                      "</tr>")
             .arg(tr("Date"))
-            .arg(Localization::displayDate(rec->date()));
+            .arg(dateToDisplay);
       body += "</table>";
 
       // Build the top table
@@ -304,7 +315,7 @@ public:
                      "<td class=\"value\">%2</td>")
             .arg(tr("Boil Time"))
             .arg(Measurement::displayAmount(Measurement::Amount{
-                                               rec->equipment() == nullptr ? 0.0 : rec->equipment()->boilTime_min(),
+                                               rec->equipment() == nullptr ? 0.0 : rec->equipment()->boilTime_min().value_or(Equipment::default_boilTime_mins),
                                                Measurement::Units::minutes
                                             }));
       body += QString("<td align=\"right\" class=\"right\">%1</td>"
@@ -349,7 +360,7 @@ public:
       body += QString("<td align=\"right\" class=\"right\">%1</td>"
                      "<td class=\"value\">%2</td></tr>")
             .arg(displayMetricVolumes ? tr("Estimated calories (per 33 cl)") : tr("Estimated calories (per 12 oz)"))
-            .arg(Measurement::displayQuantity(displayMetricVolumes ? rec->calories33cl() : rec->calories12oz(), 0) );
+            .arg(Measurement::displayQuantity(displayMetricVolumes ? rec->caloriesPer33cl() : rec->caloriesPerUs12oz(), 0) );
 
       body += "</table>";
 
@@ -375,7 +386,7 @@ public:
       entry.append(tr("Boil Time"));
       value.append(
          QString("%1").arg(
-            Measurement::displayAmount(Measurement::Amount{rec->equipment() == nullptr ? 0.0 : rec->equipment()->boilTime_min(),
+            Measurement::displayAmount(Measurement::Amount{rec->equipment() == nullptr ? 0.0 : rec->equipment()->boilTime_min().value_or(Equipment::default_boilTime_mins),
                                                            Measurement::Units::minutes})
          )
       );
@@ -398,8 +409,8 @@ public:
                                                                                          Measurement::Units::srm}, 1))
                               .arg(ColorMethods::colorFormulaName()));
 
-      padAllToMaxLength(&entry);
-      padAllToMaxLength(&value);
+      padAllToMaxLength(entry);
+      padAllToMaxLength(value);
 
       QString ret = "";
       for(int ii = 0; ii < nbLines; ++ii) {
@@ -415,9 +426,9 @@ public:
       }
 
       QString ftable;
-      QList<Fermentable*> ferms = sortFermentablesByWeight(this->rec);
+      auto fermentableAdditions = sortFermentableAdditionsByWeight(this->rec);
 
-      int size = ferms.size();
+      int size = fermentableAdditions.size();
       if ( size < 1 ) {
          return "";
       }
@@ -439,19 +450,20 @@ public:
             .arg(tr("Amount"))
             .arg(tr("Mashed"))
             .arg(tr("Late"))
-            .arg(tr("Yield"))
+            .arg(tr("Extract Yield Dry Basis Fine Grind (DBFG)"))
             .arg(tr("Color"));
       // Now add a row for each fermentable
-      for(int ii = 0; ii < size; ++ii) {
-         Fermentable* ferm = ferms[ii];
+      for (auto const & fermentableAddition : fermentableAdditions) {
+         auto const & fermentable = fermentableAddition->fermentable();
+         auto const yield = fermentable->fineGrindYield_pct();
          ftable += QString("<tr><td>%1</td><td>%2</td><td>%3</td><td>%4</td><td>%5</td><td>%6%</td><td>%7</td></tr>")
-               .arg(ferm->name())
-               .arg(Fermentable::typeDisplayNames[ferm->type()])
-               .arg(Measurement::displayAmount(Measurement::Amount{ferm->amount_kg(), Measurement::Units::kilograms}))
-               .arg(ferm->isMashed() ? tr("Yes") : tr("No") )
-               .arg(ferm->addAfterBoil() ? tr("Yes") : tr("No"))
-               .arg(Measurement::displayQuantity(ferm->yield_pct(), 0) )
-               .arg(Measurement::displayAmount(Measurement::Amount{ferm->color_srm(), Measurement::Units::srm}, 1));
+               .arg(fermentable->name())
+               .arg(Fermentable::typeDisplayNames[fermentable->type()])
+               .arg(Measurement::displayAmount(fermentableAddition->amount()))
+               .arg(fermentableAddition->stage() == RecipeAddition::Stage::Mash ? tr("Yes") : tr("No") )
+               .arg(fermentableAddition->addAfterBoil() ? tr("Yes") : tr("No"))
+               .arg(yield ? Measurement::displayQuantity(*yield, 0) : "?")
+               .arg(Measurement::displayAmount(Measurement::Amount{fermentable->color_srm(), Measurement::Units::srm}, 1));
       }
       // One row for the total grain (QTextBrowser does not know the caption tag)
       ftable += QString("<tr><td><b>%1</b></td><td>%2</td><td>%3</td><td>%4</td><td>%5</td><td>%6</td><td>%7</td></tr>")
@@ -472,38 +484,40 @@ public:
       }
 
       QString ret = "";
-      QList<Fermentable*> ferms = sortFermentablesByWeight(this->rec);
-      int size = ferms.size();
+      auto fermentableAdditions = sortFermentableAdditionsByWeight(this->rec);
+      int size = fermentableAdditions.size();
       if (size > 0) {
-         QStringList names, types, amounts, masheds, lates, yields, colors;
+         QStringList names  {tr("Name"  )};
+         QStringList types  {tr("Type"  )};
+         QStringList amounts{tr("Amount")};
+         QStringList masheds{tr("Mashed")};
+         QStringList lates  {tr("Late"  )};
+         QStringList yields {tr("Yield" )};
+         QStringList colors {tr("Color" )};
 
-         names.append(tr("Name"));
-         types.append(tr("Type"));
-         amounts.append(tr("Amount"));
-         masheds.append(tr("Mashed"));
-         lates.append(tr("Late"));
-         yields.append(tr("Yield"));
-         colors.append(tr("Color"));
-
-         for (int ii = 0; ii < size; ++ii) {
-            Fermentable* ferm =  ferms[ii];
-            names.append(ferm->name());
-            types.append(Fermentable::typeDisplayNames[ferm->type()]);
-            amounts.append(Measurement::displayAmount(Measurement::Amount{ferm->amount_kg(), Measurement::Units::kilograms}));
-            masheds.append( ferm->isMashed() ? tr("Yes") : tr("No"));
-            lates.append( ferm->addAfterBoil() ? tr("Yes") : tr("No"));
-            yields.append( QString("%1%").arg(Measurement::displayQuantity(ferm->yield_pct(), 0) ) );
-            colors.append( QString("%1").arg(Measurement::displayAmount(Measurement::Amount{ferm->color_srm(),
+         for (auto const & fermentableAddition : fermentableAdditions) {
+            auto const & fermentable = fermentableAddition->fermentable();
+            names.append(fermentable->name());
+            types.append(Fermentable::typeDisplayNames[fermentable->type()]);
+            amounts.append(Measurement::displayAmount(fermentableAddition->amount()));
+            masheds.append(fermentableAddition->stage() == RecipeAddition::Stage::Mash ? tr("Yes") : tr("No"));
+            lates.append(fermentableAddition->addAfterBoil() ? tr("Yes") : tr("No"));
+            if (fermentable->fineGrindYield_pct()) {
+               yields.append(QString("%1%").arg(Measurement::displayQuantity(*fermentable->fineGrindYield_pct(), 0)));
+            } else {
+               yields.append("?");
+            }
+            colors.append( QString("%1").arg(Measurement::displayAmount(Measurement::Amount{fermentable->color_srm(),
                                                                                             Measurement::Units::srm}, 1)));
          }
 
-         padAllToMaxLength(&names);
-         padAllToMaxLength(&types);
-         padAllToMaxLength(&amounts);
-         padAllToMaxLength(&masheds);
-         padAllToMaxLength(&lates);
-         padAllToMaxLength(&yields);
-         padAllToMaxLength(&colors);
+         padAllToMaxLength(names);
+         padAllToMaxLength(types);
+         padAllToMaxLength(amounts);
+         padAllToMaxLength(masheds);
+         padAllToMaxLength(lates);
+         padAllToMaxLength(yields);
+         padAllToMaxLength(colors);
 
          for (int ii = 0; ii < size+1; ++ii) {
             ret += names.at(ii) + types.at(ii) + amounts.at(ii) + masheds.at(ii) + lates.at(ii) + yields.at(ii) + colors.at(ii) + "\n";
@@ -521,15 +535,15 @@ public:
          return "";
       }
 
-      QList<Hop*> hops = sortHopsByTime(rec);
+      auto hopAdditions = sortHopAdditionsByTime(rec);
 
-      int size = hops.size();
+      int size = hopAdditions.size();
       if ( size < 1 ) {
          return "";
       }
 
       QString hTable = QString("<h3>%1</h3>").arg(tr("Hops"));
-      hTable += QString("<table id=\"hops\">");
+      hTable += QString("<table id=\"hopAdditions\">");
       // Set up the header row.
       hTable += QString("<tr>"
                         "<th align=\"left\" width=\"20%\">%1</th>"
@@ -543,21 +557,24 @@ public:
             .arg(tr("Name"))
             .arg(tr("Alpha"))
             .arg(tr("Amount"))
-            .arg(tr("Use"))
+            .arg(tr("Add During"))
             .arg(tr("Time"))
             .arg(tr("Form"))
             .arg(tr("IBU"));
 
       for(int ii = 0; ii < size; ++ii) {
-         Hop *hop = hops[ii];
+         auto hopAddition = hopAdditions[ii];
          hTable += QString("<tr><td>%1</td><td>%2%</td><td>%3</td><td>%4</td><td>%5</td><td>%6</td><td>%7</td></tr>")
-               .arg(hop->name())
-               .arg(Measurement::displayQuantity(hop->alpha_pct(), 1) )
-               .arg(Measurement::displayAmount(Measurement::Amount{hop->amount_kg(), Measurement::Units::kilograms}))
-               .arg(Hop::useDisplayNames[hop->use()])
-               .arg(Measurement::displayAmount(Measurement::Amount{hop->time_min(), Measurement::Units::minutes}))
-               .arg(Hop::formDisplayNames[hop->form()])
-               .arg(Measurement::displayQuantity(rec->ibuFromHop(hop), 1) );
+               .arg(hopAddition->hop()->name())
+               .arg(Measurement::displayQuantity(hopAddition->hop()->alpha_pct(), 1) )
+               .arg(Measurement::displayAmount(hopAddition->amount()))
+               .arg(RecipeAddition::stageDisplayNames[hopAddition->stage()])
+               // TBD: If we end up having hop additions that are not time based (which is technically allowed now we're
+               //      following the BeerJSON model instead of the BeerXML one) then we'll need to rework this a bit
+               //      (along with other places we use `hopAddition->addAtTime_mins().value_or(0.0)`
+               .arg(Measurement::displayAmount(Measurement::Amount{hopAddition->addAtTime_mins().value_or(0.0), Measurement::Units::minutes}))
+               .arg(Hop::formDisplayNames[hopAddition->hop()->form()])
+               .arg(Measurement::displayQuantity(rec->ibuFromHopAddition(*hopAddition), 1) );
       }
       hTable += "</table>";
       return hTable;
@@ -569,42 +586,39 @@ public:
       }
 
       QString ret = "";
-      QList<Hop*> hops = sortHopsByTime(rec);
-      int size = hops.size();
-      if ( size > 0 ) {
-         QStringList names, alphas, amounts, uses, times, forms, ibus;
+      auto hopAdditions = sortHopAdditionsByTime(this->rec);
+      int size = hopAdditions.size();
+      if (size > 0) {
+         QStringList names  {tr("Name"      )};
+         QStringList alphas {tr("Alpha"     )};
+         QStringList amounts{tr("Amount"    )};
+         QStringList stages {tr("Add During")};
+         QStringList times  {tr("Time"      )};
+         QStringList forms  {tr("Form"      )};
+         QStringList ibus   {tr("IBU"       )};
 
-         names.append(tr("Name"));
-         alphas.append(("Alpha"));
-         amounts.append(tr("Amount"));
-         uses.append(tr("Use"));
-         times.append(tr("Time"));
-         forms.append(tr("Form"));
-         ibus.append(tr("IBU"));
+         for (int ii = 0; ii < size; ++ii) {
+            auto hopAddition = hopAdditions[ii];
 
-         for(int ii = 0; ii < size; ++ii) {
-            Hop* hop = hops[ii];
-
-            names.append(hop->name());
-            alphas.append(QString("%1%").arg(Measurement::displayQuantity(hop->alpha_pct(), 1)));
-            amounts.append(Measurement::displayAmount(Measurement::Amount{hop->amount_kg(),
-                                                                          Measurement::Units::kilograms}));
-            uses.append(Hop::useDisplayNames[hop->use()]);
-            times.append(Measurement::displayAmount(Measurement::Amount{hop->time_min(), Measurement::Units::minutes}));
-            forms.append(Hop::formDisplayNames[hop->form()]);
-            ibus.append(QString("%1").arg( Measurement::displayQuantity(rec->ibuFromHop(hop), 1)));
+            names.append(hopAddition->name());
+            alphas.append(QString("%1%").arg(Measurement::displayQuantity(hopAddition->hop()->alpha_pct(), 1)));
+            amounts.append(Measurement::displayAmount(hopAddition->amount()));
+            stages.append(RecipeAddition::stageDisplayNames[hopAddition->stage()]);
+            times.append(Measurement::displayAmount(Measurement::Amount{hopAddition->addAtTime_mins().value_or(0.0), Measurement::Units::minutes}));
+            forms.append(Hop::formDisplayNames[hopAddition->hop()->form()]);
+            ibus.append(QString("%1").arg( Measurement::displayQuantity(rec->ibuFromHopAddition(*hopAddition), 1)));
          }
 
-         padAllToMaxLength(&names);
-         padAllToMaxLength(&alphas);
-         padAllToMaxLength(&amounts);
-         padAllToMaxLength(&uses);
-         padAllToMaxLength(&times);
-         padAllToMaxLength(&forms);
-         padAllToMaxLength(&ibus);
+         padAllToMaxLength(names);
+         padAllToMaxLength(alphas);
+         padAllToMaxLength(amounts);
+         padAllToMaxLength(stages);
+         padAllToMaxLength(times);
+         padAllToMaxLength(forms);
+         padAllToMaxLength(ibus);
 
-         for(int ii = 0; ii < size+1; ++ii) {
-            ret += names.at(ii) + alphas.at(ii) + amounts.at(ii) + uses.at(ii) + times.at(ii) + forms.at(ii) + ibus.at(ii) + "\n";
+         for (int ii = 0; ii < size + 1; ++ii) {
+            ret += names.at(ii) + alphas.at(ii) + amounts.at(ii) + stages.at(ii) + times.at(ii) + forms.at(ii) + ibus.at(ii) + "\n";
          }
       }
       return ret;
@@ -615,8 +629,8 @@ public:
          return "";
       }
 
-      QList<Misc*> miscs = rec->miscs();
-      int size = miscs.size();
+      auto miscAdditions = this->rec->miscAdditions();
+      int size = miscAdditions.size();
       if ( size < 1 ) {
          return "";
       }
@@ -637,18 +651,18 @@ public:
             .arg(tr("Amount"))
             .arg(tr("Time"));
       for (int ii = 0; ii < size; ++ii) {
-         Misc *misc = miscs[ii];
+         auto miscAddition = miscAdditions[ii];
+         auto misc = miscAddition->misc();
 
          mtable += QString("<tr><td>%1</td><td>%2</td><td>%3</td><td>%4</td><td>%5</td></tr>")
                .arg(misc->name())
-               .arg(misc->typeStringTr())
-               .arg(misc->useStringTr())
-               .arg(Measurement::displayAmount(Measurement::Amount{
-                                                  misc->amount(),
-                                                  misc->amountIsWeight() ? Measurement::Units::kilograms : Measurement::Units::liters
-                                               },
-                                               3))
-               .arg(Measurement::displayAmount(Measurement::Amount{misc->time(), Measurement::Units::minutes}));
+               .arg(Misc::typeDisplayNames[misc->type()])
+               .arg(RecipeAdditionMisc::useDisplayNames[miscAddition->use()])
+               .arg(Measurement::displayAmount(miscAddition->amount()))
+               // TBD: If we end up having misc additions that are not time based (which is technically allowed now we're
+               //      following the BeerJSON model instead of the BeerXML one) then we'll need to rework this a bit
+               //      (along with other places we use `miscAddition->addAtTime_mins().value_or(0.0)`
+               .arg(Measurement::displayAmount(Measurement::Amount{miscAddition->addAtTime_mins().value_or(0.0), Measurement::Units::minutes}));
       }
       mtable += "</table>";
       return mtable;
@@ -661,8 +675,8 @@ public:
       }
       QString ret = "";
 
-      QList<Misc*> miscs = this->rec->miscs();
-      int size = miscs.size();
+      auto miscAdditions = this->rec->miscAdditions();
+      int size = miscAdditions.size();
       if( size > 0 ) {
          QStringList names, types, uses, amounts, times;
 
@@ -673,24 +687,20 @@ public:
          times.append(tr("Time"));
 
          for (int ii = 0; ii < size; ++ii) {
-            Misc* misc = miscs[ii];
+            auto miscAddition = miscAdditions[ii];
+            auto misc = miscAddition->misc();
             names.append(misc->name());
-            types.append(misc->typeStringTr());
-            uses.append(misc->useStringTr());
-            amounts.append(
-               Measurement::displayAmount(Measurement::Amount{
-                                             misc->amount(),
-                                             misc->amountIsWeight() ? Measurement::Units::kilograms : Measurement::Units::liters
-                                          }, 3)
-            );
-            times.append(Measurement::displayAmount(Measurement::Amount{misc->time(),  Measurement::Units::minutes}));
+            types.append(Misc::typeDisplayNames[misc->type()]);
+            uses.append(RecipeAdditionMisc::useDisplayNames[miscAddition->use()]);
+            amounts.append(Measurement::displayAmount(miscAddition->amount()));
+            times.append(Measurement::displayAmount(Measurement::Amount{miscAddition->addAtTime_mins().value_or(0.0), Measurement::Units::minutes}));
          }
 
-         padAllToMaxLength(&names);
-         padAllToMaxLength(&types);
-         padAllToMaxLength(&uses);
-         padAllToMaxLength(&amounts);
-         padAllToMaxLength(&times);
+         padAllToMaxLength(names);
+         padAllToMaxLength(types);
+         padAllToMaxLength(uses);
+         padAllToMaxLength(amounts);
+         padAllToMaxLength(times);
 
          for (int ii = 0; ii < size+1; ++ii) {
             ret += names.at(ii) + types.at(ii) + uses.at(ii) + amounts.at(ii) + times.at(ii) + "\n";
@@ -704,9 +714,8 @@ public:
          return "";
       }
 
-      QList<Yeast*> yeasts = this->rec->yeasts();
-      int size = yeasts.size();
-
+      auto yeastAdditions = this->rec->yeastAdditions();
+      int size = yeastAdditions.size();
       if (size < 1) {
          return "";
       }
@@ -726,18 +735,15 @@ public:
             .arg(tr("Amount"))
             .arg(tr("Stage"));
       for (int ii = 0; ii < size; ++ii) {
-         Yeast* y = yeasts[ii];
+         auto yeastAddition = yeastAdditions[ii];
+         auto yeast = yeastAddition->yeast();
 
          ytable += QString("<tr><td>%1</td><td>%2</td><td>%3</td><td>%4</td><td>%5</td></tr>")
-               .arg( y->name())
-               .arg( y->typeStringTr())
-               .arg( y->formStringTr())
-               .arg( Measurement::displayAmount(Measurement::Amount{
-                                                   y->amount(),
-                                                   y->amountIsWeight() ? Measurement::Units::kilograms : Measurement::Units::liters
-                                                },
-                                                2) )
-               .arg( y->addToSecondary() ? tr("Secondary") : tr("Primary"));
+               .arg(yeast->name())
+               .arg(Yeast::typeDisplayNames[yeast->type()])
+               .arg(Yeast::formDisplayNames[yeast->form()])
+               .arg(Measurement::displayAmount(yeastAddition->amount()))
+               .arg(yeastAddition->step() > 1 ? tr("Secondary") : tr("Primary"));
       }
       ytable += "</table>";
       return ytable;
@@ -749,8 +755,8 @@ public:
       }
 
       QString ret = "";
-      QList<Yeast*> yeasts = rec->yeasts();
-      int size = yeasts.size();
+      auto yeastAdditions = this->rec->yeastAdditions();
+      int size = yeastAdditions.size();
       if (size > 0) {
          QStringList names, types, forms, amounts, stages;
 
@@ -761,23 +767,20 @@ public:
          stages.append(tr("Stage"));
 
          for (int ii = 0; ii < size; ++ii) {
-            Yeast* y = yeasts[ii];
-            names.append(y->name());
-            types.append(y->typeStringTr());
-            forms.append(y->formStringTr());
-            amounts.append(Measurement::displayAmount(Measurement::Amount{
-                                                         y->amount(),
-                                                         y->amountIsWeight() ? Measurement::Units::kilograms : Measurement::Units::liters
-                                                      },
-                                                      2));
-            stages.append(y->addToSecondary() ? tr("Secondary") : tr("Primary"));
+            auto yeastAddition = yeastAdditions[ii];
+            auto yeast = yeastAddition->yeast();
+            names.append(yeast->name());
+            types.append(Yeast::typeDisplayNames[yeast->type()]);
+            forms.append(Yeast::formDisplayNames[yeast->form()]);
+            amounts.append(Measurement::displayAmount(yeastAddition->amount()));
+            stages.append(yeastAddition->step() > 1 ? tr("Secondary") : tr("Primary"));
          }
 
-         padAllToMaxLength(&names);
-         padAllToMaxLength(&types);
-         padAllToMaxLength(&forms);
-         padAllToMaxLength(&amounts);
-         padAllToMaxLength(&stages);
+         padAllToMaxLength(names);
+         padAllToMaxLength(types);
+         padAllToMaxLength(forms);
+         padAllToMaxLength(amounts);
+         padAllToMaxLength(stages);
 
          for (int ii = 0; ii < size+1; ++ii) {
             ret += names.at(ii) + types.at(ii) + forms.at(ii) + amounts.at(ii) + stages.at(ii) + "\n";
@@ -818,24 +821,24 @@ public:
          QString tmp = "<tr>";
          tmp += QString("<td>%1</td><td>%2</td><td>%3</td><td>%4</td><td>%5</td><td>%6</td>")
                .arg(step->name())
-               .arg(step->typeStringTr());
+               .arg(MashStep::typeDisplayNames[step->type()]);
 
          if (step->isInfusion()) {
-            tmp = tmp.arg(Measurement::displayAmount(Measurement::Amount{step->infuseAmount_l(),
+            tmp = tmp.arg(Measurement::displayAmount(Measurement::Amount{step->amount_l(),
                                                                          Measurement::Units::liters}))
-                     .arg(Measurement::displayAmount(Measurement::Amount{step->infuseTemp_c(),
+                     .arg(Measurement::displayAmount(Measurement::Amount{step->infuseTemp_c().value_or(step->startTemp_c().value_or(0.0)),
                                                                          Measurement::Units::celsius}));
          } else if (step->isDecoction()) {
-            tmp = tmp.arg( Measurement::displayAmount(Measurement::Amount{step->decoctionAmount_l(),
+            tmp = tmp.arg( Measurement::displayAmount(Measurement::Amount{step->amount_l(),
                                                                           Measurement::Units::liters}))
                   .arg("---");
          } else {
             tmp = tmp.arg( "---" ).arg("---");
          }
 
-         tmp = tmp.arg( Measurement::displayAmount(Measurement::Amount{step->stepTemp_c(),
+         tmp = tmp.arg( Measurement::displayAmount(Measurement::Amount{step->startTemp_c().value_or(0.0),
                                                                        Measurement::Units::celsius}));
-         tmp = tmp.arg( Measurement::displayAmount(Measurement::Amount{step->stepTime_min(),
+         tmp = tmp.arg( Measurement::displayAmount(Measurement::Amount{step->stepTime_mins().value_or(0.0),
                                                                        Measurement::Units::minutes}, 0));
 
          mtable += tmp + "</tr>";
@@ -868,32 +871,32 @@ public:
 
          for (auto step : mashSteps) {
             names.append(step->name());
-            types.append(step->typeStringTr());
+            types.append(MashStep::typeDisplayNames[step->type()]);
             if ( step->isInfusion() ) {
-               amounts.append(Measurement::displayAmount(Measurement::Amount{step->infuseAmount_l(),
+               amounts.append(Measurement::displayAmount(Measurement::Amount{step->amount_l(),
                                                                              Measurement::Units::liters}));
-               temps.append(Measurement::displayAmount(Measurement::Amount{step->infuseTemp_c(),
+               temps.append(Measurement::displayAmount(Measurement::Amount{step->infuseTemp_c().value_or(step->startTemp_c().value_or(0.0)),
                                                                            Measurement::Units::celsius}));
             } else if( step->isDecoction() ) {
-               amounts.append(Measurement::displayAmount(Measurement::Amount{step->decoctionAmount_l(),
+               amounts.append(Measurement::displayAmount(Measurement::Amount{step->amount_l(),
                                                                              Measurement::Units::liters}));
                temps.append("---");
             } else {
                amounts.append( "---" );
                temps.append("---");
             }
-            targets.append(Measurement::displayAmount(Measurement::Amount{step->stepTemp_c(),
+            targets.append(Measurement::displayAmount(Measurement::Amount{step->startTemp_c().value_or(0.0),
                                                                           Measurement::Units::celsius}));
-            times.append(Measurement::displayAmount(Measurement::Amount{step->stepTime_min(),
+            times.append(Measurement::displayAmount(Measurement::Amount{step->stepTime_mins().value_or(0.0),
                                                                         Measurement::Units::minutes}, 0));
          }
 
-         padAllToMaxLength(&names);
-         padAllToMaxLength(&types);
-         padAllToMaxLength(&amounts);
-         padAllToMaxLength(&temps);
-         padAllToMaxLength(&targets);
-         padAllToMaxLength(&times);
+         padAllToMaxLength(names);
+         padAllToMaxLength(types);
+         padAllToMaxLength(amounts);
+         padAllToMaxLength(temps);
+         padAllToMaxLength(targets);
+         padAllToMaxLength(times);
 
          for (int ii = 0; ii < size+1; ++ii) {
             ret += names.at(ii) + types.at(ii) + amounts.at(ii) + temps.at(ii) + targets.at(ii) + times.at(ii) + "\n";
@@ -958,7 +961,7 @@ public:
             //Wrap instruction text to 75 ( 80 (text separator length) - 5 (num colunm lenght) )
             text.append(QString("- %1").arg(wrapText(ins->directions(), 75)));
          }
-         padAllToMaxLength(&num, 1);
+         padAllToMaxLength(num, 1);
          //Set a margin to align multiple line instructions
          QString leftMargin = QString("").leftJustified(num.at(0).size() + 2, ' ');
          for (int ii = 0; ii < size; ++ii) {
@@ -1154,7 +1157,7 @@ QString RecipeFormatter::getBBCodeFormat() {
    QString tmp = "";
    QRegExp regexp("(^[^\n]*\n)(.*$)"); //Regexp to match the first line of tables
 
-   Style* style = this->pimpl->rec->style();
+   auto style = this->pimpl->rec->style();
 
    QString ret = "[size=150][color=#004080][b][u]";
    ret += QString("%1 - %2 (%3%4)").arg(this->pimpl->rec->name())
@@ -1205,7 +1208,7 @@ QString RecipeFormatter::getToolTip(Recipe* rec) {
       return "";
    }
 
-   Style* style = rec->style();
+   auto style = rec->style();
 
    // Do the style sheet first
    QString header = "<html><head><style type=\"text/css\">";
@@ -1276,7 +1279,7 @@ QString RecipeFormatter::getToolTip(Style* style) {
            .arg(style->styleGuide());
    body += QString("<td class=\"left\">%1</td><td class=\"value\">%2</td></tr>")
            .arg(tr("Type"))
-           .arg(style->typeString());
+           .arg(Style::typeDisplayNames[style->type()]);
 
    body += "</table></body></html>";
 
@@ -1303,10 +1306,10 @@ QString RecipeFormatter::getToolTip(Equipment* kit) {
    // First row -- batchsize and boil time
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
            .arg(tr("Preboil"))
-           .arg(Measurement::displayAmount(Measurement::Amount{kit->boilSize_l(), Measurement::Units::liters}) );
+           .arg(Measurement::displayAmount(Measurement::Amount{kit->kettleBoilSize_l(), Measurement::Units::liters}) );
    body += QString("<td class=\"left\">%1</td><td class=\"value\">%2</td></tr>")
            .arg(tr("BoilTime"))
-           .arg(Measurement::displayAmount(Measurement::Amount{kit->boilTime_min(), Measurement::Units::minutes}) );
+           .arg(Measurement::displayAmount(Measurement::Amount{kit->boilTime_min().value_or(Equipment::default_boilTime_mins), Measurement::Units::minutes}) );
 
    body += "</table></body></html>";
 
@@ -1314,8 +1317,8 @@ QString RecipeFormatter::getToolTip(Equipment* kit) {
 }
 
 // Once we do inventory, this needs to be fixed to show amount on hand
-QString RecipeFormatter::getToolTip(Fermentable* ferm) {
-   if (ferm == nullptr) {
+QString RecipeFormatter::getToolTip(Fermentable* fermentable) {
+   if (fermentable == nullptr) {
       return "";
    }
 
@@ -1329,22 +1332,24 @@ QString RecipeFormatter::getToolTip(Fermentable* ferm) {
    body += QString("<div id=\"headerdiv\">");
    body += QString("<table id=\"tooltip\">");
    body += QString("<caption>%1</caption>")
-         .arg( ferm->name() );
+         .arg( fermentable->name() );
 
    // First row -- type and color
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
            .arg(tr("Type"))
-           .arg(Fermentable::typeDisplayNames[ferm->type()]);
+           .arg(Fermentable::typeDisplayNames[fermentable->type()]);
    body += QString("<td class=\"left\">%1</td><td class=\"value\">%2</td></tr>")
            .arg(tr("Color"))
-           .arg(Measurement::displayAmount(Measurement::Amount{ferm->color_srm(), Measurement::Units::srm}, 1));
+           .arg(Measurement::displayAmount(Measurement::Amount{fermentable->color_srm(), Measurement::Units::srm}, 1));
    // Second row -- isMashed and yield?
-   body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
-           .arg(tr("Mashed"))
-           .arg( ferm->isMashed() ? tr("Yes") : tr("No") );
+//   body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
+//           .arg(tr("Mashed"))
+//           .arg( fermentable->stage() == RecipeAddition::Stage::Mash ? tr("Yes") : tr("No") );
+   body += QString("<tr><td class=\"left\">.</td><td class=\"value\">.</td>");
+   auto const yield = fermentable->fineGrindYield_pct();
    body += QString("<td class=\"left\">%1</td><td class=\"value\">%2</td></tr>")
-           .arg(tr("Yield"))
-           .arg(Measurement::displayQuantity(ferm->yield_pct(), 3));
+           .arg(tr("Extract Yield Dry Basis Fine Grind (DBFG)"))
+           .arg(yield ? Measurement::displayQuantity(*yield, 3) : "?");
 
    body += "</table></body></html>";
 
@@ -1372,18 +1377,26 @@ QString RecipeFormatter::getToolTip(Hop* hop) {
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
            .arg(tr("Alpha"))
            .arg(Measurement::displayQuantity(hop->alpha_pct(), 3));
-   body += QString("<td class=\"left\">%1</td><td class=\"value\">%2</td></tr>")
-           .arg(tr("Beta"))
-           .arg(Measurement::displayQuantity(hop->beta_pct(), 3));
+   if (hop->beta_pct()) {
+      body += QString("<td class=\"left\">%1</td><td class=\"value\">%2</td>")
+            .arg(tr("Beta"))
+            .arg(Measurement::displayQuantity(*hop->beta_pct(), 3));
+   }
+   body += QString("</tr>");
 
-   // Second row -- form and use
-   body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
-           .arg(tr("Form"))
-           .arg(Hop::formDisplayNames[hop->form()]);
-   body += QString("<td class=\"left\">%1</td><td class=\"value\">%2</td></tr>")
-           .arg(tr("Use"))
-           .arg(Hop::useDisplayNames[hop->use()]);
-
+   // Second row -- form and type
+   body += QString("<tr>");
+   if (hop->form()) {
+      body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
+            .arg(tr("Form"))
+            .arg(Hop::formDisplayNames[*hop->form()]);
+   }
+   if (hop->type()) {
+      body += QString("<td class=\"left\">%1</td><td class=\"value\">%2</td></tr>")
+            .arg(tr("Type"))
+            .arg(Hop::typeDisplayNames[*hop->type()]);
+   }
+   body += QString("</tr>");
    body += "</table></body></html>";
 
    return header + body;
@@ -1405,14 +1418,13 @@ QString RecipeFormatter::getToolTip(Misc* misc) {
    body += QString("<table id=\"tooltip\">");
    body += QString("<caption>%1</caption>")
          .arg( misc->name() );
-
    // First row -- type and use
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
            .arg(tr("Type"))
-           .arg(misc->typeStringTr());
-   body += QString("<td class=\"left\">%1</td><td class=\"value\">%2</td></tr>")
-           .arg(tr("Use"))
-           .arg(misc->useStringTr());
+           .arg(Misc::typeDisplayNames[misc->type()]);
+///   body += QString("<td class=\"left\">%1</td><td class=\"value\">%2</td></tr>")
+///           .arg(tr("Use"))
+///           .arg(Misc::useDisplayNames[misc->use()]);
 
    body += "</table></body></html>";
 
@@ -1439,25 +1451,25 @@ QString RecipeFormatter::getToolTip(Yeast* yeast) {
    // First row -- type and form
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
            .arg(tr("Type"))
-           .arg(yeast->typeStringTr());
+           .arg(Yeast::typeDisplayNames[yeast->type()]);
    body += QString("<td class=\"left\">%1</td><td class=\"value\">%2</td></tr>")
            .arg(tr("Form"))
-           .arg(yeast->formStringTr());
+           .arg(Yeast::formDisplayNames[yeast->form()]);
    // Second row -- lab and prod id
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
            .arg(tr("Lab"))
            .arg(yeast->laboratory());
    body += QString("<td class=\"left\">%1</td><td class=\"value\">%2</td></tr>")
            .arg(tr("Attenuation"))
-           .arg(Measurement::displayQuantity(yeast->attenuation_pct(), 3));
+           .arg(Measurement::displayQuantity(yeast->getTypicalAttenuation_pct(), 3));
 
    // third row -- atten and floc
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
            .arg(tr("Id"))
-           .arg(yeast->productID());
+           .arg(yeast->productId());
    body += QString("<td class=\"left\">%1</td><td class=\"value\">%2</td></tr>")
            .arg(tr("Flocculation"))
-           .arg( yeast->flocculationStringTr());
+           .arg(Yeast::flocculationDisplayNames[yeast->flocculation()]);
 
 
    body += "</table></body></html>";

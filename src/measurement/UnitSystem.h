@@ -1,25 +1,22 @@
-/*
- * measurement/UnitSystem.h is part of Brewtarget, and is copyright the following
- * authors 2009-2023:
- * - Jeff Bailey <skydvr38@verizon.net>
- * - Matt Young <mfsy@yahoo.com>
- * - Mik Firestone <mikfire@gmail.com>
- * - Philip Greggory Lee <rocketman768@gmail.com>
- * - Théophane Martin <theophane.m@gmail.com>
+/*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ * measurement/UnitSystem.h is part of Brewtarget, and is copyright the following authors 2009-2023:
+ *   • Jeff Bailey <skydvr38@verizon.net>
+ *   • Matt Young <mfsy@yahoo.com>
+ *   • Mik Firestone <mikfire@gmail.com>
+ *   • Philip Greggory Lee <rocketman768@gmail.com>
+ *   • Théophane Martin <theophane.m@gmail.com>
  *
- * Brewtarget is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * Brewtarget is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #ifndef MEASUREMENT_UNITSYSTEM_H
 #define MEASUREMENT_UNITSYSTEM_H
 #pragma once
@@ -75,6 +72,12 @@ namespace Measurement {
        *           milliliters < liters                                        (in Metric/SI system)
        *        We only worry about units we actually use/permit, thus we don't, for example, care about where minims,
        *        fluid drams, gills etc fit in on the imperial / US customary volume scales, as we don't support them.
+       *
+       *        NOTE: The names of these enums don't have any significance beyond a relative ordering.  We usually start
+       *              with \c ExtraSmall and then use as many of the subsequent entries as necessary.
+       *
+       *        TODO: I feel this could be replaced with a \c uint8_t that holds the ordering in the \c UnitSystem
+       *              constructor.  Then we wouldn't need the pointless names like "ExtraSmall" and "Huge".
        */
       enum class RelativeScale {
          ExtraSmall = 0,
@@ -91,7 +94,7 @@ namespace Measurement {
        * \param type
        * \param defaultUnit
        * \param uniqueName
-       * \param systemOfMeasurementName
+       * \param systemOfMeasurement
        * \param scaleToUnitEntries Will be empty if there is only one unit in this unit system
        * \param thickness Used only for volume and mass unit systems, otherwise will be null
        */
@@ -250,6 +253,8 @@ namespace Measurement {
       extern UnitSystem const volume_UsCustomary;
       extern UnitSystem const volume_Metric;
 
+      extern UnitSystem const count_NumberOf;
+
       extern UnitSystem const temperature_MetricIsCelsius;
       extern UnitSystem const temperature_UsCustomaryIsFahrenheit;
 
@@ -279,8 +284,9 @@ namespace Measurement {
       extern UnitSystem const carbonation_Volumes;
       extern UnitSystem const carbonation_MassPerVolume;
 
-      extern UnitSystem const concentration_PartsPer;
-      extern UnitSystem const concentration_MassPerVolume;
+      // See comment in measurement/PhysicalQuantity.h for why we combine "mass concentration" and "mass fraction" into
+      // one grouping.
+      extern UnitSystem const massFractionOrConc_Brewing;
 
       // This is one of the few places we need to pay attention that there is more than one metric system -- see
       // comments in measurement/SystemOfMeasurement.h
@@ -290,8 +296,11 @@ namespace Measurement {
       // As explained in measurement/Unit.h, our canonical unit system for specific heat capacity is calories per ...
       // rather than joules per ...
       extern UnitSystem const specificHeatCapacity_Calories;
-      extern UnitSystem const specificHeatCapacity_Joules;
+      extern UnitSystem const specificHeatCapacity_Joules  ;
+      extern UnitSystem const specificHeatCapacity_Btus    ;
 
+      extern UnitSystem const specificVolume_Metric     ;
+      extern UnitSystem const specificVolume_UsCustomary;
    }
 }
 

@@ -1,25 +1,22 @@
-/*
- * database/DatabaseSchemaHelper.cpp is part of Brewtarget, and is copyright the following
- * authors 2009-2023:
+/*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ * database/DatabaseSchemaHelper.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
  *   • Jonatan Pålsson <jonatan.p@gmail.com>
  *   • Mattias Måhl <mattias@kejsarsten.com>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
  *   • Philip Greggory Lee <rocketman768@gmail.com>
  *
- * Brewtarget is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * Brewtarget is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "database/DatabaseSchemaHelper.h"
 
 #include <algorithm> // For std::sort and std::set_difference
@@ -34,6 +31,7 @@
 #include <QVariant>
 
 #include "Application.h"
+#include "config.h"
 #include "database/BtSqlQuery.h"
 #include "database/Database.h"
 #include "database/DbTransaction.h"
@@ -41,12 +39,13 @@
 #include "model/BrewNote.h"
 #include "model/Recipe.h"
 #include "model/Water.h"
-#include "xml/BeerXml.h"
+#include "serialization/xml/BeerXml.h"
 
-int const DatabaseSchemaHelper::dbVersion = 10;
+int constexpr DatabaseSchemaHelper::dbVersion = 11;
 
 namespace {
-   char const * const FOLDER_FOR_SUPPLIED_RECIPES = "brewtarget";
+   // TODO It would be neat to be able to supply folder name as a parameter to XML/JSON import
+   char const * const FOLDER_FOR_SUPPLIED_RECIPES = CONFIG_APPLICATION_NAME_LC;
 
    struct QueryAndParameters {
       QString sql;
@@ -99,6 +98,7 @@ namespace {
                q.lastError().text();
             return false;
          }
+         qDebug() << Q_FUNC_INFO << q.numRowsAffected() << "rows affected";
          priorQueryHadResults = q.next();
          priorQuerySql = query.sql;
       }
@@ -530,6 +530,1428 @@ namespace {
       return executeSqlQueries(q, migrationQueries);
    }
 
+   /**
+    * \brief This is a lot of schema and data changes to support BeerJSON - or rather the new data structures that
+    *        BeerJSON introduces over BeerXML and what else we already had.  We also try to standardise some
+    *        serialisations across BeerJSON, DB and UI.
+    *
+    *        Where we are adding new columns (or otherwise renaming existing ones) we are starting to try to use the
+    *        same convention we have for properties where the "units" of the column are appended to its name - hence
+    *        names ending in "_pct" (for percent), "_l" (for liters), etc.  One day perhaps we'll rename all the
+    *        relevant existing columns, but I think we've got enough other change in this update!
+    */
+   bool migrate_to_11(Database & db, BtSqlQuery q) {
+      //
+      // Some of the bits of SQL would be too cumbersome to build up in-place inside the migrationQueries vector, so
+      // we use string streams to do the string construction here.
+      //
+      // Note that the `temp_recipe_id` columns are used just for the initial population of the table and are then
+      // dropped.  (For each row in recipe, we need to create a new row in boil and then update the row in recipe to
+      // refer to it.  Temporarily putting the recipe_id on boil, without a foreign key constraint, makes this a lot
+      // simpler.  Same applied to fermentation.)
+      //
+      QString createBoilSql;
+      QTextStream createBoilSqlStream(&createBoilSql);
+      createBoilSqlStream <<
+         "CREATE TABLE boil ("
+            "id"              " " << db.getDbNativePrimaryKeyDeclaration() << ", "
+            "name"            " " << db.getDbNativeTypeName<QString>()     << ", "
+            "deleted"         " " << db.getDbNativeTypeName<bool>()        << ", "
+            "display"         " " << db.getDbNativeTypeName<bool>()        << ", "
+            "folder"          " " << db.getDbNativeTypeName<QString>()     << ", "
+            "description"     " " << db.getDbNativeTypeName<QString>()     << ", "
+            "notes"           " " << db.getDbNativeTypeName<QString>()     << ", "
+            "pre_boil_size_l" " " << db.getDbNativeTypeName<double>()      << ", "
+            "boil_Time_mins"  " " << db.getDbNativeTypeName<double>()      << ", "
+            "temp_recipe_id"  " " << db.getDbNativeTypeName<int>()         <<
+         ");";
+
+      QString createBoilStepSql;
+      QTextStream createBoilStepSqlStream(&createBoilStepSql);
+      createBoilStepSqlStream <<
+         "CREATE TABLE boil_step ("
+            "id"               " " << db.getDbNativePrimaryKeyDeclaration() << ", "
+            "name"             " " << db.getDbNativeTypeName<QString>()     << ", "
+            "deleted"          " " << db.getDbNativeTypeName<bool>()        << ", "
+            "display"          " " << db.getDbNativeTypeName<bool>()        << ", "
+            "step_time_mins"   " " << db.getDbNativeTypeName<double>()      << ", "
+            "end_temp_c"       " " << db.getDbNativeTypeName<double>()      << ", "
+            "ramp_time_mins"   " " << db.getDbNativeTypeName<double>()      << ", "
+            "step_number"      " " << db.getDbNativeTypeName<int>()         << ", "
+            "boil_id"          " " << db.getDbNativeTypeName<int>()         << ", "
+            "description"      " " << db.getDbNativeTypeName<QString>()     << ", "
+            "start_acidity_ph" " " << db.getDbNativeTypeName<double>()      << ", "
+            "end_acidity_ph"   " " << db.getDbNativeTypeName<double>()      << ", "
+            "start_temp_c"     " " << db.getDbNativeTypeName<double>()      << ", "
+            "start_gravity_sg" " " << db.getDbNativeTypeName<double>()      << ", "
+            "end_gravity_sg"   " " << db.getDbNativeTypeName<double>()      << ", "
+            "chilling_type"    " " << db.getDbNativeTypeName<QString>()     << ", "
+            "FOREIGN KEY(boil_id) REFERENCES boil(id)" <<
+         ");";
+
+      QString createFermentationSql;
+      QTextStream createFermentationSqlStream(&createFermentationSql);
+      createFermentationSqlStream <<
+         "CREATE TABLE fermentation ("
+            "id"              " " << db.getDbNativePrimaryKeyDeclaration() << ", "
+            "name"            " " << db.getDbNativeTypeName<QString>()     << ", "
+            "deleted"         " " << db.getDbNativeTypeName<bool>()        << ", "
+            "display"         " " << db.getDbNativeTypeName<bool>()        << ", "
+            "folder"          " " << db.getDbNativeTypeName<QString>()     << ", "
+            "description"     " " << db.getDbNativeTypeName<QString>()     << ", "
+            "notes"           " " << db.getDbNativeTypeName<QString>()     << ", "
+            "temp_recipe_id"  " " << db.getDbNativeTypeName<int>()         <<
+         ");";
+
+      // NB: Although FermentationStep inherits (via StepExtended) from Step, the rampTime_mins field is not used and
+      //     should not be stored in the DB or serialised.  See comment in model/Step.h.
+      QString createFermentationStepSql;
+      QTextStream createFermentationStepSqlStream(&createFermentationStepSql);
+      createFermentationStepSqlStream <<
+         "CREATE TABLE fermentation_step ("
+            "id"               " " << db.getDbNativePrimaryKeyDeclaration() << ", "
+            "name"             " " << db.getDbNativeTypeName<QString>()     << ", "
+            "deleted"          " " << db.getDbNativeTypeName<bool>()        << ", "
+            "display"          " " << db.getDbNativeTypeName<bool>()        << ", "
+            "step_time_mins"   " " << db.getDbNativeTypeName<double>()      << ", "
+            "end_temp_c"       " " << db.getDbNativeTypeName<double>()      << ", "
+            "step_number"      " " << db.getDbNativeTypeName<int>()         << ", "
+            "fermentation_id"  " " << db.getDbNativeTypeName<int>()         << ", "
+            "description"      " " << db.getDbNativeTypeName<QString>()     << ", "
+            "start_acidity_ph" " " << db.getDbNativeTypeName<double>()      << ", "
+            "end_acidity_ph"   " " << db.getDbNativeTypeName<double>()      << ", "
+            "start_temp_c"     " " << db.getDbNativeTypeName<double>()      << ", "
+            "start_gravity_sg" " " << db.getDbNativeTypeName<double>()      << ", "
+            "end_gravity_sg"   " " << db.getDbNativeTypeName<double>()      << ", "
+            "free_rise"        " " << db.getDbNativeTypeName<bool>()        << ", "
+            "vessel"           " " << db.getDbNativeTypeName<QString>()     << ", "
+            "FOREIGN KEY(fermentation_id) REFERENCES fermentation(id)" <<
+         ");";
+
+      QVector<QueryAndParameters> const migrationQueries{
+         //
+         // There was a bug in an old version of the code that meant inventory_id got stored as a decimal instead of
+         // an integer.
+         //
+         {QString("UPDATE hop         SET inventory_id = CAST(inventory_id AS int) WHERE inventory_id IS NOT null")},
+         {QString("UPDATE fermentable SET inventory_id = CAST(inventory_id AS int) WHERE inventory_id IS NOT null")},
+         {QString("UPDATE misc        SET inventory_id = CAST(inventory_id AS int) WHERE inventory_id IS NOT null")},
+         {QString("UPDATE yeast       SET inventory_id = CAST(inventory_id AS int) WHERE inventory_id IS NOT null")},
+         //
+         // Salt::Type is currently stored as a raw number.  We convert it to a string to bring it into line with other
+         // enums.  Current values are:
+         //     0 == NONE
+         //     1 == CACL2
+         //     2 == CACO3
+         //     3 == CASO4
+         //     4 == MGSO4
+         //     5 == NACL
+         //     6 == NAHCO3
+         //     7 == LACTIC
+         //     8 == H3PO4
+         //     9 == ACIDMLT
+         //    10 == numTypes
+         //
+         {QString("ALTER TABLE salt RENAME COLUMN stype TO numeric_type")},
+         {QString("ALTER TABLE salt    ADD COLUMN stype %1").arg(db.getDbNativeTypeName<QString>())},
+         {QString("UPDATE salt "
+                  "SET stype = "
+                  "CASE "
+                     "WHEN numeric_type = 1 THEN 'CaCl2'          "
+                     "WHEN numeric_type = 2 THEN 'CaCO3'          "
+                     "WHEN numeric_type = 3 THEN 'CaSO4'          "
+                     "WHEN numeric_type = 4 THEN 'MgSO4'          "
+                     "WHEN numeric_type = 5 THEN 'NaCl'           "
+                     "WHEN numeric_type = 6 THEN 'NaHCO3'         "
+                     "WHEN numeric_type = 7 THEN 'LacticAcid'     "
+                     "WHEN numeric_type = 8 THEN 'H3PO4'          "
+                     "WHEN numeric_type = 9 THEN 'AcidulatedMalt' "
+                  "END")},
+         {QString("ALTER TABLE salt DROP COLUMN numeric_type")},
+         //
+         // Hop: Extended and additional fields for BeerJSON
+         //
+         // We only need to update the old Hop type and form mappings.  The new ones should "just work".
+         {QString(     "UPDATE hop SET htype = 'aroma'           WHERE htype = 'Aroma'"    )},
+         {QString(     "UPDATE hop SET htype = 'bittering'       WHERE htype = 'Bittering'")},
+         {QString(     "UPDATE hop SET htype = 'aroma/bittering' WHERE htype = 'Both'"     )},
+         {QString(     "UPDATE hop SET form = 'pellet' WHERE form = 'Pellet'")},
+         {QString(     "UPDATE hop SET form = 'plug'   WHERE form = 'Plug'"  )},
+         {QString(     "UPDATE hop SET form = 'leaf'   WHERE form = 'Leaf'"  )},
+         {QString("ALTER TABLE hop ADD COLUMN producer              %1").arg(db.getDbNativeTypeName<QString>())},
+         {QString("ALTER TABLE hop ADD COLUMN product_id            %1").arg(db.getDbNativeTypeName<QString>())},
+         {QString("ALTER TABLE hop ADD COLUMN year                  %1").arg(db.getDbNativeTypeName<QString>())},
+         {QString("ALTER TABLE hop ADD COLUMN total_oil_ml_per_100g %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE hop ADD COLUMN farnesene_pct         %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE hop ADD COLUMN geraniol_pct          %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE hop ADD COLUMN b_pinene_pct          %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE hop ADD COLUMN linalool_pct          %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE hop ADD COLUMN limonene_pct          %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE hop ADD COLUMN nerol_pct             %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE hop ADD COLUMN pinene_pct            %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE hop ADD COLUMN polyphenols_pct       %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE hop ADD COLUMN xanthohumol_pct       %1").arg(db.getDbNativeTypeName<double >())},
+         //
+         // Fermentable: Extended and additional fields for BeerJSON
+         //
+         // We only need to update the old Fermentable type mappings.  The new ones should "just work".
+         {QString("     UPDATE fermentable SET ftype = 'grain'       WHERE ftype = 'Grain'"      )},
+         {QString("     UPDATE fermentable SET ftype = 'sugar'       WHERE ftype = 'Sugar'"      )},
+         {QString("     UPDATE fermentable SET ftype = 'extract'     WHERE ftype = 'Extract'"    )},
+         {QString("     UPDATE fermentable SET ftype = 'dry extract' WHERE ftype = 'Dry Extract'")},
+         {QString("     UPDATE fermentable SET ftype = 'other'       WHERE ftype = 'Adjunct'"    )},
+         {QString("ALTER TABLE fermentable ADD COLUMN grain_group                    %1").arg(db.getDbNativeTypeName<QString>())},
+         {QString("ALTER TABLE fermentable ADD COLUMN producer                       %1").arg(db.getDbNativeTypeName<QString>())},
+         {QString("ALTER TABLE fermentable ADD COLUMN product_id                     %1").arg(db.getDbNativeTypeName<QString>())},
+         {QString("ALTER TABLE fermentable RENAME COLUMN yield TO fine_grind_yield_pct")},
+         {QString("ALTER TABLE fermentable ADD COLUMN coarse_grind_yield_pct         %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE fermentable ADD COLUMN potential_yield_sg             %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE fermentable ADD COLUMN alpha_amylase_dext_units       %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE fermentable ADD COLUMN kolbach_index_pct              %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE fermentable ADD COLUMN hardness_prp_glassy_pct        %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE fermentable ADD COLUMN hardness_prp_half_pct          %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE fermentable ADD COLUMN hardness_prp_mealy_pct         %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE fermentable ADD COLUMN kernel_size_prp_plump_pct      %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE fermentable ADD COLUMN kernel_size_prp_thin_pct       %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE fermentable ADD COLUMN friability_pct                 %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE fermentable ADD COLUMN di_ph                          %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE fermentable ADD COLUMN viscosity_cp                   %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE fermentable ADD COLUMN dmsp_ppm                       %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE fermentable ADD COLUMN fan_ppm                        %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE fermentable ADD COLUMN fermentability_pct             %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE fermentable ADD COLUMN beta_glucan_ppm                %1").arg(db.getDbNativeTypeName<double >())},
+         // Also on Fermentable, diastaticPower_lintner is now optional (as it should have been all along) and we convert
+         // 0 values to NULL
+         {QString("     UPDATE fermentable SET diastatic_power = NULL where diastatic_power = 0.0")},
+         //
+         // Misc: Extended and additional fields for BeerJSON
+         //
+         // We only need to update the old Misc type mappings.  The new ones should "just work".
+         {QString("     UPDATE misc SET mtype = 'spice'       WHERE mtype = 'Spice'      ")},
+         {QString("     UPDATE misc SET mtype = 'fining'      WHERE mtype = 'Fining'     ")},
+         {QString("     UPDATE misc SET mtype = 'water agent' WHERE mtype = 'Water Agent'")},
+         {QString("     UPDATE misc SET mtype = 'herb'        WHERE mtype = 'Herb'       ")},
+         {QString("     UPDATE misc SET mtype = 'flavor'      WHERE mtype = 'Flavor'     ")},
+         {QString("     UPDATE misc SET mtype = 'other'       WHERE mtype = 'Other'      ")},
+         {QString("ALTER TABLE misc ADD COLUMN producer   %1").arg(db.getDbNativeTypeName<QString>())},
+         {QString("ALTER TABLE misc ADD COLUMN product_id %1").arg(db.getDbNativeTypeName<QString>())},
+         //
+         // Yeast: Extended and additional fields for BeerJSON
+         //
+         // We only need to update the old Yeast type, form and flocculation mappings.  The new ones should "just work".
+         {QString("     UPDATE yeast SET ytype = 'ale'       WHERE ytype = 'Ale'      ")},
+         {QString("     UPDATE yeast SET ytype = 'lager'     WHERE ytype = 'Lager'    ")},
+         {QString("     UPDATE yeast SET ytype = 'other'     WHERE ytype = 'Wheat'    ")}, // NB: Wheat becomes Other
+         {QString("     UPDATE yeast SET ytype = 'wine'      WHERE ytype = 'Wine'     ")},
+         {QString("     UPDATE yeast SET ytype = 'champagne' WHERE ytype = 'Champagne'")},
+         {QString("     UPDATE yeast SET form = 'liquid'  WHERE form = 'Liquid' ")},
+         {QString("     UPDATE yeast SET form = 'dry'     WHERE form = 'Dry'    ")},
+         {QString("     UPDATE yeast SET form = 'slant'   WHERE form = 'Slant'  ")},
+         {QString("     UPDATE yeast SET form = 'culture' WHERE form = 'Culture'")},
+         {QString("     UPDATE yeast SET flocculation = 'low'       WHERE flocculation = 'Low'      ")},
+         {QString("     UPDATE yeast SET flocculation = 'medium'    WHERE flocculation = 'Medium'   ")},
+         {QString("     UPDATE yeast SET flocculation = 'high'      WHERE flocculation = 'High'     ")},
+         {QString("     UPDATE yeast SET flocculation = 'very high' WHERE flocculation = 'Very High'")},
+         {QString("ALTER TABLE yeast ADD COLUMN alcohol_tolerance_pct        %1").arg(db.getDbNativeTypeName<double>())},
+         {QString("ALTER TABLE yeast ADD COLUMN attenuation_min_pct          %1").arg(db.getDbNativeTypeName<double>())},
+         {QString("ALTER TABLE yeast ADD COLUMN attenuation_max_pct          %1").arg(db.getDbNativeTypeName<double>())},
+         {QString("ALTER TABLE yeast ADD COLUMN phenolic_off_flavor_positive %1").arg(db.getDbNativeTypeName<bool  >())},
+         {QString("ALTER TABLE yeast ADD COLUMN glucoamylase_positive        %1").arg(db.getDbNativeTypeName<bool  >())},
+         {QString("ALTER TABLE yeast ADD COLUMN killer_producing_k1_toxin    %1").arg(db.getDbNativeTypeName<bool  >())},
+         {QString("ALTER TABLE yeast ADD COLUMN killer_producing_k2_toxin    %1").arg(db.getDbNativeTypeName<bool  >())},
+         {QString("ALTER TABLE yeast ADD COLUMN killer_producing_k28_toxin   %1").arg(db.getDbNativeTypeName<bool  >())},
+         {QString("ALTER TABLE yeast ADD COLUMN killer_producing_klus_toxin  %1").arg(db.getDbNativeTypeName<bool  >())},
+         {QString("ALTER TABLE yeast ADD COLUMN killer_neutral               %1").arg(db.getDbNativeTypeName<bool  >())},
+         //
+         // Style: Extended and additional fields for BeerJSON.  Plus fix inconsistent column name
+         //
+         {QString("ALTER TABLE style RENAME COLUMN s_type TO stype")},
+         // We only need to update the old Style type mapping.  The new ones should "just work".
+         // See comment in model/Style.h for more on the mapping here
+         {QString("     UPDATE style SET stype = 'beer'  WHERE stype = 'Lager'")},
+         {QString("     UPDATE style SET stype = 'beer'  WHERE stype = 'Ale'  ")},
+         {QString("     UPDATE style SET stype = 'beer'  WHERE stype = 'Wheat'")},
+         {QString("     UPDATE style SET stype = 'cider' WHERE stype = 'Cider'")},
+         {QString("     UPDATE style SET stype = 'mead'  WHERE stype = 'Mead' ")},
+         {QString("     UPDATE style SET stype = 'other' WHERE stype = 'Mixed'")},
+         // Profile is split into Flavor and Aroma, so we rename Profile to Flavor before adding the other columns
+         {QString("ALTER TABLE style RENAME COLUMN profile TO flavor")},
+         {QString("ALTER TABLE style ADD COLUMN aroma              %1").arg(db.getDbNativeTypeName<QString>())},
+         {QString("ALTER TABLE style ADD COLUMN appearance         %1").arg(db.getDbNativeTypeName<QString>())},
+         {QString("ALTER TABLE style ADD COLUMN mouthfeel          %1").arg(db.getDbNativeTypeName<QString>())},
+         {QString("ALTER TABLE style ADD COLUMN overall_impression %1").arg(db.getDbNativeTypeName<QString>())},
+         //
+         // Water: additional fields for BeerJSON
+         //
+         {QString("ALTER TABLE water ADD COLUMN carbonate_ppm %1").arg(db.getDbNativeTypeName<double>())},
+         {QString("ALTER TABLE water ADD COLUMN potassium_ppm %1").arg(db.getDbNativeTypeName<double>())},
+         {QString("ALTER TABLE water ADD COLUMN iron_ppm      %1").arg(db.getDbNativeTypeName<double>())},
+         {QString("ALTER TABLE water ADD COLUMN nitrate_ppm   %1").arg(db.getDbNativeTypeName<double>())},
+         {QString("ALTER TABLE water ADD COLUMN nitrite_ppm   %1").arg(db.getDbNativeTypeName<double>())},
+         {QString("ALTER TABLE water ADD COLUMN flouride_ppm  %1").arg(db.getDbNativeTypeName<double>())},
+         //
+         // Equipment: Extended and additional fields for BeerJSON.  This includes changing a lot of column names as
+         // BeerJSON essentially has a record per vessel ("HLT", "Mash Tun", etc)
+         //
+         {QString("ALTER TABLE equipment RENAME COLUMN notes             TO kettle_notes                 ")},
+         {QString("ALTER TABLE equipment RENAME COLUMN real_evap_rate    TO kettle_evaporation_per_hour_l")},
+         {QString("ALTER TABLE equipment RENAME COLUMN boil_size         TO kettle_boil_size_l           ")},
+         {QString("ALTER TABLE equipment RENAME COLUMN tun_specific_heat TO mash_tun_specific_heat_calgc ")},
+         {QString("ALTER TABLE equipment RENAME COLUMN tun_volume        TO mash_tun_volume_l            ")},
+         {QString("ALTER TABLE equipment RENAME COLUMN tun_weight        TO mash_tun_weight_kg           ")},
+         {QString("ALTER TABLE equipment RENAME COLUMN absorption        TO mash_tun_grain_absorption_lkg")},
+         {QString("ALTER TABLE equipment RENAME COLUMN batch_size        TO fermenter_batch_size_l       ")},
+         {QString("ALTER TABLE equipment RENAME COLUMN trub_chiller_loss TO kettle_trub_chiller_loss_l   ")},
+         {QString("ALTER TABLE equipment RENAME COLUMN lauter_deadspace  TO lauter_tun_deadspace_loss_l  ")},
+         {QString("ALTER TABLE equipment ADD COLUMN hlt_type                       %1").arg(db.getDbNativeTypeName<QString>())},
+         {QString("ALTER TABLE equipment ADD COLUMN mash_tun_type                  %1").arg(db.getDbNativeTypeName<QString>())},
+         {QString("ALTER TABLE equipment ADD COLUMN lauter_tun_type                %1").arg(db.getDbNativeTypeName<QString>())},
+         {QString("ALTER TABLE equipment ADD COLUMN kettle_type                    %1").arg(db.getDbNativeTypeName<QString>())},
+         {QString("ALTER TABLE equipment ADD COLUMN fermenter_type                 %1").arg(db.getDbNativeTypeName<QString>())},
+         {QString("ALTER TABLE equipment ADD COLUMN agingvessel_type               %1").arg(db.getDbNativeTypeName<QString>())},
+         {QString("ALTER TABLE equipment ADD COLUMN packaging_vessel_type          %1").arg(db.getDbNativeTypeName<QString>())},
+         {QString("ALTER TABLE equipment ADD COLUMN hlt_volume_l                   %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE equipment ADD COLUMN lauter_tun_volume_l            %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE equipment ADD COLUMN aging_vessel_volume_l          %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE equipment ADD COLUMN packaging_vessel_volume_l      %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE equipment ADD COLUMN hlt_loss_l                     %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE equipment ADD COLUMN mash_tun_loss_l                %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE equipment ADD COLUMN fermenter_loss_l               %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE equipment ADD COLUMN aging_vessel_loss_l            %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE equipment ADD COLUMN packaging_vessel_loss_l        %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE equipment ADD COLUMN kettle_outflow_per_minute_l    %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE equipment ADD COLUMN hlt_weight_kg                  %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE equipment ADD COLUMN lauter_tun_weight_kg           %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE equipment ADD COLUMN kettle_weight_kg               %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE equipment ADD COLUMN hlt_specific_heat_calgc        %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE equipment ADD COLUMN lauter_tun_specific_heat_calgc %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE equipment ADD COLUMN kettle_specific_heat_calgc     %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE equipment ADD COLUMN hlt_notes                      %1").arg(db.getDbNativeTypeName<QString>())},
+         {QString("ALTER TABLE equipment ADD COLUMN mash_tun_notes                 %1").arg(db.getDbNativeTypeName<QString>())},
+         {QString("ALTER TABLE equipment ADD COLUMN lauter_tun_notes               %1").arg(db.getDbNativeTypeName<QString>())},
+         {QString("ALTER TABLE equipment ADD COLUMN fermenter_notes                %1").arg(db.getDbNativeTypeName<QString>())},
+         {QString("ALTER TABLE equipment ADD COLUMN aging_vessel_notes             %1").arg(db.getDbNativeTypeName<QString>())},
+         {QString("ALTER TABLE equipment ADD COLUMN packaging_vessel_notes         %1").arg(db.getDbNativeTypeName<QString>())},
+         //
+         // MashStep
+         //
+         // Fix the table name for MashStep so it's consistent with most of the rest of our naming
+         {QString("ALTER TABLE mashstep RENAME TO mash_step")},
+         // We only need to update the old MashStep type mapping.  The new ones should "just work".
+         {QString("     UPDATE mash_step SET mstype = 'infusion'       WHERE mstype = 'Infusion'   ")},
+         {QString("     UPDATE mash_step SET mstype = 'temperature'    WHERE mstype = 'Temperature'")},
+         {QString("     UPDATE mash_step SET mstype = 'decoction'      WHERE mstype = 'Decoction'  ")},
+         {QString("     UPDATE mash_step SET mstype = 'sparge'         WHERE mstype = 'FlySparge'  ")},
+         {QString("     UPDATE mash_step SET mstype = 'drain mash tun' WHERE mstype = 'BatchSparge'")},
+         // The two different amount fields are unified.
+         // Note that, per https://sqlite.org/changes.html, SQLite finally supports "DROP COLUMN" as of its
+         // 2021-03-12 (3.35.0) release (and the teething troubles were ironed out by the 2021-04-19 (3.35.5) release!)
+         {QString("ALTER TABLE mash_step RENAME COLUMN infuse_amount TO amount_l")},
+         {QString("     UPDATE mash_step SET amount_l = decoction_amount WHERE mstype = 'Decoction'")},
+         {QString("ALTER TABLE mash_step DROP COLUMN decoction_amount")},
+         {QString("ALTER TABLE mash_step RENAME COLUMN ramp_time TO ramp_time_mins")},
+         {QString("ALTER TABLE mash_step ADD COLUMN description               %1").arg(db.getDbNativeTypeName<QString>())},
+         {QString("ALTER TABLE mash_step ADD COLUMN liquor_to_grist_ratio_lkg %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE mash_step ADD COLUMN start_acidity_ph          %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE mash_step ADD COLUMN end_acidity_ph            %1").arg(db.getDbNativeTypeName<double >())},
+         // Now that we properly support optional fields, we can fix "zero means not set" on certain fields
+         {QString("     UPDATE mash_step SET end_temp = NULL WHERE end_temp = 0")},
+         // Give some other columns more consistent names
+         {QString("ALTER TABLE mash_step RENAME COLUMN    end_temp TO    end_temp_c"   )},
+         {QString("ALTER TABLE mash_step RENAME COLUMN infuse_temp TO infuse_temp_c"   )},
+         {QString("ALTER TABLE mash_step RENAME COLUMN   step_temp TO   step_temp_c"   )},
+         {QString("ALTER TABLE mash_step RENAME COLUMN   step_time TO   step_time_mins")},
+         //
+         // Recipe
+         //
+         // We only need to update the old Recipe type mapping.  The new ones should "just work".
+         {QString("     UPDATE recipe SET type = 'extract'      WHERE type = 'Extract'     ")},
+         {QString("     UPDATE recipe SET type = 'partial mash' WHERE type = 'Partial Mash'")},
+         {QString("     UPDATE recipe SET type = 'all grain'    WHERE type = 'All Grain'   ")},
+         {QString("ALTER TABLE recipe ADD COLUMN boil_id         %1 REFERENCES boil         (id)").arg(db.getDbNativeTypeName<int>())},
+         {QString("ALTER TABLE recipe ADD COLUMN fermentation_id %1 REFERENCES fermentation (id)").arg(db.getDbNativeTypeName<int>())},
+         {QString("ALTER TABLE recipe ADD COLUMN beer_acidity_ph          %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE recipe ADD COLUMN apparent_attenuation_pct %1").arg(db.getDbNativeTypeName<double >())},
+         //
+         // We have to create and populate the boil and boil_step tables before we do hop_in_recipe as we need pre-boil
+         // steps to attach first wort hops to.
+         //
+         // We also need to create and populate fermentation and fermentation_step tables.
+         //
+         // As noted above, we use a temporary column on the new tables to simplify populating them with data linked to
+         // recipe.
+         //
+         {createBoilSql            },
+         {createBoilStepSql        },
+         {createFermentationSql    },
+         {createFermentationStepSql},
+         {QString("INSERT INTO boil ("
+                      "name           , "
+                      "deleted        , "
+                      "display        , "
+                      "folder         , "
+                      "description    , "
+                      "notes          , "
+                      "pre_boil_size_l, "
+                      "boil_Time_mins , "
+                      "temp_recipe_id   "
+                  ") SELECT "
+                     "'Boil for ' || name, "
+                     "?, "
+                     "?, "
+                     "'', "
+                     "'', "
+                     "'', "
+                     "boil_size, "
+                     "boil_time, "
+                     "id AS recipe_id "
+                  "FROM recipe"
+         ), {QVariant{false}, QVariant{true}}},
+
+         {QString("INSERT INTO fermentation ("
+                      "name           , "
+                      "deleted        , "
+                      "display        , "
+                      "folder         , "
+                      "description    , "
+                      "notes          , "
+                      "temp_recipe_id   "
+                  ") SELECT "
+                     "'Fermentation for ' || name, "
+                     "?, "
+                     "?, "
+                     "'', "
+                     "'', "
+                     "'', "
+                     "id AS recipe_id "
+                  "FROM recipe"
+         ), {QVariant{false}, QVariant{true}}},
+         {QString("UPDATE recipe "
+                  "SET boil_id = b.id "
+                  "FROM ("
+                     "SELECT id, "
+                            "temp_recipe_id "
+                     "FROM boil"
+                  ") AS b "
+                  "WHERE recipe.id = b.temp_recipe_id")},
+         {QString("UPDATE recipe "
+                  "SET fermentation_id = f.id "
+                  "FROM ("
+                     "SELECT id, "
+                            "temp_recipe_id "
+                     "FROM fermentation"
+                  ") AS f "
+                  "WHERE recipe.id = f.temp_recipe_id")},
+         // Get rid of the temporary columns now that they have served their purpose.
+         {QString("ALTER TABLE boil         DROP COLUMN temp_recipe_id")},
+         {QString("ALTER TABLE fermentation DROP COLUMN temp_recipe_id")},
+         //
+         // Now we copied two recipe columns onto the boil table, we can drop them from the recipe table
+         //
+         {QString("ALTER TABLE recipe DROP COLUMN boil_size")},
+         {QString("ALTER TABLE recipe DROP COLUMN boil_time")},
+         //
+         // Populate boil_steps.  We want to have a pre-boil step, a boil step, and a post-boil step as it makes the hop
+         // addition stuff easier.
+         //
+         // The default names here are hard-coded in English, which isn't ideal (mea culpa) but this is only a one-off
+         // data migration.  When the main code needs to add a new BoilStep, it does the right thing and uses tr().
+         //
+         // For the pre-boil step, ie ramping up from mash temperature to boil temperature, we take the end temperature
+         // of the last mash step as the starting point.  This will be mash_step.end_temp_c IF SET, and
+         // mash_step.step_temp_c otherwise.
+         //
+         // Note that, because mash_id is stored in both the mash_step and recipe tables, we don't actually have to look
+         // at the mash table here.
+         //
+         // The PARTITION BY stuff below is a SQL window function that helps us get the max mash step number for each
+         // mash ID.  As often with SQL, there are several ways to achieve this result.  The small size of our data sets
+         // means we're not too anxious about performance so we prefer clarity (to the extent that's possible with
+         // SQL!).
+         //
+         {QString("INSERT INTO boil_step ("
+                     "name            , "
+                     "deleted         , "
+                     "display         , "
+                     "step_time_mins  , "
+                     "end_temp_c      , "
+                     "ramp_time_mins  , "
+                     "step_number     , "
+                     "boil_id         , "
+                     "description     , "
+                     "start_acidity_ph, "
+                     "end_acidity_ph  , "
+                     "start_temp_c    , "
+                     "start_gravity_sg, "
+                     "end_gravity_sg  , "
+                     "chilling_type     "
+                  ") SELECT "
+                     "'Pre-boil for ' || recipe.name, "                              // name
+                     "?, "                                                           // deleted
+                     "?, "                                                           // display
+                     "NULL, "                                                        // step_time_mins
+                     "100.0, "                                                       // end_temp_c
+                     "NULL, "                                                        // ramp_time_mins
+                     "1, "                                                           // step_number
+                     "recipe.boil_id, "                                              // boil_id
+                     "'Automatically-generated pre-boil step for ' || recipe.name, " // description
+                     "NULL, "                                                        // start_acidity_ph
+                     "NULL, "                                                        // end_acidity_ph
+                     "last_mash_step.temperature, "                                  // start_temp_c
+                     "NULL, "                                                        // start_gravity_sg
+                     "NULL, "                                                        // end_gravity_sg
+                     "NULL "                                                         // chilling_type
+                  "FROM recipe, "
+                       "("
+                          "SELECT mash_id, "
+                                 "step_temp_c, "
+                                 "end_temp_c, "
+                                 "step_number, "
+                                 "IIF(step_temp_c < end_temp_c, step_temp_c, end_temp_c) AS temperature, "
+                                 "ROW_NUMBER() OVER ("
+                                    "PARTITION BY mash_id "
+                                    "ORDER BY step_number DESC"
+                                 ") reversed_step_number "
+                          "FROM mash_step "
+                       ") AS last_mash_step "
+                  "WHERE reversed_step_number = 1 "
+                  "AND recipe.mash_id = last_mash_step.mash_id"
+         ), {QVariant{false}, QVariant{true}}},
+         // Adding the second step for the actual boil itself is easier
+         {QString("INSERT INTO boil_step ("
+                     "name            , "
+                     "deleted         , "
+                     "display         , "
+                     "step_time_mins  , "
+                     "end_temp_c      , "
+                     "ramp_time_mins  , "
+                     "step_number     , "
+                     "boil_id         , "
+                     "description     , "
+                     "start_acidity_ph, "
+                     "end_acidity_ph  , "
+                     "start_temp_c    , "
+                     "start_gravity_sg, "
+                     "end_gravity_sg  , "
+                     "chilling_type     "
+                  ") SELECT "
+                     "'Boil proper for ' || recipe.name, "                              // name
+                     "?, "                                                              // deleted
+                     "?, "                                                              // display
+                     "NULL, "                                                           // step_time_mins
+                     "100.0, "                                                          // end_temp_c
+                     "NULL, "                                                           // ramp_time_mins
+                     "2, "                                                              // step_number
+                     "recipe.boil_id, "                                                 // boil_id
+                     "'Automatically-generated boil proper step for ' || recipe.name, " // description
+                     "NULL, "                                                           // start_acidity_ph
+                     "NULL, "                                                           // end_acidity_ph
+                     "100.0, "                                                          // start_temp_c
+                     "NULL, "                                                           // start_gravity_sg
+                     "NULL, "                                                           // end_gravity_sg
+                     "NULL "                                                            // chilling_type
+                  "FROM recipe"
+         ), {QVariant{false}, QVariant{true}}},
+         // For the post-boil step, we'll assume we are cooling to primary fermentation temperature, if known (ie it's
+         // non-zero), or to 30°C otherwise.
+         {QString("INSERT INTO boil_step ("
+                     "name            , "
+                     "deleted         , "
+                     "display         , "
+                     "step_time_mins  , "
+                     "end_temp_c      , "
+                     "ramp_time_mins  , "
+                     "step_number     , "
+                     "boil_id         , "
+                     "description     , "
+                     "start_acidity_ph, "
+                     "end_acidity_ph  , "
+                     "start_temp_c    , "
+                     "start_gravity_sg, "
+                     "end_gravity_sg  , "
+                     "chilling_type     "
+                  ") SELECT "
+                     "'Wort cooling for ' || recipe.name, "                            // name
+                     "?, "                                                            // deleted
+                     "?, "                                                            // display
+                     "NULL, "                                                         // step_time_mins
+                     "IIF(recipe.primary_temp > 0.0, recipe.primary_temp, 30.0), "    // end_temp_c
+                     "NULL, "                                                         // ramp_time_mins
+                     "3, "                                                            // step_number
+                     "recipe.boil_id, "                                               // boil_id
+                     "'Automatically-generated post-boil step for ' || recipe.name, " // description
+                     "NULL, "                                                         // start_acidity_ph
+                     "NULL, "                                                         // end_acidity_ph
+                     "100.0, "                                                        // start_temp_c
+                     "NULL, "                                                         // start_gravity_sg
+                     "NULL, "                                                         // end_gravity_sg
+                     "NULL "                                                          // chilling_type
+                  "FROM recipe"
+         ), {QVariant{false}, QVariant{true}}},
+         //
+         // Populate fermentation_steps.  NB that fermentation steps do not have a ramp time.  (See comment in
+         // model/Step.h.)
+         //
+         // Note that primary_age, secondary_age, tertiary_age (which we can safely assume are not NULL as we are only
+         // introducing optional fields with the BeerJSON work) are in days, but our canonical unit of time is minutes.
+         //
+         // We assume everything has a primary fermentation.
+         //
+         {QString("INSERT INTO fermentation_step ("
+                     "name            , "
+                     "deleted         , "
+                     "display         , "
+                     "step_time_mins  , "
+                     "end_temp_c      , "
+                     "step_number     , "
+                     "fermentation_id , "
+                     "description     , "
+                     "start_acidity_ph, "
+                     "end_acidity_ph  , "
+                     "start_temp_c    , "
+                     "start_gravity_sg, "
+                     "end_gravity_sg  , "
+                     "free_rise       , "
+                     "vessel            "
+                  ") SELECT "
+                     "'Primary fermentation for ' || recipe.name, "                              // name
+                     "?,    "                                                                    // deleted
+                     "?,    "                                                                    // display
+                     "recipe.primary_age * 60 * 24, "                                            // step_time_mins
+                     "recipe.primary_temp   , "                                                  // end_temp_c
+                     "1,    "                                                                    // step_number
+                     "recipe.fermentation_id, "                                                  // fermentation_id
+                     "'Automatically-generated primary fermentation step for ' || recipe.name, " // description
+                     "NULL, "                                                                    // start_acidity_ph
+                     "NULL, "                                                                    // end_acidity_ph
+                     "recipe.primary_temp   , "                                                  // start_temp_c
+                     "NULL, "                                                                    // start_gravity_sg
+                     "NULL, "                                                                    // end_gravity_sg
+                     "NULL, "                                                                    // free_rise
+                     "''    "                                                                    // vessel
+                  "FROM recipe "
+         ), {QVariant{false}, QVariant{true}}},
+         // Secondary fermentation is only valid if its age is more than 0 days.
+         {QString("INSERT INTO fermentation_step ("
+                     "name            , "
+                     "deleted         , "
+                     "display         , "
+                     "step_time_mins  , "
+                     "end_temp_c      , "
+                     "step_number     , "
+                     "fermentation_id , "
+                     "description     , "
+                     "start_acidity_ph, "
+                     "end_acidity_ph  , "
+                     "start_temp_c    , "
+                     "start_gravity_sg, "
+                     "end_gravity_sg  , "
+                     "free_rise       , "
+                     "vessel            "
+                  ") SELECT "
+                     "'Secondary fermentation for ' || recipe.name, "                              // name
+                     "?,    "                                                                      // deleted
+                     "?,    "                                                                      // display
+                     "recipe.secondary_age * 60 * 24,"                                             // step_time_mins
+                     "recipe.secondary_temp , "                                                    // end_temp_c
+                     "2,    "                                                                      // step_number
+                     "recipe.fermentation_id, "                                                    // fermentation_id
+                     "'Automatically-generated secondary fermentation step for ' || recipe.name, " // description
+                     "NULL, "                                                                      // start_acidity_ph
+                     "NULL, "                                                                      // end_acidity_ph
+                     "recipe.secondary_temp , "                                                    // start_temp_c
+                     "NULL, "                                                                      // start_gravity_sg
+                     "NULL, "                                                                      // end_gravity_sg
+                     "NULL, "                                                                      // free_rise
+                     "''    "                                                                      // vessel
+                  "FROM recipe "
+                  "WHERE recipe.secondary_age > 0 "
+         ), {QVariant{false}, QVariant{true}}},
+         // Tertiary fermentation is only valid if its age is more than 0 days AND if there was a secondary
+         // fermentation.
+         {QString("INSERT INTO fermentation_step ("
+                     "name            , "
+                     "deleted         , "
+                     "display         , "
+                     "step_time_mins  , "
+                     "end_temp_c      , "
+                     "step_number     , "
+                     "fermentation_id , "
+                     "description     , "
+                     "start_acidity_ph, "
+                     "end_acidity_ph  , "
+                     "start_temp_c    , "
+                     "start_gravity_sg, "
+                     "end_gravity_sg  , "
+                     "free_rise       , "
+                     "vessel            "
+                  ") SELECT "
+                     "'Tertiary fermentation for ' || recipe.name, "                               // name
+                     "?,    "                                                                     // deleted
+                     "?,    "                                                                     // display
+                     "recipe.tertiary_age * 60 * 24,"                                             // step_time_mins
+                     "recipe.tertiary_temp , "                                                    // end_temp_c
+                     "3,    "                                                                     // step_number
+                     "recipe.fermentation_id, "                                                   // fermentation_id
+                     "'Automatically-generated tertiary fermentation step for ' || recipe.name, " // description
+                     "NULL, "                                                                     // start_acidity_ph
+                     "NULL, "                                                                     // end_acidity_ph
+                     "recipe.tertiary_temp , "                                                    // start_temp_c
+                     "NULL, "                                                                     // start_gravity_sg
+                     "NULL, "                                                                     // end_gravity_sg
+                     "NULL, "                                                                     // free_rise
+                     "''    "                                                                     // vessel
+                  "FROM recipe "
+                  "WHERE recipe.tertiary_age  > 0 "
+                  "AND   recipe.secondary_age > 0 "
+         ), {QVariant{false}, QVariant{true}}},
+         //
+         // Now we copied the data across, we don't need the primary/secondary/tertiary columns on recipe
+         //
+         {QString("ALTER TABLE recipe DROP COLUMN primary_age   ")},
+         {QString("ALTER TABLE recipe DROP COLUMN primary_temp  ")},
+         {QString("ALTER TABLE recipe DROP COLUMN secondary_age ")},
+         {QString("ALTER TABLE recipe DROP COLUMN secondary_temp")},
+         {QString("ALTER TABLE recipe DROP COLUMN tertiary_age  ")},
+         {QString("ALTER TABLE recipe DROP COLUMN tertiary_temp ")},
+         //
+         // This field/column exists in our schema because it is part of BeerXML, but we don't expose it in the UI or
+         // make any use of it internally.  So, for any recipes created in our software, its value will be meaningless.
+         //
+         // Going forward, Fermentation object knows the number of FermentationSteps it has, so a separate field is not
+         // needed.
+         //
+         {QString("ALTER TABLE recipe DROP COLUMN fermentation_stages")},
+         //
+         // Now comes the tricky stuff where we change the hop_in_recipe, fermentable_in_recipe, misc_in_recipe,
+         // yeast_in_recipe, salt_in_recipe and water_in_recipe junction tables to full-blown object tables, and remove
+         // hop_children, fermentable_children, misc_children, yeast_children and water_children.  (NB: There is no
+         // salt_children table!)  We do salt and water last (out of alphabetical order) because they are a bit
+         // different from the other ingredients.  In particular, water additions don't have any timing info (because
+         // that's in the mash / mash step data) and there is no inventory for water.
+         //
+         {QString("ALTER TABLE hop_in_recipe ADD COLUMN name              %1").arg(db.getDbNativeTypeName<QString>())},
+         {QString("ALTER TABLE hop_in_recipe ADD COLUMN display           %1").arg(db.getDbNativeTypeName<bool   >())},
+         {QString("ALTER TABLE hop_in_recipe ADD COLUMN deleted           %1").arg(db.getDbNativeTypeName<bool   >())},
+         {QString("ALTER TABLE hop_in_recipe ADD COLUMN quantity          %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE hop_in_recipe ADD COLUMN unit              %1").arg(db.getDbNativeTypeName<QString>())}, // Enums are stored as strings
+         {QString("ALTER TABLE hop_in_recipe ADD COLUMN stage             %1").arg(db.getDbNativeTypeName<QString>())}, // Enums are stored as strings
+         {QString("ALTER TABLE hop_in_recipe ADD COLUMN step              %1").arg(db.getDbNativeTypeName<int    >())},
+         {QString("ALTER TABLE hop_in_recipe ADD COLUMN add_at_time_mins  %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE hop_in_recipe ADD COLUMN add_at_gravity_sg %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE hop_in_recipe ADD COLUMN add_at_acidity_ph %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE hop_in_recipe ADD COLUMN duration_mins     %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("     UPDATE hop_in_recipe SET display = ?"), {QVariant{true}}},
+         {QString("     UPDATE hop_in_recipe SET deleted = ?"), {QVariant{false}}},
+         {QString("ALTER TABLE fermentable_in_recipe ADD COLUMN name              %1").arg(db.getDbNativeTypeName<QString>())},
+         {QString("ALTER TABLE fermentable_in_recipe ADD COLUMN display           %1").arg(db.getDbNativeTypeName<bool   >())},
+         {QString("ALTER TABLE fermentable_in_recipe ADD COLUMN deleted           %1").arg(db.getDbNativeTypeName<bool   >())},
+         {QString("ALTER TABLE fermentable_in_recipe ADD COLUMN quantity          %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE fermentable_in_recipe ADD COLUMN unit              %1").arg(db.getDbNativeTypeName<QString>())}, // Enums are stored as strings
+         {QString("ALTER TABLE fermentable_in_recipe ADD COLUMN stage             %1").arg(db.getDbNativeTypeName<QString>())}, // Enums are stored as strings
+         {QString("ALTER TABLE fermentable_in_recipe ADD COLUMN step              %1").arg(db.getDbNativeTypeName<int    >())},
+         {QString("ALTER TABLE fermentable_in_recipe ADD COLUMN add_at_time_mins  %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE fermentable_in_recipe ADD COLUMN add_at_gravity_sg %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE fermentable_in_recipe ADD COLUMN add_at_acidity_ph %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE fermentable_in_recipe ADD COLUMN duration_mins     %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("     UPDATE fermentable_in_recipe SET display = ?"), {QVariant{true}}},
+         {QString("     UPDATE fermentable_in_recipe SET deleted = ?"), {QVariant{false}}},
+         {QString("ALTER TABLE misc_in_recipe ADD COLUMN name              %1").arg(db.getDbNativeTypeName<QString>())},
+         {QString("ALTER TABLE misc_in_recipe ADD COLUMN display           %1").arg(db.getDbNativeTypeName<bool   >())},
+         {QString("ALTER TABLE misc_in_recipe ADD COLUMN deleted           %1").arg(db.getDbNativeTypeName<bool   >())},
+         {QString("ALTER TABLE misc_in_recipe ADD COLUMN quantity          %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE misc_in_recipe ADD COLUMN unit              %1").arg(db.getDbNativeTypeName<QString>())}, // Enums are stored as strings
+         {QString("ALTER TABLE misc_in_recipe ADD COLUMN stage             %1").arg(db.getDbNativeTypeName<QString>())}, // Enums are stored as strings
+         {QString("ALTER TABLE misc_in_recipe ADD COLUMN step              %1").arg(db.getDbNativeTypeName<int    >())},
+         {QString("ALTER TABLE misc_in_recipe ADD COLUMN add_at_time_mins  %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE misc_in_recipe ADD COLUMN add_at_gravity_sg %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE misc_in_recipe ADD COLUMN add_at_acidity_ph %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE misc_in_recipe ADD COLUMN duration_mins     %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("     UPDATE misc_in_recipe SET display = ?"), {QVariant{true}}},
+         {QString("     UPDATE misc_in_recipe SET deleted = ?"), {QVariant{false}}},
+         {QString("ALTER TABLE yeast_in_recipe ADD COLUMN name                %1").arg(db.getDbNativeTypeName<QString>())},
+         {QString("ALTER TABLE yeast_in_recipe ADD COLUMN display             %1").arg(db.getDbNativeTypeName<bool   >())},
+         {QString("ALTER TABLE yeast_in_recipe ADD COLUMN deleted             %1").arg(db.getDbNativeTypeName<bool   >())},
+         {QString("ALTER TABLE yeast_in_recipe ADD COLUMN quantity            %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE yeast_in_recipe ADD COLUMN unit                %1").arg(db.getDbNativeTypeName<QString>())}, // Enums are stored as strings
+         {QString("ALTER TABLE yeast_in_recipe ADD COLUMN stage               %1").arg(db.getDbNativeTypeName<QString>())}, // Enums are stored as strings
+         {QString("ALTER TABLE yeast_in_recipe ADD COLUMN step                %1").arg(db.getDbNativeTypeName<int    >())},
+         {QString("ALTER TABLE yeast_in_recipe ADD COLUMN add_at_time_mins    %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE yeast_in_recipe ADD COLUMN add_at_gravity_sg   %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE yeast_in_recipe ADD COLUMN add_at_acidity_ph   %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE yeast_in_recipe ADD COLUMN duration_mins       %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE yeast_in_recipe ADD COLUMN attenuation_pct     %1").arg(db.getDbNativeTypeName<double >())}, // NB: Extra column for yeast_in_recipe
+         {QString("ALTER TABLE yeast_in_recipe ADD COLUMN times_cultured      %1").arg(db.getDbNativeTypeName<int    >())}, // NB: Extra column for yeast_in_recipe
+         {QString("ALTER TABLE yeast_in_recipe ADD COLUMN cell_count_billions %1").arg(db.getDbNativeTypeName<int    >())}, // NB: Extra column for yeast_in_recipe
+         {QString("     UPDATE yeast_in_recipe SET display = ?"), {QVariant{true}}},
+         {QString("     UPDATE yeast_in_recipe SET deleted = ?"), {QVariant{false}}},
+         {QString("ALTER TABLE salt_in_recipe ADD COLUMN name              %1").arg(db.getDbNativeTypeName<QString>())},
+         {QString("ALTER TABLE salt_in_recipe ADD COLUMN display           %1").arg(db.getDbNativeTypeName<bool   >())},
+         {QString("ALTER TABLE salt_in_recipe ADD COLUMN deleted           %1").arg(db.getDbNativeTypeName<bool   >())},
+         {QString("ALTER TABLE salt_in_recipe ADD COLUMN quantity          %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE salt_in_recipe ADD COLUMN unit              %1").arg(db.getDbNativeTypeName<QString>())}, // Enums are stored as strings
+         {QString("ALTER TABLE salt_in_recipe ADD COLUMN when_to_add       %1").arg(db.getDbNativeTypeName<QString>())}, // Enums are stored as strings
+         {QString("     UPDATE salt_in_recipe SET display = ?"), {QVariant{true}}},
+         {QString("     UPDATE salt_in_recipe SET deleted = ?"), {QVariant{false}}},
+         {QString("ALTER TABLE water_in_recipe ADD COLUMN name              %1").arg(db.getDbNativeTypeName<QString>())},
+         {QString("ALTER TABLE water_in_recipe ADD COLUMN display           %1").arg(db.getDbNativeTypeName<bool   >())},
+         {QString("ALTER TABLE water_in_recipe ADD COLUMN deleted           %1").arg(db.getDbNativeTypeName<bool   >())},
+         {QString("ALTER TABLE water_in_recipe ADD COLUMN volume_l          %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("     UPDATE water_in_recipe SET display = ?"), {QVariant{true}}},
+         {QString("     UPDATE water_in_recipe SET deleted = ?"), {QVariant{false}}},
+
+         //
+         // Bring the amounts across from the hop and fermentable tables.  At the outset, all amounts are going to be
+         // weights, because the previous schemas did not support volumes for hop or fermentable additions.
+         //
+         // Although we mostly try to avoid it, we are using non-standard UPDATE FROM syntax here (see
+         // https://www.sqlite.org/lang_update.html#update_from).  Fortunately, SQLite follows PostgreSQL for this, so
+         // the same query should work on both databases.
+         //
+         // (See Measurement::Units::unitStringMapping for mapping of "kilograms" to Measurement::Units::kilograms etc.)
+         //
+         // It's not strictly needed, but we'll give obvious ("Addition of...") names to the hop/fermentable/etc
+         // additions at the same time because it makes the DB easier to browse.  I guess in a perfect world we should
+         // translate these but, for now at least, the name of the addition object (ie the RecipeAdditionHop etc object)
+         // is not shown in the UI, so it's not a big deal that there's an English name in the DB.
+         //
+         {QString("UPDATE hop_in_recipe "
+                  "SET quantity = h.amount, "
+                      "unit = 'kilograms', "
+                      "name = 'Addition of ' || h.name "
+                  "FROM ("
+                     "SELECT id, "
+                            "name, "
+                            "amount "
+                     "FROM hop"
+                  ") AS h "
+                  "WHERE hop_in_recipe.hop_id = h.id")},
+         {QString("UPDATE fermentable_in_recipe "
+                  "SET quantity = f.amount, "
+                      "unit = 'kilograms', "
+                      "name = 'Addition of ' || f.name "
+                  "FROM ("
+                     "SELECT id, "
+                            "name, "
+                            "amount "
+                     "FROM fermentable"
+                  ") AS f "
+                  "WHERE fermentable_in_recipe.fermentable_id = f.id")},
+         //
+         // Now do the same for misc and yeast tables.  Here, the existing schema _does_ support weight and volume, so
+         // we have to account for that.
+         //
+         // We also bring across yeast.times_cultured to yeast_in_recipe.times_cultured, as that's where it now lives.
+         //
+         // TBD: How do "quanta" (ie number of packets) of yeast get stored in DB?
+         //
+         {QString("UPDATE misc_in_recipe "
+                  "SET quantity = m.amount, "
+                      "unit = m.unit, "
+                      "name = 'Addition of ' || m.name "
+                  "FROM ("
+                     "SELECT id, "
+                            "name, "
+                            "amount, "
+                            "CASE WHEN amount_is_weight THEN 'kilograms' ELSE 'liters' END AS unit "
+                     "FROM misc"
+                  ") AS m "
+                  "WHERE misc_in_recipe.misc_id = m.id")},
+         {QString("UPDATE yeast_in_recipe "
+                  "SET quantity = y.amount, "
+                      "unit = y.unit, "
+                      "name = 'Addition of ' || y.name, "
+                      "times_cultured = y.times_cultured "
+                  "FROM ("
+                     "SELECT id, "
+                            "name, "
+                            "amount, "
+                            "CASE WHEN amount_is_weight THEN 'kilograms' ELSE 'liters' END AS unit, "
+                            "times_cultured "
+                     "FROM yeast"
+                  ") AS y "
+                  "WHERE yeast_in_recipe.yeast_id = y.id")},
+         //
+         // Salt is similar to misc and yeast, except we have the possibility of "WhenToAdd == Never" (addTo == 0) which
+         // means don't add the salt at all(!)
+         //
+         // It's convenient to bring the WhenToAdd property across at the same time as the quantity.  It's stored
+         // numerically in the salt.addTo column:
+         //    0 == Never  == Do not add at all
+         //    1 == Mash   == Add at start of mash
+         //    2 == Sparge == Add to sparge water (at end of mash)
+         //    3 == Ratio  == Add at mash and sparge, pro rata to the amounts of water (I think!)
+         //    4 == Equal  == Add at mash and sparge, equal amounts (I think!)
+         //
+         // We ditch the "Never" value and store in when_to_add as a string.
+         //
+         {QString("UPDATE salt_in_recipe "
+                  "SET quantity    = s.amount, "
+                      "unit        = s.unit, "
+                      "name = 'Addition of ' || s.name, "
+                      "when_to_add = s.when_to_add "
+                  "FROM ("
+                     "SELECT id, "
+                            "name, "
+                            "amount, "
+                            "addTo, "
+                            "CASE "
+                               "WHEN amount_is_weight THEN 'kilograms' "
+                               "ELSE 'liters' "
+                            "END AS unit, "
+                            "CASE "
+                               "WHEN addTo = 1 THEN 'Mash'   "
+                               "WHEN addTo = 2 THEN 'Sparge' "
+                               "WHEN addTo = 3 THEN 'Ratio'  "
+                               "WHEN addTo = 4 THEN 'Equal'  "
+                            "END AS when_to_add "
+                     "FROM salt"
+                  ") AS s "
+                  "WHERE salt_in_recipe.salt_id = s.id "
+                  "AND s.addTo != 0")},
+         //
+         // For water both the source and target are volume in liters
+         //
+         {QString("UPDATE water_in_recipe "
+                  "SET volume_l = w.amount, "
+                      "name = 'Use of ' || w.name "
+                  "FROM ("
+                     "SELECT id, "
+                            "name, "
+                            "amount "
+                     "FROM water"
+                  ") AS w "
+                  "WHERE water_in_recipe.water_id = w.id")},
+         //
+         // Now we brought the amounts across, we can drop them on the hop, fermentable, misc, yeast, salt and water
+         // tables.
+         //
+         // NB: Do NOT drop the amount_is_weight columns yet!  We need them below to update inventory.
+         //
+         // Technically we are losing some data here, because we lose the amount field for "parent" hops/fermentables
+         // (ie those rows that do not correspond to "use of hop/fermentable in a recipe".  However, this is meaningless
+         // data, which is why it isn't in the new schema, and the user has a backup of the old DB, so it should be OK.
+         // (Note that inventory amounts are stored in different tables - hop_in_inventory, fermentable_in_inventory.)
+         //
+         {QString("ALTER TABLE hop         DROP COLUMN amount")},
+         {QString("ALTER TABLE fermentable DROP COLUMN amount")},
+         {QString("ALTER TABLE misc        DROP COLUMN amount")},
+         {QString("ALTER TABLE salt        DROP COLUMN amount")},
+         {QString("ALTER TABLE yeast       DROP COLUMN amount")},
+         {QString("ALTER TABLE water       DROP COLUMN amount")},
+         // Also drop the other column on yeast that we brought across
+         {QString("ALTER TABLE yeast       DROP COLUMN times_cultured")},
+         //
+         // Bring the addition times across from the hop and misc tables.  Do this before setting stage etc, as it's
+         // similar to the queries we've just done.
+         //
+         {QString("UPDATE hop_in_recipe "
+                  "SET add_at_time_mins = h.time "
+                  "FROM ("
+                     "SELECT id, "
+                            "time "
+                     "FROM hop"
+                  ") AS h "
+                  "WHERE hop_in_recipe.hop_id = h.id")},
+         {QString("UPDATE misc_in_recipe "
+                  "SET add_at_time_mins = m.time "
+                  "FROM ("
+                     "SELECT id, "
+                            "time "
+                     "FROM misc"
+                  ") AS m "
+                  "WHERE misc_in_recipe.misc_id = m.id")},
+         //
+         // Existing data doesn't have an addition time for fermentable or yeast to 0 for both of them.  (Note that
+         // salt_in_recipe and water_in_recipe do not have the add_at_time_mins column.)
+         //
+         {QString("UPDATE fermentable_in_recipe "
+                  "SET add_at_time_mins = 0.0 ")},
+         {QString("UPDATE yeast_in_recipe "
+                  "SET add_at_time_mins = 0.0 ")},
+         //
+         // And, as above, drop the time column on the hop and misc tables now we pulled the data across.
+         //
+         {QString("ALTER TABLE hop  DROP COLUMN time")},
+         {QString("ALTER TABLE misc DROP COLUMN time")},
+         //
+         // NB: No addition times or stages etc for water uses (as this is handled in mash steps etc).
+         //
+         // We need to map from old Hop::Use {Mash, First_Wort, Boil, Aroma, Dry_Hop} to new RecipeAddition::Stage
+         // {Mash, Boil, Fermentation, Packaging}.  NB: The equivalent logic is also in RecipeAdditionHop::use() and
+         // RecipeAdditionHop::setUse().
+         //
+         // Hop::Use::Mash -> RecipeAddition::Stage::Mash
+         //
+         {QString("UPDATE hop_in_recipe "
+                  "SET stage = 'add_to_mash' "
+                  "WHERE hop_id IN ("
+                     "SELECT id "
+                     "FROM hop "
+                     "WHERE lower(hop.use) = 'mash'"
+                  ")")},
+         //
+         // Hop::Use::First_Wort -> RecipeAddition::Stage::Boil + RecipeAddition::step = 1 (because we made sure above
+         // that every boil has a pre-boil step
+         //
+         {QString("UPDATE hop_in_recipe "
+                  "SET stage = 'add_to_boil', "
+                      "step  = 1 "
+                  "WHERE hop_id IN ("
+                     "SELECT id "
+                     "FROM hop "
+                     "WHERE lower(hop.use) = 'first wort'"
+                  ")")},
+         //
+         // Hop::Use::Boil -> RecipeAddition::Stage::Boil + RecipeAddition::step = 2 (because we made sure above that
+         // every boil has a "boil proper" step
+         //
+         {QString("UPDATE hop_in_recipe "
+                  "SET stage = 'add_to_boil', "
+                      "step  = 2 "
+                  "WHERE hop_id IN ("
+                     "SELECT id "
+                     "FROM hop "
+                     "WHERE lower(hop.use) = 'boil'"
+                  ")")},
+         //
+         // Hop::Use::Aroma -> RecipeAddition::Stage::Boil + RecipeAddition::step = 3 (because we made sure above that
+         // every boil has a post-boil step
+         //
+         {QString("UPDATE hop_in_recipe "
+                  "SET stage = 'add_to_boil', "
+                      "step  = 3 "
+                  "WHERE hop_id IN ("
+                     "SELECT id "
+                     "FROM hop "
+                     "WHERE lower(hop.use) = 'aroma'"
+                  ")")},
+         //
+         // Hop::Use::Dry_Hop -> RecipeAddition::Stage::Fermentation
+         //
+         {QString("UPDATE hop_in_recipe "
+                  "SET stage = 'add_to_fermentation' "
+                  "WHERE hop_id IN ("
+                     "SELECT id "
+                     "FROM hop "
+                     "WHERE lower(hop.use) = 'dry hop'"
+                  ")")},
+         //
+         // Misc is similar to Hop, except that the old Misc::Use values are {Mash, Boil, Primary, Secondary, Bottling}.
+         // Again, parallel logic is in RecipeAdditionMisc::use() and RecipeAdditionMisc::setUse().
+         //
+         //
+         // Misc::Use::Mash -> RecipeAddition::Stage::Mash
+         //
+         {QString("UPDATE misc_in_recipe "
+                  "SET stage = 'add_to_mash' "
+                  "WHERE misc_id IN ("
+                     "SELECT id "
+                     "FROM misc "
+                     "WHERE lower(misc.use) = 'mash'"
+                  ")")},
+         //
+         // Misc::Use::Boil -> RecipeAddition::Stage::Boil + RecipeAddition::step = 2 (because we made sure above that
+         // every boil has a "boil proper" step
+         //
+         {QString("UPDATE misc_in_recipe "
+                  "SET stage = 'add_to_boil', "
+                      "step  = 2 "
+                  "WHERE misc_id IN ("
+                     "SELECT id "
+                     "FROM misc "
+                     "WHERE lower(misc.use) = 'boil'"
+                  ")")},
+         //
+         // Misc::Use::Primary, Misc::Use::Secondary -> RecipeAddition::Stage::Fermentation
+         //
+         // TBD: Should we create two fermentation steps?
+         //
+         {QString("UPDATE misc_in_recipe "
+                  "SET stage = 'add_to_fermentation' "
+                  "WHERE misc_id IN ("
+                     "SELECT id "
+                     "FROM misc "
+                     "WHERE lower(misc.use) = 'primary' "
+                        "OR lower(misc.use) = 'secondary' "
+                  ")")},
+         //
+         // Misc::Use::Bottling -> RecipeAddition::Stage::Packaging
+         //
+         {QString("UPDATE misc_in_recipe "
+                  "SET stage = 'add_to_package' "
+                  "WHERE misc_id IN ("
+                     "SELECT id "
+                     "FROM misc "
+                     "WHERE lower(misc.use) = 'bottling'"
+                  ")")},
+         //
+         // Now we pulled the info from the hop.use column into the hop_in_recipe table, we can drop the column.  Same
+         // goes for misc.use into misc_in_recipe.
+         //
+         {QString("ALTER TABLE hop  DROP COLUMN use")},
+         {QString("ALTER TABLE misc DROP COLUMN use")},
+         //
+         // Fermentable additions are a bit simpler.  They are either "is_mashed" or "add_after_boil" or neither.
+         // (Obviously doesn't make sense to be both!)  In the case of neither (ie not mashed and not added after boil,
+         // we assume added at the start of the boil).
+         //
+         // NOTE: For historical reasons, there are a lot of places in the database where a Boolean value could be
+         //       stored as "true" / "false" rather than 1 / 0 (depending on the exact version of the software that a
+         //       particular field was written with).  According to https://sqlite.org/datatype3.html:
+         //
+         //          SQLite does not have a separate Boolean storage class. Instead, Boolean values are stored as
+         //          integers 0 (false) and 1 (true).
+         //
+         //          SQLite recognizes the keywords "TRUE" and "FALSE", as of version 3.23.0 (2018-04-02) but those
+         //          keywords are really just alternative spellings for the integer literals 1 and 0 respectively.
+         //
+         //       So it should be OK to ignore this difference and trust SQLite to "do the right thing" when we have a
+         //       Boolean value in a WHERE clause.
+         //
+         //       Note that we start by setting _everything_ to be added to the mash, then overwrite the boil cases
+         //       afterwards.  This guarantees that every entry in fermentable_in_recipe has stage set -- even if there
+         //       are odd null values in the is_mashed and/or add_after_boil columns of the fermentable table.
+         //
+         {QString("UPDATE fermentable_in_recipe "
+                  "SET stage = 'add_to_mash' ")},
+         {QString("UPDATE fermentable_in_recipe "
+                  "SET stage = 'add_to_boil', "
+                      "step  = 1 "
+                  "WHERE fermentable_id IN ("
+                     "SELECT id "
+                     "FROM fermentable "
+                     "WHERE is_mashed = ? "
+                     "AND add_after_boil = ?"
+                  ")"), {QVariant{false}, QVariant{false}}},
+         {QString("UPDATE fermentable_in_recipe "
+                  "SET stage = 'add_to_boil', "
+                      "step  = 3 "
+                  "WHERE fermentable_id IN ("
+                     "SELECT id "
+                     "FROM fermentable "
+                     "WHERE add_after_boil = ?"
+                  ")"), {QVariant{true}}},
+         //
+         // We can drop the is_mashed and add_after_boil columns on fermentable as we just pulled the information from
+         // them into the fermentable_in_recipe table.
+         //
+         {QString("ALTER TABLE fermentable DROP COLUMN is_mashed")},
+         {QString("ALTER TABLE fermentable DROP COLUMN add_after_boil")},
+         //
+         // Yeast additions are either add_to_secondary or not (ie add to primary).  The BeerXML specifications explain
+         // that add_to_secondary is a "flag denoting that this yeast was added for a secondary (or later) fermentation
+         // as opposed to the primary fermentation.  Useful if one uses two or more yeast strains for a single brew (eg:
+         // Lambic).  Default value is FALSE".
+         //
+         // In BeerJSON, the TimingType of an addition includes the "step" field, which is "used to indicate what step
+         // this ingredient timing addition is referencing. EG A value of 2 for add_to_fermentation would mean to add
+         // during the second fermentation step".
+         //
+         // Again, we start by setting _everything_ to be add-to-primary and then overwrite the add-to-secondary cases
+         // afterwards, as this covers any null data in the add_to_secondary column of the yeast table.
+         //
+         {QString("UPDATE yeast_in_recipe "
+                  "SET stage = 'add_to_fermentation', "
+                      "step = 1 ")},
+         {QString("UPDATE yeast_in_recipe "
+                  "SET stage = 'add_to_fermentation', "
+                      "step = 2 "
+                  "WHERE yeast_id IN ("
+                     "SELECT id "
+                     "FROM yeast "
+                     "WHERE add_to_secondary = ?"
+                  ")"), {QVariant{true}}},
+         //
+         // We can drop the add_to_secondary column on yeast now that we have transferred the information from it across
+         // to yeast_in_recipe.
+         //
+         {QString("ALTER TABLE yeast DROP COLUMN add_to_secondary")},
+         //
+         // Attenuation percent moves from being a Yeast property to a RecipeAdditionYeast one
+         //
+         {QString("UPDATE yeast_in_recipe "
+                  "SET attenuation_pct = y.attenuation "
+                  "FROM ("
+                     "SELECT id, "
+                            "attenuation "
+                     "FROM yeast"
+                  ") AS y "
+                  "WHERE yeast_in_recipe.yeast_id = y.id")},
+         // Now we moved the attenuation column across, we can drop it
+         {QString("ALTER TABLE yeast DROP COLUMN attenuation")},
+
+         //
+         // Entries in hop_in_recipe will still be pointing to the "child" hop.  We need to point to the parent one.
+         // Same for fermentable_in_recipe, misc_in_recipe, yeast_in_recipe and water_in_recipe.
+         //
+         {QString("UPDATE hop_in_recipe "
+                  "SET hop_id = hc.parent_id "
+                  "FROM ("
+                     "SELECT parent_id, "
+                            "child_id "
+                     "FROM hop_children"
+                  ") AS hc "
+                  "WHERE hop_in_recipe.hop_id = hc.child_id")},
+         {QString("UPDATE fermentable_in_recipe "
+                  "SET fermentable_id = fc.parent_id "
+                  "FROM ("
+                     "SELECT parent_id, "
+                            "child_id "
+                     "FROM fermentable_children"
+                  ") AS fc "
+                  "WHERE fermentable_in_recipe.fermentable_id = fc.child_id")},
+         {QString("UPDATE misc_in_recipe "
+                  "SET misc_id = mc.parent_id "
+                  "FROM ("
+                     "SELECT parent_id, "
+                            "child_id "
+                     "FROM misc_children"
+                  ") AS mc "
+                  "WHERE misc_in_recipe.misc_id = mc.child_id")},
+         {QString("UPDATE yeast_in_recipe "
+                  "SET yeast_id = yc.parent_id "
+                  "FROM ("
+                     "SELECT parent_id, "
+                            "child_id "
+                     "FROM yeast_children"
+                  ") AS yc "
+                  "WHERE yeast_in_recipe.yeast_id = yc.child_id")},
+         {QString("UPDATE water_in_recipe "
+                  "SET water_id = wc.parent_id "
+                  "FROM ("
+                     "SELECT parent_id, "
+                            "child_id "
+                     "FROM water_children"
+                  ") AS wc "
+                  "WHERE water_in_recipe.water_id = wc.child_id")},
+         //
+         // Now we can mark the child hops, fermentables, miscs, yeasts, waters as deleted
+         //
+         {QString("UPDATE hop "
+                  "SET deleted = ?, "
+                      "display = ? "
+                  "WHERE hop.id IN (SELECT child_id FROM hop_children)"), {QVariant{true}, QVariant{false}}},
+         {QString("UPDATE fermentable "
+                  "SET deleted = ?, "
+                      "display = ? "
+                  "WHERE fermentable.id IN (SELECT child_id FROM fermentable_children)"), {QVariant{true}, QVariant{false}}},
+         {QString("UPDATE misc "
+                  "SET deleted = ?, "
+                      "display = ? "
+                  "WHERE misc.id IN (SELECT child_id FROM misc_children)"), {QVariant{true}, QVariant{false}}},
+         {QString("UPDATE yeast "
+                  "SET deleted = ?, "
+                      "display = ? "
+                  "WHERE yeast.id IN (SELECT child_id FROM yeast_children)"), {QVariant{true}, QVariant{false}}},
+         {QString("UPDATE water "
+                  "SET deleted = ?, "
+                      "display = ? "
+                  "WHERE water.id IN (SELECT child_id FROM water_children)"), {QVariant{true}, QVariant{false}}},
+         //
+         // So we don't need the hop_children, fermentable_children, misc_children, yeast_children, water_children
+         // tables any more.
+         //
+         {QString("DROP TABLE         hop_children")},
+         {QString("DROP TABLE fermentable_children")},
+         {QString("DROP TABLE        misc_children")},
+         {QString("DROP TABLE       yeast_children")},
+         {QString("DROP TABLE       water_children")},
+
+         //
+         // Whilst we're here, there are some unused columns on hop, and various other tables, that we should get rid
+         // of.  These were added a long time ago for a feature that was dropped (see
+         // https://github.com/Brewtarget/brewtarget/issues/557) so safe to delete.
+         //
+         // Don't forget we renamed mashstep to mash_step above!
+         //
+         {QString("ALTER TABLE hop         DROP COLUMN display_unit")},
+         {QString("ALTER TABLE hop         DROP COLUMN display_scale")},
+         {QString("ALTER TABLE fermentable DROP COLUMN display_unit")},
+         {QString("ALTER TABLE fermentable DROP COLUMN display_scale")},
+         {QString("ALTER TABLE mash_step   DROP COLUMN display_unit")},
+         {QString("ALTER TABLE mash_step   DROP COLUMN display_scale")},
+         {QString("ALTER TABLE mash_step   DROP COLUMN display_temp_unit")},
+         {QString("ALTER TABLE misc        DROP COLUMN display_unit")},
+         {QString("ALTER TABLE misc        DROP COLUMN display_scale")},
+         {QString("ALTER TABLE yeast       DROP COLUMN display_unit")},
+         {QString("ALTER TABLE yeast       DROP COLUMN display_scale")},
+         //
+         // The salt table has a column misc_id that is a foreign key to the misc table.  AFAIK this is currently
+         // unused.  It's a bit of a palava to drop a foreign key column, as you have to make a new table and copy all
+         // the data over etc, then drop and rename tables.  For the moment, we'll leave it alone as it seems to do no
+         // harm.
+         //
+         //
+         // Now we sort out inventory.  We move the hop ID and by-volume/by-mass info from the hop table to the
+         // inventory table.  Same thing for fermentables, misc and, to some extent, yeast.
+         //
+         // NB: Inventory table for salt is brand new -- ie there never used to be one -- and gets created below just
+         //     after we fix up the foreign keys on the other inventory tables.
+         //
+         // NB: No inventory for water!
+         //
+         {QString("ALTER TABLE         hop_in_inventory RENAME COLUMN amount TO quantity")},
+         {QString("ALTER TABLE fermentable_in_inventory RENAME COLUMN amount TO quantity")},
+         {QString("ALTER TABLE        misc_in_inventory RENAME COLUMN amount TO quantity")},
+         {QString("ALTER TABLE       yeast_in_inventory RENAME COLUMN quanta TO quantity")},
+         {QString("ALTER TABLE         hop_in_inventory ADD COLUMN         hop_id %1").arg(db.getDbNativeTypeName<QString>())},
+         {QString("ALTER TABLE fermentable_in_inventory ADD COLUMN fermentable_id %1").arg(db.getDbNativeTypeName<QString>())},
+         {QString("ALTER TABLE        misc_in_inventory ADD COLUMN        misc_id %1").arg(db.getDbNativeTypeName<QString>())},
+         {QString("ALTER TABLE       yeast_in_inventory ADD COLUMN       yeast_id %1").arg(db.getDbNativeTypeName<QString>())},
+         {QString("ALTER TABLE         hop_in_inventory ADD COLUMN unit   %1").arg(db.getDbNativeTypeName<QString>())},
+         {QString("ALTER TABLE fermentable_in_inventory ADD COLUMN unit   %1").arg(db.getDbNativeTypeName<QString>())},
+         {QString("ALTER TABLE        misc_in_inventory ADD COLUMN unit   %1").arg(db.getDbNativeTypeName<QString>())},
+         {QString("ALTER TABLE       yeast_in_inventory ADD COLUMN unit   %1").arg(db.getDbNativeTypeName<QString>())},
+         // At this point, all hop and fermentable amounts will be weights, because prior versions of the DB did not
+         // support measuring them by volume.
+         {QString("UPDATE hop_in_inventory "
+                  "SET hop_id = h.id, "
+                      "unit = 'kilograms' "
+                  "FROM ("
+                     "SELECT id, "
+                            "inventory_id "
+                     "FROM hop"
+                  ") AS h "
+                  "WHERE hop_in_inventory.id = h.inventory_id")},
+         {QString("UPDATE fermentable_in_inventory "
+                  "SET fermentable_id = f.id, "
+                      "unit = 'kilograms' "
+                  "FROM ("
+                     "SELECT id, "
+                            "inventory_id "
+                     "FROM fermentable"
+                  ") AS f "
+                  "WHERE fermentable_in_inventory.id = f.inventory_id ")},
+         // For misc, we need to support both weights and volumes.
+         {QString("UPDATE misc_in_inventory "
+                  "SET misc_id = m.id, "
+                      "unit = m.unit "
+                  "FROM ("
+                     "SELECT id, "
+                            "inventory_id, "
+                            "CASE WHEN amount_is_weight THEN 'kilograms' ELSE 'liters' END AS unit "
+                     "FROM misc"
+                  ") AS m "
+                  "WHERE misc_in_inventory.id = m.inventory_id")},
+         // HOWEVER, for inventory purposes, yeast is actually stored as "number of packets" (aka quanta in various old
+         // bits of the code).
+         {QString("UPDATE yeast_in_inventory "
+                  "SET yeast_id = y.id, "
+                      "unit = 'number_of' "
+                  "FROM ("
+                     "SELECT id, "
+                            "inventory_id "
+                     "FROM yeast"
+                  ") AS y "
+                  "WHERE yeast_in_inventory.id = y.inventory_id")},
+         // Now we transferred info across, we don't need the inventory_id column on hop or fermentable
+         {QString("ALTER TABLE hop         DROP COLUMN inventory_id")},
+         {QString("ALTER TABLE fermentable DROP COLUMN inventory_id")},
+         {QString("ALTER TABLE misc        DROP COLUMN inventory_id")},
+         {QString("ALTER TABLE yeast       DROP COLUMN inventory_id")},
+         // And we're finally done with the amount_is_weight columns
+         {QString("ALTER TABLE misc        DROP COLUMN amount_is_weight")},
+         {QString("ALTER TABLE yeast       DROP COLUMN amount_is_weight")},
+         //
+         // We would like hop_in_inventory.hop_id to be a foreign key to hop.id.  SQLite only lets you create foreign
+         // key constraints at the time that you create the table, so this is a bit of a palava.
+         //
+         {QString("CREATE TABLE tmp_hop_in_inventory ( "
+                    "id        %1, "
+                    "hop_id    %2, "
+                    "quantity  %3, "
+                    "unit      %4, "
+                    "FOREIGN KEY(hop_id)   REFERENCES hop(id)"
+                 ");").arg(db.getDbNativePrimaryKeyDeclaration(),
+                           db.getDbNativeTypeName<int    >(),
+                           db.getDbNativeTypeName<double >(),
+                           db.getDbNativeTypeName<QString>())},
+         {QString("INSERT INTO tmp_hop_in_inventory (id, hop_id, quantity, unit) "
+                  "SELECT id, hop_id, quantity, unit "
+                  "FROM hop_in_inventory")},
+         {QString("DROP TABLE hop_in_inventory")},
+         {QString("ALTER TABLE tmp_hop_in_inventory "
+                  "RENAME TO hop_in_inventory")},
+         // Same palava for fermentable_in_inventory.fermentable_id to be a foreign key to fermentable.id
+         {QString("CREATE TABLE tmp_fermentable_in_inventory ( "
+                    "id             %1, "
+                    "fermentable_id %2, "
+                    "quantity       %3, "
+                    "unit           %4, "
+                    "FOREIGN KEY(fermentable_id)   REFERENCES fermentable(id)"
+                 ");").arg(db.getDbNativePrimaryKeyDeclaration(),
+                           db.getDbNativeTypeName<int    >(),
+                           db.getDbNativeTypeName<double >(),
+                           db.getDbNativeTypeName<QString>())},
+         {QString("INSERT INTO tmp_fermentable_in_inventory (id, fermentable_id, quantity, unit) "
+                  "SELECT id, fermentable_id, quantity, unit "
+                  "FROM fermentable_in_inventory")},
+         {QString("DROP TABLE fermentable_in_inventory")},
+         {QString("ALTER TABLE tmp_fermentable_in_inventory "
+                  "RENAME TO fermentable_in_inventory")},
+         // Same palava for misc_in_inventory.misc_id to be a foreign key to misc.id
+         {QString("CREATE TABLE tmp_misc_in_inventory ( "
+                    "id             %1, "
+                    "misc_id %2, "
+                    "quantity       %3, "
+                    "unit           %4, "
+                    "FOREIGN KEY(misc_id)   REFERENCES misc(id)"
+                 ");").arg(db.getDbNativePrimaryKeyDeclaration(),
+                           db.getDbNativeTypeName<int    >(),
+                           db.getDbNativeTypeName<double >(),
+                           db.getDbNativeTypeName<QString>())},
+         {QString("INSERT INTO tmp_misc_in_inventory (id, misc_id, quantity, unit) "
+                  "SELECT id, misc_id, quantity, unit "
+                  "FROM misc_in_inventory")},
+         {QString("DROP TABLE misc_in_inventory")},
+         {QString("ALTER TABLE tmp_misc_in_inventory "
+                  "RENAME TO misc_in_inventory")},
+         // Same palava for yeast_in_inventory.yeast_id to be a foreign key to yeast.id
+         {QString("CREATE TABLE tmp_yeast_in_inventory ( "
+                    "id             %1, "
+                    "yeast_id %2, "
+                    "quantity       %3, "
+                    "unit           %4, "
+                    "FOREIGN KEY(yeast_id)   REFERENCES yeast(id)"
+                 ");").arg(db.getDbNativePrimaryKeyDeclaration(),
+                           db.getDbNativeTypeName<int    >(),
+                           db.getDbNativeTypeName<double >(),
+                           db.getDbNativeTypeName<QString>())},
+         {QString("INSERT INTO tmp_yeast_in_inventory (id, yeast_id, quantity, unit) "
+                  "SELECT id, yeast_id, quantity, unit "
+                  "FROM yeast_in_inventory")},
+         {QString("DROP TABLE yeast_in_inventory")},
+         {QString("ALTER TABLE tmp_yeast_in_inventory "
+                  "RENAME TO yeast_in_inventory")},
+         // Note that there isn't yet a salt_in_inventory table so we don't have to change it -- just create it!
+         {QString("CREATE TABLE salt_in_inventory ( "
+                    "id        %1, "
+                    "salt_id   %2, "
+                    "quantity  %3, "
+                    "unit      %4, "
+                    "FOREIGN KEY(salt_id)   REFERENCES salt(id)"
+                 ");").arg(db.getDbNativePrimaryKeyDeclaration(),
+                           db.getDbNativeTypeName<int    >(),
+                           db.getDbNativeTypeName<double >(),
+                           db.getDbNativeTypeName<QString>())},
+         //
+         // Finally, since we're doing a big update and a bit of a clean up, it is time to drop tables that have not
+         // been used for a long time and are not mentioned anywhere else in the current code base.
+         //
+         {QString("DROP TABLE bt_equipment")},
+         {QString("DROP TABLE bt_fermentable")},
+         {QString("DROP TABLE bt_hop")},
+         {QString("DROP TABLE bt_misc")},
+         {QString("DROP TABLE bt_style")},
+         {QString("DROP TABLE bt_water")},
+         {QString("DROP TABLE bt_yeast")},
+         {QString("DROP TABLE recipe_children")},
+      };
+
+      return executeSqlQueries(q, migrationQueries);
+   }
+
    /*!
     * \brief Migrate from version \c oldVersion to \c oldVersion+1
     */
@@ -567,6 +1989,9 @@ namespace {
          case 9:
             ret &= migrate_to_10(database, sqlQuery);
             break;
+         case 10:
+            ret &= migrate_to_11(database, sqlQuery);
+            break;
          default:
             qCritical() << QString("Unknown version %1").arg(oldVersion);
             return false;
@@ -586,6 +2011,7 @@ namespace {
    }
 
 }
+
 bool DatabaseSchemaHelper::upgrade = false;
 // Default namespace hides functions from everything outside this file.
 

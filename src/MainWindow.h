@@ -1,28 +1,29 @@
-/*
- * MainWindow.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2023
- * - Dan Cavanagh <dan@dancavanagh.com>
- * - Jeff Bailey <skydvr38@verizon.net>
- * - Matt Young <mfsy@yahoo.com>
- * - Maxime Lavigne <duguigne@gmail.com>
- * - Mik Firestone <mikfire@gmail.com>
- * - Philip Greggory Lee <rocketman768@gmail.com>
- * - Samuel Östling <MrOstling@gmail.com>
- * - Ted Wright
+/*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ * MainWindow.h is part of Brewtarget, and is copyright the following authors 2009-2024:
+ *   • Aidan Roberts <aidanr67@gmail.com>
+ *   • Dan Cavanagh <dan@dancavanagh.com>
+ *   • Daniel Pettersson <pettson81@gmail.com>
+ *   • Jeff Bailey <skydvr38@verizon.net>
+ *   • Mark de Wever <koraq@xs4all.nl>
+ *   • Matt Young <mfsy@yahoo.com>
+ *   • Maxime Lavigne <duguigne@gmail.com>
+ *   • Mik Firestone <mikfire@gmail.com>
+ *   • Philip Greggory Lee <rocketman768@gmail.com>
+ *   • Ryan Hoobler <rhoob@yahoo.com>
+ *   • Samuel Östling <MrOstling@gmail.com>
+ *   • Ted Wright <tedwright@users.sourceforge.net>
  *
- * Brewtarget is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * Brewtarget is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 #pragma once
@@ -31,81 +32,32 @@
 #include <memory> // For PImpl
 
 #include <QCloseEvent>
-#include <QFileDialog>
 #include <QMainWindow>
 #include <QPalette>
 #include <QPrintDialog>
 #include <QPrinter>
 #include <QString>
 #include <QTimer>
-#include <QUndoStack>
 #include <QVariant>
 #include <QWidget>
 
 #include "ui_mainWindow.h"
-#include "SimpleUndoableUpdate.h"
-
+#include "undoRedo/SimpleUndoableUpdate.h"
+#include "utils/NoCopy.h"
 
 // Forward Declarations
 
-class AboutDialog;
-class AlcoholTool;
-class AncestorDialog;
-class BeerColorWidget;
-class BrewDayScrollWidget;
 class BrewNoteWidget;
-class BtDatePopup;
-class ConverterTool;
-class EquipmentEditor;
-class EquipmentListModel;
-class FermentableDialog;
-class FermentableEditor;
-class FermentableSortFilterProxyModel;
-class FermentableTableModel;
-class HopDialog;
-class HopEditor;
-class HopSortFilterProxyModel;
-class HopTableModel;
-class HtmlViewer;
-class HydrometerTool;
-class MashDesigner;
-class MashEditor;
-class MashListModel;
-class MashStepEditor;
-class MashStepTableModel;
-class MashWizard;
-class MiscDialog;
-class MiscEditor;
-class MiscSortFilterProxyModel;
-class MiscTableModel;
-class NamedMashEditor;
-class OgAdjuster;
 class OptionDialog;
-class PitchDialog;
-class PrimingDialog;
-class PrintAndPreviewDialog;
+class PropertyPath;
 class Recipe;
-class RecipeExtrasWidget;
-class RecipeFormatter;
-class RefractoDialog;
-class ScaleRecipeTool;
-class StrikeWaterDialog;
-class StyleEditor;
-class StyleListModel;
-class StyleSortFilterProxyModel;
-class TimerMainDialog;
-class WaterDialog;
-class WaterEditor;
-class WaterListModel;
-class YeastDialog;
-class YeastEditor;
-class YeastSortFilterProxyModel;
-class YeastTableModel;
+
+class RecipeAdditionHop;
 
 /*!
  * \class MainWindow
  *
- * \brief Brewtarget's main window. This is a view/controller class.
+ * \brief The application's main window. This is a view/controller class.
  */
 class MainWindow : public QMainWindow, public Ui::mainWindow {
    Q_OBJECT
@@ -114,6 +66,19 @@ class MainWindow : public QMainWindow, public Ui::mainWindow {
 public:
    MainWindow(QWidget* parent=nullptr);
    virtual ~MainWindow();
+
+   //
+   // This is a short-term trick to save me adding .get() to lots of calls
+   //
+   using QObject::connect;
+   template<typename A, typename B, typename C, typename D>
+   void connect(std::unique_ptr<A> & a, B b, C c, D d) {
+      this->connect(a.get(), b, c, d);
+   }
+   template<typename A, typename B, typename C, typename D>
+   void connect(A a, B b, std::unique_ptr<C> & c, D d) {
+      this->connect(a, b, c.get(), d);
+   }
 
    static MainWindow & instance();
    /**
@@ -132,14 +97,49 @@ public:
 
    //! \brief Get the currently observed recipe.
    Recipe* currentRecipe();
-   //! \brief Display a file dialog for writing xml files.
-   QFile* openForWrite(QString filterStr = "BeerXML files (*.xml)", QString defaultSuff = "xml");
 
    bool verifyImport(QString tag, QString name);
    bool verifyDelete(QString tab, QString name);
 
    void setBrewNoteByIndex(const QModelIndex &index);
    void setBrewNote(BrewNote* bNote);
+
+   //! \brief Doing updates via this method makes them undoable (and redoable).  This is the simplified version
+   //         which suffices for modifications to most individual non-relational attributes.
+   template<typename T>
+   void doOrRedoUpdate(NamedEntity & updatee,
+                       TypeInfo const & typeInfo,
+                       T newValue,
+                       QString const & description,
+                       [[maybe_unused]] QUndoCommand * parent = nullptr) {
+      this->doOrRedoUpdate(new SimpleUndoableUpdate(updatee, typeInfo, newValue, description));
+      return;
+   }
+
+   /**
+    * \brief This version of \c doOrRedoUpdate is needed when updating a property that has (or might have) a non-trivial
+    *        \c PropertyPath
+    */
+   template<typename T>
+   void doOrRedoUpdate(NamedEntity & updatee,
+                       PropertyPath const & propertyPath,
+                       TypeInfo const & typeInfo,
+                       T newValue,
+                       QString const & description,
+                       [[maybe_unused]] QUndoCommand * parent = nullptr) {
+      this->doOrRedoUpdate(new SimpleUndoableUpdate(updatee, propertyPath, typeInfo, newValue, description));
+      return;
+   }
+
+   /**
+    * \brief Add given \c Fermentable / \c Hop / \c Misc / \c Yeast to the Recipe
+    *
+    *        Fortunately this does not need to be a slot function (as slots cannot be templated)
+    */
+   template<class NE> void addIngredientToRecipe(NE * ne);
+
+   void addFermentableToRecipe(Fermentable * fermentable);
+   void addHopToRecipe(Hop * hop);
 
 public slots:
 
@@ -174,49 +174,64 @@ public slots:
 
    //! \brief Close a brewnote tab if we must (because of the BrewNote being deleted)
    void closeBrewNote(int brewNoteId, std::shared_ptr<QObject> object);
-   //! \brief Add given Fermentable to the Recipe.
-   void addFermentableToRecipe(std::shared_ptr<Fermentable> ferm);
+
    //! \brief Remove selected Fermentable(s) from the Recipe.
-   void removeSelectedFermentable();
-   //! \brief Edit selected Fermentable.
-   void editSelectedFermentable();
+   void removeSelectedFermentableAddition();
+   //! \brief Edit the Fermentable in the selected Fermentable addition.
+   void editFermentableOfSelectedFermentableAddition();
 
    //! \brief Show the pitch dialog.
    void showPitchDialog();
 
-   //! \brief Add given Hop to the Recipe.
-   void addHopToRecipe(std::shared_ptr<Hop> hop);
-   //! \brief Remove selected Hop(s) from the Recipe.
-   void removeSelectedHop();
-   //! \brief Edit selected Hop.
-   void editSelectedHop();
+   /**
+    * \brief Remove selected Hop addition(s) from the Recipe.
+    *
+    *        The name is a bit cumbersome, but is more accurate than, say, `removeSelectedHop`.  You might have the same
+    *        hop added at two different points, and this is only removing one of those additions.
+    */
+   void removeSelectedHopAddition();
+   /**
+    * \brief Edit the Hop in the selected Hop addition.
+    */
+   void editHopOfSelectedHopAddition();
 
-   //! \brief Add given Misc to the Recipe.
-   void addMiscToRecipe(std::shared_ptr<Misc> misc);
-   //! \brief Remove selected Misc(s) from the Recipe.
-   void removeSelectedMisc();
-   //! \brief Edit selected Misc.
-   void editSelectedMisc();
+   //! \brief Remove selected Misc addition(s) from the Recipe.
+   void removeSelectedMiscAddition();
+   //! \brief Edit the Misc in the selected Misc addition.
+   void editMiscOfSelectedMiscAddition();
 
-   //! \brief Add given Yeast to the Recipe.
-   void addYeastToRecipe(std::shared_ptr<Yeast> yeast);
-   //! \brief Remove selected Yeast(s) from the Recipe.
-   void removeSelectedYeast();
-   //! \brief Edit selected Yeast
-   void editSelectedYeast();
+   //! \brief Remove selected Yeast addition(s) from the Recipe.
+   void removeSelectedYeastAddition();
+   //! \brief Edit the Yeast in the selected Yeast addition.
+   void editYeastOfSelectedYeastAddition();
 
    //! \brief Invoke the pop-up Window to add a new mash step to (the mash of) the recipe.
    void addMashStep();
+   void addBoilStep();
+   void addFermentationStep();
+
    //! \brief Actually add the new mash step to (the mash of) the recipe (in an undoable way).
-   void addMashStepToMash(std::shared_ptr<MashStep> mashStep);
+   void addMashStepToMash                (std::shared_ptr<MashStep        > step);
+   void addBoilStepToBoil                (std::shared_ptr<BoilStep        > step);
+   void addFermentationStepToFermentation(std::shared_ptr<FermentationStep> step);
+
    //! \brief Move currently selected mash step down.
    void moveSelectedMashStepUp();
+   void moveSelectedBoilStepUp();
+   void moveSelectedFermentationStepUp();
    //! \brief Move currently selected mash step up.
    void moveSelectedMashStepDown();
+   void moveSelectedBoilStepDown();
+   void moveSelectedFermentationStepDown();
    //! \brief Remove currently selected mash step.
-   void removeSelectedMashStep();
+   void removeSelectedMashStep        ();
+   void removeSelectedBoilStep        ();
+   void removeSelectedFermentationStep();
    //! \brief Edit currently selected mash step.
-   void editSelectedMashStep();
+   void editSelectedMashStep        ();
+   void editSelectedBoilStep        ();
+   void editSelectedFermentationStep();
+
    //! \brief Set the current recipe's mash to the one selected in the mash combo box.
    //void setMashToCurrentlySelected();
    //! \brief Save the current recipe's mash to be used in other recipes.
@@ -252,7 +267,7 @@ public slots:
    void restoreFromBackup();
 
    //! \brief makes sure we can do water chemistry before we show the window
-   void popChemistry();
+   void showWaterChemistryTool();
 
    //! \brief draws a context menu, the exact nature of which depends on which
    //tree is focused
@@ -266,9 +281,6 @@ public slots:
    void reduceInventory();
    void changeBrewDate();
    void fixBrewNote();
-
-   //! \brief Open the default browser to view Brewtarget manual.
-    void openManual();
 
    void redisplayLabel();
 
@@ -306,15 +318,6 @@ public slots:
     */
    void showChanges(QMetaProperty* prop = nullptr);
 
-public:
-   //! \brief Doing updates via this method makes them undoable (and redoable).  This is the simplified version
-   //         which suffices for modifications to most individual non-relational attributes.
-   void doOrRedoUpdate(QObject & updatee,
-                       BtStringConst const & propertyName,
-                       QVariant newValue,
-                       QString const & description,
-                       QUndoCommand * parent = nullptr);
-
 protected:
    virtual void closeEvent(QCloseEvent* event);
 
@@ -327,109 +330,28 @@ private:
    class impl;
    std::unique_ptr<impl> pimpl;
 
-   //! No copy constructor, as never want anyone, not even our friends, to make copies of a singleton
-   MainWindow(MainWindow const&) = delete;
-   //! No assignment operator , as never want anyone, not even our friends, to make copies of a singleton.
-   MainWindow& operator=(MainWindow const&) = delete;
-   //! No move constructor
-   MainWindow(MainWindow &&) = delete;
-   //! No move assignment
-   MainWindow & operator=(MainWindow &&) = delete;
+   // Insert all the usual boilerplate to prevent copy/assignment/move
+   NO_COPY_DECLARATIONS(MainWindow)
 
-   void removeHop(std::shared_ptr<Hop> itemToRemove);
-   void removeFermentable(std::shared_ptr<Fermentable> itemToRemove);
-   void removeMisc(std::shared_ptr<Misc> itemToRemove);
-   void removeYeast(std::shared_ptr<Yeast> itemToRemove);
-   void removeMashStep(std::shared_ptr<MashStep> itemToRemove);
+   //
+   // We only use specialisations of this template, which are all defined in the .cpp file
+   //
+   // TODO: At the moment, these need to be in MainWindow itself rather than in the pimpl because of the way function
+   // pointers get passed to UndoableAddOrRemove.  We should fix that at some point.
+   template<typename NE> void remove(std::shared_ptr<NE> itemToRemove);
 
-   Recipe* recipeObs;
-   // TBD: (MY 2020-11-24) Not sure whether we need to store recipe style (since it ought to be available from the
-   //      recipe) or whether this is just for convenience.
-   Style* recStyle;
-   Equipment* recEquip;
+   Recipe* m_recipeObs;
 
    QString highSS, lowSS, goodSS, boldSS; // Palette replacements
 
-   AboutDialog* dialog_about;
-   QFileDialog* fileSaver;
    QList<QMenu*> contextMenus;
-   EquipmentEditor* equipEditor;
-   EquipmentEditor* singleEquipEditor;
-   FermentableDialog* fermDialog;
-   FermentableEditor* fermEditor;
-   HopDialog* hopDialog;
-   HopEditor* hopEditor;
-   MashEditor* mashEditor;
-   MashStepEditor* mashStepEditor;
-   MashWizard* mashWizard;
-   MiscDialog* miscDialog;
-   MiscEditor* miscEditor;
-   StyleEditor* styleEditor;
-   StyleEditor* singleStyleEditor;
-   YeastDialog* yeastDialog;
-   YeastEditor* yeastEditor;
-   OptionDialog* optionDialog;
    QDialog* brewDayDialog;
-   ScaleRecipeTool* recipeScaler;
-   RecipeFormatter* recipeFormatter;
-   PrintAndPreviewDialog* printAndPreviewDialog;
-   OgAdjuster* ogAdjuster;
-   ConverterTool* converterTool;
-   HydrometerTool* hydrometerTool;
-   AlcoholTool* alcoholTool;
-   TimerMainDialog* timerMainDialog;
-   PrimingDialog* primingDialog;
-   StrikeWaterDialog* strikeWaterDialog;
-   RefractoDialog* refractoDialog;
-   MashDesigner* mashDesigner;
-   PitchDialog* pitchDialog;
    QPrinter *printer;
 
-   WaterDialog* waterDialog;
-   WaterEditor* waterEditor;
-
-   AncestorDialog* ancestorDialog;
-
-   // all things tables should go here.
-   FermentableTableModel* fermTableModel;
-   HopTableModel* hopTableModel;
-   MashStepTableModel* mashStepTableModel;
-   MiscTableModel* miscTableModel;
-   YeastTableModel* yeastTableModel;
-
-   // all things lists should go here
-   EquipmentListModel* equipmentListModel;
-   MashListModel* mashListModel;
-   StyleListModel* styleListModel;
-//   WaterListModel* waterListModel;  Appears to be unused...
-
-   // all things sort/filter proxy go here
-   FermentableSortFilterProxyModel* fermTableProxy;
-   HopSortFilterProxyModel* hopTableProxy;
-   MiscSortFilterProxyModel* miscTableProxy;
-   StyleSortFilterProxyModel* styleProxyModel;
-   YeastSortFilterProxyModel* yeastTableProxy;
-
-   NamedMashEditor* namedMashEditor;
-   NamedMashEditor* singleNamedMashEditor;
-
-   BtDatePopup* btDatePopup;
    int confirmDelete;
-
-   // Undo / Redo, using the Qt Undo framework
-   QUndoStack * undoStack = nullptr;
 
    //! \brief Fix pixel dimensions according to dots-per-inch (DPI) of screen we're on.
    void setSizesInPixelsBasedOnDpi();
-
-   //! \brief Currently highlighted fermentable in the fermentable table.
-   Fermentable* selectedFermentable();
-   //! \brief Currently highlighted hop in the hop table.
-   Hop* selectedHop();
-   //! \brief Currently highlighted misc in the misc table.
-   Misc* selectedMisc();
-   //! \brief Currently highlighted yeast in the yeast table
-   Yeast* selectedYeast();
 
    //! \brief Find an open brewnote tab, if it is open
    BrewNoteWidget* findBrewNoteWidget(BrewNote* b);
@@ -443,14 +365,8 @@ private:
    void setupContextMenu();
    //! \brief Create the CSS strings
    void setupCSS();
-   //! \brief Create the dialogs, including the file dialogs
-   void setupDialogs();
    //! \brief Configure the range sliders
    void setupRanges();
-   //! \brief Configure combo boxes and their list models
-   void setupComboBoxes();
-   //! \brief Configure the tables and their proxies
-   void setupTables();
    //! \brief Restore any saved states
    void restoreSavedState();
    //! \brief Connect the signal/slots for actions
@@ -468,7 +384,6 @@ private:
    //! \brief Connect signal/slots for check boxes
    void setUpStateChanges();
 
-   void convertedMsg();
 };
 
 #endif

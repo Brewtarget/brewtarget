@@ -1,92 +1,110 @@
-/*
- * measurement/PhysicalQuantity.cpp is part of Brewtarget, and is copyright the following
- * authors 2021-2023:
- * - Matt Young <mfsy@yahoo.com>
+/*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ * measurement/PhysicalQuantity.cpp is part of Brewtarget, and is copyright the following authors 2021-2024:
+ *   • Matt Young <mfsy@yahoo.com>
  *
- * Brewtarget is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * Brewtarget is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "measurement/PhysicalQuantity.h"
 
 #include <utility>
+
 #include <QDebug>
 
+#include "utils/EnumStringMapping.h"
+
+//
 // Settings we only use in this file.  Strictly we could put these as literals in Measurement::getSettingsName, but
 // doing it this way is consistent with how we define other persistent setting name constants.
+//
 #define AddSettingName(name) namespace { BtStringConst const name{#name}; }
 AddSettingName(unitSystem_acidity             )
 AddSettingName(unitSystem_bitterness          )
 AddSettingName(unitSystem_carbonation         )
 AddSettingName(unitSystem_color               )
+AddSettingName(unitSystem_count               )
 AddSettingName(unitSystem_density             )
 AddSettingName(unitSystem_diastaticPower      )
-AddSettingName(unitSystem_massConcentration   )
+AddSettingName(unitSystem_massFractionOrConc  )
 AddSettingName(unitSystem_specificHeatCapacity)
+AddSettingName(unitSystem_specificVolume      )
 AddSettingName(unitSystem_temperature         )
 AddSettingName(unitSystem_time                )
 AddSettingName(unitSystem_viscosity           )
 AddSettingName(unitSystem_volume              )
-AddSettingName(unitSystem_volumeConcentration )
 AddSettingName(unitSystem_weight              )
 #undef AddSettingName
 
-std::array<Measurement::PhysicalQuantity, 14> const Measurement::allPhysicalQuantites{
-   Measurement::PhysicalQuantity::Mass                , // 1
-   Measurement::PhysicalQuantity::Volume              , // 2
-   Measurement::PhysicalQuantity::Time                , // 3
-   Measurement::PhysicalQuantity::Temperature         , // 4
-   Measurement::PhysicalQuantity::Color               , // 5
-   Measurement::PhysicalQuantity::Density             , // 6
-   Measurement::PhysicalQuantity::DiastaticPower      , // 7
-   Measurement::PhysicalQuantity::Acidity             , // 8
-   Measurement::PhysicalQuantity::Bitterness          , // 9
-   Measurement::PhysicalQuantity::Carbonation         , // 10
-   Measurement::PhysicalQuantity::MassConcentration   , // 11
-   Measurement::PhysicalQuantity::VolumeConcentration , // 12
-   Measurement::PhysicalQuantity::Viscosity           , // 13
-   Measurement::PhysicalQuantity::SpecificHeatCapacity, // 14
+namespace {
+
+   /**
+    * \brief Construct a vector of \c To from a vector of \c From
+    */
+   template <typename To, typename From>
+   std::vector<To> copyCast(std::vector<From> const & from) {
+      // In theory we can set the size of the To vector in its constructor to be the same as the size of the From
+      // vector, but GCC gives us compiler warnings about narrowing conversions from std::vector<From>::size_type to
+      // std::vector<To>::size_type.  In practice, these vectors are so short that it's not buying us much to do this,
+      // so we prefer to avoid the compiler warning.
+      std::vector<To> to{};
+      std::transform(from.cbegin(), from.cend(), std::back_inserter(to), [](From const & value) {
+         return static_cast<To>(value);
+      });
+      return to;
+   }
+
+   // TBD: It would be nice to be able to make these constexpr, but we need to wait for compilers to catch up.  Eg,
+   //      need GCC version 12 for this but, as of 2023-09-03, Ubuntu 22.04 is on GCC 11.4.0.
+   std::vector<Measurement::PhysicalQuantity> const allOf_Mass_Volume      {Measurement::PhysicalQuantity::Mass, Measurement::PhysicalQuantity::Volume};
+   std::vector<Measurement::PhysicalQuantity> const allOf_Mass_Volume_Count{Measurement::PhysicalQuantity::Mass, Measurement::PhysicalQuantity::Volume, Measurement::PhysicalQuantity::Count};
+
+   std::vector<int> const allOfAsInt_Mass_Volume         = copyCast<int, Measurement::PhysicalQuantity>(allOf_Mass_Volume        );
+   std::vector<int> const allOfAsInt_Mass_Volume_Count   = copyCast<int, Measurement::PhysicalQuantity>(allOf_Mass_Volume_Count  );
+}
+
+EnumStringMapping const Measurement::physicalQuantityStringMapping {
+   {Measurement::PhysicalQuantity::Mass                , "Mass"                },
+   {Measurement::PhysicalQuantity::Volume              , "Volume"              },
+   {Measurement::PhysicalQuantity::Count               , "Count"               },
+   {Measurement::PhysicalQuantity::Temperature         , "Temperature"         },
+   {Measurement::PhysicalQuantity::Time                , "Time"                },
+   {Measurement::PhysicalQuantity::Color               , "Color"               },
+   {Measurement::PhysicalQuantity::Density             , "Density"             },
+   {Measurement::PhysicalQuantity::DiastaticPower      , "DiastaticPower"      },
+   {Measurement::PhysicalQuantity::Acidity             , "Acidity"             },
+   {Measurement::PhysicalQuantity::Bitterness          , "Bitterness"          },
+   {Measurement::PhysicalQuantity::Carbonation         , "Carbonation"         },
+   {Measurement::PhysicalQuantity::MassFractionOrConc  , "MassFractionOrConc"  },
+   {Measurement::PhysicalQuantity::Viscosity           , "Viscosity"           },
+   {Measurement::PhysicalQuantity::SpecificHeatCapacity, "SpecificHeatCapacity"},
+   {Measurement::PhysicalQuantity::SpecificVolume      , "SpecificVolume"      },
 };
 
-QString Measurement::getDisplayName(Measurement::PhysicalQuantity const physicalQuantity) {
-   //
-   // We could use an EnumStringMapping object to hold all the data and then call its enumToString member function.
-   // However, the advantage of using a switch statement is that the compiler will warn us if we have missed one of the
-   // enum values (because it's a strongly-typed enum).  This is better than waiting until run time for
-   // EnumStringMapping::enumToString to log an error and throw an exception).
-   //
-   switch (physicalQuantity) {
-      case Measurement::PhysicalQuantity::Mass                : return QObject::tr("Mass"                  );
-      case Measurement::PhysicalQuantity::Volume              : return QObject::tr("Volume"                );
-      case Measurement::PhysicalQuantity::Time                : return QObject::tr("Time"                  );
-      case Measurement::PhysicalQuantity::Temperature         : return QObject::tr("Temperature"           );
-      case Measurement::PhysicalQuantity::Color               : return QObject::tr("Color"                 );
-      case Measurement::PhysicalQuantity::Density             : return QObject::tr("Density"               );
-      case Measurement::PhysicalQuantity::DiastaticPower      : return QObject::tr("Diastatic Power"       );
-      case Measurement::PhysicalQuantity::Acidity             : return QObject::tr("Acidity"               );
-      case Measurement::PhysicalQuantity::Bitterness          : return QObject::tr("Bitterness"            );
-      case Measurement::PhysicalQuantity::Carbonation         : return QObject::tr("Carbonation"           );
-      case Measurement::PhysicalQuantity::MassConcentration   : return QObject::tr("Mass Concentration"    );
-      case Measurement::PhysicalQuantity::VolumeConcentration : return QObject::tr("Volume Concentration"  );
-      case Measurement::PhysicalQuantity::Viscosity           : return QObject::tr("Viscosity"             );
-      case Measurement::PhysicalQuantity::SpecificHeatCapacity: return QObject::tr("Specific Heat Capacity");
-      // In C++23, we'd add:
-      // default: std::unreachable();
-   }
-   // In C++23, we'd add:
-   // std::unreachable()
-   // It's a coding error if we get here
-   Q_ASSERT(false);
-}
+EnumStringMapping const Measurement::physicalQuantityDisplayNames {
+   {Measurement::PhysicalQuantity::Mass                , QObject::tr("Weight (Mass)"                 )},
+   {Measurement::PhysicalQuantity::Volume              , QObject::tr("Volume"                        )},
+   {Measurement::PhysicalQuantity::Count               , QObject::tr("Count"                         )},
+   {Measurement::PhysicalQuantity::Temperature         , QObject::tr("Temperature"                   )},
+   {Measurement::PhysicalQuantity::Time                , QObject::tr("Time"                          )},
+   {Measurement::PhysicalQuantity::Color               , QObject::tr("Color"                         )},
+   {Measurement::PhysicalQuantity::Density             , QObject::tr("Density"                       )},
+   {Measurement::PhysicalQuantity::DiastaticPower      , QObject::tr("Diastatic Power"               )},
+   {Measurement::PhysicalQuantity::Acidity             , QObject::tr("Acidity"                       )},
+   {Measurement::PhysicalQuantity::Bitterness          , QObject::tr("Bitterness"                    )},
+   {Measurement::PhysicalQuantity::Carbonation         , QObject::tr("Carbonation"                   )},
+   {Measurement::PhysicalQuantity::MassFractionOrConc  , QObject::tr("Mass Fraction or Concentration")},
+   {Measurement::PhysicalQuantity::Viscosity           , QObject::tr("Viscosity"                     )},
+   {Measurement::PhysicalQuantity::SpecificHeatCapacity, QObject::tr("Specific Heat Capacity"        )},
+   {Measurement::PhysicalQuantity::SpecificVolume      , QObject::tr("Specific Volume"               )},
+};
 
 
 BtStringConst const & Measurement::getSettingsName(PhysicalQuantity const physicalQuantity) {
@@ -98,6 +116,7 @@ BtStringConst const & Measurement::getSettingsName(PhysicalQuantity const physic
       case Measurement::PhysicalQuantity::Mass                : return unitSystem_weight              ;
       case Measurement::PhysicalQuantity::Volume              : return unitSystem_volume              ;
       case Measurement::PhysicalQuantity::Time                : return unitSystem_time                ;
+      case Measurement::PhysicalQuantity::Count               : return unitSystem_count               ;
       case Measurement::PhysicalQuantity::Temperature         : return unitSystem_temperature         ;
       case Measurement::PhysicalQuantity::Color               : return unitSystem_color               ;
       case Measurement::PhysicalQuantity::Density             : return unitSystem_density             ;
@@ -105,10 +124,10 @@ BtStringConst const & Measurement::getSettingsName(PhysicalQuantity const physic
       case Measurement::PhysicalQuantity::Acidity             : return unitSystem_acidity             ;
       case Measurement::PhysicalQuantity::Bitterness          : return unitSystem_bitterness          ;
       case Measurement::PhysicalQuantity::Carbonation         : return unitSystem_carbonation         ;
-      case Measurement::PhysicalQuantity::MassConcentration   : return unitSystem_massConcentration   ;
-      case Measurement::PhysicalQuantity::VolumeConcentration : return unitSystem_volumeConcentration ;
+      case Measurement::PhysicalQuantity::MassFractionOrConc  : return unitSystem_massFractionOrConc  ;
       case Measurement::PhysicalQuantity::Viscosity           : return unitSystem_viscosity           ;
       case Measurement::PhysicalQuantity::SpecificHeatCapacity: return unitSystem_specificHeatCapacity;
+      case Measurement::PhysicalQuantity::SpecificVolume      : return unitSystem_specificVolume      ;
       // In C++23, we'd add:
       // default: std::unreachable();
    }
@@ -118,8 +137,107 @@ BtStringConst const & Measurement::getSettingsName(PhysicalQuantity const physic
    Q_ASSERT(false);
 }
 
+EnumStringMapping const Measurement::choiceOfPhysicalQuantityStringMapping {
+   {Measurement::ChoiceOfPhysicalQuantity::Mass_Volume        , "Mass_Volume"        },
+   {Measurement::ChoiceOfPhysicalQuantity::Mass_Volume_Count  , "Mass_Volume_Count"  },
+};
 
-namespace Measurement {
-   Mixed2PhysicalQuantities const PqEitherMassOrVolume              {std::make_tuple(PhysicalQuantity::Mass,              PhysicalQuantity::Volume             )};
-   Mixed2PhysicalQuantities const PqEitherMassOrVolumeConcentration {std::make_tuple(PhysicalQuantity::MassConcentration, PhysicalQuantity::VolumeConcentration)};
+EnumStringMapping const Measurement::choiceOfPhysicalQuantityDisplayNames {
+   {Measurement::ChoiceOfPhysicalQuantity::Mass_Volume        , QObject::tr("Mass or Volume"              )},
+   {Measurement::ChoiceOfPhysicalQuantity::Mass_Volume_Count  , QObject::tr("Mass, Volume or Count"       )},
+};
+
+// Default case is that PhysicalQuantities holds PhysicalQuantity; specialisations are for all ChoiceOfPhysicalQuantity
+// possibilities.  Note that, because this is a function template, we are not allowed _partial_ specialisations.
+template<Measurement::PhysicalQuantityConstTypes PQT, PQT pqt> Measurement::PhysicalQuantity Measurement::defaultPhysicalQuantity() {
+   return pqt;
 }
+template<> Measurement::PhysicalQuantity Measurement::defaultPhysicalQuantity<Measurement::ChoiceOfPhysicalQuantity const, Measurement::ChoiceOfPhysicalQuantity::Mass_Volume        >() { return Measurement::PhysicalQuantity::Mass             ; }
+template<> Measurement::PhysicalQuantity Measurement::defaultPhysicalQuantity<Measurement::ChoiceOfPhysicalQuantity const, Measurement::ChoiceOfPhysicalQuantity::Mass_Volume_Count  >() { return Measurement::PhysicalQuantity::Mass             ; }
+
+
+Measurement::PhysicalQuantity Measurement::defaultPhysicalQuantity(Measurement::ChoiceOfPhysicalQuantity const val) {
+   switch (val) {
+      case Measurement::ChoiceOfPhysicalQuantity::Mass_Volume        : return Measurement::defaultPhysicalQuantity<Measurement::ChoiceOfPhysicalQuantity const, Measurement::ChoiceOfPhysicalQuantity::Mass_Volume        >();
+      case Measurement::ChoiceOfPhysicalQuantity::Mass_Volume_Count  : return Measurement::defaultPhysicalQuantity<Measurement::ChoiceOfPhysicalQuantity const, Measurement::ChoiceOfPhysicalQuantity::Mass_Volume_Count  >();
+   }
+   // Should be unreachable
+   Q_ASSERT(false);
+   // Keep the compiler happy
+   return PhysicalQuantity::Mass;
+}
+
+template<Measurement::PhysicalQuantity const pq> bool isValid(Measurement::PhysicalQuantity const physicalQuantity) {
+   return physicalQuantity == pq;
+}
+template<> bool Measurement::isValid<Measurement::ChoiceOfPhysicalQuantity const,
+                                     Measurement::ChoiceOfPhysicalQuantity::Mass_Volume        >(Measurement::PhysicalQuantity const physicalQuantity) {
+   return (physicalQuantity == Measurement::PhysicalQuantity::Mass  ||
+           physicalQuantity == Measurement::PhysicalQuantity::Volume);
+}
+template<> bool Measurement::isValid<Measurement::ChoiceOfPhysicalQuantity const,
+                                     Measurement::ChoiceOfPhysicalQuantity::Mass_Volume_Count  >(Measurement::PhysicalQuantity const physicalQuantity) {
+   return (physicalQuantity == Measurement::PhysicalQuantity::Mass   ||
+           physicalQuantity == Measurement::PhysicalQuantity::Volume ||
+           physicalQuantity == Measurement::PhysicalQuantity::Count  );
+}
+
+bool Measurement::isValid(Measurement::ChoiceOfPhysicalQuantity const choiceOfPhysicalQuantity,
+                          Measurement::PhysicalQuantity const physicalQuantity) {
+   switch (choiceOfPhysicalQuantity) {
+      case Measurement::ChoiceOfPhysicalQuantity::Mass_Volume        : return Measurement::isValid<Measurement::ChoiceOfPhysicalQuantity const, Measurement::ChoiceOfPhysicalQuantity::Mass_Volume        >(physicalQuantity);
+      case Measurement::ChoiceOfPhysicalQuantity::Mass_Volume_Count  : return Measurement::isValid<Measurement::ChoiceOfPhysicalQuantity const, Measurement::ChoiceOfPhysicalQuantity::Mass_Volume_Count  >(physicalQuantity);
+   }
+
+   // Should be unreachable
+   Q_ASSERT(false);
+   return false;
+}
+
+std::vector<Measurement::PhysicalQuantity> const & Measurement::allPossibilities(
+   Measurement::ChoiceOfPhysicalQuantity const val
+) {
+   switch (val) {
+      case Measurement::ChoiceOfPhysicalQuantity::Mass_Volume        : return allOf_Mass_Volume        ;
+      case Measurement::ChoiceOfPhysicalQuantity::Mass_Volume_Count  : return allOf_Mass_Volume_Count  ;
+   }
+   // Should be unreachable
+   Q_ASSERT(false);
+   // But we have to return something
+   return allOf_Mass_Volume;
+}
+
+std::vector<int> const & Measurement::allPossibilitiesAsInt(
+   Measurement::ChoiceOfPhysicalQuantity const val
+) {
+   // It's a bit ugly having this as almost copy-and-paste of allPossibilities, but we'll live with it for now.
+   switch (val) {
+      case Measurement::ChoiceOfPhysicalQuantity::Mass_Volume        : return allOfAsInt_Mass_Volume        ;
+      case Measurement::ChoiceOfPhysicalQuantity::Mass_Volume_Count  : return allOfAsInt_Mass_Volume_Count  ;
+   }
+   // Should be unreachable
+   Q_ASSERT(false);
+   // But we have to return something
+   return allOfAsInt_Mass_Volume;
+}
+
+
+template<class S>
+S & operator<<(S & stream, Measurement::PhysicalQuantity const val) {
+   stream <<
+      "PhysicalQuantity #" << static_cast<int>(val) << ": (" <<
+      Measurement::physicalQuantityStringMapping[val] << ")";
+   return stream;
+}
+template QDebug      & operator<<(QDebug      & stream, Measurement::PhysicalQuantity const val);
+template QTextStream & operator<<(QTextStream & stream, Measurement::PhysicalQuantity const val);
+
+template<class S>
+S & operator<<(S & stream, Measurement::ChoiceOfPhysicalQuantity const val) {
+   stream <<
+      "PhysicalQuantity #" << static_cast<int>(val) << ": (" <<
+      Measurement::choiceOfPhysicalQuantityStringMapping[val] << ")";
+   return stream;
+}
+template QDebug      & operator<<(QDebug      & stream, Measurement::ChoiceOfPhysicalQuantity const val);
+template QTextStream & operator<<(QTextStream & stream, Measurement::ChoiceOfPhysicalQuantity const val);

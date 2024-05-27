@@ -1,23 +1,26 @@
-/*
- * BrewDayScrollWidget.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2023
- * - Matt Young <mfsy@yahoo.com>
- * - Mik Firestone <mikfire@gmail.com>
- * - Philip Greggory Lee <rocketman768@gmail.com>
+/*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ * BrewDayScrollWidget.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ *   • Brian Rower <brian.rower@gmail.com>
+ *   • Carles Muñoz Gorriz <carlesmu@internautas.org>
+ *   • Daniel Pettersson <pettson81@gmail.com>
+ *   • Greg Greenaae <ggreenaae@gmail.com>
+ *   • Mark de Wever <koraq@xs4all.nl>
+ *   • Matt Young <mfsy@yahoo.com>
+ *   • Mik Firestone <mikfire@gmail.com>
+ *   • Philip Greggory Lee <rocketman768@gmail.com>
+ *   • Théophane Martin <theophane.m@gmail.com>
  *
- * Brewtarget is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * Brewtarget is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "BrewDayScrollWidget.h"
 
 #include <QDate>
@@ -51,7 +54,7 @@ namespace {
          return "unknown";
       }
 
-      return Measurement::displayAmount(Measurement::Amount{equipment->boilTime_min(), Measurement::Units::minutes});
+      return Measurement::displayAmount(Measurement::Amount{equipment->boilTime_min().value_or(Equipment::default_boilTime_mins), Measurement::Units::minutes});
    }
 }
 
@@ -355,7 +358,7 @@ QString BrewDayScrollWidget::buildTitleTable(bool includeImage) {
    body += QString("<tr><td class=\"left\">%1</td>")
          .arg(tr("Style"));
    body += QString("<td class=\"value\">%1</td>")
-           .arg(styleName(recObs->style()));
+           .arg(styleName(recObs->style().get()));
    body += QString("<td class=\"right\">%1</td>")
          .arg(tr("Date"));
    body += QString("<td class=\"value\">%1</td></tr>")
@@ -364,7 +367,7 @@ QString BrewDayScrollWidget::buildTitleTable(bool includeImage) {
    // second row:  boil time and efficiency.
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</td></tr>")
             .arg(tr("Boil Time"))
-            .arg(boilTime(recObs->equipment()))
+            .arg(boilTime(recObs->equipment().get()))
             .arg(tr("Efficiency"))
             .arg(Measurement::displayQuantity(recObs->efficiency_pct(), 0));
 
@@ -398,7 +401,7 @@ QString BrewDayScrollWidget::buildTitleTable(bool includeImage) {
             .arg(tr("ABV"))
             .arg(Measurement::displayQuantity(recObs->ABV_pct(), 1) )
             .arg(metricVolume ? tr("Estimated calories (per 33 cl)") : tr("Estimated calories (per 12 oz)"))
-            .arg(Measurement::displayQuantity(metricVolume ? this->recObs->calories33cl() : this->recObs->calories12oz(), 0) );
+            .arg(Measurement::displayQuantity(metricVolume ? this->recObs->caloriesPer33cl() : this->recObs->caloriesPerUs12oz(), 0) );
 
    body += "</table>";
 
@@ -433,7 +436,7 @@ QString BrewDayScrollWidget::buildInstructionTable() {
       // doesn't work in other languages. Find a better way.
       QList<QString> reagents;
       if ( ins->name() == tr("Add grains") ) {
-         reagents = this->recObs->getReagents( this->recObs->fermentables() );
+         reagents = this->recObs->getReagents( this->recObs->fermentableAdditions() );
       } else if ( ins->name() == tr("Heat water") ) {
          reagents = this->recObs->getReagents( this->recObs->mash()->mashSteps() );
       } else {

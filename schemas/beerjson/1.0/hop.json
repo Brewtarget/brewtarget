@@ -1,0 +1,206 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/beerjson/beerjson/master/json/hop.json",
+  "type": "object",
+  "additionalProperties": false,
+  "definitions": {
+    "HopVarietyBase": {
+      "type": "object",
+      "description": "HopVarietyBase provides unique properties to identify individual records of a hop variety.",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "producer": {
+          "type": "string"
+        },
+        "product_id": {
+          "type": "string"
+        },
+        "origin": {
+          "type": "string"
+        },
+        "year": {
+          "type": "string"
+        },
+        "form": {
+          "type": "string",
+          "enum": [
+            "extract",
+            "leaf",
+            "leaf (wet)",
+            "pellet",
+            "powder",
+            "plug"
+          ]
+        },
+        "alpha_acid": {
+          "$ref": "measureable_units.json#/definitions/PercentType"
+        },
+        "beta_acid": {
+          "$ref": "measureable_units.json#/definitions/PercentType"
+        }
+      },
+      "required": [
+        "name",
+        "alpha_acid"
+      ]
+    },
+    "VarietyInformation": {
+      "type": "object",
+      "description": "VarietyInformation collects the attributes of a hop variety to store as record information.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/HopVarietyBase"
+        },
+        {
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "aroma",
+                "bittering",
+                "flavor",
+                "aroma/bittering",
+                "bittering/flavor",
+                "aroma/flavor",
+                "aroma/bittering/flavor"
+              ]
+            },
+            "notes": {
+              "type": "string"
+            },
+            "percent_lost": {
+              "description": " Defined as the percentage of hop alpha lost in 6 months of storage.",
+              "$ref": "measureable_units.json#/definitions/PercentType"
+            },
+            "substitutes": {
+              "type": "string"
+            },
+            "oil_content": {
+              "description": "Oil Content information object.",
+              "$ref": "#/definitions/OilContentType"
+            },
+            "inventory": {
+              "$ref": "#/definitions/HopInventoryType"
+            }
+          }
+        }
+      ]
+    },
+    "HopAdditionType": {
+      "type": "object",
+      "description": "HopAdditionType collects the attributes of each hop ingredient for use in a recipe hop bil.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/HopVarietyBase"
+        },
+        {
+          "properties": {
+            "timing": {
+              "description": "The timing object fully describes the timing of an addition with options for basis on time, gravity, or pH at any process step.",
+              "$ref": "timing.json#/definitions/TimingType"
+            },
+            "amount": {
+              "oneOf": [
+                {
+                  "$ref": "measureable_units.json#/definitions/VolumeType"
+                },
+                {
+                  "$ref": "measureable_units.json#/definitions/MassType"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "required": [
+        "amount",
+        "timing"
+      ]
+    },
+    "IBUEstimateType": {
+      "description": "Used to differentiate which IBU formula is being used in a recipe. If formula is modified in any way, eg to support whirlpool/flameout additions etc etc, please use `Other` for transparency.",
+      "type": "object",
+      "properties": {
+        "method": {
+          "$ref": "#/definitions/IBUMethodType"
+        }
+      }
+    },
+    "IBUMethodType": {
+      "type": "string",
+      "enum": [
+        "Rager",
+        "Tinseth",
+        "Garetz",
+        "Other"
+      ]
+    },
+    "OilContentType": {
+      "type": "object",
+      "description": "oil_content collects all information of a hop variety pertaining to oil content, polyphenols, and thiols. Each individual compound is expressed as a percent of the total oil measurement.",
+      "properties": {
+        "total_oil_ml_per_100g": {
+          "description": "The total amount of oil, including hydrocarbons, esters, and terpene alcohols in units of ml of oil per 100g of hop mass.",
+          "type": "number"
+        },
+        "humulene": {
+          "$ref": "measureable_units.json#/definitions/PercentType"
+        },
+        "caryophyllene": {
+          "$ref": "measureable_units.json#/definitions/PercentType"
+        },
+        "cohumulone": {
+          "$ref": "measureable_units.json#/definitions/PercentType"
+        },
+        "myrcene": {
+          "$ref": "measureable_units.json#/definitions/PercentType"
+        },
+        "farnesene": {
+          "$ref": "measureable_units.json#/definitions/PercentType"
+        },
+        "geraniol": {
+          "$ref": "measureable_units.json#/definitions/PercentType"
+        },
+        "b_pinene": {
+          "$ref": "measureable_units.json#/definitions/PercentType"
+        },
+        "linalool": {
+          "$ref": "measureable_units.json#/definitions/PercentType"
+        },
+        "limonene": {
+          "$ref": "measureable_units.json#/definitions/PercentType"
+        },
+        "nerol": {
+          "$ref": "measureable_units.json#/definitions/PercentType"
+        },
+        "pinene": {
+          "$ref": "measureable_units.json#/definitions/PercentType"
+        },
+        "polyphenols": {
+          "$ref": "measureable_units.json#/definitions/PercentType"
+        },
+        "xanthohumol": {
+          "$ref": "measureable_units.json#/definitions/PercentType"
+        }
+      }
+    },
+    "HopInventoryType": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "amount": {
+          "oneOf": [
+            {
+              "$ref": "measureable_units.json#/definitions/VolumeType"
+            },
+            {
+              "$ref": "measureable_units.json#/definitions/MassType"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

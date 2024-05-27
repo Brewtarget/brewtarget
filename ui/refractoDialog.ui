@@ -21,9 +21,6 @@
        <property name="title">
         <string>Inputs</string>
        </property>
-       <property name="configSection" stdset="0">
-        <string notr="true">refractoDialog</string>
-       </property>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
          <layout class="QFormLayout" name="formLayout">
@@ -157,9 +154,6 @@
     <widget class="QGroupBox" name="groupBox_output">
      <property name="title">
       <string>Outputs</string>
-     </property>
-     <property name="configSection" stdset="0">
-      <string notr="true">refractoDialog</string>
      </property>
      <layout class="QFormLayout" name="formLayout_2">
       <item row="1" column="1">

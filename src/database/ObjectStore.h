@@ -1,21 +1,18 @@
-/*
- * database/ObjectStore.h is part of Brewtarget, and is copyright the following
- * authors 2021-2023:
+/*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ * database/ObjectStore.h is part of Brewtarget, and is copyright the following authors 2021-2024:
  *   • Matt Young <mfsy@yahoo.com>
  *
- * Brewtarget is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * Brewtarget is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #ifndef DATABASE_OBJECTSTORE_H
 #define DATABASE_OBJECTSTORE_H
 #pragma once
@@ -29,9 +26,11 @@
 #include <QString>
 #include <QVector>
 
+#include "measurement/Unit.h"
 #include "model/NamedEntity.h"
 #include "utils/BtStringConst.h"
 #include "utils/EnumStringMapping.h"
+#include "utils/NoCopy.h"
 #include "utils/TypeLookup.h"
 
 class Database;
@@ -64,6 +63,16 @@ class ObjectStore : public QObject {
 
 public:
    /**
+    * \brief ObjectStore can be in three states - not yet initialised, initialised OK, or error initialising
+    */
+   enum class State {
+      NotYetInitialised,
+      InitialisedOk,
+      ErrorInitialising
+   };
+
+
+   /**
     * \brief The different field types that can be stored directly in an object's DB table.
     *
     *        Note that older versions of the code did a lot of special handling for boolean because SQLite has no native
@@ -79,7 +88,8 @@ public:
       Double,
       String,
       Date,
-      Enum,          // Stored as a string in the DB
+      Enum,   // Stored as a string in the DB
+      Unit,   // Stored as a string in the DB
    };
 
    /**
@@ -98,24 +108,21 @@ public:
 
    struct TableDefinition;
    struct TableField {
-      FieldType                 const fieldType;
-      BtStringConst             const columnName;   // Shouldn't ever be empty in practice
-      BtStringConst             const propertyName; // Can be empty in a junction table (see below)
-      EnumStringMapping const * const enumMapping;  // Only needed if fieldType is Enum
-      TableDefinition   const * const foreignKeyTo;
+      FieldType     const fieldType;
+      BtStringConst const columnName;   // Shouldn't ever be empty in practice
+      BtStringConst const propertyName; // Can be empty in a junction table (see below)
+      using ValueDecoder =
+         std::variant<std::monostate,
+                      EnumStringMapping              const *,  // FieldType::Enum
+                      TableDefinition                const *,  // FieldType::Int (when foreign key)
+                      Measurement::UnitStringMapping const *>; // FieldType::Unit
+      ValueDecoder valueDecoder;
+
       //! Constructor
-      TableField(FieldType                 const   fieldType,
-                 char              const * const   columnName   = nullptr,
-                 BtStringConst             const & propertyName = BtString::NULL_STR,
-                 EnumStringMapping const * const   enumMapping  = nullptr,
-                 TableDefinition   const * const   foreignKeyTo = nullptr) :
-         fieldType{fieldType},
-         columnName{columnName},
-         propertyName{propertyName},
-         enumMapping{enumMapping},
-         foreignKeyTo{foreignKeyTo} {
-         return;
-      }
+      TableField(FieldType     const   fieldType,
+                 char const *  const   columnName,
+                 BtStringConst const & propertyName = BtString::NULL_STR,
+                 ValueDecoder  const   valueDecoder = ValueDecoder{});
    };
 
    /**
@@ -126,12 +133,8 @@ public:
       BtStringConst tableName;
       QVector<TableField> const tableFields;
       //! Constructor
-      TableDefinition(char const * const tableName = nullptr,
-                      std::initializer_list<TableField> const tableFields = {}) :
-         tableName{tableName},
-         tableFields{tableFields} {
-         return;
-      }
+      TableDefinition(char const * const tableName,
+                      std::initializer_list<TableField> const tableFields);
    };
 
    /**
@@ -182,8 +185,8 @@ public:
     */
    struct JunctionTableDefinition : public TableDefinition {
       AssumedNumEntries assumedNumEntries = MULTIPLE_ENTRIES_OK;
-      JunctionTableDefinition(char const * const tableName = nullptr,
-                              std::initializer_list<TableField> tableFields = {},
+      JunctionTableDefinition(char const * const tableName,
+                              std::initializer_list<TableField> tableFields,
                               AssumedNumEntries assumedNumEntries = MULTIPLE_ENTRIES_OK) :
          TableDefinition{tableName, tableFields},
          assumedNumEntries{assumedNumEntries} {
@@ -198,16 +201,25 @@ public:
    /**
     * \brief Constructor sets up mappings but does not read in data from DB
     *
+    * \param className Set by \c ObjectStoreTyped
     * \param typeLookup The \c TypeLookup object that, amongst other things allows us to tell whether Qt properties on
     *                   this object type are "optional" (ie wrapped in \c std::optional)
     * \param primaryTable  First in the list should be the primary key
     * \param junctionTables  Optional
     */
-   ObjectStore(TypeLookup               const & typeLookup,
+   ObjectStore(char const *             const   className,
+               TypeLookup               const & typeLookup,
                TableDefinition          const & primaryTable,
                JunctionTableDefinitions const & junctionTables = JunctionTableDefinitions{});
 
    ~ObjectStore();
+
+   /**
+    * \brief Gets the state of the ObjectStore.  If it's \c ErrorInitialising, we probably need to terminate the
+    *        program.  (This is because, if we were unable to read some or all data from the database during startup,
+    *        we're very likely to hit all sorts of null pointer errors if we try to soldier on.
+    */
+   State state() const;
 
    /**
     * \brief This will log info about every object the store knows about.  Usually only needed for debugging double-free
@@ -328,6 +340,11 @@ public:
    std::shared_ptr<QObject> defaultHardDelete(int id);
 
    /**
+    * \brief Returns the number of objects in this store
+    */
+   size_t size() const;
+
+   /**
     * \brief Return \c true if an object with the supplied ID is stored in the cache or \c false otherwise
     */
    bool contains(int id) const;
@@ -361,10 +378,10 @@ public:
     *
     * \param matchFunction Takes a shared pointer to object and returns \c true if it's a match or \c false otherwise.
     *
-    * \return Shared pointer to the first object that gives a \c true result to \c matchFunction, or \c std::nullopt if
-    *         none does
+    * \return Shared pointer to the first object that gives a \c true result to \c matchFunction, or \c nullptr if none
+    *         does.
     */
-   std::optional< std::shared_ptr<QObject> > findFirstMatching(
+   std::shared_ptr<QObject> findFirstMatching(
       std::function<bool(std::shared_ptr<QObject>)> const & matchFunction
    ) const;
    /**
@@ -376,7 +393,10 @@ public:
     * \brief Search for multiple objects (in the set of all cached objects of a given type) with a lambda.  Subclasses
     *        are expected to provide a public override of this function that implements a class-specific interface.
     *
-    *        NB: This is non-virtual for the same reason as \c getById
+    *        NB: This is non-virtual for the same reason as \c getById.
+    *
+    *        Outside of the database layer, we don't call this function directly.  It is called from
+    *        \c ObjectStoreTyped::findAllMatching, which in turn is called by \c ObjectStoreWrapper::findAllMatching.
     *
     * \param matchFunction Takes a pointer to object and returns \c true if it's a match or \c false otherwise.
     *
@@ -390,6 +410,11 @@ public:
     * \brief Alternate version of \c findAllMatching that uses raw pointers
     */
    QList<QObject *> findAllMatching(std::function<bool(QObject *)> const & matchFunction) const;
+
+   /**
+    * \brief Similary to \c findAllMatching but returns a list of IDs
+    */
+   QVector<int> idsOfAllMatching(std::function<bool(QObject const *)> const & matchFunction) const;
 
    /**
     * \brief Special case of \c findAllMatching that returns a list of all cached objects of a given type
@@ -498,15 +523,8 @@ private:
    class impl;
    std::unique_ptr<impl> pimpl;
 
-   //! No copy constructor, as never want anyone, not even our friends, to make copies of a singleton
-   ObjectStore(ObjectStore const &) = delete;
-   //! No assignment operator , as never want anyone, not even our friends, to make copies of a singleton.
-   ObjectStore & operator=(ObjectStore const &) = delete;
-   //! No move constructor
-   ObjectStore(ObjectStore &&) = delete;
-   //! No move assignment
-   ObjectStore & operator=(ObjectStore &&) = delete;
-
+   // Insert all the usual boilerplate to prevent copy/assignment/move
+   NO_COPY_DECLARATIONS(ObjectStore)
 };
 
 
