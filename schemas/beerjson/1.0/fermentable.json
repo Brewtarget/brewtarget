@@ -88,7 +88,7 @@
             },
             "kolbach_index": {
               "description": "The Kolbach Index, also known as soluble to total ratio of nitrogen or protein, is used to indcate the degree of malt modification. A value above 35% is desired for simple single infusion mashing, undermodified malt may require multiple step mashes or decoction.",
-              "type": "number"
+              "$ref": "measureable_units.json#/definitions/PercentType"
             },
             "max_in_batch": {
               "description": "The recommended maximum percentage to use in a grain bill. ",

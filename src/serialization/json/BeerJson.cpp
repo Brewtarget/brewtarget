@@ -60,8 +60,6 @@
 #include "serialization/json/JsonUtils.h"
 #include "utils/OStreamWriterForQFile.h"
 
-// TODO: WE should upgrade our copy of the BeerJSON schema to the 1.0.2 release at https://github.com/beerjson/beerjson/releases/tag/v1.0.2
-
 namespace {
    // See below for more comments on this.  If and when BeerJSON evolves then we will want separate constants for
    // min/max versions we can read plus whatever version we write.
@@ -336,7 +334,8 @@ namespace {
       {JsonRecordDefinition::FieldType::Double                    , "alpha_amylase"   , PropertyNames::Fermentable::alphaAmylase_dextUnits,                                       },
       {JsonRecordDefinition::FieldType::MeasurementWithUnits      , "diastatic_power" , PropertyNames::Fermentable::diastaticPower_lintner, &BEER_JSON_DIASTATIC_POWER_UNIT_MAPPER},
       {JsonRecordDefinition::FieldType::SingleUnitValue           , "protein"         , PropertyNames::Fermentable::protein_pct           , &BEER_JSON_PERCENT_UNIT               },
-      {JsonRecordDefinition::FieldType::Double                    , "kolbach_index"   , PropertyNames::Fermentable::kolbachIndex_pct      ,                                       },
+      // kolbach_index changed from Double to PercentType in BeerJSON 1.0.2
+      {JsonRecordDefinition::FieldType::SingleUnitValue           , "kolbach_index"   , PropertyNames::Fermentable::kolbachIndex_pct      , &BEER_JSON_PERCENT_UNIT               },
       {JsonRecordDefinition::FieldType::SingleUnitValue           , "max_in_batch"    , PropertyNames::Fermentable::maxInBatch_pct        , &BEER_JSON_PERCENT_UNIT               },
       {JsonRecordDefinition::FieldType::Bool                      , "recommend_mash"  , PropertyNames::Fermentable::recommendMash         ,                                       },
       {JsonRecordDefinition::FieldType::OneOfMeasurementsWithUnits, "inventory/amount", PropertyNames::Ingredient::totalInventory         , &BEER_JSON_MASS_OR_VOLUME_UNIT_MAPPER },
