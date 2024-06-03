@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * serialization/json/JsonUtils.cpp is part of Brewtarget, and is copyright the following authors 2021:
+ * serialization/json/JsonUtils.cpp is part of Brewtarget, and is copyright the following authors 2021-2024:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -205,8 +205,13 @@ void JsonUtils::serialize(std::ostream & stream,
       currentIndent = &initialIndent;
    }
 
+   //
    // We only need special processing for objects and arrays.  We could just call boost::json::serialize or operator<<
    // for other sorts of values, but mostly it's slightly more efficient to serialise them directly.
+   //
+   // Note, per the comment in JsonRecord::toJson, that we want to skip over the output of any key:value pair where the
+   // value is an empty object, as it would likely cause parse errors when the document is validated.
+   //
    switch(val.kind()) {
       case boost::json::kind::object:
       {
@@ -214,8 +219,18 @@ void JsonUtils::serialize(std::ostream & stream,
          currentIndent->append(tabString);
          auto const & obj = val.get_object();
          if (!obj.empty()) {
+            bool firstWritten = false;
             for (auto ii = obj.begin(); ii != obj.end(); ++ii) {
-               if (ii != obj.begin()) {
+               //
+               // Skip over key:value output when value is empty object
+               //
+               if (ii->value().kind() == boost::json::kind::object &&
+                   ii->value().get_object().size() == 0) {
+                  qDebug() << Q_FUNC_INFO << "Skipping output of empty object for" << ii->key();
+                  continue;
+               }
+
+               if (firstWritten) {
                   stream << ",\n";
                }
                stream << *currentIndent;
@@ -231,6 +246,7 @@ void JsonUtils::serialize(std::ostream & stream,
                // http://json-schema.org/understanding-json-schema/reference/object.html omit them, so we go with that.
                stream << ": ";
                JsonUtils::serialize(stream, ii->value(), tabString, currentIndent);
+               firstWritten = true;
             }
          }
          stream << "\n";

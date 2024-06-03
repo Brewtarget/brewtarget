@@ -168,7 +168,6 @@ JsonXPath::JsonXPath(char const * const xPath) :
    Q_ASSERT(std::holds_alternative<JsonXPath::JsonKey>(this->m_pathNodes.front()));
    Q_ASSERT(std::holds_alternative<JsonXPath::JsonKey>(this->m_pathNodes.back()));
 
-
    return;
 }
 
@@ -180,6 +179,8 @@ bool JsonXPath::isEmpty() const {
 
 boost::json::value const * JsonXPath::followPathFrom(boost::json::value const * startingValue,
                                                      std::error_code & errorCode) const {
+   // It's a coding error to call with a null pointer
+   Q_ASSERT(startingValue);
    // Note that if this->isEmpty(), the outer for loop does not execute (because this->m_pathParts.size() == 0) and we
    // return startingValue, which is the desired behaviour.
    boost::json::value const * destinationValue = startingValue;
@@ -187,6 +188,10 @@ boost::json::value const * JsonXPath::followPathFrom(boost::json::value const * 
       if (std::holds_alternative<JsonXPath::JsonPointer>(pathPart)) {
          // For a JSON Pointer, Boost.JSON does all the work
          auto jsonPointer{std::get<JsonXPath::JsonPointer>(pathPart)};
+         // Normally have this commented out as it generates lots of logging
+//         qDebug() <<
+//            Q_FUNC_INFO << "Following path part" << jsonPointer.c_str() << "from" << *destinationValue << "in" <<
+//            this->m_rawXPath;
          destinationValue = destinationValue->find_pointer(std::string_view{jsonPointer}, errorCode);
          // If we already know there's no result, stop looping through the path parts
          // This is not an error per se, just that nothing was found
@@ -217,16 +222,24 @@ boost::json::value const * JsonXPath::followPathFrom(boost::json::value const * 
          // Now we loop through the array, examining elements until we find a match.  (We only care about the first
          // match as, in our use cases, we are not expecting multiple matches and cannot usefully interpret them.)
          bool foundInArray = false;
-         auto destinationValueAsArray = destinationValue->get_array();
-         for (auto const & arrayEntry : destinationValueAsArray) {
+         boost::json::array const & destinationValueAsArray = destinationValue->get_array();
+         qDebug() <<
+            Q_FUNC_INFO << "Searching through" << destinationValueAsArray.size() << "array items for" <<
+            namedArrayItemId;
+         //
+         // Note that we do not use the range for (eg `for (auto arrayEntry : destinationValueAsArray)`) because we want
+         // arrayEntry to be a pointer to constant values and we don't want any copying going on.
+         //
+         for (boost::json::value const * arrayEntry  = destinationValueAsArray.cbegin();
+                                         arrayEntry != destinationValueAsArray.cend(); ++arrayEntry) {
             // The elements of the array had better be objects (ie associative containers holding key and value pairs)
             // Technically, according to https://json-schema.org/, in a JSON array "each element in an array may be of a
             // different type".  So we could just skip over the current element if it's not an object.  However, in our
             // use cases, we do not have heterogeneous arrays, so it's better to barf up an error straight away.
-            auto arrayEntryAsObject = arrayEntry.if_object();
+            auto arrayEntryAsObject = arrayEntry->if_object();
             if (!arrayEntryAsObject) {
                qWarning() <<
-                  Q_FUNC_INFO << "While following" << this->m_rawXPath << "found" << arrayEntry.kind() <<
+                  Q_FUNC_INFO << "While following" << this->m_rawXPath << "found" << arrayEntry->kind() <<
                   "when applying" << namedArrayItemId;
                errorCode = std::make_error_code(std::errc::bad_address);
                return nullptr;
@@ -254,14 +267,16 @@ boost::json::value const * JsonXPath::followPathFrom(boost::json::value const * 
             }
 
             if (*valueAsString == namedArrayItemId.value) {
-               destinationValue = &arrayEntry;
+               // It isn't normally necessary to enable the next log statement
+//               qDebug() << Q_FUNC_INFO << "Found" << valueAsString->c_str();
+               destinationValue = arrayEntry;
+               foundInArray = true;
                break;
             }
 
             qDebug() <<
                Q_FUNC_INFO << "Skipping" << valueAsString->c_str() << "while searching for" << namedArrayItemId <<
                "as part of" << this->m_rawXPath;
-
          }
 
          if (!foundInArray) {

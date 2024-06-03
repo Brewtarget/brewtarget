@@ -831,7 +831,7 @@ namespace {
          // NB: BrewNotes don't have names in DB
          {ObjectStore::FieldType::Bool  , "display"                , PropertyNames::NamedEntity::display       },
          {ObjectStore::FieldType::Bool  , "deleted"                , PropertyNames::NamedEntity::deleted       },
-         {ObjectStore::FieldType::String, "folder"                 , PropertyNames::FolderBase::folder},
+         // NB: BrewNotes don't have folders, as each one is owned by a Recipe
          {ObjectStore::FieldType::Double, "abv"                    , PropertyNames::BrewNote::abv              },
          {ObjectStore::FieldType::Double, "attenuation"            , PropertyNames::BrewNote::attenuation      },
          {ObjectStore::FieldType::Double, "boil_off"               , PropertyNames::BrewNote::boilOff_l        },
@@ -841,7 +841,6 @@ namespace {
          {ObjectStore::FieldType::Date  , "fermentdate"            , PropertyNames::BrewNote::fermentDate      },
          {ObjectStore::FieldType::Double, "fg"                     , PropertyNames::BrewNote::fg               },
          {ObjectStore::FieldType::Double, "final_volume"           , PropertyNames::BrewNote::finalVolume_l    },
-         // NB: BrewNotes don't have folders, as each one is owned by a Recipe
          {ObjectStore::FieldType::Double, "mash_final_temp"        , PropertyNames::BrewNote::mashFinTemp_c    },
          {ObjectStore::FieldType::String, "notes"                  , PropertyNames::BrewNote::notes            },
          {ObjectStore::FieldType::Double, "og"                     , PropertyNames::BrewNote::og               },

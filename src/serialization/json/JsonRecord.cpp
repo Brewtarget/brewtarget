@@ -984,7 +984,8 @@ void JsonRecord::insertValue(JsonRecordDefinition::FieldDefinition const & field
                              std::string_view const & key,
                              QVariant & value) {
    qDebug() <<
-      Q_FUNC_INFO << "Writing" << std::string(key).c_str() << "=" << value << "(type" << fieldDefinition.type << ")";
+      Q_FUNC_INFO << "Writing" << std::string(key).c_str() << "=" << value << "(type" << fieldDefinition.type <<
+      ") for xPath" << fieldDefinition.xPath << ", path" << fieldDefinition.propertyPath;
 
    //
    // If the Qt property is an optional value, we need to unwrap it from std::optional and then, if it's null, skip
@@ -1076,6 +1077,7 @@ void JsonRecord::insertValue(JsonRecordDefinition::FieldDefinition const & field
          if (Optional::removeOptionalWrapperIfPresent<double>(value, propertyIsOptional)) {
             // It's definitely a coding error if there is no unit decoder mapping for a field declared to require
             // one
+            Q_ASSERT(std::holds_alternative<JsonMeasureableUnitsMapping const *>(fieldDefinition.valueDecoder));
             JsonMeasureableUnitsMapping const * const unitsMapping =
                std::get<JsonMeasureableUnitsMapping const *>(fieldDefinition.valueDecoder);
             Q_ASSERT(unitsMapping);
@@ -1169,7 +1171,7 @@ void JsonRecord::insertValue(JsonRecordDefinition::FieldDefinition const & field
          // write out).  This saves having an extra almost-never-used field on
          // JsonRecordDefinition::FieldDefinition.
          //
-         recordDataAsObject.emplace(fieldDefinition.xPath.asKey(), fieldDefinition.propertyPath.asXPath().toStdString());
+         recordDataAsObject.emplace(key, fieldDefinition.propertyPath.asXPath().toStdString());
          break;
 
       // Don't need a default case as we want the compiler to warn us if we didn't cover everything explicitly above
@@ -1232,7 +1234,13 @@ bool JsonRecord::toJson(NamedEntity const & namedEntityToExport) {
          continue;
       }
 
-      QVariant value = fieldDefinition.propertyPath.getValue(namedEntityToExport);
+      // Note we have to handle the case where we (ab)use the propertyPath field to hold the value of a required
+      // constant.
+      QVariant value = (
+         fieldDefinition.type == JsonRecordDefinition::FieldType::RequiredConstant ?
+         fieldDefinition.propertyPath.asXPath() :
+         fieldDefinition.propertyPath.getValue(namedEntityToExport)
+      );
       Q_ASSERT(value.isValid());
 
       //
@@ -1262,11 +1270,15 @@ bool JsonRecord::toJson(NamedEntity const & namedEntityToExport) {
       // If we have a non-trivial XPath then we'll need to traverse through any sub-objects and sub-arrays (creating
       // any that are not present) before arriving at the leaf object where we can set the value.
       // JsonXPath::makePointerToLeaf() does all the heaving lifting here -- including correctly handling the case of an
-      // empty XPath (where it will just return empty string and leave valuePointer unmodified).
+      // empty XPath (where it will just return empty string and leave valuePointer unmodified).  The only problem is
+      // when we have made a leaf object and end up not setting the value (eg because it is optional and unset).
+      // Having an empty leaf object in the document would give validation problems when we read in.  We solve this in
+      // JsonUtils::serialize() by skipping over the output of empty objects.
       //
-      // Note that, although we start and end with an object, we need to pass in the containing value.  (If you have
-      // a boost::json::value, you can trivially get to its contained boost::json::object, but you can't do the
-      // reverse.  So passing the value makes things easier in the function we're calling.)
+      // Note that, although we start and end with a boost::json::object, we need to pass in the containing
+      // boost::json::value.  (If you have a boost::json::value, you can trivially get to its contained
+      // boost::json::object, but you can't do the reverse.  So passing the boost::json::value makes things easier in
+      // the function we're calling.)
       //
       boost::json::value * valuePointer = &this->m_recordData;
 //      qDebug() <<
@@ -1396,7 +1408,7 @@ bool JsonRecord::toJson(NamedEntity const & namedEntityToExport) {
       } else {
          this->insertValue(fieldDefinition, valuePointer->get_object(), key, value);
       }
-
    }
+
    return true;
 }

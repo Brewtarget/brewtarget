@@ -141,5 +141,4 @@ S & operator<<(S & stream, PropertyPath const * propertyPath) {
 }
 //! @}
 
-
 #endif

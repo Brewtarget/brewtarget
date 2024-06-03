@@ -1936,6 +1936,12 @@ namespace {
                            db.getDbNativeTypeName<double >(),
                            db.getDbNativeTypeName<QString>())},
          //
+         // As part of removing code duplication in the model classes, we introduced FolderBase for classes that live in
+         // folders, and removed the folder attribute from BrewNote.  (A BrewNote belongs to a Recipe.  The Recipe has a
+         // folder, but it does not make sense for the BrewNote to have its own folder.)
+         //
+         {QString("ALTER TABLE brewnote DROP COLUMN folder")},
+         //
          // Finally, since we're doing a big update and a bit of a clean up, it is time to drop tables that have not
          // been used for a long time and are not mentioned anywhere else in the current code base.
          //

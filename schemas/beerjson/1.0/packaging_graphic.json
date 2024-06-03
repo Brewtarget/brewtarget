@@ -1,0 +1,78 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/beerjson/beerjson/master/json/packaging_graphic.json",
+  "type": "object",
+  "additionalProperties": false,
+  "definitions": {
+    "PackagingGraphicType": {
+      "type": "object",
+      "description": "PackagingGraphicType - a representation of a graphic to be placed on a vessel.",
+      "additionalProperties": false,
+      "properties": {
+        "position": {
+          "type": "string",
+          "enum": [
+            "body front",
+            "body back",
+            "body wrap around",
+            "neck front",
+            "neck back",
+            "neck wrap around",
+            "cap",
+            "carrier"
+          ]
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "svg",
+            "svgz",
+            "ai",
+            "cdr",
+            "cdx",
+            "odg",
+            "eps",
+            "pdf",
+            "png",
+            "jpg",
+            "gif"
+          ],
+          "description": "File type"
+        },
+        "base64_data": {
+          "type": "string",
+          "description": "base64 encoded file."
+        },
+        "URLS": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "URLS to hosted version of image."
+        },
+        "dpi": {
+          "type": "number",
+          "description": "Dots per inch."
+        },
+        "width": {
+          "type": "number"
+        },
+        "height": {
+          "type": "number"
+        },
+        "units": {
+          "type": "string",
+          "enum": [
+            "mm",
+            "in"
+          ],
+          "description": "The unit type which are used for measurements."
+        }
+      },
+      "required": [
+        "position",
+        "type"
+      ]
+    }
+  }
+}

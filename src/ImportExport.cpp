@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * ImportExport.cpp is part of Brewtarget, and is copyright the following authors 2013-2022:
+ * ImportExport.cpp is part of Brewtarget, and is copyright the following authors 2013-2024:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
  *
@@ -22,18 +22,22 @@
 #include <QObject>
 
 #include "BtTreeView.h"
-#include "serialization/json/BeerJson.h"
 #include "MainWindow.h"
+#include "model/Equipment.h"
+#include "model/Fermentable.h"
+#include "model/Hop.h"
+#include "model/Misc.h"
+#include "model/Recipe.h"
+#include "model/RecipeAdditionFermentable.h"
+#include "model/RecipeAdditionHop.h"
+#include "model/RecipeAdditionMisc.h"
+#include "model/RecipeAdditionYeast.h"
+#include "model/RecipeUseOfWater.h"
+#include "model/Style.h"
+#include "model/Water.h"
+#include "model/Yeast.h"
+#include "serialization/json/BeerJson.h"
 #include "serialization/xml/BeerXml.h"
-
-class Equipment;
-class Fermentable;
-class Hop;
-class Misc;
-class Recipe;
-class Style;
-class Water;
-class Yeast;
 
 namespace {
    enum class ImportOrExport {
@@ -152,6 +156,38 @@ namespace {
       msgBox.exec();
       return;
    }
+
+   /**
+    * \brief Turn a possibly null list into a set
+    */
+   template<class NE> QSet<NE const *> makeSet(QList<NE const *> const * nes) {
+      QSet<NE const *> neSet;
+      if (nes) {
+         neSet = QSet<NE const *>{nes->begin(), nes->end()};
+      }
+      return neSet;
+   }
+
+   /**
+    * \brief Make a set of Hop/Fermentable/etc from a list of same and a list of Recipes
+    *        Used in ImportExport::exportToFile when exporting to BeerJSON.  See comment in that function for why.
+    */
+   template<class NE> QSet<NE const *> makeSet(QList<NE     const *> const * ingredients,
+                                               QList<Recipe const *> const * recipes) {
+      QSet<NE const *> ingredientSet{makeSet(ingredients)};
+      if (recipes) {
+         for (Recipe const * recipe : *recipes) {
+            auto ingredientAdditions = recipe->getAll<typename NE::RecipeAdditionClass>();
+            for (auto ingredientAddition : ingredientAdditions) {
+               auto ingredient = ingredientAddition->ingredient();
+               if (ingredient) {
+                  ingredientSet.insert(ingredient.get());
+               }
+            }
+         }
+      }
+      return ingredientSet;
+   }
 }
 
 void ImportExport::importFromFiles() {
@@ -224,15 +260,39 @@ void ImportExport::exportToFile(QList<Recipe      const *> const * recipes,
    }
 
    if (filename.endsWith("json", Qt::CaseInsensitive)) {
+      //
+      // It's not strictly required by the BeerJSON standard, but we'll get a better export of Recipe if we also
+      // explicitly export all the ingredients.  This is because, in BeerJSON (unlike BeerXML), the Recipe specification
+      // includes only partial information about each Hop/Fermentable/etc addition.  This is fine if you already have
+      // those ingredients in your database when you're reading a Recipe in, but doesn't work so well when you don't.
+      //
+      QSet<Fermentable const *> setOfFermentable = makeSet(fermentables, recipes);
+      QSet<Hop         const *> setOfHop         = makeSet(hops        , recipes);
+      QSet<Misc        const *> setOfMisc        = makeSet(miscs       , recipes);
+      QSet<Yeast       const *> setOfYeast       = makeSet(yeasts      , recipes);
+      QSet<Water       const *> setOfWater       = makeSet(waters      , recipes);
+      //
+      // Same thing applies for Styles, and we have similar thinking for Equipments.  (Though note that, unlike in
+      // BeerXML, Equipment is not part of the Recipe in BeerJSON.)
+      //
+      QSet<Style       const *> setOfStyle       = makeSet(styles);
+      QSet<Equipment   const *> setOfEquipment   = makeSet(equipments);
+      if (recipes) {
+         for (Recipe const * recipe : *recipes) {
+            auto style     = recipe->style    (); if (style    ) { setOfStyle    .insert(style    .get()); }
+            auto equipment = recipe->equipment(); if (equipment) { setOfEquipment.insert(equipment.get()); }
+         }
+      }
+
       BeerJson::Exporter exporter(outFile, userMessageAsStream);
-      if (hops         && hops        ->size() > 0) { exporter.add(*hops        ); }
-      if (fermentables && fermentables->size() > 0) { exporter.add(*fermentables); }
-      if (yeasts       && yeasts      ->size() > 0) { exporter.add(*yeasts      ); }
-      if (miscs        && miscs       ->size() > 0) { exporter.add(*miscs       ); }
-      if (waters       && waters      ->size() > 0) { exporter.add(*waters      ); }
-      if (styles       && styles      ->size() > 0) { exporter.add(*styles      ); }
-      if (recipes      && recipes     ->size() > 0) { exporter.add(*recipes     ); }
-      if (equipments   && equipments  ->size() > 0) { exporter.add(*equipments  ); }
+      if (!setOfFermentable.isEmpty()   ) { exporter.add(setOfFermentable.values()); }
+      if (!setOfHop        .isEmpty()   ) { exporter.add(setOfHop        .values()); }
+      if (!setOfMisc       .isEmpty()   ) { exporter.add(setOfMisc       .values()); }
+      if (!setOfYeast      .isEmpty()   ) { exporter.add(setOfYeast      .values()); }
+      if (!setOfStyle      .isEmpty()   ) { exporter.add(setOfStyle      .values()); }
+      if (!setOfEquipment  .isEmpty()   ) { exporter.add(setOfEquipment  .values()); }
+      if (!setOfWater      .isEmpty()   ) { exporter.add(setOfWater      .values()); }
+      if (recipes && recipes->size() > 0) { exporter.add(*recipes                 ); }
 
       exporter.close();
       return;

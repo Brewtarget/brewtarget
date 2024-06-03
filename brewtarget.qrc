@@ -125,6 +125,7 @@
       <file alias="schemas/beerjson/1.0/measureable_units.json">schemas/beerjson/1.0/measureable_units.json</file>
       <file alias="schemas/beerjson/1.0/misc.json"             >schemas/beerjson/1.0/misc.json</file>
       <file alias="schemas/beerjson/1.0/packaging.json"        >schemas/beerjson/1.0/packaging.json</file>
+      <file alias="schemas/beerjson/1.0/packaging_graphic.json">schemas/beerjson/1.0/packaging_graphic.json</file>
       <file alias="schemas/beerjson/1.0/packaging_vessel.json" >schemas/beerjson/1.0/packaging_vessel.json</file>
       <file alias="schemas/beerjson/1.0/recipe.json"           >schemas/beerjson/1.0/recipe.json</file>
       <file alias="schemas/beerjson/1.0/style.json"            >schemas/beerjson/1.0/style.json</file>
