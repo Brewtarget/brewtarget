@@ -19,6 +19,7 @@
 
 #include <array>
 #include <filesystem>
+#include <sstream>
 
 #include <QDebug>
 #include <QString>
