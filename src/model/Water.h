@@ -29,7 +29,7 @@
 #include "model/OutlineableNamedEntity.h"
 #include "utils/EnumStringMapping.h"
 
-//╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+//======================================================================================================================
 //========================================== Start of property name constants ==========================================
 // See comment in model/NamedEntity.h
 #define AddPropertyName(property) namespace PropertyNames::Water { BtStringConst const property{#property}; }
@@ -55,8 +55,9 @@ AddPropertyName(sulfate_ppm     )
 AddPropertyName(type            )
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
-//╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+//======================================================================================================================
 
+class RecipeUseOfWater;
 
 /*!
  * \class Water
@@ -119,6 +120,12 @@ public:
 
    static EnumStringMapping const ionStringMapping;
    static EnumStringMapping const ionDisplayNames;
+
+   //
+   // Although Water is a bit different from other "ingredients", this alias is still helpful for templating functions
+   // where it is valid to great RecipeUseOfWater as a RecipeAddition class.
+   //
+   using RecipeAdditionClass = RecipeUseOfWater;
 
    /**
     * \brief Mapping of names to types for the Qt properties of this class.  See \c NamedEntity::typeLookup for more

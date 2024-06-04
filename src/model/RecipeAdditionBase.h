@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/RecipeAdditionBase.h is part of Brewtarget, and is copyright the following authors 2023:
+ * model/RecipeAdditionBase.h is part of Brewtarget, and is copyright the following authors 2023-2024:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -51,8 +51,8 @@ public:
       return listOfAdditions;
    }
 
-   std::shared_ptr<Derived> ingredient() {
-      return ObjectStoreWrapper::getById<Derived>(this->derived().m_ingredientId);
+   std::shared_ptr<IngredientClass> ingredient() {
+      return ObjectStoreWrapper::getById<IngredientClass>(this->derived().m_ingredientId);
    }
 
 };

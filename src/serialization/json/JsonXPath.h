@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * serialization/json/JsonXPath.h is part of Brewtarget, and is copyright the following authors 2022-2023:
+ * serialization/json/JsonXPath.h is part of Brewtarget, and is copyright the following authors 2022-2024:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -23,6 +23,8 @@
 #include <vector>
 
 #include <boost/json/value.hpp>
+
+#include <QString>
 
 /**
  * \brief \c JsonXPath is, essentially, almost the same as a JSON Pointer (see
@@ -198,7 +200,20 @@ S & operator<<(S & stream, JsonXPath const & jsonXPath) {
 }
 template<class S>
 S & operator<<(S & stream, JsonXPath::NamedArrayItemId const & namedArrayItemId) {
-   stream << "[" << namedArrayItemId.key.c_str() << "=\"" << namedArrayItemId.value.c_str() << "\"]";
+   //
+   // Stream output to QDebug etc automatically pads everything with spaces, which is a bit annoying here, so we build
+   // the output the old way instead of, say, writing:
+   //    stream << "[" << namedArrayItemId.key.c_str() << "=\"" << namedArrayItemId.value.c_str() << "\"]";
+   // The R"()" string literal format here saves us needing backslashes to escape quotes.
+   //
+   // Note too that, if we output a QString to QDebug then the latter "prints the string inside quotes and transforms
+   // non-printable characters to their Unicode values".  Again, this is not what we want here, so we get around it by
+   // passing in the raw string data, which is not escaped by QDebug.  (A better way would be to output
+   // QDebug::noquote().  However, we cannot do that here as we have no way of finding out whether the stream is already
+   // in noquote mode, so we would not be able to restore to caller's state afterwards.)
+   //
+   QString output = QString{R"([%1="%2"])"}.arg(namedArrayItemId.key.c_str(), namedArrayItemId.value.c_str());
+   stream << output.toLocal8Bit().constData();
    return stream;
 }
 template<class S>

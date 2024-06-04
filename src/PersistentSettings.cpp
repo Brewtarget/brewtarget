@@ -164,7 +164,7 @@ void PersistentSettings::initialise(QString customUserDataDir) {
          // on Linux).  This is a slightly more logical location, but we don't want to change directories for existing
          // Brewtarget users.
          PersistentSettings::value(PersistentSettings::Names::UserDataDirectory,
-                                   QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)).toString()
+                                   QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation)).toString()
       );
    }
 

@@ -58,6 +58,10 @@
         },
         "vessel_quantity": {
           "type": "number"
+        },
+        "graphics": {
+          "type": "array",
+          "$ref": "packaging_graphic.json#/definitions/PackagingGraphicType"
         }
       },
       "required": [
