@@ -246,7 +246,8 @@ public:
    Q_PROPERTY(double  ageTemp_c          READ ageTemp_c          WRITE setAgeTemp_c        )
    /**
     * \brief In BeerXML, a recipe has a date which is supposed to be when it was brewed.  This is slightly meaningless
-    *        unless you take it to mean "first brewed".  We then take that to be the "created" date in BeerJSON.
+    *        unless you take it to mean "first brewed".  We then take that to be the "created" date in BeerJSON and our
+    *        UI.
     *        NB: In both BeerXML and BeerJSON, this is an optional field
     */
    Q_PROPERTY(std::optional<QDate>   date               READ date               WRITE setDate             )
