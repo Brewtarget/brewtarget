@@ -161,7 +161,7 @@
          <item row="5" column="0">
           <widget class="QLabel" name="label_date">
            <property name="text">
-            <string>Date First Brewed</string>
+            <string>Date Created</string>
            </property>
            <property name="buddy">
             <cstring>dateEdit_date</cstring>

@@ -5,11 +5,24 @@ Note however that we also process it into a Debian-compliant text change log, so
 In particular, the Release Timestamp section is needed as part of this (and you need to be meticulous about the date
 format therein, otherwise you'll get, eg, no-changelogname-tag error from rpmlint).
 
-## Forthcoming in v3.1.0
+## Forthcoming in v4.1.0
 
 ### New Features
-
 * We'll list new features here...
+
+## v4.0.0
+Support for BeerJSON, which includes adding a lot of new fields
+
+### New Features
+* Import from, and export to, BeerJSON [388](https://github.com/Brewtarget/brewtarget/issues/388)
+* Support for optional fields (ie where value can be blank)
+
+### Bug Fixes
+* Default SQLite database file: hop, fermentable, mashstep, misc and yeast tables have unused columns [557](https://github.com/Brewtarget/brewtarget/issues/557)
+* Problem with Windows installer NSIS plugins [522](https://github.com/Brewtarget/brewtarget/issues/522)
+* Add values for pH [386](https://github.com/Brewtarget/brewtarget/issues/386)
+* Hops Use combo has entry that says "Aroma" but ends up listed as "Post-Boil" in the display [775](https://github.com/Brewtarget/brewtarget/issues/775)
+* We currently display a Recipe's date as "Brew Date", when it should probably be "Creation Date" [619](https://github.com/Brewtarget/brewtarget/issues/619)
 
 ## v3.0.11
 Minor bug fixes for the 3.0.10 release (ie bugs in 3.0.10 are fixed in this 3.0.11 release).
@@ -74,7 +87,6 @@ Sun, 30 Apr 2023 09:29:08 +0100
 Minor bug fixes for the 3.0.6 release (ie bugs in 3.0.6 are fixed in this 3.0.7 release).
 
 ### New Features
-
 * None
 
 ### Bug Fixes
@@ -184,7 +196,6 @@ Sun, 9 Oct 2022 09:09:09 +0100
 New features, rewrites of several low-level interfaces, changes to the basic data model, lots of bug fixes.
 
 ### New Features
-
 * PostgreSQL 9.5 is now a supported database
 * SQLite database is automatically backed up
 * Temporary database has been removed, in favor of the automated backups
