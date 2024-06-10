@@ -1000,11 +1000,11 @@
     <name>Database</name>
     <message>
         <source>Merge Database</source>
-        <translation>Database Samenvoegen</translation>
+        <translation type="vanished">Database Samenvoegen</translation>
     </message>
     <message>
         <source>There may be new ingredients and recipes available. Would you like to add these to your database?</source>
-        <translation>Er zijn mogelijk nieuwe ingrediënten en recepten verkrijgbaar. Wilt u deze toevoegen aan uw database?</translation>
+        <translation type="vanished">Er zijn mogelijk nieuwe ingrediënten en recepten verkrijgbaar. Wilt u deze toevoegen aan uw database?</translation>
     </message>
     <message>
         <source>Database password</source>
@@ -1034,14 +1034,6 @@
         <source>Successfully read new default data
 
 %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Unable to import new default data
-
-%1
-
-Log file may contain more details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1114,6 +1106,14 @@ If you didn&apos;t yet do this, click Abort.</source>
 %1</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Unable to import some or all of new default data
+
+%1
+
+Log file may contain more details.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Equipment</name>
@@ -1126,15 +1126,15 @@ If you didn&apos;t yet do this, click Abort.</source>
     <name>EquipmentEditor</name>
     <message>
         <source>Grain absorption (%1/%2)</source>
-        <translation>Graan absorptie (%1/%2)</translation>
+        <translation type="vanished">Graan absorptie (%1/%2)</translation>
     </message>
     <message>
         <source>Equipment name</source>
-        <translation>Apparatuur naam</translation>
+        <translation type="vanished">Apparatuur naam</translation>
     </message>
     <message>
         <source>Equipment name:</source>
-        <translation>Apparatuur naam:</translation>
+        <translation type="vanished">Apparatuur naam:</translation>
     </message>
     <message>
         <source>Equipment Editor</source>
@@ -1287,10 +1287,6 @@ If you didn&apos;t yet do this, click Abort.</source>
     <message>
         <source>Calculation Warnings</source>
         <translation>Berekening Waarschuwingen</translation>
-    </message>
-    <message>
-        <source>This equipment profile may break Brewtarget&apos;s maths</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>This equipment profile may break %1&apos;s maths</source>
@@ -1451,50 +1447,50 @@ If you didn&apos;t yet do this, click Abort.</source>
     <name>FermentableDialog</name>
     <message>
         <source>Fermentable name</source>
-        <translation>naam vergistbare</translation>
+        <translation type="vanished">naam vergistbare</translation>
     </message>
     <message>
         <source>Fermentable name:</source>
-        <translation>naam vergistbare:</translation>
+        <translation type="vanished">naam vergistbare:</translation>
     </message>
     <message>
         <source>Fermentable Database</source>
-        <translation>Database met vergistbaren</translation>
+        <translation type="vanished">Database met vergistbaren</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation>Toevoegen aan recept</translation>
+        <translation type="vanished">Toevoegen aan recept</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>Nieuw</translation>
+        <translation type="vanished">Nieuw</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation>Voeg geselecteerde ingredient aan het recept toe</translation>
+        <translation type="vanished">Voeg geselecteerde ingredient aan het recept toe</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation>Creëer nieuw ingrediënt</translation>
+        <translation type="vanished">Creëer nieuw ingrediënt</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation>Edit geselecteerde ingrediënt</translation>
+        <translation type="vanished">Edit geselecteerde ingrediënt</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation>Verwijder geselecteerde ingrediënt</translation>
+        <translation type="vanished">Verwijder geselecteerde ingrediënt</translation>
     </message>
 </context>
 <context>
     <name>FermentableEditor</name>
     <message>
         <source>Fermentable name</source>
-        <translation type="unfinished">naam vergistbare</translation>
+        <translation type="obsolete">naam vergistbare</translation>
     </message>
     <message>
         <source>Fermentable name:</source>
-        <translation type="unfinished">naam vergistbare:</translation>
+        <translation type="obsolete">naam vergistbare:</translation>
     </message>
 </context>
 <context>
@@ -1794,58 +1790,58 @@ If you didn&apos;t yet do this, click Abort.</source>
     <name>HopDialog</name>
     <message>
         <source>Hop name</source>
-        <translation>Hop naam</translation>
+        <translation type="vanished">Hop naam</translation>
     </message>
     <message>
         <source>Hop name:</source>
-        <translation>Hop naam:</translation>
+        <translation type="vanished">Hop naam:</translation>
     </message>
     <message>
         <source>Hop Database</source>
-        <translation>Hop Database</translation>
+        <translation type="vanished">Hop Database</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation>Toevoegen aan recept</translation>
+        <translation type="vanished">Toevoegen aan recept</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>Nieuw</translation>
+        <translation type="vanished">Nieuw</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation>Voeg geselecteerde ingredient aan het recept toe</translation>
+        <translation type="vanished">Voeg geselecteerde ingredient aan het recept toe</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation>Creëer nieuw ingrediënt</translation>
+        <translation type="vanished">Creëer nieuw ingrediënt</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation>Edit geselecteerde ingrediënt</translation>
+        <translation type="vanished">Edit geselecteerde ingrediënt</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation>Verwijder geselecteerde ingrediënt</translation>
+        <translation type="vanished">Verwijder geselecteerde ingrediënt</translation>
     </message>
 </context>
 <context>
     <name>HopEditor</name>
     <message>
         <source>Hop name</source>
-        <translation type="unfinished">Hop naam</translation>
+        <translation type="obsolete">Hop naam</translation>
     </message>
     <message>
         <source>Hop name:</source>
-        <translation type="unfinished">Hop naam:</translation>
+        <translation type="obsolete">Hop naam:</translation>
     </message>
     <message>
         <source>Bittering</source>
-        <translation type="unfinished">Bitterhop</translation>
+        <translation type="obsolete">Bitterhop</translation>
     </message>
     <message>
         <source>Aroma</source>
-        <translation type="unfinished">Aroma</translation>
+        <translation type="obsolete">Aroma</translation>
     </message>
     <message>
         <source>Flavor</source>
@@ -1857,39 +1853,31 @@ If you didn&apos;t yet do this, click Abort.</source>
     </message>
     <message>
         <source>Leaf</source>
-        <translation type="unfinished">Blad</translation>
+        <translation type="obsolete">Blad</translation>
     </message>
     <message>
         <source>Pellet</source>
-        <translation type="unfinished">Pellet</translation>
+        <translation type="obsolete">Pellet</translation>
     </message>
     <message>
         <source>Plug</source>
-        <translation type="unfinished">Geperste hop</translation>
+        <translation type="obsolete">Geperste hop</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished">Maisch</translation>
+        <translation type="obsolete">Maisch</translation>
     </message>
     <message>
         <source>First Wort</source>
-        <translation type="unfinished">Eerste Wort</translation>
+        <translation type="obsolete">Eerste Wort</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation type="unfinished">Koken</translation>
+        <translation type="obsolete">Koken</translation>
     </message>
     <message>
         <source>Dry Hop</source>
-        <translation type="unfinished">Dry Hop</translation>
-    </message>
-    <message>
-        <source>Aroma &amp; Bittering</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Post-Boil</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Dry Hop</translation>
     </message>
 </context>
 <context>
@@ -2661,50 +2649,50 @@ If you need help, please open an issue at %1</source>
     <name>MiscDialog</name>
     <message>
         <source>Misc name</source>
-        <translation>naam Diversen</translation>
+        <translation type="vanished">naam Diversen</translation>
     </message>
     <message>
         <source>Misc name:</source>
-        <translation>naam Diversen:</translation>
+        <translation type="vanished">naam Diversen:</translation>
     </message>
     <message>
         <source>Misc Database</source>
-        <translation>Database Diversen</translation>
+        <translation type="vanished">Database Diversen</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation>Toevoegen aan recept</translation>
+        <translation type="vanished">Toevoegen aan recept</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>Nieuw</translation>
+        <translation type="vanished">Nieuw</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation>Voeg geselecteerde ingredient aan het recept toe</translation>
+        <translation type="vanished">Voeg geselecteerde ingredient aan het recept toe</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation>Creëer nieuw ingrediënt</translation>
+        <translation type="vanished">Creëer nieuw ingrediënt</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation>Edit geselecteerde ingrediënt</translation>
+        <translation type="vanished">Edit geselecteerde ingrediënt</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation>Verwijder geselecteerde ingrediënt</translation>
+        <translation type="vanished">Verwijder geselecteerde ingrediënt</translation>
     </message>
 </context>
 <context>
     <name>MiscEditor</name>
     <message>
         <source>Misc name</source>
-        <translation type="unfinished">naam Diversen</translation>
+        <translation type="obsolete">naam Diversen</translation>
     </message>
     <message>
         <source>Misc name:</source>
-        <translation type="unfinished">naam Diversen:</translation>
+        <translation type="obsolete">naam Diversen:</translation>
     </message>
 </context>
 <context>
@@ -3912,6 +3900,18 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Could not open %1 for reading (error # %2)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Merge Database</source>
+        <translation type="unfinished">Database Samenvoegen</translation>
+    </message>
+    <message>
+        <source>New ingredients etc are available. Would you like to add them to your database?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error matching %1 file pattern in %2 directory</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -5147,11 +5147,11 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     <name>StyleEditor</name>
     <message>
         <source>Style name</source>
-        <translation>Stijl naam</translation>
+        <translation type="vanished">Stijl naam</translation>
     </message>
     <message>
         <source>Style name:</source>
-        <translation>Stijl naam:</translation>
+        <translation type="vanished">Stijl naam:</translation>
     </message>
 </context>
 <context>
@@ -5661,50 +5661,50 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     <name>YeastDialog</name>
     <message>
         <source>Yeast name</source>
-        <translation>Gist naam</translation>
+        <translation type="vanished">Gist naam</translation>
     </message>
     <message>
         <source>Yeast name:</source>
-        <translation>Gist naam:</translation>
+        <translation type="vanished">Gist naam:</translation>
     </message>
     <message>
         <source>Yeast Database</source>
-        <translation>Gist Databank</translation>
+        <translation type="vanished">Gist Databank</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation>Voeg toe aan recept</translation>
+        <translation type="vanished">Voeg toe aan recept</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>Nieuw</translation>
+        <translation type="vanished">Nieuw</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation>Voeg geselecteerde ingredient toe aan het recept</translation>
+        <translation type="vanished">Voeg geselecteerde ingredient toe aan het recept</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation>Creëer nieuw ingrediënt</translation>
+        <translation type="vanished">Creëer nieuw ingrediënt</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation>Edit geselecteerde ingrediënt</translation>
+        <translation type="vanished">Edit geselecteerde ingrediënt</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation>Verwijder geselecteerde ingrediënt</translation>
+        <translation type="vanished">Verwijder geselecteerde ingrediënt</translation>
     </message>
 </context>
 <context>
     <name>YeastEditor</name>
     <message>
         <source>Yeast name</source>
-        <translation type="unfinished">Gist naam</translation>
+        <translation type="obsolete">Gist naam</translation>
     </message>
     <message>
         <source>Yeast name:</source>
-        <translation type="unfinished">Gist naam:</translation>
+        <translation type="obsolete">Gist naam:</translation>
     </message>
 </context>
 <context>
@@ -9059,7 +9059,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Date First Brewed</source>
-        <translation>Datum Eerste Brouwsel</translation>
+        <translation type="vanished">Datum Eerste Brouwsel</translation>
     </message>
     <message>
         <source>dd MMM yyyy</source>
@@ -9083,6 +9083,10 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Total apparent attenuation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Date Created</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -18,6 +18,8 @@
 #define IMPORTEXPORT_H
 #pragma once
 
+#include <optional>
+
 #include <QList>
 
 class Equipment;
@@ -30,14 +32,20 @@ class Water;
 class Yeast;
 
 namespace ImportExport {
+
    /**
-    * \brief Import recipes, hops, equipment, etc from BeerXML or BeerJSON files specified by the user
+    * \brief Import recipes, hops, equipment, etc from BeerXML or BeerJSON files either specified by the user or in the
+    *        parameter.
     *
     *        For export, we let the user choose between BeerXML and BeerJSON by the file extension they choose.  This is
     *        similar to how other programs work (eg LibreOffice, Gimp), so I think it's OK, but we'll see what feedback
     *        is on usability.
+    *
+    * \param inputFiles If \c std::nullopt (ie not supplied) then user will be prompted for file(s) through the UI
+    *
+    * \return \c true if succeeded, \c false otherwise
     */
-   void importFromFiles();
+   bool importFromFiles(std::optional<QStringList> inputFiles = std::nullopt);
 
    /**
     * \brief Import recipes, hops, equipment, etc to a BeerXML or BeerJSON file specified by the user

@@ -996,11 +996,11 @@
     <name>Database</name>
     <message>
         <source>Merge Database</source>
-        <translation>Sammanfoga databas</translation>
+        <translation type="vanished">Sammanfoga databas</translation>
     </message>
     <message>
         <source>There may be new ingredients and recipes available. Would you like to add these to your database?</source>
-        <translation>Det kan finnas ny ingredienser och recept tillgängliga. Vill du lägga till dem till din databas?</translation>
+        <translation type="vanished">Det kan finnas ny ingredienser och recept tillgängliga. Vill du lägga till dem till din databas?</translation>
     </message>
     <message>
         <source>Database password</source>
@@ -1030,14 +1030,6 @@
         <source>Successfully read new default data
 
 %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Unable to import new default data
-
-%1
-
-Log file may contain more details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1110,6 +1102,14 @@ If you didn&apos;t yet do this, click Abort.</source>
 %1</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Unable to import some or all of new default data
+
+%1
+
+Log file may contain more details.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Equipment</name>
@@ -1122,15 +1122,15 @@ If you didn&apos;t yet do this, click Abort.</source>
     <name>EquipmentEditor</name>
     <message>
         <source>Grain absorption (%1/%2)</source>
-        <translation>Malt upptag (%1/%2)</translation>
+        <translation type="vanished">Malt upptag (%1/%2)</translation>
     </message>
     <message>
         <source>Equipment name</source>
-        <translation>Utrustningsnamn</translation>
+        <translation type="vanished">Utrustningsnamn</translation>
     </message>
     <message>
         <source>Equipment name:</source>
-        <translation>Utrustningsnamn:</translation>
+        <translation type="vanished">Utrustningsnamn:</translation>
     </message>
     <message>
         <source>Equipment Editor</source>
@@ -1287,10 +1287,6 @@ If you didn&apos;t yet do this, click Abort.</source>
     <message>
         <source>Calculation Warnings</source>
         <translation>Kalkylerings varningar</translation>
-    </message>
-    <message>
-        <source>This equipment profile may break Brewtarget&apos;s maths</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>This equipment profile may break %1&apos;s maths</source>
@@ -1451,50 +1447,50 @@ If you didn&apos;t yet do this, click Abort.</source>
     <name>FermentableDialog</name>
     <message>
         <source>Fermentable name</source>
-        <translation>Jästnamn</translation>
+        <translation type="vanished">Jästnamn</translation>
     </message>
     <message>
         <source>Fermentable name:</source>
-        <translation>Jästnamn:</translation>
+        <translation type="vanished">Jästnamn:</translation>
     </message>
     <message>
         <source>Fermentable Database</source>
-        <translation>Jäsningsdatabas</translation>
+        <translation type="vanished">Jäsningsdatabas</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation>Lägg till i receptet</translation>
+        <translation type="vanished">Lägg till i receptet</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>Ny</translation>
+        <translation type="vanished">Ny</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation>Addera vald ingrediens till receptet</translation>
+        <translation type="vanished">Addera vald ingrediens till receptet</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation>Skapa ny ingrediens</translation>
+        <translation type="vanished">Skapa ny ingrediens</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation>Ändra vald ingrediens</translation>
+        <translation type="vanished">Ändra vald ingrediens</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation>Ta bort vald ingrediens</translation>
+        <translation type="vanished">Ta bort vald ingrediens</translation>
     </message>
 </context>
 <context>
     <name>FermentableEditor</name>
     <message>
         <source>Fermentable name</source>
-        <translation type="unfinished">Jästnamn</translation>
+        <translation type="obsolete">Jästnamn</translation>
     </message>
     <message>
         <source>Fermentable name:</source>
-        <translation type="unfinished">Jästnamn:</translation>
+        <translation type="obsolete">Jästnamn:</translation>
     </message>
 </context>
 <context>
@@ -1794,58 +1790,58 @@ If you didn&apos;t yet do this, click Abort.</source>
     <name>HopDialog</name>
     <message>
         <source>Hop name</source>
-        <translation>Humlenamn</translation>
+        <translation type="vanished">Humlenamn</translation>
     </message>
     <message>
         <source>Hop name:</source>
-        <translation>Humlenamn:</translation>
+        <translation type="vanished">Humlenamn:</translation>
     </message>
     <message>
         <source>Hop Database</source>
-        <translation>Humledatabas</translation>
+        <translation type="vanished">Humledatabas</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation>Lägg till i receptet</translation>
+        <translation type="vanished">Lägg till i receptet</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>Ny</translation>
+        <translation type="vanished">Ny</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation>Addera vald ingrediens till receptet</translation>
+        <translation type="vanished">Addera vald ingrediens till receptet</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation>Skapa ny ingrediens</translation>
+        <translation type="vanished">Skapa ny ingrediens</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation>Ändra vald ingrediens</translation>
+        <translation type="vanished">Ändra vald ingrediens</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation>Ta bort vald ingrediens</translation>
+        <translation type="vanished">Ta bort vald ingrediens</translation>
     </message>
 </context>
 <context>
     <name>HopEditor</name>
     <message>
         <source>Hop name</source>
-        <translation type="unfinished">Humlenamn</translation>
+        <translation type="obsolete">Humlenamn</translation>
     </message>
     <message>
         <source>Hop name:</source>
-        <translation type="unfinished">Humlenamn:</translation>
+        <translation type="obsolete">Humlenamn:</translation>
     </message>
     <message>
         <source>Bittering</source>
-        <translation type="unfinished">Bitter</translation>
+        <translation type="obsolete">Bitter</translation>
     </message>
     <message>
         <source>Aroma</source>
-        <translation type="unfinished">Arom</translation>
+        <translation type="obsolete">Arom</translation>
     </message>
     <message>
         <source>Flavor</source>
@@ -1857,39 +1853,27 @@ If you didn&apos;t yet do this, click Abort.</source>
     </message>
     <message>
         <source>Leaf</source>
-        <translation type="unfinished">Löv</translation>
+        <translation type="obsolete">Löv</translation>
     </message>
     <message>
         <source>Pellet</source>
-        <translation type="unfinished">Pellets</translation>
+        <translation type="obsolete">Pellets</translation>
     </message>
     <message>
         <source>Plug</source>
-        <translation type="unfinished">Puck</translation>
+        <translation type="obsolete">Puck</translation>
     </message>
     <message>
         <source>First Wort</source>
-        <translation type="unfinished">Första Vörten</translation>
+        <translation type="obsolete">Första Vörten</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation type="unfinished">Kokning</translation>
+        <translation type="obsolete">Kokning</translation>
     </message>
     <message>
         <source>Dry Hop</source>
-        <translation type="unfinished">Torrhumling</translation>
-    </message>
-    <message>
-        <source>Aroma &amp; Bittering</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mash</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Post-Boil</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Torrhumling</translation>
     </message>
 </context>
 <context>
@@ -2657,50 +2641,50 @@ If you need help, please open an issue at %1</source>
     <name>MiscDialog</name>
     <message>
         <source>Misc name</source>
-        <translation>Övriga namn</translation>
+        <translation type="vanished">Övriga namn</translation>
     </message>
     <message>
         <source>Misc name:</source>
-        <translation>Diverse namn:</translation>
+        <translation type="vanished">Diverse namn:</translation>
     </message>
     <message>
         <source>Misc Database</source>
-        <translation>Diverse databas</translation>
+        <translation type="vanished">Diverse databas</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation>Lägg till i receptet</translation>
+        <translation type="vanished">Lägg till i receptet</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>Ny</translation>
+        <translation type="vanished">Ny</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation>Addera vald ingrediens till receptet</translation>
+        <translation type="vanished">Addera vald ingrediens till receptet</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation>Skapa ny ingrediens</translation>
+        <translation type="vanished">Skapa ny ingrediens</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation>Ändra vald ingrediens</translation>
+        <translation type="vanished">Ändra vald ingrediens</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation>Ta bort vald ingrediens</translation>
+        <translation type="vanished">Ta bort vald ingrediens</translation>
     </message>
 </context>
 <context>
     <name>MiscEditor</name>
     <message>
         <source>Misc name</source>
-        <translation type="unfinished">Övriga namn</translation>
+        <translation type="obsolete">Övriga namn</translation>
     </message>
     <message>
         <source>Misc name:</source>
-        <translation type="unfinished">Diverse namn:</translation>
+        <translation type="obsolete">Diverse namn:</translation>
     </message>
 </context>
 <context>
@@ -3898,6 +3882,18 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Could not open %1 for reading (error # %2)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Merge Database</source>
+        <translation type="unfinished">Sammanfoga databas</translation>
+    </message>
+    <message>
+        <source>New ingredients etc are available. Would you like to add them to your database?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error matching %1 file pattern in %2 directory</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -5134,11 +5130,11 @@ Primärens slutgiltiga volym är %1.</translation>
     <name>StyleEditor</name>
     <message>
         <source>Style name</source>
-        <translation>Stilnamn</translation>
+        <translation type="vanished">Stilnamn</translation>
     </message>
     <message>
         <source>Style name:</source>
-        <translation>Stil:</translation>
+        <translation type="vanished">Stil:</translation>
     </message>
 </context>
 <context>
@@ -5648,50 +5644,50 @@ Primärens slutgiltiga volym är %1.</translation>
     <name>YeastDialog</name>
     <message>
         <source>Yeast name</source>
-        <translation>Jästnamn</translation>
+        <translation type="vanished">Jästnamn</translation>
     </message>
     <message>
         <source>Yeast name:</source>
-        <translation>Jästnamn:</translation>
+        <translation type="vanished">Jästnamn:</translation>
     </message>
     <message>
         <source>Yeast Database</source>
-        <translation>Jästdatabas</translation>
+        <translation type="vanished">Jästdatabas</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation>Lägg till i receptet</translation>
+        <translation type="vanished">Lägg till i receptet</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>Ny</translation>
+        <translation type="vanished">Ny</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation>Addera vald ingrediens till receptet</translation>
+        <translation type="vanished">Addera vald ingrediens till receptet</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation>Skapa ny ingrediens</translation>
+        <translation type="vanished">Skapa ny ingrediens</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation>Ändra vald ingrediens</translation>
+        <translation type="vanished">Ändra vald ingrediens</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation>Ta bort vald ingrediens</translation>
+        <translation type="vanished">Ta bort vald ingrediens</translation>
     </message>
 </context>
 <context>
     <name>YeastEditor</name>
     <message>
         <source>Yeast name</source>
-        <translation type="unfinished">Jästnamn</translation>
+        <translation type="obsolete">Jästnamn</translation>
     </message>
     <message>
         <source>Yeast name:</source>
-        <translation type="unfinished">Jästnamn:</translation>
+        <translation type="obsolete">Jästnamn:</translation>
     </message>
 </context>
 <context>
@@ -9090,7 +9086,7 @@ Primärens slutgiltiga volym är %1.</translation>
     </message>
     <message>
         <source>Date First Brewed</source>
-        <translation>Första bryggdatum</translation>
+        <translation type="vanished">Första bryggdatum</translation>
     </message>
     <message>
         <source>dd MMM yyyy</source>
@@ -9114,6 +9110,10 @@ Primärens slutgiltiga volym är %1.</translation>
     </message>
     <message>
         <source>Total apparent attenuation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Date Created</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -190,13 +190,16 @@ namespace {
    }
 }
 
-void ImportExport::importFromFiles() {
-   auto selectedFiles = selectFiles(ImportOrExport::IMPORT);
-   if (!selectedFiles) {
-      return;
+bool ImportExport::importFromFiles(std::optional<QStringList> inputFiles) {
+   if (!inputFiles) {
+      inputFiles = selectFiles(ImportOrExport::IMPORT);
+   }
+   if (!inputFiles) {
+      return false;
    }
 
-   for (QString filename : *selectedFiles) {
+   bool allSucceeded = true;
+   for (QString filename : *inputFiles) {
       //
       // I guess if the user were importing a lot of files in one go, it might be annoying to have a separate result
       // message for each one, but TBD whether that's much of a use case.  For now, we keep things simple.
@@ -214,11 +217,13 @@ void ImportExport::importFromFiles() {
       }
       qDebug() << Q_FUNC_INFO << "Import " << (succeeded ? "succeeded" : "failed");
       importExportMsg(ImportOrExport::IMPORT, filename, succeeded, userMessage);
+
+      allSucceeded &= succeeded;
    }
 
    MainWindow::instance().showChanges();
 
-   return;
+   return allSucceeded;
 }
 
 

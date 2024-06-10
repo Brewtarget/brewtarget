@@ -817,11 +817,11 @@
     <name>Database</name>
     <message>
         <source>Merge Database</source>
-        <translation>Veri tabanını Birleştir</translation>
+        <translation type="vanished">Veri tabanını Birleştir</translation>
     </message>
     <message>
         <source>There may be new ingredients and recipes available. Would you like to add these to your database?</source>
-        <translation>Burada yeni öğeler ve tarifler olabilir.Bunları veri tabanınıza eklemek ister misiniz?</translation>
+        <translation type="vanished">Burada yeni öğeler ve tarifler olabilir.Bunları veri tabanınıza eklemek ister misiniz?</translation>
     </message>
     <message>
         <source>Database password</source>
@@ -859,7 +859,7 @@
 %1
 
 Log file may contain more details.</source>
-        <translation>Yeni varsayılan veri %1 içeri aktarılamadı. Günlük dosyası daha fazla detay içerebilir.</translation>
+        <translation type="vanished">Yeni varsayılan veri %1 içeri aktarılamadı. Günlük dosyası daha fazla detay içerebilir.</translation>
     </message>
     <message>
         <source>Filename</source>
@@ -931,6 +931,14 @@ If you didn&apos;t yet do this, click Abort.</source>
 %1</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Unable to import some or all of new default data
+
+%1
+
+Log file may contain more details.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Equipment</name>
@@ -943,15 +951,15 @@ If you didn&apos;t yet do this, click Abort.</source>
     <name>EquipmentEditor</name>
     <message>
         <source>Grain absorption (%1/%2)</source>
-        <translation>Tahılın su emişi (%1/%2)</translation>
+        <translation type="vanished">Tahılın su emişi (%1/%2)</translation>
     </message>
     <message>
         <source>Equipment name</source>
-        <translation>Teçhizat adı</translation>
+        <translation type="vanished">Teçhizat adı</translation>
     </message>
     <message>
         <source>Equipment name:</source>
-        <translation>Teçhizat adı:</translation>
+        <translation type="vanished">Teçhizat adı:</translation>
     </message>
     <message>
         <source>The following values are not set:</source>
@@ -975,7 +983,7 @@ If you didn&apos;t yet do this, click Abort.</source>
     </message>
     <message>
         <source>This equipment profile may break Brewtarget&apos;s maths</source>
-        <translation>Bu teçhizat profili Brewtarget&apos;in matematiğini bozabilir</translation>
+        <translation type="vanished">Bu teçhizat profili Brewtarget&apos;in matematiğini bozabilir</translation>
     </message>
     <message>
         <source>This equipment profile may break %1&apos;s maths</source>
@@ -1136,50 +1144,50 @@ If you didn&apos;t yet do this, click Abort.</source>
     <name>FermentableDialog</name>
     <message>
         <source>Fermentable name</source>
-        <translation>Mayalanabilen adı</translation>
+        <translation type="vanished">Mayalanabilen adı</translation>
     </message>
     <message>
         <source>Fermentable name:</source>
-        <translation>Mayalanabilen adı:</translation>
+        <translation type="vanished">Mayalanabilen adı:</translation>
     </message>
     <message>
         <source>Fermentable Database</source>
-        <translation>Mayalanabilen Veri tabanı</translation>
+        <translation type="vanished">Mayalanabilen Veri tabanı</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation>Tarife Ekle</translation>
+        <translation type="vanished">Tarife Ekle</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>Yeni</translation>
+        <translation type="vanished">Yeni</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation>Seçilen katkıyı tarife ekle</translation>
+        <translation type="vanished">Seçilen katkıyı tarife ekle</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation>Yeni katkı oluştur</translation>
+        <translation type="vanished">Yeni katkı oluştur</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation>Seçilen katkıyı düzenle</translation>
+        <translation type="vanished">Seçilen katkıyı düzenle</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation>Seçilen katkıyı kaldır</translation>
+        <translation type="vanished">Seçilen katkıyı kaldır</translation>
     </message>
 </context>
 <context>
     <name>FermentableEditor</name>
     <message>
         <source>Fermentable name</source>
-        <translation>Mayalanabilen adı</translation>
+        <translation type="vanished">Mayalanabilen adı</translation>
     </message>
     <message>
         <source>Fermentable name:</source>
-        <translation>Mayalanabilen adı:</translation>
+        <translation type="vanished">Mayalanabilen adı:</translation>
     </message>
 </context>
 <context>
@@ -1503,58 +1511,58 @@ If you didn&apos;t yet do this, click Abort.</source>
     <name>HopDialog</name>
     <message>
         <source>Hop name</source>
-        <translation>Şerbetçi otu adı</translation>
+        <translation type="vanished">Şerbetçi otu adı</translation>
     </message>
     <message>
         <source>Hop name:</source>
-        <translation>Şerbetçi otu adı:</translation>
+        <translation type="vanished">Şerbetçi otu adı:</translation>
     </message>
     <message>
         <source>Hop Database</source>
-        <translation>Şerbetçi otu Veri tabanı</translation>
+        <translation type="vanished">Şerbetçi otu Veri tabanı</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation>Tarife Ekle</translation>
+        <translation type="vanished">Tarife Ekle</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>Yeni</translation>
+        <translation type="vanished">Yeni</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation>Seçilen katkıyı tarife ekle</translation>
+        <translation type="vanished">Seçilen katkıyı tarife ekle</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation>Yeni katkı oluştur</translation>
+        <translation type="vanished">Yeni katkı oluştur</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation>Seçilen katkıyı düzenle</translation>
+        <translation type="vanished">Seçilen katkıyı düzenle</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation>Seçilen katkıyı kaldır</translation>
+        <translation type="vanished">Seçilen katkıyı kaldır</translation>
     </message>
 </context>
 <context>
     <name>HopEditor</name>
     <message>
         <source>Hop name</source>
-        <translation>Şerbetçi otu adı</translation>
+        <translation type="vanished">Şerbetçi otu adı</translation>
     </message>
     <message>
         <source>Hop name:</source>
-        <translation>Şerbetçi otu adı:</translation>
+        <translation type="vanished">Şerbetçi otu adı:</translation>
     </message>
     <message>
         <source>Bittering</source>
-        <translation type="unfinished">Acılık</translation>
+        <translation type="obsolete">Acılık</translation>
     </message>
     <message>
         <source>Aroma</source>
-        <translation type="unfinished">Aroma</translation>
+        <translation type="obsolete">Aroma</translation>
     </message>
     <message>
         <source>Flavor</source>
@@ -1566,39 +1574,27 @@ If you didn&apos;t yet do this, click Abort.</source>
     </message>
     <message>
         <source>Leaf</source>
-        <translation type="unfinished">Yaprak</translation>
+        <translation type="obsolete">Yaprak</translation>
     </message>
     <message>
         <source>Pellet</source>
-        <translation type="unfinished">Pelet</translation>
+        <translation type="obsolete">Pelet</translation>
     </message>
     <message>
         <source>Plug</source>
-        <translation type="unfinished">Kozalak</translation>
+        <translation type="obsolete">Kozalak</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished">Mayşe</translation>
+        <translation type="obsolete">Mayşe</translation>
     </message>
     <message>
         <source>First Wort</source>
-        <translation type="unfinished">İlk Şıra</translation>
+        <translation type="obsolete">İlk Şıra</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation type="unfinished">Kaynama</translation>
-    </message>
-    <message>
-        <source>Aroma &amp; Bittering</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Post-Boil</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Dry Hop</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Kaynama</translation>
     </message>
 </context>
 <context>
@@ -2490,50 +2486,50 @@ If you need help, please open an issue at %1</source>
     <name>MiscDialog</name>
     <message>
         <source>Misc name</source>
-        <translation>Diğer için isim</translation>
+        <translation type="vanished">Diğer için isim</translation>
     </message>
     <message>
         <source>Misc name:</source>
-        <translation>Diğer için isim:</translation>
+        <translation type="vanished">Diğer için isim:</translation>
     </message>
     <message>
         <source>Misc Database</source>
-        <translation>Diğer eklemeler Veri tabanı</translation>
+        <translation type="vanished">Diğer eklemeler Veri tabanı</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation>Tarife Ekle</translation>
+        <translation type="vanished">Tarife Ekle</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>Yeni</translation>
+        <translation type="vanished">Yeni</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation>Seçilen ürünü tarife ekle</translation>
+        <translation type="vanished">Seçilen ürünü tarife ekle</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation>Yeni ürün oluştur</translation>
+        <translation type="vanished">Yeni ürün oluştur</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation>Seçilen ürünü düzenle</translation>
+        <translation type="vanished">Seçilen ürünü düzenle</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation>Seçilen ürünü kaldır</translation>
+        <translation type="vanished">Seçilen ürünü kaldır</translation>
     </message>
 </context>
 <context>
     <name>MiscEditor</name>
     <message>
         <source>Misc name</source>
-        <translation>Diğer için isim</translation>
+        <translation type="vanished">Diğer için isim</translation>
     </message>
     <message>
         <source>Misc name:</source>
-        <translation>Diğer için isim:</translation>
+        <translation type="vanished">Diğer için isim:</translation>
     </message>
 </context>
 <context>
@@ -3793,6 +3789,18 @@ Günlük dosyası daha fazla detay içerebilir.</translation>
     </message>
     <message>
         <source>Could not open %1 for reading (error # %2)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Merge Database</source>
+        <translation type="unfinished">Veri tabanını Birleştir</translation>
+    </message>
+    <message>
+        <source>New ingredients etc are available. Would you like to add them to your database?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error matching %1 file pattern in %2 directory</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -5068,11 +5076,11 @@ The final volume in the primary is %1.</source>
     <name>StyleEditor</name>
     <message>
         <source>Style name</source>
-        <translation>Stil adı</translation>
+        <translation type="vanished">Stil adı</translation>
     </message>
     <message>
         <source>Style name:</source>
-        <translation>Stil adı:</translation>
+        <translation type="vanished">Stil adı:</translation>
     </message>
 </context>
 <context>
@@ -5601,50 +5609,50 @@ The final volume in the primary is %1.</source>
     <name>YeastDialog</name>
     <message>
         <source>Yeast name</source>
-        <translation>Maya ismi</translation>
+        <translation type="vanished">Maya ismi</translation>
     </message>
     <message>
         <source>Yeast name:</source>
-        <translation>Maya ismi:</translation>
+        <translation type="vanished">Maya ismi:</translation>
     </message>
     <message>
         <source>Yeast Database</source>
-        <translation>Maya Veri Tabanı</translation>
+        <translation type="vanished">Maya Veri Tabanı</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation>Tarife Ekle</translation>
+        <translation type="vanished">Tarife Ekle</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>Yeni</translation>
+        <translation type="vanished">Yeni</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation>Seçili bileşeni tarife ekle</translation>
+        <translation type="vanished">Seçili bileşeni tarife ekle</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation>Yeni bileşen oluştur</translation>
+        <translation type="vanished">Yeni bileşen oluştur</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation>Seçili bileşeni düzenle</translation>
+        <translation type="vanished">Seçili bileşeni düzenle</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation>Seçili bileşeni kaldır</translation>
+        <translation type="vanished">Seçili bileşeni kaldır</translation>
     </message>
 </context>
 <context>
     <name>YeastEditor</name>
     <message>
         <source>Yeast name</source>
-        <translation>Maya ismi</translation>
+        <translation type="vanished">Maya ismi</translation>
     </message>
     <message>
         <source>Yeast name:</source>
-        <translation>Maya ismi:</translation>
+        <translation type="vanished">Maya ismi:</translation>
     </message>
 </context>
 <context>
@@ -8804,7 +8812,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Date First Brewed</source>
-        <translation>İlk Demlendiği Gün</translation>
+        <translation type="vanished">İlk Demlendiği Gün</translation>
     </message>
     <message>
         <source>dd MMM yyyy</source>
@@ -8828,6 +8836,10 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Total apparent attenuation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Date Created</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

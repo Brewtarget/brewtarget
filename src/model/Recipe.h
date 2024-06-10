@@ -211,13 +211,14 @@ public:
 
 
    //=============================================== REGULAR PROPERTIES ================================================
+   //! \brief Folder.  See model/FolderBase for implementation of the getter & setter.
+   Q_PROPERTY(QString folder READ folder WRITE setFolder)
    //
    // Note that boilSize_l and boilTime_min, which were previously properties of Recipe are now moved to Boil.  Given
    // Recipe r:
    //   - to SET a boil size of `double boilSizeLiters`, call `r.nonOptBoil()->setPreBoilSize_l(boilSizeLiters)`;
    //   - to SET a boil time of `double boilTimeMinutes`, call `r.nonOptBoil()->setBoilTime_mins(boilTimeMinutes)`.
    //
-
    //! \brief The \b Type
    Q_PROPERTY(Type    type               READ type               WRITE setType             )
    //! \brief The brewer.  This becomes "author" in BeerJSON

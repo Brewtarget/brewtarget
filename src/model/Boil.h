@@ -28,7 +28,7 @@
 #include "model/NamedEntity.h"
 #include "model/StepOwnerBase.h"
 
-//╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+//======================================================================================================================
 //========================================== Start of property name constants ==========================================
 // See comment in model/NamedEntity.h
 #define AddPropertyName(property) namespace PropertyNames::Boil { BtStringConst const property{#property}; }
@@ -39,7 +39,7 @@ AddPropertyName(boilTime_mins    )
 AddPropertyName(boilSteps        )
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
-//╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+//======================================================================================================================
 
 
 /**
@@ -105,6 +105,8 @@ public:
    static constexpr double minimumBoilTemperature_c{81.0};
 
    //=================================================== PROPERTIES ====================================================
+   //! \brief Folder.  See model/FolderBase for implementation of the getter & setter.
+   Q_PROPERTY(QString folder READ folder WRITE setFolder)
    Q_PROPERTY(QString               description            READ description     WRITE setDescription   )
    Q_PROPERTY(QString               notes                  READ notes           WRITE setNotes         )
    Q_PROPERTY(std::optional<double> preBoilSize_l          READ preBoilSize_l   WRITE setPreBoilSize_l )

@@ -16,6 +16,7 @@ Support for BeerJSON, which includes adding a lot of new fields
 ### New Features
 * Import from, and export to, BeerJSON [388](https://github.com/Brewtarget/brewtarget/issues/388)
 * Support for optional fields (ie where value can be blank)
+* Lovibond as color unit option [428](https://github.com/Brewtarget/brewtarget/issues/428)
 
 ### Bug Fixes
 * Default SQLite database file: hop, fermentable, mashstep, misc and yeast tables have unused columns [557](https://github.com/Brewtarget/brewtarget/issues/557)

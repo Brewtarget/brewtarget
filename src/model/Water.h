@@ -153,8 +153,9 @@ protected:
 public:
    // .:TODO:. On a base or target profile, bicarbonate and alkalinity cannot both be used. I'm gonna have fun figuring that out
 
-   //! \brief The amount in liters. **** MOVED TO RecipeUseOfWater ****
-///   Q_PROPERTY(double amount          READ amount          WRITE setAmount)
+   //=================================================== PROPERTIES ====================================================
+   //! \brief Folder.  See model/FolderBase for implementation of the getter & setter.
+   Q_PROPERTY(QString folder READ folder WRITE setFolder)
    //! \brief The ppm of calcium.  Required in BeerXML and BeerJSON.
    Q_PROPERTY(double calcium_ppm     READ calcium_ppm     WRITE setCalcium_ppm)
    //! \brief The ppm of bicarbonate.  Required in BeerXML and BeerJSON.

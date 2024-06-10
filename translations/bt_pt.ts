@@ -980,11 +980,11 @@
     <name>Database</name>
     <message>
         <source>Merge Database</source>
-        <translation>Mesclar o Banco de Dados</translation>
+        <translation type="vanished">Mesclar o Banco de Dados</translation>
     </message>
     <message>
         <source>There may be new ingredients and recipes available. Would you like to add these to your database?</source>
-        <translation>Existem novos ingredientes e receitas disponíveis. Deseja adicioná-las ao seu Banco de Dados?</translation>
+        <translation type="vanished">Existem novos ingredientes e receitas disponíveis. Deseja adicioná-las ao seu Banco de Dados?</translation>
     </message>
     <message>
         <source>Database password</source>
@@ -1014,14 +1014,6 @@
         <source>Successfully read new default data
 
 %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Unable to import new default data
-
-%1
-
-Log file may contain more details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1094,6 +1086,14 @@ If you didn&apos;t yet do this, click Abort.</source>
 %1</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Unable to import some or all of new default data
+
+%1
+
+Log file may contain more details.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Equipment</name>
@@ -1106,7 +1106,7 @@ If you didn&apos;t yet do this, click Abort.</source>
     <name>EquipmentEditor</name>
     <message>
         <source>Grain absorption (%1/%2)</source>
-        <translation>Absorção de Grãos (%1 / %2)</translation>
+        <translation type="vanished">Absorção de Grãos (%1 / %2)</translation>
     </message>
     <message>
         <source>Tun Volume Warning</source>
@@ -1118,11 +1118,11 @@ If you didn&apos;t yet do this, click Abort.</source>
     </message>
     <message>
         <source>Equipment name</source>
-        <translation>Nome do Equipamento</translation>
+        <translation type="vanished">Nome do Equipamento</translation>
     </message>
     <message>
         <source>Equipment name:</source>
-        <translation>Nome do Equipamento</translation>
+        <translation type="vanished">Nome do Equipamento</translation>
     </message>
     <message>
         <source>The tun volume you entered is 0. This may cause problems</source>
@@ -1293,10 +1293,6 @@ If you didn&apos;t yet do this, click Abort.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>This equipment profile may break Brewtarget&apos;s maths</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>This equipment profile may break %1&apos;s maths</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1443,50 +1439,50 @@ If you didn&apos;t yet do this, click Abort.</source>
     <name>FermentableDialog</name>
     <message>
         <source>Fermentable name</source>
-        <translation>Nome do Fermentável</translation>
+        <translation type="vanished">Nome do Fermentável</translation>
     </message>
     <message>
         <source>Fermentable name:</source>
-        <translation>Nome do Fermentável</translation>
+        <translation type="vanished">Nome do Fermentável</translation>
     </message>
     <message>
         <source>Fermentable Database</source>
-        <translation>Banco de Dados de Fermentáveis</translation>
+        <translation type="vanished">Banco de Dados de Fermentáveis</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation>Adicionar a receita</translation>
+        <translation type="vanished">Adicionar a receita</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>Novo</translation>
+        <translation type="vanished">Novo</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation>Adicionar ingrediente selecionado à receita</translation>
+        <translation type="vanished">Adicionar ingrediente selecionado à receita</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation>Criar novo ingrediente</translation>
+        <translation type="vanished">Criar novo ingrediente</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation>Editar ingrediente selecionado</translation>
+        <translation type="vanished">Editar ingrediente selecionado</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation>Remover ingrediente selecionado</translation>
+        <translation type="vanished">Remover ingrediente selecionado</translation>
     </message>
 </context>
 <context>
     <name>FermentableEditor</name>
     <message>
         <source>Fermentable name</source>
-        <translation type="unfinished">Nome do Fermentável</translation>
+        <translation type="obsolete">Nome do Fermentável</translation>
     </message>
     <message>
         <source>Fermentable name:</source>
-        <translation type="unfinished">Nome do Fermentável</translation>
+        <translation type="obsolete">Nome do Fermentável</translation>
     </message>
 </context>
 <context>
@@ -1766,94 +1762,70 @@ If you didn&apos;t yet do this, click Abort.</source>
     <name>HopDialog</name>
     <message>
         <source>Hop name</source>
-        <translation>Nome do Lúpulo</translation>
+        <translation type="vanished">Nome do Lúpulo</translation>
     </message>
     <message>
         <source>Hop name:</source>
-        <translation>Nome do Lúpulo:</translation>
+        <translation type="vanished">Nome do Lúpulo:</translation>
     </message>
     <message>
         <source>Hop Database</source>
-        <translation>Banco de Dados de Lúpulo</translation>
+        <translation type="vanished">Banco de Dados de Lúpulo</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation>Adicionar a receita</translation>
+        <translation type="vanished">Adicionar a receita</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>Novo</translation>
+        <translation type="vanished">Novo</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation>Adicionar ingrediente selecionado à receita</translation>
+        <translation type="vanished">Adicionar ingrediente selecionado à receita</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation>Criar novo ingrediente</translation>
+        <translation type="vanished">Criar novo ingrediente</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation>Editar ingrediente selecionado</translation>
+        <translation type="vanished">Editar ingrediente selecionado</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation>Remover ingrediente selecionado</translation>
+        <translation type="vanished">Remover ingrediente selecionado</translation>
     </message>
 </context>
 <context>
     <name>HopEditor</name>
     <message>
         <source>Hop name</source>
-        <translation type="unfinished">Nome do Lúpulo</translation>
+        <translation type="obsolete">Nome do Lúpulo</translation>
     </message>
     <message>
         <source>Hop name:</source>
-        <translation type="unfinished">Nome do Lúpulo:</translation>
+        <translation type="obsolete">Nome do Lúpulo:</translation>
     </message>
     <message>
         <source>Bittering</source>
-        <translation type="unfinished">Amargor</translation>
+        <translation type="obsolete">Amargor</translation>
     </message>
     <message>
         <source>Aroma</source>
-        <translation type="unfinished">Aroma</translation>
+        <translation type="obsolete">Aroma</translation>
     </message>
     <message>
         <source>Leaf</source>
-        <translation type="unfinished">Folha</translation>
+        <translation type="obsolete">Folha</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished">Mosto</translation>
+        <translation type="obsolete">Mosto</translation>
     </message>
     <message>
         <source>First Wort</source>
-        <translation type="unfinished">Primeiro mosto</translation>
-    </message>
-    <message>
-        <source>Aroma &amp; Bittering</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Pellet</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Plug</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Boil</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Post-Boil</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Dry Hop</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Primeiro mosto</translation>
     </message>
 </context>
 <context>
@@ -2613,50 +2585,50 @@ If you need help, please open an issue at %1</source>
     <name>MiscDialog</name>
     <message>
         <source>Misc name</source>
-        <translation>Nome do Adjunto</translation>
+        <translation type="vanished">Nome do Adjunto</translation>
     </message>
     <message>
         <source>Misc name:</source>
-        <translation>Nome do Adjunto</translation>
+        <translation type="vanished">Nome do Adjunto</translation>
     </message>
     <message>
         <source>Misc Database</source>
-        <translation>Banco de Dados de Adjuntos</translation>
+        <translation type="vanished">Banco de Dados de Adjuntos</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation>Adicionar a receita</translation>
+        <translation type="vanished">Adicionar a receita</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>Novo</translation>
+        <translation type="vanished">Novo</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation>Adicionar ingrediente selecionado à receita</translation>
+        <translation type="vanished">Adicionar ingrediente selecionado à receita</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation>Criar novo ingrediente</translation>
+        <translation type="vanished">Criar novo ingrediente</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation>Editar ingrediente selecionado</translation>
+        <translation type="vanished">Editar ingrediente selecionado</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation>Remover ingrediente selecionado</translation>
+        <translation type="vanished">Remover ingrediente selecionado</translation>
     </message>
 </context>
 <context>
     <name>MiscEditor</name>
     <message>
         <source>Misc name</source>
-        <translation type="unfinished">Nome do Adjunto</translation>
+        <translation type="obsolete">Nome do Adjunto</translation>
     </message>
     <message>
         <source>Misc name:</source>
-        <translation type="unfinished">Nome do Adjunto</translation>
+        <translation type="obsolete">Nome do Adjunto</translation>
     </message>
 </context>
 <context>
@@ -3880,6 +3852,18 @@ Log file may contain more details.</source>
         <source>Could not open %1 for reading (error # %2)</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Merge Database</source>
+        <translation type="unfinished">Mesclar o Banco de Dados</translation>
+    </message>
+    <message>
+        <source>New ingredients etc are available. Would you like to add them to your database?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error matching %1 file pattern in %2 directory</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Recipe</name>
@@ -5093,11 +5077,11 @@ O volume final do fermentador primário é %1.</translation>
     <name>StyleEditor</name>
     <message>
         <source>Style name</source>
-        <translation>Nome do estilo</translation>
+        <translation type="vanished">Nome do estilo</translation>
     </message>
     <message>
         <source>Style name:</source>
-        <translation>Nome do estilo:</translation>
+        <translation type="vanished">Nome do estilo:</translation>
     </message>
 </context>
 <context>
@@ -5639,50 +5623,50 @@ O volume final do fermentador primário é %1.</translation>
     <name>YeastDialog</name>
     <message>
         <source>Yeast name</source>
-        <translation>Nome da levedura</translation>
+        <translation type="vanished">Nome da levedura</translation>
     </message>
     <message>
         <source>Yeast name:</source>
-        <translation>Nome da levedura:</translation>
+        <translation type="vanished">Nome da levedura:</translation>
     </message>
     <message>
         <source>Yeast Database</source>
-        <translation>Banco de Dados de Levedura</translation>
+        <translation type="vanished">Banco de Dados de Levedura</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation>Adicionar a receita</translation>
+        <translation type="vanished">Adicionar a receita</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>Novo</translation>
+        <translation type="vanished">Novo</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation>Adicionar ingrediente selecionado à receita</translation>
+        <translation type="vanished">Adicionar ingrediente selecionado à receita</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation>Criar novo ingrediente</translation>
+        <translation type="vanished">Criar novo ingrediente</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation>Editar ingrediente selecionado</translation>
+        <translation type="vanished">Editar ingrediente selecionado</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation>Remover ingrediente selecionado</translation>
+        <translation type="vanished">Remover ingrediente selecionado</translation>
     </message>
 </context>
 <context>
     <name>YeastEditor</name>
     <message>
         <source>Yeast name</source>
-        <translation type="unfinished">Nome da levedura</translation>
+        <translation type="obsolete">Nome da levedura</translation>
     </message>
     <message>
         <source>Yeast name:</source>
-        <translation type="unfinished">Nome da levedura:</translation>
+        <translation type="obsolete">Nome da levedura:</translation>
     </message>
 </context>
 <context>
@@ -9173,7 +9157,7 @@ O volume final do fermentador primário é %1.</translation>
     </message>
     <message>
         <source>Date First Brewed</source>
-        <translation>Primeira Data de Cerveja Produzida</translation>
+        <translation type="vanished">Primeira Data de Cerveja Produzida</translation>
     </message>
     <message>
         <source>dd MMM yyyy</source>
@@ -9197,6 +9181,10 @@ O volume final do fermentador primário é %1.</translation>
     </message>
     <message>
         <source>Total apparent attenuation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Date Created</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

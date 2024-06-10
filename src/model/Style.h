@@ -139,6 +139,9 @@ public:
 
    virtual ~Style();
 
+   //=================================================== PROPERTIES ====================================================
+   //! \brief Folder.  See model/FolderBase for implementation of the getter & setter.
+   Q_PROPERTY(QString folder READ folder WRITE setFolder)
    //! \brief The category.
    Q_PROPERTY(QString category                       READ category           WRITE setCategory         )
    //! \brief The category number.
