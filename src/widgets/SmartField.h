@@ -130,12 +130,12 @@ public:
     *                 need to handle blank / empty string as a valid value).
     *
     * \param buddyLabel Usually needs to be \c QLabel if \c fieldType is a \c NonPhysicalQuantity and \c SmartLabel if
-    *                   it is not.  However, a \c PhysicalQuantity (or \c Mixed2PhysicalQuantities) field can have a
-    *                   \c QLabel (rather than a \c SmartLabel) where the user does \b not have a choice about units or
-    *                   scales (even though they otherwise would for this sort of \c PhysicalQuantity).  This is
-    *                   typically used on conversion dialogs, eg \c RefractoDialog, where we are asking the user to give
-    *                   us inputs in specific units in order to convert them to other units measuring the same physical
-    *                   quantity.
+    *                   it is not.  However, a \c PhysicalQuantity (or \c Measurement::ChoiceOfPhysicalQuantity) field
+    *                   can have a \c QLabel (rather than a \c SmartLabel) where the user does \b not have a choice
+    *                   about units or scales (even though they otherwise would for this sort of \c PhysicalQuantity).
+    *                   This is typically used on conversion dialogs, eg \c RefractoDialog, where we are asking the user
+    *                   to give us inputs in specific units in order to convert them to other units measuring the same
+    *                   physical quantity.
     *
     * \param precision For a decimal field, this determines the number of decimal places to show.  If not specified, we
     *                  show 3 decimal places.  TBD: IDK if one day we might need to be more sophisticated about this, ie
@@ -208,7 +208,8 @@ public:
    /**
     * \brief Maybe for consistency this should be \c getSettings() but that jars somewhat!
     */
-   [[nodiscard]] SmartAmountSettings & settings();
+   [[nodiscard]] SmartAmountSettings const & settings() const;
+///   [[nodiscard]] SmartAmountSettings       & settings();
 
    QString const & getMaximalDisplayString() const;
 

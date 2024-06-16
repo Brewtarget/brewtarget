@@ -138,17 +138,21 @@ public:
          Q_FUNC_INFO << "enteredText:" << enteredText <<  ", old SystemOfMeasurement:" <<
          previousScaleInfo.systemOfMeasurement << ", old RelativeScale: " << previousScaleInfo.relativeScale;
 
-      Measurement::UnitSystem const & oldUnitSystem = this->m_self.getUnitSystem(previousScaleInfo);
 
-      Measurement::Unit const * defaultUnit{
-         previousScaleInfo.relativeScale ? oldUnitSystem.scaleUnit(*previousScaleInfo.relativeScale) : oldUnitSystem.unit()
+      auto physicalQuantity{this->m_self.settings().getPhysicalQuantity()};
+      Measurement::UnitSystem const & unitSystem{
+         Measurement::UnitSystem::getInstance(previousScaleInfo.systemOfMeasurement, physicalQuantity)
       };
 
-      // It's a coding error if defaultUnit is null, because it means previousScaleInfo.relativeScale was not valid for
-      // oldUnitSystem.  However, we can recover.
+      qDebug() << Q_FUNC_INFO << "¥¥¥ unitSystem" << unitSystem;
+
+      Measurement::Unit const * defaultUnit{
+         previousScaleInfo.relativeScale ? unitSystem.scaleUnit(*previousScaleInfo.relativeScale) : unitSystem.unit()
+      };
+
       if (!defaultUnit) {
          qWarning() << Q_FUNC_INFO << "previousScaleInfo.relativeScale invalid?" << previousScaleInfo.relativeScale;
-         defaultUnit = oldUnitSystem.unit();
+         defaultUnit = unitSystem.unit();
          if (ok) {
             *ok = false;
          }
@@ -166,7 +170,7 @@ public:
       // have old or current units then that helps with this - eg, if current units are US customary cups and user enters
       // gallons, then we'll go with US customary gallons over Imperial ones.)
       //
-      auto amount = oldUnitSystem.qstringToSI(enteredText, *defaultUnit);
+      auto amount = unitSystem.qstringToSI(enteredText, *defaultUnit);
       qDebug() << Q_FUNC_INFO << "Converted to" << amount;
       if (ok) {
          *ok = true;
@@ -264,7 +268,7 @@ void SmartField::initFixed(char const *                const   editorName,
   return this->pimpl->m_initialised;
 }
 
-[[nodiscard]] SmartAmountSettings & SmartField::settings() {
+[[nodiscard]] SmartAmountSettings const & SmartField::settings() const {
    // Note that this can be called from within this class before we have set the this->pimpl->m_initialised flag
    if (this->pimpl->m_smartBuddyLabel) {
       return this->pimpl->m_smartBuddyLabel->settings();

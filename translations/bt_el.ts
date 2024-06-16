@@ -6645,15 +6645,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Check it if the amount listed is in kg instead of L.</source>
-        <translation type="unfinished">Τσέκαρε το εαν το ποσό που αναγράφεται είναι σε κιλά αντί για λίτρα</translation>
+        <translation type="obsolete">Τσέκαρε το εαν το ποσό που αναγράφεται είναι σε κιλά αντί για λίτρα</translation>
     </message>
     <message>
         <source>Amount is weight?</source>
-        <translation type="unfinished">Το ποσό αναφέρεται σε βάρος;</translation>
-    </message>
-    <message>
-        <source>Checked if the given amount is weight instead of volume</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Το ποσό αναφέρεται σε βάρος;</translation>
     </message>
     <message>
         <source>Producer</source>
@@ -6742,6 +6738,14 @@ The final volume in the primary is %1.</source>
     <message>
         <source>Beta-glucans</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Whether the amount is weight or volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount Type</source>
+        <translation type="unfinished">Μονάδα μέτρησης</translation>
     </message>
 </context>
 <context>
@@ -9691,15 +9695,15 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Check it if the amount given is in kg instead of L.</source>
-        <translation>Έλεγχος εάν η ποσότητα είναι σε κιλά αντί για λίτρα</translation>
+        <translation type="vanished">Έλεγχος εάν η ποσότητα είναι σε κιλά αντί για λίτρα</translation>
     </message>
     <message>
         <source>Amount is weight?</source>
-        <translation>Το ποσό αναφέρεται σε βάρος;</translation>
+        <translation type="vanished">Το ποσό αναφέρεται σε βάρος;</translation>
     </message>
     <message>
         <source>Checked if the given amount is weight instead of volume</source>
-        <translation>Τσέκαρε  εάν το νούμερο αναφέρεται σε βάρος αντί για όγκο</translation>
+        <translation type="vanished">Τσέκαρε  εάν το νούμερο αναφέρεται σε βάρος αντί για όγκο</translation>
     </message>
     <message>
         <source>Lab</source>

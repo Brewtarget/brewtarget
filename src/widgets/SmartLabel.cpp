@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * widgets/SmartLabel.cpp is part of Brewtarget, and is copyright the following authors 2009-2023:
+ * widgets/SmartLabel.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Mark de Wever <koraq@xs4all.nl>
  *   • Matt Young <mfsy@yahoo.com>
@@ -82,7 +82,7 @@ void SmartLabel::init(char const * const   editorName,
   return this->pimpl->m_initialised;
 }
 
-[[nodiscard]] SmartAmountSettings & SmartLabel::settings() {
+[[nodiscard]] SmartAmountSettings const & SmartLabel::settings() const {
    Q_ASSERT(this->pimpl->m_initialised);
    Q_ASSERT(this->pimpl->m_settings);
    return *this->pimpl->m_settings.get();

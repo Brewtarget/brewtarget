@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * widgets/UnitAndScalePopUpMenu.h is part of Brewtarget, and is copyright the following authors 2012-2023:
+ * widgets/UnitAndScalePopUpMenu.h is part of Brewtarget, and is copyright the following authors 2012-2024:
  *   • Mark de Wever <koraq@xs4all.nl>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -44,7 +44,7 @@ namespace UnitAndScalePopUpMenu {
     * \param forcedSystemOfMeasurement the current \c SystemOfMeasurement, if any, specified for the UI field.  (If none
     *                                  is specified then the global default is used.)
     * \param forcedRelativeScale the forced scale, if any, for displaying the field.  (NB: Should always be
-    *                            \c std::nullopt_t if \c physicalQuantity is \c Mixed2PhysicalQuantities.)
+    *                            \c std::nullopt if \c physicalQuantities is \c Measurement::ChoiceOfPhysicalQuantity.)
     *
     * \return New \c QMenu "owned" by \c parent, but see comment in \c widgets/SmartLabel.cpp for why we return
     *         unique pointer so that caller really owns the object -- essentially the returned object typically has a

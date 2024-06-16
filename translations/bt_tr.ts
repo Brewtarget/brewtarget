@@ -6594,15 +6594,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Check it if the amount listed is in kg instead of L.</source>
-        <translation type="unfinished">Miktarın L yerine KG olarak listelendiğini kontrol edin.</translation>
+        <translation type="obsolete">Miktarın L yerine KG olarak listelendiğini kontrol edin.</translation>
     </message>
     <message>
         <source>Amount is weight?</source>
-        <translation type="unfinished">Miktar ağırlık mı?</translation>
-    </message>
-    <message>
-        <source>Checked if the given amount is weight instead of volume</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Miktar ağırlık mı?</translation>
     </message>
     <message>
         <source>Producer</source>
@@ -6691,6 +6687,14 @@ The final volume in the primary is %1.</source>
     <message>
         <source>Beta-glucans</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Whether the amount is weight or volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount Type</source>
+        <translation type="unfinished">Miktar Türü</translation>
     </message>
 </context>
 <context>
@@ -9344,15 +9348,15 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Check it if the amount given is in kg instead of L.</source>
-        <translation>Miktarın L yerine KG olarak listelendiğini kontrol edin.</translation>
+        <translation type="vanished">Miktarın L yerine KG olarak listelendiğini kontrol edin.</translation>
     </message>
     <message>
         <source>Amount is weight?</source>
-        <translation>Miktar ağırlık mı?</translation>
+        <translation type="vanished">Miktar ağırlık mı?</translation>
     </message>
     <message>
         <source>Checked if the given amount is weight instead of volume</source>
-        <translation>Miktarın hacim yerine ağırlık olarak listelendiğini kontrol edin</translation>
+        <translation type="vanished">Miktarın hacim yerine ağırlık olarak listelendiğini kontrol edin</translation>
     </message>
     <message>
         <source>Lab</source>

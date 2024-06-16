@@ -256,7 +256,6 @@ set(filesToCompile_cpp
     ${repoDir}/src/widgets/SelectionControl.cpp
     ${repoDir}/src/widgets/SmartAmountSettings.cpp
     ${repoDir}/src/widgets/SmartAmounts.cpp
-    ${repoDir}/src/widgets/SmartCheckBox.cpp
     ${repoDir}/src/widgets/SmartDigitWidget.cpp
     ${repoDir}/src/widgets/SmartField.cpp
     ${repoDir}/src/widgets/SmartLabel.cpp

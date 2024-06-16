@@ -6736,15 +6736,11 @@ Il Volume finale del primo è %1.</translation>
     </message>
     <message>
         <source>Check it if the amount listed is in kg instead of L.</source>
-        <translation type="unfinished">Controllare se l&apos;importo indicato è in kg invece di L.</translation>
-    </message>
-    <message>
-        <source>Amount is weight?</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Controllare se l&apos;importo indicato è in kg invece di L.</translation>
     </message>
     <message>
         <source>Checked if the given amount is weight instead of volume</source>
-        <translation type="unfinished">Controlla se la data quantità è peso invece di volume</translation>
+        <translation type="obsolete">Controlla se la data quantità è peso invece di volume</translation>
     </message>
     <message>
         <source>Producer</source>
@@ -6833,6 +6829,14 @@ Il Volume finale del primo è %1.</translation>
     <message>
         <source>Beta-glucans</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Whether the amount is weight or volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount Type</source>
+        <translation type="unfinished">Tipo di Quantità</translation>
     </message>
 </context>
 <context>
@@ -9804,15 +9808,15 @@ Il Volume finale del primo è %1.</translation>
     </message>
     <message>
         <source>Check it if the amount given is in kg instead of L.</source>
-        <translation>Controllare se l&apos;importo indicato è in kg invece di L.</translation>
+        <translation type="vanished">Controllare se l&apos;importo indicato è in kg invece di L.</translation>
     </message>
     <message>
         <source>Amount is weight?</source>
-        <translation>Importo è il peso?</translation>
+        <translation type="vanished">Importo è il peso?</translation>
     </message>
     <message>
         <source>Checked if the given amount is weight instead of volume</source>
-        <translation>Controlla se la data quantità è peso invece di volume</translation>
+        <translation type="vanished">Controlla se la data quantità è peso invece di volume</translation>
     </message>
     <message>
         <source>Lab</source>

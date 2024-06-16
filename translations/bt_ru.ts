@@ -6707,15 +6707,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Check it if the amount listed is in kg instead of L.</source>
-        <translation type="unfinished">Включите, если количество задано в кг, а не в литрах.</translation>
+        <translation type="obsolete">Включите, если количество задано в кг, а не в литрах.</translation>
     </message>
     <message>
         <source>Amount is weight?</source>
-        <translation type="unfinished">Количество - вес?</translation>
-    </message>
-    <message>
-        <source>Checked if the given amount is weight instead of volume</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Количество - вес?</translation>
     </message>
     <message>
         <source>Producer</source>
@@ -6803,6 +6799,14 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Beta-glucans</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Whether the amount is weight or volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount Type</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -9741,15 +9745,15 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Check it if the amount given is in kg instead of L.</source>
-        <translation>Отметьте, если количество указано в кг вместо л.</translation>
+        <translation type="vanished">Отметьте, если количество указано в кг вместо л.</translation>
     </message>
     <message>
         <source>Amount is weight?</source>
-        <translation>Количество - вес?</translation>
+        <translation type="vanished">Количество - вес?</translation>
     </message>
     <message>
         <source>Checked if the given amount is weight instead of volume</source>
-        <translation>Отмечено, если указанное количество - вес, а не объем</translation>
+        <translation type="vanished">Отмечено, если указанное количество - вес, а не объем</translation>
     </message>
     <message>
         <source>Lab</source>

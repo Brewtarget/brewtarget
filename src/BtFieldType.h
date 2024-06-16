@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * BtFieldType.h is part of Brewtarget, and is copyright the following authors 2022-2023:
+ * BtFieldType.h is part of Brewtarget, and is copyright the following authors 2022-2024:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -44,6 +44,9 @@ enum class NonPhysicalQuantity {
     *
     * This is also used for "number of times" something has been done or is to be done.  Eg number of times a yeast
     * sample has been cultured or reused.  Similarly, it's used for the number of fermentation stages in a Recipe.
+    *
+    * NOTE, however, this is NOT used for "number of things" (eg number of packets of yeast).  For that, we use
+    * Measurement::PhysicalQuantity::Count, for the reasons explained in measurement/PhysicalQuantity.h.
     */
    OrdinalNumeral,
    /**

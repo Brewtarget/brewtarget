@@ -6717,15 +6717,11 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Check it if the amount listed is in kg instead of L.</source>
-        <translation type="unfinished">Controleer of de hoeveelheid vermeld staat in kg i.p.v. L.</translation>
+        <translation type="obsolete">Controleer of de hoeveelheid vermeld staat in kg i.p.v. L.</translation>
     </message>
     <message>
         <source>Amount is weight?</source>
-        <translation type="unfinished">Hoeveelheid is gewicht?</translation>
-    </message>
-    <message>
-        <source>Checked if the given amount is weight instead of volume</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Hoeveelheid is gewicht?</translation>
     </message>
     <message>
         <source>Producer</source>
@@ -6814,6 +6810,14 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     <message>
         <source>Beta-glucans</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Whether the amount is weight or volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount Type</source>
+        <translation type="unfinished">Hoeveelheid Type</translation>
     </message>
 </context>
 <context>
@@ -9639,15 +9643,15 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Check it if the amount given is in kg instead of L.</source>
-        <translation>Controleer of de opgegeven hoeveelheid in kg is i.p.v.in L.</translation>
+        <translation type="vanished">Controleer of de opgegeven hoeveelheid in kg is i.p.v.in L.</translation>
     </message>
     <message>
         <source>Amount is weight?</source>
-        <translation>Hoeveelheid is gewicht?</translation>
+        <translation type="vanished">Hoeveelheid is gewicht?</translation>
     </message>
     <message>
         <source>Checked if the given amount is weight instead of volume</source>
-        <translation>Controleer of de opgegeven hoeveelheid een gewicht is i.p.v. een volume</translation>
+        <translation type="vanished">Controleer of de opgegeven hoeveelheid een gewicht is i.p.v. een volume</translation>
     </message>
     <message>
         <source>Lab</source>

@@ -6581,15 +6581,15 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Check it if the amount listed is in kg instead of L.</source>
-        <translation type="unfinished">检查如果上市量（公斤）代替L。</translation>
+        <translation type="obsolete">检查如果上市量（公斤）代替L。</translation>
     </message>
     <message>
         <source>Amount is weight?</source>
-        <translation type="unfinished">金额重量？Amount is weight?</translation>
+        <translation type="obsolete">金额重量？Amount is weight?</translation>
     </message>
     <message>
         <source>Checked if the given amount is weight instead of volume</source>
-        <translation type="unfinished">检查，如果给定的量是重量，而不是数量</translation>
+        <translation type="obsolete">检查，如果给定的量是重量，而不是数量</translation>
     </message>
     <message>
         <source>Producer</source>
@@ -6678,6 +6678,14 @@ The final volume in the primary is %1.</source>
     <message>
         <source>Beta-glucans</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Whether the amount is weight or volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount Type</source>
+        <translation type="unfinished">金额类型MiscTableModel |</translation>
     </message>
 </context>
 <context>
@@ -9611,15 +9619,15 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Check it if the amount given is in kg instead of L.</source>
-        <translation>如果给定的数量是公斤代替L.检查Check it if the amount given is in kg instead of L.</translation>
+        <translation type="vanished">如果给定的数量是公斤代替L.检查Check it if the amount given is in kg instead of L.</translation>
     </message>
     <message>
         <source>Amount is weight?</source>
-        <translation>金额重量？Amount is weight?</translation>
+        <translation type="vanished">金额重量？Amount is weight?</translation>
     </message>
     <message>
         <source>Checked if the given amount is weight instead of volume</source>
-        <translation>检查，如果给定的量是重量，而不是数量</translation>
+        <translation type="vanished">检查，如果给定的量是重量，而不是数量</translation>
     </message>
     <message>
         <source>Lab</source>
