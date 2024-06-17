@@ -992,11 +992,11 @@
     <name>Database</name>
     <message>
         <source>Merge Database</source>
-        <translation>Объединение базы данных</translation>
+        <translation type="vanished">Объединение базы данных</translation>
     </message>
     <message>
         <source>There may be new ingredients and recipes available. Would you like to add these to your database?</source>
-        <translation>Возможно доступны новые ингридиенты и рецепты. Желаете добавить их в вашу базу данных?</translation>
+        <translation type="vanished">Возможно доступны новые ингридиенты и рецепты. Желаете добавить их в вашу базу данных?</translation>
     </message>
     <message>
         <source>Database password</source>
@@ -1026,14 +1026,6 @@
         <source>Successfully read new default data
 
 %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Unable to import new default data
-
-%1
-
-Log file may contain more details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1106,6 +1098,14 @@ If you didn&apos;t yet do this, click Abort.</source>
 %1</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Unable to import some or all of new default data
+
+%1
+
+Log file may contain more details.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Equipment</name>
@@ -1118,7 +1118,7 @@ If you didn&apos;t yet do this, click Abort.</source>
     <name>EquipmentEditor</name>
     <message>
         <source>Grain absorption (%1/%2)</source>
-        <translation>Поглощение дробиной (%1/%2)</translation>
+        <translation type="vanished">Поглощение дробиной (%1/%2)</translation>
     </message>
     <message>
         <source>Tun Volume Warning</source>
@@ -1130,11 +1130,11 @@ If you didn&apos;t yet do this, click Abort.</source>
     </message>
     <message>
         <source>Equipment name</source>
-        <translation>Название оборудования</translation>
+        <translation type="vanished">Название оборудования</translation>
     </message>
     <message>
         <source>Equipment name:</source>
-        <translation>Название оборудования:</translation>
+        <translation type="vanished">Название оборудования:</translation>
     </message>
     <message>
         <source>The tun volume you entered is 0. This may cause problems</source>
@@ -1305,10 +1305,6 @@ If you didn&apos;t yet do this, click Abort.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>This equipment profile may break Brewtarget&apos;s maths</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>This equipment profile may break %1&apos;s maths</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1455,50 +1451,50 @@ If you didn&apos;t yet do this, click Abort.</source>
     <name>FermentableDialog</name>
     <message>
         <source>Fermentable name</source>
-        <translation>Название сбраживаемого</translation>
+        <translation type="vanished">Название сбраживаемого</translation>
     </message>
     <message>
         <source>Fermentable name:</source>
-        <translation>Название сбраживаемого</translation>
+        <translation type="vanished">Название сбраживаемого</translation>
     </message>
     <message>
         <source>Fermentable Database</source>
-        <translation>База сбраживаемых ингридиентов</translation>
+        <translation type="vanished">База сбраживаемых ингридиентов</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation>Добавить в рецепт</translation>
+        <translation type="vanished">Добавить в рецепт</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>Новый</translation>
+        <translation type="vanished">Новый</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation>Добавить выбранный ингредиент в рецепт</translation>
+        <translation type="vanished">Добавить выбранный ингредиент в рецепт</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation>Создать новый ингредиент</translation>
+        <translation type="vanished">Создать новый ингредиент</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation>Изменить выбранный ингредиент</translation>
+        <translation type="vanished">Изменить выбранный ингредиент</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation>Удалить выбранный ингредиент</translation>
+        <translation type="vanished">Удалить выбранный ингредиент</translation>
     </message>
 </context>
 <context>
     <name>FermentableEditor</name>
     <message>
         <source>Fermentable name</source>
-        <translation type="unfinished">Название сбраживаемого</translation>
+        <translation type="obsolete">Название сбраживаемого</translation>
     </message>
     <message>
         <source>Fermentable name:</source>
-        <translation type="unfinished">Название сбраживаемого</translation>
+        <translation type="obsolete">Название сбраживаемого</translation>
     </message>
 </context>
 <context>
@@ -1778,58 +1774,58 @@ If you didn&apos;t yet do this, click Abort.</source>
     <name>HopDialog</name>
     <message>
         <source>Hop name</source>
-        <translation>Название хмеля</translation>
+        <translation type="vanished">Название хмеля</translation>
     </message>
     <message>
         <source>Hop name:</source>
-        <translation>Название хмеля:</translation>
+        <translation type="vanished">Название хмеля:</translation>
     </message>
     <message>
         <source>Hop Database</source>
-        <translation>База данных сортов хмеля</translation>
+        <translation type="vanished">База данных сортов хмеля</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation>Добавить в рецепт</translation>
+        <translation type="vanished">Добавить в рецепт</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>Новый</translation>
+        <translation type="vanished">Новый</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation>Добавить выбранный ингредиент в рецепт</translation>
+        <translation type="vanished">Добавить выбранный ингредиент в рецепт</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation>Создать новый ингредиент</translation>
+        <translation type="vanished">Создать новый ингредиент</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation>Изменить выбранный ингредиент</translation>
+        <translation type="vanished">Изменить выбранный ингредиент</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation>Удалить выбранный ингредиент</translation>
+        <translation type="vanished">Удалить выбранный ингредиент</translation>
     </message>
 </context>
 <context>
     <name>HopEditor</name>
     <message>
         <source>Hop name</source>
-        <translation type="unfinished">Название хмеля</translation>
+        <translation type="obsolete">Название хмеля</translation>
     </message>
     <message>
         <source>Hop name:</source>
-        <translation type="unfinished">Название хмеля:</translation>
+        <translation type="obsolete">Название хмеля:</translation>
     </message>
     <message>
         <source>Bittering</source>
-        <translation type="unfinished">Горечь</translation>
+        <translation type="obsolete">Горечь</translation>
     </message>
     <message>
         <source>Aroma</source>
-        <translation type="unfinished">Аромат</translation>
+        <translation type="obsolete">Аромат</translation>
     </message>
     <message>
         <source>Extract</source>
@@ -1837,39 +1833,23 @@ If you didn&apos;t yet do this, click Abort.</source>
     </message>
     <message>
         <source>Plug</source>
-        <translation type="unfinished">Пробка</translation>
+        <translation type="obsolete">Пробка</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished">Затор</translation>
+        <translation type="obsolete">Затор</translation>
     </message>
     <message>
         <source>First Wort</source>
-        <translation type="unfinished">Первое сусло</translation>
+        <translation type="obsolete">Первое сусло</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation type="unfinished">Кипячение</translation>
+        <translation type="obsolete">Кипячение</translation>
     </message>
     <message>
         <source>Dry Hop</source>
-        <translation type="unfinished">Сухое охмеление</translation>
-    </message>
-    <message>
-        <source>Aroma &amp; Bittering</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Leaf</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Pellet</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Post-Boil</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Сухое охмеление</translation>
     </message>
 </context>
 <context>
@@ -2629,50 +2609,50 @@ If you need help, please open an issue at %1</source>
     <name>MiscDialog</name>
     <message>
         <source>Misc name</source>
-        <translation>Разное имя</translation>
+        <translation type="vanished">Разное имя</translation>
     </message>
     <message>
         <source>Misc name:</source>
-        <translation>Разное имя:</translation>
+        <translation type="vanished">Разное имя:</translation>
     </message>
     <message>
         <source>Misc Database</source>
-        <translation>База данных прочих ингредиентов</translation>
+        <translation type="vanished">База данных прочих ингредиентов</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation>Добавить в рецепт</translation>
+        <translation type="vanished">Добавить в рецепт</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>Новый</translation>
+        <translation type="vanished">Новый</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation>Добавить выбранный ингредиент в рецепт</translation>
+        <translation type="vanished">Добавить выбранный ингредиент в рецепт</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation>Создать новый ингредиент</translation>
+        <translation type="vanished">Создать новый ингредиент</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation>Изменить выбранный ингредиент</translation>
+        <translation type="vanished">Изменить выбранный ингредиент</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation>Удалить выбранный ингредиент</translation>
+        <translation type="vanished">Удалить выбранный ингредиент</translation>
     </message>
 </context>
 <context>
     <name>MiscEditor</name>
     <message>
         <source>Misc name</source>
-        <translation type="unfinished">Разное имя</translation>
+        <translation type="obsolete">Разное имя</translation>
     </message>
     <message>
         <source>Misc name:</source>
-        <translation type="unfinished">Разное имя:</translation>
+        <translation type="obsolete">Разное имя:</translation>
     </message>
 </context>
 <context>
@@ -3900,6 +3880,18 @@ Log file may contain more details.</source>
         <source>Could not open %1 for reading (error # %2)</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Merge Database</source>
+        <translation type="unfinished">Объединение базы данных</translation>
+    </message>
+    <message>
+        <source>New ingredients etc are available. Would you like to add them to your database?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error matching %1 file pattern in %2 directory</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Recipe</name>
@@ -5113,11 +5105,11 @@ The final volume in the primary is %1.</source>
     <name>StyleEditor</name>
     <message>
         <source>Style name</source>
-        <translation>Название стиля</translation>
+        <translation type="vanished">Название стиля</translation>
     </message>
     <message>
         <source>Style name:</source>
-        <translation>Название стиля</translation>
+        <translation type="vanished">Название стиля</translation>
     </message>
 </context>
 <context>
@@ -5655,50 +5647,50 @@ The final volume in the primary is %1.</source>
     <name>YeastDialog</name>
     <message>
         <source>Yeast name</source>
-        <translation>Название дрожжей</translation>
+        <translation type="vanished">Название дрожжей</translation>
     </message>
     <message>
         <source>Yeast name:</source>
-        <translation>Название дрожжей:</translation>
+        <translation type="vanished">Название дрожжей:</translation>
     </message>
     <message>
         <source>Yeast Database</source>
-        <translation>База данных дрожжей</translation>
+        <translation type="vanished">База данных дрожжей</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation>Добавить в рецепт</translation>
+        <translation type="vanished">Добавить в рецепт</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>Новый</translation>
+        <translation type="vanished">Новый</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation>Добавить выбранный ингредиент в рецепт</translation>
+        <translation type="vanished">Добавить выбранный ингредиент в рецепт</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation>Создать новый ингредиент</translation>
+        <translation type="vanished">Создать новый ингредиент</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation>Изменить выбранный ингредиент</translation>
+        <translation type="vanished">Изменить выбранный ингредиент</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation>Удалить выбранный ингредиент</translation>
+        <translation type="vanished">Удалить выбранный ингредиент</translation>
     </message>
 </context>
 <context>
     <name>YeastEditor</name>
     <message>
         <source>Yeast name</source>
-        <translation type="unfinished">Название дрожжей</translation>
+        <translation type="obsolete">Название дрожжей</translation>
     </message>
     <message>
         <source>Yeast name:</source>
-        <translation type="unfinished">Название дрожжей:</translation>
+        <translation type="obsolete">Название дрожжей:</translation>
     </message>
 </context>
 <context>
@@ -6715,15 +6707,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Check it if the amount listed is in kg instead of L.</source>
-        <translation type="unfinished">Включите, если количество задано в кг, а не в литрах.</translation>
+        <translation type="obsolete">Включите, если количество задано в кг, а не в литрах.</translation>
     </message>
     <message>
         <source>Amount is weight?</source>
-        <translation type="unfinished">Количество - вес?</translation>
-    </message>
-    <message>
-        <source>Checked if the given amount is weight instead of volume</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Количество - вес?</translation>
     </message>
     <message>
         <source>Producer</source>
@@ -6811,6 +6799,14 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Beta-glucans</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Whether the amount is weight or volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount Type</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -9165,7 +9161,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Date First Brewed</source>
-        <translation>Дата первой варки</translation>
+        <translation type="vanished">Дата первой варки</translation>
     </message>
     <message>
         <source>dd MMM yyyy</source>
@@ -9189,6 +9185,10 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Total apparent attenuation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Date Created</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -9745,15 +9745,15 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Check it if the amount given is in kg instead of L.</source>
-        <translation>Отметьте, если количество указано в кг вместо л.</translation>
+        <translation type="vanished">Отметьте, если количество указано в кг вместо л.</translation>
     </message>
     <message>
         <source>Amount is weight?</source>
-        <translation>Количество - вес?</translation>
+        <translation type="vanished">Количество - вес?</translation>
     </message>
     <message>
         <source>Checked if the given amount is weight instead of volume</source>
-        <translation>Отмечено, если указанное количество - вес, а не объем</translation>
+        <translation type="vanished">Отмечено, если указанное количество - вес, а не объем</translation>
     </message>
     <message>
         <source>Lab</source>

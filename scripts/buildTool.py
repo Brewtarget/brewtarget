@@ -1378,8 +1378,11 @@ def doPackage():
          #                ├── applications
          #                │   └── [projectName].desktop     ✅  <── [filesToInstall_desktop]
          #                ├── [projectName]
-         #                │   ├── DefaultData.xml           ✅  <──┬── [filesToInstall_data]
-         #                │   ├── default_db.sqlite         ✅  <──┘
+         #                │   ├── DefaultContent001-DefaultData.xml       ✅  <──┬── [filesToInstall_data]
+         #                │   ├── DefaultContent002-BJCP_2021_Styles.json ✅  <──┤
+         #                │   ├── DefaultContent003-...                   ✅  <──┤
+         #                │   ├── ...etc                                  ✅  <──┤
+         #                │   ├── default_db.sqlite                       ✅  <──┘
          #                │   ├── sounds
          #                │   │   └── [All the filesToInstall_sounds .wav files] ✅
          #                │   └── translations_qm

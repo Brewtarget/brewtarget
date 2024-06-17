@@ -67,6 +67,10 @@ TypeLookup const Step::typeLookup {
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Step::rampTime_mins  , Step::m_rampTime_mins  , Measurement::PhysicalQuantity::Time          ),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Step::startAcidity_pH, Step::m_startAcidity_pH, Measurement::PhysicalQuantity::Acidity       ),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Step::  endAcidity_pH, Step::m_endAcidity_pH  , Measurement::PhysicalQuantity::Acidity       ),
+
+      // Note that, because days is not our canonical unit of measurement for time, this has to be a
+      // NonPhysicalQuantity, not Measurement::PhysicalQuantity::Time.
+      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Step::stepTime_days, Step::stepTime_days, NonPhysicalQuantity::OrdinalNumeral),
    },
    // Parent class lookup
    {&NamedEntity::typeLookup}

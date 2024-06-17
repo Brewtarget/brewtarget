@@ -620,7 +620,6 @@ commonSourceFiles = files([
    'src/Html.cpp',
    'src/HydrometerTool.cpp',
    'src/IbuGuSlider.cpp',
-   'src/ImportExport.cpp',
    'src/InstructionWidget.cpp',
    'src/InventoryFormatter.cpp',
    'src/Localization.cpp',
@@ -663,6 +662,7 @@ commonSourceFiles = files([
    'src/catalogs/YeastCatalog.cpp',
    'src/database/BtSqlQuery.cpp',
    'src/database/Database.cpp',
+   'src/database/DefaultContentLoader.cpp',
    'src/database/DatabaseSchemaHelper.cpp',
    'src/database/DbTransaction.cpp',
    'src/database/ObjectStore.cpp',
@@ -738,6 +738,7 @@ commonSourceFiles = files([
    'src/model/Style.cpp',
    'src/model/Water.cpp',
    'src/model/Yeast.cpp',
+   'src/serialization/ImportExport.cpp',
    'src/serialization/SerializationRecord.cpp',
    'src/serialization/json/BeerJson.cpp',
    'src/serialization/json/JsonCoding.cpp',
@@ -811,7 +812,6 @@ commonSourceFiles = files([
    'src/widgets/SelectionControl.cpp',
    'src/widgets/SmartAmountSettings.cpp',
    'src/widgets/SmartAmounts.cpp',
-   'src/widgets/SmartCheckBox.cpp',
    'src/widgets/SmartDigitWidget.cpp',
    'src/widgets/SmartField.cpp',
    'src/widgets/SmartLabel.cpp',
@@ -995,7 +995,6 @@ mocHeaders = files([
    'src/widgets/InfoButton.h',
    'src/widgets/InfoText.h',
    'src/widgets/SelectionControl.h',
-   'src/widgets/SmartCheckBox.h',
    'src/widgets/SmartDigitWidget.h',
    'src/widgets/SmartLabel.h',
    'src/widgets/SmartLineEdit.h',
@@ -1093,7 +1092,9 @@ filesToInstall_docs = files([
 
 filesToInstall_data = files([
    'data/default_db.sqlite',
-   'data/DefaultData.xml'
+   'data/DefaultContent001-OriginalDefaultData.xml',
+   'data/DefaultContent002-BJCP_2021_Styles.json',
+   'data/DefaultContent003-Ingredients-Hops-Yeasts.json'
 ])
 
 filesToInstall_desktop = files([

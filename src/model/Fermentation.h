@@ -30,20 +30,19 @@
 #include "model/NamedEntity.h"
 #include "model/StepOwnerBase.h"
 
-//╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+//======================================================================================================================
 //========================================== Start of property name constants ==========================================
 // See comment in model/NamedEntity.h
 #define AddPropertyName(property) namespace PropertyNames::Fermentation { BtStringConst const property{#property}; }
 AddPropertyName(description      )
 AddPropertyName(fermentationSteps)
 AddPropertyName(notes            )
-AddPropertyName(numSteps         )
 AddPropertyName(primary          )
 AddPropertyName(secondary        )
 AddPropertyName(tertiary         )
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
-//╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+//======================================================================================================================
 
 /**
  * \class Fermentation is a collection of steps providing process information for common fermentation procedures.  It is
@@ -75,6 +74,8 @@ public:
    virtual ~Fermentation();
 
    //=================================================== PROPERTIES ====================================================
+   //! \brief Folder.  See model/FolderBase for implementation of the getter & setter.
+   Q_PROPERTY(QString folder READ folder WRITE setFolder)
    Q_PROPERTY(QString                                    description         READ description     WRITE setDescription)
    Q_PROPERTY(QString                                    notes               READ notes           WRITE setNotes      )
    //! \brief The individual fermentation steps.  (See \c StepOwnerBase for getter/setter implementation.)

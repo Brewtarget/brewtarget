@@ -499,10 +499,13 @@ bool BtTreeModel::removeRows(int row, int count, const QModelIndex & parent) {
 QModelIndex BtTreeModel::findElement(NamedEntity * thing, BtTreeItem * parent) {
    BtTreeItem * pItem = parent ? parent : this->rootItem->child(0);
 
-   qDebug() << Q_FUNC_INFO << "Find" << thing << "in" << pItem;
 
    if (! thing) {
       return createIndex(0, 0, pItem);
+   }
+
+   if (pItem) {
+      qDebug() << Q_FUNC_INFO << "Find" << *thing << "in" << pItem->name();
    }
 
    QList<BtTreeItem *> folders;

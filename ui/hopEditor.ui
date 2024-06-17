@@ -273,7 +273,6 @@
          </property>
         </widget>
        </item>
-
        <item row="7" column="0">
         <spacer name="verticalSpacer">
          <property name="orientation">
@@ -887,11 +886,6 @@
    <class>BtComboBox</class>
    <extends>QComboBox</extends>
    <header>widgets/BtComboBox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>SmartCheckBox</class>
-   <extends>QCheckBox</extends>
-   <header>widgets/SmartCheckBox.h</header>
   </customwidget>
   <customwidget>
    <class>SmartLabel</class>

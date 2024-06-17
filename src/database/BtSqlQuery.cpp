@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * database/BtSqlQuery.cpp is part of Brewtarget, and is copyright the following authors 2021:
+ * database/BtSqlQuery.cpp is part of Brewtarget, and is copyright the following authors 2021-2024:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -20,6 +20,8 @@
 #include <QDebug>
 #include <QSqlError>
 
+#include "Logging.h"
+
 bool BtSqlQuery::prepare(const QString & query) {
    //
    // We don't want to call QSqlQuery::prepare() because if there are no bind values and the DB is PostgreSQL then we'll
@@ -39,6 +41,7 @@ void BtSqlQuery::reallyPrepare() {
       this->bt_boundValues = true;
       if (!this->QSqlQuery::prepare(this->bt_query)) {
          qCritical() << Q_FUNC_INFO << "Call to QSqlQuery::prepare() failed: " << this->lastError().text();
+         qCritical().noquote() << Q_FUNC_INFO << Logging::getStackTrace();
          throw std::runtime_error(this->lastError().text().toStdString());
       }
    }

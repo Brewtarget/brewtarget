@@ -31,21 +31,15 @@
 #include <QVariant>
 
 #include "Application.h"
-#include "config.h"
 #include "database/BtSqlQuery.h"
 #include "database/Database.h"
 #include "database/DbTransaction.h"
-#include "database/ObjectStoreWrapper.h"
-#include "model/BrewNote.h"
-#include "model/Recipe.h"
-#include "model/Water.h"
-#include "serialization/xml/BeerXml.h"
+#include "database/ObjectStoreTyped.h"
 
-int constexpr DatabaseSchemaHelper::dbVersion = 11;
+int constexpr DatabaseSchemaHelper::latestVersion = 11;
 
+// Default namespace hides functions from everything outside this file.
 namespace {
-   // TODO It would be neat to be able to supply folder name as a parameter to XML/JSON import
-   char const * const FOLDER_FOR_SUPPLIED_RECIPES = CONFIG_APPLICATION_NAME_LC;
 
    struct QueryAndParameters {
       QString sql;
@@ -135,22 +129,22 @@ namespace {
 
    bool migrate_to_210(Database & db, BtSqlQuery & q) {
       QVector<QueryAndParameters> migrationQueries{
-         {QString("ALTER TABLE equipment   ADD COLUMN folder text")}, // Previously DEFAULT ''
-         {QString("ALTER TABLE fermentable ADD COLUMN folder text")}, // Previously DEFAULT ''
-         {QString("ALTER TABLE hop         ADD COLUMN folder text")}, // Previously DEFAULT ''
-         {QString("ALTER TABLE misc        ADD COLUMN folder text")}, // Previously DEFAULT ''
-         {QString("ALTER TABLE style       ADD COLUMN folder text")}, // Previously DEFAULT ''
-         {QString("ALTER TABLE yeast       ADD COLUMN folder text")}, // Previously DEFAULT ''
-         {QString("ALTER TABLE water       ADD COLUMN folder text")}, // Previously DEFAULT ''
-         {QString("ALTER TABLE mash        ADD COLUMN folder text")}, // Previously DEFAULT ''
-         {QString("ALTER TABLE recipe      ADD COLUMN folder text")}, // Previously DEFAULT ''
-         {QString("ALTER TABLE brewnote    ADD COLUMN folder text")}, // Previously DEFAULT ''
-         {QString("ALTER TABLE salt        ADD COLUMN folder text")}, // Previously DEFAULT ''
+         {QString("ALTER TABLE equipment   ADD COLUMN folder %1").arg(db.getDbNativeTypeName<QString>())}, // Previously DEFAULT ''
+         {QString("ALTER TABLE fermentable ADD COLUMN folder %1").arg(db.getDbNativeTypeName<QString>())}, // Previously DEFAULT ''
+         {QString("ALTER TABLE hop         ADD COLUMN folder %1").arg(db.getDbNativeTypeName<QString>())}, // Previously DEFAULT ''
+         {QString("ALTER TABLE misc        ADD COLUMN folder %1").arg(db.getDbNativeTypeName<QString>())}, // Previously DEFAULT ''
+         {QString("ALTER TABLE style       ADD COLUMN folder %1").arg(db.getDbNativeTypeName<QString>())}, // Previously DEFAULT ''
+         {QString("ALTER TABLE yeast       ADD COLUMN folder %1").arg(db.getDbNativeTypeName<QString>())}, // Previously DEFAULT ''
+         {QString("ALTER TABLE water       ADD COLUMN folder %1").arg(db.getDbNativeTypeName<QString>())}, // Previously DEFAULT ''
+         {QString("ALTER TABLE mash        ADD COLUMN folder %1").arg(db.getDbNativeTypeName<QString>())}, // Previously DEFAULT ''
+         {QString("ALTER TABLE recipe      ADD COLUMN folder %1").arg(db.getDbNativeTypeName<QString>())}, // Previously DEFAULT ''
+         {QString("ALTER TABLE brewnote    ADD COLUMN folder %1").arg(db.getDbNativeTypeName<QString>())}, // Previously DEFAULT ''
+         {QString("ALTER TABLE salt        ADD COLUMN folder %1").arg(db.getDbNativeTypeName<QString>())}, // Previously DEFAULT ''
          // Put the "Bt:.*" recipes into /brewtarget folder
          {QString("UPDATE recipe   SET folder='/brewtarget' WHERE name LIKE 'Bt:%'")},
          // Update version to 2.1.0
          {QString("UPDATE settings SET version='2.1.0' WHERE id=1")},
-         // Used to trigger the code to populate the ingredient inheritance tables
+         // Used to trigger the code to populate the ingredient inheritance tables.  Gets removed in schema version 11.
          {QString("ALTER TABLE settings ADD COLUMN repopulatechildrenonnextstart %1").arg(db.getDbNativeTypeName<int>())},
          {QString("UPDATE repopulatechildrenonnextstart integer=1")},
       };
@@ -235,7 +229,7 @@ namespace {
    bool migrate_to_7([[maybe_unused]] Database & db, BtSqlQuery q) {
       QVector<QueryAndParameters> const migrationQueries{
          // Add "attenuation" to brewnote table
-         {"ALTER TABLE brewnote ADD COLUMN attenuation real"} // Previously DEFAULT 0.0
+         {QString("ALTER TABLE brewnote ADD COLUMN attenuation %1").arg(db.getDbNativeTypeName<double>())} // Previously DEFAULT 0.0
       };
       return executeSqlQueries(q, migrationQueries);
    }
@@ -1953,6 +1947,18 @@ namespace {
          {QString("DROP TABLE bt_water")},
          {QString("DROP TABLE bt_yeast")},
          {QString("DROP TABLE recipe_children")},
+         //
+         // Finally finally, we update the "settings" table to drop columns we no longer use and support multiple files
+         // for new "default content".
+         //
+         // It would be nice to rename the "version" column to "schema_version" but doing so would create a Catch-22
+         // situation where, in order to know what the schema version column name is in the DB we're reading, we need to
+         // know the contents of that same column.  It's solvable but the ugliness of doing so isn't worth the benefit
+         // of having the better column name IMHO.
+         //
+         {QString("ALTER TABLE settings DROP COLUMN repopulatechildrenonnextstart")},
+         {QString("ALTER TABLE settings  ADD COLUMN default_content_version").arg(db.getDbNativeTypeName<unsigned int>())},
+         {QString("UPDATE settings SET default_content_version = 0")},
       };
 
       return executeSqlQueries(q, migrationQueries);
@@ -2003,10 +2009,11 @@ namespace {
             return false;
       }
 
+      //
       // Set the db version
-      if (oldVersion > 3 )
-      {
-         QString queryString{"UPDATE settings SET version=:version WHERE id=1"};
+      //
+      if (oldVersion > 3) {
+         QString const queryString{"UPDATE settings SET version=:version WHERE id=1"};
          sqlQuery.prepare(queryString);
          QVariant bindValue{QString::number(oldVersion + 1)};
          sqlQuery.bindValue(":version", bindValue);
@@ -2018,12 +2025,30 @@ namespace {
 
 }
 
-bool DatabaseSchemaHelper::upgrade = false;
-// Default namespace hides functions from everything outside this file.
+
+int DatabaseSchemaHelper::getDefaultContentVersionFromDb(QSqlDatabase & db) {
+   BtSqlQuery sqlQuery("SELECT default_content_version FROM settings WHERE id=1", db);
+   if (sqlQuery.next() ) {
+      QVariant dc = sqlQuery.value("default_content_version");
+      return dc.toInt();
+   }
+   return -1;
+}
+
+bool DatabaseSchemaHelper::setDefaultContentVersionFromDb(QSqlDatabase & db, int val) {
+   BtSqlQuery sqlQuery{db};
+   QString const queryString{"UPDATE settings SET default_content_version=:version WHERE id=1"};
+   sqlQuery.prepare(queryString);
+   QVariant bindValue{QString::number(val)};
+   sqlQuery.bindValue(":version", bindValue);
+   bool ret = sqlQuery.exec();
+   return ret;
+}
+
 
 bool DatabaseSchemaHelper::create(Database & database, QSqlDatabase connection) {
    //--------------------------------------------------------------------------
-   // NOTE: if you edit this function, increment dbVersion and edit
+   // NOTE: if you edit this function, increment DatabaseSchemaHelper::latestVersion and edit
    // migrateNext() appropriately.
    //--------------------------------------------------------------------------
 
@@ -2050,15 +2075,20 @@ bool DatabaseSchemaHelper::create(Database & database, QSqlDatabase connection) 
    }
 
    //
-   // Create the settings table manually, since it's only used in this file
+   // Create the settings table manually, since it's only used in a couple of places (this file and
+   // DefaultContentLoader.cpp).
    //
-   // NB: For reasons lost in the mists of time, the repopulateChildrenOnNextStart column was originally implemented as
-   // an integer and not a boolean.
+   // Note that we changed the settings table in version 11 of the schema (DatabaseSchemaHelper::latestVersion == 11).  What
+   // we create here is the new version of that table.
    //
    QVector<QueryAndParameters> const setUpQueries{
-      {QString("CREATE TABLE settings (id %2, repopulatechildrenonnextstart %1, version %1)").arg(database.getDbNativeTypeName<int>(), database.getDbNativePrimaryKeyDeclaration())},
-      {QString("INSERT INTO settings (repopulatechildrenonnextstart, version) VALUES (?, ?)"), {QVariant(1), QVariant(dbVersion)}}
-
+      {QString("CREATE TABLE settings (id %1, "
+                                      "version %2, "
+                                      "default_content_version %2)").arg(database.getDbNativePrimaryKeyDeclaration(),
+                                                                         database.getDbNativeTypeName<int>        ())},
+      {QString("INSERT INTO settings (version, "
+                                     "default_content_version) "
+               "VALUES (?, ?)"), {QVariant(DatabaseSchemaHelper::latestVersion), QVariant(0)}}
    };
    BtSqlQuery sqlQuery{connection};
 
@@ -2074,9 +2104,10 @@ bool DatabaseSchemaHelper::create(Database & database, QSqlDatabase connection) 
 }
 
 bool DatabaseSchemaHelper::migrate(Database & database, int oldVersion, int newVersion, QSqlDatabase connection) {
-   if (oldVersion >= newVersion || newVersion > dbVersion ) {
-      qDebug() << Q_FUNC_INFO <<
-         QString("Requested backwards migration from %1 to %2: You are an imbecile").arg(oldVersion).arg(newVersion);
+   if (oldVersion >= newVersion || newVersion > DatabaseSchemaHelper::latestVersion ) {
+      qCritical() << Q_FUNC_INFO <<
+         "Requested backwards migration from" << oldVersion << "to" << newVersion << ".  Assuming this is a coding "
+         "error and therefore doing nothing!";
       return false;
    }
 
@@ -2101,7 +2132,7 @@ bool DatabaseSchemaHelper::migrate(Database & database, int oldVersion, int newV
    return ret;
 }
 
-int DatabaseSchemaHelper::currentVersion(QSqlDatabase db) {
+int DatabaseSchemaHelper::schemaVersion(QSqlDatabase & db) {
    // Version was a string field in early versions of the code and then became an integer field
    // We'll read it into a QVariant and then work out whether it's a string or an integer
    BtSqlQuery q("SELECT version FROM settings WHERE id=1", db);
@@ -2160,66 +2191,4 @@ bool DatabaseSchemaHelper::copyToNewDatabase(Database & newDatabase, QSqlDatabas
    }
 
    return true;
-}
-
-
-/**
- * \brief Imports any new default data to the database.  This is what gets called when the user responds Yes to the
- *        dialog saying "There are new ingredients, would you like to merge?"
- *
- *        In older versions of the software, default data was copied from a SQLite database file (default_db.sqlite)
- *        into the user's database (which could be SQLite or PostgreSQL), and special tables (bt_hop, bt_fermentable,
- *        etc) kept track of which records in the user's database had been copies from the default database.  This
- *        served two purposes.  One was to know which default records were present in the user's database, so we could
- *        copy across any new ones when the default data set is augmented.  The other was to allow us to attempt to
- *        modify the user's records when corresponding records in the default data set were changed (typically to make
- *        corrections).  However, it's risky to modify the user's existing data because you might overwrite changes
- *        they've made themselves since the record was imported.  So we stopped trying to do that, and used the special
- *        tables just to track which default records had and hadn't yet been imported.
- *
- *        What we do now is store the default data in BeerXML.  (We will likely switch to storing in BeerJSON once we
- *        support that.)  Besides simplifying this function, this has a couple of advantages:
- *           - Being a text rather than a binary format, it's much easier in the source code repository to make (and
- *             see) changes to default data.
- *           - Our XML import code already does duplicate detection, so don't need the special tracking tables any more.
- *             We just try to import all the default data, and any records that the user already has will be skipped
- *             over.
- */
-bool DatabaseSchemaHelper::updateDatabase(QTextStream & userMessage) {
-
-   //
-   // We'd like to put any newly-imported default Recipes in the same folder as the other default ones.  To do this, we
-   // first make a note of which Recipes exist already, then, after the import, any new ones need to go in the default
-   // folder.
-   //
-   QList<Recipe *> allRecipesBeforeImport = ObjectStoreWrapper::getAllRaw<Recipe>();
-   qDebug() << Q_FUNC_INFO << allRecipesBeforeImport.size() << "Recipes before import";
-
-   QString const defaultDataFileName = Application::getResourceDir().filePath("DefaultData.xml");
-   bool succeeded = BeerXML::getInstance().importFromXML(defaultDataFileName, userMessage);
-
-   if (succeeded) {
-      //
-      // Now see what Recipes exist that weren't there before the import
-      //
-      QList<Recipe *> allRecipesAfterImport = ObjectStoreWrapper::getAllRaw<Recipe>();
-      qDebug() << Q_FUNC_INFO << allRecipesAfterImport.size() << "Recipes after import";
-
-      //
-      // Once the lists are sorted, finding the difference is just a library call
-      // (Note that std::set_difference requires the longer list as its first parameter pair.)
-      //
-      std::sort(allRecipesBeforeImport.begin(), allRecipesBeforeImport.end());
-      std::sort(allRecipesAfterImport.begin(), allRecipesAfterImport.end());
-      QList<Recipe *> newlyImportedRecipes;
-      std::set_difference(allRecipesAfterImport.begin(), allRecipesAfterImport.end(),
-                          allRecipesBeforeImport.begin(), allRecipesBeforeImport.end(),
-                          std::back_inserter(newlyImportedRecipes));
-      qDebug() << Q_FUNC_INFO << newlyImportedRecipes.size() << "newly imported Recipes";
-      for (auto recipe : newlyImportedRecipes) {
-         recipe->setFolder(FOLDER_FOR_SUPPLIED_RECIPES);
-      }
-   }
-
-   return succeeded;
 }

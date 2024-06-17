@@ -40,11 +40,16 @@ TypeLookup const Fermentation::typeLookup {
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Fermentation::description, Fermentation::m_description, NonPhysicalQuantity::String),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Fermentation::notes      , Fermentation::m_notes      , NonPhysicalQuantity::String),
 
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Fermentation::fermentationSteps        , Fermentation::fermentationSteps        ),
+      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Fermentation::fermentationSteps, Fermentation::fermentationSteps),
+      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Fermentation::primary          , Fermentation::primary          ),
+      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Fermentation::secondary        , Fermentation::secondary        ),
+      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Fermentation::tertiary         , Fermentation::tertiary         ),
    },
    // Parent classes lookup
    {&NamedEntity::typeLookup,
-    std::addressof(FolderBase<Fermentation>::typeLookup)}
+    std::addressof(FolderBase<Fermentation>::typeLookup),
+    std::addressof(StepOwnerBase<Fermentation, FermentationStep>::typeLookup)
+   }
 };
 static_assert(std::is_base_of<FolderBase<Fermentation>, Fermentation>::value);
 

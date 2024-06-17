@@ -29,6 +29,15 @@
 #include "model/Recipe.h"
 #include "utils/CuriouslyRecurringTemplateBase.h"
 
+//======================================================================================================================
+//========================================== Start of property name constants ==========================================
+// See comment in model/NamedEntity.h
+#define AddPropertyName(property) namespace PropertyNames::StepOwnerBase { BtStringConst const property{#property}; }
+AddPropertyName(numSteps)
+#undef AddPropertyName
+//=========================================== End of property name constants ===========================================
+//======================================================================================================================
+
 /**
  * \brief Templated base class for \c Mash, \c Boil and \c Fermentation to handle manipulation of their component steps
  *        (\c MashStep, \c BoilStep and \c FermentationStep respectively).
@@ -68,6 +77,8 @@ template<class Derived> class StepOwnerPhantom;
 template<class Derived, class DerivedStep>
 class StepOwnerBase : public CuriouslyRecurringTemplateBase<StepOwnerPhantom, Derived> {
 public:
+   // Note that, because this is static, it cannot be initialised inside the class definition
+   static TypeLookup const typeLookup;
 
    StepOwnerBase() : m_stepIds{} {
       return;
@@ -431,6 +442,25 @@ private:
 
 protected:
    QVector<int> m_stepIds;
+};
+
+template<class Derived, class DerivedStep>
+TypeLookup const StepOwnerBase<Derived, DerivedStep>::typeLookup {
+   "StepOwnerBase",
+   {
+      //
+      // See comment in model/IngredientAmount.h for why we can't use the PROPERTY_TYPE_LOOKUP_ENTRY or
+      // PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV macros here.
+      //
+      {&PropertyNames::StepOwnerBase::numSteps,
+       TypeInfo::construct<MemberFunctionReturnType_t<&StepOwnerBase::numSteps>>(
+          PropertyNames::StepOwnerBase::numSteps,
+          TypeLookupOf<MemberFunctionReturnType_t<&StepOwnerBase::numSteps>>::value,
+          NonPhysicalQuantity::OrdinalNumeral
+       )},
+   },
+   // Parent class lookup: none as we are at the top of this arm of the inheritance tree
+   {}
 };
 
 /**

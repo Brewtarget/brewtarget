@@ -498,11 +498,6 @@ void Application::readSystemOptions() {
    checkVersion = PersistentSettings::value(PersistentSettings::Names::check_version, QVariant(true)).toBool();
    qDebug() << Q_FUNC_INFO << "checkVersion=" << checkVersion;
 
-   //=====================Last DB Merge Request======================
-   if (PersistentSettings::contains(PersistentSettings::Names::last_db_merge_req)) {
-      Database::lastDbMergeRequest = QDateTime::fromString(PersistentSettings::value(PersistentSettings::Names::last_db_merge_req,"").toString(), Qt::ISODate);
-   }
-
    Measurement::loadDisplayScales();
 
    //===================IBU===================
@@ -520,7 +515,6 @@ void Application::readSystemOptions() {
 
 void Application::saveSystemOptions() {
    PersistentSettings::insert(PersistentSettings::Names::check_version, checkVersion);
-   PersistentSettings::insert(PersistentSettings::Names::last_db_merge_req, Database::lastDbMergeRequest.toString(Qt::ISODate));
    //setOption("user_data_dir", userDataDir);
 
    Localization::saveSettings();

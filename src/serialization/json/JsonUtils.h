@@ -32,12 +32,16 @@ namespace JsonUtils {
     *                 packaged with the program
     *
     * \param allowComments Strictly, JSON documents are not allowed to contain comments.  In reality, it is sometimes
-    *                      useful to have them.  Turning this option on will cause C/C++-style comments in the document
-    *                      being opened to be ignored (rather than generate an error).
+    *                      useful to have them.  Turning this option on causes C/C++-style comments in the document
+    *                      being opened to be ignored (rather than generate an error).  By Postel's Law
+    *                      (https://en.wikipedia.org/wiki/Robustness_principle) we accept and ignore such comments in
+    *                      JSON files because (a) they do not prevent us from correctly parsing the file and (b) it is
+    *                      useful for us to have such comments in data/DefaultContent002-BJCP_2021_Styles.json and
+    *                      similar files.
     *
     * \throw BtException containing text that can be displayed to the user
     */
-   [[nodiscard]] boost::json::value loadJsonDocument(QString const & fileName, bool allowComments = false);
+   [[nodiscard]] boost::json::value loadJsonDocument(QString const & fileName, bool allowComments = true);
 
    /**
     * \brief Output a \c boost::json::value to a stream as nicely formatted valid JSON.  Essentially adds nice

@@ -196,11 +196,6 @@ public:
     */
    char const * getSqlToAddColumnAsForeignKey() const;
 
-   /*! Stores the date that we last asked the user to merge the
-    *  data-space database to the user-space database.
-    */
-   static QDateTime lastDbMergeRequest;
-
    /**
     * \brief Returns a displayable set of name-value pairs for the connection details for the current database,
     *        \b excluding password

@@ -133,6 +133,16 @@ void YeastEditor::readFieldsFromEditItem(std::optional<QString> propName) {
    if (!propName || *propName == PropertyNames::Yeast::bestFor            ) { this->textEdit_bestFor          ->setPlainText(m_editItem->bestFor         ()); if (propName) { return; } }
    if (!propName || *propName == PropertyNames::Yeast::notes              ) { this->textEdit_notes            ->setPlainText(m_editItem->notes           ()); if (propName) { return; } }
    // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
+   if (!propName || *propName == PropertyNames::Yeast::alcoholTolerance_pct) { this->lineEdit_alcoholTolerance->setQuantity(m_editItem->alcoholTolerance_pct()); if (propName) { return; } }
+   if (!propName || *propName == PropertyNames::Yeast::attenuationMin_pct  ) { this->lineEdit_attenuationMin  ->setQuantity(m_editItem->attenuationMin_pct  ()); if (propName) { return; } }
+   if (!propName || *propName == PropertyNames::Yeast::attenuationMax_pct  ) { this->lineEdit_attenuationMax  ->setQuantity(m_editItem->attenuationMax_pct  ()); if (propName) { return; } }
+   if (!propName || *propName == PropertyNames::Yeast::phenolicOffFlavorPositive) { this->boolCombo_phenolicOffFlavorPositive->setValue(m_editItem->phenolicOffFlavorPositive()); if (propName) { return; } }
+   if (!propName || *propName == PropertyNames::Yeast::glucoamylasePositive     ) { this->boolCombo_glucoamylasePositive     ->setValue(m_editItem->glucoamylasePositive     ()); if (propName) { return; } }
+   if (!propName || *propName == PropertyNames::Yeast::killerProducingK1Toxin   ) { this->boolCombo_killerProducingK1Toxin   ->setValue(m_editItem->killerProducingK1Toxin   ()); if (propName) { return; } }
+   if (!propName || *propName == PropertyNames::Yeast::killerProducingK2Toxin   ) { this->boolCombo_killerProducingK2Toxin   ->setValue(m_editItem->killerProducingK2Toxin   ()); if (propName) { return; } }
+   if (!propName || *propName == PropertyNames::Yeast::killerProducingK28Toxin  ) { this->boolCombo_killerProducingK28Toxin  ->setValue(m_editItem->killerProducingK28Toxin  ()); if (propName) { return; } }
+   if (!propName || *propName == PropertyNames::Yeast::killerProducingKlusToxin ) { this->boolCombo_killerProducingKlusToxin ->setValue(m_editItem->killerProducingKlusToxin ()); if (propName) { return; } }
+   if (!propName || *propName == PropertyNames::Yeast::killerNeutral            ) { this->boolCombo_killerNeutral            ->setValue(m_editItem->killerNeutral            ()); if (propName) { return; } }
 
    return;
 }

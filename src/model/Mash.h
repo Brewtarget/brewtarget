@@ -36,7 +36,7 @@
 #include "model/NamedEntity.h"
 #include "model/StepOwnerBase.h"
 
-//╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+//======================================================================================================================
 //========================================== Start of property name constants ==========================================
 // See comment in model/NamedEntity.h
 #define AddPropertyName(property) namespace PropertyNames::Mash { BtStringConst const property{#property}; }
@@ -53,7 +53,7 @@ AddPropertyName(totalTime                )
 AddPropertyName(tunTemp_c                )
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
-//╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+//======================================================================================================================
 
 
 // Forward declarations.
@@ -93,6 +93,8 @@ public:
    virtual ~Mash();
 
    //=================================================== PROPERTIES ====================================================
+   //! \brief Folder.  See model/FolderBase for implementation of the getter & setter.
+   Q_PROPERTY(QString folder READ folder WRITE setFolder)
    //! \brief The initial grain temp in Celsius.
    Q_PROPERTY(double                grainTemp_c               READ grainTemp_c               WRITE setGrainTemp_c  )
    //! \brief The notes.

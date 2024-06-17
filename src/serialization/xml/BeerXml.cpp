@@ -991,7 +991,7 @@ namespace {
          {XmlRecordDefinition::FieldType::Double          , "OG"                      , PropertyNames::Recipe::og                },
          {XmlRecordDefinition::FieldType::Double          , "FG"                      , PropertyNames::Recipe::fg                },
          {XmlRecordDefinition::FieldType::UInt            , "FERMENTATION_STAGES"     , {PropertyNames::Recipe::fermentation,
-                                                                                         PropertyNames::Fermentation::numSteps}  }, // We write but ignore on read if present.
+                                                                                         PropertyNames::StepOwnerBase::numSteps}  }, // We write but ignore on read if present.
          {XmlRecordDefinition::FieldType::Double          , "PRIMARY_AGE"             , {PropertyNames::Recipe::fermentation ,
                                                                                          PropertyNames::Fermentation::primary,
                                                                                          PropertyNames::Step::stepTime_days  }   }, // Replaces PropertyNames::Recipe::primaryAge_days

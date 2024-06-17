@@ -59,6 +59,7 @@
 #include "Application.h"
 #include "config.h"
 #include "database/BtSqlQuery.h"
+#include "database/DefaultContentLoader.h"
 #include "database/DatabaseSchemaHelper.h"
 #include "PersistentSettings.h"
 #include "utils/BtStringConst.h"
@@ -276,9 +277,6 @@ public:
             this->dataDbFile.copy(this->dbFileName);
             QFile::setPermissions(this->dbFileName, QFile::ReadOwner | QFile::WriteOwner | QFile::ReadGroup);
          }
-
-         // Reset the last merge request.
-         Database::lastDbMergeRequest = QDateTime::currentDateTime();
       }
 
       // Open SQLite DB
@@ -396,12 +394,13 @@ public:
    // Returns true if the schema gets updated, false otherwise.
    // If err != 0, set it to true if an error occurs, false otherwise.
    bool updateSchema(Database & database, bool* err = nullptr) {
-      int currentVersion = DatabaseSchemaHelper::currentVersion( database.sqlDatabase() );
-      int newVersion = DatabaseSchemaHelper::dbVersion;
+      auto connection = database.sqlDatabase();
+      int dbSchemaVersion = DatabaseSchemaHelper::schemaVersion(connection);
+      int latestSchemaVersion = DatabaseSchemaHelper::latestVersion;
       qInfo() <<
-         Q_FUNC_INFO << "Schema version in DB:" << currentVersion << ", current schema version in code:" << newVersion;
+         Q_FUNC_INFO << "Schema version in DB:" << dbSchemaVersion << ", current schema version in code:" << latestSchemaVersion;
 
-      bool doUpdate = currentVersion < newVersion;
+      bool doUpdate = dbSchemaVersion < latestSchemaVersion;
       if (doUpdate) {
          //
          // Before we do a DB upgrade, we should back-up the DB (if we can).
@@ -425,7 +424,7 @@ public:
          //
          QString backupName = QString(
             "%1 database.sqlite backup (before upgrade from v%2 to v%3)"
-         ).arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh∶mm∶ss")).arg(currentVersion).arg(newVersion);
+         ).arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh∶mm∶ss")).arg(dbSchemaVersion).arg(latestSchemaVersion);
          bool succeeded = database.backupToDir(backupDir, backupName);
          if (!succeeded) {
             qCritical() << Q_FUNC_INFO << "Unable to create DB backup";
@@ -446,7 +445,7 @@ public:
             dbUpgradeMessageBox.setWindowTitle(tr("Software Upgraded"));
             dbUpgradeMessageBox.setText(
                tr("Before continuing, %1 %2 needs to upgrade your database schema "
-                  "(from v%3 to v%4).\n").arg(CONFIG_APPLICATION_NAME_UC).arg(CONFIG_VERSION_STRING).arg(currentVersion).arg(newVersion)
+                  "(from v%3 to v%4).\n").arg(CONFIG_APPLICATION_NAME_UC).arg(CONFIG_VERSION_STRING).arg(dbSchemaVersion).arg(latestSchemaVersion)
             );
             dbUpgradeMessageBox.setInformativeText(
                tr("DON'T PANIC: Your existing data will be retained!")
@@ -475,9 +474,9 @@ public:
             }
          }
 
-         bool success = DatabaseSchemaHelper::migrate(database, currentVersion, newVersion, database.sqlDatabase() );
+         bool success = DatabaseSchemaHelper::migrate(database, dbSchemaVersion, latestSchemaVersion, database.sqlDatabase() );
          if (!success) {
-            qCritical() << Q_FUNC_INFO << QString("Database migration %1->%2 failed").arg(currentVersion).arg(newVersion);
+            qCritical() << Q_FUNC_INFO << QString("Database migration %1->%2 failed").arg(dbSchemaVersion).arg(latestSchemaVersion);
             if (err) {
                *err = true;
             }
@@ -764,25 +763,17 @@ void Database::checkForNewDefaultData() {
       Q_FUNC_INFO << "dataDbFile:" << this->pimpl->dataDbFile.fileName() << ", dbFile:" <<
       this->pimpl->dbFile.fileName() << ", userDatabaseDidNotExist: " <<
       (this->pimpl->userDatabaseDidNotExist ? "True" : "False") << ", dataDbFile.lastModified:" <<
-      QFileInfo(this->pimpl->dataDbFile).lastModified() << ", lastDbMergeRequest" << Database::lastDbMergeRequest;
+      QFileInfo(this->pimpl->dataDbFile).lastModified();
    if (this->pimpl->dataDbFile.fileName() != this->pimpl->dbFile.fileName() &&
-       !this->pimpl->userDatabaseDidNotExist &&
-       QFileInfo(this->pimpl->dataDbFile).lastModified() > Database::lastDbMergeRequest) {
-      if (Application::isInteractive() &&
-         QMessageBox::question(
-            nullptr,
-            tr("Merge Database"),
-            tr("There may be new ingredients and recipes available. Would you like to add these to your database?"),
-            QMessageBox::Yes | QMessageBox::No,
-            QMessageBox::Yes
-         )
-         == QMessageBox::Yes
-      ) {
-         QString userMessage;
-         QTextStream userMessageAsStream{&userMessage};
-
-         bool succeeded = DatabaseSchemaHelper::updateDatabase(userMessageAsStream);
-
+       !this->pimpl->userDatabaseDidNotExist) {
+      auto connection = this->sqlDatabase();
+      QString userMessage;
+      QTextStream userMessageAsStream{&userMessage};
+      auto result = DefaultContentLoader::updateContentIfNecessary(connection, userMessageAsStream);
+      if (result != DefaultContentLoader::UpdateResult::NothingToDo) {
+         bool succeeded = (
+            result == DefaultContentLoader::UpdateResult::Succeeded
+         );
          QString messageBoxTitle{succeeded ? tr("Success!") : tr("ERROR")};
          QString messageBoxText;
          if (succeeded) {
@@ -793,7 +784,7 @@ void Database::checkForNewDefaultData() {
             );
          } else {
             messageBoxText = QString(
-               tr("Unable to import new default data\n\n"
+               tr("Unable to import some or all of new default data\n\n"
                   "%1\n\n"
                   "Log file may contain more details.").arg(userMessage)
             );
@@ -801,14 +792,14 @@ void Database::checkForNewDefaultData() {
          }
          qDebug() << Q_FUNC_INFO << "Message box text : " << messageBoxText;
          QMessageBox msgBox{succeeded ? QMessageBox::Information : QMessageBox::Critical,
-                            messageBoxTitle,
-                            messageBoxText};
+                           messageBoxTitle,
+                           messageBoxText};
          msgBox.exec();
       }
 
-      // Update this field.
-      Database::lastDbMergeRequest = QDateTime::currentDateTime();
+
    }
+
    return;
 }
 
@@ -1171,8 +1162,6 @@ char const * Database::getSqlToAddColumnAsForeignKey() const {
    return getDbNativeName(sqlToAddColumnAsForeignKey, this->pimpl->dbType);
 }
 
-QDateTime Database::lastDbMergeRequest = QDateTime::fromString("1986-02-24T06:00:00", Qt::ISODate);
-
 QList<QPair<QString, QString>> Database::displayableConnectionParms() const {
    switch (this->pimpl->dbType) {
       case Database::DbType::SQLITE:
@@ -1274,9 +1263,9 @@ S & operator<<(S & stream, Database::DbType const dbType) {
 template QDebug &      operator<<(QDebug &      stream, Database::DbType const dbType);
 template QTextStream & operator<<(QTextStream & stream, Database::DbType const dbType);
 
-//╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+//======================================================================================================================
 //====================================== Start of Functions in Helper Namespace ========================================
-//╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+//======================================================================================================================
 char const * DatabaseHelper::getNameFromDbTypeName(Database::DbType whichDb) {
    return getDbNativeName(displayableDbType, whichDb);
 }

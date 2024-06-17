@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * widgets/SmartAmountSettings.h is part of Brewtarget, and is copyright the following authors 2023:
+ * widgets/SmartAmountSettings.h is part of Brewtarget, and is copyright the following authors 2023-2024:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -54,8 +54,6 @@ public:
     */
    SmartAmounts::ScaleInfo getScaleInfo() const;
 
-   Measurement::UnitSystem const & getUnitSystem(SmartAmounts::ScaleInfo const & scaleInfo) const;
-
    /**
     * \brief Returns the \c UnitSystem that should be used to display this field, based on the forced
     *        \c SystemOfMeasurement for the field if there is one or otherwise on the the system-wide default
@@ -64,33 +62,23 @@ public:
    Measurement::UnitSystem const & getDisplayUnitSystem() const;
 
    /**
-    * \brief Returns what type of field this is - except that, if it is \c Mixed2PhysicalQuantities, will one of the two
-    *        possible \c Measurement::PhysicalQuantity values depending on the value of \c this->units.
+    * \brief Returns what type of field this is - except that, if it is \c Measurement::ChoiceOfPhysicalQuantity, will
+    *        one of the two or three possible \c Measurement::PhysicalQuantity values depending on the value of
+    *        \c this->units.
     *
-    *        It is a coding error to call this function if our field type \c is \c NonPhysicalQuantity.)
+    *        It is a coding error to call this function if our field type is \c NonPhysicalQuantity.)
     */
    Measurement::PhysicalQuantity getPhysicalQuantity() const;
 
    /**
     * \brief If the \c Measurement::PhysicalQuantities supplied in the \c init call was not a single
     *        \c Measurement::PhysicalQuantity, then this member function permits selecting the current
-    *        \c Measurement::PhysicalQuantity from two in the \c Measurement::Mixed2PhysicalQuantities supplied in the
-    *        constructor.
+    *        \c Measurement::PhysicalQuantity from two or three in the \c Measurement::ChoiceOfPhysicalQuantity supplied
+    *        in the constructor.
     *
     *        NB: Caller's responsibility to ensure the display gets updated.  (SmartBase handles this.)
     */
    void selectPhysicalQuantity(Measurement::PhysicalQuantity const physicalQuantity);
-
-   /**
-    * \brief Alternative version of \c selectPhysicalQuantity for generic usage.  By convention, whenever we have a
-    *        checkbox for "Amount is weight?" or "Amount is mass concentration?", \c true (ie box checked) is selecting
-    *        the first of the two values in the \c Mixed2PhysicalQuantities pair (eg \c Mass in \c PqEitherMassOrVolume
-    *        or \c MassConcentration in \c PqEitherMassOrVolumeConcentration).  So, passing in the boolean state of the
-    *        checkbox to this function selects the correct option.
-    *
-    *        NB: Caller's responsibility to ensure the display gets updated.  (SmartBase handles this.)
-    */
-   void selectPhysicalQuantity(bool const isFirst);
 
    /**
     * \brief Use this when you want to do something with the returned QString

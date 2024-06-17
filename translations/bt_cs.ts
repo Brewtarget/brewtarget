@@ -941,11 +941,11 @@
     <name>Database</name>
     <message>
         <source>Merge Database</source>
-        <translation>Spojit databáze</translation>
+        <translation type="vanished">Spojit databáze</translation>
     </message>
     <message>
         <source>There may be new ingredients and recipes available. Would you like to add these to your database?</source>
-        <translation>Možná jsou k dispozici nové přísady a recepty. Chcete je přidat do své databáze?</translation>
+        <translation type="vanished">Možná jsou k dispozici nové přísady a recepty. Chcete je přidat do své databáze?</translation>
     </message>
     <message>
         <source>Database password</source>
@@ -975,14 +975,6 @@
         <source>Successfully read new default data
 
 %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Unable to import new default data
-
-%1
-
-Log file may contain more details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1055,6 +1047,14 @@ If you didn&apos;t yet do this, click Abort.</source>
 %1</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Unable to import some or all of new default data
+
+%1
+
+Log file may contain more details.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Equipment</name>
@@ -1067,7 +1067,7 @@ If you didn&apos;t yet do this, click Abort.</source>
     <name>EquipmentEditor</name>
     <message>
         <source>Grain absorption (%1/%2)</source>
-        <translation>Nasákavost sladu (%1/%2)</translation>
+        <translation type="vanished">Nasákavost sladu (%1/%2)</translation>
     </message>
     <message>
         <source>Tun Volume Warning</source>
@@ -1079,11 +1079,11 @@ If you didn&apos;t yet do this, click Abort.</source>
     </message>
     <message>
         <source>Equipment name</source>
-        <translation>Název vybavení</translation>
+        <translation type="vanished">Název vybavení</translation>
     </message>
     <message>
         <source>Equipment name:</source>
-        <translation>Název vybavení:</translation>
+        <translation type="vanished">Název vybavení:</translation>
     </message>
     <message>
         <source>The tun volume you entered is 0. This may cause problems</source>
@@ -1254,10 +1254,6 @@ If you didn&apos;t yet do this, click Abort.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>This equipment profile may break Brewtarget&apos;s maths</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>This equipment profile may break %1&apos;s maths</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1404,50 +1400,50 @@ If you didn&apos;t yet do this, click Abort.</source>
     <name>FermentableDialog</name>
     <message>
         <source>Fermentable name</source>
-        <translation>Název suroviny</translation>
+        <translation type="vanished">Název suroviny</translation>
     </message>
     <message>
         <source>Fermentable name:</source>
-        <translation>Název suroviny:</translation>
+        <translation type="vanished">Název suroviny:</translation>
     </message>
     <message>
         <source>Fermentable Database</source>
-        <translation>Databáze surovin</translation>
+        <translation type="vanished">Databáze surovin</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation>Přidat do receptu</translation>
+        <translation type="vanished">Přidat do receptu</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>Nový</translation>
+        <translation type="vanished">Nový</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation>Přidat zvolenou přísadu do receptu</translation>
+        <translation type="vanished">Přidat zvolenou přísadu do receptu</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation>Vytvořit novou přísadu</translation>
+        <translation type="vanished">Vytvořit novou přísadu</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation>Upravit zvolenou přísadu</translation>
+        <translation type="vanished">Upravit zvolenou přísadu</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation>Odebrat zvolenou přísadu</translation>
+        <translation type="vanished">Odebrat zvolenou přísadu</translation>
     </message>
 </context>
 <context>
     <name>FermentableEditor</name>
     <message>
         <source>Fermentable name</source>
-        <translation type="unfinished">Název suroviny</translation>
+        <translation type="obsolete">Název suroviny</translation>
     </message>
     <message>
         <source>Fermentable name:</source>
-        <translation type="unfinished">Název suroviny:</translation>
+        <translation type="obsolete">Název suroviny:</translation>
     </message>
 </context>
 <context>
@@ -1727,58 +1723,58 @@ If you didn&apos;t yet do this, click Abort.</source>
     <name>HopDialog</name>
     <message>
         <source>Hop name</source>
-        <translation>Název chmele</translation>
+        <translation type="vanished">Název chmele</translation>
     </message>
     <message>
         <source>Hop name:</source>
-        <translation>Název chmele:</translation>
+        <translation type="vanished">Název chmele:</translation>
     </message>
     <message>
         <source>Hop Database</source>
-        <translation>Datbáze chmelů</translation>
+        <translation type="vanished">Datbáze chmelů</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation>Přidat do receptu</translation>
+        <translation type="vanished">Přidat do receptu</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>Nový</translation>
+        <translation type="vanished">Nový</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation>Přidat zvolenou přísadu do receptu</translation>
+        <translation type="vanished">Přidat zvolenou přísadu do receptu</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation>Vytvořit novou přísadu</translation>
+        <translation type="vanished">Vytvořit novou přísadu</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation>Upravit zvolenou přísadu</translation>
+        <translation type="vanished">Upravit zvolenou přísadu</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation>Odebrat zvolenou přísadu</translation>
+        <translation type="vanished">Odebrat zvolenou přísadu</translation>
     </message>
 </context>
 <context>
     <name>HopEditor</name>
     <message>
         <source>Hop name</source>
-        <translation type="unfinished">Název chmele</translation>
+        <translation type="obsolete">Název chmele</translation>
     </message>
     <message>
         <source>Hop name:</source>
-        <translation type="unfinished">Název chmele:</translation>
+        <translation type="obsolete">Název chmele:</translation>
     </message>
     <message>
         <source>Bittering</source>
-        <translation type="unfinished">Hořký</translation>
+        <translation type="obsolete">Hořký</translation>
     </message>
     <message>
         <source>Aroma</source>
-        <translation type="unfinished">Aromatický</translation>
+        <translation type="obsolete">Aromatický</translation>
     </message>
     <message>
         <source>Flavor</source>
@@ -1790,39 +1786,19 @@ If you didn&apos;t yet do this, click Abort.</source>
     </message>
     <message>
         <source>Leaf</source>
-        <translation type="unfinished">Hlávkový</translation>
+        <translation type="obsolete">Hlávkový</translation>
     </message>
     <message>
         <source>Pellet</source>
-        <translation type="unfinished">Granulovaný</translation>
+        <translation type="obsolete">Granulovaný</translation>
     </message>
     <message>
         <source>Plug</source>
-        <translation type="unfinished">Lisovaný</translation>
+        <translation type="obsolete">Lisovaný</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation type="unfinished">Chmelovar</translation>
-    </message>
-    <message>
-        <source>Aroma &amp; Bittering</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mash</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>First Wort</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Post-Boil</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Dry Hop</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Chmelovar</translation>
     </message>
 </context>
 <context>
@@ -2582,50 +2558,50 @@ If you need help, please open an issue at %1</source>
     <name>MiscDialog</name>
     <message>
         <source>Misc name</source>
-        <translation>Název přípravku</translation>
+        <translation type="vanished">Název přípravku</translation>
     </message>
     <message>
         <source>Misc name:</source>
-        <translation>Název přípravku:</translation>
+        <translation type="vanished">Název přípravku:</translation>
     </message>
     <message>
         <source>Misc Database</source>
-        <translation>Databáze přípravků</translation>
+        <translation type="vanished">Databáze přípravků</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation>Přidat do receptu</translation>
+        <translation type="vanished">Přidat do receptu</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>Nový</translation>
+        <translation type="vanished">Nový</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation>Přidat zvolenou přísadu do receptu</translation>
+        <translation type="vanished">Přidat zvolenou přísadu do receptu</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation>Vytvořit novou přísadu</translation>
+        <translation type="vanished">Vytvořit novou přísadu</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation>Upravit zvolenou přísadu</translation>
+        <translation type="vanished">Upravit zvolenou přísadu</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation>Odebrat zvolenou přísadu</translation>
+        <translation type="vanished">Odebrat zvolenou přísadu</translation>
     </message>
 </context>
 <context>
     <name>MiscEditor</name>
     <message>
         <source>Misc name</source>
-        <translation type="unfinished">Název přípravku</translation>
+        <translation type="obsolete">Název přípravku</translation>
     </message>
     <message>
         <source>Misc name:</source>
-        <translation type="unfinished">Název přípravku:</translation>
+        <translation type="obsolete">Název přípravku:</translation>
     </message>
 </context>
 <context>
@@ -3841,6 +3817,18 @@ Log file may contain more details.</source>
         <source>Could not open %1 for reading (error # %2)</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Merge Database</source>
+        <translation type="unfinished">Spojit databáze</translation>
+    </message>
+    <message>
+        <source>New ingredients etc are available. Would you like to add them to your database?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error matching %1 file pattern in %2 directory</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Recipe</name>
@@ -5051,11 +5039,11 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     <name>StyleEditor</name>
     <message>
         <source>Style name</source>
-        <translation>Název stylu</translation>
+        <translation type="vanished">Název stylu</translation>
     </message>
     <message>
         <source>Style name:</source>
-        <translation>Název stylu:</translation>
+        <translation type="vanished">Název stylu:</translation>
     </message>
 </context>
 <context>
@@ -5597,50 +5585,50 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     <name>YeastDialog</name>
     <message>
         <source>Yeast name</source>
-        <translation>Název kvasnic</translation>
+        <translation type="vanished">Název kvasnic</translation>
     </message>
     <message>
         <source>Yeast name:</source>
-        <translation>Název kvasnic:</translation>
+        <translation type="vanished">Název kvasnic:</translation>
     </message>
     <message>
         <source>Yeast Database</source>
-        <translation>Databáze kvasnic</translation>
+        <translation type="vanished">Databáze kvasnic</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation>Přidat do receptu</translation>
+        <translation type="vanished">Přidat do receptu</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>Nový</translation>
+        <translation type="vanished">Nový</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation>Přidat zvolenou přísadu do receptu</translation>
+        <translation type="vanished">Přidat zvolenou přísadu do receptu</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation>Vytvořit novou přísadu</translation>
+        <translation type="vanished">Vytvořit novou přísadu</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation>Upravit zvolenou přísadu</translation>
+        <translation type="vanished">Upravit zvolenou přísadu</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation>Odebrat zvolenou přísadu</translation>
+        <translation type="vanished">Odebrat zvolenou přísadu</translation>
     </message>
 </context>
 <context>
     <name>YeastEditor</name>
     <message>
         <source>Yeast name</source>
-        <translation type="unfinished">Název kvasnic</translation>
+        <translation type="obsolete">Název kvasnic</translation>
     </message>
     <message>
         <source>Yeast name:</source>
-        <translation type="unfinished">Název kvasnic:</translation>
+        <translation type="obsolete">Název kvasnic:</translation>
     </message>
 </context>
 <context>
@@ -6659,15 +6647,7 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
     <message>
         <source>Check it if the amount listed is in kg instead of L.</source>
-        <translation type="unfinished">Zaškrtněte, pokud se množství přísady vyjadřuje v kg místo l.</translation>
-    </message>
-    <message>
-        <source>Amount is weight?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Checked if the given amount is weight instead of volume</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Zaškrtněte, pokud se množství přísady vyjadřuje v kg místo l.</translation>
     </message>
     <message>
         <source>Producer</source>
@@ -6756,6 +6736,14 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     <message>
         <source>Beta-glucans</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Whether the amount is weight or volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount Type</source>
+        <translation type="unfinished">Druh množství</translation>
     </message>
 </context>
 <context>
@@ -9121,7 +9109,7 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
     <message>
         <source>Date First Brewed</source>
-        <translation>Poprvé uvařeno</translation>
+        <translation type="vanished">Poprvé uvařeno</translation>
     </message>
     <message>
         <source>dd MMM yyyy</source>
@@ -9145,6 +9133,10 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
     <message>
         <source>Total apparent attenuation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Date Created</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -9701,15 +9693,15 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
     <message>
         <source>Check it if the amount given is in kg instead of L.</source>
-        <translation>Zaškrtněte, pokud je objem v kg místo l.</translation>
+        <translation type="vanished">Zaškrtněte, pokud je objem v kg místo l.</translation>
     </message>
     <message>
         <source>Amount is weight?</source>
-        <translation>Možství je hmotnost?</translation>
+        <translation type="vanished">Možství je hmotnost?</translation>
     </message>
     <message>
         <source>Checked if the given amount is weight instead of volume</source>
-        <translation>Zaškrtněte, pokud je zadané množství hmotnostní, nikoli objemové</translation>
+        <translation type="vanished">Zaškrtněte, pokud je zadané množství hmotnostní, nikoli objemové</translation>
     </message>
     <message>
         <source>Lab</source>

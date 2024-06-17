@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * measurement/UnitSystem.cpp is part of Brewtarget, and is copyright the following authors 2009-2023:
+ * measurement/UnitSystem.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -272,6 +272,13 @@ Measurement::UnitSystem const * Measurement::UnitSystem::getInstanceByUniqueName
 Measurement::UnitSystem const & Measurement::UnitSystem::getInstance(SystemOfMeasurement const systemOfMeasurement,
                                                                      PhysicalQuantity const physicalQuantity) {
    auto systemsForThisPhysicalQuantity = Measurement::UnitSystem::getUnitSystems(physicalQuantity);
+
+   // Per the comment in the header, if there is _only_ one UnitSystem for the given PhysicalQuantity then we return
+   // that, without trying to match SystemOfMeasurement.
+   if (systemsForThisPhysicalQuantity.size() == 1) {
+      return **systemsForThisPhysicalQuantity.begin();
+   }
+
    auto result = std::find_if(
       systemsForThisPhysicalQuantity.begin(),
       systemsForThisPhysicalQuantity.end(),
@@ -281,11 +288,13 @@ Measurement::UnitSystem const & Measurement::UnitSystem::getInstance(SystemOfMea
    );
 
    if (systemsForThisPhysicalQuantity.end() == result) {
-      // It's a coding error if we didn't find a match
+      // At this point, it's a coding error if we didn't find a match
       qCritical() <<
          Q_FUNC_INFO << "Unable to find a UnitSystem for SystemOfMeasurement" <<
          Measurement::getDisplayName(systemOfMeasurement) << "and PhysicalQuantity" <<
-         Measurement::physicalQuantityStringMapping[physicalQuantity];
+         Measurement::physicalQuantityStringMapping[physicalQuantity] << "(Searched" <<
+         systemsForThisPhysicalQuantity.size() << "option(s).)";
+      qCritical().noquote() << Q_FUNC_INFO << "Stacktrace:" << Logging::getStackTrace();
       Q_ASSERT(false); // Stop here on a debug build
    }
 
@@ -347,8 +356,9 @@ template QTextStream & operator<<(QTextStream & stream, Measurement::UnitSystem:
 //---------------------------------------------------------------------------------------------------------------------
 namespace Measurement::UnitSystems {
    //
-   // NB: For the mass_Xxxx and volume_Xxxx unit systems, to make Measurement::MixedPhysicalQuantities work, we rely on
-   //     them sharing systemOfMeasurement. TODO: This will need to change for PhysicalQuantity::Count
+   // NB: For the mass_Xxxx and volume_Xxxx unit systems, to make PhysicalQuantity::ChoiceOfPhysicalQuantity work, we
+   //     rely on them sharing systemOfMeasurement (Imperial, UsCustomary or Metric).  However, this trick can't work
+   //     with PhysicalQuantity::Count, so there is special handling for that.
    //
    UnitSystem const mass_Metric{PhysicalQuantity::Mass,
                                 &Measurement::Units::kilograms,

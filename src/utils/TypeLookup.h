@@ -227,10 +227,16 @@ private:
  */
 template <typename T> concept HasTypeLookup = (std::is_base_of_v<NamedEntity, T> &&
                                                std::same_as<decltype(T::typeLookup), TypeLookup const>);
-
-template<typename      T> struct TypeLookupOf      : std::integral_constant<TypeLookup const *, nullptr       > {};
-template<HasTypeLookup T> struct TypeLookupOf<T>   : std::integral_constant<TypeLookup const *, &T::typeLookup> {};
-template<HasTypeLookup T> struct TypeLookupOf<T *> : std::integral_constant<TypeLookup const *, &T::typeLookup> {};
+//
+// Default assumption is that a type (eg int) doesn't have its own typeLookup function.  Then we override this for types
+// (such as our own classes inheriting from NamedEntity) that do.  We have to handle all the different types of pointers
+// here.
+//
+template<typename      T> struct TypeLookupOf                     : std::integral_constant<TypeLookup const *, nullptr       > {};
+template<HasTypeLookup T> struct TypeLookupOf<T>                  : std::integral_constant<TypeLookup const *, &T::typeLookup> {};
+template<HasTypeLookup T> struct TypeLookupOf<T *>                : std::integral_constant<TypeLookup const *, &T::typeLookup> {};
+template<HasTypeLookup T> struct TypeLookupOf<std::shared_ptr<T>> : std::integral_constant<TypeLookup const *, &T::typeLookup> {};
+template<HasTypeLookup T> struct TypeLookupOf<std::unique_ptr<T>> : std::integral_constant<TypeLookup const *, &T::typeLookup> {};
 
 /**
  * \brief This macro simplifies the entries in the \c initializerList parameter of a \c TypeLookup constructor call.  It

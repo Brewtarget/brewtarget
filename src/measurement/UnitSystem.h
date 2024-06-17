@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * measurement/UnitSystem.h is part of Brewtarget, and is copyright the following authors 2009-2023:
+ * measurement/UnitSystem.h is part of Brewtarget, and is copyright the following authors 2009-2024:
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -210,6 +210,14 @@ namespace Measurement {
        */
       static UnitSystem const * getInstanceByUniqueName(QString const & name);
 
+      /**
+       * \brief For the given \c SystemOfMeasurement (eg Metric) and \c PhysicalQuantity (eg Volume), returns the
+       *        appropriate \c UnitSystem (eg volume_Metric).  HOWEVER, if there is no match and the supplied
+       *        \c PhysicalQuantity only has one \c UnitSystem, then return that.  (This allows
+       *        \c ChoiceOfPhysicalQuantity::Mass_Volume_Count to work for the \c Count case.  For Mass and Volume, we
+       *        allow Imperial / UsCustomary / Metric systems of measurement, but it would be madness to have Metric,
+       *        Imperial, etc versions of Count.  So it's better to do some special case handling here.
+       */
       static UnitSystem const & getInstance(SystemOfMeasurement const systemOfMeasurement,
                                             PhysicalQuantity const physicalQuantity);
 

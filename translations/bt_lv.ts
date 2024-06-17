@@ -837,14 +837,6 @@
 <context>
     <name>Database</name>
     <message>
-        <source>Merge Database</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>There may be new ingredients and recipes available. Would you like to add these to your database?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Database password</source>
         <translation type="unfinished"></translation>
     </message>
@@ -872,14 +864,6 @@
         <source>Successfully read new default data
 
 %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Unable to import new default data
-
-%1
-
-Log file may contain more details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -952,6 +936,14 @@ If you didn&apos;t yet do this, click Abort.</source>
 %1</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Unable to import some or all of new default data
+
+%1
+
+Log file may contain more details.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Equipment</name>
@@ -962,18 +954,6 @@ If you didn&apos;t yet do this, click Abort.</source>
 </context>
 <context>
     <name>EquipmentEditor</name>
-    <message>
-        <source>Grain absorption (%1/%2)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Equipment name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Equipment name:</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <source>Equipment</source>
         <translation type="vanished">Iekārtas</translation>
@@ -1000,10 +980,6 @@ If you didn&apos;t yet do this, click Abort.</source>
     </message>
     <message>
         <source>Calculation Warnings</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>This equipment profile may break Brewtarget&apos;s maths</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1144,51 +1120,8 @@ If you didn&apos;t yet do this, click Abort.</source>
 <context>
     <name>FermentableDialog</name>
     <message>
-        <source>Fermentable name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fermentable name:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fermentable Database</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Add to Recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>New</source>
-        <translation>Jauns</translation>
-    </message>
-    <message>
-        <source>Add selected ingredient to recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Create new ingredient</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit selected ingredient</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Remove selected ingredient</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>FermentableEditor</name>
-    <message>
-        <source>Fermentable name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fermentable name:</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Jauns</translation>
     </message>
 </context>
 <context>
@@ -1400,95 +1333,8 @@ If you didn&apos;t yet do this, click Abort.</source>
 <context>
     <name>HopDialog</name>
     <message>
-        <source>Hop name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hop name:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hop Database</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Add to Recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>New</source>
-        <translation>Jauns</translation>
-    </message>
-    <message>
-        <source>Add selected ingredient to recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Create new ingredient</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit selected ingredient</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Remove selected ingredient</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>HopEditor</name>
-    <message>
-        <source>Hop name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hop name:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Bittering</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Aroma</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Aroma &amp; Bittering</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Leaf</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Pellet</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Plug</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mash</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>First Wort</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Boil</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Post-Boil</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Dry Hop</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Jauns</translation>
     </message>
 </context>
 <context>
@@ -2108,51 +1954,8 @@ If you need help, please open an issue at %1</source>
 <context>
     <name>MiscDialog</name>
     <message>
-        <source>Misc name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Misc name:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Misc Database</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Add to Recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>New</source>
-        <translation>Jauns</translation>
-    </message>
-    <message>
-        <source>Add selected ingredient to recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Create new ingredient</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit selected ingredient</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Remove selected ingredient</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>MiscEditor</name>
-    <message>
-        <source>Misc name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Misc name:</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Jauns</translation>
     </message>
 </context>
 <context>
@@ -3143,6 +2946,18 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Could not open %1 for reading (error # %2)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Merge Database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New ingredients etc are available. Would you like to add them to your database?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error matching %1 file pattern in %2 directory</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4337,17 +4152,6 @@ The final volume in the primary is %1.</source>
     </message>
 </context>
 <context>
-    <name>StyleEditor</name>
-    <message>
-        <source>Style name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Style name:</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>StyleTableModel</name>
     <message>
         <source>Name</source>
@@ -4841,51 +4645,8 @@ The final volume in the primary is %1.</source>
 <context>
     <name>YeastDialog</name>
     <message>
-        <source>Yeast name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Yeast name:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Yeast Database</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Add to Recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>New</source>
-        <translation>Jauns</translation>
-    </message>
-    <message>
-        <source>Add selected ingredient to recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Create new ingredient</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit selected ingredient</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Remove selected ingredient</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>YeastEditor</name>
-    <message>
-        <source>Yeast name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Yeast name:</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Jauns</translation>
     </message>
 </context>
 <context>
@@ -5690,18 +5451,6 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Check it if the amount listed is in kg instead of L.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Amount is weight?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Checked if the given amount is weight instead of volume</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Producer</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5787,6 +5536,14 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Beta-glucans</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Whether the amount is weight or volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount Type</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -7756,10 +7513,6 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Date First Brewed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>dd MMM yyyy</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7781,6 +7534,10 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Total apparent attenuation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Date Created</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -8229,18 +7986,6 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Check it if the amount given is in kg instead of L.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Amount is weight?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Checked if the given amount is weight instead of volume</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

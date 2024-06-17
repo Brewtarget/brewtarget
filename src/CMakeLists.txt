@@ -64,7 +64,6 @@ set(filesToCompile_cpp
     ${repoDir}/src/Html.cpp
     ${repoDir}/src/HydrometerTool.cpp
     ${repoDir}/src/IbuGuSlider.cpp
-    ${repoDir}/src/ImportExport.cpp
     ${repoDir}/src/InstructionWidget.cpp
     ${repoDir}/src/InventoryFormatter.cpp
     ${repoDir}/src/Localization.cpp
@@ -92,8 +91,8 @@ set(filesToCompile_cpp
     ${repoDir}/src/TimerWidget.cpp
     ${repoDir}/src/WaterDialog.cpp
     ${repoDir}/src/boiltime.cpp
-    ${repoDir}/src/buttons/EquipmentButton.cpp
     ${repoDir}/src/buttons/BoilButton.cpp
+    ${repoDir}/src/buttons/EquipmentButton.cpp
     ${repoDir}/src/buttons/FermentationButton.cpp
     ${repoDir}/src/buttons/MashButton.cpp
     ${repoDir}/src/buttons/RecipeAttributeButton.cpp
@@ -107,6 +106,7 @@ set(filesToCompile_cpp
     ${repoDir}/src/catalogs/YeastCatalog.cpp
     ${repoDir}/src/database/BtSqlQuery.cpp
     ${repoDir}/src/database/Database.cpp
+    ${repoDir}/src/database/DefaultContentLoader.cpp
     ${repoDir}/src/database/DatabaseSchemaHelper.cpp
     ${repoDir}/src/database/DbTransaction.cpp
     ${repoDir}/src/database/ObjectStore.cpp
@@ -182,6 +182,7 @@ set(filesToCompile_cpp
     ${repoDir}/src/model/Style.cpp
     ${repoDir}/src/model/Water.cpp
     ${repoDir}/src/model/Yeast.cpp
+    ${repoDir}/src/serialization/ImportExport.cpp
     ${repoDir}/src/serialization/SerializationRecord.cpp
     ${repoDir}/src/serialization/json/BeerJson.cpp
     ${repoDir}/src/serialization/json/JsonCoding.cpp
@@ -255,7 +256,6 @@ set(filesToCompile_cpp
     ${repoDir}/src/widgets/SelectionControl.cpp
     ${repoDir}/src/widgets/SmartAmountSettings.cpp
     ${repoDir}/src/widgets/SmartAmounts.cpp
-    ${repoDir}/src/widgets/SmartCheckBox.cpp
     ${repoDir}/src/widgets/SmartDigitWidget.cpp
     ${repoDir}/src/widgets/SmartField.cpp
     ${repoDir}/src/widgets/SmartLabel.cpp

@@ -30,7 +30,7 @@
 #include "model/FolderBase.h"
 #include "model/NamedEntity.h"
 
-//╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+//======================================================================================================================
 //========================================== Start of property name constants ==========================================
 // See comment in model/NamedEntity.h
 #define AddPropertyName(property) namespace PropertyNames::Equipment { BtStringConst const property{#property}; }
@@ -82,7 +82,7 @@ AddPropertyName(topUpWater_l               )
 AddPropertyName(kettleTrubChillerLoss_l    )
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
-//╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+//======================================================================================================================
 
 
 /*!
@@ -156,6 +156,9 @@ public:
    static constexpr double default_topUpWater_l               = 0.0;
    //! @}
 
+   //=================================================== PROPERTIES ====================================================
+   //! \brief Folder.  See model/FolderBase for implementation of the getter & setter.
+   Q_PROPERTY(QString folder READ folder WRITE setFolder)
    /**
     * \brief The boil size in liters: the pre-boil volume used in this particular instance for this equipment setup.
     *        Note that this may be a calculated value depending on the calcBoilVolume property.

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * widgets/SmartAmountSettings.cpp is part of Brewtarget, and is copyright the following authors 2023:
+ * widgets/SmartAmountSettings.cpp is part of Brewtarget, and is copyright the following authors 2023-2024:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -133,12 +133,6 @@ SmartAmounts::ScaleInfo SmartAmountSettings::getScaleInfo() const {
                                      ConvertToPhysicalQuantities(*this->pimpl->m_typeInfo.fieldType));
 }
 
-Measurement::UnitSystem const & SmartAmountSettings::getUnitSystem(SmartAmounts::ScaleInfo const & scaleInfo) const {
-   // It's a coding error to call this for a NonPhysicalQuantity
-   Q_ASSERT(this->pimpl->m_currentPhysicalQuantity);
-   return Measurement::UnitSystem::getInstance(scaleInfo.systemOfMeasurement, *this->pimpl->m_currentPhysicalQuantity);
-}
-
 Measurement::UnitSystem const & SmartAmountSettings::getDisplayUnitSystem() const {
    // It's a coding error to call this for NonPhysicalQuantity, and we assert we never have a ChoiceOfPhysicalQuantity
    // for a SmartLabel that has no associated SmartField.
@@ -168,20 +162,6 @@ void SmartAmountSettings::selectPhysicalQuantity(Measurement::PhysicalQuantity c
 
    this->pimpl->m_currentPhysicalQuantity = physicalQuantity;
 
-   return;
-}
-
-// TODO: We need to rethink this for the case where there are 3 options
-void SmartAmountSettings::selectPhysicalQuantity(bool const isFirst) {
-   // It's a coding error to call this for NonPhysicalQuantity
-   Q_ASSERT(!std::holds_alternative<NonPhysicalQuantity>(*this->pimpl->m_typeInfo.fieldType));
-
-   // It's a coding error to call this if we only hold one PhysicalQuantity
-   Q_ASSERT(!std::holds_alternative<Measurement::PhysicalQuantity>(*this->pimpl->m_typeInfo.fieldType));
-
-   auto const choiceOfPhysicalQuantity = std::get<Measurement::ChoiceOfPhysicalQuantity>(*this->pimpl->m_typeInfo.fieldType);
-   auto const & possibilities = Measurement::allPossibilities(choiceOfPhysicalQuantity);
-   this->pimpl->m_currentPhysicalQuantity = isFirst ? possibilities[0] : possibilities[1];
    return;
 }
 

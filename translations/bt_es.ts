@@ -988,11 +988,11 @@
     <name>Database</name>
     <message>
         <source>Merge Database</source>
-        <translation>Unir Bases de Datos</translation>
+        <translation type="vanished">Unir Bases de Datos</translation>
     </message>
     <message>
         <source>There may be new ingredients and recipes available. Would you like to add these to your database?</source>
-        <translation>Puede haber recetas e ingredientes nuevos disponibles. ¿Te gustaría añadirlos a la base de datos?</translation>
+        <translation type="vanished">Puede haber recetas e ingredientes nuevos disponibles. ¿Te gustaría añadirlos a la base de datos?</translation>
     </message>
     <message>
         <source>Database password</source>
@@ -1022,14 +1022,6 @@
         <source>Successfully read new default data
 
 %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Unable to import new default data
-
-%1
-
-Log file may contain more details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1102,6 +1094,14 @@ If you didn&apos;t yet do this, click Abort.</source>
 %1</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Unable to import some or all of new default data
+
+%1
+
+Log file may contain more details.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Equipment</name>
@@ -1114,7 +1114,7 @@ If you didn&apos;t yet do this, click Abort.</source>
     <name>EquipmentEditor</name>
     <message>
         <source>Grain absorption (%1/%2)</source>
-        <translation>Absorción del Grano (%1/%2)</translation>
+        <translation type="vanished">Absorción del Grano (%1/%2)</translation>
     </message>
     <message>
         <source>Tun Volume Warning</source>
@@ -1126,11 +1126,11 @@ If you didn&apos;t yet do this, click Abort.</source>
     </message>
     <message>
         <source>Equipment name</source>
-        <translation>Nombre del equipo</translation>
+        <translation type="vanished">Nombre del equipo</translation>
     </message>
     <message>
         <source>Equipment name:</source>
-        <translation>Nombre del equipo:</translation>
+        <translation type="vanished">Nombre del equipo:</translation>
     </message>
     <message>
         <source>The tun volume you entered is 0. This may cause problems</source>
@@ -1301,10 +1301,6 @@ If you didn&apos;t yet do this, click Abort.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>This equipment profile may break Brewtarget&apos;s maths</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>This equipment profile may break %1&apos;s maths</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1459,50 +1455,50 @@ If you didn&apos;t yet do this, click Abort.</source>
     <name>FermentableDialog</name>
     <message>
         <source>Fermentable name</source>
-        <translation>Nombre del Fermentable</translation>
+        <translation type="vanished">Nombre del Fermentable</translation>
     </message>
     <message>
         <source>Fermentable name:</source>
-        <translation>Nombre del Fermentable:</translation>
+        <translation type="vanished">Nombre del Fermentable:</translation>
     </message>
     <message>
         <source>Fermentable Database</source>
-        <translation>Base de datos para fermentables</translation>
+        <translation type="vanished">Base de datos para fermentables</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation>Agregar a Receta</translation>
+        <translation type="vanished">Agregar a Receta</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>Nuevo</translation>
+        <translation type="vanished">Nuevo</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation>Agregar ingrediente seleccionado a la receta</translation>
+        <translation type="vanished">Agregar ingrediente seleccionado a la receta</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation>Crear un ingrediente nuevo</translation>
+        <translation type="vanished">Crear un ingrediente nuevo</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation>Editar ingrediente seleccionado</translation>
+        <translation type="vanished">Editar ingrediente seleccionado</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation>Quitar ingrediente seleccionado</translation>
+        <translation type="vanished">Quitar ingrediente seleccionado</translation>
     </message>
 </context>
 <context>
     <name>FermentableEditor</name>
     <message>
         <source>Fermentable name</source>
-        <translation type="unfinished">Nombre del Fermentable</translation>
+        <translation type="obsolete">Nombre del Fermentable</translation>
     </message>
     <message>
         <source>Fermentable name:</source>
-        <translation type="unfinished">Nombre del Fermentable:</translation>
+        <translation type="obsolete">Nombre del Fermentable:</translation>
     </message>
 </context>
 <context>
@@ -1798,58 +1794,58 @@ If you didn&apos;t yet do this, click Abort.</source>
     <name>HopDialog</name>
     <message>
         <source>Hop name</source>
-        <translation>Nombre de lúpulo</translation>
+        <translation type="vanished">Nombre de lúpulo</translation>
     </message>
     <message>
         <source>Hop name:</source>
-        <translation>Nombre de lúpulo:</translation>
+        <translation type="vanished">Nombre de lúpulo:</translation>
     </message>
     <message>
         <source>Hop Database</source>
-        <translation>Base de datos para Lúpulos</translation>
+        <translation type="vanished">Base de datos para Lúpulos</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation>Agregar a Receta</translation>
+        <translation type="vanished">Agregar a Receta</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>Nuevo</translation>
+        <translation type="vanished">Nuevo</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation>Agregar ingrediente seleccionado a la receta</translation>
+        <translation type="vanished">Agregar ingrediente seleccionado a la receta</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation>Crear un ingrediente nuevo</translation>
+        <translation type="vanished">Crear un ingrediente nuevo</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation>Editar ingrediente seleccionado</translation>
+        <translation type="vanished">Editar ingrediente seleccionado</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation>Quitar ingrediente seleccionado</translation>
+        <translation type="vanished">Quitar ingrediente seleccionado</translation>
     </message>
 </context>
 <context>
     <name>HopEditor</name>
     <message>
         <source>Hop name</source>
-        <translation type="unfinished">Nombre de lúpulo</translation>
+        <translation type="obsolete">Nombre de lúpulo</translation>
     </message>
     <message>
         <source>Hop name:</source>
-        <translation type="unfinished">Nombre de lúpulo:</translation>
+        <translation type="obsolete">Nombre de lúpulo:</translation>
     </message>
     <message>
         <source>Bittering</source>
-        <translation type="unfinished">Amargor</translation>
+        <translation type="obsolete">Amargor</translation>
     </message>
     <message>
         <source>Aroma</source>
-        <translation type="unfinished">Aroma</translation>
+        <translation type="obsolete">Aroma</translation>
     </message>
     <message>
         <source>Flavor</source>
@@ -1861,39 +1857,19 @@ If you didn&apos;t yet do this, click Abort.</source>
     </message>
     <message>
         <source>Leaf</source>
-        <translation type="unfinished">Flor</translation>
+        <translation type="obsolete">Flor</translation>
     </message>
     <message>
         <source>Pellet</source>
-        <translation type="unfinished">Pellet</translation>
+        <translation type="obsolete">Pellet</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished">Maceración</translation>
+        <translation type="obsolete">Maceración</translation>
     </message>
     <message>
         <source>Dry Hop</source>
-        <translation type="unfinished">Dry Hop</translation>
-    </message>
-    <message>
-        <source>Aroma &amp; Bittering</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Plug</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>First Wort</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Boil</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Post-Boil</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Dry Hop</translation>
     </message>
 </context>
 <context>
@@ -2657,50 +2633,50 @@ If you need help, please open an issue at %1</source>
     <name>MiscDialog</name>
     <message>
         <source>Misc name</source>
-        <translation>Nombre de misc</translation>
+        <translation type="vanished">Nombre de misc</translation>
     </message>
     <message>
         <source>Misc name:</source>
-        <translation>Nombre de misc:</translation>
+        <translation type="vanished">Nombre de misc:</translation>
     </message>
     <message>
         <source>Misc Database</source>
-        <translation>Base de datos de miscs</translation>
+        <translation type="vanished">Base de datos de miscs</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation>Agregar a Receta</translation>
+        <translation type="vanished">Agregar a Receta</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>Nuevo</translation>
+        <translation type="vanished">Nuevo</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation>Agregar ingrediente seleccionado a la receta</translation>
+        <translation type="vanished">Agregar ingrediente seleccionado a la receta</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation>Crear un ingrediente nuevo</translation>
+        <translation type="vanished">Crear un ingrediente nuevo</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation>Editar ingrediente seleccionado</translation>
+        <translation type="vanished">Editar ingrediente seleccionado</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation>Quitar ingrediente seleccionado</translation>
+        <translation type="vanished">Quitar ingrediente seleccionado</translation>
     </message>
 </context>
 <context>
     <name>MiscEditor</name>
     <message>
         <source>Misc name</source>
-        <translation type="unfinished">Nombre de misc</translation>
+        <translation type="obsolete">Nombre de misc</translation>
     </message>
     <message>
         <source>Misc name:</source>
-        <translation type="unfinished">Nombre de misc:</translation>
+        <translation type="obsolete">Nombre de misc:</translation>
     </message>
 </context>
 <context>
@@ -3910,6 +3886,18 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Could not open %1 for reading (error # %2)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Merge Database</source>
+        <translation type="unfinished">Unir Bases de Datos</translation>
+    </message>
+    <message>
+        <source>New ingredients etc are available. Would you like to add them to your database?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error matching %1 file pattern in %2 directory</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -5125,11 +5113,11 @@ El volumen final en el primario es %1.</translation>
     <name>StyleEditor</name>
     <message>
         <source>Style name</source>
-        <translation>Nombre del estilo</translation>
+        <translation type="vanished">Nombre del estilo</translation>
     </message>
     <message>
         <source>Style name:</source>
-        <translation>Nombre del estilo:</translation>
+        <translation type="vanished">Nombre del estilo:</translation>
     </message>
 </context>
 <context>
@@ -5671,50 +5659,50 @@ El volumen final en el primario es %1.</translation>
     <name>YeastDialog</name>
     <message>
         <source>Yeast name</source>
-        <translation>Nombre de levadura</translation>
+        <translation type="vanished">Nombre de levadura</translation>
     </message>
     <message>
         <source>Yeast name:</source>
-        <translation>Nombre de levadura:</translation>
+        <translation type="vanished">Nombre de levadura:</translation>
     </message>
     <message>
         <source>Yeast Database</source>
-        <translation>Base de datos para levaduras</translation>
+        <translation type="vanished">Base de datos para levaduras</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation>Agregar a Receta</translation>
+        <translation type="vanished">Agregar a Receta</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>Nuevo</translation>
+        <translation type="vanished">Nuevo</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation>Agregar ingrediente seleccionado a la receta</translation>
+        <translation type="vanished">Agregar ingrediente seleccionado a la receta</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation>Crear un ingrediente nuevo</translation>
+        <translation type="vanished">Crear un ingrediente nuevo</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation>Editar ingrediente seleccionado</translation>
+        <translation type="vanished">Editar ingrediente seleccionado</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation>Quitar ingrediente seleccionado</translation>
+        <translation type="vanished">Quitar ingrediente seleccionado</translation>
     </message>
 </context>
 <context>
     <name>YeastEditor</name>
     <message>
         <source>Yeast name</source>
-        <translation type="unfinished">Nombre de levadura</translation>
+        <translation type="obsolete">Nombre de levadura</translation>
     </message>
     <message>
         <source>Yeast name:</source>
-        <translation type="unfinished">Nombre de levadura:</translation>
+        <translation type="obsolete">Nombre de levadura:</translation>
     </message>
 </context>
 <context>
@@ -6727,15 +6715,11 @@ El volumen final en el primario es %1.</translation>
     </message>
     <message>
         <source>Check it if the amount listed is in kg instead of L.</source>
-        <translation type="unfinished">Marcar si la cantidad se mide por masa en vez de volumen</translation>
+        <translation type="obsolete">Marcar si la cantidad se mide por masa en vez de volumen</translation>
     </message>
     <message>
         <source>Amount is weight?</source>
-        <translation type="unfinished">¿Cantidad es masa?</translation>
-    </message>
-    <message>
-        <source>Checked if the given amount is weight instead of volume</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">¿Cantidad es masa?</translation>
     </message>
     <message>
         <source>Producer</source>
@@ -6824,6 +6808,14 @@ El volumen final en el primario es %1.</translation>
     <message>
         <source>Beta-glucans</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Whether the amount is weight or volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount Type</source>
+        <translation type="unfinished">Tipo de Cantidad</translation>
     </message>
 </context>
 <context>
@@ -9185,7 +9177,7 @@ El volumen final en el primario es %1.</translation>
     </message>
     <message>
         <source>Date First Brewed</source>
-        <translation>Fecha de Primera Fabricación</translation>
+        <translation type="vanished">Fecha de Primera Fabricación</translation>
     </message>
     <message>
         <source>dd MMM yyyy</source>
@@ -9209,6 +9201,10 @@ El volumen final en el primario es %1.</translation>
     </message>
     <message>
         <source>Total apparent attenuation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Date Created</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -9765,15 +9761,15 @@ El volumen final en el primario es %1.</translation>
     </message>
     <message>
         <source>Check it if the amount given is in kg instead of L.</source>
-        <translation>Si la cantidad es masa.</translation>
+        <translation type="vanished">Si la cantidad es masa.</translation>
     </message>
     <message>
         <source>Amount is weight?</source>
-        <translation>¿Cantidad es masa?</translation>
+        <translation type="vanished">¿Cantidad es masa?</translation>
     </message>
     <message>
         <source>Checked if the given amount is weight instead of volume</source>
-        <translation>Si la cantidad es masa</translation>
+        <translation type="vanished">Si la cantidad es masa</translation>
     </message>
     <message>
         <source>Lab</source>

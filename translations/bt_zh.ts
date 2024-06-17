@@ -937,11 +937,11 @@
     <name>Database</name>
     <message>
         <source>Merge Database</source>
-        <translation>合并数据库</translation>
+        <translation type="vanished">合并数据库</translation>
     </message>
     <message>
         <source>There may be new ingredients and recipes available. Would you like to add these to your database?</source>
-        <translation>有可能是新的成分和配方。你想添加到你的数据库？</translation>
+        <translation type="vanished">有可能是新的成分和配方。你想添加到你的数据库？</translation>
     </message>
     <message>
         <source>Database password</source>
@@ -971,14 +971,6 @@
         <source>Successfully read new default data
 
 %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Unable to import new default data
-
-%1
-
-Log file may contain more details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1051,6 +1043,14 @@ If you didn&apos;t yet do this, click Abort.</source>
 %1</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Unable to import some or all of new default data
+
+%1
+
+Log file may contain more details.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Equipment</name>
@@ -1063,7 +1063,7 @@ If you didn&apos;t yet do this, click Abort.</source>
     <name>EquipmentEditor</name>
     <message>
         <source>Grain absorption (%1/%2)</source>
-        <translation>粮食吸水率(%1/%2)</translation>
+        <translation type="vanished">粮食吸水率(%1/%2)</translation>
     </message>
     <message>
         <source>Tun Volume Warning</source>
@@ -1075,11 +1075,11 @@ If you didn&apos;t yet do this, click Abort.</source>
     </message>
     <message>
         <source>Equipment name</source>
-        <translation>设备名称</translation>
+        <translation type="vanished">设备名称</translation>
     </message>
     <message>
         <source>Equipment name:</source>
-        <translation>设备名称：</translation>
+        <translation type="vanished">设备名称：</translation>
     </message>
     <message>
         <source>The tun volume you entered is 0. This may cause problems</source>
@@ -1250,10 +1250,6 @@ If you didn&apos;t yet do this, click Abort.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>This equipment profile may break Brewtarget&apos;s maths</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>This equipment profile may break %1&apos;s maths</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1400,50 +1396,50 @@ If you didn&apos;t yet do this, click Abort.</source>
     <name>FermentableDialog</name>
     <message>
         <source>Fermentable name</source>
-        <translation>可发酵的名字</translation>
+        <translation type="vanished">可发酵的名字</translation>
     </message>
     <message>
         <source>Fermentable name:</source>
-        <translation>可发酵的名称:</translation>
+        <translation type="vanished">可发酵的名称:</translation>
     </message>
     <message>
         <source>Fermentable Database</source>
-        <translation>可发酵的数据库Fermentable Database</translation>
+        <translation type="vanished">可发酵的数据库Fermentable Database</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation>添加到配方Add to Recipe</translation>
+        <translation type="vanished">添加到配方Add to Recipe</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>新New</translation>
+        <translation type="vanished">新New</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation>选择添加成份，配方添加选定的配方成分Add selected ingredient to recipe</translation>
+        <translation type="vanished">选择添加成份，配方添加选定的配方成分Add selected ingredient to recipe</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation>创建新的成分Create new ingredient</translation>
+        <translation type="vanished">创建新的成分Create new ingredient</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation>编辑选定的成分Edit selected ingredient</translation>
+        <translation type="vanished">编辑选定的成分Edit selected ingredient</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation>删除选定的成分Remove selected ingredient</translation>
+        <translation type="vanished">删除选定的成分Remove selected ingredient</translation>
     </message>
 </context>
 <context>
     <name>FermentableEditor</name>
     <message>
         <source>Fermentable name</source>
-        <translation type="unfinished">可发酵的名字</translation>
+        <translation type="obsolete">可发酵的名字</translation>
     </message>
     <message>
         <source>Fermentable name:</source>
-        <translation type="unfinished">可发酵的名称:</translation>
+        <translation type="obsolete">可发酵的名称:</translation>
     </message>
 </context>
 <context>
@@ -1723,50 +1719,50 @@ If you didn&apos;t yet do this, click Abort.</source>
     <name>HopDialog</name>
     <message>
         <source>Hop name</source>
-        <translation>合名Hop name</translation>
+        <translation type="vanished">合名Hop name</translation>
     </message>
     <message>
         <source>Hop name:</source>
-        <translation>合名称合名</translation>
+        <translation type="vanished">合名称合名</translation>
     </message>
     <message>
         <source>Hop Database</source>
-        <translation>合数据库</translation>
+        <translation type="vanished">合数据库</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation>添加到配方Add to Recipe</translation>
+        <translation type="vanished">添加到配方Add to Recipe</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>新New</translation>
+        <translation type="vanished">新New</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation>选择添加成份，配方添加选定的配方成分Add selected ingredient to recipe</translation>
+        <translation type="vanished">选择添加成份，配方添加选定的配方成分Add selected ingredient to recipe</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation>创建新的成分Create new ingredient</translation>
+        <translation type="vanished">创建新的成分Create new ingredient</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation>编辑选定的成分Edit selected ingredient</translation>
+        <translation type="vanished">编辑选定的成分Edit selected ingredient</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation>删除选定的成分Remove selected ingredient</translation>
+        <translation type="vanished">删除选定的成分Remove selected ingredient</translation>
     </message>
 </context>
 <context>
     <name>HopEditor</name>
     <message>
         <source>Hop name</source>
-        <translation type="unfinished">合名Hop name</translation>
+        <translation type="obsolete">合名Hop name</translation>
     </message>
     <message>
         <source>Hop name:</source>
-        <translation type="unfinished">合名称合名</translation>
+        <translation type="obsolete">合名称合名</translation>
     </message>
     <message>
         <source>Flavor</source>
@@ -1775,50 +1771,6 @@ If you didn&apos;t yet do this, click Abort.</source>
     <message>
         <source>Extract</source>
         <translation type="obsolete">提取</translation>
-    </message>
-    <message>
-        <source>Bittering</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Aroma</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Aroma &amp; Bittering</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Leaf</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Pellet</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Plug</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mash</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>First Wort</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Boil</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Post-Boil</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Dry Hop</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2566,50 +2518,50 @@ If you need help, please open an issue at %1</source>
     <name>MiscDialog</name>
     <message>
         <source>Misc name</source>
-        <translation>其他名称</translation>
+        <translation type="vanished">其他名称</translation>
     </message>
     <message>
         <source>Misc name:</source>
-        <translation>其他名称：</translation>
+        <translation type="vanished">其他名称：</translation>
     </message>
     <message>
         <source>Misc Database</source>
-        <translation>Misc数据库Misc Database</translation>
+        <translation type="vanished">Misc数据库Misc Database</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation>添加到配方Add to Recipe</translation>
+        <translation type="vanished">添加到配方Add to Recipe</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>新New</translation>
+        <translation type="vanished">新New</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation>选择添加成份，配方添加选定的配方成分Add selected ingredient to recipe</translation>
+        <translation type="vanished">选择添加成份，配方添加选定的配方成分Add selected ingredient to recipe</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation>创建新的成分Create new ingredient</translation>
+        <translation type="vanished">创建新的成分Create new ingredient</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation>编辑选定的成分Edit selected ingredient</translation>
+        <translation type="vanished">编辑选定的成分Edit selected ingredient</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation>删除选定的成分Remove selected ingredient</translation>
+        <translation type="vanished">删除选定的成分Remove selected ingredient</translation>
     </message>
 </context>
 <context>
     <name>MiscEditor</name>
     <message>
         <source>Misc name</source>
-        <translation type="unfinished">其他名称</translation>
+        <translation type="obsolete">其他名称</translation>
     </message>
     <message>
         <source>Misc name:</source>
-        <translation type="unfinished">其他名称：</translation>
+        <translation type="obsolete">其他名称：</translation>
     </message>
 </context>
 <context>
@@ -3817,6 +3769,18 @@ Log file may contain more details.</source>
         <source>Could not open %1 for reading (error # %2)</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Merge Database</source>
+        <translation type="unfinished">合并数据库</translation>
+    </message>
+    <message>
+        <source>New ingredients etc are available. Would you like to add them to your database?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error matching %1 file pattern in %2 directory</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Recipe</name>
@@ -5019,11 +4983,11 @@ The final volume in the primary is %1.</source>
     <name>StyleEditor</name>
     <message>
         <source>Style name</source>
-        <translation>样式名</translation>
+        <translation type="vanished">样式名</translation>
     </message>
     <message>
         <source>Style name:</source>
-        <translation>风格名称：</translation>
+        <translation type="vanished">风格名称：</translation>
     </message>
 </context>
 <context>
@@ -5565,50 +5529,50 @@ The final volume in the primary is %1.</source>
     <name>YeastDialog</name>
     <message>
         <source>Yeast name</source>
-        <translation>酵母的名字Yeast name</translation>
+        <translation type="vanished">酵母的名字Yeast name</translation>
     </message>
     <message>
         <source>Yeast name:</source>
-        <translation>酵母的名字:Yeast name:</translation>
+        <translation type="vanished">酵母的名字:Yeast name:</translation>
     </message>
     <message>
         <source>Yeast Database</source>
-        <translation>酵母数据库Yeast Database</translation>
+        <translation type="vanished">酵母数据库Yeast Database</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation>添加到配方Add to Recipe</translation>
+        <translation type="vanished">添加到配方Add to Recipe</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>新New</translation>
+        <translation type="vanished">新New</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation>选择添加成份，配方添加选定的配方成分Add selected ingredient to recipe</translation>
+        <translation type="vanished">选择添加成份，配方添加选定的配方成分Add selected ingredient to recipe</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation>创建新的成分Create new ingredient</translation>
+        <translation type="vanished">创建新的成分Create new ingredient</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation>编辑选定的成分Edit selected ingredient</translation>
+        <translation type="vanished">编辑选定的成分Edit selected ingredient</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation>删除选定的成分Remove selected ingredient</translation>
+        <translation type="vanished">删除选定的成分Remove selected ingredient</translation>
     </message>
 </context>
 <context>
     <name>YeastEditor</name>
     <message>
         <source>Yeast name</source>
-        <translation type="unfinished">酵母的名字Yeast name</translation>
+        <translation type="obsolete">酵母的名字Yeast name</translation>
     </message>
     <message>
         <source>Yeast name:</source>
-        <translation type="unfinished">酵母的名字:Yeast name:</translation>
+        <translation type="obsolete">酵母的名字:Yeast name:</translation>
     </message>
 </context>
 <context>
@@ -6617,15 +6581,15 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Check it if the amount listed is in kg instead of L.</source>
-        <translation type="unfinished">检查如果上市量（公斤）代替L。</translation>
+        <translation type="obsolete">检查如果上市量（公斤）代替L。</translation>
     </message>
     <message>
         <source>Amount is weight?</source>
-        <translation type="unfinished">金额重量？Amount is weight?</translation>
+        <translation type="obsolete">金额重量？Amount is weight?</translation>
     </message>
     <message>
         <source>Checked if the given amount is weight instead of volume</source>
-        <translation type="unfinished">检查，如果给定的量是重量，而不是数量</translation>
+        <translation type="obsolete">检查，如果给定的量是重量，而不是数量</translation>
     </message>
     <message>
         <source>Producer</source>
@@ -6714,6 +6678,14 @@ The final volume in the primary is %1.</source>
     <message>
         <source>Beta-glucans</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Whether the amount is weight or volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount Type</source>
+        <translation type="unfinished">金额类型MiscTableModel |</translation>
     </message>
 </context>
 <context>
@@ -9063,7 +9035,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Date First Brewed</source>
-        <translation>首先酿造的日期Date First Brewed</translation>
+        <translation type="vanished">首先酿造的日期Date First Brewed</translation>
     </message>
     <message>
         <source>dd MMM yyyy</source>
@@ -9087,6 +9059,10 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Total apparent attenuation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Date Created</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -9643,15 +9619,15 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Check it if the amount given is in kg instead of L.</source>
-        <translation>如果给定的数量是公斤代替L.检查Check it if the amount given is in kg instead of L.</translation>
+        <translation type="vanished">如果给定的数量是公斤代替L.检查Check it if the amount given is in kg instead of L.</translation>
     </message>
     <message>
         <source>Amount is weight?</source>
-        <translation>金额重量？Amount is weight?</translation>
+        <translation type="vanished">金额重量？Amount is weight?</translation>
     </message>
     <message>
         <source>Checked if the given amount is weight instead of volume</source>
-        <translation>检查，如果给定的量是重量，而不是数量</translation>
+        <translation type="vanished">检查，如果给定的量是重量，而不是数量</translation>
     </message>
     <message>
         <source>Lab</source>
