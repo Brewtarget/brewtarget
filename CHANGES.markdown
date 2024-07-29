@@ -19,6 +19,9 @@ Support for BeerJSON, which includes adding a lot of new fields
 * Lovibond as color unit option [428](https://github.com/Brewtarget/brewtarget/issues/428)
 * Use Brewerwall ingredient data [290](https://github.com/Brewtarget/brewtarget/issues/290)
 * Update Styles to 2015 or even 2021 BJCP Guidelines [125](https://github.com/Brewtarget/brewtarget/issues/125)
+* Add alcohol tolerance as optional parameter in yeast database model and manufacturer's link ? [639](https://github.com/Brewtarget/brewtarget/issues/639)
+* Remove Default amounts in ingredients editors [359](https://github.com/Brewtarget/brewtarget/issues/359)
+* Mechanism to add new content [750](https://github.com/Brewtarget/brewtarget/issues/750)
 
 ### Bug Fixes
 * Default SQLite database file: hop, fermentable, mashstep, misc and yeast tables have unused columns [557](https://github.com/Brewtarget/brewtarget/issues/557)
