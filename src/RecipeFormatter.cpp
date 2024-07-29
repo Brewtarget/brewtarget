@@ -1455,15 +1455,15 @@ QString RecipeFormatter::getToolTip(Yeast* yeast) {
    body += QString("<td class=\"left\">%1</td><td class=\"value\">%2</td></tr>")
            .arg(tr("Form"))
            .arg(Yeast::formDisplayNames[yeast->form()]);
-   // Second row -- lab and prod id
+   // Second row -- lab and attenuation
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
            .arg(tr("Lab"))
            .arg(yeast->laboratory());
-   body += QString("<td class=\"left\">%1</td><td class=\"value\">%2</td></tr>")
+   body += QString("<td class=\"left\">%1</td><td class=\"value\">%2 %</td></tr>")
            .arg(tr("Attenuation"))
-           .arg(Measurement::displayQuantity(yeast->getTypicalAttenuation_pct(), 3));
+           .arg(Measurement::displayQuantity(yeast->getTypicalAttenuation_pct(), 0));
 
-   // third row -- atten and floc
+   // Third row -- prod id and flocculation
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
            .arg(tr("Id"))
            .arg(yeast->productId());

@@ -1,5 +1,6 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * BtFolder.h is part of Brewtarget, and is copyright the following authors 2009-2014:
+ * model/Folder.h is part of Brewken, and is copyright the following authors 2009-2024:
+ *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
  *   • Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -14,46 +15,44 @@
  * You should have received a copy of the GNU General Public License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
  ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
-#ifndef BTFOLDER_H
-#define BTFOLDER_H
+#ifndef MODEL_FOLDER_H
+#define MODEL_FOLDER_H
 #pragma once
 
-#include <QSharedPointer>
-#include <QList>
-#include <QVariant>
-#include <QModelIndex>
-#include <QWidget>
-#include <QVector>
 #include <QObject>
+#include <QString>
 
 
 /*!
- * \class BtFolder
+ * \class Folder
  *
- * \brief Item needed to implement folders in the trees
+ * \brief Item needed to implement folders in the trees.
+ *
+ *        TODO: For the moment, this is implemented in a bit of a short-cut way where a folder exists by virtue of being
+ *        referenced from a Fermentable/Hop/etc object.  Amongst other things this means empty folders are not possible
+ *        and renaming folders is a bit tricky.  At some point we would like to address this and make Folders
+ *        first-class descendants of \c NamedEntity with their own database table.
  *
  * This provides a generic item from which the trees are built. Since most of
  * the actions required are the same regardless of the item being stored (e.g.
  * hop or equipment), this class considers them all the same.
  *
  * A few notes, just so I don't have to rethink all of this. This class
- * generates NO signals. It catches signals from cahnges made in the database,
+ * generates NO signals. It catches signals from changes made in the database,
  * but I currently don't think it needs to signal anything itself. I reserve
- * the right to chnage this just as soon as I actually start working the
+ * the right to change this just as soon as I actually start working the
  * trees.
  *
  */
-class BtFolder : public QObject
-{
-
+class Folder : public QObject {
    Q_OBJECT
 
 public:
 
-   BtFolder();
-   BtFolder(BtFolder const& other);
+   Folder();
+   Folder(Folder const & other);
 
-   virtual ~BtFolder() {}
+   virtual ~Folder();
 
    // Getters
    QString name() const;
@@ -61,17 +60,17 @@ public:
    QString fullPath() const;
 
    //Setter
-   void setName( QString var );
-   void setPath( QString var );
-   void setfullPath( QString var );
+   void setName(QString var);
+   void setPath(QString var);
+   void setfullPath(QString var);
 
    //! \brief do some tests to see if the provided name is mine
-   bool isFolder( QString name );
+   bool isFolder(QString name);
 
 private:
-   QString _name;
-   QString _path;
-   QString _fullPath;
+   QString m_name;
+   QString m_path;
+   QString m_fullPath;
 
 };
 

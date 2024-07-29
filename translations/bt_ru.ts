@@ -719,27 +719,27 @@
     <name>BtTreeModel</name>
     <message>
         <source>Name</source>
-        <translation>Название</translation>
+        <translation type="vanished">Название</translation>
     </message>
     <message>
         <source>Brew Date</source>
-        <translation>Дата варки</translation>
+        <translation type="vanished">Дата варки</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation>Стиль</translation>
+        <translation type="vanished">Стиль</translation>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation>Время кипячения</translation>
+        <translation type="vanished">Время кипячения</translation>
     </message>
     <message>
         <source>Color</source>
-        <translation>Цвет</translation>
+        <translation type="vanished">Цвет</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Тип</translation>
+        <translation type="vanished">Тип</translation>
     </message>
     <message>
         <source>Use</source>
@@ -747,178 +747,138 @@
     </message>
     <message>
         <source>Form</source>
-        <translation>Форма</translation>
+        <translation type="vanished">Форма</translation>
     </message>
     <message>
         <source>Category</source>
-        <translation>Категория</translation>
+        <translation type="vanished">Категория</translation>
     </message>
     <message>
         <source>Number</source>
-        <translation>Число</translation>
+        <translation type="vanished">Число</translation>
     </message>
     <message>
         <source>Letter</source>
-        <translation>Буква</translation>
+        <translation type="vanished">Буква</translation>
     </message>
     <message>
         <source>Guide</source>
-        <translation>Руководство</translation>
+        <translation type="vanished">Руководство</translation>
     </message>
     <message>
         <source>PATH</source>
-        <translation>Путь</translation>
+        <translation type="vanished">Путь</translation>
     </message>
     <message>
         <source>FULLPATH</source>
-        <translation>Полный путь</translation>
+        <translation type="vanished">Полный путь</translation>
     </message>
     <message>
         <source>Could not copy</source>
-        <translation>Не удалось скопировать</translation>
+        <translation type="vanished">Не удалось скопировать</translation>
     </message>
     <message>
         <source>There was an unexpected error creating %1</source>
-        <translation>Не ожидаемая ошибка при создании %1</translation>
-    </message>
-    <message>
-        <source>Snapshots</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Ca</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>HCO3</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>SO4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cl</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Na</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mg</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>pH</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>% Alpha</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Не ожидаемая ошибка при создании %1</translation>
     </message>
     <message>
         <source>Origin</source>
-        <translation type="unfinished">Происхождение</translation>
+        <translation type="obsolete">Происхождение</translation>
     </message>
 </context>
 <context>
     <name>BtTreeView</name>
     <message>
         <source>New</source>
-        <translation>Новый</translation>
+        <translation type="vanished">Новый</translation>
     </message>
     <message>
         <source>Recipe</source>
-        <translation>Рецепт</translation>
+        <translation type="vanished">Рецепт</translation>
     </message>
     <message>
         <source>Brew It!</source>
-        <translation>Сварить!</translation>
+        <translation type="vanished">Сварить!</translation>
     </message>
     <message>
         <source>Brew Again</source>
-        <translation>Сварить снова</translation>
+        <translation type="vanished">Сварить снова</translation>
     </message>
     <message>
         <source>Change date</source>
-        <translation>Выбрать дату</translation>
+        <translation type="vanished">Выбрать дату</translation>
     </message>
     <message>
         <source>Recalculate eff</source>
-        <translation>Пересчитать эффективность</translation>
+        <translation type="vanished">Пересчитать эффективность</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation>Удалить</translation>
+        <translation type="vanished">Удалить</translation>
     </message>
     <message>
         <source>Equipment</source>
-        <translation>Оборудование</translation>
+        <translation type="vanished">Оборудование</translation>
     </message>
     <message>
         <source>Fermentable</source>
-        <translation>Сбраживаемый</translation>
+        <translation type="vanished">Сбраживаемый</translation>
     </message>
     <message>
         <source>Hop</source>
-        <translation>Хмель</translation>
+        <translation type="vanished">Хмель</translation>
     </message>
     <message>
         <source>Misc</source>
-        <translation>Разное</translation>
+        <translation type="vanished">Разное</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation>Стиль</translation>
+        <translation type="vanished">Стиль</translation>
     </message>
     <message>
         <source>Yeast</source>
-        <translation>Дрожжи</translation>
+        <translation type="vanished">Дрожжи</translation>
     </message>
     <message>
         <source>Folder</source>
-        <translation>Папка</translation>
+        <translation type="vanished">Папка</translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation>Копировать</translation>
+        <translation type="vanished">Копировать</translation>
     </message>
     <message>
         <source>Export</source>
-        <translation>Экспорт</translation>
+        <translation type="vanished">Экспорт</translation>
     </message>
     <message>
         <source>Import</source>
-        <translation>Импорт</translation>
+        <translation type="vanished">Импорт</translation>
     </message>
     <message>
         <source>Delete %1</source>
-        <translation>Удалить %1</translation>
+        <translation type="vanished">Удалить %1</translation>
     </message>
     <message>
         <source>Delete %1 %2?</source>
-        <translation>Удалить %1 %2?</translation>
+        <translation type="vanished">Удалить %1 %2?</translation>
     </message>
     <message>
         <source>BrewNote</source>
-        <translation>Заметки к варке</translation>
+        <translation type="vanished">Заметки к варке</translation>
     </message>
     <message>
         <source>Cancel All</source>
-        <translation>Отменить всё</translation>
+        <translation type="vanished">Отменить всё</translation>
     </message>
     <message>
         <source>Copy %1</source>
-        <translation>Копирование %1</translation>
+        <translation type="vanished">Копирование %1</translation>
     </message>
     <message>
         <source>Enter a unique name for the copy of %1.</source>
-        <translation>Введите уникальное имя для копии %1.</translation>
-    </message>
-    <message>
-        <source>An empty name will skip copying this %1.</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Введите уникальное имя для копии %1.</translation>
     </message>
     <message>
         <source>To XML</source>
@@ -927,30 +887,6 @@
     <message>
         <source>To HTML</source>
         <translation type="vanished">В HTML</translation>
-    </message>
-    <message>
-        <source>Show Snapshots</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hide Snapshots</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Detach Recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Snapshot Recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Water</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>To File (BeerXML or BeerJSON)</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1112,6 +1048,14 @@ Log file may contain more details.</source>
     <message>
         <source>Equipment</source>
         <translation type="unfinished">Оборудование</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Boil Time</source>
+        <translation type="unfinished">Время кипячения</translation>
     </message>
 </context>
 <context>
@@ -1446,6 +1390,18 @@ Log file may contain more details.</source>
         <source>Smoked</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="unfinished">Тип</translation>
+    </message>
+    <message>
+        <source>Color</source>
+        <translation type="unfinished">Цвет</translation>
+    </message>
 </context>
 <context>
     <name>FermentableDialog</name>
@@ -1637,6 +1593,21 @@ Log file may contain more details.</source>
     </message>
 </context>
 <context>
+    <name>Folder</name>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PATH</source>
+        <translation type="unfinished">Путь</translation>
+    </message>
+    <message>
+        <source>FULLPATH</source>
+        <translation type="unfinished">Полный путь</translation>
+    </message>
+</context>
+<context>
     <name>HelpDialog</name>
     <message>
         <source>for</source>
@@ -1768,6 +1739,22 @@ Log file may contain more details.</source>
     <message>
         <source>Aroma, Bittering &amp; Flavor</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="unfinished">Тип</translation>
+    </message>
+    <message>
+        <source>% Alpha</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Origin</source>
+        <translation type="unfinished">Происхождение</translation>
     </message>
 </context>
 <context>
@@ -2603,6 +2590,14 @@ If you need help, please open an issue at %1</source>
     <message>
         <source>Wood</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="unfinished">Тип</translation>
     </message>
 </context>
 <context>
@@ -4193,6 +4188,22 @@ The final volume in the primary is %1.</source>
         <source>Wine</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Snapshots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew Date</source>
+        <translation type="unfinished">Дата варки</translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RecipeAddition</name>
@@ -5100,6 +5111,26 @@ The final volume in the primary is %1.</source>
         <source>Other</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Category</source>
+        <translation type="unfinished">Категория</translation>
+    </message>
+    <message>
+        <source>Number</source>
+        <translation type="unfinished">Число</translation>
+    </message>
+    <message>
+        <source>Letter</source>
+        <translation type="unfinished">Буква</translation>
+    </message>
+    <message>
+        <source>Guide</source>
+        <translation type="unfinished">Руководство</translation>
+    </message>
 </context>
 <context>
     <name>StyleEditor</name>
@@ -5352,6 +5383,188 @@ The final volume in the primary is %1.</source>
     </message>
 </context>
 <context>
+    <name>TreeModel</name>
+    <message>
+        <source>Brew Date</source>
+        <translation type="obsolete">Дата варки</translation>
+    </message>
+    <message>
+        <source>Boil Time</source>
+        <translation type="obsolete">Время кипячения</translation>
+    </message>
+    <message>
+        <source>Color</source>
+        <translation type="obsolete">Цвет</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="obsolete">Тип</translation>
+    </message>
+    <message>
+        <source>Origin</source>
+        <translation type="obsolete">Происхождение</translation>
+    </message>
+    <message>
+        <source>Form</source>
+        <translation type="obsolete">Форма</translation>
+    </message>
+    <message>
+        <source>Category</source>
+        <translation type="obsolete">Категория</translation>
+    </message>
+    <message>
+        <source>Number</source>
+        <translation type="obsolete">Число</translation>
+    </message>
+    <message>
+        <source>Letter</source>
+        <translation type="obsolete">Буква</translation>
+    </message>
+    <message>
+        <source>Guide</source>
+        <translation type="obsolete">Руководство</translation>
+    </message>
+    <message>
+        <source>PATH</source>
+        <translation type="obsolete">Путь</translation>
+    </message>
+    <message>
+        <source>FULLPATH</source>
+        <translation type="obsolete">Полный путь</translation>
+    </message>
+    <message>
+        <source>Could not copy</source>
+        <translation type="unfinished">Не удалось скопировать</translation>
+    </message>
+    <message>
+        <source>There was an unexpected error creating %1</source>
+        <translation type="unfinished">Не ожидаемая ошибка при создании %1</translation>
+    </message>
+</context>
+<context>
+    <name>TreeView</name>
+    <message>
+        <source>New</source>
+        <translation type="unfinished">Новый</translation>
+    </message>
+    <message>
+        <source>Recipe</source>
+        <translation type="unfinished">Рецепт</translation>
+    </message>
+    <message>
+        <source>Show Snapshots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hide Snapshots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Detach Recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Snapshot Recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew It!</source>
+        <translation type="unfinished">Сварить!</translation>
+    </message>
+    <message>
+        <source>Brew Again</source>
+        <translation type="unfinished">Сварить снова</translation>
+    </message>
+    <message>
+        <source>Change date</source>
+        <translation type="unfinished">Выбрать дату</translation>
+    </message>
+    <message>
+        <source>Recalculate eff</source>
+        <translation type="unfinished">Пересчитать эффективность</translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation type="unfinished">Удалить</translation>
+    </message>
+    <message>
+        <source>Equipment</source>
+        <translation type="unfinished">Оборудование</translation>
+    </message>
+    <message>
+        <source>Fermentable</source>
+        <translation type="unfinished">Сбраживаемый</translation>
+    </message>
+    <message>
+        <source>Hop</source>
+        <translation type="unfinished">Хмель</translation>
+    </message>
+    <message>
+        <source>Misc</source>
+        <translation type="unfinished">Разное</translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Yeast</source>
+        <translation type="unfinished">Дрожжи</translation>
+    </message>
+    <message>
+        <source>Water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Folder</source>
+        <translation type="unfinished">Папка</translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation type="unfinished">Копировать</translation>
+    </message>
+    <message>
+        <source>Export</source>
+        <translation type="unfinished">Экспорт</translation>
+    </message>
+    <message>
+        <source>To File (BeerXML or BeerJSON)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Import</source>
+        <translation type="unfinished">Импорт</translation>
+    </message>
+    <message>
+        <source>Cancel All</source>
+        <translation type="unfinished">Отменить всё</translation>
+    </message>
+    <message>
+        <source>Copy %1</source>
+        <translation type="unfinished">Копирование %1</translation>
+    </message>
+    <message>
+        <source>Enter a unique name for the copy of %1.</source>
+        <translation type="unfinished">Введите уникальное имя для копии %1.</translation>
+    </message>
+    <message>
+        <source>An empty name will skip copying this %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete %1</source>
+        <translation type="unfinished">Удалить %1</translation>
+    </message>
+    <message>
+        <source>Delete %1 %2?</source>
+        <translation type="unfinished">Удалить %1 %2?</translation>
+    </message>
+    <message>
+        <source>BrewNote</source>
+        <translation type="unfinished">Заметки к варке</translation>
+    </message>
+</context>
+<context>
     <name>UnitAndScalePopUpMenu</name>
     <message>
         <source>Default</source>
@@ -5401,6 +5614,34 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>SO4 </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ca</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SO4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cl</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Na</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mg</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>pH</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -5641,6 +5882,22 @@ The final volume in the primary is %1.</source>
     <message>
         <source>Medium High</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Laboratory</source>
+        <translation type="unfinished">Лаборатория</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="unfinished">Тип</translation>
+    </message>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished">Форма</translation>
     </message>
 </context>
 <context>

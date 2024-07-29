@@ -361,7 +361,7 @@ private:
 
    //! \brief Set the keyboard shortcuts.
    void setupShortCuts();
-   //! \brief Set the BtTreeView context menus.
+   //! \brief Set the TreeView context menus.
    void setupContextMenu();
    //! \brief Create the CSS strings
    void setupCSS();

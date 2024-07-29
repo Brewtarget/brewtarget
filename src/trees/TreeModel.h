@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * BtTreeModel.h is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * trees/TreeModel.h is part of Brewtarget, and is copyright the following authors 2009-2024:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Maxime Lavigne <duguigne@gmail.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
  ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
-#ifndef BTTREEMODEL_H
-#define BTTREEMODEL_H
+#ifndef TREES_TREEMODEL_H
+#define TREES_TREEMODEL_H
 #pragma once
 
 #include <memory>
@@ -32,13 +32,13 @@
 //#include <QSqlRelationalTableModel>
 #include <QVariant>
 
-#include "BtTreeItem.h"
+#include "trees/TreeNode.h"
 
 // Forward declarations
 class BrewNote;
-class BtFolder;
+class Folder;
 class BtStringConst;
-class BtTreeView;
+class TreeView;
 class Equipment;
 class Fermentable;
 class Hop;
@@ -50,7 +50,7 @@ class Water;
 class Yeast;
 
 /*!
- * \class BtTreeModel
+ * \class TreeModel
  *
  * \brief Model for a tree of Recipes, Equipments, Fermentables, Hops, Miscs and Yeasts
  *
@@ -58,7 +58,7 @@ class Yeast;
  * QAbstractItemModel, so it has to implement some of the virtual methods
  * required.
  */
-class BtTreeModel : public QAbstractItemModel {
+class TreeModel : public QAbstractItemModel {
    Q_OBJECT
 
 public:
@@ -77,8 +77,8 @@ public:
    };
    Q_DECLARE_FLAGS(TypeMasks, TypeMask)
 
-   BtTreeModel(BtTreeView * parent = nullptr, TypeMasks type = TypeMask::Recipe);
-   virtual ~BtTreeModel();
+   TreeModel(TreeView * parent = nullptr, TypeMasks type = TypeMask::Recipe);
+   virtual ~TreeModel();
 
    //! \brief Reimplemented from QAbstractItemModel
    virtual QVariant data(const QModelIndex & index, int role) const;
@@ -100,27 +100,27 @@ public:
    bool insertRow(int row,
                   QModelIndex const & parent = QModelIndex(),
                   QObject * victim = nullptr,
-                  std::optional<BtTreeItem::Type> victimType = std::nullopt);
+                  std::optional<TreeNode::Type> victimType = std::nullopt);
    //! \brief Reimplemented from QAbstractItemModel
    virtual bool removeRows(int row, int count, const QModelIndex & parent = QModelIndex());
 
    //! \brief Get the upper-left index for the tree
    QModelIndex first();
-   //! \brief returns the BtTreeItem at \c index
-   BtTreeItem * item(const QModelIndex & index) const;
+   //! \brief returns the TreeNode at \c index
+   TreeNode * item(const QModelIndex & index) const;
 
    /**
     * \brief Test type at \c index.
     *        Valid for \c Recipe, \c Equipment, \c Fermentable, \c Hop, \c Misc, \c Yeast, \c Style, \c BrewNote,
-    *        \c Water, \c BtFolder.
+    *        \c Water, \c Folder.
     */
    template<class T>
    bool itemIs(QModelIndex const & index) const;
 
    //! \brief Gets the type of item at \c index
-   std::optional<BtTreeItem::Type> type(const QModelIndex & index) const;
+   std::optional<TreeNode::Type> type(const QModelIndex & index) const;
 
-   //! \brief Return the type mask for this tree. \sa BtTreeModel::TypeMasks
+   //! \brief Return the type mask for this tree. \sa TreeModel::TypeMasks
    int mask();
 
    // I'm trying to shove some complexity down a few layers.
@@ -134,7 +134,7 @@ public:
    /**
     * \brief Get T at \c index.
     *        Valid for \c Recipe, \c Equipment, \c Fermentable, \c Hop, \c Misc, \c Yeast, \c Style, \c BrewNote,
-    *        \c Water, \c BtFolder.
+    *        \c Water, \c Folder.
     */
    template<class T>
    T * getItem(QModelIndex const & index) const;
@@ -143,14 +143,14 @@ public:
    NamedEntity * thing(const QModelIndex & index) const;
 
    //! \brief one find method to find them all, and in darkness bind them
-   QModelIndex findElement(NamedEntity * thing, BtTreeItem * parent = nullptr);
+   QModelIndex findElement(NamedEntity * thing, TreeNode * parent = nullptr);
 
    //! \brief Get index of \c Folder
-   QModelIndex findFolder(QString folder, BtTreeItem * parent = nullptr, bool create = false);
+   QModelIndex findFolder(QString folder, TreeNode * parent = nullptr, bool create = false);
    //! \brief a new folder .
    bool addFolder(QString name);
    //! \brief renames a folder
-   bool renameFolder(BtFolder * victim, QString name);
+   bool renameFolder(Folder * victim, QString name);
    //! \brief removes a folder. This could get weird if you don't remove
    //! everything from it first. This is *intended* to be called from
    //! deleteSelected().
@@ -212,7 +212,7 @@ private slots:
    void recipePropertyChanged(int recipeId, BtStringConst const & propertyName);
 
 signals:
-   void expandFolder(BtTreeModel::TypeMasks kindofThing, QModelIndex fIdx);
+   void expandFolder(TreeModel::TypeMasks kindofThing, QModelIndex fIdx);
    void recipeSpawn(Recipe * descendant);
 
 private:
@@ -230,24 +230,6 @@ private:
    void observeElement(NamedEntity *);
 
    void folderChanged(NamedEntity * test);
-   //! \brief returns the \c section header from a recipe
-   QVariant recipeHeader(int section) const;
-   //! \brief returns the \c section header from an equipment
-   QVariant equipmentHeader(int section) const;
-   //! \brief returns the \c section header from a fermentable
-   QVariant fermentableHeader(int section) const;
-   //! \brief returns the \c section header from a hop
-   QVariant hopHeader(int section) const;
-   //! \brief returns the \c section header from a misc
-   QVariant miscHeader(int section) const;
-   //! \brief returns the \c section header from a yeast
-   QVariant yeastHeader(int section) const;
-   //! \brief returns the \c section header from a style
-   QVariant styleHeader(int section) const;
-   //! \brief returns the \c section header for a folder.
-   QVariant folderHeader(int section) const;
-   //! \brief returns the \c section header for a folder.
-   QVariant waterHeader(int section) const;
 
    //! \brief get a tooltip
    QVariant toolTipData(const QModelIndex & index) const;
@@ -257,18 +239,18 @@ private:
    //! cleaner
    QList<NamedEntity *> elements();
    //! \brief creates a folder tree. It's mostly a helper function.
-   QModelIndex createFolderTree(QStringList dirs, BtTreeItem * parent, QString pPath);
+   QModelIndex createFolderTree(QStringList dirs, TreeNode * parent, QString pPath);
 
    //! \brief convenience function to add brewnotes to a recipe as a subtree
-   void addBrewNoteSubTree(Recipe * rec, int i, BtTreeItem * parent, bool recurse = true);
+   void addBrewNoteSubTree(Recipe * rec, int i, TreeNode * parent, bool recurse = true);
    //! \b flip the switch to show descendants
    void setShowChild(QModelIndex child, bool val);
-   void addAncestoralTree(Recipe * rec, int i, BtTreeItem * parent);
+   void addAncestoralTree(Recipe * rec, int i, TreeNode * parent);
 
-   BtTreeItem * rootItem;
-   BtTreeView * parentTree;
+   TreeNode * rootItem;
+   TreeView * parentTree;
    TypeMasks m_treeMask;
-   BtTreeItem::Type itemType;
+   TreeNode::Type nodeType;
    int m_maxColumns;
    QString m_mimeType;
 

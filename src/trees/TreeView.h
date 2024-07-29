@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * BtTreeView.h is part of Brewtarget, and is copyright the following authors 2009-2023:
+ * trees/TreeView.h is part of Brewtarget, and is copyright the following authors 2009-2024:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
  *   • Philip Greggory Lee <rocketman768@gmail.com>
@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU General Public License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
  ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
-#ifndef BTTREEVIEW_H
-#define BTTREEVIEW_H
+#ifndef TREES_TREEVIEW_H
+#define TREES_TREEVIEW_H
 #pragma once
 
 #include <QTreeView>
@@ -24,11 +24,11 @@
 #include <QPoint>
 #include <QMouseEvent>
 
-#include "BtTreeItem.h"
-#include "sortFilterProxyModels/BtTreeFilterProxyModel.h"
+#include "trees/TreeNode.h"
+#include "trees/TreeFilterProxyModel.h"
 
 // Forward declarations.
-class BtTreeModel;
+class TreeModel;
 class Recipe;
 class Equipment;
 class Fermentable;
@@ -40,19 +40,19 @@ class Style;
 class Water;
 
 /*!
- * \class BtTreeView
+ * \class TreeView
  *
- * \brief View class for BtTreeModel.
+ * \brief View class for TreeModel.
  */
-class BtTreeView : public QTreeView {
+class TreeView : public QTreeView {
    Q_OBJECT
 public:
    //! \brief The standard constructor
-   BtTreeView(QWidget * parent = nullptr, BtTreeModel::TypeMasks mask = BtTreeModel::TypeMask::Recipe);
+   TreeView(QWidget * parent = nullptr, TreeModel::TypeMasks mask = TreeModel::TypeMask::Recipe);
    //! \brief returns the model associated with this tree
-   BtTreeModel * model();
+   TreeModel * model();
    //! \b returns the filter associated with this model
-   BtTreeFilterProxyModel * filter();
+   TreeFilterProxyModel * filter();
 
    //! \brief returns the context menu associated with the \c selected item
    QMenu * contextMenu(QModelIndex selected);
@@ -72,21 +72,21 @@ public:
    /**
     * \brief returns the item at \c index
     *        Valid for \c Recipe, \c Equipment, \c Fermentable, \c Hop, \c Misc, \c Yeast, \c Style, \c BrewNote,
-    *        \c Water, \c BtFolder.
+    *        \c Water, \c Folder.
     */
    template<class T>
    T * getItem(QModelIndex const & index) const;
 
    //! \brief finds the index of the \c folder in the tree,but does not create
-   QModelIndex findFolder(BtFolder * folder);
+   QModelIndex findFolder(Folder * folder);
    //! \brief adds a folder to the tree
    void addFolder(QString folder);
    //! \brief renames a folder and all of its subitems
-   void renameFolder(BtFolder * victim, QString newName);
+   void renameFolder(Folder * victim, QString newName);
    QString folderName(QModelIndex starter);
 
    //! \brief gets the type of the item at \c index.
-   std::optional<BtTreeItem::Type> type(QModelIndex const & index) const;
+   std::optional<TreeNode::Type> type(QModelIndex const & index) const;
 
    //! \brief returns true if the recipe at ndx is showing its ancestors
    bool ancestorsAreShowing(QModelIndex ndx);
@@ -119,9 +119,9 @@ public:
    void setupContextMenu(QWidget * top, QWidget * editor);
 
    //! \brief sets a new filter
-   void setFilter(BtTreeFilterProxyModel * newFilter);
+   void setFilter(TreeFilterProxyModel * newFilter);
    //! \brief gets the current filter
-   BtTreeFilterProxyModel * filter() const;
+   TreeFilterProxyModel * filter() const;
 
    void deleteSelected(QModelIndexList selected);
    void copySelected(QModelIndexList selected);
@@ -140,7 +140,7 @@ public slots:
    void newNamedEntity();
 
 private slots:
-   void expandFolder(BtTreeModel::TypeMasks kindaThing, QModelIndex fIdx);
+   void expandFolder(TreeModel::TypeMasks kindaThing, QModelIndex fIdx);
    void versionedRecipe(Recipe * descendant);
 
    void showAncestors();
@@ -153,9 +153,9 @@ signals:
    void recipeSpawn(Recipe * descendant);
 
 private:
-   BtTreeModel * m_model;
-   BtTreeFilterProxyModel * m_filter;
-   BtTreeModel::TypeMasks m_type;
+   TreeModel * m_model;
+   TreeFilterProxyModel * m_filter;
+   TreeModel::TypeMasks m_type;
    QMenu * m_contextMenu,
          * subMenu,
          * m_versionMenu,
@@ -179,8 +179,8 @@ private:
 
 //!
 // \class RecipeTreeView
-// \brief subclasses BtTreeView to only show recipes.
-class RecipeTreeView : public BtTreeView {
+// \brief subclasses TreeView to only show recipes.
+class RecipeTreeView : public TreeView {
    Q_OBJECT
 public:
    //! \brief Constructs the tree view, sets up the filter proxy and sets a
@@ -191,8 +191,8 @@ public:
 
 //!
 // \class EquipmentTreeView
-// \brief subclasses BtTreeView to only show equipment.
-class EquipmentTreeView : public BtTreeView {
+// \brief subclasses TreeView to only show equipment.
+class EquipmentTreeView : public TreeView {
    Q_OBJECT
 public:
    //! \brief Constructs the tree view, sets up the filter proxy and sets a
@@ -202,8 +202,8 @@ public:
 
 //!
 // \class FermentableTreeView
-// \brief subclasses BtTreeView to only show fermentables.
-class FermentableTreeView : public BtTreeView {
+// \brief subclasses TreeView to only show fermentables.
+class FermentableTreeView : public TreeView {
    Q_OBJECT
 public:
    //! \brief Constructs the tree view, sets up the filter proxy and sets a
@@ -214,8 +214,8 @@ public:
 
 //!
 // \class HopTreeView
-// \brief subclasses BtTreeView to only show hops.
-class HopTreeView : public BtTreeView {
+// \brief subclasses TreeView to only show hops.
+class HopTreeView : public TreeView {
    Q_OBJECT
 public:
    //! \brief Constructs the tree view, sets up the filter proxy and sets a
@@ -226,8 +226,8 @@ public:
 
 //!
 // \class MiscTreeView
-// \brief subclasses BtTreeView to only show miscs.
-class MiscTreeView : public BtTreeView {
+// \brief subclasses TreeView to only show miscs.
+class MiscTreeView : public TreeView {
    Q_OBJECT
 public:
    //! \brief Constructs the tree view, sets up the filter proxy and sets a
@@ -237,8 +237,8 @@ public:
 
 //!
 // \class YeastTreeView
-// \brief subclasses BtTreeView to only show yeasts.
-class YeastTreeView : public BtTreeView {
+// \brief subclasses TreeView to only show yeasts.
+class YeastTreeView : public TreeView {
    Q_OBJECT
 public:
    //! \brief Constructs the tree view, sets up the filter proxy and sets a
@@ -249,8 +249,8 @@ public:
 
 //!
 // \class StyleTreeView
-// \brief subclasses BtTreeView to only show styles.
-class StyleTreeView : public BtTreeView {
+// \brief subclasses TreeView to only show styles.
+class StyleTreeView : public TreeView {
    Q_OBJECT
 public:
    //! \brief Constructs the tree view, sets up the filter proxy and sets a
@@ -261,8 +261,8 @@ public:
 
 //!
 // \class WaterTreeView
-// \brief subclasses BtTreeView to only show waters.
-class WaterTreeView : public BtTreeView {
+// \brief subclasses TreeView to only show waters.
+class WaterTreeView : public TreeView {
    Q_OBJECT
 public:
    //! \brief Constructs the tree view, sets up the filter proxy and sets a
