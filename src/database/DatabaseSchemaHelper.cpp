@@ -36,7 +36,7 @@
 #include "database/DbTransaction.h"
 #include "database/ObjectStoreTyped.h"
 
-int constexpr DatabaseSchemaHelper::latestVersion = 11;
+int constexpr DatabaseSchemaHelper::latestVersion = 12;
 
 // Default namespace hides functions from everything outside this file.
 namespace {
@@ -732,7 +732,8 @@ namespace {
          //
          // Yeast: Extended and additional fields for BeerJSON
          //
-         // We only need to update the old Yeast type, form and flocculation mappings.  The new ones should "just work".
+         // We only need to update the old Yeast type, form and flocculation mappings.  The new ones ("very low",
+         // "medium low", "medium high") should "just work".
          {QString("     UPDATE yeast SET ytype = 'ale'       WHERE ytype = 'Ale'      ")},
          {QString("     UPDATE yeast SET ytype = 'lager'     WHERE ytype = 'Lager'    ")},
          {QString("     UPDATE yeast SET ytype = 'other'     WHERE ytype = 'Wheat'    ")}, // NB: Wheat becomes Other
@@ -1964,6 +1965,37 @@ namespace {
       return executeSqlQueries(q, migrationQueries);
    }
 
+   /**
+    * \brief This is not actually a schema change, but rather data fixes that were missed from migrate_to_11 - mostly
+    *        things where we should have been less case-sensitive.
+    */
+   bool migrate_to_12(Database & db, BtSqlQuery q) {
+      QVector<QueryAndParameters> const migrationQueries{
+         {QString(     "UPDATE hop SET htype = 'aroma/bittering' WHERE lower(htype) = 'both'"     )},
+         {QString("     UPDATE fermentable SET ftype = 'dry extract' WHERE lower(ftype) = 'dry extract'")},
+         {QString("     UPDATE fermentable SET ftype = 'dry extract' WHERE lower(ftype) = 'dryextract'" )},
+         {QString("     UPDATE fermentable SET ftype = 'other'       WHERE lower(ftype) = 'adjunct'"    )},
+         {QString("     UPDATE misc SET mtype = 'water agent' WHERE lower(mtype) = 'water agent'")},
+         {QString("     UPDATE misc SET mtype = 'water agent' WHERE lower(mtype) = 'wateragent'" )},
+         {QString("     UPDATE yeast SET ytype = 'other'     WHERE lower(ytype) = 'wheat'    ")},
+         {QString("     UPDATE yeast SET flocculation = 'very high' WHERE lower(flocculation) = 'very high'")},
+         {QString("     UPDATE yeast SET flocculation = 'very high' WHERE lower(flocculation) = 'veryhigh'" )},
+         {QString("     UPDATE style SET stype = 'beer'  WHERE lower(stype) = 'lager'")},
+         {QString("     UPDATE style SET stype = 'beer'  WHERE lower(stype) = 'ale'  ")},
+         {QString("     UPDATE style SET stype = 'beer'  WHERE lower(stype) = 'wheat'")},
+         {QString("     UPDATE style SET stype = 'other' WHERE lower(stype) = 'mixed'")},
+         {QString("     UPDATE mash_step SET mstype = 'sparge'         WHERE lower(mstype) = 'flysparge'  ")},
+         {QString("     UPDATE mash_step SET mstype = 'sparge'         WHERE lower(mstype) = 'fly sparge'  ")},
+         {QString("     UPDATE mash_step SET mstype = 'drain mash tun' WHERE lower(mstype) = 'batchsparge'")},
+         {QString("     UPDATE mash_step SET mstype = 'drain mash tun' WHERE lower(mstype) = 'batch sparge'")},
+         {QString("     UPDATE recipe SET type = 'partial mash' WHERE lower(type) = 'partial mash'")},
+         {QString("     UPDATE recipe SET type = 'partial mash' WHERE lower(type) = 'partialmash'")},
+         {QString("     UPDATE recipe SET type = 'all grain'    WHERE lower(type) = 'all grain'   ")},
+         {QString("     UPDATE recipe SET type = 'all grain'    WHERE lower(type) = 'allgrain'   ")},
+      };
+      return executeSqlQueries(q, migrationQueries);
+   }
+
    /*!
     * \brief Migrate from version \c oldVersion to \c oldVersion+1
     */
@@ -2003,6 +2035,9 @@ namespace {
             break;
          case 10:
             ret &= migrate_to_11(database, sqlQuery);
+            break;
+         case 11:
+            ret &= migrate_to_12(database, sqlQuery);
             break;
          default:
             qCritical() << QString("Unknown version %1").arg(oldVersion);
