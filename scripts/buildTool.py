@@ -97,8 +97,10 @@ if (exe_pip is None or exe_pip == ''):
 log.info('Found pip at: ' + exe_pip)
 
 # Of course, when you run the pip in the venv, it might complain that it is not up-to-date.  So we should ensure that
-# first.
-btUtils.abortOnRunFail(subprocess.run([exe_pip, 'install', '--upgrade', 'pip']))
+# first.  Note that it is Python we must run to upgrade pip, as pip cannot upgrade itself.  (Pip will happily _try_ to
+# upgrade itself, but then, on Windows at least, will get stuck when it tries to remove the old version of itself
+# because "process cannot access the file because it is being used by another process".)
+btUtils.abortOnRunFail(subprocess.run([exe_python, '-m', 'pip', 'install', '--upgrade', 'pip']))
 
 #
 # We use the packaging module (see https://pypi.org/project/packaging/) for handling version numbers (as described at
@@ -767,6 +769,12 @@ def installDependencies():
          #
          # As noted above, we no longer support 32-bit ('i686') builds and now only support 64-bit ('x86_64') ones.
          #
+         # 2024-07-29: TBD: Not totally sure we need angleproject.  It wasn't previously a requirement, but, as of
+         #                  recently, windeployqt complains if it can't find it.  The alternative would be to pass
+         #                  "-no-angle" as a parameter to windeployqt.  However, that option seems to not be present
+         #                  in Qt 6 (see https://doc.qt.io/qt-6/windows-deployment.html vs
+         #                  https://doc.qt.io/qt-5/windows-deployment.html).
+         #
          arch = 'x86_64'
          installList = ['base-devel',
                         'cmake',
@@ -779,14 +787,15 @@ def installDependencies():
                         'mingw-w64-' + arch + '-libbacktrace',
                         'mingw-w64-' + arch + '-meson',
                         'mingw-w64-' + arch + '-nsis',
-                        'mingw-w64-' + arch + '-freetype', #
-                        'mingw-w64-' + arch + '-harfbuzz', #
+                        'mingw-w64-' + arch + '-freetype',
+                        'mingw-w64-' + arch + '-harfbuzz',
                         'mingw-w64-' + arch + '-qt5-base',
                         'mingw-w64-' + arch + '-qt5-static',
                         'mingw-w64-' + arch + '-qt5',
                         'mingw-w64-' + arch + '-toolchain',
                         'mingw-w64-' + arch + '-xalan-c',
-                        'mingw-w64-' + arch + '-xerces-c']
+                        'mingw-w64-' + arch + '-xerces-c',
+                        'mingw-w64-' + arch + '-angleproject'] # See comment above
          for packageToInstall in installList:
             log.debug('Installing ' + packageToInstall)
             btUtils.abortOnRunFail(

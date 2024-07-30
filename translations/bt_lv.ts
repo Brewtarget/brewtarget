@@ -573,230 +573,70 @@
     <name>BtTreeModel</name>
     <message>
         <source>Name</source>
-        <translation>Nosaukums</translation>
+        <translation type="vanished">Nosaukums</translation>
     </message>
     <message>
         <source>Brew Date</source>
-        <translation>Brūvēšanas datums</translation>
-    </message>
-    <message>
-        <source>Style</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Boil Time</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Brūvēšanas datums</translation>
     </message>
     <message>
         <source>Color</source>
-        <translation>Krāsa</translation>
+        <translation type="vanished">Krāsa</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Veids</translation>
+        <translation type="vanished">Veids</translation>
     </message>
     <message>
         <source>Use</source>
         <translation type="vanished">Lietot</translation>
     </message>
     <message>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Category</source>
-        <translation>Kategorija</translation>
+        <translation type="vanished">Kategorija</translation>
     </message>
     <message>
         <source>Number</source>
-        <translation>Numurs</translation>
-    </message>
-    <message>
-        <source>Letter</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Guide</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Numurs</translation>
     </message>
     <message>
         <source>PATH</source>
-        <translation>Ceļš</translation>
+        <translation type="vanished">Ceļš</translation>
     </message>
     <message>
         <source>FULLPATH</source>
-        <translation>Pilns ceļš</translation>
-    </message>
-    <message>
-        <source>Could not copy</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>There was an unexpected error creating %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Snapshots</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Ca</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>HCO3</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>SO4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cl</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Na</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mg</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>pH</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>% Alpha</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Origin</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Pilns ceļš</translation>
     </message>
 </context>
 <context>
     <name>BtTreeView</name>
     <message>
         <source>New</source>
-        <translation>Jauns</translation>
+        <translation type="vanished">Jauns</translation>
     </message>
     <message>
         <source>Recipe</source>
-        <translation>Recepte</translation>
+        <translation type="vanished">Recepte</translation>
     </message>
     <message>
         <source>Brew It!</source>
-        <translation>Brūvē!</translation>
+        <translation type="vanished">Brūvē!</translation>
     </message>
     <message>
         <source>Brew Again</source>
-        <translation>Brūvēt velreiz</translation>
+        <translation type="vanished">Brūvēt velreiz</translation>
     </message>
     <message>
         <source>Change date</source>
-        <translation>Mainīt datumu</translation>
-    </message>
-    <message>
-        <source>Recalculate eff</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Mainīt datumu</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation>Dzēst</translation>
+        <translation type="vanished">Dzēst</translation>
     </message>
     <message>
         <source>Equipment</source>
-        <translation>Iekārtas</translation>
-    </message>
-    <message>
-        <source>Fermentable</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hop</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Misc</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Style</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Yeast</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Folder</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Copy</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Export</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Import</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Delete %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Delete %1 %2?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>BrewNote</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cancel All</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Copy %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Enter a unique name for the copy of %1.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>An empty name will skip copying this %1.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Show Snapshots</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hide Snapshots</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Detach Recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Snapshot Recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Water</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>To File (BeerXML or BeerJSON)</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Iekārtas</translation>
     </message>
 </context>
 <context>
@@ -950,6 +790,14 @@ Log file may contain more details.</source>
     <message>
         <source>Equipment</source>
         <translation type="unfinished">Iekārtas</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Nosaukums</translation>
+    </message>
+    <message>
+        <source>Boil Time</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1116,6 +964,18 @@ Log file may contain more details.</source>
         <source>Smoked</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Nosaukums</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="unfinished">Veids</translation>
+    </message>
+    <message>
+        <source>Color</source>
+        <translation type="unfinished">Krāsa</translation>
+    </message>
 </context>
 <context>
     <name>FermentableDialog</name>
@@ -1214,6 +1074,21 @@ Log file may contain more details.</source>
     <message>
         <source>Vessel</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Folder</name>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Nosaukums</translation>
+    </message>
+    <message>
+        <source>PATH</source>
+        <translation type="unfinished">Ceļš</translation>
+    </message>
+    <message>
+        <source>FULLPATH</source>
+        <translation type="unfinished">Pilns ceļš</translation>
     </message>
 </context>
 <context>
@@ -1327,6 +1202,22 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Aroma, Bittering &amp; Flavor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Nosaukums</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="unfinished">Veids</translation>
+    </message>
+    <message>
+        <source>% Alpha</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Origin</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1949,6 +1840,14 @@ If you need help, please open an issue at %1</source>
     <message>
         <source>Wood</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Nosaukums</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="unfinished">Veids</translation>
     </message>
 </context>
 <context>
@@ -3254,6 +3153,22 @@ The final volume in the primary is %1.</source>
         <source>Wine</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Nosaukums</translation>
+    </message>
+    <message>
+        <source>Snapshots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew Date</source>
+        <translation type="unfinished">Brūvēšanas datums</translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RecipeAddition</name>
@@ -4150,6 +4065,26 @@ The final volume in the primary is %1.</source>
         <source>Other</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Nosaukums</translation>
+    </message>
+    <message>
+        <source>Category</source>
+        <translation type="unfinished">Kategorija</translation>
+    </message>
+    <message>
+        <source>Number</source>
+        <translation type="unfinished">Numurs</translation>
+    </message>
+    <message>
+        <source>Letter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Guide</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>StyleTableModel</name>
@@ -4355,6 +4290,172 @@ The final volume in the primary is %1.</source>
     </message>
 </context>
 <context>
+    <name>TreeModel</name>
+    <message>
+        <source>Name</source>
+        <translation type="obsolete">Nosaukums</translation>
+    </message>
+    <message>
+        <source>Brew Date</source>
+        <translation type="obsolete">Brūvēšanas datums</translation>
+    </message>
+    <message>
+        <source>Color</source>
+        <translation type="obsolete">Krāsa</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="obsolete">Veids</translation>
+    </message>
+    <message>
+        <source>Category</source>
+        <translation type="obsolete">Kategorija</translation>
+    </message>
+    <message>
+        <source>Number</source>
+        <translation type="obsolete">Numurs</translation>
+    </message>
+    <message>
+        <source>PATH</source>
+        <translation type="obsolete">Ceļš</translation>
+    </message>
+    <message>
+        <source>FULLPATH</source>
+        <translation type="obsolete">Pilns ceļš</translation>
+    </message>
+    <message>
+        <source>Could not copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>There was an unexpected error creating %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>TreeView</name>
+    <message>
+        <source>New</source>
+        <translation type="unfinished">Jauns</translation>
+    </message>
+    <message>
+        <source>Recipe</source>
+        <translation type="unfinished">Recepte</translation>
+    </message>
+    <message>
+        <source>Show Snapshots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hide Snapshots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Detach Recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Snapshot Recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew It!</source>
+        <translation type="unfinished">Brūvē!</translation>
+    </message>
+    <message>
+        <source>Brew Again</source>
+        <translation type="unfinished">Brūvēt velreiz</translation>
+    </message>
+    <message>
+        <source>Change date</source>
+        <translation type="unfinished">Mainīt datumu</translation>
+    </message>
+    <message>
+        <source>Recalculate eff</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation type="unfinished">Dzēst</translation>
+    </message>
+    <message>
+        <source>Equipment</source>
+        <translation type="unfinished">Iekārtas</translation>
+    </message>
+    <message>
+        <source>Fermentable</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Misc</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Yeast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>To File (BeerXML or BeerJSON)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Import</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copy %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enter a unique name for the copy of %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>An empty name will skip copying this %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete %1 %2?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>BrewNote</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>UnitAndScalePopUpMenu</name>
     <message>
         <source>Default</source>
@@ -4404,6 +4505,34 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>SO4 </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Nosaukums</translation>
+    </message>
+    <message>
+        <source>Ca</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SO4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cl</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Na</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mg</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>pH</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4639,6 +4768,22 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Medium High</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Laboratory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Nosaukums</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="unfinished">Veids</translation>
+    </message>
+    <message>
+        <source>Form</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

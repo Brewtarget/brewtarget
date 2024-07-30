@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * BtTreeView.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * trees/TreeView.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Mattias Måhl <mattias@kejsarsten.com>
  *   • Matt Young <mfsy@yahoo.com>
@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU General Public License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
  ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
-#include "BtTreeView.h"
+#include "trees/TreeView.h"
 
 #include <QApplication>
 #include <QDebug>
@@ -29,26 +29,26 @@
 #include <QMessageBox>
 #include <QMimeData>
 
-#include "BtFolder.h"
-#include "BtTreeModel.h"
-#include "editors/EquipmentEditor.h"
-#include "editors/StyleEditor.h"
-#include "editors/WaterEditor.h"
 #include "catalogs/FermentableCatalog.h"
 #include "catalogs/HopCatalog.h"
 #include "catalogs/MiscCatalog.h"
 #include "catalogs/YeastCatalog.h"
+#include "editors/EquipmentEditor.h"
+#include "editors/StyleEditor.h"
+#include "editors/WaterEditor.h"
 #include "model/BrewNote.h"
 #include "model/Equipment.h"
 #include "model/Fermentable.h"
+#include "model/Folder.h"
 #include "model/Hop.h"
 #include "model/Misc.h"
 #include "model/Recipe.h"
 #include "model/Style.h"
 #include "model/Water.h"
 #include "model/Yeast.h"
+#include "trees/TreeModel.h"
 
-BtTreeView::BtTreeView(QWidget * parent, BtTreeModel::TypeMasks type) :
+TreeView::TreeView(QWidget * parent, TreeModel::TypeMasks type) :
    QTreeView{parent},
    m_type{type} {
    qDebug() << Q_FUNC_INFO << "type=" << type;
@@ -63,8 +63,8 @@ BtTreeView::BtTreeView(QWidget * parent, BtTreeModel::TypeMasks type) :
    setSelectionMode(QAbstractItemView::ExtendedSelection);
 
    this->m_type = type;
-   this->m_model = new BtTreeModel(this, m_type);
-   this->m_filter = new BtTreeFilterProxyModel(this, m_type);
+   this->m_model = new TreeModel(this, m_type);
+   this->m_filter = new TreeFilterProxyModel(this, m_type);
    this->m_filter->setSourceModel(m_model);
    this->setModel(m_filter);
    this->m_filter->setDynamicSortFilter(true);
@@ -75,19 +75,19 @@ BtTreeView::BtTreeView(QWidget * parent, BtTreeModel::TypeMasks type) :
    resizeColumnToContents(0);
 
    // and one wee connection
-   connect(m_model, &BtTreeModel::expandFolder, this, &BtTreeView::expandFolder);
+   connect(m_model, &TreeModel::expandFolder, this, &TreeView::expandFolder);
    return;
 }
 
-BtTreeModel * BtTreeView::model() {
+TreeModel * TreeView::model() {
    return m_model;
 }
 
-BtTreeFilterProxyModel * BtTreeView::filter() {
+TreeFilterProxyModel * TreeView::filter() {
    return m_filter;
 }
 
-bool BtTreeView::removeRow(const QModelIndex & index) {
+bool TreeView::removeRow(const QModelIndex & index) {
    QModelIndex modelIndex = m_filter->mapToSource(index);
    QModelIndex parent = m_model->parent(modelIndex);
    int position       = modelIndex.row();
@@ -95,13 +95,13 @@ bool BtTreeView::removeRow(const QModelIndex & index) {
    return m_model->removeRows(position, 1, parent);
 }
 
-bool BtTreeView::isParent(const QModelIndex & parent, const QModelIndex & child) {
+bool TreeView::isParent(const QModelIndex & parent, const QModelIndex & child) {
    QModelIndex modelParent = m_filter->mapToSource(parent);
    QModelIndex modelChild = m_filter->mapToSource(child);
    return modelParent == m_model->parent(modelChild);
 }
 
-QModelIndex BtTreeView::parent(const QModelIndex & child) {
+QModelIndex TreeView::parent(const QModelIndex & child) {
    if (! child.isValid()) {
       return QModelIndex();
    }
@@ -114,13 +114,13 @@ QModelIndex BtTreeView::parent(const QModelIndex & child) {
    return QModelIndex();
 }
 
-QModelIndex BtTreeView::first() {
+QModelIndex TreeView::first() {
    return m_filter->mapFromSource(m_model->first());
 }
 
-QString BtTreeView::folderName(QModelIndex index) {
-   if (m_model->type(m_filter->mapToSource(index)) == BtTreeItem::Type::Folder) {
-      return m_model->getItem<BtFolder>(m_filter->mapToSource(index))->fullPath();
+QString TreeView::folderName(QModelIndex index) {
+   if (m_model->type(m_filter->mapToSource(index)) == TreeNode::Type::Folder) {
+      return m_model->getItem<Folder>(m_filter->mapToSource(index))->fullPath();
    }
 
    //
@@ -135,12 +135,12 @@ QString BtTreeView::folderName(QModelIndex index) {
    }
 }
 
-QModelIndex BtTreeView::findElement(NamedEntity * thing) {
+QModelIndex TreeView::findElement(NamedEntity * thing) {
    return m_filter->mapFromSource(m_model->findElement(thing));
 }
 
 template<class T>
-T * BtTreeView::getItem(QModelIndex const & index) const {
+T * TreeView::getItem(QModelIndex const & index) const {
    if (! index.isValid()) {
       return nullptr;
    }
@@ -150,34 +150,34 @@ T * BtTreeView::getItem(QModelIndex const & index) const {
 //
 // Instantiate the above template function for the types that are going to use it
 //
-template Recipe      * BtTreeView::getItem<Recipe     >(QModelIndex const & index) const;
-template Equipment   * BtTreeView::getItem<Equipment  >(QModelIndex const & index) const;
-template Fermentable * BtTreeView::getItem<Fermentable>(QModelIndex const & index) const;
-template Hop         * BtTreeView::getItem<Hop        >(QModelIndex const & index) const;
-template Misc        * BtTreeView::getItem<Misc       >(QModelIndex const & index) const;
-template Yeast       * BtTreeView::getItem<Yeast      >(QModelIndex const & index) const;
-template Style       * BtTreeView::getItem<Style      >(QModelIndex const & index) const;
-template Water       * BtTreeView::getItem<Water      >(QModelIndex const & index) const;
-template BrewNote    * BtTreeView::getItem<BrewNote   >(QModelIndex const & index) const;
-template BtFolder    * BtTreeView::getItem<BtFolder   >(QModelIndex const & index) const;
+template Recipe      * TreeView::getItem<Recipe     >(QModelIndex const & index) const;
+template Equipment   * TreeView::getItem<Equipment  >(QModelIndex const & index) const;
+template Fermentable * TreeView::getItem<Fermentable>(QModelIndex const & index) const;
+template Hop         * TreeView::getItem<Hop        >(QModelIndex const & index) const;
+template Misc        * TreeView::getItem<Misc       >(QModelIndex const & index) const;
+template Yeast       * TreeView::getItem<Yeast      >(QModelIndex const & index) const;
+template Style       * TreeView::getItem<Style      >(QModelIndex const & index) const;
+template Water       * TreeView::getItem<Water      >(QModelIndex const & index) const;
+template BrewNote    * TreeView::getItem<BrewNote   >(QModelIndex const & index) const;
+template Folder    * TreeView::getItem<Folder   >(QModelIndex const & index) const;
 
-QModelIndex BtTreeView::findFolder(BtFolder * folder) {
+QModelIndex TreeView::findFolder(Folder * folder) {
    return m_filter->mapFromSource(m_model->findFolder(folder->fullPath(), nullptr, false));
 }
 
-void BtTreeView::addFolder(QString folder) {
+void TreeView::addFolder(QString folder) {
    m_model->addFolder(folder);
 }
 
-void BtTreeView::renameFolder(BtFolder * victim, QString newName) {
+void TreeView::renameFolder(Folder * victim, QString newName) {
    m_model->renameFolder(victim, newName);
 }
 
-std::optional<BtTreeItem::Type> BtTreeView::type(const QModelIndex & index) const {
+std::optional<TreeNode::Type> TreeView::type(const QModelIndex & index) const {
    return this->m_model->type(this->m_filter->mapToSource(index));
 }
 
-void BtTreeView::mousePressEvent(QMouseEvent * event) {
+void TreeView::mousePressEvent(QMouseEvent * event) {
    if (event->button() == Qt::LeftButton) {
       this->dragStart = event->pos();
       this->doubleClick = false;
@@ -187,7 +187,7 @@ void BtTreeView::mousePressEvent(QMouseEvent * event) {
    QTreeView::mousePressEvent(event);
 }
 
-void BtTreeView::mouseDoubleClickEvent(QMouseEvent * event) {
+void TreeView::mouseDoubleClickEvent(QMouseEvent * event) {
 
    if (event->button() == Qt::LeftButton) {
       this->doubleClick = true;
@@ -199,7 +199,7 @@ void BtTreeView::mouseDoubleClickEvent(QMouseEvent * event) {
    QTreeView::mouseDoubleClickEvent(event);
 }
 
-void BtTreeView::mouseMoveEvent(QMouseEvent * event) {
+void TreeView::mouseMoveEvent(QMouseEvent * event) {
    // Return if the left button isn't down
    if (!(event->buttons() & Qt::LeftButton)) {
       return;
@@ -221,19 +221,19 @@ void BtTreeView::mouseMoveEvent(QMouseEvent * event) {
    drag->exec(Qt::CopyAction);
 }
 
-void BtTreeView::keyPressEvent(QKeyEvent * event) {
+void TreeView::keyPressEvent(QKeyEvent * event) {
    switch (event->key()) {
       case Qt::Key_Space:
       case Qt::Key_Select:
       case Qt::Key_Enter:
       case Qt::Key_Return:
-         emit BtTreeView::doubleClicked(selectedIndexes().first());
+         emit TreeView::doubleClicked(selectedIndexes().first());
          return;
    }
    QTreeView::keyPressEvent(event);
 }
 
-QMimeData * BtTreeView::mimeData(QModelIndexList indexes) {
+QMimeData * TreeView::mimeData(QModelIndexList indexes) {
    QString name = "";
 
    QByteArray encodedData;
@@ -241,7 +241,7 @@ QMimeData * BtTreeView::mimeData(QModelIndexList indexes) {
 
    // From what I've been able to tell, the drop events are homogenous -- a
    // single drop event will be all equipment or all recipe or ...
-   std::optional<BtTreeItem::Type> itsa;
+   std::optional<TreeNode::Type> itsa;
    for (QModelIndex index : indexes) {
 
       if (!index.isValid()) {
@@ -249,33 +249,33 @@ QMimeData * BtTreeView::mimeData(QModelIndexList indexes) {
       }
 
       int id;
-      auto itemType = this->type(index);
-      if (itemType != BtTreeItem::Type::Folder) {
+      auto nodeType = this->type(index);
+      if (nodeType != TreeNode::Type::Folder) {
          if (m_model->thing(m_filter->mapToSource(index)) == nullptr) {
-            qWarning() << QString("Couldn't map that thing");
+            qWarning() << Q_FUNC_INFO << QString("Couldn't map that thing");
             id = -1;
          } else {
             id   = m_model->thing(m_filter->mapToSource(index))->key();
             name = m_model->name(m_filter->mapToSource(index));
             // Save this for later reference
             if (!itsa) {
-               itsa = itemType;
+               itsa = nodeType;
             }
          }
       } else {
          id = -1;
-         name = m_model->getItem<BtFolder>(m_filter->mapToSource(index))->fullPath();
+         name = m_model->getItem<Folder>(m_filter->mapToSource(index))->fullPath();
       }
-      stream << static_cast<int>(*itemType) << id << name;
+      stream << static_cast<int>(*nodeType) << id << name;
    }
 
-   if (*itsa == BtTreeItem::Type::Recipe || *itsa == BtTreeItem::Type::Style || *itsa == BtTreeItem::Type::Equipment) {
+   if (*itsa == TreeNode::Type::Recipe || *itsa == TreeNode::Type::Style || *itsa == TreeNode::Type::Equipment) {
       // Recipes, equipment and styles get dropped on the recipe pane
       name = "application/x-brewtarget-recipe";
-   } else if ( *itsa == BtTreeItem::Type::Folder ) {
+   } else if ( *itsa == TreeNode::Type::Folder ) {
       // folders will be handled by themselves.
       name = "application/x-brewtarget-folder";
-   } else if ( *itsa != BtTreeItem::Type::Water ) {
+   } else if ( *itsa != TreeNode::Type::Water ) {
       // Everything other than folders get dropped on the ingredients pane
       name = "application/x-brewtarget-ingredient";
    } else {
@@ -288,7 +288,7 @@ QMimeData * BtTreeView::mimeData(QModelIndexList indexes) {
    return mimeData;
 }
 
-bool BtTreeView::multiSelected() {
+bool TreeView::multiSelected() {
    QModelIndexList selected = selectionModel()->selectedRows();
    if (selected.count() == 0) {
       return false;
@@ -309,7 +309,7 @@ bool BtTreeView::multiSelected() {
    return hasRecipe && hasSomethingElse;
 }
 
-void BtTreeView::newNamedEntity() {
+void TreeView::newNamedEntity() {
 
    QString folder;
    QModelIndexList indexes = selectionModel()->selectedRows();
@@ -319,20 +319,20 @@ void BtTreeView::newNamedEntity() {
       folder = folderName(indexes.at(0));
    }
 
-   if (m_type.testFlag(BtTreeModel::TypeMask::Equipment  )) { qobject_cast<EquipmentEditor   *>(m_editor)->newEditItem(folder); return; }
-   if (m_type.testFlag(BtTreeModel::TypeMask::Fermentable)) { qobject_cast<FermentableEditor *>(m_editor)->newEditItem(folder); return; }
-   if (m_type.testFlag(BtTreeModel::TypeMask::Hop        )) { qobject_cast<HopEditor         *>(m_editor)->newEditItem(folder); return; }
-   if (m_type.testFlag(BtTreeModel::TypeMask::Misc       )) { qobject_cast<MiscEditor        *>(m_editor)->newEditItem(folder); return; }
-   if (m_type.testFlag(BtTreeModel::TypeMask::Style      )) { qobject_cast<StyleEditor       *>(m_editor)->newEditItem(folder); return; }
-   if (m_type.testFlag(BtTreeModel::TypeMask::Yeast      )) { qobject_cast<YeastEditor       *>(m_editor)->newEditItem(folder); return; }
-   if (m_type.testFlag(BtTreeModel::TypeMask::Water      )) { qobject_cast<WaterEditor       *>(m_editor)->newWater   (folder); return; }
+   if (m_type.testFlag(TreeModel::TypeMask::Equipment  )) { qobject_cast<EquipmentEditor   *>(m_editor)->newEditItem(folder); return; }
+   if (m_type.testFlag(TreeModel::TypeMask::Fermentable)) { qobject_cast<FermentableEditor *>(m_editor)->newEditItem(folder); return; }
+   if (m_type.testFlag(TreeModel::TypeMask::Hop        )) { qobject_cast<HopEditor         *>(m_editor)->newEditItem(folder); return; }
+   if (m_type.testFlag(TreeModel::TypeMask::Misc       )) { qobject_cast<MiscEditor        *>(m_editor)->newEditItem(folder); return; }
+   if (m_type.testFlag(TreeModel::TypeMask::Style      )) { qobject_cast<StyleEditor       *>(m_editor)->newEditItem(folder); return; }
+   if (m_type.testFlag(TreeModel::TypeMask::Yeast      )) { qobject_cast<YeastEditor       *>(m_editor)->newEditItem(folder); return; }
+   if (m_type.testFlag(TreeModel::TypeMask::Water      )) { qobject_cast<WaterEditor       *>(m_editor)->newWater   (folder); return; }
 
    qWarning() << Q_FUNC_INFO << "Unrecognized mask" << m_type;
    return;
 }
 
-void BtTreeView::showAncestors() {
-   if (m_type.testFlag(BtTreeModel::TypeMask::Recipe)) {
+void TreeView::showAncestors() {
+   if (m_type.testFlag(TreeModel::TypeMask::Recipe)) {
       QModelIndexList ndxs = selectionModel()->selectedRows();
 
       // I hear a noise at the door, as of some immense slippery body
@@ -343,8 +343,8 @@ void BtTreeView::showAncestors() {
    }
 }
 
-void BtTreeView::hideAncestors() {
-   if (m_type.testFlag(BtTreeModel::TypeMask::Recipe)) {
+void TreeView::hideAncestors() {
+   if (m_type.testFlag(TreeModel::TypeMask::Recipe)) {
       QModelIndexList ndxs = selectionModel()->selectedRows();
 
       // I hear a noise at the door, as of some immense slippery body
@@ -356,8 +356,8 @@ void BtTreeView::hideAncestors() {
    }
 }
 
-void BtTreeView::revertRecipeToPreviousVersion() {
-   if (m_type.testFlag(BtTreeModel::TypeMask::Recipe)) {
+void TreeView::revertRecipeToPreviousVersion() {
+   if (m_type.testFlag(TreeModel::TypeMask::Recipe)) {
       QModelIndexList ndxs = selectionModel()->selectedRows();
 
       // I hear a noise at the door, as of some immense slippery body
@@ -369,8 +369,8 @@ void BtTreeView::revertRecipeToPreviousVersion() {
    }
 }
 
-void BtTreeView::orphanRecipe() {
-   if (m_type.testFlag(BtTreeModel::TypeMask::Recipe)) {
+void TreeView::orphanRecipe() {
+   if (m_type.testFlag(TreeModel::TypeMask::Recipe)) {
       QModelIndexList ndxs = selectionModel()->selectedRows();
 
       // I hear a noise at the door, as of some immense slippery body
@@ -382,8 +382,8 @@ void BtTreeView::orphanRecipe() {
    }
 }
 
-void BtTreeView::spawnRecipe() {
-   if (m_type.testFlag(BtTreeModel::TypeMask::Recipe)) {
+void TreeView::spawnRecipe() {
+   if (m_type.testFlag(TreeModel::TypeMask::Recipe)) {
       QModelIndexList ndxs = selectionModel()->selectedRows();
 
       foreach (QModelIndex selected, ndxs) {
@@ -393,31 +393,31 @@ void BtTreeView::spawnRecipe() {
    }
 }
 
-bool BtTreeView::ancestorsAreShowing(QModelIndex ndx) {
-   if (m_type.testFlag(BtTreeModel::TypeMask::Recipe)) {
+bool TreeView::ancestorsAreShowing(QModelIndex ndx) {
+   if (m_type.testFlag(TreeModel::TypeMask::Recipe)) {
       QModelIndex translated = m_filter->mapToSource(ndx);
       return m_model->showChild(translated);
    }
 
    return false;
 }
-void BtTreeView::enableDelete(bool enable)       {
+void TreeView::enableDelete(bool enable)       {
    m_deleteAction->setEnabled(enable);
 }
-void BtTreeView::enableShowAncestor(bool enable) {
+void TreeView::enableShowAncestor(bool enable) {
    m_showAncestorAction->setEnabled(enable);
 }
-void BtTreeView::enableHideAncestor(bool enable) {
+void TreeView::enableHideAncestor(bool enable) {
    m_hideAncestorAction->setEnabled(enable);
 }
-void BtTreeView::enableOrphan(bool enable)       {
+void TreeView::enableOrphan(bool enable)       {
    m_orphanAction->setEnabled(enable);
 }
-void BtTreeView::enableSpawn(bool enable)        {
+void TreeView::enableSpawn(bool enable)        {
    m_spawnAction->setEnabled(enable);
 }
 
-void BtTreeView::setupContextMenu(QWidget * top, QWidget * editor) {
+void TreeView::setupContextMenu(QWidget * top, QWidget * editor) {
    QMenu * newMenu = new QMenu(this);
    m_exportMenu = new QMenu(this);
    m_contextMenu = new QMenu(this);
@@ -430,7 +430,7 @@ void BtTreeView::setupContextMenu(QWidget * top, QWidget * editor) {
    m_contextMenu->addMenu(newMenu);
 
 
-   if (m_type.testFlag(BtTreeModel::TypeMask::Recipe)) {
+   if (m_type.testFlag(TreeModel::TypeMask::Recipe)) {
       // the recipe case is a bit more complex, because we need to handle the brewnotes too
       newMenu->addAction(tr("Recipe"), editor, SLOT(newRecipe()));
 
@@ -452,13 +452,13 @@ void BtTreeView::setupContextMenu(QWidget * top, QWidget * editor) {
       subMenu->addAction(tr("Delete"), top, SLOT(deleteSelected()));
 
    }
-   else if (m_type.testFlag(BtTreeModel::TypeMask::Equipment  )) { newMenu->addAction(tr("Equipment"  ), this, SLOT(newNamedEntity())); }
-   else if (m_type.testFlag(BtTreeModel::TypeMask::Fermentable)) { newMenu->addAction(tr("Fermentable"), this, SLOT(newNamedEntity())); }
-   else if (m_type.testFlag(BtTreeModel::TypeMask::Hop        )) { newMenu->addAction(tr("Hop"        ), this, SLOT(newNamedEntity())); }
-   else if (m_type.testFlag(BtTreeModel::TypeMask::Misc       )) { newMenu->addAction(tr("Misc"       ), this, SLOT(newNamedEntity())); }
-   else if (m_type.testFlag(BtTreeModel::TypeMask::Style      )) { newMenu->addAction(tr("Style"      ), this, SLOT(newNamedEntity())); }
-   else if (m_type.testFlag(BtTreeModel::TypeMask::Yeast      )) { newMenu->addAction(tr("Yeast"      ), this, SLOT(newNamedEntity())); }
-   else if (m_type.testFlag(BtTreeModel::TypeMask::Water      )) { newMenu->addAction(tr("Water"      ), this, SLOT(newNamedEntity())); }
+   else if (m_type.testFlag(TreeModel::TypeMask::Equipment  )) { newMenu->addAction(tr("Equipment"  ), this, SLOT(newNamedEntity())); }
+   else if (m_type.testFlag(TreeModel::TypeMask::Fermentable)) { newMenu->addAction(tr("Fermentable"), this, SLOT(newNamedEntity())); }
+   else if (m_type.testFlag(TreeModel::TypeMask::Hop        )) { newMenu->addAction(tr("Hop"        ), this, SLOT(newNamedEntity())); }
+   else if (m_type.testFlag(TreeModel::TypeMask::Misc       )) { newMenu->addAction(tr("Misc"       ), this, SLOT(newNamedEntity())); }
+   else if (m_type.testFlag(TreeModel::TypeMask::Style      )) { newMenu->addAction(tr("Style"      ), this, SLOT(newNamedEntity())); }
+   else if (m_type.testFlag(TreeModel::TypeMask::Yeast      )) { newMenu->addAction(tr("Yeast"      ), this, SLOT(newNamedEntity())); }
+   else if (m_type.testFlag(TreeModel::TypeMask::Water      )) { newMenu->addAction(tr("Water"      ), this, SLOT(newNamedEntity())); }
    else {
       qWarning() << Q_FUNC_INFO << "Unrecognized mask" << m_type;
    }
@@ -479,15 +479,15 @@ void BtTreeView::setupContextMenu(QWidget * top, QWidget * editor) {
    return;
 }
 
-QMenu * BtTreeView::contextMenu(QModelIndex selected) {
+QMenu * TreeView::contextMenu(QModelIndex selected) {
    bool disableDelete = false;
 
-   BtTreeItem::Type t_type = *this->type(selected);
-   if (t_type == BtTreeItem::Type::BrewNote) {
+   TreeNode::Type t_type = *this->type(selected);
+   if (t_type == TreeNode::Type::BrewNote) {
       return subMenu;
    }
 
-   if (t_type == BtTreeItem::Type::Recipe) {
+   if (t_type == TreeNode::Type::Recipe) {
       // Right at the top of the tree, it's possible to click on something that is neither a folder nor a recipe, so
       // we have to check for that here.
       auto rec = this->getItem<Recipe>(selected);
@@ -519,10 +519,10 @@ QMenu * BtTreeView::contextMenu(QModelIndex selected) {
       } else {
          // This case will happen if user Right-click the top most item in the list, as that will yield a rec == nullptr.
          // In this case we will treat it like a folder and disable a bunch of options.
-         t_type = BtTreeItem::Type::Folder;
+         t_type = TreeNode::Type::Folder;
          disableDelete = true;
       }
-      if (t_type == BtTreeItem::Type::Folder) {
+      if (t_type == TreeNode::Type::Folder) {
          enableDelete( ! disableDelete );
          enableHideAncestor( false );
          enableShowAncestor( false );
@@ -537,7 +537,7 @@ QMenu * BtTreeView::contextMenu(QModelIndex selected) {
    return m_contextMenu;
 }
 
-QString BtTreeView::verifyCopy(QString tag, QString name, bool * abort) {
+QString TreeView::verifyCopy(QString tag, QString name, bool * abort) {
    QInputDialog askEm;
 
    // Gotta build this hard, so we can say "cancel all"
@@ -561,7 +561,7 @@ QString BtTreeView::verifyCopy(QString tag, QString name, bool * abort) {
    return name;
 }
 
-void BtTreeView::copySelected(QModelIndexList selected) {
+void TreeView::copySelected(QModelIndexList selected) {
    QList< QPair<QModelIndex, QString>> names;
    QString newName;
    bool abort = false;
@@ -582,40 +582,40 @@ void BtTreeView::copySelected(QModelIndexList selected) {
       }
 
       // Otherwise prompt
-      auto itemType = this->m_model->type(trans);
-      if (!itemType) {
+      auto nodeType = this->m_model->type(trans);
+      if (!nodeType) {
          qWarning() << Q_FUNC_INFO << "Unknown type";
       } else {
-         switch (*itemType) {
-            case BtTreeItem::Type::Equipment:
+         switch (*nodeType) {
+            case TreeNode::Type::Equipment:
                newName = verifyCopy(tr("Equipment"), m_model->name(trans), &abort);
                break;
-            case BtTreeItem::Type::Fermentable:
+            case TreeNode::Type::Fermentable:
                newName = verifyCopy(tr("Fermentable"), m_model->name(trans), &abort);
                break;
-            case BtTreeItem::Type::Hop:
+            case TreeNode::Type::Hop:
                newName = verifyCopy(tr("Hop"), m_model->name(trans), &abort);
                break;
-            case BtTreeItem::Type::Misc:
+            case TreeNode::Type::Misc:
                newName = verifyCopy(tr("Misc"), m_model->name(trans), &abort);
                break;
-            case BtTreeItem::Type::Recipe:
+            case TreeNode::Type::Recipe:
                newName = verifyCopy(tr("Recipe"), m_model->name(trans), &abort);
                break;
-            case BtTreeItem::Type::Style:
+            case TreeNode::Type::Style:
                newName = verifyCopy(tr("Style"), m_model->name(trans), &abort);
                break;
-            case BtTreeItem::Type::Yeast:
+            case TreeNode::Type::Yeast:
                newName = verifyCopy(tr("Yeast"), m_model->name(trans), &abort);
                break;
-            case BtTreeItem::Type::Water:
+            case TreeNode::Type::Water:
                newName = verifyCopy(tr("Water"), m_model->name(trans), &abort);
                break;
-            case BtTreeItem::Type::BrewNote:
-            case BtTreeItem::Type::Folder:
+            case TreeNode::Type::BrewNote:
+            case TreeNode::Type::Folder:
                // These cases shouldn't arise (I think!) but the compiler will emit a warning if we don't explicitly
                // have code to handle them (which is good!).
-               qWarning() << Q_FUNC_INFO << "Unexpected item type" << static_cast<int>(*itemType);
+               qWarning() << Q_FUNC_INFO << "Unexpected item type" << static_cast<int>(*nodeType);
                break;
          }
       }
@@ -628,7 +628,7 @@ void BtTreeView::copySelected(QModelIndexList selected) {
    return;
 }
 
-int BtTreeView::verifyDelete(int confirmDelete, QString tag, QString name) {
+int TreeView::verifyDelete(int confirmDelete, QString tag, QString name) {
    if (confirmDelete == QMessageBox::YesToAll) {
       return confirmDelete;
    }
@@ -642,7 +642,7 @@ int BtTreeView::verifyDelete(int confirmDelete, QString tag, QString name) {
 // I should maybe shove this further down the stack. But I prefer to keep the
 // confirmation windows at least this high -- models shouldn't be interacting
 // with users.
-void BtTreeView::deleteSelected(QModelIndexList selected) {
+void TreeView::deleteSelected(QModelIndexList selected) {
    //.:TODO:. Pull out some of the common code from this and copySelected()
 
    QModelIndexList translated;
@@ -671,39 +671,39 @@ void BtTreeView::deleteSelected(QModelIndexList selected) {
       }
 
       // Otherwise prompt
-      auto itemType = this->m_model->type(trans);
-      if (!itemType) {
+      auto nodeType = this->m_model->type(trans);
+      if (!nodeType) {
          qWarning() << Q_FUNC_INFO << "Unknown type";
       } else {
-         switch (*itemType) {
-            case BtTreeItem::Type::Recipe:
+         switch (*nodeType) {
+            case TreeNode::Type::Recipe:
                confirmDelete = verifyDelete(confirmDelete, tr("Recipe"), m_model->name(trans));
                break;
-            case BtTreeItem::Type::Equipment:
+            case TreeNode::Type::Equipment:
                confirmDelete = verifyDelete(confirmDelete, tr("Equipment"), m_model->name(trans));
                break;
-            case BtTreeItem::Type::Fermentable:
+            case TreeNode::Type::Fermentable:
                confirmDelete = verifyDelete(confirmDelete, tr("Fermentable"), m_model->name(trans));
                break;
-            case BtTreeItem::Type::Hop:
+            case TreeNode::Type::Hop:
                confirmDelete = verifyDelete(confirmDelete, tr("Hop"), m_model->name(trans));
                break;
-            case BtTreeItem::Type::Misc:
+            case TreeNode::Type::Misc:
                confirmDelete = verifyDelete(confirmDelete, tr("Misc"), m_model->name(trans));
                break;
-            case BtTreeItem::Type::Style:
+            case TreeNode::Type::Style:
                confirmDelete = verifyDelete(confirmDelete, tr("Style"), m_model->name(trans));
                break;
-            case BtTreeItem::Type::Yeast:
+            case TreeNode::Type::Yeast:
                confirmDelete = verifyDelete(confirmDelete, tr("Yeast"), m_model->name(trans));
                break;
-            case BtTreeItem::Type::BrewNote:
+            case TreeNode::Type::BrewNote:
                confirmDelete = verifyDelete(confirmDelete, tr("BrewNote"), m_model->getItem<BrewNote>(trans)->brewDate_short());
                break;
-            case BtTreeItem::Type::Folder:
-               confirmDelete = verifyDelete(confirmDelete, tr("Folder"), m_model->getItem<BtFolder>(trans)->fullPath());
+            case TreeNode::Type::Folder:
+               confirmDelete = verifyDelete(confirmDelete, tr("Folder"), m_model->getItem<Folder>(trans)->fullPath());
                break;
-            case BtTreeItem::Type::Water:
+            case TreeNode::Type::Water:
                confirmDelete = verifyDelete(confirmDelete, tr("Water"), m_model->name(trans));
                break;
          }
@@ -723,15 +723,15 @@ void BtTreeView::deleteSelected(QModelIndexList selected) {
    return;
 }
 
-void BtTreeView::setFilter(BtTreeFilterProxyModel * newFilter) {
+void TreeView::setFilter(TreeFilterProxyModel * newFilter) {
    m_filter = newFilter;
 }
 
-BtTreeFilterProxyModel * BtTreeView::filter() const {
+TreeFilterProxyModel * TreeView::filter() const {
    return m_filter;
 }
 
-void BtTreeView::expandFolder(BtTreeModel::TypeMasks kindaThing, QModelIndex fIdx) {
+void TreeView::expandFolder(TreeModel::TypeMasks kindaThing, QModelIndex fIdx) {
    // FUN! I get to map from source this time.
    // I don't have to check if this is a folder (I think?)
    if (kindaThing & m_type && fIdx.isValid() && ! isExpanded(m_filter->mapFromSource(fIdx))) {
@@ -739,46 +739,46 @@ void BtTreeView::expandFolder(BtTreeModel::TypeMasks kindaThing, QModelIndex fId
    }
 }
 
-void BtTreeView::versionedRecipe(Recipe * descendant) {
+void TreeView::versionedRecipe(Recipe * descendant) {
    emit recipeSpawn(descendant);
 }
 
 // Bad form likely
 
-RecipeTreeView::RecipeTreeView(QWidget * parent) : BtTreeView(parent, BtTreeModel::TypeMask::Recipe) {
-   connect(m_model, &BtTreeModel::recipeSpawn, this, &BtTreeView::versionedRecipe);
+RecipeTreeView::RecipeTreeView(QWidget * parent) : TreeView(parent, TreeModel::TypeMask::Recipe) {
+   connect(m_model, &TreeModel::recipeSpawn, this, &TreeView::versionedRecipe);
 }
 
 EquipmentTreeView::EquipmentTreeView(QWidget * parent)
-   : BtTreeView(parent, BtTreeModel::TypeMask::Equipment) {
+   : TreeView(parent, TreeModel::TypeMask::Equipment) {
 }
 
 // Icky ick ikcy
 FermentableTreeView::FermentableTreeView(QWidget * parent)
-   : BtTreeView(parent, BtTreeModel::TypeMask::Fermentable) {
+   : TreeView(parent, TreeModel::TypeMask::Fermentable) {
 }
 
 // More Ick
 HopTreeView::HopTreeView(QWidget * parent)
-   : BtTreeView(parent, BtTreeModel::TypeMask::Hop) {
+   : TreeView(parent, TreeModel::TypeMask::Hop) {
 }
 
 // Ick some more
 MiscTreeView::MiscTreeView(QWidget * parent)
-   : BtTreeView(parent, BtTreeModel::TypeMask::Misc) {
+   : TreeView(parent, TreeModel::TypeMask::Misc) {
 }
 
 // Will this ick never end?
 YeastTreeView::YeastTreeView(QWidget * parent)
-   : BtTreeView(parent, BtTreeModel::TypeMask::Yeast) {
+   : TreeView(parent, TreeModel::TypeMask::Yeast) {
 }
 
 // Nope. Apparently not, cause I keep adding more
 StyleTreeView::StyleTreeView(QWidget * parent)
-   : BtTreeView(parent, BtTreeModel::TypeMask::Style) {
+   : TreeView(parent, TreeModel::TypeMask::Style) {
 }
 
 // Cthulhu take me
 WaterTreeView::WaterTreeView(QWidget * parent)
-   : BtTreeView(parent, BtTreeModel::TypeMask::Water) {
+   : TreeView(parent, TreeModel::TypeMask::Water) {
 }

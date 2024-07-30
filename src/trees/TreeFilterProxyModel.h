@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * sortFilterProxyModels/BtTreeFilterProxyModel.h is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * trees/TreeFilterProxyModel.h is part of Brewtarget, and is copyright the following authors 2009-2024:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
  *   • Philip Greggory Lee <rocketman768@gmail.com>
@@ -15,32 +15,32 @@
  * You should have received a copy of the GNU General Public License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
  ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
-#ifndef SORTFILTERPROXYMODELS_BTTREEFILTERPROXYMODEL_H
-#define SORTFILTERPROXYMODELS_BTTREEFILTERPROXYMODEL_H
+#ifndef TREES_TREEFILTERPROXYMODEL_H
+#define TREES_TREEFILTERPROXYMODEL_H
 #pragma once
 
 #include <QModelIndex>
 #include <QSortFilterProxyModel>
 
-#include "BtTreeModel.h"
+#include "trees/TreeModel.h"
 
 /*!
- * \class BtTreeFilterProxyModel
+ * \class TreeFilterProxyModel
  *
- * \brief Proxy model for sorting BtTreeModel trees.
+ * \brief Proxy model for sorting TreeModel trees.
  */
-class BtTreeFilterProxyModel : public QSortFilterProxyModel {
+class TreeFilterProxyModel : public QSortFilterProxyModel {
    Q_OBJECT
 
 public:
-   BtTreeFilterProxyModel(QObject *parent, BtTreeModel::TypeMasks mask);
+   TreeFilterProxyModel(QObject *parent, TreeModel::TypeMasks mask);
 
 protected:
    bool lessThan(const QModelIndex &left, const QModelIndex &right) const;
    bool filterAcceptsRow( int source_row, const QModelIndex &source_parent) const;
 
 private:
-   BtTreeModel::TypeMasks m_treeMask;
+   TreeModel::TypeMasks m_treeMask;
 };
 
 #endif

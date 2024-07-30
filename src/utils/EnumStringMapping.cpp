@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * utils/EnumStringMapping.cpp is part of Brewtarget, and is copyright the following authors 2021-2023:
+ * utils/EnumStringMapping.cpp is part of Brewtarget, and is copyright the following authors 2021-2024:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -32,7 +32,7 @@ EnumAndItsString::EnumAndItsString(int native, QString string) :
 EnumStringMapping::EnumStringMapping(std::initializer_list<EnumAndItsString> args, bool const isRegularEnum) {
    this->reserve(args.size());
    for (auto arg : args) {
-      // Uncomment this debug statement for debugging -- eg if you are hitting the assert at start-up!
+      // Uncomment this block for debugging -- eg if you are hitting the assert below at start-up!
 //      qDebug().noquote() <<
 //         Q_FUNC_INFO << "Inserting at" << arg.native << ". Size=" << this->size() <<
 //         Logging::getStackTrace();

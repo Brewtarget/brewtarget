@@ -2573,7 +2573,7 @@
   <customwidget>
    <class>MiscTreeView</class>
    <extends>QTreeView</extends>
-   <header>BtTreeView.h</header>
+   <header>trees/TreeView.h</header>
   </customwidget>
   <customwidget>
    <class>IbuGuSlider</class>
@@ -2598,27 +2598,27 @@
   <customwidget>
    <class>RecipeTreeView</class>
    <extends>QTreeView</extends>
-   <header>BtTreeView.h</header>
+   <header>trees/TreeView.h</header>
   </customwidget>
   <customwidget>
    <class>EquipmentTreeView</class>
    <extends>QTreeView</extends>
-   <header>BtTreeView.h</header>
+   <header>trees/TreeView.h</header>
   </customwidget>
   <customwidget>
    <class>FermentableTreeView</class>
    <extends>QTreeView</extends>
-   <header>BtTreeView.h</header>
+   <header>trees/TreeView.h</header>
   </customwidget>
   <customwidget>
    <class>HopTreeView</class>
    <extends>QTreeView</extends>
-   <header>BtTreeView.h</header>
+   <header>trees/TreeView.h</header>
   </customwidget>
   <customwidget>
    <class>YeastTreeView</class>
    <extends>QTreeView</extends>
-   <header>BtTreeView.h</header>
+   <header>trees/TreeView.h</header>
   </customwidget>
   <customwidget>
    <class>StyleButton</class>
@@ -2643,7 +2643,7 @@
   <customwidget>
    <class>StyleTreeView</class>
    <extends>QTreeView</extends>
-   <header location="global">BtTreeView.h</header>
+   <header>trees/TreeView.h</header>
   </customwidget>
   <customwidget>
    <class>BtTabWidget</class>
@@ -2654,7 +2654,7 @@
   <customwidget>
    <class>WaterTreeView</class>
    <extends>QTreeView</extends>
-   <header>BtTreeView.h</header>
+   <header>trees/TreeView.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

@@ -309,7 +309,7 @@ void Yeast::setKillerNeutral            (std::optional<bool>         const   val
 
 double Yeast::getTypicalAttenuation_pct() const {
    if (m_attenuationMin_pct && m_attenuationMax_pct) {
-      return *m_attenuationMin_pct + *m_attenuationMax_pct / 2.0;
+      return (*m_attenuationMin_pct + *m_attenuationMax_pct) / 2.0;
    }
    return Yeast::DefaultAttenuation_pct;
 }

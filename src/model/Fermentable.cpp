@@ -84,6 +84,7 @@ EnumStringMapping const Fermentable::grainGroupDisplayNames {
 bool Fermentable::isEqualTo(NamedEntity const & other) const {
    // Base class (NamedEntity) will have ensured this cast is valid
    Fermentable const & rhs = static_cast<Fermentable const &>(other);
+
    // Base class will already have ensured names are equal
    bool const outlinesAreEqual{
       // "Outline" fields: In BeerJSON, all these fields are in the FermentableBase type

@@ -33,7 +33,7 @@ namespace {
    char const * const FOLDER_FOR_SUPPLIED_RECIPES = CONFIG_APPLICATION_NAME_LC;
 }
 
-int constexpr DefaultContentLoader::availableContentVersion = 3;
+int constexpr DefaultContentLoader::availableContentVersion = 4;
 
 DefaultContentLoader::UpdateResult DefaultContentLoader::updateContentIfNecessary(QSqlDatabase & db,
                                                                                   QTextStream  & userMessage) {

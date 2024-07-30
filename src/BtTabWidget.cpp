@@ -20,9 +20,7 @@
 #include <QDebug>
 #include <QtGui>
 
-#include "BtTreeItem.h"
-#include "BtTreeView.h"
-//#include "database/Database.h"
+#include "trees/TreeNode.h"
 #include "database/ObjectStoreWrapper.h"
 #include "model/Equipment.h"
 #include "model/Fermentable.h"
@@ -84,35 +82,35 @@ void BtTabWidget::dropEvent(QDropEvent *event) {
       QString name;
       dStream >> itemTypeRaw >> id >> name;
       qDebug() << Q_FUNC_INFO << "Item type #" << itemTypeRaw;
-      BtTreeItem::Type itemType{itemTypeRaw};
-      switch (itemType) {
-         case BtTreeItem::Type::Recipe:
+      TreeNode::Type nodeType{itemTypeRaw};
+      switch (nodeType) {
+         case TreeNode::Type::Recipe:
             event->acceptProposedAction();
             emit setRecipe(ObjectStoreWrapper::getById<Recipe>(id).get());
             return;
-         case BtTreeItem::Type::Equipment:
+         case TreeNode::Type::Equipment:
             event->acceptProposedAction();
             emit setEquipment(ObjectStoreWrapper::getById<Equipment>(id).get());
             return;
-         case BtTreeItem::Type::Style:
+         case TreeNode::Type::Style:
             event->acceptProposedAction();
             emit setStyle(ObjectStoreWrapper::getById<Style>(id).get());
             return;
-         case BtTreeItem::Type::Fermentable:
+         case TreeNode::Type::Fermentable:
             ferms.append(ObjectStoreWrapper::getById<Fermentable>(id).get());
             break;
-         case BtTreeItem::Type::Hop:
+         case TreeNode::Type::Hop:
             hops.append(ObjectStoreWrapper::getById<Hop>(id).get());
             break;
-         case BtTreeItem::Type::Misc:
+         case TreeNode::Type::Misc:
             miscs.append(ObjectStoreWrapper::getById<Misc>(id).get());
             break;
-         case BtTreeItem::Type::Yeast:
+         case TreeNode::Type::Yeast:
             yeasts.append(ObjectStoreWrapper::getById<Yeast>(id).get());
             break;
-         case BtTreeItem::Type::BrewNote:
-         case BtTreeItem::Type::Folder:
-         case BtTreeItem::Type::Water:
+         case TreeNode::Type::BrewNote:
+         case TreeNode::Type::Folder:
+         case TreeNode::Type::Water:
             // These cases shouldn't arise (I think!) but the compiler will emit a warning if we don't explicitly have
             // code to handle them (which is good!).
             qWarning() << Q_FUNC_INFO << "Unexpected item type" << itemTypeRaw;
