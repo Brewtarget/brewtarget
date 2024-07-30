@@ -134,7 +134,7 @@ public:
    /**
     * \brief Create a new Hop, Fermentable, etc.
     *
-    *        This is also called from \c BtTreeView::newNamedEntity.
+    *        This is also called from \c TreeView::newNamedEntity.
     */
    void newEditItem(QString folder = "") {
       QString name = QInputDialog::getText(&this->derived(),

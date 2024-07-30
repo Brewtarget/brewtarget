@@ -548,27 +548,27 @@
     <name>BtTreeModel</name>
     <message>
         <source>Name</source>
-        <translation>İsim</translation>
+        <translation type="vanished">İsim</translation>
     </message>
     <message>
         <source>Brew Date</source>
-        <translation>Demleme Günü</translation>
+        <translation type="vanished">Demleme Günü</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation>Stil</translation>
+        <translation type="vanished">Stil</translation>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation>Kaynama Süresi</translation>
+        <translation type="vanished">Kaynama Süresi</translation>
     </message>
     <message>
         <source>Color</source>
-        <translation>Renk</translation>
+        <translation type="vanished">Renk</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Tür</translation>
+        <translation type="vanished">Tür</translation>
     </message>
     <message>
         <source>Use</source>
@@ -576,178 +576,170 @@
     </message>
     <message>
         <source>Form</source>
-        <translation>Biçim</translation>
+        <translation type="vanished">Biçim</translation>
     </message>
     <message>
         <source>Category</source>
-        <translation>Kategori</translation>
+        <translation type="vanished">Kategori</translation>
     </message>
     <message>
         <source>Number</source>
-        <translation>Numara</translation>
+        <translation type="vanished">Numara</translation>
     </message>
     <message>
         <source>Letter</source>
-        <translation>Harf</translation>
+        <translation type="vanished">Harf</translation>
     </message>
     <message>
         <source>Guide</source>
-        <translation>Kılavuz</translation>
+        <translation type="vanished">Kılavuz</translation>
     </message>
     <message>
         <source>PATH</source>
-        <translation>KONUM</translation>
+        <translation type="vanished">KONUM</translation>
     </message>
     <message>
         <source>FULLPATH</source>
-        <translation>TAM KONUM</translation>
+        <translation type="vanished">TAM KONUM</translation>
     </message>
     <message>
         <source>Could not copy</source>
-        <translation>Kopyalanamadı</translation>
+        <translation type="vanished">Kopyalanamadı</translation>
     </message>
     <message>
         <source>There was an unexpected error creating %1</source>
-        <translation>%1 oluşturulurken beklenmedik bir hata meydana geldi</translation>
+        <translation type="vanished">%1 oluşturulurken beklenmedik bir hata meydana geldi</translation>
     </message>
     <message>
         <source>Snapshots</source>
-        <translation>Anlık Görüntüler</translation>
+        <translation type="vanished">Anlık Görüntüler</translation>
     </message>
     <message>
         <source>Ca</source>
-        <translation>Ca</translation>
+        <translation type="vanished">Ca</translation>
     </message>
     <message>
         <source>HCO3</source>
-        <translation>HCO3</translation>
+        <translation type="vanished">HCO3</translation>
     </message>
     <message>
         <source>SO4</source>
-        <translation>SO4</translation>
-    </message>
-    <message>
-        <source>Cl</source>
-        <translation></translation>
+        <translation type="vanished">SO4</translation>
     </message>
     <message>
         <source>Na</source>
-        <translation>Na</translation>
+        <translation type="vanished">Na</translation>
     </message>
     <message>
         <source>Mg</source>
-        <translation>Mg</translation>
+        <translation type="vanished">Mg</translation>
     </message>
     <message>
         <source>pH</source>
-        <translation>pH</translation>
-    </message>
-    <message>
-        <source>% Alpha</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">pH</translation>
     </message>
     <message>
         <source>Origin</source>
-        <translation type="unfinished">Köken</translation>
+        <translation type="obsolete">Köken</translation>
     </message>
 </context>
 <context>
     <name>BtTreeView</name>
     <message>
         <source>New</source>
-        <translation>Yeni</translation>
+        <translation type="vanished">Yeni</translation>
     </message>
     <message>
         <source>Recipe</source>
-        <translation>Tarif</translation>
+        <translation type="vanished">Tarif</translation>
     </message>
     <message>
         <source>Brew It!</source>
-        <translation>Bunu Demle!</translation>
+        <translation type="vanished">Bunu Demle!</translation>
     </message>
     <message>
         <source>Brew Again</source>
-        <translation>Tekrar Demle</translation>
+        <translation type="vanished">Tekrar Demle</translation>
     </message>
     <message>
         <source>Change date</source>
-        <translation>Tarihi değiştir</translation>
+        <translation type="vanished">Tarihi değiştir</translation>
     </message>
     <message>
         <source>Recalculate eff</source>
-        <translation>Verimliliği tekrar hesapla</translation>
+        <translation type="vanished">Verimliliği tekrar hesapla</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation>Sil</translation>
+        <translation type="vanished">Sil</translation>
     </message>
     <message>
         <source>Equipment</source>
-        <translation>Teçhizat</translation>
+        <translation type="vanished">Teçhizat</translation>
     </message>
     <message>
         <source>Fermentable</source>
-        <translation>Mayalanabilen</translation>
+        <translation type="vanished">Mayalanabilen</translation>
     </message>
     <message>
         <source>Hop</source>
-        <translation>Şerbetçi Otu</translation>
+        <translation type="vanished">Şerbetçi Otu</translation>
     </message>
     <message>
         <source>Misc</source>
-        <translation>Diğerleri</translation>
+        <translation type="vanished">Diğerleri</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation>Stil</translation>
+        <translation type="vanished">Stil</translation>
     </message>
     <message>
         <source>Yeast</source>
-        <translation>Maya</translation>
+        <translation type="vanished">Maya</translation>
     </message>
     <message>
         <source>Folder</source>
-        <translation>Klasör</translation>
+        <translation type="vanished">Klasör</translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation>Kopyala</translation>
+        <translation type="vanished">Kopyala</translation>
     </message>
     <message>
         <source>Export</source>
-        <translation>Dışa Gönder</translation>
+        <translation type="vanished">Dışa Gönder</translation>
     </message>
     <message>
         <source>Import</source>
-        <translation>İçe Al</translation>
+        <translation type="vanished">İçe Al</translation>
     </message>
     <message>
         <source>Delete %1</source>
-        <translation>Sil %1</translation>
+        <translation type="vanished">Sil %1</translation>
     </message>
     <message>
         <source>Delete %1 %2?</source>
-        <translation>%1 %2 silinsin mi?</translation>
+        <translation type="vanished">%1 %2 silinsin mi?</translation>
     </message>
     <message>
         <source>BrewNote</source>
-        <translation>Demleme Notu</translation>
+        <translation type="vanished">Demleme Notu</translation>
     </message>
     <message>
         <source>Cancel All</source>
-        <translation>Tümünü İptal Et</translation>
+        <translation type="vanished">Tümünü İptal Et</translation>
     </message>
     <message>
         <source>Copy %1</source>
-        <translation>Kopyala %1</translation>
+        <translation type="vanished">Kopyala %1</translation>
     </message>
     <message>
         <source>Enter a unique name for the copy of %1.</source>
-        <translation>%1 kopyası için benzersiz bir isim girin.</translation>
+        <translation type="vanished">%1 kopyası için benzersiz bir isim girin.</translation>
     </message>
     <message>
         <source>An empty name will skip copying this %1.</source>
-        <translation>Boş isim %1 kopyalamasını gerçekleştirmez.</translation>
+        <translation type="vanished">Boş isim %1 kopyalamasını gerçekleştirmez.</translation>
     </message>
     <message>
         <source>To XML</source>
@@ -755,27 +747,23 @@
     </message>
     <message>
         <source>Show Snapshots</source>
-        <translation>Anlık Görüntüleri Göster</translation>
+        <translation type="vanished">Anlık Görüntüleri Göster</translation>
     </message>
     <message>
         <source>Hide Snapshots</source>
-        <translation>Anlık Görüntüleri Gizle</translation>
+        <translation type="vanished">Anlık Görüntüleri Gizle</translation>
     </message>
     <message>
         <source>Detach Recipe</source>
-        <translation>Tarifi Ayır</translation>
+        <translation type="vanished">Tarifi Ayır</translation>
     </message>
     <message>
         <source>Snapshot Recipe</source>
-        <translation>Tarifin Anlık Görüntüsünü Al</translation>
+        <translation type="vanished">Tarifin Anlık Görüntüsünü Al</translation>
     </message>
     <message>
         <source>Water</source>
-        <translation>Su</translation>
-    </message>
-    <message>
-        <source>To File (BeerXML or BeerJSON)</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Su</translation>
     </message>
 </context>
 <context>
@@ -945,6 +933,14 @@ Log file may contain more details.</source>
     <message>
         <source>Equipment</source>
         <translation type="unfinished">Teçhizat</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">İsim</translation>
+    </message>
+    <message>
+        <source>Boil Time</source>
+        <translation type="unfinished">Kaynama Süresi</translation>
     </message>
 </context>
 <context>
@@ -1138,6 +1134,18 @@ Log file may contain more details.</source>
     <message>
         <source>Smoked</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">İsim</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="unfinished">Tür</translation>
+    </message>
+    <message>
+        <source>Color</source>
+        <translation type="unfinished">Renk</translation>
     </message>
 </context>
 <context>
@@ -1374,6 +1382,21 @@ Log file may contain more details.</source>
     </message>
 </context>
 <context>
+    <name>Folder</name>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">İsim</translation>
+    </message>
+    <message>
+        <source>PATH</source>
+        <translation type="unfinished">KONUM</translation>
+    </message>
+    <message>
+        <source>FULLPATH</source>
+        <translation type="unfinished">TAM KONUM</translation>
+    </message>
+</context>
+<context>
     <name>HelpDialog</name>
     <message>
         <source>for</source>
@@ -1505,6 +1528,22 @@ Log file may contain more details.</source>
     <message>
         <source>Aroma, Bittering &amp; Flavor</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">İsim</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="unfinished">Tür</translation>
+    </message>
+    <message>
+        <source>% Alpha</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Origin</source>
+        <translation type="unfinished">Köken</translation>
     </message>
 </context>
 <context>
@@ -2480,6 +2519,14 @@ If you need help, please open an issue at %1</source>
     <message>
         <source>Wood</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">İsim</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="unfinished">Tür</translation>
     </message>
 </context>
 <context>
@@ -4104,6 +4151,22 @@ The final volume in the primary is %1.</source>
         <source>Wine</source>
         <translation type="unfinished">Şarap</translation>
     </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">İsim</translation>
+    </message>
+    <message>
+        <source>Snapshots</source>
+        <translation type="unfinished">Anlık Görüntüler</translation>
+    </message>
+    <message>
+        <source>Brew Date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RecipeAddition</name>
@@ -5071,6 +5134,26 @@ The final volume in the primary is %1.</source>
         <source>Other</source>
         <translation type="unfinished">Diğer</translation>
     </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">İsim</translation>
+    </message>
+    <message>
+        <source>Category</source>
+        <translation type="unfinished">Kategori</translation>
+    </message>
+    <message>
+        <source>Number</source>
+        <translation type="unfinished">Numara</translation>
+    </message>
+    <message>
+        <source>Letter</source>
+        <translation type="unfinished">Harf</translation>
+    </message>
+    <message>
+        <source>Guide</source>
+        <translation type="unfinished">Kılavuz</translation>
+    </message>
 </context>
 <context>
     <name>StyleEditor</name>
@@ -5287,6 +5370,216 @@ The final volume in the primary is %1.</source>
     </message>
 </context>
 <context>
+    <name>TreeModel</name>
+    <message>
+        <source>Name</source>
+        <translation type="obsolete">İsim</translation>
+    </message>
+    <message>
+        <source>Snapshots</source>
+        <translation type="obsolete">Anlık Görüntüler</translation>
+    </message>
+    <message>
+        <source>Boil Time</source>
+        <translation type="obsolete">Kaynama Süresi</translation>
+    </message>
+    <message>
+        <source>Color</source>
+        <translation type="obsolete">Renk</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="obsolete">Tür</translation>
+    </message>
+    <message>
+        <source>Origin</source>
+        <translation type="obsolete">Köken</translation>
+    </message>
+    <message>
+        <source>Form</source>
+        <translation type="obsolete">Biçim</translation>
+    </message>
+    <message>
+        <source>Category</source>
+        <translation type="obsolete">Kategori</translation>
+    </message>
+    <message>
+        <source>Number</source>
+        <translation type="obsolete">Numara</translation>
+    </message>
+    <message>
+        <source>Letter</source>
+        <translation type="obsolete">Harf</translation>
+    </message>
+    <message>
+        <source>Guide</source>
+        <translation type="obsolete">Kılavuz</translation>
+    </message>
+    <message>
+        <source>PATH</source>
+        <translation type="obsolete">KONUM</translation>
+    </message>
+    <message>
+        <source>FULLPATH</source>
+        <translation type="obsolete">TAM KONUM</translation>
+    </message>
+    <message>
+        <source>Ca</source>
+        <translation type="obsolete">Ca</translation>
+    </message>
+    <message>
+        <source>HCO3</source>
+        <translation type="obsolete">HCO3</translation>
+    </message>
+    <message>
+        <source>SO4</source>
+        <translation type="obsolete">SO4</translation>
+    </message>
+    <message>
+        <source>Na</source>
+        <translation type="obsolete">Na</translation>
+    </message>
+    <message>
+        <source>Mg</source>
+        <translation type="obsolete">Mg</translation>
+    </message>
+    <message>
+        <source>pH</source>
+        <translation type="obsolete">pH</translation>
+    </message>
+    <message>
+        <source>Could not copy</source>
+        <translation type="unfinished">Kopyalanamadı</translation>
+    </message>
+    <message>
+        <source>There was an unexpected error creating %1</source>
+        <translation type="unfinished">%1 oluşturulurken beklenmedik bir hata meydana geldi</translation>
+    </message>
+</context>
+<context>
+    <name>TreeView</name>
+    <message>
+        <source>New</source>
+        <translation type="unfinished">Yeni</translation>
+    </message>
+    <message>
+        <source>Recipe</source>
+        <translation type="unfinished">Tarif</translation>
+    </message>
+    <message>
+        <source>Show Snapshots</source>
+        <translation type="unfinished">Anlık Görüntüleri Göster</translation>
+    </message>
+    <message>
+        <source>Hide Snapshots</source>
+        <translation type="unfinished">Anlık Görüntüleri Gizle</translation>
+    </message>
+    <message>
+        <source>Detach Recipe</source>
+        <translation type="unfinished">Tarifi Ayır</translation>
+    </message>
+    <message>
+        <source>Snapshot Recipe</source>
+        <translation type="unfinished">Tarifin Anlık Görüntüsünü Al</translation>
+    </message>
+    <message>
+        <source>Brew It!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew Again</source>
+        <translation type="unfinished">Tekrar Demle</translation>
+    </message>
+    <message>
+        <source>Change date</source>
+        <translation type="unfinished">Tarihi değiştir</translation>
+    </message>
+    <message>
+        <source>Recalculate eff</source>
+        <translation type="unfinished">Verimliliği tekrar hesapla</translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation type="unfinished">Sil</translation>
+    </message>
+    <message>
+        <source>Equipment</source>
+        <translation type="unfinished">Teçhizat</translation>
+    </message>
+    <message>
+        <source>Fermentable</source>
+        <translation type="unfinished">Mayalanabilen</translation>
+    </message>
+    <message>
+        <source>Hop</source>
+        <translation type="unfinished">Şerbetçi Otu</translation>
+    </message>
+    <message>
+        <source>Misc</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Yeast</source>
+        <translation type="unfinished">Maya</translation>
+    </message>
+    <message>
+        <source>Water</source>
+        <translation type="unfinished">Su</translation>
+    </message>
+    <message>
+        <source>Folder</source>
+        <translation type="unfinished">Klasör</translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation type="unfinished">Kopyala</translation>
+    </message>
+    <message>
+        <source>Export</source>
+        <translation type="unfinished">Dışa Gönder</translation>
+    </message>
+    <message>
+        <source>To File (BeerXML or BeerJSON)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Import</source>
+        <translation type="unfinished">İçe Al</translation>
+    </message>
+    <message>
+        <source>Cancel All</source>
+        <translation type="unfinished">Tümünü İptal Et</translation>
+    </message>
+    <message>
+        <source>Copy %1</source>
+        <translation type="unfinished">Kopyala %1</translation>
+    </message>
+    <message>
+        <source>Enter a unique name for the copy of %1.</source>
+        <translation type="unfinished">%1 kopyası için benzersiz bir isim girin.</translation>
+    </message>
+    <message>
+        <source>An empty name will skip copying this %1.</source>
+        <translation type="unfinished">Boş isim %1 kopyalamasını gerçekleştirmez.</translation>
+    </message>
+    <message>
+        <source>Delete %1</source>
+        <translation type="unfinished">Sil %1</translation>
+    </message>
+    <message>
+        <source>Delete %1 %2?</source>
+        <translation type="unfinished">%1 %2 silinsin mi?</translation>
+    </message>
+    <message>
+        <source>BrewNote</source>
+        <translation type="unfinished">Demleme Notu</translation>
+    </message>
+</context>
+<context>
     <name>UnitAndScalePopUpMenu</name>
     <message>
         <source>Default</source>
@@ -5337,6 +5630,34 @@ The final volume in the primary is %1.</source>
     <message>
         <source>SO4 </source>
         <translation type="unfinished">SO4 </translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">İsim</translation>
+    </message>
+    <message>
+        <source>Ca</source>
+        <translation type="unfinished">Ca</translation>
+    </message>
+    <message>
+        <source>SO4</source>
+        <translation type="unfinished">SO4</translation>
+    </message>
+    <message>
+        <source>Cl</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Na</source>
+        <translation type="unfinished">Na</translation>
+    </message>
+    <message>
+        <source>Mg</source>
+        <translation type="unfinished">Mg</translation>
+    </message>
+    <message>
+        <source>pH</source>
+        <translation type="unfinished">pH</translation>
     </message>
 </context>
 <context>
@@ -5603,6 +5924,22 @@ The final volume in the primary is %1.</source>
     <message>
         <source>Medium High</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Laboratory</source>
+        <translation type="unfinished">Laboratuvar</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">İsim</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="unfinished">Tür</translation>
+    </message>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished">Biçim</translation>
     </message>
 </context>
 <context>

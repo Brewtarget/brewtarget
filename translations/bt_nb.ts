@@ -676,27 +676,27 @@
     <name>BtTreeModel</name>
     <message>
         <source>Name</source>
-        <translation>Navn</translation>
+        <translation type="vanished">Navn</translation>
     </message>
     <message>
         <source>Brew Date</source>
-        <translation>Bryggedato</translation>
+        <translation type="vanished">Bryggedato</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation>Øltype</translation>
+        <translation type="vanished">Øltype</translation>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation>Koketid</translation>
+        <translation type="vanished">Koketid</translation>
     </message>
     <message>
         <source>Color</source>
-        <translation>Farge</translation>
+        <translation type="vanished">Farge</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Type</translation>
+        <translation type="vanished">Type</translation>
     </message>
     <message>
         <source>Use</source>
@@ -704,202 +704,126 @@
     </message>
     <message>
         <source>Form</source>
-        <translation>Skjema</translation>
+        <translation type="vanished">Skjema</translation>
     </message>
     <message>
         <source>Category</source>
-        <translation>Kategori</translation>
+        <translation type="vanished">Kategori</translation>
     </message>
     <message>
         <source>Number</source>
-        <translation>Nummer</translation>
+        <translation type="vanished">Nummer</translation>
     </message>
     <message>
         <source>Letter</source>
-        <translation>Bokstav</translation>
+        <translation type="vanished">Bokstav</translation>
     </message>
     <message>
         <source>Guide</source>
-        <translation>Veiledning</translation>
+        <translation type="vanished">Veiledning</translation>
     </message>
     <message>
         <source>PATH</source>
-        <translation>STI</translation>
+        <translation type="vanished">STI</translation>
     </message>
     <message>
         <source>FULLPATH</source>
-        <translation>HEL STI</translation>
-    </message>
-    <message>
-        <source>Could not copy</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>There was an unexpected error creating %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Snapshots</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Ca</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>HCO3</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>SO4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cl</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Na</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mg</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>pH</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>% Alpha</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">HEL STI</translation>
     </message>
     <message>
         <source>Origin</source>
-        <translation type="unfinished">Opphav</translation>
+        <translation type="obsolete">Opphav</translation>
     </message>
 </context>
 <context>
     <name>BtTreeView</name>
     <message>
         <source>New</source>
-        <translation>Ny</translation>
+        <translation type="vanished">Ny</translation>
     </message>
     <message>
         <source>Recipe</source>
-        <translation>Oppskrift</translation>
+        <translation type="vanished">Oppskrift</translation>
     </message>
     <message>
         <source>Brew It!</source>
-        <translation>Start brygg!</translation>
+        <translation type="vanished">Start brygg!</translation>
     </message>
     <message>
         <source>Brew Again</source>
-        <translation>Brygg igjen</translation>
+        <translation type="vanished">Brygg igjen</translation>
     </message>
     <message>
         <source>Change date</source>
-        <translation>Forandre dato</translation>
+        <translation type="vanished">Forandre dato</translation>
     </message>
     <message>
         <source>Recalculate eff</source>
-        <translation>Rekaluler eff</translation>
+        <translation type="vanished">Rekaluler eff</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation>Slett</translation>
+        <translation type="vanished">Slett</translation>
     </message>
     <message>
         <source>Equipment</source>
-        <translation>Utstyr</translation>
+        <translation type="vanished">Utstyr</translation>
     </message>
     <message>
         <source>Fermentable</source>
-        <translation>Gjærbar</translation>
+        <translation type="vanished">Gjærbar</translation>
     </message>
     <message>
         <source>Hop</source>
-        <translation>Humle</translation>
+        <translation type="vanished">Humle</translation>
     </message>
     <message>
         <source>Misc</source>
-        <translation>Diverse</translation>
+        <translation type="vanished">Diverse</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation>Øltype</translation>
+        <translation type="vanished">Øltype</translation>
     </message>
     <message>
         <source>Yeast</source>
-        <translation>Gjær</translation>
+        <translation type="vanished">Gjær</translation>
     </message>
     <message>
         <source>Folder</source>
-        <translation>Mappe</translation>
+        <translation type="vanished">Mappe</translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation>Kopier</translation>
+        <translation type="vanished">Kopier</translation>
     </message>
     <message>
         <source>Export</source>
-        <translation>Eksportér</translation>
+        <translation type="vanished">Eksportér</translation>
     </message>
     <message>
         <source>Import</source>
-        <translation>Importér</translation>
+        <translation type="vanished">Importér</translation>
     </message>
     <message>
         <source>Delete %1</source>
-        <translation>Slett %1</translation>
+        <translation type="vanished">Slett %1</translation>
     </message>
     <message>
         <source>Delete %1 %2?</source>
-        <translation>Slett %1 %2?</translation>
+        <translation type="vanished">Slett %1 %2?</translation>
     </message>
     <message>
         <source>BrewNote</source>
-        <translation>Bryggenotat</translation>
-    </message>
-    <message>
-        <source>Cancel All</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Bryggenotat</translation>
     </message>
     <message>
         <source>Copy %1</source>
-        <translation>Kopier %1</translation>
+        <translation type="vanished">Kopier %1</translation>
     </message>
     <message>
         <source>Enter a unique name for the copy of %1.</source>
-        <translation>Skriv inn et unikt navn for kopien av %1.</translation>
-    </message>
-    <message>
-        <source>An empty name will skip copying this %1.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Show Snapshots</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hide Snapshots</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Detach Recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Snapshot Recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Water</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>To File (BeerXML or BeerJSON)</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Skriv inn et unikt navn for kopien av %1.</translation>
     </message>
 </context>
 <context>
@@ -1061,6 +985,14 @@ Log file may contain more details.</source>
     <message>
         <source>Equipment</source>
         <translation type="unfinished">Utstyr</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Navn</translation>
+    </message>
+    <message>
+        <source>Boil Time</source>
+        <translation type="unfinished">Koketid</translation>
     </message>
 </context>
 <context>
@@ -1395,6 +1327,18 @@ Log file may contain more details.</source>
         <source>Smoked</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Navn</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="unfinished">Type</translation>
+    </message>
+    <message>
+        <source>Color</source>
+        <translation type="unfinished">Farge</translation>
+    </message>
 </context>
 <context>
     <name>FermentableDialog</name>
@@ -1586,6 +1530,21 @@ Log file may contain more details.</source>
     </message>
 </context>
 <context>
+    <name>Folder</name>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Navn</translation>
+    </message>
+    <message>
+        <source>PATH</source>
+        <translation type="unfinished">STI</translation>
+    </message>
+    <message>
+        <source>FULLPATH</source>
+        <translation type="unfinished">HEL STI</translation>
+    </message>
+</context>
+<context>
     <name>HelpDialog</name>
     <message>
         <source>for</source>
@@ -1717,6 +1676,22 @@ Log file may contain more details.</source>
     <message>
         <source>Aroma, Bittering &amp; Flavor</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Navn</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="unfinished">Type</translation>
+    </message>
+    <message>
+        <source>% Alpha</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Origin</source>
+        <translation type="unfinished">Opphav</translation>
     </message>
 </context>
 <context>
@@ -2556,6 +2531,14 @@ If you need help, please open an issue at %1</source>
     <message>
         <source>Wood</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Navn</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="unfinished">Type</translation>
     </message>
 </context>
 <context>
@@ -4138,6 +4121,22 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
         <source>Wine</source>
         <translation type="unfinished">Vin</translation>
     </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Navn</translation>
+    </message>
+    <message>
+        <source>Snapshots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew Date</source>
+        <translation type="unfinished">Bryggedato</translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <translation type="unfinished">Øltype</translation>
+    </message>
 </context>
 <context>
     <name>RecipeAddition</name>
@@ -5045,6 +5044,26 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
         <source>Other</source>
         <translation type="unfinished">Annet</translation>
     </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Navn</translation>
+    </message>
+    <message>
+        <source>Category</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Number</source>
+        <translation type="unfinished">Nummer</translation>
+    </message>
+    <message>
+        <source>Letter</source>
+        <translation type="unfinished">Bokstav</translation>
+    </message>
+    <message>
+        <source>Guide</source>
+        <translation type="unfinished">Veiledning</translation>
+    </message>
 </context>
 <context>
     <name>StyleEditor</name>
@@ -5297,6 +5316,188 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
 </context>
 <context>
+    <name>TreeModel</name>
+    <message>
+        <source>Name</source>
+        <translation type="obsolete">Navn</translation>
+    </message>
+    <message>
+        <source>Brew Date</source>
+        <translation type="obsolete">Bryggedato</translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <translation type="obsolete">Øltype</translation>
+    </message>
+    <message>
+        <source>Boil Time</source>
+        <translation type="obsolete">Koketid</translation>
+    </message>
+    <message>
+        <source>Color</source>
+        <translation type="obsolete">Farge</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="obsolete">Type</translation>
+    </message>
+    <message>
+        <source>Origin</source>
+        <translation type="obsolete">Opphav</translation>
+    </message>
+    <message>
+        <source>Number</source>
+        <translation type="obsolete">Nummer</translation>
+    </message>
+    <message>
+        <source>Letter</source>
+        <translation type="obsolete">Bokstav</translation>
+    </message>
+    <message>
+        <source>Guide</source>
+        <translation type="obsolete">Veiledning</translation>
+    </message>
+    <message>
+        <source>PATH</source>
+        <translation type="obsolete">STI</translation>
+    </message>
+    <message>
+        <source>FULLPATH</source>
+        <translation type="obsolete">HEL STI</translation>
+    </message>
+    <message>
+        <source>Could not copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>There was an unexpected error creating %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>TreeView</name>
+    <message>
+        <source>New</source>
+        <translation type="unfinished">Ny</translation>
+    </message>
+    <message>
+        <source>Recipe</source>
+        <translation type="unfinished">Oppskrift</translation>
+    </message>
+    <message>
+        <source>Show Snapshots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hide Snapshots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Detach Recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Snapshot Recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew It!</source>
+        <translation type="unfinished">Start brygg!</translation>
+    </message>
+    <message>
+        <source>Brew Again</source>
+        <translation type="unfinished">Brygg igjen</translation>
+    </message>
+    <message>
+        <source>Change date</source>
+        <translation type="unfinished">Forandre dato</translation>
+    </message>
+    <message>
+        <source>Recalculate eff</source>
+        <translation type="unfinished">Rekaluler eff</translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation type="unfinished">Slett</translation>
+    </message>
+    <message>
+        <source>Equipment</source>
+        <translation type="unfinished">Utstyr</translation>
+    </message>
+    <message>
+        <source>Fermentable</source>
+        <translation type="unfinished">Gjærbar</translation>
+    </message>
+    <message>
+        <source>Hop</source>
+        <translation type="unfinished">Humle</translation>
+    </message>
+    <message>
+        <source>Misc</source>
+        <translation type="unfinished">Diverse</translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <translation type="unfinished">Øltype</translation>
+    </message>
+    <message>
+        <source>Yeast</source>
+        <translation type="unfinished">Gjær</translation>
+    </message>
+    <message>
+        <source>Water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Folder</source>
+        <translation type="unfinished">Mappe</translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation type="unfinished">Kopier</translation>
+    </message>
+    <message>
+        <source>Export</source>
+        <translation type="unfinished">Eksportér</translation>
+    </message>
+    <message>
+        <source>To File (BeerXML or BeerJSON)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Import</source>
+        <translation type="unfinished">Importér</translation>
+    </message>
+    <message>
+        <source>Cancel All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copy %1</source>
+        <translation type="unfinished">Kopier %1</translation>
+    </message>
+    <message>
+        <source>Enter a unique name for the copy of %1.</source>
+        <translation type="unfinished">Skriv inn et unikt navn for kopien av %1.</translation>
+    </message>
+    <message>
+        <source>An empty name will skip copying this %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete %1</source>
+        <translation type="unfinished">Slett %1</translation>
+    </message>
+    <message>
+        <source>Delete %1 %2?</source>
+        <translation type="unfinished">Slett %1 %2?</translation>
+    </message>
+    <message>
+        <source>BrewNote</source>
+        <translation type="unfinished">Bryggenotat</translation>
+    </message>
+</context>
+<context>
     <name>UnitAndScalePopUpMenu</name>
     <message>
         <source>Default</source>
@@ -5346,6 +5547,34 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>SO4 </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Navn</translation>
+    </message>
+    <message>
+        <source>Ca</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SO4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cl</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Na</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mg</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>pH</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -5589,6 +5818,22 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Medium High</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Laboratory</source>
+        <translation type="unfinished">Laboratorie</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Navn</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="unfinished">Type</translation>
+    </message>
+    <message>
+        <source>Form</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

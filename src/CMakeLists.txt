@@ -50,14 +50,10 @@ set(filesToCompile_cpp
     ${repoDir}/src/BtColor.cpp
     ${repoDir}/src/BtDatePopup.cpp
     ${repoDir}/src/BtFieldType.cpp
-    ${repoDir}/src/BtFolder.cpp
     ${repoDir}/src/BtHorizontalTabs.cpp
     ${repoDir}/src/BtSplashScreen.cpp
     ${repoDir}/src/BtTabWidget.cpp
     ${repoDir}/src/BtTextEdit.cpp
-    ${repoDir}/src/BtTreeItem.cpp
-    ${repoDir}/src/BtTreeModel.cpp
-    ${repoDir}/src/BtTreeView.cpp
     ${repoDir}/src/ConverterTool.cpp
     ${repoDir}/src/HeatCalculations.cpp
     ${repoDir}/src/HelpDialog.cpp
@@ -106,9 +102,9 @@ set(filesToCompile_cpp
     ${repoDir}/src/catalogs/YeastCatalog.cpp
     ${repoDir}/src/database/BtSqlQuery.cpp
     ${repoDir}/src/database/Database.cpp
-    ${repoDir}/src/database/DefaultContentLoader.cpp
     ${repoDir}/src/database/DatabaseSchemaHelper.cpp
     ${repoDir}/src/database/DbTransaction.cpp
+    ${repoDir}/src/database/DefaultContentLoader.cpp
     ${repoDir}/src/database/ObjectStore.cpp
     ${repoDir}/src/database/ObjectStoreTyped.cpp
     ${repoDir}/src/editors/BoilEditor.cpp
@@ -156,6 +152,7 @@ set(filesToCompile_cpp
     ${repoDir}/src/model/Fermentable.cpp
     ${repoDir}/src/model/Fermentation.cpp
     ${repoDir}/src/model/FermentationStep.cpp
+    ${repoDir}/src/model/Folder.cpp
     ${repoDir}/src/model/Hop.cpp
     ${repoDir}/src/model/Ingredient.cpp
     ${repoDir}/src/model/IngredientInRecipe.cpp
@@ -201,7 +198,6 @@ set(filesToCompile_cpp
     ${repoDir}/src/serialization/xml/XmlRecipeRecord.cpp
     ${repoDir}/src/serialization/xml/XmlRecord.cpp
     ${repoDir}/src/serialization/xml/XmlRecordDefinition.cpp
-    ${repoDir}/src/sortFilterProxyModels/BtTreeFilterProxyModel.cpp
     ${repoDir}/src/sortFilterProxyModels/EquipmentSortFilterProxyModel.cpp
     ${repoDir}/src/sortFilterProxyModels/FermentableSortFilterProxyModel.cpp
     ${repoDir}/src/sortFilterProxyModels/HopSortFilterProxyModel.cpp
@@ -231,6 +227,10 @@ set(filesToCompile_cpp
     ${repoDir}/src/tableModels/StyleTableModel.cpp
     ${repoDir}/src/tableModels/WaterTableModel.cpp
     ${repoDir}/src/tableModels/YeastTableModel.cpp
+    ${repoDir}/src/trees/TreeFilterProxyModel.cpp
+    ${repoDir}/src/trees/TreeModel.cpp
+    ${repoDir}/src/trees/TreeNode.cpp
+    ${repoDir}/src/trees/TreeView.cpp
     ${repoDir}/src/undoRedo/SimpleUndoableUpdate.cpp
     ${repoDir}/src/utils/BtException.cpp
     ${repoDir}/src/utils/BtStringConst.cpp

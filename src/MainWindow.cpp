@@ -75,7 +75,7 @@
 #include "Application.h"
 #include "BrewNoteWidget.h"
 #include "BtDatePopup.h"
-#include "BtFolder.h"
+#include "model/Folder.h"
 #include "BtHorizontalTabs.h"
 #include "BtTabWidget.h"
 #include "ConverterTool.h"
@@ -964,9 +964,9 @@ void MainWindow::init() {
    qDebug() << Q_FUNC_INFO << "Fermentation signals connected";
 
    // I do not like this connection here.
-   connect(this->pimpl->m_ancestorDialog,  &AncestorDialog::ancestoryChanged, treeView_recipe->model(), &BtTreeModel::versionedRecipe);
-   connect(this->pimpl->m_optionDialog,    &OptionDialog::showAllAncestors,   treeView_recipe->model(), &BtTreeModel::catchAncestors );
-   connect(this->treeView_recipe, &BtTreeView::recipeSpawn,          this,                     &MainWindow::versionedRecipe );
+   connect(this->pimpl->m_ancestorDialog,  &AncestorDialog::ancestoryChanged, treeView_recipe->model(), &TreeModel::versionedRecipe);
+   connect(this->pimpl->m_optionDialog,    &OptionDialog::showAllAncestors,   treeView_recipe->model(), &TreeModel::catchAncestors );
+   connect(this->treeView_recipe, &TreeView::recipeSpawn,          this,                     &MainWindow::versionedRecipe );
 
    // No connections from the database yet? Oh FSM, that probably means I'm
    // doing it wrong again.
@@ -1435,7 +1435,7 @@ void MainWindow::setupDrops() {
 
 void MainWindow::deleteSelected() {
    QModelIndexList selected;
-   BtTreeView* active = qobject_cast<BtTreeView*>(tabWidget_Trees->currentWidget()->focusWidget());
+   TreeView* active = qobject_cast<TreeView*>(tabWidget_Trees->currentWidget()->focusWidget());
 
    // This happens after startup when nothing is selected
    if (!active) {
@@ -1457,7 +1457,7 @@ void MainWindow::deleteSelected() {
    //
    // .:TBD:. This works if you have plenty of recipes outside folders.  If all your recipes are inside folders, then
    // we should so a proper search through the tree to find the first recipe and then expand the folder that it's in.
-   // Doesn't feel like that logic belongs here.  Would be better to create BtTreeView::firstNonFolder() or similar.
+   // Doesn't feel like that logic belongs here.  Would be better to create TreeView::firstNonFolder() or similar.
    //
    if (!start.isValid() || !active->type(start)) {
       int oldRow = start.row();
@@ -1465,7 +1465,7 @@ void MainWindow::deleteSelected() {
       qDebug() << Q_FUNC_INFO << "Row" << oldRow << "no longer valid, so returning to first (" << start.row() << ")";
    }
 
-   while (start.isValid() && active->type(start) == BtTreeItem::Type::Folder) {
+   while (start.isValid() && active->type(start) == TreeNode::Type::Folder) {
       qDebug() << Q_FUNC_INFO << "Skipping over folder at row" << start.row();
       // Once all platforms are on Qt 5.11 or later, we can write:
       // start = start.siblingAtRow(start.row() + 1);
@@ -1474,7 +1474,7 @@ void MainWindow::deleteSelected() {
 
    if (start.isValid()) {
       qDebug() << Q_FUNC_INFO << "Row" << start.row() << "is" << active->type(start);
-      if (active->type(start) == BtTreeItem::Type::Recipe) {
+      if (active->type(start) == TreeNode::Type::Recipe) {
          this->setRecipe(treeView_recipe->getItem<Recipe>(start));
       }
       this->setTreeSelection(start);
@@ -1490,22 +1490,22 @@ void MainWindow::treeActivated(const QModelIndex &index) {
       return;
    }
 
-   BtTreeView* active = qobject_cast<BtTreeView*>(calledBy);
-   // If the sender cannot be morphed into a BtTreeView object
+   TreeView* active = qobject_cast<TreeView*>(calledBy);
+   // If the sender cannot be morphed into a TreeView object
    if (!active) {
       qWarning() << Q_FUNC_INFO << "Unrecognised sender" << calledBy->metaObject()->className();
       return;
    }
 
-   auto itemType = active->type(index);
-   if (!itemType) {
+   auto nodeType = active->type(index);
+   if (!nodeType) {
       qWarning() << Q_FUNC_INFO << "Unknown type for index" << index;
    } else {
-      switch (*itemType) {
-         case BtTreeItem::Type::Recipe:
+      switch (*nodeType) {
+         case TreeNode::Type::Recipe:
             setRecipe(treeView_recipe->getItem<Recipe>(index));
             break;
-         case BtTreeItem::Type::Equipment:
+         case TreeNode::Type::Equipment:
             {
                Equipment * kit = active->getItem<Equipment>(index);
                if ( kit ) {
@@ -1514,7 +1514,7 @@ void MainWindow::treeActivated(const QModelIndex &index) {
                }
             }
             break;
-         case BtTreeItem::Type::Fermentable:
+         case TreeNode::Type::Fermentable:
             {
                Fermentable * ferm = active->getItem<Fermentable>(index);
                if (ferm) {
@@ -1523,7 +1523,7 @@ void MainWindow::treeActivated(const QModelIndex &index) {
                }
             }
             break;
-         case BtTreeItem::Type::Hop:
+         case TreeNode::Type::Hop:
             {
                Hop* hop = active->getItem<Hop>(index);
                if (hop) {
@@ -1532,7 +1532,7 @@ void MainWindow::treeActivated(const QModelIndex &index) {
                }
             }
             break;
-         case BtTreeItem::Type::Misc:
+         case TreeNode::Type::Misc:
             {
                Misc * misc = active->getItem<Misc>(index);
                if (misc) {
@@ -1541,7 +1541,7 @@ void MainWindow::treeActivated(const QModelIndex &index) {
                }
             }
             break;
-         case BtTreeItem::Type::Style:
+         case TreeNode::Type::Style:
             {
                Style * style = active->getItem<Style>(index);
                if (style) {
@@ -1550,7 +1550,7 @@ void MainWindow::treeActivated(const QModelIndex &index) {
                }
             }
             break;
-         case BtTreeItem::Type::Yeast:
+         case TreeNode::Type::Yeast:
             {
                Yeast * yeast = active->getItem<Yeast>(index);
                if (yeast) {
@@ -1559,12 +1559,12 @@ void MainWindow::treeActivated(const QModelIndex &index) {
                }
             }
             break;
-         case BtTreeItem::Type::BrewNote:
+         case TreeNode::Type::BrewNote:
             setBrewNoteByIndex(index);
             break;
-         case BtTreeItem::Type::Folder:  // default behavior is fine, but no warning
+         case TreeNode::Type::Folder:  // default behavior is fine, but no warning
             break;
-         case BtTreeItem::Type::Water:
+         case TreeNode::Type::Water:
             {
                Water * w = active->getItem<Water>(index);
                if (w) {
@@ -2517,19 +2517,19 @@ void MainWindow::newRecipe()
    // a new recipe will be put in a folder if you right click on a recipe or
    // folder. Otherwise, it goes into the main window?
    if (selection) {
-      BtTreeView* sent = qobject_cast<BtTreeView*>(tabWidget_Trees->currentWidget()->focusWidget());
+      TreeView* sent = qobject_cast<TreeView*>(tabWidget_Trees->currentWidget()->focusWidget());
       if (sent) {
          QModelIndexList indexes = sent->selectionModel()->selectedRows();
          // This is a little weird. There is an edge case where nothing is
          // selected and you click the big blue + button.
          if (indexes.size() > 0) {
-            if (sent->type(indexes.at(0)) == BtTreeItem::Type::Recipe) {
+            if (sent->type(indexes.at(0)) == TreeNode::Type::Recipe) {
                auto foo = sent->getItem<Recipe>(indexes.at(0));
                if (foo && ! foo->folder().isEmpty()) {
                   newRec->setFolder( foo->folder() );
                }
-            } else if (sent->type(indexes.at(0)) == BtTreeItem::Type::Folder) {
-               BtFolder* foo = sent->getItem<BtFolder>(indexes.at(0));
+            } else if (sent->type(indexes.at(0)) == TreeNode::Type::Folder) {
+               Folder* foo = sent->getItem<Folder>(indexes.at(0));
                if (foo) {
                   newRec->setFolder(foo->fullPath());
                }
@@ -2544,7 +2544,7 @@ void MainWindow::newRecipe()
 
 void MainWindow::newFolder() {
    // get the currently active tree
-   BtTreeView* active = qobject_cast<BtTreeView*>(tabWidget_Trees->currentWidget()->focusWidget());
+   TreeView* active = qobject_cast<TreeView*>(tabWidget_Trees->currentWidget()->focusWidget());
 
    if (!active) {
       return;
@@ -2583,9 +2583,9 @@ void MainWindow::newFolder() {
 }
 
 void MainWindow::renameFolder() {
-   BtTreeView* active = qobject_cast<BtTreeView*>(tabWidget_Trees->currentWidget()->focusWidget());
+   TreeView* active = qobject_cast<TreeView*>(tabWidget_Trees->currentWidget()->focusWidget());
 
-   // If the sender cannot be morphed into a BtTreeView object
+   // If the sender cannot be morphed into a TreeView object
    if ( active == nullptr ) {
       return;
    }
@@ -2597,11 +2597,11 @@ void MainWindow::renameFolder() {
 
    // The item to be renamed
    // Don't rename anything other than a folder
-   if ( active->type(starter) != BtTreeItem::Type::Folder) {
+   if ( active->type(starter) != TreeNode::Type::Folder) {
       return;
    }
 
-   BtFolder* victim = active->getItem<BtFolder>(starter);
+   Folder* victim = active->getItem<Folder>(starter);
    QString newName = QInputDialog::getText(this,
                                            tr("Folder name"),
                                            tr("Folder name:"),
@@ -2645,21 +2645,21 @@ void MainWindow::setTreeSelection(QModelIndex item) {
       return;
    }
 
-   BtTreeView *active = qobject_cast<BtTreeView*>(tabWidget_Trees->currentWidget()->focusWidget());
+   TreeView *active = qobject_cast<TreeView*>(tabWidget_Trees->currentWidget()->focusWidget());
    if ( active == nullptr ) {
-      active = qobject_cast<BtTreeView*>(treeView_recipe);
+      active = qobject_cast<TreeView*>(treeView_recipe);
    }
 
-   // Couldn't cast the active item to a BtTreeView
+   // Couldn't cast the active item to a TreeView
    if ( active == nullptr ) {
-      qDebug() << Q_FUNC_INFO << "Couldn't cast the active item to a BtTreeView";
+      qDebug() << Q_FUNC_INFO << "Couldn't cast the active item to a TreeView";
       return;
    }
 
    QModelIndex parent = active->parent(item);
 
    active->setCurrentIndex(item);
-   if ( active->type(parent) == BtTreeItem::Type::Folder && ! active->isExpanded(parent) ) {
+   if ( active->type(parent) == TreeNode::Type::Folder && ! active->isExpanded(parent) ) {
       active->setExpanded(parent, true);
    }
    active->scrollTo(item,QAbstractItemView::PositionAtCenter);
@@ -2948,8 +2948,8 @@ void MainWindow::contextMenu(const QPoint &point) {
       return;
    }
 
-   BtTreeView * active = qobject_cast<BtTreeView*>(calledBy);
-   // If the sender cannot be morphed into a BtTreeView object
+   TreeView * active = qobject_cast<TreeView*>(calledBy);
+   // If the sender cannot be morphed into a TreeView object
    if (active == nullptr) {
       return;
    }
@@ -3006,14 +3006,14 @@ void MainWindow::setupContextMenu() {
 
 void MainWindow::copySelected() {
    QModelIndexList selected;
-   BtTreeView* active = qobject_cast<BtTreeView*>(tabWidget_Trees->currentWidget()->focusWidget());
+   TreeView* active = qobject_cast<TreeView*>(tabWidget_Trees->currentWidget()->focusWidget());
 
    active->copySelected(active->selectionModel()->selectedRows());
    return;
 }
 
 void MainWindow::exportSelected() {
-   BtTreeView const * active = qobject_cast<BtTreeView*>(this->tabWidget_Trees->currentWidget()->focusWidget());
+   TreeView const * active = qobject_cast<TreeView*>(this->tabWidget_Trees->currentWidget()->focusWidget());
    if (active == nullptr) {
       qDebug() << Q_FUNC_INFO << "No active tree so can't get a selection";
       return;
@@ -3044,52 +3044,52 @@ void MainWindow::exportSelected() {
 
    int count = 0;
    for (auto & selection : selected) {
-      auto itemType = active->type(selection);
-      if (!itemType) {
+      auto nodeType = active->type(selection);
+      if (!nodeType) {
          qWarning() << Q_FUNC_INFO << "Unknown type for selection" << selection;
       } else {
-         switch(*itemType) {
-            case BtTreeItem::Type::Recipe:
+         switch(*nodeType) {
+            case TreeNode::Type::Recipe:
                recipes.append(treeView_recipe->getItem<Recipe>(selection));
                ++count;
                break;
-            case BtTreeItem::Type::Equipment:
+            case TreeNode::Type::Equipment:
                equipments.append(treeView_equip->getItem<Equipment>(selection));
                ++count;
                break;
-            case BtTreeItem::Type::Fermentable:
+            case TreeNode::Type::Fermentable:
                fermentables.append(treeView_ferm->getItem<Fermentable>(selection));
                ++count;
                break;
-            case BtTreeItem::Type::Hop:
+            case TreeNode::Type::Hop:
                hops.append(treeView_hops->getItem<Hop>(selection));
                ++count;
                break;
-            case BtTreeItem::Type::Misc:
+            case TreeNode::Type::Misc:
                miscs.append(treeView_misc->getItem<Misc>(selection));
                ++count;
                break;
-            case BtTreeItem::Type::Style:
+            case TreeNode::Type::Style:
                styles.append(treeView_style->getItem<Style>(selection));
                ++count;
                break;
-            case BtTreeItem::Type::Water:
+            case TreeNode::Type::Water:
                waters.append(treeView_water->getItem<Water>(selection));
                ++count;
                break;
-            case BtTreeItem::Type::Yeast:
+            case TreeNode::Type::Yeast:
                yeasts.append(treeView_yeast->getItem<Yeast>(selection));
                ++count;
                break;
-            case BtTreeItem::Type::Folder:
+            case TreeNode::Type::Folder:
                qDebug() << Q_FUNC_INFO << "Can't export selected Folder to XML as BeerXML does not support it";
                break;
-            case BtTreeItem::Type::BrewNote:
+            case TreeNode::Type::BrewNote:
                qDebug() << Q_FUNC_INFO << "Can't export selected BrewNote to XML as BeerXML does not support it";
                break;
             default:
                // This shouldn't happen, because we should explicitly cover all the types above
-               qWarning() << Q_FUNC_INFO << "Don't know how to export BtTreeItem type" << static_cast<int>(*itemType);
+               qWarning() << Q_FUNC_INFO << "Don't know how to export TreeNode type" << static_cast<int>(*nodeType);
                break;
          }
       }

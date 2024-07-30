@@ -90,10 +90,25 @@ template <typename T> concept CONCEPT_FIX_UP IsOptionalOther = !is_optional_enum
 //
 // Already std::is_pointer tells us whether something is a raw pointer, so we just need the other case.
 //
-template<typename T> struct is_shared_ptr : public std::false_type{};
-template<typename T> struct is_shared_ptr<std::shared_ptr<T>> : public std::true_type{};
+template <typename T> struct is_shared_ptr : public std::false_type{};
+template <typename T> struct is_shared_ptr<std::shared_ptr<T>> : public std::true_type{};
 
 template <typename T> concept CONCEPT_FIX_UP IsRawPointer    = std::is_pointer<T>::value;
 template <typename T> concept CONCEPT_FIX_UP IsSharedPointer = is_shared_ptr  <T>::value;
+
+//
+// We currently only use this in one place (trees) but it's potentially useful in multiple places to have a concept for
+// empty variant (ie one that can't contain anything) as we typically want different code for such a case.
+//
+// Note that, unlike all the examples above, std::variant takes a template parameter pack, so we need to cater for that
+// here.
+//
+template <typename T> struct is_variant : public std::false_type{};
+template <typename... Ts> struct is_variant<std::variant<Ts...>> : public std::true_type{};
+
+template <typename T> struct is_null_variant : public std::false_type{};
+template <>           struct is_null_variant<std::variant<std::monostate>> : public std::true_type{};
+template <typename T> concept CONCEPT_FIX_UP IsNullVariant        = is_variant<T>::value && is_null_variant<T>::value;
+template <typename T> concept CONCEPT_FIX_UP IsSubstantiveVariant = is_variant<T>::value && !is_null_variant<T>::value;
 
 #endif

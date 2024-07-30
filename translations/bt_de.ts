@@ -715,27 +715,27 @@
     <name>BtTreeModel</name>
     <message>
         <source>Name</source>
-        <translation>Name</translation>
+        <translation type="vanished">Name</translation>
     </message>
     <message>
         <source>Brew Date</source>
-        <translation>Braudatum</translation>
+        <translation type="vanished">Braudatum</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation>Stil</translation>
+        <translation type="vanished">Stil</translation>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation>Kochzeit</translation>
+        <translation type="vanished">Kochzeit</translation>
     </message>
     <message>
         <source>Color</source>
-        <translation>Farbe</translation>
+        <translation type="vanished">Farbe</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Typ</translation>
+        <translation type="vanished">Typ</translation>
     </message>
     <message>
         <source>Use</source>
@@ -743,202 +743,130 @@
     </message>
     <message>
         <source>Form</source>
-        <translation>Form</translation>
+        <translation type="vanished">Form</translation>
     </message>
     <message>
         <source>Category</source>
-        <translation>Kategorie</translation>
+        <translation type="vanished">Kategorie</translation>
     </message>
     <message>
         <source>Number</source>
-        <translation>Nummer</translation>
+        <translation type="vanished">Nummer</translation>
     </message>
     <message>
         <source>Letter</source>
-        <translation>Buchstabe</translation>
+        <translation type="vanished">Buchstabe</translation>
     </message>
     <message>
         <source>Guide</source>
-        <translation>Richtlinie</translation>
+        <translation type="vanished">Richtlinie</translation>
     </message>
     <message>
         <source>PATH</source>
-        <translation>PFAD</translation>
+        <translation type="vanished">PFAD</translation>
     </message>
     <message>
         <source>FULLPATH</source>
-        <translation>VOLLSTÄNDIGER PFAD</translation>
-    </message>
-    <message>
-        <source>Could not copy</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>There was an unexpected error creating %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Snapshots</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Ca</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>HCO3</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>SO4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cl</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Na</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mg</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>pH</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>% Alpha</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">VOLLSTÄNDIGER PFAD</translation>
     </message>
     <message>
         <source>Origin</source>
-        <translation type="unfinished">Ursprung</translation>
+        <translation type="obsolete">Ursprung</translation>
     </message>
 </context>
 <context>
     <name>BtTreeView</name>
     <message>
         <source>New</source>
-        <translation>Neu</translation>
+        <translation type="vanished">Neu</translation>
     </message>
     <message>
         <source>Recipe</source>
-        <translation>Rezept</translation>
+        <translation type="vanished">Rezept</translation>
     </message>
     <message>
         <source>Brew It!</source>
-        <translation>Dieses brauen!</translation>
+        <translation type="vanished">Dieses brauen!</translation>
     </message>
     <message>
         <source>Brew Again</source>
-        <translation>Erneut brauen</translation>
+        <translation type="vanished">Erneut brauen</translation>
     </message>
     <message>
         <source>Change date</source>
-        <translation>Datum ändern</translation>
+        <translation type="vanished">Datum ändern</translation>
     </message>
     <message>
         <source>Recalculate eff</source>
-        <translation>Ausbeute neu berechnen</translation>
+        <translation type="vanished">Ausbeute neu berechnen</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation>Entfernen</translation>
+        <translation type="vanished">Entfernen</translation>
     </message>
     <message>
         <source>Equipment</source>
-        <translation>Ausstattung</translation>
+        <translation type="vanished">Ausstattung</translation>
     </message>
     <message>
         <source>Fermentable</source>
-        <translation>Gärgut</translation>
+        <translation type="vanished">Gärgut</translation>
     </message>
     <message>
         <source>Hop</source>
-        <translation>Hopfen</translation>
+        <translation type="vanished">Hopfen</translation>
     </message>
     <message>
         <source>Misc</source>
-        <translation>Sonstiges</translation>
+        <translation type="vanished">Sonstiges</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation>Stil</translation>
+        <translation type="vanished">Stil</translation>
     </message>
     <message>
         <source>Yeast</source>
-        <translation>Hefe</translation>
+        <translation type="vanished">Hefe</translation>
     </message>
     <message>
         <source>Folder</source>
-        <translation>Ordner</translation>
+        <translation type="vanished">Ordner</translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation>Kopieren</translation>
+        <translation type="vanished">Kopieren</translation>
     </message>
     <message>
         <source>Export</source>
-        <translation>Exportieren</translation>
+        <translation type="vanished">Exportieren</translation>
     </message>
     <message>
         <source>Import</source>
-        <translation>Importieren</translation>
+        <translation type="vanished">Importieren</translation>
     </message>
     <message>
         <source>Delete %1</source>
-        <translation>%1 löschen</translation>
+        <translation type="vanished">%1 löschen</translation>
     </message>
     <message>
         <source>Delete %1 %2?</source>
-        <translation>%1 %2 löschen?</translation>
+        <translation type="vanished">%1 %2 löschen?</translation>
     </message>
     <message>
         <source>BrewNote</source>
-        <translation>Braunotiz</translation>
+        <translation type="vanished">Braunotiz</translation>
     </message>
     <message>
         <source>Cancel All</source>
-        <translation>Alles Abbrechen</translation>
+        <translation type="vanished">Alles Abbrechen</translation>
     </message>
     <message>
         <source>Copy %1</source>
-        <translation>%1 kopieren</translation>
+        <translation type="vanished">%1 kopieren</translation>
     </message>
     <message>
         <source>Enter a unique name for the copy of %1.</source>
-        <translation>Geben Sie einen eindeutigen Namen für die Kopie von %1 an.</translation>
-    </message>
-    <message>
-        <source>An empty name will skip copying this %1.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Show Snapshots</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hide Snapshots</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Detach Recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Snapshot Recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Water</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>To File (BeerXML or BeerJSON)</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Geben Sie einen eindeutigen Namen für die Kopie von %1 an.</translation>
     </message>
 </context>
 <context>
@@ -1100,6 +1028,14 @@ Log file may contain more details.</source>
     <message>
         <source>Equipment</source>
         <translation type="unfinished">Ausstattung</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Name</translation>
+    </message>
+    <message>
+        <source>Boil Time</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1430,6 +1366,18 @@ Log file may contain more details.</source>
         <source>Smoked</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Name</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="unfinished">Typ</translation>
+    </message>
+    <message>
+        <source>Color</source>
+        <translation type="unfinished">Farbe</translation>
+    </message>
 </context>
 <context>
     <name>FermentableDialog</name>
@@ -1629,6 +1577,21 @@ Log file may contain more details.</source>
     </message>
 </context>
 <context>
+    <name>Folder</name>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Name</translation>
+    </message>
+    <message>
+        <source>PATH</source>
+        <translation type="unfinished">PFAD</translation>
+    </message>
+    <message>
+        <source>FULLPATH</source>
+        <translation type="unfinished">VOLLSTÄNDIGER PFAD</translation>
+    </message>
+</context>
+<context>
     <name>HelpDialog</name>
     <message>
         <source>for</source>
@@ -1760,6 +1723,22 @@ Log file may contain more details.</source>
     <message>
         <source>Aroma, Bittering &amp; Flavor</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Name</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="unfinished">Typ</translation>
+    </message>
+    <message>
+        <source>% Alpha</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Origin</source>
+        <translation type="unfinished">Ursprung</translation>
     </message>
 </context>
 <context>
@@ -2603,6 +2582,14 @@ If you need help, please open an issue at %1</source>
     <message>
         <source>Wood</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Name</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="unfinished">Typ</translation>
     </message>
 </context>
 <context>
@@ -4181,6 +4168,22 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
         <source>Wine</source>
         <translation type="unfinished">Wein</translation>
     </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Name</translation>
+    </message>
+    <message>
+        <source>Snapshots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew Date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RecipeAddition</name>
@@ -5092,6 +5095,26 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
         <source>Other</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Name</translation>
+    </message>
+    <message>
+        <source>Category</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Number</source>
+        <translation type="unfinished">Nummer</translation>
+    </message>
+    <message>
+        <source>Letter</source>
+        <translation type="unfinished">Buchstabe</translation>
+    </message>
+    <message>
+        <source>Guide</source>
+        <translation type="unfinished">Richtlinie</translation>
+    </message>
 </context>
 <context>
     <name>StyleTableModel</name>
@@ -5333,6 +5356,176 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
 </context>
 <context>
+    <name>TreeModel</name>
+    <message>
+        <source>Name</source>
+        <translation type="obsolete">Name</translation>
+    </message>
+    <message>
+        <source>Color</source>
+        <translation type="obsolete">Farbe</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="obsolete">Typ</translation>
+    </message>
+    <message>
+        <source>Origin</source>
+        <translation type="obsolete">Ursprung</translation>
+    </message>
+    <message>
+        <source>Number</source>
+        <translation type="obsolete">Nummer</translation>
+    </message>
+    <message>
+        <source>Letter</source>
+        <translation type="obsolete">Buchstabe</translation>
+    </message>
+    <message>
+        <source>Guide</source>
+        <translation type="obsolete">Richtlinie</translation>
+    </message>
+    <message>
+        <source>PATH</source>
+        <translation type="obsolete">PFAD</translation>
+    </message>
+    <message>
+        <source>FULLPATH</source>
+        <translation type="obsolete">VOLLSTÄNDIGER PFAD</translation>
+    </message>
+    <message>
+        <source>Could not copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>There was an unexpected error creating %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>TreeView</name>
+    <message>
+        <source>New</source>
+        <translation type="unfinished">Neu</translation>
+    </message>
+    <message>
+        <source>Recipe</source>
+        <translation type="unfinished">Rezept</translation>
+    </message>
+    <message>
+        <source>Show Snapshots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hide Snapshots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Detach Recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Snapshot Recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew It!</source>
+        <translation type="unfinished">Dieses brauen!</translation>
+    </message>
+    <message>
+        <source>Brew Again</source>
+        <translation type="unfinished">Erneut brauen</translation>
+    </message>
+    <message>
+        <source>Change date</source>
+        <translation type="unfinished">Datum ändern</translation>
+    </message>
+    <message>
+        <source>Recalculate eff</source>
+        <translation type="unfinished">Ausbeute neu berechnen</translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation type="unfinished">Entfernen</translation>
+    </message>
+    <message>
+        <source>Equipment</source>
+        <translation type="unfinished">Ausstattung</translation>
+    </message>
+    <message>
+        <source>Fermentable</source>
+        <translation type="unfinished">Gärgut</translation>
+    </message>
+    <message>
+        <source>Hop</source>
+        <translation type="unfinished">Hopfen</translation>
+    </message>
+    <message>
+        <source>Misc</source>
+        <translation type="unfinished">Sonstiges</translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Yeast</source>
+        <translation type="unfinished">Hefe</translation>
+    </message>
+    <message>
+        <source>Water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Folder</source>
+        <translation type="unfinished">Ordner</translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation type="unfinished">Kopieren</translation>
+    </message>
+    <message>
+        <source>Export</source>
+        <translation type="unfinished">Exportieren</translation>
+    </message>
+    <message>
+        <source>To File (BeerXML or BeerJSON)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Import</source>
+        <translation type="unfinished">Importieren</translation>
+    </message>
+    <message>
+        <source>Cancel All</source>
+        <translation type="unfinished">Alles Abbrechen</translation>
+    </message>
+    <message>
+        <source>Copy %1</source>
+        <translation type="unfinished">%1 kopieren</translation>
+    </message>
+    <message>
+        <source>Enter a unique name for the copy of %1.</source>
+        <translation type="unfinished">Geben Sie einen eindeutigen Namen für die Kopie von %1 an.</translation>
+    </message>
+    <message>
+        <source>An empty name will skip copying this %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete %1</source>
+        <translation type="unfinished">%1 löschen</translation>
+    </message>
+    <message>
+        <source>Delete %1 %2?</source>
+        <translation type="unfinished">%1 %2 löschen?</translation>
+    </message>
+    <message>
+        <source>BrewNote</source>
+        <translation type="unfinished">Braunotiz</translation>
+    </message>
+</context>
+<context>
     <name>UnitAndScalePopUpMenu</name>
     <message>
         <source>Default</source>
@@ -5382,6 +5575,34 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
     <message>
         <source>SO4 </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Name</translation>
+    </message>
+    <message>
+        <source>Ca</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SO4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cl</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Na</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mg</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>pH</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -5621,6 +5842,22 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
     <message>
         <source>Medium High</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Laboratory</source>
+        <translation type="unfinished">Labor</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Name</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="unfinished">Typ</translation>
+    </message>
+    <message>
+        <source>Form</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
