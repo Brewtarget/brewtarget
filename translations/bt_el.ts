@@ -5825,6 +5825,10 @@ The final volume in the primary is %1.</source>
         <source>Form</source>
         <translation type="unfinished">Μορφή</translation>
     </message>
+    <message>
+        <source>Product ID</source>
+        <translation type="unfinished">Κωδικός προιόντος</translation>
+    </message>
 </context>
 <context>
     <name>YeastDialog</name>

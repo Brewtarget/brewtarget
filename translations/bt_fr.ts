@@ -5943,6 +5943,10 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
         <source>Form</source>
         <translation type="unfinished">Format</translation>
     </message>
+    <message>
+        <source>Product ID</source>
+        <translation type="unfinished">ID du produit</translation>
+    </message>
 </context>
 <context>
     <name>YeastDialog</name>

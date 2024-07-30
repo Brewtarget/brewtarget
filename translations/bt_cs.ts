@@ -5793,6 +5793,10 @@ Celkový objem pro hlavní kvašení je %1.</translation>
         <source>Form</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Product ID</source>
+        <translation type="unfinished">ID produktu</translation>
+    </message>
 </context>
 <context>
     <name>YeastDialog</name>

@@ -5863,6 +5863,10 @@ O volume final do fermentador primário é %1.</translation>
         <source>Form</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Product ID</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>YeastDialog</name>

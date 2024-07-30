@@ -105,6 +105,9 @@ public:
    ~TreeNodeBase() = default;
 
    static QVariant header(int section) {
+      if (section < 0 || section >= static_cast<int>(Info::NumberOfColumns)) {
+         return QVariant();
+      }
       return QVariant(Derived::columnDisplayNames[section]);
    }
 
@@ -365,12 +368,15 @@ template<> struct TreeItemTraits<TreeItemNode<Misc>> {
 
 template<> struct TreeItemTraits<TreeItemNode<Yeast>> {
    enum class ColumnIndex {
-      Laboratory,
+      // It's tempting to put Laboratory first, and have it at the first column, but it messes up the way the folders
+      // work if the first column isn't Name
       Name,
+      Laboratory,
+      ProductId,
       Type,
       Form,
    };
-   enum class Info { NumberOfColumns = 3 };
+   enum class Info { NumberOfColumns = 5 };
    using ParentType = TreeFolderNode<Yeast>;
    using ChildPtrTypes = std::variant<std::monostate>;
 };

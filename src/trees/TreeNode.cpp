@@ -77,8 +77,9 @@ template<> EnumStringMapping const TreeItemNode<Misc>::columnDisplayNames {
 };
 
 template<> EnumStringMapping const TreeItemNode<Yeast>::columnDisplayNames {
-   {TreeItemNode<Yeast>::ColumnIndex::Laboratory, Yeast::tr("Laboratory")},
    {TreeItemNode<Yeast>::ColumnIndex::Name      , Yeast::tr("Name"      )},
+   {TreeItemNode<Yeast>::ColumnIndex::Laboratory, Yeast::tr("Laboratory")},
+   {TreeItemNode<Yeast>::ColumnIndex::ProductId , Yeast::tr("Product ID")},
    {TreeItemNode<Yeast>::ColumnIndex::Type      , Yeast::tr("Type"      )},
    {TreeItemNode<Yeast>::ColumnIndex::Form      , Yeast::tr("Form"      )},
 };
@@ -226,8 +227,9 @@ template<> bool TreeItemNode<Yeast>::isLessThan([[maybe_unused]] TreeModel const
                                                 Yeast const & lhs,
                                                 Yeast const & rhs) {
    switch (section) {
-      case TreeItemNode<Yeast>::ColumnIndex::Laboratory: return lhs.laboratory() < rhs.laboratory();
       case TreeItemNode<Yeast>::ColumnIndex::Name      : return lhs.name()       < rhs.name();
+      case TreeItemNode<Yeast>::ColumnIndex::Laboratory: return lhs.laboratory() < rhs.laboratory();
+      case TreeItemNode<Yeast>::ColumnIndex::ProductId : return lhs.productId()  < rhs.productId();
       case TreeItemNode<Yeast>::ColumnIndex::Type      : return lhs.type()       < rhs.type();
       case TreeItemNode<Yeast>::ColumnIndex::Form      : return lhs.form()       < rhs.form();
    }
@@ -542,17 +544,22 @@ QVariant TreeNode::dataMisc(int column) {
 QVariant TreeNode::dataYeast(int column) {
    Yeast * yeast = qobject_cast<Yeast *>(this->m_thing);
    switch (static_cast<TreeItemNode<Yeast>::ColumnIndex>(column)) {
-      case TreeItemNode<Yeast>::ColumnIndex::Laboratory:
-         if (yeast) {
-            return QVariant(yeast->laboratory());
-         }
-         break;
       case TreeItemNode<Yeast>::ColumnIndex::Name:
          if (! yeast) {
             return QVariant(QObject::tr("Yeast"));
          } else {
             return QVariant(yeast->name());
          }
+      case TreeItemNode<Yeast>::ColumnIndex::Laboratory:
+         if (yeast) {
+            return QVariant(yeast->laboratory());
+         }
+         break;
+      case TreeItemNode<Yeast>::ColumnIndex::ProductId:
+         if (yeast) {
+            return QVariant(yeast->productId());
+         }
+         break;
       case TreeItemNode<Yeast>::ColumnIndex::Type:
          if (yeast) {
             return QVariant(Yeast::typeDisplayNames[yeast->type()]);

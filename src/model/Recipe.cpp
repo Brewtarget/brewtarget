@@ -1462,13 +1462,8 @@ public:
 
       // Need to translate OG and FG into plato
 
-      double const better_startPlato  = Measurement::Units::plato.fromCanonical(this->m_self.m_og);
-      double const better_finishPlato = Measurement::Units::plato.fromCanonical(this->m_self.m_fg);
-      double const startPlato  = -463.37 + (668.72 * this->m_self.m_og) - (205.35 * this->m_self.m_og * this->m_self.m_og);
-      double const finishPlato = -463.37 + (668.72 * this->m_self.m_fg) - (205.35 * this->m_self.m_fg * this->m_self.m_fg);
-
-      qCritical() << Q_FUNC_INFO << "better_startPlato:" << better_startPlato << ", startPlato:" << startPlato;
-      qCritical() << Q_FUNC_INFO << "better_finishPlato:" << better_finishPlato << ", finishPlato:" << finishPlato;
+      double const startPlato  = Measurement::Units::plato.fromCanonical(this->m_self.m_og);
+      double const finishPlato = Measurement::Units::plato.fromCanonical(this->m_self.m_fg);
 
       double const realExtract = (0.1808 * startPlato) + (0.8192 * finishPlato);
 

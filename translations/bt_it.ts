@@ -5920,6 +5920,10 @@ Il Volume finale del primo è %1.</translation>
         <source>Form</source>
         <translation type="unfinished">Forma</translation>
     </message>
+    <message>
+        <source>Product ID</source>
+        <translation type="unfinished">ID Prodotto</translation>
+    </message>
 </context>
 <context>
     <name>YeastDialog</name>
