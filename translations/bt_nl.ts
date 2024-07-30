@@ -5917,6 +5917,10 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
         <source>Form</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Product ID</source>
+        <translation type="unfinished">Product ID</translation>
+    </message>
 </context>
 <context>
     <name>YeastDialog</name>

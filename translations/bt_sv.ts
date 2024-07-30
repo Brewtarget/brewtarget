@@ -5904,6 +5904,10 @@ Primärens slutgiltiga volym är %1.</translation>
         <source>Form</source>
         <translation type="unfinished">Formulär</translation>
     </message>
+    <message>
+        <source>Product ID</source>
+        <translation type="unfinished">Produkt-ID</translation>
+    </message>
 </context>
 <context>
     <name>YeastDialog</name>

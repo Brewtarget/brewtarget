@@ -5947,6 +5947,10 @@ El volum final al primari és de %1.</translation>
         <source>Form</source>
         <translation type="unfinished">Format</translation>
     </message>
+    <message>
+        <source>Product ID</source>
+        <translation type="unfinished">ID del producte</translation>
+    </message>
 </context>
 <context>
     <name>YeastDialog</name>

@@ -5899,6 +5899,10 @@ The final volume in the primary is %1.</source>
         <source>Form</source>
         <translation type="unfinished">Форма</translation>
     </message>
+    <message>
+        <source>Product ID</source>
+        <translation type="unfinished">ID продукта</translation>
+    </message>
 </context>
 <context>
     <name>YeastDialog</name>

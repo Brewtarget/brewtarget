@@ -5836,6 +5836,10 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
         <source>Form</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Product ID</source>
+        <translation type="unfinished">Produkt-ID</translation>
+    </message>
 </context>
 <context>
     <name>YeastDialog</name>

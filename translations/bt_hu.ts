@@ -5875,6 +5875,10 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
         <source>Form</source>
         <translation type="unfinished">Forma</translation>
     </message>
+    <message>
+        <source>Product ID</source>
+        <translation type="unfinished">Termékazonosító</translation>
+    </message>
 </context>
 <context>
     <name>YeastDialog</name>
