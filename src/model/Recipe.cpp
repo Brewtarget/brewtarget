@@ -2822,8 +2822,15 @@ double Recipe::ibuFromHopAddition(RecipeAdditionHop const & hopAddition) {
    Q_ASSERT(hopAddition.recipeId() == this->key());
 
    double AArating = hopAddition.hop()->alpha_pct() / 100.0;
-   // .:TBD.JSON:.  What to do if hopAddition is measured by volume?
-   if (hopAddition.amountIsWeight()) {
+   // .:TBD:.  What to do if hopAddition is measured by volume?
+   //
+   // Per https://beersmith.com/blog/2016/08/31/using-hop-extracts-for-beer-brewing/, for CO2 Hop Extract, a first
+   // approximation would be 1 gram hop = 1 ml of hop extract.
+   //
+   // The same page suggests that, for Isomerized Hop Extract,
+   //    IBU = (extract_vol_ml * alpha_content_pct * 1000) / (volume_beer_liters)
+   //
+   if (!hopAddition.amountIsWeight()) {
       qCritical() << Q_FUNC_INFO << "Using Hop volume as weight - THIS IS PROBABLY WRONG!";
    }
    double grams = hopAddition.quantity() * 1000.0;
