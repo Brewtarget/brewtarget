@@ -632,6 +632,58 @@ namespace {
          {QString("UPDATE misc        SET inventory_id = CAST(inventory_id AS int) WHERE inventory_id IS NOT null")},
          {QString("UPDATE yeast       SET inventory_id = CAST(inventory_id AS int) WHERE inventory_id IS NOT null")},
          //
+         // For historical reasons, some people have a lot of indexes in their database, others do not.  Where they
+         // relate to columns we are getting rid of we need to drop them if present.  Fortunately, the syntax for doing
+         // this is the same for SQLite and PostgreSQL.
+         //
+         // We actually go a bit further and drop some indexes on columns we aren't getting rid of.  This is because the
+         // indexes serve little purpose.  We load all the data from the DB into memory at start-up and then access rows
+         // by primary key to make amendments etc.
+         //
+         // NOTE: we cannot drop indexes beginning "sqlite_autoindex_" as we would get an error "index associated with
+         //       UNIQUE or PRIMARY KEY constraint cannot be dropped".
+         //
+         {QString("DROP INDEX IF EXISTS bt_hop_hop_id                       ")},
+         {QString("DROP INDEX IF EXISTS hop_children_parent_id              ")},
+         {QString("DROP INDEX IF EXISTS hop_in_recipe_recipe_id             ")},
+         {QString("DROP INDEX IF EXISTS hop_in_recipe_hop_id                ")},
+         {QString("DROP INDEX IF EXISTS instruction_in_recipe_recipe_id     ")},
+         {QString("DROP INDEX IF EXISTS instruction_in_recipe_instruction_id")},
+         {QString("DROP INDEX IF EXISTS equipment_children_parent_id        ")},
+         {QString("DROP INDEX IF EXISTS misc_inventory_id                   ")},
+         {QString("DROP INDEX IF EXISTS misc_children_parent_id             ")},
+         {QString("DROP INDEX IF EXISTS misc_in_recipe_recipe_id            ")},
+         {QString("DROP INDEX IF EXISTS misc_in_recipe_misc_id              ")},
+         {QString("DROP INDEX IF EXISTS brewnote_recipe_id                  ")},
+         {QString("DROP INDEX IF EXISTS bt_equipment_equipment_id           ")},
+         {QString("DROP INDEX IF EXISTS bt_fermentable_fermentable_id       ")},
+         {QString("DROP INDEX IF EXISTS bt_misc_misc_id                     ")},
+         {QString("DROP INDEX IF EXISTS bt_style_style_id                   ")},
+         {QString("DROP INDEX IF EXISTS bt_water_water_id                   ")},
+         {QString("DROP INDEX IF EXISTS bt_yeast_yeast_id                   ")},
+         {QString("DROP INDEX IF EXISTS fermentable_inventory_id            ")},
+         {QString("DROP INDEX IF EXISTS fermentable_children_parent_id      ")},
+         {QString("DROP INDEX IF EXISTS fermentable_in_recipe_recipe_id     ")},
+         {QString("DROP INDEX IF EXISTS fermentable_in_recipe_fermentable_id")},
+         {QString("DROP INDEX IF EXISTS hop_inventory_id                    ")},
+         {QString("DROP INDEX IF EXISTS mashstep_mash_id                    ")},
+         {QString("DROP INDEX IF EXISTS recipe_equipment_id                 ")},
+         {QString("DROP INDEX IF EXISTS recipe_mash_id                      ")},
+         {QString("DROP INDEX IF EXISTS recipe_style_id                     ")},
+         {QString("DROP INDEX IF EXISTS recipe_ancestor_id                  ")},
+         {QString("DROP INDEX IF EXISTS recipe_children_parent_id           ")},
+         {QString("DROP INDEX IF EXISTS salt_misc_id                        ")},
+         {QString("DROP INDEX IF EXISTS salt_in_recipe_salt_id              ")},
+         {QString("DROP INDEX IF EXISTS salt_in_recipe_recipe_id            ")},
+         {QString("DROP INDEX IF EXISTS style_children_parent_id            ")},
+         {QString("DROP INDEX IF EXISTS water_children_parent_id            ")},
+         {QString("DROP INDEX IF EXISTS water_in_recipe_recipe_id           ")},
+         {QString("DROP INDEX IF EXISTS water_in_recipe_water_id            ")},
+         {QString("DROP INDEX IF EXISTS yeast_inventory_id                  ")},
+         {QString("DROP INDEX IF EXISTS yeast_children_parent_id            ")},
+         {QString("DROP INDEX IF EXISTS yeast_in_recipe_recipe_id           ")},
+         {QString("DROP INDEX IF EXISTS yeast_in_recipe_yeast_id            ")},
+         //
          // Salt::Type is currently stored as a raw number.  We convert it to a string to bring it into line with other
          // enums.  Current values are:
          //     0 == NONE
@@ -1958,7 +2010,7 @@ namespace {
          // of having the better column name IMHO.
          //
          {QString("ALTER TABLE settings DROP COLUMN repopulatechildrenonnextstart")},
-         {QString("ALTER TABLE settings  ADD COLUMN default_content_version").arg(db.getDbNativeTypeName<unsigned int>())},
+         {QString("ALTER TABLE settings  ADD COLUMN default_content_version %1").arg(db.getDbNativeTypeName<unsigned int>())},
          {QString("UPDATE settings SET default_content_version = 0")},
       };
 
@@ -1969,7 +2021,7 @@ namespace {
     * \brief This is not actually a schema change, but rather data fixes that were missed from migrate_to_11 - mostly
     *        things where we should have been less case-sensitive.
     */
-   bool migrate_to_12(Database & db, BtSqlQuery q) {
+   bool migrate_to_12([[maybe_unused]] Database & db, BtSqlQuery q) {
       QVector<QueryAndParameters> const migrationQueries{
          {QString(     "UPDATE hop SET htype = 'aroma/bittering' WHERE lower(htype) = 'both'"     )},
          {QString("     UPDATE fermentable SET ftype = 'dry extract' WHERE lower(ftype) = 'dry extract'")},
