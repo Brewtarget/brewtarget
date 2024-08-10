@@ -10,6 +10,18 @@ format therein, otherwise you'll get, eg, no-changelogname-tag error from rpmlin
 ### New Features
 * We'll list new features here...
 
+## v4.0.1
+Minor bug fixes for the 4.0.0 release (ie bugs in 4.0.0 are fixed in this 4.0.1 release).
+
+### New Features
+* None
+
+### Bug Fixes
+* Windows installation blocked by Data Conversion failure [804](https://github.com/Brewtarget/brewtarget/issues/804)
+
+### Release Timestamp
+Thu, 8 Aug 2024 04:00:01 +0100
+
 ## v4.0.0
 Support for BeerJSON, which includes adding a lot of new fields
 
@@ -22,6 +34,7 @@ Support for BeerJSON, which includes adding a lot of new fields
 * Add alcohol tolerance as optional parameter in yeast database model and manufacturer's link ? [639](https://github.com/Brewtarget/brewtarget/issues/639)
 * Remove Default amounts in ingredients editors [359](https://github.com/Brewtarget/brewtarget/issues/359)
 * Mechanism to add new content [750](https://github.com/Brewtarget/brewtarget/issues/750)
+* Add "each" as a unit of measurement [383](https://github.com/Brewtarget/brewtarget/issues/383)
 
 ### Bug Fixes
 * Default SQLite database file: hop, fermentable, mashstep, misc and yeast tables have unused columns [557](https://github.com/Brewtarget/brewtarget/issues/557)
