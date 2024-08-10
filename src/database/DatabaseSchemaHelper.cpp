@@ -1850,6 +1850,16 @@ namespace {
          {QString("ALTER TABLE fermentable_in_inventory ADD COLUMN unit   %1").arg(db.getDbNativeTypeName<QString>())},
          {QString("ALTER TABLE        misc_in_inventory ADD COLUMN unit   %1").arg(db.getDbNativeTypeName<QString>())},
          {QString("ALTER TABLE       yeast_in_inventory ADD COLUMN unit   %1").arg(db.getDbNativeTypeName<QString>())},
+         //
+         // For historical reasons, some users have some duff entries in the xxx_in_inventory tables.  It's worth
+         // cleaning them up here.  Note that empirical testing shows the "WHERE inventory_id IS NOT NULL" bit is needed
+         // here.
+         //
+         {QString("DELETE FROM         hop_in_inventory WHERE id NOT IN (SELECT inventory_id FROM         hop WHERE inventory_id IS NOT NULL)")},
+         {QString("DELETE FROM fermentable_in_inventory WHERE id NOT IN (SELECT inventory_id FROM fermentable WHERE inventory_id IS NOT NULL)")},
+         {QString("DELETE FROM        misc_in_inventory WHERE id NOT IN (SELECT inventory_id FROM        misc WHERE inventory_id IS NOT NULL)")},
+         {QString("DELETE FROM       yeast_in_inventory WHERE id NOT IN (SELECT inventory_id FROM       yeast WHERE inventory_id IS NOT NULL)")},
+         //
          // At this point, all hop and fermentable amounts will be weights, because prior versions of the DB did not
          // support measuring them by volume.
          {QString("UPDATE hop_in_inventory "
