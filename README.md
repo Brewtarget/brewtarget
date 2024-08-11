@@ -4,8 +4,10 @@
 
 ![Windows Workflow](https://github.com/brewtarget/brewtarget/actions/workflows/windows.yml/badge.svg)
 
-### *** Please note that the latest Brewtarget releases are here on [Github](https://github.com/Brewtarget/brewtarget/). ***
-### (The old brewtarget.org website is out-of-date but we do not have access to modify it.)
+![Mac Workflow](https://github.com/brewtarget/brewtarget/actions/workflows/mac.yml/badge.svg)
+
+### *** Please note that the up-to-date Brewtarget website is [www.brewtarget.beer](https://www.brewtarget.beer/).  Latest Brewtarget releases are always here on [GitHub](https://github.com/Brewtarget/brewtarget/releases/latest). ***
+##### (The old brewtarget.org website is out-of-date but we do not have access to modify it.)
 
 Brewtarget is free open-source brewing software, and a beer recipe creation
 tool available for Linux, Mac, and Windows. It automatically calculates color,
@@ -50,17 +52,17 @@ is your single, free, go-to tool when crafting your beer recipes.
 * Markus Mårtensson <mackan.90@gmail.com>
 * Matt Anderson <matt.anderson@is4s.com>
 * Mattias Måhl <mattias@kejsarsten.com>
-* Matt Young <mfsy@yahoo.com>
+* Matt Young <mfsy@yahoo.com> -- Current lead developer
 * Maxime Lavigne <duguigne@gmail.com>
 * Medic Momcilo <medicmomcilo@gmail.com>
 * Mike Evans <mikee@saxicola.co.uk>
-* Mik Firestone <mikfire@gmail.com>
+* Mik Firestone <mikfire@gmail.com> -- Previous lead developer
 * Mikhail Gorbunov <mikhail@sirena2000.ru>
 * Mitch Lillie <mitch@mitchlillie.com>
 * Padraic Stack <padraic.stack@gmail.com>
 * Peter Buelow <goballstate@gmail.com>
 * Peter Urbanec <git.user@urbanec.net>
-* Philip Greggory Lee <rocketman768@gmail.com> -- Original developer
+* Philip Greggory Lee <rocketman768@gmail.com> -- Original lead developer
 * Rob Taylor <robtaylor@floopily.org>
 * Samuel Östling <MrOstling@gmail.com>
 * Scott Peshak <scott@peshak.net>
@@ -75,18 +77,16 @@ Author list created with the help of the following command:
 
 ### For Users
 
-* [Main website](http://www.brewtarget.org) (No longer updated and has some out-of-date links)
-* [Help group](https://groups.google.com/forum/?fromgroups=#!forum/brewtarget-help) (Linked to from the website, but it's better to raise issues on GitHub than post here)
+* [Main website](https://www.brewtarget.beer) (This replaces the old brewtarget.org website, to which we no longer have access)
 * [Latest builds](https://github.com/Brewtarget/brewtarget/actions)
-* [Brewtarget PPA](https://launchpad.net/~brewtarget-devs/+archive/ubuntu/brewtarget-releases) (out of date)
 * [Bug tracker](https://github.com/Brewtarget/brewtarget/issues)
 
-Latest builds are available by logging into Github, following the "Latest builds" link above, drilling down into the relevant OS and downloading the installer package.
+Latest builds are available by logging into GitHub, following the "Latest builds" link above, drilling down into the
+relevant OS and downloading the installer package.
 
 ### For Developers
 
 * [Source code repository](https://github.com/Brewtarget/brewtarget)
-* [Developers team](https://launchpad.net/~brewtarget-devs) (No longer used)
 * [Developers wiki](https://github.com/Brewtarget/brewtarget/wiki)
 
 ## Compiling and Installing
@@ -95,4 +95,4 @@ If you want to build the application from source, see
 [Development: Getting Started](https://github.com/Brewtarget/brewtarget/wiki/Development:-Getting-Started) for
 up-to-date instructions.
 
-See also comments in CMakeLists.txt file.
+See also comments in [bt](https://github.com/Brewtarget/brewtarget/blob/develop/bt) and [meson.build](https://github.com/Brewtarget/brewtarget/blob/develop/meson.build) files.
