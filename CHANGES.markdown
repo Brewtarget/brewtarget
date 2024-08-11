@@ -18,6 +18,7 @@ Minor bug fixes for the 4.0.0 release (ie bugs in 4.0.0 are fixed in this 4.0.1 
 
 ### Bug Fixes
 * Windows installation blocked by Data Conversion failure [804](https://github.com/Brewtarget/brewtarget/issues/804)
+* DefaultContent004-MoreYeasts.json not in cmake files [806](https://github.com/Brewtarget/brewtarget/issues/806)
 
 ### Release Timestamp
 Thu, 8 Aug 2024 04:00:01 +0100
