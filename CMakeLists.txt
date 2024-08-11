@@ -819,7 +819,8 @@ set(filesToInstall_docs ${repoDir}/README.md)
 set(filesToInstall_data ${repoDir}/data/default_db.sqlite
                         ${repoDir}/data/DefaultContent001-OriginalDefaultData.xml
                         ${repoDir}/data/DefaultContent002-BJCP_2021_Styles.json
-                        ${repoDir}/data/DefaultContent003-Ingredients-Hops-Yeasts.json)
+                        ${repoDir}/data/DefaultContent003-Ingredients-Hops-Yeasts.json
+                        ${repoDir}/data/DefaultContent004-MoreYeasts.json)
 
 # Desktop files to install.
 set(filesToInstall_desktop ${repoDir}/linux/${PROJECT_NAME}.desktop)
