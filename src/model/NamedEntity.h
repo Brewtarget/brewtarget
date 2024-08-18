@@ -539,6 +539,12 @@ protected:
     */
    void propagatePropertyChange(BtStringConst const & propertyName, bool notify = true) const;
 
+   /**
+    * \brief Emit a "changed" signal for the supplied \c propertyName.  Usually called from \c propagatePropertyChange,
+    *        but can be called directly when the property being updated is not stored in the DB (or not stored in the
+    *        default way -- see eg RecipeAddition subclasses).
+    */
+   void notifyPropertyChange(BtStringConst const & propertyName) const;
 
    /**
     * \brief Convenience function to check for the set being a no-op. (Sometimes the UI will call all setters, even on

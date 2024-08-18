@@ -462,14 +462,20 @@ void NamedEntity::propagatePropertyChange(BtStringConst const & propertyName, bo
 
    // Send a signal if needed
    if (notify) {
-      // It's obviously a coding error to supply a property name that is not registered with Qt as a property of this
-      // object
-      int idx = this->metaObject()->indexOfProperty(*propertyName);
-      Q_ASSERT(idx >= 0);
-      QMetaProperty metaProperty = this->metaObject()->property(idx);
-      QVariant value = metaProperty.read(this);
-      emit this->changed(metaProperty, value);
+      this->notifyPropertyChange(propertyName);
    }
+
+   return;
+}
+
+void NamedEntity::notifyPropertyChange(BtStringConst const & propertyName) const {
+   // It's obviously a coding error to supply a property name that is not registered with Qt as a property of this
+   // object
+   int idx = this->metaObject()->indexOfProperty(*propertyName);
+   Q_ASSERT(idx >= 0);
+   QMetaProperty metaProperty = this->metaObject()->property(idx);
+   QVariant value = metaProperty.read(this);
+   emit this->changed(metaProperty, value);
 
    return;
 }

@@ -868,20 +868,25 @@ protected:
    /**
     * \brief Called from \c Derived::changed slot
     *
-    * \param propNameOfOurIdsInRecipe  This needs to be something valid in all cases, but is only used if Derived is a
+    * \param propNameOfOurAdditionsInRecipe  This needs to be something valid in all cases, but is only used if Derived is a
     *                                  recipe observer.
     */
    template<class Caller>
    void propertyChanged(QMetaProperty prop,
                         [[maybe_unused]] QVariant val,
-                        BtStringConst const & propNameOfOurIdsInRecipe) {
+                        BtStringConst const & propNameOfOurAdditionsInRecipe) {
+      QObject * rawSender = this->derived().sender();
+      QString senderClassName{"Null"};
+      if (rawSender) {
+         senderClassName = rawSender->metaObject()->className();
+      }
       // Normally leave this logging statement commented out as it generates a lot of logging (because this function is
       // called a lot!)
 //      qDebug() <<
-//         Q_FUNC_INFO << "Property" << prop.name() << "; val" << val << "; propNameOfOurIdsInRecipe" <<
-//         propNameOfOurIdsInRecipe;
+//         Q_FUNC_INFO << "Sender:" << senderClassName << "; property:" << prop.name() << "; val:" << val <<
+//         "; propNameOfOurAdditionsInRecipe:" << propNameOfOurAdditionsInRecipe;
       // Is sender one of our items?
-      NE * itemSender = qobject_cast<NE *>(this->derived().sender());
+      NE * itemSender = qobject_cast<NE *>(rawSender);
       if (itemSender) {
          int ii = this->findIndexOf(itemSender);
          if (ii < 0) {
@@ -896,8 +901,8 @@ protected:
       }
 
       // See if our recipe gained or lost items.
-      Recipe * recSender = qobject_cast<Recipe *>(this->derived().sender());
-      if (recSender && prop.name() == propNameOfOurIdsInRecipe) {
+      Recipe * recSender = qobject_cast<Recipe *>(rawSender);
+      if (recSender && prop.name() == propNameOfOurAdditionsInRecipe) {
          this->checkRecipeItems<Caller>(recSender);
       }
 

@@ -469,24 +469,28 @@ public:
 
    /**
     * \brief Use this for adding \c RecipeAdditionHop etc
+    *
+    * \param ra The recipe addition object - eg \c RecipeAdditionFermentable, \c RecipeAdditionHop, etc
     */
-   template<class NE>
-   void doRecipeAddition(std::shared_ptr<NE> ne) {
-      Q_ASSERT(ne);
+   template<class RA>
+   void doRecipeAddition(std::shared_ptr<RA> ra) {
+      Q_ASSERT(ra);
 
       this->m_self.doOrRedoUpdate(
          newUndoableAddOrRemove(*this->m_self.m_recipeObs,
-                                &Recipe::addAddition<NE>,
-                                ne,
-                                &Recipe::removeAddition<NE>,
-                                QString(tr("Add %1 to recipe")).arg(NE::localisedName()))
+                                &Recipe::addAddition<RA>,
+                                ra,
+                                &Recipe::removeAddition<RA>,
+                                QString(tr("Add %1 to recipe")).arg(RA::localisedName()))
       );
 
+      //
       // Since we just added an ingredient, switch the focus to the tab that lists that type of ingredient.  We rely here
       // on the individual tabs following a naming convention (recipeHopTab, recipeFermentableTab, etc)
       // Note that we want the untranslated class name because this is not for display but to refer to a QWidget inside
       // tabWidget_ingredients
-      auto const widgetName = QString("recipe%1Tab").arg(NE::staticMetaObject.className());
+      //
+      auto const widgetName = QString("recipe%1Tab").arg(RA::IngredientClass::staticMetaObject.className());
       qDebug() << Q_FUNC_INFO << widgetName;
       QWidget * widget = this->m_self.tabWidget_ingredients->findChild<QWidget *>(widgetName);
       Q_ASSERT(widget);
@@ -872,7 +876,7 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), pimpl{std::make_u
             tr("The program may not work if you ignore this error.\n\n"
                "See logs for more details.\n\n"
                "If you need help, please open an issue "
-               "at %1").arg(CONFIG_HOMEPAGE_URL)
+               "at %1").arg(CONFIG_GITHUB_URL)
          );
          dataLoadErrorMessageBox.setStandardButtons(QMessageBox::Ignore | QMessageBox::Close);
          dataLoadErrorMessageBox.setDefaultButton(QMessageBox::Close);
@@ -2144,7 +2148,8 @@ void MainWindow::droppedRecipeFermentable(QList<Fermentable *> fermentables) {
       tabWidget_ingredients->setCurrentWidget(recipeFermentableTab);
    }
 
-   auto fermentableAdditions = RecipeAdditionFermentable::create(*this->m_recipeObs, fermentables);
+   QList<std::shared_ptr<RecipeAdditionFermentable>> fermentableAdditions =
+      RecipeAdditionFermentable::create(*this->m_recipeObs, fermentables);
 
    this->doOrRedoUpdate(
       newUndoableAddOrRemoveList(*this->m_recipeObs,
@@ -2279,11 +2284,11 @@ void MainWindow::updateRecipeEfficiency() {
 }
 
 template<class NE>
-void MainWindow::addIngredientToRecipe(NE * ne) {
+void MainWindow::addIngredientToRecipe(NE & ne) {
    if (!this->m_recipeObs) {
       return;
    }
-   auto neAddition = std::make_shared<typename NE::RecipeAdditionClass>(*this->m_recipeObs, *ne);
+   auto neAddition = std::make_shared<typename NE::RecipeAdditionClass>(*this->m_recipeObs, ne);
    this->pimpl->doRecipeAddition(neAddition);
    return;
 }
@@ -2291,10 +2296,10 @@ void MainWindow::addIngredientToRecipe(NE * ne) {
 // Instantiate the above template function for the types that are going to use it
 // (This is all just a trick to allow the template definition to be here in the .cpp file and not in the header.)
 //
-template void MainWindow::addIngredientToRecipe(Fermentable * ne);
-template void MainWindow::addIngredientToRecipe(Hop         * ne);
-template void MainWindow::addIngredientToRecipe(Misc        * ne);
-template void MainWindow::addIngredientToRecipe(Yeast       * ne);
+template void MainWindow::addIngredientToRecipe(Fermentable & ne);
+template void MainWindow::addIngredientToRecipe(Hop         & ne);
+template void MainWindow::addIngredientToRecipe(Misc        & ne);
+template void MainWindow::addIngredientToRecipe(Yeast       & ne);
 
 void MainWindow::removeSelectedFermentableAddition() {
    this->pimpl->doRemoveRecipeAddition<RecipeAdditionFermentable>(fermentableAdditionTable,

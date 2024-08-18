@@ -370,7 +370,11 @@ public:
                               std::initializer_list<ColumnInfo> columnInfos);
    ~BtTableModelRecipeObserver();
 
-   // Normally this would be protected, but it needs to be public for TableModelBase to access
+   /**
+    * \brief The \c Recipe, if any, in which this table's objects (eg RecipeAdditionHop objects) are used.
+    *
+    *        Normally this would be protected, but it needs to be public for TableModelBase to access
+    */
    Recipe * recObs;
 };
 

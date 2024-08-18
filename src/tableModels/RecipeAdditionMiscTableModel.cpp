@@ -174,7 +174,7 @@ bool RecipeAdditionMiscTableModel::setData(const QModelIndex & index, const QVar
 }
 
 // Insert the boiler-plate stuff that we cannot do in TableModelBase
-TABLE_MODEL_COMMON_CODE(RecipeAdditionMisc, recipeAdditionMisc, PropertyNames::Recipe::miscAdditionIds)
+TABLE_MODEL_COMMON_CODE(RecipeAdditionMisc, recipeAdditionMisc, PropertyNames::Recipe::miscAdditions)
 //=============================================== CLASS RecipeAdditionMiscItemDelegate ================================================
 
 // Insert the boiler-plate stuff that we cannot do in ItemDelegate

@@ -189,7 +189,7 @@
 #
 #
 project('brewtarget', 'cpp',
-        version: '4.0.1',
+        version: '4.0.2',
         license: 'GPL-3.0-or-later',
         meson_version: '>=0.60.0',
         default_options : ['cpp_std=c++20',
@@ -1338,8 +1338,9 @@ exportedVariables = {
    'CONFIG_ORGANIZATION_NAME' : 'The ' + capitalisedProjectName + ' Team',
 
    # Similarly, installers often want a URL link.  We also use this in the program, to tell users where to get support.
-   'CONFIG_HOMEPAGE_URL' : 'https://github.com/' + capitalisedProjectName + '/' + projectName,
-   'CONFIG_ORGANIZATION_DOMAIN' : 'brewtarget.com',
+   'CONFIG_GITHUB_URL' : 'https://github.com/' + capitalisedProjectName + '/' + projectName,
+   'CONFIG_WEBSITE_URL' : 'https://www.brewtarget.beer/',
+   'CONFIG_ORGANIZATION_DOMAIN' : 'brewken.com',
 
    #
    # On Windows and Mac, the external packaging step (managed by the `bt` build tool script) needs to know about all the

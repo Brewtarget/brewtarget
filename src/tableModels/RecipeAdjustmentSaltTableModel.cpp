@@ -1,5 +1,6 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * tableModels/RecipeAdjustmentSaltTableModel.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * tableModels/RecipeAdjustmentSaltTableModel.cpp is part of Brewtarget, and is copyright the following authors
+ * 2009-2024:
  *   • Mattias Måhl <mattias@kejsarsten.com>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -326,7 +327,7 @@ void RecipeAdjustmentSaltTableModel::saveAndClose() {
 }
 
 // Insert the boiler-plate stuff that we cannot do in TableModelBase
-TABLE_MODEL_COMMON_CODE(RecipeAdjustmentSalt, salt, PropertyNames::Recipe::saltAdjustmentIds)
+TABLE_MODEL_COMMON_CODE(RecipeAdjustmentSalt, salt, PropertyNames::Recipe::saltAdjustments)
 //=============================================== CLASS SaltItemDelegate ===============================================
 
 // Insert the boiler-plate stuff that we cannot do in ItemDelegate

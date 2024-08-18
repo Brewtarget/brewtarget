@@ -1118,6 +1118,7 @@ public:
             qCritical() <<
                Q_FUNC_INFO << "Unable to find rule for storing property" << object.metaObject()->className() << "::" <<
                propertyName << "in either" << this->primaryTable.tableName << "or any associated table";
+            qCritical().noquote() << Q_FUNC_INFO << Logging::getStackTrace();
             Q_ASSERT(false);
          }
 

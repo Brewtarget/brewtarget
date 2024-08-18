@@ -31,6 +31,7 @@
 
 #include "database/ObjectStoreWrapper.h"
 #include "MainWindow.h"
+#include "model/Ingredient.h"
 #include "utils/CuriouslyRecurringTemplateBase.h"
 
 // TBD: Double-click does different things depending on whether you're looking at list of things in a recipe or
@@ -82,7 +83,7 @@
  *        the code for the definitions of all these functions is "the same" for all editors, and should be inserted in
  *        the implementation file using the CATALOG_COMMON_CODE macro.  Eg, in HopDialog, we need:
  *
- *          CATALOG_COMMON_CODE(HopDialog)
+ *          CATALOG_COMMON_CODE(Hop)
  *
  *        There is not much to the rest of the derived class (eg HopDialog).
  *
@@ -217,22 +218,17 @@ public:
       return;
    }
 
-///   void enableEditableInventory() requires IsTableModel<NeTableModel> && HasInventory<NeTableModel> {
-///      m_neTableModel->setInventoryEditable(true);
-///      return;
-///   }
-///   void enableEditableInventory() requires IsTableModel<NeTableModel> && HasNoInventory<NeTableModel> {
-///      // No-op version
-///      return;
-///   }
-
    /**
     * \brief Subclass should call this from its \c addItem slot
     *
     *        If \b index is the default, will add the selected ingredient to list. Otherwise, will add the ingredient
     *        at the specified index.
     */
-   void add(QModelIndex const & index = QModelIndex()) requires IsTableModel<NeTableModel> && ObservesRecipe<NeTableModel> {
+//   void add(QModelIndex const & index = QModelIndex()) requires IsTableModel<NeTableModel> && ObservesRecipe<NeTableModel> {
+   void add(QModelIndex const & index = QModelIndex()) requires IsIngredient<NE> {
+      //
+      // Substantive version - for FermentableCatalog, HopCatalog, MiscCatalog, YeastCatalog
+      //
       qDebug() << Q_FUNC_INFO << "Index: " << index;
       QModelIndex translated;
 
@@ -265,11 +261,14 @@ public:
       }
 
       qDebug() << Q_FUNC_INFO << "translated.row(): " << translated.row();
-      m_parent->addIngredientToRecipe(m_neTableModel->getRow(translated.row()));
+      m_parent->addIngredientToRecipe(*m_neTableModel->getRow(translated.row()));
 
       return;
    }
-   void add([[maybe_unused]] QModelIndex const & index = QModelIndex()) requires IsTableModel<NeTableModel> && DoesNotObserveRecipe<NeTableModel> {
+   void add([[maybe_unused]] QModelIndex const & index = QModelIndex()) requires IsTableModel<NeTableModel> && IsNotIngredient<NE> {
+      //
+      // No-op version - for EquipmentCatalog, StyleCatalog
+      //
       qDebug() << Q_FUNC_INFO << "No-op";
       // No-op version
       return;

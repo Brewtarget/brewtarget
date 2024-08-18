@@ -25,10 +25,10 @@
  *        \c RecipeAdditionFermentable, \c RecipeAdditionMisc, \c RecipeAdditionYeast.
  *
  * \param Derived = the derived class, eg \c RecipeAdditionHop
- * \param IngredientClass = the ingredient class, eg \c Hop
+ * \param Ingr    = the ingredient class, eg \c Hop
  */
 template<class Derived> class RecipeAdditionPhantom;
-template<class Derived, class IngredientClass>
+template<class Derived, class Ingr>
 class RecipeAdditionBase : public CuriouslyRecurringTemplateBase<RecipeAdditionPhantom, Derived> {
 
 protected:
@@ -39,10 +39,18 @@ protected:
    ~RecipeAdditionBase() = default;
 
 public:
+
+   //
+   // This alias makes it easier to template a number of functions that are essentially the same for all subclasses of
+   // RecipeAddition.  Note that the alias and the template parameter cannot have the same name, hence why we use Ingr
+   // for the latter.
+   //
+   using IngredientClass = Ingr;
+
    /**
     * \brief Create \c RecipeAddition##NeName objects for a given \c Recipe from \c NeName objects
     */
-   static QList<std::shared_ptr<Derived>> create(Recipe & recipe, QList<IngredientClass *> ingredients) {
+   static QList<std::shared_ptr<Derived>> create(Recipe & recipe, QList<Ingr *> ingredients) {
       QList<std::shared_ptr<Derived>> listOfAdditions;
       for (auto ingredient : ingredients) {
          auto addition = std::make_shared<Derived>(recipe, *ingredient);
@@ -51,8 +59,8 @@ public:
       return listOfAdditions;
    }
 
-   std::shared_ptr<IngredientClass> ingredient() {
-      return ObjectStoreWrapper::getById<IngredientClass>(this->derived().m_ingredientId);
+   std::shared_ptr<Ingr> ingredient() {
+      return ObjectStoreWrapper::getById<Ingr>(this->derived().m_ingredientId);
    }
 
 };
