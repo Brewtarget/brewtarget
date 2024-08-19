@@ -1,5 +1,5 @@
 #
-# packaging/linux/control.in is part of Brewtarget, and is copyright the following authors 2023:
+# packaging/linux/control.in is part of Brewtarget, and is copyright the following authors 2023-2024:
 #   • Matt Young <mfsy@yahoo.com>
 #
 # Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -121,4 +121,4 @@ Description: GUI beer brewing software
 #
 # Homepage (Optional)
 #
-Homepage: @CONFIG_HOMEPAGE_URL@
+Homepage: @CONFIG_WEBSITE_URL@
