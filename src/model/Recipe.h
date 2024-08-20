@@ -435,7 +435,8 @@ public:
     *
     *        We want this to have the same signature as add because it makes the implementation of Undo/Redo easier
     */
-   template<class NE> std::shared_ptr<NE> remove(std::shared_ptr<NE> var);
+//   template<class NE> std::shared_ptr<NE> remove(std::shared_ptr<NE> var);
+   std::shared_ptr<Instruction> remove(std::shared_ptr<Instruction> var);
 
    /**
     * \brief Use this for removing \c RecipeAdditionHop, etc.

@@ -2,7 +2,7 @@
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <!--
 #
-# packaging/mac/Info.plist.in is part of Brewtarget, and is copyright the following authors 2023:
+# packaging/darwin/Info.plist.in is part of Brewtarget, and is copyright the following authors 2023-2024:
 #   • Matt Young <mfsy@yahoo.com>
 #
 # Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -21,12 +21,19 @@
 # See comments in meson.build for how this file gets processed into mbuild/Info.plist.  Then see comments in the build
 # tool for how it ends up in the Mac application bundle.
 #
+# https://developer.apple.com/documentation/bundleresources/information_property_list and related pages give info on the
+# individual parameters
+#
+# The following bundle parameters used in oldver versions of this file are AFAICT deprecated, so I have removed them:
+#    CFBundleLongVersionString
+#    CFBundleSignature
+#
 -->
 <plist version="1.0">
 <dict>
    <!--
-   Language the system if it can't locate a resource for the user’s preferred language.  Value should be a language ID
-   (ideally the two-letter ISO 639-1 standard) that identifies a language, dialect, or script.
+   Default language for the system if it can't locate a resource for the user’s preferred language.  Value should be a
+   language ID (ideally the two-letter ISO 639-1 standard) that identifies a language, dialect, or script.
    -->
    <key>CFBundleDevelopmentRegion</key>
    <string>en</string>
@@ -42,25 +49,41 @@
    -->
    <key>CFBundleIconFile</key>
    <string>@CONFIG_INSTALLER_APPLICATION_ICON@</string>
+   <!--
+   A bundle ID uniquely identifies a single app throughout the system. The bundle ID string must contain only
+   alphanumeric characters (A–Z, a–z, and 0–9), hyphens (-), and periods (.). Typically, you use a reverse-DNS format
+   for bundle ID strings. Bundle IDs are case-insensitive.
+   -->
    <key>CFBundleIdentifier</key>
-   <string>com.brewtarget.Brewtarget</string>
+   <string>beer.brewtarget.Brewtarget</string>
    <key>CFBundleInfoDictionaryVersion</key>
    <string>6.0</string>
-   <key>CFBundleLongVersionString</key>
-   <string></string>
    <key>CFBundleName</key>
    <string>@CONFIG_APPLICATION_NAME_UC@</string>
+   <!--
+   This key consists of a four-letter code for the bundle type. For apps, the code is APPL, for frameworks, it's FMWK,
+   and for bundles, it's BNDL. The default value is derived from the bundle extension or, if it can't be derived, the
+   default value is BNDL.
+   -->
    <key>CFBundlePackageType</key>
    <string>APPL</string>
    <key>CFBundleShortVersionString</key>
    <string>@CONFIG_VERSION_STRING@</string>
-   <key>CFBundleSignature</key>
-   <string>????</string>
    <key>CFBundleVersion</key>
    <string>@CONFIG_VERSION_STRING@</string>
+   <!--
+   A Boolean value indicating whether the app's resources files should be mapped into memory.
+   -->
    <key>CSResourcesFileMapped</key>
    <true/>
    <key>NSHumanReadableCopyright</key>
    <string>@CONFIG_COPYRIGHT_STRING@</string>
+   <!--
+   There isn't a great choice for us for application category from the list at
+   https://developer.apple.com/documentation/bundleresources/information_property_list/lsapplicationcategorytype
+   This value seemed as close as any.
+   -->
+   <key>LSApplicationCategoryType</key>
+   <string>public.app-category.productivity</string>
 </dict>
 </plist>

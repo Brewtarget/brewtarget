@@ -644,7 +644,7 @@ namespace {
          {ObjectStore::FieldType::String, "name"               , PropertyNames::NamedEntity::name         },
          {ObjectStore::FieldType::Bool  , "deleted"            , PropertyNames::NamedEntity::deleted      },
          {ObjectStore::FieldType::Bool  , "display"            , PropertyNames::NamedEntity::display      },
-         {ObjectStore::FieldType::String, "folder"             , PropertyNames::FolderBase::folder       },
+         {ObjectStore::FieldType::String, "folder"             , PropertyNames::FolderBase::folder        },
          {ObjectStore::FieldType::Double, "age"                , PropertyNames::Recipe::age_days          },
          {ObjectStore::FieldType::Double, "age_temp"           , PropertyNames::Recipe::ageTemp_c         },
          {ObjectStore::FieldType::String, "assistant_brewer"   , PropertyNames::Recipe::asstBrewer        },
@@ -678,18 +678,32 @@ namespace {
       }
    };
    template<> ObjectStore::JunctionTableDefinitions const JUNCTION_TABLES<Recipe> {
-      // .:TODO:. BrewNote table stores its recipe ID, so there isn't a brewnote junction table
+      //
+      // .:TODO:. This is the wrong way to model Instructions.  We should treat them more like BrewNotes.  In both case
+      //          the objects cannot meaningfully exist without a corresponding Recipe.
+      //
+      //          Having the "instruction" table (see PRIMARY_TABLE<Instruction>) and this instruction_in_recipe
+      //          junction table implies the possibility for an existence of Instruction objects independently of Recipe
+      //          ones, which is incorrect.
+      //
       // There is a lot of boiler-plate here, and we could have gone for a much more compact representation of junction
       // tables, but this keeps the definition format relatively closely aligned with that of primary tables.
+      //
+      // NOTE that the tables for ingredient additions (such as fermentable_in_recipe for RecipeAdditionFermentable)
+      //      could, in principle, be treated as a junction tables, because they really are modelling a many-to-many
+      //      relationship between, eg, Recipe and Fermentable.  However, because they are also storing other properties
+      //      (to do with the timing and amount of the addition), and because the Recipe class is already quite large,
+      //      we choose to model the ingredient addition tables as freestanding entities.
+      //
       {
          "instruction_in_recipe",
          {
-            {ObjectStore::FieldType::Int, "id"                                                                                            },
+            {ObjectStore::FieldType::Int, "id"                                                                                   },
             {ObjectStore::FieldType::Int, "recipe_id",         PropertyNames::NamedEntity::key,       &PRIMARY_TABLE<Recipe>     },
             {ObjectStore::FieldType::Int, "instruction_id",    PropertyNames::Recipe::instructionIds, &PRIMARY_TABLE<Instruction>},
-            {ObjectStore::FieldType::Int, "instruction_number"                                                                            },
+            {ObjectStore::FieldType::Int, "instruction_number"                                                                   },
          }
-      },
+      }
    };
 
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

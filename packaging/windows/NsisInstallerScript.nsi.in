@@ -1,5 +1,5 @@
 #
-# packaging/windows/NsisInstallerScript.nsi.in is part of Brewtarget, and is copyright the following authors 2023:
+# packaging/windows/NsisInstallerScript.nsi.in is part of Brewtarget, and is copyright the following authors 2023-2024:
 #   • Matt Young <mfsy@yahoo.com>
 #
 # Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -119,7 +119,7 @@ RequestExecutionLevel admin
 #
 # Other variables injected from Meson
 #
-# Similarly, although we could use other injected variables directly, we don't to avoid another gotcha.  When Meson
+# Similarly, although we could use other injected variables directly, we don't, to avoid another gotcha.  When Meson
 # is processing the file to do @BLAH@ substitutions, if it sees a backslash followed by an @, then it will think you're
 # escaping the first @ symbol, so, eg "C:\Blah\@CONFIG_APPLICATION_NAME_UC@" will not get converted to
 # "C:\Blah\Brewtarget" or "C:\Blah\Brewken".  Instead, we take the injected variable into an NSIS compile-time constant
@@ -127,7 +127,7 @@ RequestExecutionLevel admin
 #    !define INJECTED_APPLICATION_NAME_UC "@CONFIG_APPLICATION_NAME_UC@"
 # and then we can write "C:\Blah\${INJECTED_APPLICATION_NAME_UC}" and the right substitutions will happen.  (The
 # alternative, of adding an extra slash, eg "C:\Blah\\@CONFIG_APPLICATION_NAME_UC@", would work but seems a bit less
-# robust.
+# robust.)
 #
 !define INJECTED_APPLICATION_NAME_UC "@CONFIG_APPLICATION_NAME_UC@"
 !define INJECTED_APPLICATION_NAME_LC "@CONFIG_APPLICATION_NAME_LC@"
@@ -136,7 +136,7 @@ RequestExecutionLevel admin
 !define INJECTED_DESCRIPTION_STRING  "@CONFIG_DESCRIPTION_STRING@"
 !define INJECTED_COPYRIGHT_STRING    "@CONFIG_COPYRIGHT_STRING@"
 !define INJECTED_ORGANIZATION_NAME   "@CONFIG_ORGANIZATION_NAME@"
-!define INJECTED_HOMEPAGE_URL        "@CONFIG_HOMEPAGE_URL@"
+!define INJECTED_HOMEPAGE_URL        "@CONFIG_WEBSITE_URL@"
 
 #=======================================================================================================================
 #==================================================== Our Constants ====================================================

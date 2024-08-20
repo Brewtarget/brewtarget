@@ -1,5 +1,6 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * tableModels/RecipeAdditionYeastTableModel.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * tableModels/RecipeAdditionYeastTableModel.cpp is part of Brewtarget, and is copyright the following authors
+ * 2009-2024:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Daniel Pettersson <pettson81@gmail.com>
  *   • Luke Vincent <luke.r.vincent@gmail.com>
@@ -186,7 +187,7 @@ bool RecipeAdditionYeastTableModel::setData(const QModelIndex & index, const QVa
 }
 
 // Insert the boiler-plate stuff that we cannot do in TableModelBase
-TABLE_MODEL_COMMON_CODE(RecipeAdditionYeast, recipeAdditionYeast, PropertyNames::Recipe::yeastAdditionIds)
+TABLE_MODEL_COMMON_CODE(RecipeAdditionYeast, recipeAdditionYeast, PropertyNames::Recipe::yeastAdditions)
 //=============================================== CLASS RecipeAdditionYeastItemDelegate ================================================
 
 // Insert the boiler-plate stuff that we cannot do in ItemDelegate

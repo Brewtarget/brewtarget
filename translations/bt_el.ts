@@ -1547,10 +1547,6 @@ Log file may contain more details.</source>
 <context>
     <name>HelpDialog</name>
     <message>
-        <source>for</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Online Help</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1596,6 +1592,10 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Help</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>version %1 for %2</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -58,8 +58,8 @@ public:
     * Set the text.  This is a separate function because we want to be able to redisplay in a different language.
     */
    void setText(HelpDialog & helpDialog) {
-      static QString const wikiUrl   = QString{"%1/wiki"  }.arg(CONFIG_HOMEPAGE_URL);
-      static QString const issuesUrl = QString{"%1/issues"}.arg(CONFIG_HOMEPAGE_URL);
+      static QString const wikiUrl   = QString{"%1/wiki"  }.arg(CONFIG_GITHUB_URL);
+      static QString const issuesUrl = QString{"%1/issues"}.arg(CONFIG_GITHUB_URL);
       QString mainText;
       QTextStream mainTextAsStream{&mainText};
       mainTextAsStream <<
@@ -70,8 +70,9 @@ public:
          "</style>"
          "</head>"
          ""
-         "<h1>" << CONFIG_APPLICATION_NAME_UC << "</h1>"
-         "version " << CONFIG_VERSION_STRING << " " << HelpDialog::tr("for") << " " << QSysInfo::prettyProductName() <<
+         "<h1>" << CONFIG_APPLICATION_NAME_UC << "</h1>" <<
+         HelpDialog::tr("version %1 for %2").arg(CONFIG_VERSION_STRING).arg(QSysInfo::prettyProductName()) <<
+         "<p><a href=\"" << CONFIG_WEBSITE_URL << "\">" << CONFIG_ORGANIZATION_DOMAIN << " website</a></p>"
          "<h2>" << HelpDialog::tr("Online Help") << "</h2>"
          "<p>" <<
          HelpDialog::tr("<p>The %1 wiki is at "

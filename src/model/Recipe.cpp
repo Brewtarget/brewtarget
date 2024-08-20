@@ -205,13 +205,14 @@ template<> BtStringConst const & Recipe::propertyNameFor<Equipment              
 template<> BtStringConst const & Recipe::propertyNameFor<Fermentation             >() { return PropertyNames::Recipe::fermentationId        ; }
 template<> BtStringConst const & Recipe::propertyNameFor<Instruction              >() { return PropertyNames::Recipe::instructionIds        ; }
 template<> BtStringConst const & Recipe::propertyNameFor<Mash                     >() { return PropertyNames::Recipe::mashId                ; }
-template<> BtStringConst const & Recipe::propertyNameFor<RecipeAdditionFermentable>() { return PropertyNames::Recipe::fermentableAdditionIds; }
-template<> BtStringConst const & Recipe::propertyNameFor<RecipeAdditionHop        >() { return PropertyNames::Recipe::hopAdditionIds        ; }
-template<> BtStringConst const & Recipe::propertyNameFor<RecipeAdditionMisc       >() { return PropertyNames::Recipe::miscAdditionIds       ; }
-template<> BtStringConst const & Recipe::propertyNameFor<RecipeAdditionYeast      >() { return PropertyNames::Recipe::yeastAdditionIds      ; }
-template<> BtStringConst const & Recipe::propertyNameFor<RecipeAdjustmentSalt     >() { return PropertyNames::Recipe::saltAdjustmentIds     ; }
-template<> BtStringConst const & Recipe::propertyNameFor<RecipeUseOfWater         >() { return PropertyNames::Recipe::waterUseIds           ; }
 template<> BtStringConst const & Recipe::propertyNameFor<Style                    >() { return PropertyNames::Recipe::styleId               ; }
+// NB it is fermentableAdditions not fermentableAdditionIds that we want to use here, etc
+template<> BtStringConst const & Recipe::propertyNameFor<RecipeAdditionFermentable>() { return PropertyNames::Recipe::fermentableAdditions; }
+template<> BtStringConst const & Recipe::propertyNameFor<RecipeAdditionHop        >() { return PropertyNames::Recipe::hopAdditions        ; }
+template<> BtStringConst const & Recipe::propertyNameFor<RecipeAdditionMisc       >() { return PropertyNames::Recipe::miscAdditions       ; }
+template<> BtStringConst const & Recipe::propertyNameFor<RecipeAdditionYeast      >() { return PropertyNames::Recipe::yeastAdditions      ; }
+template<> BtStringConst const & Recipe::propertyNameFor<RecipeAdjustmentSalt     >() { return PropertyNames::Recipe::saltAdjustments     ; }
+template<> BtStringConst const & Recipe::propertyNameFor<RecipeUseOfWater         >() { return PropertyNames::Recipe::waterUses           ; }
 
 // TBD: This is needed for WaterButton, but we should have a proper look at that some day
 template<> BtStringConst const & Recipe::propertyNameFor<Water                    >() { return PropertyNames::Recipe::waterUses             ; }
@@ -2131,8 +2132,19 @@ template<class RA> std::shared_ptr<RA> Recipe::addAddition(std::shared_ptr<RA> a
       ObjectStoreWrapper::insert(addition);
    }
 
-   connect(addition->ingredient().get(), &NamedEntity::changed, this, &Recipe::acceptChangeToContainedObject);
-   this->propagatePropertyChange(Recipe::propertyNameFor<RA>());
+   //
+   // Doing this connect here means that a signal will be sent to acceptChangeToContainedObject() by the call to
+   // notifyPropertyChange() below.
+   //
+   connect(addition.get(), &NamedEntity::changed, this, &Recipe::acceptChangeToContainedObject);
+
+   //
+   // We don't want to call this->propagatePropertyChange here because the RecipeAddition is not stored either in the
+   // Recipe database table or or one of the Recipe junction tables (see comments in database/ObjectStoreTyped.cpp).
+   //
+   // Instead, we merely want to emit the signals to tell anyone listening that the property was updated
+   //
+   this->notifyPropertyChange(Recipe::propertyNameFor<RA>());
 
    this->recalcIfNeeded(addition->ingredient()->metaObject()->className());
    return addition;
@@ -2183,39 +2195,39 @@ template<> bool Recipe::uses<RecipeAdditionYeast      >(RecipeAdditionYeast     
 template<> bool Recipe::uses<RecipeAdjustmentSalt     >(RecipeAdjustmentSalt      const & val) const { return val.recipeId() == this->key(); }
 template<> bool Recipe::uses<RecipeUseOfWater         >(RecipeUseOfWater          const & val) const { return val.recipeId() == this->key(); }
 
-template<class NE> std::shared_ptr<NE> Recipe::remove(std::shared_ptr<NE> var) {
+std::shared_ptr<Instruction> Recipe::remove(std::shared_ptr<Instruction> var) {
    // It's a coding error to supply a null shared pointer
    Q_ASSERT(var);
 
    int idToRemove = var->key();
-   if (!this->pimpl->accessIds<NE>().removeOne(idToRemove)) {
+   if (!this->pimpl->accessIds<Instruction>().removeOne(idToRemove)) {
       // It's a coding error if we try to remove something from the Recipe that wasn't in it in the first place!
       qCritical() <<
          Q_FUNC_INFO << "Tried to remove" << var->metaObject()->className() << "with ID" << idToRemove <<
          "but couldn't find it in Recipe #" << this->key();
       Q_ASSERT(false);
    } else {
-      this->propagatePropertyChange(Recipe::propertyNameFor<NE>());
-      this->pimpl->recalcIBU(); // .:TODO:. Don't need to do this recalculation when it's Instruction
+      this->propagatePropertyChange(Recipe::propertyNameFor<Instruction>());
+      // NB: Don't need to call this->pimpl->recalcIBU() for removing an Instruction!
    }
 
    //
-   // Because Hop/Fermentable/etc objects in a Recipe are actually "Instance of use of Hop/Fermentable/etc" we usually
-   // want to delete the object from the ObjectStore at this point.  But, because we're a bit paranoid, we'll check
-   // first that the object we're removing has a parent (ie really is an "instance of use of") and is not used in any
-   // other Recipes.
+   // Because Instruction objects are owned by their Recipe we usually want to delete them object from the ObjectStore
+   // at this point.  But, because we're a bit paranoid, we'll check first that the object we're removing has a parent
+   // (ie really is an "instance of use of") and is not used in any other Recipes.  THIS EXTRA CHECK IS ALMOST CERTAINLY
+   // UNNECESSARY.
    //
    if (isUnusedInstanceOfUseOf(*var)) {
       qDebug() <<
          Q_FUNC_INFO << "Deleting" << var->metaObject()->className() << "#" << var->key() <<
          "as it is \"instance of use of\" that is no longer needed";
-      ObjectStoreWrapper::hardDelete<NE>(var->key());
+      ObjectStoreWrapper::hardDelete<Instruction>(var->key());
    }
    // The caller now owns the removed object unless and until they pass it in to Recipe::add() (typically to undo the
    // remove).
    return var;
 }
-template std::shared_ptr<Instruction> Recipe::remove(std::shared_ptr<Instruction> var);
+//template std::shared_ptr<Instruction> Recipe::remove(std::shared_ptr<Instruction> var);
 
 template<class RA> std::shared_ptr<RA> Recipe::removeAddition(std::shared_ptr<RA> addition) {
    // It's a coding error to supply a null shared pointer
@@ -2226,8 +2238,11 @@ template<class RA> std::shared_ptr<RA> Recipe::removeAddition(std::shared_ptr<RA
 
    addition->setRecipeId(-1);
 
-   disconnect(addition->ingredient().get(), &NamedEntity::changed, this, &Recipe::acceptChangeToContainedObject);
-   this->propagatePropertyChange(Recipe::propertyNameFor<RA>());
+   disconnect(addition.get(), &NamedEntity::changed, this, &Recipe::acceptChangeToContainedObject);
+   //
+   // For the same reason as in addAddition(), we don't want to call this->propagatePropertyChange here
+   //
+   this->notifyPropertyChange(Recipe::propertyNameFor<RA>());
 
    this->recalcIfNeeded(addition->ingredient()->metaObject()->className());
 
@@ -2713,19 +2728,22 @@ void Recipe::recalcIfNeeded(QString classNameOfWhatWasAddedOrChanged) {
    // We could just compare with "Hop", "Equipment", etc but there's then no compile-time checking of typos.  Using
    // ::staticMetaObject.className() is a bit more clunky but it's safer.
 
-   if (classNameOfWhatWasAddedOrChanged == Hop::staticMetaObject.className()) {
+   if (classNameOfWhatWasAddedOrChanged ==               Hop::staticMetaObject.className() ||
+       classNameOfWhatWasAddedOrChanged == RecipeAdditionHop::staticMetaObject.className()) {
       this->pimpl->recalcIBU();
       return;
    }
 
-   if (classNameOfWhatWasAddedOrChanged == Equipment::staticMetaObject.className() ||
-       classNameOfWhatWasAddedOrChanged == Fermentable::staticMetaObject.className() ||
-       classNameOfWhatWasAddedOrChanged == Mash::staticMetaObject.className()) {
+   if (classNameOfWhatWasAddedOrChanged ==                 Equipment::staticMetaObject.className() ||
+       classNameOfWhatWasAddedOrChanged ==               Fermentable::staticMetaObject.className() ||
+       classNameOfWhatWasAddedOrChanged == RecipeAdditionFermentable::staticMetaObject.className() ||
+       classNameOfWhatWasAddedOrChanged ==                      Mash::staticMetaObject.className()) {
       this->recalcAll();
       return;
    }
 
-   if (classNameOfWhatWasAddedOrChanged == Yeast::staticMetaObject.className()) {
+   if (classNameOfWhatWasAddedOrChanged ==               Yeast::staticMetaObject.className() ||
+       classNameOfWhatWasAddedOrChanged == RecipeAdditionYeast::staticMetaObject.className()) {
       this->pimpl->recalcOgFg();
       this->pimpl->recalcABV_pct();
       return;

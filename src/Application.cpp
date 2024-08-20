@@ -48,6 +48,7 @@
 #include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QNetworkRequest>
 #include <QUrl>
+#include <QVersionNumber>
 
 #include "Algorithms.h"
 #include "BtSplashScreen.h"
@@ -237,33 +238,43 @@ namespace {
 
       QJsonObject jsonObject = jsonDocument.object();
 
-      QString remoteVersion = jsonObject.value("name").toString();
-      qDebug() << Q_FUNC_INFO << "Latest release is" << remoteVersion << "; this release is" << CONFIG_VERSION_STRING;
-
+      QString remoteVersion = jsonObject.value("tag_name").toString();
       // Version names are usually "v3.0.2" etc, so we want to strip the 'v' off the front
       if (remoteVersion.startsWith("v", Qt::CaseInsensitive)) {
          remoteVersion.remove(0, 1);
       }
 
+      //
+      // We used to just compare if the remote version is the same as the current one, but it then gets annoying if you
+      // are running the nightly build and it keeps asking if you want to, eg, download 4.0.0 because you're "only"
+      // running 4.0.1.  So now we do it properly, letting QVersionNumber do the heavy lifting for us.
+      //
+      QVersionNumber const currentlyRunning{QVersionNumber::fromString(CONFIG_VERSION_STRING)};
+      QVersionNumber const latestRelease   {QVersionNumber::fromString(remoteVersion)};
+
+      qInfo() <<
+         Q_FUNC_INFO << "Latest release is" << remoteVersion << "(parsed as" << latestRelease << ") ; "
+         "currently running" << CONFIG_VERSION_STRING << "(parsed as" << currentlyRunning << ")";
+
       // If the remote version is newer...
-      if (!remoteVersion.startsWith(CONFIG_VERSION_STRING)) {
+      if (latestRelease > currentlyRunning) {
          // ...and the user wants to download the new version...
-         if( QMessageBox::information(&MainWindow::instance(),
-                                    QObject::tr("New Version"),
-                                    QObject::tr("Version %1 is now available. Download it?").arg(remoteVersion),
-                                    QMessageBox::Yes | QMessageBox::No,
-                                    QMessageBox::Yes) == QMessageBox::Yes ) {
+         if(QMessageBox::information(&MainWindow::instance(),
+                                     QObject::tr("New Version"),
+                                     QObject::tr("Version %1 is now available. Download it?").arg(remoteVersion),
+                                     QMessageBox::Yes | QMessageBox::No,
+                                     QMessageBox::Yes) == QMessageBox::Yes) {
             // ...take them to the website.
-            static QString const releasesPage = QString{"%1/releases"}.arg(CONFIG_HOMEPAGE_URL);
+            static QString const releasesPage = QString{"%1/releases"}.arg(CONFIG_GITHUB_URL);
             QDesktopServices::openUrl(QUrl(releasesPage));
          } else  {
             // ... and the user does NOT want to download the new version...
             // ... and they want us to stop bothering them...
-            if( QMessageBox::question(&MainWindow::instance(),
-                                    QObject::tr("New Version"),
-                                    QObject::tr("Stop bothering you about new versions?"),
-                                    QMessageBox::Yes | QMessageBox::No,
-                                    QMessageBox::Yes) == QMessageBox::Yes) {
+            if(QMessageBox::question(&MainWindow::instance(),
+                                     QObject::tr("New Version"),
+                                     QObject::tr("Stop bothering you about new versions?"),
+                                     QMessageBox::Yes | QMessageBox::No,
+                                     QMessageBox::Yes) == QMessageBox::Yes) {
                // ... make a note to stop bothering the user about the new version.
                setCheckVersion(false);
             }
@@ -298,7 +309,7 @@ namespace {
       // Since Qt5, you can connect signals to simple functions (see https://wiki.qt.io/New_Signal_Slot_Syntax)
       QObject::connect(responseToCheckForNewVersion, &QNetworkReply::finished, mw, &finishCheckForNewVersion);
       qDebug() <<
-         Q_FUNC_INFO << "Sending request to check for new version (request running =" <<
+         Q_FUNC_INFO << "Sending request to" << url << "to check for new version (request running =" <<
          responseToCheckForNewVersion->isRunning() << ")";
       return;
    }

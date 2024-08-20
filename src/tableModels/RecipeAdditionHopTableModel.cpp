@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * tableModels/RecipeAdditionHopTableModel.cpp is part of Brewtarget, and is copyright the following authors 2009-2023:
+ * tableModels/RecipeAdditionHopTableModel.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Daniel Pettersson <pettson81@gmail.com>
  *   • Luke Vincent <luke.r.vincent@gmail.com>
@@ -182,7 +182,7 @@ bool RecipeAdditionHopTableModel::setData(const QModelIndex & index, const QVari
 }
 
 // Insert the boiler-plate stuff that we cannot do in TableModelBase
-TABLE_MODEL_COMMON_CODE(RecipeAdditionHop, recipeAdditionHop, PropertyNames::Recipe::hopAdditionIds)
+TABLE_MODEL_COMMON_CODE(RecipeAdditionHop, recipeAdditionHop, PropertyNames::Recipe::hopAdditions)
 //=============================================== CLASS RecipeAdditionHopItemDelegate ================================================
 
 // Insert the boiler-plate stuff that we cannot do in ItemDelegate

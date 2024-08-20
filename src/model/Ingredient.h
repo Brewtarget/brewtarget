@@ -86,6 +86,7 @@ public:
  *
  *        See comment in utils/TypeTraits.h for definition of CONCEPT_FIX_UP (and why, for now, we need it).
  */
-template <typename T> concept CONCEPT_FIX_UP IsIngredient = std::is_base_of_v<Ingredient, T>;
+template <typename T> concept CONCEPT_FIX_UP    IsIngredient = std::is_base_of_v<Ingredient, T>;
+template <typename T> concept CONCEPT_FIX_UP IsNotIngredient = std::negation_v<std::is_base_of<Ingredient, T>>;
 
 #endif

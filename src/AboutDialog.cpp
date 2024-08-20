@@ -196,7 +196,7 @@ AboutDialog::AboutDialog(QWidget * parent) :
          " </p>"
          "</html>"
       )
-      .arg(CONFIG_APPLICATION_NAME_UC, CONFIG_VERSION_STRING, CONFIG_HOMEPAGE_URL)
+      .arg(CONFIG_APPLICATION_NAME_UC, CONFIG_VERSION_STRING, CONFIG_GITHUB_URL)
    );
    return;
 }

@@ -136,10 +136,7 @@ public:
     *
     *        Fortunately this does not need to be a slot function (as slots cannot be templated)
     */
-   template<class NE> void addIngredientToRecipe(NE * ne);
-
-   void addFermentableToRecipe(Fermentable * fermentable);
-   void addHopToRecipe(Hop * hop);
+   template<class NE> void addIngredientToRecipe(NE & ne);
 
 public slots:
 

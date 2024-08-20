@@ -49,6 +49,7 @@ constexpr char const * CONFIG_CXX_COMPILER_ID = "${CMAKE_CXX_COMPILER_ID}";
 constexpr char const * CONFIG_BUILD_TIMESTAMP = "${BUILD_TIMESTAMP}";
 
 // Support info
-constexpr char const * CONFIG_HOMEPAGE_URL    = "${CONFIG_HOMEPAGE_URL}";
+constexpr char const * CONFIG_GITHUB_URL      = "${CONFIG_GITHUB_URL}";
+constexpr char const * CONFIG_WEBSITE_URL     = "${CONFIG_WEBSITE_URL}";
 
 #endif

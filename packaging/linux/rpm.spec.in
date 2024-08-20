@@ -1,5 +1,5 @@
 #
-# packaging/linux/rpm.spec.in is part of Brewtarget, and is copyright the following authors 2023:
+# packaging/linux/rpm.spec.in is part of Brewtarget, and is copyright the following authors 2023-2024:
 #   • Matt Young <mfsy@yahoo.com>
 #
 # Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -43,7 +43,7 @@ Group       : Applications/Productivity
 Summary     : GUI beer brewing software
 
 # URL supplying further information about the package, typically upstream website.
-URL         : @CONFIG_HOMEPAGE_URL@
+URL         : @CONFIG_WEBSITE_URL@
 Vendor      : @CONFIG_ORGANIZATION_NAME@
 
 # Specifies the architecture which the resulting binary package will run on. Typically this is a CPU architecture.
