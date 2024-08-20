@@ -3,12 +3,27 @@
 This change log is for high-level user-visible changes to Brewtarget, intended for consumption by the typical end-user.
 Note however that we also process it into a Debian-compliant text change log, so we need to keep the format consistent.
 In particular, the Release Timestamp section is needed as part of this (and you need to be meticulous about the date
-format therein, otherwise you'll get, eg, no-changelogname-tag error from rpmlint).
+format therein, otherwise you'll get, eg, no-changelogname-tag error from rpmlint).  You get problems if you set the
+release timestamp to be a date in the future, and I'm guessing nobody cares about the exact time of day a release
+happens, so I'm now setting it to a slightly arbitrary time early in the morning.
 
 ## Forthcoming in v4.1.0
 
 ### New Features
 * We'll list new features here...
+
+
+## v4.0.2
+Minor bug fixes for the 4.0.1 release (ie bugs in 4.0.1 are fixed in this 4.0.2 release).
+
+### New Features
+* None
+
+### Bug Fixes
+* Unable to add ingredients to recipe (4.0.X) [810](https://github.com/Brewtarget/brewtarget/issues/810)
+
+### Release Timestamp
+Tue, 20 Aug 2024 04:00:02 +0100
 
 ## v4.0.1
 Minor bug fixes for the 4.0.0 release (ie bugs in 4.0.0 are fixed in this 4.0.1 release).
