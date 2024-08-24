@@ -224,10 +224,15 @@ jobs:
           echo "Running ./bt -v package"
           ./bt -v package
           cd mbuild/packages
+          mkdir windows/signed
           pwd
           tree -sh
 
-      - name: Upload Windows binaries (installers)
+      #
+      # For now, we'll still upload the unsigned binaries before we try to sign them, so that we at least have a
+      # fallback if there is some problem with the signing process
+      #
+      - name: Upload unsigned Windows binaries (installers)
         if: ${{ success()}}
         uses: actions/upload-artifact@v4
         with:
@@ -235,6 +240,56 @@ jobs:
           path: |
             C:/_/mbuild/packages/windows/Brewtarget*Installer.exe
             C:/_/mbuild/packages/windows/Brewtarget*Installer.exe.sha256sum
+          retention-days: 7
+
+
+      #
+      # Sign the Windows binaries using our Signpath certificate
+      #
+      # See https://github.com/SignPath/github-action-submit-signing-request for documentation of this action and
+      # https://github.com/SignPath/github-actions-extended-demo/ for example usage.
+      #
+      # Note that we need the special file `.signpath/artifact-configurations/default.xml` in our repository as well as
+      # the relevant GitHub secrets (see
+      # https://docs.github.com/en/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions).
+      #
+      - name: Sign Windows binaries
+        if: ${{ success()}}
+        uses: signpath/github-action-submit-signing-request@v1
+        env:
+          #
+          # Select "release-signing" policy for things we're going to release and "test-signing" otherwise.
+          #
+          # Currently our main branch for releasing is called "develop", but we'll probably change it to "main" in the
+          # not too distant future.
+          #
+          # We don't do release branches per se, but, before we do a lot of commits for a major release, we'll usually
+          # cut a "stable/" branch for the prior one.
+          #
+          SIGNPATH_SIGNING_POLICY_SLUG: |
+            ${{ (github.ref == 'refs/heads/develop' ||
+                 github.ref == 'refs/heads/main' ||
+                 startsWith(github.ref, 'refs/heads/stable/')) && 'release-signing' || 'test-signing' }}
+        with:
+          api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
+          organization-id: '${{ vars.SIGNPATH_ORGANIZATION_ID }}'
+          project-slug: 'Brewtarget'
+          signing-policy-slug: '${{ env.SIGNPATH_SIGNING_POLICY_SLUG }}'
+          github-artifact-id: '${{steps.upload-unsigned-artifact.outputs.artifact-id}}'
+          wait-for-completion: true
+          output-artifact-directory: 'C:/_/mbuild/packages/windows/signed'
+          github-extended-verification-token: '${{ secrets.EXTENDED_VERIFICATION_TOKEN }}'
+
+      #
+      # For now, we'll upload both the signed and unsigned
+      #
+      - name: Upload signed Windows binaries (installers)
+        if: ${{ success()}}
+        uses: actions/upload-artifact@v4
+        with:
+          name: brewtarget-dev-${{ matrix.msystem }}
+          path: |
+            C:/_/mbuild/packages/windows/signed/*.*
           retention-days: 7
 
       - name: Upload CMake error info from failed build

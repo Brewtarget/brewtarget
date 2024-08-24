@@ -1282,7 +1282,7 @@ public:
       for (auto yeastAddition : this->m_self.yeastAdditions()) {
          // Get the yeast with the greatest attenuation.
          if (yeastAddition->attenuation_pct() > attenuation_pct) {
-            attenuation_pct = yeastAddition->yeast()->getTypicalAttenuation_pct();
+            attenuation_pct = yeastAddition->yeast()->attenuationTypical_pct();
          }
       }
       // This means we have yeast, but they neglected to provide attenuation percentages.

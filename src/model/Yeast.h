@@ -40,6 +40,7 @@ class RecipeAdditionYeast;
 // See comment in model/NamedEntity.h
 #define AddPropertyName(property) namespace PropertyNames::Yeast { BtStringConst const property{#property}; }
 AddPropertyName(alcoholTolerance_pct     )
+AddPropertyName(attenuationTypical_pct   ) // This is for use only by BeerXML
 AddPropertyName(attenuationMax_pct       )
 AddPropertyName(attenuationMin_pct       )
 AddPropertyName(bestFor                  )
@@ -226,10 +227,18 @@ public:
    //! \brief The maximum recommended number of reculturings.      ⮜⮜⮜ Optional in BeerXML ⮞⮞⮞
    Q_PROPERTY(std::optional<int>     maxReuse                  READ maxReuse                  WRITE setMaxReuse                 )
 
+   //! \brief This is only for BeerXML
+   Q_PROPERTY(double attenuationTypical_pct     READ attenuationTypical_pct)
+
    // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
 
    //! \brief The recommended limit of abv by the culture producer before attenuation stops.
    Q_PROPERTY(std::optional<double>  alcoholTolerance_pct      READ alcoholTolerance_pct      WRITE setAlcoholTolerance_pct     )
+   //
+   // Note that the optional BeerXML ATTENUATION property (which we used to store as attenuation_pct) has moved to
+   // RecipeAdditionYeast, where it seems to make more sense.  The yeast itself has a typical attenuation range (hence
+   // min and max) but its use in a specific recipe gives a single attenuation figure.
+   //
    Q_PROPERTY(std::optional<double>  attenuationMin_pct        READ attenuationMin_pct        WRITE setAttenuationMin_pct       )
    Q_PROPERTY(std::optional<double>  attenuationMax_pct        READ attenuationMax_pct        WRITE setAttenuationMax_pct       )
    //! \brief aka POF+
@@ -306,10 +315,10 @@ public:
    /**
     * \brief Get the best attenuation figure to use for this yeast.
     *
-    *        If \c attenuation_pct is set, returns that.  Otherwise, if \c attenuationMin_pct and \c attenuationMax_pct
-    *        are set, return the mean of those two figures.  Otherwise returns \c Yeast::DefaultAttenuation_pct
+    *        Otherwise, if \c attenuationMin_pct and \c attenuationMax_pct are set, return the mean of those two
+    *        figures.  Otherwise returns \c Yeast::DefaultAttenuation_pct.
     */
-   double getTypicalAttenuation_pct() const;
+   double attenuationTypical_pct() const;
 
 signals:
 
