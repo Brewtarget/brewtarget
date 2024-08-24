@@ -51,6 +51,7 @@ template <> struct TableModelTraits<RecipeAdditionYeastTableModel> {
       TotalInventory,
       Stage         ,
       Step          ,
+      Attenuation   ,
    };
 };
 
