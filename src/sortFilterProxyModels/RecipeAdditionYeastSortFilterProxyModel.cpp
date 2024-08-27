@@ -25,8 +25,8 @@
 #include "measurement/PhysicalQuantity.h"
 
 bool RecipeAdditionYeastSortFilterProxyModel::isLessThan(RecipeAdditionYeastTableModel::ColumnIndex const columnIndex,
-                                                       QVariant const & leftItem,
-                                                       QVariant const & rightItem) const {
+                                                         QVariant const & leftItem,
+                                                         QVariant const & rightItem) const {
    switch (columnIndex) {
       case RecipeAdditionYeastTableModel::ColumnIndex::Name:
       case RecipeAdditionYeastTableModel::ColumnIndex::Laboratory:
@@ -37,6 +37,16 @@ bool RecipeAdditionYeastSortFilterProxyModel::isLessThan(RecipeAdditionYeastTabl
       case RecipeAdditionYeastTableModel::ColumnIndex::Step:
       case RecipeAdditionYeastTableModel::ColumnIndex::AmountType:
          return leftItem.toString() < rightItem.toString();
+
+      case RecipeAdditionYeastTableModel::ColumnIndex::Attenuation:
+         // Attenuation on a RecipeAdditionYeast is std::optional<double> in the underlying model.  But here, the
+         // leftItem and rightItem QVariants will contain QString eg "75.0 %" or "" (for std::nullopt).
+         //
+         // Measurement::extractRawFromString does pretty much what we want though TODO we should explicitly tell it
+         // blanks are OK.
+         //
+         return Measurement::extractRawFromString<double>( leftItem.toString()) <
+                Measurement::extractRawFromString<double>(rightItem.toString());
 
       case RecipeAdditionYeastTableModel::ColumnIndex::TotalInventory:
       case RecipeAdditionYeastTableModel::ColumnIndex::Amount:

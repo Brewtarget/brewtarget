@@ -111,42 +111,54 @@ void HopEditor::writeFieldsToEditItem() {
 }
 
 void HopEditor::writeLateFieldsToEditItem() {
-   // Do this late to make sure we've the row in the inventory table
-   this->m_editItem->setTotalInventory(lineEdit_inventory->getNonOptCanonicalAmt());
+   //
+   // Do this late to make sure we've the row in the inventory table (because total inventory amount isn't really an
+   // attribute of the Hop).
+   //
+   // Note that we do not need to store the value of comboBox_amountType.  It merely controls the available unit for
+   // lineEdit_inventory
+   //
+   // Note that, if the inventory field is blank, we'll treat that as meaning "don't change the inventory"
+   //
+   if (!this->lineEdit_inventory->isEmptyOrBlank()) {
+      this->m_editItem->setTotalInventory(lineEdit_inventory->getNonOptCanonicalAmt());
+   }
    return;
 }
 
 void HopEditor::readFieldsFromEditItem(std::optional<QString> propName) {
-   if (!propName || *propName == PropertyNames::Hop::type                 ) { this->comboBox_hopType              ->setValue       (m_editItem->type                 ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Hop::form                 ) { this->comboBox_hopForm              ->setValue       (m_editItem->form                 ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::NamedEntity::name         ) { this->lineEdit_name                 ->setTextCursor  (m_editItem->name                 ()); // Continues to next line
-                                                                              this->tabWidget_editor->setTabText(0, m_editItem->name());                                  if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Hop::origin               ) { this->lineEdit_origin               ->setTextCursor  (m_editItem->origin               ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Hop::alpha_pct            ) { this->lineEdit_alpha                ->setQuantity    (m_editItem->alpha_pct            ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Hop::beta_pct             ) { this->lineEdit_beta                 ->setQuantity    (m_editItem->beta_pct             ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Hop::hsi_pct              ) { this->lineEdit_HSI                  ->setQuantity    (m_editItem->hsi_pct              ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Hop::humulene_pct         ) { this->lineEdit_humulene             ->setQuantity    (m_editItem->humulene_pct         ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Hop::caryophyllene_pct    ) { this->lineEdit_caryophyllene        ->setQuantity    (m_editItem->caryophyllene_pct    ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Hop::cohumulone_pct       ) { this->lineEdit_cohumulone           ->setQuantity    (m_editItem->cohumulone_pct       ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Hop::myrcene_pct          ) { this->lineEdit_myrcene              ->setQuantity    (m_editItem->myrcene_pct          ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Hop::substitutes          ) { this->textEdit_substitutes          ->setPlainText   (m_editItem->substitutes          ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Hop::notes                ) { this->textEdit_notes                ->setPlainText   (m_editItem->notes                ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Ingredient::totalInventory) { this->lineEdit_inventory            ->setAmount      (m_editItem->totalInventory       ()); if (propName) { return; } }
+   if (!propName || *propName == PropertyNames::Hop::type             ) { this->comboBox_hopType      ->setValue     (m_editItem->type             ()); if (propName) { return; } }
+   if (!propName || *propName == PropertyNames::Hop::form             ) { this->comboBox_hopForm      ->setValue     (m_editItem->form             ()); if (propName) { return; } }
+   if (!propName || *propName == PropertyNames::NamedEntity::name     ) { this->lineEdit_name         ->setTextCursor(m_editItem->name             ()); // Continues to next line
+                                                                          this->tabWidget_editor->setTabText(0, m_editItem->name());
+                                                                          if (propName) { return; } }
+   if (!propName || *propName == PropertyNames::Hop::origin           ) { this->lineEdit_origin       ->setTextCursor(m_editItem->origin           ()); if (propName) { return; } }
+   if (!propName || *propName == PropertyNames::Hop::alpha_pct        ) { this->lineEdit_alpha        ->setQuantity  (m_editItem->alpha_pct        ()); if (propName) { return; } }
+   if (!propName || *propName == PropertyNames::Hop::beta_pct         ) { this->lineEdit_beta         ->setQuantity  (m_editItem->beta_pct         ()); if (propName) { return; } }
+   if (!propName || *propName == PropertyNames::Hop::hsi_pct          ) { this->lineEdit_HSI          ->setQuantity  (m_editItem->hsi_pct          ()); if (propName) { return; } }
+   if (!propName || *propName == PropertyNames::Hop::humulene_pct     ) { this->lineEdit_humulene     ->setQuantity  (m_editItem->humulene_pct     ()); if (propName) { return; } }
+   if (!propName || *propName == PropertyNames::Hop::caryophyllene_pct) { this->lineEdit_caryophyllene->setQuantity  (m_editItem->caryophyllene_pct()); if (propName) { return; } }
+   if (!propName || *propName == PropertyNames::Hop::cohumulone_pct   ) { this->lineEdit_cohumulone   ->setQuantity  (m_editItem->cohumulone_pct   ()); if (propName) { return; } }
+   if (!propName || *propName == PropertyNames::Hop::myrcene_pct      ) { this->lineEdit_myrcene      ->setQuantity  (m_editItem->myrcene_pct      ()); if (propName) { return; } }
+   if (!propName || *propName == PropertyNames::Hop::substitutes      ) { this->textEdit_substitutes  ->setPlainText (m_editItem->substitutes      ()); if (propName) { return; } }
+   if (!propName || *propName == PropertyNames::Hop::notes            ) { this->textEdit_notes        ->setPlainText (m_editItem->notes            ()); if (propName) { return; } }
+   if (!propName || *propName == PropertyNames::Ingredient::totalInventory) { this->lineEdit_inventory->setAmount    (m_editItem->totalInventory   ());
+                                                                              this->comboBox_amountType->autoSetFromControlledField();
+                                                                              if (propName) { return; } }
    // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
-///   if (!propName || *propName == PropertyNames::Hop::amountIsWeight              ) { this->checkBox_amountIsWeight       ->setChecked   (m_editItem->amountIsWeight       ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Hop::producer             ) { this->lineEdit_producer             ->setText        (m_editItem->producer             ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Hop::productId           ) { this->lineEdit_productId           ->setText        (m_editItem->productId           ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Hop::year                 ) { this->lineEdit_year                 ->setText        (m_editItem->year                 ()); if (propName) { return; } }
+   if (!propName || *propName == PropertyNames::Hop::producer       ) { this->lineEdit_producer   ->setText    (m_editItem->producer       ()); if (propName) { return; } }
+   if (!propName || *propName == PropertyNames::Hop::productId      ) { this->lineEdit_productId  ->setText    (m_editItem->productId      ()); if (propName) { return; } }
+   if (!propName || *propName == PropertyNames::Hop::year           ) { this->lineEdit_year       ->setText    (m_editItem->year           ()); if (propName) { return; } }
    if (!propName || *propName == PropertyNames::Hop::totalOil_mlPer100g) { this->lineEdit_totalOil_mlPer100g->setQuantity    (m_editItem->totalOil_mlPer100g()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Hop::farnesene_pct        ) { this->lineEdit_farnesene            ->setQuantity    (m_editItem->farnesene_pct        ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Hop::geraniol_pct         ) { this->lineEdit_geraniol             ->setQuantity    (m_editItem->geraniol_pct         ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Hop::bPinene_pct         ) { this->lineEdit_bPinene             ->setQuantity    (m_editItem->bPinene_pct         ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Hop::linalool_pct         ) { this->lineEdit_linalool             ->setQuantity    (m_editItem->linalool_pct         ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Hop::limonene_pct         ) { this->lineEdit_limonene             ->setQuantity    (m_editItem->limonene_pct         ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Hop::nerol_pct            ) { this->lineEdit_nerol                ->setQuantity    (m_editItem->nerol_pct            ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Hop::pinene_pct           ) { this->lineEdit_pinene               ->setQuantity    (m_editItem->pinene_pct           ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Hop::polyphenols_pct      ) { this->lineEdit_polyphenols          ->setQuantity    (m_editItem->polyphenols_pct      ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Hop::xanthohumol_pct      ) { this->lineEdit_xanthohumol          ->setQuantity    (m_editItem->xanthohumol_pct      ()); if (propName) { return; } }
+   if (!propName || *propName == PropertyNames::Hop::farnesene_pct  ) { this->lineEdit_farnesene  ->setQuantity(m_editItem->farnesene_pct  ()); if (propName) { return; } }
+   if (!propName || *propName == PropertyNames::Hop::geraniol_pct   ) { this->lineEdit_geraniol   ->setQuantity(m_editItem->geraniol_pct   ()); if (propName) { return; } }
+   if (!propName || *propName == PropertyNames::Hop::bPinene_pct    ) { this->lineEdit_bPinene    ->setQuantity(m_editItem->bPinene_pct    ()); if (propName) { return; } }
+   if (!propName || *propName == PropertyNames::Hop::linalool_pct   ) { this->lineEdit_linalool   ->setQuantity(m_editItem->linalool_pct   ()); if (propName) { return; } }
+   if (!propName || *propName == PropertyNames::Hop::limonene_pct   ) { this->lineEdit_limonene   ->setQuantity(m_editItem->limonene_pct   ()); if (propName) { return; } }
+   if (!propName || *propName == PropertyNames::Hop::nerol_pct      ) { this->lineEdit_nerol      ->setQuantity(m_editItem->nerol_pct      ()); if (propName) { return; } }
+   if (!propName || *propName == PropertyNames::Hop::pinene_pct     ) { this->lineEdit_pinene     ->setQuantity(m_editItem->pinene_pct     ()); if (propName) { return; } }
+   if (!propName || *propName == PropertyNames::Hop::polyphenols_pct) { this->lineEdit_polyphenols->setQuantity(m_editItem->polyphenols_pct()); if (propName) { return; } }
+   if (!propName || *propName == PropertyNames::Hop::xanthohumol_pct) { this->lineEdit_xanthohumol->setQuantity(m_editItem->xanthohumol_pct()); if (propName) { return; } }
 
    return;
 }

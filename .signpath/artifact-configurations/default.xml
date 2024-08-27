@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+   .signpath/artifact-configurations/default.xml is part of Brewtarget
+-->
+<artifact-configuration xmlns="http://signpath.io/artifact-configuration/v1">
+  <zip-file>
+
+    <msi-file path="DemoExample.msi">
+      <directory path="application/SignPath Demo">
+
+        <pe-file-set>
+          <include path="Microsoft.*.dll" min-matches="0" max-matches="unbounded" />
+          <include path="Microsoft.*.exe" min-matches="0" max-matches="unbounded" />
+          <for-each>
+            <authenticode-verify />
+          </for-each>
+        </pe-file-set>
+
+        <pe-file-set>
+          <include path="Serilog.dll" product-name="Serilog" min-matches="0" />
+          <include path="Serilog.AspNetCore.dll" product-name="Serilog" product-version="7.0.0" min-matches="0" />
+        </pe-file-set>
+
+        <pe-file-set>
+          <include path="DemoExample.dll" />
+          <include path="DemoExample.exe" />
+          <for-each>
+            <authenticode-sign />
+          </for-each>
+        </pe-file-set>
+
+      </directory>
+      <authenticode-sign />
+    </msi-file>
+
+    <xml-file path="bom.xml" root-element-namespace="http://cyclonedx.org/schema/bom/1.5" root-element-name="bom">
+      <xml-sign/>
+    </xml-file>
+
+  </zip-file>
+</artifact-configuration>

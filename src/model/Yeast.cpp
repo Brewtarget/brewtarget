@@ -228,6 +228,13 @@ Yeast::Yeast(NamedParameterBundle const & namedParameterBundle) :
    SET_REGULAR_FROM_NPB (m_killerProducingK28Toxin          , namedParameterBundle, PropertyNames::Yeast::killerProducingK28Toxin  ),
    SET_REGULAR_FROM_NPB (m_killerProducingKlusToxin         , namedParameterBundle, PropertyNames::Yeast::killerProducingKlusToxin ),
    SET_REGULAR_FROM_NPB (m_killerNeutral                    , namedParameterBundle, PropertyNames::Yeast::killerNeutral            ) {
+   // If we're being constructed from a BeerXML file, then we might only have typical attenuation rather than min and
+   // max.  Best we can do in that scenario is set min and max to the supplied value.
+   if (namedParameterBundle.contains(PropertyNames::Yeast::attenuationTypical_pct)) {
+      double attenuationTypical_pct{namedParameterBundle.val<double>(PropertyNames::Yeast::attenuationTypical_pct)};
+      if (!this->m_attenuationMin_pct) { this->m_attenuationMin_pct = attenuationTypical_pct; }
+      if (!this->m_attenuationMax_pct) { this->m_attenuationMax_pct = attenuationTypical_pct; }
+   }
    return;
 }
 
@@ -307,7 +314,7 @@ void Yeast::setKillerProducingK28Toxin  (std::optional<bool>         const   val
 void Yeast::setKillerProducingKlusToxin (std::optional<bool>         const   val) { SET_AND_NOTIFY(PropertyNames::Yeast::killerProducingKlusToxin , m_killerProducingKlusToxin , val); return; }
 void Yeast::setKillerNeutral            (std::optional<bool>         const   val) { SET_AND_NOTIFY(PropertyNames::Yeast::killerNeutral            , m_killerNeutral            , val); return; }
 
-double Yeast::getTypicalAttenuation_pct() const {
+double Yeast::attenuationTypical_pct() const {
    if (m_attenuationMin_pct && m_attenuationMax_pct) {
       return (*m_attenuationMin_pct + *m_attenuationMax_pct) / 2.0;
    }

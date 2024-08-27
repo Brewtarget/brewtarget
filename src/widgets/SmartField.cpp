@@ -144,8 +144,6 @@ public:
          Measurement::UnitSystem::getInstance(previousScaleInfo.systemOfMeasurement, physicalQuantity)
       };
 
-      qDebug() << Q_FUNC_INFO << "¥¥¥ unitSystem" << unitSystem;
-
       Measurement::Unit const * defaultUnit{
          previousScaleInfo.relativeScale ? unitSystem.scaleUnit(*previousScaleInfo.relativeScale) : unitSystem.unit()
       };
@@ -266,6 +264,10 @@ void SmartField::initFixed(char const *                const   editorName,
 
 [[nodiscard]] bool SmartField::isInitialised() const {
   return this->pimpl->m_initialised;
+}
+
+[[nodiscard]] bool SmartField::isEmptyOrBlank() const {
+   return Optional::isEmptyOrBlank(this->getRawText());
 }
 
 [[nodiscard]] SmartAmountSettings const & SmartField::settings() const {
@@ -420,7 +422,8 @@ template<typename T> T SmartField::getNonOptValue(bool * const ok) const {
    qDebug() << Q_FUNC_INFO << this->pimpl->m_fieldFqName << ": Converting" << rawText;
 
    // It's a coding error to call this for an optional value.  We put the assert after the log statement to help
-   // with debugging!
+   // with debugging!  (It's usually sufficient to grep the code for the logged this->pimpl->m_fieldFqName to find the
+   // bug.)
    Q_ASSERT(!this->getTypeInfo().isOptional());
 
    if (std::holds_alternative<NonPhysicalQuantity>(*this->getTypeInfo().fieldType)) {

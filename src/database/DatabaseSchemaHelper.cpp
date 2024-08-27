@@ -786,6 +786,13 @@ namespace {
          //
          // We only need to update the old Yeast type, form and flocculation mappings.  The new ones ("very low",
          // "medium low", "medium high") should "just work".
+         //
+         // For "parent" yeast records, attenuation is replaced by attenuation_min_pct and attenuation_max_pct.  (For
+         // "child" ones it moves to attenuation_pct on yeast_in_recipe, which is done below.)  Although it's unlikely
+         // to be strictly correct, we set attenuation_min_pct and attenuation_max_pct both to hold the same value as
+         // the old attenuation column, on the grounds that this is better than nothing, except in a case where the old
+         // attenuation column holds 0.
+         //
          {QString("     UPDATE yeast SET ytype = 'ale'       WHERE ytype = 'Ale'      ")},
          {QString("     UPDATE yeast SET ytype = 'lager'     WHERE ytype = 'Lager'    ")},
          {QString("     UPDATE yeast SET ytype = 'other'     WHERE ytype = 'Wheat'    ")}, // NB: Wheat becomes Other
@@ -809,6 +816,8 @@ namespace {
          {QString("ALTER TABLE yeast ADD COLUMN killer_producing_k28_toxin   %1").arg(db.getDbNativeTypeName<bool  >())},
          {QString("ALTER TABLE yeast ADD COLUMN killer_producing_klus_toxin  %1").arg(db.getDbNativeTypeName<bool  >())},
          {QString("ALTER TABLE yeast ADD COLUMN killer_neutral               %1").arg(db.getDbNativeTypeName<bool  >())},
+         {QString("     UPDATE yeast SET attenuation_min_pct = attenuation WHERE attenuation != 0")},
+         {QString("     UPDATE yeast SET attenuation_max_pct = attenuation WHERE attenuation != 0")},
          //
          // Style: Extended and additional fields for BeerJSON.  Plus fix inconsistent column name
          //
@@ -1715,7 +1724,8 @@ namespace {
          //
          {QString("ALTER TABLE yeast DROP COLUMN add_to_secondary")},
          //
-         // Attenuation percent moves from being a Yeast property to a RecipeAdditionYeast one
+         // For "child" yeast records, attenuation percent moves from being a Yeast property to a RecipeAdditionYeast
+         // one.
          //
          {QString("UPDATE yeast_in_recipe "
                   "SET attenuation_pct = y.attenuation "

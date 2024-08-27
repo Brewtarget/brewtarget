@@ -299,7 +299,7 @@ void BrewNote::populateNote(Recipe * parent) {
    auto const yeastAdditions = parent->yeastAdditions();
    for (auto const & yeastAddition : yeastAdditions) {
       if (yeastAddition->attenuation_pct() > atten_pct ) {
-         atten_pct = yeastAddition->yeast()->getTypicalAttenuation_pct();
+         atten_pct = yeastAddition->yeast()->attenuationTypical_pct();
       }
    }
 
