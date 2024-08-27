@@ -45,7 +45,6 @@ FermentableEditor::FermentableEditor(QWidget* parent) :
    SMART_FIELD_INIT(FermentableEditor, label_maxInBatch    , lineEdit_maxInBatch    , Fermentable, PropertyNames::Fermentable::maxInBatch_pct        , 0);
    SMART_FIELD_INIT(FermentableEditor, label_moisture      , lineEdit_moisture      , Fermentable, PropertyNames::Fermentable::moisture_pct          , 0);
    SMART_FIELD_INIT(FermentableEditor, label_protein       , lineEdit_protein       , Fermentable, PropertyNames::Fermentable::protein_pct           , 0);
-///   SMART_FIELD_INIT(FermentableEditor, label_yield         , lineEdit_yield         , Fermentable, PropertyNames::Fermentable::yield_pct             , 1);
    SMART_FIELD_INIT(FermentableEditor, label_inventory     , lineEdit_inventory     , Fermentable, PropertyNames::Ingredient::totalInventory         , 1);
    SMART_FIELD_INIT(FermentableEditor, label_origin        , lineEdit_origin        , Fermentable, PropertyNames::Fermentable::origin                   );
    SMART_FIELD_INIT(FermentableEditor, label_supplier      , lineEdit_supplier      , Fermentable, PropertyNames::Fermentable::supplier                 );
@@ -77,7 +76,7 @@ FermentableEditor::FermentableEditor(QWidget* parent) :
 
 ///   SMART_CHECK_BOX_INIT(FermentableEditor, checkBox_amountIsWeight           , label_amountIsWeight           , lineEdit_inventory , Fermentable, amountIsWeight           );
 
-///   BT_COMBO_BOX_INIT_COPQ(FermentableEditor, comboBox_amountType, Fermentable, PropertyNames::Ingredient::totalInventory, lineEdit_inventory);
+   BT_COMBO_BOX_INIT_COPQ(FermentableEditor, comboBox_amountType, Fermentable, PropertyNames::Ingredient::totalInventory, lineEdit_inventory);
 
    this->connectSignalsAndSlots();
    return;
@@ -88,23 +87,20 @@ FermentableEditor::~FermentableEditor() = default;
 void FermentableEditor::writeFieldsToEditItem() {
    this->m_editItem->setType(this->comboBox_type      ->getNonOptValue<Fermentable::Type      >());
 
-   this->m_editItem->setName                  (this->lineEdit_name          ->text                  ());
-///   this->m_editItem->setYield_pct             (this->lineEdit_yield         ->getNonOptValue<double>());
-   this->m_editItem->setColor_srm             (this->lineEdit_color         ->getNonOptCanonicalQty ());
-///   this->m_editItem->setAddAfterBoil          (this->checkBox_addAfterBoil  ->checkState() == Qt::Checked);
-   this->m_editItem->setOrigin                (this->lineEdit_origin        ->text                  ());
-   this->m_editItem->setSupplier              (this->lineEdit_supplier      ->text                  ());
-   this->m_editItem->setCoarseFineDiff_pct    (this->lineEdit_coarseFineDiff->getNonOptValue<double>());
-   this->m_editItem->setMoisture_pct          (this->lineEdit_moisture      ->getNonOptValue<double>());
-   this->m_editItem->setDiastaticPower_lintner(this->lineEdit_diastaticPower->getNonOptCanonicalQty ());
-   this->m_editItem->setProtein_pct           (this->lineEdit_protein       ->getNonOptValue<double>());
-   this->m_editItem->setMaxInBatch_pct        (this->lineEdit_maxInBatch    ->getNonOptValue<double>());
+   this->m_editItem->setName                  (this->lineEdit_name          ->text                 ());
+   this->m_editItem->setColor_srm             (this->lineEdit_color         ->getNonOptCanonicalQty());
+   this->m_editItem->setOrigin                (this->lineEdit_origin        ->text                 ());
+   this->m_editItem->setSupplier              (this->lineEdit_supplier      ->text                 ());
+   this->m_editItem->setCoarseFineDiff_pct    (this->lineEdit_coarseFineDiff->getOptValue<double>  ());
+   this->m_editItem->setMoisture_pct          (this->lineEdit_moisture      ->getOptValue<double>  ());
+   this->m_editItem->setDiastaticPower_lintner(this->lineEdit_diastaticPower->getOptCanonicalQty   ());
+   this->m_editItem->setProtein_pct           (this->lineEdit_protein       ->getOptValue<double>  ());
+   // See below for call to setTotalInventory, which needs to be done "late"
+   this->m_editItem->setMaxInBatch_pct        (this->lineEdit_maxInBatch    ->getOptValue<double>  ());
    this->m_editItem->setRecommendMash         (this->checkBox_recommendMash ->checkState() == Qt::Checked);
-///   this->m_editItem->setIsMashed              (this->checkBox_isMashed      ->checkState() == Qt::Checked);
-   this->m_editItem->setIbuGalPerLb           (this->lineEdit_ibuGalPerLb   ->getNonOptValue<double>()); // .:TBD:. No metric measure?
+   this->m_editItem->setIbuGalPerLb           (this->lineEdit_ibuGalPerLb   ->getOptValue<double>()); // .:TBD:. No metric measure?
    this->m_editItem->setNotes                 (this->textEdit_notes         ->toPlainText           ());
    // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
-///   this->m_editItem->setAmountIsWeight           (this->checkBox_amountIsWeight           ->isChecked          ());
    this->m_editItem->setGrainGroup               (this->comboBox_grainGroup               ->getOptValue<Fermentable::GrainGroup>());
    this->m_editItem->setProducer                 (this->lineEdit_producer                 ->text               ());
    this->m_editItem->setProductId                (this->lineEdit_productId                ->text               ());
@@ -130,8 +126,18 @@ void FermentableEditor::writeFieldsToEditItem() {
 }
 
 void FermentableEditor::writeLateFieldsToEditItem() {
-   // Do this late to make sure we've the row in the inventory table
-   this->m_editItem->setTotalInventory(lineEdit_inventory->getNonOptCanonicalAmt());
+   //
+   // Do this late to make sure we've the row in the inventory table (because total inventory amount isn't really an
+   // attribute of the Fermentable).
+   //
+   // Note that we do not need to store the value of comboBox_amountType.  It merely controls the available unit for
+   // lineEdit_inventory
+   //
+   // Note that, if the inventory field is blank, we'll treat that as meaning "don't change the inventory"
+   //
+   if (!this->lineEdit_inventory->isEmptyOrBlank()) {
+      this->m_editItem->setTotalInventory(lineEdit_inventory->getNonOptCanonicalAmt());
+   }
    return;
 }
 
@@ -139,22 +145,21 @@ void FermentableEditor::readFieldsFromEditItem(std::optional<QString> propName) 
    if (!propName || *propName == PropertyNames::NamedEntity::name                  ) { this->lineEdit_name          ->setTextCursor(m_editItem->name                  ()); // Continues to next line
                                                                                        this->tabWidget_editor->setTabText(0, m_editItem->name());                                               if (propName) { return; } }
    if (!propName || *propName == PropertyNames::Fermentable::type                  ) { this->comboBox_type          ->setValue     (m_editItem->type                  ());                      if (propName) { return; } }
-///   if (!propName || *propName == PropertyNames::Fermentable::yield_pct             ) { this->lineEdit_yield         ->setQuantity    (m_editItem->yield_pct             ());                      if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Fermentable::color_srm             ) { this->lineEdit_color         ->setQuantity    (m_editItem->color_srm             ());                      if (propName) { return; } }
-///   if (!propName || *propName == PropertyNames::Fermentable::addAfterBoil          ) { this->checkBox_addAfterBoil  ->setCheckState(m_editItem->addAfterBoil() ? Qt::Checked : Qt::Unchecked);  if (propName) { return; } }
+   if (!propName || *propName == PropertyNames::Fermentable::color_srm             ) { this->lineEdit_color         ->setQuantity  (m_editItem->color_srm             ());                      if (propName) { return; } }
    if (!propName || *propName == PropertyNames::Fermentable::origin                ) { this->lineEdit_origin        ->setTextCursor(m_editItem->origin                ());                      if (propName) { return; } }
    if (!propName || *propName == PropertyNames::Fermentable::supplier              ) { this->lineEdit_supplier      ->setTextCursor(m_editItem->supplier              ());                      if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Fermentable::coarseFineDiff_pct    ) { this->lineEdit_coarseFineDiff->setQuantity    (m_editItem->coarseFineDiff_pct    ());                      if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Fermentable::moisture_pct          ) { this->lineEdit_moisture      ->setQuantity    (m_editItem->moisture_pct          ());                      if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Fermentable::diastaticPower_lintner) { this->lineEdit_diastaticPower->setQuantity    (m_editItem->diastaticPower_lintner());                      if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Fermentable::protein_pct           ) { this->lineEdit_protein       ->setQuantity    (m_editItem->protein_pct           ());                      if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Fermentable::maxInBatch_pct        ) { this->lineEdit_maxInBatch    ->setQuantity    (m_editItem->maxInBatch_pct        ());                      if (propName) { return; } }
+   if (!propName || *propName == PropertyNames::Fermentable::coarseFineDiff_pct    ) { this->lineEdit_coarseFineDiff->setQuantity  (m_editItem->coarseFineDiff_pct    ());                      if (propName) { return; } }
+   if (!propName || *propName == PropertyNames::Fermentable::moisture_pct          ) { this->lineEdit_moisture      ->setQuantity  (m_editItem->moisture_pct          ());                      if (propName) { return; } }
+   if (!propName || *propName == PropertyNames::Fermentable::diastaticPower_lintner) { this->lineEdit_diastaticPower->setQuantity  (m_editItem->diastaticPower_lintner());                      if (propName) { return; } }
+   if (!propName || *propName == PropertyNames::Fermentable::protein_pct           ) { this->lineEdit_protein       ->setQuantity  (m_editItem->protein_pct           ());                      if (propName) { return; } }
+   if (!propName || *propName == PropertyNames::Ingredient::totalInventory         ) { this->lineEdit_inventory     ->setAmount    (m_editItem->totalInventory        ());
+                                                                                       this->comboBox_amountType    ->autoSetFromControlledField();
+                                                                                       if (propName) { return; } }
+   if (!propName || *propName == PropertyNames::Fermentable::maxInBatch_pct        ) { this->lineEdit_maxInBatch    ->setQuantity  (m_editItem->maxInBatch_pct        ());                      if (propName) { return; } }
    if (!propName || *propName == PropertyNames::Fermentable::recommendMash         ) { this->checkBox_recommendMash ->setCheckState(m_editItem->recommendMash() ? Qt::Checked : Qt::Unchecked); if (propName) { return; } }
-///   if (!propName || *propName == PropertyNames::Fermentable::isMashed              ) { this->checkBox_isMashed      ->setCheckState(m_editItem->isMashed()      ? Qt::Checked : Qt::Unchecked); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Fermentable::ibuGalPerLb           ) { this->lineEdit_ibuGalPerLb   ->setQuantity    (m_editItem->ibuGalPerLb           ());                      if (propName) { return; } }
+   if (!propName || *propName == PropertyNames::Fermentable::ibuGalPerLb           ) { this->lineEdit_ibuGalPerLb   ->setQuantity  (m_editItem->ibuGalPerLb           ());                      if (propName) { return; } }
    if (!propName || *propName == PropertyNames::Fermentable::notes                 ) { this->textEdit_notes         ->setPlainText (m_editItem->notes                 ());                      if (propName) { return; } }
    // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
-///   if (!propName || *propName == PropertyNames::Fermentable::amountIsWeight           ) { this->checkBox_amountIsWeight           ->setChecked   (m_editItem->amountIsWeight           ()); if (propName) { return; } }
    if (!propName || *propName == PropertyNames::Fermentable::grainGroup               ) { this->comboBox_grainGroup               ->setValue     (m_editItem->grainGroup               ()); if (propName) { return; } }
    if (!propName || *propName == PropertyNames::Fermentable::producer                 ) { this->lineEdit_producer                 ->setTextCursor(m_editItem->producer                 ()); if (propName) { return; } }
    if (!propName || *propName == PropertyNames::Fermentable::productId                ) { this->lineEdit_productId                ->setTextCursor(m_editItem->productId                ()); if (propName) { return; } }

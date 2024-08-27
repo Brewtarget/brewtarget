@@ -188,6 +188,14 @@ public:
    virtual void setRawText(QString const & text) = 0;
 
    /**
+    * \brief Helper function that tells us whether the result of \c getRawText is empty or blank.  This is useful when
+    *        we have a non-optional field (eg totalInventory) but we would like "blank" to mean "don't change".
+    *
+    *        Note this does not need to be virtual as it is implemented by calling \c getRawText.
+    */
+   [[nodiscard]] bool isEmptyOrBlank() const;
+
+   /**
     * \brief We need our subclasses to handle signal/slot connections for us.  (The \c SmartField class cannot inherit
     *        (directly or indirectly) from \c QObject as then the subclass would be inheriting twice from \c QObject,
     *        which is (a) bad in general and (b) not supported by the Qt meta-object compiler (MOC).
@@ -209,7 +217,6 @@ public:
     * \brief Maybe for consistency this should be \c getSettings() but that jars somewhat!
     */
    [[nodiscard]] SmartAmountSettings const & settings() const;
-///   [[nodiscard]] SmartAmountSettings       & settings();
 
    QString const & getMaximalDisplayString() const;
 

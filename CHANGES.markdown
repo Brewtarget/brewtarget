@@ -10,8 +10,21 @@ happens, so I'm now setting it to a slightly arbitrary time early in the morning
 ## Forthcoming in v4.1.0
 
 ### New Features
-* We'll list new features here...
+* Additional methods for calculating IBU
+* We'll list other new features here...
 
+## v4.0.3
+Minor bug fixes for the 4.0.2 release (ie bugs in 4.0.2 are fixed in this 4.0.3 release).
+
+### New Features
+* None
+
+### Bug Fixes
+* Yeasts have no Attenuation [812](https://github.com/Brewtarget/brewtarget/issues/812)
+* Inventory not displaying and crash when try to edit [814](https://github.com/Brewtarget/brewtarget/issues/814)
+
+### Release Timestamp
+Sun, 25 Aug 2024 04:00:03 +0100
 
 ## v4.0.2
 Minor bug fixes for the 4.0.1 release (ie bugs in 4.0.1 are fixed in this 4.0.2 release).

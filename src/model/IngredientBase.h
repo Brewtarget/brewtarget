@@ -32,14 +32,14 @@ protected:
    static TypeLookup const typeLookup;
 
    /**
-    * \brief
+    * \brief Used to implement Ingredient::totalInventory() for Ingredient subclass (ie Derived)
     */
    Measurement::Amount getTotalInventory() const {
       return InventoryTools::getInventory<Derived>(this->derived())->amount();
    }
 
    /**
-    * \brief
+    * \brief Used to implement Ingredient::setTotalInventory() for Ingredient subclass (ie Derived)
     */
    void doSetTotalInventory(Measurement::Amount const val) {
       auto inventory = InventoryTools::getInventory<Derived>(this->derived());

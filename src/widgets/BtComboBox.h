@@ -72,6 +72,16 @@ public:
              SmartLineEdit *           controlledField = nullptr);
 
    /**
+    * \brief For the case where we have a controlledField (see last parameter to \c init above), we want to be able to
+    *        set the value of the combo box when the controlled field is first set (from reading the object being
+    *        edited).
+    *
+    *        We could do this with additional signals etc but, for now, I think it's simpler just to have this function
+    *        that the editor class calls just after initial population of the controlled field.
+    */
+   void autoSetFromControlledField();
+
+   /**
     *
     */
    [[nodiscard]] bool isOptional() const;

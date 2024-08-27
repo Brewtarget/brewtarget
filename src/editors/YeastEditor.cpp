@@ -99,8 +99,18 @@ void YeastEditor::writeFieldsToEditItem() {
 }
 
 void YeastEditor::writeLateFieldsToEditItem() {
-   // do this late to make sure we've the row in the inventory table
-   this->m_editItem->setTotalInventory(lineEdit_inventory->getNonOptCanonicalAmt());
+   //
+   // Do this late to make sure we've the row in the inventory table (because total inventory amount isn't really an
+   // attribute of the Misc).
+   //
+   // Note that we do not need to store the value of comboBox_amountType.  It merely controls the available unit for
+   // lineEdit_inventory
+   //
+   // Note that, if the inventory field is blank, we'll treat that as meaning "don't change the inventory"
+   //
+   if (!this->lineEdit_inventory->isEmptyOrBlank()) {
+      this->m_editItem->setTotalInventory(lineEdit_inventory->getNonOptCanonicalAmt());
+   }
    return;
 }
 
@@ -109,7 +119,9 @@ void YeastEditor::readFieldsFromEditItem(std::optional<QString> propName) {
                                                                               this->tabWidget_editor          ->setTabText(0, m_editItem->name           ()); if (propName) { return; } }
    if (!propName || *propName == PropertyNames::Yeast::type               ) { this->comboBox_yeastType        ->setValue    (m_editItem->type            ()); if (propName) { return; } }
    if (!propName || *propName == PropertyNames::Yeast::form               ) { this->comboBox_yeastForm        ->setValue    (m_editItem->form            ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Ingredient::totalInventory) { this->lineEdit_inventory        ->setAmount   (m_editItem->totalInventory  ()); if (propName) { return; } }
+   if (!propName || *propName == PropertyNames::Ingredient::totalInventory) { this->lineEdit_inventory        ->setAmount   (m_editItem->totalInventory  ());
+                                                                              this->comboBox_amountType       ->autoSetFromControlledField();
+                                                                              if (propName) { return; } }
    if (!propName || *propName == PropertyNames::Yeast::laboratory         ) { this->lineEdit_laboratory       ->setText     (m_editItem->laboratory      ()); // Continues to next line
                                                                               this->lineEdit_laboratory       ->setCursorPosition(0)                        ; if (propName) { return; } }
    if (!propName || *propName == PropertyNames::Yeast::productId          ) { this->lineEdit_productId        ->setText     (m_editItem->productId       ()); // Continues to next line

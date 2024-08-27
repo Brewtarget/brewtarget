@@ -109,13 +109,24 @@ void BtComboBox::init(char const * const        editorName        ,
    // In the special case where we're handling Measurement::ChoiceOfPhysicalQuantity, we need to pick up the right
    // initial value
    if (this->pimpl->m_controlledField) {
-      Q_ASSERT(holds_alternative<Measurement::ChoiceOfPhysicalQuantity>(*typeInfo.fieldType));
-      Measurement::PhysicalQuantity const physicalQuantity = this->pimpl->m_controlledField->getPhysicalQuantity();
-      this->setValue(static_cast<int>(physicalQuantity));
+      this->autoSetFromControlledField();
    }
 
    return;
 }
+
+void BtComboBox::autoSetFromControlledField() {
+   // It's a coding error to call this when there is no controlled field
+   Q_ASSERT(this->pimpl->m_controlledField);
+
+   // Equally it's a coding error if we have a controlled field for anything other than choice of physical quantity
+   Q_ASSERT(holds_alternative<Measurement::ChoiceOfPhysicalQuantity>(*this->pimpl->m_typeInfo->fieldType));
+
+   Measurement::PhysicalQuantity const physicalQuantity = this->pimpl->m_controlledField->getPhysicalQuantity();
+   this->setValue(static_cast<int>(physicalQuantity));
+   return;
+}
+
 
 [[nodiscard]] bool BtComboBox::isOptional() const {
    Q_ASSERT(this->pimpl->m_initialised);
