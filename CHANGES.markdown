@@ -24,7 +24,7 @@ Minor bug fixes for the 4.0.2 release (ie bugs in 4.0.2 are fixed in this 4.0.3 
 * Inventory not displaying and crash when try to edit [814](https://github.com/Brewtarget/brewtarget/issues/814)
 
 ### Release Timestamp
-Sun, 25 Aug 2024 04:00:03 +0100
+Tue, 27 Aug 2024 04:00:03 +0100
 
 ## v4.0.2
 Minor bug fixes for the 4.0.1 release (ie bugs in 4.0.1 are fixed in this 4.0.2 release).
