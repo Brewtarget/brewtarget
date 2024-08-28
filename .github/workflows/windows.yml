@@ -232,7 +232,11 @@ jobs:
       # For now, we'll still upload the unsigned binaries before we try to sign them, so that we at least have a
       # fallback if there is some problem with the signing process
       #
+      # Note that the ID of this step is referenced in the signing step (so it can grab the unsigned binaries to sign
+      # them).
+      #
       - name: Upload unsigned Windows binaries (installers)
+        id: upload-unsigned-artifact
         if: ${{ success()}}
         uses: actions/upload-artifact@v4
         with:
@@ -249,8 +253,9 @@ jobs:
       # Various settings here have to align with the "brewtarget" project in the "Brewtarget [OSS]" organisation
       # registered at https://app.signpath.io/.
       #
-      # See https://github.com/SignPath/github-action-submit-signing-request for documentation of this action and
-      # https://github.com/SignPath/github-actions-extended-demo/ for example usage.
+      # See https://github.com/SignPath/github-action-submit-signing-request for documentation of this action (including
+      # parameters such as github-artifact-id).  Also see https://github.com/SignPath/github-actions-extended-demo/ for
+      # example usage.
       #
       # Note that we need the special file `.signpath/artifact-configurations/default.xml` in our repository as well as
       # the relevant GitHub secrets (see
@@ -258,7 +263,10 @@ jobs:
       # In particular, the repository needs to have the following secrets:
       #
       #    SIGNPATH_API_TOKEN - As generated in app.signpath.io from the user profile page
-      #    EXTENDED_VERIFICATION_TOKEN
+      #    EXTENDED_VERIFICATION_TOKEN - This a GitHub access token to allow Signpath to access our repository
+      #
+      # See https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens
+      # for how to create and manage GitHub access tokens
       #
       # We also add the following GitHub Actions variable (see
       # https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/store-information-in-variables):
@@ -310,10 +318,10 @@ jobs:
       # For now, we'll upload both the signed and unsigned
       #
       - name: Upload signed Windows binaries (installers)
-        if: ${{ success()}}
+        if: ${{ success() }}
         uses: actions/upload-artifact@v4
         with:
-          name: brewtarget-dev-${{ matrix.msystem }}
+          name: brewtarget-dev-${{ matrix.msystem }}-signed
           path: |
             C:/_/mbuild/packages/windows/signed/*.*
           retention-days: 7
