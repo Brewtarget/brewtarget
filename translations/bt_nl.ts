@@ -4505,6 +4505,10 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
         <source>Step</source>
         <translation type="unfinished">Stap</translation>
     </message>
+    <message>
+        <source>Attenuation</source>
+        <translation type="unfinished">Vergisting</translation>
+    </message>
 </context>
 <context>
     <name>RecipeAdjustmentSalt</name>
@@ -9964,11 +9968,11 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Attenuation (%)</source>
-        <translation>Vergisting (%)</translation>
+        <translation type="vanished">Vergisting (%)</translation>
     </message>
     <message>
         <source>Apparent attenuation as percentage of OG points</source>
-        <translation>Schijnbare Vergisting als percentage van het oorspronkelijke SG</translation>
+        <translation type="vanished">Schijnbare Vergisting als percentage van het oorspronkelijke SG</translation>
     </message>
     <message>
         <source>Times Recultured</source>

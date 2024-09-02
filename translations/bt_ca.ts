@@ -4511,6 +4511,10 @@ El volum final al primari és de %1.</translation>
         <source>Step</source>
         <translation type="unfinished">Pas</translation>
     </message>
+    <message>
+        <source>Attenuation</source>
+        <translation type="unfinished">Atenuació</translation>
+    </message>
 </context>
 <context>
     <name>RecipeAdjustmentSalt</name>
@@ -10130,11 +10134,11 @@ El volum final al primari és de %1.</translation>
     </message>
     <message>
         <source>Attenuation (%)</source>
-        <translation>Atenuació (%)</translation>
+        <translation type="vanished">Atenuació (%)</translation>
     </message>
     <message>
         <source>Apparent attenuation as percentage of OG points</source>
-        <translation>Atenuació aparent com un percentatge de punts de DI</translation>
+        <translation type="vanished">Atenuació aparent com un percentatge de punts de DI</translation>
     </message>
     <message>
         <source>Times Recultured</source>

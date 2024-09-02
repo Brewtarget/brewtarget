@@ -4443,6 +4443,10 @@ O volume final do fermentador primário é %1.</translation>
         <source>Step</source>
         <translation type="unfinished">Etapa</translation>
     </message>
+    <message>
+        <source>Attenuation</source>
+        <translation type="unfinished">Atenuação</translation>
+    </message>
 </context>
 <context>
     <name>RecipeAdjustmentSalt</name>
@@ -10050,11 +10054,11 @@ O volume final do fermentador primário é %1.</translation>
     </message>
     <message>
         <source>Attenuation (%)</source>
-        <translation>Atenuação (%)</translation>
+        <translation type="vanished">Atenuação (%)</translation>
     </message>
     <message>
         <source>Apparent attenuation as percentage of OG points</source>
-        <translation>Atenuação aparente como percentagem de medida do OG</translation>
+        <translation type="vanished">Atenuação aparente como percentagem de medida do OG</translation>
     </message>
     <message>
         <source>Times Recultured</source>

@@ -4459,6 +4459,10 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
         <source>Step</source>
         <translation type="unfinished">Schritt</translation>
     </message>
+    <message>
+        <source>Attenuation</source>
+        <translation type="unfinished">Vergärungsgrad</translation>
+    </message>
 </context>
 <context>
     <name>RecipeAdjustmentSalt</name>
@@ -10003,11 +10007,11 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
     <message>
         <source>Attenuation (%)</source>
-        <translation>Vergärungsgrad (%)</translation>
+        <translation type="vanished">Vergärungsgrad (%)</translation>
     </message>
     <message>
         <source>Apparent attenuation as percentage of OG points</source>
-        <translation>scheinbarer Vergärungsgrad in Prozent</translation>
+        <translation type="vanished">scheinbarer Vergärungsgrad in Prozent</translation>
     </message>
     <message>
         <source>Times Recultured</source>

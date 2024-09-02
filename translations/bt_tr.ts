@@ -4442,6 +4442,10 @@ The final volume in the primary is %1.</source>
         <source>Step</source>
         <translation type="unfinished">Adım</translation>
     </message>
+    <message>
+        <source>Attenuation</source>
+        <translation type="unfinished">Sindirme</translation>
+    </message>
 </context>
 <context>
     <name>RecipeAdjustmentSalt</name>
@@ -9745,11 +9749,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Attenuation (%)</source>
-        <translation>Sindirme (%)</translation>
+        <translation type="vanished">Sindirme (%)</translation>
     </message>
     <message>
         <source>Apparent attenuation as percentage of OG points</source>
-        <translation>Görünen sindirim OG noktalarının yüzdesidir</translation>
+        <translation type="vanished">Görünen sindirim OG noktalarının yüzdesidir</translation>
     </message>
     <message>
         <source>Times Recultured</source>

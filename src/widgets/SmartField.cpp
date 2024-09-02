@@ -381,6 +381,8 @@ void SmartField::setPrecision(unsigned int const precision) {
 }
 
 Measurement::Amount SmartField::getNonOptCanonicalAmt() const {
+   // Uncomment this if asserts below are firing
+//   qDebug().noquote() << Q_FUNC_INFO << this->pimpl->m_fieldFqName << ":" << Logging::getStackTrace();
    Q_ASSERT(this->pimpl->m_initialised);
    // It's a coding error to call this for a NonPhysicalQuantity
    Q_ASSERT(!std::holds_alternative<NonPhysicalQuantity>(*this->getTypeInfo().fieldType));

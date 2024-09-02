@@ -4479,6 +4479,10 @@ El volumen final en el primario es %1.</translation>
         <source>Step</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Attenuation</source>
+        <translation type="unfinished">Atenuación</translation>
+    </message>
 </context>
 <context>
     <name>RecipeAdjustmentSalt</name>
@@ -10070,11 +10074,11 @@ El volumen final en el primario es %1.</translation>
     </message>
     <message>
         <source>Attenuation (%)</source>
-        <translation>Atenuación (%)</translation>
+        <translation type="vanished">Atenuación (%)</translation>
     </message>
     <message>
         <source>Apparent attenuation as percentage of OG points</source>
-        <translation>Atenucación aparente como un porcentaje de puntos de DI</translation>
+        <translation type="vanished">Atenucación aparente como un porcentaje de puntos de DI</translation>
     </message>
     <message>
         <source>Times Recultured</source>

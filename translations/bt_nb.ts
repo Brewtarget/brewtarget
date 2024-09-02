@@ -4412,6 +4412,10 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
         <source>Step</source>
         <translation type="unfinished">Trinn</translation>
     </message>
+    <message>
+        <source>Attenuation</source>
+        <translation type="unfinished">Demping</translation>
+    </message>
 </context>
 <context>
     <name>RecipeAdjustmentSalt</name>
@@ -10010,11 +10014,11 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Attenuation (%)</source>
-        <translation>Attenuation (%)</translation>
+        <translation type="vanished">Attenuation (%)</translation>
     </message>
     <message>
         <source>Apparent attenuation as percentage of OG points</source>
-        <translation>Tilsynelatende demping i prosent av OG-poeng</translation>
+        <translation type="vanished">Tilsynelatende demping i prosent av OG-poeng</translation>
     </message>
     <message>
         <source>Times Recultured</source>

@@ -4479,6 +4479,10 @@ The final volume in the primary is %1.</source>
         <source>Step</source>
         <translation type="unfinished">Этап</translation>
     </message>
+    <message>
+        <source>Attenuation</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RecipeAdjustmentSalt</name>
@@ -10062,11 +10066,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Attenuation (%)</source>
-        <translation>Степень сбраживания (%)</translation>
+        <translation type="vanished">Степень сбраживания (%)</translation>
     </message>
     <message>
         <source>Apparent attenuation as percentage of OG points</source>
-        <translation>Видимая степень сбраживания в процентах от НП</translation>
+        <translation type="vanished">Видимая степень сбраживания в процентах от НП</translation>
     </message>
     <message>
         <source>Times Recultured</source>

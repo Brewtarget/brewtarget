@@ -4467,6 +4467,10 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
         <source>Step</source>
         <translation type="unfinished">Lépés</translation>
     </message>
+    <message>
+        <source>Attenuation</source>
+        <translation type="unfinished">erjesztési hatékonyság</translation>
+    </message>
 </context>
 <context>
     <name>RecipeAdjustmentSalt</name>
@@ -9871,14 +9875,6 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     <message>
         <source>Very High</source>
         <translation type="vanished">Nagyon magas</translation>
-    </message>
-    <message>
-        <source>Attenuation (%)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Apparent attenuation as percentage of OG points</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Times Recultured</source>
