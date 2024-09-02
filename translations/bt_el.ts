@@ -4408,6 +4408,10 @@ The final volume in the primary is %1.</source>
         <source>Step</source>
         <translation type="unfinished">Βήμα</translation>
     </message>
+    <message>
+        <source>Attenuation</source>
+        <translation type="unfinished">αραίωση</translation>
+    </message>
 </context>
 <context>
     <name>RecipeAdjustmentSalt</name>
@@ -10000,11 +10004,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Attenuation (%)</source>
-        <translation>Ελάττωση</translation>
+        <translation type="vanished">Ελάττωση</translation>
     </message>
     <message>
         <source>Apparent attenuation as percentage of OG points</source>
-        <translation>Φαινομενική ελάττωση πυκνότητας ως πσοστό επί  OG βαθμών</translation>
+        <translation type="vanished">Φαινομενική ελάττωση πυκνότητας ως πσοστό επί  OG βαθμών</translation>
     </message>
     <message>
         <source>Times Recultured</source>

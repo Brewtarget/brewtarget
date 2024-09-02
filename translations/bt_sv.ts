@@ -4487,6 +4487,10 @@ Primärens slutgiltiga volym är %1.</translation>
         <source>Step</source>
         <translation type="unfinished">Steg</translation>
     </message>
+    <message>
+        <source>Attenuation</source>
+        <translation type="unfinished">Förjäsningsgrad</translation>
+    </message>
 </context>
 <context>
     <name>RecipeAdjustmentSalt</name>
@@ -9999,11 +10003,11 @@ Primärens slutgiltiga volym är %1.</translation>
     </message>
     <message>
         <source>Attenuation (%)</source>
-        <translation>Förtunning (%)</translation>
+        <translation type="vanished">Förtunning (%)</translation>
     </message>
     <message>
         <source>Apparent attenuation as percentage of OG points</source>
-        <translation>Uppenbar försvagnings som procent av OG värde</translation>
+        <translation type="vanished">Uppenbar försvagnings som procent av OG värde</translation>
     </message>
     <message>
         <source>Times Recultured</source>

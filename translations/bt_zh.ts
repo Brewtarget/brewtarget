@@ -4280,6 +4280,10 @@ The final volume in the primary is %1.</source>
         <source>Step</source>
         <translation type="unfinished">步驟</translation>
     </message>
+    <message>
+        <source>Attenuation</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RecipeAdjustmentSalt</name>
@@ -9828,11 +9832,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Attenuation (%)</source>
-        <translation>衰减（%）Attenuation (%)</translation>
+        <translation type="vanished">衰减（%）Attenuation (%)</translation>
     </message>
     <message>
         <source>Apparent attenuation as percentage of OG points</source>
-        <translation>明显的衰减为OG点的百分比Apparent attenuation as percentage of OG points</translation>
+        <translation type="vanished">明显的衰减为OG点的百分比Apparent attenuation as percentage of OG points</translation>
     </message>
     <message>
         <source>Times Recultured</source>

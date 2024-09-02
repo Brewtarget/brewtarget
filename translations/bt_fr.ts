@@ -4515,6 +4515,10 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
         <source>Step</source>
         <translation type="unfinished">Étape</translation>
     </message>
+    <message>
+        <source>Attenuation</source>
+        <translation type="unfinished">Atténuation</translation>
+    </message>
 </context>
 <context>
     <name>RecipeAdjustmentSalt</name>
@@ -10148,11 +10152,11 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Attenuation (%)</source>
-        <translation>Atténuation (%)</translation>
+        <translation type="vanished">Atténuation (%)</translation>
     </message>
     <message>
         <source>Apparent attenuation as percentage of OG points</source>
-        <translation>Atténuation apparente en pourcentage de la densité initiale</translation>
+        <translation type="vanished">Atténuation apparente en pourcentage de la densité initiale</translation>
     </message>
     <message>
         <source>Times Recultured</source>

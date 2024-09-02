@@ -4352,6 +4352,10 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
         <source>Step</source>
         <translation type="unfinished">Krok</translation>
     </message>
+    <message>
+        <source>Attenuation</source>
+        <translation type="unfinished">Rozcieńczenie</translation>
+    </message>
 </context>
 <context>
     <name>RecipeAdjustmentSalt</name>
@@ -9916,11 +9920,11 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Attenuation (%)</source>
-        <translation>Żywotność (%)</translation>
+        <translation type="vanished">Żywotność (%)</translation>
     </message>
     <message>
         <source>Apparent attenuation as percentage of OG points</source>
-        <translation>Żywotność jako procent punktów OG</translation>
+        <translation type="vanished">Żywotność jako procent punktów OG</translation>
     </message>
     <message>
         <source>Times Recultured</source>

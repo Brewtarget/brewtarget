@@ -4384,6 +4384,10 @@ Celkový objem pro hlavní kvašení je %1.</translation>
         <source>Step</source>
         <translation type="unfinished">Krok</translation>
     </message>
+    <message>
+        <source>Attenuation</source>
+        <translation type="unfinished">Prokvašení</translation>
+    </message>
 </context>
 <context>
     <name>RecipeAdjustmentSalt</name>
@@ -9966,11 +9970,11 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
     <message>
         <source>Attenuation (%)</source>
-        <translation>Prokvašení (%)</translation>
+        <translation type="vanished">Prokvašení (%)</translation>
     </message>
     <message>
         <source>Apparent attenuation as percentage of OG points</source>
-        <translation>Zdánlivé prokvašení v procentech bodů hustoty</translation>
+        <translation type="vanished">Zdánlivé prokvašení v procentech bodů hustoty</translation>
     </message>
     <message>
         <source>Times Recultured</source>

@@ -57,6 +57,9 @@ AddPropertyName(boilSteps        )
  *
  *             Additionally, there is a short-term benefit, which is that we can share a lot of the logic between
  *             MashStep and BoilStep, which saves us duplicating code.
+ *
+ *             Our \c Boil class maps closely to a BeerJSON "boil procedure", with the exception that, in BeerJSON "a
+ *             boil procedure with no steps is the same as a standard single step boil."
  */
 class Boil : public NamedEntity,
              public FolderBase<Boil>,
@@ -109,8 +112,21 @@ public:
    Q_PROPERTY(QString folder READ folder WRITE setFolder)
    Q_PROPERTY(QString               description            READ description     WRITE setDescription   )
    Q_PROPERTY(QString               notes                  READ notes           WRITE setNotes         )
+
+   /**
+    * \brief This is optional because it's optional in BeerJSON.  The equivalent field in BeerXML (BOIL_SIZE on RECIPE)
+    *        is a required field.
+    *
+    *        Note however, that Recipe::batchSize_l is a required field in both BeerJSON and BeerXML, so callers should
+    *        fall back to that as a "better than nothing" value when this one is \c std::nullopt.
+    */
    Q_PROPERTY(std::optional<double> preBoilSize_l          READ preBoilSize_l   WRITE setPreBoilSize_l )
-   //! \brief The total time to boil the wort.  Hopefully equal to the sum of the times of all the steps
+   /**
+    * \brief The total time to boil the wort.  Hopefully equal to the sum of the times of all the steps.
+    *        (TODO: We should probably add some validation about this, though it's a bit complicated as not all steps
+    *               necessarily have times, but the length of the boil should be no shorter than the sum of the step
+    *               times, for sure.)
+    */
    Q_PROPERTY(double                boilTime_mins          READ boilTime_mins   WRITE setBoilTime_mins )
    /**
     * \brief The individual boil steps.  (See \c StepOwnerBase for getter/setter implementation.)

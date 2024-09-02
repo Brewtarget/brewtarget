@@ -2241,10 +2241,11 @@ void MainWindow::updateRecipeBoilSize() {
       return;
    }
 
+   // See comments in model/Boil.h for why boil size is, technically, optional
    auto boil = this->m_recipeObs->nonOptBoil();
    this->doOrRedoUpdate(*boil,
                         TYPE_INFO(Boil, preBoilSize_l),
-                        lineEdit_boilSize->getNonOptCanonicalQty(),
+                        lineEdit_boilSize->getOptCanonicalQty(),
                         tr("Change Boil Size"));
    return;
 }

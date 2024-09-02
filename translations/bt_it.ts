@@ -4495,6 +4495,10 @@ Il Volume finale del primo è %1.</translation>
         <source>Step</source>
         <translation type="unfinished">Passo</translation>
     </message>
+    <message>
+        <source>Attenuation</source>
+        <translation type="unfinished">Attenuazione</translation>
+    </message>
 </context>
 <context>
     <name>RecipeAdjustmentSalt</name>
@@ -10121,11 +10125,11 @@ Il Volume finale del primo è %1.</translation>
     </message>
     <message>
         <source>Attenuation (%)</source>
-        <translation>Attenuazione (%)</translation>
+        <translation type="vanished">Attenuazione (%)</translation>
     </message>
     <message>
         <source>Apparent attenuation as percentage of OG points</source>
-        <translation>Attenuazione apparente come percentuale di punti OG</translation>
+        <translation type="vanished">Attenuazione apparente come percentuale di punti OG</translation>
     </message>
     <message>
         <source>Times Recultured</source>

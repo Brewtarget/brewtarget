@@ -700,6 +700,8 @@ protected:
 
       TypeInfo const & typeInfo = columnInfo.typeInfo;
 
+      // Uncomment this if one of the physicalQuantity-related asserts below is firing
+//      qDebug().noquote() << Q_FUNC_INFO << "physicalQuantity: " << physicalQuantity << Logging::getStackTrace();
       // For all non physical quantities, including enums and bools, ItemDelegate::writeDataToModel will already have
       // created the right type of QVariant for us, including handling whether or not it is optional.
       QVariant processedValue;
