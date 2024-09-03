@@ -56,31 +56,12 @@ void EquipmentTableModel::removed([[maybe_unused]] std::shared_ptr<Equipment> it
 void EquipmentTableModel::updateTotals()                                            { return; }
 
 QVariant EquipmentTableModel::data(QModelIndex const & index, int role) const {
-   if (!this->isIndexOk(index)) {
+   if (!this->indexAndRoleOk(index, role)) {
       return QVariant();
    }
 
-   auto row = this->rows[index.row()];
-
-   // Deal with the column and return the right data.
-   auto const columnIndex = static_cast<EquipmentTableModel::ColumnIndex>(index.column());
-   switch (columnIndex) {
-      case EquipmentTableModel::ColumnIndex::Name           :
-      case EquipmentTableModel::ColumnIndex::MashTunVolume  :
-      case EquipmentTableModel::ColumnIndex::KettleVolume   :
-      case EquipmentTableModel::ColumnIndex::FermenterVolume:
-         return this->readDataFromModel(index, role);
-
-      // No default case as we want the compiler to warn us if we missed one
-   }
-   return QVariant();
-}
-
-QVariant EquipmentTableModel::headerData(int section, Qt::Orientation orientation, int role) const {
-   if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
-      return this->getColumnLabel(section);
-   }
-   return QVariant();
+   // No special handling required for any of our columns
+   return this->readDataFromModel(index, role);
 }
 
 Qt::ItemFlags EquipmentTableModel::flags(QModelIndex const & index) const {
@@ -92,31 +73,13 @@ Qt::ItemFlags EquipmentTableModel::flags(QModelIndex const & index) const {
    return defaults | (this->m_editable ? Qt::ItemIsEditable : Qt::NoItemFlags);
 }
 
-bool EquipmentTableModel::setData(QModelIndex const & index,
-                                  QVariant const & value,
-                                  [[maybe_unused]] int role) {
-   if (!this->isIndexOk(index)) {
+bool EquipmentTableModel::setData(QModelIndex const & index, QVariant const & value, int role) {
+   if (!this->indexAndRoleOk(index, role)) {
       return false;
    }
 
-   auto row = this->rows[index.row()];
-
-   auto const columnIndex = static_cast<EquipmentTableModel::ColumnIndex>(index.column());
-   switch (columnIndex) {
-      case EquipmentTableModel::ColumnIndex::Name           :
-      case EquipmentTableModel::ColumnIndex::MashTunVolume  :
-      case EquipmentTableModel::ColumnIndex::KettleVolume   :
-      case EquipmentTableModel::ColumnIndex::FermenterVolume:
-         return this->writeDataToModel(index, value, role);
-
-      // No default case as we want the compiler to warn us if we missed one
-   }
-
-//   emit dataChanged(index, index);
-
-   // Should be unreachable
-   Q_ASSERT(false);
-   return true;
+   // No special handling required for any of our columns
+   return this->writeDataToModel(index, value, role);
 }
 
 // Insert the boiler-plate stuff that we cannot do in TableModelBase

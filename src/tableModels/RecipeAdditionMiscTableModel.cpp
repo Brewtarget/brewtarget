@@ -93,24 +93,12 @@ void RecipeAdditionMiscTableModel::setShowIBUs(bool var) {
 }
 
 QVariant RecipeAdditionMiscTableModel::data(const QModelIndex & index, int role) const {
-   if (!this->isIndexOk(index)) {
+   if (!this->indexAndRoleOk(index, role)) {
       return QVariant();
    }
 
-   auto const columnIndex = static_cast<RecipeAdditionMiscTableModel::ColumnIndex>(index.column());
-   switch (columnIndex) {
-      case RecipeAdditionMiscTableModel::ColumnIndex::Name          :
-      case RecipeAdditionMiscTableModel::ColumnIndex::Type          :
-      case RecipeAdditionMiscTableModel::ColumnIndex::Amount        :
-      case RecipeAdditionMiscTableModel::ColumnIndex::AmountType    :
-      case RecipeAdditionMiscTableModel::ColumnIndex::TotalInventory:
-      case RecipeAdditionMiscTableModel::ColumnIndex::Stage         :
-      case RecipeAdditionMiscTableModel::ColumnIndex::Time          :
-         return this->readDataFromModel(index, role);
-
-      // No default case as we want the compiler to warn us if we missed one
-   }
-   return QVariant();
+   // No special handling required for any of our columns
+   return this->readDataFromModel(index, role);
 }
 
 QVariant RecipeAdditionMiscTableModel::headerData(int section, Qt::Orientation orientation, int role) const {
@@ -140,37 +128,12 @@ Qt::ItemFlags RecipeAdditionMiscTableModel::flags(const QModelIndex & index) con
 }
 
 bool RecipeAdditionMiscTableModel::setData(const QModelIndex & index, const QVariant & value, int role) {
-   if (!this->isIndexOk(index)) {
+   if (!this->indexAndRoleOk(index, role)) {
       return false;
    }
 
-   bool retVal = false;
-
-   auto row = this->rows[index.row()];
-///   Measurement::PhysicalQuantity physicalQuantity = row->getMeasure();
-
-   auto const columnIndex = static_cast<RecipeAdditionMiscTableModel::ColumnIndex>(index.column());
-   switch (columnIndex) {
-      case RecipeAdditionMiscTableModel::ColumnIndex::Name          :
-      case RecipeAdditionMiscTableModel::ColumnIndex::Type          :
-      case RecipeAdditionMiscTableModel::ColumnIndex::Amount        :
-      case RecipeAdditionMiscTableModel::ColumnIndex::AmountType    :
-      case RecipeAdditionMiscTableModel::ColumnIndex::TotalInventory:
-      case RecipeAdditionMiscTableModel::ColumnIndex::Stage         :
-      case RecipeAdditionMiscTableModel::ColumnIndex::Time          :
-         retVal = this->writeDataToModel(index, value, role);
-         break;
-
-      // We don't need to pass in a PhysicalQuantity for any of the columns
-
-      // No default case as we want the compiler to warn us if we missed one
-   }
-
-   if (retVal) {
-      headerDataChanged(Qt::Vertical, index.row(), index.row());   // Need to re-show header (IBUs).
-   }
-
-   return retVal;
+   // No special handling required for any of our columns
+   return this->writeDataToModel(index, value, role);
 }
 
 // Insert the boiler-plate stuff that we cannot do in TableModelBase

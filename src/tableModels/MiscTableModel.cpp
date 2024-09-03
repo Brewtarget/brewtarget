@@ -46,8 +46,6 @@ MiscTableModel::MiscTableModel(QTableView* parent, bool editable) :
          //       can handle mass-or-volume generically in TableModelBase.  Same for inventoryWithUnits.
          TABLE_MODEL_HEADER(Misc, Name              , tr("Name"       ), PropertyNames::NamedEntity::name                           ),
          TABLE_MODEL_HEADER(Misc, Type              , tr("Type"       ), PropertyNames::Misc::type                                  , EnumInfo{Misc::typeStringMapping, Misc::typeDisplayNames}),
-///         TABLE_MODEL_HEADER(Misc, Use               , tr("Use"        ), PropertyNames::Misc::use                                   , EnumInfo{Misc:: useStringMapping, Misc:: useDisplayNames}),
-///         TABLE_MODEL_HEADER(Misc, Time              , tr("Time"       ), PropertyNames::Misc::time_min                              ),
          TABLE_MODEL_HEADER(Misc, TotalInventory    , tr("Inventory"  ), PropertyNames::Ingredient::totalInventory, PrecisionInfo{1}),
          TABLE_MODEL_HEADER(Misc, TotalInventoryType, tr("Amount Type"), PropertyNames::Ingredient::totalInventory, Misc::validMeasures),
       }
@@ -72,33 +70,12 @@ void MiscTableModel::removed([[maybe_unused]] std::shared_ptr<Misc> item) { retu
 void MiscTableModel::updateTotals()                                       { return; }
 
 QVariant MiscTableModel::data(QModelIndex const & index, int role) const {
-   if (!this->isIndexOk(index)) {
+   if (!this->indexAndRoleOk(index, role)) {
       return QVariant();
    }
 
-   auto row = this->rows[index.row()];
-
-   // Deal with the column and return the right data.
-   auto const columnIndex = static_cast<MiscTableModel::ColumnIndex>(index.column());
-   switch (columnIndex) {
-      case MiscTableModel::ColumnIndex::Name:
-      case MiscTableModel::ColumnIndex::Type:
-///      case MiscTableModel::ColumnIndex::Use:
-///      case MiscTableModel::ColumnIndex::Time:
-      case MiscTableModel::ColumnIndex::TotalInventory    :
-      case MiscTableModel::ColumnIndex::TotalInventoryType:
-         return this->readDataFromModel(index, role);
-
-      // No default case as we want the compiler to warn us if we missed one
-   }
-   return QVariant();
-}
-
-QVariant MiscTableModel::headerData(int section, Qt::Orientation orientation, int role) const {
-   if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
-      return this->getColumnLabel(section);
-   }
-   return QVariant();
+   // No special handling required for any of our columns
+   return this->readDataFromModel(index, role);
 }
 
 Qt::ItemFlags MiscTableModel::flags(QModelIndex const & index) const {
@@ -113,31 +90,13 @@ Qt::ItemFlags MiscTableModel::flags(QModelIndex const & index) const {
    return defaults | (this->m_editable ? Qt::ItemIsEditable : Qt::NoItemFlags);
 }
 
-bool MiscTableModel::setData(QModelIndex const & index,
-                             QVariant const & value,
-                             [[maybe_unused]] int role) {
-   if (!this->isIndexOk(index)) {
+bool MiscTableModel::setData(QModelIndex const & index, QVariant const & value, int role) {
+   if (!this->indexAndRoleOk(index, role)) {
       return false;
    }
 
-///   auto row = this->rows[index.row()];
-
-   auto const columnIndex = static_cast<MiscTableModel::ColumnIndex>(index.column());
-   switch (columnIndex) {
-      case MiscTableModel::ColumnIndex::Name:
-      case MiscTableModel::ColumnIndex::Type:
-///      case MiscTableModel::ColumnIndex::Use:
-///      case MiscTableModel::ColumnIndex::Time:
-      case MiscTableModel::ColumnIndex::TotalInventory    :
-      case MiscTableModel::ColumnIndex::TotalInventoryType:
-         return this->writeDataToModel(index, value, role);
-
-      // No default case as we want the compiler to warn us if we missed one
-   }
-
-   // Should be unreachable
-   emit dataChanged(index, index);
-   return true;
+   // No special handling required for any of our columns
+   return this->writeDataToModel(index, value, role);
 }
 
 // Insert the boiler-plate stuff that we cannot do in TableModelBase

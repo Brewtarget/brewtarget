@@ -58,33 +58,12 @@ void StyleTableModel::removed([[maybe_unused]] std::shared_ptr<Style> item) { re
 void StyleTableModel::updateTotals()                                       { return; }
 
 QVariant StyleTableModel::data(QModelIndex const & index, int role) const {
-   if (!this->isIndexOk(index)) {
+   if (!this->indexAndRoleOk(index, role)) {
       return QVariant();
    }
 
-   auto row = this->rows[index.row()];
-
-   // Deal with the column and return the right data.
-   auto const columnIndex = static_cast<StyleTableModel::ColumnIndex>(index.column());
-   switch (columnIndex) {
-      case StyleTableModel::ColumnIndex::Name          :
-      case StyleTableModel::ColumnIndex::Type          :
-      case StyleTableModel::ColumnIndex::Category      :
-      case StyleTableModel::ColumnIndex::CategoryNumber:
-      case StyleTableModel::ColumnIndex::StyleLetter   :
-      case StyleTableModel::ColumnIndex::StyleGuide    :
-         return this->readDataFromModel(index, role);
-
-      // No default case as we want the compiler to warn us if we missed one
-   }
-   return QVariant();
-}
-
-QVariant StyleTableModel::headerData(int section, Qt::Orientation orientation, int role) const {
-   if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
-      return this->getColumnLabel(section);
-   }
-   return QVariant();
+   // No special handling required for any of our columns
+   return this->readDataFromModel(index, role);
 }
 
 Qt::ItemFlags StyleTableModel::flags(QModelIndex const & index) const {
@@ -96,31 +75,13 @@ Qt::ItemFlags StyleTableModel::flags(QModelIndex const & index) const {
    return defaults | (this->m_editable ? Qt::ItemIsEditable : Qt::NoItemFlags);
 }
 
-bool StyleTableModel::setData(QModelIndex const & index,
-                             QVariant const & value,
-                             [[maybe_unused]] int role) {
-   if (!this->isIndexOk(index)) {
+bool StyleTableModel::setData(QModelIndex const & index, QVariant const & value, int role) {
+   if (!this->indexAndRoleOk(index, role)) {
       return false;
    }
 
-   auto row = this->rows[index.row()];
-
-   auto const columnIndex = static_cast<StyleTableModel::ColumnIndex>(index.column());
-   switch (columnIndex) {
-      case StyleTableModel::ColumnIndex::Name          :
-      case StyleTableModel::ColumnIndex::Type          :
-      case StyleTableModel::ColumnIndex::Category      :
-      case StyleTableModel::ColumnIndex::CategoryNumber:
-      case StyleTableModel::ColumnIndex::StyleLetter   :
-      case StyleTableModel::ColumnIndex::StyleGuide    :
-         return this->writeDataToModel(index, value, role);
-
-      // No default case as we want the compiler to warn us if we missed one
-   }
-
-   // Should be unreachable
-   emit dataChanged(index, index);
-   return true;
+   // No special handling required for any of our columns
+   return this->writeDataToModel(index, value, role);
 }
 
 // Insert the boiler-plate stuff that we cannot do in TableModelBase

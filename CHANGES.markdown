@@ -20,7 +20,7 @@ Minor bug fixes for the 4.0.3 release (ie bugs in 4.0.3 are fixed in this 4.0.4 
 * None
 
 ### Bug Fixes
-* None
+* Crash editing Target Boil Size [817](https://github.com/Brewtarget/brewtarget/issues/817)
 
 ### Release Timestamp
 Wed, 28 Aug 2024 04:00:04 +0100

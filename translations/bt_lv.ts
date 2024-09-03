@@ -4617,10 +4617,6 @@ The final volume in the primary is %1.</source>
 <context>
     <name>WaterTableModel</name>
     <message>
-        <source>Bad model index. row = %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Bad column: %1</source>
         <translation type="unfinished"></translation>
     </message>

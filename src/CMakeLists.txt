@@ -211,7 +211,6 @@ set(filesToCompile_cpp
     ${repoDir}/src/sortFilterProxyModels/YeastSortFilterProxyModel.cpp
     ${repoDir}/src/tableModels/BoilStepTableModel.cpp
     ${repoDir}/src/tableModels/BtTableModel.cpp
-    ${repoDir}/src/tableModels/BtTableModelInventory.cpp
     ${repoDir}/src/tableModels/EquipmentTableModel.cpp
     ${repoDir}/src/tableModels/FermentableTableModel.cpp
     ${repoDir}/src/tableModels/FermentationStepTableModel.cpp

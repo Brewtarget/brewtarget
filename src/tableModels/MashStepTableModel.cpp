@@ -80,50 +80,20 @@ void MashStepTableModel::removed([[maybe_unused]] std::shared_ptr<MashStep> item
 void MashStepTableModel::updateTotals()                                      { return; }
 
 QVariant MashStepTableModel::data(QModelIndex const & index, int role) const {
-   if (!this->m_stepOwnerObs) {
+   if (!this->m_stepOwnerObs || !this->indexAndRoleOk(index, role)) {
       return QVariant();
    }
-
-   if (!this->isIndexOk(index)) {
-      return QVariant();
-   }
-
-   // Make sure we only respond to the display or edit roles. (TBD: Why?)
-   //
-   // Note that if we do not send data back for the edit role, then double-clicking a cell to edit it will blank the
-   // contents, which can be rather annoying. See
-   // https://stackoverflow.com/questions/55855284/qabstracttablemodel-editing-without-clearing-previous-data-in-cell.)
-   if (role != Qt::DisplayRole && role != Qt::EditRole) {
-      return QVariant();
-   }
-
-   auto row = this->rows[index.row()];
 
    auto const columnIndex = static_cast<MashStepTableModel::ColumnIndex>(index.column());
-   switch (columnIndex) {
-      case MashStepTableModel::ColumnIndex::Name:
-      case MashStepTableModel::ColumnIndex::Type:
-      case MashStepTableModel::ColumnIndex::Amount:
-      case MashStepTableModel::ColumnIndex::TargetTemp:
-      case MashStepTableModel::ColumnIndex::Time:
-         return this->readDataFromModel(index, role);
-
-      case MashStepTableModel::ColumnIndex::Temp:
-         if (row->type() == MashStep::Type::Decoction) {
-            return QVariant("---");
-         }
-         return this->readDataFromModel(index, role);
-
-      // No default case as we want the compiler to warn us if we missed one
+   if (MashStepTableModel::ColumnIndex::Temp == columnIndex) {
+      auto row = this->rows[index.row()];
+      if (row->type() == MashStep::Type::Decoction) {
+         return QVariant("---");
+      }
    }
-   return QVariant();
-}
 
-QVariant MashStepTableModel::headerData( int section, Qt::Orientation orientation, int role ) const {
-   if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
-      return this->getColumnLabel(section);
-   }
-   return QVariant();
+   // No other special handling required for any of our other columns
+   return this->readDataFromModel(index, role);
 }
 
 Qt::ItemFlags MashStepTableModel::flags(const QModelIndex& index ) const {
@@ -135,33 +105,12 @@ Qt::ItemFlags MashStepTableModel::flags(const QModelIndex& index ) const {
 }
 
 bool MashStepTableModel::setData(QModelIndex const & index, QVariant const & value, int role) {
-   if (!this->m_stepOwnerObs) {
+   if (!this->m_stepOwnerObs || !this->indexAndRoleOk(index, role)) {
       return false;
    }
 
-   if (!this->isIndexOk(index)) {
-      return false;
-   }
-
-   if (index.row() >= static_cast<int>(this->rows.size()) || role != Qt::EditRole ) {
-      return false;
-   }
-
-   bool retVal = false;
-   auto const columnIndex = static_cast<MashStepTableModel::ColumnIndex>(index.column());
-   switch (columnIndex) {
-      case MashStepTableModel::ColumnIndex::Name:
-      case MashStepTableModel::ColumnIndex::Type:
-      case MashStepTableModel::ColumnIndex::Temp:
-      case MashStepTableModel::ColumnIndex::TargetTemp:
-      case MashStepTableModel::ColumnIndex::Time:
-      case MashStepTableModel::ColumnIndex::Amount:
-         retVal = this->writeDataToModel(index, value, role);
-         break;
-
-      // No default case as we want the compiler to warn us if we missed one
-   }
-   return retVal;
+   // No special handling required for any of our columns
+   return this->writeDataToModel(index, value, role);
 }
 
 // Insert the boiler-plate stuff that we cannot do in TableModelBase

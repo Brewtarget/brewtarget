@@ -74,45 +74,12 @@ void BoilStepTableModel::updateTotals()                                      { r
 
 
 QVariant BoilStepTableModel::data(QModelIndex const & index, int role) const {
-   if (!this->m_stepOwnerObs) {
+   if (!this->m_stepOwnerObs || !this->indexAndRoleOk(index, role)) {
       return QVariant();
    }
 
-   if (!this->isIndexOk(index)) {
-      return QVariant();
-   }
-
-   // Make sure we only respond to the DisplayRole role.
-   if (role != Qt::DisplayRole) {
-      return QVariant();
-   }
-
-   auto row = this->rows[index.row()];
-
-   auto const columnIndex = static_cast<BoilStepTableModel::ColumnIndex>(index.column());
-   switch (columnIndex) {
-      case BoilStepTableModel::ColumnIndex::Name        :
-      case BoilStepTableModel::ColumnIndex::StepTime    :
-      case BoilStepTableModel::ColumnIndex::StartTemp   :
-      case BoilStepTableModel::ColumnIndex::RampTime    :
-      case BoilStepTableModel::ColumnIndex::EndTemp     :
-      case BoilStepTableModel::ColumnIndex::StartAcidity:
-      case BoilStepTableModel::ColumnIndex::EndAcidity  :
-      case BoilStepTableModel::ColumnIndex::StartGravity:
-      case BoilStepTableModel::ColumnIndex::EndGravity  :
-      case BoilStepTableModel::ColumnIndex::ChillingType:
-         return this->readDataFromModel(index, role);
-
-      // No default case as we want the compiler to warn us if we missed one
-   }
-   return QVariant();
-}
-
-QVariant BoilStepTableModel::headerData( int section, Qt::Orientation orientation, int role ) const {
-   if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
-      return this->getColumnLabel(section);
-   }
-   return QVariant();
+   // No special handling required for any of our columns
+   return this->readDataFromModel(index, role);
 }
 
 Qt::ItemFlags BoilStepTableModel::flags(const QModelIndex& index ) const {
@@ -124,39 +91,12 @@ Qt::ItemFlags BoilStepTableModel::flags(const QModelIndex& index ) const {
 }
 
 bool BoilStepTableModel::setData(QModelIndex const & index, QVariant const & value, int role) {
-   if (!this->m_stepOwnerObs) {
+   if (!this->m_stepOwnerObs || !this->indexAndRoleOk(index, role)) {
       return false;
    }
 
-   if (!this->isIndexOk(index)) {
-      return false;
-   }
-
-   if (index.row() >= static_cast<int>(this->rows.size()) || role != Qt::EditRole ) {
-      return false;
-   }
-
-
-   bool retVal = false;
-
-   auto const columnIndex = static_cast<BoilStepTableModel::ColumnIndex>(index.column());
-   switch (columnIndex) {
-      case BoilStepTableModel::ColumnIndex::Name        :
-      case BoilStepTableModel::ColumnIndex::StepTime    :
-      case BoilStepTableModel::ColumnIndex::StartTemp   :
-      case BoilStepTableModel::ColumnIndex::RampTime    :
-      case BoilStepTableModel::ColumnIndex::EndTemp     :
-      case BoilStepTableModel::ColumnIndex::StartAcidity:
-      case BoilStepTableModel::ColumnIndex::EndAcidity  :
-      case BoilStepTableModel::ColumnIndex::StartGravity:
-      case BoilStepTableModel::ColumnIndex::EndGravity  :
-      case BoilStepTableModel::ColumnIndex::ChillingType:
-         retVal = this->writeDataToModel(index, value, role);
-         break;
-
-      // No default case as we want the compiler to warn us if we missed one
-   }
-   return retVal;
+   // No special handling required for any of our columns
+   return this->writeDataToModel(index, value, role);
 }
 
 /////==========================CLASS BoilStepItemDelegate===============================

@@ -38,7 +38,7 @@ BtTableModelRecipeObserver::BtTableModelRecipeObserver(QTableView * parent,
 
 BtTableModelRecipeObserver::~BtTableModelRecipeObserver() = default;
 
-//╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+//======================================================================================================================
 
 void BtTableModel::ColumnInfo::setForcedSystemOfMeasurement(std::optional<Measurement::SystemOfMeasurement> forcedSystemOfMeasurement) const {
    SmartAmounts::setForcedSystemOfMeasurement(this->tableModelName, this->columnName, forcedSystemOfMeasurement);
@@ -58,7 +58,7 @@ std::optional<Measurement::UnitSystem::RelativeScale> BtTableModel::ColumnInfo::
    return SmartAmounts::getForcedRelativeScale(this->tableModelName, this->columnName);
 }
 
-//╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+//======================================================================================================================
 
 BtTableModel::BtTableModel(QTableView * parent,
                            bool editable,
@@ -116,6 +116,14 @@ QVariant BtTableModel::getColumnLabel(size_t const columnIndex) const {
 
 int BtTableModel::columnCount(QModelIndex const & /*parent*/) const {
    return this->m_columnInfos.size();
+}
+
+QVariant BtTableModel::headerData(int section, Qt::Orientation orientation, int role) const {
+   if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
+      return this->getColumnLabel(section);
+   }
+
+   return QVariant();
 }
 
 void BtTableModel::contextMenu(QPoint const & point) {

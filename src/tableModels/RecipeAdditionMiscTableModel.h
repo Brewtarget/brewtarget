@@ -68,6 +68,9 @@ public:
    //! \brief Show ibus in the vertical header.
    void setShowIBUs(bool var);
 
+   //! \brief Reimplemented from QAbstractTableModel.
+   virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+
 private:
    bool showIBUs; // True if you want to show the IBU contributions in the table rows.
 };

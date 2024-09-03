@@ -60,16 +60,16 @@ void BoilStepEditor::readFieldsFromEditItem(std::optional<QString> propName) {
 }
 
 void BoilStepEditor::writeFieldsToEditItem() {
-   this->m_editItem->setName                  (this->lineEdit_name->text());
-   this->m_editItem->setDescription           (this->textEdit_description ->toPlainText          ());
-   this->m_editItem->setStartTemp_c           (this->lineEdit_startTemp   ->getNonOptCanonicalQty());
-   this->m_editItem->setStepTime_mins         (this->lineEdit_stepTime    ->getNonOptCanonicalQty());
-   this->m_editItem->setRampTime_mins         (this->lineEdit_rampTime    ->getOptCanonicalQty   ());
-   this->m_editItem->setEndTemp_c             (this->lineEdit_endTemp     ->getOptCanonicalQty   ());
-   this->m_editItem->setStartAcidity_pH       (this->lineEdit_startAcidity->getOptCanonicalQty   ());
-   this->m_editItem->setEndAcidity_pH         (this->lineEdit_endAcidity  ->getOptCanonicalQty   ());
-   this->m_editItem->setStartGravity_sg       (this->lineEdit_startGravity->getOptCanonicalQty   ());
-   this->m_editItem->setEndGravity_sg         (this->lineEdit_endGravity  ->getOptCanonicalQty   ());
+   this->m_editItem->setName           (this->lineEdit_name        ->text              ());
+   this->m_editItem->setDescription    (this->textEdit_description ->toPlainText       ());
+   this->m_editItem->setStartTemp_c    (this->lineEdit_startTemp   ->getOptCanonicalQty());
+   this->m_editItem->setStepTime_mins  (this->lineEdit_stepTime    ->getOptCanonicalQty());
+   this->m_editItem->setRampTime_mins  (this->lineEdit_rampTime    ->getOptCanonicalQty());
+   this->m_editItem->setEndTemp_c      (this->lineEdit_endTemp     ->getOptCanonicalQty());
+   this->m_editItem->setStartAcidity_pH(this->lineEdit_startAcidity->getOptCanonicalQty());
+   this->m_editItem->setEndAcidity_pH  (this->lineEdit_endAcidity  ->getOptCanonicalQty());
+   this->m_editItem->setStartGravity_sg(this->lineEdit_startGravity->getOptCanonicalQty());
+   this->m_editItem->setEndGravity_sg  (this->lineEdit_endGravity  ->getOptCanonicalQty());
 
    this->m_editItem->setChillingType(this->comboBox_boilStepChillingType->getOptValue<BoilStep::ChillingType>());
    return;

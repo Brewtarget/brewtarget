@@ -235,34 +235,12 @@ double RecipeAdjustmentSaltTableModel::totalAcidWeight(Salt::Type type) const {
 }
 
 QVariant RecipeAdjustmentSaltTableModel::data(QModelIndex const & index, int role) const {
-   if (!this->isIndexOk(index)) {
+   if (!this->indexAndRoleOk(index, role)) {
       return QVariant();
    }
 
-   auto row = this->rows[index.row()];
-
-   auto const columnIndex = static_cast<RecipeAdjustmentSaltTableModel::ColumnIndex>(index.column());
-   switch (columnIndex) {
-      case RecipeAdjustmentSaltTableModel::ColumnIndex::Name          :
-      case RecipeAdjustmentSaltTableModel::ColumnIndex::Type          :
-      case RecipeAdjustmentSaltTableModel::ColumnIndex::Amount        :
-      case RecipeAdjustmentSaltTableModel::ColumnIndex::AmountType    :
-      case RecipeAdjustmentSaltTableModel::ColumnIndex::TotalInventory:
-      case RecipeAdjustmentSaltTableModel::ColumnIndex::AddTo         :
-      case RecipeAdjustmentSaltTableModel::ColumnIndex::PctAcid       :
-         return this->readDataFromModel(index, role);
-
-      // No default case as we want the compiler to warn us if we missed one
-   }
-   // Should be unreachable
-   return QVariant();
-}
-
-QVariant RecipeAdjustmentSaltTableModel::headerData( int section, Qt::Orientation orientation, int role ) const {
-   if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
-      return this->getColumnLabel(section);
-   }
-   return QVariant();
+   // No special handling required for any of our columns
+   return this->readDataFromModel(index, role);
 }
 
 Qt::ItemFlags RecipeAdjustmentSaltTableModel::flags(const QModelIndex& index) const {
@@ -279,39 +257,22 @@ Qt::ItemFlags RecipeAdjustmentSaltTableModel::flags(const QModelIndex& index) co
 }
 
 bool RecipeAdjustmentSaltTableModel::setData(QModelIndex const & index, QVariant const & value, int role) {
-   if (!this->isIndexOk(index)) {
+   if (!this->indexAndRoleOk(index, role)) {
       return false;
    }
 
-   if (role != Qt::EditRole) {
-      return false;
-   }
+   // No special handling required for any of our columns...
+   bool const retVal = this->writeDataToModel(index, value, role);
 
-   bool retval = false;
-
-   auto const columnIndex = static_cast<RecipeAdjustmentSaltTableModel::ColumnIndex>(index.column());
-   switch (columnIndex) {
-      case RecipeAdjustmentSaltTableModel::ColumnIndex::Name          :
-      case RecipeAdjustmentSaltTableModel::ColumnIndex::Type          :
-      case RecipeAdjustmentSaltTableModel::ColumnIndex::Amount        :
-      case RecipeAdjustmentSaltTableModel::ColumnIndex::AmountType    :
-      case RecipeAdjustmentSaltTableModel::ColumnIndex::TotalInventory:
-      case RecipeAdjustmentSaltTableModel::ColumnIndex::AddTo         :
-      case RecipeAdjustmentSaltTableModel::ColumnIndex::PctAcid       :
-         retval = this->writeDataToModel(index, value, role);
-         break;
-
-      // No default case as we want the compiler to warn us if we missed one
-   }
-
-   if (retval) {
+   // ...but some other post-modification things we check
+   if (retVal) {
       emit newTotals();
    }
    emit dataChanged(index,index);
    QHeaderView* headerView = m_parentTableWidget->horizontalHeader();
    headerView->resizeSections(QHeaderView::ResizeToContents);
 
-   return retval;
+   return retVal;
 }
 
 void RecipeAdjustmentSaltTableModel::saveAndClose() {

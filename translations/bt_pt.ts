@@ -5687,7 +5687,7 @@ O volume final do fermentador primário é %1.</translation>
     <name>WaterTableModel</name>
     <message>
         <source>Bad model index. row = %1</source>
-        <translation>Índice de modelo inválido. Linha = %1</translation>
+        <translation type="vanished">Índice de modelo inválido. Linha = %1</translation>
     </message>
     <message>
         <source>Bad column: %1</source>

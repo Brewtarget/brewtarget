@@ -78,34 +78,13 @@ void FermentableTableModel::added  ([[maybe_unused]] std::shared_ptr<Fermentable
 void FermentableTableModel::removed([[maybe_unused]] std::shared_ptr<Fermentable> item) { return; }
 void FermentableTableModel::updateTotals()                                              { return; }
 
-
 QVariant FermentableTableModel::data(QModelIndex const & index, int role) const {
-   if (!this->isIndexOk(index)) {
+   if (!this->indexAndRoleOk(index, role)) {
       return QVariant();
    }
 
-   auto row = this->rows[index.row()];
-   auto const columnIndex = static_cast<FermentableTableModel::ColumnIndex>(index.column());
-   switch (columnIndex) {
-      case FermentableTableModel::ColumnIndex::Name:
-      case FermentableTableModel::ColumnIndex::Type:
-      case FermentableTableModel::ColumnIndex::Yield:
-      case FermentableTableModel::ColumnIndex::Color:
-      case FermentableTableModel::ColumnIndex::TotalInventory:
-      case FermentableTableModel::ColumnIndex::TotalInventoryType:
-         return this->readDataFromModel(index, role);
-
-      // No default case as we want the compiler to warn us if we missed one
-   }
-   return QVariant();
-}
-
-QVariant FermentableTableModel::headerData( int section, Qt::Orientation orientation, int role ) const {
-   if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
-      return this->getColumnLabel(section);
-   }
-
-   return QVariant();
+   // No special handling required for any of our columns
+   return this->readDataFromModel(index, role);
 }
 
 Qt::ItemFlags FermentableTableModel::flags(QModelIndex const & index) const {
@@ -114,18 +93,6 @@ Qt::ItemFlags FermentableTableModel::flags(QModelIndex const & index) const {
 
    auto const columnIndex = static_cast<FermentableTableModel::ColumnIndex>(index.column());
    switch (columnIndex) {
-///      case FermentableTableModel::ColumnIndex::IsMashed:
-///         // Ensure that being mashed and being a late addition are mutually exclusive.
-///         if (!row->addAfterBoil()) {
-///            return (defaults | Qt::ItemIsSelectable | (m_editable ? Qt::ItemIsEditable : Qt::NoItemFlags) | Qt::ItemIsDragEnabled);
-///         }
-///         return Qt::ItemIsSelectable | (m_editable ? Qt::ItemIsEditable : Qt::NoItemFlags) | Qt::ItemIsDragEnabled;
-///      case FermentableTableModel::ColumnIndex::AfterBoil:
-///         // Ensure that being mashed and being a late addition are mutually exclusive.
-///         if (!row->isMashed()) {
-///            return (defaults | Qt::ItemIsSelectable | (m_editable ? Qt::ItemIsEditable : Qt::NoItemFlags) | Qt::ItemIsDragEnabled);
-///         }
-///         return Qt::ItemIsSelectable | (m_editable ? Qt::ItemIsEditable : Qt::NoItemFlags) | Qt::ItemIsDragEnabled;
       case FermentableTableModel::ColumnIndex::Name:
          return (defaults | Qt::ItemIsSelectable);
       case FermentableTableModel::ColumnIndex::TotalInventory:
@@ -139,41 +106,12 @@ Qt::ItemFlags FermentableTableModel::flags(QModelIndex const & index) const {
 bool FermentableTableModel::setData(QModelIndex const & index,
                                     QVariant const & value,
                                     int role) {
-   if (!this->isIndexOk(index)) {
+   if (!this->indexAndRoleOk(index, role)) {
       return false;
    }
 
-   bool retVal = false;
-
-   auto row = this->rows[index.row()];
-///   Measurement::PhysicalQuantity physicalQuantity =
-///      row->amountIsWeight() ? Measurement::PhysicalQuantity::Mass : Measurement::PhysicalQuantity::Volume;
-
-   auto const columnIndex = static_cast<FermentableTableModel::ColumnIndex>(index.column());
-   switch (columnIndex) {
-      case FermentableTableModel::ColumnIndex::Name:
-      case FermentableTableModel::ColumnIndex::Type:
-      case FermentableTableModel::ColumnIndex::Yield:
-      case FermentableTableModel::ColumnIndex::Color:
-      case FermentableTableModel::ColumnIndex::TotalInventory:
-      case FermentableTableModel::ColumnIndex::TotalInventoryType:
-         return this->writeDataToModel(index, value, role);
-
-///      case FermentableTableModel::ColumnIndex::Inventory:
-///         return this->writeDataToModel(index, value, role, physicalQuantity);
-///
-///      case FermentableTableModel::ColumnIndex::Amount:
-///         retVal = this->writeDataToModel(index, value, role, physicalQuantity);
-///         if (retVal) {
-///            if (this->rowCount() > 0) {
-///               headerDataChanged(Qt::Vertical, 0, this->rowCount() - 1); // Need to re-show header (grain percent).
-///            }
-///         }
-///         break;
-
-      // No default case as we want the compiler to warn us if we missed one
-   }
-   return retVal;
+   // No special handling required for any of our columns
+   return this->writeDataToModel(index, value, role);
 }
 
 // Insert the boiler-plate stuff that we cannot do in TableModelBase

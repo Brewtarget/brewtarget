@@ -97,26 +97,12 @@ void RecipeAdditionHopTableModel::setShowIBUs(bool var) {
 }
 
 QVariant RecipeAdditionHopTableModel::data(const QModelIndex & index, int role) const {
-   if (!this->isIndexOk(index)) {
+   if (!this->indexAndRoleOk(index, role)) {
       return QVariant();
    }
 
-   auto const columnIndex = static_cast<RecipeAdditionHopTableModel::ColumnIndex>(index.column());
-   switch (columnIndex) {
-      case RecipeAdditionHopTableModel::ColumnIndex::Name          :
-      case RecipeAdditionHopTableModel::ColumnIndex::Form          :
-      case RecipeAdditionHopTableModel::ColumnIndex::Alpha         :
-      case RecipeAdditionHopTableModel::ColumnIndex::Year          :
-      case RecipeAdditionHopTableModel::ColumnIndex::Amount        :
-      case RecipeAdditionHopTableModel::ColumnIndex::AmountType    :
-      case RecipeAdditionHopTableModel::ColumnIndex::TotalInventory:
-      case RecipeAdditionHopTableModel::ColumnIndex::Stage         :
-      case RecipeAdditionHopTableModel::ColumnIndex::Time          :
-         return this->readDataFromModel(index, role);
-
-      // No default case as we want the compiler to warn us if we missed one
-   }
-   return QVariant();
+   // No special handling required for any of our columns
+   return this->readDataFromModel(index, role);
 }
 
 QVariant RecipeAdditionHopTableModel::headerData(int section, Qt::Orientation orientation, int role) const {
@@ -146,36 +132,16 @@ Qt::ItemFlags RecipeAdditionHopTableModel::flags(const QModelIndex & index) cons
 }
 
 bool RecipeAdditionHopTableModel::setData(const QModelIndex & index, const QVariant & value, int role) {
-   if (!this->isIndexOk(index)) {
+   if (!this->indexAndRoleOk(index, role)) {
       return false;
    }
 
-   bool retVal = false;
+   // No special handling required for any of our columns...
+   bool const retVal = this->writeDataToModel(index, value, role);
 
-   auto row = this->rows[index.row()];
-///   Measurement::PhysicalQuantity physicalQuantity = row->getMeasure();
-
-   auto const columnIndex = static_cast<RecipeAdditionHopTableModel::ColumnIndex>(index.column());
-   switch (columnIndex) {
-      case RecipeAdditionHopTableModel::ColumnIndex::Name          :
-      case RecipeAdditionHopTableModel::ColumnIndex::Form          :
-      case RecipeAdditionHopTableModel::ColumnIndex::Alpha         :
-      case RecipeAdditionHopTableModel::ColumnIndex::Year          :
-      case RecipeAdditionHopTableModel::ColumnIndex::Amount        :
-      case RecipeAdditionHopTableModel::ColumnIndex::AmountType    :
-      case RecipeAdditionHopTableModel::ColumnIndex::TotalInventory:
-      case RecipeAdditionHopTableModel::ColumnIndex::Stage         :
-      case RecipeAdditionHopTableModel::ColumnIndex::Time          :
-         retVal = this->writeDataToModel(index, value, role);
-         break;
-
-      // We don't need to pass in a PhysicalQuantity for any of the columns
-
-      // No default case as we want the compiler to warn us if we missed one
-   }
-
+   // ...but we might need to re-show header IBUs
    if (retVal) {
-      headerDataChanged(Qt::Vertical, index.row(), index.row());   // Need to re-show header (IBUs).
+      headerDataChanged(Qt::Vertical, index.row(), index.row());
    }
 
    return retVal;

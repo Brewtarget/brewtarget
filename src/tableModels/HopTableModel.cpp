@@ -82,30 +82,12 @@ void HopTableModel::setShowIBUs(bool var) {
 }
 
 QVariant HopTableModel::data(const QModelIndex & index, int role) const {
-   if (!this->isIndexOk(index)) {
+   if (!this->indexAndRoleOk(index, role)) {
       return QVariant();
    }
 
-   auto const columnIndex = static_cast<HopTableModel::ColumnIndex>(index.column());
-   switch (columnIndex) {
-      case HopTableModel::ColumnIndex::Name              :
-      case HopTableModel::ColumnIndex::Form              :
-      case HopTableModel::ColumnIndex::Year              :
-      case HopTableModel::ColumnIndex::Alpha             :
-      case HopTableModel::ColumnIndex::TotalInventory    :
-      case HopTableModel::ColumnIndex::TotalInventoryType:
-         return this->readDataFromModel(index, role);
-
-      // No default case as we want the compiler to warn us if we missed one
-   }
-   return QVariant();
-}
-
-QVariant HopTableModel::headerData(int section, Qt::Orientation orientation, int role) const {
-   if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
-      return this->getColumnLabel(section);
-   }
-   return QVariant();
+   // No special handling required for any of our columns
+   return this->readDataFromModel(index, role);
 }
 
 Qt::ItemFlags HopTableModel::flags(const QModelIndex & index) const {
@@ -121,30 +103,16 @@ Qt::ItemFlags HopTableModel::flags(const QModelIndex & index) const {
 }
 
 bool HopTableModel::setData(const QModelIndex & index, const QVariant & value, int role) {
-   if (!this->isIndexOk(index)) {
+   if (!this->indexAndRoleOk(index, role)) {
       return false;
    }
 
-   bool retVal = false;
-///   auto row = this->rows[index.row()];
-   auto const columnIndex = static_cast<HopTableModel::ColumnIndex>(index.column());
-   switch (columnIndex) {
-      case HopTableModel::ColumnIndex::Name              :
-      case HopTableModel::ColumnIndex::Form              :
-      case HopTableModel::ColumnIndex::Year              :
-      case HopTableModel::ColumnIndex::Alpha             :
-      case HopTableModel::ColumnIndex::TotalInventory    :
-      case HopTableModel::ColumnIndex::TotalInventoryType:
-         retVal = this->writeDataToModel(index, value, role);
-         break;
+   // No special handling required for any of our columns...
+   bool const retVal = this->writeDataToModel(index, value, role);
 
-      // We don't need to pass in a PhysicalQuantity for any of the columns
-
-      // No default case as we want the compiler to warn us if we missed one
-   }
-
+   // ...but we might need to re-show header IBUs
    if (retVal) {
-      headerDataChanged(Qt::Vertical, index.row(), index.row());   // Need to re-show header (IBUs).
+      headerDataChanged(Qt::Vertical, index.row(), index.row());
    }
 
    return retVal;

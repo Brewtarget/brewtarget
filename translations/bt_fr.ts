@@ -5767,7 +5767,7 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     <name>WaterTableModel</name>
     <message>
         <source>Bad model index. row = %1</source>
-        <translation>Mauvais index de modèle. ligne = %1</translation>
+        <translation type="vanished">Mauvais index de modèle. ligne = %1</translation>
     </message>
     <message>
         <source>Bad column: %1</source>

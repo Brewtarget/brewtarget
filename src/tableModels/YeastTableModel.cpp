@@ -64,8 +64,10 @@ YeastTableModel::YeastTableModel(QTableView * parent, bool editable) :
 
    QHeaderView * headerView = m_parentTableWidget->horizontalHeader();
    connect(headerView, &QWidget::customContextMenuRequested, this, &YeastTableModel::contextMenu);
-   connect(&ObjectStoreTyped<InventoryYeast>::getInstance(), &ObjectStoreTyped<InventoryYeast>::signalPropertyChanged,
-           this, &YeastTableModel::changedInventory);
+   connect(&ObjectStoreTyped<InventoryYeast>::getInstance(),
+           &ObjectStoreTyped<InventoryYeast>::signalPropertyChanged,
+           this,
+           &YeastTableModel::changedInventory);
    return;
 }
 
@@ -76,32 +78,12 @@ void YeastTableModel::removed([[maybe_unused]] std::shared_ptr<Yeast> item) { re
 void YeastTableModel::updateTotals()                                        { return; }
 
 QVariant YeastTableModel::data(QModelIndex const & index, int role) const {
-   if (!this->isIndexOk(index)) {
+   if (!this->indexAndRoleOk(index, role)) {
       return QVariant();
    }
 
-   auto const columnIndex = static_cast<YeastTableModel::ColumnIndex>(index.column());
-   switch (columnIndex) {
-      case YeastTableModel::ColumnIndex::Name:
-      case YeastTableModel::ColumnIndex::Laboratory:
-      case YeastTableModel::ColumnIndex::ProductId:
-      case YeastTableModel::ColumnIndex::Type:
-      case YeastTableModel::ColumnIndex::Form:
-      case YeastTableModel::ColumnIndex::TotalInventory:
-      case YeastTableModel::ColumnIndex::TotalInventoryType:
-         return this->readDataFromModel(index, role);
-
-      // No default case as we want the compiler to warn us if we missed one
-   }
-   // Should never reach here
-   return QVariant();
-}
-
-QVariant YeastTableModel::headerData(int section, Qt::Orientation orientation, int role) const {
-   if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
-      return this->getColumnLabel(section);
-   }
-   return QVariant();
+   // No special handling required for any of our columns
+   return this->readDataFromModel(index, role);
 }
 
 Qt::ItemFlags YeastTableModel::flags(const QModelIndex & index) const {
@@ -117,26 +99,12 @@ Qt::ItemFlags YeastTableModel::flags(const QModelIndex & index) const {
 }
 
 bool YeastTableModel::setData(QModelIndex const & index, QVariant const & value, int role) {
-   if (!this->isIndexOk(index)) {
+   if (!this->indexAndRoleOk(index, role)) {
       return false;
    }
 
-///   auto row = this->rows[index.row()];
-   auto const columnIndex = static_cast<YeastTableModel::ColumnIndex>(index.column());
-   switch (columnIndex) {
-      case YeastTableModel::ColumnIndex::Name:
-      case YeastTableModel::ColumnIndex::Laboratory:
-      case YeastTableModel::ColumnIndex::ProductId:
-      case YeastTableModel::ColumnIndex::Type:
-      case YeastTableModel::ColumnIndex::Form:
-      case YeastTableModel::ColumnIndex::TotalInventory:
-      case YeastTableModel::ColumnIndex::TotalInventoryType:
-         return this->writeDataToModel(index, value, role);
-
-      // No default case as we want the compiler to warn us if we missed one
-   }
-   // Should never reach here
-   return false;
+   // No special handling required for any of our columns
+   return this->writeDataToModel(index, value, role);
 }
 
 // Insert the boiler-plate stuff that we cannot do in TableModelBase

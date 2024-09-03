@@ -78,47 +78,13 @@ void FermentationStepTableModel::added  ([[maybe_unused]] std::shared_ptr<Fermen
 void FermentationStepTableModel::removed([[maybe_unused]] std::shared_ptr<FermentationStep> item) { return; }
 void FermentationStepTableModel::updateTotals()                                      { return; }
 
-
 QVariant FermentationStepTableModel::data(QModelIndex const & index, int role) const {
-   if (!this->m_stepOwnerObs) {
+   if (!this->m_stepOwnerObs || !this->indexAndRoleOk(index, role)) {
       return QVariant();
    }
 
-   if (!this->isIndexOk(index)) {
-      return QVariant();
-   }
-
-   // Make sure we only respond to the DisplayRole role.
-   if (role != Qt::DisplayRole) {
-      return QVariant();
-   }
-
-   auto row = this->rows[index.row()];
-
-   auto const columnIndex = static_cast<FermentationStepTableModel::ColumnIndex>(index.column());
-   switch (columnIndex) {
-      case FermentationStepTableModel::ColumnIndex::Name        :
-      case FermentationStepTableModel::ColumnIndex::StepTime    :
-      case FermentationStepTableModel::ColumnIndex::StartTemp   :
-      case FermentationStepTableModel::ColumnIndex::EndTemp     :
-      case FermentationStepTableModel::ColumnIndex::StartAcidity:
-      case FermentationStepTableModel::ColumnIndex::EndAcidity  :
-      case FermentationStepTableModel::ColumnIndex::StartGravity:
-      case FermentationStepTableModel::ColumnIndex::EndGravity  :
-      case FermentationStepTableModel::ColumnIndex::FreeRise    :
-      case FermentationStepTableModel::ColumnIndex::Vessel      :
-         return this->readDataFromModel(index, role);
-
-      // No default case as we want the compiler to warn us if we missed one
-   }
-   return QVariant();
-}
-
-QVariant FermentationStepTableModel::headerData(int section, Qt::Orientation orientation, int role) const {
-   if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
-      return this->getColumnLabel(section);
-   }
-   return QVariant();
+   // No special handling required for any of our columns
+   return this->readDataFromModel(index, role);
 }
 
 Qt::ItemFlags FermentationStepTableModel::flags(const QModelIndex& index ) const {
@@ -130,39 +96,12 @@ Qt::ItemFlags FermentationStepTableModel::flags(const QModelIndex& index ) const
 }
 
 bool FermentationStepTableModel::setData(QModelIndex const & index, QVariant const & value, int role) {
-   if (!this->m_stepOwnerObs) {
+   if (!this->m_stepOwnerObs || !this->indexAndRoleOk(index, role)) {
       return false;
    }
 
-   if (!this->isIndexOk(index)) {
-      return false;
-   }
-
-   if (index.row() >= static_cast<int>(this->rows.size()) || role != Qt::EditRole ) {
-      return false;
-   }
-
-
-   bool retVal = false;
-
-   auto const columnIndex = static_cast<FermentationStepTableModel::ColumnIndex>(index.column());
-   switch (columnIndex) {
-      case FermentationStepTableModel::ColumnIndex::Name        :
-      case FermentationStepTableModel::ColumnIndex::StepTime    :
-      case FermentationStepTableModel::ColumnIndex::StartTemp   :
-      case FermentationStepTableModel::ColumnIndex::EndTemp     :
-      case FermentationStepTableModel::ColumnIndex::StartAcidity:
-      case FermentationStepTableModel::ColumnIndex::EndAcidity  :
-      case FermentationStepTableModel::ColumnIndex::StartGravity:
-      case FermentationStepTableModel::ColumnIndex::EndGravity  :
-      case FermentationStepTableModel::ColumnIndex::FreeRise    :
-      case FermentationStepTableModel::ColumnIndex::Vessel      :
-         retVal = this->writeDataToModel(index, value, role);
-         break;
-
-      // No default case as we want the compiler to warn us if we missed one
-   }
-   return retVal;
+   // No special handling required for any of our columns
+   return this->writeDataToModel(index, value, role);
 }
 
 /////==========================CLASS FermentationStepItemDelegate===============================
