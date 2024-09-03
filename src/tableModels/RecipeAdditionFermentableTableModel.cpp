@@ -111,26 +111,12 @@ void RecipeAdditionFermentableTableModel::setDisplayPercentages(bool var) {
 }
 
 QVariant RecipeAdditionFermentableTableModel::data(const QModelIndex & index, int role) const {
-   if (!this->isIndexOk(index)) {
+   if (!this->indexAndRoleOk(index, role)) {
       return QVariant();
    }
 
-   auto const columnIndex = static_cast<RecipeAdditionFermentableTableModel::ColumnIndex>(index.column());
-   switch (columnIndex) {
-      case RecipeAdditionFermentableTableModel::ColumnIndex::Name          :
-      case RecipeAdditionFermentableTableModel::ColumnIndex::Type          :
-      case RecipeAdditionFermentableTableModel::ColumnIndex::Yield         :
-      case RecipeAdditionFermentableTableModel::ColumnIndex::Color         :
-      case RecipeAdditionFermentableTableModel::ColumnIndex::Amount        :
-      case RecipeAdditionFermentableTableModel::ColumnIndex::AmountType    :
-      case RecipeAdditionFermentableTableModel::ColumnIndex::TotalInventory:
-      case RecipeAdditionFermentableTableModel::ColumnIndex::Stage         :
-      case RecipeAdditionFermentableTableModel::ColumnIndex::Time          :
-         return this->readDataFromModel(index, role);
-
-      // No default case as we want the compiler to warn us if we missed one
-   }
-   return QVariant();
+   // No special handling required for any of our columns
+   return this->readDataFromModel(index, role);
 }
 
 QVariant RecipeAdditionFermentableTableModel::headerData(int section, Qt::Orientation orientation, int role) const {
@@ -166,36 +152,16 @@ Qt::ItemFlags RecipeAdditionFermentableTableModel::flags(const QModelIndex & ind
 }
 
 bool RecipeAdditionFermentableTableModel::setData(const QModelIndex & index, const QVariant & value, int role) {
-   if (!this->isIndexOk(index)) {
+   if (!indexAndRoleOk(index, role)) {
       return false;
    }
 
-   bool retVal = false;
+   // No special handling required for any of our columns...
+   bool const retVal = this->writeDataToModel(index, value, role);
 
-   auto row = this->rows[index.row()];
-///   Measurement::PhysicalQuantity physicalQuantity = row->getMeasure();
-
-   auto const columnIndex = static_cast<RecipeAdditionFermentableTableModel::ColumnIndex>(index.column());
-   switch (columnIndex) {
-      case RecipeAdditionFermentableTableModel::ColumnIndex::Name          :
-      case RecipeAdditionFermentableTableModel::ColumnIndex::Type          :
-      case RecipeAdditionFermentableTableModel::ColumnIndex::Yield         :
-      case RecipeAdditionFermentableTableModel::ColumnIndex::Color         :
-      case RecipeAdditionFermentableTableModel::ColumnIndex::Amount        :
-      case RecipeAdditionFermentableTableModel::ColumnIndex::AmountType    :
-      case RecipeAdditionFermentableTableModel::ColumnIndex::TotalInventory:
-      case RecipeAdditionFermentableTableModel::ColumnIndex::Stage         :
-      case RecipeAdditionFermentableTableModel::ColumnIndex::Time          :
-         retVal = this->writeDataToModel(index, value, role);
-         break;
-
-      // We don't need to pass in a PhysicalQuantity for any of the columns
-
-      // No default case as we want the compiler to warn us if we missed one
-   }
-
+   // ...but we might need to re-show header percentages
    if (retVal) {
-      headerDataChanged(Qt::Vertical, index.row(), index.row());   // Need to re-show header (IBUs).
+      headerDataChanged(Qt::Vertical, index.row(), index.row());
    }
 
    return retVal;

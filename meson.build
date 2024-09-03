@@ -767,7 +767,6 @@ commonSourceFiles = files([
    'src/sortFilterProxyModels/YeastSortFilterProxyModel.cpp',
    'src/tableModels/BoilStepTableModel.cpp',
    'src/tableModels/BtTableModel.cpp',
-   'src/tableModels/BtTableModelInventory.cpp',
    'src/tableModels/EquipmentTableModel.cpp',
    'src/tableModels/FermentableTableModel.cpp',
    'src/tableModels/FermentationStepTableModel.cpp',

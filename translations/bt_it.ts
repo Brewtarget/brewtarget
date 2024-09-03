@@ -5744,7 +5744,7 @@ Il Volume finale del primo è %1.</translation>
     <name>WaterTableModel</name>
     <message>
         <source>Bad model index. row = %1</source>
-        <translation>Cattivo modello indicizzazione. Riga = %1</translation>
+        <translation type="vanished">Cattivo modello indicizzazione. Riga = %1</translation>
     </message>
     <message>
         <source>Bad column: %1</source>

@@ -5728,7 +5728,7 @@ Primärens slutgiltiga volym är %1.</translation>
     <name>WaterTableModel</name>
     <message>
         <source>Bad model index. row = %1</source>
-        <translation>Felaktigt modellindex. rad = %1</translation>
+        <translation type="vanished">Felaktigt modellindex. rad = %1</translation>
     </message>
     <message>
         <source>Bad column: %1</source>

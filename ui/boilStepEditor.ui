@@ -26,7 +26,7 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="2" colspan="3">
+     <item row="0" column="2" colspan="4">
       <widget class="SmartLineEdit" name="lineEdit_name">
        <property name="toolTip">
         <string>Name</string>

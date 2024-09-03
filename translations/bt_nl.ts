@@ -5741,7 +5741,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     <name>WaterTableModel</name>
     <message>
         <source>Bad model index. row = %1</source>
-        <translation>Bad model index. row = %1</translation>
+        <translation type="vanished">Bad model index. row = %1</translation>
     </message>
     <message>
         <source>Bad column: %1</source>

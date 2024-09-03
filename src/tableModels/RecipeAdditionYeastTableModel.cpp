@@ -77,10 +77,9 @@ RecipeAdditionYeastTableModel::RecipeAdditionYeastTableModel(QTableView * parent
          TABLE_MODEL_HEADER(RecipeAdditionYeast, Attenuation   , tr("Attenuation"), PropertyNames::RecipeAdditionYeast::attenuation_pct    , PrecisionInfo{1}),
       }
    },
-   TableModelBase<RecipeAdditionYeastTableModel, RecipeAdditionYeast>{},
-   showIBUs(false) {
+   TableModelBase<RecipeAdditionYeastTableModel, RecipeAdditionYeast>{} {
    this->rows.clear();
-   this->setObjectName("hopAdditionTable");
+   this->setObjectName("yeastAdditionTable");
 
    QHeaderView * headerView = m_parentTableWidget->horizontalHeader();
    connect(headerView, &QWidget::customContextMenuRequested, this, &RecipeAdditionYeastTableModel::contextMenu);
@@ -95,48 +94,13 @@ void RecipeAdditionYeastTableModel::added  ([[maybe_unused]] std::shared_ptr<Rec
 void RecipeAdditionYeastTableModel::removed([[maybe_unused]] std::shared_ptr<RecipeAdditionYeast> item) { return; }
 void RecipeAdditionYeastTableModel::updateTotals()                                                    { return; }
 
-void RecipeAdditionYeastTableModel::setShowIBUs(bool var) {
-   showIBUs = var;
-   return;
-}
-
 QVariant RecipeAdditionYeastTableModel::data(const QModelIndex & index, int role) const {
-   if (!this->isIndexOk(index)) {
+   if (!this->indexAndRoleOk(index, role)) {
       return QVariant();
    }
 
-   auto const columnIndex = static_cast<RecipeAdditionYeastTableModel::ColumnIndex>(index.column());
-   switch (columnIndex) {
-      case RecipeAdditionYeastTableModel::ColumnIndex::Name          :
-      case RecipeAdditionYeastTableModel::ColumnIndex::Laboratory    :
-      case RecipeAdditionYeastTableModel::ColumnIndex::ProductId     :
-      case RecipeAdditionYeastTableModel::ColumnIndex::Type          :
-      case RecipeAdditionYeastTableModel::ColumnIndex::Form          :
-      case RecipeAdditionYeastTableModel::ColumnIndex::Amount        :
-      case RecipeAdditionYeastTableModel::ColumnIndex::AmountType    :
-      case RecipeAdditionYeastTableModel::ColumnIndex::TotalInventory:
-      case RecipeAdditionYeastTableModel::ColumnIndex::Stage         :
-      case RecipeAdditionYeastTableModel::ColumnIndex::Step          :
-      case RecipeAdditionYeastTableModel::ColumnIndex::Attenuation   :
-         return this->readDataFromModel(index, role);
-
-      // No default case as we want the compiler to warn us if we missed one
-   }
-   return QVariant();
-}
-
-QVariant RecipeAdditionYeastTableModel::headerData(int section, Qt::Orientation orientation, int role) const {
-   if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
-      return this->getColumnLabel(section);
-   }
-   if (showIBUs && recObs && orientation == Qt::Vertical && role == Qt::DisplayRole) {
-      QList<double> ibus = recObs->IBUs();
-
-      if (ibus.size() > section) {
-         return QVariant(QString("%L1 IBU").arg(ibus.at(section), 0, 'f', 1));
-      }
-   }
-   return QVariant();
+   // No special handling required for any of our columns
+   return this->readDataFromModel(index, role);
 }
 
 Qt::ItemFlags RecipeAdditionYeastTableModel::flags(const QModelIndex & index) const {
@@ -152,41 +116,12 @@ Qt::ItemFlags RecipeAdditionYeastTableModel::flags(const QModelIndex & index) co
 }
 
 bool RecipeAdditionYeastTableModel::setData(const QModelIndex & index, const QVariant & value, int role) {
-   if (!this->isIndexOk(index)) {
+   if (!this->indexAndRoleOk(index, role)) {
       return false;
    }
 
-   bool retVal = false;
-
-   auto row = this->rows[index.row()];
-///   Measurement::PhysicalQuantity physicalQuantity = row->getMeasure();
-
-   auto const columnIndex = static_cast<RecipeAdditionYeastTableModel::ColumnIndex>(index.column());
-   switch (columnIndex) {
-      case RecipeAdditionYeastTableModel::ColumnIndex::Name          :
-      case RecipeAdditionYeastTableModel::ColumnIndex::Laboratory    :
-      case RecipeAdditionYeastTableModel::ColumnIndex::ProductId     :
-      case RecipeAdditionYeastTableModel::ColumnIndex::Type          :
-      case RecipeAdditionYeastTableModel::ColumnIndex::Form          :
-      case RecipeAdditionYeastTableModel::ColumnIndex::Amount        :
-      case RecipeAdditionYeastTableModel::ColumnIndex::AmountType    :
-      case RecipeAdditionYeastTableModel::ColumnIndex::TotalInventory:
-      case RecipeAdditionYeastTableModel::ColumnIndex::Stage         :
-      case RecipeAdditionYeastTableModel::ColumnIndex::Step          :
-      case RecipeAdditionYeastTableModel::ColumnIndex::Attenuation   :
-         retVal = this->writeDataToModel(index, value, role);
-         break;
-
-      // We don't need to pass in a PhysicalQuantity for any of the columns
-
-      // No default case as we want the compiler to warn us if we missed one
-   }
-
-   if (retVal) {
-      headerDataChanged(Qt::Vertical, index.row(), index.row());   // Need to re-show header (IBUs).
-   }
-
-   return retVal;
+   // No special handling required for any of our columns
+   return this->writeDataToModel(index, value, role);
 }
 
 // Insert the boiler-plate stuff that we cannot do in TableModelBase

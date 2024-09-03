@@ -5742,7 +5742,7 @@ The final volume in the primary is %1.</source>
     <name>WaterTableModel</name>
     <message>
         <source>Bad model index. row = %1</source>
-        <translation>Kötü model içeriği. sıra = %1</translation>
+        <translation type="vanished">Kötü model içeriği. sıra = %1</translation>
     </message>
     <message>
         <source>Bad column: %1</source>

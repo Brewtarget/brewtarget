@@ -5660,7 +5660,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     <name>WaterTableModel</name>
     <message>
         <source>Bad model index. row = %1</source>
-        <translation>Dårlig modell indeks.rad = %1</translation>
+        <translation type="vanished">Dårlig modell indeks.rad = %1</translation>
     </message>
     <message>
         <source>Bad column: %1</source>

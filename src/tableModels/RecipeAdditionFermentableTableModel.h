@@ -71,6 +71,9 @@ public:
    //! \brief True if you want to display percent of each grain in the row header.
    void setDisplayPercentages(bool var);
 
+   //! \brief Reimplemented from QAbstractTableModel.
+   virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+
 private:
    //! \brief Recalculate the total amount of grains in the model.
    void updateTotalGrains();

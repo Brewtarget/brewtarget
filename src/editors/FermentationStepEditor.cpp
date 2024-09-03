@@ -24,7 +24,8 @@ FermentationStepEditor::FermentationStepEditor(QWidget* parent) :
    this->setupUi(this);
 
    // NB: Although FermentationStep inherits (via StepExtended) from Step, the rampTime_mins field is not used and
-   //     should not be stored in the DB or serialised.  See comment in model/Step.h.
+   //     should not be stored in the DB or serialised.  See comment in model/Step.h.  There should therefore not be
+   //     any label_rampTime or lineEdit_rampTime fields in the .ui file!
    //
    // NB: label_description / textEdit_description don't need initialisation here as neither is a smart field
    SMART_FIELD_INIT(FermentationStepEditor, label_name           , lineEdit_name           , FermentationStep, PropertyNames::     NamedEntity::name           );
@@ -57,10 +58,8 @@ void FermentationStepEditor::readFieldsFromEditItem(std::optional<QString> propN
    if (!propName || *propName == PropertyNames::        Step::endAcidity_pH  ) { this->lineEdit_endAcidity  ->setQuantity  (m_editItem->endAcidity_pH  ()); if (propName) { return; } }
    if (!propName || *propName == PropertyNames::StepExtended::startGravity_sg) { this->lineEdit_startGravity->setQuantity  (m_editItem->startGravity_sg()); if (propName) { return; } }
    if (!propName || *propName == PropertyNames::StepExtended::endGravity_sg  ) { this->lineEdit_endGravity  ->setQuantity  (m_editItem->endGravity_sg  ()); if (propName) { return; } }
-
-   if (!propName || *propName == PropertyNames::FermentationStep::vessel ) { this->lineEdit_vessel      ->setTextCursor (m_editItem->vessel         ()); if (propName) { return; } }
-
-   if (!propName || *propName == PropertyNames::FermentationStep::freeRise) { this->boolCombo_freeRise->setValue(m_editItem->freeRise()); if (propName) { return; } }
+   if (!propName || *propName == PropertyNames::FermentationStep::vessel     ) { this->lineEdit_vessel      ->setTextCursor(m_editItem->vessel         ()); if (propName) { return; } }
+   if (!propName || *propName == PropertyNames::FermentationStep::freeRise   ) { this->boolCombo_freeRise   ->setValue     (m_editItem->freeRise       ()); if (propName) { return; } }
 
    return;
 }
@@ -68,18 +67,17 @@ void FermentationStepEditor::readFieldsFromEditItem(std::optional<QString> propN
 void FermentationStepEditor::writeFieldsToEditItem() {
    // NB: Although FermentationStep inherits (via StepExtended) from Step, the rampTime_mins field is not used and
    //     should not be stored in the DB or serialised.  See comment in model/Step.h.
-   this->m_editItem->setName                  (this->lineEdit_name->text());
-   this->m_editItem->setDescription           (this->textEdit_description ->toPlainText          ());
-   this->m_editItem->setStartTemp_c           (this->lineEdit_startTemp   ->getNonOptCanonicalQty());
-   this->m_editItem->setStepTime_mins         (this->lineEdit_stepTime    ->getNonOptCanonicalQty());
-   this->m_editItem->setEndTemp_c             (this->lineEdit_endTemp     ->getOptCanonicalQty   ());
-   this->m_editItem->setStartAcidity_pH       (this->lineEdit_startAcidity->getOptCanonicalQty   ());
-   this->m_editItem->setEndAcidity_pH         (this->lineEdit_endAcidity  ->getOptCanonicalQty   ());
-   this->m_editItem->setStartGravity_sg       (this->lineEdit_startGravity->getOptCanonicalQty   ());
-   this->m_editItem->setEndGravity_sg         (this->lineEdit_endGravity  ->getOptCanonicalQty   ());
-
-   this->m_editItem->setVessel(this->lineEdit_vessel->text());
-   this->m_editItem->setFreeRise(this->boolCombo_freeRise->getOptBoolValue());
+   this->m_editItem->setName           (this->lineEdit_name        ->text              ());
+   this->m_editItem->setDescription    (this->textEdit_description ->toPlainText       ());
+   this->m_editItem->setStartTemp_c    (this->lineEdit_startTemp   ->getOptCanonicalQty());
+   this->m_editItem->setStepTime_mins  (this->lineEdit_stepTime    ->getOptCanonicalQty());
+   this->m_editItem->setEndTemp_c      (this->lineEdit_endTemp     ->getOptCanonicalQty());
+   this->m_editItem->setStartAcidity_pH(this->lineEdit_startAcidity->getOptCanonicalQty());
+   this->m_editItem->setEndAcidity_pH  (this->lineEdit_endAcidity  ->getOptCanonicalQty());
+   this->m_editItem->setStartGravity_sg(this->lineEdit_startGravity->getOptCanonicalQty());
+   this->m_editItem->setEndGravity_sg  (this->lineEdit_endGravity  ->getOptCanonicalQty());
+   this->m_editItem->setVessel         (this->lineEdit_vessel      ->text              ());
+   this->m_editItem->setFreeRise       (this->boolCombo_freeRise   ->getOptBoolValue   ());
 
    return;
 }

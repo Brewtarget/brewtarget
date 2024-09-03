@@ -26,7 +26,7 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="2">
+     <item row="0" column="2" colspan="4">
       <widget class="SmartLineEdit" name="lineEdit_name">
        <property name="toolTip">
         <string>Name</string>
@@ -119,26 +119,6 @@
       </widget>
      </item>
      <item row="4" column="4">
-      <widget class="SmartLabel" name="label_rampTime">
-       <property name="contextMenuPolicy">
-        <enum>Qt::CustomContextMenu</enum>
-       </property>
-       <property name="text">
-        <string>Temp. lag time</string>
-       </property>
-       <property name="buddy">
-        <cstring>lineEdit_rampTime</cstring>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="5">
-      <widget class="SmartLineEdit" name="lineEdit_rampTime">
-       <property name="toolTip">
-        <string>Lag time</string>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="4">
       <widget class="SmartLabel" name="label_endTemp">
        <property name="contextMenuPolicy">
         <enum>Qt::CustomContextMenu</enum>
@@ -151,14 +131,14 @@
        </property>
       </widget>
      </item>
-     <item row="6" column="5">
+     <item row="4" column="5">
       <widget class="SmartLineEdit" name="lineEdit_endTemp">
        <property name="toolTip">
         <string>Final temp. of this step</string>
        </property>
       </widget>
      </item>
-     <item row="8" column="1">
+     <item row="6" column="1">
       <widget class="SmartLabel" name="label_startGravity">
        <property name="text">
         <string>Start Gravity</string>
@@ -168,11 +148,11 @@
        </property>
       </widget>
      </item>
-     <item row="8" column="2">
+     <item row="6" column="2">
       <widget class="SmartLineEdit" name="lineEdit_startGravity">
       </widget>
      </item>
-     <item row="8" column="4">
+     <item row="6" column="4">
       <widget class="SmartLabel" name="label_endGravity">
        <property name="text">
         <string>End Gravity</string>
@@ -182,11 +162,11 @@
        </property>
       </widget>
      </item>
-     <item row="8" column="5">
+     <item row="6" column="5">
       <widget class="SmartLineEdit" name="lineEdit_endGravity">
       </widget>
      </item>
-     <item row="10" column="1">
+     <item row="8" column="1">
       <widget class="SmartLabel" name="label_startAcidity">
        <property name="text">
         <string>Start Acidity</string>
@@ -196,11 +176,11 @@
        </property>
       </widget>
      </item>
-     <item row="10" column="2">
+     <item row="8" column="2">
       <widget class="SmartLineEdit" name="lineEdit_startAcidity">
       </widget>
      </item>
-     <item row="10" column="4">
+     <item row="8" column="4">
       <widget class="SmartLabel" name="label_endAcidity">
        <property name="text">
         <string>End Acidity</string>
@@ -210,11 +190,11 @@
        </property>
       </widget>
      </item>
-     <item row="10" column="5">
+     <item row="8" column="5">
       <widget class="SmartLineEdit" name="lineEdit_endAcidity">
       </widget>
      </item>
-     <item row="12" column="1">
+     <item row="10" column="1">
       <widget class="QLabel" name="label_vessel">
        <property name="text">
         <string>Vessel</string>
@@ -224,7 +204,7 @@
        </property>
       </widget>
      </item>
-     <item row="12" column="2">
+     <item row="10" column="2">
       <widget class="SmartLineEdit" name="lineEdit_vessel">
        <property name="toolTip">
         <string>Vessel</string>
@@ -244,7 +224,7 @@
        </property>
       </widget>
      </item>
-     <item row="14" column="2" colspan="4">
+     <item row="14" column="2" rowspan="3" colspan="4">
       <widget class="QTextEdit" name="textEdit_description">
       </widget>
      </item>

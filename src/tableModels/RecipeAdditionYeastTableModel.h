@@ -58,22 +58,15 @@ template <> struct TableModelTraits<RecipeAdditionYeastTableModel> {
 /*!
  * \class RecipeAdditionYeastTableModel
  *
- * \brief Model class for a list of hop additions.
+ * \brief Model class for a list of yeast additions.
  *
  *        TBD: Maybe there is a way for this class and \c YeastTableModel to share more code.
  */
 class RecipeAdditionYeastTableModel : public BtTableModelRecipeObserver,
-                                    public TableModelBase<RecipeAdditionYeastTableModel, RecipeAdditionYeast> {
+                                      public TableModelBase<RecipeAdditionYeastTableModel, RecipeAdditionYeast> {
    Q_OBJECT
 
    TABLE_MODEL_COMMON_DECL(RecipeAdditionYeast)
-
-public:
-   //! \brief Show ibus in the vertical header.
-   void setShowIBUs(bool var);
-
-private:
-   bool showIBUs; // True if you want to show the IBU contributions in the table rows.
 };
 
 //=============================================== CLASS RecipeAdditionYeastItemDelegate ================================================

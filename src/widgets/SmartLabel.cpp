@@ -149,6 +149,8 @@ void SmartLabel::mouseReleaseEvent(QMouseEvent * event) {
 }
 
 void SmartLabel::textEffect(bool enabled) {
+   // Uncomment the next command for diagnosing asserts!
+//   qDebug().noquote() << Q_FUNC_INFO << "Stack trace:" << Logging::getStackTrace();
    Q_ASSERT(this->pimpl->m_initialised);
 
    // If we are a label for a NonPhysicalQuantity, then we don't want the underline effect as there are no scale choices
