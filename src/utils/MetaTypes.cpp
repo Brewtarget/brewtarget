@@ -67,11 +67,12 @@ void registerMetaTypes() {
    qRegisterMetaType<QList<std::shared_ptr<RecipeAdjustmentSalt     >>>();
    qRegisterMetaType<QList<std::shared_ptr<RecipeUseOfWater         >>>();
 
-   qRegisterMetaType<std::shared_ptr<Boil        >>();
-   qRegisterMetaType<std::shared_ptr<Equipment   >>();
-   qRegisterMetaType<std::shared_ptr<Fermentation>>();
-   qRegisterMetaType<std::shared_ptr<Mash        >>();
-   qRegisterMetaType<std::shared_ptr<Style       >>();
+   qRegisterMetaType<std::shared_ptr<Boil            >>();
+   qRegisterMetaType<std::shared_ptr<Equipment       >>();
+   qRegisterMetaType<std::shared_ptr<Fermentation    >>();
+   qRegisterMetaType<std::shared_ptr<FermentationStep>>();
+   qRegisterMetaType<std::shared_ptr<Mash            >>();
+   qRegisterMetaType<std::shared_ptr<Style           >>();
 
    return;
 }

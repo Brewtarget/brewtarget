@@ -187,7 +187,7 @@ namespace InventoryTools {
    template<IsIngredient Ing>
    std::shared_ptr<typename Ing::InventoryClass> getInventory(Ing const & ing) {
       //
-      // At the moment, we assume there is at most on Inventory object per ingredient object.  In time we would like to
+      // At the moment, we assume there is at most one Inventory object per ingredient object.  In time we would like to
       // extend this to manage, eg, different purchases/batches as separate Inventory items, but that's for another day.
       //
       auto result = firstInventory<typename Ing::InventoryClass, Ing>(ing);
@@ -213,10 +213,11 @@ namespace InventoryTools {
 #define INVENTORY_DECL(IngredientName, LcIngredientName) \
 public:                                                                            \
    /** \brief See comment in model/NamedEntity.h */                                \
-   static QString localisedName();                                             \
+   static QString localisedName();                                                 \
                                                                                    \
    /** \brief See \c NamedEntity::typeLookup. */                                   \
    static TypeLookup const typeLookup;                                             \
+   TYPE_LOOKUP_GETTER                                                              \
                                                                                    \
    using IngredientClass = IngredientName;                                         \
                                                                                    \

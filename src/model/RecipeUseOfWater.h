@@ -63,6 +63,7 @@ public:
     *        info.
     */
    static TypeLookup const typeLookup;
+   TYPE_LOOKUP_GETTER
 
    RecipeUseOfWater(QString name = "", int const recipeId = -1, int const ingredientId = -1);
    RecipeUseOfWater(NamedParameterBundle const & namedParameterBundle);

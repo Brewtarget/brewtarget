@@ -26,6 +26,7 @@
 #include <vector>
 
 #include "BtFieldType.h"
+#include "model/NamedEntityCasters.h"
 #include "utils/BtStringConst.h"
 #include "utils/OptionalHelpers.h"
 #include "utils/TypeTraits.h"
@@ -95,6 +96,22 @@ struct TypeInfo {
    PointerType pointerType;
 
    /**
+    * \brief If and only if \c pointerType is PointerType::SharedPointer, this holds the function pointers necessary to
+    *        cast to and from equivalent pointers to \c NamedEntity.
+    *
+    *        In the templated factory function \c makeCasters, we have T is std::shared_ptr<NE> for some class NE, a
+    *        subclass of \c NamedEntity, so we need T::element_type to obtain NE to pass to
+    *        \c NamedEntityCasters::construct.
+    *
+    *        NOTE: We are taking a bit of a shortcut here in terms of assuming that any shared pointer is a shared
+    *              pointer to a subclass of \c NamedEntity.  I'm pretty sure this is valid at the moment, but if need
+    *              something more nuanced in future then we'd need to extend things slightly here.
+    */
+   std::optional<NamedEntityCasters> namedEntityCasters;
+   template<typename        T> static std::optional<NamedEntityCasters> makeCasters() {return std::nullopt;}
+   template<IsSharedPointer T> static std::optional<NamedEntityCasters> makeCasters() {return NamedEntityCasters::construct<typename T::element_type>();}
+
+   /**
     * \brief If the type is a subclass of \c NamedEntity (or a raw or smart pointer to one) then this will point to the
     *        \c TypeLookup for that class.  This is used in \c PropertyPath.  Otherwise this will hold \c nullptr.
     */
@@ -151,6 +168,7 @@ struct TypeInfo {
       return TypeInfo{makeTypeIndex<T>(),
                       makeClassification<T>(),
                       makePointerType<T>(),
+                      makeCasters<T>(),
                       typeLookup,
                       fieldType,
                       propertyName};

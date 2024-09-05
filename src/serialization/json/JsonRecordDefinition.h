@@ -342,7 +342,7 @@ public:
                         TypeLookup             const * const   typeLookup,
                         char                   const * const   namedEntityClassName,
                         QString                        const & localisedEntityName,
-                        NamedEntity::UpAndDownCasters  const   upAndDownCasters,
+                        NamedEntityCasters             const   upAndDownCasters,
                         JsonRecordConstructorWrapper           jsonRecordConstructorWrapper,
                         std::initializer_list<FieldDefinition> fieldDefinitions,
                         RecordType                     const   recordType);
@@ -361,7 +361,7 @@ public:
                            &T::typeLookup,
                            T::staticMetaObject.className(),
                            T::localisedName(),
-                           NamedEntity::makeUpAndDownCasters<T>(),
+                           NamedEntityCasters::construct<T>(),
                            JsonRecordDefinition::create<JsonNamedEntityRecord<T>>,
                            fieldDefinitions,
                            recordType) {
@@ -378,7 +378,7 @@ public:
                         TypeLookup             const * const   typeLookup,
                         char                   const * const   namedEntityClassName,
                         QString                        const & localisedEntityName,
-                        NamedEntity::UpAndDownCasters  const   upAndDownCasters,
+                        NamedEntityCasters             const   upAndDownCasters,
                         JsonRecordConstructorWrapper           jsonRecordConstructorWrapper,
                         std::initializer_list< std::initializer_list<FieldDefinition> > fieldDefinitionLists,
                         RecordType                     const   recordType);
@@ -391,7 +391,7 @@ public:
                            &T::typeLookup,
                            T::staticMetaObject.className(),
                            T::localisedName(),
-                           NamedEntity::makeUpAndDownCasters<T>(),
+                           NamedEntityCasters::construct<T>(),
                            JsonRecordDefinition::create<JsonNamedEntityRecord<T>>,
                            fieldDefinitionLists,
                            recordType) {

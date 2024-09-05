@@ -877,9 +877,10 @@ void XmlRecord::toXml(NamedEntity const & namedEntityToExport,
             writeIndents(out, indentLevel + 1 + ii, indentString);
             out << "<" << xPathElements.at(ii) << ">\n";
          }
-         qDebug() << Q_FUNC_INFO << xPathElements;
-         qDebug() << Q_FUNC_INFO << xPathElements.last();
-         std::unique_ptr<XmlRecord> subRecord{this->m_recordDefinition.makeRecord(this->m_coding)};
+         qDebug() <<
+            Q_FUNC_INFO << "Creating XmlRecord for" << fieldDefinition.propertyPath << ".  XPath:" << xPathElements <<
+            ";" << xPathElements.last();
+         std::unique_ptr<XmlRecord> subRecord{childRecordDefinition.makeRecord(this->m_coding)};
 
          if (XmlRecordDefinition::FieldType::Record == fieldDefinition.type) {
             //
@@ -959,7 +960,30 @@ void XmlRecord::toXml(NamedEntity const & namedEntityToExport,
          //
          valueAsText = fieldDefinition.propertyPath.asXPath();
       } else {
+         // Uncomment this if the assert below is firing
+         qDebug() <<
+            Q_FUNC_INFO << "To write" << fieldDefinition.xPath << ", reading property" <<
+            fieldDefinition.propertyPath << "from" << namedEntityToExport;
          QVariant value = fieldDefinition.propertyPath.getValue(namedEntityToExport);
+         //
+         // In older versions of the code, when we were accessing properties directly, it would be a valid to assert at
+         // this stage, that we always get something back (even if it is nullptr or std::nullopt) when we ask for a
+         // property.
+         //
+         // However, with property paths, we can no longer always say this.  Eg, if the property path is
+         // Recipe::fermentation > Fermentation::secondary > Step::stepTime_days, then we expect to get nothing back if
+         // Fermentation::secondary is nullptr (ie the fermentation is a single stage one).
+         //
+         // What we can say, is that, for a trivial (ie single element) property path (which is the vast majority of
+         // them), it is still true that it would be a coding error not to receive some sort of valid value back.
+         //
+         if (fieldDefinition.propertyPath.properties().length() > 1 && !value.isValid()) {
+            // Non-trivial property path returned invalid value, so assume this means nothing to write out
+            continue;
+         }
+
+         // At this point, we know the return value is valid if the property path was non-trivial.  We now assert that
+         // it must also be valid for the other cases (ie trivial property path).
          Q_ASSERT(value.isValid());
 
          // It's a coding error if we are trying here to write out some field with a complex XPath

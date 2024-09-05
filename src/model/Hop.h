@@ -165,6 +165,7 @@ public:
     *        info.
     */
    static TypeLookup const typeLookup;
+   TYPE_LOOKUP_GETTER
 
    Hop(QString name = "");
    Hop(NamedParameterBundle const & namedParameterBundle);
@@ -216,18 +217,18 @@ public:
    Q_PROPERTY(std::optional<double> myrcene_pct           READ myrcene_pct           WRITE setMyrcene_pct          )
 
    // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
-   Q_PROPERTY(std::optional<double> totalOil_mlPer100g READ totalOil_mlPer100g WRITE setTotalOil_mlPer100g)
-   Q_PROPERTY(std::optional<double> farnesene_pct         READ farnesene_pct         WRITE setFarnesene_pct        )
-   Q_PROPERTY(std::optional<double> geraniol_pct          READ geraniol_pct          WRITE setGeraniol_pct         )
-   Q_PROPERTY(std::optional<double> bPinene_pct          READ bPinene_pct          WRITE setBPinene_pct         )
-   Q_PROPERTY(std::optional<double> linalool_pct          READ linalool_pct          WRITE setLinalool_pct         )
-   Q_PROPERTY(std::optional<double> limonene_pct          READ limonene_pct          WRITE setLimonene_pct         )
-   Q_PROPERTY(std::optional<double> nerol_pct             READ nerol_pct             WRITE setNerol_pct            )
-   Q_PROPERTY(std::optional<double> pinene_pct            READ pinene_pct            WRITE setPinene_pct           )
-   Q_PROPERTY(std::optional<double> polyphenols_pct       READ polyphenols_pct       WRITE setPolyphenols_pct      )
-   Q_PROPERTY(std::optional<double> xanthohumol_pct       READ xanthohumol_pct       WRITE setXanthohumol_pct      )
-   Q_PROPERTY(QString               producer     READ producer     WRITE setProducer             )
-   Q_PROPERTY(QString               productId   READ productId   WRITE setProductId           )
+   Q_PROPERTY(std::optional<double> totalOil_mlPer100g    READ totalOil_mlPer100g   WRITE setTotalOil_mlPer100g)
+   Q_PROPERTY(std::optional<double> farnesene_pct         READ farnesene_pct        WRITE setFarnesene_pct     )
+   Q_PROPERTY(std::optional<double> geraniol_pct          READ geraniol_pct         WRITE setGeraniol_pct      )
+   Q_PROPERTY(std::optional<double> bPinene_pct           READ bPinene_pct          WRITE setBPinene_pct       )
+   Q_PROPERTY(std::optional<double> linalool_pct          READ linalool_pct         WRITE setLinalool_pct      )
+   Q_PROPERTY(std::optional<double> limonene_pct          READ limonene_pct         WRITE setLimonene_pct      )
+   Q_PROPERTY(std::optional<double> nerol_pct             READ nerol_pct            WRITE setNerol_pct         )
+   Q_PROPERTY(std::optional<double> pinene_pct            READ pinene_pct           WRITE setPinene_pct        )
+   Q_PROPERTY(std::optional<double> polyphenols_pct       READ polyphenols_pct      WRITE setPolyphenols_pct   )
+   Q_PROPERTY(std::optional<double> xanthohumol_pct       READ xanthohumol_pct      WRITE setXanthohumol_pct   )
+   Q_PROPERTY(QString               producer              READ producer             WRITE setProducer          )
+   Q_PROPERTY(QString               productId             READ productId            WRITE setProductId         )
    /**
     * \brief It might seem odd to store year as a string rather than, say, std::optional<unsigned int>, but this is
     *        deliberate and for two reasons.  Firstly BeerJSON treats it as a string.  Secondly, we don't want it

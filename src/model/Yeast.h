@@ -194,6 +194,7 @@ public:
     *        info.
     */
    static TypeLookup const typeLookup;
+   TYPE_LOOKUP_GETTER
 
    Yeast(QString name = "");
    Yeast(NamedParameterBundle const & namedParameterBundle);

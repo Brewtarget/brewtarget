@@ -85,6 +85,7 @@ public:
     *        info.
     */
    static TypeLookup const typeLookup;
+   TYPE_LOOKUP_GETTER
 
    Mash(QString name = "");
    Mash(NamedParameterBundle const & namedParameterBundle);

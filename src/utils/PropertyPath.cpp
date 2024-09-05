@@ -138,22 +138,29 @@ QVariant PropertyPath::getValue(NamedEntity const & obj) const {
    NamedEntity const * ne = &obj;
    for (auto const property : this->m_properties) {
       // Normally keep the next line commented out otherwise it generates too many lines in the log file
-//      qDebug() << Q_FUNC_INFO << "Looking at" << *property;
+      qDebug() << Q_FUNC_INFO << "Looking at" << *property;
 
       if (property == this->m_properties.last()) {
+         //
+         // We've chained through the properties and found the end one that we want the actual value of
+         //
+         QMetaObject const * neMetaObject = ne->metaObject();
+         // Uncomment the next line if the assert below is firing
+//         qDebug() <<
+//            Q_FUNC_INFO << "Request to get" << this->m_path << "on" << obj.metaObject()->className() << "(=" <<
+//            *property << "on" << ne->metaObject()->className() << ")";
 
          // It's a coding error if we're trying to get a non-existent property on the NamedEntity subclass for this
          // record.
-         QMetaObject const * neMetaObject = ne->metaObject();
          int propertyIndex = neMetaObject->indexOfProperty(**property);
          Q_ASSERT(propertyIndex >= 0);
          QMetaProperty neMetaProperty = neMetaObject->property(propertyIndex);
 
-      // Normally keep this log statement commented out otherwise it generates too many lines in the log file
-//         qDebug() <<
-//            Q_FUNC_INFO << "Request to get" << this->m_path << "on" << obj.metaObject()->className() << "(=" <<
-//            *property << "on" << ne->metaObject()->className() << "); property type =" << neMetaProperty.typeName() <<
-//            "; readable =" << neMetaProperty.isReadable();
+         // Normally keep this log statement commented out otherwise it generates too many lines in the log file
+         qDebug() <<
+            Q_FUNC_INFO << "Request to get" << this->m_path << "on" << obj.metaObject()->className() << "(=" <<
+            *property << "on" << ne->metaObject()->className() << "); property type =" << neMetaProperty.typeName() <<
+            "; readable =" << neMetaProperty.isReadable();
 
          if (neMetaProperty.isReadable()) {
             retVal = ne->property(**property);
@@ -167,14 +174,57 @@ QVariant PropertyPath::getValue(NamedEntity const & obj) const {
          break;
       }
 
-      // Note that what we are expecting to get back inside the QVariant is `NamedEntity *`.  It's OK for us to assign
-      // this pointer to a variable of type `NamedEntity const *`, but we shouldn't expect
-      // `containedNe.canConvert<NamedEntity const *>()` to return true (because it won't).
+      //
+      // Note that we can't fall through from the above "if" here.
+      //
+      // This is a property prior to the last one in the chain.  So it's some sort of pointer to an object which is a
+      // subclass of NamedEntity.
+      //
+      // Although we hope one day to be able to simplify things (when we have thought more profoundly about object
+      // lifetimes and ownership), for the moment, the pointer could be either a raw pointer or a shared one.  For a raw
+      // pointer, life is relatively easy as we can safely downcast it to a `NamedEntity *` and then ask it to give us
+      // the Qt Property we are after (next time around the loop).  For a shared pointer, things are a bit more
+      // complicated and we need some help from TypeInfo to obtain a `NamedEntity *`.  Either way, we need to get the
+      // TypeInfo object first to find out what sort of pointer we're dealing with.
+      //
       QVariant containedNe = ne->property(**property);
-      if (!containedNe.isValid() || !containedNe.canConvert<NamedEntity *>()) {
-         break;
+      TypeInfo const & typeInfo = ne->getTypeLookup().getType(*property);
+      switch (typeInfo.pointerType) {
+         case TypeInfo::PointerType::RawPointer:
+            // In this case, what we are expecting inside the containedNe QVariant is `NamedEntity *`.  It's OK for
+            // us to assign this pointer to a variable of type `NamedEntity const *`, but we shouldn't expect
+            // `containedNe.canConvert<NamedEntity const *>()` to return true (because it won't).
+            if (!containedNe.isValid() || !containedNe.canConvert<NamedEntity *>()) {
+               break;
+            }
+            ne = containedNe.value<NamedEntity *>();
+            break;
+
+         case TypeInfo::PointerType::SharedPointer:
+            //
+            // Inside the QVariant will be std::shared_ptr<NE> where NE is some subclass of NamedEntity.  We want to
+            // convert it to something known, which we can do by giving the QVariant to the relevant
+            // NamedEntityCasters::downcastPointer function.
+            //
+            // First we assert that it's a coding error if we don't have caster functions in the type info for a
+            // shared pointer type.
+            //
+            Q_ASSERT(typeInfo.namedEntityCasters);
+            ne = typeInfo.namedEntityCasters->m_pointerDowncaster(containedNe).get();
+            break;
+
+         case TypeInfo::PointerType::NotPointer:
+            // This is a coding error, as we shouldn't have something that's not a pointer at all as an "internal" node
+            // in a property path.
+            qCritical() << Q_FUNC_INFO << *property << "on" << ne << "is not pointer!";
+            Q_ASSERT(false);
+            // This forces an exit below
+            ne = nullptr;
+            break;
+
+         // No default case as we want compiler to warn us if we missed an enumeration
       }
-      ne = containedNe.value<NamedEntity *>();
+
       if (!ne) {
          qDebug() << Q_FUNC_INFO << "Property" << *property << "returned nullptr";
          break;

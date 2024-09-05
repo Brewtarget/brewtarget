@@ -99,6 +99,7 @@ void RecipeAdjustmentSaltTableModel::updateTotals() { return; }
 
 void RecipeAdjustmentSaltTableModel::catchSalt() {
    // This gets stored in the DB in saveAndClose()
+   qDebug() << Q_FUNC_INFO;
    auto gaq = std::make_shared<RecipeAdjustmentSalt>("");
    this->add(gaq);
    return;

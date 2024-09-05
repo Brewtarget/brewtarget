@@ -106,6 +106,7 @@ public:
     *        info.
     */
    static TypeLookup const typeLookup;
+   TYPE_LOOKUP_GETTER
 
    Salt(QString name = "");
    Salt(NamedParameterBundle const & namedParameterBundle);
@@ -122,12 +123,12 @@ public:
    Q_PROPERTY(bool      isAcid         READ isAcid         WRITE setIsAcid          )
    Q_PROPERTY(Measurement::PhysicalQuantity suggestedMeasure READ suggestedMeasure)
 
-   Salt::Type      type()           const;
+   Salt::Type            type       () const;
    double          percentAcid()    const;
-   bool            isAcid()         const;
+   bool                  isAcid     () const;
    Measurement::PhysicalQuantity suggestedMeasure() const;
 
-   void setType          (Salt::Type      val);
+   void setType       (Salt::Type val);
    void setPercentAcid   (double          val);
    void setIsAcid        (bool            val);
 
@@ -173,7 +174,7 @@ protected:
    virtual ObjectStore & getObjectStoreTypedInstance() const;
 
 private:
-   Salt::Type m_type;
+   Salt::Type            m_type;
    double     m_percent_acid;
    bool       m_is_acid;
 };

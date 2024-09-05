@@ -80,6 +80,7 @@ public:
     *        info.
     */
    static TypeLookup const typeLookup;
+   TYPE_LOOKUP_GETTER
 
    Boil(QString name = "");
    Boil(NamedParameterBundle const & namedParameterBundle);
@@ -109,9 +110,9 @@ public:
 
    //=================================================== PROPERTIES ====================================================
    //! \brief Folder.  See model/FolderBase for implementation of the getter & setter.
-   Q_PROPERTY(QString folder READ folder WRITE setFolder)
-   Q_PROPERTY(QString               description            READ description     WRITE setDescription   )
-   Q_PROPERTY(QString               notes                  READ notes           WRITE setNotes         )
+   Q_PROPERTY(QString folder        READ folder        WRITE setFolder     )
+   Q_PROPERTY(QString description   READ description   WRITE setDescription)
+   Q_PROPERTY(QString notes         READ notes         WRITE setNotes      )
 
    /**
     * \brief This is optional because it's optional in BeerJSON.  The equivalent field in BeerXML (BOIL_SIZE on RECIPE)
@@ -121,6 +122,7 @@ public:
     *        fall back to that as a "better than nothing" value when this one is \c std::nullopt.
     */
    Q_PROPERTY(std::optional<double> preBoilSize_l          READ preBoilSize_l   WRITE setPreBoilSize_l )
+
    /**
     * \brief The total time to boil the wort.  Hopefully equal to the sum of the times of all the steps.
     *        (TODO: We should probably add some validation about this, though it's a bit complicated as not all steps

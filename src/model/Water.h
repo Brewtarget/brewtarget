@@ -132,6 +132,7 @@ public:
     *        info.
     */
    static TypeLookup const typeLookup;
+   TYPE_LOOKUP_GETTER
 
    Water(QString name = "");
    Water(NamedParameterBundle const & namedParameterBundle);

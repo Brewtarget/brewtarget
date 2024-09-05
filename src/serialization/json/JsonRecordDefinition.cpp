@@ -39,16 +39,12 @@ namespace {
 
 JsonRecordDefinition::FieldDefinition::FieldDefinition(FieldType type,
                                                        JsonXPath xPath,
-///                                                       BtStringConst const & propertyName,
                                                        PropertyPath propertyPath,
                                                        ValueDecoder valueDecoder) :
    type{type},
    xPath{xPath},
-///   propertyName{&propertyName},
    propertyPath{propertyPath},
    valueDecoder{valueDecoder} {
-///   // Per comment in header file, propertyName should never be nullptr; use BtString::NULL_STR instead if it is not set
-///   Q_ASSERT(this->propertyName);
    return;
 }
 
@@ -57,7 +53,7 @@ JsonRecordDefinition::JsonRecordDefinition(
    TypeLookup const *            const   typeLookup,
    char const *                  const   namedEntityClassName,
    QString                       const & localisedEntityName,
-   NamedEntity::UpAndDownCasters const   upAndDownCasters,
+   NamedEntityCasters            const   upAndDownCasters,
    JsonRecordConstructorWrapper          jsonRecordConstructorWrapper,
    std::initializer_list<JsonRecordDefinition::FieldDefinition> fieldDefinitions,
    RecordType                    const   recordType
@@ -74,7 +70,7 @@ JsonRecordDefinition::JsonRecordDefinition(
    TypeLookup const *            const   typeLookup,
    char const *                  const   namedEntityClassName,
    QString                       const & localisedEntityName,
-   NamedEntity::UpAndDownCasters const   upAndDownCasters,
+   NamedEntityCasters            const   upAndDownCasters,
    JsonRecordConstructorWrapper          jsonRecordConstructorWrapper,
    std::initializer_list< std::initializer_list<FieldDefinition> > fieldDefinitionLists,
    RecordType                    const   recordType

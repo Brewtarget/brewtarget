@@ -34,6 +34,7 @@
 #include <QVariant>
 
 #include "model/FolderBase.h"
+#include "model/NamedEntityCasters.h"
 #include "utils/BtStringConst.h"
 #include "utils/MetaTypes.h"
 #include "utils/TypeLookup.h"
@@ -68,6 +69,20 @@ AddPropertyName(parentKey)
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
 //======================================================================================================================
+
+/**
+ * \brief See \c NamedEntity::typeLookup.  This macro -- to include just after \c typeLookup in the class declaration of
+ *        \c NamedEntity and every non-abstract sublass thereof -- adds a virtual member function to return the static
+ *        \c typeLookup member.
+ *
+ *        I'm not sure whether there is a clever way to do this with the curiously recurring template pattern, but, if
+ *        there is, I haven't figured it out yet.  So, for now at least, macros are better than copy-and-paste code
+ *        everywhere.
+ *
+ *        NOTE that, strictly, this is not needed on abstract classes, though it is relatively harmless to include on
+ *        them.
+ */
+#define TYPE_LOOKUP_GETTER inline virtual TypeLookup const & getTypeLookup() const { return typeLookup; }
 
 /*!
  * \class NamedEntity
@@ -138,8 +153,14 @@ public:
     *        it \b before we have created the object.  Eg, if we are reading a \c Fermentable from the DB, we first read
     *        all the fields and construct a \c NamedParameterBundle, and then use that \c NamedParameterBundle to
     *        construct the \c Fermentable.
+    *
+    *        In other circumstances, if we need the \c TypeLookup for an instance of an unknown subclass of
+    *        \c NamedEntity (eg in the \c PropertyPath), we should call the virtual member function \c getTypeLookup
+    *        which just returns the relevant object.  That's a turn-the-handle function
     */
    static TypeLookup const typeLookup;
+   // See comment above for what this does
+   TYPE_LOOKUP_GETTER
 
    NamedEntity(QString t_name, bool t_display = false);
    NamedEntity(NamedEntity const & other);
@@ -585,117 +606,12 @@ protected:
       return true;
    }
 
-public:
-
-   /**
-    * \brief Converts a QVariant containing `std::shared_ptr<Hop>` or `std::shared_ptr<Fermentable>` etc to
-    *        `std::shared_ptr<NamedEntity>`.
-    */
-   template<typename T>
-   static std::shared_ptr<NamedEntity> downcastPointer(QVariant const & input) {
-      return std::static_pointer_cast<NamedEntity>(input.value<std::shared_ptr<T>>());
-   }
-
-   /**
-    * \brief Opposite of \c downcastVariant.  Converts `std::shared_ptr<NamedEntity>` to a QVariant containing
-    *        `std::shared_ptr<Hop>` or `std::shared_ptr<Fermentable>` etc.
-    */
-   template<typename T>
-   static QVariant upcastPointer(std::shared_ptr<NamedEntity> input) {
-      return QVariant::fromValue(std::static_pointer_cast<T>(input));
-   }
-
-   /**
-    * \brief Converts `QList<shared_ptr<Hop>>` or `QList<shared_ptr<Fermentable>>` etc to
-    *        `QList<shared_ptr<NamedEntity>>`.
-    */
-   template<typename T>
-   static QList< std::shared_ptr<NamedEntity> > downcastList(QList<std::shared_ptr<T>> const & inputList) {
-      QList< std::shared_ptr<NamedEntity> > outputList;
-      outputList.reserve(inputList.size());
-      for (std::shared_ptr<T> ii : inputList) {
-         outputList.append(std::static_pointer_cast<NamedEntity>(ii));
-      }
-      return outputList;
-   }
-
-   /**
-    * \brief Converts `QList<shared_ptr<NamedEntity>>` to `QList<shared_ptr<Hop>>` or `QList<shared_ptr<Fermentable>>`
-    *        etc.
-    */
-   template<typename T>
-   static QList< std::shared_ptr<T> > upcastList(QList<std::shared_ptr<NamedEntity>> const & inputList) {
-      QList< std::shared_ptr<T> > outputList;
-      outputList.reserve(inputList.size());
-      for (std::shared_ptr<NamedEntity> ii : inputList) {
-         outputList.append(std::static_pointer_cast<T>(ii));
-      }
-      return outputList;
-   }
-
-   /**
-    * \brief In various parts of the generic serialisation code (for XML and JSON), it is useful, for a given subclass
-    *        \c T of \c NamedEntity, to have a pointer to a function that can cast a list of base pointers to derived
-    *        ones.  This is typically because we want to pass such a list in to the property system so that it can call
-    *        a setter function.  This is fortunate because it means we can avoid having the function pointer signature
-    *        depend on T (even though it points to a templated function).
-    */
-   template<typename T>
-   static QVariant upcastListToVariant(QList<std::shared_ptr<NamedEntity>> const & inputList) {
-      return QVariant::fromValue(NamedEntity::upcastList<T>(inputList));
-   }
-
-   /**
-    * \brief In counterpart to \c upcastListToVariant, we need to be able to cast in the opposite direction.  Again, we
-    *        don't want the function \b signature to depend on T, and again the use of \c QVariant allows this.
-    *
-    * \param inputList A \c QVariant holding QList< std::shared_ptr<T>>
-    */
-   template<typename T>
-   static QList<std::shared_ptr<NamedEntity>> downcastListFromVariant(QVariant const & inputList) {
-      return NamedEntity::downcastList<T>(inputList.value<QList<std::shared_ptr<T>>>());
-   }
-
-   /**
-    * \brief It's useful in places to have pointers to all the upcasters and downcasters for a given type
-    */
-   struct UpAndDownCasters{
-      std::shared_ptr<NamedEntity>                (*m_pointerDowncaster        )(QVariant const &                           );
-      QVariant                                    (*m_pointerUpcaster          )(std::shared_ptr<NamedEntity>               );
-      QVariant                                    (*m_listUpcaster             )(QList<std::shared_ptr<NamedEntity>> const &);
-      QList<std::shared_ptr<NamedEntity>>         (*m_listDowncaster           )(QVariant const &                           );
-   };
-
-   /**
-    * \brief And because we can't template the constructor of a non-templated class/struct, we need a templated factory
-    *        function.
-    */
-   template<typename T>
-   static UpAndDownCasters makeUpAndDownCasters() {
-      return {
-         NamedEntity::downcastPointer        <T>,
-         NamedEntity::upcastPointer          <T>,
-         NamedEntity::upcastListToVariant    <T>,
-         NamedEntity::downcastListFromVariant<T>
-      };
-   }
-
 private:
   QString m_name;
   bool m_display;
   bool m_deleted;
   bool m_beingModified;
 };
-
-/**
- * \brief The downside of the \c UpAndDownCasters is that we now need to declare all sorts of permutations of
- *        Q_DECLARE_METATYPE, including a lot that we'll never actually use in practice.  So it's simpler to have our
- *        own macro that generates all the Q_DECLARE_METATYPE macros we think we'll need for a class.
- */
-#define BT_DECLARE_METATYPES(ClassName) \
-Q_DECLARE_METATYPE(std::shared_ptr<ClassName> ) \
-Q_DECLARE_METATYPE(QList<                ClassName *>) \
-Q_DECLARE_METATYPE(QList<std::shared_ptr<ClassName> >)
 
 /**
  * \brief Convenience typedef for pointer to \c isOptional();
