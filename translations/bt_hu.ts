@@ -7038,6 +7038,14 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
         <source>Amount Type</source>
         <translation type="unfinished">Mennyiségi egység</translation>
     </message>
+    <message>
+        <source>ID in database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The ID of this fermentable in the database.  Sometimes useful for debugging.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>fermentationEditor</name>
@@ -7102,14 +7110,6 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source>Free rise is used to indicate a fermentation step where the exothermic fermentation is allowed to raise the temperature without restriction</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Temp. lag time</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Lag time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

@@ -588,7 +588,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="../brewtarget.qrc">
+        <iconset resource="../resources.qrc">
          <normaloff>:/images/smallPlus.svg</normaloff>:/images/smallPlus.svg</iconset>
        </property>
        <property name="autoDefault">
@@ -605,7 +605,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="../brewtarget.qrc">
+        <iconset resource="../resources.qrc">
          <normaloff>:/images/filesave.svg</normaloff>:/images/filesave.svg</iconset>
        </property>
        <property name="autoDefault">
@@ -625,7 +625,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="../brewtarget.qrc">
+        <iconset resource="../resources.qrc">
          <normaloff>:/images/exit.svg</normaloff>:/images/exit.svg</iconset>
        </property>
        <property name="autoDefault">
@@ -692,6 +692,6 @@
   <tabstop>textEdit_notes</tabstop>
  </tabstops>
  <resources>
-  <include location="../brewtarget.qrc"/>
+  <include location="../resources.qrc"/>
  </resources>
 </ui>

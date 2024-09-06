@@ -7038,6 +7038,14 @@ O volume final do fermentador primário é %1.</translation>
         <source>Amount Type</source>
         <translation type="unfinished">Tipo Quantidade</translation>
     </message>
+    <message>
+        <source>ID in database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The ID of this fermentable in the database.  Sometimes useful for debugging.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>fermentationEditor</name>
@@ -7106,11 +7114,11 @@ O volume final do fermentador primário é %1.</translation>
     </message>
     <message>
         <source>Temp. lag time</source>
-        <translation type="unfinished">tempo de atraso</translation>
+        <translation type="obsolete">tempo de atraso</translation>
     </message>
     <message>
         <source>Lag time</source>
-        <translation type="unfinished">Atraso</translation>
+        <translation type="obsolete">Atraso</translation>
     </message>
     <message>
         <source>End temp.</source>

@@ -548,7 +548,7 @@
   <tabstop>buttonBox</tabstop>
  </tabstops>
  <resources>
-  <include location="../brewtarget.qrc"/>
+  <include location="../resources.qrc"/>
  </resources>
  <connections>
   <connection>

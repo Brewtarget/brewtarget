@@ -7041,6 +7041,14 @@ The final volume in the primary is %1.</source>
         <source>Amount Type</source>
         <translation type="unfinished">Miktar Türü</translation>
     </message>
+    <message>
+        <source>ID in database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The ID of this fermentable in the database.  Sometimes useful for debugging.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>fermentationEditor</name>
@@ -7109,11 +7117,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Temp. lag time</source>
-        <translation type="unfinished">Sıcaklık gecikme süresi</translation>
+        <translation type="obsolete">Sıcaklık gecikme süresi</translation>
     </message>
     <message>
         <source>Lag time</source>
-        <translation type="unfinished">Gecikme süresi</translation>
+        <translation type="obsolete">Gecikme süresi</translation>
     </message>
     <message>
         <source>End temp.</source>

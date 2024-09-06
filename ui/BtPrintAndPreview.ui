@@ -356,7 +356,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../brewtarget.qrc"/>
+  <include location="../resources.qrc"/>
  </resources>
  <connections/>
  <buttongroups>

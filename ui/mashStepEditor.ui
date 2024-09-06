@@ -277,7 +277,7 @@
         <string>New</string>
        </property>
        <property name="icon">
-        <iconset resource="../brewtarget.qrc">
+        <iconset resource="../resources.qrc">
          <normaloff>:/images/smallPlus.svg</normaloff>:/images/smallPlus.svg</iconset>
        </property>
       </widget>
@@ -291,7 +291,7 @@
         <string>Save</string>
        </property>
        <property name="icon">
-        <iconset resource="../brewtarget.qrc">
+        <iconset resource="../resources.qrc">
          <normaloff>:/images/filesave.svg</normaloff>:/images/filesave.svg</iconset>
        </property>
       </widget>
@@ -305,7 +305,7 @@
         <string>Cancel</string>
        </property>
        <property name="icon">
-        <iconset resource="../brewtarget.qrc">
+        <iconset resource="../resources.qrc">
          <normaloff>:/images/exit.svg</normaloff>:/images/exit.svg</iconset>
        </property>
       </widget>

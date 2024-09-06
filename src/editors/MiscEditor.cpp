@@ -92,6 +92,7 @@ void MiscEditor::readFieldsFromEditItem(std::optional<QString> propName) {
    if (!propName || *propName == PropertyNames::Misc::producer   ) { this->lineEdit_producer ->setTextCursor(m_editItem->producer ()); if (propName) { return; } }
    if (!propName || *propName == PropertyNames::Misc::productId  ) { this->lineEdit_productId->setTextCursor(m_editItem->productId()); if (propName) { return; } }
 
+   this->label_id_value->setText(QString::number(m_editItem->key()));
    return;
 }
 

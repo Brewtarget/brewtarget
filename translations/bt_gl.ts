@@ -5850,6 +5850,14 @@ The final volume in the primary is %1.</source>
         <source>Amount Type</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>ID in database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The ID of this fermentable in the database.  Sometimes useful for debugging.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>fermentationEditor</name>
@@ -5914,14 +5922,6 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Free rise is used to indicate a fermentation step where the exothermic fermentation is allowed to raise the temperature without restriction</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Temp. lag time</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Lag time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

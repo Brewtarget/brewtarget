@@ -138,7 +138,7 @@ QVariant PropertyPath::getValue(NamedEntity const & obj) const {
    NamedEntity const * ne = &obj;
    for (auto const property : this->m_properties) {
       // Normally keep the next line commented out otherwise it generates too many lines in the log file
-      qDebug() << Q_FUNC_INFO << "Looking at" << *property;
+//      qDebug() << Q_FUNC_INFO << "Looking at" << *property;
 
       if (property == this->m_properties.last()) {
          //
@@ -157,10 +157,10 @@ QVariant PropertyPath::getValue(NamedEntity const & obj) const {
          QMetaProperty neMetaProperty = neMetaObject->property(propertyIndex);
 
          // Normally keep this log statement commented out otherwise it generates too many lines in the log file
-         qDebug() <<
-            Q_FUNC_INFO << "Request to get" << this->m_path << "on" << obj.metaObject()->className() << "(=" <<
-            *property << "on" << ne->metaObject()->className() << "); property type =" << neMetaProperty.typeName() <<
-            "; readable =" << neMetaProperty.isReadable();
+//         qDebug() <<
+//            Q_FUNC_INFO << "Request to get" << this->m_path << "on" << obj.metaObject()->className() << "(=" <<
+//            *property << "on" << ne->metaObject()->className() << "); property type =" << neMetaProperty.typeName() <<
+//            "; readable =" << neMetaProperty.isReadable();
 
          if (neMetaProperty.isReadable()) {
             retVal = ne->property(**property);

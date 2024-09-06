@@ -7114,6 +7114,14 @@ El volum final al primari és de %1.</translation>
         <source>Amount Type</source>
         <translation type="unfinished">Tipus de quantitat</translation>
     </message>
+    <message>
+        <source>ID in database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The ID of this fermentable in the database.  Sometimes useful for debugging.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>fermentationEditor</name>
@@ -7182,11 +7190,11 @@ El volum final al primari és de %1.</translation>
     </message>
     <message>
         <source>Temp. lag time</source>
-        <translation type="unfinished">Lapse entre temparatures</translation>
+        <translation type="obsolete">Lapse entre temparatures</translation>
     </message>
     <message>
         <source>Lag time</source>
-        <translation type="unfinished">Lapse de temps</translation>
+        <translation type="obsolete">Lapse de temps</translation>
     </message>
     <message>
         <source>End temp.</source>

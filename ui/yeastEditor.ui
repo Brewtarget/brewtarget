@@ -33,7 +33,7 @@
        <string>Main</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout">
-       <item row="0" column="0">
+       <item row="0" column="1">
         <widget class="QLabel" name="label_name">
          <property name="text">
           <string>Name</string>
@@ -43,27 +43,28 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="1" colspan="3">
+       <item row="0" column="2" colspan="4">
         <widget class="SmartLineEdit" name="lineEdit_name">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
          <property name="toolTip">
           <string>Name</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_type">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
+       <item row="1" column="3">
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
          </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLabel" name="label_type">
          <property name="text">
           <string>Type</string>
          </property>
@@ -72,14 +73,14 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="1">
+       <item row="2" column="2">
         <widget class="BtComboBox" name="comboBox_yeastType">
          <property name="toolTip">
           <string>Type</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
+       <item row="2" column="4">
         <widget class="QLabel" name="label_form">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -95,14 +96,14 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="1">
+       <item row="2" column="5">
         <widget class="BtComboBox" name="comboBox_yeastForm">
          <property name="toolTip">
           <string>Form</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="2">
+       <item row="3" column="1">
         <widget class="SmartLabel" name="label_inventory">
          <property name="text">
           <string>Total amount in Inventory</string>
@@ -112,7 +113,7 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="3">
+       <item row="3" column="2">
         <widget class="SmartLineEdit" name="lineEdit_inventory">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -125,8 +126,7 @@
          </property>
         </widget>
        </item>
-
-       <item row="2" column="4">
+       <item row="3" column="4">
         <widget class="QLabel" name="label_amountType">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -145,21 +145,14 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="5">
+       <item row="3" column="5">
         <widget class="BtComboBox" name="comboBox_amountType">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
          <property name="toolTip">
           <string>Whether the amount is weight or volume</string>
          </property>
         </widget>
        </item>
-
-       <item row="3" column="0">
+       <item row="4" column="1">
         <widget class="QLabel" name="label_laboratory">
          <property name="text">
           <string>Lab</string>
@@ -169,20 +162,14 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="1" colspan="2">
+       <item row="4" column="2" colspan="3">
         <widget class="SmartLineEdit" name="lineEdit_laboratory">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
          <property name="toolTip">
           <string>Lab</string>
          </property>
         </widget>
        </item>
-       <item row="4" column="0">
+       <item row="5" column="1">
         <widget class="QLabel" name="label_productId">
          <property name="text">
           <string>Product ID</string>
@@ -192,20 +179,14 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="1" colspan="2">
+       <item row="5" column="2" colspan="3">
         <widget class="SmartLineEdit" name="lineEdit_productId">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
          <property name="toolTip">
           <string>Product ID</string>
          </property>
         </widget>
        </item>
-       <item row="5" column="1">
+       <item row="12" column="1">
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -217,6 +198,30 @@
           </size>
          </property>
         </spacer>
+       </item>
+       <item row="13" column="0">
+        <widget class="InfoButton" name="infoButton_id"></widget>
+       </item>
+       <item row="13" column="1">
+        <widget class="QLabel" name="label_id">
+         <property name="text">
+          <string>ID in database</string>
+         </property>
+        </widget>
+       </item>
+       <item row="13" column="2">
+        <widget class="QLabel" name="label_id_value">
+        </widget>
+       </item>
+       <item row="14" column="1" colspan="5">
+        <widget class="InfoText" name="infoText_id">
+         <property name="buddy">
+          <cstring>infoButton_id</cstring>
+         </property>
+         <property name="text">
+          <string>You can normally ignore this, but it's sometimes useful for debugging.</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -518,7 +523,6 @@
          </property>
         </widget>
        </item>
-
        <item row="9" column="1">
         <spacer name="verticalSpacer_2">
          <property name="orientation">
@@ -559,7 +563,7 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
-      <spacer name="horizontalSpacer">
+      <spacer name="horizontalSpacer_2">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
@@ -580,7 +584,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="../brewtarget.qrc">
+        <iconset resource="../resources.qrc">
          <normaloff>:/images/smallPlus.svg</normaloff>:/images/smallPlus.svg</iconset>
        </property>
       </widget>
@@ -594,7 +598,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="../brewtarget.qrc">
+        <iconset resource="../resources.qrc">
          <normaloff>:/images/filesave.svg</normaloff>:/images/filesave.svg</iconset>
        </property>
       </widget>
@@ -608,7 +612,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="../brewtarget.qrc">
+        <iconset resource="../resources.qrc">
          <normaloff>:/images/exit.svg</normaloff>:/images/exit.svg</iconset>
        </property>
       </widget>
@@ -622,6 +626,16 @@
    <class>BtComboBox</class>
    <extends>QComboBox</extends>
    <header>widgets/BtComboBox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>InfoButton</class>
+   <extends>QPushButton</extends>
+   <header>widgets/InfoButton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>InfoText</class>
+   <extends>QLabel</extends>
+   <header>widgets/InfoText.h</header>
   </customwidget>
   <customwidget>
    <class>BtBoolComboBox</class>
@@ -653,7 +667,8 @@
   <tabstop>lineEdit_laboratory</tabstop>
   <tabstop>lineEdit_productId</tabstop>
   <tabstop>lineEdit_inventory</tabstop>
-  <tabstop>lineEdit_attenuation</tabstop>
+  <tabstop>lineEdit_attenuationMin</tabstop>
+  <tabstop>lineEdit_attenuationMax</tabstop>
   <tabstop>lineEdit_minTemperature</tabstop>
   <tabstop>lineEdit_maxTemperature</tabstop>
   <tabstop>comboBox_yeastFlocculation</tabstop>
@@ -667,6 +682,6 @@
   <tabstop>textEdit_notes</tabstop>
  </tabstops>
  <resources>
-  <include location="../brewtarget.qrc"/>
+  <include location="../resources.qrc"/>
  </resources>
 </ui>

@@ -7128,6 +7128,14 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
         <source>Amount Type</source>
         <translation type="unfinished">Type de quantité</translation>
     </message>
+    <message>
+        <source>ID in database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The ID of this fermentable in the database.  Sometimes useful for debugging.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>fermentationEditor</name>
@@ -7196,11 +7204,11 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Temp. lag time</source>
-        <translation type="unfinished">Temps de latence de la chauffe</translation>
+        <translation type="obsolete">Temps de latence de la chauffe</translation>
     </message>
     <message>
         <source>Lag time</source>
-        <translation type="unfinished">Temps de latence</translation>
+        <translation type="obsolete">Temps de latence</translation>
     </message>
     <message>
         <source>End temp.</source>
