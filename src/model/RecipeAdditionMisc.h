@@ -25,7 +25,7 @@
 #include "model/RecipeAdditionBase.h"
 #include "model/Recipe.h"
 
-//╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+//======================================================================================================================
 //========================================== Start of property name constants ==========================================
 // See comment in model/NamedEntity.h
 #define AddPropertyName(property) namespace PropertyNames::RecipeAdditionMisc { BtStringConst const property{#property}; }
@@ -34,7 +34,7 @@ AddPropertyName(use) // Deprecated - retained only for BeerXML
 
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
-//╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+//======================================================================================================================
 
 /**
  * \brief Represents the addition of a \c Misc to a \c Recipe
@@ -88,6 +88,7 @@ public:
     *        info.
     */
    static TypeLookup const typeLookup;
+   TYPE_LOOKUP_GETTER
 
    RecipeAdditionMisc(QString name = "", int const recipeId = -1, int const ingredientId = -1);
    RecipeAdditionMisc(NamedParameterBundle const & namedParameterBundle);

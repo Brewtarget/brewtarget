@@ -94,6 +94,7 @@ public:
     *        info.
     */
    static TypeLookup const typeLookup;
+   TYPE_LOOKUP_GETTER
 
    BrewNote(QString name = "");
    BrewNote(Recipe const & recipe);

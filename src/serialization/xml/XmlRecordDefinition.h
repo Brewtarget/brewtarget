@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * serialization/xml/XmlRecordDefinition.h is part of Brewtarget, and is copyright the following authors 2020-2023:
+ * serialization/xml/XmlRecordDefinition.h is part of Brewtarget, and is copyright the following authors 2020-2024:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -131,11 +131,11 @@ public:
     * \param fieldDefinitions A list of fields we expect to find in this record (other fields will be ignored) and how
     *                         to parse them.
     */
-   XmlRecordDefinition(char                   const * const   recordName,
-                       TypeLookup             const * const   typeLookup,
-                       char                   const * const   namedEntityClassName,
-                       QString                        const & localisedEntityName,
-                       NamedEntity::UpAndDownCasters  const   upAndDownCasters,
+   XmlRecordDefinition(char                     const * const recordName,
+                       TypeLookup               const * const typeLookup,
+                       char                     const * const namedEntityClassName,
+                       QString                  const &       localisedEntityName,
+                       NamedEntityCasters               const upAndDownCasters,
                        XmlRecordConstructorWrapper            xmlRecordConstructorWrapper,
                        std::initializer_list<FieldDefinition> fieldDefinitions);
 
@@ -154,7 +154,7 @@ public:
                           &T::typeLookup,
                           T::staticMetaObject.className(),
                           T::localisedName(),
-                          NamedEntity::makeUpAndDownCasters<T>(),
+                          NamedEntityCasters::construct<T>(),
                           xmlRecordConstructorWrapper,
                           fieldDefinitions) {
       return;
@@ -166,12 +166,12 @@ public:
     *                         and how to parse them.  Effectively the constructor just concatenates all the lists.
     *                         See comments fin BeerXml.cpp for why we want to do this.
     */
-   XmlRecordDefinition(char                     const * const recordName,
-                       TypeLookup               const * const typeLookup,
-                       char                     const * const namedEntityClassName,
-                       QString                        const & localisedEntityName,
-                       NamedEntity::UpAndDownCasters  const   upAndDownCasters,
-                       XmlRecordConstructorWrapper            xmlRecordConstructorWrapper,
+   XmlRecordDefinition(char          const * const recordName,
+                       TypeLookup    const * const typeLookup,
+                       char          const * const namedEntityClassName,
+                       QString       const &       localisedEntityName,
+                       NamedEntityCasters    const upAndDownCasters,
+                       XmlRecordConstructorWrapper xmlRecordConstructorWrapper,
                        std::initializer_list< std::initializer_list<FieldDefinition> > fieldDefinitionLists);
    template<typename T>
    XmlRecordDefinition(std::in_place_type_t<T>,
@@ -182,7 +182,7 @@ public:
                           &T::typeLookup,
                           T::staticMetaObject.className(),
                           T::localisedName(),
-                          NamedEntity::makeUpAndDownCasters<T>(),
+                          NamedEntityCasters::construct<T>(),
                           xmlRecordConstructorWrapper,
                           fieldDefinitionLists) {
       return;

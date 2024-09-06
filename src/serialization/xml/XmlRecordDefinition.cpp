@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * serialization/xml/XmlRecordDefinition.cpp is part of Brewtarget, and is copyright the following authors 2020-2023:
+ * serialization/xml/XmlRecordDefinition.cpp is part of Brewtarget, and is copyright the following authors 2020-2024:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -61,7 +61,7 @@ XmlRecordDefinition::XmlRecordDefinition(
    TypeLookup const *             const   typeLookup,
    char const *                   const   namedEntityClassName,
    QString                        const & localisedEntityName,
-   NamedEntity::UpAndDownCasters  const   upAndDownCasters,
+   NamedEntityCasters             const   upAndDownCasters,
    XmlRecordConstructorWrapper xmlRecordConstructorWrapper,
    std::initializer_list<XmlRecordDefinition::FieldDefinition> fieldDefinitions
 ) :
@@ -76,7 +76,7 @@ XmlRecordDefinition::XmlRecordDefinition(
    TypeLookup const *             const   typeLookup,
    char const *                   const   namedEntityClassName,
    QString                        const & localisedEntityName,
-   NamedEntity::UpAndDownCasters  const   upAndDownCasters,
+   NamedEntityCasters             const   upAndDownCasters,
    XmlRecordConstructorWrapper xmlRecordConstructorWrapper,
    std::initializer_list< std::initializer_list<FieldDefinition> > fieldDefinitionLists
 ) :

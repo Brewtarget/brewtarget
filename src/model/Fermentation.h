@@ -66,6 +66,7 @@ public:
     *        info.
     */
    static TypeLookup const typeLookup;
+   TYPE_LOOKUP_GETTER
 
    Fermentation(QString name = "");
    Fermentation(NamedParameterBundle const & namedParameterBundle);

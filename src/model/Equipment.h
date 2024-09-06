@@ -135,6 +135,7 @@ public:
     *        info.
     */
    static TypeLookup const typeLookup;
+   TYPE_LOOKUP_GETTER
 
    Equipment(QString name = "");
    Equipment(NamedParameterBundle const & namedParameterBundle);
@@ -146,7 +147,7 @@ public:
     * \brief Some default values we use in calculations when no value is set in this record
     */
    //! @{
-   static constexpr double default_boilTime_mins               = 60.0;
+   static constexpr double default_boilTime_mins              = 60.0;
    static constexpr double default_hopUtilization_pct         = 100.0;
    static constexpr double default_kettleEvaporationPerHour_l = 4.0;
    static constexpr double default_mashTunGrainAbsorption_LKg = 1.086; // See also PhysicalConstants::grainAbsorption_Lkg
@@ -337,12 +338,12 @@ public:
    std::optional<double> mashTunWeight_kg           () const;
    std::optional<double> mashTunSpecificHeat_calGC  () const;
    std::optional<double> topUpWater_l               () const;
-   double                kettleTrubChillerLoss_l          () const;
+   double                kettleTrubChillerLoss_l    () const;
    std::optional<double> evapRate_pctHr             () const;
    std::optional<double> kettleEvaporationPerHour_l () const;
    std::optional<double> boilTime_min               () const;
    bool                  calcBoilVolume             () const;
-   double                lauterTunDeadspaceLoss_l      () const;
+   double                lauterTunDeadspaceLoss_l   () const;
    std::optional<double> topUpKettle_l              () const;
    std::optional<double> hopUtilization_pct         () const;
    QString               kettleNotes                () const;
@@ -457,7 +458,7 @@ private:
    std::optional<double> m_kettleEvaporationPerHour_l;
    std::optional<double> m_boilTime_min              ;
    bool                  m_calcBoilVolume            ;
-   double                m_lauterTunDeadspaceLoss_l         ;
+   double                m_lauterTunDeadspaceLoss_l  ;
    std::optional<double> m_topUpKettle_l             ;
    std::optional<double> m_hopUtilization_pct        ;
    QString               m_kettleNotes               ;

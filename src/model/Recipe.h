@@ -166,6 +166,7 @@ public:
     *        info.
     */
    static TypeLookup const typeLookup;
+   TYPE_LOOKUP_GETTER
 
    Recipe(QString name);
    Recipe(NamedParameterBundle const & namedParameterBundle);
