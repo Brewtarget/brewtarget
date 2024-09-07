@@ -7000,6 +7000,14 @@ The final volume in the primary is %1.</source>
         <source>Amount Type</source>
         <translation type="unfinished">Μονάδα μέτρησης</translation>
     </message>
+    <message>
+        <source>ID in database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The ID of this fermentable in the database.  Sometimes useful for debugging.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>fermentationEditor</name>
@@ -7068,11 +7076,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Temp. lag time</source>
-        <translation type="unfinished">Temp. lag time</translation>
+        <translation type="obsolete">Temp. lag time</translation>
     </message>
     <message>
         <source>Lag time</source>
-        <translation type="unfinished">Lag time</translation>
+        <translation type="obsolete">Lag time</translation>
     </message>
     <message>
         <source>End temp.</source>

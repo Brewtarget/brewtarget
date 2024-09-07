@@ -65,7 +65,7 @@
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="../brewtarget.qrc">
+          <iconset resource="../resources.qrc">
            <normaloff>:/images/filesave.svg</normaloff>:/images/filesave.svg</iconset>
          </property>
         </widget>
@@ -79,7 +79,7 @@
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="../brewtarget.qrc">
+          <iconset resource="../resources.qrc">
            <normaloff>:/images/exit.svg</normaloff>:/images/exit.svg</iconset>
          </property>
         </widget>
@@ -91,7 +91,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../brewtarget.qrc"/>
+  <include location="../resources.qrc"/>
  </resources>
  <connections/>
 </ui>

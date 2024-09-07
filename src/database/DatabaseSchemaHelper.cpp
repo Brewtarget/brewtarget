@@ -1872,13 +1872,46 @@ namespace {
          //
          // At this point, all hop and fermentable amounts will be weights, because prior versions of the DB did not
          // support measuring them by volume.
+         //
+         // There is a bit of a gotcha waiting for us here.  In the old schema, where each hop refers to a
+         // hop_in_inventory row, there can and will be multiple hops sharing the same inventory row.  In the new
+         // schema, where each hop_in_inventory row refers to a hop, different hops cannot share an inventory.  (This is
+         // all by design, as we ultimately want to be able to manage multiple inventory entries per hop.  That way you
+         // can separately track the Fuggles that you bought last year (and need to use up) from the ones you bought
+         // last week (so you won't run out when you use up last year's).
+         //
+         // Although we have, by this point, deleted the "child" entries in hop that signified "use of hop in recipe"
+         // (replacing them with entries in hop_in_recipe).  There can still be multiple entries for "the same" hop in
+         // the hop table, all sharing the same hop_in_inventory row.  Specifically this is because of hops marked
+         // deleted or not displayable.  The simple answer would be to ignore deleted and non-displayable hops.  But
+         // this creates another problem because there can be inventory entries for hops that are only deleted.  And,
+         // whilst we might have a natural instinct to just delete the hop_in_inventory rows that have no corresponding
+         // displayable not-deleted hop, that feels wrong as we would be throwing data away that might one day be
+         // needed (eg if someone wants to undelete a hop that they deleted in error).
+         //
+         // So, we do something "clever".  For the "update hop_in_inventory rows to point at hop rows" query, we feed it
+         // the list of hops in a sort of reverse order, specifically such that the deleted and non-displayable ones
+         // occur before the others.  Thus, where there are multiple hop rows pointing to the same hop_in_inventory row,
+         // the latter will get updated multiple times and, if there is a corresponding displayable non-deleted hop,
+         // that will be the last one that the hop_in_inventory row is updated to point to, so it will "win" over the
+         // others.  Despite sounding a bit complicated, it's makes the SQL simpler than a lot of other approaches!
+         //
+         // It _should_ be the case that there is at most one displayable non-deleted hop per row of hop_in_inventory.
+         // However, just in case this is ever not true, we go a bit further and say that, after ordering hops so that
+         // all the deleted and non-displayable ones are parsed first, the remaining ones are put in reverse ID order,
+         // which means the oldest entries (with the smallest IDs) get processed last and are most likely to "win" in
+         // conflicts.  At the moment at least, it seems the most reasonable tie-breaker.
+         //
+         // Of course, all the above applies, mutatis mutandis, to fermentables, miscs, and yeasts as well.
+         //
          {QString("UPDATE hop_in_inventory "
                   "SET hop_id = h.id, "
                       "unit = 'kilograms' "
                   "FROM ("
                      "SELECT id, "
                             "inventory_id "
-                     "FROM hop"
+                     "FROM hop "
+                     "ORDER BY NOT deleted, display, id DESC "
                   ") AS h "
                   "WHERE hop_in_inventory.id = h.inventory_id")},
          {QString("UPDATE fermentable_in_inventory "
@@ -1887,7 +1920,8 @@ namespace {
                   "FROM ("
                      "SELECT id, "
                             "inventory_id "
-                     "FROM fermentable"
+                     "FROM fermentable "
+                     "ORDER BY NOT deleted, display, id DESC "
                   ") AS f "
                   "WHERE fermentable_in_inventory.id = f.inventory_id ")},
          // For misc, we need to support both weights and volumes.
@@ -1898,7 +1932,8 @@ namespace {
                      "SELECT id, "
                             "inventory_id, "
                             "CASE WHEN amount_is_weight THEN 'kilograms' ELSE 'liters' END AS unit "
-                     "FROM misc"
+                     "FROM misc "
+                     "ORDER BY NOT deleted, display, id DESC "
                   ") AS m "
                   "WHERE misc_in_inventory.id = m.inventory_id")},
          // HOWEVER, for inventory purposes, yeast is actually stored as "number of packets" (aka quanta in various old
@@ -1909,7 +1944,8 @@ namespace {
                   "FROM ("
                      "SELECT id, "
                             "inventory_id "
-                     "FROM yeast"
+                     "FROM yeast "
+                     "ORDER BY NOT deleted, display, id DESC "
                   ") AS y "
                   "WHERE yeast_in_inventory.id = y.inventory_id")},
          // Now we transferred info across, we don't need the inventory_id column on hop or fermentable

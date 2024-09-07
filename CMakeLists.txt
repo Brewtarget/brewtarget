@@ -94,7 +94,7 @@ if(APPLE AND NOT CMAKE_OSX_ARCHITECTURES)
    # Per https://cmake.org/cmake/help/latest/variable/CMAKE_OSX_ARCHITECTURES.html, "the value of this variable should
    # be set prior to the first project() or enable_language() command invocation because it may influence configuration
    # of the toolchain and flags".
-   set(CMAKE_OSX_ARCHITECTURES x86_64) # Build intel 64-bit binary.
+   set(CMAKE_OSX_ARCHITECTURES x86_64, arm64) # Build both x86_64 and arm64 for Apple silicon.
    #set(CMAKE_OSX_ARCHITECTURES i386 x86_64) # Build intel binary.
    #set(CMAKE_OSX_ARCHITECTURES ppc i386 ppc64 x86_64) # Build universal binary.
 endif()
@@ -805,7 +805,7 @@ configure_file(src/config.in src/config.h)
 #=======================================================================================================================
 # We don't need to list the embedded resource files themselves here, just the "Resource Collection File" that lists what
 # they are.
-set(filesToCompile_qrc "${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.qrc")
+set(filesToCompile_qrc "${CMAKE_CURRENT_SOURCE_DIR}/resources.qrc")
 
 #=======================================================================================================================
 #=========================================== Files included with the program ===========================================

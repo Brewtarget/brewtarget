@@ -384,7 +384,7 @@
                <string/>
               </property>
               <property name="icon">
-               <iconset resource="../brewtarget.qrc">
+               <iconset resource="../resources.qrc">
                 <normaloff>:/images/smallPlus.svg</normaloff>:/images/smallPlus.svg</iconset>
               </property>
              </widget>
@@ -398,7 +398,7 @@
                <string/>
               </property>
               <property name="icon">
-               <iconset resource="../brewtarget.qrc">
+               <iconset resource="../resources.qrc">
                 <normaloff>:/images/smallMinus.svg</normaloff>:/images/smallMinus.svg</iconset>
               </property>
              </widget>
@@ -483,7 +483,7 @@
   <tabstop>pushButton_removeSalt</tabstop>
  </tabstops>
  <resources>
-  <include location="../brewtarget.qrc"/>
+  <include location="../resources.qrc"/>
  </resources>
  <connections>
   <connection>

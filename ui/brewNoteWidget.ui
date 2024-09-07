@@ -14,7 +14,7 @@
    <string>brewNote</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../brewtarget.qrc">
+   <iconset resource="../resources.qrc">
     <normaloff>:/images/edit.svg</normaloff>:/images/edit.svg</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -753,7 +753,7 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../brewtarget.qrc"/>
+  <include location="../resources.qrc"/>
  </resources>
  <designerdata>
   <property name="gridDeltaX">

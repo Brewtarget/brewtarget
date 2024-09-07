@@ -160,6 +160,7 @@ void HopEditor::readFieldsFromEditItem(std::optional<QString> propName) {
    if (!propName || *propName == PropertyNames::Hop::polyphenols_pct) { this->lineEdit_polyphenols->setQuantity(m_editItem->polyphenols_pct()); if (propName) { return; } }
    if (!propName || *propName == PropertyNames::Hop::xanthohumol_pct) { this->lineEdit_xanthohumol->setQuantity(m_editItem->xanthohumol_pct()); if (propName) { return; } }
 
+   this->label_id_value->setText(QString::number(m_editItem->key()));
    return;
 }
 

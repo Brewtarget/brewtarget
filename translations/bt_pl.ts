@@ -6916,6 +6916,14 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
         <source>Amount Type</source>
         <translation type="unfinished">Rodzaj kwoty</translation>
     </message>
+    <message>
+        <source>ID in database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The ID of this fermentable in the database.  Sometimes useful for debugging.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>fermentationEditor</name>
@@ -6984,11 +6992,11 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Temp. lag time</source>
-        <translation type="unfinished">Temp. czasu zwłoki</translation>
+        <translation type="obsolete">Temp. czasu zwłoki</translation>
     </message>
     <message>
         <source>Lag time</source>
-        <translation type="unfinished">Czas zwłoki</translation>
+        <translation type="obsolete">Czas zwłoki</translation>
     </message>
     <message>
         <source>End temp.</source>

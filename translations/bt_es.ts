@@ -7074,6 +7074,14 @@ El volumen final en el primario es %1.</translation>
         <source>Amount Type</source>
         <translation type="unfinished">Tipo de Cantidad</translation>
     </message>
+    <message>
+        <source>ID in database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The ID of this fermentable in the database.  Sometimes useful for debugging.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>fermentationEditor</name>
@@ -7142,11 +7150,11 @@ El volumen final en el primario es %1.</translation>
     </message>
     <message>
         <source>Temp. lag time</source>
-        <translation type="unfinished">Lapso de la temp.</translation>
+        <translation type="obsolete">Lapso de la temp.</translation>
     </message>
     <message>
         <source>Lag time</source>
-        <translation type="unfinished">Tiempo del lapso</translation>
+        <translation type="obsolete">Tiempo del lapso</translation>
     </message>
     <message>
         <source>End temp.</source>

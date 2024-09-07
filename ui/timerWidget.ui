@@ -100,7 +100,7 @@
         <string>Stop</string>
        </property>
        <property name="icon">
-        <iconset resource="../brewtarget.qrc">
+        <iconset resource="../resources.qrc">
          <normaloff>:/images/alarm_stop.png</normaloff>:/images/alarm_stop.png</iconset>
        </property>
       </widget>
@@ -114,7 +114,7 @@
         <string>Set Sound</string>
        </property>
        <property name="icon">
-        <iconset resource="../brewtarget.qrc">
+        <iconset resource="../resources.qrc">
          <normaloff>:/images/sound.png</normaloff>:/images/sound.png</iconset>
        </property>
       </widget>
@@ -128,7 +128,7 @@
         <string>Cancel</string>
        </property>
        <property name="icon">
-        <iconset resource="../brewtarget.qrc">
+        <iconset resource="../resources.qrc">
          <normaloff>:/images/exit.svg</normaloff>:/images/exit.svg</iconset>
        </property>
       </widget>
@@ -142,7 +142,7 @@
         <string>Play Alarm Sound</string>
        </property>
        <property name="icon">
-        <iconset resource="../brewtarget.qrc">
+        <iconset resource="../resources.qrc">
          <normaloff>:/images/play.png</normaloff>:/images/play.png</iconset>
        </property>
       </widget>
@@ -152,7 +152,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../brewtarget.qrc"/>
+  <include location="../resources.qrc"/>
  </resources>
  <connections/>
 </ui>

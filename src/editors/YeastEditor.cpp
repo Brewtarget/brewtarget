@@ -144,6 +144,7 @@ void YeastEditor::readFieldsFromEditItem(std::optional<QString> propName) {
    if (!propName || *propName == PropertyNames::Yeast::killerProducingKlusToxin ) { this->boolCombo_killerProducingKlusToxin ->setValue(m_editItem->killerProducingKlusToxin ()); if (propName) { return; } }
    if (!propName || *propName == PropertyNames::Yeast::killerNeutral            ) { this->boolCombo_killerNeutral            ->setValue(m_editItem->killerNeutral            ()); if (propName) { return; } }
 
+   this->label_id_value->setText(QString::number(m_editItem->key()));
    return;
 }
 

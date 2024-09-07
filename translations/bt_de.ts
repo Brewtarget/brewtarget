@@ -7015,6 +7015,14 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
         <source>Amount Type</source>
         <translation type="unfinished">Mengenangabe</translation>
     </message>
+    <message>
+        <source>ID in database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The ID of this fermentable in the database.  Sometimes useful for debugging.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>fermentationEditor</name>
@@ -7083,11 +7091,11 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
     <message>
         <source>Temp. lag time</source>
-        <translation type="unfinished">Temperatur-Anstiegszeit</translation>
+        <translation type="obsolete">Temperatur-Anstiegszeit</translation>
     </message>
     <message>
         <source>Lag time</source>
-        <translation type="unfinished">Verzögerung</translation>
+        <translation type="obsolete">Verzögerung</translation>
     </message>
     <message>
         <source>End temp.</source>

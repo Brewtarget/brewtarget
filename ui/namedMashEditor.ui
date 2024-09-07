@@ -45,7 +45,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="../brewtarget.qrc">
+        <iconset resource="../resources.qrc">
          <normaloff>:/images/smallMinus.svg</normaloff>:/images/smallMinus.svg</iconset>
        </property>
        <property name="autoDefault">
@@ -483,7 +483,7 @@
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="../brewtarget.qrc">
+          <iconset resource="../resources.qrc">
            <normaloff>:/images/smallPlus.svg</normaloff>:/images/smallPlus.svg</iconset>
          </property>
         </widget>
@@ -497,7 +497,7 @@
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="../brewtarget.qrc">
+          <iconset resource="../resources.qrc">
            <normaloff>:/images/smallMinus.svg</normaloff>:/images/smallMinus.svg</iconset>
          </property>
         </widget>
@@ -508,7 +508,7 @@
           <string>Mash step up</string>
          </property>
          <property name="icon">
-          <iconset resource="../brewtarget.qrc">
+          <iconset resource="../resources.qrc">
            <normaloff>:/images/smallUpArrow.svg</normaloff>:/images/smallUpArrow.svg</iconset>
          </property>
         </widget>
@@ -519,7 +519,7 @@
           <string>Mash step down</string>
          </property>
          <property name="icon">
-          <iconset resource="../brewtarget.qrc">
+          <iconset resource="../resources.qrc">
            <normaloff>:/images/smallDownArrow.svg</normaloff>:/images/smallDownArrow.svg</iconset>
          </property>
         </widget>
@@ -562,7 +562,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="../brewtarget.qrc">
+        <iconset resource="../resources.qrc">
          <normaloff>:/images/filesave.svg</normaloff>:/images/filesave.svg</iconset>
        </property>
       </widget>
@@ -573,7 +573,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="../brewtarget.qrc">
+        <iconset resource="../resources.qrc">
          <normaloff>:/images/exit.svg</normaloff>:/images/exit.svg</iconset>
        </property>
       </widget>
@@ -609,6 +609,6 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../brewtarget.qrc"/>
+  <include location="../resources.qrc"/>
  </resources>
 </ui>

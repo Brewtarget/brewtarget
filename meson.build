@@ -1211,7 +1211,7 @@ installSubDir_translations = installSubDir_data + '/translations_qm'
 #=======================================================================================================================
 
 # Compile Qt's resources collection files (.qrc) into C++ files for compilation
-generatedFromQrc = qt.compile_resources(sources : projectName + '.qrc')
+generatedFromQrc = qt.compile_resources(sources : 'resources.qrc')
 
 # Compile Qt's ui files (.ui) into header files.
 generatedFromUi = qt.compile_ui(sources : uiFiles)

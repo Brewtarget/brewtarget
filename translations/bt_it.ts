@@ -7099,6 +7099,14 @@ Il Volume finale del primo è %1.</translation>
         <source>Amount Type</source>
         <translation type="unfinished">Tipo di Quantità</translation>
     </message>
+    <message>
+        <source>ID in database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The ID of this fermentable in the database.  Sometimes useful for debugging.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>fermentationEditor</name>
@@ -7167,11 +7175,11 @@ Il Volume finale del primo è %1.</translation>
     </message>
     <message>
         <source>Temp. lag time</source>
-        <translation type="unfinished">Temperatura di fine lagerizzazione</translation>
+        <translation type="obsolete">Temperatura di fine lagerizzazione</translation>
     </message>
     <message>
         <source>Lag time</source>
-        <translation type="unfinished">Tempo lagerizzazione</translation>
+        <translation type="obsolete">Tempo lagerizzazione</translation>
     </message>
     <message>
         <source>End temp.</source>

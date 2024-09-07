@@ -6966,6 +6966,14 @@ Celkový objem pro hlavní kvašení je %1.</translation>
         <source>Amount Type</source>
         <translation type="unfinished">Druh množství</translation>
     </message>
+    <message>
+        <source>ID in database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The ID of this fermentable in the database.  Sometimes useful for debugging.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>fermentationEditor</name>
@@ -7034,11 +7042,11 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
     <message>
         <source>Temp. lag time</source>
-        <translation type="unfinished">Prodleva</translation>
+        <translation type="obsolete">Prodleva</translation>
     </message>
     <message>
         <source>Lag time</source>
-        <translation type="unfinished">Čas pro odpočinek</translation>
+        <translation type="obsolete">Čas pro odpočinek</translation>
     </message>
     <message>
         <source>End temp.</source>

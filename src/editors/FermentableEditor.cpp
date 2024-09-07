@@ -181,6 +181,7 @@ void FermentableEditor::readFieldsFromEditItem(std::optional<QString> propName) 
    if (!propName || *propName == PropertyNames::Fermentable::fermentability_pct       ) { this->lineEdit_fermentability_pct       ->setQuantity    (m_editItem->fermentability_pct       ()); if (propName) { return; } }
    if (!propName || *propName == PropertyNames::Fermentable::betaGlucan_ppm           ) { this->lineEdit_betaGlucan               ->setQuantity    (m_editItem->betaGlucan_ppm               ()); if (propName) { return; } }
 
+   this->label_id_value->setText(QString::number(m_editItem->key()));
    return;
 }
 
