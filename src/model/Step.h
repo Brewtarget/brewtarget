@@ -25,7 +25,7 @@
 #include "model/FolderBase.h"
 #include "model/NamedEntity.h"
 
-//╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+//======================================================================================================================
 //========================================== Start of property name constants ==========================================
 // See comment in model/NamedEntity.h
 #define AddPropertyName(property) namespace PropertyNames::Step { BtStringConst const property{#property}; }
@@ -41,7 +41,7 @@ AddPropertyName(stepTime_days  )
 AddPropertyName(stepTime_mins  )
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
-//╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+//======================================================================================================================
 
 
 /**
@@ -111,12 +111,12 @@ public:
     *        NOTE: This is required for MashStep but optional for BoilStep and FermentationStep.  We make it optional
     *              here but classes that need it required should override the virtual function \c stepTimeIsRequired
     */
-   Q_PROPERTY(std::optional<double> stepTime_mins          READ stepTime_mins          WRITE setStepTime_mins                    )
+   Q_PROPERTY(std::optional<double> stepTime_mins          READ stepTime_mins          WRITE setStepTime_mins           )
    /**
     * \brief The time of the step in days - primarily for convenience on FermentationStep where measuring in minutes is
     *        overly precise.  The underlying measure in the database remains minutes however, for consistency.
     */
-   Q_PROPERTY(std::optional<double> stepTime_days          READ stepTime_days          WRITE setStepTime_days                    )
+   Q_PROPERTY(std::optional<double> stepTime_days          READ stepTime_days          WRITE setStepTime_days           )
    /**
     * \brief Per comment above, this is also referred to as step temperature when talking about Mash Steps.
     *        For a \c MashStep, this is the target temperature of this step in C.  This is the main field to use when

@@ -330,6 +330,7 @@ namespace {
       {XmlRecordDefinition::FieldType::Double          , "MIN_TEMPERATURE"             , PropertyNames::Yeast::minTemperature_c            }, // ⮜⮜⮜ Optional in BeerXML ⮞⮞⮞
       {XmlRecordDefinition::FieldType::Double          , "MAX_TEMPERATURE"             , PropertyNames::Yeast::maxTemperature_c            }, // ⮜⮜⮜ Optional in BeerXML ⮞⮞⮞
       {XmlRecordDefinition::FieldType::Enum            , "FLOCCULATION"                , PropertyNames::Yeast::flocculation                , &BEER_XML_YEAST_FLOCCULATION_MAPPER}, // ⮜⮜⮜ Optional in BeerXML ⮞⮞⮞
+      {XmlRecordDefinition::FieldType::Double          , "ATTENUATION"                 , PropertyNames::Yeast::attenuationTypical_pct      }, // ⮜⮜⮜ Optional in BeerXML ⮞⮞⮞
       {XmlRecordDefinition::FieldType::String          , "NOTES"                       , PropertyNames::Yeast::notes                       },
       {XmlRecordDefinition::FieldType::String          , "BEST_FOR"                    , PropertyNames::Yeast::bestFor                     },
       {XmlRecordDefinition::FieldType::Int             , "MAX_REUSE"                   , PropertyNames::Yeast::maxReuse                    }, // ⮜⮜⮜ Optional in BeerXML ⮞⮞⮞
@@ -339,6 +340,7 @@ namespace {
       {XmlRecordDefinition::FieldType::String          , "INVENTORY"                   , BtString::NULL_STR                                }, // Extension tag
       {XmlRecordDefinition::FieldType::String          , "CULTURE_DATE"                , BtString::NULL_STR                                }, // Extension tag
       // ⮜⮜⮜ Following are new fields that BeerJSON adds to BeerXML, so all extension tags in BeerXML ⮞⮞⮞
+      // See comments in model/Yeast.h for why the optional BeerXML field "ATTENUATION" is now used only for RecipeAdditionYeast
       {XmlRecordDefinition::FieldType::Double          , "ALCOHOL_TOLERANCE"           , PropertyNames::Yeast::alcoholTolerance_pct        },
       {XmlRecordDefinition::FieldType::Double          , "ATTENUATION_MIN"             , PropertyNames::Yeast::attenuationMin_pct          },
       {XmlRecordDefinition::FieldType::Double          , "ATTENUATION_MAX"             , PropertyNames::Yeast::attenuationMax_pct          },
@@ -617,6 +619,9 @@ namespace {
 
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
    // Field mappings for <EQUIPMENT>...</EQUIPMENT> BeerXML records
+   //
+   // Fields marked ‡ are non-standard, in that they are not part of BeerXML 1.0, so likely will not be recognised by
+   // other programs.
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
    template<> XmlRecordDefinition const BEER_XML_RECORD_DEFN<Equipment> {
       std::in_place_type_t<Equipment>{},
@@ -649,9 +654,11 @@ namespace {
          {XmlRecordDefinition::FieldType::String          , "DISPLAY_TRUB_CHILLER_LOSS"     , BtString::NULL_STR                                   }, // Extension tag
          {XmlRecordDefinition::FieldType::String          , "DISPLAY_LAUTER_DEADSPACE"      , BtString::NULL_STR                                   }, // Extension tag
          {XmlRecordDefinition::FieldType::String          , "DISPLAY_TOP_UP_KETTLE"         , BtString::NULL_STR                                   }, // Extension tag
-         {XmlRecordDefinition::FieldType::Double          , "REAL_EVAP_RATE"                , PropertyNames::Equipment::kettleEvaporationPerHour_l }, // Non-standard: not part of BeerXML 1.0
-         {XmlRecordDefinition::FieldType::Double          , "ABSORPTION"                    , PropertyNames::Equipment::mashTunGrainAbsorption_LKg }, // Non-standard: not part of BeerXML 1.0
-         {XmlRecordDefinition::FieldType::Double          , "BOILING_POINT"                 , PropertyNames::Equipment::boilingPoint_c             }, // Non-standard: not part of BeerXML 1.0
+         {XmlRecordDefinition::FieldType::Double          , "REAL_EVAP_RATE"                , PropertyNames::Equipment::kettleEvaporationPerHour_l }, // ‡
+         {XmlRecordDefinition::FieldType::Double          , "ABSORPTION"                    , PropertyNames::Equipment::mashTunGrainAbsorption_LKg }, // ‡
+         {XmlRecordDefinition::FieldType::Double          , "BOILING_POINT"                 , PropertyNames::Equipment::boilingPoint_c             }, // ‡
+         {XmlRecordDefinition::FieldType::Double          , "KETTLEINTERNALDIAMETER_CM"     , PropertyNames::Equipment::kettleInternalDiameter_cm  }, // ‡
+         {XmlRecordDefinition::FieldType::Double          , "KETTLEOPENINGDIAMETER_CM"      , PropertyNames::Equipment::kettleOpeningDiameter_cm   }, // ‡
          // ⮜⮜⮜ Following are new fields that BeerJSON adds to BeerXML, so all extension tags in BeerXML ⮞⮞⮞
          {XmlRecordDefinition::FieldType::String          , "HLT_TYPE"                      , PropertyNames::Equipment::hltType                    },
          {XmlRecordDefinition::FieldType::String          , "MASH_TUN_TYPE"                 , PropertyNames::Equipment::mashTunType                },

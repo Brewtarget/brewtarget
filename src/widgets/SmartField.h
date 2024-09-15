@@ -233,6 +233,9 @@ public:
     *        Note that, if you are explicitly providing std::nullopt as the parameter, you need to provide type
     *        information, eg myField->setQuantity<double>(std::nullopt);
     *
+    *        Note too, that only certain values of T are allowed - int, unsigned int, double.  Template definition is in
+    *        the .cpp file.
+    *
     * \param quantity is the quantity to display
     */
    template<typename T, typename = std::enable_if_t<is_non_optional<T>::value> > void setQuantity(std::optional<T> quantity);
@@ -251,6 +254,20 @@ public:
     *        \c setQuantity as we will not be able determine units from field type.
     */
    void setAmount(Measurement::Amount const & amount);
+
+   void setAmount(std::optional<Measurement::Amount> const & amount);
+
+   /**
+    * \brief Wrapper to call \c setAmount or correct version of \c setQuantity, from a \c QVariant parameter that would
+    *        typically have been obtained from Qt property system, eg via \c QObject::property().
+    */
+   void setFromVariant(QVariant const & value);
+
+   /**
+    * \brief Opposite of \c setFromVariant.  Returns a correctly typed value from the field inside a \c QVariant that
+    *        can be passed into the Qt property system eg via \c QObject::setProperty().
+    */
+   QVariant getAsVariant() const;
 
    /**
     * \brief Normally, you set precision once when \c init is called via \c SMART_FIELD_INIT or similar.  However, if

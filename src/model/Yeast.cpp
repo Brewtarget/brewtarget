@@ -27,6 +27,7 @@
 #include "model/NamedParameterBundle.h"
 #include "model/Recipe.h"
 #include "PhysicalConstants.h"
+#include "utils/AutoCompare.h"
 
 QString Yeast::localisedName() { return tr("Yeast"); }
 
@@ -105,10 +106,10 @@ bool Yeast::isEqualTo(NamedEntity const & other) const {
    // Base class will already have ensured names are equal
     bool const outlinesAreEqual{
       // "Outline" fields: In BeerJSON, all these fields are in the FermentableBase type
-      this->m_type       == rhs.m_type       &&
-      this->m_form       == rhs.m_form       &&
-      this->m_laboratory == rhs.m_laboratory && // = producer in BeerJSON
-      this->m_productId  == rhs.m_productId
+      Utils::AutoCompare(this->m_type      , rhs.m_type      ) &&
+      Utils::AutoCompare(this->m_form      , rhs.m_form      ) &&
+      Utils::AutoCompare(this->m_laboratory, rhs.m_laboratory) && // = producer in BeerJSON
+      Utils::AutoCompare(this->m_productId , rhs.m_productId )
    };
 
    // If either object is an outline (see comment in model/OutlineableNamedEntity.h) then there is no point comparing
@@ -121,23 +122,22 @@ bool Yeast::isEqualTo(NamedEntity const & other) const {
       outlinesAreEqual &&
 
       // Remaining BeerJSON fields -- excluding inventories
-      this->m_minTemperature_c          == rhs.m_minTemperature_c          &&
-      this->m_maxTemperature_c          == rhs.m_maxTemperature_c          &&
-      this->m_alcoholTolerance_pct      == rhs.m_alcoholTolerance_pct      &&
-      this->m_flocculation              == rhs.m_flocculation              &&
-      this->m_attenuationMin_pct        == rhs.m_attenuationMin_pct        &&
-      this->m_attenuationMax_pct        == rhs.m_attenuationMax_pct        &&
-      this->m_notes                     == rhs.m_notes                     &&
-      this->m_bestFor                   == rhs.m_bestFor                   &&
-      this->m_maxReuse                  == rhs.m_maxReuse                  &&
-      this->m_phenolicOffFlavorPositive == rhs.m_phenolicOffFlavorPositive &&
-      this->m_glucoamylasePositive      == rhs.m_glucoamylasePositive      &&
-
-      this->m_killerProducingK1Toxin    == rhs.m_killerProducingK1Toxin    &&
-      this->m_killerProducingK2Toxin    == rhs.m_killerProducingK2Toxin    &&
-      this->m_killerProducingK28Toxin   == rhs.m_killerProducingK28Toxin   &&
-      this->m_killerProducingKlusToxin  == rhs.m_killerProducingKlusToxin  &&
-      this->m_killerNeutral             == rhs.m_killerNeutral
+      Utils::AutoCompare(this->m_minTemperature_c         , rhs.m_minTemperature_c         ) &&
+      Utils::AutoCompare(this->m_maxTemperature_c         , rhs.m_maxTemperature_c         ) &&
+      Utils::AutoCompare(this->m_alcoholTolerance_pct     , rhs.m_alcoholTolerance_pct     ) &&
+      Utils::AutoCompare(this->m_flocculation             , rhs.m_flocculation             ) &&
+      Utils::AutoCompare(this->m_attenuationMin_pct       , rhs.m_attenuationMin_pct       ) &&
+      Utils::AutoCompare(this->m_attenuationMax_pct       , rhs.m_attenuationMax_pct       ) &&
+      Utils::AutoCompare(this->m_notes                    , rhs.m_notes                    ) &&
+      Utils::AutoCompare(this->m_bestFor                  , rhs.m_bestFor                  ) &&
+      Utils::AutoCompare(this->m_maxReuse                 , rhs.m_maxReuse                 ) &&
+      Utils::AutoCompare(this->m_phenolicOffFlavorPositive, rhs.m_phenolicOffFlavorPositive) &&
+      Utils::AutoCompare(this->m_glucoamylasePositive     , rhs.m_glucoamylasePositive     ) &&
+      Utils::AutoCompare(this->m_killerProducingK1Toxin   , rhs.m_killerProducingK1Toxin   ) &&
+      Utils::AutoCompare(this->m_killerProducingK2Toxin   , rhs.m_killerProducingK2Toxin   ) &&
+      Utils::AutoCompare(this->m_killerProducingK28Toxin  , rhs.m_killerProducingK28Toxin  ) &&
+      Utils::AutoCompare(this->m_killerProducingKlusToxin , rhs.m_killerProducingKlusToxin ) &&
+      Utils::AutoCompare(this->m_killerNeutral            , rhs.m_killerNeutral            )
    );
 }
 

@@ -31,6 +31,7 @@
 #include "model/InventoryMisc.h"
 #include "model/NamedParameterBundle.h"
 #include "model/Recipe.h"
+#include "utils/AutoCompare.h"
 
 QString Misc::localisedName() { return tr("Miscellaneous"); }
 
@@ -60,9 +61,9 @@ bool Misc::isEqualTo(NamedEntity const & other) const {
    // Base class will already have ensured names are equal
    bool const outlinesAreEqual{
       // "Outline" fields: In BeerJSON, all these fields are in the FermentableBase type
-      this->m_producer  == rhs.m_producer  &&
-      this->m_productId == rhs.m_productId &&
-      this->m_type      == rhs.m_type
+      Utils::AutoCompare(this->m_producer , rhs.m_producer ) &&
+      Utils::AutoCompare(this->m_productId, rhs.m_productId) &&
+      Utils::AutoCompare(this->m_type     , rhs.m_type     )
    };
 
    // If either object is an outline (see comment in model/OutlineableNamedEntity.h) then there is no point comparing
@@ -75,8 +76,8 @@ bool Misc::isEqualTo(NamedEntity const & other) const {
       outlinesAreEqual &&
 
       // Remaining BeerJSON fields -- excluding inventories
-      this->m_useFor == rhs.m_useFor &&
-      this->m_notes  == rhs.m_notes
+      Utils::AutoCompare(this->m_useFor, rhs.m_useFor) &&
+      Utils::AutoCompare(this->m_notes , rhs.m_notes )
    );
 }
 
@@ -104,12 +105,12 @@ static_assert(std::is_base_of<Ingredient, Misc>::value);
 
 Misc::Misc(QString name) :
    Ingredient{name},
-   m_type          {Misc::Type::Spice},
-   m_useFor        {""               },
-   m_notes         {""               },
+   m_type     {Misc::Type::Spice},
+   m_useFor   {""               },
+   m_notes    {""               },
    // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
-   m_producer      {""               },
-   m_productId     {""               } {
+   m_producer {""               },
+   m_productId{""               } {
    return;
 }
 

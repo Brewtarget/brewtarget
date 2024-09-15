@@ -44,7 +44,7 @@ class RecipeAdditionFermentable : public RecipeAddition,
                                   public IngredientAmount<RecipeAdditionFermentable, Fermentable> {
    Q_OBJECT
 
-   RECIPE_ADDITION_DECL(Fermentable)
+   RECIPE_ADDITION_DECL(RecipeAdditionFermentable, Fermentable)
 
    INGREDIENT_AMOUNT_DECL(RecipeAdditionFermentable, Fermentable)
 

@@ -524,6 +524,10 @@ void Logging::terminateLogging() {
 }
 
 QString Logging::getStackTrace() {
+   //
+   // TBD: Once all our compilers have full C++23 support, we should look at switching to <stacktrace> in the standard
+   //      library.
+   //
    std::ostringstream stacktrace;
    stacktrace << boost::stacktrace::stacktrace();
    QString returnValue;

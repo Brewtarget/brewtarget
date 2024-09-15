@@ -237,6 +237,7 @@ set(filesToCompile_cpp
     ${repoDir}/src/utils/EnumStringMapping.cpp
     ${repoDir}/src/utils/FileSystemHelpers.cpp
     ${repoDir}/src/utils/Fonts.cpp
+    ${repoDir}/src/utils/FuzzyCompare.cpp
     ${repoDir}/src/utils/ImportRecordCount.cpp
     ${repoDir}/src/utils/MetaTypes.cpp
     ${repoDir}/src/utils/OStreamWriterForQFile.cpp

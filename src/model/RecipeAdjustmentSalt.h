@@ -52,7 +52,9 @@ class RecipeAdjustmentSalt : public IngredientInRecipe,
    Q_OBJECT
 
    // This allows RecipeAdditionBase to call protected and private members of RecipeAdjustmentSalt
-   friend class RecipeAdditionBase<RecipeAdjustmentSalt, Salt>;
+///   friend class RecipeAdditionBase<RecipeAdjustmentSalt, Salt>;
+
+   RECIPE_ADDITION_DECL(RecipeAdjustmentSalt, Salt)
 
    INGREDIENT_AMOUNT_DECL(RecipeAdjustmentSalt, Salt)
 

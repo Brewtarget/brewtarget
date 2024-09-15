@@ -55,60 +55,6 @@
         </widget>
        </item>
 
-       <item row="4" column="1">
-        <widget class="SmartLabel" name="label_preFermentationSize">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="contextMenuPolicy">
-          <enum>Qt::CustomContextMenu</enum>
-         </property>
-         <property name="text">
-          <string>Pre-Fermentation Size</string>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit_preFermentationSize</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="2">
-        <widget class="SmartLineEdit" name="lineEdit_preFermentationSize">
-         <property name="toolTip">
-          <string>Pre-Fermentation Size</string>
-         </property>
-        </widget>
-       </item>
-
-       <item row="6" column="1">
-        <widget class="SmartLabel" name="label_fermentationTime">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="contextMenuPolicy">
-          <enum>Qt::CustomContextMenu</enum>
-         </property>
-         <property name="text">
-          <string>Fermentation Time</string>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit_fermentationTime</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="2">
-        <widget class="SmartLineEdit" name="lineEdit_fermentationTime">
-         <property name="toolTip">
-          <string>Fermentation Time</string>
-         </property>
-        </widget>
-       </item>
-
        <item row="8" column="1">
         <widget class="SmartLabel" name="label_notes">
          <property name="text">
@@ -120,15 +66,51 @@
         <widget class="QTextEdit" name="textEdit_notes"/>
        </item>
 
-       <item row="10" column="2">
-        <widget class="QDialogButtonBox" name="buttonBox">
-        <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="standardButtons">
-        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-        </property>
-        </widget>
+       <item row="10" column="3">
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <widget class="QPushButton" name="pushButton_new">
+           <property name="toolTip">
+            <string>New hop</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="../resources.qrc">
+             <normaloff>:/images/smallPlus.svg</normaloff>:/images/smallPlus.svg</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_save">
+           <property name="toolTip">
+            <string>Save and close</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="../resources.qrc">
+             <normaloff>:/images/filesave.svg</normaloff>:/images/filesave.svg</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_cancel">
+           <property name="toolTip">
+            <string>Discard and close</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="../resources.qrc">
+             <normaloff>:/images/exit.svg</normaloff>:/images/exit.svg</iconset>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
 
       </layout>

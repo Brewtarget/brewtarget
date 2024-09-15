@@ -2087,7 +2087,7 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Import %1?</source>
-        <translation>Importar %1?</translation>
+        <translation type="vanished">Importar %1?</translation>
     </message>
     <message>
         <source>No mash</source>
@@ -3023,7 +3023,7 @@ Press OK to quit.</source>
     </message>
     <message>
         <source>Unrecognized IBU formula type. %1</source>
-        <translation>Fórmula de IBU não reconhecida. %1</translation>
+        <translation type="vanished">Fórmula de IBU não reconhecida. %1</translation>
     </message>
     <message>
         <source>Directory Problem</source>
@@ -3399,7 +3399,7 @@ Press OK to quit.</source>
     </message>
     <message>
         <source>Unknown</source>
-        <translation type="unfinished">Desconhecido</translation>
+        <translation type="obsolete">Desconhecido</translation>
     </message>
     <message>
         <source>Detailed (for debugging)</source>
@@ -3849,6 +3849,57 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Error matching %1 file pattern in %2 directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tinseth</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rager</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Noonan</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>mIBU</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SMPH</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Length</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>cm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>mm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>m</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>in</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ft</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>RaIngrd</name>
+    <message>
+        <source>Add %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -6047,10 +6098,22 @@ O volume final do fermentador primário é %1.</translation>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation type="unfinished">Tempo de Fervura</translation>
+        <translation type="obsolete">Tempo de Fervura</translation>
     </message>
     <message>
         <source>Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New hop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save and close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Discard and close</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -7043,7 +7106,7 @@ O volume final do fermentador primário é %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>The ID of this fermentable in the database.  Sometimes useful for debugging.</source>
+        <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -7066,15 +7129,19 @@ O volume final do fermentador primário é %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Pre-Fermentation Size</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fermentation Time</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New hop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save and close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Discard and close</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -7495,6 +7562,14 @@ O volume final do fermentador primário é %1.</translation>
         <source>Total Oil ml/100g</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>ID in database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>instructionWidget</name>
@@ -7559,7 +7634,7 @@ O volume final do fermentador primário é %1.</translation>
     </message>
     <message>
         <source>Target boil size</source>
-        <translation>Tamanho Alvo de Fervura</translation>
+        <translation type="vanished">Tamanho Alvo de Fervura</translation>
     </message>
     <message>
         <source>Efficiency (%)</source>
@@ -7583,7 +7658,7 @@ O volume final do fermentador primário é %1.</translation>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation type="vanished">Tempo de Fervura</translation>
+        <translation>Tempo de Fervura</translation>
     </message>
     <message>
         <source>Target batch size</source>
@@ -8006,10 +8081,6 @@ O volume final do fermentador primário é %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&amp;Boil Time</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>E&amp;quipment</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8199,6 +8270,10 @@ O volume final do fermentador primário é %1.</translation>
     </message>
     <message>
         <source>Help</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>(See Boil tab below)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -8590,15 +8665,15 @@ O volume final do fermentador primário é %1.</translation>
     </message>
     <message>
         <source>Check it if the amount listed is in kg instead of L.</source>
-        <translation>Checar se a quantidade está em Kg em vez de L.</translation>
+        <translation type="vanished">Checar se a quantidade está em Kg em vez de L.</translation>
     </message>
     <message>
         <source>Amount is weight?</source>
-        <translation>Quantidade é o peso?</translation>
+        <translation type="vanished">Quantidade é o peso?</translation>
     </message>
     <message>
         <source>Checked if the given amount is weight instead of volume</source>
-        <translation>Verifique se a quantidade informada é um peso ao invés de um volume</translation>
+        <translation type="vanished">Verifique se a quantidade informada é um peso ao invés de um volume</translation>
     </message>
     <message>
         <source>Use for:</source>
@@ -8658,6 +8733,14 @@ O volume final do fermentador primário é %1.</translation>
     </message>
     <message>
         <source>Product ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ID in database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -10238,6 +10321,14 @@ O volume final do fermentador primário é %1.</translation>
     </message>
     <message>
         <source>Neutral strains do not produce toxins, nor are they killed by them</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ID in database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

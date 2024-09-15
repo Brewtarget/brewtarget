@@ -22,6 +22,7 @@
 #include "model/Mash.h"
 #include "model/MashStep.h"
 #include "model/NamedParameterBundle.h"
+#include "utils/AutoCompare.h"
 
 QString Boil::localisedName() { return tr("Boil"); }
 
@@ -30,10 +31,9 @@ bool Boil::isEqualTo(NamedEntity const & other) const {
    Boil const & rhs = static_cast<Boil const &>(other);
    // Base class will already have ensured names are equal
    return (
-      this->m_description   == rhs.m_description   &&
-      this->m_notes         == rhs.m_notes         &&
-      this->m_preBoilSize_l == rhs.m_preBoilSize_l &&
-      this->m_boilTime_mins == rhs.m_boilTime_mins
+      Utils::AutoCompare(this->m_description  , rhs.m_description  )   &&
+      Utils::AutoCompare(this->m_notes        , rhs.m_notes        ) &&
+      Utils::AutoCompare(this->m_preBoilSize_l, rhs.m_preBoilSize_l)
       // .:TBD:. Should we check BoilSteps too?
    );
 }
@@ -48,8 +48,8 @@ TypeLookup const Boil::typeLookup {
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Boil::description  , Boil::m_description  ,           NonPhysicalQuantity::String),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Boil::notes        , Boil::m_notes        ,           NonPhysicalQuantity::String),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Boil::preBoilSize_l, Boil::m_preBoilSize_l, Measurement::PhysicalQuantity::Volume),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Boil::boilTime_mins, Boil::m_boilTime_mins, Measurement::PhysicalQuantity::Time  ),
 
+      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Boil::boilTime_mins, Boil::boilTime_mins, Measurement::PhysicalQuantity::Time),
       PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Boil::boilSteps, Boil::boilSteps),
    },
    // Parent classes lookup
@@ -66,8 +66,7 @@ Boil::Boil(QString name) :
    StepOwnerBase<Boil, BoilStep>{},
    m_description  {""          },
    m_notes        {""          },
-   m_preBoilSize_l{std::nullopt},
-   m_boilTime_mins{0.0         } {
+   m_preBoilSize_l{std::nullopt} {
    return;
 }
 
@@ -77,8 +76,7 @@ Boil::Boil(NamedParameterBundle const & namedParameterBundle) :
    StepOwnerBase<Boil, BoilStep>{},
    SET_REGULAR_FROM_NPB (m_description  , namedParameterBundle, PropertyNames::Boil::description  ),
    SET_REGULAR_FROM_NPB (m_notes        , namedParameterBundle, PropertyNames::Boil::notes        ),
-   SET_REGULAR_FROM_NPB (m_preBoilSize_l, namedParameterBundle, PropertyNames::Boil::preBoilSize_l),
-   SET_REGULAR_FROM_NPB (m_boilTime_mins, namedParameterBundle, PropertyNames::Boil::boilTime_mins) {
+   SET_REGULAR_FROM_NPB (m_preBoilSize_l, namedParameterBundle, PropertyNames::Boil::preBoilSize_l) {
    return;
 }
 
@@ -88,8 +86,7 @@ Boil::Boil(Boil const & other) :
    StepOwnerBase<Boil, BoilStep>{other},
    m_description  {other.m_description  },
    m_notes        {other.m_notes        },
-   m_preBoilSize_l{other.m_preBoilSize_l},
-   m_boilTime_mins{other.m_boilTime_mins} {
+   m_preBoilSize_l{other.m_preBoilSize_l} {
    return;
 }
 
@@ -99,16 +96,64 @@ Boil::~Boil() = default;
 QString               Boil::description  () const { return this->m_description  ; }
 QString               Boil::notes        () const { return this->m_notes        ; }
 std::optional<double> Boil::preBoilSize_l() const { return this->m_preBoilSize_l; }
-double                Boil::boilTime_mins() const { return this->m_boilTime_mins; }
+
+double Boil::boilTime_mins() const {
+   double boilTimeProper_mins = 0.0;
+   for (auto const & step : this->steps()) {
+      if (step->startTemp_c() && *step->startTemp_c() > Boil::minimumBoilTemperature_c &&
+          step->  endTemp_c() && *step->  endTemp_c() > Boil::minimumBoilTemperature_c &&
+          step->stepTime_mins()) {
+          boilTimeProper_mins += *step->stepTime_mins();
+      }
+   }
+   return boilTimeProper_mins;
+}
+
+std::optional<double> Boil::coolTime_mins() const {
+   auto boilSteps = this->steps();
+   if (boilSteps.size() > 0 &&
+       boilSteps.last()->startTemp_c() > Boil::minimumBoilTemperature_c &&
+       boilSteps.last()->endTemp_c  () < Boil::minimumBoilTemperature_c) {
+      return boilSteps.last()->stepTime_mins();
+   }
+   return std::nullopt;
+}
+
 
 //============================================= "SETTER" MEMBER FUNCTIONS ==============================================
 void Boil::setDescription  (QString               const & val) { SET_AND_NOTIFY(PropertyNames::Boil::description  , this->m_description  , val); return; }
 void Boil::setNotes        (QString               const & val) { SET_AND_NOTIFY(PropertyNames::Boil::notes        , this->m_notes        , val); return; }
 void Boil::setPreBoilSize_l(std::optional<double> const   val) { SET_AND_NOTIFY(PropertyNames::Boil::preBoilSize_l, this->m_preBoilSize_l, val); return; }
-void Boil::setBoilTime_mins(double                const   val) { SET_AND_NOTIFY(PropertyNames::Boil::boilTime_mins, this->m_boilTime_mins, val); return; }
+
+//
+// This is only used by BeerXML processing, so we can be a bit fast and loose.  In particular, we assume the first step
+// we find that is a proper boil is also the only such step.
+//
+void Boil::setBoilTime_mins(double const val) {
+   this->ensureStandardProfile();
+   for (auto step : this->steps()) {
+      if (step->startTemp_c() && *step->startTemp_c() > Boil::minimumBoilTemperature_c &&
+          step->  endTemp_c() && *step->  endTemp_c() > Boil::minimumBoilTemperature_c) {
+         step->setStepTime_mins(val);
+         break;
+      }
+   }
+   return;
+}
 
 void Boil::acceptStepChange([[maybe_unused]] QMetaProperty prop,
                             [[maybe_unused]] QVariant      val) {
+   BoilStep * stepSender = qobject_cast<BoilStep*>(sender());
+   if (!stepSender) {
+      return;
+   }
+
+   // If one of our steps changed, our pseudo properties may also change, so we need to emit some signals
+   if (stepSender->ownerId() == this->key()) {
+      emit changed(metaProperty(*PropertyNames::Boil::boilTime_mins), QVariant());
+      emit changed(metaProperty(*PropertyNames::Boil::boilSteps    ), QVariant());
+   }
+
    return;
 }
 

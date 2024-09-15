@@ -32,11 +32,11 @@
 //========================================== Start of property name constants ==========================================
 // See comment in model/NamedEntity.h
 #define AddPropertyName(property) namespace PropertyNames::Boil { BtStringConst const property{#property}; }
-AddPropertyName(description      )
-AddPropertyName(notes            )
-AddPropertyName(preBoilSize_l    )
-AddPropertyName(boilTime_mins    )
-AddPropertyName(boilSteps        )
+AddPropertyName(description  )
+AddPropertyName(notes        )
+AddPropertyName(preBoilSize_l)
+AddPropertyName(boilTime_mins)
+AddPropertyName(boilSteps    )
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
 //======================================================================================================================
@@ -124,12 +124,14 @@ public:
    Q_PROPERTY(std::optional<double> preBoilSize_l          READ preBoilSize_l   WRITE setPreBoilSize_l )
 
    /**
-    * \brief The total time to boil the wort.  Hopefully equal to the sum of the times of all the steps.
-    *        (TODO: We should probably add some validation about this, though it's a bit complicated as not all steps
-    *               necessarily have times, but the length of the boil should be no shorter than the sum of the step
-    *               times, for sure.)
+    * \brief In BeerXML, this is "The total time to boil the wort in minutes".  I think this would mostly be understood
+    *        as the length of the "boil proper" so, in our new model, it is the length of the step(s) for which
+    *        \c Step::startTemp_c and \c Step::endTemp_c are above \c minimumBoilTemperature_c.  In other words, it is
+    *        a convenience way of accessing the length of the boil excluding any ramp-up or cool-down steps.
+    *
+    *        TBD: It's possible we should make this optional if we desire to support "no boil" recipes in future.
     */
-   Q_PROPERTY(double                boilTime_mins          READ boilTime_mins   WRITE setBoilTime_mins )
+   Q_PROPERTY(double                boilTime_mins          READ boilTime_mins   WRITE setBoilTime_mins STORED false)
    /**
     * \brief The individual boil steps.  (See \c StepOwnerBase for getter/setter implementation.)
     *        Technically this is optional in BeerJSON, but we'll treat it as required (for consistency with
@@ -143,6 +145,12 @@ public:
    QString               notes        () const;
    std::optional<double> preBoilSize_l() const;
    double                boilTime_mins() const;
+
+   /**
+    * \brief If there is a post-boil cooling step, and if it has a duration, this will return it, otherwise returns
+    *        \c std::nullopt
+    */
+   std::optional<double> coolTime_mins() const;
 
    //============================================ "SETTER" MEMBER FUNCTIONS ============================================
    void setDescription  (QString               const & val);
@@ -178,7 +186,6 @@ private:
    QString               m_description  ;
    QString               m_notes        ;
    std::optional<double> m_preBoilSize_l;
-   double                m_boilTime_mins;
 };
 
 BT_DECLARE_METATYPES(Boil)

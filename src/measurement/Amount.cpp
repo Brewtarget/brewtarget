@@ -19,6 +19,7 @@
 #include <QTextStream>
 
 #include "measurement/Unit.h"
+#include "utils/FuzzyCompare.h"
 
 namespace Measurement {
 
@@ -57,37 +58,66 @@ namespace Measurement {
       return *this;
    }
 
+   bool Amount::operator==(Amount const & other) const {
+      // Most of the time, everything will be in canonical units, but if two amounts for the same physical quantity are
+      // in different units, they should still be comparable.
+      auto const lhsCanonical {this->unit->toCanonical(this->quantity)};
+      auto const rhsCanonical {other.unit->toCanonical(other.quantity)};
+      // Unit classes are singletons so, once everything is in canonical units, it's OK to compare just the pointers
+      return lhsCanonical.unit == rhsCanonical.unit && Utils::FuzzyCompare(lhsCanonical.quantity, rhsCanonical.quantity);
+   }
+
+   bool Amount::operator!=(Amount const & other) const {
+      // Don't reinvent the wheel '!=' should just be the opposite of '=='
+      return !(*this == other);
+   }
+
+   std::partial_ordering Amount::operator<=>(Amount const & other) const {
+      // Comments above in operator== also apply here
+      auto const lhsCanonical {this->unit->toCanonical(this->quantity)};
+      auto const rhsCanonical {other.unit->toCanonical(other.quantity)};
+      if (lhsCanonical.unit != rhsCanonical.unit) {
+         return std::partial_ordering::unordered;
+      }
+      if (Utils::FuzzyCompare(lhsCanonical.quantity, rhsCanonical.quantity)) {
+         return std::partial_ordering::equivalent;
+      }
+      // Now we did the fuzzy compare, anything that's not a fuzzy match is safe to compare "as normal"
+      return (lhsCanonical.quantity < rhsCanonical.quantity) ? std::partial_ordering::less :
+                                                               std::partial_ordering::greater;
+   };
+
    bool Amount::isValid() const {
       return (this->unit && this->quantity >= 0.0);
    }
 
 }
 
-bool operator<(Measurement::Amount const & lhs, Measurement::Amount const & rhs) {
-   // Amounts in the same units are trivial to compare
-   if (lhs.unit == rhs.unit) {
-      return lhs.quantity < rhs.quantity;
-   }
-
-   // It's a coding error if we try to compare two things that aren't a measure of the same physical quantity (because
-   // it's meaningless to compare a temperature to a mass, etc
-   Q_ASSERT(lhs.unit->getPhysicalQuantity() == rhs.unit->getPhysicalQuantity());
-
-   return lhs.unit->toCanonical(lhs.quantity).quantity < rhs.unit->toCanonical(lhs.quantity).quantity;
-}
-
-bool operator==(Measurement::Amount const & lhs, Measurement::Amount const & rhs) {
-   // Amounts in the same units are trivial to compare
-   if (lhs.unit == rhs.unit) {
-      return lhs.quantity == rhs.quantity;
-   }
-
-   // It's a coding error if we try to compare two things that aren't a measure of the same physical quantity (because
-   // it's meaningless to compare a temperature to a mass, etc
-   Q_ASSERT(lhs.unit->getPhysicalQuantity() == rhs.unit->getPhysicalQuantity());
-
-   return lhs.unit->toCanonical(lhs.quantity).quantity == rhs.unit->toCanonical(lhs.quantity).quantity;
-}
+///bool operator<(Measurement::Amount const & lhs, Measurement::Amount const & rhs) {
+///   // Amounts in the same units are trivial to compare
+///   if (lhs.unit == rhs.unit) {
+///      return lhs.quantity < rhs.quantity;
+///   }
+///
+///   // It's a coding error if we try to compare two things that aren't a measure of the same physical quantity (because
+///   // it's meaningless to compare a temperature to a mass, etc
+///   Q_ASSERT(lhs.unit->getPhysicalQuantity() == rhs.unit->getPhysicalQuantity());
+///
+///   return lhs.unit->toCanonical(lhs.quantity).quantity < rhs.unit->toCanonical(lhs.quantity).quantity;
+///}
+///
+///bool operator==(Measurement::Amount const & lhs, Measurement::Amount const & rhs) {
+///   // Amounts in the same units are trivial to compare
+///   if (lhs.unit == rhs.unit) {
+///      return lhs.quantity == rhs.quantity;
+///   }
+///
+///   // It's a coding error if we try to compare two things that aren't a measure of the same physical quantity (because
+///   // it's meaningless to compare a temperature to a mass, etc
+///   Q_ASSERT(lhs.unit->getPhysicalQuantity() == rhs.unit->getPhysicalQuantity());
+///
+///   return lhs.unit->toCanonical(lhs.quantity).quantity == rhs.unit->toCanonical(lhs.quantity).quantity;
+///}
 
 template<class S>
 S & operator<<(S & stream, Measurement::Amount const amount) {

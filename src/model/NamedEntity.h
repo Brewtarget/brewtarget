@@ -229,8 +229,12 @@ public:
 
    /**
     * \brief As you might expect, this ensures we order \b NamedEntity objects by name
+    *
+    *        Most subclasses do not need any more ordering than this.  However \c RecipeAddition subclasses do need to
+    *        override this, so we can have a canonical ordering of a list of, eg, pointers to \c RecipeAdditionHop, so
+    *        that we can then easily compare two such lists for equality.
     */
-   auto operator<=>(NamedEntity const & other) const;
+   std::strong_ordering operator<=>(NamedEntity const & other) const;
 
    // Everything that inherits from NamedEntity has these properties
    Q_PROPERTY(QString name      READ name         WRITE setName     )

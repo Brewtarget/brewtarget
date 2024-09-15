@@ -117,20 +117,22 @@ public:
    // On a base or target profile, bicarbonate and alkalinity cannot both be used. I'm gonna have fun figuring that out
    //! \brief What kind of salt this is
    Q_PROPERTY(Type      type           READ type           WRITE setType            )
-   //! \brief What percent is acid (used for lactic acid, H3PO4 and acid malts)
-   Q_PROPERTY(double    percentAcid    READ percentAcid    WRITE setPercentAcid     )
-   //! \brief Is this an acid or salt?
-   Q_PROPERTY(bool      isAcid         READ isAcid         WRITE setIsAcid          )
+   /**
+    * \brief What percent is acid - valid only for lactic acid, H3PO4 and acid malts
+    */
+   Q_PROPERTY(std::optional<double>    percentAcid    READ percentAcid    WRITE setPercentAcid     )
+   //! \brief Is this an acid or salt?  Deduced from \c type
+   Q_PROPERTY(bool      isAcid         READ isAcid)
    Q_PROPERTY(Measurement::PhysicalQuantity suggestedMeasure READ suggestedMeasure)
 
    Salt::Type            type       () const;
-   double          percentAcid()    const;
+   std::optional<double> percentAcid() const;
    bool                  isAcid     () const;
    Measurement::PhysicalQuantity suggestedMeasure() const;
 
    void setType       (Salt::Type val);
-   void setPercentAcid   (double          val);
-   void setIsAcid        (bool            val);
+   void setPercentAcid(std::optional<double> val);
+///   void setIsAcid     (bool       val);
 
    /**
     * \return Mass concentration (in parts per million) of Calcium (Ca) for one gram of this salt in one liter of water
@@ -175,8 +177,7 @@ protected:
 
 private:
    Salt::Type            m_type;
-   double     m_percent_acid;
-   bool       m_is_acid;
+   std::optional<double> m_percent_acid;
 };
 
 BT_DECLARE_METATYPES(Salt)

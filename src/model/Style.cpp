@@ -23,6 +23,7 @@
 #include "database/ObjectStoreWrapper.h"
 #include "model/NamedParameterBundle.h"
 #include "model/Recipe.h"
+#include "utils/AutoCompare.h"
 
 QString Style::localisedName() { return tr("Style"); }
 
@@ -50,11 +51,11 @@ bool Style::isEqualTo(NamedEntity const & other) const {
    Style const & rhs = static_cast<Style const &>(other);
    // Base class will already have ensured names are equal
    return (
-      this->m_category       == rhs.m_category       &&
-      this->m_categoryNumber == rhs.m_categoryNumber &&
-      this->m_styleLetter    == rhs.m_styleLetter    &&
-      this->m_styleGuide     == rhs.m_styleGuide     &&
-      this->m_type           == rhs.m_type
+      Utils::AutoCompare(this->m_category      , rhs.m_category      ) &&
+      Utils::AutoCompare(this->m_categoryNumber, rhs.m_categoryNumber) &&
+      Utils::AutoCompare(this->m_styleLetter   , rhs.m_styleLetter   ) &&
+      Utils::AutoCompare(this->m_styleGuide    , rhs.m_styleGuide    ) &&
+      Utils::AutoCompare(this->m_type          , rhs.m_type          )
    );
 }
 

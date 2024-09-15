@@ -147,20 +147,51 @@ namespace {
 class Measurement::Unit::impl {
 public:
    /**
-    * Constructor
+    * Simple case constructor -- conversion to/from canonical units is just multiplication/division
     */
-   impl(Unit & self,
+   impl(Unit const & self,
         UnitSystem const & unitSystem,
-        std::function<double(double)> convertToCanonical,
-        std::function<double(double)> convertFromCanonical,
+        double const multiplierToCanonical,
         double const boundaryValue,
         bool const isCanonical) :
-      self                {self},
-      unitSystem          {unitSystem},
-      convertToCanonical  {convertToCanonical},
-      convertFromCanonical{convertFromCanonical},
-      boundaryValue       {boundaryValue},
-      isCanonical         {isCanonical} {
+      m_self                 {self},
+      m_unitSystem           {unitSystem},
+      m_multiplierToCanonical{multiplierToCanonical},
+      m_convertToCanonical   {},
+      m_convertFromCanonical {},
+      m_boundaryValue        {boundaryValue},
+      m_isCanonical          {isCanonical} {
+      // If this is a canonical unit then, by definition, its multiplier should be 1.0.  Usually we wouldn't compare
+      // doubles, but I'm pretty sure comparing against 1.0 is safe in this context because there will never be a
+      // rounding error from the `1.0` literal.
+      //
+      // Note, however, that it _can_ be valid for a non-canonical unit to have a 1.0 multiplier to and from canonical
+      // units (eg Lovibond is a no-op conversion to/from SRM).
+      Q_ASSERT((isCanonical && 1.0 == multiplierToCanonical) || !isCanonical);
+
+      // It's a coding error for the multiplier to be zero.  Again, I think this is an OK comparison to do since we're
+      // checking for source code error rather than "value is so close to zero it might as well be zero".
+      Q_ASSERT(0.0 != multiplierToCanonical);
+
+      return;
+   }
+
+   /**
+    * Complex-case constructor -- conversion to/from canonical units requires formulae (via lambda functions).  By
+    * definition, this cannot be a canonical unit.
+    */
+   impl(Unit const & self,
+        UnitSystem const & unitSystem,
+        std::function<double(double)> const convertToCanonical,
+        std::function<double(double)> const convertFromCanonical,
+        double const boundaryValue) :
+      m_self                 {self},
+      m_unitSystem           {unitSystem},
+      m_multiplierToCanonical{std::nullopt},
+      m_convertToCanonical   {convertToCanonical},
+      m_convertFromCanonical {convertFromCanonical},
+      m_boundaryValue        {boundaryValue},
+      m_isCanonical          {false} {
       return;
    }
 
@@ -170,35 +201,57 @@ public:
    ~impl() = default;
 
    // Member variables for impl
-   Unit & self;
-   UnitSystem const & unitSystem;
+   Unit const & m_self;
+   UnitSystem const & m_unitSystem;
 
-   std::function<double(double)> convertToCanonical;
-   std::function<double(double)> convertFromCanonical;
-   double const boundaryValue;
-   bool const isCanonical;
+   std::optional<double> const m_multiplierToCanonical = std::nullopt;
+   std::function<double(double)> const m_convertToCanonical = {};
+   std::function<double(double)> const m_convertFromCanonical = {};
+   double const m_boundaryValue;
+   bool const m_isCanonical;
+   //
+   // TBD: We could store a pointer to the canonical Unit here, since we have it in the constructors below
+   //
 };
+
+Measurement::Unit::Unit(UnitSystem const & unitSystem,
+                        QString const unitName,
+                        double const multiplierToCanonical,
+                        Measurement::Unit const * canonical,
+                        double const boundaryValue) :
+   name{unitName},
+   pimpl{std::make_unique<impl>(*this,
+                                unitSystem,
+                                multiplierToCanonical,
+                                boundaryValue,
+                                (canonical == nullptr))} {
+   //
+   // You might think here would be a neat place to add the Unit we are constructing to unitNameLookup and, if
+   // appropriate, physicalQuantityToCanonicalUnit.  However, there is not guarantee that unitSystem is constructed at
+   // this point, so unitSystem.getPhysicalQuantity() could result in a core dump.
+   //
+   // What we can do safely is add ourselves to listOfAllUnits
+   //
+   listOfAllUnits.append(this);
+   return;
+}
 
 Measurement::Unit::Unit(UnitSystem const & unitSystem,
                         QString const unitName,
                         std::function<double(double)> convertToCanonical,
                         std::function<double(double)> convertFromCanonical,
-                        double boundaryValue,
-                        Measurement::Unit const * canonical) :
+                        Measurement::Unit const * canonical,
+                        double const boundaryValue) :
    name{unitName},
    pimpl{std::make_unique<impl>(*this,
                                 unitSystem,
                                 convertToCanonical,
                                 convertFromCanonical,
-                                boundaryValue,
-                                (canonical == nullptr) )} {
-   //
-   // You might think here would be a neat place to the Unit we are constructing to unitNameLookup and, if appropriate,
-   // physicalQuantityToCanonicalUnit.  However, there is not guarantee that unitSystem is constructed at this point, so
-   // unitSystem.getPhysicalQuantity() could result in a core dump.
-   //
-   // What we can do safely is add ourselves to listOfAllUnits
-   //
+                                boundaryValue)} {
+   // It's a coding error if we used this version of the constructor for a canonical unit
+   Q_ASSERT(canonical);
+
+   // See comment in other version of constructor above
    listOfAllUnits.append(this);
    return;
 }
@@ -207,9 +260,9 @@ Measurement::Unit::~Unit() = default;
 
 void Measurement::Unit::initialiseLookups() {
    for (auto const unit : listOfAllUnits) {
-      Measurement::PhysicalQuantity const physicalQuantity = unit->pimpl->unitSystem.getPhysicalQuantity();
+      Measurement::PhysicalQuantity const physicalQuantity = unit->pimpl->m_unitSystem.getPhysicalQuantity();
       unitNameLookup.insert(NameLookupKey{physicalQuantity, unit->name.toLower()}, unit);
-      if (unit->pimpl->isCanonical) {
+      if (unit->pimpl->m_isCanonical) {
          physicalQuantityToCanonicalUnit.insert(physicalQuantity, unit);
       }
    }
@@ -279,28 +332,36 @@ Measurement::Unit const & Measurement::Unit::getCanonical() const {
 }
 
 bool Measurement::Unit::isCanonical() const {
-   return &this->getCanonical() == this;
+   Q_ASSERT(this->pimpl->m_isCanonical == (&this->getCanonical() == this));
+   return this->pimpl->m_isCanonical;
 }
 
 Measurement::Amount Measurement::Unit::toCanonical(double amt) const {
-   return Measurement::Amount{this->pimpl->convertToCanonical(amt), this->getCanonical()};
+   double const convertedQuantity{
+      this->pimpl->m_multiplierToCanonical ? amt * (*this->pimpl->m_multiplierToCanonical) :
+                                             this->pimpl->m_convertToCanonical(amt)
+   };
+   return Measurement::Amount{convertedQuantity, this->getCanonical()};
 }
 
 double Measurement::Unit::fromCanonical(double amt) const {
-   return this->pimpl->convertFromCanonical(amt);
+   if (this->pimpl->m_multiplierToCanonical) {
+      return amt / (*this->pimpl->m_multiplierToCanonical);
+   }
+   return this->pimpl->m_convertFromCanonical(amt);
 }
 
 Measurement::PhysicalQuantity Measurement::Unit::getPhysicalQuantity() const {
    // The PhysicalQuantity for this Unit is already stored in its UnitSystem, so we don't store it separately here
-   return this->pimpl->unitSystem.getPhysicalQuantity();
+   return this->pimpl->m_unitSystem.getPhysicalQuantity();
 }
 
 Measurement::UnitSystem const & Measurement::Unit::getUnitSystem() const {
-   return this->pimpl->unitSystem;
+   return this->pimpl->m_unitSystem;
 }
 
 double Measurement::Unit::boundary() const {
-   return this->pimpl->boundaryValue;
+   return this->pimpl->m_boundaryValue;
 }
 
 Measurement::Unit const & Measurement::Unit::getCanonicalUnit(Measurement::PhysicalQuantity const physicalQuantity) {
@@ -443,34 +504,44 @@ namespace Measurement::Units {
 
    // === Mass ===
    // See comment in measurement/UnitSystem.cpp for why we have separate entities for US Customary pounds/ounces and Imperials ones, even though they are, in fact, the same
-   Unit const kilograms           {Measurement::UnitSystems::mass_Metric,                         QObject::tr("kg"),       [](double x){return x;},                 [](double y){return y;},                 1.0};
-   Unit const grams               {Measurement::UnitSystems::mass_Metric,                         QObject::tr("g"),        [](double x){return x/1000.0;},          [](double y){return y*1000.0;},          1.0,  &kilograms};
-   Unit const milligrams          {Measurement::UnitSystems::mass_Metric,                         QObject::tr("mg"),       [](double x){return x/1000000.0;},       [](double y){return y*1000000.0;},       1.0,  &kilograms};
-   Unit const pounds              {Measurement::UnitSystems::mass_UsCustomary,                    QObject::tr("lb"),       [](double x){return x*0.45359237;},      [](double y){return y/0.45359237;},      1.0,  &kilograms};
-   Unit const ounces              {Measurement::UnitSystems::mass_UsCustomary,                    QObject::tr("oz"),       [](double x){return x*0.0283495231;},    [](double y){return y/0.0283495231;},    1.0,  &kilograms};
-   Unit const imperial_pounds     {Measurement::UnitSystems::mass_Imperial,                       QObject::tr("lb"),       [](double x){return x*0.45359237;},      [](double y){return y/0.45359237;},      1.0,  &kilograms};
-   Unit const imperial_ounces     {Measurement::UnitSystems::mass_Imperial,                       QObject::tr("oz"),       [](double x){return x*0.0283495231;},    [](double y){return y/0.0283495231;},    1.0,  &kilograms};
+   Unit const kilograms      {Measurement::UnitSystems::mass_Metric     , QObject::tr("kg")};
+   Unit const grams          {Measurement::UnitSystems::mass_Metric     , QObject::tr("g" ), 1.0/1000.0   , &kilograms};
+   Unit const milligrams     {Measurement::UnitSystems::mass_Metric     , QObject::tr("mg"), 1.0/1000000.0, &kilograms};
+   Unit const pounds         {Measurement::UnitSystems::mass_UsCustomary, QObject::tr("lb"), 0.45359237   , &kilograms};
+   Unit const ounces         {Measurement::UnitSystems::mass_UsCustomary, QObject::tr("oz"), 0.0283495231 , &kilograms};
+   Unit const imperial_pounds{Measurement::UnitSystems::mass_Imperial   , QObject::tr("lb"), 0.45359237   , &kilograms};
+   Unit const imperial_ounces{Measurement::UnitSystems::mass_Imperial   , QObject::tr("oz"), 0.0283495231 , &kilograms};
 
    // === Volume ===
    // Where possible, the multipliers for going to and from litres come from www.conversion-metric.org as it seems to offer the most decimal places on its conversion tables
-   Unit const liters              {Measurement::UnitSystems::volume_Metric     ,                  QObject::tr("L"),        [](double x){return x;},                    [](double y){return y;},                    1.0};
-   Unit const milliliters         {Measurement::UnitSystems::volume_Metric     ,                  QObject::tr("mL"),       [](double x){return x/1000.0;},             [](double y){return y*1000.0;},             1.0,  &liters};
-   Unit const us_barrels          {Measurement::UnitSystems::volume_UsCustomary,                  QObject::tr("bbl"),      [](double x){return x*117.34777;},          [](double y){return y/117.34777;},          1.0,  &liters};
-   Unit const us_gallons          {Measurement::UnitSystems::volume_UsCustomary,                  QObject::tr("gal"),      [](double x){return x*3.7854117840007;},    [](double y){return y/3.7854117840007;},    1.0,  &liters};
-   Unit const us_quarts           {Measurement::UnitSystems::volume_UsCustomary,                  QObject::tr("qt"),       [](double x){return x*0.94635294599999;},   [](double y){return y/0.94635294599999;},   1.0,  &liters};
-   Unit const us_pints            {Measurement::UnitSystems::volume_UsCustomary,                  QObject::tr("qt"),       [](double x){return x*0.473176473;},        [](double y){return y/0.473176473;},        1.0,  &liters};
-   Unit const us_cups             {Measurement::UnitSystems::volume_UsCustomary,                  QObject::tr("cup"),      [](double x){return x*0.23658823648491;},   [](double y){return y/0.23658823648491;},   0.25, &liters};
-   Unit const us_fluidOunces      {Measurement::UnitSystems::volume_UsCustomary,                  QObject::tr("floz"),     [](double x){return x*0.029573529564112;},  [](double y){return y/0.029573529564112;},  1.0,  &liters};
-   Unit const us_tablespoons      {Measurement::UnitSystems::volume_UsCustomary,                  QObject::tr("tbsp"),     [](double x){return x*0.014786764782056;},  [](double y){return y/0.014786764782056;},  1.0,  &liters};
-   Unit const us_teaspoons        {Measurement::UnitSystems::volume_UsCustomary,                  QObject::tr("tsp"),      [](double x){return x*0.0049289215940186;}, [](double y){return y/0.0049289215940186;}, 1.0,  &liters};
-   Unit const imperial_barrels    {Measurement::UnitSystems::volume_Imperial   ,                  QObject::tr("bbl"),      [](double x){return x*163.659;},            [](double y){return y/163.659;},            1.0,  &liters};
-   Unit const imperial_gallons    {Measurement::UnitSystems::volume_Imperial   ,                  QObject::tr("gal"),      [](double x){return x*4.5460899999997;},    [](double y){return y/4.5460899999997;},    1.0,  &liters};
-   Unit const imperial_quarts     {Measurement::UnitSystems::volume_Imperial   ,                  QObject::tr("qt"),       [](double x){return x*1.1365225;},          [](double y){return y/1.1365225;},          1.0,  &liters};
-   Unit const imperial_pints      {Measurement::UnitSystems::volume_Imperial   ,                  QObject::tr("qt"),       [](double x){return x*0.56826125;},         [](double y){return y/0.56826125;},         1.0,  &liters};
-   Unit const imperial_cups       {Measurement::UnitSystems::volume_Imperial   ,                  QObject::tr("cup"),      [](double x){return x*0.284130625;},        [](double y){return y/0.284130625;},        0.25, &liters};
-   Unit const imperial_fluidOunces{Measurement::UnitSystems::volume_Imperial   ,                  QObject::tr("floz"),     [](double x){return x*0.028413075003383;},  [](double y){return y/0.028413075003383;},  1.0, &liters};
-   Unit const imperial_tablespoons{Measurement::UnitSystems::volume_Imperial   ,                  QObject::tr("tbsp"),     [](double x){return x*0.0177581714;},       [](double y){return y/0.0177581714;},       1.0,  &liters};
-   Unit const imperial_teaspoons  {Measurement::UnitSystems::volume_Imperial   ,                  QObject::tr("tsp"),      [](double x){return x*0.00591939047;},      [](double y){return y/0.00591939047;},      1.0,  &liters};
+   Unit const liters              {Measurement::UnitSystems::volume_Metric     , QObject::tr("L"   )};
+   Unit const milliliters         {Measurement::UnitSystems::volume_Metric     , QObject::tr("mL"  ), 1.0/1000.0          , &liters};
+   Unit const us_barrels          {Measurement::UnitSystems::volume_UsCustomary, QObject::tr("bbl" ), 117.34777           , &liters};
+   Unit const us_gallons          {Measurement::UnitSystems::volume_UsCustomary, QObject::tr("gal" ),   3.7854117840007   , &liters};
+   Unit const us_quarts           {Measurement::UnitSystems::volume_UsCustomary, QObject::tr("qt"  ),   0.94635294599999  , &liters};
+   Unit const us_pints            {Measurement::UnitSystems::volume_UsCustomary, QObject::tr("qt"  ),   0.473176473       , &liters};
+   Unit const us_cups             {Measurement::UnitSystems::volume_UsCustomary, QObject::tr("cup" ),   0.23658823648491  , &liters, 0.25};
+   Unit const us_fluidOunces      {Measurement::UnitSystems::volume_UsCustomary, QObject::tr("floz"),   0.029573529564112 , &liters};
+   Unit const us_tablespoons      {Measurement::UnitSystems::volume_UsCustomary, QObject::tr("tbsp"),   0.014786764782056 , &liters};
+   Unit const us_teaspoons        {Measurement::UnitSystems::volume_UsCustomary, QObject::tr("tsp" ),   0.0049289215940186, &liters};
+   Unit const imperial_barrels    {Measurement::UnitSystems::volume_Imperial   , QObject::tr("bbl" ), 163.659             , &liters};
+   Unit const imperial_gallons    {Measurement::UnitSystems::volume_Imperial   , QObject::tr("gal" ),   4.5460899999997   , &liters};
+   Unit const imperial_quarts     {Measurement::UnitSystems::volume_Imperial   , QObject::tr("qt"  ),   1.1365225         , &liters};
+   Unit const imperial_pints      {Measurement::UnitSystems::volume_Imperial   , QObject::tr("qt"  ),   0.56826125        , &liters};
+   Unit const imperial_cups       {Measurement::UnitSystems::volume_Imperial   , QObject::tr("cup" ),   0.284130625       , &liters, 0.25};
+   Unit const imperial_fluidOunces{Measurement::UnitSystems::volume_Imperial   , QObject::tr("floz"),   0.028413075003383 , &liters};
+   Unit const imperial_tablespoons{Measurement::UnitSystems::volume_Imperial   , QObject::tr("tbsp"),   0.0177581714      , &liters};
+   Unit const imperial_teaspoons  {Measurement::UnitSystems::volume_Imperial   , QObject::tr("tsp" ),   0.00591939047     , &liters};
+
+   // === Length ===
+   // I suppose we could use the other official abbreviations for feet and inches -- either the real ones (see
+   // en.wikipedia.org/wiki/Prime_(symbol)) that no-one can type (′ and ″) or what people would actually type
+   // (' and ") -- but I fear it's a bit more hassle than it's worth.
+   Unit const centimeters{Measurement::UnitSystems::length_Metric     , QObject::tr("cm")};
+   Unit const millimeters{Measurement::UnitSystems::length_Metric     , QObject::tr("mm"),   0.1, &centimeters};
+   Unit const meters     {Measurement::UnitSystems::length_Metric     , QObject::tr("m" ), 100.0, &centimeters};
+   Unit const inches     {Measurement::UnitSystems::length_UsCustomary, QObject::tr("in"),  2.54, &centimeters};
+   Unit const feet       {Measurement::UnitSystems::length_UsCustomary, QObject::tr("ft"), 30.48, &centimeters};
 
    // === Count ===
    // The choice of abbreviation here is a bit of a compromise, in English at least, because it's a bit unnatural to say
@@ -478,58 +549,58 @@ namespace Measurement::Units {
    // or "2.5 × cinnamon sticks".  "Cinnamon sticks: 2.5" would be more natural, but I'm reluctant to have no
    // abbreviation, as there are, arguably, circumstances where it could lead to ambiguity or confusion.  At very least
    // if we are showing an abbreviation for "number of" then we are showing that the units haven't been forgotten.
-   Unit const numberOf            {Measurement::UnitSystems::count_NumberOf,                      QObject::tr("(№)"),      [](double x){return x;},               [](double y){return y;},                1.0};
+   Unit const numberOf{Measurement::UnitSystems::count_NumberOf, QObject::tr("(№)")};
 
    // === Temperature ===
-   Unit const celsius             {Measurement::UnitSystems::temperature_MetricIsCelsius,         QObject::tr("C"),        [](double x){return x;},               [](double y){return y;},                1.0};
-   Unit const fahrenheit          {Measurement::UnitSystems::temperature_UsCustomaryIsFahrenheit, QObject::tr("F"),        [](double x){return (x-32)*5.0/9.0;},  [](double y){return y * 9.0/5.0 + 32;}, 1.0,  &celsius};
+   Unit const celsius   {Measurement::UnitSystems::temperature_MetricIsCelsius        , QObject::tr("C")};
+   Unit const fahrenheit{Measurement::UnitSystems::temperature_UsCustomaryIsFahrenheit, QObject::tr("F"), [](double x){return (x - 32.0) * 5.0/9.0;},
+                                                                                                          [](double y){return (y * 9.0/5.0) + 32.0;}, &celsius};
 
    // === Time ===
    // Added weeks because BeerJSON has it
    // TBD I've put days and weeks in plural here, because in practice it looks jarring to have them in singular, but
    //     maybe we should decide on abbreviations for them.
-   Unit const minutes             {Measurement::UnitSystems::time_CoordinatedUniversalTime,       QObject::tr("min"),      [](double x){return x;},                 [](double y){return y;},                 1.0};
-   Unit const weeks               {Measurement::UnitSystems::time_CoordinatedUniversalTime,       QObject::tr("weeks"),    [](double x){return x*(7.0*24.0*60.0);}, [](double y){return y/(7.0*24.0*60.0);}, 1.0,  &minutes};
-   Unit const days                {Measurement::UnitSystems::time_CoordinatedUniversalTime,       QObject::tr("days"),     [](double x){return x*(24.0*60.0);},     [](double y){return y/(24.0*60.0);},     1.0,  &minutes};
-   Unit const hours               {Measurement::UnitSystems::time_CoordinatedUniversalTime,       QObject::tr("hr"),       [](double x){return x*60.0;},            [](double y){return y/60.0;},            2.0,  &minutes};
-   Unit const seconds             {Measurement::UnitSystems::time_CoordinatedUniversalTime,       QObject::tr("s"),        [](double x){return x/60.0;},            [](double y){return y*60.0;},            90.0, &minutes};
+   Unit const minutes{Measurement::UnitSystems::time_CoordinatedUniversalTime, QObject::tr("min"  )};
+   Unit const weeks  {Measurement::UnitSystems::time_CoordinatedUniversalTime, QObject::tr("weeks"), (7.0*24.0*60.0), &minutes};
+   Unit const days   {Measurement::UnitSystems::time_CoordinatedUniversalTime, QObject::tr("days" ), (24.0*60.0)    , &minutes};
+   Unit const hours  {Measurement::UnitSystems::time_CoordinatedUniversalTime, QObject::tr("hr"   ), 60.0           , &minutes,  2.0};
+   Unit const seconds{Measurement::UnitSystems::time_CoordinatedUniversalTime, QObject::tr("s"    ), 1.0/60.0       , &minutes, 90.0};
 
    // === Color ===
    // Not sure how many people use Lovibond scale these days, but BeerJSON supports it, so we need to be able to read
    // it.  https://en.wikipedia.org/wiki/Beer_measurement#Colour= says "The Standard Reference Method (SRM) ... [gives]
    // results approximately equal to the °L."
-   Unit const srm                 {Measurement::UnitSystems::color_StandardReferenceMethod,       QObject::tr("srm"),      [](double x){return x;},               [](double y){return y;},                1.0};
-   Unit const ebc                 {Measurement::UnitSystems::color_EuropeanBreweryConvention,     QObject::tr("ebc"),      [](double x){return x * 12.7/25.0;},   [](double y){return y * 25.0/12.7;},    1.0,  &srm};
-   Unit const lovibond            {Measurement::UnitSystems::color_Lovibond,                      QObject::tr("lovibond"), [](double x){return x;},               [](double y){return y;},                1.0,  &srm};
+   Unit const srm     {Measurement::UnitSystems::color_StandardReferenceMethod  , QObject::tr("srm"     )};
+   Unit const ebc     {Measurement::UnitSystems::color_EuropeanBreweryConvention, QObject::tr("ebc"     ), 12.7/25.0, &srm};
+   Unit const lovibond{Measurement::UnitSystems::color_Lovibond                 , QObject::tr("lovibond"), 1.0      , &srm};
 
    // == Density ===
    // Brix isn't much used in beer brewing, but BeerJSON supports it, so we have it here.
    // Per https://en.wikipedia.org/wiki/Beer_measurement, Plato and Brix are "essentially ... the same ([both based on
    // mass fraction of sucrose) [and only] differ in their conversion from weight percentage to specific gravity in the
    // fifth and sixth decimal places"
-   Unit const specificGravity             {Measurement::UnitSystems::density_SpecificGravity,             QObject::tr("sg"),       [](double x){return x;},               [](double y){return y;},                1.0};
-   Unit const plato               {Measurement::UnitSystems::density_Plato,
-                                   QObject::tr("P"),
-                                          [](double x){return x == 0.0 ? 0.0 : Algorithms::PlatoToSG_20C20C(x);},
-                                          [](double y){return y == 0.0 ? 0.0 : Algorithms::SG_20C20C_toPlato(y);},
-                                          1.0,
-                                          &specificGravity};
-   Unit const brix                {Measurement::UnitSystems::density_Brix,
-                                   QObject::tr("brix"),
-                                   [](double x){return x == 0.0 ? 0.0 : Algorithms::BrixToSgAt20C(x);},
-                                   [](double y){return y == 0.0 ? 0.0 : Algorithms::SgAt20CToBrix(y);},
-                                   1.0,
-                                   &specificGravity};
+   Unit const specificGravity{Measurement::UnitSystems::density_SpecificGravity, QObject::tr("sg"),};
+   Unit const plato          {Measurement::UnitSystems::density_Plato,
+                              QObject::tr("P"),
+                                     [](double x){return x == 0.0 ? 0.0 : Algorithms::PlatoToSG_20C20C(x);},
+                                     [](double y){return y == 0.0 ? 0.0 : Algorithms::SG_20C20C_toPlato(y);},
+                                     &specificGravity};
+   Unit const brix           {Measurement::UnitSystems::density_Brix,
+                              QObject::tr("brix"),
+                              [](double x){return x == 0.0 ? 0.0 : Algorithms::BrixToSgAt20C(x);},
+                              [](double y){return y == 0.0 ? 0.0 : Algorithms::SgAt20CToBrix(y);},
+                              &specificGravity};
 
    // == Diastatic power ==
-   Unit const lintner             {Measurement::UnitSystems::diastaticPower_Lintner,                  QObject::tr("L"),    [](double x){return x;},               [](double y){return y;},                1.0};
-   Unit const wk                  {Measurement::UnitSystems::diastaticPower_WindischKolbach,          QObject::tr("WK"),   [](double x){return (x + 16) / 3.5;},  [](double y){return 3.5 * y - 16;},     1.0,  &lintner};
+   Unit const lintner{Measurement::UnitSystems::diastaticPower_Lintner        , QObject::tr("L" )};
+   Unit const wk     {Measurement::UnitSystems::diastaticPower_WindischKolbach, QObject::tr("WK"), [](double x){return (x + 16.0) / 3.5;},
+                                                                                                   [](double y){return (3.5 * y) - 16.0;}, &lintner};
 
    // == Acidity ==
-   Unit const pH                  {Measurement::UnitSystems::acidity_pH,                              QObject::tr("pH"),   [](double x){return x;},               [](double y){return y;},                1.0};
+   Unit const pH{Measurement::UnitSystems::acidity_pH, QObject::tr("pH")};
 
    // == Bitterness ==
-   Unit const ibu                 {Measurement::UnitSystems::bitterness_InternationalBitternessUnits, QObject::tr("IBU"),  [](double x){return x;},               [](double y){return y;},                1.0};
+   Unit const ibu{Measurement::UnitSystems::bitterness_InternationalBitternessUnits, QObject::tr("IBU")};
 
    // == Carbonation ==
    // Per http://www.uigi.com/co2_conv.html, 1 cubic metre (aka 1000 litres) of CO2 at 1 atmosphere pressure and 0°C
@@ -537,34 +608,34 @@ namespace Measurement::Units {
    // whether we should use 0°C or 20°C or some other temperature for the conversion from volumes to grams per litre.
    // A brewing-specific source, https://byo.com/article/master-the-action-carbonation/, gives the conversion factor as
    // 1.96, so we use that.
-   Unit const carbonationVolumes      {Measurement::UnitSystems::carbonation_Volumes,                 QObject::tr("vol"),  [](double x){return x;},               [](double y){return y;},                1.0};
-   Unit const carbonationGramsPerLiter{Measurement::UnitSystems::carbonation_MassPerVolume,           QObject::tr("mg/L"), [](double x){return x / 1.96;},        [](double y){return y * 1.96;},         1.0,  &carbonationVolumes};
+   Unit const carbonationVolumes      {Measurement::UnitSystems::carbonation_Volumes      , QObject::tr("vol" )};
+   Unit const carbonationGramsPerLiter{Measurement::UnitSystems::carbonation_MassPerVolume, QObject::tr("mg/L"), 1.0/1.96, &carbonationVolumes};
 
    // == Mass Fraction & Mass Concentration ==
-   Unit const partsPerMillionMass {Measurement::UnitSystems::massFractionOrConc_Brewing,             QObject::tr("ppm"),  [](double x){return x;},               [](double y){return y;},                1.0};
-   Unit const partsPerBillionMass {Measurement::UnitSystems::massFractionOrConc_Brewing,             QObject::tr("ppb"),  [](double x){return x * 1000.0;},      [](double y){return y/1000.0;},         1.0,  &partsPerMillionMass};
-   Unit const milligramsPerLiter  {Measurement::UnitSystems::massFractionOrConc_Brewing,             QObject::tr("mg/L"), [](double x){return x;},               [](double y){return y;},                1.0,  &partsPerMillionMass};
+   Unit const partsPerMillionMass {Measurement::UnitSystems::massFractionOrConc_Brewing, QObject::tr("ppm" )};
+   Unit const partsPerBillionMass {Measurement::UnitSystems::massFractionOrConc_Brewing, QObject::tr("ppb" ), 1000.0, &partsPerMillionMass};
+   Unit const milligramsPerLiter  {Measurement::UnitSystems::massFractionOrConc_Brewing, QObject::tr("mg/L"),    1.0, &partsPerMillionMass};
 
    // == Viscosity ==
    // Yes, 1 centipoise = 1 millipascal-second.  See comment in measurement/Unit.h for more info
-   Unit const centipoise          {Measurement::UnitSystems::viscosity_Metric         ,               QObject::tr("cP"   ), [](double x){return x;},              [](double y){return y;},                1.0};
-   Unit const millipascalSecond   {Measurement::UnitSystems::viscosity_MetricAlternate,               QObject::tr("mPa-s"), [](double x){return x;},              [](double y){return y;},                1.0,  &centipoise};
+   Unit const centipoise       {Measurement::UnitSystems::viscosity_Metric         , QObject::tr("cP"   )};
+   Unit const millipascalSecond{Measurement::UnitSystems::viscosity_MetricAlternate, QObject::tr("mPa-s"), 1.0,  &centipoise};
 
    // == Specific heat capacity ==
    // See comment in measurement/Unit.h for why the non-metric units are the canonical ones
-   Unit const caloriesPerCelsiusPerGram{Measurement::UnitSystems::specificHeatCapacity_Calories,     QObject::tr("c/g·C"   ), [](double x){return x;},                    [](double y){return y;},                    1.0};
-   Unit const joulesPerKelvinPerKg     {Measurement::UnitSystems::specificHeatCapacity_Joules  ,     QObject::tr("J/kg·K"  ), [](double x){return x / 4184.0;},           [](double y){return y * 4184.0;},           1.0, &caloriesPerCelsiusPerGram};
-   Unit const btuPerFahrenheitPerPound {Measurement::UnitSystems::specificHeatCapacity_Btus    ,     QObject::tr("BTU/lb·F"), [](double x){return x;},                    [](double y){return y;},                    1.0, &caloriesPerCelsiusPerGram};
+   Unit const caloriesPerCelsiusPerGram{Measurement::UnitSystems::specificHeatCapacity_Calories, QObject::tr("c/g·C"   )};
+   Unit const joulesPerKelvinPerKg     {Measurement::UnitSystems::specificHeatCapacity_Joules  , QObject::tr("J/kg·K"  ), 1.0/4184.0, &caloriesPerCelsiusPerGram};
+   Unit const btuPerFahrenheitPerPound {Measurement::UnitSystems::specificHeatCapacity_Btus    , QObject::tr("BTU/lb·F"), 1.0       , &caloriesPerCelsiusPerGram};
 
    // == Specific Volume ==
-   Unit const litresPerKilogram     {Measurement::UnitSystems::specificVolume_Metric     ,           QObject::tr("L/kg"   ),  [](double x){return x;},                    [](double y){return y;},                    1.0};
-   Unit const litresPerGram         {Measurement::UnitSystems::specificVolume_Metric     ,           QObject::tr("L/g"    ),  [](double x){return x * 1000;},             [](double y){return y / 1000;},             1.0, &litresPerKilogram};
-   Unit const cubicMetersPerKilogram{Measurement::UnitSystems::specificVolume_Metric     ,           QObject::tr("m^3/kg" ),  [](double x){return x * 1000;},             [](double y){return y / 1000;},             1.0, &litresPerKilogram};
-   Unit const us_fluidOuncesPerOunce{Measurement::UnitSystems::specificVolume_UsCustomary,           QObject::tr("floz/oz"),  [](double x){return x * 66.7632356142;},    [](double y){return y / 66.7632356142;},    1.0, &litresPerKilogram};
-   Unit const us_gallonsPerPound    {Measurement::UnitSystems::specificVolume_UsCustomary,           QObject::tr("gal/lb" ),  [](double x){return x * 8.34540445177617;}, [](double y){return y / 8.34540445177617;}, 1.0, &litresPerKilogram};
-   Unit const us_quartsPerPound     {Measurement::UnitSystems::specificVolume_UsCustomary,           QObject::tr("qt/lb"  ),  [](double x){return x * 2.08635111294;},    [](double y){return y / 2.08635111294;},    1.0, &litresPerKilogram};
-   Unit const us_gallonsPerOunce    {Measurement::UnitSystems::specificVolume_UsCustomary,           QObject::tr("gal/oz" ),  [](double x){return x * 0.521587778236;},   [](double y){return y / 0.521587778236;},   1.0, &litresPerKilogram};
-   Unit const cubicFeetPerPound     {Measurement::UnitSystems::specificVolume_UsCustomary,           QObject::tr("ft^3/lb"),  [](double x){return x * 62.4279605755126;}, [](double y){return y / 62.4279605755126;}, 1.0, &litresPerKilogram};
+   Unit const litresPerKilogram     {Measurement::UnitSystems::specificVolume_Metric     , QObject::tr("L/kg"   )};
+   Unit const litresPerGram         {Measurement::UnitSystems::specificVolume_Metric     , QObject::tr("L/g"    ), 1000.0             , &litresPerKilogram};
+   Unit const cubicMetersPerKilogram{Measurement::UnitSystems::specificVolume_Metric     , QObject::tr("m^3/kg" ), 1000.0             , &litresPerKilogram};
+   Unit const us_fluidOuncesPerOunce{Measurement::UnitSystems::specificVolume_UsCustomary, QObject::tr("floz/oz"),   66.7632356142    , &litresPerKilogram};
+   Unit const us_gallonsPerPound    {Measurement::UnitSystems::specificVolume_UsCustomary, QObject::tr("gal/lb" ),    8.34540445177617, &litresPerKilogram};
+   Unit const us_quartsPerPound     {Measurement::UnitSystems::specificVolume_UsCustomary, QObject::tr("qt/lb"  ),    2.08635111294   , &litresPerKilogram};
+   Unit const us_gallonsPerOunce    {Measurement::UnitSystems::specificVolume_UsCustomary, QObject::tr("gal/oz" ),    0.521587778236  , &litresPerKilogram};
+   Unit const cubicFeetPerPound     {Measurement::UnitSystems::specificVolume_UsCustomary, QObject::tr("ft^3/lb"),   62.4279605755126 , &litresPerKilogram};
 
    ObjectAddressStringMapping<Unit> const unitStringMapping {
       {
@@ -595,6 +666,12 @@ namespace Measurement::Units {
          {imperial_fluidOunces          , "imperial_fluid_ounces"        },
          {imperial_tablespoons          , "imperial_tablespoons"         },
          {imperial_teaspoons            , "imperial_teaspoons"           },
+         // === Length ===
+         {centimeters                   , "centimeters"                  },
+         {millimeters                   , "millimeters"                  },
+         {meters                        , "meters"                       },
+         {inches                        , "inches"                       },
+         {feet                          , "feet"                         },
          // === Count ===
          {numberOf                      , "number_of"                    },
          // === Temperature ===

@@ -73,19 +73,17 @@ namespace Measurement {
        *        We only worry about units we actually use/permit, thus we don't, for example, care about where minims,
        *        fluid drams, gills etc fit in on the imperial / US customary volume scales, as we don't support them.
        *
-       *        NOTE: The names of these enums don't have any significance beyond a relative ordering.  We usually start
-       *              with \c ExtraSmall and then use as many of the subsequent entries as necessary.
-       *
-       *        TODO: I feel this could be replaced with a \c uint8_t that holds the ordering in the \c UnitSystem
-       *              constructor.  Then we wouldn't need the pointless names like "ExtraSmall" and "Huge".
+       *        NOTE: The names of these enums don't have any significance beyond a relative ordering.  We automatically
+       *              assign things starting with with \c Smallest and then use as many of the subsequent entries as
+       *              necessary.
        */
-      enum class RelativeScale {
+      enum class RelativeScale : uint8_t {
          ExtraSmall = 0,
          Small      = 1,
          Medium     = 2,
          Large      = 3,
          ExtraLarge = 4,
-         Huge       = 5
+         Huge       = 5,
       };
 
       /*!
@@ -95,15 +93,14 @@ namespace Measurement {
        * \param defaultUnit
        * \param uniqueName
        * \param systemOfMeasurement
-       * \param scaleToUnitEntries Will be empty if there is only one unit in this unit system
+       * \param unitEntriesSmallestToLargest Will be empty if there is only one unit in this unit system
        * \param thickness Used only for volume and mass unit systems, otherwise will be null
        */
       UnitSystem(Measurement::PhysicalQuantity const physicalQuantity,
                  Measurement::Unit const * const defaultUnit,
                  char const * const uniqueName,
                  SystemOfMeasurement const systemOfMeasurement = Measurement::SystemOfMeasurement::UniversalStandard,
-                 std::initializer_list<std::pair<Measurement::UnitSystem::RelativeScale const,
-                                                 Measurement::Unit const *> > scaleToUnit = {},
+                 std::initializer_list<Measurement::Unit const *> unitEntriesSmallestToLargest = {},
                  Measurement::Unit const * const thickness = nullptr);
 
       ~UnitSystem();
@@ -260,6 +257,13 @@ namespace Measurement {
       extern UnitSystem const volume_Imperial;
       extern UnitSystem const volume_UsCustomary;
       extern UnitSystem const volume_Metric;
+
+      // For length, at the scales we care about (feet and inches), the US customary and the British imperial system are
+      // identical.  Rather than have two sorts of inches (eg inches and imperial_inches), we'll just pick one.  Non-
+      // metric units are more entrenched in the US than anywhere else, so we'll go with US customary.  If we change our
+      // minds, we can always add imperial_inches later.
+      extern UnitSystem const length_UsCustomary;
+      extern UnitSystem const length_Metric;
 
       extern UnitSystem const count_NumberOf;
 

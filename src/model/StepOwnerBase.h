@@ -102,8 +102,8 @@ public:
          // .:TBD:. It would be nice to find a more automated way of doing this
          this->m_stepIds.append(stepToAdd->key());
 
-         // Connect signals so that we are notified when there are changes to the DerivedStep we just added to
-         // our Mash.
+         // Connect signals so that we are notified when there are changes to the DerivedStep we just added to our
+         // StepOwner.
          this->derived().connect(stepToAdd.get(), &NamedEntity::changed, &this->derived(), &Derived::acceptStepChange);
       }
       return;

@@ -584,8 +584,8 @@ public:
    template<class NE> static BtStringConst const & propertyNameFor();
 
    /**
-    * \brief This is used in \c RecipeAttributeButtonBase and also in places where we want to do templated code for
-    *        Mash, Boil, Fermentation.
+    * \brief This is used in \c RecipeAttributeButtonBase and also in places such as \c EditorWithRecipeBase where we
+    *        want to do templated code for Mash, Boil, Fermentation, etc.
     *
     *        No general implementation.  Only specialisations, all defined in model/Recipe.cpp.
     */

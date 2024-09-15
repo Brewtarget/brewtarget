@@ -102,6 +102,9 @@ namespace Measurement {
 
       Volume,
 
+      // Currently used for a couple of equipment dimension measures
+      Length,
+
       // This is not really a physical quantity.  However, in our domain, it makes life simpler for us to pretend that
       // it is.  This is because "mass", "volume" and "number of" are the three canonical ways of measuring ingredients.
       // Note that this _is_ allowed to be fractional because you might want to add 1½ cinnamon sticks or 2.5 packets of
@@ -111,7 +114,12 @@ namespace Measurement {
 
       Temperature,
 
-      // Note this is durations of time, NOT dates or times of day  .:TBD:. Rename to TimeDuration
+      // Note this NOT dates or times of day but length-of-time or elapsed time, eg duration of a mash step, or how long
+      // after the start of the boil to add something.  I was wondering whether to rename it LengthOfTime, or
+      // TimeDuration or ElapsedTime or something, but all those names are slightly unsatisfactory (eg several sound
+      // wrong for "when to add hops").  Since SI units talk about seconds as base unit of time, it doesn't seem crazy
+      // to stick with just Time here.  If we ever (elsewhere) need time of day or something else, we'll pick TimeOfDay
+      // or TimeStamp etc for that.
       Time,
 
       Color,
@@ -181,7 +189,6 @@ namespace Measurement {
 
       // Specific volume (= the reciprocal of density) -- see https://en.wikipedia.org/wiki/Specific_volume
       SpecificVolume,
-
 
       // .:TBD:. Should we add Energy for PropertyNames::Recipe::calories (in which case, should canonical measure be
       //         Joules)?

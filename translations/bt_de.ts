@@ -2107,7 +2107,7 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Import %1?</source>
-        <translation>%1 importieren?</translation>
+        <translation type="vanished">%1 importieren?</translation>
     </message>
     <message>
         <source>No mash</source>
@@ -3047,7 +3047,7 @@ Press OK to quit.</source>
     </message>
     <message>
         <source>Unrecognized IBU formula type. %1</source>
-        <translation>Unbekannter IBU-Typ. %1</translation>
+        <translation type="vanished">Unbekannter IBU-Typ. %1</translation>
     </message>
     <message>
         <source>Directory Problem</source>
@@ -3415,7 +3415,7 @@ Press OK to quit.</source>
     </message>
     <message>
         <source>Unknown</source>
-        <translation type="unfinished">unbekannt</translation>
+        <translation type="obsolete">unbekannt</translation>
     </message>
     <message>
         <source>Detailed (for debugging)</source>
@@ -3865,6 +3865,57 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Error matching %1 file pattern in %2 directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tinseth</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rager</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Noonan</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>mIBU</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SMPH</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Length</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>cm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>mm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>m</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>in</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ft</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>RaIngrd</name>
+    <message>
+        <source>Add %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -6043,11 +6094,19 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Boil Time</source>
+        <source>Notes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Notes</source>
+        <source>New hop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save and close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Discard and close</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -7020,7 +7079,7 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>The ID of this fermentable in the database.  Sometimes useful for debugging.</source>
+        <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -7043,15 +7102,19 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Pre-Fermentation Size</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fermentation Time</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New hop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save and close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Discard and close</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -7472,6 +7535,14 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
         <source>Total Oil ml/100g</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>ID in database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>instructionWidget</name>
@@ -7536,7 +7607,7 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
     <message>
         <source>Target boil size</source>
-        <translation>Geplante Ausschlagmenge</translation>
+        <translation type="vanished">Geplante Ausschlagmenge</translation>
     </message>
     <message>
         <source>Efficiency (%)</source>
@@ -7560,7 +7631,7 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation type="vanished">Kochzeit</translation>
+        <translation>Kochzeit</translation>
     </message>
     <message>
         <source>Target batch size</source>
@@ -7983,10 +8054,6 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&amp;Boil Time</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>E&amp;quipment</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8176,6 +8243,10 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
     <message>
         <source>Help</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>(See Boil tab below)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -8563,15 +8634,15 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
     <message>
         <source>Check it if the amount listed is in kg instead of L.</source>
-        <translation>Anhaken, wenn Menge in kg statt L angegeben wird.</translation>
+        <translation type="vanished">Anhaken, wenn Menge in kg statt L angegeben wird.</translation>
     </message>
     <message>
         <source>Amount is weight?</source>
-        <translation>Mengenangabe ist Gewicht</translation>
+        <translation type="vanished">Mengenangabe ist Gewicht</translation>
     </message>
     <message>
         <source>Checked if the given amount is weight instead of volume</source>
-        <translation>Angehakt, wenn die Mengenangabe in Gewicht anstatt Volumen erfolgt</translation>
+        <translation type="vanished">Angehakt, wenn die Mengenangabe in Gewicht anstatt Volumen erfolgt</translation>
     </message>
     <message>
         <source>Use for:</source>
@@ -8631,6 +8702,14 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
     <message>
         <source>Product ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ID in database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -10191,6 +10270,14 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
     <message>
         <source>Neutral strains do not produce toxins, nor are they killed by them</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ID in database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

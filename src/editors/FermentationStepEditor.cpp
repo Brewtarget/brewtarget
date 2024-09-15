@@ -87,5 +87,5 @@ void FermentationStepEditor::writeLateFieldsToEditItem() {
    return;
 }
 
-// Insert the fermentationer-plate stuff that we cannot do in EditorBase
-EDITOR_COMMON_SLOT_DEFINITIONS(FermentationStepEditor)
+// Insert the boilerplate stuff that we cannot do in EditorBase
+EDITOR_COMMON_CODE(FermentationStepEditor)

@@ -106,6 +106,16 @@ namespace {
        {"ibbl" , &Measurement::Units::imperial_barrels    }}
    };
 
+   // NB: Length is not currently part of the BeerJSON standard.  What we put here for our extension fields is our best
+   //     guess at what length units might look like if they were to be included in a future version of BeerJSON.
+   JsonMeasureableUnitsMapping const BEER_JSON_LENGTH_MAPPER {
+      {{"cm" , &Measurement::Units::centimeters},
+       {"mm" , &Measurement::Units::millimeters},
+       {"m"  , &Measurement::Units::meters     },
+       {"in" , &Measurement::Units::inches     },
+       {"ft" , &Measurement::Units::feet       }}
+   };
+
    JsonMeasureableUnitsMapping const BEER_JSON_COUNT_UNIT_MAPPER {
       //
       // Strictly, we can ignore the "unit" field of a BeerJSON UnitType, but it's easier to just do the trivial mapping
@@ -665,6 +675,9 @@ namespace {
          //     we read a BeerJSON file.
          //
 
+         // TODO PropertyNames::Equipment::kettleInternalDiameter_cm
+         //      PropertyNames::Equipment::kettleOpeningDiameter_cm
+
          // Type                                                 XPath / Q_PROPERTY / Value Decoder
          {JsonRecordDefinition::FieldType::String              , "name"                                               ,
                                                                  PropertyNames::NamedEntity::name                     },
@@ -770,6 +783,17 @@ namespace {
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "equipment_items[form=\"Brew Kettle\"]/specific_heat",
                                                                  PropertyNames::Equipment::kettleSpecificHeat_calGC   ,
                                                                  &BEER_JSON_SPECIFIC_HEAT_UNIT_MAPPER                 },
+         //
+         // The next two fields are not part of the BeerJSON 1.0 standard.  But the BeerJSON validation schema currently
+         // allows extensions here, and it's conceivable that a future version of BeerJSON might incorporate these or
+         // similar fields.
+         //
+         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "equipment_items[form=\"Brew Kettle\"]/internal_diameter",
+                                                                 PropertyNames::Equipment::kettleInternalDiameter_cm      ,
+                                                                 &BEER_JSON_LENGTH_MAPPER                                 },
+         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "equipment_items[form=\"Brew Kettle\"]/opening_diameter",
+                                                                 PropertyNames::Equipment::kettleOpeningDiameter_cm      ,
+                                                                 &BEER_JSON_LENGTH_MAPPER                                },
          {JsonRecordDefinition::FieldType::String              , "equipment_items[form=\"Brew Kettle\"]/notes"        ,
                                                                  PropertyNames::Equipment::kettleNotes                },
          {JsonRecordDefinition::FieldType::RequiredConstant    , "equipment_items[form=\"Fermenter\"]/name"           , nameForFermenter},

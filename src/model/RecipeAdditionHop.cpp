@@ -142,19 +142,25 @@ bool RecipeAdditionHop::isFirstWort() const {
    // We could work this out in a single if statement, but it would be too horrible to look at, so we simply go through
    // all the conditions that have to be satisfied.
    //
-   if (this->stage() != RecipeAddition::Stage::Boil) { return false; }
+   if (this->stage() != RecipeAddition::Stage::Boil) {
+      return false;
+   }
 
    // First Wort must be the first step of the boil, during ramp-up from mashout and before the boil proper
-   if (!this->step() || *this->step() != 1) { return false; }
+   if (!this->step() || *this->step() != 1) {
+      return false;
+   }
 
    Recipe const * recipe = ObjectStoreWrapper::getByIdRaw<Recipe>(this->m_recipeId);
-
    auto boil = recipe->boil();
-   if (!boil) { return false; }
-   if (boil->boilSteps().empty()) { return false; }
+   if (!boil || boil->boilSteps().empty()) {
+      return false;
+   }
 
    auto boilStep = boil->boilSteps().first();
-   if (!boilStep->startTemp_c() || *boilStep->startTemp_c() > Boil::minimumBoilTemperature_c) {return false; }
+   if (!boilStep->startTemp_c() || *boilStep->startTemp_c() > Boil::minimumBoilTemperature_c) {
+      return false;
+   }
 
    return true;
 }
@@ -263,5 +269,6 @@ void RecipeAdditionHop::setHop(Hop * const val) {
    return;
 }
 
-// Boilerplate code for IngredientAmount
+// Boilerplate code for IngredientAmount and RecipeAddition
 INGREDIENT_AMOUNT_COMMON_CODE(RecipeAdditionHop, Hop)
+RECIPE_ADDITION_CODE(RecipeAdditionHop, Hop)

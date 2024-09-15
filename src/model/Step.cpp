@@ -17,6 +17,7 @@
 
 #include "model/NamedParameterBundle.h"
 #include "PhysicalConstants.h"
+#include "utils/AutoCompare.h"
 
 namespace {
    // Everything has to be double because our underlying measure (minutes) is allowed to be measured in fractions.
@@ -42,15 +43,15 @@ bool Step::isEqualTo(NamedEntity const & other) const {
    Step const & rhs = static_cast<Step const &>(other);
    // Base class will already have ensured names are equal
    return (
-      this->m_stepTime_mins   == rhs.m_stepTime_mins   &&
-      this->m_startTemp_c     == rhs.m_startTemp_c     &&
-      this->m_endTemp_c       == rhs.m_endTemp_c       &&
-      this->m_stepNumber      == rhs.m_stepNumber      &&
-      this->m_ownerId         == rhs.m_ownerId         &&
-      this->m_description     == rhs.m_description     &&
-      this->m_rampTime_mins   == rhs.m_rampTime_mins   &&
-      this->m_startAcidity_pH == rhs.m_startAcidity_pH &&
-      this->m_endAcidity_pH   == rhs.m_endAcidity_pH
+      Utils::AutoCompare(this->m_stepTime_mins  , rhs.m_stepTime_mins  ) &&
+      Utils::AutoCompare(this->m_startTemp_c    , rhs.m_startTemp_c    ) &&
+      Utils::AutoCompare(this->m_endTemp_c      , rhs.m_endTemp_c      ) &&
+      Utils::AutoCompare(this->m_stepNumber     , rhs.m_stepNumber     ) &&
+      Utils::AutoCompare(this->m_ownerId        , rhs.m_ownerId        ) &&
+      Utils::AutoCompare(this->m_description    , rhs.m_description    ) &&
+      Utils::AutoCompare(this->m_rampTime_mins  , rhs.m_rampTime_mins  ) &&
+      Utils::AutoCompare(this->m_startAcidity_pH, rhs.m_startAcidity_pH) &&
+      Utils::AutoCompare(this->m_endAcidity_pH  , rhs.m_endAcidity_pH  )
    );
 }
 
@@ -79,8 +80,8 @@ TypeLookup const Step::typeLookup {
 //==================================================== CONSTRUCTORS ====================================================
 Step::Step(QString name) :
    NamedEntity      {name, true},
-   m_stepTime_mins   {0.0         },
-   m_startTemp_c      {std::nullopt},
+   m_stepTime_mins  {0.0         },
+   m_startTemp_c    {std::nullopt},
    m_endTemp_c      {std::nullopt},
    m_stepNumber     {0           },
    m_ownerId        {-1          },

@@ -18,6 +18,8 @@
  ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "measurement/IbuMethods.h"
 
+#include <numbers> // For std::numbers::pi
+
 #include <cmath>
 
 #include <QDebug>
@@ -29,45 +31,93 @@
 #include "PersistentSettings.h"
 
 namespace {
-   // The Tinseth, Rager and Garetz methods are explained and discussed at http://www.realbeer.com/hops/FAQ.html
-
-   double tinseth(double AArating,
-                  double hops_grams,
-                  double finalVolume_liters,
-                  double wort_grav,
-                  double minutes) {
-      return (
-         (AArating * hops_grams * 1000) /
-         finalVolume_liters) * ((1.0 - exp(-0.04 * minutes)) / 4.15) * (1.65 * pow(0.000125, (wort_grav - 1))
-      );
+   double circleAreaFromRadius(double const radius) {
+      return std::numbers::pi * radius * radius;
    }
 
-   double rager(double AArating,
-                double hops_grams,
-                double finalVolume_liters,
-                double wort_grav,
-                double minutes) {
-      double utilization = (18.11 + 13.86 * tanh((minutes - 31.32) / 18.17)) / 100.0;
+   /**
+    * \brief This intermediate calculation is used in Tinseth's formula and the mIBU formula
+    *
+    * \param wortGravity_sg
+    * \param boilTime_minutes usually measured from the point at which hops are added until flameout
+    */
+   double calculateDecimalAlphaAcidUtilization(double const wortGravity_sg,
+                                               double const boilTime_minutes) {
+      //
+      // TODO This is Tinseth's "Utilization Table" from which we could probably get a better value for
+      //      decimalAlphaAcidUtilization via look-up and interpolation.
+      //
+      // Decimal Alpha Acid Utilization vs. Boil Time and Wort Original Gravity
+      //
+      // Boil  | Original Gravity
+      // Time  |
+      // (min) | 1.030  1.040  1.050  1.060  1.070  1.080  1.090  1.100  1.110  1.120  1.130
+      // ------+ -----  -----  -----  -----  -----  -----  -----  -----  -----  -----  -----
+      //    0  | 0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+      //    3  | 0.034  0.031  0.029  0.026  0.024  0.022  0.020  0.018  0.017  0.015  0.014
+      //    6  | 0.065  0.059  0.054  0.049  0.045  0.041  0.038  0.035  0.032  0.029  0.026
+      //    9  | 0.092  0.084  0.077  0.070  0.064  0.059  0.054  0.049  0.045  0.041  0.037
+      //   12  | 0.116  0.106  0.097  0.088  0.081  0.074  0.068  0.062  0.056  0.052  0.047
+      //   15  | 0.137  0.125  0.114  0.105  0.096  0.087  0.080  0.073  0.067  0.061  0.056
+      //   18  | 0.156  0.142  0.130  0.119  0.109  0.099  0.091  0.083  0.076  0.069  0.063
+      //   21  | 0.173  0.158  0.144  0.132  0.120  0.110  0.101  0.092  0.084  0.077  0.070
+      //   24  | 0.187  0.171  0.157  0.143  0.131  0.120  0.109  0.100  0.091  0.083  0.076
+      //   27  | 0.201  0.183  0.168  0.153  0.140  0.128  0.117  0.107  0.098  0.089  0.082
+      //   30  | 0.212  0.194  0.177  0.162  0.148  0.135  0.124  0.113  0.103  0.094  0.086
+      //   33  | 0.223  0.203  0.186  0.170  0.155  0.142  0.130  0.119  0.108  0.099  0.091
+      //   36  | 0.232  0.212  0.194  0.177  0.162  0.148  0.135  0.124  0.113  0.103  0.094
+      //   39  | 0.240  0.219  0.200  0.183  0.167  0.153  0.140  0.128  0.117  0.107  0.098
+      //   42  | 0.247  0.226  0.206  0.189  0.172  0.158  0.144  0.132  0.120  0.110  0.101
+      //   45  | 0.253  0.232  0.212  0.194  0.177  0.162  0.148  0.135  0.123  0.113  0.103
+      //   48  | 0.259  0.237  0.216  0.198  0.181  0.165  0.151  0.138  0.126  0.115  0.105
+      //   51  | 0.264  0.241  0.221  0.202  0.184  0.169  0.154  0.141  0.129  0.118  0.108
+      //   54  | 0.269  0.246  0.224  0.205  0.188  0.171  0.157  0.143  0.131  0.120  0.109
+      //   57  | 0.273  0.249  0.228  0.208  0.190  0.174  0.159  0.145  0.133  0.121  0.111
+      //   60  | 0.276  0.252  0.231  0.211  0.193  0.176  0.161  0.147  0.135  0.123  0.112
+      //   70  | 0.285  0.261  0.238  0.218  0.199  0.182  0.166  0.152  0.139  0.127  0.116
+      //   80  | 0.291  0.266  0.243  0.222  0.203  0.186  0.170  0.155  0.142  0.130  0.119
+      //   90  | 0.295  0.270  0.247  0.226  0.206  0.188  0.172  0.157  0.144  0.132  0.120
+      //  120  | 0.301  0.275  0.252  0.230  0.210  0.192  0.176  0.161  0.147  0.134  0.123
+      //
 
-      double gravityFactor = (wort_grav > 1.050) ? (wort_grav - 1.050)/0.2 : 0.0;
-
-      return (hops_grams * utilization * AArating * 1000) / (finalVolume_liters * (1 + gravityFactor));
+      //
+      // This is the short-cut way to get decimalAlphaAcidUtilization
+      //
+      double const boilTimeFactor = (1.0 - exp(-0.04 * boilTime_minutes)) / 4.15;
+      double const bignessFactor  = 1.65 * pow(0.000125, (wortGravity_sg - 1.0));
+      double const decimalAlphaAcidUtilization = bignessFactor * boilTimeFactor;
+      return decimalAlphaAcidUtilization;
    }
 
    /*!
-    * \brief Calculates the IBU by Greg Noonans formula
+    * \brief Calculates the IBU by Tinseth's formula, as described at http://www.realbeer.com/hops/research.html
     */
-   double noonan(double AArating,
-                 double hops_grams,
-                 double finalVolume_liters,
-                 double wort_grav,
-                 double minutes) {
-      double volumeFactor = (Measurement::Units::us_gallons.toCanonical(5.0).quantity)/ finalVolume_liters;
-      double hopsFactor = hops_grams/ (Measurement::Units::ounces.toCanonical(1.0).quantity * 1000.0);
-      static Polynomial p(Polynomial() << 0.7000029428 << -0.08868853463 << 0.02720809386 << -0.002340415323 << 0.00009925450081 << -0.000002102006144 << 0.00000002132644293 << -0.00000000008229488217);
+   double tinseth(IbuMethods::IbuCalculationParms const & parms) {
+      double const mgPerLiterOfAddedAlphaAcids = (parms.AArating * parms.hops_grams * 1000) / parms.postBoilVolume_liters;
+      double const decimalAlphaAcidUtilization = calculateDecimalAlphaAcidUtilization(parms.wortGravity_sg,
+                                                                                      parms.boilTime_minutes);
+      return decimalAlphaAcidUtilization * mgPerLiterOfAddedAlphaAcids;
+///      return ((AArating * hops_grams * 1000) / postBoilVolume_liters) * ((1.0 - exp(-0.04 * boilTime_minutes)) / 4.15) * (1.65 * pow(0.000125, (wortGravity_sg - 1)));
+   }
 
-      //using 60 minutes as a general table
-      double utilizationFactorTable[4][2] =  {
+   double rager(IbuMethods::IbuCalculationParms const & parms) {
+      double const utilization = (18.11 + 13.86 * tanh((parms.boilTime_minutes - 31.32) / 18.17)) / 100.0;
+
+      double const gravityFactor = (parms.wortGravity_sg > 1.050) ? (parms.wortGravity_sg - 1.050)/0.2 : 0.0;
+
+      return (parms.hops_grams * utilization * parms.AArating * 1000) / (parms.postBoilVolume_liters * (1 + gravityFactor));
+   }
+
+   /*!
+    * \brief Calculates the IBU by Greg Noonan's formula
+    */
+   double noonan(IbuMethods::IbuCalculationParms const & parms) {
+      double const volumeFactor = (Measurement::Units::us_gallons.toCanonical(5.0).quantity)/ parms.postBoilVolume_liters;
+      double const hopsFactor = parms.hops_grams/ (Measurement::Units::ounces.toCanonical(1.0).quantity * 1000.0);
+      static const Polynomial p(Polynomial() << 0.7000029428 << -0.08868853463 << 0.02720809386 << -0.002340415323 << 0.00009925450081 << -0.000002102006144 << 0.00000002132644293 << -0.00000000008229488217);
+
+      //using 60 boilTime_minutes as a general table
+      static double const utilizationFactorTable[4][2] =  {
                         {1.050, 1},
                         {1.065, 0.9286},
                         {1.085, 0.8571},
@@ -76,30 +126,105 @@ namespace {
 
       double utilizationFactor;
 
-      if(wort_grav <= utilizationFactorTable[0][0]) {
+      if (parms.wortGravity_sg <= utilizationFactorTable[0][0]) {
          utilizationFactor = utilizationFactorTable[0][1];
-      } else if(wort_grav <= utilizationFactorTable[1][0]) {
+      } else if (parms.wortGravity_sg <= utilizationFactorTable[1][0]) {
          utilizationFactor = utilizationFactorTable[1][1];
-      } else if(wort_grav <= utilizationFactorTable[2][0]) {
+      } else if (parms.wortGravity_sg <= utilizationFactorTable[2][0]) {
          utilizationFactor = utilizationFactorTable[2][1];
       } else {
          utilizationFactor = utilizationFactorTable[3][1];
       }
 
-      return(volumeFactor * ( hopsFactor * (100 * AArating) * p.eval(minutes) ) * utilizationFactor);
+      return(volumeFactor * ( hopsFactor * (100 * parms.AArating) * p.eval(parms.boilTime_minutes) ) * utilizationFactor);
+   }
+
+   /**
+    * \brief Intermediate step used by mIBU formula
+    */
+   double computePostBoilUtilization(double const boilTime_minutes,
+                                     double const wortGravity_sg,
+                                     double const postBoilVolume_liters,
+                                     double const coolTime_minutes,
+                                     double const kettleInternalDiameter_cm,
+                                     double const kettleOpeningDiameter_cm) {
+
+      double const surfaceArea_cm2 = circleAreaFromRadius(kettleInternalDiameter_cm/2.0);
+      double const openingArea_cm2 = circleAreaFromRadius(kettleOpeningDiameter_cm/2.0);
+      double const effectiveArea_cm2 = sqrt(surfaceArea_cm2 * openingArea_cm2);
+      double const b = (0.0002925 * effectiveArea_cm2 / postBoilVolume_liters) + 0.00538;
+
+      double const integrationTime = 0.001;
+      double decimalAArating = 0.0;
+      for (double time_minutes = boilTime_minutes;
+           time_minutes < boilTime_minutes + coolTime_minutes;
+           time_minutes += integrationTime) {
+         double const dU = -1.65 * pow(0.000125, (wortGravity_sg-1.0)) * -0.04 * exp(-0.04*time_minutes) / 4.15;
+         double const temp_degK = 53.70 * exp(-1.0 * b * (time_minutes - boilTime_minutes)) + 319.55;
+         double const degreeOfUtilization =
+            // The 1.0 case accounts for nonIAA components
+            (time_minutes < 5.0) ? 1.0 : 2.39*pow(10.0,11.0)*exp(-9773.0/temp_degK);
+         double const combinedValue = dU * degreeOfUtilization;
+         decimalAArating += (combinedValue * integrationTime);
+      }
+      return decimalAArating;
+   }
+
+   /*!
+    * \brief Calculates the IBU by the mIBU formula, developed by Paul-John Hosom, and described at
+    *        https://alchemyoverlord.wordpress.com/2015/05/12/a-modified-ibu-measurement-especially-for-late-hopping/
+    */
+   double mIbu(IbuMethods::IbuCalculationParms const & parms) {
+      //
+      // Check optional parameters available for this formula.  We supply fallback values below, but they likely
+      // won't be great.
+      //
+      if (!parms.coolTime_minutes         ) { qWarning() << Q_FUNC_INFO << "coolTime_minutes          not set!"; }
+      if (!parms.kettleInternalDiameter_cm) { qWarning() << Q_FUNC_INFO << "kettleInternalDiameter_cm not set!"; }
+      if (!parms.kettleOpeningDiameter_cm ) { qWarning() << Q_FUNC_INFO << "kettleOpeningDiameter_cm  not set!"; }
+      double const decimalAlphaAcidUtilization = calculateDecimalAlphaAcidUtilization(parms.wortGravity_sg,
+                                                                                      parms.boilTime_minutes);
+      double const postBoilUtilization = computePostBoilUtilization(parms.boilTime_minutes,
+                                                                    parms.wortGravity_sg,
+                                                                    parms.postBoilVolume_liters,
+                                                                    parms.coolTime_minutes.value_or(0.0),
+                                                                    parms.kettleInternalDiameter_cm.value_or(45.0),
+                                                                    parms.kettleOpeningDiameter_cm.value_or(45.0));
+
+      double const totalUtilization = decimalAlphaAcidUtilization + postBoilUtilization;
+      double const IBU = (totalUtilization * parms.AArating * parms.hops_grams * 1000.0) / parms.postBoilVolume_liters;
+      return IBU;
    }
 }
 
-IbuMethods::IbuType IbuMethods::ibuFormula = IbuMethods::TINSETH;
+EnumStringMapping const IbuMethods::formulaStringMapping {
+   {IbuMethods::IbuFormula::Tinseth, "tinseth"},
+   {IbuMethods::IbuFormula::Rager  , "rager"  },
+   {IbuMethods::IbuFormula::Noonan , "noonan" },
+   {IbuMethods::IbuFormula::mIbu   , "mibu"   },
+   {IbuMethods::IbuFormula::Smph   , "smph"   },
+};
+
+EnumStringMapping const IbuMethods::formulaDisplayNames {
+   // Not sure how translatable these names are, but I guess it doesn't hurt to include them
+   {IbuMethods::IbuFormula::Tinseth, QObject::tr("Tinseth")},
+   {IbuMethods::IbuFormula::Rager  , QObject::tr("Rager"  )},
+   {IbuMethods::IbuFormula::Noonan , QObject::tr("Noonan" )},
+   {IbuMethods::IbuFormula::mIbu   , QObject::tr("mIBU"   )},
+   {IbuMethods::IbuFormula::Smph   , QObject::tr("SMPH"   )},
+};
+
+
+IbuMethods::IbuFormula IbuMethods::ibuFormula = IbuMethods::IbuFormula::Tinseth;
 
 void IbuMethods::loadIbuFormula() {
    QString text = PersistentSettings::value(PersistentSettings::Names::ibu_formula, "tinseth").toString();
    if (text == "tinseth") {
-      IbuMethods::ibuFormula = IbuMethods::TINSETH;
+      IbuMethods::ibuFormula = IbuMethods::IbuFormula::Tinseth;
    } else if (text == "rager") {
-      IbuMethods::ibuFormula = IbuMethods::RAGER;
+      IbuMethods::ibuFormula = IbuMethods::IbuFormula::Rager;
    } else if (text == "noonan") {
-       IbuMethods::ibuFormula = IbuMethods::NOONAN;
+       IbuMethods::ibuFormula = IbuMethods::IbuFormula::Noonan;
    } else {
       qCritical() << Q_FUNC_INFO << "Bad ibu_formula type:" << text;
    }
@@ -107,39 +232,23 @@ void IbuMethods::loadIbuFormula() {
 }
 
 void IbuMethods::saveIbuFormula() {
-   switch(IbuMethods::ibuFormula) {
-      case IbuMethods::TINSETH:
-         PersistentSettings::insert(PersistentSettings::Names::ibu_formula, "tinseth");
-         break;
-      case IbuMethods::RAGER:
-         PersistentSettings::insert(PersistentSettings::Names::ibu_formula, "rager");
-         break;
-      case IbuMethods::NOONAN:
-         PersistentSettings::insert(PersistentSettings::Names::ibu_formula, "noonan");
-         break;
-   }
+   PersistentSettings::insert(PersistentSettings::Names::ibu_formula,
+                              IbuMethods::formulaStringMapping[IbuMethods::ibuFormula]);
    return;
 }
 
 QString IbuMethods::ibuFormulaName() {
-   switch (IbuMethods::ibuFormula) {
-      case IbuMethods::TINSETH: return "Tinseth";
-      case IbuMethods::RAGER:   return "Rager";
-      case IbuMethods::NOONAN:  return "Noonan";
-   }
-   return QObject::tr("Unknown");
+   return IbuMethods::formulaDisplayNames[IbuMethods::ibuFormula];
 }
 
-double IbuMethods::getIbus(double AArating,
-                           double hops_grams,
-                           double finalVolume_liters,
-                           double wort_grav,
-                           double minutes) {
+double IbuMethods::getIbus(IbuMethods::IbuCalculationParms const & parms) {
    switch(IbuMethods::ibuFormula) {
-      case IbuMethods::TINSETH: return tinseth(AArating, hops_grams, finalVolume_liters, wort_grav, minutes);
-      case IbuMethods::RAGER:   return rager(AArating, hops_grams, finalVolume_liters, wort_grav, minutes);
-      case IbuMethods::NOONAN:  return noonan(AArating, hops_grams, finalVolume_liters, wort_grav, minutes);
+      case IbuMethods::IbuFormula::Tinseth: return tinseth(parms);
+      case IbuMethods::IbuFormula::Rager  : return rager  (parms);
+      case IbuMethods::IbuFormula::Noonan : return noonan (parms);
    }
-   qCritical() << Q_FUNC_INFO << QObject::tr("Unrecognized IBU formula type. %1").arg(IbuMethods::ibuFormula);
-   return tinseth(AArating, hops_grams, finalVolume_liters, wort_grav, minutes);
+   qCritical() <<
+      Q_FUNC_INFO << "Unrecognized IBU formula type:" << static_cast<int>(IbuMethods::ibuFormula) <<
+      ".  Defaulting to Tinseth.";
+   return tinseth(parms);
 }

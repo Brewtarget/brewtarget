@@ -33,6 +33,7 @@ AddSettingName(unitSystem_color               )
 AddSettingName(unitSystem_count               )
 AddSettingName(unitSystem_density             )
 AddSettingName(unitSystem_diastaticPower      )
+AddSettingName(unitSystem_length              )
 AddSettingName(unitSystem_massFractionOrConc  )
 AddSettingName(unitSystem_specificHeatCapacity)
 AddSettingName(unitSystem_specificVolume      )
@@ -73,6 +74,7 @@ namespace {
 EnumStringMapping const Measurement::physicalQuantityStringMapping {
    {Measurement::PhysicalQuantity::Mass                , "Mass"                },
    {Measurement::PhysicalQuantity::Volume              , "Volume"              },
+   {Measurement::PhysicalQuantity::Length              , "Length"              },
    {Measurement::PhysicalQuantity::Count               , "Count"               },
    {Measurement::PhysicalQuantity::Temperature         , "Temperature"         },
    {Measurement::PhysicalQuantity::Time                , "Time"                },
@@ -91,6 +93,7 @@ EnumStringMapping const Measurement::physicalQuantityStringMapping {
 EnumStringMapping const Measurement::physicalQuantityDisplayNames {
    {Measurement::PhysicalQuantity::Mass                , QObject::tr("Weight (Mass)"                 )},
    {Measurement::PhysicalQuantity::Volume              , QObject::tr("Volume"                        )},
+   {Measurement::PhysicalQuantity::Length              , QObject::tr("Length"                        )},
    {Measurement::PhysicalQuantity::Count               , QObject::tr("Count"                         )},
    {Measurement::PhysicalQuantity::Temperature         , QObject::tr("Temperature"                   )},
    {Measurement::PhysicalQuantity::Time                , QObject::tr("Time"                          )},
@@ -115,6 +118,7 @@ BtStringConst const & Measurement::getSettingsName(PhysicalQuantity const physic
       // so it would be annoying to just change it now.
       case Measurement::PhysicalQuantity::Mass                : return unitSystem_weight              ;
       case Measurement::PhysicalQuantity::Volume              : return unitSystem_volume              ;
+      case Measurement::PhysicalQuantity::Length              : return unitSystem_length              ;
       case Measurement::PhysicalQuantity::Time                : return unitSystem_time                ;
       case Measurement::PhysicalQuantity::Count               : return unitSystem_count               ;
       case Measurement::PhysicalQuantity::Temperature         : return unitSystem_temperature         ;

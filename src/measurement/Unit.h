@@ -61,9 +61,9 @@ namespace Measurement {
        *                 kilograms, "tsp" for teaspoons. Note that this needs to be unique within the \c UnitSystem to
        *                 which this \c Unit belongs but is \c not necessarily globally unique, eg "qt" refers to both
        *                 Imperial quarts and US Customary quarts; "L" refers to liters and Lintner.
-       * \param convertToCanonical Converts a quantity of this \c Unit to a quantity of \c canonical \c Unit
-       * \param convertFromCanonical  Converts a quantity of \c canonical \c Unit to a quantity of this \c Unit
-       * \param boundaryValue
+       * \param multiplierToCanonical Factor by which to multiply a quantity of this \c Unit to convert it to a quantity
+       *                              of \c canonical \c Unit
+       * \param boundaryValue Threshold below which a smaller unit (of the same type) should be used \see \c boundary
        * \param canonical The canonical units we use for \c PhysicalQuantity this \c Unit relates to.  \c nullptr means
        *                  this \c Unit is the canonical one (and therefore \c convertToCanonical and
        *                  \c convertFromCanonical are no-ops).  (Note that the canonical units may or may not be in the
@@ -77,10 +77,24 @@ namespace Measurement {
        */
       Unit(UnitSystem const & unitSystem,
            QString const unitName,
+           double const multiplierToCanonical = 1.0,
+           Unit const * canonical = nullptr,
+           double const boundaryValue = 1.0);
+
+      /**
+       * \brief Construct a type of unit when converting to/from canonical units requires more than a simple
+       *        multiplication/division (eg as when converting °F to/from °C).  Parameters are as for the other
+       *        constructor, except as follows.
+       *
+       * \param convertToCanonical Converts a quantity of this \c Unit to a quantity of \c canonical \c Unit
+       * \param convertFromCanonical  Converts a quantity of \c canonical \c Unit to a quantity of this \c Unit
+       */
+      Unit(UnitSystem const & unitSystem,
+           QString const unitName,
            std::function<double(double)> convertToCanonical,
            std::function<double(double)> convertFromCanonical,
-           double boundaryValue,
-           Unit const * canonical = nullptr);
+           Unit const * canonical,
+           double const boundaryValue = 1.0);
 
       ~Unit();
 
@@ -229,6 +243,11 @@ namespace Measurement {
    //! This alias makes things a bit more concise eg in \c ObjectStore
    using UnitStringMapping = ObjectAddressStringMapping<Unit>;
 
+   //
+   // We mostly use American spellings of words such as "liter" and "meter", on the grounds that more people speak this
+   // variant of English than ones where "litre" and "metre" are correct.  If anyone ever cares enough, we could one day
+   // provide an option for which spellings we use in the UI.
+   //
    namespace Units {
       // === Mass ===
       extern Unit const kilograms;
@@ -258,6 +277,13 @@ namespace Measurement {
       extern Unit const imperial_fluidOunces;
       extern Unit const imperial_tablespoons;
       extern Unit const imperial_teaspoons;
+
+      // === Length ===
+      extern Unit const millimeters;
+      extern Unit const centimeters;
+      extern Unit const meters;
+      extern Unit const inches;
+      extern Unit const feet;
 
       // === Count ===
       extern Unit const numberOf;

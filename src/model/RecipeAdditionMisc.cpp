@@ -195,5 +195,6 @@ void RecipeAdditionMisc::setMisc(Misc * const val) {
    return;
 }
 
-// Boilerplate code for IngredientAmount
+// Boilerplate code for IngredientAmount and RecipeAddition
 INGREDIENT_AMOUNT_COMMON_CODE(RecipeAdditionMisc, Misc)
+RECIPE_ADDITION_CODE(RecipeAdditionMisc, Misc)
