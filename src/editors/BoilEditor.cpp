@@ -22,123 +22,44 @@
 #include "model/Boil.h"
 #include "model/Recipe.h"
 
-BoilEditor::BoilEditor(QWidget* parent) : QDialog(parent), m_boilObs{nullptr} {
-   setupUi(this);
+BoilEditor::BoilEditor(QWidget* parent) :
+   QDialog(parent),
+   EditorWithRecipeBase<BoilEditor, Boil>() {
+   this->setupUi(this);
+   this->postSetupUiInit(
+      {
+       EDITOR_FIELD(Boil, label_name       , lineEdit_name       , PropertyNames::NamedEntity::name     ),
+       EDITOR_FIELD(Boil, label_description, textEdit_description, PropertyNames::Boil::description     ),
+       EDITOR_FIELD(Boil, label_preBoilSize, lineEdit_preBoilSize, PropertyNames::Boil::preBoilSize_l, 2),
+       EDITOR_FIELD(Boil, label_notes      , textEdit_notes      , PropertyNames::Boil::notes           )
+      }
+   );
 
    // NB: label_description / textEdit_description don't need initialisation here as neither is a smart field
    // NB: label_notes / textEdit_notes don't need initialisation here as neither is a smart field
-   SMART_FIELD_INIT(BoilEditor, label_name       , lineEdit_name       , Boil, PropertyNames::NamedEntity::name  );
-   SMART_FIELD_INIT(BoilEditor, label_preBoilSize, lineEdit_preBoilSize, Boil, PropertyNames::Boil::preBoilSize_l, 1);
-   SMART_FIELD_INIT(BoilEditor, label_boilTime   , lineEdit_boilTime   , Boil, PropertyNames::Boil::boilTime_mins, 0);
+///   SMART_FIELD_INIT(BoilEditor, label_name       , lineEdit_name       , Boil, PropertyNames::NamedEntity::name  );
+///   SMART_FIELD_INIT(BoilEditor, label_preBoilSize, lineEdit_preBoilSize, Boil, PropertyNames::Boil::preBoilSize_l, 2);
 
-   connect(this, &QDialog::accepted, this, &BoilEditor::saveAndClose);
-   connect(this, &QDialog::rejected, this, &BoilEditor::closeEditor );
+///   connect(this, &QDialog::accepted, this, &BoilEditor::saveAndClose);
+///   connect(this, &QDialog::rejected, this, &BoilEditor::closeEditor );
+
+///   this->connectSignalsAndSlots();
    return;
 }
 
 BoilEditor::~BoilEditor() = default;
 
-void BoilEditor::showEditor() {
-   showChanges();
-   setVisible(true);
+void BoilEditor::writeFieldsToEditItem() {
    return;
 }
 
-void BoilEditor::closeEditor() {
-   setVisible(false);
+void BoilEditor::writeLateFieldsToEditItem() {
    return;
 }
 
-void BoilEditor::saveAndClose() {
-   bool isNew = false;
-
-   if (!this->m_boilObs) {
-      this->m_boilObs = std::make_shared<Boil>(lineEdit_name->text());
-      isNew = true;
-   }
-   qDebug() << Q_FUNC_INFO << "Saving" << (isNew ? "new" : "existing") << "boil (#" << this->m_boilObs->key() << ")";
-
-   this->m_boilObs->setName         (this->lineEdit_name       ->text                 ());
-   this->m_boilObs->setDescription  (this->textEdit_description->toPlainText          ());
-   this->m_boilObs->setPreBoilSize_l(this->lineEdit_preBoilSize->getOptCanonicalQty   ());
-   this->m_boilObs->setBoilTime_mins(this->lineEdit_boilTime   ->getNonOptCanonicalQty());
-   this->m_boilObs->setNotes        (this->textEdit_notes      ->toPlainText          ());
-
-   if (isNew) {
-      ObjectStoreWrapper::insert(*this->m_boilObs);
-      this->m_rec->setBoil(this->m_boilObs);
-   }
-
+void BoilEditor::readFieldsFromEditItem([[maybe_unused]] std::optional<QString> propName) {
    return;
 }
 
-void BoilEditor::setBoil(std::shared_ptr<Boil> boil) {
-   if (this->m_boilObs) {
-      disconnect(this->m_boilObs.get(), nullptr, this, nullptr);
-   }
-
-   this->m_boilObs = boil;
-   if (this->m_boilObs) {
-      connect(this->m_boilObs.get(), &NamedEntity::changed, this, &BoilEditor::changed);
-      showChanges();
-   }
-   return;
-}
-
-void BoilEditor::setRecipe(Recipe * recipe) {
-   if (!recipe) {
-      return;
-   }
-
-   this->m_rec = recipe;
-
-   return;
-}
-
-void BoilEditor::changed(QMetaProperty prop, QVariant /*val*/) {
-   if (!this->m_boilObs) {
-      return;
-   }
-
-
-   if (sender() == this->m_boilObs.get()) {
-      this->showChanges(&prop);
-   }
-
-   if (sender() == this->m_rec) {
-      this->showChanges();
-   }
-   return;
-}
-
-void BoilEditor::showChanges(QMetaProperty* prop) {
-   if (!this->m_boilObs) {
-      this->clear();
-      return;
-   }
-
-   QString propName;
-   bool updateAll = false;
-   if (prop == nullptr) {
-      updateAll = true;
-   } else {
-      propName = prop->name();
-   }
-   qDebug() << Q_FUNC_INFO << "Updating" << (updateAll ? "all" : "property") << propName;
-
-   if (updateAll || propName == PropertyNames::NamedEntity::name  ) {this->lineEdit_name       ->setText     (this->m_boilObs->name         ()); if (!updateAll) { return; } }
-   if (updateAll || propName == PropertyNames::Boil::description  ) {this->textEdit_description->setPlainText(this->m_boilObs->description  ()); if (!updateAll) { return; } }
-   if (updateAll || propName == PropertyNames::Boil::preBoilSize_l) {this->lineEdit_preBoilSize->setQuantity (this->m_boilObs->preBoilSize_l()); if (!updateAll) { return; } }
-   if (updateAll || propName == PropertyNames::Boil::boilTime_mins) {this->lineEdit_boilTime   ->setQuantity (this->m_boilObs->boilTime_mins()); if (!updateAll) { return; } }
-   if (updateAll || propName == PropertyNames::Boil::notes        ) {this->textEdit_notes      ->setPlainText(this->m_boilObs->notes        ()); if (!updateAll) { return; } }
-   return;
-}
-
-void BoilEditor::clear() {
-   this->lineEdit_name       ->setText     ("");
-   this->textEdit_description->setText     ("");
-   this->lineEdit_preBoilSize->setText     ("");
-   this->lineEdit_boilTime   ->setText     ("");
-   this->textEdit_notes      ->setPlainText("");
-   return;
-}
+// Insert the boilerplate stuff that we cannot do in EditorWithRecipeBase
+EDITOR_WITH_RECIPE_COMMON_CODE(BoilEditor)

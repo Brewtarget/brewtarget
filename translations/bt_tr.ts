@@ -1920,7 +1920,7 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Import %1?</source>
-        <translation>%1 içe aktar?</translation>
+        <translation type="vanished">%1 içe aktar?</translation>
     </message>
     <message>
         <source>No mash</source>
@@ -3020,7 +3020,7 @@ Press OK to quit.</source>
     </message>
     <message>
         <source>Unrecognized IBU formula type. %1</source>
-        <translation>Tanınmayan IBU formülü tipi. %1</translation>
+        <translation type="vanished">Tanınmayan IBU formülü tipi. %1</translation>
     </message>
     <message>
         <source>Directory Problem</source>
@@ -3380,7 +3380,7 @@ Press OK to quit.</source>
     </message>
     <message>
         <source>Unknown</source>
-        <translation>Bilinmeyen</translation>
+        <translation type="vanished">Bilinmeyen</translation>
     </message>
     <message>
         <source>Detailed (for debugging)</source>
@@ -3848,6 +3848,57 @@ Günlük dosyası daha fazla detay içerebilir.</translation>
     </message>
     <message>
         <source>Error matching %1 file pattern in %2 directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tinseth</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rager</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Noonan</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>mIBU</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SMPH</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Length</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>cm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>mm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>m</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>in</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ft</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>RaIngrd</name>
+    <message>
+        <source>Add %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -6137,11 +6188,23 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation type="unfinished">Kaynama Süresi</translation>
+        <translation type="obsolete">Kaynama Süresi</translation>
     </message>
     <message>
         <source>Notes</source>
         <translation type="unfinished">Notlar</translation>
+    </message>
+    <message>
+        <source>New hop</source>
+        <translation type="unfinished">Yeni şot</translation>
+    </message>
+    <message>
+        <source>Save and close</source>
+        <translation type="unfinished">Kaydet ve kapat</translation>
+    </message>
+    <message>
+        <source>Discard and close</source>
+        <translation type="unfinished">Kaydetmeden çık</translation>
     </message>
 </context>
 <context>
@@ -7046,7 +7109,7 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>The ID of this fermentable in the database.  Sometimes useful for debugging.</source>
+        <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -7069,16 +7132,20 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Pre-Fermentation Size</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fermentation Time</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Notes</source>
         <translation type="unfinished">Notlar</translation>
+    </message>
+    <message>
+        <source>New hop</source>
+        <translation type="unfinished">Yeni şot</translation>
+    </message>
+    <message>
+        <source>Save and close</source>
+        <translation type="unfinished">Kaydet ve kapat</translation>
+    </message>
+    <message>
+        <source>Discard and close</source>
+        <translation type="unfinished">Kaydetmeden çık</translation>
     </message>
 </context>
 <context>
@@ -7446,6 +7513,14 @@ The final volume in the primary is %1.</source>
         <source>Total Oil ml/100g</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>ID in database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>instructionWidget</name>
@@ -7506,7 +7581,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Target boil size</source>
-        <translation>Hedeflenen kaynatma hacmi</translation>
+        <translation type="vanished">Hedeflenen kaynatma hacmi</translation>
     </message>
     <message>
         <source>The extraction efficiency you expect</source>
@@ -7518,7 +7593,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation type="vanished">Kaynama Süresi</translation>
+        <translation>Kaynama Süresi</translation>
     </message>
     <message>
         <source>Target batch size</source>
@@ -7874,7 +7949,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>&amp;Boil Time</source>
-        <translation>&amp;Kaynama Süresi</translation>
+        <translation type="vanished">&amp;Kaynama Süresi</translation>
     </message>
     <message>
         <source>E&amp;quipment</source>
@@ -8066,6 +8141,10 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Help</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>(See Boil tab below)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -8437,15 +8516,15 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Check it if the amount listed is in kg instead of L.</source>
-        <translation>Miktarın L yerine KG olarak listelendiğini kontrol edin.</translation>
+        <translation type="vanished">Miktarın L yerine KG olarak listelendiğini kontrol edin.</translation>
     </message>
     <message>
         <source>Amount is weight?</source>
-        <translation>Miktar ağırlık mı?</translation>
+        <translation type="vanished">Miktar ağırlık mı?</translation>
     </message>
     <message>
         <source>Checked if the given amount is weight instead of volume</source>
-        <translation>Miktarın hacim yerine ağırlık olarak listelendiğini kontrol edin.</translation>
+        <translation type="vanished">Miktarın hacim yerine ağırlık olarak listelendiğini kontrol edin.</translation>
     </message>
     <message>
         <source>Amount in Inventory</source>
@@ -8494,6 +8573,14 @@ The final volume in the primary is %1.</source>
     <message>
         <source>Product ID</source>
         <translation type="unfinished">Ürün Kimliği</translation>
+    </message>
+    <message>
+        <source>ID in database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -9921,6 +10008,14 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Neutral strains do not produce toxins, nor are they killed by them</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ID in database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

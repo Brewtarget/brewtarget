@@ -21,6 +21,7 @@
 #include "database/ObjectStoreWrapper.h"
 #include "model/NamedParameterBundle.h"
 #include "model/Recipe.h"
+#include "utils/AutoCompare.h"
 
 QString Water::localisedName() { return tr("Water"); }
 
@@ -61,18 +62,18 @@ bool Water::isEqualTo(NamedEntity const & other) const {
    // Base class will already have ensured names are equal
    bool const outlinesAreEqual{
       // "Outline" fields: In BeerJSON, all these fields are in the FermentableBase type
-      this->m_calcium_ppm      == rhs.m_calcium_ppm      &&
-      this->m_bicarbonate_ppm  == rhs.m_bicarbonate_ppm  &&
-      this->m_carbonate_ppm    == rhs.m_carbonate_ppm    &&
-      this->m_potassium_ppm    == rhs.m_potassium_ppm    &&
-      this->m_iron_ppm         == rhs.m_iron_ppm         &&
-      this->m_nitrate_ppm      == rhs.m_nitrate_ppm      &&
-      this->m_nitrite_ppm      == rhs.m_nitrite_ppm      &&
-      this->m_flouride_ppm     == rhs.m_flouride_ppm     &&
-      this->m_sulfate_ppm      == rhs.m_sulfate_ppm      &&
-      this->m_chloride_ppm     == rhs.m_chloride_ppm     &&
-      this->m_sodium_ppm       == rhs.m_sodium_ppm       &&
-      this->m_magnesium_ppm    == rhs.m_magnesium_ppm
+      Utils::AutoCompare(this->m_calcium_ppm    , rhs.m_calcium_ppm    ) &&
+      Utils::AutoCompare(this->m_bicarbonate_ppm, rhs.m_bicarbonate_ppm) &&
+      Utils::AutoCompare(this->m_carbonate_ppm  , rhs.m_carbonate_ppm  ) &&
+      Utils::AutoCompare(this->m_potassium_ppm  , rhs.m_potassium_ppm  ) &&
+      Utils::AutoCompare(this->m_iron_ppm       , rhs.m_iron_ppm       ) &&
+      Utils::AutoCompare(this->m_nitrate_ppm    , rhs.m_nitrate_ppm    ) &&
+      Utils::AutoCompare(this->m_nitrite_ppm    , rhs.m_nitrite_ppm    ) &&
+      Utils::AutoCompare(this->m_flouride_ppm   , rhs.m_flouride_ppm   ) &&
+      Utils::AutoCompare(this->m_sulfate_ppm    , rhs.m_sulfate_ppm    ) &&
+      Utils::AutoCompare(this->m_chloride_ppm   , rhs.m_chloride_ppm   ) &&
+      Utils::AutoCompare(this->m_sodium_ppm     , rhs.m_sodium_ppm     ) &&
+      Utils::AutoCompare(this->m_magnesium_ppm  , rhs.m_magnesium_ppm  )
    };
 
    // If either object is an outline (see comment in model/OutlineableNamedEntity.h) then there is no point comparing
@@ -84,8 +85,8 @@ bool Water::isEqualTo(NamedEntity const & other) const {
    return (
       outlinesAreEqual &&
       // Remaining BeerJSON fields
-      this->m_ph    == rhs.m_ph    &&
-      this->m_notes == rhs.m_notes
+      Utils::AutoCompare(this->m_ph   , rhs.m_ph   ) &&
+      Utils::AutoCompare(this->m_notes, rhs.m_notes)
    );
 }
 

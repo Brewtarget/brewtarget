@@ -793,6 +793,7 @@ commonSourceFiles = files([
    'src/utils/EnumStringMapping.cpp',
    'src/utils/FileSystemHelpers.cpp',
    'src/utils/Fonts.cpp',
+   'src/utils/FuzzyCompare.cpp',
    'src/utils/ImportRecordCount.cpp',
    'src/utils/MetaTypes.cpp',
    'src/utils/OStreamWriterForQFile.cpp',

@@ -39,12 +39,21 @@ FermentationStepTableModel::FermentationStepTableModel(QTableView * parent, bool
       parent,
       editable,
       {
+         //
+         // As noted elsewhere, we store the step time for fermentation times in minutes, so we can reuse code with
+         // mash steps, boil steps etc, but the Measurement system will automatically show them in days (because
+         // sufficiently large numbers of minutes will get shown as days).
+         //
+         // TODO: What is not great is that, currently, if step time is "30 days" and you edit to replace it with "29",
+         //       the system will convert this to "29 mins", which is almost certainly not what the user means.  Even if
+         //       you type "29 day", it will still get converted to "29 mins", which is definitely wrong.
+         //
          TABLE_MODEL_HEADER(FermentationStep, Name        , tr("Name"         ), PropertyNames::     NamedEntity::name           ),
          TABLE_MODEL_HEADER(FermentationStep, StepTime    , tr("Step Time"    ), PropertyNames::            Step::stepTime_mins  , PrecisionInfo{0}),
-         TABLE_MODEL_HEADER(FermentationStep, StartTemp   , tr("Start Temp"   ), PropertyNames::            Step::startTemp_c    ),
-         TABLE_MODEL_HEADER(FermentationStep, EndTemp     , tr("End Temp"     ), PropertyNames::            Step::endTemp_c      ),
-         TABLE_MODEL_HEADER(FermentationStep, StartAcidity, tr("Start Acidity"), PropertyNames::            Step::startAcidity_pH),
-         TABLE_MODEL_HEADER(FermentationStep, EndAcidity  , tr("End Acidity"  ), PropertyNames::            Step::endAcidity_pH  ),
+         TABLE_MODEL_HEADER(FermentationStep, StartTemp   , tr("Start Temp"   ), PropertyNames::            Step::startTemp_c    , PrecisionInfo{1}),
+         TABLE_MODEL_HEADER(FermentationStep, EndTemp     , tr("End Temp"     ), PropertyNames::            Step::endTemp_c      , PrecisionInfo{1}),
+         TABLE_MODEL_HEADER(FermentationStep, StartAcidity, tr("Start Acidity"), PropertyNames::            Step::startAcidity_pH, PrecisionInfo{1}),
+         TABLE_MODEL_HEADER(FermentationStep, EndAcidity  , tr("End Acidity"  ), PropertyNames::            Step::endAcidity_pH  , PrecisionInfo{1}),
          TABLE_MODEL_HEADER(FermentationStep, StartGravity, tr("Start Gravity"), PropertyNames::    StepExtended::startGravity_sg),
          TABLE_MODEL_HEADER(FermentationStep, EndGravity  , tr("End Gravity"  ), PropertyNames::    StepExtended::  endGravity_sg),
          TABLE_MODEL_HEADER(FermentationStep, FreeRise    , tr("Free Rise"    ), PropertyNames::FermentationStep::freeRise       , BoolInfo{tr("No"), tr("Yes")}),

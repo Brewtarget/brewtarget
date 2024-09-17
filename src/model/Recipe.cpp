@@ -67,6 +67,7 @@
 #include "model/Yeast.h"
 #include "PersistentSettings.h"
 #include "PhysicalConstants.h"
+#include "utils/AutoCompare.h"
 
 namespace {
 
@@ -1557,22 +1558,38 @@ EnumStringMapping const Recipe::typeDisplayNames {
 bool Recipe::isEqualTo(NamedEntity const & other) const {
    // Base class (NamedEntity) will have ensured this cast is valid
    Recipe const & rhs = static_cast<Recipe const &>(other);
+
    // Base class will already have ensured names are equal
    return (
-      this->m_type              == rhs.m_type              &&
-      this->m_batchSize_l       == rhs.m_batchSize_l       &&
-      this->m_efficiency_pct    == rhs.m_efficiency_pct    &&
-      this->m_age               == rhs.m_age               &&
-      this->m_ageTemp_c         == rhs.m_ageTemp_c         &&
+      Utils::AutoCompare(this->m_type          , rhs.m_type          ) &&
+      Utils::AutoCompare(this->m_batchSize_l   , rhs.m_batchSize_l   ) &&
+      Utils::AutoCompare(this->m_efficiency_pct, rhs.m_efficiency_pct) &&
+      Utils::AutoCompare(this->m_age           , rhs.m_age           ) &&
+      Utils::AutoCompare(this->m_ageTemp_c     , rhs.m_ageTemp_c     ) &&
+      Utils::AutoCompare(this->m_og            , rhs.m_og            ) &&
+      Utils::AutoCompare(this->m_fg            , rhs.m_fg            ) &&
       ObjectStoreWrapper::compareById<Style    >(this->m_styleId,     rhs.m_styleId    ) &&
       ObjectStoreWrapper::compareById<Mash     >(this->m_mashId,      rhs.m_mashId     ) &&
       ObjectStoreWrapper::compareById<Boil     >(this->m_boilId,      rhs.m_boilId     ) &&
-      ObjectStoreWrapper::compareById<Equipment>(this->m_equipmentId, rhs.m_equipmentId) &&
-      this->m_og                == rhs.m_og                &&
-      this->m_fg                == rhs.m_fg                &&
-      ObjectStoreWrapper::compareListByIds<Instruction      >(this->pimpl->instructionIds  , rhs.pimpl->instructionIds  )
+      //
+      // We don't include any of the following in the equality test:
+      //    - BrewNotes as those are records of actually brewing a Recipe and shouldn't form part of determining whether
+      //      two Recipes are identical.
+      //    - Instructions, since these are generated from the Recipe
+      //    - Equipment, as you could brew the same recipe on different sets of equipment
+      //    - Salt additions, since salts are typically added to correct water profiles
+      //
+//      ObjectStoreWrapper::compareById<Equipment>(this->m_equipmentId, rhs.m_equipmentId) &&
+//      ObjectStoreWrapper::compareListByIds<Instruction      >(this->pimpl->instructionIds  , rhs.pimpl->instructionIds) &&
+      // The comparisons for each type of addition depend on them being in some canonical ordering that does not depend
+      // on their database IDs.  However, we don't have to worry about this here.  The AutoCompare does the sorting for
+      // us (on copies of the lists) using the operator<=> defined in RecipeAdditionBase.
+      Utils::AutoCompare(this->fermentableAdditions(), rhs.fermentableAdditions()) &&
+      Utils::AutoCompare(this->        hopAdditions(), rhs.        hopAdditions()) &&
+      Utils::AutoCompare(this->       miscAdditions(), rhs.       miscAdditions()) &&
+      Utils::AutoCompare(this->      yeastAdditions(), rhs.      yeastAdditions()) &&
+      Utils::AutoCompare(this->waterUses           (), rhs.waterUses           ())
 
-      // TODO: What about BrewNote, RecipeAdditionFermentable, RecipeAdditionHop, RecipeAdditionMisc, RecipeAdditionYeast, RecipeAdjustmentSalt, RecipeUseOfWater
    );
 }
 
@@ -2856,7 +2873,7 @@ double Recipe::ibuFromHopAddition(RecipeAdditionHop const & hopAddition) {
    // Assume 100% utilization until further notice
    double hopUtilization = 1.0;
    // Assume 60 min boil until further notice
-   int boilTime = 60;
+   double boilTime_mins = 60.0;
 
    // NOTE: we used to carefully calculate the average boil gravity and use it in the
    // IBU calculations. However, due to John Palmer
@@ -2866,15 +2883,31 @@ double Recipe::ibuFromHopAddition(RecipeAdditionHop const & hopAddition) {
 
    if (equipment) {
       hopUtilization = equipment->hopUtilization_pct().value_or(Equipment::default_hopUtilization_pct) / 100.0;
-      boilTime = static_cast<int>(equipment->boilTime_min().value_or(Equipment::default_boilTime_mins));
+      boilTime_mins = static_cast<int>(equipment->boilTime_min().value_or(Equipment::default_boilTime_mins));
    }
 
+   auto boil = this->boil();
+   if (boil) {
+      boilTime_mins = boil->boilTime_mins();
+   }
+
+   IbuMethods::IbuCalculationParms parms = {
+      .AArating              = AArating,
+      .hops_grams            = grams,
+      .postBoilVolume_liters = this->pimpl->m_finalVolumeNoLosses_l,
+      .wortGravity_sg        = m_og,
+      .boilTime_minutes      = boilTime_mins,  // Seems unlikely in reality that there would be fractions of a minute
+      .coolTime_minutes          = boil->coolTime_mins(),
+      .kettleInternalDiameter_cm = equipment->kettleInternalDiameter_cm(),
+      .kettleOpeningDiameter_cm  = equipment->kettleOpeningDiameter_cm (),
+   };
    if (hopAddition.isFirstWort()) {
-      ibus = fwhAdjust * IbuMethods::getIbus(AArating, grams, this->pimpl->m_finalVolumeNoLosses_l, m_og, boilTime);
+      ibus = fwhAdjust * IbuMethods::getIbus(parms);
    } else if (hopAddition.stage() == RecipeAddition::Stage::Boil) {
-      ibus = IbuMethods::getIbus(AArating, grams, this->pimpl->m_finalVolumeNoLosses_l, m_og, minutes);
+      parms.boilTime_minutes = minutes;
+      ibus = IbuMethods::getIbus(parms);
    } else if (hopAddition.stage() == RecipeAddition::Stage::Mash && mashHopAdjust > 0.0) {
-      ibus = mashHopAdjust * IbuMethods::getIbus(AArating, grams, this->pimpl->m_finalVolumeNoLosses_l, m_og, boilTime);
+      ibus = mashHopAdjust * IbuMethods::getIbus(parms);
    }
 
    // Adjust for hopAddition form. Tinseth's table was created from whole cone data,

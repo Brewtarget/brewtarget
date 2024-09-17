@@ -144,5 +144,6 @@ void RecipeAdjustmentSalt::setSalt(Salt * const val) {
    return;
 }
 
-// Boilerplate code for IngredientAmount
+// Boilerplate code for IngredientAmount and RecipeAddition
 INGREDIENT_AMOUNT_COMMON_CODE(RecipeAdjustmentSalt, Salt)
+RECIPE_ADDITION_CODE(RecipeAdjustmentSalt, Salt)

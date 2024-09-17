@@ -28,6 +28,7 @@
 #include "model/MashStep.h"
 #include "model/NamedParameterBundle.h"
 #include "model/Recipe.h"
+#include "utils/AutoCompare.h"
 
 QString Mash::localisedName() { return tr("Mash"); }
 
@@ -36,12 +37,12 @@ bool Mash::isEqualTo(NamedEntity const & other) const {
    Mash const & rhs = static_cast<Mash const &>(other);
    // Base class will already have ensured names are equal
    return (
-      this->m_grainTemp_c           == rhs.m_grainTemp_c           &&
-      this->m_tunTemp_c             == rhs.m_tunTemp_c             &&
-      this->m_spargeTemp_c          == rhs.m_spargeTemp_c          &&
-      this->m_ph                    == rhs.m_ph                    &&
-      this->m_mashTunWeight_kg          == rhs.m_mashTunWeight_kg          &&
-      this->m_mashTunSpecificHeat_calGC == rhs.m_mashTunSpecificHeat_calGC
+      Utils::AutoCompare(this->m_grainTemp_c              , rhs.m_grainTemp_c              ) &&
+      Utils::AutoCompare(this->m_tunTemp_c                , rhs.m_tunTemp_c                ) &&
+      Utils::AutoCompare(this->m_spargeTemp_c             , rhs.m_spargeTemp_c             ) &&
+      Utils::AutoCompare(this->m_ph                       , rhs.m_ph                       ) &&
+      Utils::AutoCompare(this->m_mashTunWeight_kg         , rhs.m_mashTunWeight_kg         ) &&
+      Utils::AutoCompare(this->m_mashTunSpecificHeat_calGC, rhs.m_mashTunSpecificHeat_calGC)
       // .:TBD:. Should we check MashSteps too?
    );
 }

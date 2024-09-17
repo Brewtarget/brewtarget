@@ -20,11 +20,11 @@
 #include <QDialog>
 #include <QMetaProperty>
 #include <QVariant>
+
 #include "ui_boilEditor.h"
 
-// Forward declarations.
-class Recipe;
-class Boil;
+#include "editors/EditorWithRecipeBase.h"
+#include "model/Boil.h"
 
 /*!
  * \class BoilEditor
@@ -33,26 +33,10 @@ class Boil;
  *
  *        See also \c NamedBoilEditor
  */
-class BoilEditor : public QDialog, public Ui::boilEditor {
+class BoilEditor : public QDialog, public Ui::boilEditor, public EditorWithRecipeBase<BoilEditor, Boil> {
    Q_OBJECT
-public:
-   BoilEditor(QWidget * parent = nullptr);
-   ~BoilEditor();
 
-public slots:
-   void showEditor();
-   void closeEditor();
-   void saveAndClose();
-   //! Set the boil we wish to view/edit.
-   void setBoil(std::shared_ptr<Boil> boil);
-   void setRecipe(Recipe* r);
-
-   void changed(QMetaProperty,QVariant);
-private:
-   void showChanges(QMetaProperty* prop = nullptr);
-   void clear();
-   Recipe* m_rec;
-   std::shared_ptr<Boil> m_boilObs;
+   EDITOR_WITH_RECIPE_COMMON_DECL(Boil)
 };
 
 #endif

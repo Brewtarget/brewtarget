@@ -134,8 +134,8 @@ WaterDialog::WaterDialog(QWidget* parent) :
       m_ppm_digits[ii]->setLimits(0.0,1000.0);
       m_ppm_digits[ii]->setQuantity(0.0);
       m_ppm_digits[ii]->setMessages(tr("Too low for target profile."),
-                                   tr("In range for target profile."),
-                                   tr("Too high for target profile."));
+                                    tr("In range for target profile."),
+                                    tr("Too high for target profile."));
    }
    // we can be a bit more specific with pH
    btDigit_ph->setLowLim(5.0);
@@ -163,9 +163,9 @@ WaterDialog::WaterDialog(QWidget* parent) :
    connect(baseProfileButton,   &WaterButton::clicked, m_base_editor,   &QWidget::show);
    connect(targetProfileButton, &WaterButton::clicked, m_target_editor, &QWidget::show);
 
-   connect(m_saltAdjustmentTableModel,    &RecipeAdjustmentSaltTableModel::newTotals, this,               &WaterDialog::newTotals   );
-   connect(pushButton_addSalt,    &QAbstractButton::clicked,  m_saltAdjustmentTableModel, &RecipeAdjustmentSaltTableModel::catchSalt);
-   connect(pushButton_removeSalt, &QAbstractButton::clicked,  this,               &WaterDialog::removeSalts );
+   connect(m_saltAdjustmentTableModel, &RecipeAdjustmentSaltTableModel::newTotals, this                      , &WaterDialog::newTotals   );
+   connect(pushButton_addSalt        , &QAbstractButton::clicked                 , m_saltAdjustmentTableModel, &RecipeAdjustmentSaltTableModel::catchSalt);
+   connect(pushButton_removeSalt     , &QAbstractButton::clicked                 , this                      , &WaterDialog::removeSalts );
 
    connect(spinBox_mashRO,   QOverload<int>::of(&QSpinBox::valueChanged), this, &WaterDialog::setMashRO  );
    connect(spinBox_spargeRO, QOverload<int>::of(&QSpinBox::valueChanged), this, &WaterDialog::setSpargeRO);

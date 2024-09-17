@@ -21,6 +21,8 @@
 #include <optional>
 #include <type_traits>
 
+#include <QList>
+
 /**
  * \brief Together with \c std::is_enum from \c <type_traits>, the \c is_optional and \c is_optional_enum templates
  *        defined here give us a generic way at compile time to determine whether a type T is:
@@ -110,5 +112,13 @@ template <typename T> struct is_null_variant : public std::false_type{};
 template <>           struct is_null_variant<std::variant<std::monostate>> : public std::true_type{};
 template <typename T> concept CONCEPT_FIX_UP IsNullVariant        = is_variant<T>::value && is_null_variant<T>::value;
 template <typename T> concept CONCEPT_FIX_UP IsSubstantiveVariant = is_variant<T>::value && !is_null_variant<T>::value;
+
+//
+// It's useful in AutoCompare at least to be able to tell if a type is QList<NE *> or QList<shared_ptr<NE>>
+//
+template <typename T> struct is_qlist_of_ptr : public std::false_type{};
+template <typename T> struct is_qlist_of_ptr<QList<T *>> : public std::true_type{};
+template <typename T> struct is_qlist_of_ptr<QList<std::shared_ptr<T>>> : public std::true_type{};
+template <typename T> concept CONCEPT_FIX_UP IsQListOfPointer = is_qlist_of_ptr<T>::value;
 
 #endif

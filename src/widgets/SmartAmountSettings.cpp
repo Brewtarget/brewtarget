@@ -117,7 +117,7 @@ std::optional<Measurement::UnitSystem::RelativeScale> SmartAmountSettings::getFo
 }
 
 SmartAmounts::ScaleInfo SmartAmountSettings::getScaleInfo() const {
-   // Uncomment the next command for diagnosing asserts!
+   // Uncomment the next statement for diagnosing asserts!
 //   qDebug().noquote() <<
 //      Q_FUNC_INFO << this->pimpl->editorName << this->pimpl->labelOrFieldName << ":" << this->pimpl->m_typeInfo <<
 //      "Stack trace:" << Logging::getStackTrace();
@@ -156,8 +156,15 @@ void SmartAmountSettings::selectPhysicalQuantity(Measurement::PhysicalQuantity c
    // It's a coding error to call this if we only hold one PhysicalQuantity
    Q_ASSERT(!std::holds_alternative<Measurement::PhysicalQuantity>(*this->pimpl->m_typeInfo.fieldType));
 
+   // Uncomment the next statement for diagnosing asserts!
+//   qDebug().noquote() <<
+//      Q_FUNC_INFO << this->pimpl->m_editorName << "->" << this->pimpl->m_labelOrFieldName << " - TypeInfo:" <<
+//      this->pimpl->m_typeInfo << ", physicalQuantity:" << physicalQuantity << ", Stack trace:" <<
+//      Logging::getStackTrace();
+
    // It's a coding error to try to select a PhysicalQuantity that was not specified in the constructor
-   auto const choiceOfPhysicalQuantity = std::get<Measurement::ChoiceOfPhysicalQuantity>(*this->pimpl->m_typeInfo.fieldType);
+   auto const choiceOfPhysicalQuantity =
+      std::get<Measurement::ChoiceOfPhysicalQuantity>(*this->pimpl->m_typeInfo.fieldType);
    Q_ASSERT(Measurement::isValid(choiceOfPhysicalQuantity, physicalQuantity));
 
    this->pimpl->m_currentPhysicalQuantity = physicalQuantity;

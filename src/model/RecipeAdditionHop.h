@@ -44,7 +44,7 @@ class RecipeAdditionHop : public RecipeAddition,
                           public IngredientAmount<RecipeAdditionHop, Hop> {
    Q_OBJECT
 
-   RECIPE_ADDITION_DECL(Hop)
+   RECIPE_ADDITION_DECL(RecipeAdditionHop, Hop)
 
    INGREDIENT_AMOUNT_DECL(RecipeAdditionHop, Hop)
 

@@ -30,52 +30,52 @@
 #include "model/RecipeAdditionYeast.h"
 #include "model/RecipeUseOfWater.h"
 
-namespace {
-   //
-   // To keep us on our toes, the various ingredients you might add to a recipe have different ways of specifying how
-   // much to add and when to add them.  We'll use template specialisation to ensure we call the right member
-   // functions.
-   //
-   template<typename CNE>
-   void setAmountsEtc([[maybe_unused]] CNE & ingredient, [[maybe_unused]] NamedParameterBundle const & npb) {
-      return;
-   }
-   template<> void setAmountsEtc(RecipeAdditionHop & hopAddition, NamedParameterBundle const & npb) {
-///      // For Hop, assume amount is weight unless otherwise specified because base BeerXML does not include the
-///      // possibility of hops being measured by volume.  (It is an extension we have added as a result of
+///namespace {
+///   //
+///   // To keep us on our toes, the various ingredients you might add to a recipe have different ways of specifying how
+///   // much to add and when to add them.  We'll use template specialisation to ensure we call the right member
+///   // functions.
+///   //
+///   template<typename CNE>
+///   void setAmountsEtc([[maybe_unused]] CNE & ingredient, [[maybe_unused]] NamedParameterBundle const & npb) {
+///      return;
+///   }
+///   template<> void setAmountsEtc(RecipeAdditionHop & hopAddition, NamedParameterBundle const & npb) {
+//////      // For Hop, assume amount is weight unless otherwise specified because base BeerXML does not include the
+//////      // possibility of hops being measured by volume.  (It is an extension we have added as a result of
+//////      // implementing support for BeerJSON.)
+//////      hop.setAmount        (npb.val<double>(PropertyNames::Hop::amount        ));
+//////      hop.setAmountIsWeight(npb.val<bool  >(PropertyNames::Hop::amountIsWeight, true));
+//////      hop.setTime_min      (npb.val<double>(PropertyNames::Hop::time_min ));
+///      return;
+///   }
+///   template<> void setAmountsEtc(RecipeAdditionFermentable & fermentableAddition, NamedParameterBundle const & npb) {
+///      // For Fermentable, assume amount is weight unless otherwise specified because base BeerXML does not include the
+///      // possibility of fermentables being measured by volume.  (It is an extension we have added as a result of
 ///      // implementing support for BeerJSON.)
-///      hop.setAmount        (npb.val<double>(PropertyNames::Hop::amount        ));
-///      hop.setAmountIsWeight(npb.val<bool  >(PropertyNames::Hop::amountIsWeight, true));
-///      hop.setTime_min      (npb.val<double>(PropertyNames::Hop::time_min ));
-      return;
-   }
-   template<> void setAmountsEtc(RecipeAdditionFermentable & fermentableAddition, NamedParameterBundle const & npb) {
-      // For Fermentable, assume amount is weight unless otherwise specified because base BeerXML does not include the
-      // possibility of fermentables being measured by volume.  (It is an extension we have added as a result of
-      // implementing support for BeerJSON.)
-///      fermentable.setAmount        (npb.val<double>(PropertyNames::Fermentable::amount        ));
-///      fermentable.setAmountIsWeight(npb.val<bool  >(PropertyNames::Fermentable::amountIsWeight, true));
-///      fermentable.setAddAfterBoil  (npb.val<bool  >(PropertyNames::Fermentable::addAfterBoil  ));
-///      fermentable.setIsMashed      (npb.val<bool  >(PropertyNames::Fermentable::isMashed      ));
-      return;
-   }
-   template<> void setAmountsEtc(RecipeAdditionMisc & miscAddition, NamedParameterBundle const & npb) {
-///      misc.setAmount        (npb.val<double>(PropertyNames::Misc::amount        ));
-///      misc.setAmountIsWeight(npb.val<bool  >(PropertyNames::Misc::amountIsWeight));
-///      misc.setTime_min      (npb.val<double>(PropertyNames::Misc::time_min      ));
-      return;
-   }
-   template<> void setAmountsEtc(RecipeAdditionYeast & yeastAddition, NamedParameterBundle const & npb) {
-///      yeast.setAmount        (npb.val<double>(PropertyNames::Yeast::amount        ));
-///      yeast.setAmountIsWeight(npb.val<bool  >(PropertyNames::Yeast::amountIsWeight));
-      return;
-   }
-   template<> void setAmountsEtc(RecipeUseOfWater & water, NamedParameterBundle const & npb) {
-///      water.setAmount(npb.val<double>(PropertyNames::Water::amount));
-      return;
-   }
-
-}
+//////      fermentable.setAmount        (npb.val<double>(PropertyNames::Fermentable::amount        ));
+//////      fermentable.setAmountIsWeight(npb.val<bool  >(PropertyNames::Fermentable::amountIsWeight, true));
+//////      fermentable.setAddAfterBoil  (npb.val<bool  >(PropertyNames::Fermentable::addAfterBoil  ));
+//////      fermentable.setIsMashed      (npb.val<bool  >(PropertyNames::Fermentable::isMashed      ));
+///      return;
+///   }
+///   template<> void setAmountsEtc(RecipeAdditionMisc & miscAddition, NamedParameterBundle const & npb) {
+//////      misc.setAmount        (npb.val<double>(PropertyNames::Misc::amount        ));
+//////      misc.setAmountIsWeight(npb.val<bool  >(PropertyNames::Misc::amountIsWeight));
+//////      misc.setTime_min      (npb.val<double>(PropertyNames::Misc::time_min      ));
+///      return;
+///   }
+///   template<> void setAmountsEtc(RecipeAdditionYeast & yeastAddition, NamedParameterBundle const & npb) {
+//////      yeast.setAmount        (npb.val<double>(PropertyNames::Yeast::amount        ));
+//////      yeast.setAmountIsWeight(npb.val<bool  >(PropertyNames::Yeast::amountIsWeight));
+///      return;
+///   }
+///   template<> void setAmountsEtc(RecipeUseOfWater & water, NamedParameterBundle const & npb) {
+//////      water.setAmount(npb.val<double>(PropertyNames::Water::amount));
+///      return;
+///   }
+///
+///}
 
 
 //template<typename CNE>

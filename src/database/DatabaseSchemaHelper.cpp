@@ -36,7 +36,7 @@
 #include "database/DbTransaction.h"
 #include "database/ObjectStoreTyped.h"
 
-int constexpr DatabaseSchemaHelper::latestVersion = 12;
+int constexpr DatabaseSchemaHelper::latestVersion = 13;
 
 // Default namespace hides functions from everything outside this file.
 namespace {
@@ -556,7 +556,7 @@ namespace {
             "description"     " " << db.getDbNativeTypeName<QString>()     << ", "
             "notes"           " " << db.getDbNativeTypeName<QString>()     << ", "
             "pre_boil_size_l" " " << db.getDbNativeTypeName<double>()      << ", "
-            "boil_Time_mins"  " " << db.getDbNativeTypeName<double>()      << ", "
+            "boil_time_mins"  " " << db.getDbNativeTypeName<double>()      << ", "
             "temp_recipe_id"  " " << db.getDbNativeTypeName<int>()         <<
          ");";
 
@@ -949,7 +949,7 @@ namespace {
                       "description    , "
                       "notes          , "
                       "pre_boil_size_l, "
-                      "boil_Time_mins , "
+                      "boil_time_mins , "
                       "temp_recipe_id   "
                   ") SELECT "
                      "'Boil for ' || name, "
@@ -2104,6 +2104,44 @@ namespace {
       return executeSqlQueries(q, migrationQueries);
    }
 
+   /**
+    * \brief Small schema change to support measuring diameter of boil kettle for new IBU calculations.  Plus, some
+    *        tidy-ups to Salt and Boil / BoilStep which we didn't get to before.
+    */
+   bool migrate_to_13([[maybe_unused]] Database & db, BtSqlQuery q) {
+      QVector<QueryAndParameters> const migrationQueries{
+         {QString("ALTER TABLE equipment  ADD COLUMN kettleInternalDiameter_cm %1").arg(db.getDbNativeTypeName<double>())},
+         {QString("ALTER TABLE equipment  ADD COLUMN kettleOpeningDiameter_cm  %1").arg(db.getDbNativeTypeName<double>())},
+         // The is_acid column is unnecessary as we know whether it's an acide from the stype column
+         {QString("ALTER TABLE salt DROP COLUMN is_acid")},
+         // The addTo column is not needed as it is now replaced by salt_in_recipe.when_to_add and the contents brought
+         // over in migrate_to_11 above.  Same goes for amount_is_weight, which is replaced by salt_in_recipe.unit and
+         // salt_in_inventory.unit.
+         {QString("ALTER TABLE salt DROP COLUMN addTo")},
+         {QString("ALTER TABLE salt DROP COLUMN amount_is_weight")},
+         //
+         // The boil.boil_time_mins column is, in reality the length of the boil proper, so it should have gone straight
+         // to the relevant boil_step.  We correct that here and do away with the column on boil.
+         //
+         // Per the comment in model/Boil.h on minimumBoilTemperature_c, 81.0°C is the temperature above which we assume
+         // a step is a boil.
+         //
+         {QString("UPDATE boil_step "
+                  "SET step_time_mins = b.boil_time_mins "
+                  "FROM ("
+                     "SELECT id, "
+                            "boil_time_mins "
+                     "FROM boil"
+                  ") AS b "
+                  "WHERE boil_step.step_time_mins IS NULL "
+                    "AND boil_step.start_temp_c >= 81.0 "
+                    "AND boil_step.end_temp_c >= 81.0 "
+                    "AND boil_step.boil_id = b.id ")},
+         {QString("ALTER TABLE boil DROP COLUMN boil_time_mins")},
+      };
+      return executeSqlQueries(q, migrationQueries);
+   }
+
    /*!
     * \brief Migrate from version \c oldVersion to \c oldVersion+1
     */
@@ -2146,6 +2184,9 @@ namespace {
             break;
          case 11:
             ret &= migrate_to_12(database, sqlQuery);
+            break;
+         case 12:
+            ret &= migrate_to_13(database, sqlQuery);
             break;
          default:
             qCritical() << QString("Unknown version %1").arg(oldVersion);

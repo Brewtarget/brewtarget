@@ -22,10 +22,10 @@
 #define EDITORS_EQUIPMENTEDITOR_H
 #pragma once
 
-#include "ui_equipmentEditor.h"
-
 #include <QMetaProperty>
 #include <QVariant>
+
+#include "ui_equipmentEditor.h"
 
 #include "editors/EditorBase.h"
 #include "model/Equipment.h"
@@ -56,51 +56,5 @@ private:
    double calcBatchSize();
 
 };
-///class EquipmentEditor : public QDialog, private Ui::equipmentEditor {
-///   Q_OBJECT
-///
-///public:
-///   //! \param singleEquipEditor true if you do not want the necessary elements for viewing all the database elements.
-///   EquipmentEditor( QWidget *parent=nullptr, bool singleEquipEditor=false );
-///   virtual ~EquipmentEditor();
-///
-///   //! Edit the given equipment.
-///   void setEquipment( Equipment* e );
-///   //! Create a new equipment record
-///   void newEquipment(QString folder = "");
-///
-///public slots:
-///   //! Save the changes to the equipment.
-///   void save();
-///   //! Delete the equipment from the database.
-///   void removeEquipment();
-///   //! Set the equipment to default values.
-///   void clear();
-///   //! Close the dialog, throwing away changes.
-///   void cancel();
-///   //! Set absorption back to default.
-///   void resetAbsorption();
-///
-///   //! Edit the equipment currently selected in our combobox.
-///   void equipmentSelected();
-///   //! If state==Qt::Checked, set the "calculate boil volume" checkbox. Otherwise, unset.
-///   void updateCheckboxRecord();
-///   //! \brief set the default equipment, or unset the current equipment as the default
-///   void updateDefaultEquipment(int state);
-///
-///   void changed(QMetaProperty, QVariant);
-///
-///   double calcBatchSize();
-///
-///protected:
-///   void closeEvent(QCloseEvent *event);
-///
-///private:
-///   void showChanges();
-///
-///   Equipment* obsEquip;
-///   EquipmentListModel* equipmentListModel;
-///   NamedEntitySortProxyModel* equipmentSortProxyModel;
-///};
 
 #endif

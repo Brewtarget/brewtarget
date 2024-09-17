@@ -21,6 +21,7 @@
 #include "model/Misc.h"
 #include "model/NamedParameterBundle.h"
 #include "model/Recipe.h"
+#include "utils/AutoCompare.h"
 
 QString RecipeAddition::localisedName() { return tr("Recipe Addition"); }
 
@@ -45,14 +46,14 @@ bool RecipeAddition::isEqualTo(NamedEntity const & other) const {
    RecipeAddition const & rhs = static_cast<RecipeAddition const &>(other);
    // Base class will already have ensured names are equal
    return (
-      this->m_recipeId        == rhs.m_recipeId        &&
-      this->m_ingredientId    == rhs.m_ingredientId    &&
-      this->m_stage           == rhs.m_stage           &&
-      this->m_step            == rhs.m_step            &&
-      this->m_addAtTime_mins  == rhs.m_addAtTime_mins  &&
-      this->m_addAtGravity_sg == rhs.m_addAtGravity_sg &&
-      this->m_addAtAcidity_pH == rhs.m_addAtAcidity_pH &&
-      this->m_duration_mins   == rhs.m_duration_mins   &&
+      Utils::AutoCompare(this->m_recipeId       , rhs.m_recipeId       ) &&
+      Utils::AutoCompare(this->m_ingredientId   , rhs.m_ingredientId   ) &&
+      Utils::AutoCompare(this->m_stage          , rhs.m_stage          ) &&
+      Utils::AutoCompare(this->m_step           , rhs.m_step           ) &&
+      Utils::AutoCompare(this->m_addAtTime_mins , rhs.m_addAtTime_mins ) &&
+      Utils::AutoCompare(this->m_addAtGravity_sg, rhs.m_addAtGravity_sg) &&
+      Utils::AutoCompare(this->m_addAtAcidity_pH, rhs.m_addAtAcidity_pH) &&
+      Utils::AutoCompare(this->m_duration_mins  , rhs.m_duration_mins  ) &&
       // Parent classes have to be equal too
       this->IngredientInRecipe::isEqualTo(other)
    );

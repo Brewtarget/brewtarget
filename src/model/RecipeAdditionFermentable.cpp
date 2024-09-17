@@ -158,5 +158,6 @@ double RecipeAdditionFermentable::equivSucrose_kg() const {
    return ret;
 }
 
-// Boilerplate code for IngredientAmount
+// Boilerplate code for IngredientAmount and RecipeAddition
 INGREDIENT_AMOUNT_COMMON_CODE(RecipeAdditionFermentable, Fermentable)
+RECIPE_ADDITION_CODE(RecipeAdditionFermentable, Fermentable)

@@ -186,4 +186,4 @@ void FermentableEditor::readFieldsFromEditItem(std::optional<QString> propName) 
 }
 
 // Insert the boiler-plate stuff that we cannot do in EditorBase
-EDITOR_COMMON_SLOT_DEFINITIONS(FermentableEditor)
+EDITOR_COMMON_CODE(FermentableEditor)

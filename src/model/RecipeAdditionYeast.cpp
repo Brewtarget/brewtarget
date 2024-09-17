@@ -169,5 +169,6 @@ void RecipeAdditionYeast::setAddToSecondary (std::optional<bool  > const val) {
 }
 
 
-// Boilerplate code for IngredientAmount
+// Boilerplate code for IngredientAmount and RecipeAddition
 INGREDIENT_AMOUNT_COMMON_CODE(RecipeAdditionYeast, Yeast)
+RECIPE_ADDITION_CODE(RecipeAdditionYeast, Yeast)

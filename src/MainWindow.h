@@ -33,26 +33,18 @@
 
 #include <QCloseEvent>
 #include <QMainWindow>
-#include <QPalette>
-#include <QPrintDialog>
-#include <QPrinter>
 #include <QString>
-#include <QTimer>
 #include <QVariant>
 #include <QWidget>
 
 #include "ui_mainWindow.h"
+
 #include "undoRedo/SimpleUndoableUpdate.h"
 #include "utils/NoCopy.h"
 
 // Forward Declarations
-
-class BrewNoteWidget;
-class OptionDialog;
 class PropertyPath;
 class Recipe;
-
-class RecipeAdditionHop;
 
 /*!
  * \class MainWindow
@@ -62,7 +54,6 @@ class RecipeAdditionHop;
 class MainWindow : public QMainWindow, public Ui::mainWindow {
    Q_OBJECT
 
-   friend class OptionDialog;
 public:
    MainWindow(QWidget* parent=nullptr);
    virtual ~MainWindow();
@@ -80,7 +71,9 @@ public:
       this->connect(a, b, c.get(), d);
    }
 
+   //! \brief Accessor to obtain \c MainWindow singleton
    static MainWindow & instance();
+
    /**
     * \brief Call at program termination to clean-up.  Caller's responsibility not to subsequently call (or use the
     *        return value from) \c MainWindow::instance().
@@ -98,12 +91,7 @@ public:
    //! \brief Get the currently observed recipe.
    Recipe* currentRecipe();
 
-   bool verifyImport(QString tag, QString name);
-   bool verifyDelete(QString tab, QString name);
-
-   void setBrewNoteByIndex(const QModelIndex &index);
-   void setBrewNote(BrewNote* bNote);
-
+public:
    //! \brief Doing updates via this method makes them undoable (and redoable).  This is the simplified version
    //         which suffices for modifications to most individual non-relational attributes.
    template<typename T>
@@ -158,9 +146,9 @@ public slots:
    //! \brief Update Recipe batch size to that given by the relevant widget.
    void updateRecipeBatchSize();
    //! \brief Update Recipe boil size to that given by the relevant widget.
-   void updateRecipeBoilSize();
+///   void updateRecipeBoilSize();
    //! \brief Update Recipe boil time to that given by the relevant widget.
-   void updateRecipeBoilTime();
+///   void updateRecipeBoilTime();
    //! \brief Update Recipe efficiency to that given by the relevant widget.
    void updateRecipeEfficiency();
    //! \brief Update Recipe's mash
@@ -238,9 +226,9 @@ public slots:
 
    //! \brief Create a new recipe in the database.
    void newRecipe();
-   //! \brief Export current recipe to BeerXML.
+   //! \brief Export current recipe to BeerXML or BeerJSON.
    void exportRecipe();
-   //! \brief Display file selection dialog and import BeerXML files.
+   //! \brief Display file selection dialog and import BeerXML/BeerJSON files.
    void importFiles();
    //! \brief Create a duplicate of the current recipe.
    void copyRecipe();
@@ -266,8 +254,7 @@ public slots:
    //! \brief makes sure we can do water chemistry before we show the window
    void showWaterChemistryTool();
 
-   //! \brief draws a context menu, the exact nature of which depends on which
-   //tree is focused
+   //! \brief draws a context menu, the exact nature of which depends on which tree is focused
    void contextMenu(const QPoint &point);
    //! \brief creates a new brewnote
    void newBrewNote();
@@ -305,11 +292,13 @@ public slots:
    //! \brief prepopulate the ancestorDialog when the menu is selected
    void setAncestor();
 
+public:
    /*!
     * \brief Make the widgets in the window update changes.
     *
-    * Updates all the widgets with info about the currently
-    * selected Recipe, except for the tables.
+    *        Updates all the widgets with info about the currently selected Recipe, except for the tables.
+    *
+    *        Called by \c Recipe and \c OptionDialog::saveLoggingSettings
     *
     * \param prop Not yet used. Will indicate which Recipe property has changed.
     */
@@ -336,22 +325,6 @@ private:
    // TODO: At the moment, these need to be in MainWindow itself rather than in the pimpl because of the way function
    // pointers get passed to UndoableAddOrRemove.  We should fix that at some point.
    template<typename NE> void remove(std::shared_ptr<NE> itemToRemove);
-
-   Recipe* m_recipeObs;
-
-   QString highSS, lowSS, goodSS, boldSS; // Palette replacements
-
-   QList<QMenu*> contextMenus;
-   QDialog* brewDayDialog;
-   QPrinter *printer;
-
-   int confirmDelete;
-
-   //! \brief Fix pixel dimensions according to dots-per-inch (DPI) of screen we're on.
-   void setSizesInPixelsBasedOnDpi();
-
-   //! \brief Find an open brewnote tab, if it is open
-   BrewNoteWidget* findBrewNoteWidget(BrewNote* b);
 
    //! \brief Scroll to the given \c item in the currently visible item tree.
    void setTreeSelection(QModelIndex item);

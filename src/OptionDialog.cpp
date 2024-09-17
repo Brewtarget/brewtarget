@@ -471,7 +471,7 @@ public:
          optionDialog.colorFormulaComboBox->findData(ColorMethods::colorFormula)
       );
       optionDialog.ibuFormulaComboBox->setCurrentIndex(
-         optionDialog.ibuFormulaComboBox->findData(IbuMethods::ibuFormula)
+         optionDialog.ibuFormulaComboBox->findData(static_cast<int>(IbuMethods::ibuFormula))
       );
 
       // User data directory
@@ -657,13 +657,13 @@ void OptionDialog::configure_formulaCombos() {
                                    QVariant(Measurement::UnitSystems::diastaticPower_WindischKolbach.uniqueName));
 
    // Populate combo boxes on the "Formulas" tab
-   ibuFormulaComboBox->addItem(tr("Tinseth's approximation"), QVariant(IbuMethods::TINSETH));
-   ibuFormulaComboBox->addItem(tr("Rager's approximation"), QVariant(IbuMethods::RAGER));
-   ibuFormulaComboBox->addItem(tr("Noonan's approximation"), QVariant(IbuMethods::NOONAN));
+   ibuFormulaComboBox->addItem(tr("Tinseth's approximation"), QVariant(static_cast<int>(IbuMethods::IbuFormula::Tinseth)));
+   ibuFormulaComboBox->addItem(tr("Rager's approximation"  ), QVariant(static_cast<int>(IbuMethods::IbuFormula::Rager  )));
+   ibuFormulaComboBox->addItem(tr("Noonan's approximation" ), QVariant(static_cast<int>(IbuMethods::IbuFormula::Noonan )));
 
    colorFormulaComboBox->addItem(tr("Mosher's approximation"), QVariant(ColorMethods::MOSHER));
    colorFormulaComboBox->addItem(tr("Daniel's approximation"), QVariant(ColorMethods::DANIEL));
-   colorFormulaComboBox->addItem(tr("Morey's approximation"), QVariant(ColorMethods::MOREY));
+   colorFormulaComboBox->addItem(tr("Morey's approximation" ), QVariant(ColorMethods::MOREY));
 }
 
 void OptionDialog::configure_logging() {
@@ -907,7 +907,7 @@ void OptionDialog::saveFormulae() {
    bool okay = false;
 
    int ndx = ibuFormulaComboBox->itemData(ibuFormulaComboBox->currentIndex()).toInt(&okay);
-   IbuMethods::ibuFormula = static_cast<IbuMethods::IbuType>(ndx);
+   IbuMethods::ibuFormula = static_cast<IbuMethods::IbuFormula>(ndx);
    ndx = colorFormulaComboBox->itemData(colorFormulaComboBox->currentIndex()).toInt(&okay);
    ColorMethods::colorFormula = static_cast<ColorMethods::ColorType>(ndx);
 
