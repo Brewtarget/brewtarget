@@ -17,12 +17,13 @@ happens, so I'm now setting it to a slightly arbitrary time early in the morning
 Minor bug fixes for the 4.0.3 release (ie bugs in 4.0.3 are fixed in this 4.0.4 release).
 
 ### New Features
-* None
+* Improve equality tests [824](https://github.com/Brewtarget/brewtarget/issues/824)
 
 ### Bug Fixes
 * Crash editing Target Boil Size [817](https://github.com/Brewtarget/brewtarget/issues/817)
 * Crash when exporting recipe [821](https://github.com/Brewtarget/brewtarget/issues/821)
 * Inventory not displaying (further fixes) [814](https://github.com/Brewtarget/brewtarget/issues/814)
+* Edit Boil and Edit Fermentation buttons not working [826](https://github.com/Brewtarget/brewtarget/issues/826)
 
 ### Release Timestamp
 Wed, 28 Aug 2024 04:00:04 +0100
