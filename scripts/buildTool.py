@@ -910,8 +910,8 @@ def installDependencies():
             #
             log.debug('Checking ' + packageToInstall)
             brewListResult = subprocess.run(['brew', 'list', packageToInstall],
-                                            stdout = DEVNULL,
-                                            stderr = DEVNULL,
+                                            stdout = subprocess.DEVNULL,
+                                            stderr = subprocess.DEVNULL,
                                             capture_output = False)
             if (brewListResult.returncode == 0):
                log.debug('Homebrew reports ' + packageToInstall + ' already installed')
