@@ -2873,7 +2873,7 @@ double Recipe::ibuFromHopAddition(RecipeAdditionHop const & hopAddition) {
    // Assume 100% utilization until further notice
    double hopUtilization = 1.0;
    // Assume 60 min boil until further notice
-   int boilTime_mins = 60;
+   double boilTime_mins = 60.0;
 
    // NOTE: we used to carefully calculate the average boil gravity and use it in the
    // IBU calculations. However, due to John Palmer
@@ -2896,7 +2896,7 @@ double Recipe::ibuFromHopAddition(RecipeAdditionHop const & hopAddition) {
       .hops_grams            = grams,
       .postBoilVolume_liters = this->pimpl->m_finalVolumeNoLosses_l,
       .wortGravity_sg        = m_og,
-      .boilTime_minutes      = static_cast<int>(boilTime_mins),  // Seems unlikely in reality that there would be fractions of a minute
+      .boilTime_minutes      = boilTime_mins,  // Seems unlikely in reality that there would be fractions of a minute
       .coolTime_minutes          = boil->coolTime_mins(),
       .kettleInternalDiameter_cm = equipment->kettleInternalDiameter_cm(),
       .kettleOpeningDiameter_cm  = equipment->kettleOpeningDiameter_cm (),
