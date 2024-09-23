@@ -59,6 +59,7 @@ AddPropertyName(boilId                 )
 AddPropertyName(boilVolume_l           )
 AddPropertyName(brewer                 )
 AddPropertyName(brewNotes              )
+AddPropertyName(calcsEnabled           )
 AddPropertyName(caloriesPer33cl        )
 AddPropertyName(caloriesPerLiter       )
 AddPropertyName(caloriesPerUs12oz      )
@@ -242,10 +243,14 @@ public:
     *         .:TBD:. This is stored as a double but the UI constrains it to an unsigned int.
     */
    Q_PROPERTY(double  tasteRating        READ tasteRating        WRITE setTasteRating      )
-   //! \brief The number of days to age the beer after bottling.
-   Q_PROPERTY(double  age_days           READ age_days           WRITE setAge_days         )
-   //! \brief The temp in C as beer is aging after bottling.
-   Q_PROPERTY(double  ageTemp_c          READ ageTemp_c          WRITE setAgeTemp_c        )
+   /**
+    * \brief The number of days to age the beer after bottling.  This is an optional field in BeerXML, but is not
+    *        directly part of BeerJSON. .:TBD:. We should probably map this and ageTemp_c to the BeerJSON equivalent --
+    *        just as soon as we work out what that is!
+    */
+   Q_PROPERTY(std::optional<double> age_days           READ age_days           WRITE setAge_days         )
+   //! \brief The temp in C as beer is ageing after bottling.
+   Q_PROPERTY(std::optional<double> ageTemp_c          READ ageTemp_c          WRITE setAgeTemp_c        )
    /**
     * \brief In BeerXML, a recipe has a date which is supposed to be when it was brewed.  This is slightly meaningless
     *        unless you take it to mean "first brewed".  We then take that to be the "created" date in BeerJSON and our
@@ -277,6 +282,16 @@ public:
    Q_PROPERTY(double  kegPrimingFactor   READ kegPrimingFactor   WRITE setKegPrimingFactor )
    //! \brief Whether the recipe is locked against changes
    Q_PROPERTY(bool    locked             READ locked             WRITE setLocked           )
+
+   /**
+    * \brief Whether calculations are enabled.  By default, all the automatic calculations are enabled.  However, it is
+    *        helpful to be able to disable them when we are reading a recipe in from serialisation, otherwise, we can
+    *        end up trying to calculate things before we've finished reading in data (eg for fermentable additions).
+    *
+    *        TBD: Should perhaps move this up to \c NamedEntity.
+    */
+   Q_PROPERTY(bool calcsEnabled   READ calcsEnabled   WRITE setCalcsEnabled   STORED false)
+
    // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
    //! \brief The final beer pH at the end of fermentation.
    Q_PROPERTY(std::optional<double> beerAcidity_pH               READ beerAcidity_pH                WRITE setBeerAcidity_pH)
@@ -504,8 +519,8 @@ public:
    double  secondaryTemp_c   () const;
    double  tertiaryAge_days  () const;
    double  tertiaryTemp_c    () const;
-   double  age_days          () const;
-   double  ageTemp_c         () const;
+   std::optional<double>  age_days          () const;
+   std::optional<double>  ageTemp_c         () const;
    std::optional<QDate>   date              () const;
    std::optional<double>  carbonation_vols  () const;
    bool    forcedCarbonation () const;
@@ -514,6 +529,7 @@ public:
    double  primingSugarEquiv () const;
    double  kegPrimingFactor  () const;
    bool    locked            () const;
+   bool    calcsEnabled      () const;
    // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
    std::optional<double> beerAcidity_pH()          const;
    std::optional<double> apparentAttenuation_pct() const;
@@ -661,8 +677,8 @@ public:
    void setOg                (double  const   val);
    void setFg                (double  const   val);
    void setFermentationStages(int     const   val);
-   void setAge_days          (double  const   val);
-   void setAgeTemp_c         (double  const   val);
+   void setAge_days          (std::optional<double>  const   val);
+   void setAgeTemp_c         (std::optional<double>  const   val);
    void setDate              (std::optional<QDate>   const   val);
    void setCarbonation_vols  (std::optional<double>  const   val);
    void setForcedCarbonation (bool    const   val);
@@ -671,6 +687,7 @@ public:
    void setPrimingSugarEquiv (double  const   val);
    void setKegPrimingFactor  (double  const   val);
    void setLocked            (bool    const   val);
+   void setCalcsEnabled      (bool    const   val);
    void setHasDescendants    (bool    const   val);
    // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
    void setBeerAcidity_pH         (std::optional<double> const val);
@@ -709,8 +726,8 @@ private:
    double                m_batchSize_l            ;
    double                m_efficiency_pct         ;
    int                   m_fermentationStages     ;
-   double                m_age                    ;
-   double                m_ageTemp_c              ;
+   std::optional<double> m_age_days               ;
+   std::optional<double> m_ageTemp_c              ;
    std::optional<QDate>  m_date                   ;
    std::optional<double> m_carbonation_vols       ;
    bool                  m_forcedCarbonation      ;
@@ -735,7 +752,8 @@ private:
    double        m_og            ;
    double        m_fg            ;
 
-   bool          m_locked;
+   bool          m_locked      ;
+   bool          m_calcsEnabled;
 
    // True when constructed, indicates whether recalcAll has been called.
    bool                    m_uninitializedCalcs     ;

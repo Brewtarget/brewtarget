@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * database/DbTransaction.h is part of Brewtarget, and is copyright the following authors 2021:
+ * database/DbTransaction.h is part of Brewtarget, and is copyright the following authors 2021-2024:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -34,7 +34,10 @@ public:
    /**
     * \brief Constructing a \c DbTransaction will start a DB transaction
     */
-   DbTransaction(Database & database, QSqlDatabase & connection, SpecialBehaviours specialBehaviours = NONE);
+   DbTransaction(Database & database,
+                 QSqlDatabase & connection,
+                 QString const nameForLogging = "???",
+                 SpecialBehaviours specialBehaviours = NONE);
 
    /**
     * \brief When a \c DbTransaction goes out of scope and its destructor is called, the transaction started in the
@@ -53,6 +56,9 @@ private:
    Database & database;
    // This is intended to be a short-lived object, so it's OK to store a reference to a QSqlDatabase object
    QSqlDatabase & connection;
+   // This is useful for diagnosing problems such as
+   // 'Unable to start database transaction: "cannot start a transaction within a transaction Unable to begin transaction"'
+   QString const nameForLogging;
    bool committed;
    int specialBehaviours;
 

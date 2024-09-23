@@ -17,7 +17,7 @@
 
 
 SerializationRecord::SerializationRecord() :
-   m_namedParameterBundle{NamedParameterBundle::NotStrict},
+   m_namedParameterBundle{NamedParameterBundle::OperationMode::NotStrict},
    m_namedEntity{nullptr},
    m_includeInStats{true} {
    return;

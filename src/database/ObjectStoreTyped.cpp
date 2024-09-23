@@ -1041,7 +1041,7 @@ bool WriteAllObjectStoresToNewDb(Database & newDatabase, QSqlDatabase & connecti
    // having called dbTransaction.commit().  (It will also turn foreign keys back on either way -- whether the
    // transaction is committed or rolled back.)
    //
-   DbTransaction dbTransaction{newDatabase, connectionNew, DbTransaction::DISABLE_FOREIGN_KEYS};
+   DbTransaction dbTransaction{newDatabase, connectionNew, "Write All", DbTransaction::DISABLE_FOREIGN_KEYS};
 
    for (ObjectStore const * objectStore : getAllObjectStores()) {
       if (!objectStore->writeAllToNewDb(newDatabase, connectionNew)) {

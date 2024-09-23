@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * database/DbTransaction.cpp is part of Brewtarget, and is copyright the following authors 2021-2022:
+ * database/DbTransaction.cpp is part of Brewtarget, and is copyright the following authors 2021-2024:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -19,11 +19,15 @@
 #include <QSqlError>
 
 #include "database/Database.h"
+#include "Logging.h"
 
-
-DbTransaction::DbTransaction(Database & database, QSqlDatabase & connection, DbTransaction::SpecialBehaviours specialBehaviours) :
+DbTransaction::DbTransaction(Database & database,
+                             QSqlDatabase & connection,
+                             QString const nameForLogging,
+                             DbTransaction::SpecialBehaviours specialBehaviours) :
    database{database},
    connection{connection},
+   nameForLogging{nameForLogging},
    committed{false},
    specialBehaviours{specialBehaviours} {
    // Note that, on SQLite at least, turning foreign keys on and off has to happen outside a transaction, so we have to
@@ -33,9 +37,12 @@ DbTransaction::DbTransaction(Database & database, QSqlDatabase & connection, DbT
    }
 
    bool succeeded = this->connection.transaction();
-   qDebug() << Q_FUNC_INFO << "Database transaction begin: " << (succeeded ? "succeeded" : "failed");
+   qDebug() <<
+      Q_FUNC_INFO << "Database transaction" << this->nameForLogging << "begin: " << (succeeded ? "succeeded" : "failed");
    if (!succeeded) {
-      qCritical() << Q_FUNC_INFO << "Unable to start database transaction:" << connection.lastError().text();
+      qCritical() <<
+         Q_FUNC_INFO << "Unable to start database transaction" << this->nameForLogging << ":" << connection.lastError().text();
+      qCritical().noquote() << Q_FUNC_INFO << Logging::getStackTrace();
    }
    return;
 }
@@ -44,9 +51,11 @@ DbTransaction::~DbTransaction() {
    qDebug() << Q_FUNC_INFO;
    if (!committed) {
       bool succeeded = this->connection.rollback();
-      qDebug() << Q_FUNC_INFO << "Database transaction rollback: " << (succeeded ? "succeeded" : "failed");
+      qDebug() <<
+         Q_FUNC_INFO << "Database transaction" << this->nameForLogging << "rollback: " << (succeeded ? "succeeded" : "failed");
       if (!succeeded) {
-         qCritical() << Q_FUNC_INFO << "Unable to rollback database transaction:" << connection.lastError().text();
+         qCritical() <<
+            Q_FUNC_INFO << "Unable to rollback database transaction" << this->nameForLogging << ":" << connection.lastError().text();
       }
    }
 
@@ -59,9 +68,11 @@ DbTransaction::~DbTransaction() {
 
 bool DbTransaction::commit() {
    this->committed = connection.commit();
-   qDebug() << Q_FUNC_INFO << "Database transaction commit: " << (this->committed ? "succeeded" : "failed");
+   qDebug() <<
+      Q_FUNC_INFO << "Database transaction" << this->nameForLogging << "commit: " << (this->committed ? "succeeded" : "failed");
    if (!this->committed) {
-      qCritical() << Q_FUNC_INFO << "Unable to commit database transaction:" << connection.lastError().text();
+      qCritical() <<
+         Q_FUNC_INFO << "Unable to commit database transaction" << this->nameForLogging << ":" << connection.lastError().text();
    }
    return this->committed;
 }

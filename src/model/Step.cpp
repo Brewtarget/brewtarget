@@ -96,19 +96,28 @@ Step::Step(QString name) :
 Step::Step(NamedParameterBundle const & namedParameterBundle) :
    NamedEntity      (namedParameterBundle                                                             ),
    SET_REGULAR_FROM_NPB (m_stepTime_mins  , namedParameterBundle, PropertyNames::Step::stepTime_mins  ),
-   SET_REGULAR_FROM_NPB (m_startTemp_c    , namedParameterBundle, PropertyNames::Step::startTemp_c    ),
-   SET_REGULAR_FROM_NPB (m_endTemp_c      , namedParameterBundle, PropertyNames::Step::  endTemp_c    ),
-   SET_REGULAR_FROM_NPB (m_stepNumber     , namedParameterBundle, PropertyNames::Step::stepNumber     ),
-   SET_REGULAR_FROM_NPB (m_ownerId        , namedParameterBundle, PropertyNames::Step::ownerId        ),
+   SET_REGULAR_FROM_NPB (m_startTemp_c    , namedParameterBundle, PropertyNames::Step::startTemp_c    , std::nullopt),
+   SET_REGULAR_FROM_NPB (m_endTemp_c      , namedParameterBundle, PropertyNames::Step::  endTemp_c    , std::nullopt),
+   SET_REGULAR_FROM_NPB (m_stepNumber     , namedParameterBundle, PropertyNames::Step::stepNumber     , 0),
+   SET_REGULAR_FROM_NPB (m_ownerId        , namedParameterBundle, PropertyNames::Step::ownerId        , -1),
    // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
-   SET_REGULAR_FROM_NPB (m_description    , namedParameterBundle, PropertyNames::Step::description    ),
-   // rampTime_mins needs a default value because it might not be used -- see below
+   SET_REGULAR_FROM_NPB (m_description    , namedParameterBundle, PropertyNames::Step::description    , ""),
    SET_REGULAR_FROM_NPB (m_rampTime_mins  , namedParameterBundle, PropertyNames::Step::rampTime_mins  , std::nullopt),
-   SET_REGULAR_FROM_NPB (m_startAcidity_pH, namedParameterBundle, PropertyNames::Step::startAcidity_pH),
-   SET_REGULAR_FROM_NPB (m_endAcidity_pH  , namedParameterBundle, PropertyNames::Step::  endAcidity_pH) {
+   SET_REGULAR_FROM_NPB (m_startAcidity_pH, namedParameterBundle, PropertyNames::Step::startAcidity_pH, std::nullopt),
+   SET_REGULAR_FROM_NPB (m_endAcidity_pH  , namedParameterBundle, PropertyNames::Step::  endAcidity_pH, std::nullopt) {
    // It would be nice to be able to assert here that rampTime_mins is present in the bundle only if the subclass
    // supports it.  However, we cannot safely call a virtual member function from a base class constructor, so we have
    // to do such asserts in the derived classes.
+
+   qDebug().noquote() << Q_FUNC_INFO << namedParameterBundle;
+
+   // If we're being constructed from a BeerXML file, we use the property stepTime_days for RECIPE > PRIMARY_AGE etc
+   if (namedParameterBundle.contains(PropertyNames::Step::stepTime_days)) {
+      SET_REGULAR_FROM_NPB_NO_MV(Step::setStepTime_days, namedParameterBundle, PropertyNames::Step::stepTime_days);
+   }
+
+   qDebug().noquote() << Q_FUNC_INFO << "m_stepTime_mins" << this->m_stepTime_mins;
+
    return;
 }
 

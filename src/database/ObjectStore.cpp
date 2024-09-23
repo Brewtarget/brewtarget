@@ -1409,7 +1409,9 @@ void ObjectStore::loadAll(Database * database) {
    //
    // .:TBD:. In theory we don't need a transaction if we're _only_ reading data...
    QSqlDatabase connection = this->pimpl->database->sqlDatabase();
-   DbTransaction dbTransaction{*this->pimpl->database, connection};
+   DbTransaction dbTransaction{*this->pimpl->database,
+                               connection,
+                               QString("Load All %1").arg(*this->pimpl->primaryTable.tableName)};
 
    //
    // Using QSqlTableModel would save us having to write a SELECT statement, however it is a bit hard to use it to
@@ -1710,7 +1712,9 @@ int ObjectStore::insert(std::shared_ptr<QObject> object) {
    // Start transaction
    // (By the magic of RAII, this will abort if we return from this function without calling dbTransaction.commit()
    QSqlDatabase connection = this->pimpl->database->sqlDatabase();
-   DbTransaction dbTransaction{*this->pimpl->database, connection};
+   DbTransaction dbTransaction{*this->pimpl->database,
+                               connection,
+                               QString("Insert %1").arg(*this->pimpl->primaryTable.tableName)};
 
    int primaryKey = this->pimpl->insertObjectInDb(connection, *object, false);
 
@@ -1749,7 +1753,9 @@ void ObjectStore::update(std::shared_ptr<QObject> object) {
    // Start transaction
    // (By the magic of RAII, this will abort if we return from this function without calling dbTransaction.commit()
    QSqlDatabase connection = this->pimpl->database->sqlDatabase();
-   DbTransaction dbTransaction{*this->pimpl->database, connection};
+   DbTransaction dbTransaction{*this->pimpl->database,
+                               connection,
+                               QString("Update %1").arg(*this->pimpl->primaryTable.tableName)};
 
    //
    // Construct the SQL, which will be of the form
@@ -1875,7 +1881,11 @@ void ObjectStore::updateProperty(QObject const & object, BtStringConst const & p
    // Start transaction
    // (By the magic of RAII, this will abort if we return from this function without calling dbTransaction.commit()
    QSqlDatabase connection = this->pimpl->database->sqlDatabase();
-   DbTransaction dbTransaction{*this->pimpl->database, connection};
+   DbTransaction dbTransaction{
+      *this->pimpl->database,
+      connection,
+      QString("Update property %1 on %2").arg(*propertyName).arg(*this->pimpl->primaryTable.tableName)
+   };
 
    if (!this->pimpl->updatePropertyInDb(connection, object, propertyName)) {
       // Something went wrong.  Bailing out here will abort the transaction and avoid sending the signal.
@@ -1918,7 +1928,9 @@ std::shared_ptr<QObject> ObjectStore::defaultHardDelete(int id) {
    qDebug() << Q_FUNC_INFO << "Hard delete" << this->pimpl->m_className << "#" << id;
    auto object = this->pimpl->allObjects.value(id);
    QSqlDatabase connection = this->pimpl->database->sqlDatabase();
-   DbTransaction dbTransaction{*this->pimpl->database, connection};
+   DbTransaction dbTransaction{*this->pimpl->database,
+                               connection,
+                               QString("Hard delete %1").arg(*this->pimpl->primaryTable.tableName)};
 
    // We'll use this in a couple of places below
    QVariant primaryKey{id};

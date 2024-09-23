@@ -150,19 +150,19 @@ Style::Style(NamedParameterBundle const & namedParameterBundle) :
    SET_REGULAR_FROM_NPB (m_ibuMax           , namedParameterBundle, PropertyNames::Style::ibuMax           ),
    SET_REGULAR_FROM_NPB (m_colorMin_srm     , namedParameterBundle, PropertyNames::Style::colorMin_srm     ),
    SET_REGULAR_FROM_NPB (m_colorMax_srm     , namedParameterBundle, PropertyNames::Style::colorMax_srm     ),
-   SET_REGULAR_FROM_NPB (m_carbMin_vol      , namedParameterBundle, PropertyNames::Style::carbMin_vol      ),
-   SET_REGULAR_FROM_NPB (m_carbMax_vol      , namedParameterBundle, PropertyNames::Style::carbMax_vol      ),
-   SET_REGULAR_FROM_NPB (m_abvMin_pct       , namedParameterBundle, PropertyNames::Style::abvMin_pct       ),
-   SET_REGULAR_FROM_NPB (m_abvMax_pct       , namedParameterBundle, PropertyNames::Style::abvMax_pct       ),
+   SET_REGULAR_FROM_NPB (m_carbMin_vol      , namedParameterBundle, PropertyNames::Style::carbMin_vol      , std::nullopt),
+   SET_REGULAR_FROM_NPB (m_carbMax_vol      , namedParameterBundle, PropertyNames::Style::carbMax_vol      , std::nullopt),
+   SET_REGULAR_FROM_NPB (m_abvMin_pct       , namedParameterBundle, PropertyNames::Style::abvMin_pct       , std::nullopt),
+   SET_REGULAR_FROM_NPB (m_abvMax_pct       , namedParameterBundle, PropertyNames::Style::abvMax_pct       , std::nullopt),
    SET_REGULAR_FROM_NPB (m_notes            , namedParameterBundle, PropertyNames::Style::notes            ),
    SET_REGULAR_FROM_NPB (m_ingredients      , namedParameterBundle, PropertyNames::Style::ingredients      ),
    SET_REGULAR_FROM_NPB (m_examples         , namedParameterBundle, PropertyNames::Style::examples         ),
    // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
-   SET_REGULAR_FROM_NPB (m_aroma            , namedParameterBundle, PropertyNames::Style::aroma            ),
-   SET_REGULAR_FROM_NPB (m_appearance       , namedParameterBundle, PropertyNames::Style::appearance       ),
-   SET_REGULAR_FROM_NPB (m_flavor           , namedParameterBundle, PropertyNames::Style::flavor           ),
-   SET_REGULAR_FROM_NPB (m_mouthfeel        , namedParameterBundle, PropertyNames::Style::mouthfeel        ),
-   SET_REGULAR_FROM_NPB (m_overallImpression, namedParameterBundle, PropertyNames::Style::overallImpression) {
+   SET_REGULAR_FROM_NPB (m_aroma            , namedParameterBundle, PropertyNames::Style::aroma            , ""),
+   SET_REGULAR_FROM_NPB (m_appearance       , namedParameterBundle, PropertyNames::Style::appearance       , ""),
+   SET_REGULAR_FROM_NPB (m_flavor           , namedParameterBundle, PropertyNames::Style::flavor           , ""),
+   SET_REGULAR_FROM_NPB (m_mouthfeel        , namedParameterBundle, PropertyNames::Style::mouthfeel        , ""),
+   SET_REGULAR_FROM_NPB (m_overallImpression, namedParameterBundle, PropertyNames::Style::overallImpression, "") {
    return;
 }
 

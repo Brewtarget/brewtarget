@@ -2302,7 +2302,7 @@ bool DatabaseSchemaHelper::migrate(Database & database, int oldVersion, int newV
    // By the magic of RAII, this will abort if we exit this function (including by throwing an exception) without
    // having called dbTransaction.commit().  (It will also turn foreign keys back on either way -- whether the
    // transaction is committed or rolled back.)
-   DbTransaction dbTransaction{database, connection, DbTransaction::DISABLE_FOREIGN_KEYS};
+   DbTransaction dbTransaction{database, connection, "Migrate", DbTransaction::DISABLE_FOREIGN_KEYS};
 
    for ( ; oldVersion < newVersion && ret; ++oldVersion ) {
       ret &= migrateNext(database, oldVersion, connection);

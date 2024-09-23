@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/NamedParameterBundle.cpp is part of Brewtarget, and is copyright the following authors 2021-2023:
+ * model/NamedParameterBundle.cpp is part of Brewtarget, and is copyright the following authors 2021-2024:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -47,14 +47,20 @@ void NamedParameterBundle::insert(PropertyPath const & propertyPath, QVariant co
    for (auto const property : properties) {
       if (property == properties.last()) {
          bundle->insert(*property, value);
+      } else {
+         bool const newBundle { !bundle->m_containedBundles.contains(**property) };
+         // Here, operator[]() silently inserts an item into bundle->m_containedBundles if no item exists with the same
+         // key, which is exactly the behaviour we want, and hence why we don't explicitly need to call insert elsewhere
+         // on this member variable.
+         //
+         // Note that property is pointer to BtStringConst, so we need one '*' to dereference it and another to extract the
+         // wrapped string.
+         bundle = &bundle->m_containedBundles[**property];
+         if (newBundle) {
+            // If we just created a new bundle, ensure it inherits the top level mode.
+            bundle->m_mode = this->m_mode;
+         }
       }
-      // Here, operator[]() silently inserts an item into bundle->m_containedBundles if no item exists with the same
-      // key, which is exactly the behaviour we want, and hence why we don't explicitly need to call insert elsewhere on
-      // this member variable.
-      //
-      // Note that property is pointer to BtStringConst, so we need one '*' to dereference it and another to extract the
-      // wrapped string.
-      bundle = &bundle->m_containedBundles[**property];
    }
    return;
 }
@@ -78,6 +84,18 @@ bool NamedParameterBundle::contains(PropertyPath const & propertyPath) const {
    // This should actually be unreachable
    return false;
 }
+
+template<typename P>
+void NamedParameterBundle::insertIfNotPresent(P const & propertyNameOrPath, QVariant const & value) {
+   if (!this->contains(propertyNameOrPath)) {
+      this->insert(propertyNameOrPath, value);
+   }
+   return;
+}
+
+// Instantiate the above template for the two types we care about
+template<> void NamedParameterBundle::insertIfNotPresent(BtStringConst const & propertyName, QVariant const & value);
+template<> void NamedParameterBundle::insertIfNotPresent(PropertyPath  const & propertyPath, QVariant const & value);
 
 std::size_t NamedParameterBundle::size() const noexcept {
    //
@@ -106,7 +124,7 @@ QVariant NamedParameterBundle::get(BtStringConst const & propertyName) const {
          errorMessageAsStream << key;
       }
       errorMessageAsStream << ")";
-      if (this->m_mode == NamedParameterBundle::Strict) {
+      if (this->m_mode == NamedParameterBundle::OperationMode::Strict) {
          //
          // We want to throw an exception here because it's a lot less code than checking a return value on every call
          // and, usually, missing required parameter is a coding error.
@@ -148,23 +166,33 @@ NamedParameterBundle const & NamedParameterBundle::getBundle(BtStringConst const
 }
 
 
-template<class S>
-S & operator<<(S & stream, NamedParameterBundle const & namedParameterBundle);
+///template<class S>
+///S & operator<<(S & stream, NamedParameterBundle const & namedParameterBundle);
+///
+///template<class S>
+///S & operator<<(S & stream, NamedParameterBundle const * namedParameterBundle);
 
 template<class S>
-S & operator<<(S & stream, NamedParameterBundle const * namedParameterBundle);
+S & NamedParameterBundle::writeToStream(S & stream, QString const indent) const {
+   stream << indent << this->size() << "element NamedParameterBundle @" <<
+   static_cast<void const *>(this) << " {\n";
+   QString const newIndent{QString("   %1").arg(indent)};
+   for (auto const & [key, value] : this->m_parameters) {
+      stream << newIndent << key << "->" << value.typeName() << ":" << value.toString() << "\n";
+   }
+
+   for (auto const & [bundleName, bundle] : this->m_containedBundles) {
+      stream << newIndent << bundleName << "->\n";
+      bundle.writeToStream(stream, newIndent);
+   }
+
+   stream << indent << "}\n";
+   return stream;
+}
 
 template<class S>
 S & operator<<(S & stream, NamedParameterBundle const & namedParameterBundle) {
-   stream << namedParameterBundle.size() << "element NamedParameterBundle @" <<
-   static_cast<void const *>(&namedParameterBundle) << " {";
-
-   for (auto const & [key, value] : namedParameterBundle.m_parameters) {
-      stream << key << "->" << value.typeName() << ":" << value.toString() << " ";
-   }
-
-   stream << "}";
-   return stream;
+   return namedParameterBundle.writeToStream(stream, "");
 }
 
 template<class S>

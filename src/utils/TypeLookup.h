@@ -293,6 +293,21 @@ template<auto MembFnPtr> using MemberFunctionReturnType_t = typename MemberFunct
 //! @}
 
 /**
+ * \brief Using the same trick as \c MemberFunctionReturnType_t, we can, with a bit of extra work, also get the type of
+ *        the first parameter to a member function.
+ */
+//! @{
+template<typename First, typename...> struct FirstTypeInPack {
+   using type = First;
+};
+template<typename MembFnPtr> struct MemberFunctionFirstParamType;
+template<typename Ret, class Obj, typename... Args> struct MemberFunctionFirstParamType<Ret (Obj::*)(Args...)> {
+   using type = typename FirstTypeInPack<Args...>::type;
+};
+template<auto MembFnPtr> using MemberFunctionFirstParamType_t = typename MemberFunctionFirstParamType<decltype(MembFnPtr)>::type;
+//! @}
+
+/**
  * \brief Similar to \c PROPERTY_TYPE_LOOKUP_ENTRY but used when we do not have a member variable and instead must use
  *        the return value of a getter member function.  This is usually when we have some combo getters/setters that
  *        exist primarily for the benefit of BeerJSON.  Eg, The \c Fermentable::betaGlucanWithUnits member function
@@ -302,6 +317,9 @@ template<auto MembFnPtr> using MemberFunctionReturnType_t = typename MemberFunct
  *
  *           PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Fermentable::betaGlucanWithUnits, Fermentable::betaGlucanWithUnits, Measurement::PqEitherMassOrVolumeConcentration),
  *
+ *        It would be neat to include the following in the macro:
+ *           static_assert(std::is_member_function_pointer_v<decltype(&getterMemberFunction)>)
+ *        However, because the macro is designed to be used inside an initialiser list, we can't.
  */
 #define PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(propNameConstVar, getterMemberFunction, ...) \
    {&propNameConstVar, TypeInfo::construct<MemberFunctionReturnType_t<&getterMemberFunction>>(propNameConstVar, TypeLookupOf<MemberFunctionReturnType_t<&getterMemberFunction>>::value __VA_OPT__ (, __VA_ARGS__))}

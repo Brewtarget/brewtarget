@@ -77,8 +77,6 @@ XmlRecord::~XmlRecord() = default;
 bool XmlRecord::load(xalanc::DOMSupport & domSupport,
                      xalanc::XalanNode * rootNodeOfRecord,
                      QTextStream & userMessage) {
-   qDebug() << Q_FUNC_INFO;
-
    xalanc::XPathEvaluator xPathEvaluator;
    //
    // Loop through all the fields that we know/care about.  Anything else is intentionally ignored.  (We won't know
@@ -140,7 +138,8 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
          }
       }
       auto numChildNodes = nodesForCurrentXPath.size();
-      qDebug() << Q_FUNC_INFO << "Found" << numChildNodes << "node(s) for " << fieldDefinition.xPath;
+      // Normally keep this log statement commented out otherwise it generates too many lines in the log file
+//      qDebug() << Q_FUNC_INFO << "Found" << numChildNodes << "node(s) for " << fieldDefinition.xPath;
       if (XmlRecordDefinition::FieldType::Record        == fieldDefinition.type ||
           XmlRecordDefinition::FieldType::ListOfRecords == fieldDefinition.type) {
          //
@@ -178,12 +177,14 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
          XQString fieldName{fieldContainerNode->getNodeName()};
          xalanc::XalanNodeList const * fieldContents = fieldContainerNode->getChildNodes();
          int numChildrenOfContainerNode = fieldContents->getLength();
+         // Normally keep this log statement commented out otherwise it generates too many lines in the log file
          qDebug() <<
             Q_FUNC_INFO << "Node " << fieldDefinition.xPath << "(" << fieldName << ":" <<
             XALAN_NODE_TYPES[fieldContainerNode->getNodeType()] << ") has " <<
             numChildrenOfContainerNode << " children";
          if (0 == numChildrenOfContainerNode) {
-            qDebug() << Q_FUNC_INFO << "Empty!";
+            // Normally keep this log statement commented out otherwise it generates too many lines in the log file
+//            qDebug() << Q_FUNC_INFO << "Empty!";
          } else {
             {
                //
@@ -198,7 +199,8 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
                }
                xalanc::XalanNode * valueNode = fieldContents->item(0);
                XQString value(valueNode->getNodeValue());
-               qDebug() << Q_FUNC_INFO << "Value " << value;
+               // Normally keep this log statement commented out otherwise it generates too many lines in the log file
+//               qDebug() << Q_FUNC_INFO << "Value " << value;
 
                bool parsedValueOk = false;
                QVariant parsedValue;
@@ -233,6 +235,9 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
                      false :
                      fieldDefinition.propertyPath.getTypeInfo(*this->m_recordDefinition.m_typeLookup).isOptional()
                };
+
+               // Normally keep this log statement commented out otherwise it generates too many lines in the log file
+               qDebug() << Q_FUNC_INFO << "Value " << value << "; optional=" << (propertyIsOptional ? "true" : "false");
 
                switch (fieldDefinition.type) {
 
@@ -439,10 +444,11 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
                      // out), we can't carry on to normal processing below.  So jump straight to processing the next
                      // node in the loop (via continue).
                      //
-                     qDebug() <<
-                        Q_FUNC_INFO << "Skipping " << this->m_recordDefinition.m_namedEntityClassName << " node " <<
-                        fieldDefinition.xPath << "=" << value << "(" << fieldDefinition.propertyPath.asXPath() <<
-                        ") as not useful";
+                     // Normally keep this log statement commented out otherwise it generates too many lines in the log file
+//                     qDebug() <<
+//                        Q_FUNC_INFO << "Skipping " << this->m_recordDefinition.m_namedEntityClassName << " node " <<
+//                        fieldDefinition.xPath << "=" << value << "(" << fieldDefinition.propertyPath.asXPath() <<
+//                        ") as not useful";
                      continue; // NB: _NOT_break here.  We want to jump straight to the next run through the for loop.
 
                   // By default we assume it's a string
@@ -464,6 +470,11 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
                      break;
                }
 
+               // Normally keep this log statement commented out otherwise it generates too many lines in the log file
+               qDebug() <<
+                  Q_FUNC_INFO << "parsedValue:" << parsedValue << "; parsedValueOk:" << parsedValueOk <<
+                  "; fieldDefinition.propertyPath:" << fieldDefinition.propertyPath;
+
                //
                // What we do if we couldn't parse the value depends.  If it was a value that we didn't need to set on
                // the supplied Hop/Yeast/Recipe/Etc object, then we can just ignore the problem and carry on processing.
@@ -472,8 +483,8 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
                //
                if (!parsedValueOk && !fieldDefinition.propertyPath.isNull()) {
                   userMessage <<
-                     "Could not parse " << this->m_recordDefinition.m_namedEntityClassName << " node " << fieldDefinition.xPath << "=" <<
-                     value << " into " << fieldDefinition.propertyPath.asXPath();
+                     "Could not parse " << this->m_recordDefinition.m_namedEntityClassName << " node " <<
+                     fieldDefinition.xPath << "=" << value << " into " << fieldDefinition.propertyPath.asXPath();
                   return false;
                }
 
@@ -494,7 +505,17 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
    // For everything but the root record, we now construct a suitable object (Hop, Recipe, etc) from the
    // NamedParameterBundle (which will be empty for the root record).
    //
+   // Note that this will not construct sub-objects for non-trivial property paths in m_namedParameterBundle (eg
+   // {PropertyNames::Recipe::boil, PropertyNames::Boil::boilTime_mins}).  This is handled in subclass implementation of
+   // normaliseAndStoreInDb, eg XmlRecipeRecord::normaliseAndStoreInDb, (and is part of why we retain
+   // m_namedParameterBundle).
+   //
    if (!this->m_namedParameterBundle.isEmpty()) {
+      // Normally keep this log statement commented out otherwise it generates too many lines in the log file
+      qDebug() <<
+         Q_FUNC_INFO << "Constructing " << this->m_recordDefinition.m_namedEntityClassName << " from " <<
+         this->m_namedParameterBundle;
+
       this->constructNamedEntity();
    }
 
@@ -771,8 +792,8 @@ bool XmlRecord::normaliseAndStoreChildRecordsInDb(QTextStream & userMessage,
    auto constructorWrapper = childRecordDefinition.xmlRecordConstructorWrapper;
    this->m_childRecordSets.push_back(XmlRecord::ChildRecordSet{&parentFieldDefinition, {}});
    qDebug() <<
-      Q_FUNC_INFO << "this->m_childRecordSets for" << this->m_recordDefinition << "has" <<
-      this->m_childRecordSets.size() << "entries";
+      Q_FUNC_INFO << "childRecordDefinition" << childRecordDefinition << ". m_childRecordSets for" <<
+      this->m_recordDefinition << "has" << this->m_childRecordSets.size() << "entries";
    XmlRecord::ChildRecordSet & childRecordSet = this->m_childRecordSets.back();
    for (xalanc::XalanNode * childRecordNode : nodesForCurrentXPath) {
       //
@@ -792,7 +813,8 @@ bool XmlRecord::normaliseAndStoreChildRecordsInDb(QTextStream & userMessage,
       // Requesting the HOPS/HOP subpath of RECIPE will not return FOO or BAR
       //
       XQString childRecordName{childRecordNode->getNodeName()};
-      qDebug() << Q_FUNC_INFO << childRecordName;
+      // Normally keep this log statement commented out otherwise it generates too many lines in the log file
+//      qDebug() << Q_FUNC_INFO << childRecordName;
 
       std::unique_ptr<XmlRecord> childRecord{
          constructorWrapper(this->m_coding, childRecordDefinition)

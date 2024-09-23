@@ -45,7 +45,8 @@ IngredientInRecipe::IngredientInRecipe(QString name, int const recipeId, int con
 
 IngredientInRecipe::IngredientInRecipe(NamedParameterBundle const & namedParameterBundle) :
    OwnedByRecipe{namedParameterBundle},
-   SET_REGULAR_FROM_NPB(m_ingredientId, namedParameterBundle, PropertyNames::IngredientInRecipe::ingredientId) {
+   // Although ingredientId is required, we have to supply a default value for when we are reading from BeerXML or BeerJSON
+   SET_REGULAR_FROM_NPB(m_ingredientId, namedParameterBundle, PropertyNames::IngredientInRecipe::ingredientId, -1) {
    return;
 }
 
