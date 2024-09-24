@@ -56,18 +56,24 @@ TypeLookup const Inventory::typeLookup {
 Inventory::Inventory() :
    NamedEntity{""},
    m_ingredientId{-1} {
+
+   CONSTRUCTOR_END
    return;
 }
 
 Inventory::Inventory(NamedParameterBundle const & namedParameterBundle) :
    NamedEntity{namedParameterBundle},
    SET_REGULAR_FROM_NPB (m_ingredientId, namedParameterBundle, PropertyNames::Inventory::ingredientId) {
+
+   CONSTRUCTOR_END
    return;
 }
 
 Inventory::Inventory(Inventory const & other) :
    NamedEntity   {other               },
    m_ingredientId{other.m_ingredientId} {
+
+   CONSTRUCTOR_END
    return;
 }
 

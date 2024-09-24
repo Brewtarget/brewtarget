@@ -69,6 +69,8 @@ NamedEntity::NamedEntity(QString t_name, bool t_display) :
    m_display      {t_display},
    m_deleted      {false    },
    m_beingModified{false    } {
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -94,6 +96,8 @@ NamedEntity::NamedEntity(NamedParameterBundle const & namedParameterBundle) :
    SET_REGULAR_FROM_NPB (m_display, namedParameterBundle, PropertyNames::NamedEntity::display,   true     ),
    SET_REGULAR_FROM_NPB (m_deleted, namedParameterBundle, PropertyNames::NamedEntity::deleted,   false    ),
    m_beingModified{false} {
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -108,6 +112,8 @@ NamedEntity::NamedEntity(NamedEntity const & other) :
    m_display      {other.m_display},
    m_deleted      {other.m_deleted},
    m_beingModified{false} {
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -454,6 +460,11 @@ void NamedEntity::prepareForPropertyChange(BtStringConst const & propertyName) {
 }
 
 void NamedEntity::propagatePropertyChange(BtStringConst const & propertyName, bool notify) const {
+   if (!this->m_propagationAndSignalsEnabled) {
+      qDebug() << Q_FUNC_INFO << "m_propagationAndSignalsEnabled unset";
+      return;
+   }
+
    // If we're already stored in the object store, tell it about the property change so that it can write it to the
    // database.  (We don't pass the new value as it will get read out of the object via propertyName.)
    if (this->m_key > 0) {

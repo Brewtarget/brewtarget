@@ -32,18 +32,24 @@ TypeLookup const OutlineableNamedEntity::typeLookup {
 OutlineableNamedEntity::OutlineableNamedEntity(QString name) :
    NamedEntity{name, true},
    m_outline{false} {
+
+   CONSTRUCTOR_END
    return;
 }
 
 OutlineableNamedEntity::OutlineableNamedEntity(NamedParameterBundle const & namedParameterBundle) :
    NamedEntity{namedParameterBundle},
    SET_REGULAR_FROM_NPB(m_outline, namedParameterBundle, PropertyNames::OutlineableNamedEntity::outline, false) {
+
+   CONSTRUCTOR_END
    return;
 }
 
 OutlineableNamedEntity::OutlineableNamedEntity(OutlineableNamedEntity const & other) :
    NamedEntity{other},
    m_outline{other.m_outline} {
+
+   CONSTRUCTOR_END
    return;
 }
 

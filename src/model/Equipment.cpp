@@ -135,7 +135,7 @@ Equipment::Equipment(QString name) :
    m_kettleEvaporationPerHour_l {std::nullopt}, // Previously 4.0
    m_boilTime_min               {std::nullopt}, // Previously 60.0
    m_calcBoilVolume             {true        },
-   m_lauterTunDeadspaceLoss_l      {0.0         },
+   m_lauterTunDeadspaceLoss_l   {0.0         },
    m_topUpKettle_l              {std::nullopt},
    m_hopUtilization_pct         {std::nullopt}, // Previously 100.0
    m_kettleNotes                {""          },
@@ -173,6 +173,8 @@ Equipment::Equipment(QString name) :
    m_fermenterNotes             {""          },
    m_agingVesselNotes           {""          },
    m_packagingVesselNotes       {""          } {
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -190,52 +192,54 @@ Equipment::Equipment(NamedParameterBundle const & namedParameterBundle) :
    SET_REGULAR_FROM_NPB (m_kettleBoilSize_l           , namedParameterBundle, PropertyNames::Equipment::kettleBoilSize_l           ),
    SET_REGULAR_FROM_NPB (m_fermenterBatchSize_l       , namedParameterBundle, PropertyNames::Equipment::fermenterBatchSize_l       ),
    SET_REGULAR_FROM_NPB (m_mashTunVolume_l            , namedParameterBundle, PropertyNames::Equipment::mashTunVolume_l            ),
-   SET_REGULAR_FROM_NPB (m_mashTunWeight_kg           , namedParameterBundle, PropertyNames::Equipment::mashTunWeight_kg           ),
-   SET_REGULAR_FROM_NPB (m_mashTunSpecificHeat_calGC  , namedParameterBundle, PropertyNames::Equipment::mashTunSpecificHeat_calGC  ),
-   SET_REGULAR_FROM_NPB (m_topUpWater_l               , namedParameterBundle, PropertyNames::Equipment::topUpWater_l               ),
+   SET_REGULAR_FROM_NPB (m_mashTunWeight_kg           , namedParameterBundle, PropertyNames::Equipment::mashTunWeight_kg           , std::nullopt),
+   SET_REGULAR_FROM_NPB (m_mashTunSpecificHeat_calGC  , namedParameterBundle, PropertyNames::Equipment::mashTunSpecificHeat_calGC  , std::nullopt),
+   SET_REGULAR_FROM_NPB (m_topUpWater_l               , namedParameterBundle, PropertyNames::Equipment::topUpWater_l               , std::nullopt),
    SET_REGULAR_FROM_NPB (m_kettleTrubChillerLoss_l    , namedParameterBundle, PropertyNames::Equipment::kettleTrubChillerLoss_l    ),
    SET_REGULAR_FROM_NPB (m_evapRate_pctHr             , namedParameterBundle, PropertyNames::Equipment::evapRate_pctHr             ),
-   SET_REGULAR_FROM_NPB (m_kettleEvaporationPerHour_l , namedParameterBundle, PropertyNames::Equipment::kettleEvaporationPerHour_l , 4.0  ),
-   SET_REGULAR_FROM_NPB (m_boilTime_min               , namedParameterBundle, PropertyNames::Equipment::boilTime_min               ),
+   SET_REGULAR_FROM_NPB (m_kettleEvaporationPerHour_l , namedParameterBundle, PropertyNames::Equipment::kettleEvaporationPerHour_l , std::nullopt),
+   SET_REGULAR_FROM_NPB (m_boilTime_min               , namedParameterBundle, PropertyNames::Equipment::boilTime_min               , std::nullopt),
    SET_REGULAR_FROM_NPB (m_calcBoilVolume             , namedParameterBundle, PropertyNames::Equipment::calcBoilVolume             ),
    SET_REGULAR_FROM_NPB (m_lauterTunDeadspaceLoss_l   , namedParameterBundle, PropertyNames::Equipment::lauterTunDeadspaceLoss_l   ),
-   SET_REGULAR_FROM_NPB (m_topUpKettle_l              , namedParameterBundle, PropertyNames::Equipment::topUpKettle_l              ),
-   SET_REGULAR_FROM_NPB (m_hopUtilization_pct         , namedParameterBundle, PropertyNames::Equipment::hopUtilization_pct         ),
-   SET_REGULAR_FROM_NPB (m_kettleNotes                , namedParameterBundle, PropertyNames::Equipment::kettleNotes                ),
-   SET_REGULAR_FROM_NPB (m_mashTunGrainAbsorption_LKg , namedParameterBundle, PropertyNames::Equipment::mashTunGrainAbsorption_LKg , 1.086),
+   SET_REGULAR_FROM_NPB (m_topUpKettle_l              , namedParameterBundle, PropertyNames::Equipment::topUpKettle_l              , std::nullopt),
+   SET_REGULAR_FROM_NPB (m_hopUtilization_pct         , namedParameterBundle, PropertyNames::Equipment::hopUtilization_pct         , std::nullopt),
+   SET_REGULAR_FROM_NPB (m_kettleNotes                , namedParameterBundle, PropertyNames::Equipment::kettleNotes                , ""),
+   SET_REGULAR_FROM_NPB (m_mashTunGrainAbsorption_LKg , namedParameterBundle, PropertyNames::Equipment::mashTunGrainAbsorption_LKg , std::nullopt),
    SET_REGULAR_FROM_NPB (m_boilingPoint_c             , namedParameterBundle, PropertyNames::Equipment::boilingPoint_c             , 100.0),
    SET_REGULAR_FROM_NPB (m_kettleInternalDiameter_cm  , namedParameterBundle, PropertyNames::Equipment::kettleInternalDiameter_cm  , std::nullopt),
    SET_REGULAR_FROM_NPB (m_kettleOpeningDiameter_cm   , namedParameterBundle, PropertyNames::Equipment::kettleOpeningDiameter_cm   , std::nullopt),
    // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
-   SET_REGULAR_FROM_NPB (m_hltType                    , namedParameterBundle, PropertyNames::Equipment::hltType                    ),
-   SET_REGULAR_FROM_NPB (m_mashTunType                , namedParameterBundle, PropertyNames::Equipment::mashTunType                ),
-   SET_REGULAR_FROM_NPB (m_lauterTunType              , namedParameterBundle, PropertyNames::Equipment::lauterTunType              ),
-   SET_REGULAR_FROM_NPB (m_kettleType                 , namedParameterBundle, PropertyNames::Equipment::kettleType                 ),
-   SET_REGULAR_FROM_NPB (m_fermenterType              , namedParameterBundle, PropertyNames::Equipment::fermenterType              ),
-   SET_REGULAR_FROM_NPB (m_agingVesselType            , namedParameterBundle, PropertyNames::Equipment::agingVesselType            ),
-   SET_REGULAR_FROM_NPB (m_packagingVesselType        , namedParameterBundle, PropertyNames::Equipment::packagingVesselType        ),
-   SET_REGULAR_FROM_NPB (m_hltVolume_l                , namedParameterBundle, PropertyNames::Equipment::hltVolume_l                ),
-   SET_REGULAR_FROM_NPB (m_lauterTunVolume_l          , namedParameterBundle, PropertyNames::Equipment::lauterTunVolume_l          ),
-   SET_REGULAR_FROM_NPB (m_agingVesselVolume_l        , namedParameterBundle, PropertyNames::Equipment::agingVesselVolume_l        ),
-   SET_REGULAR_FROM_NPB (m_packagingVesselVolume_l    , namedParameterBundle, PropertyNames::Equipment::packagingVesselVolume_l    ),
-   SET_REGULAR_FROM_NPB (m_hltLoss_l                  , namedParameterBundle, PropertyNames::Equipment::hltLoss_l                  ),
-   SET_REGULAR_FROM_NPB (m_mashTunLoss_l              , namedParameterBundle, PropertyNames::Equipment::mashTunLoss_l              ),
-   SET_REGULAR_FROM_NPB (m_fermenterLoss_l            , namedParameterBundle, PropertyNames::Equipment::fermenterLoss_l            ),
-   SET_REGULAR_FROM_NPB (m_agingVesselLoss_l          , namedParameterBundle, PropertyNames::Equipment::agingVesselLoss_l          ),
-   SET_REGULAR_FROM_NPB (m_packagingVesselLoss_l      , namedParameterBundle, PropertyNames::Equipment::packagingVesselLoss_l      ),
-   SET_REGULAR_FROM_NPB (m_kettleOutflowPerMinute_l   , namedParameterBundle, PropertyNames::Equipment::kettleOutflowPerMinute_l   ),
-   SET_REGULAR_FROM_NPB (m_hltWeight_kg               , namedParameterBundle, PropertyNames::Equipment::hltWeight_kg               ),
-   SET_REGULAR_FROM_NPB (m_lauterTunWeight_kg         , namedParameterBundle, PropertyNames::Equipment::lauterTunWeight_kg         ),
-   SET_REGULAR_FROM_NPB (m_kettleWeight_kg            , namedParameterBundle, PropertyNames::Equipment::kettleWeight_kg            ),
-   SET_REGULAR_FROM_NPB (m_hltSpecificHeat_calGC      , namedParameterBundle, PropertyNames::Equipment::hltSpecificHeat_calGC      ),
-   SET_REGULAR_FROM_NPB (m_lauterTunSpecificHeat_calGC, namedParameterBundle, PropertyNames::Equipment::lauterTunSpecificHeat_calGC),
-   SET_REGULAR_FROM_NPB (m_kettleSpecificHeat_calGC   , namedParameterBundle, PropertyNames::Equipment::kettleSpecificHeat_calGC   ),
-   SET_REGULAR_FROM_NPB (m_hltNotes                   , namedParameterBundle, PropertyNames::Equipment::hltNotes                   ),
-   SET_REGULAR_FROM_NPB (m_mashTunNotes               , namedParameterBundle, PropertyNames::Equipment::mashTunNotes               ),
-   SET_REGULAR_FROM_NPB (m_lauterTunNotes             , namedParameterBundle, PropertyNames::Equipment::lauterTunNotes             ),
-   SET_REGULAR_FROM_NPB (m_fermenterNotes             , namedParameterBundle, PropertyNames::Equipment::fermenterNotes             ),
-   SET_REGULAR_FROM_NPB (m_agingVesselNotes           , namedParameterBundle, PropertyNames::Equipment::agingVesselNotes           ),
-   SET_REGULAR_FROM_NPB (m_packagingVesselNotes       , namedParameterBundle, PropertyNames::Equipment::packagingVesselNotes       ) {
+   SET_REGULAR_FROM_NPB (m_hltType                    , namedParameterBundle, PropertyNames::Equipment::hltType                    , ""          ),
+   SET_REGULAR_FROM_NPB (m_mashTunType                , namedParameterBundle, PropertyNames::Equipment::mashTunType                , ""          ),
+   SET_REGULAR_FROM_NPB (m_lauterTunType              , namedParameterBundle, PropertyNames::Equipment::lauterTunType              , ""          ),
+   SET_REGULAR_FROM_NPB (m_kettleType                 , namedParameterBundle, PropertyNames::Equipment::kettleType                 , ""          ),
+   SET_REGULAR_FROM_NPB (m_fermenterType              , namedParameterBundle, PropertyNames::Equipment::fermenterType              , ""          ),
+   SET_REGULAR_FROM_NPB (m_agingVesselType            , namedParameterBundle, PropertyNames::Equipment::agingVesselType            , ""          ),
+   SET_REGULAR_FROM_NPB (m_packagingVesselType        , namedParameterBundle, PropertyNames::Equipment::packagingVesselType        , ""          ),
+   SET_REGULAR_FROM_NPB (m_hltVolume_l                , namedParameterBundle, PropertyNames::Equipment::hltVolume_l                , 0.0         ),
+   SET_REGULAR_FROM_NPB (m_lauterTunVolume_l          , namedParameterBundle, PropertyNames::Equipment::lauterTunVolume_l          , 0.0         ),
+   SET_REGULAR_FROM_NPB (m_agingVesselVolume_l        , namedParameterBundle, PropertyNames::Equipment::agingVesselVolume_l        , 0.0         ),
+   SET_REGULAR_FROM_NPB (m_packagingVesselVolume_l    , namedParameterBundle, PropertyNames::Equipment::packagingVesselVolume_l    , 0.0         ),
+   SET_REGULAR_FROM_NPB (m_hltLoss_l                  , namedParameterBundle, PropertyNames::Equipment::hltLoss_l                  , 0.0         ),
+   SET_REGULAR_FROM_NPB (m_mashTunLoss_l              , namedParameterBundle, PropertyNames::Equipment::mashTunLoss_l              , 0.0         ),
+   SET_REGULAR_FROM_NPB (m_fermenterLoss_l            , namedParameterBundle, PropertyNames::Equipment::fermenterLoss_l            , 0.0         ),
+   SET_REGULAR_FROM_NPB (m_agingVesselLoss_l          , namedParameterBundle, PropertyNames::Equipment::agingVesselLoss_l          , 0.0         ),
+   SET_REGULAR_FROM_NPB (m_packagingVesselLoss_l      , namedParameterBundle, PropertyNames::Equipment::packagingVesselLoss_l      , 0.0         ),
+   SET_REGULAR_FROM_NPB (m_kettleOutflowPerMinute_l   , namedParameterBundle, PropertyNames::Equipment::kettleOutflowPerMinute_l   , std::nullopt),
+   SET_REGULAR_FROM_NPB (m_hltWeight_kg               , namedParameterBundle, PropertyNames::Equipment::hltWeight_kg               , std::nullopt),
+   SET_REGULAR_FROM_NPB (m_lauterTunWeight_kg         , namedParameterBundle, PropertyNames::Equipment::lauterTunWeight_kg         , std::nullopt),
+   SET_REGULAR_FROM_NPB (m_kettleWeight_kg            , namedParameterBundle, PropertyNames::Equipment::kettleWeight_kg            , std::nullopt),
+   SET_REGULAR_FROM_NPB (m_hltSpecificHeat_calGC      , namedParameterBundle, PropertyNames::Equipment::hltSpecificHeat_calGC      , std::nullopt),
+   SET_REGULAR_FROM_NPB (m_lauterTunSpecificHeat_calGC, namedParameterBundle, PropertyNames::Equipment::lauterTunSpecificHeat_calGC, std::nullopt),
+   SET_REGULAR_FROM_NPB (m_kettleSpecificHeat_calGC   , namedParameterBundle, PropertyNames::Equipment::kettleSpecificHeat_calGC   , std::nullopt),
+   SET_REGULAR_FROM_NPB (m_hltNotes                   , namedParameterBundle, PropertyNames::Equipment::hltNotes                   , ""          ),
+   SET_REGULAR_FROM_NPB (m_mashTunNotes               , namedParameterBundle, PropertyNames::Equipment::mashTunNotes               , ""          ),
+   SET_REGULAR_FROM_NPB (m_lauterTunNotes             , namedParameterBundle, PropertyNames::Equipment::lauterTunNotes             , ""          ),
+   SET_REGULAR_FROM_NPB (m_fermenterNotes             , namedParameterBundle, PropertyNames::Equipment::fermenterNotes             , ""          ),
+   SET_REGULAR_FROM_NPB (m_agingVesselNotes           , namedParameterBundle, PropertyNames::Equipment::agingVesselNotes           , ""          ),
+   SET_REGULAR_FROM_NPB (m_packagingVesselNotes       , namedParameterBundle, PropertyNames::Equipment::packagingVesselNotes       , ""          ) {
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -291,6 +295,8 @@ Equipment::Equipment(Equipment const & other) :
    m_fermenterNotes             {other.m_fermenterNotes             },
    m_agingVesselNotes           {other.m_agingVesselNotes           },
    m_packagingVesselNotes       {other.m_packagingVesselNotes       } {
+
+   CONSTRUCTOR_END
    return;
 }
 

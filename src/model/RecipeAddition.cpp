@@ -81,6 +81,8 @@ RecipeAddition::RecipeAddition(QString name, int const recipeId, int const ingre
    m_addAtGravity_sg{std::nullopt},
    m_addAtAcidity_pH{std::nullopt},
    m_duration_mins  {std::nullopt} {
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -88,22 +90,26 @@ RecipeAddition::RecipeAddition(NamedParameterBundle const & namedParameterBundle
    IngredientInRecipe{namedParameterBundle},
    // Note that we do not set m_stage here as it is for subclasses to determine how that should be defaulted if it is
    // not present.
-   SET_REGULAR_FROM_NPB (m_step           , namedParameterBundle, PropertyNames::RecipeAddition::step           ),
-   SET_REGULAR_FROM_NPB (m_addAtTime_mins , namedParameterBundle, PropertyNames::RecipeAddition::addAtTime_mins ),
-   SET_REGULAR_FROM_NPB (m_addAtGravity_sg, namedParameterBundle, PropertyNames::RecipeAddition::addAtGravity_sg),
-   SET_REGULAR_FROM_NPB (m_addAtAcidity_pH, namedParameterBundle, PropertyNames::RecipeAddition::addAtAcidity_pH),
-   SET_REGULAR_FROM_NPB (m_duration_mins  , namedParameterBundle, PropertyNames::RecipeAddition::duration_mins  ) {
+   SET_REGULAR_FROM_NPB (m_step           , namedParameterBundle, PropertyNames::RecipeAddition::step           , std::nullopt),
+   SET_REGULAR_FROM_NPB (m_addAtTime_mins , namedParameterBundle, PropertyNames::RecipeAddition::addAtTime_mins , std::nullopt),
+   SET_REGULAR_FROM_NPB (m_addAtGravity_sg, namedParameterBundle, PropertyNames::RecipeAddition::addAtGravity_sg, std::nullopt),
+   SET_REGULAR_FROM_NPB (m_addAtAcidity_pH, namedParameterBundle, PropertyNames::RecipeAddition::addAtAcidity_pH, std::nullopt),
+   SET_REGULAR_FROM_NPB (m_duration_mins  , namedParameterBundle, PropertyNames::RecipeAddition::duration_mins  , std::nullopt) {
+
+   CONSTRUCTOR_END
    return;
 }
 
 RecipeAddition::RecipeAddition(RecipeAddition const & other) :
-   IngredientInRecipe{other                        },
+   IngredientInRecipe{other                 },
    m_stage          {other.m_stage          },
    m_step           {other.m_step           },
    m_addAtTime_mins {other.m_addAtTime_mins },
    m_addAtGravity_sg{other.m_addAtGravity_sg},
    m_addAtAcidity_pH{other.m_addAtAcidity_pH},
    m_duration_mins  {other.m_duration_mins  } {
+
+   CONSTRUCTOR_END
    return;
 }
 

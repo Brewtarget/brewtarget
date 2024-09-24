@@ -67,6 +67,8 @@ RecipeAdjustmentSalt::RecipeAdjustmentSalt(QString name, int const recipeId, int
    IngredientInRecipe{name, recipeId, saltId},
    RecipeAdditionBase<RecipeAdjustmentSalt, Salt>{},
    IngredientAmount<RecipeAdjustmentSalt, Salt>{} {
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -74,6 +76,8 @@ RecipeAdjustmentSalt::RecipeAdjustmentSalt(NamedParameterBundle const & namedPar
    IngredientInRecipe{namedParameterBundle},
    RecipeAdditionBase<RecipeAdjustmentSalt, Salt>{},
    IngredientAmount<RecipeAdjustmentSalt, Salt>{namedParameterBundle} {
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -81,6 +85,8 @@ RecipeAdjustmentSalt::RecipeAdjustmentSalt(RecipeAdjustmentSalt const & other) :
    IngredientInRecipe{other},
    RecipeAdditionBase<RecipeAdjustmentSalt, Salt>{},
    IngredientAmount<RecipeAdjustmentSalt, Salt>{other} {
+
+   CONSTRUCTOR_END
    return;
 }
 

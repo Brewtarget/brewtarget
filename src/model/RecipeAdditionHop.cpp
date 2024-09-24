@@ -68,6 +68,8 @@ RecipeAdditionHop::RecipeAdditionHop(QString name, int const recipeId, int const
    RecipeAddition{name, recipeId, ingredientId},
    RecipeAdditionBase<RecipeAdditionHop, Hop>{},
    IngredientAmount<RecipeAdditionHop, Hop>{} {
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -82,6 +84,8 @@ RecipeAdditionHop::RecipeAdditionHop(NamedParameterBundle const & namedParameter
    m_stage = namedParameterBundle.val<RecipeAddition::Stage>(PropertyNames::RecipeAddition::stage,
                                                              RecipeAddition::Stage::Boil);
 ///   qDebug() << Q_FUNC_INFO << "RecipeAdditionHop #" << this->key() << ": Recipe #" << this->m_recipeId << ", Hop #" << this->m_ingredientId;
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -89,6 +93,8 @@ RecipeAdditionHop::RecipeAdditionHop(RecipeAdditionHop const & other) :
    RecipeAddition{other},
    RecipeAdditionBase<RecipeAdditionHop, Hop>{},
    IngredientAmount<RecipeAdditionHop, Hop>{other} {
+
+   CONSTRUCTOR_END
    return;
 }
 

@@ -169,6 +169,8 @@ TypeLookup const Yeast::typeLookup {
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Yeast::killerProducingK28Toxin  , Yeast::m_killerProducingK28Toxin  ,           NonPhysicalQuantity::Bool          ),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Yeast::killerProducingKlusToxin , Yeast::m_killerProducingKlusToxin ,           NonPhysicalQuantity::Bool          ),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Yeast::killerNeutral            , Yeast::m_killerNeutral            ,           NonPhysicalQuantity::Bool          ),
+      // Legacy property for BeerXML
+      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Yeast::attenuationTypical_pct, Yeast::attenuationTypical_pct  ,           NonPhysicalQuantity::Percentage    ),
    },
    // Parent classes lookup
    {&Ingredient::typeLookup,
@@ -202,6 +204,8 @@ Yeast::Yeast(QString name) :
    m_killerProducingK28Toxin  {std::nullopt},
    m_killerProducingKlusToxin {std::nullopt},
    m_killerNeutral            {std::nullopt} {
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -211,30 +215,32 @@ Yeast::Yeast(NamedParameterBundle const & namedParameterBundle) :
    SET_REGULAR_FROM_NPB (m_form                             , namedParameterBundle, PropertyNames::Yeast::form                     ),
    SET_REGULAR_FROM_NPB (m_laboratory                       , namedParameterBundle, PropertyNames::Yeast::laboratory               ),
    SET_REGULAR_FROM_NPB (m_productId                        , namedParameterBundle, PropertyNames::Yeast::productId                ),
-   SET_REGULAR_FROM_NPB (m_minTemperature_c                 , namedParameterBundle, PropertyNames::Yeast::minTemperature_c         ),
-   SET_REGULAR_FROM_NPB (m_maxTemperature_c                 , namedParameterBundle, PropertyNames::Yeast::maxTemperature_c         ),
+   SET_REGULAR_FROM_NPB (m_minTemperature_c                 , namedParameterBundle, PropertyNames::Yeast::minTemperature_c         , std::nullopt),
+   SET_REGULAR_FROM_NPB (m_maxTemperature_c                 , namedParameterBundle, PropertyNames::Yeast::maxTemperature_c         , std::nullopt),
    SET_OPT_ENUM_FROM_NPB(m_flocculation, Yeast::Flocculation, namedParameterBundle, PropertyNames::Yeast::flocculation             ),
    SET_REGULAR_FROM_NPB (m_notes                            , namedParameterBundle, PropertyNames::Yeast::notes                    ),
    SET_REGULAR_FROM_NPB (m_bestFor                          , namedParameterBundle, PropertyNames::Yeast::bestFor                  ),
-   SET_REGULAR_FROM_NPB (m_maxReuse                         , namedParameterBundle, PropertyNames::Yeast::maxReuse                 ),
+   SET_REGULAR_FROM_NPB (m_maxReuse                         , namedParameterBundle, PropertyNames::Yeast::maxReuse                 , std::nullopt),
    // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
-   SET_REGULAR_FROM_NPB (m_alcoholTolerance_pct             , namedParameterBundle, PropertyNames::Yeast::alcoholTolerance_pct     ),
-   SET_REGULAR_FROM_NPB (m_attenuationMin_pct               , namedParameterBundle, PropertyNames::Yeast::attenuationMin_pct       ),
-   SET_REGULAR_FROM_NPB (m_attenuationMax_pct               , namedParameterBundle, PropertyNames::Yeast::attenuationMax_pct       ),
-   SET_REGULAR_FROM_NPB (m_phenolicOffFlavorPositive        , namedParameterBundle, PropertyNames::Yeast::phenolicOffFlavorPositive),
-   SET_REGULAR_FROM_NPB (m_glucoamylasePositive             , namedParameterBundle, PropertyNames::Yeast::glucoamylasePositive     ),
-   SET_REGULAR_FROM_NPB (m_killerProducingK1Toxin           , namedParameterBundle, PropertyNames::Yeast::killerProducingK1Toxin   ),
-   SET_REGULAR_FROM_NPB (m_killerProducingK2Toxin           , namedParameterBundle, PropertyNames::Yeast::killerProducingK2Toxin   ),
-   SET_REGULAR_FROM_NPB (m_killerProducingK28Toxin          , namedParameterBundle, PropertyNames::Yeast::killerProducingK28Toxin  ),
-   SET_REGULAR_FROM_NPB (m_killerProducingKlusToxin         , namedParameterBundle, PropertyNames::Yeast::killerProducingKlusToxin ),
-   SET_REGULAR_FROM_NPB (m_killerNeutral                    , namedParameterBundle, PropertyNames::Yeast::killerNeutral            ) {
+   SET_REGULAR_FROM_NPB (m_alcoholTolerance_pct             , namedParameterBundle, PropertyNames::Yeast::alcoholTolerance_pct     , std::nullopt),
+   SET_REGULAR_FROM_NPB (m_attenuationMin_pct               , namedParameterBundle, PropertyNames::Yeast::attenuationMin_pct       , std::nullopt),
+   SET_REGULAR_FROM_NPB (m_attenuationMax_pct               , namedParameterBundle, PropertyNames::Yeast::attenuationMax_pct       , std::nullopt),
+   SET_REGULAR_FROM_NPB (m_phenolicOffFlavorPositive        , namedParameterBundle, PropertyNames::Yeast::phenolicOffFlavorPositive, std::nullopt),
+   SET_REGULAR_FROM_NPB (m_glucoamylasePositive             , namedParameterBundle, PropertyNames::Yeast::glucoamylasePositive     , std::nullopt),
+   SET_REGULAR_FROM_NPB (m_killerProducingK1Toxin           , namedParameterBundle, PropertyNames::Yeast::killerProducingK1Toxin   , std::nullopt),
+   SET_REGULAR_FROM_NPB (m_killerProducingK2Toxin           , namedParameterBundle, PropertyNames::Yeast::killerProducingK2Toxin   , std::nullopt),
+   SET_REGULAR_FROM_NPB (m_killerProducingK28Toxin          , namedParameterBundle, PropertyNames::Yeast::killerProducingK28Toxin  , std::nullopt),
+   SET_REGULAR_FROM_NPB (m_killerProducingKlusToxin         , namedParameterBundle, PropertyNames::Yeast::killerProducingKlusToxin , std::nullopt),
+   SET_REGULAR_FROM_NPB (m_killerNeutral                    , namedParameterBundle, PropertyNames::Yeast::killerNeutral            , std::nullopt) {
    // If we're being constructed from a BeerXML file, then we might only have typical attenuation rather than min and
    // max.  Best we can do in that scenario is set min and max to the supplied value.
    if (namedParameterBundle.contains(PropertyNames::Yeast::attenuationTypical_pct)) {
       double attenuationTypical_pct{namedParameterBundle.val<double>(PropertyNames::Yeast::attenuationTypical_pct)};
-      if (!this->m_attenuationMin_pct) { this->m_attenuationMin_pct = attenuationTypical_pct; }
-      if (!this->m_attenuationMax_pct) { this->m_attenuationMax_pct = attenuationTypical_pct; }
+      if (!this->m_attenuationMin_pct) { ASSIGN_REGULAR_FROM_NPB(m_attenuationMin_pct, namedParameterBundle, PropertyNames::Yeast::attenuationTypical_pct); }
+      if (!this->m_attenuationMax_pct) { ASSIGN_REGULAR_FROM_NPB(m_attenuationMax_pct, namedParameterBundle, PropertyNames::Yeast::attenuationTypical_pct); }
    }
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -260,6 +266,8 @@ Yeast::Yeast(Yeast const & other) :
    m_killerProducingK28Toxin  {other.m_killerProducingK28Toxin  },
    m_killerProducingKlusToxin {other.m_killerProducingKlusToxin },
    m_killerNeutral            {other.m_killerNeutral            } {
+
+   CONSTRUCTOR_END
    return;
 }
 

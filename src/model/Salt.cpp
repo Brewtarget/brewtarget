@@ -96,6 +96,8 @@ Salt::Salt(QString name) :
    Ingredient    {name},
    m_type        {Salt::Type::CaCl2},
    m_percent_acid{std::nullopt} {
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -103,13 +105,17 @@ Salt::Salt(NamedParameterBundle const & namedParameterBundle) :
    Ingredient       {namedParameterBundle},
    SET_REGULAR_FROM_NPB (m_type        , namedParameterBundle, PropertyNames::Salt::type       ),
    SET_REGULAR_FROM_NPB (m_percent_acid, namedParameterBundle, PropertyNames::Salt::percentAcid) {
+
+   CONSTRUCTOR_END
    return;
 }
 
 Salt::Salt(Salt const & other) :
-   Ingredient       {other                   },
+   Ingredient    {other               },
    m_type        {other.m_type        },
    m_percent_acid{other.m_percent_acid} {
+
+   CONSTRUCTOR_END
    return;
 }
 

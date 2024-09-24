@@ -40,18 +40,25 @@ TypeLookup const OwnedByRecipe::typeLookup {
 OwnedByRecipe::OwnedByRecipe(QString name, int const recipeId) :
    NamedEntity{name, true},
    m_recipeId{recipeId} {
+
+   CONSTRUCTOR_END
    return;
 }
 
 OwnedByRecipe::OwnedByRecipe(NamedParameterBundle const & namedParameterBundle) :
    NamedEntity{namedParameterBundle},
-   SET_REGULAR_FROM_NPB(m_recipeId, namedParameterBundle, PropertyNames::OwnedByRecipe::recipeId) {
+   // Although recipeId is required, we have to supply a default value for when we are reading from BeerXML or BeerJSON
+   SET_REGULAR_FROM_NPB(m_recipeId, namedParameterBundle, PropertyNames::OwnedByRecipe::recipeId, -1) {
+
+   CONSTRUCTOR_END
    return;
 }
 
 OwnedByRecipe::OwnedByRecipe(OwnedByRecipe const & other) :
    NamedEntity{other},
    m_recipeId{other.m_recipeId} {
+
+   CONSTRUCTOR_END
    return;
 }
 

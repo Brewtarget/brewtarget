@@ -49,6 +49,8 @@ FermentationStep::FermentationStep(QString name) :
    StepExtended{name},
    m_freeRise  {std::nullopt},
    m_vessel    {""} {
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -58,6 +60,8 @@ FermentationStep::FermentationStep(NamedParameterBundle const & namedParameterBu
    SET_REGULAR_FROM_NPB (m_vessel  , namedParameterBundle, PropertyNames::FermentationStep::vessel  , QString()   ) {
    // See comment in Step constructor
    Q_ASSERT(this->rampTimeIsSupported() == namedParameterBundle.contains(PropertyNames::Step::rampTime_mins));
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -65,6 +69,8 @@ FermentationStep::FermentationStep(FermentationStep const & other) :
    StepExtended{other           },
    m_freeRise  {other.m_freeRise},
    m_vessel    {other.m_vessel  } {
+
+   CONSTRUCTOR_END
    return;
 }
 

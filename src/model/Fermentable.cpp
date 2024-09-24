@@ -224,6 +224,8 @@ Fermentable::Fermentable(QString name) :
    m_fan_ppm                  {std::nullopt            },
    m_fermentability_pct       {std::nullopt            },
    m_betaGlucan_ppm           {std::nullopt            } {
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -242,27 +244,28 @@ Fermentable::Fermentable(NamedParameterBundle const & namedParameterBundle) :
    SET_REGULAR_FROM_NPB (m_recommendMash                      , namedParameterBundle, PropertyNames::Fermentable::recommendMash                    ),
    SET_REGULAR_FROM_NPB (m_ibuGalPerLb                        , namedParameterBundle, PropertyNames::Fermentable::ibuGalPerLb                      ),
    // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
-   SET_OPT_ENUM_FROM_NPB(m_grainGroup, Fermentable::GrainGroup, namedParameterBundle, PropertyNames::Fermentable::grainGroup                       ),
-   SET_REGULAR_FROM_NPB (m_producer                           , namedParameterBundle, PropertyNames::Fermentable::producer                         ),
-   SET_REGULAR_FROM_NPB (m_productId                          , namedParameterBundle, PropertyNames::Fermentable::productId                        ),
-   SET_REGULAR_FROM_NPB (m_fineGrindYield_pct                 , namedParameterBundle, PropertyNames::Fermentable::fineGrindYield_pct               ),
-   SET_REGULAR_FROM_NPB (m_coarseGrindYield_pct               , namedParameterBundle, PropertyNames::Fermentable::coarseGrindYield_pct             ),
-   SET_REGULAR_FROM_NPB (m_potentialYield_sg                  , namedParameterBundle, PropertyNames::Fermentable::potentialYield_sg                ),
-   SET_REGULAR_FROM_NPB (m_alphaAmylase_dextUnits             , namedParameterBundle, PropertyNames::Fermentable::alphaAmylase_dextUnits           ),
-   SET_REGULAR_FROM_NPB (m_kolbachIndex_pct                   , namedParameterBundle, PropertyNames::Fermentable::kolbachIndex_pct                 ),
-   SET_REGULAR_FROM_NPB (m_hardnessPrpGlassy_pct              , namedParameterBundle, PropertyNames::Fermentable::hardnessPrpGlassy_pct            ),
-   SET_REGULAR_FROM_NPB (m_hardnessPrpHalf_pct                , namedParameterBundle, PropertyNames::Fermentable::hardnessPrpHalf_pct              ),
-   SET_REGULAR_FROM_NPB (m_hardnessPrpMealy_pct               , namedParameterBundle, PropertyNames::Fermentable::hardnessPrpMealy_pct             ),
-   SET_REGULAR_FROM_NPB (m_kernelSizePrpPlump_pct             , namedParameterBundle, PropertyNames::Fermentable::kernelSizePrpPlump_pct           ),
-   SET_REGULAR_FROM_NPB (m_kernelSizePrpThin_pct              , namedParameterBundle, PropertyNames::Fermentable::kernelSizePrpThin_pct            ),
-   SET_REGULAR_FROM_NPB (m_friability_pct                     , namedParameterBundle, PropertyNames::Fermentable::friability_pct                   ),
-   SET_REGULAR_FROM_NPB (m_di_ph                              , namedParameterBundle, PropertyNames::Fermentable::di_ph                            ),
-   SET_REGULAR_FROM_NPB (m_viscosity_cP                       , namedParameterBundle, PropertyNames::Fermentable::viscosity_cP                     ),
-   SET_REGULAR_FROM_NPB (m_dmsP_ppm                           , namedParameterBundle, PropertyNames::Fermentable::dmsP_ppm                         ),
-   SET_REGULAR_FROM_NPB (m_fan_ppm                            , namedParameterBundle, PropertyNames::Fermentable::fan_ppm                          ),
-   SET_REGULAR_FROM_NPB (m_fermentability_pct                 , namedParameterBundle, PropertyNames::Fermentable::fermentability_pct               ),
-   SET_REGULAR_FROM_NPB (m_betaGlucan_ppm                     , namedParameterBundle, PropertyNames::Fermentable::betaGlucan_ppm                   ) {
+   SET_OPT_ENUM_FROM_NPB(m_grainGroup, Fermentable::GrainGroup, namedParameterBundle, PropertyNames::Fermentable::grainGroup            ),
+   SET_REGULAR_FROM_NPB (m_producer                           , namedParameterBundle, PropertyNames::Fermentable::producer              , QString()   ),
+   SET_REGULAR_FROM_NPB (m_productId                          , namedParameterBundle, PropertyNames::Fermentable::productId             , QString()   ),
+   SET_REGULAR_FROM_NPB (m_fineGrindYield_pct                 , namedParameterBundle, PropertyNames::Fermentable::fineGrindYield_pct    , std::nullopt),
+   SET_REGULAR_FROM_NPB (m_coarseGrindYield_pct               , namedParameterBundle, PropertyNames::Fermentable::coarseGrindYield_pct  , std::nullopt),
+   SET_REGULAR_FROM_NPB (m_potentialYield_sg                  , namedParameterBundle, PropertyNames::Fermentable::potentialYield_sg     , std::nullopt),
+   SET_REGULAR_FROM_NPB (m_alphaAmylase_dextUnits             , namedParameterBundle, PropertyNames::Fermentable::alphaAmylase_dextUnits, std::nullopt),
+   SET_REGULAR_FROM_NPB (m_kolbachIndex_pct                   , namedParameterBundle, PropertyNames::Fermentable::kolbachIndex_pct      , std::nullopt),
+   SET_REGULAR_FROM_NPB (m_hardnessPrpGlassy_pct              , namedParameterBundle, PropertyNames::Fermentable::hardnessPrpGlassy_pct , std::nullopt),
+   SET_REGULAR_FROM_NPB (m_hardnessPrpHalf_pct                , namedParameterBundle, PropertyNames::Fermentable::hardnessPrpHalf_pct   , std::nullopt),
+   SET_REGULAR_FROM_NPB (m_hardnessPrpMealy_pct               , namedParameterBundle, PropertyNames::Fermentable::hardnessPrpMealy_pct  , std::nullopt),
+   SET_REGULAR_FROM_NPB (m_kernelSizePrpPlump_pct             , namedParameterBundle, PropertyNames::Fermentable::kernelSizePrpPlump_pct, std::nullopt),
+   SET_REGULAR_FROM_NPB (m_kernelSizePrpThin_pct              , namedParameterBundle, PropertyNames::Fermentable::kernelSizePrpThin_pct , std::nullopt),
+   SET_REGULAR_FROM_NPB (m_friability_pct                     , namedParameterBundle, PropertyNames::Fermentable::friability_pct        , std::nullopt),
+   SET_REGULAR_FROM_NPB (m_di_ph                              , namedParameterBundle, PropertyNames::Fermentable::di_ph                 , std::nullopt),
+   SET_REGULAR_FROM_NPB (m_viscosity_cP                       , namedParameterBundle, PropertyNames::Fermentable::viscosity_cP          , std::nullopt),
+   SET_REGULAR_FROM_NPB (m_dmsP_ppm                           , namedParameterBundle, PropertyNames::Fermentable::dmsP_ppm              , std::nullopt),
+   SET_REGULAR_FROM_NPB (m_fan_ppm                            , namedParameterBundle, PropertyNames::Fermentable::fan_ppm               , std::nullopt),
+   SET_REGULAR_FROM_NPB (m_fermentability_pct                 , namedParameterBundle, PropertyNames::Fermentable::fermentability_pct    , std::nullopt),
+   SET_REGULAR_FROM_NPB (m_betaGlucan_ppm                     , namedParameterBundle, PropertyNames::Fermentable::betaGlucan_ppm        , std::nullopt) {
 
+   CONSTRUCTOR_END
    return;
 }
 
@@ -301,6 +304,8 @@ Fermentable::Fermentable(Fermentable const & other) :
    m_fan_ppm                  {other.m_fan_ppm               },
    m_fermentability_pct       {other.m_fermentability_pct    },
    m_betaGlucan_ppm           {other.m_betaGlucan_ppm        } {
+
+   CONSTRUCTOR_END
    return;
 }
 

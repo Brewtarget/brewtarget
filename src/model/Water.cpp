@@ -149,6 +149,8 @@ Water::Water(QString name) :
    m_nitrate_ppm        {std::nullopt},
    m_nitrite_ppm        {std::nullopt},
    m_flouride_ppm       {std::nullopt} {
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -162,20 +164,22 @@ Water::Water(NamedParameterBundle const & namedParameterBundle) :
    SET_REGULAR_FROM_NPB (m_chloride_ppm      , namedParameterBundle, PropertyNames::Water::chloride_ppm    ),
    SET_REGULAR_FROM_NPB (m_sodium_ppm        , namedParameterBundle, PropertyNames::Water::sodium_ppm      ),
    SET_REGULAR_FROM_NPB (m_magnesium_ppm     , namedParameterBundle, PropertyNames::Water::magnesium_ppm   ),
-   SET_REGULAR_FROM_NPB (m_ph                , namedParameterBundle, PropertyNames::Water::ph              ),
-   SET_REGULAR_FROM_NPB (m_alkalinity_ppm    , namedParameterBundle, PropertyNames::Water::alkalinity_ppm  ),
+   SET_REGULAR_FROM_NPB (m_ph                , namedParameterBundle, PropertyNames::Water::ph              , std::nullopt),
+   SET_REGULAR_FROM_NPB (m_alkalinity_ppm    , namedParameterBundle, PropertyNames::Water::alkalinity_ppm  , std::nullopt),
    SET_REGULAR_FROM_NPB (m_notes             , namedParameterBundle, PropertyNames::Water::notes           ),
    SET_OPT_ENUM_FROM_NPB(m_type , Water::Type, namedParameterBundle, PropertyNames::Water::type            ),
-   SET_REGULAR_FROM_NPB (m_mashRo_pct        , namedParameterBundle, PropertyNames::Water::mashRo_pct      ),
-   SET_REGULAR_FROM_NPB (m_spargeRo_pct      , namedParameterBundle, PropertyNames::Water::spargeRo_pct    ),
+   SET_REGULAR_FROM_NPB (m_mashRo_pct        , namedParameterBundle, PropertyNames::Water::mashRo_pct      , std::nullopt),
+   SET_REGULAR_FROM_NPB (m_spargeRo_pct      , namedParameterBundle, PropertyNames::Water::spargeRo_pct    , std::nullopt),
    SET_REGULAR_FROM_NPB (m_alkalinity_as_hco3, namedParameterBundle, PropertyNames::Water::alkalinityAsHCO3),
    // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
-   SET_REGULAR_FROM_NPB (m_carbonate_ppm     , namedParameterBundle, PropertyNames::Water::carbonate_ppm   ),
-   SET_REGULAR_FROM_NPB (m_potassium_ppm     , namedParameterBundle, PropertyNames::Water::potassium_ppm   ),
-   SET_REGULAR_FROM_NPB (m_iron_ppm          , namedParameterBundle, PropertyNames::Water::iron_ppm        ),
-   SET_REGULAR_FROM_NPB (m_nitrate_ppm       , namedParameterBundle, PropertyNames::Water::nitrate_ppm     ),
-   SET_REGULAR_FROM_NPB (m_nitrite_ppm       , namedParameterBundle, PropertyNames::Water::nitrite_ppm     ),
-   SET_REGULAR_FROM_NPB (m_flouride_ppm      , namedParameterBundle, PropertyNames::Water::flouride_ppm    ) {
+   SET_REGULAR_FROM_NPB (m_carbonate_ppm     , namedParameterBundle, PropertyNames::Water::carbonate_ppm   , std::nullopt),
+   SET_REGULAR_FROM_NPB (m_potassium_ppm     , namedParameterBundle, PropertyNames::Water::potassium_ppm   , std::nullopt),
+   SET_REGULAR_FROM_NPB (m_iron_ppm          , namedParameterBundle, PropertyNames::Water::iron_ppm        , std::nullopt),
+   SET_REGULAR_FROM_NPB (m_nitrate_ppm       , namedParameterBundle, PropertyNames::Water::nitrate_ppm     , std::nullopt),
+   SET_REGULAR_FROM_NPB (m_nitrite_ppm       , namedParameterBundle, PropertyNames::Water::nitrite_ppm     , std::nullopt),
+   SET_REGULAR_FROM_NPB (m_flouride_ppm      , namedParameterBundle, PropertyNames::Water::flouride_ppm    , std::nullopt) {
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -203,6 +207,8 @@ Water::Water(Water const& other) :
    m_nitrate_ppm        {other.m_nitrate_ppm       },
    m_nitrite_ppm        {other.m_nitrite_ppm       },
    m_flouride_ppm       {other.m_flouride_ppm      } {
+
+   CONSTRUCTOR_END
    return;
 }
 

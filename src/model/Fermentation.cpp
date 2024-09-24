@@ -61,15 +61,19 @@ Fermentation::Fermentation(QString name) :
    StepOwnerBase<Fermentation, FermentationStep>{},
    m_description  {""          },
    m_notes        {""          } {
+
+   CONSTRUCTOR_END
    return;
 }
 
 Fermentation::Fermentation(NamedParameterBundle const & namedParameterBundle) :
-   NamedEntity                {namedParameterBundle},
+   NamedEntity             {namedParameterBundle},
    FolderBase<Fermentation>{namedParameterBundle},
    StepOwnerBase<Fermentation, FermentationStep>{},
-   SET_REGULAR_FROM_NPB (m_description  , namedParameterBundle, PropertyNames::Fermentation::description  ),
-   SET_REGULAR_FROM_NPB (m_notes        , namedParameterBundle, PropertyNames::Fermentation::notes        ) {
+   SET_REGULAR_FROM_NPB (m_description, namedParameterBundle, PropertyNames::Fermentation::description),
+   SET_REGULAR_FROM_NPB (m_notes      , namedParameterBundle, PropertyNames::Fermentation::notes      ) {
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -79,6 +83,8 @@ Fermentation::Fermentation(Fermentation const & other) :
    StepOwnerBase<Fermentation, FermentationStep>{other},
    m_description  {other.m_description  },
    m_notes        {other.m_notes        } {
+
+   CONSTRUCTOR_END
    return;
 }
 

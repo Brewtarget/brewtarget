@@ -56,6 +56,8 @@ RecipeAdditionYeast::RecipeAdditionYeast(QString name, int const recipeId, int c
    m_attenuation_pct  {std::nullopt},
    m_timesCultured    {std::nullopt},
    m_cellCountBillions{std::nullopt} {
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -73,6 +75,8 @@ RecipeAdditionYeast::RecipeAdditionYeast(NamedParameterBundle const & namedParam
    m_stage = namedParameterBundle.val<RecipeAddition::Stage>(PropertyNames::RecipeAddition::stage,
                                                              RecipeAddition::Stage::Fermentation);
 ///   qDebug() << Q_FUNC_INFO << "RecipeAdditionYeast #" << this->key() << ": Recipe #" << this->m_recipeId << ", Yeast #" << this->m_ingredientId;
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -83,6 +87,8 @@ RecipeAdditionYeast::RecipeAdditionYeast(RecipeAdditionYeast const & other) :
    m_attenuation_pct  {other.m_attenuation_pct  },
    m_timesCultured    {other.m_timesCultured    },
    m_cellCountBillions{other.m_cellCountBillions} {
+
+   CONSTRUCTOR_END
    return;
 }
 

@@ -13,6 +13,20 @@ happens, so I'm now setting it to a slightly arbitrary time early in the morning
 * Additional methods for calculating IBU
 * We'll list other new features here...
 
+
+## v4.0.4
+Minor bug fixes for the 4.0.4 release (ie bugs in 4.0.4 are fixed in this 4.0.5 release).
+
+### New Features
+* None
+
+### Bug Fixes
+* Crash on new ingredient import (brewtarget v4.0.4) at startup time [828](https://github.com/Brewtarget/brewtarget/issues/828)
+*  Crash on new recipe creation [829](https://github.com/Brewtarget/brewtarget/issues/829)
+
+### Release Timestamp
+Tue, 24 Sep 2024 04:00:05 +0100
+
 ## v4.0.4
 Minor bug fixes for the 4.0.3 release (ie bugs in 4.0.3 are fixed in this 4.0.4 release).
 
@@ -26,7 +40,7 @@ Minor bug fixes for the 4.0.3 release (ie bugs in 4.0.3 are fixed in this 4.0.4 
 * Edit Boil and Edit Fermentation buttons not working [826](https://github.com/Brewtarget/brewtarget/issues/826)
 
 ### Release Timestamp
-Wed, 28 Aug 2024 04:00:04 +0100
+Wed, 18 Sep 2024 04:00:04 +0100
 
 ## v4.0.3
 Minor bug fixes for the 4.0.2 release (ie bugs in 4.0.2 are fixed in this 4.0.3 release).

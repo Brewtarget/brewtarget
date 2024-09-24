@@ -462,12 +462,14 @@ public:
          // No change (from "not set" to "not set")
          return;
       }
-      if (val && val->key() == ourId) {
-         // No change (same object as we already have)
-         return;
-      }
 
       if (ourId > 0) {
+         // This comparison is only valid if we have a valid ID, because val might not yet be stored in the DB.
+         if (val && val->key() == ourId) {
+            // No change (same object as we already have)
+            return;
+         }
+
          std::shared_ptr<NE> oldVal = ObjectStoreWrapper::getById<NE>(ourId);
          disconnect(oldVal.get(), nullptr, &this->m_self, nullptr);
       }
@@ -477,15 +479,20 @@ public:
          return;
       }
 
-      // TBD: Would be nice to get rid of this call to copyIfNeeded
-      std::shared_ptr<NE> valToAdd = copyIfNeeded(*val);
-      ourId = valToAdd->key();
+      if (val->key() < 0) {
+         ourId = ObjectStoreWrapper::insert<NE>(val);
+      } else {
+         // TBD: Would be nice to get rid of this call to copyIfNeeded
+         val = copyIfNeeded(*val);
+         ourId = val->key();
+      }
+
       BtStringConst const & property = Recipe::propertyNameFor<NE>();
       qDebug() << Q_FUNC_INFO << "Setting" << property << "to" << ourId;
       this->m_self.propagatePropertyChange(property);
 
-      connect(valToAdd.get(), &NamedEntity::changed, &this->m_self, &Recipe::acceptChangeToContainedObject);
-      emit this->m_self.changed(this->m_self.metaProperty(*property), QVariant::fromValue<NE *>(valToAdd.get()));
+      connect(val.get(), &NamedEntity::changed, &this->m_self, &Recipe::acceptChangeToContainedObject);
+      emit this->m_self.changed(this->m_self.metaProperty(*property), QVariant::fromValue<NE *>(val.get()));
 
       this->m_self.recalcAll();
       return;
@@ -1564,7 +1571,7 @@ bool Recipe::isEqualTo(NamedEntity const & other) const {
       Utils::AutoCompare(this->m_type          , rhs.m_type          ) &&
       Utils::AutoCompare(this->m_batchSize_l   , rhs.m_batchSize_l   ) &&
       Utils::AutoCompare(this->m_efficiency_pct, rhs.m_efficiency_pct) &&
-      Utils::AutoCompare(this->m_age           , rhs.m_age           ) &&
+      Utils::AutoCompare(this->m_age_days      , rhs.m_age_days      ) &&
       Utils::AutoCompare(this->m_ageTemp_c     , rhs.m_ageTemp_c     ) &&
       Utils::AutoCompare(this->m_og            , rhs.m_og            ) &&
       Utils::AutoCompare(this->m_fg            , rhs.m_fg            ) &&
@@ -1610,7 +1617,7 @@ TypeLookup const Recipe::typeLookup {
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::asstBrewer        , Recipe::m_asstBrewer        ,           NonPhysicalQuantity::String        ),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::batchSize_l       , Recipe::m_batchSize_l       , Measurement::PhysicalQuantity::Volume        ),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::efficiency_pct    , Recipe::m_efficiency_pct    ,           NonPhysicalQuantity::Percentage    ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::age_days          , Recipe::m_age               ,           NonPhysicalQuantity::Dimensionless ), // See comment above for why Dimensionless, not Time
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::age_days          , Recipe::m_age_days          ,           NonPhysicalQuantity::Dimensionless ), // See comment above for why Dimensionless, not Time
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::ageTemp_c         , Recipe::m_ageTemp_c         , Measurement::PhysicalQuantity::Temperature   ),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::date              , Recipe::m_date              ,           NonPhysicalQuantity::Date          ),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::carbonation_vols  , Recipe::m_carbonation_vols  , Measurement::PhysicalQuantity::Carbonation   ),
@@ -1630,6 +1637,7 @@ TypeLookup const Recipe::typeLookup {
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::og                , Recipe::m_og                , Measurement::PhysicalQuantity::Density       ),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::fg                , Recipe::m_fg                , Measurement::PhysicalQuantity::Density       ),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::locked            , Recipe::m_locked            ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::calcsEnabled      , Recipe::m_calcsEnabled      ),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::ancestorId        , Recipe::m_ancestor_id       ),
 
       PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::ABV_pct          , Recipe::ABV_pct         ,           NonPhysicalQuantity::Percentage   ), // Calculated, not in DB
@@ -1688,8 +1696,8 @@ Recipe::Recipe(QString name) :
    m_asstBrewer             {QString{"%1: free beer software"}.arg(CONFIG_APPLICATION_NAME_UC)},
    m_batchSize_l            {0.0                 },
    m_efficiency_pct         {0.0                 },
-   m_age                    {0.0                 },
-   m_ageTemp_c              {0.0                 },
+   m_age_days               {std::nullopt        },
+   m_ageTemp_c              {std::nullopt        },
    m_date                   {QDate::currentDate()}, // Date is allowed to be blank, but we default it to today
    m_carbonation_vols       {std::nullopt        },
    m_forcedCarbonation      {false               },
@@ -1710,12 +1718,15 @@ Recipe::Recipe(QString name) :
    m_og                     {1.0                 },
    m_fg                     {1.0                 },
    m_locked                 {false               },
+   m_calcsEnabled           {true                },
    m_uninitializedCalcs     {true                },
    m_uninitializedCalcsMutex{},
    m_recalcMutex            {},
    m_ancestor_id            {-1                  },
    m_ancestors              {},
    m_hasDescendants         {false               } {
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -1724,12 +1735,12 @@ Recipe::Recipe(NamedParameterBundle const & namedParameterBundle) :
    FolderBase<Recipe>   {namedParameterBundle},
    pimpl                {std::make_unique<impl>(*this)},
    SET_REGULAR_FROM_NPB (m_type                   , namedParameterBundle, PropertyNames::Recipe::type                   ),
-   SET_REGULAR_FROM_NPB (m_brewer                 , namedParameterBundle, PropertyNames::Recipe::brewer                 ),
-   SET_REGULAR_FROM_NPB (m_asstBrewer             , namedParameterBundle, PropertyNames::Recipe::asstBrewer             ),
+   SET_REGULAR_FROM_NPB (m_brewer                 , namedParameterBundle, PropertyNames::Recipe::brewer                 , ""),
+   SET_REGULAR_FROM_NPB (m_asstBrewer             , namedParameterBundle, PropertyNames::Recipe::asstBrewer             , ""),
    SET_REGULAR_FROM_NPB (m_batchSize_l            , namedParameterBundle, PropertyNames::Recipe::batchSize_l            ),
    SET_REGULAR_FROM_NPB (m_efficiency_pct         , namedParameterBundle, PropertyNames::Recipe::efficiency_pct         ),
-   SET_REGULAR_FROM_NPB (m_age                    , namedParameterBundle, PropertyNames::Recipe::age_days               ),
-   SET_REGULAR_FROM_NPB (m_ageTemp_c              , namedParameterBundle, PropertyNames::Recipe::ageTemp_c              ),
+   SET_REGULAR_FROM_NPB (m_age_days               , namedParameterBundle, PropertyNames::Recipe::age_days               , std::nullopt),
+   SET_REGULAR_FROM_NPB (m_ageTemp_c              , namedParameterBundle, PropertyNames::Recipe::ageTemp_c              , std::nullopt),
    SET_REGULAR_FROM_NPB (m_date                   , namedParameterBundle, PropertyNames::Recipe::date                   ),
    SET_REGULAR_FROM_NPB (m_carbonation_vols       , namedParameterBundle, PropertyNames::Recipe::carbonation_vols       ),
    SET_REGULAR_FROM_NPB (m_forcedCarbonation      , namedParameterBundle, PropertyNames::Recipe::forcedCarbonation      ),
@@ -1737,31 +1748,34 @@ Recipe::Recipe(NamedParameterBundle const & namedParameterBundle) :
    SET_REGULAR_FROM_NPB (m_carbonationTemp_c      , namedParameterBundle, PropertyNames::Recipe::carbonationTemp_c      ),
    SET_REGULAR_FROM_NPB (m_primingSugarEquiv      , namedParameterBundle, PropertyNames::Recipe::primingSugarEquiv      ),
    SET_REGULAR_FROM_NPB (m_kegPrimingFactor       , namedParameterBundle, PropertyNames::Recipe::kegPrimingFactor       ),
-   SET_REGULAR_FROM_NPB (m_notes                  , namedParameterBundle, PropertyNames::Recipe::notes                  ),
-   SET_REGULAR_FROM_NPB (m_tasteNotes             , namedParameterBundle, PropertyNames::Recipe::tasteNotes             ),
+   SET_REGULAR_FROM_NPB (m_notes                  , namedParameterBundle, PropertyNames::Recipe::notes                  , ""),
+   SET_REGULAR_FROM_NPB (m_tasteNotes             , namedParameterBundle, PropertyNames::Recipe::tasteNotes             , ""),
    SET_REGULAR_FROM_NPB (m_tasteRating            , namedParameterBundle, PropertyNames::Recipe::tasteRating            ),
-   SET_REGULAR_FROM_NPB (m_styleId                , namedParameterBundle, PropertyNames::Recipe::styleId                ),
-   SET_REGULAR_FROM_NPB (m_equipmentId            , namedParameterBundle, PropertyNames::Recipe::equipmentId            ),
-   SET_REGULAR_FROM_NPB (m_mashId                 , namedParameterBundle, PropertyNames::Recipe::mashId                 ),
+   // Although some of these IDs are not really optional, we need default values for them for when reading from BeerXML or BeerJSON
+   SET_REGULAR_FROM_NPB (m_styleId                , namedParameterBundle, PropertyNames::Recipe::styleId                , -1),
+   SET_REGULAR_FROM_NPB (m_equipmentId            , namedParameterBundle, PropertyNames::Recipe::equipmentId            , -1),
+   SET_REGULAR_FROM_NPB (m_mashId                 , namedParameterBundle, PropertyNames::Recipe::mashId                 , -1),
    SET_REGULAR_FROM_NPB (m_boilId                 , namedParameterBundle, PropertyNames::Recipe::boilId                 , -1),
    SET_REGULAR_FROM_NPB (m_fermentationId         , namedParameterBundle, PropertyNames::Recipe::fermentationId         , -1),
-   SET_REGULAR_FROM_NPB (m_beerAcidity_pH         , namedParameterBundle, PropertyNames::Recipe::beerAcidity_pH         ),
-   SET_REGULAR_FROM_NPB (m_apparentAttenuation_pct, namedParameterBundle, PropertyNames::Recipe::apparentAttenuation_pct),
+   SET_REGULAR_FROM_NPB (m_beerAcidity_pH         , namedParameterBundle, PropertyNames::Recipe::beerAcidity_pH         , std::nullopt),
+   SET_REGULAR_FROM_NPB (m_apparentAttenuation_pct, namedParameterBundle, PropertyNames::Recipe::apparentAttenuation_pct, std::nullopt),
    // Note that, although we read them in here, the OG and FG are going to get recalculated when someone first tries to
    // access them.
    SET_REGULAR_FROM_NPB (m_og                     , namedParameterBundle, PropertyNames::Recipe::og                     ),
    SET_REGULAR_FROM_NPB (m_fg                     , namedParameterBundle, PropertyNames::Recipe::fg                     ),
-   SET_REGULAR_FROM_NPB (m_locked                 , namedParameterBundle, PropertyNames::Recipe::locked                 ),
+   SET_REGULAR_FROM_NPB (m_locked                 , namedParameterBundle, PropertyNames::Recipe::locked                 , false),
+                         m_calcsEnabled           {true},
                          m_uninitializedCalcs     {true},
                          m_uninitializedCalcsMutex{},
                          m_recalcMutex            {},
-   SET_REGULAR_FROM_NPB (m_ancestor_id            , namedParameterBundle, PropertyNames::Recipe::ancestorId             ),
+   SET_REGULAR_FROM_NPB (m_ancestor_id            , namedParameterBundle, PropertyNames::Recipe::ancestorId             , -1),
                          m_ancestors              {},
                          m_hasDescendants         {false} {
    // At this stage, we haven't set any Hops, Fermentables, etc.  This is deliberate because the caller typically needs
    // to access subsidiary records to obtain this info.   Callers will usually use setters (setHopIds, etc but via
    // setProperty) to finish constructing the object.
 
+   CONSTRUCTOR_END
    return;
 }
 
@@ -1774,7 +1788,7 @@ Recipe::Recipe(Recipe const & other) :
    m_asstBrewer             {other.m_asstBrewer        },
    m_batchSize_l            {other.m_batchSize_l       },
    m_efficiency_pct         {other.m_efficiency_pct    },
-   m_age                    {other.m_age               },
+   m_age_days               {other.m_age_days          },
    m_ageTemp_c              {other.m_ageTemp_c         },
    m_date                   {other.m_date              },
    m_carbonation_vols       {other.m_carbonation_vols  },
@@ -1796,6 +1810,7 @@ Recipe::Recipe(Recipe const & other) :
    m_og                     {other.m_og                },
    m_fg                     {other.m_fg                },
    m_locked                 {other.m_locked            },
+   m_calcsEnabled           {other.m_calcsEnabled      },
    m_uninitializedCalcs     {true                      },
    m_uninitializedCalcsMutex{},
    m_recalcMutex            {},
@@ -1843,6 +1858,10 @@ Recipe::Recipe(Recipe const & other) :
 
    this->recalcAll();
 
+   // This turns on writing to the DB and sending signals when things change.  However, we do this _after_ calling
+   // recalcAll() as the newly constructed object will not yet be stored in the DB and won't yet have anyone listening
+   // to its signals.
+   CONSTRUCTOR_END
    return;
 }
 
@@ -2404,9 +2423,7 @@ void Recipe::setEfficiency_pct(double val) {
 }
 
 void Recipe::setAsstBrewer(const QString & val) {
-   SET_AND_NOTIFY(PropertyNames::Recipe::asstBrewer,
-                      this->m_asstBrewer,
-                      val);
+   SET_AND_NOTIFY(PropertyNames::Recipe::asstBrewer, this->m_asstBrewer, val);
    return;
 }
 
@@ -2435,12 +2452,12 @@ void Recipe::setFg(double val) {
    return;
 }
 
-void Recipe::setAge_days(double val) {
-   SET_AND_NOTIFY(PropertyNames::Recipe::age_days, this->m_age, this->enforceMin(val, "age"));
+void Recipe::setAge_days(std::optional<double> val) {
+   SET_AND_NOTIFY(PropertyNames::Recipe::age_days, this->m_age_days, this->enforceMin(val, "age_days"));
    return;
 }
 
-void Recipe::setAgeTemp_c(double val) {
+void Recipe::setAgeTemp_c(std::optional<double> val) {
    SET_AND_NOTIFY(PropertyNames::Recipe::ageTemp_c, this->m_ageTemp_c, val);
    return;
 }
@@ -2483,7 +2500,7 @@ void Recipe::setKegPrimingFactor(double val) {
 void Recipe::setBeerAcidity_pH         (std::optional<double> const val) { SET_AND_NOTIFY(PropertyNames::Recipe::beerAcidity_pH         , this->m_beerAcidity_pH         , val); return; }
 void Recipe::setApparentAttenuation_pct(std::optional<double> const val) { SET_AND_NOTIFY(PropertyNames::Recipe::apparentAttenuation_pct, this->m_apparentAttenuation_pct, val); return; }
 
-void Recipe::setLocked(bool isLocked) {
+void Recipe::setLocked(bool const isLocked) {
    // Locking a Recipe doesn't count as changing it for the purposes of versioning or the UI, so no call to setAndNotify
    // here.
    if (this->newValueMatchesExisting(PropertyNames::Recipe::locked, this->m_locked, isLocked)) {
@@ -2491,6 +2508,11 @@ void Recipe::setLocked(bool isLocked) {
    }
    this->m_locked = isLocked;
    this->propagatePropertyChange(PropertyNames::Recipe::locked);
+   return;
+}
+
+void Recipe::setCalcsEnabled(bool const val) {
+   this->m_calcsEnabled = val;
    return;
 }
 
@@ -2726,14 +2748,16 @@ bool    Recipe::forcedCarbonation()  const { return m_forcedCarbonation;  }
 double  Recipe::batchSize_l()        const { return m_batchSize_l;        }
 double  Recipe::efficiency_pct()     const { return m_efficiency_pct;     }
 double  Recipe::tasteRating()        const { return m_tasteRating;        }
-double  Recipe::age_days()           const { return m_age;                }
-double  Recipe::ageTemp_c()          const { return m_ageTemp_c;          }
+std::optional<double>  Recipe::age_days()           const { return m_age_days;                }
+std::optional<double>  Recipe::ageTemp_c()          const { return m_ageTemp_c;          }
 double  Recipe::carbonationTemp_c()  const { return m_carbonationTemp_c;  }
 double  Recipe::primingSugarEquiv()  const { return m_primingSugarEquiv;  }
 double  Recipe::kegPrimingFactor()   const { return m_kegPrimingFactor;   }
 std::optional<QDate>   Recipe::date()               const { return m_date;               }
 std::optional<double>  Recipe::carbonation_vols()   const { return m_carbonation_vols;   }
-bool    Recipe::locked()             const { return m_locked;             }
+bool    Recipe::locked()             const { return m_locked      ;        }
+bool    Recipe::calcsEnabled()       const { return m_calcsEnabled;        }
+
 // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
 std::optional<double> Recipe::beerAcidity_pH         () const { return m_beerAcidity_pH         ; }
 std::optional<double> Recipe::apparentAttenuation_pct() const { return m_apparentAttenuation_pct; }
@@ -2770,6 +2794,11 @@ void Recipe::recalcIfNeeded(QString classNameOfWhatWasAddedOrChanged) {
 }
 
 void Recipe::recalcAll() {
+   if (!this->m_calcsEnabled) {
+      qDebug() << Q_FUNC_INFO << "Calculations disabled";
+      return;
+   }
+
    // WARNING
    // Infinite recursion possible, since these methods will emit changed(),
    // causing other objects to call finalVolume_l() for example, which may

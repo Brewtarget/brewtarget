@@ -87,6 +87,8 @@ Mash::Mash(QString name) :
    m_mashTunWeight_kg         {0.0 },
    m_mashTunSpecificHeat_calGC{0.0 },
    m_equipAdjust              {true} {
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -95,13 +97,15 @@ Mash::Mash(NamedParameterBundle const & namedParameterBundle) :
    FolderBase<Mash>{namedParameterBundle},
    StepOwnerBase<Mash, MashStep>{},
    SET_REGULAR_FROM_NPB (m_grainTemp_c              , namedParameterBundle, PropertyNames::Mash::grainTemp_c              ),
-   SET_REGULAR_FROM_NPB (m_notes                    , namedParameterBundle, PropertyNames::Mash::notes                    ),
+   SET_REGULAR_FROM_NPB (m_notes                    , namedParameterBundle, PropertyNames::Mash::notes                    , ""),
    SET_REGULAR_FROM_NPB (m_tunTemp_c                , namedParameterBundle, PropertyNames::Mash::tunTemp_c                ),
    SET_REGULAR_FROM_NPB (m_spargeTemp_c             , namedParameterBundle, PropertyNames::Mash::spargeTemp_c             ),
    SET_REGULAR_FROM_NPB (m_ph                       , namedParameterBundle, PropertyNames::Mash::ph                       ),
    SET_REGULAR_FROM_NPB (m_mashTunWeight_kg         , namedParameterBundle, PropertyNames::Mash::mashTunWeight_kg         ),
    SET_REGULAR_FROM_NPB (m_mashTunSpecificHeat_calGC, namedParameterBundle, PropertyNames::Mash::mashTunSpecificHeat_calGC),
    SET_REGULAR_FROM_NPB (m_equipAdjust              , namedParameterBundle, PropertyNames::Mash::equipAdjust              ) {
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -117,6 +121,8 @@ Mash::Mash(Mash const & other) :
    m_mashTunWeight_kg         {other.m_mashTunWeight_kg         },
    m_mashTunSpecificHeat_calGC{other.m_mashTunSpecificHeat_calGC},
    m_equipAdjust              {other.m_equipAdjust              } {
+
+   CONSTRUCTOR_END
    return;
 }
 

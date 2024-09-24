@@ -40,18 +40,25 @@ TypeLookup const IngredientInRecipe::typeLookup {
 IngredientInRecipe::IngredientInRecipe(QString name, int const recipeId, int const ingredientId) :
    OwnedByRecipe{name, recipeId},
    m_ingredientId{ingredientId} {
+
+   CONSTRUCTOR_END
    return;
 }
 
 IngredientInRecipe::IngredientInRecipe(NamedParameterBundle const & namedParameterBundle) :
    OwnedByRecipe{namedParameterBundle},
-   SET_REGULAR_FROM_NPB(m_ingredientId, namedParameterBundle, PropertyNames::IngredientInRecipe::ingredientId) {
+   // Although ingredientId is required, we have to supply a default value for when we are reading from BeerXML or BeerJSON
+   SET_REGULAR_FROM_NPB(m_ingredientId, namedParameterBundle, PropertyNames::IngredientInRecipe::ingredientId, -1) {
+
+   CONSTRUCTOR_END
    return;
 }
 
 IngredientInRecipe::IngredientInRecipe(IngredientInRecipe const & other) :
    OwnedByRecipe{other},
    m_ingredientId{other.m_ingredientId} {
+
+   CONSTRUCTOR_END
    return;
 }
 

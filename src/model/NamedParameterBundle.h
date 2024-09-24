@@ -30,6 +30,7 @@
 #include "utils/BtStringConst.h"
 #include "utils/MetaTypes.h"
 #include "utils/PropertyPath.h"
+#include "utils/TypeLookup.h"
 
 class NamedParameterBundle;
 
@@ -57,14 +58,14 @@ S & operator<<(S & stream, NamedParameterBundle const * namedParameterBundle);
  */
 class NamedParameterBundle {
 public:
-   enum OperationMode {
+   enum class OperationMode {
       Strict,
       NotStrict
    };
 
-   template<class S> friend S & operator<<(S & stream, NamedParameterBundle const & namedParameterBundle);
+   template<class S> S & writeToStream(S & stream, QString const indent) const;
 
-   NamedParameterBundle(OperationMode mode = Strict);
+   NamedParameterBundle(OperationMode mode = OperationMode::Strict);
    ~NamedParameterBundle();
 
    void insert(BtStringConst const & propertyName, QVariant const & value);
@@ -74,6 +75,11 @@ public:
    bool contains(BtStringConst const & propertyName) const;
 
    bool contains(PropertyPath  const & propertyPath) const;
+
+   //! \brief Convenience function combining \c contains and \c insert
+   template<typename P>
+   void insertIfNotPresent(P const & propertyNameOrPath, QVariant const & value);
+
 
    std::size_t size() const noexcept;
 
@@ -154,7 +160,7 @@ private:
 };
 
 
-//
+//======================================================================================================================
 // In the past, in a constructor's member initializer list, we would put things along the lines of:
 //
 //     m_foobar{namedParameterBundle.val<double>(PropertyNames::Hop::foobar)}
@@ -167,7 +173,7 @@ private:
 // But this is a bit clunky, and we have to refer to the member variable twice.
 //
 // So, now we use the macros below.
-//
+//======================================================================================================================
 
 /**
  * \brief In a constructor's member initializer list, instead of writing:
@@ -192,8 +198,40 @@ private:
  *              std::nullopt.  The lack of any value in the bundle means no DB column was mapped to this property name.)
  *
  */
-#define SET_REGULAR_FROM_NPB(MemberVariable, NamedParameterBundle, PropertyName, ...) \
-   MemberVariable{NamedParameterBundle.val<decltype(MemberVariable)>(PropertyName __VA_OPT__(, __VA_ARGS__))}
+#define SET_REGULAR_FROM_NPB(memberVariable, namedParameterBundle, propertyName, ...) \
+   memberVariable{namedParameterBundle.val<decltype(memberVariable)>(propertyName __VA_OPT__(, __VA_ARGS__))}
+
+/**
+ * \brief Same as SET_REGULAR_FROM_NPB but for use in the body of a constructor (rather than the initialisation list)
+ */
+#define ASSIGN_REGULAR_FROM_NPB(memberVariable, namedParameterBundle, propertyName, ...) \
+   this->memberVariable = namedParameterBundle.val<decltype(memberVariable)>(propertyName __VA_OPT__(, __VA_ARGS__))
+
+/**
+ * \brief Sometimes we want to call a setter (in the body of the constructor) rather than write directly to a member
+ *        variable in the initialiser list.  Eg in Step where we want to be able to store \c stepTime_days in
+ *        \c m_stepTime_mins by calling \c setStepTime_days.
+ *
+ *        This should work even for "setters" with multiple parameters, provided the first one is the one coming out of
+ *        the \c NamedParameterBundle
+ */
+#define SET_REGULAR_FROM_NPB_NO_MV(setterMemberFunction, namedParameterBundle, propertyName, ...) \
+   this->setterMemberFunction(namedParameterBundle.val<MemberFunctionFirstParamType_t<&setterMemberFunction>>(propertyName __VA_OPT__(, __VA_ARGS__)))
+
+/**
+ * \brief Similar to SET_REGULAR_FROM_NPB_NO_MV, but only calls the setter if the property is in the bundle
+ *
+ *        Evaluates to \c true if property was in the bundle, \c false otherwise
+ *
+ *        The logic below is (a && (function-returning-void, true)).  If a is false, result is false with no further
+ *        evaluation because of short-circuit evaluation.  If a is true, then the function-returning-void is called and,
+ *        because of the comma operator, its (non-)result is ignored and replaced by 'true' leading to an overall true
+ *        result (true && true).
+ */
+#define SET_IF_PRESENT_FROM_NPB_NO_MV(setterMemberFunction, namedParameterBundle, propertyName, ...) \
+   (namedParameterBundle.contains(propertyName) && \
+      ((SET_REGULAR_FROM_NPB_NO_MV(setterMemberFunction, namedParameterBundle, propertyName __VA_OPT__(, __VA_ARGS__))), \
+       true))
 
 /**
  * \brief In a constructor's member initializer list, instead of writing:

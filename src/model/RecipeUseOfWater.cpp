@@ -47,18 +47,24 @@ static_assert(std::is_base_of<IngredientInRecipe, RecipeUseOfWater>::value);
 RecipeUseOfWater::RecipeUseOfWater(QString name, int const recipeId, int const ingredientId) :
    IngredientInRecipe{name, recipeId, ingredientId},
    m_volume_l       {0.0} {
+
+   CONSTRUCTOR_END
    return;
 }
 
 RecipeUseOfWater::RecipeUseOfWater(NamedParameterBundle const & namedParameterBundle) :
    IngredientInRecipe{namedParameterBundle},
    SET_REGULAR_FROM_NPB (m_volume_l    , namedParameterBundle, PropertyNames::RecipeUseOfWater::volume_l    ) {
+
+   CONSTRUCTOR_END
    return;
 }
 
 RecipeUseOfWater::RecipeUseOfWater(RecipeUseOfWater const & other) :
    IngredientInRecipe{other               },
    m_volume_l        {other.m_volume_l    } {
+
+   CONSTRUCTOR_END
    return;
 }
 

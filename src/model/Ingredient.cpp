@@ -35,18 +35,24 @@ static_assert(std::is_base_of<FolderBase<Ingredient>, Ingredient>::value);
 Ingredient::Ingredient(QString name) :
    OutlineableNamedEntity{name},
    FolderBase<Ingredient>{} {
+
+   CONSTRUCTOR_END
    return;
 }
 
 Ingredient::Ingredient(NamedParameterBundle const & namedParameterBundle) :
    OutlineableNamedEntity{namedParameterBundle},
    FolderBase<Ingredient>{namedParameterBundle} {
+
+   CONSTRUCTOR_END
    return;
 }
 
 Ingredient::Ingredient(Ingredient const & other) :
    OutlineableNamedEntity{other},
    FolderBase<Ingredient>{other} {
+
+   CONSTRUCTOR_END
    return;
 }
 

@@ -1,41 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
    .signpath/artifact-configurations/default.xml is part of Brewtarget
+
+   See .github/workflows/windows.yml for more general info on how we use SignPath to sign the Windows binaries
+
+   See https://about.signpath.io/documentation/artifact-configuration/ for the syntax for this file
 -->
 <artifact-configuration xmlns="http://signpath.io/artifact-configuration/v1">
+  <!--
+  Note, per https://github.com/SignPath/github-action-submit-signing-request, that "the used artifact configuration must
+  have a zip-file element at its root, as all artifacts are packaged as ZIP archives on GitHub by default."
+  -->
   <zip-file>
+    <!--
+    Prior to the signing step, our build will have generated two files (where x.y.z is the version number - eg 4.0.4):
+      Brewtarget x.y.z Installer.exe
+      Brewtarget x.y.z Installer.exe.sha256sum
+    We want to create a signed version of the first file, and then generate a new checksum for it.
 
-    <msi-file path="DemoExample.msi">
-      <directory path="application/SignPath Demo">
+    Fortunately we don't have to work this out from scratch.  By manually uploading an installer to sign, SignPath will
+    also generate a sample artifact-configuration, which we can then edit as needed.
 
-        <pe-file-set>
-          <include path="Microsoft.*.dll" min-matches="0" max-matches="unbounded" />
-          <include path="Microsoft.*.exe" min-matches="0" max-matches="unbounded" />
-          <for-each>
-            <authenticode-verify />
-          </for-each>
-        </pe-file-set>
-
-        <pe-file-set>
-          <include path="Serilog.dll" product-name="Serilog" min-matches="0" />
-          <include path="Serilog.AspNetCore.dll" product-name="Serilog" product-version="7.0.0" min-matches="0" />
-        </pe-file-set>
-
-        <pe-file-set>
-          <include path="DemoExample.dll" />
-          <include path="DemoExample.exe" />
-          <for-each>
-            <authenticode-sign />
-          </for-each>
-        </pe-file-set>
-
-      </directory>
-      <authenticode-sign />
-    </msi-file>
-
-    <xml-file path="bom.xml" root-element-namespace="http://cyclonedx.org/schema/bom/1.5" root-element-name="bom">
-      <xml-sign/>
-    </xml-file>
-
+    Because we are only signing a single installer, our configuration is actually very simple.
+    -->
+    <pe-file>
+      <!--
+      This means do the signing with Microsoft Authenticode, which is "the primary signing method on the Windows
+      platform".  This is equivalent to using Microsoft’s SignTool.exe.
+      -->
+      <authenticode-sign hash-algorithm="sha256"
+                         description="Brewtarget Windows Installer"
+                         description-url="https://www.brewtarget.beer" />
+    </pe-file>
   </zip-file>
 </artifact-configuration>

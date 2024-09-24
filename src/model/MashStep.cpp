@@ -87,6 +87,8 @@ MashStep::MashStep(QString name) :
    m_infuseTemp_c          {std::nullopt            },
    // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
    m_liquorToGristRatio_lKg{std::nullopt            } {
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -106,11 +108,13 @@ MashStep::MashStep(NamedParameterBundle const & namedParameterBundle) :
    //
    if (0.0 == m_amount_l) {
       if (m_type == MashStep::Type::Decoction) {
-         m_amount_l = namedParameterBundle.val<double>(PropertyNames::MashStep::decoctionAmount_l, 0.0);
+         ASSIGN_REGULAR_FROM_NPB(m_amount_l, namedParameterBundle, PropertyNames::MashStep::decoctionAmount_l, 0.0);
       } else {
-         m_amount_l = namedParameterBundle.val<double>(PropertyNames::MashStep::infuseAmount_l   , 0.0);
+         ASSIGN_REGULAR_FROM_NPB(m_amount_l, namedParameterBundle, PropertyNames::MashStep::infuseAmount_l   , 0.0);
       }
    }
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -121,6 +125,8 @@ MashStep::MashStep(MashStep const & other) :
    m_infuseTemp_c          {other.m_infuseTemp_c          },
    // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
    m_liquorToGristRatio_lKg{other.m_liquorToGristRatio_lKg} {
+
+   CONSTRUCTOR_END
    return;
 }
 

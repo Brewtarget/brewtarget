@@ -67,16 +67,23 @@ Boil::Boil(QString name) :
    m_description  {""          },
    m_notes        {""          },
    m_preBoilSize_l{std::nullopt} {
+
+   CONSTRUCTOR_END
    return;
 }
 
 Boil::Boil(NamedParameterBundle const & namedParameterBundle) :
-   NamedEntity                {namedParameterBundle},
+   NamedEntity     {namedParameterBundle},
    FolderBase<Boil>{namedParameterBundle},
    StepOwnerBase<Boil, BoilStep>{},
    SET_REGULAR_FROM_NPB (m_description  , namedParameterBundle, PropertyNames::Boil::description  ),
    SET_REGULAR_FROM_NPB (m_notes        , namedParameterBundle, PropertyNames::Boil::notes        ),
    SET_REGULAR_FROM_NPB (m_preBoilSize_l, namedParameterBundle, PropertyNames::Boil::preBoilSize_l) {
+
+   // If we're being constructed from a BeerXML file, we use the property boilTime_mins for RECIPE > BOIL_TIME
+   SET_IF_PRESENT_FROM_NPB_NO_MV(Boil::setBoilTime_mins, namedParameterBundle, PropertyNames::Boil::boilTime_mins);
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -87,6 +94,8 @@ Boil::Boil(Boil const & other) :
    m_description  {other.m_description  },
    m_notes        {other.m_notes        },
    m_preBoilSize_l{other.m_preBoilSize_l} {
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -170,6 +179,7 @@ void Boil::ensureStandardProfile() {
    if (boilSteps.size() == 0 || boilSteps.at(0)->startTemp_c().value_or(100.0) > Boil::minimumBoilTemperature_c) {
       // We need to add a ramp-up (aka pre-boil) step
       auto preBoil = std::make_shared<BoilStep>(tr("Pre-boil for %1").arg(recipe->name()));
+      preBoil->setDescription(tr("Automatically-generated pre-boil step for %1").arg(recipe->name()));
       // Get the starting temperature for the ramp-up from the end temperature of the mash
       double startingTemp = Boil::minimumBoilTemperature_c - 1.0;
       if (recipe->mash()) {
@@ -188,6 +198,7 @@ void Boil::ensureStandardProfile() {
    if (boilSteps.size() < 2 || boilSteps.at(1)->startTemp_c().value_or(0.0) < Boil::minimumBoilTemperature_c) {
       // We need to add a main (aka boil proper) step
       auto mainBoil = std::make_shared<BoilStep>(tr("Main boil for %1").arg(recipe->name()));
+      mainBoil->setDescription(tr("Automatically-generated boil proper step for %1").arg(recipe->name()));
       mainBoil->setStartTemp_c(100.0);
       mainBoil->setEndTemp_c(100.0);
       this->insertStep(mainBoil, 2);
@@ -196,6 +207,7 @@ void Boil::ensureStandardProfile() {
    if (boilSteps.size() < 3 || boilSteps.at(2)->endTemp_c().value_or(100.0) > Boil::minimumBoilTemperature_c) {
       // We need to add a post-boil step
       auto postBoil = std::make_shared<BoilStep>(tr("Post-boil for %1").arg(recipe->name()));
+      postBoil->setDescription(tr("Automatically-generated post-boil step for %1").arg(recipe->name()));
       double endingTemp = 30.0;
       if (recipe->fermentation()) {
          auto fs = recipe->fermentation()->fermentationSteps();
