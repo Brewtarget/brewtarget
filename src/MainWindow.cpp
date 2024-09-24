@@ -2506,15 +2506,11 @@ void MainWindow::editYeastOfSelectedYeastAddition() {
    return;
 }
 
-void MainWindow::newRecipe()
-{
-   QString name = QInputDialog::getText(this, tr("Recipe name"),
-                                          tr("Recipe name:"));
-   QVariant defEquipKey = PersistentSettings::value(PersistentSettings::Names::defaultEquipmentKey, -1);
-   QObject* selection = sender();
-
-   if( name.isEmpty() )
+void MainWindow::newRecipe() {
+   QString const name = QInputDialog::getText(this, tr("Recipe name"), tr("Recipe name:"));
+   if (name.isEmpty()) {
       return;
+   }
 
    std::shared_ptr<Recipe> newRec = std::make_shared<Recipe>(name);
 
@@ -2526,9 +2522,22 @@ void MainWindow::newRecipe()
       return;
    }
    ObjectStoreWrapper::insert(newRec);
-   std::shared_ptr<Boil> newBoil = std::make_shared<Boil>(QString("Boil for %1").arg(name));
+
+   //
+   // .:TODO:. For the moment, we still assume that every Recipe has a Boil and a Fermentation.  Also, for the moment,
+   // we also create a new boil and fermentation for every Recipe.  In time, I'd like to extend the UI so that, when you
+   // input the name for your new Recipe, you also select Mash, Boil, Fermentation (all either from "List of existing"
+   // or "Make new").
+   //
+   std::shared_ptr<Boil> newBoil = std::make_shared<Boil>(tr("Automatically-created Boil for %1").arg(name));
+   // NB: Recipe::setBoil will ensure Boil is stored in the database
    newRec->setBoil(newBoil);
-   ObjectStoreWrapper::insert(newBoil);
+   // Since we're auto-creating a Boil, it might as well start out with the "standard" profile
+   newBoil->ensureStandardProfile();
+
+   std::shared_ptr<Fermentation> newFermentation = std::make_shared<Fermentation>(tr("Automatically-created Fermentation for %1").arg(name));
+   // NB: Recipe::setFermentation will ensure Fermentation is stored in the database
+   newRec->setFermentation(newFermentation);
 
    // Set the following stuff so everything appears nice
    // and the calculations don't divide by zero... things like that.
@@ -2536,7 +2545,8 @@ void MainWindow::newRecipe()
    newBoil->setPreBoilSize_l(23.47);  // 6.2 gallons
    newRec->setEfficiency_pct(70.0);
 
-   // we need a valid key, so insert the recipe before we add equipment
+   // We need a valid key, so insert the recipe before we add equipment
+   QVariant const defEquipKey = PersistentSettings::value(PersistentSettings::Names::defaultEquipmentKey, -1);
    if (defEquipKey != -1) {
       auto equipment = ObjectStoreWrapper::getById<Equipment>(defEquipKey.toInt());
       // I really want to do this before we've written the object to the
@@ -2549,8 +2559,9 @@ void MainWindow::newRecipe()
       }
    }
 
-   // a new recipe will be put in a folder if you right click on a recipe or
+   // A new recipe will be put in a folder if you right click on a recipe or
    // folder. Otherwise, it goes into the main window?
+   QObject* selection = this->sender();
    if (selection) {
       TreeView* sent = qobject_cast<TreeView*>(tabWidget_Trees->currentWidget()->focusWidget());
       if (sent) {
