@@ -189,6 +189,8 @@ Hop::Hop(QString name) :
    m_producer          {""          },
    m_productId         {""          },
    m_year              {""          } {
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -220,6 +222,8 @@ Hop::Hop(NamedParameterBundle const & namedParameterBundle) :
    SET_REGULAR_FROM_NPB (m_producer          , namedParameterBundle, PropertyNames::Hop::producer          , ""          ),
    SET_REGULAR_FROM_NPB (m_productId         , namedParameterBundle, PropertyNames::Hop::productId         , ""          ),
    SET_REGULAR_FROM_NPB (m_year              , namedParameterBundle, PropertyNames::Hop::year              , ""          ) {
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -251,6 +255,8 @@ Hop::Hop(Hop const & other) :
    m_producer          {other.m_producer          },
    m_productId         {other.m_productId         },
    m_year              {other.m_year              } {
+
+   CONSTRUCTOR_END
    return;
 }
 

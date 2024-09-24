@@ -1725,6 +1725,8 @@ Recipe::Recipe(QString name) :
    m_ancestor_id            {-1                  },
    m_ancestors              {},
    m_hasDescendants         {false               } {
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -1773,6 +1775,7 @@ Recipe::Recipe(NamedParameterBundle const & namedParameterBundle) :
    // to access subsidiary records to obtain this info.   Callers will usually use setters (setHopIds, etc but via
    // setProperty) to finish constructing the object.
 
+   CONSTRUCTOR_END
    return;
 }
 
@@ -1855,6 +1858,10 @@ Recipe::Recipe(Recipe const & other) :
 
    this->recalcAll();
 
+   // This turns on writing to the DB and sending signals when things change.  However, we do this _after_ calling
+   // recalcAll() as the newly constructed object will not yet be stored in the DB and won't yet have anyone listening
+   // to its signals.
+   CONSTRUCTOR_END
    return;
 }
 

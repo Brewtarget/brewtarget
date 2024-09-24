@@ -48,6 +48,8 @@ StepExtended::StepExtended(QString name) :
    Step             {name},
    m_startGravity_sg{std::nullopt},
    m_endGravity_sg  {std::nullopt} {
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -55,6 +57,8 @@ StepExtended::StepExtended(NamedParameterBundle const & namedParameterBundle) :
    Step             (namedParameterBundle                                                                     ),
    SET_REGULAR_FROM_NPB (m_startGravity_sg, namedParameterBundle, PropertyNames::StepExtended::startGravity_sg),
    SET_REGULAR_FROM_NPB (m_endGravity_sg  , namedParameterBundle, PropertyNames::StepExtended::endGravity_sg  ) {
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -62,6 +66,8 @@ StepExtended::StepExtended(StepExtended const & other) :
    Step      {other},
    m_startGravity_sg{other.m_startGravity_sg},
    m_endGravity_sg  {other.m_endGravity_sg  } {
+
+   CONSTRUCTOR_END
    return;
 }
 

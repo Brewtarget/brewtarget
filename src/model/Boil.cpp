@@ -67,11 +67,13 @@ Boil::Boil(QString name) :
    m_description  {""          },
    m_notes        {""          },
    m_preBoilSize_l{std::nullopt} {
+
+   CONSTRUCTOR_END
    return;
 }
 
 Boil::Boil(NamedParameterBundle const & namedParameterBundle) :
-   NamedEntity                {namedParameterBundle},
+   NamedEntity     {namedParameterBundle},
    FolderBase<Boil>{namedParameterBundle},
    StepOwnerBase<Boil, BoilStep>{},
    SET_REGULAR_FROM_NPB (m_description  , namedParameterBundle, PropertyNames::Boil::description  ),
@@ -79,10 +81,9 @@ Boil::Boil(NamedParameterBundle const & namedParameterBundle) :
    SET_REGULAR_FROM_NPB (m_preBoilSize_l, namedParameterBundle, PropertyNames::Boil::preBoilSize_l) {
 
    // If we're being constructed from a BeerXML file, we use the property boilTime_mins for RECIPE > BOIL_TIME
-   if (namedParameterBundle.contains(PropertyNames::Boil::boilTime_mins)) {
-      double boilTime_mins{namedParameterBundle.val<double>(PropertyNames::Boil::boilTime_mins)};
-      this->setBoilTime_mins(boilTime_mins);
-   }
+   SET_IF_PRESENT_FROM_NPB_NO_MV(Boil::setBoilTime_mins, namedParameterBundle, PropertyNames::Boil::boilTime_mins);
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -93,6 +94,8 @@ Boil::Boil(Boil const & other) :
    m_description  {other.m_description  },
    m_notes        {other.m_notes        },
    m_preBoilSize_l{other.m_preBoilSize_l} {
+
+   CONSTRUCTOR_END
    return;
 }
 

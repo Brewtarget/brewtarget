@@ -204,6 +204,8 @@ Yeast::Yeast(QString name) :
    m_killerProducingK28Toxin  {std::nullopt},
    m_killerProducingKlusToxin {std::nullopt},
    m_killerNeutral            {std::nullopt} {
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -234,9 +236,11 @@ Yeast::Yeast(NamedParameterBundle const & namedParameterBundle) :
    // max.  Best we can do in that scenario is set min and max to the supplied value.
    if (namedParameterBundle.contains(PropertyNames::Yeast::attenuationTypical_pct)) {
       double attenuationTypical_pct{namedParameterBundle.val<double>(PropertyNames::Yeast::attenuationTypical_pct)};
-      if (!this->m_attenuationMin_pct) { this->m_attenuationMin_pct = attenuationTypical_pct; }
-      if (!this->m_attenuationMax_pct) { this->m_attenuationMax_pct = attenuationTypical_pct; }
+      if (!this->m_attenuationMin_pct) { ASSIGN_REGULAR_FROM_NPB(m_attenuationMin_pct, namedParameterBundle, PropertyNames::Yeast::attenuationTypical_pct); }
+      if (!this->m_attenuationMax_pct) { ASSIGN_REGULAR_FROM_NPB(m_attenuationMax_pct, namedParameterBundle, PropertyNames::Yeast::attenuationTypical_pct); }
    }
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -262,6 +266,8 @@ Yeast::Yeast(Yeast const & other) :
    m_killerProducingK28Toxin  {other.m_killerProducingK28Toxin  },
    m_killerProducingKlusToxin {other.m_killerProducingKlusToxin },
    m_killerNeutral            {other.m_killerNeutral            } {
+
+   CONSTRUCTOR_END
    return;
 }
 

@@ -198,8 +198,14 @@ private:
  *              std::nullopt.  The lack of any value in the bundle means no DB column was mapped to this property name.)
  *
  */
-#define SET_REGULAR_FROM_NPB(MemberVariable, NamedParameterBundle, PropertyName, ...) \
-   MemberVariable{NamedParameterBundle.val<decltype(MemberVariable)>(PropertyName __VA_OPT__(, __VA_ARGS__))}
+#define SET_REGULAR_FROM_NPB(memberVariable, namedParameterBundle, propertyName, ...) \
+   memberVariable{namedParameterBundle.val<decltype(memberVariable)>(propertyName __VA_OPT__(, __VA_ARGS__))}
+
+/**
+ * \brief Same as SET_REGULAR_FROM_NPB but for use in the body of a constructor (rather than the initialisation list)
+ */
+#define ASSIGN_REGULAR_FROM_NPB(memberVariable, namedParameterBundle, propertyName, ...) \
+   this->memberVariable = namedParameterBundle.val<decltype(memberVariable)>(propertyName __VA_OPT__(, __VA_ARGS__))
 
 /**
  * \brief Sometimes we want to call a setter (in the body of the constructor) rather than write directly to a member
@@ -209,8 +215,23 @@ private:
  *        This should work even for "setters" with multiple parameters, provided the first one is the one coming out of
  *        the \c NamedParameterBundle
  */
-#define SET_REGULAR_FROM_NPB_NO_MV(setterMemberFunction, NamedParameterBundle, PropertyName, ...) \
-   this->setterMemberFunction(NamedParameterBundle.val<MemberFunctionFirstParamType_t<&setterMemberFunction>>(PropertyName __VA_OPT__(, __VA_ARGS__)))
+#define SET_REGULAR_FROM_NPB_NO_MV(setterMemberFunction, namedParameterBundle, propertyName, ...) \
+   this->setterMemberFunction(namedParameterBundle.val<MemberFunctionFirstParamType_t<&setterMemberFunction>>(propertyName __VA_OPT__(, __VA_ARGS__)))
+
+/**
+ * \brief Similar to SET_REGULAR_FROM_NPB_NO_MV, but only calls the setter if the property is in the bundle
+ *
+ *        Evaluates to \c true if property was in the bundle, \c false otherwise
+ *
+ *        The logic below is (a && (function-returning-void, true)).  If a is false, result is false with no further
+ *        evaluation because of short-circuit evaluation.  If a is true, then the function-returning-void is called and,
+ *        because of the comma operator, its (non-)result is ignored and replaced by 'true' leading to an overall true
+ *        result (true && true).
+ */
+#define SET_IF_PRESENT_FROM_NPB_NO_MV(setterMemberFunction, namedParameterBundle, propertyName, ...) \
+   (namedParameterBundle.contains(propertyName) && \
+      ((SET_REGULAR_FROM_NPB_NO_MV(setterMemberFunction, namedParameterBundle, propertyName __VA_OPT__(, __VA_ARGS__))), \
+       true))
 
 /**
  * \brief In a constructor's member initializer list, instead of writing:

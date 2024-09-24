@@ -90,12 +90,14 @@ Step::Step(QString name) :
    m_rampTime_mins  {std::nullopt},
    m_startAcidity_pH{std::nullopt},
    m_endAcidity_pH  {std::nullopt} {
+
+   CONSTRUCTOR_END
    return;
 }
 
 Step::Step(NamedParameterBundle const & namedParameterBundle) :
    NamedEntity      (namedParameterBundle                                                             ),
-   SET_REGULAR_FROM_NPB (m_stepTime_mins  , namedParameterBundle, PropertyNames::Step::stepTime_mins  ),
+   // See below for m_stepTime_mins
    SET_REGULAR_FROM_NPB (m_startTemp_c    , namedParameterBundle, PropertyNames::Step::startTemp_c    , std::nullopt),
    SET_REGULAR_FROM_NPB (m_endTemp_c      , namedParameterBundle, PropertyNames::Step::  endTemp_c    , std::nullopt),
    SET_REGULAR_FROM_NPB (m_stepNumber     , namedParameterBundle, PropertyNames::Step::stepNumber     , 0),
@@ -109,15 +111,15 @@ Step::Step(NamedParameterBundle const & namedParameterBundle) :
    // supports it.  However, we cannot safely call a virtual member function from a base class constructor, so we have
    // to do such asserts in the derived classes.
 
-   qDebug().noquote() << Q_FUNC_INFO << namedParameterBundle;
-
    // If we're being constructed from a BeerXML file, we use the property stepTime_days for RECIPE > PRIMARY_AGE etc
-   if (namedParameterBundle.contains(PropertyNames::Step::stepTime_days)) {
-      SET_REGULAR_FROM_NPB_NO_MV(Step::setStepTime_days, namedParameterBundle, PropertyNames::Step::stepTime_days);
+   // Otherwise we use the stepTime_mins property
+   if (!SET_IF_PRESENT_FROM_NPB_NO_MV(Step::setStepTime_mins, namedParameterBundle, PropertyNames::Step::stepTime_mins) &&
+       !SET_IF_PRESENT_FROM_NPB_NO_MV(Step::setStepTime_days, namedParameterBundle, PropertyNames::Step::stepTime_days)) {
+      qWarning() << Q_FUNC_INFO << "Neither stepTime_mins nor stepTime_days set in bundle, so step time will be 0.";
+      this->m_stepTime_mins = 0.0;
    }
 
-   qDebug().noquote() << Q_FUNC_INFO << "m_stepTime_mins" << this->m_stepTime_mins;
-
+   CONSTRUCTOR_END
    return;
 }
 
@@ -133,6 +135,8 @@ Step::Step(Step const & other) :
    m_rampTime_mins  {other.m_rampTime_mins  },
    m_startAcidity_pH{other.m_startAcidity_pH},
    m_endAcidity_pH  {other.m_endAcidity_pH  } {
+
+   CONSTRUCTOR_END
    return;
 }
 

@@ -131,6 +131,8 @@ Style::Style(QString name) :
    m_flavor           {""               },
    m_mouthfeel        {""               },
    m_overallImpression{""               } {
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -163,6 +165,8 @@ Style::Style(NamedParameterBundle const & namedParameterBundle) :
    SET_REGULAR_FROM_NPB (m_flavor           , namedParameterBundle, PropertyNames::Style::flavor           , ""),
    SET_REGULAR_FROM_NPB (m_mouthfeel        , namedParameterBundle, PropertyNames::Style::mouthfeel        , ""),
    SET_REGULAR_FROM_NPB (m_overallImpression, namedParameterBundle, PropertyNames::Style::overallImpression, "") {
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -195,6 +199,8 @@ Style::Style(Style const & other) :
    m_flavor           {other.m_flavor           },
    m_mouthfeel        {other.m_mouthfeel        },
    m_overallImpression{other.m_overallImpression} {
+
+   CONSTRUCTOR_END
    return;
 }
 

@@ -81,6 +81,8 @@ RecipeAddition::RecipeAddition(QString name, int const recipeId, int const ingre
    m_addAtGravity_sg{std::nullopt},
    m_addAtAcidity_pH{std::nullopt},
    m_duration_mins  {std::nullopt} {
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -93,6 +95,8 @@ RecipeAddition::RecipeAddition(NamedParameterBundle const & namedParameterBundle
    SET_REGULAR_FROM_NPB (m_addAtGravity_sg, namedParameterBundle, PropertyNames::RecipeAddition::addAtGravity_sg, std::nullopt),
    SET_REGULAR_FROM_NPB (m_addAtAcidity_pH, namedParameterBundle, PropertyNames::RecipeAddition::addAtAcidity_pH, std::nullopt),
    SET_REGULAR_FROM_NPB (m_duration_mins  , namedParameterBundle, PropertyNames::RecipeAddition::duration_mins  , std::nullopt) {
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -104,6 +108,8 @@ RecipeAddition::RecipeAddition(RecipeAddition const & other) :
    m_addAtGravity_sg{other.m_addAtGravity_sg},
    m_addAtAcidity_pH{other.m_addAtAcidity_pH},
    m_duration_mins  {other.m_duration_mins  } {
+
+   CONSTRUCTOR_END
    return;
 }
 

@@ -57,6 +57,8 @@ static_assert(std::is_base_of<StepExtended, BoilStep>::value);
 BoilStep::BoilStep(QString name) :
    StepExtended  {name        },
    m_chillingType{std::nullopt} {
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -67,12 +69,16 @@ BoilStep::BoilStep(NamedParameterBundle const & namedParameterBundle) :
    // always be because it's optional) then it is supported by this class.  In other words, either it's not there, or
    // (if it is then) it's supported.
    Q_ASSERT(!namedParameterBundle.contains(PropertyNames::Step::rampTime_mins) || this->rampTimeIsSupported());
+
+   CONSTRUCTOR_END
    return;
 }
 
 BoilStep::BoilStep(BoilStep const & other) :
    StepExtended  {other               },
    m_chillingType{other.m_chillingType} {
+
+   CONSTRUCTOR_END
    return;
 }
 

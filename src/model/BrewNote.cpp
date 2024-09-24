@@ -100,12 +100,16 @@ TypeLookup const BrewNote::typeLookup {
 // Initializers
 BrewNote::BrewNote(QString name) :
    BrewNote(QDate(), name) {
+
+   CONSTRUCTOR_END
    return;
 }
 
 BrewNote::BrewNote(Recipe const & recipe) :
    BrewNote(QDate(), "") {
    this->m_recipeId = recipe.key();
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -142,6 +146,8 @@ BrewNote::BrewNote(QDate dateNow, QString const & name) :
    m_projPoints       {0.0    },
    m_projFermPoints   {0.0    },
    m_projAtten        {0.0    } {
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -178,6 +184,8 @@ BrewNote::BrewNote(NamedParameterBundle const & namedParameterBundle) :
    SET_REGULAR_FROM_NPB (m_projPoints       , namedParameterBundle, PropertyNames::BrewNote::projPoints       ),
    SET_REGULAR_FROM_NPB (m_projFermPoints   , namedParameterBundle, PropertyNames::BrewNote::projFermPoints   ),
    SET_REGULAR_FROM_NPB (m_projAtten        , namedParameterBundle, PropertyNames::BrewNote::projAtten        ) {
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -213,6 +221,8 @@ BrewNote::BrewNote(BrewNote const & other) :
    m_projPoints       {other.m_projPoints       },
    m_projFermPoints   {other.m_projFermPoints   },
    m_projAtten        {other.m_projAtten        } {
+
+   CONSTRUCTOR_END
    return;
 }
 

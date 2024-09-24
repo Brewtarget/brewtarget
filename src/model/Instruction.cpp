@@ -104,6 +104,8 @@ Instruction::Instruction(QString name) :
    m_timerValue(""),
    m_completed (false),
    m_interval  (0.0) {
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -115,6 +117,8 @@ Instruction::Instruction(NamedParameterBundle const & namedParameterBundle) :
    SET_REGULAR_FROM_NPB (m_timerValue, namedParameterBundle, PropertyNames::Instruction::timerValue),
    SET_REGULAR_FROM_NPB (m_completed , namedParameterBundle, PropertyNames::Instruction::completed ),
    SET_REGULAR_FROM_NPB (m_interval  , namedParameterBundle, PropertyNames::Instruction::interval  ) {
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -126,6 +130,8 @@ Instruction::Instruction(Instruction const & other) :
    m_timerValue{other.m_timerValue},
    m_completed {other.m_completed },
    m_interval  {other.m_interval  } {
+
+   CONSTRUCTOR_END
    return;
 }
 

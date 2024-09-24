@@ -68,6 +68,8 @@ RecipeAdditionMisc::RecipeAdditionMisc(QString name, int const recipeId, int con
    RecipeAddition{name, recipeId, ingredientId},
    RecipeAdditionBase<RecipeAdditionMisc, Misc>{},
    IngredientAmount<RecipeAdditionMisc, Misc>{} {
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -81,6 +83,8 @@ RecipeAdditionMisc::RecipeAdditionMisc(NamedParameterBundle const & namedParamet
    //
    m_stage = namedParameterBundle.val<RecipeAddition::Stage>(PropertyNames::RecipeAddition::stage,
                                                              RecipeAddition::Stage::Boil);
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -88,6 +92,8 @@ RecipeAdditionMisc::RecipeAdditionMisc(RecipeAdditionMisc const & other) :
    RecipeAddition{other},
    RecipeAdditionBase<RecipeAdditionMisc, Misc>{},
    IngredientAmount<RecipeAdditionMisc, Misc>{other} {
+
+   CONSTRUCTOR_END
    return;
 }
 

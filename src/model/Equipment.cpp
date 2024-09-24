@@ -173,6 +173,8 @@ Equipment::Equipment(QString name) :
    m_fermenterNotes             {""          },
    m_agingVesselNotes           {""          },
    m_packagingVesselNotes       {""          } {
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -236,6 +238,8 @@ Equipment::Equipment(NamedParameterBundle const & namedParameterBundle) :
    SET_REGULAR_FROM_NPB (m_fermenterNotes             , namedParameterBundle, PropertyNames::Equipment::fermenterNotes             , ""          ),
    SET_REGULAR_FROM_NPB (m_agingVesselNotes           , namedParameterBundle, PropertyNames::Equipment::agingVesselNotes           , ""          ),
    SET_REGULAR_FROM_NPB (m_packagingVesselNotes       , namedParameterBundle, PropertyNames::Equipment::packagingVesselNotes       , ""          ) {
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -291,6 +295,8 @@ Equipment::Equipment(Equipment const & other) :
    m_fermenterNotes             {other.m_fermenterNotes             },
    m_agingVesselNotes           {other.m_agingVesselNotes           },
    m_packagingVesselNotes       {other.m_packagingVesselNotes       } {
+
+   CONSTRUCTOR_END
    return;
 }
 

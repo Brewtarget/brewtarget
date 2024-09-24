@@ -224,6 +224,8 @@ Fermentable::Fermentable(QString name) :
    m_fan_ppm                  {std::nullopt            },
    m_fermentability_pct       {std::nullopt            },
    m_betaGlucan_ppm           {std::nullopt            } {
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -263,6 +265,7 @@ Fermentable::Fermentable(NamedParameterBundle const & namedParameterBundle) :
    SET_REGULAR_FROM_NPB (m_fermentability_pct                 , namedParameterBundle, PropertyNames::Fermentable::fermentability_pct    , std::nullopt),
    SET_REGULAR_FROM_NPB (m_betaGlucan_ppm                     , namedParameterBundle, PropertyNames::Fermentable::betaGlucan_ppm        , std::nullopt) {
 
+   CONSTRUCTOR_END
    return;
 }
 
@@ -301,6 +304,8 @@ Fermentable::Fermentable(Fermentable const & other) :
    m_fan_ppm                  {other.m_fan_ppm               },
    m_fermentability_pct       {other.m_fermentability_pct    },
    m_betaGlucan_ppm           {other.m_betaGlucan_ppm        } {
+
+   CONSTRUCTOR_END
    return;
 }
 

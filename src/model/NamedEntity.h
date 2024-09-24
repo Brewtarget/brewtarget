@@ -409,6 +409,23 @@ signals:
    void changedName(QString);
 
 protected:
+   /**
+    * \brief If a derived class calls a setter from its constructor (eg as we do in \c Step to handle setting
+    *        \c m_stepTime_mins from either \c PropertyNames::Step::stepTime_mins or
+    *        \c PropertyNames::Step::stepTime_days) we don't want to be sending signals or trying to write to the
+    *        database.  Besides being somewhat circular to write to the DB whilst we are perhaps reading the object from
+    *        the DB, it's not always possible.  Eg, \c Step is a pure virtual class, and, at the point its constructor
+    *        is running, it is not valid to call \c this->getObjectStoreTypedInstance() (because the vtable for the
+    *        derived class such as \c BoilStep or \c MashStep has not yet been created).
+    *
+    *        So, this flag is set to \c false in the \c NamedEntity constructor (courtesy of the default here) to
+    *        disable signalling and propagation down to the DB when properties change.  Concrete subclasses should turn
+    *        this flag on as the last action of their constructor.  HOWEVER to make life simple, we just include the
+    *        CONSTRUCTOR_END macro (see below) at the end of every constructor, which turns the flag on if the class is
+    *        not abstract.
+    */
+   bool m_propagationAndSignalsEnabled = false;
+
    //! The key of this entity in its table.
    int m_key;
    // This is <=0 if there is no parent (or parent is not yet known)
@@ -697,6 +714,25 @@ Q_DECLARE_METATYPE(std::shared_ptr<NamedEntity>)
  * \brief Convenience macro
  */
 #define SET_AND_NOTIFY(...) this->setAndNotify(__VA_ARGS__)
+
+template<typename T> constexpr bool IsAbstract(T const *) { return std::is_abstract<T>::value; }
+
+/**
+ * \brief Subclasses should include this macro at the end of \b all of their constructors.  See comment on
+ *        \c m_propagationAndSignalsEnabled for more info.
+ *
+ *        There is probably a way to make this if statement constexpr, but I haven't figured it out yet!
+ *
+ *        TODO: We could probably remove a \b lot of boilerplate from the three main constructors (create empty,
+ *              copy, create from NamedParameterBundle) by having generic code that uses the static typeLookup member
+ *              variable to loop through and initialise all of the instance member variables.  We'd need to move default
+ *              values to the header (which is best practice now anyway) and add something to \c TypeInfo to say when
+ *              default values are OK for constructing from NamedParameterBundle, but that should be doable).
+ */
+#define CONSTRUCTOR_END \
+  if (!IsAbstract(this)) { \
+     this->NamedEntity::m_propagationAndSignalsEnabled = true; \
+  }
 
 /**
  * \brief For some templated functions, it's useful at compile time to have one version for NE classes with folders and

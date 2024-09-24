@@ -149,6 +149,8 @@ Water::Water(QString name) :
    m_nitrate_ppm        {std::nullopt},
    m_nitrite_ppm        {std::nullopt},
    m_flouride_ppm       {std::nullopt} {
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -176,6 +178,8 @@ Water::Water(NamedParameterBundle const & namedParameterBundle) :
    SET_REGULAR_FROM_NPB (m_nitrate_ppm       , namedParameterBundle, PropertyNames::Water::nitrate_ppm     , std::nullopt),
    SET_REGULAR_FROM_NPB (m_nitrite_ppm       , namedParameterBundle, PropertyNames::Water::nitrite_ppm     , std::nullopt),
    SET_REGULAR_FROM_NPB (m_flouride_ppm      , namedParameterBundle, PropertyNames::Water::flouride_ppm    , std::nullopt) {
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -203,6 +207,8 @@ Water::Water(Water const& other) :
    m_nitrate_ppm        {other.m_nitrate_ppm       },
    m_nitrite_ppm        {other.m_nitrite_ppm       },
    m_flouride_ppm       {other.m_flouride_ppm      } {
+
+   CONSTRUCTOR_END
    return;
 }
 

@@ -50,6 +50,8 @@ RecipeAdditionFermentable::RecipeAdditionFermentable(QString name, int const rec
    RecipeAddition{name, recipeId, ingredientId},
    RecipeAdditionBase<RecipeAdditionFermentable, Fermentable>{},
    IngredientAmount<RecipeAdditionFermentable, Fermentable>{} {
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -64,6 +66,8 @@ RecipeAdditionFermentable::RecipeAdditionFermentable(NamedParameterBundle const 
    m_stage = namedParameterBundle.val<RecipeAddition::Stage>(PropertyNames::RecipeAddition::stage,
                                                              RecipeAddition::Stage::Boil);
 ///   qDebug() << Q_FUNC_INFO << "RecipeAdditionFermentable #" << this->key() << ": Recipe #" << this->m_recipeId << ", Fermentable #" << this->m_ingredientId;
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -71,6 +75,8 @@ RecipeAdditionFermentable::RecipeAdditionFermentable(RecipeAdditionFermentable c
    RecipeAddition{other},
    RecipeAdditionBase<RecipeAdditionFermentable, Fermentable>{},
    IngredientAmount<RecipeAdditionFermentable, Fermentable>{other} {
+
+   CONSTRUCTOR_END
    return;
 }
 

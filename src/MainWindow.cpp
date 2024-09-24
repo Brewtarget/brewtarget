@@ -2526,7 +2526,7 @@ void MainWindow::newRecipe()
       return;
    }
    ObjectStoreWrapper::insert(newRec);
-   std::shared_ptr<Boil> newBoil = std::make_shared<Boil>(QString("Boil for").arg(name));
+   std::shared_ptr<Boil> newBoil = std::make_shared<Boil>(QString("Boil for %1").arg(name));
    newRec->setBoil(newBoil);
    ObjectStoreWrapper::insert(newBoil);
 

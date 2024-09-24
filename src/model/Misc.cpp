@@ -111,6 +111,8 @@ Misc::Misc(QString name) :
    // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
    m_producer {""               },
    m_productId{""               } {
+
+   CONSTRUCTOR_END
    return;
 }
 
@@ -123,6 +125,7 @@ Misc::Misc(NamedParameterBundle const & namedParameterBundle) :
    SET_REGULAR_FROM_NPB (m_producer , namedParameterBundle, PropertyNames::Misc::producer ),
    SET_REGULAR_FROM_NPB (m_productId, namedParameterBundle, PropertyNames::Misc::productId) {
 
+   CONSTRUCTOR_END
    return;
 }
 
@@ -134,6 +137,8 @@ Misc::Misc(Misc const & other) :
    // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
    m_producer {other.m_producer },
    m_productId{other.m_productId} {
+
+   CONSTRUCTOR_END
    return;
 }
 
