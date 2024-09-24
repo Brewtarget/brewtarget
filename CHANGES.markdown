@@ -22,9 +22,10 @@ Minor bug fixes for the 4.0.4 release (ie bugs in 4.0.4 are fixed in this 4.0.5 
 
 ### Bug Fixes
 * Crash on new ingredient import (brewtarget v4.0.4) at startup time [828](https://github.com/Brewtarget/brewtarget/issues/828)
+*  Crash on new recipe creation [829](https://github.com/Brewtarget/brewtarget/issues/829)
 
 ### Release Timestamp
-Mon, 23 Sep 2024 04:00:05 +0100
+Tue, 24 Sep 2024 04:00:05 +0100
 
 ## v4.0.4
 Minor bug fixes for the 4.0.3 release (ie bugs in 4.0.3 are fixed in this 4.0.4 release).
