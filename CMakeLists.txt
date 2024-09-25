@@ -86,6 +86,11 @@ cmake_policy(VERSION 3.16)
 # numbers via it (rather than manually setting individual major/minor/patch vars).
 cmake_policy(SET CMP0048 NEW)
 
+# Compatibility settings used with modern CMAKE (>= 3.29) used to pull BoostConfig.cmake from upstream
+# -> FindBoost cmake module was removed in recent versions.
+# See https://cmake.org/cmake/help/latest/module/FindBoost.html
+cmake_policy(SET CMP0167 NEW)
+
 #=======================================================================================================================
 #================================================ Other preliminaries =================================================
 #=======================================================================================================================
@@ -653,14 +658,7 @@ message(STATUS "Using Qt version " ${Qt5Core_VERSION})
 #    libraries.  Boost JSON needs a more recent version than 1.71.
 #
 set(Boost_USE_STATIC_LIBS ON)
-if(WIN32)
-   find_package(Boost 1.79.0 REQUIRED)
-elseif(APPLE)
-   find_package(Boost 1.79.0 REQUIRED)
-else()
-   # Note that header-only libraries don't have a component
-   find_package(Boost 1.79.0 REQUIRED COMPONENTS stacktrace_backtrace)
-endif()
+find_package(Boost 1.79.0 REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
 # Uncomment the next two lines if you want to find where Boost headers and DLLs are on your system
 message("Boost include directories: ${Boost_INCLUDE_DIRS}")
