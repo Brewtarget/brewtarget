@@ -248,7 +248,9 @@ jobs:
 
 
       #
-      # Sign the Windows binaries using our Signpath certificate
+      # Sign the Windows binaries using our Signpath certificate.  Note that this involves sending the binary to the
+      # remote SignPath service where the signing actually happens.  We need to have an account and credentials with
+      # that service to use it, so this step can't be done in forked repositories.
       #
       # Various settings here have to align with the "brewtarget" project in the "Brewtarget [OSS]" organisation
       # registered at https://app.signpath.io/.
@@ -311,7 +313,15 @@ jobs:
           signing-policy-slug: '${{ env.SIGNPATH_SIGNING_POLICY_SLUG }}'
           github-artifact-id: '${{steps.upload-unsigned-artifact.outputs.artifact-id}}'
           wait-for-completion: true
-          output-artifact-directory: 'C:/_/mbuild/packages/windows/signed'
+          #
+          # From trial and error, it seems output-artifact-directory must be a relative directory, because it will get
+          # appended to some base directory (possibly on the remote server where the signing is actually done).  Eg, if
+          # we set:
+          #    output-artifact-directory: 'C:/_/mbuild/packages/windows/signed'
+          # We get error:
+          #    ENOENT: no such file or directory, mkdir 'D:\a\brewtarget\brewtarget\C:\_\mbuild\packages\windows\signed'
+          #
+          output-artifact-directory: 'signed'
           github-extended-verification-token: '${{ secrets.EXTENDED_VERIFICATION_TOKEN }}'
 
       #

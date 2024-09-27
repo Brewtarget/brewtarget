@@ -22,7 +22,8 @@ Minor bug fixes for the 4.0.4 release (ie bugs in 4.0.4 are fixed in this 4.0.5 
 
 ### Bug Fixes
 * Crash on new ingredient import (brewtarget v4.0.4) at startup time [828](https://github.com/Brewtarget/brewtarget/issues/828)
-*  Crash on new recipe creation [829](https://github.com/Brewtarget/brewtarget/issues/829)
+* Crash on new recipe creation [829](https://github.com/Brewtarget/brewtarget/issues/829)
+* BeerXML/BeerJSON Recipe export does not match selected type [835](https://github.com/Brewtarget/brewtarget/issues/835)
 
 ### Release Timestamp
 Tue, 24 Sep 2024 04:00:05 +0100

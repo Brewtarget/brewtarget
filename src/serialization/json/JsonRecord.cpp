@@ -1081,6 +1081,7 @@ void JsonRecord::insertValue(JsonRecordDefinition::FieldDefinition const & field
             JsonMeasureableUnitsMapping const * const unitsMapping =
                std::get<JsonMeasureableUnitsMapping const *>(fieldDefinition.valueDecoder);
             Q_ASSERT(unitsMapping);
+            qDebug() << Q_FUNC_INFO << *unitsMapping;
             Measurement::Unit const * const aUnit = unitsMapping->defaultUnit();
             Measurement::Unit const & canonicalUnit = aUnit->getCanonical();
             qDebug() << Q_FUNC_INFO << canonicalUnit;

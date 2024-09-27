@@ -496,7 +496,7 @@ std::string JsonXPath::makePointerToLeaf(boost::json::value ** valuePointer) con
    return std::get<JsonXPath::JsonKey>(priorNode);
 }
 
-std::string_view JsonXPath::asKey() const {
+std::string JsonXPath::asKey() const {
    // It's a coding error if there is more than one path part
    Q_ASSERT(this->m_pathParts.size() == 1);
 
@@ -505,9 +505,8 @@ std::string_view JsonXPath::asKey() const {
 
    // We need to get the first path part (m_pathParts[0]) and then strip the beginning '/' character from it
    // (.substr(1)) before we pass it to the string_view constructor.  (Maybe there is a slick way to skip over the '/'
-   // in the string_view constructor, but I didn't yet find it.)
-   std::string_view key{std::get<JsonXPath::JsonKey>(this->m_pathParts[0]).substr(1)};
-   return key;
+   // in the std::string constructor, but I didn't yet find it.)
+   return std::get<JsonXPath::JsonKey>(this->m_pathParts[0]).substr(1);
 }
 
 char const * JsonXPath::asXPath_c_str() const {

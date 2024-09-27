@@ -81,11 +81,30 @@ namespace {
          Q_ASSERT(importOrExport == ImportOrExport::EXPORT);
          fileChooser.setAcceptMode(QFileDialog::AcceptSave);
          fileChooser.setFileMode(QFileDialog::AnyFile);
-         // If the user doesn't specify a suffix
-         fileChooser.setDefaultSuffix(QString("xml"));
-         // TBD what's the difference between filter and nameFilter?
-//         QString filterStr = "BeerXML files (*.xml)";
-//         fileChooser.setNameFilter(filterStr);
+         //
+         // If the user doesn't specify a suffix, we choose one for them.  By default it's "json" to match the first
+         // filter in the list.  If the user changes the filter, then we get a signal and change the default suffix
+         // accordingly.
+         //
+         // I think in practice QFileDialog::filterSelected will always get sent when exec() is run below, so we don't
+         // need the call to setDefaultSuffix here as the one in the lambda below will suffice.  But it doesn't hurt to
+         // have this initial one, so we'll leave it for now.
+         //
+         fileChooser.setDefaultSuffix(QString("json"));
+         fileChooser.connect(
+            &fileChooser,
+            &QFileDialog::filterSelected,
+            [&fileChooser](QString const & filter) {
+               // The Qt docs are a bit silent about what the parameter is for the QFileDialog::filterSelected signal.
+               // By adding a logging statement here, we discover that we get either "*.json" or "*.xml".  So we just
+               // need to chop off the first two characters to get default suffix.
+               //
+               // In Qt 6, we can replace `mid` with `sliced` which is faster apparently.
+               qDebug() << Q_FUNC_INFO << "Export filter is:" << filter;
+               fileChooser.setDefaultSuffix(filter.mid(2));
+               return;
+            }
+         );
       }
 
       if (!fileChooser.exec() ) {
@@ -93,8 +112,9 @@ namespace {
          return std::nullopt;
       }
 
-      qDebug() << Q_FUNC_INFO << "Selected " << fileChooser.selectedFiles().length() << " files";
-      qDebug() << Q_FUNC_INFO << "Directory " << fileChooser.directory();
+      qDebug() <<
+         Q_FUNC_INFO << "Selected" << fileChooser.selectedFiles().length() << "file(s) (from directory" <<
+         fileChooser.directory() << "):" << fileChooser.selectedFiles();
 
       // Remember the directory for next time
       fileChooserDirectory = fileChooser.directory().canonicalPath();
