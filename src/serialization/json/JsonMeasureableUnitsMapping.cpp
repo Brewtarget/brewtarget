@@ -97,3 +97,37 @@ Measurement::Unit const * JsonMeasureableUnitsMapping::findUnit(std::string_view
 Measurement::Unit const * JsonMeasureableUnitsMapping::defaultUnit() const {
    return this->nameToUnit.cbegin()->second;
 }
+
+template<class S>
+S & JsonMeasureableUnitsMapping::writeToStream(S & stream) const {
+   stream <<
+      "Unit Field:" << this->unitField << "; Value Field:" << this->valueField << "; Map:\n";
+   for (auto const & ii : this->nameToUnit) {
+      stream << QString::fromStdString(std::string{ii.first}) << "->" << *ii.second << "\n";
+   }
+   return stream;
+}
+
+template<class S>
+S & operator<<(S & stream, JsonMeasureableUnitsMapping const & jmum) {
+   return jmum.writeToStream(stream);
+}
+
+template<class S>
+S & operator<<(S & stream, JsonMeasureableUnitsMapping const * jmum) {
+   if (jmum) {
+      stream << *jmum;
+   } else {
+      stream << "NULL";
+   }
+   return stream;
+}
+
+//
+// Instantiate the above template functions for the types that are going to use them
+// (This is all just a trick to allow the template definition to be here in the .cpp file and not in the header.)
+//
+template QDebug &      operator<<(QDebug &      stream, JsonMeasureableUnitsMapping const & jmum);
+template QTextStream & operator<<(QTextStream & stream, JsonMeasureableUnitsMapping const & jmum);
+template QDebug &      operator<<(QDebug &      stream, JsonMeasureableUnitsMapping const * jmum);
+template QTextStream & operator<<(QTextStream & stream, JsonMeasureableUnitsMapping const * jmum);

@@ -122,7 +122,7 @@ public:
     * \brief For a trivial path, return it without the leading slash (as a \c string_view because that's what we're
     *        going to pass to Boost.JSON).  Caller's responsibility to ensure this is indeed a trivial path.
     */
-   std::string_view asKey() const;
+   std::string asKey() const;
 
    /**
     * \brief This returns a C-style string as that's most universally usable for logging

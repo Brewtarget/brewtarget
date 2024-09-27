@@ -89,6 +89,21 @@ public:
     *         unit matches our canonical metric ones.)
     */
    Measurement::Unit const * defaultUnit() const;
+
+   template<class S> S & writeToStream(S & stream) const;
 };
+
+/**
+ * \brief Convenience function to allow output of \c JsonMeasureableUnitsMapping to \c QDebug or \c QTextStream stream
+ */
+template<class S>
+S & operator<<(S & stream, JsonMeasureableUnitsMapping const & jmum);
+
+/**
+ * \brief Convenience function to allow output of \c JsonMeasureableUnitsMapping to \c QDebug or \c QTextStream stream
+ */
+template<class S>
+S & operator<<(S & stream, JsonMeasureableUnitsMapping const * jmum);
+
 
 #endif

@@ -5,32 +5,59 @@
    See .github/workflows/windows.yml for more general info on how we use SignPath to sign the Windows binaries
 
    See https://about.signpath.io/documentation/artifact-configuration/ for the syntax for this file
+
+   +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+   + NOTE: Although, as is done in the https://github.com/SignPath/github-actions-extended-demo/ SignPath demo
+   +       application, we include this Artifact Configuration file in our source tree, it is not directly picked up
+   +       by the build process.  Whenever you change this file, you need to manually upload the revised version to
+   +       the SignPath Brewtarget project, as that's where the configuration is read from during the signing process.
+   +
+   +       The upside of doing things this way that the configuration file gets validated when you upload it (including
+   +       to confirm you are only using features permitted by your subscription).
+   +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 -->
 <artifact-configuration xmlns="http://signpath.io/artifact-configuration/v1">
   <!--
   Note, per https://github.com/SignPath/github-action-submit-signing-request, that "the used artifact configuration must
   have a zip-file element at its root, as all artifacts are packaged as ZIP archives on GitHub by default."
+
+  Prior to the signing step, our build will have generated two files (where x.y.z is the version number - eg 4.0.4):
+    Brewtarget x.y.z Installer.exe
+    Brewtarget x.y.z Installer.exe.sha256sum
+  GitHub will then have zipped these up into a file called brewtarget-dev-MINGW64.xip
+
+  We want to create a signed version of the first file, and then generate a new checksum for it.
+
+  Fortunately we don't have to work this out from scratch.  By manually uploading an installer to sign, SignPath will
+  also generate a sample artifact-configuration, which we can then edit as needed.
+
+  Because we are only signing a single installer, our configuration is actually very simple.
   -->
   <zip-file>
     <!--
-    Prior to the signing step, our build will have generated two files (where x.y.z is the version number - eg 4.0.4):
-      Brewtarget x.y.z Installer.exe
-      Brewtarget x.y.z Installer.exe.sha256sum
-    We want to create a signed version of the first file, and then generate a new checksum for it.
+    pe-file tag is for "Portable Executable (PE) files: EXE, DLL, and other executable files"
 
-    Fortunately we don't have to work this out from scratch.  By manually uploading an installer to sign, SignPath will
-    also generate a sample artifact-configuration, which we can then edit as needed.
-
-    Because we are only signing a single installer, our configuration is actually very simple.
+    NB: File and directory names in path attributes are case-insensitive. You may use slash / or backslash \ as
+        directory separators.
     -->
-    <pe-file>
+    <pe-file path="Brewtarget *.*.* Installer.exe">
       <!--
-      This means do the signing with Microsoft Authenticode, which is "the primary signing method on the Windows
-      platform".  This is equivalent to using Microsoft’s SignTool.exe.
+      authenticode-sign means do the signing with Microsoft Authenticode, which is "the primary signing method on the
+      Windows platform".  This is equivalent to using Microsoft’s SignTool.exe.
+
+      In theory, we can specify hash-algorithm="sha256" as an attribute on the authenticode-sign tag.  However, if we
+      try that, we get an error:
+
+         "You're not allowed to use the attribute 'hash-algorithm' on the element 'authenticode-sign' with your current
+         subscription type."
+
+      Fortunately sha256 is the default algorithm, so we can just omit that attribute.
+
+      Similarly, our subscription does not allow us to use the 'description' or 'description-url' attributes here,
+      otherwise we would specify:  description="Brewtarget Windows Installer"
+                                   description-url="https://www.brewtarget.beer"
       -->
-      <authenticode-sign hash-algorithm="sha256"
-                         description="Brewtarget Windows Installer"
-                         description-url="https://www.brewtarget.beer" />
+      <authenticode-sign />
     </pe-file>
   </zip-file>
 </artifact-configuration>
