@@ -314,14 +314,15 @@ jobs:
           github-artifact-id: '${{steps.upload-unsigned-artifact.outputs.artifact-id}}'
           wait-for-completion: true
           #
-          # From trial and error, it seems output-artifact-directory must be a relative directory, because it will get
-          # appended to some base directory (possibly on the remote server where the signing is actually done).  Eg, if
-          # we set:
+          # This is "Path to where the signed artifact will be extracted. If not specified, the task will not download
+          # the signed artifact from SignPath."
+          #
+          # From trial and error, it seems output-artifact-directory must be a relative directory.  Eg, if we set:
           #    output-artifact-directory: 'C:/_/mbuild/packages/windows/signed'
           # We get error:
           #    ENOENT: no such file or directory, mkdir 'D:\a\brewtarget\brewtarget\C:\_\mbuild\packages\windows\signed'
           #
-          output-artifact-directory: 'signed'
+          output-artifact-directory: 'windows/signed'
           github-extended-verification-token: '${{ secrets.EXTENDED_VERIFICATION_TOKEN }}'
 
       #
@@ -332,8 +333,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: brewtarget-dev-${{ matrix.msystem }}-signed
+          # Hopefully the same relative path we use in the signing step works here
           path: |
-            C:/_/mbuild/packages/windows/signed/*.*
+            windows/signed/*.*
           retention-days: 7
 
       - name: Upload CMake error info from failed build
