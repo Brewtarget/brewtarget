@@ -189,7 +189,7 @@
 #
 #
 project('brewtarget', 'cpp',
-        version: '4.0.4',
+        version: '4.0.5',
         license: 'GPL-3.0-or-later',
         meson_version: '>=0.60.0',
         default_options : ['cpp_std=c++20',
