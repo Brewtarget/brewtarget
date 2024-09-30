@@ -24,16 +24,18 @@
 #include "editors/EditorBase.h"
 #include "model/BoilStep.h"
 
+#define BoilStepEditorOptions EditorBaseOptions{ }
 /*!
  * \class BoilStepEditor
  *
  * \brief View/controller dialog for editing boil steps.
  */
-class BoilStepEditor : public QDialog, public Ui::boilStepEditor, public EditorBase<BoilStepEditor, BoilStep> {
+class BoilStepEditor : public QDialog,
+                       public Ui::boilStepEditor,
+                       public EditorBase<BoilStepEditor, BoilStep, BoilStepEditorOptions> {
    Q_OBJECT
 
-   EDITOR_COMMON_DECL(BoilStep)
-
+   EDITOR_COMMON_DECL(BoilStep, BoilStepEditorOptions)
 };
 
 #endif

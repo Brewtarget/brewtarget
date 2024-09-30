@@ -25,69 +25,31 @@
 #include "database/ObjectStoreWrapper.h"
 #include "model/Water.h"
 
-// This private implementation class holds all private non-virtual members of WaterEditor
-class WaterEditor::impl {
-public:
-   /**
-    * Constructor
-    */
-   impl(QString const editorName) : editorName{editorName},
-                                    observedWater{},
-                                    editedWater{} {
-      return;
-   }
-
-   /**
-    * Destructor
-    */
-   ~impl() = default;
-
-   QString const editorName;
-
-   // This is the Water object we are "observing" and to which our edits will be committed if and when the user clicks
-   // OK
-   std::shared_ptr<Water> observedWater;
-   // This is a temporary copy of the "observed" Water that holds the live edits (which will be saved if the user clicks
-   // OK and lost if the user clicks Cancel)
-   std::unique_ptr<Water> editedWater;
-};
-
-WaterEditor::WaterEditor(QWidget *parent,
-                         QString const editorName) : QDialog(parent),
-                                                     pimpl{std::make_unique<impl>(editorName)} {
-   setupUi(this);
-
-   SMART_FIELD_INIT(WaterEditor, label_ca       , lineEdit_ca       , Water, PropertyNames::Water::calcium_ppm   , 2);
-   SMART_FIELD_INIT(WaterEditor, label_cl       , lineEdit_cl       , Water, PropertyNames::Water::chloride_ppm  , 2);
-   SMART_FIELD_INIT(WaterEditor, label_mg       , lineEdit_mg       , Water, PropertyNames::Water::magnesium_ppm , 2);
-   SMART_FIELD_INIT(WaterEditor, label_so4      , lineEdit_so4      , Water, PropertyNames::Water::sulfate_ppm   , 2);
-   SMART_FIELD_INIT(WaterEditor, label_na       , lineEdit_na       , Water, PropertyNames::Water::sodium_ppm    , 2);
-   SMART_FIELD_INIT(WaterEditor, label_alk      , lineEdit_alk      , Water, PropertyNames::Water::alkalinity_ppm, 2);
-   SMART_FIELD_INIT(WaterEditor, label_pH       , lineEdit_ph       , Water, PropertyNames::Water::ph            , 2);
-   // TODO: Finish adding extra fields below!
-   // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
-//   SMART_FIELD_INIT(WaterEditor, label_carbonate, lineEdit_carbonate, Water, PropertyNames::Water::carbonate_ppm , 2);
-//   SMART_FIELD_INIT(WaterEditor, label_potassium, lineEdit_potassium, Water, PropertyNames::Water::potassium_ppm , 2);
-//   SMART_FIELD_INIT(WaterEditor, label_iron     , lineEdit_iron     , Water, PropertyNames::Water::iron_ppm      , 2);
-//   SMART_FIELD_INIT(WaterEditor, label_nitrate  , lineEdit_nitrate  , Water, PropertyNames::Water::nitrate_ppm   , 2);
-//   SMART_FIELD_INIT(WaterEditor, label_nitrite  , lineEdit_nitrite  , Water, PropertyNames::Water::nitrite_ppm   , 2);
-//   SMART_FIELD_INIT(WaterEditor, label_flouride , lineEdit_flouride , Water, PropertyNames::Water::flouride_ppm  , 2);
-
-   // .:TBD:. The QLineEdit::textEdited and QPlainTextEdit::textChanged signals below are sent somewhat more frequently
-   // than we really need - ie every time you type a character in the name or notes field.  We should perhaps look at
-   // changing the corresponding field types...
-   connect(this->buttonBox,           &QDialogButtonBox::accepted,    this, &WaterEditor::saveAndClose      );
-   connect(this->buttonBox,           &QDialogButtonBox::rejected,    this, &WaterEditor::clearAndClose     );
-   connect(this->comboBox_alk,        &QComboBox::currentTextChanged, this, &WaterEditor::inputFieldModified);
-   connect(this->lineEdit_alk,        &SmartLineEdit::textModified,   this, &WaterEditor::inputFieldModified);
-   connect(this->lineEdit_ca,         &SmartLineEdit::textModified,   this, &WaterEditor::inputFieldModified);
-   connect(this->lineEdit_cl,         &SmartLineEdit::textModified,   this, &WaterEditor::inputFieldModified);
-   connect(this->lineEdit_mg,         &SmartLineEdit::textModified,   this, &WaterEditor::inputFieldModified);
-   connect(this->lineEdit_na,         &SmartLineEdit::textModified,   this, &WaterEditor::inputFieldModified);
-   connect(this->lineEdit_name,       &QLineEdit::textEdited,         this, &WaterEditor::inputFieldModified);
-   connect(this->lineEdit_ph,         &SmartLineEdit::textModified,   this, &WaterEditor::inputFieldModified);
-   connect(this->lineEdit_so4,        &SmartLineEdit::textModified,   this, &WaterEditor::inputFieldModified);
-   connect(this->plainTextEdit_notes, &QPlainTextEdit::textChanged,   this, &WaterEditor::inputFieldModified);
+WaterEditor::WaterEditor(QWidget *parent, QString const editorName) :
+   QDialog(parent),
+   EditorBase<WaterEditor, Water, WaterEditorOptions>(editorName) {
+   this->setupUi(this);
+   this->postSetupUiInit(
+      {
+       EDITOR_FIELD_NORM(Water, label_name            , lineEdit_name             , NamedEntity::name      ),
+       EDITOR_FIELD_NORM(Water, label_notes           , textEdit_notes            , Water::notes           ),
+       EDITOR_FIELD_NORM(Water, label_ca              , lineEdit_ca               , Water::calcium_ppm     , 2),
+       EDITOR_FIELD_NORM(Water, label_cl              , lineEdit_cl               , Water::chloride_ppm    , 2),
+       EDITOR_FIELD_NORM(Water, label_mg              , lineEdit_mg               , Water::magnesium_ppm   , 2),
+       EDITOR_FIELD_NORM(Water, label_so4             , lineEdit_so4              , Water::sulfate_ppm     , 2),
+       EDITOR_FIELD_NORM(Water, label_na              , lineEdit_na               , Water::sodium_ppm      , 2),
+       EDITOR_FIELD_NORM(Water, label_alk             , lineEdit_alk              , Water::alkalinity_ppm  , 2),
+       EDITOR_FIELD_NORM(Water, label_pH              , lineEdit_ph               , Water::ph              , 2),
+       EDITOR_FIELD_NORM(Water, label_alkalinityAsHCO3, boolCombo_alkalinityAsHCO3, Water::alkalinityAsHCO3, tr("CaCO3"), tr("HCO3")),
+       // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
+       EDITOR_FIELD_NORM(Water, label_carbonate       , lineEdit_carbonate        , Water::carbonate_ppm   , 2),
+       EDITOR_FIELD_NORM(Water, label_potassium       , lineEdit_potassium        , Water::potassium_ppm   , 2),
+       EDITOR_FIELD_NORM(Water, label_iron            , lineEdit_iron             , Water::iron_ppm        , 2),
+       EDITOR_FIELD_NORM(Water, label_nitrate         , lineEdit_nitrate          , Water::nitrate_ppm     , 2),
+       EDITOR_FIELD_NORM(Water, label_nitrite         , lineEdit_nitrite          , Water::nitrite_ppm     , 2),
+       EDITOR_FIELD_NORM(Water, label_fluoride        , lineEdit_fluoride         , Water::fluoride_ppm    , 2),
+      }
+   );
 
    this->waterEditRadarChart->init(
       tr("PPM"),
@@ -108,216 +70,39 @@ WaterEditor::WaterEditor(QWidget *parent,
 //WaterEditor::~WaterEditor() = default;
 WaterEditor::~WaterEditor() {
    qDebug() << Q_FUNC_INFO << "Cleaning up";
-   if (this->pimpl->observedWater) {
+   if (this->m_editItem) {
       qDebug() <<
-         Q_FUNC_INFO << this->pimpl->editorName << ": Was observing" << this->pimpl->observedWater->name() <<
-         "#" << this->pimpl->observedWater->key() << " @" << static_cast<void *>(this->pimpl->observedWater.get()) <<
-         " (use count" << this->pimpl->observedWater.use_count() << ")";
+         Q_FUNC_INFO << this->m_editorName << ": Was observing" << this->m_editItem->name() <<
+         "#" << this->m_editItem->key() << " @" << static_cast<void *>(this->m_editItem.get()) <<
+         " (use count" << this->m_editItem.use_count() << ")";
    }
-   if (this->pimpl->editedWater) {
+   if (this->m_liveEditItem) {
       qDebug() <<
-         Q_FUNC_INFO << this->pimpl->editorName << ": Was editing" << this->pimpl->editedWater->name() <<
-         "#" << this->pimpl->editedWater->key() << " @" << static_cast<void *>(this->pimpl->editedWater.get());
+         Q_FUNC_INFO << this->m_editorName << ": Was editing" << this->m_liveEditItem->name() <<
+         "#" << this->m_liveEditItem->key() << " @" << static_cast<void *>(this->m_liveEditItem.get());
    }
    return;
 }
 
-void WaterEditor::setWater(std::shared_ptr<Water> water) {
+void WaterEditor::postSetEditItem() {
+   if (this->m_editItem) {
+      // Note that we don't need to remove the old series from any previous Water objects as the call to addSeries will
+      // replace them.
+      this->waterEditRadarChart->addSeries(tr("Current"), Qt::darkGreen, *this->m_editItem);
 
-   if (this->pimpl->observedWater) {
-      qDebug() <<
-         Q_FUNC_INFO << this->pimpl->editorName << ": Stop observing" << this->pimpl->observedWater->name() <<
-         "#" << this->pimpl->observedWater->key() << " @" << static_cast<void *>(this->pimpl->observedWater.get()) <<
-         " (use count" << this->pimpl->observedWater.use_count() << ")";
-      disconnect(this->pimpl->observedWater.get(), nullptr, this, nullptr);
-      this->pimpl->observedWater.reset();
+      this->waterEditRadarChart->addSeries(tr("Modified"), Qt::green, *this->m_liveEditItem);
    }
-
-   if (water) {
-      this->pimpl->observedWater = water;
-      qDebug() <<
-         Q_FUNC_INFO << this->pimpl->editorName << ": Now observing" << this->pimpl->observedWater->name() <<
-         "#" << this->pimpl->observedWater->key() << " @" << static_cast<void *>(this->pimpl->observedWater.get()) <<
-         " (use count" << this->pimpl->observedWater.use_count() << ")";
-      this->waterEditRadarChart->addSeries(tr("Current"), Qt::darkGreen, *this->pimpl->observedWater);
-      connect(this->pimpl->observedWater.get(), &NamedEntity::changed, this, &WaterEditor::changed);
-
-      // Make a copy of the Water object we are observing
-      this->pimpl->editedWater = std::make_unique<Water>(*this->pimpl->observedWater);
-///      this->pimpl->editedWater->setAmount(0.0);
-      this->waterEditRadarChart->addSeries(tr("Modified"), Qt::green, *this->pimpl->editedWater);
-
-      this->showChanges();
-   } else {
-      qDebug() << Q_FUNC_INFO << this->pimpl->editorName << ": Observing Nothing";
-   }
-
    return;
 }
 
-void WaterEditor::newWater(QString folder) {
-   QString name = QInputDialog::getText(this, tr("Water name"),
-                                              tr("Water name:"));
-   if (name.isEmpty()) {
-      return;
-   }
 
-   qDebug() << Q_FUNC_INFO << this->pimpl->editorName << ": Creating new Water, " << name;
-
-   this->setWater(std::make_shared<Water>(name));
-   if (!folder.isEmpty()) {
-      this->pimpl->observedWater->setFolder(folder);
-   }
-
-   setVisible(true);
-
-   return;
-}
-
-void WaterEditor::showChanges(QMetaProperty const * prop) {
-
-   if (!this->pimpl->observedWater) {
-      return;
-   }
-
-   QString propName;
-
-   bool updateAll = false;
-
-   if (prop == nullptr) {
-      qDebug() << Q_FUNC_INFO << this->pimpl->editorName << ": Update all";
-      updateAll = true;
-   } else {
-      propName = prop->name();
-      qDebug() << Q_FUNC_INFO << this->pimpl->editorName << ": Changed" << propName;
-   }
-
-   if (updateAll || propName == PropertyNames::NamedEntity::name      ) { this->lineEdit_name->setText    (this->pimpl->observedWater->name           ()); if (!updateAll) { return; } }
-   if (updateAll || propName == PropertyNames::Water::calcium_ppm     ) { this->lineEdit_ca  ->setQuantity(this->pimpl->observedWater->calcium_ppm    ()); if (!updateAll) { return; } }
-   if (updateAll || propName == PropertyNames::Water::magnesium_ppm   ) { this->lineEdit_mg  ->setQuantity(this->pimpl->observedWater->magnesium_ppm  ()); if (!updateAll) { return; } }
-   if (updateAll || propName == PropertyNames::Water::sulfate_ppm     ) { this->lineEdit_so4 ->setQuantity(this->pimpl->observedWater->sulfate_ppm    ()); if (!updateAll) { return; } }
-   if (updateAll || propName == PropertyNames::Water::sodium_ppm      ) { this->lineEdit_na  ->setQuantity(this->pimpl->observedWater->sodium_ppm     ()); if (!updateAll) { return; } }
-   if (updateAll || propName == PropertyNames::Water::chloride_ppm    ) { this->lineEdit_cl  ->setQuantity(this->pimpl->observedWater->chloride_ppm   ()); if (!updateAll) { return; } }
-   if (updateAll || propName == PropertyNames::Water::bicarbonate_ppm ) { this->lineEdit_alk ->setQuantity(this->pimpl->observedWater->bicarbonate_ppm()); if (!updateAll) { return; } }
-   if (updateAll || propName == PropertyNames::Water::ph              ) { this->lineEdit_ph  ->setQuantity(this->pimpl->observedWater->ph             ()); if (!updateAll) { return; } }
-   if (updateAll || propName == PropertyNames::Water::alkalinityAsHCO3) {
-      bool typeless = this->pimpl->observedWater->alkalinityAsHCO3();
-      this->comboBox_alk->setCurrentIndex(comboBox_alk->findText(typeless ? "HCO3" : "CaCO3"));
-      if (!updateAll) { return; }
-   }
-   if (updateAll || propName == PropertyNames::Water::notes           ) { this->plainTextEdit_notes->setPlainText(this->pimpl->observedWater->notes() );    if (!updateAll) { return; } }
-   // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
-   if (updateAll || propName == PropertyNames::Water::carbonate_ppm ) { this->lineEdit_alk ->setQuantity(this->pimpl->observedWater->carbonate_ppm()); if (!updateAll) { return; } }
-   if (updateAll || propName == PropertyNames::Water::potassium_ppm ) { this->lineEdit_alk ->setQuantity(this->pimpl->observedWater->potassium_ppm()); if (!updateAll) { return; } }
-   if (updateAll || propName == PropertyNames::Water::iron_ppm      ) { this->lineEdit_alk ->setQuantity(this->pimpl->observedWater->iron_ppm     ()); if (!updateAll) { return; } }
-   if (updateAll || propName == PropertyNames::Water::nitrate_ppm   ) { this->lineEdit_alk ->setQuantity(this->pimpl->observedWater->nitrate_ppm  ()); if (!updateAll) { return; } }
-   if (updateAll || propName == PropertyNames::Water::nitrite_ppm   ) { this->lineEdit_alk ->setQuantity(this->pimpl->observedWater->nitrite_ppm  ()); if (!updateAll) { return; } }
-   if (updateAll || propName == PropertyNames::Water::flouride_ppm  ) { this->lineEdit_alk ->setQuantity(this->pimpl->observedWater->flouride_ppm ()); if (!updateAll) { return; } }
-
-   return;
-}
-
-void WaterEditor::inputFieldModified() {
+void WaterEditor::postInputFieldModified() {
    //
-   // What we're doing here is, if one of the input fields on the dialog is modified, we update the corresponding
-   // field(s) on this->pimpl->editedWater and replot the radar chart.  That way the user can see the "shape" of their
-   // changes in real time.
+   // Strictly speaking we don't always need to replot the radar chart - eg if a text field changed it doesn't affect
+   // the chart - but, for the moment, we just keep things simple and always replot.
    //
-   // When we come to close the window, depending on whether the user clicked "OK" or "Cancel" we then either copy the
-   // changes to the "observed" water (this->pimpl->observedWater) or discard them (resetting this->pimpl->editedWater
-   // to be the same as this->pimpl->observedWater).
-   //
-   QObject const * const signalSender = this->sender();
-   // Usually leave the next line commented as otherwise get too much logging when user is typing in notes or name
-   // fields.
-//   qDebug() << Q_FUNC_INFO << this->pimpl->editorName << ": signal from" << signalSender;
-   if (signalSender && signalSender->parent() == this) {
-      // .:TBD:. Need to get to the bottom of the relationship between Water::alkalinity and Water::bicarbonate_ppm.  It
-      //         feels wrong that we just set both from the same input, but probably needs some more profound thought
-      //         about what exactly correct behaviour should be.
-      if      (signalSender == this->comboBox_alk)         {this->pimpl->editedWater->setAlkalinityAsHCO3(this->comboBox_alk ->currentText() == QString("HCO3"));}
-      else if (signalSender == this->lineEdit_alk)         {this->pimpl->editedWater->setBicarbonate_ppm (this->lineEdit_alk ->getNonOptCanonicalQty());  // NB continues on next line!
-                                                            this->pimpl->editedWater->setAlkalinity_ppm  (this->lineEdit_alk ->getNonOptCanonicalQty());        }
-      else if (signalSender == this->lineEdit_ca)          {this->pimpl->editedWater->setCalcium_ppm     (this->lineEdit_ca  ->getNonOptCanonicalQty());        }
-      else if (signalSender == this->lineEdit_cl)          {this->pimpl->editedWater->setChloride_ppm    (this->lineEdit_cl  ->getNonOptCanonicalQty());        }
-      else if (signalSender == this->lineEdit_mg)          {this->pimpl->editedWater->setMagnesium_ppm   (this->lineEdit_mg  ->getNonOptCanonicalQty());        }
-      else if (signalSender == this->lineEdit_na)          {this->pimpl->editedWater->setSodium_ppm      (this->lineEdit_na  ->getNonOptCanonicalQty());        }
-      else if (signalSender == this->lineEdit_name)        {this->pimpl->editedWater->setName            (this->lineEdit_name->text());                          }
-      else if (signalSender == this->lineEdit_ph)          {this->pimpl->editedWater->setPh              (this->lineEdit_ph  ->getNonOptCanonicalQty());        }
-      else if (signalSender == this->lineEdit_so4)         {this->pimpl->editedWater->setSulfate_ppm     (this->lineEdit_so4 ->getNonOptCanonicalQty());        }
-      else if (signalSender == this->plainTextEdit_notes)  {this->pimpl->editedWater->setNotes           (this->plainTextEdit_notes->toPlainText());             }
-      else {
-         // If we get here, it's probably a coding error
-         qWarning() << Q_FUNC_INFO << "Unrecognised child";
-      }
-
-      //
-      // Strictly speaking we don't always need to replot the radar chart - eg if a text field changed it doesn't affect
-      // the chart - but, for the moment, we just keep things simple and always replot.
-      //
-      this->waterEditRadarChart->replot();
-   }
-   return;
-}
-
-void WaterEditor::changed(QMetaProperty prop, QVariant /*val*/) {
-   if (sender() == this->pimpl->observedWater.get()) {
-      this->showChanges(&prop);
-   }
-
    this->waterEditRadarChart->replot();
    return;
 }
 
-void WaterEditor::saveAndClose() {
-   qDebug() << Q_FUNC_INFO << this->pimpl->editorName;
-   if (!this->pimpl->observedWater) {
-      // For the moment, if we weren't given a Water object (via setWater) then we don't try to save any changes when
-      // the editor is closed.  Arguably, if the user has actually filled in a bunch of data, then we should use that
-      // to create and save a new Water object.
-      qDebug() << Q_FUNC_INFO << "Save and close with no Water specified, so discarding any inputs";
-      return;
-   }
-
-   // Apply all the edits
-   if (this->pimpl->editedWater) {
-      *this->pimpl->observedWater = *this->pimpl->editedWater;
-      qDebug() <<
-         Q_FUNC_INFO << this->pimpl->editorName << ": Applied edits to Water #" << this->pimpl->observedWater->key() <<
-         ":" << this->pimpl->observedWater->name();
-   }
-
-   //
-   // TBD: When we're called from WaterDialog, it is that window that is responsible for adding new Water objects to the
-   //      Recipe (which results in the Water object being saved in the DB).  Saving the Water object means the current
-   //      logic in WaterDialog won't pick up that it needs to be added to the Recipe.
-   //
-   if (this->pimpl->observedWater->key() < 0) {
-      qDebug() << Q_FUNC_INFO << "Writing new Water:" << this->pimpl->observedWater->name();
-      ObjectStoreWrapper::insert(this->pimpl->observedWater);
-   }
-
-   setVisible(false);
-   return;
-}
-
-void WaterEditor::clearAndClose() {
-   qDebug() << Q_FUNC_INFO << this->pimpl->editorName;
-
-   // At this point, we want to clear edits, but we _don't_ want to stop observing the Water that's been given to us as
-   // our creator (eg WaterDialog) may redisplay us without a repeat call to setWater.
-
-   // This reverts all the input fields
-   this->showChanges();
-
-   // Revert all the edits in our temporary copy of the "observed" Water
-   if (this->pimpl->observedWater && this->pimpl->editedWater) {
-      *this->pimpl->editedWater = *this->pimpl->observedWater;
-      qDebug() <<
-         Q_FUNC_INFO << this->pimpl->editorName << ": Discarded edits to Water #" <<
-         this->pimpl->observedWater->key() << ":" << this->pimpl->observedWater->name();
-   }
-
-   setVisible(false); // Hide the window.
-   return;
-}
+EDITOR_COMMON_CODE(Water)

@@ -23,9 +23,10 @@
 
 #include "ui_boilEditor.h"
 
-#include "editors/EditorWithRecipeBase.h"
+#include "editors/EditorBase.h"
 #include "model/Boil.h"
 
+#define BoilEditorOptions EditorBaseOptions{ .recipe = true }
 /*!
  * \class BoilEditor
  *
@@ -33,10 +34,12 @@
  *
  *        See also \c NamedBoilEditor
  */
-class BoilEditor : public QDialog, public Ui::boilEditor, public EditorWithRecipeBase<BoilEditor, Boil> {
+class BoilEditor : public QDialog,
+                   public Ui::boilEditor,
+                   public EditorBase<BoilEditor, Boil, BoilEditorOptions> {
    Q_OBJECT
 
-   EDITOR_WITH_RECIPE_COMMON_DECL(Boil)
+   EDITOR_COMMON_DECL(Boil, BoilEditorOptions)
 };
 
 #endif

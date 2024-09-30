@@ -258,6 +258,12 @@ public:
    void setAmount(std::optional<Measurement::Amount> const & amount);
 
    /**
+    * \brief At the moment, this sets the field value to blank text, but we could imagine it being more sophisticated in
+    *        future.
+    */
+   void setDefault();
+
+   /**
     * \brief Wrapper to call \c setAmount or correct version of \c setQuantity, from a \c QVariant parameter that would
     *        typically have been obtained from Qt property system, eg via \c QObject::property().
     */

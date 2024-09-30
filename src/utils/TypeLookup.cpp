@@ -56,6 +56,8 @@ TypeLookup::TypeLookup(char       const * const                                 
 }
 
 TypeInfo const * TypeLookup::typeInfoFor(BtStringConst const & propertyName) const {
+   // Normally keep this log statement commented out otherwise it generates too many lines in the log file
+//   qDebug() << Q_FUNC_INFO << this << "Searching for" << *propertyName;
    auto match = std::find_if(
       this->m_lookupMap.begin(),
       this->m_lookupMap.end(),

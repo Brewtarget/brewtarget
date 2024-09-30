@@ -47,68 +47,67 @@
 // user to grab this value (and that of other common materials if we can find them).
 //
 
-EquipmentEditor::EquipmentEditor(QWidget* parent/*, bool singleEquipEditor*/) :
+EquipmentEditor::EquipmentEditor(QWidget* parent, QString const editorName) :
    QDialog(parent),
-   EditorBase<EquipmentEditor, Equipment>() {
+   EditorBase<EquipmentEditor, Equipment, EquipmentEditorOptions>(editorName) {
    this->setupUi(this);
-
    this->tabWidget_editor->tabBar()->setStyle(new BtHorizontalTabs);
-
-   SMART_FIELD_INIT(EquipmentEditor, label_name                    , lineEdit_name                    , Equipment, PropertyNames::NamedEntity::name                     );
-   SMART_FIELD_INIT(EquipmentEditor, label_mashTunSpecificHeat     , lineEdit_mashTunSpecificHeat     , Equipment, PropertyNames::Equipment::mashTunSpecificHeat_calGC  );
-   SMART_FIELD_INIT(EquipmentEditor, label_mashTunGrainAbsorption  , lineEdit_mashTunGrainAbsorption  , Equipment, PropertyNames::Equipment::mashTunGrainAbsorption_LKg );
-   SMART_FIELD_INIT(EquipmentEditor, label_hopUtilization          , lineEdit_hopUtilization          , Equipment, PropertyNames::Equipment::hopUtilization_pct         , 0);
-   SMART_FIELD_INIT(EquipmentEditor, label_mashTunWeight           , lineEdit_mashTunWeight           , Equipment, PropertyNames::Equipment::mashTunWeight_kg           );
-   SMART_FIELD_INIT(EquipmentEditor, label_boilingPoint            , lineEdit_boilingPoint            , Equipment, PropertyNames::Equipment::boilingPoint_c             , 1);
-   SMART_FIELD_INIT(EquipmentEditor, label_boilTime                , lineEdit_boilTime                , Equipment, PropertyNames::Equipment::boilTime_min               );
-   SMART_FIELD_INIT(EquipmentEditor, label_fermenterBatchSize      , lineEdit_fermenterBatchSize      , Equipment, PropertyNames::Equipment::fermenterBatchSize_l       );
-   SMART_FIELD_INIT(EquipmentEditor, label_kettleBoilSize          , lineEdit_kettleBoilSize          , Equipment, PropertyNames::Equipment::kettleBoilSize_l           );
-   SMART_FIELD_INIT(EquipmentEditor, label_kettleEvaporationPerHour, lineEdit_kettleEvaporationPerHour, Equipment, PropertyNames::Equipment::kettleEvaporationPerHour_l );
-   SMART_FIELD_INIT(EquipmentEditor, label_lauterTunDeadspaceLoss  , lineEdit_lauterTunDeadspaceLoss  , Equipment, PropertyNames::Equipment::lauterTunDeadspaceLoss_l   );
-   SMART_FIELD_INIT(EquipmentEditor, label_topUpKettle             , lineEdit_topUpKettle             , Equipment, PropertyNames::Equipment::topUpKettle_l              );
-   SMART_FIELD_INIT(EquipmentEditor, label_topUpWater              , lineEdit_topUpWater              , Equipment, PropertyNames::Equipment::topUpWater_l               );
-   SMART_FIELD_INIT(EquipmentEditor, label_kettleTrubChillerLoss   , lineEdit_kettleTrubChillerLoss   , Equipment, PropertyNames::Equipment::kettleTrubChillerLoss_l    );
-   SMART_FIELD_INIT(EquipmentEditor, label_mashTunVolume           , lineEdit_mashTunVolume           , Equipment, PropertyNames::Equipment::mashTunVolume_l            );
-   // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
-   SMART_FIELD_INIT(EquipmentEditor, label_hltType                 , lineEdit_hltType                 , Equipment, PropertyNames::Equipment::hltType                    );
-   SMART_FIELD_INIT(EquipmentEditor, label_mashTunType             , lineEdit_mashTunType             , Equipment, PropertyNames::Equipment::mashTunType                );
-   SMART_FIELD_INIT(EquipmentEditor, label_lauterTunType           , lineEdit_lauterTunType           , Equipment, PropertyNames::Equipment::lauterTunType              );
-   SMART_FIELD_INIT(EquipmentEditor, label_kettleType              , lineEdit_kettleType              , Equipment, PropertyNames::Equipment::kettleType                 );
-   SMART_FIELD_INIT(EquipmentEditor, label_fermenterType           , lineEdit_fermenterType           , Equipment, PropertyNames::Equipment::fermenterType              );
-   SMART_FIELD_INIT(EquipmentEditor, label_agingVesselType         , lineEdit_agingVesselType         , Equipment, PropertyNames::Equipment::agingVesselType            );
-   SMART_FIELD_INIT(EquipmentEditor, label_packagingVesselType     , lineEdit_packagingVesselType     , Equipment, PropertyNames::Equipment::packagingVesselType        );
-   SMART_FIELD_INIT(EquipmentEditor, label_hltVolume               , lineEdit_hltVolume               , Equipment, PropertyNames::Equipment::hltVolume_l                );
-   SMART_FIELD_INIT(EquipmentEditor, label_lauterTunVolume         , lineEdit_lauterTunVolume         , Equipment, PropertyNames::Equipment::lauterTunVolume_l          );
-   SMART_FIELD_INIT(EquipmentEditor, label_agingVesselVolume       , lineEdit_agingVesselVolume       , Equipment, PropertyNames::Equipment::agingVesselVolume_l        );
-   SMART_FIELD_INIT(EquipmentEditor, label_packagingVesselVolume   , lineEdit_packagingVesselVolume   , Equipment, PropertyNames::Equipment::packagingVesselVolume_l    );
-   SMART_FIELD_INIT(EquipmentEditor, label_hltLoss                 , lineEdit_hltLoss                 , Equipment, PropertyNames::Equipment::hltLoss_l                  );
-   SMART_FIELD_INIT(EquipmentEditor, label_mashTunLoss             , lineEdit_mashTunLoss             , Equipment, PropertyNames::Equipment::mashTunLoss_l              );
-   SMART_FIELD_INIT(EquipmentEditor, label_fermenterLoss           , lineEdit_fermenterLoss           , Equipment, PropertyNames::Equipment::fermenterLoss_l            );
-   SMART_FIELD_INIT(EquipmentEditor, label_agingVesselLoss         , lineEdit_agingVesselLoss         , Equipment, PropertyNames::Equipment::agingVesselLoss_l          );
-   SMART_FIELD_INIT(EquipmentEditor, label_packagingVesselLoss     , lineEdit_packagingVesselLoss     , Equipment, PropertyNames::Equipment::packagingVesselLoss_l      );
-   SMART_FIELD_INIT(EquipmentEditor, label_kettleOutflowPerMinute  , lineEdit_kettleOutflowPerMinute  , Equipment, PropertyNames::Equipment::kettleOutflowPerMinute_l   );
-   SMART_FIELD_INIT(EquipmentEditor, label_hltWeight               , lineEdit_hltWeight               , Equipment, PropertyNames::Equipment::hltWeight_kg               );
-   SMART_FIELD_INIT(EquipmentEditor, label_lauterTunWeight         , lineEdit_lauterTunWeight         , Equipment, PropertyNames::Equipment::lauterTunWeight_kg         );
-   SMART_FIELD_INIT(EquipmentEditor, label_kettleWeight            , lineEdit_kettleWeight            , Equipment, PropertyNames::Equipment::kettleWeight_kg            );
-   SMART_FIELD_INIT(EquipmentEditor, label_hltSpecificHeat         , lineEdit_hltSpecificHeat         , Equipment, PropertyNames::Equipment::hltSpecificHeat_calGC      );
-   SMART_FIELD_INIT(EquipmentEditor, label_lauterTunSpecificHeat   , lineEdit_lauterTunSpecificHeat   , Equipment, PropertyNames::Equipment::lauterTunSpecificHeat_calGC);
-   SMART_FIELD_INIT(EquipmentEditor, label_kettleSpecificHeat      , lineEdit_kettleSpecificHeat      , Equipment, PropertyNames::Equipment::kettleSpecificHeat_calGC   );
+   this->postSetupUiInit({
+      EDITOR_FIELD_NORM(Equipment, label_name                    , lineEdit_name                    , NamedEntity::name                     ),
+      EDITOR_FIELD_NORM(Equipment, label_mashTunSpecificHeat     , lineEdit_mashTunSpecificHeat     , Equipment::mashTunSpecificHeat_calGC  ),
+      EDITOR_FIELD_NORM(Equipment, label_mashTunGrainAbsorption  , lineEdit_mashTunGrainAbsorption  , Equipment::mashTunGrainAbsorption_LKg ),
+      EDITOR_FIELD_NORM(Equipment, label_hopUtilization          , lineEdit_hopUtilization          , Equipment::hopUtilization_pct      , 0),
+      EDITOR_FIELD_NORM(Equipment, label_mashTunWeight           , lineEdit_mashTunWeight           , Equipment::mashTunWeight_kg           ),
+      EDITOR_FIELD_NORM(Equipment, label_boilingPoint            , lineEdit_boilingPoint            , Equipment::boilingPoint_c          , 1),
+      EDITOR_FIELD_NORM(Equipment, label_boilTime                , lineEdit_boilTime                , Equipment::boilTime_min               ),
+      EDITOR_FIELD_NORM(Equipment, label_fermenterBatchSize      , lineEdit_fermenterBatchSize      , Equipment::fermenterBatchSize_l       ),
+      EDITOR_FIELD_NORM(Equipment, label_kettleBoilSize          , lineEdit_kettleBoilSize          , Equipment::kettleBoilSize_l           ),
+      EDITOR_FIELD_NORM(Equipment, label_kettleEvaporationPerHour, lineEdit_kettleEvaporationPerHour, Equipment::kettleEvaporationPerHour_l ),
+      EDITOR_FIELD_NORM(Equipment, label_lauterTunDeadspaceLoss  , lineEdit_lauterTunDeadspaceLoss  , Equipment::lauterTunDeadspaceLoss_l   ),
+      EDITOR_FIELD_NORM(Equipment, label_topUpKettle             , lineEdit_topUpKettle             , Equipment::topUpKettle_l              ),
+      EDITOR_FIELD_NORM(Equipment, label_topUpWater              , lineEdit_topUpWater              , Equipment::topUpWater_l               ),
+      EDITOR_FIELD_NORM(Equipment, label_kettleTrubChillerLoss   , lineEdit_kettleTrubChillerLoss   , Equipment::kettleTrubChillerLoss_l    ),
+      EDITOR_FIELD_NORM(Equipment, label_mashTunVolume           , lineEdit_mashTunVolume           , Equipment::mashTunVolume_l            ),
+      // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
+      EDITOR_FIELD_NORM(Equipment, label_hltType                 , lineEdit_hltType                 , Equipment::hltType                    ),
+      EDITOR_FIELD_NORM(Equipment, label_mashTunType             , lineEdit_mashTunType             , Equipment::mashTunType                ),
+      EDITOR_FIELD_NORM(Equipment, label_lauterTunType           , lineEdit_lauterTunType           , Equipment::lauterTunType              ),
+      EDITOR_FIELD_NORM(Equipment, label_kettleType              , lineEdit_kettleType              , Equipment::kettleType                 ),
+      EDITOR_FIELD_NORM(Equipment, label_fermenterType           , lineEdit_fermenterType           , Equipment::fermenterType              ),
+      EDITOR_FIELD_NORM(Equipment, label_agingVesselType         , lineEdit_agingVesselType         , Equipment::agingVesselType            ),
+      EDITOR_FIELD_NORM(Equipment, label_packagingVesselType     , lineEdit_packagingVesselType     , Equipment::packagingVesselType        ),
+      EDITOR_FIELD_NORM(Equipment, label_hltVolume               , lineEdit_hltVolume               , Equipment::hltVolume_l                ),
+      EDITOR_FIELD_NORM(Equipment, label_lauterTunVolume         , lineEdit_lauterTunVolume         , Equipment::lauterTunVolume_l          ),
+      EDITOR_FIELD_NORM(Equipment, label_agingVesselVolume       , lineEdit_agingVesselVolume       , Equipment::agingVesselVolume_l        ),
+      EDITOR_FIELD_NORM(Equipment, label_packagingVesselVolume   , lineEdit_packagingVesselVolume   , Equipment::packagingVesselVolume_l    ),
+      EDITOR_FIELD_NORM(Equipment, label_hltLoss                 , lineEdit_hltLoss                 , Equipment::hltLoss_l                  ),
+      EDITOR_FIELD_NORM(Equipment, label_mashTunLoss             , lineEdit_mashTunLoss             , Equipment::mashTunLoss_l              ),
+      EDITOR_FIELD_NORM(Equipment, label_fermenterLoss           , lineEdit_fermenterLoss           , Equipment::fermenterLoss_l            ),
+      EDITOR_FIELD_NORM(Equipment, label_agingVesselLoss         , lineEdit_agingVesselLoss         , Equipment::agingVesselLoss_l          ),
+      EDITOR_FIELD_NORM(Equipment, label_packagingVesselLoss     , lineEdit_packagingVesselLoss     , Equipment::packagingVesselLoss_l      ),
+      EDITOR_FIELD_NORM(Equipment, label_kettleOutflowPerMinute  , lineEdit_kettleOutflowPerMinute  , Equipment::kettleOutflowPerMinute_l   ),
+      EDITOR_FIELD_NORM(Equipment, label_hltWeight               , lineEdit_hltWeight               , Equipment::hltWeight_kg               ),
+      EDITOR_FIELD_NORM(Equipment, label_lauterTunWeight         , lineEdit_lauterTunWeight         , Equipment::lauterTunWeight_kg         ),
+      EDITOR_FIELD_NORM(Equipment, label_kettleWeight            , lineEdit_kettleWeight            , Equipment::kettleWeight_kg            ),
+      EDITOR_FIELD_NORM(Equipment, label_hltSpecificHeat         , lineEdit_hltSpecificHeat         , Equipment::hltSpecificHeat_calGC      ),
+      EDITOR_FIELD_NORM(Equipment, label_lauterTunSpecificHeat   , lineEdit_lauterTunSpecificHeat   , Equipment::lauterTunSpecificHeat_calGC),
+      EDITOR_FIELD_NORM(Equipment, label_kettleSpecificHeat      , lineEdit_kettleSpecificHeat      , Equipment::kettleSpecificHeat_calGC   ),
+   });
 
    // Connect all the boxen
-   connect(this->checkBox_showHlt            , &QCheckBox::stateChanged    , this, &EquipmentEditor::hideOrShowOptionalVessels       );
-   connect(this->checkBox_showLauterTun      , &QCheckBox::stateChanged    , this, &EquipmentEditor::hideOrShowOptionalVessels       );
-   connect(this->checkBox_showAgingVessel    , &QCheckBox::stateChanged    , this, &EquipmentEditor::hideOrShowOptionalVessels       );
-   connect(this->checkBox_showPackagingVessel, &QCheckBox::stateChanged    , this, &EquipmentEditor::hideOrShowOptionalVessels       );
-   connect(this->checkBox_defaultEquipment   , &QCheckBox::stateChanged    , this, &EquipmentEditor::updateDefaultEquipment);
-   connect(this->checkBox_calcBoilVolume     , &QCheckBox::stateChanged    , this, &EquipmentEditor::updateCalcBoilVolume  );
-   connect(lineEdit_boilTime                 , &SmartLineEdit::textModified, this, &EquipmentEditor::updateCalcBoilVolume  );
-   connect(lineEdit_kettleEvaporationPerHour , &SmartLineEdit::textModified, this, &EquipmentEditor::updateCalcBoilVolume  );
-   connect(lineEdit_topUpWater               , &SmartLineEdit::textModified, this, &EquipmentEditor::updateCalcBoilVolume  );
-   connect(lineEdit_kettleTrubChillerLoss    , &SmartLineEdit::textModified, this, &EquipmentEditor::updateCalcBoilVolume  );
-   connect(lineEdit_fermenterBatchSize       , &SmartLineEdit::textModified, this, &EquipmentEditor::updateCalcBoilVolume  );
-   connect(pushButton_absorption             , &QAbstractButton::clicked   , this, &EquipmentEditor::resetAbsorption       );
+   connect(this->checkBox_showHlt                  , &QCheckBox::stateChanged    , this, &EquipmentEditor::hideOrShowOptionalVessels);
+   connect(this->checkBox_showLauterTun            , &QCheckBox::stateChanged    , this, &EquipmentEditor::hideOrShowOptionalVessels);
+   connect(this->checkBox_showAgingVessel          , &QCheckBox::stateChanged    , this, &EquipmentEditor::hideOrShowOptionalVessels);
+   connect(this->checkBox_showPackagingVessel      , &QCheckBox::stateChanged    , this, &EquipmentEditor::hideOrShowOptionalVessels);
+   connect(this->checkBox_defaultEquipment         , &QCheckBox::stateChanged    , this, &EquipmentEditor::updateDefaultEquipment   );
+   connect(this->checkBox_calcBoilVolume           , &QCheckBox::stateChanged    , this, &EquipmentEditor::updateCalcBoilVolume     );
+   connect(this->lineEdit_boilTime                 , &SmartLineEdit::textModified, this, &EquipmentEditor::updateCalcBoilVolume     );
+   connect(this->lineEdit_kettleEvaporationPerHour , &SmartLineEdit::textModified, this, &EquipmentEditor::updateCalcBoilVolume     );
+   connect(this->lineEdit_topUpWater               , &SmartLineEdit::textModified, this, &EquipmentEditor::updateCalcBoilVolume     );
+   connect(this->lineEdit_kettleTrubChillerLoss    , &SmartLineEdit::textModified, this, &EquipmentEditor::updateCalcBoilVolume     );
+   connect(this->lineEdit_fermenterBatchSize       , &SmartLineEdit::textModified, this, &EquipmentEditor::updateCalcBoilVolume     );
+   connect(this->pushButton_absorption             , &QAbstractButton::clicked   , this, &EquipmentEditor::resetAbsorption          );
 
-   this->connectSignalsAndSlots();
    return;
 }
 
@@ -226,119 +225,14 @@ bool EquipmentEditor::validateBeforeSave() {
 }
 
 
-void EquipmentEditor::writeFieldsToEditItem() {
+void EquipmentEditor::postReadFieldsFromEditItem([[maybe_unused]] std::optional<QString> propName) {
 
-   m_editItem->setName                       (lineEdit_name                    ->text                 ());
-   m_editItem->setKettleBoilSize_l           (lineEdit_kettleBoilSize          ->getNonOptCanonicalQty());
-   m_editItem->setFermenterBatchSize_l       (lineEdit_fermenterBatchSize      ->getNonOptCanonicalQty());
-   m_editItem->setMashTunVolume_l            (lineEdit_mashTunVolume           ->getNonOptCanonicalQty());
-   m_editItem->setMashTunWeight_kg           (lineEdit_mashTunWeight           ->getOptCanonicalQty   ());
-   m_editItem->setMashTunSpecificHeat_calGC  (lineEdit_mashTunSpecificHeat     ->getOptCanonicalQty   ());
-   m_editItem->setBoilTime_min               (lineEdit_boilTime                ->getOptCanonicalQty   ());
-   m_editItem->setKettleEvaporationPerHour_l (lineEdit_kettleEvaporationPerHour->getOptCanonicalQty   ());
-   m_editItem->setTopUpKettle_l              (lineEdit_topUpKettle             ->getOptCanonicalQty   ());
-   m_editItem->setTopUpWater_l               (lineEdit_topUpWater              ->getOptCanonicalQty   ());
-   m_editItem->setKettleTrubChillerLoss_l    (lineEdit_kettleTrubChillerLoss   ->getNonOptCanonicalQty());
-   m_editItem->setLauterTunDeadspaceLoss_l   (lineEdit_lauterTunDeadspaceLoss  ->getNonOptCanonicalQty());
-   m_editItem->setMashTunGrainAbsorption_LKg (lineEdit_mashTunGrainAbsorption  ->getOptCanonicalQty   ());
-   m_editItem->setBoilingPoint_c             (lineEdit_boilingPoint            ->getNonOptCanonicalQty());
-   m_editItem->setHopUtilization_pct         (lineEdit_hopUtilization          ->getOptValue<double>  ());
-   m_editItem->setKettleNotes                (textEdit_kettleNotes             ->toPlainText          ());
-   m_editItem->setCalcBoilVolume             (checkBox_calcBoilVolume          ->isChecked            ());
-   // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
-   m_editItem->setHltType                    (lineEdit_hltType                 ->text                 ());
-   m_editItem->setMashTunType                (lineEdit_mashTunType             ->text                 ());
-   m_editItem->setLauterTunType              (lineEdit_lauterTunType           ->text                 ());
-   m_editItem->setKettleType                 (lineEdit_kettleType              ->text                 ());
-   m_editItem->setFermenterType              (lineEdit_fermenterType           ->text                 ());
-   m_editItem->setAgingVesselType            (lineEdit_agingVesselType         ->text                 ());
-   m_editItem->setPackagingVesselType        (lineEdit_packagingVesselType     ->text                 ());
-   m_editItem->setHltVolume_l                (lineEdit_hltVolume               ->getNonOptCanonicalQty());
-   m_editItem->setLauterTunVolume_l          (lineEdit_lauterTunVolume         ->getNonOptCanonicalQty());
-   m_editItem->setAgingVesselVolume_l        (lineEdit_agingVesselVolume       ->getNonOptCanonicalQty());
-   m_editItem->setPackagingVesselVolume_l    (lineEdit_packagingVesselVolume   ->getNonOptCanonicalQty());
-   m_editItem->setHltLoss_l                  (lineEdit_hltLoss                 ->getNonOptCanonicalQty());
-   m_editItem->setMashTunLoss_l              (lineEdit_mashTunLoss             ->getNonOptCanonicalQty());
-   m_editItem->setFermenterLoss_l            (lineEdit_fermenterLoss           ->getNonOptCanonicalQty());
-   m_editItem->setAgingVesselLoss_l          (lineEdit_agingVesselLoss         ->getNonOptCanonicalQty());
-   m_editItem->setPackagingVesselLoss_l      (lineEdit_packagingVesselLoss     ->getNonOptCanonicalQty());
-   m_editItem->setKettleOutflowPerMinute_l   (lineEdit_kettleOutflowPerMinute  ->getOptCanonicalQty   ());
-   m_editItem->setHltWeight_kg               (lineEdit_hltWeight               ->getOptCanonicalQty   ());
-   m_editItem->setLauterTunWeight_kg         (lineEdit_lauterTunWeight         ->getOptCanonicalQty   ());
-   m_editItem->setKettleWeight_kg            (lineEdit_kettleWeight            ->getOptCanonicalQty   ());
-   m_editItem->setHltSpecificHeat_calGC      (lineEdit_hltSpecificHeat         ->getOptCanonicalQty   ());
-   m_editItem->setLauterTunSpecificHeat_calGC(lineEdit_lauterTunSpecificHeat   ->getOptCanonicalQty   ());
-   m_editItem->setKettleSpecificHeat_calGC   (lineEdit_kettleSpecificHeat      ->getOptCanonicalQty   ());
-   m_editItem->setHltNotes                   (textEdit_hltNotes                ->toPlainText          ());
-   m_editItem->setMashTunNotes               (textEdit_mashTunNotes            ->toPlainText          ());
-   m_editItem->setLauterTunNotes             (textEdit_lauterTunNotes          ->toPlainText          ());
-   m_editItem->setFermenterNotes             (textEdit_fermenterNotes          ->toPlainText          ());
-   m_editItem->setAgingVesselNotes           (textEdit_agingVesselNotes        ->toPlainText          ());
-   m_editItem->setPackagingVesselNotes       (textEdit_packagingVesselNotes    ->toPlainText          ());
-
-   return;
-}
-
-void EquipmentEditor::writeLateFieldsToEditItem() {
-   // Nothing to do here for Equipment
-   return;
-}
-
-void EquipmentEditor::readFieldsFromEditItem(std::optional<QString> propName) {
-
-   if (!propName || *propName == PropertyNames::NamedEntity::name    ) { this->lineEdit_name          ->setTextCursor(m_editItem->name          ()); // Continues to next line
-                                                                         /* this->tabWidget_editor->setTabText(0, m_editItem->name()); */                 if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Equipment::kettleBoilSize_l           ) { this->lineEdit_kettleBoilSize          ->setQuantity    (m_editItem->kettleBoilSize_l           ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Equipment::fermenterBatchSize_l       ) { this->lineEdit_fermenterBatchSize      ->setQuantity    (m_editItem->fermenterBatchSize_l       ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Equipment::mashTunVolume_l            ) { this->lineEdit_mashTunVolume           ->setQuantity    (m_editItem->mashTunVolume_l            ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Equipment::mashTunWeight_kg           ) { this->lineEdit_mashTunWeight           ->setQuantity    (m_editItem->mashTunWeight_kg           ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Equipment::mashTunSpecificHeat_calGC  ) { this->lineEdit_mashTunSpecificHeat     ->setQuantity    (m_editItem->mashTunSpecificHeat_calGC  ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Equipment::boilTime_min               ) { this->lineEdit_boilTime                ->setQuantity    (m_editItem->boilTime_min               ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Equipment::kettleEvaporationPerHour_l ) { this->lineEdit_kettleEvaporationPerHour->setQuantity    (m_editItem->kettleEvaporationPerHour_l ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Equipment::topUpKettle_l              ) { this->lineEdit_topUpKettle             ->setQuantity    (m_editItem->topUpKettle_l              ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Equipment::topUpWater_l               ) { this->lineEdit_topUpWater              ->setQuantity    (m_editItem->topUpWater_l               ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Equipment::kettleTrubChillerLoss_l    ) { this->lineEdit_kettleTrubChillerLoss   ->setQuantity    (m_editItem->kettleTrubChillerLoss_l    ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Equipment::lauterTunDeadspaceLoss_l   ) { this->lineEdit_lauterTunDeadspaceLoss  ->setQuantity    (m_editItem->lauterTunDeadspaceLoss_l   ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Equipment::kettleNotes                ) { this->textEdit_kettleNotes             ->setText      (m_editItem->kettleNotes                ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Equipment::mashTunGrainAbsorption_LKg ) { this->lineEdit_mashTunGrainAbsorption  ->setQuantity    (m_editItem->mashTunGrainAbsorption_LKg ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Equipment::boilingPoint_c             ) { this->lineEdit_boilingPoint            ->setQuantity    (m_editItem->boilingPoint_c             ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Equipment::hopUtilization_pct         ) { this->lineEdit_hopUtilization          ->setQuantity    (m_editItem->hopUtilization_pct         ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Equipment::calcBoilVolume             ) { this->checkBox_calcBoilVolume          ->setChecked   (m_editItem->calcBoilVolume             ()); if (propName) { return; } }
-   // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
-   if (!propName || *propName == PropertyNames::Equipment::hltType                    ) { this->lineEdit_hltType                 ->setTextCursor(m_editItem->hltType                    ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Equipment::mashTunType                ) { this->lineEdit_mashTunType             ->setTextCursor(m_editItem->mashTunType                ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Equipment::lauterTunType              ) { this->lineEdit_lauterTunType           ->setTextCursor(m_editItem->lauterTunType              ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Equipment::kettleType                 ) { this->lineEdit_kettleType              ->setTextCursor(m_editItem->kettleType                 ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Equipment::fermenterType              ) { this->lineEdit_fermenterType           ->setTextCursor(m_editItem->fermenterType              ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Equipment::agingVesselType            ) { this->lineEdit_agingVesselType         ->setTextCursor(m_editItem->agingVesselType            ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Equipment::packagingVesselType        ) { this->lineEdit_packagingVesselType     ->setTextCursor(m_editItem->packagingVesselType        ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Equipment::hltVolume_l                ) { this->lineEdit_hltVolume               ->setQuantity    (m_editItem->hltVolume_l                ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Equipment::lauterTunVolume_l          ) { this->lineEdit_lauterTunVolume         ->setQuantity    (m_editItem->lauterTunVolume_l          ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Equipment::agingVesselVolume_l        ) { this->lineEdit_agingVesselVolume       ->setQuantity    (m_editItem->agingVesselVolume_l        ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Equipment::packagingVesselVolume_l    ) { this->lineEdit_packagingVesselVolume   ->setQuantity    (m_editItem->packagingVesselVolume_l    ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Equipment::hltLoss_l                  ) { this->lineEdit_hltLoss                 ->setQuantity    (m_editItem->hltLoss_l                  ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Equipment::mashTunLoss_l              ) { this->lineEdit_mashTunLoss             ->setQuantity    (m_editItem->mashTunLoss_l              ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Equipment::fermenterLoss_l            ) { this->lineEdit_fermenterLoss           ->setQuantity    (m_editItem->fermenterLoss_l            ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Equipment::agingVesselLoss_l          ) { this->lineEdit_agingVesselLoss         ->setQuantity    (m_editItem->agingVesselLoss_l          ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Equipment::packagingVesselLoss_l      ) { this->lineEdit_packagingVesselLoss     ->setQuantity    (m_editItem->packagingVesselLoss_l      ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Equipment::kettleOutflowPerMinute_l   ) { this->lineEdit_kettleOutflowPerMinute  ->setQuantity    (m_editItem->kettleOutflowPerMinute_l   ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Equipment::hltWeight_kg               ) { this->lineEdit_hltWeight               ->setQuantity    (m_editItem->hltWeight_kg               ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Equipment::lauterTunWeight_kg         ) { this->lineEdit_lauterTunWeight         ->setQuantity    (m_editItem->lauterTunWeight_kg         ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Equipment::kettleWeight_kg            ) { this->lineEdit_kettleWeight            ->setQuantity    (m_editItem->kettleWeight_kg            ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Equipment::hltSpecificHeat_calGC      ) { this->lineEdit_hltSpecificHeat         ->setQuantity    (m_editItem->hltSpecificHeat_calGC      ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Equipment::lauterTunSpecificHeat_calGC) { this->lineEdit_lauterTunSpecificHeat   ->setQuantity    (m_editItem->lauterTunSpecificHeat_calGC()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Equipment::kettleSpecificHeat_calGC   ) { this->lineEdit_kettleSpecificHeat      ->setQuantity    (m_editItem->kettleSpecificHeat_calGC   ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Equipment::hltNotes                   ) { this->textEdit_hltNotes                ->setText      (m_editItem->hltNotes                   ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Equipment::mashTunNotes               ) { this->textEdit_mashTunNotes            ->setText      (m_editItem->mashTunNotes               ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Equipment::lauterTunNotes             ) { this->textEdit_lauterTunNotes          ->setText      (m_editItem->lauterTunNotes             ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Equipment::fermenterNotes             ) { this->textEdit_fermenterNotes          ->setText      (m_editItem->fermenterNotes             ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Equipment::agingVesselNotes           ) { this->textEdit_agingVesselNotes        ->setText      (m_editItem->agingVesselNotes           ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Equipment::packagingVesselNotes       ) { this->textEdit_packagingVesselNotes    ->setText      (m_editItem->packagingVesselNotes       ()); if (propName) { return; } }
-
+   // These aren't fields we store in the DB, rather they control which bits of the editor are visible
    this->checkBox_showHlt            ->setChecked(m_editItem->hltVolume_l            () != 0);
    this->checkBox_showLauterTun      ->setChecked(m_editItem->lauterTunVolume_l      () != 0);
    this->checkBox_showAgingVessel    ->setChecked(m_editItem->agingVesselVolume_l    () != 0);
    this->checkBox_showPackagingVessel->setChecked(m_editItem->packagingVesselVolume_l() != 0);
+
    this->hideOrShowOptionalVessels();
 
    this->checkBox_defaultEquipment->blockSignals(true);
@@ -418,4 +312,4 @@ void EquipmentEditor::updateDefaultEquipment() {
 }
 
 // Insert the boiler-plate stuff that we cannot do in EditorBase
-EDITOR_COMMON_CODE(EquipmentEditor)
+EDITOR_COMMON_CODE(Equipment)

@@ -67,7 +67,8 @@ void BtBoolComboBox::init(char const * const   editorName    ,
                           QString      const & unsetDisplay  ,
                           QString      const & setDisplay    ,
                           TypeInfo     const & typeInfo      ) {
-   qDebug() << Q_FUNC_INFO << comboBoxFqName << ":" << typeInfo;
+   // Normally keep this log statement commented out otherwise it generates too many lines in the log file
+//   qDebug() << Q_FUNC_INFO << comboBoxFqName << ":" << typeInfo;
 
    // It's a coding error to call init twice
    Q_ASSERT(!this->pimpl->m_initialised);
@@ -128,6 +129,21 @@ void BtBoolComboBox::setNull() {
    return;
 }
 
+void BtBoolComboBox::setDefault() {
+   this->setCurrentIndex(0);
+   return;
+}
+
+void BtBoolComboBox::setFromVariant(QVariant const & value) {
+   Q_ASSERT(this->pimpl->m_initialised);
+   if (this->pimpl->m_typeInfo->isOptional()) {
+      this->setValue(value.value<std::optional<bool>>());
+   } else {
+      this->setValue(value.value<bool>());
+   }
+   return;
+}
+
 [[nodiscard]] bool BtBoolComboBox::getNonOptBoolValue() const {
    Q_ASSERT(!this->isOptional());
    QString const rawValue = this->currentData().toString();
@@ -146,8 +162,8 @@ void BtBoolComboBox::setNull() {
    return rawValue == trueValue;
 }
 
-[[nodiscard]] QVariant BtBoolComboBox::getValue(TypeInfo const & typeInfo) const {
-   if (typeInfo.isOptional()) {
+[[nodiscard]] QVariant BtBoolComboBox::getAsVariant() const {
+   if (this->pimpl->m_typeInfo->isOptional()) {
       return QVariant::fromValue(this->getOptBoolValue());
    }
    return QVariant::fromValue(this->getNonOptBoolValue());

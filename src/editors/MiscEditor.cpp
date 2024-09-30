@@ -28,73 +28,32 @@
 #include "database/ObjectStoreWrapper.h"
 #include "measurement/Unit.h"
 
-MiscEditor::MiscEditor(QWidget * parent) :
+MiscEditor::MiscEditor(QWidget * parent, QString const editorName) :
    QDialog(parent),
-   EditorBase<MiscEditor, Misc>() {
+   EditorBase<MiscEditor, Misc, MiscEditorOptions>(editorName) {
    setupUi(this);
-
-   tabWidget_editor->tabBar()->setStyle(new BtHorizontalTabs);
-
-   SMART_FIELD_INIT(MiscEditor, label_name     , lineEdit_name     , Misc, PropertyNames::NamedEntity::name);
-   SMART_FIELD_INIT(MiscEditor, label_inventory, lineEdit_inventory, Misc, PropertyNames::Ingredient::totalInventory, 1);
-
-   BT_COMBO_BOX_INIT(MiscEditor, comboBox_type,  Misc, type);
-
-   BT_COMBO_BOX_INIT_COPQ(MiscEditor, comboBox_amountType, Misc, PropertyNames::Ingredient::totalInventory, lineEdit_inventory);
-
-   // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
-   SMART_FIELD_INIT(MiscEditor, label_producer , lineEdit_producer , Misc, PropertyNames::Misc::producer   );
-   SMART_FIELD_INIT(MiscEditor, label_productId, lineEdit_productId, Misc, PropertyNames::Misc::productId  );
-
-   this->connectSignalsAndSlots();
+   this->postSetupUiInit({
+      //
+      // Write inventory late to make sure we've the row in the inventory table (because total inventory amount isn't
+      // really an attribute of the Fermentable).
+      //
+      // Note that we do not need to store the value of comboBox_amountType.  It merely controls the available unit for
+      // lineEdit_inventory
+      //
+      EDITOR_FIELD_NORM(Misc, label_name      , lineEdit_name      , NamedEntity::name         ),
+      EDITOR_FIELD_NORM(Misc, label_inventory , lineEdit_inventory , Ingredient::totalInventory, 1, WhenToWriteField::Late),
+      EDITOR_FIELD_COPQ(Misc, label_amountType, comboBox_amountType, Ingredient::totalInventory, lineEdit_inventory, WhenToWriteField::Never),
+      EDITOR_FIELD_ENUM(Misc, label_type      , comboBox_type      , Misc::type                ),
+      EDITOR_FIELD_NORM(Misc, tab_useFor      , textEdit_useFor    , Misc::useFor              ),
+      EDITOR_FIELD_NORM(Misc, tab_notes       , textEdit_notes     , Misc::notes               ),
+      // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
+      EDITOR_FIELD_NORM(Misc, label_producer  , lineEdit_producer  , Misc::producer            ),
+      EDITOR_FIELD_NORM(Misc, label_productId , lineEdit_productId , Misc::productId           ),
+   });
    return;
 }
 
 MiscEditor::~MiscEditor() = default;
 
-void MiscEditor::writeFieldsToEditItem() {
-   this->m_editItem->setType(this->comboBox_type->getNonOptValue<Misc::Type>());
-   this->m_editItem->setName          (this->lineEdit_name          ->text                  ());
-   this->m_editItem->setUseFor        (this->textEdit_useFor        ->toPlainText           ());
-   this->m_editItem->setNotes         (this->textEdit_notes         ->toPlainText           ());
-   // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
-   this->m_editItem->setProducer      (this->lineEdit_producer      ->text                  ());
-   this->m_editItem->setProductId     (this->lineEdit_productId     ->text                  ());
-   return;
-}
-
-void MiscEditor::writeLateFieldsToEditItem() {
-   //
-   // Do this late to make sure we've the row in the inventory table (because total inventory amount isn't really an
-   // attribute of the Misc).
-   //
-   // Note that we do not need to store the value of comboBox_amountType.  It merely controls the available unit for
-   // lineEdit_inventory
-   //
-   // Note that, if the inventory field is blank, we'll treat that as meaning "don't change the inventory"
-   //
-   if (!this->lineEdit_inventory->isEmptyOrBlank()) {
-      this->m_editItem->setTotalInventory(lineEdit_inventory->getNonOptCanonicalAmt());
-   }
-   return;
-}
-
-void MiscEditor::readFieldsFromEditItem(std::optional<QString> propName) {
-   if (!propName || *propName == PropertyNames::NamedEntity::name) { this->lineEdit_name     ->setTextCursor(m_editItem->name     ()); // Continues to next line
-                                                                     this->tabWidget_editor->setTabText(0, m_editItem->name());        if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Misc::type       ) { this->comboBox_type     ->setValue     (m_editItem->type     ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Ingredient::totalInventory) { this->lineEdit_inventory->setAmount(m_editItem->totalInventory());
-                                                                              this->comboBox_amountType->autoSetFromControlledField();
-                                                                              if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Misc::useFor     ) { this->textEdit_useFor   ->setPlainText (m_editItem->useFor   ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Misc::notes      ) { this->textEdit_notes    ->setPlainText (m_editItem->notes    ()); if (propName) { return; } }
-   // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
-   if (!propName || *propName == PropertyNames::Misc::producer   ) { this->lineEdit_producer ->setTextCursor(m_editItem->producer ()); if (propName) { return; } }
-   if (!propName || *propName == PropertyNames::Misc::productId  ) { this->lineEdit_productId->setTextCursor(m_editItem->productId()); if (propName) { return; } }
-
-   this->label_id_value->setText(QString::number(m_editItem->key()));
-   return;
-}
-
 // Insert the boiler-plate stuff that we cannot do in EditorBase
-EDITOR_COMMON_CODE(MiscEditor)
+EDITOR_COMMON_CODE(Misc)

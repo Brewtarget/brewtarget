@@ -325,7 +325,7 @@ void TreeView::newNamedEntity() {
    if (m_type.testFlag(TreeModel::TypeMask::Misc       )) { qobject_cast<MiscEditor        *>(m_editor)->newEditItem(folder); return; }
    if (m_type.testFlag(TreeModel::TypeMask::Style      )) { qobject_cast<StyleEditor       *>(m_editor)->newEditItem(folder); return; }
    if (m_type.testFlag(TreeModel::TypeMask::Yeast      )) { qobject_cast<YeastEditor       *>(m_editor)->newEditItem(folder); return; }
-   if (m_type.testFlag(TreeModel::TypeMask::Water      )) { qobject_cast<WaterEditor       *>(m_editor)->newWater   (folder); return; }
+   if (m_type.testFlag(TreeModel::TypeMask::Water      )) { qobject_cast<WaterEditor       *>(m_editor)->newEditItem(folder); return; }
 
    qWarning() << Q_FUNC_INFO << "Unrecognized mask" << m_type;
    return;
@@ -743,42 +743,11 @@ void TreeView::versionedRecipe(Recipe * descendant) {
    emit recipeSpawn(descendant);
 }
 
-// Bad form likely
-
-RecipeTreeView::RecipeTreeView(QWidget * parent) : TreeView(parent, TreeModel::TypeMask::Recipe) {
-   connect(m_model, &TreeModel::recipeSpawn, this, &TreeView::versionedRecipe);
-}
-
-EquipmentTreeView::EquipmentTreeView(QWidget * parent)
-   : TreeView(parent, TreeModel::TypeMask::Equipment) {
-}
-
-// Icky ick ikcy
-FermentableTreeView::FermentableTreeView(QWidget * parent)
-   : TreeView(parent, TreeModel::TypeMask::Fermentable) {
-}
-
-// More Ick
-HopTreeView::HopTreeView(QWidget * parent)
-   : TreeView(parent, TreeModel::TypeMask::Hop) {
-}
-
-// Ick some more
-MiscTreeView::MiscTreeView(QWidget * parent)
-   : TreeView(parent, TreeModel::TypeMask::Misc) {
-}
-
-// Will this ick never end?
-YeastTreeView::YeastTreeView(QWidget * parent)
-   : TreeView(parent, TreeModel::TypeMask::Yeast) {
-}
-
-// Nope. Apparently not, cause I keep adding more
-StyleTreeView::StyleTreeView(QWidget * parent)
-   : TreeView(parent, TreeModel::TypeMask::Style) {
-}
-
-// Cthulhu take me
-WaterTreeView::WaterTreeView(QWidget * parent)
-   : TreeView(parent, TreeModel::TypeMask::Water) {
-}
+TREE_VIEW_COMMON_CODE(Recipe)
+TREE_VIEW_COMMON_CODE(Equipment)
+TREE_VIEW_COMMON_CODE(Fermentable)
+TREE_VIEW_COMMON_CODE(Hop)
+TREE_VIEW_COMMON_CODE(Misc)
+TREE_VIEW_COMMON_CODE(Yeast)
+TREE_VIEW_COMMON_CODE(Style)
+TREE_VIEW_COMMON_CODE(Water)

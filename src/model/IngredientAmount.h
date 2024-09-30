@@ -23,7 +23,7 @@
 #include "utils/EnumStringMapping.h"
 #include "utils/TypeLookup.h"
 
-//╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+//======================================================================================================================
 //========================================== Start of property name constants ==========================================
 // See comment in model/NamedEntity.h
 #define AddPropertyName(property) namespace PropertyNames::IngredientAmount { BtStringConst const property{#property}; }
@@ -34,7 +34,7 @@ AddPropertyName(quantity) // Only quantity and unit should be used in database m
 AddPropertyName(unit    ) // Only quantity and unit should be used in database mappings
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
-//╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+//======================================================================================================================
 
 /**
  * \brief Represents an amount of an ingredient.  These amounts are used in two places: in the \c RecipeAddition
@@ -198,8 +198,8 @@ public:
       //
       // For the moment, we keep the database layer and update one column from one property, hence the split into two
       // separate calls here.  If we ended up doing this sort of stuff in a lot of places, we could expand the
-      // capabilities of ObjectStore etc to handle compound types such as Measurement::Amount.
-      //
+      // capabilities of ObjectStore etc to handle compound types such as Measurement::Amount.  Note, however, that very
+      // often, the unit is not changing, so a lot of the time this is still only one DB call.
       //
       this->doSetQuantity(val.quantity);
       this->doSetUnit    (val.unit    );

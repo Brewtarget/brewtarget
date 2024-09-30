@@ -27,15 +27,18 @@
 #include "editors/EditorBase.h"
 #include "model/MashStep.h"
 
+#define MashStepEditorOptions EditorBaseOptions{ }
 /*!
  * \class MashStepEditor
  *
  * \brief View/controller dialog for editing mash steps.
  */
-class MashStepEditor : public QDialog, public Ui::mashStepEditor, public EditorBase<MashStepEditor, MashStep> {
+class MashStepEditor : public QDialog,
+                       public Ui::mashStepEditor,
+                       public EditorBase<MashStepEditor, MashStep, MashStepEditorOptions> {
    Q_OBJECT
 
-   EDITOR_COMMON_DECL(MashStep)
+   EDITOR_COMMON_DECL(MashStep, MashStepEditorOptions)
 
 public slots:
    /*!

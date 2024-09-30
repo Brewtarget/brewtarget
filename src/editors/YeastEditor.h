@@ -29,6 +29,7 @@
 #include "editors/EditorBase.h"
 #include "model/Yeast.h"
 
+#define YeastEditorOptions EditorBaseOptions{ .nameTab = true, .idDisplay = true }
 /*!
  * \class YeastEditor
  *
@@ -37,10 +38,12 @@
  *        See comment on EditorBase::connectSignalsAndSlots for why we need to have \c public, not \c private
  *        inheritance from the Ui base.
  */
-class YeastEditor : public QDialog, public Ui::yeastEditor, public EditorBase<YeastEditor, Yeast> {
+class YeastEditor : public QDialog,
+                    public Ui::yeastEditor,
+                    public EditorBase<YeastEditor, Yeast, YeastEditorOptions> {
    Q_OBJECT
 
-   EDITOR_COMMON_DECL(Yeast)
+   EDITOR_COMMON_DECL(Yeast, YeastEditorOptions)
 };
 
 #endif

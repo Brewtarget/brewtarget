@@ -503,7 +503,8 @@ namespace {
       {JsonRecordDefinition::FieldType::MeasurementWithUnits, "iron"       , PropertyNames::Water::iron_ppm       , &BEER_JSON_MASS_FRACT_OR_CONC_UNIT_MAPPER},
       {JsonRecordDefinition::FieldType::MeasurementWithUnits, "nitrate"    , PropertyNames::Water::nitrate_ppm    , &BEER_JSON_MASS_FRACT_OR_CONC_UNIT_MAPPER},
       {JsonRecordDefinition::FieldType::MeasurementWithUnits, "nitrite"    , PropertyNames::Water::nitrite_ppm    , &BEER_JSON_MASS_FRACT_OR_CONC_UNIT_MAPPER},
-      {JsonRecordDefinition::FieldType::MeasurementWithUnits, "flouride"   , PropertyNames::Water::flouride_ppm   , &BEER_JSON_MASS_FRACT_OR_CONC_UNIT_MAPPER},
+      // BeerJSON attribute is flouride but should be fluoride -- see https://github.com/beerjson/beerjson/issues/214
+      {JsonRecordDefinition::FieldType::MeasurementWithUnits, "flouride"   , PropertyNames::Water::fluoride_ppm   , &BEER_JSON_MASS_FRACT_OR_CONC_UNIT_MAPPER},
       {JsonRecordDefinition::FieldType::MeasurementWithUnits, "sulfate"    , PropertyNames::Water::sulfate_ppm    , &BEER_JSON_MASS_FRACT_OR_CONC_UNIT_MAPPER},
       {JsonRecordDefinition::FieldType::MeasurementWithUnits, "chloride"   , PropertyNames::Water::chloride_ppm   , &BEER_JSON_MASS_FRACT_OR_CONC_UNIT_MAPPER},
       {JsonRecordDefinition::FieldType::MeasurementWithUnits, "sodium"     , PropertyNames::Water::sodium_ppm     , &BEER_JSON_MASS_FRACT_OR_CONC_UNIT_MAPPER},

@@ -85,6 +85,18 @@
         <source>Post-boil for %1</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Automatically-generated pre-boil step for %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Automatically-generated boil proper step for %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Automatically-generated post-boil step for %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>BoilStep</name>
@@ -2158,6 +2170,14 @@ If you need help, please open an issue at %1</source>
         <source>None of the selected items is exportable</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Automatically-created Boil for %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Automatically-created Fermentation for %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Mash</name>
@@ -3726,6 +3746,38 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>ft</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No</source>
+        <translation type="unfinished">否</translation>
+    </message>
+    <message>
+        <source>Yes</source>
+        <translation type="unfinished">是</translation>
+    </message>
+    <message>
+        <source>Boil for %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Automatically created by BeerXML import</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fermentation for %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Primary Fermentation Step for %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Secondary Fermentation Step for %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tertiary Fermentation Step for %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -5532,11 +5584,11 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Water name</source>
+        <source>CaCO3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Water name:</source>
+        <source>HCO3</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -6788,10 +6840,6 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>GrainGroup</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Fermantable Grain Group</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6909,6 +6957,10 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Grain Group</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -8447,7 +8499,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Time</source>
-        <translation>时间Time</translation>
+        <translation type="vanished">时间Time</translation>
     </message>
     <message>
         <source>Amount</source>
@@ -9943,7 +9995,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Add to Secondary</source>
-        <translation>加入二次Add to Secondary</translation>
+        <translation type="vanished">加入二次Add to Secondary</translation>
     </message>
     <message>
         <source>Checked means add this yeast to secondary instead of primary</source>
@@ -10015,10 +10067,6 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Maximum apparent attenuation as percentage of OG points</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Whether to add this yeast to secondary instead of primary</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

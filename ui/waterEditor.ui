@@ -46,7 +46,7 @@
        <property name="sizeConstraint">
         <enum>QLayout::SetMinimumSize</enum>
        </property>
-       <item row="0" column="0">
+       <item row="0" column="1">
         <widget class="QLabel" name="label_name">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -59,7 +59,7 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="1" colspan="3">
+       <item row="0" column="2" colspan="4">
         <widget class="QLineEdit" name="lineEdit_name">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -69,7 +69,7 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
+       <item row="1" column="1">
         <widget class="SmartLabel" name="label_ca">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -85,7 +85,7 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="1">
+       <item row="1" column="2">
         <widget class="SmartLineEdit" name="lineEdit_ca">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
@@ -99,15 +99,22 @@
            <height>0</height>
           </size>
          </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>16777215</height>
-          </size>
-         </property>
         </widget>
        </item>
-       <item row="1" column="2">
+       <item row="1" column="3">
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="1" column="4">
         <widget class="SmartLabel" name="label_cl">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -123,7 +130,7 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="3">
+       <item row="1" column="5">
         <widget class="SmartLineEdit" name="lineEdit_cl">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
@@ -137,15 +144,9 @@
            <height>0</height>
           </size>
          </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>16777215</height>
-          </size>
-         </property>
         </widget>
        </item>
-       <item row="2" column="0">
+       <item row="2" column="1">
         <widget class="SmartLabel" name="label_mg">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -161,7 +162,7 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="1">
+       <item row="2" column="2">
         <widget class="SmartLineEdit" name="lineEdit_mg">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
@@ -175,15 +176,9 @@
            <height>0</height>
           </size>
          </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>16777215</height>
-          </size>
-         </property>
         </widget>
        </item>
-       <item row="2" column="2">
+       <item row="2" column="4">
         <widget class="SmartLabel" name="label_so4">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -202,7 +197,7 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="3">
+       <item row="2" column="5">
         <widget class="SmartLineEdit" name="lineEdit_so4">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
@@ -216,15 +211,9 @@
            <height>0</height>
           </size>
          </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>16777215</height>
-          </size>
-         </property>
         </widget>
        </item>
-       <item row="3" column="0">
+       <item row="3" column="1">
         <widget class="SmartLabel" name="label_na">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -240,7 +229,7 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="1">
+       <item row="3" column="2">
         <widget class="SmartLineEdit" name="lineEdit_na">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
@@ -254,15 +243,9 @@
            <height>0</height>
           </size>
          </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>16777215</height>
-          </size>
-         </property>
         </widget>
        </item>
-       <item row="3" column="2">
+       <item row="3" column="4">
         <widget class="SmartLabel" name="label_alk">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -281,7 +264,7 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="3">
+       <item row="3" column="5">
         <widget class="SmartLineEdit" name="lineEdit_alk">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
@@ -295,15 +278,9 @@
            <height>0</height>
           </size>
          </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>16777215</height>
-          </size>
-         </property>
         </widget>
        </item>
-       <item row="4" column="0">
+       <item row="4" column="1">
         <widget class="SmartLabel" name="label_pH">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -319,7 +296,7 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="1">
+       <item row="4" column="2">
         <widget class="SmartLineEdit" name="lineEdit_ph">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
@@ -333,16 +310,10 @@
            <height>0</height>
           </size>
          </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>16777215</height>
-          </size>
-         </property>
         </widget>
        </item>
-       <item row="4" column="2">
-        <widget class="QLabel" name="label_alkCombo">
+       <item row="4" column="4">
+        <widget class="QLabel" name="label_alkalinityAsHCO3">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -360,8 +331,8 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="3">
-        <widget class="QComboBox" name="comboBox_alk">
+       <item row="4" column="5">
+        <widget class="BtBoolComboBox" name="boolCombo_alkalinityAsHCO3">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -380,50 +351,159 @@
          </item>
         </widget>
        </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout">
-       <item>
+
+       <item row="5" column="1">
+        <widget class="SmartLabel" name="label_carbonate">
+         <property name="text">
+          <string notr="true">Carbonate</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_carbonate</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="2">
+        <widget class="SmartLineEdit" name="lineEdit_carbonate">
+        </widget>
+       </item>
+       <item row="5" column="4">
+        <widget class="SmartLabel" name="label_potassium">
+         <property name="text">
+          <string notr="true">Potassium</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_potassium</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="5">
+        <widget class="SmartLineEdit" name="lineEdit_potassium">
+        </widget>
+       </item>
+       <item row="6" column="1">
+        <widget class="SmartLabel" name="label_iron">
+         <property name="text">
+          <string notr="true">Iron</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_iron</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="2">
+        <widget class="SmartLineEdit" name="lineEdit_iron">
+        </widget>
+       </item>
+       <item row="6" column="4">
+        <widget class="SmartLabel" name="label_fluoride">
+         <property name="text">
+          <string notr="true">Flouride</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_fluoride</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="5">
+        <widget class="SmartLineEdit" name="lineEdit_fluoride">
+        </widget>
+       </item>
+       <item row="7" column="1">
+        <widget class="SmartLabel" name="label_nitrate">
+         <property name="text">
+          <string notr="true">Nitrate</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_nitrate</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="2">
+        <widget class="SmartLineEdit" name="lineEdit_nitrate">
+        </widget>
+       </item>
+       <item row="7" column="4">
+        <widget class="SmartLabel" name="label_nitrite">
+         <property name="text">
+          <string notr="true">Nitrite</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_nitrite</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="5">
+        <widget class="SmartLineEdit" name="lineEdit_nitrite">
+        </widget>
+       </item>
+       <item row="8" column="1">
         <widget class="QLabel" name="label_notes">
          <property name="text">
           <string>Notes</string>
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QPlainTextEdit" name="plainTextEdit_notes">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
+       <item row="8" column="2">
+        <widget class="QTextEdit" name="textEdit_notes"/>
+       </item>
+       <item row="10" column="3">
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <widget class="QPushButton" name="pushButton_new">
+           <property name="toolTip">
+            <string>New hop</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="../resources.qrc">
+             <normaloff>:/images/smallPlus.svg</normaloff>:/images/smallPlus.svg</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_save">
+           <property name="toolTip">
+            <string>Save and close</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="../resources.qrc">
+             <normaloff>:/images/filesave.svg</normaloff>:/images/filesave.svg</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_cancel">
+           <property name="toolTip">
+            <string>Discard and close</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="../resources.qrc">
+             <normaloff>:/images/exit.svg</normaloff>:/images/exit.svg</iconset>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
       </layout>
-     </item>
-     <item>
-      <widget class="QDialogButtonBox" name="buttonBox">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="standardButtons">
-        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-       </property>
-      </widget>
      </item>
     </layout>
    </item>
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>BtBoolComboBox</class>
+   <extends>QComboBox</extends>
+   <header>widgets/BtBoolComboBox.h</header>
+  </customwidget>
   <customwidget>
    <class>SmartLabel</class>
    <extends>QLabel</extends>

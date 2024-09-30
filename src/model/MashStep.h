@@ -136,7 +136,9 @@ public:
     * \brief The infusion temp in C.                                        ⮜⮜⮜ Not part of BeerXML; optional in BeerJSON ⮞⮞⮞
     *
     *        An infusion step is where you're adding hot water to the mash, so this is the temperature of the water
-    *        being added.
+    *        being added.  This is not part of BeerJSON, so I guess the thinking there is that the temperature of the
+    *        water being added is either not important or can be calculated from other data (including the difference
+    *        between the start and end temperatures of the step).
     */
    Q_PROPERTY(std::optional<double> infuseTemp_c           READ infuseTemp_c           WRITE setInfuseTemp_c                    )
    // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞

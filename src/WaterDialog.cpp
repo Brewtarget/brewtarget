@@ -294,12 +294,12 @@ void WaterDialog::setRecipe(Recipe *rec) {
       spinBox_spargeRO->setValue( QVariant(m_spargeRO * 100).toInt());
 
       baseProfileButton->setWater(this->m_base);
-      m_base_editor->setWater(this->m_base);
+      m_base_editor->setEditItem(this->m_base);
       // all of the magic to set the sliders happens in newTotals(). So don't do it twice
    }
    if (this->m_target && this->m_target != this->m_base) {
       targetProfileButton->setWater(this->m_target);
-      m_target_editor->setWater(this->m_target);
+      m_target_editor->setEditItem(this->m_target);
 
       this->setDigits();
    }
@@ -327,7 +327,7 @@ void WaterDialog::update_baseProfile(int selected) {
       qDebug() << Q_FUNC_INFO << "Made base child" << *this->m_base << "from parent" << parent;
 
       baseProfileButton->setWater(this->m_base);
-      m_base_editor->setWater(this->m_base);
+      m_base_editor->setEditItem(this->m_base);
       newTotals();
    }
    return;
@@ -351,7 +351,7 @@ void WaterDialog::update_targetProfile(int selected) {
       qDebug() << Q_FUNC_INFO << "Made target child" << *this->m_target << "from parent" << parent;
 
       targetProfileButton->setWater(this->m_target);
-      m_target_editor->setWater(this->m_target);
+      m_target_editor->setEditItem(this->m_target);
 
       this->setDigits();
    }

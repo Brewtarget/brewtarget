@@ -456,7 +456,7 @@ namespace {
       {XmlRecordDefinition::FieldType::Double          , "IRON_PPM"      , PropertyNames::Water::iron_ppm       },
       {XmlRecordDefinition::FieldType::Double          , "NITRATE_PPM"   , PropertyNames::Water::nitrate_ppm    },
       {XmlRecordDefinition::FieldType::Double          , "NITRITE_PPM"   , PropertyNames::Water::nitrite_ppm    },
-      {XmlRecordDefinition::FieldType::Double          , "FLOURIDE_PPM"  , PropertyNames::Water::flouride_ppm   },
+      {XmlRecordDefinition::FieldType::Double          , "FLUORIDE_PPM"  , PropertyNames::Water::fluoride_ppm   },
    };
    std::initializer_list<XmlRecordDefinition::FieldDefinition> const BeerXml_WaterType_ExclBase {
       // Type                                            XPath     Q_PROPERTY               Value Decoder

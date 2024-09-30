@@ -13,8 +13,20 @@ happens, so I'm now setting it to a slightly arbitrary time early in the morning
 * Additional methods for calculating IBU
 * We'll list other new features here...
 
+## v4.0.6
+Bug fixes for the 4.0.5 release (ie bugs in 4.0.5 are fixed in this 4.0.6 release).
+
+### New Features
+* None
+
+### Bug Fixes
+* Ingredient inventory edits not saved [832](https://github.com/Brewtarget/brewtarget/issues/832)
+
+### Release Timestamp
+Mon, 30 Sep 2024 04:00:06 +0100
+
 ## v4.0.5
-Minor bug fixes for the 4.0.4 release (ie bugs in 4.0.4 are fixed in this 4.0.5 release).
+Bug fixes for the 4.0.4 release (ie bugs in 4.0.4 are fixed in this 4.0.5 release).
 
 ### New Features
 * None
@@ -26,7 +38,7 @@ Minor bug fixes for the 4.0.4 release (ie bugs in 4.0.4 are fixed in this 4.0.5 
 * BeerXML/BeerJSON Recipe export does not match selected type [835](https://github.com/Brewtarget/brewtarget/issues/835)
 
 ### Release Timestamp
-Sat, 28 Sep 2024 04:00:05 +0100
+Sun, 29 Sep 2024 04:00:05 +0100
 
 ## v4.0.4
 Minor bug fixes for the 4.0.3 release (ie bugs in 4.0.3 are fixed in this 4.0.4 release).

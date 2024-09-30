@@ -30,6 +30,7 @@
 #include "editors/EditorBase.h"
 #include "model/Fermentable.h"
 
+#define FermentableEditorOptions EditorBaseOptions{ .nameTab = true, .idDisplay = true }
 /*!
  * \class FermentableEditor
  *
@@ -38,10 +39,12 @@
  *        See comment on EditorBase::connectSignalsAndSlots for why we need to have \c public, not \c private
  *        inheritance from the Ui base.
  */
-class FermentableEditor : public QDialog, public Ui::fermentableEditor, public EditorBase<FermentableEditor, Fermentable> {
+class FermentableEditor : public QDialog,
+                          public Ui::fermentableEditor,
+                          public EditorBase<FermentableEditor, Fermentable, FermentableEditorOptions> {
    Q_OBJECT
 
-   EDITOR_COMMON_DECL(Fermentable)
+   EDITOR_COMMON_DECL(Fermentable, FermentableEditorOptions)
 };
 
 #endif

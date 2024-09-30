@@ -1671,7 +1671,7 @@ void MainWindow::treeActivated(const QModelIndex &index) {
             {
                Water * w = active->getItem<Water>(index);
                if (w) {
-                  this->pimpl->m_waterEditor->setWater(ObjectStoreWrapper::getSharedFromRaw(w));
+                  this->pimpl->m_waterEditor->setEditItem(ObjectStoreWrapper::getSharedFromRaw(w));
                   this->pimpl->m_waterEditor->show();
                }
             }

@@ -601,7 +601,7 @@ protected:
       if (newValue == memberVariable) {
          qDebug() <<
             Q_FUNC_INFO << this->metaObject()->className() << "#" << this->key() << ": ignoring call to setter for" <<
-            propertyName << "as value not changing";
+            propertyName << "as value (" << newValue << ") not changing";
          return true;
       }
       return false;
@@ -618,6 +618,8 @@ protected:
    bool setAndNotify(BtStringConst const & propertyName,
                      T & memberVariable,
                      T const newValue) {
+      // Normally leave this log statement commented out as it generates too many lines in the log file
+//      qDebug() << Q_FUNC_INFO << propertyName << ": change from" << memberVariable << "to" << newValue;
       if (this->newValueMatchesExisting(propertyName, memberVariable, newValue)) {
          return false;
       }

@@ -43,7 +43,7 @@ class Equipment;
  *
  * \brief View/controller dialog for editing a mash.
  *
- *        See also \c MashEditor
+ *        See also \c MashEditor (into which I think this should be subsumed!)
  */
 class NamedMashEditor : public QDialog, public Ui::namedMashEditor {
    Q_OBJECT
