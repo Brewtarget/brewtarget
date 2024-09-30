@@ -26,6 +26,7 @@
 
 #include "trees/TreeNode.h"
 #include "trees/TreeFilterProxyModel.h"
+#include "utils/CuriouslyRecurringTemplateBase.h"
 
 // Forward declarations.
 class TreeModel;
@@ -33,6 +34,7 @@ class Recipe;
 class Equipment;
 class Fermentable;
 class Hop;
+class Mash;
 class Misc;
 class Yeast;
 class BrewNote;
@@ -138,10 +140,10 @@ public:
 
 public slots:
    void newNamedEntity();
+   void versionedRecipe(Recipe * descendant);
 
 private slots:
    void expandFolder(TreeModel::TypeMasks kindaThing, QModelIndex fIdx);
-   void versionedRecipe(Recipe * descendant);
 
    void showAncestors();
    void hideAncestors();
@@ -176,98 +178,61 @@ private:
    QString verifyCopy(QString tag, QString name, bool * abort);
    QMimeData * mimeData(QModelIndexList indexes);
 };
-
-//!
-// \class RecipeTreeView
-// \brief subclasses TreeView to only show recipes.
-class RecipeTreeView : public TreeView {
-   Q_OBJECT
+//======================================================================================================================
+template<class Derived> class TreeViewPhantom;
+template<class Derived, class NE>
+class TreeViewBase : public CuriouslyRecurringTemplateBase<TreeViewPhantom, Derived> {
 public:
-   //! \brief Constructs the tree view, sets up the filter proxy and sets a
-   // few options on the tree that can only be set after the model
-   RecipeTreeView(QWidget * parent = nullptr);
+   TreeViewBase() {
+      return;
+   }
+   ~TreeViewBase() = default;
+
+   void doConnections() requires std::same_as<Recipe, Derived> {
+      this->derived().connect(this->derived().m_model, &TreeModel::recipeSpawn, &this->derived(), &TreeView::versionedRecipe);
+      return;
+   }
+
+   void doConnections() requires (!std::same_as<Recipe, Derived>) {
+      return;
+   }
+
 
 };
+//======================================================================================================================
+#define TREE_VIEW_COMMON_DECL(NeName) \
+class NeName##TreeView : public TreeView,                                            \
+                         public TreeViewBase<NeName##TreeView, NeName> {             \
+   Q_OBJECT                                                                          \
+                                                                                     \
+   /* This allows TreeViewBase to call protected and private members of Derived */   \
+   friend class TreeViewBase<NeName##TreeView, NeName>;                              \
+                                                                                     \
+   public:                                                                           \
+      /* Constructs the tree view, sets up the filter proxy and sets a */            \
+      /* few options on the tree that can only be set after the model  */            \
+      NeName##TreeView(QWidget * parent = nullptr);                                  \
+      virtual ~NeName##TreeView();                                                   \
+};                                                                                   \
 
-//!
-// \class EquipmentTreeView
-// \brief subclasses TreeView to only show equipment.
-class EquipmentTreeView : public TreeView {
-   Q_OBJECT
-public:
-   //! \brief Constructs the tree view, sets up the filter proxy and sets a
-   // few options on the tree that can only be set after the model
-   EquipmentTreeView(QWidget * parent = nullptr);
-};
+TREE_VIEW_COMMON_DECL(Recipe)
+TREE_VIEW_COMMON_DECL(Equipment)
+TREE_VIEW_COMMON_DECL(Fermentable)
+TREE_VIEW_COMMON_DECL(Hop)
+TREE_VIEW_COMMON_DECL(Misc)
+TREE_VIEW_COMMON_DECL(Yeast)
+TREE_VIEW_COMMON_DECL(Style)
+TREE_VIEW_COMMON_DECL(Water)
 
-//!
-// \class FermentableTreeView
-// \brief subclasses TreeView to only show fermentables.
-class FermentableTreeView : public TreeView {
-   Q_OBJECT
-public:
-   //! \brief Constructs the tree view, sets up the filter proxy and sets a
-   // few options on the tree that can only be set after the model
-   FermentableTreeView(QWidget * parent = nullptr);
+#define TREE_VIEW_COMMON_CODE(NeName) \
+   NeName##TreeView::NeName##TreeView(QWidget * parent) : \
+      TreeView(parent, TreeModel::TypeMask::NeName),      \
+      TreeViewBase<NeName##TreeView, NeName>() {          \
+      this->doConnections();                              \
+      return;                                             \
+   }                                                      \
+                                                          \
+   NeName##TreeView::~NeName##TreeView() = default;       \
 
-};
 
-//!
-// \class HopTreeView
-// \brief subclasses TreeView to only show hops.
-class HopTreeView : public TreeView {
-   Q_OBJECT
-public:
-   //! \brief Constructs the tree view, sets up the filter proxy and sets a
-   // few options on the tree that can only be set after the model
-   HopTreeView(QWidget * parent = nullptr);
-
-};
-
-//!
-// \class MiscTreeView
-// \brief subclasses TreeView to only show miscs.
-class MiscTreeView : public TreeView {
-   Q_OBJECT
-public:
-   //! \brief Constructs the tree view, sets up the filter proxy and sets a
-   // few options on the tree that can only be set after the model
-   MiscTreeView(QWidget * parent = nullptr);
-};
-
-//!
-// \class YeastTreeView
-// \brief subclasses TreeView to only show yeasts.
-class YeastTreeView : public TreeView {
-   Q_OBJECT
-public:
-   //! \brief Constructs the tree view, sets up the filter proxy and sets a
-   // few options on the tree that can only be set after the model
-   YeastTreeView(QWidget * parent = nullptr);
-
-};
-
-//!
-// \class StyleTreeView
-// \brief subclasses TreeView to only show styles.
-class StyleTreeView : public TreeView {
-   Q_OBJECT
-public:
-   //! \brief Constructs the tree view, sets up the filter proxy and sets a
-   // few options on the tree that can only be set after the model
-   StyleTreeView(QWidget * parent = nullptr);
-
-};
-
-//!
-// \class WaterTreeView
-// \brief subclasses TreeView to only show waters.
-class WaterTreeView : public TreeView {
-   Q_OBJECT
-public:
-   //! \brief Constructs the tree view, sets up the filter proxy and sets a
-   // few options on the tree that can only be set after the model
-   WaterTreeView(QWidget * parent = nullptr);
-
-};
 #endif

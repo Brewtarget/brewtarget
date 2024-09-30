@@ -358,17 +358,27 @@ void SmartField::setAmount(Measurement::Amount const & amount) {
    // For the moment, I'm going to say this function should _only_ be called for ChoiceOfPhysicalQuantity
    Q_ASSERT(std::holds_alternative<Measurement::ChoiceOfPhysicalQuantity>(*this->getTypeInfo().fieldType));
 
+   // Usually leave this debug log commented out unless trouble-shooting as it generates a lot of logging
+//   qDebug() << Q_FUNC_INFO << this->pimpl->m_fieldFqName << "amount:" << amount;
    this->setRawText(this->displayAmount(amount, this->pimpl->m_precision));
    return;
 }
 
 void SmartField::setAmount(std::optional<Measurement::Amount> const & amount) {
    Q_ASSERT(this->pimpl->m_initialised);
+   // Usually leave this debug log commented out unless trouble-shooting as it generates a lot of logging
+//   qDebug() << Q_FUNC_INFO << this->pimpl->m_fieldFqName << "amount:" << amount;
    if (!amount) {
       this->setRawText("");
       return;
    }
    this->setAmount(*amount);
+   return;
+}
+
+void SmartField::setDefault() {
+   Q_ASSERT(this->pimpl->m_initialised);
+   this->setRawText("");
    return;
 }
 
@@ -418,9 +428,9 @@ void SmartField::setFromVariant(QVariant const & value) {
       }
    } else if (ti == typeid(Measurement::Amount)) {
       if (typeInfo.isOptional()) {
-         this->setAmount(value.value<Measurement::Amount >());
-      } else {
          this->setAmount(value.value<std::optional<Measurement::Amount>>());
+      } else {
+         this->setAmount(value.value<Measurement::Amount >());
       }
    } else if (ti == typeid(QString)) {
       Q_ASSERT(!typeInfo.isOptional());

@@ -261,18 +261,21 @@ TypeLookup const Inventory##IngredientName::typeLookup {                        
 };                                                                                                                   \
 static_assert(std::is_base_of<Inventory, Inventory##IngredientName>::value);                                         \
 Inventory##IngredientName::Inventory##IngredientName() :                                                             \
-   Inventory(),                                                                                                      \
-   IngredientAmount<Inventory##IngredientName, IngredientName>() {                                                   \
-      return;                                                                                                        \
+   Inventory{},                                                                                                      \
+   IngredientAmount<Inventory##IngredientName, IngredientName>{} {                                                   \
+   CONSTRUCTOR_END                                                                                                   \
+   return;                                                                                                           \
 }                                                                                                                    \
 Inventory##IngredientName::Inventory##IngredientName(NamedParameterBundle const & npb) :                             \
    Inventory {npb},                                                                                                  \
    IngredientAmount<Inventory##IngredientName, IngredientName>{npb} {                                                \
+   CONSTRUCTOR_END                                                                                                   \
    return;                                                                                                           \
 }                                                                                                                    \
 Inventory##IngredientName::Inventory##IngredientName(Inventory##IngredientName const & other) :                      \
    Inventory {other},                                                                                                \
    IngredientAmount<Inventory##IngredientName, IngredientName>{other} {                                              \
+   CONSTRUCTOR_END                                                                                                   \
    return;                                                                                                           \
 }                                                                                                                    \
 Inventory##IngredientName::~Inventory##IngredientName() = default;                                                   \

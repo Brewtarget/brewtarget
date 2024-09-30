@@ -85,6 +85,13 @@ public:
 
    void setNull();
 
+   void setDefault();
+
+   /**
+    * \brief Similar to \c SmartField::setFromVariant
+    */
+   void setFromVariant(QVariant const & value);
+
    /**
     * \brief Get value of a combo box for a non-optional bool
     */
@@ -96,9 +103,9 @@ public:
    [[nodiscard]] std::optional<bool> getOptBoolValue() const;
 
    /**
-    * \brief Get value of a combo box, using \c typeInfo to determine whether it is optional or not
+    * \brief Similar to \c SmartField::getAsVariant
     */
-   [[nodiscard]] QVariant getValue(TypeInfo const & typeInfo) const;
+   [[nodiscard]] QVariant getAsVariant() const;
 
 private:
    // Private implementation details - see https://herbsutter.com/gotw/_100/

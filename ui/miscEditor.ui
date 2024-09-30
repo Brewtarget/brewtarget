@@ -129,29 +129,6 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="1">
-        <widget class="SmartLabel" name="label_time">
-         <property name="contextMenuPolicy">
-          <enum>Qt::CustomContextMenu</enum>
-         </property>
-         <property name="text">
-          <string>Time</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit_time</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="2">
-        <widget class="SmartLineEdit" name="lineEdit_time">
-         <property name="toolTip">
-          <string>Time</string>
-         </property>
-        </widget>
-       </item>
        <item row="6" column="1">
         <widget class="QLabel" name="label_producer">
          <property name="text">
@@ -225,7 +202,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_usefor">
+     <widget class="QWidget" name="tab_useFor">
       <attribute name="title">
        <string>Use for</string>
       </attribute>
@@ -345,7 +322,6 @@
   <tabstop>tabWidget_editor</tabstop>
   <tabstop>lineEdit_name</tabstop>
   <tabstop>comboBox_type</tabstop>
-  <tabstop>lineEdit_time</tabstop>
   <tabstop>lineEdit_inventory</tabstop>
   <tabstop>pushButton_new</tabstop>
   <tabstop>pushButton_save</tabstop>

@@ -69,7 +69,7 @@ bool Water::isEqualTo(NamedEntity const & other) const {
       Utils::AutoCompare(this->m_iron_ppm       , rhs.m_iron_ppm       ) &&
       Utils::AutoCompare(this->m_nitrate_ppm    , rhs.m_nitrate_ppm    ) &&
       Utils::AutoCompare(this->m_nitrite_ppm    , rhs.m_nitrite_ppm    ) &&
-      Utils::AutoCompare(this->m_flouride_ppm   , rhs.m_flouride_ppm   ) &&
+      Utils::AutoCompare(this->m_fluoride_ppm   , rhs.m_fluoride_ppm   ) &&
       Utils::AutoCompare(this->m_sulfate_ppm    , rhs.m_sulfate_ppm    ) &&
       Utils::AutoCompare(this->m_chloride_ppm   , rhs.m_chloride_ppm   ) &&
       Utils::AutoCompare(this->m_sodium_ppm     , rhs.m_sodium_ppm     ) &&
@@ -117,7 +117,7 @@ TypeLookup const Water::typeLookup {
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::iron_ppm        , Water::m_iron_ppm          , Measurement::PhysicalQuantity::MassFractionOrConc),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::nitrate_ppm     , Water::m_nitrate_ppm       , Measurement::PhysicalQuantity::MassFractionOrConc),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::nitrite_ppm     , Water::m_nitrite_ppm       , Measurement::PhysicalQuantity::MassFractionOrConc),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::flouride_ppm    , Water::m_flouride_ppm      , Measurement::PhysicalQuantity::MassFractionOrConc),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::fluoride_ppm    , Water::m_fluoride_ppm      , Measurement::PhysicalQuantity::MassFractionOrConc),
    },
    // Parent classes lookup
    {&OutlineableNamedEntity::typeLookup,
@@ -148,7 +148,7 @@ Water::Water(QString name) :
    m_iron_ppm           {std::nullopt},
    m_nitrate_ppm        {std::nullopt},
    m_nitrite_ppm        {std::nullopt},
-   m_flouride_ppm       {std::nullopt} {
+   m_fluoride_ppm       {std::nullopt} {
 
    CONSTRUCTOR_END
    return;
@@ -177,7 +177,7 @@ Water::Water(NamedParameterBundle const & namedParameterBundle) :
    SET_REGULAR_FROM_NPB (m_iron_ppm          , namedParameterBundle, PropertyNames::Water::iron_ppm        , std::nullopt),
    SET_REGULAR_FROM_NPB (m_nitrate_ppm       , namedParameterBundle, PropertyNames::Water::nitrate_ppm     , std::nullopt),
    SET_REGULAR_FROM_NPB (m_nitrite_ppm       , namedParameterBundle, PropertyNames::Water::nitrite_ppm     , std::nullopt),
-   SET_REGULAR_FROM_NPB (m_flouride_ppm      , namedParameterBundle, PropertyNames::Water::flouride_ppm    , std::nullopt) {
+   SET_REGULAR_FROM_NPB (m_fluoride_ppm      , namedParameterBundle, PropertyNames::Water::fluoride_ppm    , std::nullopt) {
 
    CONSTRUCTOR_END
    return;
@@ -206,7 +206,7 @@ Water::Water(Water const& other) :
    m_iron_ppm           {other.m_iron_ppm          },
    m_nitrate_ppm        {other.m_nitrate_ppm       },
    m_nitrite_ppm        {other.m_nitrite_ppm       },
-   m_flouride_ppm       {other.m_flouride_ppm      } {
+   m_fluoride_ppm       {other.m_fluoride_ppm      } {
 
    CONSTRUCTOR_END
    return;
@@ -237,7 +237,7 @@ void Water::swap(NamedEntity & other) noexcept {
    std::swap(this->m_iron_ppm          , otherWater.m_iron_ppm          );
    std::swap(this->m_nitrate_ppm       , otherWater.m_nitrate_ppm       );
    std::swap(this->m_nitrite_ppm       , otherWater.m_nitrite_ppm       );
-   std::swap(this->m_flouride_ppm      , otherWater.m_flouride_ppm      );
+   std::swap(this->m_fluoride_ppm      , otherWater.m_fluoride_ppm      );
    return;
 }
 
@@ -289,7 +289,7 @@ Water & Water::operator=(Water other) {
    if (this->m_iron_ppm           != other.m_iron_ppm          ) { this->propagatePropertyChange(PropertyNames::Water::iron_ppm     ); }
    if (this->m_nitrate_ppm        != other.m_nitrate_ppm       ) { this->propagatePropertyChange(PropertyNames::Water::nitrate_ppm  ); }
    if (this->m_nitrite_ppm        != other.m_nitrite_ppm       ) { this->propagatePropertyChange(PropertyNames::Water::nitrite_ppm  ); }
-   if (this->m_flouride_ppm       != other.m_flouride_ppm      ) { this->propagatePropertyChange(PropertyNames::Water::flouride_ppm ); }
+   if (this->m_fluoride_ppm       != other.m_fluoride_ppm      ) { this->propagatePropertyChange(PropertyNames::Water::fluoride_ppm ); }
 
    return *this;
 }
@@ -316,7 +316,7 @@ std::optional<double>      Water::potassium_ppm   () const { return             
 std::optional<double>      Water::iron_ppm        () const { return                    m_iron_ppm     ; }
 std::optional<double>      Water::nitrate_ppm     () const { return                    m_nitrate_ppm  ; }
 std::optional<double>      Water::nitrite_ppm     () const { return                    m_nitrite_ppm  ; }
-std::optional<double>      Water::flouride_ppm    () const { return                    m_flouride_ppm ; }
+std::optional<double>      Water::fluoride_ppm    () const { return                    m_fluoride_ppm ; }
 
 //============================================= "SETTER" MEMBER FUNCTIONS ==============================================
 ///void Water::setAmount          (double              const   val) { SET_AND_NOTIFY(PropertyNames::Water::amount          , m_amount            ,                            val ); return; }
@@ -340,7 +340,7 @@ void Water::setPotassium_ppm   (std::optional<double> const val) { SET_AND_NOTIF
 void Water::setIron_ppm        (std::optional<double> const val) { SET_AND_NOTIFY(PropertyNames::Water::iron_ppm        , m_iron_ppm          , val); return; }
 void Water::setNitrate_ppm     (std::optional<double> const val) { SET_AND_NOTIFY(PropertyNames::Water::nitrate_ppm     , m_nitrate_ppm       , val); return; }
 void Water::setNitrite_ppm     (std::optional<double> const val) { SET_AND_NOTIFY(PropertyNames::Water::nitrite_ppm     , m_nitrite_ppm       , val); return; }
-void Water::setFlouride_ppm    (std::optional<double> const val) { SET_AND_NOTIFY(PropertyNames::Water::flouride_ppm    , m_flouride_ppm      , val); return; }
+void Water::setFluoride_ppm    (std::optional<double> const val) { SET_AND_NOTIFY(PropertyNames::Water::fluoride_ppm    , m_fluoride_ppm      , val); return; }
 
 double Water::ppm(Water::Ion const ion) const {
    switch (ion) {

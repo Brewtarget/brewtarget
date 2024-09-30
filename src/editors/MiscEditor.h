@@ -29,6 +29,7 @@
 #include "editors/EditorBase.h"
 #include "model/Misc.h"
 
+#define MiscEditorOptions EditorBaseOptions{ .nameTab = true, .idDisplay = true }
 /*!
  * \class MiscEditor
  *
@@ -37,10 +38,12 @@
  *        See comment on EditorBase::connectSignalsAndSlots for why we need to have \c public, not \c private
  *        inheritance from the Ui base.
  */
-class MiscEditor : public QDialog, public Ui::miscEditor, public EditorBase<MiscEditor, Misc> {
+class MiscEditor : public QDialog,
+                   public Ui::miscEditor,
+                   public EditorBase<MiscEditor, Misc, MiscEditorOptions> {
    Q_OBJECT
 
-   EDITOR_COMMON_DECL(Misc)
+   EDITOR_COMMON_DECL(Misc, MiscEditorOptions)
 };
 
 #endif

@@ -40,7 +40,7 @@ AddPropertyName(bicarbonate_ppm )
 AddPropertyName(calcium_ppm     )
 AddPropertyName(carbonate_ppm   )
 AddPropertyName(chloride_ppm    )
-AddPropertyName(flouride_ppm    )
+AddPropertyName(fluoride_ppm    )
 AddPropertyName(iron_ppm        )
 AddPropertyName(magnesium_ppm   )
 AddPropertyName(mashRo_pct      )
@@ -195,7 +195,7 @@ public:
    Q_PROPERTY(std::optional<double> iron_ppm       READ iron_ppm         WRITE setIron_ppm     )
    Q_PROPERTY(std::optional<double> nitrate_ppm    READ nitrate_ppm      WRITE setNitrate_ppm  )
    Q_PROPERTY(std::optional<double> nitrite_ppm    READ nitrite_ppm      WRITE setNitrite_ppm  )
-   Q_PROPERTY(std::optional<double> flouride_ppm   READ flouride_ppm     WRITE setFlouride_ppm )
+   Q_PROPERTY(std::optional<double> fluoride_ppm   READ fluoride_ppm     WRITE setFluoride_ppm )
 
    //============================================ "GETTER" MEMBER FUNCTIONS ============================================
 ///   double              amount          () const;
@@ -219,7 +219,7 @@ public:
    std::optional<double> iron_ppm      () const;
    std::optional<double> nitrate_ppm   () const;
    std::optional<double> nitrite_ppm   () const;
-   std::optional<double> flouride_ppm  () const;
+   std::optional<double> fluoride_ppm  () const;
 
    double       ppm(Water::Ion const ion) const;
 
@@ -246,7 +246,7 @@ public:
    void setIron_ppm        (std::optional<double> const   val);
    void setNitrate_ppm     (std::optional<double> const   val);
    void setNitrite_ppm     (std::optional<double> const   val);
-   void setFlouride_ppm    (std::optional<double> const   val);
+   void setFluoride_ppm    (std::optional<double> const   val);
 
 ///   virtual Recipe * getOwningRecipe() const;
 
@@ -277,7 +277,7 @@ private:
    std::optional<double> m_iron_ppm        ;
    std::optional<double> m_nitrate_ppm     ;
    std::optional<double> m_nitrite_ppm     ;
-   std::optional<double> m_flouride_ppm    ;
+   std::optional<double> m_fluoride_ppm    ;
 };
 
 BT_DECLARE_METATYPES(Water)

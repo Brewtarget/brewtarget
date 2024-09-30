@@ -76,9 +76,9 @@ public:
 
    //=================================================== PROPERTIES ====================================================
    //! \brief Folder.  See model/FolderBase for implementation of the getter & setter.
-   Q_PROPERTY(QString folder READ folder WRITE setFolder)
-   Q_PROPERTY(QString                                    description         READ description     WRITE setDescription)
-   Q_PROPERTY(QString                                    notes               READ notes           WRITE setNotes      )
+   Q_PROPERTY(QString folder        READ folder        WRITE setFolder     )
+   Q_PROPERTY(QString description   READ description   WRITE setDescription)
+   Q_PROPERTY(QString notes         READ notes         WRITE setNotes      )
    //! \brief The individual fermentation steps.  (See \c StepOwnerBase for getter/setter implementation.)
    Q_PROPERTY(QList<std::shared_ptr<FermentationStep>>   fermentationSteps   READ fermentationSteps   WRITE setFermentationSteps   STORED false)
 

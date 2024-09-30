@@ -26,6 +26,7 @@
 #include "editors/EditorBase.h"
 #include "model/Hop.h"
 
+#define HopEditorOptions EditorBaseOptions{ .nameTab = true, .idDisplay = true }
 /*!
  * \class HopEditor
  *
@@ -34,10 +35,12 @@
  *        See comment on EditorBase::connectSignalsAndSlots for why we need to have \c public, not \c private
  *        inheritance from the Ui base.
  */
-class HopEditor : public QDialog, public Ui::hopEditor, public EditorBase<HopEditor, Hop> {
+class HopEditor : public QDialog,
+                  public Ui::hopEditor,
+                  public EditorBase<HopEditor, Hop, HopEditorOptions> {
    Q_OBJECT
 
-   EDITOR_COMMON_DECL(Hop)
+   EDITOR_COMMON_DECL(Hop, HopEditorOptions)
 };
 
 #endif

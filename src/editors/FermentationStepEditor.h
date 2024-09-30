@@ -24,6 +24,7 @@
 #include "editors/EditorBase.h"
 #include "model/FermentationStep.h"
 
+#define FermentationStepEditorOptions EditorBaseOptions{ }
 /*!
  * \class FermentationStepEditor
  *
@@ -31,10 +32,10 @@
  */
 class FermentationStepEditor : public QDialog,
                                public Ui::fermentationStepEditor,
-                               public EditorBase<FermentationStepEditor, FermentationStep> {
+                               public EditorBase<FermentationStepEditor, FermentationStep, FermentationStepEditorOptions> {
    Q_OBJECT
 
-   EDITOR_COMMON_DECL(FermentationStep)
+   EDITOR_COMMON_DECL(FermentationStep, FermentationStepEditorOptions)
 
 };
 

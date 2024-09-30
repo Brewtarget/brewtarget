@@ -23,9 +23,10 @@
 
 #include "ui_fermentationEditor.h"
 
-#include "editors/EditorWithRecipeBase.h"
+#include "editors/EditorBase.h"
 #include "model/Fermentation.h"
 
+#define FermentationEditorOptions EditorBaseOptions{ .recipe = true }
 /*!
  * \class FermentationEditor
  *
@@ -35,32 +36,10 @@
  */
 class FermentationEditor : public QDialog,
                            public Ui::fermentationEditor,
-                           public EditorWithRecipeBase<FermentationEditor, Fermentation> {
+                           public EditorBase<FermentationEditor, Fermentation, FermentationEditorOptions> {
    Q_OBJECT
 
-   EDITOR_WITH_RECIPE_COMMON_DECL(Fermentation)
+   EDITOR_COMMON_DECL(Fermentation, FermentationEditorOptions)
 };
-
-///class FermentationEditor : public QDialog, public Ui::fermentationEditor {
-///   Q_OBJECT
-///public:
-///   FermentationEditor(QWidget * parent = nullptr);
-///   ~FermentationEditor();
-///
-///public slots:
-///   void showEditor();
-///   void closeEditor();
-///   void saveAndClose();
-///   //! Set the fermentation we wish to view/edit.
-///   void setFermentation(std::shared_ptr<Fermentation> fermentation);
-///   void setRecipe(Recipe* r);
-///
-///   void changed(QMetaProperty,QVariant);
-///private:
-///   void showChanges(QMetaProperty* prop = nullptr);
-///   void clear();
-///   Recipe* m_rec;
-///   std::shared_ptr<Fermentation> m_fermentationObs;
-///};
 
 #endif

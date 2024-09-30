@@ -19,14 +19,14 @@
 
 #include "model/NamedEntity.h"
 
-//╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+//======================================================================================================================
 //========================================== Start of property name constants ==========================================
 // See comment in model/NamedEntity.h
 #define AddPropertyName(property) namespace PropertyNames::OutlineableNamedEntity { BtStringConst const property{#property}; }
 AddPropertyName(outline)
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
-//╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+//======================================================================================================================
 
 
 /**
@@ -51,7 +51,7 @@ AddPropertyName(outline)
  *           │            │ • yield †         │ • alpha_acid    │              │                       │ • iron        │
  *           │            │ • color           │ • beta_acid     │              │                       │ • nitrate     │
  *           │            │                   │                 │              │                       │ • nitrite     │
- *           │            │                   │                 │              │                       │ • flouride    │
+ *           │            │                   │                 │              │                       │ • flouride ⹋  │
  *           │            │                   │                 │              │                       │ • sulfate     │
  *           │            │                   │                 │              │                       │ • chloride    │
  *           │            │                   │                 │              │                       │ • sodium      │
@@ -79,7 +79,7 @@ AddPropertyName(outline)
  *           │            │ • fermentability  │                 │              │                       │               │
  *           │            │ • beta_glucan     │                 │              │                       │               │
  *           └────────────┴───────────────────┴─────────────────┴──────────────┴───────────────────────┴───────────────┘
- *            † = compound field; ‡ = field we don't support
+ *            † = compound field; ‡ = field we don't support; ⹋ sic -- see https://github.com/beerjson/beerjson/issues/214
  *
  *        What this means is that, when we read in a Hop/Fermentable/Misc/Yeast/Water inside a RecipeAddition/
  *        RecipeUseOf record (an XxxxAdditionType record in BeerJSON) then we need different logic when we "check for

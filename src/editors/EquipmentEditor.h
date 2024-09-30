@@ -30,6 +30,7 @@
 #include "editors/EditorBase.h"
 #include "model/Equipment.h"
 
+#define EquipmentEditorOptions EditorBaseOptions{ }
 /*!
  * \class EquipmentEditor
  *
@@ -38,10 +39,12 @@
  *        See comment on EditorBase::connectSignalsAndSlots for why we need to have \c public, not \c private
  *        inheritance from the Ui base.
  */
-class EquipmentEditor : public QDialog, public Ui::equipmentEditor, public EditorBase<EquipmentEditor, Equipment> {
+class EquipmentEditor : public QDialog,
+                        public Ui::equipmentEditor,
+                        public EditorBase<EquipmentEditor, Equipment, EquipmentEditorOptions> {
    Q_OBJECT
 
-   EDITOR_COMMON_DECL(Equipment)
+   EDITOR_COMMON_DECL(Equipment, EquipmentEditorOptions)
 
 public slots:
    void hideOrShowOptionalVessels();
@@ -53,6 +56,7 @@ public:
    bool validateBeforeSave();
 
 private:
+   void postReadFieldsFromEditItem(std::optional<QString> propName);
    double calcBatchSize();
 
 };

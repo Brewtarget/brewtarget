@@ -382,32 +382,6 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="label_addToSecondary">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Add to Secondary</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="1">
-        <widget class="BtBoolComboBox" name="boolCombo_addToSecondary">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="toolTip">
-          <string>Whether to add this yeast to secondary instead of primary</string>
-         </property>
-        </widget>
-       </item>
        <item row="4" column="2">
         <widget class="QLabel" name="label_alcoholTolerance">
          <property name="text">
@@ -538,7 +512,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_bestfor">
+     <widget class="QWidget" name="tab_bestFor">
       <attribute name="title">
        <string>Best For</string>
       </attribute>
@@ -674,7 +648,6 @@
   <tabstop>comboBox_yeastFlocculation</tabstop>
   <tabstop>lineEdit_maxReuse</tabstop>
   <tabstop>lineEdit_timesCultured</tabstop>
-  <tabstop>boolCombo_addToSecondary</tabstop>
   <tabstop>pushButton_new</tabstop>
   <tabstop>pushButton_save</tabstop>
   <tabstop>pushButton_cancel</tabstop>

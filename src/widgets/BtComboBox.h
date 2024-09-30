@@ -138,9 +138,9 @@ public:
    }
 
    /**
-    * \brief Get value of a combo box, using \c typeInfo to determine whether it is optional or not
+    * \brief Get value of a combo box
     */
-   [[nodiscard]] QVariant getValue(TypeInfo const & typeInfo) const;
+   [[nodiscard]] QVariant getAsVariant() const;
 
    /**
     * \brief Called from templated version of \c setValue, but also used in generic code (eg \c ItemDelegate) where we
@@ -153,6 +153,13 @@ public:
     *        cannot use strongly-typed enums.
     */
    void setValue(int value);
+
+   void setDefault();
+
+   /**
+    * \brief Similar to \c SmartField::setFromVariant
+    */
+   void setFromVariant(QVariant const & value);
 
    [[nodiscard]] std::optional<int> getOptIntValue() const;
 

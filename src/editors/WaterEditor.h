@@ -29,40 +29,25 @@
 
 #include "ui_waterEditor.h"
 
-// Forward declarations.
-class Water;
+#include "editors/EditorBase.h"
+#include "model/Water.h"
 
+#define WaterEditorOptions EditorBaseOptions{ .liveEditItem = true }
 /*!
  * \class WaterEditor
  *
  * \brief View/controller class for creating and modifying water records.
  */
-class WaterEditor : public QDialog, public Ui::waterEditor {
+class WaterEditor : public QDialog,
+                    public Ui::waterEditor,
+                    public EditorBase<WaterEditor, Water, WaterEditorOptions> {
    Q_OBJECT
 public:
-   WaterEditor(QWidget *parent = nullptr, QString const editorName = "Unnamed");
-   virtual ~WaterEditor();
-
-   /*!
-    * Sets the water we want to observe.
-    *
-    * \param water If \c nullptr then stop observing
-    */
-   void setWater(std::shared_ptr<Water> water);
-
-   void newWater(QString folder);
-
-public slots:
-   void showChanges(QMetaProperty const * prop = nullptr);
-   void inputFieldModified();
-   void changed(QMetaProperty, QVariant);
-   void saveAndClose();
-   void clearAndClose();
+   EDITOR_COMMON_DECL(Water, WaterEditorOptions)
 
 private:
-   // Private implementation details - see https://herbsutter.com/gotw/_100/
-   class impl;
-   std::unique_ptr<impl> pimpl;
+   void postSetEditItem();
+   void postInputFieldModified();
 };
 
 #endif

@@ -36,7 +36,7 @@
        <string>Main</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout">
-       <item row="0" column="0">
+       <item row="0" column="1">
         <widget class="QLabel" name="label_name">
          <property name="toolTip">
           <string>Required</string>
@@ -49,14 +49,20 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="3">
+       <item row="0" column="2">
         <widget class="SmartLineEdit" name="lineEdit_name">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>10</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="toolTip">
           <string>Name</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
+       <item row="2" column="1">
         <widget class="QLabel" name="label_category">
          <property name="toolTip">
           <string>Required</string>
@@ -69,21 +75,15 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="3">
+       <item row="2" column="2">
         <widget class="SmartLineEdit" name="lineEdit_category">
          <property name="toolTip">
           <string>Category</string>
          </property>
         </widget>
        </item>
-       <item row="4" column="0" colspan="3">
+       <item row="4" column="1">
         <widget class="QLabel" name="label_categoryNumber">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
          <property name="toolTip">
           <string>Required</string>
          </property>
@@ -95,21 +95,15 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="3">
+       <item row="4" column="2">
         <widget class="SmartLineEdit" name="lineEdit_categoryNumber">
          <property name="toolTip">
           <string>Category number</string>
          </property>
         </widget>
        </item>
-       <item row="5" column="0" colspan="2">
+       <item row="5" column="1">
         <widget class="QLabel" name="label_styleLetter">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
          <property name="toolTip">
           <string>Required</string>
          </property>
@@ -121,21 +115,15 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="3">
+       <item row="5" column="2">
         <widget class="SmartLineEdit" name="lineEdit_styleLetter">
          <property name="toolTip">
           <string>Style letter</string>
          </property>
         </widget>
        </item>
-       <item row="6" column="0" colspan="2">
+       <item row="6" column="1">
         <widget class="QLabel" name="label_styleGuide">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
          <property name="toolTip">
           <string>Required</string>
          </property>
@@ -147,21 +135,15 @@
          </property>
         </widget>
        </item>
-       <item row="6" column="3">
+       <item row="6" column="2">
         <widget class="SmartLineEdit" name="lineEdit_styleGuide">
          <property name="toolTip">
           <string>Style guide</string>
          </property>
         </widget>
        </item>
-       <item row="7" column="0">
+       <item row="7" column="1">
         <widget class="QLabel" name="label_type">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
          <property name="toolTip">
           <string>Required</string>
          </property>
@@ -170,7 +152,7 @@
          </property>
         </widget>
        </item>
-       <item row="7" column="3">
+       <item row="7" column="2">
         <widget class="BtComboBox" name="comboBox_type">
          <property name="toolTip">
           <string>Type of beverage</string>
@@ -197,17 +179,17 @@
        <string>Ranges</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
-       <item row="0" column="2">
-        <widget class="QLabel" name="label_max">
-         <property name="text">
-          <string>Max</string>
-         </property>
-        </widget>
-       </item>
        <item row="0" column="1">
         <widget class="QLabel" name="label_min">
          <property name="text">
           <string>Min</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QLabel" name="label_max">
+         <property name="text">
+          <string>Max</string>
          </property>
         </widget>
        </item>

@@ -35,14 +35,25 @@ protected:
     * \brief Used to implement Ingredient::totalInventory() for Ingredient subclass (ie Derived)
     */
    Measurement::Amount getTotalInventory() const {
-      return InventoryTools::getInventory<Derived>(this->derived())->amount();
+      auto inventory = InventoryTools::getInventory<Derived>(this->derived());
+      // Normally leave this log statement commented out as it generates too many lines in the log file
+//      qDebug() <<
+//         Q_FUNC_INFO << "Inventory object:" << *inventory << "; ingredient ID:" << inventory->ingredientId() <<
+//         "; amount:" << inventory->amount();
+      return inventory->amount();
    }
 
    /**
     * \brief Used to implement Ingredient::setTotalInventory() for Ingredient subclass (ie Derived)
     */
    void doSetTotalInventory(Measurement::Amount const val) {
+      // InventoryTools::getInventory will have ensured the object returned here is in the database, even if it was
+      // newly-created.
       auto inventory = InventoryTools::getInventory<Derived>(this->derived());
+      // Normally leave this log statement commented out as it generates too many lines in the log file
+//      qDebug() <<
+//         Q_FUNC_INFO << "Inventory object:" << *inventory << "; change amount from" << inventory->amount() << "to" <<
+//         val;
       inventory->setAmount(val);
       return;
    }

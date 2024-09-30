@@ -27,6 +27,7 @@
 #include "editors/EditorBase.h"
 #include "model/Style.h"
 
+#define StyleEditorOptions EditorBaseOptions{ }
 /*!
  * \class StyleEditor
  *
@@ -35,10 +36,12 @@
  *        See comment on EditorBase::connectSignalsAndSlots for why we need to have \c public, not \c private
  *        inheritance from the Ui base.
  */
-class StyleEditor : public QDialog, public Ui::styleEditor, public EditorBase<StyleEditor, Style> {
+class StyleEditor : public QDialog,
+                    public Ui::styleEditor,
+                    public EditorBase<StyleEditor, Style, StyleEditorOptions> {
    Q_OBJECT
 
-   EDITOR_COMMON_DECL(Style)
+   EDITOR_COMMON_DECL(Style, StyleEditorOptions)
 };
 
 #endif

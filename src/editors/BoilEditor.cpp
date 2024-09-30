@@ -12,7 +12,7 @@
  *
  * You should have received a copy of the GNU General Public License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
- ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
+ =====================================================================================================================*/
 #include "editors/BoilEditor.h"
 
 #include <QDebug>
@@ -22,44 +22,23 @@
 #include "model/Boil.h"
 #include "model/Recipe.h"
 
-BoilEditor::BoilEditor(QWidget* parent) :
+BoilEditor::BoilEditor(QWidget* parent, QString const editorName) :
    QDialog(parent),
-   EditorWithRecipeBase<BoilEditor, Boil>() {
+   EditorBase<BoilEditor, Boil, BoilEditorOptions>(editorName) {
    this->setupUi(this);
    this->postSetupUiInit(
       {
-       EDITOR_FIELD(Boil, label_name       , lineEdit_name       , PropertyNames::NamedEntity::name     ),
-       EDITOR_FIELD(Boil, label_description, textEdit_description, PropertyNames::Boil::description     ),
-       EDITOR_FIELD(Boil, label_preBoilSize, lineEdit_preBoilSize, PropertyNames::Boil::preBoilSize_l, 2),
-       EDITOR_FIELD(Boil, label_notes      , textEdit_notes      , PropertyNames::Boil::notes           )
+       EDITOR_FIELD_NORM(Boil, label_name       , lineEdit_name       , NamedEntity::name     ),
+       EDITOR_FIELD_NORM(Boil, label_description, textEdit_description, Boil::description     ),
+       EDITOR_FIELD_NORM(Boil, label_preBoilSize, lineEdit_preBoilSize, Boil::preBoilSize_l, 2),
+       EDITOR_FIELD_NORM(Boil, label_notes      , textEdit_notes      , Boil::notes           ),
       }
    );
 
-   // NB: label_description / textEdit_description don't need initialisation here as neither is a smart field
-   // NB: label_notes / textEdit_notes don't need initialisation here as neither is a smart field
-///   SMART_FIELD_INIT(BoilEditor, label_name       , lineEdit_name       , Boil, PropertyNames::NamedEntity::name  );
-///   SMART_FIELD_INIT(BoilEditor, label_preBoilSize, lineEdit_preBoilSize, Boil, PropertyNames::Boil::preBoilSize_l, 2);
-
-///   connect(this, &QDialog::accepted, this, &BoilEditor::saveAndClose);
-///   connect(this, &QDialog::rejected, this, &BoilEditor::closeEditor );
-
-///   this->connectSignalsAndSlots();
    return;
 }
 
 BoilEditor::~BoilEditor() = default;
 
-void BoilEditor::writeFieldsToEditItem() {
-   return;
-}
-
-void BoilEditor::writeLateFieldsToEditItem() {
-   return;
-}
-
-void BoilEditor::readFieldsFromEditItem([[maybe_unused]] std::optional<QString> propName) {
-   return;
-}
-
 // Insert the boilerplate stuff that we cannot do in EditorWithRecipeBase
-EDITOR_WITH_RECIPE_COMMON_CODE(BoilEditor)
+EDITOR_COMMON_CODE(Boil)

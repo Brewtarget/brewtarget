@@ -93,9 +93,12 @@ void NamedParameterBundle::insertIfNotPresent(P const & propertyNameOrPath, QVar
    return;
 }
 
-// Instantiate the above template for the two types we care about
-template<> void NamedParameterBundle::insertIfNotPresent(BtStringConst const & propertyName, QVariant const & value);
-template<> void NamedParameterBundle::insertIfNotPresent(PropertyPath  const & propertyPath, QVariant const & value);
+//
+// Instantiate the above template functions for the types that are going to use them
+// (This is all just a trick to allow the template definition to be here in the .cpp file and not in the header.)
+//
+template void NamedParameterBundle::insertIfNotPresent<BtStringConst>(BtStringConst const & propertyName, QVariant const & value);
+template void NamedParameterBundle::insertIfNotPresent<PropertyPath >(PropertyPath  const & propertyPath, QVariant const & value);
 
 std::size_t NamedParameterBundle::size() const noexcept {
    //
@@ -164,13 +167,6 @@ bool NamedParameterBundle::containsBundle(BtStringConst const & propertyName) co
 NamedParameterBundle const & NamedParameterBundle::getBundle(BtStringConst const & propertyName) const {
    return this->m_containedBundles.at(*propertyName);
 }
-
-
-///template<class S>
-///S & operator<<(S & stream, NamedParameterBundle const & namedParameterBundle);
-///
-///template<class S>
-///S & operator<<(S & stream, NamedParameterBundle const * namedParameterBundle);
 
 template<class S>
 S & NamedParameterBundle::writeToStream(S & stream, QString const indent) const {
