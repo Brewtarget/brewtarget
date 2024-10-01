@@ -2698,13 +2698,6 @@ If you need help, please open an issue at %1</source>
     </message>
 </context>
 <context>
-    <name>NE</name>
-    <message>
-        <source>Change %1 %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>NamedEntity</name>
     <message>
         <source>Named Entity</source>
@@ -2976,35 +2969,6 @@ If you need help, please open an issue at %1</source>
     </message>
     <message>
         <source>Could not open the file %1 for writing! please try again with a new filename or diretory</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>QApplication</name>
-    <message>
-        <source>Application terminates</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The application encountered a fatal error.
-Error message:
-%1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The application encountered a fatal error.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>%1 is already running!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Another instance of %1 is already running.
-
-Running two copies of the program at once may lead to data loss.
-
-Press OK to quit.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3585,40 +3549,12 @@ Press OK to quit.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>%1 Catalog / Database</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Add to Recipe</source>
-        <translation type="unfinished">Legg til oppskrift</translation>
+        <translation type="obsolete">Legg til oppskrift</translation>
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Ny</translation>
-    </message>
-    <message>
-        <source>Add selected %1 to recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Create new %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit selected %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Remove selected %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>%1 name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>%1 name:</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Ny</translation>
     </message>
     <message>
         <source>Failed to update the database.
@@ -3886,11 +3822,11 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>No</source>
-        <translation type="unfinished">Nei</translation>
+        <translation type="obsolete">Nei</translation>
     </message>
     <message>
         <source>Yes</source>
-        <translation type="unfinished">Ja</translation>
+        <translation type="obsolete">Ja</translation>
     </message>
     <message>
         <source>Boil for %1</source>
@@ -3914,13 +3850,6 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Tertiary Fermentation Step for %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>RaIngrd</name>
-    <message>
-        <source>Add %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -6530,11 +6459,11 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     <name>editorClass</name>
     <message>
         <source>No</source>
-        <translation type="unfinished">Nei</translation>
+        <translation type="obsolete">Nei</translation>
     </message>
     <message>
         <source>Yes</source>
-        <translation type="unfinished">Ja</translation>
+        <translation type="obsolete">Ja</translation>
     </message>
 </context>
 <context>
@@ -10034,6 +9963,18 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Alkalinity measured as</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New hop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save and close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Discard and close</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

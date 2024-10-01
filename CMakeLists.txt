@@ -89,7 +89,9 @@ cmake_policy(SET CMP0048 NEW)
 # Compatibility settings used with modern CMAKE (>= 3.29) used to pull BoostConfig.cmake from upstream
 # -> FindBoost cmake module was removed in recent versions.
 # See https://cmake.org/cmake/help/latest/module/FindBoost.html
+if(${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} VERSION_GREATER_EQUAL 3.29)
 cmake_policy(SET CMP0167 NEW)
+endif()
 
 #=======================================================================================================================
 #================================================ Other preliminaries =================================================
