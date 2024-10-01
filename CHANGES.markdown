@@ -21,9 +21,11 @@ Bug fixes for the 4.0.5 release (ie bugs in 4.0.5 are fixed in this 4.0.6 releas
 
 ### Bug Fixes
 * Ingredient inventory edits not saved [832](https://github.com/Brewtarget/brewtarget/issues/832)
+* Unsatisfied dependency for Brewtarget update in ubuntu 24.01 [840](https://github.com/Brewtarget/brewtarget/issues/840)
+* Cmake error on Linux Mint 22 Wilma [843](https://github.com/Brewtarget/brewtarget/issues/843)
 
 ### Release Timestamp
-Mon, 30 Sep 2024 04:00:06 +0100
+Tue, 1 Oct 2024 04:00:06 +0100
 
 ## v4.0.5
 Bug fixes for the 4.0.4 release (ie bugs in 4.0.4 are fixed in this 4.0.5 release).

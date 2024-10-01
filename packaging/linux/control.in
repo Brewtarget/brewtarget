@@ -80,20 +80,22 @@ Architecture: amd64
 #    Normally, this field is (surprisingly) not allowed to be "folded" (ie split across multiple lines).  However, we do
 #    our own folding in the bt build script, so the backslash line continuations are OK here!
 #
+#    I _think_ libqt5core5a has been replaced by libqt5core5t64
+#
 Depends: \
-   libc6               (>= 2.34 ),  \
-   libgcc-s1           (>= 3.3  ),  \
-   libqt5core5a        (>= 5.9.5),  \
-   libqt5gui5          (>= 5.9.5) | \
-   libqt5gui5-gles     (>= 5.9.5),  \
-   libqt5multimedia5   (>= 5.9.5),  \
-   libqt5network5      (>= 5.9.5),  \
-   libqt5printsupport5 (>= 5.9.5),  \
-   libqt5sql5          (>= 5.9.5),  \
-   libqt5widgets5      (>= 5.9.5),  \
-   libstdc++6          (>= 11   ),  \
-   libxalan-c112       (>= 1.12 ),  \
-   libxerces-c3.2      (>= 3.2  )
+   libc6               (>= 2.34  ),  \
+   libgcc-s1           (>= 3.3   ),  \
+   libqt5core5t64      (>= 5.15.3),  \
+   libqt5gui5          (>= 5.15.3) | \
+   libqt5gui5-gles     (>= 5.15.3),  \
+   libqt5multimedia5   (>= 5.15.3),  \
+   libqt5network5      (>= 5.15.3),  \
+   libqt5printsupport5 (>= 5.15.3),  \
+   libqt5sql5          (>= 5.15.3),  \
+   libqt5widgets5      (>= 5.15.3),  \
+   libstdc++6          (>= 11    ),  \
+   libxalan-c112       (>= 1.12  ),  \
+   libxerces-c3.2      (>= 3.2   )
 #
 # Installed-Size (Optional) : an estimate of the total amount of disk space required to install the named package
 #    The disk space is given as the integer value of the estimated installed size in bytes, divided by 1024 and rounded
