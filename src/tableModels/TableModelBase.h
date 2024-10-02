@@ -737,7 +737,7 @@ protected:
          // with optional values.
          //
          // ItemDelegate::writeDataToModel should have just given us a raw string
-         Q_ASSERT(value.canConvert(QVariant::String));
+         Q_ASSERT(value.canConvert<QString>());
 
          //
          // For cases where we have an Amount and a drop-down chooser to select PhysicalQuantity (eg between Mass and

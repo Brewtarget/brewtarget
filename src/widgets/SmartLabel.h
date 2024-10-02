@@ -183,14 +183,14 @@ public:
     * \brief We override the \c QWidget event handlers \c enterEvent and \c leaveEvent to implement mouse-over effects
     *        on the label text - specifically to give the user a visual clue that the label text is (right)-clickable
     */
-   virtual void enterEvent(QEvent* event);
-   virtual void leaveEvent(QEvent* event);
+   virtual void enterEvent(QEvent* event) override;
+   virtual void leaveEvent(QEvent* event) override;
 
    /**
     * \brief We override the \c QWidget event handler \c mouseReleaseEvent to capture left mouse clicks on us.  (Right
     *        clicks get notified to us via the \c QWidget::customContextMenuRequested signal.)
     */
-   virtual void mouseReleaseEvent(QMouseEvent * event);
+   virtual void mouseReleaseEvent(QMouseEvent * event) override;
 
 
 private:
