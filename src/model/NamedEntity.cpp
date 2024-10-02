@@ -186,14 +186,14 @@ void NamedEntity::makeChild(NamedEntity const & copiedFrom) {
    return;
 }
 
-QRegExp const & NamedEntity::getDuplicateNameNumberMatcher() {
+QRegularExpression const & NamedEntity::getDuplicateNameNumberMatcher() {
    //
    // Note that, in the regexp, to match a bracket, we need to escape it, thus "\(" instead of "(".  However, we
    // must also escape the backslash so that the C++ compiler doesn't think we want a special character (such as
    // '\n') and barf a "unknown escape sequence" warning at us.  So "\\(" is needed in the string literal here to
    // pass "\(" to the regexp to match literal "(" (and similarly for close bracket).
    //
-   static QRegExp const duplicateNameNumberMatcher{" *\\(([0-9]+)\\)$"};
+   static QRegularExpression const duplicateNameNumberMatcher{" *\\(([0-9]+)\\)$"};
    return duplicateNameNumberMatcher;
 }
 
@@ -226,13 +226,13 @@ bool NamedEntity::operator==(NamedEntity const & other) const {
       // "Tettnang" and another called "Tettnang (1)" we wouldn't say they are different just because of the names.
       // So we want to strip off any number in brackets at the ends of the names and then compare again.
       //
-      QRegExp const & duplicateNameNumberMatcher = NamedEntity::getDuplicateNameNumberMatcher();
+      QRegularExpression const & duplicateNameNumberMatcher = NamedEntity::getDuplicateNameNumberMatcher();
       QString names[2] {this->m_name, other.m_name};
       for (auto ii = 0; ii < 2; ++ii) {
-         int positionOfMatch = duplicateNameNumberMatcher.indexIn(names[ii]);
-         if (positionOfMatch > -1) {
+         QRegularExpressionMatch match = duplicateNameNumberMatcher.match(names[ii]);
+         if (match.hasMatch()) {
             // There's some integer in brackets at the end of the name.  Chop it off.
-            names[ii].truncate(positionOfMatch);
+            names[ii].truncate(match.capturedStart(1));
          }
       }
 //      qDebug() << Q_FUNC_INFO << "Adjusted names to " << names[0] << " & " << names[1];

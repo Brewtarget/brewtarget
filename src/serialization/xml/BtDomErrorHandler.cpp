@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * serialization/xml/BtDomErrorHandler.cpp is part of Brewtarget, and is copyright the following authors 2020-2022:
+ * serialization/xml/BtDomErrorHandler.cpp is part of Brewtarget, and is copyright the following authors 2020-2024:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -16,6 +16,7 @@
 #include "serialization/xml/BtDomErrorHandler.h"
 
 #include <QDebug>
+#include <QRegularExpression>
 #include <QString>
 
 #include <xercesc/dom/DOMLocator.hpp>
@@ -135,8 +136,9 @@ bool BtDomErrorHandler::handleError(xercesc::DOMError const & domError) {
    //
    if (nullptr != this->pimpl->errorPatternsToIgnore) {
       for (auto ii = this->pimpl->errorPatternsToIgnore->cbegin(); ii != this->pimpl->errorPatternsToIgnore->cend(); ++ii) {
-         QRegExp pattern(ii->regExMatchingErrorMessage);
-         if (pattern.indexIn(message) != -1) {
+         QRegularExpression pattern(ii->regExMatchingErrorMessage);
+         QRegularExpressionMatch match = pattern.match(message);
+         if (match.hasMatch()) {
             // We want to force the parse error onto a separate line, as it will be quite long, hence
             // ".noquote()" here.
             qWarning().noquote() <<

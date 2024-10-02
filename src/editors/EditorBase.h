@@ -246,12 +246,16 @@ public:
    }
 
    //! \brief No-op version
-   void makeLiveEditItem() requires (!HasLiveEditItem<editorBaseOptions>) {
+   void setLiveEditItem() requires (!HasLiveEditItem<editorBaseOptions>) {
       return;
    }
 
-   void makeLiveEditItem() requires HasLiveEditItem<editorBaseOptions> {
-      this->m_liveEditItem = std::make_unique<NE>(*this->m_editItem);
+   void setLiveEditItem() requires HasLiveEditItem<editorBaseOptions> {
+      if (this->m_editItem) {
+         this->m_liveEditItem = std::make_unique<NE>(*this->m_editItem);
+      } else {
+         this->m_liveEditItem.reset();
+      }
       return;
    }
 
@@ -270,7 +274,7 @@ public:
          this->readFieldsFromEditItem(std::nullopt);
       }
 
-      this->makeLiveEditItem();
+      this->setLiveEditItem();
 
       // Comment below about calling this->derived().validateBeforeSave() also applies here
       this->derived().postSetEditItem();

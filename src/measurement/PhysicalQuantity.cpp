@@ -225,7 +225,6 @@ std::vector<int> const & Measurement::allPossibilitiesAsInt(
    return allOfAsInt_Mass_Volume;
 }
 
-
 template<class S>
 S & operator<<(S & stream, Measurement::PhysicalQuantity const val) {
    stream <<

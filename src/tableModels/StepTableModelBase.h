@@ -101,7 +101,7 @@ protected:
 
    //! \returns true if \c step is successfully found and removed.
    bool doRemoveStep(std::shared_ptr<StepClass> step) {
-      int ii {this->derived().rows.indexOf(step)};
+      int ii {static_cast<int>(this->derived().rows.indexOf(step))};
       if (ii >= 0) {
          qDebug() <<
             Q_FUNC_INFO << "Removing" << StepClass::staticMetaObject.className() << step->name() << "(#" <<

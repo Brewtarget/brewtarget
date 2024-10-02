@@ -21,7 +21,6 @@
 
 #include <QApplication>
 #include <QDebug>
-#include <QRegExp>
 
 #include "Localization.h"
 #include "measurement/Unit.h"

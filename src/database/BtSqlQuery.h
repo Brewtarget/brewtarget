@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * database/BtSqlQuery.h is part of Brewtarget, and is copyright the following authors 2021:
+ * database/BtSqlQuery.h is part of Brewtarget, and is copyright the following authors 2021-2024:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -50,8 +50,12 @@
  */
 class BtSqlQuery : public QSqlQuery {
 public:
-   // Use the same constructors as QSqlQuery
+   // Use the same constructors as QSqlQuery...
    using QSqlQuery::QSqlQuery;
+   // ...except that QSqlQuery copy constructor is deprecated (and, if you use it, you get a warning: "QSqlQuery is not
+   // meant to be copied. Use move construction instead.").  So, let's not do copy construction!
+   BtSqlQuery(BtSqlQuery const & other) = delete;
+   BtSqlQuery(QSqlQuery const & other) = delete;
 
    /**
     * \brief As \c QSqlQuery::prepare() except we don't actually call QSqlQuery::prepare() unless and until a value is
@@ -79,7 +83,8 @@ private:
 
    void reallyPrepare();
 
-
+   // This is deprecated in the base class
+   BtSqlQuery & operator=(BtSqlQuery const & other) = delete;
 };
 
 #endif

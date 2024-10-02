@@ -25,6 +25,11 @@
 #include "database/ObjectStoreWrapper.h"
 #include "model/Water.h"
 
+namespace {
+   auto const seriesNameCurrent {WaterEditor::tr("Current" )};
+   auto const seriesNameModified{WaterEditor::tr("Modified")};
+}
+
 WaterEditor::WaterEditor(QWidget *parent, QString const editorName) :
    QDialog(parent),
    EditorBase<WaterEditor, Water, WaterEditorOptions>(editorName) {
@@ -88,9 +93,13 @@ void WaterEditor::postSetEditItem() {
    if (this->m_editItem) {
       // Note that we don't need to remove the old series from any previous Water objects as the call to addSeries will
       // replace them.
-      this->waterEditRadarChart->addSeries(tr("Current"), Qt::darkGreen, *this->m_editItem);
+      this->waterEditRadarChart->addSeries(seriesNameCurrent, Qt::darkGreen, *this->m_editItem);
 
-      this->waterEditRadarChart->addSeries(tr("Modified"), Qt::green, *this->m_liveEditItem);
+      this->waterEditRadarChart->addSeries(seriesNameModified, Qt::green, *this->m_liveEditItem);
+      this->waterEditRadarChart->replot();
+   } else {
+      this->waterEditRadarChart->removeSeries(seriesNameCurrent );
+      this->waterEditRadarChart->removeSeries(seriesNameModified);
    }
    return;
 }

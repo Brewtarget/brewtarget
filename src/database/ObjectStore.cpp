@@ -214,9 +214,12 @@ namespace {
       QString result;
       QTextStream resultAsStream{&result};
 
-      QMap<QString, QVariant> boundValueMap = sqlQuery.boundValues();
-      for (auto bv = boundValueMap.begin(); bv != boundValueMap.end(); ++bv) {
-         resultAsStream << bv.key() << ": " << bv.value().toString() << "\n";
+      // From Qt 6.6 we'll be able to write:
+      //    for (auto const & bvn : sqlQuery.boundValueNames()) {
+      //       resultAsStream << bvn << ": " << sqlQuery.boundValue(bvn).toString() << "\n";
+      //    }
+      for (auto const & bv : sqlQuery.boundValues()) {
+         resultAsStream << bv.toString() << "\n";
       }
 
       return result;
@@ -319,7 +322,7 @@ namespace {
       // Here and elsewhere, although we could just do a Q_ASSERT, we prefer (a) some extra diagnostics on debug builds
       // and (b) to bail out immediately of the DB transaction on non-debug builds.
       //
-      if (QVariant::Type::Int != primaryKey.type()) {
+      if (QMetaType::Type::Int != primaryKey.userType()) {
          qCritical() << Q_FUNC_INFO << "Unexpected contents of primaryKey QVariant: " << primaryKey.typeName();
          Q_ASSERT(false); // Stop here on debug builds
          return false;    // Continue but bail out of the current DB transaction on other builds
@@ -1561,7 +1564,7 @@ void ObjectStore::loadAll(Database * database) {
       }
       queryStringAsStream << ";";
 
-      sqlQuery = BtSqlQuery{connection};
+///      sqlQuery = BtSqlQuery{connection};
       sqlQuery.prepare(queryString);
       if (!sqlQuery.exec()) {
          qCritical() <<

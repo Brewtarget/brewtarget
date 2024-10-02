@@ -102,7 +102,7 @@ namespace {
    // This is when we first defined the settings table, and defined the version as a string.
    // In the new world, this will create the settings table and define the version as an int.
    // Since we don't set the version until the very last step of the update, I think this will be fine.
-   bool migrate_to_202(Database & db, BtSqlQuery q) {
+   bool migrate_to_202(Database & db, BtSqlQuery & q) {
       bool ret = true;
 
       // Add "projected_ferm_points" to brewnote table
@@ -204,7 +204,7 @@ namespace {
       return executeSqlQueries(q, migrationQueries);
    }
 
-   bool migrate_to_5([[maybe_unused]] Database & db, BtSqlQuery q) {
+   bool migrate_to_5([[maybe_unused]] Database & db, BtSqlQuery & q) {
       QVector<QueryAndParameters> const migrationQueries{
          // Drop the previous bugged TRIGGER
          {QString("DROP TRIGGER dec_ins_num")},
@@ -221,12 +221,12 @@ namespace {
    }
 
    //
-   bool migrate_to_6([[maybe_unused]] Database & db, [[maybe_unused]] BtSqlQuery q) {
+   bool migrate_to_6([[maybe_unused]] Database & db, [[maybe_unused]] BtSqlQuery & q) {
       // I drop this table in version 8. There is no sense doing anything here, and it breaks other things.
       return true;
    }
 
-   bool migrate_to_7([[maybe_unused]] Database & db, BtSqlQuery q) {
+   bool migrate_to_7([[maybe_unused]] Database & db, BtSqlQuery & q) {
       QVector<QueryAndParameters> const migrationQueries{
          // Add "attenuation" to brewnote table
          {QString("ALTER TABLE brewnote ADD COLUMN attenuation %1").arg(db.getDbNativeTypeName<double>())} // Previously DEFAULT 0.0
@@ -234,7 +234,7 @@ namespace {
       return executeSqlQueries(q, migrationQueries);
    }
 
-   bool migrate_to_8(Database & db, BtSqlQuery q) {
+   bool migrate_to_8(Database & db, BtSqlQuery & q) {
       QString createTmpBrewnoteSql;
       QTextStream createTmpBrewnoteSqlStream(&createTmpBrewnoteSql);
       createTmpBrewnoteSqlStream <<
@@ -462,7 +462,7 @@ namespace {
 
    // To support the water chemistry, I need to add two columns to water and to
    // create the salt and salt_in_recipe tables
-   bool migrate_to_9(Database & db, BtSqlQuery q) {
+   bool migrate_to_9(Database & db, BtSqlQuery & q) {
       QString createSaltSql;
       QTextStream createSaltSqlStream(&createSaltSql);
       createSaltSqlStream <<
@@ -509,7 +509,7 @@ namespace {
       return executeSqlQueries(q, migrationQueries);
    }
 
-   bool migrate_to_10(Database & db, BtSqlQuery q) {
+   bool migrate_to_10(Database & db, BtSqlQuery & q) {
       QVector<QueryAndParameters> const migrationQueries{
          // DB-specific version of ALTER TABLE recipe ADD COLUMN ancestor_id INTEGER REFERENCES recipe(id)
          {QString(db.getSqlToAddColumnAsForeignKey()).arg("recipe",
@@ -534,7 +534,7 @@ namespace {
     *        names ending in "_pct" (for percent), "_l" (for liters), etc.  One day perhaps we'll rename all the
     *        relevant existing columns, but I think we've got enough other change in this update!
     */
-   bool migrate_to_11(Database & db, BtSqlQuery q) {
+   bool migrate_to_11(Database & db, BtSqlQuery & q) {
       //
       // Some of the bits of SQL would be too cumbersome to build up in-place inside the migrationQueries vector, so
       // we use string streams to do the string construction here.
@@ -2077,7 +2077,7 @@ namespace {
     * \brief This is not actually a schema change, but rather data fixes that were missed from migrate_to_11 - mostly
     *        things where we should have been less case-sensitive.
     */
-   bool migrate_to_12([[maybe_unused]] Database & db, BtSqlQuery q) {
+   bool migrate_to_12([[maybe_unused]] Database & db, BtSqlQuery & q) {
       QVector<QueryAndParameters> const migrationQueries{
          {QString(     "UPDATE hop SET htype = 'aroma/bittering' WHERE lower(htype) = 'both'"     )},
          {QString("     UPDATE fermentable SET ftype = 'dry extract' WHERE lower(ftype) = 'dry extract'")},
@@ -2108,7 +2108,7 @@ namespace {
     * \brief Small schema change to support measuring diameter of boil kettle for new IBU calculations.  Plus, some
     *        tidy-ups to Salt and Boil / BoilStep which we didn't get to before.
     */
-   bool migrate_to_13([[maybe_unused]] Database & db, BtSqlQuery q) {
+   bool migrate_to_13([[maybe_unused]] Database & db, BtSqlQuery & q) {
       QVector<QueryAndParameters> const migrationQueries{
          {QString("ALTER TABLE equipment  ADD COLUMN kettleInternalDiameter_cm %1").arg(db.getDbNativeTypeName<double>())},
          {QString("ALTER TABLE equipment  ADD COLUMN kettleOpeningDiameter_cm  %1").arg(db.getDbNativeTypeName<double>())},

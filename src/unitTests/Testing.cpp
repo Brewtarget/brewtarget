@@ -885,7 +885,7 @@ void Testing::testLogRotation() {
    qDebug() << Q_FUNC_INFO << "Logging::logFileSize =" << Logging::logFileSize;
    for (int i = 0; i < fileList.size(); i++) {
       QFile f(QString(fileList.at(i).canonicalFilePath()));
-      qDebug() << Q_FUNC_INFO << "File" << f << "has size" << f.size();
+      qDebug() << Q_FUNC_INFO << "File" << f.fileName() << "has size" << f.size();
       //Here we test if the file is more than 10% bigger than the specified logFileSize", if so, fail.
       QVERIFY2(f.size() <= (Logging::logFileSize * 1.1), "Wrong Sized file");
    }

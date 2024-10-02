@@ -31,6 +31,7 @@
 #include <QList>
 #include <QMetaProperty>
 #include <QObject>
+#include <QRegularExpression>
 #include <QVariant>
 
 #include "model/FolderBase.h"
@@ -255,7 +256,7 @@ public:
     * \brief Returns a regexp that will match the " (n)" (for n some positive integer) added on the end of a name to
     *        prevent name clashes.  It will also "capture" n to allow you to extract it.
     */
-   static QRegExp const & getDuplicateNameNumberMatcher();
+   static QRegularExpression const & getDuplicateNameNumberMatcher();
 
    void setName(QString const & var);
    void setDeleted(bool const var);
