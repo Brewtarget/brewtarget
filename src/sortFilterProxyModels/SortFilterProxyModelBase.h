@@ -1,6 +1,6 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
  * sortFilterProxyModels/SortFilterProxyModelBase.h is part of Brewtarget, and is copyright the following authors
- * 2023:
+ * 2023-2024:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -77,8 +77,20 @@ protected:
       if (tableModel) {
          QModelIndex index = tableModel->index(source_row, 0, source_parent);
 
-         return !m_filter || (tableModel->data(index).toString().contains(this->derived().filterRegExp()) &&
-                              tableModel->getRow(source_row)->display());
+         if (!this->m_filter) {
+            // No filter, so we accept
+            return true;
+         }
+         if (!tableModel->getRow(source_row)->display()) {
+            // Row not displayed, so reject
+            return false;
+         }
+
+         // The filterRegularExpression() member function we call here is inherited from QSortFilterProxyModel
+         QRegularExpression const filterRegExp {this->derived().filterRegularExpression()};
+         QString const dataAsString {tableModel->data(index).toString()};
+         QRegularExpressionMatch const match {filterRegExp.match(dataAsString)};
+         return match.hasMatch();
       }
 
       NeListModel* listModel = qobject_cast<NeListModel*>(this->derived().sourceModel());

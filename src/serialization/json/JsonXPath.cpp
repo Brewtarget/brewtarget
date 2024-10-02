@@ -35,9 +35,14 @@ JsonXPath::JsonXPath(char const * const xPath) :
    m_pathParts{},
    m_pathNodes{} {
 
+   //
    // Because we're using std::string (because it's easier to pass in and out of Boost.JSON), we use the C++ standard
-   // regular expressions library rather than QRegExp here.  (The latter is obviously a better choice when we're
-   // manipulating QString objects.)
+   // regular expressions library rather than QRegularExpression here.  (The latter is obviously a better choice when
+   // we're manipulating QString objects.)
+   //
+   // TBD: If we wanted to improve performance we should look at
+   // https://github.com/hanickadot/compile-time-regular-expressions
+   //
 
    //
    // We could, in principle, use std::cregex_iterator on the raw char * string, but it's a bit clunky because you need

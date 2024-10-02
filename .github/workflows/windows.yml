@@ -289,10 +289,6 @@ jobs:
           # (which is not yet generated) uses a real certificate that will be supplied by Signpath and will be suitable
           # for signing released versions of the application.
           #
-          # For the moment, everything uses "test-signing".  Once that's working, we'll use the logic below.
-          #
-          # -=-=-=-=-=-=-=-=-=-=-
-          #
           # Select "release-signing" policy for things we're going to release and "test-signing" otherwise.
           #
           # Currently our main branch for releasing is called "develop", but we'll probably change it to "main" in the
@@ -301,11 +297,10 @@ jobs:
           # We don't do release branches per se, but, before we do a lot of commits for a major release, we'll usually
           # cut a "stable/" branch for the prior one.
           #
-          SIGNPATH_SIGNING_POLICY_SLUG: 'test-signing'
-#          SIGNPATH_SIGNING_POLICY_SLUG: |
-#            ${{ (github.ref == 'refs/heads/develop' ||
-#                 github.ref == 'refs/heads/main' ||
-#                 startsWith(github.ref, 'refs/heads/stable/')) && 'release-signing' || 'test-signing' }}
+          SIGNPATH_SIGNING_POLICY_SLUG: |
+            ${{ (github.ref == 'refs/heads/develop' ||
+                 github.ref == 'refs/heads/main' ||
+                 startsWith(github.ref, 'refs/heads/stable/')) && 'release-signing' || 'test-signing' }}
         with:
           api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
           organization-id: '${{ vars.SIGNPATH_ORGANIZATION_ID }}'

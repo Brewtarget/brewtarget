@@ -297,7 +297,6 @@ namespace Measurement {
 
 }
 
-
 /**
  * \brief Convenience functions for logging
  */

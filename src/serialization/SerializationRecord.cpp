@@ -15,6 +15,7 @@
  ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "serialization/SerializationRecord.h"
 
+#include <QRegularExpression>
 
 SerializationRecord::SerializationRecord() :
    m_namedParameterBundle{NamedParameterBundle::OperationMode::NotStrict},
@@ -85,13 +86,13 @@ void SerializationRecord::modifyClashingName(QString & candidateName) {
    // space(s) preceding the left bracket.  If so, we want to replace this with " (n+1)".  If not, we try " (1)".
    //
    int duplicateNumber = 1;
-   QRegExp const & nameNumberMatcher = NamedEntity::getDuplicateNameNumberMatcher();
-   int positionOfMatch = nameNumberMatcher.indexIn(candidateName);
-   if (positionOfMatch > -1) {
-      // There's already some integer in brackets at the end of the name, extract it, add one, and truncate the
-      // name.
-      duplicateNumber = nameNumberMatcher.cap(1).toInt() + 1;
-      candidateName.truncate(positionOfMatch);
+   QRegularExpression const & nameNumberMatcher = NamedEntity::getDuplicateNameNumberMatcher();
+   QRegularExpressionMatch match = nameNumberMatcher.match(candidateName);
+   QString matchedValue = match.captured(1);
+   if (matchedValue.size() > 0) {
+      // There's already some integer in brackets at the end of the name, extract it, add one, and truncate the name
+      duplicateNumber = matchedValue.toInt() + 1;
+      candidateName.truncate(match.capturedStart(1));
    }
    candidateName += QString(" (%1)").arg(duplicateNumber);
    return;

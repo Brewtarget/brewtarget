@@ -226,7 +226,7 @@ void JsonUtils::serialize(std::ostream & stream,
                //
                if (ii->value().kind() == boost::json::kind::object &&
                    ii->value().get_object().size() == 0) {
-                  qDebug() << Q_FUNC_INFO << "Skipping output of empty object for" << ii->key();
+                  qDebug() << Q_FUNC_INFO << "Skipping output of empty object for" << QString::fromStdString(ii->key());
                   continue;
                }
 

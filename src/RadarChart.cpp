@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * RadarChart.cpp is part of Brewtarget, and is copyright the following authors 2021-2023:
+ * RadarChart.cpp is part of Brewtarget, and is copyright the following authors 2021-2024:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -46,7 +46,7 @@ namespace std {
 namespace {
    struct ColorAndObject{
       QColor color;
-      QObject const * object;
+      NamedEntity const * object;
    };
 
    // Qt measures angles either in degrees or sixteenths of a degree, measured clockwise starting from 12 o'clock as 0°
@@ -98,6 +98,9 @@ public:
    void updateMaxAxisValue() {
       double maxInAllSeries = 0.0;
       for (auto currSeries : qAsConst(this->allSeries)) {
+         // It's a coding error if we have a series with a null pointer.  (If the object has gone away, we should remove
+         // the series.)
+         Q_ASSERT(currSeries.object);
          auto maxVariableInThisSeries = std::max_element(
             this->variableNames.begin(),
             this->variableNames.end(),
@@ -183,14 +186,27 @@ void RadarChart::init(QString const unitsName,
    return;
 }
 
-void RadarChart::addSeries(QString name, QColor color, QObject const & object) {
+void RadarChart::addSeries(QString name, QColor color, NamedEntity const & object) {
 
    // Can't store an object or a reference in a hash, but we can store a pointer
    // (Still good to have the object passed in by reference as it saves having to check/assert for null pointers.)
    this->pimpl->allSeries.insert(name, {color, &object});
-   this->replot();
+   qDebug() <<
+      Q_FUNC_INFO << "Added" << name << object.metaObject()->className() << "#" << object.key() << ":" << object.name();
+   // We deliberately don't replot here because the caller might need to make further calls before it is OK to redraw
+   // the graph.
    return;
 }
+
+void RadarChart::removeSeries(QString name) {
+   // It doesn't matter if the series is not present - QHash remove will just return false, but nothing bad happens
+   this->pimpl->allSeries.remove(name);
+   qDebug() << Q_FUNC_INFO << "Removed" << name;
+   // We deliberately don't replot here because the caller might need to make further calls before it is OK to redraw
+   // the graph.
+   return;
+}
+
 
 void RadarChart::replot() {
    this->pimpl->updateMaxAxisValue();

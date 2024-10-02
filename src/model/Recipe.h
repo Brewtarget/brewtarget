@@ -39,7 +39,9 @@
 #include "database/ObjectStoreWrapper.h"
 #include "model/BrewNote.h"
 #include "model/FolderBase.h"
+#include "model/Instruction.h"
 #include "model/NamedEntity.h"
+#include "model/Salt.h"
 
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
@@ -115,7 +117,6 @@ AddPropertyName(yeastAdditions         )
 //=========================================== End of property name constants ===========================================
 //======================================================================================================================
 
-
 // Forward declarations
 class Boil;
 class BoilStep;
@@ -132,7 +133,6 @@ class RecipeAdditionMisc;
 class RecipeAdjustmentSalt;
 class RecipeAdditionYeast;
 class RecipeUseOfWater;
-class Salt;
 class Style;
 class Water;
 class Yeast;

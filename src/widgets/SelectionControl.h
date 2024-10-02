@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * widgets/SelectionControl.h is is part of Brewtarget, and is copyright the following authors 2018-2021:
+ * widgets/SelectionControl.h is is part of Brewtarget, and is copyright the following authors 2018-2024:
  *   • Iman Ahmadvand <iman72411@gmail.com>
  *   • Matt Young <mfsy@yahoo.com>
  *
@@ -39,7 +39,7 @@ Q_SIGNALS:
    void stateChanged(int);
 
 protected:
-   void enterEvent(QEvent *) override;
+   virtual void enterEvent(QEvent *) override;
    void checkStateSet() override;
    void nextCheckState() override;
    virtual void toggle(Qt::CheckState state) = 0;

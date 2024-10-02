@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * measurement/Unit.cpp is part of Brewtarget, and is copyright the following authors 2009-2023:
+ * measurement/Unit.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
  *   • Mark de Wever <koraq@xs4all.nl>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -24,7 +24,7 @@
 #include <string>
 
 #include <QStringList>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QDebug>
 
 #include "Algorithms.h"
@@ -59,22 +59,26 @@ namespace {
       Measurement::PhysicalQuantity physicalQuantity;
       QString                       lowerCaseUnitName;
       //
-      // We need an ordering on the struct to use it as a key of QMap / QMultiMap.  In theory, in C++20, we should be
-      // able to ask the compiler to do all the work to give a suitable default ordering, by writing:
+      // We need an ordering on the struct to use it as a key of QMap / QMultiMap.  AIUI, these two operators suffice
+      // for the compiler to deduce all the others.
       //
-      //    friend auto operator<=>(NameLookupKey const & lhs, NameLookupKey const & rhs) = default;
-      //
-      // However, in practice, this requires the spaceship operator to be defined for QString, which it isn't in Qt5.
-      // So, for now, define our own operator<, which will suffice for QMultiMap.
-      //
-      bool operator<(NameLookupKey const & rhs) const {
-         NameLookupKey const & lhs = *this;
-         if (lhs.physicalQuantity != rhs.physicalQuantity) {
-            return (lhs.physicalQuantity < rhs.physicalQuantity);
-         }
-         return (lhs.lowerCaseUnitName < rhs.lowerCaseUnitName);
-      }
+      friend auto operator==(NameLookupKey const & lhs, NameLookupKey const & rhs);
+      friend auto operator<=>(NameLookupKey const & lhs, NameLookupKey const & rhs);
+
    };
+
+   auto operator==(NameLookupKey const & lhs, NameLookupKey const & rhs) {
+      return lhs.physicalQuantity == rhs.physicalQuantity && lhs.lowerCaseUnitName == rhs.lowerCaseUnitName;
+   }
+
+   auto operator<=>(NameLookupKey const & lhs, NameLookupKey const & rhs) {
+      if (lhs.physicalQuantity < rhs.physicalQuantity) { return std::strong_ordering::less; }
+      if (lhs.physicalQuantity > rhs.physicalQuantity) { return std::strong_ordering::greater; }
+      if (lhs.lowerCaseUnitName < rhs.lowerCaseUnitName) { return std::strong_ordering::less; }
+      if (lhs.lowerCaseUnitName > rhs.lowerCaseUnitName) { return std::strong_ordering::greater; }
+      return std::strong_ordering::equal;
+   }
+
    QMultiMap<NameLookupKey, Measurement::Unit const *> unitNameLookup;
 
    QMap<Measurement::PhysicalQuantity, Measurement::Unit const *> physicalQuantityToCanonicalUnit;
@@ -129,7 +133,8 @@ namespace {
       std::call_once(initFlag_Lookups, &Measurement::Unit::initialiseLookups);
 
       QList<Measurement::Unit const *> allMatches;
-      for (auto key : unitNameLookup.uniqueKeys()) {
+      auto const & keys {unitNameLookup.uniqueKeys()};
+      for (auto const & key : keys) {
          //
          // Although it's slightly clunky to call getUnitsByNameAndPhysicalQuantity() here, it saves us re-implementing
          // all the case-insensitive logic.
@@ -275,8 +280,9 @@ std::pair<double, QString> Measurement::Unit::splitAmountString(QString const & 
       *ok = false;
    }
 
-   // All functions in QRegExp are reentrant, so it should be safe to use as a shared const in multi-threaded code.
-   static QRegExp const amtUnit {
+   // All functions in QRegularExpression are reentrant, so it should be safe to use as a shared const in multi-threaded
+   // code.
+   static QRegularExpression const amtUnit {
       //
       // For the numeric part (the quantity) we need to make sure we get the right decimal point (. or ,) and the right
       // grouping separator (, or .).  Some locales write 1.000,10 and others write 1,000.10.  We need to catch both.
@@ -285,22 +291,23 @@ std::pair<double, QString> Measurement::Unit::splitAmountString(QString const & 
       // This was fine when we had "simple" unit names such as "kg" and "floz", but it breaks for names containing
       // symbols, such as "L/kg" or "c/g·C".  Instead, we have to match non-space characters
       //
-      "((?:\\d+" + QRegExp::escape(Localization::getLocale().groupSeparator()) + ")?\\d+(?:" +
-      QRegExp::escape(Localization::getLocale().decimalPoint()) + "\\d+)?|" +
-      QRegExp::escape(Localization::getLocale().decimalPoint()) + "\\d+)\\s*([^\\s]+)?",
-      Qt::CaseInsensitive
+      "((?:\\d+" + QRegularExpression::escape(Localization::getLocale().groupSeparator()) + ")?\\d+(?:" +
+      QRegularExpression::escape(Localization::getLocale().decimalPoint()) + "\\d+)?|" +
+      QRegularExpression::escape(Localization::getLocale().decimalPoint()) + "\\d+)\\s*([^\\s]+)?",
+      QRegularExpression::CaseInsensitiveOption
    };
 
    // Make sure we can parse the string
-   if (amtUnit.indexIn(inputString) == -1) {
+   QRegularExpressionMatch match = amtUnit.match(inputString);
+   if (!match.hasMatch()) {
       qDebug() << Q_FUNC_INFO << "Unable to parse" << inputString << "so treating as 0.0";
       return std::pair<double, QString>{0.0, ""};
    }
 
-   QString const unitName = amtUnit.cap(2);
+   QString const unitName = match.captured(2);
 
    double quantity = 0.0;
-   QString numericPartOfInput{amtUnit.cap(1)};
+   QString numericPartOfInput{match.captured(1)};
    try {
       quantity = Localization::toDouble(numericPartOfInput, Q_FUNC_INFO);
       // If we didn't throw an exception then all must finally be OK!

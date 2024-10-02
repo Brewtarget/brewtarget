@@ -27,6 +27,7 @@
 #include <QMimeData>
 #include <QModelIndex>
 #include <QObject>
+#include <QRegularExpression>
 #include <QStringBuilder>
 #include <Qt>
 #include <QVariant>
@@ -989,7 +990,7 @@ QModelIndex TreeModel::createFolderTree(QStringList dirs, TreeNode * parent, QSt
          fPath = pPath % "/" % cur;   // If it isn't we need the parent path
       }
 
-      fPath.replace(QRegExp("//"), "/");
+      fPath.replace(QRegularExpression("//"), "/");
 
       // Set the full path, which will set the name and the path
       temp->setfullPath(fPath);

@@ -44,7 +44,6 @@
 
 #include <QAction>
 #include <QBrush>
-#include <QDesktopWidget>
 #include <QFile>
 #include <QFileDialog>
 #include <QIcon>
@@ -57,6 +56,7 @@
 #include <QMessageBox>
 #include <QPen>
 #include <QPixmap>
+#include <QScreen>
 #include <QSize>
 #include <QString>
 #include <QTextStream>
@@ -1276,13 +1276,14 @@ void MainWindow::restoreSavedState() {
       restoreState(PersistentSettings::value(PersistentSettings::Names::windowState).toByteArray());
    } else {
       // otherwise, guess a reasonable size at 1/4 of the screen.
-      QDesktopWidget *desktop = QApplication::desktop();
-      int width = desktop->width();
-      int height = desktop->height();
+      QScreen * screen = this->screen();
+      QRect const desktop = screen->availableGeometry();
+      int const width = desktop.width();
+      int const height = desktop.height();
       this->resize(width/2,height/2);
 
       // Or we could do the same in one line:
-      // this->resize(QDesktopWidget().availableGeometry(this).size() * 0.5);
+      // this->resize(this->screen().availableGeometry().size() * 0.5);
    }
 
    // If we saved the selected recipe name the last time we ran, select it and show it.

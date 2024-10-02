@@ -23,12 +23,8 @@
 #include "trees/TreeNode.h"
 #include "database/ObjectStoreWrapper.h"
 #include "model/Equipment.h"
-#include "model/Fermentable.h"
-#include "model/Hop.h"
-#include "model/Misc.h"
 #include "model/Recipe.h"
 #include "model/Style.h"
-#include "model/Yeast.h"
 
 
 //! \brief set up the popup window.

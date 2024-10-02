@@ -660,35 +660,37 @@ def installDependencies():
                   )
                )
 
-         #
-         # Ubuntu 20.04 packages only have Meson 0.53.2, and we need 0.60.0 or later.  In this case it means we have to
-         # install Meson via pip, which is not ideal on Linux.
-         #
-         # Specifically, as explained at https://mesonbuild.com/Getting-meson.html#installing-meson-with-pip, although
-         # using the pip3 install gets a newer version, we have to do the pip install as root (which is normally not
-         # recommended).  If we don't do this, then running `meson install` (or even `sudo meson install`) will barf on
-         # Linux (because we need to be able to install files into system directories).
-         #
-         # So, where a sufficiently recent version of Meson is available in the distro packages (eg
-         # `sudo apt install meson` on Ubuntu etc) it is much better to install this.   Installing via pip is a last
-         # resort.
-         #
-         # The distro ID we get from 'lsb_release -is' will be 'Ubuntu' for all the variants of Ubuntu (eg including
-         # Kubuntu).  Not sure what happens on derivatives such as Linux Mint though.
-         #
-         distroName = str(
-            btUtils.abortOnRunFail(subprocess.run(['lsb_release', '-is'], encoding = "utf-8", capture_output = True)).stdout
-         ).rstrip()
-         log.debug('Linux distro: ' + distroName)
-         if ('Ubuntu' == distroName):
-            ubuntuRelease = str(
-               btUtils.abortOnRunFail(subprocess.run(['lsb_release', '-rs'], encoding = "utf-8", capture_output = True)).stdout
-            ).rstrip()
-            log.debug('Ubuntu release: ' + ubuntuRelease)
-            if (Decimal(ubuntuRelease) < Decimal('22.04')):
-               log.info('Installing newer version of Meson the hard way')
-               btUtils.abortOnRunFail(subprocess.run(['sudo', 'apt', 'remove', '-y', 'meson']))
-               btUtils.abortOnRunFail(subprocess.run(['sudo', 'pip3', 'install', 'meson']))
+###         #
+###         # Commented this out as, as of 2024, we don't support Ubuntu 20.04 any more.
+###         #
+###         # Ubuntu 20.04 packages only have Meson 0.53.2, and we need 0.60.0 or later.  In this case it means we have to
+###         # install Meson via pip, which is not ideal on Linux.
+###         #
+###         # Specifically, as explained at https://mesonbuild.com/Getting-meson.html#installing-meson-with-pip, although
+###         # using the pip3 install gets a newer version, we have to do the pip install as root (which is normally not
+###         # recommended).  If we don't do this, then running `meson install` (or even `sudo meson install`) will barf on
+###         # Linux (because we need to be able to install files into system directories).
+###         #
+###         # So, where a sufficiently recent version of Meson is available in the distro packages (eg
+###         # `sudo apt install meson` on Ubuntu etc) it is much better to install this.   Installing via pip is a last
+###         # resort.
+###         #
+###         # The distro ID we get from 'lsb_release -is' will be 'Ubuntu' for all the variants of Ubuntu (eg including
+###         # Kubuntu).  Not sure what happens on derivatives such as Linux Mint though.
+###         #
+###         distroName = str(
+###            btUtils.abortOnRunFail(subprocess.run(['lsb_release', '-is'], encoding = "utf-8", capture_output = True)).stdout
+###         ).rstrip()
+###         log.debug('Linux distro: ' + distroName)
+###         if ('Ubuntu' == distroName):
+###            ubuntuRelease = str(
+###               btUtils.abortOnRunFail(subprocess.run(['lsb_release', '-rs'], encoding = "utf-8", capture_output = True)).stdout
+###            ).rstrip()
+###            log.debug('Ubuntu release: ' + ubuntuRelease)
+###            if (Decimal(ubuntuRelease) < Decimal('22.04')):
+###               log.info('Installing newer version of Meson the hard way')
+###               btUtils.abortOnRunFail(subprocess.run(['sudo', 'apt', 'remove', '-y', 'meson']))
+###               btUtils.abortOnRunFail(subprocess.run(['sudo', 'pip3', 'install', 'meson']))
 
       #-----------------------------------------------------------------------------------------------------------------
       #--------------------------------------------- Windows Dependencies ----------------------------------------------

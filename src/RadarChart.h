@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * RadarChart.h is part of Brewtarget, and is copyright the following authors 2021-2023:
+ * RadarChart.h is part of Brewtarget, and is copyright the following authors 2021-2024:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -23,6 +23,7 @@
 #include <QString>
 #include <QVector>
 
+#include "model/NamedEntity.h"
 #include "utils/BtStringConst.h"
 
 /**
@@ -67,7 +68,10 @@ public:
     * @param color  Color in which to plot the series
     * @param values  The object whose properties are to be plotted for this series
     */
-   void addSeries(QString name, QColor color, QObject const & object);
+   void addSeries(QString name, QColor color, NamedEntity const & object);
+
+   //! \brief Remove the named series if present
+   void removeSeries(QString name);
 
    /**
     * @brief (Re)plot the graph.  Call this when there's a change to a property on an object being plotted, so that the

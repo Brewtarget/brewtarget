@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * RangedSlider.h is part of Brewtarget, and is copyright the following authors 2009-2020:
+ * RangedSlider.h is part of Brewtarget, and is copyright the following authors 2009-2024:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
  *   • Philip Greggory Lee <rocketman768@gmail.com>
@@ -24,23 +24,22 @@
 #include <QString>
 #include <QBrush>
 #include <QPen>
+
 class QPaintEvent;
 class QMouseEvent;
 
 /*!
  * \brief Widget to display a number with an optional range on a type of read-only slider.
- *
  */
-class RangedSlider : public QWidget
-{
+class RangedSlider : public QWidget {
    Q_OBJECT
 
 public:
-   RangedSlider(QWidget* parent=0);
+   RangedSlider(QWidget * parent = nullptr);
 
-   Q_PROPERTY( double value READ value WRITE setValue )
+   Q_PROPERTY(double value READ value WRITE setValue )
 
-   double value() const { return _val; }
+   double value() const;
 
    //! \brief Set the background brush for the widget.
    void setBackgroundBrush( QBrush const& brush );
@@ -82,7 +81,7 @@ public slots:
     * \param range \c range.first and \c range.second are the min and max
     *        values for the preferred range resp.
     */
-   void setPreferredRange(QPair<double,double> range);
+   void setPreferredRange(QPair<double, double> range);
 
    /*!
     * \brief Set the range of values that the widget displays
@@ -90,14 +89,14 @@ public slots:
     * \param range \c range.first and \c range.second are the min and max
     *        values for the preferred range resp.
     */
-   void setRange(QPair<double,double> range);
+   void setRange(QPair<double, double> range);
 
    //! \brief Convenience method for setting the widget range
-   void setRange( double min, double max );
+   void setRange(double min, double max);
 
    //! \brief Convenience method for setting the preferred range
    //         Note that this is completely unrelated to "preferred size".
-   void setPreferredRange( double min, double max );
+   void setPreferredRange(double min, double max);
 
 protected:
    //! \brief Reimplemented from QWidget.
@@ -114,47 +113,39 @@ private:
    void setSizes();
    void recalculateHeightInPixels() const;
 
-   /**
-    * Minimum value the widget displays
-    */
-   double _min;
-   /**
-    * Maximum value the widget displays
-    */
-   double _max;
+   //! Minimum value the widget displays
+   double  m_min;
+   //! Maximum value the widget displays
+   double  m_max;
 
-   /**
-    * Minimum value for the "best" sub-range
-    */
-   double _prefMin;
-   /**
-    * Maximum value for the "best" sub-range
-    */
-   double _prefMax;
-   double _val;
-   QString _valText;
-   QString _markerText;
-   int _prec;
-   double _tickInterval;
-   int _secondaryTicks;
-   QString _tooltipText;
-   QBrush _bgBrush;
-   QBrush _prefRangeBrush;
-   QPen _prefRangePen;
-   QBrush _markerBrush;
-   bool _markerTextIsValue;
+   //! Minimum value for the "best" sub-range
+   double  m_prefMin;
+   //! Maximum value for the "best" sub-range
+   double  m_prefMax;
+   double  m_val;
+   QString m_valText;
+   QString m_markerText;
+   int     m_prec;
+   double  m_tickInterval;
+   int     m_secondaryTicks;
+   QString m_tooltipText;
+   QBrush  m_bgBrush;
+   QBrush  m_prefRangeBrush;
+   QPen    m_prefRangePen;
+   QBrush  m_markerBrush;
+   bool    m_markerTextIsValue;
 
    /**
     * The font used for showing the value at the right-hand side of the slider
     */
-   QFont const valueTextFont;
+   QFont const m_valueTextFont;
 
    /**
     * The font used for showing the indicator above the "needle" on the slider.  Often this is just showing the same as
     * the value - eg OG, FG, ABV - but sometimes it's something else - eg descriptive text such as "slightly hoppy" for
     * the IBU/GU reading.
     */
-   QFont const indicatorTextFont;
+   QFont const m_indicatorTextFont;
 
    /**
     * Since preferred and minimum dimensions are all based off a height we need to calculate based on the resolution of
@@ -162,7 +153,7 @@ private:
     * that height here.  However, its value is not really part of the current value/state of the object, hence mutable
     * (ie OK to change in a const function).
     */
-   mutable int heightInPixels;
+   mutable int m_heightInPixels;
 };
 
 #endif
