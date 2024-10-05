@@ -148,7 +148,7 @@ jobs:
           retention-days: 7
 
       - name: Recover Debris Artifacts (Meson)
-        if: ${{ failure() && (steps.meson-build.conclusion == 'failure' || steps.meson-test.conclusion = 'failure') }}
+        if: ${{ failure() && (steps.meson-build.conclusion == 'failure' || steps.meson-test.conclusion == 'failure') }}
         uses: actions/upload-artifact@v4
         with:
           name: mbuild-results-${{matrix.os}}
@@ -156,7 +156,7 @@ jobs:
           retention-days: 1
 
       - name: Recover Debris Artifacts (CMake)
-        if: ${{ failure() && (steps.cmake-build.conclusion == 'failure' || steps.cmake-test.conclusion = 'failure') }}
+        if: ${{ failure() && (steps.cmake-build.conclusion == 'failure' || steps.cmake-test.conclusion == 'failure') }}
         uses: actions/upload-artifact@v4
         with:
           name: build-results-${{matrix.os}}
