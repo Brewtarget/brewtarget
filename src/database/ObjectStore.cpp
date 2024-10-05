@@ -1183,6 +1183,8 @@ public:
       qDebug() <<
          Q_FUNC_INFO << "Inserting" << object.metaObject()->className() << "main table row with database query " <<
          queryString;
+      // Uncomment the following to track down errors where we're trying to insert an object to the database twice
+//      qDebug().noquote() << Q_FUNC_INFO << Logging::getStackTrace();
 
       //
       // Bind the values

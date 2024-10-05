@@ -63,7 +63,7 @@ jobs:
       # have only Python 3.6.7 and Ubuntu 20.04 only have Python 3.8.2.  However Ubuntu 22.04 has Python 3.10.6.)  There
       # are ways to get around this, but, in this context, it's simplest to use a canned GitHub action.
       #
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.10'
       - name: Install Frameworks and Libraries, and set up Meson build environment
@@ -88,6 +88,7 @@ jobs:
             $GITHUB_WORKSPACE
 
       - name: Build (with Meson)
+        id: meson-build
         working-directory: ${{github.workspace}}/mbuild
         shell: bash
         run: |
@@ -98,6 +99,7 @@ jobs:
       # The 'export QT_QPA_PLATFORM=offscreen' stops Qt's xcb sub-module trying to connect to a non-existent display
       # (which would cause the test runner to abort before running any tests).
       - name: Test (via Meson)
+        id: meson-test
         working-directory: ${{github.workspace}}/mbuild
         shell: bash
         run: |
@@ -106,12 +108,14 @@ jobs:
           meson test
 
       - name: Build (with CMake)
+        id: cmake-build
         working-directory: ${{github.workspace}}/build
         shell: bash
         run: |
           make
 
       - name: Test (via CMake)
+        id: cmake-test
         working-directory: ${{github.workspace}}/build
         shell: bash
         env:
@@ -143,20 +147,20 @@ jobs:
             mbuild/packages/linux/brewtarget*.rpm.sha256sum
           retention-days: 7
 
-      - name: Recover Debris Artifacts (CMake)
-        if: ${{ failure() }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-results-${{matrix.os}}
-          path: build
-          retention-days: 1
-
       - name: Recover Debris Artifacts (Meson)
-        if: ${{ failure() }}
+        if: ${{ failure() && (steps.meson-build.conclusion == 'failure' || steps.meson-test.conclusion == 'failure') }}
         uses: actions/upload-artifact@v4
         with:
           name: mbuild-results-${{matrix.os}}
           path: mbuild
+          retention-days: 1
+
+      - name: Recover Debris Artifacts (CMake)
+        if: ${{ failure() && (steps.cmake-build.conclusion == 'failure' || steps.cmake-test.conclusion == 'failure') }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-results-${{matrix.os}}
+          path: build
           retention-days: 1
 
       # Meson test doesn't show log output on the terminal, but puts it straight to a log file.  We don't want to have

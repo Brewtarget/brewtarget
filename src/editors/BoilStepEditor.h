@@ -32,6 +32,7 @@
  */
 class BoilStepEditor : public QDialog,
                        public Ui::boilStepEditor,
+                       public StepEditorBase<BoilStepEditor, BoilStep>,
                        public EditorBase<BoilStepEditor, BoilStep, BoilStepEditorOptions> {
    Q_OBJECT
 

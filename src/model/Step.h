@@ -37,7 +37,7 @@ AddPropertyName(rampTime_mins  )
 AddPropertyName(startAcidity_pH)
 AddPropertyName(startTemp_c    )
 AddPropertyName(stepNumber     )
-AddPropertyName(stepTime_days  )
+AddPropertyName(stepTime_days  ) // Mostly needed for BeerXML
 AddPropertyName(stepTime_mins  )
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
@@ -45,7 +45,7 @@ AddPropertyName(stepTime_mins  )
 
 
 /**
- * \brief Common base class for \c MashStep, \c BoilStep, \c FermentationStep
+ * \brief Common abstract base class for \c MashStep, \c BoilStep, \c FermentationStep
  *
  *        In BeerJSON, the step types have overlapping sets of fields, which correspond to our properties as follows
  *        (where ‡ means a field is required):
@@ -109,7 +109,8 @@ public:
    /**
     * \brief The time of the step in min.
     *        NOTE: This is required for MashStep but optional for BoilStep and FermentationStep.  We make it optional
-    *              here but classes that need it required should override the virtual function \c stepTimeIsRequired
+    *              here but classes that need it required should set \c StepBaseOptions.stepTimeIsRequired parameter on
+    *              \c StepBase template.  See \c StepBase for getters and setters.
     */
    Q_PROPERTY(std::optional<double> stepTime_mins          READ stepTime_mins          WRITE setStepTime_mins           )
    /**
@@ -123,7 +124,8 @@ public:
     *        dealing with the mash step temperature.
     *
     *        NOTE: This is required for MashStep but optional for BoilStep and FermentationStep.  We make it optional
-    *              here but classes that need it required should override the virtual function \c startTempIsRequired
+    *              here but classes that need it required should set \c StepBaseOptions.startTempIsRequired parameter on
+    *              \c StepBase template.  See \c StepBase for getters and setters.
     */
    Q_PROPERTY(std::optional<double> startTemp_c      READ startTemp_c      WRITE setStartTemp_c    )
    /**
@@ -146,9 +148,10 @@ public:
     *
     *        NOTE: This property is \b not used by \c FermentationStep.  (It is the only property shared by \c MashStep
     *              and \c BoilStep that is not also needed in \c FermentationStep.  We can't really do mix-ins in Qt, so
-    *              it's simplest just to not use it in \c FermentationStep.  We make the getters and setters virtual so
-    *              we can at least get a run-time error if we accidentally try to use this property on a
-    *              \c FermentationStep.)
+    *              it's simplest just to not use it in \c FermentationStep.  We require the classes that use this
+    *              property to set set \c StepBaseOptions.rampTimeIsSupported parameter on \c StepBase template, so we
+    *              can at least get a run-time error if we accidentally try to use this property on a
+    *              \c FermentationStep.)  See \c StepBase for getters and setters.
     */
    Q_PROPERTY(std::optional<double> rampTime_mins          READ rampTime_mins          WRITE setRampTime_mins                   )
    //! \brief The step number in a sequence of other steps.  Step numbers start from 1.
@@ -161,28 +164,34 @@ public:
    Q_PROPERTY(std::optional<double>   endAcidity_pH        READ   endAcidity_pH        WRITE   setEndAcidity_pH                 )
 
    //============================================ "GETTER" MEMBER FUNCTIONS ============================================
-   std::optional<double> stepTime_mins  () const;
-   std::optional<double> stepTime_days  () const;
-   std::optional<double> startTemp_c    () const;
+
    std::optional<double>   endTemp_c    () const;
    int                   stepNumber     () const;
    int                   ownerId        () const;
    // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
    QString               description    () const;
-   virtual std::optional<double> rampTime_mins  () const; // See related Q_PROPERTY comment above for why this is virtual
    std::optional<double> startAcidity_pH() const;
    std::optional<double>   endAcidity_pH() const;
 
+   // See model/StepBase.h for overrides of these
+   virtual std::optional<double> stepTime_mins() const = 0;
+   virtual std::optional<double> stepTime_days() const = 0;
+   virtual std::optional<double> startTemp_c  () const = 0;
+   virtual std::optional<double> rampTime_mins() const = 0;
+
    //============================================ "SETTER" MEMBER FUNCTIONS ============================================
-   void setStepTime_mins  (std::optional<double> const   val       );
-   void setStepTime_days  (std::optional<double> const   val       );
-   void setStartTemp_c    (std::optional<double> const   val       );
+
+   // See model/StepBase.h for overrides of these
+   virtual void setStepTime_mins(std::optional<double> const val) = 0;
+   virtual void setStepTime_days(std::optional<double> const val) = 0;
+   virtual void setStartTemp_c  (std::optional<double> const val) = 0;
+   virtual void setRampTime_mins(std::optional<double> const val) = 0;
+
    void setEndTemp_c      (std::optional<double> const   val       );
    void setStepNumber     (int                   const   stepNumber);
    void setOwnerId        (int                   const   ownerId   );
    // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
    void setDescription    (QString               const & val);
-   virtual void setRampTime_mins  (std::optional<double> const   val); // See related Q_PROPERTY comment above for why this is virtual
    void setStartAcidity_pH(std::optional<double> const   val);
    void setEndAcidity_pH  (std::optional<double> const   val);
 
@@ -190,12 +199,6 @@ signals:
 
 protected:
    virtual bool isEqualTo(NamedEntity const & other) const;
-   //! See comment above.  By default stepTime_mins is optional
-   [[nodiscard]] virtual bool stepTimeIsRequired() const;
-   //! See comment above.  By default startTemp_c is optional
-   [[nodiscard]] virtual bool startTempIsRequired() const;
-   //! See comment above.  By default rampTime_mins is supported
-   [[nodiscard]] virtual bool rampTimeIsSupported() const;
 
 protected:
    std::optional<double> m_stepTime_mins  ;

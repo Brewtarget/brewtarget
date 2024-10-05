@@ -126,6 +126,15 @@ public:
     */
    template<class NE> void addIngredientToRecipe(NE & ne);
 
+   //! \brief Actually add the new mash step to (the mash of) the recipe (in an undoable way).
+   template<class StepOwnerClass, class StepClass>
+   void addStepToStepOwner(StepOwnerClass & stepOwner, std::shared_ptr<StepClass> step);
+   template<class StepOwnerClass, class StepClass>
+   void addStepToStepOwner(std::shared_ptr<StepOwnerClass> stepOwner, std::shared_ptr<StepClass> step);
+   void addStepToStepOwner(std::shared_ptr<MashStep        > step);
+   void addStepToStepOwner(std::shared_ptr<BoilStep        > step);
+   void addStepToStepOwner(std::shared_ptr<FermentationStep> step);
+
 public slots:
 
    //! \brief Accepts Recipe changes, and takes appropriate action to show the changes.
@@ -194,11 +203,6 @@ public slots:
    void addMashStep();
    void addBoilStep();
    void addFermentationStep();
-
-   //! \brief Actually add the new mash step to (the mash of) the recipe (in an undoable way).
-   void addMashStepToMash                (std::shared_ptr<MashStep        > step);
-   void addBoilStepToBoil                (std::shared_ptr<BoilStep        > step);
-   void addFermentationStepToFermentation(std::shared_ptr<FermentationStep> step);
 
    //! \brief Move currently selected mash step down.
    void moveSelectedMashStepUp();

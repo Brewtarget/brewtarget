@@ -19,23 +19,6 @@
 #include "PhysicalConstants.h"
 #include "utils/AutoCompare.h"
 
-namespace {
-   // Everything has to be double because our underlying measure (minutes) is allowed to be measured in fractions.
-   constexpr double minutesInADay = 24.0 * 60.0;
-   std::optional<double> minutesToDays(std::optional<double> val) {
-      if (val) {
-         return *val / minutesInADay;
-      }
-      return std::nullopt;
-   }
-   std::optional<double> daysToMinutes(std::optional<double> val) {
-      if (val) {
-         return *val * minutesInADay;
-      }
-      return std::nullopt;
-   }
-}
-
 QString Step::localisedName() { return tr("Step"); }
 
 bool Step::isEqualTo(NamedEntity const & other) const {
@@ -80,7 +63,7 @@ TypeLookup const Step::typeLookup {
 //==================================================== CONSTRUCTORS ====================================================
 Step::Step(QString name) :
    NamedEntity      {name, true},
-   m_stepTime_mins  {0.0         },
+   m_stepTime_mins  {std::nullopt},
    m_startTemp_c    {std::nullopt},
    m_endTemp_c      {std::nullopt},
    m_stepNumber     {0           },
@@ -96,7 +79,7 @@ Step::Step(QString name) :
 }
 
 Step::Step(NamedParameterBundle const & namedParameterBundle) :
-   NamedEntity      (namedParameterBundle                                                             ),
+   NamedEntity      (namedParameterBundle),
    // See below for m_stepTime_mins
    SET_REGULAR_FROM_NPB (m_startTemp_c    , namedParameterBundle, PropertyNames::Step::startTemp_c    , std::nullopt),
    SET_REGULAR_FROM_NPB (m_endTemp_c      , namedParameterBundle, PropertyNames::Step::  endTemp_c    , std::nullopt),
@@ -107,17 +90,10 @@ Step::Step(NamedParameterBundle const & namedParameterBundle) :
    SET_REGULAR_FROM_NPB (m_rampTime_mins  , namedParameterBundle, PropertyNames::Step::rampTime_mins  , std::nullopt),
    SET_REGULAR_FROM_NPB (m_startAcidity_pH, namedParameterBundle, PropertyNames::Step::startAcidity_pH, std::nullopt),
    SET_REGULAR_FROM_NPB (m_endAcidity_pH  , namedParameterBundle, PropertyNames::Step::  endAcidity_pH, std::nullopt) {
-   // It would be nice to be able to assert here that rampTime_mins is present in the bundle only if the subclass
-   // supports it.  However, we cannot safely call a virtual member function from a base class constructor, so we have
-   // to do such asserts in the derived classes.
 
-   // If we're being constructed from a BeerXML file, we use the property stepTime_days for RECIPE > PRIMARY_AGE etc
-   // Otherwise we use the stepTime_mins property
-   if (!SET_IF_PRESENT_FROM_NPB_NO_MV(Step::setStepTime_mins, namedParameterBundle, PropertyNames::Step::stepTime_mins) &&
-       !SET_IF_PRESENT_FROM_NPB_NO_MV(Step::setStepTime_days, namedParameterBundle, PropertyNames::Step::stepTime_days)) {
-      qWarning() << Q_FUNC_INFO << "Neither stepTime_mins nor stepTime_days set in bundle, so step time will be 0.";
-      this->m_stepTime_mins = 0.0;
-   }
+   // Note that we cannot call this->setStepTime_mins() or this->setStepTime_days() here, as these are virtual functions
+   // which are not callable until our child class constructor is run.  Therefore handling of
+   // PropertyNames::Step::stepTime_mins and PropertyNames::Step::stepTime_days is done in StepBase
 
    CONSTRUCTOR_END
    return;
@@ -143,51 +119,19 @@ Step::Step(Step const & other) :
 Step::~Step() = default;
 
 //============================================= "GETTER" MEMBER FUNCTIONS ==============================================
-std::optional<double> Step::stepTime_mins  () const {
-   Q_ASSERT(!this->stepTimeIsRequired() || this->m_stepTime_mins);
-   return this->m_stepTime_mins;
-}
-std::optional<double> Step::stepTime_days  () const {
-   return minutesToDays(this->stepTime_mins());
-}
-std::optional<double> Step::startTemp_c    () const {
-   Q_ASSERT(!this->startTempIsRequired() || this->m_startTemp_c);
-   return this->m_startTemp_c;
-}
 std::optional<double> Step::endTemp_c      () const { return this->m_endTemp_c      ; }
 int                   Step::stepNumber     () const { return this->m_stepNumber     ; }
 int                   Step::ownerId        () const { return this->m_ownerId        ; }
 // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
 QString               Step::description    () const { return this->m_description    ; }
-std::optional<double> Step::rampTime_mins  () const { return this->m_rampTime_mins  ; }
 std::optional<double> Step::startAcidity_pH() const { return this->m_startAcidity_pH; }
 std::optional<double> Step::endAcidity_pH  () const { return this->m_endAcidity_pH  ; }
 
 //============================================= "SETTER" MEMBER FUNCTIONS ==============================================
-void Step::setStepTime_mins(std::optional<double> const val) {
-   Q_ASSERT(!this->stepTimeIsRequired() || val);
-   SET_AND_NOTIFY(PropertyNames::Step::stepTime_mins, this->m_stepTime_mins, val);
-   return;
-}
-void Step::setStepTime_days(std::optional<double> const val) {
-   this->setStepTime_mins(daysToMinutes(val));
-   return;
-}
-void Step::setStartTemp_c(std::optional<double> const   val) {
-   Q_ASSERT(!this->startTempIsRequired() || val);
-   SET_AND_NOTIFY(PropertyNames::Step::startTemp_c, this->m_startTemp_c, this->enforceMin(val, "start temp", PhysicalConstants::absoluteZero));
-   return;
-}
-void Step::setEndTemp_c             (std::optional<double> const   val) { SET_AND_NOTIFY(PropertyNames::Step::endTemp_c      , this->m_endTemp_c      , this->enforceMin(val, "end temp" , PhysicalConstants::absoluteZero)); return; }
-void Step::setStepNumber            (int                   const   val) { SET_AND_NOTIFY(PropertyNames::Step::stepNumber     , this->m_stepNumber     , val                                                                ); return; }
-void Step::setOwnerId               (int                   const   val) { this->m_ownerId = val;    this->propagatePropertyChange(PropertyNames::Step::ownerId, false);    return; }
-// ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
-void Step::setDescription           (QString               const & val) { SET_AND_NOTIFY(PropertyNames::Step::description    , this->m_description    , val                                                                ); return; }
-void Step::setRampTime_mins         (std::optional<double> const   val) { SET_AND_NOTIFY(PropertyNames::Step::rampTime_mins  , this->m_rampTime_mins  , val                                                                ); return; }
-void Step::setStartAcidity_pH       (std::optional<double> const   val) { SET_AND_NOTIFY(PropertyNames::Step::startAcidity_pH, this->m_startAcidity_pH, val                                                                ); return; }
-void Step::setEndAcidity_pH         (std::optional<double> const   val) { SET_AND_NOTIFY(PropertyNames::Step::endAcidity_pH  , this->m_endAcidity_pH  , val                                                                ); return; }
-
-//=============================================== OTHER MEMBER FUNCTIONS ===============================================
-[[nodiscard]] bool Step:: stepTimeIsRequired() const { return false; }
-[[nodiscard]] bool Step::startTempIsRequired() const { return false; }
-[[nodiscard]] bool Step::rampTimeIsSupported() const { return true; }
+void Step::setEndTemp_c      (std::optional<double> const   val) { SET_AND_NOTIFY(PropertyNames::Step::endTemp_c      , this->m_endTemp_c      , this->enforceMin(val, "end temp" , PhysicalConstants::absoluteZero)); return; }
+void Step::setStepNumber     (int                   const   val) { SET_AND_NOTIFY(PropertyNames::Step::stepNumber     , this->m_stepNumber     , val); return; }
+void Step::setOwnerId        (int                   const   val) { this->m_ownerId = val;    this->propagatePropertyChange(PropertyNames::Step::ownerId, false);    return; }
+// ⮜⮜⮜ All below added for Besupport ⮞⮞⮞
+void Step::setDescription    (QString               const & val) { SET_AND_NOTIFY(PropertyNames::Step::description    , this->m_description    , val); return; }
+void Step::setStartAcidity_pH(std::optional<double> const   val) { SET_AND_NOTIFY(PropertyNames::Step::startAcidity_pH, this->m_startAcidity_pH, val); return; }
+void Step::setEndAcidity_pH  (std::optional<double> const   val) { SET_AND_NOTIFY(PropertyNames::Step::endAcidity_pH  , this->m_endAcidity_pH  , val); return; }

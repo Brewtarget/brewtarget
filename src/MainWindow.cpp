@@ -535,29 +535,6 @@ public:
       return;
    }
 
-   template<class StepOwnerClass, class StepClass>
-   void addStepToStepOwner(std::shared_ptr<StepOwnerClass> stepOwner, std::shared_ptr<StepClass> step) {
-      qDebug() << Q_FUNC_INFO;
-      //
-      // Mash/Boil/Fermentation Steps are a bit different from most other NamedEntity objects in that they don't really
-      // have an independent existence.  Taking Mash as an example, if you ask a Mash to remove a MashStep then it will
-      // also tell the ObjectStore to delete it, but, when we're adding a MashStep to a Mash it's easier (for eg the
-      // implementation of undo/redo) if we add it to the ObjectStore before we call Mash::addMashStep().
-      //
-      ObjectStoreWrapper::insert(step);
-      this->m_self.doOrRedoUpdate(
-         newUndoableAddOrRemove(*stepOwner,
-                                &StepOwnerClass::addStep,
-                                step,
-                                &StepOwnerClass::removeStep,
-                                tr("Add %1 step to recipe").arg(StepOwnerClass::localisedName()))
-      );
-      // We don't need to call this->pimpl->m_mashStepTableModel->addMashStep(mashStep) etc here because the change to
-      // the mash/boil/ferementation will already have triggered the necessary updates to
-      // this->pimpl->m_mashStepTableModel/this->pimpl->m_boilStepTableModel/etc.
-      return;
-   }
-
 //   template<class StepClass> auto & getStepTableModel() const;
 //   template<std::same_as<MashStep        > T> auto & getTableModel<T>() const { return *this->        m_mashStepTableModel; }
 //   template<std::same_as<BoilStep        > T> auto & getTableModel<T>() const { return *this->        m_boilStepTableModel; }
@@ -585,18 +562,21 @@ public:
    void setStepOwner(std::shared_ptr<Mash> stepOwner) {
       this->m_recipeObs->setMash(stepOwner);
       this->m_mashStepTableModel->setMash(stepOwner);
+      this->m_mashStepEditor->setStepOwner(stepOwner);
       this->m_self.mashButton->setMash(stepOwner);
       return;
    }
    void setStepOwner(std::shared_ptr<Boil> stepOwner) {
       this->m_recipeObs->setBoil(stepOwner);
       this->m_boilStepTableModel->setBoil(stepOwner);
+      this->m_boilStepEditor->setStepOwner(stepOwner);
       this->m_self.boilButton->setBoil(stepOwner);
       return;
    }
    void setStepOwner(std::shared_ptr<Fermentation> stepOwner) {
       this->m_recipeObs->setFermentation(stepOwner);
       this->m_fermentationStepTableModel->setFermentation(stepOwner);
+      this->m_fermentationStepEditor->setStepOwner(stepOwner);
       this->m_self.fermentationButton->setFermentation(stepOwner);
       return;
    }
@@ -616,13 +596,17 @@ public:
 
       std::shared_ptr<typename StepClass::StepOwnerClass> stepOwner =
          this->m_recipeObs->get<typename StepClass::StepOwnerClass>();
-      if (!stepOwner) {
+      if (stepOwner) {
+         // This seems a bit circular, but guarantees that the editor knows to which step owner (eg Mash) the new step
+         // (eg MashStep) should be added.
+         this->setStepOwner(stepOwner);
+      } else {
          auto defaultStepOwner = std::make_shared<typename StepClass::StepOwnerClass>();
          ObjectStoreWrapper::insert(defaultStepOwner);
          this->setStepOwner(defaultStepOwner);
       }
 
-      // This ultimately gets stored in MainWindow::addMashStepToMash() etc
+      // This ultimately gets stored in MainWindow::addStepToStepOwner() etc
       auto step = std::make_shared<StepClass>("");
       this->showStepEditor(step);
       return;
@@ -2360,16 +2344,50 @@ void MainWindow::removeSelectedYeastAddition() {
    return;
 }
 
-void MainWindow::addMashStepToMash(std::shared_ptr<MashStep> mashStep) {
-   this->pimpl->addStepToStepOwner(this->pimpl->m_recipeObs->mash(), mashStep);
+
+template<class StepOwnerClass, class StepClass>
+void MainWindow::addStepToStepOwner(StepOwnerClass & stepOwner, std::shared_ptr<StepClass> step) {
+   qDebug() << Q_FUNC_INFO;
+   //
+   // Mash/Boil/Fermentation Steps are a bit different from most other NamedEntity objects in that they don't really
+   // have an independent existence.  Taking Mash as an example, if you ask a Mash to remove a MashStep then it will
+   // also tell the ObjectStore to delete it, but, when we're adding a MashStep to a Mash it's easier (for eg the
+   // implementation of undo/redo) if we add it to the ObjectStore before we call Mash::addMashStep().
+   //
+   // However, normally, at this point, the new step will already have been added to the DB by
+   // EditorBase::doSaveAndClose.  So we are just belt-and-braces here checking whether it needs to be added.
+   //
+   if (step->key() < 0) {
+      qWarning() << Q_FUNC_INFO << step->metaObject()->className() << "unexpectedly not in DB, so inserting it now.";
+      ObjectStoreWrapper::insert(step);
+   }
+   this->doOrRedoUpdate(
+      newUndoableAddOrRemove(stepOwner,
+                             &StepOwnerClass::addStep,
+                             step,
+                             &StepOwnerClass::removeStep,
+                             tr("Add %1 step to recipe").arg(StepOwnerClass::localisedName()))
+   );
+   // We don't need to call this->pimpl->m_mashStepTableModel->addMashStep(mashStep) etc here because the change to
+   // the mash/boil/ferementation will already have triggered the necessary updates to
+   // this->pimpl->m_mashStepTableModel/this->pimpl->m_boilStepTableModel/etc.
    return;
 }
-void MainWindow::addBoilStepToBoil(std::shared_ptr<BoilStep> boilStep) {
-   this->pimpl->addStepToStepOwner(this->pimpl->m_recipeObs->boil(), boilStep);
+
+template<class StepOwnerClass, class StepClass>
+void MainWindow::addStepToStepOwner(std::shared_ptr<StepOwnerClass> stepOwner, std::shared_ptr<StepClass> step) {
+   this->addStepToStepOwner(*stepOwner, step);
+}
+void MainWindow::addStepToStepOwner(std::shared_ptr<MashStep> mashStep) {
+   this->addStepToStepOwner(this->pimpl->m_recipeObs->mash(), mashStep);
    return;
 }
-void MainWindow::addFermentationStepToFermentation(std::shared_ptr<FermentationStep> fermentationStep) {
-   this->pimpl->addStepToStepOwner(this->pimpl->m_recipeObs->fermentation(), fermentationStep);
+void MainWindow::addStepToStepOwner(std::shared_ptr<BoilStep> boilStep) {
+   this->addStepToStepOwner(this->pimpl->m_recipeObs->boil(), boilStep);
+   return;
+}
+void MainWindow::addStepToStepOwner(std::shared_ptr<FermentationStep> fermentationStep) {
+   this->addStepToStepOwner(this->pimpl->m_recipeObs->fermentation(), fermentationStep);
    return;
 }
 

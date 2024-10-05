@@ -17,6 +17,7 @@
 #define EDITORS_EDITORBASE_H
 #pragma once
 
+#include <concepts>
 #include <memory>
 #include <variant>
 #include <vector>
@@ -29,9 +30,51 @@
 #include "BtHorizontalTabs.h"
 #include "database/ObjectStoreWrapper.h"
 #include "editors/EditorBaseField.h"
+#include "MainWindow.h"
 #include "model/NamedEntity.h"
 #include "model/Recipe.h" // Need to include this this to be able to cast Recipe to QObject
 #include "utils/CuriouslyRecurringTemplateBase.h"
+
+/**
+ * \brief Extra base class for \c MashStepEditor, \c BoilStepEditor and \c FermentationStepEditor to inherit from
+ *        \b before inheriting from \c EditorBase.  This provides the functionality that, if we are creating a new step,
+ *        rather than editing an existing one, then we need to be able to set the owner (ie the \c Mash, \c Boil or
+ *        \c Fermentation) when we click \b Save, because the steps have no independent existence without their owner.
+ */
+template<class Derived> class StepEditorPhantom;
+template<class Derived, class NE>
+class StepEditorBase : public CuriouslyRecurringTemplateBase<StepEditorPhantom, Derived> {
+public:
+   StepEditorBase() :
+      m_stepOwner{nullptr} {
+      return;
+   }
+
+   void setStepOwner(std::shared_ptr<typename NE::OwnerClass> stepOwner) {
+      this->m_stepOwner = stepOwner;
+      return;
+   }
+
+   /**
+    * \brief If the step being edited is new, then, when save is clicked, this should be called
+    */
+   void addStepToStepOwner(std::shared_ptr<NE> step) {
+      //
+      // Going via MainWindow makes the action undoable
+      //
+      Q_ASSERT(this->m_stepOwner);
+      MainWindow::instance().addStepToStepOwner(*this->m_stepOwner, step);
+      return;
+   }
+
+   /**
+    * \brief I tried putting this in \c EditorBase and having \c NE::OwnerClass eavluated only when it is valid  (ie
+    *        when HasStepOwner<editorBaseOptions> is true), and some replaced with some dummy type otherwise.  This
+    *        seems quite to do.  Eg \c std::conditional requires both its class parameters to be valid.  So an extra
+    *        CRTP base class was born.
+    */
+   std::shared_ptr<typename NE::OwnerClass> m_stepOwner;
+};
 
 /**
  * \brief This is used as a template parameter to turn on and off various \b small features in \c EditorBase (in
@@ -337,6 +380,16 @@ public:
       return true;
    }
 
+   //! No-op version
+   void updateStepOwnerIfNeeded() requires (!std::is_base_of<StepEditorBase<Derived, NE>, Derived>::value) {
+      return;
+   }
+   //! Substantive version
+   void updateStepOwnerIfNeeded() requires (std::is_base_of<StepEditorBase<Derived, NE>, Derived>::value) {
+      this->derived().addStepToStepOwner(this->m_editItem);
+      return;
+   }
+
    /**
     * \brief Subclass should call this from its \c save slot
     */
@@ -357,6 +410,7 @@ public:
          ObjectStoreWrapper::insert(this->m_editItem);
       }
       this->writeLateFieldsToEditItem();
+      this->updateStepOwnerIfNeeded();
 
       this->derived().setVisible(false);
       return;
