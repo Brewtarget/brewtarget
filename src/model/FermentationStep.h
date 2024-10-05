@@ -33,23 +33,32 @@ AddPropertyName(vessel  )
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
 //======================================================================================================================
-
+/**
+ * On \c FermentationStep, \c stepTime_mins and \c startTemp_c are optional, and \c rampTime_mins is not to be used
+ */
+#define FermentationStepOptions StepBaseOptions{.stepTimeRequired = false, .startTempRequired = false, .rampTimeSupported = false}
 /**
  * \class FermentationStep is a step in a a fermentation process.
  *
  * \brief As a \c MashStep is to a \c Mash, and a \c BoilStep is to a \c Boil, so a \c FermentationStep is to a
  *        \c Fermentation.
  */
-class FermentationStep : public StepExtended, public StepBase<FermentationStep, Fermentation> {
+class FermentationStep : public StepExtended, public StepBase<FermentationStep, Fermentation, FermentationStepOptions> {
    Q_OBJECT
 
-   STEP_COMMON_DECL(Fermentation)
+   STEP_COMMON_DECL(Fermentation, FermentationStepOptions)
 
 public:
    /**
     * \brief See comment in model/NamedEntity.h
     */
    static QString localisedName();
+
+   //
+   // This alias makees it easier to template a number of functions that are essentially the same for all subclasses of
+   // Step.
+   //
+   using OwnerClass = Fermentation;
 
    /**
     * \brief Mapping of names to types for the Qt properties of this class.  See \c NamedEntity::typeLookup for more
@@ -80,15 +89,6 @@ public:
    //============================================ "SETTER" MEMBER FUNCTIONS ============================================
    void setFreeRise(std::optional<bool> const   val);
    void setVessel  (QString             const & val);
-
-   //========================================== "DON'T USE" MEMBER FUNCTIONS ===========================================
-   // See related Q_PROPERTY in model/Step.h comment above for why these are virtual.  Essentially we inherit them from
-   // Step but want to assert at runtime that it is a coding error if they are every called.
-   [[deprecated]] virtual std::optional<double> rampTime_mins() const;
-   [[deprecated]] virtual void setRampTime_mins(std::optional<double> const val);
-
-   //============================================= OTHER MEMBER FUNCTIONS ==============================================
-   [[nodiscard]] virtual bool rampTimeIsSupported() const;
 
 signals:
 

@@ -45,17 +45,19 @@ AddPropertyName(type                  )
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
 //======================================================================================================================
-
-
+/**
+ * On \c MashStep, \c stepTime_mins is required, \c startTemp_c is required
+ */
+#define MashStepOptions StepBaseOptions{.stepTimeRequired = true, .startTempRequired = true, .rampTimeSupported = true}
 /*!
  * \class MashStep
  *
  * \brief Model for a mash step record in the database.
  */
-class MashStep : public Step, public StepBase<MashStep, Mash> {
+class MashStep : public Step, public StepBase<MashStep, Mash, MashStepOptions> {
    Q_OBJECT
 
-   STEP_COMMON_DECL(Mash)
+   STEP_COMMON_DECL(Mash, MashStepOptions)
 
 public:
    /**
@@ -88,6 +90,12 @@ public:
     * \brief Localised names of \c MashStep::Type values suitable for displaying to the end user
     */
    static EnumStringMapping const typeDisplayNames;
+
+   //
+   // This alias makees it easier to template a number of functions that are essentially the same for all subclasses of
+   // Step.
+   //
+   using OwnerClass = Mash;
 
    /**
     * \brief Mapping of names to types for the Qt properties of this class.  See \c NamedEntity::typeLookup for more
@@ -174,10 +182,6 @@ signals:
 
 protected:
    virtual bool isEqualTo(NamedEntity const & other) const;
-   //! On \c MashStep, stepTime_mins is required
-   [[nodiscard]] virtual bool stepTimeIsRequired() const;
-   //! On \c MashStep, startTemp_c is required
-   [[nodiscard]] virtual bool startTempIsRequired() const;
 
 private:
    Type                  m_type                  ;

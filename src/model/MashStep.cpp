@@ -82,6 +82,9 @@ static_assert(std::is_base_of<Step, MashStep>::value);
 
 MashStep::MashStep(QString name) :
    Step                    {name},
+   StepBase<MashStep,
+            Mash,
+            MashStepOptions>{},
    m_type                  {MashStep::Type::Infusion},
    m_amount_l              {0.0                     },
    m_infuseTemp_c          {std::nullopt            },
@@ -93,16 +96,15 @@ MashStep::MashStep(QString name) :
 }
 
 MashStep::MashStep(NamedParameterBundle const & namedParameterBundle) :
-   Step                    (namedParameterBundle                                                                           ),
+   Step{namedParameterBundle},
+   StepBase<MashStep,
+            Mash,
+            MashStepOptions>{namedParameterBundle},
    SET_REGULAR_FROM_NPB (m_type                  , namedParameterBundle, PropertyNames::MashStep::type                  ),
    SET_REGULAR_FROM_NPB (m_amount_l              , namedParameterBundle, PropertyNames::MashStep::amount_l              , 0.0),
    SET_REGULAR_FROM_NPB (m_infuseTemp_c          , namedParameterBundle, PropertyNames::MashStep::infuseTemp_c          ),
    // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
    SET_REGULAR_FROM_NPB (m_liquorToGristRatio_lKg, namedParameterBundle, PropertyNames::MashStep::liquorToGristRatio_lKg) {
-   // See comment in Step constructor.  We're saying that, if rampTime_mins is present in the bundle (which it won't
-   // always be because it's optional) then it is supported by this class.  In other words, either it's not there, or
-   // (if it is then) it's supported.
-   Q_ASSERT(!namedParameterBundle.contains(PropertyNames::Step::rampTime_mins) || this->rampTimeIsSupported());
    //
    // If we were constructed from BeerXML, it will have set decoctionAmount_l or infuseAmount_l instead of amount_l
    //
@@ -120,6 +122,9 @@ MashStep::MashStep(NamedParameterBundle const & namedParameterBundle) :
 
 MashStep::MashStep(MashStep const & other) :
    Step                    {other},
+   StepBase<MashStep,
+            Mash,
+            MashStepOptions>{},
    m_type                  {other.m_type                  },
    m_amount_l              {other.m_amount_l              },
    m_infuseTemp_c          {other.m_infuseTemp_c          },
@@ -144,10 +149,9 @@ std::optional<double> MashStep::liquorToGristRatio_lKg() const { return this->m_
 [[deprecated]] double MashStep::decoctionAmount_l() const { return this->m_amount_l; }
 
 //============================================= "SETTER" MEMBER FUNCTIONS ==============================================
-void MashStep::setType                  (MashStep::Type        const   val) { SET_AND_NOTIFY(PropertyNames::MashStep::type                  , this->m_type                  , val                                                                ); return; }
-void MashStep::setAmount_l              (double                const   val) { SET_AND_NOTIFY(PropertyNames::MashStep::amount_l              , this->m_amount_l              , val                                                                ); return; }
-///void MashStep::setStepTemp_c            (double                const   val) { SET_AND_NOTIFY(PropertyNames::MashStep::stepTemp_c            , this->m_stepTemp_c            , this->enforceMin(val, "step temp", PhysicalConstants::absoluteZero)); return; }
-void MashStep::setInfuseTemp_c          (std::optional<double> const   val) { SET_AND_NOTIFY(PropertyNames::MashStep::infuseTemp_c          , this->m_infuseTemp_c          , val                                                                ); return; }
+void MashStep::setType        (MashStep::Type        const   val) { SET_AND_NOTIFY(PropertyNames::MashStep::type        , this->m_type        , val); return; }
+void MashStep::setAmount_l    (double                const   val) { SET_AND_NOTIFY(PropertyNames::MashStep::amount_l    , this->m_amount_l    , val); return; }
+void MashStep::setInfuseTemp_c(std::optional<double> const   val) { SET_AND_NOTIFY(PropertyNames::MashStep::infuseTemp_c, this->m_infuseTemp_c, val); return; }
 // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
 void MashStep::setLiquorToGristRatio_lKg(std::optional<double> const   val) { SET_AND_NOTIFY(PropertyNames::MashStep::liquorToGristRatio_lKg, this->m_liquorToGristRatio_lKg, val                                                                ); return; }
 
@@ -175,9 +179,6 @@ bool MashStep::isTemperature() const {
 bool MashStep::isDecoction() const {
    return (m_type == MashStep::Type::Decoction);
 }
-
-[[nodiscard]] bool MashStep:: stepTimeIsRequired() const { return true; }
-[[nodiscard]] bool MashStep::startTempIsRequired() const { return true; }
 
 // Insert boiler-plate wrapper functions that call down to StepBase
 STEP_COMMON_CODE(Mash)

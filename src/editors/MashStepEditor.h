@@ -35,6 +35,7 @@
  */
 class MashStepEditor : public QDialog,
                        public Ui::mashStepEditor,
+                       public StepEditorBase<MashStepEditor, MashStep>,
                        public EditorBase<MashStepEditor, MashStep, MashStepEditorOptions> {
    Q_OBJECT
 

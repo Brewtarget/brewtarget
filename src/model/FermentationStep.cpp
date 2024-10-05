@@ -47,6 +47,7 @@ static_assert(std::is_base_of<StepExtended, FermentationStep>::value);
 
 FermentationStep::FermentationStep(QString name) :
    StepExtended{name},
+   StepBase<FermentationStep, Fermentation, FermentationStepOptions>{},
    m_freeRise  {std::nullopt},
    m_vessel    {""} {
 
@@ -55,11 +56,10 @@ FermentationStep::FermentationStep(QString name) :
 }
 
 FermentationStep::FermentationStep(NamedParameterBundle const & namedParameterBundle) :
-   StepExtended  (namedParameterBundle                                                                ),
+   StepExtended  {namedParameterBundle                                                   },
+   StepBase<FermentationStep, Fermentation, FermentationStepOptions>{namedParameterBundle},
    SET_REGULAR_FROM_NPB (m_freeRise, namedParameterBundle, PropertyNames::FermentationStep::freeRise, std::nullopt),
    SET_REGULAR_FROM_NPB (m_vessel  , namedParameterBundle, PropertyNames::FermentationStep::vessel  , QString()   ) {
-   // See comment in Step constructor
-   Q_ASSERT(this->rampTimeIsSupported() == namedParameterBundle.contains(PropertyNames::Step::rampTime_mins));
 
    CONSTRUCTOR_END
    return;
@@ -67,6 +67,7 @@ FermentationStep::FermentationStep(NamedParameterBundle const & namedParameterBu
 
 FermentationStep::FermentationStep(FermentationStep const & other) :
    StepExtended{other           },
+   StepBase<FermentationStep, Fermentation, FermentationStepOptions>{other},
    m_freeRise  {other.m_freeRise},
    m_vessel    {other.m_vessel  } {
 
@@ -83,24 +84,6 @@ QString             FermentationStep::vessel  () const { return this->m_vessel  
 //============================================= "SETTER" MEMBER FUNCTIONS ==============================================
 void FermentationStep::setFreeRise(std::optional<bool> const   val) { SET_AND_NOTIFY(PropertyNames::FermentationStep::freeRise, this->m_freeRise, val); return; }
 void FermentationStep::setVessel  (QString             const & val) { SET_AND_NOTIFY(PropertyNames::FermentationStep::vessel  , this->m_vessel  , val); return; }
-
-//============================================ "DON'T USE" MEMBER FUNCTIONS ============================================
-// See related Q_PROPERTY in model/Step.h comment above for why these are virtual.  Essentially we inherit them from
-// Step but want to assert at runtime that it is a coding error if they are every called.
-[[deprecated]] std::optional<double> FermentationStep::rampTime_mins() const {
-   qCritical().noquote() << Q_FUNC_INFO << "Erroneous function call: " << Logging::getStackTrace();
-   Q_ASSERT(false);
-   return std::nullopt;
-}
-[[deprecated]] void FermentationStep::setRampTime_mins(std::optional<double> const) {
-   qCritical().noquote() << Q_FUNC_INFO << "Erroneous function call: " << Logging::getStackTrace();
-   Q_ASSERT(false);
-   return;
-}
-
-//=============================================== OTHER MEMBER FUNCTIONS ===============================================
-[[nodiscard]] bool FermentationStep::rampTimeIsSupported() const { return false; }
-
 
 // Insert boiler-plate wrapper functions that call down to StepBase
 STEP_COMMON_CODE(Fermentation)

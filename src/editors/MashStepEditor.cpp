@@ -23,7 +23,8 @@
 
 MashStepEditor::MashStepEditor(QWidget* parent, QString const editorName) :
    QDialog{parent},
-   EditorBase<MashStepEditor, MashStep, MashStepEditorOptions>(editorName) {
+   StepEditorBase<MashStepEditor, MashStep>{},
+   EditorBase<MashStepEditor, MashStep, MashStepEditorOptions>{editorName} {
    this->setupUi(this);
    this->postSetupUiInit({
       //

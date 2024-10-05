@@ -32,17 +32,20 @@ AddPropertyName(chillingType)
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
 //======================================================================================================================
-
+/**
+ * On \c BoilStep, \c stepTime_mins and \c startTemp_c are optional
+ */
+#define BoilStepOptions StepBaseOptions{.stepTimeRequired = false, .startTempRequired = false, .rampTimeSupported = true}
 /**
  * \class BoilStep is a step in a a boil process.  It can be used to support pre-boil steps, non-boiling pasteurisation
  *                 steps, boiling, whirlpool steps, and chilling.
  *
  * \brief As a \c MashStep is to a \c Mash, so a \c BoilStep is to a \c Boil
  */
-class BoilStep : public StepExtended, public StepBase<BoilStep, Boil> {
+class BoilStep : public StepExtended, public StepBase<BoilStep, Boil, BoilStepOptions> {
    Q_OBJECT
 
-   STEP_COMMON_DECL(Boil)
+   STEP_COMMON_DECL(Boil, BoilStepOptions)
 
 public:
    /**
@@ -72,6 +75,12 @@ public:
     * \brief Localised names of \c BoilStep::ChillingType values suitable for displaying to the end user
     */
    static EnumStringMapping const chillingTypeDisplayNames;
+
+   //
+   // This alias makees it easier to template a number of functions that are essentially the same for all subclasses of
+   // Step.
+   //
+   using OwnerClass = Boil;
 
    /**
     * \brief Mapping of names to types for the Qt properties of this class.  See \c NamedEntity::typeLookup for more

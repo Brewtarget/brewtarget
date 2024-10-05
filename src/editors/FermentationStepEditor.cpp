@@ -20,6 +20,7 @@
 
 FermentationStepEditor::FermentationStepEditor(QWidget* parent, QString const editorName) :
    QDialog{parent},
+   StepEditorBase<FermentationStepEditor, FermentationStep>{},
    EditorBase<FermentationStepEditor, FermentationStep, FermentationStepEditorOptions>(editorName) {
    this->setupUi(this);
    this->postSetupUiInit({

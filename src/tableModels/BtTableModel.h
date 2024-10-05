@@ -40,7 +40,7 @@ class Recipe;
 template<class Derived, class NE> class TableModelBase; // This forward declaration is so we can make it a friend
 
 /**
- * \class BtTableModelData
+ * \class BtTableModel
  *
  * \brief Typically used to show a grid list of \c Hop or \c Fermentable, etc in one of two contexts:
  *           * Listing all items of this type in the database
@@ -90,105 +90,6 @@ template<class Derived, class NE> class TableModelBase; // This forward declarat
  *        You might be wondering why there isn't a corresponding inheritance hierarchy in \c TableModelBase.  This is
  *        because, by the magic of template metaprogramming \c TableModelBase "knows" whether its derived class inherits
  *        from \c BtTableModelRecipeObserver or \c BtTableModelInventory, and can therefore adapt accordingly.
- */
-// TODO: Need to kill off BtTableModelData once we have switched everything over to using TableModelBase (just WaterTableModel left to do)
-///template<class NE>
-///class BtTableModelData {
-///protected:
-///   BtTableModelData() : rows{} {
-///      return;
-///   }
-///   // Need a virtual destructor as we have a virtual member function
-///   virtual ~BtTableModelData() = default;
-///public:
-///   /**
-///    * \brief Return the \c i-th row in the model.
-///    *        Returns \c nullptr on failure.
-///    */
-///   std::shared_ptr<NE> getRow(int ii) const {
-///      if (!(this->rows.isEmpty())) {
-///         if (ii >= 0 && ii < this->rows.size()) {
-///            return this->rows[ii];
-///         }
-///         qWarning() << Q_FUNC_INFO << "index out of range (" << ii << "/" << this->rows.size() << ")";
-///      } else {
-///         qWarning() << Q_FUNC_INFO << "this->rows is empty (" << ii << "/" << this->rows.size() << ")";
-///      }
-///      return nullptr;
-///   }
-///
-///   /**
-///    * \brief Remove duplicates and non-displayable items from the supplied list
-///    */
-///   QList< std::shared_ptr<NE> > removeDuplicates(QList< std::shared_ptr<NE> > items, Recipe const * recipe = nullptr) {
-///      decltype(items) tmp;
-///
-///      for (auto ii : items) {
-///         if (!recipe && (ii->deleted() || !ii->display())) {
-///               continue;
-///         }
-///         if (!this->rows.contains(ii) ) {
-///            tmp.append(ii);
-///         }
-///      }
-///      return tmp;
-///   }
-///
-///   /**
-///    * \brief Remove duplicates, ignoring if the item is displayed
-///    */
-///   QList< std::shared_ptr<NE> > removeDuplicatesIgnoreDisplay(QList< std::shared_ptr<NE> > items, Recipe const * recipe = nullptr) {
-///      decltype(items) tmp;
-///
-///      for (auto ii : items) {
-///         if (!recipe && ii->deleted() ) {
-///            continue;
-///         }
-///         if (!this->rows.contains(ii) ) {
-///            tmp.append(ii);
-///         }
-///      }
-///      return tmp;
-///   }
-///
-///   /**
-///    * \brief Given a raw pointer, find the index of the corresponding shared pointer in \c this->rows
-///    *
-///    *        This is useful because the Qt signals and slots framework allows the slot receiving a signal to get a raw
-///    *        pointer to the object that sent the signal, and we often want to find the corresponding shared pointer in
-///    *        our list.
-///    *
-///    *        Note that using this function is a lot safer than, say, calling ObjectStoreWrapper::getSharedFromRaw(), as
-///    *        that only works for objects that are already stored in the database, something which is not guaranteed to
-///    *        be the case with our rows.  (Eg in SaltTableModel, new Salts are only stored in the DB when the window is
-///    *        closed with OK.)
-///    *
-///    *        Function name is for consistency with \c QList::indexOf
-///    *
-///    * \param object  what to search for
-///    * \return index of object in this->rows or -1 if it's not found
-///    */
-///   int findIndexOf(NE const * object) const {
-///      for (int index = 0; index < this->rows.size(); ++index) {
-///         if (this->rows.at(index).get() == object) {
-///            return index;
-///         }
-///      }
-///      return -1;
-///   }
-///
-///protected:
-///   virtual std::shared_ptr<NamedEntity> getRowAsNamedEntity(int ii) {
-///      return std::static_pointer_cast<NamedEntity>(this->getRow(ii));
-///   }
-///
-///   QList< std::shared_ptr<NE> > rows;
-///};
-
-/*!
- * \class BtTableModel
- *
- * \brief Shared interface & code for all the table models we use
  */
 class BtTableModel : public QAbstractTableModel {
    Q_OBJECT
