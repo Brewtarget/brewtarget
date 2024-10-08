@@ -29,47 +29,27 @@
       <attribute name="title">
        <string>Main</string>
       </attribute>
+
       <layout class="QGridLayout" name="gridLayout">
        <item row="0" column="1">
         <widget class="QLabel" name="label_name">
          <property name="text">
-          <string>Name</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit_name</cstring>
+         <string>Name</string>
          </property>
         </widget>
        </item>
        <item row="0" column="2" colspan="4">
-        <widget class="SmartLineEdit" name="lineEdit_name">
-         <property name="toolTip">
-          <string>Name</string>
+        <widget class="QLineEdit" name="lineEdit_name">
+         <property name="text">
+         <string>Name</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="3">
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
+
        <item row="2" column="1">
         <widget class="QLabel" name="label_type">
          <property name="text">
           <string>Type</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
          </property>
          <property name="buddy">
           <cstring>comboBox_type</cstring>
@@ -83,6 +63,7 @@
          </property>
         </widget>
        </item>
+
        <item row="4" column="1">
         <widget class="SmartLabel" name="label_inventory">
          <property name="contextMenuPolicy">
@@ -105,12 +86,6 @@
        </item>
        <item row="4" column="4">
         <widget class="QLabel" name="label_amountType">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
          <property name="toolTip">
           <string>Whether the amount is weight or volume</string>
          </property>
@@ -129,6 +104,7 @@
          </property>
         </widget>
        </item>
+
        <item row="6" column="1">
         <widget class="QLabel" name="label_producer">
          <property name="text">
@@ -163,19 +139,7 @@
          </property>
         </widget>
        </item>
-       <item row="12" column="1">
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
+
        <item row="13" column="0">
         <widget class="InfoButton" name="infoButton_id"></widget>
        </item>
@@ -200,8 +164,10 @@
          </property>
         </widget>
        </item>
+
       </layout>
      </widget>
+
      <widget class="QWidget" name="tab_useFor">
       <attribute name="title">
        <string>Use for</string>
@@ -212,6 +178,7 @@
        </item>
       </layout>
      </widget>
+
      <widget class="QWidget" name="tab_notes">
       <attribute name="title">
        <string>Notes</string>
@@ -222,12 +189,17 @@
        </item>
       </layout>
      </widget>
+
     </widget>
    </item>
+
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
+    <layout class="QHBoxLayout" name="horizontalLayout_Buttons">
+     <property name="spacing">
+      <number>2</number>
+     </property>
      <item>
-      <spacer name="horizontalSpacer_2">
+      <spacer name="horizontalSpacer_Buttons">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
@@ -242,10 +214,10 @@
      <item>
       <widget class="QPushButton" name="pushButton_new">
        <property name="toolTip">
-        <string>New misc</string>
+        <string>New</string>
        </property>
        <property name="text">
-        <string/>
+        <string>New</string>
        </property>
        <property name="icon">
         <iconset resource="../resources.qrc">
@@ -259,7 +231,7 @@
         <string>Save and close</string>
        </property>
        <property name="text">
-        <string/>
+        <string>Save</string>
        </property>
        <property name="icon">
         <iconset resource="../resources.qrc">
@@ -273,7 +245,7 @@
         <string>Discard and close</string>
        </property>
        <property name="text">
-        <string/>
+        <string>Cancel</string>
        </property>
        <property name="icon">
         <iconset resource="../resources.qrc">
@@ -283,6 +255,7 @@
      </item>
     </layout>
    </item>
+
   </layout>
  </widget>
  <customwidgets>

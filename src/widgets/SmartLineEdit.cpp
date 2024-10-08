@@ -92,7 +92,7 @@ public:
          }
          this->calculateDisplaySize(sizingString);
       }
-      this->m_self.setFixedWidth(this->m_desiredWidthInPixels);
+      this->m_self.setMinimumWidth(this->m_desiredWidthInPixels);
       return;
    }
 

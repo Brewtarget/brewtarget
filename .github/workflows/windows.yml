@@ -253,7 +253,11 @@ jobs:
       # that service to use it, so this step can't be done in forked repositories.
       #
       # Various settings here have to align with the "brewtarget" project in the "Brewtarget [OSS]" organisation
-      # registered at https://app.signpath.io/.
+      # registered at https://app.signpath.io/.  In some places you have to be quite pedantic about the settings (both
+      # here and in the SignPath account).  Eg at one point we were getting the following error:
+      #
+      #    "The supplied repository URL 'https://github.com/Brewtarget/brewtarget' does not match
+      #     the expected repository URLs 'https://github.com/Brewtarget/brewtarget/'."
       #
       # See https://github.com/SignPath/github-action-submit-signing-request for documentation of this action (including
       # parameters such as github-artifact-id).  Also see https://github.com/SignPath/github-actions-extended-demo/ for

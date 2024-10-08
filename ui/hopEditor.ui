@@ -50,7 +50,7 @@
         </widget>
        </item>
        <item row="0" column="2" colspan="4">
-        <widget class="SmartLineEdit" name="lineEdit_name">
+        <widget class="QLineEdit" name="lineEdit_name">
          <property name="toolTip">
           <string>Name</string>
          </property>
@@ -866,7 +866,7 @@
         <string>New hop</string>
        </property>
        <property name="text">
-        <string/>
+        <string>New</string>
        </property>
        <property name="icon">
         <iconset resource="../resources.qrc">
@@ -880,7 +880,7 @@
         <string>Save and close</string>
        </property>
        <property name="text">
-        <string/>
+        <string>Save</string>
        </property>
        <property name="icon">
         <iconset resource="../resources.qrc">
@@ -894,7 +894,7 @@
         <string>Discard and close</string>
        </property>
        <property name="text">
-        <string/>
+        <string>Cancel</string>
        </property>
        <property name="icon">
         <iconset resource="../resources.qrc">

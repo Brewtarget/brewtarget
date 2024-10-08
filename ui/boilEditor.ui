@@ -27,7 +27,7 @@
         </widget>
        </item>
        <item row="0" column="2" colspan="2">
-        <widget class="SmartLineEdit" name="lineEdit_name">
+        <widget class="QLineEdit" name="lineEdit_name">
          <property name="toolTip">
           <string>Name</string>
          </property>
@@ -47,7 +47,7 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="2">
+       <item row="2" column="2" colspan="2">
         <widget class="QTextEdit" name="textEdit_description">
          <property name="toolTip">
           <string>Description</string>
@@ -57,12 +57,6 @@
 
        <item row="4" column="1">
         <widget class="SmartLabel" name="label_preBoilSize">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
          <property name="contextMenuPolicy">
           <enum>Qt::CustomContextMenu</enum>
          </property>
@@ -74,7 +68,7 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="2">
+       <item row="4" column="2" colspan="2">
         <widget class="SmartLineEdit" name="lineEdit_preBoilSize">
          <property name="toolTip">
           <string>Pre-Boil Size</string>
@@ -89,7 +83,7 @@
          </property>
         </widget>
        </item>
-       <item row="8" column="2">
+       <item row="8" column="2" colspan="2">
         <widget class="QTextEdit" name="textEdit_notes"/>
        </item>
 
@@ -98,10 +92,10 @@
          <item>
           <widget class="QPushButton" name="pushButton_new">
            <property name="toolTip">
-            <string>New hop</string>
+            <string>New boil</string>
            </property>
            <property name="text">
-            <string/>
+            <string>New</string>
            </property>
            <property name="icon">
             <iconset resource="../resources.qrc">
@@ -115,7 +109,7 @@
             <string>Save and close</string>
            </property>
            <property name="text">
-            <string/>
+            <string>Save</string>
            </property>
            <property name="icon">
             <iconset resource="../resources.qrc">
@@ -129,7 +123,7 @@
             <string>Discard and close</string>
            </property>
            <property name="text">
-            <string/>
+            <string>Cancel</string>
            </property>
            <property name="icon">
             <iconset resource="../resources.qrc">

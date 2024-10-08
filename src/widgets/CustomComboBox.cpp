@@ -29,7 +29,7 @@ CustomComboBox::CustomComboBox(QWidget* parent) : QComboBox(parent) {
 CustomComboBox::~CustomComboBox() = default;
 
 void CustomComboBox::showPopup() {
-   view()->setFixedWidth(300);
+//   view()->setFixedWidth(300);
    QComboBox::showPopup();
    return;
 }
