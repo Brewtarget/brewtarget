@@ -44,7 +44,7 @@
         </widget>
        </item>
        <item row="0" column="2" colspan="4">
-        <widget class="SmartLineEdit" name="lineEdit_name">
+        <widget class="QLineEdit" name="lineEdit_name">
          <property name="toolTip">
           <string>Name</string>
          </property>
@@ -82,12 +82,6 @@
        </item>
        <item row="2" column="4">
         <widget class="QLabel" name="label_form">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
          <property name="text">
           <string>Form</string>
          </property>
@@ -115,12 +109,6 @@
        </item>
        <item row="3" column="2">
         <widget class="SmartLineEdit" name="lineEdit_inventory">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
          <property name="toolTip">
           <string>Total amount in inventory</string>
          </property>
@@ -128,12 +116,6 @@
        </item>
        <item row="3" column="4">
         <widget class="QLabel" name="label_amountType">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
          <property name="toolTip">
           <string>Whether the amount is weight or volume</string>
          </property>
@@ -232,12 +214,6 @@
       <layout class="QGridLayout" name="gridLayout_2">
        <item row="0" column="0">
         <widget class="QLabel" name="label_flocculation">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
          <property name="text">
           <string>Flocculation</string>
          </property>
@@ -299,12 +275,6 @@
        </item>
        <item row="2" column="1">
         <widget class="SmartLineEdit" name="lineEdit_minTemperature">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
          <property name="toolTip">
           <string>Min temp</string>
          </property>
@@ -322,12 +292,6 @@
        </item>
        <item row="2" column="3">
         <widget class="SmartLineEdit" name="lineEdit_maxReuse">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
          <property name="toolTip">
           <string>Max recultures</string>
          </property>
@@ -348,12 +312,6 @@
        </item>
        <item row="3" column="1">
         <widget class="SmartLineEdit" name="lineEdit_maxTemperature">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
          <property name="toolTip">
           <string>Max temp</string>
          </property>
@@ -371,12 +329,6 @@
        </item>
        <item row="3" column="3">
         <widget class="SmartLineEdit" name="lineEdit_timesCultured">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
          <property name="toolTip">
           <string>Times this yeast has been recultured</string>
          </property>
@@ -555,7 +507,7 @@
         <string>New yeast</string>
        </property>
        <property name="text">
-        <string/>
+        <string>New</string>
        </property>
        <property name="icon">
         <iconset resource="../resources.qrc">
@@ -569,7 +521,7 @@
         <string>Save and close</string>
        </property>
        <property name="text">
-        <string/>
+        <string>Save</string>
        </property>
        <property name="icon">
         <iconset resource="../resources.qrc">
@@ -583,7 +535,7 @@
         <string>Discard and close</string>
        </property>
        <property name="text">
-        <string/>
+        <string>Cancel</string>
        </property>
        <property name="icon">
         <iconset resource="../resources.qrc">

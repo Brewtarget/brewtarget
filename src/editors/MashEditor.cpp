@@ -34,7 +34,7 @@ MashEditor::MashEditor(QWidget* parent) :
    m_mashObs{nullptr} {
    setupUi(this);
 
-   SMART_FIELD_INIT(MashEditor, label_name      , lineEdit_name      , Mash, PropertyNames::NamedEntity::name             );
+///   SMART_FIELD_INIT(MashEditor, label_name      , lineEdit_name      , Mash, PropertyNames::NamedEntity::name             );
    SMART_FIELD_INIT(MashEditor, label_grainTemp , lineEdit_grainTemp , Mash, PropertyNames::Mash::grainTemp_c          , 1);
    SMART_FIELD_INIT(MashEditor, label_spargeTemp, lineEdit_spargeTemp, Mash, PropertyNames::Mash::spargeTemp_c         , 1);
    SMART_FIELD_INIT(MashEditor, label_spargePh  , lineEdit_spargePh  , Mash, PropertyNames::Mash::ph                   , 0);

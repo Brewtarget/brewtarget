@@ -2,20 +2,6 @@
 <ui version="4.0">
  <class>fermentableEditor</class>
  <widget class="QDialog" name="fermentableEditor">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>661</width>
-    <height>348</height>
-   </rect>
-  </property>
-  <property name="sizePolicy">
-   <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-    <horstretch>0</horstretch>
-    <verstretch>0</verstretch>
-   </sizepolicy>
-  </property>
   <property name="windowTitle">
    <string>Fermentable Editor</string>
   </property>
@@ -50,24 +36,11 @@
         </widget>
        </item>
        <item row="0" column="2" colspan="4">
-        <widget class="SmartLineEdit" name="lineEdit_name">
+        <widget class="QLineEdit" name="lineEdit_name">
          <property name="toolTip">
           <string>Name</string>
          </property>
         </widget>
-       </item>
-       <item row="1" column="3">
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
        </item>
        <item row="2" column="1">
         <widget class="QLabel" name="label_fermentableType">
@@ -84,12 +57,6 @@
        </item>
        <item row="2" column="2">
         <widget class="BtComboBox" name="comboBox_type">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
          <property name="toolTip">
           <string>Fermantable Type</string>
          </property>
@@ -97,12 +64,6 @@
        </item>
        <item row="2" column="4">
         <widget class="QLabel" name="label_recommendMash">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
          <property name="text">
           <string>Recommend Mash</string>
          </property>
@@ -139,18 +100,6 @@
        </item>
        <item row="3" column="2">
         <widget class="SmartLineEdit" name="lineEdit_color">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>100</width>
-           <height>16777215</height>
-          </size>
-         </property>
          <property name="toolTip">
           <string>Lovibond rating</string>
          </property>
@@ -158,12 +107,6 @@
        </item>
        <item row="3" column="4">
         <widget class="QLabel" name="label_isMashed">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
          <property name="text">
           <string>Is Mashed</string>
          </property>
@@ -197,12 +140,6 @@
        </item>
        <item row="5" column="2">
         <widget class="BtComboBox" name="comboBox_grainGroup">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
          <property name="toolTip">
           <string>Fermantable Grain Group</string>
          </property>
@@ -210,12 +147,6 @@
        </item>
        <item row="5" column="4">
         <widget class="QLabel" name="label_addAfterBoil">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
          <property name="text">
           <string>Add After Boil</string>
          </property>
@@ -226,12 +157,6 @@
        </item>
        <item row="5" column="5">
         <widget class="QCheckBox" name="checkBox_addAfterBoil">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
          <property name="toolTip">
           <string>This ingredient is added post boil.</string>
          </property>
@@ -258,18 +183,6 @@
        </item>
        <item row="6" column="2">
         <widget class="SmartLineEdit" name="lineEdit_inventory">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>100</width>
-           <height>16777215</height>
-          </size>
-         </property>
          <property name="toolTip">
           <string>Amount in inventory</string>
          </property>
@@ -277,12 +190,6 @@
        </item>
        <item row="6" column="4">
         <widget class="QLabel" name="label_amountType">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
          <property name="toolTip">
           <string>Whether the amount is weight or volume</string>
          </property>
@@ -296,12 +203,6 @@
        </item>
        <item row="6" column="5">
         <widget class="BtComboBox" name="comboBox_amountType">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
          <property name="toolTip">
           <string>Whether the amount is weight or volume</string>
          </property>
@@ -319,12 +220,6 @@
        </item>
        <item row="7" column="2">
         <widget class="SmartLineEdit" name="lineEdit_origin">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
          <property name="toolTip">
           <string>Origin</string>
          </property>
@@ -342,12 +237,6 @@
        </item>
        <item row="7" column="5">
         <widget class="SmartLineEdit" name="lineEdit_protein">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
          <property name="toolTip">
           <string>Protein percentage by mass</string>
          </property>
@@ -365,12 +254,6 @@
        </item>
        <item row="8" column="2">
         <widget class="SmartLineEdit" name="lineEdit_supplier">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
          <property name="toolTip">
           <string>Supplier</string>
          </property>
@@ -388,12 +271,6 @@
        </item>
        <item row="8" column="5">
         <widget class="SmartLineEdit" name="lineEdit_maxInBatch">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
          <property name="toolTip">
           <string>Maximum recommended percentage of total grist</string>
          </property>
@@ -411,12 +288,6 @@
        </item>
        <item row="9" column="2">
         <widget class="SmartLineEdit" name="lineEdit_moisture">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
          <property name="toolTip">
           <string>Moisture percentage by mass</string>
          </property>
@@ -437,12 +308,6 @@
        </item>
        <item row="9" column="5">
         <widget class="SmartLineEdit" name="lineEdit_coarseFineDiff">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
          <property name="toolTip">
           <string>Yield difference between coarse and fine grind</string>
          </property>
@@ -463,12 +328,6 @@
        </item>
        <item row="10" column="2">
         <widget class="SmartLineEdit" name="lineEdit_diastaticPower">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
          <property name="toolTip">
           <string>Diastatic power</string>
          </property>
@@ -486,12 +345,6 @@
        </item>
        <item row="10" column="5">
         <widget class="SmartLineEdit" name="lineEdit_ibuGalPerLb">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
          <property name="toolTip">
           <string>Bitterness of pre-hopped extracts</string>
          </property>
@@ -530,19 +383,6 @@
           <string>Product ID</string>
          </property>
         </widget>
-       </item>
-       <item row="12" column="1">
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
        </item>
        <item row="13" column="0">
         <widget class="InfoButton" name="infoButton_id"></widget>
@@ -899,12 +739,6 @@
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
         <widget class="QTextEdit" name="textEdit_notes">
-         <property name="maximumSize">
-          <size>
-           <width>1000</width>
-           <height>1000</height>
-          </size>
-         </property>
         </widget>
        </item>
       </layout>
@@ -932,7 +766,7 @@
         <string>New fermentable</string>
        </property>
        <property name="text">
-        <string/>
+        <string>New</string>
        </property>
        <property name="icon">
         <iconset resource="../resources.qrc">
@@ -946,7 +780,7 @@
         <string>Save and close</string>
        </property>
        <property name="text">
-        <string/>
+        <string>Save</string>
        </property>
        <property name="icon">
         <iconset resource="../resources.qrc">
@@ -960,7 +794,7 @@
         <string>Discard and close</string>
        </property>
        <property name="text">
-        <string/>
+        <string>Cancel</string>
        </property>
        <property name="icon">
         <iconset resource="../resources.qrc">

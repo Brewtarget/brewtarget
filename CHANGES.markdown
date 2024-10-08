@@ -13,6 +13,18 @@ happens, so I'm now setting it to a slightly arbitrary time early in the morning
 * Additional methods for calculating IBU
 * We'll list other new features here...
 
+## v4.0.7
+Bug fixes and minor enhancements.
+
+### New Features
+* None
+
+### Bug Fixes
+*  Some input fields not wide enough on various editors [849](https://github.com/Brewtarget/brewtarget/issues/849)
+
+### Release Timestamp
+Mon, 7 Oct 2024 04:00:06 +0100
+
 ## v4.0.6
 Bug fixes for the 4.0.5 release (ie bugs in 4.0.5 are fixed in this 4.0.6 release).
 
@@ -28,7 +40,7 @@ Bug fixes for the 4.0.5 release (ie bugs in 4.0.5 are fixed in this 4.0.6 releas
 * Adding Mash Step causes core dump [847](https://github.com/Brewtarget/brewtarget/issues/847)
 
 ### Release Timestamp
-Wed, 2 Oct 2024 04:00:06 +0100
+Sun, 6 Oct 2024 04:00:06 +0100
 
 ## v4.0.5
 Bug fixes for the 4.0.4 release (ie bugs in 4.0.4 are fixed in this 4.0.5 release).
