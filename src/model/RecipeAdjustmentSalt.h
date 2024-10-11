@@ -125,7 +125,7 @@ private:
 };
 
 Q_DECLARE_METATYPE(Salt)
-Q_DECLARE_METATYPE(Salt *)
+//Q_DECLARE_METATYPE(Salt *)
 BT_DECLARE_METATYPES(RecipeAdjustmentSalt)
 
 #endif

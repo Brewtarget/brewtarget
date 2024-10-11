@@ -17,25 +17,7 @@
 
 #include <algorithm>
 #include <cmath>
-
-//
-// C++20 introduces std::numbers::pi, which has better cross-platform support than the M_PI constant in cmath.  However,
-// older versions of GCC (eg as shipped with Ubuntu 20.04 LTS) do not ship with the new <numbers> header.
-//
-#if defined(__linux__ ) && defined(__GNUC__) && (__GNUC__ < 10)
-
-// I hope this is allowed.  We'll be able to get rid of it once we stop needing to support old versions of GCC
-namespace std {
-   namespace numbers {
-      constexpr double pi = M_PI;
-   }
-}
-
-#else
-
-#include <numbers> // For std::numbers::pi
-
-#endif
+#include <numbers>
 
 #include <QPainter>
 #include <QPaintEvent>
@@ -97,7 +79,7 @@ public:
     */
    void updateMaxAxisValue() {
       double maxInAllSeries = 0.0;
-      for (auto currSeries : qAsConst(this->allSeries)) {
+      for (auto const & currSeries : std::as_const(this->allSeries)) {
          // It's a coding error if we have a series with a null pointer.  (If the object has gone away, we should remove
          // the series.)
          Q_ASSERT(currSeries.object);
@@ -316,7 +298,7 @@ void RadarChart::paintEvent(QPaintEvent *event) {
    // Now plot the actual data
    //
    QPen seriesPen{allSeriesPen};
-   for (auto currSeries : qAsConst(this->pimpl->allSeries)) {
+   for (auto const & currSeries : std::as_const(this->pimpl->allSeries)) {
       seriesPen.setColor(currSeries.color);
       painter.setPen(seriesPen);
       QVector<QPointF> seriesPoints(this->pimpl->variableNames.size());

@@ -135,7 +135,7 @@ namespace Logging {
    extern QDir getDirectory();
 
    /**
-    * \brief  Initialize logging to utilize the built in logging functionality in QT5
+    * \brief  Initialize logging to utilize the built in logging functionality in Qt.
     *         This has to be called before any logging is done, but after PersistentSettings::initialise() is called.
     * \return
     */

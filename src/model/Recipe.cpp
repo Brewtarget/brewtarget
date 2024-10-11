@@ -271,23 +271,22 @@ public:
     * \brief Make copies of the Instructions from one Recipe and add them to another - typically
     *        because we are copying the Recipe.
     */
-   template<class NE> void copyList(Recipe & us, Recipe const & other) {
+   void copyInstructions(Recipe & us, Recipe const & other) {
       qDebug() << Q_FUNC_INFO;
-      for (int otherIngId : other.pimpl->accessIds<NE>()) {
+      for (int otherInstructionId : other.pimpl->instructionIds) {
          // Make and store a copy of the current Hop/Fermentable/etc object we're looking at in the other Recipe
-         auto otherIngredient = ObjectStoreWrapper::getById<NE>(otherIngId);
-         auto ourIngredient = copyIfNeeded(*otherIngredient);
+         auto otherInstruction = ObjectStoreWrapper::getById<Instruction>(otherInstructionId);
+         auto ourInstruction = copyIfNeeded(*otherInstruction);
          // Store the ID of the copy in our recipe
-         this->accessIds<NE>().append(ourIngredient->key());
+         this->instructionIds.append(ourInstruction->key());
 
          qDebug() <<
-            Q_FUNC_INFO << "After adding" << ourIngredient->metaObject()->className() << "#" << ourIngredient->key() <<
-            ", Recipe" << us.name() << "has" << this->accessIds<NE>().size() << "of" <<
-            NE::staticMetaObject.className();
+            Q_FUNC_INFO << "After adding Instruction #" << ourInstruction->key() <<
+            ", Recipe" << us.name() << "has" << this->instructionIds.size() << "Instructions";
 
          // Connect signals so that we are notified when there are changes to the Hop/Fermentable/etc we just added to
          // our recipe.
-         connect(ourIngredient.get(), &NamedEntity::changed, &us, &Recipe::acceptChangeToContainedObject);
+         connect(ourInstruction.get(), &NamedEntity::changed, &us, &Recipe::acceptChangeToContainedObject);
       }
       return;
    }
@@ -1839,12 +1838,12 @@ Recipe::Recipe(Recipe const & other) :
    this->pimpl->copyAdditions<RecipeAdditionYeast      >(other);
    this->pimpl->copyAdditions<RecipeAdjustmentSalt     >(other);
    this->pimpl->copyAdditions<RecipeUseOfWater         >(other);
-   this->pimpl->copyList<Instruction>(*this, other);
+   this->pimpl->copyInstructions(*this, other);
 
    //
    // You might think that Style, Mash and Equipment could safely be shared between Recipes.   However, AFAICT, none of
    // them is.  Presumably this is because users expect to be able to edit them in one Recipe without changing the
-   // settings for any other Recipe.
+   // settings for any other Recipe.  TODO: We should change this so we can retire copyIfNeeded.
    //
    // We also need to be careful here as one or more of these may not be set to a valid value.
    //

@@ -262,7 +262,7 @@ bool WaterTableModel::setData(QModelIndex const & index, QVariant const & value,
       return false;
    }
 
-   bool retval = value.canConvert(QVariant::String);
+   bool retval = value.canConvert<QString>();
    if (!retval) {
       return retval;
    }

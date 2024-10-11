@@ -44,7 +44,7 @@ class Water;
 /*!
  * \class TreeView
  *
- * \brief View class for TreeModel.
+ * \brief View class for \c TreeModel.
  */
 class TreeView : public QTreeView {
    Q_OBJECT

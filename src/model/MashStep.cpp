@@ -124,7 +124,7 @@ MashStep::MashStep(MashStep const & other) :
    Step                    {other},
    StepBase<MashStep,
             Mash,
-            MashStepOptions>{},
+            MashStepOptions>{other},
    m_type                  {other.m_type                  },
    m_amount_l              {other.m_amount_l              },
    m_infuseTemp_c          {other.m_infuseTemp_c          },

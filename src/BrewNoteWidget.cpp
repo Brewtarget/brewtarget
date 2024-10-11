@@ -25,6 +25,7 @@
 
 #include "Localization.h"
 #include "measurement/Measurement.h"
+#include "measurement/UnitSystem.h"
 #include "model/BrewNote.h"
 #include "PersistentSettings.h"
 

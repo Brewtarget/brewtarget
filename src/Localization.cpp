@@ -188,7 +188,7 @@ double Localization::toDouble(QString text, bool* ok) {
 double Localization::toDouble(NamedEntity const & element,
                               BtStringConst const & propertyName,
                               char const * const caller) {
-   if (element.property(*propertyName).canConvert(QVariant::String) ) {
+   if (element.property(*propertyName).canConvert<QString>()) {
       // Get the amount
       QString value = element.property(*propertyName).toString();
       bool ok = false;
@@ -222,7 +222,11 @@ void Localization::loadTranslations() {
    }
 
    // Load translators.
-   defaultTrans.load("qt_" + Localization::getLocale().name(), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+   bool succeeded = defaultTrans.load("qt_" + Localization::getLocale().name(),
+                                      QLibraryInfo::path(QLibraryInfo::TranslationsPath));
+   if (!succeeded) {
+      qWarning() << Q_FUNC_INFO << "Error loading translations for" << Localization::getLocale().name();
+   }
    if (getCurrentLanguage().isEmpty()) {
       setLanguage(getSystemLanguage());
    }

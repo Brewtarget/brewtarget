@@ -85,7 +85,7 @@ namespace {
 template<typename T>
 std::optional<T> UnitAndScalePopUpMenu::dataFromQAction(QAction const & action) {
    QVariant const data = action.data();
-   Q_ASSERT(data.type() == QVariant::Int);
+   Q_ASSERT(data.typeId() == QMetaType::Type::Int);
    int raw = data.toInt();
    if (raw < 0) {
       qDebug() << Q_FUNC_INFO << "Raw" << raw << "= null";

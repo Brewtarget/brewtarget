@@ -188,13 +188,6 @@ public:
     * \return Pointer to a Boost.JSON value which is the root of the document tree
     */
    boost::json::value const * getReferencedDocument(std::string const & uri) {
-      // We assert that JsonSchema::fetchReferencedDocument is not calling us on a JsonSchema whose pimpl member
-      // variable has not yet been set.  CLang thinks this assert is unnecessary ("warning: 'this' pointer cannot be
-      // null in well-defined C++ code; comparison may be assumed to always evaluate to true
-      // [-Wtautological-undefined-compare"]) so we disable the assert on that compiler (which is currently only MacOS).
-#ifndef __clang__
-      Q_ASSERT(this != nullptr);
-#endif
       qDebug() << Q_FUNC_INFO << "Request for" << uri.c_str();
       QString schemaFilePath = QString("%1/%2").arg(this->baseDir, uri.c_str());
       if (!this->schemaFileCache.contains(schemaFilePath)) {
@@ -309,5 +302,9 @@ bool JsonSchema::validate(boost::json::value const & document, QTextStream & use
 boost::json::value const * JsonSchema::fetchReferencedDocument(std::string const & uri) {
    // It's a coding error if we asked Valijson to load a schema without setting currentJsonSchema
    Q_ASSERT(currentJsonSchema);
+
+   // It's also a coding error if the pimpl member variable of currentJsonSchema has not yet been set.
+   Q_ASSERT(currentJsonSchema->pimpl);
+
    return currentJsonSchema->pimpl->getReferencedDocument(uri);
 }

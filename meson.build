@@ -141,8 +141,8 @@
 #   - Meson 0.59.0 or newer to use qt.compile_resources, qt.compile_ui and qt.compile_moc
 #   - Meson 0.60.0 or newer to use + to append items to lists (aka 'list.<plus>' feature -- at least that's what the
 #     warning message says if you've specified a lower minimum version of Meson)
-# We would/will need:
 #   - Meson 0.62.0 or newer for dep 'dl' custom lookup, but current version of Meson on Ubuntu 22.04 LTS is only 0.61.2
+#   - Meson 0.63.0 or newer to correctly locate versions of Qt >= 6.1 -- see https://mesonbuild.com/Qt6-module.html
 #
 # NB: Per https://mesonbuild.com/Reference-manual_functions.html#project the default_options settings "are only used
 #     when running Meson for the first time"!  So if you change any of the default_options settings you *MUST* delete
@@ -275,8 +275,8 @@ testRunnerTargetName = mainExecutableTargetName + '_tests'
 #=======================================================================================================================
 #==================================================== Meson modules ====================================================
 #=======================================================================================================================
-# Import the Qt tools.  See https://mesonbuild.com/Qt5-module.html
-qt = import('qt5')
+# Import the Qt tools.  See https://mesonbuild.com/Qt6-module.html
+qt = import('qt6')
 # File System module - see https://mesonbuild.com/Fs-module.html
 fs = import('fs')
 
@@ -325,16 +325,14 @@ sharedLibraryPaths = []
 # Note that if you change the minimum Qt version, you need to make corresponding changes to the .github/workflows/*.yml
 # files so that GitHub uses the appropriate version of Qt for the automated builds.
 #
-# 2024-05-19: Removed support for Ubuntu 20.04 because the latest version of Qt available in its packages is 5.12.8,
-#             which is no longer supported (and, amongst other things, has an old version of SQLite that does not
-#             support "DROP COLUMN").  Qt 5.15 is the long-term support version of Qt5.
+# As of 2024-09-30:
+#   - Qt 6.2.4 is the maximum available in Ubuntu 22.04 (Jammy).
+#   - Qt 6.4.2 is the maximum available in Ubuntu 24.04 (Noble).
 #
-# For the moment, max version we can have here is 5.15.3, because that's what Ubuntu 22.04 topped out at.  But note
-# that Meson will be happy with newer versions (5.15.13 on Windows & Mac).
-
+minVersionOfQt = '>=6.2.4'
 # Tell meson which Qt modules we need
-qtCommonDependencies = dependency('qt5',
-                                  version : '>=5.15.3',
+qtCommonDependencies = dependency('qt6',
+                                  version : minVersionOfQt,
                                   modules : ['Core',
                                              'Gui',          # Needed for QColor on Mac?
                                              'Multimedia',
@@ -348,9 +346,9 @@ qtCommonDependencies = dependency('qt5',
                                   static : true)
 # The Qt Gui module is only needed for the main program.  (We don't want the tests to try to load it or it could barf
 # in a GitHub action that does not have a display running.)
-qtMainExeDependencies = dependency('qt5', version : '>=5.15.3', modules: ['Gui'])
+qtMainExeDependencies = dependency('qt6', version : minVersionOfQt, modules: ['Gui'])
 # The Qt Test module is only needed for the unit tests
-qtTestRunnerDependencies = dependency('qt5', version : '>=5.15.3', modules: ['Test'])
+qtTestRunnerDependencies = dependency('qt6', version : minVersionOfQt, modules: ['Test'])
 
 #===================================================== Find Boost ======================================================
 # Boost is a collection of separate libraries, some, but not all, of which are header-only.  We only specify the Boost
@@ -1232,7 +1230,21 @@ generatedFromMocForUnitTests = qt.compile_moc(headers : unitTestMocHeaders,
 #     manually from the command line with lrelease
 # Calling qt.compile_translations will do only the latter, so we need to do the former directly
 #
+#
+# NB: In Qt 5, the `lupdate` command line tool is just invoked as `lupdate` on all three of our build platforms.  In
+# Qt 6, it's a bit different.  We still call `lupdate` on Mac, but, on Windows we need to call `lupdate-qt6` (see file
+# list at https://packages.msys2.org/packages/mingw-w64-x86_64-qt6-tools).  This is presumably to allow Qt 5 and Qt 6 to
+# coexist, but we have to take account of it here.
+#
+lupdate_name = 'lupdate'
+if host_machine.system() == 'windows'
+   lupdate_name = 'lupdate-qt6'
+elif host_machine.system() == 'linux'
+   lupdate_name = 'lupdate'
+endif
+lupdate_executable = find_program(lupdate_name, required : true)
 
+#
 # Call lupdate to ensure the .ts files are synced with the source code.  We need:
 #    lupdate meson.project_source_root()/src meson.project_source_root()/ui -ts [list of .ts files]
 # This tells lupdate to recursively scan the src/ and ui/ subdirectories and update the specified ts files
@@ -1240,9 +1252,13 @@ generatedFromMocForUnitTests = qt.compile_moc(headers : unitTestMocHeaders,
 #
 # We make a point here of displaying the output of run_command because we want to show message emitted by lupdate about
 # what it did.
-message('Running lupdate on the following ts files:', run_command('ls', translationSourceFiles, check: true).stdout())
+#
 message(
-   run_command('lupdate',
+   'Running lupdate (', lupdate_executable.full_path(), ') on the following ts files:',
+   run_command('ls', translationSourceFiles, check: true).stdout()
+)
+message(
+   run_command(lupdate_executable,
                meson.project_source_root() + '/src',
                meson.project_source_root() + '/ui',
                '-ts',
