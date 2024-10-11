@@ -415,6 +415,12 @@ def installDependencies():
          #  - The rpm and rpmlint packages are for creating RPM packages
          #  - We need python-dev to build parts of Boost -- though it may be we could do without this as we only use a
          #    few parts of Boost and most Boost libraries are header-only, so do not require compilation.
+         #  - To keep us on our toes, some of the package name formats change between Qt5 and Qt6.  Eg qtmultimedia5-dev
+         #    becomes qt6-multimedia-dev.  Also libqt5multimedia5-plugins has no direct successor in Qt6.
+         #
+         # I have struggled to find how to install a Qt6 version of lupdate.  Compilation on Ubuntu 24.04 seems to work
+         # fine with the 5.15.13 version of lupdate, so we'll make sure that's installed.  Various other comments below
+         # about lupdate are (so far unsuccessful) attempts to get a Qt6 version of lupdate installed.
          #
          log.info('Ensuring libraries and frameworks are installed')
          btUtils.abortOnRunFail(subprocess.run(['sudo', 'apt-get', 'update']))
@@ -425,10 +431,9 @@ def installDependencies():
                                                 'coreutils',
                                                 'debhelper',
                                                 'git',
-                                                'libqt5multimedia5-plugins',
-                                                'libqt5sql5-psql',
-                                                'libqt5sql5-sqlite',
-                                                'libqt5svg5-dev',
+                                                'libqt6sql6-psql',
+                                                'libqt6sql6-sqlite',
+                                                'libqt6svg6-dev',
                                                 'libxalan-c-dev',
                                                 'libxerces-c-dev',
                                                 'lintian',
@@ -437,10 +442,13 @@ def installDependencies():
                                                 'pandoc',
                                                 'python3',
                                                 'python3-dev',
+                                                'qmake6', # Possibly needed for Qt6 lupdate
                                                 'qtbase5-dev',
-                                                'qtmultimedia5-dev',
-                                                'qttools5-dev',
-                                                'qttools5-dev-tools',
+                                                'qt6-l10n-tools', # Needed for Qt6 lupdate?
+                                                'qt6-multimedia-dev',
+                                                'qt6-tools-dev',
+                                                'qttools5-dev-tools', # For Qt5 version of lupdate, per comment above
+                                                'qt6-tools-dev-tools',
                                                 'rpm',
                                                 'rpmlint']
             )
@@ -660,37 +668,47 @@ def installDependencies():
                   )
                )
 
-###         #
-###         # Commented this out as, as of 2024, we don't support Ubuntu 20.04 any more.
-###         #
-###         # Ubuntu 20.04 packages only have Meson 0.53.2, and we need 0.60.0 or later.  In this case it means we have to
-###         # install Meson via pip, which is not ideal on Linux.
-###         #
-###         # Specifically, as explained at https://mesonbuild.com/Getting-meson.html#installing-meson-with-pip, although
-###         # using the pip3 install gets a newer version, we have to do the pip install as root (which is normally not
-###         # recommended).  If we don't do this, then running `meson install` (or even `sudo meson install`) will barf on
-###         # Linux (because we need to be able to install files into system directories).
-###         #
-###         # So, where a sufficiently recent version of Meson is available in the distro packages (eg
-###         # `sudo apt install meson` on Ubuntu etc) it is much better to install this.   Installing via pip is a last
-###         # resort.
-###         #
-###         # The distro ID we get from 'lsb_release -is' will be 'Ubuntu' for all the variants of Ubuntu (eg including
-###         # Kubuntu).  Not sure what happens on derivatives such as Linux Mint though.
-###         #
-###         distroName = str(
-###            btUtils.abortOnRunFail(subprocess.run(['lsb_release', '-is'], encoding = "utf-8", capture_output = True)).stdout
-###         ).rstrip()
-###         log.debug('Linux distro: ' + distroName)
-###         if ('Ubuntu' == distroName):
-###            ubuntuRelease = str(
-###               btUtils.abortOnRunFail(subprocess.run(['lsb_release', '-rs'], encoding = "utf-8", capture_output = True)).stdout
-###            ).rstrip()
-###            log.debug('Ubuntu release: ' + ubuntuRelease)
-###            if (Decimal(ubuntuRelease) < Decimal('22.04')):
-###               log.info('Installing newer version of Meson the hard way')
-###               btUtils.abortOnRunFail(subprocess.run(['sudo', 'apt', 'remove', '-y', 'meson']))
-###               btUtils.abortOnRunFail(subprocess.run(['sudo', 'pip3', 'install', 'meson']))
+         #
+         # Although Ubuntu 24.04 gives us Meson 1.3.2, Ubuntu 22.04 packages only have Meson 0.61.2.  We need Meson
+         # 0.63.0 or later.  In this case it means we have to install Meson via pip, which is not ideal on Linux.
+         #
+         # Specifically, as explained at https://mesonbuild.com/Getting-meson.html#installing-meson-with-pip, although
+         # using the pip3 install gets a newer version, we have to do the pip install as root (which is normally not
+         # recommended).  If we don't do this, then running `meson install` (or even `sudo meson install`) will barf on
+         # Linux (because we need to be able to install files into system directories).
+         #
+         # So, where a sufficiently recent version of Meson is available in the distro packages (eg
+         # `sudo apt install meson` on Ubuntu etc) it is much better to install this.   Installing via pip is a last
+         # resort.
+         #
+         # The distro ID we get from 'lsb_release -is' will be 'Ubuntu' for all the variants of Ubuntu (eg including
+         # Kubuntu).  Not sure what happens on derivatives such as Linux Mint though.
+         #
+         # ANOTHER problem on Ubuntu 22.04 is that lupdate doesn't work with Qt6, because it runs qtchooser which does
+         # not work with Qt6 on Ubuntu 22.04 because of the following "won't fix"
+         # bug: https://bugs.launchpad.net/ubuntu/+source/qtchooser/+bug/1964763.  The workaround suggested at
+         # https://askubuntu.com/questions/1460242/ubuntu-22-04-with-qt6-qmake-could-not-find-a-qt-installation-of is
+         # to run `sudo qtchooser -install qt6 $(which qmake6)`, so that's what we do here after sorting out the Meson
+         # install.
+         #
+         distroName = str(
+            btUtils.abortOnRunFail(subprocess.run(['lsb_release', '-is'], encoding = "utf-8", capture_output = True)).stdout
+         ).rstrip()
+         log.debug('Linux distro: ' + distroName)
+         if ('Ubuntu' == distroName):
+            ubuntuRelease = str(
+               btUtils.abortOnRunFail(subprocess.run(['lsb_release', '-rs'], encoding = "utf-8", capture_output = True)).stdout
+            ).rstrip()
+            log.debug('Ubuntu release: ' + ubuntuRelease)
+            if (Decimal(ubuntuRelease) < Decimal('24.04')):
+               log.info('Installing newer version of Meson the hard way')
+               btUtils.abortOnRunFail(subprocess.run(['sudo', 'apt', 'remove', '-y', 'meson']))
+               btUtils.abortOnRunFail(subprocess.run(['sudo', 'pip3', 'install', 'meson']))
+               #
+               # Now fix lupdate
+               #
+               fullPath_qmake6 = shutil.which('qmake6')
+               btUtils.abortOnRunFail(subprocess.run(['sudo', 'qtchooser', '-install', 'qt6', fullPath_qmake6]))
 
       #-----------------------------------------------------------------------------------------------------------------
       #--------------------------------------------- Windows Dependencies ----------------------------------------------
@@ -770,6 +788,22 @@ def installDependencies():
          # sites, so we now specify it routinely.
          #
          # As noted above, we no longer support 32-bit ('i686') builds and now only support 64-bit ('x86_64') ones.
+         # NOTE that, as explained at
+         # https://forum.qt.io/topic/140029/i-ve-downloaded-the-qt6-version-and-mingw-for-gcc-11-version/7, we will
+         # still see mention of "mingw32" in bits of the toolchain on 64-bit builds, but the "32" in the name is there
+         # for historical reasons and does not mean it's not a fully 64-bit build!
+         #
+         # Compiling the list of required packages here involves a bit of trial-and-error.  A good starting point for
+         # what we probably need is found by searching for qt6 in the list at https://packages.msys2.org/base.  However,
+         # it can still be challenging to work out which package provided the missing binary or library that is
+         # preventing your build from working.
+         #
+         # Eg, when you install mingw-w64-x86_64-qt6-static, you get a message saying mingw-w64-x86_64-clang-libs is an
+         # "optional dependency" required for lupdate and qdoc.  Since we need lupdate, we therefore need to install
+         # clang-libs, even though our own compilation is done with GCC.  (In fact, per comments in meson.build, lupdate
+         # also gets a name change to lupdate-qt6, but we don't have to worry about that here!)
+         #
+         # So, it may be that the list below is not minimal, but it should be sufficient!
          #
          # 2024-07-29: TBD: Not totally sure we need angleproject.  It wasn't previously a requirement, but, as of
          #                  recently, windeployqt complains if it can't find it.  The alternative would be to pass
@@ -786,14 +820,18 @@ def installDependencies():
                         'git',
                         'mingw-w64-' + arch + '-boost',
                         'mingw-w64-' + arch + '-cmake',
+                        'mingw-w64-' + arch + '-clang-libs', # Needed for lupdate
                         'mingw-w64-' + arch + '-libbacktrace',
                         'mingw-w64-' + arch + '-meson',
                         'mingw-w64-' + arch + '-nsis',
                         'mingw-w64-' + arch + '-freetype',
                         'mingw-w64-' + arch + '-harfbuzz',
-                        'mingw-w64-' + arch + '-qt5-base',
-                        'mingw-w64-' + arch + '-qt5-static',
-                        'mingw-w64-' + arch + '-qt5',
+                        'mingw-w64-' + arch + '-qt6-base',
+                        'mingw-w64-' + arch + '-qt6-declarative', # Also needed for lupdate?
+                        'mingw-w64-' + arch + '-qt6-static',
+                        'mingw-w64-' + arch + '-qt6-tools',
+                        'mingw-w64-' + arch + '-qt6-translations',
+                        'mingw-w64-' + arch + '-qt6',
                         'mingw-w64-' + arch + '-toolchain',
                         'mingw-w64-' + arch + '-xalan-c',
                         'mingw-w64-' + arch + '-xerces-c',
@@ -872,8 +910,6 @@ def installDependencies():
          # too (as the former depends on the latter).  However, I think it's clearer to explicitly list all the direct
          # dependencies (eg we do make calls directly into Xerces).
          #
-         # For the moment, we install Qt 5 (= 5.15.13), as there are code changes required to use Qt 6
-         #
          # .:TBD:. Installing Boost here doesn't seem to give us libboost_stacktrace_backtrace
          #         Also, trying to use the "--cc=clang" option to install boost gives an error ("Error: boost: no bottle
          #         available!")  For the moment, we're just using Boost header files on Mac though, so this should be
@@ -894,7 +930,7 @@ def installDependencies():
                             'ninja',
                             'pandoc',
                             'tree',
-                            'qt@5',
+                            'qt@6',
 #                            'xalan-c',
 #                            'xerces-c'
                             ]
@@ -921,44 +957,47 @@ def installDependencies():
                log.debug('Installing ' + packageToInstall + ' via Homebrew')
                btUtils.abortOnRunFail(subprocess.run(['brew', 'install', packageToInstall]))
          #
-         # By default, even once Qt5 is installed, Meson will not find it
+         # By default, even once Qt is installed, Meson will not find it
          #
          # See https://stackoverflow.com/questions/29431882/get-qt5-up-and-running-on-a-new-mac for suggestion to do
-         # the following to run `brew link qt5 --force` to "symlink the various Qt5 binaries and libraries into your
+         # the following to run `brew link qt5 --force` to "symlink the various Qt binaries and libraries into your
          # /usr/local/bin and /usr/local/lib directories".
          #
-         btUtils.abortOnRunFail(subprocess.run(['brew', 'link', '--force', 'qt5']))
+         btUtils.abortOnRunFail(subprocess.run(['brew', 'link', '--force', 'qt6']))
 
          #
-         # Additionally, per lengthy discussion at https://github.com/Homebrew/legacy-homebrew/issues/29938, it seems
-         # we might also need either:
-         #    ln -s /usr/local/Cellar/qt5/5.15.7/mkspecs /usr/local/mkspecs
-         #    ln -s /usr/local/Cellar/qt5/5.15.7/plugins /usr/local/plugins
-         # or:
-         #    export PATH=/usr/local/opt/qt5/bin:$PATH
-         # The former gives permission errors, so we do the latter in mac.yml
-         #
-         # But the brew command to install Qt also tells us to do the following:
-         #
-         #    echo 'export PATH="/usr/local/opt/qt@5/bin:$PATH"' >> ~/.bash_profile
-         #    export LDFLAGS="-L/usr/local/opt/qt@5/lib"
-         #    export CPPFLAGS="-I/usr/local/opt/qt@5/include"
-         #    export PKG_CONFIG_PATH="/usr/local/opt/qt@5/lib/pkgconfig"
-         #
-         # Note however that, in a GitHub runner, the first of these will give "[Errno 13] Permission denied".
+         # Further notes from when we did this for Qt5:
+         #    ┌──────────────────────────────────────────────────────────────────────────────────────────────────────┐
+         #    │ Additionally, per lengthy discussion at https://github.com/Homebrew/legacy-homebrew/issues/29938, it │
+         #    │ seems we might also need either:                                                                     │
+         #    │    ln -s /usr/local/Cellar/qt5/5.15.7/mkspecs /usr/local/mkspecs                                     │
+         #    │    ln -s /usr/local/Cellar/qt5/5.15.7/plugins /usr/local/plugins                                     │
+         #    │ or:                                                                                                  │
+         #    │    export PATH=/usr/local/opt/qt5/bin:$PATH                                                          │
+         #    │ The former gives permission errors, so we do the latter in mac.yml                                   │
+         #    │                                                                                                      │
+         #    │ But the brew command to install Qt also tells us to do the following:                                │
+         #    │                                                                                                      │
+         #    │    echo 'export PATH="/usr/local/opt/qt@5/bin:$PATH"' >> ~/.bash_profile                             │
+         #    │    export LDFLAGS="-L/usr/local/opt/qt@5/lib"                                                        │
+         #    │    export CPPFLAGS="-I/usr/local/opt/qt@5/include"                                                   │
+         #    │    export PKG_CONFIG_PATH="/usr/local/opt/qt@5/lib/pkgconfig"                                        │
+         #    │                                                                                                      │
+         #    │ Note however that, in a GitHub runner, the first of these will give "[Errno 13] Permission denied".  │
+         #    └──────────────────────────────────────────────────────────────────────────────────────────────────────┘
          #
          try:
             # See
             # https://stackoverflow.com/questions/1466000/difference-between-modes-a-a-w-w-and-r-in-built-in-open-function
             # for a good summary (clearer than the Python official docs) of the mode flag on open.
             with open("~/.bash_profile", "a+") as bashProfile:
-               bashProfile.write('export PATH="/usr/local/opt/qt@5/bin:$PATH"')
+               bashProfile.write('export PATH="/usr/local/opt/qt@6/bin:$PATH"')
          except IOError as ioe:
             # This is not fatal, so we just note the error and continue
             log.warning("Unable to write to .bash_profile: " + ioe.strerror)
-         os.environ['LDFLAGS'] = '-L/usr/local/opt/qt@5/lib'
-         os.environ['CPPFLAGS'] = '-I/usr/local/opt/qt@5/include'
-         os.environ['PKG_CONFIG_PATH'] = '/usr/local/opt/qt@5/lib/pkgconfig'
+         os.environ['LDFLAGS'] = '-L/usr/local/opt/qt@6/lib'
+         os.environ['CPPFLAGS'] = '-I/usr/local/opt/qt@6/include'
+         os.environ['PKG_CONFIG_PATH'] = '/usr/local/opt/qt@6/lib/pkgconfig'
 
          #
          # See comment about CMAKE_PREFIX_PATH in CMakeLists.txt.  I think this is rather too soon to try to do this,
@@ -967,7 +1006,7 @@ def installDependencies():
          # Typically, this is going to set CMAKE_PREFIX_PATH to /usr/local/opt/qt@5
          #
          qtPrefixPath = btUtils.abortOnRunFail(
-            subprocess.run(['brew', '--prefix', 'qt@5'], capture_output=True)
+            subprocess.run(['brew', '--prefix', 'qt@6'], capture_output=True)
          ).stdout.decode('UTF-8').rstrip()
          log.debug('Qt Prefix Path: ' + qtPrefixPath)
          os.environ['CMAKE_PREFIX_PATH'] = qtPrefixPath;
@@ -1884,11 +1923,14 @@ def doPackage():
          # folder tree "containing the Qt-related dependencies (libraries, QML imports, plugins, and translations)
          # required to run the application from that folder".
          #
+         # In the MSYS2 packaging of Qt6 at least, per https://packages.msys2.org/packages/mingw-w64-x86_64-qt6-base,
+         # windeployqt is renamed to windeployqt6.
+         #
          log.debug('Running windeployqt')
          previousWorkingDirectory = pathlib.Path.cwd().as_posix()
          os.chdir(dir_packages_win_bin)
          btUtils.abortOnRunFail(
-            subprocess.run(['windeployqt',
+            subprocess.run(['windeployqt6',
                             '--verbose', '2',        # 2 is the maximum
                             projectName + '.exe'],
                            capture_output=False)
@@ -2213,7 +2255,8 @@ def doPackage():
          ).stdout.decode('UTF-8')
          log.debug('Output of `otool -L' + capitalisedProjectName + '`: ' + otoolOutputExe)
          #
-         # The output from otool at this stage will be along the following lines:
+         # The output from otool at this stage will be along the following lines (though what's below is from when we
+         # were using Qt5):
          #
          #    [capitalisedProjectName]:
          #       /usr/local/opt/qt@5/lib/QtCore.framework/Versions/5/QtCore (compatibility version 5.15.0, current version 5.15.8)

@@ -235,7 +235,6 @@ Yeast::Yeast(NamedParameterBundle const & namedParameterBundle) :
    // If we're being constructed from a BeerXML file, then we might only have typical attenuation rather than min and
    // max.  Best we can do in that scenario is set min and max to the supplied value.
    if (namedParameterBundle.contains(PropertyNames::Yeast::attenuationTypical_pct)) {
-      double attenuationTypical_pct{namedParameterBundle.val<double>(PropertyNames::Yeast::attenuationTypical_pct)};
       if (!this->m_attenuationMin_pct) { ASSIGN_REGULAR_FROM_NPB(m_attenuationMin_pct, namedParameterBundle, PropertyNames::Yeast::attenuationTypical_pct); }
       if (!this->m_attenuationMax_pct) { ASSIGN_REGULAR_FROM_NPB(m_attenuationMax_pct, namedParameterBundle, PropertyNames::Yeast::attenuationTypical_pct); }
    }

@@ -30,8 +30,6 @@
 
 #include <QApplication>
 #include <QDebug>
-#include <QString>
-#include <QTextStream>
 
 #include "database/ObjectStoreWrapper.h"
 #include "model/Boil.h"

@@ -1116,27 +1116,28 @@ void Database::setForeignKeysEnabled(bool enabled, QSqlDatabase connection, Data
       type = this->dbType();
    }
 
+   QString queryString{""};
    switch (type) {
       case Database::DbType::SQLITE:
-         if (enabled) {
-            connection.exec("PRAGMA foreign_keys=on");
-         } else {
-            connection.exec("PRAGMA foreign_keys=off");
-         }
+         queryString = QString{"PRAGMA foreign_keys=%1"}.arg(enabled ? "on": "off");
          break;
       case Database::DbType::PGSQL:
          // This is a bit of a hack, and needs you to be connected as super user, but seems more robust than
          // "SET CONSTRAINTS ALL DEFERRED" which requires foreign keys to have been set up in a particular way in the
          // first place (see https://www.postgresql.org/docs/13/sql-set-constraints.html).
-         if (enabled) {
-            connection.exec("SET session_replication_role TO 'origin'");
-         } else {
-            connection.exec("SET session_replication_role TO 'replica'");
-         }
+         queryString = QString{"SET session_replication_role TO '%1'"}.arg(enabled ? "origin": "replica");
          break;
       default:
          // It's a coding error (somewhere) if we get here!
          Q_ASSERT(false);
+   }
+
+   BtSqlQuery sqlQuery{connection};
+   sqlQuery.prepare(queryString);
+   if (!sqlQuery.exec()) {
+      qCritical() <<
+         Q_FUNC_INFO << "Error executing database query " << queryString << ": " << sqlQuery.lastError().text();
+      return;
    }
 
    return;

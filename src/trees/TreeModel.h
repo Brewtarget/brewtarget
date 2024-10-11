@@ -35,19 +35,10 @@
 #include "trees/TreeNode.h"
 
 // Forward declarations
-class BrewNote;
-class Folder;
 class BtStringConst;
-class TreeView;
-class Equipment;
-class Fermentable;
-class Hop;
-class Misc;
 class NamedEntity;
 class Recipe;
-class Style;
-class Water;
-class Yeast;
+class TreeView;
 
 /*!
  * \class TreeModel

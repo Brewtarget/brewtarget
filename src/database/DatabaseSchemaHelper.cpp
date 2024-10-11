@@ -2335,19 +2335,19 @@ int DatabaseSchemaHelper::schemaVersion(QSqlDatabase & db) {
 
    // Initially, versioning was done with strings, so we need to convert
    // the old version strings to integer versions
-   if ( ver.convert(QVariant::Int) ) {
+   if (ver.canConvert<int>()) {
       return ver.toInt();
    }
 
-   if (stringVer == "2.0.0" ) {
+   if (stringVer == "2.0.0") {
       return 1;
    }
 
-   if (stringVer == "2.0.2" ) {
+   if (stringVer == "2.0.2") {
       return 2;
    }
 
-   if (stringVer == "2.1.0" ) {
+   if (stringVer == "2.1.0") {
       return 3;
    }
 

@@ -19,11 +19,10 @@
 
 #include <memory> // For PImpl
 
+#include <QFile>
 #include <QList>
-
-class QFile;
-class QString;
-class QTextStream;
+#include <QString>
+#include <QTextStream>
 
 namespace BeerJson {
    /*!

@@ -165,7 +165,7 @@ void BtTableModel::contextMenu(QPoint const & point) {
 
    // User will either have selected a SystemOfMeasurement or a UnitSystem::RelativeScale.  We can know which based
    // on whether it's the menu or the sub-menu that it came from.
-   bool isTopMenu{invoked->parentWidget() == menu.get()};
+   bool isTopMenu{invoked->parent() == menu.get()};
    if (isTopMenu) {
       // It's the menu, so SystemOfMeasurement
       std::optional<Measurement::SystemOfMeasurement> const whatSelected =

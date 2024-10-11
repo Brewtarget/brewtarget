@@ -1156,7 +1156,7 @@ QString RecipeFormatter::getBBCodeFormat() {
    }
 
    QString tmp = "";
-   QRegularExpression const regexp("(^[^\n]*\n)(.*$)"); // Regexp to match the first line of tables
+   QRegularExpression const regexp{"(^[^\n]*\n)(.*$)"}; // Regexp to match the first line of tables
 
    auto style = this->pimpl->rec->style();
 

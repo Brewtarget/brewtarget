@@ -39,7 +39,7 @@ Q_SIGNALS:
    void stateChanged(int);
 
 protected:
-   virtual void enterEvent(QEvent *) override;
+   virtual void enterEvent(QEnterEvent *) override;
    void checkStateSet() override;
    void nextCheckState() override;
    virtual void toggle(Qt::CheckState state) = 0;

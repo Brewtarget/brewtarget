@@ -25,7 +25,7 @@
 #include <QFile>
 #include <QHash>
 #include <QList>
-#include <QTextCodec>
+#include <QStringConverter>
 #include <QTextStream>
 
 #include "config.h" // For CONFIG_VERSION_STRING
@@ -1236,8 +1236,8 @@ BeerXML::~BeerXML() = default;
 
 void BeerXML::createXmlFile(QFile & outFile) const {
    QTextStream out(&outFile);
-   // BeerXML specifies the ISO-8859-1 encoding
-   out.setCodec(QTextCodec::codecForMib(CharacterSets::ISO_8859_1_1987));
+   // BeerXML specifies the ISO-8859-1 (Latin 1) encoding
+   out.setEncoding(QStringConverter::Latin1);
 
    out <<
       "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n"
@@ -1259,9 +1259,7 @@ template<class NE> void BeerXML::toXml(QList<NE const *> const & nes, QFile & ou
    // <MISCS>...</MISCS> tags and so on.
    QTextStream out(&outFile);
    // BeerXML specifies the ISO-8859-1 encoding
-   // .:TODO:. In Qt6, QTextCodec and QTextStream::setCodec have been removed and are replaced by QStringConverter
-   // (which is new in Qt6).
-   out.setCodec(QTextCodec::codecForMib(CharacterSets::ISO_8859_1_1987));
+   out.setEncoding(QStringConverter::Latin1);
    out << "<" << BEER_XML_RECORD_DEFN<NE>.m_recordName << "S>\n";
    for (NE const * ne : nes) {
       std::unique_ptr<XmlRecord> xmlRecord{

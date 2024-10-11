@@ -154,28 +154,12 @@ jobs:
           Expand-Archive -Path C:/_/build/nsis/Nsislog.zip -DestinationPath C:/_/build/nsis/Nsislog
           Tree /f C:/_/build
 
-      # Somehow, running the configure script sets up CMake to use Ninja rather than Makefiles, which is then in
-      # conflict with our other assumptions about CMake.  Error message says remove CMakeCache.txt before running CMake,
-      # so we do that as a short-term fix (on the assumption that, longer term, we'll be moving to Meson).
+      # The configure script does default set-up for CMake that is enough for us here
       - name: CMake Config
         shell: msys2 {0}
         run: |
           cd /C/_
           ./configure
-          cd build
-          rm CMakeCache.txt
-          cmake .. -DCMAKE_RC_COMPILER:FILEPATH=windres.exe -G "MinGW Makefiles"
-
-      # The pwd and find ../third-party commands below are just diagnostics, but it's generally useful to have too
-      # much rather than not enough diagnostic info on these GitHub action builds
-      - name: Build (with CMake)
-        shell: msys2 {0}
-        run: |
-          cd /C/_/build
-          pwd
-          tree -sh
-          cmake --build .
-          ls
 
       - name: Build (with Meson)
         shell: msys2 {0}
@@ -183,6 +167,19 @@ jobs:
           cd /C/_/mbuild
           pwd
           meson compile
+
+      # The pwd and find ../third-party commands below are just diagnostics, but it's generally useful to have too
+      # much rather than not enough diagnostic info on these GitHub action builds
+      #
+      # This is the same reason we specify the --verbose option on CMake
+      - name: Build (with CMake)
+        shell: msys2 {0}
+        run: |
+          cd /C/_/build
+          pwd
+          tree -sh
+          cmake --build . --verbose
+          ls
 
       # The 'export QT_DEBUG_PLUGINS=1' give us diagnostics in the event that there are problems initialising QT
       # The 'export QT_QPA_PLATFORM=offscreen' stops Qt's xcb sub-module trying to connect to a non-existent display

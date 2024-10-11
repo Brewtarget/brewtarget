@@ -154,7 +154,6 @@ public:
     * \brief Maybe for consistency this should be \c getSettings() but that jars somewhat!
     */
    [[nodiscard]] SmartAmountSettings const & settings() const;
-///   [[nodiscard]] SmartAmountSettings       & settings();
 
    /**
     * \brief This is called by \c SmartBase and just wraps \c changedSystemOfMeasurementOrScale
@@ -183,7 +182,7 @@ public:
     * \brief We override the \c QWidget event handlers \c enterEvent and \c leaveEvent to implement mouse-over effects
     *        on the label text - specifically to give the user a visual clue that the label text is (right)-clickable
     */
-   virtual void enterEvent(QEvent* event) override;
+   virtual void enterEvent(QEnterEvent* event) override;
    virtual void leaveEvent(QEvent* event) override;
 
    /**

@@ -62,13 +62,13 @@ BuildArch   : x86_64
 #
 Requires    : \
    libgcc_s1           >= 3.3  ,  \
-   libqt5core5         >= 5.9.5,  \
-   libqt5gui5          >= 5.9.5,  \
-   libqt5multimedia5   >= 5.9.5,  \
-   libqt5network5      >= 5.9.5,  \
-   libqt5printsupport5 >= 5.9.5,  \
-   libqt5sql5          >= 5.9.5,  \
-   libqt5widgets5      >= 5.9.5,  \
+   libqt6core6         >= 6.2.4, \
+   libqt6gui6          >= 6.2.4, \
+   libqt6multimedia6   >= 6.2.4, \
+   libqt6network6      >= 6.2.4, \
+   libqt6printsupport6 >= 6.2.4, \
+   libqt6sql6          >= 6.2.4, \
+   libqt6widgets6      >= 6.2.4, \
    libstdc++6          >= 11   ,  \
    libxalan-c112       >= 1.12 ,  \
    libxerces-c3_2      >= 3.2

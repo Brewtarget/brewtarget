@@ -100,7 +100,14 @@ int main(int argc, char **argv) {
    // own logging.
    //qputenv("QT_DEBUG_PLUGINS", QByteArray("1"));
 
-   QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling, true);
+   //
+   // In Qt5, we used to make the following call here:
+   //
+   //    QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling, true);
+   //
+   // However, in Qt6, this serves no purpose as "‘Qt::AA_EnableHighDpiScaling’ is deprecated: High-DPI scaling is
+   // always enabled. This attribute no longer has any effect."
+   //
 
    //
    // Various bits of Qt initialisation need to be done straight away for other Qt functionality to work correctly
