@@ -2925,10 +2925,12 @@ double Recipe::ibuFromHopAddition(RecipeAdditionHop const & hopAddition) {
       .postBoilVolume_liters = this->pimpl->m_finalVolumeNoLosses_l,
       .wortGravity_sg        = m_og,
       .boilTime_minutes      = boilTime_mins,  // Seems unlikely in reality that there would be fractions of a minute
-      .coolTime_minutes          = boil->coolTime_mins(),
-      .kettleInternalDiameter_cm = equipment->kettleInternalDiameter_cm(),
-      .kettleOpeningDiameter_cm  = equipment->kettleOpeningDiameter_cm (),
+      .coolTime_minutes      = boil->coolTime_mins(),
    };
+   if (equipment) {
+      parms.kettleInternalDiameter_cm = equipment->kettleInternalDiameter_cm();
+      parms.kettleOpeningDiameter_cm  = equipment->kettleOpeningDiameter_cm ();
+   }
    if (hopAddition.isFirstWort()) {
       ibus = fwhAdjust * IbuMethods::getIbus(parms);
    } else if (hopAddition.stage() == RecipeAddition::Stage::Boil) {
