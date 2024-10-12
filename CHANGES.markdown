@@ -20,10 +20,11 @@ Bug fixes and minor enhancements.
 * None
 
 ### Bug Fixes
-*  Some input fields not wide enough on various editors [849](https://github.com/Brewtarget/brewtarget/issues/849)
+* Some input fields not wide enough on various editors [849](https://github.com/Brewtarget/brewtarget/issues/849)
+* Upgrade to Qt 6 [841](https://github.com/Brewtarget/brewtarget/issues/841)
 
 ### Release Timestamp
-Mon, 7 Oct 2024 04:00:06 +0100
+Fri, 11 Oct 2024 04:00:07 +0100
 
 ## v4.0.6
 Bug fixes for the 4.0.5 release (ie bugs in 4.0.5 are fixed in this 4.0.6 release).

@@ -1120,9 +1120,9 @@ namespace {
       //
       // † The BeerXML 1.0 standard diverges from valid/standard XML in a few ways:
       //    • It mandates an XML Declaration (which it calls the "XML Header"), which is normally an optional part of
-      //      any UTF-8 encoded XML document.  (This is perhaps because it seems to mandate an ISO-8859-1 coding of
-      //      BeerXML files, though there is no explicit discussion of file encodings in the standard, and this seems
-      //      an unnecessary constraint to place on files.)
+      //      any UTF-8 encoded XML document.  (This is perhaps because it seems to mandate an ISO-8859-1 aka "Latin 1"
+      //      coding of BeerXML files, though there is no explicit discussion of file encodings in the standard, and
+      //      this seems an unnecessary constraint.)
       //    • It omits to specify a single root element, even though this is a required part of any valid XML document.
       //    • It uses "TRUE" and "FALSE" (ie caps) for boolean values instead of the XML standard "true" and "false"
       //      (ie lower case).
@@ -1142,6 +1142,9 @@ namespace {
       // Note here that we are assuming the on-disk format of the file is single-byte (UTF-8 or ASCII or ISO-8859-1).
       // This is a reasonably safe assumption but, in theory, we could examine the first line to verify it.
       //
+      // We further assume the first line of the file can be treated as ISO-8859-1 aka "Latin 1", but, again, this
+      // should be safe as it's just one or two tags, not user content.
+      //
       // We _could_ make "BEER_XML" some sort of constant eg:
       //    constexpr static char const * const INSERTED_ROOT_NODE_NAME = "BEER_XML";
       // but we wouldn't be able to use that constant in beerxml/v1/BeerXml.xsd, and using it in the few C++ places we
@@ -1150,7 +1153,7 @@ namespace {
       // readability over purity, and left it hard-coded, for now at least.
       //
       QByteArray documentData = inputFile.readLine();
-      QString firstLine{documentData};
+      QString firstLine{QString::fromLatin1(documentData)};
       qDebug() << Q_FUNC_INFO << "First line of " << inputFile.fileName() << " was " << firstLine;
       if (!firstLine.startsWith(QString("<?xml version="))) {
          //
@@ -1163,7 +1166,16 @@ namespace {
          userMessage << "Unexpected first line (not the XML declaration mandated by BeerXML).";
          return false;
       }
-      documentData += "<BEER_XML>\n";
+      //
+      // Some software, such as the Grainfather online recipe editor at https://community.grainfather.com/, omits to put
+      // a linebreak after the initial tag, so it will export a first line such as:
+      //    <?xml version="1.0" encoding="UTF-8" ?><RECIPES>
+      // So, rather than just append our root tag after line 1, we find the end of the first tag and insert it there.
+      // It's easier to do the insertions in QString and then overwrite the raw data we read in for the first line.
+      //
+      auto const tagEnd = firstLine.indexOf(QChar{'>'});
+      firstLine.insert(tagEnd + 1, "\n<BEER_XML>");
+      documentData = firstLine.toLatin1();
       documentData += inputFile.readAll();
       documentData += "\n</BEER_XML>";
       qDebug() << Q_FUNC_INFO << "Input file " << inputFile.fileName() << ": " << documentData.length() << " bytes";
