@@ -304,11 +304,11 @@ jobs:
           # the time a manual approval has happened, the GitHub action will have timed out waiting for it.)  So,
           # instead, we do our release signings via manual upload to the SignPath service.
           #
-          SIGNPATH_SIGNING_POLICY_SLUG: |
+#          SIGNPATH_SIGNING_POLICY_SLUG: |
 #            ${{ (github.ref == 'refs/heads/develop' ||
 #                 github.ref == 'refs/heads/main' ||
 #                 startsWith(github.ref, 'refs/heads/stable/')) && 'release-signing' || 'test-signing' }}
-            'test-signing'
+          SIGNPATH_SIGNING_POLICY_SLUG: 'test-signing'
         with:
           api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
           organization-id: '${{ vars.SIGNPATH_ORGANIZATION_ID }}'
