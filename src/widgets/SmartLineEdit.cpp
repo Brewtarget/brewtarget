@@ -35,8 +35,11 @@
 #include "widgets/SmartLabel.h"
 
 namespace {
-   int const min_text_size = 8;
-   int const max_text_size = 50;
+   //
+   // There is a bit of trial-and-error involved in setting these values
+   //
+   int constexpr min_text_size = 3;
+   int constexpr max_text_size = 40;
 }
 
 // This private implementation class holds all private non-virtual members of SmartLineEdit
@@ -86,9 +89,9 @@ public:
          // want, but only when we are instructed to force it
          this->m_self.setMinimumWidth(0);
          if (sizingString.length() < min_text_size) {
-            sizingString = QString(min_text_size,'a');
+            sizingString = QString(min_text_size, 'a');
          } else if (sizingString.length() > max_text_size) {
-            sizingString = QString(max_text_size,'a');
+            sizingString = QString(max_text_size, 'a');
          }
          this->calculateDisplaySize(sizingString);
       }
@@ -107,8 +110,8 @@ public:
       return;
    }
 
-   SmartLineEdit &                    m_self;
-   int                                m_desiredWidthInPixels;
+   SmartLineEdit & m_self;
+   int             m_desiredWidthInPixels;
 };
 
 SmartLineEdit::SmartLineEdit(QWidget * parent) :

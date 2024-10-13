@@ -163,15 +163,13 @@ template<class Derived> class EditorPhantom;
 template<class Derived, class NE,
                         EditorBaseOptions editorBaseOptions>
 class EditorBase : public CuriouslyRecurringTemplateBase<EditorPhantom, Derived> {
-public:
+   friend Derived;
+private:
    /**
     * \brief Constructor
     *
     *        Often with CRTP it's good to make the constructor private and Derived a friend, so that only Derived can
-    *        call the CRTP base constructor.  This stops errors with incorrect inheritance - eg makes a compile error if
-    *        we write `class FooEditor : ... public EditorBase<BarEditor, Bar>` instead of
-    *        `class FooEditor : ... public EditorBase<FooEditor, Foo>`.  However, since we want EditorWithRecipeBase to
-    *        inherit from EditorBase, we can't do that trick here.
+    *        call the CRTP base constructor.
     *
     *        Note that we cannot initialise this->m_fields here, as the parameters themselves won't get constructed
     *        until Derived calls setupUi().
@@ -183,6 +181,7 @@ public:
       m_liveEditItem{nullptr} {
       return;
    }
+public:
    ~EditorBase() = default;
 
    //! No-op version
