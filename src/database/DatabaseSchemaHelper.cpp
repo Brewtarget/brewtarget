@@ -1439,7 +1439,7 @@ namespace {
          //    3 == Ratio  == Add at mash and sparge, pro rata to the amounts of water (I think!)
          //    4 == Equal  == Add at mash and sparge, equal amounts (I think!)
          //
-         // We ditch the "Never" value and store in when_to_add as a string.
+         // We skip the "Never" value (see below) and store in when_to_add as a string.
          //
          {QString("UPDATE salt_in_recipe "
                   "SET quantity    = s.amount, "
@@ -1465,6 +1465,34 @@ namespace {
                   ") AS s "
                   "WHERE salt_in_recipe.salt_id = s.id "
                   "AND s.addTo != 0")},
+         //
+         // Now we have to do something with the salts marked as "do not add".  Since salt is not mentioned in either
+         // BeerXML or BeerJSON, we don't have a lot of guidance here.  AFAICT the "Never" value was just a convenience
+         // in the UI for when you created a salt addition but hadn't yet set all its properties.  I _think_ we could
+         // safely just delete Salts with addTo == 0.  However, rather than risk losing data, we will instead mark them
+         // as deleted.  We have to set some valid value for when_to_add, so we arbitrarily choose "Equal", but make
+         // clear in the Name that original value was "Never".
+         //
+         {QString("UPDATE salt_in_recipe "
+                  "SET quantity    = s.amount, "
+                      "unit        = s.unit, "
+                      "name = 'Deleted addition of \"Never add\" ' || s.name, "
+                      "display = ?, "
+                      "deleted = ?, "
+                      "when_to_add = 'Equal' "
+                  "FROM ("
+                     "SELECT id, "
+                            "name, "
+                            "amount, "
+                            "addTo, "
+                            "CASE "
+                               "WHEN amount_is_weight THEN 'kilograms' "
+                               "ELSE 'liters' "
+                            "END AS unit "
+                     "FROM salt"
+                  ") AS s "
+                  "WHERE salt_in_recipe.salt_id = s.id "
+                  "AND s.addTo == 0"), {QVariant{false}, QVariant{true}}},
          //
          // For water both the source and target are volume in liters
          //
