@@ -18,17 +18,39 @@
 #-----------------------------------------------------------------------------------------------------------------------
 name: Windows
 
+#
+# These are all the events that trigger this workflow run.  Most are self-explanatory.  We need workflow_dispatch to be
+# able to run the workflow manually.
+#
 on:
   push:
     branches:
       - develop
       - "stable/**"
-
   pull_request:
     branches:
       - develop
   schedule:
     - cron: "0 2 * * *"
+  workflow_dispatch:
+    #
+    # Normally, on the scheduled builds, we only do the "test" signing with SignPath because doing the "release" signing
+    # requires a manual approval step in our SignPath account.  When we want to do a proper "release" signing, then we
+    # trigger a manual build and set this variable to true (via the GitHub UI prompt at the time the build is
+    # initiated).
+    #
+    inputs:
+      doReleaseSigning:
+        #
+        # Note that, per GitHub doco, "If you attempt to dereference a nonexistent property, it will evaluate to an
+        # empty string."  Hence it's easier later on in the code if we use a choice here than a boolean.
+        #
+        description: 'Do a "release" signing (rather than just a "test" one)'
+        required: true
+        type: choice
+        options:
+         - Yes
+         - No
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
@@ -48,7 +70,6 @@ jobs:
           # As of January 2024, some of the 32-bit MSYS2 packages/groups we were previously relying on previously are no
           # longer available.  So now, we only build 64-bit packages (x86_64 architecture) on Windows.
           { msystem: MINGW64, arch: x86_64 },
-          #{ msystem: MINGW32, arch: i686 }
         ]
     steps:
 
@@ -287,8 +308,7 @@ jobs:
           #
           # The https://app.signpath.io/ "brewtarget" project has two signing policies: "test-signing" and
           # "release-signing".  The former uses a self-signed certificate that can be used for testing etc.  The latter
-          # (which is not yet generated) uses a real certificate that will be supplied by Signpath and will be suitable
-          # for signing released versions of the application.
+          # uses a real certificate supplied by Signpath and suitable for signing released versions of the application.
           #
           # Ideally we would select "release-signing" policy for things we're going to release and "test-signing"
           # otherwise, according to the following logic:
@@ -299,16 +319,19 @@ jobs:
           #   - We don't do release branches per se, but, before we do a lot of commits for a major release, we'll
           #     usually cut a "stable/" branch for the prior one.
           #
-          # NOTE HOWEVER that, for automated builds, we comment out this logic and always use the "test-signing" policy.
-          # This is because, on the free tier of SignPath, all release signings need to be manually approved.  (And by
-          # the time a manual approval has happened, the GitHub action will have timed out waiting for it.)  So,
-          # instead, we do our release signings via manual upload to the SignPath service.
+          # NOTE however that we also want to restrict "release" signings to manually initiated builds.  This is
+          # because, on the free tier of SignPath, all release signings need to be manually approved, and we don't want
+          # to be generating manual approval requests every night.  (The GitHub action will time out after 10 minutes
+          # waiting for the approval, though we can still get the signed binary from the SignPath site if the approval
+          # is done later.)
           #
-#          SIGNPATH_SIGNING_POLICY_SLUG: |
-#            ${{ (github.ref == 'refs/heads/develop' ||
-#                 github.ref == 'refs/heads/main' ||
-#                 startsWith(github.ref, 'refs/heads/stable/')) && 'release-signing' || 'test-signing' }}
-          SIGNPATH_SIGNING_POLICY_SLUG: 'test-signing'
+          # The syntax here is just using short-circuit evaluation to do the assignment as a one-liner.
+          #
+          SIGNPATH_SIGNING_POLICY_SLUG: |
+            ${{ (inputs.doReleaseSigning == 'Yes' &&
+                 (github.ref == 'refs/heads/develop' ||
+                  github.ref == 'refs/heads/main' ||
+                  startsWith(github.ref, 'refs/heads/stable/'))) && 'release-signing' || 'test-signing' }}
         with:
           api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
           organization-id: '${{ vars.SIGNPATH_ORGANIZATION_ID }}'
