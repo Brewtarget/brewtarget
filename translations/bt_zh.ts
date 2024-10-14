@@ -6675,6 +6675,14 @@ The final volume in the primary is %1.</source>
         <source>Cancel</source>
         <translation type="unfinished">取消</translation>
     </message>
+    <message>
+        <source>Internal Diameter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Opening Diameter</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>fermentableEditor</name>

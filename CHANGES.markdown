@@ -22,6 +22,7 @@ Bug fixes and minor enhancements.
 ### Bug Fixes
 * Some input fields not wide enough on various editors [849](https://github.com/Brewtarget/brewtarget/issues/849)
 * Upgrade to Qt 6 [841](https://github.com/Brewtarget/brewtarget/issues/841)
+* Equipment should be optional in Recipes in BeerXML [853](https://github.com/Brewtarget/brewtarget/issues/853)
 
 ### Release Timestamp
 Fri, 11 Oct 2024 04:00:07 +0100
