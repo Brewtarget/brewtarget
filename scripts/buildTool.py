@@ -247,7 +247,7 @@ def downloadFile(url):
    log.info('Downloading ' + url + ' to ' + filename + ' in directory ' + pathlib.Path.cwd().as_posix())
    response = requests.get(url)
    if (response.status_code != 200):
-      log.critical('Error code ' + response.status_code + ' while downloading ' + url)
+      log.critical('Error code ' + str(response.status_code) + ' while downloading ' + url)
       exit(1)
    with open(filename, 'wb') as fd:
       for chunk in response.iter_content(chunk_size = 128):
@@ -1001,9 +1001,9 @@ def installDependencies():
 
          #
          # See comment about CMAKE_PREFIX_PATH in CMakeLists.txt.  I think this is rather too soon to try to do this,
-         # but, it can't hurt.
+         # but it can't hurt.
          #
-         # Typically, this is going to set CMAKE_PREFIX_PATH to /usr/local/opt/qt@5
+         # Typically, this is going to set CMAKE_PREFIX_PATH to /usr/local/opt/qt@6
          #
          qtPrefixPath = btUtils.abortOnRunFail(
             subprocess.run(['brew', '--prefix', 'qt@6'], capture_output=True)
@@ -1025,10 +1025,13 @@ def installDependencies():
          # for various ways to do this if we had to, though we might just as easily copy the info
          # from https://en.wikipedia.org/wiki/MacOS#Timeline_of_releases
          #
+         # The instructions at https://guide.macports.org/#installing say that we probably don't need to install Xcode
+         # as only a few ports need it.  So, for now, we haven't tried to install that.
+         #
 ##         log.debug('Installing MacPorts')
-##         btUtils.abortOnRunFail(subprocess.run(['curl', '-O', 'https://distfiles.macports.org/MacPorts/MacPorts-2.8.1.tar.bz2']))
-##         btUtils.abortOnRunFail(subprocess.run(['tar', 'xf', 'MacPorts-2.8.1.tar.bz2']))
-##         btUtils.abortOnRunFail(subprocess.run(['cd', 'MacPorts-2.8.1/']))
+##         btUtils.abortOnRunFail(subprocess.run(['curl', '-O', 'https://distfiles.macports.org/MacPorts/MacPorts-2.10.2.tar.bz2']))
+##         btUtils.abortOnRunFail(subprocess.run(['tar', 'xf', 'MacPorts-2.10.2.tar.bz2']))
+##         btUtils.abortOnRunFail(subprocess.run(['cd', 'MacPorts-2.10.2/']))
 ##         btUtils.abortOnRunFail(subprocess.run(['./configure']))
 ##         btUtils.abortOnRunFail(subprocess.run(['make']))
 ##         btUtils.abortOnRunFail(subprocess.run(['sudo', 'make', 'install']))
