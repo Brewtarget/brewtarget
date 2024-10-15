@@ -40,7 +40,7 @@ on:
     # initiated).
     #
     inputs:
-      doReleaseSigning:
+      signingType:
         #
         # Note that, per GitHub doco, "If you attempt to dereference a nonexistent property, it will evaluate to an
         # empty string."  Hence it's easier later on in the code if we use a choice here than a boolean.
@@ -49,8 +49,9 @@ on:
         required: true
         type: choice
         options:
-         - Yes
-         - No
+         - test
+         - release
+        default: 'test'
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
@@ -328,7 +329,7 @@ jobs:
           # The syntax here is just using short-circuit evaluation to do the assignment as a one-liner.
           #
           SIGNPATH_SIGNING_POLICY_SLUG: |
-            ${{ (inputs.doReleaseSigning == 'Yes' &&
+            ${{ (inputs.signingType == 'release' &&
                  (github.ref == 'refs/heads/develop' ||
                   github.ref == 'refs/heads/main' ||
                   startsWith(github.ref, 'refs/heads/stable/'))) && 'release-signing' || 'test-signing' }}
