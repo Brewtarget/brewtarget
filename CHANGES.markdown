@@ -13,6 +13,18 @@ happens, so I'm now setting it to a slightly arbitrary time early in the morning
 * Additional methods for calculating IBU
 * We'll list other new features here...
 
+## v4.0.8
+Bug fixes and minor enhancements.
+
+### New Features
+* None
+
+### Bug Fixes
+
+
+### Release Timestamp
+Tue, 16 Oct 2024 04:00:08 +0100
+
 ## v4.0.7
 Bug fixes and minor enhancements.
 
@@ -27,7 +39,7 @@ Bug fixes and minor enhancements.
 * Salt additions with when-to-add time of Never not handled in DB upgrade [840](https://github.com/Brewtarget/brewtarget/issues/840)
 
 ### Release Timestamp
-Mon, 14 Oct 2024 04:00:07 +0100
+Tue, 16 Oct 2024 04:00:07 +0100
 
 ## v4.0.6
 Bug fixes for the 4.0.5 release (ie bugs in 4.0.5 are fixed in this 4.0.6 release).
