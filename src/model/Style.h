@@ -74,6 +74,8 @@ class Style : public NamedEntity,
               public FolderBase<Style> {
    Q_OBJECT
    FOLDER_BASE_DECL(Style)
+   // See model/FolderBase.h for info, getters and setters for these properties
+   Q_PROPERTY(QString folder        READ folder        WRITE setFolder     )
 
 public:
    /**
@@ -141,8 +143,6 @@ public:
    virtual ~Style();
 
    //=================================================== PROPERTIES ====================================================
-   //! \brief Folder.  See model/FolderBase for implementation of the getter & setter.
-   Q_PROPERTY(QString folder READ folder WRITE setFolder)
    //! \brief The category.
    Q_PROPERTY(QString category                       READ category           WRITE setCategory         )
    //! \brief The category number.

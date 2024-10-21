@@ -148,8 +148,8 @@ public:
 signals:
 
 protected:
-   virtual bool isEqualTo(NamedEntity const & other) const;
-   virtual ObjectStore & getObjectStoreTypedInstance() const;
+   virtual bool isEqualTo(NamedEntity const & other) const override;
+   virtual ObjectStore & getObjectStoreTypedInstance() const override;
 
 private:
    Type    m_type     ;

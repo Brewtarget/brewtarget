@@ -74,7 +74,6 @@ RecipeAdditionYeast::RecipeAdditionYeast(NamedParameterBundle const & namedParam
    //
    m_stage = namedParameterBundle.val<RecipeAddition::Stage>(PropertyNames::RecipeAddition::stage,
                                                              RecipeAddition::Stage::Fermentation);
-///   qDebug() << Q_FUNC_INFO << "RecipeAdditionYeast #" << this->key() << ": Recipe #" << this->m_recipeId << ", Yeast #" << this->m_ingredientId;
 
    CONSTRUCTOR_END
    return;
@@ -104,7 +103,6 @@ Yeast * RecipeAdditionYeast::yeast() const {
       return nullptr;
    }
 
-///   qDebug() << Q_FUNC_INFO << "RecipeAdditionYeast #" << this->key() << ": Recipe #" << this->m_recipeId << ", Yeast #" << this->m_ingredientId << "@" << ObjectStoreWrapper::getByIdRaw<Yeast>(this->m_ingredientId);
    return ObjectStoreWrapper::getByIdRaw<Yeast>(this->m_ingredientId);
 }
 
@@ -117,10 +115,6 @@ std::optional<bool>   RecipeAdditionYeast::addToSecondary   () const {
    }
    return true;
 }
-
-///Recipe * RecipeAdditionYeast::getOwningRecipe() const {
-///   return ObjectStoreWrapper::getByIdRaw<Recipe>(this->m_recipeId);
-///}
 
 NamedEntity * RecipeAdditionYeast::ensureExists(BtStringConst const & property) {
    if (property == PropertyNames::RecipeAdditionYeast::yeast) {

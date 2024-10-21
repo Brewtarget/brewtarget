@@ -373,6 +373,14 @@
         <source>Brewday</source>
         <translation type="unfinished">Μέρα ζυθοποίησης</translation>
     </message>
+    <message>
+        <source>Overwrite Existing Instructions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Generating instructions will overwrite the existing ones.  This is not undoable.  Do you want to proceed?</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>BrewDayWidget</name>
@@ -3940,7 +3948,7 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>%1 water to %2, </source>
-        <translation>%1 το νερό σε  %2, </translation>
+        <translation type="vanished">%1 το νερό σε  %2, </translation>
     </message>
     <message>
         <source>for upcoming infusions.</source>
@@ -4142,7 +4150,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>%1 water to %2 </source>
-        <translation>%1 νερό για %2 </translation>
+        <translation type="vanished">%1 νερό για %2 </translation>
     </message>
     <message>
         <source>mash</source>
@@ -7660,23 +7668,23 @@ The final volume in the primary is %1.</source>
     <name>instructionWidget</name>
     <message>
         <source>Form</source>
-        <translation>Μορφή</translation>
+        <translation type="vanished">Μορφή</translation>
     </message>
     <message>
         <source>Show a timer</source>
-        <translation>Χρονόμετρο</translation>
+        <translation type="vanished">Χρονόμετρο</translation>
     </message>
     <message>
         <source>Show timer</source>
-        <translation>Εμφάνιση χρονομέτρου</translation>
+        <translation type="vanished">Εμφάνιση χρονομέτρου</translation>
     </message>
     <message>
         <source>Mark this step completed</source>
-        <translation>ανήγγειλε αυτό το βήμα ώς ολοκληρωμένο</translation>
+        <translation type="vanished">ανήγγειλε αυτό το βήμα ώς ολοκληρωμένο</translation>
     </message>
     <message>
         <source>Step completed</source>
-        <translation>Το βήμα ολοκληρώθηκε</translation>
+        <translation type="vanished">Το βήμα ολοκληρώθηκε</translation>
     </message>
 </context>
 <context>

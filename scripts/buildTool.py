@@ -1969,6 +1969,7 @@ def doPackage():
          #
          pathsToSearch = os.environ['PATH'].split(os.pathsep)
          for extraLib in [
+            'libb2',                # BLAKE hash functions -- https://en.wikipedia.org/wiki/BLAKE_(hash_function)
             'libbrotlicommon',      # Brotli compression -- see https://en.wikipedia.org/wiki/Brotli
             'libbrotlidec',         # Brotli compression
             'libbrotlienc',         # Brotli compression

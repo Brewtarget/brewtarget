@@ -1063,6 +1063,8 @@ public:
          BtSqlQuery sqlQuery{connection};
          sqlQuery.prepare(queryString);
          QVariant propertyBindValue{object.property(*propertyName)};
+         // It's a coding error if the property we are trying to read from does not exist
+         Q_ASSERT(propertyBindValue.isValid());
          auto fieldDefn = std::find_if(
             this->primaryTable.tableFields.begin(),
             this->primaryTable.tableFields.end(),
@@ -1195,6 +1197,11 @@ public:
          auto const & fieldDefn = this->primaryTable.tableFields[ii];
 
          QVariant bindValue{object.property(*fieldDefn.propertyName)};
+         // Uncomment the following line if the assert below is firing
+         qDebug() << Q_FUNC_INFO << fieldDefn.propertyName << ":" << bindValue;
+
+         // It's a coding error if the property we are trying to read from does not exist
+         Q_ASSERT(bindValue.isValid());
 
          // Fix-up the QVariant if needed, including converting enums to strings
          this->unwrapAndMapAsNeeded(this->primaryTable, fieldDefn, bindValue);

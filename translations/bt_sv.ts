@@ -373,6 +373,14 @@
         <source>Brewday</source>
         <translation type="unfinished">Bryggdagen</translation>
     </message>
+    <message>
+        <source>Overwrite Existing Instructions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Generating instructions will overwrite the existing ones.  This is not undoable.  Do you want to proceed?</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>BrewDayWidget</name>
@@ -4019,7 +4027,7 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>%1 water to %2, </source>
-        <translation>%1 vatten till %2, </translation>
+        <translation type="vanished">%1 vatten till %2, </translation>
     </message>
     <message>
         <source>for upcoming infusions.</source>
@@ -4221,7 +4229,7 @@ Primärens slutgiltiga volym är %1.</translation>
     </message>
     <message>
         <source>%1 water to %2 </source>
-        <translation>%1 vatten till %2 </translation>
+        <translation type="vanished">%1 vatten till %2 </translation>
     </message>
     <message>
         <source>mash</source>
@@ -7747,23 +7755,23 @@ Primärens slutgiltiga volym är %1.</translation>
     <name>instructionWidget</name>
     <message>
         <source>Form</source>
-        <translation>Formulär</translation>
+        <translation type="vanished">Formulär</translation>
     </message>
     <message>
         <source>Show a timer</source>
-        <translation>Visa en timer</translation>
+        <translation type="vanished">Visa en timer</translation>
     </message>
     <message>
         <source>Show timer</source>
-        <translation>Visa timer</translation>
+        <translation type="vanished">Visa timer</translation>
     </message>
     <message>
         <source>Mark this step completed</source>
-        <translation>Markera steg som slutfört</translation>
+        <translation type="vanished">Markera steg som slutfört</translation>
     </message>
     <message>
         <source>Step completed</source>
-        <translation>Steg slutfört</translation>
+        <translation type="vanished">Steg slutfört</translation>
     </message>
 </context>
 <context>

@@ -44,6 +44,15 @@ protected:
    // Note that, because this is static, it cannot be initialised inside the class definition
    static TypeLookup const typeLookup;
 
+   //! Non-virtual equivalent of isEqualTo
+   bool doIsEqualTo([[maybe_unused]] FolderBase const & other) const {
+      // For the moment at least, we do not consider the fact that things are in different folders prevents them from
+      // being equal.
+      return true;
+   }
+
+private:
+   friend Derived;
    FolderBase() :
       m_folder{""} {
       return;
@@ -61,6 +70,7 @@ protected:
 
    ~FolderBase() = default;
 
+protected:
    QString const & getFolder() const {
       return this->m_folder;
    }
@@ -88,12 +98,22 @@ TypeLookup const FolderBase<Derived>::typeLookup {
           TypeLookupOf<decltype(FolderBase<Derived>::m_folder)>::value
        )}
    },
-   // Parent class lookup: none as we are at the top of this arm of the inheritance tree
+   // Parent class lookup: none as we are at the top of this branch of the inheritance tree
    {}
 };
 
 /**
- * \brief Derived classes should include this in their header file, right after Q_OBJECT
+ * \brief Concrete derived classes should (either directly or via inclusion in an intermediate class's equivalent macro)
+ *        include this in their header file, right after Q_OBJECT.  Concrete derived classes also need to include the
+ *        following block (see comment in model/StepBase.h for why):
+ *
+ *           // See model/FolderBase.h for info, getters and setters for these properties
+ *           Q_PROPERTY(QString folder        READ folder        WRITE setFolder     )
+ *
+ *        Comments for these properties:
+ *
+ *           \c folder : Currently this is the name of the folder, but ultimately we'd like to make it the \c Folder
+ *                       object itself.
  *
  *        Note we have to be careful about comment formats in macro definitions
  */
@@ -102,10 +122,10 @@ TypeLookup const FolderBase<Derived>::typeLookup {
    friend class FolderBase<Derived>;                                                        \
                                                                                             \
    public:                                                                                  \
-   /*=========================== FB "GETTER" MEMBER FUNCTIONS ===========================*/ \
-   virtual QString const & folder() const;                                                  \
-   /*=========================== FB "SETTER" MEMBER FUNCTIONS ===========================*/ \
-   virtual void setFolder(QString const & val);                                             \
+      /*=========================== FB "GETTER" MEMBER FUNCTIONS ===========================*/ \
+      virtual QString const & folder() const;                                                  \
+      /*=========================== FB "SETTER" MEMBER FUNCTIONS ===========================*/ \
+      virtual void setFolder(QString const & val);                                             \
 
 /**
  * \brief Derived classes should include this in their .cpp file

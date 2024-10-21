@@ -42,6 +42,7 @@
 #include "model/Instruction.h"
 #include "model/NamedEntity.h"
 #include "model/Salt.h"
+#include "model/SteppedOwnerBase.h"
 
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
@@ -86,8 +87,8 @@ AddPropertyName(hopAdditionIds         )
 AddPropertyName(hopAdditions           )
 AddPropertyName(IBU                    )
 AddPropertyName(IBUs                   )
-AddPropertyName(instructionIds         )
-AddPropertyName(instructions           )
+///AddPropertyName(instructionIds         )
+///AddPropertyName(instructions           )
 AddPropertyName(kegPrimingFactor       )
 AddPropertyName(locked                 )
 AddPropertyName(mash                   )
@@ -124,7 +125,7 @@ class Equipment;
 class Fermentable;
 class Fermentation;
 class FermentationStep;
-class Instruction;
+///class Instruction;
 class Mash;
 class MashStep;
 class RecipeAdditionFermentable;
@@ -144,9 +145,16 @@ class Yeast;
  * \brief Model class for recipe records in the database.
  */
 class Recipe : public NamedEntity,
-               public FolderBase<Recipe> {
+               public FolderBase<Recipe>,
+               public SteppedOwnerBase<Recipe, Instruction> {
    Q_OBJECT
    FOLDER_BASE_DECL(Recipe)
+   STEPPED_OWNER_COMMON_DECL(Recipe, Instruction)
+   // See model/FolderBase.h for info, getters and setters for these properties
+   Q_PROPERTY(QString folder        READ folder        WRITE setFolder     )
+   // See model/SteppedOwnerBase.h for info, getters and setters for these properties
+   Q_PROPERTY(QList<std::shared_ptr<Instruction>> steps   READ steps   WRITE setSteps   STORED false)
+   Q_PROPERTY(unsigned int numSteps   READ numSteps   STORED false)
 
    /**
     * \brief \c MainWindow is a friend so it can access \c Recipe::recalcAll() and \c Recipe::recalcIfNeeded()
@@ -213,8 +221,6 @@ public:
 
 
    //=============================================== REGULAR PROPERTIES ================================================
-   //! \brief Folder.  See model/FolderBase for implementation of the getter & setter.
-   Q_PROPERTY(QString folder READ folder WRITE setFolder)
    //
    // Note that boilSize_l and boilTime_min, which were previously properties of Recipe are now moved to Boil.  Given
    // Recipe r:
@@ -367,10 +373,10 @@ public:
    // These QList properties should only emit changed() when their size changes, or when
    // one of their elements is replaced by another with a different key.
    //! \brief The brew notes.
-   Q_PROPERTY(QList<BrewNote *> brewNotes READ brewNotes /*WRITE*/ /*NOTIFY changed*/ STORED false)
+   Q_PROPERTY(QList<std::shared_ptr<BrewNote>> brewNotes READ brewNotes /*WRITE*/ /*NOTIFY changed*/ STORED false)
    //! \brief The instructions.
-   Q_PROPERTY(QList<Instruction *> instructions   READ instructions /*WRITE*/ /*NOTIFY changed*/ STORED false)
-   Q_PROPERTY(QVector<int>         instructionIds READ getInstructionIds WRITE setInstructionIds)
+///   Q_PROPERTY(QList<std::shared_ptr<Instruction>> instructions   READ instructions /*WRITE*/ /*NOTIFY changed*/ STORED false)
+///   Q_PROPERTY(QVector<int>         instructionIds READ getInstructionIds WRITE setInstructionIds)
    //! \brief The fermentable additions.
    Q_PROPERTY(QList<std::shared_ptr<RecipeAdditionFermentable>> fermentableAdditions   READ fermentableAdditions WRITE setFermentableAdditions   STORED false)
    Q_PROPERTY(QVector<int>                                      fermentableAdditionIds READ fermentableAdditionIds /*WRITE setFermentableAdditionIds*/ STORED false)
@@ -397,7 +403,7 @@ public:
    /**
     * \brief We need to override \c NamedEntity::setKey to do some extra ancestor stuff
     */
-   virtual void setKey(int key);
+   virtual void setKey(int key) override;
 
    /**
     * \brief Connect Fermentable, Hop changed signals etc to their parent Recipes.
@@ -409,37 +415,37 @@ public:
     */
    static void connectSignalsForAllRecipes();
 
-   /*!
-    * \brief Add (a copy if necessary of) a Hop/Fermentable/Instruction etc (that may or may not already be in an
-    *        ObjectStore).
-    *
-    * TODO: Need to finish killing off this member function!
-    *
-    * When we add a Hop/Fermentable/Yeast/etc to a Recipe, we make a copy of thing we're adding to serve as an "instance
-    * of use of" record.  Amongst other things, this allows the same Hop/Fermentable/Yeast/etc to be added multiple
-    * times to a recipe - eg the same type of hops might well be added at multiple points in the recipe.  It also allows
-    * an ingredient in a recipe to be modified without those modifications affecting the use of the ingredient in other
-    * recipes (eg if you want to modify the % alpha acid on a hop).  An "instance of use of" instance of a
-    * Hop/Fermentable/Yeast/etc will always have parent record which is the actual Hop/Fermentable/Yeast/etc to which it
-    * relates.
-    *
-    * Calling the templated \c Recipe::add function returns the copy "instance of use of" object for whatever
-    * Hop/Fermentable/Yeast/etc was added.  This returned object is what needs to be passed to \c Recipe::remove to
-    * remove that instance of use of the Hop/Fermentable/Yeast/etc from the Recipe.  When you  call \c Recipe::remove it
-    * returns the "instance of use of" object that was removed, which you as caller now own (because it will no longer
-    * be in the ObjectStore).  If you want to undo the remove (or redo an add that the remove itself was undoing), you
-    * can call \c Recipe::add with the "instance of use of" object returned from \c Recipe::remove, in which case
-    * \c Recipe::add will determine that the "instance of use of" object can be used directly without needing to be
-    * copied.  (The \c Recipe::add method will also recognise when an object has been removed from the ObjectStore and
-    * will reinsert it, so the caller doesn't need to worry about this.)  Thus, eg, the following sequence of calls is
-    * valid:
-    *
-    *    std::shared_ptr<Hop> copyOfFooHop = myRecipe->add<Hop>(fooHop);                     // DO
-    *    std::shared_ptr<Hop> sameCopyOfFooHop = myRecipe->remove<Hop>(*copyOfFooHop);       // UNDO
-    *    std::shared_ptr<Hop> stillSameCopyOfFooHop = myRecipe->add<Hop>(*sameCopyOfFooHop); // REDO
-    *
-    */
-   template<class NE> std::shared_ptr<NE> add(std::shared_ptr<NE> var);
+///   /*!
+///    * \brief Add (a copy if necessary of) a Hop/Fermentable/Instruction etc (that may or may not already be in an
+///    *        ObjectStore).
+///    *
+///    * TODO: Need to finish killing off this member function!
+///    *
+///    * When we add a Hop/Fermentable/Yeast/etc to a Recipe, we make a copy of thing we're adding to serve as an "instance
+///    * of use of" record.  Amongst other things, this allows the same Hop/Fermentable/Yeast/etc to be added multiple
+///    * times to a recipe - eg the same type of hops might well be added at multiple points in the recipe.  It also allows
+///    * an ingredient in a recipe to be modified without those modifications affecting the use of the ingredient in other
+///    * recipes (eg if you want to modify the % alpha acid on a hop).  An "instance of use of" instance of a
+///    * Hop/Fermentable/Yeast/etc will always have parent record which is the actual Hop/Fermentable/Yeast/etc to which it
+///    * relates.
+///    *
+///    * Calling the templated \c Recipe::add function returns the copy "instance of use of" object for whatever
+///    * Hop/Fermentable/Yeast/etc was added.  This returned object is what needs to be passed to \c Recipe::remove to
+///    * remove that instance of use of the Hop/Fermentable/Yeast/etc from the Recipe.  When you  call \c Recipe::remove it
+///    * returns the "instance of use of" object that was removed, which you as caller now own (because it will no longer
+///    * be in the ObjectStore).  If you want to undo the remove (or redo an add that the remove itself was undoing), you
+///    * can call \c Recipe::add with the "instance of use of" object returned from \c Recipe::remove, in which case
+///    * \c Recipe::add will determine that the "instance of use of" object can be used directly without needing to be
+///    * copied.  (The \c Recipe::add method will also recognise when an object has been removed from the ObjectStore and
+///    * will reinsert it, so the caller doesn't need to worry about this.)  Thus, eg, the following sequence of calls is
+///    * valid:
+///    *
+///    *    std::shared_ptr<Hop> copyOfFooHop = myRecipe->add<Hop>(fooHop);                     // DO
+///    *    std::shared_ptr<Hop> sameCopyOfFooHop = myRecipe->remove<Hop>(*copyOfFooHop);       // UNDO
+///    *    std::shared_ptr<Hop> stillSameCopyOfFooHop = myRecipe->add<Hop>(*sameCopyOfFooHop); // REDO
+///    *
+///    */
+///   template<class NE> std::shared_ptr<NE> add(std::shared_ptr<NE> var);
 
    /**
     * \brief Use this for adding \c RecipeAdditionHop, etc.
@@ -452,7 +458,7 @@ public:
     *        We want this to have the same signature as add because it makes the implementation of Undo/Redo easier
     */
 //   template<class NE> std::shared_ptr<NE> remove(std::shared_ptr<NE> var);
-   std::shared_ptr<Instruction> remove(std::shared_ptr<Instruction> var);
+///   std::shared_ptr<Instruction> remove(std::shared_ptr<Instruction> var);
 
    /**
     * \brief Use this for removing \c RecipeAdditionHop, etc.
@@ -473,15 +479,15 @@ public:
       return ObjectStoreWrapper::findFirstMatching<Recipe>( [var](Recipe * rec) {return rec->uses(var);} );
    }
 
-   int instructionNumber(Instruction const & ins) const;
-   /*!
-    * \brief Swap instructions \c ins1 and \c ins2
-    */
-   void swapInstructions(Instruction * ins1, Instruction * ins2);
-   //! \brief Remove all instructions.
-   void clearInstructions();
-   //! \brief Insert instruction ins into slot pos.
-   void insertInstruction(Instruction const & ins, int pos);
+///   int instructionNumber(Instruction const & ins) const;
+///   /*!
+///    * \brief Swap instructions \c ins1 and \c ins2
+///    */
+///   void swapInstructions(Instruction & ins1, Instruction & ins2);
+///   //! \brief Remove all instructions.
+///   void clearInstructions();
+///   //! \brief Insert instruction ins into slot pos.
+///   void insertInstruction(Instruction const & ins, int pos);
    //! \brief Automagically generate a list of instructions.
    void generateInstructions();
    /*!
@@ -555,8 +561,13 @@ public:
    double        grains_kg               ();
    QList<double> IBUs                    ();
 
+   /**
+    * \brief It's useful to have this templated way of getting all the \c NamedEntity objects of a particular type (eg
+    *        all \c BrewNote or all \c RecipeAdditionHop objects) that are owned by a given \c Recipe.
+    */
+   template<typename NE> QList<std::shared_ptr<NE>> allOwned() const;
+
    // Relational getters
-   template<typename NE> QList<std::shared_ptr<NE>> getAll() const;
    QList<std::shared_ptr<RecipeAdditionFermentable>> fermentableAdditions  () const;
    QVector<int>                                      fermentableAdditionIds() const;
    QList<std::shared_ptr<RecipeAdditionHop>>         hopAdditions          () const;
@@ -569,9 +580,9 @@ public:
    QVector<int>                                      saltAdjustmentIds     () const;
    QList<std::shared_ptr<RecipeUseOfWater>>          waterUses             () const;
    QVector<int>                                      waterUseIds           () const;
-   QList<Instruction *>                              instructions          () const;
-   QVector<int>                                      getInstructionIds     () const;
-   QList<BrewNote *>                                 brewNotes             () const;
+///   QList<std::shared_ptr<Instruction>>               instructions          () const;
+///   QVector<int>                                      getInstructionIds     () const;
+   QList<std::shared_ptr<BrewNote>>                  brewNotes             () const;
    QList<Recipe *>                                   ancestors             () const;
    std::shared_ptr<Equipment>                        equipment             () const;
    int                                               getEquipmentId        () const;
@@ -635,7 +646,7 @@ public:
    // ⮜⮜⮜ Next two added for BeerJSON support ⮞⮞⮞
    void setBoilId        (int const id);
    void setFermentationId(int const id);
-   void setInstructionIds(QVector<int> ids);
+///   void setInstructionIds(QVector<int> ids);
    void setAncestorId    (int ancestorId, bool notify = true);
    //! @}
 
@@ -696,19 +707,22 @@ public:
    /**
     * \brief A Recipe owns some of its contained objects, so needs to delete those if it itself is being deleted
     */
-   virtual void hardDeleteOwnedEntities();
+   virtual void hardDeleteOwnedEntities() override;
 
    /**
     * \brief Deleting a Recipe usually results in an orphaned Mash record (which cannot be removed by
     *        \c hardDeleteOwnedEntities because of the direction of foreign key constraints) and needs to be deleted
     *        immediately after the Recipe record has been removed from the database.
     */
-   virtual void hardDeleteOrphanedEntities();
+   virtual void hardDeleteOrphanedEntities() override;
 
 signals:
+   //! Emitted when the number of instructions changes, or when you should call steps() again.
+   void stepsChanged();
 
 public slots:
    void acceptChangeToContainedObject(QMetaProperty prop, QVariant val);
+   void acceptStepChange(QMetaProperty, QVariant);
 
 protected:
    virtual bool isEqualTo(NamedEntity const & other) const;
@@ -788,7 +802,7 @@ namespace RecipeHelper {
    /**
     * \brief Gets the BrewNotes for a Recipe and all its ancestors
     */
-   QList<BrewNote *> brewNotesForRecipeAndAncestors(Recipe const & recipe);
+   QList<std::shared_ptr<BrewNote>> brewNotesForRecipeAndAncestors(Recipe const & recipe);
 
    /**
     * \brief Turn automatic versioning on or off

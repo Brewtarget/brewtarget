@@ -34,6 +34,7 @@
 
 #include "model/FolderBase.h"
 #include "model/NamedEntity.h"
+#include "model/MashStep.h"
 #include "model/StepOwnerBase.h"
 
 //======================================================================================================================
@@ -42,7 +43,7 @@
 #define AddPropertyName(property) namespace PropertyNames::Mash { BtStringConst const property{#property}; }
 AddPropertyName(equipAdjust              )
 AddPropertyName(grainTemp_c              )
-AddPropertyName(mashSteps                )
+///AddPropertyName(mashSteps                )
 AddPropertyName(mashTunSpecificHeat_calGC)
 AddPropertyName(mashTunWeight_kg         )
 AddPropertyName(notes                    )
@@ -54,10 +55,6 @@ AddPropertyName(tunTemp_c                )
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
 //======================================================================================================================
-
-
-// Forward declarations.
-class MashStep;
 
 /*!
  * \class Mash
@@ -73,6 +70,11 @@ class Mash : public NamedEntity,
    Q_OBJECT
    FOLDER_BASE_DECL(Mash)
    STEP_OWNER_COMMON_DECL(Mash, mash)
+   // See model/FolderBase.h for info, getters and setters for these properties
+   Q_PROPERTY(QString folder        READ folder        WRITE setFolder     )
+   // See model/SteppedOwnerBase.h for info, getters and setters for these properties
+   Q_PROPERTY(QList<std::shared_ptr<MashStep>> steps   READ steps   WRITE setSteps   STORED false)
+   Q_PROPERTY(unsigned int numSteps   READ numSteps   STORED false)
 
 public:
    /**
@@ -94,8 +96,6 @@ public:
    virtual ~Mash();
 
    //=================================================== PROPERTIES ====================================================
-   //! \brief Folder.  See model/FolderBase for implementation of the getter & setter.
-   Q_PROPERTY(QString folder READ folder WRITE setFolder)
    //! \brief The initial grain temp in Celsius.
    Q_PROPERTY(double                grainTemp_c               READ grainTemp_c               WRITE setGrainTemp_c  )
    //! \brief The notes.
@@ -116,8 +116,6 @@ public:
    Q_PROPERTY(double                totalMashWater_l          READ totalMashWater_l  STORED false )
    //! \brief The total mash time in minutes. Calculated.
    Q_PROPERTY(double                totalTime                 READ totalTime  STORED false )
-   //! \brief The individual mash steps.
-   Q_PROPERTY(QList<std::shared_ptr<MashStep>>    mashSteps         READ mashSteps         WRITE setMashSteps         STORED false )
 
    // ⮜⮜⮜ BeerJSON support does not require any additional properties on this class! ⮞⮞⮞
 
@@ -142,7 +140,7 @@ public:
    void setEquipAdjust              (bool                  const   val);
 
    // Calculated getters
-   unsigned int numMashSteps() const;
+///   unsigned int numMashSteps() const;
    double totalMashWater_l() const;
    //! \brief all the infusion water, excluding sparge
    double totalInfusionAmount_l() const;
@@ -160,8 +158,8 @@ signals:
    void stepsChanged();
 
 protected:
-   virtual bool isEqualTo(NamedEntity const & other) const;
-   virtual ObjectStore & getObjectStoreTypedInstance() const;
+   virtual bool isEqualTo(NamedEntity const & other) const override;
+   virtual ObjectStore & getObjectStoreTypedInstance() const override;
 
 private:
    double                m_grainTemp_c              ;

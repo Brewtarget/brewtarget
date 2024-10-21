@@ -36,7 +36,7 @@
 #include "database/DbTransaction.h"
 #include "database/ObjectStoreTyped.h"
 
-int constexpr DatabaseSchemaHelper::latestVersion = 13;
+int constexpr DatabaseSchemaHelper::latestVersion = 14;
 
 // Default namespace hides functions from everything outside this file.
 namespace {
@@ -2170,6 +2170,93 @@ namespace {
       return executeSqlQueries(q, migrationQueries);
    }
 
+   /**
+    * \brief Correct flouride to fluoride on water table
+    *        Fix Instructions to be stored the same way as BrewNotes, RecipeAdditions etc
+    *           // TODO: On next DB update, correct water.flouride_ppm to water.fluoride_ppm
+.
+    */
+   bool migrate_to_14([[maybe_unused]] Database & db, BtSqlQuery & q) {
+      //
+      // See below for why we create a new version of the instruction table here.  While we're at it, we make the
+      // column names snake_case, and add units, to be more consistent with the rest of the DB schema.
+      //
+      // NOTE I am not convinced that has_timer, timer_value and completed columns are actually used
+      //
+      QString createNewInstructionsSql;
+      QTextStream createNewInstructionsSqlStream(&createNewInstructionsSql);
+      createNewInstructionsSqlStream <<
+         "CREATE TABLE new_instruction ("
+            "id"              " " << db.getDbNativePrimaryKeyDeclaration() << ", "
+            "name"            " " << db.getDbNativeTypeName<QString>()     << ", "
+            "display"         " " << db.getDbNativeTypeName<bool>()        << ", "
+            "deleted"         " " << db.getDbNativeTypeName<bool>()        << ", "
+            "recipe_id"       " " << db.getDbNativeTypeName<int>()         << ", "
+            "step_number"     " " << db.getDbNativeTypeName<int>()         << ", "
+            "directions"      " " << db.getDbNativeTypeName<QString>()     << ", "
+            "has_timer"       " " << db.getDbNativeTypeName<bool>()        << ", "
+            "timer_value"     " " << db.getDbNativeTypeName<QString>()     << ", "
+            "completed"       " " << db.getDbNativeTypeName<bool>()        << ", "
+            "interval_mins"   " " << db.getDbNativeTypeName<double>()      << ", "
+            "FOREIGN KEY(recipe_id) REFERENCES recipe(id) "
+         ");";
+
+      QVector<QueryAndParameters> const migrationQueries{
+         //
+         // This is a naming error in BeerJSON that we copied-and-pasted into the code.  BeerJSON will get a fix at some
+         // point -- see https://github.com/beerjson/beerjson/issues/214.  But we can fix our DB column name in the
+         // meantime.
+         //
+         {QString("ALTER TABLE water RENAME COLUMN flouride_ppm TO fluoride_ppm")},
+         //
+         // The existence of the instruction_in_recipe table implies that Instruction objects can be shared between
+         // multiple Recipe objects.  However, since they are only managed inside each Recipe, and are often
+         // automatically generated, it doesn't make a whole lot of sense for an Instruction to have a separate
+         // existence outside of Recipe.  So we try to make them more like BrewNotes here.
+         //
+         // At the risk of being overly cautious, we assume it is at least conceivable there could be some user
+         // databases where instructions are shared between recipes (even though this should not happen).   To avoid any
+         // potential data loss, we therefore allow for the possibility that we might need to create copies of existing
+         // "shared" instructions (since, after the schema update it will be impossible for one instruction row to
+         // related to more than one recipe row).  This being the case, it seems simpler to create a new table rather
+         // than fill in the blanks on the existing one.
+         //
+         {createNewInstructionsSql},
+         {QString("INSERT INTO new_instruction ( "
+            "name       , "
+            "display    , "
+            "deleted    , "
+            "recipe_id  , "
+            "step_number, "
+            "directions , "
+            "has_timer  , "
+            "timer_value, "
+            "completed  , "
+            "interval_mins "
+          ") "
+          "SELECT ii.name              , "
+                 "ii.display           , "
+                 "ii.deleted           , "
+                 "jj.recipe_id         , "
+                 "jj.instruction_number, "
+                 "ii.directions        , "
+                 "ii.hasTimer          , " // NB: hasTimer -> has_timer
+                 "ii.timerValue        , " // NB: timerValue -> timer_value
+                 "ii.completed         , "
+                 "ii.interval "            // NB: interval -> interval_mins
+          "FROM instruction AS ii, "
+               "instruction_in_recipe AS jj "
+          "WHERE jj.instruction_id = ii.id")},
+         // Now we've copied all the data to the new table, we can safely throw the old tables away
+         {QString("DROP TABLE instruction_in_recipe")},
+         {QString("DROP TABLE instruction")},
+         // And finally we can rename the new table replace the old one
+         {QString("ALTER TABLE new_instruction RENAME TO instruction")},
+
+      };
+      return executeSqlQueries(q, migrationQueries);
+   }
+
    /*!
     * \brief Migrate from version \c oldVersion to \c oldVersion+1
     */
@@ -2216,7 +2303,9 @@ namespace {
          case 12:
             ret &= migrate_to_13(database, sqlQuery);
             break;
-         // TODO: On next DB update, correct water.flouride_ppm to water.fluoride_ppm
+         case 13:
+            ret &= migrate_to_14(database, sqlQuery);
+            break;
          default:
             qCritical() << QString("Unknown version %1").arg(oldVersion);
             return false;

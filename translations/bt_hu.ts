@@ -373,6 +373,14 @@
         <source>Brewday</source>
         <translation type="unfinished">Főzés napja</translation>
     </message>
+    <message>
+        <source>Overwrite Existing Instructions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Generating instructions will overwrite the existing ones.  This is not undoable.  Do you want to proceed?</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>BrewDayWidget</name>
@@ -3999,7 +4007,7 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>%1 water to %2, </source>
-        <translation>%1 víz %2. </translation>
+        <translation type="vanished">%1 víz %2. </translation>
     </message>
     <message>
         <source>for upcoming infusions.</source>
@@ -4201,7 +4209,7 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source>%1 water to %2 </source>
-        <translation>%1 vizet a %2 </translation>
+        <translation type="vanished">%1 vizet a %2 </translation>
     </message>
     <message>
         <source>mash</source>
@@ -7690,23 +7698,23 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     <name>instructionWidget</name>
     <message>
         <source>Form</source>
-        <translation>Forma</translation>
+        <translation type="vanished">Forma</translation>
     </message>
     <message>
         <source>Show a timer</source>
-        <translation>Időzítő megjelenítése</translation>
+        <translation type="vanished">Időzítő megjelenítése</translation>
     </message>
     <message>
         <source>Show timer</source>
-        <translation>Időzítő megjelenítése</translation>
+        <translation type="vanished">Időzítő megjelenítése</translation>
     </message>
     <message>
         <source>Mark this step completed</source>
-        <translation>Befejezett lépés</translation>
+        <translation type="vanished">Befejezett lépés</translation>
     </message>
     <message>
         <source>Step completed</source>
-        <translation>Befejezett lépés</translation>
+        <translation type="vanished">Befejezett lépés</translation>
     </message>
 </context>
 <context>

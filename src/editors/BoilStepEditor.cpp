@@ -26,9 +26,9 @@ BoilStepEditor::BoilStepEditor(QWidget* parent, QString const editorName) :
    this->postSetupUiInit({
       EDITOR_FIELD_NORM(BoilStep, label_name                , lineEdit_name                , NamedEntity::name               ),
       EDITOR_FIELD_NORM(BoilStep, label_description         , textEdit_description         , Step::description               ),
-      EDITOR_FIELD_NORM(BoilStep, label_startTemp           , lineEdit_startTemp           , Step::startTemp_c            , 1),
-      EDITOR_FIELD_NORM(BoilStep, label_stepTime            , lineEdit_stepTime            , Step::stepTime_mins          , 0),
-      EDITOR_FIELD_NORM(BoilStep, label_rampTime            , lineEdit_rampTime            , Step::rampTime_mins          , 0),
+      EDITOR_FIELD_NORM(BoilStep, label_startTemp           , lineEdit_startTemp           , StepBase::startTemp_c        , 1),
+      EDITOR_FIELD_NORM(BoilStep, label_stepTime            , lineEdit_stepTime            , StepBase::stepTime_mins      , 0),
+      EDITOR_FIELD_NORM(BoilStep, label_rampTime            , lineEdit_rampTime            , StepBase::rampTime_mins      , 0),
       EDITOR_FIELD_NORM(BoilStep, label_endTemp             , lineEdit_endTemp             , Step::endTemp_c              , 1),
       EDITOR_FIELD_NORM(BoilStep, label_startAcidity        , lineEdit_startAcidity        , Step::startAcidity_pH        , 1),
       EDITOR_FIELD_NORM(BoilStep, label_endAcidity          , lineEdit_endAcidity          , Step::endAcidity_pH          , 1),

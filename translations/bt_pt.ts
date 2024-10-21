@@ -373,6 +373,14 @@
         <source>Brewday</source>
         <translation type="unfinished">Dia de Confecção de Cerveja</translation>
     </message>
+    <message>
+        <source>Overwrite Existing Instructions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Generating instructions will overwrite the existing ones.  This is not undoable.  Do you want to proceed?</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>BrewDayWidget</name>
@@ -3975,7 +3983,7 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>%1 water to %2, </source>
-        <translation>%1 de água para %2, </translation>
+        <translation type="vanished">%1 de água para %2, </translation>
     </message>
     <message>
         <source>for upcoming infusions.</source>
@@ -4177,7 +4185,7 @@ O volume final do fermentador primário é %1.</translation>
     </message>
     <message>
         <source>%1 water to %2 </source>
-        <translation>%1 de água para %2 </translation>
+        <translation type="vanished">%1 de água para %2 </translation>
     </message>
     <message>
         <source>mash</source>
@@ -7698,23 +7706,23 @@ O volume final do fermentador primário é %1.</translation>
     <name>instructionWidget</name>
     <message>
         <source>Form</source>
-        <translation>Formulário</translation>
+        <translation type="vanished">Formulário</translation>
     </message>
     <message>
         <source>Show a timer</source>
-        <translation>Mostrar um cronômetro</translation>
+        <translation type="vanished">Mostrar um cronômetro</translation>
     </message>
     <message>
         <source>Show timer</source>
-        <translation>Mostrar o cronômetro</translation>
+        <translation type="vanished">Mostrar o cronômetro</translation>
     </message>
     <message>
         <source>Mark this step completed</source>
-        <translation>Marcar esse passo como concluído</translation>
+        <translation type="vanished">Marcar esse passo como concluído</translation>
     </message>
     <message>
         <source>Step completed</source>
-        <translation>Passo concluído</translation>
+        <translation type="vanished">Passo concluído</translation>
     </message>
 </context>
 <context>

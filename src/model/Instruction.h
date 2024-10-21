@@ -21,13 +21,12 @@
 #define MODEL_INSTRUCTION_H
 #pragma once
 
-#include <memory> // For PImpl
-
 #include <QDomNode>
 #include <QString>
 #include <QVector>
 
 #include "model/NamedEntity.h"
+#include "model/SteppedBase.h"
 
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
@@ -42,18 +41,28 @@ AddPropertyName(timerValue)
 //=========================================== End of property name constants ===========================================
 //======================================================================================================================
 
+// Forward declarations;
+class Recipe;
 
 /*!
  * \class Instruction
  *
  * \brief Model class for an instruction record in the database.
  *
- *        This class is completely outside the BeerXML spec.
+ *        NOTE that \c Instruction is not part of the official BeerXML or BeerJSON standards.  We add it in to our
+ *             BeerXML files, because we can, but TBD whether this is possible with BeerJSON.
  *
- *        TODO: We should make this inherit from \c OwnedByRecipe and bring it more into line with \c BrewNote
+ *        NB: We do not inherit from \c OwnedByRecipe, because doing so would duplicate part of what we get from
+ *            \c SteppedBase.
  */
-class Instruction : public NamedEntity {
+class Instruction : public NamedEntity,
+                    public SteppedBase<Instruction, Recipe> {
    Q_OBJECT
+
+   STEPPED_COMMON_DECL(Instruction, Recipe)
+   // See model/SteppedBase.h for info, getters and setters for these properties
+   Q_PROPERTY(int ownerId      READ ownerId      WRITE setOwnerId   )
+   Q_PROPERTY(int stepNumber   READ stepNumber   WRITE setStepNumber)
 
 public:
    /**
@@ -74,23 +83,15 @@ public:
 
    virtual ~Instruction();
 
-   Q_PROPERTY(QString        directions        READ directions WRITE setDirections /*NOTIFY changed*/ /*changedDirections*/ )
-   Q_PROPERTY(bool           hasTimer          READ hasTimer   WRITE setHasTimer /*NOTIFY changed*/ /*changedHasTimer*/ )
-   Q_PROPERTY(QString        timerValue        READ timerValue WRITE setTimerValue /*NOTIFY changed*/ /*changedTimerValue*/ )
-   Q_PROPERTY(bool           completed         READ completed  WRITE setCompleted /*NOTIFY changed*/ /*changedCompleted*/ )
-   Q_PROPERTY(double         interval          READ interval   WRITE setInterval /*NOTIFY changed*/ /*changedInterval*/ )
-   Q_PROPERTY(QList<QString> reagents          READ reagents /*WRITE*/ /*NOTIFY changed*/ /*changedReagents*/ )
-   Q_PROPERTY(int            instructionNumber READ instructionNumber /*WRITE*/ /*NOTIFY changed*/ STORED false )
+   //=================================================== PROPERTIES ====================================================
+   Q_PROPERTY(QString        directions        READ directions         WRITE setDirections)
+   Q_PROPERTY(bool           hasTimer          READ hasTimer           WRITE setHasTimer  )
+   Q_PROPERTY(QString        timerValue        READ timerValue         WRITE setTimerValue)
+   Q_PROPERTY(bool           completed         READ completed          WRITE setCompleted )
+   Q_PROPERTY(double         interval          READ interval           WRITE setInterval  )
+   Q_PROPERTY(QList<QString> reagents          READ reagents           STORED false       )
 
-   // "set" methods.
-   void setDirections(const QString& dir);
-   void setHasTimer  (bool has);
-   void setTimerValue(const QString& timerVal);
-   void setCompleted (bool comp);
-   void setInterval  (double interval);
-   void addReagent   (const QString& reagent);
-
-   // "get" methods.
+   //============================================ "GETTER" MEMBER FUNCTIONS ============================================
    QString directions();
    bool    hasTimer();
    QString timerValue();
@@ -99,21 +100,22 @@ public:
    QList<QString> reagents();
    double interval();
 
-   int instructionNumber() const;
+   //============================================ "SETTER" MEMBER FUNCTIONS ============================================
+   void setDirections(const QString& dir);
+   void setHasTimer  (bool has);
+   void setTimerValue(const QString& timerVal);
+   void setCompleted (bool comp);
+   void setInterval  (double interval);
+   void addReagent   (const QString& reagent);
 
-   virtual std::shared_ptr<Recipe> owningRecipe() const;
+///   virtual std::shared_ptr<Recipe> owningRecipe() const override;
 
 signals:
 
 protected:
-   virtual bool isEqualTo(NamedEntity const & other) const;
-   virtual ObjectStore & getObjectStoreTypedInstance() const;
+   virtual bool isEqualTo(NamedEntity const & other) const override;
 
 private:
-   // Private implementation details - see https://herbsutter.com/gotw/_100/
-   class impl;
-   std::unique_ptr<impl> pimpl;
-
    QString m_directions;
    bool    m_hasTimer;
    QString m_timerValue;
@@ -126,9 +128,6 @@ private:
 BT_DECLARE_METATYPES(Instruction)
 
 //! \brief Compares Instruction pointers by Instruction::instructionNumber().
-inline bool insPtrLtByNumber( Instruction* lhs, Instruction* rhs)
-{
-   return lhs->instructionNumber() < rhs->instructionNumber();
-}
+bool operator<(Instruction & lhs, Instruction & rhs);
 
 #endif

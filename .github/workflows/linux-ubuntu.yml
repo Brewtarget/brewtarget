@@ -133,6 +133,17 @@ jobs:
           umask 022
           ../bt package
 
+      #
+      # Since we're running on Ubuntu, we ought at least to be able to test installing the .deb packages.  There should
+      # be just one .deb file created on each run, but we use pattern matching to save having to construct the exact
+      # name.
+      #
+      - name: Install deb Package
+        working-directory: ${{github.workspace}}/mbuild/packages/linux
+        shell: bash
+        run: |
+          sudo dpkg -i brewtarget*.deb
+
       - name: Upload Linux Packages (Installers)
         if: ${{ success() }}
         uses: actions/upload-artifact@v4

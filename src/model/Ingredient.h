@@ -43,6 +43,8 @@ class Ingredient : public OutlineableNamedEntity,
                    public FolderBase<Ingredient> {
    Q_OBJECT
    FOLDER_BASE_DECL(Ingredient)
+   // See model/FolderBase.h for info, getters and setters for these properties
+   Q_PROPERTY(QString folder        READ folder        WRITE setFolder     )
 
 public:
    /**
@@ -63,8 +65,6 @@ public:
    virtual ~Ingredient();
 
    //=================================================== PROPERTIES ====================================================
-   //! \brief Folder.  See model/FolderBase for implementation of the getter & setter.
-   Q_PROPERTY(QString folder READ folder WRITE setFolder)
    /**
     * \brief For the moment, we have a single "total amount" inventory for a given \c Ingredient instance (eg \c Hop etc
     *        instance).  This property and its associated accessors allow the total to be read and modified without

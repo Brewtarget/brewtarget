@@ -128,7 +128,6 @@ static_assert(std::is_base_of<FolderBase<Water>, Water>::value);
 Water::Water(QString name) :
    OutlineableNamedEntity{name},
    FolderBase<Water>{},
-///   m_amount             {0.0         },
    m_calcium_ppm        {0.0         },
    m_bicarbonate_ppm    {0.0         },
    m_sulfate_ppm        {0.0         },
@@ -157,7 +156,6 @@ Water::Water(QString name) :
 Water::Water(NamedParameterBundle const & namedParameterBundle) :
    OutlineableNamedEntity{namedParameterBundle},
    FolderBase<Water>{namedParameterBundle},
-///   SET_REGULAR_FROM_NPB (m_amount            , namedParameterBundle, PropertyNames::Water::amount          ),
    SET_REGULAR_FROM_NPB (m_calcium_ppm       , namedParameterBundle, PropertyNames::Water::calcium_ppm     ),
    SET_REGULAR_FROM_NPB (m_bicarbonate_ppm   , namedParameterBundle, PropertyNames::Water::bicarbonate_ppm ),
    SET_REGULAR_FROM_NPB (m_sulfate_ppm       , namedParameterBundle, PropertyNames::Water::sulfate_ppm     ),
@@ -186,7 +184,6 @@ Water::Water(NamedParameterBundle const & namedParameterBundle) :
 Water::Water(Water const& other) :
    OutlineableNamedEntity{other},
    FolderBase<Water>{other},
-///   m_amount             {other.m_amount            },
    m_calcium_ppm        {other.m_calcium_ppm       },
    m_bicarbonate_ppm    {other.m_bicarbonate_ppm   },
    m_sulfate_ppm        {other.m_sulfate_ppm       },
@@ -217,7 +214,6 @@ void Water::swap(NamedEntity & other) noexcept {
    // Base class (NamedEntity) will have asserted this cast is valid
    Water & otherWater = static_cast<Water &>(other);
 
-///   std::swap(this->m_amount            , otherWater.m_amount            );
    std::swap(this->m_calcium_ppm       , otherWater.m_calcium_ppm       );
    std::swap(this->m_bicarbonate_ppm   , otherWater.m_bicarbonate_ppm   );
    std::swap(this->m_sulfate_ppm       , otherWater.m_sulfate_ppm       );
@@ -242,12 +238,6 @@ void Water::swap(NamedEntity & other) noexcept {
 }
 
 Water::~Water() = default;
-/*Water::~Water() {
-   qDebug() <<
-      Q_FUNC_INFO << "Deleting Water #" << this->key() << ":" << this->name() << "@" << static_cast<void *>(this);
-   ObjectStoreWrapper::logDiagnostics<Water>();
-   return;
-}*/
 
 Water & Water::operator=(Water other) {
    // Per https://en.wikibooks.org/wiki/More_C++_Idioms/Copy-and-swap and other places, the safest way to do assignment
@@ -269,7 +259,6 @@ Water & Water::operator=(Water other) {
          static_cast<void *>(this) << "in DB";
       ObjectStoreWrapper::update(*this);
    }
-///   if (this->m_amount             != other.m_amount            ) { this->propagatePropertyChange(PropertyNames::Water::amount          ); }
    if (this->m_calcium_ppm        != other.m_calcium_ppm       ) { this->propagatePropertyChange(PropertyNames::Water::calcium_ppm     ); }
    if (this->m_bicarbonate_ppm    != other.m_bicarbonate_ppm   ) { this->propagatePropertyChange(PropertyNames::Water::bicarbonate_ppm ); }
    if (this->m_sulfate_ppm        != other.m_sulfate_ppm       ) { this->propagatePropertyChange(PropertyNames::Water::sulfate_ppm     ); }
@@ -356,10 +345,6 @@ double Water::ppm(Water::Ion const ion) const {
    // Should be unreachable
    return 0.0;
 }
-
-///Recipe * Water::getOwningRecipe() const {
-///   return ObjectStoreWrapper::findFirstMatching<Recipe>( [this](Recipe * rec) {return rec->uses(*this);} );
-///}
 
 // Boilerplate code for FolderBase
 FOLDER_BASE_COMMON_CODE(Water)

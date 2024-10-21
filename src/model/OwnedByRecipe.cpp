@@ -73,11 +73,17 @@ std::shared_ptr<Recipe> OwnedByRecipe::recipe() const {
    return ObjectStoreWrapper::getById<Recipe>(this->m_recipeId);
 }
 
-std::shared_ptr<Recipe> OwnedByRecipe::owningRecipe() const {
+std::shared_ptr<Recipe> OwnedByRecipe::owner() const {
    if (ObjectStoreWrapper::contains<Recipe>(this->m_recipeId)) {
       return ObjectStoreWrapper::getById<Recipe>(this->m_recipeId);
    }
    return nullptr;
+}
+
+std::shared_ptr<Recipe> OwnedByRecipe::owningRecipe() const {
+   // See comment in model/NamedEntity.h.  This function is virtual (runtime polymorphic) but we implement it with by
+   // calling the compile-time polymorphic function whose signature we share with BoilStep, MashStep, FermentationStep.
+   return this->owner();
 }
 
 void OwnedByRecipe::setRecipeId(int const val) { SET_AND_NOTIFY(PropertyNames::OwnedByRecipe::recipeId, this->m_recipeId, val); return; }

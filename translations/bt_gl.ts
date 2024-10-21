@@ -369,6 +369,14 @@
         <source>Brewday</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Overwrite Existing Instructions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Generating instructions will overwrite the existing ones.  This is not undoable.  Do you want to proceed?</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>BrewDayWidget</name>
@@ -3121,10 +3129,6 @@ Log file may contain more details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>%1 water to %2, </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>for upcoming infusions.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3313,10 +3317,6 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Add Extracts to water</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>%1 water to %2 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -6402,23 +6402,7 @@ The final volume in the primary is %1.</source>
     <name>instructionWidget</name>
     <message>
         <source>Form</source>
-        <translation>Formulario</translation>
-    </message>
-    <message>
-        <source>Show a timer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Show timer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mark this step completed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Step completed</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Formulario</translation>
     </message>
 </context>
 <context>

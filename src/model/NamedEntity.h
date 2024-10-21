@@ -354,6 +354,12 @@ public:
     *        object has an owning \c Recipe to make it easy to determine whether a change to a base class property
     *        constitutes a change to a \c Recipe (and if so which one).  Hence this function.
     *
+    *        NOTE that we have a similar member function \b owner() on classes that have an owner (be that owner a
+    *        \c Recipe, \c Boil, \c Mash or \c Fermentation).  The difference is that \c owner is not virtual (as it is
+    *        intended to be called by templated code where we know the concrete type at compile time) and it has
+    *        covariant return types (which are hard to do properly with smart pointers).  To avoid code duplication, we
+    *        normally implement the virtual function (\c owningRecipe()) by calling the non-virtual one (\c owner).
+    *
     * \return \c nullptr if this object does not belong to a \c Recipe (ie it is an Independent Item or a
     *         Semi-Independent Item that is either used in more than one \c Recipe or not used in any \c Recipe)
     */
@@ -446,8 +452,8 @@ protected:
    virtual bool isEqualTo(NamedEntity const & other) const = 0;
 
    /**
-    * \brief Subclasses need to override this function to return the appropriate instance of \c ObjectStoreTyped.
-    *        This allows us in this base class to access \c ObjectStoreTyped<Hop> for \c Hop,
+    * \brief Concrete subclasses need to override this functionto return the appropriate instance of
+    *        \c ObjectStoreTyped.  This allows us in this base class to access \c ObjectStoreTyped<Hop> for \c Hop,
     *        \c ObjectStoreTyped<Fermentable> for \c Fermentable, etc.
     */
    virtual ObjectStore & getObjectStoreTypedInstance() const = 0;

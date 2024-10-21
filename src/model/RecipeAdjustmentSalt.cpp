@@ -104,13 +104,8 @@ Salt * RecipeAdjustmentSalt::salt() const {
       return nullptr;
    }
 
-///   qDebug() << Q_FUNC_INFO << "RecipeAdjustmentSalt #" << this->key() << ": Recipe #" << this->m_recipeId << ", Salt #" << this->m_ingredientId << "@" << ObjectStoreWrapper::getByIdRaw<Salt>(this->m_ingredientId);
    return ObjectStoreWrapper::getByIdRaw<Salt>(this->m_ingredientId);
 }
-
-///Recipe * RecipeAdjustmentSalt::getOwningRecipe() const {
-///   return ObjectStoreWrapper::getByIdRaw<Recipe>(this->m_recipeId);
-///}
 
 NamedEntity * RecipeAdjustmentSalt::ensureExists(BtStringConst const & property) {
    if (property == PropertyNames::RecipeAdjustmentSalt::salt) {

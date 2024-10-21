@@ -50,7 +50,7 @@ EnumStringMapping const MashStep::typeDisplayNames {
 
 
 bool MashStep::isEqualTo(NamedEntity const & other) const {
-   // Base class (NamedEntity) will have ensured this cast is valid
+   // NamedEntity::operator==() will have ensured this cast is valid
    MashStep const & rhs = static_cast<MashStep const &>(other);
    // Base class will already have ensured names are equal
    return (
@@ -58,7 +58,10 @@ bool MashStep::isEqualTo(NamedEntity const & other) const {
       this->m_amount_l     == rhs.m_amount_l     &&
       this->m_infuseTemp_c == rhs.m_infuseTemp_c &&
       // Parent classes have to be equal too
-      this->Step::isEqualTo(other)
+      this->Step::isEqualTo(rhs) &&
+      this->StepBase<MashStep,
+                     Mash,
+                     MashStepOptions>::doIsEqualTo(rhs)
    );
 }
 
@@ -74,7 +77,8 @@ TypeLookup const MashStep::typeLookup {
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::MashStep::liquorToGristRatio_lKg, MashStep::m_liquorToGristRatio_lKg, Measurement::PhysicalQuantity::SpecificVolume),
    },
    // Parent class lookup.  NB: Step not NamedEntity!
-   {&Step::typeLookup}
+   {&Step::typeLookup,
+    std::addressof(StepBase<MashStep, Mash, MashStepOptions>::typeLookup)}
 };
 static_assert(std::is_base_of<Step, MashStep>::value);
 

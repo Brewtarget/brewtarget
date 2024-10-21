@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * PrintAndPreviewDialog.cpp is part of Brewtarget, and is copyright the following authors 2021-2022:
+ * PrintAndPreviewDialog.cpp is part of Brewtarget, and is copyright the following authors 2021-2024:
  *   • Mattias Måhl <mattias@kejsarsten.com>
  *   • Matt Young <mfsy@yahoo.com>
  *
@@ -146,7 +146,7 @@ void PrintAndPreviewDialog::collectSupportedPageSizes() {
       qDebug() << "generating a list of page sizes as there is no printer intalled on the system";
       supportedPageSizeList = generatePageSizeList();
    }
-   foreach(QPageSize pageSize, supportedPageSizeList) {
+   for (QPageSize pageSize : supportedPageSizeList) {
       PageSizeMap.insert(pageSize.name(), pageSize);
       comboBox_PaperFormatSelector->addItem(pageSize.name());
    }

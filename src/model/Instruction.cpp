@@ -22,50 +22,6 @@
 #include "model/NamedParameterBundle.h"
 #include "model/Recipe.h"
 
-// This private implementation class holds all private non-virtual members of Instruction
-class Instruction::impl {
-public:
-
-   /**
-    * Constructor
-    */
-   impl(Instruction & instruction) :
-      instruction{instruction},
-      recipe{} {
-      return;
-   }
-
-   /**
-    * Destructor
-    */
-   ~impl() = default;
-
-   std::shared_ptr<Recipe> getRecipe() {
-      // If we already know which recipe we're in, we just return that...
-      if (this->recipe) {
-         return this->recipe;
-      }
-
-      // ...otherwise we have to ask the recipe object store to find our recipe
-      auto result = ObjectStoreTyped<Recipe>::getInstance().findFirstMatching(
-         [this](std::shared_ptr<Recipe> rec) {return rec->uses(instruction);}
-      );
-
-      if (!result) {
-         qCritical() << Q_FUNC_INFO << "Unable to find Recipe for Instruction #" << this->instruction.key();
-         return nullptr;
-      }
-
-      this->recipe = result;
-
-      return result;
-   }
-
-private:
-   Instruction & instruction;
-   std::shared_ptr<Recipe> recipe;
-};
-
 QString Instruction::localisedName() { return tr("Instruction"); }
 
 bool Instruction::isEqualTo(NamedEntity const & other) const {
@@ -75,12 +31,10 @@ bool Instruction::isEqualTo(NamedEntity const & other) const {
    return (
       this->m_directions == rhs.m_directions &&
       this->m_hasTimer   == rhs.m_hasTimer   &&
-      this->m_timerValue == rhs.m_timerValue
+      this->m_timerValue == rhs.m_timerValue &&
+      // Parent classes have to be equal too
+      this->SteppedBase<Instruction, Recipe>::doIsEqualTo(rhs)
    );
-}
-
-ObjectStore & Instruction::getObjectStoreTypedInstance() const {
-   return ObjectStoreTyped<Instruction>::getInstance();
 }
 
 TypeLookup const Instruction::typeLookup {
@@ -93,25 +47,26 @@ TypeLookup const Instruction::typeLookup {
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Instruction::timerValue, Instruction::m_timerValue),
    },
    // Parent class lookup
-   {&NamedEntity::typeLookup}
+   {&NamedEntity::typeLookup,
+    std::addressof(SteppedBase<Instruction, Recipe>::typeLookup)}
 };
 
 Instruction::Instruction(QString name) :
-   NamedEntity (name, true),
-   pimpl       {std::make_unique<impl>(*this)},
-   m_directions(""),
-   m_hasTimer  (false),
-   m_timerValue(""),
-   m_completed (false),
-   m_interval  (0.0) {
+   NamedEntity  {name },
+   SteppedBase<Instruction, Recipe>{},
+   m_directions {""   },
+   m_hasTimer   {false},
+   m_timerValue {""   },
+   m_completed  {false},
+   m_interval   {0.0  } {
 
    CONSTRUCTOR_END
    return;
 }
 
 Instruction::Instruction(NamedParameterBundle const & namedParameterBundle) :
-   NamedEntity {namedParameterBundle},
-   pimpl       {std::make_unique<impl>(*this)},
+   NamedEntity{namedParameterBundle},
+   SteppedBase<Instruction, Recipe>{namedParameterBundle},
    SET_REGULAR_FROM_NPB (m_directions, namedParameterBundle, PropertyNames::Instruction::directions),
    SET_REGULAR_FROM_NPB (m_hasTimer  , namedParameterBundle, PropertyNames::Instruction::hasTimer  ),
    SET_REGULAR_FROM_NPB (m_timerValue, namedParameterBundle, PropertyNames::Instruction::timerValue),
@@ -123,20 +78,18 @@ Instruction::Instruction(NamedParameterBundle const & namedParameterBundle) :
 }
 
 Instruction::Instruction(Instruction const & other) :
-   NamedEntity {other},
-   pimpl       {std::make_unique<impl>(*this)},
-   m_directions{other.m_directions},
-   m_hasTimer  {other.m_hasTimer  },
-   m_timerValue{other.m_timerValue},
-   m_completed {other.m_completed },
-   m_interval  {other.m_interval  } {
+   NamedEntity  {other},
+   SteppedBase<Instruction, Recipe>{other},
+   m_directions {other.m_directions},
+   m_hasTimer   {other.m_hasTimer  },
+   m_timerValue {other.m_timerValue},
+   m_completed  {other.m_completed },
+   m_interval   {other.m_interval  } {
 
    CONSTRUCTOR_END
    return;
 }
 
-// See https://herbsutter.com/gotw/_100/ for why we need to explicitly define the destructor here (and not in the
-// header file)
 Instruction::~Instruction() = default;
 
 // Setters ====================================================================
@@ -176,20 +129,27 @@ void Instruction::addReagent(QString const & reagent) {
 // Accessors ==================================================================
 QString Instruction::directions() { return m_directions; }
 
-bool Instruction::hasTimer() { return m_hasTimer; }
+bool    Instruction::hasTimer() { return m_hasTimer; }
 
 QString Instruction::timerValue() { return m_timerValue; }
 
-bool Instruction::completed() { return m_completed; }
+bool    Instruction::completed() { return m_completed; }
 
 QList<QString> Instruction::reagents() { return m_reagents; }
 
 double Instruction::interval() { return m_interval; }
 
-int Instruction::instructionNumber() const {
-   return this->pimpl->getRecipe()->instructionNumber(*this);
+///int Instruction::instructionNumber() const {
+///   return this->pimpl->getRecipe()->instructionNumber(*this);
+///}
+
+///std::shared_ptr<Recipe> Instruction::owningRecipe() const {
+///   return ObjectStoreWrapper::findFirstMatching<Recipe>( [this](std::shared_ptr<Recipe> rec) {return rec->uses(*this);} );
+///}
+
+bool operator<(Instruction & lhs, Instruction & rhs) {
+   return lhs.stepNumber() < rhs.stepNumber();
 }
 
-std::shared_ptr<Recipe> Instruction::owningRecipe() const {
-   return ObjectStoreWrapper::findFirstMatching<Recipe>( [this](std::shared_ptr<Recipe> rec) {return rec->uses(*this);} );
-}
+// Insert boiler-plate wrapper functions that call down to SteppedBase
+STEPPED_COMMON_CODE(Instruction)

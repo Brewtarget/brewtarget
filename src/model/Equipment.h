@@ -125,6 +125,8 @@ class Equipment : public NamedEntity,
                   public FolderBase<Equipment> {
    Q_OBJECT
    FOLDER_BASE_DECL(Equipment)
+   // See model/FolderBase.h for info, getters and setters for these properties
+   Q_PROPERTY(QString folder        READ folder        WRITE setFolder     )
 
 public:
    /**
@@ -160,8 +162,6 @@ public:
    //! @}
 
    //=================================================== PROPERTIES ====================================================
-   //! \brief Folder.  See model/FolderBase for implementation of the getter & setter.
-   Q_PROPERTY(QString folder READ folder WRITE setFolder)
    /**
     * \brief The boil size in liters: the pre-boil volume used in this particular instance for this equipment setup.
     *        Note that this may be a calculated value depending on the calcBoilVolume property.
@@ -457,13 +457,11 @@ public:
    //! \brief Calculate how much wort is left immediately at knockout.
    double wortEndOfBoil_l( double kettleWort_l ) const;
 
-///   virtual Recipe * getOwningRecipe() const;
-
 signals:
 
 protected:
-   virtual bool isEqualTo(NamedEntity const & other) const;
-   virtual ObjectStore & getObjectStoreTypedInstance() const;
+   virtual bool isEqualTo(NamedEntity const & other) const override;
+   virtual ObjectStore & getObjectStoreTypedInstance() const override;
 
 private:
    double                m_kettleBoilSize_l          ;
@@ -515,9 +513,6 @@ private:
    QString               m_fermenterNotes             ;
    QString               m_agingVesselNotes           ;
    QString               m_packagingVesselNotes       ;
-
-
-
 
    // Calculate the boil size.
    void doCalculations();

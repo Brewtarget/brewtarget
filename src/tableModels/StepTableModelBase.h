@@ -212,7 +212,7 @@ protected:
 
          int ii = this->derived().findIndexOf(stepSender);
          if (ii >= 0) {
-            if (prop.name() == PropertyNames::Step::stepNumber) {
+            if (prop.name() == PropertyNames::SteppedBase::stepNumber) {
                this->reorderStep(this->derived().rows.at(ii), ii);
             }
 

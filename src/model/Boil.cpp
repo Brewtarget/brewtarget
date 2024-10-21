@@ -17,6 +17,7 @@
 
 #include <algorithm>
 
+#include "database/ObjectStoreWrapper.h"
 #include "model/Fermentation.h"
 #include "model/FermentationStep.h"
 #include "model/Mash.h"
@@ -33,8 +34,10 @@ bool Boil::isEqualTo(NamedEntity const & other) const {
    return (
       Utils::AutoCompare(this->m_description  , rhs.m_description  )   &&
       Utils::AutoCompare(this->m_notes        , rhs.m_notes        ) &&
-      Utils::AutoCompare(this->m_preBoilSize_l, rhs.m_preBoilSize_l)
-      // .:TBD:. Should we check BoilSteps too?
+      Utils::AutoCompare(this->m_preBoilSize_l, rhs.m_preBoilSize_l) &&
+      // Parent classes have to be equal too
+      this->FolderBase<Boil>::doIsEqualTo(rhs) &&
+      this->StepOwnerBase<Boil, BoilStep>::doIsEqualTo(rhs)
    );
 }
 
@@ -50,11 +53,11 @@ TypeLookup const Boil::typeLookup {
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Boil::preBoilSize_l, Boil::m_preBoilSize_l, Measurement::PhysicalQuantity::Volume),
 
       PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Boil::boilTime_mins, Boil::boilTime_mins, Measurement::PhysicalQuantity::Time),
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Boil::boilSteps, Boil::boilSteps),
    },
    // Parent classes lookup
    {&NamedEntity::typeLookup,
-    std::addressof(FolderBase<Boil>::typeLookup)}
+    std::addressof(FolderBase<Boil>::typeLookup),
+    std::addressof(StepOwnerBase<Boil, BoilStep>::typeLookup)}
 };
 static_assert(std::is_base_of<FolderBase<Boil>, Boil>::value);
 
@@ -150,19 +153,8 @@ void Boil::setBoilTime_mins(double const val) {
    return;
 }
 
-void Boil::acceptStepChange([[maybe_unused]] QMetaProperty prop,
-                            [[maybe_unused]] QVariant      val) {
-   BoilStep * stepSender = qobject_cast<BoilStep*>(sender());
-   if (!stepSender) {
-      return;
-   }
-
-   // If one of our steps changed, our pseudo properties may also change, so we need to emit some signals
-   if (stepSender->ownerId() == this->key()) {
-      emit changed(metaProperty(*PropertyNames::Boil::boilTime_mins), QVariant());
-      emit changed(metaProperty(*PropertyNames::Boil::boilSteps    ), QVariant());
-   }
-
+void Boil::acceptStepChange(QMetaProperty prop, QVariant val) {
+   this->doAcceptStepChange(this->sender(), prop, val, {&PropertyNames::Boil::boilTime_mins});
    return;
 }
 
@@ -173,7 +165,12 @@ void Boil::ensureStandardProfile() {
    // post-boil).  If it turns out that there are recipes with more complicated boil profiles then we might need to
    // revisit this.
    //
-   auto recipe = this->getOwningRecipe();
+   // We are sort of assuming that, if this function needs to do anything then probably the Boil is only used by one
+   // Recipe -- because we're typically doing this when we're creating a new Boil for a Recipe being read in from a
+   // BeerXML file.  That said, I don't think anything would break too horribly if in the event the Boil were used by
+   // more than one Recipe.
+   //
+   auto recipe = ObjectStoreWrapper::findFirstMatching<Recipe>([this](Recipe * rec) {return rec->uses(*this);});
 
    auto boilSteps = this->steps();
    if (boilSteps.size() == 0 || boilSteps.at(0)->startTemp_c().value_or(100.0) > Boil::minimumBoilTemperature_c) {

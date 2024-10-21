@@ -546,19 +546,19 @@ void TreeModel::addAncestoralTree(Recipe * rec, int i, TreeNode * parent) {
 }
 
 void TreeModel::addBrewNoteSubTree(Recipe * rec, int i, TreeNode * parent, bool recurse) {
-   QList<BrewNote *> notes = recurse ? RecipeHelper::brewNotesForRecipeAndAncestors(*rec) : rec->brewNotes();
+   auto notes = recurse ? RecipeHelper::brewNotesForRecipeAndAncestors(*rec) : rec->brewNotes();
    TreeNode * temp = parent->child(i);
 
    int j = 0;
 
-   for (BrewNote * note : notes) {
+   for (auto note : notes) {
       // In previous insert loops, we ignore the error and soldier on. So we
       // will do that here too
-      if (! insertRow(j, createIndex(i, 0, temp), note, TreeNode::Type::BrewNote)) {
+      if (! insertRow(j, createIndex(i, 0, temp), note.get(), TreeNode::Type::BrewNote)) {
          qWarning() << Q_FUNC_INFO << "Brewnote insert failed in loadTreeModel()";
          continue;
       }
-      observeElement(note);
+      observeElement(note.get());
       ++j;
    }
    return;
@@ -1174,14 +1174,14 @@ void TreeModel::elementAdded(NamedEntity * victim) {
    // We need some special processing here to add brewnotes on a recipe import
    if (qobject_cast<Recipe *>(victim)) {
       Recipe * parent = qobject_cast<Recipe *>(victim);
-      QList<BrewNote *> notes = parent->brewNotes();
+      auto notes = parent->brewNotes();
 
       if (notes.size()) {
          pIdx = findElement(parent);
          lType = TreeNode::Type::BrewNote;
          int row = 0;
-         for (BrewNote * note : notes) {
-            insertRow(row++, pIdx, note, lType);
+         for (auto note : notes) {
+            insertRow(row++, pIdx, note.get(), lType);
          }
       }
    }

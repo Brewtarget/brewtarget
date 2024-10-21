@@ -35,7 +35,7 @@
 // See comment in model/NamedEntity.h
 #define AddPropertyName(property) namespace PropertyNames::Fermentation { BtStringConst const property{#property}; }
 AddPropertyName(description      )
-AddPropertyName(fermentationSteps)
+///AddPropertyName(fermentationSteps)
 AddPropertyName(notes            )
 AddPropertyName(primary          )
 AddPropertyName(secondary        )
@@ -54,6 +54,11 @@ class Fermentation : public NamedEntity,
    Q_OBJECT
    FOLDER_BASE_DECL(Fermentation)
    STEP_OWNER_COMMON_DECL(Fermentation, fermentation)
+   // See model/FolderBase.h for info, getters and setters for these properties
+   Q_PROPERTY(QString folder        READ folder        WRITE setFolder     )
+   // See model/SteppedOwnerBase.h for info, getters and setters for these properties
+   Q_PROPERTY(QList<std::shared_ptr<FermentationStep>> steps   READ steps   WRITE setSteps   STORED false)
+   Q_PROPERTY(unsigned int numSteps   READ numSteps   STORED false)
 
 public:
    /**
@@ -75,41 +80,49 @@ public:
    virtual ~Fermentation();
 
    //=================================================== PROPERTIES ====================================================
-   //! \brief Folder.  See model/FolderBase for implementation of the getter & setter.
-   Q_PROPERTY(QString folder        READ folder        WRITE setFolder     )
    Q_PROPERTY(QString description   READ description   WRITE setDescription)
    Q_PROPERTY(QString notes         READ notes         WRITE setNotes      )
-   //! \brief The individual fermentation steps.  (See \c StepOwnerBase for getter/setter implementation.)
-   Q_PROPERTY(QList<std::shared_ptr<FermentationStep>>   fermentationSteps   READ fermentationSteps   WRITE setFermentationSteps   STORED false)
 
-   //! \brief Number of fermentation steps -- for BeerXML.  NB: Read-only.  (See \c StepOwnerBase for getter/setter implementation.)
-   Q_PROPERTY(unsigned int numSteps   READ numSteps   STORED false)
-
-   //! \brief Convenience property for accessing the first fermentation step  (See \c StepOwnerBase for getter/setter implementation.)
+   //! \brief Convenience property for accessing the first fermentation step
    Q_PROPERTY(std::shared_ptr<FermentationStep>   primary     READ primary     WRITE setPrimary     STORED false)
-   //! \brief Convenience property for accessing the second fermentation step  (See \c StepOwnerBase for getter/setter implementation.)
+   //! \brief Convenience property for accessing the second fermentation step
    Q_PROPERTY(std::shared_ptr<FermentationStep>   secondary   READ secondary   WRITE setSecondary   STORED false)
-   //! \brief Convenience property for accessing the third fermentation step  (See \c StepOwnerBase for getter/setter implementation.)
+   //! \brief Convenience property for accessing the third fermentation step
    Q_PROPERTY(std::shared_ptr<FermentationStep>   tertiary    READ tertiary    WRITE setTertiary    STORED false)
 
    //============================================ "GETTER" MEMBER FUNCTIONS ============================================
-   QString               description  () const;
-   QString               notes        () const;
+   QString description() const;
+   QString notes      () const;
 
    //============================================ "SETTER" MEMBER FUNCTIONS ============================================
-   void setDescription  (QString               const & val);
-   void setNotes        (QString               const & val);
+   void setDescription(QString const & val);
+   void setNotes      (QString const & val);
+
+   /**
+    * \brief  A set of convenience functions for accessing the first, second and third steps.  Note that calling
+    *         \c setSecondary or \c setTertiary with something other than \c std::nullopt needs to ensure the right
+    *         number of prior step(s) exist, if necessary by creating default ones.
+    *
+    *         We don't put the step name in these getters/setters as it would become unwieldy - eg
+    *         \c setSecondaryFermentationStep()
+    */
+   std::shared_ptr<FermentationStep> primary  () const;
+   std::shared_ptr<FermentationStep> secondary() const;
+   std::shared_ptr<FermentationStep> tertiary () const;
+   void setPrimary  (std::shared_ptr<FermentationStep> val);
+   void setSecondary(std::shared_ptr<FermentationStep> val);
+   void setTertiary (std::shared_ptr<FermentationStep> val);
 
 public slots:
    void acceptStepChange(QMetaProperty, QVariant);
 
 signals:
-   // Emitted when the number of steps change, or when you should call fermentationSteps() again.
+   //! Emitted when the number of steps change, or when you should call fermentationSteps() again.
    void stepsChanged();
 
 protected:
-   virtual bool isEqualTo(NamedEntity const & other) const;
-   virtual ObjectStore & getObjectStoreTypedInstance() const;
+   virtual bool isEqualTo(NamedEntity const & other) const override;
+   virtual ObjectStore & getObjectStoreTypedInstance() const override;
 
 private:
    QString m_description;

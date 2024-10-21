@@ -373,6 +373,14 @@
         <source>Brewday</source>
         <translation type="unfinished">Varní list</translation>
     </message>
+    <message>
+        <source>Overwrite Existing Instructions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Generating instructions will overwrite the existing ones.  This is not undoable.  Do you want to proceed?</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>BrewDayWidget</name>
@@ -3916,7 +3924,7 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>%1 water to %2, </source>
-        <translation>%1 vody na teplotu %2, </translation>
+        <translation type="vanished">%1 vody na teplotu %2, </translation>
     </message>
     <message>
         <source>for upcoming infusions.</source>
@@ -4118,7 +4126,7 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
     <message>
         <source>%1 water to %2 </source>
-        <translation>%1 vody na teplotu %2 </translation>
+        <translation type="vanished">%1 vody na teplotu %2 </translation>
     </message>
     <message>
         <source>mash</source>
@@ -7626,23 +7634,23 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     <name>instructionWidget</name>
     <message>
         <source>Form</source>
-        <translation>Formulář</translation>
+        <translation type="vanished">Formulář</translation>
     </message>
     <message>
         <source>Show a timer</source>
-        <translation>Zobrazit časovač</translation>
+        <translation type="vanished">Zobrazit časovač</translation>
     </message>
     <message>
         <source>Show timer</source>
-        <translation>Zobrazit časovač</translation>
+        <translation type="vanished">Zobrazit časovač</translation>
     </message>
     <message>
         <source>Mark this step completed</source>
-        <translation>Označit krok jako provedený</translation>
+        <translation type="vanished">Označit krok jako provedený</translation>
     </message>
     <message>
         <source>Step completed</source>
-        <translation>Krok proveden</translation>
+        <translation type="vanished">Krok proveden</translation>
     </message>
 </context>
 <context>

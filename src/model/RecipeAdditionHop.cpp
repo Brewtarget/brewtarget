@@ -203,10 +203,6 @@ bool RecipeAdditionHop::isAroma() const {
    return true;
 }
 
-///Recipe * RecipeAdditionHop::getOwningRecipe() const {
-///   return ObjectStoreWrapper::getByIdRaw<Recipe>(this->m_recipeId);
-///}
-
 NamedEntity * RecipeAdditionHop::ensureExists(BtStringConst const & property) {
    if (property == PropertyNames::RecipeAdditionHop::hop) {
       // It's a coding error if a RecipeAdditionHop doesn't have a Hop by the time we're accessing it via the property
