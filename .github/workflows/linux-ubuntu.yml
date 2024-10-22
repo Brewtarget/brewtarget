@@ -142,7 +142,7 @@ jobs:
         working-directory: ${{github.workspace}}/mbuild/packages/linux
         shell: bash
         run: |
-          sudo dpkg -i brewtarget*.deb
+          sudo apt install brewtarget*.deb
 
       - name: Upload Linux Packages (Installers)
         if: ${{ success() }}

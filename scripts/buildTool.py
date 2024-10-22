@@ -835,7 +835,10 @@ def installDependencies():
                         'mingw-w64-' + arch + '-toolchain',
                         'mingw-w64-' + arch + '-xalan-c',
                         'mingw-w64-' + arch + '-xerces-c',
-                        'mingw-w64-' + arch + '-angleproject'] # See comment above
+                        'mingw-w64-' + arch + '-angleproject', # See comment above
+                        'mingw-w64-' + arch + '-ntldd', # Dependency tool useful for running manually -- see below
+
+                        ]
          for packageToInstall in installList:
             log.debug('Installing ' + packageToInstall)
             btUtils.abortOnRunFail(
@@ -1949,9 +1952,16 @@ def doPackage():
          # in the paths listed in the PATH environment variable.  It's a bit less painful than you might think to
          # construct and maintain this list of libraries, because, for the most part, if you miss a needed DLL from the
          # package, Windows will give you an error message at start-up telling you which DLL(s) it needed but could not
-         # find.  (There are also various platform-specific free-standing tools that claim to examine an executable and
-         # tell you what shared libraries it depends on.  None that I know of is easy to install in an automated way in
-         # MSYS2 however.)
+         # find.
+         #
+         # There are also various platform-specific free-standing tools that claim to examine an executable and
+         # tell you what shared libraries it depends on.  In particular ntldd
+         # (see https://packages.msys2.org/packages/mingw-w64-x86_64-ntldd) seems useful.  Note that you need to run it
+         # with the `-R` (recursive) option to catch all the dependencies.  (Unlike with Linux packaging, we can't just
+         # specify the top level dependencies and rely on everything else to get pulled in automatically.)  Eg, the
+         # following is a useful starting point:
+         #
+         #    ntldd -R brewtarget.exe | grep -v "not found" | grep -v ext | grep -v WINDOWS | sed -e 's/^[\t ]*//; s/\.dll.*$//' | sort -u
          #
          # We assume that the library 'foo' has a dll called 'libfoo.dll' or 'libfoo-X.dll' or 'libfooX.dll' where X is
          # a (possibly multi-digit) version number present on some, but not all, libraries.  If we find more matches
@@ -1969,13 +1979,23 @@ def doPackage():
          #
          pathsToSearch = os.environ['PATH'].split(os.pathsep)
          for extraLib in [
+            #
+            # Following should have been handled automatically by windeployqt
+            #
+            #'Qt6Core'        ,
+            #'Qt6Gui'         ,
+            #'Qt6Multimedia'  ,
+            #'Qt6Network'     ,
+            #'Qt6PrintSupport',
+            #'Qt6Sql'         ,
+            #'Qt6Widgets'     ,
             'libb2',                # BLAKE hash functions -- https://en.wikipedia.org/wiki/BLAKE_(hash_function)
             'libbrotlicommon',      # Brotli compression -- see https://en.wikipedia.org/wiki/Brotli
             'libbrotlidec',         # Brotli compression
             'libbrotlienc',         # Brotli compression
             'libbz2',               # BZip2 compression -- see https://en.wikipedia.org/wiki/Bzip2
-            'libdouble-conversion', # See https://github.com/google/double-conversion
-            'libfreetype',          # See https://freetype.org/
+            'libdouble-conversion', # Binary-decimal & decimal-binary routines for IEEE doubles -- see https://github.com/google/double-conversion
+            'libfreetype',          # Font rendering -- see https://freetype.org/
             #
             # 32-bit and 64-bit MinGW use different exception handling (see
             # https://sourceforge.net/p/mingw-w64/wiki2/Exception%20Handling/) hence the different naming of libgcc in
