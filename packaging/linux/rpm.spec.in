@@ -55,7 +55,7 @@ BuildArch   : x86_64
 # Format is similar to Dependencies in Debian (.deb) package control file, but (a) without brackets around version
 # numbers and (b) '-' and '.' are sometimes replaced by '_' in package names.
 #
-# You can search online for rpm packages at, eg, http://download.opensuse.org/tumbleweed/repo/oss/x86_64/
+# You can search online for rpm packages at, eg, https://rpmfind.net/
 #
 # We essentially start with the Debian dependencies and look for RPM equivalents, which have similar, but often slightly
 # different, names.  (There would be a more direct way of doing things if we were building on an RPM-based distro, but
@@ -63,12 +63,15 @@ BuildArch   : x86_64
 # case-sensitive.  (We've ignored this in the past and made everything lower case without error or complaint, but it
 # doesn't hurt to try to follow the standards!)
 #
+# We exclude the following RPM packages:
+#    - glibc-devel : Gives rpmlint error "devel-dependency" = " "Your package has a dependency on a devel package but
+#                    it's not a devel package itself.
+#
 # As with .deb package control file, we do our own line folding in the bt build script, so the backslash line
 # continuations are OK here!
 #
 Requires    : \
    glibc               >= 2.35  , \
-   glibc-devel         >= 2.35  , \
    glibc-32bit         >= 2.35  , \
    libgcc_s1-32bit     >= 12.3.0, \
    libstdc++6-32bit    >= 12.3.0, \
