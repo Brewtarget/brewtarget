@@ -144,8 +144,7 @@ Depends: \
    libqt6sql6t64          (>= 6.2.4 ), \
    libqt6widgets6t64      (>= 6.2.4 ), \
    libxalan-c112t64       (>= 1.12  ), \
-   libxerces-c3.2t64      (>= 3.2.4 )
-
+   libxerces-c3.2t64      (>= 3.2.3 )
 #
 # Installed-Size (Optional) : an estimate of the total amount of disk space required to install the named package
 #    The disk space is given as the integer value of the estimated installed size in bytes, divided by 1024 and rounded
