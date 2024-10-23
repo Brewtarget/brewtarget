@@ -21,6 +21,8 @@ Bug fixes and minor enhancements.
 
 ### Bug Fixes
 * Clicking 'Generate Instructions' on the Brewday tab overwrites existing instructions without warning [862](https://github.com/Brewtarget/brewtarget/issues/862)
+* Brewtarget 4.0.7 Qt6 issue on Ubuntu (libQt6Multimedia.so.6 missing) [861](https://github.com/Brewtarget/brewtarget/issues/861)
+* Missing libb2-1.dll [863](https://github.com/Brewtarget/brewtarget/issues/863)
 
 ### Release Timestamp
 Tue, 16 Oct 2024 04:00:08 +0100
