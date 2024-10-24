@@ -129,7 +129,6 @@ WaterDialog::WaterDialog(QWidget* parent) :
    m_total_digits[static_cast<int>(Salt::Type::NaCl  )] = btDigit_totalnacl  ;
    m_total_digits[static_cast<int>(Salt::Type::NaHCO3)] = btDigit_totalnahco3;
 
-   // foreach( SmartDigitWidget* i, m_ppm_digits ) {
    for (int ii = 0; ii < Water::ionStringMapping.size(); ++ii) {
       m_ppm_digits[ii]->setLimits(0.0,1000.0);
       m_ppm_digits[ii]->setQuantity(0.0);

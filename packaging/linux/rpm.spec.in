@@ -55,23 +55,37 @@ BuildArch   : x86_64
 # Format is similar to Dependencies in Debian (.deb) package control file, but (a) without brackets around version
 # numbers and (b) '-' and '.' are sometimes replaced by '_' in package names.
 #
-# You can search online for rpm packages at, eg, http://download.opensuse.org/tumbleweed/repo/oss/x86_64/
+# You can search online for rpm packages at, eg, https://rpmfind.net/
+#
+# We essentially start with the Debian dependencies and look for RPM equivalents, which have similar, but often slightly
+# different, names.  (There would be a more direct way of doing things if we were building on an RPM-based distro, but
+# we aren't.)  Note that, per https://centoshelp.org/resources/faqs/yum-rpm-faq/, RPM package package names are
+# case-sensitive.  (We've ignored this in the past and made everything lower case without error or complaint, but it
+# doesn't hurt to try to follow the standards!)
+#
+# We exclude the following RPM packages:
+#    - glibc-devel : Gives rpmlint error "devel-dependency" = " "Your package has a dependency on a devel package but
+#                    it's not a devel package itself.
 #
 # As with .deb package control file, we do our own line folding in the bt build script, so the backslash line
 # continuations are OK here!
 #
 Requires    : \
-   libgcc_s1           >= 3.3  ,  \
-   libqt6core6         >= 6.2.4, \
-   libqt6gui6          >= 6.2.4, \
-   libqt6multimedia6   >= 6.2.4, \
-   libqt6network6      >= 6.2.4, \
-   libqt6printsupport6 >= 6.2.4, \
-   libqt6sql6          >= 6.2.4, \
-   libqt6widgets6      >= 6.2.4, \
-   libstdc++6          >= 11   ,  \
-   libxalan-c112       >= 1.12 ,  \
-   libxerces-c3_2      >= 3.2
+   glibc               >= 2.35  , \
+   glibc-32bit         >= 2.35  , \
+   libgcc_s1-32bit     >= 12.3.0, \
+   libstdc++6-32bit    >= 12.3.0, \
+   libgcc_s1           >= 12.3.0, \
+   libstdc++6          >= 12.3.0, \
+   libQt6Core6         >= 6.2.4 , \
+   libQt6Gui6          >= 6.2.4 , \
+   libQt6Multimedia6   >= 6.2.4 , \
+   libQt6Network6      >= 6.2.4 , \
+   libQt6PrintSupport6 >= 6.2.4 , \
+   libQt6Sql6          >= 6.2.4 , \
+   libQt6Widgets6      >= 6.2.4 , \
+   libxalan-c112       >= 1.12  , \
+   libxerces-c-3_2     >= 3.2.3
 
 # Description is done in a different way, perhaps because it's a multi-line field
 %description
@@ -86,8 +100,8 @@ makes the process of recipe formulation much easier.
 %files
 /usr/bin/*
 /usr/share/applications/*
-/usr/share/brewtarget/*
-/usr/share/doc/brewtarget/*
+/usr/share/@CONFIG_APPLICATION_NAME_LC@/*
+/usr/share/doc/@CONFIG_APPLICATION_NAME_LC@/*
 /usr/share/icons/hicolor/scalable/apps/*
 /usr/share/man/man1/*
 

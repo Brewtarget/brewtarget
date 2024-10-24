@@ -25,8 +25,10 @@ bool Fermentation::isEqualTo(NamedEntity const & other) const {
    // Base class will already have ensured names are equal
    return (
       this->m_description == rhs.m_description &&
-      this->m_notes       == rhs.m_notes
-      // .:TBD:. Should we check FermentationSteps too?
+      this->m_notes       == rhs.m_notes       &&
+      // Parent classes have to be equal too
+      this->FolderBase<Fermentation>::doIsEqualTo(rhs) &&
+      this->StepOwnerBase<Fermentation, FermentationStep>::doIsEqualTo(rhs)
    );
 }
 
@@ -40,7 +42,6 @@ TypeLookup const Fermentation::typeLookup {
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Fermentation::description, Fermentation::m_description, NonPhysicalQuantity::String),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Fermentation::notes      , Fermentation::m_notes      , NonPhysicalQuantity::String),
 
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Fermentation::fermentationSteps, Fermentation::fermentationSteps),
       PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Fermentation::primary          , Fermentation::primary          ),
       PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Fermentation::secondary        , Fermentation::secondary        ),
       PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Fermentation::tertiary         , Fermentation::tertiary         ),
@@ -59,8 +60,8 @@ Fermentation::Fermentation(QString name) :
    NamedEntity{name, true},
    FolderBase<Fermentation>{},
    StepOwnerBase<Fermentation, FermentationStep>{},
-   m_description  {""          },
-   m_notes        {""          } {
+   m_description  {""},
+   m_notes        {""} {
 
    CONSTRUCTOR_END
    return;
@@ -81,8 +82,8 @@ Fermentation::Fermentation(Fermentation const & other) :
    NamedEntity{other},
    FolderBase<Fermentation>{other},
    StepOwnerBase<Fermentation, FermentationStep>{other},
-   m_description  {other.m_description  },
-   m_notes        {other.m_notes        } {
+   m_description  {other.m_description},
+   m_notes        {other.m_notes      } {
 
    CONSTRUCTOR_END
    return;
@@ -98,8 +99,15 @@ QString Fermentation::notes      () const { return this->m_notes      ; }
 void Fermentation::setDescription (QString const & val) { SET_AND_NOTIFY(PropertyNames::Fermentation::description, this->m_description, val); return; }
 void Fermentation::setNotes       (QString const & val) { SET_AND_NOTIFY(PropertyNames::Fermentation::notes      , this->m_notes      , val); return; }
 
-void Fermentation::acceptStepChange([[maybe_unused]] QMetaProperty prop,
-                                    [[maybe_unused]] QVariant      val) {
+std::shared_ptr<FermentationStep> Fermentation::primary  () const { return this->stepAt(1); }
+std::shared_ptr<FermentationStep> Fermentation::secondary() const { return this->stepAt(2); }
+std::shared_ptr<FermentationStep> Fermentation::tertiary () const { return this->stepAt(3); }
+void Fermentation::setPrimary  (std::shared_ptr<FermentationStep> val) { this->setStepAt(val, 1); return; }
+void Fermentation::setSecondary(std::shared_ptr<FermentationStep> val) { this->setStepAt(val, 2); return; }
+void Fermentation::setTertiary (std::shared_ptr<FermentationStep> val) { this->setStepAt(val, 3); return; }
+
+void Fermentation::acceptStepChange(QMetaProperty prop, QVariant val) {
+   this->doAcceptStepChange(this->sender(), prop, val, {});
    return;
 }
 

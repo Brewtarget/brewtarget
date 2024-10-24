@@ -39,7 +39,8 @@ TypeLookup const FermentationStep::typeLookup {
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::FermentationStep::vessel  , FermentationStep::m_vessel  , NonPhysicalQuantity::String),
    },
    // Parent class lookup.  NB: StepExtended not NamedEntity!
-   {&StepExtended::typeLookup}
+   {&StepExtended::typeLookup,
+    std::addressof(StepBase<FermentationStep, Fermentation, FermentationStepOptions>::typeLookup)}
 };
 static_assert(std::is_base_of<StepExtended, FermentationStep>::value);
 

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * serialization/xml/XmlMashRecord.cpp is part of Brewtarget, and is copyright the following authors 2021-2022:
+ * serialization/xml/XmlMashRecord.cpp is part of Brewtarget, and is copyright the following authors 2021-2024:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -28,7 +28,7 @@ void XmlMashRecord::subRecordToXml(XmlRecordDefinition::FieldDefinition const & 
    Mash const & mash = static_cast<Mash const &>(namedEntityToExport);
 
    // We assert that MashStep is the only complex record inside a Mash
-   Q_ASSERT(fieldDefinition.propertyPath.asXPath() == PropertyNames::Mash::mashSteps);
+   Q_ASSERT(fieldDefinition.propertyPath.asXPath() == PropertyNames::SteppedOwnerBase::steps);
 
    auto children = mash.mashSteps();
    if (children.empty()) {

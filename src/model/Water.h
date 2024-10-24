@@ -70,6 +70,8 @@ class Water : public OutlineableNamedEntity,
               public FolderBase<Water> {
    Q_OBJECT
    FOLDER_BASE_DECL(Water)
+   // See model/FolderBase.h for info, getters and setters for these properties
+   Q_PROPERTY(QString folder        READ folder        WRITE setFolder     )
 
 public:
    /**
@@ -79,7 +81,7 @@ public:
 
    /**
     * \brief
-    *        NOTE: This does not appear to be part of BeerXML or BeerJSON.
+    *        NOTE: This does not appear to be part of BeerXML or BeerJSON.  TBD I am not 100% certain that we need it.
     */
    enum class Type {
       Base  ,
@@ -149,14 +151,12 @@ protected:
     *
     *        Note that we are overriding NamedEntity::swap, so we want to keep the same signature.
     */
-   virtual void swap(NamedEntity & other) noexcept;
+   virtual void swap(NamedEntity & other) noexcept override;
 
 public:
    // .:TODO:. On a base or target profile, bicarbonate and alkalinity cannot both be used. I'm gonna have fun figuring that out
 
    //=================================================== PROPERTIES ====================================================
-   //! \brief Folder.  See model/FolderBase for implementation of the getter & setter.
-   Q_PROPERTY(QString folder READ folder WRITE setFolder)
    //! \brief The ppm of calcium.  Required in BeerXML and BeerJSON.
    Q_PROPERTY(double calcium_ppm     READ calcium_ppm     WRITE setCalcium_ppm)
    //! \brief The ppm of bicarbonate.  Required in BeerXML and BeerJSON.
@@ -198,7 +198,6 @@ public:
    Q_PROPERTY(std::optional<double> fluoride_ppm   READ fluoride_ppm     WRITE setFluoride_ppm )
 
    //============================================ "GETTER" MEMBER FUNCTIONS ============================================
-///   double              amount          () const;
    double                calcium_ppm     () const;
    double                bicarbonate_ppm () const;
    double                sulfate_ppm     () const;
@@ -224,7 +223,6 @@ public:
    double       ppm(Water::Ion const ion) const;
 
    //============================================ "SETTER" MEMBER FUNCTIONS ============================================
-///   void setAmount          (double              const   val);
    void setCalcium_ppm     (double                const   val);
    void setSulfate_ppm     (double                const   val);
    void setBicarbonate_ppm (double                const   val);
@@ -248,16 +246,13 @@ public:
    void setNitrite_ppm     (std::optional<double> const   val);
    void setFluoride_ppm    (std::optional<double> const   val);
 
-///   virtual Recipe * getOwningRecipe() const;
-
 signals:
 
 protected:
-   virtual bool isEqualTo(NamedEntity const & other) const;
-   virtual ObjectStore & getObjectStoreTypedInstance() const;
+   virtual bool isEqualTo(NamedEntity const & other) const override;
+   virtual ObjectStore & getObjectStoreTypedInstance() const override;
 
 private:
-///   double              m_amount            ;
    double                m_calcium_ppm       ;
    double                m_bicarbonate_ppm   ;
    double                m_sulfate_ppm       ;

@@ -196,32 +196,30 @@ QString BrewDayFormatter::buildInstructionHtml() {
              .arg(tr("Time"))
              .arg(tr("Step"));
 
-   QList<Instruction *> instructions = recObs->instructions();
-   int size = instructions.size();
-   for (int i = 0; i < size; ++i) {
+   bool useAlt = true;
+   for (auto instruction : recObs->steps()) {
+      useAlt = !useAlt;
       QString stepTime, tmp;
       QList<QString> reagents;
 
-      Instruction * ins = instructions[i];
-
-      if (ins->interval() > 0.0) {
-         stepTime = Measurement::displayAmount(Measurement::Amount{ins->interval(), Measurement::Units::minutes}, 0);
+      if (instruction->interval() > 0.0) {
+         stepTime = Measurement::displayAmount(Measurement::Amount{instruction->interval(), Measurement::Units::minutes}, 0);
       } else {
          stepTime = "--";
       }
 
       tmp = "";
 
-      // TODO: comparing ins->name() with these untranslated strings means this
+      // TODO: comparing instruction->name() with these untranslated strings means this
       // doesn't work in other languages. Find a better way.
-      if (ins->name() == tr("Add grains")) {
+      if (instruction->name() == tr("Add grains")) {
          reagents = recObs->getReagents(recObs->fermentableAdditions());
-      } else if (ins->name() == tr("Heat water")) {
+      } else if (instruction->name() == tr("Heat water")) {
          if (recObs->mash()) {
             reagents = recObs->getReagents(recObs->mash()->mashSteps());
          }
       } else {
-         reagents = ins->reagents();
+         reagents = instruction->reagents();
       }
 
       if (reagents.size() > 1) {
@@ -234,15 +232,15 @@ QString BrewDayFormatter::buildInstructionHtml() {
       } else if (reagents.size() == 1) {
          tmp = reagents.at(0);
       } else {
-         tmp = ins->directions();
+         tmp = instruction->directions();
       }
 
-      QString altTag = i % 2 ? "alt" : "norm";
+      QString altTag = useAlt ? "alt" : "norm";
 
       middle += QString("<tr class=\"%1\"><td class=\"check\"></td><td class=\"time\">%2</td><td align=\"step\">%3 : %4</td></tr>")
                 .arg(altTag)
                 .arg(stepTime)
-                .arg(ins->name())
+                .arg(instruction->name())
                 .arg(tmp);
    }
    middle += "</table>";
@@ -254,7 +252,6 @@ QList<QStringList> BrewDayFormatter::buildInstructionList() {
    QList<QStringList> ret;
 
    QStringList row;
-   int i, size;
 
    row.append(tr("Completed"));
    row.append(tr("Time"));
@@ -262,43 +259,39 @@ QList<QStringList> BrewDayFormatter::buildInstructionList() {
    ret.append(row);
    row.clear();
 
-   QList<Instruction *> instructions = recObs->instructions();
-   size = instructions.size();
-   for (i = 0; i < size; ++i) {
+   for (auto instruction : recObs->steps()) {
       QString stepTime, tmp;
       QList<QString> reagents;
 
-      Instruction * ins = instructions[i];
-
-      if (ins->interval() > 0.0) {
-         stepTime = Measurement::displayAmount(Measurement::Amount{ins->interval(), Measurement::Units::minutes}, 0);
+      if (instruction->interval() > 0.0) {
+         stepTime = Measurement::displayAmount(Measurement::Amount{instruction->interval(), Measurement::Units::minutes}, 0);
       } else {
          stepTime = "--";
       }
 
-      // TODO: comparing ins->name() with these untranslated strings means this
+      // TODO: comparing instruction->name() with these untranslated strings means this
       // doesn't work in other languages. Find a better way.
-      if (ins->name() == tr("Add grains")) {
+      if (instruction->name() == tr("Add grains")) {
          reagents = recObs->getReagents(recObs->fermentableAdditions());
-      } else if (ins->name() == tr("Heat water")) {
+      } else if (instruction->name() == tr("Heat water")) {
          if (recObs->mash()) {
             reagents = recObs->getReagents(recObs->mash()->mashSteps());
          }
       } else {
-         reagents = ins->reagents();
+         reagents = instruction->reagents();
       }
 
       tmp = "";
       if (reagents.size() > 0) {
-         foreach (QString reagent, reagents) {
+         for (QString reagent : reagents) {
             tmp += QString("\t%1\n").arg(reagent);
          }
       } else {
-         tmp = ins->directions();
+         tmp = instruction->directions();
       }
 
       row.append(stepTime);
-      row.append(QString("%1 : %2").arg(ins->name()).arg(tmp));
+      row.append(QString("%1 : %2").arg(instruction->name()).arg(tmp));
       ret.append(row);
       row.clear();
    }

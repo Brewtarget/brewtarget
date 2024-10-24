@@ -35,8 +35,8 @@
 AddPropertyName(description  )
 AddPropertyName(notes        )
 AddPropertyName(preBoilSize_l)
-AddPropertyName(boilTime_mins)
-AddPropertyName(boilSteps    )
+AddPropertyName(boilTime_mins) // Only used for BeerXML
+///AddPropertyName(boilSteps    )
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
 //======================================================================================================================
@@ -59,7 +59,9 @@ AddPropertyName(boilSteps    )
  *             MashStep and BoilStep, which saves us duplicating code.
  *
  *             Our \c Boil class maps closely to a BeerJSON "boil procedure", with the exception that, in BeerJSON "a
- *             boil procedure with no steps is the same as a standard single step boil."
+ *             boil procedure with no steps is the same as a standard single step boil."  We treat steps as required
+ *             (for consistency with \c Mash::mashSteps and \c Fermentation::fermentationSteps) and map "no list of boil
+ *             steps" to "empty list of boil steps".
  */
 class Boil : public NamedEntity,
              public FolderBase<Boil>,
@@ -68,6 +70,11 @@ class Boil : public NamedEntity,
 
    FOLDER_BASE_DECL(Boil)
    STEP_OWNER_COMMON_DECL(Boil, boil)
+   // See model/FolderBase.h for info, getters and setters for these properties
+   Q_PROPERTY(QString folder        READ folder        WRITE setFolder     )
+   // See model/SteppedOwnerBase.h for info, getters and setters for these properties
+   Q_PROPERTY(QList<std::shared_ptr<BoilStep>> steps   READ steps   WRITE setSteps   STORED false)
+   Q_PROPERTY(unsigned int numSteps   READ numSteps   STORED false)
 
 public:
    /**
@@ -109,8 +116,6 @@ public:
    static constexpr double minimumBoilTemperature_c{81.0};
 
    //=================================================== PROPERTIES ====================================================
-   //! \brief Folder.  See model/FolderBase for implementation of the getter & setter.
-   Q_PROPERTY(QString folder        READ folder        WRITE setFolder     )
    Q_PROPERTY(QString description   READ description   WRITE setDescription)
    Q_PROPERTY(QString notes         READ notes         WRITE setNotes      )
 
@@ -132,13 +137,6 @@ public:
     *        TBD: It's possible we should make this optional if we desire to support "no boil" recipes in future.
     */
    Q_PROPERTY(double                boilTime_mins          READ boilTime_mins   WRITE setBoilTime_mins STORED false)
-   /**
-    * \brief The individual boil steps.  (See \c StepOwnerBase for getter/setter implementation.)
-    *        Technically this is optional in BeerJSON, but we'll treat it as required (for consistency with
-    *        \c Mash::mashSteps and \c Fermentation::fermentationSteps) and map "no list of boil steps" to "empty list
-    *        of boil steps".
-    */
-   Q_PROPERTY(QList<std::shared_ptr<BoilStep>>    boilSteps         READ boilSteps    WRITE setBoilSteps STORED false)
 
    //============================================ "GETTER" MEMBER FUNCTIONS ============================================
    QString               description  () const;
@@ -179,8 +177,8 @@ signals:
    void stepsChanged();
 
 protected:
-   virtual bool isEqualTo(NamedEntity const & other) const;
-   virtual ObjectStore & getObjectStoreTypedInstance() const;
+   virtual bool isEqualTo(NamedEntity const & other) const override;
+   virtual ObjectStore & getObjectStoreTypedInstance() const override;
 
 private:
    QString               m_description  ;

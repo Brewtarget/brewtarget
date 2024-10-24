@@ -373,6 +373,14 @@
         <source>Brewday</source>
         <translation type="unfinished">Brewday</translation>
     </message>
+    <message>
+        <source>Overwrite Existing Instructions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Generating instructions will overwrite the existing ones.  This is not undoable.  Do you want to proceed?</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>BrewDayWidget</name>
@@ -3808,7 +3816,7 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>%1 water to %2, </source>
-        <translation>%1 water to %2, % 1水% 2, </translation>
+        <translation type="vanished">%1 water to %2, % 1水% 2, </translation>
     </message>
     <message>
         <source>for upcoming infusions.</source>
@@ -4010,7 +4018,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>%1 water to %2 </source>
-        <translation>％2％1水 %1 water to %2 </translation>
+        <translation type="vanished">％2％1水 %1 water to %2 </translation>
     </message>
     <message>
         <source>mash</source>
@@ -7492,23 +7500,23 @@ The final volume in the primary is %1.</source>
     <name>instructionWidget</name>
     <message>
         <source>Form</source>
-        <translation>形式Form</translation>
+        <translation type="vanished">形式Form</translation>
     </message>
     <message>
         <source>Show a timer</source>
-        <translation>显示一个计时器Show a timer</translation>
+        <translation type="vanished">显示一个计时器Show a timer</translation>
     </message>
     <message>
         <source>Show timer</source>
-        <translation>显示计时器Show timer</translation>
+        <translation type="vanished">显示计时器Show timer</translation>
     </message>
     <message>
         <source>Mark this step completed</source>
-        <translation>标记完成这一步Mark this step completed</translation>
+        <translation type="vanished">标记完成这一步Mark this step completed</translation>
     </message>
     <message>
         <source>Step completed</source>
-        <translation>步骤完成Step completed</translation>
+        <translation type="vanished">步骤完成Step completed</translation>
     </message>
 </context>
 <context>

@@ -373,6 +373,14 @@
         <source>Brewday</source>
         <translation type="unfinished">День варки</translation>
     </message>
+    <message>
+        <source>Overwrite Existing Instructions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Generating instructions will overwrite the existing ones.  This is not undoable.  Do you want to proceed?</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>BrewDayWidget</name>
@@ -4007,7 +4015,7 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>%1 water to %2, </source>
-        <translation>%1 воды к %2 </translation>
+        <translation type="vanished">%1 воды к %2 </translation>
     </message>
     <message>
         <source>for upcoming infusions.</source>
@@ -4209,7 +4217,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>%1 water to %2 </source>
-        <translation>%1 воды к %2 </translation>
+        <translation type="vanished">%1 воды к %2 </translation>
     </message>
     <message>
         <source>mash</source>
@@ -7730,23 +7738,23 @@ The final volume in the primary is %1.</source>
     <name>instructionWidget</name>
     <message>
         <source>Form</source>
-        <translation>Форма</translation>
+        <translation type="vanished">Форма</translation>
     </message>
     <message>
         <source>Show a timer</source>
-        <translation>Показать таймер</translation>
+        <translation type="vanished">Показать таймер</translation>
     </message>
     <message>
         <source>Show timer</source>
-        <translation>Показать таймер</translation>
+        <translation type="vanished">Показать таймер</translation>
     </message>
     <message>
         <source>Mark this step completed</source>
-        <translation>Пометить этот этап, как завершённый</translation>
+        <translation type="vanished">Пометить этот этап, как завершённый</translation>
     </message>
     <message>
         <source>Step completed</source>
-        <translation>Этап завершён</translation>
+        <translation type="vanished">Этап завершён</translation>
     </message>
 </context>
 <context>

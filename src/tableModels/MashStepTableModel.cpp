@@ -49,8 +49,8 @@ MashStepTableModel::MashStepTableModel(QTableView * parent, bool editable) :
          TABLE_MODEL_HEADER(MashStep, Type      , tr("Type"         ), PropertyNames::MashStep::type         , EnumInfo{MashStep::typeStringMapping, MashStep::typeDisplayNames}),
          TABLE_MODEL_HEADER(MashStep, Amount    , tr("Amount"       ), PropertyNames::MashStep::amount_l     ),
          TABLE_MODEL_HEADER(MashStep, Temp      , tr("Infusion Temp"), PropertyNames::MashStep::infuseTemp_c ),
-         TABLE_MODEL_HEADER(MashStep, TargetTemp, tr("Target Temp"  ), PropertyNames::    Step::startTemp_c  ),
-         TABLE_MODEL_HEADER(MashStep, Time      , tr("Time"         ), PropertyNames::    Step::stepTime_mins),
+         TABLE_MODEL_HEADER(MashStep, TargetTemp, tr("Target Temp"  ), PropertyNames::StepBase::startTemp_c  ),
+         TABLE_MODEL_HEADER(MashStep, Time      , tr("Time"         ), PropertyNames::StepBase::stepTime_mins),
       }
    },
    TableModelBase<MashStepTableModel, MashStep>{},

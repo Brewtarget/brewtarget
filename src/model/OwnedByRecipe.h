@@ -21,14 +21,14 @@
 
 #include "model/NamedEntity.h"
 
-//╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+//======================================================================================================================
 //========================================== Start of property name constants ==========================================
 // See comment in model/NamedEntity.h
 #define AddPropertyName(property) namespace PropertyNames::OwnedByRecipe { BtStringConst const property{#property}; }
 AddPropertyName(recipeId)
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
-//╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+//======================================================================================================================
 
 // Forward declarations;
 class Recipe;
@@ -59,12 +59,17 @@ public:
    void setRecipeId(int const val);
    void setRecipe(Recipe * recipe);
 
-   virtual std::shared_ptr<Recipe> owningRecipe() const;
+   /**
+    * \brief This is, amongst other things, needed by \c TreeModelBase
+    */
+   std::shared_ptr<Recipe> owner() const;
+
+   virtual std::shared_ptr<Recipe> owningRecipe() const override;
    int recipeId() const;
    std::shared_ptr<Recipe> recipe() const;
 
 protected:
-   virtual bool isEqualTo(NamedEntity const & other) const;
+   virtual bool isEqualTo(NamedEntity const & other) const override;
 
 protected:
    int m_recipeId;

@@ -32,13 +32,7 @@
 AddPropertyName(description    )
 AddPropertyName(endAcidity_pH  )
 AddPropertyName(endTemp_c      )
-AddPropertyName(ownerId        )
-AddPropertyName(rampTime_mins  )
 AddPropertyName(startAcidity_pH)
-AddPropertyName(startTemp_c    )
-AddPropertyName(stepNumber     )
-AddPropertyName(stepTime_days  ) // Mostly needed for BeerXML
-AddPropertyName(stepTime_mins  )
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
 //======================================================================================================================
@@ -107,89 +101,27 @@ public:
 
    //=================================================== PROPERTIES ====================================================
    /**
-    * \brief The time of the step in min.
-    *        NOTE: This is required for MashStep but optional for BoilStep and FermentationStep.  We make it optional
-    *              here but classes that need it required should set \c StepBaseOptions.stepTimeIsRequired parameter on
-    *              \c StepBase template.  See \c StepBase for getters and setters.
-    */
-   Q_PROPERTY(std::optional<double> stepTime_mins          READ stepTime_mins          WRITE setStepTime_mins           )
-   /**
-    * \brief The time of the step in days - primarily for convenience on FermentationStep where measuring in minutes is
-    *        overly precise.  The underlying measure in the database remains minutes however, for consistency.
-    */
-   Q_PROPERTY(std::optional<double> stepTime_days          READ stepTime_days          WRITE setStepTime_days           )
-   /**
-    * \brief Per comment above, this is also referred to as step temperature when talking about Mash Steps.
-    *        For a \c MashStep, this is the target temperature of this step in C.  This is the main field to use when
-    *        dealing with the mash step temperature.
-    *
-    *        NOTE: This is required for MashStep but optional for BoilStep and FermentationStep.  We make it optional
-    *              here but classes that need it required should set \c StepBaseOptions.startTempIsRequired parameter on
-    *              \c StepBase template.  See \c StepBase for getters and setters.
-    */
-   Q_PROPERTY(std::optional<double> startTemp_c      READ startTemp_c      WRITE setStartTemp_c    )
-   /**
-    * \brief The target ending temp of the step in C.                       ⮜⮜⮜ Optional in BeerXML & BeerJSON ⮞⮞⮞
+    * \brief The target ending temp of the step in °C.                       ⮜⮜⮜ Optional in BeerXML & BeerJSON ⮞⮞⮞
     *
     *        On a \c MashStep, this field is used in BeerXML and BeerJSON to signify "The expected temperature the mash
     *        falls to after a long mash step."
     */
-   Q_PROPERTY(std::optional<double> endTemp_c              READ endTemp_c              WRITE setEndTemp_c                       )
-   /**
-    * \brief The time it takes to ramp the temp to the target temp in min - ie the amount of time that passes before
-    *        this step begins.                                                           ⮜⮜⮜ Optional in BeerXML & BeerJSON ⮞⮞⮞
-    *
-    *        Eg for \c MashStep, moving from a mash step (step 1) of 148F, to a new temperature step of 156F (step 2)
-    *        may take 8 minutes to heat the mash. Step 2 would have a ramp time of 8 minutes.
-    *
-    *        Similarly, for a \c BoilStep, moving from a boiling step (step 1) to a whirlpool step (step 2) may take 5
-    *        minutes.  Step 2 would have a ramp time of 5 minutes, hop isomerization and bitterness calculations will
-    *        need to account for this accordingly.
-    *
-    *        NOTE: This property is \b not used by \c FermentationStep.  (It is the only property shared by \c MashStep
-    *              and \c BoilStep that is not also needed in \c FermentationStep.  We can't really do mix-ins in Qt, so
-    *              it's simplest just to not use it in \c FermentationStep.  We require the classes that use this
-    *              property to set set \c StepBaseOptions.rampTimeIsSupported parameter on \c StepBase template, so we
-    *              can at least get a run-time error if we accidentally try to use this property on a
-    *              \c FermentationStep.)  See \c StepBase for getters and setters.
-    */
-   Q_PROPERTY(std::optional<double> rampTime_mins          READ rampTime_mins          WRITE setRampTime_mins                   )
-   //! \brief The step number in a sequence of other steps.  Step numbers start from 1.
-   Q_PROPERTY(int                   stepNumber             READ stepNumber             WRITE setStepNumber          STORED false)
-   //! \brief The Mash, Boil or Fermentation to which this Step belongs
-   Q_PROPERTY(int                   ownerId                READ ownerId                WRITE setOwnerId                         )
+   Q_PROPERTY(std::optional<double> endTemp_c         READ endTemp_c         WRITE setEndTemp_c      )
    // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
-   Q_PROPERTY(QString               description            READ description            WRITE setDescription                     )
-   Q_PROPERTY(std::optional<double> startAcidity_pH        READ startAcidity_pH        WRITE setStartAcidity_pH                 )
-   Q_PROPERTY(std::optional<double>   endAcidity_pH        READ   endAcidity_pH        WRITE   setEndAcidity_pH                 )
+   Q_PROPERTY(QString               description       READ description       WRITE setDescription    )
+   Q_PROPERTY(std::optional<double> startAcidity_pH   READ startAcidity_pH   WRITE setStartAcidity_pH)
+   Q_PROPERTY(std::optional<double>   endAcidity_pH   READ   endAcidity_pH   WRITE   setEndAcidity_pH)
 
    //============================================ "GETTER" MEMBER FUNCTIONS ============================================
 
-   std::optional<double>   endTemp_c    () const;
-   int                   stepNumber     () const;
-   int                   ownerId        () const;
+   std::optional<double> endTemp_c      () const;
    // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
    QString               description    () const;
    std::optional<double> startAcidity_pH() const;
    std::optional<double>   endAcidity_pH() const;
 
-   // See model/StepBase.h for overrides of these
-   virtual std::optional<double> stepTime_mins() const = 0;
-   virtual std::optional<double> stepTime_days() const = 0;
-   virtual std::optional<double> startTemp_c  () const = 0;
-   virtual std::optional<double> rampTime_mins() const = 0;
-
    //============================================ "SETTER" MEMBER FUNCTIONS ============================================
-
-   // See model/StepBase.h for overrides of these
-   virtual void setStepTime_mins(std::optional<double> const val) = 0;
-   virtual void setStepTime_days(std::optional<double> const val) = 0;
-   virtual void setStartTemp_c  (std::optional<double> const val) = 0;
-   virtual void setRampTime_mins(std::optional<double> const val) = 0;
-
    void setEndTemp_c      (std::optional<double> const   val       );
-   void setStepNumber     (int                   const   stepNumber);
-   void setOwnerId        (int                   const   ownerId   );
    // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
    void setDescription    (QString               const & val);
    void setStartAcidity_pH(std::optional<double> const   val);
@@ -201,14 +133,9 @@ protected:
    virtual bool isEqualTo(NamedEntity const & other) const;
 
 protected:
-   std::optional<double> m_stepTime_mins  ;
-   std::optional<double> m_startTemp_c    ;
    std::optional<double> m_endTemp_c      ;
-   int                   m_stepNumber     ;
-   int                   m_ownerId        ;
    // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
    QString               m_description    ;
-   std::optional<double> m_rampTime_mins  ;
    std::optional<double> m_startAcidity_pH;
    std::optional<double> m_endAcidity_pH  ;
 

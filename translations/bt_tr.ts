@@ -373,6 +373,14 @@
         <source>Brewday</source>
         <translation>Demleme Günü</translation>
     </message>
+    <message>
+        <source>Overwrite Existing Instructions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Generating instructions will overwrite the existing ones.  This is not undoable.  Do you want to proceed?</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>BrewDayWidget</name>
@@ -3974,7 +3982,7 @@ Günlük dosyası daha fazla detay içerebilir.</translation>
     </message>
     <message>
         <source>%1 water to %2, </source>
-        <translation>%1 olan %2 derece suyu, </translation>
+        <translation type="vanished">%1 olan %2 derece suyu, </translation>
     </message>
     <message>
         <source>for upcoming infusions.</source>
@@ -4176,7 +4184,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>%1 water to %2 </source>
-        <translation>%1 su ekleyerek %2 sıcaklığında </translation>
+        <translation type="vanished">%1 su ekleyerek %2 sıcaklığında </translation>
     </message>
     <message>
         <source>mash</source>
@@ -7665,23 +7673,23 @@ The final volume in the primary is %1.</source>
     <name>instructionWidget</name>
     <message>
         <source>Form</source>
-        <translation>Biçim</translation>
+        <translation type="vanished">Biçim</translation>
     </message>
     <message>
         <source>Show a timer</source>
-        <translation>Bir zamanlayıcı göster</translation>
+        <translation type="vanished">Bir zamanlayıcı göster</translation>
     </message>
     <message>
         <source>Show timer</source>
-        <translation>Zamanlayıcı göster</translation>
+        <translation type="vanished">Zamanlayıcı göster</translation>
     </message>
     <message>
         <source>Mark this step completed</source>
-        <translation>Bu adımı tamamlandı olarak işaretle</translation>
+        <translation type="vanished">Bu adımı tamamlandı olarak işaretle</translation>
     </message>
     <message>
         <source>Step completed</source>
-        <translation>Adım tamamlandı</translation>
+        <translation type="vanished">Adım tamamlandı</translation>
     </message>
 </context>
 <context>

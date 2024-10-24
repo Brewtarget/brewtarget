@@ -114,17 +114,19 @@ public:
    void setSalt          (Salt *               const val);
    void setWhenToAdd     (RecipeAdjustmentSalt::WhenToAdd val);
 
-   virtual NamedEntity * ensureExists(BtStringConst const & property);
+   virtual NamedEntity * ensureExists(BtStringConst const & property) override;
 
 protected:
    // Note that we don't override isEqualTo, as we don't have any non-inherited member variables
-   virtual ObjectStore & getObjectStoreTypedInstance() const;
+   virtual ObjectStore & getObjectStoreTypedInstance() const override;
 
 private:
    WhenToAdd m_whenToAdd;
 };
 
 Q_DECLARE_METATYPE(Salt)
+// As of Qt6, we get compiler errors if we uncomment the following, but, so far, everything seems to work fine with it
+// commented out!
 //Q_DECLARE_METATYPE(Salt *)
 BT_DECLARE_METATYPES(RecipeAdjustmentSalt)
 

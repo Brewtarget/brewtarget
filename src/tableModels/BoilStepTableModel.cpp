@@ -33,9 +33,9 @@ BoilStepTableModel::BoilStepTableModel(QTableView * parent, bool editable) :
       editable,
       {
          TABLE_MODEL_HEADER(BoilStep, Name        , tr("Name"         ), PropertyNames:: NamedEntity::name           ),
-         TABLE_MODEL_HEADER(BoilStep, StepTime    , tr("Step Time"    ), PropertyNames::        Step::stepTime_mins  , PrecisionInfo{0}),
-         TABLE_MODEL_HEADER(BoilStep, StartTemp   , tr("Start Temp"   ), PropertyNames::        Step::startTemp_c    , PrecisionInfo{1}),
-         TABLE_MODEL_HEADER(BoilStep, RampTime    , tr("Ramp Time"    ), PropertyNames::        Step::rampTime_mins  , PrecisionInfo{0}),
+         TABLE_MODEL_HEADER(BoilStep, StepTime    , tr("Step Time"    ), PropertyNames::    StepBase::stepTime_mins  , PrecisionInfo{0}),
+         TABLE_MODEL_HEADER(BoilStep, StartTemp   , tr("Start Temp"   ), PropertyNames::    StepBase::startTemp_c    , PrecisionInfo{1}),
+         TABLE_MODEL_HEADER(BoilStep, RampTime    , tr("Ramp Time"    ), PropertyNames::    StepBase::rampTime_mins  , PrecisionInfo{0}),
          TABLE_MODEL_HEADER(BoilStep, EndTemp     , tr("End Temp"     ), PropertyNames::        Step::endTemp_c      , PrecisionInfo{1}),
          TABLE_MODEL_HEADER(BoilStep, StartAcidity, tr("Start Acidity"), PropertyNames::        Step::startAcidity_pH, PrecisionInfo{1}),
          TABLE_MODEL_HEADER(BoilStep, EndAcidity  , tr("End Acidity"  ), PropertyNames::        Step::endAcidity_pH  , PrecisionInfo{1}),

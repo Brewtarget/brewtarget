@@ -124,8 +124,25 @@ jobs:
         run: |
           make test
 
+      #
       # Note that, although we continue to support CMake for local builds and installs, we no longer support packaging
       # with CPack/CMake.  The bt build script packaging gives us better control over the packaging process.
+      #
+      # I did also have the idea of doing a subsequent step to try installing the package (eg via
+      # `sudo apt -f install ./brew*.deb`) but, in practice this gives errors about the following packages not being
+      # installable:
+      #    libqt6core6t64
+      #    libqt6gui6t64
+      #    libqt6network6t64
+      #    libqt6printsupport6t64
+      #    libqt6sql6t64
+      #    libqt6widgets6t64
+      #    libxalan-c112t64
+      #    libxerces-c3.2t64
+      #
+      # I suspect this is because there are restrictions on what you can install on GitHub action runners - presumably
+      # because they want you to not to do things other than builds with them.
+      #
       - name: Package
         working-directory: ${{github.workspace}}/mbuild
         shell: bash

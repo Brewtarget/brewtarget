@@ -19,12 +19,24 @@
 
 #include <optional>
 
-#include "database/ObjectStoreWrapper.h"
 #include "model/Recipe.h"
 #include "model/Step.h"
+#include "model/SteppedBase.h"
 #include "PhysicalConstants.h"
-#include "utils/CuriouslyRecurringTemplateBase.h"
+#include "utils/AutoCompare.h"
 #include "utils/TypeTraits.h"
+
+//======================================================================================================================
+//========================================== Start of property name constants ==========================================
+// See comment in model/NamedEntity.h
+#define AddPropertyName(property) namespace PropertyNames::StepBase { BtStringConst const property{#property}; }
+AddPropertyName(rampTime_mins)
+AddPropertyName(startTemp_c  )
+AddPropertyName(stepTime_days) // Mostly needed for BeerXML
+AddPropertyName(stepTime_mins)
+#undef AddPropertyName
+//=========================================== End of property name constants ===========================================
+//======================================================================================================================
 
 namespace {
    // Where step time is required to have a value, this is the default
@@ -66,18 +78,46 @@ template <StepBaseOptions ebo> concept CONCEPT_FIX_UP StartTempRequired = has_st
 template <StepBaseOptions ebo> concept CONCEPT_FIX_UP RampTimeSupported = has_rampTimeSupported<ebo>::value;
 
 /**
- * \brief  Additional base class for \c MashStep, \c BoilStep, \c FermentationStep to provide strongly-typed functions
- *         using CRTP.
+ * \brief Additional base class for \c MashStep, \c BoilStep, \c FermentationStep to provide strongly-typed functions
+ *        using CRTP.
+ *
+ *        We also implement some properties where we want slightly different handling for the different derived classes.
+ *        (The regular properties that are exactly the same for all derived classes are in \c Step and \c StepExtended.)
+ *
+ *        Note that we do \b not inherit from \c CuriouslyRecurringTemplateBase because \c SteppedBase already does
+ *        this.  If we inherited again, we'd end up with two (identical) implementations of this->derived() that the
+ *        compiler can't disambiguate between.
  */
 template<class Derived> class StepPhantom;
 template<class Derived, class Owner, StepBaseOptions stepBaseOptions>
-class StepBase : public CuriouslyRecurringTemplateBase<StepPhantom, Derived> {
+class StepBase : public SteppedBase<Derived, Owner> {
 protected:
-   StepBase() {
+   // Note that, because this is static, it cannot be initialised inside the class definition
+   static TypeLookup const typeLookup;
+
+   //! Non-virtual equivalent of isEqualTo
+   bool doIsEqualTo(StepBase const & other) const {
+      return (
+         Utils::AutoCompare(this->m_stepTime_mins, other.m_stepTime_mins) &&
+         Utils::AutoCompare(this->m_startTemp_c  , other.m_startTemp_c  ) &&
+         Utils::AutoCompare(this->m_rampTime_mins, other.m_rampTime_mins) &&
+         // Parent classes have to be equal too
+         this->SteppedBase<Derived, Owner>::doIsEqualTo(other)
+      );
+   }
+
+private:
+   friend Derived;
+   StepBase() :
+      SteppedBase<Derived, Owner>{} {
       return;
    }
 
-   StepBase([[maybe_unused]] NamedParameterBundle const & namedParameterBundle) {
+   StepBase(NamedParameterBundle const & namedParameterBundle) :
+      SteppedBase<Derived, Owner>{namedParameterBundle},
+      // See below for m_stepTime_mins
+      SET_REGULAR_FROM_NPB (m_startTemp_c  , namedParameterBundle, PropertyNames::StepBase::startTemp_c  , std::nullopt),
+      SET_REGULAR_FROM_NPB (m_rampTime_mins, namedParameterBundle, PropertyNames::StepBase::rampTime_mins, std::nullopt) {
       // We intend that Derived should always inherit from Step before it inherits from StepBase.  So, at this point,
       // the Step bits of Derived() will be constructed and initialised from namedParameterBundle.
 
@@ -87,38 +127,30 @@ protected:
       //
       // See comment in Step.h for why we cannot do this in the Step constructor.
       //
-      if (!SET_IF_PRESENT_FROM_NPB_NO_MV(StepBase::doSetStepTime_mins, namedParameterBundle, PropertyNames::Step::stepTime_mins) &&
-          !SET_IF_PRESENT_FROM_NPB_NO_MV(StepBase::doSetStepTime_days, namedParameterBundle, PropertyNames::Step::stepTime_days)) {
-         this->derived().m_stepTime_mins = std::nullopt;
+      if (!SET_IF_PRESENT_FROM_NPB_NO_MV(StepBase::setStepTime_mins, namedParameterBundle, PropertyNames::StepBase::stepTime_mins) &&
+          !SET_IF_PRESENT_FROM_NPB_NO_MV(StepBase::setStepTime_days, namedParameterBundle, PropertyNames::StepBase::stepTime_days)) {
+         this->m_stepTime_mins = std::nullopt;
       }
 
-
       // Override the std::nullopt default for step time and/or start temp if subclass so requires
-      this->derived().m_stepTime_mins = this->correctStepTime_mins(this->derived().m_stepTime_mins);
-      this->derived().m_startTemp_c   = this->correctStartTemp_c  (this->derived().m_startTemp_c  );
+      this->m_stepTime_mins = this->correctStepTime_mins(this->m_stepTime_mins);
+      this->m_startTemp_c   = this->correctStartTemp_c  (this->m_startTemp_c  );
 
-      if (this->derived().m_rampTime_mins) {
+      if (this->m_rampTime_mins) {
          this->checkRampTimeSupported();
       }
       return;
    }
 
-   StepBase([[maybe_unused]] Derived const & other) {
+   StepBase(Derived const & other) :
+      SteppedBase<Derived, Owner>{other},
+      m_stepTime_mins{other.m_stepTime_mins},
+      m_startTemp_c  {other.m_startTemp_c  },
+      m_rampTime_mins{other.m_rampTime_mins} {
       return;
    }
 
-   /**
-    * \brief Steps do not directly belong to a \c Recipe, but a step's owner (ie its \c Mash, \c Boil, \c Fermentation)
-    *        does.
-    */
-   Recipe * doGetOwningRecipe() const {
-      Owner const * owner = ObjectStoreWrapper::getByIdRaw<Owner>(this->derived().m_ownerId);
-      if (!owner) {
-         return nullptr;
-      }
-      return owner->getOwningRecipe();
-   }
-
+private:
    //! No-op version
    std::optional<double> correctStepTime_mins(std::optional<double> const val) const
    requires (!StepTimeRequired<stepBaseOptions>) {
@@ -133,30 +165,32 @@ protected:
       return val.value_or(defaultStepTime_mins);
    }
 
-   std::optional<double> doStepTime_mins() const {
+public:
+   std::optional<double> stepTime_mins() const {
       // If subclass needs step time to be non-optional then we ensure std::nullopt cannot be returned
-      return this->correctStepTime_mins(this->derived().m_stepTime_mins);
+      return this->correctStepTime_mins(this->m_stepTime_mins);
    }
-   void doSetStepTime_mins(std::optional<double> const val) {
+   void setStepTime_mins(std::optional<double> const val) {
       // Can't use SET_AND_NOTIFY macro here, but fortunately it's trivial
-      this->derived().setAndNotify(PropertyNames::Step::stepTime_mins,
-                                   this->derived().m_stepTime_mins,
+      this->derived().setAndNotify(PropertyNames::StepBase::stepTime_mins,
+                                   this->m_stepTime_mins,
                                    this->correctStepTime_mins(val));
       return;
    }
-   std::optional<double> doStepTime_days() const {
-      auto const val = this->doStepTime_mins();
+   std::optional<double> stepTime_days() const {
+      auto const val = this->stepTime_mins();
       // Convert minutes to days
       if (val) {
          return *val / minutesInADay;
       }
       return std::nullopt;
    }
-   void doSetStepTime_days(std::optional<double> const val) {
-      this->doSetStepTime_mins(daysToMinutes(val));
+   void setStepTime_days(std::optional<double> const val) {
+      this->setStepTime_mins(daysToMinutes(val));
       return;
    }
 
+private:
    //! No-op version
    std::optional<double> correctStartTemp_c(std::optional<double> const val) const
    requires (!StartTempRequired<stepBaseOptions>) {
@@ -168,19 +202,21 @@ protected:
       return val.value_or(defaultStartTemp_c);
    }
 
-   std::optional<double> doStartTemp_c  () const {
-      return this->correctStartTemp_c(this->derived().m_startTemp_c);
+public:
+   std::optional<double> startTemp_c  () const {
+      return this->correctStartTemp_c(this->m_startTemp_c);
    }
-   void doSetStartTemp_c(std::optional<double> const val) {
+   void setStartTemp_c(std::optional<double> const val) {
       // Can't use SET_AND_NOTIFY macro here, but fortunately it's trivial
-      this->derived().setAndNotify(PropertyNames::Step::startTemp_c,
-                                   this->derived().m_startTemp_c,
+      this->derived().setAndNotify(PropertyNames::StepBase::startTemp_c,
+                                   this->m_startTemp_c,
                                    this->derived().enforceMin(this->correctStartTemp_c(val),
                                                               "start temp",
                                                               PhysicalConstants::absoluteZero));
       return;
    }
 
+private:
    //! No-op version
    void checkRampTimeSupported() const requires (RampTimeSupported<stepBaseOptions>) {
       return;
@@ -195,71 +231,136 @@ protected:
       return;
    }
 
-   std::optional<double> doRampTime_mins() const {
+public:
+   std::optional<double> rampTime_mins() const {
       this->checkRampTimeSupported();
       return this->derived().m_rampTime_mins;
    }
 
-   void doSetRampTime_mins(std::optional<double> const val) {
+   void setRampTime_mins(std::optional<double> const val) {
       this->checkRampTimeSupported();
       // Can't use SET_AND_NOTIFY macro here, but fortunately it's trivial
-      this->derived().setAndNotify(PropertyNames::Step::rampTime_mins, this->derived().m_rampTime_mins, val);
+      this->derived().setAndNotify(PropertyNames::StepBase::rampTime_mins, this->m_rampTime_mins, val);
       return;
    }
 
-   ObjectStore & doGetObjectStoreTypedInstance() const {
-      return ObjectStoreTyped<Derived>::getInstance();
-   }
+protected:
+   //================================================ MEMBER VARIABLES =================================================
+   std::optional<double> m_stepTime_mins = std::nullopt;
+   std::optional<double> m_startTemp_c   = std::nullopt;
+   std::optional<double> m_rampTime_mins = std::nullopt;
 
 };
 
+template<class Derived, class Owner, StepBaseOptions stepBaseOptions>
+TypeLookup const StepBase<Derived, Owner, stepBaseOptions>::typeLookup {
+   "StepBase",
+   {
+      //
+      // See comment in model/IngredientAmount.h for why we can't use the PROPERTY_TYPE_LOOKUP_ENTRY or
+      // PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV macros here.
+      //
+      {&PropertyNames::StepBase::stepTime_mins,
+       TypeInfo::construct<decltype(StepBase<Derived, Owner, stepBaseOptions>::m_stepTime_mins)>(
+          PropertyNames::StepBase::stepTime_mins,
+          TypeLookupOf<decltype(StepBase<Derived, Owner, stepBaseOptions>::m_stepTime_mins)>::value,
+          Measurement::PhysicalQuantity::Time
+       )},
+      {&PropertyNames::StepBase::stepTime_days,
+       TypeInfo::construct<MemberFunctionReturnType_t<&StepBase<Derived, Owner, stepBaseOptions>::stepTime_days>>(
+          PropertyNames::StepBase::stepTime_days,
+          TypeLookupOf<MemberFunctionReturnType_t<&StepBase<Derived, Owner, stepBaseOptions>::stepTime_days>>::value,
+          // Note that, because days is not our canonical unit of measurement for time, this has to be a
+          // NonPhysicalQuantity, not Measurement::PhysicalQuantity::Time.
+          NonPhysicalQuantity::OrdinalNumeral
+       )},
+      {&PropertyNames::StepBase::startTemp_c,
+       TypeInfo::construct<decltype(StepBase<Derived, Owner, stepBaseOptions>::m_startTemp_c)>(
+          PropertyNames::StepBase::startTemp_c,
+          TypeLookupOf<decltype(StepBase<Derived, Owner, stepBaseOptions>::m_startTemp_c)>::value,
+          Measurement::PhysicalQuantity::Temperature
+       )},
+      {&PropertyNames::StepBase::rampTime_mins,
+       TypeInfo::construct<decltype(StepBase<Derived, Owner, stepBaseOptions>::m_rampTime_mins)>(
+          PropertyNames::StepBase::rampTime_mins,
+          TypeLookupOf<decltype(StepBase<Derived, Owner, stepBaseOptions>::m_rampTime_mins)>::value,
+          Measurement::PhysicalQuantity::Time
+       )},
+   },
+   // Parent class lookup
+   {&SteppedBase<Derived, Owner>::typeLookup}
+};
+
 /**
- * \brief Derived classes should include this in their header file, right after Q_OBJECT
+ * \brief Derived classes should include this in their header file, right after Q_OBJECT.  Concrete derived classes also
+ *        need to include the following block (as well as the equivalent from \c model/SteppedBase.h):
+ *
+ *           // See model/StepBase.h for info, getters and setters for these properties
+ *           Q_PROPERTY(std::optional<double> stepTime_mins   READ stepTime_mins   WRITE setStepTime_mins)
+ *           Q_PROPERTY(std::optional<double> stepTime_days   READ stepTime_days   WRITE setStepTime_days)
+ *           Q_PROPERTY(std::optional<double> startTemp_c     READ startTemp_c     WRITE setStartTemp_c  )
+ *           Q_PROPERTY(std::optional<double> rampTime_mins   READ rampTime_mins   WRITE setRampTime_mins)
+ *
+ *        This is needed because, although recent versions of Qt MOC (Meta Object Compiler) now "fully expand macros"
+ *        (at least according to https://woboq.com/blog/moc-myths.html), they do not appear to pick up Q_PROPERTY
+ *        declarations inside a macro.  One day, maybe we could work out why by looking at
+ *        https://github.com/qt/qtbase/blob/dev/src/tools/moc/preprocessor.cpp
+ *
+ *        Comments for these properties:
+ *
+ *        \c stepTime_mins : The time of the step in min.
+ *                           NOTE: This is required for \c MashStep but optional for \c BoilStep and
+ *                                 \c FermentationStep.  We make it optional here but classes that need it required
+ *                                 should set \c StepBaseOptions.stepTimeIsRequired parameter on \c StepBase template.
+ *
+ *        \c stepTime_days : The time of the step in days - primarily for convenience on \c FermentationStep where
+ *                           measuring in minutes is overly precise.  The underlying measure in the database remains
+ *                           minutes however, for consistency.
+ *
+ *        \c startTemp_c : Per comment in \cmodel/Step.h, this is also referred to as step temperature when talking
+ *                         about Mash Steps.  For a \c MashStep, this is the target temperature of this step in °C.
+ *                         This is the main field to use when dealing with the mash step temperature.
+ *
+ *                         NOTE: This is required for MashStep but optional for BoilStep and FermentationStep.  We make
+ *                               it optional here but classes that need it required should set
+ *                               \c StepBaseOptions.startTempIsRequired parameter on \c StepBase template.
+ *
+ *        \c rampTime_mins : The time it takes to ramp the temp to the target temp in min - ie the amount of time that
+ *                           passes before this step begins.                    ⮜⮜⮜ Optional in BeerXML & BeerJSON ⮞⮞⮞
+ *
+ *                           Eg for \c MashStep, moving from a mash step (step 1) of 148F, to a new temperature step of
+ *                           156F (step 2) may take 8 minutes to heat the mash. Step 2 would have a ramp time of 8
+ *                           minutes.
+ *
+ *                           Similarly, for a \c BoilStep, moving from a boiling step (step 1) to a whirlpool step
+ *                           (step 2) may take 5 minutes.  Step 2 would have a ramp time of 5 minutes, hop isomerization
+ *                           and bitterness calculations will need to account for this accordingly.
+ *
+ *                           NOTE: This property is \b not used by \c FermentationStep.  (It is the only property shared
+ *                                 by \c MashStep and \c BoilStep that is not also needed in \c FermentationStep.  We
+ *                                 can't really do mix-ins in Qt, so it's simplest just to not use it in
+ *                                 \c FermentationStep.  We require the classes that use this property to set set
+ *                                 \c StepBaseOptions.rampTimeIsSupported parameter on \c StepBase template, so we can
+ *                                 at least get a run-time error if we accidentally try to use this property on a
+ *                                 \c FermentationStep.)
  *
  *        Although we could do more in this macro, we limit it to member functions that are just wrappers around calls
  *        to this base class.
  *
- *        Note we have to be careful about comment formats in macro definitions
+ *        Note we have to be careful about comment formats in macro definitions.
  */
 #define STEP_COMMON_DECL(NeName, Options) \
+   STEPPED_COMMON_DECL(NeName##Step, NeName) \
    /* This allows StepBase to call protected and private members of Derived */  \
    friend class StepBase<NeName##Step,                                          \
                          NeName,                                                \
                          Options>;                                              \
-                                                                                \
-   public:                                                                      \
-      /* This alias makes it easier to template a number of functions */        \
-      /* that are essentially the same for all "Step" classes.        */        \
-      using StepOwnerClass = NeName;                                            \
-                                                                                \
-      virtual Recipe * getOwningRecipe() const;                                 \
-                                                                                \
-      virtual std::optional<double> stepTime_mins() const override;             \
-      virtual std::optional<double> stepTime_days() const override;             \
-      virtual std::optional<double> startTemp_c  () const override;             \
-      virtual std::optional<double> rampTime_mins() const override;             \
-      virtual void setStepTime_mins(std::optional<double> const val) override;  \
-      virtual void setStepTime_days(std::optional<double> const val) override;  \
-      virtual void setStartTemp_c  (std::optional<double> const val) override;  \
-      virtual void setRampTime_mins(std::optional<double> const val) override;  \
-                                                                                \
-   protected:                                                                   \
-      /** Override NamedEntity::getObjectStoreTypedInstance */                  \
-      virtual ObjectStore & getObjectStoreTypedInstance() const override;       \
+
 
 /**
  * \brief Derived classes should include this in their implementation file
  */
 #define STEP_COMMON_CODE(NeName) \
-   Recipe *              NeName##Step::getOwningRecipe() const { return this->doGetOwningRecipe(); }                 \
-   std::optional<double> NeName##Step::stepTime_mins  () const { return this->doStepTime_mins  (); }                 \
-   std::optional<double> NeName##Step::stepTime_days  () const { return this->doStepTime_days  (); }                 \
-   std::optional<double> NeName##Step::startTemp_c    () const { return this->doStartTemp_c    (); }                 \
-   std::optional<double> NeName##Step::rampTime_mins  () const { return this->doRampTime_mins  (); }                 \
-   void NeName##Step::setStepTime_mins(std::optional<double> const val) { this->doSetStepTime_mins(val); return; }   \
-   void NeName##Step::setStepTime_days(std::optional<double> const val) { this->doSetStepTime_days(val); return; }   \
-   void NeName##Step::setStartTemp_c  (std::optional<double> const val) { this->doSetStartTemp_c  (val); return; }   \
-   void NeName##Step::setRampTime_mins(std::optional<double> const val) { this->doSetRampTime_mins(val); return; }   \
-   ObjectStore & NeName##Step::getObjectStoreTypedInstance() const { return this->doGetObjectStoreTypedInstance(); } \
+   STEPPED_COMMON_CODE(NeName##Step)   \
 
 #endif

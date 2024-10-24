@@ -64,30 +64,6 @@ class SaltTableModel : public BtTableModel, public TableModelBase<SaltTableModel
 
    TABLE_MODEL_COMMON_DECL(Salt)
 
-///public:
-///   double total_Ca() const;
-///   double total_Cl() const;
-///   double total_CO3() const;
-///   double total_HCO3() const;
-///   double total_Mg() const;
-///   double total_Na() const;
-///   double total_SO4() const;
-///
-///   double total(Water::Ion ion) const;
-///   double total( Salt::Type type ) const;
-///   double totalAcidWeight(Salt::Type type) const;
-///
-///   void saveAndClose();
-///
-///public slots:
-///   void catchSalt();
-///
-///signals:
-///   void newTotals();
-///
-///private:
-//////   double spargePct;
-///   double multiplier(Salt & salt) const;
 };
 
 //=============================================== CLASS SaltItemDelegate ===============================================

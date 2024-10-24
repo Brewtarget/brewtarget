@@ -42,8 +42,10 @@ bool Mash::isEqualTo(NamedEntity const & other) const {
       Utils::AutoCompare(this->m_spargeTemp_c             , rhs.m_spargeTemp_c             ) &&
       Utils::AutoCompare(this->m_ph                       , rhs.m_ph                       ) &&
       Utils::AutoCompare(this->m_mashTunWeight_kg         , rhs.m_mashTunWeight_kg         ) &&
-      Utils::AutoCompare(this->m_mashTunSpecificHeat_calGC, rhs.m_mashTunSpecificHeat_calGC)
-      // .:TBD:. Should we check MashSteps too?
+      Utils::AutoCompare(this->m_mashTunSpecificHeat_calGC, rhs.m_mashTunSpecificHeat_calGC) &&
+      // Parent classes have to be equal too
+      this->FolderBase<Mash>::doIsEqualTo(rhs) &&
+      this->StepOwnerBase<Mash, MashStep>::doIsEqualTo(rhs)
    );
 }
 
@@ -64,12 +66,11 @@ TypeLookup const Mash::typeLookup {
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Mash::mashTunSpecificHeat_calGC, Mash::m_mashTunSpecificHeat_calGC, Measurement::PhysicalQuantity::SpecificHeatCapacity),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Mash::tunTemp_c            , Mash::m_tunTemp_c            , Measurement::PhysicalQuantity::Temperature         ),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Mash::mashTunWeight_kg     , Mash::m_mashTunWeight_kg     , Measurement::PhysicalQuantity::Mass                ),
-
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Mash::mashSteps        , Mash::mashSteps        ),
    },
    // Parent classes lookup
    {&NamedEntity::typeLookup,
-    std::addressof(FolderBase<Mash>::typeLookup)}
+    std::addressof(FolderBase<Mash>::typeLookup),
+    std::addressof(StepOwnerBase<Mash, MashStep>::typeLookup)}
 };
 static_assert(std::is_base_of<FolderBase<Mash>, Mash>::value);
 
@@ -216,19 +217,9 @@ bool Mash::hasSparge() const {
    return false;
 }
 
-void Mash::acceptStepChange([[maybe_unused]] QMetaProperty prop,
-                            [[maybe_unused]] QVariant      val) {
-   MashStep * stepSender = qobject_cast<MashStep*>(sender());
-   if (!stepSender) {
-      return;
-   }
-
-   // If one of our mash steps changed, our calculated properties may also change, so we need to emit some signals
-   if (stepSender->ownerId() == this->key()) {
-      emit changed(metaProperty(*PropertyNames::Mash::totalMashWater_l), QVariant());
-      emit changed(metaProperty(*PropertyNames::Mash::totalTime       ), QVariant());
-   }
-
+void Mash::acceptStepChange(QMetaProperty prop, QVariant val) {
+   this->doAcceptStepChange(this->sender(), prop, val, {&PropertyNames::Mash::totalMashWater_l,
+                                                        &PropertyNames::Mash::totalTime       });
    return;
 }
 

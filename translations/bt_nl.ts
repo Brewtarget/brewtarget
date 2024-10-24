@@ -369,6 +369,14 @@
         <source>Brewday</source>
         <translation>Brouwdag</translation>
     </message>
+    <message>
+        <source>Overwrite Existing Instructions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Generating instructions will overwrite the existing ones.  This is not undoable.  Do you want to proceed?</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>BrewDayWidget</name>
@@ -4037,7 +4045,7 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>%1 water to %2, </source>
-        <translation>%1 water naar %2, </translation>
+        <translation type="vanished">%1 water naar %2, </translation>
     </message>
     <message>
         <source>for upcoming infusions.</source>
@@ -4239,7 +4247,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>%1 water to %2 </source>
-        <translation>%1 water naar %2 </translation>
+        <translation type="vanished">%1 water naar %2 </translation>
     </message>
     <message>
         <source>mash</source>
@@ -7744,23 +7752,23 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     <name>instructionWidget</name>
     <message>
         <source>Form</source>
-        <translation>Vorm</translation>
+        <translation type="vanished">Vorm</translation>
     </message>
     <message>
         <source>Show a timer</source>
-        <translation>Toon een timer</translation>
+        <translation type="vanished">Toon een timer</translation>
     </message>
     <message>
         <source>Show timer</source>
-        <translation>Toon timer</translation>
+        <translation type="vanished">Toon timer</translation>
     </message>
     <message>
         <source>Mark this step completed</source>
-        <translation>Markeer deze stap als compleet</translation>
+        <translation type="vanished">Markeer deze stap als compleet</translation>
     </message>
     <message>
         <source>Step completed</source>
-        <translation>Stap compleet</translation>
+        <translation type="vanished">Stap compleet</translation>
     </message>
 </context>
 <context>

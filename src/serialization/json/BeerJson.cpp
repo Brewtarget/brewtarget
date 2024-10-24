@@ -580,9 +580,9 @@ namespace {
          {JsonRecordDefinition::FieldType::String              , "name"              , PropertyNames::NamedEntity::name               },
          {JsonRecordDefinition::FieldType::Enum                , "type"              , PropertyNames::MashStep::type                  , &MashStep::typeStringMapping          },
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "amount"            , PropertyNames::MashStep::amount_l              , &BEER_JSON_VOLUME_UNIT_MAPPER         },
-         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "step_temperature"  , PropertyNames::    Step::startTemp_c           , &BEER_JSON_TEMPERATURE_UNIT_MAPPER    },
-         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "step_time"         , PropertyNames::    Step::stepTime_mins         , &BEER_JSON_TIME_UNIT_MAPPER           },
-         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "ramp_time"         , PropertyNames::    Step::rampTime_mins         , &BEER_JSON_TIME_UNIT_MAPPER           },
+         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "step_temperature"  , PropertyNames::StepBase::startTemp_c           , &BEER_JSON_TEMPERATURE_UNIT_MAPPER    },
+         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "step_time"         , PropertyNames::StepBase::stepTime_mins         , &BEER_JSON_TIME_UNIT_MAPPER           },
+         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "ramp_time"         , PropertyNames::StepBase::rampTime_mins         , &BEER_JSON_TIME_UNIT_MAPPER           },
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "end_temperature"   , PropertyNames::    Step::endTemp_c             , &BEER_JSON_TEMPERATURE_UNIT_MAPPER    },
          {JsonRecordDefinition::FieldType::String              , "description"       , PropertyNames::    Step::description           },
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "water_grain_ratio" , PropertyNames::MashStep::liquorToGristRatio_lKg, &BEER_JSON_SPECIFIC_VOLUME_UNIT_MAPPER},
@@ -603,7 +603,7 @@ namespace {
          {JsonRecordDefinition::FieldType::String              , "name"             , PropertyNames::NamedEntity::name},
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "grain_temperature", PropertyNames::Mash::grainTemp_c, &BEER_JSON_TEMPERATURE_UNIT_MAPPER},
          {JsonRecordDefinition::FieldType::String              , "notes"            , PropertyNames::Mash::notes      },
-         {JsonRecordDefinition::FieldType::ListOfRecords       , "mash_steps"       , PropertyNames::Mash::mashSteps  , &BEER_JSON_RECORD_DEFN<MashStep>  },
+         {JsonRecordDefinition::FieldType::ListOfRecords       , "mash_steps"       , PropertyNames::SteppedOwnerBase::steps, &BEER_JSON_RECORD_DEFN<MashStep>  },
       }
    };
 
@@ -621,9 +621,9 @@ namespace {
          // Type                                                 XPath                Q_PROPERTY                                    Value Decoder
          {JsonRecordDefinition::FieldType::String              , "name"             , PropertyNames::NamedEntity::name            },
          {JsonRecordDefinition::FieldType::String              , "description"      , PropertyNames::Step::description            },
-         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "start_temperature", PropertyNames::        Step::startTemp_c    , &BEER_JSON_TEMPERATURE_UNIT_MAPPER},
+         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "start_temperature", PropertyNames::    StepBase::startTemp_c    , &BEER_JSON_TEMPERATURE_UNIT_MAPPER},
          {JsonRecordDefinition::FieldType::MeasurementWithUnits,   "end_temperature", PropertyNames::        Step::  endTemp_c    , &BEER_JSON_TEMPERATURE_UNIT_MAPPER},
-         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "step_time"        , PropertyNames::Step::stepTime_mins          , &BEER_JSON_TIME_UNIT_MAPPER       },
+         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "step_time"        , PropertyNames::StepBase::stepTime_mins      , &BEER_JSON_TIME_UNIT_MAPPER       },
          {JsonRecordDefinition::FieldType::Bool                , "free_rise  "      , PropertyNames::FermentationStep::freeRise   },
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "start_gravity"    , PropertyNames::StepExtended::startGravity_sg,  &BEER_JSON_DENSITY_UNIT_MAPPER   },
          {JsonRecordDefinition::FieldType::MeasurementWithUnits,   "end_gravity"    , PropertyNames::StepExtended::  endGravity_sg,  &BEER_JSON_DENSITY_UNIT_MAPPER   },
@@ -644,7 +644,7 @@ namespace {
          {JsonRecordDefinition::FieldType::String       , "name"              , PropertyNames::NamedEntity::name              },
          {JsonRecordDefinition::FieldType::String       , "description"       , PropertyNames::Fermentation::description      },
          {JsonRecordDefinition::FieldType::String       , "notes"             , PropertyNames::Fermentation::notes            },
-         {JsonRecordDefinition::FieldType::ListOfRecords, "fermentation_steps", PropertyNames::Fermentation::fermentationSteps, &BEER_JSON_RECORD_DEFN<FermentationStep>},
+         {JsonRecordDefinition::FieldType::ListOfRecords, "fermentation_steps", PropertyNames::SteppedOwnerBase::steps, &BEER_JSON_RECORD_DEFN<FermentationStep>},
       }
    };
 
@@ -1014,10 +1014,10 @@ namespace {
          // Type                                                 XPath                Q_PROPERTY                                    Value Decoder
          {JsonRecordDefinition::FieldType::String              , "name"             , PropertyNames:: NamedEntity::name           },
          {JsonRecordDefinition::FieldType::String              , "description"      , PropertyNames::        Step::description    },
-         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "start_temperature", PropertyNames::        Step::startTemp_c    , &BEER_JSON_TEMPERATURE_UNIT_MAPPER  },
+         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "start_temperature", PropertyNames::    StepBase::startTemp_c    , &BEER_JSON_TEMPERATURE_UNIT_MAPPER  },
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "end_temperature"  , PropertyNames::        Step::endTemp_c      , &BEER_JSON_TEMPERATURE_UNIT_MAPPER  },
-         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "ramp_time"        , PropertyNames::        Step::rampTime_mins  , &BEER_JSON_TIME_UNIT_MAPPER         },
-         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "step_time"        , PropertyNames::        Step::stepTime_mins  , &BEER_JSON_TIME_UNIT_MAPPER         },
+         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "ramp_time"        , PropertyNames::    StepBase::rampTime_mins  , &BEER_JSON_TIME_UNIT_MAPPER         },
+         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "step_time"        , PropertyNames::    StepBase::stepTime_mins  , &BEER_JSON_TIME_UNIT_MAPPER         },
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "start_gravity"    , PropertyNames::StepExtended::startGravity_sg, &BEER_JSON_DENSITY_UNIT_MAPPER      },
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "end_gravity"      , PropertyNames::StepExtended::  endGravity_sg, &BEER_JSON_DENSITY_UNIT_MAPPER      },
          {JsonRecordDefinition::FieldType::SingleUnitValue     , "start_ph"         , PropertyNames::        Step::startAcidity_pH, &BEER_JSON_ACIDITY_UNIT             },
@@ -1039,7 +1039,7 @@ namespace {
          {JsonRecordDefinition::FieldType::String              , "notes"        , PropertyNames::Boil::notes        },
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "pre_boil_size", PropertyNames::Boil::preBoilSize_l, &BEER_JSON_VOLUME_UNIT_MAPPER   },
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "boil_time"    , PropertyNames::Boil::boilTime_mins, &BEER_JSON_TIME_UNIT_MAPPER     },
-         {JsonRecordDefinition::FieldType::ListOfRecords       , "boil_steps"   , PropertyNames::Boil::boilSteps    , &BEER_JSON_RECORD_DEFN<BoilStep>},
+         {JsonRecordDefinition::FieldType::ListOfRecords       , "boil_steps"   , PropertyNames::SteppedOwnerBase::steps, &BEER_JSON_RECORD_DEFN<BoilStep>},
       }
    };
 

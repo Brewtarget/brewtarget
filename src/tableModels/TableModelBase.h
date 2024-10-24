@@ -29,7 +29,6 @@
 #include "model/IngredientAmount.h"
 #include "model/Inventory.h"
 #include "tableModels/BtTableModel.h"
-///#include "tableModels/BtTableModelInventory.h"
 #include "utils/CuriouslyRecurringTemplateBase.h"
 #include "utils/MetaTypes.h"
 
@@ -175,8 +174,8 @@ public:
          this->derived().connect(this->derived().recObs, &NamedEntity::changed, &this->derived(), &Derived::changed);
 
          // TBD: Commented out version doesn't compile on GCC
-         // this->addItems(this->derived().recObs->getAll<NE>());
-         this->addItems(rec->getAll<NE>());
+         // this->addItems(this->derived().recObs->allOwned<NE>());
+         this->addItems(rec->allOwned<NE>());
       }
       qDebug() << Q_FUNC_INFO << "Now have" << this->rows.size() << "rows";
       return;
@@ -875,8 +874,8 @@ protected:
       if (recipe == this->derived().recObs) {
          this->removeAll();
          // TBD: Commented out version doesn't compile on GCC
-         // this->addItems(this->derived().recObs->getAll<NE>());
-         this->addItems(recipe->getAll<NE>());
+         // this->addItems(this->derived().recObs->allOwned<NE>());
+         this->addItems(recipe->allOwned<NE>());
          if (this->derived().rowCount() > 0) {
             emit this->derived().headerDataChanged(Qt::Vertical, 0, this->derived().rowCount() - 1);
          }

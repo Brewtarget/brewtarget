@@ -924,7 +924,7 @@ public:
          return "";
       }
 
-      QList<Instruction*> instructions = this->rec->instructions();
+      auto instructions = this->rec->steps();
       int size = instructions.size();
       if ( size < 1 ) {
          return "";
@@ -934,7 +934,7 @@ public:
       itable += "<ol id=\"instruction\">";
 
       for (int ii = 0; ii < size; ++ii) {
-         Instruction* ins = instructions[ii];
+         auto ins = instructions[ii];
          itable += QString("<li>%1</li>").arg( ins->directions());
       }
 
@@ -952,12 +952,11 @@ public:
 
       QStringList num, text;
 
-      QList<Instruction*> instructions = rec->instructions();
+      auto instructions = rec->steps();
       int size = instructions.size();
       if ( size > 0 ) {
-         Instruction* ins;
          for (int ii = 0; ii < size; ++ii) {
-            ins = instructions[ii];
+            auto ins = instructions[ii];
             num.append(QString("%1").arg(ii));
             //Wrap instruction text to 75 ( 80 (text separator length) - 5 (num colunm lenght) )
             text.append(QString("- %1").arg(wrapText(ins->directions(), 75)));
@@ -989,14 +988,14 @@ public:
       }
 
       QString bnTable = "";
-      QList<BrewNote*> brewNotes = rec->brewNotes();
+      auto const brewNotes = rec->brewNotes();
       int size = brewNotes.size();
       if ( size < 1 ) {
          return bnTable;
       }
 
       for(int ii = 0; ii < size; ++ii) {
-         BrewNote* note = brewNotes[ii];
+         auto note = brewNotes[ii];
 
          bnTable += QString("<h2>%1 %2</h2>").arg(tr("Brew Date")).arg(note->brewDate_short());
 
@@ -1102,12 +1101,12 @@ QString RecipeFormatter::getHtmlFormat(QList<Recipe*> recipes) {
 
    // build a toc -- why do I do this to myself?
    hDoc += "<ul>";
-   foreach ( Recipe* foo, recipes ) {
+   for (auto foo : recipes) {
        hDoc += QString("<li><a href=\"#%1\">%1</a></li>").arg(foo->name());
    }
    hDoc += "</ul>";
 
-   foreach (Recipe* foo, recipes) {
+   for (auto foo : recipes) {
       this->pimpl->rec = foo;
       hDoc += QString("<a name=\"%1\"></a>").arg(foo->name());
       hDoc += this->pimpl->buildStatTableHtml();

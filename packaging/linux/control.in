@@ -72,29 +72,79 @@ Architecture: amd64
 #    binary and not maintain a separate build with its own makefile for the source code, then those tools won't help and
 #    we need to maintain things manually here.  Fortunately our list of dependencies is not horrendous.
 #
+#    We can get an initial list of shared libraries that a binary depends on in a number of ways (per
+#    https://stackoverflow.com/questions/6242761/determine-direct-shared-object-dependencies-of-a-linux-binary), but the
+#    following gives quite neat output:
+#
+#       objdump -x myExecutable | grep NEEDED | sort
+#
+#    For our binary, this (as of 2024-10-22) gives
+#       NEEDED               ld-linux-x86-64.so.2
+#       NEEDED               libc.so.6
+#       NEEDED               libgcc_s.so.1
+#       NEEDED               libm.so.6
+#       NEEDED               libQt6Core.so.6
+#       NEEDED               libQt6Gui.so.6
+#       NEEDED               libQt6Multimedia.so.6
+#       NEEDED               libQt6Network.so.6
+#       NEEDED               libQt6PrintSupport.so.6
+#       NEEDED               libQt6Sql.so.6
+#       NEEDED               libQt6Widgets.so.6
+#       NEEDED               libstdc++.so.6
+#       NEEDED               libxalan-c.so.112
+#       NEEDED               libxerces-c-3.2.so
+#
+#    We then need to find which packages provide these shared libraries.  Assuming we're on a system where all the
+#    dependencies are already installed (eg the one where we've just build the software), we can do this with dpkg, eg
+#    running `dpkg -S libQt6Core.so.6` gives:
+#
+#       libqt6core6t64:amd64: /usr/lib/x86_64-linux-gnu/libQt6Core.so.6.4.2
+#       libqt6core6t64:amd64: /usr/lib/x86_64-linux-gnu/libQt6Core.so.6
+#
+#    So, eg, for an executable called "brewken" we can put this all together into:
+#       objdump -x brewken | grep NEEDED | awk '{print $2}' | xargs dpgg -S | grep ^lib | awk -F: '{print $1}' | sort -u
+#
 #    Note that you can see the version of a package libfoobar by running the following command from the shell:
 #       apt-cache show foobar | grep Version
+#
+#    And we can combine this altogether in the following (linebreaks added for readability):
+#       objdump -x brewtarget | grep NEEDED | awk '{print $2}' | xargs dpkg -S | grep ^lib | awk -F: '{print $1}' |
+#          sort -u | while read ii
+#          do
+#             echo -e $ii '\t' $(apt-cache show $ii | grep Version | head -1 | sed 's/Version: //; s/ubuntu[^ ]*//; s/[^0-9\.].*//')
+#          done | sort
+#    which gives us nearly the output we want.
+#
+#    The only remaining issue is that showing the currently-installed versions of packages on the build machine doesn't
+#    give us the _minimum_ required versions, so we may end up specifying more recent versions of things than are
+#    strictly required.  Usually we can check for problems here by looking what the most recent available version of a
+#    package is for the oldest version of Ubuntu we support (via https://packages.ubuntu.com/ - though NB you sometimes
+#    have to knock the t64 off the end of the name to find a match).
 #
 #    Normally, this field is (surprisingly) not allowed to be "folded" (ie split across multiple lines).  However, we do
 #    our own folding in the bt build script, so the backslash line continuations are OK here!
 #
-#    From trial-and-error, we discover which libraries have a "t64" version which is used instead of the "base" one (eg
-#    libqt6network6t64 instead of libqt6network6).  This is to do with upgrades to 64-bit time (to fix the "year 2038
-#    problem") -- per https://wiki.debian.org/ReleaseGoals/64bit-time.
+#    Note that some libraries have a "t64" version which is used instead of the "base" one (eg libqt6network6t64 instead
+#    of libqt6network6).  This is to do with upgrades to 64-bit time (to fix the "year 2038 problem") -- per
+#    https://wiki.debian.org/ReleaseGoals/64bit-time.
 #
 Depends: \
-   libc6                  (>= 2.35  ),  \
-   libgcc-s1              (>= 12.3  ),  \
-   libqt6core6t64         (>= 6.2.4),  \
-   libqt6gui6t64          (>= 6.2.4) | \
-   libqt6multimedia6      (>= 6.2.4),  \
-   libqt6network6t64      (>= 6.2.4),  \
-   libqt6printsupport6t64 (>= 6.2.4),  \
-   libqt6sql6t64          (>= 6.2.4),  \
-   libqt6widgets6t64      (>= 6.2.4),  \
-   libstdc++6             (>= 12.3 ),  \
-   libxalan-c112t64       (>= 1.12 ),  \
-   libxerces-c3.2t64      (>= 3.2.3)
+   libc6                  (>= 2.35  ), \
+   libc6-dev              (>= 2.35  ), \
+   libc6-i386             (>= 2.35  ), \
+   lib32gcc-s1            (>= 12.3.0), \
+   lib32stdc++6           (>= 12.3.0), \
+   libgcc-s1              (>= 12.3.0), \
+   libstdc++6             (>= 12.3.0), \
+   libqt6core6t64         (>= 6.2.4 ), \
+   libqt6gui6t64          (>= 6.2.4 ), \
+   libqt6multimedia6      (>= 6.2.4 ), \
+   libqt6network6t64      (>= 6.2.4 ), \
+   libqt6printsupport6t64 (>= 6.2.4 ), \
+   libqt6sql6t64          (>= 6.2.4 ), \
+   libqt6widgets6t64      (>= 6.2.4 ), \
+   libxalan-c112t64       (>= 1.12  ), \
+   libxerces-c3.2t64      (>= 3.2.3 )
 #
 # Installed-Size (Optional) : an estimate of the total amount of disk space required to install the named package
 #    The disk space is given as the integer value of the estimated installed size in bytes, divided by 1024 and rounded

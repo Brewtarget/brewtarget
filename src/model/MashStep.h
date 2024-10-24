@@ -25,7 +25,6 @@
 #include <QString>
 #include <QStringList>
 
-#include "model/Mash.h"
 #include "model/NamedEntity.h"
 #include "model/Step.h"
 #include "model/StepBase.h"
@@ -41,10 +40,12 @@ AddPropertyName(infuseAmount_l        ) // Should only be used for BeerXML
 AddPropertyName(infuseTemp_c          )
 AddPropertyName(liquorToGristRatio_lKg)
 AddPropertyName(type                  )
-
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
 //======================================================================================================================
+
+class Mash;
+
 /**
  * On \c MashStep, \c stepTime_mins is required, \c startTemp_c is required
  */
@@ -58,6 +59,17 @@ class MashStep : public Step, public StepBase<MashStep, Mash, MashStepOptions> {
    Q_OBJECT
 
    STEP_COMMON_DECL(Mash, MashStepOptions)
+   // See model/SteppedBase.h for info, getters and setters for these properties
+   Q_PROPERTY(int ownerId      READ ownerId      WRITE setOwnerId   )
+   Q_PROPERTY(int stepNumber   READ stepNumber   WRITE setStepNumber)
+   // See model/StepBase.h for info, getters and setters for these properties
+   Q_PROPERTY(std::optional<double> stepTime_mins   READ stepTime_mins   WRITE setStepTime_mins)
+   Q_PROPERTY(std::optional<double> stepTime_days   READ stepTime_days   WRITE setStepTime_days)
+   Q_PROPERTY(std::optional<double> startTemp_c     READ startTemp_c     WRITE setStartTemp_c  )
+   Q_PROPERTY(std::optional<double> rampTime_mins   READ rampTime_mins   WRITE setRampTime_mins)
+
+//   Q_PROPERTY(std::optional<double> startTemp_c     READ startTemp_c     WRITE setStartTemp_c  )
+//   Q_PROPERTY(std::optional<double> stepTime_mins   READ stepTime_mins   WRITE setStepTime_mins)
 
 public:
    /**

@@ -369,6 +369,14 @@
         <source>Brewday</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Overwrite Existing Instructions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Generating instructions will overwrite the existing ones.  This is not undoable.  Do you want to proceed?</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>BrewDayWidget</name>
@@ -3728,7 +3736,7 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>%1 water to %2, </source>
-        <translation>%1 воде на %2, </translation>
+        <translation type="vanished">%1 воде на %2, </translation>
     </message>
     <message>
         <source>for upcoming infusions.</source>
@@ -3923,10 +3931,6 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Add Extracts to water</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>%1 water to %2 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -7166,23 +7170,7 @@ The final volume in the primary is %1.</source>
     <name>instructionWidget</name>
     <message>
         <source>Form</source>
-        <translation>Облик</translation>
-    </message>
-    <message>
-        <source>Show a timer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Show timer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mark this step completed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Step completed</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Облик</translation>
     </message>
 </context>
 <context>

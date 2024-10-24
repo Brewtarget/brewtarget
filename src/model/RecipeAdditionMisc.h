@@ -120,13 +120,11 @@ public:
    [[deprecated]] void setUse(Use const val);
    void setMisc(Misc * const val);
 
-///   virtual Recipe * getOwningRecipe() const;
-
-   virtual NamedEntity * ensureExists(BtStringConst const & property);
+   virtual NamedEntity * ensureExists(BtStringConst const & property) override;
 
 protected:
    // Note that we don't override isEqualTo, as we don't have any non-inherited member variables
-   virtual ObjectStore & getObjectStoreTypedInstance() const;
+   virtual ObjectStore & getObjectStoreTypedInstance() const override;
 
 };
 

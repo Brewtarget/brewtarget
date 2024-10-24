@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/BoilStep.cpp is part of Brewtarget, and is copyright the following authors 2023:
+ * model/BoilStep.cpp is part of Brewtarget, and is copyright the following authors 2023-2024:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -48,7 +48,8 @@ TypeLookup const BoilStep::typeLookup {
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::BoilStep::chillingType, BoilStep::m_chillingType, NonPhysicalQuantity::Enum),
    },
    // Parent class lookup.  NB: StepExtended not NamedEntity!
-   {&StepExtended::typeLookup}
+   {&StepExtended::typeLookup,
+    std::addressof(StepBase<BoilStep, Boil, BoilStepOptions>::typeLookup)}
 };
 static_assert(std::is_base_of<StepExtended, BoilStep>::value);
 

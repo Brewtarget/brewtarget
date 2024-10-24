@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * BrewDayScrollWidget.h is part of Brewtarget, and is copyright the following authors 2009-2022:
+ * BrewDayScrollWidget.h is part of Brewtarget, and is copyright the following authors 2009-2024:
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Mark de Wever <koraq@xs4all.nl>
  *   • Matt Young <mfsy@yahoo.com>
@@ -92,14 +92,14 @@ private:
    QString buildInstructionTable();
    QString buildFooterTable();
 
-   Recipe* recObs;
-   QPrinter* printer;
-   QTextBrowser* doc;
+   Recipe * m_recObs;
+   QPrinter * m_printer;
+   QTextBrowser * m_doc;
 
    //! Internal list of recipe instructions, always sorted by instruction number.
-   QList<Instruction*> recIns;
+   QList<std::shared_ptr<Instruction>> m_recIns;
 
-   QString cssName;
+   QString m_cssName;
 
 private slots:
    bool loadComplete(bool ok);

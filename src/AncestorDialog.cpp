@@ -70,7 +70,7 @@ void AncestorDialog::buildAncestorBox() {
    QList<Recipe *> recipes = ObjectStoreWrapper::getAllRaw<Recipe>();
    std::sort(recipes.begin(), recipes.end(), AncestorDialog::recipeLessThan);
 
-   foreach (Recipe * recipe, recipes) {
+   for (auto recipe : recipes) {
       if (recipe->display()) {
          comboBox_ancestor->addItem(recipe->name(), recipe->key());
       }
@@ -84,7 +84,7 @@ void AncestorDialog::buildDescendantBox(Recipe * ignore) {
    std::sort(recipes.begin(), recipes.end(), recipeLessThan);
 
    //  The rules of what can be a target are complex
-   foreach (Recipe * recipe, recipes) {
+   for (auto recipe : recipes) {
       // if we are ignoring the recipe, skip
       if (recipe == ignore) {
          continue;

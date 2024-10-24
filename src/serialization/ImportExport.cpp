@@ -196,7 +196,7 @@ namespace {
       QSet<NE const *> ingredientSet{makeSet(ingredients)};
       if (recipes) {
          for (Recipe const * recipe : *recipes) {
-            auto ingredientAdditions = recipe->getAll<typename NE::RecipeAdditionClass>();
+            auto ingredientAdditions = recipe->allOwned<typename NE::RecipeAdditionClass>();
             for (auto ingredientAddition : ingredientAdditions) {
                auto ingredient = ingredientAddition->ingredient();
                if (ingredient) {
