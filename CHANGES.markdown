@@ -13,6 +13,17 @@ happens, so I'm now setting it to a slightly arbitrary time early in the morning
 * Additional methods for calculating IBU
 * We'll list other new features here...
 
+## v4.0.9
+Bug fixes and minor enhancements.
+
+### New Features
+* None
+
+### Bug Fixes
+* None
+### Release Timestamp
+Sat, 26 Oct 2024 04:00:09 +0100
+
 ## v4.0.8
 Bug fixes and minor enhancements.
 
@@ -25,7 +36,7 @@ Bug fixes and minor enhancements.
 * Missing libb2-1.dll [863](https://github.com/Brewtarget/brewtarget/issues/863)
 
 ### Release Timestamp
-Tue, 16 Oct 2024 04:00:08 +0100
+Sat, 26 Oct 2024 04:00:08 +0100
 
 ## v4.0.7
 Bug fixes and minor enhancements.
