@@ -300,17 +300,24 @@ namespace {
          return;
       }
 
+      //
       // Nobody else needs to access this QNetworkAccessManager object, but it needs to carry on existing after this
       // function returns (otherwise the HTTP GET request will get cancelled), hence why we make it static.
-      static QNetworkAccessManager * manager = new QNetworkAccessManager();
+      //
+      // As with a lot of things in Qt, passing in a "parent" QObject means Qt handles ownership of the object so
+      // having this as a raw pointer is not the resource leak it might appear.
+      //
+      static QNetworkAccessManager * manager = new QNetworkAccessManager(mw);
       static QString const releasesLatest = QString{"https://api.github.com/repos/%1/%2/releases/latest"}.arg(CONFIG_APPLICATION_NAME_UC, CONFIG_APPLICATION_NAME_LC);
-      QUrl url(releasesLatest);
-      responseToCheckForNewVersion = manager->get(QNetworkRequest(url));
+      QUrl url{releasesLatest};
+      QNetworkRequest networkRequest{url};
+      qInfo() <<
+         Q_FUNC_INFO << "Sending request to" << url << "to check for new version.  (Timeout" <<
+         manager->transferTimeout() << "ms, Redirect Policy" << manager->redirectPolicy() << ")";
+      responseToCheckForNewVersion = manager->get(networkRequest);
+      qDebug() << Q_FUNC_INFO << "Request running =" << responseToCheckForNewVersion->isRunning();
       // Since Qt5, you can connect signals to simple functions (see https://wiki.qt.io/New_Signal_Slot_Syntax)
       QObject::connect(responseToCheckForNewVersion, &QNetworkReply::finished, mw, &finishCheckForNewVersion);
-      qDebug() <<
-         Q_FUNC_INFO << "Sending request to" << url << "to check for new version (request running =" <<
-         responseToCheckForNewVersion->isRunning() << ")";
       return;
    }
 
