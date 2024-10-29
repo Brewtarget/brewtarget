@@ -86,7 +86,7 @@ public:
     *        code that calls Application::mainWindow() which returns a pointer to the MainWindow and therefore needs the
     *        MainWindow constructor to have returned!
     */
-   void init();
+   void initialiseAndMakeVisible();
 
    //! \brief Get the currently observed recipe.
    Recipe* currentRecipe();
@@ -309,11 +309,21 @@ public:
    void showChanges(QMetaProperty* prop = nullptr);
 
 protected:
-   virtual void closeEvent(QCloseEvent* event);
+   //! \brief Overrides \c QWidget::closeEvent
+   virtual void closeEvent(QCloseEvent* event) override;
 
 private slots:
    //! \brief Set whether undo / redo commands are enabled
    void setUndoRedoEnable();
+
+signals:
+   /**
+    * \brief Emitted when \c MainWindow object is initialised (at end of \c MainWindow::initialiseAndMakeVisible).
+    *
+    *        For the moment, we use this to trigger the background thread that checks to see whether a new version of
+    *        the software is available.
+    */
+   void initialisedAndVisible();
 
 private:
    // Private implementation details - see https://herbsutter.com/gotw/_100/

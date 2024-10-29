@@ -1055,7 +1055,7 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), pimpl{std::make_u
    return;
 }
 
-void MainWindow::init() {
+void MainWindow::initialiseAndMakeVisible() {
    qDebug() << Q_FUNC_INFO;
 
    this->setupCSS();
@@ -1116,6 +1116,10 @@ void MainWindow::init() {
    // .:TODO:. When we allow users to change databases without restarting, we'll need to make sure to call this whenever
    // the databae is changed (as setToolTip() just takes static text as its parameter).
    label_Brewtarget->setToolTip(getLabelToolTip());
+
+   this->setVisible(true);
+
+   emit initialisedAndVisible();
 
    qDebug() << Q_FUNC_INFO << "MainWindow initialisation complete";
    return;
