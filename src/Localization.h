@@ -148,10 +148,10 @@ namespace Localization {
     */
    bool hasUnits(QString qstr);
 
-   /**
-    * \brief Load translation files.
-    */
-   void loadTranslations();
+///   /**
+///    * \brief Load translation files.
+///    */
+///   void loadTranslations();
 
    /**
     * \brief Load localization settings from persistent storage

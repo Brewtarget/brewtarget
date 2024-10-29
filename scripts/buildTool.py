@@ -827,7 +827,7 @@ def installDependencies():
                         'mingw-w64-' + arch + '-nsis',
                         'mingw-w64-' + arch + '-freetype',
                         'mingw-w64-' + arch + '-harfbuzz',
-                        'mingw-w64-' + arch + '-openssl', # Needed for OpenSSL headers
+                        'mingw-w64-' + arch + '-openssl', # OpenSSL headers and library
                         'mingw-w64-' + arch + '-qt6-base',
                         'mingw-w64-' + arch + '-qt6-declarative', # Also needed for lupdate?
                         'mingw-w64-' + arch + '-qt6-static',
@@ -935,7 +935,7 @@ def installDependencies():
                             'pandoc',
                             'tree',
                             'qt@6',
-                            'openssl@3', # OpenSSL headers
+                            'openssl@3', # OpenSSL headers and library
 #                            'xalan-c',
 #                            'xerces-c'
                             ]
@@ -2084,11 +2084,17 @@ def doPackage():
          )
 
          #
-         # Make the checksum file TODO
+         # Make the checksum file
          #
          winInstallerName = capitalisedProjectName + ' ' + buildConfig['CONFIG_VERSION_STRING'] + ' Installer.exe'
          log.info('Generating checksum file for ' + winInstallerName)
          writeSha256sum(dir_packages_platform, winInstallerName)
+
+         #--------------------------------------------------------------------------------------------------------------
+         # Signing Windows binaries is a separate step.  For Brewtarget, it is possible, with the help of SignPath, to
+         # do via GitHub Actions.  (For Brewken, we do not yet have enough standing/users to qualify for the SignPath
+         # Open Source Software sponsorship.)
+         #--------------------------------------------------------------------------------------------------------------
 
       #-----------------------------------------------------------------------------------------------------------------
       #------------------------------------------------- Mac Packaging -------------------------------------------------
@@ -2228,7 +2234,6 @@ def doPackage():
          # Rather than create dir_packages_mac_rsc directly, it's simplest to copy the whole Resources tree from
          # mbuild/mackages/darwin/usr/local/Contents/Resources, as we want everything that's inside it
          log.debug('Copying Resources')
-#         shutil.copytree(dir_packages_platform.joinpath('usr/local/Contents/Resources'), dir_packages_mac_rsc)
          shutil.copytree(dir_packages_platform.joinpath('opt/homebrew/Contents/Resources'), dir_packages_mac_rsc)
 
          # Copy the Information Property List file to where it belongs
@@ -2238,8 +2243,6 @@ def doPackage():
          # Because Meson is geared towards local installs, in the mbuild/mackages/darwin directory, it is going to have
          # placed the executable in the usr/local/bin or opt/homebrew/bin subdirectory.  Copy it to the right place.
          log.debug('Copying executable')
-#         shutil.copy2(dir_packages_platform.joinpath('usr/local/bin').joinpath(capitalisedProjectName).as_posix(),
-#                      dir_packages_mac_bin)
          shutil.copy2(dir_packages_platform.joinpath('opt/homebrew/bin').joinpath(capitalisedProjectName).as_posix(),
                       dir_packages_mac_bin)
 
@@ -2372,24 +2375,6 @@ def doPackage():
          log.debug('Copying ' + xalanDir + xalanMsgLibName + ' to ' + dir_packages_mac_frm.as_posix())
          shutil.copy2(xalanDir + xalanMsgLibName, dir_packages_mac_frm)
 
-###         #
-###         # Let's copy libxalan-c.112.dylib to where it needs to go and hope that macdeployqt does not overwrite it
-###         #
-###         shutil.copy2(xalanDir + xalanLibName, dir_packages_mac_frm)
-###
-###         #
-###         # We need to fix up libxalan-c.112.dylib so that it looks for libxalanMsg.112.dylib in the right place.  Long
-###         # story short, this means changing '@rpath/libxalanMsg.112.dylib' to '@loader_path/libxalanMsg.112.dylib'
-###         #
-###         os.chdir(dir_packages_mac_frm)
-###         btUtils.abortOnRunFail(
-###            subprocess.run(['install_name_tool',
-###                            '-change',
-###                            xalanMsgLibName,
-###                            '@loader_path/' + xalanMsgLibName],
-###                           capture_output=False)
-###         )
-
          #
          # Now let macdeployqt do most of the heavy lifting
          #
@@ -2407,10 +2392,38 @@ def doPackage():
          #
          # .:TBD:. Ideally we would sign our application here using the `-codesign=<ident>` command line option to
          #         macdeployqt.  For the GitHub builds, we would have to import a code signing certificate using
-         #         https://github.com/Apple-Actions/import-codesign-certs.
+         #         https://github.com/Apple-Actions/import-codesign-certs.  (Note that we would need to sign both the
+         #         app and the disk image.)
          #
          #         However, getting an identity and certificate with which to sign is a bit complicated. For a start,
          #         Apple pretty much require you to sign up to their $99/year developer program.
+         #
+         #         As explained at https://wiki.lazarus.freepascal.org/Code_Signing_for_macOS, Apple do not want you to
+         #         run unsigned MacOS applications, and are making it every harder to do so.  As of 2024, if you try to
+         #         launch an unsigned executable on MacOS that you didn't download from an Apple-approved source, you'll
+         #         get two layers of errors:
+         #            - First you'll be told that the application "is damaged and can’t be opened. You should move it to
+         #              the Trash".  You can fix this by running the xattr command (as suggested at
+         #              https://discussions.apple.com/thread/253714860)
+         #            - If you now try to run the application, you'll get a different error: that the application "quit
+         #              unexpectedly".  When you click on "Report...", you'll see, buried in amongst a huge amount of
+         #              other information, the message "Exception Type: EXC_BAD_ACCESS (SIGKILL (Code Signature
+         #              Invalid))".  This can apparently be fixed by doing an "ad hoc" signing with the codesign command
+         #              (as explained at the aforementioned https://wiki.lazarus.freepascal.org/Code_Signing_for_macOS).
+         #
+         #         ❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄
+         #         ❄
+         #         ❄ TLDR for Mac users, once you've built or downloaded the app, you still need to do the following
+         #         ❄ "Simon says run this app" incantations to get it to work.  (This is because Apple knows best.
+         #         ❄ Do not question the Apple.  Do not step outside the reality distortion field.  Do not pass Go.
+         #         ❄ Etc.)  Make sure you have Xcode installed from the Mac App Store (see
+         #         ❄ https://developer.apple.com/support/xcode/).  Open the console and run the following (with the
+         #         ❄ appropriate substitution for <path/to/application.app>):
+         #         ❄
+         #         ❄    $ xattr -c <path/to/application.app>
+         #         ❄    $ codesign --force --deep -s - <path/to/application.app>
+         #         ❄
+         #         ❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄
          #
          log.debug('Running macdeployqt')
          os.chdir(dir_packages_platform)

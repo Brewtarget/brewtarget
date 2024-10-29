@@ -42,8 +42,8 @@ namespace {
 
    QString currentLanguage = "en";
 
-   QTranslator defaultTrans;
-   QTranslator btTrans;
+///   QTranslator defaultTranslator;
+   QTranslator btTranslator;
 
    QLocale initSystemLocale() {
       //
@@ -128,13 +128,16 @@ QString Localization::displayDateUserFormated(QDate const & date) {
 
 void Localization::setLanguage(QString twoLetterLanguage) {
    currentLanguage = twoLetterLanguage;
-   qApp->removeTranslator(&btTrans);
+   QCoreApplication::removeTranslator(&btTranslator);
 
    QString filename = QString("bt_%1").arg(twoLetterLanguage);
    QDir translations = QDir(Application::getResourceDir().canonicalPath() + "/translations_qm");
-
-   if (btTrans.load(filename, translations.canonicalPath())) {
-      qApp->installTranslator(&btTrans);
+   bool const succeeded = btTranslator.load(filename, translations.canonicalPath());
+   qDebug() <<
+      Q_FUNC_INFO << "Loading" << filename << "from" << translations.canonicalPath() <<
+      (succeeded ? "succeeded" : "failed");
+   if (succeeded) {
+      QCoreApplication::installTranslator(&btTranslator);
    }
    return;
 }
@@ -216,32 +219,37 @@ double Localization::toDouble(QString text, char const * const caller) {
 }
 
 
-void Localization::loadTranslations() {
-   if (qApp == nullptr) {
-      return;
-   }
-
-   // Load translators.
-   bool succeeded = defaultTrans.load("qt_" + Localization::getLocale().name(),
-                                      QLibraryInfo::path(QLibraryInfo::TranslationsPath));
-   if (!succeeded) {
-      qWarning() << Q_FUNC_INFO << "Error loading translations for" << Localization::getLocale().name();
-   }
-   if (getCurrentLanguage().isEmpty()) {
-      setLanguage(getSystemLanguage());
-   }
-   //btTrans.load("bt_" + getSystemLanguage());
-
-   // Install translators
-   qApp->installTranslator(&defaultTrans);
-   //qApp->installTranslator(btTrans);
-
-   return;
-}
+///void Localization::loadTranslations() {
+///   if (!qApp) {
+///      // It's probably a coding error if we're called before the qApp global variable is set
+///      return;
+///   }
+///
+///   // Load translators.
+///   bool succeeded = defaultTranslator.load("qt_" + Localization::getLocale().name(),
+///                                      QLibraryInfo::path(QLibraryInfo::TranslationsPath));
+///   if (!succeeded) {
+///      qWarning() <<
+///         Q_FUNC_INFO << "Error loading translations for" << Localization::getLocale().name() << "from" <<
+///         QLibraryInfo::path(QLibraryInfo::TranslationsPath);
+///   }
+///   if (getCurrentLanguage().isEmpty()) {
+///      setLanguage(getSystemLanguage());
+///   }
+///   //btTranslator.load("bt_" + getSystemLanguage());
+///
+///   // Install translators
+///   qApp->installTranslator(&defaultTranslator);
+///   //qApp->installTranslator(btTranslator);
+///
+///   return;
+///}
 
 void Localization::loadSettings() {
    if (PersistentSettings::contains(PersistentSettings::Names::language)) {
-      Localization::setLanguage(PersistentSettings::value(PersistentSettings::Names::language,"").toString());
+      Localization::setLanguage(PersistentSettings::value(PersistentSettings::Names::language, "").toString());
+   } else {
+      Localization::setLanguage(getSystemLanguage());
    }
 
    dateFormat = static_cast<Localization::NumericDateFormat>(PersistentSettings::value(PersistentSettings::Names::date_format, Localization::YearMonthDay).toInt());

@@ -389,9 +389,11 @@ bool Application::initialize() {
    // TODO: Seems a bit ugly that we call readSystemOptions here but saveSystemOptions from MainWindow::closeEvent.
    // In the long run, it would be a lot more elegant to use RAII to automatically store everything we read from
    // PersistentSettings.
+   //
    Application::readSystemOptions();
 
-   Localization::loadTranslations(); // Do internationalization.
+///   // Load in the default / remembered translations
+///   Localization::loadTranslations();
 
    QLocale const & locale = Localization::getLocale();
    qInfo() <<

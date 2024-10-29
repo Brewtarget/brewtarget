@@ -31,14 +31,13 @@
 #                                need to be for a local install).  Then creates a distributable package, making use
 #                                of various build variables passed back from Meson.
 #
-# NOTE: This tool, used in conjunction with Meson, is now the official way to build and package the software.  We
-#       continue to support CMake for local compiles and installs, but not for packaging.
+# NOTE: This tool, used in conjunction with Meson, is now the official way to build and package the software.  We will
+#       continue to support CMake indefinitely for local compiles and installs, since it is such a widespread and
+#       familiar build system for C++ projects.  However, we no longer attempt to support packaging via CPack.
 #
 # .:TODO:. At some point we should be able to retire:
 #    configure
 #    setupgit.sh
-#    CMakeLists.txt
-#    src/CMakeLists.txt
 #
 # **********************************************************************************************************************
 # *
