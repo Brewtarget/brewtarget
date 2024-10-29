@@ -392,8 +392,8 @@ bool Application::initialize() {
    //
    Application::readSystemOptions();
 
-///   // Load in the default / remembered translations
-///   Localization::loadTranslations();
+   // Load in the default / remembered translations
+   Localization::loadTranslations();
 
    QLocale const & locale = Localization::getLocale();
    qInfo() <<
@@ -422,14 +422,10 @@ void Application::cleanup() {
    // Should I do qApp->removeTranslator() first?
    MainWindow::DeleteMainWindow();
 
+   qDebug() << Q_FUNC_INFO << "Unloading database";
    Database::instance().unload();
 
-   //
-   // Ensure the thread we spawned to check for new versions is properly terminated
-   //
-   latestReleaseFinderThread.quit();
-   latestReleaseFinderThread.wait();
-
+   qDebug() << Q_FUNC_INFO << "Done cleaning up";
    return;
 }
 
@@ -449,7 +445,7 @@ int Application::run() {
    splashScreen.show();
    qApp->processEvents();
    if (!Application::initialize()) {
-      cleanup();
+      Application::cleanup();
       return 1;
    }
    Database::instance().checkForNewDefaultData();
@@ -476,11 +472,22 @@ int Application::run() {
 
    mainWindow.initialiseAndMakeVisible();
    splashScreen.finish(&mainWindow);
+
+   // TODO: According to https://doc.qt.io/qt-6/qapplication.html#exec, there are circumstances where exec() does not
+   //       return, so best practice is to connect clean-up code to the aboutToQuit() signal, instead of putting it in
+   //       the application's main() function.
    do {
       ret = qApp->exec();
    } while (ret == 1000);
 
-   cleanup();
+   //
+   // Ensure the thread we spawned to check for new versions is properly terminated
+   //
+   qDebug() << Q_FUNC_INFO << "Stopping extra thread";
+   latestReleaseFinderThread.quit();
+   latestReleaseFinderThread.wait();
+
+   Application::cleanup();
 
    qDebug() << Q_FUNC_INFO << "Cleaned up.  Returning " << ret;
 

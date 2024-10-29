@@ -40,9 +40,8 @@ namespace {
 
    Localization::NumericDateFormat dateFormat = Localization::YearMonthDay;
 
-   QString currentLanguage = "en";
+   QString currentLanguage = "";
 
-///   QTranslator defaultTranslator;
    QTranslator btTranslator;
 
    QLocale initSystemLocale() {
@@ -218,38 +217,18 @@ double Localization::toDouble(QString text, char const * const caller) {
    return ret;
 }
 
-
-///void Localization::loadTranslations() {
-///   if (!qApp) {
-///      // It's probably a coding error if we're called before the qApp global variable is set
-///      return;
-///   }
-///
-///   // Load translators.
-///   bool succeeded = defaultTranslator.load("qt_" + Localization::getLocale().name(),
-///                                      QLibraryInfo::path(QLibraryInfo::TranslationsPath));
-///   if (!succeeded) {
-///      qWarning() <<
-///         Q_FUNC_INFO << "Error loading translations for" << Localization::getLocale().name() << "from" <<
-///         QLibraryInfo::path(QLibraryInfo::TranslationsPath);
-///   }
-///   if (getCurrentLanguage().isEmpty()) {
-///      setLanguage(getSystemLanguage());
-///   }
-///   //btTranslator.load("bt_" + getSystemLanguage());
-///
-///   // Install translators
-///   qApp->installTranslator(&defaultTranslator);
-///   //qApp->installTranslator(btTranslator);
-///
-///   return;
-///}
+void Localization::loadTranslations() {
+   auto const systemLanguage = getSystemLanguage();
+   qDebug() << Q_FUNC_INFO << "Current language:" << currentLanguage << "; System language:" << systemLanguage;
+   if (currentLanguage.isEmpty()) {
+      Localization::setLanguage(systemLanguage);
+   }
+   return;
+}
 
 void Localization::loadSettings() {
    if (PersistentSettings::contains(PersistentSettings::Names::language)) {
       Localization::setLanguage(PersistentSettings::value(PersistentSettings::Names::language, "").toString());
-   } else {
-      Localization::setLanguage(getSystemLanguage());
    }
 
    dateFormat = static_cast<Localization::NumericDateFormat>(PersistentSettings::value(PersistentSettings::Names::date_format, Localization::YearMonthDay).toInt());
