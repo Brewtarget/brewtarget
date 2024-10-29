@@ -766,6 +766,13 @@ include_directories(${XalanC_INCLUDE_DIRS})
 message("Xalan-C++ include directories: ${XalanC_INCLUDE_DIRS}")
 message("Xalan-C++ libraries: ${XalanC_LIBRARIES}")
 
+#===================================================== Find OpenSSL ====================================================
+# This is needed for us to use https with Boost.Asio
+find_package(OpenSSL REQUIRED)
+include_directories(${OPENSSL_INCLUDE_DIR})
+message("OpenSSL include directories: ${OPENSSL_INCLUDE_DIR}")
+message("OpenSSL libraries: ${OPENSSL_LIBRARIES}")
+
 if(APPLE)
 # TBD: Is this also needed when static linking Xerces on MacOS?
 find_package(CURL REQUIRED)
@@ -1137,6 +1144,7 @@ set(appAndTestCommonLibraries
    ${DL_LIBRARY}
    ${XalanC_LIBRARIES}
    ${XercesC_LIBRARIES}
+   ${OPENSSL_LIBRARIES}
 )
 if(APPLE)
    # Static linking Xerces and Xalan on MacOS means we have to explicitly say what libraries and frameworks they in turn

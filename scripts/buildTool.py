@@ -434,6 +434,7 @@ def installDependencies():
                                                 'libqt6sql6-psql',
                                                 'libqt6sql6-sqlite',
                                                 'libqt6svg6-dev',
+                                                'libssl-dev', # For OpenSSL headers
                                                 'libxalan-c-dev',
                                                 'libxerces-c-dev',
                                                 'lintian',
@@ -826,6 +827,7 @@ def installDependencies():
                         'mingw-w64-' + arch + '-nsis',
                         'mingw-w64-' + arch + '-freetype',
                         'mingw-w64-' + arch + '-harfbuzz',
+                        'mingw-w64-' + arch + '-openssl', # Needed for OpenSSL headers
                         'mingw-w64-' + arch + '-qt6-base',
                         'mingw-w64-' + arch + '-qt6-declarative', # Also needed for lupdate?
                         'mingw-w64-' + arch + '-qt6-static',
@@ -837,7 +839,6 @@ def installDependencies():
                         'mingw-w64-' + arch + '-xerces-c',
                         'mingw-w64-' + arch + '-angleproject', # See comment above
                         'mingw-w64-' + arch + '-ntldd', # Dependency tool useful for running manually -- see below
-
                         ]
          for packageToInstall in installList:
             log.debug('Installing ' + packageToInstall)
@@ -934,6 +935,7 @@ def installDependencies():
                             'pandoc',
                             'tree',
                             'qt@6',
+                            'openssl@3', # OpenSSL headers
 #                            'xalan-c',
 #                            'xerces-c'
                             ]
@@ -1989,41 +1991,41 @@ def doPackage():
             #'Qt6PrintSupport',
             #'Qt6Sql'         ,
             #'Qt6Widgets'     ,
-            'libb2',                # BLAKE hash functions -- https://en.wikipedia.org/wiki/BLAKE_(hash_function)
-            'libbrotlicommon',      # Brotli compression -- see https://en.wikipedia.org/wiki/Brotli
-            'libbrotlidec',         # Brotli compression
-            'libbrotlienc',         # Brotli compression
-            'libbz2',               # BZip2 compression -- see https://en.wikipedia.org/wiki/Bzip2
+            'libb2'               , # BLAKE hash functions -- https://en.wikipedia.org/wiki/BLAKE_(hash_function)
+            'libbrotlicommon'     , # Brotli compression -- see https://en.wikipedia.org/wiki/Brotli
+            'libbrotlidec'        , # Brotli compression
+            'libbrotlienc'        , # Brotli compression
+            'libbz2'              , # BZip2 compression -- see https://en.wikipedia.org/wiki/Bzip2
             'libdouble-conversion', # Binary-decimal & decimal-binary routines for IEEE doubles -- see https://github.com/google/double-conversion
-            'libfreetype',          # Font rendering -- see https://freetype.org/
+            'libfreetype'         , # Font rendering -- see https://freetype.org/
             #
             # 32-bit and 64-bit MinGW use different exception handling (see
             # https://sourceforge.net/p/mingw-w64/wiki2/Exception%20Handling/) hence the different naming of libgcc in
             # the 32-bit and 64-bit environments.
             #
-#            'libgcc_s_dw2',    # 32-bit GCC library
-            'libgcc_s_seh',    # 64-bit GCC library
-            'libglib-2.0',
-            'libgraphite',
-            'libharfbuzz',   # HarfBuzz text shaping engine -- see https://github.com/harfbuzz/harfbuzz
-            'libiconv',      # See https://www.gnu.org/software/libiconv/
-            'libicudt',      # Part of International Components for Unicode
-            'libicuin',      # Part of International Components for Unicode
-            'libicuuc',      # Part of International Components for Unicode
-            'libintl',       # See https://www.gnu.org/software/gettext/
-            'libmd4c',       # Markdown for C -- see https://github.com/mity/md4c
-            'libpcre2-8',    # Perl Compatible Regular Expressions
-            'libpcre2-16',   # Perl Compatible Regular Expressions
-            'libpcre2-32',   # Perl Compatible Regular Expressions
-            'libpng16',      # Official PNG reference library -- see http://www.libpng.org/pub/png/libpng.html
-            'libsqlite3',    # Need this IN ADDITION to bin/sqldrivers/qsqlite.dll, which gets installed by windeployqt
-            'libstdc++',
+#            'libgcc_s_dw2' , # 32-bit GCC library
+            'libgcc_s_seh' , # 64-bit GCC library
+            'libglib-2.0'  ,
+            'libgraphite'  ,
+            'libharfbuzz'  , # HarfBuzz text shaping engine -- see https://github.com/harfbuzz/harfbuzz
+            'libiconv'     , # See https://www.gnu.org/software/libiconv/
+            'libicudt'     , # Part of International Components for Unicode
+            'libicuin'     , # Part of International Components for Unicode
+            'libicuuc'     , # Part of International Components for Unicode
+            'libintl'      , # See https://www.gnu.org/software/gettext/
+            'libmd4c'      , # Markdown for C -- see https://github.com/mity/md4c
+            'libpcre2-8'   , # Perl Compatible Regular Expressions
+            'libpcre2-16'  , # Perl Compatible Regular Expressions
+            'libpcre2-32'  , # Perl Compatible Regular Expressions
+            'libpng16'     , # Official PNG reference library -- see http://www.libpng.org/pub/png/libpng.html
+            'libsqlite3'   , # Need this IN ADDITION to bin/sqldrivers/qsqlite.dll, which gets installed by windeployqt
+            'libstdc++'    ,
             'libwinpthread',
-            'libxalan-c',
-            'libxalanMsg',
+            'libxalan-c'   ,
+            'libxalanMsg'  ,
             'libxerces-c-3',
-            'libzstd',       # ZStandard (aka zstd) = fast lossless compression algorithm
-            'zlib',          # ZLib compression library
+            'libzstd'      , # ZStandard (aka zstd) = fast lossless compression algorithm
+            'zlib'         , # ZLib compression library
          ]:
             found = False
             for searchDir in pathsToSearch:

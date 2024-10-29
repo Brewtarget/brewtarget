@@ -198,7 +198,7 @@ project('brewtarget', 'cpp',
                            'buildtype=plain'])
 
 #
-# Although Meson itself is written in Python, Meson build files uses a slihgtly different syntax and have less
+# Although Meson itself is written in Python, Meson build files uses a slightly different syntax and have less
 # functionality than Python.  See
 # https://mesonbuild.com/FAQ.html#why-is-meson-not-just-a-python-module-so-i-could-code-my-build-setup-in-python and
 # links therefrom for the rationale for avoiding being a full programming language.
@@ -515,6 +515,17 @@ xalanLibPaths = xalanDependency.get_variable(cmake : 'PACKAGE_LIBRARIES')
 message('Xalan Library:', xalanDependency.name(), 'found =', xalanDependency.found(),
         'version =', xalanDependency.version(), 'path(s)=', xalanLibPaths)
 sharedLibraryPaths += xalanLibPaths
+
+#======================================================= OpenSSL =======================================================
+# This is needed for us to use https with Boost.Asio
+openSslDependency = dependency('OpenSSL',
+                               version : '>=3.0.13',
+                               required : true,
+                               static : true)
+#openSslLibPaths = openSslDependency.get_variable(cmake : 'PACKAGE_LIBRARIES')
+message('OpenSSL Library:', openSslDependency.name(), 'found =', openSslDependency.found(),
+        'version =', openSslDependency.version())
+#sharedLibraryPaths += openSslLibPaths
 
 #====================================================== Valijson =======================================================
 # Don't need to do anything special, other than set include directories below, as it's header-only and we pull it in as
@@ -1278,6 +1289,7 @@ commonDependencies = [qtCommonDependencies,
                       xalanDependency,
                       boostDependency,
                       dlDependency,
+                      openSslDependency, # This isn't strictly needed for the testRunner, but no harm comes from including it
                       backtraceDependency]
 mainExeDependencies = commonDependencies + qtMainExeDependencies
 testRunnerDependencies = commonDependencies + qtTestRunnerDependencies
@@ -1345,7 +1357,7 @@ exportedVariables = {
    'CONFIG_DESCRIPTION_STRING' : 'Open source brewing software',
 
    # Some installers, eg NSIS on Windows, want a brief copyright string
-   'CONFIG_COPYRIGHT_STRING' : 'Copyright 2009-2023.  Distributed under the terms of the GNU General Public License (version 3).',
+   'CONFIG_COPYRIGHT_STRING' : 'Copyright 2009-2024.  Distributed under the terms of the GNU General Public License (version 3).',
 
    # Installers often want the name of the organisation supplying the product, so we need something to put there
    'CONFIG_ORGANIZATION_NAME' : 'The ' + capitalisedProjectName + ' Team',

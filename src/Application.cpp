@@ -36,6 +36,14 @@
 #include <iostream>
 #include <mutex> // For std::call_once etc
 
+//¥¥vv
+#include <string>
+
+#include <boost/asio.hpp>
+#include <boost/asio/ssl.hpp>
+#include <boost/beast.hpp>
+//¥¥^^
+
 #include <QDebug>
 #include <QDesktopServices>
 #include <QDirIterator>
@@ -196,22 +204,92 @@ namespace {
       return;
    }
 
-   QNetworkReply * responseToCheckForNewVersion = nullptr;
-
    /**
-    * \brief Once the response is received to the web request to get latest version info, this parses it and, if
-    *        necessary, prompts the user to upgrade.
-    *        See \c initiateCheckForNewVersion.
+    * \brief Check whether there is a newer version of the software available to download from GitHub.  If so, ask the
+    *        user whether they want to upgrade.  (We don't actually DO the upgrade.  We just take them to the place they
+    *        can download it.)
     */
-   void finishCheckForNewVersion() {
-      if (!responseToCheckForNewVersion) {
-         qDebug() << Q_FUNC_INFO << "Invalid sender";
+   void checkForNewVersion() {
+      //
+      // Users can turn off the check for new versions
+      //
+      if (!checkVersion) {
+         qDebug() << Q_FUNC_INFO << "Check for new version is disabled";
          return;
       }
 
-      // If there is an error, just return.
-      if (responseToCheckForNewVersion->error() != QNetworkReply::NoError) {
-         qDebug() << Q_FUNC_INFO << "Error checking for update:" << responseToCheckForNewVersion->error();
+      //
+      // Checking for the latest version involves requesting a JSON object from the GitHub API over HTTPS.
+      //
+      // Previously we used the Qt framework (QNetworkAccessManager / QNetworkRequest / QNetworkReply) to do the HTTP
+      // request/response.  The problem with this is that, when something goes wrong it can be rather hard to diagnose.
+      // Eg we had a bug that triggered a stack overflow in the Qt internals but there was only a limited amount of
+      // logging we could add to try to determine what was going on.
+      //
+      // So now, instead, we use Boost.Beast (which sits on top of Boost.Asio) and OpenSSL.  This is very slightly
+      // lower-level -- in that fewer things are magically defaulted for you -- and requires us to use std::string
+      // rather than QString.  But at least it does not require a callback function.  And, should we have future
+      // problems, it should be easier to delve into.
+      //
+      // Although it's a bit long-winded, we're not really doing anything clever here.  The example code at
+      // https://www.boost.org/doc/libs/1_86_0/libs/beast/doc/html/beast/quick_start/http_client.html explains a lot of
+      // what's going on.  We're just doing a bit extra to do HTTPS rather than HTTP.
+      //
+      std::string const host{"api.github.com"};
+      // It would be neat to construct this string at compile-time, but I haven't yet worked out how!
+      std::string const path = QString{"/repos/%1/%2/releases/latest"}.arg(CONFIG_APPLICATION_NAME_UC, CONFIG_APPLICATION_NAME_LC).toStdString();
+      std::string const port{"443"};
+      //
+      // Here 11 means HTTP/1.1, 20 means HTTP/2.0, 30 means HTTP/3.0.  (See
+      // https://www.boost.org/doc/libs/1_86_0/libs/beast/doc/html/beast/ref/boost__beast__http__message/version/overload1.html.)
+      // If we were doing something generic then we'd stick with HTTP/1.1 since that has 100% support.  But, since we're
+      // only making one request, and it's to GitHub, and we know they support they newer version of HTTP, we might as
+      // well use the newer standard.
+      //
+      boost::beast::http::request<boost::beast::http::string_body> httpRequest{boost::beast::http::verb::get,
+                                                                               path,
+                                                                               30};
+      httpRequest.set(boost::beast::http::field::host, host);
+      //
+      // GitHub will respond with an error if the user agent field is not present, but it doesn't care what it's set to
+      // and will even accept empty string.
+      //
+      httpRequest.set(boost::beast::http::field::user_agent, "");
+
+      boost::asio::io_service ioService;
+      //
+      // A lot of old example code for Boost still uses sslv23_client.  However, TLS 1.3 has been out since 2018, and we
+      // know GitHub (along with most other web sites) supports it.  So there's no reason not to use that.
+      //
+      boost::asio::ssl::context securityContext(boost::asio::ssl::context::tlsv13_client);
+      boost::asio::ssl::stream<boost::asio::ip::tcp::socket> secureSocket{ioService, securityContext};
+      // The resolver essentially does the DNS requests to look up the host address etc
+      boost::asio::ip::tcp::resolver tcpIpResolver{ioService};
+      auto endpoint = tcpIpResolver.resolve(host, port);
+      // TODO: Need to add time-outs here.
+
+      // Once we have the address, we can connect, do the SSL handshake, and then send the request
+      boost::asio::connect(secureSocket.lowest_layer(), endpoint);
+      secureSocket.handshake(boost::asio::ssl::stream_base::handshake_type::client);
+      boost::beast::http::write(secureSocket, httpRequest);
+
+      // We're expecting a response back pretty quickly, so we'll just wait for it here.  If we find response times are
+      // too
+      boost::beast::http::response<boost::beast::http::string_body> httpResponse;
+      boost::beast::flat_buffer buffer;
+      boost::beast::http::read(secureSocket, buffer, httpResponse);
+
+      if (httpResponse.result() != boost::beast::http::status::ok) {
+         //
+         // It's not the end of the world if we could't check for an update, but we should record the fact.  With some
+         // things in Boost.Beast, the easiest way to convert them to a string is via a standard library output stream,
+         // so we construct the whole error message like that rather then try to mix-and-match with Qt logging output
+         // streams.
+         //
+         std::ostringstream errorMessage;
+         errorMessage << "Error checking for update: " << httpResponse.result_int() <<
+            ".\nResponse headers:" << httpResponse.base();
+         qInfo().noquote() << Q_FUNC_INFO << QString::fromStdString(errorMessage.str());
          return;
       }
 
@@ -224,7 +302,7 @@ namespace {
       // to do anything clever with the JSON response, just extract one field, so the Qt JSON support suffices here.
       // (See comments elsewhere for why we don't use it for BeerJSON.)
       //
-      QByteArray rawContent = responseToCheckForNewVersion->readAll();
+      QByteArray rawContent = QByteArray::fromStdString(httpResponse.body());
       QJsonParseError jsonParseError{};
 
       QJsonDocument jsonDocument = QJsonDocument::fromJson(rawContent, &jsonParseError);
@@ -288,38 +366,6 @@ namespace {
       return;
    }
 
-
-   /**
-    * \brief Sends a web request to check whether there is a newer version of the software available
-    */
-   void initiateCheckForNewVersion(MainWindow* mw) {
-
-      // Don't do anything if the checkVersion flag was set false
-      if (!checkVersion) {
-         qDebug() << Q_FUNC_INFO << "Check for new version is disabled";
-         return;
-      }
-
-      //
-      // Nobody else needs to access this QNetworkAccessManager object, but it needs to carry on existing after this
-      // function returns (otherwise the HTTP GET request will get cancelled), hence why we make it static.
-      //
-      // As with a lot of things in Qt, passing in a "parent" QObject means Qt handles ownership of the object so
-      // having this as a raw pointer is not the resource leak it might appear.
-      //
-      static QNetworkAccessManager * manager = new QNetworkAccessManager(mw);
-      static QString const releasesLatest = QString{"https://api.github.com/repos/%1/%2/releases/latest"}.arg(CONFIG_APPLICATION_NAME_UC, CONFIG_APPLICATION_NAME_LC);
-      QUrl url{releasesLatest};
-      QNetworkRequest networkRequest{url};
-      qInfo() <<
-         Q_FUNC_INFO << "Sending request to" << url << "to check for new version.  (Timeout" <<
-         manager->transferTimeout() << "ms, Redirect Policy" << manager->redirectPolicy() << ")";
-      responseToCheckForNewVersion = manager->get(networkRequest);
-      qDebug() << Q_FUNC_INFO << "Request running =" << responseToCheckForNewVersion->isRunning();
-      // Since Qt5, you can connect signals to simple functions (see https://wiki.qt.io/New_Signal_Slot_Syntax)
-      QObject::connect(responseToCheckForNewVersion, &QNetworkReply::finished, mw, &finishCheckForNewVersion);
-      return;
-   }
 
    /**
     * \brief This is only called from \c Application::getResourceDir to initialise the variable it returns
@@ -496,7 +542,7 @@ int Application::run() {
    mainWindow.setVisible(true);
    splashScreen.finish(&mainWindow);
 
-   initiateCheckForNewVersion(&mainWindow);
+   checkForNewVersion();
    do {
       ret = qApp->exec();
    } while (ret == 1000);
