@@ -518,8 +518,12 @@ sharedLibraryPaths += xalanLibPaths
 
 #======================================================= OpenSSL =======================================================
 # This is needed for us to use https with Boost.Asio
+#
+# As of 2024-10-29, 3.0.2 is the most recent version of OpenSSL available on Ubuntu 22.04, so that's the minimum we
+# specify here.
+#
 openSslDependency = dependency('OpenSSL',
-                               version : '>=3.0.13',
+                               version : '>=3.0.2',
                                required : true,
                                static : true)
 #openSslLibPaths = openSslDependency.get_variable(cmake : 'PACKAGE_LIBRARIES')
