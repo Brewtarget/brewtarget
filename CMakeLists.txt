@@ -241,9 +241,9 @@ set(RUNTIME_INSTALL_COMPONENT "Runtime")
 # We use different compilers on different platforms.  Where possible, we want to let CMake handle the actual compiler
 # settings
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-# We need C++20 for std::map::contains() and concepts, C++17 or later for nested namespaces and structured bindings, and
-# C++11 or later for lambdas.
-set(CMAKE_CXX_STANDARD 20)
+# We need C++23 for std::ranges::zip_view, C++20 for std::map::contains() and concepts, C++17 or later for nested
+# namespaces and structured bindings, and C++11 or later for lambdas.
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
@@ -580,47 +580,48 @@ if(WIN32)
    get_filename_component(QT_BIN_DIR "${_qmake_executable}" DIRECTORY)
    message("QT_BIN_DIR = ${QT_BIN_DIR}")
 
-   #
-   # Per https://doc.qt.io/qt-6/windows-deployment.html, the windeployqt executable creates all the necessary folder
-   # tree "containing the Qt-related dependencies (libraries, QML imports, plugins, and translations) required to run
-   # the application from that folder".
-   #
-   # On some systems at least, looks like Qt6::windeployqt is already available in CMake (when Qt5::windeployqt) was
-   # not.  If it is, then we can't try to set it up again as we'll get an error ("add_executable cannot create imported
-   # target "Qt6::windeployqt" because another target with the same name already exists").
-   #
-   if (NOT TARGET Qt6::windeployqt)
-      find_program(WINDEPLOYQT_EXECUTABLE windeployqt HINTS "${QT_BIN_DIR}")
-      if(EXISTS ${WINDEPLOYQT_EXECUTABLE})
-         # Per https://cmake.org/cmake/help/latest/command/add_executable.html, "IMPORTED executables are useful for
-         # convenient reference from commands like add_custom_command()".
-         add_executable(Qt6::windeployqt IMPORTED)
-         set_target_properties(Qt6::windeployqt PROPERTIES IMPORTED_LOCATION ${WINDEPLOYQT_EXECUTABLE})
-      endif()
-   endif()
+###   #
+###   # Per https://doc.qt.io/qt-6/windows-deployment.html, the windeployqt executable creates all the necessary folder
+###   # tree "containing the Qt-related dependencies (libraries, QML imports, plugins, and translations) required to run
+###   # the application from that folder".
+###   #
+###   # On some systems at least, looks like Qt6::windeployqt is already available in CMake (when Qt5::windeployqt) was
+###   # not.  If it is, then we can't try to set it up again as we'll get an error ("add_executable cannot create imported
+###   # target "Qt6::windeployqt" because another target with the same name already exists").
+###   #
+###   if (NOT TARGET Qt6::windeployqt)
+###      find_program(WINDEPLOYQT_EXECUTABLE windeployqt HINTS "${QT_BIN_DIR}")
+###      if(EXISTS ${WINDEPLOYQT_EXECUTABLE})
+###         # Per https://cmake.org/cmake/help/latest/command/add_executable.html, "IMPORTED executables are useful for
+###         # convenient reference from commands like add_custom_command()".
+###         add_executable(Qt6::windeployqt IMPORTED)
+###         set_target_properties(Qt6::windeployqt PROPERTIES IMPORTED_LOCATION ${WINDEPLOYQT_EXECUTABLE})
+###      endif()
+###   endif()
 
    # International Components for Unicode
    file(GLOB IcuDlls "${QT_BIN_DIR}/libicu*.dll")
-elseif(APPLE)
-   #====================================================================================================================
-   #=================================================== Mac Qt Stuff ===================================================
-   #====================================================================================================================
 
-   # The macdeployqt executable shipped with Qt does for Mac what windeployqt does for Windows -- see
-   # https://doc.qt.io/qt-6/macos-deployment.html#the-mac-deployment-tool
-   #
-   # At first glance, you might thanks that, with a few name changes, we might share all the CMake code for macdeployqt
-   # and windeployqt.  However, as you will see below, the two programs share _only_ a top-level goal ("automate the
-   # process of creating a deployable [folder / applicaiton bundle] that contains [the necessary Qt dependencies]" - ie
-   # so that the end user does not have to install Qt to run our software).  They have completely different
-   # implementations and command line options, so it would be unhelpful to try to treat them identically.
-   find_program(MACDEPLOYQT_EXECUTABLE macdeployqt HINTS "${QT_BIN_DIR}")
-   if(EXISTS ${MACDEPLOYQT_EXECUTABLE})
-      # Per https://cmake.org/cmake/help/latest/command/add_executable.html, "IMPORTED executables are useful for
-      # convenient reference from commands like add_custom_command()".
-      add_executable(Qt6::macdeployqt IMPORTED)
-      set_target_properties(Qt6::macdeployqt PROPERTIES IMPORTED_LOCATION ${MACDEPLOYQT_EXECUTABLE})
-   endif()
+###elseif(APPLE)
+###   #====================================================================================================================
+###   #=================================================== Mac Qt Stuff ===================================================
+###   #====================================================================================================================
+###
+###   # The macdeployqt executable shipped with Qt does for Mac what windeployqt does for Windows -- see
+###   # https://doc.qt.io/qt-6/macos-deployment.html#the-mac-deployment-tool
+###   #
+###   # At first glance, you might thanks that, with a few name changes, we might share all the CMake code for macdeployqt
+###   # and windeployqt.  However, as you will see below, the two programs share _only_ a top-level goal ("automate the
+###   # process of creating a deployable [folder / applicaiton bundle] that contains [the necessary Qt dependencies]" - ie
+###   # so that the end user does not have to install Qt to run our software).  They have completely different
+###   # implementations and command line options, so it would be unhelpful to try to treat them identically.
+###   find_program(MACDEPLOYQT_EXECUTABLE macdeployqt HINTS "${QT_BIN_DIR}")
+###   if(EXISTS ${MACDEPLOYQT_EXECUTABLE})
+###      # Per https://cmake.org/cmake/help/latest/command/add_executable.html, "IMPORTED executables are useful for
+###      # convenient reference from commands like add_custom_command()".
+###      add_executable(Qt6::macdeployqt IMPORTED)
+###      set_target_properties(Qt6::macdeployqt PROPERTIES IMPORTED_LOCATION ${MACDEPLOYQT_EXECUTABLE})
+###   endif()
 
 endif()
 
@@ -765,6 +766,13 @@ include_directories(${XalanC_INCLUDE_DIRS})
 # Uncomment the next two lines if you want to find where Xalan headers and DLLs are on your system
 message("Xalan-C++ include directories: ${XalanC_INCLUDE_DIRS}")
 message("Xalan-C++ libraries: ${XalanC_LIBRARIES}")
+
+#===================================================== Find OpenSSL ====================================================
+# This is needed for us to use https with Boost.Asio
+find_package(OpenSSL REQUIRED)
+include_directories(${OPENSSL_INCLUDE_DIR})
+message("OpenSSL include directories: ${OPENSSL_INCLUDE_DIR}")
+message("OpenSSL libraries: ${OPENSSL_LIBRARIES}")
 
 if(APPLE)
 # TBD: Is this also needed when static linking Xerces on MacOS?
@@ -1137,6 +1145,7 @@ set(appAndTestCommonLibraries
    ${DL_LIBRARY}
    ${XalanC_LIBRARIES}
    ${XercesC_LIBRARIES}
+   ${OPENSSL_LIBRARIES}
 )
 if(APPLE)
    # Static linking Xerces and Xalan on MacOS means we have to explicitly say what libraries and frameworks they in turn

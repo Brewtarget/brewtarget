@@ -149,17 +149,17 @@ namespace Localization {
    bool hasUnits(QString qstr);
 
    /**
-    * \brief Load translation files.
+    * \brief Load default translation file if necessary (usually only the first time ever the software is run).
     */
    void loadTranslations();
 
    /**
-    * \brief Load localization settings from persistent storage
+    * \brief Load localization settings from persistent storage, including the language setting from the previous run.
     */
    void loadSettings();
 
    /**
-    * \brief Save localization settings to persistent storage
+    * \brief Save localization settings to persistent storage, including current language setting.
     */
    void saveSettings();
 }

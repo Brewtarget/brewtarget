@@ -468,8 +468,8 @@ void Testing::initTestCase() {
 
       //
       // Application::initialize() will initialise a bunch of things, including creating a default database in
-      // this->pimpl->m_tempDir courtesy of the call to PersistentSettings::initialise() above.  If there is a problem creating the DB,
-      // it will return false.
+      // this->pimpl->m_tempDir courtesy of the call to PersistentSettings::initialise() above.  If there is a problem
+      // creating the DB, it will return false.
       //
       QVERIFY(Application::initialize());
 

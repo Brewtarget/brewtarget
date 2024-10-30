@@ -39,14 +39,10 @@
 #include <QDebug>
 #include <QDesktopServices>
 #include <QDirIterator>
-#include <QJsonObject>
-#include <QJsonParseError>
 #include <QMessageBox>
 #include <QObject>
 #include <QString>
-#include <QtNetwork/QNetworkAccessManager>
-#include <QtNetwork/QNetworkReply>
-#include <QtNetwork/QNetworkRequest>
+#include <QThread>
 #include <QUrl>
 #include <QVersionNumber>
 
@@ -54,6 +50,7 @@
 #include "BtSplashScreen.h"
 #include "config.h"
 #include "database/Database.h"
+#include "LatestReleaseFinder.h"
 #include "Localization.h"
 #include "MainWindow.h"
 #include "measurement/ColorMethods.h"
@@ -83,11 +80,10 @@ namespace {
    bool interactive = true;
 
    //! \brief If this option is false, do not bother the user about new versions.
-   bool checkVersion = true;
+   bool tellUserAboutNewRelease = true;
 
-   void setCheckVersion(bool value) {
-      checkVersion = value;
-   }
+   //! \brief Worker thread for finding the latest released version of the program
+   QThread latestReleaseFinderThread;
 
    /**
     * \brief Create a directory if it doesn't exist, popping a error dialog if creation fails
@@ -196,53 +192,17 @@ namespace {
       return;
    }
 
-   QNetworkReply * responseToCheckForNewVersion = nullptr;
-
    /**
-    * \brief Once the response is received to the web request to get latest version info, this parses it and, if
-    *        necessary, prompts the user to upgrade.
-    *        See \c initiateCheckForNewVersion.
+    * \brief This is called to tell us the version number of the latest release of the program in its main GitHub
+    *        repository.
+    *
+    *        NB: AFAICT, because this is a freestanding function, rather than a member function of a QObject subclass,
+    *            this gets run on the caller's thread.  In particular this means it could run at the same time as other
+    *            code running inside the program's main Qt event loop.  If we wanted to do anything that might risk
+    *            clashing with other code then we would either want to add locking here or move this function to be,
+    *            say, a slot on one of our objects (eg MainWindow).
     */
-   void finishCheckForNewVersion() {
-      if (!responseToCheckForNewVersion) {
-         qDebug() << Q_FUNC_INFO << "Invalid sender";
-         return;
-      }
-
-      // If there is an error, just return.
-      if (responseToCheckForNewVersion->error() != QNetworkReply::NoError) {
-         qDebug() << Q_FUNC_INFO << "Error checking for update:" << responseToCheckForNewVersion->error();
-         return;
-      }
-
-      //
-      // Checking a version number on Sourceforge is easy, eg a GET request to
-      // https://brewtarget.sourceforge.net/version just returns the last version of Brewtarget that was hosted on
-      // Sourceforge (quite an old one).
-      //
-      // On GitHub, it's a bit harder as there's a REST API that gives back loads of info in JSON format.  We don't want
-      // to do anything clever with the JSON response, just extract one field, so the Qt JSON support suffices here.
-      // (See comments elsewhere for why we don't use it for BeerJSON.)
-      //
-      QByteArray rawContent = responseToCheckForNewVersion->readAll();
-      QJsonParseError jsonParseError{};
-
-      QJsonDocument jsonDocument = QJsonDocument::fromJson(rawContent, &jsonParseError);
-      if (QJsonParseError::ParseError::NoError != jsonParseError.error) {
-         qWarning() <<
-            Q_FUNC_INFO << "Error parsing JSON from version check response:" << jsonParseError.error << "at offset" <<
-            jsonParseError.offset;
-         return;
-
-      }
-
-      QJsonObject jsonObject = jsonDocument.object();
-
-      QString remoteVersion = jsonObject.value("tag_name").toString();
-      // Version names are usually "v3.0.2" etc, so we want to strip the 'v' off the front
-      if (remoteVersion.startsWith("v", Qt::CaseInsensitive)) {
-         remoteVersion.remove(0, 1);
-      }
+   void checkAgainstLatestRelease(QVersionNumber const latestRelease) {
 
       //
       // We used to just compare if the remote version is the same as the current one, but it then gets annoying if you
@@ -250,69 +210,68 @@ namespace {
       // running 4.0.1.  So now we do it properly, letting QVersionNumber do the heavy lifting for us.
       //
       QVersionNumber const currentlyRunning{QVersionNumber::fromString(CONFIG_VERSION_STRING)};
-      QVersionNumber const latestRelease   {QVersionNumber::fromString(remoteVersion)};
 
       qInfo() <<
-         Q_FUNC_INFO << "Latest release is" << remoteVersion << "(parsed as" << latestRelease << ") ; "
-         "currently running" << CONFIG_VERSION_STRING << "(parsed as" << currentlyRunning << ")";
+         Q_FUNC_INFO << "Latest release is" << latestRelease.toString() << ") ; currently running" <<
+         CONFIG_VERSION_STRING << "(parsed as" << currentlyRunning.toString() << ")";
 
-      // If the remote version is newer...
       if (latestRelease > currentlyRunning) {
-         // ...and the user wants to download the new version...
-         if(QMessageBox::information(&MainWindow::instance(),
-                                     QObject::tr("New Version"),
-                                     QObject::tr("Version %1 is now available. Download it?").arg(remoteVersion),
-                                     QMessageBox::Yes | QMessageBox::No,
-                                     QMessageBox::Yes) == QMessageBox::Yes) {
-            // ...take them to the website.
+         //
+         // Users can turn off the notification about new versions, though note below that this gets reset once they are
+         // running the latest version again.
+         //
+         if (!tellUserAboutNewRelease) {
+            qInfo() << Q_FUNC_INFO << "Check for new version is disabled";
+            return;
+         }
+
+         //
+         // The latest release is newer than what we are currently running.
+         // See if the user wants to download the newer version.
+         //
+         bool const wantsToDownload{
+            QMessageBox::Yes == QMessageBox::information(
+               &MainWindow::instance(),
+               QObject::tr("New Version"),
+               QObject::tr("Version %1 is now available. Download it?").arg(latestRelease.toString()),
+               QMessageBox::Yes | QMessageBox::No,
+               QMessageBox::Yes
+            )
+         };
+         if (wantsToDownload) {
+            //
+            // It would be a bit of a tall order for the program to upgrade itself in place.  We just take the user to
+            // the release download page.
+            //
             static QString const releasesPage = QString{"%1/releases"}.arg(CONFIG_GITHUB_URL);
             QDesktopServices::openUrl(QUrl(releasesPage));
-         } else  {
-            // ... and the user does NOT want to download the new version...
-            // ... and they want us to stop bothering them...
+         } else {
+            //
+            // If the user doesn't want to be taken to the download page, give them the option to stop being reminded
+            // about the new release.
+            //
             if(QMessageBox::question(&MainWindow::instance(),
                                      QObject::tr("New Version"),
                                      QObject::tr("Stop bothering you about new versions?"),
                                      QMessageBox::Yes | QMessageBox::No,
                                      QMessageBox::Yes) == QMessageBox::Yes) {
                // ... make a note to stop bothering the user about the new version.
-               setCheckVersion(false);
+               tellUserAboutNewRelease = false;
             }
          }
          return;
       }
 
-      // The current version is newest so make a note to bother users about future new versions.
-      // This means that when a user downloads the new version, this variable will always get reset to true.
-      setCheckVersion(true);
+      //
+      // The user is already running the latest release.  Make sure the user gets notified when a newer release is
+      // available.  (They can then turn off that notification if they want.)  Essentially, this means that, every time
+      // the user installs whatever the latest version of the software is, we ensure that we will tell them at least
+      // once when there is a new release.
+      //
+      tellUserAboutNewRelease = true;
       return;
    }
 
-
-   /**
-    * \brief Sends a web request to check whether there is a newer version of the software available
-    */
-   void initiateCheckForNewVersion(MainWindow* mw) {
-
-      // Don't do anything if the checkVersion flag was set false
-      if (!checkVersion) {
-         qDebug() << Q_FUNC_INFO << "Check for new version is disabled";
-         return;
-      }
-
-      // Nobody else needs to access this QNetworkAccessManager object, but it needs to carry on existing after this
-      // function returns (otherwise the HTTP GET request will get cancelled), hence why we make it static.
-      static QNetworkAccessManager * manager = new QNetworkAccessManager();
-      static QString const releasesLatest = QString{"https://api.github.com/repos/%1/%2/releases/latest"}.arg(CONFIG_APPLICATION_NAME_UC, CONFIG_APPLICATION_NAME_LC);
-      QUrl url(releasesLatest);
-      responseToCheckForNewVersion = manager->get(QNetworkRequest(url));
-      // Since Qt5, you can connect signals to simple functions (see https://wiki.qt.io/New_Signal_Slot_Syntax)
-      QObject::connect(responseToCheckForNewVersion, &QNetworkReply::finished, mw, &finishCheckForNewVersion);
-      qDebug() <<
-         Q_FUNC_INFO << "Sending request to" << url << "to check for new version (request running =" <<
-         responseToCheckForNewVersion->isRunning() << ")";
-      return;
-   }
 
    /**
     * \brief This is only called from \c Application::getResourceDir to initialise the variable it returns
@@ -427,9 +386,14 @@ bool Application::initialize() {
    // Make sure all the necessary directories and files we need exist before starting.
    ensureDirectoriesExist();
 
+   // TODO: Seems a bit ugly that we call readSystemOptions here but saveSystemOptions from MainWindow::closeEvent.
+   // In the long run, it would be a lot more elegant to use RAII to automatically store everything we read from
+   // PersistentSettings.
+   //
    Application::readSystemOptions();
 
-   Localization::loadTranslations(); // Do internationalization.
+   // Load in the default / remembered translations
+   Localization::loadTranslations();
 
    QLocale const & locale = Localization::getLocale();
    qInfo() <<
@@ -458,7 +422,10 @@ void Application::cleanup() {
    // Should I do qApp->removeTranslator() first?
    MainWindow::DeleteMainWindow();
 
+   qDebug() << Q_FUNC_INFO << "Unloading database";
    Database::instance().unload();
+
+   qDebug() << Q_FUNC_INFO << "Done cleaning up";
    return;
 }
 
@@ -478,23 +445,49 @@ int Application::run() {
    splashScreen.show();
    qApp->processEvents();
    if (!Application::initialize()) {
-      cleanup();
+      Application::cleanup();
       return 1;
    }
    Database::instance().checkForNewDefaultData();
 
-   // .:TBD:. Could maybe move the calls to init and setVisible inside createMainWindowInstance() in MainWindow.cpp
+   //
+   // Make sure the MainWindow singleton exists, but don't initialise it just yet.  We're going to use the end of the
+   // initialisation to trigger the background thread that checks to see whether a new version of the program is
+   // available, so we want to set that background thread up first.  (But we need the MainWindow object to exist, so we
+   // can connect signals and slots.)
+   //
    MainWindow & mainWindow = MainWindow::instance();
-   mainWindow.init();
-   mainWindow.setVisible(true);
+
+   //
+   // It feels a bit wrong these days to be calling `new` directly, but it is the way to do things in Qt.  We tell the
+   // framework about the object we've created, and it handles clean-up for us.
+   //
+   LatestReleaseFinder * latestReleaseFinder = new LatestReleaseFinder{};
+   latestReleaseFinder->moveToThread(&latestReleaseFinderThread);
+   mainWindow.connect(&latestReleaseFinderThread, &QThread::finished, latestReleaseFinder, &QObject::deleteLater);
+
+   mainWindow.connect(&mainWindow, &MainWindow::initialisedAndVisible, latestReleaseFinder, &LatestReleaseFinder::checkMainRespository);
+   mainWindow.connect(latestReleaseFinder, &LatestReleaseFinder::foundLatestRelease, &checkAgainstLatestRelease);
+   latestReleaseFinderThread.start();
+
+   mainWindow.initialiseAndMakeVisible();
    splashScreen.finish(&mainWindow);
 
-   initiateCheckForNewVersion(&mainWindow);
+   // TODO: According to https://doc.qt.io/qt-6/qapplication.html#exec, there are circumstances where exec() does not
+   //       return, so best practice is to connect clean-up code to the aboutToQuit() signal, instead of putting it in
+   //       the application's main() function.
    do {
       ret = qApp->exec();
    } while (ret == 1000);
 
-   cleanup();
+   //
+   // Ensure the thread we spawned to check for new versions is properly terminated
+   //
+   qDebug() << Q_FUNC_INFO << "Stopping extra thread";
+   latestReleaseFinderThread.quit();
+   latestReleaseFinderThread.wait();
+
+   Application::cleanup();
 
    qDebug() << Q_FUNC_INFO << "Cleaned up.  Returning " << ret;
 
@@ -506,8 +499,8 @@ void Application::readSystemOptions() {
    updateConfig();
 
    //================Version Checking========================
-   checkVersion = PersistentSettings::value(PersistentSettings::Names::check_version, QVariant(true)).toBool();
-   qDebug() << Q_FUNC_INFO << "checkVersion=" << checkVersion;
+   tellUserAboutNewRelease = PersistentSettings::value(PersistentSettings::Names::check_version, QVariant(true)).toBool();
+   qDebug() << Q_FUNC_INFO << "tellUserAboutNewRelease=" << tellUserAboutNewRelease;
 
    Measurement::loadDisplayScales();
 
@@ -525,7 +518,7 @@ void Application::readSystemOptions() {
 }
 
 void Application::saveSystemOptions() {
-   PersistentSettings::insert(PersistentSettings::Names::check_version, checkVersion);
+   PersistentSettings::insert(PersistentSettings::Names::check_version, tellUserAboutNewRelease);
    //setOption("user_data_dir", userDataDir);
 
    Localization::saveSettings();

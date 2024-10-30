@@ -20,9 +20,10 @@ Bug fixes and minor enhancements.
 * None
 
 ### Bug Fixes
-* None
+* Crash (stack overflow in Qt) on some Windows builds during "check for new version" [866](https://github.com/Brewtarget/brewtarget/issues/866)
+
 ### Release Timestamp
-Sat, 26 Oct 2024 04:00:09 +0100
+Tue, 29 Oct 2024 04:00:09 +0100
 
 ## v4.0.8
 Bug fixes and minor enhancements.

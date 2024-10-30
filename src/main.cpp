@@ -110,6 +110,11 @@ int main(int argc, char **argv) {
    //
 
    //
+   // This ensures the resources in "resources.qrc" are initialised at startup.
+   //
+   Q_INIT_RESOURCE(resources);
+
+   //
    // Various bits of Qt initialisation need to be done straight away for other Qt functionality to work correctly
    //
    // You might think that it would be possible to specify application and organization name etc entirely at compile
