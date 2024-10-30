@@ -214,10 +214,15 @@ namespace {
       QString result;
       QTextStream resultAsStream{&result};
 
-      // From Qt 6.6 we'll be able to write:
+      //
+      // In Qt5, QSqlQuery::boundValues() returned a QMap<QString, QVariant> giving you the bound value names and
+      // values.  In Qt6, QSqlQuery::boundValues() returns QVariantList of just the values.  We have to wait until all
+      // our platforms support Qt 6.6, when QSqlQuery::boundValueNames() and QSqlQuery::boundValueName() are introduced,
+      // before we can write, say:
       //    for (auto const & bvn : sqlQuery.boundValueNames()) {
       //       resultAsStream << bvn << ": " << sqlQuery.boundValue(bvn).toString() << "\n";
       //    }
+      //
       for (auto const & bv : sqlQuery.boundValues()) {
          resultAsStream << bv.toString() << "\n";
       }

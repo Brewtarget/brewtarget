@@ -40,9 +40,10 @@ namespace {
 
    Localization::NumericDateFormat dateFormat = Localization::YearMonthDay;
 
-   QString currentLanguage = "";
+   QString currentLanguage = "en";
 
-   QTranslator btTranslator;
+   QTranslator defaultTrans;
+   QTranslator btTrans;
 
    QLocale initSystemLocale() {
       //
@@ -127,16 +128,13 @@ QString Localization::displayDateUserFormated(QDate const & date) {
 
 void Localization::setLanguage(QString twoLetterLanguage) {
    currentLanguage = twoLetterLanguage;
-   QCoreApplication::removeTranslator(&btTranslator);
+   qApp->removeTranslator(&btTrans);
 
    QString filename = QString("bt_%1").arg(twoLetterLanguage);
    QDir translations = QDir(Application::getResourceDir().canonicalPath() + "/translations_qm");
-   bool const succeeded = btTranslator.load(filename, translations.canonicalPath());
-   qDebug() <<
-      Q_FUNC_INFO << "Loading" << filename << "from" << translations.canonicalPath() <<
-      (succeeded ? "succeeded" : "failed");
-   if (succeeded) {
-      QCoreApplication::installTranslator(&btTranslator);
+
+   if (btTrans.load(filename, translations.canonicalPath())) {
+      qApp->installTranslator(&btTrans);
    }
    return;
 }
@@ -217,18 +215,33 @@ double Localization::toDouble(QString text, char const * const caller) {
    return ret;
 }
 
+
 void Localization::loadTranslations() {
-   auto const systemLanguage = getSystemLanguage();
-   qDebug() << Q_FUNC_INFO << "Current language:" << currentLanguage << "; System language:" << systemLanguage;
-   if (currentLanguage.isEmpty()) {
-      Localization::setLanguage(systemLanguage);
+   if (qApp == nullptr) {
+      return;
    }
+
+   // Load translators.
+   bool succeeded = defaultTrans.load("qt_" + Localization::getLocale().name(),
+                                      QLibraryInfo::path(QLibraryInfo::TranslationsPath));
+   if (!succeeded) {
+      qWarning() << Q_FUNC_INFO << "Error loading translations for" << Localization::getLocale().name();
+   }
+   if (getCurrentLanguage().isEmpty()) {
+      setLanguage(getSystemLanguage());
+   }
+   //btTrans.load("bt_" + getSystemLanguage());
+
+   // Install translators
+   qApp->installTranslator(&defaultTrans);
+   //qApp->installTranslator(btTrans);
+
    return;
 }
 
 void Localization::loadSettings() {
    if (PersistentSettings::contains(PersistentSettings::Names::language)) {
-      Localization::setLanguage(PersistentSettings::value(PersistentSettings::Names::language, "").toString());
+      Localization::setLanguage(PersistentSettings::value(PersistentSettings::Names::language,"").toString());
    }
 
    dateFormat = static_cast<Localization::NumericDateFormat>(PersistentSettings::value(PersistentSettings::Names::date_format, Localization::YearMonthDay).toInt());

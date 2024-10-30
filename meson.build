@@ -163,8 +163,8 @@
 #
 # Default options (mostly ultimately controlling compiler settings):
 #
-#   - cpp_std         We need C++20 for std::map::contains(), C++17 or later for nested namespaces and structured
-#                     bindings, and C++11 or later for lambdas.
+#   - cpp_std         We need C++23 for std::ranges::zip_view, C++20 for std::map::contains(), C++17 or later for nested
+#                     namespaces and structured bindings, and C++11 or later for lambdas.
 #
 #   - warning_level   3 is the highest level ie warns about the most things.  For gcc it translates to
 #                        -Wall -Winvalid-pch -Wextra -Wpedantic
@@ -192,7 +192,7 @@ project('brewtarget', 'cpp',
         version: '4.0.9',
         license: 'GPL-3.0-or-later',
         meson_version: '>=0.63.0',
-        default_options : ['cpp_std=c++20',
+        default_options : ['cpp_std=c++23',
                            'warning_level=3',
 #                           'prefer_static=true',  See comment above for why this is commented-out for now
                            'buildtype=plain'])

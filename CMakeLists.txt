@@ -241,9 +241,9 @@ set(RUNTIME_INSTALL_COMPONENT "Runtime")
 # We use different compilers on different platforms.  Where possible, we want to let CMake handle the actual compiler
 # settings
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-# We need C++20 for std::map::contains() and concepts, C++17 or later for nested namespaces and structured bindings, and
-# C++11 or later for lambdas.
-set(CMAKE_CXX_STANDARD 20)
+# We need C++23 for std::ranges::zip_view, C++20 for std::map::contains() and concepts, C++17 or later for nested
+# namespaces and structured bindings, and C++11 or later for lambdas.
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
