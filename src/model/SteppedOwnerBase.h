@@ -39,6 +39,10 @@ AddPropertyName(steps   )
  *        etc.
  *
  *        Concrete classes deriving from this one need to declare a `void stepsChanged()` Qt signal in their header.
+ *
+ *        TODO: We could probably find a way to share more code between this class and \c OwnedSet.  Plus, I also now
+ *              think we'd be better using \c OwnedSet for Recipe's ownership of \c Instructions, so we can merge this
+ *              back into \c StepOwnerBase etc.
  */
 template<class Derived> class SteppedOwnerPhantom;
 template<class Derived, class DerivedStep>
@@ -95,6 +99,18 @@ protected:
       }
       return;
    }
+
+   /**
+    * \brief We have to delete the default copy constructor because we want the constructor above (that takes \c Derived
+    *        rather than \c SteppedOwnerBase) to be used instead of a compiler-generated copy constructor which wouldn't
+    *        do the deep copy we need.
+    */
+   SteppedOwnerBase(SteppedOwnerBase const & other) = delete;
+
+   /**
+    * \brief Similarly, we don't want copy assignment happening.
+    */
+   SteppedOwnerBase & operator=(SteppedOwnerBase const & other) = delete;
 
    ~SteppedOwnerBase() = default;
 
@@ -272,24 +288,19 @@ public:
          Q_FUNC_INFO << "Swapping steps" << step1.stepNumber() << "(#" << step1.key() << ") and " <<
          step2.stepNumber() << " (#" << step2.key() << ")";
 
+      // Make sure we don't send notifications until the end (hence the false parameter on setStepNumber).
       int temp = step1.stepNumber();
-      step1.setStepNumber(step2.stepNumber());
-      step2.setStepNumber(temp);
+      step1.setStepNumber(step2.stepNumber(), false);
+      step2.setStepNumber(temp, false);
 
       int indexOf1 = this->m_stepIds.indexOf(step1.key());
       int indexOf2 = this->m_stepIds.indexOf(step2.key());
 
       // We can't swap them if we can't find both of them
       // There's no point swapping them if they're the same
-      if (-1 == indexOf1 || -1 == indexOf2 || indexOf1 == indexOf2) {
-         return;
+      if (-1 != indexOf1 && -1 != indexOf2 && indexOf1 != indexOf2) {
+         this->m_stepIds.swapItemsAt(indexOf1, indexOf2);
       }
-
-      // As of Qt 5.14 we could write:
-      //    this->m_stepIds.swapItemsAt(indexOf1, indexOf2);
-      // However, we still need to support slightly older versions of Qt (5.12 in particular), hence the more cumbersome
-      // way here.
-      std::swap(this->m_stepIds[indexOf1], this->m_stepIds[indexOf2]);
 
       emit this->derived().stepsChanged();
       return;
@@ -420,11 +431,11 @@ public:
    /**
     * \brief Intended to be called from \c Derived::acceptStepChange
     *
-    * \param sender - Result of caller calling \c this->sender() (which is protected, so we can't call it here
+    * \param sender - Result of caller calling \c this->sender() (which is protected, so we can't call it here)
     * \param prop - As received by Derived::acceptStepChange
     * \param val  - As received by Derived::acceptStepChange
     * \param additionalProperties - Additional properties for which to emit \c changed signal if the change we are
-    *                               receiving comes from one of our steps
+    *                               receiving comes from one of our steps.  TODO: Should move this to a template parameter
     */
    void doAcceptStepChange(QObject * sender,
                            [[maybe_unused]] QMetaProperty prop,
@@ -437,7 +448,7 @@ public:
 
       // If one of our steps changed, our pseudo properties may also change, so we need to emit some signals
       if (stepSender->ownerId() == this->derived().key()) {
-         emit this->derived().changed(this->derived().metaProperty(*PropertyNames::SteppedOwnerBase::numSteps), QVariant());
+///         emit this->derived().changed(this->derived().metaProperty(*PropertyNames::SteppedOwnerBase::numSteps), QVariant());
          emit this->derived().changed(this->derived().metaProperty(*PropertyNames::SteppedOwnerBase::steps   ), QVariant());
          for (auto property : additionalProperties) {
             emit this->derived().changed(this->derived().metaProperty(**property), QVariant());

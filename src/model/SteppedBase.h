@@ -62,7 +62,8 @@ AddPropertyName(stepNumber)
  *        NOTE that the "stepped" concept does not apply to other things "owned" by Recipe, such as \c RecipeAdditionHop
  *        or \c BrewNote, because they do not have the same need of pure ordering.  There is an implicit ordering by
  *        addition time or date, but it is not necessary or desirable to be more precise than this.  You will often have
- *        two hop additions that happen at the same time, for instance.
+ *        two hop additions that happen at the same time, for instance.  See \c OwnedSet for the logic for dealing with
+ *        these.
  *
  *        Directly derived classes need to include STEPPED_COMMON_DECL and STEPPED_COMMON_CODE in the obvious places
  *        (either their own macros for \c StepBase or in the header and implementation file respectively for
@@ -112,8 +113,20 @@ public:
       this->derived().propagatePropertyChange(PropertyNames::SteppedBase::ownerId, false);
       return;
    }
-   void setStepNumber(int const val) {
-      this->derived().setAndNotify(PropertyNames::SteppedBase::stepNumber, this->m_stepNumber, val);
+
+   /**
+    * \brief Does what it says on the tin
+    *
+    * \param notify Needs to be set to \c false when part-way through swapping two steps, because we don't want
+    *               observers to re-read all the steps until we've finished.
+    */
+   void setStepNumber(int const val, bool const notify = true) {
+      if (notify) {
+         this->derived().setAndNotify(PropertyNames::SteppedBase::stepNumber, this->m_stepNumber, val);
+      } else {
+         this->m_stepNumber = val;
+         this->derived().propagatePropertyChange(PropertyNames::SteppedBase::stepNumber, false);
+      }
       return;
    }
 
