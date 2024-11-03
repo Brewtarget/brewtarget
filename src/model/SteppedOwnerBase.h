@@ -288,24 +288,19 @@ public:
          Q_FUNC_INFO << "Swapping steps" << step1.stepNumber() << "(#" << step1.key() << ") and " <<
          step2.stepNumber() << " (#" << step2.key() << ")";
 
+      // Make sure we don't send notifications until the end (hence the false parameter on setStepNumber).
       int temp = step1.stepNumber();
-      step1.setStepNumber(step2.stepNumber());
-      step2.setStepNumber(temp);
+      step1.setStepNumber(step2.stepNumber(), false);
+      step2.setStepNumber(temp, false);
 
       int indexOf1 = this->m_stepIds.indexOf(step1.key());
       int indexOf2 = this->m_stepIds.indexOf(step2.key());
 
       // We can't swap them if we can't find both of them
       // There's no point swapping them if they're the same
-      if (-1 == indexOf1 || -1 == indexOf2 || indexOf1 == indexOf2) {
-         return;
+      if (-1 != indexOf1 && -1 != indexOf2 && indexOf1 != indexOf2) {
+         this->m_stepIds.swapItemsAt(indexOf1, indexOf2);
       }
-
-      // As of Qt 5.14 we could write:
-      //    this->m_stepIds.swapItemsAt(indexOf1, indexOf2);
-      // However, we still need to support slightly older versions of Qt (5.12 in particular), hence the more cumbersome
-      // way here.
-      std::swap(this->m_stepIds[indexOf1], this->m_stepIds[indexOf2]);
 
       emit this->derived().stepsChanged();
       return;

@@ -476,9 +476,10 @@ public:
          Q_FUNC_INFO << "Swapping items" << lhs.seqNum() << "(#" << lhs.key() << ") and " << rhs.seqNum() << " (#" <<
          rhs.key() << ")";
 
+      // Make sure we don't send notifications until the end (hence the false parameter on setSeqNum).
       int temp = lhs.seqNum();
-      lhs.setSeqNum(rhs.seqNum());
-      rhs.setSeqNum(temp);
+      lhs.setSeqNum(rhs.seqNum(), false);
+      rhs.setSeqNum(temp, false);
 
       //
       // If the owner hasn't yet been put in the DB then we also need to swap things in our local list of item IDs
@@ -493,8 +494,7 @@ public:
          this->m_itemIds.swapItemsAt(lhsIndex, rhsIndex);
       }
 
-      // TBD: We could emit some sort of signal here to broadcast that the order of the set has changed, but, for the
-      //      moment at least, I don't think any other part of the code needs to know this.
+      emit this->m_owner.itemsChanged();
       return;
    }
 
