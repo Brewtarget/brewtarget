@@ -415,38 +415,6 @@ public:
     */
    static void connectSignalsForAllRecipes();
 
-///   /*!
-///    * \brief Add (a copy if necessary of) a Hop/Fermentable/Instruction etc (that may or may not already be in an
-///    *        ObjectStore).
-///    *
-///    * TODO: Need to finish killing off this member function!
-///    *
-///    * When we add a Hop/Fermentable/Yeast/etc to a Recipe, we make a copy of thing we're adding to serve as an "instance
-///    * of use of" record.  Amongst other things, this allows the same Hop/Fermentable/Yeast/etc to be added multiple
-///    * times to a recipe - eg the same type of hops might well be added at multiple points in the recipe.  It also allows
-///    * an ingredient in a recipe to be modified without those modifications affecting the use of the ingredient in other
-///    * recipes (eg if you want to modify the % alpha acid on a hop).  An "instance of use of" instance of a
-///    * Hop/Fermentable/Yeast/etc will always have parent record which is the actual Hop/Fermentable/Yeast/etc to which it
-///    * relates.
-///    *
-///    * Calling the templated \c Recipe::add function returns the copy "instance of use of" object for whatever
-///    * Hop/Fermentable/Yeast/etc was added.  This returned object is what needs to be passed to \c Recipe::remove to
-///    * remove that instance of use of the Hop/Fermentable/Yeast/etc from the Recipe.  When you  call \c Recipe::remove it
-///    * returns the "instance of use of" object that was removed, which you as caller now own (because it will no longer
-///    * be in the ObjectStore).  If you want to undo the remove (or redo an add that the remove itself was undoing), you
-///    * can call \c Recipe::add with the "instance of use of" object returned from \c Recipe::remove, in which case
-///    * \c Recipe::add will determine that the "instance of use of" object can be used directly without needing to be
-///    * copied.  (The \c Recipe::add method will also recognise when an object has been removed from the ObjectStore and
-///    * will reinsert it, so the caller doesn't need to worry about this.)  Thus, eg, the following sequence of calls is
-///    * valid:
-///    *
-///    *    std::shared_ptr<Hop> copyOfFooHop = myRecipe->add<Hop>(fooHop);                     // DO
-///    *    std::shared_ptr<Hop> sameCopyOfFooHop = myRecipe->remove<Hop>(*copyOfFooHop);       // UNDO
-///    *    std::shared_ptr<Hop> stillSameCopyOfFooHop = myRecipe->add<Hop>(*sameCopyOfFooHop); // REDO
-///    *
-///    */
-///   template<class NE> std::shared_ptr<NE> add(std::shared_ptr<NE> var);
-
    /**
     * \brief Use this for adding \c RecipeAdditionHop, etc.
     */
@@ -479,15 +447,6 @@ public:
       return ObjectStoreWrapper::findFirstMatching<Recipe>( [var](Recipe * rec) {return rec->uses(var);} );
    }
 
-///   int instructionNumber(Instruction const & ins) const;
-///   /*!
-///    * \brief Swap instructions \c ins1 and \c ins2
-///    */
-///   void swapInstructions(Instruction & ins1, Instruction & ins2);
-///   //! \brief Remove all instructions.
-///   void clearInstructions();
-///   //! \brief Insert instruction ins into slot pos.
-///   void insertInstruction(Instruction const & ins, int pos);
    //! \brief Automagically generate a list of instructions.
    void generateInstructions();
    /*!
@@ -716,17 +675,33 @@ public:
     */
    virtual void hardDeleteOrphanedEntities() override;
 
+   /**
+    * \brief This does all the work for the acceptChangeToXxxxx functions below (which can't be templated because the Qt
+    *        MOC does not allow it).
+    */
+   template<class Owned> void acceptChange(QMetaProperty prop, QVariant val);
+
 signals:
    //! Emitted when the number of instructions changes, or when you should call steps() again.
    void stepsChanged();
 
 public slots:
    void acceptChangeToContainedObject(QMetaProperty prop, QVariant val);
+   // It would be neat if we could template these slots, but the Qt MOC does not allow it, and will give "error:
+   // Template function as signal or slot".  These slot functions just call the obvious
+   void acceptChangeToRecipeAdditionFermentable(QMetaProperty prop, QVariant val);
+   void acceptChangeToRecipeAdditionHop        (QMetaProperty prop, QVariant val);
+   void acceptChangeToRecipeAdditionMisc       (QMetaProperty prop, QVariant val);
+   void acceptChangeToRecipeAdditionYeast      (QMetaProperty prop, QVariant val);
+   void acceptChangeToRecipeAdjustmentSalt     (QMetaProperty prop, QVariant val);
+   void acceptChangeToRecipeUseOfWater         (QMetaProperty prop, QVariant val);
+   void acceptChangeToBrewNote                 (QMetaProperty prop, QVariant val);
+
    void acceptStepChange(QMetaProperty, QVariant);
 
 protected:
-   virtual bool isEqualTo(NamedEntity const & other) const;
-   virtual ObjectStore & getObjectStoreTypedInstance() const;
+   virtual bool isEqualTo(NamedEntity const & other) const override;
+   virtual ObjectStore & getObjectStoreTypedInstance() const override;
 
 private:
    // Private implementation details - see https://herbsutter.com/gotw/_100/

@@ -461,9 +461,12 @@ void NamedEntity::prepareForPropertyChange(BtStringConst const & propertyName) {
 
 void NamedEntity::propagatePropertyChange(BtStringConst const & propertyName, bool notify) const {
    if (!this->m_propagationAndSignalsEnabled) {
-      qDebug() <<
-         Q_FUNC_INFO << "Not propagating" << *propertyName << "change on" << this->metaObject()->className() <<
-         "as m_propagationAndSignalsEnabled unset";
+      //
+      // Normally leave this log statement commented out as otherwise it can generate a lot of lines in the log files
+      //
+//      qDebug() <<
+//         Q_FUNC_INFO << "Not propagating" << *propertyName << "change on" << this->metaObject()->className() <<
+//         "as m_propagationAndSignalsEnabled unset";
       return;
    }
 

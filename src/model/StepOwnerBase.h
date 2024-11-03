@@ -85,10 +85,22 @@ public:
       return;
    }
 
-   StepOwnerBase(StepOwnerBase const & other) :
+   StepOwnerBase(Derived const & other) :
       SteppedOwnerBase<Derived, DerivedStep>{other} {
       return;
    }
+
+   /**
+    * \brief We have to delete the default copy constructor because we want the constructor above (that takes \c Derived
+    *        rather than \c SteppedOwnerBase) to be used instead of a compiler-generated copy constructor which wouldn't
+    *        do the deep copy we need.
+    */
+   StepOwnerBase(StepOwnerBase const & other) = delete;
+
+   /**
+    * \brief Similarly, we don't want copy assignment happening.
+    */
+   StepOwnerBase & operator=(StepOwnerBase const & other) = delete;
 
    ~StepOwnerBase() = default;
 
