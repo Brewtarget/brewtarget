@@ -21,9 +21,10 @@ Bug fixes and minor enhancements.
 
 ### Bug Fixes
 * Crash (stack overflow in Qt) on some Windows builds during "check for new version" [866](https://github.com/Brewtarget/brewtarget/issues/866)
+* Crash when copying recipe, then on adding new steps in mash, ferment, boil, others [868](https://github.com/Brewtarget/brewtarget/issues/868)
 
 ### Release Timestamp
-Tue, 29 Oct 2024 04:00:09 +0100
+Sun, 3 Nov 2024 04:00:09 +0100
 
 ## v4.0.8
 Bug fixes and minor enhancements.
