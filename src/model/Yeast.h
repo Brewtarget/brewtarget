@@ -38,7 +38,7 @@ class RecipeAdditionYeast;
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
 // See comment in model/NamedEntity.h
-#define AddPropertyName(property) namespace PropertyNames::Yeast { BtStringConst const property{#property}; }
+#define AddPropertyName(property) namespace PropertyNames::Yeast { inline BtStringConst const property{#property}; }
 AddPropertyName(alcoholTolerance_pct     )
 AddPropertyName(attenuationTypical_pct   ) // This is for use only by BeerXML
 AddPropertyName(attenuationMax_pct       )

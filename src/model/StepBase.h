@@ -29,7 +29,7 @@
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
 // See comment in model/NamedEntity.h
-#define AddPropertyName(property) namespace PropertyNames::StepBase { BtStringConst const property{#property}; }
+#define AddPropertyName(property) namespace PropertyNames::StepBase { inline BtStringConst const property{#property}; }
 AddPropertyName(rampTime_mins)
 AddPropertyName(startTemp_c  )
 AddPropertyName(stepTime_days) // Mostly needed for BeerXML

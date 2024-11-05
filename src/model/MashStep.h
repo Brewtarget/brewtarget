@@ -33,7 +33,7 @@
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
 // See comment in model/NamedEntity.h
-#define AddPropertyName(property) namespace PropertyNames::MashStep { BtStringConst const property{#property}; }
+#define AddPropertyName(property) namespace PropertyNames::MashStep { inline BtStringConst const property{#property}; }
 AddPropertyName(amount_l              )
 AddPropertyName(decoctionAmount_l     ) // Should only be used for BeerXML
 AddPropertyName(infuseAmount_l        ) // Should only be used for BeerXML

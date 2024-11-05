@@ -22,7 +22,7 @@
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
 // See comment in model/NamedEntity.h
-#define AddPropertyName(property) namespace PropertyNames::OutlineableNamedEntity { BtStringConst const property{#property}; }
+#define AddPropertyName(property) namespace PropertyNames::OutlineableNamedEntity { inline BtStringConst const property{#property}; }
 AddPropertyName(outline)
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================

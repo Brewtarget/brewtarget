@@ -28,7 +28,7 @@
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
 // See comment in model/NamedEntity.h
-#define AddPropertyName(property) namespace PropertyNames::RecipeAdditionFermentable { BtStringConst const property{#property}; }
+#define AddPropertyName(property) namespace PropertyNames::RecipeAdditionFermentable { inline BtStringConst const property{#property}; }
 AddPropertyName(fermentable)
 AddPropertyName(use) // Deprecated - retained only for BeerXML
 

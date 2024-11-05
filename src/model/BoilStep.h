@@ -27,7 +27,7 @@
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
 // See comment in model/NamedEntity.h
-#define AddPropertyName(property) namespace PropertyNames::BoilStep { BtStringConst const property{#property}; }
+#define AddPropertyName(property) namespace PropertyNames::BoilStep { inline BtStringConst const property{#property}; }
 AddPropertyName(chillingType)
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================

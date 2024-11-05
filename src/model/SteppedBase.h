@@ -25,7 +25,7 @@
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
 // See comment in model/NamedEntity.h
-#define AddPropertyName(property) namespace PropertyNames::SteppedBase { BtStringConst const property{#property}; }
+#define AddPropertyName(property) namespace PropertyNames::SteppedBase { inline BtStringConst const property{#property}; }
 AddPropertyName(ownerId   )
 AddPropertyName(stepNumber)
 #undef AddPropertyName
@@ -106,7 +106,9 @@ protected:
 
 public:
    int ownerId   () const { return this->m_ownerId   ; }
+   // TODO: Merge these two functions
    int stepNumber() const { return this->m_stepNumber; }
+   int seqNum    () const { return this->m_stepNumber; }
 
    void setOwnerId   (int const val) {
       this->m_ownerId = val;
@@ -127,6 +129,11 @@ public:
          this->m_stepNumber = val;
          this->derived().propagatePropertyChange(PropertyNames::SteppedBase::stepNumber, false);
       }
+      return;
+   }
+   // TODO: Merge above and below functions
+   void setSeqNum(int const val, bool const notify = true) {
+      this->setStepNumber(val, notify);
       return;
    }
 

@@ -31,7 +31,7 @@
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
 // See comment in model/NamedEntity.h
-#define AddPropertyName(property) namespace PropertyNames::Boil { BtStringConst const property{#property}; }
+#define AddPropertyName(property) namespace PropertyNames::Boil { inline BtStringConst const property{#property}; }
 AddPropertyName(description  )
 AddPropertyName(notes        )
 AddPropertyName(preBoilSize_l)

@@ -61,7 +61,7 @@ class Recipe;
 // IMPORTANT: These property names are unique within a class, but they are not globally unique, so we have to be a bit
 //            careful about how we use them in look-ups.
 //
-#define AddPropertyName(property) namespace PropertyNames::NamedEntity { BtStringConst const property{#property}; }
+#define AddPropertyName(property) namespace PropertyNames::NamedEntity { inline BtStringConst const property{#property}; }
 AddPropertyName(deleted)
 AddPropertyName(display)
 AddPropertyName(key)

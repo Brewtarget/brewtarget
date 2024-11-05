@@ -33,7 +33,7 @@
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
 // See comment in model/NamedEntity.h
-#define AddPropertyName(property) namespace PropertyNames::Equipment { BtStringConst const property{#property}; }
+#define AddPropertyName(property) namespace PropertyNames::Equipment { inline BtStringConst const property{#property}; }
 AddPropertyName(agingVesselLoss_l          )
 AddPropertyName(agingVesselNotes           )
 AddPropertyName(agingVesselType            )

@@ -1061,6 +1061,9 @@ public:
          qDebug() <<
             Q_FUNC_INFO << "Updating" << object.metaObject()->className() << "property" << propertyName <<
             "with database query" << queryString;
+         // Normally leave the next debug output commented, as it can generate a lot of logging.  But it's useful to
+         // uncomment if you're seeing a lot of DB updates and the cause is not clear.
+//         qDebug().noquote() << Q_FUNC_INFO << Logging::getStackTrace();
 
          //
          // Bind the values

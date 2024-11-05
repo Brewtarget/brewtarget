@@ -27,7 +27,7 @@
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
 // See comment in model/NamedEntity.h
-#define AddPropertyName(property) namespace PropertyNames::SteppedOwnerBase { BtStringConst const property{#property}; }
+#define AddPropertyName(property) namespace PropertyNames::SteppedOwnerBase { inline BtStringConst const property{#property}; }
 AddPropertyName(numSteps)
 AddPropertyName(steps   )
 #undef AddPropertyName

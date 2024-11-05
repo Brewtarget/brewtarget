@@ -33,7 +33,7 @@
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
 // See comment in model/NamedEntity.h
-#define AddPropertyName(property) namespace PropertyNames::Fermentation { BtStringConst const property{#property}; }
+#define AddPropertyName(property) namespace PropertyNames::Fermentation { inline BtStringConst const property{#property}; }
 AddPropertyName(description      )
 ///AddPropertyName(fermentationSteps)
 AddPropertyName(notes            )
