@@ -26,7 +26,7 @@
 #include <QVector>
 
 #include "model/NamedEntity.h"
-#include "model/SteppedBase.h"
+#include "model/EnumeratedBase.h"
 
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
@@ -53,14 +53,14 @@ class Recipe;
  *             BeerXML files, because we can, but TBD whether this is possible with BeerJSON.
  *
  *        NB: We do not inherit from \c OwnedByRecipe, because doing so would duplicate part of what we get from
- *            \c SteppedBase.
+ *            \c EnumeratedBase.
  */
 class Instruction : public NamedEntity,
-                    public SteppedBase<Instruction, Recipe> {
+                    public EnumeratedBase<Instruction, Recipe> {
    Q_OBJECT
 
-   STEPPED_COMMON_DECL(Instruction, Recipe)
-   // See model/SteppedBase.h for info, getters and setters for these properties
+   ENUMERATED_COMMON_DECL(Instruction, Recipe)
+   // See model/EnumeratedBase.h for info, getters and setters for these properties
    Q_PROPERTY(int ownerId      READ ownerId      WRITE setOwnerId   )
    Q_PROPERTY(int stepNumber   READ stepNumber   WRITE setStepNumber)
 

@@ -13,6 +13,18 @@ happens, so I'm now setting it to a slightly arbitrary time early in the morning
 * Additional methods for calculating IBU
 * We'll list other new features here...
 
+## v4.0.10
+Bug fixes and minor enhancements.
+
+### New Features
+* Danish translation
+
+### Bug Fixes
+* Crash when copying recipe, then on adding new steps in mash, ferment, boil, others [868](https://github.com/Brewtarget/brewtarget/issues/868)
+
+### Release Timestamp
+Sun, 3 Nov 2024 04:00:10 +0100
+
 ## v4.0.9
 Bug fixes and minor enhancements.
 

@@ -79,7 +79,7 @@ BrewDayScrollWidget::BrewDayScrollWidget(QWidget* parent) : QWidget{parent},
 BrewDayScrollWidget::~BrewDayScrollWidget() = default;
 
 void BrewDayScrollWidget::saveInstruction() {
-   this->m_recObs->steps()[ listWidget->currentRow() ]->setDirections( btTextEdit->toPlainText() );
+   this->m_recObs->instructions()[ listWidget->currentRow() ]->setDirections( btTextEdit->toPlainText() );
    return;
 }
 
@@ -114,7 +114,7 @@ void BrewDayScrollWidget::generateInstructions() {
    // TODO: Would be neat to make this an undoable action
    //
    bool proceed = true;
-   if (this->m_recObs->numSteps() > 0) {
+   if (this->m_recObs->instructions().size() > 0) {
       proceed = QMessageBox::Yes == QMessageBox::question(
          this,
          tr("Overwrite Existing Instructions"),
@@ -143,7 +143,7 @@ void BrewDayScrollWidget::removeSelectedInstruction() {
    if (row < 0) {
       return;
    }
-   this->m_recObs->removeStep(this->m_recIns[row]);
+   this->m_recObs->m_instructions.remove(this->m_recIns[row]);
 
    // After updating the model, this is the simplest way to update the display
    this->setRecipe(this->m_recObs);
@@ -171,7 +171,7 @@ void BrewDayScrollWidget::pushInstructionUp() {
       return;
    }
 
-   this->m_recObs->swapSteps(*this->m_recIns[row], *this->m_recIns[row-1]);
+   this->m_recObs->m_instructions.swap(*this->m_recIns[row], *this->m_recIns[row-1]);
 
    // After updating the model, this is the simplest way to update the display
    this->setRecipe(this->m_recObs);
@@ -190,7 +190,7 @@ void BrewDayScrollWidget::pushInstructionDown() {
       return;
    }
 
-   this->m_recObs->swapSteps(*this->m_recIns[row], *this->m_recIns[row+1]);
+   this->m_recObs->m_instructions.swap(*this->m_recIns[row], *this->m_recIns[row+1]);
 
    // After updating the model, this is the simplest way to update the display
    this->setRecipe(this->m_recObs);
@@ -248,7 +248,7 @@ void BrewDayScrollWidget::setRecipe(Recipe* rec) {
    this->m_recObs = rec;
    connect(this->m_recObs, &Recipe::changed, this, &BrewDayScrollWidget::acceptChanges);
 
-   m_recIns = this->m_recObs->steps();
+   m_recIns = this->m_recObs->m_instructions.items();
    for (auto ins : m_recIns) {
       connect(ins.get(), &Instruction::changed, this, &BrewDayScrollWidget::acceptInsChanges);
    }
@@ -288,7 +288,7 @@ void BrewDayScrollWidget::insertInstruction() {
    lineEdit_name->clear();
 
    pos = qBound(1, pos, this->m_recIns.size());
-   this->m_recObs->insertStep(instruction, pos);
+   this->m_recObs->m_instructions.insert(instruction, pos);
 
    // After updating the model, this is the simplest way to update the display
    this->setRecipe(this->m_recObs);
@@ -298,12 +298,12 @@ void BrewDayScrollWidget::insertInstruction() {
 }
 
 void BrewDayScrollWidget::acceptChanges(QMetaProperty prop, QVariant /*value*/) {
-   if (m_recObs && QString(prop.name()) == PropertyNames::SteppedOwnerBase::steps) {
+   if (m_recObs && QString(prop.name()) == PropertyNames::Recipe::instructions) {
       // An instruction has been added or deleted, so update internal list.
       for (auto ins : m_recIns ) {
          disconnect(ins.get(), nullptr, this, nullptr);
       }
-      m_recIns = this->m_recObs->steps(); // Already sorted by instruction numbers.
+      m_recIns = this->m_recObs->m_instructions.items(); // Already sorted by instruction numbers.
       for (auto ins : m_recIns ) {
          connect(ins.get(), &Instruction::changed, this, &BrewDayScrollWidget::acceptInsChanges);
       }
@@ -438,7 +438,7 @@ QString BrewDayScrollWidget::buildInstructionTable() {
          .arg(tr("Time"))
          .arg(tr("Step"));
 
-   auto instructions = this->m_recObs->steps();
+   auto instructions = this->m_recObs->m_instructions.items();
    auto mashSteps = this->m_recObs->mash()->mashSteps();
    int size = instructions.size();
    for (int i = 0; i < size; ++i ) {

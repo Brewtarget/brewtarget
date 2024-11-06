@@ -602,7 +602,7 @@ namespace {
          {XmlRecordDefinition::FieldType::String          , "NAME"                , PropertyNames::NamedEntity::name              },
          {XmlRecordDefinition::FieldType::RequiredConstant, "VERSION"             , VERSION1                                      },
          {XmlRecordDefinition::FieldType::Double          , "GRAIN_TEMP"          , PropertyNames::Mash::grainTemp_c              },
-         {XmlRecordDefinition::FieldType::ListOfRecords   , "MASH_STEPS/MASH_STEP", PropertyNames::SteppedOwnerBase::steps        , &BEER_XML_RECORD_DEFN<MashStep>}, // Additional logic for "MASH-STEPS" is handled in code
+         {XmlRecordDefinition::FieldType::ListOfRecords   , "MASH_STEPS/MASH_STEP", PropertyNames::StepOwnerBase::steps        , &BEER_XML_RECORD_DEFN<MashStep>}, // Additional logic for "MASH-STEPS" is handled in code
          {XmlRecordDefinition::FieldType::String          , "NOTES"               , PropertyNames::Mash::notes                    },
          {XmlRecordDefinition::FieldType::Double          , "TUN_TEMP"            , PropertyNames::Mash::tunTemp_c                },
          {XmlRecordDefinition::FieldType::Double          , "SPARGE_TEMP"         , PropertyNames::Mash::spargeTemp_c             },
@@ -990,7 +990,7 @@ namespace {
          {XmlRecordDefinition::FieldType::ListOfRecords   , "YEASTS/YEAST"            , PropertyNames::Recipe::yeastAdditions    , &BEER_XML_RECORD_DEFN<RecipeAdditionYeast>}, // Additional logic for "YEASTS" is handled in xml/XmlRecipeRecord.cpp
          {XmlRecordDefinition::FieldType::ListOfRecords   , "WATERS/WATER"            , PropertyNames::Recipe::waterUses         , &BEER_XML_RECORD_DEFN<RecipeUseOfWater>   }, // Additional logic for "WATERS" is handled in xml/XmlRecipeRecord.cpp
          {XmlRecordDefinition::FieldType::Record          , "MASH"                    , PropertyNames::Recipe::mash              , &BEER_XML_RECORD_DEFN<Mash>             },
-         {XmlRecordDefinition::FieldType::ListOfRecords   , "INSTRUCTIONS/INSTRUCTION", PropertyNames::SteppedOwnerBase::steps   , &BEER_XML_RECORD_DEFN<Instruction>      }, // Additional logic for "INSTRUCTIONS" is handled in xml/XmlNamedEntityRecord.h
+         {XmlRecordDefinition::FieldType::ListOfRecords   , "INSTRUCTIONS/INSTRUCTION", PropertyNames::Recipe::instructions      , &BEER_XML_RECORD_DEFN<Instruction>      }, // Additional logic for "INSTRUCTIONS" is handled in xml/XmlNamedEntityRecord.h
          {XmlRecordDefinition::FieldType::ListOfRecords   , "BREWNOTES/BREWNOTE"      , PropertyNames::Recipe::brewNotes         , &BEER_XML_RECORD_DEFN<BrewNote>         }, // Additional logic for "BREWNOTES" is handled in xml/XmlNamedEntityRecord.h
          {XmlRecordDefinition::FieldType::String          , "NOTES"                   , PropertyNames::Recipe::notes             },
          {XmlRecordDefinition::FieldType::String          , "TASTE_NOTES"             , PropertyNames::Recipe::tasteNotes        },
@@ -998,7 +998,7 @@ namespace {
          {XmlRecordDefinition::FieldType::Double          , "OG"                      , PropertyNames::Recipe::og                },
          {XmlRecordDefinition::FieldType::Double          , "FG"                      , PropertyNames::Recipe::fg                },
          {XmlRecordDefinition::FieldType::UInt            , "FERMENTATION_STAGES"     , {PropertyNames::Recipe::fermentation,
-                                                                                         PropertyNames::SteppedOwnerBase::numSteps}}, // We write but ignore on read if present.
+                                                                                         PropertyNames::StepOwnerBase::numSteps}}, // We write but ignore on read if present.
          {XmlRecordDefinition::FieldType::Double          , "PRIMARY_AGE"             , {PropertyNames::Recipe::fermentation ,
                                                                                          PropertyNames::Fermentation::primary,
                                                                                          PropertyNames::StepBase::stepTime_days} }, // Replaces PropertyNames::Recipe::primaryAge_days

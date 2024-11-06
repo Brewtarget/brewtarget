@@ -924,7 +924,7 @@ public:
          return "";
       }
 
-      auto instructions = this->rec->steps();
+      auto instructions = this->rec->instructions();
       int size = instructions.size();
       if ( size < 1 ) {
          return "";
@@ -952,7 +952,7 @@ public:
 
       QStringList num, text;
 
-      auto instructions = rec->steps();
+      auto instructions = rec->instructions();
       int size = instructions.size();
       if ( size > 0 ) {
          for (int ii = 0; ii < size; ++ii) {

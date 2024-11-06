@@ -72,7 +72,7 @@ class Boil : public NamedEntity,
    STEP_OWNER_COMMON_DECL(Boil, boil)
    // See model/FolderBase.h for info, getters and setters for these properties
    Q_PROPERTY(QString folder        READ folder        WRITE setFolder     )
-   // See model/SteppedOwnerBase.h for info, getters and setters for these properties
+   // See model/StepOwnerBase.h for info, getters and setters for these properties
    Q_PROPERTY(QList<std::shared_ptr<BoilStep>> steps   READ steps   WRITE setSteps   STORED false)
    Q_PROPERTY(unsigned int numSteps   READ numSteps   STORED false)
 

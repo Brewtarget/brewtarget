@@ -1976,7 +1976,7 @@ void MainWindow::showChanges(QMetaProperty* prop) {
    if (this->pimpl->m_recipeObs->boil() &&
        (updateAll ||
         propName == PropertyNames::Recipe::boil ||
-        propName == PropertyNames::SteppedOwnerBase::steps)) {
+        propName == PropertyNames::StepOwnerBase::steps)) {
       this->pimpl->m_boilStepTableModel->setBoil(this->pimpl->m_recipeObs->boil());
    }
    // See if we need to change the fermentation in the table.

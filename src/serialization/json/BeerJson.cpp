@@ -33,7 +33,6 @@
 
 #include "database/ObjectStoreWrapper.h"
 #include "model/Boil.h"
-#include "model/BrewNote.h"
 #include "model/Equipment.h"
 #include "model/Fermentable.h"
 #include "model/Fermentation.h"
@@ -603,7 +602,7 @@ namespace {
          {JsonRecordDefinition::FieldType::String              , "name"             , PropertyNames::NamedEntity::name},
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "grain_temperature", PropertyNames::Mash::grainTemp_c, &BEER_JSON_TEMPERATURE_UNIT_MAPPER},
          {JsonRecordDefinition::FieldType::String              , "notes"            , PropertyNames::Mash::notes      },
-         {JsonRecordDefinition::FieldType::ListOfRecords       , "mash_steps"       , PropertyNames::SteppedOwnerBase::steps, &BEER_JSON_RECORD_DEFN<MashStep>  },
+         {JsonRecordDefinition::FieldType::ListOfRecords       , "mash_steps"       , PropertyNames::StepOwnerBase::steps, &BEER_JSON_RECORD_DEFN<MashStep>  },
       }
    };
 
@@ -644,7 +643,7 @@ namespace {
          {JsonRecordDefinition::FieldType::String       , "name"              , PropertyNames::NamedEntity::name              },
          {JsonRecordDefinition::FieldType::String       , "description"       , PropertyNames::Fermentation::description      },
          {JsonRecordDefinition::FieldType::String       , "notes"             , PropertyNames::Fermentation::notes            },
-         {JsonRecordDefinition::FieldType::ListOfRecords, "fermentation_steps", PropertyNames::SteppedOwnerBase::steps, &BEER_JSON_RECORD_DEFN<FermentationStep>},
+         {JsonRecordDefinition::FieldType::ListOfRecords, "fermentation_steps", PropertyNames::StepOwnerBase::steps, &BEER_JSON_RECORD_DEFN<FermentationStep>},
       }
    };
 
@@ -1039,7 +1038,7 @@ namespace {
          {JsonRecordDefinition::FieldType::String              , "notes"        , PropertyNames::Boil::notes        },
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "pre_boil_size", PropertyNames::Boil::preBoilSize_l, &BEER_JSON_VOLUME_UNIT_MAPPER   },
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "boil_time"    , PropertyNames::Boil::boilTime_mins, &BEER_JSON_TIME_UNIT_MAPPER     },
-         {JsonRecordDefinition::FieldType::ListOfRecords       , "boil_steps"   , PropertyNames::SteppedOwnerBase::steps, &BEER_JSON_RECORD_DEFN<BoilStep>},
+         {JsonRecordDefinition::FieldType::ListOfRecords       , "boil_steps"   , PropertyNames::StepOwnerBase::steps, &BEER_JSON_RECORD_DEFN<BoilStep>},
       }
    };
 
@@ -1348,8 +1347,9 @@ namespace BeerJson {
    template void Exporter::add(QList<MashStep    const *> const & nes);
    template void Exporter::add(QList<Mash        const *> const & nes);
    template void Exporter::add(QList<Equipment   const *> const & nes);
-   template void Exporter::add(QList<Instruction const *> const & nes);
-   template void Exporter::add(QList<BrewNote    const *> const & nes); // TBD: Not part of BeerJSON
+   // Following two lines are commented out as neither Instruction nor BrewNote is part of BeerJSON.
+//   template void Exporter::add(QList<Instruction const *> const & nes);
+//   template void Exporter::add(QList<BrewNote    const *> const & nes);
    template void Exporter::add(QList<Recipe      const *> const & nes);
 
    void Exporter::close() {

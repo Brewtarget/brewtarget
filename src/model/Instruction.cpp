@@ -33,7 +33,7 @@ bool Instruction::isEqualTo(NamedEntity const & other) const {
       this->m_hasTimer   == rhs.m_hasTimer   &&
       this->m_timerValue == rhs.m_timerValue &&
       // Parent classes have to be equal too
-      this->SteppedBase<Instruction, Recipe>::doIsEqualTo(rhs)
+      this->EnumeratedBase<Instruction, Recipe>::doIsEqualTo(rhs)
    );
 }
 
@@ -48,12 +48,12 @@ TypeLookup const Instruction::typeLookup {
    },
    // Parent class lookup
    {&NamedEntity::typeLookup,
-    std::addressof(SteppedBase<Instruction, Recipe>::typeLookup)}
+    std::addressof(EnumeratedBase<Instruction, Recipe>::typeLookup)}
 };
 
 Instruction::Instruction(QString name) :
    NamedEntity  {name },
-   SteppedBase<Instruction, Recipe>{},
+   EnumeratedBase<Instruction, Recipe>{},
    m_directions {""   },
    m_hasTimer   {false},
    m_timerValue {""   },
@@ -66,7 +66,7 @@ Instruction::Instruction(QString name) :
 
 Instruction::Instruction(NamedParameterBundle const & namedParameterBundle) :
    NamedEntity{namedParameterBundle},
-   SteppedBase<Instruction, Recipe>{namedParameterBundle},
+   EnumeratedBase<Instruction, Recipe>{namedParameterBundle},
    SET_REGULAR_FROM_NPB (m_directions, namedParameterBundle, PropertyNames::Instruction::directions),
    SET_REGULAR_FROM_NPB (m_hasTimer  , namedParameterBundle, PropertyNames::Instruction::hasTimer  ),
    SET_REGULAR_FROM_NPB (m_timerValue, namedParameterBundle, PropertyNames::Instruction::timerValue),
@@ -79,7 +79,7 @@ Instruction::Instruction(NamedParameterBundle const & namedParameterBundle) :
 
 Instruction::Instruction(Instruction const & other) :
    NamedEntity  {other},
-   SteppedBase<Instruction, Recipe>{other},
+   EnumeratedBase<Instruction, Recipe>{other},
    m_directions {other.m_directions},
    m_hasTimer   {other.m_hasTimer  },
    m_timerValue {other.m_timerValue},
@@ -151,5 +151,5 @@ bool operator<(Instruction & lhs, Instruction & rhs) {
    return lhs.stepNumber() < rhs.stepNumber();
 }
 
-// Insert boiler-plate wrapper functions that call down to SteppedBase
-STEPPED_COMMON_CODE(Instruction)
+// Insert boiler-plate wrapper functions that call down to EnumeratedBase
+ENUMERATED_COMMON_CODE(Instruction)

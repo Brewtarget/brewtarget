@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/SteppedBase.h is part of Brewtarget, and is copyright the following authors 2023-2024:
+ * model/EnumeratedBase.h is part of Brewtarget, and is copyright the following authors 2023-2024:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -13,8 +13,8 @@
  * You should have received a copy of the GNU General Public License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
  ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
-#ifndef MODEL_STEPPEDBASE_H
-#define MODEL_STEPPEDBASE_H
+#ifndef MODEL_ENUMERATEDBASE_H
+#define MODEL_ENUMERATEDBASE_H
 #pragma once
 
 #include "database/ObjectStoreWrapper.h"
@@ -25,7 +25,7 @@
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
 // See comment in model/NamedEntity.h
-#define AddPropertyName(property) namespace PropertyNames::SteppedBase { inline BtStringConst const property{#property}; }
+#define AddPropertyName(property) namespace PropertyNames::EnumeratedBase { inline BtStringConst const property{#property}; }
 AddPropertyName(ownerId   )
 AddPropertyName(stepNumber)
 #undef AddPropertyName
@@ -45,39 +45,33 @@ AddPropertyName(stepNumber)
  *            corresponding \c Instruction objects).
  *          - The \c Instruction objects belonging to a given \c Recipe have an ordering
  *
- *        So we pull out these more fundamental properties into \c SteppedBase and \c SteppedOwnerBase, as the following
- *        \b partial inheritance diagram shows:
+ *        So we pull out these more fundamental properties into \c EnumeratedBase, as the following \b partial inheritance
+ *        diagram shows:
  *
- *                          SteppedBase                                      SteppedOwnerBase
- *                          /         \                                       /           \
- *                    StepBase       Instruction                       StepOwnerBase     Recipe
- *                    /   |   \                                          /   |   \
- *                   /    |    \                                        /    |    \
- *                  /     |     \                                      /     |     \
- *          MashStep  BoilStep  FermentationStep                    Mash   Boil    Fermentation
+ *                          EnumeratedBase
+ *                          /         \
+ *                    StepBase       Instruction
+ *                    /   |   \
+ *                   /    |    \
+ *                  /     |     \
+ *          MashStep  BoilStep  FermentationStep
  *
  *        This gives enough of what we need, for now.  We would need to rethink a bit if we had one type of object
  *        owning more than one type of "steps".
  *
- *        NOTE that the "stepped" concept does not apply to other things "owned" by Recipe, such as \c RecipeAdditionHop
- *        or \c BrewNote, because they do not have the same need of pure ordering.  There is an implicit ordering by
- *        addition time or date, but it is not necessary or desirable to be more precise than this.  You will often have
- *        two hop additions that happen at the same time, for instance.  See \c OwnedSet for the logic for dealing with
- *        these.
- *
- *        Directly derived classes need to include STEPPED_COMMON_DECL and STEPPED_COMMON_CODE in the obvious places
+ *        Directly derived classes need to include ENUMERATED_COMMON_DECL and ENUMERATED_COMMON_CODE in the obvious places
  *        (either their own macros for \c StepBase or in the header and implementation file respectively for
  *        \c Instruction).
  */
-template<class Derived> class SteppedPhantom;
+template<class Derived> class EnumeratedPhantom;
 template<class Derived, class Owner>
-class SteppedBase : public CuriouslyRecurringTemplateBase<SteppedPhantom, Derived> {
+class EnumeratedBase : public CuriouslyRecurringTemplateBase<EnumeratedPhantom, Derived> {
 protected:
    // Note that, because this is static, it cannot be initialised inside the class definition
    static TypeLookup const typeLookup;
 
    //! Non-virtual equivalent of isEqualTo
-   bool doIsEqualTo(SteppedBase const & other) const {
+   bool doIsEqualTo(EnumeratedBase const & other) const {
       return (
          Utils::AutoCompare(this->m_ownerId   , other.m_ownerId   ) &&
          Utils::AutoCompare(this->m_stepNumber, other.m_stepNumber)
@@ -85,24 +79,24 @@ protected:
    }
 
    // Normally we'd make the constructors private and allow access to Derived as a friend.  However, we want StepBase
-   // to inherit from SteppedBase, so we need the former's constructor to be able to call the latter's.
-   SteppedBase() {
+   // to inherit from EnumeratedBase, so we need the former's constructor to be able to call the latter's.
+   EnumeratedBase() {
       return;
    }
 
-   SteppedBase(NamedParameterBundle const & namedParameterBundle) :
-      SET_REGULAR_FROM_NPB (m_ownerId   , namedParameterBundle, PropertyNames::SteppedBase::ownerId   , -1),
-      SET_REGULAR_FROM_NPB (m_stepNumber, namedParameterBundle, PropertyNames::SteppedBase::stepNumber, -1) {
+   EnumeratedBase(NamedParameterBundle const & namedParameterBundle) :
+      SET_REGULAR_FROM_NPB (m_ownerId   , namedParameterBundle, PropertyNames::EnumeratedBase::ownerId   , -1),
+      SET_REGULAR_FROM_NPB (m_stepNumber, namedParameterBundle, PropertyNames::EnumeratedBase::stepNumber, -1) {
       return;
    }
 
-   SteppedBase(Derived const & other) :
+   EnumeratedBase(Derived const & other) :
    m_ownerId   {other.m_ownerId   },
    m_stepNumber{other.m_stepNumber} {
       return;
    }
 
-   ~SteppedBase() = default;
+   ~EnumeratedBase() = default;
 
 public:
    int ownerId   () const { return this->m_ownerId   ; }
@@ -112,7 +106,7 @@ public:
 
    void setOwnerId   (int const val) {
       this->m_ownerId = val;
-      this->derived().propagatePropertyChange(PropertyNames::SteppedBase::ownerId, false);
+      this->derived().propagatePropertyChange(PropertyNames::EnumeratedBase::ownerId, false);
       return;
    }
 
@@ -124,10 +118,10 @@ public:
     */
    void setStepNumber(int const val, bool const notify = true) {
       if (notify) {
-         this->derived().setAndNotify(PropertyNames::SteppedBase::stepNumber, this->m_stepNumber, val);
+         this->derived().setAndNotify(PropertyNames::EnumeratedBase::stepNumber, this->m_stepNumber, val);
       } else {
          this->m_stepNumber = val;
-         this->derived().propagatePropertyChange(PropertyNames::SteppedBase::stepNumber, false);
+         this->derived().propagatePropertyChange(PropertyNames::EnumeratedBase::stepNumber, false);
       }
       return;
    }
@@ -149,12 +143,12 @@ public:
    }
 
    /**
-    * \brief This is similarly needed by \c TreeModelBase
+    * \brief This is similarly needed by \c TreeModelBase -- but it needs a bit of a rethink
     */
-   static QList<std::shared_ptr<Derived>> ownedBy(std::shared_ptr<Owner> owner) {
-      // We already wrote all the logic in SteppedOwnerBase.
-      return owner->steps();
-   }
+//   static QList<std::shared_ptr<Derived>> ownedBy(std::shared_ptr<Owner> owner) {
+//      // We already wrote all the logic in StepOwnerBase.
+//      return owner->steps();
+//   }
 
    ObjectStore & doGetObjectStoreTypedInstance() const {
       return ObjectStoreTyped<Derived>::getInstance();
@@ -170,22 +164,22 @@ protected:
 };
 
 template<class Derived, class Owner>
-TypeLookup const SteppedBase<Derived, Owner>::typeLookup {
-   "SteppedBase",
+TypeLookup const EnumeratedBase<Derived, Owner>::typeLookup {
+   "EnumeratedBase",
    {
       //
       // See comment in model/IngredientAmount.h for why we can't use the PROPERTY_TYPE_LOOKUP_ENTRY or
       // PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV macros here.
       //
-      {&PropertyNames::SteppedBase::ownerId,
-       TypeInfo::construct<decltype(SteppedBase<Derived, Owner>::m_ownerId)>(
-          PropertyNames::SteppedBase::ownerId,
-          TypeLookupOf<decltype(SteppedBase<Derived, Owner>::m_ownerId)>::value
+      {&PropertyNames::EnumeratedBase::ownerId,
+       TypeInfo::construct<decltype(EnumeratedBase<Derived, Owner>::m_ownerId)>(
+          PropertyNames::EnumeratedBase::ownerId,
+          TypeLookupOf<decltype(EnumeratedBase<Derived, Owner>::m_ownerId)>::value
        )},
-      {&PropertyNames::SteppedBase::stepNumber,
-       TypeInfo::construct<decltype(SteppedBase<Derived, Owner>::m_stepNumber)>(
-          PropertyNames::SteppedBase::stepNumber,
-          TypeLookupOf<decltype(SteppedBase<Derived, Owner>::m_stepNumber)>::value,
+      {&PropertyNames::EnumeratedBase::stepNumber,
+       TypeInfo::construct<decltype(EnumeratedBase<Derived, Owner>::m_stepNumber)>(
+          PropertyNames::EnumeratedBase::stepNumber,
+          TypeLookupOf<decltype(EnumeratedBase<Derived, Owner>::m_stepNumber)>::value,
           NonPhysicalQuantity::OrdinalNumeral
        )}
    },
@@ -198,7 +192,7 @@ TypeLookup const SteppedBase<Derived, Owner>::typeLookup {
  *        include this in their header file, right after Q_OBJECT.  Concrete derived classes also need to include the
  *        following block (see comment in model/StepBase.h for why):
  *
- *           // See model/SteppedBase.h for info, getters and setters for these properties
+ *           // See model/EnumeratedBase.h for info, getters and setters for these properties
  *           Q_PROPERTY(int ownerId      READ ownerId      WRITE setOwnerId   )
  *           Q_PROPERTY(int stepNumber   READ stepNumber   WRITE setStepNumber)
  *
@@ -216,9 +210,9 @@ TypeLookup const SteppedBase<Derived, Owner>::typeLookup {
  *        In older versions of Qt, we didn't used to be able to put Q_PROPERTY inside our own macro, but, thankfully,
  *        the Qt MOC (meta object compiler) now expands "normal" macros before processing its own "special" ones.
  */
-#define STEPPED_COMMON_DECL(Derived, Owner) \
+#define ENUMERATED_COMMON_DECL(Derived, Owner) \
    /* This allows StepBase to call protected and private members of Derived */                \
-   friend class SteppedBase<Derived, Owner>;                                                  \
+   friend class EnumeratedBase<Derived, Owner>;                                               \
    public:                                                                                    \
       /* This alias makes it easier to template a number of functions */                      \
       /* that are essentially the same for all "stepped" classes.     */                      \
@@ -232,7 +226,7 @@ TypeLookup const SteppedBase<Derived, Owner>::typeLookup {
  * \brief Derived classes should (either directly or via inclusion in an intermediate class's equivalent macro) include
  *        this in their implementation file.
  */
-#define STEPPED_COMMON_CODE(Derived) \
+#define ENUMERATED_COMMON_CODE(Derived) \
    ObjectStore & Derived::getObjectStoreTypedInstance() const { return this->doGetObjectStoreTypedInstance(); } \
 
 

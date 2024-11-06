@@ -59,7 +59,7 @@ class MashStep : public Step, public StepBase<MashStep, Mash, MashStepOptions> {
    Q_OBJECT
 
    STEP_COMMON_DECL(Mash, MashStepOptions)
-   // See model/SteppedBase.h for info, getters and setters for these properties
+   // See model/EnumeratedBase.h for info, getters and setters for these properties
    Q_PROPERTY(int ownerId      READ ownerId      WRITE setOwnerId   )
    Q_PROPERTY(int stepNumber   READ stepNumber   WRITE setStepNumber)
    // See model/StepBase.h for info, getters and setters for these properties

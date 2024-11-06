@@ -37,12 +37,9 @@
 #include <QVector>
 
 #include "database/ObjectStoreWrapper.h"
-#include "model/BrewNote.h"
 #include "model/FolderBase.h"
-#include "model/Instruction.h"
 #include "model/NamedEntity.h"
-#include "model/Salt.h"
-#include "model/SteppedOwnerBase.h"
+#include "model/OwnedSet.h"
 
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
@@ -74,7 +71,7 @@ AddPropertyName(date                   )
 AddPropertyName(efficiency_pct         )
 AddPropertyName(equipment              )
 AddPropertyName(equipmentId            )
-AddPropertyName(fermentableAdditionIds )
+///AddPropertyName(fermentableAdditionIds )
 AddPropertyName(fermentableAdditions   )
 AddPropertyName(fermentation           )
 AddPropertyName(fermentationId         )
@@ -83,17 +80,17 @@ AddPropertyName(finalVolume_l          )
 AddPropertyName(forcedCarbonation      )
 AddPropertyName(grainsInMash_kg        )
 AddPropertyName(grains_kg              )
-AddPropertyName(hopAdditionIds         )
+///AddPropertyName(hopAdditionIds         )
 AddPropertyName(hopAdditions           )
 AddPropertyName(IBU                    )
 AddPropertyName(IBUs                   )
 ///AddPropertyName(instructionIds         )
-///AddPropertyName(instructions           )
+AddPropertyName(instructions           )
 AddPropertyName(kegPrimingFactor       )
 AddPropertyName(locked                 )
 AddPropertyName(mash                   )
 AddPropertyName(mashId                 )
-AddPropertyName(miscAdditionIds        )
+///AddPropertyName(miscAdditionIds        )
 AddPropertyName(miscAdditions          )
 AddPropertyName(notes                  )
 AddPropertyName(og                     )
@@ -101,7 +98,7 @@ AddPropertyName(points                 )
 AddPropertyName(postBoilVolume_l       )
 AddPropertyName(primingSugarEquiv      )
 AddPropertyName(primingSugarName       )
-AddPropertyName(saltAdjustmentIds      )
+///AddPropertyName(saltAdjustmentIds      )
 AddPropertyName(saltAdjustments        )
 AddPropertyName(SRMColor               )
 AddPropertyName(style                  )
@@ -109,10 +106,10 @@ AddPropertyName(styleId                )
 AddPropertyName(tasteNotes             )
 AddPropertyName(tasteRating            )
 AddPropertyName(type                   )
-AddPropertyName(waterUseIds            )
+///AddPropertyName(waterUseIds            )
 AddPropertyName(waterUses              )
 AddPropertyName(wortFromMash_l         )
-AddPropertyName(yeastAdditionIds       )
+///AddPropertyName(yeastAdditionIds       )
 AddPropertyName(yeastAdditions         )
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
@@ -121,11 +118,12 @@ AddPropertyName(yeastAdditions         )
 // Forward declarations
 class Boil;
 class BoilStep;
+class BrewNote;
 class Equipment;
 class Fermentable;
 class Fermentation;
 class FermentationStep;
-///class Instruction;
+class Instruction;
 class Mash;
 class MashStep;
 class RecipeAdditionFermentable;
@@ -145,24 +143,22 @@ class Yeast;
  * \brief Model class for recipe records in the database.
  */
 class Recipe : public NamedEntity,
-               public FolderBase<Recipe>,
-               public SteppedOwnerBase<Recipe, Instruction> {
+               public FolderBase<Recipe> {
    Q_OBJECT
    FOLDER_BASE_DECL(Recipe)
-   STEPPED_OWNER_COMMON_DECL(Recipe, Instruction)
+
    // See model/FolderBase.h for info, getters and setters for these properties
    Q_PROPERTY(QString folder        READ folder        WRITE setFolder     )
-   // See model/SteppedOwnerBase.h for info, getters and setters for these properties
-   Q_PROPERTY(QList<std::shared_ptr<Instruction>> steps   READ steps   WRITE setSteps   STORED false)
-   Q_PROPERTY(unsigned int numSteps   READ numSteps   STORED false)
 
    /**
     * \brief \c MainWindow is a friend so it can access \c Recipe::recalcAll() and \c Recipe::recalcIfNeeded()
+    *        \c BrewDayScrollWidget is a friend so it can access \c Recipe::m_instructions
     *
     *        In the long run, we should fix this, so that \c MainWindow doesn't need to call private member functions on
     *        \c Recipe.
     */
    friend class MainWindow;
+   friend class BrewDayScrollWidget;
 
 public:
    /**
@@ -372,29 +368,22 @@ public:
 
    // These QList properties should only emit changed() when their size changes, or when
    // one of their elements is replaced by another with a different key.
-   //! \brief The brew notes.
-   Q_PROPERTY(QList<std::shared_ptr<BrewNote>> brewNotes READ brewNotes /*WRITE*/ /*NOTIFY changed*/ STORED false)
-   //! \brief The instructions.
-///   Q_PROPERTY(QList<std::shared_ptr<Instruction>> instructions   READ instructions /*WRITE*/ /*NOTIFY changed*/ STORED false)
-///   Q_PROPERTY(QVector<int>         instructionIds READ getInstructionIds WRITE setInstructionIds)
    //! \brief The fermentable additions.
    Q_PROPERTY(QList<std::shared_ptr<RecipeAdditionFermentable>> fermentableAdditions   READ fermentableAdditions WRITE setFermentableAdditions   STORED false)
-   Q_PROPERTY(QVector<int>                                      fermentableAdditionIds READ fermentableAdditionIds /*WRITE setFermentableAdditionIds*/ STORED false)
    //! \brief The hop additions.
    Q_PROPERTY(QList<std::shared_ptr<RecipeAdditionHop>> hopAdditions   READ hopAdditions WRITE setHopAdditions   STORED false)
-   Q_PROPERTY(QVector<int>                              hopAdditionIds READ hopAdditionIds /*WRITE setHopAdditionIds*/ STORED false)
    //! \brief The misc additions.
    Q_PROPERTY(QList<std::shared_ptr<RecipeAdditionMisc>> miscAdditions   READ miscAdditions WRITE setMiscAdditions   STORED false)
-   Q_PROPERTY(QVector<int>                               miscAdditionIds READ miscAdditionIds /*WRITE setMiscAdditionIds*/ STORED false)
    //! \brief The yeast additions.
    Q_PROPERTY(QList<std::shared_ptr<RecipeAdditionYeast>> yeastAdditions   READ yeastAdditions WRITE setYeastAdditions   STORED false)
-   Q_PROPERTY(QVector<int>                                yeastAdditionIds READ yeastAdditionIds /*WRITE setYeastAdditionIds*/ STORED false)
    //! \brief The waters.
    Q_PROPERTY(QList<std::shared_ptr<RecipeUseOfWater>> waterUses   READ waterUses   WRITE setWaterUses   STORED false)
-   Q_PROPERTY(QVector<int>                             waterUseIds READ waterUseIds /*WRITE setWaterUseIds*/ STORED false)
    //! \brief The salt adjustments.
    Q_PROPERTY(QList<std::shared_ptr<RecipeAdjustmentSalt>> saltAdjustments    READ saltAdjustments    WRITE setSaltAdjustments   STORED false)
-   Q_PROPERTY(QVector<int>                                 saltAdjustmentIds  READ saltAdjustmentIds  /*WRITE setSaltAdjustmentIds*/ STORED false)
+   //! \brief The brew notes.
+   Q_PROPERTY(QList<std::shared_ptr<BrewNote>> brewNotes   READ brewNotes /*WRITE*/ /*NOTIFY changed*/ STORED false)
+   //! \brief The instructions.
+   Q_PROPERTY(QList<std::shared_ptr<Instruction>> instructions   READ instructions /*WRITE*/ /*NOTIFY changed*/ STORED false)
 
    Q_PROPERTY(int    ancestorId READ getAncestorId WRITE setAncestorId)
    //! \brief The ancestors.
@@ -417,16 +406,11 @@ public:
 
    /**
     * \brief Use this for adding \c RecipeAdditionHop, etc.
+    *
+    *        Note that we don't need an equivalent for \c BrewNote or \c Instruction because they are generated by
+    *        \c Recipe itself.
     */
    template<class NE> std::shared_ptr<NE> addAddition(std::shared_ptr<NE> addition);
-
-   /*!
-    * \brief Remove \c var from the recipe and return what was removed - ie \c var
-    *
-    *        We want this to have the same signature as add because it makes the implementation of Undo/Redo easier
-    */
-//   template<class NE> std::shared_ptr<NE> remove(std::shared_ptr<NE> var);
-///   std::shared_ptr<Instruction> remove(std::shared_ptr<Instruction> var);
 
    /**
     * \brief Use this for removing \c RecipeAdditionHop, etc.
@@ -449,6 +433,7 @@ public:
 
    //! \brief Automagically generate a list of instructions.
    void generateInstructions();
+
    /*!
     * Finds the next ingredient to add that has a time
     * less than time. Changes time to be the time of the found
@@ -528,27 +513,20 @@ public:
 
    // Relational getters
    QList<std::shared_ptr<RecipeAdditionFermentable>> fermentableAdditions  () const;
-   QVector<int>                                      fermentableAdditionIds() const;
    QList<std::shared_ptr<RecipeAdditionHop>>         hopAdditions          () const;
-   QVector<int>                                      hopAdditionIds        () const;
    QList<std::shared_ptr<RecipeAdditionMisc>>        miscAdditions         () const;
-   QVector<int>                                      miscAdditionIds       () const;
    QList<std::shared_ptr<RecipeAdditionYeast>>       yeastAdditions        () const;
-   QVector<int>                                      yeastAdditionIds      () const;
    QList<std::shared_ptr<RecipeAdjustmentSalt>>      saltAdjustments       () const;
-   QVector<int>                                      saltAdjustmentIds     () const;
    QList<std::shared_ptr<RecipeUseOfWater>>          waterUses             () const;
-   QVector<int>                                      waterUseIds           () const;
-///   QList<std::shared_ptr<Instruction>>               instructions          () const;
-///   QVector<int>                                      getInstructionIds     () const;
    QList<std::shared_ptr<BrewNote>>                  brewNotes             () const;
+   QList<std::shared_ptr<Instruction>>               instructions          () const;
    QList<Recipe *>                                   ancestors             () const;
    std::shared_ptr<Equipment>                        equipment             () const;
    int                                               getEquipmentId        () const;
    std::shared_ptr<Style>                            style                 () const;
    int                                               getStyleId            () const;
 
-   std::shared_ptr<Mash        >                mash              () const;
+   std::shared_ptr<Mash>                        mash              () const;
    //! \brief This will create a \c Mash object if it doesn't exist
    std::shared_ptr<Mash>                        nonOptMash        ();
    int                                          getMashId         () const;
@@ -605,7 +583,6 @@ public:
    // ⮜⮜⮜ Next two added for BeerJSON support ⮞⮞⮞
    void setBoilId        (int const id);
    void setFermentationId(int const id);
-///   void setInstructionIds(QVector<int> ids);
    void setAncestorId    (int ancestorId, bool notify = true);
    //! @}
 
@@ -615,7 +592,7 @@ public:
    bool hasDescendants() const;
 
    // Helpers
-   //! \brief Get the ibus from a given \c hop.
+   //! \brief Get the IBUs from a given \c hop addition.
    double ibuFromHopAddition(RecipeAdditionHop const & hop);
    // .:TBD:. Not sure reagents is the best word here...
    //! \brief Formats the fermentable additions for instructions
@@ -682,7 +659,7 @@ public:
    template<class Owned> void acceptChange(QMetaProperty prop, QVariant val);
 
 signals:
-   //! Emitted when the number of instructions changes, or when you should call steps() again.
+   //! Emitted when the number (or order) of instructions changes, or when you should call instructions() again.
    void stepsChanged();
 
 public slots:
@@ -696,8 +673,7 @@ public slots:
    void acceptChangeToRecipeAdjustmentSalt     (QMetaProperty prop, QVariant val);
    void acceptChangeToRecipeUseOfWater         (QMetaProperty prop, QVariant val);
    void acceptChangeToBrewNote                 (QMetaProperty prop, QVariant val);
-
-   void acceptStepChange(QMetaProperty, QVariant);
+   void acceptChangeToInstruction              (QMetaProperty prop, QVariant val);
 
 protected:
    virtual bool isEqualTo(NamedEntity const & other) const override;
@@ -737,6 +713,32 @@ private:
    std::optional<double> m_beerAcidity_pH         ;
    std::optional<double> m_apparentAttenuation_pct;
 
+   OwnedSet<Recipe, RecipeAdditionFermentable, PropertyNames::Recipe::fermentableAdditions, &Recipe::acceptChangeToRecipeAdditionFermentable> m_fermentableAdditions;
+   OwnedSet<Recipe, RecipeAdditionHop        , PropertyNames::Recipe::hopAdditions        , &Recipe::acceptChangeToRecipeAdditionHop        > m_hopAdditions        ;
+   OwnedSet<Recipe, RecipeAdditionMisc       , PropertyNames::Recipe::miscAdditions       , &Recipe::acceptChangeToRecipeAdditionMisc       > m_miscAdditions       ;
+   OwnedSet<Recipe, RecipeAdditionYeast      , PropertyNames::Recipe::yeastAdditions      , &Recipe::acceptChangeToRecipeAdditionYeast      > m_yeastAdditions      ;
+   OwnedSet<Recipe, RecipeAdjustmentSalt     , PropertyNames::Recipe::saltAdjustments     , &Recipe::acceptChangeToRecipeAdjustmentSalt     > m_saltAdjustments     ;
+   OwnedSet<Recipe, RecipeUseOfWater         , PropertyNames::Recipe::waterUses           , &Recipe::acceptChangeToRecipeUseOfWater         > m_waterUses           ;
+   /**
+    * \brief Each \c BrewNote is a record of a brew day.  We assume that if you're copying a \c Recipe, it is in order
+    *        to modify it into a new \c Recipe, in which case it does not make sense to bring the original brew notes
+    *        across to the copy.
+    */
+   OwnedSet<Recipe, BrewNote                 , PropertyNames::Recipe::brewNotes           , &Recipe::acceptChangeToBrewNote,
+                                               OwnedSetOptions{.copyable = false}         > m_brewNotes           ;
+   /**
+    * \brief Instructions are copyable, but they differ from Recipe's other owned sets in being numbered
+    */
+   OwnedSet<Recipe, Instruction              , PropertyNames::Recipe::instructions        , &Recipe::acceptChangeToInstruction,
+                                               OwnedSetOptions{.enumerated = true}        > m_instructions        ;
+
+   /**
+    * \brief It's sometimes useful to be able to access the above member variables by type.  This templated member
+    *        function allows that.  See Recipe.cpp for specialisations.
+    */
+   template<class RA> auto & ownedSetFor() const;
+   template<class RA> auto & ownedSetFor();
+
    // Calculated, but stored...BeerXML is weird sometimes.
    double        m_og            ;
    double        m_fg            ;
@@ -755,10 +757,10 @@ private:
    mutable bool            m_hasDescendants;
 
    // Some recalculators for calculated properties.
-
    void recalcIfNeeded(QString classNameOfWhatWasAddedOrChanged);
 
-   /* Recalculates all the calculated properties.
+   /**
+    * Recalculates all the calculated properties.
     *
     * WARNING: this call took 0.15s in rev 916!
     */

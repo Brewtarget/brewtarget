@@ -68,7 +68,7 @@ protected:
       if (stepOwner && this->m_stepOwnerObs != stepOwner) {
          qDebug() <<
             Q_FUNC_INFO << "Connecting stepsChanged signal from" << StepOwnerClass::staticMetaObject.className() << "#" <<
-            stepOwner->key();
+            stepOwner->key() << "to" << Derived::staticMetaObject.className();
          this->derived().connect(stepOwner.get(), &StepOwnerClass::stepsChanged, &this->derived(), &Derived::stepOwnerChanged);
       }
 
@@ -219,7 +219,7 @@ protected:
 
          int ii = this->derived().findIndexOf(stepSender);
          if (ii >= 0) {
-            if (prop.name() == PropertyNames::SteppedBase::stepNumber) {
+            if (prop.name() == PropertyNames::EnumeratedBase::stepNumber) {
                qDebug().noquote() << Q_FUNC_INFO << Logging::getStackTrace();
                this->reorderStep(this->derived().rows.at(ii), ii);
             }

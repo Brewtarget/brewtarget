@@ -28,7 +28,7 @@ void XmlMashRecord::subRecordToXml(XmlRecordDefinition::FieldDefinition const & 
    Mash const & mash = static_cast<Mash const &>(namedEntityToExport);
 
    // We assert that MashStep is the only complex record inside a Mash
-   Q_ASSERT(fieldDefinition.propertyPath.asXPath() == PropertyNames::SteppedOwnerBase::steps);
+   Q_ASSERT(fieldDefinition.propertyPath.asXPath() == PropertyNames::StepOwnerBase::steps);
 
    auto children = mash.mashSteps();
    if (children.empty()) {
