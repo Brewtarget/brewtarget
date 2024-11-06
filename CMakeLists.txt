@@ -901,6 +901,7 @@ set(translationSourceFiles ${repoDir}/translations/bt_ca.ts # Catalan
                            ${repoDir}/translations/bt_ru.ts # Russian
                            ${repoDir}/translations/bt_sr.ts # Serbian
                            ${repoDir}/translations/bt_sv.ts # Swedish
+                           ${repoDir}/translations/bt_da.ts # Danish
                            ${repoDir}/translations/bt_tr.ts # Turkish
                            ${repoDir}/translations/bt_zh.ts) # Chinese
 
