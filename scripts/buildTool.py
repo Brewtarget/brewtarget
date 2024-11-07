@@ -882,6 +882,61 @@ def installDependencies():
       #-----------------------------------------------------------------------------------------------------------------
       case 'Darwin':
          log.debug('Mac')
+
+         #
+         # It's useful to know what version of MacOS we're running on.  Getting the version number is straightforward,
+         # so we start with that.
+         #
+         macOsVersionRaw = btUtils.abortOnRunFail(
+            subprocess.run(['sw_vers', '-productVersion'], capture_output=True)
+         ).stdout.decode('UTF-8').rstrip()
+         log.debug('MacOS version: ' + macOsVersionRaw)
+         parsedMacOsVersion = packaging.version.parse(macOsVersionRaw)
+         log.debug('MacOS version parsed: ' + str(parsedMacOsVersion))
+         #
+         # Getting the "release name" (aka "friendly name") is a bit more tricky.  See
+         # https://apple.stackexchange.com/questions/333452/how-can-i-find-the-friendly-name-of-the-operating-system-from-the-shell-term
+         # for various approaches with varying reliability.  However, in reality, it's simpler to hard-code the info in
+         # this script by copying it from https://en.wikipedia.org/wiki/MacOS#Timeline_of_releases.  We just have to
+         # update the list below whenever a new version of MacOS comes out.
+         #
+         macOsVersionToReleaseName = {
+            '15'  : 'Sequoia'
+            # Can't guarantee that other parts of the build/packaging system will work on these older versions, but
+            # doesn't hurt to at least be able to look them up.
+            '14'  : 'Sonoma'
+            '13'  : 'Ventura'
+            '12'  : 'Monterey'
+            '11'  : 'Big Sur'
+            '10.15' : 'Catalina'
+            '10.14' : 'Mojave'
+            '10.13' : 'High Sierra'
+            '10.12' : 'Sierra'
+            '10.11' : 'El Capitan'
+            '10.10' : 'Yosemite'
+            '10.9'  : 'Mavericks'
+            '10.8'  : 'Mountain Lion'
+            '10.7'  : 'Lion'
+            '10.6'  : 'Snow Leopard'
+            '10.5'  : 'Leopard'
+            '10.4'  : 'Tiger'
+            '10.3'  : 'Panther'
+            '10.2'  : 'Jaguar'
+            '10.1'  : 'Puma'
+            '10.0'  : 'Cheetah'
+         }
+         #
+         # Version number is major.minor.micro.
+         #
+         # Prior to MacOS 11, we need the major and minor part of the version number.  From 11 on, we only need the
+         # major part.
+         #
+         macOsVersion = str(parsedMacOsVersion.major)
+         if (macOsVersion == '10'):
+            macOsVersion += '.' + str(parsedMacOsVersion.minor)
+         macOsReleaseName = macOsVersionToReleaseName[macOsVersion]
+         log.debug('MacOS ' + macOsVersion + ' release name: ' + macOsReleaseName)
+
          #
          # We install most of the Mac dependencies via Homebrew (https://brew.sh/) using the `brew` command below.
          # However, as at 2023-12-01, Homebrew has stopped supplying a package for Xalan-C.  So, we install that using
@@ -934,7 +989,7 @@ def installDependencies():
                             'ninja',
                             'pandoc',
                             'tree',
-                            'qt@6',
+#                            'qt@6',
                             'openssl@3', # OpenSSL headers and library
 #                            'xalan-c',
 #                            'xerces-c'
@@ -961,6 +1016,47 @@ def installDependencies():
             else:
                log.debug('Installing ' + packageToInstall + ' via Homebrew')
                btUtils.abortOnRunFail(subprocess.run(['brew', 'install', packageToInstall]))
+
+         #
+         # In theory, having installed things it depends on, we can now install MacPorts.
+
+         #
+         # In principle MacPorts can be installed either from source or precompiled binary.
+         #
+         # The instructions at https://guide.macports.org/#installing say that we probably don't need to install Xcode
+         # as only a few ports need it.  So, for now, we haven't tried to install that.
+         #
+         # Instructions for source install are at https://guide.macports.org/#installing.macports.source.  I tried the
+         # following but the configure script complained about the lack of /usr/local/.//mkspecs/macx-clang
+         #
+         #    log.debug('Installing MacPorts')
+         #    btUtils.abortOnRunFail(subprocess.run(['curl', '-O', 'https://distfiles.macports.org/MacPorts/MacPorts-2.10.2.tar.bz2']))
+         #    btUtils.abortOnRunFail(subprocess.run(['tar', 'xf', 'MacPorts-2.10.2.tar.bz2']))
+         #    btUtils.abortOnRunFail(subprocess.run(['cd', 'MacPorts-2.10.2/']))
+         #    btUtils.abortOnRunFail(subprocess.run(['./configure']))
+         #    btUtils.abortOnRunFail(subprocess.run(['make']))
+         #    btUtils.abortOnRunFail(subprocess.run(['sudo', 'make', 'install']))
+         #    btUtils.abortOnRunFail(subprocess.run(['export', 'PATH=/opt/local/bin:/opt/local/sbin:$PATH']))
+         #
+         # For a binary install we need the version of MacPorts we're downloading and both the version and release name
+         # of MacOS.
+         #
+         # TBD: For the moment we hard-code the version of MacPorts, but we should probably find it out from GitHub in
+         #      a similar way that we check our own latest releases in the C++ code.
+         #
+         downloadUrl = 'https://github.com/macports/macports-base/releases/download/' + 'v2.10.4/MacPorts-2.10.4-' + macOsVersion + '-' + macOsReleaseName + '.pkg'
+         # TODO: Need to finish this.  For now, we  install MacPorts for GitHub actions via the mac.yml script.
+
+         #
+         # Now install Xalan-C via MacPorts
+         #
+         installListPort = ['qt6',
+                            'xalanc',
+                            'xercesc3']
+         for packageToInstall in installListPort:
+            log.debug('Installing ' + packageToInstall + ' via MacPorts')
+            btUtils.abortOnRunFail(subprocess.run(['sudo', 'port', 'install', packageToInstall]))
+
          #
          # By default, even once Qt is installed, Meson will not find it
          #
@@ -968,7 +1064,7 @@ def installDependencies():
          # the following to run `brew link qt5 --force` to "symlink the various Qt binaries and libraries into your
          # /usr/local/bin and /usr/local/lib directories".
          #
-         btUtils.abortOnRunFail(subprocess.run(['brew', 'link', '--force', 'qt6']))
+#         btUtils.abortOnRunFail(subprocess.run(['brew', 'link', '--force', 'qt6']))
 
          #
          # Further notes from when we did this for Qt5:
@@ -991,18 +1087,18 @@ def installDependencies():
          #    │ Note however that, in a GitHub runner, the first of these will give "[Errno 13] Permission denied".  │
          #    └──────────────────────────────────────────────────────────────────────────────────────────────────────┘
          #
-         try:
-            # See
-            # https://stackoverflow.com/questions/1466000/difference-between-modes-a-a-w-w-and-r-in-built-in-open-function
-            # for a good summary (clearer than the Python official docs) of the mode flag on open.
-            with open("~/.bash_profile", "a+") as bashProfile:
-               bashProfile.write('export PATH="/usr/local/opt/qt@6/bin:$PATH"')
-         except IOError as ioe:
-            # This is not fatal, so we just note the error and continue
-            log.warning("Unable to write to .bash_profile: " + ioe.strerror)
-         os.environ['LDFLAGS'] = '-L/usr/local/opt/qt@6/lib'
-         os.environ['CPPFLAGS'] = '-I/usr/local/opt/qt@6/include'
-         os.environ['PKG_CONFIG_PATH'] = '/usr/local/opt/qt@6/lib/pkgconfig'
+#         try:
+#            # See
+#            # https://stackoverflow.com/questions/1466000/difference-between-modes-a-a-w-w-and-r-in-built-in-open-function
+#            # for a good summary (clearer than the Python official docs) of the mode flag on open.
+#            with open("~/.bash_profile", "a+") as bashProfile:
+#               bashProfile.write('export PATH="/usr/local/opt/qt@6/bin:$PATH"')
+#         except IOError as ioe:
+#            # This is not fatal, so we just note the error and continue
+#            log.warning("Unable to write to .bash_profile: " + ioe.strerror)
+#         os.environ['LDFLAGS'] = '-L/usr/local/opt/qt@6/lib'
+#         os.environ['CPPFLAGS'] = '-I/usr/local/opt/qt@6/include'
+#         os.environ['PKG_CONFIG_PATH'] = '/usr/local/opt/qt@6/lib/pkgconfig'
 
          #
          # See comment about CMAKE_PREFIX_PATH in CMakeLists.txt.  I think this is rather too soon to try to do this,
@@ -1010,46 +1106,12 @@ def installDependencies():
          #
          # Typically, this is going to set CMAKE_PREFIX_PATH to /usr/local/opt/qt@6
          #
-         qtPrefixPath = btUtils.abortOnRunFail(
-            subprocess.run(['brew', '--prefix', 'qt@6'], capture_output=True)
-         ).stdout.decode('UTF-8').rstrip()
-         log.debug('Qt Prefix Path: ' + qtPrefixPath)
-         os.environ['CMAKE_PREFIX_PATH'] = qtPrefixPath;
-         btUtils.abortOnRunFail(subprocess.run(['tree', '-sh', qtPrefixPath], capture_output=False))
-
-         #
-         # In theory, we can now install MacPorts.  However, I didn't manage to get the following working.  The
-         # configure script complains about the lack of /usr/local/.//mkspecs/macx-clang.  So, for now, we comment this
-         # bit out and install MacPorts for GitHub actions via the mac.yml script.
-         #
-         # This is a source install - per instructions at https://guide.macports.org/#installing.macports.source.  In
-         # principle, we could install a precompiled binary, but it's a bit painful to do programatically as even to
-         # download the right package you have to know not just the the Darwin version of MacOS you are running, but
-         # also its "release name" (aka "friendly name").  See
-         # https://apple.stackexchange.com/questions/333452/how-can-i-find-the-friendly-name-of-the-operating-system-from-the-shell-term
-         # for various ways to do this if we had to, though we might just as easily copy the info
-         # from https://en.wikipedia.org/wiki/MacOS#Timeline_of_releases
-         #
-         # The instructions at https://guide.macports.org/#installing say that we probably don't need to install Xcode
-         # as only a few ports need it.  So, for now, we haven't tried to install that.
-         #
-##         log.debug('Installing MacPorts')
-##         btUtils.abortOnRunFail(subprocess.run(['curl', '-O', 'https://distfiles.macports.org/MacPorts/MacPorts-2.10.2.tar.bz2']))
-##         btUtils.abortOnRunFail(subprocess.run(['tar', 'xf', 'MacPorts-2.10.2.tar.bz2']))
-##         btUtils.abortOnRunFail(subprocess.run(['cd', 'MacPorts-2.10.2/']))
-##         btUtils.abortOnRunFail(subprocess.run(['./configure']))
-##         btUtils.abortOnRunFail(subprocess.run(['make']))
-##         btUtils.abortOnRunFail(subprocess.run(['sudo', 'make', 'install']))
-##         btUtils.abortOnRunFail(subprocess.run(['export', 'PATH=/opt/local/bin:/opt/local/sbin:$PATH']))
-
-         #
-         # Now install Xalan-C via MacPorts
-         #
-         installListPort = ['xalanc',
-                            'xercesc3']
-         for packageToInstall in installListPort:
-            log.debug('Installing ' + packageToInstall + ' via MacPorts')
-            btUtils.abortOnRunFail(subprocess.run(['sudo', 'port', 'install', packageToInstall]))
+#         qtPrefixPath = btUtils.abortOnRunFail(
+#            subprocess.run(['brew', '--prefix', 'qt@6'], capture_output=True)
+#         ).stdout.decode('UTF-8').rstrip()
+#         log.debug('Qt Prefix Path: ' + qtPrefixPath)
+#         os.environ['CMAKE_PREFIX_PATH'] = qtPrefixPath;
+#         btUtils.abortOnRunFail(subprocess.run(['tree', '-sh', qtPrefixPath], capture_output=False))
 
          #
          # dmgbuild is a Python package that provides a command line tool to create macOS disk images (aka .dmg
@@ -1058,7 +1120,7 @@ def installDependencies():
          # Note that we install with the [badge_icons] extra so we can use the badge_icon setting (see
          # https://dmgbuild.readthedocs.io/en/latest/settings.html#badge_icon)
          #
-         btUtils.abortOnRunFail(subprocess.run(['pip3', 'install', 'dmgbuild[badge_icons]']))
+#         btUtils.abortOnRunFail(subprocess.run(['pip3', 'install', 'dmgbuild[badge_icons]']))
 
       case _:
          log.critical('Unrecognised platform: ' + platform.system())
@@ -2273,6 +2335,21 @@ def doPackage():
          #    - libxalanMsg -- a library that libxalan-c uses (so an indirect rather than direct dependency)
          #    - libqsqlpsql.dylib -- which would be needed for any user that wants to use PostgreSQL instead of SQLite
          #
+
+         #
+         # Since moving to Qt6, we also have to do some extra things to avoid the following errors:
+         #    - Library not loaded: @rpath/QtDBus.framework/Versions/A/QtDBus
+         #    - Library not loaded: @rpath/QtNetwork.framework/Versions/A/QtNetwork
+         # I _think_ the problem with these is that they are not direct dependencies of our application (eg, as shown
+         # below, they do not appear in the output from otool), but rather dependencies of other Qt libraries.  The
+         # detailed error messages imply it is QtGui that needs QtDBus and QtMultimedia that needs QtNetwork.
+         #
+         #    - libdbus-1 library -- as explained at https://doc.qt.io/qt-6/macos-issues.html#d-bus-and-macos
+         #
+         # TODO: Still working this bit out!
+         #
+         # See https://github.com/orgs/Homebrew/discussions/2823 for problems using macdeployqt with homebrew installation of Qt
+         #
          previousWorkingDirectory = pathlib.Path.cwd().as_posix()
          log.debug('Running otool before macdeployqt')
          os.chdir(dir_packages_mac_bin)
@@ -2284,8 +2361,21 @@ def doPackage():
          ).stdout.decode('UTF-8')
          log.debug('Output of `otool -L' + capitalisedProjectName + '`: ' + otoolOutputExe)
          #
-         # The output from otool at this stage will be along the following lines (though what's below is from when we
-         # were using Qt5):
+         # The output from otool at this stage will be along the following lines:
+         #
+         #    [capitalisedProjectName]:
+         #       /opt/homebrew/opt/qt/lib/QtCore.framework/Versions/A/QtCore (compatibility version 6.0.0, current version 6.7.2)
+         #       /opt/homebrew/opt/qt/lib/QtGui.framework/Versions/A/QtGui (compatibility version 6.0.0, current version 6.7.2)
+         #       /opt/homebrew/opt/qt/lib/QtMultimedia.framework/Versions/A/QtMultimedia (compatibility version 6.0.0, current version 6.7.2)
+         #       /opt/homebrew/opt/qt/lib/QtPrintSupport.framework/Versions/A/QtPrintSupport (compatibility version 6.0.0, current version 6.7.2)
+         #       /opt/homebrew/opt/qt/lib/QtSql.framework/Versions/A/QtSql (compatibility version 6.0.0, current version 6.7.2)
+         #       /opt/homebrew/opt/qt/lib/QtWidgets.framework/Versions/A/QtWidgets (compatibility version 6.0.0, current version 6.7.2)
+         #       /opt/local/lib/libxerces-c-3.2.dylib (compatibility version 0.0.0, current version 0.0.0)
+         #       /opt/local/lib/libxalan-c.112.dylib (compatibility version 112.0.0, current version 112.0.0)
+         #       /usr/lib/libc++.1.dylib (compatibility version 1.0.0, current version 1700.255.5)
+         #       /usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1345.120.2)
+         #
+         # Similarly, here's an example from when we were using Qt5:
          #
          #    [capitalisedProjectName]:
          #       /usr/local/opt/qt@5/lib/QtCore.framework/Versions/5/QtCore (compatibility version 5.15.0, current version 5.15.8)
@@ -2428,6 +2518,10 @@ def doPackage():
          log.debug('Running macdeployqt')
          os.chdir(dir_packages_platform)
          btUtils.abortOnRunFail(
+            #
+            # NOTE: For at least some macdeployqt errors, it will not return an error code, but will merely log an ERROR
+            #       message (eg "ERROR: Cannot resolve rpath") and carry on.
+            #
             #
             # Note that app bundle name has to be the first parameter and options come afterwards.
             # The -executable argument is to automatically alter the search path of the executable for the Qt libraries
