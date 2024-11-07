@@ -256,7 +256,7 @@ struct EditorBaseField {
    /**
     * \brief Set property on supplied object from edit field
     */
-   void setPropertyFromEditField(QObject & object) const {
+   void setPropertyFromEditField(QObject & object) const requires (std::same_as<EditFieldType, BtComboBox>) {
       //
       // The only "special case" we can't handle with template specialisation is where we have a combo-box that is
       // controlling the physical quantity for another field (eg whether an input field is mass or volume), there is
@@ -266,6 +266,10 @@ struct EditorBaseField {
       if (!this->hasControlledField) {
          object.setProperty(*property, this->getFieldValue());
       }
+      return;
+   }
+   void setPropertyFromEditField(QObject & object) const requires (!std::same_as<EditFieldType, BtComboBox>) {
+      object.setProperty(*property, this->getFieldValue());
       return;
    }
 
@@ -330,6 +334,20 @@ struct EditorBaseField {
    }
 
 };
+
+/**
+ * \brief Convenience function for logging
+ */
+template<class S>
+S & operator<<(S & stream, WhenToWriteField const & val) {
+   switch (val) {
+      case WhenToWriteField::Normal: stream << "WhenToWriteField::Normal"; break;
+      case WhenToWriteField::Late  : stream << "WhenToWriteField::Late"  ; break;
+      case WhenToWriteField::Never : stream << "WhenToWriteField::Never" ; break;
+   }
+   return stream;
+}
+
 
 using EditorBaseFieldVariant = std::variant<
    // Not all permutations are valid, hence why some are commented out

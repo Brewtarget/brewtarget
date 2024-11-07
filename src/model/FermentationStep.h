@@ -27,7 +27,7 @@
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
 // See comment in model/NamedEntity.h
-#define AddPropertyName(property) namespace PropertyNames::FermentationStep { BtStringConst const property{#property}; }
+#define AddPropertyName(property) namespace PropertyNames::FermentationStep { inline BtStringConst const property{#property}; }
 AddPropertyName(freeRise)
 AddPropertyName(vessel  )
 #undef AddPropertyName
@@ -47,7 +47,7 @@ class FermentationStep : public StepExtended, public StepBase<FermentationStep, 
    Q_OBJECT
 
    STEP_COMMON_DECL(Fermentation, FermentationStepOptions)
-   // See model/SteppedBase.h for info, getters and setters for these properties
+   // See model/EnumeratedBase.h for info, getters and setters for these properties
    Q_PROPERTY(int ownerId      READ ownerId      WRITE setOwnerId   )
    Q_PROPERTY(int stepNumber   READ stepNumber   WRITE setStepNumber)
    // See model/StepBase.h for info, getters and setters for these properties

@@ -26,7 +26,7 @@
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
 // See comment in model/NamedEntity.h
-#define AddPropertyName(property) namespace PropertyNames::IngredientAmount { BtStringConst const property{#property}; }
+#define AddPropertyName(property) namespace PropertyNames::IngredientAmount { inline BtStringConst const property{#property}; }
 AddPropertyName(amount  )
 AddPropertyName(isWeight) // Deprecated.  Used only for BeerXML support
 AddPropertyName(measure )

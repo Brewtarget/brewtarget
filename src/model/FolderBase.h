@@ -26,7 +26,7 @@
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
 // See comment in model/NamedEntity.h
-#define AddPropertyName(property) namespace PropertyNames::FolderBase { BtStringConst const property{#property}; }
+#define AddPropertyName(property) namespace PropertyNames::FolderBase { inline BtStringConst const property{#property}; }
 AddPropertyName(folder)
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================

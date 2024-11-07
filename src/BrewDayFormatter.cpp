@@ -197,7 +197,7 @@ QString BrewDayFormatter::buildInstructionHtml() {
              .arg(tr("Step"));
 
    bool useAlt = true;
-   for (auto instruction : recObs->steps()) {
+   for (auto instruction : recObs->instructions()) {
       useAlt = !useAlt;
       QString stepTime, tmp;
       QList<QString> reagents;
@@ -259,7 +259,7 @@ QList<QStringList> BrewDayFormatter::buildInstructionList() {
    ret.append(row);
    row.clear();
 
-   for (auto instruction : recObs->steps()) {
+   for (auto instruction : recObs->instructions()) {
       QString stepTime, tmp;
       QList<QString> reagents;
 

@@ -38,9 +38,9 @@ class RecipeAdditionYeast;
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
 // See comment in model/NamedEntity.h
-#define AddPropertyName(property) namespace PropertyNames::Yeast { BtStringConst const property{#property}; }
+#define AddPropertyName(property) namespace PropertyNames::Yeast { inline BtStringConst const property{#property}; }
 AddPropertyName(alcoholTolerance_pct     )
-AddPropertyName(attenuationTypical_pct   ) // This is for use only by BeerXML
+AddPropertyName(attenuationTypical_pct   ) // Calculated
 AddPropertyName(attenuationMax_pct       )
 AddPropertyName(attenuationMin_pct       )
 AddPropertyName(bestFor                  )
@@ -229,7 +229,7 @@ public:
    Q_PROPERTY(std::optional<int>     maxReuse                  READ maxReuse                  WRITE setMaxReuse                 )
 
    //! \brief This is only for BeerXML
-   Q_PROPERTY(double attenuationTypical_pct     READ attenuationTypical_pct)
+   Q_PROPERTY(double attenuationTypical_pct     READ attenuationTypical_pct   STORED false)
 
    // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
 
@@ -316,16 +316,16 @@ public:
    /**
     * \brief Get the best attenuation figure to use for this yeast.
     *
-    *        Otherwise, if \c attenuationMin_pct and \c attenuationMax_pct are set, return the mean of those two
-    *        figures.  Otherwise returns \c Yeast::DefaultAttenuation_pct.
+    *        If \c attenuationMin_pct and \c attenuationMax_pct are set, return the mean of those two figures.
+    *        Otherwise returns \c Yeast::DefaultAttenuation_pct.
     */
    double attenuationTypical_pct() const;
 
 signals:
 
 protected:
-   virtual bool isEqualTo(NamedEntity const & other) const;
-   virtual ObjectStore & getObjectStoreTypedInstance() const;
+   virtual bool isEqualTo(NamedEntity const & other) const override;
+   virtual ObjectStore & getObjectStoreTypedInstance() const override;
 
 private:
    Type                        m_type                     ;

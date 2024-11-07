@@ -45,6 +45,7 @@
 #include "measurement/Unit.h"
 #include "model/Boil.h"
 #include "model/BoilStep.h"
+#include "model/BrewNote.h"
 #include "model/Equipment.h"
 #include "model/Fermentable.h"
 #include "model/Fermentation.h"
@@ -55,7 +56,6 @@
 #include "model/MashStep.h"
 #include "model/Misc.h"
 #include "model/NamedParameterBundle.h"
-#include "model/OwnedSet.h"
 #include "model/RecipeAdditionFermentable.h"
 #include "model/RecipeAdditionHop.h"
 #include "model/RecipeAdditionMisc.h"
@@ -153,7 +153,6 @@ namespace {
 template<> BtStringConst const & Recipe::propertyNameFor<Boil                     >() { return PropertyNames::Recipe::boilId                ; }
 template<> BtStringConst const & Recipe::propertyNameFor<Equipment                >() { return PropertyNames::Recipe::equipmentId           ; }
 template<> BtStringConst const & Recipe::propertyNameFor<Fermentation             >() { return PropertyNames::Recipe::fermentationId        ; }
-///template<> BtStringConst const & Recipe::propertyNameFor<Instruction              >() { return PropertyNames::Recipe::instructionIds        ; }
 template<> BtStringConst const & Recipe::propertyNameFor<Mash                     >() { return PropertyNames::Recipe::mashId                ; }
 template<> BtStringConst const & Recipe::propertyNameFor<Style                    >() { return PropertyNames::Recipe::styleId               ; }
 // NB it is fermentableAdditions not fermentableAdditionIds that we want to use here, etc
@@ -167,6 +166,7 @@ template<> BtStringConst const & Recipe::propertyNameFor<RecipeUseOfWater       
 // TBD: This is needed for WaterButton, but we should have a proper look at that some day
 template<> BtStringConst const & Recipe::propertyNameFor<Water                    >() { return PropertyNames::Recipe::waterUses             ; }
 
+///template<> BtStringConst const & Recipe::propertyNameFor<Instruction              >() { return PropertyNames::Recipe::instructions        ; }
 
 // This private implementation class holds all private non-virtual members of Recipe
 class Recipe::impl {
@@ -177,13 +177,6 @@ public:
     */
    impl(Recipe & self) :
       m_self                 {self},
-      m_fermentableAdditions {self},
-      m_hopAdditions         {self},
-      m_miscAdditions        {self},
-      m_yeastAdditions       {self},
-      m_saltAdjustments      {self},
-      m_waterUses            {self},
-      m_brewNotes            {self},
       m_ABV_pct              {0.0},
       m_color_srm            {0.0},
       m_boilGrav             {0.0},
@@ -211,18 +204,7 @@ public:
    }
 
    impl(Recipe & self, Recipe const & other) :
-      // Our internal "self" reference, and the equivalents in our owned sets, obviously need to point to the new Recipe
-      // from whose constructor we are being called.  Where relevant, each owned set will also do a deep copy of the
-      // contents of the corresponding owned set in the Recipe we are copying.
       m_self                 {self},
-      m_fermentableAdditions {self, other.pimpl->m_fermentableAdditions},
-      m_hopAdditions         {self, other.pimpl->m_hopAdditions        },
-      m_miscAdditions        {self, other.pimpl->m_miscAdditions       },
-      m_yeastAdditions       {self, other.pimpl->m_yeastAdditions      },
-      m_saltAdjustments      {self, other.pimpl->m_saltAdjustments     },
-      m_waterUses            {self, other.pimpl->m_waterUses           },
-      m_brewNotes            {self, other.pimpl->m_brewNotes           },
-      // Other fields are just a simple copy
       m_ABV_pct              {other.pimpl->m_ABV_pct              },
       m_color_srm            {other.pimpl->m_color_srm            },
       m_boilGrav             {other.pimpl->m_boilGrav             },
@@ -291,6 +273,10 @@ public:
          // are now picked up in Recipe::acceptChangeToContainedObject from the generic `changed` signal
          connect(equipment.get(), &NamedEntity::changed, &this->m_self, &Recipe::acceptChangeToContainedObject);
       }
+
+      this->m_self.m_fermentableAdditions.connectAllItemChangedSignals();
+      this->m_self.        m_hopAdditions.connectAllItemChangedSignals();
+      this->m_self.      m_yeastAdditions.connectAllItemChangedSignals();
 
       // Below should not be handled via OwnedSet connecting to acceptChangeToRecipeAdditionFermentable etc
 ///      auto fermentableAdditions = this->m_self.fermentableAdditions();
@@ -567,7 +553,7 @@ public:
          ins->setDirections(pi.text);
          ins->setInterval(pi.time);
 
-         m_self.addStep(ins);
+         this->m_self.m_instructions.add(ins);
       }
       return;
    }
@@ -673,7 +659,7 @@ public:
       ins->setDirections(str);
       ins->addReagent(tmp);
 
-      this->m_self.addStep(ins);
+      this->m_self.m_instructions.add(ins);
 
       return;
    }
@@ -703,7 +689,7 @@ public:
       auto ins = std::make_shared<Instruction>();
       ins->setName(tr("Post boil"));
       ins->setDirections(str);
-      this->m_self.addStep(ins);
+      this->m_self.m_instructions.add(ins);
 
       return;
    }
@@ -722,7 +708,7 @@ public:
       str += tr("to the mash tun.");
       ins->setDirections(str);
 
-      this->m_self.addStep(ins);
+      this->m_self.m_instructions.add(ins);
 
       return;
    }
@@ -745,7 +731,7 @@ public:
       str += tr("for upcoming infusions.");
       ins->setDirections(str);
 
-      this->m_self.addStep(ins);
+      this->m_self.m_instructions.add(ins);
 
       return;
    }
@@ -767,7 +753,7 @@ public:
       ins->setName(tr("First wort hopping"));
       ins->setDirections(str);
 
-      this->m_self.addStep(ins);
+      this->m_self.m_instructions.add(ins);
 
       return;
    }
@@ -797,14 +783,14 @@ public:
       ins->setDirections(str);
       ins->addReagent(tmp);
 
-      this->m_self.addStep(ins);
+      this->m_self.m_instructions.add(ins);
 
       return;
    }
 
    void saltWater(RecipeAdjustmentSalt::WhenToAdd when) {
 
-      if (!this->m_self.mash() || this->m_self.saltAdjustmentIds().size() == 0) {
+      if (!this->m_self.mash() || this->m_self.saltAdjustments().size() == 0) {
          return;
       }
 
@@ -825,7 +811,7 @@ public:
       str += QString(tr(" into the %1 water").arg(tmp));
       ins->setDirections(str);
 
-      this->m_self.addStep(ins);
+      this->m_self.m_instructions.add(ins);
 
       return;
    }
@@ -1109,10 +1095,10 @@ public:
       double nonFermentableSugars_kg   = sugars.nonFermentableSugars_kg;  // Mass of sugar that is not fermentable (also counted in sugar_kg_ignoreEfficiency)
 
       // Uncomment for diagnosing problems with calculations
-//      qDebug() <<
-//         Q_FUNC_INFO << "Recipe #" << this->m_self.key() << "(" << this->m_self.name() << ") "
-//         "sugar_kg: " << sugar_kg << ", sugar_kg_ignoreEfficiency: " << sugar_kg_ignoreEfficiency <<
-//         ", nonFermentableSugars_kg:" << nonFermentableSugars_kg;
+      qDebug() <<
+         Q_FUNC_INFO << "Recipe #" << this->m_self.key() << "(" << this->m_self.name() << ") "
+         "sugar_kg: " << sugar_kg << ", sugar_kg_ignoreEfficiency: " << sugar_kg_ignoreEfficiency <<
+         ", nonFermentableSugars_kg:" << nonFermentableSugars_kg;
 
       // We might lose some sugar in the form of Trub/Chiller loss and lauter deadspace.
       auto equipment = this->m_self.equipment();
@@ -1154,12 +1140,17 @@ public:
          tmp_nonferm_pnts = 0.0;
       }
 
-      // Calculage FG
+      // Calculate FG
+      // First, get the yeast with the greatest attenuation.
       double attenuation_pct = 0.0;
       for (auto yeastAddition : this->m_self.yeastAdditions()) {
-         // Get the yeast with the greatest attenuation.
-         if (yeastAddition->attenuation_pct() > attenuation_pct) {
-            attenuation_pct = yeastAddition->yeast()->attenuationTypical_pct();
+         // For each yeast addition, prefer the attenuation specified for that addition if available, otherwise as the
+         // underlying yeast object for a typical value -- which in the worst case can be Yeast::DefaultAttenuation_pct,
+         // but is usually the mean of Yeast::attenuationMin_pct() and Yeast::attenuationMax_pct().
+         double const valueForThisAddition =
+            yeastAddition->attenuation_pct().value_or(yeastAddition->yeast()->attenuationTypical_pct());
+         if (valueForThisAddition > attenuation_pct) {
+            attenuation_pct = valueForThisAddition;
          }
       }
       // This means we have yeast, but they neglected to provide attenuation percentages.
@@ -1181,9 +1172,10 @@ public:
       }
 
       // Uncomment for diagnosing problems with calculations
-//      qDebug() <<
-//         Q_FUNC_INFO << "Recipe #" << this->m_self.key() << "(" << this->m_self.name() << ") "
-//         "m_og_fermentable: " << m_og_fermentable << ", m_fg_fermentable: " << m_fg_fermentable;
+      qDebug() <<
+         Q_FUNC_INFO << "Recipe #" << this->m_self.key() << "(" << this->m_self.name() << ") "
+         "attenuation_pct:" << attenuation_pct << ", m_og_fermentable:" << m_og_fermentable << ", m_fg_fermentable: " <<
+         m_fg_fermentable;
 
       if (!qFuzzyCompare(this->m_self.m_og, calculatedOg)) {
          qDebug() <<
@@ -1376,28 +1368,6 @@ public:
    //================================================ Member variables =================================================
    Recipe & m_self;
 
-   OwnedSet<Recipe, RecipeAdditionFermentable, PropertyNames::Recipe::fermentableAdditions, &Recipe::acceptChangeToRecipeAdditionFermentable> m_fermentableAdditions;
-   OwnedSet<Recipe, RecipeAdditionHop        , PropertyNames::Recipe::hopAdditions        , &Recipe::acceptChangeToRecipeAdditionHop        > m_hopAdditions        ;
-   OwnedSet<Recipe, RecipeAdditionMisc       , PropertyNames::Recipe::miscAdditions       , &Recipe::acceptChangeToRecipeAdditionMisc       > m_miscAdditions       ;
-   OwnedSet<Recipe, RecipeAdditionYeast      , PropertyNames::Recipe::yeastAdditions      , &Recipe::acceptChangeToRecipeAdditionYeast      > m_yeastAdditions      ;
-   OwnedSet<Recipe, RecipeAdjustmentSalt     , PropertyNames::Recipe::saltAdjustments     , &Recipe::acceptChangeToRecipeAdjustmentSalt     > m_saltAdjustments     ;
-   OwnedSet<Recipe, RecipeUseOfWater         , PropertyNames::Recipe::waterUses           , &Recipe::acceptChangeToRecipeUseOfWater         > m_waterUses           ;
-
-   /**
-    * \brief Each \c BrewNote is a record of a brew day.  We assume that if you're copying a \c Recipe, it is in order
-    *        to modify it into a new \c Recipe, in which case it does not make sense to bring the original brew notes
-    *        across to the copy.
-    */
-   OwnedSet<Recipe, BrewNote                 , PropertyNames::Recipe::brewNotes           , &Recipe::acceptChangeToBrewNote,
-                                               OwnedSetOptions{.copyable = false}         > m_brewNotes           ;
-
-   /**
-    * \brief It's sometimes useful to be able to access the above member variables by type.  This templated member
-    *        function allows that.  See below for specialisations (which have to be outside the class declaration,
-    *        otherwise the compiler complains about being unable to deduce the return type.
-    */
-   template<class RA> auto & ownedSetFor();
-
    // Calculated properties.
    double        m_ABV_pct              ;
    double        m_color_srm            ;
@@ -1419,13 +1389,27 @@ public:
 
 };
 
-template<> auto & Recipe::impl::ownedSetFor<RecipeAdditionFermentable>() { return this->m_fermentableAdditions; }
-template<> auto & Recipe::impl::ownedSetFor<RecipeAdditionHop        >() { return this->m_hopAdditions        ; }
-template<> auto & Recipe::impl::ownedSetFor<RecipeAdditionMisc       >() { return this->m_miscAdditions       ; }
-template<> auto & Recipe::impl::ownedSetFor<RecipeAdditionYeast      >() { return this->m_yeastAdditions      ; }
-template<> auto & Recipe::impl::ownedSetFor<RecipeAdjustmentSalt     >() { return this->m_saltAdjustments     ; }
-template<> auto & Recipe::impl::ownedSetFor<RecipeUseOfWater         >() { return this->m_waterUses           ; }
-template<> auto & Recipe::impl::ownedSetFor<BrewNote                 >() { return this->m_brewNotes           ; }
+template<> auto & Recipe::ownedSetFor<RecipeAdditionFermentable>() const { return this->m_fermentableAdditions; }
+template<> auto & Recipe::ownedSetFor<RecipeAdditionHop        >() const { return this->m_hopAdditions        ; }
+template<> auto & Recipe::ownedSetFor<RecipeAdditionMisc       >() const { return this->m_miscAdditions       ; }
+template<> auto & Recipe::ownedSetFor<RecipeAdditionYeast      >() const { return this->m_yeastAdditions      ; }
+template<> auto & Recipe::ownedSetFor<RecipeAdjustmentSalt     >() const { return this->m_saltAdjustments     ; }
+template<> auto & Recipe::ownedSetFor<RecipeUseOfWater         >() const { return this->m_waterUses           ; }
+template<> auto & Recipe::ownedSetFor<BrewNote                 >() const { return this->m_brewNotes           ; }
+template<> auto & Recipe::ownedSetFor<Instruction              >() const { return this->m_instructions        ; }
+//
+// Maybe there is a clever way to do these non-const versions without the copy-and-paste repetition, but the auto
+// return type (which saves an even bigger copy-and-paste) makes it hard.
+//
+template<> auto & Recipe::ownedSetFor<RecipeAdditionFermentable>() { return this->m_fermentableAdditions; }
+template<> auto & Recipe::ownedSetFor<RecipeAdditionHop        >() { return this->m_hopAdditions        ; }
+template<> auto & Recipe::ownedSetFor<RecipeAdditionMisc       >() { return this->m_miscAdditions       ; }
+template<> auto & Recipe::ownedSetFor<RecipeAdditionYeast      >() { return this->m_yeastAdditions      ; }
+template<> auto & Recipe::ownedSetFor<RecipeAdjustmentSalt     >() { return this->m_saltAdjustments     ; }
+template<> auto & Recipe::ownedSetFor<RecipeUseOfWater         >() { return this->m_waterUses           ; }
+template<> auto & Recipe::ownedSetFor<BrewNote                 >() { return this->m_brewNotes           ; }
+template<> auto & Recipe::ownedSetFor<Instruction              >() { return this->m_instructions        ; }
+
 
 QString Recipe::localisedName() { return tr("Recipe"); }
 
@@ -1482,8 +1466,6 @@ bool Recipe::isEqualTo(NamedEntity const & other) const {
       //    - Equipment, as you could brew the same recipe on different sets of equipment
       //    - Salt additions, since salts are typically added to correct water profiles
       //
-//      ObjectStoreWrapper::compareById<Equipment>(this->m_equipmentId, rhs.m_equipmentId) &&
-//      ObjectStoreWrapper::compareListByIds<Instruction      >(this->pimpl->instructionIds  , rhs.pimpl->instructionIds) &&
       // The comparisons for each type of addition depend on them being in some canonical ordering that does not depend
       // on their database IDs.  However, we don't have to worry about this here.  The AutoCompare does the sorting for
       // us (on copies of the lists) using the operator<=> defined in RecipeAdditionBase.
@@ -1493,9 +1475,7 @@ bool Recipe::isEqualTo(NamedEntity const & other) const {
       Utils::AutoCompare(this->      yeastAdditions(), rhs.      yeastAdditions()) &&
       Utils::AutoCompare(this->waterUses           (), rhs.waterUses           ()) &&
       //
-      // Parent classes have to match too, except that, as above, we deliberately don't add
-      //   && this->SteppedOwnerBase<Recipe, Instruction>::doIsEqualTo(rhs)
-      // here, because we're deliberately ignoring instructions in our equality test.
+      // Parent classes have to match too.
       //
       this->FolderBase<Recipe>::doIsEqualTo(rhs)
 
@@ -1576,12 +1556,12 @@ TypeLookup const Recipe::typeLookup {
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::beerAcidity_pH         , Recipe::m_beerAcidity_pH         , Measurement::PhysicalQuantity::Acidity   ),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::apparentAttenuation_pct, Recipe::m_apparentAttenuation_pct,           NonPhysicalQuantity::Percentage),
 
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::fermentableAdditionIds, Recipe::fermentableAdditionIds),
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::hopAdditionIds        , Recipe::hopAdditionIds        ),
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::miscAdditionIds       , Recipe::miscAdditionIds       ),
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::yeastAdditionIds      , Recipe::yeastAdditionIds      ),
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::saltAdjustmentIds     , Recipe::saltAdjustmentIds     ),
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::waterUseIds           , Recipe::waterUseIds           ),
+///      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::fermentableAdditionIds, Recipe::fermentableAdditionIds),
+///      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::hopAdditionIds        , Recipe::hopAdditionIds        ),
+///      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::miscAdditionIds       , Recipe::miscAdditionIds       ),
+///      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::yeastAdditionIds      , Recipe::yeastAdditionIds      ),
+///      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::saltAdjustmentIds     , Recipe::saltAdjustmentIds     ),
+///      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::waterUseIds           , Recipe::waterUseIds           ),
    },
    // Parent classes lookup
    {&NamedEntity::typeLookup,
@@ -1592,7 +1572,6 @@ static_assert(std::is_base_of<FolderBase<Recipe>, Recipe>::value);
 Recipe::Recipe(QString name) :
    NamedEntity              {name, true                   },
    FolderBase<Recipe>       {},
-   SteppedOwnerBase<Recipe, Instruction>{},
    pimpl                    {std::make_unique<impl>(*this)},
    m_type                   {Recipe::Type::AllGrain       },
    m_brewer                 {""                           },
@@ -1618,6 +1597,14 @@ Recipe::Recipe(QString name) :
    m_fermentationId         {-1                  },
    m_beerAcidity_pH         {std::nullopt        },
    m_apparentAttenuation_pct{std::nullopt        },
+   m_fermentableAdditions   {*this               },
+   m_hopAdditions           {*this               },
+   m_miscAdditions          {*this               },
+   m_yeastAdditions         {*this               },
+   m_saltAdjustments        {*this               },
+   m_waterUses              {*this               },
+   m_brewNotes              {*this               },
+   m_instructions           {*this               },
    m_og                     {1.0                 },
    m_fg                     {1.0                 },
    m_locked                 {false               },
@@ -1636,7 +1623,6 @@ Recipe::Recipe(QString name) :
 Recipe::Recipe(NamedParameterBundle const & namedParameterBundle) :
    NamedEntity          {namedParameterBundle},
    FolderBase<Recipe>   {namedParameterBundle},
-   SteppedOwnerBase<Recipe, Instruction>{namedParameterBundle},
    pimpl                {std::make_unique<impl>(*this, namedParameterBundle)},
    SET_REGULAR_FROM_NPB (m_type                   , namedParameterBundle, PropertyNames::Recipe::type                   ),
    SET_REGULAR_FROM_NPB (m_brewer                 , namedParameterBundle, PropertyNames::Recipe::brewer                 , ""),
@@ -1663,6 +1649,15 @@ Recipe::Recipe(NamedParameterBundle const & namedParameterBundle) :
    SET_REGULAR_FROM_NPB (m_fermentationId         , namedParameterBundle, PropertyNames::Recipe::fermentationId         , -1),
    SET_REGULAR_FROM_NPB (m_beerAcidity_pH         , namedParameterBundle, PropertyNames::Recipe::beerAcidity_pH         , std::nullopt),
    SET_REGULAR_FROM_NPB (m_apparentAttenuation_pct, namedParameterBundle, PropertyNames::Recipe::apparentAttenuation_pct, std::nullopt),
+   // See comment in model/OwnedSet.h for why an OwnedSet never needs to read from NamedParameterBundle
+   m_fermentableAdditions{*this},
+   m_hopAdditions        {*this},
+   m_miscAdditions       {*this},
+   m_yeastAdditions      {*this},
+   m_saltAdjustments     {*this},
+   m_waterUses           {*this},
+   m_brewNotes           {*this},
+   m_instructions        {*this},
    // Note that, although we read them in here, the OG and FG are going to get recalculated when someone first tries to
    // access them.
    SET_REGULAR_FROM_NPB (m_og                     , namedParameterBundle, PropertyNames::Recipe::og                     ),
@@ -1686,7 +1681,6 @@ Recipe::Recipe(NamedParameterBundle const & namedParameterBundle) :
 Recipe::Recipe(Recipe const & other) :
    NamedEntity{other},
    FolderBase<Recipe>{other},
-   SteppedOwnerBase<Recipe, Instruction>{other}, // This handles copying instructions
    // The impl copy constructor calls the OwnedSet copy constructor for each type of recipe addition etc which, in turn
    // does a deep copy of the corresonding additions
    pimpl{std::make_unique<impl>(*this, other)},
@@ -1714,6 +1708,15 @@ Recipe::Recipe(Recipe const & other) :
    m_fermentationId         {other.m_fermentationId    },  // But see additional logic in body
    m_beerAcidity_pH         {other.m_beerAcidity_pH    },
    m_apparentAttenuation_pct{other.m_apparentAttenuation_pct},
+   // Owned sets need the correct owner, but otherwise can handle whatever deep copying is needed.
+   m_fermentableAdditions   {*this, other.m_fermentableAdditions},
+   m_hopAdditions           {*this, other.m_hopAdditions        },
+   m_miscAdditions          {*this, other.m_miscAdditions       },
+   m_yeastAdditions         {*this, other.m_yeastAdditions      },
+   m_saltAdjustments        {*this, other.m_saltAdjustments     },
+   m_waterUses              {*this, other.m_waterUses           },
+   m_brewNotes              {*this, other.m_brewNotes           },
+   m_instructions           {*this, other.m_instructions        },
    m_og                     {other.m_og                },
    m_fg                     {other.m_fg                },
    m_locked                 {other.m_locked            },
@@ -1762,14 +1765,14 @@ void Recipe::setKey(int key) {
    // This function is called because we've just inserted a new Recipe in the DB and we now know its primary key.
    // Various things that we own, such as Instructions and RecipeAdditions, need to know about our key.
    //
-   this->SteppedOwnerBase<Recipe, Instruction>::doSetKey(key);
-   this->pimpl->m_fermentableAdditions         .doSetKey(key);
-   this->pimpl->m_hopAdditions                 .doSetKey(key);
-   this->pimpl->m_miscAdditions                .doSetKey(key);
-   this->pimpl->m_yeastAdditions               .doSetKey(key);
-   this->pimpl->m_saltAdjustments              .doSetKey(key);
-   this->pimpl->m_waterUses                    .doSetKey(key);
-   this->pimpl->m_brewNotes                    .doSetKey(key);
+   this->m_fermentableAdditions.doSetKey(key);
+   this->m_hopAdditions        .doSetKey(key);
+   this->m_miscAdditions       .doSetKey(key);
+   this->m_yeastAdditions      .doSetKey(key);
+   this->m_saltAdjustments     .doSetKey(key);
+   this->m_waterUses           .doSetKey(key);
+   this->m_brewNotes           .doSetKey(key);
+   this->m_instructions        .doSetKey(key);
 
    // By convention, a new Recipe with no ancestor should have itself as its own ancestor.  So we need to check whether
    // to set that default here (which will then result in a DB update).  Otherwise, ancestor ID would remain as null.
@@ -1801,8 +1804,8 @@ void Recipe::generateInstructions() {
    double timeRemaining;
    double totalWaterAdded_l = 0.0;
 
-   if (this->numSteps() > 0) {
-      this->removeAllSteps();
+   if (this->m_instructions.size() > 0) {
+      this->m_instructions.removeAll();
    }
 
    QVector<PreInstruction> preinstructions;
@@ -1865,7 +1868,7 @@ void Recipe::generateInstructions() {
    startBoilIns->setName(tr("Start boil"));
    startBoilIns->setInterval(timeRemaining);
    startBoilIns->setDirections(str);
-   this->addStep(startBoilIns);
+   this->m_instructions.add(startBoilIns);
 
    /*** Get fermentables unless we haven't added yet ***/
    if (this->pimpl->hasBoilFermentable()) {
@@ -1892,7 +1895,7 @@ void Recipe::generateInstructions() {
    auto flameoutIns = std::make_shared<Instruction>();
    flameoutIns->setName(tr("Flameout"));
    flameoutIns->setDirections(tr("Stop boiling the wort."));
-   this->addStep(flameoutIns);
+   this->m_instructions.add(flameoutIns);
 
    // TODO: These get included in RecipeAddition::Stage::Boil above.  But we're going to want to rework this anyway to
    //       order by stage, step, time.
@@ -1922,7 +1925,7 @@ void Recipe::generateInstructions() {
    auto pitchIns = std::make_shared<Instruction>();
    pitchIns->setName(tr("Pitch yeast"));
    pitchIns->setDirections(str);
-   this->addStep(pitchIns);
+   this->m_instructions.add(pitchIns);
    /*** End primary yeast ***/
 
    /*** Primary misc ***/
@@ -1935,13 +1938,13 @@ void Recipe::generateInstructions() {
    auto fermentIns = std::make_shared<Instruction>();
    fermentIns->setName(tr("Ferment"));
    fermentIns->setDirections(str);
-   this->addStep(fermentIns);
+   this->m_instructions.add(fermentIns);
 
    str = tr("Transfer beer to secondary.");
    auto transferIns = std::make_shared<Instruction>();
    transferIns->setName(tr("Transfer to secondary"));
    transferIns->setDirections(str);
-   this->addStep(transferIns);
+   this->m_instructions.add(transferIns);
 
    /*** Secondary misc ***/
    this->pimpl->addPreinstructions(this->pimpl->miscSteps(RecipeAdditionMisc::Use::Secondary));
@@ -1951,7 +1954,7 @@ void Recipe::generateInstructions() {
 
    // END fermentation instructions. Let everybody know that now is the time
    // to update instructions
-   emit changed(metaProperty(*PropertyNames::SteppedOwnerBase::steps), this->steps().size());
+   emit changed(metaProperty(*PropertyNames::Recipe::instructions), static_cast<int>(this->m_instructions.size()));
 
    return;
 }
@@ -2009,7 +2012,7 @@ template<class RA> std::shared_ptr<RA> Recipe::addAddition(std::shared_ptr<RA> a
    // It's a coding error if we've ended up with a null shared_ptr
    Q_ASSERT(addition);
 
-   this->pimpl->ownedSetFor<RA>().add(addition);
+   this->ownedSetFor<RA>().add(addition);
 
    this->recalcIfNeeded(addition->ingredient()->metaObject()->className());
    return addition;
@@ -2044,7 +2047,7 @@ template<class RA> std::shared_ptr<RA> Recipe::removeAddition(std::shared_ptr<RA
    // It's a coding error to supply a null shared pointer
    Q_ASSERT(addition);
 
-   this->pimpl->ownedSetFor<RA>().remove(addition);
+   this->ownedSetFor<RA>().remove(addition);
 
    this->recalcIfNeeded(addition->ingredient()->metaObject()->className());
 
@@ -2068,7 +2071,7 @@ void Recipe::setStyle       (std::shared_ptr<Style       > val) { this->pimpl->s
 void Recipe::setEquipment   (std::shared_ptr<Equipment   > val) { this->pimpl->set<Equipment   >(val, this->m_equipmentId   ); return; }
 
 template<typename RA> void Recipe::setAdditions(QList<std::shared_ptr<RA>> val) {
-   this->pimpl->ownedSetFor<RA>().setAll(val);
+   this->ownedSetFor<RA>().setAll(val);
 
    // We don't call recalcIfNeeded here, on the assumption that this function is only used during deserialisation (eg
    // from BeerXML or BeerJSON), so there will likely be multiple calls to it before it is worth doing the calculations.
@@ -2089,8 +2092,6 @@ void Recipe::setEquipmentId   (int const id) { this->m_equipmentId    = id; retu
 void Recipe::setMashId        (int const id) { this->m_mashId         = id; return; }
 void Recipe::setBoilId        (int const id) { this->m_boilId         = id; return; }
 void Recipe::setFermentationId(int const id) { this->m_fermentationId = id; return; }
-
-///void Recipe::setInstructionIds(QVector<int> ids) {    this->pimpl->instructionIds = ids; return; }
 
 //==============================="SET" METHODS=================================
 void Recipe::setType(Recipe::Type const val) {
@@ -2395,7 +2396,8 @@ int Recipe::getFermentationId() const { return this->m_fermentationId; }
 
 // This exists because it's helpful for places outside this class to be able to access it directly
 template<typename NE> QList< std::shared_ptr<NE> > Recipe::allOwned() const {
-   return this->pimpl->ownedSetFor<NE>().items();
+   auto const & ownedSet{this->ownedSetFor<NE>()};
+   return ownedSet.items();
 }
 //
 // We would explicitly instantiate the above template function for the types that are going to use it, as a means to
@@ -2414,7 +2416,7 @@ template QList<std::shared_ptr<RecipeAdditionYeast      >> Recipe::allOwned<Reci
 template QList<std::shared_ptr<RecipeAdjustmentSalt     >> Recipe::allOwned<RecipeAdjustmentSalt     >() const;
 template QList<std::shared_ptr<RecipeUseOfWater         >> Recipe::allOwned<RecipeUseOfWater         >() const;
 template QList<std::shared_ptr<BrewNote                 >> Recipe::allOwned<BrewNote                 >() const;
-///template QList<std::shared_ptr<Instruction              >> Recipe::allOwned<Instruction              >() const;
+template QList<std::shared_ptr<Instruction              >> Recipe::allOwned<Instruction              >() const;
 
 QList<std::shared_ptr<RecipeAdditionFermentable>> Recipe::fermentableAdditions() const { return this->allOwned<RecipeAdditionFermentable>(); }
 QList<std::shared_ptr<RecipeAdditionHop        >> Recipe::        hopAdditions() const { return this->allOwned<RecipeAdditionHop        >(); }
@@ -2423,14 +2425,14 @@ QList<std::shared_ptr<RecipeAdditionYeast      >> Recipe::      yeastAdditions()
 QList<std::shared_ptr<RecipeAdjustmentSalt     >> Recipe::     saltAdjustments() const { return this->allOwned<RecipeAdjustmentSalt     >(); }
 QList<std::shared_ptr<RecipeUseOfWater         >> Recipe::           waterUses() const { return this->allOwned<RecipeUseOfWater         >(); }
 QList<std::shared_ptr<BrewNote                 >> Recipe::           brewNotes() const { return this->allOwned<BrewNote                 >(); }
-///QList<std::shared_ptr<Instruction              >> Recipe::        instructions() const { return this->allOwned<Instruction              >(); }
+QList<std::shared_ptr<Instruction              >> Recipe::        instructions() const { return this->allOwned<Instruction              >(); }
 
-QVector<int> Recipe::fermentableAdditionIds() const { return this->pimpl->ownedSetFor<RecipeAdditionFermentable>().itemIds(); }
-QVector<int> Recipe::        hopAdditionIds() const { return this->pimpl->ownedSetFor<RecipeAdditionHop        >().itemIds(); }
-QVector<int> Recipe::       miscAdditionIds() const { return this->pimpl->ownedSetFor<RecipeAdditionMisc       >().itemIds(); }
-QVector<int> Recipe::      yeastAdditionIds() const { return this->pimpl->ownedSetFor<RecipeAdditionYeast      >().itemIds(); }
-QVector<int> Recipe::     saltAdjustmentIds() const { return this->pimpl->ownedSetFor<RecipeAdjustmentSalt     >().itemIds(); }
-QVector<int> Recipe::           waterUseIds() const { return this->pimpl->ownedSetFor<RecipeUseOfWater         >().itemIds(); }
+///QVector<int> Recipe::fermentableAdditionIds() const { return this->ownedSetFor<RecipeAdditionFermentable>().itemIds(); }
+///QVector<int> Recipe::        hopAdditionIds() const { return this->ownedSetFor<RecipeAdditionHop        >().itemIds(); }
+///QVector<int> Recipe::       miscAdditionIds() const { return this->ownedSetFor<RecipeAdditionMisc       >().itemIds(); }
+///QVector<int> Recipe::      yeastAdditionIds() const { return this->ownedSetFor<RecipeAdditionYeast      >().itemIds(); }
+///QVector<int> Recipe::     saltAdjustmentIds() const { return this->ownedSetFor<RecipeAdjustmentSalt     >().itemIds(); }
+///QVector<int> Recipe::           waterUseIds() const { return this->ownedSetFor<RecipeUseOfWater         >().itemIds(); }
 
 int Recipe::getAncestorId() const { return this->m_ancestor_id; }
 
@@ -2759,7 +2761,7 @@ void Recipe::acceptChangeToContainedObject(QMetaProperty prop, QVariant val) {
 template<class Owned> void Recipe::acceptChange(QMetaProperty prop, QVariant val) {
    QObject * sender = this->sender();
    Owned * item = static_cast<Owned *>(sender);
-   this->pimpl->ownedSetFor<Owned>().acceptItemChange(*item, prop, val);
+   this->ownedSetFor<Owned>().acceptItemChange(*item, prop, val);
 
    QString signalSenderClassName = sender->metaObject()->className();
    this->recalcIfNeeded(signalSenderClassName);
@@ -2773,11 +2775,7 @@ void Recipe::acceptChangeToRecipeAdditionYeast      (QMetaProperty prop, QVarian
 void Recipe::acceptChangeToRecipeAdjustmentSalt     (QMetaProperty prop, QVariant val) { this->acceptChange<RecipeAdjustmentSalt     >(prop, val); return; }
 void Recipe::acceptChangeToRecipeUseOfWater         (QMetaProperty prop, QVariant val) { this->acceptChange<RecipeUseOfWater         >(prop, val); return; }
 void Recipe::acceptChangeToBrewNote                 (QMetaProperty prop, QVariant val) { this->acceptChange<BrewNote                 >(prop, val); return; }
-
-void Recipe::acceptStepChange(QMetaProperty prop, QVariant val) {
-   this->doAcceptStepChange(this->sender(), prop, val, {});
-   return;
-}
+void Recipe::acceptChangeToInstruction              (QMetaProperty prop, QVariant val) { this->acceptChange<Instruction              >(prop, val); return; }
 
 double Recipe::targetCollectedWortVol_l() {
 
@@ -2842,29 +2840,14 @@ double Recipe::targetTotalMashVol_l() {
 }
 
 void Recipe::hardDeleteOwnedEntities() {
-   this->pimpl->m_fermentableAdditions.doHardDeleteOwnedEntities();
-   this->pimpl->m_hopAdditions        .doHardDeleteOwnedEntities();
-   this->pimpl->m_miscAdditions       .doHardDeleteOwnedEntities();
-   this->pimpl->m_yeastAdditions      .doHardDeleteOwnedEntities();
-   this->pimpl->m_saltAdjustments     .doHardDeleteOwnedEntities();
-   this->pimpl->m_waterUses           .doHardDeleteOwnedEntities();
-   this->pimpl->m_brewNotes           .doHardDeleteOwnedEntities();
-
-///   // It's the BrewNote that stores its Recipe ID, so all we need to do is delete our BrewNotes then the subsequent
-///   // database delete of this Recipe won't hit any foreign key problems.
-///   auto brewNotes = this->brewNotes();
-///   for (auto brewNote : brewNotes) {
-///      ObjectStoreWrapper::hardDelete<BrewNote>(*brewNote);
-///   }
-///
-///   this->pimpl->hardDeleteAdditions<RecipeAdditionFermentable>();
-///   this->pimpl->hardDeleteAdditions<RecipeAdditionHop        >();
-///   this->pimpl->hardDeleteAdditions<RecipeAdditionMisc       >();
-///   this->pimpl->hardDeleteAdditions<RecipeAdditionYeast      >();
-///   this->pimpl->hardDeleteAdditions<RecipeAdjustmentSalt     >();
-///   this->pimpl->hardDeleteAdditions<RecipeUseOfWater         >();
-///   this->pimpl->hardDeleteAllMy<Instruction>();
-   this->SteppedOwnerBase<Recipe, Instruction>::doHardDeleteOwnedEntities();
+   this->m_fermentableAdditions.doHardDeleteOwnedEntities();
+   this->m_hopAdditions        .doHardDeleteOwnedEntities();
+   this->m_miscAdditions       .doHardDeleteOwnedEntities();
+   this->m_yeastAdditions      .doHardDeleteOwnedEntities();
+   this->m_saltAdjustments     .doHardDeleteOwnedEntities();
+   this->m_waterUses           .doHardDeleteOwnedEntities();
+   this->m_brewNotes           .doHardDeleteOwnedEntities();
+   this->m_instructions        .doHardDeleteOwnedEntities();
 
    return;
 }

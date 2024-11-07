@@ -561,6 +561,11 @@ public:
          for (auto const & field : *this->m_fields) {
             std::visit(
                [this, normalOrLate](auto&& fieldInfo) {
+                  // Normally leave this debug statement commented out as it generates too much logging
+//                  qDebug() <<
+//                     Q_FUNC_INFO << "Field:" << fieldInfo.labelName << ", property:" << *fieldInfo.property <<
+//                     ", hasControlledField:" << fieldInfo.hasControlledField << ", whenToWrite:" <<
+//                     fieldInfo.whenToWrite << ", value:" << fieldInfo.getFieldValue();
                   if (normalOrLate == fieldInfo.whenToWrite) {
                      fieldInfo.setPropertyFromEditField(*this->m_editItem);
                   }

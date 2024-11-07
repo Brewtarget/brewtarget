@@ -47,7 +47,7 @@ class RecipeAdditionFermentable;
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
 // See comment in model/NamedEntity.h
-#define AddPropertyName(property) namespace PropertyNames::Fermentable { BtStringConst const property{#property}; }
+#define AddPropertyName(property) namespace PropertyNames::Fermentable { inline BtStringConst const property{#property}; }
 AddPropertyName(alphaAmylase_dextUnits   )
 AddPropertyName(betaGlucan_ppm           )
 AddPropertyName(coarseFineDiff_pct       )

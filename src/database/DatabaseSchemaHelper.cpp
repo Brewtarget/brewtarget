@@ -1073,6 +1073,59 @@ namespace {
                   "WHERE reversed_step_number = 1 "
                   "AND recipe.mash_id = last_mash_step.mash_id"
          ), {QVariant{false}, QVariant{true}}},
+         //
+         // But wait, we're not done on pre-boil step.  We also need to handle the case where a recipe has a mash that
+         // does not have any mash steps.  Eg the supplied "Extract" recipes are like this.
+         //
+         // It may be there is a way to combine this with the SQL query above, but I think it's simpler not to and just
+         // live with some horrible copy-and-paste here in a query that just creates a (hopefully sane) pre-boil step
+         // for any recipes that don't have one.  We make a heroic assumption that the start temperature is 15°C (ie
+         // about 60 °F) which is about what you might expect tap water temperature to be a lot of the time in a lot of
+         // places.
+         //
+         {QString("INSERT INTO boil_step ("
+                     "name            , "
+                     "deleted         , "
+                     "display         , "
+                     "step_time_mins  , "
+                     "end_temp_c      , "
+                     "ramp_time_mins  , "
+                     "step_number     , "
+                     "boil_id         , "
+                     "description     , "
+                     "start_acidity_ph, "
+                     "end_acidity_ph  , "
+                     "start_temp_c    , "
+                     "start_gravity_sg, "
+                     "end_gravity_sg  , "
+                     "chilling_type     "
+                  ") SELECT "
+                     "'Pre-boil for ' || recipe.name, "                              // name
+                     "?, "                                                           // deleted
+                     "?, "                                                           // display
+                     "NULL, "                                                        // step_time_mins
+                     "100.0, "                                                       // end_temp_c
+                     "NULL, "                                                        // ramp_time_mins
+                     "1, "                                                           // step_number
+                     "recipe.boil_id, "                                              // boil_id
+                     "'Automatically-generated pre-boil step for ' || recipe.name, " // description
+                     "NULL, "                                                        // start_acidity_ph
+                     "NULL, "                                                        // end_acidity_ph
+                     "15, "                                                          // start_temp_c
+                     "NULL, "                                                        // start_gravity_sg
+                     "NULL, "                                                        // end_gravity_sg
+                     "NULL "                                                         // chilling_type
+                  "FROM recipe "
+                  "WHERE recipe.boil_id in ( "
+                     "SELECT boil_id "
+                     "FROM boil "
+                     "WHERE boil_id NOT IN ( "
+                        "SELECT boil_id "
+                        "FROM boil_step "
+                        "WHERE step_number = 1 "
+                     ")"
+                  ")"
+         ), {QVariant{false}, QVariant{true}}},
          // Adding the second step for the actual boil itself is easier
          {QString("INSERT INTO boil_step ("
                      "name            , "

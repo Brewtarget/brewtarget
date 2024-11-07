@@ -52,6 +52,7 @@ template <> struct TableModelTraits<RecipeAdditionYeastTableModel> {
       Stage         ,
       Step          ,
       Attenuation   ,
+      TimesCultured ,
    };
 };
 

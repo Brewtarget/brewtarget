@@ -27,7 +27,7 @@ class NamedParameterBundle;
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
 // See comment in model/NamedEntity.h
-#define AddPropertyName(property) namespace PropertyNames::Ingredient { BtStringConst const property{#property}; }
+#define AddPropertyName(property) namespace PropertyNames::Ingredient { inline BtStringConst const property{#property}; }
 AddPropertyName(totalInventory)
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================

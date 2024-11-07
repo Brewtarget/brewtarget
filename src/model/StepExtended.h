@@ -22,7 +22,7 @@
 //╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 //========================================== Start of property name constants ==========================================
 // See comment in model/NamedEntity.h
-#define AddPropertyName(property) namespace PropertyNames::StepExtended { BtStringConst const property{#property}; }
+#define AddPropertyName(property) namespace PropertyNames::StepExtended { inline BtStringConst const property{#property}; }
 AddPropertyName(startGravity_sg)
 AddPropertyName(  endGravity_sg)
 #undef AddPropertyName

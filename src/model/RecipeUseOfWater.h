@@ -26,7 +26,7 @@
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
 // See comment in model/NamedEntity.h
-#define AddPropertyName(property) namespace PropertyNames::RecipeUseOfWater { BtStringConst const property{#property}; }
+#define AddPropertyName(property) namespace PropertyNames::RecipeUseOfWater { inline BtStringConst const property{#property}; }
 AddPropertyName(recipeId    )
 AddPropertyName(water       )
 AddPropertyName(volume_l    )

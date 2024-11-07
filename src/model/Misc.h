@@ -38,7 +38,7 @@ class RecipeAdditionMisc;
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
 // See comment in model/NamedEntity.h
-#define AddPropertyName(property) namespace PropertyNames::Misc { BtStringConst const property{#property}; }
+#define AddPropertyName(property) namespace PropertyNames::Misc { inline BtStringConst const property{#property}; }
 AddPropertyName(notes    )
 AddPropertyName(producer )
 AddPropertyName(productId)

@@ -19,6 +19,7 @@
 
 #include <QDebug>
 
+#include "model/BrewNote.h"
 #include "model/Folder.h"
 #include "trees/TreeModel.h"
 #include "trees/TreeNode.h"

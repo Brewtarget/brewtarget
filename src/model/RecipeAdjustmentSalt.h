@@ -28,7 +28,7 @@
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
 // See comment in model/NamedEntity.h
-#define AddPropertyName(property) namespace PropertyNames::RecipeAdjustmentSalt { BtStringConst const property{#property}; }
+#define AddPropertyName(property) namespace PropertyNames::RecipeAdjustmentSalt { inline BtStringConst const property{#property}; }
 AddPropertyName(salt     )
 AddPropertyName(whenToAdd)
 #undef AddPropertyName

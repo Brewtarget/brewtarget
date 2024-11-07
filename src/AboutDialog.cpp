@@ -164,14 +164,20 @@ AboutDialog::AboutDialog(QWidget * parent) :
          //     2013      U-CHIMCHIM\mik <mik@chimchim.(none)>               // Incomplete name and email
          " </ul>"
          ""
-         // **********************************************************************************************************
-         // * Note that the HTML source indentation here is different than above so that we don't pick up testers as *
-         // * copyright holders in the awk command above!                                                            *
-         // **********************************************************************************************************
-         " <p>The following people have made notable contributions with testing and bug reports:</p>"
+         // ***********************************************************************************************************
+         // * Note that the HTML source indentation here is different than above so that we don't pick up translators *
+         // * as software copyright holders in the awk command above!                                                 *
+         // *                                                                                                         *
+         // * This list is currently somewhat incomplete, partly as I haven't yet found a record of who did all the   *
+         // * original translations, and partly as some GitHub users do not have their name in their profile.         *
+         // ***********************************************************************************************************
+         " <p>The following people are amongst those who have provided translations:</p>"
          " <ul>"
-         "  <li>Mik Firestone &lt;mikfire@gmail.com&gt;</li>"
-         "  <li>Nikolas &quot;Jazzbeerman&quot; </li>"
+         "  <li>André Rodrigues (Brazilian Portuguese)</li>"
+         "  <li>Orla Valbjørn Møller (Danish)</li>"
+         "  <li>Marcel Koek (Dutch)</li>"
+         "  <li>Mattias Måhl (Swedish)</li>"
+         "  <li>Mikhail Gorbunov (Russian)</li>"
          " </ul>"
          ""
          " <h2>License (GPLv3)</h2>"

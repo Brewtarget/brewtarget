@@ -27,8 +27,20 @@
 
 #include "database/ObjectStoreWrapper.h"
 #include "model/Recipe.h"
-#include "model/SteppedOwnerBase.h"
+#include "utils/CuriouslyRecurringTemplateBase.h"
+#include "model/OwnedSet.h"
 
+//======================================================================================================================
+//========================================== Start of property name constants ==========================================
+// See comment in model/NamedEntity.h
+#define AddPropertyName(property) namespace PropertyNames::StepOwnerBase { inline BtStringConst const property{#property}; }
+AddPropertyName(numSteps)
+AddPropertyName(steps   )
+#undef AddPropertyName
+//=========================================== End of property name constants ===========================================
+//======================================================================================================================
+
+#define StepOwnerBaseOptions OwnedSetOptions{ .enumerated = true }
 /**
  * \brief Templated base class for \c Mash, \c Boil and \c Fermentation to handle manipulation of their component steps
  *        (\c MashStep, \c BoilStep and \c FermentationStep respectively).
@@ -64,56 +76,193 @@
  *
  *        We assume/require that \c DerivedStep inherits from \c Step.
  *
- *        Note that we do \b not inherit from \c CuriouslyRecurringTemplateBase because \c SteppedOwnerBase already does
- *        this.  If we inherited again, we'd end up with two (identical) implementations of this->derived() that the
- *        compiler can't disambiguate between.
+ *        TBD: For the moment, we have \c OwnedSet as a member, with wrapper functions.  We could, instead, inherit from
+ *             \c OwnedSet, and use its interface directly, at the cost of a bit of renaming.
  */
 template<class Derived> class StepOwnerPhantom;
 template<class Derived, class DerivedStep>
-class StepOwnerBase : public SteppedOwnerBase<Derived, DerivedStep> {
-public:
+class StepOwnerBase : public CuriouslyRecurringTemplateBase<StepOwnerPhantom, Derived> {
    // Note that, because this is static, it cannot be initialised inside the class definition
    static TypeLookup const typeLookup;
 
+   // This allows Derived to call our protected and private members
+   friend Derived;
+
+private:
+   //! Non-virtual equivalent of isEqualTo
+   bool doIsEqualTo(StepOwnerBase const & other) const {
+      return this->m_stepSet.doIsEqualTo(other.m_stepSet);
+   }
+
    StepOwnerBase() :
-      SteppedOwnerBase<Derived, DerivedStep>{} {
+      m_stepSet{this->derived()} {
       return;
    }
 
-   StepOwnerBase(NamedParameterBundle const & namedParameterBundle) :
-      SteppedOwnerBase<Derived, DerivedStep>{namedParameterBundle} {
+   StepOwnerBase([[maybe_unused]] NamedParameterBundle const & namedParameterBundle) :
+      // See comment in OwnedSet for why it never needs the NamedParameterBundle
+      m_stepSet{this->derived()} {
       return;
    }
 
-   StepOwnerBase(Derived const & other) :
-      SteppedOwnerBase<Derived, DerivedStep>{other} {
+   StepOwnerBase(StepOwnerBase const & other) :
+      m_stepSet{this->derived(), other.m_stepSet} {
       return;
    }
 
    /**
-    * \brief We have to delete the default copy constructor because we want the constructor above (that takes \c Derived
-    *        rather than \c SteppedOwnerBase) to be used instead of a compiler-generated copy constructor which wouldn't
-    *        do the deep copy we need.
-    */
-   StepOwnerBase(StepOwnerBase const & other) = delete;
-
-   /**
-    * \brief Similarly, we don't want copy assignment happening.
+    * \brief We don't want copy assignment happening.
     */
    StepOwnerBase & operator=(StepOwnerBase const & other) = delete;
 
    ~StepOwnerBase() = default;
 
+   // TBD: This public block of member functions is just a wrapper around the OwnedSet interface.  We could get rid of
+   // it if we inherited from OwnedSet.
+public:
+   QList<std::shared_ptr<DerivedStep>> steps() const {
+      return this->m_stepSet.items();
+   }
+
+   /**
+    * \brief Returns the step at the specified position, if it exists, or \c nullptr if not
+    *
+    * \param seqNum counted from 1
+    */
+   std::shared_ptr<DerivedStep> stepAt(int const seqNum) const {
+      return this->m_stepSet.itemAt(seqNum);
+   }
+
+   /**
+    * \brief Inserts a new step at the specified position.  If there is already a step in that position, it (and all
+    *        subsequent ones) will be bumped one place down the list.
+    *
+    * \param step
+    * \param seqNum counted from 1
+    */
+   std::shared_ptr<DerivedStep> insertStep(std::shared_ptr<DerivedStep> step, int const seqNum) {
+      return this->m_stepSet.insert(step, seqNum);
+   }
+
+   /**
+    * \brief Adds a new step at the end of the current list
+    */
+   std::shared_ptr<DerivedStep> addStep(std::shared_ptr<DerivedStep> step) {
+      return this->m_stepSet.add(step);
+   }
+
+   std::shared_ptr<DerivedStep> removeStep(std::shared_ptr<DerivedStep> step) {
+      return this->m_stepSet.remove(step);
+   }
+
+   /**
+    * \brief Sets (or unsets) the step at the specified position.
+    *
+    *        Note this is different from insertStep(), as:
+    *          - If there is a step in the specified position it will be overwritten rather than bumped down the list
+    *          - Calling this with non-null value (ie not std::nullopt) for second and later steps will ensure prior
+    *            step(s) exist by creating default ones if necessary.
+    *          - Calling this with null value (ie std::nullopt) delete any subsequent steps.  (Doesn't make sense for
+    *            third step to become second in the context of this function.)
+    *
+    * \param step The step to set, or \c nullptr to unset it
+    * \param seqNum
+    */
+   void setStepAt(std::shared_ptr<DerivedStep> step, int const seqNum) {
+      this->m_stepSet.setAt(step, seqNum);
+      return;
+   }
+
+   void setSteps(QList<std::shared_ptr<DerivedStep>> const & steps) {
+      this->m_stepSet.setAll(steps);
+      return;
+   }
+
+   unsigned int numSteps() const {
+      return this->m_stepSet.size();
+   }
+
+   /*!
+    * \brief Swap Steps \c step1 and \c step2
+    */
+   void swapSteps(DerivedStep & lhs, DerivedStep & rhs) {
+      this->m_stepSet.swap(lhs, rhs);
+      return;
+   }
+
+   void removeAllSteps() {
+      this->m_stepSet.removeAll();
+      return;
+   }
+
+private:
+   void doSetKey(int key) {
+      // First call the base class function
+      this->derived().NamedEntity::setKey(key);
+      // Now tell the OwnedSet about the new key
+      this->m_stepSet.doSetKey(key);
+      return;
+   }
+
+   /**
+    * \brief Connect DerivedStep changed signals to their parent Derived objects.
+    *
+    *        Needs to be called \b after all the calls to ObjectStoreTyped<FooBar>::getInstance().loadAll()
+    */
+   static void doConnectSignals() {
+      for (auto dd : ObjectStoreTyped<Derived>::getInstance().getAllRaw()) {
+         dd->m_stepSet.connectAllItemChangedSignals();
+      }
+      return;
+   }
+
+   /**
+    * \brief Intended to be called from \c Derived::acceptStepChange
+    *
+    * \param sender - Result of caller calling \c this->sender() (which is protected, so we can't call it here)
+    * \param prop - As received by Derived::acceptStepChange
+    * \param val  - As received by Derived::acceptStepChange
+    * \param additionalProperties - Additional properties for which to emit \c changed signal if the change we are
+    *                               receiving comes from one of our steps.  TODO: Remove this
+    */
+   void doAcceptStepChange(QObject * sender,
+                           QMetaProperty prop,
+                           QVariant      val,
+                           [[maybe_unused]] QList<BtStringConst const *> const additionalProperties = {}) {
+      DerivedStep * stepSender = qobject_cast<DerivedStep*>(sender);
+      if (!stepSender) {
+         return;
+      }
+
+      this->m_stepSet.acceptItemChange(*stepSender, prop, val);
+      return;
+   }
+
+   //================================================ Member variables =================================================
+   OwnedSet<Derived,
+            DerivedStep,
+            PropertyNames::StepOwnerBase::steps,
+            nullptr,
+            StepOwnerBaseOptions> m_stepSet;
 };
 
 template<class Derived, class DerivedStep>
 TypeLookup const StepOwnerBase<Derived, DerivedStep>::typeLookup {
    "StepOwnerBase",
    {
-      // We don't have any properties
+      //
+      // See comment in model/IngredientAmount.h for why we can't use the PROPERTY_TYPE_LOOKUP_ENTRY or
+      // PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV macros here.
+      //
+      {&PropertyNames::StepOwnerBase::numSteps,
+       TypeInfo::construct<MemberFunctionReturnType_t<&StepOwnerBase::numSteps>>(
+          PropertyNames::StepOwnerBase::numSteps,
+          TypeLookupOf<MemberFunctionReturnType_t<&StepOwnerBase::numSteps>>::value,
+          NonPhysicalQuantity::OrdinalNumeral
+       )},
    },
-   // Parent class lookup
-   {&SteppedOwnerBase<Derived, DerivedStep>::typeLookup}
+   // Parent class lookup: none as we are at the top of this arm of the inheritance tree
+   {}
 };
 
 /**
@@ -125,37 +274,46 @@ TypeLookup const StepOwnerBase<Derived, DerivedStep>::typeLookup {
  *        Note we have to be careful about comment formats in macro definitions
  */
 #define STEP_OWNER_COMMON_DECL(NeName, LcNeName) \
-   STEPPED_OWNER_COMMON_DECL(NeName, NeName##Step) \
-   /* This allows StepOwnerBase to call protected and private members of Derived */ \
-   friend class StepOwnerBase<NeName,                                               \
-                              NeName##Step>;                                        \
-                                                                                    \
-   public:                                                                          \
-                                                                                    \
-      /** \brief Overrides \c NamedEntity::setKey()  */                             \
-      virtual void setKey(int key) override;                                        \
-                                                                                    \
-      /** \brief Overrides \c NamedEntity::hardDeleteOwnedEntities()         */     \
-      /*         Derived owns its DerivedSteps so needs to delete them if it */     \
-      /*         itself is being deleted                                     */     \
-      virtual void hardDeleteOwnedEntities() override;                              \
-                                                                                    \
-      /* TODO These are aliases we should probably get rid of */                    \
-      QList<std::shared_ptr<NeName##Step>> LcNeName##Steps() const;                 \
-      void set##NeName##Steps(QList<std::shared_ptr<NeName##Step>> const & val);    \
+   /* This allows StepOwnerBase to call protected and private members of Derived */      \
+   friend class StepOwnerBase<NeName,                                                    \
+                              NeName##Step>;                                             \
+                                                                                         \
+   public:                                                                               \
+      /* This alias makes it easier to template a number of functions that are */        \
+      /* essentially the same for all "Step Owner" classes.                    */        \
+      using StepClass = NeName##Step;                                                    \
+                                                                                         \
+      /* Relational getters and setters */                                               \
+      QList<std::shared_ptr<NeName##Step>> LcNeName##Steps        () const;              \
+      void set##NeName##Steps        (QList<std::shared_ptr<NeName##Step>> const & val); \
+                                                                                         \
+      /** \brief Connect DerivedStep changed signals to their parent Mashes. */          \
+      /*         Needs to be called \b after all the calls to                */          \
+      /*         ObjectStoreTyped<FooBar>::getInstance().loadAll()           */          \
+      static void connectSignals();                                                      \
+                                                                                         \
+      virtual void setKey(int key) override;                                             \
+                                                                                         \
+      /** \brief NeName owns its NeName##Steps so needs to delete them if it */          \
+      /*         itself is being deleted                                     */          \
+      virtual void hardDeleteOwnedEntities() override;                                   \
+
 
 /**
  * \brief Derived classes should include this in their implementation file
  */
 #define STEP_OWNER_COMMON_CODE(NeName, LcNeName) \
-   STEPPED_OWNER_COMMON_CODE(NeName, NeName##Step) \
-   void NeName::setKey(int key) { this->doSetKey(key); return; }                                  \
-                                                                                                  \
-   void NeName::hardDeleteOwnedEntities() { this->doHardDeleteOwnedEntities(); return; }          \
-                                                                                                  \
-   QList<std::shared_ptr<NeName##Step>> NeName::LcNeName##Steps() const { return this->steps(); } \
-   void NeName::set##NeName##Steps(QList<std::shared_ptr<NeName##Step>> const & val) {            \
-      this->setSteps(val); return;                                                                \
-   }                                                                                              \
+   QList<std::shared_ptr<NeName##Step>> NeName::LcNeName##Steps() const {                             \
+      return this->m_stepSet.items();                                                                 \
+   }                                                                                                  \
+   void NeName::set##NeName##Steps(QList<std::shared_ptr<NeName##Step>> const & val) {                \
+      this->m_stepSet.setAll(val); return;                                                            \
+   }                                                                                                  \
+                                                                                                      \
+   void NeName::connectSignals() { StepOwnerBase<NeName, NeName##Step>::doConnectSignals(); return; } \
+                                                                                                      \
+   void NeName::setKey(int key) { this->doSetKey(key); return; }                                      \
+                                                                                                      \
+   void NeName::hardDeleteOwnedEntities() { this->m_stepSet.doHardDeleteOwnedEntities(); return; }    \
 
 #endif

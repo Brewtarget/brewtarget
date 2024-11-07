@@ -465,8 +465,8 @@ QVariant SmartField::getAsVariant() const {
          return typeInfo.isOptional() ? QVariant::fromValue(this->getOptCanonicalQty   ()) :
                                         QVariant::fromValue(this->getNonOptCanonicalQty());
       }
-      return typeInfo.isOptional() ? QVariant::fromValue(this->getOptValue   <int>()) :
-                                     QVariant::fromValue(this->getNonOptValue<int>());
+      return typeInfo.isOptional() ? QVariant::fromValue(this->getOptValue   <double>()) :
+                                     QVariant::fromValue(this->getNonOptValue<double>());
    }
    if (ti == typeid(Measurement::Amount)) {
       return typeInfo.isOptional() ? QVariant::fromValue(this->getOptCanonicalAmt   ()) :
@@ -573,7 +573,10 @@ template<typename T> std::optional<T> SmartField::getOptValue(bool * const ok) c
 
    if (std::holds_alternative<NonPhysicalQuantity>(*this->getTypeInfo().fieldType)) {
       bool parseOk = false;
-      T amount = Measurement::extractRawFromString<T>(rawText, &parseOk);
+      T value = Measurement::extractRawFromString<T>(rawText, &parseOk);
+//      qDebug() <<
+//         Q_FUNC_INFO << this->pimpl->m_fieldFqName << "Converted" << rawText << "to" << value << "(" <<
+//         (parseOk ? "OK" : "Fail") << ")";
       if (ok) {
          *ok = parseOk;
       }
@@ -582,14 +585,13 @@ template<typename T> std::optional<T> SmartField::getOptValue(bool * const ok) c
          return std::optional<T>{std::nullopt};
       }
 
-      return std::make_optional<T>(amount);
+      return std::make_optional<T>(value);
    }
 
-   return std::make_optional<T>(
-      static_cast<T>(
-         this->pimpl->toCanonical(rawText, this->getScaleInfo(), ok).quantity
-      )
-   );
+   auto quantity = static_cast<T>(this->pimpl->toCanonical(rawText, this->getScaleInfo(), ok).quantity);
+//   qDebug() << Q_FUNC_INFO << this->pimpl->m_fieldFqName << "Converted" << rawText << "to" << quantity;
+
+   return std::make_optional<T>(quantity);
 }
 // Instantiate the above template function for the types that are going to use it
 template std::optional<int         > SmartField::getOptValue<int         >(bool * const ok) const;
@@ -631,8 +633,7 @@ void SmartField::correctEnteredText() {
 
    // .:TBD:. At the moment, the special handling here for types other than double is a bit moot, but we keep it in
    // case we need to do more in future.
-   NonPhysicalQuantity const nonPhysicalQuantity =
-      std::get<NonPhysicalQuantity>(*this->getTypeInfo().fieldType);
+   NonPhysicalQuantity const nonPhysicalQuantity = std::get<NonPhysicalQuantity>(*this->getTypeInfo().fieldType);
    if (nonPhysicalQuantity != NonPhysicalQuantity::String) {
       QString const rawText = this->getRawText();
 
@@ -643,8 +644,7 @@ void SmartField::correctEnteredText() {
       if (type == typeid(int         )) { if (optional) { this->setQuantity(this->getOptValue<int         >(&ok)); } else { this->setQuantity(this->getNonOptValue<int         >(&ok)); } } else
       if (type == typeid(unsigned int)) { if (optional) { this->setQuantity(this->getOptValue<unsigned int>(&ok)); } else { this->setQuantity(this->getNonOptValue<unsigned int>(&ok)); } } else {
          // It's a coding error if we get here
-         qCritical() <<
-            Q_FUNC_INFO << this->getFqFieldName() << ": Don't know how to parse" << this->getTypeInfo();
+         qCritical() << Q_FUNC_INFO << this->getFqFieldName() << ": Don't know how to parse" << this->getTypeInfo();
          Q_ASSERT(false);
       }
 

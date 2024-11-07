@@ -27,7 +27,7 @@
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
 // See comment in model/NamedEntity.h
-#define AddPropertyName(property) namespace PropertyNames::BoilStep { BtStringConst const property{#property}; }
+#define AddPropertyName(property) namespace PropertyNames::BoilStep { inline BtStringConst const property{#property}; }
 AddPropertyName(chillingType)
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
@@ -46,7 +46,7 @@ class BoilStep : public StepExtended, public StepBase<BoilStep, Boil, BoilStepOp
    Q_OBJECT
 
    STEP_COMMON_DECL(Boil, BoilStepOptions)
-   // See model/SteppedBase.h for info, getters and setters for these properties
+   // See model/EnumeratedBase.h for info, getters and setters for these properties
    Q_PROPERTY(int ownerId      READ ownerId      WRITE setOwnerId   )
    Q_PROPERTY(int stepNumber   READ stepNumber   WRITE setStepNumber)
    // See model/StepBase.h for info, getters and setters for these properties

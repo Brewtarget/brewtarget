@@ -25,7 +25,7 @@
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
 // See comment in model/NamedEntity.h
-#define AddPropertyName(property) namespace PropertyNames::RecipeAddition { BtStringConst const property{#property}; }
+#define AddPropertyName(property) namespace PropertyNames::RecipeAddition { inline BtStringConst const property{#property}; }
 AddPropertyName(stage          )
 AddPropertyName(step           )
 AddPropertyName(addAtTime_mins )

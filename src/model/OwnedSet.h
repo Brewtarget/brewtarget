@@ -30,10 +30,26 @@
 struct OwnedSetOptions {
    /**
     * \brief In an enumerated set, items are in a strict order and are accordingly numbered (starting from 1) with a
-    *        step number, which is accessed via \c seqNum / \c setSeqNum.  \c OwnedSet::items returns items in
-    *        this order.  In a non-enumerated set, the \c OwnedSet class does not manage the order of the items and
-    *        returns them in arbitrary order.  (Typically there may be a weak ordering -- eg addition time for a
-    *        \c RecipeAddition subclass or brew date for a \c BrewnNote -- but it is not managed inside of \c OwnedSet.
+    *        step number, which is accessed via \c seqNum / \c setSeqNum.  \c OwnedSet::items returns items in this
+    *        order.
+    *
+    *        In a non-enumerated set, the \c OwnedSet class does not manage the order of the items and returns them in
+    *        arbitrary order.  (Typically there may be a weak ordering -- eg addition time for a \c RecipeAddition
+    *        subclass or brew date for a \c BrewnNote -- but it is not managed inside of \c OwnedSet.
+    *
+    *        Note that \c setSeqNum has to take an optional second parmeter \c bool \c const \c notify (which should
+    *        default to \c true).  This is because, in an enumerated set, we need to be very careful and controlled
+    *        about when we (either directly or indirectly) emit signals from our member functions.
+    *           If we are part way through modifying a sequence of steps (eg to swap two steps or insert a new one) then
+    *        we do not want other parts of the code to read the steps when they are in an "in between" state.  Reading
+    *        in such a state might either give incorrect data (eg two steps with the same step number) or, worse, make
+    *        unwanted changes (eg normalising step numbers whilst we're in the middle of re-ordering steps).
+    *           You might think that we can solve that with locks, but this is complicated because, usually, when we
+    *        emit a signal, its slots are straight away run on the same thread before the signal function returns.  This
+    *        means the thread that you want to prevent from reading the step sequence is the same one that is already
+    *        modifying it.  So, instead, we ensure that whenever sequence numbers are being modified, no signal is
+    *        emitted for the change of sequence number on each step.  Instead, a single \c changed signal for the whole
+    *        set is emitted at the end.
     */
    bool enumerated = false;
 
@@ -44,9 +60,6 @@ struct OwnedSetOptions {
     *        The only other option is that, when the owning object is copied, the set is not copied at all, and the set
     *        on the newly-created copy is empty.  This is, for instance, what we do with any \c BrewNote objects on a
     *        \c Recipe.  This is what \c copyable being \c false means.
-    *
-    *
-    *
     *
     *        Note that it can never be possible to do a shallow copy of an \c OwnedSet, since an item in such a set
     *        cannot meaningfully have two different owners.
@@ -74,10 +87,11 @@ template <OwnedSetOptions os> concept CONCEPT_FIX_UP IsCopyable   = is_Copyable 
  * \param propertyName is the name of the property that we use to signal changes to the size of the owned set (eg item
  *        added or removed).  It is typically the name of the property holding this \c OwnedSet object, but the value
  *        that we send with the \c changed signal is simply the new size of the set.
- * \param itemChangedSlot is a member function slot on \c Owner that can receive \c NamedEntity::changed signals from
- *        \c Item objects in this set.  Typically that member function just needs to call our \c acceptItemChange
- *        function.  It is simpler to go via \c Owner because the owner object is able to call \c QObject::sender to
- *        get the sender and pass it to us.  (From looking at the Qt source code eg at
+ * \param itemChangedSlot if not \c nullptr, is a member function slot on \c Owner that can receive
+ *        \c NamedEntity::changed signals from \c Item objects in this set.  (Otherwise, if it is \c nullptr,
+ *        \c Owner::acceptStepChange will be used.)  Typically that member function just needs to call our
+ *        \c acceptItemChange function.  It is simpler to go via \c Owner because the owner object is able to call
+ *        \c QObject::sender to get the sender and pass it to us.  (From looking at the Qt source code eg at
  *        https://github.com/qt/qtbase/blob/dev/src/corelib/kernel/qobject.cpp, it seems \c QObject::sender will return
  *        null if a slot on the object in question is not being invoked, so there is no use us trying to find ways to
  *        call \c this->m_owner.sender(), as we'll always just get back \c nullptr.)
@@ -90,6 +104,20 @@ template<class Owner,
          OwnedSetOptions ownedSetOptions = OwnedSetOptions{} >
 class OwnedSet {
 public:
+
+   //! Non-virtual equivalent of isEqualTo
+   bool doIsEqualTo(OwnedSet const & other) const {
+      //
+      // Check each object has the same number of items and they're all the same
+      //
+      auto const myItems = this->items();
+      auto const otherItems = other.items();
+      return std::equal(   myItems.begin(),    myItems.end(),
+                        otherItems.begin(), otherItems.end(),
+                        [](std::shared_ptr<Item> const & lhs,
+                           std::shared_ptr<Item> const & rhs) {return *lhs == *rhs;});
+   }
+
    /**
     * \brief Minimal constructor.  Note that the reason we do not just initialise everything here is that the object
     *        stores on which we depend might not yet themselves be initialised when this constructor is called.
@@ -174,18 +202,6 @@ public:
       return;
    }
 
-private:
-   /**
-    * \brief Connect an item's "changed" signal to us.
-    *
-    *        Unusually, we don't worry about disconnecting this later.  The \c Item object (\c item) will never belong
-    *        to any other \c OwnedSet, and Qt will do the disconnection itself when \c item is destroyed.
-    */
-   void connectItemChangedSignal(std::shared_ptr<Item> item) {
-      this->m_owner.connect(item.get(), &NamedEntity::changed, &this->m_owner, itemChangedSlot);
-      return;
-   }
-
    /**
     * \brief Connect all our item's "changed" signals to us
     *
@@ -198,34 +214,64 @@ private:
       return;
    }
 
-   //! No-op version
-   void putInOrder([[maybe_unused]] QList<std::shared_ptr<Item>> items) const requires (!IsEnumerated<ownedSetOptions>) {
+private:
+   /**
+    * \brief Connect an item's "changed" signal to us.
+    *
+    *        Unusually, we don't worry about disconnecting this later.  The \c Item object (\c item) will never belong
+    *        to any other \c OwnedSet, and Qt will do the disconnection itself when \c item is destroyed.
+    */
+   void connectItemChangedSignal(std::shared_ptr<Item> item) {
+      if constexpr (itemChangedSlot) {
+         this->m_owner.connect(item.get(), &NamedEntity::changed, &this->m_owner, itemChangedSlot);
+      } else {
+         this->m_owner.connect(item.get(), &NamedEntity::changed, &this->m_owner, &Owner::acceptStepChange);
+      }
       return;
    }
-   //! Substantive version
-   void putInOrder(QList<std::shared_ptr<Item>> items) const requires (IsEnumerated<ownedSetOptions>) {
+
+   void putInOrder(QList<std::shared_ptr<Item>> & items) const requires (IsEnumerated<ownedSetOptions>) {
       std::sort(items.begin(),
                 items.end(),
                 [](std::shared_ptr<Item> const lhs, std::shared_ptr<Item> const rhs) {
+                   // Per https://en.cppreference.com/w/cpp/algorithm/sort, this function needs to return "returns ​true
+                   // if the first argument is less than (i.e. is ordered before) the second".
                    return lhs->seqNum() < rhs->seqNum();
                 });
       return;
    }
 
-   //! No-op version
-   void normaliseSeqNums([[maybe_unused]] QList<std::shared_ptr<Item>> items) const requires (!IsEnumerated<ownedSetOptions>) {
-      return;
-   }
-   //! Substantive version
-   void normaliseSeqNums(QList<std::shared_ptr<Item>> items) const requires (IsEnumerated<ownedSetOptions>) {
-      for (int ii = 0; ii < items.size(); ++ii) {
-         //
-         // Canonical item numbering starts from 1, which is +1 on canonical indexing!
-         //
-         int const canonicalSeqNum = ii + 1;
-         if (items[ii]->seqNum() != canonicalSeqNum) {
-            items[ii]->setSeqNum(canonicalSeqNum);
+   void normaliseSeqNums(QList<std::shared_ptr<Item>> & items) const requires (IsEnumerated<ownedSetOptions>) {
+      int const ownerId = this->m_owner.key();
+      for (int canonicalSeqNum = 1, prevSeqNum = 1; auto item : items) {
+         int const existingSeqNum = item->seqNum();
+         // Normally leave this debug statement commented out as it generates too much logging, but can be useful for
+         // troubleshooting.
+//         qDebug() <<
+//            Q_FUNC_INFO << Owner::staticMetaObject.className() << "#" << ownerId << ":" <<
+//            Item::staticMetaObject.className() << "#" << item->key() << "sequence number is" <<
+//            existingSeqNum << "; should be" << canonicalSeqNum;
+
+         // It's a coding error if any item in the list does not belong to the owner
+         Q_ASSERT(item->ownerId() == ownerId);
+
+         // Unfortunately, for historical reasons, we cannot assume that sequence (aka step) numbers read from the DB
+         // will always be unique for items belonging to a given owner (eg MashSteps in a Mash).  So, although we can
+         // assert that step numbers never go down (because we ran them through sort), and that they are never less than
+         // 1, we cannot assert that they always go up!
+         Q_ASSERT(existingSeqNum >= prevSeqNum);
+
+         // At this point, we correct things as best we can here so that the rest of the code can work on the basis of
+         // sequence numbers being in sequence starting from 1.
+         if (existingSeqNum != canonicalSeqNum) {
+            // We don't want a "changed" signal just because we normalised a sequence number.  Firstly, the items are
+            // already in the correct order.  We are just ensuring that all the sequence numbers are sequential and
+            // start from 1.  Secondly, if we are calling this as part of a modification to the set, we only want one
+            // notification, at the end of whatever modification it is we are doing.
+            item->setSeqNum(canonicalSeqNum, false);
          }
+         prevSeqNum = existingSeqNum;
+         ++canonicalSeqNum;
       }
       return;
    }
@@ -254,24 +300,38 @@ public:
       }
 
       //
-      // The object store does not guarantee what order it returned the items in, so, if they are enumerated, we need
-      // to put them in the right order.  The same comment applies to our m_itemIds list.  For enumerated sets, we
-      // _could_ enforce that the order in m_itemIds is the same as the ordering implied by seqNum() on the set
-      // members, but this would make other parts of the code a bit more complicated (where we share logic between
-      // enumerated and non-enumerated sets) for little if no gain.
+      // Couple of extra things we need to do for enumerated sets.  Obviously the joy of templates is that we know at
+      // compile-time whether the set is enumerated or not, hence the constexpr here.
       //
-      this->putInOrder(items);
+      if constexpr (IsEnumerated<ownedSetOptions>) {
+         //
+         // The object store does not guarantee what order it returned the items in, so, if they are enumerated, we need
+         // to put them in the right order.  The same comment applies to our m_itemIds list.  For enumerated sets, we
+         // _could_ enforce that the order in m_itemIds is the same as the ordering implied by seqNum() on the set
+         // members, but this would make other parts of the code a bit more complicated (where we share logic between
+         // enumerated and non-enumerated sets) for little if no gain.
+         //
+         this->putInOrder(items);
 
-      //
-      // It can be that, although they are in the right order, the items are not canonically numbered.  If this happens,
-      // it looks a bit odd in the UI -- eg because you have Instructions in a Recipe starting with Instruction #2 as
-      // the first one.  We _could_ fix this in the UI layer, but it's easier to do it here -- and, since we're never
-      // talking about more than a handful of items (often less than 10, usually less than 20, pretty much always less
-      // than 30), the absolute overhead of doing so should be pretty small.
-      //
-      this->normaliseSeqNums(items);
+         //
+         // It can be that, although they are in the right order, the items are not canonically numbered.  If this happens,
+         // it looks a bit odd in the UI -- eg because you have Instructions in a Recipe starting with Instruction #2 as
+         // the first one.  We _could_ fix this in the UI layer, but it's easier to do it here -- and, since we're never
+         // talking about more than a handful of items (often less than 10, usually less than 20, pretty much always less
+         // than 30), the absolute overhead of doing so should be pretty small.
+         //
+         this->normaliseSeqNums(items);
+      }
 
       return items;
+   }
+
+   /**
+    * \return Number of items in the set
+    */
+   size_t size() const {
+      // We could optimise this a bit, but it's not noticeably hurting performance
+      return this->items().size();
    }
 
    /**
@@ -290,6 +350,30 @@ public:
    }
 
 private:
+   /**
+    * \brief If we changed the set in any way, we call this function to have the owner emit a signal
+    *
+    * \param newSize If the caller already knows the set size, they pass it in to save us working it out.
+    */
+   void emitSetChanged(std::optional<int> const newSize = std::nullopt) {
+      auto const sizeToEmit {newSize.value_or(this->items().size())};
+      qDebug() <<
+         Q_FUNC_INFO << "Emitting set changed signal (size =" << sizeToEmit << ") for" <<
+         Owner::staticMetaObject.className() << "#" << this->m_owner.key();
+      emit this->m_owner.changed(this->m_owner.metaProperty(*propertyName), sizeToEmit);
+
+      //
+      // For the moment at least, various things dealing with steps are expecting a specific signal stepsChanged rather
+      // than the generic NamedEntity::changed one, so send that too.  (Non-step owners do not have the stepsChanged
+      // signal though.)
+      //
+      if constexpr (IsEnumerated<ownedSetOptions>) {
+         emit this->m_owner.stepsChanged();
+      }
+
+      return;
+   }
+
    /**
     * \brief Adds a new item to the set.  This is private because, for enumerated sets, we need to handle step number in
     *        the public functions that calls this one -- so we don't want it to be possible for this to be called from
@@ -332,7 +416,7 @@ private:
       }
 
       // Now we changed the size of the set, have the owner tell people about it
-      emit this->m_owner.changed(this->m_owner.metaProperty(*propertyName), this->items().size());
+      this->emitSetChanged();
 
       return item;
    }
@@ -346,7 +430,7 @@ public:
     * \param seqNum counted from 1 (or 0 to append to the end of the list)
     */
    std::shared_ptr<Item> insert(std::shared_ptr<Item> item,
-                                int const seqNum) requires (IsEnumerated<ownedSetOptions>) {
+                                int seqNum) requires (IsEnumerated<ownedSetOptions>) {
       auto existingItems = this->items();
 
       // We'll treat any out of range sequence number as meaning "append to the end"
@@ -357,10 +441,13 @@ public:
       // Note per https://en.cppreference.com/w/cpp/ranges/drop_view that dropping more than the number of elements is
       // OK (and just gives an empty range.
       for (auto existingItem : std::ranges::drop_view(existingItems, seqNum - 1)) {
-         existingItem->setSeqNum(existingItem->seqNum() + 1);
+         // Don't want to emit a "changed" signal here, as we're still part-way through modifying the sequence
+         existingItem->setSeqNum(existingItem->seqNum() + 1, false);
       }
 
-      item->setSeqNum(seqNum);
+      // Even here is a bit to early to emit a "changed" signal, as the item may need to be inserted in the DB.  The
+      // extend member function call below will emit a "changed" signal for the whole set, which should be all we need.
+      item->setSeqNum(seqNum, false);
 
       return this->extend(item);
    }
@@ -409,13 +496,13 @@ public:
       ObjectStoreWrapper::hardDelete(item);
 
       //
-      // Note that this call to items() will also call this->normaliseSeqNums(), so, in an enumerated set, item sequence
+      // Note that, in an enumerated set, this call to items() will also call this->normaliseSeqNums(), so item sequence
       // numbers will be adjusted/corrected for the fact that an item has been removed.
       //
       auto currentItems = this->items();
 
       // Now we changed the size of the set, have the owner tell people about it
-      emit this->m_owner.changed(this->m_owner.metaProperty(*propertyName), currentItems.size());
+      this->emitSetChanged(currentItems.size());
 
       return item;
    }
@@ -436,7 +523,7 @@ public:
          this->m_itemIds.clear();
 
          // Now we changed the size of the set, have the owner tell people about it
-         emit this->m_owner.changed(this->m_owner.metaProperty(*propertyName), 0);
+         this->emitSetChanged(0);
       }
       return;
    }
@@ -452,13 +539,6 @@ public:
       return;
    }
 
-   /**
-    * \return Number of items in the set
-    */
-   size_t size() const {
-      return this->items().size();
-   }
-
    /*!
     * \brief Swap the positions of Items \c lhs and \c rhs in an enumerated set
     */
@@ -470,7 +550,7 @@ public:
       // It's also a coding error if we're trying to swap a item with itself
       Q_ASSERT(lhs.key() != rhs.key());
 
-      this->normaliseSeqNums();
+///      this->normaliseSeqNums();
 
       qDebug() <<
          Q_FUNC_INFO << "Swapping items" << lhs.seqNum() << "(#" << lhs.key() << ") and " << rhs.seqNum() << " (#" <<
@@ -494,7 +574,7 @@ public:
          this->m_itemIds.swapItemsAt(lhsIndex, rhsIndex);
       }
 
-      emit this->m_owner.itemsChanged();
+      this->emitSetChanged();
       return;
    }
 
@@ -602,6 +682,5 @@ private:
    //! Note that this list is not in any particular order (see comments in \c items member function)
    QVector<int> m_itemIds = {};
 };
-
 
 #endif

@@ -40,7 +40,7 @@
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
 // See comment in model/NamedEntity.h
-#define AddPropertyName(property) namespace PropertyNames::Mash { BtStringConst const property{#property}; }
+#define AddPropertyName(property) namespace PropertyNames::Mash { inline BtStringConst const property{#property}; }
 AddPropertyName(equipAdjust              )
 AddPropertyName(grainTemp_c              )
 ///AddPropertyName(mashSteps                )
@@ -72,7 +72,7 @@ class Mash : public NamedEntity,
    STEP_OWNER_COMMON_DECL(Mash, mash)
    // See model/FolderBase.h for info, getters and setters for these properties
    Q_PROPERTY(QString folder        READ folder        WRITE setFolder     )
-   // See model/SteppedOwnerBase.h for info, getters and setters for these properties
+   // See model/StepOwnerBase.h for info, getters and setters for these properties
    Q_PROPERTY(QList<std::shared_ptr<MashStep>> steps   READ steps   WRITE setSteps   STORED false)
    Q_PROPERTY(unsigned int numSteps   READ numSteps   STORED false)
 

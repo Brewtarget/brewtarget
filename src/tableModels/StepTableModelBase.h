@@ -17,6 +17,8 @@
 #define TABLEMODELS_STEPTABLEMODELBASE_H
 #pragma once
 
+#include <memory>
+
 #include <QDebug>
 
 #include "utils/CuriouslyRecurringTemplateBase.h"
@@ -64,6 +66,9 @@ protected:
 
       // Connect new signals, unless there is no new Mash/Boil/etc or we're not changing step owner (eg Mash)
       if (stepOwner && this->m_stepOwnerObs != stepOwner) {
+         qDebug() <<
+            Q_FUNC_INFO << "Connecting stepsChanged signal from" << StepOwnerClass::staticMetaObject.className() << "#" <<
+            stepOwner->key() << "to" << Derived::staticMetaObject.className();
          this->derived().connect(stepOwner.get(), &StepOwnerClass::stepsChanged, &this->derived(), &Derived::stepOwnerChanged);
       }
 
@@ -118,6 +123,7 @@ protected:
       return false;
    }
 
+private:
    void reorderStep(std::shared_ptr<StepClass> step, int current) {
       // doSomething will be -1 if we are moving up and 1 if we are moving down
       // and 0 if nothing is to be done (see next comment)
@@ -169,6 +175,7 @@ protected:
       return;
    }
 
+protected:
    void doMoveStepUp(int stepNum) {
       if (!this->m_stepOwnerObs || stepNum == 0 || stepNum >= this->derived().rows.size()) {
          return;
@@ -188,14 +195,14 @@ protected:
    }
 
    void doStepOwnerChanged() {
-      // A step was added, removed or change order.  Remove and re-add all steps.
+      // A step was added, removed or changed order.  Remove and re-add all steps.
       qDebug() << Q_FUNC_INFO << "Re-reading" << StepClass::staticMetaObject.className() << "steps for" << this->m_stepOwnerObs;
       this->setStepOwner(this->m_stepOwnerObs);
       return;
 
    }
    void doStepChanged(QMetaProperty prop, [[maybe_unused]] QVariant val) {
-      qDebug() << Q_FUNC_INFO;
+      qDebug() << Q_FUNC_INFO << prop.name();
 
       StepClass * stepSender = qobject_cast<StepClass *>(this->derived().sender());
       if (stepSender) {
@@ -212,7 +219,8 @@ protected:
 
          int ii = this->derived().findIndexOf(stepSender);
          if (ii >= 0) {
-            if (prop.name() == PropertyNames::SteppedBase::stepNumber) {
+            if (prop.name() == PropertyNames::EnumeratedBase::stepNumber) {
+               qDebug().noquote() << Q_FUNC_INFO << Logging::getStackTrace();
                this->reorderStep(this->derived().rows.at(ii), ii);
             }
 
@@ -240,20 +248,20 @@ protected:
  *
  *        Note we have to be careful about comment formats in macro definitions
  */
-#define STEP_TABLE_MODEL_COMMON_DECL(StepOwnerName)                                                    \
-   /* This allows StepTableModelBase to call protected and private members of Derived */               \
-   friend class StepTableModelBase<StepOwnerName##StepTableModel, StepOwnerName##Step, StepOwnerName>; \
-                                                                                                       \
-   public:                                                                                             \
-      void set##StepOwnerName(std::shared_ptr<StepOwnerName> stepOwner);                               \
-      std::shared_ptr<StepOwnerName> get##StepOwnerName() const;                                       \
-      bool removeStep(std::shared_ptr<StepOwnerName##Step> step);                                      \
-                                                                                                       \
-   public slots:                                                                                       \
-      void moveStepUp(int stepNum);                                                                    \
-      void moveStepDown(int stepNum);                                                                  \
-      void stepOwnerChanged();                                                                         \
-      void stepChanged(QMetaProperty prop, QVariant val);                                              \
+#define STEP_TABLE_MODEL_COMMON_DECL(StepOwnerName)                                              \
+   /* This allows StepTableModelBase to call protected and private members of Derived */         \
+   friend StepTableModelBase<StepOwnerName##StepTableModel, StepOwnerName##Step, StepOwnerName>; \
+                                                                                                 \
+   public:                                                                                       \
+      void set##StepOwnerName(std::shared_ptr<StepOwnerName> stepOwner);                         \
+      std::shared_ptr<StepOwnerName> get##StepOwnerName() const;                                 \
+      bool removeStep(std::shared_ptr<StepOwnerName##Step> step);                                \
+                                                                                                 \
+   public slots:                                                                                 \
+      void moveStepUp(int stepNum);                                                              \
+      void moveStepDown(int stepNum);                                                            \
+      void stepOwnerChanged();                                                                   \
+      void stepChanged(QMetaProperty prop, QVariant val);                                        \
 
 
 /**
