@@ -21,6 +21,7 @@ Bug fixes and minor enhancements.
 
 ### Bug Fixes
 * Crash when copying recipe, then on adding new steps in mash, ferment, boil, others [868](https://github.com/Brewtarget/brewtarget/issues/868)
+* Changing Yeast or Annetuation does't change ABV [872](https://github.com/Brewtarget/brewtarget/issues/872)
 
 ### Release Timestamp
 Sun, 3 Nov 2024 04:00:10 +0100

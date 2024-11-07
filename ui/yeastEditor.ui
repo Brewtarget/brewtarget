@@ -145,7 +145,7 @@
         </widget>
        </item>
        <item row="4" column="2" colspan="3">
-        <widget class="SmartLineEdit" name="lineEdit_laboratory">
+        <widget class="QLineEdit" name="lineEdit_laboratory">
          <property name="toolTip">
           <string>Lab</string>
          </property>
@@ -162,7 +162,7 @@
         </widget>
        </item>
        <item row="5" column="2" colspan="3">
-        <widget class="SmartLineEdit" name="lineEdit_productId">
+        <widget class="QLineEdit" name="lineEdit_productId">
          <property name="toolTip">
           <string>Product ID</string>
          </property>
@@ -314,23 +314,6 @@
         <widget class="SmartLineEdit" name="lineEdit_maxTemperature">
          <property name="toolTip">
           <string>Max temp</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="2">
-        <widget class="QLabel" name="label_timesCultured">
-         <property name="text">
-          <string>Times Recultured</string>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit_timesCultured</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="3">
-        <widget class="SmartLineEdit" name="lineEdit_timesCultured">
-         <property name="toolTip">
-          <string>Times this yeast has been recultured</string>
          </property>
         </widget>
        </item>

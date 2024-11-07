@@ -274,6 +274,10 @@ public:
          connect(equipment.get(), &NamedEntity::changed, &this->m_self, &Recipe::acceptChangeToContainedObject);
       }
 
+      this->m_self.m_fermentableAdditions.connectAllItemChangedSignals();
+      this->m_self.        m_hopAdditions.connectAllItemChangedSignals();
+      this->m_self.      m_yeastAdditions.connectAllItemChangedSignals();
+
       // Below should not be handled via OwnedSet connecting to acceptChangeToRecipeAdditionFermentable etc
 ///      auto fermentableAdditions = this->m_self.fermentableAdditions();
 ///      for (auto fermentableAddition : fermentableAdditions) {
@@ -1091,10 +1095,10 @@ public:
       double nonFermentableSugars_kg   = sugars.nonFermentableSugars_kg;  // Mass of sugar that is not fermentable (also counted in sugar_kg_ignoreEfficiency)
 
       // Uncomment for diagnosing problems with calculations
-//      qDebug() <<
-//         Q_FUNC_INFO << "Recipe #" << this->m_self.key() << "(" << this->m_self.name() << ") "
-//         "sugar_kg: " << sugar_kg << ", sugar_kg_ignoreEfficiency: " << sugar_kg_ignoreEfficiency <<
-//         ", nonFermentableSugars_kg:" << nonFermentableSugars_kg;
+      qDebug() <<
+         Q_FUNC_INFO << "Recipe #" << this->m_self.key() << "(" << this->m_self.name() << ") "
+         "sugar_kg: " << sugar_kg << ", sugar_kg_ignoreEfficiency: " << sugar_kg_ignoreEfficiency <<
+         ", nonFermentableSugars_kg:" << nonFermentableSugars_kg;
 
       // We might lose some sugar in the form of Trub/Chiller loss and lauter deadspace.
       auto equipment = this->m_self.equipment();
@@ -1136,12 +1140,17 @@ public:
          tmp_nonferm_pnts = 0.0;
       }
 
-      // Calculage FG
+      // Calculate FG
+      // First, get the yeast with the greatest attenuation.
       double attenuation_pct = 0.0;
       for (auto yeastAddition : this->m_self.yeastAdditions()) {
-         // Get the yeast with the greatest attenuation.
-         if (yeastAddition->attenuation_pct() > attenuation_pct) {
-            attenuation_pct = yeastAddition->yeast()->attenuationTypical_pct();
+         // For each yeast addition, prefer the attenuation specified for that addition if available, otherwise as the
+         // underlying yeast object for a typical value -- which in the worst case can be Yeast::DefaultAttenuation_pct,
+         // but is usually the mean of Yeast::attenuationMin_pct() and Yeast::attenuationMax_pct().
+         double const valueForThisAddition =
+            yeastAddition->attenuation_pct().value_or(yeastAddition->yeast()->attenuationTypical_pct());
+         if (valueForThisAddition > attenuation_pct) {
+            attenuation_pct = valueForThisAddition;
          }
       }
       // This means we have yeast, but they neglected to provide attenuation percentages.
@@ -1163,9 +1172,10 @@ public:
       }
 
       // Uncomment for diagnosing problems with calculations
-//      qDebug() <<
-//         Q_FUNC_INFO << "Recipe #" << this->m_self.key() << "(" << this->m_self.name() << ") "
-//         "m_og_fermentable: " << m_og_fermentable << ", m_fg_fermentable: " << m_fg_fermentable;
+      qDebug() <<
+         Q_FUNC_INFO << "Recipe #" << this->m_self.key() << "(" << this->m_self.name() << ") "
+         "attenuation_pct:" << attenuation_pct << ", m_og_fermentable:" << m_og_fermentable << ", m_fg_fermentable: " <<
+         m_fg_fermentable;
 
       if (!qFuzzyCompare(this->m_self.m_og, calculatedOg)) {
          qDebug() <<

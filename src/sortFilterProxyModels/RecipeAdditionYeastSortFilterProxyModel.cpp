@@ -39,7 +39,7 @@ bool RecipeAdditionYeastSortFilterProxyModel::isLessThan(RecipeAdditionYeastTabl
          return leftItem.toString() < rightItem.toString();
 
       case RecipeAdditionYeastTableModel::ColumnIndex::Attenuation:
-         // Attenuation on a RecipeAdditionYeast is std::optional<double> in the underlying model.  But here, the
+         // RecipeAdditionYeast::attenuation_pct is std::optional<double> in the underlying model.  But here, the
          // leftItem and rightItem QVariants will contain QString eg "75.0 %" or "" (for std::nullopt).
          //
          // Measurement::extractRawFromString does pretty much what we want though TODO we should explicitly tell it
@@ -47,6 +47,13 @@ bool RecipeAdditionYeastSortFilterProxyModel::isLessThan(RecipeAdditionYeastTabl
          //
          return Measurement::extractRawFromString<double>( leftItem.toString()) <
                 Measurement::extractRawFromString<double>(rightItem.toString());
+
+      case RecipeAdditionYeastTableModel::ColumnIndex::TimesCultured:
+         //
+         // Similar story with RecipeAdditionYeast::timesCultured
+         //
+         return Measurement::extractRawFromString<int>( leftItem.toString()) <
+                Measurement::extractRawFromString<int>(rightItem.toString());
 
       case RecipeAdditionYeastTableModel::ColumnIndex::TotalInventory:
       case RecipeAdditionYeastTableModel::ColumnIndex::Amount:
