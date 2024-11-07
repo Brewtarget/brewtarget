@@ -882,6 +882,16 @@ def installDependencies():
       #-----------------------------------------------------------------------------------------------------------------
       case 'Darwin':
          log.debug('Mac')
+         #
+         # There are one or two things we can't install automatically because Apple won't let us.  Eg, to install Xcode,
+         # you either need to "Open the Mac App Store" or to download from
+         # https://developer.apple.com/downloads/index.action, which requires you to have an Apple Developer account,
+         # which you can only get by paying Apple $100 per year.
+         #
+         # Other things should be possible -- eg Homebrew and MacPorts -- but are a bit fiddly.  We're working on those.
+         #
+         # But most things we attempt to do below.
+         #
 
          #
          # It's useful to know what version of MacOS we're running on.  Getting the version number is straightforward,
@@ -902,9 +912,9 @@ def installDependencies():
          #
          macOsVersionToReleaseName = {
             '15'    : 'Sequoia'      ,
+            '14'    : 'Sonoma'       ,
             # Can't guarantee that other parts of the build/packaging system will work on these older versions, but
             # doesn't hurt to at least be able to look them up.
-            '14'    : 'Sonoma'       ,
             '13'    : 'Ventura'      ,
             '12'    : 'Monterey'     ,
             '11'    : 'Big Sur'      ,
@@ -928,8 +938,8 @@ def installDependencies():
          #
          # Version number is major.minor.micro.
          #
-         # Prior to MacOS 11, we need the major and minor part of the version number.  From 11 on, we only need the
-         # major part.
+         # Prior to MacOS 10, we need the major and minor part of the version number - because 10.15 has a different
+         # name than 10.14.  From 11 on, we only need the major part as, eg 14.6 and 14.7 are both "Sonoma".
          #
          macOsVersion = str(parsedMacOsVersion.major)
          if (macOsVersion == '10'):
@@ -1018,10 +1028,8 @@ def installDependencies():
                btUtils.abortOnRunFail(subprocess.run(['brew', 'install', packageToInstall]))
 
          #
-         # In theory, having installed things it depends on, we can now install MacPorts.
-
-         #
-         # In principle MacPorts can be installed either from source or precompiled binary.
+         # Having installed things it depends on, we should now be able to install MacPorts -- either from source or
+         # precompiled binary.
          #
          # The instructions at https://guide.macports.org/#installing say that we probably don't need to install Xcode
          # as only a few ports need it.  So, for now, we haven't tried to install that.
@@ -1048,7 +1056,15 @@ def installDependencies():
          # TODO: Need to finish this.  For now, we  install MacPorts for GitHub actions via the mac.yml script.
 
          #
+         # Just because we have MacPorts installed, doesn't mean its list of software etc will be up-to-date.  So fix
+         # that first.
+         #
+         btUtils.abortOnRunFail(subprocess.run(['sudo', 'port', 'selfupdate']))
+
+         #
          # Now install Xalan-C via MacPorts
+         #
+         # As of 2024-11-07 qt6-qtbase fails to install - see https://trac.macports.org/ticket/69918
          #
          installListPort = ['qt6',
                             'xalanc',
