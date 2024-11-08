@@ -948,9 +948,13 @@ def installDependencies():
          log.debug('MacOS ' + macOsVersion + ' release name: ' + macOsReleaseName)
 
          #
-         # We install most of the Mac dependencies via Homebrew (https://brew.sh/) using the `brew` command below.
-         # However, as at 2023-12-01, Homebrew has stopped supplying a package for Xalan-C.  So, we install that using
-         # MacPorts (https://ports.macports.org/), which provides the `port` command.
+         # The two main "package management" systems for MacOS are Homebrew (https://brew.sh/) and MacPorts
+         # (https://ports.macports.org/).  They work in different ways, with Homebrew distributing binaries and MacPorts
+         # building everything from source.
+         #
+         # We install most of the Mac dependencies via Homebrew using the `brew` command below.  However, as at
+         # 2023-12-01, Homebrew has stopped supplying a package for Xalan-C.  So, we install that using MacPorts, which
+         # provides the `port` command.
          #
          # Note that MacPorts (port) requires sudo but Homebrew (brew) does not.   Perhaps more importantly, they two
          # package managers install things to different locations:
@@ -971,61 +975,61 @@ def installDependencies():
          # assume Homebrew is already installed (because it is on the GitHub actions).
          #
 
-         #
-         # We install as many of our dependencies as possible with with Homebrew, and do this first, because some of
-         # these packages will also be needed for the installation of MacPorts to work.
-         #
-         # We could make this list shorter if we wanted as, eg, installing Xalan-C will cause Xerces-C to be installed
-         # too (as the former depends on the latter).  However, I think it's clearer to explicitly list all the direct
-         # dependencies (eg we do make calls directly into Xerces).
-         #
-         # .:TBD:. Installing Boost here doesn't seem to give us libboost_stacktrace_backtrace
-         #         Also, trying to use the "--cc=clang" option to install boost gives an error ("Error: boost: no bottle
-         #         available!")  For the moment, we're just using Boost header files on Mac though, so this should be
-         #         OK.
-         #
-         # We install the tree command here as, although it's not needed to do the build itself, it's useful for
-         # diagnosing certain build problems (eg to see what changes certain parts of the build have made to the build
-         # directory tree) when the build is running as a GitHub action.
-         #
-         installListBrew = ['llvm',
-                            'gcc',
-                            'cmake',
-                            'coreutils',
-                            'boost',
-                            'doxygen',
-                            'git',
-                            'meson',
-                            'ninja',
-                            'pandoc',
-                            'tree',
-#                            'qt@6',
-                            'openssl@3', # OpenSSL headers and library
-#                            'xalan-c',
-#                            'xerces-c'
-                            ]
-         for packageToInstall in installListBrew:
-            #
-            # If we try to install a Homebrew package that is already installed, we'll get a warning.  This isn't
-            # horrendous, but it looks a bit bad on the GitHub automated builds (because a lot of things are already
-            # installed by the time this script runs).  As explained at
-            # https://apple.stackexchange.com/questions/284379/with-homebrew-how-to-check-if-a-software-package-is-installed,
-            # the simplest (albeit perhaps not the most elegant) way to check whether a package is already installed is
-            # to run `brew list`, throw away the output, and look at the return code, which will be 0 if the package is
-            # already installed and 1 if it is not.  In the shell, we can use the magic of short-circuit evaluation
-            # (https://en.wikipedia.org/wiki/Short-circuit_evaluation) to, at a small legibility cost, do the whole
-            # check-and-install, in a single line.  But in Python, it's easier to do it in two steps.
-            #
-            log.debug('Checking ' + packageToInstall)
-            brewListResult = subprocess.run(['brew', 'list', packageToInstall],
-                                            stdout = subprocess.DEVNULL,
-                                            stderr = subprocess.DEVNULL,
-                                            capture_output = False)
-            if (brewListResult.returncode == 0):
-               log.debug('Homebrew reports ' + packageToInstall + ' already installed')
-            else:
-               log.debug('Installing ' + packageToInstall + ' via Homebrew')
-               btUtils.abortOnRunFail(subprocess.run(['brew', 'install', packageToInstall]))
+#         #
+#         # We install as many of our dependencies as possible with with Homebrew, and do this first, because some of
+#         # these packages will also be needed for the installation of MacPorts to work.
+#         #
+#         # We could make this list shorter if we wanted as, eg, installing Xalan-C will cause Xerces-C to be installed
+#         # too (as the former depends on the latter).  However, I think it's clearer to explicitly list all the direct
+#         # dependencies (eg we do make calls directly into Xerces).
+#         #
+#         # .:TBD:. Installing Boost here doesn't seem to give us libboost_stacktrace_backtrace
+#         #         Also, trying to use the "--cc=clang" option to install boost gives an error ("Error: boost: no bottle
+#         #         available!")  For the moment, we're just using Boost header files on Mac though, so this should be
+#         #         OK.
+#         #
+#         # We install the tree command here as, although it's not needed to do the build itself, it's useful for
+#         # diagnosing certain build problems (eg to see what changes certain parts of the build have made to the build
+#         # directory tree) when the build is running as a GitHub action.
+#         #
+#         installListBrew = ['llvm',
+#                            'gcc',
+#                            'cmake',
+#                            'coreutils',
+#                            'boost',
+#                            'doxygen',
+#                            'git',
+#                            'meson',
+#                            'ninja',
+#                            'pandoc',
+#                            'tree',
+##                            'qt@6',
+#                            'openssl@3', # OpenSSL headers and library
+##                            'xalan-c',
+##                            'xerces-c'
+#                            ]
+#         for packageToInstall in installListBrew:
+#            #
+#            # If we try to install a Homebrew package that is already installed, we'll get a warning.  This isn't
+#            # horrendous, but it looks a bit bad on the GitHub automated builds (because a lot of things are already
+#            # installed by the time this script runs).  As explained at
+#            # https://apple.stackexchange.com/questions/284379/with-homebrew-how-to-check-if-a-software-package-is-installed,
+#            # the simplest (albeit perhaps not the most elegant) way to check whether a package is already installed is
+#            # to run `brew list`, throw away the output, and look at the return code, which will be 0 if the package is
+#            # already installed and 1 if it is not.  In the shell, we can use the magic of short-circuit evaluation
+#            # (https://en.wikipedia.org/wiki/Short-circuit_evaluation) to, at a small legibility cost, do the whole
+#            # check-and-install, in a single line.  But in Python, it's easier to do it in two steps.
+#            #
+#            log.debug('Checking ' + packageToInstall)
+#            brewListResult = subprocess.run(['brew', 'list', packageToInstall],
+#                                            stdout = subprocess.DEVNULL,
+#                                            stderr = subprocess.DEVNULL,
+#                                            capture_output = False)
+#            if (brewListResult.returncode == 0):
+#               log.debug('Homebrew reports ' + packageToInstall + ' already installed')
+#            else:
+#               log.debug('Installing ' + packageToInstall + ' via Homebrew')
+#               btUtils.abortOnRunFail(subprocess.run(['brew', 'install', packageToInstall]))
 
          #
          # Having installed things it depends on, we should now be able to install MacPorts -- either from source or
@@ -1066,7 +1070,16 @@ def installDependencies():
          #
          # As of 2024-11-07 qt6-qtbase fails to install - see https://trac.macports.org/ticket/69918
          #
-         installListPort = ['qt6',
+         installListPort = ['llvm-19',
+                            'cmake',
+                            'ninja',
+                            'meson',
+                            'boost',
+                            'doxygen',
+                            'openssl',
+                            'tree',
+                            'pandoc',
+                            'qt6',
                             'xalanc',
                             'xercesc3']
          for packageToInstall in installListPort:
