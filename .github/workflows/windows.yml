@@ -18,40 +18,17 @@
 #-----------------------------------------------------------------------------------------------------------------------
 name: Windows
 
-#
-# These are all the events that trigger this workflow run.  Most are self-explanatory.  We need workflow_dispatch to be
-# able to run the workflow manually.
-#
 on:
   push:
     branches:
       - develop
       - "stable/**"
+
   pull_request:
     branches:
       - develop
   schedule:
     - cron: "0 2 * * *"
-  workflow_dispatch:
-    #
-    # Normally, on the scheduled builds, we only do the "test" signing with SignPath because doing the "release" signing
-    # requires a manual approval step in our SignPath account.  When we want to do a proper "release" signing, then we
-    # trigger a manual build and set this variable to true (via the GitHub UI prompt at the time the build is
-    # initiated).
-    #
-    inputs:
-      signingType:
-        #
-        # Note that, per GitHub doco, "If you attempt to dereference a nonexistent property, it will evaluate to an
-        # empty string."  Hence it's easier later on in the code if we use a choice here than a boolean.
-        #
-        description: 'Do a "release" signing (rather than just a "test" one)'
-        required: true
-        type: choice
-        options:
-         - test
-         - release
-        default: 'test'
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
@@ -137,6 +114,8 @@ jobs:
       #       python get-pip.py
       #       python -m pip install -U --force-reinstall pip
       #    See https://stackoverflow.com/questions/48087004/installing-pip-on-msys for more discussion on this.
+      #    HOWEVER, as of 2024-11-08, this gives an error that "This environment is externally managed" and we're
+      #    directed to use pacman.
       #
       - name: Install Frameworks and Libraries, and set up Meson build environment
         shell: msys2 {0}
@@ -150,10 +129,11 @@ jobs:
           echo "Installed pip is:"
           which pip
           pip --version
-          curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-          python get-pip.py
-          python -m pip install -U --force-reinstall pip
-          pip --version
+          #curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+          #python get-pip.py
+          #python -m pip install -U --force-reinstall pip
+          #pip --version
+          echo $PATH
           echo "Locale:"
           locale
           export PYTHONIOENCODING=utf8
