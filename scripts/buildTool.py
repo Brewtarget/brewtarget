@@ -1086,6 +1086,18 @@ def installDependencies():
          # Just because we have MacPorts installed, doesn't mean its list of software etc will be up-to-date.  So fix
          # that first.
          #
+         log.debug('First run of MacPorts selfupdate')
+         btUtils.abortOnRunFail(subprocess.run(['sudo', 'port', 'selfupdate']))
+
+         #
+         # Sometimes you need to run selfupdate twice, because MacPorts itself was too out of date to update the ports
+         # tree.  (You'll get an error that "Not all sources could be fully synced using the old version of MacPorts.
+         # Please run selfupdate again now that MacPorts base has been updated."
+         #
+         # Rather than try to detect this, we just always run selfupdate twice.  If the second time is a no-op then no
+         # harm is done.
+         #
+         log.debug('Second run of MacPorts selfupdate')
          btUtils.abortOnRunFail(subprocess.run(['sudo', 'port', 'selfupdate']))
 
          #
