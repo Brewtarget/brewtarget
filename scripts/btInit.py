@@ -87,15 +87,27 @@ match platform.system():
          # to.
          btUtils.abortOnRunFail(subprocess.run(['sudo', 'apt', 'install', 'python3-venv']))
    case 'Windows':
-      # https://docs.python.org/3/library/sys.html#sys.executable says sys.executable is '"the absolute path of the
-      # executable binary for the Python interpreter, on systems where this makes sense".
-      log.info(
-         'Attempting to ensure latest version of pip is installed via  ' + sys.executable + ' -m ensurepip --upgrade'
-      )
-      btUtils.abortOnRunFail(subprocess.run([sys.executable, '-m', 'ensurepip', '--upgrade']))
-      log.info('pip install setuptools')
-      exe_pip = shutil.which('pip3')
-      btUtils.abortOnRunFail(subprocess.run([exe_pip, 'install', 'setuptools']))
+      #
+      # In the past, we were able to install pip via Python, with the following code:
+      #
+      #    # https://docs.python.org/3/library/sys.html#sys.executable says sys.executable is '"the absolute path of the
+      #    # executable binary for the Python interpreter, on systems where this makes sense".
+      #    log.info(
+      #       'Attempting to ensure latest version of pip is installed via  ' + sys.executable + ' -m ensurepip --upgrade'
+      #    )
+      #    btUtils.abortOnRunFail(subprocess.run([sys.executable, '-m', 'ensurepip', '--upgrade']))
+      #
+      # However, as of 2024-11, this gives "error: externally-managed-environment" and a direction "To install Python
+      # packages system-wide, try 'pacman -S $MINGW_PACKAGE_PREFIX-python-xyz', where xyz is the package you are trying
+      # to install."  So now we do that instead.  (Note that MINGW_PACKAGE_PREFIX will normally be set to
+      # "mingw-w64-x86_64".)
+      #
+      log.info('Install pip via pacman')
+      btUtils.abortOnRunFail(subprocess.run(['pacman', '-S', '$MINGW_PACKAGE_PREFIX-python-pip']))
+      # See comment in scripts/buildTool.py about why we have to run pip via Python rather than just invoking pip
+      # directly eg via `shutil.which('pip3')`.
+      log.info('python -m pip install setuptools')
+      btUtils.abortOnRunFail(subprocess.run([sys.executable, '-m', 'pip', 'install', 'setuptools']))
    case 'Darwin':
       # Assuming it was Homebrew that installed Python, then, according to https://docs.brew.sh/Homebrew-and-Python,
       # it bundles various packages, including pip.  Since Python version 3.12, Homebrew marks itself as package manager
