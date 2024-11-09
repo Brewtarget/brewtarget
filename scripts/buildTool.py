@@ -1175,7 +1175,6 @@ def installDependencies():
                # `pathlib.Path('/opt/local/bin/qmake').symlink_to(qmakePath)`.  However, this will give a "Permission
                # denied" error.  We need to do it as root, via sudo.
                #
-               pathlib.Path('/opt/local/bin/qmake').symlink_to(qmakePath)
                btUtils.abortOnRunFail(subprocess.run(['sudo', 'ln', '-s', qmakePath, '/opt/local/bin/qmake'], capture_output=False))
 
             qtBinDir = os.path.dirname(qmakePath)
