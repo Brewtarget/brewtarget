@@ -124,6 +124,7 @@ topDir=$(dirname $0)
 
 # This first Python script, run using the system-wide Python interpreter, will install a few bare necessities and
 # (re)create the Python venv
+echo "python3 ${topDir}/scripts/btInit.py"
 python3 ${topDir}/scripts/btInit.py
 if [ $? -ne 0 ]; then
    exit $?
@@ -133,6 +134,7 @@ fi
 # Now we can switch to the venv
 #
 pwd
+echo "source ${topDir}/.venv/bin/activate"
 source ${topDir}/.venv/bin/activate
 
 #
@@ -147,4 +149,5 @@ source ${topDir}/.venv/bin/activate
 #env
 
 # Run the main script, passing in all the command line arguments we received
+echo "python3 ${topDir}/scripts/buildTool.py $@"
 python3 ${topDir}/scripts/buildTool.py $@

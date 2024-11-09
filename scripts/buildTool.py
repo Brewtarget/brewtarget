@@ -1104,6 +1104,7 @@ def installDependencies():
 #         qtInstalledBy = 'Homebrew'
          qtInstalledBy = 'MacPorts'
 
+         qtBaseDir = ''
          if ('Homebrew' == qtInstalledBy):
             #
             # ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
@@ -1118,6 +1119,9 @@ def installDependencies():
             # /usr/local/lib directories".
             #
             btUtils.abortOnRunFail(subprocess.run(['brew', 'link', '--force', 'qt6']))
+            qtBaseDir = btUtils.abortOnRunFail(
+               subprocess.run(['brew', '--prefix', 'qt@6'], capture_output=True)
+            ).stdout.decode('UTF-8').rstrip()
 
             #
             # Further notes from when we did this for Qt5:
@@ -1130,42 +1134,9 @@ def installDependencies():
             #    │    export PATH=/usr/local/opt/qt5/bin:$PATH                                                         │
             #    │ The former gives permission errors, so we do the latter in mac.yml (but NB it's only needed for     │
             #    │ CMake).                                                                                             │
-            #    │                                                                                                     │
-            #    │ But the brew command to install Qt also tells us to do the following:                               │
-            #    │                                                                                                     │
-            #    │    echo 'export PATH="/usr/local/opt/qt@5/bin:$PATH"' >> ~/.bash_profile                            │
-            #    │    export LDFLAGS="-L/usr/local/opt/qt@5/lib"                                                       │
-            #    │    export CPPFLAGS="-I/usr/local/opt/qt@5/include"                                                  │
-            #    │    export PKG_CONFIG_PATH="/usr/local/opt/qt@5/lib/pkgconfig"                                       │
-            #    │                                                                                                     │
-            #    │ Note however that, in a GitHub runner, the first of these will give "[Errno 13] Permission denied". │
             #    └─────────────────────────────────────────────────────────────────────────────────────────────────────┘
             #
-            try:
-               # See
-               # https://stackoverflow.com/questions/1466000/difference-between-modes-a-a-w-w-and-r-in-built-in-open-function
-               # for a good summary (clearer than the Python official docs) of the mode flag on open.
-               with open("~/.bash_profile", "a+") as bashProfile:
-                  bashProfile.write('export PATH="/usr/local/opt/qt@6/bin:$PATH"')
-            except IOError as ioe:
-               # This is not fatal, so we just note the error and continue
-               log.warning("Unable to write to .bash_profile: " + ioe.strerror)
-            os.environ['LDFLAGS'] = '-L/usr/local/opt/qt@6/lib'
-            os.environ['CPPFLAGS'] = '-I/usr/local/opt/qt@6/include'
-            os.environ['PKG_CONFIG_PATH'] = '/usr/local/opt/qt@6/lib/pkgconfig'
 
-            #
-            # See comment about CMAKE_PREFIX_PATH in CMakeLists.txt.  I think this is rather too soon to try to do this,
-            # but it can't hurt.
-            #
-            # Typically, this is going to set CMAKE_PREFIX_PATH to /usr/local/opt/qt@6
-            #
-            qtPrefixPath = btUtils.abortOnRunFail(
-               subprocess.run(['brew', '--prefix', 'qt@6'], capture_output=True)
-            ).stdout.decode('UTF-8').rstrip()
-            log.debug('Qt Prefix Path: ' + qtPrefixPath)
-            os.environ['CMAKE_PREFIX_PATH'] = qtPrefixPath;
-            btUtils.abortOnRunFail(subprocess.run(['tree', '-sh', qtPrefixPath], capture_output=False))
          elif ('MacPorts' == qtInstalledBy):
             #
             # ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
@@ -1178,38 +1149,71 @@ def installDependencies():
             # https://stackoverflow.com/questions/29431882/get-qt5-up-and-running-on-a-new-mac is to search for qmake
             # under the /opt directory and then make a symlink to it in the /opt/local/bin/ directory.  Eg, if qmake
             # were found in /opt/local/libexec/qt5/bin/, then we'd want to run
-            # `ln -s /opt/local/libexec/qt5/bin/qmake /opt/local/bin/qmake`
+            # `ln -s /opt/local/libexec/qt5/bin/qmake /opt/local/bin/qmake`.
             #
             qmakePath = findFirstMatchingFile('qmake', '/opt')
             if ('' == qmakePath):
                log.error('Unable to write to find qmake under /opt')
             else:
                log.debug('Found qmake at ' + qmakePath)
+               #
+               # You might think we could just create the symlink directly in Python, eg by running
+               # `pathlib.Path('/opt/local/bin/qmake').symlink_to(qmakePath)`.  However, this will give a "Permission
+               # denied" error.  We need to do it as root, via sudo.
+               #
                pathlib.Path('/opt/local/bin/qmake').symlink_to(qmakePath)
+               btUtils.abortOnRunFail(subprocess.run(['sudo', 'ln', '-s', qmakePath, '/opt/local/bin/qmake'], capture_output=False))
 
-            #
-            # Now we know where qmake is, we should probably use this as a way to do the same environment variable fixes
-            # that Homebrew tells us to.
-            #
             qtBinDir = os.path.dirname(qmakePath)
             qtBaseDir = os.path.dirname(qtBinDir)
-
-            try:
-               # See
-               # https://stackoverflow.com/questions/1466000/difference-between-modes-a-a-w-w-and-r-in-built-in-open-function
-               # for a good summary (clearer than the Python official docs) of the mode flag on open.
-               with open("~/.bash_profile", "a+") as bashProfile:
-                  bashProfile.write('export PATH="' + qtBaseDir + '/bin:$PATH"')
-            except IOError as ioe:
-               # This is not fatal, so we just note the error and continue
-               log.warning("Unable to write to .bash_profile: " + ioe.strerror)
-            os.environ['LDFLAGS'] = '-L' + qtBaseDir + '/lib'
-            os.environ['CPPFLAGS'] = '-I' + qtBaseDir + '/include'
-            os.environ['PKG_CONFIG_PATH'] = qtBaseDir + 'lib/pkgconfig'
 
          else:
             log.error('Did not understand how Qt was installed: ' + qtInstalledBy)
 
+         #
+         # This is useful for diagnosing problems with GitHub action builds.
+         #
+         btUtils.abortOnRunFail(subprocess.run(['tree', '-sh', qtBaseDir], capture_output=False))
+
+         #
+         # We now fix various environment variables needed for the builds to pick up Qt headers, libraries, etc.
+         #
+         # When intalling Qt5 via homebrew, the brew command explicitly tells us to do the following.  We do a slightly
+         # more generic version to work with any verison of Qt and regardless of whether Homebrew or MacPorts was used
+         # to install Qt.
+         #    ┌─────────────────────────────────────────────────────────────────────────────────────────────────────┐
+         #    │ But the brew command to install Qt also tells us to do the following:                               │
+         #    │                                                                                                     │
+         #    │    echo 'export PATH="/usr/local/opt/qt@5/bin:$PATH"' >> ~/.bash_profile                            │
+         #    │    export LDFLAGS="-L/usr/local/opt/qt@5/lib"                                                       │
+         #    │    export CPPFLAGS="-I/usr/local/opt/qt@5/include"                                                  │
+         #    │    export PKG_CONFIG_PATH="/usr/local/opt/qt@5/lib/pkgconfig"                                       │
+         #    │                                                                                                     │
+         #    │ Note however that, in a GitHub runner, the first of these will give "[Errno 13] Permission denied". │
+         #    └─────────────────────────────────────────────────────────────────────────────────────────────────────┘
+         #
+         log.debug('Qt Base Dir: ' + qtBaseDir)
+         try:
+            # See
+            # https://stackoverflow.com/questions/1466000/difference-between-modes-a-a-w-w-and-r-in-built-in-open-function
+            # for a good summary (clearer than the Python official docs) of the mode flag on open.
+            with open("~/.bash_profile", "a+") as bashProfile:
+               bashProfile.write('export PATH="' + qtBaseDir + '/bin:$PATH"')
+         except IOError as ioe:
+            # This is not fatal, so we just note the error and continue
+            log.warning("Unable to write to .bash_profile: " + ioe.strerror)
+         os.environ['LDFLAGS'] = '-L' + qtBaseDir + '/lib'
+         os.environ['CPPFLAGS'] = '-I' + qtBaseDir + '/include'
+         os.environ['PKG_CONFIG_PATH'] = qtBaseDir + 'lib/pkgconfig'
+
+         #
+         # See comment about CMAKE_PREFIX_PATH in CMakeLists.txt.  I think this is rather too soon to try to do this,
+         # but it can't hurt.
+         #
+         # Typically, this is going to set CMAKE_PREFIX_PATH to /usr/local/opt/qt@6 for a Homebrew Qt intall and
+         # /opt/local/libexec/qt6 for a MacPorts one.
+         #
+         os.environ['CMAKE_PREFIX_PATH'] = qtBaseDir;
 
          #
          # dmgbuild is a Python package that provides a command line tool to create macOS disk images (aka .dmg
