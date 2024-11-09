@@ -971,23 +971,37 @@ def installDependencies():
          log.debug('MacOS ' + macOsVersion + ' release name: ' + macOsReleaseName)
 
          #
-         # The two main "package management" systems for MacOS are Homebrew (https://brew.sh/) and MacPorts
-         # (https://ports.macports.org/).  They work in different ways, with Homebrew distributing binaries and MacPorts
-         # building everything from source, which is obviously a lot slower.
+         # The two main "package management" systems for MacOS are Homebrew (https://brew.sh/), which provides the
+         # `brew` command, and MacPorts (https://ports.macports.org/), which provides the `port` command.  They work in
+         # different ways, and have different philosophies.  Homebrew distributes binaries and MacPorts (mostly) builds
+         # everything from source.  MacPorts installs for all users and requires sudo.  Homebrew installs only for the
+         # current user and does not require sudo.  This means they install things to different locations:
+         #    - Homebrew packages are installed under /usr/local/Cellar/ with symlinks in /usr/local/opt/
+         #    - MacPorts packages are installed under /opt/local
+         # Note too that package names can vary slightly between HomeBrew and MacPorts.
          #
-         # We install most of the Mac dependencies via Homebrew using the `brew` command below.  However, as at
-         # 2023-12-01, Homebrew has stopped supplying a package for Xalan-C.  So, we install that using MacPorts, which
-         # provides the `port` command.
+         # Unfortunately, the different approaches mean there are limits on the extent to which you can mix-and-match
+         # between the two systems.
          #
-         # Note that MacPorts (port) requires sudo but Homebrew (brew) does not.   Perhaps more importantly, they two
-         # package managers install things to different locations:
-         #  - Homebrew packages are installed under /usr/local/Cellar/ with symlinks in /usr/local/opt/
-         #  - MacPorts packages are installed under /opt/local
-         # This means we need to have both directories in the include path when we come to compile.  On the whole, both
-         # CMake and Meson take care of finding a library automatically once given its name.
+         # In the past, we installed everything via Homebrew as it was very quick and seemed to work, provided we had
+         # both directories in the include path when we came to compile (because CMake and Meson can generally take care
+         # of finding a library automatically once given its name).
          #
-         # Note too that package names vary slightly between HomeBrew and MacPorts.  Don't assume you can always guess
-         # one from the other, as it's occasionally not evident.
+         # However, as at 2023-12-01, Homebrew has stopped supplying a package for Xalan-C.  So, we started installing
+         # Xalan and Xerces using MacPorts, whilst still installing everything else via Homebrew.  This seemed to work
+         # for a while, but in 2024, after upgrading to Qt6, we started having problems with the Qt `macdeployqt`
+         # command (which is used to pull all the necessary Qt libraries into the app bundle we distribute).  AFAICT
+         # this is a known issue (https://github.com/orgs/Homebrew/discussions/2823).  So now we are trying installing
+         # Qt6 via MacPorts.
+         #
+         # In the expectation that we might well chop and change between what we install via which package manager, we
+         # aim to support both below and to make it relatively easy to change which one is used to install which
+         # packages.
+         #
+         # Both package managers handle dependencies, so we could make our list of what to install very minimal (eg
+         # installing Xalan-C will cause Xerces-C to be installed too, as the former depends on the latter).  However, I
+         # think it's clearer to explicitly list all the _direct_ dependencies (eg we do make calls directly into
+         # Xerces, so we should list it as an explicit dependency).
          #
 
          #
@@ -998,61 +1012,56 @@ def installDependencies():
          # assume Homebrew is already installed (because it is on the GitHub actions).
          #
 
-#         #
-#         # We install as many of our dependencies as possible with with Homebrew, and do this first, because some of
-#         # these packages will also be needed for the installation of MacPorts to work.
-#         #
-#         # We could make this list shorter if we wanted as, eg, installing Xalan-C will cause Xerces-C to be installed
-#         # too (as the former depends on the latter).  However, I think it's clearer to explicitly list all the direct
-#         # dependencies (eg we do make calls directly into Xerces).
-#         #
-#         # .:TBD:. Installing Boost here doesn't seem to give us libboost_stacktrace_backtrace
-#         #         Also, trying to use the "--cc=clang" option to install boost gives an error ("Error: boost: no bottle
-#         #         available!")  For the moment, we're just using Boost header files on Mac though, so this should be
-#         #         OK.
-#         #
-#         # We install the tree command here as, although it's not needed to do the build itself, it's useful for
-#         # diagnosing certain build problems (eg to see what changes certain parts of the build have made to the build
-#         # directory tree) when the build is running as a GitHub action.
-#         #
-#         installListBrew = ['llvm',
+         #
+         # .:TBD:. Installing Boost here doesn't seem to give us libboost_stacktrace_backtrace
+         #         Also, trying to use the "--cc=clang" option to install boost gives an error ("Error: boost: no bottle
+         #         available!")  For the moment, we're just using Boost header files on Mac though, so this should be
+         #         OK.
+         #
+         # We install the tree command here as, although it's not needed to do the build itself, it's useful for
+         # diagnosing certain build problems (eg to see what changes certain parts of the build have made to the build
+         # directory tree) when the build is running as a GitHub action.
+         #
+         installListBrew = [
+#                            'llvm',
 #                            'gcc',
 #                            'cmake',
 #                            'coreutils',
-#                            'boost',
+                            'boost',
 #                            'doxygen',
 #                            'git',
 #                            'meson',
 #                            'ninja',
 #                            'pandoc',
-#                            'tree',
-##                            'qt@6',
-#                            'openssl@3', # OpenSSL headers and library
-##                            'xalan-c',
-##                            'xerces-c'
-#                            ]
-#         for packageToInstall in installListBrew:
-#            #
-#            # If we try to install a Homebrew package that is already installed, we'll get a warning.  This isn't
-#            # horrendous, but it looks a bit bad on the GitHub automated builds (because a lot of things are already
-#            # installed by the time this script runs).  As explained at
-#            # https://apple.stackexchange.com/questions/284379/with-homebrew-how-to-check-if-a-software-package-is-installed,
-#            # the simplest (albeit perhaps not the most elegant) way to check whether a package is already installed is
-#            # to run `brew list`, throw away the output, and look at the return code, which will be 0 if the package is
-#            # already installed and 1 if it is not.  In the shell, we can use the magic of short-circuit evaluation
-#            # (https://en.wikipedia.org/wiki/Short-circuit_evaluation) to, at a small legibility cost, do the whole
-#            # check-and-install, in a single line.  But in Python, it's easier to do it in two steps.
-#            #
-#            log.debug('Checking ' + packageToInstall)
-#            brewListResult = subprocess.run(['brew', 'list', packageToInstall],
-#                                            stdout = subprocess.DEVNULL,
-#                                            stderr = subprocess.DEVNULL,
-#                                            capture_output = False)
-#            if (brewListResult.returncode == 0):
-#               log.debug('Homebrew reports ' + packageToInstall + ' already installed')
-#            else:
-#               log.debug('Installing ' + packageToInstall + ' via Homebrew')
-#               btUtils.abortOnRunFail(subprocess.run(['brew', 'install', packageToInstall]))
+                            'tree',
+                            'dylibbundler',
+#                            'qt@6',
+                            'openssl@3', # OpenSSL headers and library
+#                            'xalan-c',
+#                            'xerces-c'
+                            ]
+         for packageToInstall in installListBrew:
+            #
+            # If we try to install a Homebrew package that is already installed, we'll get a warning.  This isn't
+            # horrendous, but it looks a bit bad on the GitHub automated builds (because a lot of things are already
+            # installed by the time this script runs).  As explained at
+            # https://apple.stackexchange.com/questions/284379/with-homebrew-how-to-check-if-a-software-package-is-installed,
+            # the simplest (albeit perhaps not the most elegant) way to check whether a package is already installed is
+            # to run `brew list`, throw away the output, and look at the return code, which will be 0 if the package is
+            # already installed and 1 if it is not.  In the shell, we can use the magic of short-circuit evaluation
+            # (https://en.wikipedia.org/wiki/Short-circuit_evaluation) to, at a small legibility cost, do the whole
+            # check-and-install, in a single line.  But in Python, it's easier to do it in two steps.
+            #
+            log.debug('Checking ' + packageToInstall)
+            brewListResult = subprocess.run(['brew', 'list', packageToInstall],
+                                            stdout = subprocess.DEVNULL,
+                                            stderr = subprocess.DEVNULL,
+                                            capture_output = False)
+            if (brewListResult.returncode == 0):
+               log.debug('Homebrew reports ' + packageToInstall + ' already installed')
+            else:
+               log.debug('Installing ' + packageToInstall + ' via Homebrew')
+               btUtils.abortOnRunFail(subprocess.run(['brew', 'install', packageToInstall]))
 
          #
          # Having installed things it depends on, we should now be able to install MacPorts -- either from source or
@@ -1101,18 +1110,21 @@ def installDependencies():
          btUtils.abortOnRunFail(subprocess.run(['sudo', 'port', 'selfupdate']))
 
          #
-         # Now install Xalan-C via MacPorts
+         # Now install packages we want from MacPorts
          #
-         # As of 2024-11-07 qt6-qtbase fails to install - see https://trac.macports.org/ticket/69918
+         # Note that it is not sufficient to install 'boost' here because, as at 2024-11-09, this still only gives us
+         # Boost 1.76 (from April 2021) and we need at least Boost 1.79.  Installing 'boost181' gives us Boost 1.81
+         # (from December 2022) which seems to be the newest version available in MacPorts.
          #
          installListPort = ['llvm-19',
                             'cmake',
                             'ninja',
                             'meson',
-                            'boost',
+#                           'boost181',
                             'doxygen',
                             'openssl',
-                            'tree',
+#                            'tree',
+#                            'dylibbundler',
                             'pandoc',
                             'qt6',
                             'xalanc',
@@ -1122,16 +1134,25 @@ def installDependencies():
             btUtils.abortOnRunFail(subprocess.run(['sudo', 'port', 'install', packageToInstall]))
 
          #
-         # By default, even once Qt is installed (whether from Homebrew or MacPorts, Meson will not find it.  Apparently
+         # By default, even once Qt is installed, whether from Homebrew or MacPorts, Meson will not find it.  Apparently
          # this is intentional to allow two versions of Qt to be installed at the same time.  The way to fix things
-         # differs between the two package managers.  We include both sets of fix-up code.  Toggle which of the
-         # following two lines is commented-out, depending on which way Qt was installed.
+         # differs between the two package managers.  We include both sets of fix-up code.
          #
-#         qtInstalledBy = 'Homebrew'
-         qtInstalledBy = 'MacPorts'
+         qtInstalledBy = []
+         if ('qt6' in installListPort):
+            qtInstalledBy.append('MacPorts')
+         if ('qt@6' in installListBrew):
+            qtInstalledBy.append('Homebrew')
+         log.debug('Qt installed by ' + ', '.join(qtInstalledBy))
+
+         if ([] == qtInstalledBy):
+            log.error('Did not understand how Qt was installed!')
+
+         if (len(qtInstalledBy)):
+            log.error('Qt installed twice!')
 
          qtBaseDir = ''
-         if ('Homebrew' == qtInstalledBy):
+         if ('Homebrew' in qtInstalledBy):
             #
             # ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
             # ┃ ××××××××××××××××××××××××××××××××× Fix-ups for Homebrew-installed Qt ××××××××××××××××××××××××××××××××× ┃
@@ -1163,7 +1184,7 @@ def installDependencies():
             #    └─────────────────────────────────────────────────────────────────────────────────────────────────────┘
             #
 
-         elif ('MacPorts' == qtInstalledBy):
+         elif ('MacPorts' in qtInstalledBy):
             #
             # ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
             # ┃ ××××××××××××××××××××××××××××××××× Fix-ups for MacPorts-installed Qt ××××××××××××××××××××××××××××××××× ┃
@@ -1192,8 +1213,6 @@ def installDependencies():
             qtBinDir = os.path.dirname(qmakePath)
             qtBaseDir = os.path.dirname(qtBinDir)
 
-         else:
-            log.error('Did not understand how Qt was installed: ' + qtInstalledBy)
 
          #
          # This is useful for diagnosing problems with GitHub action builds.
@@ -2591,6 +2610,10 @@ def doPackage():
             xalanMsgLibName = 'libxalanMsg.112.dylib'
          log.debug('Copying ' + xalanDir + xalanMsgLibName + ' to ' + dir_packages_mac_frm.as_posix())
          shutil.copy2(xalanDir + xalanMsgLibName, dir_packages_mac_frm)
+
+         #
+         # 2024-11-09 TODO Let's also try dylibbundler (https://github.com/auriamg/macdylibbundler/)
+         #
 
          #
          # Now let macdeployqt do most of the heavy lifting
