@@ -103,6 +103,20 @@ log.info('Found pip at: ' + exe_pip)
 btUtils.abortOnRunFail(subprocess.run([exe_python, '-m', 'pip', 'install', '--upgrade', 'pip']))
 
 #
+# Mostly, from here on out we'd be fine to invoke pip directly, eg via:
+#
+#    btUtils.abortOnRunFail(subprocess.run([exe_pip, 'install', 'setuptools']))
+#
+# However, in practice, it turns out this can lead to problems in the Windows MSYS2 environment.  According to
+# https://stackoverflow.com/questions/12332975/how-can-i-install-a-python-module-within-code, the recommended and most
+# robust way to invoke pip from within a Python script is via:
+#
+#    subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+#
+# Where package is whatever package you want to install.  So that is what we do.
+#
+
+#
 # We use the packaging module (see https://pypi.org/project/packaging/) for handling version numbers (as described at
 # https://packaging.pypa.io/en/stable/version.html).
 #
@@ -111,15 +125,15 @@ btUtils.abortOnRunFail(subprocess.run([exe_python, '-m', 'pip', 'install', '--up
 # it via pip here.)
 #
 log.info('pip install packaging')
-btUtils.abortOnRunFail(subprocess.run([exe_pip, 'install', 'packaging']))
+btUtils.abortOnRunFail(subprocess.run([sys.executable, '-m', 'pip', 'install', 'packaging']))
 log.info('pip install setuptools')
-btUtils.abortOnRunFail(subprocess.run([exe_pip, 'install', 'setuptools']))
+btUtils.abortOnRunFail(subprocess.run([sys.executable, '-m', 'pip', 'install', 'setuptools']))
 import packaging.version
 
 # The requests library (see https://pypi.org/project/requests/) is used for downloading files in a more Pythonic way
 # than invoking wget through the shell.
 log.info('pip install requests')
-btUtils.abortOnRunFail(subprocess.run([exe_pip, 'install', 'requests']))
+btUtils.abortOnRunFail(subprocess.run([sys.executable, '-m', 'pip', 'install', 'requests']))
 import requests
 
 #
@@ -127,7 +141,7 @@ import requests
 # library (see https://docs.python.org/3/library/tomllib.html) for parsing TOML.  Until then, it's easier to import the
 # tomlkit library (see https://pypi.org/project/tomlkit/) which actually has rather more functionality than we need
 #
-btUtils.abortOnRunFail(subprocess.run([exe_pip, 'install', 'tomlkit']))
+btUtils.abortOnRunFail(subprocess.run([sys.executable, '-m', 'pip', 'install', 'tomlkit']))
 import tomlkit
 
 #-----------------------------------------------------------------------------------------------------------------------
