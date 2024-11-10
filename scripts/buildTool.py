@@ -2444,6 +2444,14 @@ def doPackage():
          # However, we are not currently shipping man page on Mac
          #
 
+         #
+         # If we get errors about things not being found, the following can be a helpful diagnostic
+         #
+         log.debug('Directory tree of '+ dir_packages_platform.as_posix())
+         btUtils.abortOnRunFail(
+            subprocess.run(['tree', '-sh', dir_packages_platform.as_posix()], capture_output=False)
+         )
+
          # Rather than create dir_packages_mac_rsc directly, it's simplest to copy the whole Resources tree from
          # mbuild/mackages/darwin/usr/local/Contents/Resources, as we want everything that's inside it
          log.debug('Copying Resources')
