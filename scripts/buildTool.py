@@ -2432,10 +2432,17 @@ def doPackage():
          #    - resources in mbuild/packages/darwin/usr/local/Contents/Resources
          #    - binary    in mbuild/packages/darwin/usr/local/bin
          #
-         # Something changed in 2024 so that now, the locations are:
+         # Something changed in 2024 so that the locations became:
          #
          #    - resources in mbuild/packages/darwin/opt/homebrew/Contents/Resources
          #    - binary    in mbuild/packages/darwin/opt/homebrew/bin
+         #
+         # But then, later in the year, it changed back again.
+         #
+         # It's possible that we are somehow triggering this by other things we do in this script - possibly to do with
+         # what we install from Homebrew and what from MacPorts.  Or perhaps things change from version to version of
+         # one of the tools or libraries we are using.  For the moment, rather than spend a lot of time trying to get to
+         # the bottom of it, we just detect which set of paths has been used.
          #
          # We also have:
          #
@@ -2443,19 +2450,35 @@ def doPackage():
          #
          # However, we are not currently shipping man page on Mac
          #
+         dir_buildOutputRoot = ''
+         possible_buildOutputRoots = ['usr/local', 'opt/homebrew']
+         for subDir in possible_buildOutputRoots:
+            candidateDir = dir_packages_platform.joinpath(candidate)
+            log.debug('Is ' + candidateDir.as_posix() + ' a directory? ' + str(os.path.isdir(candidateDir)))
+            if (os.path.isdir(candidateDir)):
+               dir_buildOutputRoot = candidateDir
+               break
+
+         if ('' == dir_buildOutputRoot):
+            log.error('Unable to find build output root!')
+         else:
+            log.debug('Detected build output root as ' + dir_buildOutputRoot.as_posix())
 
          #
          # If we get errors about things not being found, the following can be a helpful diagnostic
          #
-         log.debug('Directory tree of '+ dir_packages_platform.as_posix())
+         log.debug('Directory tree of ' + dir_packages_platform.as_posix())
          btUtils.abortOnRunFail(
             subprocess.run(['tree', '-sh', dir_packages_platform.as_posix()], capture_output=False)
          )
 
          # Rather than create dir_packages_mac_rsc directly, it's simplest to copy the whole Resources tree from
          # mbuild/mackages/darwin/usr/local/Contents/Resources, as we want everything that's inside it
-         log.debug('Copying Resources')
-         shutil.copytree(dir_packages_platform.joinpath('opt/homebrew/Contents/Resources'), dir_packages_mac_rsc)
+         log.debug(
+            'Copying Resources from ' + dir_buildOutputRoot.joinpath('Contents/Resources').as_posix() +
+            ' to ' + dir_packages_mac_rsc.as_posix()
+         )
+         shutil.copytree(dir_buildOutputRoot.joinpath('Contents/Resources'), dir_packages_mac_rsc)
 
          # Copy the Information Property List file to where it belongs
          log.debug('Copying Information Property List file')
@@ -2464,7 +2487,7 @@ def doPackage():
          # Because Meson is geared towards local installs, in the mbuild/mackages/darwin directory, it is going to have
          # placed the executable in the usr/local/bin or opt/homebrew/bin subdirectory.  Copy it to the right place.
          log.debug('Copying executable')
-         shutil.copy2(dir_packages_platform.joinpath('opt/homebrew/bin').joinpath(capitalisedProjectName).as_posix(),
+         shutil.copy2(dir_buildOutputRoot.joinpath('bin').joinpath(capitalisedProjectName).as_posix(),
                       dir_packages_mac_bin)
 
          #
@@ -2625,8 +2648,30 @@ def doPackage():
          shutil.copy2(xalanDir + xalanMsgLibName, dir_packages_mac_frm)
 
          #
-         # 2024-11-09 TODO Let's also try dylibbundler (https://github.com/auriamg/macdylibbundler/)
+         # The dylibbundler tool (https://github.com/auriamg/macdylibbundler/) proposes a ready-made solution to make
+         # incorporating shared libraries into app bundles simple.  We try it here.
          #
+         # The --dest-dir parameter is where we want dylibbundler to put the fixed-up shared libraries.
+         # The --install-path parameter is where the app will look for shared libraries, so it's essentially the
+         # relative path from the executable to the same directory we specified with --dest-dir.
+         #
+         log.debug('Running' +
+                   ' dylibbundler' +
+                   ' --dest-dir ' + dir_packages_mac_frm.as_posix() +
+                   ' --bundle-deps' +
+                   ' --fix-file ' + macBundleDirName + '/Contents/MacOS/' + capitalisedProjectName +
+                   ' --install-path ' + '@executable_path/' + os.path.relpath(dir_packages_mac_frm, dir_packages_mac_bin))
+         btUtils.abortOnRunFail(
+            subprocess.run(
+               ['dylibbundler',
+                '--dest-dir', dir_packages_mac_frm.as_posix(),
+                '--bundle-deps',
+                '--fix-file', macBundleDirName + '/Contents/MacOS/' + capitalisedProjectName,
+                '--install-path', '@executable_path/' + os.path.relpath(dir_packages_mac_frm, dir_packages_mac_bin)],
+               capture_output=False
+            )
+         )
+
 
          #
          # Now let macdeployqt do most of the heavy lifting
