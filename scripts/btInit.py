@@ -27,6 +27,7 @@
 #-----------------------------------------------------------------------------------------------------------------------
 # Python built-in modules we use
 #-----------------------------------------------------------------------------------------------------------------------
+import os
 import platform
 import shutil
 import subprocess
@@ -100,10 +101,17 @@ match platform.system():
       # However, as of 2024-11, this gives "error: externally-managed-environment" and a direction "To install Python
       # packages system-wide, try 'pacman -S $MINGW_PACKAGE_PREFIX-python-xyz', where xyz is the package you are trying
       # to install."  So now we do that instead.  (Note that MINGW_PACKAGE_PREFIX will normally be set to
-      # "mingw-w64-x86_64", and that we need shell=True for variable substitution to happen.)
+      # "mingw-w64-x86_64".)  As in buildTool.py, we need to specify '--overwrite' options otherwise we'll get "error:
+      # failed to commit transaction (conflicting files)".
       #
-      log.info('Install pip via pacman')
-      btUtils.abortOnRunFail(subprocess.run(['pacman', '-S', '$MINGW_PACKAGE_PREFIX-python-pip'], shell=True))
+      log.info('Install pip (' + os.environ['MINGW_PACKAGE_PREFIX'] + '-python-pip) via pacman')
+      btUtils.abortOnRunFail(
+         subprocess.run(['pacman', '-S',
+                         '--noconfirm',
+                         '--overwrite', '*python*',
+                         '--overwrite', '*pip*',
+                         os.environ['MINGW_PACKAGE_PREFIX'] + '-python-pip'])
+      )
       # See comment in scripts/buildTool.py about why we have to run pip via Python rather than just invoking pip
       # directly eg via `shutil.which('pip3')`.
       log.info('python -m pip install setuptools')
