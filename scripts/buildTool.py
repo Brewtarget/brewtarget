@@ -1236,7 +1236,12 @@ def installDependencies():
          #    │ Note however that, in a GitHub runner, the first of these will give "[Errno 13] Permission denied". │
          #    └─────────────────────────────────────────────────────────────────────────────────────────────────────┘
          #
+         # We also make sure that the Qt bin directory is in the PATH (otherwise, when we invoke Meson from this script
+         # to set up the mbuild directory, it will give an error about not being able to find Qt tools such as
+         # `lupdate`).
+         #
          log.debug('Qt Base Dir: ' + qtBaseDir)
+         os.environ["PATH"] = qtBaseDir + '/bin' + os.pathsep + os.environ["PATH"]
          try:
             # See
             # https://stackoverflow.com/questions/1466000/difference-between-modes-a-a-w-w-and-r-in-built-in-open-function
@@ -1254,7 +1259,7 @@ def installDependencies():
          # See comment about CMAKE_PREFIX_PATH in CMakeLists.txt.  I think this is rather too soon to try to do this,
          # but it can't hurt.
          #
-         # Typically, this is going to set CMAKE_PREFIX_PATH to /usr/local/opt/qt@6 for a Homebrew Qt intall and
+         # Typically, this is going to set CMAKE_PREFIX_PATH to /usr/local/opt/qt@6 for a Homebrew Qt install and
          # /opt/local/libexec/qt6 for a MacPorts one.
          #
          os.environ['CMAKE_PREFIX_PATH'] = qtBaseDir;
@@ -1378,7 +1383,7 @@ def doSetup(setupOption):
       # See https://mesonbuild.com/Commands.html#setup for all the optional parameters to meson setup
       # Note that meson setup will create the build directory (along with various subdirectories)
       btUtils.abortOnRunFail(subprocess.run([exe_meson, "setup", dir_build.as_posix(), dir_base.as_posix()],
-                                    capture_output=False))
+                                            capture_output=False))
 
       log.info('Finished setting up Meson build.  Note that the warnings above about path separator and optimization ' +
                'level are expected!')
