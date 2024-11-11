@@ -2583,7 +2583,7 @@ def doPackage():
          #
          xalanDir = ''
          xalanLibName = ''
-         xalanMatch =  re.search(r'^\s*(\S+/)(libxalan-c\S*.dylib)', otoolOutputExe, re.MULTILINE)
+         xalanMatch = re.search(r'^\s*(\S+/)(libxalan-c\S*.dylib)', otoolOutputExe, re.MULTILINE)
          if (xalanMatch):
             # The [1] index gives us the first parenthesized subgroup of the regexp match, which in this case should be
             # the directory path to libxalan-c.xxx.dylib
@@ -2659,19 +2659,18 @@ def doPackage():
                    ' dylibbundler' +
                    ' --dest-dir ' + dir_packages_mac_frm.as_posix() +
                    ' --bundle-deps' +
-                   ' --fix-file ' + macBundleDirName + '/Contents/MacOS/' + capitalisedProjectName +
+                   ' --fix-file ' + dir_packages_mac_bin.joinpath(capitalisedProjectName).as_posix() +
                    ' --install-path ' + '@executable_path/' + os.path.relpath(dir_packages_mac_frm, dir_packages_mac_bin))
          btUtils.abortOnRunFail(
             subprocess.run(
                ['dylibbundler',
                 '--dest-dir', dir_packages_mac_frm.as_posix(),
                 '--bundle-deps',
-                '--fix-file', macBundleDirName + '/Contents/MacOS/' + capitalisedProjectName,
+                '--fix-file', dir_packages_mac_bin.joinpath(capitalisedProjectName).as_posix(),
                 '--install-path', '@executable_path/' + os.path.relpath(dir_packages_mac_frm, dir_packages_mac_bin)],
                capture_output=False
             )
          )
-
 
          #
          # Now let macdeployqt do most of the heavy lifting
