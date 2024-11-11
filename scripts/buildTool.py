@@ -2453,7 +2453,7 @@ def doPackage():
          dir_buildOutputRoot = ''
          possible_buildOutputRoots = ['usr/local', 'opt/homebrew']
          for subDir in possible_buildOutputRoots:
-            candidateDir = dir_packages_platform.joinpath(candidate)
+            candidateDir = dir_packages_platform.joinpath(subDir)
             log.debug('Is ' + candidateDir.as_posix() + ' a directory? ' + str(os.path.isdir(candidateDir)))
             if (os.path.isdir(candidateDir)):
                dir_buildOutputRoot = candidateDir
