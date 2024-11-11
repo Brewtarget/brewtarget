@@ -1213,11 +1213,10 @@ def installDependencies():
             qtBinDir = os.path.dirname(qmakePath)
             qtBaseDir = os.path.dirname(qtBinDir)
 
-
          #
-         # This is useful for diagnosing problems with GitHub action builds.
+         # This generates a _lot_ of output, but is useful for diagnosing problems with GitHub action builds.
          #
-         btUtils.abortOnRunFail(subprocess.run(['tree', '-sh', qtBaseDir], capture_output=False))
+#         btUtils.abortOnRunFail(subprocess.run(['tree', '-sh', qtBaseDir], capture_output=False))
 
          #
          # We now fix various environment variables needed for the builds to pick up Qt headers, libraries, etc.
@@ -1240,14 +1239,19 @@ def installDependencies():
          # to set up the mbuild directory, it will give an error about not being able to find Qt tools such as
          # `lupdate`).
          #
-         log.debug('Qt Base Dir: ' + qtBaseDir)
-         os.environ["PATH"] = qtBaseDir + '/bin' + os.pathsep + os.environ["PATH"]
+         log.debug('Qt Base Dir: ' + qtBaseDir + ', Bin Dir: ' + qtBinDir)
+         os.environ["PATH"] = qtBinDir + os.pathsep + os.environ["PATH"]
          try:
+            #
             # See
             # https://stackoverflow.com/questions/1466000/difference-between-modes-a-a-w-w-and-r-in-built-in-open-function
             # for a good summary (clearer than the Python official docs) of the mode flag on open.
-            with open("~/.bash_profile", "a+") as bashProfile:
-               bashProfile.write('export PATH="' + qtBaseDir + '/bin:$PATH"')
+            #
+            # As always, we have to remember to explicitly do things that would be done for us automatically by the
+            # shell (eg expansion of '~').
+            #
+            with open(os.path.expanduser('~/.bash_profile'), 'a+') as bashProfile:
+               bashProfile.write('export PATH="' + qtBinDir + os.pathsep + ':$PATH"')
          except IOError as ioe:
             # This is not fatal, so we just note the error and continue
             log.warning("Unable to write to .bash_profile: " + ioe.strerror)
@@ -2722,7 +2726,7 @@ def doPackage():
          #         ❄
          #         ❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄
          #
-         log.debug('Running macdeployqt')
+         log.debug('Running macdeployqt (PATH=' + os.environ['PATH'] + ')')
          os.chdir(dir_packages_platform)
          btUtils.abortOnRunFail(
             #
