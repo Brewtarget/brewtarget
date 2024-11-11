@@ -1241,20 +1241,28 @@ def installDependencies():
          #
          log.debug('Qt Base Dir: ' + qtBaseDir + ', Bin Dir: ' + qtBinDir)
          os.environ["PATH"] = qtBinDir + os.pathsep + os.environ["PATH"]
-         try:
-            #
-            # See
-            # https://stackoverflow.com/questions/1466000/difference-between-modes-a-a-w-w-and-r-in-built-in-open-function
-            # for a good summary (clearer than the Python official docs) of the mode flag on open.
-            #
-            # As always, we have to remember to explicitly do things that would be done for us automatically by the
-            # shell (eg expansion of '~').
-            #
-            with open(os.path.expanduser('~/.bash_profile'), 'a+') as bashProfile:
-               bashProfile.write('export PATH="' + qtBinDir + os.pathsep + ':$PATH"')
-         except IOError as ioe:
-            # This is not fatal, so we just note the error and continue
-            log.warning("Unable to write to .bash_profile: " + ioe.strerror)
+         #
+         # See
+         # https://stackoverflow.com/questions/1466000/difference-between-modes-a-a-w-w-and-r-in-built-in-open-function
+         # for a good summary (clearer than the Python official docs) of the mode flag on open.
+         #
+         # As always, we have to remember to explicitly do things that would be done for us automatically by the
+         # shell (eg expansion of '~').
+         #
+         with open(os.path.expanduser('~/.bash_profile'), 'a+') as bashProfile:
+            bashProfile.write('export PATH="' + qtBinDir + os.pathsep + ':$PATH"')
+         #
+         # Another way to "permanently" add something to PATH on MacOS, is by either appending to the /etc/paths file or
+         # creating a file in the /etc/paths.d directory.  We do the latter, as (a) it's best practice and (b) it allows
+         # us to explicitly read it in again later (eg on a subsequent invocation of this script).
+         #
+         # The contents of the files in the /etc/paths.d directory get added to PATH by /usr/libexec/path_helper, which
+         # gets run from /etc/profile.  We have some belt-and-braces code below in the Mac packaging section to read
+         # /etc/paths.d/01-qtToolPaths in ourselves.
+         #
+         with open('/etc/paths.d/01-qtToolPaths', 'a+') as qtToolPaths:
+            qtToolPaths.write(qtBinDir)
+
          os.environ['LDFLAGS'] = '-L' + qtBaseDir + '/lib'
          os.environ['CPPFLAGS'] = '-I' + qtBaseDir + '/include'
          os.environ['PKG_CONFIG_PATH'] = qtBaseDir + 'lib/pkgconfig'
@@ -2675,6 +2683,21 @@ def doPackage():
                capture_output=False
             )
          )
+
+         #
+         # Before we try to run macdeployqt, we need to make sure its directory is in the PATH.  (Depending on how Qt
+         # was installed, this may or may not have happened automatically.)
+         #
+         exe_macdeployqt = shutil.which('macdeployqt')
+         if (macdeployqt is None or macdeployqt == ''):
+            log.debug('Before reading /etc/paths.d/01-qtToolPaths, PATH=' + os.environ['PATH'])
+            with open('/etc/paths.d/01-qtToolPaths', 'r') as qtToolPaths:
+               for line in qtToolPaths:
+                  os.environ["PATH"] = os.environ["PATH"] + os.pathsep + line
+            log.debug('After reading /etc/paths.d/01-qtToolPaths, PATH=' + os.environ['PATH'])
+
+         if (macdeployqt is None or macdeployqt == ''):
+            log.error('Cannot find macdeployqt.  PATH=' + os.environ['PATH'])
 
          #
          # Now let macdeployqt do most of the heavy lifting
