@@ -2643,7 +2643,7 @@ def doPackage():
          #                       [projectName]_[versionNumber].app/Contents/Frameworks is one of the places to search
          #                       when @rpath is specified
          #
-         log.debug('Running otool -L on ' + xalanLibName)
+         log.debug('Running otool -L on ' + xalanDir + xalanLibName)
          otoolOutputXalan = btUtils.abortOnRunFail(
             subprocess.run(['otool',
                             '-L',
@@ -2786,9 +2786,9 @@ def doPackage():
          os.chdir(dir_packages_mac_bin)
          btUtils.abortOnRunFail(subprocess.run(['otool', '-L', capitalisedProjectName], capture_output=False))
          btUtils.abortOnRunFail(subprocess.run(['otool', '-l', capitalisedProjectName], capture_output=False))
-         log.debug('Running otool on ' + xalanLibName + ' library after macdeployqt')
+         log.debug('Running otool on ' + xalanDir + xalanLibName + ' library after macdeployqt')
          os.chdir(dir_packages_mac_frm)
-         btUtils.abortOnRunFail(subprocess.run(['otool', '-L', xalanLibName], capture_output=False))
+         btUtils.abortOnRunFail(subprocess.run(['otool', '-L', xalanDir + xalanLibName], capture_output=False))
 
          log.info('Created ' + dmgFileName + ' in directory ' + dir_packages_platform.as_posix())
 
