@@ -2694,14 +2694,15 @@ def doPackage():
          # was installed, this may or may not have happened automatically.)
          #
          exe_macdeployqt = shutil.which('macdeployqt')
-         if (macdeployqt is None or macdeployqt == ''):
+         if (exe_macdeployqt is None or exe_macdeployqt == ''):
             log.debug('Before reading /etc/paths.d/01-qtToolPaths, PATH=' + os.environ['PATH'])
             with open('/etc/paths.d/01-qtToolPaths', 'r') as qtToolPaths:
                for line in qtToolPaths:
                   os.environ["PATH"] = os.environ["PATH"] + os.pathsep + line
             log.debug('After reading /etc/paths.d/01-qtToolPaths, PATH=' + os.environ['PATH'])
+            exe_macdeployqt = shutil.which('macdeployqt')
 
-         if (macdeployqt is None or macdeployqt == ''):
+         if (exe_macdeployqt is None or exe_macdeployqt == ''):
             log.error('Cannot find macdeployqt.  PATH=' + os.environ['PATH'])
 
          #
