@@ -1260,6 +1260,11 @@ def installDependencies():
          # gets run from /etc/profile.  We have some belt-and-braces code below in the Mac packaging section to read
          # /etc/paths.d/01-qtToolPaths in ourselves.
          #
+         # The slight complication is that you need to be root to create a file in /etc/paths.d/, so we need to go via
+         # the shell to run sudo.
+         #
+         btUtils.abortOnRunFail(subprocess.run(['sudo', 'touch', '/etc/paths.d/01-qtToolPaths']))
+         btUtils.abortOnRunFail(subprocess.run(['sudo', 'chmod', 'a+rw', '/etc/paths.d/01-qtToolPaths']))
          with open('/etc/paths.d/01-qtToolPaths', 'a+') as qtToolPaths:
             qtToolPaths.write(qtBinDir)
 
