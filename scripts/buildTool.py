@@ -1109,10 +1109,10 @@ def installDependencies():
          log.debug('Second run of MacPorts selfupdate')
          btUtils.abortOnRunFail(subprocess.run(['sudo', 'port', 'selfupdate']))
 
-#===============vvv
-subprocess.run(['sudo', 'port', 'install', 'xalanc'])
-subprocess.run(['cat', '/opt/local/var/macports/logs/_opt_local_var_macports_sources_rsync.macports.org_macports_release_tarballs_ports_textproc_xalanc/xalanc/main.log'])
-#===============^^^
+         #===============vvv
+         subprocess.run(['sudo', 'port', 'install', 'xalanc'])
+         subprocess.run(['cat', '/opt/local/var/macports/logs/_opt_local_var_macports_sources_rsync.macports.org_macports_release_tarballs_ports_textproc_xalanc/xalanc/main.log'])
+         #===============^^^
 
          #
          # Now install packages we want from MacPorts
