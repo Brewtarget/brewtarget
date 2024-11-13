@@ -1124,6 +1124,10 @@ def installDependencies():
          # Boost 1.76 (from April 2021) and we need at least Boost 1.79.  Installing 'boost181' gives us Boost 1.81
          # (from December 2022) which seems to be the newest version available in MacPorts.
          #
+         # Note too that, as of 2024-11-12, the xalanc port will not install.  This seems to be related to the fact that
+         # the xercesc3 port, on which it depends, got updated from v3.2.4 to v3.3.0.  See
+         # https://trac.macports.org/ticket/71304.
+         #
          installListPort = [
                             'llvm-19',
                             'cmake',
@@ -1136,7 +1140,7 @@ def installDependencies():
 #                            'dylibbundler',
                             'pandoc',
                             'xercesc3',
-                            'xalanc',
+#                            'xalanc',
                             'qt6'
                             ]
          for packageToInstall in installListPort:
@@ -1146,10 +1150,10 @@ def installDependencies():
 
          #
          # Sometimes MacPorts prompts you to upgrade already installed ports with the `port upgrade outdated` command.
-         # It should be harmless to run it even if nothing needs upgrading, so we always do.
+         # I'm not convinced it is always harmless to do this!  Uncomment the following if we decide it's a good idea.
          #
-         log.debug('Ensuring installed ports up-to-date')
-         btUtils.abortOnRunFail(subprocess.run(['sudo', 'port', 'upgrade', 'outdated']))
+#         log.debug('Ensuring installed ports up-to-date')
+#         btUtils.abortOnRunFail(subprocess.run(['sudo', 'port', 'upgrade', 'outdated']))
 
          #--------------------------------------------------------------------------------------------------------------
          # By default, even once Qt is installed, whether from Homebrew or MacPorts, Meson will not find it.  Apparently
@@ -1307,6 +1311,39 @@ def installDependencies():
          # https://dmgbuild.readthedocs.io/en/latest/settings.html#badge_icon)
          #
 #         btUtils.abortOnRunFail(subprocess.run(['pip3', 'install', 'dmgbuild[badge_icons]']))
+
+         #
+         # Since we can't install Xalan-C++ via Homebrew (no longer available) or MacPorts (broken), we must build it
+         # from source ourselves, per the instructions at https://apache.github.io/xalan-c/build.html
+         #
+         xalanCSourceUrl = 'https://github.com/apache/xalan-c/releases/download/Xalan-C_1_12_0/xalan_c-1.12.tar.gz'
+         log.debug('Downloading Xalan-C++ source from ' + xalanCSourceUrl)
+         btUtils.abortOnRunFail(subprocess.run([
+            'wget',
+            xalanCSourceUrl
+         ]))
+         btUtils.abortOnRunFail(subprocess.run(['tar', 'xf', 'xalan_c-1.12.tar.gz']))
+
+         os.chdir('xalan_c-1.12')
+         log.debug('Working directory now ' + pathlib.Path.cwd().as_posix())
+         os.makedirs('build')
+         os.chdir('build')
+         log.debug('Working directory now ' + pathlib.Path.cwd().as_posix())
+         btUtils.abortOnRunFail(subprocess.run([
+            'cmake',
+            '-G',
+            'Ninja',
+            '-DCMAKE_INSTALL_PREFIX=/opt/Xalan-c',
+            '-DCMAKE_BUILD_TYPE=Release',
+            '-Dnetwork-accessor=curl',
+            '..'
+         ]))
+         log.debug('Building Xalan-C++')
+         btUtils.abortOnRunFail(subprocess.run(['ninja']))
+         log.debug('Running Xalan-C++ tests')
+         btUtils.abortOnRunFail(subprocess.run(['ctest', '-V', '-j', '8']))
+         log.debug('Installing Xalan-C++')
+         btUtils.abortOnRunFail(subprocess.run(['sudo', 'ninja', 'install']))
 
       case _:
          log.critical('Unrecognised platform: ' + platform.system())
