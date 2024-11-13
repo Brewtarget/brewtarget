@@ -1025,13 +1025,13 @@ def installDependencies():
          installListBrew = [
 #                            'llvm',
 #                            'gcc',
-#                            'cmake',
 #                            'coreutils',
+                            'cmake',
+                            'ninja',
+                            'meson',
                             'boost',
-#                            'doxygen',
+                            'doxygen',
 #                            'git',
-#                            'meson',
-#                            'ninja',
 #                            'pandoc',
                             'tree',
                             'dylibbundler',
@@ -1116,19 +1116,21 @@ def installDependencies():
          # Boost 1.76 (from April 2021) and we need at least Boost 1.79.  Installing 'boost181' gives us Boost 1.81
          # (from December 2022) which seems to be the newest version available in MacPorts.
          #
-         installListPort = ['llvm-19',
-                            'cmake',
-                            'ninja',
-                            'meson',
-#                           'boost181',
-                            'doxygen',
+         installListPort = [
+                            'llvm-19',
+#                            'cmake',
+#                            'ninja',
+#                            'meson',
+#                            'boost181',
+#                            'doxygen',
                             'openssl',
 #                            'tree',
 #                            'dylibbundler',
                             'pandoc',
-                            'qt6',
+                            'xercesc3',
                             'xalanc',
-                            'xercesc3']
+                            'qt6'
+                            ]
          for packageToInstall in installListPort:
             log.debug('Installing ' + packageToInstall + ' via MacPorts')
             btUtils.abortOnRunFail(subprocess.run(['sudo', 'port', 'install', packageToInstall]))
