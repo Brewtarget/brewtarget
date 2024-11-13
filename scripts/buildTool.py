@@ -1038,7 +1038,7 @@ def installDependencies():
 #                            'qt@6',
                             'openssl@3', # OpenSSL headers and library
 #                            'xalan-c',
-#                            'xerces-c'
+                            'xerces-c'
                             ]
          for packageToInstall in installListBrew:
             #
@@ -1061,7 +1061,14 @@ def installDependencies():
                log.debug('Homebrew reports ' + packageToInstall + ' already installed')
             else:
                log.debug('Installing ' + packageToInstall + ' via Homebrew')
-               btUtils.abortOnRunFail(subprocess.run(['brew', 'install', packageToInstall]))
+               #
+               # We specify --formula here because sometimes we want to disambiguate from a "formula" (what Homebrew
+               # calls its regular package definitions) and a "cask" (package definitions used in an extension to
+               # Homebrew for installing graphical applications).  In cases of ambiguity, Homebrew will always assume
+               # formula if neither '--formula' nor '--cask' is specified, but it emits a warning, which we might as
+               # well suppress, since we know we always want the formula.
+               #
+               btUtils.abortOnRunFail(subprocess.run(['brew', 'install', '--formula', packageToInstall]))
 
          #
          # Having installed things it depends on, we should now be able to install MacPorts -- either from source or
@@ -1115,6 +1122,7 @@ def installDependencies():
          btUtils.abortOnRunFail(subprocess.run(['sudo', 'port', 'diagnose', '--quiet']))
 
          # Per https://guide.macports.org/#using.port.installed, this tells us what ports are already installed
+         log.debug('List ports already installed')
          btUtils.abortOnRunFail(subprocess.run(['sudo', 'port', 'installed']))
 
          #
@@ -1124,8 +1132,8 @@ def installDependencies():
          # Boost 1.76 (from April 2021) and we need at least Boost 1.79.  Installing 'boost181' gives us Boost 1.81
          # (from December 2022) which seems to be the newest version available in MacPorts.
          #
-         # Note too that, as of 2024-11-12, the xalanc port will not install.  This seems to be related to the fact that
-         # the xercesc3 port, on which it depends, got updated from v3.2.4 to v3.3.0.  See
+         # Note too that, as of 2024-11-12, the xercesc3 and xalanc ports will not install.  This seems to be related to
+         # the fact that the xercesc3 port got updated from v3.2.4 to v3.3.0.  See
          # https://trac.macports.org/ticket/71304.
          #
          installListPort = [
@@ -1139,7 +1147,7 @@ def installDependencies():
 #                            'tree',
 #                            'dylibbundler',
                             'pandoc',
-                            'xercesc3',
+#                            'xercesc3',
 #                            'xalanc',
                             'qt6'
                             ]
