@@ -1109,12 +1109,13 @@ def installDependencies():
          log.debug('Second run of MacPorts selfupdate')
          btUtils.abortOnRunFail(subprocess.run(['sudo', 'port', 'selfupdate']))
 
-         #
-         # Sometimes MacPorts prompts you to upgrade already installed ports with the `port upgrade outdated` command.
-         # It should be harmless to run it even if nothing needs upgrading, so we always do.
-         #
-         log.debug('Ensuring installed ports up-to-date')
-         btUtils.abortOnRunFail(subprocess.run(['sudo', 'port', 'upgrade', 'outdated']))
+         # Per https://guide.macports.org/#using.port.diagnose this will tell us about "common issues in the user's
+         # environment".
+         log.debug('Check environment is OK')
+         btUtils.abortOnRunFail(subprocess.run(['sudo', 'port', 'diagnose', '--quiet']))
+
+         # Per https://guide.macports.org/#using.port.installed, this tells us what ports are already installed
+         btUtils.abortOnRunFail(subprocess.run(['sudo', 'port', 'installed']))
 
          #
          # Now install packages we want from MacPorts
@@ -1140,13 +1141,21 @@ def installDependencies():
                             ]
          for packageToInstall in installListPort:
             log.debug('Installing ' + packageToInstall + ' via MacPorts')
-            btUtils.abortOnRunFail(subprocess.run(['sudo', 'port', 'install', packageToInstall]))
+            # The '-v' option here is for "verbose", which is useful in diagnosing problems with port installs
+            btUtils.abortOnRunFail(subprocess.run(['sudo', 'port', '-v', 'install', packageToInstall]))
 
          #
+         # Sometimes MacPorts prompts you to upgrade already installed ports with the `port upgrade outdated` command.
+         # It should be harmless to run it even if nothing needs upgrading, so we always do.
+         #
+         log.debug('Ensuring installed ports up-to-date')
+         btUtils.abortOnRunFail(subprocess.run(['sudo', 'port', 'upgrade', 'outdated']))
+
+         #--------------------------------------------------------------------------------------------------------------
          # By default, even once Qt is installed, whether from Homebrew or MacPorts, Meson will not find it.  Apparently
          # this is intentional to allow two versions of Qt to be installed at the same time.  The way to fix things
          # differs between the two package managers.  We include both sets of fix-up code.
-         #
+         #--------------------------------------------------------------------------------------------------------------
          qtInstalledBy = []
          if ('qt6' in installListPort):
             qtInstalledBy.append('MacPorts')
