@@ -1109,10 +1109,12 @@ def installDependencies():
          log.debug('Second run of MacPorts selfupdate')
          btUtils.abortOnRunFail(subprocess.run(['sudo', 'port', 'selfupdate']))
 
-         #===============vvv
-         subprocess.run(['sudo', 'port', 'install', 'xalanc'])
-         subprocess.run(['cat', '/opt/local/var/macports/logs/_opt_local_var_macports_sources_rsync.macports.org_macports_release_tarballs_ports_textproc_xalanc/xalanc/main.log'])
-         #===============^^^
+         #
+         # Sometimes MacPorts prompts you to upgrade already installed ports with the `port upgrade outdated` command.
+         # It should be harmless to run it even if nothing needs upgrading, so we always do.
+         #
+         log.debug('Ensuring installed ports up-to-date')
+         btUtils.abortOnRunFail(subprocess.run(['sudo', 'port', 'upgrade', 'outdated']))
 
          #
          # Now install packages we want from MacPorts
