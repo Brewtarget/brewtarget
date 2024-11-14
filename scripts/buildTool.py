@@ -1025,7 +1025,7 @@ def installDependencies():
          installListBrew = [
 #                            'llvm',
 #                            'gcc',
-#                            'coreutils',
+                            'coreutils', # Needed for sha256sum
 #                            'cmake',
 #                            'ninja',
 #                            'meson',
