@@ -1153,8 +1153,14 @@ def installDependencies():
                             ]
          for packageToInstall in installListPort:
             log.debug('Installing ' + packageToInstall + ' via MacPorts')
-            # The '-v' option here is for "verbose", which is useful in diagnosing problems with port installs
-            btUtils.abortOnRunFail(subprocess.run(['sudo', 'port', '-v', 'install', packageToInstall]))
+            #
+            # Add the '-v' option here for "verbose", which is useful in diagnosing problems with port installs:
+            #
+            #    btUtils.abortOnRunFail(subprocess.run(['sudo', 'port', '-v', 'install', packageToInstall]))
+            #
+            # However, it generates a _lot_ of output, so we normally leave it turned off.
+            #
+            btUtils.abortOnRunFail(subprocess.run(['sudo', 'port', 'install', packageToInstall]))
 
          #
          # Sometimes MacPorts prompts you to upgrade already installed ports with the `port upgrade outdated` command.
@@ -1244,7 +1250,8 @@ def installDependencies():
             qtBaseDir = os.path.dirname(qtBinDir)
 
          #
-         # This generates a _lot_ of output, but is useful for diagnosing problems with GitHub action builds.
+         # Normally leave the next line commented out as it generates a _lot_ of output.  Can be useful for diagnosing
+         # problems with GitHub action builds.
          #
 #         btUtils.abortOnRunFail(subprocess.run(['tree', '-sh', qtBaseDir], capture_output=False))
 
@@ -1312,6 +1319,8 @@ def installDependencies():
          os.environ['CMAKE_PREFIX_PATH'] = qtBaseDir;
 
          #
+         # NOTE: This is commented out as, per comments later in this script, we have macdeployqt create the .dmg file.
+         #
          # dmgbuild is a Python package that provides a command line tool to create macOS disk images (aka .dmg
          # files) -- see https://dmgbuild.readthedocs.io/en/latest/
          #
@@ -1321,37 +1330,41 @@ def installDependencies():
 #         btUtils.abortOnRunFail(subprocess.run(['pip3', 'install', 'dmgbuild[badge_icons]']))
 
          #
+         # TBD: For the moment, it seems that we are somehow getting Xerces and Xalan ports "for free" (when we list
+         #      what ports are already installed before we install the ones in 'installListPort').  Commented code here
+         #      is a first stab at Plan C -- building from source ourselves.
+         #
          # Since we can't install Xalan-C++ via Homebrew (no longer available) or MacPorts (broken), we must build it
          # from source ourselves, per the instructions at https://apache.github.io/xalan-c/build.html
          #
-         xalanCSourceUrl = 'https://github.com/apache/xalan-c/releases/download/Xalan-C_1_12_0/xalan_c-1.12.tar.gz'
-         log.debug('Downloading Xalan-C++ source from ' + xalanCSourceUrl)
-         btUtils.abortOnRunFail(subprocess.run([
-            'wget',
-            xalanCSourceUrl
-         ]))
-         btUtils.abortOnRunFail(subprocess.run(['tar', 'xf', 'xalan_c-1.12.tar.gz']))
-
-         os.chdir('xalan_c-1.12')
-         log.debug('Working directory now ' + pathlib.Path.cwd().as_posix())
-         os.makedirs('build')
-         os.chdir('build')
-         log.debug('Working directory now ' + pathlib.Path.cwd().as_posix())
-         btUtils.abortOnRunFail(subprocess.run([
-            'cmake',
-            '-G',
-            'Ninja',
-            '-DCMAKE_INSTALL_PREFIX=/opt/Xalan-c',
-            '-DCMAKE_BUILD_TYPE=Release',
-            '-Dnetwork-accessor=curl',
-            '..'
-         ]))
-         log.debug('Building Xalan-C++')
-         btUtils.abortOnRunFail(subprocess.run(['ninja']))
-         log.debug('Running Xalan-C++ tests')
-         btUtils.abortOnRunFail(subprocess.run(['ctest', '-V', '-j', '8']))
-         log.debug('Installing Xalan-C++')
-         btUtils.abortOnRunFail(subprocess.run(['sudo', 'ninja', 'install']))
+#         xalanCSourceUrl = 'https://github.com/apache/xalan-c/releases/download/Xalan-C_1_12_0/xalan_c-1.12.tar.gz'
+#         log.debug('Downloading Xalan-C++ source from ' + xalanCSourceUrl)
+#         btUtils.abortOnRunFail(subprocess.run([
+#            'wget',
+#            xalanCSourceUrl
+#         ]))
+#         btUtils.abortOnRunFail(subprocess.run(['tar', 'xf', 'xalan_c-1.12.tar.gz']))
+#
+#         os.chdir('xalan_c-1.12')
+#         log.debug('Working directory now ' + pathlib.Path.cwd().as_posix())
+#         os.makedirs('build')
+#         os.chdir('build')
+#         log.debug('Working directory now ' + pathlib.Path.cwd().as_posix())
+#         btUtils.abortOnRunFail(subprocess.run([
+#            'cmake',
+#            '-G',
+#            'Ninja',
+#            '-DCMAKE_INSTALL_PREFIX=/opt/Xalan-c',
+#            '-DCMAKE_BUILD_TYPE=Release',
+#            '-Dnetwork-accessor=curl',
+#            '..'
+#         ]))
+#         log.debug('Building Xalan-C++')
+#         btUtils.abortOnRunFail(subprocess.run(['ninja']))
+#         log.debug('Running Xalan-C++ tests')
+#         btUtils.abortOnRunFail(subprocess.run(['ctest', '-V', '-j', '8']))
+#         log.debug('Installing Xalan-C++')
+#         btUtils.abortOnRunFail(subprocess.run(['sudo', 'ninja', 'install']))
 
       case _:
          log.critical('Unrecognised platform: ' + platform.system())
