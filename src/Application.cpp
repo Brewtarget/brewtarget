@@ -448,7 +448,6 @@ int Application::run() {
       Application::cleanup();
       return 1;
    }
-   Database::instance().checkForNewDefaultData();
 
    //
    // Make sure the MainWindow singleton exists, but don't initialise it just yet.  We're going to use the end of the

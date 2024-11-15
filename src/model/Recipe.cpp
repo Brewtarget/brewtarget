@@ -2225,11 +2225,23 @@ QList<Recipe *> Recipe::ancestors() const {
    if (this->m_ancestor_id > 0 && this->m_ancestor_id != this->key() && this->m_ancestors.size() == 0) {
       // NB: In previous versions of the code, we included the Recipe in the list along with its ancestors, but it's
       //     now just the ancestors in the list.
-      Recipe * ancestor = const_cast<Recipe *>(this);
-      while (ancestor->m_ancestor_id > 0 && ancestor->m_ancestor_id != ancestor->key()) {
-         ancestor = ObjectStoreWrapper::getByIdRaw<Recipe>(ancestor->m_ancestor_id);
+      Recipe * recipe = const_cast<Recipe *>(this);
+      while (recipe && recipe->m_ancestor_id > 0 && recipe->m_ancestor_id != recipe->key()) {
+         qDebug() <<
+            Q_FUNC_INFO << "Search ancestors for Recipe #" << recipe->key() << "with m_ancestor_id" <<
+            recipe->m_ancestor_id;
+         Recipe * ancestor = ObjectStoreWrapper::getByIdRaw<Recipe>(recipe->m_ancestor_id);
+         if (!ancestor || ancestor->key() < 0) {
+            qWarning() <<
+               Q_FUNC_INFO << "Recipe #" << recipe->key() << "(" << recipe->name() << ")" <<
+               "has non-existent ancestor #" << recipe->m_ancestor_id;
+            break;
+         }
+
+         qDebug() << Q_FUNC_INFO << "Found ancestor Recipe #" << ancestor->key();
          ancestor->m_hasDescendants = true;
          this->m_ancestors.append(ancestor);
+         recipe = ancestor;
       }
    }
 

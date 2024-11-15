@@ -20,6 +20,8 @@
  ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include <boost/json/src.hpp> // Needs to be included exactly once in the code to use header-only version of Boost.JSON
 
+#include <iostream>
+
 #include <xercesc/util/PlatformUtils.hpp>
 #include <xalanc/Include/PlatformDefinitions.hpp>
 
@@ -80,8 +82,10 @@ namespace {
          try {
             return QApplication::notify(receiver, event);
          } catch (std::exception & e) {
-            qCritical() << Q_FUNC_INFO << "Uncaught exception: " << e.what();
-            qCritical().noquote() << Q_FUNC_INFO << "Stacktrace:" << Logging::getStackTrace();
+            // Obviously "uncaught" here means "uncaught elsewhere in the code"
+            std::cerr << "Uncaught exception: " << e.what() << std::endl;
+            qCritical().noquote() <<
+               Q_FUNC_INFO << "Uncaught exception: " << e.what() << "\nStacktrace:" << Logging::getStackTrace();
 
             // If we wanted the application to keep running here, we could just drop through to `return false`.  But we
             // don't know whether continuing is a good idea.  So the safest thing is to exit now that we've logged some
