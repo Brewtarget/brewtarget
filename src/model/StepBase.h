@@ -46,7 +46,7 @@ namespace {
 
    // Everything has to be double because our underlying measure (minutes) is allowed to be measured in fractions.
    constexpr double minutesInADay = 24.0 * 60.0;
-   std::optional<double> daysToMinutes(std::optional<double> val) {
+   inline std::optional<double> daysToMinutes(std::optional<double> const & val) {
       if (val) {
          return *val * minutesInADay;
       }

@@ -138,7 +138,7 @@ public:
    void hardDeleteOwnedEntities();
 
 protected:
-   virtual bool isEqualTo(NamedEntity const & other) const;
+   virtual bool isEqualTo(NamedEntity const & other) const override;
 
    int m_ingredientId;
 };
@@ -231,8 +231,8 @@ public:                                                                         
    IngredientName * LcIngredientName() const ;                                     \
                                                                                    \
 protected:                                                                         \
-   virtual bool isEqualTo(NamedEntity const & other) const;                        \
-   virtual ObjectStore & getObjectStoreTypedInstance() const;                      \
+   virtual bool isEqualTo(NamedEntity const & other) const override;               \
+   virtual ObjectStore & getObjectStoreTypedInstance() const override;             \
 
 /**
  * \brief Subclasses of \c Inventory should include this in their implementation file.

@@ -122,7 +122,7 @@ public:
 signals:
 
 protected:
-   virtual bool isEqualTo(NamedEntity const & other) const;
+   virtual bool isEqualTo(NamedEntity const & other) const override;
 
 private:
    std::optional<ChillingType> m_chillingType;

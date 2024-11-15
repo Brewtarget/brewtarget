@@ -209,7 +209,7 @@ public:
    void setDuration_mins  (std::optional<double> const val);
 
 protected:
-   virtual bool isEqualTo(NamedEntity const & other) const;
+   virtual bool isEqualTo(NamedEntity const & other) const override;
 
 protected:
    Stage                 m_stage          ;

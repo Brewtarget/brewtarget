@@ -93,9 +93,9 @@ TypeLookup const IngredientBase<Derived>::typeLookup {
                                                                                             \
    public:                                                                                  \
    /*=========================== IB "GETTER" MEMBER FUNCTIONS ===========================*/ \
-   virtual Measurement::Amount totalInventory  () const;                                    \
+   virtual Measurement::Amount totalInventory  () const override;                           \
    /*=========================== IB "SETTER" MEMBER FUNCTIONS ===========================*/ \
-   virtual void setTotalInventory(Measurement::Amount const & val);                         \
+   virtual void setTotalInventory(Measurement::Amount const & val) override;                \
 
 /**
  * \brief Derived classes should include this in their .cpp file
