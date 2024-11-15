@@ -71,7 +71,8 @@ public:
    static Database& instance(Database::DbType dbType = Database::DbType::NODB);
 
    /**
-    * \brief Check for new default ingredients etc
+    * \brief Check for new default ingredients etc.  NB: This should be called \b after calling
+    *        \c InitialiseAllObjectStores, and after the \c MainWindow is constructed.
     */
    void checkForNewDefaultData();
 

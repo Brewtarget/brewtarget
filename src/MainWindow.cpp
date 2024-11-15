@@ -1087,11 +1087,6 @@ void MainWindow::initialiseAndMakeVisible() {
    // set up the drag/drop parts
    this->setupDrops();
 
-   // This sets up things that might have been 'remembered' (ie stored in the config file) from a previous run of the
-   // program - eg window size, which is stored in MainWindow::closeEvent().
-   // Breaks the naming convention, doesn't it?
-   this->restoreSavedState();
-
    // Moved from Database class
    Recipe::connectSignalsForAllRecipes();
    qDebug() << Q_FUNC_INFO << "Recipe signals connected";
@@ -1112,9 +1107,23 @@ void MainWindow::initialiseAndMakeVisible() {
    // .:TODO:. Change this so we use the newer deleted signal!
    connect(&ObjectStoreTyped<BrewNote>::getInstance(), &ObjectStoreTyped<BrewNote>::signalObjectDeleted, this, &MainWindow::closeBrewNote);
 
+   //
+   // Read in any new ingredients, styles, example recipes etc
+   //
+   // (In the past this was done in Application::run() because we were reading raw DB files.  Now that default
+   // ingredients etc are stored in BeerXML and BeerJSON, we need to read them in a bit later, after the MainWindow
+   // object exists (ie after its constructor finishes running!) and after the call InitialiseAllObjectStores.)
+   //
+   Database::instance().checkForNewDefaultData();
+
+   // This sets up things that might have been 'remembered' (ie stored in the config file) from a previous run of the
+   // program - eg window size, which is stored in MainWindow::closeEvent().
+   // Breaks the naming convention, doesn't it?
+   this->restoreSavedState();
+
    // Set up the pretty tool tip. It doesn't really belong anywhere, so here it is
    // .:TODO:. When we allow users to change databases without restarting, we'll need to make sure to call this whenever
-   // the databae is changed (as setToolTip() just takes static text as its parameter).
+   // the database is changed (as setToolTip() just takes static text as its parameter).
    label_Brewtarget->setToolTip(getLabelToolTip());
 
    this->setVisible(true);
@@ -1287,15 +1296,18 @@ void MainWindow::restoreSavedState() {
          key = firstRecipeWeFind->key();
       }
    }
-   if ( key > -1 ) {
-      this->pimpl->m_recipeObs = ObjectStoreWrapper::getByIdRaw<Recipe>(key);
-      QModelIndex rIdx = treeView_recipe->findElement(this->pimpl->m_recipeObs);
-
-      setRecipe(this->pimpl->m_recipeObs);
-      setTreeSelection(rIdx);
+   if (key > -1) {
+      // We can't assume that the "remembered" recipe exists.  The user might have restored to an older DB file since
+      // the last time the program was run.
+      Recipe * recipe = ObjectStoreWrapper::getByIdRaw<Recipe>(key);
+      qDebug() << Q_FUNC_INFO << "Recipe #" << key << (recipe ? "found" : "not found");
+      if (recipe) {
+         // We trust setRecipe to do any necessary checks and UI updates
+         this->setRecipe(recipe);
+      }
    }
 
-   //UI restore state
+   // UI restore state
    if (PersistentSettings::contains(PersistentSettings::Names::splitter_vertical_State,
                                     PersistentSettings::Sections::MainWindow)) {
       splitter_vertical->restoreState(PersistentSettings::value(PersistentSettings::Names::splitter_vertical_State,
@@ -1786,6 +1798,11 @@ void MainWindow::setRecipe(Recipe* recipe) {
    if (boil) {
       connect(boil.get(), &NamedEntity::changed, this, &MainWindow::changed);
    }
+
+   // TBD: Had some problems with this that we should come back to once rework of TreeView etc is complete
+//   QModelIndex rIdx = treeView_recipe->findElement(this->pimpl->m_recipeObs);
+//   setTreeSelection(rIdx);
+
    this->showChanges();
    return;
 }
