@@ -30,6 +30,27 @@ on:
   schedule:
     - cron: "0 2 * * *"
 
+  workflow_dispatch:
+    #
+    # Normally, on the scheduled builds, we only do the "test" signing with SignPath because doing the "release" signing
+    # requires a manual approval step in our SignPath account.  When we want to do a proper "release" signing, then we
+    # trigger a manual build and set this variable to true (via the GitHub UI prompt at the time the build is
+    # initiated).
+    #
+    inputs:
+      signingType:
+        #
+        # Note that, per GitHub doco, "If you attempt to dereference a nonexistent property, it will evaluate to an
+        # empty string."  Hence it's easier later on in the code if we use a choice here than a boolean.
+        #
+        description: 'Do a "release" signing (rather than just a "test" one)'
+        required: true
+        type: choice
+        options:
+         - test
+         - release
+        default: 'test'
+
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   BUILD_TYPE: Release
