@@ -3326,3 +3326,8 @@ void MainWindow::showWaterChemistryTool() {
    QMessageBox::warning( this, tr("No Mash"), tr("You must define a mash first."));
    return;
 }
+
+void MainWindow::checkAgainstLatestRelease(QVersionNumber const latestRelease) {
+   Application::checkAgainstLatestRelease(latestRelease);
+   return;
+}

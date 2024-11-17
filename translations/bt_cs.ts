@@ -4495,6 +4495,10 @@ Celkový objem pro hlavní kvašení je %1.</translation>
         <source>Attenuation</source>
         <translation type="unfinished">Prokvašení</translation>
     </message>
+    <message>
+        <source>Times Cultured</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RecipeAdjustmentSalt</name>
@@ -10232,11 +10236,11 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
     <message>
         <source>Times Recultured</source>
-        <translation>Počet použití</translation>
+        <translation type="vanished">Počet použití</translation>
     </message>
     <message>
         <source>Times this yeast has been recultured</source>
-        <translation>Kolikrát byly již kvasnice použity</translation>
+        <translation type="vanished">Kolikrát byly již kvasnice použity</translation>
     </message>
     <message>
         <source>Max Recultures</source>

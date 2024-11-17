@@ -4590,6 +4590,10 @@ El volumen final en el primario es %1.</translation>
         <source>Attenuation</source>
         <translation type="unfinished">Atenuación</translation>
     </message>
+    <message>
+        <source>Times Cultured</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RecipeAdjustmentSalt</name>
@@ -10332,11 +10336,11 @@ El volumen final en el primario es %1.</translation>
     </message>
     <message>
         <source>Times Recultured</source>
-        <translation>Veces Reculturada</translation>
+        <translation type="vanished">Veces Reculturada</translation>
     </message>
     <message>
         <source>Times this yeast has been recultured</source>
-        <translation>Numero de veces que la levadura ha sido reculturado</translation>
+        <translation type="vanished">Numero de veces que la levadura ha sido reculturado</translation>
     </message>
     <message>
         <source>Max Recultures</source>

@@ -4578,6 +4578,10 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
         <source>Attenuation</source>
         <translation type="unfinished">erjesztési hatékonyság</translation>
     </message>
+    <message>
+        <source>Times Cultured</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RecipeAdjustmentSalt</name>
@@ -10109,14 +10113,6 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     <message>
         <source>Very High</source>
         <translation type="vanished">Nagyon magas</translation>
-    </message>
-    <message>
-        <source>Times Recultured</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Times this yeast has been recultured</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Max Recultures</source>

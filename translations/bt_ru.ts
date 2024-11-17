@@ -4586,6 +4586,10 @@ The final volume in the primary is %1.</source>
         <source>Attenuation</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Times Cultured</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RecipeAdjustmentSalt</name>
@@ -10324,11 +10328,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Times Recultured</source>
-        <translation>Сколько раз использовались повторно</translation>
+        <translation type="vanished">Сколько раз использовались повторно</translation>
     </message>
     <message>
         <source>Times this yeast has been recultured</source>
-        <translation>Сколько раз эти дрожжи повторно использовались</translation>
+        <translation type="vanished">Сколько раз эти дрожжи повторно использовались</translation>
     </message>
     <message>
         <source>Max Recultures</source>

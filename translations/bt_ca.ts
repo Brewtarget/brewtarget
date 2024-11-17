@@ -4622,6 +4622,10 @@ El volum final al primari és de %1.</translation>
         <source>Attenuation</source>
         <translation type="unfinished">Atenuació</translation>
     </message>
+    <message>
+        <source>Times Cultured</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RecipeAdjustmentSalt</name>
@@ -10396,11 +10400,11 @@ El volum final al primari és de %1.</translation>
     </message>
     <message>
         <source>Times Recultured</source>
-        <translation>Nombre de cultius</translation>
+        <translation type="vanished">Nombre de cultius</translation>
     </message>
     <message>
         <source>Times this yeast has been recultured</source>
-        <translation>Cops que aquest llevats s&apos;ha tornat a cultivar</translation>
+        <translation type="vanished">Cops que aquest llevats s&apos;ha tornat a cultivar</translation>
     </message>
     <message>
         <source>Max Recultures</source>

@@ -4554,6 +4554,10 @@ O volume final do fermentador primário é %1.</translation>
         <source>Attenuation</source>
         <translation type="unfinished">Atenuação</translation>
     </message>
+    <message>
+        <source>Times Cultured</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RecipeAdjustmentSalt</name>
@@ -10316,11 +10320,11 @@ O volume final do fermentador primário é %1.</translation>
     </message>
     <message>
         <source>Times Recultured</source>
-        <translation>Vezes recultivadas</translation>
+        <translation type="vanished">Vezes recultivadas</translation>
     </message>
     <message>
         <source>Times this yeast has been recultured</source>
-        <translation>Vezes que esta levedura foi recultivada</translation>
+        <translation type="vanished">Vezes que esta levedura foi recultivada</translation>
     </message>
     <message>
         <source>Max Recultures</source>

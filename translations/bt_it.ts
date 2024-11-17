@@ -4606,6 +4606,10 @@ Il Volume finale del primo è %1.</translation>
         <source>Attenuation</source>
         <translation type="unfinished">Attenuazione</translation>
     </message>
+    <message>
+        <source>Times Cultured</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RecipeAdjustmentSalt</name>
@@ -10387,11 +10391,11 @@ Il Volume finale del primo è %1.</translation>
     </message>
     <message>
         <source>Times Recultured</source>
-        <translation>Riattivato</translation>
+        <translation type="vanished">Riattivato</translation>
     </message>
     <message>
         <source>Times this yeast has been recultured</source>
-        <translation>Il lievito è stato riattivato</translation>
+        <translation type="vanished">Il lievito è stato riattivato</translation>
     </message>
     <message>
         <source>Max Recultures</source>

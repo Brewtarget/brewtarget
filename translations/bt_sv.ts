@@ -4598,6 +4598,10 @@ Primärens slutgiltiga volym är %1.</translation>
         <source>Attenuation</source>
         <translation type="unfinished">Förjäsningsgrad</translation>
     </message>
+    <message>
+        <source>Times Cultured</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RecipeAdjustmentSalt</name>
@@ -10265,11 +10269,11 @@ Primärens slutgiltiga volym är %1.</translation>
     </message>
     <message>
         <source>Times Recultured</source>
-        <translation>Antal omodlingar</translation>
+        <translation type="vanished">Antal omodlingar</translation>
     </message>
     <message>
         <source>Times this yeast has been recultured</source>
-        <translation>Antal gånger denna jäst har blivit omodlad</translation>
+        <translation type="vanished">Antal gånger denna jäst har blivit omodlad</translation>
     </message>
     <message>
         <source>Max Recultures</source>

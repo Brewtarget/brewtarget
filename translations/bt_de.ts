@@ -4570,6 +4570,10 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
         <source>Attenuation</source>
         <translation type="unfinished">Vergärungsgrad</translation>
     </message>
+    <message>
+        <source>Times Cultured</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RecipeAdjustmentSalt</name>
@@ -10265,11 +10269,11 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
     <message>
         <source>Times Recultured</source>
-        <translation>Führung Nr.</translation>
+        <translation type="vanished">Führung Nr.</translation>
     </message>
     <message>
         <source>Times this yeast has been recultured</source>
-        <translation>Die Führung in der sich die Hefe befindet</translation>
+        <translation type="vanished">Die Führung in der sich die Hefe befindet</translation>
     </message>
     <message>
         <source>Max Recultures</source>

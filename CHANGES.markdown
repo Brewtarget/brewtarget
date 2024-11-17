@@ -13,6 +13,18 @@ happens, so I'm now setting it to a slightly arbitrary time early in the morning
 * Additional methods for calculating IBU
 * We'll list other new features here...
 
+## v4.0.11
+Bug fixes and minor enhancements.
+
+### New Features
+* None
+
+### Bug Fixes
+* Crash when you click Yes or No in the pop-up about downloading the latest version [878](https://github.com/Brewtarget/brewtarget/issues/878)
+
+### Release Timestamp
+Sun, 17 Nov 2024 04:00:11 +0100
+
 ## v4.0.10
 Bug fixes and minor enhancements.
 
@@ -21,11 +33,11 @@ Bug fixes and minor enhancements.
 
 ### Bug Fixes
 * Crash when copying recipe, then on adding new steps in mash, ferment, boil, others [868](https://github.com/Brewtarget/brewtarget/issues/868)
-* Changing Yeast or Annetuation does't change ABV [872](https://github.com/Brewtarget/brewtarget/issues/872)
-* Brewtarget 4.0.X doesn't work on macOS [809](https://github.com/Brewtarget/brewtarget/issues/809)
+* Changing Yeast or Attenuation doesn't change ABV [872](https://github.com/Brewtarget/brewtarget/issues/872)
+* Brewtarget 4.0.X doesn't work on MacOS [809](https://github.com/Brewtarget/brewtarget/issues/809)
 
 ### Release Timestamp
-Fri, 15 Nov 2024 04:00:10 +0100
+Sat, 16 Nov 2024 04:00:10 +0100
 
 ## v4.0.9
 Bug fixes and minor enhancements.

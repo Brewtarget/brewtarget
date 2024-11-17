@@ -4523,6 +4523,10 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
         <source>Attenuation</source>
         <translation type="unfinished">Demping</translation>
     </message>
+    <message>
+        <source>Times Cultured</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RecipeAdjustmentSalt</name>
@@ -10276,11 +10280,11 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Times Recultured</source>
-        <translation>Ganger rekulturert</translation>
+        <translation type="vanished">Ganger rekulturert</translation>
     </message>
     <message>
         <source>Times this yeast has been recultured</source>
-        <translation>Antall ganger denne gjæren er rekulturert</translation>
+        <translation type="vanished">Antall ganger denne gjæren er rekulturert</translation>
     </message>
     <message>
         <source>Max Recultures</source>
