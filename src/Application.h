@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * Application.h is part of Brewtarget, and is copyright the following authors 2009-2022:
+ * Application.h is part of Brewtarget, and is copyright the following authors 2009-2024:
  *   • Dan Cavanagh <dan@dancavanagh.com>
  *   • Daniel Pettersson <pettson81@gmail.com>
  *   • Greg Meess <Daedalus12@gmail.com>
@@ -36,6 +36,7 @@ extern void qt_set_sequence_auto_mnemonic(bool b);
 
 #include <QDir>
 #include <QMetaProperty>
+#include <QVersionNumber>
 
 class MainWindow;
 
@@ -98,6 +99,7 @@ namespace Application {
    //! \brief Set the mode to an interactive or non-interactive state
    void setInteractive(bool val);
 
+   void checkAgainstLatestRelease(QVersionNumber const latestRelease);
 }
 
 

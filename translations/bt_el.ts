@@ -4519,6 +4519,10 @@ The final volume in the primary is %1.</source>
         <source>Attenuation</source>
         <translation type="unfinished">αραίωση</translation>
     </message>
+    <message>
+        <source>Times Cultured</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RecipeAdjustmentSalt</name>
@@ -10266,11 +10270,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Times Recultured</source>
-        <translation>Φορές που επανακαλλιεργήθηκε</translation>
+        <translation type="vanished">Φορές που επανακαλλιεργήθηκε</translation>
     </message>
     <message>
         <source>Times this yeast has been recultured</source>
-        <translation>Φορές που αυτή η μαγιά επανακαλλιεργήθηκε</translation>
+        <translation type="vanished">Φορές που αυτή η μαγιά επανακαλλιεργήθηκε</translation>
     </message>
     <message>
         <source>Max Recultures</source>

@@ -4463,6 +4463,10 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
         <source>Attenuation</source>
         <translation type="unfinished">Rozcieńczenie</translation>
     </message>
+    <message>
+        <source>Times Cultured</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RecipeAdjustmentSalt</name>
@@ -10182,11 +10186,11 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Times Recultured</source>
-        <translation>Ilość pokoleń</translation>
+        <translation type="vanished">Ilość pokoleń</translation>
     </message>
     <message>
         <source>Times this yeast has been recultured</source>
-        <translation>Które pokolenie drożdży</translation>
+        <translation type="vanished">Które pokolenie drożdży</translation>
     </message>
     <message>
         <source>Max Recultures</source>

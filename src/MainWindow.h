@@ -35,6 +35,7 @@
 #include <QMainWindow>
 #include <QString>
 #include <QVariant>
+#include <QVersionNumber>
 #include <QWidget>
 
 #include "ui_mainWindow.h"
@@ -295,6 +296,13 @@ public slots:
    void lockRecipe(int state);
    //! \brief prepopulate the ancestorDialog when the menu is selected
    void setAncestor();
+
+   /**
+    * \brief This is called to tell us the version number of the latest release of the program in its main GitHub
+    *        repository.  It's just a wrapper around \c Application::checkAgainstLatestRelease.  See comments in
+    *        \c Application.cpp for why.
+    */
+   void checkAgainstLatestRelease(QVersionNumber const latestRelease);
 
 public:
    /*!

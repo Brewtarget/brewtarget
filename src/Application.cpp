@@ -44,7 +44,6 @@
 #include <QString>
 #include <QThread>
 #include <QUrl>
-#include <QVersionNumber>
 
 #include "Algorithms.h"
 #include "BtSplashScreen.h"
@@ -191,87 +190,6 @@ namespace {
       }
       return;
    }
-
-   /**
-    * \brief This is called to tell us the version number of the latest release of the program in its main GitHub
-    *        repository.
-    *
-    *        NB: AFAICT, because this is a freestanding function, rather than a member function of a QObject subclass,
-    *            this gets run on the caller's thread.  In particular this means it could run at the same time as other
-    *            code running inside the program's main Qt event loop.  If we wanted to do anything that might risk
-    *            clashing with other code then we would either want to add locking here or move this function to be,
-    *            say, a slot on one of our objects (eg MainWindow).
-    */
-   void checkAgainstLatestRelease(QVersionNumber const latestRelease) {
-
-      //
-      // We used to just compare if the remote version is the same as the current one, but it then gets annoying if you
-      // are running the nightly build and it keeps asking if you want to, eg, download 4.0.0 because you're "only"
-      // running 4.0.1.  So now we do it properly, letting QVersionNumber do the heavy lifting for us.
-      //
-      QVersionNumber const currentlyRunning{QVersionNumber::fromString(CONFIG_VERSION_STRING)};
-
-      qInfo() <<
-         Q_FUNC_INFO << "Latest release is" << latestRelease.toString() << ") ; currently running" <<
-         CONFIG_VERSION_STRING << "(parsed as" << currentlyRunning.toString() << ")";
-
-      if (latestRelease > currentlyRunning) {
-         //
-         // Users can turn off the notification about new versions, though note below that this gets reset once they are
-         // running the latest version again.
-         //
-         if (!tellUserAboutNewRelease) {
-            qInfo() << Q_FUNC_INFO << "Check for new version is disabled";
-            return;
-         }
-
-         //
-         // The latest release is newer than what we are currently running.
-         // See if the user wants to download the newer version.
-         //
-         bool const wantsToDownload{
-            QMessageBox::Yes == QMessageBox::information(
-               &MainWindow::instance(),
-               QObject::tr("New Version"),
-               QObject::tr("Version %1 is now available. Download it?").arg(latestRelease.toString()),
-               QMessageBox::Yes | QMessageBox::No,
-               QMessageBox::Yes
-            )
-         };
-         if (wantsToDownload) {
-            //
-            // It would be a bit of a tall order for the program to upgrade itself in place.  We just take the user to
-            // the release download page.
-            //
-            static QString const releasesPage = QString{"%1/releases"}.arg(CONFIG_GITHUB_URL);
-            QDesktopServices::openUrl(QUrl(releasesPage));
-         } else {
-            //
-            // If the user doesn't want to be taken to the download page, give them the option to stop being reminded
-            // about the new release.
-            //
-            if(QMessageBox::question(&MainWindow::instance(),
-                                     QObject::tr("New Version"),
-                                     QObject::tr("Stop bothering you about new versions?"),
-                                     QMessageBox::Yes | QMessageBox::No,
-                                     QMessageBox::Yes) == QMessageBox::Yes) {
-               // ... make a note to stop bothering the user about the new version.
-               tellUserAboutNewRelease = false;
-            }
-         }
-         return;
-      }
-
-      //
-      // The user is already running the latest release.  Make sure the user gets notified when a newer release is
-      // available.  (They can then turn off that notification if they want.)  Essentially, this means that, every time
-      // the user installs whatever the latest version of the software is, we ensure that we will tell them at least
-      // once when there is a new release.
-      //
-      tellUserAboutNewRelease = true;
-      return;
-   }
-
 
    /**
     * \brief This is only called from \c Application::getResourceDir to initialise the variable it returns
@@ -465,8 +383,16 @@ int Application::run() {
    latestReleaseFinder->moveToThread(&latestReleaseFinderThread);
    mainWindow.connect(&latestReleaseFinderThread, &QThread::finished, latestReleaseFinder, &QObject::deleteLater);
 
-   mainWindow.connect(&mainWindow, &MainWindow::initialisedAndVisible, latestReleaseFinder, &LatestReleaseFinder::checkMainRespository);
-   mainWindow.connect(latestReleaseFinder, &LatestReleaseFinder::foundLatestRelease, &checkAgainstLatestRelease);
+   //
+   // NB: We have to be a bit careful about sending signals across threads.  AIUI, if we connected to a freestanding
+   //     function, rather than a member function of a QObject subclass, the slot would get run on the caller's thread.
+   //     We don't want that, so we connect to MainWindow::checkAgainstLatestRelease, which allows us to use a queued
+   //     connection whereby the slot gets run in the program's main Qt event loop.  (If the slot were run on the
+   //     caller's thread -- ie the thread created above for LatestReleaseFinder -- then various things inside Qt will
+   //     break eg when we use QMessageBox or QDesktopServices::openUrl.)
+   //
+   mainWindow.connect(&mainWindow        , &MainWindow::initialisedAndVisible      , latestReleaseFinder, &LatestReleaseFinder::checkMainRespository, Qt::QueuedConnection);
+   mainWindow.connect(latestReleaseFinder, &LatestReleaseFinder::foundLatestRelease, &mainWindow        , &MainWindow::checkAgainstLatestRelease    , Qt::QueuedConnection);
    latestReleaseFinderThread.start();
 
    mainWindow.initialiseAndMakeVisible();
@@ -528,5 +454,88 @@ void Application::saveSystemOptions() {
 
    Measurement::saveDisplayScales();
 
+   return;
+}
+
+
+/**
+ * \brief This is called to tell us the version number of the latest release of the program in its main GitHub
+ *        repository.
+ *
+ *        See comment in \c Application::run for why this gets called from \c MainWindow::checkAgainstLatestRelease.
+ */
+void Application::checkAgainstLatestRelease(QVersionNumber const latestRelease) {
+
+   //
+   // We used to just compare if the remote version is the same as the current one, but it then gets annoying if you
+   // are running the nightly build and it keeps asking if you want to, eg, download 4.0.0 because you're "only"
+   // running 4.0.1.  So now we do it properly, letting QVersionNumber do the heavy lifting for us.
+   //
+   QVersionNumber const currentlyRunning{QVersionNumber::fromString(CONFIG_VERSION_STRING)};
+
+   qInfo() <<
+      Q_FUNC_INFO << "Latest release is" << latestRelease.toString() << ") ; currently running" <<
+      CONFIG_VERSION_STRING << "(parsed as" << currentlyRunning.toString() << ")";
+
+   if (latestRelease > currentlyRunning) {
+      //
+      // Users can turn off the notification about new versions, though note below that this gets reset once they are
+      // running the latest version again.
+      //
+      if (!tellUserAboutNewRelease) {
+         qInfo() << Q_FUNC_INFO << "Check for new version is disabled";
+         return;
+      }
+
+      //
+      // The latest release is newer than what we are currently running.
+      // See if the user wants to download the newer version.
+      //
+      bool const wantsToDownload {
+         QMessageBox::Yes == QMessageBox::information(
+            //
+            // I think it's OK for this 'parent' parameter to be nullptr, rather than &MainWindow::instance(), because
+            // this is a modal dialog that Qt creates and destroys for us (ie it doesn't need to be "owned" by
+            // MainWindow for clean-up purposes).
+            //
+            nullptr,
+            QObject::tr("New Version"),
+            QObject::tr("Version %1 is now available. Download it?").arg(latestRelease.toString()),
+            QMessageBox::Yes | QMessageBox::No,
+            QMessageBox::Yes
+         )
+      };
+      if (wantsToDownload) {
+         //
+         // It would be a bit of a tall order for the program to upgrade itself in place.  We just take the user to
+         // the release download page.
+         //
+         static QUrl const releasesPageUrl{QString{"%1/releases"}.arg(CONFIG_GITHUB_URL)};
+         qDebug() << Q_FUNC_INFO << "Opening browser at" << releasesPageUrl;
+         QDesktopServices::openUrl(releasesPageUrl);
+      } else {
+         //
+         // If the user doesn't want to be taken to the download page, give them the option to stop being reminded
+         // about the new release.
+         //
+         if(QMessageBox::question(nullptr,
+                                  QObject::tr("New Version"),
+                                  QObject::tr("Stop bothering you about new versions?"),
+                                  QMessageBox::Yes | QMessageBox::No,
+                                  QMessageBox::Yes) == QMessageBox::Yes) {
+            // ... make a note to stop bothering the user about the new version.
+            tellUserAboutNewRelease = false;
+         }
+      }
+      return;
+   }
+
+   //
+   // The user is already running the latest release.  Make sure the user gets notified when a newer release is
+   // available.  (They can then turn off that notification if they want.)  Essentially, this means that, every time
+   // the user installs whatever the latest version of the software is, we ensure that we will tell them at least
+   // once when there is a new release.
+   //
+   tellUserAboutNewRelease = true;
    return;
 }

@@ -4626,6 +4626,10 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
         <source>Attenuation</source>
         <translation type="unfinished">Atténuation</translation>
     </message>
+    <message>
+        <source>Times Cultured</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RecipeAdjustmentSalt</name>
@@ -10414,11 +10418,11 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Times Recultured</source>
-        <translation>Nombre de cultures</translation>
+        <translation type="vanished">Nombre de cultures</translation>
     </message>
     <message>
         <source>Times this yeast has been recultured</source>
-        <translation>Nombre de fois que cette levure a été cultivée</translation>
+        <translation type="vanished">Nombre de fois que cette levure a été cultivée</translation>
     </message>
     <message>
         <source>Max Recultures</source>

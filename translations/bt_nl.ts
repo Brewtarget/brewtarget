@@ -4616,6 +4616,10 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
         <source>Attenuation</source>
         <translation type="unfinished">Vergisting</translation>
     </message>
+    <message>
+        <source>Times Cultured</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RecipeAdjustmentSalt</name>
@@ -10226,11 +10230,11 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Times Recultured</source>
-        <translation>Aantal keren opgekweekt</translation>
+        <translation type="vanished">Aantal keren opgekweekt</translation>
     </message>
     <message>
         <source>Times this yeast has been recultured</source>
-        <translation>Aantal keren dat deze gist is opgekweekt</translation>
+        <translation type="vanished">Aantal keren dat deze gist is opgekweekt</translation>
     </message>
     <message>
         <source>Max Recultures</source>
