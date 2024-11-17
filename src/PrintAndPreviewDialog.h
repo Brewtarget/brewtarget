@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * PrintAndPreviewDialog.h is part of Brewtarget, and is copyright the following authors 2021:
+ * PrintAndPreviewDialog.h is part of Brewtarget, and is copyright the following authors 2021-2024:
  *   • Mattias Måhl <mattias@kejsarsten.com>
  *   • Matt Young <mfsy@yahoo.com>
  *
@@ -56,11 +56,11 @@ public:
    virtual ~PrintAndPreviewDialog();
 
    /**
-    * @brief shows the dialog and updates the Printing preview.
+    * @brief Shows the dialog and updates the Printing preview.
     *
-    * @param e
+    * @param event
     */
-   virtual void showEvent(QShowEvent *e);
+   virtual void showEvent(QShowEvent * event) override;
 
 public slots:
    void printDocument(QPrinter * printer);

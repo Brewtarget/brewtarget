@@ -20,6 +20,7 @@ Bug fixes and minor enhancements.
 * None
 
 ### Bug Fixes
+* Crash on Windows when opening Print and Print Preview dialog [873](https://github.com/Brewtarget/brewtarget/issues/873)
 * Crash when you click Yes or No in the pop-up about downloading the latest version [878](https://github.com/Brewtarget/brewtarget/issues/878)
 
 ### Release Timestamp
