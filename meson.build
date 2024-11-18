@@ -1090,6 +1090,7 @@ translationSourceFiles = files([
    'translations/bt_ru.ts', # Russian
    'translations/bt_sr.ts', # Serbian
    'translations/bt_sv.ts', # Swedish
+   'translations/bt_da.ts', # Danish
    'translations/bt_tr.ts', # Turkish
    'translations/bt_zh.ts', # Chinese
 ])
