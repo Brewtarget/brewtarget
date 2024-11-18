@@ -1186,8 +1186,8 @@ void MainWindow::setupCSS() {
    this->pimpl->highSS = QString("QLineEdit:read-only { color: #D00000; background: %1 }").arg(wPalette.name());
    this->pimpl->boldSS = QString("QLineEdit:read-only { font: bold 10pt; color: #000000; background: %1 }").arg(wPalette.name());
 
-   // The bold style sheet doesn't change, so set it here once.
-   lineEdit_boilSg->setStyleSheet(this->pimpl->boldSS);
+///   // The bold style sheet doesn't change, so set it here once.
+///   lineEdit_boilSg->setStyleSheet(this->pimpl->boldSS);
 
    // Disabled fields should change color, but not become unreadable. Mucking
    // with the css seems the most reasonable way to do that.
@@ -1195,6 +1195,7 @@ void MainWindow::setupCSS() {
    tab_recipe->setStyleSheet(tabDisabled);
    tabWidget_ingredients->setStyleSheet(tabDisabled);
 
+   return;
 }
 
 // Configures the range widgets for the bubbles
@@ -1830,7 +1831,6 @@ void MainWindow::lockRecipe(int state) {
    qWidget_styleBox->setEnabled(enabled);
    qWidget_equipmentBox->setEnabled(enabled);
    lineEdit_batchSize->setEnabled(enabled);
-   lineEdit_boilSize->setEnabled(enabled);
    lineEdit_efficiency->setEnabled(enabled);
 
    // locked recipes cannot be deleted
@@ -1904,10 +1904,13 @@ void MainWindow::showChanges(QMetaProperty* prop) {
    this->lineEdit_boilSize  ->setQuantity(boilSize);
    this->lineEdit_efficiency->setQuantity(this->pimpl->m_recipeObs->efficiency_pct());
    this->lineEdit_boilTime  ->setQuantity(this->pimpl->m_recipeObs->boil()->boilTime_mins());
+   this->lineEdit_boilSg    ->setQuantity(this->pimpl->m_recipeObs->boilGrav());
    this->lineEdit_name      ->setCursorPosition(0);
    this->lineEdit_batchSize ->setCursorPosition(0);
    this->lineEdit_boilSize  ->setCursorPosition(0);
    this->lineEdit_efficiency->setCursorPosition(0);
+   this->lineEdit_boilTime  ->setCursorPosition(0);
+   this->lineEdit_boilSg    ->setCursorPosition(0);
 /*
    lineEdit_calcBatchSize->setText(this->pimpl->m_recipeObs);
    lineEdit_calcBoilSize->setText(this->pimpl->m_recipeObs);
@@ -1929,7 +1932,6 @@ void MainWindow::showChanges(QMetaProperty* prop) {
    else
       lineEdit_calcBoilSize->setStyleSheet(this->pimpl->highSS);
 */
-   this->lineEdit_boilSg->setQuantity(this->pimpl->m_recipeObs->boilGrav());
 
    auto style = this->pimpl->m_recipeObs->style();
    if (style) {

@@ -22,6 +22,7 @@ Bug fixes and minor enhancements.
 ### Bug Fixes
 * Crash on Windows when opening Print and Print Preview dialog [873](https://github.com/Brewtarget/brewtarget/issues/873)
 * Crash when you click Yes or No in the pop-up about downloading the latest version [878](https://github.com/Brewtarget/brewtarget/issues/878)
+* Drop down menu for Style and Equipment are so narrow, cannot see contents [879](https://github.com/Brewtarget/brewtarget/issues/879)
 
 ### Release Timestamp
 Sun, 17 Nov 2024 04:00:11 +0100
