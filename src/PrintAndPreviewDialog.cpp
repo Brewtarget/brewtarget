@@ -88,19 +88,19 @@ PrintAndPreviewDialog::PrintAndPreviewDialog(MainWindow * parent) : QDialog(pare
  */
 PrintAndPreviewDialog::~PrintAndPreviewDialog() = default;
 
-/**
- * @brief Show event for the dialog
- *
- * @param e Event object
- */
-void PrintAndPreviewDialog::showEvent([[maybe_unused]] QShowEvent *e) {
-   setVisible(true);
-   collectRecipe();
-   currentlySelectedPageSize = printer->pageLayout().pageSize();
+void PrintAndPreviewDialog::showEvent(QShowEvent * event) {
+   //
+   // In older versions of the code, we called setVisible(true) here without incident.  But, since Qt6, this results in
+   // a stack overflow on Windows (because calling setVisible(true) triggers sending of a show event, which causes this
+   // function to be called again).  The correct thing here is to call the base class handler.
+   //
+   this->QDialog::showEvent(event);
+   this->collectRecipe();
+   this->currentlySelectedPageSize = printer->pageLayout().pageSize();
    int index = comboBox_PaperFormatSelector->findText(currentlySelectedPageSize.name());
-   comboBox_PaperFormatSelector->setCurrentIndex(index);
-   comboBox_PaperFormatSelector->repaint();
-   updatePreview();
+   this->comboBox_PaperFormatSelector->setCurrentIndex(index);
+   this->comboBox_PaperFormatSelector->repaint();
+   this->updatePreview();
    return;
 }
 
@@ -159,7 +159,6 @@ void PrintAndPreviewDialog::collectSupportedPageSizes() {
    return;
 }
 
-
 QList<QPageSize> PrintAndPreviewDialog::generatePageSizeList() {
    QList<QPageSize> result;
 
@@ -170,10 +169,8 @@ QList<QPageSize> PrintAndPreviewDialog::generatePageSizeList() {
    return result;
 }
 
-
 /**
  * @brief Connects all the signals to their respective function.
- *
  */
 void PrintAndPreviewDialog::setupConnections() {
    // Preview windows connections for drawing the previewed document. connects to the printer.
@@ -341,12 +338,6 @@ void PrintAndPreviewDialog::updatePreview() {
             pDoc += brewDayFormatter->buildHtml();
          }
       } else if (verticalTabWidget->currentIndex() == 1) {
-///         InventoryFormatter::HtmlGenerationFlags flags  = static_cast<InventoryFormatter::HtmlGenerationFlag::HtmlGenerationFlags>(
-///            checkBox_inventoryFermentables->isChecked() * InventoryFormatter::HtmlGenerationFlag::FERMENTABLES   +
-///            checkBox_inventoryHops->isChecked()         * InventoryFormatter::HtmlGenerationFlag::HOPS           +
-///            checkBox_inventoryYeast->isChecked()        * InventoryFormatter::HtmlGenerationFlag::YEAST          +
-///            checkBox_inventoryMicellaneous->isChecked() * InventoryFormatter::HtmlGenerationFlag::MISCELLANEOUS
-///         );
          InventoryFormatter::HtmlGenerationFlags flags;
          if (checkBox_inventoryFermentables->isChecked()) { flags |= InventoryFormatter::HtmlGenerationFlag::FERMENTABLES ; }
          if (checkBox_inventoryHops->isChecked()        ) { flags |= InventoryFormatter::HtmlGenerationFlag::HOPS         ; }
@@ -518,12 +509,6 @@ void PrintAndPreviewDialog::printDocument(QPrinter * printer) {
 
       hDoc += recipeFormatter->buildHtmlFooter();
    } else if (verticalTabWidget->currentIndex() == 1) {
-///      InventoryFormatter::HtmlGenerationFlags flags = static_cast<InventoryFormatter::HtmlGenerationFlags>(
-///         checkBox_inventoryFermentables->isChecked() * InventoryFormatter::FERMENTABLES   +
-///         checkBox_inventoryHops->isChecked()         * InventoryFormatter::HOPS           +
-///         checkBox_inventoryYeast->isChecked()        * InventoryFormatter::YEAST          +
-///         checkBox_inventoryMicellaneous->isChecked() * InventoryFormatter::MISCELLANEOUS
-///      );
       InventoryFormatter::HtmlGenerationFlags flags;
       if (checkBox_inventoryFermentables->isChecked()) { flags |= InventoryFormatter::HtmlGenerationFlag::FERMENTABLES ; }
       if (checkBox_inventoryHops->isChecked()        ) { flags |= InventoryFormatter::HtmlGenerationFlag::HOPS         ; }
