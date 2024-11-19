@@ -460,13 +460,14 @@ void NamedEntity::prepareForPropertyChange(BtStringConst const & propertyName) {
 }
 
 void NamedEntity::propagatePropertyChange(BtStringConst const & propertyName, bool notify) const {
+   //
+   // Normally leave this log statement commented out as otherwise it can generate a lot of lines in the log files
+   //
+//   qDebug() <<
+//      Q_FUNC_INFO << "Property name" << *propertyName << "change on" << this->metaObject()->className() <<
+//      ": m_propagationAndSignalsEnabled " << (this->m_propagationAndSignalsEnabled ? "set" : "unset") << ", notify" <<
+//      (notify ? "on" : "off");
    if (!this->m_propagationAndSignalsEnabled) {
-      //
-      // Normally leave this log statement commented out as otherwise it can generate a lot of lines in the log files
-      //
-//      qDebug() <<
-//         Q_FUNC_INFO << "Not propagating" << *propertyName << "change on" << this->metaObject()->className() <<
-//         "as m_propagationAndSignalsEnabled unset";
       return;
    }
 
@@ -491,6 +492,8 @@ void NamedEntity::notifyPropertyChange(BtStringConst const & propertyName) const
    Q_ASSERT(idx >= 0);
    QMetaProperty metaProperty = this->metaObject()->property(idx);
    QVariant value = metaProperty.read(this);
+   // Normally leave this log statement commented out as otherwise it can generate a lot of lines in the log files
+//   qDebug() << Q_FUNC_INFO << this->metaObject()->className() << ":" << propertyName << "=" << value;
    emit this->changed(metaProperty, value);
 
    return;

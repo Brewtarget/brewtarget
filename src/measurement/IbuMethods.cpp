@@ -39,10 +39,10 @@ namespace {
     * \brief This intermediate calculation is used in Tinseth's formula and the mIBU formula
     *
     * \param wortGravity_sg
-    * \param boilTime_minutes usually measured from the point at which hops are added until flameout
+    * \param timeInBoil_minutes usually measured from the point at which hops are added until flameout
     */
    double calculateDecimalAlphaAcidUtilization(double const wortGravity_sg,
-                                               double const boilTime_minutes) {
+                                               double const timeInBoil_minutes) {
       //
       // TODO This is Tinseth's "Utilization Table" from which we could probably get a better value for
       //      decimalAlphaAcidUtilization via look-up and interpolation.
@@ -83,7 +83,7 @@ namespace {
       //
       // This is the short-cut way to get decimalAlphaAcidUtilization
       //
-      double const boilTimeFactor = (1.0 - exp(-0.04 * boilTime_minutes)) / 4.15;
+      double const boilTimeFactor = (1.0 - exp(-0.04 * timeInBoil_minutes)) / 4.15;
       double const bignessFactor  = 1.65 * pow(0.000125, (wortGravity_sg - 1.0));
       double const decimalAlphaAcidUtilization = bignessFactor * boilTimeFactor;
       return decimalAlphaAcidUtilization;
@@ -95,13 +95,13 @@ namespace {
    double tinseth(IbuMethods::IbuCalculationParms const & parms) {
       double const mgPerLiterOfAddedAlphaAcids = (parms.AArating * parms.hops_grams * 1000) / parms.postBoilVolume_liters;
       double const decimalAlphaAcidUtilization = calculateDecimalAlphaAcidUtilization(parms.wortGravity_sg,
-                                                                                      parms.boilTime_minutes);
+                                                                                      parms.timeInBoil_minutes);
       return decimalAlphaAcidUtilization * mgPerLiterOfAddedAlphaAcids;
-///      return ((AArating * hops_grams * 1000) / postBoilVolume_liters) * ((1.0 - exp(-0.04 * boilTime_minutes)) / 4.15) * (1.65 * pow(0.000125, (wortGravity_sg - 1)));
+///      return ((AArating * hops_grams * 1000) / postBoilVolume_liters) * ((1.0 - exp(-0.04 * timeInBoil_minutes)) / 4.15) * (1.65 * pow(0.000125, (wortGravity_sg - 1)));
    }
 
    double rager(IbuMethods::IbuCalculationParms const & parms) {
-      double const utilization = (18.11 + 13.86 * tanh((parms.boilTime_minutes - 31.32) / 18.17)) / 100.0;
+      double const utilization = (18.11 + 13.86 * tanh((parms.timeInBoil_minutes - 31.32) / 18.17)) / 100.0;
 
       double const gravityFactor = (parms.wortGravity_sg > 1.050) ? (parms.wortGravity_sg - 1.050)/0.2 : 0.0;
 
@@ -116,7 +116,7 @@ namespace {
       double const hopsFactor = parms.hops_grams/ (Measurement::Units::ounces.toCanonical(1.0).quantity * 1000.0);
       static const Polynomial p(Polynomial() << 0.7000029428 << -0.08868853463 << 0.02720809386 << -0.002340415323 << 0.00009925450081 << -0.000002102006144 << 0.00000002132644293 << -0.00000000008229488217);
 
-      //using 60 boilTime_minutes as a general table
+      //using 60 minutes as a general table
       static double const utilizationFactorTable[4][2] =  {
                         {1.050, 1},
                         {1.065, 0.9286},
@@ -136,13 +136,13 @@ namespace {
          utilizationFactor = utilizationFactorTable[3][1];
       }
 
-      return(volumeFactor * ( hopsFactor * (100 * parms.AArating) * p.eval(parms.boilTime_minutes) ) * utilizationFactor);
+      return(volumeFactor * ( hopsFactor * (100 * parms.AArating) * p.eval(parms.timeInBoil_minutes) ) * utilizationFactor);
    }
 
    /**
     * \brief Intermediate step used by mIBU formula
     */
-   double computePostBoilUtilization(double const boilTime_minutes,
+   double computePostBoilUtilization(double const timeInBoil_minutes,
                                      double const wortGravity_sg,
                                      double const postBoilVolume_liters,
                                      double const coolTime_minutes,
@@ -156,11 +156,11 @@ namespace {
 
       double const integrationTime = 0.001;
       double decimalAArating = 0.0;
-      for (double time_minutes = boilTime_minutes;
-           time_minutes < boilTime_minutes + coolTime_minutes;
+      for (double time_minutes = timeInBoil_minutes;
+           time_minutes < timeInBoil_minutes + coolTime_minutes;
            time_minutes += integrationTime) {
          double const dU = -1.65 * pow(0.000125, (wortGravity_sg-1.0)) * -0.04 * exp(-0.04*time_minutes) / 4.15;
-         double const temp_degK = 53.70 * exp(-1.0 * b * (time_minutes - boilTime_minutes)) + 319.55;
+         double const temp_degK = 53.70 * exp(-1.0 * b * (time_minutes - timeInBoil_minutes)) + 319.55;
          double const degreeOfUtilization =
             // The 1.0 case accounts for nonIAA components
             (time_minutes < 5.0) ? 1.0 : 2.39*pow(10.0,11.0)*exp(-9773.0/temp_degK);
@@ -183,8 +183,8 @@ namespace {
       if (!parms.kettleInternalDiameter_cm) { qWarning() << Q_FUNC_INFO << "kettleInternalDiameter_cm not set!"; }
       if (!parms.kettleOpeningDiameter_cm ) { qWarning() << Q_FUNC_INFO << "kettleOpeningDiameter_cm  not set!"; }
       double const decimalAlphaAcidUtilization = calculateDecimalAlphaAcidUtilization(parms.wortGravity_sg,
-                                                                                      parms.boilTime_minutes);
-      double const postBoilUtilization = computePostBoilUtilization(parms.boilTime_minutes,
+                                                                                      parms.timeInBoil_minutes);
+      double const postBoilUtilization = computePostBoilUtilization(parms.timeInBoil_minutes,
                                                                     parms.wortGravity_sg,
                                                                     parms.postBoilVolume_liters,
                                                                     parms.coolTime_minutes.value_or(0.0),

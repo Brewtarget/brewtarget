@@ -91,8 +91,8 @@ namespace IbuMethods {
     *        say that Tinseth himself confirmed "Post boil volume is correct" because "We are concerned with the mg/L
     *        and any portions of a liter lost post boil doesn’t affect the calculation".
     * \param wortGravity_sg in specific gravity at around 60F I guess.
-    * \param boilTime_minutes - minutes that the hops are in the boil: usually measured from the point at which hops are
-    *                           added until flameout
+    * \param timeInBoil_minutes - minutes that the hops are in the boil: usually measured from the point at which hops
+    *                             are added until flameout
     *
     * \param coolTime_minutes - (Only used in mIbu)  Time after flameout, without forced cooling.  Note per
     *        https://alchemyoverlord.wordpress.com/2015/05/12/a-modified-ibu-measurement-especially-for-late-hopping/
@@ -110,7 +110,7 @@ namespace IbuMethods {
       double hops_grams;
       double postBoilVolume_liters;
       double wortGravity_sg;
-      double boilTime_minutes;
+      double timeInBoil_minutes;
       std::optional<double> coolTime_minutes          = std::nullopt;
       std::optional<double> kettleInternalDiameter_cm = std::nullopt;
       std::optional<double> kettleOpeningDiameter_cm  = std::nullopt;
