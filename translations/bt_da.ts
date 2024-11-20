@@ -373,6 +373,14 @@
         <source>Brewday</source>
         <translation>Brygdag</translation>
     </message>
+    <message>
+        <source>Overwrite Existing Instructions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Generating instructions will overwrite the existing ones.  This is not undoable.  Do you want to proceed?</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>BrewDayWidget</name>
@@ -1924,7 +1932,7 @@ Logfil indeholder måske flere detaljer.</translation>
     </message>
     <message>
         <source>Add %1 step to recipe</source>
-        <translation>Føj %1 trin til opskrift</translation>
+        <translation type="vanished">Føj %1 trin til opskrift</translation>
     </message>
     <message>
         <source>Remove %1</source>
@@ -2447,6 +2455,13 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
     </message>
 </context>
 <context>
+    <name>NE</name>
+    <message>
+        <source>Change %1 %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>NamedEntity</name>
     <message>
         <source>Named Entity</source>
@@ -2715,6 +2730,35 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
     <message>
         <source>Could not open the file %1 for writing! please try again with a new filename or diretory</source>
         <translation>Kunne ikke skrive til filen %1! Prøv igen med nyt filnavn eller mappe</translation>
+    </message>
+</context>
+<context>
+    <name>QApplication</name>
+    <message>
+        <source>%1 is already running!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Another instance of %1 is already running.
+
+Running two copies of the program at once may lead to data loss.
+
+Press OK to quit.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Application terminates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The application encountered a fatal error.
+Error message:
+%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The application encountered a fatal error.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3449,6 +3493,57 @@ Logfil indeholder evt. flere detaljer.</translation>
         <source>Tertiary Fermentation Step for %1</source>
         <translation>Tredje gæringstrin i %1</translation>
     </message>
+    <message>
+        <source>%1 Catalog / Database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add to Recipe</source>
+        <translation type="unfinished">Føj til opskrift</translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished">Ny</translation>
+    </message>
+    <message>
+        <source>Add selected %1 to recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Create new %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit selected %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove selected %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 name:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No</source>
+        <translation type="unfinished">Nej</translation>
+    </message>
+    <message>
+        <source>Yes</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>RaIngrd</name>
+    <message>
+        <source>Add %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Recipe</name>
@@ -3474,7 +3569,7 @@ Logfil indeholder evt. flere detaljer.</translation>
     </message>
     <message>
         <source>%1 water to %2, </source>
-        <translation>%1 vand til %2</translation>
+        <translation type="vanished">%1 vand til %2</translation>
     </message>
     <message>
         <source>for upcoming infusions.</source>
@@ -3669,7 +3764,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>%1 water to %2 </source>
-        <translation>%1 vand til %2 </translation>
+        <translation type="vanished">%1 vand til %2 </translation>
     </message>
     <message>
         <source>Put %1 %2 into packaging for %3.</source>
@@ -4037,6 +4132,10 @@ The final volume in the primary is %1.</source>
     <message>
         <source>Attenuation</source>
         <translation>Forgæring</translation>
+    </message>
+    <message>
+        <source>Times Cultured</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4616,6 +4715,13 @@ The final volume in the primary is %1.</source>
     <message>
         <source>Step</source>
         <translation>Trin</translation>
+    </message>
+</context>
+<context>
+    <name>StepClass</name>
+    <message>
+        <source>Add %1 step to recipe</source>
+        <translation type="unfinished">Føj %1 trin til opskrift</translation>
     </message>
 </context>
 <context>
@@ -5447,7 +5553,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>New hop</source>
-        <translation>Ny humle</translation>
+        <translation type="vanished">Ny humle</translation>
     </message>
     <message>
         <source>Save and close</source>
@@ -5456,6 +5562,22 @@ The final volume in the primary is %1.</source>
     <message>
         <source>Discard and close</source>
         <translation>Annuller og luk</translation>
+    </message>
+    <message>
+        <source>New boil</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished">Ny</translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished">Gem</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Annuller</translation>
     </message>
 </context>
 <context>
@@ -5763,6 +5885,17 @@ The final volume in the primary is %1.</source>
     </message>
 </context>
 <context>
+    <name>editorClass</name>
+    <message>
+        <source>No</source>
+        <translation type="unfinished">Nej</translation>
+    </message>
+    <message>
+        <source>Yes</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>equipmentEditor</name>
     <message>
         <source>Losses</source>
@@ -6007,6 +6140,26 @@ The final volume in the primary is %1.</source>
     <message>
         <source>Discard and close</source>
         <translation>Annuller og luk</translation>
+    </message>
+    <message>
+        <source>Internal Diameter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Opening Diameter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished">Ny</translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished">Gem</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Annuller</translation>
     </message>
 </context>
 <context>
@@ -6283,6 +6436,18 @@ The final volume in the primary is %1.</source>
         <source>Grain Group</source>
         <translation>Maltgruppe</translation>
     </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished">Ny</translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished">Gem</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Annuller</translation>
+    </message>
 </context>
 <context>
     <name>fermentationEditor</name>
@@ -6308,7 +6473,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>New hop</source>
-        <translation>Ny humle</translation>
+        <translation type="vanished">Ny humle</translation>
     </message>
     <message>
         <source>Save and close</source>
@@ -6317,6 +6482,22 @@ The final volume in the primary is %1.</source>
     <message>
         <source>Discard and close</source>
         <translation>Annuller og luk</translation>
+    </message>
+    <message>
+        <source>New fermentation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished">Ny</translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished">Gem</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Annuller</translation>
     </message>
 </context>
 <context>
@@ -6684,28 +6865,40 @@ The final volume in the primary is %1.</source>
         <source>Discard and close</source>
         <translation>Annuller og luk</translation>
     </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished">Ny</translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished">Gem</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Annuller</translation>
+    </message>
 </context>
 <context>
     <name>instructionWidget</name>
     <message>
         <source>Form</source>
-        <translation>Type</translation>
+        <translation type="vanished">Type</translation>
     </message>
     <message>
         <source>Show a timer</source>
-        <translation>Vis en timer</translation>
+        <translation type="vanished">Vis en timer</translation>
     </message>
     <message>
         <source>Show timer</source>
-        <translation>Vis timer</translation>
+        <translation type="vanished">Vis timer</translation>
     </message>
     <message>
         <source>Mark this step completed</source>
-        <translation>Marker dette trin som afsluttet</translation>
+        <translation type="vanished">Marker dette trin som afsluttet</translation>
     </message>
     <message>
         <source>Step completed</source>
-        <translation>Trin afsluttet</translation>
+        <translation type="vanished">Trin afsluttet</translation>
     </message>
 </context>
 <context>
@@ -7112,7 +7305,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>(See Boil tab below)</source>
-        <translation>(se faneblad Kogning herunder)</translation>
+        <translation type="vanished">(se faneblad Kogning herunder)</translation>
     </message>
     <message>
         <source>&amp;Efficiency (%)</source>
@@ -7289,6 +7482,10 @@ The final volume in the primary is %1.</source>
     <message>
         <source>Brew It!</source>
         <translation>Bryg den!</translation>
+    </message>
+    <message>
+        <source>See Boil tab below</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -7647,7 +7844,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>New misc</source>
-        <translation>Ny diverse ingrediens</translation>
+        <translation type="vanished">Ny diverse ingrediens</translation>
     </message>
     <message>
         <source>Save and close</source>
@@ -7656,6 +7853,18 @@ The final volume in the primary is %1.</source>
     <message>
         <source>Discard and close</source>
         <translation>Annuller og luk</translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished">Ny</translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished">Gem</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Annuller</translation>
     </message>
 </context>
 <context>
@@ -8546,7 +8755,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Save</source>
-        <translation type="vanished">Gem</translation>
+        <translation>Gem</translation>
     </message>
     <message>
         <source>Main</source>
@@ -8591,6 +8800,14 @@ The final volume in the primary is %1.</source>
     <message>
         <source>Discard and close</source>
         <translation>Annuller og luk</translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished">Ny</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Annuller</translation>
     </message>
 </context>
 <context>
@@ -8766,7 +8983,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>New hop</source>
-        <translation>Ny humle</translation>
+        <translation type="vanished">Ny humle</translation>
     </message>
     <message>
         <source>Save and close</source>
@@ -8775,6 +8992,22 @@ The final volume in the primary is %1.</source>
     <message>
         <source>Discard and close</source>
         <translation>Annuller og luk</translation>
+    </message>
+    <message>
+        <source>New water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished">Ny</translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished">Gem</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Annuller</translation>
     </message>
 </context>
 <context>
@@ -8829,11 +9062,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Times Recultured</source>
-        <translation>Antal gange genhøstet</translation>
+        <translation type="vanished">Antal gange genhøstet</translation>
     </message>
     <message>
         <source>Times this yeast has been recultured</source>
-        <translation>Antal gange denne gær er blevet genhøstet</translation>
+        <translation type="vanished">Antal gange denne gær er blevet genhøstet</translation>
     </message>
     <message>
         <source>Max Recultures</source>
@@ -8974,6 +9207,18 @@ The final volume in the primary is %1.</source>
     <message>
         <source>Discard and close</source>
         <translation>Annuller og luk</translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished">Ny</translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished">Gem</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Annuller</translation>
     </message>
 </context>
 </TS>

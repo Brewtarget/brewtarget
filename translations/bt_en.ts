@@ -6511,11 +6511,11 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>(See Boil tab below)</source>
+        <source>Boil Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Boil Time</source>
+        <source>See Boil tab below</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
