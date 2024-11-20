@@ -1266,6 +1266,8 @@ public:
     * Emits changed(IBU). Depends on: _batchSize_l, _boilGrav, _boilVolume_l, _finalVolume_l
     */
    void recalcIBU() {
+      qDebug() << Q_FUNC_INFO << "Recalculating IBU from" << this->m_IBU;
+
       double calculatedIbu = 0.0;
 
       // Bitterness due to hops...
@@ -1275,9 +1277,11 @@ public:
       this->m_ibus.clear();
       for (auto const & hopAddition : this->m_self.hopAdditions()) {
          double tmp = this->m_self.ibuFromHopAddition(*hopAddition);
+         qDebug() << Q_FUNC_INFO << *hopAddition << "gave IBU" << tmp;
          this->m_ibus.append(tmp);
          calculatedIbu += tmp;
       }
+      qDebug() << Q_FUNC_INFO << "Calculated IBU from hops" << calculatedIbu;
 
       // Bitterness due to hopped extracts...
       for (auto const & fermentableAddition : this->m_self.fermentableAdditions()) {
@@ -1291,6 +1295,7 @@ public:
                fermentableAddition->fermentable()->key() << ":" << fermentableAddition->name();
          }
       }
+      qDebug() << Q_FUNC_INFO << "Calculated IBU from hops and fermentables" << calculatedIbu;
 
       if (! qFuzzyCompare(calculatedIbu, this->m_IBU)) {
          qDebug() <<
@@ -2609,7 +2614,7 @@ double Recipe::ibuFromHopAddition(RecipeAdditionHop const & hopAddition) {
       qCritical() << Q_FUNC_INFO << "Using Hop volume as weight - THIS IS PROBABLY WRONG!";
    }
    double grams = hopAddition.quantity() * 1000.0;
-   double minutes = hopAddition.addAtTime_mins().value_or(0.0);
+   double hopTimeInBoil_mins = hopAddition.addAtTime_mins().value_or(0.0);
    // Assume 100% utilization until further notice
    double hopUtilization = 1.0;
    // Assume 60 min boil until further notice
@@ -2631,12 +2636,18 @@ double Recipe::ibuFromHopAddition(RecipeAdditionHop const & hopAddition) {
       boilTime_mins = boil->boilTime_mins();
    }
 
+   qDebug() <<
+      Q_FUNC_INFO << "Equipment" << (equipment ? "set" : "not set") << ", Boil" << (boil ? "present" : "not present") <<
+      ", Hop Utilization =" << hopUtilization << ", Boil Time (Mins) =" << boilTime_mins << ", Hop Addition" <<
+      hopAddition << ", stage =" << hopAddition.stage() << ", grams =" << grams << ", hopTimeInBoil_mins = " <<
+      hopTimeInBoil_mins << ", AArating = " << AArating;
+
    IbuMethods::IbuCalculationParms parms = {
       .AArating              = AArating,
       .hops_grams            = grams,
       .postBoilVolume_liters = this->pimpl->m_finalVolumeNoLosses_l,
       .wortGravity_sg        = m_og,
-      .boilTime_minutes      = boilTime_mins,  // Seems unlikely in reality that there would be fractions of a minute
+      .timeInBoil_minutes    = boilTime_mins,  // Seems unlikely in reality that there would be fractions of a minute
       .coolTime_minutes      = boil->coolTime_mins(),
    };
    if (equipment) {
@@ -2646,13 +2657,17 @@ double Recipe::ibuFromHopAddition(RecipeAdditionHop const & hopAddition) {
    if (hopAddition.isFirstWort()) {
       ibus = fwhAdjust * IbuMethods::getIbus(parms);
    } else if (hopAddition.stage() == RecipeAddition::Stage::Boil) {
-      parms.boilTime_minutes = minutes;
+      parms.timeInBoil_minutes = hopTimeInBoil_mins;
       ibus = IbuMethods::getIbus(parms);
    } else if (hopAddition.stage() == RecipeAddition::Stage::Mash && mashHopAdjust > 0.0) {
       ibus = mashHopAdjust * IbuMethods::getIbus(parms);
+   } else {
+      qDebug() << Q_FUNC_INFO << "No IBUs from " << hopAddition;
    }
 
-   // Adjust for hopAddition form. Tinseth's table was created from whole cone data,
+   qDebug() << Q_FUNC_INFO << "IBUs before adjustment for form =" << ibus;
+
+   // Adjust for hop form. Tinseth's table was created from whole cone data,
    // and it seems other formulae are optimized that way as well. So, the
    // utilization is considered unadjusted for whole cones, and adjusted
    // up for plugs and pellets.

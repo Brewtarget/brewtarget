@@ -8465,7 +8465,7 @@ Primärens slutgiltiga volym är %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>(See Boil tab below)</source>
+        <source>See Boil tab below</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

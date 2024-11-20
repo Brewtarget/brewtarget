@@ -1895,14 +1895,15 @@ void MainWindow::showChanges(QMetaProperty* prop) {
    if (prop) {
       propName = prop->name();
    }
+   qDebug() << Q_FUNC_INFO << "propName:" << propName;
 
    // May St. Stevens preserve me
-   this->lineEdit_name      ->setText  (this->pimpl->m_recipeObs->name          ());
+   this->lineEdit_name      ->setText    (this->pimpl->m_recipeObs->name          ());
    this->lineEdit_batchSize ->setQuantity(this->pimpl->m_recipeObs->batchSize_l   ());
+   this->lineEdit_efficiency->setQuantity(this->pimpl->m_recipeObs->efficiency_pct());
    // TODO: One day we'll want to do some work to properly handle no-boil recipes....
    std::optional<double> const boilSize = this->pimpl->m_recipeObs->boil() ? this->pimpl->m_recipeObs->boil()->preBoilSize_l() : std::nullopt;
    this->lineEdit_boilSize  ->setQuantity(boilSize);
-   this->lineEdit_efficiency->setQuantity(this->pimpl->m_recipeObs->efficiency_pct());
    this->lineEdit_boilTime  ->setQuantity(this->pimpl->m_recipeObs->boil()->boilTime_mins());
    this->lineEdit_boilSg    ->setQuantity(this->pimpl->m_recipeObs->boilGrav());
    this->lineEdit_name      ->setCursorPosition(0);

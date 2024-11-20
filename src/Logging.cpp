@@ -20,6 +20,7 @@
 
 #include <sstream>      // For std::ostringstream
 
+//#include <stacktrace>
 #include <boost/stacktrace.hpp>
 
 #include <QApplication>
@@ -527,11 +528,17 @@ QString Logging::getStackTrace() {
    //
    // TBD: Once all our compilers have full C++23 support, we should look at switching to <stacktrace> in the standard
    //      library.
+   //      As at 2024-11-19, according to https://en.cppreference.com/w/cpp/compiler_support, Clang and Apple Clang do
+   //      not have support for <stacktrace> (and GCC needs to be version 14 to have support enabled by default.
    //
    std::ostringstream stacktrace;
    stacktrace << boost::stacktrace::stacktrace();
    QString returnValue;
    QTextStream returnValueAsStream(&returnValue);
+   // What we'd like to be able to write:
+//   returnValueAsStream << "\nStacktrace:\n" << QString::fromStdString( std::to_string(std::stacktrace::current()));
+   // What we use in the meantime:
    returnValueAsStream << "\nStacktrace:\n" << QString::fromStdString(stacktrace.str());
+
    return returnValue;
 }

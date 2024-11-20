@@ -81,6 +81,8 @@ template <OwnedSetOptions os> concept CONCEPT_FIX_UP IsCopyable   = is_Copyable 
  *        For an "unordered" set, we do not have a strict ordering of the owned items (eg two hop additions could happen
  *        at the same time).
  *
+ *        When the set changes, we emit the \c NamedEntity::changed signal on the \c owner object.
+ *
  * \param Owner class needs to inherit from \c NamedEntity
  * \param Item class also needs to inherit from \c NamedEntity, plus implement: \c ownerId, \c setOwnerId
  *        For an enumerated set, \c Item also needs to implement \c seqNum, \c setSeqNum
@@ -195,7 +197,7 @@ public:
     *             be.
     */
    void acceptItemChange(Item const & item, [[maybe_unused]] QMetaProperty prop, [[maybe_unused]] QVariant val) {
-      // If one of our steps changed, our pseudo properties may also change, so we need to emit some signals
+      // If one of our items changed, our pseudo properties may also change, so we need to emit some signals
       if (item.ownerId() == this->m_owner.key()) {
          emit this->m_owner.changed(this->m_owner.metaProperty(*propertyName), QVariant());
       }
@@ -415,7 +417,10 @@ private:
          this->m_itemIds.append(item->key());
       }
 
-      // Now we changed the size of the set, have the owner tell people about it
+      // Now we added an item to the set, we need to listen for changes to it
+      this->connectItemChangedSignal(item);
+
+      // And, now we changed the size of the set, we have the owner tell people about it
       this->emitSetChanged();
 
       return item;
