@@ -25,9 +25,11 @@ Bug fixes and minor enhancements.
 * Drop down menu for Style and Equipment are so narrow, cannot see contents [879](https://github.com/Brewtarget/brewtarget/issues/879)
 * OG doesn't immediately change when adding malt to a recipe [880](https://github.com/Brewtarget/brewtarget/issues/880)
 * IBU doesn't update when adding hops [881](https://github.com/Brewtarget/brewtarget/issues/881)
+* Errors when loading translations [891](https://github.com/Brewtarget/brewtarget/pull/891)
+* Debian package depencies [890](https://github.com/Brewtarget/brewtarget/issues/890)
 
 ### Release Timestamp
-Tue, 19 Nov 2024 04:00:11 +0100
+Fri, 22 Nov 2024 04:00:11 +0100
 
 ## v4.0.10
 Bug fixes and minor enhancements.
