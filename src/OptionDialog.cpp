@@ -64,14 +64,6 @@ namespace {
       TEST_PASSED
    };
 
-   struct LanguageInfo {
-      QString            iso639_1Code;       // What we need to pass to Localization::setLanguage()
-      QIcon              countryFlag;        // Yes, we know some languages are spoken in more than one country...
-      char const    *    nameInEnglish;
-      QString            nameInCurrentLang;  // Don't strictly need to store this, but having the hard-coded tr() calls
-                                             // in the initialisation flag up what language names need translating
-   };
-
    /**
     * \brief For a given QComboBox, save the UnitSystem it has selected
     *
@@ -136,38 +128,7 @@ public:
       label_numBackups           {optionDialog.groupBox_dbConfig},
       spinBox_numBackups         {optionDialog.groupBox_dbConfig},
       label_frequency            {optionDialog.groupBox_dbConfig},
-      spinBox_frequency          {optionDialog.groupBox_dbConfig},
-      languageInfo {
-         //
-         // See also CmakeLists.txt for list of translation source files (in ../translations directory)
-         //
-         // The order here is alphabetical by language name in English (eg "German" rather then "Deutsch").  Of course,
-         // one day it would be nice to sort this at run-time by the name in whatever the currently-set language is.
-         //
-         {"eu", QIcon(":images/flagBasque.svg"     ), "Basque"          , tr("Basque"          )},
-         {"ca", QIcon(":images/flagCatalonia.svg"  ), "Catalan"         , tr("Catalan"         )},
-         {"zh", QIcon(":images/flagChina.svg"      ), "Chinese"         , tr("Chinese"         )},
-         {"cs", QIcon(":images/flagCzech.svg"      ), "Czech"           , tr("Czech"           )},
-         {"da", QIcon(":images/flagDenmark.svg"    ), "Danish"          , tr("Danish"          )},
-         {"nl", QIcon(":images/flagNetherlands.svg"), "Dutch"           , tr("Dutch"           )},
-         {"de", QIcon(":images/flagGermany.svg"    ), "German"          , tr("German"          )},
-         {"el", QIcon(":images/flagGreece.svg"     ), "Greek"           , tr("Greek"           )},
-         {"en", QIcon(":images/flagUK.svg"         ), "English"         , tr("English"         )},
-         {"et", QIcon(":images/flagEstonia.svg"    ), "Estonian"        , tr("Estonian"        )},
-         {"fr", QIcon(":images/flagFrance.svg"     ), "French"          , tr("French"          )},
-         {"gl", QIcon(":images/flagGalicia.svg"    ), "Galician"        , tr("Galician"        )},
-         {"hu", QIcon(":images/flagHungary.svg"    ), "Hungarian"       , tr("Hungarian"       )},
-         {"it", QIcon(":images/flagItaly.svg"      ), "Italian"         , tr("Italian"         )},
-         {"lv", QIcon(":images/flagLatvia.svg"     ), "Latvian"         , tr("Latvian"         )},
-         {"nb", QIcon(":images/flagNorway.svg"     ), "Norwegian Bokmål", tr("Norwegian Bokmål")},
-         {"pl", QIcon(":images/flagPoland.svg"     ), "Polish"          , tr("Polish"          )},
-         {"pt", QIcon(":images/flagBrazil.svg"     ), "Portuguese"      , tr("Portuguese"      )},
-         {"ru", QIcon(":images/flagRussia.svg"     ), "Russian"         , tr("Russian"         )},
-         {"sr", QIcon(":images/flagSerbia.svg"     ), "Serbian"         , tr("Serbian"         )},
-         {"es", QIcon(":images/flagSpain.svg"      ), "Spanish"         , tr("Spanish"         )},
-         {"sv", QIcon(":images/flagSweden.svg"     ), "Swedish"         , tr("Swedish"         )},
-         {"tr", QIcon(":images/flagTurkey.svg"     ), "Turkish"         , tr("Turkish"         )},
-      } {
+      spinBox_frequency          {optionDialog.groupBox_dbConfig} {
       //
       // Optimise the select file dialog to select directories
       //
@@ -219,7 +180,7 @@ public:
 
    void initLangs(OptionDialog & optionDialog) {
 
-      for (auto langInfo : this->languageInfo) {
+      for (auto langInfo : Localization::languageInfo) {
          optionDialog.comboBox_lang->addItem(langInfo.countryFlag, langInfo.nameInCurrentLang, langInfo.iso639_1Code);
       }
 
@@ -393,9 +354,9 @@ public:
       this->retranslateDbDialog();
 
       // Retranslate the language combobox.
-      for (int ii = 0; ii < this->languageInfo.size(); ++ii) {
-         this->languageInfo[ii].nameInCurrentLang = tr(this->languageInfo[ii].nameInEnglish);
-         optionDialog.comboBox_lang->setItemText(ii, this->languageInfo[ii].nameInCurrentLang);
+      for (int ii = 0; ii < Localization::languageInfo.size(); ++ii) {
+         Localization::languageInfo[ii].nameInCurrentLang = tr(Localization::languageInfo[ii].nameInEnglish);
+         optionDialog.comboBox_lang->setItemText(ii, Localization::languageInfo[ii].nameInCurrentLang);
       }
       return;
    }
@@ -578,8 +539,6 @@ public:
    QSpinBox    spinBox_frequency;
 
    DbConnectionTestStates dbConnectionTestState;
-
-   QVector<LanguageInfo> languageInfo;
 
 };
 

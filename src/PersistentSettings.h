@@ -35,7 +35,7 @@
 
 #include "utils/BtStringConst.h"
 
-//╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+//======================================================================================================================
 //========================================== Start of setting NAME constants ===========================================
 //===== (Note that we only need to add here names that have no section or are used in multiple places in the code) =====
 //===== (Note too that property names are often used as setting names and, in such cases, are not redefined here) ======
@@ -88,8 +88,8 @@ AddSettingName(versioning)
 AddSettingName(windowState)
 #undef AddSettingName
 //=========================================== End of setting NAME constants ============================================
-//╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
-//╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+//======================================================================================================================
+//======================================================================================================================
 //======================================== Start of setting SECTION constants ==========================================
 // .:TODO:. I think most of these are no longer used and can be deleted
 #define AddSettingSection(section) namespace PersistentSettings::Sections { BtStringConst const section{#section}; }
@@ -106,7 +106,7 @@ AddSettingSection(yeastTable)
 AddSettingSection(yeastTableModel)
 #undef AddSettingName
 //========================================= End of setting SECTION constants ===========================================
-//╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+//======================================================================================================================
 
 
 /**
@@ -134,6 +134,8 @@ namespace PersistentSettings {
     *                          data is stored
     */
    void initialise(QString customUserDataDir = "");
+
+   [[nodiscard]] bool isInitialised();
 
    /**
     * \return the config directory

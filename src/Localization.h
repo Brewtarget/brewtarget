@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * Localization.h is part of Brewtarget, and is copyright the following authors 2011-2023:
+ * Localization.h is part of Brewtarget, and is copyright the following authors 2011-2024:
  *   • Greg Meess <Daedalus12@gmail.com>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -21,13 +21,29 @@
 #pragma once
 
 #include <QDate>
+#include <QIcon>
 #include <QLocale>
 #include <QString>
+#include <QVector>
 
 class BtStringConst;
 class NamedEntity;
 
 namespace Localization {
+   struct LanguageInfo {
+      int                qtLanguageCode;     // From enum QLocale::Language
+      QString            iso639_1Code;       // The two-letter language code used by Localization::setLanguage()
+      QIcon              countryFlag;        // Yes, we know some languages are spoken in more than one country...
+      char const    *    nameInEnglish;
+      QString            nameInCurrentLang;  // Don't strictly need to store this, but having the hard-coded tr() calls
+                                             // in the initialisation flag up what language names need translating
+   };
+
+   /**
+    * \brief This list holds info about the languages we support
+    */
+   extern QVector<LanguageInfo> languageInfo;
+
    /**
     * \brief Returns the locale to use for formatting numbers etc.  Usually this is the same as \c QLocale::system(),
     *        but can be overridden for testing purposes.
@@ -79,6 +95,13 @@ namespace Localization {
    QString displayDateUserFormated(QDate const & date);
 
    /**
+    * \return \c true if the supplied language code is one we support, \c false otherwise
+    */
+   [[nodiscard]] bool isSupportedLanguage(QString const & twoLetterLanguage);
+
+   void setLanguage(QLocale const & newLanguageLocale);
+
+   /**
     * \brief Loads the translator with two letter ISO 639-1 code.
     *
     *        For example, for Spanish, it would be 'es'. Currently, this does NO checking to make sure the locale code
@@ -86,19 +109,19 @@ namespace Localization {
     *
     * \param twoLetterLanguage two letter ISO 639-1 code
     */
-   void setLanguage(QString twoLetterLanguage);
+   void setLanguage(QString const & twoLetterLanguage);
 
    /**
     * \brief Gets the 2-letter ISO 639-1 language code we are currently using.
     * \returns current 2-letter ISO 639-1 language code.
     */
-   QString const & getCurrentLanguage();
+   QString getCurrentLanguage();
 
    /**
     * \brief Gets the ISO 639-1 language code for the system.
     * \returns current 2-letter ISO 639-1 system language code
     */
-   QString const & getSystemLanguage();
+   QString getSystemLanguage();
 
    /**
     * \brief Convert a \c QString to a \c double, if possible using the default locale and if not using the C locale.
