@@ -439,7 +439,8 @@ def installDependencies():
          #  - We need python-dev to build parts of Boost -- though it may be we could do without this as we only use a
          #    few parts of Boost and most Boost libraries are header-only, so do not require compilation.
          #  - To keep us on our toes, some of the package name formats change between Qt5 and Qt6.  Eg qtmultimedia5-dev
-         #    becomes qt6-multimedia-dev.  Also libqt5multimedia5-plugins has no direct successor in Qt6.
+         #    becomes qt6-multimedia-dev, qtbase5-dev becomes qt6-base-dev.  Also libqt5multimedia5-plugins has no
+         #    direct successor in Qt6.
          #
          # I have struggled to find how to install a Qt6 version of lupdate.  Compilation on Ubuntu 24.04 seems to work
          # fine with the 5.15.13 version of lupdate, so we'll make sure that's installed.  Various other comments below
@@ -468,7 +469,7 @@ def installDependencies():
                                                 'python3',
                                                 'python3-dev',
                                                 'qmake6', # Possibly needed for Qt6 lupdate
-                                                'qtbase5-dev',
+                                                'qt6-base-dev',
                                                 'qt6-l10n-tools', # Needed for Qt6 lupdate?
                                                 'qt6-multimedia-dev',
                                                 'qt6-tools-dev',
