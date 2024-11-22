@@ -473,7 +473,7 @@ def installDependencies():
                                                 'qt6-multimedia-dev',
                                                 'qt6-tools-dev',
                                                 'qt6-translations-l10n', # Puts all the *.qm files in /usr/share/qt6/translations
-                                                'qt6-svg-dev',
+#                                                'qt6-svg-dev', # Available on Ubuntu 24.04, but not on Ubuntu 22.04
                                                 'qttools5-dev-tools', # For Qt5 version of lupdate, per comment above
                                                 'qt6-tools-dev-tools',
                                                 'rpm',
