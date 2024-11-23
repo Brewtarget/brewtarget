@@ -429,6 +429,13 @@ def installDependencies():
          # NOTE: For the moment at least, we are assuming you are on Ubuntu or another Debian-based Linux.  For other
          # flavours of the OS you need to install libraries and frameworks manually.
          #
+         distroName = str(
+            btUtils.abortOnRunFail(subprocess.run(['lsb_release', '-is'], encoding = "utf-8", capture_output = True)).stdout
+         ).rstrip()
+         distroRelease = str(
+            btUtils.abortOnRunFail(subprocess.run(['lsb_release', '-rs'], encoding = "utf-8", capture_output = True)).stdout
+         ).rstrip()
+         log.debug('Linux distro: ' + distroName + ', release: ' + distroRelease)
 
          #
          # For almost everything apart form Boost (see below) we can rely on the distro packages.  A few notes:
@@ -441,6 +448,7 @@ def installDependencies():
          #  - To keep us on our toes, some of the package name formats change between Qt5 and Qt6.  Eg qtmultimedia5-dev
          #    becomes qt6-multimedia-dev, qtbase5-dev becomes qt6-base-dev.  Also libqt5multimedia5-plugins has no
          #    direct successor in Qt6.
+         #  - The package called 'libqt6svg6-dev' in Ubuntu 22.04, is renamed to 'qt6-svg-dev' from Ubuntu 24.04.
          #
          # I have struggled to find how to install a Qt6 version of lupdate.  Compilation on Ubuntu 24.04 seems to work
          # fine with the 5.15.13 version of lupdate, so we'll make sure that's installed.  Various other comments below
@@ -448,6 +456,11 @@ def installDependencies():
          #
          log.info('Ensuring libraries and frameworks are installed')
          btUtils.abortOnRunFail(subprocess.run(['sudo', 'apt-get', 'update']))
+
+         qt6svgDevPackage = 'qt6-svg-dev'
+         if ('Ubuntu' == distroName and Decimal(distroRelease) < Decimal('24.04')):
+            qt6svgDevPackage = 'libqt6svg6-dev'
+
          btUtils.abortOnRunFail(
             subprocess.run(
                ['sudo', 'apt', 'install', '-y', 'build-essential',
@@ -474,7 +487,7 @@ def installDependencies():
                                                 'qt6-multimedia-dev',
                                                 'qt6-tools-dev',
                                                 'qt6-translations-l10n', # Puts all the *.qm files in /usr/share/qt6/translations
-#                                                'qt6-svg-dev', # Available on Ubuntu 24.04, but not on Ubuntu 22.04
+                                                qt6svgDevPackage,
                                                 'qttools5-dev-tools', # For Qt5 version of lupdate, per comment above
                                                 'qt6-tools-dev-tools',
                                                 'rpm',
@@ -719,24 +732,15 @@ def installDependencies():
          # to run `sudo qtchooser -install qt6 $(which qmake6)`, so that's what we do here after sorting out the Meson
          # install.
          #
-         distroName = str(
-            btUtils.abortOnRunFail(subprocess.run(['lsb_release', '-is'], encoding = "utf-8", capture_output = True)).stdout
-         ).rstrip()
-         log.debug('Linux distro: ' + distroName)
-         if ('Ubuntu' == distroName):
-            ubuntuRelease = str(
-               btUtils.abortOnRunFail(subprocess.run(['lsb_release', '-rs'], encoding = "utf-8", capture_output = True)).stdout
-            ).rstrip()
-            log.debug('Ubuntu release: ' + ubuntuRelease)
-            if (Decimal(ubuntuRelease) < Decimal('24.04')):
-               log.info('Installing newer version of Meson the hard way')
-               btUtils.abortOnRunFail(subprocess.run(['sudo', 'apt', 'remove', '-y', 'meson']))
-               btUtils.abortOnRunFail(subprocess.run(['sudo', 'pip3', 'install', 'meson']))
-               #
-               # Now fix lupdate
-               #
-               fullPath_qmake6 = shutil.which('qmake6')
-               btUtils.abortOnRunFail(subprocess.run(['sudo', 'qtchooser', '-install', 'qt6', fullPath_qmake6]))
+         if ('Ubuntu' == distroName and Decimal(distroRelease) < Decimal('24.04')):
+            log.info('Installing newer version of Meson the hard way')
+            btUtils.abortOnRunFail(subprocess.run(['sudo', 'apt', 'remove', '-y', 'meson']))
+            btUtils.abortOnRunFail(subprocess.run(['sudo', 'pip3', 'install', 'meson']))
+            #
+            # Now fix lupdate
+            #
+            fullPath_qmake6 = shutil.which('qmake6')
+            btUtils.abortOnRunFail(subprocess.run(['sudo', 'qtchooser', '-install', 'qt6', fullPath_qmake6]))
 
       #-----------------------------------------------------------------------------------------------------------------
       #--------------------------------------------- Windows Dependencies ----------------------------------------------
