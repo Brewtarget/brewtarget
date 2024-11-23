@@ -171,6 +171,10 @@ void PersistentSettings::initialise(QString customUserDataDir) {
    return;
 }
 
+[[nodiscard]] bool PersistentSettings::isInitialised() {
+   return initialised;
+}
+
 QDir PersistentSettings::getConfigDir() {
    Q_ASSERT(initialised);
    // Note that it can be valid for canonicalPath() to return empty string -- if config dir is current dir

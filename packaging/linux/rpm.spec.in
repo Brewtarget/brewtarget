@@ -71,21 +71,22 @@ BuildArch   : x86_64
 # continuations are OK here!
 #
 Requires    : \
-   glibc               >= 2.35  , \
-   glibc-32bit         >= 2.35  , \
-   libgcc_s1-32bit     >= 12.3.0, \
-   libstdc++6-32bit    >= 12.3.0, \
-   libgcc_s1           >= 12.3.0, \
-   libstdc++6          >= 12.3.0, \
-   libQt6Core6         >= 6.2.4 , \
-   libQt6Gui6          >= 6.2.4 , \
-   libQt6Multimedia6   >= 6.2.4 , \
-   libQt6Network6      >= 6.2.4 , \
-   libQt6PrintSupport6 >= 6.2.4 , \
-   libQt6Sql6          >= 6.2.4 , \
-   libQt6Widgets6      >= 6.2.4 , \
-   libxalan-c112       >= 1.12  , \
-   libxerces-c-3_2     >= 3.2.3
+   glibc                 >= 2.35  , \
+   glibc-32bit           >= 2.35  , \
+   libgcc_s1-32bit       >= 12.3.0, \
+   libstdc++6-32bit      >= 12.3.0, \
+   libgcc_s1             >= 12.3.0, \
+   libstdc++6            >= 12.3.0, \
+   libQt6Core6           >= 6.2.4 , \
+   libQt6Gui6            >= 6.2.4 , \
+   libQt6Multimedia6     >= 6.2.4 , \
+   libQt6Network6        >= 6.2.4 , \
+   libQt6PrintSupport6   >= 6.2.4 , \
+   libQt6Sql6            >= 6.2.4 , \
+   libQt6Widgets6        >= 6.2.4 , \
+   libxalan-c112         >= 1.12  , \
+   libxerces-c-3_2       >= 3.2.3 , \
+   qt6-translations-l10n >= 6.2.4
 
 # Description is done in a different way, perhaps because it's a multi-line field
 %description
