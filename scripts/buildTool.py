@@ -468,6 +468,7 @@ def installDependencies():
                                                 'coreutils',
                                                 'debhelper',
                                                 'git',
+                                                'libgl1', # Qt GUI module requires this but the libqt6gui6 package won't automatically install it
                                                 'libqt6gui6', # Qt GUI module -- needed for QColor (per https://doc.qt.io/qt-6.2/qtgui-module.html)
                                                 'libqt6sql6-psql',
                                                 'libqt6sql6-sqlite',
