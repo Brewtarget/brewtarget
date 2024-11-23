@@ -463,37 +463,49 @@ def installDependencies():
 
          btUtils.abortOnRunFail(
             subprocess.run(
-               ['sudo', 'apt', 'install', '-y', 'build-essential',
-                                                'cmake',
-                                                'coreutils',
-                                                'debhelper',
-                                                'git',
-                                                'libgl1', # Qt GUI module requires this but the libqt6gui6 package won't automatically install it
-                                                'libqt6gui6', # Qt GUI module -- needed for QColor (per https://doc.qt.io/qt-6.2/qtgui-module.html)
-                                                'libqt6sql6-psql',
-                                                'libqt6sql6-sqlite',
-                                                'libqt6svg6',
-                                                'libqt6svgwidgets6',
-                                                'libssl-dev', # For OpenSSL headers
-                                                'libxalan-c-dev',
-                                                'libxerces-c-dev',
-                                                'lintian',
-                                                'meson',
-                                                'ninja-build',
-                                                'pandoc',
-                                                'python3',
-                                                'python3-dev',
-                                                'qmake6', # Possibly needed for Qt6 lupdate
-                                                'qt6-base-dev',
-                                                'qt6-l10n-tools', # Needed for Qt6 lupdate?
-                                                'qt6-multimedia-dev',
-                                                'qt6-tools-dev',
-                                                'qt6-translations-l10n', # Puts all the *.qm files in /usr/share/qt6/translations
-                                                qt6svgDevPackage,
-                                                'qttools5-dev-tools', # For Qt5 version of lupdate, per comment above
-                                                'qt6-tools-dev-tools',
-                                                'rpm',
-                                                'rpmlint']
+               ['sudo', 'apt', 'install', '-y',
+
+                'build-essential',
+                'cmake',
+                'coreutils',
+                'debhelper',
+                'git',
+                #
+                # On Ubuntu 22.04, installing the packages for the Qt GUI module, does not automatically install all its
+                # dependencies.  At compile-time we get an error "Qt6Gui could not be found because dependency
+                # WrapOpenGL could not be found".  Various different posts suggest what packages are needed to satisfy
+                # this dependency.  With a bit of trial-and-error, we have the following.
+                #
+                'libgl1',
+                'libglx-dev',
+                'libgl1-mesa-dev',
+                #
+                'libqt6gui6', # Qt GUI module -- needed for QColor (per https://doc.qt.io/qt-6.2/qtgui-module.html)
+                'libqt6sql6-psql',
+                'libqt6sql6-sqlite',
+                'libqt6svg6',
+                'libqt6svgwidgets6',
+                'libssl-dev', # For OpenSSL headers
+                'libxalan-c-dev',
+                'libxerces-c-dev',
+                'lintian',
+                'meson',
+                'ninja-build',
+                'pandoc',
+                'python3',
+                'python3-dev',
+                'qmake6', # Possibly needed for Qt6 lupdate
+                'qt6-base-dev',
+                'qt6-l10n-tools', # Needed for Qt6 lupdate?
+                'qt6-multimedia-dev',
+                'qt6-tools-dev',
+                'qt6-translations-l10n', # Puts all the *.qm files in /usr/share/qt6/translations
+                qt6svgDevPackage,
+                'qttools5-dev-tools', # For Qt5 version of lupdate, per comment above
+                'qt6-tools-dev-tools',
+                'rpm',
+                'rpmlint'
+               ]
             )
          )
 
