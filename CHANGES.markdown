@@ -13,6 +13,18 @@ happens, so I'm now setting it to a slightly arbitrary time early in the morning
 * Additional methods for calculating IBU
 * We'll list other new features here...
 
+## v4.0.12
+Bug fixes and minor enhancements.
+
+### New Features
+* None
+
+### Bug Fixes
+* None
+
+### Release Timestamp
+Sun, 24 Nov 2024 04:00:12 +0100
+
 ## v4.0.11
 Bug fixes and minor enhancements.
 
@@ -29,7 +41,7 @@ Bug fixes and minor enhancements.
 * Debian package depencies [890](https://github.com/Brewtarget/brewtarget/issues/890)
 
 ### Release Timestamp
-Fri, 22 Nov 2024 04:00:11 +0100
+Sun, 24 Nov 2024 04:00:11 +0100
 
 ## v4.0.10
 Bug fixes and minor enhancements.
