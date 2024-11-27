@@ -133,6 +133,10 @@ Architecture: amd64
 #    Note too that qt6-translations-l10n is not required in terms of providing any functions that we call, but it does
 #    ensure the Qt framework's own translation files are installed.
 #
+#    Now that we are on Qt6, we need to explicitly specify as a libqt6svg6 dependency, otherwise .svg files (which we
+#    use a lot in icons) will not display (see
+#    https://stackoverflow.com/questions/76047551/icons-shown-in-qt5-not-showing-in-qt6)
+#
 Depends: \
    libc6        (>= 2.35  ), \
    libc6-dev    (>= 2.35  ), \
@@ -147,6 +151,7 @@ Depends: \
    libqt6network6      | libqt6network6t64      (>= 6.2.4 ), \
    libqt6printsupport6 | libqt6printsupport6t64 (>= 6.2.4 ), \
    libqt6sql6          | libqt6sql6t64          (>= 6.2.4 ), \
+   libqt6svg6                                   (>= 6.2.4 ), \
    libqt6widgets6      | libqt6widgets6t64      (>= 6.2.4 ), \
    libxalan-c112       | libxalan-c112t64       (>= 1.12  ), \
    libxerces-c3.2      | libxerces-c3.2t64      (>= 3.2.3 ), \

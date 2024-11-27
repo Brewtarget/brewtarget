@@ -2343,6 +2343,12 @@ def doPackage():
             #'Qt6PrintSupport',
             #'Qt6Sql'         ,
             #'Qt6Widgets'     ,
+            #
+            # Following is not handled by windeployqt.  The application will install and run without it, but it just
+            # won't show any icons.
+            'Qt6Svg' , # Needed to display .svg icons
+            #
+            #
             'libb2'               , # BLAKE hash functions -- https://en.wikipedia.org/wiki/BLAKE_(hash_function)
             'libbrotlicommon'     , # Brotli compression -- see https://en.wikipedia.org/wiki/Brotli
             'libbrotlidec'        , # Brotli compression
