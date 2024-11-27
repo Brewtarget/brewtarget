@@ -62,6 +62,7 @@ projectUrl = 'https://github.com/' + capitalisedProjectName + '/' + projectName 
 log = btUtils.getLogger()
 
 exe_python = shutil.which('python3')
+log.info('sys.version: ' + sys.version + '; exe_python: ' + exe_python + '; ' + sys.executable)
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Welcome banner and environment info
@@ -96,11 +97,28 @@ if (exe_pip is None or exe_pip == ''):
 
 log.info('Found pip at: ' + exe_pip)
 
+#
 # Of course, when you run the pip in the venv, it might complain that it is not up-to-date.  So we should ensure that
 # first.  Note that it is Python we must run to upgrade pip, as pip cannot upgrade itself.  (Pip will happily _try_ to
 # upgrade itself, but then, on Windows at least, will get stuck when it tries to remove the old version of itself
 # because "process cannot access the file because it is being used by another process".)
+#
+# You might think we could use sys.executable instead of exe_python here.  However, on Windows at least, that gives the
+# wrong python executable: the "system" one rather than the venv one.
+#
+log.info('Running ' + exe_python + '-m pip install --upgrade pip')
 btUtils.abortOnRunFail(subprocess.run([exe_python, '-m', 'pip', 'install', '--upgrade', 'pip']))
+
+#
+# Per https://docs.python.org/3/library/sys.html#sys.path, this is the search path for Python modules, which is useful
+# for debugging import problems.  Provided that we  started with a clean venv (so there is only one version of Python
+# installed in it), then the search path for packages should include the directory
+# '/some/path/to/.venv/lib/pythonX.yy/site-packages' (where 'X.yy' is the Python version number (eg 3.11, 3.12, etc).
+# If there is more than one version of Python in the venv, then none of these site-packages directories will be in the
+# path.  (We could, in principle, add it manually, but it's a bit fiddly and not necessary since we don't use the venv
+# for anything other than running this script.)
+#
+log.info('Initial module search paths:\n   ' + '\n   '.join(sys.path))
 
 #
 # Mostly, from here on out we'd be fine to invoke pip directly, eg via:
@@ -113,7 +131,8 @@ btUtils.abortOnRunFail(subprocess.run([exe_python, '-m', 'pip', 'install', '--up
 #
 #    subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 #
-# Where package is whatever package you want to install.  So that is what we do.
+# Where package is whatever package you want to install.  However, note comments above that we need exe_python rather
+# than sys.executable.
 #
 
 #
@@ -122,18 +141,19 @@ btUtils.abortOnRunFail(subprocess.run([exe_python, '-m', 'pip', 'install', '--up
 #
 # On some platforms, we also need to install setuptools to be able to access packaging.version.  (NB: On MacOS,
 # setuptools is now installed by default by Homebrew when it installs Python, so we'd get an error if we try to install
-# it via pip here.)
+# it via pip here.  On Windows in MSYS2, packaging and setuptools need to be installed via pacman.)
 #
 log.info('pip install packaging')
-btUtils.abortOnRunFail(subprocess.run([sys.executable, '-m', 'pip', 'install', 'packaging']))
+btUtils.abortOnRunFail(subprocess.run([exe_python, '-m', 'pip', 'install', 'packaging']))
+from packaging import version
 log.info('pip install setuptools')
-btUtils.abortOnRunFail(subprocess.run([sys.executable, '-m', 'pip', 'install', 'setuptools']))
+btUtils.abortOnRunFail(subprocess.run([exe_python, '-m', 'pip', 'install', 'setuptools']))
 import packaging.version
 
 # The requests library (see https://pypi.org/project/requests/) is used for downloading files in a more Pythonic way
 # than invoking wget through the shell.
 log.info('pip install requests')
-btUtils.abortOnRunFail(subprocess.run([sys.executable, '-m', 'pip', 'install', 'requests']))
+btUtils.abortOnRunFail(subprocess.run([exe_python, '-m', 'pip', 'install', 'requests']))
 import requests
 
 #
@@ -468,7 +488,6 @@ def installDependencies():
                 'build-essential',
                 'cmake',
                 'coreutils',
-                'debhelper',
                 'git',
                 #
                 # On Ubuntu 22.04, installing the packages for the Qt GUI module, does not automatically install all its
@@ -488,7 +507,6 @@ def installDependencies():
                 'libssl-dev', # For OpenSSL headers
                 'libxalan-c-dev',
                 'libxerces-c-dev',
-                'lintian',
                 'meson',
                 'ninja-build',
                 'pandoc',
@@ -503,8 +521,13 @@ def installDependencies():
                 qt6svgDevPackage,
                 'qttools5-dev-tools', # For Qt5 version of lupdate, per comment above
                 'qt6-tools-dev-tools',
-                'rpm',
-                'rpmlint'
+                #
+                # The following are needed to build the install packages (rather than just install locally)
+                #
+                'debhelper', # Needed to build .deb packages for Debian/Ubuntu
+                'lintian'  , # Needed to validate .deb packages
+                'rpm'      , # Needed to build RPMs
+                'rpmlint'    # Needed to validate RPMs
                ]
             )
          )
@@ -785,7 +808,6 @@ def installDependencies():
          #    MINGW64
          terminalVersion = unameResult.split(sep='_', maxsplit=1)[0]
 
-
          if (terminalVersion != 'MINGW64'):
             # In the past, we built only 32-bit packages (i686 architecture) on Windows because of problems getting
             # 64-bit versions of NSIS plugins to work.  However, we now invoke NSIS without plugins, so the 64-bit build
@@ -798,7 +820,7 @@ def installDependencies():
 
          # Ensure pip is up-to-date.  This is what the error message tells you to run if it's not!
          log.info('Ensuring Python pip is up-to-date')
-         btUtils.abortOnRunFail(subprocess.run(['python3.exe', '-m', 'pip', 'install', '--upgrade', 'pip']))
+         btUtils.abortOnRunFail(subprocess.run([exe_python, '-m', 'pip', 'install', '--upgrade', 'pip']))
 
          #
          # When we update packages below, we get "error: failed to commit transaction (conflicting files)" errors for a
@@ -882,6 +904,7 @@ def installDependencies():
                         'mingw-w64-' + arch + '-toolchain',
                         'mingw-w64-' + arch + '-xalan-c',
                         'mingw-w64-' + arch + '-xerces-c',
+#                        'mingw-w64-' + arch + '-7zip', # To unzip NSIS plugins
                         'mingw-w64-' + arch + '-angleproject', # See comment above
                         'mingw-w64-' + arch + '-ntldd', # Dependency tool useful for running manually -- see below
                         ]

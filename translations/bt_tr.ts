@@ -2750,56 +2750,48 @@ If you need help, please open an issue at %1</source>
         <translation type="vanished">Lütfen Brewtarget&apos;i yeniden başlatın.</translation>
     </message>
     <message>
-        <source>Catalan</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Czech</source>
-        <translation>Çekçe</translation>
+        <translation type="vanished">Çekçe</translation>
     </message>
     <message>
         <source>German</source>
-        <translation>Almanca</translation>
+        <translation type="vanished">Almanca</translation>
     </message>
     <message>
         <source>English</source>
-        <translation>İngilizce</translation>
+        <translation type="vanished">İngilizce</translation>
     </message>
     <message>
         <source>Greek</source>
-        <translation>Yunanca</translation>
+        <translation type="vanished">Yunanca</translation>
     </message>
     <message>
         <source>Spanish</source>
-        <translation>İspanyolca</translation>
+        <translation type="vanished">İspanyolca</translation>
     </message>
     <message>
         <source>French</source>
-        <translation>Fransızca</translation>
+        <translation type="vanished">Fransızca</translation>
     </message>
     <message>
         <source>Italian</source>
-        <translation>İtalyanca</translation>
+        <translation type="vanished">İtalyanca</translation>
     </message>
     <message>
         <source>Dutch</source>
-        <translation>Flemenkçe</translation>
+        <translation type="vanished">Flemenkçe</translation>
     </message>
     <message>
         <source>Polish</source>
-        <translation>Lehçe</translation>
+        <translation type="vanished">Lehçe</translation>
     </message>
     <message>
         <source>Portuguese</source>
-        <translation>Portekizce</translation>
+        <translation type="vanished">Portekizce</translation>
     </message>
     <message>
         <source>Russian</source>
-        <translation>Rusça</translation>
-    </message>
-    <message>
-        <source>Chinese</source>
-        <translation></translation>
+        <translation type="vanished">Rusça</translation>
     </message>
     <message>
         <source>US traditional units</source>
@@ -2879,43 +2871,35 @@ If you need help, please open an issue at %1</source>
     </message>
     <message>
         <source>Danish</source>
-        <translation>Danimarkaca</translation>
+        <translation type="vanished">Danimarkaca</translation>
     </message>
     <message>
         <source>Estonian</source>
-        <translation>Estonca</translation>
-    </message>
-    <message>
-        <source>Basque</source>
-        <translation></translation>
+        <translation type="vanished">Estonca</translation>
     </message>
     <message>
         <source>Galician</source>
-        <translation>Galiçyaca</translation>
+        <translation type="vanished">Galiçyaca</translation>
     </message>
     <message>
         <source>Hungarian</source>
-        <translation>Macarca</translation>
+        <translation type="vanished">Macarca</translation>
     </message>
     <message>
         <source>Latvian</source>
-        <translation>Letonca</translation>
-    </message>
-    <message>
-        <source>Norwegian Bokmål</source>
-        <translation></translation>
+        <translation type="vanished">Letonca</translation>
     </message>
     <message>
         <source>Serbian</source>
-        <translation>Sırpça</translation>
+        <translation type="vanished">Sırpça</translation>
     </message>
     <message>
         <source>Swedish</source>
-        <translation>İsveççe</translation>
+        <translation type="vanished">İsveççe</translation>
     </message>
     <message>
         <source>Turkish</source>
-        <translation>Türkçe</translation>
+        <translation type="vanished">Türkçe</translation>
     </message>
     <message>
         <source>Test connection or cancel</source>
@@ -3949,6 +3933,98 @@ Günlük dosyası daha fazla detay içerebilir.</translation>
     <message>
         <source>%1 name:</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Basque</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Catalan</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Chinese</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Czech</source>
+        <translation type="unfinished">Çekçe</translation>
+    </message>
+    <message>
+        <source>Danish</source>
+        <translation type="unfinished">Danimarkaca</translation>
+    </message>
+    <message>
+        <source>Dutch</source>
+        <translation type="unfinished">Flemenkçe</translation>
+    </message>
+    <message>
+        <source>English</source>
+        <translation type="unfinished">İngilizce</translation>
+    </message>
+    <message>
+        <source>Estonian</source>
+        <translation type="unfinished">Estonca</translation>
+    </message>
+    <message>
+        <source>French</source>
+        <translation type="unfinished">Fransızca</translation>
+    </message>
+    <message>
+        <source>Galician</source>
+        <translation type="unfinished">Galiçyaca</translation>
+    </message>
+    <message>
+        <source>German</source>
+        <translation type="unfinished">Almanca</translation>
+    </message>
+    <message>
+        <source>Greek</source>
+        <translation type="unfinished">Yunanca</translation>
+    </message>
+    <message>
+        <source>Hungarian</source>
+        <translation type="unfinished">Macarca</translation>
+    </message>
+    <message>
+        <source>Italian</source>
+        <translation type="unfinished">İtalyanca</translation>
+    </message>
+    <message>
+        <source>Latvian</source>
+        <translation type="unfinished">Letonca</translation>
+    </message>
+    <message>
+        <source>Norwegian Bokmål</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Polish</source>
+        <translation type="unfinished">Lehçe</translation>
+    </message>
+    <message>
+        <source>Portuguese</source>
+        <translation type="unfinished">Portekizce</translation>
+    </message>
+    <message>
+        <source>Russian</source>
+        <translation type="unfinished">Rusça</translation>
+    </message>
+    <message>
+        <source>Serbian</source>
+        <translation type="unfinished">Sırpça</translation>
+    </message>
+    <message>
+        <source>Spanish</source>
+        <translation type="unfinished">İspanyolca</translation>
+    </message>
+    <message>
+        <source>Swedish</source>
+        <translation type="unfinished">İsveççe</translation>
+    </message>
+    <message>
+        <source>Turkish</source>
+        <translation type="unfinished">Türkçe</translation>
     </message>
 </context>
 <context>

@@ -112,10 +112,25 @@ match platform.system():
                          '--overwrite', '*pip*',
                          os.environ['MINGW_PACKAGE_PREFIX'] + '-python-pip'])
       )
-      # See comment in scripts/buildTool.py about why we have to run pip via Python rather than just invoking pip
-      # directly eg via `shutil.which('pip3')`.
-      log.info('python -m pip install setuptools')
-      btUtils.abortOnRunFail(subprocess.run([sys.executable, '-m', 'pip', 'install', 'setuptools']))
+      #
+      # Similarly, in the past, we were able to install setuptools as follows:
+      #
+      #    # See comment in scripts/buildTool.py about why we have to run pip via Python rather than just invoking pip
+      #    # directly eg via `shutil.which('pip3')`.
+      #    log.info('python -m pip install setuptools')
+      #    btUtils.abortOnRunFail(subprocess.run([sys.executable, '-m', 'pip', 'install', 'setuptools']))
+      #
+      # But, as of 2024-11, this gives an error "No module named pip.__main__; 'pip' is a package and cannot be directly
+      # executed".  So now we install via pacman instead.
+      #
+      log.info('Install setuptools (' + os.environ['MINGW_PACKAGE_PREFIX'] + '-python-setuptools) via pacman')
+      btUtils.abortOnRunFail(
+         subprocess.run(['pacman', '-S',
+                         '--noconfirm',
+#                         '--overwrite', '*python*',
+#                         '--overwrite', '*pip*',
+                         os.environ['MINGW_PACKAGE_PREFIX'] + '-python-setuptools'])
+      )
    case 'Darwin':
       # Assuming it was Homebrew that installed Python, then, according to https://docs.brew.sh/Homebrew-and-Python,
       # it bundles various packages, including pip.  Since Python version 3.12, Homebrew marks itself as package manager
@@ -127,12 +142,27 @@ match platform.system():
       log.critical('Unrecognised platform: ' + platform.system())
       exit(1)
 
+exe_python = shutil.which('python3')
+log.info('sys.version: ' + sys.version + '; exe_python: ' + exe_python + '; ' + sys.executable)
+
 #
-# At this point we should have enough installed to set up a virtual environment.  (It doesn't matter if the virtual
-# environment already exists.  We are only using it to run the scripts/buildTool.py script.)
+# At this point we should have enough installed to set up a virtual environment.  In principle, it doesn't matter if the
+# virtual environment already exists, as we are only using it to run the scripts/buildTool.py script.  In practice, life
+# is a lot easier if we always start with a new virtual environment.  Partly this is because it makes debugging the
+# scripts easier.  But more importantly, if there are old versions of Python sitting around in a previously-used venv,
+# then some the paths won't get set up correctly, and we won't be able to find modules we install in the venv.  There
+# will be multiple site-packages directories (one for each version of Python in the venv) but none of them will be in
+# the search path for packages.
+#
+# Fortunately, venv can clear any existing environment for us with the '--clear' parameter
+#
+# Once running inside the virtual environment, any packages we need there can be installed directly in the venv with
+# Python and Pip.
 #
 dir_venv = btUtils.getBaseDir().joinpath('.venv')
-log.info('Create Python virtual environment in ' + dir_venv.as_posix())
-btUtils.abortOnRunFail(subprocess.run([sys.executable, '-m', 'venv', dir_venv.as_posix()]))
+log.info('Create new Python virtual environment in ' + dir_venv.as_posix())
+btUtils.abortOnRunFail(
+   subprocess.run([sys.executable, '-m', 'venv', '--clear', dir_venv.as_posix()])
+)
 
 # Control now returns to the bt bash script in the parent directory
