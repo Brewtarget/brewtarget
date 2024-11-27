@@ -95,6 +95,12 @@ void BtBoolComboBox::init(char const * const   editorName    ,
    this->addItem(*this->pimpl->m_setDisplay  ,  trueValue);
 
    this->pimpl->m_initialised = true;
+
+   //
+   // By default, a QComboBox "will adjust to its contents the first time it is shown", which means that, on some
+   // platforms at least, if it somehow gets shown before it is populated, then it will be far too narrow.
+   //
+   this->QComboBox::setSizeAdjustPolicy(QComboBox::AdjustToContents);
    return;
 }
 

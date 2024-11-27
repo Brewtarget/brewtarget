@@ -410,7 +410,8 @@ signals:
     * \brief Passes the meta property that has changed about this object.
     *
     * NOTE: When subclassing, be \em extra careful not to create a member function with the same signature.
-    *       Otherwise, everything will silently break.
+    *       Otherwise, everything will silently break.  If this were a virtual member function, we could add the final
+    *       keyword here to enforce this, but it isn't so we can't.
     */
    void changed(QMetaProperty, QVariant value = QVariant()) const;
    void changedFolder(QString);
@@ -607,9 +608,15 @@ protected:
                                 T & memberVariable,
                                 T const newValue) {
       if (newValue == memberVariable) {
-         qDebug() <<
-            Q_FUNC_INFO << this->metaObject()->className() << "#" << this->key() << ": ignoring call to setter for" <<
-            propertyName << "as value (" << newValue << ") not changing";
+         //
+         // Don't bother with this log whilst we're still in the constructor, otherwise we'll get lots of messages about
+         // NULL and 0 not changing.
+         //
+         if (this->m_propagationAndSignalsEnabled) {
+            qDebug() <<
+               Q_FUNC_INFO << this->metaObject()->className() << "#" << this->key() << ": ignoring call to setter for" <<
+               propertyName << "as value (" << newValue << ") not changing";
+         }
          return true;
       }
       return false;

@@ -2715,55 +2715,55 @@ If you need help, please open an issue at %1</source>
     </message>
     <message>
         <source>Catalan</source>
-        <translation>Katalánština</translation>
+        <translation type="vanished">Katalánština</translation>
     </message>
     <message>
         <source>Czech</source>
-        <translation>Čeština</translation>
+        <translation type="vanished">Čeština</translation>
     </message>
     <message>
         <source>German</source>
-        <translation>Němčina</translation>
+        <translation type="vanished">Němčina</translation>
     </message>
     <message>
         <source>English</source>
-        <translation>Angličtina</translation>
+        <translation type="vanished">Angličtina</translation>
     </message>
     <message>
         <source>Greek</source>
-        <translation>Řečtina</translation>
+        <translation type="vanished">Řečtina</translation>
     </message>
     <message>
         <source>Spanish</source>
-        <translation>Španělština</translation>
+        <translation type="vanished">Španělština</translation>
     </message>
     <message>
         <source>French</source>
-        <translation>Francouzština</translation>
+        <translation type="vanished">Francouzština</translation>
     </message>
     <message>
         <source>Italian</source>
-        <translation>Italština</translation>
+        <translation type="vanished">Italština</translation>
     </message>
     <message>
         <source>Dutch</source>
-        <translation>Holandština</translation>
+        <translation type="vanished">Holandština</translation>
     </message>
     <message>
         <source>Polish</source>
-        <translation>Polština</translation>
+        <translation type="vanished">Polština</translation>
     </message>
     <message>
         <source>Portuguese</source>
-        <translation>Portugalština</translation>
+        <translation type="vanished">Portugalština</translation>
     </message>
     <message>
         <source>Russian</source>
-        <translation>Ruština</translation>
+        <translation type="vanished">Ruština</translation>
     </message>
     <message>
         <source>Chinese</source>
-        <translation>Čínština</translation>
+        <translation type="vanished">Čínština</translation>
     </message>
     <message>
         <source>US traditional units</source>
@@ -2839,46 +2839,6 @@ If you need help, please open an issue at %1</source>
     </message>
     <message>
         <source>PostgreSQL</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Danish</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Estonian</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Basque</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Galician</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hungarian</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Latvian</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Norwegian Bokmål</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Serbian</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Swedish</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Turkish</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3890,6 +3850,98 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>%1 name:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Basque</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Catalan</source>
+        <translation type="unfinished">Katalánština</translation>
+    </message>
+    <message>
+        <source>Chinese</source>
+        <translation type="unfinished">Čínština</translation>
+    </message>
+    <message>
+        <source>Czech</source>
+        <translation type="unfinished">Čeština</translation>
+    </message>
+    <message>
+        <source>Danish</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dutch</source>
+        <translation type="unfinished">Holandština</translation>
+    </message>
+    <message>
+        <source>English</source>
+        <translation type="unfinished">Angličtina</translation>
+    </message>
+    <message>
+        <source>Estonian</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>French</source>
+        <translation type="unfinished">Francouzština</translation>
+    </message>
+    <message>
+        <source>Galician</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>German</source>
+        <translation type="unfinished">Němčina</translation>
+    </message>
+    <message>
+        <source>Greek</source>
+        <translation type="unfinished">Řečtina</translation>
+    </message>
+    <message>
+        <source>Hungarian</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Italian</source>
+        <translation type="unfinished">Italština</translation>
+    </message>
+    <message>
+        <source>Latvian</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Norwegian Bokmål</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Polish</source>
+        <translation type="unfinished">Polština</translation>
+    </message>
+    <message>
+        <source>Portuguese</source>
+        <translation type="unfinished">Portugalština</translation>
+    </message>
+    <message>
+        <source>Russian</source>
+        <translation type="unfinished">Ruština</translation>
+    </message>
+    <message>
+        <source>Serbian</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Spanish</source>
+        <translation type="unfinished">Španělština</translation>
+    </message>
+    <message>
+        <source>Swedish</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Turkish</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

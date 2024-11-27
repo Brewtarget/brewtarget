@@ -2488,55 +2488,55 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
     </message>
     <message>
         <source>Catalan</source>
-        <translation>Katalansk</translation>
+        <translation type="vanished">Katalansk</translation>
     </message>
     <message>
         <source>Czech</source>
-        <translation>Tjekkisk</translation>
+        <translation type="vanished">Tjekkisk</translation>
     </message>
     <message>
         <source>German</source>
-        <translation>Tysk</translation>
+        <translation type="vanished">Tysk</translation>
     </message>
     <message>
         <source>English</source>
-        <translation>Engelsk</translation>
+        <translation type="vanished">Engelsk</translation>
     </message>
     <message>
         <source>Greek</source>
-        <translation>Græsk</translation>
+        <translation type="vanished">Græsk</translation>
     </message>
     <message>
         <source>Spanish</source>
-        <translation>Spansk</translation>
+        <translation type="vanished">Spansk</translation>
     </message>
     <message>
         <source>French</source>
-        <translation>Fransk</translation>
+        <translation type="vanished">Fransk</translation>
     </message>
     <message>
         <source>Italian</source>
-        <translation>Italiensk</translation>
+        <translation type="vanished">Italiensk</translation>
     </message>
     <message>
         <source>Dutch</source>
-        <translation>Hollands</translation>
+        <translation type="vanished">Hollands</translation>
     </message>
     <message>
         <source>Polish</source>
-        <translation>Polsk</translation>
+        <translation type="vanished">Polsk</translation>
     </message>
     <message>
         <source>Portuguese</source>
-        <translation>Portugisisk</translation>
+        <translation type="vanished">Portugisisk</translation>
     </message>
     <message>
         <source>Russian</source>
-        <translation>Russisk</translation>
+        <translation type="vanished">Russisk</translation>
     </message>
     <message>
         <source>Chinese</source>
-        <translation>Kinesisk</translation>
+        <translation type="vanished">Kinesisk</translation>
     </message>
     <message>
         <source>US traditional units</source>
@@ -2616,43 +2616,43 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
     </message>
     <message>
         <source>Danish</source>
-        <translation>Dansk</translation>
+        <translation type="vanished">Dansk</translation>
     </message>
     <message>
         <source>Estonian</source>
-        <translation>Estisk</translation>
+        <translation type="vanished">Estisk</translation>
     </message>
     <message>
         <source>Basque</source>
-        <translation>Baskisk</translation>
+        <translation type="vanished">Baskisk</translation>
     </message>
     <message>
         <source>Galician</source>
-        <translation>Galisisk</translation>
+        <translation type="vanished">Galisisk</translation>
     </message>
     <message>
         <source>Hungarian</source>
-        <translation>Ungarsk</translation>
+        <translation type="vanished">Ungarsk</translation>
     </message>
     <message>
         <source>Latvian</source>
-        <translation>Litauisk</translation>
+        <translation type="vanished">Litauisk</translation>
     </message>
     <message>
         <source>Norwegian Bokmål</source>
-        <translation>Norsk bokmål</translation>
+        <translation type="vanished">Norsk bokmål</translation>
     </message>
     <message>
         <source>Serbian</source>
-        <translation>Serbisk</translation>
+        <translation type="vanished">Serbisk</translation>
     </message>
     <message>
         <source>Swedish</source>
-        <translation>Svensk</translation>
+        <translation type="vanished">Svensk</translation>
     </message>
     <message>
         <source>Turkish</source>
-        <translation>Tyrkisk</translation>
+        <translation type="vanished">Tyrkisk</translation>
     </message>
     <message>
         <source>Test connection or cancel</source>
@@ -3536,6 +3536,98 @@ Logfil indeholder evt. flere detaljer.</translation>
     <message>
         <source>Yes</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Basque</source>
+        <translation type="unfinished">Baskisk</translation>
+    </message>
+    <message>
+        <source>Catalan</source>
+        <translation type="unfinished">Katalansk</translation>
+    </message>
+    <message>
+        <source>Chinese</source>
+        <translation type="unfinished">Kinesisk</translation>
+    </message>
+    <message>
+        <source>Czech</source>
+        <translation type="unfinished">Tjekkisk</translation>
+    </message>
+    <message>
+        <source>Danish</source>
+        <translation type="unfinished">Dansk</translation>
+    </message>
+    <message>
+        <source>Dutch</source>
+        <translation type="unfinished">Hollands</translation>
+    </message>
+    <message>
+        <source>English</source>
+        <translation type="unfinished">Engelsk</translation>
+    </message>
+    <message>
+        <source>Estonian</source>
+        <translation type="unfinished">Estisk</translation>
+    </message>
+    <message>
+        <source>French</source>
+        <translation type="unfinished">Fransk</translation>
+    </message>
+    <message>
+        <source>Galician</source>
+        <translation type="unfinished">Galisisk</translation>
+    </message>
+    <message>
+        <source>German</source>
+        <translation type="unfinished">Tysk</translation>
+    </message>
+    <message>
+        <source>Greek</source>
+        <translation type="unfinished">Græsk</translation>
+    </message>
+    <message>
+        <source>Hungarian</source>
+        <translation type="unfinished">Ungarsk</translation>
+    </message>
+    <message>
+        <source>Italian</source>
+        <translation type="unfinished">Italiensk</translation>
+    </message>
+    <message>
+        <source>Latvian</source>
+        <translation type="unfinished">Litauisk</translation>
+    </message>
+    <message>
+        <source>Norwegian Bokmål</source>
+        <translation type="unfinished">Norsk bokmål</translation>
+    </message>
+    <message>
+        <source>Polish</source>
+        <translation type="unfinished">Polsk</translation>
+    </message>
+    <message>
+        <source>Portuguese</source>
+        <translation type="unfinished">Portugisisk</translation>
+    </message>
+    <message>
+        <source>Russian</source>
+        <translation type="unfinished">Russisk</translation>
+    </message>
+    <message>
+        <source>Serbian</source>
+        <translation type="unfinished">Serbisk</translation>
+    </message>
+    <message>
+        <source>Spanish</source>
+        <translation type="unfinished">Spansk</translation>
+    </message>
+    <message>
+        <source>Swedish</source>
+        <translation type="unfinished">Svensk</translation>
+    </message>
+    <message>
+        <source>Turkish</source>
+        <translation type="unfinished">Tyrkisk</translation>
     </message>
 </context>
 <context>

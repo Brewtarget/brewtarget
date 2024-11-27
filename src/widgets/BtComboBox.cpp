@@ -112,6 +112,12 @@ void BtComboBox::init(char const * const        editorName        ,
       this->autoSetFromControlledField();
    }
 
+   //
+   // By default, a QComboBox "will adjust to its contents the first time it is shown", which means that, on some
+   // platforms at least, if it somehow gets shown before it is populated, then it will be far too narrow.
+   //
+   this->QComboBox::setSizeAdjustPolicy(QComboBox::AdjustToContents);
+
    return;
 }
 

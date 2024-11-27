@@ -83,6 +83,7 @@ Requires    : \
    libQt6Network6        >= 6.2.4 , \
    libQt6PrintSupport6   >= 6.2.4 , \
    libQt6Sql6            >= 6.2.4 , \
+   libqt6svg6            >= 6.2.4 , \
    libQt6Widgets6        >= 6.2.4 , \
    libxalan-c112         >= 1.12  , \
    libxerces-c-3_2       >= 3.2.3 , \

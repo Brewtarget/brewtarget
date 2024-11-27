@@ -122,10 +122,18 @@
 #
 topDir=$(dirname $0)
 
+#
+# It's worth knowing exactly which instance of Python we're running as, eg, on MSYS2 on Windows there can be multiple
+# versions installed
+#
+export exe_python=$(which python3)
+echo "${exe_python} --version"
+${exe_python} --version
+
 # This first Python script, run using the system-wide Python interpreter, will install a few bare necessities and
 # (re)create the Python venv
-echo "python3 ${topDir}/scripts/btInit.py"
-python3 ${topDir}/scripts/btInit.py
+echo "${exe_python} ${topDir}/scripts/btInit.py"
+${exe_python} ${topDir}/scripts/btInit.py
 if [ $? -ne 0 ]; then
    exit $?
 fi
@@ -136,6 +144,13 @@ fi
 pwd
 echo "source ${topDir}/.venv/bin/activate"
 source ${topDir}/.venv/bin/activate
+
+#
+# And let's reassure ourselves that, with the changed paths of the venve, we're still running the same version of Python
+#
+export exe_python=$(which python3)
+echo "${exe_python} --version"
+${exe_python} --version
 
 #
 # Uncomment the following to show exported environment variables for debugging.
@@ -149,5 +164,5 @@ source ${topDir}/.venv/bin/activate
 #env
 
 # Run the main script, passing in all the command line arguments we received
-echo "python3 ${topDir}/scripts/buildTool.py $@"
-python3 ${topDir}/scripts/buildTool.py $@
+echo "${exe_python} ${topDir}/scripts/buildTool.py $@"
+${exe_python} ${topDir}/scripts/buildTool.py $@
