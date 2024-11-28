@@ -356,6 +356,8 @@ public:
    /**
     * \brief Getting a recipe's \c Boil, \c Fermentation, etc is pretty much the same logic, so we template it
     *
+    * \param ourId The primary key of the \c Boil, \c Fermentation, etc.
+    *
     *        In BeerJSON, each of mash, boil and fermentation is optional.  I guess no fermentation is for recipes for
     *        making hop water etc.  Equally, there are people making beer without boiling -- eg see
     *        https://byo.com/article/raw-ale/.  In both cases, our current support for "no boil" and/or "no ferment" is
@@ -1095,10 +1097,10 @@ public:
       double nonFermentableSugars_kg   = sugars.nonFermentableSugars_kg;  // Mass of sugar that is not fermentable (also counted in sugar_kg_ignoreEfficiency)
 
       // Uncomment for diagnosing problems with calculations
-      qDebug() <<
-         Q_FUNC_INFO << "Recipe #" << this->m_self.key() << "(" << this->m_self.name() << ") "
-         "sugar_kg: " << sugar_kg << ", sugar_kg_ignoreEfficiency: " << sugar_kg_ignoreEfficiency <<
-         ", nonFermentableSugars_kg:" << nonFermentableSugars_kg;
+//      qDebug() <<
+//         Q_FUNC_INFO << "Recipe #" << this->m_self.key() << "(" << this->m_self.name() << ") "
+//         "sugar_kg: " << sugar_kg << ", sugar_kg_ignoreEfficiency: " << sugar_kg_ignoreEfficiency <<
+//         ", nonFermentableSugars_kg:" << nonFermentableSugars_kg;
 
       // We might lose some sugar in the form of Trub/Chiller loss and lauter deadspace.
       auto equipment = this->m_self.equipment();
@@ -1172,10 +1174,10 @@ public:
       }
 
       // Uncomment for diagnosing problems with calculations
-      qDebug() <<
-         Q_FUNC_INFO << "Recipe #" << this->m_self.key() << "(" << this->m_self.name() << ") "
-         "attenuation_pct:" << attenuation_pct << ", m_og_fermentable:" << m_og_fermentable << ", m_fg_fermentable: " <<
-         m_fg_fermentable;
+//      qDebug() <<
+//         Q_FUNC_INFO << "Recipe #" << this->m_self.key() << "(" << this->m_self.name() << ") "
+//         "attenuation_pct:" << attenuation_pct << ", m_og_fermentable:" << m_og_fermentable << ", m_fg_fermentable: " <<
+//         m_fg_fermentable;
 
       if (!qFuzzyCompare(this->m_self.m_og, calculatedOg)) {
          qDebug() <<
@@ -1764,6 +1766,8 @@ Recipe::Recipe(Recipe const & other) :
 Recipe::~Recipe() = default;
 
 void Recipe::setKey(int key) {
+   this->NamedEntity::setKey(key);
+
    qDebug() << Q_FUNC_INFO << "Promulgating key for Recipe #" << key;
 
    //
@@ -2598,7 +2602,9 @@ double Recipe::ibuFromHopAddition(RecipeAdditionHop const & hopAddition) {
       Q_FUNC_INFO
    );
 
-   // It's a coding error to ask one recipe about another's hop additions!
+   // It's a coding error to ask one recipe about another's hop additions!  Uncomment the log statement here if the
+   // assert is firing.
+//   qDebug() << Q_FUNC_INFO << *this << " / " << hopAddition << "; hopAddition.recipeId():" << hopAddition.recipeId();
    Q_ASSERT(hopAddition.recipeId() == this->key());
 
    double AArating = hopAddition.hop()->alpha_pct() / 100.0;

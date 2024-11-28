@@ -1904,7 +1904,7 @@ void MainWindow::showChanges(QMetaProperty* prop) {
    // TODO: One day we'll want to do some work to properly handle no-boil recipes....
    std::optional<double> const boilSize = this->pimpl->m_recipeObs->boil() ? this->pimpl->m_recipeObs->boil()->preBoilSize_l() : std::nullopt;
    this->lineEdit_boilSize  ->setQuantity(boilSize);
-   this->lineEdit_boilTime  ->setQuantity(this->pimpl->m_recipeObs->boil()->boilTime_mins());
+   this->lineEdit_boilTime  ->setQuantity(this->pimpl->m_recipeObs->boil() ? this->pimpl->m_recipeObs->boil()->boilTime_mins() : 0.0);
    this->lineEdit_boilSg    ->setQuantity(this->pimpl->m_recipeObs->boilGrav());
    this->lineEdit_name      ->setCursorPosition(0);
    this->lineEdit_batchSize ->setCursorPosition(0);
@@ -2407,6 +2407,8 @@ void MainWindow::addStepToStepOwner(std::shared_ptr<MashStep> mashStep) {
    return;
 }
 void MainWindow::addStepToStepOwner(std::shared_ptr<BoilStep> boilStep) {
+   // It's a coding error if we're trying to add a BoilStep when there is no Boil
+   Q_ASSERT(this->pimpl->m_recipeObs->boil());
    this->addStepToStepOwner(this->pimpl->m_recipeObs->boil(), boilStep);
    return;
 }

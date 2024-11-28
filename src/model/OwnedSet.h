@@ -143,6 +143,7 @@ public:
     */
    OwnedSet(Owner & owner, [[maybe_unused]] OwnedSet const & other) requires (!IsCopyable<ownedSetOptions>) :
       m_owner{owner} {
+      qDebug() << Q_FUNC_INFO << "Copy is no-op";
       return;
    }
 
@@ -162,6 +163,7 @@ public:
 
          // However, if we insert the new Item in the object store, that will give it its own ID
          ObjectStoreWrapper::insert(itemToAdd);
+         qDebug() << Q_FUNC_INFO << "Copied" << *item << "to" << *itemToAdd;
 
          // Store the ID of the copy Item
          // If and when we get our ID then we can give it to our Items
