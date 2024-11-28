@@ -78,7 +78,7 @@ Boil::Boil(QString name) :
 Boil::Boil(NamedParameterBundle const & namedParameterBundle) :
    NamedEntity     {namedParameterBundle},
    FolderBase<Boil>{namedParameterBundle},
-   StepOwnerBase<Boil, BoilStep>{},
+   StepOwnerBase<Boil, BoilStep>{namedParameterBundle},
    SET_REGULAR_FROM_NPB (m_description  , namedParameterBundle, PropertyNames::Boil::description  ),
    SET_REGULAR_FROM_NPB (m_notes        , namedParameterBundle, PropertyNames::Boil::notes        ),
    SET_REGULAR_FROM_NPB (m_preBoilSize_l, namedParameterBundle, PropertyNames::Boil::preBoilSize_l) {
@@ -154,6 +154,7 @@ void Boil::setBoilTime_mins(double const val) {
 }
 
 void Boil::acceptStepChange(QMetaProperty prop, QVariant val) {
+   // TBD I don't think anything listens for changes to boilTime_mins
    this->doAcceptStepChange(this->sender(), prop, val, {&PropertyNames::Boil::boilTime_mins});
    return;
 }
