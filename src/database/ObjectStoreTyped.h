@@ -144,6 +144,9 @@ public:
    std::shared_ptr<NE> getById(int id) const {
       if (!this->contains(id)) {
          qDebug() << Q_FUNC_INFO << "ID" << id << "not found amongst" << this->size() << "objects";
+         // Uncomment the following to track down errors where we're looking for an object that is not in the DB.
+         // (Often this is because we are searching for an object before it has been stored in the DB.)
+//         qDebug().noquote() << Q_FUNC_INFO << Logging::getStackTrace();
          return nullptr;
       }
       return std::static_pointer_cast<NE>(this->ObjectStore::getById(id));

@@ -173,8 +173,8 @@ void MashDesigner::saveStep() {
       this->m_mashStep->setInfuseTemp_c(this->selectedTemp_c());
    }
 
-   // Mash::addStep() will ensure the m_mash step is stored in the DB and has the correct m_mash ID etc
-   this->m_mash->addStep(this->m_mashStep);
+   // This call will ensure the m_mash step is stored in the DB and has the correct m_mash ID etc
+   this->m_mash->add(this->m_mashStep);
    return;
 }
 

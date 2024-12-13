@@ -61,9 +61,9 @@ bool Misc::isEqualTo(NamedEntity const & other) const {
    // Base class will already have ensured names are equal
    bool const outlinesAreEqual{
       // "Outline" fields: In BeerJSON, all these fields are in the FermentableBase type
-      Utils::AutoCompare(this->m_producer , rhs.m_producer ) &&
-      Utils::AutoCompare(this->m_productId, rhs.m_productId) &&
-      Utils::AutoCompare(this->m_type     , rhs.m_type     )
+      AUTO_LOG_COMPARE(this, rhs, m_producer ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_productId) &&
+      AUTO_LOG_COMPARE(this, rhs, m_type     )
    };
 
    // If either object is an outline (see comment in model/OutlineableNamedEntity.h) then there is no point comparing
@@ -76,8 +76,8 @@ bool Misc::isEqualTo(NamedEntity const & other) const {
       outlinesAreEqual &&
 
       // Remaining BeerJSON fields -- excluding inventories
-      Utils::AutoCompare(this->m_useFor, rhs.m_useFor) &&
-      Utils::AutoCompare(this->m_notes , rhs.m_notes )
+      AUTO_LOG_COMPARE(this, rhs, m_useFor) &&
+      AUTO_LOG_COMPARE(this, rhs, m_notes )
    );
 }
 

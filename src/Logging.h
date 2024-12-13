@@ -168,4 +168,20 @@ namespace Logging {
    extern QString getStackTrace();
 }
 
+/**
+ * \brief Convenience function for logging pointers (because usually we want to log whatever the pointer is pointing to,
+ *        rather than the numerical value of the pointer).
+ *
+ *        But NB for void * we really do want to log the address!
+ */
+//template<class S, typename T>
+//S & operator<<(S & stream, T const * thingToLog) requires (!std::same_as<T, void>) {
+//   if (thingToLog) {
+//      stream << *thingToLog;
+//   } else {
+//      stream << "Null";
+//   }
+//   return stream;
+//}
+
 #endif

@@ -421,5 +421,11 @@ public:
 template<class S>
 S & operator<<(S & stream, JsonRecordDefinition::FieldType const fieldType);
 
+/**
+ * \brief Convenience function for logging
+ */
+template<class S>
+S & operator<<(S & stream, JsonRecordDefinition::FieldDefinition const & fieldDefinition);
+
 
 #endif

@@ -26,8 +26,8 @@ bool StepExtended::isEqualTo(NamedEntity const & other) const {
    StepExtended const & rhs = static_cast<StepExtended const &>(other);
    // Base class will already have ensured names are equal
    return (
-      Utils::AutoCompare(this->m_startGravity_sg, rhs.m_startGravity_sg) &&
-      Utils::AutoCompare(this->m_endGravity_sg  , rhs.m_endGravity_sg  ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_startGravity_sg) &&
+      AUTO_LOG_COMPARE(this, rhs, m_endGravity_sg  ) &&
       // Parent classes have to be equal too
       this->Step::isEqualTo(other)
    );

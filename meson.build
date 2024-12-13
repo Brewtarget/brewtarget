@@ -763,7 +763,6 @@ commonSourceFiles = files([
    'src/serialization/xml/XercesHelpers.cpp',
    'src/serialization/xml/XmlCoding.cpp',
    'src/serialization/xml/XmlMashRecord.cpp',
-   'src/serialization/xml/XmlMashStepRecord.cpp',
    'src/serialization/xml/XmlRecipeRecord.cpp',
    'src/serialization/xml/XmlRecord.cpp',
    'src/serialization/xml/XmlRecordDefinition.cpp',

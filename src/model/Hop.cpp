@@ -78,13 +78,13 @@ bool Hop::isEqualTo(NamedEntity const & other) const {
    // Base class will already have ensured names are equal
    bool const outlinesAreEqual{
       // "Outline" fields: In BeerJSON, all these fields are in the FermentableBase type
-      Utils::AutoCompare(this->m_producer , rhs.m_producer ) &&
-      Utils::AutoCompare(this->m_productId, rhs.m_productId) &&
-      Utils::AutoCompare(this->m_origin   , rhs.m_origin   ) &&
-      Utils::AutoCompare(this->m_year     , rhs.m_year     ) &&
-      Utils::AutoCompare(this->m_form     , rhs.m_form     ) &&
-      Utils::AutoCompare(this->m_alpha_pct, rhs.m_alpha_pct) &&
-      Utils::AutoCompare(this->m_beta_pct , rhs.m_beta_pct )
+      AUTO_LOG_COMPARE(this, rhs, m_producer ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_productId) &&
+      AUTO_LOG_COMPARE(this, rhs, m_origin   ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_year     ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_form     ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_alpha_pct) &&
+      AUTO_LOG_COMPARE(this, rhs, m_beta_pct )
    };
 
    // If either object is an outline (see comment in model/OutlineableNamedEntity.h) then there is no point comparing
@@ -98,26 +98,26 @@ bool Hop::isEqualTo(NamedEntity const & other) const {
 
       // Remaining BeerJSON fields -- excluding inventories
 
-      Utils::AutoCompare(this->m_type              , rhs.m_type              ) &&
-      Utils::AutoCompare(this->m_notes             , rhs.m_notes             ) &&
-      Utils::AutoCompare(this->m_hsi_pct           , rhs.m_hsi_pct           ) &&
-      Utils::AutoCompare(this->m_substitutes       , rhs.m_substitutes       ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_type              ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_notes             ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_hsi_pct           ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_substitutes       ) &&
 
       // Oil content
-      Utils::AutoCompare(this->m_totalOil_mlPer100g, rhs.m_totalOil_mlPer100g) &&
-      Utils::AutoCompare(this->m_humulene_pct      , rhs.m_humulene_pct      ) &&
-      Utils::AutoCompare(this->m_caryophyllene_pct , rhs.m_caryophyllene_pct ) &&
-      Utils::AutoCompare(this->m_cohumulone_pct    , rhs.m_cohumulone_pct    ) &&
-      Utils::AutoCompare(this->m_myrcene_pct       , rhs.m_myrcene_pct       ) &&
-      Utils::AutoCompare(this->m_farnesene_pct     , rhs.m_farnesene_pct     ) &&
-      Utils::AutoCompare(this->m_geraniol_pct      , rhs.m_geraniol_pct      ) &&
-      Utils::AutoCompare(this->m_bPinene_pct       , rhs.m_bPinene_pct       ) &&
-      Utils::AutoCompare(this->m_linalool_pct      , rhs.m_linalool_pct      ) &&
-      Utils::AutoCompare(this->m_limonene_pct      , rhs.m_limonene_pct      ) &&
-      Utils::AutoCompare(this->m_nerol_pct         , rhs.m_nerol_pct         ) &&
-      Utils::AutoCompare(this->m_pinene_pct        , rhs.m_pinene_pct        ) &&
-      Utils::AutoCompare(this->m_polyphenols_pct   , rhs.m_polyphenols_pct   ) &&
-      Utils::AutoCompare(this->m_xanthohumol_pct   , rhs.m_xanthohumol_pct   )
+      AUTO_LOG_COMPARE(this, rhs, m_totalOil_mlPer100g) &&
+      AUTO_LOG_COMPARE(this, rhs, m_humulene_pct      ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_caryophyllene_pct ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_cohumulone_pct    ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_myrcene_pct       ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_farnesene_pct     ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_geraniol_pct      ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_bPinene_pct       ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_linalool_pct      ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_limonene_pct      ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_nerol_pct         ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_pinene_pct        ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_polyphenols_pct   ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_xanthohumol_pct   )
    );
 }
 

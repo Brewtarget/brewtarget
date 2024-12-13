@@ -193,7 +193,7 @@ void MashWizard::wizardry() {
    // Find any batch sparges and remove them
    for (auto step : steps) {
       if (step->isSparge()) {
-         mash->removeStep(step);
+         mash->remove(step);
       } else {
          tmp.append(step);
       }

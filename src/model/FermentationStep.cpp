@@ -17,6 +17,7 @@
 
 #include "database/ObjectStoreWrapper.h"
 #include "model/NamedParameterBundle.h"
+#include "utils/AutoCompare.h"
 
 QString FermentationStep::localisedName() { return tr("Fermentation Step"); }
 
@@ -25,8 +26,8 @@ bool FermentationStep::isEqualTo(NamedEntity const & other) const {
    FermentationStep const & rhs = static_cast<FermentationStep const &>(other);
    // Base class will already have ensured names are equal
    return (
-      this->m_freeRise == rhs.m_freeRise &&
-      this->m_vessel   == rhs.m_vessel   &&
+      AUTO_LOG_COMPARE(this, rhs, m_freeRise) &&
+      AUTO_LOG_COMPARE(this, rhs, m_vessel  ) &&
       // Parent classes have to be equal too
       this->StepExtended::isEqualTo(other)
    );

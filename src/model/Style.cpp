@@ -51,11 +51,11 @@ bool Style::isEqualTo(NamedEntity const & other) const {
    Style const & rhs = static_cast<Style const &>(other);
    // Base class will already have ensured names are equal
    return (
-      Utils::AutoCompare(this->m_category      , rhs.m_category      ) &&
-      Utils::AutoCompare(this->m_categoryNumber, rhs.m_categoryNumber) &&
-      Utils::AutoCompare(this->m_styleLetter   , rhs.m_styleLetter   ) &&
-      Utils::AutoCompare(this->m_styleGuide    , rhs.m_styleGuide    ) &&
-      Utils::AutoCompare(this->m_type          , rhs.m_type          )
+      AUTO_LOG_COMPARE(this, rhs, m_category      ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_categoryNumber) &&
+      AUTO_LOG_COMPARE(this, rhs, m_styleLetter   ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_styleGuide    ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_type          )
    );
 }
 

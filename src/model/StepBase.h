@@ -24,6 +24,7 @@
 #include "model/EnumeratedBase.h"
 #include "PhysicalConstants.h"
 #include "utils/AutoCompare.h"
+#include "utils/OptionalHelpers.h"
 #include "utils/TypeTraits.h"
 
 //======================================================================================================================
@@ -98,9 +99,9 @@ protected:
    //! Non-virtual equivalent of isEqualTo
    bool doIsEqualTo(StepBase const & other) const {
       return (
-         Utils::AutoCompare(this->m_stepTime_mins, other.m_stepTime_mins) &&
-         Utils::AutoCompare(this->m_startTemp_c  , other.m_startTemp_c  ) &&
-         Utils::AutoCompare(this->m_rampTime_mins, other.m_rampTime_mins) &&
+         AUTO_LOG_COMPARE(this, other, m_stepTime_mins) &&
+         AUTO_LOG_COMPARE(this, other, m_startTemp_c  ) &&
+         AUTO_LOG_COMPARE(this, other, m_rampTime_mins) &&
          // Parent classes have to be equal too
          this->EnumeratedBase<Derived, Owner>::doIsEqualTo(other)
       );
@@ -142,7 +143,7 @@ private:
       return;
    }
 
-   StepBase(Derived const & other) :
+   explicit StepBase(Derived const & other) :
       EnumeratedBase<Derived, Owner>{other},
       m_stepTime_mins{other.m_stepTime_mins},
       m_startTemp_c  {other.m_startTemp_c  },
@@ -242,6 +243,21 @@ public:
       // Can't use SET_AND_NOTIFY macro here, but fortunately it's trivial
       this->derived().setAndNotify(PropertyNames::StepBase::rampTime_mins, this->m_rampTime_mins, val);
       return;
+   }
+
+   //! \brief Convenience function for logging
+   virtual QString toString() const {
+      return QString{
+         "StepBase (m_stepTime_mins: %1; m_startTemp_c: %2; m_rampTime_mins: %3) %4"
+      }.arg(
+         Optional::toString(this->m_stepTime_mins)
+      ).arg(
+         Optional::toString(this->m_startTemp_c)
+      ).arg(
+         Optional::toString(this->m_rampTime_mins)
+      ).arg(
+         this->EnumeratedBase<Derived, Owner>::toString()
+      );
    }
 
 protected:

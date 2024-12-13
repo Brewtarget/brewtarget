@@ -2395,10 +2395,6 @@ If you need help, please open an issue at %1</source>
 <context>
     <name>MashStep</name>
     <message>
-        <source>Unnamed Mash Step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Mash Step</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2756,6 +2752,10 @@ If you need help, please open an issue at %1</source>
     <name>NE</name>
     <message>
         <source>Change %1 %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unnamed %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

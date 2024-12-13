@@ -653,9 +653,9 @@ public:
       auto step = stepTableModel.getRow(row);
       this->m_self.doOrRedoUpdate(
          newUndoableAddOrRemove(*stepOwner,
-                                &StepClass::StepOwnerClass::removeStep,
+                                &StepClass::StepOwnerClass::remove,
                                 step,
-                                &StepClass::StepOwnerClass::addStep,
+                                &StepClass::StepOwnerClass::add,
                                 &MainWindow::remove<StepClass>,
                                 static_cast<void (MainWindow::*)(std::shared_ptr<StepClass>)>(nullptr),
                                 tr("Remove %1").arg(StepClass::localisedName()))
@@ -2387,9 +2387,9 @@ void MainWindow::addStepToStepOwner(StepOwnerClass & stepOwner, std::shared_ptr<
    }
    this->doOrRedoUpdate(
       newUndoableAddOrRemove(stepOwner,
-                             &StepOwnerClass::addStep,
+                             &StepOwnerClass::add,
                              step,
-                             &StepOwnerClass::removeStep,
+                             &StepOwnerClass::remove,
                              tr("Add %1 step to recipe").arg(StepOwnerClass::localisedName()))
    );
    // We don't need to call this->pimpl->m_mashStepTableModel->addMashStep(mashStep) etc here because the change to

@@ -158,6 +158,9 @@ double RecipeAdditionFermentable::equivSucrose_kg() const {
    return ret;
 }
 
+// We rely on this being true in serialization/NamedEntityRecordBase.h, so let's check it at compile-time here
+static_assert(std::is_base_of<OwnedByRecipe, RecipeAdditionFermentable>::value);
+
 // Boilerplate code for IngredientAmount and RecipeAddition
 INGREDIENT_AMOUNT_COMMON_CODE(RecipeAdditionFermentable, Fermentable)
 RECIPE_ADDITION_CODE(RecipeAdditionFermentable, Fermentable)

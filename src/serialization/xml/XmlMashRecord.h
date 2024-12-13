@@ -32,7 +32,8 @@ protected:
    /**
     * \brief We need to override \c XmlRecord::propertiesToXml for similar reasons that that
     *        \c XmlRecipeRecord does.  (Note that we do not need to override \c XmlRecord::normaliseAndStoreInDb as the
-    *        connection between a \c MashStep and its \c Mash is handled in \c XmlMashStepRecord::setContainingEntity.)
+    *        connection between a \c MashStep and its \c Mash is handled in
+    *        \c Serialization::NamedEntityRecordBase::doSetContainingEntity.)
     */
    virtual void subRecordToXml(XmlRecordDefinition::FieldDefinition const & fieldDefinition,
                                XmlRecord const & subRecord,
@@ -41,17 +42,17 @@ protected:
                                int indentLevel,
                                char const * const indentString) const;
 
-   /**
-    * \brief We need to know about our containing entity to decide whether to include the Mash record in the stats.
-    *
-    *        If the Mash is outside a Recipe, then we DO want to include it in stats.  If it's inside a Recipe then we
-    *        don't call it out with a separate stats entry.  It suffices to tell the user how many Recipes we read in
-    *        without also counting how many Mashes inside Recipes we read.
-    *
-    *        Additionally, if the Recipe gets deleted after being read in (because at that point we determine it's a
-    *        duplicate), this means we don't have to try to unpick stats about Mashes.
-    */
-   virtual void setContainingEntity(std::shared_ptr<NamedEntity> containingEntity);
+///   /**
+///    * \brief We need to know about our containing entity to decide whether to include the Mash record in the stats.
+///    *
+///    *        If the Mash is outside a Recipe, then we DO want to include it in stats.  If it's inside a Recipe then we
+///    *        don't call it out with a separate stats entry.  It suffices to tell the user how many Recipes we read in
+///    *        without also counting how many Mashes inside Recipes we read.
+///    *
+///    *        Additionally, if the Recipe gets deleted after being read in (because at that point we determine it's a
+///    *        duplicate), this means we don't have to try to unpick stats about Mashes.
+///    */
+///   virtual void setContainingEntity(std::shared_ptr<NamedEntity> containingEntity);
 };
 
 #endif

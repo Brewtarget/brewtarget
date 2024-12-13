@@ -29,6 +29,7 @@
 #include "model/Step.h"
 #include "model/StepBase.h"
 #include "utils/EnumStringMapping.h"
+#include "utils/OptionalHelpers.h"
 
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
@@ -195,6 +196,22 @@ signals:
 protected:
    virtual bool isEqualTo(NamedEntity const & other) const override;
 
+   /**
+    * \brief Because \c MashStep inherits from multiple bases, more than one of which has a match for \c operator<<, we
+    *        need to provide an overload of \c operator<< that combines the output of those for all the base classes.
+    */
+   template<class S>
+   friend S & operator<<(S & stream, MashStep const & mashStep) {
+      stream <<
+         static_cast<Step const &>(mashStep) <<
+         ", type: " << MashStep::typeStringMapping[mashStep.m_type] <<
+         ", m_amount_l " << mashStep.m_amount_l <<
+         ", m_infuseTemp_c " << Optional::toString(mashStep.m_infuseTemp_c) <<
+         ", m_liquorToGristRatio_lKg " << Optional::toString(mashStep.m_liquorToGristRatio_lKg) << " " <<
+         static_cast<StepBase<MashStep, Mash, MashStepOptions> const &>(mashStep);
+      return stream;
+   }
+
 private:
    Type                  m_type                  ;
    double                m_amount_l              ;
@@ -202,6 +219,7 @@ private:
    // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
    std::optional<double> m_liquorToGristRatio_lKg;
 };
+
 
 BT_DECLARE_METATYPES(MashStep)
 

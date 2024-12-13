@@ -93,230 +93,217 @@
     <NAME>Acid Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>58.7</YIELD>
     <COLOR>3</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>Germany</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>10</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Amber Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>75</YIELD>
     <COLOR>22</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>United Kingdom</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>20</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Aromatic Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>78</YIELD>
     <COLOR>26</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>Belgium</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES>Used at rates of up to 10%, Aromatic malt will lend a distinct, almost exaggerated malt aroma and flavor to the finished Ales and Lagers. Aromatic malt also has a rich color and is high in diastatic power for aid in starch conversion. D/C Aromatic malt. As the name suggests, adds aromatics to a beer.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>10</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Barley Hulls</NAME>
     <VERSION>1</VERSION>
     <TYPE>Adjunct</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>0</YIELD>
     <COLOR>0</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>5</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Barley, Flaked</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>70</YIELD>
     <COLOR>2</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES>Adds proteins to promote hean retention and mouth feel. Commonly used Dry Stouts.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>20</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Barley, Raw</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>60.9</YIELD>
     <COLOR>2</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>15</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Barley, Torrefied</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>79</YIELD>
     <COLOR>2</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>40</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Biscuit Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>79</YIELD>
     <COLOR>23</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>Belgium</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES>Biscuit is a unique malt thats lightly roasted, lending the subtle properties of black and chocolate malts. Used at the rate of 3 to 15 %, it is designed to improve the bread and biscuits, or toasted flavor and aroma characteristics to Lagers and Ales.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>10</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Black (Patent) Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>55</YIELD>
     <COLOR>500</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES>The darkest of all malts, use sparingly to add deep color and roast-charcoal flavor. Use no more than 1 to 3%. Best used in trace amounts only, for color. Almost any contribution that Black Patent gives to beer can be obtained from using another malt with less harsh flavor impacts.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>10</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Black Barley (Roast Barley)</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>55</YIELD>
     <COLOR>500</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES>Use 10 to 12% to impart a distinct, roasted flavor to Stouts. Other dark beers also benefit from smaller quantities (2 - 6%).</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>10</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - 2 Row Black Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>55</YIELD>
     <COLOR>500</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES>2-Row. Color adjustment for all beer styles. Use with other roasted malts for mild flavored dark beers. Has little impact on foam color.</NOTES>
     <COARSE_FINE_DIFF>1</COARSE_FINE_DIFF>
     <MOISTURE>6</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>10</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - 2 Row Brewers Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>80.5</YIELD>
     <COLOR>1.8</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES>DP 140. Base malt for all beer styles.
@@ -331,176 +318,168 @@ Malted in small batches, making it an excellent fit for small batch craft brewin
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - 2 Row Caramel Malt 10L</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>77</YIELD>
     <COLOR>10</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES>Candylike sweetness, mild caramel.</NOTES>
     <COARSE_FINE_DIFF>1</COARSE_FINE_DIFF>
     <MOISTURE>7</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>15</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - 2 Row Caramel Malt 120L</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>75</YIELD>
     <COLOR>120</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES>Pronounced caramel, slight burnt sugar, raisiny, prunes.</NOTES>
     <COARSE_FINE_DIFF>1</COARSE_FINE_DIFF>
     <MOISTURE>3</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>15</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - 2 Row Caramel Malt 30L</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>77</YIELD>
     <COLOR>30</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES>Sweet, caramel, toffee.</NOTES>
     <COARSE_FINE_DIFF>1</COARSE_FINE_DIFF>
     <MOISTURE>5.5</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>15</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - 2 Row Caramel Malt 40L</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>77</YIELD>
     <COLOR>40</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>1</COARSE_FINE_DIFF>
     <MOISTURE>5.5</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>15</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - 2 Row Caramel Malt 60L</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>77</YIELD>
     <COLOR>60</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES>Sweet, pronounced caramel.</NOTES>
     <COARSE_FINE_DIFF>1</COARSE_FINE_DIFF>
     <MOISTURE>5</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>15</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - 2 Row Caramel Malt 80L</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>76</YIELD>
     <COLOR>80</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES>Pronounced caramel, slight burnt sugar, raisiny.</NOTES>
     <COARSE_FINE_DIFF>1</COARSE_FINE_DIFF>
     <MOISTURE>4.5</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>15</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - 2 Row Carapils Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>75</YIELD>
     <COLOR>1.5</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES>Use up to 5% for increased foam, improved head retention and enhanced mouthfeel in any beer style.</NOTES>
     <COARSE_FINE_DIFF>1</COARSE_FINE_DIFF>
     <MOISTURE>6.5</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>5</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - 2 Row Chocolate Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>60</YIELD>
     <COLOR>350</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES>2-Row. Use in all beer styles for color adjustment. Use 1-10% for desired color in Porter and Stout. The rich roasted coffee, cocoa flavor is very complementary when used in higher percentages in Porters, Stouts, Brown Ales, and other dark beers. </NOTES>
     <COARSE_FINE_DIFF>1</COARSE_FINE_DIFF>
     <MOISTURE>5.5</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>10</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - 6 Row Brewers Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>78</YIELD>
     <COLOR>1.8</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES>DP 180. Base malt for all beer styles. Contributes light straw color. More husk than 2-Row Malt. Higher enzymes than 2-Row malt. Well suited for high adjunct brewing.</NOTES>
@@ -511,16 +490,16 @@ Malted in small batches, making it an excellent fit for small batch craft brewin
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - Aromatic Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>77</YIELD>
     <COLOR>20</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES>DP 20. Deep golden with orange hues.</NOTES>
@@ -531,16 +510,16 @@ Malted in small batches, making it an excellent fit for small batch craft brewin
     <MAX_IN_BATCH>50</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - Ashburne Mild Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>79</YIELD>
     <COLOR>5.3</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES>DP 65. 2-Row specialty base malt.
@@ -555,116 +534,111 @@ Will lend a higher residual maltiness/ mouthfeel.</NOTES>
     <MAX_IN_BATCH>50</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - Barley Flakes</NAME>
     <VERSION>1</VERSION>
     <TYPE>Adjunct</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>70</YIELD>
     <COLOR>1.4</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES>Pregelatinized. Use Barley Flakes as an adjunct in all-grain brews to produce a lighter colored finished beer without lowering the original gravity. Use in place of corn as an adjunct to eliminate corn flavor in the finished beer. Use at 10-25% of total grist to produce a light colored, mild flavored, dry beer.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>9</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>12.5</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - Black Barley</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>55</YIELD>
     <COLOR>500</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES>Contributes color and rich, sharp flavor characteristic of Stouts and some Porters. Impacts foam color.</NOTES>
     <COARSE_FINE_DIFF>1</COARSE_FINE_DIFF>
     <MOISTURE>6</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>7</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - Black Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>55</YIELD>
     <COLOR>500</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES>Color adjustment for all beer styles. Use with other roasted malts for mild flavored dark beers. Has little impact on foam color.</NOTES>
     <COARSE_FINE_DIFF>1</COARSE_FINE_DIFF>
     <MOISTURE>6</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>10</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - Black Malted Barley Flour</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>55</YIELD>
     <COLOR>500</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES>Color adjustment for all beer styles.</NOTES>
     <COARSE_FINE_DIFF>1</COARSE_FINE_DIFF>
     <MOISTURE>6</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>10</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - Blackprinz Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>78</YIELD>
     <COLOR>500</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES>Bitterless black malt that can be used in any recipe calling for debittered black malt. Blackprinz� Malt delivers colors plus more roasted flavor than Midnight Wheat Malt.</NOTES>
     <COARSE_FINE_DIFF>1</COARSE_FINE_DIFF>
     <MOISTURE>6</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>10</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - Bonlander Munich Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>78</YIELD>
     <COLOR>10</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES>DP 40. Golden leaning toward orange hues.</NOTES>
@@ -675,36 +649,35 @@ Will lend a higher residual maltiness/ mouthfeel.</NOTES>
     <MAX_IN_BATCH>50</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - Brown Rice Flakes</NAME>
     <VERSION>1</VERSION>
     <TYPE>Adjunct</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>60</YIELD>
     <COLOR>1</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES>Pregelatinized. Briess Rice Flakes produce a light, clean and crisp characteristic to the finished beer. Use up to 40% as a ceral adjunct in the total grist.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>7</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>10</PROTEIN>
     <MAX_IN_BATCH>40</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - Carabrown Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>79</YIELD>
     <COLOR>55</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES>Begins slightly sweet.
@@ -713,21 +686,20 @@ Smooth and clean with a slightly dry finish.
 Light brown/orange color contributions. </NOTES>
     <COARSE_FINE_DIFF>1</COARSE_FINE_DIFF>
     <MOISTURE>2.2</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>25</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - Caracrystal Wheat Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>78</YIELD>
     <COLOR>55</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES>Sweet, smooth, malty, bready, subtle caramel, dark toast.
@@ -735,281 +707,267 @@ Exceptionally clean finish.
 Orange to mahogany color.</NOTES>
     <COARSE_FINE_DIFF>1</COARSE_FINE_DIFF>
     <MOISTURE>4</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>25</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - Caramel Malt 10L</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>76</YIELD>
     <COLOR>10</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES>Candylike sweetness, mild caramel.</NOTES>
     <COARSE_FINE_DIFF>1</COARSE_FINE_DIFF>
     <MOISTURE>7</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>15</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - Caramel Malt 120L</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>74</YIELD>
     <COLOR>120</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES>Pronounced caramel, slight burnt sugar, raisiny, prunes.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>3</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>15</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - Caramel Malt 20L</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>76</YIELD>
     <COLOR>20</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>6</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>15</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - Caramel Malt 40L</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>75</YIELD>
     <COLOR>40</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES>Sweet, caramel, toffee.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>5.5</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>15</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - Caramel Malt 60L</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>76</YIELD>
     <COLOR>60</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES>Sweet, pronounced caramel.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>5</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>15</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - Caramel Malt 80L</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>75</YIELD>
     <COLOR>80</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES>Pronounced caramel, slight burnt sugar, raisiny.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>4.5</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>15</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - Caramel Malt 90L</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>75</YIELD>
     <COLOR>90</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES>Pronounced caramel, slight burnt sugar, raisiny, prunes.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>4</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>15</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - Caramel Munich Malt 60L</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>77</YIELD>
     <COLOR>60</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES>This darker colored, more intensely flavored 2-Row caramel munich malt is excellent in IPAs, Pale ales, Oktoberfests and Porters. Imparts amber to red hues.</NOTES>
     <COARSE_FINE_DIFF>1</COARSE_FINE_DIFF>
     <MOISTURE>3.5</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>15</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - Caramel Vienne Malt 20L</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>78</YIELD>
     <COLOR>20</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES>This 2-Row caramel malt adds flavors unique to Vienna-style lagers and Belgian-style Abbey Ales. Imparts golden hues.</NOTES>
     <COARSE_FINE_DIFF>1</COARSE_FINE_DIFF>
     <MOISTURE>4.5</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>10</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - Carapils Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>74</YIELD>
     <COLOR>1.3</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES>Use up to 5% for increased foam, improved head retention and enhanced mouthfeel in any beer style.</NOTES>
     <COARSE_FINE_DIFF>1</COARSE_FINE_DIFF>
     <MOISTURE>6.5</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>5</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - Chocolate Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>60</YIELD>
     <COLOR>350</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES>Use in all beer styles for color adjustment. Use 1-10% for desired color in Porter and Stout. The rich roasted coffee, cocoa flavor is very complementary when used in higher percentages in Porters, Stouts, Brown Ales, and other dark beers.</NOTES>
     <COARSE_FINE_DIFF>1</COARSE_FINE_DIFF>
     <MOISTURE>6</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>10</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - Dark Chocolate Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>60</YIELD>
     <COLOR>420</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES>2-Row. The chocolate flavor is very complementary when used in higher percentages in Porter, Stout, Brown Ale, Dunkels and other dark beers. Use in all styles for color. Contributes brown hues.</NOTES>
     <COARSE_FINE_DIFF>1</COARSE_FINE_DIFF>
     <MOISTURE>5.5</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>10</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - Extra Special Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>73</YIELD>
     <COLOR>130</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES>Complex flavored 2-Row Biscuit-style Malt. This hybrid drum roasted malt has an array of both caramel and dry roasted flavors. Use to develop flavors associated with darker, high gravity beers like Doppelbock. Equally well suited for mid to dark Belgian style ales. Adds complexity to Abbey styles and darker styles like dry Irish Stouts and Porters. Contributes dark reed to deep copper colors. At higher usage it contributes lighter brown hues.</NOTES>
     <COARSE_FINE_DIFF>1</COARSE_FINE_DIFF>
     <MOISTURE>2.5</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>15</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - Goldpils Vienna Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>80</YIELD>
     <COLOR>3.5</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES>DP 80. Use as a base malt or high percentage specialty malt.
@@ -1023,36 +981,35 @@ Use in any beer for rich malty flavor.</NOTES>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - Midnight Wheat Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>55</YIELD>
     <COLOR>550</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES>Bitterless black malt that can be used in any recipe calling for debittered black malt. Midnight Wheat Malt is the smoothest source of black color of any malt available.</NOTES>
     <COARSE_FINE_DIFF>1</COARSE_FINE_DIFF>
     <MOISTURE>6.5</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>10</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - Munich Malt 10L</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>77</YIELD>
     <COLOR>10</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES>DP 40. Golden leaning toward orange hues.</NOTES>
@@ -1063,16 +1020,16 @@ Use in any beer for rich malty flavor.</NOTES>
     <MAX_IN_BATCH>50</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - Munich Malt 20L</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>74</YIELD>
     <COLOR>20</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES>DP 20. Deep golden with orange hues.</NOTES>
@@ -1083,36 +1040,35 @@ Use in any beer for rich malty flavor.</NOTES>
     <MAX_IN_BATCH>50</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - Oat Flakes</NAME>
     <VERSION>1</VERSION>
     <TYPE>Adjunct</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>80</YIELD>
     <COLOR>2.5</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES>Pregelatinized. Use 5-25% of the total grist for an Oatmeal Stout. Use a small percentage in Belgian Wit Beers.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>7.5</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>14</PROTEIN>
     <MAX_IN_BATCH>25</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - Pale Ale Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>80</YIELD>
     <COLOR>3.5</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES>DP 85. Use as a rich malty 2-Row base malt. Contributes golden color.  A fully modified, high extract, low protein malt.
@@ -1124,16 +1080,16 @@ Not just a darker 2-Row Base Malt. Its very unique recipe results in the develop
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - Pilsen Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>80.5</YIELD>
     <COLOR>1.2</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES>DP 140. Lightest colored base malt available. Produces very light colored, clean, crisp wort.
@@ -1146,76 +1102,73 @@ Use as 2-Row base malt for all beer styles.  Excellent choice for lagers. Allows
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - Red Wheat Flakes</NAME>
     <VERSION>1</VERSION>
     <TYPE>Adjunct</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>70</YIELD>
     <COLOR>2</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES>Pregelatinized. Red Wheat Flakes can be used in place of Wheat Malt to make Wheat Beer. Flakes will yield a different flavor profile than Wheat Malt. Use in theproduction of Belgian Wit Beers. Use up to 40% as a cereal adjunct in the total grist. Use 0.5-1.0% to a standard brew to increase foam stability.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>7</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>13.5</PROTEIN>
     <MAX_IN_BATCH>40</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - Roasted Barley</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>55</YIELD>
     <COLOR>300</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES>Contributes color and rich, sharp flavor characteristic of Stouts and some Porters. Impacts foam color.</NOTES>
     <COARSE_FINE_DIFF>1</COARSE_FINE_DIFF>
     <MOISTURE>5</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>7</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - Rye Flakes</NAME>
     <VERSION>1</VERSION>
     <TYPE>Adjunct</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>71</YIELD>
     <COLOR>3</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES>Pregelatinized. Rye Flakes contribute a very clean, distinctive rye flavor. Use to to 40% as a cereal adjunct in the total grist to create rye Beer. Start at 5-10% and increase in increments of 5% because of the concentrated flavor of Rye Flakes.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>7</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>13</PROTEIN>
     <MAX_IN_BATCH>40</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - Rye Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>80</YIELD>
     <COLOR>3.7</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES>DP 105. Rye Malt isn't just for rye beer styles. Although brewing a traditional rye beer is exceptionally rewarding, try adding Rye Malt to light- and medium-colored and flavored beers for complexity. Or fire up your new distillery and use it to make a single malt whiskey.</NOTES>
@@ -1226,16 +1179,16 @@ Use as 2-Row base malt for all beer styles.  Excellent choice for lagers. Allows
     <MAX_IN_BATCH>35</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - Smoked Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>80.5</YIELD>
     <COLOR>5</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES>DP 140. Briess Smoked Malt is produced using cherry wood. The result is a very smooth, smoky flavored, enzyme-active kilned malt.</NOTES>
@@ -1246,77 +1199,74 @@ Use as 2-Row base malt for all beer styles.  Excellent choice for lagers. Allows
     <MAX_IN_BATCH>60</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - Special Roast Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>72</YIELD>
     <COLOR>40</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES>Complex flavored Biscuit-style Malt. With its characteristic and bold sourdough flavor, it will contribute an exciting layer of flavor to Nut Brown Ales, Porters and other dark beer styles. </NOTES>
     <COARSE_FINE_DIFF>1</COARSE_FINE_DIFF>
     <MOISTURE>2.5</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>10</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - Torrified Red Wheat</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>76</YIELD>
     <COLOR>1.5</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES>Torrified Wheat is short for Insta Grains� Soft Red Wheat Whole Kernel. Heat treated to break the cellular structure, allowing more rapid hydration and malt enzymes to more completely attack the starches and protein. Use up to 40% of the total grist bill.
 </NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>8.5</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>11</PROTEIN>
     <MAX_IN_BATCH>40</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - Victory Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>75</YIELD>
     <COLOR>28</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES>Biscuit Malt. Well suited for Nut Brown Ales &amp; other dark beers. Its clean flavor makes it equally well suited for ales and lagers alike. Use in small amounts to add complexity to lighter colored ales and lagers.</NOTES>
     <COARSE_FINE_DIFF>1</COARSE_FINE_DIFF>
     <MOISTURE>2.5</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>25</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - Vienna Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>77.5</YIELD>
     <COLOR>3.5</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES>DP 130. Use as a base malt or high percentage specialty malt.
@@ -1329,16 +1279,16 @@ Typically used in Vienna, Oktoberfest, Marzen, Alt and all dark lagers.</NOTES>
     <MAX_IN_BATCH>90</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - Wheat Malt, Red</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>81</YIELD>
     <COLOR>2.3</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES>DP 180.
@@ -1353,16 +1303,16 @@ Improves head and foam retention in any beer style.</NOTES>
     <MAX_IN_BATCH>40</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - Wheat Malt, White</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>85</YIELD>
     <COLOR>2.5</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES>DP 160. Use as part or all of base malt in wheat beers. Improves head and foam retention in any beer style.</NOTES>
@@ -1373,1136 +1323,1080 @@ Improves head and foam retention in any beer style.</NOTES>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess - Yellow Corn Flakes</NAME>
     <VERSION>1</VERSION>
     <TYPE>Adjunct</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>75</YIELD>
     <COLOR>0.8</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES>Pregelatinized. Using Yellow Corn Flakes as an adjunct produces a lower color in the finished beer without lowering the original gravity.Yellow Corn Flakes produce a beer with a mild, less malty flavor. Yellow Corn Flakes produce a drier, more crisp beer.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>8</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>10</PROTEIN>
     <MAX_IN_BATCH>40</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess DME - Bavarian Wheat</NAME>
     <VERSION>1</VERSION>
     <TYPE>Dry Extract</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>95</YIELD>
     <COLOR>3</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess DME - Golden Light</NAME>
     <VERSION>1</VERSION>
     <TYPE>Dry Extract</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>95</YIELD>
     <COLOR>4</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess DME - Maltoferm A-6001 (Black Malt Extract)</NAME>
     <VERSION>1</VERSION>
     <TYPE>Dry Extract</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>95</YIELD>
     <COLOR>500</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess DME - Pilsen Light</NAME>
     <VERSION>1</VERSION>
     <TYPE>Dry Extract</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>95</YIELD>
     <COLOR>2</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess DME - Sparkling Amber</NAME>
     <VERSION>1</VERSION>
     <TYPE>Dry Extract</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>95</YIELD>
     <COLOR>10</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess DME - Traditional Dark</NAME>
     <VERSION>1</VERSION>
     <TYPE>Dry Extract</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>95</YIELD>
     <COLOR>30</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess LME - Golden Light</NAME>
     <VERSION>1</VERSION>
     <TYPE>Extract</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>78</YIELD>
     <COLOR>4</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess LME - Maltoferm A-6000 (Black Malt Extract)</NAME>
     <VERSION>1</VERSION>
     <TYPE>Extract</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>78</YIELD>
     <COLOR>500</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess LME - Munich</NAME>
     <VERSION>1</VERSION>
     <TYPE>Extract</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>78</YIELD>
     <COLOR>8</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess LME - Pilsen Light</NAME>
     <VERSION>1</VERSION>
     <TYPE>Extract</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>78</YIELD>
     <COLOR>2</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess LME - Sparkling Amber</NAME>
     <VERSION>1</VERSION>
     <TYPE>Extract</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>78</YIELD>
     <COLOR>10</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess LME - Sweet Brown Rice Syrup</NAME>
     <VERSION>1</VERSION>
     <TYPE>Extract</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>75</YIELD>
     <COLOR>2</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES>Gluten free</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess LME - Traditional Dark</NAME>
     <VERSION>1</VERSION>
     <TYPE>Extract</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>78</YIELD>
     <COLOR>30</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Briess LME - White Sorghum Syrup</NAME>
     <VERSION>1</VERSION>
     <TYPE>Extract</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>75</YIELD>
     <COLOR>3</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES>Gluten free</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Brown Malt (British Chocolate)</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>70</YIELD>
     <COLOR>65</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>United Kingdom</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES>Ideal for British Porters and Brown or Mild Ales and even Stouts. It's a little darker than domestic Chocolate malt yet it has a slightly smoother character in the roast flavor and aroma profiles.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>10</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Brown Sugar, Dark</NAME>
     <VERSION>1</VERSION>
     <TYPE>Sugar</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>100</YIELD>
     <COLOR>50</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>10</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Brown Sugar, Light</NAME>
     <VERSION>1</VERSION>
     <TYPE>Sugar</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>100</YIELD>
     <COLOR>8</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>10</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Brumalt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>71.7</YIELD>
     <COLOR>23</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>Germany</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES>Dark German malt developed to add malt flavor of Alt, Marzen and Oktoberfest beers. Helps create authentic maltiness without having to do a decoction mash. Rarely available for homebrewers.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>10</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Candi Sugar, Amber</NAME>
     <VERSION>1</VERSION>
     <TYPE>Sugar</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>78.3</YIELD>
     <COLOR>75</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>Belgium</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>20</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Candi Sugar, Clear</NAME>
     <VERSION>1</VERSION>
     <TYPE>Sugar</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>78.3</YIELD>
     <COLOR>1</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>Belgium</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>20</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Candi Sugar, Dark</NAME>
     <VERSION>1</VERSION>
     <TYPE>Sugar</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>78.3</YIELD>
     <COLOR>275</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>Belgium</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>20</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Cane (Beet) Sugar</NAME>
     <VERSION>1</VERSION>
     <TYPE>Sugar</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>100</YIELD>
     <COLOR>0</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>7</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Cara-Pils/Dextrine</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>72</YIELD>
     <COLOR>2</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES>Dextrins lend body, mouth feel and palate fullness to beers, as well as foam stability. Carapils must be mashed with pale malt, due to its lack of enzymes. Use 5 to 20% for these properties without adding color.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>20</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Caraamber</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>75</YIELD>
     <COLOR>30</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>20</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Carafa</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>70</YIELD>
     <COLOR>337</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>Germany</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>1.5</COARSE_FINE_DIFF>
     <MOISTURE>4</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>11.7</PROTEIN>
     <MAX_IN_BATCH>5</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Carafa II</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>70</YIELD>
     <COLOR>412</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>Germany</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>1.5</COARSE_FINE_DIFF>
     <MOISTURE>4</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>11.7</PROTEIN>
     <MAX_IN_BATCH>5</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Carafa III</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>70</YIELD>
     <COLOR>525</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>Germany</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>1.5</COARSE_FINE_DIFF>
     <MOISTURE>4</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>11.7</PROTEIN>
     <MAX_IN_BATCH>5</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Carafoam</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>72</YIELD>
     <COLOR>2</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>20</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Caramel/Crystal Malt - 10L</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>75</YIELD>
     <COLOR>10</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES>This Light Crystal malt will lend body and mouth feel with a minimum of color, much like Carapils, but with a light caramel sweetness.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>20</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Caramel/Crystal Malt - 120L</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>72</YIELD>
     <COLOR>120</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES>Dark Crystal will lend a complex sharp caramel flavor and aroma to beers. Used in smaller quantities this malt will add color and slight sweetness to beers, while heavier concentrations are well suited to strong beers.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>20</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Caramel/Crystal Malt - 20L</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>75</YIELD>
     <COLOR>20</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES>This Crystal malt will provide a golden color and a sweet, mild caramel flavor.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>20</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Caramel/Crystal Malt - 30L</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>75</YIELD>
     <COLOR>30</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>20</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Caramel/Crystal Malt - 40L</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>74</YIELD>
     <COLOR>40</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES>This Pale Crystal malt will lend a balance of medium caramel color, flavor, and body.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>20</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Caramel/Crystal Malt - 60L</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>74</YIELD>
     <COLOR>60</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES>This Medium Crystal malt will lend a well rounded caramel flavor, color and sweetness. This Crystal malt is a good choice if you're not sure which variety to use.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>20</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Caramel/Crystal Malt - 80L</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>74</YIELD>
     <COLOR>80</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES>This Crystal malt will lend a well a pronounced caramel flavor, color and sweetness.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>20</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Caramunich Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>71.7</YIELD>
     <COLOR>56</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>Belgium</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES>Use Caramunich for a deeper color, caramelized sugars and contribute a rich malt aroma.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>10</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Carared</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>75</YIELD>
     <COLOR>20</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>20</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Caravienne Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>73.9</YIELD>
     <COLOR>22</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>Belgium</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES>Impart a rich, caramel-sweet aroma and promotes a fuller flavor. Excellent all purpose caramel malt that can be used in high percentages (up to 15%) without leaving the beer too caramel/sweet.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>10</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Carawheat (GR)</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>68</YIELD>
     <COLOR>40</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN></ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>6.5</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>0</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Chocolate Malt (UK)</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>73</YIELD>
     <COLOR>450</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>United Kingdom</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES>Ideal for British Porters and Brown or Mild Ales and even Stouts. It's a little darker than US Chocolate malt yet it has a slightly smoother character in the roast flavor and aroma profiles.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>10</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Chocolate Malt (US)</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>60</YIELD>
     <COLOR>350</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES>Being the least roasted of the black malts, Chocolate malt will add a dark color and pleasant roast flavor. Small quantities lend a nutty flavor and deep, ruby red color while higher amounts lend a black color and smooth, roasted flavor. Use 3 to 12%.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>10</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Coopers LME - Amber</NAME>
     <VERSION>1</VERSION>
     <TYPE>Extract</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>78</YIELD>
     <COLOR>16.4</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Coopers LME - Dark</NAME>
     <VERSION>1</VERSION>
     <TYPE>Extract</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>78</YIELD>
     <COLOR>65.9</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Coopers LME - Light</NAME>
     <VERSION>1</VERSION>
     <TYPE>Extract</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>78</YIELD>
     <COLOR>3.4</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Coopers LME - Wheat</NAME>
     <VERSION>1</VERSION>
     <TYPE>Extract</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>78</YIELD>
     <COLOR>4.5</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Corn Sugar (Dextrose)</NAME>
     <VERSION>1</VERSION>
     <TYPE>Sugar</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>100</YIELD>
     <COLOR>0</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>5</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Corn Syrup</NAME>
     <VERSION>1</VERSION>
     <TYPE>Sugar</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>78.3</YIELD>
     <COLOR>1</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>10</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Corn, Flaked</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>80</YIELD>
     <COLOR>1</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES>The most common adjunct in American Lagers and Cream ales. Lightens both color and body.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>40</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Dark Liquid Extract</NAME>
     <VERSION>1</VERSION>
     <TYPE>Extract</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>78</YIELD>
     <COLOR>18</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Dememera Sugar</NAME>
     <VERSION>1</VERSION>
     <TYPE>Sugar</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>100</YIELD>
     <COLOR>2</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>United Kingdom</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>10</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Dry Extract (DME) - Amber</NAME>
     <VERSION>1</VERSION>
     <TYPE>Dry Extract</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>95</YIELD>
     <COLOR>13</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Dry Extract (DME) - Dark</NAME>
     <VERSION>1</VERSION>
     <TYPE>Dry Extract</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>95</YIELD>
     <COLOR>18</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Dry Extract (DME) - Extra Light</NAME>
     <VERSION>1</VERSION>
     <TYPE>Dry Extract</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>95</YIELD>
     <COLOR>3</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Dry Extract (DME) - Light</NAME>
     <VERSION>1</VERSION>
     <TYPE>Dry Extract</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>95</YIELD>
     <COLOR>8</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Dry Extract (DME) - Wheat</NAME>
     <VERSION>1</VERSION>
     <TYPE>Dry Extract</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>95</YIELD>
     <COLOR>8</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Gladfield - Ale Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>81.4</YIELD>
     <COLOR>3.0456853</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>New Zealand, Canterbury</ORIGIN>
     <SUPPLIER>Gladfield Malt</SUPPLIER>
     <NOTES>Gladfield Ale malt has very similar attributes to the Pilsner malt but only winter grown English bread 2 row varieties are used. The malt is fully modified through a traditional long cool germination.
@@ -2517,16 +2411,16 @@ A single step mash of between 66 and 68C is sufficient to avoid any lautering pr
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Gladfield - American Ale Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>81</YIELD>
     <COLOR>2.5380711</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>New Zealand, Canterbury</ORIGIN>
     <SUPPLIER>Gladfield Malt</SUPPLIER>
     <NOTES>Gladfields American Ale malt is our answer for brewers who have found that our regular Ale malt will add too much of a malty and toasted flavour profile to certain beer styles. This malt starts as all our other base malts do with our traditional long cool germination period. What separates it from our standard Ale malt is a newly developed a kilning recipe that favours colour formation typical to an Ale malt but with a clean malt profile and without the extra toasted flavours. This malt has been a favourite for producing popular hop-forward American style beers for which it was named.</NOTES>
@@ -2537,16 +2431,16 @@ A single step mash of between 66 and 68C is sufficient to avoid any lautering pr
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Gladfield - Aurora Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>80.97</YIELD>
     <COLOR>29.4416244</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>New Zealand, Canterbury</ORIGIN>
     <SUPPLIER>Gladfield Malt</SUPPLIER>
     <NOTES>Aurora has been developed to produce rich bready, fruit cake aroma and deep red colour. It has a long traditional germination process to create complex sugars and amino acids which react during a careful kilning regime. The resulting Maillard reaction is responsible for the deep red colour. It is ideal for Dark Ales, Belgium style and high alcohol beers for balance and beer stability. If you want to make that big malty, rich beer then this is a great malt to use along with our Crystals and Red Back.</NOTES>
@@ -2557,97 +2451,93 @@ A single step mash of between 66 and 68C is sufficient to avoid any lautering pr
     <MAX_IN_BATCH>30</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Gladfield - Biscuit Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>76</YIELD>
     <COLOR>30.4568528</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>New Zealand, Canterbury</ORIGIN>
     <SUPPLIER>Gladfield Malt</SUPPLIER>
     <NOTES>Gladfield Biscuit malt is made by gently roasting kilned dried ale malt. The resulting malt is ideal in small amounts for Light/Mild Ales and Bitters to give a dry finish to the beer with out too much colour.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>2.2</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>10</PROTEIN>
     <MAX_IN_BATCH>20</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Gladfield - Brown Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>74</YIELD>
     <COLOR>90.3553299</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>New Zealand, Canterbury</ORIGIN>
     <SUPPLIER>Gladfield Malt</SUPPLIER>
     <NOTES>Gladfield Brown malt is a stronger version of the biscuit malt but made from green chitted malt. This allows good colour build up with out the astringency from husk damage. This malt will impart a dry biscuity flavour to the beer along with nice amber colour. Ideal in Porters, Stouts, Dark Ales or Dunkels in carful amounts.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>3.2</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>11.7</PROTEIN>
     <MAX_IN_BATCH>10</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Gladfield - Dark Chocolate Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>71</YIELD>
     <COLOR>659.8984772</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>New Zealand, Canterbury</ORIGIN>
     <SUPPLIER>Gladfield Malt</SUPPLIER>
     <NOTES>Gladfield Chocolate malt is dark in colour and light on astringency due to a unique roasting technique. It has lovely coffee/chocolate aromas and is a big hit with Porter and Stout drinkers! This malt must be used fresh!</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>3.5</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>10</PROTEIN>
     <MAX_IN_BATCH>10</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Gladfield - Dark Crystal Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>77</YIELD>
     <COLOR>96.4467005</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>New Zealand, Canterbury</ORIGIN>
     <SUPPLIER>Gladfield Malt</SUPPLIER>
     <NOTES>All Crystal malts are made in a specialised roasting drum. The green malt used is made from the fattest low nitrogen 2 row barley available. The emphases are on sweetness and evenness of crystallisation. This is achieved by using only the best barley and batch malting small amounts of green malt at a time to feed the roaster.
 The evenness of colour is achieved by using the latest technology in malt roasting and heat recirculation to avoid scorching. Crystal malts can be used in varying amounts and intensities to an array of beer styles to add colour, flavour, aroma and stability to the beer. It is important to use crystal malts fresh to get the best results.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>3.2</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>10</PROTEIN>
     <MAX_IN_BATCH>20</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Gladfield - Gladiator Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>81</YIELD>
     <COLOR>5.0761421</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>New Zealand, Canterbury</ORIGIN>
     <SUPPLIER>Gladfield Malt</SUPPLIER>
     <NOTES>Gladiator Malt is a malt specially developed to provide extra foaming stability, mouth feel and body to the beer with out adding too much colour. Like crystal malts Gladiator has a high amount of unfermentable sugars. These unfermentable sugars will help increase the final gravity and improve beer stability. The final processing of the malt has been done in such a way to reduce colour build up. Because of this Gladiator has proved very popular for use in a wide range of beer styles.</NOTES>
@@ -2658,16 +2548,16 @@ The evenness of colour is achieved by using the latest technology in malt roasti
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Gladfield - Lager Light</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>80.5</YIELD>
     <COLOR>1.4263959</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>New Zealand, Canterbury</ORIGIN>
     <SUPPLIER>Gladfield Malt</SUPPLIER>
     <NOTES>Lager light is made especially for brewing an all malt lager where a light colour is desirable. It can also be used alongside Gladfield wheat malt when brewing delicate bright clean wheat beers where low colour formation is important and a clean malt profile required.</NOTES>
@@ -2678,57 +2568,55 @@ The evenness of colour is achieved by using the latest technology in malt roasti
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Gladfield - Light Chocolate Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>71</YIELD>
     <COLOR>456.8527919</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>New Zealand, Canterbury</ORIGIN>
     <SUPPLIER>Gladfield Malt</SUPPLIER>
     <NOTES>Gladfield Light Chocolate Malt is a lighter version of our chocolate malt. Produced in the same way and roasted to a lower temperature and lighter colour. This malt has fantastic roasted and espresso coffee like flavours. A great addition to stouts and porters.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>3.5</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>10</PROTEIN>
     <MAX_IN_BATCH>10</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Gladfield - Light Crystal Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>77</YIELD>
     <COLOR>31.9796954</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>New Zealand, Canterbury</ORIGIN>
     <SUPPLIER>Gladfield Malt</SUPPLIER>
     <NOTES>All Crystal malts are made in a specialised roasting drum. The green malt used is made from the fattest low nitrogen 2 row barley available. The emphases are on sweetness and evenness of crystallisation. This is achieved by using only the best barley and batch malting small amounts of green malt at a time to feed the roaster.
 The evenness of colour is achieved by using the latest technology in malt roasting and heat recirculation to avoid scorching. Crystal malts can be used in varying amounts and intensities to an array of beer styles to add colour, flavour, aroma and stability to the beer. It is important to use crystal malts fresh to get the best results.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>3.8</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>10</PROTEIN>
     <MAX_IN_BATCH>20</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Gladfield - Malted Rye</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>87.49</YIELD>
     <COLOR>3</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>New Zealand, Canterbury</ORIGIN>
     <SUPPLIER>Gladfield Malt</SUPPLIER>
     <NOTES></NOTES>
@@ -2739,16 +2627,16 @@ The evenness of colour is achieved by using the latest technology in malt roasti
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Gladfield - Manuka Smoked Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>80</YIELD>
     <COLOR>2.0304569</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>New Zealand, Canterbury</ORIGIN>
     <SUPPLIER>Gladfield Malt</SUPPLIER>
     <NOTES>We take our top quality New Zealand malt and smoke it over 100% Manuka wood from the West Coast. This malt has a smooth smoke character that is both floral and sweet. Perfect for a Kiwi twist to a Rauchbier or to add something unique to almost any beer style. Use this malt anywhere between 1 and 100% depending on the required smoke level.</NOTES>
@@ -2759,37 +2647,36 @@ The evenness of colour is achieved by using the latest technology in malt roasti
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Gladfield - Medium Crystal Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>77</YIELD>
     <COLOR>56.3451777</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>New Zealand, Canterbury</ORIGIN>
     <SUPPLIER>Gladfield Malt</SUPPLIER>
     <NOTES>All Crystal malts are made in a specialised roasting drum. The green malt used is made from the fattest low nitrogen 2 row barley available. The emphases are on sweetness and evenness of crystallisation. This is achieved by using only the best barley and batch malting small amounts of green malt at a time to feed the roaster.
 The evenness of colour is achieved by using the latest technology in malt roasting and heat recirculation to avoid scorching. Crystal malts can be used in varying amounts and intensities to an array of beer styles to add colour, flavour, aroma and stability to the beer. It is important to use crystal malts fresh to get the best results.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>3.4</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>10</PROTEIN>
     <MAX_IN_BATCH>20</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Gladfield - Munich Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>79.93</YIELD>
     <COLOR>7.8680203</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>New Zealand, Canterbury</ORIGIN>
     <SUPPLIER>Gladfield Malt</SUPPLIER>
     <NOTES>Gladfield Munich malt is germinated similar to the Vienna malt using slightly higher nitrogen barley to create more intense colour through greater maillard reactions. This is achieved with a kilning regime that includes higher levels of moist air recirculation during the early and intermediate stages of the kilning cycle followed by high final curing temperatures. The resulting malt is rich, sweat, toasty and biscuity with a touch of breadiness.
@@ -2801,16 +2688,16 @@ This malt is ideal for darker style Lagers or Ales and high alcohol beers.</NOTE
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Gladfield - Organic Pilsner</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>82.49</YIELD>
     <COLOR>1.5862944</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>New Zealand, Canterbury</ORIGIN>
     <SUPPLIER>Gladfield Malt</SUPPLIER>
     <NOTES></NOTES>
@@ -2821,16 +2708,16 @@ This malt is ideal for darker style Lagers or Ales and high alcohol beers.</NOTE
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Gladfield - Pilsner Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>81.1</YIELD>
     <COLOR>1.928934</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>New Zealand, Canterbury</ORIGIN>
     <SUPPLIER>Gladfield Malt</SUPPLIER>
     <NOTES>Gladfield Pilsener malt is made from 2 row English and European bred barley varieties. Only plump low protein barley is used which allows for higher extract potential and helps eliminate potential protein haze issues in the beer.
@@ -2845,56 +2732,54 @@ Carefully controlled kilning gives a nice malty character with out too much colo
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Gladfield - Red Back Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>77</YIELD>
     <COLOR>32.9949239</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>New Zealand, Canterbury</ORIGIN>
     <SUPPLIER>Gladfield Malt</SUPPLIER>
     <NOTES>The Red Back Malt is also a unique malt made by Gladfield. It is prepared by a special process before going into the roaster. It is then roasted in a particular way to create certain Maillard reactions which causes the malt to produce a lovely red hue in the resulting beer without the opalescence that can occur with other similar malts. In other words the wort colour is bright with good clarity but most of all a lovely red colour. It goes well with our Pale Ale and Aurora malt which is a melanoidin malt.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>4.7</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>10</PROTEIN>
     <MAX_IN_BATCH>20</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Gladfield - Roast Barley</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>71</YIELD>
     <COLOR>736.0406091</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>New Zealand, Canterbury</ORIGIN>
     <SUPPLIER>Gladfield Malt</SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>3.5</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>10</PROTEIN>
     <MAX_IN_BATCH>10</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Gladfield - Roasted Wheat</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>73</YIELD>
     <COLOR>279.1878173</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>New Zealand, Canterbury</ORIGIN>
     <SUPPLIER>Gladfield Malt</SUPPLIER>
     <NOTES>Our Roasted Wheat is produced by roasting unmalted wheat. It is a great way to get those roasted coffee and chocolate flavours without the extra bitterness that comes from roasted barley or chocolate malt. The wheat malt, lacking its outer husk, is less susceptible to burning at the higher roasting temperatures which prevents bitter and astringent flavors. This malt is a great addition to any darker beer style.</NOTES>
@@ -2905,36 +2790,35 @@ Carefully controlled kilning gives a nice malty character with out too much colo
     <MAX_IN_BATCH>10</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Gladfield - Shepherds Delight Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>77</YIELD>
     <COLOR>152.284264</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>New Zealand, Canterbury</ORIGIN>
     <SUPPLIER>Gladfield Malt</SUPPLIER>
     <NOTES>Shepherds Delight is what we would consider a stepped up version of our Aurora malt. It has intense bready, toasted and kola flavour with a lingering fruity sweetness. This malt should be used sparingly to supercharge the maltiness of a beer and will give flavours similar to a decoction mash. Used at too high a concentration could lead to bitterness in the final beer we recommend combining Shepherds Delight with our Vienna malt to give a balancing sweetness. This malt will also give some red highlights to the beers colour. Recommended usage level of 8% Maximum.</NOTES>
     <COARSE_FINE_DIFF>1.5</COARSE_FINE_DIFF>
     <MOISTURE>3.5</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>10.5</PROTEIN>
     <MAX_IN_BATCH>15</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Gladfield - Sour Grapes Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>27</YIELD>
     <COLOR>2.0304569</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>New Zealand, Canterbury</ORIGIN>
     <SUPPLIER>Gladfield Malt</SUPPLIER>
     <NOTES>Gladfield Sour Grapes malt is designed for pH adjustment in the brew house mash. Sour Grapes is produced through a combination of lactic growth during germination from naturally present bacteria on the grain and a lactic bath prior to kilning grown from the same lactobacillus strains. Recommended usage of between 1% and 5% to achieve target mash pH.</NOTES>
@@ -2945,16 +2829,16 @@ Carefully controlled kilning gives a nice malty character with out too much colo
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Gladfield - Supernova Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>79.3478261</YIELD>
     <COLOR>58.3756345</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>New Zealand, Canterbury</ORIGIN>
     <SUPPLIER>Gladfield Malt</SUPPLIER>
     <NOTES>Supernova malt is a new roasted malt from Gladfield that adds nutty, toasted caramel flavours to a beer. It can be used as a replacement for traditional crystal malts to change the flavour characteristics and reduce the beers residual sweetness. We start this malt with Canterbury winter barley and take it through our germination process before it is roasted to develop flavour and colour.
@@ -2967,36 +2851,35 @@ This is a great malt to be used in any beer style. We have already seen it used 
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Gladfield - Toffee Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>74</YIELD>
     <COLOR>5.3299492</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>New Zealand, Canterbury</ORIGIN>
     <SUPPLIER>Gladfield Malt</SUPPLIER>
     <NOTES>The Toffee Malt is a unique malt produced by Gladfield. It is basically a fully caramalised malt that has been roasted at very low temperature. This special roasting cycle produces a very light colour and the resulting malt is toffee like to chew instead of the crystalised popcorn affect of using higher temperatures. The resulting malt is very popular for adding a malty toffee flavour to lighter colured beers and also adds good beer stability, body and mouth feel.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>7.2</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>10.3</PROTEIN>
     <MAX_IN_BATCH>20</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Gladfield - Vienna Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>81.2</YIELD>
     <COLOR>3.4517766</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>New Zealand, Canterbury</ORIGIN>
     <SUPPLIER>Gladfield Malt</SUPPLIER>
     <NOTES>Gladfield Vienna has a kiwi twist but still has the normal characteristics of typical Vienna malt. The germination and kilning allows a sweeter maltier character with out over doing it. It is ideal for darker lagers or Marzen style beers. The Gladfield Vienna goes well with Gladiator and Toffee giving a big white head and lovely golden redy lager for that drinkable session beer.</NOTES>
@@ -3007,16 +2890,16 @@ This is a great malt to be used in any beer style. We have already seen it used 
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Gladfield - Wheat Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>84.29</YIELD>
     <COLOR>2.1319797</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>New Zealand, Canterbury</ORIGIN>
     <SUPPLIER>Gladfield Malt</SUPPLIER>
     <NOTES>Gladfield wheat malt like all other Gladfield malts is 100% natural there are no chemicals added to the steep water to accelerate germination or bleach the grain for visual appearances of the malt. Gladfield wheat malt is produced from an old English wheat variety that modifies very well. The resulting malt gives clean light coloured wort.</NOTES>
@@ -3027,797 +2910,758 @@ This is a great malt to be used in any beer style. We have already seen it used 
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Grits</NAME>
     <VERSION>1</VERSION>
     <TYPE>Adjunct</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>80</YIELD>
     <COLOR>1</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>10</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Harraway's Rolled Oats</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>85</YIELD>
     <COLOR>1.4</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>New Zealand</ORIGIN>
     <SUPPLIER>Harraways / Gladfield</SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>7.5</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>9</PROTEIN>
     <MAX_IN_BATCH>0</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Harraways Rolled Barley</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>77</YIELD>
     <COLOR>1.7</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>New Zealand</ORIGIN>
     <SUPPLIER>Harraways / Gladfield</SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>9</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>13.5</PROTEIN>
     <MAX_IN_BATCH>0</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Honey</NAME>
     <VERSION>1</VERSION>
     <TYPE>Extract</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>75</YIELD>
     <COLOR>1</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Honey Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>80</YIELD>
     <COLOR>25</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>Canada</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES>This Canadian malt imparts a honey-like flavor. It also also sometimes called Brumalt.
 Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </NOTES>
     <COARSE_FINE_DIFF>2</COARSE_FINE_DIFF>
     <MOISTURE>3.8</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>10.5</PROTEIN>
     <MAX_IN_BATCH>10</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Invert Sugar</NAME>
     <VERSION>1</VERSION>
     <TYPE>Sugar</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>100</YIELD>
     <COLOR>0</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>United Kingdom</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES>Sucrose (table sugar) that has been inverted with heat and acid to form a mixture of fructose and glucose.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>10</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Liquid Extract (LME) - Amber</NAME>
     <VERSION>1</VERSION>
     <TYPE>Extract</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>78</YIELD>
     <COLOR>13</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Liquid Extract (LME) - Pale</NAME>
     <VERSION>1</VERSION>
     <TYPE>Extract</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>78</YIELD>
     <COLOR>8</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Liquid Extract (LME) - Pilsner</NAME>
     <VERSION>1</VERSION>
     <TYPE>Extract</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>78</YIELD>
     <COLOR>4</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Liquid Extract (LME) - Wheat</NAME>
     <VERSION>1</VERSION>
     <TYPE>Extract</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>78</YIELD>
     <COLOR>8</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Maple Syrup</NAME>
     <VERSION>1</VERSION>
     <TYPE>Sugar</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>65.2</YIELD>
     <COLOR>35</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>10</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Melanoiden Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>80</YIELD>
     <COLOR>20</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>Germany</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>15</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Mild Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>80</YIELD>
     <COLOR>4</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>United Kingdom</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Milk Sugar (Lactose)</NAME>
     <VERSION>1</VERSION>
     <TYPE>Sugar</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>76.1</YIELD>
     <COLOR>0</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>10</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Molasses</NAME>
     <VERSION>1</VERSION>
     <TYPE>Sugar</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>78.3</YIELD>
     <COLOR>80</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>5</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Munich Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>80</YIELD>
     <COLOR>9</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>Germany</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES>Although kilned, Munich still retains sufficient enzymes for 100% of the grain bill, or it can be used at a percentage of the total malt content for its full, malty flavor and aroma.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Munich Malt - 10L</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>77</YIELD>
     <COLOR>10</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES>Although kilned, Munich still retains sufficient enzymes for 100% of the grain bill, or it can be used at a percentage of the total malt content for its full, malty flavor and aroma.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Munich Malt - 20L</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>75</YIELD>
     <COLOR>20</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES>A little darker than German Munich malt and adds a deeper color and fuller malt profile. Great for Dark and amber lagers, blend Munich with German Pils or Domestic 2 Row at the rate of 10 to 60% of the total grain bill.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>80</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Muntons DME - Amber</NAME>
     <VERSION>1</VERSION>
     <TYPE>Dry Extract</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>95</YIELD>
     <COLOR>13</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Muntons DME - Dark</NAME>
     <VERSION>1</VERSION>
     <TYPE>Dry Extract</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>95</YIELD>
     <COLOR>22</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Muntons DME - Extra Dark</NAME>
     <VERSION>1</VERSION>
     <TYPE>Dry Extract</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>95</YIELD>
     <COLOR>38</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Muntons DME - Extra Light</NAME>
     <VERSION>1</VERSION>
     <TYPE>Dry Extract</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>95</YIELD>
     <COLOR>3</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Muntons DME - Light</NAME>
     <VERSION>1</VERSION>
     <TYPE>Dry Extract</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>95</YIELD>
     <COLOR>4</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Muntons DME - Wheat</NAME>
     <VERSION>1</VERSION>
     <TYPE>Dry Extract</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>95</YIELD>
     <COLOR>4</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Muntons LME - Amber</NAME>
     <VERSION>1</VERSION>
     <TYPE>Extract</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>78</YIELD>
     <COLOR>7</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Muntons LME - Dark</NAME>
     <VERSION>1</VERSION>
     <TYPE>Extract</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>78</YIELD>
     <COLOR>2.1</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Muntons LME - Extra Light</NAME>
     <VERSION>1</VERSION>
     <TYPE>Extract</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>78</YIELD>
     <COLOR>2.8</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Muntons LME - Light</NAME>
     <VERSION>1</VERSION>
     <TYPE>Extract</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>78</YIELD>
     <COLOR>4</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Muntons LME - Wheat</NAME>
     <VERSION>1</VERSION>
     <TYPE>Extract</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>78</YIELD>
     <COLOR>4</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Oats, Flaked</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>80</YIELD>
     <COLOR>1</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES>Oats will improve mouth feel and add a creamy head. Commonly used in Oatmeal Stout.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>30</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Oats, Malted</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>80</YIELD>
     <COLOR>1</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES>Use to make wheat and weizen beers at 40-60% for wheat and 35-65% for Bavarian weizens. Small amounts at about 3-6 % aid in head retention to any beer without altering final flavor. Use with a highly modified malt to insure diastatic enzymes. Protein rest highly recommended due to very high protein content.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>10</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Pale Malt (2 Row) Bel</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>80</YIELD>
     <COLOR>3</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>Belgium</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Pale Malt (2 Row) UK</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>78</YIELD>
     <COLOR>3</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>United Kingdom</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES>Fully modified British malt, easily converted by a single temperature mash. Preferred by many brewers for authentic English ales. This malt has undergone higher kilning than Domestic 2 Row and is lower in diastatic power so keep adjuncts at a lower percentage.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Pale Malt (2 Row) US</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>79</YIELD>
     <COLOR>2</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES>A variety of malt that forms two seed rows along the stem on the grain head. Well modified with a high diastatic power allows mashing with up to 35% grain adjuncts. Because it is fairly neutral 2-Row makes an excellent base malt and is known as the &quot;workhorse&quot; of many recipes. Greater starch per weight ratio than 6-Row. Protein rest recommended to avoid chill-haze. Also know as Klages.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Pale Malt (6 Row) US</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>76</YIELD>
     <COLOR>2</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES>This malt variety forms six distinct seed rows on the grain head. Very high diastatic power allows mashing with up to 60% grain adjuncts, great if added diastatic strength is needed in a recipe. 6-Row also has greater husks per weight ratio than 2-Row. Protein rest recommended to avoid chill-haze.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Peat Smoked Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>74</YIELD>
     <COLOR>3</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>United Kingdom</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES>Smoked over peat moss for a soft sweet, earty smoked character. Imparts a soft peaty smoke flavor for strong Scottish ales.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>20</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Pilsner (2 Row) Bel</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>79</YIELD>
     <COLOR>2</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>Belgium</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES>This is an excellent base malt for many styles, including full flavored Lagers, Belgian Ales and Belgian Wheat beers.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Pilsner (2 Row) Ger</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>81</YIELD>
     <COLOR>2</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>Germany</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Pilsner (2 Row) UK</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>78</YIELD>
     <COLOR>1</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>United Kingdom</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Rahr - 2 Row Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>80</YIELD>
     <COLOR>2</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
@@ -3828,16 +3672,16 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Rahr - 6 Row Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>79</YIELD>
     <COLOR>25</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
@@ -3848,16 +3692,16 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Rahr - Pale Ale Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>79</YIELD>
     <COLOR>40</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
@@ -3868,16 +3712,16 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Rahr - Premium Pilsner Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>80</YIELD>
     <COLOR>2</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
@@ -3888,416 +3732,396 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Rahr - Red Wheat Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>85</YIELD>
     <COLOR>45</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>1</COARSE_FINE_DIFF>
     <MOISTURE>4.5</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>12</PROTEIN>
     <MAX_IN_BATCH>50</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Rahr - White Wheat Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>85</YIELD>
     <COLOR>45</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>1</COARSE_FINE_DIFF>
     <MOISTURE>4.5</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>12</PROTEIN>
     <MAX_IN_BATCH>50</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Rauch Malt (Germany)</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>81</YIELD>
     <COLOR>2</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>Germany</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES>German malt is smoked over a beechwood fire for a drier, sharper, obvious more wood-smoked flavor. Imparts a distinct smoked character for German Rauch beers.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>10</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Rice Extract Syrup</NAME>
     <VERSION>1</VERSION>
     <TYPE>Extract</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>69.6</YIELD>
     <COLOR>7</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>15</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Rice Hulls</NAME>
     <VERSION>1</VERSION>
     <TYPE>Adjunct</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>0</YIELD>
     <COLOR>0</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>5</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Rice, Flaked</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>70</YIELD>
     <COLOR>1</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES>Another popular adjunct in American Lagers. Lightens both color and body.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>25</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Roasted Barley</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>55</YIELD>
     <COLOR>300</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES>Use 10 to 12% to impart a distinct, roasted flavor to Stouts. Other dark beers also benefit from smaller quantities (2 - 6%).</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>10</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Rye Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>63</YIELD>
     <COLOR>5</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES>Imparts a distinct sharp flavor.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>15</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Rye, Flaked</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>78.3</YIELD>
     <COLOR>2</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES>Imparts a distinct sharp flavor.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>10</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Simpsons - Aromatic Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>82.5</YIELD>
     <COLOR>25</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>UK</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>1</COARSE_FINE_DIFF>
     <MOISTURE>5</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>12</PROTEIN>
     <MAX_IN_BATCH>5</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Simpsons - Black Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>70</YIELD>
     <COLOR>550</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>UK</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>1</COARSE_FINE_DIFF>
     <MOISTURE>3</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>12</PROTEIN>
     <MAX_IN_BATCH>10</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Simpsons - Caramalt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>76</YIELD>
     <COLOR>35</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>UK</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>1</COARSE_FINE_DIFF>
     <MOISTURE>5</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>12</PROTEIN>
     <MAX_IN_BATCH>20</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Simpsons - Caramalt Light</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>76</YIELD>
     <COLOR>13</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>UK</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>1</COARSE_FINE_DIFF>
     <MOISTURE>6.9</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>12</PROTEIN>
     <MAX_IN_BATCH>30</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Simpsons - Chocolate Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>73</YIELD>
     <COLOR>400</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>UK</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>1</COARSE_FINE_DIFF>
     <MOISTURE>1.9</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>12</PROTEIN>
     <MAX_IN_BATCH>20</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Simpsons - Coffee Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>74</YIELD>
     <COLOR>150</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>UK</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>1</COARSE_FINE_DIFF>
     <MOISTURE>3.5</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>12</PROTEIN>
     <MAX_IN_BATCH>20</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Simpsons - Crystal Dark</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>74</YIELD>
     <COLOR>80</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>UK</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>1</COARSE_FINE_DIFF>
     <MOISTURE>5.3</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>12</PROTEIN>
     <MAX_IN_BATCH>10</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Simpsons - Crystal Extra Dark</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>74</YIELD>
     <COLOR>160</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>UK</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>1</COARSE_FINE_DIFF>
     <MOISTURE>5</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>12</PROTEIN>
     <MAX_IN_BATCH>10</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Simpsons - Crystal Medium</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>74</YIELD>
     <COLOR>55</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>UK</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>1</COARSE_FINE_DIFF>
     <MOISTURE>4.7</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>12</PROTEIN>
     <MAX_IN_BATCH>20</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Simpsons - Crystal Rye</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>73</YIELD>
     <COLOR>90</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>UK</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>1</COARSE_FINE_DIFF>
     <MOISTURE>3.1</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>12</PROTEIN>
     <MAX_IN_BATCH>5</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Simpsons - Golden Naked Oats</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>73</YIELD>
     <COLOR>10</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>UK</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>1</COARSE_FINE_DIFF>
     <MOISTURE>4.5</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>12</PROTEIN>
     <MAX_IN_BATCH>15</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Simpsons - Golden Promise</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>81</YIELD>
     <COLOR>2</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>UK</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
@@ -4308,16 +4132,16 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Simpsons - Maris Otter</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>81</YIELD>
     <COLOR>3</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>UK</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
@@ -4328,16 +4152,16 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Simpsons - Peated Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>81</YIELD>
     <COLOR>2.5</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>UK</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES>Phenol level 12-24</NOTES>
@@ -4348,196 +4172,187 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
     <MAX_IN_BATCH>10</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Simpsons - Roasted Barley</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>70</YIELD>
     <COLOR>550</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>UK</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>1</COARSE_FINE_DIFF>
     <MOISTURE>1.9</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>12</PROTEIN>
     <MAX_IN_BATCH>10</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Smoked Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>80</YIELD>
     <COLOR>9</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>Germany</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Special B Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>65.2</YIELD>
     <COLOR>160</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>Belgium</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES>Special B refers to a type of dark, flavorful crystal malt traditionally malted in Belgium. In small amounts, it gives a unique flavor to the finished beer that is often compared to raisins or dried fruit. This malt is always dark, but the color and flavor vary more than most other malt styles; most of the commonly available varieties are in the 110-160 L range, but it may be even darker. Don't depend on this software to calculate the color of your beer correctly, since it may be expecting a much darker malt than you are actually using; some older sources assume Special B will be over 200 or even up to 300 L. While some sources still claim that Special B must be mashed, it is a crystal malt and can be steeped with an extract batch without adding significant protein to the beer.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>10</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Special Roast</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>72</YIELD>
     <COLOR>50</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER>Briess</SUPPLIER>
     <NOTES>Special Roast Malt is a specially processed malt from the American maltster, Briess. It is kilned using 6 row barley and it appears to be Victory Malt turned up a notch. Flavor: Toasty, Strong Biscuit, Sour Dough, Tangy. Any non-straw colored beer where roasty, toasty flavors are acceptable is a good candidate for this malt. Porters and Nut Brown Ales could take a good helping of this malt, and smaller amounts (less than 8 ounces) would work in Viennas, M�rzens, and Alt beers.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>10</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Sugar, Table (Sucrose)</NAME>
     <VERSION>1</VERSION>
     <TYPE>Sugar</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>100</YIELD>
     <COLOR>1</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>10</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Toasted Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>71.7</YIELD>
     <COLOR>27</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>United Kingdom</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES>Adds reddish hue without sweetness associated with caramelized malts.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>10</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Turbinado</NAME>
     <VERSION>1</VERSION>
     <TYPE>Sugar</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>95.7</YIELD>
     <COLOR>10</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>United Kingdom</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>10</MAX_IN_BATCH>
     <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Victory Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>73</YIELD>
     <COLOR>25</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES>Imparts a toasty/nutty/biscuit/bread flavor, and adds head retention. Use in nut browns and other darker beers.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>15</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Vienna Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>78</YIELD>
     <COLOR>4</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>Germany</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES>Vienna Malt is a kiln-dried barley malt darker than pale ale malt, but not as dark as Munich Malt. It imparts a golden to orange color and a distinctive toast or biscuit malt aroma to the beer. Vienna malt traditionally makes up up to 100% of the grist of Vienna Lager and the bulk of the related M�rzen style. Other beer styles sometimes use Vienna malt to add malty complexity and light toasty notes to lighter base malts, or to lighten the grist of a beer brewed with mostly Munich malt. Examples include Baltic Porter, Dunkelweizen, and most styles of Bock.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>90</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Weyermann - Acidulated Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>80</YIELD>
     <COLOR>3.2</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>Germany</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
@@ -4548,16 +4363,16 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
     <MAX_IN_BATCH>10</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Weyermann - Bohemian Pilsner Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>81</YIELD>
     <COLOR>2.1</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>Germany</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
@@ -4568,156 +4383,149 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Weyermann - Carafa I</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>70</YIELD>
     <COLOR>350</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>Germany</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>1</COARSE_FINE_DIFF>
     <MOISTURE>3.5</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>12</PROTEIN>
     <MAX_IN_BATCH>5</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Weyermann - Carafa II</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>70</YIELD>
     <COLOR>425</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>Germany</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>1</COARSE_FINE_DIFF>
     <MOISTURE>3.5</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>12</PROTEIN>
     <MAX_IN_BATCH>5</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Weyermann - Carafa III</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>70</YIELD>
     <COLOR>520</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>Germany</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>1</COARSE_FINE_DIFF>
     <MOISTURE>3.5</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>12</PROTEIN>
     <MAX_IN_BATCH>5</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Weyermann - Carafoam</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>81</YIELD>
     <COLOR>2.4</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>Germany</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>1</COARSE_FINE_DIFF>
     <MOISTURE>6.5</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>12</PROTEIN>
     <MAX_IN_BATCH>40</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Weyermann - Carawheat</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>77</YIELD>
     <COLOR>49</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>Germany</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>1</COARSE_FINE_DIFF>
     <MOISTURE>4</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>12</PROTEIN>
     <MAX_IN_BATCH>15</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Weyermann - Chocolate Rye</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>20</YIELD>
     <COLOR>250</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>Germany</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>1</COARSE_FINE_DIFF>
     <MOISTURE>4</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>12</PROTEIN>
     <MAX_IN_BATCH>5</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Weyermann - Chocolate Wheat</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>74</YIELD>
     <COLOR>400</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>Germany</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>1</COARSE_FINE_DIFF>
     <MOISTURE>4.5</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>12</PROTEIN>
     <MAX_IN_BATCH>5</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Weyermann - Dark Wheat Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>85</YIELD>
     <COLOR>7.3</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>Germany</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
@@ -4728,76 +4536,73 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
     <MAX_IN_BATCH>50</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Weyermann - Dehusked Carafa I</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>70</YIELD>
     <COLOR>350</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>Germany</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>1</COARSE_FINE_DIFF>
     <MOISTURE>3.5</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>12</PROTEIN>
     <MAX_IN_BATCH>5</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Weyermann - Dehusked Carafa II</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>70</YIELD>
     <COLOR>425</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>Germany</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>1</COARSE_FINE_DIFF>
     <MOISTURE>3.5</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>12</PROTEIN>
     <MAX_IN_BATCH>5</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Weyermann - Dehusked Carafa III</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>70</YIELD>
     <COLOR>520</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>Germany</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>1</COARSE_FINE_DIFF>
     <MOISTURE>3.5</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>12</PROTEIN>
     <MAX_IN_BATCH>5</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>FALSE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Weyermann - Light Munich Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>82</YIELD>
     <COLOR>6.9</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>Germany</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
@@ -4808,36 +4613,35 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Weyermann - Melanoiden Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>81</YIELD>
     <COLOR>27</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>Germany</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>1</COARSE_FINE_DIFF>
     <MOISTURE>4.5</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>12</PROTEIN>
     <MAX_IN_BATCH>20</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Weyermann - Pale Ale Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>85</YIELD>
     <COLOR>3.4</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>Germany</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
@@ -4848,16 +4652,16 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Weyermann - Pale Wheat Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>85</YIELD>
     <COLOR>2.4</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>Germany</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
@@ -4868,16 +4672,16 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
     <MAX_IN_BATCH>80</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Weyermann - Pilsner Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>81</YIELD>
     <COLOR>2.4</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>Germany</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
@@ -4888,16 +4692,16 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Weyermann - Rye Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>85</YIELD>
     <COLOR>3.6</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>Germany</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
@@ -4908,16 +4712,16 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
     <MAX_IN_BATCH>50</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Weyermann - Smoked Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>81</YIELD>
     <COLOR>2.8</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>Germany</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
@@ -4928,16 +4732,16 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Weyermann - Vienna Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>81</YIELD>
     <COLOR>3.9</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>Germany</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
@@ -4948,147 +4752,142 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
     <MAX_IN_BATCH>100</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Wheat Malt, Bel</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>81</YIELD>
     <COLOR>2</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>Belgium</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES>Use in wheat beers.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>60</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Wheat Malt, Dark</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>84</YIELD>
     <COLOR>9</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>Germany</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES>Use in wheat beers.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>20</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Wheat Malt, Ger</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>84</YIELD>
     <COLOR>2</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>Germany</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES>Use in wheat beers.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>60</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Wheat, Flaked</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>77</YIELD>
     <COLOR>2</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES>Flaked wheat is not malted, therefore requires extra effort to extract it's potential sugar content, which will be lower than malted wheat. Flaked wheat is traditional in Belgian witbier and lambics, it contains more starch and higher levels of protein than malted wheat. It adds more mouthfeel than malted wheat and has a different taste, which is noticeable when used in larger quantities. If the grain bill consists of more than 25% flaked wheat you should consider a cereal mash, or precooking the wheat in order to gelatinize it so you can extract more sugars out of it. The addion of 6-row can aid conversion since the barley contains a higher percentage of enzymes than 2-row.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>40</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Wheat, Roasted</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>54.3</YIELD>
     <COLOR>425</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>Germany</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>10</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>Wheat, Torrified</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>79</YIELD>
     <COLOR>2</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES>Torrified wheat is unmalted wheat that has been heated very quickly to get the kernel to puff up, kind of like popcorn. Torrified wheat adds a different flavor to the beer and the grain is gelatinized so you don't have to cook it.</NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>40</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
   <FERMENTABLE>
     <NAME>White Wheat Malt</NAME>
     <VERSION>1</VERSION>
     <TYPE>Grain</TYPE>
-    <AMOUNT>0</AMOUNT>
     <YIELD>86</YIELD>
     <COLOR>2</COLOR>
-    <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
     <ORIGIN>US</ORIGIN>
     <SUPPLIER></SUPPLIER>
     <NOTES></NOTES>
     <COARSE_FINE_DIFF>0</COARSE_FINE_DIFF>
     <MOISTURE>0</MOISTURE>
-    <DIASTATIC_POWER>0</DIASTATIC_POWER>
     <PROTEIN>0</PROTEIN>
     <MAX_IN_BATCH>60</MAX_IN_BATCH>
     <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
     <IBU_GAL_PER_LB>0</IBU_GAL_PER_LB>
-    <IS_MASHED>TRUE</IS_MASHED>
+    <PRODUCER></PRODUCER>
+    <PRODUCT_ID></PRODUCT_ID>
+    <AMOUNT>0.123</AMOUNT>
   </FERMENTABLE>
 </FERMENTABLES>
 <HOPS>

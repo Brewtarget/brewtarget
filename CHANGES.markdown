@@ -21,7 +21,7 @@ Bug fixes and minor enhancements.
 
 ### Bug Fixes
 * Combo boxes not displaying properly on Windows [894](https://github.com/Brewtarget/brewtarget/issues/894)
-* Icons Misisng [895](https://github.com/Brewtarget/brewtarget/issues/895)
+* Icons Missing [895](https://github.com/Brewtarget/brewtarget/issues/895)
 * Brewtarget 4.0.7 Qt6 issue on Ubuntu (libQt6Multimedia.so.6 missing) [861](https://github.com/Brewtarget/brewtarget/issues/861)
 * Opening user recipe causes crash [897](https://github.com/Brewtarget/brewtarget/issues/897)
 * Copy recipe crash [899](https://github.com/Brewtarget/brewtarget/issues/899)

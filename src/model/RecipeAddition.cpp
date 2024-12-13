@@ -46,14 +46,18 @@ bool RecipeAddition::isEqualTo(NamedEntity const & other) const {
    RecipeAddition const & rhs = static_cast<RecipeAddition const &>(other);
    // Base class will already have ensured names are equal
    return (
-      Utils::AutoCompare(this->m_recipeId       , rhs.m_recipeId       ) &&
-      Utils::AutoCompare(this->m_ingredientId   , rhs.m_ingredientId   ) &&
-      Utils::AutoCompare(this->m_stage          , rhs.m_stage          ) &&
-      Utils::AutoCompare(this->m_step           , rhs.m_step           ) &&
-      Utils::AutoCompare(this->m_addAtTime_mins , rhs.m_addAtTime_mins ) &&
-      Utils::AutoCompare(this->m_addAtGravity_sg, rhs.m_addAtGravity_sg) &&
-      Utils::AutoCompare(this->m_addAtAcidity_pH, rhs.m_addAtAcidity_pH) &&
-      Utils::AutoCompare(this->m_duration_mins  , rhs.m_duration_mins  ) &&
+      //
+      // Note that we do _not_ compare m_recipeId.  We need to be able to compare classes with different owners.  Eg,
+      // as part of comparing whether two Recipe objects objects are equal, we need, amongst other things, to check
+      // whether their owned RecipeAddition objects are equal.
+      //
+      AUTO_LOG_COMPARE(this, rhs, m_ingredientId   ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_stage          ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_step           ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_addAtTime_mins ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_addAtGravity_sg) &&
+      AUTO_LOG_COMPARE(this, rhs, m_addAtAcidity_pH) &&
+      AUTO_LOG_COMPARE(this, rhs, m_duration_mins  ) &&
       // Parent classes have to be equal too
       this->IngredientInRecipe::isEqualTo(other)
    );
@@ -116,20 +120,32 @@ RecipeAddition::RecipeAddition(RecipeAddition const & other) :
 RecipeAddition::~RecipeAddition() = default;
 
 [[nodiscard]] bool RecipeAddition::lessThanByTime(RecipeAddition const & lhs, RecipeAddition const & rhs) {
+   //
+   // Note that, per https://en.cppreference.com/w/cpp/utility/optional/operator_cmp, operator< is sensibly defined for
+   // std::optional values, so we don't have to jump through any special hoops here.
+   //
 
-   if (lhs.m_stage != rhs.m_stage) {
+   if (!Utils::AutoCompare(lhs.m_stage, rhs.m_stage)) {
       return lhs.m_stage < rhs.m_stage;
    }
 
-   if (lhs.m_step != rhs.m_step) {
+   if (!Utils::AutoCompare(lhs.m_step, rhs.m_step)) {
       return lhs.m_step < rhs.m_step;
    }
 
-   if (lhs.m_addAtTime_mins != rhs.m_addAtTime_mins) {
+   if (!Utils::AutoCompare(lhs.m_addAtTime_mins, rhs.m_addAtTime_mins)) {
       return lhs.m_addAtTime_mins < rhs.m_addAtTime_mins;
    }
 
-   return lhs.name() < rhs.name();
+   if (!Utils::AutoCompare(lhs.m_duration_mins, rhs.m_duration_mins)) {
+      return lhs.m_duration_mins < rhs.m_duration_mins;
+   }
+
+   bool const tieBreakResult{lhs.name() < rhs.name()};
+   // Normally leave this log statement commented out as it generates a lot of logging
+//   qDebug() <<
+//      Q_FUNC_INFO << "Tie-break:" << lhs.name() << "is" << (tieBreakResult ? "" : "not") << "less than" << rhs.name();
+   return tieBreakResult;
 }
 
 //============================================= "GETTER" MEMBER FUNCTIONS ==============================================

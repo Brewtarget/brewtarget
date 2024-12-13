@@ -108,6 +108,18 @@ private:
    QString             m_vessel  ;
 };
 
+/**
+ * \brief Because \c FermentationStep inherits from multiple bases, more than one of which has a match for \c operator<<, we
+ *        need to provide an overload of \c operator<< that combines the output of those for all the base classes.
+ */
+template<class S>
+S & operator<<(S & stream, FermentationStep const & fermentationStep) {
+   stream <<
+      static_cast<StepExtended const &>(fermentationStep) << " " <<
+      static_cast<StepBase<FermentationStep, Fermentation, FermentationStepOptions> const &>(fermentationStep);
+   return stream;
+}
+
 BT_DECLARE_METATYPES(FermentationStep)
 
 #endif
