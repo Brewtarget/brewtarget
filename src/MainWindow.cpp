@@ -3131,38 +3131,80 @@ void MainWindow::exportSelected() {
       if (!nodeType) {
          qWarning() << Q_FUNC_INFO << "Unknown type for selection" << selection;
       } else {
+         // This is all a bit clunky, but extending the trees to include mashes, boils and fermentations mean it's going to
+         // be rewritten soon
          switch(*nodeType) {
             case TreeNode::Type::Recipe:
-               recipes.append(treeView_recipe->getItem<Recipe>(selection));
-               ++count;
+               {
+                  auto item = treeView_recipe->getItem<Recipe>(selection);
+                  if (item) {
+                     recipes.append(item);
+                     ++count;
+                  }
+               }
                break;
             case TreeNode::Type::Equipment:
-               equipments.append(treeView_equip->getItem<Equipment>(selection));
-               ++count;
+               {
+                  auto item = treeView_equip->getItem<Equipment>(selection);
+                  if (item) {
+                     equipments.append(item);
+                     ++count;
+                  }
+               }
                break;
             case TreeNode::Type::Fermentable:
-               fermentables.append(treeView_ferm->getItem<Fermentable>(selection));
-               ++count;
+               {
+                  auto item = treeView_ferm->getItem<Fermentable>(selection);
+                  if (item) {
+                     fermentables.append(item);
+                     ++count;
+                  }
+               }
                break;
             case TreeNode::Type::Hop:
-               hops.append(treeView_hops->getItem<Hop>(selection));
-               ++count;
+               {
+                  auto item = treeView_hops->getItem<Hop>(selection);
+                  if (item) {
+                     hops.append(item);
+                     ++count;
+                  }
+               }
                break;
             case TreeNode::Type::Misc:
-               miscs.append(treeView_misc->getItem<Misc>(selection));
-               ++count;
+               {
+                  auto item = treeView_misc->getItem<Misc>(selection);
+                  if (item) {
+                     miscs.append(item);
+                     ++count;
+                  }
+               }
                break;
             case TreeNode::Type::Style:
-               styles.append(treeView_style->getItem<Style>(selection));
-               ++count;
+               {
+                  auto item = treeView_style->getItem<Style>(selection);
+                  if (item) {
+                     styles.append(item);
+                     ++count;
+                  }
+               }
                break;
             case TreeNode::Type::Water:
-               waters.append(treeView_water->getItem<Water>(selection));
-               ++count;
+               {
+                  auto item = treeView_water->getItem<Water>(selection);
+                  if (item) {
+                     waters.append(item);
+                     ++count;
+                  }
+               }
                break;
             case TreeNode::Type::Yeast:
-               yeasts.append(treeView_yeast->getItem<Yeast>(selection));
-               ++count;
+               {
+                  auto item = treeView_yeast->getItem<Yeast>(selection);
+                  if (item) {
+                     yeasts.append(item);
+                     ++count;
+                  }
+               }
                break;
             case TreeNode::Type::Folder:
                qDebug() << Q_FUNC_INFO << "Can't export selected Folder to XML as BeerXML does not support it";

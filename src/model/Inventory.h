@@ -135,7 +135,7 @@ public:
    /**
     * \brief We need this for ObjectStoreTyped to call
     */
-   void hardDeleteOwnedEntities();
+   virtual void hardDeleteOwnedEntities() override;
 
 protected:
    virtual bool isEqualTo(NamedEntity const & other) const override;

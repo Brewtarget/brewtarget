@@ -30,7 +30,7 @@ namespace Measurement {
     *        you try to construct / assign / move it with a \c Measurement::Unit of the wrong
     *        \c Measurement::PhysicalQuantity
     */
-   template<Measurement::PhysicalQuantityConstTypes PQT, PQT const pqt>
+   template<Measurement::PhysicalQuantityConstTypes PQT, PQT pqt>
    class ConstrainedAmount : public Measurement::Amount {
    public:
       /**
