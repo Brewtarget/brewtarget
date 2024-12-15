@@ -47,7 +47,7 @@ namespace Utils {
    inline bool AutoCompare(bool    const   lhs, bool    const   rhs) { return lhs == rhs; }
    // Amount already implements operator== using fuzzy comparison
    inline bool AutoCompare(Measurement::Amount const & lhs, Measurement::Amount const & rhs) { return lhs == rhs; }
-   template<Measurement::PhysicalQuantityConstTypes PQT, PQT const pqt>
+   template<Measurement::PhysicalQuantityConstTypes PQT, PQT pqt>
    inline bool AutoCompare(Measurement::ConstrainedAmount<PQT, pqt> const & lhs,
                            Measurement::ConstrainedAmount<PQT, pqt> const & rhs) { return lhs == rhs; }
    // QStrings should ignore trailling spaces etc when comparing
