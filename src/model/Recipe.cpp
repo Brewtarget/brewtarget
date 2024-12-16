@@ -311,6 +311,12 @@ public:
       return;
    }
 
+   /**
+    * \brief Called to set Mash, Boil, Fermentation, Style, Equipment, etc
+    *
+    * \param val   the Mash/Boil/Fermentation/Style/Equipment to set
+    * \param ourId reference to the Recipe member variable storing the ID of Mash/Boil/Fermentation/Style/Equipment
+    */
    template<class NE>
    void set(std::shared_ptr<NE> val, int & ourId) {
       if (!val && ourId < 0) {
@@ -337,8 +343,6 @@ public:
       if (val->key() < 0) {
          ourId = ObjectStoreWrapper::insert<NE>(val);
       } else {
-///         // TBD: Would be nice to get rid of this call to copyIfNeeded
-///         val = copyIfNeeded(*val);
          ourId = val->key();
       }
 
@@ -673,7 +677,11 @@ public:
       }
 
       double wortInBoil_l = this->m_self.wortFromMash_l() - equipment->getLauteringDeadspaceLoss_l();
-      wortInBoil_l += equipment->topUpKettle_l().value_or(0.0);
+      wortInBoil_l += equipment->topUpKettle_l().value_or(Equipment::default_topUpKettle_l);
+
+      //
+      // TODO: We need to handle RecipeUseOfWater properly here (and in similar places) as well as in the UI
+      //
 
       double wort_l = equipment->wortEndOfBoil_l(wortInBoil_l);
       QString str = tr("You should have %1 wort post-boil.")

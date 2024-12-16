@@ -199,7 +199,8 @@ public:
     *        The amount of top up water normally added just prior to starting fermentation.  Usually used for extract
     *        brewing.
     *
-    *        Note this is not stored in BeerJSON.  .:TBD.JSON:. Does this become part of the Recipe?
+    *        Note this is not stored in BeerJSON.  Instead, all water top-ups are part of the Recipe to which they
+    *        relate.  See \c RecipeUseOfWater
     */
    Q_PROPERTY(std::optional<double> topUpWater_l          READ topUpWater_l          WRITE setTopUpWater_l          )
    /**
@@ -255,6 +256,9 @@ public:
    /**
     * \brief The kettle top up in liters.                                       ⮜⮜⮜ Optional in BeerXML.  Not supported in BeerJSON. ⮞⮞⮞
     *        Amount normally added to the boil kettle before the boil.
+    *
+    *        Note this is not stored in BeerJSON.  Instead, all water top-ups are part of the Recipe to which they
+    *        relate.  See \c RecipeUseOfWater
     */
    Q_PROPERTY(std::optional<double>  topUpKettle_l         READ topUpKettle_l         WRITE setTopUpKettle_l         )
    /**
