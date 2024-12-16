@@ -1367,6 +1367,10 @@ ObjectStore::~ObjectStore() {
    return;
 }
 
+QString ObjectStore::name() const {
+   return this->pimpl->m_className;
+}
+
 ObjectStore::State ObjectStore::state() const {
    return this->pimpl->m_state;
 }

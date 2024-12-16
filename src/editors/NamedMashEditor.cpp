@@ -81,7 +81,10 @@ NamedMashEditor::NamedMashEditor(QWidget* parent, MashStepEditor* editor, bool s
    connect(this->mashComboBox,              &QComboBox::currentTextChanged, this, &NamedMashEditor::mashSelected    );
    connect(this->pushButton_remove,         &QAbstractButton::clicked,      this, &NamedMashEditor::removeMash      );
 
-   this->setMash(ObjectStoreWrapper::getSharedFromRaw(m_mashListModel->at(mashComboBox->currentIndex())));
+   auto mash {m_mashListModel->at(mashComboBox->currentIndex())};
+   if (mash) {
+      this->setMash(ObjectStoreWrapper::getSharedFromRaw(mash));
+   }
    return;
 }
 

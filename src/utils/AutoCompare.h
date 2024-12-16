@@ -12,7 +12,7 @@
  *
  * You should have received a copy of the GNU General Public License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
- ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
+ =====================================================================================================================*/
 #ifndef UTILS_AUTOCOMPARE_H
 #define UTILS_AUTOCOMPARE_H
 #pragma once
@@ -47,7 +47,7 @@ namespace Utils {
    inline bool AutoCompare(bool    const   lhs, bool    const   rhs) { return lhs == rhs; }
    // Amount already implements operator== using fuzzy comparison
    inline bool AutoCompare(Measurement::Amount const & lhs, Measurement::Amount const & rhs) { return lhs == rhs; }
-   template<Measurement::PhysicalQuantityConstTypes PQT, PQT pqt>
+   template<typename PQT, PQT pqt>
    inline bool AutoCompare(Measurement::ConstrainedAmount<PQT, pqt> const & lhs,
                            Measurement::ConstrainedAmount<PQT, pqt> const & rhs) { return lhs == rhs; }
    // QStrings should ignore trailling spaces etc when comparing

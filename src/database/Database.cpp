@@ -250,12 +250,13 @@ public:
 
       // Set file names.
       this->dbFileName = PersistentSettings::getUserDataDir().filePath("database.sqlite");
-      this->dataDbFileName = Application::getResourceDir().filePath("default_db.sqlite");
-      qInfo().noquote() <<
-         Q_FUNC_INFO << "dbFileName = \"" << this->dbFileName << "\"\ndataDbFileName=\"" << this->dataDbFileName << "\"";
+///      this->dataDbFileName = Application::getResourceDir().filePath("default_db.sqlite");
+///      qInfo().noquote() <<
+///         Q_FUNC_INFO << "dbFileName = \"" << this->dbFileName << "\"\ndataDbFileName=\"" << this->dataDbFileName << "\"";
+      qInfo().noquote() << Q_FUNC_INFO << "dbFileName =" << this->dbFileName;
       // Set the files.
       this->dbFile.setFileName(this->dbFileName);
-      this->dataDbFile.setFileName(this->dataDbFileName);
+///      this->dataDbFile.setFileName(this->dataDbFileName);
 
       // If user restored the database from a backup, make the backup into the primary.
       {
@@ -268,16 +269,16 @@ public:
          }
       }
 
-      // If there's no dbFile, try to copy from dataDbFile.
-      if (!this->dbFile.exists()) {
-         userDatabaseDidNotExist = true;
-
-         // Have to wait until db is open before creating from scratch.
-         if (this->dataDbFile.exists()) {
-            this->dataDbFile.copy(this->dbFileName);
-            QFile::setPermissions(this->dbFileName, QFile::ReadOwner | QFile::WriteOwner | QFile::ReadGroup);
-         }
-      }
+///      // If there's no dbFile, try to copy from dataDbFile.
+///      if (!this->dbFile.exists()) {
+///         userDatabaseDidNotExist = true;
+///
+///         // Have to wait until db is open before creating from scratch.
+///         if (this->dataDbFile.exists()) {
+///            this->dataDbFile.copy(this->dbFileName);
+///            QFile::setPermissions(this->dbFileName, QFile::ReadOwner | QFile::WriteOwner | QFile::ReadGroup);
+///         }
+///      }
 
       // Open SQLite DB
       // It's a coding error if we didn't already establish that SQLite is the type of DB we're talking to, so assert
@@ -595,8 +596,8 @@ public:
    // These are for SQLite databases
    QFile dbFile;
    QString dbFileName;
-   QFile dataDbFile;
-   QString dataDbFileName;
+///   QFile dataDbFile;
+///   QString dataDbFileName;
 
    // And these are for Postgres databases
    QString dbHostname;
@@ -760,14 +761,18 @@ bool Database::load() {
 
 void Database::checkForNewDefaultData() {
    // See if there are new ingredients that we need to merge from the data-space db.
-   // Don't do this if we JUST copied the default database.
+///   // Don't do this if we JUST copied the default database.
+///   qDebug() <<
+///      Q_FUNC_INFO << "dataDbFile:" << this->pimpl->dataDbFile.fileName() << ", dbFile:" <<
+///      this->pimpl->dbFile.fileName() << ", userDatabaseDidNotExist: " <<
+///      (this->pimpl->userDatabaseDidNotExist ? "True" : "False") << ", dataDbFile.lastModified:" <<
+///      QFileInfo(this->pimpl->dataDbFile).lastModified();
    qDebug() <<
-      Q_FUNC_INFO << "dataDbFile:" << this->pimpl->dataDbFile.fileName() << ", dbFile:" <<
-      this->pimpl->dbFile.fileName() << ", userDatabaseDidNotExist: " <<
-      (this->pimpl->userDatabaseDidNotExist ? "True" : "False") << ", dataDbFile.lastModified:" <<
-      QFileInfo(this->pimpl->dataDbFile).lastModified();
-   if (this->pimpl->dataDbFile.fileName() != this->pimpl->dbFile.fileName() &&
-       !this->pimpl->userDatabaseDidNotExist) {
+      Q_FUNC_INFO << "dbFile:" << this->pimpl->dbFile.fileName() << ", userDatabaseDidNotExist: " <<
+      (this->pimpl->userDatabaseDidNotExist ? "True" : "False");
+///   if (this->pimpl->dataDbFile.fileName() != this->pimpl->dbFile.fileName() &&
+///       !this->pimpl->userDatabaseDidNotExist) {
+   if (!this->pimpl->userDatabaseDidNotExist) {
       auto connection = this->sqlDatabase();
       QString userMessage;
       QTextStream userMessageAsStream{&userMessage};

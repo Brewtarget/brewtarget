@@ -49,8 +49,11 @@ public:
 
    /**
     * \brief Get the singleton instance of this class
+    *
+    * \param database Sets and stores the Database this store is going to work with.  Normally should only set when
+    *                 called from \c CreateAllDatabaseTables.
     */
-   static ObjectStoreTyped<NE> & getInstance();
+   static ObjectStoreTyped<NE> & getInstance(Database * database = nullptr);
 
    using ObjectStore::insert;
 

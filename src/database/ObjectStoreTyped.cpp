@@ -862,19 +862,23 @@ namespace {
 
 
 template<class NE>
-ObjectStoreTyped<NE> & ObjectStoreTyped<NE>::getInstance() {
+ObjectStoreTyped<NE> & ObjectStoreTyped<NE>::getInstance(Database * database) {
    //
    // As of C++11, simple "Meyers singleton" is now thread-safe -- see
    // https://www.modernescpp.com/index.php/thread-safe-initialization-of-a-singleton#h3-guarantees-of-the-c-runtime
    //
    static ObjectStoreTyped<NE> ostSingleton{NE::typeLookup, PRIMARY_TABLE<NE>, JUNCTION_TABLES<NE>};
 
+   //
    // C++11 provides a thread-safe way to ensure singleton.loadAll() is called exactly once
    //
-   // NB: It's easier to just pass in nullptr to ObjectStoreTyped<NE>::loadAll than to do all the magic casting to
-   //     allow std::call_once to invoke it with the default parameter (which is nullptr).
+   // Note that, if caller has passed us a pointer to a Database object, it's because we have a new empty database and
+   // are about to construct tables -- ie it's too soon to try to load data.
+   //
    static std::once_flag initFlag;
-   std::call_once(initFlag, &ObjectStoreTyped<NE>::loadAll, &ostSingleton, nullptr);
+   if (!database) {
+      std::call_once(initFlag, &ObjectStoreTyped<NE>::loadAll, &ostSingleton, nullptr);
+   }
 
    return ostSingleton;
 }
@@ -886,34 +890,34 @@ ObjectStoreTyped<NE> & ObjectStoreTyped<NE>::getInstance() {
 // You might think the use in InitialiseAllObjectStores below is sufficient for this, but the GCC linker says
 // otherwise.
 //
-template ObjectStoreTyped<Boil                     > & ObjectStoreTyped<Boil                     >::getInstance();
-template ObjectStoreTyped<BoilStep                 > & ObjectStoreTyped<BoilStep                 >::getInstance();
-template ObjectStoreTyped<BrewNote                 > & ObjectStoreTyped<BrewNote                 >::getInstance();
-template ObjectStoreTyped<Equipment                > & ObjectStoreTyped<Equipment                >::getInstance();
-template ObjectStoreTyped<Fermentable              > & ObjectStoreTyped<Fermentable              >::getInstance();
-template ObjectStoreTyped<Fermentation             > & ObjectStoreTyped<Fermentation             >::getInstance();
-template ObjectStoreTyped<FermentationStep         > & ObjectStoreTyped<FermentationStep         >::getInstance();
-template ObjectStoreTyped<Hop                      > & ObjectStoreTyped<Hop                      >::getInstance();
-template ObjectStoreTyped<Instruction              > & ObjectStoreTyped<Instruction              >::getInstance();
-template ObjectStoreTyped<InventoryFermentable     > & ObjectStoreTyped<InventoryFermentable     >::getInstance();
-template ObjectStoreTyped<InventoryHop             > & ObjectStoreTyped<InventoryHop             >::getInstance();
-template ObjectStoreTyped<InventoryMisc            > & ObjectStoreTyped<InventoryMisc            >::getInstance();
-template ObjectStoreTyped<InventorySalt            > & ObjectStoreTyped<InventorySalt            >::getInstance();
-template ObjectStoreTyped<InventoryYeast           > & ObjectStoreTyped<InventoryYeast           >::getInstance();
-template ObjectStoreTyped<Mash                     > & ObjectStoreTyped<Mash                     >::getInstance();
-template ObjectStoreTyped<MashStep                 > & ObjectStoreTyped<MashStep                 >::getInstance();
-template ObjectStoreTyped<Misc                     > & ObjectStoreTyped<Misc                     >::getInstance();
-template ObjectStoreTyped<Recipe                   > & ObjectStoreTyped<Recipe                   >::getInstance();
-template ObjectStoreTyped<RecipeAdditionFermentable> & ObjectStoreTyped<RecipeAdditionFermentable>::getInstance();
-template ObjectStoreTyped<RecipeAdditionHop        > & ObjectStoreTyped<RecipeAdditionHop        >::getInstance();
-template ObjectStoreTyped<RecipeAdditionMisc       > & ObjectStoreTyped<RecipeAdditionMisc       >::getInstance();
-template ObjectStoreTyped<RecipeAdditionYeast      > & ObjectStoreTyped<RecipeAdditionYeast      >::getInstance();
-template ObjectStoreTyped<RecipeAdjustmentSalt     > & ObjectStoreTyped<RecipeAdjustmentSalt     >::getInstance();
-template ObjectStoreTyped<RecipeUseOfWater         > & ObjectStoreTyped<RecipeUseOfWater         >::getInstance();
-template ObjectStoreTyped<Salt                     > & ObjectStoreTyped<Salt                     >::getInstance();
-template ObjectStoreTyped<Style                    > & ObjectStoreTyped<Style                    >::getInstance();
-template ObjectStoreTyped<Water                    > & ObjectStoreTyped<Water                    >::getInstance();
-template ObjectStoreTyped<Yeast                    > & ObjectStoreTyped<Yeast                    >::getInstance();
+template ObjectStoreTyped<Boil                     > & ObjectStoreTyped<Boil                     >::getInstance(Database * database = nullptr);
+template ObjectStoreTyped<BoilStep                 > & ObjectStoreTyped<BoilStep                 >::getInstance(Database * database = nullptr);
+template ObjectStoreTyped<BrewNote                 > & ObjectStoreTyped<BrewNote                 >::getInstance(Database * database = nullptr);
+template ObjectStoreTyped<Equipment                > & ObjectStoreTyped<Equipment                >::getInstance(Database * database = nullptr);
+template ObjectStoreTyped<Fermentable              > & ObjectStoreTyped<Fermentable              >::getInstance(Database * database = nullptr);
+template ObjectStoreTyped<Fermentation             > & ObjectStoreTyped<Fermentation             >::getInstance(Database * database = nullptr);
+template ObjectStoreTyped<FermentationStep         > & ObjectStoreTyped<FermentationStep         >::getInstance(Database * database = nullptr);
+template ObjectStoreTyped<Hop                      > & ObjectStoreTyped<Hop                      >::getInstance(Database * database = nullptr);
+template ObjectStoreTyped<Instruction              > & ObjectStoreTyped<Instruction              >::getInstance(Database * database = nullptr);
+template ObjectStoreTyped<InventoryFermentable     > & ObjectStoreTyped<InventoryFermentable     >::getInstance(Database * database = nullptr);
+template ObjectStoreTyped<InventoryHop             > & ObjectStoreTyped<InventoryHop             >::getInstance(Database * database = nullptr);
+template ObjectStoreTyped<InventoryMisc            > & ObjectStoreTyped<InventoryMisc            >::getInstance(Database * database = nullptr);
+template ObjectStoreTyped<InventorySalt            > & ObjectStoreTyped<InventorySalt            >::getInstance(Database * database = nullptr);
+template ObjectStoreTyped<InventoryYeast           > & ObjectStoreTyped<InventoryYeast           >::getInstance(Database * database = nullptr);
+template ObjectStoreTyped<Mash                     > & ObjectStoreTyped<Mash                     >::getInstance(Database * database = nullptr);
+template ObjectStoreTyped<MashStep                 > & ObjectStoreTyped<MashStep                 >::getInstance(Database * database = nullptr);
+template ObjectStoreTyped<Misc                     > & ObjectStoreTyped<Misc                     >::getInstance(Database * database = nullptr);
+template ObjectStoreTyped<Recipe                   > & ObjectStoreTyped<Recipe                   >::getInstance(Database * database = nullptr);
+template ObjectStoreTyped<RecipeAdditionFermentable> & ObjectStoreTyped<RecipeAdditionFermentable>::getInstance(Database * database = nullptr);
+template ObjectStoreTyped<RecipeAdditionHop        > & ObjectStoreTyped<RecipeAdditionHop        >::getInstance(Database * database = nullptr);
+template ObjectStoreTyped<RecipeAdditionMisc       > & ObjectStoreTyped<RecipeAdditionMisc       >::getInstance(Database * database = nullptr);
+template ObjectStoreTyped<RecipeAdditionYeast      > & ObjectStoreTyped<RecipeAdditionYeast      >::getInstance(Database * database = nullptr);
+template ObjectStoreTyped<RecipeAdjustmentSalt     > & ObjectStoreTyped<RecipeAdjustmentSalt     >::getInstance(Database * database = nullptr);
+template ObjectStoreTyped<RecipeUseOfWater         > & ObjectStoreTyped<RecipeUseOfWater         >::getInstance(Database * database = nullptr);
+template ObjectStoreTyped<Salt                     > & ObjectStoreTyped<Salt                     >::getInstance(Database * database = nullptr);
+template ObjectStoreTyped<Style                    > & ObjectStoreTyped<Style                    >::getInstance(Database * database = nullptr);
+template ObjectStoreTyped<Water                    > & ObjectStoreTyped<Water                    >::getInstance(Database * database = nullptr);
+template ObjectStoreTyped<Yeast                    > & ObjectStoreTyped<Yeast                    >::getInstance(Database * database = nullptr);
 
 bool InitialiseAllObjectStores(QString & errorMessage) {
    // It's deliberate that we don't stop after the first error.  If there is a problem, it's quite useful to know how
@@ -950,6 +954,7 @@ bool InitialiseAllObjectStores(QString & errorMessage) {
    if (ObjectStoreTyped<Yeast                    >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "Yeast"                    ; }
 
    if (errors.size() > 0) {
+      qCritical() << Q_FUNC_INFO << "Errors loading" << errors.join(", ");
       errorMessage = QObject::tr("There were errors loading the following object store(s): %1").arg(errors.join(", "));
       return false;
    }
@@ -958,37 +963,37 @@ bool InitialiseAllObjectStores(QString & errorMessage) {
 }
 
 namespace {
-   QVector<ObjectStore const *> getAllObjectStores() {
+   QVector<ObjectStore const *> getAllObjectStores(Database * database = nullptr) {
       // NOTE: This is the 3rd of 3 places we need to add any new ObjectStoreTyped
       static QVector<ObjectStore const *> allObjectStores {
-         &ObjectStoreTyped<Boil                     >::getInstance(),
-         &ObjectStoreTyped<BoilStep                 >::getInstance(),
-         &ObjectStoreTyped<BrewNote                 >::getInstance(),
-         &ObjectStoreTyped<Equipment                >::getInstance(),
-         &ObjectStoreTyped<Fermentable              >::getInstance(),
-         &ObjectStoreTyped<Fermentation             >::getInstance(),
-         &ObjectStoreTyped<FermentationStep         >::getInstance(),
-         &ObjectStoreTyped<Hop                      >::getInstance(),
-         &ObjectStoreTyped<Instruction              >::getInstance(),
-         &ObjectStoreTyped<InventoryFermentable     >::getInstance(),
-         &ObjectStoreTyped<InventoryHop             >::getInstance(),
-         &ObjectStoreTyped<InventoryMisc            >::getInstance(),
-         &ObjectStoreTyped<InventorySalt            >::getInstance(),
-         &ObjectStoreTyped<InventoryYeast           >::getInstance(),
-         &ObjectStoreTyped<Mash                     >::getInstance(),
-         &ObjectStoreTyped<MashStep                 >::getInstance(),
-         &ObjectStoreTyped<Misc                     >::getInstance(),
-         &ObjectStoreTyped<Recipe                   >::getInstance(),
-         &ObjectStoreTyped<RecipeAdditionFermentable>::getInstance(),
-         &ObjectStoreTyped<RecipeAdditionHop        >::getInstance(),
-         &ObjectStoreTyped<RecipeAdditionMisc       >::getInstance(),
-         &ObjectStoreTyped<RecipeAdditionYeast      >::getInstance(),
-         &ObjectStoreTyped<RecipeAdjustmentSalt     >::getInstance(),
-         &ObjectStoreTyped<RecipeUseOfWater         >::getInstance(),
-         &ObjectStoreTyped<Salt                     >::getInstance(),
-         &ObjectStoreTyped<Style                    >::getInstance(),
-         &ObjectStoreTyped<Water                    >::getInstance(),
-         &ObjectStoreTyped<Yeast                    >::getInstance(),
+         &ObjectStoreTyped<Boil                     >::getInstance(database),
+         &ObjectStoreTyped<BoilStep                 >::getInstance(database),
+         &ObjectStoreTyped<BrewNote                 >::getInstance(database),
+         &ObjectStoreTyped<Equipment                >::getInstance(database),
+         &ObjectStoreTyped<Fermentable              >::getInstance(database),
+         &ObjectStoreTyped<Fermentation             >::getInstance(database),
+         &ObjectStoreTyped<FermentationStep         >::getInstance(database),
+         &ObjectStoreTyped<Hop                      >::getInstance(database),
+         &ObjectStoreTyped<Instruction              >::getInstance(database),
+         &ObjectStoreTyped<InventoryFermentable     >::getInstance(database),
+         &ObjectStoreTyped<InventoryHop             >::getInstance(database),
+         &ObjectStoreTyped<InventoryMisc            >::getInstance(database),
+         &ObjectStoreTyped<InventorySalt            >::getInstance(database),
+         &ObjectStoreTyped<InventoryYeast           >::getInstance(database),
+         &ObjectStoreTyped<Mash                     >::getInstance(database),
+         &ObjectStoreTyped<MashStep                 >::getInstance(database),
+         &ObjectStoreTyped<Misc                     >::getInstance(database),
+         &ObjectStoreTyped<Recipe                   >::getInstance(database),
+         &ObjectStoreTyped<RecipeAdditionFermentable>::getInstance(database),
+         &ObjectStoreTyped<RecipeAdditionHop        >::getInstance(database),
+         &ObjectStoreTyped<RecipeAdditionMisc       >::getInstance(database),
+         &ObjectStoreTyped<RecipeAdditionYeast      >::getInstance(database),
+         &ObjectStoreTyped<RecipeAdjustmentSalt     >::getInstance(database),
+         &ObjectStoreTyped<RecipeUseOfWater         >::getInstance(database),
+         &ObjectStoreTyped<Salt                     >::getInstance(database),
+         &ObjectStoreTyped<Style                    >::getInstance(database),
+         &ObjectStoreTyped<Water                    >::getInstance(database),
+         &ObjectStoreTyped<Yeast                    >::getInstance(database),
       };
       return allObjectStores;
    }
@@ -996,13 +1001,21 @@ namespace {
 
 bool CreateAllDatabaseTables(Database & database, QSqlDatabase & connection) {
    qDebug() << Q_FUNC_INFO;
-   for (auto ii : getAllObjectStores()) {
-      if (!ii->createTables(database, connection)) {
+   //
+   // This is obviously deliberately two separate loops because we cannot add the constraints until after all the tables
+   // have been created.
+   //
+   // We only need to pass the database parameter to getAllObjectStores() the first time it is called.
+   //
+   for (auto store : getAllObjectStores(&database)) {
+      qInfo() << Q_FUNC_INFO << "Creating tables for" << *store;
+      if (!store->createTables(database, connection)) {
          return false;
       }
    }
-   for (auto jj : getAllObjectStores()) {
-      if (!jj->addTableConstraints(database, connection)) {
+   for (auto store : getAllObjectStores()) {
+      qInfo() << Q_FUNC_INFO << "Adding constraints for" << *store;
+      if (!store->addTableConstraints(database, connection)) {
          return false;
       }
    }
