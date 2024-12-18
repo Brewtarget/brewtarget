@@ -2141,7 +2141,7 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
     </message>
     <message>
         <source>Unnamed Mash Step</source>
-        <translation>Unavngivet mæskningstrin</translation>
+        <translation type="vanished">Unavngivet mæskningstrin</translation>
     </message>
 </context>
 <context>
@@ -2458,6 +2458,10 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
     <name>NE</name>
     <message>
         <source>Change %1 %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unnamed %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

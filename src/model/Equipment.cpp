@@ -32,28 +32,25 @@ bool Equipment::isEqualTo(NamedEntity const & other) const {
    Equipment const & rhs = static_cast<Equipment const &>(other);
    // Base class will already have ensured names are equal
    return (
-      //
-      // .:TBC:. We ought to do fuzzy compare here, which probably means
-      //
-      Utils::AutoCompare(this->m_kettleBoilSize_l          , rhs.m_kettleBoilSize_l          ) &&
-      Utils::AutoCompare(this->m_fermenterBatchSize_l      , rhs.m_fermenterBatchSize_l      ) &&
-      Utils::AutoCompare(this->m_mashTunVolume_l           , rhs.m_mashTunVolume_l           ) &&
-      Utils::AutoCompare(this->m_mashTunWeight_kg          , rhs.m_mashTunWeight_kg          ) &&
-      Utils::AutoCompare(this->m_mashTunSpecificHeat_calGC , rhs.m_mashTunSpecificHeat_calGC ) &&
-      Utils::AutoCompare(this->m_topUpWater_l              , rhs.m_topUpWater_l              ) &&
-      Utils::AutoCompare(this->m_kettleTrubChillerLoss_l   , rhs.m_kettleTrubChillerLoss_l   ) &&
-      Utils::AutoCompare(this->m_evapRate_pctHr            , rhs.m_evapRate_pctHr            ) &&
-      Utils::AutoCompare(this->m_kettleEvaporationPerHour_l, rhs.m_kettleEvaporationPerHour_l) &&
-      Utils::AutoCompare(this->m_boilTime_min              , rhs.m_boilTime_min              ) &&
-      Utils::AutoCompare(this->m_calcBoilVolume            , rhs.m_calcBoilVolume            ) &&
-      Utils::AutoCompare(this->m_lauterTunDeadspaceLoss_l  , rhs.m_lauterTunDeadspaceLoss_l  ) &&
-      Utils::AutoCompare(this->m_topUpKettle_l             , rhs.m_topUpKettle_l             ) &&
-      Utils::AutoCompare(this->m_hopUtilization_pct        , rhs.m_hopUtilization_pct        ) &&
-      Utils::AutoCompare(this->m_kettleNotes               , rhs.m_kettleNotes               ) &&
-      Utils::AutoCompare(this->m_mashTunGrainAbsorption_LKg, rhs.m_mashTunGrainAbsorption_LKg) &&
-      Utils::AutoCompare(this->m_boilingPoint_c            , rhs.m_boilingPoint_c            ) &&
-      Utils::AutoCompare(this->m_kettleInternalDiameter_cm , rhs.m_kettleInternalDiameter_cm ) &&
-      Utils::AutoCompare(this->m_kettleOpeningDiameter_cm  , rhs.m_kettleOpeningDiameter_cm  )
+      AUTO_LOG_COMPARE(this, rhs, m_kettleBoilSize_l          ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_fermenterBatchSize_l      ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_mashTunVolume_l           ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_mashTunWeight_kg          ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_mashTunSpecificHeat_calGC ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_topUpWater_l              ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_kettleTrubChillerLoss_l   ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_evapRate_pctHr            ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_kettleEvaporationPerHour_l) &&
+      AUTO_LOG_COMPARE(this, rhs, m_boilTime_min              ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_calcBoilVolume            ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_lauterTunDeadspaceLoss_l  ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_topUpKettle_l             ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_hopUtilization_pct        ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_kettleNotes               ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_mashTunGrainAbsorption_LKg) &&
+      AUTO_LOG_COMPARE(this, rhs, m_boilingPoint_c            ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_kettleInternalDiameter_cm ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_kettleOpeningDiameter_cm  )
    );
 }
 

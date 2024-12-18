@@ -36,6 +36,9 @@ DbTransaction::DbTransaction(Database & database,
       this->database.setForeignKeysEnabled(false, connection);
    }
 
+   // Normally leave the next line commented out
+//   qDebug().noquote() << Q_FUNC_INFO << Logging::getStackTrace();
+
    bool succeeded = this->connection.transaction();
    qDebug() <<
       Q_FUNC_INFO << "Database transaction" << this->nameForLogging << "begin: " << (succeeded ? "succeeded" : "failed");

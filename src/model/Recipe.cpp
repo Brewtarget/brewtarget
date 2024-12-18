@@ -311,6 +311,12 @@ public:
       return;
    }
 
+   /**
+    * \brief Called to set Mash, Boil, Fermentation, Style, Equipment, etc
+    *
+    * \param val   the Mash/Boil/Fermentation/Style/Equipment to set
+    * \param ourId reference to the Recipe member variable storing the ID of Mash/Boil/Fermentation/Style/Equipment
+    */
    template<class NE>
    void set(std::shared_ptr<NE> val, int & ourId) {
       if (!val && ourId < 0) {
@@ -337,8 +343,6 @@ public:
       if (val->key() < 0) {
          ourId = ObjectStoreWrapper::insert<NE>(val);
       } else {
-///         // TBD: Would be nice to get rid of this call to copyIfNeeded
-///         val = copyIfNeeded(*val);
          ourId = val->key();
       }
 
@@ -673,7 +677,11 @@ public:
       }
 
       double wortInBoil_l = this->m_self.wortFromMash_l() - equipment->getLauteringDeadspaceLoss_l();
-      wortInBoil_l += equipment->topUpKettle_l().value_or(0.0);
+      wortInBoil_l += equipment->topUpKettle_l().value_or(Equipment::default_topUpKettle_l);
+
+      //
+      // TODO: We need to handle RecipeUseOfWater properly here (and in similar places) as well as in the UI
+      //
 
       double wort_l = equipment->wortEndOfBoil_l(wortInBoil_l);
       QString str = tr("You should have %1 wort post-boil.")
@@ -1455,18 +1463,19 @@ bool Recipe::isEqualTo(NamedEntity const & other) const {
 
    // Base class will already have ensured names are equal
    return (
-      Utils::AutoCompare(this->m_type          , rhs.m_type          ) &&
-      Utils::AutoCompare(this->m_batchSize_l   , rhs.m_batchSize_l   ) &&
-      Utils::AutoCompare(this->m_efficiency_pct, rhs.m_efficiency_pct) &&
-      Utils::AutoCompare(this->m_age_days      , rhs.m_age_days      ) &&
-      Utils::AutoCompare(this->m_ageTemp_c     , rhs.m_ageTemp_c     ) &&
-      Utils::AutoCompare(this->m_og            , rhs.m_og            ) &&
-      Utils::AutoCompare(this->m_fg            , rhs.m_fg            ) &&
-      ObjectStoreWrapper::compareById<Style    >(this->m_styleId,     rhs.m_styleId    ) &&
-      ObjectStoreWrapper::compareById<Mash     >(this->m_mashId,      rhs.m_mashId     ) &&
-      ObjectStoreWrapper::compareById<Boil     >(this->m_boilId,      rhs.m_boilId     ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_type          ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_batchSize_l   ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_efficiency_pct) &&
+      AUTO_LOG_COMPARE(this, rhs, m_age_days      ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_ageTemp_c     ) &&
+///      AUTO_LOG_COMPARE(this, rhs, m_og            ) &&
+///      AUTO_LOG_COMPARE(this, rhs, m_fg            ) &&
+      AUTO_LOG_COMPARE_ID(this, rhs, Style, m_styleId) &&
+      AUTO_LOG_COMPARE_ID(this, rhs, Mash , m_mashId ) &&
+      AUTO_LOG_COMPARE_ID(this, rhs, Boil , m_boilId ) &&
       //
       // We don't include any of the following in the equality test:
+      //    - Calculated values such as m_og and m_fg, since, if everything else is the same, they should match
       //    - BrewNotes as those are records of actually brewing a Recipe and shouldn't form part of determining whether
       //      two Recipes are identical.
       //    - Instructions, since these are generated from the Recipe
@@ -1476,11 +1485,11 @@ bool Recipe::isEqualTo(NamedEntity const & other) const {
       // The comparisons for each type of addition depend on them being in some canonical ordering that does not depend
       // on their database IDs.  However, we don't have to worry about this here.  The AutoCompare does the sorting for
       // us (on copies of the lists) using the operator<=> defined in RecipeAdditionBase.
-      Utils::AutoCompare(this->fermentableAdditions(), rhs.fermentableAdditions()) &&
-      Utils::AutoCompare(this->        hopAdditions(), rhs.        hopAdditions()) &&
-      Utils::AutoCompare(this->       miscAdditions(), rhs.       miscAdditions()) &&
-      Utils::AutoCompare(this->      yeastAdditions(), rhs.      yeastAdditions()) &&
-      Utils::AutoCompare(this->waterUses           (), rhs.waterUses           ()) &&
+      AUTO_LOG_COMPARE_FN(this, rhs, fermentableAdditions) &&
+      AUTO_LOG_COMPARE_FN(this, rhs,         hopAdditions) &&
+      AUTO_LOG_COMPARE_FN(this, rhs,        miscAdditions) &&
+      AUTO_LOG_COMPARE_FN(this, rhs,       yeastAdditions) &&
+      AUTO_LOG_COMPARE_FN(this, rhs, waterUses           ) &&
       //
       // Parent classes have to match too.
       //
@@ -1967,6 +1976,12 @@ void Recipe::generateInstructions() {
 
    return;
 }
+
+void Recipe::add(std::shared_ptr<Instruction> instruction) {
+   this->m_instructions.add(instruction);
+   return;
+}
+
 
 QString Recipe::nextAddToBoil(double & time) {
    double max = 0;

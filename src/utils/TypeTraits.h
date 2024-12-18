@@ -121,4 +121,20 @@ template <typename T> struct is_qlist_of_ptr<QList<T *>> : public std::true_type
 template <typename T> struct is_qlist_of_ptr<QList<std::shared_ptr<T>>> : public std::true_type{};
 template <typename T> concept CONCEPT_FIX_UP IsQListOfPointer = is_qlist_of_ptr<T>::value;
 
+//
+// It's useful to be able to tell whether class Derived inherits from class template Base.  This is a way to do that,
+// based on code at https://stackoverflow.com/questions/34672441/stdis-base-of-for-template-classes and
+// https://www.devgem.io/posts/checking-if-a-class-inherits-from-a-templated-base-in-c.
+//
+template <template <typename...> typename BaseClassTemplate, typename DerivedClass>
+struct is_base_class_template_of {
+   template<typename... Ts> static constexpr std::true_type isBaseOf(const BaseClassTemplate<Ts...> *);
+   static constexpr std::false_type isBaseOf(...);
+   using value_type = decltype(isBaseOf(std::declval<DerivedClass *>()));
+};
+
+template <template <typename...> typename BaseClassTemplate, typename DerivedClass>
+concept CONCEPT_FIX_UP IsBaseClassTemplateOf = is_base_class_template_of<BaseClassTemplate, DerivedClass>::value_type::value;
+
+
 #endif

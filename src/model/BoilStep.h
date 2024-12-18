@@ -126,8 +126,19 @@ protected:
 
 private:
    std::optional<ChillingType> m_chillingType;
-
 };
+
+/**
+ * \brief Because \c BoilStep inherits from multiple bases, more than one of which has a match for \c operator<<, we
+ *        need to provide an overload of \c operator<< that combines the output of those for all the base classes.
+ */
+template<class S>
+S & operator<<(S & stream, BoilStep const & boilStep) {
+   stream <<
+      static_cast<StepExtended const &>(boilStep) << " " <<
+      static_cast<StepBase<BoilStep, Boil, BoilStepOptions> const &>(boilStep);
+   return stream;
+}
 
 BT_DECLARE_METATYPES(BoilStep)
 

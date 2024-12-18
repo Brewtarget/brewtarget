@@ -308,33 +308,33 @@ public:
    // Same goes for ABV_pct, IBU, color_srm below (which are optional BeerJSON fields but not part of BeerXML)
    //
    //! \brief The calculated OG
-   Q_PROPERTY(double  og                 READ og                 WRITE setOg               )
+   Q_PROPERTY(double  og                 READ og                 WRITE setOg)
    //! \brief The calculated FG
-   Q_PROPERTY(double  fg                 READ fg                 WRITE setFg               )
+   Q_PROPERTY(double  fg                 READ fg                 WRITE setFg)
 
    //========================================= CALCULATED UNSTORED PROPERTIES ==========================================
    // These need to listen for changes to the uncalculated properties they depend on, and re-emit changed() when
    // appropriate.
    //! \brief The calculated points (1000*(\c og()-1.0)).
-   Q_PROPERTY(double  points READ points /*WRITE*/ /*NOTIFY changed*/ /*changedPoints*/ STORED false)
+   Q_PROPERTY(double  points              READ points              STORED false)
    //! \brief The calculated ABV in percent.
-   Q_PROPERTY(double  ABV_pct READ ABV_pct /*WRITE*/ /*NOTIFY changed*/ /*changedABV*/ STORED false)
+   Q_PROPERTY(double  ABV_pct             READ ABV_pct             STORED false)
    //! \brief The calculated color in SRM.
-   Q_PROPERTY(double  color_srm READ color_srm /*WRITE*/ /*NOTIFY changed*/ /*changedColor_srm*/ STORED false)
+   Q_PROPERTY(double  color_srm           READ color_srm           STORED false)
    //! \brief The calculated boil gravity. .:TBD:. This should perhaps be renamed boilSg for consistency
-   Q_PROPERTY(double  boilGrav READ boilGrav /*WRITE*/ /*NOTIFY changed*/ /*changedBoilGrav*/ STORED false)
+   Q_PROPERTY(double  boilGrav            READ boilGrav            STORED false)
    //! \brief The calculated IBUs.
-   Q_PROPERTY(double  IBU READ IBU /*WRITE*/ /*NOTIFY changed*/ /*changedIBU*/)
+   Q_PROPERTY(double  IBU                 READ IBU                 STORED false)
    //! \brief IBU contributions from each hop.
-   Q_PROPERTY(QList<double> IBUs READ IBUs)
+   Q_PROPERTY(QList<double> IBUs          READ IBUs                STORED false)
    //! \brief The calculated wort coming from the mash in liters.
-   Q_PROPERTY(double  wortFromMash_l READ wortFromMash_l /*WRITE*/ /*NOTIFY changed*/ /*changedEstimateWortFromMash_l*/ STORED false)
+   Q_PROPERTY(double  wortFromMash_l      READ wortFromMash_l      STORED false)
    //! \brief The calculated preboil volume in liters.
-   Q_PROPERTY(double  boilVolume_l READ boilVolume_l /*WRITE*/ /*NOTIFY changed*/ /*changedEstimateBoilVolume_l*/ STORED false)
+   Q_PROPERTY(double  boilVolume_l        READ boilVolume_l        STORED false)
    //! \brief The calculated postboil volume in liters.
-   Q_PROPERTY(double  postBoilVolume_l READ postBoilVolume_l /*WRITE*/ /*NOTIFY changed*/ /*changedEstimatePostBoilVolume_l*/ STORED false)
+   Q_PROPERTY(double  postBoilVolume_l    READ postBoilVolume_l    STORED false)
    //! \brief The calculated final volume into the primary in liters.
-   Q_PROPERTY(double  finalVolume_l READ finalVolume_l /*WRITE*/ /*NOTIFY changed*/ /*changedEstimateFinalVolume_l*/ STORED false)
+   Q_PROPERTY(double  finalVolume_l       READ finalVolume_l       STORED false)
    //! \brief The calculated Calories per liter. (kcal).
    Q_PROPERTY(double  caloriesPerLiter    READ caloriesPerLiter    STORED false)
    //! \brief The calculated Calories per 33cl. (kcal).
@@ -344,11 +344,11 @@ public:
    //! \brief The calculated Calories per US pint (16 US fl oz). (kcal).
    Q_PROPERTY(double  caloriesPerUsPint   READ caloriesPerUsPint   STORED false)
    //! \brief The amount of grains in the mash in kg.
-   Q_PROPERTY(double  grainsInMash_kg READ grainsInMash_kg /*WRITE*/ /*NOTIFY changed*/ /*changedGrainsInMash_kg*/ STORED false)
+   Q_PROPERTY(double  grainsInMash_kg     READ grainsInMash_kg     STORED false)
    //! \brief The total amount of grains in the recipe in kg.
-   Q_PROPERTY(double  grains_kg READ grains_kg /*WRITE*/ /*NOTIFY changed*/ /*changedGrains_kg*/ STORED false)
+   Q_PROPERTY(double  grains_kg           READ grains_kg           STORED false)
    //! \brief The beer color as a displayable QColor.
-   Q_PROPERTY(QColor  SRMColor READ SRMColor /*WRITE*/ /*NOTIFY changed*/ STORED false)
+   Q_PROPERTY(QColor  SRMColor            READ SRMColor            STORED false)
 
    //============================================== RELATIONAL PROPERTIES ==============================================
    // NB: the setBlahId() calls are needed by ObjectStore and are not intended for more general use.
@@ -427,12 +427,19 @@ public:
     *
     *        See below for specialisations (which have to be outside the class definition).
     */
-   template<class T> static Recipe * findOwningRecipe(T const & var) {
+   template<class T> static Recipe * findFirstThatUses(T const & var) {
       return ObjectStoreWrapper::findFirstMatching<Recipe>( [var](Recipe * rec) {return rec->uses(var);} );
    }
 
    //! \brief Automagically generate a list of instructions.
    void generateInstructions();
+
+   /**
+    * \brief Although a \c Recipe typically generates its own Instructions, which the user can then edit, we need to be
+    *        able to set them so we can read in \c Instruction records from BeerXML files (where we include them as an
+    *        extension to the BeerXML base standard).
+    */
+   void add(std::shared_ptr<Instruction> instruction);
 
    /*!
     * Finds the next ingredient to add that has a time
@@ -740,8 +747,11 @@ private:
    template<class RA> auto & ownedSetFor();
 
    // Calculated, but stored...BeerXML is weird sometimes.
-   double        m_og            ;
-   double        m_fg            ;
+   // These are mutable because updates to these cached values aren't, in and of themselves, modifications to the
+   // recipe.  An update might be triggered by some other change to the recipe or it might be done just because the
+   // cached value is stale.
+   mutable double m_og;
+   mutable double m_fg;
 
    bool          m_locked      ;
    bool          m_calcsEnabled;
@@ -768,7 +778,7 @@ private:
 };
 
 // Need specialisations for abstract types
-template<> inline Recipe * Recipe::findOwningRecipe([[maybe_unused]] NamedEntity const & var) { return nullptr; }
+template<> inline Recipe * Recipe::findFirstThatUses([[maybe_unused]] NamedEntity const & var) { return nullptr; }
 
 BT_DECLARE_METATYPES(Recipe)
 

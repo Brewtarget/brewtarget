@@ -37,12 +37,12 @@ bool Mash::isEqualTo(NamedEntity const & other) const {
    Mash const & rhs = static_cast<Mash const &>(other);
    // Base class will already have ensured names are equal
    return (
-      Utils::AutoCompare(this->m_grainTemp_c              , rhs.m_grainTemp_c              ) &&
-      Utils::AutoCompare(this->m_tunTemp_c                , rhs.m_tunTemp_c                ) &&
-      Utils::AutoCompare(this->m_spargeTemp_c             , rhs.m_spargeTemp_c             ) &&
-      Utils::AutoCompare(this->m_ph                       , rhs.m_ph                       ) &&
-      Utils::AutoCompare(this->m_mashTunWeight_kg         , rhs.m_mashTunWeight_kg         ) &&
-      Utils::AutoCompare(this->m_mashTunSpecificHeat_calGC, rhs.m_mashTunSpecificHeat_calGC) &&
+      AUTO_LOG_COMPARE(this, rhs, m_grainTemp_c              ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_tunTemp_c                ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_spargeTemp_c             ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_ph                       ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_mashTunWeight_kg         ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_mashTunSpecificHeat_calGC) &&
       // Parent classes have to be equal too
       this->FolderBase<Mash>::doIsEqualTo(rhs) &&
       this->StepOwnerBase<Mash, MashStep>::doIsEqualTo(rhs)
@@ -218,6 +218,7 @@ bool Mash::hasSparge() const {
 }
 
 void Mash::acceptStepChange(QMetaProperty prop, QVariant val) {
+   // TBD I don't think anything listens for changes to totalMashWater_l or totalTime
    this->doAcceptStepChange(this->sender(), prop, val, {&PropertyNames::Mash::totalMashWater_l,
                                                         &PropertyNames::Mash::totalTime       });
    return;

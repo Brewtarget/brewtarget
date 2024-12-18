@@ -1,22 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * beerxml/v1/BeerXml.xsd is part of Brewtarget, and is Copyright the following
- * authors 2020-2021
+ *╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ * beerxml/v1/BeerXml.xsd is part of Brewtarget, and is Copyright the following authors 2020-2024
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  *
- * Brewtarget is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
  *
- * Brewtarget is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ *╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 -->
 <!--
   General Notes:
@@ -216,6 +214,71 @@
       <xs:union memberTypes="xs:date Blank" />
    </xs:simpleType>
 
+   <!-- This is for Fermentable::type, but we can't use FermentableType as we use that for Fermentable below -->
+   <xs:simpleType name="FermentableCategory">
+      <xs:restriction base="xs:string">
+        <xs:enumeration value="Grain"/>
+        <xs:enumeration value="Sugar"/>
+        <xs:enumeration value="Extract"/>
+        <xs:enumeration value="Dry Extract"/>
+        <xs:enumeration value="Adjunct"/>
+     </xs:restriction>
+   </xs:simpleType>
+
+   <!-- Extra types created for dealing with new BeerJSON fields etc -->
+   <xs:simpleType name="MassOrVolumeUnit">
+      <xs:restriction base="xs:string">
+         <xs:enumeration value="kilograms"            />
+         <xs:enumeration value="grams"                />
+         <xs:enumeration value="milligrams"           />
+         <xs:enumeration value="pounds"               />
+         <xs:enumeration value="ounces"               />
+         <xs:enumeration value="imperial_pounds"      />
+         <xs:enumeration value="imperial_ounces"      />
+
+         <xs:enumeration value="liters"               />
+         <xs:enumeration value="milliliters"          />
+         <xs:enumeration value="us_barrels"           />
+         <xs:enumeration value="us_gallons"           />
+         <xs:enumeration value="us_quarts"            />
+         <xs:enumeration value="us_pints"             />
+         <xs:enumeration value="us_cups"              />
+         <xs:enumeration value="us_fluid_ounces"      />
+         <xs:enumeration value="us_tablespoons"       />
+         <xs:enumeration value="us_teaspoons"         />
+         <xs:enumeration value="imperial_barrels"     />
+         <xs:enumeration value="imperial_gallons"     />
+         <xs:enumeration value="imperial_quarts"      />
+         <xs:enumeration value="imperial_pints"       />
+         <xs:enumeration value="imperial_cups"        />
+         <xs:enumeration value="imperial_fluid_ounces"/>
+         <xs:enumeration value="imperial_tablespoons" />
+         <xs:enumeration value="imperial_teaspoons"   />
+      </xs:restriction>
+   </xs:simpleType>
+
+   <xs:simpleType name="RecipeAdditionStage">
+      <xs:restriction base="xs:string">
+         <xs:enumeration value="add_to_mash"        />
+         <xs:enumeration value="add_to_boil"        />
+         <xs:enumeration value="add_to_fermentation"/>
+         <xs:enumeration value="add_to_package"     />
+      </xs:restriction>
+   </xs:simpleType>
+
+   <xs:simpleType name="FermentableGrainGroup">
+      <xs:restriction base="xs:string">
+        <xs:enumeration value="base"     />
+        <xs:enumeration value="caramel"  />
+        <xs:enumeration value="flaked"   />
+        <xs:enumeration value="roasted"  />
+        <xs:enumeration value="specialty"/>
+        <xs:enumeration value="smoked"   />
+        <xs:enumeration value="adjunct"  />
+     </xs:restriction>
+   </xs:simpleType>
+
+
    <!-- There is scope for adding more custom types here, eg ABV could be more constrained than just a decimal.
 
         There are also some areas of ambiguity, eg the BeerXML 1.0 specification describes "a floating point number" as
@@ -314,6 +377,12 @@
          <xs:element name="CARB_RANGE" type="xs:string" minOccurs="0" maxOccurs="1"/>
          <xs:element name="COLOR_RANGE" type="xs:string" minOccurs="0" maxOccurs="1"/>
          <xs:element name="ABV_RANGE" type="xs:string" minOccurs="0" maxOccurs="1"/>
+
+         <!-- These fields are our own extension tags to support new fields in BeerJSON -->
+         <xs:element name="AROMA"              type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="APPEARANCE"         type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="MOUTHFEEL"          type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="OVERALL_IMPRESSION" type="xs:string" minOccurs="0" maxOccurs="1"/>
       </xs:all>
    </xs:complexType>
 
@@ -363,6 +432,39 @@
          <xs:element name="REAL_EVAP_RATE" type="SimplePercentage" minOccurs="0" maxOccurs="1"/>
          <xs:element name="ABSORPTION" type="xs:decimal" minOccurs="0" maxOccurs="1"/>
          <xs:element name="BOILING_POINT" type="TemperatureInCelsius" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="KETTLEINTERNALDIAMETER_CM" type="xs:decimal" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="KETTLEOPENINGDIAMETER_CM"  type="xs:decimal" minOccurs="0" maxOccurs="1"/>
+
+         <!-- These fields are our own extension tags to support new fields in BeerJSON -->
+         <xs:element name="HLT_TYPE"                       type="xs:string"  minOccurs="0" maxOccurs="1"/>
+         <xs:element name="MASH_TUN_TYPE"                  type="xs:string"  minOccurs="0" maxOccurs="1"/>
+         <xs:element name="LAUTER_TUN_TYPE"                type="xs:string"  minOccurs="0" maxOccurs="1"/>
+         <xs:element name="KETTLE_TYPE"                    type="xs:string"  minOccurs="0" maxOccurs="1"/>
+         <xs:element name="FERMENTER_TYPE"                 type="xs:string"  minOccurs="0" maxOccurs="1"/>
+         <xs:element name="AGINGVESSEL_TYPE"               type="xs:string"  minOccurs="0" maxOccurs="1"/>
+         <xs:element name="PACKAGING_VESSEL_TYPE"          type="xs:string"  minOccurs="0" maxOccurs="1"/>
+         <xs:element name="HLT_VOLUME_L"                   type="xs:decimal" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="LAUTER_TUN_VOLUME_L"            type="xs:decimal" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="AGING_VESSEL_VOLUME_L"          type="xs:decimal" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="PACKAGING_VESSEL_VOLUME_L"      type="xs:decimal" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="HLT_LOSS_L"                     type="xs:decimal" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="MASH_TUN_LOSS_L"                type="xs:decimal" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="FERMENTER_LOSS_L"               type="xs:decimal" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="AGING_VESSEL_LOSS_L"            type="xs:decimal" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="PACKAGING_VESSEL_LOSS_L"        type="xs:decimal" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="KETTLE_OUTFLOW_PER_MINUTE_L"    type="xs:decimal" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="HLT_WEIGHT_KG"                  type="xs:decimal" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="LAUTER_TUN_WEIGHT_KG"           type="xs:decimal" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="KETTLE_WEIGHT_KG"               type="xs:decimal" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="HLT_SPECIFIC_HEAT_CALGC"        type="xs:decimal" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="LAUTER_TUN_SPECIFIC_HEAT_CALGC" type="xs:decimal" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="KETTLE_SPECIFIC_HEAT_CALGC"     type="xs:decimal" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="HLT_NOTES"                      type="xs:string"  minOccurs="0" maxOccurs="1"/>
+         <xs:element name="MASH_TUN_NOTES"                 type="xs:string"  minOccurs="0" maxOccurs="1"/>
+         <xs:element name="LAUTER_TUN_NOTES"               type="xs:string"  minOccurs="0" maxOccurs="1"/>
+         <xs:element name="FERMENTER_NOTES"                type="xs:string"  minOccurs="0" maxOccurs="1"/>
+         <xs:element name="AGING_VESSEL_NOTES"             type="xs:string"  minOccurs="0" maxOccurs="1"/>
+         <xs:element name="PACKAGING_VESSEL_NOTES"         type="xs:string"  minOccurs="0" maxOccurs="1"/>
       </xs:all>
    </xs:complexType>
 
@@ -430,6 +532,29 @@
          <xs:element name="DISPLAY_AMOUNT" type="xs:string" minOccurs="0" maxOccurs="1"/>
          <xs:element name="INVENTORY" type="xs:string" minOccurs="0" maxOccurs="1"/>
          <xs:element name="DISPLAY_TIME" type="xs:string" minOccurs="0" maxOccurs="1"/>
+
+         <!-- These fields are our own extension tags to support new fields in BeerJSON - both inside and outside a RECIPE -->
+         <!-- First the "outside a RECIPE" fields -->
+         <xs:element name="PRODUCER"              type="xs:string"  minOccurs="0" maxOccurs="1"/>
+         <xs:element name="PRODUCT_ID"            type="xs:string"  minOccurs="0" maxOccurs="1"/>
+         <xs:element name="YEAR"                  type="xs:string"  minOccurs="0" maxOccurs="1"/>
+         <xs:element name="TOTAL_OIL_ML_PER_100G" type="xs:decimal" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="FARNESENE"             type="xs:decimal" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="GERANIOL"              type="xs:decimal" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="B_PINENE"              type="xs:decimal" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="LINALOOL"              type="xs:decimal" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="LIMONENE"              type="xs:decimal" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="NEROL"                 type="xs:decimal" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="PINENE"                type="xs:decimal" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="POLYPHENOLS"           type="xs:decimal" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="XANTHOHUMOL"           type="xs:decimal" minOccurs="0" maxOccurs="1"/>
+         <!-- Now the "inside a RECIPE" fields -->
+         <xs:element name="UNIT"              type="MassOrVolumeUnit"      minOccurs="0" maxOccurs="1"/>
+         <xs:element name="STAGE"             type="RecipeAdditionStage"   minOccurs="0" maxOccurs="1"/>
+         <xs:element name="STEP"              type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="ADD_AT_GRAVITY_SG" type="xs:decimal"            minOccurs="0" maxOccurs="1"/>
+         <xs:element name="ADD_AT_ACIDITY_PH" type="xs:decimal"            minOccurs="0" maxOccurs="1"/>
+         <xs:element name="DURATION_MINS"     type="xs:decimal"            minOccurs="0" maxOccurs="1"/>
       </xs:all>
    </xs:complexType>
 
@@ -448,26 +573,16 @@
    <!-- Type for <FERMENTABLE>...</FERMENTABLE> records -->
    <xs:complexType name="FermentableType">
       <xs:all>
-         <xs:element name="NAME" type="NonBlankString"/>
-         <xs:element name="VERSION" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1"/>
-         <xs:element name="TYPE">
-            <xs:simpleType>
-               <xs:restriction base="xs:string">
-                  <xs:enumeration value="Grain"/>
-                  <xs:enumeration value="Sugar"/>
-                  <xs:enumeration value="Extract"/>
-                  <xs:enumeration value="Dry Extract"/>
-                  <xs:enumeration value="Adjunct"/>
-               </xs:restriction>
-            </xs:simpleType>
-         </xs:element>
-         <xs:element name="AMOUNT" type="xs:decimal"/> <!-- In kg -->
-         <xs:element name="YIELD" type="SimplePercentage"/>
-         <xs:element name="COLOR" type="xs:decimal"/> <!-- In Lovibond Units (SRM for liquid extracts) -->
+         <xs:element name="NAME"           type="NonBlankString"/>
+         <xs:element name="VERSION"        type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="TYPE"           type="FermentableCategory" />
+         <xs:element name="AMOUNT"         type="xs:decimal"/> <!-- In kg -->
+         <xs:element name="YIELD"          type="SimplePercentage"/>
+         <xs:element name="COLOR"          type="xs:decimal"/> <!-- In Lovibond Units (SRM for liquid extracts) -->
          <xs:element name="ADD_AFTER_BOIL" type="RobustBoolean" minOccurs="0" maxOccurs="1"/>
-         <xs:element name="ORIGIN" type="xs:string" minOccurs="0" maxOccurs="1"/>
-         <xs:element name="SUPPLIER" type="xs:string" minOccurs="0" maxOccurs="1"/>
-         <xs:element name="NOTES" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="ORIGIN"         type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="SUPPLIER"       type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="NOTES"          type="xs:string" minOccurs="0" maxOccurs="1"/>
 
          <!-- The next four fields are only appropriate for a "Grain" or "Adjunct" type, otherwise their values are ignored -->
          <xs:element name="COARSE_FINE_DIFF" type="NullableSimplePercentage" minOccurs="0" maxOccurs="1"/>
@@ -487,10 +602,40 @@
          <xs:element name="INVENTORY" type="xs:string" minOccurs="0" maxOccurs="1"/>
          <xs:element name="DISPLAY_COLOR" type="xs:string" minOccurs="0" maxOccurs="1"/>
 
-         <!-- *******************************************************************************************
-              *** Extra field not included in the BeerXML 1.0 standard but used by Brewtarget/Brewken ***
-              ******************************************************************************************* -->
+         <!-- ******************************************************************************************************
+              *** Extra field not included in the BeerXML 1.0 standard but used to be used by Brewtarget/Brewken ***
+              ****************************************************************************************************** -->
          <xs:element name="IS_MASHED" type="RobustBoolean" minOccurs="0" maxOccurs="1"/>
+
+         <!-- These fields are our own extension tags to support new fields in BeerJSON - both inside and outside a RECIPE -->
+         <!-- First the "outside a RECIPE" fields -->
+         <xs:element name="GRAIN_GROUP"           type="FermentableGrainGroup"    minOccurs="0" maxOccurs="1"/>
+         <xs:element name="PRODUCER"              type="xs:string"                minOccurs="0" maxOccurs="1"/>
+         <xs:element name="PRODUCT_ID"            type="xs:string"                minOccurs="0" maxOccurs="1"/>
+         <xs:element name="COARSE_GRIND_YIELD"    type="NullableSimplePercentage" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="POTENTIAL_YIELD"       type="xs:decimal"               minOccurs="0" maxOccurs="1"/>
+         <xs:element name="ALPHA_AMYLASE"         type="xs:decimal"               minOccurs="0" maxOccurs="1"/>
+         <xs:element name="KOLBACH_INDEX"         type="xs:decimal"               minOccurs="0" maxOccurs="1"/>
+         <xs:element name="HARDNESS_PRP_GLASSY"   type="NullableSimplePercentage" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="HARDNESS_PRP_HALF"     type="NullableSimplePercentage" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="HARDNESS_PRP_MEALY"    type="NullableSimplePercentage" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="KERNEL_SIZE_PRP_PLUMP" type="NullableSimplePercentage" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="KERNEL_SIZE_PRP_THIN"  type="NullableSimplePercentage" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="FRIABILITY"            type="NullableSimplePercentage" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="DI"                    type="xs:decimal"               minOccurs="0" maxOccurs="1"/>
+         <xs:element name="VISCOSITY"             type="xs:decimal"               minOccurs="0" maxOccurs="1"/>
+         <xs:element name="DMS_P_PPM"             type="xs:decimal"               minOccurs="0" maxOccurs="1"/>
+         <xs:element name="FAN_PPM"               type="xs:decimal"               minOccurs="0" maxOccurs="1"/>
+         <xs:element name="FERMENTABILITY"        type="NullableSimplePercentage" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="BETA_GLUCAN_PPM"       type="xs:decimal"               minOccurs="0" maxOccurs="1"/>
+         <!-- Now the "inside a RECIPE" fields -->
+         <xs:element name="TIME"              type="DurationInMinutes"     minOccurs="0" maxOccurs="1"/>
+         <xs:element name="UNIT"              type="MassOrVolumeUnit"      minOccurs="0" maxOccurs="1"/>
+         <xs:element name="STAGE"             type="RecipeAdditionStage"   minOccurs="0" maxOccurs="1"/>
+         <xs:element name="STEP"              type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="ADD_AT_GRAVITY_SG" type="xs:decimal"            minOccurs="0" maxOccurs="1"/>
+         <xs:element name="ADD_AT_ACIDITY_PH" type="xs:decimal"            minOccurs="0" maxOccurs="1"/>
+         <xs:element name="DURATION_MINS"     type="xs:decimal"            minOccurs="0" maxOccurs="1"/>
       </xs:all>
    </xs:complexType>
 
@@ -545,6 +690,18 @@
          <xs:element name="DISPLAY_AMOUNT" type="xs:string" minOccurs="0" maxOccurs="1"/>
          <xs:element name="INVENTORY" type="xs:string" minOccurs="0" maxOccurs="1"/>
          <xs:element name="DISPLAY_TIME" type="xs:string" minOccurs="0" maxOccurs="1"/>
+
+         <!-- These fields are our own extension tags to support new fields in BeerJSON - both inside and outside a RECIPE -->
+         <!-- First the "outside a RECIPE" fields -->
+         <xs:element name="PRODUCER"          type="xs:string"             minOccurs="0" maxOccurs="1"/>
+         <xs:element name="PRODUCT_ID"        type="xs:string"             minOccurs="0" maxOccurs="1"/>
+         <!-- Now the "inside a RECIPE" fields -->
+         <xs:element name="UNIT"              type="MassOrVolumeUnit"      minOccurs="0" maxOccurs="1"/>
+         <xs:element name="STAGE"             type="RecipeAdditionStage"   minOccurs="0" maxOccurs="1"/>
+         <xs:element name="STEP"              type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="ADD_AT_GRAVITY_SG" type="xs:decimal"            minOccurs="0" maxOccurs="1"/>
+         <xs:element name="ADD_AT_ACIDITY_PH" type="xs:decimal"            minOccurs="0" maxOccurs="1"/>
+         <xs:element name="DURATION_MINS"     type="xs:decimal"            minOccurs="0" maxOccurs="1"/>
 
       </xs:all>
    </xs:complexType>
@@ -616,6 +773,28 @@
          <xs:element name="DISP_MAX_TEMP" type="xs:string" minOccurs="0" maxOccurs="1"/>
          <xs:element name="INVENTORY" type="xs:string" minOccurs="0" maxOccurs="1"/>
          <xs:element name="CULTURE_DATE" type="xs:string" minOccurs="0" maxOccurs="1"/> <!-- BeerXML 1.0 Standard says "in a neutral date form" -->
+
+         <!-- These fields are our own extension tags to support new fields in BeerJSON - both inside and outside a RECIPE -->
+         <!-- First the "outside a RECIPE" fields -->
+         <xs:element name="ALCOHOL_TOLERANCE"            type="xs:decimal"    minOccurs="0" maxOccurs="1"/>
+         <xs:element name="ATTENUATION_MIN"              type="xs:decimal"    minOccurs="0" maxOccurs="1"/>
+         <xs:element name="ATTENUATION_MAX"              type="xs:decimal"    minOccurs="0" maxOccurs="1"/>
+         <xs:element name="PHENOLIC_OFF_FLAVOR_POSITIVE" type="RobustBoolean" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="GLUCOAMYLASE_POSITIVE"        type="RobustBoolean" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="KILLER_PRODUCING_K1_TOXIN"    type="RobustBoolean" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="KILLER_PRODUCING_K2_TOXIN"    type="RobustBoolean" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="KILLER_PRODUCING_K28_TOXIN"   type="RobustBoolean" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="KILLER_PRODUCING_KLUS_TOXIN"  type="RobustBoolean" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="KILLER_NEUTRAL"               type="RobustBoolean" minOccurs="0" maxOccurs="1"/>
+         <!-- Now the "inside a RECIPE" fields -->
+         <xs:element name="TIME"              type="DurationInMinutes"     minOccurs="0" maxOccurs="1"/>
+         <xs:element name="UNIT"              type="MassOrVolumeUnit"      minOccurs="0" maxOccurs="1"/>
+         <xs:element name="STAGE"             type="RecipeAdditionStage"   minOccurs="0" maxOccurs="1"/>
+         <xs:element name="STEP"              type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="ADD_AT_GRAVITY_SG" type="xs:decimal"            minOccurs="0" maxOccurs="1"/>
+         <xs:element name="ADD_AT_ACIDITY_PH" type="xs:decimal"            minOccurs="0" maxOccurs="1"/>
+         <xs:element name="DURATION_MINS"     type="xs:decimal"            minOccurs="0" maxOccurs="1"/>
+
       </xs:all>
    </xs:complexType>
 
@@ -648,6 +827,14 @@
 
          <!-- The next field is listed under "Water Extensions" in the BeerXML 1.0 standard -->
          <xs:element name="DISPLAY_AMOUNT" type="xs:string" minOccurs="0" maxOccurs="1"/>
+
+         <!-- These fields are our own extension tags to support new fields in BeerJSON -->
+         <xs:element name="CARBONATE_PPM" type="xs:decimal" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="POTASSIUM_PPM" type="xs:decimal" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="IRON_PPM"      type="xs:decimal" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="NITRATE_PPM"   type="xs:decimal" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="NITRITE_PPM"   type="xs:decimal" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="FLUORIDE_PPM"  type="xs:decimal" minOccurs="0" maxOccurs="1"/>
       </xs:all>
    </xs:complexType>
 
@@ -698,7 +885,13 @@
          <!-- *******************************************************************************************
               *** Extra field not included in the BeerXML 1.0 standard but used by Brewtarget/Brewken ***
               ******************************************************************************************* -->
+         <xs:element name="INFUSE_TEMP_C"    type="xs:decimal"     minOccurs="0" maxOccurs="1"/>
          <xs:element name="DECOCTION_AMOUNT" type="VolumeInLiters" minOccurs="0" maxOccurs="1"/>
+
+         <!-- These fields are our own extension tags to support new fields in BeerJSON -->
+         <xs:element name="LIQUOR_TO_GRIST_RATIO_LKG" type="xs:decimal" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="START_ACIDITY_PH"          type="xs:decimal" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="END_ACIDITY_PH"            type="xs:decimal" minOccurs="0" maxOccurs="1"/>
 
       </xs:all>
    </xs:complexType>

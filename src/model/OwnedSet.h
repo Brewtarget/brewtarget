@@ -23,6 +23,7 @@
 #include <QDebug>
 #include <QVector>
 
+#include "utils/AutoCompare.h"
 #include "utils/BtStringConst.h"
 #include "utils/TypeTraits.h"
 
@@ -112,12 +113,13 @@ public:
       //
       // Check each object has the same number of items and they're all the same
       //
-      auto const myItems = this->items();
-      auto const otherItems = other.items();
-      return std::equal(   myItems.begin(),    myItems.end(),
-                        otherItems.begin(), otherItems.end(),
-                        [](std::shared_ptr<Item> const & lhs,
-                           std::shared_ptr<Item> const & rhs) {return *lhs == *rhs;});
+///      QList<std::shared_ptr<Item>> const myItems = this->items();
+///      QList<std::shared_ptr<Item>> const otherItems = other.items();
+///      return std::equal(   myItems.begin(),    myItems.end(),
+///                        otherItems.begin(), otherItems.end(),
+///                        [](std::shared_ptr<Item> const & lhs,
+///                           std::shared_ptr<Item> const & rhs) {return *lhs == *rhs;});
+      return AUTO_LOG_COMPARE_FN(this, other, items);
    }
 
    /**
@@ -683,11 +685,37 @@ public:
       return;
    }
 
+   //! \brief Convenience function for logging
+   template<class S>
+   friend S & operator<<(S & stream, OwnedSet const & ownedSet) {
+      QString output{};
+      QTextStream outputAsStream{&output};
+      auto const items = ownedSet.items();
+      outputAsStream << "OwnedSet of " << ownedSet.m_owner << " with " << items.size() << " members: ";
+      for (auto const & item : items) {
+         outputAsStream << "|| " << *item << " || ";
+      }
+      stream << output;
+      return stream;
+   }
+
+   //! \brief Convenience function for logging
+   template<class S>
+   friend S & operator<<(S & stream, OwnedSet const * ownedSet) {
+      if (ownedSet) {
+         stream << *ownedSet;
+      } else {
+         stream << "Null";
+      }
+      return stream;
+   }
+
 private:
    //================================================ MEMBER VARIABLES =================================================
    Owner & m_owner;
    //! Note that this list is not in any particular order (see comments in \c items member function)
    QVector<int> m_itemIds = {};
 };
+
 
 #endif

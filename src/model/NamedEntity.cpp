@@ -57,9 +57,25 @@
 #include "model/Water.h"
 #include "model/Yeast.h"
 
+namespace {
+   /**
+    * \brief This is a regexp that will match the " (n)" (for n some positive integer) added on the end of a name to
+    *        prevent name clashes.  It will also "capture" n to allow you to extract it.
+    *
+    *        Note that, in the regexp, to match a bracket, we need to escape it, thus "\(" instead of "(".  However, we
+    *        must also escape the backslash so that the C++ compiler doesn't think we want a special character (such as
+    *        '\n') and barf a "unknown escape sequence" warning at us.  So "\\(" is needed in the string literal here to
+    *        pass "\(" to the regexp to match literal "(" (and similarly for close bracket).
+    *
+    *        The inner brackets for the capturing group do not require any escaping.
+    *
+    *        A bug in some versions of the code meant that "Foobar ( (1)" was used instead of "Foobar (1)", so we allow
+    *        for the erroneous extra bracket etc here so that we may at least partially correct things.
+    */
+   QRegularExpression const duplicateNameNumberMatcher{" *\\([( ]*([0-9]+)\\)$"};
+}
 
 QString NamedEntity::localisedName() { return tr("Named Entity"); }
-
 
 NamedEntity::NamedEntity(QString t_name, bool t_display) :
    QObject        {nullptr  },
@@ -186,18 +202,6 @@ void NamedEntity::makeChild(NamedEntity const & copiedFrom) {
    return;
 }
 
-QRegularExpression const & NamedEntity::getDuplicateNameNumberMatcher() {
-   //
-   // Note that, in the regexp, to match a bracket, we need to escape it, thus "\(" instead of "(".  However, we
-   // must also escape the backslash so that the C++ compiler doesn't think we want a special character (such as
-   // '\n') and barf a "unknown escape sequence" warning at us.  So "\\(" is needed in the string literal here to
-   // pass "\(" to the regexp to match literal "(" (and similarly for close bracket).
-   //
-   static QRegularExpression const duplicateNameNumberMatcher{" *\\(([0-9]+)\\)$"};
-   return duplicateNameNumberMatcher;
-}
-
-
 // See https://zpz.github.io/blog/overloading-equality-operator-in-cpp-class-hierarchy/ (and cross-references to
 // http://www.gotw.ca/publications/mill18.htm) for good discussion on implementation of operator== in a class
 // hierarchy.  Our implementation differs slightly for a couple of reasons:
@@ -220,21 +224,27 @@ bool NamedEntity::operator==(NamedEntity const & other) const {
    // m_deleted as they are more related to the UI than whether, in essence, two objects are the same.
    //
    if (this->m_name != other.m_name) {
+      // Normally leave the next line commented out as it generates a lot of logging
 //      qDebug() << Q_FUNC_INFO << "No name match (" << this->m_name << "/" << other.m_name << ")";
       //
       // If the names don't match, let's check it's not for a trivial reason.  Eg, if you have one Hop called
       // "Tettnang" and another called "Tettnang (1)" we wouldn't say they are different just because of the names.
       // So we want to strip off any number in brackets at the ends of the names and then compare again.
       //
-      QRegularExpression const & duplicateNameNumberMatcher = NamedEntity::getDuplicateNameNumberMatcher();
       QString names[2] {this->m_name, other.m_name};
       for (auto ii = 0; ii < 2; ++ii) {
          QRegularExpressionMatch match = duplicateNameNumberMatcher.match(names[ii]);
          if (match.hasMatch()) {
+            // Regular expression capturing groups are traditionally numbered from 1, with number 0 being reserved for
+            // "the implicit capturing group ... capturing the substring matched by the entire pattern".
+            auto const positionOfMatch = match.capturedStart(0);
+            // Normally leave the next line commented out as it generates a lot of logging
+//            qDebug() << Q_FUNC_INFO << names[ii] << "has match" << match << "at" << positionOfMatch;
             // There's some integer in brackets at the end of the name.  Chop it off.
-            names[ii].truncate(match.capturedStart(1));
+            names[ii].truncate(positionOfMatch);
          }
       }
+      // Normally leave the next line commented out as it generates a lot of logging
 //      qDebug() << Q_FUNC_INFO << "Adjusted names to " << names[0] << " & " << names[1];
       if (names[0] != names[1]) {
          return false;
@@ -291,6 +301,19 @@ void NamedEntity::setDisplay(bool var) {
 
 QString NamedEntity::name() const {
    return this->m_name;
+}
+
+QString NamedEntity::strippedName() const {
+   QString name {this->m_name};
+   QRegularExpressionMatch const match = duplicateNameNumberMatcher.match(name);
+   QString matchedValue = match.captured(1);
+   if (matchedValue.size() > 0) {
+      // There's some integer in brackets at the end of the name, so we chop it off.  Comments in modifyClashingName
+      // apply here too.
+      name.truncate(match.capturedStart(0));
+   }
+
+   return name;
 }
 
 void NamedEntity::setName(QString const & var) {
@@ -537,6 +560,25 @@ NamedEntity * NamedEntity::ensureExists(BtStringConst const & property) {
    // Stop here on debug builds
    Q_ASSERT(false);
    return nullptr;
+}
+
+void NamedEntity::modifyClashingName(QString & candidateName) {
+   //
+   // First, see whether there's already a (n) (ie "(1)", "(2)" etc) at the end of the name (with or without
+   // space(s) preceding the left bracket.  If so, we want to replace this with " (n+1)".  If not, we try " (1)".
+   //
+   int duplicateNumber = 1;
+   QRegularExpressionMatch const match = duplicateNameNumberMatcher.match(candidateName);
+   QString matchedValue = match.captured(1);
+   if (matchedValue.size() > 0) {
+      // There's already some integer in brackets at the end of the name, extract it, add one, and truncate the name
+      // NB: Regular expression capturing groups are traditionally numbered from 1, with number 0 being reserved for
+      // "the implicit capturing group ... capturing the substring matched by the entire pattern".
+      duplicateNumber = matchedValue.toInt() + 1;
+      candidateName.truncate(match.capturedStart(0));
+   }
+   candidateName += QString(" (%1)").arg(duplicateNumber);
+   return;
 }
 
 //======================================================================================================================

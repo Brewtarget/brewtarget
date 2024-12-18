@@ -258,9 +258,13 @@ namespace Measurement {
    //
    // See comment in utils/TypeTraits.h for definition of CONCEPT_FIX_UP (and why, for now, we need it)
    template <typename T>
-   concept CONCEPT_FIX_UP PhysicalQuantityConstTypes =
-      std::same_as<T, Measurement::PhysicalQuantity const> ||
-      std::same_as<T, Measurement::ChoiceOfPhysicalQuantity const>;
+   concept CONCEPT_FIX_UP PhysicalQuantityTypes =
+      std::same_as<T, Measurement::PhysicalQuantity> ||
+      std::same_as<T, Measurement::ChoiceOfPhysicalQuantity>;
+///   template <typename T>
+///   concept CONCEPT_FIX_UP PhysicalQuantityConstTypes =
+///      std::same_as<T, Measurement::PhysicalQuantity const> ||
+///      std::same_as<T, Measurement::ChoiceOfPhysicalQuantity const>;
 
    /**
     * \brief For each set of alternates implied by a value of \c ChoiceOfPhysicalQuantity, there needs to be a default
@@ -275,7 +279,7 @@ namespace Measurement {
     *        possibilities.  Note that, because this is a function template, we are not allowed \b partial
     *        specialisations.
     */
-   template<PhysicalQuantityConstTypes PQT, PQT pqt> PhysicalQuantity defaultPhysicalQuantity();
+   template<PhysicalQuantityTypes PQT, PQT const pqt> PhysicalQuantity defaultPhysicalQuantity();
 
    /**
     * \brief We also need to handle the case where things need to be resolved at run-time
@@ -292,7 +296,7 @@ namespace Measurement {
    /**
     * \return \c true if \c physicalQuantity is a valid option for \c variantPhysicalQuantity, false otherwise
     */
-   template<PhysicalQuantityConstTypes PQT, PQT pqt> bool isValid(PhysicalQuantity const physicalQuantity);
+   template<PhysicalQuantityTypes PQT, PQT const pqt> bool isValid(PhysicalQuantity const physicalQuantity);
    bool isValid(ChoiceOfPhysicalQuantity const choiceOfPhysicalQuantity, PhysicalQuantity const physicalQuantity);
 
 }

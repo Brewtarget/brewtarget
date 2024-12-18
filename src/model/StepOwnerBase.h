@@ -140,18 +140,18 @@ public:
     * \param step
     * \param seqNum counted from 1
     */
-   std::shared_ptr<DerivedStep> insertStep(std::shared_ptr<DerivedStep> step, int const seqNum) {
+   std::shared_ptr<DerivedStep> insert(std::shared_ptr<DerivedStep> step, int const seqNum) {
       return this->m_stepSet.insert(step, seqNum);
    }
 
    /**
     * \brief Adds a new step at the end of the current list
     */
-   std::shared_ptr<DerivedStep> addStep(std::shared_ptr<DerivedStep> step) {
+   std::shared_ptr<DerivedStep> add(std::shared_ptr<DerivedStep> step) {
       return this->m_stepSet.add(step);
    }
 
-   std::shared_ptr<DerivedStep> removeStep(std::shared_ptr<DerivedStep> step) {
+   std::shared_ptr<DerivedStep> remove(std::shared_ptr<DerivedStep> step) {
       return this->m_stepSet.remove(step);
    }
 

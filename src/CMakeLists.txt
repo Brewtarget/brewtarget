@@ -194,7 +194,6 @@ set(filesToCompile_cpp
     ${repoDir}/src/serialization/xml/XercesHelpers.cpp
     ${repoDir}/src/serialization/xml/XmlCoding.cpp
     ${repoDir}/src/serialization/xml/XmlMashRecord.cpp
-    ${repoDir}/src/serialization/xml/XmlMashStepRecord.cpp
     ${repoDir}/src/serialization/xml/XmlRecipeRecord.cpp
     ${repoDir}/src/serialization/xml/XmlRecord.cpp
     ${repoDir}/src/serialization/xml/XmlRecordDefinition.cpp

@@ -81,7 +81,10 @@ NamedMashEditor::NamedMashEditor(QWidget* parent, MashStepEditor* editor, bool s
    connect(this->mashComboBox,              &QComboBox::currentTextChanged, this, &NamedMashEditor::mashSelected    );
    connect(this->pushButton_remove,         &QAbstractButton::clicked,      this, &NamedMashEditor::removeMash      );
 
-   this->setMash(ObjectStoreWrapper::getSharedFromRaw(m_mashListModel->at(mashComboBox->currentIndex())));
+   auto mash {m_mashListModel->at(mashComboBox->currentIndex())};
+   if (mash) {
+      this->setMash(ObjectStoreWrapper::getSharedFromRaw(mash));
+   }
    return;
 }
 
@@ -185,7 +188,7 @@ void NamedMashEditor::addMashStep() {
 
    // The call to Mash::addMashStep() will also store the MashStep in the ObjectStore / DB
    auto step = std::make_shared<MashStep>();
-   this->m_mashObs->addStep(step);
+   this->m_mashObs->add(step);
    m_mashStepEditor->setEditItem(step);
    m_mashStepEditor->setVisible(true);
    return;
@@ -217,7 +220,7 @@ void NamedMashEditor::removeMashStep() {
    }
 
    auto step = m_mashStepTableModel->getRow(selected[0].row());
-   this->m_mashObs->removeStep(step);
+   this->m_mashObs->remove(step);
    return;
 }
 

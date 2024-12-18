@@ -21,10 +21,15 @@ QString OwnedByRecipe::localisedName() { return tr("Owned By Recipe"); }
 
 bool OwnedByRecipe::isEqualTo(NamedEntity const & other) const {
    // Base class (NamedEntity) will have ensured this cast is valid
-   OwnedByRecipe const & rhs = static_cast<OwnedByRecipe const &>(other);
+//   OwnedByRecipe const & rhs = static_cast<OwnedByRecipe const &>(other);
    // Base class will already have ensured names are equal
    return (
-      this->m_recipeId == rhs.m_recipeId
+      //
+      // Note that we do _not_ compare m_recipeId.  We need to be able to compare classes with different owners.  Eg,
+      // as part of comparing whether two Recipe objects objects are equal, we need, amongst other things, to check
+      // whether their owned objects are equal.
+      //
+      true
    );
 }
 

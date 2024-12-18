@@ -117,3 +117,14 @@ S & operator<<(S & stream, JsonRecordDefinition::FieldType const fieldType) {
 //
 template QDebug & operator<<(QDebug & stream, JsonRecordDefinition::FieldType const fieldType);
 template QTextStream & operator<<(QTextStream & stream, JsonRecordDefinition::FieldType const fieldType);
+
+
+template<class S>
+S & operator<<(S & stream, JsonRecordDefinition::FieldDefinition const & fieldDefinition) {
+   stream <<
+      "FieldDefinition:" << fieldDefinition.type << "/" << fieldDefinition.xPath << "/" << fieldDefinition.propertyPath;
+   return stream;
+}
+
+template QDebug      & operator<<(QDebug      & stream, JsonRecordDefinition::FieldDefinition const & fieldDefinition);
+template QTextStream & operator<<(QTextStream & stream, JsonRecordDefinition::FieldDefinition const & fieldDefinition);

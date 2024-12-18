@@ -73,10 +73,10 @@ BuildArch   : x86_64
 Requires    : \
    glibc                 >= 2.35  , \
    glibc-32bit           >= 2.35  , \
-   libgcc_s1-32bit       >= 12.3.0, \
-   libstdc++6-32bit      >= 12.3.0, \
-   libgcc_s1             >= 12.3.0, \
-   libstdc++6            >= 12.3.0, \
+   libgcc_s1-32bit       >= 12.2.0, \
+   libstdc++6-32bit      >= 12.2.0, \
+   libgcc_s1             >= 12.2.0, \
+   libstdc++6            >= 12.2.0, \
    libQt6Core6           >= 6.2.4 , \
    libQt6Gui6            >= 6.2.4 , \
    libQt6Multimedia6     >= 6.2.4 , \

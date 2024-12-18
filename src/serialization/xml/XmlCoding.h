@@ -31,7 +31,6 @@
 #include "serialization/xml/XmlRecord.h"
 #include "serialization/xml/XmlNamedEntityRecord.h"
 #include "serialization/xml/XmlMashRecord.h"
-#include "serialization/xml/XmlMashStepRecord.h"
 #include "serialization/xml/XmlRecipeRecord.h"
 
 /**
@@ -60,7 +59,6 @@
  *    \b XmlNamedEntityRecord<Water> suffices to read Water records
  *    \b XmlNamedEntityRecord<Yeast> suffices to read Yeast records
  * For a couple of other cases, this needs to be extended further:
- *    \b XmlMashStepRecord: public XmlNamedEntityRecord<MashStep> - handles extra validation for \b MashStep
  *    \b XmlRecipeRecord : public XmlNamedEntityRecord<Recipe> - handles fact that \b Recipe contains lots
  *                                                               of other things
  *

@@ -45,8 +45,8 @@ AddPropertyName(stepNumber)
  *            corresponding \c Instruction objects).
  *          - The \c Instruction objects belonging to a given \c Recipe have an ordering
  *
- *        So we pull out these more fundamental properties into \c EnumeratedBase, as the following \b partial inheritance
- *        diagram shows:
+ *        So we pull out these more fundamental properties into \c EnumeratedBase, as the following \b partial
+ *        inheritance diagram shows:
  *
  *                          EnumeratedBase
  *                          /         \
@@ -59,8 +59,8 @@ AddPropertyName(stepNumber)
  *        This gives enough of what we need, for now.  We would need to rethink a bit if we had one type of object
  *        owning more than one type of "steps".
  *
- *        Directly derived classes need to include ENUMERATED_COMMON_DECL and ENUMERATED_COMMON_CODE in the obvious places
- *        (either their own macros for \c StepBase or in the header and implementation file respectively for
+ *        Directly derived classes need to include ENUMERATED_COMMON_DECL and ENUMERATED_COMMON_CODE in the obvious
+ *        places (either their own macros for \c StepBase or in the header and implementation file respectively for
  *        \c Instruction).
  */
 template<class Derived> class EnumeratedPhantom;
@@ -73,9 +73,19 @@ protected:
    //! Non-virtual equivalent of isEqualTo
    bool doIsEqualTo(EnumeratedBase const & other) const {
       return (
-         Utils::AutoCompare(this->m_ownerId   , other.m_ownerId   ) &&
-         Utils::AutoCompare(this->m_stepNumber, other.m_stepNumber)
+         //
+         // Note that we do _not_ compare m_ownerId.  We need to be able to compare classes with different owners.  Eg,
+         // to know whether two different Mash objects are equal, we need, amongst other things, to check whether their
+         // owned MashStep objects are equal.
+         //
+         AUTO_LOG_COMPARE(this, other, m_stepNumber)
       );
+   }
+
+   bool doIsLessThan(EnumeratedBase const & other) const {
+      // It is a coding error if we are trying to order items that don't have the same owner
+      Q_ASSERT(this->m_ownerId == other.m_ownerId);
+      return this->m_stepNumber < other.m_stepNumber;
    }
 
    // Normally we'd make the constructors private and allow access to Derived as a friend.  However, we want StepBase
@@ -90,7 +100,7 @@ protected:
       return;
    }
 
-   EnumeratedBase(Derived const & other) :
+   explicit EnumeratedBase(Derived const & other) :
    m_ownerId   {other.m_ownerId   },
    m_stepNumber{other.m_stepNumber} {
       return;
@@ -154,7 +164,10 @@ public:
       return ObjectStoreTyped<Derived>::getInstance();
    }
 
-
+   //! \brief Convenience function for logging
+   virtual QString toString() const {
+      return QString{"EnumeratedBase (m_ownerId: %1; m_stepNumber: %2)"}.arg(this->m_ownerId).arg(this->m_stepNumber);
+   }
 
 protected:
    //================================================ MEMBER VARIABLES =================================================
@@ -162,6 +175,13 @@ protected:
    // For historical reasons, step numbers always start from 1, so 0 would also be invalid, but -1 is more obvious
    int m_stepNumber = -1;
 };
+
+
+template<class S, class Derived, class Owner>
+S & operator<<(S & stream, EnumeratedBase<Derived, Owner> const & enumeratedBase) {
+   stream << enumeratedBase.toString();
+   return stream;
+}
 
 template<class Derived, class Owner>
 TypeLookup const EnumeratedBase<Derived, Owner>::typeLookup {
@@ -217,6 +237,7 @@ TypeLookup const EnumeratedBase<Derived, Owner>::typeLookup {
       /* This alias makes it easier to template a number of functions */                      \
       /* that are essentially the same for all "stepped" classes.     */                      \
       using StepOwnerClass = Owner;                                                           \
+      bool operator<(Derived const & other) const;                                            \
                                                                                               \
    protected:                                                                                 \
       /** Override NamedEntity::getObjectStoreTypedInstance */                                \
@@ -227,6 +248,7 @@ TypeLookup const EnumeratedBase<Derived, Owner>::typeLookup {
  *        this in their implementation file.
  */
 #define ENUMERATED_COMMON_CODE(Derived) \
+   bool Derived::operator<(Derived const & other) const { return this->doIsLessThan(other); }                   \
    ObjectStore & Derived::getObjectStoreTypedInstance() const { return this->doGetObjectStoreTypedInstance(); } \
 
 

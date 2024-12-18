@@ -130,7 +130,9 @@ public:
    virtual ~RecipeAddition();
 
    /**
-    * \brief This function is used (as a parameter to std::sort) for sorting in the recipe formatter
+    * \brief This function is used (as a parameter to std::sort) for sorting in the recipe formatter.
+    *
+    *        See also \c RecipeAdditionBase::doSpaceship
     */
    [[nodiscard]] static bool lessThanByTime(RecipeAddition const & lhs, RecipeAddition const & rhs);
 

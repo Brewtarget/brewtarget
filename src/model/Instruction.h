@@ -70,6 +70,8 @@ public:
     */
    static QString localisedName();
 
+   using OwnerClass = Recipe;
+
    /**
     * \brief Mapping of names to types for the Qt properties of this class.  See \c NamedEntity::typeLookup for more
     *        info.
@@ -124,6 +126,18 @@ private:
 
    QList<QString> m_reagents;
 };
+
+/**
+ * \brief Because \c Instruction inherits from multiple bases, more than one of which has a match for \c operator<<, we
+ *        need to provide an overload of \c operator<< that combines the output of those for all the base classes.
+ */
+template<class S>
+S & operator<<(S & stream, Instruction const & instruction) {
+   stream <<
+      static_cast<NamedEntity const &>(instruction) << " " <<
+      static_cast<EnumeratedBase<Instruction, Recipe> const &>(instruction);
+   return stream;
+}
 
 BT_DECLARE_METATYPES(Instruction)
 

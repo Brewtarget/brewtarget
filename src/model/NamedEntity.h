@@ -165,7 +165,7 @@ public:
    inline virtual TypeLookup const & getTypeLookup() const { return typeLookup; }
 
    NamedEntity(QString t_name, bool t_display = false);
-   NamedEntity(NamedEntity const & other);
+   explicit NamedEntity(NamedEntity const & other);
 
    /**
     * \brief Note that, if you want a \b child of a \c NamedEntity (to add to a \c Recipe), you should call
@@ -248,6 +248,8 @@ public:
    Q_PROPERTY(int     parentKey READ getParentKey WRITE setParentKey)
 
    QString name() const;
+   //! \brief Returns name with any bracketed number stripped from the end (eg "Foobar" for "Foobar (2)")
+   QString strippedName() const;
    bool deleted() const;
    bool display() const;
    int key() const;
@@ -404,6 +406,19 @@ public:
     * \return Pointer to the object whose existence we want to ensure (which will have been newly created if necessary).
     */
    virtual NamedEntity * ensureExists(BtStringConst const & property);
+
+   /**
+    * \brief Given a name that is a duplicate of an existing one, modify it to a potential alternative.
+    *        Callers should call this function as many times as necessary to find a non-clashing name.
+    *
+    *        Eg if the supplied clashing name is "Oatmeal Stout", we'll try adding a "duplicate number" in brackets to
+    *        the end of the name, ie amending it to "Oatmeal Stout (1)".  If the caller determines that that clashes too
+    *        then the next call (supplying "Oatmeal Stout (1)") will make us modify the name to "Oatmeal Stout (2)" (and
+    *        NOT "Oatmeal Stout (1) (1)"!).
+    *
+    * \param candidateName The name that we should attempt to modify.  (Modification is done in place.)
+    */
+   static void modifyClashingName(QString & candidateName);
 
 signals:
    /*!
@@ -681,7 +696,7 @@ private:
  */
 template<class S>
 S & operator<<(S & stream, NamedEntity const & namedEntity) {
-   stream << namedEntity.metaObject()->className() << " #" << namedEntity.key() << "(" << namedEntity.name() << ")";
+   stream << namedEntity.metaObject()->className() << " #" << namedEntity.key() << " (" << namedEntity.name() << ")";
    return stream;
 }
 

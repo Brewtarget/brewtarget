@@ -18,6 +18,7 @@
 #include "database/ObjectStoreWrapper.h"
 #include "model/NamedParameterBundle.h"
 #include "utils/OptionalHelpers.h"
+#include "utils/AutoCompare.h"
 
 QString BoilStep::localisedName() { return tr("Boil Step"); }
 
@@ -36,7 +37,7 @@ bool BoilStep::isEqualTo(NamedEntity const & other) const {
    BoilStep const & rhs = static_cast<BoilStep const &>(other);
    // Base class will already have ensured names are equal
    return (
-      this->m_chillingType == rhs.m_chillingType &&
+      AUTO_LOG_COMPARE(this, rhs, m_chillingType) &&
       // Parent classes have to be equal too
       this->StepExtended::isEqualTo(other)
    );

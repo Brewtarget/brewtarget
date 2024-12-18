@@ -90,20 +90,20 @@ bool Fermentable::isEqualTo(NamedEntity const & other) const {
    bool const outlinesAreEqual{
       // "Outline" fields: In BeerJSON, all these fields are in the FermentableBase type
 
-      Utils::AutoCompare(this->m_type      , rhs.m_type      ) &&
-      Utils::AutoCompare(this->m_origin    , rhs.m_origin    ) &&
-      Utils::AutoCompare(this->m_color_srm , rhs.m_color_srm ) &&
-      Utils::AutoCompare(this->m_producer  , rhs.m_producer  ) &&
-      Utils::AutoCompare(this->m_productId , rhs.m_productId ) &&
-      Utils::AutoCompare(this->m_grainGroup, rhs.m_grainGroup) &&
+      AUTO_LOG_COMPARE(this, rhs, m_type      ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_origin    ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_color_srm ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_producer  ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_productId ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_grainGroup) &&
 
       // Yield
-      Utils::AutoCompare(this->m_fineGrindYield_pct  , rhs.m_fineGrindYield_pct  ) &&
-      Utils::AutoCompare(this->m_coarseGrindYield_pct, rhs.m_coarseGrindYield_pct) &&
-      Utils::AutoCompare(this->m_coarseFineDiff_pct  , rhs.m_coarseFineDiff_pct  ) &&
-      Utils::AutoCompare(this->m_potentialYield_sg   , rhs.m_potentialYield_sg   ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_fineGrindYield_pct  ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_coarseGrindYield_pct) &&
+      AUTO_LOG_COMPARE(this, rhs, m_coarseFineDiff_pct  ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_potentialYield_sg   ) &&
 
-      Utils::AutoCompare(this->m_color_srm           , rhs.m_color_srm)
+      AUTO_LOG_COMPARE(this, rhs, m_color_srm)
    };
 
    // If either object is an outline (see comment in model/OutlineableNamedEntity.h) then there is no point comparing
@@ -116,29 +116,29 @@ bool Fermentable::isEqualTo(NamedEntity const & other) const {
       outlinesAreEqual &&
 
       // Remaining BeerJSON fields -- excluding inventories
-      Utils::AutoCompare(this->m_notes                 , rhs.m_notes                 ) &&
-      Utils::AutoCompare(this->m_moisture_pct          , rhs.m_moisture_pct          ) &&
-      Utils::AutoCompare(this->m_alphaAmylase_dextUnits, rhs.m_alphaAmylase_dextUnits) &&
-      Utils::AutoCompare(this->m_diastaticPower_lintner, rhs.m_diastaticPower_lintner) &&
-      Utils::AutoCompare(this->m_protein_pct           , rhs.m_protein_pct           ) &&
-      Utils::AutoCompare(this->m_kolbachIndex_pct      , rhs.m_kolbachIndex_pct      ) &&
-      Utils::AutoCompare(this->m_maxInBatch_pct        , rhs.m_maxInBatch_pct        ) &&
-      Utils::AutoCompare(this->m_recommendMash         , rhs.m_recommendMash         ) &&
-      Utils::AutoCompare(this->m_hardnessPrpGlassy_pct , rhs.m_hardnessPrpGlassy_pct ) &&
-      Utils::AutoCompare(this->m_kernelSizePrpPlump_pct, rhs.m_kernelSizePrpPlump_pct) &&
-      Utils::AutoCompare(this->m_hardnessPrpHalf_pct   , rhs.m_hardnessPrpHalf_pct   ) &&
-      Utils::AutoCompare(this->m_hardnessPrpMealy_pct  , rhs.m_hardnessPrpMealy_pct  ) &&
-      Utils::AutoCompare(this->m_kernelSizePrpThin_pct , rhs.m_kernelSizePrpThin_pct ) &&
-      Utils::AutoCompare(this->m_friability_pct        , rhs.m_friability_pct        ) &&
-      Utils::AutoCompare(this->m_di_ph                 , rhs.m_di_ph                 ) &&
-      Utils::AutoCompare(this->m_viscosity_cP          , rhs.m_viscosity_cP          ) &&
-      Utils::AutoCompare(this->m_dmsP_ppm              , rhs.m_dmsP_ppm              ) &&
-      Utils::AutoCompare(this->m_fan_ppm               , rhs.m_fan_ppm               ) &&
-      Utils::AutoCompare(this->m_fermentability_pct    , rhs.m_fermentability_pct    ) &&
-      Utils::AutoCompare(this->m_betaGlucan_ppm        , rhs.m_betaGlucan_ppm        ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_notes                 ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_moisture_pct          ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_alphaAmylase_dextUnits) &&
+      AUTO_LOG_COMPARE(this, rhs, m_diastaticPower_lintner) &&
+      AUTO_LOG_COMPARE(this, rhs, m_protein_pct           ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_kolbachIndex_pct      ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_maxInBatch_pct        ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_recommendMash         ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_hardnessPrpGlassy_pct ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_kernelSizePrpPlump_pct) &&
+      AUTO_LOG_COMPARE(this, rhs, m_hardnessPrpHalf_pct   ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_hardnessPrpMealy_pct  ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_kernelSizePrpThin_pct ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_friability_pct        ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_di_ph                 ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_viscosity_cP          ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_dmsP_ppm              ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_fan_ppm               ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_fermentability_pct    ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_betaGlucan_ppm        ) &&
 
       // Non-BeerJSON fields
-      Utils::AutoCompare(this->m_supplier              , rhs.m_supplier)
+      AUTO_LOG_COMPARE(this, rhs, m_supplier)
    );
 }
 

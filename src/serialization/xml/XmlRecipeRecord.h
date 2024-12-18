@@ -35,9 +35,16 @@ protected:
     *        properties is hard unless you make the getters and setters all use the same list type, eg QList<QVariant>
     *        instead of QList<Hop *>, QList<Fermentable *>, QList<Instruction *>, etc.
     */
-   virtual XmlRecord::ProcessingResult normaliseAndStoreInDb(std::shared_ptr<NamedEntity> containingEntity,
-                                                             QTextStream & userMessage,
-                                                             ImportRecordCount & stats);
+   [[nodiscard]] virtual XmlRecord::ProcessingResult normaliseAndStoreInDb(std::shared_ptr<NamedEntity> containingEntity,
+                                                                           QTextStream & userMessage,
+                                                                           ImportRecordCount & stats) override;
+
+   /**
+    * \brief We override \c XmlRecord::normaliseAndStoreChildRecordsInDb because we want to create a child record for
+    *        \c Boil (which isn't modelled as a child record in BeerXML).
+    */
+   [[nodiscard]] virtual bool normaliseAndStoreChildRecordsInDb(QTextStream & userMessage,
+                                                                ImportRecordCount & stats) override;
 
    /**
     * \brief We need to override \c XmlRecord::propertiesToXml for similar reasons that we override
@@ -82,6 +89,5 @@ private:
                       char const * const indentString,
                       BtStringConst const & propertyNameForGetter,
                       RecipeChildGetter getter) const;
-
 };
 #endif

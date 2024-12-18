@@ -34,7 +34,7 @@
  *        document.  It uses data from a corresponding singleton const \c JsonRecordDefinition to map between our
  *        internal data structures and fields in a JSON document.
  */
-class JsonRecord : public SerializationRecord {
+class JsonRecord : public SerializationRecord<JsonRecord, JsonCoding, JsonRecordDefinition> {
 public:
 
    /**
@@ -65,6 +65,8 @@ public:
    template <typename P, typename Q, typename R> JsonRecord(P, Q, R) = delete;
    virtual ~JsonRecord();
 
+   virtual SerializationRecordDefinition const & recordDefinition() const override;
+
    /**
     * \brief From the supplied record (ie node) in an JSON document, load into memory the data it contains, including
     *        any other records nested inside it.
@@ -75,27 +77,10 @@ public:
     */
    [[nodiscard]] bool load(QTextStream & userMessage);
 
-   /**
-    * \brief Once the record (including all its sub-records) is loaded into memory, we this function does any final
-    *        validation and data correction before then storing the object(s) in the database.  Most validation should
-    *        already have been done via the XSD, but there are some validation rules have to be done in code, including
-    *        checking for duplicates and name clashes.
-    *
-    *        Child classes may override this function to extend functionality but should make sure to call this base
-    *        class version to ensure child nodes are saved.
-    *
-    * \param containingEntity If not null, this is the entity that contains this one.  Eg, for a MashStep it should
-    *                         always be the containing Mash.  For a Style inside a Recipe, this will be a pointer to
-    *                         the Recipe, but for a freestanding Style, this will be null.
-    * \param userMessage Where to append any error messages that we want the user to see on the screen
-    * \param stats This object keeps tally of how many records (of each type) we skipped or stored
-    *
-    * \return \b Succeeded, if processing succeeded, \b Failed, if there was an unresolvable problem, \b FoundDuplicate
-    *         if the current record is a duplicate of one already in the DB and should be skipped.
-    */
+   //! \brief Override base class member function
    [[nodiscard]] virtual ProcessingResult normaliseAndStoreInDb(std::shared_ptr<NamedEntity> containingEntity,
                                                                 QTextStream & userMessage,
-                                                                ImportRecordCount & stats);
+                                                                ImportRecordCount & stats) override;
 
    static bool listToJson(QList< std::shared_ptr<NamedEntity> > const & objectsToWrite,
                           boost::json::array & outputArray,
@@ -130,7 +115,7 @@ private:
                                        QTextStream & userMessage);
 
 protected:
-   [[nodiscard]] bool normaliseAndStoreChildRecordsInDb(QTextStream & userMessage, ImportRecordCount & stats);
+///   [[nodiscard]] bool normaliseAndStoreChildRecordsInDb(QTextStream & userMessage, ImportRecordCount & stats);
 
 private:
    /**
@@ -149,7 +134,7 @@ private:
                     QVariant & value);
 
 protected:
-   JsonCoding const & m_coding;
+///   JsonCoding const & m_coding;
 
    /**
     * The underlying type of the contents of \c recordData is \c boost::json::object.  However, we need to store it as
@@ -159,40 +144,40 @@ protected:
     */
    boost::json::value & m_recordData;
 
-   JsonRecordDefinition const & m_recordDefinition;
+///   JsonRecordDefinition const & m_recordDefinition;
 
-   //
-   // Keep track of any child (ie contained) records as we're reading in FROM a JSON file.  (NB: We don't need to do
-   // this when writing out TO a JSON file as we don't have to worry about duplicate detection or construction order
-   // etc.)
-   //
-   // This is used both for lists of children (eg hop additions in a recipe, or steps in a mash) and for single children
-   // (eg boil of a recipe, mash of a recipe).
-   //
-   // Note that we don't use QVector here or below as it always wants to be able to copy things, which doesn't play
-   // nicely with there being a std::unique_ptr inside the ChildRecordSet struct.  OTOH, std::vector is guaranteed to
-   // be able to hold std_unique_ptr (provided, of course, that we use move semantics to put the elements in the
-   // vector).
-   //
-   struct ChildRecordSet {
-      /**
-       * \brief This holds info about the attribute/field to which this set of child records relates.  Eg, if a recipe
-       *        record has hop addition and fermentable addition child records, then it needs to know which is which and
-       *        how to connect them with the recipe.
-       *
-       *        If it's \c nullptr then that means this is a top-level record (eg just a hop variety rather than a use
-       *        of a hop in a recipe), in which, once the records are read in, there's no further work to do: the
-       *        records do not need to be connected with anything else.
-       */
-      JsonRecordDefinition::FieldDefinition const * parentFieldDefinition;
-
-      /**
-       * \brief The actual child record(s)
-       */
-      std::vector< std::unique_ptr<JsonRecord> > records;
-   };
-
-   std::vector<ChildRecordSet> m_childRecordSets;
+///   //
+///   // Keep track of any child (ie contained) records as we're reading in FROM a JSON file.  (NB: We don't need to do
+///   // this when writing out TO a JSON file as we don't have to worry about duplicate detection or construction order
+///   // etc.)
+///   //
+///   // This is used both for lists of children (eg hop additions in a recipe, or steps in a mash) and for single children
+///   // (eg boil of a recipe, mash of a recipe).
+///   //
+///   // Note that we don't use QVector here or below as it always wants to be able to copy things, which doesn't play
+///   // nicely with there being a std::unique_ptr inside the ChildRecordSet struct.  OTOH, std::vector is guaranteed to
+///   // be able to hold std_unique_ptr (provided, of course, that we use move semantics to put the elements in the
+///   // vector).
+///   //
+///   struct ChildRecordSet {
+///      /**
+///       * \brief This holds info about the attribute/field to which this set of child records relates.  Eg, if a recipe
+///       *        record has hop addition and fermentable addition child records, then it needs to know which is which and
+///       *        how to connect them with the recipe.
+///       *
+///       *        If it's \c nullptr then that means this is a top-level record (eg just a hop variety rather than a use
+///       *        of a hop in a recipe), in which, once the records are read in, there's no further work to do: the
+///       *        records do not need to be connected with anything else.
+///       */
+///      JsonRecordDefinition::FieldDefinition const * parentFieldDefinition;
+///
+///      /**
+///       * \brief The actual child record(s)
+///       */
+///      std::vector< std::unique_ptr<JsonRecord> > records;
+///   };
+///
+///   std::vector<ChildRecordSet> m_childRecordSets;
 };
 
 #endif

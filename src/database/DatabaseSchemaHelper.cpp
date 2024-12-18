@@ -2422,7 +2422,7 @@ bool DatabaseSchemaHelper::create(Database & database, QSqlDatabase connection) 
    // Start transaction
    // By the magic of RAII, this will abort if we exit this function (including by throwing an exception) without
    // having called dbTransaction.commit().
-   DbTransaction dbTransaction{database, connection};
+   DbTransaction dbTransaction{database, connection, "DatabaseSchemaHelper::create"};
 
    qDebug() << Q_FUNC_INFO;
    if (!CreateAllDatabaseTables(database, connection)) {

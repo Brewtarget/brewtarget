@@ -18,6 +18,7 @@
 #pragma once
 
 #include "database/ObjectStoreWrapper.h"
+#include "utils/AutoCompare.h"
 #include "utils/CuriouslyRecurringTemplateBase.h"
 #include "utils/TypeTraits.h"
 
@@ -28,14 +29,6 @@ class RecipeAddition;
 //
 // See comment in utils/TypeTraits.h for definition of CONCEPT_FIX_UP (and why, for now, we need it)
 template <typename T> concept CONCEPT_FIX_UP IsRegularAddition = std::is_base_of_v<RecipeAddition, T>;
-
-namespace {
-   template<typename T>
-   std::strong_ordering compare3way(T const & lhs, T const & rhs) {
-      return lhs == rhs ? std::strong_ordering::equal : (lhs < rhs ? std::strong_ordering::less :
-                                                                     std::strong_ordering::greater);
-   }
-}
 
 /**
  * \brief Small template base class to provide templated code for recipe addition classes: \c RecipeAdditionHop,
@@ -87,26 +80,23 @@ public:
     */
    std::strong_ordering doSpaceship(Derived const & other) const requires IsRegularAddition<Derived> {
       //
-      // We want a multi-level comparison for the spaceship operator.  Often the recommendation for this sort of thing
-      // is to use a tuple (via std::tie), since operator<=> is already well-defined for tuples.  However, there are
-      // limitations, eg you can't put an rvalue in a tuple, that make it a bit fiddly here, so we do old-school
-      // if/else statements.
-      //
       // Note that Amounts will not necessarily be truly comparable -- eg one Misc addition might be measured by weight
       // and another by volume -- but we can assume they are in canonical units and we can make an arbitrary canonical
       // ordering even of units for different physical measurements.
       //
-      auto const & ll {this->derived()};
-      auto const & rr {other};
-      std::strong_ordering result {std::strong_ordering::equivalent};
-      result = compare3way(ll.m_stage          , rr.m_stage          ); if (result != std::strong_ordering::equal) { return result; }
-      result = compare3way(ll.m_step           , rr.m_step           ); if (result != std::strong_ordering::equal) { return result; }
-      result = compare3way(ll.m_addAtTime_mins , rr.m_addAtTime_mins ); if (result != std::strong_ordering::equal) { return result; }
-      result = compare3way(ll.m_amount         , rr.m_amount         ); if (result != std::strong_ordering::equal) { return result; }
-      result = compare3way(ll.m_addAtGravity_sg, rr.m_addAtGravity_sg); if (result != std::strong_ordering::equal) { return result; }
-      result = compare3way(ll.m_addAtAcidity_pH, rr.m_addAtAcidity_pH); if (result != std::strong_ordering::equal) { return result; }
-      result = compare3way(ll.m_duration_mins  , rr.m_duration_mins  ); if (result != std::strong_ordering::equal) { return result; }
-      return result;
+      // Note too the importance of including name as a tie-break for where we have identical amounts of two different
+      // additions added at the same time (something that is relatively common).
+      //
+      Derived const & lhs {this->derived()};
+      Derived const & rhs {other};
+      return Utils::Auto3WayCompare(lhs.m_stage          , rhs.m_stage          ,
+                                    lhs.m_step           , rhs.m_step           ,
+                                    lhs.m_addAtTime_mins , rhs.m_addAtTime_mins ,
+                                    lhs.m_amount         , rhs.m_amount         ,
+                                    lhs.m_addAtGravity_sg, rhs.m_addAtGravity_sg,
+                                    lhs.m_addAtAcidity_pH, rhs.m_addAtAcidity_pH,
+                                    lhs.m_duration_mins  , rhs.m_duration_mins  ,
+                                    lhs.name()           , rhs.name()           );
    }
 
    /**

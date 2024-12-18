@@ -24,6 +24,7 @@
 #include <QMetaType>
 
 #include "serialization/json/JsonCoding.h"
+#include "serialization/json/JsonRecordDefinition.h"
 #include "serialization/json/JsonUtils.h"
 #include "model/Hop.h"  // Only needed for workaround/hack for Hop year property
 #include "model/NamedEntity.h"
@@ -291,15 +292,16 @@ namespace {
 JsonRecord::JsonRecord(JsonCoding const & jsonCoding,
                        boost::json::value & recordData,
                        JsonRecordDefinition const & recordDefinition) :
-   SerializationRecord{},
-   m_coding{jsonCoding},
-   m_recordData{recordData},
-   m_recordDefinition{recordDefinition},
-   m_childRecordSets{} {
+   SerializationRecord{jsonCoding, recordDefinition},
+   m_recordData{recordData} {
    return;
 }
 
 JsonRecord::~JsonRecord() = default;
+
+SerializationRecordDefinition const & JsonRecord::recordDefinition() const {
+   return this->m_recordDefinition;
+}
 
 [[nodiscard]] bool JsonRecord::load(QTextStream & userMessage) {
    Q_ASSERT(this->m_recordData.is_object());
@@ -675,249 +677,262 @@ JsonRecord::~JsonRecord() = default;
    QTextStream & userMessage,
    ImportRecordCount & stats
 ) {
-   qDebug() << Q_FUNC_INFO;
-   if (nullptr != this->m_namedEntity) {
-      qDebug() <<
-         Q_FUNC_INFO << "Normalise and store " << this->m_recordDefinition.m_namedEntityClassName << "(" <<
-         this->m_namedEntity->metaObject()->className() << "):" << this->m_namedEntity->name();
-
-      //
-      // If the object we are reading in is a duplicate of something we already have (and duplicates are not allowed)
-      // then skip over this record (and any records it contains).  (This is _not_ an error, so we return true not
-      // false in this event.)
-      //
-      // Note, however, that some objects -- in particular those such as Recipe that contain other objects -- need
-      // to be further along in their construction (ie have had all their contained objects added) before we can
-      // determine whether they are duplicates.  This is why we check again, after storing in the DB, below.
-      //
-      if (this->isDuplicate()) {
-         qDebug() <<
-            Q_FUNC_INFO << "(Early found) duplicate" << this->m_recordDefinition.m_namedEntityClassName <<
-            (this->m_includeInStats ? " will" : " won't") << " be included in stats";
-         if (this->m_includeInStats) {
-            stats.skipped(*this->m_recordDefinition.m_namedEntityClassName);
-         }
-         return JsonRecord::ProcessingResult::FoundDuplicate;
-      }
-
-      this->normaliseName();
-
-      // Some classes of object are owned by their containing entity and can't sensibly be saved without knowing what it
-      // is.  Subclasses of JsonRecord will override setContainingEntity() to pass the info in if it is needed (or ignore
-      // it if not).
-      this->setContainingEntity(containingEntity);
-
-      // Now we're ready to store in the DB
-      int id = this->storeNamedEntityInDb();
-      if (id <= 0) {
-         userMessage << "Error storing " << this->m_namedEntity->metaObject()->className() <<
-         " in database.  See logs for more details";
-         return JsonRecord::ProcessingResult::Failed;
-      }
-   }
-
-   JsonRecord::ProcessingResult processingResult;
+   // Most of the work is done in the base class
+   auto processingResult = this->SerializationRecord::normaliseAndStoreInDb(containingEntity, userMessage, stats);
+///   if (nullptr != this->m_namedEntity) {
+///      qDebug() <<
+///         Q_FUNC_INFO << "Normalise and store " << this->m_recordDefinition.m_namedEntityClassName << "(" <<
+///         this->m_namedEntity->metaObject()->className() << "):" << this->m_namedEntity->name();
+///
+///      //
+///      // If the object we are reading in is a duplicate of something we already have (and duplicates are not allowed)
+///      // then skip over this record (and any records it contains).  (This is _not_ an error, so we return true not
+///      // false in this event.)
+///      //
+///      // Note, however, that some objects -- in particular those such as Recipe that contain other objects -- need
+///      // to be further along in their construction (ie have had all their contained objects added) before we can
+///      // determine whether they are duplicates.  This is why we check again, after storing in the DB, below.
+///      //
+///      if (this->resolveDuplicates()) {
+///         qDebug() <<
+///            Q_FUNC_INFO << "(Early found) duplicate" << this->m_recordDefinition.m_namedEntityClassName <<
+///            (this->includedInStats() ? " will" : " won't") << " be included in stats";
+///         if (this->includedInStats()) {
+///            stats.skipped(*this->m_recordDefinition.m_namedEntityClassName);
+///         }
+///         return SerializationRecord::ProcessingResult::FoundDuplicate;
+///      }
+///
+///      this->normaliseName();
+///
+///      // Some classes of object are owned by their containing entity and can't sensibly be saved without knowing what it
+///      // is.  Subclasses of JsonRecord will override setContainingEntity() to pass the info in if it is needed (or ignore
+///      // it if not).
+///      this->setContainingEntity(containingEntity);
+///
+///      // Now we're ready to store in the DB
+///      int id = this->storeNamedEntityInDb();
+///      if (id <= 0) {
+///         userMessage << "Error storing " << this->m_namedEntity->metaObject()->className() <<
+///         " in database.  See logs for more details";
+///         return SerializationRecord::ProcessingResult::Failed;
+///      }
+///   }
+///
+///   SerializationRecord::ProcessingResult processingResult;
+///
+///   //
+///   // Finally (well, nearly) orchestrate storing any contained records
+///   //
+///   // Note, of course, that this still needs to be done, even if nullptr == this->m_namedEntity, because that just means
+///   // we're processing the root node.
+///   //
+///   if (this->normaliseAndStoreChildRecordsInDb(userMessage, stats)) {
+///      //
+///      // Now all the processing succeeded, we do that final duplicate check for any complex object such as Recipe that
+///      // had to be fully constructed before we could meaningfully check whether it's the same as something we already
+///      // have in the object store.
+///      //
+///      if (nullptr == this->m_namedEntity.get()) {
+///         // Child records OK and no duplicate check needed (root record), which also means no further processing
+///         // required
+///         return SerializationRecord::ProcessingResult::Succeeded;
+///      }
+///      processingResult = this->isDuplicate() ? SerializationRecord::ProcessingResult::FoundDuplicate :
+///                                               SerializationRecord::ProcessingResult::Succeeded;
+///   } else {
+///      // There was a problem with one of our child records
+///      processingResult = SerializationRecord::ProcessingResult::Failed;
+///   }
+///
+///   if (nullptr != this->m_namedEntity.get()) {
+///      //
+///      // We potentially do stats for everything except failure
+///      //
+///      if (SerializationRecord::ProcessingResult::FoundDuplicate == processingResult) {
+///         qDebug() <<
+///            Q_FUNC_INFO << "(Late found) duplicate" << this->m_recordDefinition.m_namedEntityClassName << "(" <<
+///            this->m_recordDefinition.m_localisedEntityName << ")" << (this->includedInStats() ? " will" : " won't") <<
+///            " be included in stats";
+///         if (this->includedInStats()) {
+///            stats.skipped(this->m_recordDefinition.m_localisedEntityName);
+///         }
+///      } else if (SerializationRecord::ProcessingResult::Succeeded == processingResult && this->includedInStats()) {
+///         stats.processedOk(this->m_recordDefinition.m_localisedEntityName);
+///      }
+///
+///      //
+///      // Clean-up
+///      //
+///      if (SerializationRecord::ProcessingResult::FoundDuplicate == processingResult ||
+///          SerializationRecord::ProcessingResult::Failed == processingResult) {
+///         //
+///         // If we reach here, it means either there was a problem with one of our child records or we ourselves are a
+///         // late-detected duplicate.  We've already stored our NamedEntity record in the DB, so we need to try to undo
+///         // that by deleting it.  It is the responsibility of each NamedEntity subclass to take care of deleting any
+///         // owned stored objects, via the virtual member function NamedEntity::hardDeleteOwnedEntities().  So we don't
+///         // have to worry about child records that have already been stored.  (Eg if this is a Mash, and we stored it
+///         // and 2 MashSteps before hitting an error on the 3rd MashStep, then deleting the Mash from the DB will also
+///         // result in those 2 stored MashSteps getting deleted from the DB.)
+///         //
+///         qDebug() <<
+///            Q_FUNC_INFO << "Deleting stored" << this->m_recordDefinition.m_namedEntityClassName << "as" <<
+///            (SerializationRecord::ProcessingResult::FoundDuplicate == processingResult ? "duplicate" : "failed to read all child records");
+///         this->deleteNamedEntityFromDb();
+///      } else {
+///         //
+///         // If we read in and stored an outline Fermentable/Hop/etc object (because we could not find any existing
+///         // object for which it is a match) then the newly-read in object is no longer an outline.
+///         //
+///         if (this->m_recordDefinition.isOutlineRecord) {
+///            // It would be slightly more robust to set the property via Qt properties, but OTOH it's a coding error if
+///            // we can't cast the newly created object to OutlineableNamedEntity.
+///            auto createdFromOutline = static_pointer_cast<OutlineableNamedEntity>(this->m_namedEntity);
+///            createdFromOutline->setOutline(false);
+///         }
+///      }
+///   }
 
    //
-   // Finally (well, nearly) orchestrate storing any contained records
+   // If we read in and stored an outline Fermentable/Hop/etc object (because we could not find any existing
+   // object for which it is a match) then the newly-read in object is no longer an outline.
    //
-   // Note, of course, that this still needs to be done, even if nullptr == this->m_namedEntity, because that just means
-   // we're processing the root node.
-   //
-   if (this->normaliseAndStoreChildRecordsInDb(userMessage, stats)) {
-      //
-      // Now all the processing succeeded, we do that final duplicate check for any complex object such as Recipe that
-      // had to be fully constructed before we could meaningfully check whether it's the same as something we already
-      // have in the object store.
-      //
-      if (nullptr == this->m_namedEntity.get()) {
-         // Child records OK and no duplicate check needed (root record), which also means no further processing
-         // required
-         return JsonRecord::ProcessingResult::Succeeded;
-      }
-      processingResult = this->isDuplicate() ? JsonRecord::ProcessingResult::FoundDuplicate :
-                                               JsonRecord::ProcessingResult::Succeeded;
-   } else {
-      // There was a problem with one of our child records
-      processingResult = JsonRecord::ProcessingResult::Failed;
-   }
-
-   if (nullptr != this->m_namedEntity.get()) {
-      //
-      // We potentially do stats for everything except failure
-      //
-      if (JsonRecord::ProcessingResult::FoundDuplicate == processingResult) {
-         qDebug() <<
-            Q_FUNC_INFO << "(Late found) duplicate" << this->m_recordDefinition.m_namedEntityClassName << "(" <<
-            this->m_recordDefinition.m_localisedEntityName << ")" << (this->m_includeInStats ? " will" : " won't") <<
-            " be included in stats";
-         if (this->m_includeInStats) {
-            stats.skipped(this->m_recordDefinition.m_localisedEntityName);
-         }
-      } else if (JsonRecord::ProcessingResult::Succeeded == processingResult && this->m_includeInStats) {
-         stats.processedOk(this->m_recordDefinition.m_localisedEntityName);
-      }
-
-      //
-      // Clean-up
-      //
-      if (JsonRecord::ProcessingResult::FoundDuplicate == processingResult ||
-          JsonRecord::ProcessingResult::Failed == processingResult) {
-         //
-         // If we reach here, it means either there was a problem with one of our child records or we ourselves are a
-         // late-detected duplicate.  We've already stored our NamedEntity record in the DB, so we need to try to undo
-         // that by deleting it.  It is the responsibility of each NamedEntity subclass to take care of deleting any
-         // owned stored objects, via the virtual member function NamedEntity::hardDeleteOwnedEntities().  So we don't
-         // have to worry about child records that have already been stored.  (Eg if this is a Mash, and we stored it
-         // and 2 MashSteps before hitting an error on the 3rd MashStep, then deleting the Mash from the DB will also
-         // result in those 2 stored MashSteps getting deleted from the DB.)
-         //
-         qDebug() <<
-            Q_FUNC_INFO << "Deleting stored" << this->m_recordDefinition.m_namedEntityClassName << "as" <<
-            (JsonRecord::ProcessingResult::FoundDuplicate == processingResult ? "duplicate" : "failed to read all child records");
-         this->deleteNamedEntityFromDb();
-      } else {
-         //
-         // If we read in and stored an outline Fermentable/Hop/etc object (because we could not find any existing
-         // object for which it is a match) then the newly-read in object is no longer an outline.
-         //
-         if (this->m_recordDefinition.isOutlineRecord) {
-            // It would be slightly more robust to set the property via Qt properties, but OTOH it's a coding error if
-            // we can't cast the newly created object to OutlineableNamedEntity.
-            auto createdFromOutline = static_pointer_cast<OutlineableNamedEntity>(this->m_namedEntity);
-            createdFromOutline->setOutline(false);
-         }
-      }
+   if (JsonRecord::ProcessingResult::Succeeded == processingResult &&
+      this->m_recordDefinition.isOutlineRecord) {
+      // It would be slightly more robust to set the property via Qt properties, but OTOH it's a coding error if
+      // we can't cast the newly created object to OutlineableNamedEntity.
+      auto createdFromOutline = static_pointer_cast<OutlineableNamedEntity>(this->m_namedEntity);
+      createdFromOutline->setOutline(false);
    }
 
    return processingResult;
 }
 
-[[nodiscard]] bool JsonRecord::normaliseAndStoreChildRecordsInDb(QTextStream & userMessage,
-                                                                 ImportRecordCount & stats) {
-   qDebug() << Q_FUNC_INFO << this->m_childRecordSets.size() << "child record sets";
-   //
-   // We are assuming it does not matter which order different types of children are processed in.
-   //
-   // Where there are several children of the same type, we need to process them in the same order as they were read in
-   // from the JSON document because, in some cases, this order matters.  In particular, in BeerJSON, the Mash Steps
-   // inside a Mash are stored in order without any other means of identifying order.
-   //
-   for (auto & childRecordSet : this->m_childRecordSets) {
-      if (childRecordSet.parentFieldDefinition) {
-         qDebug() <<
-            Q_FUNC_INFO << childRecordSet.parentFieldDefinition->propertyPath << "has" <<
-            childRecordSet.records.size() << "entries";
-      } else {
-         qDebug() << Q_FUNC_INFO << "Top-level record has" << childRecordSet.records.size() << "entries";
-      }
-
-      QList<std::shared_ptr<NamedEntity>> processedChildren;
-      for (auto & childRecord : childRecordSet.records) {
-         // The childRecord variable is a reference to a std::unique_ptr (because the vector we're looping over owns the
-         // records it contains), which is why we have all the "member of pointer" (->) operators below.
-         qDebug() <<
-            Q_FUNC_INFO << "Storing" << childRecord->m_recordDefinition.m_namedEntityClassName << "child of" <<
-            this->m_recordDefinition.m_namedEntityClassName;
-         if (JsonRecord::ProcessingResult::Failed ==
-            childRecord->normaliseAndStoreInDb(this->m_namedEntity, userMessage, stats)) {
-            return false;
-         }
-         processedChildren.append(childRecord->m_namedEntity);
-      }
-
-      //
-      // Now we've stored (and/or recognised as duplicates) the child records of one particular type, we want to link
-      // them (and/or, as the case may be, the records they are duplicates of) to the parent.  If this is possible via a
-      // property (eg the style on a recipe), then we can just do that here.  Otherwise the work needs to be done in the
-      // appropriate subclass of JsonNamedEntityRecord.
-      //
-      // We can't just use the presence or absence of a property name to determine whether the child record can be set
-      // via a property.  It's a necessary but not sufficient condition.  This is because some properties are read-only
-      // in the code (eg because they are calculated values) but need to be present in the FieldDefinition for export to
-      // JSON to work.  However, we can tell whether a property is read-only by calling QMetaProperty::isWritable().
-      //
-      if (childRecordSet.parentFieldDefinition) {
-         auto const & fieldDefinition{*childRecordSet.parentFieldDefinition};
-         Q_ASSERT(std::holds_alternative<JsonRecordDefinition const *>(fieldDefinition.valueDecoder));
-         Q_ASSERT(std::get              <JsonRecordDefinition const *>(fieldDefinition.valueDecoder));
-         JsonRecordDefinition const & childRecordDefinition{
-            *std::get<JsonRecordDefinition const *>(fieldDefinition.valueDecoder)
-         };
-
-         auto const & propertyPath = fieldDefinition.propertyPath;
-         if (!propertyPath.isNull()) {
-            // It's a coding error if we had a property defined for a record that's not trying to populate a NamedEntity
-            // (ie for the root record).
-            Q_ASSERT(this->m_namedEntity);
-
-            QVariant valueToSet;
-            //
-            // How we set the property depends on whether this is a single child record or an array of them
-            //
-            if (fieldDefinition.type != JsonRecordDefinition::FieldType::ListOfRecords) {
-               // It's a coding error if we ended up with more than on child when there's only supposed to be one!
-               if (processedChildren.size() > 1) {
-                  qCritical() <<
-                     Q_FUNC_INFO << "Only expecting one record for" << propertyPath << "property on" <<
-                     this->m_recordDefinition.m_namedEntityClassName << "object, but found" << processedChildren.size();
-                  Q_ASSERT(false);
-               }
-
-               //
-               // We need to pass a pointer to the relevant subclass of NamedEntity (call it of class ChildEntity for
-               // the sake of argument) in to the property setter (inside a QVariant).  As in JsonRecord::toJson, we
-               // need to handle any of the following forms:
-               //    ChildEntity *                               -- eg Equipment *
-               //    std::shared_ptr<ChildEntity>                -- eg std::shared_ptr<Mash>
-               //    std::optional<std::shared_ptr<ChildEntity>> -- eg std::optional<std::shared_ptr<Boil>>
-               //
-               // First we assert that they type is _some_ sort of pointer, otherwise it's a coding error.
-               //
-               auto const & typeInfo = fieldDefinition.propertyPath.getTypeInfo(*this->m_recordDefinition.m_typeLookup);
-               Q_ASSERT(typeInfo.pointerType != TypeInfo::PointerType::NotPointer);
-
-               if (typeInfo.pointerType == TypeInfo::PointerType::RawPointer) {
-                  // For a raw pointer, we don't have to upcast as the pointer will get upcast in the setter during the
-                  // extraction from QVariant
-                  valueToSet = QVariant::fromValue(processedChildren.first().get());
-               } else {
-                  // Should be the only possibility left.
-                  Q_ASSERT(typeInfo.pointerType == TypeInfo::PointerType::SharedPointer);
-                  Q_ASSERT(childRecordDefinition.m_upAndDownCasters.m_pointerUpcaster);
-                  valueToSet = QVariant::fromValue(
-                     childRecordDefinition.m_upAndDownCasters.m_pointerUpcaster(processedChildren.first())
-                  );
-               }
-
-            } else {
-               //
-               // Multi-item setters all take a list of shared pointers
-               //
-               // At this point we have QList<std::shared_ptr<NamedEntity>>, which the setter will not be able to
-               // handle.  We need to convert it to a list of upcast elements -- eg QList<shared_ptr<Hop>>
-               //
-               Q_ASSERT(std::holds_alternative<JsonRecordDefinition const *>(fieldDefinition.valueDecoder));
-               Q_ASSERT(std::get              <JsonRecordDefinition const *>(fieldDefinition.valueDecoder));
-               JsonRecordDefinition const & childRecordDefinition{
-                  *std::get<JsonRecordDefinition const *>(fieldDefinition.valueDecoder)
-               };
-               Q_ASSERT(childRecordDefinition.m_upAndDownCasters.m_listUpcaster);
-               valueToSet = childRecordDefinition.m_upAndDownCasters.m_listUpcaster(processedChildren);
-            }
-
-            if (!propertyPath.setValue(*this->m_namedEntity, valueToSet)) {
-               qCritical() <<
-                  Q_FUNC_INFO << "Could not write" << propertyPath << "property on" <<
-                  this->m_recordDefinition.m_namedEntityClassName;
-                  Q_ASSERT(false);
-            }
-         }
-      }
-   }
-
-   return true;
-}
+///[[nodiscard]] bool JsonRecord::normaliseAndStoreChildRecordsInDb(QTextStream & userMessage,
+///                                                                 ImportRecordCount & stats) {
+///   qDebug() << Q_FUNC_INFO << this->m_childRecordSets.size() << "child record sets";
+///   //
+///   // We are assuming it does not matter which order different types of children are processed in.
+///   //
+///   // Where there are several children of the same type, we need to process them in the same order as they were read in
+///   // from the JSON document because, in some cases, this order matters.  In particular, in BeerJSON, the Mash Steps
+///   // inside a Mash are stored in order without any other means of identifying order.
+///   //
+///   for (auto & childRecordSet : this->m_childRecordSets) {
+///      if (childRecordSet.parentFieldDefinition) {
+///         qDebug() <<
+///            Q_FUNC_INFO << childRecordSet.parentFieldDefinition->propertyPath << "has" <<
+///            childRecordSet.records.size() << "entries";
+///      } else {
+///         qDebug() << Q_FUNC_INFO << "Top-level record has" << childRecordSet.records.size() << "entries";
+///      }
+///
+///      QList<std::shared_ptr<NamedEntity>> processedChildren;
+///      for (auto & childRecord : childRecordSet.records) {
+///         // The childRecord variable is a reference to a std::unique_ptr (because the vector we're looping over owns the
+///         // records it contains), which is why we have all the "member of pointer" (->) operators below.
+///         qDebug() <<
+///            Q_FUNC_INFO << "Storing" << childRecord->m_recordDefinition.m_namedEntityClassName << "child of" <<
+///            this->m_recordDefinition.m_namedEntityClassName;
+///         if (SerializationRecord::ProcessingResult::Failed ==
+///            childRecord->normaliseAndStoreInDb(this->m_namedEntity, userMessage, stats)) {
+///            return false;
+///         }
+///         processedChildren.append(childRecord->m_namedEntity);
+///      }
+///
+///      //
+///      // Now we've stored (and/or recognised as duplicates) the child records of one particular type, we want to link
+///      // them (and/or, as the case may be, the records they are duplicates of) to the parent.  If this is possible via a
+///      // property (eg the style on a recipe), then we can just do that here.  Otherwise the work needs to be done in the
+///      // appropriate subclass of JsonNamedEntityRecord.
+///      //
+///      // We can't just use the presence or absence of a property name to determine whether the child record can be set
+///      // via a property.  It's a necessary but not sufficient condition.  This is because some properties are read-only
+///      // in the code (eg because they are calculated values) but need to be present in the FieldDefinition for export to
+///      // JSON to work.  However, we can tell whether a property is read-only by calling QMetaProperty::isWritable().
+///      //
+///      if (childRecordSet.parentFieldDefinition) {
+///         auto const & fieldDefinition{*childRecordSet.parentFieldDefinition};
+///         Q_ASSERT(std::holds_alternative<JsonRecordDefinition const *>(fieldDefinition.valueDecoder));
+///         Q_ASSERT(std::get              <JsonRecordDefinition const *>(fieldDefinition.valueDecoder));
+///         JsonRecordDefinition const & childRecordDefinition{
+///            *std::get<JsonRecordDefinition const *>(fieldDefinition.valueDecoder)
+///         };
+///
+///         auto const & propertyPath = fieldDefinition.propertyPath;
+///         if (!propertyPath.isNull()) {
+///            // It's a coding error if we had a property defined for a record that's not trying to populate a NamedEntity
+///            // (ie for the root record).
+///            Q_ASSERT(this->m_namedEntity);
+///
+///            QVariant valueToSet;
+///            //
+///            // How we set the property depends on whether this is a single child record or an array of them
+///            //
+///            if (fieldDefinition.type != JsonRecordDefinition::FieldType::ListOfRecords) {
+///               // It's a coding error if we ended up with more than on child when there's only supposed to be one!
+///               if (processedChildren.size() > 1) {
+///                  qCritical() <<
+///                     Q_FUNC_INFO << "Only expecting one record for" << propertyPath << "property on" <<
+///                     this->m_recordDefinition.m_namedEntityClassName << "object, but found" << processedChildren.size();
+///                  Q_ASSERT(false);
+///               }
+///
+///               //
+///               // We need to pass a pointer to the relevant subclass of NamedEntity (call it of class ChildEntity for
+///               // the sake of argument) in to the property setter (inside a QVariant).  As in JsonRecord::toJson, we
+///               // need to handle any of the following forms:
+///               //    ChildEntity *                               -- eg Equipment *
+///               //    std::shared_ptr<ChildEntity>                -- eg std::shared_ptr<Mash>
+///               //    std::optional<std::shared_ptr<ChildEntity>> -- eg std::optional<std::shared_ptr<Boil>>
+///               //
+///               // First we assert that they type is _some_ sort of pointer, otherwise it's a coding error.
+///               //
+///               auto const & typeInfo = fieldDefinition.propertyPath.getTypeInfo(*this->m_recordDefinition.m_typeLookup);
+///               Q_ASSERT(typeInfo.pointerType != TypeInfo::PointerType::NotPointer);
+///
+///               if (typeInfo.pointerType == TypeInfo::PointerType::RawPointer) {
+///                  // For a raw pointer, we don't have to upcast as the pointer will get upcast in the setter during the
+///                  // extraction from QVariant
+///                  valueToSet = QVariant::fromValue(processedChildren.first().get());
+///               } else {
+///                  // Should be the only possibility left.
+///                  Q_ASSERT(typeInfo.pointerType == TypeInfo::PointerType::SharedPointer);
+///                  Q_ASSERT(childRecordDefinition.m_upAndDownCasters.m_pointerUpcaster);
+///                  valueToSet = QVariant::fromValue(
+///                     childRecordDefinition.m_upAndDownCasters.m_pointerUpcaster(processedChildren.first())
+///                  );
+///               }
+///
+///            } else {
+///               //
+///               // Multi-item setters all take a list of shared pointers
+///               //
+///               // At this point we have QList<std::shared_ptr<NamedEntity>>, which the setter will not be able to
+///               // handle.  We need to convert it to a list of upcast elements -- eg QList<shared_ptr<Hop>>
+///               //
+///               Q_ASSERT(std::holds_alternative<JsonRecordDefinition const *>(fieldDefinition.valueDecoder));
+///               Q_ASSERT(std::get              <JsonRecordDefinition const *>(fieldDefinition.valueDecoder));
+///               JsonRecordDefinition const & childRecordDefinition{
+///                  *std::get<JsonRecordDefinition const *>(fieldDefinition.valueDecoder)
+///               };
+///               Q_ASSERT(childRecordDefinition.m_upAndDownCasters.m_listUpcaster);
+///               valueToSet = childRecordDefinition.m_upAndDownCasters.m_listUpcaster(processedChildren);
+///            }
+///
+///            if (!propertyPath.setValue(*this->m_namedEntity, valueToSet)) {
+///               qCritical() <<
+///                  Q_FUNC_INFO << "Could not write" << propertyPath << "property on" <<
+///                  this->m_recordDefinition.m_namedEntityClassName;
+///                  Q_ASSERT(false);
+///            }
+///         }
+///      }
+///   }
+///
+///   return true;
+///}
 
 [[nodiscard]] bool JsonRecord::loadChildRecord(JsonRecordDefinition::FieldDefinition const & parentFieldDefinition,
                                                JsonRecordDefinition const & childRecordDefinition,

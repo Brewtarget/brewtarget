@@ -172,12 +172,13 @@ void Boil::ensureStandardProfile() {
    // more than one Recipe.
    //
    auto recipe = ObjectStoreWrapper::findFirstMatching<Recipe>([this](Recipe * rec) {return rec->uses(*this);});
+   QString const recipeStrippedName = recipe->strippedName();
 
    auto boilSteps = this->steps();
    if (boilSteps.size() == 0 || boilSteps.at(0)->startTemp_c().value_or(100.0) > Boil::minimumBoilTemperature_c) {
       // We need to add a ramp-up (aka pre-boil) step
-      auto preBoil = std::make_shared<BoilStep>(tr("Pre-boil for %1").arg(recipe->name()));
-      preBoil->setDescription(tr("Automatically-generated pre-boil step for %1").arg(recipe->name()));
+      auto preBoil = std::make_shared<BoilStep>(tr("Pre-boil for %1").arg(recipeStrippedName));
+      preBoil->setDescription(tr("Automatically-generated pre-boil step for %1").arg(recipeStrippedName));
       // Get the starting temperature for the ramp-up from the end temperature of the mash
       double startingTemp = Boil::minimumBoilTemperature_c - 1.0;
       if (recipe->mash()) {
@@ -190,22 +191,22 @@ void Boil::ensureStandardProfile() {
       }
       preBoil->setStartTemp_c(startingTemp);
       preBoil->setEndTemp_c(100.0);
-      this->insertStep(preBoil, 1);
+      this->insert(preBoil, 1);
    }
 
    if (boilSteps.size() < 2 || boilSteps.at(1)->startTemp_c().value_or(0.0) < Boil::minimumBoilTemperature_c) {
       // We need to add a main (aka boil proper) step
-      auto mainBoil = std::make_shared<BoilStep>(tr("Main boil for %1").arg(recipe->name()));
-      mainBoil->setDescription(tr("Automatically-generated boil proper step for %1").arg(recipe->name()));
+      auto mainBoil = std::make_shared<BoilStep>(tr("Main boil for %1").arg(recipeStrippedName));
+      mainBoil->setDescription(tr("Automatically-generated boil proper step for %1").arg(recipeStrippedName));
       mainBoil->setStartTemp_c(100.0);
       mainBoil->setEndTemp_c(100.0);
-      this->insertStep(mainBoil, 2);
+      this->insert(mainBoil, 2);
    }
 
    if (boilSteps.size() < 3 || boilSteps.at(2)->endTemp_c().value_or(100.0) > Boil::minimumBoilTemperature_c) {
       // We need to add a post-boil step
-      auto postBoil = std::make_shared<BoilStep>(tr("Post-boil for %1").arg(recipe->name()));
-      postBoil->setDescription(tr("Automatically-generated post-boil step for %1").arg(recipe->name()));
+      auto postBoil = std::make_shared<BoilStep>(tr("Post-boil for %1").arg(recipeStrippedName));
+      postBoil->setDescription(tr("Automatically-generated post-boil step for %1").arg(recipeStrippedName));
       double endingTemp = 30.0;
       if (recipe->fermentation()) {
          auto fs = recipe->fermentation()->fermentationSteps();
@@ -216,7 +217,7 @@ void Boil::ensureStandardProfile() {
       }
       postBoil->setStartTemp_c(100.0);
       postBoil->setEndTemp_c(endingTemp);
-      this->insertStep(postBoil, 3);
+      this->insert(postBoil, 3);
    }
 
    return;

@@ -204,6 +204,16 @@ namespace {
    }
 
    /**
+    * \brief Converts a QVariant to a QString, but with a special value for a null QVariant
+    */
+   QString VariantToString(QVariant const & val) {
+      if (val.isNull()) {
+         return "[NULL]";
+      }
+      return val.toString();
+   }
+
+   /**
     * \brief Return a string containing all the bound values on a query.   This is quite a useful thing to have logged
     *        when you get an error!
     *
@@ -216,17 +226,18 @@ namespace {
 
       //
       // In Qt5, QSqlQuery::boundValues() returned a QMap<QString, QVariant> giving you the bound value names and
-      // values.  In Qt6, QSqlQuery::boundValues() returns QVariantList of just the values.  We have to wait until all
-      // our platforms support Qt 6.6, when QSqlQuery::boundValueNames() and QSqlQuery::boundValueName() are introduced,
-      // before we can write, say:
-      //    for (auto const & bvn : sqlQuery.boundValueNames()) {
-      //       resultAsStream << bvn << ": " << sqlQuery.boundValue(bvn).toString() << "\n";
-      //    }
+      // values.  In Qt6, QSqlQuery::boundValues() returns QVariantList of just the values.  It is not until Qt 6.6 that
+      // QSqlQuery::boundValueNames() and QSqlQuery::boundValueName() are introduced.
       //
-      for (auto const & bv : sqlQuery.boundValues()) {
-         resultAsStream << bv.toString() << "\n";
+#if QT_VERSION >= QT_VERSION_CHECK(6, 6, 0)
+      for (auto const & bvn : sqlQuery.boundValueNames()) {
+         resultAsStream << bvn << ": " << VariantToString(sqlQuery.boundValue(bvn)) << "\n";
       }
-
+#else
+      for (auto const & bv : sqlQuery.boundValues()) {
+         resultAsStream << VariantToString(bv) << "\n";
+      }
+#endif
       return result;
    }
 
@@ -1280,6 +1291,7 @@ public:
             qCritical() <<
                Q_FUNC_INFO << "Wrote new" << object.metaObject()->className() << " to database (with primary key " <<
                primaryKeyInDb << ") but it already had primary key" << currentPrimaryKey;
+            qCritical().noquote() << Q_FUNC_INFO << Logging::getStackTrace();
             Q_ASSERT(false); // Stop here on debug build
          }
       }
@@ -1353,6 +1365,10 @@ ObjectStore::~ObjectStore() {
    //   Q_FUNC_INFO << "Destruct of object store for primary table" << this->pimpl->primaryTable.tableName <<
    //   "(containing" << this->pimpl->allObjects.size() << "objects)";
    return;
+}
+
+QString ObjectStore::name() const {
+   return this->pimpl->m_className;
 }
 
 ObjectStore::State ObjectStore::state() const {
@@ -2005,6 +2021,7 @@ std::shared_ptr<QObject> ObjectStore::defaultHardDelete(int id) {
    if (!sqlQuery.exec()) {
       qCritical() <<
          Q_FUNC_INFO << "Error executing database query " << queryString << ": " << sqlQuery.lastError().text();
+      qCritical().noquote() << Q_FUNC_INFO << Logging::getStackTrace();
       return object;
    }
 

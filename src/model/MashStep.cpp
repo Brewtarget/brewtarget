@@ -25,6 +25,7 @@
 #include "database/ObjectStoreWrapper.h"
 #include "model/NamedParameterBundle.h"
 #include "PhysicalConstants.h"
+#include "utils/AutoCompare.h"
 
 QString MashStep::localisedName() { return tr("Mash Step"); }
 
@@ -54,9 +55,9 @@ bool MashStep::isEqualTo(NamedEntity const & other) const {
    MashStep const & rhs = static_cast<MashStep const &>(other);
    // Base class will already have ensured names are equal
    return (
-      this->m_type         == rhs.m_type         &&
-      this->m_amount_l     == rhs.m_amount_l     &&
-      this->m_infuseTemp_c == rhs.m_infuseTemp_c &&
+      AUTO_LOG_COMPARE(this, rhs, m_type        ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_amount_l    ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_infuseTemp_c) &&
       // Parent classes have to be equal too
       this->Step::isEqualTo(rhs) &&
       this->StepBase<MashStep,
@@ -183,6 +184,9 @@ bool MashStep::isTemperature() const {
 bool MashStep::isDecoction() const {
    return (m_type == MashStep::Type::Decoction);
 }
+
+// Check that IsBaseClassTemplateOf is working
+static_assert(IsBaseClassTemplateOf<EnumeratedBase, MashStep>);
 
 // Insert boiler-plate wrapper functions that call down to StepBase
 STEP_COMMON_CODE(Mash)
