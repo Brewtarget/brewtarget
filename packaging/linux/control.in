@@ -141,10 +141,10 @@ Depends: \
    libc6        (>= 2.35  ), \
    libc6-dev    (>= 2.35  ), \
    libc6-i386   (>= 2.35  ), \
-   lib32gcc-s1  (>= 12.3.0), \
-   lib32stdc++6 (>= 12.3.0), \
-   libgcc-s1    (>= 12.3.0), \
-   libstdc++6   (>= 12.3.0), \
+   lib32gcc-s1  (>= 12.2.0), \
+   lib32stdc++6 (>= 12.2.0), \
+   libgcc-s1    (>= 12.2.0), \
+   libstdc++6   (>= 12.2.0), \
    libqt6core6         | libqt6core6t64         (>= 6.2.4 ), \
    libqt6gui6          | libqt6gui6t64          (>= 6.2.4 ), \
    libqt6multimedia6                            (>= 6.2.4 ), \

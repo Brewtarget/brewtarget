@@ -20,14 +20,21 @@ Bug fixes and minor enhancements.
 * None
 
 ### Bug Fixes
+* Brewtarget 4.0.7 Qt6 issue on Ubuntu (libQt6Multimedia.so.6 missing) [861](https://github.com/Brewtarget/brewtarget/issues/861)
+* Update Development Prerequisites to qt6 [892](https://github.com/Brewtarget/brewtarget/issues/892)
 * Combo boxes not displaying properly on Windows [894](https://github.com/Brewtarget/brewtarget/issues/894)
 * Icons Missing [895](https://github.com/Brewtarget/brewtarget/issues/895)
 * Brewtarget 4.0.7 Qt6 issue on Ubuntu (libQt6Multimedia.so.6 missing) [861](https://github.com/Brewtarget/brewtarget/issues/861)
+* Installation of new version results in duplicates of recipes and ingredients [896](https://github.com/Brewtarget/brewtarget/issues/896)
 * Opening user recipe causes crash [897](https://github.com/Brewtarget/brewtarget/issues/897)
 * Copy recipe crash [899](https://github.com/Brewtarget/brewtarget/issues/899)
+* Error in BeerXML recipe export [901](https://github.com/Brewtarget/brewtarget/issues/901)
+* BeerXML imports of our own exports log lots of warnings [902](https://github.com/Brewtarget/brewtarget/issues/902)
+* Buttons not displaying button text [903](https://github.com/Brewtarget/brewtarget/issues/903)
+* Trying to export a folder to BeerXML causes a segfault [905](https://github.com/Brewtarget/brewtarget/issues/905)
 
 ### Release Timestamp
-Sun, 24 Nov 2024 04:00:12 +0100
+Wed, 18 Dec 2024 04:00:12 +0100
 
 ## v4.0.11
 Bug fixes and minor enhancements.
