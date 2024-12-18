@@ -17,6 +17,8 @@
 #define MODEL_INGREDIENTAMOUNT_H
 #pragma once
 
+#include <type_traits>
+
 #include "measurement/Unit.h"
 #include "model/NamedParameterBundle.h"
 #include "utils/CuriouslyRecurringTemplateBase.h"
@@ -140,8 +142,8 @@ protected:
 
 public:
 
-   using AmountType = Measurement::ConstrainedAmount<decltype(IngredientClass::validMeasures),
-                                                     IngredientClass::validMeasures>;
+   using ValidMeasuresType = std::remove_const_t<decltype(IngredientClass::validMeasures)>;
+   using AmountType = Measurement::ConstrainedAmount<ValidMeasuresType, IngredientClass::validMeasures>;
 
    AmountType getAmount() const {
       return this->m_amount;
@@ -223,8 +225,7 @@ public:
    void doSetMeasure (Measurement::PhysicalQuantity const val) {
       // Since Q_ASSERT is a macro, it gets confused by some templated expressions, so we have to have this separate
       // variable
-      bool const measureIsValid = Measurement::isValid<decltype(IngredientClass::validMeasures),
-                                                       IngredientClass::validMeasures>(val);
+      bool const measureIsValid = Measurement::isValid<ValidMeasuresType, IngredientClass::validMeasures>(val);
       Q_ASSERT(measureIsValid);
       this->doSetUnit(&Measurement::Unit::getCanonicalUnit(val));
       return;

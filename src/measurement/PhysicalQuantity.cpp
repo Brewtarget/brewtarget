@@ -153,17 +153,27 @@ EnumStringMapping const Measurement::choiceOfPhysicalQuantityDisplayNames {
 
 // Default case is that PhysicalQuantities holds PhysicalQuantity; specialisations are for all ChoiceOfPhysicalQuantity
 // possibilities.  Note that, because this is a function template, we are not allowed _partial_ specialisations.
-template<Measurement::PhysicalQuantityConstTypes PQT, PQT pqt> Measurement::PhysicalQuantity Measurement::defaultPhysicalQuantity() {
+template<Measurement::PhysicalQuantityTypes PQT, PQT const pqt> Measurement::PhysicalQuantity Measurement::defaultPhysicalQuantity() {
    return pqt;
 }
-template<> Measurement::PhysicalQuantity Measurement::defaultPhysicalQuantity<Measurement::ChoiceOfPhysicalQuantity const, Measurement::ChoiceOfPhysicalQuantity::Mass_Volume        >() { return Measurement::PhysicalQuantity::Mass             ; }
-template<> Measurement::PhysicalQuantity Measurement::defaultPhysicalQuantity<Measurement::ChoiceOfPhysicalQuantity const, Measurement::ChoiceOfPhysicalQuantity::Mass_Volume_Count  >() { return Measurement::PhysicalQuantity::Mass             ; }
+template<> Measurement::PhysicalQuantity Measurement::defaultPhysicalQuantity<Measurement::ChoiceOfPhysicalQuantity,
+                                                                              Measurement::ChoiceOfPhysicalQuantity::Mass_Volume      >() {
+   return Measurement::PhysicalQuantity::Mass;
+}
+template<> Measurement::PhysicalQuantity Measurement::defaultPhysicalQuantity<Measurement::ChoiceOfPhysicalQuantity,
+                                                                              Measurement::ChoiceOfPhysicalQuantity::Mass_Volume_Count>() {
+   return Measurement::PhysicalQuantity::Mass;
+}
 
 
 Measurement::PhysicalQuantity Measurement::defaultPhysicalQuantity(Measurement::ChoiceOfPhysicalQuantity const val) {
    switch (val) {
-      case Measurement::ChoiceOfPhysicalQuantity::Mass_Volume        : return Measurement::defaultPhysicalQuantity<Measurement::ChoiceOfPhysicalQuantity const, Measurement::ChoiceOfPhysicalQuantity::Mass_Volume        >();
-      case Measurement::ChoiceOfPhysicalQuantity::Mass_Volume_Count  : return Measurement::defaultPhysicalQuantity<Measurement::ChoiceOfPhysicalQuantity const, Measurement::ChoiceOfPhysicalQuantity::Mass_Volume_Count  >();
+      case Measurement::ChoiceOfPhysicalQuantity::Mass_Volume      :
+         return Measurement::defaultPhysicalQuantity<Measurement::ChoiceOfPhysicalQuantity,
+                                                     Measurement::ChoiceOfPhysicalQuantity::Mass_Volume      >();
+      case Measurement::ChoiceOfPhysicalQuantity::Mass_Volume_Count:
+         return Measurement::defaultPhysicalQuantity<Measurement::ChoiceOfPhysicalQuantity,
+                                                     Measurement::ChoiceOfPhysicalQuantity::Mass_Volume_Count>();
    }
    // Should be unreachable
    Q_ASSERT(false);
@@ -174,13 +184,13 @@ Measurement::PhysicalQuantity Measurement::defaultPhysicalQuantity(Measurement::
 template<Measurement::PhysicalQuantity const pq> bool isValid(Measurement::PhysicalQuantity const physicalQuantity) {
    return physicalQuantity == pq;
 }
-template<> bool Measurement::isValid<Measurement::ChoiceOfPhysicalQuantity const,
-                                     Measurement::ChoiceOfPhysicalQuantity::Mass_Volume        >(Measurement::PhysicalQuantity const physicalQuantity) {
+template<> bool Measurement::isValid<Measurement::ChoiceOfPhysicalQuantity,
+                                     Measurement::ChoiceOfPhysicalQuantity::Mass_Volume      >(Measurement::PhysicalQuantity const physicalQuantity) {
    return (physicalQuantity == Measurement::PhysicalQuantity::Mass  ||
            physicalQuantity == Measurement::PhysicalQuantity::Volume);
 }
-template<> bool Measurement::isValid<Measurement::ChoiceOfPhysicalQuantity const,
-                                     Measurement::ChoiceOfPhysicalQuantity::Mass_Volume_Count  >(Measurement::PhysicalQuantity const physicalQuantity) {
+template<> bool Measurement::isValid<Measurement::ChoiceOfPhysicalQuantity,
+                                     Measurement::ChoiceOfPhysicalQuantity::Mass_Volume_Count>(Measurement::PhysicalQuantity const physicalQuantity) {
    return (physicalQuantity == Measurement::PhysicalQuantity::Mass   ||
            physicalQuantity == Measurement::PhysicalQuantity::Volume ||
            physicalQuantity == Measurement::PhysicalQuantity::Count  );
@@ -189,8 +199,12 @@ template<> bool Measurement::isValid<Measurement::ChoiceOfPhysicalQuantity const
 bool Measurement::isValid(Measurement::ChoiceOfPhysicalQuantity const choiceOfPhysicalQuantity,
                           Measurement::PhysicalQuantity const physicalQuantity) {
    switch (choiceOfPhysicalQuantity) {
-      case Measurement::ChoiceOfPhysicalQuantity::Mass_Volume        : return Measurement::isValid<Measurement::ChoiceOfPhysicalQuantity const, Measurement::ChoiceOfPhysicalQuantity::Mass_Volume        >(physicalQuantity);
-      case Measurement::ChoiceOfPhysicalQuantity::Mass_Volume_Count  : return Measurement::isValid<Measurement::ChoiceOfPhysicalQuantity const, Measurement::ChoiceOfPhysicalQuantity::Mass_Volume_Count  >(physicalQuantity);
+      case Measurement::ChoiceOfPhysicalQuantity::Mass_Volume       :
+         return Measurement::isValid<Measurement::ChoiceOfPhysicalQuantity,
+                                     Measurement::ChoiceOfPhysicalQuantity::Mass_Volume      >(physicalQuantity);
+      case Measurement::ChoiceOfPhysicalQuantity::Mass_Volume_Count :
+         return Measurement::isValid<Measurement::ChoiceOfPhysicalQuantity,
+                                     Measurement::ChoiceOfPhysicalQuantity::Mass_Volume_Count>(physicalQuantity);
    }
 
    // Should be unreachable
