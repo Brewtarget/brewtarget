@@ -2344,9 +2344,12 @@ def doPackage():
             #'Qt6Sql'         ,
             #'Qt6Widgets'     ,
             #
-            # Following is not handled by windeployqt.  The application will install and run without it, but it just
-            # won't show any icons.
-            'Qt6Svg' , # Needed to display .svg icons
+            # Following are not handled by windeployqt.  The application will install and run without them, but it just
+            # won't show any .svg icons (and won't log any errors about them either).
+            # See also https://stackoverflow.com/questions/76047551/icons-shown-in-qt5-not-showing-in-qt6
+            #
+            'Qt6SvgWidgets', # See https://doc.qt.io/qt-6/qsvgwidget.html
+            'Qt6Svg'       , # Needed for Qt6SvgWidgets.dll to display .svg icons
             #
             #
             'libb2'               , # BLAKE hash functions -- https://en.wikipedia.org/wiki/BLAKE_(hash_function)
@@ -2378,6 +2381,7 @@ def doPackage():
             'libpng16'     , # Official PNG reference library -- see http://www.libpng.org/pub/png/libpng.html
             'libsqlite3'   , # Need this IN ADDITION to bin/sqldrivers/qsqlite.dll, which gets installed by windeployqt
             'libstdc++'    ,
+            'librsvg'      , # SVG rendering library -- see https://wiki.gnome.org/Projects/LibRsvg
             'libwinpthread',
             'libxalan-c'   ,
             'libxalanMsg'  ,

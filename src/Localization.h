@@ -31,18 +31,18 @@ class NamedEntity;
 
 namespace Localization {
    struct LanguageInfo {
-      int                qtLanguageCode;     // From enum QLocale::Language
-      QString            iso639_1Code;       // The two-letter language code used by Localization::setLanguage()
-      QIcon              countryFlag;        // Yes, we know some languages are spoken in more than one country...
-      char const    *    nameInEnglish;
-      QString            nameInCurrentLang;  // Don't strictly need to store this, but having the hard-coded tr() calls
-                                             // in the initialisation flag up what language names need translating
+      int          qtLanguageCode;     // From enum QLocale::Language
+      QString      iso639_1Code;       // The two-letter language code used by Localization::setLanguage()
+      QIcon        countryFlag;        // Yes, we know some languages are spoken in more than one country...
+      char const * nameInEnglish;
+      QString      nameInDefaultLang;  // Don't strictly need to store this, but having the hard-coded tr() calls
+                                       // in the initialisation flag up what language names need translating
    };
 
    /**
-    * \brief This list holds info about the languages we support
+    * \brief Returns a reference to the list holding info about the languages we support
     */
-   extern QVector<LanguageInfo> languageInfo;
+   QVector<LanguageInfo> const & languageInfo();
 
    /**
     * \brief Returns the locale to use for formatting numbers etc.  Usually this is the same as \c QLocale::system(),

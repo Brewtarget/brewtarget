@@ -582,7 +582,6 @@
   <tabstop>lineEdit_maxTemperature</tabstop>
   <tabstop>comboBox_yeastFlocculation</tabstop>
   <tabstop>lineEdit_maxReuse</tabstop>
-  <tabstop>lineEdit_timesCultured</tabstop>
   <tabstop>pushButton_new</tabstop>
   <tabstop>pushButton_save</tabstop>
   <tabstop>pushButton_cancel</tabstop>

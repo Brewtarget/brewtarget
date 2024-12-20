@@ -13,6 +13,18 @@ happens, so I'm now setting it to a slightly arbitrary time early in the morning
 * Additional methods for calculating IBU
 * We'll list other new features here...
 
+## v4.0.13
+Bug fixes and minor enhancements.
+
+### New Features
+* None
+
+### Bug Fixes
+* None
+
+### Release Timestamp
+Wed, 18 Dec 2024 04:00:13 +0100
+
 ## v4.0.12
 Bug fixes and minor enhancements.
 
@@ -24,7 +36,6 @@ Bug fixes and minor enhancements.
 * Update Development Prerequisites to qt6 [892](https://github.com/Brewtarget/brewtarget/issues/892)
 * Combo boxes not displaying properly on Windows [894](https://github.com/Brewtarget/brewtarget/issues/894)
 * Icons Missing [895](https://github.com/Brewtarget/brewtarget/issues/895)
-* Brewtarget 4.0.7 Qt6 issue on Ubuntu (libQt6Multimedia.so.6 missing) [861](https://github.com/Brewtarget/brewtarget/issues/861)
 * Installation of new version results in duplicates of recipes and ingredients [896](https://github.com/Brewtarget/brewtarget/issues/896)
 * Opening user recipe causes crash [897](https://github.com/Brewtarget/brewtarget/issues/897)
 * Copy recipe crash [899](https://github.com/Brewtarget/brewtarget/issues/899)
