@@ -235,8 +235,6 @@ public slots:
    void exportRecipe();
    //! \brief Display file selection dialog and import BeerXML/BeerJSON files.
    void importFiles();
-   //! \brief Create a duplicate of the current recipe.
-   void copyRecipe();
 
    //! \brief Implements "> Edit > Undo"
    void editUndo();

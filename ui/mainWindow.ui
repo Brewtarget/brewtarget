@@ -1940,7 +1940,7 @@
      <addaction name="actionRestore_Database"/>
     </widget>
     <addaction name="actionNewRecipe"/>
-    <addaction name="actionCopy_Recipe"/>
+    <addaction name="actionCopySelected"/>
     <addaction name="separator"/>
     <addaction name="actionImportFromXml"/>
     <addaction name="actionExportToXml"/>
@@ -2239,13 +2239,13 @@
     <string>Restore Database</string>
    </property>
   </action>
-  <action name="actionCopy_Recipe">
+  <action name="actionCopySelected">
    <property name="icon">
     <iconset resource="../resources.qrc">
      <normaloff>:/images/edit-copy.png</normaloff>:/images/edit-copy.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;Copy Recipe</string>
+    <string>&amp;Copy Selected Item(s)</string>
    </property>
   </action>
   <action name="actionPriming_Calculator">

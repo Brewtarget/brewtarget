@@ -1159,7 +1159,7 @@ void MainWindow::DeleteMainWindow() {
 void MainWindow::setupShortCuts()
 {
    actionNewRecipe->setShortcut(QKeySequence::New);
-   actionCopy_Recipe->setShortcut(QKeySequence::Copy);
+   actionCopySelected->setShortcut(QKeySequence::Copy);
    actionDeleteSelected->setShortcut(QKeySequence::Delete);
    actionUndo->setShortcut(QKeySequence::Undo);
    actionRedo->setShortcut(QKeySequence::Redo);
@@ -1412,7 +1412,7 @@ void MainWindow::setupTriggers() {
    connect(actionHydrometer_Temp_Adjustment, &QAction::triggered, this->pimpl->m_hydrometerTool.get()       , &QWidget::show                     ); // > Tools > Hydrometer Temp Adjustment
    connect(actionAlcohol_Percentage_Tool   , &QAction::triggered, this->pimpl->m_alcoholTool.get()          , &QWidget::show                     ); // > Tools > Alcohol
    connect(actionOG_Correction_Help        , &QAction::triggered, this->pimpl->m_ogAdjuster.get()           , &QWidget::show                     ); // > Tools > OG Correction Help
-   connect(actionCopy_Recipe               , &QAction::triggered, this                                      , &MainWindow::copyRecipe            ); // > File > Copy Recipe
+   connect(actionCopySelected              , &QAction::triggered, this                                      , &MainWindow::copySelected          ); // > File > Copy Selected
    connect(actionPriming_Calculator        , &QAction::triggered, this->pimpl->m_primingDialog.get()        , &QWidget::show                     ); // > Tools > Priming Calculator
    connect(actionStrikeWater_Calculator    , &QAction::triggered, this->pimpl->m_strikeWaterDialog.get()    , &QWidget::show                     ); // > Tools > Strike Water Calculator
    connect(actionRefractometer_Tools       , &QAction::triggered, this->pimpl->m_refractoDialog.get()       , &QWidget::show                     ); // > Tools > Refractometer Tools
@@ -2995,18 +2995,6 @@ void MainWindow::closeEvent(QCloseEvent* /*event*/) {
    return;
 }
 
-void MainWindow::copyRecipe() {
-   QString name = QInputDialog::getText( this, tr("Copy Recipe"), tr("Enter a unique name for the copy.") );
-   if (name.isEmpty()) {
-      return;
-   }
-
-   auto newRec = std::make_shared<Recipe>(*this->pimpl->m_recipeObs); // Create a deep copy
-   newRec->setName(name);
-   ObjectStoreTyped<Recipe>::getInstance().insert(newRec);
-   return;
-}
-
 void MainWindow::saveMash() {
    if (!this->pimpl->m_recipeObs || !this->pimpl->m_recipeObs->mash()) {
       return;
@@ -3088,21 +3076,23 @@ void MainWindow::setupContextMenu() {
    return;
 }
 
-void MainWindow::copySelected() {
-///   QModelIndexList selected;
-   TreeView* active = qobject_cast<TreeView*>(tabWidget_Trees->currentWidget()->focusWidget());
-   active->copySelected(active->selectionModel()->selectedRows());
+void MainWindow::MainWindow::copySelected() {
+   TreeView * activeTreeView = qobject_cast<TreeView *>(this->tabWidget_Trees->currentWidget()->focusWidget());
+   if (activeTreeView) {
+      QModelIndexList selected = activeTreeView->selectionModel()->selectedRows();
+      activeTreeView->copySelected(selected);
+   }
    return;
 }
 
 void MainWindow::exportSelected() {
-   TreeView const * active = qobject_cast<TreeView*>(this->tabWidget_Trees->currentWidget()->focusWidget());
-   if (active == nullptr) {
+   TreeView const * activeTreeView = qobject_cast<TreeView*>(this->tabWidget_Trees->currentWidget()->focusWidget());
+   if (!activeTreeView) {
       qDebug() << Q_FUNC_INFO << "No active tree so can't get a selection";
       return;
    }
 
-   QModelIndexList selected = active->selectionModel()->selectedRows();
+   QModelIndexList selected = activeTreeView->selectionModel()->selectedRows();
    if (selected.count() == 0) {
       qDebug() << Q_FUNC_INFO << "Nothing selected, so nothing to export";
       return;
@@ -3127,7 +3117,7 @@ void MainWindow::exportSelected() {
 
    int count = 0;
    for (auto & selection : selected) {
-      auto nodeType = active->type(selection);
+      auto nodeType = activeTreeView->type(selection);
       if (!nodeType) {
          qWarning() << Q_FUNC_INFO << "Unknown type for selection" << selection;
       } else {
