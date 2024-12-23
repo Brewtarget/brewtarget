@@ -2325,6 +2325,9 @@ def doPackage():
          # version number in the library name because we really are looking for a specific version or there are always
          # multiple versions)  It's not super pretty, but it should work.
          #
+         # Note that there are libraries with names of form 'libfoo-Y-X.dll'.  For the moment, we require the '-Y' part
+         # to be included in the list below, rather than adding more logic to deduce it.
+         #
          # Just to keep us on our toes, the Python os module has two similarly-named but different things:
          #    - os.pathsep is the separator between paths (usually ';' or ':') eg in the PATH environment variable
          #    - os.sep is the separator between directories (usually '/' or '\\') in a path
@@ -2383,7 +2386,7 @@ def doPackage():
             'libpng16'     , # Official PNG reference library -- see http://www.libpng.org/pub/png/libpng.html
             'libsqlite3'   , # Need this IN ADDITION to bin/sqldrivers/qsqlite.dll, which gets installed by windeployqt
             'libstdc++'    ,
-            'librsvg'      , # SVG rendering library -- see https://wiki.gnome.org/Projects/LibRsvg
+            'librsvg-2'    , # SVG rendering library -- see https://wiki.gnome.org/Projects/LibRsvg
             'libwinpthread',
             'libxalan-c'   ,
             'libxalanMsg'  ,

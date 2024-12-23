@@ -20,7 +20,9 @@ Bug fixes and minor enhancements.
 * None
 
 ### Bug Fixes
-* None
+* Buttons not displaying icons on Windows, and some missing button text [903](https://github.com/Brewtarget/brewtarget/issues/903)
+* Country flags not shown on Windows [907](https://github.com/Brewtarget/brewtarget/issues/907)
+* Ctrl-C copied recipe not shown in correct folder until after restart [909](https://github.com/Brewtarget/brewtarget/issues/909)
 
 ### Release Timestamp
 Wed, 18 Dec 2024 04:00:13 +0100
