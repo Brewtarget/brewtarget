@@ -58,7 +58,6 @@ public:
 private:
    void postReadFieldsFromEditItem(std::optional<QString> propName);
    double calcBatchSize();
-
 };
 
 #endif

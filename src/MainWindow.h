@@ -291,7 +291,11 @@ public slots:
    void doOrRedoUpdate(QUndoCommand * update);
 
     //! \brief to lock or not was never the question before now.
+#if QT_VERSION >= QT_VERSION_CHECK(6, 7, 0)
+   void lockRecipe(Qt::CheckState state);
+#else
    void lockRecipe(int state);
+#endif
    //! \brief prepopulate the ancestorDialog when the menu is selected
    void setAncestor();
 

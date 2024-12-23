@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * PitchDialog.cpp is part of Brewtarget, and is copyright the following authors 2009-2023:
+ * PitchDialog.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
  *   • A.J. Drobnich <aj.drobnich@gmail.com>
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Matt Young <mfsy@yahoo.com>
@@ -52,7 +52,11 @@ PitchDialog::PitchDialog(QWidget* parent) : QDialog(parent) {
    connect(this->spinBox_VialsPitched,        QOverload<int>::of(&QSpinBox::valueChanged),         this, &PitchDialog::calculate              );
    connect(this->comboBox_AerationMethod,     QOverload<int>::of(&QComboBox::currentIndexChanged), this, &PitchDialog::calculate              );
    connect(this->dateEdit_ProductionDate,     &QDateTimeEdit::dateChanged,                         this, &PitchDialog::updateViabilityFromDate);
-   connect(this->checkBox_CalculateViability, &QCheckBox::stateChanged,                            this, &PitchDialog::toggleViabilityFromDate);
+#if QT_VERSION >= QT_VERSION_CHECK(6, 7, 0)
+   connect(this->checkBox_CalculateViability, &QCheckBox::checkStateChanged,                       this, &PitchDialog::toggleViabilityFromDate);
+#else
+   connect(this->checkBox_CalculateViability, &QCheckBox::stateChanged     ,                       this, &PitchDialog::toggleViabilityFromDate);
+#endif
 
    // Dates are a little more cranky
    this->updateProductionDate();
@@ -143,7 +147,11 @@ void PitchDialog::updateShownPitchRate(int percent) {
  * Toggles whether or not the viability box and date edit
  * is enabled or disabled.
  */
+#if QT_VERSION >= QT_VERSION_CHECK(6, 7, 0)
+void PitchDialog::toggleViabilityFromDate(Qt::CheckState state) {
+#else
 void PitchDialog::toggleViabilityFromDate(int state) {
+#endif
    if (state == Qt::Unchecked) {
       // If the box is not checked, disable the date and allow
       // the user to manually set the viability.

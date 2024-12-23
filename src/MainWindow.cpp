@@ -1165,9 +1165,13 @@ void MainWindow::setupShortCuts()
    actionRedo->setShortcut(QKeySequence::Redo);
 }
 
-void MainWindow::setUpStateChanges()
-{
-   connect( checkBox_locked, &QCheckBox::stateChanged, this, &MainWindow::lockRecipe );
+void MainWindow::setUpStateChanges() {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 7, 0)
+   connect(checkBox_locked, &QCheckBox::checkStateChanged, this, &MainWindow::lockRecipe);
+#else
+   connect(checkBox_locked, &QCheckBox::stateChanged     , this, &MainWindow::lockRecipe);
+#endif
+   return;
 }
 
 // Any manipulation of CSS for the MainWindow should be in here

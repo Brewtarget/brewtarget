@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * PitchDialog.h is part of Brewtarget, and is copyright the following authors 2009-2021:
+ * PitchDialog.h is part of Brewtarget, and is copyright the following authors 2009-2024:
  *   • A.J. Drobnich <aj.drobnich@gmail.com>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -47,7 +47,11 @@ public:
 public slots:
    void calculate();
    void updateShownPitchRate(int percent);
+#if QT_VERSION >= QT_VERSION_CHECK(6, 7, 0)
+   void toggleViabilityFromDate(Qt::CheckState state);
+#else
    void toggleViabilityFromDate(int state);
+#endif
    void updateViabilityFromDate(QDate date);
 
    void updateProductionDate();
