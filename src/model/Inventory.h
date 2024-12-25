@@ -90,33 +90,12 @@ public:
 
    //=================================================== PROPERTIES ====================================================
    Q_PROPERTY(int    ingredientId     READ ingredientId     WRITE setIngredientId    )
-   /**
-    * These properties are defined here with virtual accessors.  Child classes actually get the implementations by
-    * inheriting from \c IngredientAmount.
-    */
-   Q_PROPERTY(Measurement::Amount           amount    READ amount     WRITE setAmount  )
-   Q_PROPERTY(double                        quantity  READ quantity   WRITE setQuantity)
-   Q_PROPERTY(Measurement::Unit const *     unit      READ unit       WRITE setUnit    )
-   Q_PROPERTY(Measurement::PhysicalQuantity measure   READ measure    WRITE setMeasure )
-   Q_PROPERTY(bool                          isWeight  READ isWeight   WRITE setIsWeight)
 
    //============================================ "GETTER" MEMBER FUNCTIONS ============================================
    int ingredientId() const;
 
-   virtual Measurement::Amount           amount  () const = 0;
-   virtual double                        quantity() const = 0;
-   virtual Measurement::Unit const *     unit    () const = 0;
-   virtual Measurement::PhysicalQuantity measure () const = 0;
-   virtual bool                          isWeight() const = 0;
-
    //============================================ "SETTER" MEMBER FUNCTIONS ============================================
    void setIngredientId(int const val);
-
-   virtual void setAmount  (Measurement::Amount           const & val) = 0;
-   virtual void setQuantity(double                        const   val) = 0;
-   virtual void setUnit    (Measurement::Unit const *     const   val) = 0;
-   virtual void setMeasure (Measurement::PhysicalQuantity const   val) = 0;
-   virtual void setIsWeight(bool                          const   val) = 0;
 
    //============================================= OTHER MEMBER FUNCTIONS ==============================================
 

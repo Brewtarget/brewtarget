@@ -1813,7 +1813,11 @@ void MainWindow::setRecipe(Recipe* recipe) {
 }
 
 // When a recipe is locked, many fields need to be disabled.
+#if QT_VERSION >= QT_VERSION_CHECK(6, 7, 0)
+void MainWindow::lockRecipe(Qt::CheckState state) {
+#else
 void MainWindow::lockRecipe(int state) {
+#endif
    if (!this->pimpl->m_recipeObs) {
       return;
    }

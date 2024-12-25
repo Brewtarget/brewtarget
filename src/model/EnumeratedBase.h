@@ -226,9 +226,6 @@ TypeLookup const EnumeratedBase<Derived, Owner>::typeLookup {
  *        to this base class.
  *
  *        Note we have to be careful about comment formats in macro definitions.
- *
- *        In older versions of Qt, we didn't used to be able to put Q_PROPERTY inside our own macro, but, thankfully,
- *        the Qt MOC (meta object compiler) now expands "normal" macros before processing its own "special" ones.
  */
 #define ENUMERATED_COMMON_DECL(Derived, Owner) \
    /* This allows StepBase to call protected and private members of Derived */                \
