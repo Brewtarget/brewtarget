@@ -92,33 +92,10 @@ public:
    //! \brief Get the currently observed recipe.
    Recipe* currentRecipe();
 
-public:
-   //! \brief Doing updates via this method makes them undoable (and redoable).  This is the simplified version
-   //         which suffices for modifications to most individual non-relational attributes.
-   template<typename T>
-   void doOrRedoUpdate(NamedEntity & updatee,
-                       TypeInfo const & typeInfo,
-                       T newValue,
-                       QString const & description,
-                       [[maybe_unused]] QUndoCommand * parent = nullptr) {
-      this->doOrRedoUpdate(new SimpleUndoableUpdate(updatee, typeInfo, newValue, description));
-      return;
-   }
+   //! \brief Set whether undo / redo commands are enabled
+   void setUndoRedoEnable();
 
-   /**
-    * \brief This version of \c doOrRedoUpdate is needed when updating a property that has (or might have) a non-trivial
-    *        \c PropertyPath
-    */
-   template<typename T>
-   void doOrRedoUpdate(NamedEntity & updatee,
-                       PropertyPath const & propertyPath,
-                       TypeInfo const & typeInfo,
-                       T newValue,
-                       QString const & description,
-                       [[maybe_unused]] QUndoCommand * parent = nullptr) {
-      this->doOrRedoUpdate(new SimpleUndoableUpdate(updatee, propertyPath, typeInfo, newValue, description));
-      return;
-   }
+public:
 
    /**
     * \brief Add given \c Fermentable / \c Hop / \c Misc / \c Yeast to the Recipe
@@ -274,7 +251,7 @@ public slots:
    void showEquipmentEditor();
    void showStyleEditor();
 
-   void updateEquipmentButton();
+   void updateEquipmentSelector();
 
    //! \brief Set all the things based on a drop event
    void droppedRecipeEquipment(Equipment *kit);
@@ -285,10 +262,6 @@ public slots:
    void droppedRecipeYeast(QList<Yeast*>yeasts);
 
    void versionedRecipe(Recipe* descendant);
-
-   //! \brief Doing updates via this method makes them undoable (and redoable).  This is the most generic version
-   //         which requires the caller to construct a QUndoCommand.
-   void doOrRedoUpdate(QUndoCommand * update);
 
     //! \brief to lock or not was never the question before now.
 #if QT_VERSION >= QT_VERSION_CHECK(6, 7, 0)
@@ -321,10 +294,6 @@ public:
 protected:
    //! \brief Overrides \c QWidget::closeEvent
    virtual void closeEvent(QCloseEvent* event) override;
-
-private slots:
-   //! \brief Set whether undo / redo commands are enabled
-   void setUndoRedoEnable();
 
 signals:
    /**

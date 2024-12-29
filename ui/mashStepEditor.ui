@@ -57,7 +57,7 @@
       </widget>
      </item>
      <item row="0" column="5">
-      <widget class="BtComboBox" name="comboBox_mashStepType">
+      <widget class="BtComboBoxEnum" name="comboBox_mashStepType">
        <property name="toolTip">
         <string>Type</string>
        </property>
@@ -316,9 +316,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>BtComboBox</class>
+   <class>BtComboBoxEnum</class>
    <extends>QComboBox</extends>
-   <header>widgets/BtComboBox.h</header>
+   <header>widgets/BtComboBoxEnum.h</header>
   </customwidget>
   <customwidget>
    <class>InfoButton</class>

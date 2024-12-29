@@ -25,26 +25,10 @@
  ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "tableModels/HopTableModel.h"
 
-#include <QAbstractItemModel>
-#include <QComboBox>
 #include <QHeaderView>
-#include <QItemDelegate>
-#include <QLineEdit>
 #include <QModelIndex>
-#include <QString>
-#include <QStyleOptionViewItem>
 #include <QVariant>
 #include <QWidget>
-
-#include "database/ObjectStoreWrapper.h"
-#include "Localization.h"
-#include "MainWindow.h"
-#include "measurement/Measurement.h"
-#include "measurement/Unit.h"
-#include "model/Inventory.h"
-#include "model/Recipe.h"
-#include "PersistentSettings.h"
-#include "utils/BtStringConst.h"
 
 HopTableModel::HopTableModel(QTableView * parent, bool editable) :
    BtTableModel{
@@ -62,7 +46,6 @@ HopTableModel::HopTableModel(QTableView * parent, bool editable) :
    TableModelBase<HopTableModel, Hop>{},
    showIBUs(false) {
    this->rows.clear();
-   this->setObjectName("hopTable");
 
    QHeaderView * headerView = m_parentTableWidget->horizontalHeader();
    connect(headerView, &QWidget::customContextMenuRequested, this, &HopTableModel::contextMenu);
@@ -81,41 +64,21 @@ void HopTableModel::setShowIBUs(bool var) {
    showIBUs = var;
 }
 
-QVariant HopTableModel::data(const QModelIndex & index, int role) const {
-   if (!this->indexAndRoleOk(index, role)) {
-      return QVariant();
-   }
-
-   // No special handling required for any of our columns
-   return this->readDataFromModel(index, role);
+QVariant HopTableModel::data(QModelIndex const & index, int role) const {
+   return this->doDataDefault(index, role);
 }
 
-Qt::ItemFlags HopTableModel::flags(const QModelIndex & index) const {
-   auto const columnIndex = static_cast<HopTableModel::ColumnIndex>(index.column());
-   if (columnIndex == HopTableModel::ColumnIndex::Name) {
-      return Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
-   }
-   if (columnIndex == HopTableModel::ColumnIndex::TotalInventory) {
-      return Qt::ItemIsEnabled | Qt::ItemIsEditable;
-   }
-   return Qt::ItemIsSelectable |
-          (this->m_editable ? Qt::ItemIsEditable : Qt::NoItemFlags) | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
+Qt::ItemFlags HopTableModel::flags(QModelIndex const & index) const {
+   return TableModelHelper::doFlags<HopTableModel>(
+      index,
+      this->m_editable,
+      {{HopTableModel::ColumnIndex::TotalInventory, Qt::ItemIsEditable}}
+   );
 }
 
-bool HopTableModel::setData(const QModelIndex & index, const QVariant & value, int role) {
-   if (!this->indexAndRoleOk(index, role)) {
-      return false;
-   }
-
-   // No special handling required for any of our columns...
-   bool const retVal = this->writeDataToModel(index, value, role);
-
-   // ...but we might need to re-show header IBUs
-   if (retVal) {
-      headerDataChanged(Qt::Vertical, index.row(), index.row());
-   }
-
-   return retVal;
+bool HopTableModel::setData(QModelIndex const & index, QVariant const & value, int role) {
+   // Template parameter is true as we might need to re-show header IBUs
+   return this->doSetDataDefault<true>(index, value, role);
 }
 
 // Insert the boiler-plate stuff that we cannot do in TableModelBase

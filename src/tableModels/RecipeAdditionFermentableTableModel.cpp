@@ -26,26 +26,16 @@
  ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "tableModels/RecipeAdditionFermentableTableModel.h"
 
-#include <QAbstractItemModel>
-#include <QComboBox>
 #include <QHeaderView>
-#include <QItemDelegate>
-#include <QLineEdit>
 #include <QModelIndex>
 #include <QString>
-#include <QStyleOptionViewItem>
 #include <QVariant>
 #include <QWidget>
 
-#include "database/ObjectStoreWrapper.h"
-#include "Localization.h"
-#include "MainWindow.h"
 #include "measurement/Measurement.h"
 #include "measurement/Unit.h"
 #include "model/Inventory.h"
 #include "model/Recipe.h"
-#include "PersistentSettings.h"
-#include "utils/BtStringConst.h"
 
 RecipeAdditionFermentableTableModel::RecipeAdditionFermentableTableModel(QTableView * parent, bool editable) :
    BtTableModelRecipeObserver{
@@ -78,7 +68,6 @@ RecipeAdditionFermentableTableModel::RecipeAdditionFermentableTableModel(QTableV
    displayPercentages(false),
    totalFermMass_kg(0) {
    this->rows.clear();
-   this->setObjectName("fermentableAdditionTable");
 
    QHeaderView * headerView = m_parentTableWidget->horizontalHeader();
    connect(headerView, &QWidget::customContextMenuRequested, this, &RecipeAdditionFermentableTableModel::contextMenu);
@@ -110,13 +99,8 @@ void RecipeAdditionFermentableTableModel::setDisplayPercentages(bool var) {
    return;
 }
 
-QVariant RecipeAdditionFermentableTableModel::data(const QModelIndex & index, int role) const {
-   if (!this->indexAndRoleOk(index, role)) {
-      return QVariant();
-   }
-
-   // No special handling required for any of our columns
-   return this->readDataFromModel(index, role);
+QVariant RecipeAdditionFermentableTableModel::data(QModelIndex const & index, int role) const {
+   return this->doDataDefault(index, role);
 }
 
 QVariant RecipeAdditionFermentableTableModel::headerData(int section, Qt::Orientation orientation, int role) const {
@@ -139,32 +123,17 @@ QVariant RecipeAdditionFermentableTableModel::headerData(int section, Qt::Orient
    return QVariant();
 }
 
-Qt::ItemFlags RecipeAdditionFermentableTableModel::flags(const QModelIndex & index) const {
-   auto const columnIndex = static_cast<RecipeAdditionFermentableTableModel::ColumnIndex>(index.column());
-   if (columnIndex == RecipeAdditionFermentableTableModel::ColumnIndex::Name) {
-      return Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
-   }
-   if (columnIndex == RecipeAdditionFermentableTableModel::ColumnIndex::TotalInventory) {
-      return Qt::ItemIsEnabled | Qt::NoItemFlags;
-   }
-   return Qt::ItemIsSelectable |
-          (this->m_editable ? Qt::ItemIsEditable : Qt::NoItemFlags) | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
+Qt::ItemFlags RecipeAdditionFermentableTableModel::flags(QModelIndex const & index) const {
+   return TableModelHelper::doFlags<RecipeAdditionFermentableTableModel>(
+      index,
+      this->m_editable,
+      {{RecipeAdditionFermentableTableModel::ColumnIndex::TotalInventory, Qt::ItemIsEnabled}}
+   );
 }
 
-bool RecipeAdditionFermentableTableModel::setData(const QModelIndex & index, const QVariant & value, int role) {
-   if (!indexAndRoleOk(index, role)) {
-      return false;
-   }
-
-   // No special handling required for any of our columns...
-   bool const retVal = this->writeDataToModel(index, value, role);
-
-   // ...but we might need to re-show header percentages
-   if (retVal) {
-      headerDataChanged(Qt::Vertical, index.row(), index.row());
-   }
-
-   return retVal;
+bool RecipeAdditionFermentableTableModel::setData(QModelIndex const & index, QVariant const & value, int role) {
+   // Template parameter is true as we might need to re-show header percentages
+   return this->doSetDataDefault<true>(index, value, role);
 }
 
 // Insert the boiler-plate stuff that we cannot do in TableModelBase

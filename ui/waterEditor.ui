@@ -194,7 +194,7 @@
         </widget>
        </item>
        <item row="4" column="5">
-        <widget class="BtBoolComboBox" name="boolCombo_alkalinityAsHCO3">
+        <widget class="BtComboBoxBool" name="boolCombo_alkalinityAsHCO3">
          <item>
           <property name="text">
            <string notr="true">HCO3</string>
@@ -356,9 +356,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>BtBoolComboBox</class>
+   <class>BtComboBoxBool</class>
    <extends>QComboBox</extends>
-   <header>widgets/BtBoolComboBox.h</header>
+   <header>widgets/BtComboBoxBool.h</header>
   </customwidget>
   <customwidget>
    <class>SmartLabel</class>

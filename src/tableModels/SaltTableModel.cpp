@@ -19,29 +19,10 @@
  ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "tableModels/SaltTableModel.h"
 
-#include <QAbstractItemModel>
-#include <QAbstractTableModel>
-#include <QComboBox>
 #include <QHeaderView>
-#include <QItemDelegate>
-#include <QLineEdit>
-#include <QList>
 #include <QModelIndex>
-#include <QObject>
-#include <QStandardItemModel>
-#include <QString>
-#include <QStyleOptionViewItem>
 #include <QVariant>
 #include <QWidget>
-
-#include "database/ObjectStoreWrapper.h"
-#include "measurement/Measurement.h"
-#include "measurement/Unit.h"
-#include "model/Mash.h"
-#include "model/MashStep.h"
-#include "model/Recipe.h"
-#include "PersistentSettings.h"
-#include "WaterDialog.h"
 
 SaltTableModel::SaltTableModel(QTableView* parent, bool editable) :
    BtTableModel{
@@ -53,15 +34,12 @@ SaltTableModel::SaltTableModel(QTableView* parent, bool editable) :
          //
          // Note too that, for the purposes of these columns, the "name" of a Salt is not its "NamedEntity name" but actually its type
          TABLE_MODEL_HEADER(Salt, Name   , tr("Name"    ), PropertyNames::Salt::type           , EnumInfo{Salt::typeStringMapping, Salt::typeDisplayNames}),
-///         TABLE_MODEL_HEADER(Salt, Amount , tr("Amount"  ), PropertyNames::Salt::amountWithUnits),
-///         TABLE_MODEL_HEADER(Salt, AddTo  , tr("Added To"), PropertyNames::Salt::whenToAdd      , EnumInfo{Salt::whenToAddStringMapping, Salt::whenToAddDisplayNames}),
          TABLE_MODEL_HEADER(Salt, PctAcid, tr("% Acid"  ), PropertyNames::Salt::percentAcid    ),
          TABLE_MODEL_HEADER(Salt, TotalInventory    , tr("Inventory"  ), PropertyNames::Ingredient::totalInventory, PrecisionInfo{1}),
          TABLE_MODEL_HEADER(Salt, TotalInventoryType, tr("Amount Type"), PropertyNames::Ingredient::totalInventory, Salt::validMeasures),
       }
    },
    TableModelBase<SaltTableModel, Salt>{} {
-   setObjectName("saltTable");
 
    QHeaderView* headerView = m_parentTableWidget->horizontalHeader();
    headerView->setMinimumSectionSize(parent->width()/this->columnCount());
@@ -77,12 +55,7 @@ void SaltTableModel::removed([[maybe_unused]] std::shared_ptr<Salt> item) { retu
 void SaltTableModel::updateTotals()                                       { return; }
 
 QVariant SaltTableModel::data(QModelIndex const & index, int role) const {
-   if (!this->indexAndRoleOk(index, role)) {
-      return QVariant();
-   }
-
-   // No special handling required for any of our columns
-   return this->readDataFromModel(index, role);
+   return this->doDataDefault(index, role);
 }
 
 Qt::ItemFlags SaltTableModel::flags(const QModelIndex& index) const {
@@ -113,19 +86,6 @@ bool SaltTableModel::setData(QModelIndex const & index, QVariant const & value, 
 
    return retVal;
 }
-
-///void SaltTableModel::saveAndClose() {
-///   // all of the writes should have been instantaneous unless
-///   // we've added a new salt. Wonder if this will work?
-///   for (auto salt : this->rows) {
-///      if (salt->key() < 0 &&
-///         salt->whenToAdd() != Salt::WhenToAdd::NEVER) {
-///         ObjectStoreWrapper::insert(salt);
-///         this->recObs->add(salt);
-///      }
-///   }
-///   return;
-///}
 
 // Insert the boiler-plate stuff that we cannot do in TableModelBase
 TABLE_MODEL_COMMON_CODE(Salt, salt, PropertyNames::None::none)

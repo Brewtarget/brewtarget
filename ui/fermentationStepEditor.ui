@@ -93,7 +93,7 @@
       </widget>
      </item>
      <item row="4" column="2">
-      <widget class="BtBoolComboBox" name="boolCombo_freeRise">
+      <widget class="BtComboBoxBool" name="boolCombo_freeRise">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -270,14 +270,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>BtComboBox</class>
+   <class>BtComboBoxEnum</class>
    <extends>QComboBox</extends>
-   <header>widgets/BtComboBox.h</header>
+   <header>widgets/BtComboBoxEnum.h</header>
   </customwidget>
   <customwidget>
-   <class>BtBoolComboBox</class>
+   <class>BtComboBoxBool</class>
    <extends>QComboBox</extends>
-   <header>widgets/BtBoolComboBox.h</header>
+   <header>widgets/BtComboBoxBool.h</header>
   </customwidget>
   <customwidget>
    <class>InfoButton</class>

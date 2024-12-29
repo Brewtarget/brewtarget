@@ -157,6 +157,17 @@
     </message>
 </context>
 <context>
+    <name>BoilTableModel</name>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pre-Boil Size</source>
+        <translation type="unfinished">Forkogning volumen</translation>
+    </message>
+</context>
+<context>
     <name>BrewDayFormatter</name>
     <message>
         <source>Brewday</source>
@@ -1375,6 +1386,17 @@ Logfil indeholder måske flere detaljer.</translation>
     </message>
 </context>
 <context>
+    <name>FermentationTableModel</name>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Number of Steps</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Folder</name>
     <message>
         <source>Name</source>
@@ -1840,11 +1862,11 @@ Logfil indeholder måske flere detaljer.</translation>
     </message>
     <message>
         <source>Copy Recipe</source>
-        <translation>Kopier opskrift</translation>
+        <translation type="vanished">Kopier opskrift</translation>
     </message>
     <message>
         <source>Enter a unique name for the copy.</source>
-        <translation>Indtast et unikt navn for kopien.</translation>
+        <translation type="vanished">Indtast et unikt navn for kopien.</translation>
     </message>
     <message>
         <source>Please give your mash a name before saving.</source>
@@ -2054,6 +2076,14 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
         <source>Automatically-created Fermentation for %1</source>
         <translation>Automatisk genereret gæring for %1</translation>
     </message>
+    <message>
+        <source>Change Recipe Mash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Recipe Equipment</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Mash</name>
@@ -2177,6 +2207,25 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
     <message>
         <source>Time</source>
         <translation>Tidspunkt</translation>
+    </message>
+</context>
+<context>
+    <name>MashTableModel</name>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Initial Grain Temperature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Total Mash Water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Total Time</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -5220,6 +5269,17 @@ The final volume in the primary is %1.</source>
     </message>
 </context>
 <context>
+    <name>Undoable</name>
+    <message>
+        <source>Undo %1</source>
+        <translation type="obsolete">Fortryd %1</translation>
+    </message>
+    <message>
+        <source>Redo %1</source>
+        <translation type="obsolete">Gentag %1</translation>
+    </message>
+</context>
+<context>
     <name>UnitAndScalePopUpMenu</name>
     <message>
         <source>Default</source>
@@ -7309,7 +7369,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>&amp;Copy Recipe</source>
-        <translation>&amp;Kopier opskrift</translation>
+        <translation type="vanished">&amp;Kopier opskrift</translation>
     </message>
     <message>
         <source>Pr&amp;iming Calculator</source>
@@ -7581,6 +7641,10 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>See Boil tab below</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Copy Selected Item(s)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -17,17 +17,20 @@
 #define TABLEMODELS_TABLEMODELBASE_H
 #pragma once
 
-#include  <type_traits>
+#include <type_traits>
+#include <utility> // For std::pair
+#include <vector>
 
 #include <QList>
 #include <QModelIndex>
 
 #include "database/ObjectStoreTyped.h"
 #include "database/ObjectStoreWrapper.h"
-#include "MainWindow.h"
+#include "undoRedo/Undoable.h"
 #include "measurement/Measurement.h"
 #include "model/IngredientAmount.h"
 #include "model/Inventory.h"
+#include "model/Recipe.h"
 #include "tableModels/BtTableModel.h"
 #include "utils/CuriouslyRecurringTemplateBase.h"
 #include "utils/MetaTypes.h"
@@ -829,7 +832,7 @@ protected:
          }
       }
 
-      MainWindow::instance().doOrRedoUpdate(
+      Undoable::doOrRedoUpdate(
          *row,
          columnInfo.propertyPath,
          typeInfo,
@@ -933,10 +936,91 @@ protected:
       return;
    }
 
+   //! \brief Default implementation for Derived::data
+   QVariant doDataDefault(QModelIndex const & index, int role) const {
+      if (!this->indexAndRoleOk(index, role)) {
+         return QVariant();
+      }
+
+      // No special handling required for any of our columns
+      return this->readDataFromModel(index, role);
+   }
+
+   //! \brief Default implementation for Derived::setData
+   template<bool updateHeader = false>
+   bool doSetDataDefault(QModelIndex const & index, QVariant const & value, int role) {
+      if (!this->indexAndRoleOk(index, role)) {
+         return false;
+      }
+
+      // No special handling required for any of our columns
+      bool const retVal = this->writeDataToModel(index, value, role);
+
+      // ...but we might need to re-show header
+      if constexpr (updateHeader) {
+         if (retVal) {
+            emit this->derived().headerDataChanged(Qt::Vertical, index.row(), index.row());
+         }
+      }
+
+      return retVal;
+   }
+
    //================================================ Member Variables =================================================
 
    QList< std::shared_ptr<NE> > rows;
 };
+
+namespace TableModelHelper {
+
+   /**
+    * \brief Implementation for \c TableModelBase::Derived::flags
+    *
+    *        NB: This can't be a member function of \c TableModelBase because otherwise the compiler will complain about
+    *            "invalid use of incomplete type" for \c Derived.
+    */
+   template<class Derived>
+   Qt::ItemFlags doFlags(
+      QModelIndex const & index,
+      bool const editable,
+      std::vector<std::pair<typename Derived::ColumnIndex, typename Qt::ItemFlags>> const & columnExtraFlags = {},
+      Qt::ItemFlags defaults = Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled
+   ) {
+      auto const columnIndex = static_cast<Derived::ColumnIndex>(index.column());
+      if (columnIndex == Derived::ColumnIndex::Name) {
+         return defaults;
+      }
+      auto extraFlags = std::find_if(
+         columnExtraFlags.begin(),
+         columnExtraFlags.end(),
+         [&](std::pair<typename Derived::ColumnIndex, typename Qt::ItemFlags> const & element) {
+            return element.first == columnIndex;
+         }
+      );
+      if (extraFlags != columnExtraFlags.end()) {
+         return defaults | extraFlags->second;
+      }
+
+      return defaults | (editable ? Qt::ItemIsEditable : Qt::NoItemFlags);
+   }
+
+}
+
+/**
+ * \brief Derived classes should include this in their header file, right before their class declaration
+ *
+ *        Note we have to be careful about comment formats in macro definitions
+ */
+#define TABLE_MODEL_TRAITS(NeName, ...) \
+   /* You have to get the order of everything right with traits classes, but the */ \
+   /* end result is that we can refer to BoilTableModel::ColumnIndex::Name etc.  */ \
+   class NeName##TableModel;                                                        \
+   template <> struct TableModelTraits<NeName##TableModel> {                        \
+      enum class ColumnIndex {                                                      \
+         __VA_ARGS__                                                                \
+      };                                                                            \
+   };                                                                               \
+
 
 /**
  * \brief Derived classes should include this in their header file, right after Q_OBJECT
@@ -944,45 +1028,45 @@ protected:
  *        Note we have to be careful about comment formats in macro definitions
  */
 #define TABLE_MODEL_COMMON_DECL(NeName) \
-   /* This allows TableModelBase to call protected and private members of Derived */                            \
-   friend class TableModelBase<NeName##TableModel, NeName>;                                                     \
-                                                                                                                \
-   public:                                                                                                      \
-      NeName##TableModel(QTableView * parent = nullptr, bool editable = true);                                  \
-      virtual ~NeName##TableModel();                                                                            \
-                                                                                                                \
-      /* This will be a no-op if we do not inherit from BtTableModelRecipeObserver */                           \
-      void observeRecipe(Recipe * rec);                                                                         \
-      /* This will always return nullptr if we do not inherit from BtTableModelRecipeObserver */                \
-      Recipe * getObservedRecipe() const;                                                                       \
-                                                                                                                \
-   protected:                                                                                                   \
-      /* This block of functions is called from the TableModelBase class */                                     \
-      void added  (std::shared_ptr<NeName> item);                                                               \
-      void removed(std::shared_ptr<NeName> item);                                                               \
-      void updateTotals();                                                                                      \
-                                                                                                                \
-   public:                                                                                                      \
-      /** \brief Reimplemented from QAbstractTableModel. */                                                     \
-      virtual int rowCount(QModelIndex const & parent = QModelIndex()) const;                                   \
-      /** \brief Reimplemented from QAbstractTableModel. */                                                     \
-      virtual QVariant data(QModelIndex const & index, int role = Qt::DisplayRole) const;                       \
-      /** \brief Reimplemented from QAbstractTableModel. */                                                     \
-      virtual Qt::ItemFlags flags(const QModelIndex& index) const;                                              \
-      /** \brief Reimplemented from QAbstractTableModel. */                                                     \
-      virtual bool setData(QModelIndex const & index, QVariant const & value, int role = Qt::EditRole);         \
-                                                                                                                \
-   private slots:                                                                                               \
-      /** \brief Watch \b NeName for changes. */                                                                \
-      void addItem(int itemId);                                                                                 \
-                                                                                                                \
-      void removeItem(int itemId, std::shared_ptr<QObject> object);                                             \
-                                                                                                                \
-      /** \brief Catch changes to Recipe, Database, and NeName. */                                              \
-      void changed(QMetaProperty, QVariant);                                                                    \
-                                                                                                                \
-      /** \brief Catches changes to inventory.  (Can be no-op where not relevant (eg \c MashStepTableModel). */ \
-      void changedInventory(int invKey, BtStringConst const & propertyName);                                    \
+   /* This allows TableModelBase to call protected and private members of Derived */                             \
+   friend class TableModelBase<NeName##TableModel, NeName>;                                                      \
+                                                                                                                 \
+   public:                                                                                                       \
+      NeName##TableModel(QTableView * parent = nullptr, bool editable = true);                                   \
+      virtual ~NeName##TableModel();                                                                             \
+                                                                                                                 \
+      /* This will be a no-op if we do not inherit from BtTableModelRecipeObserver */                            \
+      void observeRecipe(Recipe * rec);                                                                          \
+      /* This will always return nullptr if we do not inherit from BtTableModelRecipeObserver */                 \
+      Recipe * getObservedRecipe() const;                                                                        \
+                                                                                                                 \
+   protected:                                                                                                    \
+      /* This block of functions is called from the TableModelBase class */                                      \
+      void added  (std::shared_ptr<NeName> item);                                                                \
+      void removed(std::shared_ptr<NeName> item);                                                                \
+      void updateTotals();                                                                                       \
+                                                                                                                 \
+   public:                                                                                                       \
+      /** \brief Reimplemented from QAbstractTableModel. */                                                      \
+      virtual int rowCount(QModelIndex const & parent = QModelIndex()) const override;                           \
+      /** \brief Reimplemented from QAbstractTableModel. */                                                      \
+      virtual QVariant data(QModelIndex const & index, int role = Qt::DisplayRole) const override;               \
+      /** \brief Reimplemented from QAbstractTableModel. */                                                      \
+      virtual Qt::ItemFlags flags(const QModelIndex& index) const override;                                      \
+      /** \brief Reimplemented from QAbstractTableModel. */                                                      \
+      virtual bool setData(QModelIndex const & index, QVariant const & value, int role = Qt::EditRole) override; \
+                                                                                                                 \
+   private slots:                                                                                                \
+      /** \brief Watch \b NeName for changes. */                                                                 \
+      void addItem(int itemId);                                                                                  \
+                                                                                                                 \
+      void removeItem(int itemId, std::shared_ptr<QObject> object);                                              \
+                                                                                                                 \
+      /** \brief Catch changes to Recipe, Database, and NeName. */                                               \
+      void changed(QMetaProperty, QVariant);                                                                     \
+                                                                                                                 \
+      /** \brief Catches changes to inventory.  (Can be no-op where not relevant (eg \c MashStepTableModel). */  \
+      void changedInventory(int invKey, BtStringConst const & propertyName);                                     \
 
 /**
  * \brief Derived classes should include this in their .cpp file

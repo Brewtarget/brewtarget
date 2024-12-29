@@ -21,24 +21,14 @@
  ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "tableModels/MashStepTableModel.h"
 
-#include <QAbstractTableModel>
-#include <QComboBox>
 #include <QHeaderView>
-#include <QItemDelegate>
-#include <QLineEdit>
 #include <QModelIndex>
-#include <QObject>
 #include <QTableView>
 #include <QVariant>
-#include <QVector>
 #include <QWidget>
 
-#include "database/ObjectStoreWrapper.h"
-#include "MainWindow.h"
-#include "measurement/Measurement.h"
-#include "measurement/Unit.h"
 #include "model/MashStep.h"
-#include "PersistentSettings.h"
+#include "tableModels/BtTableModel.h"
 
 MashStepTableModel::MashStepTableModel(QTableView * parent, bool editable) :
    BtTableModel{
@@ -96,21 +86,15 @@ QVariant MashStepTableModel::data(QModelIndex const & index, int role) const {
    return this->readDataFromModel(index, role);
 }
 
-Qt::ItemFlags MashStepTableModel::flags(const QModelIndex& index ) const {
-   auto const columnIndex = static_cast<MashStepTableModel::ColumnIndex>(index.column());
-   if (columnIndex == MashStepTableModel::ColumnIndex::Name) {
-      return Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
-   }
-   return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
+Qt::ItemFlags MashStepTableModel::flags(QModelIndex const & index) const {
+   return TableModelHelper::doFlags<MashStepTableModel>(index, this->m_editable);
 }
 
 bool MashStepTableModel::setData(QModelIndex const & index, QVariant const & value, int role) {
-   if (!this->m_stepOwnerObs || !this->indexAndRoleOk(index, role)) {
+   if (!this->m_stepOwnerObs) {
       return false;
    }
-
-   // No special handling required for any of our columns
-   return this->writeDataToModel(index, value, role);
+   return this->doSetDataDefault(index, value, role);
 }
 
 // Insert the boiler-plate stuff that we cannot do in TableModelBase

@@ -26,26 +26,16 @@
  ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "tableModels/RecipeAdditionYeastTableModel.h"
 
-#include <QAbstractItemModel>
-#include <QComboBox>
 #include <QHeaderView>
-#include <QItemDelegate>
-#include <QLineEdit>
 #include <QModelIndex>
 #include <QString>
-#include <QStyleOptionViewItem>
 #include <QVariant>
 #include <QWidget>
 
-#include "database/ObjectStoreWrapper.h"
-#include "Localization.h"
-#include "MainWindow.h"
 #include "measurement/Measurement.h"
 #include "measurement/Unit.h"
 #include "model/Inventory.h"
 #include "model/Recipe.h"
-#include "PersistentSettings.h"
-#include "utils/BtStringConst.h"
 
 RecipeAdditionYeastTableModel::RecipeAdditionYeastTableModel(QTableView * parent, bool editable) :
    BtTableModelRecipeObserver{
@@ -80,7 +70,6 @@ RecipeAdditionYeastTableModel::RecipeAdditionYeastTableModel(QTableView * parent
    },
    TableModelBase<RecipeAdditionYeastTableModel, RecipeAdditionYeast>{} {
    this->rows.clear();
-   this->setObjectName("yeastAdditionTable");
 
    QHeaderView * headerView = m_parentTableWidget->horizontalHeader();
    connect(headerView, &QWidget::customContextMenuRequested, this, &RecipeAdditionYeastTableModel::contextMenu);
@@ -95,34 +84,20 @@ void RecipeAdditionYeastTableModel::added  ([[maybe_unused]] std::shared_ptr<Rec
 void RecipeAdditionYeastTableModel::removed([[maybe_unused]] std::shared_ptr<RecipeAdditionYeast> item) { return; }
 void RecipeAdditionYeastTableModel::updateTotals()                                                    { return; }
 
-QVariant RecipeAdditionYeastTableModel::data(const QModelIndex & index, int role) const {
-   if (!this->indexAndRoleOk(index, role)) {
-      return QVariant();
-   }
-
-   // No special handling required for any of our columns
-   return this->readDataFromModel(index, role);
+QVariant RecipeAdditionYeastTableModel::data(QModelIndex const & index, int role) const {
+   return this->doDataDefault(index, role);
 }
 
-Qt::ItemFlags RecipeAdditionYeastTableModel::flags(const QModelIndex & index) const {
-   auto const columnIndex = static_cast<RecipeAdditionYeastTableModel::ColumnIndex>(index.column());
-   if (columnIndex == RecipeAdditionYeastTableModel::ColumnIndex::Name) {
-      return Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
-   }
-   if (columnIndex == RecipeAdditionYeastTableModel::ColumnIndex::TotalInventory) {
-      return Qt::ItemIsEnabled | Qt::NoItemFlags;
-   }
-   return Qt::ItemIsSelectable |
-          (this->m_editable ? Qt::ItemIsEditable : Qt::NoItemFlags) | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
+Qt::ItemFlags RecipeAdditionYeastTableModel::flags(QModelIndex const & index) const {
+   return TableModelHelper::doFlags<RecipeAdditionYeastTableModel>(
+      index,
+      this->m_editable,
+      {{RecipeAdditionYeastTableModel::ColumnIndex::TotalInventory, Qt::ItemIsEnabled}}
+   );
 }
 
-bool RecipeAdditionYeastTableModel::setData(const QModelIndex & index, const QVariant & value, int role) {
-   if (!this->indexAndRoleOk(index, role)) {
-      return false;
-   }
-
-   // No special handling required for any of our columns
-   return this->writeDataToModel(index, value, role);
+bool RecipeAdditionYeastTableModel::setData(QModelIndex const & index, QVariant const & value, int role) {
+   return this->doSetDataDefault(index, value, role);
 }
 
 // Insert the boiler-plate stuff that we cannot do in TableModelBase

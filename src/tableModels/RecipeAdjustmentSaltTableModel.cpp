@@ -20,29 +20,17 @@
  ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "tableModels/RecipeAdjustmentSaltTableModel.h"
 
-#include <QAbstractItemModel>
-#include <QAbstractTableModel>
-#include <QComboBox>
 #include <QHeaderView>
-#include <QItemDelegate>
-#include <QLineEdit>
-#include <QList>
 #include <QModelIndex>
-#include <QObject>
-#include <QStandardItemModel>
 #include <QString>
-#include <QStyleOptionViewItem>
 #include <QVariant>
 #include <QWidget>
 
-#include "database/ObjectStoreWrapper.h"
 #include "measurement/Measurement.h"
 #include "measurement/Unit.h"
+#include "model/Inventory.h"
 #include "model/Mash.h"
-#include "model/MashStep.h"
 #include "model/Recipe.h"
-#include "PersistentSettings.h"
-#include "WaterDialog.h"
 
 RecipeAdjustmentSaltTableModel::RecipeAdjustmentSaltTableModel(QTableView* parent, bool editable) :
    BtTableModelRecipeObserver{
@@ -72,7 +60,6 @@ RecipeAdjustmentSaltTableModel::RecipeAdjustmentSaltTableModel(QTableView* paren
       }
    },
    TableModelBase<RecipeAdjustmentSaltTableModel, RecipeAdjustmentSalt>{} {
-   setObjectName("saltTable");
 
    QHeaderView* headerView = m_parentTableWidget->horizontalHeader();
    headerView->setMinimumSectionSize(parent->width()/this->columnCount());
@@ -239,12 +226,7 @@ double RecipeAdjustmentSaltTableModel::totalAcidWeight(Salt::Type type) const {
 }
 
 QVariant RecipeAdjustmentSaltTableModel::data(QModelIndex const & index, int role) const {
-   if (!this->indexAndRoleOk(index, role)) {
-      return QVariant();
-   }
-
-   // No special handling required for any of our columns
-   return this->readDataFromModel(index, role);
+   return this->doDataDefault(index, role);
 }
 
 Qt::ItemFlags RecipeAdjustmentSaltTableModel::flags(const QModelIndex& index) const {

@@ -157,6 +157,17 @@
     </message>
 </context>
 <context>
+    <name>BoilTableModel</name>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">İsim</translation>
+    </message>
+    <message>
+        <source>Pre-Boil Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>BrewDayFormatter</name>
     <message>
         <source>Brewday</source>
@@ -1402,6 +1413,17 @@ Log file may contain more details.</source>
     </message>
 </context>
 <context>
+    <name>FermentationTableModel</name>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">İsim</translation>
+    </message>
+    <message>
+        <source>Number of Steps</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Folder</name>
     <message>
         <source>Name</source>
@@ -1952,11 +1974,11 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Copy Recipe</source>
-        <translation>Tarifi Kopyala</translation>
+        <translation type="vanished">Tarifi Kopyala</translation>
     </message>
     <message>
         <source>Enter a unique name for the copy.</source>
-        <translation>Kopya için benzersiz bir isim girin.</translation>
+        <translation type="vanished">Kopya için benzersiz bir isim girin.</translation>
     </message>
     <message>
         <source>Please give your mash a name before saving.</source>
@@ -2254,6 +2276,14 @@ If you need help, please open an issue at %1</source>
         <source>Automatically-created Fermentation for %1</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Change Recipe Mash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Recipe Equipment</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Mash</name>
@@ -2401,6 +2431,25 @@ If you need help, please open an issue at %1</source>
     <message>
         <source>Change Mash Step Time</source>
         <translation type="vanished">Mayşe Adımı Zamanını Değiştir</translation>
+    </message>
+</context>
+<context>
+    <name>MashTableModel</name>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">İsim</translation>
+    </message>
+    <message>
+        <source>Initial Grain Temperature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Total Mash Water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Total Time</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -5782,6 +5831,17 @@ The final volume in the primary is %1.</source>
     </message>
 </context>
 <context>
+    <name>Undoable</name>
+    <message>
+        <source>Undo %1</source>
+        <translation type="obsolete">Geri al %1</translation>
+    </message>
+    <message>
+        <source>Redo %1</source>
+        <translation type="obsolete">Tekrarla %1</translation>
+    </message>
+</context>
+<context>
     <name>UnitAndScalePopUpMenu</name>
     <message>
         <source>Default</source>
@@ -8096,7 +8156,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>&amp;Copy Recipe</source>
-        <translation>Tarifi &amp;Kopyala</translation>
+        <translation type="vanished">Tarifi &amp;Kopyala</translation>
     </message>
     <message>
         <source>Pr&amp;iming Calculator</source>
@@ -8376,6 +8436,10 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>See Boil tab below</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Copy Selected Item(s)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

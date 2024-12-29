@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * database/ObjectStoreWrapper.h is part of Brewtarget, and is copyright the following authors 2021-2022:
+ * database/ObjectStoreWrapper.h is part of Brewtarget, and is copyright the following authors 2021-2024:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -72,6 +72,7 @@ namespace ObjectStoreWrapper {
       return ObjectStoreTyped<NE>::getInstance().getAll();
    }
 
+   //! \brief Raw pointer version
    template<class NE> QList<NE *> getAllRaw() {
       return ObjectStoreTyped<NE>::getInstance().getAllRaw();
    }
@@ -82,6 +83,13 @@ namespace ObjectStoreWrapper {
     *          - not marked deleted
     *          - do not have a parent (ie are not "an instance of use of"
     */
+   template<class NE> QList<std::shared_ptr<NE>> getAllDisplayable() {
+      return ObjectStoreTyped<NE>::getInstance().findAllMatching(
+         [](std::shared_ptr<NE> ne) { return (ne->display() && !ne->deleted() && ne->getParentKey() <= 0); }
+      );
+   }
+
+   //! \brief Raw pointer version
    template<class NE> QList<NE *> getAllDisplayableRaw() {
       return ObjectStoreTyped<NE>::getInstance().findAllMatching(
          [](NE const * ne) { return (ne->display() && !ne->deleted() && ne->getParentKey() <= 0); }

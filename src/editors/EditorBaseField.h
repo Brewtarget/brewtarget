@@ -19,8 +19,8 @@
 
 #include <variant>
 
-#include "widgets/BtBoolComboBox.h"
-#include "widgets/BtComboBox.h"
+#include "widgets/BtComboBoxBool.h"
+#include "widgets/BtComboBoxEnum.h"
 
 //
 // This is only included from one place -- editors/EditorBase.h -- but I think it's a big enough block that there is
@@ -85,8 +85,8 @@ struct EditorBaseField {
                    std::optional<int> precision = std::nullopt,
                    WhenToWriteField whenToWrite = WhenToWriteField::Normal)
    requires (!std::same_as<EditFieldType, SmartLineEdit > &&
-             !std::same_as<EditFieldType, BtComboBox    > &&
-             !std::same_as<EditFieldType, BtBoolComboBox>) :
+             !std::same_as<EditFieldType, BtComboBoxEnum    > &&
+             !std::same_as<EditFieldType, BtComboBoxBool>) :
       labelName  {labelName  },
       label      {label      },
       editField  {editField  },
@@ -127,14 +127,14 @@ struct EditorBaseField {
       return;
    }
 
-   //! Constructor for when we have a BtComboBox
+   //! Constructor for when we have a BtComboBoxEnum
    EditorBaseField(char const * const editorClass,
                    char const * const labelName,
                    [[maybe_unused]] char const * const labelFqName,
                    LabelType * label,
                    char const * const editFieldName,
                    char const * const editFieldFqName,
-                   BtComboBox * editField,
+                   BtComboBoxEnum * editField,
                    BtStringConst const & property,
                    TypeInfo const & typeInfo,
                    EnumStringMapping const & nameMapping,
@@ -142,7 +142,7 @@ struct EditorBaseField {
                    std::vector<int>  const * restrictTo = nullptr,
                    SmartLineEdit *           controlledField = nullptr,
                    WhenToWriteField whenToWrite = WhenToWriteField::Normal)
-   requires (std::same_as<EditFieldType, BtComboBox>) :
+   requires (std::same_as<EditFieldType, BtComboBoxEnum>) :
       labelName  {labelName  },
       label      {label      },
       editField  {editField  },
@@ -163,20 +163,20 @@ struct EditorBaseField {
       return;
    }
 
-   //! Constructor for when we have a BtBoolComboBox
+   //! Constructor for when we have a BtComboBoxBool
    EditorBaseField(char const * const editorClass,
                    char const * const labelName,
                    [[maybe_unused]] char const * const labelFqName,
                    LabelType * label,
                    char const * const editFieldName,
                    char const * const editFieldFqName,
-                   BtBoolComboBox * editField,
+                   BtComboBoxBool * editField,
                    BtStringConst const & property,
                    TypeInfo const & typeInfo,
                    QString const & unsetDisplay = QObject::tr("No"),
                    QString const & setDisplay   = QObject::tr("Yes"),
                    WhenToWriteField whenToWrite = WhenToWriteField::Normal)
-   requires (std::same_as<EditFieldType, BtBoolComboBox>) :
+   requires (std::same_as<EditFieldType, BtComboBoxBool>) :
       labelName  {labelName  },
       label      {label      },
       editField  {editField  },
@@ -229,8 +229,8 @@ struct EditorBaseField {
    //! Combo boxes are slightly different
    template <typename Derived, typename Functor>
    void connectFieldChanged(Derived * context, Functor functor) const
-   requires (std::same_as<EditFieldType, BtComboBox> ||
-             std::same_as<EditFieldType, BtBoolComboBox>) {
+   requires (std::same_as<EditFieldType, BtComboBoxEnum> ||
+             std::same_as<EditFieldType, BtComboBoxBool>) {
       // QOverload is needed on next line because the signal currentIndexChanged is overloaded in QComboBox - see
       // https://doc.qt.io/qt-5/qcombobox.html#currentIndexChanged
       context->connect(this->editField, QOverload<int>::of(&QComboBox::currentIndexChanged), context, functor, Qt::AutoConnection);
@@ -247,8 +247,8 @@ struct EditorBaseField {
    }
 
    QVariant getFieldValue() const requires (std::same_as<EditFieldType, SmartLineEdit > ||
-                                            std::same_as<EditFieldType, BtComboBox    > ||
-                                            std::same_as<EditFieldType, BtBoolComboBox>) {
+                                            std::same_as<EditFieldType, BtComboBoxEnum    > ||
+                                            std::same_as<EditFieldType, BtComboBoxBool>) {
       // Through the magic of templates, and naming conventions, one line suffices for all three types
       return this->editField->getAsVariant();
    }
@@ -256,7 +256,7 @@ struct EditorBaseField {
    /**
     * \brief Set property on supplied object from edit field
     */
-   void setPropertyFromEditField(QObject & object) const requires (std::same_as<EditFieldType, BtComboBox>) {
+   void setPropertyFromEditField(QObject & object) const requires (std::same_as<EditFieldType, BtComboBoxEnum>) {
       //
       // The only "special case" we can't handle with template specialisation is where we have a combo-box that is
       // controlling the physical quantity for another field (eg whether an input field is mass or volume), there is
@@ -268,7 +268,7 @@ struct EditorBaseField {
       }
       return;
    }
-   void setPropertyFromEditField(QObject & object) const requires (!std::same_as<EditFieldType, BtComboBox>) {
+   void setPropertyFromEditField(QObject & object) const requires (!std::same_as<EditFieldType, BtComboBoxEnum>) {
       object.setProperty(*property, this->getFieldValue());
       return;
    }
@@ -293,8 +293,8 @@ struct EditorBaseField {
    }
 
    void setEditField(QVariant const & val) const requires (std::same_as<EditFieldType, SmartLineEdit > ||
-                                                           std::same_as<EditFieldType, BtComboBox    > ||
-                                                           std::same_as<EditFieldType, BtBoolComboBox>) {
+                                                           std::same_as<EditFieldType, BtComboBoxEnum    > ||
+                                                           std::same_as<EditFieldType, BtComboBoxBool>) {
       this->editField->setFromVariant(val);
       return;
    }
@@ -307,8 +307,8 @@ struct EditorBaseField {
       return;
    }
    void clearEditField() const requires (std::same_as<EditFieldType, SmartLineEdit > ||
-                                         std::same_as<EditFieldType, BtComboBox    > ||
-                                         std::same_as<EditFieldType, BtBoolComboBox>) {
+                                         std::same_as<EditFieldType, BtComboBoxEnum    > ||
+                                         std::same_as<EditFieldType, BtComboBoxBool>) {
       this->editField->setDefault();
       return;
    }
@@ -316,7 +316,7 @@ struct EditorBaseField {
    /**
     * \brief Set edit field from property on supplied object
     */
-   void setEditFieldFromProperty(QObject & object) const requires (std::same_as<EditFieldType, BtComboBox>) {
+   void setEditFieldFromProperty(QObject & object) const requires (std::same_as<EditFieldType, BtComboBoxEnum>) {
       //
       // Similarly to setPropertyFromEditField, in the case of a combo-box that is controlling the physical quantity for
       // another field, we want to initialise from that controlled field.
@@ -328,7 +328,7 @@ struct EditorBaseField {
       }
       return;
    }
-   void setEditFieldFromProperty(QObject & object) const requires (!std::same_as<EditFieldType, BtComboBox>) {
+   void setEditFieldFromProperty(QObject & object) const requires (!std::same_as<EditFieldType, BtComboBoxEnum>) {
       this->setEditField(object.property(*property));
       return;
    }
@@ -355,15 +355,15 @@ using EditorBaseFieldVariant = std::variant<
    EditorBaseField<QLabel, QTextEdit     >,
    EditorBaseField<QLabel, QPlainTextEdit>,
    EditorBaseField<QLabel, SmartLineEdit >,
-   EditorBaseField<QLabel, BtComboBox    >,
-   EditorBaseField<QLabel, BtBoolComboBox>,
+   EditorBaseField<QLabel, BtComboBoxEnum    >,
+   EditorBaseField<QLabel, BtComboBoxBool>,
    EditorBaseField<QWidget, QTextEdit     >, // This is for tabs such as tab_notes containing a single QTextEdit with no separate QLabel
    EditorBaseField<SmartLabel, QLineEdit     >,
 //   EditorBaseField<SmartLabel, QTextEdit     >,
 //   EditorBaseField<SmartLabel, QPlainTextEdit>,
    EditorBaseField<SmartLabel, SmartLineEdit >,
-   EditorBaseField<SmartLabel, BtComboBox    >,
-   EditorBaseField<SmartLabel, BtBoolComboBox>
+   EditorBaseField<SmartLabel, BtComboBoxEnum    >,
+   EditorBaseField<SmartLabel, BtComboBoxBool>
 >;
 
 /**

@@ -21,9 +21,6 @@
 #include <QVariant>
 #include <QWidget>
 
-#include "database/ObjectStoreWrapper.h"
-#include "measurement/Measurement.h"
-#include "measurement/Unit.h"
 #include "model/BoilStep.h"
 #include "tableModels/BtTableModel.h"
 
@@ -47,7 +44,6 @@ BoilStepTableModel::BoilStepTableModel(QTableView * parent, bool editable) :
    },
    TableModelBase<BoilStepTableModel, BoilStep>{},
    StepTableModelBase<BoilStepTableModel, BoilStep, Boil>{} {
-   this->setObjectName("boilStepTableModel");
 
    QHeaderView* headerView = m_parentTableWidget->horizontalHeader();
    connect(headerView, &QWidget::customContextMenuRequested, this, &BoilStepTableModel::contextMenu);
@@ -69,36 +65,25 @@ BoilStepTableModel::~BoilStepTableModel() = default;
 
 void BoilStepTableModel::added  ([[maybe_unused]] std::shared_ptr<BoilStep> item) { return; }
 void BoilStepTableModel::removed([[maybe_unused]] std::shared_ptr<BoilStep> item) { return; }
-void BoilStepTableModel::updateTotals()                                      { return; }
-
+void BoilStepTableModel::updateTotals()                                           { return; }
 
 QVariant BoilStepTableModel::data(QModelIndex const & index, int role) const {
-   if (!this->m_stepOwnerObs || !this->indexAndRoleOk(index, role)) {
+   if (!this->m_stepOwnerObs) {
       return QVariant();
    }
-
-   // No special handling required for any of our columns
-   return this->readDataFromModel(index, role);
+   return this->doDataDefault(index, role);
 }
 
-Qt::ItemFlags BoilStepTableModel::flags(const QModelIndex& index ) const {
-   auto const columnIndex = static_cast<BoilStepTableModel::ColumnIndex>(index.column());
-   if (columnIndex == BoilStepTableModel::ColumnIndex::Name) {
-      return Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
-   }
-   return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
+Qt::ItemFlags BoilStepTableModel::flags(QModelIndex const & index) const {
+   return TableModelHelper::doFlags<BoilStepTableModel>(index, this->m_editable);
 }
 
 bool BoilStepTableModel::setData(QModelIndex const & index, QVariant const & value, int role) {
-   if (!this->m_stepOwnerObs || !this->indexAndRoleOk(index, role)) {
+   if (!this->m_stepOwnerObs) {
       return false;
    }
-
-   // No special handling required for any of our columns
-   return this->writeDataToModel(index, value, role);
+   return this->doSetDataDefault(index, value, role);
 }
-
-/////==========================CLASS BoilStepItemDelegate===============================
 
 // Insert the boiler-plate stuff that we cannot do in TableModelBase
 TABLE_MODEL_COMMON_CODE(BoilStep, boilStep, PropertyNames::Recipe::boilId)

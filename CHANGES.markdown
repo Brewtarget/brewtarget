@@ -23,10 +23,11 @@ Bug fixes and minor enhancements.
 * Buttons not displaying icons on Windows, and some missing button text [903](https://github.com/Brewtarget/brewtarget/issues/903)
 * Country flags not shown on Windows [907](https://github.com/Brewtarget/brewtarget/issues/907)
 * Ctrl-C copied recipe not shown in correct folder until after restart [909](https://github.com/Brewtarget/brewtarget/issues/909)
+* Combo boxes not displaying properly on Windows [894](https://github.com/Brewtarget/brewtarget/issues/894)
 * Compiler warning: "'void QCheckBox::stateChanged(int)' is deprecated: Use checkStateChanged() instead" [884](https://github.com/Brewtarget/brewtarget/issues/884)
 
 ### Release Timestamp
-Mon, 23 Dec 2024 04:00:13 +0100
+Sun, 29 Dec 2024 04:00:13 +0100
 
 ## v4.0.12
 Bug fixes and minor enhancements.

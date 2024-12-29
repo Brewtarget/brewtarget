@@ -124,7 +124,7 @@
       </widget>
      </item>
      <item row="6" column="2">
-      <widget class="BtComboBox" name="comboBox_boilStepChillingType">
+      <widget class="BtComboBoxEnum" name="comboBox_boilStepChillingType">
        <property name="toolTip">
         <string>Chilling Type</string>
        </property>
@@ -258,9 +258,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>BtComboBox</class>
+   <class>BtComboBoxEnum</class>
    <extends>QComboBox</extends>
-   <header>widgets/BtComboBox.h</header>
+   <header>widgets/BtComboBoxEnum.h</header>
   </customwidget>
   <customwidget>
    <class>InfoButton</class>

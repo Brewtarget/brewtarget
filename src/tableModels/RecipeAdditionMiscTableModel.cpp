@@ -25,26 +25,16 @@
  ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "tableModels/RecipeAdditionMiscTableModel.h"
 
-#include <QAbstractItemModel>
-#include <QComboBox>
 #include <QHeaderView>
-#include <QItemDelegate>
-#include <QLineEdit>
 #include <QModelIndex>
 #include <QString>
-#include <QStyleOptionViewItem>
 #include <QVariant>
 #include <QWidget>
 
-#include "database/ObjectStoreWrapper.h"
-#include "Localization.h"
-#include "MainWindow.h"
 #include "measurement/Measurement.h"
 #include "measurement/Unit.h"
 #include "model/Inventory.h"
 #include "model/Recipe.h"
-#include "PersistentSettings.h"
-#include "utils/BtStringConst.h"
 
 RecipeAdditionMiscTableModel::RecipeAdditionMiscTableModel(QTableView * parent, bool editable) :
    BtTableModelRecipeObserver{
@@ -72,7 +62,6 @@ RecipeAdditionMiscTableModel::RecipeAdditionMiscTableModel(QTableView * parent, 
    TableModelBase<RecipeAdditionMiscTableModel, RecipeAdditionMisc>{},
    showIBUs(false) {
    this->rows.clear();
-   this->setObjectName("hopAdditionTable");
 
    QHeaderView * headerView = m_parentTableWidget->horizontalHeader();
    connect(headerView, &QWidget::customContextMenuRequested, this, &RecipeAdditionMiscTableModel::contextMenu);
@@ -92,13 +81,8 @@ void RecipeAdditionMiscTableModel::setShowIBUs(bool var) {
    return;
 }
 
-QVariant RecipeAdditionMiscTableModel::data(const QModelIndex & index, int role) const {
-   if (!this->indexAndRoleOk(index, role)) {
-      return QVariant();
-   }
-
-   // No special handling required for any of our columns
-   return this->readDataFromModel(index, role);
+QVariant RecipeAdditionMiscTableModel::data(QModelIndex const & index, int role) const {
+   return this->doDataDefault(index, role);
 }
 
 QVariant RecipeAdditionMiscTableModel::headerData(int section, Qt::Orientation orientation, int role) const {
@@ -115,25 +99,16 @@ QVariant RecipeAdditionMiscTableModel::headerData(int section, Qt::Orientation o
    return QVariant();
 }
 
-Qt::ItemFlags RecipeAdditionMiscTableModel::flags(const QModelIndex & index) const {
-   auto const columnIndex = static_cast<RecipeAdditionMiscTableModel::ColumnIndex>(index.column());
-   if (columnIndex == RecipeAdditionMiscTableModel::ColumnIndex::Name) {
-      return Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
-   }
-   if (columnIndex == RecipeAdditionMiscTableModel::ColumnIndex::TotalInventory) {
-      return Qt::ItemIsEnabled | Qt::NoItemFlags;
-   }
-   return Qt::ItemIsSelectable |
-          (this->m_editable ? Qt::ItemIsEditable : Qt::NoItemFlags) | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
+Qt::ItemFlags RecipeAdditionMiscTableModel::flags(QModelIndex const & index) const {
+   return TableModelHelper::doFlags<RecipeAdditionMiscTableModel>(
+      index,
+      this->m_editable,
+      {{RecipeAdditionMiscTableModel::ColumnIndex::TotalInventory, Qt::ItemIsEnabled}}
+   );
 }
 
-bool RecipeAdditionMiscTableModel::setData(const QModelIndex & index, const QVariant & value, int role) {
-   if (!this->indexAndRoleOk(index, role)) {
-      return false;
-   }
-
-   // No special handling required for any of our columns
-   return this->writeDataToModel(index, value, role);
+bool RecipeAdditionMiscTableModel::setData(QModelIndex const & index, QVariant const & value, int role) {
+   return this->doSetDataDefault(index, value, role);
 }
 
 // Insert the boiler-plate stuff that we cannot do in TableModelBase

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * widgets/BtComboBox.h is part of Brewtarget, and is copyright the following authors 2023-2024:
+ * widgets/BtComboBoxEnum.h is part of Brewtarget, and is copyright the following authors 2023-2024:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -13,8 +13,8 @@
  * You should have received a copy of the GNU General Public License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
  ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
-#ifndef WIDGETS_BTCOMBOBOX_H
-#define WIDGETS_BTCOMBOBOX_H
+#ifndef WIDGETS_BTCOMBOBOXENUM_H
+#define WIDGETS_BTCOMBOBOXENUM_H
 #pragma once
 
 #include <memory> // For PImpl
@@ -28,17 +28,17 @@
 class SmartLineEdit;
 
 /**
- * \class BtComboBox extends \c QComboBox to handle strongly-typed enums more directly
+ * \class BtComboBoxEnum extends \c QComboBox to handle strongly-typed enums more directly
  *
  *        Note that this class cannot be templated, as it will confuse the Qt Meta Object Compiler (MOC) but it is OK
  *        for it to have templated member functions.
  */
-class BtComboBox : public QComboBox {
+class BtComboBoxEnum : public QComboBox {
 Q_OBJECT
 
 public:
-   BtComboBox(QWidget * parent);
-   virtual ~BtComboBox();
+   BtComboBoxEnum(QWidget * parent);
+   virtual ~BtComboBoxEnum();
 
    /**
     * \brief Post-construction initialisation.  Usually called via \c BT_COMBO_BOX_INIT macro
@@ -175,17 +175,17 @@ private:
    std::unique_ptr<impl> pimpl;
 
    //! No copy constructor, as never want anyone, not even our friends, to make copies of a label object
-   BtComboBox(BtComboBox const&) = delete;
+   BtComboBoxEnum(BtComboBoxEnum const&) = delete;
    //! No assignment operator , as never want anyone, not even our friends, to make copies of a label object
-   BtComboBox& operator=(BtComboBox const&) = delete;
+   BtComboBoxEnum& operator=(BtComboBoxEnum const&) = delete;
    //! No move constructor
-   BtComboBox(BtComboBox &&) = delete;
+   BtComboBoxEnum(BtComboBoxEnum &&) = delete;
    //! No move assignment
-   BtComboBox & operator=(BtComboBox &&) = delete;
+   BtComboBoxEnum & operator=(BtComboBoxEnum &&) = delete;
 };
 
 /**
- * \brief This macro saves a bit of copy-and-paste when invoking \c BtComboBox::Init.  Eg instead of writing:
+ * \brief This macro saves a bit of copy-and-paste when invoking \c BtComboBoxEnum::Init.  Eg instead of writing:
  *
  *           this->comboBox_hopForm->init("HopEditor",
  *                                        "comboBox_hopForm",

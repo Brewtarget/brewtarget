@@ -385,7 +385,7 @@
                         </widget>
                        </item>
                        <item>
-                        <widget class="CustomComboBox" name="styleComboBox">
+                        <widget class="BtComboBoxStyle" name="styleComboBox">
                          <property name="sizePolicy">
                           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
                            <horstretch>0</horstretch>
@@ -436,7 +436,7 @@
                         </widget>
                        </item>
                        <item>
-                        <widget class="CustomComboBox" name="equipmentComboBox">
+                        <widget class="BtComboBoxEquipment" name="equipmentComboBox">
                          <property name="sizePolicy">
                           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
                            <horstretch>0</horstretch>
@@ -1442,17 +1442,17 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="CustomComboBox" name="mashComboBox">
+                 <widget class="BtComboBoxMash" name="mashComboBox">
                   <property name="sizePolicy">
-                   <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                   <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
                   </property>
-                  <property name="maximumSize">
+                  <property name="minimumSize">
                    <size>
-                    <width>30</width>
-                    <height>16777215</height>
+                    <width>128</width>
+                    <height>0</height>
                    </size>
                   </property>
                  </widget>
@@ -1631,17 +1631,17 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="CustomComboBox" name="boilComboBox">
+                 <widget class="BtComboBoxBoil" name="boilComboBox">
                   <property name="sizePolicy">
-                   <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                   <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
                   </property>
-                  <property name="maximumSize">
+                  <property name="minimumSize">
                    <size>
-                    <width>30</width>
-                    <height>16777215</height>
+                    <width>128</width>
+                    <height>0</height>
                    </size>
                   </property>
                  </widget>
@@ -1820,17 +1820,17 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="CustomComboBox" name="fermentationComboBox">
+                 <widget class="BtComboBoxFermentation" name="fermentationComboBox">
                   <property name="sizePolicy">
-                   <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                   <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
                   </property>
-                  <property name="maximumSize">
+                  <property name="minimumSize">
                    <size>
-                    <width>30</width>
-                    <height>16777215</height>
+                    <width>128</width>
+                    <height>0</height>
                    </size>
                   </property>
                  </widget>
@@ -2448,11 +2448,6 @@
    </slots>
   </customwidget>
   <customwidget>
-   <class>CustomComboBox</class>
-   <extends>QComboBox</extends>
-   <header>widgets/CustomComboBox.h</header>
-  </customwidget>
-  <customwidget>
    <class>StyleRangeWidget</class>
    <extends>QWidget</extends>
    <header>StyleRangeWidget.h</header>
@@ -2476,6 +2471,31 @@
    <class>RecipeExtrasWidget</class>
    <extends>QWidget</extends>
    <header>RecipeExtrasWidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>BtComboBoxEquipment</class>
+   <extends>QtComboBox</extends>
+   <header>widgets/BtComboBoxNamedEntity.h</header>
+  </customwidget>
+  <customwidget>
+   <class>BtComboBoxStyle</class>
+   <extends>QtComboBox</extends>
+   <header>widgets/BtComboBoxNamedEntity.h</header>
+  </customwidget>
+  <customwidget>
+   <class>BtComboBoxMash</class>
+   <extends>QtComboBox</extends>
+   <header>widgets/BtComboBoxNamedEntity.h</header>
+  </customwidget>
+  <customwidget>
+   <class>BtComboBoxBoil</class>
+   <extends>QtComboBox</extends>
+   <header>widgets/BtComboBoxNamedEntity.h</header>
+  </customwidget>
+  <customwidget>
+   <class>BtComboBoxFermentation</class>
+   <extends>QtComboBox</extends>
+   <header>widgets/BtComboBoxNamedEntity.h</header>
   </customwidget>
   <customwidget>
    <class>EquipmentButton</class>

@@ -67,7 +67,7 @@
              </widget>
             </item>
             <item>
-             <widget class="CustomComboBox" name="targetProfileCombo">
+             <widget class="BtComboBoxWater" name="targetProfileCombo">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -114,7 +114,7 @@
              </widget>
             </item>
             <item>
-             <widget class="CustomComboBox" name="baseProfileCombo">
+             <widget class="BtComboBoxWater" name="baseProfileCombo">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -449,9 +449,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>CustomComboBox</class>
+   <class>BtComboBoxWater</class>
    <extends>QComboBox</extends>
-   <header>widgets/CustomComboBox.h</header>
+   <header>widgets/BtComboBoxNamedEntity.h</header>
   </customwidget>
   <customwidget>
    <class>WaterButton</class>

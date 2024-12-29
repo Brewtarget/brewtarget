@@ -121,8 +121,10 @@ set(filesToCompile_cpp
     ${repoDir}/src/editors/StyleEditor.cpp
     ${repoDir}/src/editors/WaterEditor.cpp
     ${repoDir}/src/editors/YeastEditor.cpp
+    ${repoDir}/src/listModels/BoilListModel.cpp
     ${repoDir}/src/listModels/EquipmentListModel.cpp
     ${repoDir}/src/listModels/FermentableListModel.cpp
+    ${repoDir}/src/listModels/FermentationListModel.cpp
     ${repoDir}/src/listModels/HopListModel.cpp
     ${repoDir}/src/listModels/MashListModel.cpp
     ${repoDir}/src/listModels/MashStepListModel.cpp
@@ -197,9 +199,12 @@ set(filesToCompile_cpp
     ${repoDir}/src/serialization/xml/XmlRecipeRecord.cpp
     ${repoDir}/src/serialization/xml/XmlRecord.cpp
     ${repoDir}/src/serialization/xml/XmlRecordDefinition.cpp
+    ${repoDir}/src/sortFilterProxyModels/BoilSortFilterProxyModel.cpp
     ${repoDir}/src/sortFilterProxyModels/EquipmentSortFilterProxyModel.cpp
     ${repoDir}/src/sortFilterProxyModels/FermentableSortFilterProxyModel.cpp
+    ${repoDir}/src/sortFilterProxyModels/FermentationSortFilterProxyModel.cpp
     ${repoDir}/src/sortFilterProxyModels/HopSortFilterProxyModel.cpp
+    ${repoDir}/src/sortFilterProxyModels/MashSortFilterProxyModel.cpp
     ${repoDir}/src/sortFilterProxyModels/MiscSortFilterProxyModel.cpp
     ${repoDir}/src/sortFilterProxyModels/RecipeAdditionFermentableSortFilterProxyModel.cpp
     ${repoDir}/src/sortFilterProxyModels/RecipeAdditionHopSortFilterProxyModel.cpp
@@ -209,12 +214,15 @@ set(filesToCompile_cpp
     ${repoDir}/src/sortFilterProxyModels/WaterSortFilterProxyModel.cpp
     ${repoDir}/src/sortFilterProxyModels/YeastSortFilterProxyModel.cpp
     ${repoDir}/src/tableModels/BoilStepTableModel.cpp
+    ${repoDir}/src/tableModels/BoilTableModel.cpp
     ${repoDir}/src/tableModels/BtTableModel.cpp
     ${repoDir}/src/tableModels/EquipmentTableModel.cpp
     ${repoDir}/src/tableModels/FermentableTableModel.cpp
     ${repoDir}/src/tableModels/FermentationStepTableModel.cpp
+    ${repoDir}/src/tableModels/FermentationTableModel.cpp
     ${repoDir}/src/tableModels/HopTableModel.cpp
     ${repoDir}/src/tableModels/MashStepTableModel.cpp
+    ${repoDir}/src/tableModels/MashTableModel.cpp
     ${repoDir}/src/tableModels/MiscTableModel.cpp
     ${repoDir}/src/tableModels/RecipeAdditionFermentableTableModel.cpp
     ${repoDir}/src/tableModels/RecipeAdditionHopTableModel.cpp
@@ -230,6 +238,7 @@ set(filesToCompile_cpp
     ${repoDir}/src/trees/TreeNode.cpp
     ${repoDir}/src/trees/TreeView.cpp
     ${repoDir}/src/undoRedo/SimpleUndoableUpdate.cpp
+    ${repoDir}/src/undoRedo/Undoable.cpp
     ${repoDir}/src/utils/BtException.cpp
     ${repoDir}/src/utils/BtStringConst.cpp
     ${repoDir}/src/utils/BtStringStream.cpp
@@ -245,13 +254,12 @@ set(filesToCompile_cpp
     ${repoDir}/src/utils/TimerUtils.cpp
     ${repoDir}/src/utils/TypeLookup.cpp
     ${repoDir}/src/widgets/Animator.cpp
-    ${repoDir}/src/widgets/BtBoolComboBox.cpp
-    ${repoDir}/src/widgets/BtComboBox.cpp
+    ${repoDir}/src/widgets/BtComboBoxBool.cpp
+    ${repoDir}/src/widgets/BtComboBoxEnum.cpp
+    ${repoDir}/src/widgets/BtComboBoxNamedEntity.cpp
     ${repoDir}/src/widgets/BtOptionalDateEdit.cpp
-    ${repoDir}/src/widgets/CustomComboBox.cpp
     ${repoDir}/src/widgets/InfoButton.cpp
     ${repoDir}/src/widgets/InfoText.cpp
-    ${repoDir}/src/widgets/MashComboBox.cpp
     ${repoDir}/src/widgets/SelectionControl.cpp
     ${repoDir}/src/widgets/SmartAmountSettings.cpp
     ${repoDir}/src/widgets/SmartAmounts.cpp

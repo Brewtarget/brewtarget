@@ -23,9 +23,9 @@
 #include <QWidget>
 #include <QDebug>
 
-#include "MainWindow.h"
 #include "measurement/Unit.h"
 #include "model/Recipe.h"
+#include "undoRedo/Undoable.h"
 #include "utils/OptionalHelpers.h"
 
 RecipeExtrasWidget::RecipeExtrasWidget(QWidget* parent) :
@@ -82,14 +82,14 @@ void RecipeExtrasWidget::setRecipe(Recipe* rec) {
 
 void RecipeExtrasWidget::updateBrewer() {
    if (!this->recipe) { return; }
-   MainWindow::instance().doOrRedoUpdate(*recipe, TYPE_INFO(Recipe, brewer), lineEdit_brewer->text(), tr("Change Brewer"));
+   Undoable::doOrRedoUpdate(*recipe, TYPE_INFO(Recipe, brewer), lineEdit_brewer->text(), tr("Change Brewer"));
    return;
 }
 
 void RecipeExtrasWidget::updateBrewerAsst() {
    if (!this->recipe) { return; }
    if ( lineEdit_asstBrewer->isModified() ) {
-      MainWindow::instance().doOrRedoUpdate(*recipe, TYPE_INFO(Recipe, asstBrewer), lineEdit_asstBrewer->text(), tr("Change Assistant Brewer"));
+      Undoable::doOrRedoUpdate(*recipe, TYPE_INFO(Recipe, asstBrewer), lineEdit_asstBrewer->text(), tr("Change Assistant Brewer"));
    }
    return;
 }
@@ -100,7 +100,7 @@ void RecipeExtrasWidget::updateTasteRating() {
    if (!this->recipe) { return; }
    if ( ratingChanged )
    {
-      MainWindow::instance().doOrRedoUpdate(*recipe, TYPE_INFO(Recipe, tasteRating), spinBox_tasteRating->value(), tr("Change Taste Rating"));
+      Undoable::doOrRedoUpdate(*recipe, TYPE_INFO(Recipe, tasteRating), spinBox_tasteRating->value(), tr("Change Taste Rating"));
       ratingChanged = false;
    }
    return;
@@ -108,12 +108,12 @@ void RecipeExtrasWidget::updateTasteRating() {
 
 void RecipeExtrasWidget::updateAge() {
    if (!this->recipe) { return; }
-   MainWindow::instance().doOrRedoUpdate(*recipe, TYPE_INFO(Recipe, age_days), lineEdit_age->getNonOptValue<double>(), tr("Change Age"));
+   Undoable::doOrRedoUpdate(*recipe, TYPE_INFO(Recipe, age_days), lineEdit_age->getNonOptValue<double>(), tr("Change Age"));
 }
 
 void RecipeExtrasWidget::updateAgeTemp() {
    if (!this->recipe) { return; }
-   MainWindow::instance().doOrRedoUpdate(*recipe, TYPE_INFO(Recipe, ageTemp_c), lineEdit_ageTemp->getNonOptCanonicalQty(), tr("Change Age Temp"));
+   Undoable::doOrRedoUpdate(*recipe, TYPE_INFO(Recipe, ageTemp_c), lineEdit_ageTemp->getNonOptCanonicalQty(), tr("Change Age Temp"));
 }
 
 void RecipeExtrasWidget::updateDate(std::optional<QDate> const date) {
@@ -133,7 +133,7 @@ void RecipeExtrasWidget::updateDate(std::optional<QDate> const date) {
    // signal that ends up calling this function to say the date on the Recipe has changed, which it hasn't.
    if (date != this->recipe->date()) {
       qDebug() << Q_FUNC_INFO;
-      MainWindow::instance().doOrRedoUpdate(*recipe, TYPE_INFO(Recipe, date), date, tr("Change Date"));
+      Undoable::doOrRedoUpdate(*recipe, TYPE_INFO(Recipe, date), date, tr("Change Date"));
    }
    return;
 }
@@ -141,7 +141,7 @@ void RecipeExtrasWidget::updateDate(std::optional<QDate> const date) {
 void RecipeExtrasWidget::updateCarbonation() {
    if (!this->recipe) { return; }
 
-   MainWindow::instance().doOrRedoUpdate(*recipe,
+   Undoable::doOrRedoUpdate(*recipe,
                                          TYPE_INFO(Recipe, carbonation_vols),
                                          lineEdit_carbVols->getNonOptCanonicalQty(),
                                          tr("Change Carbonation"));
@@ -150,7 +150,7 @@ void RecipeExtrasWidget::updateCarbonation() {
 void RecipeExtrasWidget::updateTasteNotes() {
    if (!this->recipe) { return; }
 
-   MainWindow::instance().doOrRedoUpdate(*recipe,
+   Undoable::doOrRedoUpdate(*recipe,
                                          TYPE_INFO(Recipe, tasteNotes),
                                          btTextEdit_tasteNotes->toPlainText(),
                                          tr("Edit Taste Notes"));
@@ -159,7 +159,7 @@ void RecipeExtrasWidget::updateTasteNotes() {
 void RecipeExtrasWidget::updateNotes() {
    if (!this->recipe) { return; }
 
-   MainWindow::instance().doOrRedoUpdate(*recipe,
+   Undoable::doOrRedoUpdate(*recipe,
                                          TYPE_INFO(Recipe, notes),
                                          btTextEdit_notes->toPlainText(),
                                          tr("Edit Notes"));
@@ -168,7 +168,7 @@ void RecipeExtrasWidget::updateNotes() {
 void RecipeExtrasWidget::updateAcidity() {
    if (!this->recipe) { return; }
 
-   MainWindow::instance().doOrRedoUpdate(*recipe,
+   Undoable::doOrRedoUpdate(*recipe,
                                          TYPE_INFO(Recipe, beerAcidity_pH),
                                          lineEdit_acidity->getOptCanonicalQty(),
                                          tr("Change pH"));
@@ -177,7 +177,7 @@ void RecipeExtrasWidget::updateAcidity() {
 void RecipeExtrasWidget::updateAttenuation() {
    if (!this->recipe) { return; }
 
-   MainWindow::instance().doOrRedoUpdate(*recipe,
+   Undoable::doOrRedoUpdate(*recipe,
                                          TYPE_INFO(Recipe, apparentAttenuation_pct),
                                          lineEdit_attenuation->getOptValue<double>(),
                                          tr("Change Apparent Attenuation"));
