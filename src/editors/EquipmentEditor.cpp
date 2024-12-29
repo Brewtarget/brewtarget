@@ -97,18 +97,27 @@ EquipmentEditor::EquipmentEditor(QWidget* parent, QString const editorName) :
    });
 
    // Connect all the boxen
-   connect(this->checkBox_showHlt                  , &QCheckBox::stateChanged    , this, &EquipmentEditor::hideOrShowOptionalVessels);
-   connect(this->checkBox_showLauterTun            , &QCheckBox::stateChanged    , this, &EquipmentEditor::hideOrShowOptionalVessels);
-   connect(this->checkBox_showAgingVessel          , &QCheckBox::stateChanged    , this, &EquipmentEditor::hideOrShowOptionalVessels);
-   connect(this->checkBox_showPackagingVessel      , &QCheckBox::stateChanged    , this, &EquipmentEditor::hideOrShowOptionalVessels);
-   connect(this->checkBox_defaultEquipment         , &QCheckBox::stateChanged    , this, &EquipmentEditor::updateDefaultEquipment   );
-   connect(this->checkBox_calcBoilVolume           , &QCheckBox::stateChanged    , this, &EquipmentEditor::updateCalcBoilVolume     );
-   connect(this->lineEdit_boilTime                 , &SmartLineEdit::textModified, this, &EquipmentEditor::updateCalcBoilVolume     );
-   connect(this->lineEdit_kettleEvaporationPerHour , &SmartLineEdit::textModified, this, &EquipmentEditor::updateCalcBoilVolume     );
-   connect(this->lineEdit_topUpWater               , &SmartLineEdit::textModified, this, &EquipmentEditor::updateCalcBoilVolume     );
-   connect(this->lineEdit_kettleTrubChillerLoss    , &SmartLineEdit::textModified, this, &EquipmentEditor::updateCalcBoilVolume     );
-   connect(this->lineEdit_fermenterBatchSize       , &SmartLineEdit::textModified, this, &EquipmentEditor::updateCalcBoilVolume     );
-   connect(this->pushButton_absorption             , &QAbstractButton::clicked   , this, &EquipmentEditor::resetAbsorption          );
+#if QT_VERSION >= QT_VERSION_CHECK(6, 7, 0)
+   connect(this->checkBox_showHlt                  , &QCheckBox::checkStateChanged, this, &EquipmentEditor::hideOrShowOptionalVessels);
+   connect(this->checkBox_showLauterTun            , &QCheckBox::checkStateChanged, this, &EquipmentEditor::hideOrShowOptionalVessels);
+   connect(this->checkBox_showAgingVessel          , &QCheckBox::checkStateChanged, this, &EquipmentEditor::hideOrShowOptionalVessels);
+   connect(this->checkBox_showPackagingVessel      , &QCheckBox::checkStateChanged, this, &EquipmentEditor::hideOrShowOptionalVessels);
+   connect(this->checkBox_defaultEquipment         , &QCheckBox::checkStateChanged, this, &EquipmentEditor::updateDefaultEquipment   );
+   connect(this->checkBox_calcBoilVolume           , &QCheckBox::checkStateChanged, this, &EquipmentEditor::updateCalcBoilVolume     );
+#else
+   connect(this->checkBox_showHlt                  , &QCheckBox::stateChanged     , this, &EquipmentEditor::hideOrShowOptionalVessels);
+   connect(this->checkBox_showLauterTun            , &QCheckBox::stateChanged     , this, &EquipmentEditor::hideOrShowOptionalVessels);
+   connect(this->checkBox_showAgingVessel          , &QCheckBox::stateChanged     , this, &EquipmentEditor::hideOrShowOptionalVessels);
+   connect(this->checkBox_showPackagingVessel      , &QCheckBox::stateChanged     , this, &EquipmentEditor::hideOrShowOptionalVessels);
+   connect(this->checkBox_defaultEquipment         , &QCheckBox::stateChanged     , this, &EquipmentEditor::updateDefaultEquipment   );
+   connect(this->checkBox_calcBoilVolume           , &QCheckBox::stateChanged     , this, &EquipmentEditor::updateCalcBoilVolume     );
+#endif
+   connect(this->lineEdit_boilTime                 , &SmartLineEdit::textModified , this, &EquipmentEditor::updateCalcBoilVolume     );
+   connect(this->lineEdit_kettleEvaporationPerHour , &SmartLineEdit::textModified , this, &EquipmentEditor::updateCalcBoilVolume     );
+   connect(this->lineEdit_topUpWater               , &SmartLineEdit::textModified , this, &EquipmentEditor::updateCalcBoilVolume     );
+   connect(this->lineEdit_kettleTrubChillerLoss    , &SmartLineEdit::textModified , this, &EquipmentEditor::updateCalcBoilVolume     );
+   connect(this->lineEdit_fermenterBatchSize       , &SmartLineEdit::textModified , this, &EquipmentEditor::updateCalcBoilVolume     );
+   connect(this->pushButton_absorption             , &QAbstractButton::clicked    , this, &EquipmentEditor::resetAbsorption          );
 
    return;
 }

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * widgets/BtBoolComboBox.cpp is part of Brewtarget, and is copyright the following authors 2023-2024:
+ * widgets/BtComboBoxBool.cpp is part of Brewtarget, and is copyright the following authors 2023-2024:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -13,7 +13,7 @@
  * You should have received a copy of the GNU General Public License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
  ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
-#include "widgets/BtBoolComboBox.h"
+#include "widgets/BtComboBoxBool.h"
 
 #include <QString>
 #include <QVariant>
@@ -26,10 +26,10 @@ namespace {
    QString const  trueValue = QStringLiteral("true" );
 }
 
-// This private implementation class holds all private non-virtual members of BtBoolComboBox
-class BtBoolComboBox::impl {
+// This private implementation class holds all private non-virtual members of BtComboBoxBool
+class BtComboBoxBool::impl {
 public:
-   impl(BtBoolComboBox & self) :
+   impl(BtComboBoxBool & self) :
       m_self          {self },
       m_initialised   {false},
       m_editorName    {"Uninitialised m_editorName!"    },
@@ -43,7 +43,7 @@ public:
 
    ~impl() = default;
 
-   BtBoolComboBox & m_self          ;
+   BtComboBoxBool & m_self          ;
    bool             m_initialised   ;
    char     const * m_editorName    ;
    char     const * m_comboBoxName  ;
@@ -53,15 +53,15 @@ public:
    TypeInfo const * m_typeInfo      ;
 };
 
-BtBoolComboBox::BtBoolComboBox(QWidget * parent) :
+BtComboBoxBool::BtComboBoxBool(QWidget * parent) :
    QComboBox{parent},
    pimpl {std::make_unique<impl>(*this)} {
    return;
 }
 
-BtBoolComboBox::~BtBoolComboBox() = default;
+BtComboBoxBool::~BtComboBoxBool() = default;
 
-void BtBoolComboBox::init(char const * const   editorName    ,
+void BtComboBoxBool::init(char const * const   editorName    ,
                           char const * const   comboBoxName  ,
                           char const * const   comboBoxFqName,
                           QString      const & unsetDisplay  ,
@@ -104,12 +104,12 @@ void BtBoolComboBox::init(char const * const   editorName    ,
    return;
 }
 
-[[nodiscard]] bool BtBoolComboBox::isOptional() const {
+[[nodiscard]] bool BtComboBoxBool::isOptional() const {
    Q_ASSERT(this->pimpl->m_initialised);
    return this->pimpl->m_typeInfo->isOptional();
 }
 
-void BtBoolComboBox::setValue(bool const value) {
+void BtComboBoxBool::setValue(bool const value) {
    Q_ASSERT(!this->isOptional());
 
    // Standard conversion of bool is false -> 0, true -> 1
@@ -117,7 +117,7 @@ void BtBoolComboBox::setValue(bool const value) {
    return;
 }
 
-void BtBoolComboBox::setValue(std::optional<bool> const value) {
+void BtComboBoxBool::setValue(std::optional<bool> const value) {
    Q_ASSERT(this->isOptional());
 
    if (!value) {
@@ -129,18 +129,18 @@ void BtBoolComboBox::setValue(std::optional<bool> const value) {
    return;
 }
 
-void BtBoolComboBox::setNull() {
+void BtComboBoxBool::setNull() {
    Q_ASSERT(this->isOptional());
    this->setCurrentIndex(0);
    return;
 }
 
-void BtBoolComboBox::setDefault() {
+void BtComboBoxBool::setDefault() {
    this->setCurrentIndex(0);
    return;
 }
 
-void BtBoolComboBox::setFromVariant(QVariant const & value) {
+void BtComboBoxBool::setFromVariant(QVariant const & value) {
    Q_ASSERT(this->pimpl->m_initialised);
    if (this->pimpl->m_typeInfo->isOptional()) {
       this->setValue(value.value<std::optional<bool>>());
@@ -150,14 +150,14 @@ void BtBoolComboBox::setFromVariant(QVariant const & value) {
    return;
 }
 
-[[nodiscard]] bool BtBoolComboBox::getNonOptBoolValue() const {
+[[nodiscard]] bool BtComboBoxBool::getNonOptBoolValue() const {
    Q_ASSERT(!this->isOptional());
    QString const rawValue = this->currentData().toString();
    Q_ASSERT(rawValue == falseValue || rawValue == trueValue);
    return rawValue == trueValue;
 }
 
-[[nodiscard]] std::optional<bool> BtBoolComboBox::getOptBoolValue() const {
+[[nodiscard]] std::optional<bool> BtComboBoxBool::getOptBoolValue() const {
    Q_ASSERT(this->isOptional());
    QString const rawValue = this->currentData().toString();
    if (rawValue.isEmpty()) {
@@ -168,7 +168,7 @@ void BtBoolComboBox::setFromVariant(QVariant const & value) {
    return rawValue == trueValue;
 }
 
-[[nodiscard]] QVariant BtBoolComboBox::getAsVariant() const {
+[[nodiscard]] QVariant BtComboBoxBool::getAsVariant() const {
    if (this->pimpl->m_typeInfo->isOptional()) {
       return QVariant::fromValue(this->getOptBoolValue());
    }

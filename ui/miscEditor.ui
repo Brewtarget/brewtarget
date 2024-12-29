@@ -57,7 +57,7 @@
         </widget>
        </item>
        <item row="2" column="2">
-        <widget class="BtComboBox" name="comboBox_type">
+        <widget class="BtComboBoxEnum" name="comboBox_type">
          <property name="toolTip">
           <string>Type</string>
          </property>
@@ -98,7 +98,7 @@
         </widget>
        </item>
        <item row="4" column="5">
-        <widget class="BtComboBox" name="comboBox_amountType">
+        <widget class="BtComboBoxEnum" name="comboBox_amountType">
          <property name="toolTip">
           <string>Whether the amount is weight or volume</string>
          </property>
@@ -260,9 +260,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>BtComboBox</class>
+   <class>BtComboBoxEnum</class>
    <extends>QComboBox</extends>
-   <header>widgets/BtComboBox.h</header>
+   <header>widgets/BtComboBoxEnum.h</header>
   </customwidget>
   <customwidget>
    <class>InfoButton</class>

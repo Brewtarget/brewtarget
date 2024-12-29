@@ -147,7 +147,7 @@
         </widget>
        </item>
        <item row="7" column="2">
-        <widget class="BtComboBox" name="comboBox_type">
+        <widget class="BtComboBoxEnum" name="comboBox_type">
          <property name="toolTip">
           <string>Type of beverage</string>
          </property>
@@ -471,9 +471,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>BtComboBox</class>
+   <class>BtComboBoxEnum</class>
    <extends>QComboBox</extends>
-   <header>widgets/BtComboBox.h</header>
+   <header>widgets/BtComboBoxEnum.h</header>
   </customwidget>
   <customwidget>
    <class>SmartLabel</class>

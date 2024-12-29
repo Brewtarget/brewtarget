@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * tableModels/EquipmentTableModel.cpp is part of Brewtarget, and is copyright the following authors 2023:
+ * tableModels/EquipmentTableModel.cpp is part of Brewtarget, and is copyright the following authors 2023-2024:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -15,19 +15,10 @@
  ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "tableModels/EquipmentTableModel.h"
 
-#include <QComboBox>
 #include <QHeaderView>
-#include <QLineEdit>
-
-#include "database/ObjectStoreWrapper.h"
-#include "MainWindow.h"
-#include "measurement/Measurement.h"
-#include "measurement/Unit.h"
-#include "model/Inventory.h"
-#include "model/Recipe.h"
-#include "PersistentSettings.h"
-#include "utils/BtStringConst.h"
-#include "widgets/BtComboBox.h"
+#include <QModelIndex>
+#include <QVariant>
+#include <QWidget>
 
 EquipmentTableModel::EquipmentTableModel(QTableView* parent, bool editable) :
    BtTableModel{
@@ -42,7 +33,6 @@ EquipmentTableModel::EquipmentTableModel(QTableView* parent, bool editable) :
    },
    TableModelBase<EquipmentTableModel, Equipment>{} {
    this->rows.clear();
-   setObjectName("equipmentTableModel");
 
    QHeaderView* headerView = m_parentTableWidget->horizontalHeader();
    connect(headerView, &QWidget::customContextMenuRequested, this, &EquipmentTableModel::contextMenu);
@@ -56,30 +46,15 @@ void EquipmentTableModel::removed([[maybe_unused]] std::shared_ptr<Equipment> it
 void EquipmentTableModel::updateTotals()                                            { return; }
 
 QVariant EquipmentTableModel::data(QModelIndex const & index, int role) const {
-   if (!this->indexAndRoleOk(index, role)) {
-      return QVariant();
-   }
-
-   // No special handling required for any of our columns
-   return this->readDataFromModel(index, role);
+   return this->doDataDefault(index, role);
 }
 
 Qt::ItemFlags EquipmentTableModel::flags(QModelIndex const & index) const {
-   Qt::ItemFlags const defaults = Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled;
-   auto const columnIndex = static_cast<EquipmentTableModel::ColumnIndex>(index.column());
-   if (columnIndex == EquipmentTableModel::ColumnIndex::Name) {
-      return defaults;
-   }
-   return defaults | (this->m_editable ? Qt::ItemIsEditable : Qt::NoItemFlags);
+   return TableModelHelper::doFlags<EquipmentTableModel>(index, this->m_editable);
 }
 
 bool EquipmentTableModel::setData(QModelIndex const & index, QVariant const & value, int role) {
-   if (!this->indexAndRoleOk(index, role)) {
-      return false;
-   }
-
-   // No special handling required for any of our columns
-   return this->writeDataToModel(index, value, role);
+   return this->doSetDataDefault(index, value, role);
 }
 
 // Insert the boiler-plate stuff that we cannot do in TableModelBase

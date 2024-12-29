@@ -332,7 +332,7 @@
              </widget>
             </item>
             <item>
-             <widget class="CustomComboBox" name="equipmentComboBox">
+             <widget class="BtComboBoxEquipment" name="equipmentComboBox">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -603,9 +603,9 @@
    </slots>
   </customwidget>
   <customwidget>
-   <class>CustomComboBox</class>
+   <class>BtComboBoxEquipment</class>
    <extends>QComboBox</extends>
-   <header>widgets/CustomComboBox.h</header>
+   <header>widgets/BtComboBoxNamedEntity.h</header>
   </customwidget>
  </customwidgets>
  <resources>

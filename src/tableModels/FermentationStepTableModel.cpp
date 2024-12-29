@@ -62,7 +62,6 @@ FermentationStepTableModel::FermentationStepTableModel(QTableView * parent, bool
    },
    TableModelBase<FermentationStepTableModel, FermentationStep>{},
    StepTableModelBase<FermentationStepTableModel, FermentationStep, Fermentation>{} {
-   this->setObjectName("fermentationStepTableModel");
 
    QHeaderView* headerView = m_parentTableWidget->horizontalHeader();
    connect(headerView, &QWidget::customContextMenuRequested, this, &FermentationStepTableModel::contextMenu);
@@ -88,29 +87,21 @@ void FermentationStepTableModel::removed([[maybe_unused]] std::shared_ptr<Fermen
 void FermentationStepTableModel::updateTotals()                                      { return; }
 
 QVariant FermentationStepTableModel::data(QModelIndex const & index, int role) const {
-   if (!this->m_stepOwnerObs || !this->indexAndRoleOk(index, role)) {
+   if (!this->m_stepOwnerObs) {
       return QVariant();
    }
-
-   // No special handling required for any of our columns
-   return this->readDataFromModel(index, role);
+   return this->doDataDefault(index, role);
 }
 
-Qt::ItemFlags FermentationStepTableModel::flags(const QModelIndex& index ) const {
-   auto const columnIndex = static_cast<FermentationStepTableModel::ColumnIndex>(index.column());
-   if (columnIndex == FermentationStepTableModel::ColumnIndex::Name) {
-      return Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
-   }
-   return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
+Qt::ItemFlags FermentationStepTableModel::flags(QModelIndex const & index) const {
+   return TableModelHelper::doFlags<FermentationStepTableModel>(index, this->m_editable);
 }
 
 bool FermentationStepTableModel::setData(QModelIndex const & index, QVariant const & value, int role) {
-   if (!this->m_stepOwnerObs || !this->indexAndRoleOk(index, role)) {
+   if (!this->m_stepOwnerObs) {
       return false;
    }
-
-   // No special handling required for any of our columns
-   return this->writeDataToModel(index, value, role);
+   return this->doSetDataDefault(index, value, role);
 }
 
 /////==========================CLASS FermentationStepItemDelegate===============================

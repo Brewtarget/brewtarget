@@ -157,6 +157,17 @@
     </message>
 </context>
 <context>
+    <name>BoilTableModel</name>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pre-Boil Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>BrewDayFormatter</name>
     <message>
         <source>Brewday</source>
@@ -1470,6 +1481,17 @@ Log file may contain more details.</source>
     </message>
 </context>
 <context>
+    <name>FermentationTableModel</name>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Number of Steps</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Folder</name>
     <message>
         <source>Name</source>
@@ -1984,11 +2006,11 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Copy Recipe</source>
-        <translation>复制配方Copy Recipe</translation>
+        <translation type="vanished">复制配方Copy Recipe</translation>
     </message>
     <message>
         <source>Enter a unique name for the copy.</source>
-        <translation>进入副本的唯一名称。Enter a unique name for the copy.</translation>
+        <translation type="vanished">进入副本的唯一名称。Enter a unique name for the copy.</translation>
     </message>
     <message>
         <source>Please give your mash a name before saving.</source>
@@ -2095,14 +2117,6 @@ Log file may contain more details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Undo %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Redo %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Error creating recipe</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2180,6 +2194,22 @@ If you need help, please open an issue at %1</source>
     </message>
     <message>
         <source>Automatically-created Fermentation for %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Recipe Mash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Recipe Equipment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Undo %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Redo %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2301,6 +2331,25 @@ If you need help, please open an issue at %1</source>
     <message>
         <source>Time</source>
         <translation>时间Time</translation>
+    </message>
+</context>
+<context>
+    <name>MashTableModel</name>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Initial Grain Temperature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Total Mash Water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Total Time</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -7895,7 +7944,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>&amp;Copy Recipe</source>
-        <translation>复制配方</translation>
+        <translation type="vanished">复制配方</translation>
     </message>
     <message>
         <source>Pr&amp;iming Calculator</source>
@@ -8199,6 +8248,10 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>See Boil tab below</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Copy Selected Item(s)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

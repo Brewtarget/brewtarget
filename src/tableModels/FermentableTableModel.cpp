@@ -41,7 +41,7 @@
 #include "model/Recipe.h"
 #include "tableModels/ItemDelegate.h"
 #include "utils/BtStringConst.h"
-#include "widgets/BtComboBox.h"
+#include "widgets/BtComboBoxEnum.h"
 
 //=====================CLASS FermentableTableModel==============================
 FermentableTableModel::FermentableTableModel(QTableView* parent, bool editable) :
@@ -63,9 +63,6 @@ FermentableTableModel::FermentableTableModel(QTableView* parent, bool editable) 
    },
    TableModelBase<FermentableTableModel, Fermentable>{} {
 
-   // for units and scales
-   setObjectName("fermentableTable");
-
    QHeaderView* headerView = m_parentTableWidget->horizontalHeader();
    connect(headerView, &QWidget::customContextMenuRequested, this, &FermentableTableModel::contextMenu);
    connect(&ObjectStoreTyped<InventoryFermentable>::getInstance(), &ObjectStoreTyped<InventoryFermentable>::signalPropertyChanged, this, &FermentableTableModel::changedInventory);
@@ -79,39 +76,19 @@ void FermentableTableModel::removed([[maybe_unused]] std::shared_ptr<Fermentable
 void FermentableTableModel::updateTotals()                                              { return; }
 
 QVariant FermentableTableModel::data(QModelIndex const & index, int role) const {
-   if (!this->indexAndRoleOk(index, role)) {
-      return QVariant();
-   }
-
-   // No special handling required for any of our columns
-   return this->readDataFromModel(index, role);
+   return this->doDataDefault(index, role);
 }
 
 Qt::ItemFlags FermentableTableModel::flags(QModelIndex const & index) const {
-   Qt::ItemFlags constexpr defaults = Qt::ItemIsEnabled;
-   auto row = this->rows[index.row()];
-
-   auto const columnIndex = static_cast<FermentableTableModel::ColumnIndex>(index.column());
-   switch (columnIndex) {
-      case FermentableTableModel::ColumnIndex::Name:
-         return (defaults | Qt::ItemIsSelectable);
-      case FermentableTableModel::ColumnIndex::TotalInventory:
-         return Qt::ItemIsEnabled | Qt::ItemIsEditable;
-      default:
-         return (defaults | Qt::ItemIsSelectable | (m_editable ? Qt::ItemIsEditable : Qt::NoItemFlags) );
-   }
+   return TableModelHelper::doFlags<FermentableTableModel>(
+      index,
+      this->m_editable,
+      {{FermentableTableModel::ColumnIndex::TotalInventory, Qt::ItemIsEditable}}
+   );
 }
 
-
-bool FermentableTableModel::setData(QModelIndex const & index,
-                                    QVariant const & value,
-                                    int role) {
-   if (!this->indexAndRoleOk(index, role)) {
-      return false;
-   }
-
-   // No special handling required for any of our columns
-   return this->writeDataToModel(index, value, role);
+bool FermentableTableModel::setData(QModelIndex const & index, QVariant const & value, int role) {
+   return this->doSetDataDefault(index, value, role);
 }
 
 // Insert the boiler-plate stuff that we cannot do in TableModelBase

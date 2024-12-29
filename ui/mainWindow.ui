@@ -385,7 +385,7 @@
                         </widget>
                        </item>
                        <item>
-                        <widget class="CustomComboBox" name="styleComboBox">
+                        <widget class="BtComboBoxStyle" name="styleComboBox">
                          <property name="sizePolicy">
                           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
                            <horstretch>0</horstretch>
@@ -436,7 +436,7 @@
                         </widget>
                        </item>
                        <item>
-                        <widget class="CustomComboBox" name="equipmentComboBox">
+                        <widget class="BtComboBoxEquipment" name="equipmentComboBox">
                          <property name="sizePolicy">
                           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
                            <horstretch>0</horstretch>
@@ -1442,17 +1442,17 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="CustomComboBox" name="mashComboBox">
+                 <widget class="BtComboBoxMash" name="mashComboBox">
                   <property name="sizePolicy">
-                   <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                   <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
                   </property>
-                  <property name="maximumSize">
+                  <property name="minimumSize">
                    <size>
-                    <width>30</width>
-                    <height>16777215</height>
+                    <width>128</width>
+                    <height>0</height>
                    </size>
                   </property>
                  </widget>
@@ -1631,17 +1631,17 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="CustomComboBox" name="boilComboBox">
+                 <widget class="BtComboBoxBoil" name="boilComboBox">
                   <property name="sizePolicy">
-                   <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                   <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
                   </property>
-                  <property name="maximumSize">
+                  <property name="minimumSize">
                    <size>
-                    <width>30</width>
-                    <height>16777215</height>
+                    <width>128</width>
+                    <height>0</height>
                    </size>
                   </property>
                  </widget>
@@ -1820,17 +1820,17 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="CustomComboBox" name="fermentationComboBox">
+                 <widget class="BtComboBoxFermentation" name="fermentationComboBox">
                   <property name="sizePolicy">
-                   <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                   <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
                   </property>
-                  <property name="maximumSize">
+                  <property name="minimumSize">
                    <size>
-                    <width>30</width>
-                    <height>16777215</height>
+                    <width>128</width>
+                    <height>0</height>
                    </size>
                   </property>
                  </widget>
@@ -1940,7 +1940,7 @@
      <addaction name="actionRestore_Database"/>
     </widget>
     <addaction name="actionNewRecipe"/>
-    <addaction name="actionCopy_Recipe"/>
+    <addaction name="actionCopySelected"/>
     <addaction name="separator"/>
     <addaction name="actionImportFromXml"/>
     <addaction name="actionExportToXml"/>
@@ -2239,13 +2239,13 @@
     <string>Restore Database</string>
    </property>
   </action>
-  <action name="actionCopy_Recipe">
+  <action name="actionCopySelected">
    <property name="icon">
     <iconset resource="../resources.qrc">
      <normaloff>:/images/edit-copy.png</normaloff>:/images/edit-copy.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;Copy Recipe</string>
+    <string>&amp;Copy Selected Item(s)</string>
    </property>
   </action>
   <action name="actionPriming_Calculator">
@@ -2448,11 +2448,6 @@
    </slots>
   </customwidget>
   <customwidget>
-   <class>CustomComboBox</class>
-   <extends>QComboBox</extends>
-   <header>widgets/CustomComboBox.h</header>
-  </customwidget>
-  <customwidget>
    <class>StyleRangeWidget</class>
    <extends>QWidget</extends>
    <header>StyleRangeWidget.h</header>
@@ -2476,6 +2471,31 @@
    <class>RecipeExtrasWidget</class>
    <extends>QWidget</extends>
    <header>RecipeExtrasWidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>BtComboBoxEquipment</class>
+   <extends>QtComboBox</extends>
+   <header>widgets/BtComboBoxNamedEntity.h</header>
+  </customwidget>
+  <customwidget>
+   <class>BtComboBoxStyle</class>
+   <extends>QtComboBox</extends>
+   <header>widgets/BtComboBoxNamedEntity.h</header>
+  </customwidget>
+  <customwidget>
+   <class>BtComboBoxMash</class>
+   <extends>QtComboBox</extends>
+   <header>widgets/BtComboBoxNamedEntity.h</header>
+  </customwidget>
+  <customwidget>
+   <class>BtComboBoxBoil</class>
+   <extends>QtComboBox</extends>
+   <header>widgets/BtComboBoxNamedEntity.h</header>
+  </customwidget>
+  <customwidget>
+   <class>BtComboBoxFermentation</class>
+   <extends>QtComboBox</extends>
+   <header>widgets/BtComboBoxNamedEntity.h</header>
   </customwidget>
   <customwidget>
    <class>EquipmentButton</class>

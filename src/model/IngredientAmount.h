@@ -293,7 +293,28 @@ TypeLookup const IngredientAmount<Derived, IngredientClass>::typeLookup {
 
 
 /**
- * \brief Derived classes should include this in their header file, right after Q_OBJECT
+ * \brief Concrete derived classes should (either directly or via inclusion in an intermediate class's equivalent macro)
+ *        include this in their header file, right after Q_OBJECT.  Concrete derived classes also need to include the
+ *        following block (see comment in model/StepBase.h for why):
+ *
+ *           // See model/IngredientAmount.h for info, getters and setters for these properties
+ *           Q_PROPERTY(Measurement::Amount           amount    READ amount     WRITE setAmount  )
+ *           Q_PROPERTY(double                        quantity  READ quantity   WRITE setQuantity)
+ *           Q_PROPERTY(Measurement::Unit const *     unit      READ unit       WRITE setUnit    )
+ *           Q_PROPERTY(Measurement::PhysicalQuantity measure   READ measure    WRITE setMeasure )
+ *           Q_PROPERTY(bool                          isWeight  READ isWeight   WRITE setIsWeight)
+ *
+ *        Comments for these properties:
+ *
+ *           \c amount : Convenience to access \c quantity and \c unit simultaneously
+ *
+ *           \c quantity :
+ *
+ *           \c unit :
+ *
+ *           \c measure :
+ *
+ *           \c isWeight : Mostly for BeerXML support
  *
  *        Note we have to be careful about comment formats in macro definitions
  */

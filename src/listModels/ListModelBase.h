@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * listModels/ListModelBase.h is part of Brewtarget, and is copyright the following authors 2023:
+ * listModels/ListModelBase.h is part of Brewtarget, and is copyright the following authors 2023-2024:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -141,8 +141,18 @@ protected:
    }
 
    QVariant doData(QModelIndex const & index, int role) const {
-      if (index.column() == 0 && role == Qt::DisplayRole) {
-         return QVariant(m_items.at(index.row())->name());
+      if (index.column() == 0) {
+         //
+         // See https://doc.qt.io/qt-6/qt.html#ItemDataRole-enum for more on Qt::ItemDataRole.  For our purposes:
+         //
+         //    Qt::DisplayRole = we want the name of the stored object (to show on the screen)
+         //    Qt::UserRole    = we want the ID of the stored object (to uniquely identify it)
+         //
+         if (role == Qt::DisplayRole) {
+            return QVariant(m_items.at(index.row())->name());
+         } else if (role == Qt::UserRole) {
+            return QVariant(m_items.at(index.row())->key());
+         }
       }
       return QVariant();
    }

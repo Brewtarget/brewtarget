@@ -153,6 +153,7 @@
 #include "tableModels/RecipeAdditionMiscTableModel.h"
 #include "tableModels/RecipeAdditionYeastTableModel.h"
 #include "undoRedo/RelationalUndoableUpdate.h"
+#include "undoRedo/Undoable.h"
 #include "undoRedo/UndoableAddOrRemove.h"
 #include "undoRedo/UndoableAddOrRemoveList.h"
 #include "utils/BtStringConst.h"
@@ -236,7 +237,6 @@ public:
 
    impl(MainWindow & self) :
       m_self{self},
-      m_undoStack{std::make_unique<QUndoStack>(&m_self)},
       m_boilStepTableModel            {nullptr},
       m_fermentationStepTableModel    {nullptr},
       m_mashStepTableModel            {nullptr},
@@ -247,8 +247,7 @@ public:
       m_fermentableAdditionsTableProxy{nullptr},
       m_hopAdditionsTableProxy        {nullptr},
       m_miscAdditionsTableProxy       {nullptr},
-      m_yeastAdditionsTableProxy      {nullptr},
-      m_styleProxyModel               {nullptr} {
+      m_yeastAdditionsTableProxy      {nullptr} {
       return;
    }
 
@@ -414,27 +413,17 @@ public:
     *        Any new combo boxes, along with their list models, should be initialized here
     */
    void setupComboBoxes() {
-      // Set equipment combo box model.
-      m_equipmentListModel = std::make_unique<EquipmentListModel>(m_self.equipmentComboBox);
-      m_self.equipmentComboBox->setModel(m_equipmentListModel.get());
-
-      // Set the style combo box
-      m_styleListModel = std::make_unique<StyleListModel>(m_self.styleComboBox);
-      m_styleProxyModel = std::make_unique<StyleSortFilterProxyModel>(m_self.styleComboBox);
-      m_styleProxyModel->setDynamicSortFilter(true);
-      m_styleProxyModel->setSortLocaleAware(true);
-      m_styleProxyModel->setSourceModel(m_styleListModel.get());
-      m_styleProxyModel->sort(0);
-      m_self.styleComboBox->setModel(m_styleProxyModel.get());
-
-      // Set the mash combo box
-      m_mashListModel = std::make_unique<MashListModel>(m_self.mashComboBox);
-      m_self.mashComboBox->setModel(m_mashListModel.get());
+      m_self.equipmentComboBox->init();
+      m_self.styleComboBox->init();
+      m_self.mashComboBox->init();
+      m_self.boilComboBox->init();
+      m_self.fermentationComboBox->init();
 
       // Nothing to say.
       m_namedMashEditor = std::make_unique<NamedMashEditor>(&m_self, m_mashStepEditor.get());
       // I don't think this is used yet
       m_singleNamedMashEditor = std::make_unique<NamedMashEditor>(&m_self, m_mashStepEditor.get(), true);
+      return;
    }
 
    /**
@@ -477,7 +466,7 @@ public:
    void doRecipeAddition(std::shared_ptr<RA> ra) {
       Q_ASSERT(ra);
 
-      this->m_self.doOrRedoUpdate(
+      Undoable::doOrRedoUpdate(
          newUndoableAddOrRemove(*this->m_recipeObs,
                                 &Recipe::addAddition<RA>,
                                 ra,
@@ -523,7 +512,7 @@ public:
       }
 
       for (auto item : itemsToRemove) {
-         this->m_self.doOrRedoUpdate(
+         Undoable::doOrRedoUpdate(
             newUndoableAddOrRemove(*this->m_recipeObs,
                                     &Recipe::removeAddition<NE>,
                                     item,
@@ -651,7 +640,7 @@ public:
 
       auto & stepTableModel = this->getStepTableModel<StepClass>();
       auto step = stepTableModel.getRow(row);
-      this->m_self.doOrRedoUpdate(
+      Undoable::doOrRedoUpdate(
          newUndoableAddOrRemove(*stepOwner,
                                 &StepClass::StepOwnerClass::remove,
                                 step,
@@ -848,7 +837,6 @@ public:
    }
 
    void setBrewNote(BrewNote * bNote) {
-///      QString tabname;
       BrewNoteWidget* ni = this->findBrewNoteWidget(bNote);
       if (ni) {
          this->m_self.tabWidget_recipeView->setCurrentWidget(ni);
@@ -867,10 +855,6 @@ public:
 
    MainWindow & m_self;
 
-   // Undo / Redo, using the Qt Undo framework
-   std::unique_ptr<QUndoStack> m_undoStack;
-
-
    Recipe * m_recipeObs = nullptr;
 
 
@@ -888,7 +872,6 @@ public:
    std::unique_ptr<RecipeAdditionHopSortFilterProxyModel        > m_hopAdditionsTableProxy        ;
    std::unique_ptr<RecipeAdditionMiscSortFilterProxyModel       > m_miscAdditionsTableProxy       ;
    std::unique_ptr<RecipeAdditionYeastSortFilterProxyModel      > m_yeastAdditionsTableProxy      ;
-   std::unique_ptr<StyleSortFilterProxyModel                    > m_styleProxyModel               ;
 
    // All initialised in setupDialogs
    std::unique_ptr<AboutDialog           > m_aboutDialog           ;
@@ -931,17 +914,10 @@ public:
    std::unique_ptr<YeastCatalog          > m_yeastCatalog          ;
    std::unique_ptr<YeastEditor           > m_yeastEditor           ;
 
-   // all things lists should go here
-   std::unique_ptr<EquipmentListModel> m_equipmentListModel;
-   std::unique_ptr<MashListModel     > m_mashListModel     ;
-   std::unique_ptr<StyleListModel    > m_styleListModel    ;
-//   std::unique_ptr<WaterListModel> waterListModel;  Appears to be unused...
    std::unique_ptr<NamedMashEditor> m_namedMashEditor;
    std::unique_ptr<NamedMashEditor> m_singleNamedMashEditor;
 
    QString highSS, lowSS, goodSS, boldSS; // Palette replacements
-///   QPrinter * printer = nullptr;
-
 };
 
 
@@ -1043,14 +1019,6 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), pimpl{std::make_u
 
    // Null out the recipe
    this->pimpl->m_recipeObs = nullptr;
-
-///   // Set up the printer
-///   this->pimpl->printer = new QPrinter;
-///#if QT_VERSION < QT_VERSION_CHECK(5,15,0)
-///   this->pimpl->printer->setPageSize(QPrinter::Letter);
-///#else
-///   this->pimpl->printer->setPageSize(QPageSize(QPageSize::Letter));
-///#endif
 
    return;
 }
@@ -1156,18 +1124,22 @@ void MainWindow::DeleteMainWindow() {
 }
 
 // Setup the keyboard shortcuts
-void MainWindow::setupShortCuts()
-{
-   actionNewRecipe->setShortcut(QKeySequence::New);
-   actionCopy_Recipe->setShortcut(QKeySequence::Copy);
-   actionDeleteSelected->setShortcut(QKeySequence::Delete);
-   actionUndo->setShortcut(QKeySequence::Undo);
-   actionRedo->setShortcut(QKeySequence::Redo);
+void MainWindow::setupShortCuts() {
+   this->actionNewRecipe->setShortcut(QKeySequence::New);
+   this->actionCopySelected->setShortcut(QKeySequence::Copy);
+   this->actionDeleteSelected->setShortcut(QKeySequence::Delete);
+   this->actionUndo->setShortcut(QKeySequence::Undo);
+   this->actionRedo->setShortcut(QKeySequence::Redo);
+   return;
 }
 
-void MainWindow::setUpStateChanges()
-{
-   connect( checkBox_locked, &QCheckBox::stateChanged, this, &MainWindow::lockRecipe );
+void MainWindow::setUpStateChanges() {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 7, 0)
+   connect(checkBox_locked, &QCheckBox::checkStateChanged, this, &MainWindow::lockRecipe);
+#else
+   connect(checkBox_locked, &QCheckBox::stateChanged     , this, &MainWindow::lockRecipe);
+#endif
+   return;
 }
 
 // Any manipulation of CSS for the MainWindow should be in here
@@ -1396,7 +1368,7 @@ void MainWindow::setupTriggers() {
    connect(actionExportToXml               , &QAction::triggered, this                                      , &MainWindow::exportRecipe          ); // > File > Export Recipes
    connect(actionUndo                      , &QAction::triggered, this                                      , &MainWindow::editUndo              ); // > Edit > Undo
    connect(actionRedo                      , &QAction::triggered, this                                      , &MainWindow::editRedo              ); // > Edit > Redo
-   setUndoRedoEnable();
+   this->setUndoRedoEnable();
    connect(actionEquipments                , &QAction::triggered, this->pimpl->m_equipCatalog.get()         , &QWidget::show                     ); // > View > Equipments
    connect(actionMashs                     , &QAction::triggered, this->pimpl->m_namedMashEditor.get()      , &QWidget::show                     ); // > View > Mashs
    connect(actionStyles                    , &QAction::triggered, this->pimpl->m_styleCatalog.get()         , &QWidget::show                     ); // > View > Styles
@@ -1412,7 +1384,7 @@ void MainWindow::setupTriggers() {
    connect(actionHydrometer_Temp_Adjustment, &QAction::triggered, this->pimpl->m_hydrometerTool.get()       , &QWidget::show                     ); // > Tools > Hydrometer Temp Adjustment
    connect(actionAlcohol_Percentage_Tool   , &QAction::triggered, this->pimpl->m_alcoholTool.get()          , &QWidget::show                     ); // > Tools > Alcohol
    connect(actionOG_Correction_Help        , &QAction::triggered, this->pimpl->m_ogAdjuster.get()           , &QWidget::show                     ); // > Tools > OG Correction Help
-   connect(actionCopy_Recipe               , &QAction::triggered, this                                      , &MainWindow::copyRecipe            ); // > File > Copy Recipe
+   connect(actionCopySelected              , &QAction::triggered, this                                      , &MainWindow::copySelected          ); // > File > Copy Selected
    connect(actionPriming_Calculator        , &QAction::triggered, this->pimpl->m_primingDialog.get()        , &QWidget::show                     ); // > Tools > Priming Calculator
    connect(actionStrikeWater_Calculator    , &QAction::triggered, this->pimpl->m_strikeWaterDialog.get()    , &QWidget::show                     ); // > Tools > Strike Water Calculator
    connect(actionRefractometer_Tools       , &QAction::triggered, this->pimpl->m_refractoDialog.get()       , &QWidget::show                     ); // > Tools > Refractometer Tools
@@ -1450,9 +1422,8 @@ void MainWindow::setupClicks() {
    connect(this->equipmentButton          , &QAbstractButton::clicked, this                             , &MainWindow::showEquipmentEditor);
    connect(this->styleButton              , &QAbstractButton::clicked, this                             , &MainWindow::showStyleEditor    );
    connect(this->mashButton               , &QAbstractButton::clicked, this->pimpl->m_mashEditor        , &MashEditor::showEditor);
-   // TODO: Make these buttons!
-//   connect(this->boilButton               , &QAbstractButton::clicked, this->pimpl->m_boilEditor        , &BoilEditor::showEditor);
-//   connect(this->fermentationButton       , &QAbstractButton::clicked, this->pimpl->m_fermentationEditor, &FermentationEditor::showEditor);
+   connect(this->boilButton               , &QAbstractButton::clicked, this->pimpl->m_boilEditor        , &BoilEditor::showEditor);
+   connect(this->fermentationButton       , &QAbstractButton::clicked, this->pimpl->m_fermentationEditor, &FermentationEditor::showEditor);
    connect(this->pushButton_addFerm       , &QAbstractButton::clicked, this->pimpl->m_fermCatalog , &QWidget::show         );
    connect(this->pushButton_addHop        , &QAbstractButton::clicked, this->pimpl->m_hopCatalog  , &QWidget::show         );
    connect(this->pushButton_addMisc       , &QAbstractButton::clicked, this->pimpl->m_miscCatalog , &QWidget::show         );
@@ -1744,31 +1715,35 @@ void MainWindow::setRecipe(Recipe* recipe) {
    // Tell some of our other widgets to observe the new recipe.
    this->pimpl->m_mashWizard->setRecipe(recipe);
    brewDayScrollWidget->setRecipe(recipe);
-   this->pimpl->m_equipmentListModel->observeRecipe(recipe);
    this->pimpl->m_recipeFormatter->setRecipe(recipe);
    this->pimpl->m_ogAdjuster->setRecipe(recipe);
    recipeExtrasWidget->setRecipe(recipe);
    this->pimpl->m_mashDesigner->setRecipe(recipe);
-   equipmentButton->setRecipe(recipe);
+   this->equipmentButton->setRecipe(recipe);
+   this->equipmentComboBox->setItem(recipe->equipment());
    if (recipe->equipment()) {
       this->pimpl->m_equipEditor->setEditItem(recipe->equipment());
    }
-   styleButton->setRecipe(recipe);
+   this->styleButton->setRecipe(recipe);
+   this->styleComboBox->setItem(recipe->style());
    if (recipe->style()) {
       this->pimpl->m_styleEditor->setEditItem(recipe->style());
    }
 
-   this->pimpl->m_mashEditor->setMash(this->pimpl->m_recipeObs->mash());
-   this->pimpl->m_mashEditor->setRecipe(this->pimpl->m_recipeObs);
+   this->pimpl->m_mashEditor->setMash(recipe->mash());
+   this->pimpl->m_mashEditor->setRecipe(recipe);
+   this->mashButton->setMash(recipe->mash());
+   this->mashComboBox->setItem(recipe->mash());
 
-   this->pimpl->m_boilEditor->setEditItem(this->pimpl->m_recipeObs->boil());
-   this->pimpl->m_boilEditor->setRecipe(this->pimpl->m_recipeObs);
+   this->pimpl->m_boilEditor->setEditItem(recipe->boil());
+   this->pimpl->m_boilEditor->setRecipe(recipe);
+   this->boilComboBox->setItem(recipe->boil());
 
-   this->pimpl->m_fermentationEditor->setEditItem(this->pimpl->m_recipeObs->fermentation());
-   this->pimpl->m_fermentationEditor->setRecipe(this->pimpl->m_recipeObs);
+   this->pimpl->m_fermentationEditor->setEditItem(recipe->fermentation());
+   this->pimpl->m_fermentationEditor->setRecipe(recipe);
+   this->fermentationComboBox->setItem(recipe->fermentation());
 
-   mashButton->setMash(this->pimpl->m_recipeObs->mash());
-   this->pimpl->m_recipeScaler->setRecipe(this->pimpl->m_recipeObs);
+   this->pimpl->m_recipeScaler->setRecipe(recipe);
 
    // Set the locked flag as required
    checkBox_locked->setCheckState( recipe->locked() ? Qt::Checked : Qt::Unchecked );
@@ -1809,7 +1784,11 @@ void MainWindow::setRecipe(Recipe* recipe) {
 }
 
 // When a recipe is locked, many fields need to be disabled.
+#if QT_VERSION >= QT_VERSION_CHECK(6, 7, 0)
+void MainWindow::lockRecipe(Qt::CheckState state) {
+#else
 void MainWindow::lockRecipe(int state) {
+#endif
    if (!this->pimpl->m_recipeObs) {
       return;
    }
@@ -2018,7 +1997,7 @@ void MainWindow::updateRecipeName() {
       return;
    }
 
-   this->doOrRedoUpdate(*this->pimpl->m_recipeObs,
+   Undoable::doOrRedoUpdate(*this->pimpl->m_recipeObs,
                         TYPE_INFO(Recipe, NamedEntity, name),
                         lineEdit_name->text(),
                         tr("Change Recipe Name"));
@@ -2045,24 +2024,23 @@ void MainWindow::displayRangesEtcForCurrentRecipeStyle() {
    this->styleRangeWidget_srm->setPreferredRange(this->colorSRMLabel->getRangeToDisplay(style->colorMin_srm(),
                                                                                         style->colorMax_srm()));
    this->styleButton->setStyle(style);
+   this->styleComboBox->setItem(style);
 
    return;
 }
 
 //
-// TODO: Would be good to harmonise how these updatRecipeFoo and dropRecipeFoo functions work
+// TODO: Would be good to harmonise how these updateRecipeFoo and dropRecipeFoo functions work
 //
 
 void MainWindow::updateRecipeStyle() {
-   if (this->pimpl->m_recipeObs == nullptr) {
+   if (!this->pimpl->m_recipeObs) {
       return;
    }
 
-   QModelIndex proxyIndex( this->pimpl->m_styleProxyModel->index(styleComboBox->currentIndex(),0) );
-   QModelIndex sourceIndex( this->pimpl->m_styleProxyModel->mapToSource(proxyIndex) );
-   auto selected = ObjectStoreWrapper::getSharedFromRaw(this->pimpl->m_styleListModel->at(sourceIndex.row()));
+   auto selected = this->styleComboBox->getItem();
    if (selected) {
-      this->doOrRedoUpdate(
+      Undoable::doOrRedoUpdate(
          newRelationalUndoableUpdate(*this->pimpl->m_recipeObs,
                                      &Recipe::setStyle,
                                      this->pimpl->m_recipeObs->style(),
@@ -2075,30 +2053,48 @@ void MainWindow::updateRecipeStyle() {
 }
 
 void MainWindow::updateRecipeMash() {
-   if (this->pimpl->m_recipeObs == nullptr) {
+   if (!this->pimpl->m_recipeObs) {
       return;
    }
 
-   auto selectedMash = ObjectStoreWrapper::getSharedFromRaw(
-      this->pimpl->m_mashListModel->at(mashComboBox->currentIndex())
-   );
-   if (selectedMash) {
-      // The Recipe will decide whether it needs to make a copy of the Mash, hence why we don't reuse "selectedMash" below
-      this->pimpl->m_recipeObs->setMash(selectedMash);
-      this->pimpl->m_mashEditor->setMash(this->pimpl->m_recipeObs->mash());
-      mashButton->setMash(this->pimpl->m_recipeObs->mash());
+   auto selected = this->mashComboBox->getItem();
+   if (selected) {
+      Undoable::doOrRedoUpdate(
+         newRelationalUndoableUpdate(*this->pimpl->m_recipeObs,
+                                     &Recipe::setMash,
+                                     this->pimpl->m_recipeObs->mash(),
+                                     selected,
+                                     nullptr,
+                                     tr("Change Recipe Mash"))
+      );
    }
    return;
 }
 
 void MainWindow::updateRecipeEquipment() {
-  droppedRecipeEquipment(this->pimpl->m_equipmentListModel->at(equipmentComboBox->currentIndex()));
-  return;
+   if (!this->pimpl->m_recipeObs) {
+      return;
+   }
+
+   auto selected = this->equipmentComboBox->getItem();
+   if (selected) {
+      Undoable::doOrRedoUpdate(
+         newRelationalUndoableUpdate(*this->pimpl->m_recipeObs,
+                                     &Recipe::setEquipment,
+                                     this->pimpl->m_recipeObs->equipment(),
+                                     selected,
+                                     &MainWindow::updateEquipmentSelector,
+                                     tr("Change Recipe Equipment"))
+      );
+   }
+   return;
 }
 
-void MainWindow::updateEquipmentButton() {
+void MainWindow::updateEquipmentSelector() {
    if (this->pimpl->m_recipeObs != nullptr) {
-      this->equipmentButton->setEquipment(this->pimpl->m_recipeObs->equipment());
+      auto equipment = this->pimpl->m_recipeObs->equipment();
+      this->equipmentButton->setEquipment(equipment);
+      this->equipmentComboBox->setItem(equipment);
    }
    return;
 }
@@ -2120,7 +2116,7 @@ void MainWindow::droppedRecipeEquipment(Equipment * kitRaw) {
                                                       &Recipe::setEquipment,
                                                       this->pimpl->m_recipeObs->equipment(),
                                                       kit,
-                                                      &MainWindow::updateEquipmentButton,
+                                                      &MainWindow::updateEquipmentSelector,
                                                       tr("Change Recipe Kit"));
 
    // Keep the mash tun weight and specific heat up to date.
@@ -2151,7 +2147,7 @@ void MainWindow::droppedRecipeEquipment(Equipment * kitRaw) {
    }
 
    // This will do the equipment update and any related updates - see above
-   this->doOrRedoUpdate(equipmentUpdate);
+   Undoable::doOrRedoUpdate(equipmentUpdate);
    return;
 }
 
@@ -2164,7 +2160,7 @@ void MainWindow::droppedRecipeStyle(Style * styleRaw) {
    // When the style is changed, we also need to update what is shown on the Style button
    qDebug() << Q_FUNC_INFO << "Do or redo";
    auto style = ObjectStoreWrapper::getSharedFromRaw(styleRaw);
-   this->doOrRedoUpdate(
+   Undoable::doOrRedoUpdate(
       newRelationalUndoableUpdate(*this->pimpl->m_recipeObs,
                                   &Recipe::setStyle,
                                   this->pimpl->m_recipeObs->style(),
@@ -2189,7 +2185,7 @@ void MainWindow::droppedRecipeFermentable(QList<Fermentable *> fermentables) {
    QList<std::shared_ptr<RecipeAdditionFermentable>> fermentableAdditions =
       RecipeAdditionFermentable::create(*this->pimpl->m_recipeObs, fermentables);
 
-   this->doOrRedoUpdate(
+   Undoable::doOrRedoUpdate(
       newUndoableAddOrRemoveList(*this->pimpl->m_recipeObs,
                                  &Recipe::addAddition<RecipeAdditionFermentable>,
                                  fermentableAdditions,
@@ -2210,7 +2206,7 @@ void MainWindow::droppedRecipeHop(QList<Hop *> hops) {
 
    auto hopAdditions = RecipeAdditionHop::create(*this->pimpl->m_recipeObs, hops);
 
-   this->doOrRedoUpdate(
+   Undoable::doOrRedoUpdate(
       newUndoableAddOrRemoveList(*this->pimpl->m_recipeObs,
                                  &Recipe::addAddition<RecipeAdditionHop>,
                                  hopAdditions,
@@ -2231,7 +2227,7 @@ void MainWindow::droppedRecipeMisc(QList<Misc *> miscs) {
 
    auto miscAdditions = RecipeAdditionMisc::create(*this->pimpl->m_recipeObs, miscs);
 
-   this->doOrRedoUpdate(
+   Undoable::doOrRedoUpdate(
       newUndoableAddOrRemoveList(*this->pimpl->m_recipeObs,
                                  &Recipe::addAddition<RecipeAdditionMisc>,
                                  miscAdditions,
@@ -2252,7 +2248,7 @@ void MainWindow::droppedRecipeYeast(QList<Yeast *> yeasts) {
 
    auto yeastAdditions = RecipeAdditionYeast::create(*this->pimpl->m_recipeObs, yeasts);
 
-   this->doOrRedoUpdate(
+   Undoable::doOrRedoUpdate(
       newUndoableAddOrRemoveList(*this->pimpl->m_recipeObs,
                                  &Recipe::addAddition<RecipeAdditionYeast>,
                                  yeastAdditions,
@@ -2267,7 +2263,7 @@ void MainWindow::updateRecipeBatchSize() {
       return;
    }
 
-   this->doOrRedoUpdate(*this->pimpl->m_recipeObs,
+   Undoable::doOrRedoUpdate(*this->pimpl->m_recipeObs,
                         TYPE_INFO(Recipe, batchSize_l),
                         lineEdit_batchSize->getNonOptCanonicalQty(),
                         tr("Change Batch Size"));
@@ -2281,7 +2277,7 @@ void MainWindow::updateRecipeBatchSize() {
 ///
 ///   // See comments in model/Boil.h for why boil size is, technically, optional
 ///   auto boil = this->pimpl->m_recipeObs->nonOptBoil();
-///   this->doOrRedoUpdate(*boil,
+///   Undoable::doOrRedoUpdate(*boil,
 ///                        TYPE_INFO(Boil, preBoilSize_l),
 ///                        lineEdit_boilSize->getOptCanonicalQty(),
 ///                        tr("Change Boil Size"));
@@ -2300,10 +2296,10 @@ void MainWindow::updateRecipeBatchSize() {
 ///   // this->pimpl->m_recipeObs->boilSize_l
 ///   // NOTE: This works because kit is the recipe's equipment, not the generic equipment in the recipe drop down.
 ///   if (kit) {
-///      this->doOrRedoUpdate(*kit, TYPE_INFO(Equipment, boilTime_min), boilTime, tr("Change Boil Time"));
+///      Undoable::doOrRedoUpdate(*kit, TYPE_INFO(Equipment, boilTime_min), boilTime, tr("Change Boil Time"));
 ///   } else {
 ///      auto boil = this->pimpl->m_recipeObs->nonOptBoil();
-///      this->doOrRedoUpdate(*boil, TYPE_INFO(Boil, boilTime_mins), boilTime, tr("Change Boil Time"));
+///      Undoable::doOrRedoUpdate(*boil, TYPE_INFO(Boil, boilTime_mins), boilTime, tr("Change Boil Time"));
 ///   }
 ///
 ///   return;
@@ -2315,7 +2311,7 @@ void MainWindow::updateRecipeEfficiency() {
       return;
    }
 
-   this->doOrRedoUpdate(*this->pimpl->m_recipeObs,
+   Undoable::doOrRedoUpdate(*this->pimpl->m_recipeObs,
                         TYPE_INFO(Recipe, efficiency_pct),
                         lineEdit_efficiency->getNonOptValue<unsigned int>(),
                         tr("Change Recipe Efficiency"));
@@ -2385,7 +2381,7 @@ void MainWindow::addStepToStepOwner(StepOwnerClass & stepOwner, std::shared_ptr<
       qWarning() << Q_FUNC_INFO << step->metaObject()->className() << "unexpectedly not in DB, so inserting it now.";
       ObjectStoreWrapper::insert(step);
    }
-   this->doOrRedoUpdate(
+   Undoable::doOrRedoUpdate(
       newUndoableAddOrRemove(stepOwner,
                              &StepOwnerClass::add,
                              step,
@@ -2397,6 +2393,13 @@ void MainWindow::addStepToStepOwner(StepOwnerClass & stepOwner, std::shared_ptr<
    // this->pimpl->m_mashStepTableModel/this->pimpl->m_boilStepTableModel/etc.
    return;
 }
+
+// We need to directly instantiate the above so that it can be called from StepEditorBase.  (Although we might expect it
+// is indirectly instantiated by the MainWindow::addStepToStepOwner overloads below, that might not be visible outside
+// this translation unit, because of compiler optimisations.)
+template void MainWindow::addStepToStepOwner(Boil         & stepOwner, std::shared_ptr<        BoilStep> step);
+template void MainWindow::addStepToStepOwner(Mash         & stepOwner, std::shared_ptr<        MashStep> step);
+template void MainWindow::addStepToStepOwner(Fermentation & stepOwner, std::shared_ptr<FermentationStep> step);
 
 template<class StepOwnerClass, class StepClass>
 void MainWindow::addStepToStepOwner(std::shared_ptr<StepOwnerClass> stepOwner, std::shared_ptr<StepClass> step) {
@@ -2437,46 +2440,38 @@ Recipe* MainWindow::currentRecipe() {
 }
 
 void MainWindow::setUndoRedoEnable() {
-   Q_ASSERT(this->pimpl->m_undoStack != 0);
-   actionUndo->setEnabled(this->pimpl->m_undoStack->canUndo());
-   actionRedo->setEnabled(this->pimpl->m_undoStack->canRedo());
+   QUndoStack & undoStack { Undoable::getStack() };
+   this->actionUndo->setEnabled(undoStack.canUndo());
+   this->actionRedo->setEnabled(undoStack.canRedo());
 
-   actionUndo->setText(QString(tr("Undo %1").arg(this->pimpl->m_undoStack->undoText())));
-   actionRedo->setText(QString(tr("Redo %1").arg(this->pimpl->m_undoStack->redoText())));
+   this->actionUndo->setText(QString(tr("Undo %1").arg(undoStack.undoText())));
+   this->actionRedo->setText(QString(tr("Redo %1").arg(undoStack.redoText())));
 
-   return;
-}
-
-void MainWindow::doOrRedoUpdate(QUndoCommand * update) {
-   Q_ASSERT(this->pimpl->m_undoStack != nullptr);
-   Q_ASSERT(update != nullptr);
-   this->pimpl->m_undoStack->push(update);
-   this->setUndoRedoEnable();
    return;
 }
 
 // For undo/redo, we use Qt's Undo framework
 void MainWindow::editUndo() {
-   Q_ASSERT(this->pimpl->m_undoStack != 0);
-   if ( !this->pimpl->m_undoStack->canUndo() ) {
+   QUndoStack & undoStack { Undoable::getStack() };
+   if (!undoStack.canUndo()) {
       qDebug() << "Undo called but nothing to undo";
    } else {
-      this->pimpl->m_undoStack->undo();
+      undoStack.undo();
    }
 
-   setUndoRedoEnable();
+   this->setUndoRedoEnable();
    return;
 }
 
 void MainWindow::editRedo() {
-   Q_ASSERT(this->pimpl->m_undoStack != 0);
-   if ( !this->pimpl->m_undoStack->canRedo() ) {
+   QUndoStack & undoStack { Undoable::getStack() };
+   if (!undoStack.canRedo()) {
       qDebug() << "Redo called but nothing to redo";
    } else {
-      this->pimpl->m_undoStack->redo();
+      undoStack.redo();
    }
 
-   setUndoRedoEnable();
+   this->setUndoRedoEnable();
    return;
 }
 
@@ -2995,18 +2990,6 @@ void MainWindow::closeEvent(QCloseEvent* /*event*/) {
    return;
 }
 
-void MainWindow::copyRecipe() {
-   QString name = QInputDialog::getText( this, tr("Copy Recipe"), tr("Enter a unique name for the copy.") );
-   if (name.isEmpty()) {
-      return;
-   }
-
-   auto newRec = std::make_shared<Recipe>(*this->pimpl->m_recipeObs); // Create a deep copy
-   newRec->setName(name);
-   ObjectStoreTyped<Recipe>::getInstance().insert(newRec);
-   return;
-}
-
 void MainWindow::saveMash() {
    if (!this->pimpl->m_recipeObs || !this->pimpl->m_recipeObs->mash()) {
       return;
@@ -3088,21 +3071,23 @@ void MainWindow::setupContextMenu() {
    return;
 }
 
-void MainWindow::copySelected() {
-///   QModelIndexList selected;
-   TreeView* active = qobject_cast<TreeView*>(tabWidget_Trees->currentWidget()->focusWidget());
-   active->copySelected(active->selectionModel()->selectedRows());
+void MainWindow::MainWindow::copySelected() {
+   TreeView * activeTreeView = qobject_cast<TreeView *>(this->tabWidget_Trees->currentWidget()->focusWidget());
+   if (activeTreeView) {
+      QModelIndexList selected = activeTreeView->selectionModel()->selectedRows();
+      activeTreeView->copySelected(selected);
+   }
    return;
 }
 
 void MainWindow::exportSelected() {
-   TreeView const * active = qobject_cast<TreeView*>(this->tabWidget_Trees->currentWidget()->focusWidget());
-   if (active == nullptr) {
+   TreeView const * activeTreeView = qobject_cast<TreeView*>(this->tabWidget_Trees->currentWidget()->focusWidget());
+   if (!activeTreeView) {
       qDebug() << Q_FUNC_INFO << "No active tree so can't get a selection";
       return;
    }
 
-   QModelIndexList selected = active->selectionModel()->selectedRows();
+   QModelIndexList selected = activeTreeView->selectionModel()->selectedRows();
    if (selected.count() == 0) {
       qDebug() << Q_FUNC_INFO << "Nothing selected, so nothing to export";
       return;
@@ -3127,7 +3112,7 @@ void MainWindow::exportSelected() {
 
    int count = 0;
    for (auto & selection : selected) {
-      auto nodeType = active->type(selection);
+      auto nodeType = activeTreeView->type(selection);
       if (!nodeType) {
          qWarning() << Q_FUNC_INFO << "Unknown type for selection" << selection;
       } else {

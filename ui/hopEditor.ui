@@ -100,7 +100,7 @@
         </widget>
        </item>
        <item row="2" column="5">
-        <widget class="BtComboBox" name="comboBox_hopType">
+        <widget class="BtComboBoxEnum" name="comboBox_hopType">
          <property name="toolTip">
           <string>Hop Type</string>
          </property>
@@ -134,7 +134,7 @@
         </widget>
        </item>
        <item row="3" column="5">
-        <widget class="BtComboBox" name="comboBox_hopForm">
+        <widget class="BtComboBoxEnum" name="comboBox_hopForm">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -262,7 +262,7 @@
         </widget>
        </item>
        <item row="6" column="5">
-        <widget class="BtComboBox" name="comboBox_amountType">
+        <widget class="BtComboBoxEnum" name="comboBox_amountType">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -908,9 +908,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>BtComboBox</class>
+   <class>BtComboBoxEnum</class>
    <extends>QComboBox</extends>
-   <header>widgets/BtComboBox.h</header>
+   <header>widgets/BtComboBoxEnum.h</header>
   </customwidget>
   <customwidget>
    <class>InfoButton</class>

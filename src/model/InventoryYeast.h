@@ -32,6 +32,13 @@ class InventoryYeast : public Inventory, public IngredientAmount<InventoryYeast,
 
    INGREDIENT_AMOUNT_DECL(InventoryYeast, Yeast)
    INVENTORY_DECL(Yeast, yeast)
+
+   // See model/IngredientAmount.h for info, getters and setters for these properties
+   Q_PROPERTY(Measurement::Amount           amount    READ amount     WRITE setAmount  )
+   Q_PROPERTY(double                        quantity  READ quantity   WRITE setQuantity)
+   Q_PROPERTY(Measurement::Unit const *     unit      READ unit       WRITE setUnit    )
+   Q_PROPERTY(Measurement::PhysicalQuantity measure   READ measure    WRITE setMeasure )
+   Q_PROPERTY(bool                          isWeight  READ isWeight   WRITE setIsWeight)
 };
 
 #endif

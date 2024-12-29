@@ -894,10 +894,12 @@ def installDependencies():
                         'mingw-w64-' + arch + '-nsis',
                         'mingw-w64-' + arch + '-freetype',
                         'mingw-w64-' + arch + '-harfbuzz',
+                        'mingw-w64-' + arch + '-librsvg', # Possibly needed to include in packaging for SVG display
                         'mingw-w64-' + arch + '-openssl', # OpenSSL headers and library
                         'mingw-w64-' + arch + '-qt6-base',
                         'mingw-w64-' + arch + '-qt6-declarative', # Also needed for lupdate?
                         'mingw-w64-' + arch + '-qt6-static',
+                        'mingw-w64-' + arch + '-qt6-svg',
                         'mingw-w64-' + arch + '-qt6-tools',
                         'mingw-w64-' + arch + '-qt6-translations',
                         'mingw-w64-' + arch + '-qt6',
@@ -2323,6 +2325,9 @@ def doPackage():
          # version number in the library name because we really are looking for a specific version or there are always
          # multiple versions)  It's not super pretty, but it should work.
          #
+         # Note that there are libraries with names of form 'libfoo-Y-X.dll'.  For the moment, we require the '-Y' part
+         # to be included in the list below, rather than adding more logic to deduce it.
+         #
          # Just to keep us on our toes, the Python os module has two similarly-named but different things:
          #    - os.pathsep is the separator between paths (usually ';' or ':') eg in the PATH environment variable
          #    - os.sep is the separator between directories (usually '/' or '\\') in a path
@@ -2344,9 +2349,12 @@ def doPackage():
             #'Qt6Sql'         ,
             #'Qt6Widgets'     ,
             #
-            # Following is not handled by windeployqt.  The application will install and run without it, but it just
-            # won't show any icons.
-            'Qt6Svg' , # Needed to display .svg icons
+            # Following are not handled by windeployqt.  The application will install and run without them, but it just
+            # won't show any .svg icons (and won't log any errors about them either).
+            # See also https://stackoverflow.com/questions/76047551/icons-shown-in-qt5-not-showing-in-qt6
+            #
+            'Qt6SvgWidgets', # See https://doc.qt.io/qt-6/qsvgwidget.html
+            'Qt6Svg'       , # Needed for Qt6SvgWidgets.dll to display .svg icons
             #
             #
             'libb2'               , # BLAKE hash functions -- https://en.wikipedia.org/wiki/BLAKE_(hash_function)
@@ -2378,6 +2386,7 @@ def doPackage():
             'libpng16'     , # Official PNG reference library -- see http://www.libpng.org/pub/png/libpng.html
             'libsqlite3'   , # Need this IN ADDITION to bin/sqldrivers/qsqlite.dll, which gets installed by windeployqt
             'libstdc++'    ,
+            'librsvg-2'    , # SVG rendering library -- see https://wiki.gnome.org/Projects/LibRsvg
             'libwinpthread',
             'libxalan-c'   ,
             'libxalanMsg'  ,

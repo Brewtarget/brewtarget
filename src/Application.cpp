@@ -322,12 +322,27 @@ bool Application::initialize() {
    qt_set_sequence_auto_mnemonic(true); // turns on Mac Keyboard shortcuts
 #endif
 
-   // Uncomment the following to list all the entries in our resource bundle.  This can be helpful at certain points in
-   // debugging, but is not normally needed.
-//   QDirIterator resource(":", QDirIterator::Subdirectories);
-//   while (resource.hasNext()) {
-//      qDebug() << "Resource:" << resource.next();
-//   }
+   unsigned int numResources {0};
+   QDirIterator resource(":", QDirIterator::Subdirectories);
+   while (resource.hasNext()) {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 3, 0)
+      // QDirIterator::nextFileInfo() both advances the iterator and returns the result of QDirIterator::fileInfo() on
+      // the advanced iterator.  Some might call this unnecessary interface bloat, but it's there so we might as well
+      // use it.
+      QFileInfo fileInfo = resource.nextFileInfo();
+#else
+      // Ubuntu 22.04 doesn't yet have Qt 6.3
+      resource.next();
+      QFileInfo fileInfo = resource.fileInfo();
+#endif
+      // Uncomment the following to list all the entries in our resource bundle.  This can be helpful at certain points
+      // in debugging, but is not normally needed.
+      qDebug() << "Resource:" << fileInfo.absoluteFilePath() << "- size:" << fileInfo.size() << "bytes";
+      // It should be impossible that a resource compiled into the binary doesn't exist!
+      Q_ASSERT(fileInfo.exists());
+      ++numResources;
+   }
+   qInfo() << Q_FUNC_INFO << "Number of resources compiled into binary:" << numResources;
 
    // Check if the database was successfully loaded before
    // loading the main window.

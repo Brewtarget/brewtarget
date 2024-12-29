@@ -158,39 +158,46 @@ namespace {
 //    - Add a file alias for the new flag in ../resources.qrc
 //    - Add the name of the new bt_*.ts file to both ../CMakeLists.txt and ../meson.build
 //
-QVector<Localization::LanguageInfo> Localization::languageInfo {
+QVector<Localization::LanguageInfo> const & Localization::languageInfo() {
    //
-   // The order here is alphabetical by language name in English (eg "German" rather then "Deutsch").  This is the same
-   // as the order of the QLocale::Language enum values (see https://doc.qt.io/qt-6/qlocale.html#Language-enum).
+   // We can't safely construct this object until the Qt resource system has started up, so we use a Meyers Singleton
+   // rather than just have clients directly reference statically initialised object.
    //
-   // TODO: one day it would be nice to sort this at run-time by the name in whatever the currently-set language is.
-   //
-   // For languages spoken in more than one country, we usually choose the flag for the country where that language has
-   // been spoken the longest (eg France for French)
-   //
-   {QLocale::Basque         , "eu", QIcon{":/images/flagBasque.svg"     }, "Basque"          , QObject::tr("Basque"          )},
-   {QLocale::Catalan        , "ca", QIcon{":/images/flagCatalonia.svg"  }, "Catalan"         , QObject::tr("Catalan"         )},
-   {QLocale::Chinese        , "zh", QIcon{":/images/flagChina.svg"      }, "Chinese"         , QObject::tr("Chinese"         )},
-   {QLocale::Czech          , "cs", QIcon{":/images/flagCzech.svg"      }, "Czech"           , QObject::tr("Czech"           )},
-   {QLocale::Danish         , "da", QIcon{":/images/flagDenmark.svg"    }, "Danish"          , QObject::tr("Danish"          )},
-   {QLocale::Dutch          , "nl", QIcon{":/images/flagNetherlands.svg"}, "Dutch"           , QObject::tr("Dutch"           )},
-   {QLocale::English        , "en", QIcon{":/images/flagUK.svg"         }, "English"         , QObject::tr("English"         )},
-   {QLocale::Estonian       , "et", QIcon{":/images/flagEstonia.svg"    }, "Estonian"        , QObject::tr("Estonian"        )},
-   {QLocale::French         , "fr", QIcon{":/images/flagFrance.svg"     }, "French"          , QObject::tr("French"          )},
-   {QLocale::Galician       , "gl", QIcon{":/images/flagGalicia.svg"    }, "Galician"        , QObject::tr("Galician"        )},
-   {QLocale::German         , "de", QIcon{":/images/flagGermany.svg"    }, "German"          , QObject::tr("German"          )},
-   {QLocale::Greek          , "el", QIcon{":/images/flagGreece.svg"     }, "Greek"           , QObject::tr("Greek"           )},
-   {QLocale::Hungarian      , "hu", QIcon{":/images/flagHungary.svg"    }, "Hungarian"       , QObject::tr("Hungarian"       )},
-   {QLocale::Italian        , "it", QIcon{":/images/flagItaly.svg"      }, "Italian"         , QObject::tr("Italian"         )},
-   {QLocale::Latvian        , "lv", QIcon{":/images/flagLatvia.svg"     }, "Latvian"         , QObject::tr("Latvian"         )},
-   {QLocale::NorwegianBokmal, "nb", QIcon{":/images/flagNorway.svg"     }, "Norwegian Bokmål", QObject::tr("Norwegian Bokmål")},
-   {QLocale::Polish         , "pl", QIcon{":/images/flagPoland.svg"     }, "Polish"          , QObject::tr("Polish"          )},
-   {QLocale::Portuguese     , "pt", QIcon{":/images/flagBrazil.svg"     }, "Portuguese"      , QObject::tr("Portuguese"      )},
-   {QLocale::Russian        , "ru", QIcon{":/images/flagRussia.svg"     }, "Russian"         , QObject::tr("Russian"         )},
-   {QLocale::Serbian        , "sr", QIcon{":/images/flagSerbia.svg"     }, "Serbian"         , QObject::tr("Serbian"         )},
-   {QLocale::Spanish        , "es", QIcon{":/images/flagSpain.svg"      }, "Spanish"         , QObject::tr("Spanish"         )},
-   {QLocale::Swedish        , "sv", QIcon{":/images/flagSweden.svg"     }, "Swedish"         , QObject::tr("Swedish"         )},
-   {QLocale::Turkish        , "tr", QIcon{":/images/flagTurkey.svg"     }, "Turkish"         , QObject::tr("Turkish"         )},
+   static const QVector<Localization::LanguageInfo> languageInfos {
+      //
+      // The order here is alphabetical by language name in English (eg "German" rather then "Deutsch").  This is the same
+      // as the order of the QLocale::Language enum values (see https://doc.qt.io/qt-6/qlocale.html#Language-enum).
+      //
+      // TODO: one day it would be nice to sort this at run-time by the name in whatever the currently-set language is.
+      //
+      // For languages spoken in more than one country, we usually choose the flag for the country where that language has
+      // been spoken the longest (eg France for French)
+      //
+      {QLocale::Basque         , "eu", QIcon{":/images/flagBasque.svg"     }, "Basque"          , QObject::tr("Basque"          )},
+      {QLocale::Catalan        , "ca", QIcon{":/images/flagCatalonia.svg"  }, "Catalan"         , QObject::tr("Catalan"         )},
+      {QLocale::Chinese        , "zh", QIcon{":/images/flagChina.svg"      }, "Chinese"         , QObject::tr("Chinese"         )},
+      {QLocale::Czech          , "cs", QIcon{":/images/flagCzech.svg"      }, "Czech"           , QObject::tr("Czech"           )},
+      {QLocale::Danish         , "da", QIcon{":/images/flagDenmark.svg"    }, "Danish"          , QObject::tr("Danish"          )},
+      {QLocale::Dutch          , "nl", QIcon{":/images/flagNetherlands.svg"}, "Dutch"           , QObject::tr("Dutch"           )},
+      {QLocale::English        , "en", QIcon{":/images/flagUK.svg"         }, "English"         , QObject::tr("English"         )},
+      {QLocale::Estonian       , "et", QIcon{":/images/flagEstonia.svg"    }, "Estonian"        , QObject::tr("Estonian"        )},
+      {QLocale::French         , "fr", QIcon{":/images/flagFrance.svg"     }, "French"          , QObject::tr("French"          )},
+      {QLocale::Galician       , "gl", QIcon{":/images/flagGalicia.svg"    }, "Galician"        , QObject::tr("Galician"        )},
+      {QLocale::German         , "de", QIcon{":/images/flagGermany.svg"    }, "German"          , QObject::tr("German"          )},
+      {QLocale::Greek          , "el", QIcon{":/images/flagGreece.svg"     }, "Greek"           , QObject::tr("Greek"           )},
+      {QLocale::Hungarian      , "hu", QIcon{":/images/flagHungary.svg"    }, "Hungarian"       , QObject::tr("Hungarian"       )},
+      {QLocale::Italian        , "it", QIcon{":/images/flagItaly.svg"      }, "Italian"         , QObject::tr("Italian"         )},
+      {QLocale::Latvian        , "lv", QIcon{":/images/flagLatvia.svg"     }, "Latvian"         , QObject::tr("Latvian"         )},
+      {QLocale::NorwegianBokmal, "nb", QIcon{":/images/flagNorway.svg"     }, "Norwegian Bokmål", QObject::tr("Norwegian Bokmål")},
+      {QLocale::Polish         , "pl", QIcon{":/images/flagPoland.svg"     }, "Polish"          , QObject::tr("Polish"          )},
+      {QLocale::Portuguese     , "pt", QIcon{":/images/flagBrazil.svg"     }, "Portuguese"      , QObject::tr("Portuguese"      )},
+      {QLocale::Russian        , "ru", QIcon{":/images/flagRussia.svg"     }, "Russian"         , QObject::tr("Russian"         )},
+      {QLocale::Serbian        , "sr", QIcon{":/images/flagSerbia.svg"     }, "Serbian"         , QObject::tr("Serbian"         )},
+      {QLocale::Spanish        , "es", QIcon{":/images/flagSpain.svg"      }, "Spanish"         , QObject::tr("Spanish"         )},
+      {QLocale::Swedish        , "sv", QIcon{":/images/flagSweden.svg"     }, "Swedish"         , QObject::tr("Swedish"         )},
+      {QLocale::Turkish        , "tr", QIcon{":/images/flagTurkey.svg"     }, "Turkish"         , QObject::tr("Turkish"         )},
+   };
+   return languageInfos;
 };
 
 QLocale const & Localization::getLocale() {
@@ -239,12 +246,13 @@ QString Localization::displayDateUserFormated(QDate const & date) {
 }
 
 [[nodiscard]] bool Localization::isSupportedLanguage(QString const & twoLetterLanguage) {
+   QVector<Localization::LanguageInfo> const & languageInfos {Localization::languageInfo()};
    auto const match = std::find_if(
-      Localization::languageInfo.begin(),
-      Localization::languageInfo.end(),
+      languageInfos.begin(),
+      languageInfos.end(),
       [& twoLetterLanguage](auto const & record) { return twoLetterLanguage == record.iso639_1Code; }
    );
-   return match != Localization::languageInfo.end();
+   return match != languageInfos.end();
 }
 
 
@@ -285,12 +293,13 @@ void Localization::setLanguage(QLocale const & newLanguageLocale) {
    if (currentTwoLetterLanguageCode.isEmpty()) {
       auto const qtLanguageCode = newLanguageLocale.language();
       qDebug() << Q_FUNC_INFO << "QLocale::language() returned" << qtLanguageCode;
+      QVector<Localization::LanguageInfo> const & languageInfos {Localization::languageInfo()};
       auto const match = std::find_if(
-         Localization::languageInfo.begin(),
-         Localization::languageInfo.end(),
+         languageInfos.begin(),
+         languageInfos.end(),
          [& qtLanguageCode](auto const & record) { return qtLanguageCode == record.qtLanguageCode; }
       );
-      if (match != Localization::languageInfo.end()) {
+      if (match != languageInfos.end()) {
          currentTwoLetterLanguageCode = match->iso639_1Code;
       } else {
          //

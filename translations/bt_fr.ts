@@ -157,6 +157,17 @@
     </message>
 </context>
 <context>
+    <name>BoilTableModel</name>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Nom</translation>
+    </message>
+    <message>
+        <source>Pre-Boil Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>BrewDayFormatter</name>
     <message>
         <source>Brewday</source>
@@ -1637,6 +1648,17 @@ Log file may contain more details.</source>
     </message>
 </context>
 <context>
+    <name>FermentationTableModel</name>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Nom</translation>
+    </message>
+    <message>
+        <source>Number of Steps</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Folder</name>
     <message>
         <source>Name</source>
@@ -2183,11 +2205,11 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Copy Recipe</source>
-        <translation>Copier la recette</translation>
+        <translation type="vanished">Copier la recette</translation>
     </message>
     <message>
         <source>Enter a unique name for the copy.</source>
-        <translation>Entrer un nom unique pour la copie.</translation>
+        <translation type="vanished">Entrer un nom unique pour la copie.</translation>
     </message>
     <message>
         <source>Please give your mash a name before saving.</source>
@@ -2298,14 +2320,6 @@ Log file may contain more details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Undo %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Redo %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Error creating recipe</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2383,6 +2397,22 @@ If you need help, please open an issue at %1</source>
     </message>
     <message>
         <source>Automatically-created Fermentation for %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Recipe Mash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Recipe Equipment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Undo %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Redo %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2504,6 +2534,25 @@ If you need help, please open an issue at %1</source>
     <message>
         <source>Time</source>
         <translation>Durée</translation>
+    </message>
+</context>
+<context>
+    <name>MashTableModel</name>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Nom</translation>
+    </message>
+    <message>
+        <source>Initial Grain Temperature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Total Mash Water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Total Time</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -8243,7 +8292,7 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>&amp;Copy Recipe</source>
-        <translation>&amp;Copier la recette</translation>
+        <translation type="vanished">&amp;Copier la recette</translation>
     </message>
     <message>
         <source>Pr&amp;iming Calculator</source>
@@ -8555,6 +8604,10 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>See Boil tab below</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Copy Selected Item(s)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

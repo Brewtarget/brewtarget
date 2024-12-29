@@ -35,8 +35,9 @@ enum class NonPhysicalQuantity {
    Date,
    String,
    Percentage,
+   //! This usually means we need either a \c QCheckBox or a \c BtComboBoxBool
    Bool,
-   //! This usually means we need a \c BtComboBox
+   //! This usually means we need a \c BtComboBoxEnum
    Enum,
    /**
     * This is for things like step number and other orderings where we have 1st, 2nd, 3rd etc (though its usually

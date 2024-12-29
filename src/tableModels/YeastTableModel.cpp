@@ -23,24 +23,10 @@
  ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "tableModels/YeastTableModel.h"
 
-#include <QAbstractItemModel>
-#include <QDebug>
 #include <QHeaderView>
 #include <QModelIndex>
-#include <QString>
 #include <QVariant>
 #include <QWidget>
-
-#include "database/ObjectStoreWrapper.h"
-#include "MainWindow.h"
-#include "measurement/Measurement.h"
-#include "measurement/Unit.h"
-#include "model/Inventory.h"
-#include "model/Recipe.h"
-#include "model/RecipeUseOfWater.h"
-#include "tableModels/ItemDelegate.h"
-#include "utils/BtStringConst.h"
-#include "widgets/BtComboBox.h"
 
 YeastTableModel::YeastTableModel(QTableView * parent, bool editable) :
    BtTableModel{
@@ -60,8 +46,6 @@ YeastTableModel::YeastTableModel(QTableView * parent, bool editable) :
    },
    TableModelBase<YeastTableModel, Yeast>{} {
 
-   setObjectName("yeastTableModel");
-
    QHeaderView * headerView = m_parentTableWidget->horizontalHeader();
    connect(headerView, &QWidget::customContextMenuRequested, this, &YeastTableModel::contextMenu);
    connect(&ObjectStoreTyped<InventoryYeast>::getInstance(),
@@ -78,33 +62,19 @@ void YeastTableModel::removed([[maybe_unused]] std::shared_ptr<Yeast> item) { re
 void YeastTableModel::updateTotals()                                        { return; }
 
 QVariant YeastTableModel::data(QModelIndex const & index, int role) const {
-   if (!this->indexAndRoleOk(index, role)) {
-      return QVariant();
-   }
-
-   // No special handling required for any of our columns
-   return this->readDataFromModel(index, role);
+   return this->doDataDefault(index, role);
 }
 
-Qt::ItemFlags YeastTableModel::flags(const QModelIndex & index) const {
-   auto const columnIndex = static_cast<YeastTableModel::ColumnIndex>(index.column());
-   if (columnIndex == YeastTableModel::ColumnIndex::Name) {
-      return Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
-   }
-   if (columnIndex == YeastTableModel::ColumnIndex::TotalInventory) {
-      return Qt::ItemIsEnabled | Qt::ItemIsEditable;
-   }
-   return Qt::ItemIsSelectable |
-          (this->m_editable ? Qt::ItemIsEditable : Qt::NoItemFlags) | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
+Qt::ItemFlags YeastTableModel::flags(QModelIndex const & index) const {
+   return TableModelHelper::doFlags<YeastTableModel>(
+      index,
+      this->m_editable,
+      {{YeastTableModel::ColumnIndex::TotalInventory, Qt::ItemIsEditable}}
+   );
 }
 
 bool YeastTableModel::setData(QModelIndex const & index, QVariant const & value, int role) {
-   if (!this->indexAndRoleOk(index, role)) {
-      return false;
-   }
-
-   // No special handling required for any of our columns
-   return this->writeDataToModel(index, value, role);
+   return this->doSetDataDefault(index, value, role);
 }
 
 // Insert the boiler-plate stuff that we cannot do in TableModelBase

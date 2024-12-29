@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * widgets/BtComboBox.cpp is part of Brewtarget, and is copyright the following authors 2023-2024:
+ * widgets/BtComboBoxEnum.cpp is part of Brewtarget, and is copyright the following authors 2023-2024:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -13,14 +13,14 @@
  * You should have received a copy of the GNU General Public License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
  ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
-#include "widgets/BtComboBox.h"
+#include "widgets/BtComboBoxEnum.h"
 
 #include "widgets/SmartLineEdit.h"
 
-// This private implementation class holds all private non-virtual members of BtComboBox
-class BtComboBox::impl {
+// This private implementation class holds all private non-virtual members of BtComboBoxEnum
+class BtComboBoxEnum::impl {
 public:
-   impl(BtComboBox & self) :
+   impl(BtComboBoxEnum & self) :
       m_self              {self },
       m_initialised       {false},
       m_editorName        {"Uninitialised m_editorName!"    },
@@ -35,7 +35,7 @@ public:
 
    ~impl() = default;
 
-   BtComboBox              & m_self              ;
+   BtComboBoxEnum              & m_self              ;
    bool                      m_initialised       ;
    char const *              m_editorName        ;
    char const *              m_comboBoxName      ;
@@ -47,18 +47,18 @@ public:
 
 };
 
-BtComboBox::BtComboBox(QWidget * parent) :
+BtComboBoxEnum::BtComboBoxEnum(QWidget * parent) :
    QComboBox{parent},
    pimpl {std::make_unique<impl>(*this)} {
    // QOverload is needed on next line because the signal currentIndexChanged is overloaded in QComboBox - see
    // https://doc.qt.io/qt-5/qcombobox.html#currentIndexChanged
-   connect(this, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BtComboBox::onIndexChanged);
+   connect(this, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BtComboBoxEnum::onIndexChanged);
    return;
 }
 
-BtComboBox::~BtComboBox() = default;
+BtComboBoxEnum::~BtComboBoxEnum() = default;
 
-void BtComboBox::init(char const * const        editorName        ,
+void BtComboBoxEnum::init(char const * const        editorName        ,
                       char const * const        comboBoxName      ,
                       char const * const        comboBoxFqName    ,
                       EnumStringMapping const & nameMapping       ,
@@ -121,7 +121,7 @@ void BtComboBox::init(char const * const        editorName        ,
    return;
 }
 
-void BtComboBox::autoSetFromControlledField() {
+void BtComboBoxEnum::autoSetFromControlledField() {
    // Normally keep this log statement commented out otherwise it generates too many lines in the log file
 //   qDebug().noquote() <<
 //      Q_FUNC_INFO << this->pimpl->m_comboBoxFqName << ":" << this->pimpl->m_typeInfo->fieldType <<
@@ -144,19 +144,19 @@ void BtComboBox::autoSetFromControlledField() {
 }
 
 
-[[nodiscard]] bool BtComboBox::isOptional() const {
+[[nodiscard]] bool BtComboBoxEnum::isOptional() const {
    Q_ASSERT(this->pimpl->m_initialised);
    return this->pimpl->m_typeInfo->isOptional();
 }
 
-void BtComboBox::setNull() {
+void BtComboBoxEnum::setNull() {
    this->setCurrentIndex(0);
    // For an optional field, it's a coding error if the first value is not empty string
    Q_ASSERT(this->currentData().toString().isEmpty());
    return;
 }
 
-void BtComboBox::setValue(int value) {
+void BtComboBoxEnum::setValue(int value) {
    Q_ASSERT(this->pimpl->m_initialised);
    this->setCurrentIndex(this->findData(this->pimpl->m_nameMapping->enumToString(value)));
    // It's a coding error if we have an empty string here
@@ -165,12 +165,12 @@ void BtComboBox::setValue(int value) {
 }
 
 
-void BtComboBox::setDefault() {
+void BtComboBoxEnum::setDefault() {
    this->setCurrentIndex(0);
    return;
 }
 
-void BtComboBox::setFromVariant(QVariant const & value) {
+void BtComboBoxEnum::setFromVariant(QVariant const & value) {
    Q_ASSERT(this->pimpl->m_initialised);
    // We assume the QVariant holds an int or an optional int, as we do for serialisation etc, as otherwise it gets hard
    // to handle strongly-typed enums generically at runtime.
@@ -187,7 +187,7 @@ void BtComboBox::setFromVariant(QVariant const & value) {
    return;
 }
 
-QVariant BtComboBox::getAsVariant() const {
+QVariant BtComboBoxEnum::getAsVariant() const {
    Q_ASSERT(this->pimpl->m_initialised);
    if (this->pimpl->m_typeInfo->isOptional()) {
       return QVariant::fromValue(this->getOptIntValue());
@@ -195,7 +195,7 @@ QVariant BtComboBox::getAsVariant() const {
    return QVariant::fromValue(this->getNonOptIntValue());
 }
 
-[[nodiscard]] std::optional<int> BtComboBox::getOptIntValue() const {
+[[nodiscard]] std::optional<int> BtComboBoxEnum::getOptIntValue() const {
    Q_ASSERT(this->pimpl->m_initialised);
    QString const rawValue = this->currentData().toString();
    if (rawValue.isEmpty()) {
@@ -209,7 +209,7 @@ QVariant BtComboBox::getAsVariant() const {
    return value;
 }
 
-[[nodiscard]] int BtComboBox::getNonOptIntValue() const {
+[[nodiscard]] int BtComboBoxEnum::getNonOptIntValue() const {
    Q_ASSERT(this->pimpl->m_initialised);
    QString const rawValue = this->currentData().toString();
    Q_ASSERT(!rawValue.isEmpty());
@@ -220,7 +220,7 @@ QVariant BtComboBox::getAsVariant() const {
    return *value;
 }
 
-void BtComboBox::onIndexChanged([[maybe_unused]] int const index) {
+void BtComboBoxEnum::onIndexChanged([[maybe_unused]] int const index) {
    if (this->pimpl->m_initialised && this->pimpl->m_controlledField) {
       // Uncomment the next statement for diagnosing asserts!
 //      qDebug() <<

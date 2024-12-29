@@ -15,19 +15,10 @@
  ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "tableModels/StyleTableModel.h"
 
-#include <QComboBox>
 #include <QHeaderView>
-#include <QLineEdit>
-
-#include "database/ObjectStoreWrapper.h"
-#include "MainWindow.h"
-#include "measurement/Measurement.h"
-#include "measurement/Unit.h"
-#include "model/Inventory.h"
-#include "model/Recipe.h"
-#include "PersistentSettings.h"
-#include "utils/BtStringConst.h"
-#include "widgets/BtComboBox.h"
+#include <QModelIndex>
+#include <QVariant>
+#include <QWidget>
 
 StyleTableModel::StyleTableModel(QTableView* parent, bool editable) :
    BtTableModel{
@@ -44,7 +35,6 @@ StyleTableModel::StyleTableModel(QTableView* parent, bool editable) :
    },
    TableModelBase<StyleTableModel, Style>{} {
    this->rows.clear();
-   setObjectName("styleTableModel");
 
    QHeaderView* headerView = m_parentTableWidget->horizontalHeader();
    connect(headerView, &QWidget::customContextMenuRequested, this, &StyleTableModel::contextMenu);
@@ -58,30 +48,15 @@ void StyleTableModel::removed([[maybe_unused]] std::shared_ptr<Style> item) { re
 void StyleTableModel::updateTotals()                                       { return; }
 
 QVariant StyleTableModel::data(QModelIndex const & index, int role) const {
-   if (!this->indexAndRoleOk(index, role)) {
-      return QVariant();
-   }
-
-   // No special handling required for any of our columns
-   return this->readDataFromModel(index, role);
+   return this->doDataDefault(index, role);
 }
 
 Qt::ItemFlags StyleTableModel::flags(QModelIndex const & index) const {
-   Qt::ItemFlags const defaults = Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled;
-   auto const columnIndex = static_cast<StyleTableModel::ColumnIndex>(index.column());
-   if (columnIndex == StyleTableModel::ColumnIndex::Name) {
-      return defaults;
-   }
-   return defaults | (this->m_editable ? Qt::ItemIsEditable : Qt::NoItemFlags);
+   return TableModelHelper::doFlags<StyleTableModel>(index, this->m_editable);
 }
 
 bool StyleTableModel::setData(QModelIndex const & index, QVariant const & value, int role) {
-   if (!this->indexAndRoleOk(index, role)) {
-      return false;
-   }
-
-   // No special handling required for any of our columns
-   return this->writeDataToModel(index, value, role);
+   return this->doSetDataDefault(index, value, role);
 }
 
 // Insert the boiler-plate stuff that we cannot do in TableModelBase

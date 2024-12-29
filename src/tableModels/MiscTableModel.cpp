@@ -23,19 +23,10 @@
  ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "tableModels/MiscTableModel.h"
 
-#include <QComboBox>
 #include <QHeaderView>
-#include <QLineEdit>
-
-#include "database/ObjectStoreWrapper.h"
-#include "MainWindow.h"
-#include "measurement/Measurement.h"
-#include "measurement/Unit.h"
-#include "model/Inventory.h"
-#include "model/Recipe.h"
-#include "PersistentSettings.h"
-#include "utils/BtStringConst.h"
-#include "widgets/BtComboBox.h"
+#include <QModelIndex>
+#include <QVariant>
+#include <QWidget>
 
 MiscTableModel::MiscTableModel(QTableView* parent, bool editable) :
    BtTableModel{
@@ -52,7 +43,6 @@ MiscTableModel::MiscTableModel(QTableView* parent, bool editable) :
    },
    TableModelBase<MiscTableModel, Misc>{} {
    this->rows.clear();
-   setObjectName("miscTableModel");
 
    QHeaderView* headerView = m_parentTableWidget->horizontalHeader();
    connect(headerView, &QWidget::customContextMenuRequested, this, &MiscTableModel::contextMenu);
@@ -70,33 +60,19 @@ void MiscTableModel::removed([[maybe_unused]] std::shared_ptr<Misc> item) { retu
 void MiscTableModel::updateTotals()                                       { return; }
 
 QVariant MiscTableModel::data(QModelIndex const & index, int role) const {
-   if (!this->indexAndRoleOk(index, role)) {
-      return QVariant();
-   }
-
-   // No special handling required for any of our columns
-   return this->readDataFromModel(index, role);
+   return this->doDataDefault(index, role);
 }
 
 Qt::ItemFlags MiscTableModel::flags(QModelIndex const & index) const {
-   Qt::ItemFlags const defaults = Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled;
-   auto const columnIndex = static_cast<MiscTableModel::ColumnIndex>(index.column());
-   if (columnIndex == MiscTableModel::ColumnIndex::Name) {
-      return defaults;
-   }
-   if (columnIndex == MiscTableModel::ColumnIndex::TotalInventory) {
-      return Qt::ItemIsEnabled | Qt::ItemIsEditable;
-   }
-   return defaults | (this->m_editable ? Qt::ItemIsEditable : Qt::NoItemFlags);
+   return TableModelHelper::doFlags<MiscTableModel>(
+      index,
+      this->m_editable,
+      {{MiscTableModel::ColumnIndex::TotalInventory, Qt::ItemIsEditable}}
+   );
 }
 
 bool MiscTableModel::setData(QModelIndex const & index, QVariant const & value, int role) {
-   if (!this->indexAndRoleOk(index, role)) {
-      return false;
-   }
-
-   // No special handling required for any of our columns
-   return this->writeDataToModel(index, value, role);
+   return this->doSetDataDefault(index, value, role);
 }
 
 // Insert the boiler-plate stuff that we cannot do in TableModelBase

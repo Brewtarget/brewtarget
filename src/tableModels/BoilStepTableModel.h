@@ -18,38 +18,23 @@
 #pragma once
 
 #include <QItemDelegate>
-#include <QMetaProperty>
-#include <QModelIndex>
-#include <QStyleOptionViewItem>
-#include <QVariant>
-#include <QVector>
-#include <QWidget>
 
-#include "measurement/Unit.h"
 #include "model/BoilStep.h"
-#include "model/Boil.h"
 #include "tableModels/BtTableModel.h"
 #include "tableModels/ItemDelegate.h"
 #include "tableModels/StepTableModelBase.h"
 #include "tableModels/TableModelBase.h"
 
-// You have to get the order of everything right with traits classes, but the end result is that we can refer to
-// HopTableModel::ColumnIndex::Alpha etc.
-class BoilStepTableModel;
-template <> struct TableModelTraits<BoilStepTableModel> {
-   enum class ColumnIndex {
-      Name        ,
-      StepTime    ,
-      StartTemp   ,
-      RampTime    ,
-      EndTemp     ,
-      StartAcidity,
-      EndAcidity  ,
-      StartGravity,
-      EndGravity  ,
-      ChillingType,
-   };
-};
+TABLE_MODEL_TRAITS(BoilStep, Name        ,
+                             StepTime    ,
+                             StartTemp   ,
+                             RampTime    ,
+                             EndTemp     ,
+                             StartAcidity,
+                             EndAcidity  ,
+                             StartGravity,
+                             EndGravity  ,
+                             ChillingType,)
 
 /*!
  * \class BoilStepTableModel

@@ -74,7 +74,7 @@
         </widget>
        </item>
        <item row="2" column="2">
-        <widget class="BtComboBox" name="comboBox_yeastType">
+        <widget class="BtComboBoxEnum" name="comboBox_yeastType">
          <property name="toolTip">
           <string>Type</string>
          </property>
@@ -91,7 +91,7 @@
         </widget>
        </item>
        <item row="2" column="5">
-        <widget class="BtComboBox" name="comboBox_yeastForm">
+        <widget class="BtComboBoxEnum" name="comboBox_yeastForm">
          <property name="toolTip">
           <string>Form</string>
          </property>
@@ -128,7 +128,7 @@
         </widget>
        </item>
        <item row="3" column="5">
-        <widget class="BtComboBox" name="comboBox_amountType">
+        <widget class="BtComboBoxEnum" name="comboBox_amountType">
          <property name="toolTip">
           <string>Whether the amount is weight or volume</string>
          </property>
@@ -220,7 +220,7 @@
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="BtComboBox" name="comboBox_yeastFlocculation">
+        <widget class="BtComboBoxEnum" name="comboBox_yeastFlocculation">
          <property name="toolTip">
           <string>Flocculation</string>
          </property>
@@ -342,7 +342,7 @@
         </widget>
        </item>
        <item row="5" column="1">
-        <widget class="BtBoolComboBox" name="boolCombo_phenolicOffFlavorPositive">
+        <widget class="BtComboBoxBool" name="boolCombo_phenolicOffFlavorPositive">
          <property name="toolTip">
           <string>Whether culture is capable of producing phenols, which is a common distinctive property of saison, and brett yeasts</string>
          </property>
@@ -356,7 +356,7 @@
         </widget>
        </item>
        <item row="5" column="3">
-        <widget class="BtBoolComboBox" name="boolCombo_glucoamylasePositive">
+        <widget class="BtComboBoxBool" name="boolCombo_glucoamylasePositive">
          <property name="toolTip">
           <string>A glucoamylase positive culture is capable of producing glucoamylase, the enzyme produced through expression of the diastatic gene, which allows yeast to attenuate dextrins and starches leading to a very low FG. This is positive in some saison/brett yeasts as well as the new gulo hybrid by Omega yeast labs.</string>
          </property>
@@ -370,7 +370,7 @@
         </widget>
        </item>
        <item row="6" column="1">
-        <widget class="BtBoolComboBox" name="boolCombo_killerProducingK1Toxin">
+        <widget class="BtComboBoxBool" name="boolCombo_killerProducingK1Toxin">
          <property name="toolTip">
           <string>Produces K1 killer toxin</string>
          </property>
@@ -384,7 +384,7 @@
         </widget>
        </item>
        <item row="6" column="3">
-        <widget class="BtBoolComboBox" name="boolCombo_killerProducingK2Toxin">
+        <widget class="BtComboBoxBool" name="boolCombo_killerProducingK2Toxin">
          <property name="toolTip">
           <string>Produces K2 killer toxin</string>
          </property>
@@ -398,7 +398,7 @@
         </widget>
        </item>
        <item row="7" column="1">
-        <widget class="BtBoolComboBox" name="boolCombo_killerProducingK28Toxin">
+        <widget class="BtComboBoxBool" name="boolCombo_killerProducingK28Toxin">
          <property name="toolTip">
           <string>Produces K28 killer toxin</string>
          </property>
@@ -412,7 +412,7 @@
         </widget>
        </item>
        <item row="7" column="3">
-        <widget class="BtBoolComboBox" name="boolCombo_killerProducingKlusToxin">
+        <widget class="BtComboBoxBool" name="boolCombo_killerProducingKlusToxin">
          <property name="toolTip">
           <string>Produces Klus killer toxin</string>
          </property>
@@ -426,7 +426,7 @@
         </widget>
        </item>
        <item row="8" column="1">
-        <widget class="BtBoolComboBox" name="boolCombo_killerNeutral">
+        <widget class="BtComboBoxBool" name="boolCombo_killerNeutral">
          <property name="toolTip">
           <string>Neutral strains do not produce toxins, nor are they killed by them</string>
          </property>
@@ -532,9 +532,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>BtComboBox</class>
+   <class>BtComboBoxEnum</class>
    <extends>QComboBox</extends>
-   <header>widgets/BtComboBox.h</header>
+   <header>widgets/BtComboBoxEnum.h</header>
   </customwidget>
   <customwidget>
    <class>InfoButton</class>
@@ -547,9 +547,9 @@
    <header>widgets/InfoText.h</header>
   </customwidget>
   <customwidget>
-   <class>BtBoolComboBox</class>
+   <class>BtComboBoxBool</class>
    <extends>QComboBox</extends>
-   <header>widgets/BtBoolComboBox.h</header>
+   <header>widgets/BtComboBoxBool.h</header>
   </customwidget>
   <customwidget>
    <class>SmartLabel</class>
@@ -582,7 +582,6 @@
   <tabstop>lineEdit_maxTemperature</tabstop>
   <tabstop>comboBox_yeastFlocculation</tabstop>
   <tabstop>lineEdit_maxReuse</tabstop>
-  <tabstop>lineEdit_timesCultured</tabstop>
   <tabstop>pushButton_new</tabstop>
   <tabstop>pushButton_save</tabstop>
   <tabstop>pushButton_cancel</tabstop>
