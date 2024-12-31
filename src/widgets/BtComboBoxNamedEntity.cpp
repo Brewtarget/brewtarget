@@ -33,9 +33,14 @@ BtComboBoxNamedEntity::~BtComboBoxNamedEntity() = default;
  * \param value -1 means nothing selected
  */
 void BtComboBoxNamedEntity::setCurrentId(int value) {
-   int const index {this->findData(value)};
+   //
+   // See comment in widgets/BtComboBoxNamedEntity.h for why the "nothing selected" option cannot appear explicitly
+   //
+   int const index {value < 0 ? -1 : this->findData(value)};
+   qDebug() << Q_FUNC_INFO << "value:" << value << ", index:" << index;
    // It's a coding error to set an ID we don't know about
-   Q_ASSERT(index >= 0);
+   Q_ASSERT(value < 0 || index >= 0);
+
    this->setCurrentIndex(index);
    return;
 }

@@ -43,12 +43,6 @@ public:
    void setCurrentId(int value);
 
    int getCurrentId() const;
-
-   //! Reimplemented from QComboBox to allow the popup to be independently sized.
-///   void showPopup();
-
-   //! Reimplemented from QComboBox to not show any text.
-///   virtual void paintEvent(QPaintEvent*);
 };
 
 
@@ -95,7 +89,18 @@ public:
       this->m_sortFilterProxyModel->sort(0);
       this->derived().setModel(this->m_sortFilterProxyModel.get());
 
-      this->derived().insertItem(0, "", QVariant::fromValue<int>(-1));
+      //
+      // The current limitation of using our own QSortFilterProxyModel etc to control what the combo box displays is
+      // that we can't add an explicit "empty item" to the list of items, because EquipmentSortFilterProxyModel etc
+      // don't support this.  Eg, putting the following here will have no effect:
+      //
+      //    this->derived().insertItem(0, "", QVariant::fromValue<int>(-1));
+      //
+      // However, even when a QComboBox combo box doesn't have such an "empty item", you can still set the current
+      // selection to be empty (ie nothing selected) by passing -1 to QComboBox::setCurrentIndex.  It's just that, once
+      // it is set to something, the user won't be able to unset it.  On the whole, that is actually what we want.  Eg,
+      // once the user has set the Equipment on a new Recipe for the first time, they can change it but not unset it.
+      //
 
       qDebug() << Q_FUNC_INFO << "Number of items:" << this->derived().count();
 
@@ -104,9 +109,15 @@ public:
 //         QString debugOutput;
 //         QTextStream debugOutputStream{&debugOutput};
 //         for (int ii = 0; ii < this->derived().count(); ++ii) {
+//            //
+//            // Annoyingly, QMetaType implements operator<< only for QDebug output stream (and only since Qt 6.5), and
+//            // doesn't have a toString() or similar member function.  However, we can lookup the names of the id()
+//            // values at https://doc.qt.io/qt-6/qmetatype.html#Type-enum, which is good enough for our diagnostic
+//            // purposes here.
+//            //
 //            QVariant data {this->derived().itemData(ii)};
 //            debugOutputStream <<
-//               "[" << ii << "] : (" << data.metaType() << ") " << data.typeName() << " : " << data.toString() << "\n";
+//               "[" << ii << "] : (" << data.metaType().id() << ") " << data.typeName() << " : " << data.toString() << "\n";
 //         }
 //         qDebug().noquote() << Q_FUNC_INFO << "Values:\n" << debugOutput;
 //      }
