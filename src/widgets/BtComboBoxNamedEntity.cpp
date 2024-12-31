@@ -21,7 +21,9 @@
 #include <QStyleOptionComboBox>
 #include <QStylePainter>
 
-BtComboBoxNamedEntity::BtComboBoxNamedEntity(QWidget* parent) : QComboBox(parent) {
+BtComboBoxNamedEntity::BtComboBoxNamedEntity(char const * const name, QWidget* parent) :
+   QComboBox{parent},
+   m_name{name} {
    return;
 }
 
@@ -37,7 +39,8 @@ void BtComboBoxNamedEntity::setCurrentId(int value) {
    // See comment in widgets/BtComboBoxNamedEntity.h for why the "nothing selected" option cannot appear explicitly
    //
    int const index {value < 0 ? -1 : this->findData(value)};
-   qDebug() << Q_FUNC_INFO << "value:" << value << ", index:" << index;
+   qDebug() << Q_FUNC_INFO << this->m_name << "value:" << value << ", index:" << index;
+
    // It's a coding error to set an ID we don't know about
    Q_ASSERT(value < 0 || index >= 0);
 

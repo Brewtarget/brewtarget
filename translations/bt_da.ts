@@ -2091,12 +2091,12 @@ Logfil indeholder måske flere detaljer.</translation>
         <translation type="vanished">Gem</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2130"/>
+        <location filename="../src/MainWindow.cpp" line="2129"/>
         <source>Equipment request</source>
         <translation>Udstyr forespørgsel</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2131"/>
+        <location filename="../src/MainWindow.cpp" line="2130"/>
         <source>Would you like to set the batch size, boil size and time to that requested by the equipment?</source>
         <translation>Ønsker du at sætte volumen af portion, volumen før kogning og varighed til udstyrets værdier?</translation>
     </message>
@@ -2121,39 +2121,39 @@ Logfil indeholder måske flere detaljer.</translation>
         <translation type="vanished">Brewtarget database (*.sqlite)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2550"/>
+        <location filename="../src/MainWindow.cpp" line="2549"/>
         <source>Recipe name</source>
         <translation>Opskrift navn</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2550"/>
+        <location filename="../src/MainWindow.cpp" line="2549"/>
         <source>Recipe name:</source>
         <translation>Opskrift navn:</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2875"/>
+        <location filename="../src/MainWindow.cpp" line="2874"/>
         <source>Backup Database</source>
         <translation>Sikkerhedskopier database</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2884"/>
-        <location filename="../src/MainWindow.cpp" line="2902"/>
-        <location filename="../src/MainWindow.cpp" line="3001"/>
+        <location filename="../src/MainWindow.cpp" line="2883"/>
+        <location filename="../src/MainWindow.cpp" line="2901"/>
+        <location filename="../src/MainWindow.cpp" line="3000"/>
         <source>Oops!</source>
         <translation>Hovsa!</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2884"/>
+        <location filename="../src/MainWindow.cpp" line="2883"/>
         <source>Could not copy the files for some reason.</source>
         <translation>Kan ikke kopiere filer.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2891"/>
+        <location filename="../src/MainWindow.cpp" line="2890"/>
         <source>A Warning</source>
         <translation>Advarsel</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2892"/>
+        <location filename="../src/MainWindow.cpp" line="2891"/>
         <source>This will obliterate your current set of recipes and ingredients. Do you want to continue?</source>
         <translation>Dette vil destruere det nuværende sæt af opskrifter og ingredienser. Fortsæt?</translation>
     </message>
@@ -2182,12 +2182,12 @@ Logfil indeholder måske flere detaljer.</translation>
         <translation type="vanished">Indtast et unikt navn for kopien.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3001"/>
+        <location filename="../src/MainWindow.cpp" line="3000"/>
         <source>Please give your mash a name before saving.</source>
         <translation>Giv din mæsk et navn før du gemmer.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2904"/>
+        <location filename="../src/MainWindow.cpp" line="2903"/>
         <source>Restart</source>
         <translation>Genstart</translation>
     </message>
@@ -2196,32 +2196,32 @@ Logfil indeholder måske flere detaljer.</translation>
         <translation type="vanished">Genstart Brewtarget.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3249"/>
+        <location filename="../src/MainWindow.cpp" line="3248"/>
         <source>No equipment</source>
         <translation>Intet udstyr</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3249"/>
+        <location filename="../src/MainWindow.cpp" line="3248"/>
         <source>You must select or define an equipment profile first.</source>
         <translation>Vælg eller definer en udstyrsprofil først.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3259"/>
+        <location filename="../src/MainWindow.cpp" line="3258"/>
         <source>No style</source>
         <translation>Ingen stilart</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3259"/>
+        <location filename="../src/MainWindow.cpp" line="3258"/>
         <source>You must select a style first.</source>
         <translation>Vælg en stilart først.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2898"/>
+        <location filename="../src/MainWindow.cpp" line="2897"/>
         <source>Choose File</source>
         <translation>Vælg fil</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2898"/>
+        <location filename="../src/MainWindow.cpp" line="2897"/>
         <source>SQLite (*.sqlite)</source>
         <translation>SQLite (*.sqlite)</translation>
     </message>
@@ -2238,34 +2238,34 @@ Logfil indeholder måske flere detaljer.</translation>
         <translation type="vanished">Importen indeholdt fejlbehæftet beerXML. Den er importeret men tjek om den ser fornuftig ud.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2645"/>
-        <location filename="../src/MainWindow.cpp" line="2692"/>
+        <location filename="../src/MainWindow.cpp" line="2644"/>
+        <location filename="../src/MainWindow.cpp" line="2691"/>
         <source>Folder name</source>
         <translation>Mappenavn</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2645"/>
-        <location filename="../src/MainWindow.cpp" line="2693"/>
+        <location filename="../src/MainWindow.cpp" line="2644"/>
+        <location filename="../src/MainWindow.cpp" line="2692"/>
         <source>Folder name:</source>
         <translation>Mappenavn:</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2654"/>
-        <location filename="../src/MainWindow.cpp" line="2665"/>
-        <location filename="../src/MainWindow.cpp" line="2706"/>
-        <location filename="../src/MainWindow.cpp" line="2717"/>
+        <location filename="../src/MainWindow.cpp" line="2653"/>
+        <location filename="../src/MainWindow.cpp" line="2664"/>
+        <location filename="../src/MainWindow.cpp" line="2705"/>
+        <location filename="../src/MainWindow.cpp" line="2716"/>
         <source>Bad Name</source>
         <translation>Uanvendeligt navn</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2655"/>
-        <location filename="../src/MainWindow.cpp" line="2707"/>
+        <location filename="../src/MainWindow.cpp" line="2654"/>
+        <location filename="../src/MainWindow.cpp" line="2706"/>
         <source>A folder name must have at least one non-whitespace character in it</source>
         <translation>Et mappenavn skal indeholde mindst et tegn ud over mellemrum</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2665"/>
-        <location filename="../src/MainWindow.cpp" line="2717"/>
+        <location filename="../src/MainWindow.cpp" line="2664"/>
+        <location filename="../src/MainWindow.cpp" line="2716"/>
         <source>A folder name must have at least one non-/ character in it</source>
         <translation>Et mappenavn skal indeholde mindst et tegn ud over bogstaver</translation>
     </message>
@@ -2274,13 +2274,14 @@ Logfil indeholder måske flere detaljer.</translation>
         <translation type="vanished">Fejl ved kopiering af opskrift</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2561"/>
+        <location filename="../src/MainWindow.cpp" line="2560"/>
         <source>An error was returned while creating %1</source>
         <translation>Der opstod en fejl ved dannelse af %1</translation>
     </message>
     <message>
+        <location filename="../src/MainWindow.cpp" line="474"/>
         <source>Add %1 to recipe</source>
-        <translation type="vanished">Føj %1 til opskrift</translation>
+        <translation>Føj %1 til opskrift</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="520"/>
@@ -2292,8 +2293,9 @@ Logfil indeholder måske flere detaljer.</translation>
         <translation type="vanished">Føj %1 trin til opskrift</translation>
     </message>
     <message>
+        <location filename="../src/MainWindow.cpp" line="650"/>
         <source>Remove %1</source>
-        <translation type="vanished">Fjern %1</translation>
+        <translation>Fjern %1</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="984"/>
@@ -2325,129 +2327,129 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
         <translation>Ændr opskriftnavn</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2049"/>
-        <location filename="../src/MainWindow.cpp" line="2169"/>
+        <location filename="../src/MainWindow.cpp" line="2048"/>
+        <location filename="../src/MainWindow.cpp" line="2168"/>
         <source>Change Recipe Style</source>
         <translation>Ændr opskriftens stilart</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2068"/>
+        <location filename="../src/MainWindow.cpp" line="2067"/>
         <source>Change Recipe Mash</source>
         <translation>Ændr mæskning for opskriften</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2087"/>
+        <location filename="../src/MainWindow.cpp" line="2086"/>
         <source>Change Recipe Equipment</source>
         <translation>Ændr udstyr for opskriften</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2120"/>
+        <location filename="../src/MainWindow.cpp" line="2119"/>
         <source>Change Recipe Kit</source>
         <translation>Ændr opskriftskit</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2125"/>
+        <location filename="../src/MainWindow.cpp" line="2124"/>
         <source>Change Tun Weight</source>
         <translation>Ændr karrets masse</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2126"/>
+        <location filename="../src/MainWindow.cpp" line="2125"/>
         <source>Change Tun Specific Heat</source>
         <translation>Ændr karrets specifikke varmefylde</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2140"/>
-        <location filename="../src/MainWindow.cpp" line="2269"/>
+        <location filename="../src/MainWindow.cpp" line="2139"/>
+        <location filename="../src/MainWindow.cpp" line="2268"/>
         <source>Change Batch Size</source>
         <translation>Ændr volumen af portion</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2143"/>
+        <location filename="../src/MainWindow.cpp" line="2142"/>
         <source>Change Boil Size</source>
         <translation>Ændr kogevolumen</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2145"/>
+        <location filename="../src/MainWindow.cpp" line="2144"/>
         <source>Change Boil Time</source>
         <translation>Ændr varighed af kogning</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2193"/>
+        <location filename="../src/MainWindow.cpp" line="2192"/>
         <source>Drop fermentable(s) on a recipe</source>
         <translation>Træk gærbar(e) til en opskrift</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2214"/>
+        <location filename="../src/MainWindow.cpp" line="2213"/>
         <source>Drop hop(s) on a recipe</source>
         <translation>Træk humle(r) til en opskrift</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2235"/>
+        <location filename="../src/MainWindow.cpp" line="2234"/>
         <source>Drop misc(s) on a recipe</source>
         <translation>Træk diverse ingrediens(er) til en opskrift</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2256"/>
+        <location filename="../src/MainWindow.cpp" line="2255"/>
         <source>Drop yeast(s) on a recipe</source>
         <translation>Træk gær til en opskrift</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2317"/>
+        <location filename="../src/MainWindow.cpp" line="2316"/>
         <source>Change Recipe Efficiency</source>
         <translation>Ændr effektivitet for opskrift</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2447"/>
+        <location filename="../src/MainWindow.cpp" line="2446"/>
         <source>Undo %1</source>
         <translation>Fortryd %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2448"/>
+        <location filename="../src/MainWindow.cpp" line="2447"/>
         <source>Redo %1</source>
         <translation>Gentag %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2560"/>
+        <location filename="../src/MainWindow.cpp" line="2559"/>
         <source>Error creating recipe</source>
         <translation>Fejl ved dannelse af opskrift</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2902"/>
+        <location filename="../src/MainWindow.cpp" line="2901"/>
         <source>Operation failed.  See log file for more details.</source>
         <translation>Handlingen mislykkedes. Se detaljer i logfil.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2904"/>
+        <location filename="../src/MainWindow.cpp" line="2903"/>
         <source>Please restart %1.</source>
         <translation>Genstart venligst %1.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3211"/>
+        <location filename="../src/MainWindow.cpp" line="3210"/>
         <source>Nothing to export</source>
         <translation>Intet at eksportere</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3212"/>
+        <location filename="../src/MainWindow.cpp" line="3211"/>
         <source>None of the selected items is exportable</source>
         <translation>Ingen af de markerede kan eksporteres</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3358"/>
+        <location filename="../src/MainWindow.cpp" line="3357"/>
         <source>No Mash</source>
         <translation>Ingen mæskning</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3358"/>
+        <location filename="../src/MainWindow.cpp" line="3357"/>
         <source>You must define a mash first.</source>
         <translation>Du skal først definere en mæskning.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2572"/>
+        <location filename="../src/MainWindow.cpp" line="2571"/>
         <source>Automatically-created Boil for %1</source>
         <translation>Automatisk genereret kogning for %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2578"/>
+        <location filename="../src/MainWindow.cpp" line="2577"/>
         <source>Automatically-created Fermentation for %1</source>
         <translation>Automatisk genereret gæring for %1</translation>
     </message>
@@ -5977,8 +5979,9 @@ The final volume in the primary is %1.</source>
 <context>
     <name>StepClass</name>
     <message>
+        <location filename="../src/MainWindow.cpp" line="2388"/>
         <source>Add %1 step to recipe</source>
-        <translation type="vanished">Føj %1 trin til opskrift</translation>
+        <translation>Føj %1 trin til opskrift</translation>
     </message>
 </context>
 <context>
@@ -6494,19 +6497,16 @@ The final volume in the primary is %1.</source>
 <context>
     <name>Undoable</name>
     <message>
-        <location filename="../src/MainWindow.cpp" line="474"/>
         <source>Add %1 to recipe</source>
-        <translation>Føj %1 til opskrift</translation>
+        <translation type="vanished">Føj %1 til opskrift</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="650"/>
         <source>Remove %1</source>
-        <translation>Fjern %1</translation>
+        <translation type="vanished">Fjern %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2389"/>
         <source>Add %1 step to recipe</source>
-        <translation>Føj %1 trin til opskrift</translation>
+        <translation type="vanished">Føj %1 trin til opskrift</translation>
     </message>
 </context>
 <context>
@@ -7456,8 +7456,14 @@ The final volume in the primary is %1.</source>
 <context>
     <name>editorClass</name>
     <message>
+        <location filename="../src/widgets/BtComboBoxBool.h" line="149"/>
         <source>No</source>
-        <translation type="obsolete">Nej</translation>
+        <translation type="unfinished">Nej</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/BtComboBoxBool.h" line="150"/>
+        <source>Yes</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -8758,40 +8764,40 @@ The final volume in the primary is %1.</source>
 <context>
     <name>mainWindow</name>
     <message>
-        <location filename="../ui/mainWindow.ui" line="88"/>
-        <location filename="../ui/mainWindow.ui" line="98"/>
+        <location filename="../ui/mainWindow.ui" line="91"/>
+        <location filename="../ui/mainWindow.ui" line="101"/>
         <source>Recipes</source>
         <translation>Opskrifter</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="122"/>
+        <location filename="../ui/mainWindow.ui" line="125"/>
         <source>Styles</source>
         <translation>Stilarter</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="160"/>
-        <location filename="../ui/mainWindow.ui" line="1008"/>
+        <location filename="../ui/mainWindow.ui" line="163"/>
+        <location filename="../ui/mainWindow.ui" line="1013"/>
         <source>Fermentables</source>
         <translation>Gærbare ingredienser</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="177"/>
-        <location filename="../ui/mainWindow.ui" line="1087"/>
+        <location filename="../ui/mainWindow.ui" line="180"/>
+        <location filename="../ui/mainWindow.ui" line="1092"/>
         <source>Hops</source>
         <translation>Humle</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="194"/>
+        <location filename="../ui/mainWindow.ui" line="197"/>
         <source>Miscs</source>
         <translation>Diverse</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="211"/>
+        <location filename="../ui/mainWindow.ui" line="214"/>
         <source>Yeasts</source>
         <translation>Gær</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="283"/>
+        <location filename="../ui/mainWindow.ui" line="286"/>
         <source>Recipe</source>
         <translation>Opskrift</translation>
     </message>
@@ -8800,12 +8806,12 @@ The final volume in the primary is %1.</source>
         <translation type="vanished">Navn</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="321"/>
+        <location filename="../ui/mainWindow.ui" line="324"/>
         <source>Name of recipe</source>
         <translation>Navn på opskrift</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="495"/>
+        <location filename="../ui/mainWindow.ui" line="499"/>
         <source>The extraction efficiency you expect</source>
         <translation>Forventet effektivitet af ekstraktion</translation>
     </message>
@@ -8814,332 +8820,332 @@ The final volume in the primary is %1.</source>
         <translation type="vanished">Stilart</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="540"/>
+        <location filename="../ui/mainWindow.ui" line="544"/>
         <source>Boil Time</source>
         <translation>Varighed af kogning</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="472"/>
+        <location filename="../ui/mainWindow.ui" line="476"/>
         <source>Target batch size</source>
         <translation>Tilsigtet volumen af portion</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="143"/>
+        <location filename="../ui/mainWindow.ui" line="146"/>
         <source>Equipment</source>
         <translation>Udstyr</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="744"/>
+        <location filename="../ui/mainWindow.ui" line="749"/>
         <source>OG</source>
         <translation>Startmassefylde (OG)</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="572"/>
+        <location filename="../ui/mainWindow.ui" line="576"/>
         <source>Boil SG</source>
         <translation>Massefylde før kogning</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="754"/>
+        <location filename="../ui/mainWindow.ui" line="759"/>
         <source>FG</source>
         <translation>Slutmassefylde (FG)</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="695"/>
+        <location filename="../ui/mainWindow.ui" line="700"/>
         <source>ABV</source>
         <translation>Alkoholvolumenprocent (ABV)</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="712"/>
+        <location filename="../ui/mainWindow.ui" line="717"/>
         <source>Bitterness (IBU)</source>
         <translation>Bitterhed (IBU)</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="705"/>
+        <location filename="../ui/mainWindow.ui" line="710"/>
         <source>Color</source>
         <translation>Farve</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="761"/>
+        <location filename="../ui/mainWindow.ui" line="766"/>
         <source>IBU/GU</source>
         <translation>IBU/GU</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="598"/>
+        <location filename="../ui/mainWindow.ui" line="602"/>
         <source>Calories/12oz</source>
         <translation>Kalorieindhold pr. 12 oz</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="943"/>
+        <location filename="../ui/mainWindow.ui" line="948"/>
         <source>Extras</source>
         <translation>Mere</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="953"/>
+        <location filename="../ui/mainWindow.ui" line="958"/>
         <source>Brewday</source>
         <translation>Bryggedag</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1029"/>
+        <location filename="../ui/mainWindow.ui" line="1034"/>
         <source>Add a fermentable</source>
         <translation>Tilføj gærbar ingrediens</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1043"/>
+        <location filename="../ui/mainWindow.ui" line="1048"/>
         <source>Remove selected fermentable</source>
         <translation>Fjern markeret gærbar ingrediens</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1057"/>
+        <location filename="../ui/mainWindow.ui" line="1062"/>
         <source>Edit selected fermentable</source>
         <translation>Rediger markeret gærbar ingrediens</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1101"/>
+        <location filename="../ui/mainWindow.ui" line="1106"/>
         <source>Add hop</source>
         <translation>Tilføj humle</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1115"/>
+        <location filename="../ui/mainWindow.ui" line="1120"/>
         <source>Remove selected hop</source>
         <translation>Fjern markeret humle</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1129"/>
+        <location filename="../ui/mainWindow.ui" line="1134"/>
         <source>Edit selected hop</source>
         <translation>Rediger markeret humle</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1159"/>
+        <location filename="../ui/mainWindow.ui" line="1164"/>
         <source>Miscellaneous</source>
         <translation>Diverse ingredienser</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1177"/>
+        <location filename="../ui/mainWindow.ui" line="1182"/>
         <source>Add misc</source>
         <translation>Tilføj diverseingrediens</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1191"/>
+        <location filename="../ui/mainWindow.ui" line="1196"/>
         <source>Remove selected misc</source>
         <translation>Fjern markeret diverseingrediens</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1205"/>
+        <location filename="../ui/mainWindow.ui" line="1210"/>
         <source>Edit selected misc</source>
         <translation>Rediger markeret diverseingrediens</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1235"/>
+        <location filename="../ui/mainWindow.ui" line="1240"/>
         <source>Yeast</source>
         <translation>Gær</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1253"/>
+        <location filename="../ui/mainWindow.ui" line="1258"/>
         <source>Add yeast</source>
         <translation>Tilføj gær</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1267"/>
+        <location filename="../ui/mainWindow.ui" line="1272"/>
         <source>Remove selected yeast</source>
         <translation>Fjern markeret gær</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1281"/>
+        <location filename="../ui/mainWindow.ui" line="1286"/>
         <source>Edit selected yeast</source>
         <translation>Rediger markeret gær</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1311"/>
+        <location filename="../ui/mainWindow.ui" line="1316"/>
         <source>Mash</source>
         <translation>Mæskning</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1331"/>
+        <location filename="../ui/mainWindow.ui" line="1336"/>
         <source>Add mash step</source>
         <translation>Tilføj mæsketrin</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1345"/>
+        <location filename="../ui/mainWindow.ui" line="1350"/>
         <source>Remove selected mash step</source>
         <translation>Fjern markeret mæsketrin</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1359"/>
+        <location filename="../ui/mainWindow.ui" line="1364"/>
         <source>Edit selected mash step</source>
         <translation>Rediger markeret mæsketrin</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1373"/>
+        <location filename="../ui/mainWindow.ui" line="1378"/>
         <source>Edit mash properties</source>
         <translation>Rediger mæskeegenskaber</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1376"/>
+        <location filename="../ui/mainWindow.ui" line="1381"/>
         <source>Edit mash</source>
         <translation>Rediger mæskning</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1383"/>
+        <location filename="../ui/mainWindow.ui" line="1388"/>
         <source>Mash Des</source>
         <translation>Mæskning design</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1390"/>
+        <location filename="../ui/mainWindow.ui" line="1395"/>
         <source>Invoke the mash wizard</source>
         <translation>Start mæskningsguide</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1393"/>
+        <location filename="../ui/mainWindow.ui" line="1398"/>
         <source>Mash wiz</source>
         <translation>Mæskningsguide</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1428"/>
+        <location filename="../ui/mainWindow.ui" line="1433"/>
         <source>Mashs</source>
         <translation>Mæskninger</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1482"/>
+        <location filename="../ui/mainWindow.ui" line="1487"/>
         <source>Mash step up</source>
         <translation>Mæskning trin op</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1493"/>
+        <location filename="../ui/mainWindow.ui" line="1498"/>
         <source>Mash step down</source>
         <translation>Mæskning trin ned</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1504"/>
+        <location filename="../ui/mainWindow.ui" line="1509"/>
         <source>Save this mash profile</source>
         <translation>Gem denne mæskeprofil</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1507"/>
+        <location filename="../ui/mainWindow.ui" line="1512"/>
         <source>Save Mash</source>
         <translation>Gem mæskning</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1914"/>
+        <location filename="../ui/mainWindow.ui" line="1919"/>
         <source>&amp;About</source>
         <translation>Om</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1924"/>
+        <location filename="../ui/mainWindow.ui" line="1929"/>
         <source>&amp;File</source>
         <translation>&amp;Fil</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1928"/>
+        <location filename="../ui/mainWindow.ui" line="1933"/>
         <source>&amp;Database</source>
         <translation>&amp;Database</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1951"/>
+        <location filename="../ui/mainWindow.ui" line="1956"/>
         <source>&amp;View</source>
         <translation>&amp;Vis</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1964"/>
+        <location filename="../ui/mainWindow.ui" line="1969"/>
         <source>&amp;Tools</source>
         <translation>Værk&amp;tøjer</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2003"/>
+        <location filename="../ui/mainWindow.ui" line="2009"/>
         <source>toolBar</source>
         <translation>værktøjsbjælke</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2069"/>
+        <location filename="../ui/mainWindow.ui" line="2079"/>
         <source>&amp;Fermentables</source>
         <translation>&amp;Gærbare ingredienser</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2072"/>
+        <location filename="../ui/mainWindow.ui" line="2082"/>
         <source>Ctrl+F</source>
         <translation>Ctr+G</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2081"/>
+        <location filename="../ui/mainWindow.ui" line="2091"/>
         <source>&amp;Hops</source>
         <translation>&amp;Humle</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2084"/>
+        <location filename="../ui/mainWindow.ui" line="2094"/>
         <source>Ctrl+H</source>
         <translation>Ctrl+H</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2096"/>
+        <location filename="../ui/mainWindow.ui" line="2106"/>
         <source>Ctrl+M</source>
         <translation>Ctrl+M</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2105"/>
+        <location filename="../ui/mainWindow.ui" line="2115"/>
         <source>&amp;Yeasts</source>
         <translation>&amp;Gær</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2108"/>
+        <location filename="../ui/mainWindow.ui" line="2118"/>
         <source>Ctrl+Y</source>
         <translation>Crtl+G</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2117"/>
+        <location filename="../ui/mainWindow.ui" line="2127"/>
         <source>&amp;Equipments</source>
         <translation>&amp;Udstyr</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2120"/>
+        <location filename="../ui/mainWindow.ui" line="2130"/>
         <source>Ctrl+E</source>
         <translation>Ctrl+U</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2129"/>
+        <location filename="../ui/mainWindow.ui" line="2139"/>
         <source>&amp;Styles</source>
         <translation>&amp;Stilarter</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2132"/>
+        <location filename="../ui/mainWindow.ui" line="2142"/>
         <source>Ctrl+T</source>
         <translation>Crtl+T</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2156"/>
+        <location filename="../ui/mainWindow.ui" line="2166"/>
         <source>Ctrl+Q</source>
         <translation>Crtl+Q</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2183"/>
+        <location filename="../ui/mainWindow.ui" line="2193"/>
         <source>&amp;Manual</source>
         <translation>&amp;Manual</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2192"/>
+        <location filename="../ui/mainWindow.ui" line="2202"/>
         <source>&amp;Scale Recipe</source>
         <translation>&amp;Skaler opskrift</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2201"/>
+        <location filename="../ui/mainWindow.ui" line="2211"/>
         <source>Recipe to Clipboard as &amp;Text</source>
         <translation>Opskrift til klippebord som &amp;tekst</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2210"/>
+        <location filename="../ui/mainWindow.ui" line="2220"/>
         <source>&amp;OG Correction Help</source>
         <translation>Hjælp til &amp;OG korrektion</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2219"/>
+        <location filename="../ui/mainWindow.ui" line="2229"/>
         <source>&amp;Convert Units</source>
         <translation>Konverter enheder</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2224"/>
+        <location filename="../ui/mainWindow.ui" line="2234"/>
         <source>Backup Database</source>
         <translation>Sikkerhedskopier database</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2229"/>
+        <location filename="../ui/mainWindow.ui" line="2239"/>
         <source>Restore Database</source>
         <translation>Gendan database</translation>
     </message>
@@ -9148,113 +9154,113 @@ The final volume in the primary is %1.</source>
         <translation type="vanished">&amp;Kopier opskrift</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2247"/>
+        <location filename="../ui/mainWindow.ui" line="2257"/>
         <source>Pr&amp;iming Calculator</source>
         <translation>Gært&amp;ilsætning beregner</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2256"/>
+        <location filename="../ui/mainWindow.ui" line="2266"/>
         <source>&amp;Refractometer Tools</source>
         <translation>&amp;Refraktometer værktøjer</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2265"/>
+        <location filename="../ui/mainWindow.ui" line="2275"/>
         <source>&amp;Pitch Rate Calculator</source>
         <translation>&amp;Forgæringshastighed beregner</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2274"/>
+        <location filename="../ui/mainWindow.ui" line="2284"/>
         <source>&amp;Backup</source>
         <translation>&amp;Sikkerhedskopiering</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2277"/>
+        <location filename="../ui/mainWindow.ui" line="2287"/>
         <source>Save all recipes, ingredients, etc. to a backup folder</source>
         <translation>Gem alle opskrifter, ingredienser etc. til en sikkerhedskopimappe</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2286"/>
+        <location filename="../ui/mainWindow.ui" line="2296"/>
         <source>&amp;Restore</source>
         <translation>&amp;Gendan</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2289"/>
+        <location filename="../ui/mainWindow.ui" line="2299"/>
         <source>Restore recipes, ingredients, etc. from a previous backup</source>
         <translation>Gendan opskrifter, ingredienser etc. fra en tidligere sikkerhedskopi</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2298"/>
+        <location filename="../ui/mainWindow.ui" line="2308"/>
         <source>&amp;New Recipe</source>
         <translation>&amp;Ny opskrift</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2310"/>
+        <location filename="../ui/mainWindow.ui" line="2320"/>
         <source>Show timers</source>
         <translation>Vis timere</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2319"/>
-        <location filename="../ui/mainWindow.ui" line="2322"/>
+        <location filename="../ui/mainWindow.ui" line="2329"/>
+        <location filename="../ui/mainWindow.ui" line="2332"/>
         <source>Save</source>
         <translation>Gem</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2331"/>
+        <location filename="../ui/mainWindow.ui" line="2341"/>
         <source>Delete selected</source>
         <translation>Slet markeret</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2334"/>
+        <location filename="../ui/mainWindow.ui" line="2344"/>
         <source>Delete recipe</source>
         <translation>Slet opskrift</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2344"/>
+        <location filename="../ui/mainWindow.ui" line="2354"/>
         <source>&amp;Mashs</source>
         <translation>&amp;Mæskninger</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2347"/>
+        <location filename="../ui/mainWindow.ui" line="2357"/>
         <source>Mashes</source>
         <translation>Mæskninger</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="613"/>
+        <location filename="../ui/mainWindow.ui" line="618"/>
         <source>1.0</source>
         <translation>1.0</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2365"/>
+        <location filename="../ui/mainWindow.ui" line="2375"/>
         <source>Export to &amp;BBCode</source>
         <translation>Eksporter til &amp;BBkode</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="228"/>
+        <location filename="../ui/mainWindow.ui" line="231"/>
         <source>Water</source>
         <translation>Vand</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="299"/>
+        <location filename="../ui/mainWindow.ui" line="302"/>
         <source>&amp;Name</source>
         <translation>&amp;Navn</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="357"/>
+        <location filename="../ui/mainWindow.ui" line="361"/>
         <source>&amp;Style</source>
         <translation>&amp;Stilart</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="408"/>
+        <location filename="../ui/mainWindow.ui" line="412"/>
         <source>E&amp;quipment</source>
         <translation>&amp;Udstyr</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="462"/>
+        <location filename="../ui/mainWindow.ui" line="466"/>
         <source>Target Batch Si&amp;ze</source>
         <translation>Tilsigtet &amp;volumen af portion</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="508"/>
+        <location filename="../ui/mainWindow.ui" line="512"/>
         <source>Tar&amp;get Boil Size</source>
         <translation>Tilsigtet volumen før ko&amp;gning</translation>
     </message>
@@ -9263,234 +9269,234 @@ The final volume in the primary is %1.</source>
         <translation type="vanished">(se faneblad Kogning herunder)</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="482"/>
+        <location filename="../ui/mainWindow.ui" line="486"/>
         <source>&amp;Efficiency (%)</source>
         <translation>&amp;Effektivitet (%)</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="623"/>
+        <location filename="../ui/mainWindow.ui" line="628"/>
         <source>Recipe Locked</source>
         <translation>Opskrift låst</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="768"/>
+        <location filename="../ui/mainWindow.ui" line="773"/>
         <source>Batch Size</source>
         <translation>Portion volumen</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="800"/>
+        <location filename="../ui/mainWindow.ui" line="805"/>
         <source>Boil Size</source>
         <translation>Volumen ved kogning</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1517"/>
+        <location filename="../ui/mainWindow.ui" line="1522"/>
         <source>Boil</source>
         <translation>Kogning</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1537"/>
+        <location filename="../ui/mainWindow.ui" line="1542"/>
         <source>Add boil step</source>
         <translation>Tilføj trin i kogning</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1551"/>
+        <location filename="../ui/mainWindow.ui" line="1556"/>
         <source>Remove selected boil step</source>
         <translation>Fjern markeret trin i kogning</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1565"/>
+        <location filename="../ui/mainWindow.ui" line="1570"/>
         <source>Edit selected boil step</source>
         <translation>Rediger markeret trin i kogning</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1579"/>
+        <location filename="../ui/mainWindow.ui" line="1584"/>
         <source>Edit boil properties</source>
         <translation>Rediger egenskaber for kogning</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1582"/>
+        <location filename="../ui/mainWindow.ui" line="1587"/>
         <source>Edit boil</source>
         <translation>Rediger kogning</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1617"/>
+        <location filename="../ui/mainWindow.ui" line="1622"/>
         <source>Boils</source>
         <translation>Kogninger</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1671"/>
+        <location filename="../ui/mainWindow.ui" line="1676"/>
         <source>Boil step up</source>
         <translation>Trin i kogning en plads op</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1682"/>
+        <location filename="../ui/mainWindow.ui" line="1687"/>
         <source>Boil step down</source>
         <translation>Trin i kogning en plads ned</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1693"/>
+        <location filename="../ui/mainWindow.ui" line="1698"/>
         <source>Save this boil profile</source>
         <translation>Gem denne kogningsprofil</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1696"/>
+        <location filename="../ui/mainWindow.ui" line="1701"/>
         <source>Save Boil</source>
         <translation>Gem kogning</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1706"/>
+        <location filename="../ui/mainWindow.ui" line="1711"/>
         <source>Fermentation</source>
         <translation>Gæring</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1726"/>
+        <location filename="../ui/mainWindow.ui" line="1731"/>
         <source>Add fermentation step</source>
         <translation>Tilføj gæringstrin</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1740"/>
+        <location filename="../ui/mainWindow.ui" line="1745"/>
         <source>Remove selected fermentation step</source>
         <translation>Fjern markeret gæringstrin</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1754"/>
+        <location filename="../ui/mainWindow.ui" line="1759"/>
         <source>Edit selected fermentation step</source>
         <translation>Rediger markeret gæringstrin</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1768"/>
+        <location filename="../ui/mainWindow.ui" line="1773"/>
         <source>Edit fermentation properties</source>
         <translation>Rediger gæringsegenskaber</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1771"/>
+        <location filename="../ui/mainWindow.ui" line="1776"/>
         <source>Edit fermentation</source>
         <translation>Rediger gæring</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1806"/>
+        <location filename="../ui/mainWindow.ui" line="1811"/>
         <source>Fermentations</source>
         <translation>Gæringer</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1860"/>
+        <location filename="../ui/mainWindow.ui" line="1865"/>
         <source>Fermentation step up</source>
         <translation>Gæringstrin en plads op</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1871"/>
+        <location filename="../ui/mainWindow.ui" line="1876"/>
         <source>Fermentation step down</source>
         <translation>Gæringstrin en plads ned</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1882"/>
+        <location filename="../ui/mainWindow.ui" line="1887"/>
         <source>Save this fermentation profile</source>
         <translation>Gem denne gæringsprofil</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1885"/>
+        <location filename="../ui/mainWindow.ui" line="1890"/>
         <source>Save Fermentation</source>
         <translation>Gem gæring</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1984"/>
+        <location filename="../ui/mainWindow.ui" line="1989"/>
         <source>Edit</source>
         <translation>Rediger</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2036"/>
-        <location filename="../ui/mainWindow.ui" line="2039"/>
+        <location filename="../ui/mainWindow.ui" line="2042"/>
+        <location filename="../ui/mainWindow.ui" line="2045"/>
         <source>Help</source>
         <translation>Hjælp</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2060"/>
+        <location filename="../ui/mainWindow.ui" line="2070"/>
         <source>&amp;Export to File</source>
         <translation>&amp;Eksporter til fil</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2093"/>
+        <location filename="../ui/mainWindow.ui" line="2103"/>
         <source>M&amp;iscs</source>
         <translation>D&amp;iverse ingredienser</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2141"/>
+        <location filename="../ui/mainWindow.ui" line="2151"/>
         <source>&amp;Print and preview</source>
         <translation>&amp;Udskriv og forhåndsvisning</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2144"/>
+        <location filename="../ui/mainWindow.ui" line="2154"/>
         <source>Ctrl+P</source>
         <translation>Crtl+P</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2153"/>
+        <location filename="../ui/mainWindow.ui" line="2163"/>
         <source>E&amp;xit</source>
         <translation>Afbryd</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2165"/>
+        <location filename="../ui/mainWindow.ui" line="2175"/>
         <source>&amp;Import from File</source>
         <translation>&amp;Importer fra fil</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2174"/>
+        <location filename="../ui/mainWindow.ui" line="2184"/>
         <source>Optio&amp;ns</source>
         <translation>I&amp;ndstillinger</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2238"/>
+        <location filename="../ui/mainWindow.ui" line="2248"/>
         <source>&amp;Copy Selected Item(s)</source>
         <translation>Kopier de markerede</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2307"/>
+        <location filename="../ui/mainWindow.ui" line="2317"/>
         <source>Ti&amp;mers</source>
         <translation>Ti&amp;mere</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2356"/>
+        <location filename="../ui/mainWindow.ui" line="2366"/>
         <source>Strike &amp;Water Calculator</source>
         <translation>&amp;Vandtemperatur ved malttilsætning beregner</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2374"/>
+        <location filename="../ui/mainWindow.ui" line="2384"/>
         <source>&amp;Hydrometer Temp Adjustment</source>
         <translation>&amp;Hydrometer temperaturjustering</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2379"/>
+        <location filename="../ui/mainWindow.ui" line="2389"/>
         <source>Alcohol Percentage Tool</source>
         <translation>Alkoholprocent værktøj</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2388"/>
+        <location filename="../ui/mainWindow.ui" line="2398"/>
         <source>Water &amp;Chemistry</source>
         <translation>Vand&amp;kemi</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2393"/>
+        <location filename="../ui/mainWindow.ui" line="2403"/>
         <source>Undo</source>
         <translation>Fortryd</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2398"/>
+        <location filename="../ui/mainWindow.ui" line="2408"/>
         <source>Redo</source>
         <translation>Gentag</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2407"/>
+        <location filename="../ui/mainWindow.ui" line="2417"/>
         <source>Ancestors</source>
         <translation>Kopieret fra</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2419"/>
+        <location filename="../ui/mainWindow.ui" line="2429"/>
         <source>Brew It!</source>
         <translation>Bryg den!</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="524"/>
-        <location filename="../ui/mainWindow.ui" line="556"/>
+        <location filename="../ui/mainWindow.ui" line="522"/>
+        <location filename="../ui/mainWindow.ui" line="554"/>
         <source>See Boil tab below</source>
         <translation>Se faneblad Kogning herunder</translation>
     </message>
