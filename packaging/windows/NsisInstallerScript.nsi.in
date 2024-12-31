@@ -243,7 +243,7 @@ functionEnd
 Name "${APPLICATION_DISPLAY_NAME}"
 
 # Name of the installer executable to create
-OutFile "${APPLICATION_DISPLAY_NAME} Installer.exe"
+OutFile "${APPLICATION_DISPLAY_NAME} Windows Installer.exe"
 
 #
 # Default installation directory
