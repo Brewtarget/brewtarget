@@ -17,7 +17,7 @@ happens, so I'm now setting it to a slightly arbitrary time early in the morning
 Bug fixes and minor enhancements.
 
 ### New Features
-* None
+* Updated Danish translations (courtesy of Orla Valbjørn Møller)
 
 ### Bug Fixes
 * Crash when creating or opening user recipe [910](https://github.com/Brewtarget/brewtarget/issues/910)
