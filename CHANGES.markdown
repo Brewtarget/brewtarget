@@ -17,13 +17,13 @@ happens, so I'm now setting it to a slightly arbitrary time early in the morning
 Bug fixes and minor enhancements.
 
 ### New Features
-* Updated Danish translations (courtesy of Orla Valbjørn Møller)
+* None
 
 ### Bug Fixes
 * 4.0.13 and ubuntu 24.10 crash [913](https://github.com/Brewtarget/brewtarget/issues/913)
 
 ### Release Timestamp
-Tue, 31 Dec 2024 04:00:15 +0100
+Wed, 1 Jan 2025 04:00:15 +0100
 
 ## v4.0.14
 Bug fixes and minor enhancements.
