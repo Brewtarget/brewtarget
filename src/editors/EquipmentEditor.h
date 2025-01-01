@@ -30,7 +30,7 @@
 #include "editors/EditorBase.h"
 #include "model/Equipment.h"
 
-#define EquipmentEditorOptions EditorBaseOptions{ }
+#define EquipmentEditorOptions EditorBaseOptions{ .idDisplay = true }
 /*!
  * \class EquipmentEditor
  *

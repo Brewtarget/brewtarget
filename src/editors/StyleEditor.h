@@ -27,7 +27,7 @@
 #include "editors/EditorBase.h"
 #include "model/Style.h"
 
-#define StyleEditorOptions EditorBaseOptions{ }
+#define StyleEditorOptions EditorBaseOptions{ .idDisplay = true }
 /*!
  * \class StyleEditor
  *
