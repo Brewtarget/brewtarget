@@ -15,7 +15,7 @@
  ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "catalogs/StyleCatalog.h"
 
-#include "sortFilterProxyModels/StyleSortFilterProxyModel.h"
+#include "qtModels/sortFilterProxyModels/StyleSortFilterProxyModel.h"
 
 // Insert the boiler-plate stuff that we cannot do in CatalogBase
 CATALOG_COMMON_CODE(Style)

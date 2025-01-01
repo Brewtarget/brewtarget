@@ -21,7 +21,7 @@
  ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "catalogs/HopCatalog.h"
 
-#include "sortFilterProxyModels/HopSortFilterProxyModel.h"
+#include "qtModels/sortFilterProxyModels/HopSortFilterProxyModel.h"
 
 // Insert the boiler-plate stuff that we cannot do in CatalogBase
 CATALOG_COMMON_CODE(Hop)

@@ -121,23 +121,23 @@ set(filesToCompile_cpp
     ${repoDir}/src/editors/StyleEditor.cpp
     ${repoDir}/src/editors/WaterEditor.cpp
     ${repoDir}/src/editors/YeastEditor.cpp
-    ${repoDir}/src/listModels/BoilListModel.cpp
-    ${repoDir}/src/listModels/EquipmentListModel.cpp
-    ${repoDir}/src/listModels/FermentableListModel.cpp
-    ${repoDir}/src/listModels/FermentationListModel.cpp
-    ${repoDir}/src/listModels/HopListModel.cpp
-    ${repoDir}/src/listModels/MashListModel.cpp
-    ${repoDir}/src/listModels/MashStepListModel.cpp
-    ${repoDir}/src/listModels/MiscListModel.cpp
-    ${repoDir}/src/listModels/RecipeAdditionFermentableListModel.cpp
-    ${repoDir}/src/listModels/RecipeAdditionHopListModel.cpp
-    ${repoDir}/src/listModels/RecipeAdditionMiscListModel.cpp
-    ${repoDir}/src/listModels/RecipeAdditionYeastListModel.cpp
-    ${repoDir}/src/listModels/RecipeAdjustmentSaltListModel.cpp
-    ${repoDir}/src/listModels/SaltListModel.cpp
-    ${repoDir}/src/listModels/StyleListModel.cpp
-    ${repoDir}/src/listModels/WaterListModel.cpp
-    ${repoDir}/src/listModels/YeastListModel.cpp
+    ${repoDir}/src/qtModels/listModels/BoilListModel.cpp
+    ${repoDir}/src/qtModels/listModels/EquipmentListModel.cpp
+    ${repoDir}/src/qtModels/listModels/FermentableListModel.cpp
+    ${repoDir}/src/qtModels/listModels/FermentationListModel.cpp
+    ${repoDir}/src/qtModels/listModels/HopListModel.cpp
+    ${repoDir}/src/qtModels/listModels/MashListModel.cpp
+    ${repoDir}/src/qtModels/listModels/MashStepListModel.cpp
+    ${repoDir}/src/qtModels/listModels/MiscListModel.cpp
+    ${repoDir}/src/qtModels/listModels/RecipeAdditionFermentableListModel.cpp
+    ${repoDir}/src/qtModels/listModels/RecipeAdditionHopListModel.cpp
+    ${repoDir}/src/qtModels/listModels/RecipeAdditionMiscListModel.cpp
+    ${repoDir}/src/qtModels/listModels/RecipeAdditionYeastListModel.cpp
+    ${repoDir}/src/qtModels/listModels/RecipeAdjustmentSaltListModel.cpp
+    ${repoDir}/src/qtModels/listModels/SaltListModel.cpp
+    ${repoDir}/src/qtModels/listModels/StyleListModel.cpp
+    ${repoDir}/src/qtModels/listModels/WaterListModel.cpp
+    ${repoDir}/src/qtModels/listModels/YeastListModel.cpp
     ${repoDir}/src/measurement/Amount.cpp
     ${repoDir}/src/measurement/ColorMethods.cpp
     ${repoDir}/src/measurement/IbuMethods.cpp
@@ -199,40 +199,40 @@ set(filesToCompile_cpp
     ${repoDir}/src/serialization/xml/XmlRecipeRecord.cpp
     ${repoDir}/src/serialization/xml/XmlRecord.cpp
     ${repoDir}/src/serialization/xml/XmlRecordDefinition.cpp
-    ${repoDir}/src/sortFilterProxyModels/BoilSortFilterProxyModel.cpp
-    ${repoDir}/src/sortFilterProxyModels/EquipmentSortFilterProxyModel.cpp
-    ${repoDir}/src/sortFilterProxyModels/FermentableSortFilterProxyModel.cpp
-    ${repoDir}/src/sortFilterProxyModels/FermentationSortFilterProxyModel.cpp
-    ${repoDir}/src/sortFilterProxyModels/HopSortFilterProxyModel.cpp
-    ${repoDir}/src/sortFilterProxyModels/MashSortFilterProxyModel.cpp
-    ${repoDir}/src/sortFilterProxyModels/MiscSortFilterProxyModel.cpp
-    ${repoDir}/src/sortFilterProxyModels/RecipeAdditionFermentableSortFilterProxyModel.cpp
-    ${repoDir}/src/sortFilterProxyModels/RecipeAdditionHopSortFilterProxyModel.cpp
-    ${repoDir}/src/sortFilterProxyModels/RecipeAdditionMiscSortFilterProxyModel.cpp
-    ${repoDir}/src/sortFilterProxyModels/RecipeAdditionYeastSortFilterProxyModel.cpp
-    ${repoDir}/src/sortFilterProxyModels/StyleSortFilterProxyModel.cpp
-    ${repoDir}/src/sortFilterProxyModels/WaterSortFilterProxyModel.cpp
-    ${repoDir}/src/sortFilterProxyModels/YeastSortFilterProxyModel.cpp
-    ${repoDir}/src/tableModels/BoilStepTableModel.cpp
-    ${repoDir}/src/tableModels/BoilTableModel.cpp
-    ${repoDir}/src/tableModels/BtTableModel.cpp
-    ${repoDir}/src/tableModels/EquipmentTableModel.cpp
-    ${repoDir}/src/tableModels/FermentableTableModel.cpp
-    ${repoDir}/src/tableModels/FermentationStepTableModel.cpp
-    ${repoDir}/src/tableModels/FermentationTableModel.cpp
-    ${repoDir}/src/tableModels/HopTableModel.cpp
-    ${repoDir}/src/tableModels/MashStepTableModel.cpp
-    ${repoDir}/src/tableModels/MashTableModel.cpp
-    ${repoDir}/src/tableModels/MiscTableModel.cpp
-    ${repoDir}/src/tableModels/RecipeAdditionFermentableTableModel.cpp
-    ${repoDir}/src/tableModels/RecipeAdditionHopTableModel.cpp
-    ${repoDir}/src/tableModels/RecipeAdditionMiscTableModel.cpp
-    ${repoDir}/src/tableModels/RecipeAdditionYeastTableModel.cpp
-    ${repoDir}/src/tableModels/RecipeAdjustmentSaltTableModel.cpp
-    ${repoDir}/src/tableModels/SaltTableModel.cpp
-    ${repoDir}/src/tableModels/StyleTableModel.cpp
-    ${repoDir}/src/tableModels/WaterTableModel.cpp
-    ${repoDir}/src/tableModels/YeastTableModel.cpp
+    ${repoDir}/src/qtModels/sortFilterProxyModels/BoilSortFilterProxyModel.cpp
+    ${repoDir}/src/qtModels/sortFilterProxyModels/EquipmentSortFilterProxyModel.cpp
+    ${repoDir}/src/qtModels/sortFilterProxyModels/FermentableSortFilterProxyModel.cpp
+    ${repoDir}/src/qtModels/sortFilterProxyModels/FermentationSortFilterProxyModel.cpp
+    ${repoDir}/src/qtModels/sortFilterProxyModels/HopSortFilterProxyModel.cpp
+    ${repoDir}/src/qtModels/sortFilterProxyModels/MashSortFilterProxyModel.cpp
+    ${repoDir}/src/qtModels/sortFilterProxyModels/MiscSortFilterProxyModel.cpp
+    ${repoDir}/src/qtModels/sortFilterProxyModels/RecipeAdditionFermentableSortFilterProxyModel.cpp
+    ${repoDir}/src/qtModels/sortFilterProxyModels/RecipeAdditionHopSortFilterProxyModel.cpp
+    ${repoDir}/src/qtModels/sortFilterProxyModels/RecipeAdditionMiscSortFilterProxyModel.cpp
+    ${repoDir}/src/qtModels/sortFilterProxyModels/RecipeAdditionYeastSortFilterProxyModel.cpp
+    ${repoDir}/src/qtModels/sortFilterProxyModels/StyleSortFilterProxyModel.cpp
+    ${repoDir}/src/qtModels/sortFilterProxyModels/WaterSortFilterProxyModel.cpp
+    ${repoDir}/src/qtModels/sortFilterProxyModels/YeastSortFilterProxyModel.cpp
+    ${repoDir}/src/qtModels/tableModels/BoilStepTableModel.cpp
+    ${repoDir}/src/qtModels/tableModels/BoilTableModel.cpp
+    ${repoDir}/src/qtModels/tableModels/BtTableModel.cpp
+    ${repoDir}/src/qtModels/tableModels/EquipmentTableModel.cpp
+    ${repoDir}/src/qtModels/tableModels/FermentableTableModel.cpp
+    ${repoDir}/src/qtModels/tableModels/FermentationStepTableModel.cpp
+    ${repoDir}/src/qtModels/tableModels/FermentationTableModel.cpp
+    ${repoDir}/src/qtModels/tableModels/HopTableModel.cpp
+    ${repoDir}/src/qtModels/tableModels/MashStepTableModel.cpp
+    ${repoDir}/src/qtModels/tableModels/MashTableModel.cpp
+    ${repoDir}/src/qtModels/tableModels/MiscTableModel.cpp
+    ${repoDir}/src/qtModels/tableModels/RecipeAdditionFermentableTableModel.cpp
+    ${repoDir}/src/qtModels/tableModels/RecipeAdditionHopTableModel.cpp
+    ${repoDir}/src/qtModels/tableModels/RecipeAdditionMiscTableModel.cpp
+    ${repoDir}/src/qtModels/tableModels/RecipeAdditionYeastTableModel.cpp
+    ${repoDir}/src/qtModels/tableModels/RecipeAdjustmentSaltTableModel.cpp
+    ${repoDir}/src/qtModels/tableModels/SaltTableModel.cpp
+    ${repoDir}/src/qtModels/tableModels/StyleTableModel.cpp
+    ${repoDir}/src/qtModels/tableModels/WaterTableModel.cpp
+    ${repoDir}/src/qtModels/tableModels/YeastTableModel.cpp
     ${repoDir}/src/trees/TreeFilterProxyModel.cpp
     ${repoDir}/src/trees/TreeModel.cpp
     ${repoDir}/src/trees/TreeNode.cpp

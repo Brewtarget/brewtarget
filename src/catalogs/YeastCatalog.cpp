@@ -19,7 +19,7 @@
  ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "catalogs/YeastCatalog.h"
 
-#include "sortFilterProxyModels/YeastSortFilterProxyModel.h"
+#include "qtModels/sortFilterProxyModels/YeastSortFilterProxyModel.h"
 
 // Insert the boiler-plate stuff that we cannot do in CatalogBase
 CATALOG_COMMON_CODE(Yeast)

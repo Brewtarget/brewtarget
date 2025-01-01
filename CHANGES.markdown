@@ -13,6 +13,18 @@ happens, so I'm now setting it to a slightly arbitrary time early in the morning
 * Additional methods for calculating IBU
 * We'll list other new features here...
 
+## v4.0.16
+Bug fixes and minor enhancements.
+
+### New Features
+* None
+
+### Bug Fixes
+* None yet!
+
+### Release Timestamp
+Wed, 1 Jan 2025 04:00:16 +0100
+
 ## v4.0.15
 Bug fixes and minor enhancements.
 

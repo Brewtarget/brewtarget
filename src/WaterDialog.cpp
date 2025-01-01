@@ -36,11 +36,11 @@
 #include "model/RecipeAdditionFermentable.h"
 #include "model/RecipeUseOfWater.h"
 #include "model/Salt.h"
-#include "tableModels/RecipeAdjustmentSaltTableModel.h"
-#include "tableModels/WaterTableModel.h"
+#include "qtModels/tableModels/RecipeAdjustmentSaltTableModel.h"
+#include "qtModels/tableModels/WaterTableModel.h"
 #include "editors/WaterEditor.h"
-#include "listModels/WaterListModel.h"
-#include "sortFilterProxyModels/WaterSortFilterProxyModel.h"
+#include "qtModels/listModels/WaterListModel.h"
+#include "qtModels/sortFilterProxyModels/WaterSortFilterProxyModel.h"
 #include "widgets/SmartDigitWidget.h"
 
 

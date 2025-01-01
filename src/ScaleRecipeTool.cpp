@@ -23,7 +23,7 @@
 
 #include "config.h"
 #include "database/ObjectStoreWrapper.h"
-#include "listModels/EquipmentListModel.h"
+#include "qtModels/listModels/EquipmentListModel.h"
 #include "model/Boil.h"
 #include "model/Equipment.h"
 #include "model/Fermentable.h"

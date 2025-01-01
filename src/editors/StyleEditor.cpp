@@ -23,7 +23,7 @@
 #include "BtHorizontalTabs.h"
 #include "database/ObjectStoreWrapper.h"
 #include "measurement/Unit.h"
-#include "sortFilterProxyModels/StyleSortFilterProxyModel.h"
+#include "qtModels/sortFilterProxyModels/StyleSortFilterProxyModel.h"
 
 StyleEditor::StyleEditor(QWidget* parent, QString const editorName) :
    QDialog{parent},

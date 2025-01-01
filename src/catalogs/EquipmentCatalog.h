@@ -22,8 +22,8 @@
 
 #include "editors/EquipmentEditor.h"
 #include "model/Equipment.h"
-#include "sortFilterProxyModels/EquipmentSortFilterProxyModel.h"
-#include "tableModels/EquipmentTableModel.h"
+#include "qtModels/sortFilterProxyModels/EquipmentSortFilterProxyModel.h"
+#include "qtModels/tableModels/EquipmentTableModel.h"
 
 // This needs to be the last include.  (I know, I know...)
 #include "catalogs/CatalogBase.h"
