@@ -61,7 +61,7 @@ set(filesToCompile_cpp
     ${repoDir}/src/HydrometerTool.cpp
     ${repoDir}/src/IbuGuSlider.cpp
     ${repoDir}/src/InventoryFormatter.cpp
-    ${repoDir}/src/LatestReleaseFinder
+    ${repoDir}/src/LatestReleaseFinder.cpp
     ${repoDir}/src/Localization.cpp
     ${repoDir}/src/Logging.cpp
     ${repoDir}/src/MainWindow.cpp
@@ -121,23 +121,6 @@ set(filesToCompile_cpp
     ${repoDir}/src/editors/StyleEditor.cpp
     ${repoDir}/src/editors/WaterEditor.cpp
     ${repoDir}/src/editors/YeastEditor.cpp
-    ${repoDir}/src/qtModels/listModels/BoilListModel.cpp
-    ${repoDir}/src/qtModels/listModels/EquipmentListModel.cpp
-    ${repoDir}/src/qtModels/listModels/FermentableListModel.cpp
-    ${repoDir}/src/qtModels/listModels/FermentationListModel.cpp
-    ${repoDir}/src/qtModels/listModels/HopListModel.cpp
-    ${repoDir}/src/qtModels/listModels/MashListModel.cpp
-    ${repoDir}/src/qtModels/listModels/MashStepListModel.cpp
-    ${repoDir}/src/qtModels/listModels/MiscListModel.cpp
-    ${repoDir}/src/qtModels/listModels/RecipeAdditionFermentableListModel.cpp
-    ${repoDir}/src/qtModels/listModels/RecipeAdditionHopListModel.cpp
-    ${repoDir}/src/qtModels/listModels/RecipeAdditionMiscListModel.cpp
-    ${repoDir}/src/qtModels/listModels/RecipeAdditionYeastListModel.cpp
-    ${repoDir}/src/qtModels/listModels/RecipeAdjustmentSaltListModel.cpp
-    ${repoDir}/src/qtModels/listModels/SaltListModel.cpp
-    ${repoDir}/src/qtModels/listModels/StyleListModel.cpp
-    ${repoDir}/src/qtModels/listModels/WaterListModel.cpp
-    ${repoDir}/src/qtModels/listModels/YeastListModel.cpp
     ${repoDir}/src/measurement/Amount.cpp
     ${repoDir}/src/measurement/ColorMethods.cpp
     ${repoDir}/src/measurement/IbuMethods.cpp
@@ -181,24 +164,23 @@ set(filesToCompile_cpp
     ${repoDir}/src/model/Style.cpp
     ${repoDir}/src/model/Water.cpp
     ${repoDir}/src/model/Yeast.cpp
-    ${repoDir}/src/serialization/ImportExport.cpp
-    ${repoDir}/src/serialization/SerializationRecord.cpp
-    ${repoDir}/src/serialization/json/BeerJson.cpp
-    ${repoDir}/src/serialization/json/JsonCoding.cpp
-    ${repoDir}/src/serialization/json/JsonMeasureableUnitsMapping.cpp
-    ${repoDir}/src/serialization/json/JsonRecord.cpp
-    ${repoDir}/src/serialization/json/JsonRecordDefinition.cpp
-    ${repoDir}/src/serialization/json/JsonSchema.cpp
-    ${repoDir}/src/serialization/json/JsonUtils.cpp
-    ${repoDir}/src/serialization/json/JsonXPath.cpp
-    ${repoDir}/src/serialization/xml/BeerXml.cpp
-    ${repoDir}/src/serialization/xml/BtDomErrorHandler.cpp
-    ${repoDir}/src/serialization/xml/XercesHelpers.cpp
-    ${repoDir}/src/serialization/xml/XmlCoding.cpp
-    ${repoDir}/src/serialization/xml/XmlMashRecord.cpp
-    ${repoDir}/src/serialization/xml/XmlRecipeRecord.cpp
-    ${repoDir}/src/serialization/xml/XmlRecord.cpp
-    ${repoDir}/src/serialization/xml/XmlRecordDefinition.cpp
+    ${repoDir}/src/qtModels/listModels/BoilListModel.cpp
+    ${repoDir}/src/qtModels/listModels/EquipmentListModel.cpp
+    ${repoDir}/src/qtModels/listModels/FermentableListModel.cpp
+    ${repoDir}/src/qtModels/listModels/FermentationListModel.cpp
+    ${repoDir}/src/qtModels/listModels/HopListModel.cpp
+    ${repoDir}/src/qtModels/listModels/MashListModel.cpp
+    ${repoDir}/src/qtModels/listModels/MashStepListModel.cpp
+    ${repoDir}/src/qtModels/listModels/MiscListModel.cpp
+    ${repoDir}/src/qtModels/listModels/RecipeAdditionFermentableListModel.cpp
+    ${repoDir}/src/qtModels/listModels/RecipeAdditionHopListModel.cpp
+    ${repoDir}/src/qtModels/listModels/RecipeAdditionMiscListModel.cpp
+    ${repoDir}/src/qtModels/listModels/RecipeAdditionYeastListModel.cpp
+    ${repoDir}/src/qtModels/listModels/RecipeAdjustmentSaltListModel.cpp
+    ${repoDir}/src/qtModels/listModels/SaltListModel.cpp
+    ${repoDir}/src/qtModels/listModels/StyleListModel.cpp
+    ${repoDir}/src/qtModels/listModels/WaterListModel.cpp
+    ${repoDir}/src/qtModels/listModels/YeastListModel.cpp
     ${repoDir}/src/qtModels/sortFilterProxyModels/BoilSortFilterProxyModel.cpp
     ${repoDir}/src/qtModels/sortFilterProxyModels/EquipmentSortFilterProxyModel.cpp
     ${repoDir}/src/qtModels/sortFilterProxyModels/FermentableSortFilterProxyModel.cpp
@@ -233,6 +215,24 @@ set(filesToCompile_cpp
     ${repoDir}/src/qtModels/tableModels/StyleTableModel.cpp
     ${repoDir}/src/qtModels/tableModels/WaterTableModel.cpp
     ${repoDir}/src/qtModels/tableModels/YeastTableModel.cpp
+    ${repoDir}/src/serialization/ImportExport.cpp
+    ${repoDir}/src/serialization/SerializationRecord.cpp
+    ${repoDir}/src/serialization/json/BeerJson.cpp
+    ${repoDir}/src/serialization/json/JsonCoding.cpp
+    ${repoDir}/src/serialization/json/JsonMeasureableUnitsMapping.cpp
+    ${repoDir}/src/serialization/json/JsonRecord.cpp
+    ${repoDir}/src/serialization/json/JsonRecordDefinition.cpp
+    ${repoDir}/src/serialization/json/JsonSchema.cpp
+    ${repoDir}/src/serialization/json/JsonUtils.cpp
+    ${repoDir}/src/serialization/json/JsonXPath.cpp
+    ${repoDir}/src/serialization/xml/BeerXml.cpp
+    ${repoDir}/src/serialization/xml/BtDomErrorHandler.cpp
+    ${repoDir}/src/serialization/xml/XercesHelpers.cpp
+    ${repoDir}/src/serialization/xml/XmlCoding.cpp
+    ${repoDir}/src/serialization/xml/XmlMashRecord.cpp
+    ${repoDir}/src/serialization/xml/XmlRecipeRecord.cpp
+    ${repoDir}/src/serialization/xml/XmlRecord.cpp
+    ${repoDir}/src/serialization/xml/XmlRecordDefinition.cpp
     ${repoDir}/src/trees/TreeFilterProxyModel.cpp
     ${repoDir}/src/trees/TreeModel.cpp
     ${repoDir}/src/trees/TreeNode.cpp
