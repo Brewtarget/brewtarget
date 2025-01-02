@@ -35,8 +35,10 @@
 #include "utils/AutoCompare.h"
 #include "utils/OptionalHelpers.h"
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_Fermentable.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_Fermentable.cpp"
+#endif
 
 QString Fermentable::localisedName() { return tr("Fermentable"); }
 

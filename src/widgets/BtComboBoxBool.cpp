@@ -20,8 +20,10 @@
 
 #include "utils/MetaTypes.h"
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_BtComboBoxBool.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_BtComboBoxBool.cpp"
+#endif
 
 namespace {
    // We store string values inside the combo box as it's less confusing when the value is optional

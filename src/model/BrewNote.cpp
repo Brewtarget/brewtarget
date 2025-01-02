@@ -38,8 +38,10 @@
 #include "model/Recipe.h"
 #include "model/RecipeAdditionYeast.h"
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_BrewNote.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_BrewNote.cpp"
+#endif
 
 QString BrewNote::localisedName() { return tr("Brew Note"); }
 

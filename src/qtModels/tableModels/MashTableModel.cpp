@@ -23,8 +23,10 @@
 
 #include "model/Mash.h"
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_MashTableModel.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_MashTableModel.cpp"
+#endif
 
 MashTableModel::MashTableModel(QTableView * parent, bool editable) :
    BtTableModel{

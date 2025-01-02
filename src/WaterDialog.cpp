@@ -43,8 +43,10 @@
 #include "qtModels/sortFilterProxyModels/WaterSortFilterProxyModel.h"
 #include "widgets/SmartDigitWidget.h"
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_WaterDialog.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_WaterDialog.cpp"
+#endif
 
 
 //

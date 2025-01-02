@@ -17,8 +17,10 @@
 
 #include "model/Recipe.h"
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_OwnedByRecipe.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_OwnedByRecipe.cpp"
+#endif
 
 QString OwnedByRecipe::localisedName() { return tr("Owned By Recipe"); }
 

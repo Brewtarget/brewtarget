@@ -15,8 +15,10 @@
  ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "qtModels/listModels/RecipeAdditionYeastListModel.h"
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_RecipeAdditionYeastListModel.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_RecipeAdditionYeastListModel.cpp"
+#endif
 
 // Insert the boiler-plate stuff that we cannot do in ListModelBase
 LIST_MODEL_COMMON_CODE(RecipeAdditionYeast, PropertyNames::Recipe::yeastAdditions)

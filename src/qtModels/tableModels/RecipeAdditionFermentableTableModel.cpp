@@ -37,8 +37,10 @@
 #include "model/Inventory.h"
 #include "model/Recipe.h"
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_RecipeAdditionFermentableTableModel.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_RecipeAdditionFermentableTableModel.cpp"
+#endif
 
 RecipeAdditionFermentableTableModel::RecipeAdditionFermentableTableModel(QTableView * parent, bool editable) :
    BtTableModelRecipeObserver{

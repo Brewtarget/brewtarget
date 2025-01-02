@@ -18,8 +18,10 @@
 #include "BtFieldType.h"
 #include "model/NamedParameterBundle.h"
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_OutlineableNamedEntity.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_OutlineableNamedEntity.cpp"
+#endif
 
 QString OutlineableNamedEntity::localisedName() { return tr("Outlineable Named Entity"); }
 

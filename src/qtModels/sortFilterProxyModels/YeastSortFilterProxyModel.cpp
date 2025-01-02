@@ -23,8 +23,10 @@
 #include "measurement/Measurement.h"
 #include "measurement/PhysicalQuantity.h"
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_YeastSortFilterProxyModel.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_YeastSortFilterProxyModel.cpp"
+#endif
 
 bool YeastSortFilterProxyModel::isLessThan(YeastTableModel::ColumnIndex const columnIndex,
                                            QVariant const & leftItem,

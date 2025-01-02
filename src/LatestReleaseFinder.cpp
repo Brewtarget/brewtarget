@@ -28,8 +28,10 @@
 
 #include "config.h"
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_LatestReleaseFinder.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_LatestReleaseFinder.cpp"
+#endif
 
 void LatestReleaseFinder::checkMainRespository() {
 

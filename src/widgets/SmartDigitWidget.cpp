@@ -31,8 +31,10 @@
 #include "PersistentSettings.h"
 #include "widgets/SmartLabel.h"
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_SmartDigitWidget.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_SmartDigitWidget.cpp"
+#endif
 
 // This private implementation class holds all private non-virtual members of SmartDigitWidget
 class SmartDigitWidget::impl {

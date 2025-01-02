@@ -57,8 +57,10 @@
 #include "model/Water.h"
 #include "model/Yeast.h"
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_NamedEntity.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_NamedEntity.cpp"
+#endif
 
 namespace {
    /**

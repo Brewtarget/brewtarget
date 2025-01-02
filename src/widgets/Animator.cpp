@@ -21,8 +21,10 @@
 #include <QEvent>
 #include <QVariant>
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_Animator.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_Animator.cpp"
+#endif
 
 Animator::Animator(QObject * target, QObject * parent) : QVariantAnimation(parent) {
    setTargetObject(target);

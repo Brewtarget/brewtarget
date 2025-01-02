@@ -19,8 +19,10 @@
 #include "model/NamedParameterBundle.h"
 #include "utils/AutoCompare.h"
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_FermentationStep.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_FermentationStep.cpp"
+#endif
 
 QString FermentationStep::localisedName() { return tr("Fermentation Step"); }
 

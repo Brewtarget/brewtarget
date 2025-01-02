@@ -25,8 +25,10 @@
 #include "model/Recipe.h"
 #include "utils/AutoCompare.h"
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_Style.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_Style.cpp"
+#endif
 
 QString Style::localisedName() { return tr("Style"); }
 

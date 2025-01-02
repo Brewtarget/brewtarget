@@ -28,8 +28,10 @@
 #include "model/Mash.h"
 #include "model/Recipe.h"
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_MashEditor.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_MashEditor.cpp"
+#endif
 
 MashEditor::MashEditor(QWidget* parent) :
    QDialog(parent),

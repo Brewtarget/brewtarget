@@ -34,8 +34,10 @@
 #include "model/FermentationStep.h"
 #include "PersistentSettings.h"
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_FermentationStepTableModel.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_FermentationStepTableModel.cpp"
+#endif
 
 FermentationStepTableModel::FermentationStepTableModel(QTableView * parent, bool editable) :
    BtTableModel{

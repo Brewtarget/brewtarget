@@ -41,8 +41,10 @@
 #include "PersistentSettings.h"
 #include "PhysicalConstants.h"
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_EquipmentEditor.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_EquipmentEditor.cpp"
+#endif
 
 //
 // TODO: According to https://www.engineersedge.com/materials/specific_heat_capacity_of_metals_13259.htm, the specific

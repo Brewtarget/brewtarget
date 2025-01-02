@@ -27,8 +27,10 @@
 #include "database/ObjectStoreWrapper.h"
 #include "measurement/Unit.h"
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_FermentableEditor.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_FermentableEditor.cpp"
+#endif
 
 // TODO: Need a separate editor for inventory
 

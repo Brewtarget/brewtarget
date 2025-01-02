@@ -24,8 +24,10 @@
 #include "measurement/Measurement.h"
 #include "measurement/PhysicalQuantity.h"
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_HopSortFilterProxyModel.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_HopSortFilterProxyModel.cpp"
+#endif
 
 bool HopSortFilterProxyModel::isLessThan(HopTableModel::ColumnIndex const columnIndex,
                                          QVariant const & leftItem,

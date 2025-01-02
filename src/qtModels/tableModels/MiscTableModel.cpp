@@ -28,8 +28,10 @@
 #include <QVariant>
 #include <QWidget>
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_MiscTableModel.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_MiscTableModel.cpp"
+#endif
 
 MiscTableModel::MiscTableModel(QTableView* parent, bool editable) :
    BtTableModel{

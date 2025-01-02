@@ -24,8 +24,10 @@
 #include "model/Recipe.h"
 #include "utils/AutoCompare.h"
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_Salt.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_Salt.cpp"
+#endif
 
 namespace {
    // Constants used in our mass concentration calculations below

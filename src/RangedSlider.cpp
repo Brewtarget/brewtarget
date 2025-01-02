@@ -34,8 +34,10 @@
 #include <QRectF>
 #include <QToolTip>
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_RangedSlider.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_RangedSlider.cpp"
+#endif
 
 RangedSlider::RangedSlider(QWidget* parent)
    : QWidget(parent),

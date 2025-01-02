@@ -23,8 +23,10 @@
 #include "model/Recipe.h"
 #include "utils/AutoCompare.h"
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_RecipeAddition.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_RecipeAddition.cpp"
+#endif
 
 QString RecipeAddition::localisedName() { return tr("Recipe Addition"); }
 

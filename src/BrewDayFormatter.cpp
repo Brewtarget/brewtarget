@@ -30,8 +30,10 @@
 #include "model/Style.h"
 #include "PersistentSettings.h"
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_BrewDayFormatter.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_BrewDayFormatter.cpp"
+#endif
 
 BrewDayFormatter::BrewDayFormatter(QObject * parent)
    : QObject(parent) {

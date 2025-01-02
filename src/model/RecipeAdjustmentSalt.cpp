@@ -21,8 +21,10 @@
 #include "model/Boil.h"
 #include "model/BoilStep.h"
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_RecipeAdjustmentSalt.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_RecipeAdjustmentSalt.cpp"
+#endif
 
 QString RecipeAdjustmentSalt::localisedName() { return tr("Salt Addition"); }
 

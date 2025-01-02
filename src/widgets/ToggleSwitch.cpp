@@ -18,8 +18,10 @@
 
 #include <QtCore/qeasingcurve.h>
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_ToggleSwitch.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_ToggleSwitch.cpp"
+#endif
 
 Q_DECL_IMPORT void qt_blurImage(QPainter * p, QImage & blurImage, qreal radius, bool quality, bool alphaOnly,
                                 int transposed = 0); // src/widgets/effects/qpixmapfilter.cpp

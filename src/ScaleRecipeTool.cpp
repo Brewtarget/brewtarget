@@ -41,8 +41,10 @@
 #include "model/Yeast.h"
 #include "NamedEntitySortProxyModel.h"
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_ScaleRecipeTool.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_ScaleRecipeTool.cpp"
+#endif
 
 ScaleRecipeTool::ScaleRecipeTool(QWidget* parent) :
    QWizard(parent),

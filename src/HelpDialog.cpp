@@ -25,8 +25,10 @@
 #include "Logging.h"
 #include "PersistentSettings.h"
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_HelpDialog.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_HelpDialog.cpp"
+#endif
 
 // This private implementation class holds all private non-virtual members of HelpDialog
 class HelpDialog::impl {

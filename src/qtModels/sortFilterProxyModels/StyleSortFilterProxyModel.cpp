@@ -20,8 +20,10 @@
 #include "measurement/Measurement.h"
 #include "measurement/PhysicalQuantity.h"
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_StyleSortFilterProxyModel.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_StyleSortFilterProxyModel.cpp"
+#endif
 
 bool StyleSortFilterProxyModel::isLessThan(StyleTableModel::ColumnIndex const columnIndex,
                                            QVariant const & leftItem,

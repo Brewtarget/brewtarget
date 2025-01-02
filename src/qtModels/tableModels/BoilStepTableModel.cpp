@@ -24,8 +24,10 @@
 #include "model/BoilStep.h"
 #include "qtModels/tableModels/BtTableModel.h"
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_BoilStepTableModel.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_BoilStepTableModel.cpp"
+#endif
 
 BoilStepTableModel::BoilStepTableModel(QTableView * parent, bool editable) :
    BtTableModel{

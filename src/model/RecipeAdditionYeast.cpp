@@ -19,8 +19,10 @@
 #include "database/ObjectStoreWrapper.h"
 #include "model/NamedParameterBundle.h"
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_RecipeAdditionYeast.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_RecipeAdditionYeast.cpp"
+#endif
 
 QString RecipeAdditionYeast::localisedName() { return tr("Yeast Addition"); }
 

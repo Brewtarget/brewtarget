@@ -22,8 +22,10 @@
 
 #include <Algorithms.h>
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_StrikeWaterDialog.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_StrikeWaterDialog.cpp"
+#endif
 
 namespace {
    // From Northern Brewer ~0.38 but Jon Palmer suggest 0.41

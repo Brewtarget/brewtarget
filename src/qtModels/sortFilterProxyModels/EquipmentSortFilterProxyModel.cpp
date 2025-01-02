@@ -19,8 +19,10 @@
 #include "measurement/Measurement.h"
 #include "measurement/PhysicalQuantity.h"
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_EquipmentSortFilterProxyModel.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_EquipmentSortFilterProxyModel.cpp"
+#endif
 
 bool EquipmentSortFilterProxyModel::isLessThan(EquipmentTableModel::ColumnIndex const columnIndex,
                                                QVariant const & leftItem,

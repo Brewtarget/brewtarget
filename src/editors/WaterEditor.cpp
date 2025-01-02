@@ -25,8 +25,10 @@
 #include "database/ObjectStoreWrapper.h"
 #include "model/Water.h"
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_WaterEditor.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_WaterEditor.cpp"
+#endif
 
 namespace {
    auto const seriesNameCurrent {WaterEditor::tr("Current" )};

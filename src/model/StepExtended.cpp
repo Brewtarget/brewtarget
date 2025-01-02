@@ -19,8 +19,10 @@
 #include "PhysicalConstants.h"
 #include "utils/AutoCompare.h"
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_StepExtended.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_StepExtended.cpp"
+#endif
 
 QString StepExtended::localisedName() { return tr("Extended Step"); }
 

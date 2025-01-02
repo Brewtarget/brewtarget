@@ -37,8 +37,10 @@
 #include "model/NamedEntity.h"
 #include "model/Recipe.h"
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_AncestorDialog.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_AncestorDialog.cpp"
+#endif
 
 AncestorDialog::AncestorDialog(QWidget * parent) : QDialog(parent) {
 

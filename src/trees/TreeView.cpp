@@ -48,8 +48,10 @@
 #include "model/Yeast.h"
 #include "trees/TreeModel.h"
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_TreeView.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_TreeView.cpp"
+#endif
 
 TreeView::TreeView(QWidget * parent, TreeModel::TypeMasks type) :
    QTreeView{parent},

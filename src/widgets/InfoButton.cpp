@@ -25,8 +25,10 @@
 #include "utils/Fonts.h"
 #include "widgets/InfoText.h"
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_InfoButton.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_InfoButton.cpp"
+#endif
 
 namespace {
    QColor const backgroundColorInfoShown {0x14, 0x82, 0x63};

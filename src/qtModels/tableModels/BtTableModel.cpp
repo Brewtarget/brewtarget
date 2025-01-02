@@ -28,8 +28,10 @@
 #include "widgets/SmartAmounts.h"
 #include "widgets/UnitAndScalePopUpMenu.h"
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_BtTableModel.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_BtTableModel.cpp"
+#endif
 
 BtTableModelRecipeObserver::BtTableModelRecipeObserver(QTableView * parent,
                                                        bool editable,

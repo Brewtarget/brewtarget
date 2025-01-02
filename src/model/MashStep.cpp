@@ -27,8 +27,10 @@
 #include "PhysicalConstants.h"
 #include "utils/AutoCompare.h"
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_MashStep.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_MashStep.cpp"
+#endif
 
 QString MashStep::localisedName() { return tr("Mash Step"); }
 

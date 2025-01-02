@@ -20,8 +20,10 @@
 #include <QtGui>
 #include "BtDatePopup.h"
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_BtDatePopup.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_BtDatePopup.cpp"
+#endif
 
 //! \brief set up the popup window.
 BtDatePopup::BtDatePopup(QWidget* parent) : QDialog(parent, Qt::Popup)

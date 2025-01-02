@@ -52,8 +52,10 @@
 #include "measurement/UnitSystem.h"
 #include "PersistentSettings.h"
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_OptionDialog.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_OptionDialog.cpp"
+#endif
 
 //
 // Anonymous namespace for constants, global variables and functions used only in this file

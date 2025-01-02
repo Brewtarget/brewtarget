@@ -30,8 +30,10 @@
 #include "model/Recipe.h"
 #include "utils/AutoCompare.h"
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_Hop.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_Hop.cpp"
+#endif
 
 QString Hop::localisedName() { return tr("Hop"); }
 

@@ -32,8 +32,10 @@
 #include "model/Fermentable.h"
 #include "PhysicalConstants.h"
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_MashDesigner.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_MashDesigner.cpp"
+#endif
 
 MashDesigner::MashDesigner(QWidget * parent) : QDialog       {parent},
                                                m_recObs      {nullptr},

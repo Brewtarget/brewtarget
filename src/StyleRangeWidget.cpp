@@ -19,8 +19,10 @@
 #include <QColor>
 #include <QWidget>
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_StyleRangeWidget.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_StyleRangeWidget.cpp"
+#endif
 
 StyleRangeWidget::StyleRangeWidget(QWidget* parent) : RangedSlider(parent) {
    setBackgroundBrush(QColor(121,201,121));

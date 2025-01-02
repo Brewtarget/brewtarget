@@ -23,8 +23,10 @@
 
 #include "model/Fermentation.h"
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_FermentationTableModel.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_FermentationTableModel.cpp"
+#endif
 
 FermentationTableModel::FermentationTableModel(QTableView * parent, bool editable) :
    BtTableModel{

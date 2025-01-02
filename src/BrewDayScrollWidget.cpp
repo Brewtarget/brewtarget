@@ -41,8 +41,10 @@
 #include "PersistentSettings.h"
 #include "TimerWidget.h"
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_BrewDayScrollWidget.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_BrewDayScrollWidget.cpp"
+#endif
 
 namespace {
    QString styleName(Style const * style) {

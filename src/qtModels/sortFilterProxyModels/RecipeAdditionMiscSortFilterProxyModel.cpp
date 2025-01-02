@@ -24,8 +24,10 @@
 #include "measurement/Measurement.h"
 #include "measurement/PhysicalQuantity.h"
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_RecipeAdditionMiscSortFilterProxyModel.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_RecipeAdditionMiscSortFilterProxyModel.cpp"
+#endif
 
 bool RecipeAdditionMiscSortFilterProxyModel::isLessThan(RecipeAdditionMiscTableModel::ColumnIndex const columnIndex,
                                                        QVariant const & leftItem,

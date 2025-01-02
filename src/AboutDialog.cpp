@@ -27,8 +27,10 @@
 
 #include "config.h"
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_AboutDialog.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_AboutDialog.cpp"
+#endif
 
 AboutDialog::AboutDialog(QWidget * parent) :
    QDialog(parent),

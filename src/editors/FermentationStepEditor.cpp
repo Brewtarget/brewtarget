@@ -18,8 +18,10 @@
 #include "MainWindow.h"
 #include "measurement/Unit.h"
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_FermentationStepEditor.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_FermentationStepEditor.cpp"
+#endif
 
 FermentationStepEditor::FermentationStepEditor(QWidget* parent, QString const editorName) :
    QDialog{parent},

@@ -159,8 +159,10 @@
 #include "utils/BtStringConst.h"
 #include "utils/OptionalHelpers.h"
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_MainWindow.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_MainWindow.cpp"
+#endif
 
 namespace {
 

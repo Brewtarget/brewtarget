@@ -17,8 +17,10 @@
 
 #include "model/NamedParameterBundle.h"
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_Ingredient.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_Ingredient.cpp"
+#endif
 
 QString Ingredient::localisedName() { return tr("Ingredient"); }
 

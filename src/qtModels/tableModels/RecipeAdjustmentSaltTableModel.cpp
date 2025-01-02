@@ -32,8 +32,10 @@
 #include "model/Mash.h"
 #include "model/Recipe.h"
 
-// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-#include "moc_RecipeAdjustmentSaltTableModel.cpp"
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_RecipeAdjustmentSaltTableModel.cpp"
+#endif
 
 RecipeAdjustmentSaltTableModel::RecipeAdjustmentSaltTableModel(QTableView* parent, bool editable) :
    BtTableModelRecipeObserver{
