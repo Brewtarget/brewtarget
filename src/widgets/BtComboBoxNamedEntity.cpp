@@ -21,6 +21,11 @@
 #include <QStyleOptionComboBox>
 #include <QStylePainter>
 
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_BtComboBoxNamedEntity.cpp"
+#endif
+
 BtComboBoxNamedEntity::BtComboBoxNamedEntity(char const * const name, QWidget* parent) :
    QComboBox{parent},
    m_name{name} {

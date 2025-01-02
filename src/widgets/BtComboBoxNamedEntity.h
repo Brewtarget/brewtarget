@@ -26,7 +26,7 @@
  * \brief Extends \c QComboBox to show a list of a particular \c NamedEntity - eg \c Style for a \c Recipe.  Used in
  *        conjunction with \c BtComboBoxNamedEntityBase to make \c BtComboBoxNamedStyle etc, because classes inheriting
  *        from QObject can't be templated, as the Qt MOC won't be able to process them.  (See comment in
- *        tableModels/BtTableModel.h for more info.)
+ *        qtModels/tableModels/BtTableModel.h for more info.)
  */
 class BtComboBoxNamedEntity : public QComboBox {
    Q_OBJECT
@@ -226,19 +226,19 @@ class BtComboBox##NeName : public BtComboBoxNamedEntity, \
 #include "model/Style.h"
 #include "model/Water.h"
 
-#include "listModels/BoilListModel.h"
-#include "listModels/EquipmentListModel.h"
-#include "listModels/MashListModel.h"
-#include "listModels/FermentationListModel.h"
-#include "listModels/StyleListModel.h"
-#include "listModels/WaterListModel.h"
+#include "qtModels/listModels/BoilListModel.h"
+#include "qtModels/listModels/EquipmentListModel.h"
+#include "qtModels/listModels/MashListModel.h"
+#include "qtModels/listModels/FermentationListModel.h"
+#include "qtModels/listModels/StyleListModel.h"
+#include "qtModels/listModels/WaterListModel.h"
 
-#include "sortFilterProxyModels/BoilSortFilterProxyModel.h"
-#include "sortFilterProxyModels/EquipmentSortFilterProxyModel.h"
-#include "sortFilterProxyModels/MashSortFilterProxyModel.h"
-#include "sortFilterProxyModels/FermentationSortFilterProxyModel.h"
-#include "sortFilterProxyModels/StyleSortFilterProxyModel.h"
-#include "sortFilterProxyModels/WaterSortFilterProxyModel.h"
+#include "qtModels/sortFilterProxyModels/BoilSortFilterProxyModel.h"
+#include "qtModels/sortFilterProxyModels/EquipmentSortFilterProxyModel.h"
+#include "qtModels/sortFilterProxyModels/MashSortFilterProxyModel.h"
+#include "qtModels/sortFilterProxyModels/FermentationSortFilterProxyModel.h"
+#include "qtModels/sortFilterProxyModels/StyleSortFilterProxyModel.h"
+#include "qtModels/sortFilterProxyModels/WaterSortFilterProxyModel.h"
 
 BT_COMBO_BOX_NAMED_ENTITY_DECL(Boil        )
 BT_COMBO_BOX_NAMED_ENTITY_DECL(Equipment   )

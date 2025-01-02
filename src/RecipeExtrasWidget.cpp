@@ -28,6 +28,11 @@
 #include "undoRedo/Undoable.h"
 #include "utils/OptionalHelpers.h"
 
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_RecipeExtrasWidget.cpp"
+#endif
+
 RecipeExtrasWidget::RecipeExtrasWidget(QWidget* parent) :
    QWidget(parent),
    recipe(nullptr),

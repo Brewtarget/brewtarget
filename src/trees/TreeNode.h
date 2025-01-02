@@ -43,7 +43,7 @@ class TreeModel;
 template<class NE> class TreeFolderNode;
 
 /**
- * \brief See comment in tableModels/TableModelBase.h for why we use a traits class to allow the following attributes
+ * \brief See comment in qtModels/tableModels/TableModelBase.h for why we use a traits class to allow the following attributes
  *        from each \c Derived class to be accessible in \c TreeNodeBase:
  *           - \c ColumnIndex        = class enum for the columns of this node type
  *           - \c Info               = class enum holding just NumberOfColumns = number of entries in the above

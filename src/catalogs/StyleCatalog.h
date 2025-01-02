@@ -22,8 +22,8 @@
 
 #include "editors/StyleEditor.h"
 #include "model/Style.h"
-#include "sortFilterProxyModels/StyleSortFilterProxyModel.h"
-#include "tableModels/StyleTableModel.h"
+#include "qtModels/sortFilterProxyModels/StyleSortFilterProxyModel.h"
+#include "qtModels/tableModels/StyleTableModel.h"
 
 // This needs to be the last include.  (I know, I know...)
 #include "catalogs/CatalogBase.h"

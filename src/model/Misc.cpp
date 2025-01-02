@@ -33,6 +33,11 @@
 #include "model/Recipe.h"
 #include "utils/AutoCompare.h"
 
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_Misc.cpp"
+#endif
+
 QString Misc::localisedName() { return tr("Miscellaneous"); }
 
 EnumStringMapping const Misc::typeStringMapping {

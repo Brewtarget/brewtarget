@@ -29,6 +29,11 @@
 #include "TimerListDialog.h"
 #include "TimerWidget.h"
 
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_TimerMainDialog.cpp"
+#endif
+
 TimerMainDialog::TimerMainDialog(MainWindow* parent) :
    QDialog{parent},
    mainWindow{parent},

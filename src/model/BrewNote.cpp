@@ -38,6 +38,11 @@
 #include "model/Recipe.h"
 #include "model/RecipeAdditionYeast.h"
 
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_BrewNote.cpp"
+#endif
+
 QString BrewNote::localisedName() { return tr("Brew Note"); }
 
 // BrewNote doesn't use its name field, so we sort by brew date

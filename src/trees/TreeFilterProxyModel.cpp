@@ -32,6 +32,11 @@
 #include "model/Water.h"
 #include "model/Yeast.h"
 
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_TreeFilterProxyModel.cpp"
+#endif
+
 namespace {
 
    template<class T> bool lessThan(TreeModel * model,

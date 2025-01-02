@@ -22,6 +22,11 @@
 #include "model/Fermentation.h"
 #include "model/Recipe.h"
 
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_FermentationEditor.cpp"
+#endif
+
 FermentationEditor::FermentationEditor(QWidget* parent, QString const editorName) :
    QDialog(parent),
    EditorBase<FermentationEditor, Fermentation, FermentationEditorOptions>(editorName) {

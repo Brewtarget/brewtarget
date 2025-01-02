@@ -19,6 +19,11 @@
 
 #include "widgets/InfoButton.h"
 
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_InfoText.cpp"
+#endif
+
 InfoText::InfoText(QWidget * parent, Qt::WindowFlags flags) : QLabel(parent, flags), m_infoButton{nullptr} {
    this->setWordWrap(true);
    //

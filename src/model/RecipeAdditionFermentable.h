@@ -99,8 +99,6 @@ protected:
 
 };
 
-Q_DECLARE_METATYPE(Fermentable)
-Q_DECLARE_METATYPE(Fermentable *)
 BT_DECLARE_METATYPES(RecipeAdditionFermentable)
 
 #endif

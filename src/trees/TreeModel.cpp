@@ -49,6 +49,11 @@
 #include "utils/BtStringConst.h"
 #include "PersistentSettings.h"
 
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_TreeModel.cpp"
+#endif
+
 namespace {
    NamedEntity * getElement(TreeNode::Type oType, int id) {
       switch (oType) {

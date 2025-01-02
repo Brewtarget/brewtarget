@@ -24,6 +24,11 @@
 #include "model/Recipe.h"
 #include "utils/AutoCompare.h"
 
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_Salt.cpp"
+#endif
+
 namespace {
    // Constants used in our mass concentration calculations below
    double constexpr molarMass_Ca     =  40.078     ; // https://en.wikipedia.org/wiki/Calcium

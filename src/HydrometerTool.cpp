@@ -32,6 +32,11 @@
 #include "Algorithms.h"
 #include "measurement/Unit.h"
 
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_HydrometerTool.cpp"
+#endif
+
 HydrometerTool::HydrometerTool(QWidget* parent) : QDialog(parent) {
    this->doLayout();
 

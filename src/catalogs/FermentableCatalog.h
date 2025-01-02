@@ -26,8 +26,8 @@
 
 #include "editors/FermentableEditor.h"
 #include "model/Fermentable.h"
-#include "tableModels/FermentableTableModel.h"
-#include "sortFilterProxyModels/FermentableSortFilterProxyModel.h"
+#include "qtModels/tableModels/FermentableTableModel.h"
+#include "qtModels/sortFilterProxyModels/FermentableSortFilterProxyModel.h"
 
 // This needs to be the last include.  (I know, I know...)
 #include "catalogs/CatalogBase.h"

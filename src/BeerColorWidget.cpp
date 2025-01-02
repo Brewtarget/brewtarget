@@ -26,6 +26,11 @@
 
 #include "config.h"
 
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_BeerColorWidget.cpp"
+#endif
+
 // TODO: make the size adjust inside the container.
 BeerColorWidget::BeerColorWidget(QWidget* parent) : QWidget(parent) {
    //setFixedSize(QSize(90,130));

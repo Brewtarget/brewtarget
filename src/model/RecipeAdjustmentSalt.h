@@ -124,10 +124,6 @@ private:
    WhenToAdd m_whenToAdd;
 };
 
-Q_DECLARE_METATYPE(Salt)
-// As of Qt6, we get compiler errors if we uncomment the following, but, so far, everything seems to work fine with it
-// commented out!
-//Q_DECLARE_METATYPE(Salt *)
 BT_DECLARE_METATYPES(RecipeAdjustmentSalt)
 
 #endif

@@ -16,6 +16,11 @@
 
 #include "IbuGuSlider.h"
 
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_IbuGuSlider.cpp"
+#endif
+
 IbuGuSlider::IbuGuSlider(QWidget* parent)
    : RangedSlider(parent)
 {

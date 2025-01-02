@@ -36,12 +36,17 @@
 #include "model/RecipeAdditionFermentable.h"
 #include "model/RecipeUseOfWater.h"
 #include "model/Salt.h"
-#include "tableModels/RecipeAdjustmentSaltTableModel.h"
-#include "tableModels/WaterTableModel.h"
+#include "qtModels/tableModels/RecipeAdjustmentSaltTableModel.h"
+#include "qtModels/tableModels/WaterTableModel.h"
 #include "editors/WaterEditor.h"
-#include "listModels/WaterListModel.h"
-#include "sortFilterProxyModels/WaterSortFilterProxyModel.h"
+#include "qtModels/listModels/WaterListModel.h"
+#include "qtModels/sortFilterProxyModels/WaterSortFilterProxyModel.h"
 #include "widgets/SmartDigitWidget.h"
+
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_WaterDialog.cpp"
+#endif
 
 
 //

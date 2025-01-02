@@ -41,6 +41,11 @@
 #include "PersistentSettings.h"
 #include "PhysicalConstants.h"
 
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_EquipmentEditor.cpp"
+#endif
+
 //
 // TODO: According to https://www.engineersedge.com/materials/specific_heat_capacity_of_metals_13259.htm, the specific
 // heat capacity of 304 grade stainless steel is 502.416 J/kg·K = 0.120080 c/g·C.  Would be nice to have a way for the

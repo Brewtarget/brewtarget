@@ -140,52 +140,52 @@
 <context>
     <name>BoilStepTableModel</name>
     <message>
-        <location filename="../src/tableModels/BoilStepTableModel.cpp" line="32"/>
+        <location filename="../src/qtModels/tableModels/BoilStepTableModel.cpp" line="32"/>
         <source>Name</source>
         <translation>Navn</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/BoilStepTableModel.cpp" line="33"/>
+        <location filename="../src/qtModels/tableModels/BoilStepTableModel.cpp" line="33"/>
         <source>Step Time</source>
         <translation>Trin varighed</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/BoilStepTableModel.cpp" line="34"/>
+        <location filename="../src/qtModels/tableModels/BoilStepTableModel.cpp" line="34"/>
         <source>Start Temp</source>
         <translation>Starttemperatur</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/BoilStepTableModel.cpp" line="35"/>
+        <location filename="../src/qtModels/tableModels/BoilStepTableModel.cpp" line="35"/>
         <source>Ramp Time</source>
         <translation>Varighed niveau</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/BoilStepTableModel.cpp" line="36"/>
+        <location filename="../src/qtModels/tableModels/BoilStepTableModel.cpp" line="36"/>
         <source>End Temp</source>
         <translation>Sluttemperatur</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/BoilStepTableModel.cpp" line="37"/>
+        <location filename="../src/qtModels/tableModels/BoilStepTableModel.cpp" line="37"/>
         <source>Start Acidity</source>
         <translation>Startsurhedsgrad</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/BoilStepTableModel.cpp" line="38"/>
+        <location filename="../src/qtModels/tableModels/BoilStepTableModel.cpp" line="38"/>
         <source>End Acidity</source>
         <translation>Slutsurhedsgrad</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/BoilStepTableModel.cpp" line="39"/>
+        <location filename="../src/qtModels/tableModels/BoilStepTableModel.cpp" line="39"/>
         <source>Start Gravity</source>
         <translation>Startmassefylde</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/BoilStepTableModel.cpp" line="40"/>
+        <location filename="../src/qtModels/tableModels/BoilStepTableModel.cpp" line="40"/>
         <source>End Gravity</source>
         <translation>Slutmassefylde</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/BoilStepTableModel.cpp" line="41"/>
+        <location filename="../src/qtModels/tableModels/BoilStepTableModel.cpp" line="41"/>
         <source>Chilling Type</source>
         <translation>Afkølingstype</translation>
     </message>
@@ -193,12 +193,12 @@
 <context>
     <name>BoilTableModel</name>
     <message>
-        <location filename="../src/tableModels/BoilTableModel.cpp" line="31"/>
+        <location filename="../src/qtModels/tableModels/BoilTableModel.cpp" line="31"/>
         <source>Name</source>
         <translation>Navn</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/BoilTableModel.cpp" line="32"/>
+        <location filename="../src/qtModels/tableModels/BoilTableModel.cpp" line="32"/>
         <source>Pre-Boil Size</source>
         <translation>Volumen før kogning</translation>
     </message>
@@ -1319,22 +1319,22 @@ Logfil indeholder måske flere detaljer.</translation>
 <context>
     <name>EquipmentTableModel</name>
     <message>
-        <location filename="../src/tableModels/EquipmentTableModel.cpp" line="28"/>
+        <location filename="../src/qtModels/tableModels/EquipmentTableModel.cpp" line="28"/>
         <source>Name</source>
         <translation>Navn</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/EquipmentTableModel.cpp" line="29"/>
+        <location filename="../src/qtModels/tableModels/EquipmentTableModel.cpp" line="29"/>
         <source>Mash Tun Volume</source>
         <translation>Mæskebeholder Volumen</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/EquipmentTableModel.cpp" line="30"/>
+        <location filename="../src/qtModels/tableModels/EquipmentTableModel.cpp" line="30"/>
         <source>Kettle Volume</source>
         <translation>Kogekar Volumen</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/EquipmentTableModel.cpp" line="31"/>
+        <location filename="../src/qtModels/tableModels/EquipmentTableModel.cpp" line="31"/>
         <source>Fermenter Volume</source>
         <translation>Gæringskar Volumen</translation>
     </message>
@@ -1498,12 +1498,12 @@ Logfil indeholder måske flere detaljer.</translation>
         <translation type="vanished">Forkert kolonne: %1</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/FermentableTableModel.cpp" line="54"/>
+        <location filename="../src/qtModels/tableModels/FermentableTableModel.cpp" line="54"/>
         <source>Name</source>
         <translation>Navn</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/FermentableTableModel.cpp" line="55"/>
+        <location filename="../src/qtModels/tableModels/FermentableTableModel.cpp" line="55"/>
         <source>Type</source>
         <translation>Type</translation>
     </message>
@@ -1516,22 +1516,22 @@ Logfil indeholder måske flere detaljer.</translation>
         <translation type="vanished">Udbyttegrad %</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/FermentableTableModel.cpp" line="59"/>
+        <location filename="../src/qtModels/tableModels/FermentableTableModel.cpp" line="59"/>
         <source>Inventory</source>
         <translation>Lager</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/FermentableTableModel.cpp" line="58"/>
+        <location filename="../src/qtModels/tableModels/FermentableTableModel.cpp" line="58"/>
         <source>Color</source>
         <translation>Farve</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/FermentableTableModel.cpp" line="57"/>
+        <location filename="../src/qtModels/tableModels/FermentableTableModel.cpp" line="57"/>
         <source>Yield (DBFG) %</source>
         <translation>Udbytte af ekstrakt med fint kværnet malt (DBFG) %</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/FermentableTableModel.cpp" line="60"/>
+        <location filename="../src/qtModels/tableModels/FermentableTableModel.cpp" line="60"/>
         <source>Amount Type</source>
         <translation>Mængdeangivelse</translation>
     </message>
@@ -1555,62 +1555,62 @@ Logfil indeholder måske flere detaljer.</translation>
 <context>
     <name>FermentationStepTableModel</name>
     <message>
-        <location filename="../src/tableModels/FermentationStepTableModel.cpp" line="51"/>
+        <location filename="../src/qtModels/tableModels/FermentationStepTableModel.cpp" line="51"/>
         <source>Name</source>
         <translation>Navn</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/FermentationStepTableModel.cpp" line="52"/>
+        <location filename="../src/qtModels/tableModels/FermentationStepTableModel.cpp" line="52"/>
         <source>Step Time</source>
         <translation>Trin varighed</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/FermentationStepTableModel.cpp" line="53"/>
+        <location filename="../src/qtModels/tableModels/FermentationStepTableModel.cpp" line="53"/>
         <source>Start Temp</source>
         <translation>Start-temp.</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/FermentationStepTableModel.cpp" line="54"/>
+        <location filename="../src/qtModels/tableModels/FermentationStepTableModel.cpp" line="54"/>
         <source>End Temp</source>
         <translation>Slut-temp.</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/FermentationStepTableModel.cpp" line="55"/>
+        <location filename="../src/qtModels/tableModels/FermentationStepTableModel.cpp" line="55"/>
         <source>Start Acidity</source>
         <translation>Startsurhedsgrad</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/FermentationStepTableModel.cpp" line="56"/>
+        <location filename="../src/qtModels/tableModels/FermentationStepTableModel.cpp" line="56"/>
         <source>End Acidity</source>
         <translation>Slutsurhedsgrad</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/FermentationStepTableModel.cpp" line="57"/>
+        <location filename="../src/qtModels/tableModels/FermentationStepTableModel.cpp" line="57"/>
         <source>Start Gravity</source>
         <translation>Startmassefylde</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/FermentationStepTableModel.cpp" line="58"/>
+        <location filename="../src/qtModels/tableModels/FermentationStepTableModel.cpp" line="58"/>
         <source>End Gravity</source>
         <translation>Slutmassefylde</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/FermentationStepTableModel.cpp" line="59"/>
+        <location filename="../src/qtModels/tableModels/FermentationStepTableModel.cpp" line="59"/>
         <source>Free Rise</source>
         <translation>Frivillig temp.stigning</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/FermentationStepTableModel.cpp" line="59"/>
+        <location filename="../src/qtModels/tableModels/FermentationStepTableModel.cpp" line="59"/>
         <source>No</source>
         <translation>Nej</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/FermentationStepTableModel.cpp" line="59"/>
+        <location filename="../src/qtModels/tableModels/FermentationStepTableModel.cpp" line="59"/>
         <source>Yes</source>
         <translation>Ja</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/FermentationStepTableModel.cpp" line="60"/>
+        <location filename="../src/qtModels/tableModels/FermentationStepTableModel.cpp" line="60"/>
         <source>Vessel</source>
         <translation>Beholder</translation>
     </message>
@@ -1618,12 +1618,12 @@ Logfil indeholder måske flere detaljer.</translation>
 <context>
     <name>FermentationTableModel</name>
     <message>
-        <location filename="../src/tableModels/FermentationTableModel.cpp" line="31"/>
+        <location filename="../src/qtModels/tableModels/FermentationTableModel.cpp" line="31"/>
         <source>Name</source>
         <translation>Navn</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/FermentationTableModel.cpp" line="32"/>
+        <location filename="../src/qtModels/tableModels/FermentationTableModel.cpp" line="32"/>
         <source>Number of Steps</source>
         <translation>Antal trin</translation>
     </message>
@@ -1872,12 +1872,12 @@ Logfil indeholder måske flere detaljer.</translation>
 <context>
     <name>HopTableModel</name>
     <message>
-        <location filename="../src/tableModels/HopTableModel.cpp" line="38"/>
+        <location filename="../src/qtModels/tableModels/HopTableModel.cpp" line="38"/>
         <source>Name</source>
         <translation>Navn</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/HopTableModel.cpp" line="41"/>
+        <location filename="../src/qtModels/tableModels/HopTableModel.cpp" line="41"/>
         <source>Alpha %</source>
         <translation>Alfa %</translation>
     </message>
@@ -1894,22 +1894,22 @@ Logfil indeholder måske flere detaljer.</translation>
         <translation type="vanished">Titel:</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/HopTableModel.cpp" line="39"/>
+        <location filename="../src/qtModels/tableModels/HopTableModel.cpp" line="39"/>
         <source>Form</source>
         <translation>Form</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/HopTableModel.cpp" line="42"/>
+        <location filename="../src/qtModels/tableModels/HopTableModel.cpp" line="42"/>
         <source>Inventory</source>
         <translation>Lager</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/HopTableModel.cpp" line="40"/>
+        <location filename="../src/qtModels/tableModels/HopTableModel.cpp" line="40"/>
         <source>Year</source>
         <translation>År</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/HopTableModel.cpp" line="43"/>
+        <location filename="../src/qtModels/tableModels/HopTableModel.cpp" line="43"/>
         <source>Amount Type</source>
         <translation>Mængdeangivelse</translation>
     </message>
@@ -2571,32 +2571,32 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
         <translation type="vanished">Forkert kolonne: %1</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/MashStepTableModel.cpp" line="38"/>
+        <location filename="../src/qtModels/tableModels/MashStepTableModel.cpp" line="38"/>
         <source>Name</source>
         <translation>Navn</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/MashStepTableModel.cpp" line="39"/>
+        <location filename="../src/qtModels/tableModels/MashStepTableModel.cpp" line="39"/>
         <source>Type</source>
         <translation>Type</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/MashStepTableModel.cpp" line="40"/>
+        <location filename="../src/qtModels/tableModels/MashStepTableModel.cpp" line="40"/>
         <source>Amount</source>
         <translation>Mængde</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/MashStepTableModel.cpp" line="41"/>
+        <location filename="../src/qtModels/tableModels/MashStepTableModel.cpp" line="41"/>
         <source>Infusion Temp</source>
         <translation>Infusions-temp.</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/MashStepTableModel.cpp" line="42"/>
+        <location filename="../src/qtModels/tableModels/MashStepTableModel.cpp" line="42"/>
         <source>Target Temp</source>
         <translation>Tlsigtet temperatur</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/MashStepTableModel.cpp" line="43"/>
+        <location filename="../src/qtModels/tableModels/MashStepTableModel.cpp" line="43"/>
         <source>Time</source>
         <translation>Varighed</translation>
     </message>
@@ -2604,22 +2604,22 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
 <context>
     <name>MashTableModel</name>
     <message>
-        <location filename="../src/tableModels/MashTableModel.cpp" line="31"/>
+        <location filename="../src/qtModels/tableModels/MashTableModel.cpp" line="31"/>
         <source>Name</source>
         <translation>Navn</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/MashTableModel.cpp" line="32"/>
+        <location filename="../src/qtModels/tableModels/MashTableModel.cpp" line="32"/>
         <source>Initial Grain Temperature</source>
         <translation>Malttemperatur ved start</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/MashTableModel.cpp" line="33"/>
+        <location filename="../src/qtModels/tableModels/MashTableModel.cpp" line="33"/>
         <source>Total Mash Water</source>
         <translation>Samlet volumen vand til mæskning</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/MashTableModel.cpp" line="34"/>
+        <location filename="../src/qtModels/tableModels/MashTableModel.cpp" line="34"/>
         <source>Total Time</source>
         <translation>Samlet varighed</translation>
     </message>
@@ -2902,12 +2902,12 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
 <context>
     <name>MiscTableModel</name>
     <message>
-        <location filename="../src/tableModels/MiscTableModel.cpp" line="38"/>
+        <location filename="../src/qtModels/tableModels/MiscTableModel.cpp" line="38"/>
         <source>Name</source>
         <translation>Navn</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/MiscTableModel.cpp" line="39"/>
+        <location filename="../src/qtModels/tableModels/MiscTableModel.cpp" line="39"/>
         <source>Type</source>
         <translation>Type</translation>
     </message>
@@ -2924,12 +2924,12 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
         <translation type="vanished">Mængde</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/MiscTableModel.cpp" line="41"/>
+        <location filename="../src/qtModels/tableModels/MiscTableModel.cpp" line="41"/>
         <source>Amount Type</source>
         <translation>Mængdeangivelse</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/MiscTableModel.cpp" line="40"/>
+        <location filename="../src/qtModels/tableModels/MiscTableModel.cpp" line="40"/>
         <source>Inventory</source>
         <translation>Lager</translation>
     </message>
@@ -2937,7 +2937,7 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
 <context>
     <name>NE</name>
     <message>
-        <location filename="../src/tableModels/TableModelBase.h" line="840"/>
+        <location filename="../src/qtModels/tableModels/TableModelBase.h" line="840"/>
         <source>Change %1 %2</source>
         <translation>Skift %1 %2</translation>
     </message>
@@ -4867,47 +4867,47 @@ The final volume in the primary is %1.</source>
 <context>
     <name>RecipeAdditionFermentableTableModel</name>
     <message>
-        <location filename="../src/tableModels/RecipeAdditionFermentableTableModel.cpp" line="50"/>
+        <location filename="../src/qtModels/tableModels/RecipeAdditionFermentableTableModel.cpp" line="50"/>
         <source>Name</source>
         <translation>Navn</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/RecipeAdditionFermentableTableModel.cpp" line="52"/>
+        <location filename="../src/qtModels/tableModels/RecipeAdditionFermentableTableModel.cpp" line="52"/>
         <source>Type</source>
         <translation>Type</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/RecipeAdditionFermentableTableModel.cpp" line="54"/>
+        <location filename="../src/qtModels/tableModels/RecipeAdditionFermentableTableModel.cpp" line="54"/>
         <source>Yield</source>
         <translation>Udbytte</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/RecipeAdditionFermentableTableModel.cpp" line="56"/>
+        <location filename="../src/qtModels/tableModels/RecipeAdditionFermentableTableModel.cpp" line="56"/>
         <source>Color</source>
         <translation>FarveFarve</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/RecipeAdditionFermentableTableModel.cpp" line="58"/>
+        <location filename="../src/qtModels/tableModels/RecipeAdditionFermentableTableModel.cpp" line="58"/>
         <source>Amount</source>
         <translation>Mængde</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/RecipeAdditionFermentableTableModel.cpp" line="59"/>
+        <location filename="../src/qtModels/tableModels/RecipeAdditionFermentableTableModel.cpp" line="59"/>
         <source>Amount Type</source>
         <translation>Mængdeangivelse</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/RecipeAdditionFermentableTableModel.cpp" line="61"/>
+        <location filename="../src/qtModels/tableModels/RecipeAdditionFermentableTableModel.cpp" line="61"/>
         <source>Inventory</source>
         <translation>Lager</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/RecipeAdditionFermentableTableModel.cpp" line="63"/>
+        <location filename="../src/qtModels/tableModels/RecipeAdditionFermentableTableModel.cpp" line="63"/>
         <source>Stage</source>
         <translation>Trin</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/RecipeAdditionFermentableTableModel.cpp" line="64"/>
+        <location filename="../src/qtModels/tableModels/RecipeAdditionFermentableTableModel.cpp" line="64"/>
         <source>Time</source>
         <translation>Tid</translation>
     </message>
@@ -4958,47 +4958,47 @@ The final volume in the primary is %1.</source>
 <context>
     <name>RecipeAdditionHopTableModel</name>
     <message>
-        <location filename="../src/tableModels/RecipeAdditionHopTableModel.cpp" line="49"/>
+        <location filename="../src/qtModels/tableModels/RecipeAdditionHopTableModel.cpp" line="49"/>
         <source>Name</source>
         <translation>Navn</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/RecipeAdditionHopTableModel.cpp" line="51"/>
+        <location filename="../src/qtModels/tableModels/RecipeAdditionHopTableModel.cpp" line="51"/>
         <source>Form</source>
         <translation>Tilstand</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/RecipeAdditionHopTableModel.cpp" line="53"/>
+        <location filename="../src/qtModels/tableModels/RecipeAdditionHopTableModel.cpp" line="53"/>
         <source>Alpha %</source>
         <translation>Alfa %</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/RecipeAdditionHopTableModel.cpp" line="55"/>
+        <location filename="../src/qtModels/tableModels/RecipeAdditionHopTableModel.cpp" line="55"/>
         <source>Year</source>
         <translation>År</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/RecipeAdditionHopTableModel.cpp" line="57"/>
+        <location filename="../src/qtModels/tableModels/RecipeAdditionHopTableModel.cpp" line="57"/>
         <source>Amount</source>
         <translation>Mængde</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/RecipeAdditionHopTableModel.cpp" line="58"/>
+        <location filename="../src/qtModels/tableModels/RecipeAdditionHopTableModel.cpp" line="58"/>
         <source>Amount Type</source>
         <translation>Mængdeangivelse</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/RecipeAdditionHopTableModel.cpp" line="60"/>
+        <location filename="../src/qtModels/tableModels/RecipeAdditionHopTableModel.cpp" line="60"/>
         <source>Inventory</source>
         <translation>Lager</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/RecipeAdditionHopTableModel.cpp" line="62"/>
+        <location filename="../src/qtModels/tableModels/RecipeAdditionHopTableModel.cpp" line="62"/>
         <source>Stage</source>
         <translation>Trin</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/RecipeAdditionHopTableModel.cpp" line="63"/>
+        <location filename="../src/qtModels/tableModels/RecipeAdditionHopTableModel.cpp" line="63"/>
         <source>Time</source>
         <translation>Tid</translation>
     </message>
@@ -5049,37 +5049,37 @@ The final volume in the primary is %1.</source>
 <context>
     <name>RecipeAdditionMiscTableModel</name>
     <message>
-        <location filename="../src/tableModels/RecipeAdditionMiscTableModel.cpp" line="49"/>
+        <location filename="../src/qtModels/tableModels/RecipeAdditionMiscTableModel.cpp" line="49"/>
         <source>Name</source>
         <translation>Navn</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/RecipeAdditionMiscTableModel.cpp" line="51"/>
+        <location filename="../src/qtModels/tableModels/RecipeAdditionMiscTableModel.cpp" line="51"/>
         <source>Type</source>
         <translation>Type</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/RecipeAdditionMiscTableModel.cpp" line="53"/>
+        <location filename="../src/qtModels/tableModels/RecipeAdditionMiscTableModel.cpp" line="53"/>
         <source>Amount</source>
         <translation>Mængde</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/RecipeAdditionMiscTableModel.cpp" line="54"/>
+        <location filename="../src/qtModels/tableModels/RecipeAdditionMiscTableModel.cpp" line="54"/>
         <source>Amount Type</source>
         <translation>Mængdeangivelse</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/RecipeAdditionMiscTableModel.cpp" line="56"/>
+        <location filename="../src/qtModels/tableModels/RecipeAdditionMiscTableModel.cpp" line="56"/>
         <source>Inventory</source>
         <translation>Lager</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/RecipeAdditionMiscTableModel.cpp" line="58"/>
+        <location filename="../src/qtModels/tableModels/RecipeAdditionMiscTableModel.cpp" line="58"/>
         <source>Stage</source>
         <translation>Trin</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/RecipeAdditionMiscTableModel.cpp" line="59"/>
+        <location filename="../src/qtModels/tableModels/RecipeAdditionMiscTableModel.cpp" line="59"/>
         <source>Time</source>
         <translation>Tid</translation>
     </message>
@@ -5105,62 +5105,62 @@ The final volume in the primary is %1.</source>
 <context>
     <name>RecipeAdditionYeastTableModel</name>
     <message>
-        <location filename="../src/tableModels/RecipeAdditionYeastTableModel.cpp" line="50"/>
+        <location filename="../src/qtModels/tableModels/RecipeAdditionYeastTableModel.cpp" line="50"/>
         <source>Name</source>
         <translation>Navn</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/RecipeAdditionYeastTableModel.cpp" line="52"/>
+        <location filename="../src/qtModels/tableModels/RecipeAdditionYeastTableModel.cpp" line="52"/>
         <source>Laboratory</source>
         <translation>Producent</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/RecipeAdditionYeastTableModel.cpp" line="54"/>
+        <location filename="../src/qtModels/tableModels/RecipeAdditionYeastTableModel.cpp" line="54"/>
         <source>Product ID</source>
         <translation>Produkt ID</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/RecipeAdditionYeastTableModel.cpp" line="56"/>
+        <location filename="../src/qtModels/tableModels/RecipeAdditionYeastTableModel.cpp" line="56"/>
         <source>Type</source>
         <translation>Type</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/RecipeAdditionYeastTableModel.cpp" line="58"/>
+        <location filename="../src/qtModels/tableModels/RecipeAdditionYeastTableModel.cpp" line="58"/>
         <source>Form</source>
         <translation>Tilstand</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/RecipeAdditionYeastTableModel.cpp" line="60"/>
+        <location filename="../src/qtModels/tableModels/RecipeAdditionYeastTableModel.cpp" line="60"/>
         <source>Amount</source>
         <translation>Mængde</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/RecipeAdditionYeastTableModel.cpp" line="61"/>
+        <location filename="../src/qtModels/tableModels/RecipeAdditionYeastTableModel.cpp" line="61"/>
         <source>Amount Type</source>
         <translation>Mængde enhed</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/RecipeAdditionYeastTableModel.cpp" line="63"/>
+        <location filename="../src/qtModels/tableModels/RecipeAdditionYeastTableModel.cpp" line="63"/>
         <source>Inventory</source>
         <translation>Lager</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/RecipeAdditionYeastTableModel.cpp" line="65"/>
+        <location filename="../src/qtModels/tableModels/RecipeAdditionYeastTableModel.cpp" line="65"/>
         <source>Stage</source>
         <translation>Trin</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/RecipeAdditionYeastTableModel.cpp" line="66"/>
+        <location filename="../src/qtModels/tableModels/RecipeAdditionYeastTableModel.cpp" line="66"/>
         <source>Step</source>
         <translation>Trin</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/RecipeAdditionYeastTableModel.cpp" line="67"/>
+        <location filename="../src/qtModels/tableModels/RecipeAdditionYeastTableModel.cpp" line="67"/>
         <source>Attenuation</source>
         <translation>Forgæring</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/RecipeAdditionYeastTableModel.cpp" line="68"/>
+        <location filename="../src/qtModels/tableModels/RecipeAdditionYeastTableModel.cpp" line="68"/>
         <source>Times Cultured</source>
         <translation>Antal gange genhøstet</translation>
     </message>
@@ -5206,37 +5206,37 @@ The final volume in the primary is %1.</source>
 <context>
     <name>RecipeAdjustmentSaltTableModel</name>
     <message>
-        <location filename="../src/tableModels/RecipeAdjustmentSaltTableModel.cpp" line="44"/>
+        <location filename="../src/qtModels/tableModels/RecipeAdjustmentSaltTableModel.cpp" line="44"/>
         <source>Name</source>
         <translation>Navn</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/RecipeAdjustmentSaltTableModel.cpp" line="46"/>
+        <location filename="../src/qtModels/tableModels/RecipeAdjustmentSaltTableModel.cpp" line="46"/>
         <source>Type</source>
         <translation>Type</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/RecipeAdjustmentSaltTableModel.cpp" line="50"/>
+        <location filename="../src/qtModels/tableModels/RecipeAdjustmentSaltTableModel.cpp" line="50"/>
         <source>Amount</source>
         <translation>Mængde</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/RecipeAdjustmentSaltTableModel.cpp" line="51"/>
+        <location filename="../src/qtModels/tableModels/RecipeAdjustmentSaltTableModel.cpp" line="51"/>
         <source>Amount Type</source>
         <translation>Mængdeangivelse</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/RecipeAdjustmentSaltTableModel.cpp" line="53"/>
+        <location filename="../src/qtModels/tableModels/RecipeAdjustmentSaltTableModel.cpp" line="53"/>
         <source>Inventory</source>
         <translation>Lager</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/RecipeAdjustmentSaltTableModel.cpp" line="55"/>
+        <location filename="../src/qtModels/tableModels/RecipeAdjustmentSaltTableModel.cpp" line="55"/>
         <source>Added To</source>
         <translation>Føjet til</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/RecipeAdjustmentSaltTableModel.cpp" line="58"/>
+        <location filename="../src/qtModels/tableModels/RecipeAdjustmentSaltTableModel.cpp" line="58"/>
         <source>% Acid</source>
         <translation>% syre</translation>
     </message>
@@ -5881,22 +5881,22 @@ The final volume in the primary is %1.</source>
 <context>
     <name>SaltTableModel</name>
     <message>
-        <location filename="../src/tableModels/SaltTableModel.cpp" line="36"/>
+        <location filename="../src/qtModels/tableModels/SaltTableModel.cpp" line="36"/>
         <source>Name</source>
         <translation>Navn</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/SaltTableModel.cpp" line="37"/>
+        <location filename="../src/qtModels/tableModels/SaltTableModel.cpp" line="37"/>
         <source>% Acid</source>
         <translation>% syre</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/SaltTableModel.cpp" line="38"/>
+        <location filename="../src/qtModels/tableModels/SaltTableModel.cpp" line="38"/>
         <source>Inventory</source>
         <translation>Lager</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/SaltTableModel.cpp" line="39"/>
+        <location filename="../src/qtModels/tableModels/SaltTableModel.cpp" line="39"/>
         <source>Amount Type</source>
         <translation>Mængdeangivelse</translation>
     </message>
@@ -6063,32 +6063,32 @@ The final volume in the primary is %1.</source>
 <context>
     <name>StyleTableModel</name>
     <message>
-        <location filename="../src/tableModels/StyleTableModel.cpp" line="28"/>
+        <location filename="../src/qtModels/tableModels/StyleTableModel.cpp" line="28"/>
         <source>Name</source>
         <translation>Navn</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/StyleTableModel.cpp" line="29"/>
+        <location filename="../src/qtModels/tableModels/StyleTableModel.cpp" line="29"/>
         <source>Type</source>
         <translation>Type</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/StyleTableModel.cpp" line="30"/>
+        <location filename="../src/qtModels/tableModels/StyleTableModel.cpp" line="30"/>
         <source>Category</source>
         <translation>Kategori</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/StyleTableModel.cpp" line="31"/>
+        <location filename="../src/qtModels/tableModels/StyleTableModel.cpp" line="31"/>
         <source>Category Number</source>
         <translation>Kategorinummer</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/StyleTableModel.cpp" line="32"/>
+        <location filename="../src/qtModels/tableModels/StyleTableModel.cpp" line="32"/>
         <source>Style Letter</source>
         <translation>Stilart bogstav</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/StyleTableModel.cpp" line="33"/>
+        <location filename="../src/qtModels/tableModels/StyleTableModel.cpp" line="33"/>
         <source>Style Guide</source>
         <translation>Stilart guide</translation>
     </message>
@@ -6710,12 +6710,12 @@ The final volume in the primary is %1.</source>
         <translation type="vanished">Forkert model index. række = %1</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/WaterTableModel.cpp" line="80"/>
+        <location filename="../src/qtModels/tableModels/WaterTableModel.cpp" line="80"/>
         <source>Bad column: %1</source>
         <translation>Forkert kolonne: %1</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/WaterTableModel.cpp" line="35"/>
+        <location filename="../src/qtModels/tableModels/WaterTableModel.cpp" line="35"/>
         <source>Name</source>
         <translation>Navn</translation>
     </message>
@@ -6724,32 +6724,32 @@ The final volume in the primary is %1.</source>
         <translation type="vanished">Mængde</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/WaterTableModel.cpp" line="36"/>
+        <location filename="../src/qtModels/tableModels/WaterTableModel.cpp" line="36"/>
         <source>Calcium (ppm)</source>
         <translation>Calcium (ppm)</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/WaterTableModel.cpp" line="37"/>
+        <location filename="../src/qtModels/tableModels/WaterTableModel.cpp" line="37"/>
         <source>Bicarbonate (ppm)</source>
         <translation>Hydrogencarbonat (ppm)</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/WaterTableModel.cpp" line="38"/>
+        <location filename="../src/qtModels/tableModels/WaterTableModel.cpp" line="38"/>
         <source>Sulfate (ppm)</source>
         <translation>Sulfat (ppm)</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/WaterTableModel.cpp" line="39"/>
+        <location filename="../src/qtModels/tableModels/WaterTableModel.cpp" line="39"/>
         <source>Chloride (ppm)</source>
         <translation>Chlorid (ppm)</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/WaterTableModel.cpp" line="40"/>
+        <location filename="../src/qtModels/tableModels/WaterTableModel.cpp" line="40"/>
         <source>Sodium (ppm)</source>
         <translation>Natrium (ppm)</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/WaterTableModel.cpp" line="41"/>
+        <location filename="../src/qtModels/tableModels/WaterTableModel.cpp" line="41"/>
         <source>Magnesium (ppm)</source>
         <translation>Magnesium (ppm)</translation>
     </message>
@@ -6941,17 +6941,17 @@ The final volume in the primary is %1.</source>
         <translation type="vanished">Forkert kolonne: %1</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/YeastTableModel.cpp" line="38"/>
+        <location filename="../src/qtModels/tableModels/YeastTableModel.cpp" line="38"/>
         <source>Name</source>
         <translation>Navn</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/YeastTableModel.cpp" line="41"/>
+        <location filename="../src/qtModels/tableModels/YeastTableModel.cpp" line="41"/>
         <source>Type</source>
         <translation>Type</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/YeastTableModel.cpp" line="42"/>
+        <location filename="../src/qtModels/tableModels/YeastTableModel.cpp" line="42"/>
         <source>Form</source>
         <translation>Type</translation>
     </message>
@@ -6960,22 +6960,22 @@ The final volume in the primary is %1.</source>
         <translation type="vanished">Mængde</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/YeastTableModel.cpp" line="39"/>
+        <location filename="../src/qtModels/tableModels/YeastTableModel.cpp" line="39"/>
         <source>Laboratory</source>
         <translation>Producent</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/YeastTableModel.cpp" line="40"/>
+        <location filename="../src/qtModels/tableModels/YeastTableModel.cpp" line="40"/>
         <source>Product ID</source>
         <translation>Produkt ID</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/YeastTableModel.cpp" line="43"/>
+        <location filename="../src/qtModels/tableModels/YeastTableModel.cpp" line="43"/>
         <source>Inventory</source>
         <translation>Lager</translation>
     </message>
     <message>
-        <location filename="../src/tableModels/YeastTableModel.cpp" line="44"/>
+        <location filename="../src/qtModels/tableModels/YeastTableModel.cpp" line="44"/>
         <source>Amount Type</source>
         <translation>Mængdeangivelse</translation>
     </message>
@@ -7469,8 +7469,8 @@ The final volume in the primary is %1.</source>
 <context>
     <name>equipmentEditor</name>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="985"/>
-        <location filename="../ui/equipmentEditor.ui" line="1061"/>
+        <location filename="../ui/equipmentEditor.ui" line="1009"/>
+        <location filename="../ui/equipmentEditor.ui" line="1085"/>
         <source>Losses</source>
         <translation>Tab</translation>
     </message>
@@ -7511,25 +7511,25 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <location filename="../ui/equipmentEditor.ui" line="99"/>
-        <location filename="../ui/equipmentEditor.ui" line="268"/>
+        <location filename="../ui/equipmentEditor.ui" line="292"/>
         <source>Hot Liquor Tank</source>
         <translation>Varm væske beholder</translation>
     </message>
     <message>
         <location filename="../ui/equipmentEditor.ui" line="106"/>
-        <location filename="../ui/equipmentEditor.ui" line="545"/>
+        <location filename="../ui/equipmentEditor.ui" line="569"/>
         <source>Lauter Tun</source>
         <translation>Urtfiltreringsbeholder</translation>
     </message>
     <message>
         <location filename="../ui/equipmentEditor.ui" line="113"/>
-        <location filename="../ui/equipmentEditor.ui" line="938"/>
+        <location filename="../ui/equipmentEditor.ui" line="962"/>
         <source>Aging Vessel</source>
         <translation>Lagertank</translation>
     </message>
     <message>
         <location filename="../ui/equipmentEditor.ui" line="120"/>
-        <location filename="../ui/equipmentEditor.ui" line="1014"/>
+        <location filename="../ui/equipmentEditor.ui" line="1038"/>
         <source>Packaging Vessel</source>
         <translation>Opbevaringstank</translation>
     </message>
@@ -7574,254 +7574,264 @@ The final volume in the primary is %1.</source>
         <translation>Standardværdi er 100°C (212°F), men aktuel værdi varierer med højde over havet.</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="274"/>
+        <location filename="../ui/equipmentEditor.ui" line="257"/>
+        <source>ID in database</source>
+        <translation type="unfinished">ID i database</translation>
+    </message>
+    <message>
+        <location filename="../ui/equipmentEditor.ui" line="271"/>
+        <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
+        <translation type="unfinished">Du kan normalt ignorere dette, men det er nogle gange nyttigt til fejlfinding.</translation>
+    </message>
+    <message>
+        <location filename="../ui/equipmentEditor.ui" line="298"/>
         <source>Hot Liquor Tank Type</source>
         <translation>Varm væske beholdertype</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="301"/>
-        <location filename="../ui/equipmentEditor.ui" line="408"/>
-        <location filename="../ui/equipmentEditor.ui" line="885"/>
-        <location filename="../ui/equipmentEditor.ui" line="971"/>
-        <location filename="../ui/equipmentEditor.ui" line="1047"/>
+        <location filename="../ui/equipmentEditor.ui" line="325"/>
+        <location filename="../ui/equipmentEditor.ui" line="432"/>
+        <location filename="../ui/equipmentEditor.ui" line="909"/>
+        <location filename="../ui/equipmentEditor.ui" line="995"/>
+        <location filename="../ui/equipmentEditor.ui" line="1071"/>
         <source>Volume</source>
         <translation>Volumen</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="315"/>
+        <location filename="../ui/equipmentEditor.ui" line="339"/>
         <source>Evaporation Loss</source>
         <translation>Fordampningstab</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="329"/>
-        <location filename="../ui/equipmentEditor.ui" line="425"/>
-        <location filename="../ui/equipmentEditor.ui" line="592"/>
-        <location filename="../ui/equipmentEditor.ui" line="756"/>
+        <location filename="../ui/equipmentEditor.ui" line="353"/>
+        <location filename="../ui/equipmentEditor.ui" line="449"/>
+        <location filename="../ui/equipmentEditor.ui" line="616"/>
+        <location filename="../ui/equipmentEditor.ui" line="780"/>
         <source>Weight</source>
         <translation>Masse</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="343"/>
-        <location filename="../ui/equipmentEditor.ui" line="442"/>
-        <location filename="../ui/equipmentEditor.ui" line="606"/>
-        <location filename="../ui/equipmentEditor.ui" line="773"/>
+        <location filename="../ui/equipmentEditor.ui" line="367"/>
+        <location filename="../ui/equipmentEditor.ui" line="466"/>
+        <location filename="../ui/equipmentEditor.ui" line="630"/>
+        <location filename="../ui/equipmentEditor.ui" line="797"/>
         <source>Specific Heat Capacity</source>
         <translation>Specifik varmekapacitet</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="357"/>
+        <location filename="../ui/equipmentEditor.ui" line="381"/>
         <source>HLT Notes</source>
         <translation>Varm væskebeholder notater</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="360"/>
-        <location filename="../ui/equipmentEditor.ui" line="533"/>
-        <location filename="../ui/equipmentEditor.ui" line="640"/>
-        <location filename="../ui/equipmentEditor.ui" line="835"/>
-        <location filename="../ui/equipmentEditor.ui" line="926"/>
-        <location filename="../ui/equipmentEditor.ui" line="1002"/>
-        <location filename="../ui/equipmentEditor.ui" line="1078"/>
+        <location filename="../ui/equipmentEditor.ui" line="384"/>
+        <location filename="../ui/equipmentEditor.ui" line="557"/>
+        <location filename="../ui/equipmentEditor.ui" line="664"/>
+        <location filename="../ui/equipmentEditor.ui" line="859"/>
+        <location filename="../ui/equipmentEditor.ui" line="950"/>
+        <location filename="../ui/equipmentEditor.ui" line="1026"/>
+        <location filename="../ui/equipmentEditor.ui" line="1102"/>
         <source>Notes</source>
         <translation>Notater</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="372"/>
+        <location filename="../ui/equipmentEditor.ui" line="396"/>
         <source>Mash Tun</source>
         <translation>Mæskekar</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="378"/>
-        <location filename="../ui/equipmentEditor.ui" line="381"/>
-        <location filename="../ui/equipmentEditor.ui" line="388"/>
+        <location filename="../ui/equipmentEditor.ui" line="402"/>
+        <location filename="../ui/equipmentEditor.ui" line="405"/>
+        <location filename="../ui/equipmentEditor.ui" line="412"/>
         <source>Mash Tun Type</source>
         <translation>Type af mæskekar</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="418"/>
+        <location filename="../ui/equipmentEditor.ui" line="442"/>
         <source>Volume of mash tun</source>
         <translation>Volumen af mæskekar</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="459"/>
+        <location filename="../ui/equipmentEditor.ui" line="483"/>
         <source>This is equal to the vessel&apos;s Heat Capacity divided by its weight.  Typical values are • Aluminum - 0.215 c/g·C  • Copper - 0.092 c/g·C  • Iron/Steel - 0.108 c/g·C  • Plastic - 0.359 c/g·C.</source>
         <translation>Dette er lig med beholderens varmekapacitet divideret med dens masse.  Typiske værdier er • Aluminum - 0.900 J/g·°C  • Kobber - 0.385 J/g·°C • Jern/stål- 0.444 J/g·°C • Plastik - 0.92 J/g·°C.</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="469"/>
+        <location filename="../ui/equipmentEditor.ui" line="493"/>
         <source>Grain absorption</source>
         <translation>Absorption i malt</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="483"/>
+        <location filename="../ui/equipmentEditor.ui" line="507"/>
         <source>Default Absorption</source>
         <translation>Standardabsorption</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="493"/>
+        <location filename="../ui/equipmentEditor.ui" line="517"/>
         <source>How much water is permanently lost to each unit of weight of grain during mashing. The default value is 1.0875 liters per kilogram. This can fluctuate due to the fine-ness of your grind, humidity, brand, and other factors. Pressing the &quot;Default Absorption&quot; button will reset the value to this default.</source>
         <translation>Hvor meget vand mistes pr. masseenhed af malt under mæskningen. Standardværdien er 1.0875 L/kg. Dette kan variere afhængigt af formalingsgraden, leverandør og andre faktorer. Ved klik på &quot;Standardabsorption&quot; vil værdien blive sat til denne standard.</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="503"/>
+        <location filename="../ui/equipmentEditor.ui" line="527"/>
         <source>Other Mashing losses</source>
         <translation>Andre tab under mæskning</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="513"/>
+        <location filename="../ui/equipmentEditor.ui" line="537"/>
         <source>Mashing losses not included in grain absorption</source>
         <translation>Tab under mæskning, som ikke er indregnet i absorption</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="523"/>
+        <location filename="../ui/equipmentEditor.ui" line="547"/>
         <source>If you do not have a separate lauter tun, then this should include the lautering deadspace.</source>
         <translation>Hvis du ikke har en særskilt urtfiltrerinsbeholder, skal denne inkludere dødvolumen ved urtfiltreringen.</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="530"/>
+        <location filename="../ui/equipmentEditor.ui" line="554"/>
         <source>Mash Tun Notes</source>
         <translation>Mæskekar notater</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="551"/>
+        <location filename="../ui/equipmentEditor.ui" line="575"/>
         <source>Lauter Tun Type</source>
         <translation>Urtfiltreringsbeholder type</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="578"/>
+        <location filename="../ui/equipmentEditor.ui" line="602"/>
         <source>Lauter Tun Volume</source>
         <translation>Urtfiltreringsbeholder volumen</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="623"/>
-        <location filename="../ui/equipmentEditor.ui" line="899"/>
+        <location filename="../ui/equipmentEditor.ui" line="647"/>
+        <location filename="../ui/equipmentEditor.ui" line="923"/>
         <source>Deadspace Losses</source>
         <translation>Dødvolumentab</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="637"/>
+        <location filename="../ui/equipmentEditor.ui" line="661"/>
         <source>Lauter Tun Notes</source>
         <translation>Urtfiltreringsbeholder notater</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="652"/>
+        <location filename="../ui/equipmentEditor.ui" line="676"/>
         <source>Boil Kettle</source>
         <translation>Kogekar</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="658"/>
-        <location filename="../ui/equipmentEditor.ui" line="661"/>
-        <location filename="../ui/equipmentEditor.ui" line="668"/>
+        <location filename="../ui/equipmentEditor.ui" line="682"/>
+        <location filename="../ui/equipmentEditor.ui" line="685"/>
+        <location filename="../ui/equipmentEditor.ui" line="692"/>
         <source>Boil Kettle Type</source>
         <translation>Kogekar type</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="691"/>
+        <location filename="../ui/equipmentEditor.ui" line="715"/>
         <source>Pre-boil Volume</source>
         <translation>Voumen før kogning</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="705"/>
+        <location filename="../ui/equipmentEditor.ui" line="729"/>
         <source>Calculate pre-boil volume</source>
         <translation>Beregn volumen før kogning</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="722"/>
+        <location filename="../ui/equipmentEditor.ui" line="746"/>
         <source>Evaporation rate per hour</source>
         <translation>Fordampningshastighed pr. time</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="739"/>
+        <location filename="../ui/equipmentEditor.ui" line="763"/>
         <source>Kettle to Fermenter Loss</source>
         <translation>Tab ved overførsel kogekar til gærkar</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="790"/>
+        <location filename="../ui/equipmentEditor.ui" line="814"/>
         <source>Outflow per minute</source>
         <translation>Aftapningshastighed pr. min</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="832"/>
+        <location filename="../ui/equipmentEditor.ui" line="856"/>
         <source>Brew Kettle Notes</source>
         <translation>Bryggekar notater</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="859"/>
+        <location filename="../ui/equipmentEditor.ui" line="883"/>
         <source>Fermenter</source>
         <translation>Gærkar</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="865"/>
+        <location filename="../ui/equipmentEditor.ui" line="889"/>
         <source>Fermenter Type</source>
         <translation>Gærkar type</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="916"/>
+        <location filename="../ui/equipmentEditor.ui" line="940"/>
         <source>This is also known as the batch size.</source>
         <translation>Dette er det samme som volumen af portion.</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="923"/>
+        <location filename="../ui/equipmentEditor.ui" line="947"/>
         <source>Fermenter Notes</source>
         <translation>Gærkar notater</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="944"/>
+        <location filename="../ui/equipmentEditor.ui" line="968"/>
         <source>Aging Vessel Type</source>
         <translation>Lagringsbeholder type</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="999"/>
-        <location filename="../ui/equipmentEditor.ui" line="1075"/>
+        <location filename="../ui/equipmentEditor.ui" line="1023"/>
+        <location filename="../ui/equipmentEditor.ui" line="1099"/>
         <source>Packaging Vessel Notes</source>
         <translation>Opbevaringsbeholder notater</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="1020"/>
+        <location filename="../ui/equipmentEditor.ui" line="1044"/>
         <source>Packaging Vessel Type</source>
         <translation>Opbevaringsbeholder type</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="1095"/>
+        <location filename="../ui/equipmentEditor.ui" line="1119"/>
         <source>Set as Default</source>
         <translation>Vælg som standard</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="1115"/>
+        <location filename="../ui/equipmentEditor.ui" line="1139"/>
         <source>New equipment</source>
         <translation>Nyt udstyr</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="1129"/>
+        <location filename="../ui/equipmentEditor.ui" line="1153"/>
         <source>Save and close</source>
         <translation>Gem og luk</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="1143"/>
+        <location filename="../ui/equipmentEditor.ui" line="1167"/>
         <source>Discard and close</source>
         <translation>Annuller og luk</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="804"/>
+        <location filename="../ui/equipmentEditor.ui" line="828"/>
         <source>Internal Diameter</source>
         <translation>Indre diameter</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="818"/>
+        <location filename="../ui/equipmentEditor.ui" line="842"/>
         <source>Opening Diameter</source>
         <translation>Diameter af åbning</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="1118"/>
+        <location filename="../ui/equipmentEditor.ui" line="1142"/>
         <source>New</source>
         <translation>Ny</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="1132"/>
+        <location filename="../ui/equipmentEditor.ui" line="1156"/>
         <source>Save</source>
         <translation>Gem</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="1146"/>
+        <location filename="../ui/equipmentEditor.ui" line="1170"/>
         <source>Cancel</source>
         <translation>Annuller</translation>
     </message>
@@ -11040,62 +11050,72 @@ The final volume in the primary is %1.</source>
         <translation>Type af bryg</translation>
     </message>
     <message>
-        <location filename="../ui/styleEditor.ui" line="186"/>
+        <location filename="../ui/styleEditor.ui" line="211"/>
         <source>Max</source>
         <translation>Maks</translation>
     </message>
     <message>
-        <location filename="../ui/styleEditor.ui" line="179"/>
+        <location filename="../ui/styleEditor.ui" line="204"/>
         <source>Min</source>
         <translation>Min</translation>
     </message>
     <message>
-        <location filename="../ui/styleEditor.ui" line="196"/>
+        <location filename="../ui/styleEditor.ui" line="175"/>
+        <source>ID in database</source>
+        <translation type="unfinished">ID i database</translation>
+    </message>
+    <message>
+        <location filename="../ui/styleEditor.ui" line="189"/>
+        <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
+        <translation type="unfinished">Du kan normalt ignorere dette, men det er nogle gange nyttigt til fejlfinding.</translation>
+    </message>
+    <message>
+        <location filename="../ui/styleEditor.ui" line="221"/>
         <source>OG</source>
         <translation>Startmassefylde (OG)</translation>
     </message>
     <message>
-        <location filename="../ui/styleEditor.ui" line="214"/>
+        <location filename="../ui/styleEditor.ui" line="239"/>
         <source>FG</source>
         <translation>Slutmassefylde (FG)</translation>
     </message>
     <message>
-        <location filename="../ui/styleEditor.ui" line="229"/>
+        <location filename="../ui/styleEditor.ui" line="254"/>
         <source>IBUs</source>
         <translation>IBU</translation>
     </message>
     <message>
-        <location filename="../ui/styleEditor.ui" line="247"/>
+        <location filename="../ui/styleEditor.ui" line="272"/>
         <source>Color (SRM)</source>
         <translation>Farve (SRM)</translation>
     </message>
     <message>
-        <location filename="../ui/styleEditor.ui" line="262"/>
+        <location filename="../ui/styleEditor.ui" line="287"/>
         <source>Carb (vols)</source>
         <translation>Carbondioxidindhold (volumen)</translation>
     </message>
     <message>
-        <location filename="../ui/styleEditor.ui" line="277"/>
+        <location filename="../ui/styleEditor.ui" line="302"/>
         <source>ABV (pct)</source>
         <translation>Alkoholvolumenprocent (ABV)</translation>
     </message>
     <message>
-        <location filename="../ui/styleEditor.ui" line="367"/>
+        <location filename="../ui/styleEditor.ui" line="392"/>
         <source>Ingredients</source>
         <translation>Ingredienser</translation>
     </message>
     <message>
-        <location filename="../ui/styleEditor.ui" line="378"/>
+        <location filename="../ui/styleEditor.ui" line="403"/>
         <source>Examples</source>
         <translation>Eksempler</translation>
     </message>
     <message>
-        <location filename="../ui/styleEditor.ui" line="389"/>
+        <location filename="../ui/styleEditor.ui" line="414"/>
         <source>Notes</source>
         <translation>Notater</translation>
     </message>
     <message>
-        <location filename="../ui/styleEditor.ui" line="437"/>
+        <location filename="../ui/styleEditor.ui" line="462"/>
         <source>Save</source>
         <translation>Gem</translation>
     </message>
@@ -11115,57 +11135,57 @@ The final volume in the primary is %1.</source>
         <translation>Krævet</translation>
     </message>
     <message>
-        <location filename="../ui/styleEditor.ui" line="173"/>
+        <location filename="../ui/styleEditor.ui" line="198"/>
         <source>Ranges</source>
         <translation>Intervaller</translation>
     </message>
     <message>
-        <location filename="../ui/styleEditor.ui" line="307"/>
+        <location filename="../ui/styleEditor.ui" line="332"/>
         <source>Aroma</source>
         <translation>Aroma</translation>
     </message>
     <message>
-        <location filename="../ui/styleEditor.ui" line="319"/>
+        <location filename="../ui/styleEditor.ui" line="344"/>
         <source>Appearance</source>
         <translation>Udseende</translation>
     </message>
     <message>
-        <location filename="../ui/styleEditor.ui" line="331"/>
+        <location filename="../ui/styleEditor.ui" line="356"/>
         <source>Flavor</source>
         <translation>Duft</translation>
     </message>
     <message>
-        <location filename="../ui/styleEditor.ui" line="343"/>
+        <location filename="../ui/styleEditor.ui" line="368"/>
         <source>Mouthfeel</source>
         <translation>Mundfølelse</translation>
     </message>
     <message>
-        <location filename="../ui/styleEditor.ui" line="355"/>
+        <location filename="../ui/styleEditor.ui" line="380"/>
         <source>Overall Impression</source>
         <translation>Helhedsindtryk</translation>
     </message>
     <message>
-        <location filename="../ui/styleEditor.ui" line="417"/>
+        <location filename="../ui/styleEditor.ui" line="442"/>
         <source>New style</source>
         <translation>Ny stilart</translation>
     </message>
     <message>
-        <location filename="../ui/styleEditor.ui" line="434"/>
+        <location filename="../ui/styleEditor.ui" line="459"/>
         <source>Save and close</source>
         <translation>Gem og luk</translation>
     </message>
     <message>
-        <location filename="../ui/styleEditor.ui" line="454"/>
+        <location filename="../ui/styleEditor.ui" line="479"/>
         <source>Discard and close</source>
         <translation>Annuller og luk</translation>
     </message>
     <message>
-        <location filename="../ui/styleEditor.ui" line="420"/>
+        <location filename="../ui/styleEditor.ui" line="445"/>
         <source>New</source>
         <translation>Ny</translation>
     </message>
     <message>
-        <location filename="../ui/styleEditor.ui" line="457"/>
+        <location filename="../ui/styleEditor.ui" line="482"/>
         <source>Cancel</source>
         <translation>Annuller</translation>
     </message>

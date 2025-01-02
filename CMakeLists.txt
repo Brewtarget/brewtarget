@@ -115,7 +115,7 @@ endif()
 #=======================================================================================================================
 # It's simplest to keep the project name all lower-case as it means we can use a lot more of the default settings for
 # Linux packaging (where directory names etc are expected to be all lower-case).
-project(brewtarget VERSION 4.0.15 LANGUAGES CXX)
+project(brewtarget VERSION 4.0.16 LANGUAGES CXX)
 message(STATUS "Building ${PROJECT_NAME} version ${PROJECT_VERSION}")
 message(STATUS "PROJECT_SOURCE_DIR is ${PROJECT_SOURCE_DIR}")
 # Sometimes we do need the capitalised version of the project name
@@ -455,6 +455,16 @@ endif()
 # QT5_WRAP_CPP(), etc.  In particular, it also means we no longer have to manually identify which headers have Q_OBJECT
 # declarations etc.
 set(CMAKE_AUTOMOC ON)
+
+# Although AUTOMOC is pretty neat when it works, it can be problematic.  Part of what it does is #include all the
+# generated files (eg "moc_AboutDialog.cpp") into a single intermediate source file, which it then compiles.  We have
+# sometimes had compiler errors from this because of various Qt headers complaining about things being redefined.  The
+# brute-force workaround is, on CMake builds, to manually include these generated files in our corresponding .cpp file
+# (eg "AboutDialog.cpp"), which then stops CMake pulling those generated files into its intermediate source file.
+#
+# (We don't want to do this extra manual include on the Meson builds because then we'd get duplicate symbols at the
+# linking stage.)
+add_compile_definitions(BUILDING_WITH_CMAKE)
 
 # Set the AUTOUIC property on all targets.  This tells CMake to automatically handle the Qt uic code generator, without
 # having to use commands such as QT4_WRAP_UI(), QT5_WRAP_UI(), etc.

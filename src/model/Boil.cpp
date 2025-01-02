@@ -25,6 +25,11 @@
 #include "model/NamedParameterBundle.h"
 #include "utils/AutoCompare.h"
 
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_Boil.cpp"
+#endif
+
 QString Boil::localisedName() { return tr("Boil"); }
 
 bool Boil::isEqualTo(NamedEntity const & other) const {

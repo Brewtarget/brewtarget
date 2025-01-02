@@ -34,6 +34,11 @@
 #include "utils/TypeLookup.h"
 #include "widgets/SmartLabel.h"
 
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_SmartLineEdit.cpp"
+#endif
+
 namespace {
    //
    // There is a bit of trial-and-error involved in setting these values

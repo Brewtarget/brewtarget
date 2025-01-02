@@ -25,7 +25,7 @@
 class RecipeAddition;
 
 //
-// See comment in tableModels/TableModelBase.h about benefits (and limitations) of using concepts.
+// See comment in qtModels/tableModels/TableModelBase.h about benefits (and limitations) of using concepts.
 //
 // See comment in utils/TypeTraits.h for definition of CONCEPT_FIX_UP (and why, for now, we need it)
 template <typename T> concept CONCEPT_FIX_UP IsRegularAddition = std::is_base_of_v<RecipeAddition, T>;

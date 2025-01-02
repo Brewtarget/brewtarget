@@ -23,7 +23,12 @@
 #include "BtHorizontalTabs.h"
 #include "database/ObjectStoreWrapper.h"
 #include "measurement/Unit.h"
-#include "sortFilterProxyModels/StyleSortFilterProxyModel.h"
+#include "qtModels/sortFilterProxyModels/StyleSortFilterProxyModel.h"
+
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_StyleEditor.cpp"
+#endif
 
 StyleEditor::StyleEditor(QWidget* parent, QString const editorName) :
    QDialog{parent},

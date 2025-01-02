@@ -29,6 +29,11 @@
 #include "measurement/Unit.h"
 #include "PersistentSettings.h"
 
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_PitchDialog.cpp"
+#endif
+
 PitchDialog::PitchDialog(QWidget* parent) : QDialog(parent) {
    setupUi(this);
 

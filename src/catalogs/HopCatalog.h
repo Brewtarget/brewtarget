@@ -26,8 +26,8 @@
 
 #include "editors/HopEditor.h"
 #include "model/Hop.h"
-#include "sortFilterProxyModels/HopSortFilterProxyModel.h"
-#include "tableModels/HopTableModel.h"
+#include "qtModels/sortFilterProxyModels/HopSortFilterProxyModel.h"
+#include "qtModels/tableModels/HopTableModel.h"
 
 // This needs to be the last include.  (I know, I know...)
 #include "catalogs/CatalogBase.h"

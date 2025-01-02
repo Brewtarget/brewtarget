@@ -23,6 +23,11 @@
 #include "model/Recipe.h"
 #include "utils/AutoCompare.h"
 
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_Water.cpp"
+#endif
+
 QString Water::localisedName() { return tr("Water"); }
 
 EnumStringMapping const Water::typeStringMapping {

@@ -23,7 +23,7 @@
 
 #include "config.h"
 #include "database/ObjectStoreWrapper.h"
-#include "listModels/EquipmentListModel.h"
+#include "qtModels/listModels/EquipmentListModel.h"
 #include "model/Boil.h"
 #include "model/Equipment.h"
 #include "model/Fermentable.h"
@@ -40,6 +40,11 @@
 #include "model/Water.h"
 #include "model/Yeast.h"
 #include "NamedEntitySortProxyModel.h"
+
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_ScaleRecipeTool.cpp"
+#endif
 
 ScaleRecipeTool::ScaleRecipeTool(QWidget* parent) :
    QWizard(parent),

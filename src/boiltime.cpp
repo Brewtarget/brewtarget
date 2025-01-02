@@ -17,6 +17,11 @@
 
 #include "boiltime.h"
 
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_boiltime.cpp"
+#endif
+
 BoilTime::BoilTime(QObject* parent): QObject(parent),
     time(0),
     started(false),

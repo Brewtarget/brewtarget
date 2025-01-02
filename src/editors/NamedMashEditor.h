@@ -27,10 +27,10 @@
 
 #include "ui_namedMashEditor.h"
 #include "editors/MashStepEditor.h"
-#include "listModels/MashListModel.h"
-#include "listModels/EquipmentListModel.h"
+#include "qtModels/listModels/MashListModel.h"
+#include "qtModels/listModels/EquipmentListModel.h"
 #include "NamedEntitySortProxyModel.h"
-#include "tableModels/MashStepTableModel.h"
+#include "qtModels/tableModels/MashStepTableModel.h"
 
 
 // Forward declarations.

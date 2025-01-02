@@ -26,8 +26,8 @@
 
 #include "editors/YeastEditor.h"
 #include "model/Yeast.h"
-#include "sortFilterProxyModels/YeastSortFilterProxyModel.h"
-#include "tableModels/YeastTableModel.h"
+#include "qtModels/sortFilterProxyModels/YeastSortFilterProxyModel.h"
+#include "qtModels/tableModels/YeastTableModel.h"
 
 // This needs to be the last include.  (I know, I know...)
 #include "catalogs/CatalogBase.h"

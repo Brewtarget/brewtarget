@@ -29,6 +29,11 @@
 #include "Algorithms.h"
 #include "measurement/Measurement.h"
 
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_RefractoDialog.cpp"
+#endif
+
 RefractoDialog::RefractoDialog(QWidget* parent) : QDialog(parent) {
    setupUi(this);
 
