@@ -23,5 +23,8 @@
 
 #include "qtModels/sortFilterProxyModels/HopSortFilterProxyModel.h"
 
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_HopCatalog.cpp"
+
 // Insert the boiler-plate stuff that we cannot do in CatalogBase
 CATALOG_COMMON_CODE(Hop)

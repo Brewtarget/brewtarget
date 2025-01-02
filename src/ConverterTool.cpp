@@ -24,6 +24,9 @@
 
 #include "measurement/Unit.h"
 
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_ConverterTool.cpp"
+
 ConverterTool::ConverterTool(QWidget* parent) : QDialog(parent) {
    this->doLayout();
 

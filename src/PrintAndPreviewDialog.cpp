@@ -29,6 +29,9 @@
 
 #include "InventoryFormatter.h"
 
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_PrintAndPreviewDialog.cpp"
+
 /**
  * @brief Construct a new Print And Preview Dialog:: Print And Preview Dialog object
  *

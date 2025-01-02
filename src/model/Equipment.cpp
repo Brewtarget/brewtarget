@@ -25,6 +25,9 @@
 #include "model/Recipe.h"
 #include "utils/AutoCompare.h"
 
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_Equipment.cpp"
+
 QString Equipment::localisedName() { return tr("Equipment"); }
 
 bool Equipment::isEqualTo(NamedEntity const & other) const {

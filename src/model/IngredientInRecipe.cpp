@@ -17,6 +17,9 @@
 
 #include "model/Recipe.h"
 
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_IngredientInRecipe.cpp"
+
 QString IngredientInRecipe::localisedName() { return tr("Ingredient In Recipe"); }
 
 bool IngredientInRecipe::isEqualTo(NamedEntity const & other) const {

@@ -43,6 +43,9 @@
 #include "utils/BtStringConst.h"
 #include "widgets/BtComboBoxEnum.h"
 
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_FermentableTableModel.cpp"
+
 //=====================CLASS FermentableTableModel==============================
 FermentableTableModel::FermentableTableModel(QTableView* parent, bool editable) :
    BtTableModel{

@@ -25,6 +25,9 @@
 #include "measurement/Measurement.h"
 #include "measurement/PhysicalQuantity.h"
 
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_FermentableSortFilterProxyModel.cpp"
+
 bool FermentableSortFilterProxyModel::isLessThan(FermentableTableModel::ColumnIndex const columnIndex,
                                                  QVariant const & leftItem,
                                                  QVariant const & rightItem) const {

@@ -26,6 +26,9 @@
 #include "model/Equipment.h"
 #include "model/Recipe.h"
 
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_OgAdjuster.cpp"
+
 OgAdjuster::OgAdjuster( QWidget* parent ) :
    QDialog{parent},
    recObs {nullptr} {

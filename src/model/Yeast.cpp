@@ -29,6 +29,9 @@
 #include "PhysicalConstants.h"
 #include "utils/AutoCompare.h"
 
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_Yeast.cpp"
+
 QString Yeast::localisedName() { return tr("Yeast"); }
 
 EnumStringMapping const Yeast::typeStringMapping {

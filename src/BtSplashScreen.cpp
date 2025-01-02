@@ -21,6 +21,9 @@
 
 #include "config.h"
 
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_BtSplashScreen.cpp"
+
 namespace {
    static QString const logoFile = QString{":images/%1.svg"}.arg(CONFIG_APPLICATION_NAME_LC);
 }

@@ -30,6 +30,9 @@
 #include "model/Recipe.h"
 #include "utils/AutoCompare.h"
 
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_Hop.cpp"
+
 QString Hop::localisedName() { return tr("Hop"); }
 
 // Note that Hop::typeStringMapping and Hop::formStringMapping are as defined by BeerJSON, but we also use them for the

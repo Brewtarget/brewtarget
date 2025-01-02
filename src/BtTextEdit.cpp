@@ -22,6 +22,9 @@
 #include <QDebug>
 #include <QSettings>
 
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_BtTextEdit.cpp"
+
 BtTextEdit::BtTextEdit([[maybe_unused]] QWidget * parent) : wasModified{false} {
 
    // We will see if this works...

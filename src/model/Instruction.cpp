@@ -22,6 +22,9 @@
 #include "model/NamedParameterBundle.h"
 #include "model/Recipe.h"
 
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_Instruction.cpp"
+
 QString Instruction::localisedName() { return tr("Instruction"); }
 
 bool Instruction::isEqualTo(NamedEntity const & other) const {

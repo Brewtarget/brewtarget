@@ -36,6 +36,9 @@
 #include "utils/MetaTypes.h"
 #include "utils/OptionalHelpers.h"
 
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_ObjectStore.cpp"
+
 // Private implementation details that don't need access to class member variables
 namespace {
 

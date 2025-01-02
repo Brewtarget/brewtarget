@@ -25,6 +25,9 @@
 #include "measurement/Unit.h"
 #include "qtModels/sortFilterProxyModels/StyleSortFilterProxyModel.h"
 
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_StyleEditor.cpp"
+
 StyleEditor::StyleEditor(QWidget* parent, QString const editorName) :
    QDialog{parent},
    EditorBase<StyleEditor, Style, StyleEditorOptions>(editorName) {

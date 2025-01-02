@@ -27,6 +27,9 @@
 #include "PhysicalConstants.h"
 #include "utils/AutoCompare.h"
 
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_MashStep.cpp"
+
 QString MashStep::localisedName() { return tr("Mash Step"); }
 
 EnumStringMapping const MashStep::typeStringMapping {

@@ -140,8 +140,6 @@ protected:
 
 };
 
-Q_DECLARE_METATYPE(Hop)
-Q_DECLARE_METATYPE(Hop *)
 BT_DECLARE_METATYPES(RecipeAdditionHop)
 
 #endif

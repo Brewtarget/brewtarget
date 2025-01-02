@@ -36,6 +36,9 @@
 #include "TimerMainDialog.h"
 #include "utils/TimerUtils.h"
 
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_TimerWidget.cpp"
+
 TimerWidget::TimerWidget(TimerMainDialog *parent, BoilTime* bt) :
    QDialog{parent},
 //   ui{new Ui::timerWidget},

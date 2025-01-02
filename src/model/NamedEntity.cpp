@@ -57,6 +57,9 @@
 #include "model/Water.h"
 #include "model/Yeast.h"
 
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_NamedEntity.cpp"
+
 namespace {
    /**
     * \brief This is a regexp that will match the " (n)" (for n some positive integer) added on the end of a name to

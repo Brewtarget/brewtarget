@@ -20,6 +20,9 @@
 #include <QVariant>
 #include <QWidget>
 
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_StyleTableModel.cpp"
+
 StyleTableModel::StyleTableModel(QTableView* parent, bool editable) :
    BtTableModel{
       parent,

@@ -29,6 +29,9 @@
 #include "database/ObjectStoreWrapper.h"
 #include "measurement/Unit.h"
 
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_HopEditor.cpp"
+
 // TODO: Need a separate editor for inventory
 
 HopEditor::HopEditor(QWidget * parent, QString const editorName) :

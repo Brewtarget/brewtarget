@@ -28,6 +28,9 @@
 #include "database/ObjectStoreWrapper.h"
 #include "measurement/Unit.h"
 
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_MiscEditor.cpp"
+
 MiscEditor::MiscEditor(QWidget * parent, QString const editorName) :
    QDialog(parent),
    EditorBase<MiscEditor, Misc, MiscEditorOptions>(editorName) {

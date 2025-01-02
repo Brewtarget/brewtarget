@@ -23,6 +23,9 @@
 
 #include "model/Boil.h"
 
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_BoilTableModel.cpp"
+
 BoilTableModel::BoilTableModel(QTableView * parent, bool editable) :
    BtTableModel{
       parent,

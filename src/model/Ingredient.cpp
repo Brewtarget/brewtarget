@@ -17,6 +17,9 @@
 
 #include "model/NamedParameterBundle.h"
 
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_Ingredient.cpp"
+
 QString Ingredient::localisedName() { return tr("Ingredient"); }
 
 TypeLookup const Ingredient::typeLookup {

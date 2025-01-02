@@ -27,6 +27,9 @@
 
 #include "measurement/Unit.h"
 
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_PrimingDialog.cpp"
+
 PrimingDialog::PrimingDialog(QWidget* parent) : QDialog(parent) {
    this->setupUi(this);
 

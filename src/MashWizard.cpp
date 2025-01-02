@@ -37,6 +37,9 @@
 #include "model/MashStep.h"
 #include "PhysicalConstants.h"
 
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_MashWizard.cpp"
+
 MashWizard::MashWizard(QWidget* parent) :
    QDialog(parent),
    m_recObs{nullptr},

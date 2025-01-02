@@ -27,6 +27,9 @@
 
 #include "Localization.h"
 
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_WaterTableModel.cpp"
+
 WaterTableModel::WaterTableModel(QTableView * parent, bool editable) :
    BtTableModel{
       parent,

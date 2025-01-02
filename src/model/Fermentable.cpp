@@ -35,6 +35,9 @@
 #include "utils/AutoCompare.h"
 #include "utils/OptionalHelpers.h"
 
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_Fermentable.cpp"
+
 QString Fermentable::localisedName() { return tr("Fermentable"); }
 
 // Note that Fermentable::typeStringMapping and Fermentable::grainGroupStringMapping are as defined by BeerJSON, but we

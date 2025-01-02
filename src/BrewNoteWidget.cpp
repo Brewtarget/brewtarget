@@ -29,6 +29,9 @@
 #include "model/BrewNote.h"
 #include "PersistentSettings.h"
 
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_BrewNoteWidget.cpp"
+
 namespace {
    double const lowLimitPct  = 0.95;
    double const highLimitPct = 1.05;

@@ -21,6 +21,9 @@
 
 #include "TimerWidget.h"
 
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_TimerListDialog.cpp"
+
 TimerListDialog::TimerListDialog(QWidget* parent, QList<TimerWidget*>* timers) : QDialog(parent) {
    this->setWindowTitle(tr("Addition Timers"));
 

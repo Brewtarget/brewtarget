@@ -30,6 +30,9 @@
 #include "model/Recipe.h"
 #include "utils/AutoCompare.h"
 
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_Mash.cpp"
+
 QString Mash::localisedName() { return tr("Mash"); }
 
 bool Mash::isEqualTo(NamedEntity const & other) const {

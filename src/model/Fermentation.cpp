@@ -17,6 +17,9 @@
 
 #include "model/NamedParameterBundle.h"
 
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_Fermentation.cpp"
+
 QString Fermentation::localisedName() { return tr("Fermentation"); }
 
 bool Fermentation::isEqualTo(NamedEntity const & other) const {

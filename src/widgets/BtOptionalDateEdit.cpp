@@ -23,6 +23,9 @@
 #include <QStyle>
 #include <QStyleOptionSpinBox>
 
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_BtOptionalDateEdit.cpp"
+
 //
 // This private implementation class holds all private non-virtual members of BtOptionalDateEdit
 //

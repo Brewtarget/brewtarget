@@ -19,6 +19,9 @@
 #include "PhysicalConstants.h"
 #include "utils/AutoCompare.h"
 
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_StepExtended.cpp"
+
 QString StepExtended::localisedName() { return tr("Extended Step"); }
 
 bool StepExtended::isEqualTo(NamedEntity const & other) const {

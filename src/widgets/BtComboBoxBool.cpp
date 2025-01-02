@@ -20,6 +20,9 @@
 
 #include "utils/MetaTypes.h"
 
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_BtComboBoxBool.cpp"
+
 namespace {
    // We store string values inside the combo box as it's less confusing when the value is optional
    QString const falseValue = QStringLiteral("false");

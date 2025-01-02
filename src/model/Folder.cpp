@@ -20,6 +20,9 @@
 #include <QDebug>
 #include <QString>
 
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_Folder.cpp"
+
 Folder::Folder() : QObject() {
    setObjectName("Folder");
    return;

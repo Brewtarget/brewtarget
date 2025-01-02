@@ -29,6 +29,9 @@
 #include "database/ObjectStoreWrapper.h"
 #include "measurement/Unit.h"
 
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_YeastEditor.cpp"
+
 YeastEditor::YeastEditor(QWidget * parent, QString const editorName) :
    QDialog(parent),
    EditorBase<YeastEditor, Yeast, YeastEditorOptions>(editorName) {

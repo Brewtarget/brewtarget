@@ -34,6 +34,9 @@
 #include "measurement/SystemOfMeasurement.h"
 #include "widgets/ToggleSwitch.h"
 
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_AlcoholTool.cpp"
+
 // Settings we only use in this file under the PersistentSettings::Sections::alcoholTool section
 #define AddSettingName(name) namespace { BtStringConst const name{#name}; }
 AddSettingName(advancedInputsEnabled)

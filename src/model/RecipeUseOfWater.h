@@ -97,8 +97,6 @@ protected:
 
 };
 
-Q_DECLARE_METATYPE(Water)
-Q_DECLARE_METATYPE(Water *)
 BT_DECLARE_METATYPES(RecipeUseOfWater)
 
 #endif

@@ -20,6 +20,9 @@
 #include "utils/OptionalHelpers.h"
 #include "utils/AutoCompare.h"
 
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_BoilStep.cpp"
+
 QString BoilStep::localisedName() { return tr("Boil Step"); }
 
 EnumStringMapping const BoilStep::chillingTypeStringMapping {

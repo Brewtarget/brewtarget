@@ -22,6 +22,9 @@
 
 #include <Algorithms.h>
 
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_StrikeWaterDialog.cpp"
+
 namespace {
    // From Northern Brewer ~0.38 but Jon Palmer suggest 0.41
    // to compensate for the lost to the tun even if the tun is pre-heated

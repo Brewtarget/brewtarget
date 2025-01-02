@@ -43,6 +43,9 @@
 #include "qtModels/sortFilterProxyModels/WaterSortFilterProxyModel.h"
 #include "widgets/SmartDigitWidget.h"
 
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_WaterDialog.cpp"
+
 
 //
 // All of the pH calculations are taken from the work done by Kai Troester and published at

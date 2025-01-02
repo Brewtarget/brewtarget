@@ -26,6 +26,9 @@
 #include "model/Recipe.h"
 #include "model/Style.h"
 
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_BtTabWidget.cpp"
+
 
 //! \brief set up the popup window.
 BtTabWidget::BtTabWidget(QWidget* parent) :

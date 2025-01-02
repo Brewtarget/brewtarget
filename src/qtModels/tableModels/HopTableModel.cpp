@@ -30,6 +30,9 @@
 #include <QVariant>
 #include <QWidget>
 
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_HopTableModel.cpp"
+
 HopTableModel::HopTableModel(QTableView * parent, bool editable) :
    BtTableModel{
       parent,

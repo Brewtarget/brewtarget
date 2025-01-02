@@ -35,6 +35,9 @@
 #include "moc_InventorySalt.cpp"
 #include "moc_InventoryYeast.cpp"
 
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_Inventory.cpp"
+
 QString Inventory::localisedName() { return tr("Inventory"); }
 
 bool Inventory::isEqualTo(NamedEntity const & other) const {

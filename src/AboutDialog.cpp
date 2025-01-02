@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * AboutDialog.cpp is part of Brewtarget, and is copyright the following authors 2009-2022:
+ * AboutDialog.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -26,6 +26,9 @@
 #include <QWidget>
 
 #include "config.h"
+
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_AboutDialog.cpp"
 
 AboutDialog::AboutDialog(QWidget * parent) :
    QDialog(parent),
@@ -139,7 +142,7 @@ AboutDialog::AboutDialog(QWidget * parent) :
          "  <li>2015      Markus Mårtensson &lt;mackan.90@gmail.com&gt;</li>"
          "  <li>2017      Matt Anderson &lt;matt.anderson@is4s.com&gt;</li>" // Commit is "andersonm <matt.anderson@is4s.com>", but second name clear from email
          "  <li>2020-2022 Mattias Måhl &lt;mattias@kejsarsten.com&gt;</li>"
-         "  <li>2020-2024 Matt Young &lt;mfsy@yahoo.com&gt;</li>"
+         "  <li>2020-2025 Matt Young &lt;mfsy@yahoo.com&gt;</li>"
          "  <li>2014-2017 Maxime Lavigne &lt;duguigne@gmail.com&gt;</li>"
          "  <li>2018      Medic Momcilo &lt;medicmomcilo@gmail.com&gt;</li>"
          "  <li>2016      Mike Evans &lt;mikee@saxicola.co.uk&gt;</li>"

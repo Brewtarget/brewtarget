@@ -21,6 +21,9 @@
 #include "widgets/SmartLineEdit.h"
 #include "utils/TypeLookup.h"
 
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_SmartCheckBox.cpp"
+
 // This private implementation class holds all private non-virtual members of SmartCheckBox
 class SmartCheckBox::impl {
 public:

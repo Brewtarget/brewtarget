@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/RecipeAdditionYeast.cpp is part of Brewtarget, and is copyright the following authors 2023-2024:
+ * model/RecipeAdditionYeast.cpp is part of Brewtarget, and is copyright the following authors 2023-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -18,6 +18,9 @@
 #include "database/ObjectStoreTyped.h"
 #include "database/ObjectStoreWrapper.h"
 #include "model/NamedParameterBundle.h"
+
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_RecipeAdditionYeast.cpp"
 
 QString RecipeAdditionYeast::localisedName() { return tr("Yeast Addition"); }
 

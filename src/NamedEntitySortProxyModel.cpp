@@ -19,6 +19,9 @@
 #include <QDebug>
 #include <QAbstractItemModel>
 
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_NamedEntitySortProxyModel.cpp"
+
 NamedEntitySortProxyModel::NamedEntitySortProxyModel(QAbstractItemModel* sourceModel)
    : QSortFilterProxyModel(sourceModel)
 {

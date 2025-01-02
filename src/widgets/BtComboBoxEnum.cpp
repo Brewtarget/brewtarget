@@ -17,6 +17,9 @@
 
 #include "widgets/SmartLineEdit.h"
 
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_BtComboBoxEnum.cpp"
+
 // This private implementation class holds all private non-virtual members of BtComboBoxEnum
 class BtComboBoxEnum::impl {
 public:

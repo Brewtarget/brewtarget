@@ -27,6 +27,9 @@
 #include "database/ObjectStoreWrapper.h"
 #include "measurement/Unit.h"
 
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_FermentableEditor.cpp"
+
 // TODO: Need a separate editor for inventory
 
 FermentableEditor::FermentableEditor(QWidget* parent, QString const editorName) :

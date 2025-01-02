@@ -21,5 +21,8 @@
 
 #include "qtModels/sortFilterProxyModels/MiscSortFilterProxyModel.h"
 
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_MiscCatalog.cpp"
+
 // Insert the boiler-plate stuff that we cannot do in CatalogBase
 CATALOG_COMMON_CODE(Misc)

@@ -17,6 +17,9 @@
 
 #include "model/Recipe.h"
 
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_OwnedByRecipe.cpp"
+
 QString OwnedByRecipe::localisedName() { return tr("Owned By Recipe"); }
 
 bool OwnedByRecipe::isEqualTo(NamedEntity const & other) const {

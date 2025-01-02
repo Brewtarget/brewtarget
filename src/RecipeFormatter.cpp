@@ -58,6 +58,9 @@
 #include "model/Yeast.h"
 #include "PersistentSettings.h"
 
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_RecipeFormatter.cpp"
+
 namespace {
    //! Get the maximum number of characters in a list of strings.
    unsigned int getMaxLength(QStringList & list) {

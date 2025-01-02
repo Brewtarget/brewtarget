@@ -116,8 +116,6 @@ private:
    std::optional<int   > m_cellCountBillions;
 };
 
-Q_DECLARE_METATYPE(Yeast)
-Q_DECLARE_METATYPE(Yeast *)
 BT_DECLARE_METATYPES(RecipeAdditionYeast)
 
 #endif

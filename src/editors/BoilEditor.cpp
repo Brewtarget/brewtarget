@@ -22,6 +22,9 @@
 #include "model/Boil.h"
 #include "model/Recipe.h"
 
+// Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+#include "moc_BoilEditor.cpp"
+
 BoilEditor::BoilEditor(QWidget* parent, QString const editorName) :
    QDialog(parent),
    EditorBase<BoilEditor, Boil, BoilEditorOptions>(editorName) {

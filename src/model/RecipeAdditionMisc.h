@@ -128,8 +128,6 @@ protected:
 
 };
 
-Q_DECLARE_METATYPE(Misc)
-Q_DECLARE_METATYPE(Misc *)
 BT_DECLARE_METATYPES(RecipeAdditionMisc)
 
 #endif
