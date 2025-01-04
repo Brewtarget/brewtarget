@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/Recipe.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * model/Recipe.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Greg Greenaae <ggreenaae@gmail.com>
  *   • Greg Meess <Daedalus12@gmail.com>
@@ -1225,16 +1225,11 @@ public:
       return;
    }
 
-
    /**
     * Emits changed(ABV_pct). Depends on: m_og, m_fg
     */
    void recalcABV_pct() {
-      // The complex formula, and variations comes from Ritchie Products Ltd, (Zymurgy, Summer 1995, vol. 18, no. 2)
-      // Michael L. Hall’s article Brew by the Numbers: Add Up What’s in Your Beer, and Designing Great Beers by Daniels.
-      double calculatedABV_pct =
-         (76.08 * (this->m_og_fermentable - this->m_fg_fermentable) / (1.775 - this->m_og_fermentable)) *
-         (this->m_fg_fermentable / 0.794);
+      double const calculatedABV_pct = Algorithms::abvFromOgAndFg(this->m_og_fermentable, this->m_fg_fermentable);
 
       if (!qFuzzyCompare(calculatedABV_pct, m_ABV_pct)) {
          qDebug() <<
@@ -2657,9 +2652,15 @@ double Recipe::ibuFromHopAddition(RecipeAdditionHop const & hopAddition) {
       boilTime_mins = static_cast<int>(equipment->boilTime_min().value_or(Equipment::default_boilTime_mins));
    }
 
+   // Assume 30 min cool time if boil is not set
+   double coolTime_mins = 30.0;
+
    auto boil = this->boil();
    if (boil) {
       boilTime_mins = boil->boilTime_mins();
+      if (boil->coolTime_mins()) {
+         coolTime_mins = *boil->coolTime_mins();
+      }
    }
 
    qDebug() <<
@@ -2674,7 +2675,7 @@ double Recipe::ibuFromHopAddition(RecipeAdditionHop const & hopAddition) {
       .postBoilVolume_liters = this->pimpl->m_finalVolumeNoLosses_l,
       .wortGravity_sg        = m_og,
       .timeInBoil_minutes    = boilTime_mins,  // Seems unlikely in reality that there would be fractions of a minute
-      .coolTime_minutes      = boil->coolTime_mins(),
+      .coolTime_minutes      = coolTime_mins,
    };
    if (equipment) {
       parms.kettleInternalDiameter_cm = equipment->kettleInternalDiameter_cm();
