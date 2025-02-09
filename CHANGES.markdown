@@ -21,6 +21,7 @@ Bug fixes and minor enhancements.
 
 ### Bug Fixes
 * Inconsistent ABV calculation [918](https://github.com/Brewtarget/brewtarget/issues/918)
+* US / Imperial quart ("qt") conversion is treated as pints instead [923](https://github.com/Brewtarget/brewtarget/issues/923)
 
 ### Release Timestamp
 Sat, 4 Jan 2025 04:00:16 +0100
