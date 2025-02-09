@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * measurement/Unit.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * measurement/Unit.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Mark de Wever <koraq@xs4all.nl>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -526,7 +526,7 @@ namespace Measurement::Units {
    Unit const us_barrels          {Measurement::UnitSystems::volume_UsCustomary, QObject::tr("bbl" ), 117.34777           , &liters};
    Unit const us_gallons          {Measurement::UnitSystems::volume_UsCustomary, QObject::tr("gal" ),   3.7854117840007   , &liters};
    Unit const us_quarts           {Measurement::UnitSystems::volume_UsCustomary, QObject::tr("qt"  ),   0.94635294599999  , &liters};
-   Unit const us_pints            {Measurement::UnitSystems::volume_UsCustomary, QObject::tr("qt"  ),   0.473176473       , &liters};
+   Unit const us_pints            {Measurement::UnitSystems::volume_UsCustomary, QObject::tr("pt"  ),   0.473176473       , &liters};
    Unit const us_cups             {Measurement::UnitSystems::volume_UsCustomary, QObject::tr("cup" ),   0.23658823648491  , &liters, 0.25};
    Unit const us_fluidOunces      {Measurement::UnitSystems::volume_UsCustomary, QObject::tr("floz"),   0.029573529564112 , &liters};
    Unit const us_tablespoons      {Measurement::UnitSystems::volume_UsCustomary, QObject::tr("tbsp"),   0.014786764782056 , &liters};
@@ -534,7 +534,7 @@ namespace Measurement::Units {
    Unit const imperial_barrels    {Measurement::UnitSystems::volume_Imperial   , QObject::tr("bbl" ), 163.659             , &liters};
    Unit const imperial_gallons    {Measurement::UnitSystems::volume_Imperial   , QObject::tr("gal" ),   4.5460899999997   , &liters};
    Unit const imperial_quarts     {Measurement::UnitSystems::volume_Imperial   , QObject::tr("qt"  ),   1.1365225         , &liters};
-   Unit const imperial_pints      {Measurement::UnitSystems::volume_Imperial   , QObject::tr("qt"  ),   0.56826125        , &liters};
+   Unit const imperial_pints      {Measurement::UnitSystems::volume_Imperial   , QObject::tr("pt"  ),   0.56826125        , &liters};
    Unit const imperial_cups       {Measurement::UnitSystems::volume_Imperial   , QObject::tr("cup" ),   0.284130625       , &liters, 0.25};
    Unit const imperial_fluidOunces{Measurement::UnitSystems::volume_Imperial   , QObject::tr("floz"),   0.028413075003383 , &liters};
    Unit const imperial_tablespoons{Measurement::UnitSystems::volume_Imperial   , QObject::tr("tbsp"),   0.0177581714      , &liters};
