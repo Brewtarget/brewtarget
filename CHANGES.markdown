@@ -20,10 +20,10 @@ Bug fixes and minor enhancements.
 * None
 
 ### Bug Fixes
-* None yet!
+* Inconsistent ABV calculation [918](https://github.com/Brewtarget/brewtarget/issues/918)
 
 ### Release Timestamp
-Wed, 1 Jan 2025 04:00:16 +0100
+Sat, 4 Jan 2025 04:00:16 +0100
 
 ## v4.0.15
 Bug fixes and minor enhancements.
