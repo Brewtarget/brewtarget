@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * measurement/Unit.h is part of Brewtarget, and is copyright the following authors 2009-2023:
+ * measurement/Unit.h is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Mark de Wever <koraq@xs4all.nl>
  *   • Matt Young <mfsy@yahoo.com>
@@ -128,6 +128,12 @@ namespace Measurement {
        * \brief The unit name will be the singular of the commonly used abbreviation.
        */
       QString const name;
+
+      /**
+       * \brief Returns details that can be output by \c operator<< (see below).  We can't implement this in the header
+       *        as it would require circular dependencies with \c UnitSystem.
+       */
+      QString getOutputForStream() const;
 
       /**
        * \brief Returns the canonical units we use for \c PhysicalQuantity this \c Unit relates to.  These are the units
@@ -432,7 +438,7 @@ namespace Measurement {
  */
 template<class S>
 S & operator<<(S & stream, Measurement::Unit const & unit) {
-   stream << unit.name << " (" << unit.getPhysicalQuantity() << ")";
+   stream << unit.getOutputForStream();
    return stream;
 }
 template<class S>

@@ -127,24 +127,34 @@ namespace {
     * \param caseInensitiveMatching If \c true, do a case-insensitive search.  Eg, match "ml" for milliliters, even
     *                               though the correct name is "mL".
     */
-   QList<Measurement::Unit const *> getUnitsOnlyByName(QString const & name,
-                                                       bool const caseInensitiveMatching = true) {
+   QList<Measurement::Unit const *> getUnitsOnlyByName(QString const & name) {
       // Need this before we reference unitNameLookup or physicalQuantityToCanonicalUnit
       std::call_once(initFlag_Lookups, &Measurement::Unit::initialiseLookups);
 
       QList<Measurement::Unit const *> allMatches;
       auto const & keys {unitNameLookup.uniqueKeys()};
       for (auto const & key : keys) {
-         //
-         // Although it's slightly clunky to call getUnitsByNameAndPhysicalQuantity() here, it saves us re-implementing
-         // all the case-insensitive logic.
-         //
-         auto matches = getUnitsByNameAndPhysicalQuantity(name, key.physicalQuantity, caseInensitiveMatching);
-         if (matches.length() > 0) {
+
+         if (name.toLower() == key.lowerCaseUnitName) {
+            auto matches = unitNameLookup.values(key);
             allMatches.append(matches);
+            qDebug() <<
+               Q_FUNC_INFO << "Added" << matches.length() << "matches for" << key.lowerCaseUnitName << "/" <<
+               key.physicalQuantity << ":";
+            for (auto & match : matches) {
+               qDebug() << Q_FUNC_INFO << " - " << match;
+            }
          }
       }
       return allMatches;
+   }
+
+   QString displayableConvert(Measurement::Unit const & fromUnit,
+                              Measurement::Unit const &   toUnit,
+                              double const fromQuantity) {
+      double const canonicalQuantity = fromUnit.toCanonical(fromQuantity).quantity;
+      double const toQuantity        = toUnit.fromCanonical(canonicalQuantity);
+      return QString("%1 %2").arg(Measurement::displayQuantity(toQuantity, 3)).arg(toUnit.name);
    }
 }
 
@@ -334,6 +344,15 @@ bool Measurement::Unit::operator==(Unit const & other) const {
            (this->name == other.name && this->getPhysicalQuantity() == other.getPhysicalQuantity()));
 }
 
+QString Measurement::Unit::getOutputForStream() const {
+   QString output;
+   QTextStream outputAsStream{&output};
+   outputAsStream <<
+      this->name << " (" << this->getPhysicalQuantity() << ", " << this->getUnitSystem().uniqueName << ")";
+   return output;
+}
+
+
 Measurement::Unit const & Measurement::Unit::getCanonical() const {
    return Measurement::Unit::getCanonicalUnit(this->getPhysicalQuantity());
 }
@@ -395,17 +414,59 @@ QString Measurement::Unit::convertWithoutContext(QString const & qstr, QString c
       "matches for" << toUnitName;
 
    if (fromUnits.length() > 0 && toUnits.length() > 0) {
-      // We found at least one match for both "from" and "to" unit names.  We need to check search amongst these to find
-      // one where both units relate to the same physical quantity.
+      //
+      // We found at least one match for both "from" and "to" unit names.  We need to search amongst these to find one
+      // where both units relate to the same physical quantity.  If we find multiple matches, we see if the global
+      // settings can help us disambiguate.  (This is mostly for the case of Imperial vs US Customary units, where many
+      // of the units, such as pints and pounds, have the same names in both unit systems.  If the user's global
+      // preferences for a unit system are set to Imperial or US Customary then we can use that to disambiguate between,
+      // say, Imperial pints and US Customary pints for a field where the user has entered "pt".
+      //
+      Unit const * fromUnitBestMatch = nullptr;
+      Unit const *   toUnitBestMatch = nullptr;
       for (auto const fromUnit : fromUnits) {
          for (auto const toUnit : toUnits) {
-            // Stop at the first match.  If there's more than one match then we don't have a means to disambiguate.
             if (fromUnit->getPhysicalQuantity() == toUnit->getPhysicalQuantity()) {
-               double canonicalQuantity = fromUnit->toCanonical(fromQuantity).quantity;
-               double toQuantity        = toUnit->fromCanonical(canonicalQuantity);
-               return QString("%1 %2").arg(Measurement::displayQuantity(toQuantity, 3)).arg(toUnit->name);
+               Measurement::UnitSystem const & displayUnitSystem =
+                  Measurement::getDisplayUnitSystem(fromUnit->getPhysicalQuantity());
+               //
+               // If both the from and to units match the user's preferred unit system (eg from is "gal", to is "pt",
+               // and display unit system is "US Customary"), then that's a "perfect match" and has to be the best
+               // answer we could give, so stop here.
+               //
+               if (fromUnit->getUnitSystem() == toUnit->getUnitSystem() &&
+                   fromUnit->getUnitSystem() == displayUnitSystem) {
+                  return displayableConvert(*fromUnit, *toUnit, fromQuantity);
+               }
+
+               //
+               // Otherwise, if either the from or the to units match the user's preferred unit system (eg from is
+               // "gal", to is "L", and display unit system is "US Customary", then that's a good candidate answer,
+               // which should override any previous match (other than a perfect one which we would have already
+               // returned).  We don't return yet, because, conceivably, we might find a "perfect match" in the rest of
+               // the search.
+               //
+               if (fromUnit->getUnitSystem() == displayUnitSystem ||
+                     toUnit->getUnitSystem() == displayUnitSystem) {
+                  fromUnitBestMatch = fromUnit;
+                    toUnitBestMatch =   toUnit;
+                  continue;
+               }
+
+               //
+               // If neither of the above conditions are true (eg from is "gal", to is "pt", and display unit system is
+               // "Metric"), then this is a potential match that's worth using if we don't already have one.
+               //
+               if (!fromUnit && !toUnit) {
+                  fromUnitBestMatch = fromUnit;
+                    toUnitBestMatch =   toUnit;
+               }
             }
          }
+      }
+
+      if (fromUnitBestMatch && toUnitBestMatch) {
+         return displayableConvert(*fromUnitBestMatch, *toUnitBestMatch, fromQuantity);
       }
    }
 
