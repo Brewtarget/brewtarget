@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/Boil.cpp is part of Brewtarget, and is copyright the following authors 2023-2024:
+ * model/Boil.cpp is part of Brewtarget, and is copyright the following authors 2023-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -177,7 +177,7 @@ void Boil::ensureStandardProfile() {
    // more than one Recipe.
    //
    auto recipe = ObjectStoreWrapper::findFirstMatching<Recipe>([this](Recipe * rec) {return rec->uses(*this);});
-   QString const recipeStrippedName = recipe->strippedName();
+   QString const recipeStrippedName = recipe ? recipe->strippedName() : tr("a recipe");
 
    auto boilSteps = this->steps();
    if (boilSteps.size() == 0 || boilSteps.at(0)->startTemp_c().value_or(100.0) > Boil::minimumBoilTemperature_c) {
@@ -186,7 +186,7 @@ void Boil::ensureStandardProfile() {
       preBoil->setDescription(tr("Automatically-generated pre-boil step for %1").arg(recipeStrippedName));
       // Get the starting temperature for the ramp-up from the end temperature of the mash
       double startingTemp = Boil::minimumBoilTemperature_c - 1.0;
-      if (recipe->mash()) {
+      if (recipe && recipe->mash()) {
          auto mashSteps = recipe->mash()->steps();
          if (!mashSteps.isEmpty()) {
             auto lastMashStep = mashSteps.last();
@@ -213,7 +213,7 @@ void Boil::ensureStandardProfile() {
       auto postBoil = std::make_shared<BoilStep>(tr("Post-boil for %1").arg(recipeStrippedName));
       postBoil->setDescription(tr("Automatically-generated post-boil step for %1").arg(recipeStrippedName));
       double endingTemp = 30.0;
-      if (recipe->fermentation()) {
+      if (recipe && recipe->fermentation()) {
          auto fs = recipe->fermentation()->fermentationSteps();
          if (!fs.isEmpty()) {
             auto firstFermentationStep = fs.first();
