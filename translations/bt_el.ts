@@ -97,6 +97,10 @@
         <source>Automatically-generated post-boil step for %1</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>a recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>BoilStep</name>
@@ -4015,6 +4019,10 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Turkish</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>pt</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

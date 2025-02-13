@@ -832,7 +832,7 @@ public:
    }
 
    // Batch size without losses.
-   double batchSizeNoLosses_l() {
+   double batchSizeNoLosses_l() const {
       double ret = this->m_self.batchSize_l();
       auto equipment = this->m_self.equipment();
       if (equipment) {
@@ -898,11 +898,7 @@ public:
     * Depends on: m_grainsInMash_kg
     */
    void recalcVolumeEstimates() {
-      double tmp = 0.0;
       double calculatedWortFromMash_l = 0.0;
-      double calculatedBoilVolume_l = 0.0;
-      double calculatedFinalVolume_l = 0.0;
-      double calculatedPostBoilVolume_l = 0.0;
 
       auto equipment = this->m_self.equipment();
 
@@ -910,19 +906,23 @@ public:
       if (!this->m_self.mash()) {
          this->m_wortFromMash_l = 0.0;
       } else {
-         double waterAdded_l = this->m_self.mash()->totalMashWater_l();
-         double absorption_lKg;
-         if (equipment) {
-            absorption_lKg = equipment->mashTunGrainAbsorption_LKg().value_or(Equipment::default_mashTunGrainAbsorption_LKg);
-         } else {
-            absorption_lKg = PhysicalConstants::grainAbsorption_Lkg;
-         }
+         double const waterAdded_l = this->m_self.mash()->totalMashWater_l();
+         double const absorption_lKg{
+            equipment ? equipment->mashTunGrainAbsorption_LKg().value_or(Equipment::default_mashTunGrainAbsorption_LKg) :
+                        PhysicalConstants::grainAbsorption_Lkg
+         };
+///         if (equipment) {
+///            absorption_lKg = equipment->mashTunGrainAbsorption_LKg().value_or(Equipment::default_mashTunGrainAbsorption_LKg);
+///         } else {
+///            absorption_lKg = PhysicalConstants::grainAbsorption_Lkg;
+///         }
 
          calculatedWortFromMash_l = (waterAdded_l - absorption_lKg * this->m_grainsInMash_kg);
       }
 
       // boilVolume_l ==============================
 
+      double tmp = 0.0;
       if (equipment) {
          tmp = calculatedWortFromMash_l - equipment->getLauteringDeadspaceLoss_l() + equipment->topUpKettle_l().value_or(Equipment::default_topUpKettle_l);
       } else {
@@ -963,13 +963,14 @@ public:
          tmp = this->boilSizeInLitersOr(0.0);
       }
 
-      calculatedBoilVolume_l = tmp;
+      double const calculatedBoilVolume_l = tmp;
 
       // finalVolume_l ==============================
 
       // NOTE: the following figure is not based on the other volume estimates
       // since we want to show og,fg,ibus,etc. as if the collected wort is correct.
       this->m_finalVolumeNoLosses_l = this->batchSizeNoLosses_l();
+      double calculatedFinalVolume_l = 0.0;
       if (equipment) {
          //_finalVolumeNoLosses_l = equipment->wortEndOfBoil_l(calculatedBoilVolume_l) + equipment->topUpWater_l();
          calculatedFinalVolume_l =
@@ -983,11 +984,15 @@ public:
 
       // postBoilVolume_l ===========================
 
-      if (equipment) {
-         calculatedPostBoilVolume_l = equipment->wortEndOfBoil_l(calculatedBoilVolume_l);
-      } else {
-         calculatedPostBoilVolume_l = this->m_self.batchSize_l(); // Give up.
-      }
+      double const calculatedPostBoilVolume_l{
+         equipment ? equipment->wortEndOfBoil_l(calculatedBoilVolume_l) :
+                     this->m_self.batchSize_l() // Give up.
+      };
+///      if (equipment) {
+///         calculatedPostBoilVolume_l = equipment->wortEndOfBoil_l(calculatedBoilVolume_l);
+///      } else {
+///         calculatedPostBoilVolume_l = this->m_self.batchSize_l(); // Give up.
+///      }
 
       if (!qFuzzyCompare(calculatedWortFromMash_l, this->m_wortFromMash_l)) {
 //         qDebug() <<
@@ -1141,8 +1146,14 @@ public:
       sugar_kg = sugar_kg * this->m_self.efficiency_pct() / 100.0 + sugar_kg_ignoreEfficiency;
       double plato = Algorithms::getPlato(sugar_kg, this->m_finalVolumeNoLosses_l);
 
-      double calculatedOg = Algorithms::PlatoToSG_20C20C(plato);    // og from all sugars
+      double const calculatedOg = Algorithms::PlatoToSG_20C20C(plato);    // og from all sugars
       double tmp_pnts = (calculatedOg - 1) * 1000.0; // points from all sugars
+
+      // Uncomment for diagnosing problems with calculations
+//      qDebug() <<
+//         Q_FUNC_INFO << "sugar_kg:" << sugar_kg << ", m_finalVolumeNoLosses_l:" << this->m_finalVolumeNoLosses_l <<
+//         ", plato:" << plato << ", calculatedOg:" << calculatedOg << ", tmp_pnts:" << tmp_pnts;
+
       double tmp_nonferm_pnts;
       if (nonFermentableSugars_kg != 0.0) {
          double ferm_kg = sugar_kg - nonFermentableSugars_kg;  // Mass of only fermentable sugars
@@ -1189,8 +1200,8 @@ public:
       // Uncomment for diagnosing problems with calculations
 //      qDebug() <<
 //         Q_FUNC_INFO << "Recipe #" << this->m_self.key() << "(" << this->m_self.name() << ") "
-//         "attenuation_pct:" << attenuation_pct << ", m_og_fermentable:" << m_og_fermentable << ", m_fg_fermentable: " <<
-//         m_fg_fermentable;
+//         "attenuation_pct:" << attenuation_pct << ", m_og_fermentable:" << this->m_og_fermentable <<
+//         ", m_fg_fermentable: " << this->m_fg_fermentable;
 
       if (!qFuzzyCompare(this->m_self.m_og, calculatedOg)) {
          qDebug() <<
@@ -1230,7 +1241,6 @@ public:
     */
    void recalcABV_pct() {
       double const calculatedABV_pct = Algorithms::abvFromOgAndFg(this->m_og_fermentable, this->m_fg_fermentable);
-
       if (!qFuzzyCompare(calculatedABV_pct, m_ABV_pct)) {
          qDebug() <<
             Q_FUNC_INFO << "Recipe #" << this->m_self.key() << "(" << this->m_self.name() << ") "
@@ -1384,23 +1394,23 @@ public:
    Recipe & m_self;
 
    // Calculated properties.
-   double        m_ABV_pct              ;
-   double        m_color_srm            ;
-   double        m_boilGrav             ;
-   double        m_IBU                  ;
-   QList<double> m_ibus                 ;
-   double        m_wortFromMash_l       ;
-   double        m_boilVolume_l         ;
-   double        m_postBoilVolume_l     ;
-   double        m_finalVolume_l        ;
+   double        m_ABV_pct              {0.0};
+   double        m_color_srm            {0.0};
+   double        m_boilGrav             {0.0};
+   double        m_IBU                  {0.0};
+   QList<double> m_ibus                 {};
+   double        m_wortFromMash_l       {0.0};
+   double        m_boilVolume_l         {0.0};
+   double        m_postBoilVolume_l     {0.0};
+   double        m_finalVolume_l        {0.0};
    // Final volume before any losses out of the kettle, used in calculations for sg/ibu/etc.
-   double        m_finalVolumeNoLosses_l;
-   double        m_caloriesPerLiter     ;
-   double        m_grainsInMash_kg      ;
-   double        m_grains_kg            ;
-   QColor        m_SRMColor             ;
-   double        m_og_fermentable       ;
-   double        m_fg_fermentable       ;
+   double        m_finalVolumeNoLosses_l{0.0};
+   double        m_caloriesPerLiter     {0.0};
+   double        m_grainsInMash_kg      {0.0};
+   double        m_grains_kg            {0.0};
+   QColor        m_SRMColor             {};
+   double        m_og_fermentable       {0.0};
+   double        m_fg_fermentable       {0.0};
 
 };
 
@@ -2370,32 +2380,32 @@ Recipe * Recipe::revertToPreviousVersion() {
 
 //==========================Calculated Getters============================
 
-double        Recipe::og              () { return this->pimpl->getCalculated(this->m_og); }
-double        Recipe::fg              () { return this->pimpl->getCalculated(this->m_fg); }
-double        Recipe::color_srm       () { return this->pimpl->getCalculated(this->pimpl->m_color_srm       ); }
-double        Recipe::ABV_pct         () { return this->pimpl->getCalculated(this->pimpl->m_ABV_pct         ); }
-double        Recipe::IBU             () { return this->pimpl->getCalculated(this->pimpl->m_IBU             ); }
-QList<double> Recipe::IBUs            () { return this->pimpl->getCalculated(this->pimpl->m_ibus            ); }
-double        Recipe::boilGrav        () { return this->pimpl->getCalculated(this->pimpl->m_boilGrav        ); }
-double        Recipe::caloriesPerLiter() { return this->pimpl->getCalculated(this->pimpl->m_caloriesPerLiter); }
-double        Recipe::caloriesPer33cl  () { return this->caloriesPerLiter() * 0.33          ; }
-double        Recipe::caloriesPerUs12oz() {
+double        Recipe::og               () const { return this->pimpl->getCalculated(this->m_og); }
+double        Recipe::fg               () const { return this->pimpl->getCalculated(this->m_fg); }
+double        Recipe::color_srm        () const { return this->pimpl->getCalculated(this->pimpl->m_color_srm       ); }
+double        Recipe::ABV_pct          () const { return this->pimpl->getCalculated(this->pimpl->m_ABV_pct         ); }
+double        Recipe::IBU              () const { return this->pimpl->getCalculated(this->pimpl->m_IBU             ); }
+QList<double> Recipe::IBUs             () const { return this->pimpl->getCalculated(this->pimpl->m_ibus            ); }
+double        Recipe::boilGrav         () const { return this->pimpl->getCalculated(this->pimpl->m_boilGrav        ); }
+double        Recipe::caloriesPerLiter () const { return this->pimpl->getCalculated(this->pimpl->m_caloriesPerLiter); }
+double        Recipe::caloriesPer33cl  () const { return this->caloriesPerLiter() * 0.33          ; }
+double        Recipe::caloriesPerUs12oz() const {
    static double const us12ozInLiters = Measurement::Units::us_fluidOunces.toCanonical(12.0).quantity;
    return this->caloriesPerLiter() * us12ozInLiters;
 }
-double        Recipe::caloriesPerUsPint() {
+double        Recipe::caloriesPerUsPint() const {
    static double const usPintInLiters = Measurement::Units::us_fluidOunces.toCanonical(16.0).quantity;
    return this->caloriesPerLiter() * usPintInLiters;
 }
-double        Recipe::wortFromMash_l  () { return this->pimpl->getCalculated(this->pimpl->m_wortFromMash_l  );}
-double        Recipe::boilVolume_l    () { return this->pimpl->getCalculated(this->pimpl->m_boilVolume_l    );}
-double        Recipe::postBoilVolume_l() { return this->pimpl->getCalculated(this->pimpl->m_postBoilVolume_l);}
-double        Recipe::finalVolume_l   () { return this->pimpl->getCalculated(this->pimpl->m_finalVolume_l   );}
-QColor        Recipe::SRMColor        () { return this->pimpl->getCalculated(this->pimpl->m_SRMColor        );}
-double        Recipe::grainsInMash_kg () { return this->pimpl->getCalculated(this->pimpl->m_grainsInMash_kg );}
-double        Recipe::grains_kg       () { return this->pimpl->getCalculated(this->pimpl->m_grains_kg       );}
+double        Recipe::wortFromMash_l  () const { return this->pimpl->getCalculated(this->pimpl->m_wortFromMash_l  );}
+double        Recipe::boilVolume_l    () const { return this->pimpl->getCalculated(this->pimpl->m_boilVolume_l    );}
+double        Recipe::postBoilVolume_l() const { return this->pimpl->getCalculated(this->pimpl->m_postBoilVolume_l);}
+double        Recipe::finalVolume_l   () const { return this->pimpl->getCalculated(this->pimpl->m_finalVolume_l   );}
+QColor        Recipe::SRMColor        () const { return this->pimpl->getCalculated(this->pimpl->m_SRMColor        );}
+double        Recipe::grainsInMash_kg () const { return this->pimpl->getCalculated(this->pimpl->m_grainsInMash_kg );}
+double        Recipe::grains_kg       () const { return this->pimpl->getCalculated(this->pimpl->m_grains_kg       );}
 
-double Recipe::points() {
+double Recipe::points() const {
    return (this->og() - 1.0) * 1e3;
 }
 
@@ -2831,7 +2841,7 @@ void Recipe::acceptChangeToRecipeUseOfWater         (QMetaProperty prop, QVarian
 void Recipe::acceptChangeToBrewNote                 (QMetaProperty prop, QVariant val) { this->acceptChange<BrewNote                 >(prop, val); return; }
 void Recipe::acceptChangeToInstruction              (QMetaProperty prop, QVariant val) { this->acceptChange<Instruction              >(prop, val); return; }
 
-double Recipe::targetCollectedWortVol_l() {
+double Recipe::targetCollectedWortVol_l() const {
 
    // Need to account for extract/sugar volume also.
    double postMashAdditionVolume_l = 0;
@@ -2880,7 +2890,7 @@ double Recipe::targetCollectedWortVol_l() {
    }
 }
 
-double Recipe::targetTotalMashVol_l() {
+double Recipe::targetTotalMashVol_l() const {
 
    double absorption_lKg;
 

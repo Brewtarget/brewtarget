@@ -408,9 +408,16 @@ double Algorithms::BrixToSgAt20C(double brix) {
 }
 
 double Algorithms::getPlato(double sugar_kg, double wort_l) {
-   double water_kg = wort_l - sugar_kg/PhysicalConstants::sucroseDensity_kgL; // Assumes sucrose vol and water vol add to wort vol.
+   double const water_kg = wort_l - sugar_kg/PhysicalConstants::sucroseDensity_kgL; // Assumes sucrose vol and water vol add to wort vol.
+   double const totalMass_kg = sugar_kg + water_kg;
 
-   return sugar_kg/(sugar_kg+water_kg) * 100.0;
+   // It's not hugely meaningful to call this function with zero values for sugar and wort.  In those circumstances,
+   // rather than return not-a-number (because of dividing by zero), we return the °Plato value of water: 0.0.
+   if (0.0 == totalMass_kg) {
+      return 0.0;
+   }
+
+   return sugar_kg/totalMass_kg * 100.0;
 }
 
 double Algorithms::getWaterDensity_kgL(double celsius) {

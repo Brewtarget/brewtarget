@@ -468,8 +468,8 @@ public:
    QString notes             () const;
    QString tasteNotes        () const;
    double  tasteRating       () const;
-   double  og                () ;
-   double  fg                () ;
+   double  og                () const;
+   double  fg                () const;
    int     fermentationStages() const;
    double  primaryAge_days   () const;
    double  secondaryAge_days () const;
@@ -492,25 +492,25 @@ public:
    std::optional<double> apparentAttenuation_pct() const;
 
    // Calculated getters.
-   double        points                  ();
-   double        ABV_pct                 ();
-   double        color_srm               ();
-   double        boilGrav                ();
-   double        IBU                     ();
-   QColor        SRMColor                ();
-   double        targetCollectedWortVol_l();
-   double        targetTotalMashVol_l    ();
-   double        wortFromMash_l          ();
-   double        boilVolume_l            ();
-   double        postBoilVolume_l        ();
-   double        finalVolume_l           ();
-   double        caloriesPer33cl         ();
-   double        caloriesPerLiter        ();
-   double        caloriesPerUs12oz       ();
-   double        caloriesPerUsPint       ();
-   double        grainsInMash_kg         ();
-   double        grains_kg               ();
-   QList<double> IBUs                    ();
+   double        points                  () const;
+   double        ABV_pct                 () const;
+   double        color_srm               () const;
+   double        boilGrav                () const;
+   double        IBU                     () const;
+   QColor        SRMColor                () const;
+   double        targetCollectedWortVol_l() const;
+   double        targetTotalMashVol_l    () const;
+   double        wortFromMash_l          () const;
+   double        boilVolume_l            () const;
+   double        postBoilVolume_l        () const;
+   double        finalVolume_l           () const;
+   double        caloriesPer33cl         () const;
+   double        caloriesPerLiter        () const;
+   double        caloriesPerUs12oz       () const;
+   double        caloriesPerUsPint       () const;
+   double        grainsInMash_kg         () const;
+   double        grains_kg               () const;
+   QList<double> IBUs                    () const;
 
    /**
     * \brief It's useful to have this templated way of getting all the \c NamedEntity objects of a particular type (eg
