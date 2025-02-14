@@ -22,10 +22,10 @@ Bug fixes and minor enhancements.
 * None
 
 ### Bug Fixes
-* None so far
+* Crashing in Windows when making new recipe [929](https://github.com/Brewtarget/brewtarget/issues/929)
 
 ### Release Timestamp
-Tue, 11 Feb 2025 04:00:17 +0100
+Fri, 14 Feb 2025 04:00:17 +0100
 
 -
 ## v4.0.16
