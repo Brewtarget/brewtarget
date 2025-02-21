@@ -1387,7 +1387,7 @@ exportedVariables = {
    # Similarly, installers often want a URL link.  We also use this in the program, to tell users where to get support.
    'CONFIG_GITHUB_URL' : 'https://github.com/' + capitalisedProjectName + '/' + projectName,
    'CONFIG_WEBSITE_URL' : 'https://www.brewtarget.beer/',
-   'CONFIG_ORGANIZATION_DOMAIN' : 'brewken.com',
+   'CONFIG_ORGANIZATION_DOMAIN' : 'brewtarget.beer',
 
    #
    # On Windows and Mac, the external packaging step (managed by the `bt` build tool script) needs to know about all the

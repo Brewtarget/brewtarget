@@ -123,7 +123,7 @@ set(capitalisedProjectName Brewtarget)
 # We use this in the program, to tell users where to get support.
 set(CONFIG_GITHUB_URL "https://github.com/${capitalisedProjectName}/${projectName}")
 set(CONFIG_WEBSITE_URL "https://www.brewtarget.beer/")
-set(CONFIG_ORGANIZATION_DOMAIN "brewken.com")
+set(CONFIG_ORGANIZATION_DOMAIN "brewtarget.beer")
 
 #=======================================================================================================================
 #======================================================= Options =======================================================
