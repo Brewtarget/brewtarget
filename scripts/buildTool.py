@@ -1233,7 +1233,8 @@ def installDependencies():
             #
             # However, it generates a _lot_ of output, so we normally leave it turned off.
             #
-            btUtils.abortOnRunFail(subprocess.run(['sudo', 'port', 'install', packageToInstall]))
+#            btUtils.abortOnRunFail(subprocess.run(['sudo', 'port', 'install', packageToInstall]))
+            btUtils.abortOnRunFail(subprocess.run(['sudo', 'port', '-v', 'install', packageToInstall]))
 
          #
          # Sometimes MacPorts prompts you to upgrade already installed ports with the `port upgrade outdated` command.
