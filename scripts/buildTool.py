@@ -1189,8 +1189,9 @@ def installDependencies():
 
          # Per https://guide.macports.org/#using.port.diagnose this will tell us about "common issues in the user's
          # environment".
-         log.debug('Check environment is OK')
-         btUtils.abortOnRunFail(subprocess.run(['sudo', 'port', 'diagnose', '--quiet']))
+# 2025-02-26 TODO Commented out pending fix for https://trac.macports.org/ticket/72087
+#         log.debug('Check environment is OK')
+#         btUtils.abortOnRunFail(subprocess.run(['sudo', 'port', 'diagnose', '--quiet']))
 
          # Per https://guide.macports.org/#using.port.installed, this tells us what ports are already installed
          log.debug('List ports already installed')
