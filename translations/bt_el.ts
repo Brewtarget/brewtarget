@@ -9723,7 +9723,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>dd MMM yyyy</source>
-        <translation>μμ ΜΜ ΕΕΕΕ</translation>
+        <translation type="vanished">μμ ΜΜ ΕΕΕΕ</translation>
     </message>
     <message>
         <source>Carbonation Volumes</source>
@@ -9747,6 +9747,10 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Date Created</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>dd MM yyyy</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

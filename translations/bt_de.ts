@@ -9726,7 +9726,7 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
     <message>
         <source>dd MMM yyyy</source>
-        <translation>tt MMM jjjj</translation>
+        <translation type="vanished">tt MMM jjjj</translation>
     </message>
     <message>
         <source>Carbonation Volumes</source>
@@ -9750,6 +9750,10 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
     <message>
         <source>Date Created</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>dd MM yyyy</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

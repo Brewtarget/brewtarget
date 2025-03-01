@@ -9620,10 +9620,6 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>dd MMM yyyy</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Carbonation Volumes</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9645,6 +9641,10 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source>Date Created</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>dd MM yyyy</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -4626,78 +4626,78 @@ The final volume in the primary is %1.</source>
         <translation>Efterkogning</translation>
     </message>
     <message>
-        <location filename="../src/model/Recipe.cpp" line="1876"/>
+        <location filename="../src/model/Recipe.cpp" line="1886"/>
         <source>Boil time</source>
         <translation>Varighed kogning</translation>
     </message>
     <message>
-        <location filename="../src/model/Recipe.cpp" line="1877"/>
+        <location filename="../src/model/Recipe.cpp" line="1887"/>
         <source>You did not configure an equipment (which you really should), so tell me the boil time.</source>
         <translation>Du har ikke konfigureret et udstyr (hvilket du burde gøre); så oplys om kogningens varighed.</translation>
     </message>
     <message>
-        <location filename="../src/model/Recipe.cpp" line="1881"/>
+        <location filename="../src/model/Recipe.cpp" line="1891"/>
         <source>Bring the wort to a boil and hold for %1.</source>
         <translation>Bring urten til kogning og hold konstant i %1.</translation>
     </message>
     <message>
-        <location filename="../src/model/Recipe.cpp" line="1886"/>
+        <location filename="../src/model/Recipe.cpp" line="1896"/>
         <source>Start boil</source>
         <translation>Start kogning</translation>
     </message>
     <message>
-        <location filename="../src/model/Recipe.cpp" line="1914"/>
+        <location filename="../src/model/Recipe.cpp" line="1924"/>
         <source>Flameout</source>
         <translation>Slut på opvarmning</translation>
     </message>
     <message>
-        <location filename="../src/model/Recipe.cpp" line="1915"/>
+        <location filename="../src/model/Recipe.cpp" line="1925"/>
         <source>Stop boiling the wort.</source>
         <translation>Stop kogning af urten.</translation>
     </message>
     <message>
-        <location filename="../src/model/Recipe.cpp" line="1934"/>
+        <location filename="../src/model/Recipe.cpp" line="1944"/>
         <source>Cool wort and pitch </source>
         <translation>Afkøl urten og tilsæt </translation>
     </message>
     <message>
-        <location filename="../src/model/Recipe.cpp" line="1938"/>
+        <location filename="../src/model/Recipe.cpp" line="1948"/>
         <source>%1 %2 yeast, </source>
         <translation>%1 %2 gær, </translation>
     </message>
     <message>
-        <location filename="../src/model/Recipe.cpp" line="1941"/>
+        <location filename="../src/model/Recipe.cpp" line="1951"/>
         <source>to the primary.</source>
         <translation>til den første.</translation>
     </message>
     <message>
-        <location filename="../src/model/Recipe.cpp" line="1944"/>
+        <location filename="../src/model/Recipe.cpp" line="1954"/>
         <source>Pitch yeast</source>
         <translation>Tilsæt gær</translation>
     </message>
     <message>
-        <location filename="../src/model/Recipe.cpp" line="1952"/>
+        <location filename="../src/model/Recipe.cpp" line="1962"/>
         <source>Let ferment until FG is %1.</source>
         <translation>Fortsæt gæring til FG er %1.</translation>
     </message>
     <message>
-        <location filename="../src/model/Recipe.cpp" line="1957"/>
+        <location filename="../src/model/Recipe.cpp" line="1967"/>
         <source>Ferment</source>
         <translation>Gæring</translation>
     </message>
     <message>
-        <location filename="../src/model/Recipe.cpp" line="1961"/>
+        <location filename="../src/model/Recipe.cpp" line="1971"/>
         <source>Transfer beer to secondary.</source>
         <translation>Overfør øl til den anden.</translation>
     </message>
     <message>
-        <location filename="../src/model/Recipe.cpp" line="1963"/>
+        <location filename="../src/model/Recipe.cpp" line="1973"/>
         <source>Transfer to secondary</source>
         <translation>Overfør til anden</translation>
     </message>
     <message>
-        <location filename="../src/model/Recipe.cpp" line="2001"/>
-        <location filename="../src/model/Recipe.cpp" line="2021"/>
+        <location filename="../src/model/Recipe.cpp" line="2011"/>
+        <location filename="../src/model/Recipe.cpp" line="2031"/>
         <source>Add %1 %2 to boil at %3.</source>
         <translation>Tilføj %1 %2 til kogning ved %3.</translation>
     </message>
@@ -4757,52 +4757,52 @@ The final volume in the primary is %1.</source>
         <translation> i de %1 vand</translation>
     </message>
     <message>
-        <location filename="../src/model/Recipe.cpp" line="1429"/>
+        <location filename="../src/model/Recipe.cpp" line="1439"/>
         <source>Recipe</source>
         <translation>Opskrift</translation>
     </message>
     <message>
-        <location filename="../src/model/Recipe.cpp" line="1447"/>
+        <location filename="../src/model/Recipe.cpp" line="1457"/>
         <source>Extract</source>
         <translation>Ekstrakt</translation>
     </message>
     <message>
-        <location filename="../src/model/Recipe.cpp" line="1448"/>
+        <location filename="../src/model/Recipe.cpp" line="1458"/>
         <source>Partial Mash</source>
         <translation>Delvis mæskning</translation>
     </message>
     <message>
-        <location filename="../src/model/Recipe.cpp" line="1449"/>
+        <location filename="../src/model/Recipe.cpp" line="1459"/>
         <source>All Grain</source>
         <translation>Hel malt</translation>
     </message>
     <message>
-        <location filename="../src/model/Recipe.cpp" line="1451"/>
+        <location filename="../src/model/Recipe.cpp" line="1461"/>
         <source>Cider</source>
         <translation>Cider</translation>
     </message>
     <message>
-        <location filename="../src/model/Recipe.cpp" line="1452"/>
+        <location filename="../src/model/Recipe.cpp" line="1462"/>
         <source>Kombucha</source>
         <translation>Kombucha</translation>
     </message>
     <message>
-        <location filename="../src/model/Recipe.cpp" line="1453"/>
+        <location filename="../src/model/Recipe.cpp" line="1463"/>
         <source>Soda</source>
         <translation>Natriumcarbonat</translation>
     </message>
     <message>
-        <location filename="../src/model/Recipe.cpp" line="1454"/>
+        <location filename="../src/model/Recipe.cpp" line="1464"/>
         <source>Other</source>
         <translation>Andet</translation>
     </message>
     <message>
-        <location filename="../src/model/Recipe.cpp" line="1455"/>
+        <location filename="../src/model/Recipe.cpp" line="1465"/>
         <source>Mead</source>
         <translation>Råfrugt</translation>
     </message>
     <message>
-        <location filename="../src/model/Recipe.cpp" line="1456"/>
+        <location filename="../src/model/Recipe.cpp" line="1466"/>
         <source>Wine</source>
         <translation>Vin</translation>
     </message>
@@ -10809,9 +10809,8 @@ The final volume in the primary is %1.</source>
         <translation>Flaske/fad temperatur</translation>
     </message>
     <message>
-        <location filename="../ui/recipeExtrasWidget.ui" line="174"/>
         <source>dd MMM yyyy</source>
-        <translation>dd mm yyyy</translation>
+        <translation type="vanished">dd mm yyyy</translation>
     </message>
     <message>
         <location filename="../ui/recipeExtrasWidget.ui" line="185"/>
@@ -10832,6 +10831,11 @@ The final volume in the primary is %1.</source>
         <location filename="../ui/recipeExtrasWidget.ui" line="164"/>
         <source>Date Created</source>
         <translation>Bryggedato</translation>
+    </message>
+    <message>
+        <location filename="../ui/recipeExtrasWidget.ui" line="174"/>
+        <source>dd MM yyyy</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/recipeExtrasWidget.ui" line="209"/>
