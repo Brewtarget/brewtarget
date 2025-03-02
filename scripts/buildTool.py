@@ -32,6 +32,7 @@
 #-----------------------------------------------------------------------------------------------------------------------
 import argparse
 import datetime
+import getpass
 import glob
 import logging
 import os
@@ -1359,8 +1360,17 @@ def installDependencies():
          # As always, we have to remember to explicitly do things that would be done for us automatically by the
          # shell (eg expansion of '~').
          #
+         # Also, although you might think it is a reasonable assumption that ~/.bash_profile is owned by the current
+         # user, it turns out this is not always the case.  In 2025 we started seeing the script fail here on the
+         # GithHub actions because ~/.bash_profile was owned by root and not writable by the current user ("runner").
+         # So we force the ownership back to what it should be before attempting to open the file for writing.
+         #
          bashProfilePath = os.path.expanduser('~/.bash_profile')
          log.debug('Adding Qt Bin Dir ' + qtBinDir + ' to PATH in ' + bashProfilePath)
+         btUtils.abortOnRunFail(subprocess.run(['ls', '-l', bashProfilePath], capture_output=False))
+         currentUser = getpass.getuser()
+         btUtils.abortOnRunFail(subprocess.run(['sudo', 'chown', currentUser, bashProfilePath], capture_output=False))
+         btUtils.abortOnRunFail(subprocess.run(['sudo', 'chmod', 'u+w', bashProfilePath], capture_output=False))
          btUtils.abortOnRunFail(subprocess.run(['ls', '-l', bashProfilePath], capture_output=False))
          with open(bashProfilePath, 'a+') as bashProfile:
             bashProfile.write('export PATH="' + qtBinDir + os.pathsep + ':$PATH"')
