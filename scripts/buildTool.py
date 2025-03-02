@@ -1205,10 +1205,6 @@ def installDependencies():
          # Boost 1.76 (from April 2021) and we need at least Boost 1.79.  Installing 'boost181' gives us Boost 1.81
          # (from December 2022) which seems to be the newest version available in MacPorts.
          #
-         # Note too that, as of 2024-11-12, the xercesc3 and xalanc ports will not install.  This seems to be related to
-         # the fact that the xercesc3 port got updated from v3.2.4 to v3.3.0.  See
-         # https://trac.macports.org/ticket/71304.
-         #
          installListPort = [
                             'llvm-19',
                             'cmake',
@@ -1220,8 +1216,8 @@ def installDependencies():
 #                            'tree',
 #                            'dylibbundler',
                             'pandoc',
-#                            'xercesc3',
-#                            'xalanc',
+                            'xercesc3',
+                            'xalanc',
                             'qt6',
                             'qt6-qttranslations'
                             ]
