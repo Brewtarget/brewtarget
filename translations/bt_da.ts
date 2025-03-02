@@ -91,7 +91,7 @@
     <message>
         <location filename="../src/model/Boil.cpp" line="180"/>
         <source>a recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>en opskrift</translation>
     </message>
     <message>
         <location filename="../src/model/Boil.cpp" line="185"/>
@@ -285,13 +285,13 @@
         <location filename="../src/BrewDayFormatter.cpp" line="115"/>
         <location filename="../src/BrewDayFormatter.cpp" line="183"/>
         <source>Estimated calories (per 33 cl)</source>
-        <translation>Forventet kalorieindhold (pr. 0,33 L)</translation>
+        <translation>Forventet energindhold (kcal/0,33 L)</translation>
     </message>
     <message>
         <location filename="../src/BrewDayFormatter.cpp" line="115"/>
         <location filename="../src/BrewDayFormatter.cpp" line="183"/>
         <source>Estimated calories (per 12 oz)</source>
-        <translation>Forventet kalorieindhold (pr. 12 oz)</translation>
+        <translation>Forventet energiindhold (kcal/12 oz)</translation>
     </message>
     <message>
         <location filename="../src/BrewDayFormatter.cpp" line="197"/>
@@ -483,12 +483,12 @@
     <message>
         <location filename="../src/BrewDayScrollWidget.cpp" line="430"/>
         <source>Estimated calories (per 33 cl)</source>
-        <translation>Forventet kalorieindhold (pr. 0,33 L)</translation>
+        <translation>Forventet energiindhold (kcal/0,33 L)</translation>
     </message>
     <message>
         <location filename="../src/BrewDayScrollWidget.cpp" line="430"/>
         <source>Estimated calories (per 12 oz)</source>
-        <translation>Forventet kalorieindhold (i 0.35 L)</translation>
+        <translation>Forventet energiindhold (kcal/12 oz)</translation>
     </message>
     <message>
         <location filename="../src/BrewDayScrollWidget.cpp" line="375"/>
@@ -2976,7 +2976,7 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
         <location filename="../src/OptionDialog.cpp" line="991"/>
         <location filename="../src/OptionDialog.cpp" line="1022"/>
         <source>Restart</source>
-        <translation>Start igen</translation>
+        <translation>Genstart</translation>
     </message>
     <message>
         <source>Please restart Brewtarget.</source>
@@ -3225,12 +3225,12 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
     <message>
         <location filename="../src/OptionDialog.cpp" line="992"/>
         <source>Please restart %1 to connect to the new database</source>
-        <translation>Genstart venligst %1 for at forbinde til den nye database</translation>
+        <translation>Genstart %1 for at forbinde til den nye database</translation>
     </message>
     <message>
         <location filename="../src/OptionDialog.cpp" line="1023"/>
         <source>Please restart %1.</source>
-        <translation>Genstart venligst %1.</translation>
+        <translation>Genstart %1.</translation>
     </message>
 </context>
 <context>
@@ -3833,7 +3833,7 @@ Programmet lukkes nu.</translation>
         <location filename="../src/measurement/Unit.cpp" line="590"/>
         <location filename="../src/measurement/Unit.cpp" line="598"/>
         <source>pt</source>
-        <translation type="unfinished"></translation>
+        <translation>pint</translation>
     </message>
     <message>
         <location filename="../src/measurement/Unit.cpp" line="591"/>
@@ -5733,7 +5733,7 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="368"/>
         <source>Estimated calories (per 33 cl)</source>
-        <translation>Forventet kalorieindhold (pr. 0,33 L)</translation>
+        <translation>Forventet energiindhold (kcal/0,33 L)</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="368"/>
@@ -7467,12 +7467,12 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../src/widgets/BtComboBoxBool.h" line="149"/>
         <source>No</source>
-        <translation type="unfinished">Nej</translation>
+        <translation>Nej</translation>
     </message>
     <message>
         <location filename="../src/widgets/BtComboBoxBool.h" line="150"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>Ja</translation>
     </message>
 </context>
 <context>
@@ -7585,12 +7585,12 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/equipmentEditor.ui" line="257"/>
         <source>ID in database</source>
-        <translation type="unfinished">ID i database</translation>
+        <translation>ID i database</translation>
     </message>
     <message>
         <location filename="../ui/equipmentEditor.ui" line="271"/>
         <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
-        <translation type="unfinished">Du kan normalt ignorere dette, men det er nogle gange nyttigt til fejlfinding.</translation>
+        <translation>Du kan normalt ignorere dette, men det er nogle gange nyttigt til fejlfinding.</translation>
     </message>
     <message>
         <location filename="../ui/equipmentEditor.ui" line="298"/>
@@ -8891,7 +8891,7 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/mainWindow.ui" line="602"/>
         <source>Calories/12oz</source>
-        <translation>Kalorieindhold pr. 12 oz</translation>
+        <translation>Energiindhold (kcal/12 oz)</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="948"/>
@@ -10811,7 +10811,7 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/recipeExtrasWidget.ui" line="174"/>
         <source>dd MMM yyyy</source>
-        <translation>dd mm yyyy</translation>
+        <translation>dd MMM yyyy</translation>
     </message>
     <message>
         <location filename="../ui/recipeExtrasWidget.ui" line="185"/>
@@ -11071,12 +11071,12 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/styleEditor.ui" line="175"/>
         <source>ID in database</source>
-        <translation type="unfinished">ID i database</translation>
+        <translation>ID i database</translation>
     </message>
     <message>
         <location filename="../ui/styleEditor.ui" line="189"/>
         <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
-        <translation type="unfinished">Du kan normalt ignorere dette, men det er nogle gange nyttigt til fejlfinding.</translation>
+        <translation>Du kan normalt ignorere dette, men det er nogle gange nyttigt til fejlfinding.</translation>
     </message>
     <message>
         <location filename="../ui/styleEditor.ui" line="221"/>
