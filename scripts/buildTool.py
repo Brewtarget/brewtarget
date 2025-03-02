@@ -1360,6 +1360,8 @@ def installDependencies():
          # shell (eg expansion of '~').
          #
          with open(os.path.expanduser('~/.bash_profile'), 'a+') as bashProfile:
+            log.debug('Adding Qt Bin Dir ' + qtBinDir + ' to PATH in ' + bashProfile.name)
+            btUtils.abortOnRunFail(subprocess.run(['ls', '-l', bashProfile.name], capture_output=False))
             bashProfile.write('export PATH="' + qtBinDir + os.pathsep + ':$PATH"')
          #
          # Another way to "permanently" add something to PATH on MacOS, is by either appending to the /etc/paths file or
