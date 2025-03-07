@@ -31,7 +31,6 @@
 
 #include "database/ObjectStoreWrapper.h"
 #include "Html.h"
-///#include "InstructionWidget.h"
 #include "measurement/Measurement.h"
 #include "measurement/UnitSystem.h"
 #include "model/Equipment.h"

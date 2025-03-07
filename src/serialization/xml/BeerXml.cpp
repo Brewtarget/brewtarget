@@ -1273,6 +1273,7 @@ template<class NE> void BeerXML::toXml(QList<NE const *> const & nes, QFile & ou
    out.setEncoding(QStringConverter::Latin1);
    out << "<" << BEER_XML_RECORD_DEFN<NE>.m_recordName << "S>\n";
    for (NE const * ne : nes) {
+      Q_ASSERT(ne);
       std::unique_ptr<XmlRecord> xmlRecord{
          BEER_XML_RECORD_DEFN<NE>.makeRecord(BEER_XML_1_CODING)
       };

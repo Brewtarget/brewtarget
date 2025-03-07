@@ -126,7 +126,7 @@ class Equipment : public NamedEntity,
    Q_OBJECT
    FOLDER_BASE_DECL(Equipment)
    // See model/FolderBase.h for info, getters and setters for these properties
-   Q_PROPERTY(QString folder        READ folder        WRITE setFolder     )
+   Q_PROPERTY(QString folderPath        READ folderPath        WRITE setFolderPath)
 
 public:
    /**

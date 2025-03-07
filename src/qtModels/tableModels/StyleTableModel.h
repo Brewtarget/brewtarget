@@ -18,17 +18,10 @@
 #pragma once
 
 #include <QItemDelegate>
-#include <QMetaProperty>
-#include <QModelIndex>
-#include <QVariant>
-#include <QWidget>
 
 #include "model/Style.h"
 #include "qtModels/tableModels/ItemDelegate.h"
 #include "qtModels/tableModels/TableModelBase.h"
-
-class BtStringConst;
-class Recipe;
 
 // You have to get the order of everything right with traits classes, but the end result is that we can refer to
 // StyleTableModel::ColumnIndex::Type etc.
@@ -51,7 +44,6 @@ template <> struct TableModelTraits<StyleTableModel> {
  */
 class StyleTableModel : public BtTableModel, public TableModelBase<StyleTableModel, Style> {
    Q_OBJECT
-
    TABLE_MODEL_COMMON_DECL(Style)
 };
 
@@ -65,7 +57,6 @@ class StyleTableModel : public BtTableModel, public TableModelBase<StyleTableMod
 class StyleItemDelegate : public QItemDelegate,
                           public ItemDelegate<StyleItemDelegate, StyleTableModel> {
    Q_OBJECT
-
    ITEM_DELEGATE_COMMON_DECL(Style)
 };
 

@@ -134,20 +134,6 @@ Mash::Mash(Mash const & other) :
 
 Mash::~Mash() = default;
 
-///void Mash::connectSignals() {
-///   for (auto mash : ObjectStoreTyped<Mash>::getInstance().getAllRaw()) {
-///      for (auto mashStep : mash->mashSteps()) {
-///         connect(mashStep.get(), &NamedEntity::changed, mash, &Mash::acceptStepChange);
-///      }
-///   }
-///   return;
-///}
-///
-///void Mash::setKey(int key) {
-///   this->doSetKey(key);
-///   return;
-///}
-
 //============================================= "GETTER" MEMBER FUNCTIONS ==============================================
 double                Mash::grainTemp_c              () const { return this->m_grainTemp_c              ; }
 QString               Mash::notes                    () const { return this->m_notes                    ; }
@@ -196,7 +182,7 @@ double Mash::totalInfusionAmount_l() const {
 double Mash::totalSpargeAmount_l() const {
    double waterAdded_l = 0.0;
 
-   for (auto step : this-> mashSteps()) {
+   for (auto step : this->mashSteps()) {
       if (step->isSparge()) {
          waterAdded_l += step->amount_l();
       }
@@ -205,16 +191,16 @@ double Mash::totalSpargeAmount_l() const {
    return waterAdded_l;
 }
 
-double Mash::totalTime() {
+double Mash::totalTime_mins() const {
    double totalTime = 0.0;
-   for (auto step : this-> mashSteps()) {
+   for (auto step : this->mashSteps()) {
       totalTime += step->stepTime_mins().value_or(0.0);
    }
    return totalTime;
 }
 
 bool Mash::hasSparge() const {
-   for (auto step : this-> mashSteps()) {
+   for (auto step : this->mashSteps()) {
       if (step->isSparge()) {
          return true;
       }
@@ -225,7 +211,7 @@ bool Mash::hasSparge() const {
 void Mash::acceptStepChange(QMetaProperty prop, QVariant val) {
    // TBD I don't think anything listens for changes to totalMashWater_l or totalTime
    this->doAcceptStepChange(this->sender(), prop, val, {&PropertyNames::Mash::totalMashWater_l,
-                                                        &PropertyNames::Mash::totalTime       });
+                                                        &PropertyNames::Mash::totalTime_mins  });
    return;
 }
 

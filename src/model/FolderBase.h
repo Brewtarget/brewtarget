@@ -27,7 +27,7 @@
 //========================================== Start of property name constants ==========================================
 // See comment in model/NamedEntity.h
 #define AddPropertyName(property) namespace PropertyNames::FolderBase { inline BtStringConst const property{#property}; }
-AddPropertyName(folder)
+AddPropertyName(folderPath)
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
 //======================================================================================================================
@@ -53,35 +53,32 @@ protected:
 
 private:
    friend Derived;
-   FolderBase() :
-      m_folder{""} {
-      return;
-   }
+   FolderBase() = default;
 
    FolderBase(NamedParameterBundle const & namedParameterBundle) :
-      SET_REGULAR_FROM_NPB(m_folder, namedParameterBundle, PropertyNames::FolderBase::folder, "") {
+      SET_REGULAR_FROM_NPB(m_folderPath, namedParameterBundle, PropertyNames::FolderBase::folderPath, "") {
       return;
    }
 
    FolderBase(FolderBase const & other) :
-      m_folder{other.m_folder} {
+      m_folderPath{other.m_folderPath} {
       return;
    }
 
    ~FolderBase() = default;
 
 protected:
-   QString const & getFolder() const {
-      return this->m_folder;
+   QString const & getFolderPath() const {
+      return this->m_folderPath;
    }
 
-   void doSetFolder(QString const & val) {
-      this->derived().setAndNotify(PropertyNames::FolderBase::folder, this->m_folder, val);
+   void doSetFolderPath(QString const & val) {
+      this->derived().setAndNotify(PropertyNames::FolderBase::folderPath, this->m_folderPath, val);
       return;
    }
 
 protected:
-   QString m_folder;
+   QString m_folderPath = "";
 };
 
 template<class Derived>
@@ -92,10 +89,10 @@ TypeLookup const FolderBase<Derived>::typeLookup {
       // See comment in model/IngredientAmount.h for why we can't use the PROPERTY_TYPE_LOOKUP_ENTRY or
       // PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV macros here.
       //
-      {&PropertyNames::FolderBase::folder,
-       TypeInfo::construct<decltype(FolderBase<Derived>::m_folder)>(
-          PropertyNames::FolderBase::folder,
-          TypeLookupOf<decltype(FolderBase<Derived>::m_folder)>::value
+      {&PropertyNames::FolderBase::folderPath,
+       TypeInfo::construct<decltype(FolderBase<Derived>::m_folderPath)>(
+          PropertyNames::FolderBase::folderPath,
+          TypeLookupOf<decltype(FolderBase<Derived>::m_folderPath)>::value
        )}
    },
    // Parent class lookup: none as we are at the top of this branch of the inheritance tree
@@ -108,7 +105,7 @@ TypeLookup const FolderBase<Derived>::typeLookup {
  *        following block (see comment in model/StepBase.h for why):
  *
  *           // See model/FolderBase.h for info, getters and setters for these properties
- *           Q_PROPERTY(QString folder        READ folder        WRITE setFolder     )
+ *           Q_PROPERTY(QString folderPath        READ folderPath        WRITE setFolderPath)
  *
  *        Comments for these properties:
  *
@@ -123,9 +120,9 @@ TypeLookup const FolderBase<Derived>::typeLookup {
                                                                                             \
    public:                                                                                  \
       /*=========================== FB "GETTER" MEMBER FUNCTIONS ===========================*/ \
-      virtual QString const & folder() const;                                                  \
+      virtual QString const & folderPath() const;                                              \
       /*=========================== FB "SETTER" MEMBER FUNCTIONS ===========================*/ \
-      virtual void setFolder(QString const & val);                                             \
+      virtual void setFolderPath(QString const & val);                                         \
 
 /**
  * \brief Derived classes should include this in their .cpp file
@@ -134,8 +131,8 @@ TypeLookup const FolderBase<Derived>::typeLookup {
  */
 #define FOLDER_BASE_COMMON_CODE(Derived) \
    /*====================================== FB "GETTER" MEMBER FUNCTIONS ======================================*/ \
-   QString const & Derived::folder() const { return this->getFolder(); }                                          \
+   QString const & Derived::folderPath() const { return this->getFolderPath(); }                                      \
    /*====================================== FB "SETTER" MEMBER FUNCTIONS ======================================*/ \
-   void Derived::setFolder(QString const & val) { this->doSetFolder(val); return; }                               \
+   void Derived::setFolderPath(QString const & val) { this->doSetFolderPath(val); return; }                           \
 
 #endif

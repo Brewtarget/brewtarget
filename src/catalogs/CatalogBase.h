@@ -110,49 +110,50 @@ public:
       m_pushButton_edit       {new QPushButton(&this->derived())        },
       m_pushButton_remove     {new QPushButton(&this->derived())        },
       m_neTableModel          {new NeTableModel(m_tableWidget, false)   },
-      m_neTableProxy          {new NeSortFilterProxyModel(m_tableWidget)} {
+      m_sortFilterProxy       {new NeSortFilterProxyModel(m_tableWidget,
+                                                          true,
+                                                          m_neTableModel)} {
 
 ///      this->enableEditableInventory();
-      m_neTableProxy->setSourceModel(m_neTableModel);
+///      m_sortFilterProxy->setSourceModel(m_neTableModel);
 
-      m_tableWidget->setModel(m_neTableProxy);
-      m_tableWidget->setSortingEnabled(true);
-      m_tableWidget->sortByColumn(static_cast<int>(NeTableModel::ColumnIndex::Name), Qt::AscendingOrder);
-      m_neTableProxy->setDynamicSortFilter(true);
-      m_neTableProxy->setFilterKeyColumn(1);
+      this->m_tableWidget->setModel(m_sortFilterProxy);
+      this->m_tableWidget->setSortingEnabled(true);
+      this->m_tableWidget->sortByColumn(static_cast<int>(NeTableModel::ColumnIndex::Name), Qt::AscendingOrder);
+      this->m_sortFilterProxy->setDynamicSortFilter(true);
+      this->m_sortFilterProxy->setFilterKeyColumn(1);
 
-      m_qLineEdit_searchBox->setMaxLength(30);
-      m_qLineEdit_searchBox->setPlaceholderText("Enter filter");
-      if (m_pushButton_addToRecipe) {
-         m_pushButton_addToRecipe->setObjectName(QStringLiteral("pushButton_addToRecipe"));
-         m_pushButton_addToRecipe->setAutoDefault(false);
-         m_pushButton_addToRecipe->setDefault(true);
+      this->m_qLineEdit_searchBox->setMaxLength(30);
+      this->m_qLineEdit_searchBox->setPlaceholderText("Enter filter");
+      if (this->m_pushButton_addToRecipe) {
+         this->m_pushButton_addToRecipe->setObjectName(QStringLiteral("pushButton_addToRecipe"));
+         this->m_pushButton_addToRecipe->setAutoDefault(false);
+         this->m_pushButton_addToRecipe->setDefault(true);
       }
-      m_pushButton_new->setObjectName(QStringLiteral("pushButton_new"));
-      m_pushButton_new->setAutoDefault(false);
-      m_pushButton_edit->setObjectName(QStringLiteral("pushButton_edit"));
+      this->m_pushButton_new->setObjectName(QStringLiteral("pushButton_new"));
+      this->m_pushButton_new->setAutoDefault(false);
+      this->m_pushButton_edit->setObjectName(QStringLiteral("pushButton_edit"));
       QIcon icon;
       icon.addFile(QStringLiteral(":/images/edit.svg"), QSize(), QIcon::Normal, QIcon::Off);
-      m_pushButton_edit->setIcon(icon);
-      m_pushButton_edit->setAutoDefault(false);
-      m_pushButton_remove->setObjectName(QStringLiteral("pushButton_remove"));
+      this->m_pushButton_edit->setIcon(icon);
+      this->m_pushButton_edit->setAutoDefault(false);
+      this->m_pushButton_remove->setObjectName(QStringLiteral("pushButton_remove"));
       QIcon icon1;
       icon1.addFile(QStringLiteral(":/images/smallMinus.svg"), QSize(), QIcon::Normal, QIcon::Off);
-      m_pushButton_remove->setIcon(icon1);
-      m_pushButton_remove->setAutoDefault(false);
+      this->m_pushButton_remove->setIcon(icon1);
+      this->m_pushButton_remove->setAutoDefault(false);
 
       // The order we add things to m_horizontalLayout determines their left-to-right order in that layout
-      m_horizontalLayout->addWidget(m_qLineEdit_searchBox);
-      m_horizontalLayout->addItem(m_horizontalSpacer);
-      if (m_pushButton_addToRecipe) {
-         m_horizontalLayout->addWidget(m_pushButton_addToRecipe);
+      this->m_horizontalLayout->addWidget(this->m_qLineEdit_searchBox);
+      this->m_horizontalLayout->addItem  (this->m_horizontalSpacer);
+      if (this->m_pushButton_addToRecipe) {
+         this->m_horizontalLayout->addWidget(this->m_pushButton_addToRecipe);
       }
-      m_horizontalLayout->addWidget(m_pushButton_new);
-      m_horizontalLayout->addWidget(m_pushButton_edit);
-      m_horizontalLayout->addWidget(m_pushButton_remove);
-      m_verticalLayout->addWidget(m_tableWidget);
-      m_verticalLayout->addLayout(m_horizontalLayout);
-
+      this->m_horizontalLayout->addWidget(this->m_pushButton_new   );
+      this->m_horizontalLayout->addWidget(this->m_pushButton_edit  );
+      this->m_horizontalLayout->addWidget(this->m_pushButton_remove);
+      this->m_verticalLayout  ->addWidget(this->m_tableWidget      );
+      this->m_verticalLayout  ->addLayout(this->m_horizontalLayout );
 
       this->derived().resize(800, 300);
 
@@ -165,7 +166,7 @@ public:
       //
       // We could probably use the same or similar trick to avoid having to declare "public slots" at all in HopCatalog,
       // FermentableCatalog, etc, but I'm not sure it buys us much.
-      if (m_pushButton_addToRecipe) {
+      if (this->m_pushButton_addToRecipe) {
          this->derived().connect(m_pushButton_addToRecipe, &QAbstractButton::clicked,         &this->derived(), [this]() { this->add(); return; } );
       }
       this->derived().connect(m_pushButton_edit       , &QAbstractButton::clicked,         &this->derived(), &Derived::editSelected     );
@@ -194,26 +195,26 @@ public:
 
    void retranslateUi() {
       this->derived().setWindowTitle(QString(QObject::tr("%1 Catalog / Database")).arg(NE::localisedName()));
-      if (m_pushButton_addToRecipe) {
-         m_pushButton_addToRecipe->setText(QString(QObject::tr("Add to Recipe")));
+      if (this->m_pushButton_addToRecipe) {
+         this->m_pushButton_addToRecipe->setText(QString(QObject::tr("Add to Recipe")));
       }
-      m_pushButton_new        ->setText(QString(QObject::tr("New")));
-      m_pushButton_edit       ->setText(QString());
-      m_pushButton_remove     ->setText(QString());
+      this->m_pushButton_new   ->setText(QString(QObject::tr("New")));
+      this->m_pushButton_edit  ->setText(QString());
+      this->m_pushButton_remove->setText(QString());
 #ifndef QT_NO_TOOLTIP
-      if (m_pushButton_addToRecipe) {
-         m_pushButton_addToRecipe->setToolTip(QString(QObject::tr("Add selected %1 to recipe")).arg(NE::localisedName()));
+      if (this->m_pushButton_addToRecipe) {
+         this->m_pushButton_addToRecipe->setToolTip(QString(QObject::tr("Add selected %1 to recipe")).arg(NE::localisedName()));
       }
-      m_pushButton_new        ->setToolTip(QString(QObject::tr("Create new %1")).arg(NE::localisedName()));
-      m_pushButton_edit       ->setToolTip(QString(QObject::tr("Edit selected %1")).arg(NE::localisedName()));
-      m_pushButton_remove     ->setToolTip(QString(QObject::tr("Remove selected %1")).arg(NE::localisedName()));
+      this->m_pushButton_new   ->setToolTip(QString(QObject::tr("Create new %1"     )).arg(NE::localisedName()));
+      this->m_pushButton_edit  ->setToolTip(QString(QObject::tr("Edit selected %1"  )).arg(NE::localisedName()));
+      this->m_pushButton_remove->setToolTip(QString(QObject::tr("Remove selected %1")).arg(NE::localisedName()));
 #endif
       return;
    }
 
    void setEnableAddToRecipe(bool enabled) {
-      if (m_pushButton_addToRecipe) {
-         m_pushButton_addToRecipe->setEnabled(enabled);
+      if (this->m_pushButton_addToRecipe) {
+         this->m_pushButton_addToRecipe->setEnabled(enabled);
       }
       return;
    }
@@ -249,12 +250,12 @@ public:
             }
          }
 
-         translated = m_neTableProxy->mapToSource(selected[0]);
+         translated = m_sortFilterProxy->mapToSource(selected[0]);
       } else {
          // Only respond if the name is selected.  Since we connect to double-click signal, this keeps us from adding
          // something to the recipe when we just want to edit one of the other fields.
          if (index.column() == static_cast<int>(NeTableModel::ColumnIndex::Name)) {
-            translated = m_neTableProxy->mapToSource(index);
+            translated = m_sortFilterProxy->mapToSource(index);
          } else {
             return;
          }
@@ -293,7 +294,7 @@ public:
          }
       }
 
-      QModelIndex translated = m_neTableProxy->mapToSource(selected[0]);
+      QModelIndex translated = m_sortFilterProxy->mapToSource(selected[0]);
       auto ingredient = m_neTableModel->getRow(translated.row());
       ObjectStoreWrapper::softDelete(*ingredient);
       return;
@@ -318,7 +319,7 @@ public:
          }
       }
 
-      QModelIndex translated = m_neTableProxy->mapToSource(selected[0]);
+      QModelIndex translated = m_sortFilterProxy->mapToSource(selected[0]);
       auto ingredient = m_neTableModel->getRow(translated.row());
       m_neEditor->setEditItem(ingredient);
       m_neEditor->show();
@@ -333,9 +334,9 @@ public:
     *
     * TODO: This duplicates EditorBase::newEditItem.  We should just call that instead.
     *
-    * \param folder
+    * \param folderPath
     */
-   void makeNew(QString folder = "") {
+   void makeNew(QString folderPath = "") {
       QString name = QInputDialog::getText(&this->derived(),
                                            QString(QObject::tr("%1 name")).arg(NE::staticMetaObject.className()),
                                            QString(QObject::tr("%1 name:")).arg(NE::staticMetaObject.className()));
@@ -344,8 +345,8 @@ public:
       }
 
       auto ingredient = std::make_shared<NE>(name);
-      if (!folder.isEmpty()) {
-         ingredient->setFolder(folder);
+      if (!folderPath.isEmpty()) {
+         ingredient->setFolderPath(folderPath);
       }
 
       m_neEditor->setEditItem(ingredient);
@@ -357,8 +358,8 @@ public:
     * \brief Subclass should call this from its \c filterItems slot
     */
    void filter(QString searchExpression) {
-      m_neTableProxy->setFilterCaseSensitivity(Qt::CaseInsensitive);
-      m_neTableProxy->setFilterFixedString(searchExpression);
+      m_sortFilterProxy->setFilterCaseSensitivity(Qt::CaseInsensitive);
+      m_sortFilterProxy->setFilterFixedString(searchExpression);
       return;
    }
 
@@ -384,7 +385,7 @@ public:
    //! @}
 
    NeTableModel *           m_neTableModel;
-   NeSortFilterProxyModel * m_neTableProxy;
+   NeSortFilterProxyModel * m_sortFilterProxy;
 };
 
 /**

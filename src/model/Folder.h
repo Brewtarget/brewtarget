@@ -48,8 +48,12 @@ class Folder : public QObject {
    Q_OBJECT
 
 public:
+   /**
+    * \brief See comment in model/NamedEntity.h
+    */
+   static QString localisedName();
 
-   Folder();
+   Folder(QString const & fullPath = "");
    Folder(Folder const & other);
 
    virtual ~Folder();
@@ -68,9 +72,9 @@ public:
    bool isFolder(QString name);
 
 private:
-   QString m_name;
-   QString m_path;
-   QString m_fullPath;
+   QString m_name = "";
+   QString m_path = "";
+   QString m_fullPath = "";
 
 };
 

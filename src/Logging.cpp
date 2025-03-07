@@ -36,13 +36,6 @@
 #include "config.h"
 #include "PersistentSettings.h"
 
-// Qt has changed how you do endl in writing to a QTextStream
-#if QT_VERSION < QT_VERSION_CHECK(5,14,0)
-#define END_OF_LINE endl
-#else
-#define END_OF_LINE Qt::endl
-#endif
-
 //
 // Anonymous namespace for constants, global variables and functions used only in this file
 //
@@ -132,8 +125,8 @@ namespace {
                                                      .arg(message);
       QMutexLocker locker(&mutex);
       if (isLoggingToStderr ||
-          forceStderrLogging) { errStream << logEntry << END_OF_LINE; }
-      if (stream)             {   *stream << logEntry << END_OF_LINE; }
+          forceStderrLogging) { errStream << logEntry << Qt::endl; }
+      if (stream)             {   *stream << logEntry << Qt::endl; }
       return;
    }
 
@@ -202,7 +195,7 @@ namespace {
          if (!renameLogFileWithTimestamp(logDirectory)) {
             errStream <<
                "Could not rename the log file " << logFileFullName() << " in directory " <<
-               logDirectory.absolutePath() << END_OF_LINE;
+               logDirectory.absolutePath() << Qt::endl;
          }
       }
 
@@ -477,14 +470,14 @@ bool Logging::setDirectory(std::optional<QDir> newDirectory, Logging::PersistNew
             if (!renameLogFileWithTimestamp(logDirectory)) {
                errStream <<
                   Q_FUNC_INFO << "Unable to rename " << fileName << " in directory " << logDirectory.absolutePath() <<
-                  END_OF_LINE;
+                  Qt::endl;
                return false;
             }
          }
          if (!logFile.rename(logDirectory.filePath(fileName))) {
             errStream <<
                Q_FUNC_INFO << "Unable to move " << fileName << " from " << oldDirectory.absolutePath() << " to " <<
-               logDirectory.absolutePath() << END_OF_LINE;
+               logDirectory.absolutePath() << Qt::endl;
             return false;
          }
       }

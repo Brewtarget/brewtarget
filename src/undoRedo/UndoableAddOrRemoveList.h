@@ -13,9 +13,9 @@
  *
  * You should have received a copy of the GNU General Public License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
- ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
-#ifndef UNDOABLE_ADD_OR_REMOVE_LIST_H
-#define UNDOABLE_ADD_OR_REMOVE_LIST_H
+ =====================================================================================================================*/
+#ifndef UNDOREDO_UNDOABLEADDORREMOVELIST_H
+#define UNDOREDO_UNDOABLEADDORREMOVELIST_H
 #pragma once
 
 #include <QList>

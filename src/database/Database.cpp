@@ -511,11 +511,7 @@ public:
 
       QString backupDir = PersistentSettings::value(PersistentSettings::Names::directory, PersistentSettings::getUserDataDir().canonicalPath(), PersistentSettings::Sections::backups).toString();
       QString listOfFiles = PersistentSettings::value(PersistentSettings::Names::files, QVariant(), PersistentSettings::Sections::backups).toString();
-#if QT_VERSION < QT_VERSION_CHECK(5,15,0)
-      QStringList fileNames = listOfFiles.split(",", QString::SkipEmptyParts);
-#else
       QStringList fileNames = listOfFiles.split(",", Qt::SkipEmptyParts);
-#endif
 
       QString halfName = QString("%1.%2").arg("databaseBackup").arg(QDate::currentDate().toString("yyyyMMdd"));
       QString newName = halfName;

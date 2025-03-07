@@ -58,6 +58,12 @@ signals:
    void setMiscs(QList<Misc*>miscs);
    void setYeasts(QList<Yeast*>yeasts);
 
+private:
+   template<class NE, void (BtTabWidget::*signalSender)(NE *)>
+   bool acceptEventIfMatch(QString const & itemClassName, int const id, QDropEvent & event);
+   template<class NE>
+   bool appendItemIfMatch(QString const & itemClassName, int const id, QList<NE *> & droppedItems);
+
 protected:
    void dropEvent(QDropEvent *dpEvent);
    // void dragMoveEvent(QDragMoveEvent *dmEvent);

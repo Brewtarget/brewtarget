@@ -1852,7 +1852,7 @@ void Recipe::generateInstructions() {
       /*** Prepare water additions ***/
       this->pimpl->mashWaterIns();
 
-      timeRemaining = mash()->totalTime();
+      timeRemaining = mash()->totalTime_mins();
 
       /*** Generate the mash instructions ***/
       preinstructions = this->pimpl->mashInstructions(timeRemaining, totalWaterAdded_l, size);
@@ -2254,7 +2254,7 @@ void Recipe::setCalcsEnabled(bool const val) {
    return;
 }
 
-QList<Recipe *> Recipe::ancestors() const {
+QList<std::shared_ptr<Recipe>> Recipe::ancestors() const {
    // If we know we have some ancestors, and we didn't yet load them, do so now
    if (this->m_ancestor_id > 0 && this->m_ancestor_id != this->key() && this->m_ancestors.size() == 0) {
       // NB: In previous versions of the code, we included the Recipe in the list along with its ancestors, but it's
@@ -2264,7 +2264,7 @@ QList<Recipe *> Recipe::ancestors() const {
          qDebug() <<
             Q_FUNC_INFO << "Search ancestors for Recipe #" << recipe->key() << "with m_ancestor_id" <<
             recipe->m_ancestor_id;
-         Recipe * ancestor = ObjectStoreWrapper::getByIdRaw<Recipe>(recipe->m_ancestor_id);
+         auto ancestor = ObjectStoreWrapper::getById<Recipe>(recipe->m_ancestor_id);
          if (!ancestor || ancestor->key() < 0) {
             qWarning() <<
                Q_FUNC_INFO << "Recipe #" << recipe->key() << "(" << recipe->name() << ")" <<
@@ -2275,11 +2275,23 @@ QList<Recipe *> Recipe::ancestors() const {
          qDebug() << Q_FUNC_INFO << "Found ancestor Recipe #" << ancestor->key();
          ancestor->m_hasDescendants = true;
          this->m_ancestors.append(ancestor);
-         recipe = ancestor;
+         recipe = ancestor.get();
       }
    }
 
    return this->m_ancestors;
+}
+
+// TBD: Hopefully we can get rid of this version
+QList<Recipe *> Recipe::ancestorsRaw() const {
+   this->ancestors();
+
+   QList<Recipe *> ancestorsRaw;
+   for (auto ancestor : this->m_ancestors) {
+      ancestorsRaw.append(ancestor.get());
+   }
+
+   return ancestorsRaw;
 }
 
 bool Recipe::hasAncestors() const {
@@ -2287,7 +2299,7 @@ bool Recipe::hasAncestors() const {
 }
 
 bool Recipe::isMyAncestor(Recipe const & maybe) const {
-   return this->ancestors().contains(const_cast<Recipe *>(&maybe));
+   return this->ancestors().contains(ObjectStoreWrapper::getShared(maybe));
 }
 
 bool Recipe::hasDescendants() const {
@@ -2347,7 +2359,8 @@ void Recipe::setAncestor(Recipe & ancestor) {
    if (&ancestor != this) {
       // Either we verified the lazy-load of this->m_ancestors in the call to this->ancestors() in the if statement above
       // or it should have been empty to begin with.  In both cases, we should be good to append the new ancestor here.
-      this->m_ancestors.append(&ancestor);
+      std::shared_ptr<Recipe> ancestorPointer = ObjectStoreWrapper::getById<Recipe>(ancestor.key());
+      this->m_ancestors.append(ancestorPointer);
 
       ancestor.setDisplay(false);
       ancestor.setLocked(true);
@@ -2945,8 +2958,7 @@ FOLDER_BASE_COMMON_CODE(Recipe)
 //======================================================================================================================
 QList<std::shared_ptr<BrewNote>> RecipeHelper::brewNotesForRecipeAndAncestors(Recipe const & recipe) {
    QList<std::shared_ptr<BrewNote>> brewNotes = recipe.brewNotes();
-   QList<Recipe *> ancestors = recipe.ancestors();
-   for (auto ancestor : ancestors) {
+   for (auto ancestor : recipe.ancestors()) {
       brewNotes.append(ancestor->brewNotes());
    }
    return brewNotes;

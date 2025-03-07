@@ -996,6 +996,81 @@ Log file may contain more details.</source>
     </message>
 </context>
 <context>
+    <name>Derived</name>
+    <message>
+        <source>New</source>
+        <translation type="unfinished">Nový</translation>
+    </message>
+    <message>
+        <source>Folder</source>
+        <translation type="unfinished">Adresář</translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation type="unfinished">Kopírovat</translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation type="unfinished">Smazat</translation>
+    </message>
+    <message>
+        <source>Export</source>
+        <translation type="unfinished">Exportovat</translation>
+    </message>
+    <message>
+        <source>To File (BeerXML or BeerJSON)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Import</source>
+        <translation type="unfinished">Importovat</translation>
+    </message>
+    <message>
+        <source>Copy %1</source>
+        <translation type="unfinished">Kopírovat %1</translation>
+    </message>
+    <message>
+        <source>Enter a unique name for the copy of %1.</source>
+        <translation type="unfinished">Zadejte jedinečný název kopie %1.</translation>
+    </message>
+    <message>
+        <source>An empty name will skip copying this %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete %1</source>
+        <translation type="unfinished">Smazat %1</translation>
+    </message>
+    <message>
+        <source>Delete %1 %2?</source>
+        <translation type="unfinished">Smazat %1 %2?</translation>
+    </message>
+    <message>
+        <source>Folder name</source>
+        <translation type="unfinished">Název adresáře</translation>
+    </message>
+    <message>
+        <source>Folder name:</source>
+        <translation type="unfinished">Název adresáře:</translation>
+    </message>
+    <message>
+        <source>Bad Name</source>
+        <translation type="unfinished">Chybný název</translation>
+    </message>
+    <message>
+        <source>A folder name must have at least one non-whitespace character in it</source>
+        <translation type="unfinished">Název adresáře musí obsahovat alespoň jeden neprázdný znak</translation>
+    </message>
+    <message>
+        <source>A folder name must have at least one non-/ character in it</source>
+        <translation type="unfinished">Název adresáře musí obsahovat alespoň jeden nelomítkový znak</translation>
+    </message>
+</context>
+<context>
     <name>Equipment</name>
     <message>
         <source>Equipment</source>
@@ -1008,6 +1083,18 @@ Log file may contain more details.</source>
     <message>
         <source>Boil Time</source>
         <translation type="unfinished">Délka chmelovaru</translation>
+    </message>
+    <message>
+        <source>Equipments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Preboil</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>BoilTime</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1354,6 +1441,14 @@ Log file may contain more details.</source>
         <source>Color</source>
         <translation type="unfinished">Barva</translation>
     </message>
+    <message>
+        <source>Fermentables</source>
+        <translation type="unfinished">Suroviny</translation>
+    </message>
+    <message>
+        <source>Extract Yield Dry Basis Fine Grind (DBFG)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FermentableDialog</name>
@@ -1569,6 +1664,10 @@ Log file may contain more details.</source>
         <source>FULLPATH</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Folder</source>
+        <translation type="unfinished">Adresář</translation>
+    </message>
 </context>
 <context>
     <name>HelpDialog</name>
@@ -1718,6 +1817,22 @@ Log file may contain more details.</source>
     <message>
         <source>Origin</source>
         <translation type="unfinished">Původ</translation>
+    </message>
+    <message>
+        <source>Hops</source>
+        <translation type="unfinished">Chmele</translation>
+    </message>
+    <message>
+        <source>Alpha</source>
+        <translation type="unfinished">Alfa</translation>
+    </message>
+    <message>
+        <source>Beta</source>
+        <translation type="unfinished">Beta</translation>
+    </message>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2150,23 +2265,23 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Folder name</source>
-        <translation>Název adresáře</translation>
+        <translation type="vanished">Název adresáře</translation>
     </message>
     <message>
         <source>Folder name:</source>
-        <translation>Název adresáře:</translation>
+        <translation type="vanished">Název adresáře:</translation>
     </message>
     <message>
         <source>Bad Name</source>
-        <translation>Chybný název</translation>
+        <translation type="vanished">Chybný název</translation>
     </message>
     <message>
         <source>A folder name must have at least one non-whitespace character in it</source>
-        <translation>Název adresáře musí obsahovat alespoň jeden neprázdný znak</translation>
+        <translation type="vanished">Název adresáře musí obsahovat alespoň jeden neprázdný znak</translation>
     </message>
     <message>
         <source>A folder name must have at least one non-/ character in it</source>
-        <translation>Název adresáře musí obsahovat alespoň jeden nelomítkový znak</translation>
+        <translation type="vanished">Název adresáře musí obsahovat alespoň jeden nelomítkový znak</translation>
     </message>
     <message>
         <source>An error was returned while creating %1</source>
@@ -2309,6 +2424,26 @@ If you need help, please open an issue at %1</source>
     <name>Mash</name>
     <message>
         <source>Mash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mashes</source>
+        <translation type="unfinished">Rmutovací schémata</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Název</translation>
+    </message>
+    <message>
+        <source>Total Water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Total Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Total time (mins)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3165,11 +3300,11 @@ Error message:
     </message>
     <message>
         <source>Recipes</source>
-        <translation>Recepty</translation>
+        <translation type="vanished">Recepty</translation>
     </message>
     <message>
         <source>Equipment</source>
-        <translation>Vybavení</translation>
+        <translation type="vanished">Vybavení</translation>
     </message>
     <message>
         <source>Fermentables</source>
@@ -3189,11 +3324,11 @@ Error message:
     </message>
     <message>
         <source>Style</source>
-        <translation>Styl</translation>
+        <translation type="vanished">Styl</translation>
     </message>
     <message>
         <source>Folder</source>
-        <translation>Adresář</translation>
+        <translation type="vanished">Adresář</translation>
     </message>
     <message>
         <source>Error attempting to create directory &quot;%1&quot;</source>
@@ -3439,10 +3574,6 @@ Error message:
     <message>
         <source>Could not open SQLite DB file %1.
 %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Water</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4001,6 +4132,14 @@ Log file may contain more details.</source>
         <source>pt</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>None!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add %1 step to recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RaIngrd</name>
@@ -4324,6 +4463,34 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     <message>
         <source>Style</source>
         <translation type="unfinished">Styl</translation>
+    </message>
+    <message>
+        <source>Recipes</source>
+        <translation type="unfinished">Recepty</translation>
+    </message>
+    <message>
+        <source>unknown style</source>
+        <translation type="unfinished">neznámý styl</translation>
+    </message>
+    <message>
+        <source>N/A</source>
+        <translation type="unfinished">Není známo</translation>
+    </message>
+    <message>
+        <source>OG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>FG</source>
+        <translation type="unfinished">Konečná hustota</translation>
+    </message>
+    <message>
+        <source>Color</source>
+        <translation type="unfinished">Barva</translation>
+    </message>
+    <message>
+        <source>IBU</source>
+        <translation type="unfinished">IBU</translation>
     </message>
 </context>
 <context>
@@ -4938,39 +5105,31 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
     <message>
         <source>Category</source>
-        <translation>Kategorie</translation>
+        <translation type="vanished">Kategorie</translation>
     </message>
     <message>
         <source>Code</source>
-        <translation>Kód</translation>
-    </message>
-    <message>
-        <source>Guide</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>BoilTime</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Kód</translation>
     </message>
     <message>
         <source>Beta</source>
-        <translation>Beta</translation>
+        <translation type="vanished">Beta</translation>
     </message>
     <message>
         <source>Lab</source>
-        <translation>Laboratoř</translation>
+        <translation type="vanished">Laboratoř</translation>
     </message>
     <message>
         <source>Attenuation</source>
-        <translation>Prokvašení</translation>
+        <translation type="vanished">Prokvašení</translation>
     </message>
     <message>
         <source>Id</source>
-        <translation>Id</translation>
+        <translation type="vanished">Id</translation>
     </message>
     <message>
         <source>Flocculation</source>
-        <translation>Flokulace</translation>
+        <translation type="vanished">Flokulace</translation>
     </message>
     <message>
         <source>Miscs</source>
@@ -5005,36 +5164,62 @@ Celkový objem pro hlavní kvašení je %1.</translation>
         <translation type="unfinished">Recept</translation>
     </message>
     <message>
-        <source>Ca</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mg</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>SO&lt;sub&gt;4&lt;/sub&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Na</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cl</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>HCO&lt;sub&gt;3&lt;/sub&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Extract Yield Dry Basis Fine Grind (DBFG)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Add During</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>RecipeTableModel</name>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Název</translation>
+    </message>
+</context>
+<context>
+    <name>RecipeTreeView</name>
+    <message>
+        <source>Snapshots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Snapshots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hide Snapshots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Detach Recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Snapshot Recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew It!</source>
+        <translation type="unfinished">Uvařit!</translation>
+    </message>
+    <message>
+        <source>Brew Again</source>
+        <translation type="unfinished">Uvařit znovu</translation>
+    </message>
+    <message>
+        <source>Change date</source>
+        <translation type="unfinished">Datum změny</translation>
+    </message>
+    <message>
+        <source>Recalculate eff</source>
+        <translation type="unfinished">Přepočít. výtěž.</translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation type="unfinished">Smazat</translation>
     </message>
 </context>
 <context>
@@ -5197,13 +5382,6 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
 </context>
 <context>
-    <name>StepClass</name>
-    <message>
-        <source>Add %1 step to recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>StepExtended</name>
     <message>
         <source>Extended Step</source>
@@ -5263,6 +5441,18 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     <message>
         <source>Guide</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Styles</source>
+        <translation type="unfinished">Styly</translation>
+    </message>
+    <message>
+        <source>Code</source>
+        <translation type="unfinished">Kód</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="unfinished">Druh</translation>
     </message>
 </context>
 <context>
@@ -5553,136 +5743,92 @@ Celkový objem pro hlavní kvašení je %1.</translation>
         <source>Number</source>
         <translation type="obsolete">Číslo</translation>
     </message>
-    <message>
-        <source>Could not copy</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>There was an unexpected error creating %1</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>TreeView</name>
     <message>
         <source>New</source>
-        <translation type="unfinished">Nový</translation>
+        <translation type="obsolete">Nový</translation>
     </message>
     <message>
         <source>Recipe</source>
-        <translation type="unfinished">Recept</translation>
-    </message>
-    <message>
-        <source>Show Snapshots</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hide Snapshots</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Detach Recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Snapshot Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Recept</translation>
     </message>
     <message>
         <source>Brew It!</source>
-        <translation type="unfinished">Uvařit!</translation>
+        <translation type="obsolete">Uvařit!</translation>
     </message>
     <message>
         <source>Brew Again</source>
-        <translation type="unfinished">Uvařit znovu</translation>
+        <translation type="obsolete">Uvařit znovu</translation>
     </message>
     <message>
         <source>Change date</source>
-        <translation type="unfinished">Datum změny</translation>
+        <translation type="obsolete">Datum změny</translation>
     </message>
     <message>
         <source>Recalculate eff</source>
-        <translation type="unfinished">Přepočít. výtěž.</translation>
+        <translation type="obsolete">Přepočít. výtěž.</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="unfinished">Smazat</translation>
+        <translation type="obsolete">Smazat</translation>
     </message>
     <message>
         <source>Equipment</source>
-        <translation type="unfinished">Vybavení</translation>
+        <translation type="obsolete">Vybavení</translation>
     </message>
     <message>
         <source>Fermentable</source>
-        <translation type="unfinished">Zkvasitelné</translation>
+        <translation type="obsolete">Zkvasitelné</translation>
     </message>
     <message>
         <source>Hop</source>
-        <translation type="unfinished">Chmel</translation>
+        <translation type="obsolete">Chmel</translation>
     </message>
     <message>
         <source>Misc</source>
-        <translation type="unfinished">Přípravky</translation>
+        <translation type="obsolete">Přípravky</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Styl</translation>
+        <translation type="obsolete">Styl</translation>
     </message>
     <message>
         <source>Yeast</source>
-        <translation type="unfinished">Kvasnice</translation>
-    </message>
-    <message>
-        <source>Water</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Kvasnice</translation>
     </message>
     <message>
         <source>Folder</source>
-        <translation type="unfinished">Adresář</translation>
+        <translation type="obsolete">Adresář</translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation type="unfinished">Kopírovat</translation>
+        <translation type="obsolete">Kopírovat</translation>
     </message>
     <message>
         <source>Export</source>
-        <translation type="unfinished">Exportovat</translation>
-    </message>
-    <message>
-        <source>To File (BeerXML or BeerJSON)</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Exportovat</translation>
     </message>
     <message>
         <source>Import</source>
-        <translation type="unfinished">Importovat</translation>
-    </message>
-    <message>
-        <source>Cancel All</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Importovat</translation>
     </message>
     <message>
         <source>Copy %1</source>
-        <translation type="unfinished">Kopírovat %1</translation>
+        <translation type="obsolete">Kopírovat %1</translation>
     </message>
     <message>
         <source>Enter a unique name for the copy of %1.</source>
-        <translation type="unfinished">Zadejte jedinečný název kopie %1.</translation>
-    </message>
-    <message>
-        <source>An empty name will skip copying this %1.</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Zadejte jedinečný název kopie %1.</translation>
     </message>
     <message>
         <source>Delete %1</source>
-        <translation type="unfinished">Smazat %1</translation>
+        <translation type="obsolete">Smazat %1</translation>
     </message>
     <message>
         <source>Delete %1 %2?</source>
-        <translation type="unfinished">Smazat %1 %2?</translation>
-    </message>
-    <message>
-        <source>BrewNote</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Smazat %1 %2?</translation>
     </message>
 </context>
 <context>
@@ -5763,6 +5909,18 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
     <message>
         <source>pH</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Waters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SO&lt;sub&gt;4&lt;/sub&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>HCO&lt;sub&gt;3&lt;/sub&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -6027,6 +6185,26 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     <message>
         <source>Product ID</source>
         <translation type="unfinished">ID produktu</translation>
+    </message>
+    <message>
+        <source>Yeasts</source>
+        <translation type="unfinished">Kvasnice</translation>
+    </message>
+    <message>
+        <source>Lab</source>
+        <translation type="unfinished">Laboratoř</translation>
+    </message>
+    <message>
+        <source>Attenuation</source>
+        <translation type="unfinished">Prokvašení</translation>
+    </message>
+    <message>
+        <source>Id</source>
+        <translation type="unfinished">Id</translation>
+    </message>
+    <message>
+        <source>Flocculation</source>
+        <translation type="unfinished">Flokulace</translation>
     </message>
 </context>
 <context>
@@ -8580,7 +8758,7 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
     <message>
         <source>Tun</source>
-        <translation>Pánev</translation>
+        <translation type="vanished">Pánev</translation>
     </message>
     <message>
         <source>Initial tun temp</source>
@@ -8600,11 +8778,51 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
     <message>
         <source>Tun sp. heat</source>
-        <translation>Spec. teplo kádě</translation>
+        <translation type="vanished">Spec. teplo kádě</translation>
     </message>
     <message>
         <source>Tun specific heat (cal/(g*K))</source>
         <translation>Specifické teplo kádě (kalorií/(g*K))</translation>
+    </message>
+    <message>
+        <source>Main</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ID in database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use for</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tun specific heat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished">Nový</translation>
+    </message>
+    <message>
+        <source>Save and close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished">Uložit</translation>
+    </message>
+    <message>
+        <source>Discard and close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Zrušit</translation>
     </message>
 </context>
 <context>
@@ -9689,7 +9907,7 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
     <message>
         <source>dd MMM yyyy</source>
-        <translation type="vanished">dd MMM yyyy</translation>
+        <translation>dd MMM yyyy</translation>
     </message>
     <message>
         <source>Carbonation Volumes</source>
@@ -9713,10 +9931,6 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
     <message>
         <source>Date Created</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>dd MM yyyy</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

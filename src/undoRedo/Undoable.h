@@ -17,6 +17,8 @@
 #define UNDOREDO_UNDOABLE_H
 #pragma once
 
+#include <memory>
+
 #include <QString>
 #include <QUndoCommand>
 #include <QUndoStack>
@@ -62,6 +64,14 @@ namespace Undoable {
                        [[maybe_unused]] QUndoCommand * parent = nullptr) {
       doOrRedoUpdate(new SimpleUndoableUpdate(updatee, propertyPath, typeInfo, newValue, description));
       return;
+   }
+
+   //! \brief Actually add the new mash step to (the mash of) the recipe (in an undoable way).
+   template<class StepOwnerClass, class StepClass>
+   void addStepToStepOwner(StepOwnerClass & stepOwner, std::shared_ptr<StepClass> step);
+   template<class StepOwnerClass, class StepClass>
+   void addStepToStepOwner(std::shared_ptr<StepOwnerClass> stepOwner, std::shared_ptr<StepClass> step) {
+      addStepToStepOwner(*stepOwner, step);
    }
 
 }

@@ -148,7 +148,7 @@ class Recipe : public NamedEntity,
    FOLDER_BASE_DECL(Recipe)
 
    // See model/FolderBase.h for info, getters and setters for these properties
-   Q_PROPERTY(QString folder        READ folder        WRITE setFolder     )
+   Q_PROPERTY(QString folderPath        READ folderPath        WRITE setFolderPath)
 
    /**
     * \brief \c MainWindow is a friend so it can access \c Recipe::recalcAll() and \c Recipe::recalcIfNeeded()
@@ -387,7 +387,8 @@ public:
 
    Q_PROPERTY(int    ancestorId READ getAncestorId WRITE setAncestorId)
    //! \brief The ancestors.
-   Q_PROPERTY(QList<Recipe *> ancestors READ ancestors /*WRITE*/ /*NOTIFY changed*/ STORED false)
+///   Q_PROPERTY(QList<std::shared_ptr<Recipe>> ancestors      READ ancestors      STORED false)
+///   Q_PROPERTY(QList<Recipe *>                ancestorsRaw   READ ancestorsRaw   STORED false)
 
    /**
     * \brief We need to override \c NamedEntity::setKey to do some extra ancestor stuff
@@ -527,7 +528,8 @@ public:
    QList<std::shared_ptr<RecipeUseOfWater>>          waterUses             () const;
    QList<std::shared_ptr<BrewNote>>                  brewNotes             () const;
    QList<std::shared_ptr<Instruction>>               instructions          () const;
-   QList<Recipe *>                                   ancestors             () const;
+   QList<std::shared_ptr<Recipe>>                    ancestors             () const;
+   QList<Recipe *>                                   ancestorsRaw          () const;
    std::shared_ptr<Equipment>                        equipment             () const;
    int                                               getEquipmentId        () const;
    std::shared_ptr<Style>                            style                 () const;
@@ -762,9 +764,9 @@ private:
    QMutex                  m_recalcMutex            ;
 
    // version things
-   int                     m_ancestor_id;
-   mutable QList<Recipe *> m_ancestors;
-   mutable bool            m_hasDescendants;
+   int                                    m_ancestor_id;
+   mutable QList<std::shared_ptr<Recipe>> m_ancestors;
+   mutable bool                           m_hasDescendants;
 
    // Some recalculators for calculated properties.
    void recalcIfNeeded(QString classNameOfWhatWasAddedOrChanged);

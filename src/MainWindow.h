@@ -59,19 +59,6 @@ public:
    MainWindow(QWidget* parent=nullptr);
    virtual ~MainWindow();
 
-   //
-   // This is a short-term trick to save me adding .get() to lots of calls
-   //
-   using QObject::connect;
-   template<typename A, typename B, typename C, typename D>
-   void connect(std::unique_ptr<A> & a, B b, C c, D d) {
-      this->connect(a.get(), b, c, d);
-   }
-   template<typename A, typename B, typename C, typename D>
-   void connect(A a, B b, std::unique_ptr<C> & c, D d) {
-      this->connect(a, b, c.get(), d);
-   }
-
    //! \brief Accessor to obtain \c MainWindow singleton
    static MainWindow & instance();
 
@@ -104,11 +91,6 @@ public:
     */
    template<class NE> void addIngredientToRecipe(NE & ne);
 
-   //! \brief Actually add the new mash step to (the mash of) the recipe (in an undoable way).
-   template<class StepOwnerClass, class StepClass>
-   void addStepToStepOwner(StepOwnerClass & stepOwner, std::shared_ptr<StepClass> step);
-   template<class StepOwnerClass, class StepClass>
-   void addStepToStepOwner(std::shared_ptr<StepOwnerClass> stepOwner, std::shared_ptr<StepClass> step);
    void addStepToStepOwner(std::shared_ptr<MashStep        > step);
    void addStepToStepOwner(std::shared_ptr<BoilStep        > step);
    void addStepToStepOwner(std::shared_ptr<FermentationStep> step);
@@ -118,7 +100,6 @@ public slots:
    //! \brief Accepts Recipe changes, and takes appropriate action to show the changes.
    void changed(QMetaProperty,QVariant);
 
-   void treeActivated(const QModelIndex &index);
    //! \brief View the given recipe.
    void setRecipe(Recipe* recipe);
 
@@ -132,10 +113,6 @@ public slots:
    void updateRecipeEquipment();
    //! \brief Update Recipe batch size to that given by the relevant widget.
    void updateRecipeBatchSize();
-   //! \brief Update Recipe boil size to that given by the relevant widget.
-///   void updateRecipeBoilSize();
-   //! \brief Update Recipe boil time to that given by the relevant widget.
-///   void updateRecipeBoilTime();
    //! \brief Update Recipe efficiency to that given by the relevant widget.
    void updateRecipeEfficiency();
    //! \brief Update Recipe's mash
@@ -146,6 +123,8 @@ public slots:
 
    //! \brief Close a brewnote tab if we must (because of the BrewNote being deleted)
    void closeBrewNote(int brewNoteId, std::shared_ptr<QObject> object);
+
+   void setBrewNoteByIndex(QModelIndex const & index);
 
    //! \brief Remove selected Fermentable(s) from the Recipe.
    void removeSelectedFermentableAddition();
@@ -207,7 +186,8 @@ public slots:
    void removeMash();
 
    //! \brief Create a new recipe in the database.
-   void newRecipe();
+   std::shared_ptr<Recipe> newRecipe();
+   void newRecipeInFolder(QString folderPath);
    //! \brief Export current recipe to BeerXML or BeerJSON.
    void exportRecipe();
    //! \brief Display file selection dialog and import BeerXML/BeerJSON files.
@@ -218,9 +198,7 @@ public slots:
    //! \brief Implements "> Edit > Redo"
    void editRedo();
 
-   //! \brief Create a new folder
-   void newFolder();
-   void renameFolder();
+   TreeView * getActiveTreeView() const;
 
    void deleteSelected();
    void copySelected();
@@ -234,8 +212,6 @@ public slots:
    //! \brief makes sure we can do water chemistry before we show the window
    void showWaterChemistryTool();
 
-   //! \brief draws a context menu, the exact nature of which depends on which tree is focused
-   void contextMenu(const QPoint &point);
    //! \brief creates a new brewnote
    void newBrewNote();
    //! \brief copies an existing brewnote to a new brewday
@@ -324,8 +300,6 @@ private:
 
    //! \brief Set the keyboard shortcuts.
    void setupShortCuts();
-   //! \brief Set the TreeView context menus.
-   void setupContextMenu();
    //! \brief Create the CSS strings
    void setupCSS();
    //! \brief Configure the range sliders

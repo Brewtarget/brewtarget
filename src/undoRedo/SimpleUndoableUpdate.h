@@ -12,9 +12,9 @@
  *
  * You should have received a copy of the GNU General Public License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
- ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
-#ifndef SIMPLE_UNDOABLE_UPDATE_H
-#define SIMPLE_UNDOABLE_UPDATE_H
+ =====================================================================================================================*/
+#ifndef UNDOREDO_SIMPLEUNDOABLEUPDATE_H
+#define UNDOREDO_SIMPLEUNDOABLEUPDATE_H
 #pragma once
 
 #include <QMetaProperty>

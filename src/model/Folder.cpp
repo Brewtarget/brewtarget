@@ -25,7 +25,11 @@
    #include "moc_Folder.cpp"
 #endif
 
-Folder::Folder() : QObject() {
+QString Folder::localisedName() { return tr("Folder"); }
+
+Folder::Folder(QString const & fullPath) :
+   QObject{},
+   m_fullPath{fullPath} {
    setObjectName("Folder");
    return;
 }
@@ -61,11 +65,7 @@ void Folder::setPath(QString var) {
 
 // changing the full path necessarily changes the name and the path
 void Folder::setfullPath(QString var) {
-#if QT_VERSION < QT_VERSION_CHECK(5,15,0)
-   QStringList pieces = var.split("/", QString::SkipEmptyParts);
-#else
    QStringList pieces = var.split("/", Qt::SkipEmptyParts);
-#endif
 
    if (!pieces.isEmpty()) {
       m_name = pieces.last();

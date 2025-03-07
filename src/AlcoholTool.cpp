@@ -100,10 +100,7 @@ public:
 
    void doLayout() {
       this->input_og->setMinimumSize(QSize(80, 0));
-///      this->input_og->setForcedSystemOfMeasurement(Measurement::SystemOfMeasurement::SpecificGravity);
-
       this->input_fg->setMinimumSize(QSize(80, 0));
-///      this->input_fg->setForcedSystemOfMeasurement(Measurement::SystemOfMeasurement::SpecificGravity);
 
       this->label_result->setObjectName(QStringLiteral("label_results"));
       this->label_result->setContextMenuPolicy(Qt::CustomContextMenu);

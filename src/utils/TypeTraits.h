@@ -136,5 +136,11 @@ struct is_base_class_template_of {
 template <template <typename...> typename BaseClassTemplate, typename DerivedClass>
 concept CONCEPT_FIX_UP IsBaseClassTemplateOf = is_base_class_template_of<BaseClassTemplate, DerivedClass>::value_type::value;
 
+//
+// Where we have optional template parameters (eg TreeModelBase) which default to void, it's useful to tell whether a
+// type is void.
+//
+template <typename T> concept CONCEPT_FIX_UP IsVoid  = std::is_void<T>::value;
+
 
 #endif
