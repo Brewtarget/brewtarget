@@ -223,6 +223,9 @@ public:
    //! Actual attenuation, based on measured og/fg
    double calculateAttenuation_pct();
 
+   //! Needed by \c TreeModelBase
+   static QList<std::shared_ptr<BrewNote>> ownedBy(Recipe const & recipe);
+
 signals:
    void brewDateChanged(QDate const &);
 

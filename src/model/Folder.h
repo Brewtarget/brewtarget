@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/Folder.h is part of Brewken, and is copyright the following authors 2009-2024:
+ * model/Folder.h is part of Brewtarget, and is copyright the following authors 2009-2024:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
  *   • Philip Greggory Lee <rocketman768@gmail.com>
@@ -48,8 +48,12 @@ class Folder : public QObject {
    Q_OBJECT
 
 public:
+   /**
+    * \brief See comment in model/NamedEntity.h
+    */
+   static QString localisedName();
 
-   Folder();
+   Folder(QString const & fullPath = "");
    Folder(Folder const & other);
 
    virtual ~Folder();
@@ -68,9 +72,9 @@ public:
    bool isFolder(QString name);
 
 private:
-   QString m_name;
-   QString m_path;
-   QString m_fullPath;
+   QString m_name = "";
+   QString m_path = "";
+   QString m_fullPath = "";
 
 };
 

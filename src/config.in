@@ -38,6 +38,15 @@ constexpr char const * CONFIG_APPLICATION_NAME_UC = "${capitalisedProjectName}";
 constexpr char const * CONFIG_APPLICATION_NAME_LC = "${CMAKE_PROJECT_NAME}";
 constexpr char const * CONFIG_ORGANIZATION_DOMAIN = "${CONFIG_ORGANIZATION_DOMAIN}";
 
+/**
+ * Sometimes it is useful to have #define versions of constants for compile-time string concatenation with the
+ * preprocessor.  (TBD: It is possible to do this with templates -- eg see
+ * https://stackoverflow.com/questions/38955940/how-to-concatenate-static-strings-at-compile-time -- so we might retire
+ * these \c #defines at some point.)
+ */
+#define DEF_CONFIG_APPLICATION_NAME_LC "${CMAKE_PROJECT_NAME}"
+#define DEF_CONFIG_MIME_PREFIX "application/x-${CMAKE_PROJECT_NAME}"
+
 // This one has to be a #define rather than a constexpr because it's used in ui/mainWindow.ui which is processed into
 // C++ code by the Qt Meta Object Compiler (MOC) and the MOC can't handle use of a constexpr const in a ui file.
 #define CONFIG_VERSION_STRING "${PROJECT_VERSION}"

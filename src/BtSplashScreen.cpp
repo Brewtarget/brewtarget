@@ -30,22 +30,14 @@ namespace {
    static QString const logoFile = QString{":images/%1.svg"}.arg(CONFIG_APPLICATION_NAME_LC);
 }
 
-#if QT_VERSION < QT_VERSION_CHECK(5,15,0)
-BtSplashScreen::BtSplashScreen(QWidget* parent) :
-   QSplashScreen(parent, QPixmap(logoFile)) {
-   setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
-   showMessage(tr("Loading..."));
-   return;
-}
-#else
 BtSplashScreen::BtSplashScreen(QScreen* parent) :
-   QSplashScreen(parent, QPixmap(logoFile)) {
-   setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
-   showMessage(tr("Loading..."));
+   QSplashScreen{parent, QPixmap{logoFile}} {
+   this->setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
+   this->showMessage(tr("Loading..."));
    return;
 }
-#endif
 
-void BtSplashScreen::showMessage(QString const& message) {
-   QSplashScreen::showMessage(message, Qt::AlignLeft, Qt::white);
+void BtSplashScreen::showMessage(QString const & message) {
+   this->QSplashScreen::showMessage(message, Qt::AlignLeft, Qt::white);
+   return;
 }

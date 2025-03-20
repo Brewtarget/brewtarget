@@ -83,6 +83,7 @@
             <height>16</height>
            </size>
           </property>
+
           <widget class="QWidget" name="tabTree_recipe">
            <property name="acceptDrops">
             <bool>true</bool>
@@ -110,6 +111,7 @@
             </item>
            </layout>
           </widget>
+
           <widget class="QWidget" name="tabTree_style">
            <property name="acceptDrops">
             <bool>true</bool>
@@ -134,6 +136,7 @@
             </item>
            </layout>
           </widget>
+
           <widget class="QWidget" name="tabTree_equip">
            <attribute name="icon">
             <iconset resource="../resources.qrc">
@@ -151,6 +154,25 @@
             </item>
            </layout>
           </widget>
+
+          <widget class="QWidget" name="tabTree_mash">
+           <attribute name="icon">
+            <iconset resource="../resources.qrc">
+             <normaloff>:/images/mashpaddle.svg</normaloff>:/images/mashpaddle.svg</iconset>
+           </attribute>
+           <attribute name="title">
+            <string/>
+           </attribute>
+           <attribute name="toolTip">
+            <string>Mashes</string>
+           </attribute>
+           <layout class="QHBoxLayout" name="horizontalLayout_12">
+            <item>
+             <widget class="MashTreeView" name="treeView_mash"/>
+            </item>
+           </layout>
+          </widget>
+
           <widget class="QWidget" name="tabTree_ferm">
            <attribute name="icon">
             <iconset resource="../resources.qrc">
@@ -168,6 +190,7 @@
             </item>
            </layout>
           </widget>
+
           <widget class="QWidget" name="tabTree_hops">
            <attribute name="icon">
             <iconset resource="../resources.qrc">
@@ -185,6 +208,7 @@
             </item>
            </layout>
           </widget>
+
           <widget class="QWidget" name="tabTree_misc">
            <attribute name="icon">
             <iconset resource="../resources.qrc">
@@ -202,6 +226,7 @@
             </item>
            </layout>
           </widget>
+
           <widget class="QWidget" name="tabTree_yeast">
            <attribute name="icon">
             <iconset resource="../resources.qrc">
@@ -219,6 +244,7 @@
             </item>
            </layout>
           </widget>
+
           <widget class="QWidget" name="tabTree_water">
            <attribute name="icon">
             <iconset resource="../resources.qrc">
@@ -236,6 +262,7 @@
             </item>
            </layout>
           </widget>
+
          </widget>
         </item>
        </layout>
@@ -1940,7 +1967,6 @@
      <addaction name="actionRestore_Database"/>
     </widget>
     <addaction name="actionNewRecipe"/>
-    <addaction name="actionCopySelected"/>
     <addaction name="separator"/>
     <addaction name="actionImportFromXml"/>
     <addaction name="actionExportToXml"/>
@@ -1988,6 +2014,8 @@
     <property name="title">
      <string>Edit</string>
     </property>
+    <addaction name="actionCopySelected"/>
+    <addaction name="separator"/>
     <addaction name="actionUndo"/>
     <addaction name="actionRedo"/>
    </widget>
@@ -2453,9 +2481,14 @@
    <header>StyleRangeWidget.h</header>
   </customwidget>
   <customwidget>
+   <class>MashTreeView</class>
+   <extends>QTreeView</extends>
+   <header>trees/NamedEntityTreeView.h</header>
+  </customwidget>
+  <customwidget>
    <class>MiscTreeView</class>
    <extends>QTreeView</extends>
-   <header>trees/TreeView.h</header>
+   <header>trees/NamedEntityTreeView.h</header>
   </customwidget>
   <customwidget>
    <class>IbuGuSlider</class>
@@ -2505,27 +2538,27 @@
   <customwidget>
    <class>RecipeTreeView</class>
    <extends>QTreeView</extends>
-   <header>trees/TreeView.h</header>
+   <header>trees/RecipeTreeView.h</header>
   </customwidget>
   <customwidget>
    <class>EquipmentTreeView</class>
    <extends>QTreeView</extends>
-   <header>trees/TreeView.h</header>
+   <header>trees/NamedEntityTreeView.h</header>
   </customwidget>
   <customwidget>
    <class>FermentableTreeView</class>
    <extends>QTreeView</extends>
-   <header>trees/TreeView.h</header>
+   <header>trees/NamedEntityTreeView.h</header>
   </customwidget>
   <customwidget>
    <class>HopTreeView</class>
    <extends>QTreeView</extends>
-   <header>trees/TreeView.h</header>
+   <header>trees/NamedEntityTreeView.h</header>
   </customwidget>
   <customwidget>
    <class>YeastTreeView</class>
    <extends>QTreeView</extends>
-   <header>trees/TreeView.h</header>
+   <header>trees/NamedEntityTreeView.h</header>
   </customwidget>
   <customwidget>
    <class>StyleButton</class>
@@ -2550,7 +2583,7 @@
   <customwidget>
    <class>StyleTreeView</class>
    <extends>QTreeView</extends>
-   <header>trees/TreeView.h</header>
+   <header>trees/NamedEntityTreeView.h</header>
   </customwidget>
   <customwidget>
    <class>BtTabWidget</class>
@@ -2561,7 +2594,7 @@
   <customwidget>
    <class>WaterTreeView</class>
    <extends>QTreeView</extends>
-   <header>trees/TreeView.h</header>
+   <header>trees/NamedEntityTreeView.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

@@ -1087,6 +1087,81 @@ Log file may contain more details.</source>
     </message>
 </context>
 <context>
+    <name>Derived</name>
+    <message>
+        <source>New</source>
+        <translation type="unfinished">Ny</translation>
+    </message>
+    <message>
+        <source>Folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation type="unfinished">Kopiera</translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation type="unfinished">Ta bort</translation>
+    </message>
+    <message>
+        <source>Export</source>
+        <translation type="unfinished">Exportera</translation>
+    </message>
+    <message>
+        <source>To File (BeerXML or BeerJSON)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Import</source>
+        <translation type="unfinished">Importera</translation>
+    </message>
+    <message>
+        <source>Copy %1</source>
+        <translation type="unfinished">Kopiera %1</translation>
+    </message>
+    <message>
+        <source>Enter a unique name for the copy of %1.</source>
+        <translation type="unfinished">Skriv in ett unikt namn för kopian av %1.</translation>
+    </message>
+    <message>
+        <source>An empty name will skip copying this %1.</source>
+        <translation type="unfinished">Ett tomt namn kommer inte att kopiera %1.</translation>
+    </message>
+    <message>
+        <source>Cancel All</source>
+        <translation type="unfinished">Ångra alla</translation>
+    </message>
+    <message>
+        <source>Delete %1</source>
+        <translation type="unfinished">Ta bort %1</translation>
+    </message>
+    <message>
+        <source>Delete %1 %2?</source>
+        <translation type="unfinished">Ta bort %1 %2?</translation>
+    </message>
+    <message>
+        <source>Folder name</source>
+        <translation type="unfinished">Katalognamn</translation>
+    </message>
+    <message>
+        <source>Folder name:</source>
+        <translation type="unfinished">Katalognamn:</translation>
+    </message>
+    <message>
+        <source>Bad Name</source>
+        <translation type="unfinished">Felaktigt namn</translation>
+    </message>
+    <message>
+        <source>A folder name must have at least one non-whitespace character in it</source>
+        <translation type="unfinished">Ett katalognamn måste innehålla minst ett icke blankstegs-tecken</translation>
+    </message>
+    <message>
+        <source>A folder name must have at least one non-/ character in it</source>
+        <translation type="unfinished">Ett katalognamn måste innehålla något annat än bara specialtecken</translation>
+    </message>
+</context>
+<context>
     <name>Equipment</name>
     <message>
         <source>Equipment</source>
@@ -1098,6 +1173,18 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Boil Time</source>
+        <translation type="unfinished">Koktid</translation>
+    </message>
+    <message>
+        <source>Equipments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Preboil</source>
+        <translation type="unfinished">Före kokning</translation>
+    </message>
+    <message>
+        <source>BoilTime</source>
         <translation type="unfinished">Koktid</translation>
     </message>
 </context>
@@ -1437,6 +1524,14 @@ Log file may contain more details.</source>
         <source>Color</source>
         <translation type="unfinished">Färg</translation>
     </message>
+    <message>
+        <source>Fermentables</source>
+        <translation type="unfinished">Jäsbart</translation>
+    </message>
+    <message>
+        <source>Extract Yield Dry Basis Fine Grind (DBFG)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FermentableDialog</name>
@@ -1672,6 +1767,10 @@ Log file may contain more details.</source>
         <source>FULLPATH</source>
         <translation type="unfinished">Hela sökvägen</translation>
     </message>
+    <message>
+        <source>Folder</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HelpDialog</name>
@@ -1821,6 +1920,22 @@ Log file may contain more details.</source>
     <message>
         <source>Origin</source>
         <translation type="unfinished">Ursprung</translation>
+    </message>
+    <message>
+        <source>Hops</source>
+        <translation type="unfinished">Humle</translation>
+    </message>
+    <message>
+        <source>Alpha</source>
+        <translation type="unfinished">Alfa</translation>
+    </message>
+    <message>
+        <source>Beta</source>
+        <translation type="unfinished">Beta</translation>
+    </message>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished">Formulär</translation>
     </message>
 </context>
 <context>
@@ -2261,23 +2376,23 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Folder name</source>
-        <translation>Katalognamn</translation>
+        <translation type="vanished">Katalognamn</translation>
     </message>
     <message>
         <source>Folder name:</source>
-        <translation>Katalognamn:</translation>
+        <translation type="vanished">Katalognamn:</translation>
     </message>
     <message>
         <source>Bad Name</source>
-        <translation>Felaktigt namn</translation>
+        <translation type="vanished">Felaktigt namn</translation>
     </message>
     <message>
         <source>A folder name must have at least one non-whitespace character in it</source>
-        <translation>Ett katalognamn måste innehålla minst ett icke blankstegs-tecken</translation>
+        <translation type="vanished">Ett katalognamn måste innehålla minst ett icke blankstegs-tecken</translation>
     </message>
     <message>
         <source>A folder name must have at least one non-/ character in it</source>
-        <translation>Ett katalognamn måste innehålla något annat än bara specialtecken</translation>
+        <translation type="vanished">Ett katalognamn måste innehålla något annat än bara specialtecken</translation>
     </message>
     <message>
         <source>Error copying recipe</source>
@@ -2424,6 +2539,26 @@ If you need help, please open an issue at %1</source>
     <name>Mash</name>
     <message>
         <source>Mash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mashes</source>
+        <translation type="unfinished">Mäskningar</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Namn</translation>
+    </message>
+    <message>
+        <source>Total Water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Total Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Total time (mins)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3300,11 +3435,11 @@ Error message:
     </message>
     <message>
         <source>Recipes</source>
-        <translation>Recept</translation>
+        <translation type="vanished">Recept</translation>
     </message>
     <message>
         <source>Equipment</source>
-        <translation>Utrustning</translation>
+        <translation type="vanished">Utrustning</translation>
     </message>
     <message>
         <source>Fermentables</source>
@@ -3324,11 +3459,11 @@ Error message:
     </message>
     <message>
         <source>Style</source>
-        <translation>Stil</translation>
+        <translation type="vanished">Stil</translation>
     </message>
     <message>
         <source>Folder</source>
-        <translation>Katalog</translation>
+        <translation type="vanished">Katalog</translation>
     </message>
     <message>
         <source>Failed to update the database</source>
@@ -3586,10 +3721,6 @@ Error message:
     <message>
         <source>Could not open SQLite DB file %1.
 %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Water</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4144,6 +4275,14 @@ Log file may contain more details.</source>
         <source>pt</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>None!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add %1 step to recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RaIngrd</name>
@@ -4467,6 +4606,34 @@ Primärens slutgiltiga volym är %1.</translation>
     <message>
         <source>Style</source>
         <translation type="unfinished">Stil</translation>
+    </message>
+    <message>
+        <source>Recipes</source>
+        <translation type="unfinished">Recept</translation>
+    </message>
+    <message>
+        <source>unknown style</source>
+        <translation type="unfinished">Okänd stil</translation>
+    </message>
+    <message>
+        <source>N/A</source>
+        <translation type="unfinished">Ej tillämplig</translation>
+    </message>
+    <message>
+        <source>OG</source>
+        <translation type="unfinished">OG</translation>
+    </message>
+    <message>
+        <source>FG</source>
+        <translation type="unfinished">FG</translation>
+    </message>
+    <message>
+        <source>Color</source>
+        <translation type="unfinished">Färg</translation>
+    </message>
+    <message>
+        <source>IBU</source>
+        <translation type="unfinished">IBU</translation>
     </message>
 </context>
 <context>
@@ -5081,39 +5248,39 @@ Primärens slutgiltiga volym är %1.</translation>
     </message>
     <message>
         <source>Category</source>
-        <translation>Kategori</translation>
+        <translation type="vanished">Kategori</translation>
     </message>
     <message>
         <source>Code</source>
-        <translation>Kod</translation>
+        <translation type="vanished">Kod</translation>
     </message>
     <message>
         <source>Guide</source>
-        <translation>Guide</translation>
+        <translation type="vanished">Guide</translation>
     </message>
     <message>
         <source>BoilTime</source>
-        <translation>Koktid</translation>
+        <translation type="vanished">Koktid</translation>
     </message>
     <message>
         <source>Beta</source>
-        <translation>Beta</translation>
+        <translation type="vanished">Beta</translation>
     </message>
     <message>
         <source>Lab</source>
-        <translation>Lab</translation>
+        <translation type="vanished">Lab</translation>
     </message>
     <message>
         <source>Attenuation</source>
-        <translation>Förjäsningsgrad</translation>
+        <translation type="vanished">Förjäsningsgrad</translation>
     </message>
     <message>
         <source>Id</source>
-        <translation>Id</translation>
+        <translation type="vanished">Id</translation>
     </message>
     <message>
         <source>Flocculation</source>
-        <translation>Flockulering</translation>
+        <translation type="vanished">Flockulering</translation>
     </message>
     <message>
         <source>Miscs</source>
@@ -5172,36 +5339,62 @@ Primärens slutgiltiga volym är %1.</translation>
         <translation type="unfinished">Recept</translation>
     </message>
     <message>
-        <source>Ca</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mg</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>SO&lt;sub&gt;4&lt;/sub&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Na</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cl</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>HCO&lt;sub&gt;3&lt;/sub&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Extract Yield Dry Basis Fine Grind (DBFG)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Add During</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>RecipeTableModel</name>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Namn</translation>
+    </message>
+</context>
+<context>
+    <name>RecipeTreeView</name>
+    <message>
+        <source>Snapshots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Snapshots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hide Snapshots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Detach Recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Snapshot Recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew It!</source>
+        <translation type="unfinished">Brygg den!</translation>
+    </message>
+    <message>
+        <source>Brew Again</source>
+        <translation type="unfinished">Brygg den igen</translation>
+    </message>
+    <message>
+        <source>Change date</source>
+        <translation type="unfinished">Byt datum</translation>
+    </message>
+    <message>
+        <source>Recalculate eff</source>
+        <translation type="unfinished">Räkna om effektivitet</translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation type="unfinished">Ta bort</translation>
     </message>
 </context>
 <context>
@@ -5364,13 +5557,6 @@ Primärens slutgiltiga volym är %1.</translation>
     </message>
 </context>
 <context>
-    <name>StepClass</name>
-    <message>
-        <source>Add %1 step to recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>StepExtended</name>
     <message>
         <source>Extended Step</source>
@@ -5430,6 +5616,18 @@ Primärens slutgiltiga volym är %1.</translation>
     <message>
         <source>Guide</source>
         <translation type="unfinished">Guide</translation>
+    </message>
+    <message>
+        <source>Styles</source>
+        <translation type="unfinished">Stilar</translation>
+    </message>
+    <message>
+        <source>Code</source>
+        <translation type="unfinished">Kod</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -5706,134 +5904,106 @@ Primärens slutgiltiga volym är %1.</translation>
     </message>
     <message>
         <source>Could not copy</source>
-        <translation type="unfinished">Kunde inte kopiera</translation>
+        <translation type="obsolete">Kunde inte kopiera</translation>
     </message>
     <message>
         <source>There was an unexpected error creating %1</source>
-        <translation type="unfinished">Ett oväntat fel uppstod när %1 skulle skapas</translation>
+        <translation type="obsolete">Ett oväntat fel uppstod när %1 skulle skapas</translation>
     </message>
 </context>
 <context>
     <name>TreeView</name>
     <message>
         <source>New</source>
-        <translation type="unfinished">Ny</translation>
+        <translation type="obsolete">Ny</translation>
     </message>
     <message>
         <source>Recipe</source>
-        <translation type="unfinished">Recept</translation>
-    </message>
-    <message>
-        <source>Show Snapshots</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hide Snapshots</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Detach Recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Snapshot Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Recept</translation>
     </message>
     <message>
         <source>Brew It!</source>
-        <translation type="unfinished">Brygg den!</translation>
+        <translation type="obsolete">Brygg den!</translation>
     </message>
     <message>
         <source>Brew Again</source>
-        <translation type="unfinished">Brygg den igen</translation>
+        <translation type="obsolete">Brygg den igen</translation>
     </message>
     <message>
         <source>Change date</source>
-        <translation type="unfinished">Byt datum</translation>
+        <translation type="obsolete">Byt datum</translation>
     </message>
     <message>
         <source>Recalculate eff</source>
-        <translation type="unfinished">Räkna om effektivitet</translation>
+        <translation type="obsolete">Räkna om effektivitet</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="unfinished">Ta bort</translation>
+        <translation type="obsolete">Ta bort</translation>
     </message>
     <message>
         <source>Equipment</source>
-        <translation type="unfinished">Utrustning</translation>
+        <translation type="obsolete">Utrustning</translation>
     </message>
     <message>
         <source>Fermentable</source>
-        <translation type="unfinished">Jäsbar</translation>
+        <translation type="obsolete">Jäsbar</translation>
     </message>
     <message>
         <source>Hop</source>
-        <translation type="unfinished">Humle</translation>
+        <translation type="obsolete">Humle</translation>
     </message>
     <message>
         <source>Misc</source>
-        <translation type="unfinished">Övrigt</translation>
+        <translation type="obsolete">Övrigt</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Stil</translation>
+        <translation type="obsolete">Stil</translation>
     </message>
     <message>
         <source>Yeast</source>
-        <translation type="unfinished">Jäst</translation>
-    </message>
-    <message>
-        <source>Water</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Folder</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Jäst</translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation type="unfinished">Kopiera</translation>
+        <translation type="obsolete">Kopiera</translation>
     </message>
     <message>
         <source>Export</source>
-        <translation type="unfinished">Exportera</translation>
-    </message>
-    <message>
-        <source>To File (BeerXML or BeerJSON)</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Exportera</translation>
     </message>
     <message>
         <source>Import</source>
-        <translation type="unfinished">Importera</translation>
+        <translation type="obsolete">Importera</translation>
     </message>
     <message>
         <source>Cancel All</source>
-        <translation type="unfinished">Ångra alla</translation>
+        <translation type="obsolete">Ångra alla</translation>
     </message>
     <message>
         <source>Copy %1</source>
-        <translation type="unfinished">Kopiera %1</translation>
+        <translation type="obsolete">Kopiera %1</translation>
     </message>
     <message>
         <source>Enter a unique name for the copy of %1.</source>
-        <translation type="unfinished">Skriv in ett unikt namn för kopian av %1.</translation>
+        <translation type="obsolete">Skriv in ett unikt namn för kopian av %1.</translation>
     </message>
     <message>
         <source>An empty name will skip copying this %1.</source>
-        <translation type="unfinished">Ett tomt namn kommer inte att kopiera %1.</translation>
+        <translation type="obsolete">Ett tomt namn kommer inte att kopiera %1.</translation>
     </message>
     <message>
         <source>Delete %1</source>
-        <translation type="unfinished">Ta bort %1</translation>
+        <translation type="obsolete">Ta bort %1</translation>
     </message>
     <message>
         <source>Delete %1 %2?</source>
-        <translation type="unfinished">Ta bort %1 %2?</translation>
+        <translation type="obsolete">Ta bort %1 %2?</translation>
     </message>
     <message>
         <source>BrewNote</source>
-        <translation type="unfinished">Brygganteckning</translation>
+        <translation type="obsolete">Brygganteckning</translation>
     </message>
 </context>
 <context>
@@ -5914,6 +6084,18 @@ Primärens slutgiltiga volym är %1.</translation>
     </message>
     <message>
         <source>pH</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Waters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SO&lt;sub&gt;4&lt;/sub&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>HCO&lt;sub&gt;3&lt;/sub&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -6178,6 +6360,26 @@ Primärens slutgiltiga volym är %1.</translation>
     <message>
         <source>Product ID</source>
         <translation type="unfinished">Produkt-ID</translation>
+    </message>
+    <message>
+        <source>Yeasts</source>
+        <translation type="unfinished">Jäst</translation>
+    </message>
+    <message>
+        <source>Lab</source>
+        <translation type="unfinished">Lab</translation>
+    </message>
+    <message>
+        <source>Attenuation</source>
+        <translation type="unfinished">Förjäsningsgrad</translation>
+    </message>
+    <message>
+        <source>Id</source>
+        <translation type="unfinished">Id</translation>
+    </message>
+    <message>
+        <source>Flocculation</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -8733,7 +8935,7 @@ Primärens slutgiltiga volym är %1.</translation>
     </message>
     <message>
         <source>Tun</source>
-        <translation>Tun</translation>
+        <translation type="vanished">Tun</translation>
     </message>
     <message>
         <source>Initial tun temp</source>
@@ -8753,11 +8955,51 @@ Primärens slutgiltiga volym är %1.</translation>
     </message>
     <message>
         <source>Tun sp. heat</source>
-        <translation>Tun sp. värme</translation>
+        <translation type="vanished">Tun sp. värme</translation>
     </message>
     <message>
         <source>Tun specific heat (cal/(g*K))</source>
         <translation>Tun specifik värme (cal/(g*K))</translation>
+    </message>
+    <message>
+        <source>Main</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ID in database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use for</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tun specific heat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished">Ny</translation>
+    </message>
+    <message>
+        <source>Save and close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished">Spara</translation>
+    </message>
+    <message>
+        <source>Discard and close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Avbryt</translation>
     </message>
 </context>
 <context>

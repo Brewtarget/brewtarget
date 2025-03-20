@@ -118,6 +118,11 @@ namespace ObjectStoreWrapper {
       return std::shared_ptr<NE>{ne};
    }
 
+   template<class NE> std::shared_ptr<NE> getShared(NE const & ne) {
+      ObjectStoreTyped<NE> & objectStore = ObjectStoreTyped<NE>::getInstance();
+      return objectStore.getById(ne.key());
+   }
+
    /**
     * \brief Makes a \b new object that is a copy of the supplied one
     *

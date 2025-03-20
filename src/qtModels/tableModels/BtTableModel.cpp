@@ -90,14 +90,6 @@ BtTableModel::BtTableModel(QTableView * parent,
 BtTableModel::~BtTableModel() = default;
 
 BtTableModel::ColumnInfo const & BtTableModel::getColumnInfo(size_t const columnIndex) const {
-   // Uncomment this block if the assert below is firing
-   if (columnIndex >= this->m_columnInfos.size()) {
-      qCritical().noquote() <<
-         Q_FUNC_INFO << "columnIndex:" << columnIndex << ", this->m_columnInfos.size():" <<
-         this->m_columnInfos.size() << Logging::getStackTrace();
-      // TODO : This is temporary until we fix the bug!
-      return this->m_columnInfos[0];
-   }
    // It's a coding error to call this for a non-existent column
    Q_ASSERT(columnIndex < this->m_columnInfos.size());
 
@@ -124,8 +116,21 @@ int BtTableModel::columnCount(QModelIndex const & /*parent*/) const {
 }
 
 QVariant BtTableModel::headerData(int section, Qt::Orientation orientation, int role) const {
+   //
+   // For horizontal headers, the section number corresponds to the column number.  Similarly, for vertical headers, the
+   // section number corresponds to the row number.
+   //
    if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
-      return this->getColumnLabel(section);
+      // For reasons I didn't get to the bottom of, we sometimes get calls from the Qt framework requesting header data
+      // for a column number that's one beyond the maximum, so we have to validate that here.
+      if (section < this->m_columnInfos.size()) {
+         return this->getColumnLabel(section);
+      }
+
+      qWarning().noquote() <<
+         Q_FUNC_INFO << "Request for invalid column number " << section << ", this->m_columnInfos.size():" <<
+         this->m_columnInfos.size() << Logging::getStackTrace();
+      return QVariant();
    }
 
    return QVariant();

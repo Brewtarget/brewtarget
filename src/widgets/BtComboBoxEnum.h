@@ -60,7 +60,7 @@ public:
     *                           \c Measurement::ChoiceOfPhysicalQuantity value.
     * \param controlledField    If specified, then this is the field whose \c Measurement::PhysicalQuantity is
     *                           shown and controlled by this combo box.  (Note that we do \b not use this in table
-    *                           models.
+    *                           models.)
     */
    void init(char const * const editorName,
              char const * const comboBoxName,

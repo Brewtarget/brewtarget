@@ -1,0 +1,1436 @@
+/*======================================================================================================================
+ * trees/TreeModelBase.h is part of Brewtarget, and is copyright the following authors 2009-2025:
+ *   • Mattias Måhl <mattias@kejsarsten.com>
+ *   • Matt Young <mfsy@yahoo.com>
+ *   • Maxime Lavigne <duguigne@gmail.com>
+ *   • Mik Firestone <mikfire@gmail.com>
+ *   • Philip Greggory Lee <rocketman768@gmail.com>
+ *
+ * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
+ *
+ * Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ =====================================================================================================================*/
+#ifndef TREES_TREEMODELBASE_H
+#define TREES_TREEMODELBASE_H
+#pragma once
+
+#include <memory>
+#include <optional>
+#include <type_traits>
+#include <variant>
+#include <utility>
+
+#include <QDebug>
+#include <QMimeData>
+#include <QModelIndex>
+#include <QQueue>
+#include <QString>
+#include <QStringBuilder> // Needed for efficient QString concatenation operator (%)
+#include <QVariant>
+
+#include "database/ObjectStoreWrapper.h"
+#include "trees/TreeNode.h"
+#include "trees/TreeModel.h"
+#include "utils/CuriouslyRecurringTemplateBase.h"
+#include "utils/TypeTraits.h"
+
+template <typename T>
+concept HasNodeClassifier = requires {
+   { T::NodeClassifier } -> std::convertible_to<TreeNodeClassifier>;
+};
+
+/**
+ * \brief CRTP base for \c TreeModel subclasses.  See comment on \c TreeModel class for more info.
+ *
+ * \param Derived - The derived class
+ * \param NE  - The primary \c NamedEntity subclass (besides \c Folder) shown in this tree (eg \c Recipe for
+ *              \c RecipeTreeModel)
+ * \param SNE - The optional secondary \c NamedEntity subclass shown in this tree (eg \c BrewNote for
+ *              \c RecipeTreeModel, or \c MashStep for \c MashTreeModel).  This class must have:
+ *                 • an \c owner() member function that does the obvious thing (eg \c BrewNote::owner() returns a
+ *                   \c Recipe; \c MashStep::owner returns a \c Mash);
+ *                 • a static \c ownedBy() member function that returns all the \c BrewNote objects owned by a given
+ *                   \c Recipe or all the \c MashStep objects owned by a given \c Mash, etc.
+ */
+template<class Derived> class TreeModelPhantom;
+template<class Derived, class NE, typename SNE = void>
+class TreeModelBase : public CuriouslyRecurringTemplateBase<TreeModelPhantom, Derived> {
+   friend Derived;
+private:
+   /**
+    * \brief Derived classes should also call \c TreeModelBase::connectSignalsAndSlots from their own constructor (see
+    *        TREE_MODEL_COMMON_CODE).
+    */
+   TreeModelBase() :
+   m_rootNode{std::make_unique<TreeFolderNode<NE>>(this->derived())} {
+      return;
+   }
+
+public:
+   ~TreeModelBase() = default;
+
+   /**
+    * \brief Returns the class name of \c NE
+    *
+    *        Note that we deliberately return QString rather than char const * here, because we want callers to be able
+    *        to do an == comparison (eg `if (model->treeForClassName() == Recipe::staticMetaObject.className())`) rather
+    *        than have to manually call strcmp.
+    *
+    *        TBD: We could do something clever with a templated function instead of comparing class names...
+    */
+   QString doTreeForClassName() const {
+      return NE::staticMetaObject.className();
+   }
+
+   /**
+    * \brief Returns the localised name of the main thing stored in the tree
+    */
+   QString doTreeForLocalisedClassName() const {
+      return NE::localisedName();
+   }
+
+   std::optional<TreeNodeClassifier> classifier(QModelIndex const & index) const {
+      return index.isValid() ? std::optional<TreeNodeClassifier>{this->doTreeNode(index)->classifier()} : std::nullopt;
+   }
+
+   /**
+    * \brief Return the \c TreeNode for a given index
+    */
+   TreeNode * doTreeNode(QModelIndex const & index) const {
+      if (index.isValid()) {
+         TreeNode * item = static_cast<TreeNode *>(index.internalPointer());
+         if (item) {
+            return item;
+         }
+      }
+
+      return this->m_rootNode.get();
+   }
+
+   //! \brief Get the upper-left index for the tree
+   QModelIndex doFirst() const {
+      // get the first item in the list, which is the place holder
+      if (this->m_rootNode->childCount() > 0) {
+         return this->derived().createIndex(0, 0, this->m_rootNode.get());
+      }
+
+      return QModelIndex();
+   }
+
+   QVariant doData(QModelIndex const & index, int const role) const {
+      TreeNode * treeNode = this->doTreeNode(index);
+      if (treeNode) {
+         return treeNode->data(index.column(), role);
+      }
+
+      return QVariant();
+   }
+
+   QVariant doHeaderData(int const section, Qt::Orientation const orientation, int const role) const {
+      if (orientation != Qt::Horizontal || role != Qt::DisplayRole) {
+         return QVariant();
+      }
+
+      return TreeItemNode<NE>::header(section);
+   }
+
+   int doRowCount(QModelIndex const & parent) const {
+      if (!parent.isValid()) {
+         return this->m_rootNode ? this->m_rootNode->childCount() : 0;
+      }
+
+      return this->doTreeNode(parent)->childCount();
+   }
+
+   int doColumnCount([[maybe_unused]] QModelIndex const & parent) const {
+      return TreeItemNode<NE>::NumberOfColumns;
+   }
+
+   QModelIndex doIndex(int const row, int const column, QModelIndex const & parent) const {
+      if (parent.isValid() && parent.column() >= TreeItemNode<NE>::NumberOfColumns) {
+         return QModelIndex();
+      }
+
+      TreeNode * parentNode = this->doTreeNode(parent);
+      TreeNode * childNode = parentNode->rawChild(row);
+
+      if (childNode) {
+         return this->derived().createIndex(row, column, childNode);
+      }
+
+      return QModelIndex();
+   }
+
+   QModelIndex doParent(QModelIndex const & index) const {
+      if (!index.isValid()) {
+         return QModelIndex();
+      }
+
+      TreeNode * childNode = this->doTreeNode(index);
+      if (!childNode) {
+         return QModelIndex();
+      }
+
+      TreeNode * parentNode = childNode->rawParent();
+      if (!parentNode || parentNode == this->m_rootNode.get()) {
+         return QModelIndex();
+      }
+
+      return this->derived().createIndex(parentNode->childNumber(), 0, parentNode);
+   }
+
+   QString folderPath(QModelIndex const & index) const {
+
+      TreeNode const * treeNode = this->doTreeNode(index);
+      if (!treeNode) {
+         return "";
+      }
+      std::shared_ptr<Folder> folder = treeNode->folder();
+      if (!folder) {
+         return "";
+      }
+      return folder->path();
+   }
+
+   /**
+    * \brief Returns "the list of allowed MIME types", which is to say the MIME types that can be dropped on this model
+    */
+   QStringList doMimeTypes() const {
+      QStringList mimeTypesWeAccept;
+      //
+      // We only accept the primary items stored in this tree and folders.  (It doesn't make sense to allow drag and
+      // drop of secondary items such as BrewNotes or MashSteps.)
+      //
+      mimeTypesWeAccept << TreeItemNode<NE>::DragNDropMimeType;
+      mimeTypesWeAccept << TreeFolderNode<NE>::DragNDropMimeType;
+      return mimeTypesWeAccept;
+   }
+
+   /**
+    * \brief Returns a heap-allocated object that contains serialized items of MIME data corresponding to the list of
+    *        indexes specified
+    */
+   QMimeData * doMimeData(QModelIndexList const & indexes) const {
+
+      QByteArray  encodedData;
+      QDataStream encodedDataStream(&encodedData, QIODevice::WriteOnly);
+      QString mimeType;
+
+      // From what I've been able to tell, the drop events are homogeneous -- a
+      // single drop event will be all equipment or all recipe or ...
+      for (QModelIndex const & modelIndex : indexes) {
+
+         if (!modelIndex.isValid()) {
+            continue;
+         }
+
+         //
+         // Note below that we have to be careful about character encoding.  If, eg, we write
+         //
+         //    encodedDataStream << NE::staticMetaObject.className()
+         //
+         // we would get strange results, because QObject::staticMetaObject.className() returns a C-style string which
+         // will give us garbage when we try to read it as a QString at the other end.  (Eg "Fermentable" ends up as
+         // "䙥牭敮瑡扬攀"!
+         //
+         TreeNode * treeNode = this->doTreeNode(modelIndex);
+         qDebug() << Q_FUNC_INFO << *treeNode;
+         switch (treeNode->classifier()) {
+            case TreeNodeClassifier::Folder:
+               {
+                  auto & folderTreeNode = static_cast<TreeFolderNode<NE> &>(*treeNode);
+                  auto folder = folderTreeNode.underlyingItem();
+                  // For the moment, Folder does not inherit from NamedEntity, and does not have an ID
+                  encodedDataStream <<
+                     QString{Folder::staticMetaObject.className()} << -1 << folder->fullPath();
+                  mimeType = TreeFolderNode<NE>::DragNDropMimeType;
+               }
+               break;
+            case TreeNodeClassifier::PrimaryItem:
+               {
+                  auto & itemTreeNode = static_cast<TreeItemNode<NE> &>(*treeNode);
+                  auto item = itemTreeNode.underlyingItem();
+                  encodedDataStream << QString{NE::staticMetaObject.className()} << item->key() << item->name();
+                  mimeType = TreeItemNode<NE>::DragNDropMimeType;
+               }
+               break;
+            case TreeNodeClassifier::SecondaryItem:
+               if constexpr (!IsVoid<SNE>) {
+                  // Even though we don't currently support drag and drop of secondary items, we still do all the mime
+                  // type stuff for them here.  If we decide in future that we want to allow them to be dropped
+                  // somewhere we just have to implement a widget that accepts drops of this mime type.
+                  auto & secondaryItemTreeNode = static_cast<TreeItemNode<SNE> &>(*treeNode);
+                  auto secondaryItem = secondaryItemTreeNode.underlyingItem();
+                  encodedDataStream <<
+                     QString{SNE::staticMetaObject.className()} << secondaryItem->key() << secondaryItem->name();
+                  mimeType = TreeItemNode<SNE>::DragNDropMimeType;
+               } else {
+                  // If this tree does not support secondary items, then it should not be possible to attempt to drag
+                  // and drop them!
+                  Q_ASSERT(false);
+               }
+               break;
+         }
+      }
+
+      //
+      // Much as it grates to do a direct call to new and return the results, this is the required behaviour, since
+      // that's what the function we are overriding (QAbstractItemModel::mimeData) does -- see
+      // https://github.com/qt/qtbase/blob/dev/src/corelib/itemmodels/qabstractitemmodel.cpp
+      //
+      QMimeData * mimeData = new QMimeData();
+      mimeData->setData(mimeType, encodedData);
+      return mimeData;
+   }
+
+   //! \brief Accept a drop action
+   bool doDropMimeData(QMimeData const * mimeData,
+                       [[maybe_unused]] Qt::DropAction action,
+                       [[maybe_unused]] int row,
+                       [[maybe_unused]] int column,
+                       QModelIndex const & parentIndex) {
+      // See https://en.wikipedia.org/wiki/Media_type for more on MIME types (now called media types)
+      qDebug() <<
+         Q_FUNC_INFO << "MIME Data:" << (mimeData ? mimeData->text() : "NULL") << ".  "
+         "Parent" << (parentIndex.isValid() ? "valid" : "invalid");
+
+      if (!parentIndex.isValid()) {
+         return false;
+      }
+
+      qDebug() << Q_FUNC_INFO << "Parent row:" << parentIndex.row() << ", column:" << parentIndex.column();
+
+      QByteArray encodedData;
+
+      if (mimeData->hasFormat(TreeItemNode<NE>::DragNDropMimeType)) {
+         encodedData = mimeData->data(TreeItemNode<NE>::DragNDropMimeType);
+      } else if (mimeData->hasFormat(TreeFolderNode<NE>::DragNDropMimeType)) {
+         encodedData = mimeData->data(TreeFolderNode<NE>::DragNDropMimeType);
+      } else {
+         qDebug() << Q_FUNC_INFO << "Unrecognised MIME type";
+         return false;   // Don't know what we got, but we don't want it
+      }
+
+      TreeNode * parentNode = this->doTreeNode(parentIndex);
+      if (!parentNode) {
+         // Did you know there's a space between elements in a tree, and you can
+         // actually drop things there? If somebody drops something there, don't
+         // do anything
+         qDebug() << Q_FUNC_INFO << "Invalid drop location";
+         return false;
+      }
+
+      QString targetFolderPath = "";
+      if (parentNode->classifier() == TreeNodeClassifier::Folder) {
+         auto & folderParentNode = static_cast<TreeFolderNode<NE> &>(*parentNode);
+         targetFolderPath = folderParentNode.underlyingItem()->fullPath();
+      } else {
+         Q_ASSERT(parentNode->classifier() == TreeNodeClassifier::PrimaryItem);
+         auto & itemParentNode = static_cast<TreeItemNode<NE> &>(*parentNode);
+         targetFolderPath = itemParentNode.underlyingItem()->folderPath();
+      }
+
+      qDebug() << Q_FUNC_INFO << "Target:" << targetFolderPath;
+
+      // Pull the stream apart and do that which needs done. Late binding ftw!
+      for (QDataStream stream{&encodedData, QIODevice::ReadOnly}; !stream.atEnd(); ) {
+         //
+         // Obviously the format of what we read here has to align with what we write in TreeViewBase::doMimeData.
+         //
+         QString className = "";
+         int id = -1;
+         QString name = "";
+         stream >> className >> id >> name;
+         qDebug() << Q_FUNC_INFO << "Class:" << className << ", Name:" << name << ", ID:" << id;
+
+         if (className == NE::staticMetaObject.className()) {
+            auto item = ObjectStoreWrapper::getById<NE>(id);
+            if (!item) {
+               qDebug() << Q_FUNC_INFO << "Could not find" << NE::staticMetaObject.className() << "with ID" << id;
+               return false;
+            }
+            auto folder = item->folderPath();
+            if (folder.isEmpty()) {
+               qDebug() << Q_FUNC_INFO << "Could not get folder for" << item;
+               return false;
+            }
+            qDebug() <<
+               Q_FUNC_INFO << "Moving" << item << "from folder" << folder << "to folder" << targetFolderPath;
+            // Dropping an item in a folder just means setting the folder name on that item
+            item->setFolderPath(targetFolderPath);
+            // Now we have to update our own model (ie that of TreeModel) so that the display will update!
+            this->doFolderChanged(item.get());
+         } else if (className == Folder::staticMetaObject.className()) {
+            // I need the actual folder object that got dropped.
+            auto newFolder = std::make_shared<Folder>();
+            newFolder->setfullPath(name);
+
+            this->renameFolder(*newFolder, targetFolderPath);
+         }
+      }
+
+      return true;
+   }
+
+   /**
+    * \brief Call this in derived class's constructor.
+    */
+   void connectSignalsAndSlots() {
+      //
+      // We want to know about additions or deletions of objects of the type(s) used in our tree
+      //
+      this->derived().connect(&ObjectStoreTyped<NE>::getInstance(), &ObjectStoreTyped<NE>::signalObjectInserted, &this->derived(), &Derived::elementAdded  );
+      this->derived().connect(&ObjectStoreTyped<NE>::getInstance(), &ObjectStoreTyped<NE>::signalObjectDeleted , &this->derived(), &Derived::elementRemoved);
+      // For the moment at least, we don't support more than one secondary subclass
+      if constexpr (!IsVoid<SNE>) {
+         this->derived().connect(&ObjectStoreTyped<SNE>::getInstance(),
+                                 &ObjectStoreTyped<SNE>::signalObjectInserted,
+                                 &this->derived(),
+                                 &Derived::secondaryElementAdded  );
+         this->derived().connect(&ObjectStoreTyped<SNE>::getInstance(),
+                                 &ObjectStoreTyped<SNE>::signalObjectDeleted ,
+                                 &this->derived(),
+                                 &Derived::secondaryElementRemoved);
+      }
+      return;
+   }
+
+   /**
+    * \brief Call this at the end of derived class's constructor.
+    */
+   void loadTreeModel() {
+      auto primaryItems = ObjectStoreWrapper::getAllDisplayable<NE>();
+      qDebug() << Q_FUNC_INFO << "Got " << primaryItems.length() << NE::staticMetaObject.className() << "items";
+
+      for (auto item : primaryItems) {
+
+         QModelIndex parentIndex;
+         int childNumber;
+         QString folderPath = item->folderPath();
+         if (!folderPath.isEmpty()) {
+            parentIndex = this->findFolder(folderPath, this->m_rootNode.get(), true);
+            // I cannot imagine this failing, but what the hell
+            if (!parentIndex.isValid()) {
+               qWarning() << Q_FUNC_INFO << "Invalid return from findFolder";
+               continue;
+            }
+            childNumber = this->doTreeNode(parentIndex)->childCount();
+         } else {
+            childNumber = this->m_rootNode->childCount();
+            parentIndex = this->derived().createIndex(childNumber, 0, this->m_rootNode.get());
+         }
+
+         if (!this->insertChild(parentIndex, childNumber, item)) {
+            qWarning() << Q_FUNC_INFO << "Insert failed";
+            continue;
+         }
+
+         this->observeElement(item);
+      }
+      return;
+   }
+
+   void observeElement(std::shared_ptr<NE> observed) {
+      if (observed) {
+         this->derived().connect(observed.get(), &NamedEntity::changedName  , &this->derived(), &Derived::elementChanged);
+         // .:TBD:. AFAICT nothing emits NamedEntity::changedFolder...
+         this->derived().connect(observed.get(), &NamedEntity::changedFolder, &this->derived(), &Derived::folderChanged );
+      }
+      return;
+   }
+
+   void observeElement(std::shared_ptr<SNE> observed) requires (!IsVoid<SNE>) {
+      if (observed) {
+         if constexpr (std::same_as<NE, BrewNote>) {
+            // For a BrewNote, it's the date, not the name, that we're interested in
+            this->derived().connect(observed.get(), &BrewNote::brewDateChanged, &this->derived(), &Derived::secondaryElementChanged);
+         } else {
+            this->derived().connect(observed.get(), &NamedEntity::changedName , &this->derived(), &Derived::secondaryElementChanged);
+         }
+      }
+      return;
+   }
+
+   /**
+    * \brief Find the given \c NE (eg given \c Recipe) in the tree.  In most trees (eg \c Equipment, \c Hop,
+    *        \c Fermentable, \c Yeast, etc), primary elements can only be inside folders.  But in the \c Recipe tree,
+    *        primary elements can also be inside other primary elements (ie a \c Recipe can contain another \c Recipe)
+    *        as this is used to show ancestorship (ie prior versions of a \c Recipe).  In all trees, folders can also
+    *        contain other folders.  Caller can provide a starting node, otherwise we'll start at the root of the tree.
+    *
+    * \param ne If not null, this is the primary element (eg \c Recipe) we are looking for.  Otherwise, we are looking
+    *           for a place to put a new primary element.
+    */
+   QModelIndex findElement(std::shared_ptr<NE> const ne, TreeNode * parent = nullptr) {
+      // No element supplied, so return top of the tree
+      if (!ne) {
+         return this->derived().createIndex(0, 0, this->m_rootNode.get());
+      }
+
+      if (!parent) {
+         parent = this->m_rootNode.get();
+      }
+
+      //
+      // We do a breadth-first search of the tree.  It seems as good as anything, given we don't have any a priori
+      // reason to prefer one search order over another.  An obvious alternative would be a depth-first search using
+      // recursion.
+      //
+      QQueue<TreeNode *> queue;
+      queue.enqueue(parent);
+
+      while (!queue.isEmpty()) {
+         auto nodeToSearchIn = queue.dequeue();
+         qDebug() << Q_FUNC_INFO << "Find" << *ne << "in" << nodeToSearchIn->name();
+         //
+         // This is a compile-time check whether it's possible in this tree for primary items to have other primary
+         // items as children.  (If not, which is the case in most trees, we can skip over looking for children of
+         // primary items.
+         //
+         if constexpr (std::is_constructible_v<typename TreeItemNode<NE>::ChildPtrTypes,
+                                               std::shared_ptr<TreeItemNode<NE>>>) {
+            //
+            // This is the case, eg in the Recipe tree, where a primary item (eg a Recipe) can hold other primary
+            // items.
+            //
+            if (nodeToSearchIn->classifier() == TreeNodeClassifier::PrimaryItem) {
+               //
+               // We assume that nodeToSearchIn doesn't itself match what we're looking for, otherwise we wouldn't have put it
+               // on the queue.
+               //
+               auto & searchInItem = static_cast<TreeItemNode<NE> &>(*nodeToSearchIn);
+               for (int ii = 0; ii < searchInItem.childCount(); ++ii) {
+                  auto child = searchInItem.child(ii);
+                  if (std::holds_alternative<std::shared_ptr<TreeItemNode<NE>>>(child)) {
+                     auto itemNode = std::get<std::shared_ptr<TreeItemNode<NE>>>(child);
+                     if (itemNode->underlyingItem() == ne) {
+                        // We found what we were looking for
+                        qDebug() << Q_FUNC_INFO << "Found at" << ii;
+                        return this->derived().createIndex(ii, 0, itemNode.get());
+                     }
+                     //
+                     // The child primary item wasn't a match, but it itself might contain other primary items, so throw
+                     // it on the queue.
+                     //
+                     queue.enqueue(itemNode.get());
+                  }
+                  // Primary items can never contain folders, so if the child wasn't another primary item, we can ignore
+                  // it
+               }
+               //
+               // We processed this nodeToSearchIn item, so go to the next item in the queue.
+               //
+               continue;
+            }
+         }
+
+         //
+         // If we got here, either nodeToSearchIn cannot be a primary item (because either that's not allowed in this
+         // tree or it's handled above), so it's a coding error if we're trying to look inside anything other than a
+         // folder.
+         //
+         Q_ASSERT(nodeToSearchIn->classifier() == TreeNodeClassifier::Folder);
+         auto & folderNodeToSearchIn = static_cast<TreeFolderNode<NE> &>(*nodeToSearchIn);
+         for (int jj = 0; jj < folderNodeToSearchIn.childCount(); ++jj) {
+            auto child = folderNodeToSearchIn.child(jj);
+            if (std::holds_alternative<std::shared_ptr<TreeItemNode<NE>>>(child)) {
+               auto itemNode = std::get<std::shared_ptr<TreeItemNode<NE>>>(child);
+               qDebug() << Q_FUNC_INFO << "itemNode:" << *itemNode;
+               if (itemNode->underlyingItem() == ne) {
+                  // We found what we were looking for
+                  qDebug() << Q_FUNC_INFO << "Found at" << jj;
+                  return this->derived().createIndex(jj, 0, itemNode.get());
+               }
+               if constexpr (!std::is_constructible_v<typename TreeItemNode<NE>::ChildPtrTypes,
+                                                      std::shared_ptr<TreeItemNode<NE>>>) {
+                  // We're in a tree where primary items can contain other primary items, and the child primary item
+                  // wasn't a match, so throw it on the queue.
+                  queue.enqueue(itemNode.get());
+               }
+            } else if (std::holds_alternative<std::shared_ptr<TreeFolderNode<NE>>>(child)) {
+               // We found another folder to look in.  Add it to the list.
+               auto folderNode = std::get<std::shared_ptr<TreeFolderNode<NE>>>(child);
+               qDebug() << Q_FUNC_INFO << "folderNode:" << *folderNode;
+               queue.enqueue(folderNode.get());
+            } else {
+               // It should be impossible to get here, as folders only contain either primary items or other folders
+               Q_ASSERT(false);
+            }
+         }
+      }
+
+      // If we got here, we didn't find a match
+      return QModelIndex();
+   }
+
+   QModelIndex findElement(std::shared_ptr<SNE> const sne) requires (!IsVoid<SNE>) {
+      // No element supplied, so return top of the tree
+      if (!sne) {
+         return this->derived().createIndex(0, 0, this->m_rootNode.get());
+      }
+
+      //
+      // Secondary elements are owned by primary ones -- eg BrewNotes are owned by Recipes.  (If they weren't they'd
+      // have their own tree -- eg Mash has separate tree from Recipe because Mash is not owned by Recipe.)
+      // So, first we find the owner of the supplied element.
+      //
+      std::shared_ptr<NE> const owner = sne->owner();
+
+      QModelIndex ownerIndex = this->findElement(owner);
+      //
+      // Secondary elements can only be stored inside of primary ones (eg BrewNote cannot live directly in a folder or
+      // in another BrewNote), so this cast is safe.
+      //
+      auto ownerNode = static_cast<TreeItemNode<NE> *>(this->doTreeNode(ownerIndex));
+      for (int ii = 0; ii < ownerNode->childCount(); ++ii) {
+         auto childNodeVar = ownerNode->child(ii);
+         if (std::holds_alternative<std::shared_ptr<TreeItemNode<SNE>>>(childNodeVar)) {
+            auto childNode = std::get<std::shared_ptr<TreeItemNode<SNE>>>(childNodeVar);
+            std::shared_ptr<SNE> const child = childNode->underlyingItem();
+            if (child->key() == sne->key()) {
+               // See comment in trees/TreeModel.h for how QModelIndex is used in trees.
+               return this->derived().createIndex(ii, 0, childNode.get());
+            }
+         }
+      }
+
+      // If we got here, we didn't find a match
+      return QModelIndex();
+   }
+
+   QModelIndex findFolder(QString name, TreeFolderNode<NE> * parent, bool create) {
+      auto pItem = parent ? parent : this->m_rootNode.get();
+
+      // Upstream interfaces should handle this for me, but I like belt and suspenders
+      name = name.simplified();
+      // I am assuming asking me to find an empty name means find the root of the tree.
+      if (name.isEmpty()) {
+         return this->derived().createIndex(0, 0, pItem);
+      }
+
+      // Prepare all the variables for the first loop
+      QStringList dirs = name.split("/", Qt::SkipEmptyParts);
+      if (dirs.isEmpty()) {
+         return QModelIndex();
+      }
+
+      QString current = dirs.takeFirst();
+      QString fullPath = "/";
+      QString targetPath = fullPath % current;
+
+      int ii = 0;
+
+      // Time to get funky with no recursion!
+      while (ii < pItem->childCount()) {
+         auto child = pItem->child(ii);
+         if (std::holds_alternative<std::shared_ptr<TreeFolderNode<NE>>>(child)) {
+            // Child is a folder
+            auto folderNode = std::get<std::shared_ptr<TreeFolderNode<NE>>>(child);
+            auto folder = folderNode->underlyingItem();
+            if (folder->isFolder(targetPath)) {
+               // The folder name matches the part we are looking at
+               if (dirs.isEmpty()) {
+                  // There are no more subtrees to look for, we found it
+                  return this->derived().createIndex(ii, 0, folderNode.get());
+               }
+               // Otherwise, we found a parent folder in our path
+               // get the next folder in the path
+               current = dirs.takeFirst();
+               // append that to the fullPath we are looking for
+               fullPath = targetPath;
+               targetPath = fullPath % "/" % current;
+
+               // Set the parent to the folder
+               pItem = folderNode.get();
+               // Reset the counter
+               ii = 0;
+               // And do the time warp again!
+               continue;
+            }
+         }
+
+         // If we got this far, it wasn't a folder or it wasn't a match.
+         ii++;
+      }
+      // If we get here, we found no match.
+
+      // If we are supposed to create something, then lets get busy
+      if (create) {
+         // push the current dir back on the stack
+         dirs.prepend(current);
+         // And start with the madness
+         return this->createFolderTree(dirs, pItem, fullPath);
+      }
+
+      // If we weren't supposed to create, we drop to here and return an empty
+      // index.
+      return QModelIndex();
+   }
+
+   auto makeNode(TreeNode * parentNode, std::shared_ptr<NE> element) {
+      return std::make_shared<TreeItemNode<NE>>(this->derived(), parentNode, element);
+   }
+   auto makeNode(TreeNode * parentNode, std::shared_ptr<SNE> element) requires (!IsVoid<SNE>) {
+      return std::make_shared<TreeItemNode<SNE>>(this->derived(), parentNode, element);
+   }
+
+   template<class ElementType, HasNodeClassifier TreeNodeType>
+   bool insertChild(TreeNodeType & parentNode,
+                    QModelIndex const & parentIndex,
+                    int const row,
+                    std::shared_ptr<ElementType> element) requires (IsSubstantiveVariant<typename TreeNodeType::ChildPtrTypes>) {
+      // Any time we change the tree structure, we need to call beginInsertRows() and endInsertRows() to notify other
+      // components that the model has changed.
+      TreeModelRowInsertGuard treeModelRowInsertGuard(this->derived(), parentIndex, row, row);
+
+      auto childNode = std::make_shared<TreeItemNode<ElementType>>(this->derived(), &parentNode, element);
+
+      // Parent node can only be one of two types. (It cannot be SecondaryItem because, although we allow Recipes to
+      // contain Recipes -- for Recipe versioning -- we don't allow BrewNotes to contain BrewNotes etc.)
+      bool succeeded;
+      if constexpr (TreeNodeType::NodeClassifier == TreeNodeClassifier::Folder) {
+         auto & parentFolderNode = static_cast<TreeFolderNode<NE> &>(parentNode);
+         succeeded = parentFolderNode.insertChild(row, childNode);
+      } else {
+         Q_ASSERT(TreeNodeType::NodeClassifier == TreeNodeClassifier::PrimaryItem);
+         auto & parentItemNode = static_cast<TreeItemNode<NE> &>(parentNode);
+         succeeded = parentItemNode.insertChild(row, childNode);
+      }
+
+      // It's a coding error if the parent node into which we just inserted a child doesn't now have at least one child!
+      Q_ASSERT(parentNode.childCount() >= 1);
+
+      return true;
+   }
+
+   /**
+    * \brief Use this instead of \c QAbstractItemModel::insertRow or \c QAbstractItemModel::insertRows to add nodes to
+    *        the tree.
+    *
+    * \param parentIndex   The index of the parent tree node of the one we are creating.  (This parent owns the newly-
+    *                      created tree node.)
+    * \param row           The child number at which to insert the newly-created tree node.
+    * \param element       The NamedEntity (primary item, folder or secondary item) we are creating a tree node for
+    */
+   template<class T>
+   bool insertChild(QModelIndex const & parentIndex, int const row, std::shared_ptr<T> element) {
+      TreeNode * parentNode = this->doTreeNode(parentIndex);
+      if (!parentNode) {
+         return false;
+      }
+
+      if constexpr (!IsVoid<SNE> && std::same_as<T, SNE>) {
+         // Parent of secondary item can only be primary item
+         Q_ASSERT(parentNode->classifier() == TreeNodeClassifier::PrimaryItem);
+         return this->insertChild(static_cast<TreeItemNode<NE> &>(*parentNode), parentIndex, row, element);
+      } else {
+         switch (parentNode->classifier()) {
+            case TreeNodeClassifier::Folder:
+               return this->insertChild(static_cast<TreeFolderNode<NE> &>(*parentNode), parentIndex, row, element);
+            case TreeNodeClassifier::PrimaryItem:
+               if constexpr (IsSubstantiveVariant<typename TreeItemNode<NE>::ChildPtrTypes>) {
+                  return this->insertChild(static_cast<TreeItemNode<NE> &>(*parentNode), parentIndex, row, element);
+               } else {
+                  // This is a tree that does not allow primary items to be parents
+                  Q_ASSERT(false);
+                  return false;
+               }
+            case TreeNodeClassifier::SecondaryItem:
+               // Secondary item cannot be a parent!
+               Q_ASSERT(false);
+               return false;
+         }
+      }
+
+      // All cases should be covered in switch above
+//      std::unreachable();
+   }
+
+   template<std::derived_from<TreeNode> TreeNodeType>
+   bool removeChildren(int row, int count, QModelIndex const & parentIndex, TreeNodeType & parentNode) {
+      // Any time we change the tree structure, we need to call beginInsertRows() and endInsertRows() to notify other
+      // components that the model has changed.
+      TreeModelRowInsertGuard treeModelRowInsertGuard(this->derived(), parentIndex, row, row + count - 1);
+      return parentNode.removeChildren(row, count);
+   }
+
+   /**
+    * \brief Use this instead of \c QAbstractItemModel::removeRow or \c QAbstractItemModel::removeRows to remove nodes
+    *        from the tree.
+    */
+   bool removeChildren(int row, int count, QModelIndex const & parentIndex) {
+      TreeNode * parentNode = this->doTreeNode(parentIndex);
+      if (!parentNode) {
+         return false;
+      }
+
+      //
+      // Parent node is usually a folder, though in Recipe tree it can also be a primary item (ie Recipe).  It can never
+      // be a secondary item.
+      //
+      if (parentNode->classifier() == TreeNodeClassifier::Folder) {
+         return this->removeChildren(row, count, parentIndex, static_cast<TreeFolderNode<NE> &>(*parentNode));
+      }
+      Q_ASSERT(parentNode->classifier() == TreeNodeClassifier::PrimaryItem);
+      return this->removeChildren(row, count, parentIndex, static_cast<TreeItemNode<NE>   &>(*parentNode));
+   }
+
+private:
+   QModelIndex createFolderTree(QStringList const & dirs,
+                                TreeFolderNode<NE> * parentNode,
+                                QString const & parentPath) {
+      // Start the loop. We are going to return newIndex at the end,
+      // so we need to declare and initialize outside of the loop
+      QModelIndex newIndex = this->derived().createIndex(parentNode->childCount(), 0, parentNode);
+
+      // Need to call this because we are adding different things with different
+      // column counts. Just using the rowsAboutToBeAdded throws ugly errors and
+      // then a sigsegv
+      emit this->derived().layoutAboutToBeChanged();
+      for (QString cur : dirs) {
+
+         // If we have a parent folder, use its full path.  Otherwise, use the parent path
+         QString folderPath =
+            parentNode->underlyingItem() ? QString{parentNode->underlyingItem()->fullPath() % "/" % cur} :
+                                           QString{parentPath % "/" % cur};
+
+         folderPath.replace(QRegularExpression("//"), "/");
+
+         // Set the full path, which will set the name and the path
+         auto newFolder = std::make_shared<Folder>();
+         newFolder->setfullPath(folderPath);
+
+         auto newFolderNode = std::make_shared<TreeFolderNode<NE>>(this->derived(), parentNode, newFolder);
+         int const numChildren = parentNode->childCount();
+
+         parentNode->insertChild(numChildren, newFolderNode);
+
+         // Set the parent item to point to the newly created tree
+         parentNode = newFolderNode.get();
+
+         // And this for the return
+         newIndex = this->derived().createIndex(parentNode->childCount(), 0, parentNode);
+      }
+      emit this->derived().layoutChanged();
+
+      // May K&R have mercy on my soul
+      return newIndex;
+   }
+
+protected:
+   void doElementAdded(int elementId) {
+      auto element = ObjectStoreWrapper::getById<NE>(elementId);
+      if (!element->display()) {
+         return;
+      }
+
+      // Most of the time, if a new element is created, it's not going to have a folder, so we could just sling it in at
+      // the top level.  However, I don't see that it hurts to check.
+      QString folderPath = element->folderPath();
+      auto folderIndex = this->findFolder(folderPath, this->m_rootNode.get(), true);
+      if (!folderIndex.isValid()) {
+         return;
+      }
+
+      TreeFolderNode<NE> * folderNode = static_cast<TreeFolderNode<NE> *>(folderIndex.internalPointer());
+      int const numChildren = folderNode->childCount();
+      auto childNode = std::make_shared<TreeItemNode<NE>>(this->derived(), folderNode, element);
+      folderNode->insertChild(numChildren, childNode);
+
+      //
+      // If this tree can have secondary elements (eg BrewNote items on RecipeTreeModel) then we need to check whether
+      // the newly-added primary one has any.
+      //
+      this->addSecondariesForPrimary(element);
+
+      this->observeElement(element);
+      return;
+
+   }
+
+   void addSecondariesForPrimary(std::shared_ptr<NE> element) {
+      if constexpr (!IsVoid<SNE>) {
+         auto secondaries = SNE::ownedBy(*element);
+         if (!secondaries.empty()) {
+            QModelIndex parentIndex = this->findElement(element);
+            int row = 0;
+            for (auto secondary : secondaries) {
+               this->insertChild(parentIndex, row++, secondary);
+            }
+         }
+      }
+      return;
+   }
+
+   //! No-op version
+   void doSecondaryElementAdded([[maybe_unused]] int elementId) requires (IsVoid<SNE>) {
+      // It's a coding error if this ever gets called!
+      Q_ASSERT(false);
+      return;
+   }
+   //! Substantive version
+   void doSecondaryElementAdded(int elementId) requires (!IsVoid<SNE>) {
+      auto element = ObjectStoreWrapper::getById<SNE>(elementId);
+      if (!element->display()) {
+         return;
+      }
+
+      std::shared_ptr<NE> owner = element->owner();
+      QModelIndex parentIndex = this->findElement(owner);
+      if (!parentIndex.isValid()) {
+         return;
+      }
+
+      int breadth = this->doRowCount(parentIndex);
+      if (!this->insertChild(parentIndex, breadth, element)) {
+         return;
+      }
+
+      this->observeElement(element);
+      return;
+   }
+
+private:
+   /**
+    * \brief For removing an element, the code is largely the same, regardless of the element type
+    */
+   template<typename T>
+   void implElementRemoved(std::shared_ptr<T> element) {
+      if (!element) {
+         return;
+      }
+
+      QModelIndex index = this->findElement(element);
+      if (!index.isValid()) {
+         return;
+      }
+
+      QModelIndex pIndex = this->derived().parent(index);
+      if (!pIndex.isValid()) {
+         return;
+      }
+
+      if (!this->removeChildren(index.row(), 1, pIndex)) {
+         return;
+      }
+
+      this->derived().disconnect(element.get(), nullptr, &this->derived(), nullptr);
+      return;
+   }
+
+public:
+   bool addFolder(QString name) {
+      //
+      // Since findFolder can also create a folder that doesn't exist, there's pretty much no additional work for us to
+      // do here.
+      //
+      return this->findFolder(name, this->m_rootNode.get(), true).isValid();
+   }
+
+   /**
+    * \brief Delete the contents of the specified node (and of any child nodes) and remove the node from the tree
+    */
+   bool deleteNode(TreeNode & nodeToDelete) {
+      if (this->m_rootNode.get() == &nodeToDelete) {
+         // We don't allow you to delete the top-level folder
+         return false;
+      }
+
+      // Doing the deletion recursively here means the leaves of the tree get deleted first, which is what we want
+      for (int childNum = 0; childNum < nodeToDelete.childCount(); ++childNum) {
+         if (!this->deleteNode(*nodeToDelete.rawChild(childNum))) {
+            return false;
+         }
+      }
+
+      // Remove the node from the tree structure before we delete its contents
+      TreeNode & parentNodeToDelete = *nodeToDelete.rawParent();
+      parentNodeToDelete.removeChildren(nodeToDelete.childNumber(), 1);
+
+      if constexpr (!IsVoid<SNE>) {
+         // For a secondary item (eg BrewNote, MashStep), we don't delete the item itself because it is owned by a
+         // primary item (Recipe, Mash), which will take care of the deletion itself.
+         if (nodeToDelete.classifier() != TreeNodeClassifier::SecondaryItem) {
+            return true;
+         }
+      }
+
+      // TBD: For the moment, Folder objects do not have an existence in the database, so there is nothing to delete
+      if (nodeToDelete.classifier() == TreeNodeClassifier::PrimaryItem) {
+         auto itemNode = static_cast<TreeItemNode<NE> &>(nodeToDelete);
+         std::shared_ptr<NE> item = itemNode.underlyingItem();
+         qDebug() << Q_FUNC_INFO << "Deleting" << *item;
+         ObjectStoreWrapper::softDelete(*item);
+      }
+
+      return true;
+   }
+
+   bool deleteNode(QModelIndex modelIndex) {
+      if (!modelIndex.isValid()) {
+         return false;
+      }
+
+      return this->deleteNode(*this->doTreeNode(modelIndex));
+   }
+
+   QModelIndexList allChildren(QModelIndex const & modelIndex) {
+      QModelIndexList leafNodeIndexes;
+      if (!modelIndex.isValid()) {
+         return leafNodeIndexes;
+      }
+
+      TreeNode * treeNode = this->doTreeNode(modelIndex);
+      if (treeNode->classifier() != TreeNodeClassifier::Folder) {
+         return leafNodeIndexes;
+      }
+
+      auto folderNodes = QList<TreeNode *>{};
+      folderNodes.append(treeNode);
+      while (!folderNodes.isEmpty()) {
+         treeNode = folderNodes.takeFirst();
+
+         for (int ii = 0; ii < treeNode->childCount(); ++ii) {
+            TreeNode * childNode = treeNode->rawChild(ii);
+            if (childNode->classifier() == TreeNodeClassifier::Folder) {
+               // Folder: push it onto the folderNodes stack for later processing
+               folderNodes.append(childNode);
+            } else {
+               // TBD: We're calling this leaf node, but it's not necessarily that
+               leafNodeIndexes.append(this->derived().createIndex(ii, 0, childNode));
+            }
+         }
+      }
+      return leafNodeIndexes;
+   }
+
+   bool removeFolder(QModelIndex folderIndex) {
+      if (!folderIndex.isValid()) {
+         return false;
+      }
+
+      QModelIndex parentIndex = this->derived().parent(folderIndex);
+      if (!parentIndex.isValid()) {
+         return false;
+      }
+
+      TreeNode * folderNode = this->doTreeNode(folderIndex);
+      int const childNumber = folderNode->childNumber();
+      return this->removeChildren(childNumber, 1, parentIndex);
+   }
+
+   bool renameFolder(Folder & folder, QString newName) {
+      QModelIndex folderIndex = findFolder(folder.fullPath(), nullptr, false);
+      if (! folderIndex.isValid()) {
+         return false;
+      }
+
+      QModelIndex parentIndex = this->derived().parent(folderIndex);
+      if (!parentIndex.isValid()) {
+         return false;
+      }
+
+      QString targetPath = newName % "/" % folder.name();
+      TreeNode * folderNode = this->doTreeNode(folderIndex);
+      QList<QPair<QString, TreeNode *>> folderPathsAndNodes;
+      folderPathsAndNodes.append(QPair<QString, TreeNode *>{targetPath, folderNode });
+
+      while (! folderPathsAndNodes.isEmpty()) {
+         // This looks weird, but it is needed for later
+         auto folderPathAndNode = folderPathsAndNodes.takeFirst();
+
+         targetPath = folderPathAndNode.first;
+         TreeNode * target = folderPathAndNode.second;
+
+         // As we move things, childCount changes. This makes sure we loop through all of the kids.
+         int src = 0;
+         // Ok. We have a folderNode and an index.
+         for (int ii = 0; ii < target->childCount(); ++ii) {
+            // This looks weird and it is. As we move children out, the 0 items
+            // changes to the next child. In the case of a folder, though, we
+            // don't move it, so we need to get the item beyond that.
+            TreeNode * next = target->rawChild(src);
+            // If a folder, append it to the queue for latter processing
+            if (next->classifier() == TreeNodeClassifier::Folder) {
+               QPair<QString, TreeNode *> newTarget;
+               newTarget.first = targetPath % "/" % next->name();
+               newTarget.second = next;
+               folderPathsAndNodes.append(newTarget);
+               src++;
+            } else {
+               // Secondary items don't have folders, because they belong to exactly one primary item.
+               if (next->classifier() == TreeNodeClassifier::PrimaryItem) {
+                  auto & primaryNode = static_cast<TreeItemNode<NE> &>(*next);
+                  auto item = primaryNode.underlyingItem();
+                  item->setFolderPath(targetPath);
+               }
+            }
+         }
+      }
+      // Last thing is to remove the folder.
+      return this->removeChildren(folderNode->childNumber(), 1, parentIndex);
+   }
+
+   void doElementRemoved(int elementId) {
+      auto element = ObjectStoreWrapper::getById<NE>(elementId);
+      this->implElementRemoved(element);
+      return;
+   }
+
+   //! No-op version
+   void doSecondaryElementRemoved([[maybe_unused]] int elementId) requires (IsVoid<SNE>) {
+      // It's a coding error if this ever gets called!
+      Q_ASSERT(false);
+      return;
+   }
+   //! Substantive version
+   void doSecondaryElementRemoved(int elementId) requires (!IsVoid<SNE>) {
+      auto element = ObjectStoreWrapper::getById<SNE>(elementId);
+      this->implElementRemoved(element);
+      return;
+   }
+
+   /**
+    * \brief
+    *
+    * \param selectedModelIndexes
+    */
+   void deleteItems(QModelIndexList const & selectedModelIndexes) {
+      for (QModelIndex const & modelIndex : selectedModelIndexes) {
+         TreeNode * treeNode = this->doTreeNode(modelIndex);
+         if (treeNode->classifier() == TreeNodeClassifier::PrimaryItem) {
+            auto & neTreeNode = static_cast<TreeItemNode<NE> &>(*treeNode);
+            std::shared_ptr<NE> neItem = neTreeNode.underlyingItem();
+            ObjectStoreWrapper::softDelete<NE>(*neItem);
+            continue;
+         }
+
+         if constexpr (!IsVoid<SNE>) {
+            if (treeNode->classifier() == TreeNodeClassifier::SecondaryItem) {
+               auto & sneTreeNode = static_cast<TreeItemNode<SNE> &>(*treeNode);
+               std::shared_ptr<SNE> sneItem = sneTreeNode.underlyingItem();
+               ObjectStoreWrapper::softDelete(*sneItem);
+               continue;
+            }
+         }
+
+         Q_ASSERT(treeNode->classifier() == TreeNodeClassifier::Folder);
+         // We want to delete the contents of the folder (and remove it from from the model) before remove the folder
+         // itself, otherwise the QModelIndex values for the contents will not be valid.
+         this->deleteItems(this->allChildren(modelIndex));
+         this->removeFolder(modelIndex);
+      }
+      return;
+   }
+
+   /**
+    * \brief Copy the supplied items
+    *
+    * \param toBeCopied - list of pairs of {\c index, \c newName } where \c index is the item to be copied and
+    *                     \c newName is the name to give the copy.
+    */
+   void copyItems(QList<std::pair<QModelIndex, QString>> const & toBeCopied) {
+      for (auto [modelIndex, newName] : toBeCopied) {
+         TreeNode * treeNode = this->doTreeNode(modelIndex);
+         if (treeNode->classifier() == TreeNodeClassifier::PrimaryItem) {
+            auto & neTreeNode = static_cast<TreeItemNode<NE> &>(*treeNode);
+            std::shared_ptr<NE> neItem = neTreeNode.underlyingItem();
+            auto neItemCopy = ObjectStoreWrapper::copy(*neItem);
+            neItemCopy->setName(newName);
+         } else {
+            // It's a coding error if we ask this function to copy either a folder or a secondary item (eg BrewNote or
+            // MashStep).  However, we can recover by just not doing the copy.
+            qWarning() << Q_FUNC_INFO << "Unexpected item type" << static_cast<int>(treeNode->classifier());
+         }
+      }
+      return;
+   }
+
+private:
+   std::shared_ptr<NE> const senderToElement(QObject * sender) {
+      NE * elementRaw = qobject_cast<NE *>(sender);
+      if (!elementRaw) {
+         return nullptr;
+      }
+      return ObjectStoreWrapper::getSharedFromRaw(elementRaw);
+   }
+
+   std::shared_ptr<SNE> const senderToSecondaryElement(QObject * sender) requires (!IsVoid<SNE>) {
+      auto elementRaw = qobject_cast<SNE *>(sender);
+      if (!elementRaw) {
+         return nullptr;
+      }
+      return ObjectStoreWrapper::getSharedFromRaw(elementRaw);
+   }
+
+protected:
+   void doElementChanged(QObject * sender) {
+      std::shared_ptr<NE> const element = this->senderToElement(sender);
+      if (!element) {
+         return;
+      }
+
+      QModelIndex indexLeft = this->findElement(element);
+      if (!indexLeft.isValid()) {
+         return;
+      }
+
+      QModelIndex indexRight = this->derived().createIndex(
+         indexLeft.row(),
+         this->derived().columnCount(indexLeft) - 1,
+         indexLeft.internalPointer()
+      );
+
+      emit this->derived().dataChanged(indexLeft, indexRight);
+      return;
+   }
+
+   void doSecondaryElementChanged(QObject * sender) {
+      if constexpr (!IsVoid<SNE>) {
+         std::shared_ptr<SNE> const element = this->senderToSecondaryElement(sender);
+         if (!element) {
+            return;
+         }
+
+      } else {
+         // It's a coding error for the function to be called when there is no secondary element
+         // Static assert would be best here, but need to wait until we're not supporting Ubuntu 22.04
+//         static_assert(false);
+         Q_ASSERT(false);
+      }
+      return;
+   }
+
+   //! No-op version
+   void addSubTreeIfNeeded([[maybe_unused]] std::shared_ptr<NE> const element,
+                           [[maybe_unused]] TreeItemNode<NE> * elementNode) requires (IsVoid<SNE>) {
+      // It's a coding error if this ever gets called!
+      Q_ASSERT(false);
+      return;
+   }
+   //! Substantive version
+   void addSubTreeIfNeeded(std::shared_ptr<NE> const element,
+                           TreeItemNode<NE> * elementNode) requires (!IsVoid<SNE>) {
+      // The rules for adding subtrees are class-specific.  Eg for Recipes we need to take account of Ancestors.
+      this->derived().addSubTree(element, elementNode, elementNode->childCount());
+      return;
+   }
+
+   void doFolderChanged(QObject * sender) {
+      std::shared_ptr<NE> const element = this->senderToElement(sender);
+      if (!element) {
+         return;
+      }
+
+      // Find it.
+      QModelIndex index = this->findElement(element);
+      if (!index.isValid()) {
+         qWarning() << Q_FUNC_INFO << "Could not find element" << element;
+         return;
+      }
+
+      bool expand = true;
+
+      QModelIndex pIndex = this->derived().parent(index); // Get the parent
+      // If the parent isn't valid, its the root
+      if (!pIndex.isValid()) {
+         pIndex = this->derived().createIndex(0, 0, this->m_rootNode.get());
+      }
+
+      int ii = this->doTreeNode(index)->childNumber();
+      // Remove it
+      if (!this->removeChildren(ii, 1, pIndex)) {
+         qWarning() << Q_FUNC_INFO << "Could not remove row" << ii;
+         return;
+      }
+
+      // Find the new parent
+      QString const & folderPath = element->folderPath();
+      if (folderPath.isEmpty()) {
+         return;
+      }
+
+      // That's awkward, but dropping a folder prolly does need a the folder
+      // created.
+      //
+      // TODO: At some point we should refactor this code so that we have separate handling for objects that have
+      //       folders from ones that don't.
+      QModelIndex newIndex = this->findFolder(folderPath, this->m_rootNode.get(), true);
+      if (!newIndex.isValid()) {
+         newIndex = this->derived().createIndex(0, 0, this->m_rootNode.get());
+         expand = false;
+      }
+
+      auto elementNode = static_cast<TreeItemNode<NE> *>(this->doTreeNode(newIndex));
+      int jj = elementNode->childCount();
+
+      if (!this->insertChild(newIndex, jj, element)) {
+         qWarning() << Q_FUNC_INFO << "Could not insert row" << jj;
+         return;
+      }
+      // If we have brewnotes, set them up here.
+      this->addSubTreeIfNeeded(element, elementNode);
+
+      if (expand) {
+         emit this->derived().expandFolder(newIndex);
+      }
+
+      // TODO FINISH THIS!
+      return;
+   }
+
+   //================================================ Member Variables =================================================
+   std::unique_ptr<TreeFolderNode<NE>> m_rootNode;
+
+};
+
+//
+// This is a standard macro "trick" used below to allow us to have overloads of the same macro.
+//
+#define TREE_MODEL_GET_OVERLOAD(param1, param2, NAME, ...) NAME
+
+//
+// These macros are used by TREE_MODEL_COMMON_DECL (see below) to handle its optional second parameter
+//
+#define TREE_MODEL_COMMON_DECL_SNE_1(NeName)
+#define TREE_MODEL_COMMON_DECL_SNE_2(NeName, SneName) \
+      void secondaryElementAdded  (int elementId); \
+      void secondaryElementRemoved(int elementId); \
+      void secondaryElementChanged();              \
+
+#define TREE_MODEL_COMMON_DECL_SNE(...) \
+   TREE_MODEL_GET_OVERLOAD(__VA_ARGS__ __VA_OPT__(,) \
+                           TREE_MODEL_COMMON_DECL_SNE_2, \
+                           TREE_MODEL_COMMON_DECL_SNE_1)(__VA_ARGS__)
+
+/**
+ * \brief Derived classes should include this in their header file, right after Q_OBJECT
+ *
+ *        Note we have to be careful about comment formats in macro definitions
+ */
+#define TREE_MODEL_COMMON_DECL(NeName, ...) \
+   /* This allows TableModelBase to call protected and private members of Derived */        \
+   friend class TreeModelBase<NeName##TreeModel, NeName __VA_OPT__(, __VA_ARGS__)>;         \
+                                                                                            \
+   public:                                                                                  \
+      NeName##TreeModel(TreeView * parent = nullptr);                                       \
+      virtual ~NeName##TreeModel();                                                         \
+                                                                                            \
+      QModelIndex first() const;                                                            \
+                                                                                            \
+      /** \brief Overrides for TreeModel */                                                 \
+      virtual TreeNode * treeNode(QModelIndex const & index) const override;                \
+      virtual QString treeForClassName() const override;                                    \
+      virtual QString treeForLocalisedClassName() const override;                           \
+                                                                                            \
+      /** \brief These are all overrides for QAbstractItemModel */                          \
+      virtual QVariant data(QModelIndex const & index, int role) const override;            \
+      virtual QVariant headerData(int section,                                              \
+                                  Qt::Orientation orientation,                              \
+                                  int role = Qt::DisplayRole) const override;               \
+      virtual int rowCount(QModelIndex const & parent = QModelIndex()) const override;      \
+      virtual int columnCount(QModelIndex const & index = QModelIndex()) const override;    \
+      virtual QModelIndex index(int row,                                                    \
+                                int column,                                                 \
+                                QModelIndex const & parent = QModelIndex()) const override; \
+      virtual QModelIndex parent(QModelIndex const & index) const override;                 \
+      virtual QStringList mimeTypes() const override;                                       \
+      virtual QMimeData * mimeData(QModelIndexList const & indexes) const override;         \
+      virtual bool dropMimeData(QMimeData const * data,                                     \
+                                Qt::DropAction action,                                      \
+                                int row,                                                    \
+                                int column,                                                 \
+                                QModelIndex const & parent) override;                       \
+                                                                                            \
+   private slots:                                                                           \
+      void elementAdded  (int elementId);                                                   \
+      void elementRemoved(int elementId);                                                   \
+      void elementChanged();                                                                \
+      TREE_MODEL_COMMON_DECL_SNE(NeName __VA_OPT__(,) __VA_ARGS__)                          \
+      void folderChanged ();                                                                \
+
+
+//
+// These macros are used by TREE_MODEL_COMMON_CODE (see below) to handle its optional second parameter
+//
+#define TREE_MODEL_COMMON_CODE_SNE_1(NeName)
+#define TREE_MODEL_COMMON_CODE_SNE_2(NeName, SneName) \
+   void NeName##TreeModel::secondaryElementAdded  (int elementId) { this->doSecondaryElementAdded  (elementId)     ; return; } \
+   void NeName##TreeModel::secondaryElementRemoved(int elementId) { this->doSecondaryElementRemoved(elementId)     ; return; } \
+   void NeName##TreeModel::secondaryElementChanged()              { this->doSecondaryElementChanged(this->sender()); return; } \
+
+#define TREE_MODEL_COMMON_CODE_SNE(...) \
+   TREE_MODEL_GET_OVERLOAD(__VA_ARGS__ __VA_OPT__(,) \
+                           TREE_MODEL_COMMON_CODE_SNE_2, \
+                           TREE_MODEL_COMMON_CODE_SNE_1)(__VA_ARGS__)
+
+/**
+ * \brief Derived classes should include this in their .cpp file
+ *
+ *        Note we have to be careful about comment formats in macro definitions
+ *
+ *        NB: Mostly I have tried to make these macro-included function bodies trivial.  Macros are a bit clunky, so we
+ *            only really want to use them for the things that are hard to do other ways.
+ */
+#define TREE_MODEL_COMMON_CODE(NeName, ...) \
+   NeName##TreeModel::NeName##TreeModel(TreeView * parent) :                     \
+      TreeModel{parent},                                                         \
+      TreeModelBase<NeName##TreeModel, NeName __VA_OPT__(, __VA_ARGS__)>{} {     \
+         this->connectSignalsAndSlots();                                         \
+         this->loadTreeModel();                                                  \
+         return;                                                                 \
+      }                                                                          \
+   NeName##TreeModel::~NeName##TreeModel() = default;                            \
+                                                                                 \
+   QModelIndex NeName##TreeModel::first() const { return this->doFirst(); }      \
+                                                                                 \
+   TreeNode * NeName##TreeModel::treeNode(QModelIndex const & index) const {     \
+      return this->doTreeNode(index);                                            \
+   }                                                                             \
+                                                                                 \
+   QVariant NeName##TreeModel::data(QModelIndex const & index, int role) const { \
+      return this->doData(index, role);                                          \
+   }                                                                             \
+   QVariant NeName##TreeModel::headerData(int section, Qt::Orientation orientation, int role) const {     \
+      return this->doHeaderData(section, orientation, role);                                              \
+   }                                                                                                      \
+   int NeName##TreeModel::rowCount(QModelIndex const & parent) const { return this->doRowCount(parent); } \
+   int NeName##TreeModel::columnCount(QModelIndex const & parent) const {                                 \
+      return this->doColumnCount(parent);                                                                 \
+   }                                                                                                      \
+   QModelIndex NeName##TreeModel::index(int row, int column, QModelIndex const & parent) const {             \
+      return this->doIndex(row, column, parent);                                                             \
+   }                                                                                                         \
+   QModelIndex NeName##TreeModel::parent(QModelIndex const & index) const { return this->doParent(index); }  \
+   QStringList NeName##TreeModel::mimeTypes() const {                  \
+      return this->doMimeTypes();                                      \
+   }                                                                   \
+   QMimeData * NeName##TreeModel::mimeData(QModelIndexList const & indexes) const { \
+      return this->doMimeData(indexes);                                             \
+   }                                                                                \
+   bool NeName##TreeModel::dropMimeData(QMimeData const * data,        \
+                                        Qt::DropAction action,         \
+                                        int row,                       \
+                                        int column,                    \
+                                        QModelIndex const & parent) {  \
+      return this->doDropMimeData(data, action, row, column, parent);  \
+   }                                                                   \
+                                                                       \
+   QString NeName##TreeModel::treeForClassName         () const { return this->doTreeForClassName(); }          \
+   QString NeName##TreeModel::treeForLocalisedClassName() const { return this->doTreeForLocalisedClassName(); } \
+                                                                                                                \
+   void NeName##TreeModel::elementAdded  (int elementId) { this->doElementAdded  (elementId)     ; return; }    \
+   void NeName##TreeModel::elementRemoved(int elementId) { this->doElementRemoved(elementId)     ; return; }    \
+   void NeName##TreeModel::elementChanged()              { this->doElementChanged(this->sender()); return; }    \
+   TREE_MODEL_COMMON_CODE_SNE(NeName __VA_OPT__(,) __VA_ARGS__)                                                 \
+   void NeName##TreeModel::folderChanged ()              { this->doFolderChanged (this->sender()); return; }    \
+
+
+#endif

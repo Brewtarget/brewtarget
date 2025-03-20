@@ -177,6 +177,7 @@ set(filesToCompile_cpp
     ${repoDir}/src/qtModels/listModels/RecipeAdditionMiscListModel.cpp
     ${repoDir}/src/qtModels/listModels/RecipeAdditionYeastListModel.cpp
     ${repoDir}/src/qtModels/listModels/RecipeAdjustmentSaltListModel.cpp
+    ${repoDir}/src/qtModels/listModels/RecipeListModel.cpp
     ${repoDir}/src/qtModels/listModels/SaltListModel.cpp
     ${repoDir}/src/qtModels/listModels/StyleListModel.cpp
     ${repoDir}/src/qtModels/listModels/WaterListModel.cpp
@@ -188,6 +189,7 @@ set(filesToCompile_cpp
     ${repoDir}/src/qtModels/sortFilterProxyModels/HopSortFilterProxyModel.cpp
     ${repoDir}/src/qtModels/sortFilterProxyModels/MashSortFilterProxyModel.cpp
     ${repoDir}/src/qtModels/sortFilterProxyModels/MiscSortFilterProxyModel.cpp
+    ${repoDir}/src/qtModels/sortFilterProxyModels/RecipeSortFilterProxyModel.cpp
     ${repoDir}/src/qtModels/sortFilterProxyModels/RecipeAdditionFermentableSortFilterProxyModel.cpp
     ${repoDir}/src/qtModels/sortFilterProxyModels/RecipeAdditionHopSortFilterProxyModel.cpp
     ${repoDir}/src/qtModels/sortFilterProxyModels/RecipeAdditionMiscSortFilterProxyModel.cpp
@@ -211,6 +213,7 @@ set(filesToCompile_cpp
     ${repoDir}/src/qtModels/tableModels/RecipeAdditionMiscTableModel.cpp
     ${repoDir}/src/qtModels/tableModels/RecipeAdditionYeastTableModel.cpp
     ${repoDir}/src/qtModels/tableModels/RecipeAdjustmentSaltTableModel.cpp
+    ${repoDir}/src/qtModels/tableModels/RecipeTableModel.cpp
     ${repoDir}/src/qtModels/tableModels/SaltTableModel.cpp
     ${repoDir}/src/qtModels/tableModels/StyleTableModel.cpp
     ${repoDir}/src/qtModels/tableModels/WaterTableModel.cpp
@@ -233,7 +236,11 @@ set(filesToCompile_cpp
     ${repoDir}/src/serialization/xml/XmlRecipeRecord.cpp
     ${repoDir}/src/serialization/xml/XmlRecord.cpp
     ${repoDir}/src/serialization/xml/XmlRecordDefinition.cpp
-    ${repoDir}/src/trees/TreeFilterProxyModel.cpp
+    ${repoDir}/src/trees/NamedEntityTreeModel.cpp
+    ${repoDir}/src/trees/NamedEntityTreeSortFilterProxyModel.cpp
+    ${repoDir}/src/trees/NamedEntityTreeView.cpp
+    ${repoDir}/src/trees/RecipeTreeModel.cpp
+    ${repoDir}/src/trees/RecipeTreeView.cpp
     ${repoDir}/src/trees/TreeModel.cpp
     ${repoDir}/src/trees/TreeNode.cpp
     ${repoDir}/src/trees/TreeView.cpp

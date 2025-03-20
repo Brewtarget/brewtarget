@@ -18,28 +18,21 @@
 #define BTSPLASHSCREEN_H
 #pragma once
 
-#include <QWidget>
 #include <QSplashScreen>
 #include <QString>
-#include <QLabel>
 
 /*!
  * \class BtSplashScreen
  *
  * \brief A class for showing the application splash screen on startup.
  */
-class BtSplashScreen : public QSplashScreen
-{
+class BtSplashScreen : public QSplashScreen {
    Q_OBJECT
 
 public:
-#if QT_VERSION < QT_VERSION_CHECK(5,15,0)
-   BtSplashScreen(QWidget* parent=nullptr);
-#else
-   BtSplashScreen(QScreen* parent=nullptr);
-#endif
+   BtSplashScreen(QScreen * parent = nullptr);
 
-   void showMessage(QString const& message);
+   void showMessage(QString const & message);
 };
 
 #endif

@@ -183,7 +183,7 @@ struct EditorBaseField {
       property   {property   },
       precision  {std::nullopt},
       whenToWrite{whenToWrite} {
-      // We could use BT_BOOL_COMBO_BOX_INIT here, but we'd be repeating a bunch of work we already did in EDITOR_FIELD
+      // We could use BT_COMBO_BOX_BOOL_INIT here, but we'd be repeating a bunch of work we already did in EDITOR_FIELD
       editField->init(editorClass,
                       editFieldName,
                       editFieldFqName,

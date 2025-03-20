@@ -12,9 +12,9 @@
  *
  * You should have received a copy of the GNU General Public License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
- ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
-#ifndef RELATIONAL_UNDOABLE_UPDATE_H
-#define RELATIONAL_UNDOABLE_UPDATE_H
+ =====================================================================================================================*/
+#ifndef UNDOREDO_RELATIONALUNDOABLEUPDATE_H
+#define UNDOREDO_RELATIONALUNDOABLEUPDATE_H
 #pragma once
 
 #include <QMetaType>

@@ -20,6 +20,7 @@
 #include <QItemDelegate>
 
 #include "model/Boil.h"
+#include "qtModels/tableModels/BtTableModel.h"
 #include "qtModels/tableModels/ItemDelegate.h"
 #include "qtModels/tableModels/TableModelBase.h"
 

@@ -583,3 +583,7 @@ double BrewNote::calculateAttenuation_pct() {
     this->setAttenuation(attenuation);
     return attenuation;
 }
+
+QList<std::shared_ptr<BrewNote>> BrewNote::ownedBy(Recipe const & recipe) {
+   return recipe.brewNotes();
+}

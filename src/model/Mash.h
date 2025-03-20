@@ -50,7 +50,7 @@ AddPropertyName(notes                    )
 AddPropertyName(ph                       )
 AddPropertyName(spargeTemp_c             )
 AddPropertyName(totalMashWater_l         )
-AddPropertyName(totalTime                )
+AddPropertyName(totalTime_mins           )
 AddPropertyName(tunTemp_c                )
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
@@ -71,7 +71,7 @@ class Mash : public NamedEntity,
    FOLDER_BASE_DECL(Mash)
    STEP_OWNER_COMMON_DECL(Mash, mash)
    // See model/FolderBase.h for info, getters and setters for these properties
-   Q_PROPERTY(QString folder        READ folder        WRITE setFolder     )
+   Q_PROPERTY(QString folderPath        READ folderPath        WRITE setFolderPath)
    // See model/StepOwnerBase.h for info, getters and setters for these properties
    Q_PROPERTY(QList<std::shared_ptr<MashStep>> steps   READ steps   WRITE setSteps   STORED false)
    Q_PROPERTY(unsigned int numSteps   READ numSteps   STORED false)
@@ -115,7 +115,7 @@ public:
    //! \brief The total water that went into the mash (ie all the mash water, sparge and strike) in liters. Calculated.
    Q_PROPERTY(double                totalMashWater_l          READ totalMashWater_l  STORED false )
    //! \brief The total mash time in minutes. Calculated.
-   Q_PROPERTY(double                totalTime                 READ totalTime  STORED false )
+   Q_PROPERTY(double                totalTime_mins            READ totalTime_mins    STORED false )
 
    // ⮜⮜⮜ BeerJSON support does not require any additional properties on this class! ⮞⮞⮞
 
@@ -146,7 +146,7 @@ public:
    double totalInfusionAmount_l() const;
    //! \brief all the sparge water
    double totalSpargeAmount_l() const;
-   double totalTime();
+   double totalTime_mins() const;
 
    bool hasSparge() const;
 

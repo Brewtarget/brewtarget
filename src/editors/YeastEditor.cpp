@@ -26,7 +26,6 @@
 
 #include "BtHorizontalTabs.h"
 #include "config.h"
-#include "database/ObjectStoreWrapper.h"
 #include "measurement/Unit.h"
 
 #ifdef BUILDING_WITH_CMAKE

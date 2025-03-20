@@ -40,7 +40,7 @@ public:
 
    ~impl() = default;
 
-   BtComboBoxEnum              & m_self              ;
+   BtComboBoxEnum          & m_self              ;
    bool                      m_initialised       ;
    char const *              m_editorName        ;
    char const *              m_comboBoxName      ;
@@ -64,13 +64,13 @@ BtComboBoxEnum::BtComboBoxEnum(QWidget * parent) :
 BtComboBoxEnum::~BtComboBoxEnum() = default;
 
 void BtComboBoxEnum::init(char const * const        editorName        ,
-                      char const * const        comboBoxName      ,
-                      char const * const        comboBoxFqName    ,
-                      EnumStringMapping const & nameMapping       ,
-                      EnumStringMapping const & displayNameMapping,
-                      TypeInfo          const & typeInfo          ,
-                      std::vector<int>  const * restrictTo        ,
-                      SmartLineEdit *           controlledField) {
+                          char const * const        comboBoxName      ,
+                          char const * const        comboBoxFqName    ,
+                          EnumStringMapping const & nameMapping       ,
+                          EnumStringMapping const & displayNameMapping,
+                          TypeInfo          const & typeInfo          ,
+                          std::vector<int>  const * restrictTo        ,
+                          SmartLineEdit *           controlledField) {
    qDebug() << Q_FUNC_INFO << comboBoxFqName << ":" << typeInfo;
 
    // It's a coding error to call init twice

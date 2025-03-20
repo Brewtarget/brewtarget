@@ -115,7 +115,7 @@ endif()
 #=======================================================================================================================
 # It's simplest to keep the project name all lower-case as it means we can use a lot more of the default settings for
 # Linux packaging (where directory names etc are expected to be all lower-case).
-project(brewtarget VERSION 4.0.17 LANGUAGES CXX)
+project(brewtarget VERSION 4.1.0 LANGUAGES CXX)
 message(STATUS "Building ${PROJECT_NAME} version ${PROJECT_VERSION}")
 message(STATUS "PROJECT_SOURCE_DIR is ${PROJECT_SOURCE_DIR}")
 # Sometimes we do need the capitalised version of the project name
@@ -123,7 +123,7 @@ set(capitalisedProjectName Brewtarget)
 # We use this in the program, to tell users where to get support.
 set(CONFIG_GITHUB_URL "https://github.com/${capitalisedProjectName}/${projectName}")
 set(CONFIG_WEBSITE_URL "https://www.brewtarget.beer/")
-set(CONFIG_ORGANIZATION_DOMAIN "brewken.com")
+set(CONFIG_ORGANIZATION_DOMAIN "brewtarget.beer")
 
 #=======================================================================================================================
 #======================================================= Options =======================================================

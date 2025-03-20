@@ -129,14 +129,7 @@ QRect ToggleSwitch::textRect() {
 
 QSize ToggleSwitch::sizeHint() const {
    auto h = style.height;
-   // Note that QFontMetrics::width(QString const &) is deprecated in newer versions of Qt, and
-   // QFontMetrics::horizontalAdvance is the recommended replacement (fortunately with the same signature).
-   // HOWEVER, QFontMetrics::horizontalAdvance is only available since Qt 5.11
-#if QT_VERSION < QT_VERSION_CHECK(5,11,0)
-   auto w = style.indicatorMargin.left() + style.height + style.indicatorMargin.right() + fontMetrics().width(text());
-#else
    auto w = style.indicatorMargin.left() + style.height + style.indicatorMargin.right() + fontMetrics().horizontalAdvance(text());
-#endif
    return QSize(w, h);
 }
 

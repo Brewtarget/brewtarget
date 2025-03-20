@@ -260,23 +260,26 @@ void EquipmentEditor::postReadFieldsFromEditItem([[maybe_unused]] std::optional<
 
 void EquipmentEditor::hideOrShowOptionalVessels() {
    QObject * sender = this->sender();
-   // Believe it or not, QTabWidget::setTabVisible was only introduced in Qt 5.15.  There were various ghastly
-   // workarounds prior to that - eg removing and re-adding the tab you want to hide/show.  But, since it's only Ubuntu
-   // 20.04 LTS running a too-old version of Qt (5.12.8), and we won't be supporting that forever, I'm just going to
-   // disable the tab instead (which greys out its contents) if Qt is too old.  It's not quite as good, but it's not
-   // hideous either IMHO.
-#if QT_VERSION < QT_VERSION_CHECK(5,15,0)
-   if (!sender || sender == this->checkBox_showHlt            ) { this->tab_hlt            ->setEnabled(this->checkBox_showHlt            ->isChecked()); if (sender) { return; } }
-   if (!sender || sender == this->checkBox_showLauterTun      ) { this->tab_lauterTun      ->setEnabled(this->checkBox_showLauterTun      ->isChecked()); if (sender) { return; } }
-   if (!sender || sender == this->checkBox_showAgingVessel    ) { this->tab_agingVessel    ->setEnabled(this->checkBox_showAgingVessel    ->isChecked()); if (sender) { return; } }
-   if (!sender || sender == this->checkBox_showPackagingVessel) { this->tab_packagingVessel->setEnabled(this->checkBox_showPackagingVessel->isChecked()); if (sender) { return; } }
-#else
-   if (!sender || sender == this->checkBox_showHlt            ) { this->tabWidget_editor->setTabVisible(this->tabWidget_editor->indexOf(this->tab_hlt            ), this->checkBox_showHlt            ->isChecked()); if (sender) { return; } }
-   if (!sender || sender == this->checkBox_showLauterTun      ) { this->tabWidget_editor->setTabVisible(this->tabWidget_editor->indexOf(this->tab_lauterTun      ), this->checkBox_showLauterTun      ->isChecked()); if (sender) { return; } }
-   if (!sender || sender == this->checkBox_showAgingVessel    ) { this->tabWidget_editor->setTabVisible(this->tabWidget_editor->indexOf(this->tab_agingVessel    ), this->checkBox_showAgingVessel    ->isChecked()); if (sender) { return; } }
-   if (!sender || sender == this->checkBox_showPackagingVessel) { this->tabWidget_editor->setTabVisible(this->tabWidget_editor->indexOf(this->tab_packagingVessel), this->checkBox_showPackagingVessel->isChecked()); if (sender) { return; } }
-#endif
-
+   if (!sender || sender == this->checkBox_showHlt            ) {
+      this->tabWidget_editor->setTabVisible(this->tabWidget_editor->indexOf(this->tab_hlt            ),
+                                            this->checkBox_showHlt            ->isChecked());
+      if (sender) { return; }
+   }
+   if (!sender || sender == this->checkBox_showLauterTun      ) {
+      this->tabWidget_editor->setTabVisible(this->tabWidget_editor->indexOf(this->tab_lauterTun      ),
+                                            this->checkBox_showLauterTun      ->isChecked());
+      if (sender) { return; }
+   }
+   if (!sender || sender == this->checkBox_showAgingVessel    ) {
+      this->tabWidget_editor->setTabVisible(this->tabWidget_editor->indexOf(this->tab_agingVessel    ),
+                                            this->checkBox_showAgingVessel    ->isChecked());
+      if (sender) { return; }
+   }
+   if (!sender || sender == this->checkBox_showPackagingVessel) {
+      this->tabWidget_editor->setTabVisible(this->tabWidget_editor->indexOf(this->tab_packagingVessel),
+                                            this->checkBox_showPackagingVessel->isChecked());
+      if (sender) { return; }
+   }
    return;
 }
 

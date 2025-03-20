@@ -1008,6 +1008,81 @@ Log file may contain more details.</source>
     </message>
 </context>
 <context>
+    <name>Derived</name>
+    <message>
+        <source>New</source>
+        <translation type="unfinished">Нов</translation>
+    </message>
+    <message>
+        <source>Folder</source>
+        <translation type="unfinished">Фасцикла</translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation type="unfinished">Копирај</translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation type="unfinished">Обриши</translation>
+    </message>
+    <message>
+        <source>Export</source>
+        <translation type="unfinished">Извези</translation>
+    </message>
+    <message>
+        <source>To File (BeerXML or BeerJSON)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Import</source>
+        <translation type="unfinished">Увези</translation>
+    </message>
+    <message>
+        <source>Copy %1</source>
+        <translation type="unfinished">Копирај %1</translation>
+    </message>
+    <message>
+        <source>Enter a unique name for the copy of %1.</source>
+        <translation type="unfinished">Унесите јединствено име за копију %1</translation>
+    </message>
+    <message>
+        <source>An empty name will skip copying this %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete %1</source>
+        <translation type="unfinished">Обриши %1</translation>
+    </message>
+    <message>
+        <source>Delete %1 %2?</source>
+        <translation type="unfinished">Обриши %1 %2?</translation>
+    </message>
+    <message>
+        <source>Folder name</source>
+        <translation type="unfinished">Назив фасцикле</translation>
+    </message>
+    <message>
+        <source>Folder name:</source>
+        <translation type="unfinished">Назив фасцикле:</translation>
+    </message>
+    <message>
+        <source>Bad Name</source>
+        <translation type="unfinished">Лош назив</translation>
+    </message>
+    <message>
+        <source>A folder name must have at least one non-whitespace character in it</source>
+        <translation type="unfinished">Назив фасцикле мора да садржи барем један не-празан карактер.</translation>
+    </message>
+    <message>
+        <source>A folder name must have at least one non-/ character in it</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Equipment</name>
     <message>
         <source>Equipment</source>
@@ -1020,6 +1095,18 @@ Log file may contain more details.</source>
     <message>
         <source>Boil Time</source>
         <translation type="unfinished">Дужина кључања</translation>
+    </message>
+    <message>
+        <source>Equipments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Preboil</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>BoilTime</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1250,6 +1337,14 @@ Log file may contain more details.</source>
         <source>Color</source>
         <translation type="unfinished">Боја</translation>
     </message>
+    <message>
+        <source>Fermentables</source>
+        <translation type="unfinished">Слад</translation>
+    </message>
+    <message>
+        <source>Extract Yield Dry Basis Fine Grind (DBFG)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FermentableDialog</name>
@@ -1441,6 +1536,10 @@ Log file may contain more details.</source>
         <source>FULLPATH</source>
         <translation type="unfinished">ЦЕЛА ПУТАЊА</translation>
     </message>
+    <message>
+        <source>Folder</source>
+        <translation type="unfinished">Фасцикла</translation>
+    </message>
 </context>
 <context>
     <name>HelpDialog</name>
@@ -1590,6 +1689,22 @@ Log file may contain more details.</source>
     <message>
         <source>Origin</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hops</source>
+        <translation type="unfinished">Хмељ</translation>
+    </message>
+    <message>
+        <source>Alpha</source>
+        <translation type="unfinished">Алфа</translation>
+    </message>
+    <message>
+        <source>Beta</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished">Облик</translation>
     </message>
 </context>
 <context>
@@ -2010,23 +2125,19 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Folder name</source>
-        <translation>Назив фасцикле</translation>
+        <translation type="vanished">Назив фасцикле</translation>
     </message>
     <message>
         <source>Folder name:</source>
-        <translation>Назив фасцикле:</translation>
+        <translation type="vanished">Назив фасцикле:</translation>
     </message>
     <message>
         <source>Bad Name</source>
-        <translation>Лош назив</translation>
+        <translation type="vanished">Лош назив</translation>
     </message>
     <message>
         <source>A folder name must have at least one non-whitespace character in it</source>
-        <translation>Назив фасцикле мора да садржи барем један не-празан карактер.</translation>
-    </message>
-    <message>
-        <source>A folder name must have at least one non-/ character in it</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Назив фасцикле мора да садржи барем један не-празан карактер.</translation>
     </message>
     <message>
         <source>An error was returned while creating %1</source>
@@ -2170,6 +2281,26 @@ If you need help, please open an issue at %1</source>
     <message>
         <source>Mash</source>
         <translation type="unfinished">Укомљавање</translation>
+    </message>
+    <message>
+        <source>Mashes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Назив</translation>
+    </message>
+    <message>
+        <source>Total Water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Total Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Total time (mins)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2989,11 +3120,11 @@ Error message:
     </message>
     <message>
         <source>Recipes</source>
-        <translation>Рецепти</translation>
+        <translation type="vanished">Рецепти</translation>
     </message>
     <message>
         <source>Equipment</source>
-        <translation>Опрема</translation>
+        <translation type="vanished">Опрема</translation>
     </message>
     <message>
         <source>Fermentables</source>
@@ -3013,11 +3144,11 @@ Error message:
     </message>
     <message>
         <source>Style</source>
-        <translation>Стил</translation>
+        <translation type="vanished">Стил</translation>
     </message>
     <message>
         <source>Folder</source>
-        <translation>Фасцикла</translation>
+        <translation type="vanished">Фасцикла</translation>
     </message>
     <message>
         <source>Error attempting to create directory &quot;%1&quot;</source>
@@ -3251,10 +3382,6 @@ Error message:
     <message>
         <source>Could not open SQLite DB file %1.
 %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Water</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3813,6 +3940,14 @@ Log file may contain more details.</source>
         <source>pt</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>None!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add %1 step to recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RaIngrd</name>
@@ -4129,6 +4264,34 @@ The final volume in the primary is %1.</source>
     <message>
         <source>Style</source>
         <translation type="unfinished">Стил</translation>
+    </message>
+    <message>
+        <source>Recipes</source>
+        <translation type="unfinished">Рецепти</translation>
+    </message>
+    <message>
+        <source>unknown style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>N/A</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>OG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>FG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Color</source>
+        <translation type="unfinished">Боја</translation>
+    </message>
+    <message>
+        <source>IBU</source>
+        <translation type="unfinished">IBU</translation>
     </message>
 </context>
 <context>
@@ -4743,39 +4906,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Category</source>
-        <translation>Врста</translation>
-    </message>
-    <message>
-        <source>Code</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Врста</translation>
     </message>
     <message>
         <source>Guide</source>
-        <translation>Упутства</translation>
-    </message>
-    <message>
-        <source>BoilTime</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Beta</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Lab</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Attenuation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Id</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Flocculation</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Упутства</translation>
     </message>
     <message>
         <source>Miscs</source>
@@ -4810,36 +4945,62 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished">Рецепт</translation>
     </message>
     <message>
-        <source>Ca</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mg</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>SO&lt;sub&gt;4&lt;/sub&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Na</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cl</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>HCO&lt;sub&gt;3&lt;/sub&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Extract Yield Dry Basis Fine Grind (DBFG)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Add During</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>RecipeTableModel</name>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Назив</translation>
+    </message>
+</context>
+<context>
+    <name>RecipeTreeView</name>
+    <message>
+        <source>Snapshots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Snapshots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hide Snapshots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Detach Recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Snapshot Recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew It!</source>
+        <translation type="unfinished">Скувај!</translation>
+    </message>
+    <message>
+        <source>Brew Again</source>
+        <translation type="unfinished">Скувај опет</translation>
+    </message>
+    <message>
+        <source>Change date</source>
+        <translation type="unfinished">Промени датум</translation>
+    </message>
+    <message>
+        <source>Recalculate eff</source>
+        <translation type="unfinished">Прерачунај ефик</translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation type="unfinished">Обриши</translation>
     </message>
 </context>
 <context>
@@ -5009,13 +5170,6 @@ The final volume in the primary is %1.</source>
     </message>
 </context>
 <context>
-    <name>StepClass</name>
-    <message>
-        <source>Add %1 step to recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>StepExtended</name>
     <message>
         <source>Extended Step</source>
@@ -5075,6 +5229,18 @@ The final volume in the primary is %1.</source>
     <message>
         <source>Guide</source>
         <translation type="unfinished">Упутства</translation>
+    </message>
+    <message>
+        <source>Styles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Code</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="unfinished">Тип</translation>
     </message>
 </context>
 <context>
@@ -5334,136 +5500,96 @@ The final volume in the primary is %1.</source>
         <source>FULLPATH</source>
         <translation type="obsolete">ЦЕЛА ПУТАЊА</translation>
     </message>
-    <message>
-        <source>Could not copy</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>There was an unexpected error creating %1</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>TreeView</name>
     <message>
         <source>New</source>
-        <translation type="unfinished">Нов</translation>
+        <translation type="obsolete">Нов</translation>
     </message>
     <message>
         <source>Recipe</source>
-        <translation type="unfinished">Рецепт</translation>
-    </message>
-    <message>
-        <source>Show Snapshots</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hide Snapshots</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Detach Recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Snapshot Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Рецепт</translation>
     </message>
     <message>
         <source>Brew It!</source>
-        <translation type="unfinished">Скувај!</translation>
+        <translation type="obsolete">Скувај!</translation>
     </message>
     <message>
         <source>Brew Again</source>
-        <translation type="unfinished">Скувај опет</translation>
+        <translation type="obsolete">Скувај опет</translation>
     </message>
     <message>
         <source>Change date</source>
-        <translation type="unfinished">Промени датум</translation>
+        <translation type="obsolete">Промени датум</translation>
     </message>
     <message>
         <source>Recalculate eff</source>
-        <translation type="unfinished">Прерачунај ефик</translation>
+        <translation type="obsolete">Прерачунај ефик</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="unfinished">Обриши</translation>
+        <translation type="obsolete">Обриши</translation>
     </message>
     <message>
         <source>Equipment</source>
-        <translation type="unfinished">Опрема</translation>
+        <translation type="obsolete">Опрема</translation>
     </message>
     <message>
         <source>Fermentable</source>
-        <translation type="unfinished">Слад</translation>
+        <translation type="obsolete">Слад</translation>
     </message>
     <message>
         <source>Hop</source>
-        <translation type="unfinished">Хмељ</translation>
+        <translation type="obsolete">Хмељ</translation>
     </message>
     <message>
         <source>Misc</source>
-        <translation type="unfinished">Разно</translation>
+        <translation type="obsolete">Разно</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Стил</translation>
+        <translation type="obsolete">Стил</translation>
     </message>
     <message>
         <source>Yeast</source>
-        <translation type="unfinished">Квасац</translation>
-    </message>
-    <message>
-        <source>Water</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Квасац</translation>
     </message>
     <message>
         <source>Folder</source>
-        <translation type="unfinished">Фасцикла</translation>
+        <translation type="obsolete">Фасцикла</translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation type="unfinished">Копирај</translation>
+        <translation type="obsolete">Копирај</translation>
     </message>
     <message>
         <source>Export</source>
-        <translation type="unfinished">Извези</translation>
-    </message>
-    <message>
-        <source>To File (BeerXML or BeerJSON)</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Извези</translation>
     </message>
     <message>
         <source>Import</source>
-        <translation type="unfinished">Увези</translation>
-    </message>
-    <message>
-        <source>Cancel All</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Увези</translation>
     </message>
     <message>
         <source>Copy %1</source>
-        <translation type="unfinished">Копирај %1</translation>
+        <translation type="obsolete">Копирај %1</translation>
     </message>
     <message>
         <source>Enter a unique name for the copy of %1.</source>
-        <translation type="unfinished">Унесите јединствено име за копију %1</translation>
-    </message>
-    <message>
-        <source>An empty name will skip copying this %1.</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Унесите јединствено име за копију %1</translation>
     </message>
     <message>
         <source>Delete %1</source>
-        <translation type="unfinished">Обриши %1</translation>
+        <translation type="obsolete">Обриши %1</translation>
     </message>
     <message>
         <source>Delete %1 %2?</source>
-        <translation type="unfinished">Обриши %1 %2?</translation>
+        <translation type="obsolete">Обриши %1 %2?</translation>
     </message>
     <message>
         <source>BrewNote</source>
-        <translation type="unfinished">Белешка о кувању</translation>
+        <translation type="obsolete">Белешка о кувању</translation>
     </message>
 </context>
 <context>
@@ -5544,6 +5670,18 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>pH</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Waters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SO&lt;sub&gt;4&lt;/sub&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>HCO&lt;sub&gt;3&lt;/sub&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -5807,6 +5945,26 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Product ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Yeasts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lab</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Attenuation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Id</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Flocculation</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -7987,10 +8145,6 @@ The final volume in the primary is %1.</source>
         <translation>Белешке</translation>
     </message>
     <message>
-        <source>Tun</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Initial tun temp</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8007,11 +8161,47 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Tun sp. heat</source>
+        <source>Tun specific heat (cal/(g*K))</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Tun specific heat (cal/(g*K))</source>
+        <source>Main</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ID in database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use for</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tun specific heat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished">Нов</translation>
+    </message>
+    <message>
+        <source>Save and close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished">Сачувај</translation>
+    </message>
+    <message>
+        <source>Discard and close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -8940,10 +9130,6 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>dd MMM yyyy</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Carbonation Volumes</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8965,6 +9151,10 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Date Created</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>dd MMM yyyy</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

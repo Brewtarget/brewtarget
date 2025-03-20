@@ -545,5 +545,4 @@ S & operator<<(S & stream, ObjectStore const & objectStore) {
    return stream;
 }
 
-
 #endif

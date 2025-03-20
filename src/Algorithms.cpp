@@ -357,7 +357,6 @@ double Algorithms::SgAt20CToBrix(double sg) {
       "Specific gravity",
       "Brix"
    );
-
 }
 
 double Algorithms::BrixToSgAt20C(double brix) {

@@ -30,21 +30,36 @@
 #include <QVariant>
 #include <QVector>
 
-#include "model/Folder.h"
+#include "Html.h"
 #include "Localization.h"
+#include "PersistentSettings.h"
+#include "measurement/ColorMethods.h"
+#include "measurement/IbuMethods.h"
 #include "measurement/Measurement.h"
 #include "model/BrewNote.h"
 #include "model/Equipment.h"
 #include "model/Fermentable.h"
+#include "model/Folder.h"
 #include "model/Hop.h"
 #include "model/Misc.h"
 #include "model/Recipe.h"
 #include "model/Style.h"
 #include "model/Water.h"
 #include "model/Yeast.h"
-#include "PersistentSettings.h"
+#include "trees/RecipeTreeModel.h"
 #include "trees/TreeModel.h"
 
+void TreeNode::setShowMe(bool val) {
+   this->m_showMe = val;
+   return;
+}
+
+bool TreeNode::showMe() const {
+   return this->m_showMe;
+}
+
+// NOTE: Each TreeItemNode<XYZ>::columnDisplayNames definition below should correspond with the columns defined in
+//       TreeNodeTraits<XYZ, PQR>::ColumnIndex in trees/TreeNodeTraits.h.
 
 template<> EnumStringMapping const TreeItemNode<Recipe>::columnDisplayNames {
    {TreeItemNode<Recipe>::ColumnIndex::Name             , Recipe::tr("Name"     )},
@@ -69,6 +84,12 @@ template<> EnumStringMapping const TreeItemNode<Hop>::columnDisplayNames {
    {TreeItemNode<Hop>::ColumnIndex::Form    , Hop::tr("Type"   )},
    {TreeItemNode<Hop>::ColumnIndex::AlphaPct, Hop::tr("% Alpha")},
    {TreeItemNode<Hop>::ColumnIndex::Origin  , Hop::tr("Origin" )},
+};
+
+template<> EnumStringMapping const TreeItemNode<Mash>::columnDisplayNames {
+   {TreeItemNode<Mash>::ColumnIndex::Name      , Mash::tr("Name"       )},
+   {TreeItemNode<Mash>::ColumnIndex::TotalWater, Mash::tr("Total Water")},
+   {TreeItemNode<Mash>::ColumnIndex::TotalTime , Mash::tr("Total Time" )},
 };
 
 template<> EnumStringMapping const TreeItemNode<Misc>::columnDisplayNames {
@@ -111,17 +132,23 @@ template<> EnumStringMapping const TreeFolderNode<Hop>::columnDisplayNames {
    {TreeFolderNode<Hop>::ColumnIndex::FullPath, Folder::tr("FULLPATH")},
 };
 
-template<> bool TreeItemNode<Recipe>::isLessThan(TreeModel const & model,
-                                                 QModelIndex const & left,
-                                                 QModelIndex const & right,
-                                                 TreeItemTraits<TreeItemNode<Recipe>>::ColumnIndex section,
-                                                 Recipe const & lhs,
-                                                 Recipe const & rhs) {
-   if (model.showChild(left) && model.showChild(right)) {
+template<> bool TreeItemNode<Recipe>::columnIsLessThan(TreeItemNode<Recipe> const & other,
+                                                       TreeNodeTraits<Recipe>::ColumnIndex column) const {
+   auto const & lhs = *this->m_underlyingItem;
+   auto const & rhs = *other.m_underlyingItem;
+
+   //
+   // If two ancestor recipes share the same parent, we show them in reverse order of creation, regardless of what
+   // column we are sorting by.
+   //
+   // We are safe to dereference rawParent() here because the root node is always a Folder and never a Recipe
+   //
+   if (this->rawParent() == other.rawParent() &&
+       this->rawParent()->classifier() == TreeNodeClassifier::PrimaryItem) {
       return lhs.key() > rhs.key();
    }
 
-   switch (section) {
+   switch (column) {
       case TreeItemNode<Recipe>::ColumnIndex::Name:
          return lhs.name() < rhs.name();
 
@@ -141,34 +168,42 @@ template<> bool TreeItemNode<Recipe>::isLessThan(TreeModel const & model,
          return lhs.ancestors().length() < rhs.ancestors().length();
    }
 
-   // Default will be to just do a name sort. This doesn't likely make sense, but it will prevent a lot of warnings.
-   return lhs.name() < rhs.name();
+//   std::unreachable();
 }
 
-template<> bool TreeItemNode<Equipment>::isLessThan([[maybe_unused]] TreeModel const & model,
-                                                    [[maybe_unused]] QModelIndex const & left,
-                                                    [[maybe_unused]] QModelIndex const & right,
-                                                    TreeItemTraits<TreeItemNode<Equipment>>::ColumnIndex section,
-                                                    Equipment const & lhs,
-                                                    Equipment const & rhs) {
-   switch (section) {
+template<> bool TreeItemNode<BrewNote>::columnIsLessThan(TreeItemNode<BrewNote> const & other,
+                                                         TreeNodeTraits<BrewNote, Recipe>::ColumnIndex column) const {
+   auto const & lhs = *this->m_underlyingItem;
+   auto const & rhs = *other.m_underlyingItem;
+   switch (column) {
+      case TreeItemNode<BrewNote>::ColumnIndex::BrewDate:
+         return lhs.brewDate() < rhs.brewDate();
+   }
+
+//   std::unreachable();
+}
+
+template<> bool TreeItemNode<Equipment>::columnIsLessThan(TreeItemNode<Equipment> const & other,
+                                                          TreeNodeTraits<Equipment>::ColumnIndex column) const {
+   auto const & lhs = *this->m_underlyingItem;
+   auto const & rhs = *other.m_underlyingItem;
+   switch (column) {
       case TreeItemNode<Equipment>::ColumnIndex::Name:
          return lhs.name() < rhs.name();
 
       case TreeItemNode<Equipment>::ColumnIndex::BoilTime:
-         return lhs.boilTime_min().value_or(Equipment::default_boilTime_mins) < rhs.boilTime_min().value_or(Equipment::default_boilTime_mins);
+         return lhs.boilTime_min().value_or(Equipment::default_boilTime_mins) <
+                rhs.boilTime_min().value_or(Equipment::default_boilTime_mins);
    }
 
-   return lhs.name() < rhs.name();
+//   std::unreachable();
 }
 
-template<> bool TreeItemNode<Fermentable>::isLessThan([[maybe_unused]] TreeModel const & model,
-                                                      [[maybe_unused]] QModelIndex const & left,
-                                                      [[maybe_unused]] QModelIndex const & right,
-                                                      TreeItemTraits<TreeItemNode<Fermentable>>::ColumnIndex section,
-                                                      Fermentable const & lhs,
-                                                      Fermentable const & rhs) {
-   switch (section) {
+template<> bool TreeItemNode<Fermentable>::columnIsLessThan(TreeItemNode<Fermentable> const & other,
+                                                            TreeNodeTraits<Fermentable>::ColumnIndex column) const {
+   auto const & lhs = *this->m_underlyingItem;
+   auto const & rhs = *other.m_underlyingItem;
+   switch (column) {
       case TreeItemNode<Fermentable>::ColumnIndex::Name : return lhs.name()      < rhs.name();
       case TreeItemNode<Fermentable>::ColumnIndex::Type : return lhs.type()      < rhs.type();
       case TreeItemNode<Fermentable>::ColumnIndex::Color: return lhs.color_srm() < rhs.color_srm();
@@ -176,13 +211,11 @@ template<> bool TreeItemNode<Fermentable>::isLessThan([[maybe_unused]] TreeModel
    return lhs.name() < rhs.name();
 }
 
-template<> bool TreeItemNode<Hop>::isLessThan([[maybe_unused]] TreeModel const & model,
-                                              [[maybe_unused]] QModelIndex const & left,
-                                              [[maybe_unused]] QModelIndex const & right,
-                                              TreeItemTraits<TreeItemNode<Hop>>::ColumnIndex section,
-                                              Hop const & lhs,
-                                              Hop const & rhs) {
-   switch (section) {
+template<> bool TreeItemNode<Hop>::columnIsLessThan(TreeItemNode<Hop> const & other,
+                                                    TreeNodeTraits<Hop>::ColumnIndex column) const {
+   auto const & lhs = *this->m_underlyingItem;
+   auto const & rhs = *other.m_underlyingItem;
+   switch (column) {
       case TreeItemNode<Hop>::ColumnIndex::Name    : return lhs.name()      < rhs.name();
       case TreeItemNode<Hop>::ColumnIndex::Form    : return lhs.form()      < rhs.form();
       case TreeItemNode<Hop>::ColumnIndex::AlphaPct: return lhs.alpha_pct() < rhs.alpha_pct();
@@ -191,26 +224,34 @@ template<> bool TreeItemNode<Hop>::isLessThan([[maybe_unused]] TreeModel const &
    return lhs.name() < rhs.name();
 }
 
-template<> bool TreeItemNode<Misc>::isLessThan([[maybe_unused]] TreeModel const & model,
-                                               [[maybe_unused]] QModelIndex const & left,
-                                               [[maybe_unused]] QModelIndex const & right,
-                                               TreeItemTraits<TreeItemNode<Misc>>::ColumnIndex section,
-                                               Misc const & lhs,
-                                               Misc const & rhs) {
-   switch (section) {
+template<> bool TreeItemNode<Mash>::columnIsLessThan(TreeItemNode<Mash> const & other,
+                                                     TreeNodeTraits<Mash>::ColumnIndex column) const {
+   auto const & lhs = *this->m_underlyingItem;
+   auto const & rhs = *other.m_underlyingItem;
+   switch (column) {
+      case TreeItemNode<Mash>::ColumnIndex::Name      : return lhs.name() < rhs.name();
+      case TreeItemNode<Mash>::ColumnIndex::TotalWater: return lhs.totalMashWater_l() < rhs.totalMashWater_l();
+      case TreeItemNode<Mash>::ColumnIndex::TotalTime : return lhs.totalTime_mins()   < rhs.totalTime_mins();
+   }
+   return lhs.name() < rhs.name();
+}
+
+template<> bool TreeItemNode<Misc>::columnIsLessThan(TreeItemNode<Misc> const & other,
+                                                     TreeNodeTraits<Misc>::ColumnIndex column) const {
+   auto const & lhs = *this->m_underlyingItem;
+   auto const & rhs = *other.m_underlyingItem;
+   switch (column) {
       case TreeItemNode<Misc>::ColumnIndex::Name: return lhs.name() < rhs.name();
       case TreeItemNode<Misc>::ColumnIndex::Type: return lhs.type() < rhs.type();
    }
    return lhs.name() < rhs.name();
 }
 
-template<> bool TreeItemNode<Style>::isLessThan([[maybe_unused]] TreeModel const & model,
-                                                [[maybe_unused]] QModelIndex const & left,
-                                                [[maybe_unused]] QModelIndex const & right,
-                                                TreeItemTraits<TreeItemNode<Style>>::ColumnIndex section,
-                                                Style const & lhs,
-                                                Style const & rhs) {
-   switch (section) {
+template<> bool TreeItemNode<Style>::columnIsLessThan(TreeItemNode<Style> const & other,
+                                                      TreeNodeTraits<Style>::ColumnIndex column) const {
+   auto const & lhs = *this->m_underlyingItem;
+   auto const & rhs = *other.m_underlyingItem;
+   switch (column) {
       case TreeItemNode<Style>::ColumnIndex::Name          : return lhs.name()           < rhs.name();
       case TreeItemNode<Style>::ColumnIndex::Category      : return lhs.category()       < rhs.category();
       case TreeItemNode<Style>::ColumnIndex::CategoryNumber: return lhs.categoryNumber() < rhs.categoryNumber();
@@ -220,13 +261,11 @@ template<> bool TreeItemNode<Style>::isLessThan([[maybe_unused]] TreeModel const
    return lhs.name() < rhs.name();
 }
 
-template<> bool TreeItemNode<Yeast>::isLessThan([[maybe_unused]] TreeModel const & model,
-                                                [[maybe_unused]] QModelIndex const & left,
-                                                [[maybe_unused]] QModelIndex const & right,
-                                                TreeItemTraits<TreeItemNode<Yeast>>::ColumnIndex section,
-                                                Yeast const & lhs,
-                                                Yeast const & rhs) {
-   switch (section) {
+template<> bool TreeItemNode<Yeast>::columnIsLessThan(TreeItemNode<Yeast> const & other,
+                                                      TreeNodeTraits<Yeast>::ColumnIndex column) const {
+   auto const & lhs = *this->m_underlyingItem;
+   auto const & rhs = *other.m_underlyingItem;
+   switch (column) {
       case TreeItemNode<Yeast>::ColumnIndex::Name      : return lhs.name()       < rhs.name();
       case TreeItemNode<Yeast>::ColumnIndex::Laboratory: return lhs.laboratory() < rhs.laboratory();
       case TreeItemNode<Yeast>::ColumnIndex::ProductId : return lhs.productId()  < rhs.productId();
@@ -236,13 +275,11 @@ template<> bool TreeItemNode<Yeast>::isLessThan([[maybe_unused]] TreeModel const
    return lhs.name() < rhs.name();
 }
 
-template<> bool TreeItemNode<Water>::isLessThan([[maybe_unused]] TreeModel const & model,
-                                                [[maybe_unused]] QModelIndex const & left,
-                                                [[maybe_unused]] QModelIndex const & right,
-                                                TreeItemTraits<TreeItemNode<Water>>::ColumnIndex section,
-                                                Water const & lhs,
-                                                Water const & rhs) {
-   switch (section) {
+template<> bool TreeItemNode<Water>::columnIsLessThan(TreeItemNode<Water> const & other,
+                                                      TreeNodeTraits<Water>::ColumnIndex column) const {
+   auto const & lhs = *this->m_underlyingItem;
+   auto const & rhs = *other.m_underlyingItem;
+   switch (column) {
       case TreeItemNode<Water>::ColumnIndex::Name       : return lhs.name()            < rhs.name();
       case TreeItemNode<Water>::ColumnIndex::pH         : return lhs.ph()              < rhs.ph();
       case TreeItemNode<Water>::ColumnIndex::Bicarbonate: return lhs.bicarbonate_ppm() < rhs.bicarbonate_ppm();
@@ -255,474 +292,305 @@ template<> bool TreeItemNode<Water>::isLessThan([[maybe_unused]] TreeModel const
    return lhs.name() < rhs.name();
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+template<> QString TreeItemNode<Recipe>::getToolTip() const {
+   auto style = this->m_underlyingItem->style();
 
-namespace {
-   EnumStringMapping const itemTypeToName {
-      {TreeNode::Type::Recipe     , "Recipe"     },
-      {TreeNode::Type::Equipment  , "Equipment"  },
-      {TreeNode::Type::Fermentable, "Fermentable"},
-      {TreeNode::Type::Hop        , "Hop"        },
-      {TreeNode::Type::Misc       , "Misc"       },
-      {TreeNode::Type::Yeast      , "Yeast"      },
-      {TreeNode::Type::BrewNote   , "BrewNote"   },
-      {TreeNode::Type::Style      , "Style"      },
-      {TreeNode::Type::Folder     , "Folder"     },
-      {TreeNode::Type::Water      , "Water"      },
-   };
+   // Do the style sheet first
+   QString header = "<html><head><style type=\"text/css\">";
+   header += Html::getCss(":/css/tooltip.css");
+   header += "</style></head>";
+
+   QString body   = "<body>";
+   //body += QString("<h1>%1</h1>").arg(this->m_underlyingItem->getName()());
+   body += QString("<div id=\"headerdiv\">");
+   body += QString("<table id=\"tooltip\">");
+   body += QString("<caption>%1 (%2%3)</caption>")
+         .arg( style ? style->name() : Recipe::tr("unknown style"))
+         .arg( style ? style->categoryNumber() : Recipe::tr("N/A") )
+         .arg( style ? style->styleLetter() : "" );
+
+   // Third row: OG and FG
+   body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
+           .arg(Recipe::tr("OG"))
+           .arg(Measurement::displayAmount(Measurement::Amount{this->m_underlyingItem->og(), Measurement::Units::specificGravity}, 3));
+   body += QString("<td class=\"left\">%1</td><td class=\"value\">%2</td></tr>")
+           .arg(Recipe::tr("FG"))
+           .arg(Measurement::displayAmount(Measurement::Amount{this->m_underlyingItem->fg(), Measurement::Units::specificGravity}, 3));
+
+   // Fourth row: Color and Bitterness.
+   body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2 (%3)</td>")
+           .arg(Recipe::tr("Color"))
+           .arg(Measurement::displayAmount(Measurement::Amount{this->m_underlyingItem->color_srm(), Measurement::Units::srm}, 1))
+           .arg(ColorMethods::colorFormulaName());
+   body += QString("<td class=\"left\">%1</td><td class=\"value\">%2 (%3)</td></tr>")
+           .arg(Recipe::tr("IBU"))
+           .arg(Measurement::displayQuantity(this->m_underlyingItem->IBU(), 1))
+           .arg(IbuMethods::ibuFormulaName() );
+
+   body += "</table></body></html>";
+
+   return header + body;
 }
 
-template<> TreeNode::Type TreeNode::typeOf<Recipe>()      { return TreeNode::Type::Recipe;      }
-template<> TreeNode::Type TreeNode::typeOf<Equipment>()   { return TreeNode::Type::Equipment;   }
-template<> TreeNode::Type TreeNode::typeOf<Fermentable>() { return TreeNode::Type::Fermentable; }
-template<> TreeNode::Type TreeNode::typeOf<Hop>()         { return TreeNode::Type::Hop;         }
-template<> TreeNode::Type TreeNode::typeOf<Misc>()        { return TreeNode::Type::Misc;        }
-template<> TreeNode::Type TreeNode::typeOf<Yeast>()       { return TreeNode::Type::Yeast;       }
-template<> TreeNode::Type TreeNode::typeOf<BrewNote>()    { return TreeNode::Type::BrewNote;    }
-template<> TreeNode::Type TreeNode::typeOf<Style>()       { return TreeNode::Type::Style;       }
-template<> TreeNode::Type TreeNode::typeOf<Folder>()    { return TreeNode::Type::Folder;      }
-template<> TreeNode::Type TreeNode::typeOf<Water>()       { return TreeNode::Type::Water;       }
+template<> QString TreeItemNode<BrewNote>::getToolTip() const {
+   return Localization::displayDate(this->m_underlyingItem->brewDate());
+}
 
+template<> QString TreeItemNode<Style>::getToolTip() const {
+   // Do the style sheet first
+   QString header = "<html><head><style type=\"text/css\">";
+   header += Html::getCss(":/css/tooltip.css");
+   header += "</style></head>";
 
-bool operator==(TreeNode & lhs, TreeNode & rhs) {
-   // Things of different types are not equal
-   if (lhs.nodeType != rhs.nodeType) {
-      return false;
+   QString body = "<body>";
+   body += QString("<div id=\"headerdiv\">");
+   body += QString("<table id=\"tooltip\">");
+   body += QString("<caption>%1</caption>").arg(this->m_underlyingItem->name());
+
+   // First row -- category and number (letter)
+   body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
+           .arg(Style::tr("Category"))
+           .arg(this->m_underlyingItem->category());
+   body += QString("<td class=\"left\">%1</td><td class=\"value\">%2%3</td></tr>")
+           .arg(Style::tr("Code"))
+           .arg(this->m_underlyingItem->categoryNumber())
+           .arg(this->m_underlyingItem->styleLetter());
+
+   // Second row: guide and type
+   body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
+           .arg(Style::tr("Guide"))
+           .arg(this->m_underlyingItem->styleGuide());
+   body += QString("<td class=\"left\">%1</td><td class=\"value\">%2</td></tr>")
+           .arg(Style::tr("Type"))
+           .arg(Style::typeDisplayNames[this->m_underlyingItem->type()]);
+
+   body += "</table></body></html>";
+
+   return header + body;
+}
+
+template<> QString TreeItemNode<Equipment>::getToolTip() const {
+   // Do the style sheet first
+   QString header = "<html><head><style type=\"text/css\">";
+   header += Html::getCss(":/css/tooltip.css");
+   header += "</style></head>";
+
+   QString body   = "<body>";
+
+   body += QString("<div id=\"headerdiv\">");
+   body += QString("<table id=\"tooltip\">");
+   body += QString("<caption>%1</caption>")
+         .arg( this->m_underlyingItem->name() );
+
+   // First row -- batchsize and boil time
+   body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
+           .arg(Equipment::tr("Preboil"))
+           .arg(Measurement::displayAmount(Measurement::Amount{this->m_underlyingItem->kettleBoilSize_l(), Measurement::Units::liters}) );
+   body += QString("<td class=\"left\">%1</td><td class=\"value\">%2</td></tr>")
+           .arg(Equipment::tr("BoilTime"))
+           .arg(Measurement::displayAmount(Measurement::Amount{this->m_underlyingItem->boilTime_min().value_or(Equipment::default_boilTime_mins), Measurement::Units::minutes}) );
+
+   body += "</table></body></html>";
+
+   return header + body;
+}
+
+// Once we do inventory, this needs to be fixed to show amount on hand
+template<> QString TreeItemNode<Fermentable>::getToolTip() const {
+   // Do the style sheet first
+   QString header = "<html><head><style type=\"text/css\">";
+   header += Html::getCss(":/css/tooltip.css");
+   header += "</style></head>";
+
+   QString body   = "<body>";
+
+   body += QString("<div id=\"headerdiv\">");
+   body += QString("<table id=\"tooltip\">");
+   body += QString("<caption>%1</caption>")
+         .arg( this->m_underlyingItem->name() );
+
+   // First row -- type and color
+   body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
+           .arg(Fermentable::tr("Type"))
+           .arg(Fermentable::typeDisplayNames[this->m_underlyingItem->type()]);
+   body += QString("<td class=\"left\">%1</td><td class=\"value\">%2</td></tr>")
+           .arg(Fermentable::tr("Color"))
+           .arg(Measurement::displayAmount(Measurement::Amount{this->m_underlyingItem->color_srm(), Measurement::Units::srm}, 1));
+   // Second row -- isMashed and yield?
+//   body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
+//           .arg(Fermentable::tr("Mashed"))
+//           .arg( fermentable->stage() == RecipeAddition::Stage::Mash ? Fermentable::tr("Yes") : Fermentable::tr("No") );
+   body += QString("<tr><td class=\"left\">.</td><td class=\"value\">.</td>");
+   auto const yield = this->m_underlyingItem->fineGrindYield_pct();
+   body += QString("<td class=\"left\">%1</td><td class=\"value\">%2</td></tr>")
+           .arg(Fermentable::tr("Extract Yield Dry Basis Fine Grind (DBFG)"))
+           .arg(yield ? Measurement::displayQuantity(*yield, 3) : "?");
+
+   body += "</table></body></html>";
+
+   return header + body;
+}
+
+template<> QString TreeItemNode<Hop>::getToolTip() const {
+   // Do the style sheet first
+   QString header = "<html><head><style type=\"text/css\">";
+   header += Html::getCss(":/css/tooltip.css");
+   header += "</style></head>";
+
+   QString body   = "<body>";
+
+   body += QString("<div id=\"headerdiv\">");
+   body += QString("<table id=\"tooltip\">");
+   body += QString("<caption>%1</caption>").arg(this->m_underlyingItem->name());
+
+   // First row -- alpha and beta
+   body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
+           .arg(Hop::tr("Alpha"))
+           .arg(Measurement::displayQuantity(this->m_underlyingItem->alpha_pct(), 3));
+   if (this->m_underlyingItem->beta_pct()) {
+      body += QString("<td class=\"left\">%1</td><td class=\"value\">%2</td>")
+            .arg(Hop::tr("Beta"))
+            .arg(Measurement::displayQuantity(*this->m_underlyingItem->beta_pct(), 3));
    }
+   body += QString("</tr>");
 
-   return lhs.data(0) == rhs.data(0);
-}
-
-TreeNode::TreeNode(TreeNode::Type nodeType, TreeNode * parent) :
-   parentItem{parent},
-   nodeType{nodeType},
-   m_thing{nullptr},
-   m_showMe{false} {
-   return;
-}
-
-TreeNode::~TreeNode() {
-   qDeleteAll(this->childItems);
-}
-
-TreeNode * TreeNode::child(int number) {
-   if (number < this->childItems.count()) {
-      return this->childItems.value(number);
+   // Second row -- form and type
+   body += QString("<tr>");
+   if (this->m_underlyingItem->form()) {
+      body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
+            .arg(Hop::tr("Form"))
+            .arg(Hop::formDisplayNames[*this->m_underlyingItem->form()]);
    }
-
-   return nullptr;
-}
-
-TreeNode * TreeNode::parent() {
-   return parentItem;
-}
-
-TreeNode::Type TreeNode::type() const {
-   return this->nodeType;
-}
-
-int TreeNode::childCount() const {
-   return this->childItems.count();
-}
-
-int TreeNode::columnCount(TreeNode::Type nodeType) const {
-   switch (nodeType) {
-      case TreeNode::Type::Recipe:      return static_cast<int>(TreeItemNode<     Recipe>::Info::NumberOfColumns);
-      case TreeNode::Type::Equipment:   return static_cast<int>(TreeItemNode<  Equipment>::Info::NumberOfColumns);
-      case TreeNode::Type::Fermentable: return static_cast<int>(TreeItemNode<Fermentable>::Info::NumberOfColumns);
-      case TreeNode::Type::Hop:         return static_cast<int>(TreeItemNode<        Hop>::Info::NumberOfColumns);
-      case TreeNode::Type::Misc:        return static_cast<int>(TreeItemNode<       Misc>::Info::NumberOfColumns);
-      case TreeNode::Type::Yeast:       return static_cast<int>(TreeItemNode<      Yeast>::Info::NumberOfColumns);
-      case TreeNode::Type::Style:       return static_cast<int>(TreeItemNode<      Style>::Info::NumberOfColumns);
-      case TreeNode::Type::BrewNote:    return static_cast<int>(TreeItemNode<   BrewNote>::Info::NumberOfColumns);
-      // All folders have the same columns, so it's a bit arbitrary which one we use here
-      case TreeNode::Type::Folder:      return static_cast<int>(TreeFolderNode<      Hop>::Info::NumberOfColumns);
-      case TreeNode::Type::Water:       return static_cast<int>(TreeItemNode<      Water>::Info::NumberOfColumns);
-      default:
-         qWarning() << Q_FUNC_INFO << "Bad column:" << static_cast<int>(nodeType);
-         return 0;
+   if (this->m_underlyingItem->type()) {
+      body += QString("<td class=\"left\">%1</td><td class=\"value\">%2</td></tr>")
+            .arg(Hop::tr("Type"))
+            .arg(Hop::typeDisplayNames[*this->m_underlyingItem->type()]);
    }
+   body += QString("</tr>");
+   body += "</table></body></html>";
+
+   return header + body;
 }
 
-QVariant TreeNode::data(/*TreeNode::Type nodeType, */int column) {
+template<> QString TreeItemNode<Mash>::getToolTip() const {
+   // Do the style sheet first
+   QString header = "<html><head><style type=\"text/css\">";
+   header += Html::getCss(":/css/tooltip.css");
+   header += "</style></head>";
 
-   switch (this->nodeType) {
-      case TreeNode::Type::Recipe:      return dataRecipe     (column);
-      case TreeNode::Type::Equipment:   return dataEquipment  (column);
-      case TreeNode::Type::Fermentable: return dataFermentable(column);
-      case TreeNode::Type::Hop:         return dataHop        (column);
-      case TreeNode::Type::Misc:        return dataMisc       (column);
-      case TreeNode::Type::Yeast:       return dataYeast      (column);
-      case TreeNode::Type::Style:       return dataStyle      (column);
-      case TreeNode::Type::BrewNote:    return dataBrewNote   (column);
-      case TreeNode::Type::Folder:      return dataFolder     (column);
-      case TreeNode::Type::Water:       return dataWater      (column);
-      default:
-         qWarning() << Q_FUNC_INFO << "Bad column:" << static_cast<int>(nodeType);
-         return QVariant();
-   }
+   QString body   = "<body>";
+
+   body += QString("<div id=\"headerdiv\">");
+   body += QString("<table id=\"tooltip\">");
+   body += QString("<caption>%1</caption>")
+         .arg( this->m_underlyingItem->name() );
+   // First row -- total time
+   body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
+           .arg(Mash::tr("Total time (mins)"))
+           .arg(Measurement::displayAmount(Measurement::Amount{this->m_underlyingItem->totalTime_mins(), Measurement::Units::minutes}) );
+
+   body += "</table></body></html>";
+
+   return header + body;
 }
 
-int TreeNode::childNumber() const {
-   if (this->parentItem) {
-      return parentItem->childItems.indexOf(const_cast<TreeNode *>(this));
-   }
-   return 0;
+template<> QString TreeItemNode<Misc>::getToolTip() const {
+   // Do the style sheet first
+   QString header = "<html><head><style type=\"text/css\">";
+   header += Html::getCss(":/css/tooltip.css");
+   header += "</style></head>";
+
+   QString body   = "<body>";
+
+   body += QString("<div id=\"headerdiv\">");
+   body += QString("<table id=\"tooltip\">");
+   body += QString("<caption>%1</caption>")
+         .arg( this->m_underlyingItem->name() );
+   // First row -- type and use
+   body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
+           .arg(Misc::tr("Type"))
+           .arg(Misc::typeDisplayNames[this->m_underlyingItem->type()]);
+
+   body += "</table></body></html>";
+
+   return header + body;
 }
 
-void TreeNode::setData(TreeNode::Type t, QObject * d) {
-   this->m_thing = d;
-   this->nodeType = t;
+template<> QString TreeItemNode<Yeast>::getToolTip() const {
+   // Do the style sheet first
+   QString header = "<html><head><style type=\"text/css\">";
+   header += Html::getCss(":/css/tooltip.css");
+   header += "</style></head>";
+
+   QString body   = "<body>";
+
+   body += QString("<div id=\"headerdiv\">");
+   body += QString("<table id=\"tooltip\">");
+   body += QString("<caption>%1</caption>")
+         .arg( this->m_underlyingItem->name() );
+
+   // First row -- type and form
+   body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
+           .arg(Yeast::tr("Type"))
+           .arg(Yeast::typeDisplayNames[this->m_underlyingItem->type()]);
+   body += QString("<td class=\"left\">%1</td><td class=\"value\">%2</td></tr>")
+           .arg(Yeast::tr("Form"))
+           .arg(Yeast::formDisplayNames[this->m_underlyingItem->form()]);
+   // Second row -- lab and attenuation
+   body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
+           .arg(Yeast::tr("Lab"))
+           .arg(this->m_underlyingItem->laboratory());
+   body += QString("<td class=\"left\">%1</td><td class=\"value\">%2 %</td></tr>")
+           .arg(Yeast::tr("Attenuation"))
+           .arg(Measurement::displayQuantity(this->m_underlyingItem->attenuationTypical_pct(), 0));
+
+   // Third row -- prod id and flocculation
+   body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
+           .arg(Yeast::tr("Id"))
+           .arg(this->m_underlyingItem->productId());
+   body += QString("<td class=\"left\">%1</td><td class=\"value\">%2</td></tr>")
+           .arg(Yeast::tr("Flocculation"))
+           .arg(Yeast::flocculationDisplayNames[this->m_underlyingItem->flocculation()]);
+
+   body += "</table></body></html>";
+
+   return header + body;
 }
 
-bool TreeNode::insertChildren(int position, int count, TreeNode::Type nodeType) {
-//   qDebug() <<
-//      Q_FUNC_INFO << "Inserting" << count << "children of type" << nodeType << "(" <<
-//      this->itemTypeToString(static_cast<TreeNode::Type>(nodeType)) << ") at position" << position;
-   if (position < 0  || position > this->childItems.size()) {
-      qWarning() << Q_FUNC_INFO << "Position" << position << "outside range (0, " << this->childItems.size() << ")";
-      return false;
-   }
+template<> QString TreeItemNode<Water>::getToolTip() const {
+   // Do the style sheet first
+   QString header = "<html><head><style type=\"text/css\">";
+   header += Html::getCss(":/css/tooltip.css");
+   header += "</style></head>";
 
-   for (int row = 0; row < count; ++row) {
-      TreeNode * newItem = new TreeNode(nodeType, this);
-      this->childItems.insert(position + row, newItem);
-   }
+   QString body   = "<body>";
+   body += QString("<div id=\"headerdiv\">");
+   body += QString("<table id=\"tooltip\">");
+   body += QString("<caption>%1</caption>").arg(this->m_underlyingItem->name());
 
-   return true;
+   // First row -- Ca and Mg
+   body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
+           .arg(Water::tr("Ca"))
+           .arg(this->m_underlyingItem->calcium_ppm());
+   body += QString("<td class=\"left\">%1</td><td class=\"value\">%2</td></tr>")
+           .arg(Water::tr("Mg"))
+           .arg(this->m_underlyingItem->magnesium_ppm());
+   // Second row -- SO4 and Na
+   body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
+           .arg(Water::tr("SO<sub>4</sub>"))
+           .arg(this->m_underlyingItem->sulfate_ppm());
+   body += QString("<td class=\"left\">%1</td><td class=\"value\">%2</td></tr>")
+           .arg(Water::tr("Na"))
+           .arg(this->m_underlyingItem->sodium_ppm());
+   // third row -- Cl and HCO3
+   body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
+           .arg(Water::tr("Cl"))
+           .arg(this->m_underlyingItem->chloride_ppm());
+   body += QString("<td class=\"left\">%1</td><td class=\"value\">%2</td></tr>")
+           .arg(Water::tr("HCO<sub>3</sub>"))
+           .arg( this->m_underlyingItem->bicarbonate_ppm());
+
+   body += "</table></body></html>";
+
+   return header + body;
 }
-
-bool TreeNode::removeChildren(int position, int count) {
-   if (position < 0 || position + count > this->childItems.count()) {
-      return false;
-   }
-
-   for (int row = 0; row < count; ++row) {
-      delete this->childItems.takeAt(position);
-   }
-   // FIXME: memory leak here. With delete, it's a concurrency/memory
-   // access error, due to the fact that these pointers are floating around.
-   //childItems.takeAt(position);
-
-   return true;
-}
-
-QVariant TreeNode::dataRecipe(int column) {
-   Recipe * recipe = qobject_cast<Recipe *>(this->m_thing);
-   switch (static_cast<TreeItemNode<Recipe>::ColumnIndex>(column)) {
-      case TreeItemNode<Recipe>::ColumnIndex::Name:
-         if (!this->m_thing) {
-            return QVariant(QObject::tr("Recipes"));
-         } else {
-            return QVariant(recipe->name());
-         }
-      case TreeItemNode<Recipe>::ColumnIndex::NumberOfAncestors:
-         if (recipe) {
-            return QVariant(recipe->ancestors().size());
-         }
-         break;
-      case TreeItemNode<Recipe>::ColumnIndex::BrewDate:
-         if (recipe && recipe->date()) {
-            return Localization::displayDateUserFormated(*recipe->date());
-         }
-         break;
-      case TreeItemNode<Recipe>::ColumnIndex::Style:
-         if (recipe && recipe->style()) {
-            return QVariant(recipe->style()->name());
-         }
-         break;
-      default :
-         qWarning() << QString("TreeNode::dataRecipe Bad column: %1").arg(column);
-   }
-   return QVariant();
-}
-
-QVariant TreeNode::dataEquipment(int column) {
-   Equipment * kit = qobject_cast<Equipment *>(this->m_thing);
-   switch (static_cast<TreeItemNode<Equipment>::ColumnIndex>(column)) {
-      case TreeItemNode<Equipment>::ColumnIndex::Name:
-         if (! kit) {
-            return QVariant(QObject::tr("Equipment"));
-         } else {
-            return QVariant(kit->name());
-         }
-      case TreeItemNode<Equipment>::ColumnIndex::BoilTime:
-         if (kit) {
-            return QVariant::fromValue(kit->boilTime_min());
-         }
-         break;
-      default :
-         qWarning() << QString("TreeNode::dataEquipment Bad column: %1").arg(column);
-   }
-   return QVariant();
-}
-
-QVariant TreeNode::dataFermentable(int column) {
-   Fermentable * ferm = qobject_cast<Fermentable *>(this->m_thing);
-
-   switch (static_cast<TreeItemNode<Fermentable>::ColumnIndex>(column)) {
-      case TreeItemNode<Fermentable>::ColumnIndex::Name:
-         if (ferm) {
-            return QVariant(ferm->name());
-         } else {
-            return QVariant(QObject::tr("Fermentables"));
-         }
-      case TreeItemNode<Fermentable>::ColumnIndex::Type:
-         if (ferm) {
-            return QVariant(Fermentable::typeDisplayNames[ferm->type()]);
-         }
-         break;
-      case TreeItemNode<Fermentable>::ColumnIndex::Color:
-         if (ferm) {
-            return QVariant(Measurement::displayAmount(Measurement::Amount{ferm->color_srm(),
-                                                                           Measurement::Units::srm}, 0));
-         }
-         break;
-      default :
-         qWarning() << Q_FUNC_INFO << "Bad column:" << column;
-         break;
-   }
-   return QVariant();
-}
-
-QVariant TreeNode::dataHop(int column) {
-   Hop * hop = qobject_cast<Hop *>(this->m_thing);
-   switch (static_cast<TreeItemNode<Hop>::ColumnIndex>(column)) {
-      case TreeItemNode<Hop>::ColumnIndex::Name:
-         if (! hop) {
-            return QVariant(QObject::tr("Hops"));
-         } else {
-            return QVariant(hop->name());
-         }
-      case TreeItemNode<Hop>::ColumnIndex::Form:
-         if (hop) {
-            return QVariant(Hop::formDisplayNames[hop->form()]);
-         }
-         break;
-      case TreeItemNode<Hop>::ColumnIndex::AlphaPct:
-         if (hop) {
-            return QVariant(hop->alpha_pct());
-         }
-         break;
-      case TreeItemNode<Hop>::ColumnIndex::Origin:
-         if (hop) {
-            return QVariant(hop->origin());
-         }
-         break;
-      default :
-         qWarning() << Q_FUNC_INFO << "Bad column:" << column;
-   }
-   return QVariant();
-}
-
-QVariant TreeNode::dataMisc(int column) {
-   Misc * misc = qobject_cast<Misc *>(this->m_thing);
-   switch (static_cast<TreeItemNode<Misc>::ColumnIndex>(column)) {
-      case TreeItemNode<Misc>::ColumnIndex::Name:
-         if (! misc) {
-            return QVariant(QObject::tr("Miscellaneous"));
-         } else {
-            return QVariant(misc->name());
-         }
-      case TreeItemNode<Misc>::ColumnIndex::Type:
-         if (misc) {
-            return QVariant(Misc::typeDisplayNames[misc->type()]);
-         }
-         break;
-///      case MISCUSECOL:
-///         if (misc) {
-///            // Note that EnumStringMapping::operator[] already handles returning blank string for unset optional enums
-///            return QVariant(Misc::useDisplayNames[misc->use()]);
-///         }
-///         break;
-      default :
-         qWarning() << QString("TreeNode::dataMisc Bad column: %1").arg(column);
-   }
-   return QVariant();
-}
-
-QVariant TreeNode::dataYeast(int column) {
-   Yeast * yeast = qobject_cast<Yeast *>(this->m_thing);
-   switch (static_cast<TreeItemNode<Yeast>::ColumnIndex>(column)) {
-      case TreeItemNode<Yeast>::ColumnIndex::Name:
-         if (! yeast) {
-            return QVariant(QObject::tr("Yeast"));
-         } else {
-            return QVariant(yeast->name());
-         }
-      case TreeItemNode<Yeast>::ColumnIndex::Laboratory:
-         if (yeast) {
-            return QVariant(yeast->laboratory());
-         }
-         break;
-      case TreeItemNode<Yeast>::ColumnIndex::ProductId:
-         if (yeast) {
-            return QVariant(yeast->productId());
-         }
-         break;
-      case TreeItemNode<Yeast>::ColumnIndex::Type:
-         if (yeast) {
-            return QVariant(Yeast::typeDisplayNames[yeast->type()]);
-         }
-         break;
-      case TreeItemNode<Yeast>::ColumnIndex::Form:
-         if (yeast) {
-            return QVariant(Yeast::formDisplayNames[yeast->form()]);
-         }
-         break;
-      default :
-         qWarning() << QString("TreeNode::dataYeast Bad column: %1").arg(column);
-   }
-   return QVariant();
-}
-
-QVariant TreeNode::dataBrewNote([[maybe_unused]] int column) {
-   if (!this->m_thing) {
-      return QVariant();
-   }
-
-   BrewNote * bNote = qobject_cast<BrewNote *>(this->m_thing);
-
-   return bNote->brewDate_short();
-}
-
-QVariant TreeNode::dataStyle(int column) {
-   Style * style = qobject_cast<Style *>(this->m_thing);
-
-   if (! style && static_cast<TreeItemNode<Style>::ColumnIndex>(column) == TreeItemNode<Style>::ColumnIndex::Name) {
-      return QVariant(QObject::tr("Style"));
-   }
-   if (style) {
-      switch (static_cast<TreeItemNode<Style>::ColumnIndex>(column)) {
-         case TreeItemNode<Style>::ColumnIndex::Name:
-            return QVariant(style->name());
-         case TreeItemNode<Style>::ColumnIndex::Category:
-            return QVariant(style->category());
-         case TreeItemNode<Style>::ColumnIndex::CategoryNumber:
-            return QVariant(style->categoryNumber());
-         case TreeItemNode<Style>::ColumnIndex::CategoryLetter:
-            return QVariant(style->styleLetter());
-         case TreeItemNode<Style>::ColumnIndex::StyleGuide:
-            return QVariant(style->styleGuide());
-         default :
-            qWarning() << QString("TreeNode::dataStyle Bad column: %1").arg(column);
-      }
-   }
-   return QVariant();
-}
-
-QVariant TreeNode::dataFolder(int column) {
-   Folder * folder = qobject_cast<Folder *>(this->m_thing);
-
-   // All folders have the same columns, so it's a bit arbitrary which one we use here
-   if (! folder && static_cast<TreeFolderNode<Hop>::ColumnIndex>(column) == TreeFolderNode<Hop>::ColumnIndex::Name) {
-      return QVariant(QObject::tr("Folder"));
-   }
-
-   if (! folder) {
-      return QVariant(QObject::tr("Folder"));
-   }
-   if (static_cast<TreeFolderNode<Hop>::ColumnIndex>(column) == TreeFolderNode<Hop>::ColumnIndex::Name) {
-      return QVariant(folder->name());
-   }
-
-   return QVariant();
-}
-
-QVariant TreeNode::dataWater(int column) {
-   Water * water = qobject_cast<Water *>(this->m_thing);
-
-   if (water == nullptr && static_cast<TreeItemNode<Water>::ColumnIndex>(column) == TreeItemNode<Water>::ColumnIndex::Name) {
-      return QVariant(QObject::tr("Water"));
-   }
-   if (water) {
-      switch (static_cast<TreeItemNode<Water>::ColumnIndex>(column)) {
-         case TreeItemNode<Water>::ColumnIndex::Name:
-            return QVariant(water->name());
-         case TreeItemNode<Water>::ColumnIndex::Calcium:
-            return QVariant(water->calcium_ppm());
-         case TreeItemNode<Water>::ColumnIndex::Bicarbonate:
-            return QVariant(water->bicarbonate_ppm());
-         case TreeItemNode<Water>::ColumnIndex::Sulfate:
-            return QVariant(water->sulfate_ppm());
-         case TreeItemNode<Water>::ColumnIndex::Chloride:
-            return QVariant(water->chloride_ppm());
-         case TreeItemNode<Water>::ColumnIndex::Sodium:
-            return QVariant(water->sodium_ppm());
-         case TreeItemNode<Water>::ColumnIndex::Magnesium:
-            return QVariant(water->magnesium_ppm());
-         case TreeItemNode<Water>::ColumnIndex::pH:
-            return water->ph() ? QVariant(*water->ph()) : QVariant();
-         default :
-            qWarning() << QString("TreeNode::dataWater Bad column: %1").arg(column);
-      }
-   }
-
-   return QVariant();
-}
-
-
-template<class T>
-T * TreeNode::getData() {
-   if (this->nodeType == TreeNode::typeOf<T>() && this->m_thing) {
-      return qobject_cast<T *>(this->m_thing);
-   }
-
-   return nullptr;
-}
-//
-// Instantiate the above template function for the types that are going to use it
-//
-template Recipe      * TreeNode::getData<Recipe     >();
-template Equipment   * TreeNode::getData<Equipment  >();
-template Fermentable * TreeNode::getData<Fermentable>();
-template Hop         * TreeNode::getData<Hop        >();
-template Misc        * TreeNode::getData<Misc       >();
-template Yeast       * TreeNode::getData<Yeast      >();
-template BrewNote    * TreeNode::getData<BrewNote   >();
-template Style       * TreeNode::getData<Style      >();
-template Folder    * TreeNode::getData<Folder   >();
-template Water       * TreeNode::getData<Water      >();
-
-NamedEntity * TreeNode::thing() {
-   if (m_thing) {
-      return qobject_cast<NamedEntity *>(this->m_thing);
-   }
-
-   return nullptr;
-}
-
-QString TreeNode::name() {
-   NamedEntity * tmp;
-   if (! m_thing) {
-      return QString();
-   }
-   tmp = qobject_cast<NamedEntity *>(this->m_thing);
-   return tmp->name();
-}
-
-bool TreeNode::showMe() const {
-   return m_showMe;
-}
-void TreeNode::setShowMe(bool val) {
-   m_showMe = val;
-}
-
-template<class S>
-S & operator<<(S & stream, TreeNode::Type const treeItemType) {
-   std::optional<QString> itemTypeAsString = itemTypeToName.enumToString(treeItemType);
-   if (itemTypeAsString) {
-      stream << *itemTypeAsString;
-   } else {
-      // This is a coding error
-      stream << "Unrecognised tree item type: " << static_cast<int>(treeItemType);
-   }
-   return stream;
-}
-
-//
-// Instantiate the above template function for the types that are going to use it
-// (This is all just a trick to allow the template definition to be here in the .cpp file and not in the header.)
-//
-template QDebug & operator<<(QDebug & stream, TreeNode::Type const treeItemType);
-template QTextStream & operator<<(QTextStream & stream, TreeNode::Type const treeItemType);

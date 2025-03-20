@@ -13,7 +13,18 @@ happens, so I'm now setting it to a slightly arbitrary time early in the morning
 * Mash, Boil and Fermentation profiles will appear in the left-hand section
 * Additional methods for calculating IBU
 * We'll list other new features here...
--
+
+## v4.0.18
+Bug fixes and minor enhancements.
+
+### New Features
+* None
+
+### Bug Fixes
+* None
+
+### Release Timestamp
+Sat, 15 Feb 2025 04:00:18 +0100
 
 ## v4.0.17
 Bug fixes and minor enhancements.
@@ -22,12 +33,11 @@ Bug fixes and minor enhancements.
 * None
 
 ### Bug Fixes
-* Crashing in Windows when making new recipe [929](https://github.com/Brewtarget/brewtarget/issues/929)
+* Crashing when making new recipe [929](https://github.com/Brewtarget/brewtarget/issues/929)
 
 ### Release Timestamp
-Fri, 14 Feb 2025 04:00:17 +0100
+Sat, 15 Feb 2025 04:00:17 +0100
 
--
 ## v4.0.16
 Bug fixes and minor enhancements.
 

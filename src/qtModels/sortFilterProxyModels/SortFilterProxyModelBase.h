@@ -36,6 +36,9 @@ template<class Derived> class SortFilterProxyModelPhantom;
 template<class Derived, class NeTableModel, class NeListModel>
 class SortFilterProxyModelBase : public CuriouslyRecurringTemplateBase<SortFilterProxyModelPhantom, Derived> {
 public:
+   /**
+    * \param filter If \c true then we only show "displayable" items; if \c false then we show everything
+    */
    SortFilterProxyModelBase(bool filter) :
       m_filter{filter} {
       return;
@@ -139,7 +142,9 @@ private:
                                          NeName##ListModel>;                                    \
                                                                                                 \
    public:                                                                                      \
-      NeName##SortFilterProxyModel(QObject * parent = nullptr, bool filter = true);             \
+      NeName##SortFilterProxyModel(QObject *            parent      = nullptr,                  \
+                                   bool                 filter      = true   ,                  \
+                                   QAbstractItemModel * sourceModel = nullptr);                 \
       virtual ~NeName##SortFilterProxyModel();                                                  \
                                                                                                 \
    protected:                                                                                   \
@@ -158,15 +163,20 @@ private:
 /**
  * \brief Derived classes should include this in their implementation file
  */
-#define SORT_FILTER_PROXY_MODEL_COMMON_CODE(NeName)                                               \
-   NeName##SortFilterProxyModel::NeName##SortFilterProxyModel(QObject * parent, bool filter) :    \
-      QSortFilterProxyModel{parent},                                                              \
-      SortFilterProxyModelBase<NeName##SortFilterProxyModel,                                      \
-                                         NeName##TableModel,                                      \
-                                         NeName##ListModel>{filter} {                             \
-      return;                                                                                     \
-   }                                                                                              \
-                                                                                                  \
+#define SORT_FILTER_PROXY_MODEL_COMMON_CODE(NeName)            \
+   NeName##SortFilterProxyModel::NeName##SortFilterProxyModel(QObject *            parent     ,  \
+                                                              bool                 filter     ,  \
+                                                              QAbstractItemModel * sourceModel): \
+      QSortFilterProxyModel{parent},                         \
+      SortFilterProxyModelBase<NeName##SortFilterProxyModel, \
+                               NeName##TableModel,           \
+                               NeName##ListModel>{filter} {  \
+      if (sourceModel) {                                     \
+         this->setSourceModel(sourceModel);                  \
+      }                                                      \
+      return;                                                \
+   }                                                         \
+                                                             \
    NeName##SortFilterProxyModel::~NeName##SortFilterProxyModel() = default;                       \
                                                                                                   \
    bool NeName##SortFilterProxyModel::filterAcceptsRow(int source_row,                            \
