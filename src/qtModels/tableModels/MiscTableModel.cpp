@@ -47,7 +47,7 @@ MiscTableModel::MiscTableModel(QTableView* parent, bool editable) :
       }
    },
    TableModelBase<MiscTableModel, Misc>{} {
-   this->rows.clear();
+   this->m_rows.clear();
 
    QHeaderView* headerView = m_parentTableWidget->horizontalHeader();
    connect(headerView, &QWidget::customContextMenuRequested, this, &MiscTableModel::contextMenu);

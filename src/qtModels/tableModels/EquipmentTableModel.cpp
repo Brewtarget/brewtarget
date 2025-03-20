@@ -37,7 +37,7 @@ EquipmentTableModel::EquipmentTableModel(QTableView* parent, bool editable) :
       }
    },
    TableModelBase<EquipmentTableModel, Equipment>{} {
-   this->rows.clear();
+   this->m_rows.clear();
 
    QHeaderView* headerView = m_parentTableWidget->horizontalHeader();
    connect(headerView, &QWidget::customContextMenuRequested, this, &EquipmentTableModel::contextMenu);

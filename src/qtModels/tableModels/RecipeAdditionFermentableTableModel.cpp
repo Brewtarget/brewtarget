@@ -72,7 +72,7 @@ RecipeAdditionFermentableTableModel::RecipeAdditionFermentableTableModel(QTableV
    TableModelBase<RecipeAdditionFermentableTableModel, RecipeAdditionFermentable>{},
    displayPercentages(false),
    totalFermMass_kg(0) {
-   this->rows.clear();
+   this->m_rows.clear();
 
    QHeaderView * headerView = m_parentTableWidget->horizontalHeader();
    connect(headerView, &QWidget::customContextMenuRequested, this, &RecipeAdditionFermentableTableModel::contextMenu);
@@ -88,7 +88,7 @@ void RecipeAdditionFermentableTableModel::added  (std::shared_ptr<RecipeAddition
 void RecipeAdditionFermentableTableModel::removed(std::shared_ptr<RecipeAdditionFermentable> item) { if (item->amount().unit == &Measurement::Units::kilograms) { this->totalFermMass_kg -= item->amount().quantity; } return; }
 void RecipeAdditionFermentableTableModel::updateTotals() {
    this->totalFermMass_kg = 0;
-   for (auto const & ferm : this->rows) {
+   for (auto const & ferm : this->m_rows) {
       if (ferm->amount().unit->getPhysicalQuantity() == Measurement::PhysicalQuantity::Mass) {
          totalFermMass_kg += ferm->amount().quantity;
       }
@@ -116,8 +116,8 @@ QVariant RecipeAdditionFermentableTableModel::headerData(int section, Qt::Orient
       double perMass = 0.0;
       if (totalFermMass_kg > 0.0 ) {
          // .:TODO:. Work out what to do for amounts that are volumes
-         if (this->rows[section]->amount().unit->getPhysicalQuantity() == Measurement::PhysicalQuantity::Mass) {
-            perMass = this->rows[section]->amount().quantity/totalFermMass_kg;
+         if (this->m_rows[section]->amount().unit->getPhysicalQuantity() == Measurement::PhysicalQuantity::Mass) {
+            perMass = this->m_rows[section]->amount().quantity/totalFermMass_kg;
          } else {
 //            qWarning() << Q_FUNC_INFO << "Unhandled branch for liquid fermentables";
          }

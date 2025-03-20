@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/RecipeAdjustmentSalt.h is part of Brewtarget, and is copyright the following authors 2024:
+ * model/RecipeAdjustmentSalt.h is part of Brewtarget, and is copyright the following authors 2024-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -121,7 +121,7 @@ protected:
    virtual ObjectStore & getObjectStoreTypedInstance() const override;
 
 private:
-   WhenToAdd m_whenToAdd;
+   WhenToAdd m_whenToAdd = WhenToAdd::Mash;
 };
 
 BT_DECLARE_METATYPES(RecipeAdjustmentSalt)

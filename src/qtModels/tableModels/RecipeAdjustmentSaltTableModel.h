@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * qtModels/tableModels/RecipeAdjustmentSaltTableModel.h is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * qtModels/tableModels/RecipeAdjustmentSaltTableModel.h is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -44,14 +44,13 @@ class Recipe;
 class RecipeAdjustmentSaltTableModel;
 template <> struct TableModelTraits<RecipeAdjustmentSaltTableModel> {
    enum class ColumnIndex {
-      Name   ,
-      Type   ,
-      Amount ,
+      Name          ,
+      Type          ,
+      Amount        ,
       AmountType    ,
-      TotalInventory    ,
-      AddTo  ,
-      PctAcid,
-///      TotalInventoryType,
+      TotalInventory,
+      AddTo         ,
+      PctAcid       ,
    };
 };
 

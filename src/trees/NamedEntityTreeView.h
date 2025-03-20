@@ -22,6 +22,7 @@
 #include "editors/HopEditor.h"
 #include "editors/MashEditor.h"
 #include "editors/MiscEditor.h"
+#include "editors/SaltEditor.h"
 #include "editors/StyleEditor.h"
 #include "editors/WaterEditor.h"
 #include "editors/YeastEditor.h"
@@ -30,6 +31,7 @@
 #include "model/Hop.h"
 #include "model/Mash.h"
 #include "model/Misc.h"
+#include "model/Salt.h"
 #include "model/Style.h"
 #include "model/Water.h"
 #include "model/Yeast.h"
@@ -91,6 +93,16 @@ class MiscTreeView : public TreeView,
                                          Misc> {
    Q_OBJECT
    TREE_VIEW_COMMON_DECL(Misc)
+};
+
+class SaltTreeView : public TreeView,
+                     public TreeViewBase<SaltTreeView,
+                                          SaltTreeModel,
+                                          SaltTreeSortFilterProxyModel,
+                                          SaltEditor,
+                                          Salt> {
+   Q_OBJECT
+   TREE_VIEW_COMMON_DECL(Salt)
 };
 
 class StyleTreeView : public TreeView,

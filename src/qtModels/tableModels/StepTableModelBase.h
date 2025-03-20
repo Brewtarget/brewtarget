@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * qtModels/tableModels/StepTableModelBase.h is part of Brewtarget, and is copyright the following authors 2024:
+ * qtModels/tableModels/StepTableModelBase.h is part of Brewtarget, and is copyright the following authors 2024-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -45,16 +45,16 @@ protected:
     *        existing step owner after they were changed.
     */
    void setStepOwner(std::shared_ptr<StepOwnerClass> stepOwner) {
-      if (this->m_stepOwnerObs && this->derived().rows.size() > 0) {
+      if (this->m_stepOwnerObs && this->derived().m_rows.size() > 0) {
          qDebug() <<
-            Q_FUNC_INFO << "Removing" << this->derived().rows.size() << StepClass::staticMetaObject.className() <<
+            Q_FUNC_INFO << "Removing" << this->derived().m_rows.size() << StepClass::staticMetaObject.className() <<
             "rows for old" << StepOwnerClass::staticMetaObject.className() << "#" << this->m_stepOwnerObs->key();
-         this->derived().beginRemoveRows(QModelIndex(), 0, this->derived().rows.size() - 1);
+         this->derived().beginRemoveRows(QModelIndex(), 0, this->derived().m_rows.size() - 1);
 
-         for (auto step : this->derived().rows) {
+         for (auto step : this->derived().m_rows) {
             this->derived().disconnect(step.get(), nullptr, &this->derived(), nullptr);
          }
-         this->derived().rows.clear();
+         this->derived().m_rows.clear();
          this->derived().endRemoveRows();
       }
 
@@ -84,8 +84,8 @@ protected:
                Q_FUNC_INFO << "Inserting" << tmpSteps.size() << " " << StepClass::staticMetaObject.className() <<
                "rows";
             this->derived().beginInsertRows(QModelIndex(), 0, tmpSteps.size() - 1);
-            this->derived().rows = tmpSteps;
-            for (auto step : this->derived().rows) {
+            this->derived().m_rows = tmpSteps;
+            for (auto step : this->derived().m_rows) {
                this->derived().connect(step.get(), &NamedEntity::changed, &this->derived(), &Derived::stepChanged);
             }
             this->derived().endInsertRows();
@@ -106,14 +106,14 @@ protected:
 
    //! \returns true if \c step is successfully found and removed.
    bool doRemoveStep(std::shared_ptr<StepClass> step) {
-      int ii {static_cast<int>(this->derived().rows.indexOf(step))};
+      int ii {static_cast<int>(this->derived().m_rows.indexOf(step))};
       if (ii >= 0) {
          qDebug() <<
             Q_FUNC_INFO << "Removing" << StepClass::staticMetaObject.className() << step->name() << "(#" <<
             step->key() << ")";
          this->derived().beginRemoveRows(QModelIndex(), ii, ii);
          this->derived().disconnect(step.get(), nullptr, &this->derived(), nullptr);
-         this->derived().rows.removeAt(ii);
+         this->derived().m_rows.removeAt(ii);
          //reset(); // Tell everybody the table has changed.
          this->derived().endRemoveRows();
 
@@ -155,38 +155,38 @@ private:
       // We assert that we are swapping valid locations on the list as, to do otherwise implies a coding error
       qDebug() <<
          Q_FUNC_INFO << "Swap" << current + doSomething << "with" << current << ", in list of " <<
-         this->derived().rows.size();
+         this->derived().m_rows.size();
       Q_ASSERT(current >= 0);
       Q_ASSERT(current + doSomething >= 0);
-      Q_ASSERT(current < this->derived().rows.size());
-      Q_ASSERT(current + doSomething < this->derived().rows.size());
+      Q_ASSERT(current < this->derived().m_rows.size());
+      Q_ASSERT(current + doSomething < this->derived().m_rows.size());
 
       this->derived().beginMoveRows(QModelIndex(), current, current, QModelIndex(), destChild);
 
       // doSomething is -1 if moving up and 1 if moving down. swap current with
       // current -1 when moving up, and swap current with current+1 when moving
       // down
-      this->derived().rows.swapItemsAt(current, current + doSomething);
+      this->derived().m_rows.swapItemsAt(current, current + doSomething);
       this->derived().endMoveRows();
       return;
    }
 
 protected:
    void doMoveStepUp(int stepNum) {
-      if (!this->m_stepOwnerObs || stepNum == 0 || stepNum >= this->derived().rows.size()) {
+      if (!this->m_stepOwnerObs || stepNum == 0 || stepNum >= this->derived().m_rows.size()) {
          return;
       }
 
-      this->m_stepOwnerObs->swapSteps(*this->derived().rows[stepNum], *this->derived().rows[stepNum - 1]);
+      this->m_stepOwnerObs->swapSteps(*this->derived().m_rows[stepNum], *this->derived().m_rows[stepNum - 1]);
       return;
    }
 
    void doMoveStepDown(int stepNum) {
-      if (!this->m_stepOwnerObs || stepNum + 1 >= this->derived().rows.size()) {
+      if (!this->m_stepOwnerObs || stepNum + 1 >= this->derived().m_rows.size()) {
          return;
       }
 
-      this->m_stepOwnerObs->swapSteps(*this->derived().rows[stepNum], *this->derived().rows[stepNum + 1]);
+      this->m_stepOwnerObs->swapSteps(*this->derived().m_rows[stepNum], *this->derived().m_rows[stepNum + 1]);
       return;
    }
 
@@ -217,7 +217,7 @@ protected:
          if (ii >= 0) {
             if (prop.name() == PropertyNames::EnumeratedBase::stepNumber) {
                qDebug().noquote() << Q_FUNC_INFO << Logging::getStackTrace();
-               this->reorderStep(this->derived().rows.at(ii), ii);
+               this->reorderStep(this->derived().m_rows.at(ii), ii);
             }
 
             emit this->derived().dataChanged(

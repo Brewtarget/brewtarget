@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------------------------------------------------
-# src/CMakeLists.txt is part of Brewtarget, and is copyright the following authors 2009-2024:
+# src/CMakeLists.txt is part of Brewtarget, and is copyright the following authors 2009-2025:
 #   • Aidan Roberts <aidanr67@gmail.com>
 #   • Daniel Moreno <danielm5@users.noreply.github.com>
 #   • Mark de Wever <koraq@xs4all.nl>
@@ -98,6 +98,7 @@ set(filesToCompile_cpp
     ${repoDir}/src/catalogs/FermentableCatalog.cpp
     ${repoDir}/src/catalogs/HopCatalog.cpp
     ${repoDir}/src/catalogs/MiscCatalog.cpp
+    ${repoDir}/src/catalogs/SaltCatalog.cpp
     ${repoDir}/src/catalogs/StyleCatalog.cpp
     ${repoDir}/src/catalogs/YeastCatalog.cpp
     ${repoDir}/src/database/BtSqlQuery.cpp
@@ -118,6 +119,7 @@ set(filesToCompile_cpp
     ${repoDir}/src/editors/MashStepEditor.cpp
     ${repoDir}/src/editors/MiscEditor.cpp
     ${repoDir}/src/editors/NamedMashEditor.cpp
+    ${repoDir}/src/editors/SaltEditor.cpp
     ${repoDir}/src/editors/StyleEditor.cpp
     ${repoDir}/src/editors/WaterEditor.cpp
     ${repoDir}/src/editors/YeastEditor.cpp
@@ -194,6 +196,8 @@ set(filesToCompile_cpp
     ${repoDir}/src/qtModels/sortFilterProxyModels/RecipeAdditionHopSortFilterProxyModel.cpp
     ${repoDir}/src/qtModels/sortFilterProxyModels/RecipeAdditionMiscSortFilterProxyModel.cpp
     ${repoDir}/src/qtModels/sortFilterProxyModels/RecipeAdditionYeastSortFilterProxyModel.cpp
+    ${repoDir}/src/qtModels/sortFilterProxyModels/RecipeAdjustmentSaltSortFilterProxyModel.cpp
+    ${repoDir}/src/qtModels/sortFilterProxyModels/SaltSortFilterProxyModel.cpp
     ${repoDir}/src/qtModels/sortFilterProxyModels/StyleSortFilterProxyModel.cpp
     ${repoDir}/src/qtModels/sortFilterProxyModels/WaterSortFilterProxyModel.cpp
     ${repoDir}/src/qtModels/sortFilterProxyModels/YeastSortFilterProxyModel.cpp

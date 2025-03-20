@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/Salt.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * model/Salt.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
  *
@@ -62,13 +62,19 @@ EnumStringMapping const Salt::typeStringMapping {
 };
 
 EnumStringMapping const Salt::typeDisplayNames {
+   //
+   // I guess it's a matter of preference whether you want to refer to something by its molecular formula or its name.
+   // There isn't a strong reason for lactic acid to be different from the others.  In older versions of the code, we
+   // did not show its molecular formula at all, so that's the only current reason it's the other way around from the
+   // rest.
+   //
    {Salt::Type::CaCl2                  , tr("CaCl2"           " (Calcium chloride)"  )},
    {Salt::Type::CaCO3                  , tr("CaCO3"           " (Calcium carbonate)" )},
    {Salt::Type::CaSO4                  , tr("CaSO4"           " (Calcium sulfate)"   )},
    {Salt::Type::MgSO4                  , tr("MgSO4"           " (Magnesium sulfate)" )},
    {Salt::Type::NaCl                   , tr("NaCl"            " (Sodium chloride)"   )},
    {Salt::Type::NaHCO3                 , tr("NaHCO3"          " (Sodium bicarbonate)")},
-   {Salt::Type::LacticAcid             , tr("Lactic Acid"                            )},
+   {Salt::Type::LacticAcid             , tr("Lactic Acid"     " (C3H6O3)"            )},
    {Salt::Type::H3PO4                  , tr("H3PO4"           " (Phosphoric acid)"   )},
    {Salt::Type::AcidulatedMalt         , tr("Acidulated Malt"                        )},
 };
@@ -131,8 +137,8 @@ Salt::~Salt() = default;
 Salt::Type            Salt::type       () const { return this->m_type        ; }
 std::optional<double> Salt::percentAcid() const { return this->m_percent_acid; }
 
-bool Salt::isAcid() const {
-   switch (this->m_type) {
+bool Salt::typeIsAcid(Salt::Type const type) {
+   switch (type) {
       case Salt::Type::CaCl2         :
       case Salt::Type::CaCO3         :
       case Salt::Type::CaSO4         :
@@ -147,6 +153,10 @@ bool Salt::isAcid() const {
       // No default case as we want the compiler to warn us if we missed one
    }
    return false; // Should be unreachable, but GCC gives a warning if we don't have this
+}
+
+bool Salt::isAcid() const {
+   return Salt::typeIsAcid(this->m_type);
 }
 
 Measurement::PhysicalQuantity Salt::suggestedMeasure() const {

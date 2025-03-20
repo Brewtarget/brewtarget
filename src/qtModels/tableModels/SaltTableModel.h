@@ -46,8 +46,7 @@ class SaltTableModel;
 template <> struct TableModelTraits<SaltTableModel> {
    enum class ColumnIndex {
       Name   ,
-///      Amount ,
-///      AddTo  ,
+      Type   ,
       PctAcid,
       TotalInventory    ,
       TotalInventoryType,

@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version ="6.0">
+ <class>saltEditor</class>
+ <widget class="QDialog" name="saltEditor">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>658</width>
+    <height>325</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Salt Editor</string>
+  </property>
+
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="1">
+      <widget class="QLabel" name="label_name">
+       <property name="text">
+       <string>Name</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2" colspan="4">
+      <widget class="QLineEdit" name="lineEdit_name">
+       <property name="text">
+       <string>Name</string>
+       </property>
+      </widget>
+     </item>
+
+     <item row="2" column="1">
+      <widget class="QLabel" name="label_type">
+       <property name="text">
+        <string>Type</string>
+       </property>
+       <property name="buddy">
+        <cstring>comboBox_type</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="BtComboBoxEnum" name="comboBox_type">
+       <property name="toolTip">
+        <string>Type</string>
+       </property>
+      </widget>
+     </item>
+
+     <item row="4" column="1">
+      <widget class="SmartLabel" name="label_inventory">
+       <property name="contextMenuPolicy">
+        <enum>Qt::CustomContextMenu</enum>
+       </property>
+       <property name="text">
+        <string>Amount in Inventory</string>
+       </property>
+       <property name="buddy">
+        <cstring>lineEdit_inventory</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="2">
+      <widget class="SmartLineEdit" name="lineEdit_inventory">
+       <property name="toolTip">
+        <string>Amount in inventory</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="4">
+      <widget class="QLabel" name="label_amountType">
+       <property name="toolTip">
+        <string>Whether the amount is weight or volume</string>
+       </property>
+       <property name="text">
+        <string>Amount Type</string>
+       </property>
+       <property name="buddy">
+        <cstring>comboBox_amountType</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="5">
+      <widget class="BtComboBoxEnum" name="comboBox_amountType">
+       <property name="toolTip">
+        <string>Whether the amount is weight or volume</string>
+       </property>
+      </widget>
+     </item>
+
+     <item row="6" column="1">
+      <widget class="QLabel" name="label_percentAcid">
+       <property name="text">
+        <string>Percent Acid</string>
+       </property>
+       <property name="buddy">
+        <cstring>lineEdit_percentAcid</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="2">
+      <widget class="SmartLineEdit" name="lineEdit_percentAcid">
+       <property name="toolTip">
+        <string>Percent Acid</string>
+       </property>
+      </widget>
+     </item>
+
+     <item row="13" column="0">
+      <widget class="InfoButton" name="infoButton_id"></widget>
+     </item>
+     <item row="13" column="1">
+      <widget class="QLabel" name="label_id">
+       <property name="text">
+        <string>ID in database</string>
+       </property>
+      </widget>
+     </item>
+     <item row="13" column="2">
+      <widget class="QLabel" name="label_id_value">
+      </widget>
+     </item>
+     <item row="14" column="1" colspan="5">
+      <widget class="InfoText" name="infoText_id">
+       <property name="buddy">
+        <cstring>infoButton_id</cstring>
+       </property>
+       <property name="text">
+        <string>You can normally ignore this, but it's sometimes useful for debugging.</string>
+       </property>
+      </widget>
+     </item>
+
+    </layout>
+
+   </item>
+
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_Buttons">
+     <property name="spacing">
+      <number>2</number>
+     </property>
+     <item>
+      <spacer name="horizontalSpacer_Buttons">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_new">
+       <property name="toolTip">
+        <string>New</string>
+       </property>
+       <property name="text">
+        <string>New</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../resources.qrc">
+         <normaloff>:/images/smallPlus.svg</normaloff>:/images/smallPlus.svg</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_save">
+       <property name="toolTip">
+        <string>Save and close</string>
+       </property>
+       <property name="text">
+        <string>Save</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../resources.qrc">
+         <normaloff>:/images/filesave.svg</normaloff>:/images/filesave.svg</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_cancel">
+       <property name="toolTip">
+        <string>Discard and close</string>
+       </property>
+       <property name="text">
+        <string>Cancel</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../resources.qrc">
+         <normaloff>:/images/exit.svg</normaloff>:/images/exit.svg</iconset>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>BtComboBoxEnum</class>
+   <extends>QComboBox</extends>
+   <header>widgets/BtComboBoxEnum.h</header>
+  </customwidget>
+  <customwidget>
+   <class>InfoButton</class>
+   <extends>QPushButton</extends>
+   <header>widgets/InfoButton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>InfoText</class>
+   <extends>QLabel</extends>
+   <header>widgets/InfoText.h</header>
+  </customwidget>
+  <customwidget>
+   <class>SmartLabel</class>
+   <extends>QLabel</extends>
+   <header>widgets/SmartLabel.h</header>
+   <slots>
+    <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>SmartLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>widgets/SmartLineEdit.h</header>
+   <slots>
+    <slot>lineChanged(PreviousScaleInfo)</slot>
+   </slots>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>lineEdit_name</tabstop>
+  <tabstop>comboBox_type</tabstop>
+  <tabstop>lineEdit_inventory</tabstop>
+  <tabstop>pushButton_new</tabstop>
+  <tabstop>pushButton_save</tabstop>
+  <tabstop>pushButton_cancel</tabstop>
+ </tabstops>
+ <resources>
+  <include location="../resources.qrc"/>
+ </resources>
+</ui>

@@ -137,7 +137,7 @@ public:
    using ColumnIndex = typename TableModelTraits<Derived>::ColumnIndex;
 
 protected:
-   TableModelBase() : rows{} {
+   TableModelBase() : m_rows{} {
       return;
    }
    // Need a virtual destructor as we have a virtual member function
@@ -180,7 +180,7 @@ public:
          // this->addItems(this->derived().recObs->allOwned<NE>());
          this->addItems(rec->allOwned<NE>());
       }
-      qDebug() << Q_FUNC_INFO << "Now have" << this->rows.size() << "rows";
+      qDebug() << Q_FUNC_INFO << "Now have" << this->m_rows.size() << "rows";
       return;
    }
    template<class Caller>
@@ -214,13 +214,13 @@ public:
     *        Returns \c nullptr on failure.
     */
    std::shared_ptr<NE> getRow(int ii) const {
-      if (!(this->rows.isEmpty())) {
-         if (ii >= 0 && ii < this->rows.size()) {
-            return this->rows[ii];
+      if (!(this->m_rows.isEmpty())) {
+         if (ii >= 0 && ii < this->m_rows.size()) {
+            return this->m_rows[ii];
          }
-         qWarning() << Q_FUNC_INFO << "index out of range (" << ii << "/" << this->rows.size() << ")";
+         qWarning() << Q_FUNC_INFO << "index out of range (" << ii << "/" << this->m_rows.size() << ")";
       } else {
-         qWarning() << Q_FUNC_INFO << "this->rows is empty (" << ii << "/" << this->rows.size() << ")";
+         qWarning() << Q_FUNC_INFO << "this->m_rows is empty (" << ii << "/" << this->m_rows.size() << ")";
       }
       return nullptr;
    }
@@ -236,7 +236,7 @@ public:
          if (!recipe && (ii->deleted() || !ii->display())) {
             continue;
          }
-         if (!this->rows.contains(ii) ) {
+         if (!this->m_rows.contains(ii) ) {
             tmp.append(ii);
          }
       }
@@ -254,7 +254,7 @@ public:
          if (!recipe && ii->deleted() ) {
             continue;
          }
-         if (!this->rows.contains(ii) ) {
+         if (!this->m_rows.contains(ii) ) {
             tmp.append(ii);
          }
       }
@@ -262,7 +262,7 @@ public:
    }
 
    /**
-    * \brief Given a raw pointer, find the index of the corresponding shared pointer in \c this->rows
+    * \brief Given a raw pointer, find the index of the corresponding shared pointer in \c this->m_rows
     *
     *        This is useful because the Qt signals and slots framework allows the slot receiving a signal to get a raw
     *        pointer to the object that sent the signal, and we often want to find the corresponding shared pointer in
@@ -276,11 +276,11 @@ public:
     *        Function name is for consistency with \c QList::indexOf
     *
     * \param object  what to search for
-    * \return index of object in this->rows or -1 if it's not found
+    * \return index of object in this->m_rows or -1 if it's not found
     */
    int findIndexOf(NE const * object) const {
-      for (int index = 0; index < this->rows.size(); ++index) {
-         if (this->rows.at(index).get() == object) {
+      for (int index = 0; index < this->m_rows.size(); ++index) {
+         if (this->m_rows.at(index).get() == object) {
             return index;
          }
       }
@@ -291,7 +291,7 @@ public:
       qDebug() << Q_FUNC_INFO << item->name();
 
       // Check to see if it's already in the list
-      if (this->rows.contains(item)) {
+      if (this->m_rows.contains(item)) {
          return;
       }
 
@@ -309,9 +309,9 @@ public:
 ///         return;
 ///      }
 
-      int size = this->rows.size();
+      int size = this->m_rows.size();
       this->derived().beginInsertRows(QModelIndex(), size, size);
-      this->rows.append(item);
+      this->m_rows.append(item);
       this->derived().connect(item.get(), &NamedEntity::changed, &this->derived(), &Derived::changed);
       this->derived().added(item);
       //reset(); // Tell everybody that the table has changed.
@@ -335,11 +335,11 @@ public:
 
    //! \returns true if \c item is successfully found and removed.
    bool remove(std::shared_ptr<NE> item) {
-      int rowNum = this->rows.indexOf(item);
+      int rowNum = this->m_rows.indexOf(item);
       if (rowNum >= 0)  {
          this->derived().beginRemoveRows(QModelIndex(), rowNum, rowNum);
          this->derived().disconnect(item.get(), nullptr, &this->derived(), nullptr);
-         this->rows.removeAt(rowNum);
+         this->m_rows.removeAt(rowNum);
 
          this->derived().removed(item);
 
@@ -365,7 +365,7 @@ public:
          return false;
       }
 
-      return this->remove(this->rows[index.row()]);
+      return this->remove(this->m_rows[index.row()]);
    }
 
 protected:
@@ -387,17 +387,17 @@ protected:
    void addItems(QList< std::shared_ptr<NE> > items) {
       qDebug() <<
          Q_FUNC_INFO << "Add up to " << items.size() << "of" << NE::staticMetaObject.className() <<
-         "to existing list of" << this->rows.size();
+         "to existing list of" << this->m_rows.size();
 
       auto tmp = this->removeDuplicates(items, this->derived().getObservedRecipe());
 
       qDebug() << Q_FUNC_INFO << "After de-duping, adding " << tmp.size() << "of" << NE::staticMetaObject.className();
 
-      int size = this->rows.size();
+      int size = this->m_rows.size();
       if (size + tmp.size()) {
          this->derived().beginInsertRows(QModelIndex(), size, size + tmp.size() - 1);
 
-         this->rows.append(tmp);
+         this->m_rows.append(tmp);
 
          for (auto item : tmp) {
             this->derived().connect(item.get(), &NamedEntity::changed, &this->derived(), &Derived::changed);
@@ -413,11 +413,11 @@ protected:
     * \brief Clear the model.
     */
    void removeAll() {
-      int const size = this->rows.size();
+      int const size = this->m_rows.size();
       if (size > 0) {
          this->derived().beginRemoveRows(QModelIndex(), 0, size - 1);
-         while (!this->rows.empty()) {
-            auto item = this->rows.takeLast();
+         while (!this->m_rows.empty()) {
+            auto item = this->m_rows.takeLast();
             this->derived().disconnect(item.get(), nullptr, &this->derived(), nullptr);
             //this->derived().removed(item); // Shouldn't be necessary as we call updateTotals() below
          }
@@ -435,15 +435,15 @@ protected:
     * \brief Check that supplied index is within bounds.
     */
    bool indexOk(QModelIndex const & index) const {
-      if (index.row() >= static_cast<int>(this->rows.size())) {
-         qCritical() << Q_FUNC_INFO << "Bad model index. row = " << index.row() << "; max row = " << this->rows.size();
+      if (index.row() >= static_cast<int>(this->m_rows.size())) {
+         qCritical() << Q_FUNC_INFO << "Bad model index. row = " << index.row() << "; max row = " << this->m_rows.size();
          return false;
       }
 
-      auto row = this->rows[index.row()];
+      auto row = this->m_rows[index.row()];
       if (!row) {
          // This is almost certainly a coding error
-         qCritical() << Q_FUNC_INFO << "Null pointer at row" << index.row() << "of" << this->rows.size();
+         qCritical() << Q_FUNC_INFO << "Null pointer at row" << index.row() << "of" << this->m_rows.size();
          return false;
       }
 
@@ -499,7 +499,7 @@ protected:
       //    HopItemDelegate::setEditorData()
       //    QAbstractItemView::edit()
       //
-      auto row = this->rows[index.row()];
+      auto row = this->m_rows[index.row()];
       auto const columnIndex = static_cast<ColumnIndex>(index.column());
       auto const & columnInfo = this->get_ColumnInfo(columnIndex);
 
@@ -528,6 +528,11 @@ protected:
       // QString.
       //
       TypeInfo const & typeInfo = columnInfo.typeInfo;
+
+      // Uncomment this log statement if asserts below are firing
+//      qDebug() <<
+//         Q_FUNC_INFO << columnInfo.columnFqName << ", propertyPath:" << columnInfo.propertyPath << "TypeInfo:" <<
+//         typeInfo << ", modelData:" << modelData;
 
       // First handle the cases where ItemDelegate::readDataFromModel wants "raw" data
       if (std::holds_alternative<NonPhysicalQuantity>(*typeInfo.fieldType)) {
@@ -562,7 +567,9 @@ protected:
             Q_ASSERT(std::holds_alternative<BtTableModel::EnumInfo>(*columnInfo.extras));
             BtTableModel::EnumInfo const & enumInfo = std::get<BtTableModel::EnumInfo>(*columnInfo.extras);
             Q_ASSERT(modelData.canConvert<int>());
-            std::optional<QString> displayText = enumInfo.displayNames.enumAsIntToString(modelData.toInt());
+            int const enumValue = modelData.toInt();
+//            qDebug() << Q_FUNC_INFO << "Enum value:" << enumValue;
+            std::optional<QString> displayText = enumInfo.displayNames.enumAsIntToString(enumValue);
             // It's a coding error if we couldn't find something to display!
             Q_ASSERT(displayText);
             return *displayText;
@@ -719,7 +726,7 @@ protected:
 //         qCritical().noquote() << Q_FUNC_INFO << "Unexpected role: " << role << Logging::getStackTrace();
          return false;
       }
-      auto row = this->rows[index.row()];
+      auto row = this->m_rows[index.row()];
       auto const columnIndex = static_cast<ColumnIndex>(index.column());
       auto const & columnInfo = this->get_ColumnInfo(columnIndex);
 
@@ -848,8 +855,8 @@ protected:
                                                                                  CanHaveInventory<NE> {
       // Substantive version
       if (propertyName == PropertyNames::IngredientAmount::amount) {
-         for (int ii = 0; ii < this->rows.size(); ++ii) {
-            std::shared_ptr<NE> ingredient = this->rows.at(ii);
+         for (int ii = 0; ii < this->m_rows.size(); ++ii) {
+            std::shared_ptr<NE> ingredient = this->m_rows.at(ii);
             if (InventoryTools::hasInventory<NE>(*ingredient)) {
                std::shared_ptr<typename NE::InventoryClass> inventory = InventoryTools::getInventory(*ingredient);
                if (inventory->key() == invKey) {
@@ -968,7 +975,7 @@ protected:
 
    //================================================ Member Variables =================================================
 
-   QList< std::shared_ptr<NE> > rows;
+   QList< std::shared_ptr<NE> > m_rows;
 };
 
 namespace TableModelHelper {
@@ -1088,7 +1095,7 @@ namespace TableModelHelper {
       return this->doGetObservedRecipe<NeName##TableModel>();                                           \
    }                                                                                                    \
    int NeName##TableModel::rowCount([[maybe_unused]] QModelIndex const & parent) const {                \
-      return this->rows.size();                                                                         \
+      return this->m_rows.size();                                                                       \
    }                                                                                                    \
    void NeName##TableModel::addItem(int itemId) {                                                       \
       this->addById(itemId);                                                                            \

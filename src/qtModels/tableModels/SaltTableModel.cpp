@@ -37,8 +37,8 @@ SaltTableModel::SaltTableModel(QTableView* parent, bool editable) :
          // NOTE: Need PropertyNames::Salt::amountWithUnits not PropertyNames::Salt::amount below so we
          //       can handle mass-or-volume generically in TableModelBase.
          //
-         // Note too that, for the purposes of these columns, the "name" of a Salt is not its "NamedEntity name" but actually its type
-         TABLE_MODEL_HEADER(Salt, Name   , tr("Name"    ), PropertyNames::Salt::type           , EnumInfo{Salt::typeStringMapping, Salt::typeDisplayNames}),
+         TABLE_MODEL_HEADER(Salt, Name              , tr("Name"       ), PropertyNames::NamedEntity::name),
+         TABLE_MODEL_HEADER(Salt, Type              , tr("Type"       ), PropertyNames::Salt::type       , EnumInfo{Salt::typeStringMapping, Salt::typeDisplayNames}),
          TABLE_MODEL_HEADER(Salt, PctAcid, tr("% Acid"  ), PropertyNames::Salt::percentAcid    ),
          TABLE_MODEL_HEADER(Salt, TotalInventory    , tr("Inventory"  ), PropertyNames::Ingredient::totalInventory, PrecisionInfo{1}),
          TABLE_MODEL_HEADER(Salt, TotalInventoryType, tr("Amount Type"), PropertyNames::Ingredient::totalInventory, Salt::validMeasures),
@@ -65,11 +65,11 @@ QVariant SaltTableModel::data(QModelIndex const & index, int role) const {
 
 Qt::ItemFlags SaltTableModel::flags(const QModelIndex& index) const {
    // Q_UNUSED(index)
-   if (index.row() >= this->rows.size() ) {
+   if (index.row() >= this->m_rows.size() ) {
       return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
    }
 
-   auto const row = this->rows[index.row()];
+   auto const row = this->m_rows[index.row()];
    if (!row->isAcid() && index.column() == static_cast<int>(SaltTableModel::ColumnIndex::PctAcid))  {
       return Qt::NoItemFlags;
    }
@@ -98,25 +98,3 @@ TABLE_MODEL_COMMON_CODE(Salt, salt, PropertyNames::None::none)
 
 // Insert the boiler-plate stuff that we cannot do in ItemDelegate
 ITEM_DELEGATE_COMMON_CODE(Salt)
-
-// .:TBD:. We don't currently replicate the enabled/disabled logic from the fragment of old commented-out code below.
-//         AFAICT it's graying out the SPARGE and RATIO options if the observed recipe mash has no sparge.
-
-///   if (columnIndex == SaltTableModel::ColumnIndex::AddTo) {
-///      QComboBox *box = new QComboBox(parent);
-///
-///      ...
-///
-///      if ( m_mash != nullptr ) {
-///         QStandardItemModel* i_model = qobject_cast<QStandardItemModel*>(box->model());
-///         if ( ! m_mash->hasSparge() ) {
-///            for( int i = 2; i < 5; ++i ) {
-///               QStandardItem* entry = i_model->item(i);
-///               if ( entry )
-///                  entry->setEnabled(false);
-///            }
-///         }
-///      }
-///
-///      return box;
-///   }

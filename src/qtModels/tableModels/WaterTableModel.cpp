@@ -63,7 +63,7 @@ QVariant WaterTableModel::data(const QModelIndex & index, int role) const {
       return QVariant();
    }
 
-   auto row = this->rows[index.row()];
+   auto row = this->m_rows[index.row()];
 
    auto const columnIndex = static_cast<WaterTableModel::ColumnIndex>(index.column());
    switch (columnIndex) {
@@ -105,7 +105,7 @@ bool WaterTableModel::setData(QModelIndex const & index, QVariant const & value,
       return retval;
    }
 
-   auto row = this->rows[index.row()];
+   auto row = this->m_rows[index.row()];
 
    auto const columnIndex = static_cast<WaterTableModel::ColumnIndex>(index.column());
    switch (columnIndex) {
