@@ -17,6 +17,7 @@
 #define TREES_TREENODETRAITS_H
 #pragma once
 
+#include "config.h"
 #include "model/Equipment.h"
 #include "model/Fermentable.h"
 #include "model/Folder.h"
