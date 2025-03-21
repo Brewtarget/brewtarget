@@ -23,6 +23,7 @@
 #include "model/Hop.h"
 #include "model/Mash.h"
 #include "model/Misc.h"
+#include "model/Salt.h"
 #include "model/Style.h"
 #include "model/Water.h"
 #include "model/Yeast.h"
@@ -80,7 +81,8 @@ template <class NE> struct TreeNodeTraits<Folder, NE> {
          case ColumnIndex::FullPath:
             return QVariant(folder.fullPath());
       }
-//      std::unreachable();
+      // Once we stop supporting Ubuntu 22.04, we'll be on new enough compiler versions to use:
+      //      std::unreachable();
    }
 };
 
@@ -315,6 +317,42 @@ template<> struct TreeNodeTraits<Yeast, Yeast> {
             return QVariant(Yeast::typeDisplayNames[yeast.type()]);
          case ColumnIndex::Form:
             return QVariant(Yeast::formDisplayNames[yeast.form()]);
+      }
+//      std::unreachable();
+   }
+};
+
+template<> struct TreeNodeTraits<Salt, Salt> {
+   enum class ColumnIndex {
+      Name       ,
+      Type       ,
+      IsAcid     ,
+      PercentAcid,
+   };
+   static constexpr size_t NumberOfColumns = 4;
+   static constexpr TreeNodeClassifier NodeClassifier = TreeNodeClassifier::PrimaryItem;
+   using TreeType = Salt;
+   using ParentPtrTypes = std::variant<TreeFolderNode<Salt> *>;
+   using ChildPtrTypes = std::variant<std::monostate>;
+   static constexpr char const * DragNDropMimeType = DEF_CONFIG_MIME_PREFIX "-recipe";
+
+   static QString getRootName() { return Salt::tr("Salts"); }
+
+   static QVariant data(Salt const & salt, ColumnIndex const column) {
+      switch (column) {
+         case ColumnIndex::Name:
+            return QVariant(salt.name());
+         case ColumnIndex::Type:
+            return QVariant(Salt::typeDisplayNames[salt.type()]);
+         case ColumnIndex::IsAcid:
+            return QVariant(salt.isAcid());
+         case ColumnIndex::PercentAcid:
+            // We can't just hand a std::optional type back to Qt, so we handle both set and unset cases separately
+            if (salt.percentAcid()) {
+               return QVariant(*salt.percentAcid());
+            } else {
+               return QVariant{};
+            }
       }
 //      std::unreachable();
    }

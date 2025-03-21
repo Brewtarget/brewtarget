@@ -58,6 +58,13 @@ class MiscTreeSortFilterProxyModel :
    TREE_SORT_FILTER_PROXY_MODEL_COMMON_DECL(Misc)
 };
 
+class SaltTreeSortFilterProxyModel :
+   public QSortFilterProxyModel,
+   public TreeSortFilterProxyModelBase<SaltTreeSortFilterProxyModel, SaltTreeModel, Salt> {
+   Q_OBJECT
+   TREE_SORT_FILTER_PROXY_MODEL_COMMON_DECL(Salt)
+};
+
 class StyleTreeSortFilterProxyModel :
    public QSortFilterProxyModel,
    public TreeSortFilterProxyModelBase<StyleTreeSortFilterProxyModel, StyleTreeModel, Style> {

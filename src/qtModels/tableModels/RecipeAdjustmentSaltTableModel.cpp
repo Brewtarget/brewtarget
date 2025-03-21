@@ -120,7 +120,7 @@ double RecipeAdjustmentSaltTableModel::multiplier(RecipeAdjustmentSalt & salt) c
 // total salt in ppm. Not sure this is helping.
 double RecipeAdjustmentSaltTableModel::total_Ca() const {
    double ret = 0.0;
-   for (auto saltAdjustment : this->rows) {
+   for (auto saltAdjustment : this->m_rows) {
       ret += this->multiplier(*saltAdjustment) * saltAdjustment->salt()->massConcPpm_Ca_perGramPerLiter();
    }
    return ret;
@@ -128,7 +128,7 @@ double RecipeAdjustmentSaltTableModel::total_Ca() const {
 
 double RecipeAdjustmentSaltTableModel::total_Cl() const {
    double ret = 0.0;
-   for (auto saltAdjustment : this->rows) {
+   for (auto saltAdjustment : this->m_rows) {
       ret += this->multiplier(*saltAdjustment) * saltAdjustment->salt()->massConcPpm_Cl_perGramPerLiter();
    }
    return ret;
@@ -136,7 +136,7 @@ double RecipeAdjustmentSaltTableModel::total_Cl() const {
 
 double RecipeAdjustmentSaltTableModel::total_CO3() const {
    double ret = 0.0;
-   for (auto saltAdjustment : this->rows) {
+   for (auto saltAdjustment : this->m_rows) {
       ret += this->multiplier(*saltAdjustment) * saltAdjustment->salt()->massConcPpm_CO3_perGramPerLiter();
    }
    return ret;
@@ -144,7 +144,7 @@ double RecipeAdjustmentSaltTableModel::total_CO3() const {
 
 double RecipeAdjustmentSaltTableModel::total_HCO3() const {
    double ret = 0.0;
-   for (auto saltAdjustment : this->rows) {
+   for (auto saltAdjustment : this->m_rows) {
       ret += this->multiplier(*saltAdjustment) * saltAdjustment->salt()->massConcPpm_HCO3_perGramPerLiter();
    }
    return ret;
@@ -152,7 +152,7 @@ double RecipeAdjustmentSaltTableModel::total_HCO3() const {
 
 double RecipeAdjustmentSaltTableModel::total_Mg() const {
    double ret = 0.0;
-   for (auto saltAdjustment : this->rows) {
+   for (auto saltAdjustment : this->m_rows) {
       ret += this->multiplier(*saltAdjustment) * saltAdjustment->salt()->massConcPpm_Mg_perGramPerLiter();
    }
    return ret;
@@ -160,7 +160,7 @@ double RecipeAdjustmentSaltTableModel::total_Mg() const {
 
 double RecipeAdjustmentSaltTableModel::total_Na() const {
    double ret = 0.0;
-   for (auto saltAdjustment : this->rows) {
+   for (auto saltAdjustment : this->m_rows) {
       ret += this->multiplier(*saltAdjustment) * saltAdjustment->salt()->massConcPpm_Na_perGramPerLiter();
    }
    return ret;
@@ -168,7 +168,7 @@ double RecipeAdjustmentSaltTableModel::total_Na() const {
 
 double RecipeAdjustmentSaltTableModel::total_SO4() const {
    double ret = 0.0;
-   for (auto saltAdjustment : this->rows) {
+   for (auto saltAdjustment : this->m_rows) {
       ret += this->multiplier(*saltAdjustment) * saltAdjustment->salt()->massConcPpm_SO4_perGramPerLiter();
    }
    return ret;
@@ -190,7 +190,7 @@ double RecipeAdjustmentSaltTableModel::total(Water::Ion ion) const {
 double RecipeAdjustmentSaltTableModel::total(Salt::Type type) const {
    // .:TBD:. Some assumptions in here that mass and volume are interchangeable... :-/
    double ret = 0.0;
-   for (auto saltAdjustment : this->rows) {
+   for (auto saltAdjustment : this->m_rows) {
       if (saltAdjustment->salt()->type() == type) {
          ret += this->multiplier(*saltAdjustment) * saltAdjustment->amount().quantity;
       }
@@ -205,7 +205,7 @@ double RecipeAdjustmentSaltTableModel::totalAcidWeight(Salt::Type type) const {
    // .:TODO:. There are assumptions in here about measurement being by weight or by volume.  We should check or assert
    //          these.
    double ret = 0.0;
-   for (auto saltAdjustment : this->rows) {
+   for (auto saltAdjustment : this->m_rows) {
       auto salt = saltAdjustment->salt();
       if (salt->type() == type) {
          double mult  = multiplier(*saltAdjustment);
@@ -236,11 +236,11 @@ QVariant RecipeAdjustmentSaltTableModel::data(QModelIndex const & index, int rol
 
 Qt::ItemFlags RecipeAdjustmentSaltTableModel::flags(const QModelIndex& index) const {
    // Q_UNUSED(index)
-   if (index.row() >= this->rows.size() ) {
+   if (index.row() >= this->m_rows.size() ) {
       return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
    }
 
-   auto const row = this->rows[index.row()];
+   auto const row = this->m_rows[index.row()];
    if (!row->salt()->isAcid() && index.column() == static_cast<int>(RecipeAdjustmentSaltTableModel::ColumnIndex::PctAcid))  {
       return Qt::NoItemFlags;
    }
@@ -269,7 +269,7 @@ bool RecipeAdjustmentSaltTableModel::setData(QModelIndex const & index, QVariant
 void RecipeAdjustmentSaltTableModel::saveAndClose() {
    // all of the writes should have been instantaneous unless
    // we've added a new salt. Wonder if this will work?
-   for (auto saltAddition : this->rows) {
+   for (auto saltAddition : this->m_rows) {
       if (saltAddition->key() < 0) {
          // Note that ingredient() gives us a shared pointer, whereas salt() gives us a raw one.
          auto salt {saltAddition->ingredient()};

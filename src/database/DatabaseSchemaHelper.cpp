@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * database/DatabaseSchemaHelper.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * database/DatabaseSchemaHelper.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Jonatan Pålsson <jonatan.p@gmail.com>
  *   • Mattias Måhl <mattias@kejsarsten.com>
  *   • Matt Young <mfsy@yahoo.com>
@@ -35,8 +35,9 @@
 #include "database/Database.h"
 #include "database/DbTransaction.h"
 #include "database/ObjectStoreTyped.h"
+#include "model/Salt.h"
 
-int constexpr DatabaseSchemaHelper::latestVersion = 14;
+int constexpr DatabaseSchemaHelper::latestVersion = 15;
 
 // Default namespace hides functions from everything outside this file.
 namespace {
@@ -2226,8 +2227,6 @@ namespace {
    /**
     * \brief Correct flouride to fluoride on water table
     *        Fix Instructions to be stored the same way as BrewNotes, RecipeAdditions etc
-    *           // TODO: On next DB update, correct water.flouride_ppm to water.fluoride_ppm
-.
     */
    bool migrate_to_14([[maybe_unused]] Database & db, BtSqlQuery & q) {
       //
@@ -2310,6 +2309,55 @@ namespace {
       return executeSqlQueries(q, migrationQueries);
    }
 
+   /**
+    * \brief Populate Salts table
+    */
+   bool migrate_to_15([[maybe_unused]] Database & db, BtSqlQuery & q) {
+      QVector<QueryAndParameters> const migrationQueries{
+         //
+         // Add some default content to the Salts table
+         //
+         {
+            QString(
+               "INSERT INTO salt ( "
+                  "name        ,"
+                  "deleted     ,"
+                  "display     ,"
+                  "folder      ,"
+                  "percent_acid,"
+                  "stype       "
+               ") "
+               "VALUES "
+                  "(?, ?, ?, '', NULL, ?),"
+                  "(?, ?, ?, '', NULL, ?),"
+                  "(?, ?, ?, '', NULL, ?),"
+                  "(?, ?, ?, '', NULL, ?),"
+                  "(?, ?, ?, '', NULL, ?),"
+                  "(?, ?, ?, '', NULL, ?),"
+                  "(?, ?, ?, '', 80.0, ?),"
+                  "(?, ?, ?, '', 75.0, ?),"
+                  "(?, ?, ?, '', 10.0, ?)"
+            ),
+            {
+               QVariant{Salt::typeDisplayNames[Salt::Type::CaCl2 ]}, QVariant{false}, QVariant{true}, QVariant{Salt::typeStringMapping[Salt::Type::CaCl2 ]},
+               QVariant{Salt::typeDisplayNames[Salt::Type::CaCO3 ]}, QVariant{false}, QVariant{true}, QVariant{Salt::typeStringMapping[Salt::Type::CaCO3 ]},
+               QVariant{Salt::typeDisplayNames[Salt::Type::CaSO4 ]}, QVariant{false}, QVariant{true}, QVariant{Salt::typeStringMapping[Salt::Type::CaSO4 ]},
+               QVariant{Salt::typeDisplayNames[Salt::Type::MgSO4 ]}, QVariant{false}, QVariant{true}, QVariant{Salt::typeStringMapping[Salt::Type::MgSO4 ]},
+               QVariant{Salt::typeDisplayNames[Salt::Type::NaCl  ]}, QVariant{false}, QVariant{true}, QVariant{Salt::typeStringMapping[Salt::Type::NaCl  ]},
+               QVariant{Salt::typeDisplayNames[Salt::Type::NaHCO3]}, QVariant{false}, QVariant{true}, QVariant{Salt::typeStringMapping[Salt::Type::NaHCO3]},
+               QVariant{QString{"%1 %2"}.arg(Salt::typeDisplayNames[Salt::Type::LacticAcid]).arg("80%")},
+                  QVariant{false}, QVariant{true}, QVariant{Salt::typeStringMapping[Salt::Type::LacticAcid]},
+               QVariant{QString{"%1 %2"}.arg(Salt::typeDisplayNames[Salt::Type::H3PO4]).arg("75%")},
+                  QVariant{false}, QVariant{true}, QVariant{Salt::typeStringMapping[Salt::Type::H3PO4]},
+               QVariant{QString{"%1 %2"}.arg(Salt::typeDisplayNames[Salt::Type::H3PO4]).arg("10%")},
+                  QVariant{false}, QVariant{true}, QVariant{Salt::typeStringMapping[Salt::Type::H3PO4]},
+            }
+         }
+      };
+
+      return executeSqlQueries(q, migrationQueries);
+   }
+
    /*!
     * \brief Migrate from version \c oldVersion to \c oldVersion+1
     */
@@ -2358,6 +2406,9 @@ namespace {
             break;
          case 13:
             ret &= migrate_to_14(database, sqlQuery);
+            break;
+         case 14:
+            ret &= migrate_to_15(database, sqlQuery);
             break;
          default:
             qCritical() << QString("Unknown version %1").arg(oldVersion);

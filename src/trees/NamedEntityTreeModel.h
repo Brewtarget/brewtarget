@@ -22,6 +22,7 @@
 #include "model/Hop.h"
 #include "model/Mash.h"
 #include "model/Misc.h"
+#include "model/Salt.h"
 #include "model/Style.h"
 #include "model/Water.h"
 #include "model/Yeast.h"
@@ -53,6 +54,11 @@ class MashTreeModel : public TreeModel, public TreeModelBase<MashTreeModel, Mash
 class MiscTreeModel : public TreeModel, public TreeModelBase<MiscTreeModel, Misc> {
    Q_OBJECT
    TREE_MODEL_COMMON_DECL(Misc)
+};
+
+class SaltTreeModel : public TreeModel, public TreeModelBase<SaltTreeModel, Salt> {
+   Q_OBJECT
+   TREE_MODEL_COMMON_DECL(Salt)
 };
 
 class StyleTreeModel : public TreeModel, public TreeModelBase<StyleTreeModel, Style> {

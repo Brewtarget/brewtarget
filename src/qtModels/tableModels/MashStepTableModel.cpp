@@ -81,7 +81,7 @@ QVariant MashStepTableModel::data(QModelIndex const & index, int role) const {
 
    auto const columnIndex = static_cast<MashStepTableModel::ColumnIndex>(index.column());
    if (MashStepTableModel::ColumnIndex::Temp == columnIndex) {
-      auto row = this->rows[index.row()];
+      auto row = this->m_rows[index.row()];
       if (row->type() == MashStep::Type::Decoction) {
          return QVariant("---");
       }

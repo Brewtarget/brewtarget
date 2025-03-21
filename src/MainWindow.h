@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * MainWindow.h is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * MainWindow.h is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Aidan Roberts <aidanr67@gmail.com>
  *   • Dan Cavanagh <dan@dancavanagh.com>
  *   • Daniel Pettersson <pettson81@gmail.com>
@@ -156,6 +156,11 @@ public slots:
    //! \brief Edit the Yeast in the selected Yeast addition.
    void editYeastOfSelectedYeastAddition();
 
+   //! \brief Remove selected Salt addition(s) from the Recipe.
+   void removeSelectedSaltAddition();
+   //! \brief Edit the Salt in the selected Salt addition.
+   void editSaltOfSelectedSaltAddition();
+
    //! \brief Invoke the pop-up Window to add a new mash step to (the mash of) the recipe.
    void addMashStep();
    void addBoilStep();
@@ -230,12 +235,13 @@ public slots:
    void updateEquipmentSelector();
 
    //! \brief Set all the things based on a drop event
-   void droppedRecipeEquipment(Equipment *kit);
-   void droppedRecipeStyle(Style *style);
-   void droppedRecipeFermentable(QList<Fermentable*>ferms);
-   void droppedRecipeHop(QList<Hop*>hops);
-   void droppedRecipeMisc(QList<Misc*>miscs);
-   void droppedRecipeYeast(QList<Yeast*>yeasts);
+   void droppedRecipeEquipment(Equipment * kit  );
+   void droppedRecipeStyle    (Style     * style);
+   void droppedRecipeFermentable(QList<Fermentable *> ferms );
+   void droppedRecipeHop        (QList<Hop         *> hops  );
+   void droppedRecipeMisc       (QList<Misc        *> miscs );
+   void droppedRecipeYeast      (QList<Yeast       *> yeasts);
+   void droppedRecipeSalt       (QList<Salt        *> miscs );
 
    void versionedRecipe(Recipe* descendant);
 

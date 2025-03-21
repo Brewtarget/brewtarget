@@ -97,6 +97,13 @@ template<> EnumStringMapping const TreeItemNode<Misc>::columnDisplayNames {
    {TreeItemNode<Misc>::ColumnIndex::Type, Misc::tr("Type")},
 };
 
+template<> EnumStringMapping const TreeItemNode<Salt>::columnDisplayNames {
+   {TreeItemNode<Salt>::ColumnIndex::Name       , Salt::tr("Name"       )},
+   {TreeItemNode<Salt>::ColumnIndex::Type       , Salt::tr("Type"       )},
+   {TreeItemNode<Salt>::ColumnIndex::IsAcid     , Salt::tr("IsAcid"     )},
+   {TreeItemNode<Salt>::ColumnIndex::PercentAcid, Salt::tr("PercentAcid")},
+};
+
 template<> EnumStringMapping const TreeItemNode<Yeast>::columnDisplayNames {
    {TreeItemNode<Yeast>::ColumnIndex::Name      , Yeast::tr("Name"      )},
    {TreeItemNode<Yeast>::ColumnIndex::Laboratory, Yeast::tr("Laboratory")},
@@ -243,6 +250,19 @@ template<> bool TreeItemNode<Misc>::columnIsLessThan(TreeItemNode<Misc> const & 
    switch (column) {
       case TreeItemNode<Misc>::ColumnIndex::Name: return lhs.name() < rhs.name();
       case TreeItemNode<Misc>::ColumnIndex::Type: return lhs.type() < rhs.type();
+   }
+   return lhs.name() < rhs.name();
+}
+
+template<> bool TreeItemNode<Salt>::columnIsLessThan(TreeItemNode<Salt> const & other,
+                                                     TreeNodeTraits<Salt>::ColumnIndex column) const {
+   auto const & lhs = *this->m_underlyingItem;
+   auto const & rhs = *other.m_underlyingItem;
+   switch (column) {
+      case TreeItemNode<Salt>::ColumnIndex::Name       : return lhs.name()        < rhs.name();
+      case TreeItemNode<Salt>::ColumnIndex::Type       : return lhs.type()        < rhs.type();
+      case TreeItemNode<Salt>::ColumnIndex::IsAcid     : return lhs.isAcid()      < rhs.isAcid();
+      case TreeItemNode<Salt>::ColumnIndex::PercentAcid: return lhs.percentAcid() < rhs.percentAcid();
    }
    return lhs.name() < rhs.name();
 }
@@ -510,6 +530,28 @@ template<> QString TreeItemNode<Misc>::getToolTip() const {
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
            .arg(Misc::tr("Type"))
            .arg(Misc::typeDisplayNames[this->m_underlyingItem->type()]);
+
+   body += "</table></body></html>";
+
+   return header + body;
+}
+
+template<> QString TreeItemNode<Salt>::getToolTip() const {
+   // Do the style sheet first
+   QString header = "<html><head><style type=\"text/css\">";
+   header += Html::getCss(":/css/tooltip.css");
+   header += "</style></head>";
+
+   QString body   = "<body>";
+
+   body += QString("<div id=\"headerdiv\">");
+   body += QString("<table id=\"tooltip\">");
+   body += QString("<caption>%1</caption>")
+         .arg( this->m_underlyingItem->name() );
+   // First row -- type and use
+   body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
+           .arg(Salt::tr("Type"))
+           .arg(Salt::typeDisplayNames[this->m_underlyingItem->type()]);
 
    body += "</table></body></html>";
 

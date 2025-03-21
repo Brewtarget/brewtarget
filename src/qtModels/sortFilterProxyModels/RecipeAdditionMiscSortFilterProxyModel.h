@@ -27,7 +27,7 @@
 /*!
  * \class RecipeAdditionMiscSortFilterProxyModel
  *
- * \brief Proxy model for sorting/filtering recipe hop additions
+ * \brief Proxy model for sorting/filtering recipe misc additions
  */
 class RecipeAdditionMiscSortFilterProxyModel : public QSortFilterProxyModel,
                                                public SortFilterProxyModelBase<RecipeAdditionMiscSortFilterProxyModel,

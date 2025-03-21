@@ -173,7 +173,7 @@
            </layout>
           </widget>
 
-          <widget class="QWidget" name="tabTree_ferm">
+          <widget class="QWidget" name="tabTree_fermentables">
            <attribute name="icon">
             <iconset resource="../resources.qrc">
              <normaloff>:/images/smallBarley.svg</normaloff>:/images/smallBarley.svg</iconset>
@@ -259,6 +259,24 @@
            <layout class="QHBoxLayout" name="horizontalLayout">
             <item>
              <widget class="WaterTreeView" name="treeView_water"/>
+            </item>
+           </layout>
+          </widget>
+
+          <widget class="QWidget" name="tabTree_salts">
+           <attribute name="icon">
+            <iconset resource="../resources.qrc">
+             <normaloff>:/images/iconSalt.svg</normaloff>:/images/iconSalt.svg</iconset>
+           </attribute>
+           <attribute name="title">
+            <string/>
+           </attribute>
+           <attribute name="toolTip">
+            <string>Salts</string>
+           </attribute>
+           <layout class="QHBoxLayout" name="horizontalLayout">
+            <item>
+             <widget class="SaltTreeView" name="treeView_salt"/>
             </item>
            </layout>
           </widget>
@@ -1035,6 +1053,7 @@
             <property name="mimeAccepted" stdset="0">
              <string notr="true">application/x-brewtarget-ingredient</string>
             </property>
+
             <widget class="QWidget" name="recipeFermentableTab">
              <attribute name="title">
               <string>Fermentables</string>
@@ -1114,6 +1133,7 @@
               </item>
              </layout>
             </widget>
+
             <widget class="QWidget" name="recipeHopTab">
              <attribute name="title">
               <string>Hops</string>
@@ -1186,6 +1206,7 @@
               </item>
              </layout>
             </widget>
+
             <widget class="QWidget" name="recipeMiscTab">
              <attribute name="title">
               <string>Miscellaneous</string>
@@ -1262,6 +1283,7 @@
               </item>
              </layout>
             </widget>
+
             <widget class="QWidget" name="recipeYeastTab">
              <attribute name="title">
               <string>Yeast</string>
@@ -1338,6 +1360,84 @@
               </item>
              </layout>
             </widget>
+
+            <widget class="QWidget" name="recipeSaltTab">
+             <attribute name="title">
+              <string>Salts</string>
+             </attribute>
+             <layout class="QHBoxLayout" name="horizontalLayout_21">
+              <item>
+               <widget class="QTableView" name="saltAdditionTable">
+                <property name="contextMenuPolicy">
+                 <enum>Qt::CustomContextMenu</enum>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <layout class="QVBoxLayout" name="verticalLayout_salt">
+                <property name="spacing">
+                 <number>1</number>
+                </property>
+                <item>
+                 <widget class="QPushButton" name="pushButton_addSalt">
+                  <property name="toolTip">
+                   <string>Add salt</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="../resources.qrc">
+                    <normaloff>:/images/smallPlus.svg</normaloff>:/images/smallPlus.svg</iconset>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="pushButton_removeSalt">
+                  <property name="toolTip">
+                   <string>Remove selected salt</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="../resources.qrc">
+                    <normaloff>:/images/smallMinus.svg</normaloff>:/images/smallMinus.svg</iconset>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="pushButton_editSalt">
+                  <property name="toolTip">
+                   <string>Edit selected salt</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="../resources.qrc">
+                    <normaloff>:/images/edit.svg</normaloff>:/images/edit.svg</iconset>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="verticalSpacer_5">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+
             <widget class="QWidget" name="mashStepsTab">
              <attribute name="title">
               <string>Mash</string>
@@ -1544,6 +1644,7 @@
               </item>
              </layout>
             </widget>
+
             <widget class="QWidget" name="boilStepsTab">
              <attribute name="title">
               <string>Boil</string>
@@ -1733,6 +1834,7 @@
               </item>
              </layout>
             </widget>
+
             <widget class="QWidget" name="fermentationStepsTab">
              <attribute name="title">
               <string>Fermentation</string>
@@ -1989,6 +2091,8 @@
     <addaction name="actionHops"/>
     <addaction name="actionMiscs"/>
     <addaction name="actionYeasts"/>
+    <addaction name="separator"/>
+    <addaction name="actionSalts"/>
    </widget>
    <widget class="QMenu" name="menuTools">
     <property name="title">
@@ -2061,6 +2165,7 @@
    <addaction name="separator"/>
    <addaction name="action_brewit"/>
   </widget>
+
   <action name="actionHelp">
    <property name="icon">
     <iconset resource="../resources.qrc">
@@ -2170,6 +2275,17 @@
     <string>Ctrl+T</string>
    </property>
   </action>
+
+  <action name="actionSalts">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/images/iconSalt.svg</normaloff>:/images/iconSalt.svg</iconset>
+   </property>
+   <property name="text">
+    <string>S&amp;alts</string>
+   </property>
+  </action>
+
   <action name="actionPrint">
    <property name="icon">
     <iconset resource="../resources.qrc">
@@ -2581,6 +2697,11 @@
    <header>buttons/MashButton.h</header>
   </customwidget>
   <customwidget>
+   <class>SaltTreeView</class>
+   <extends>QTreeView</extends>
+   <header>trees/NamedEntityTreeView.h</header>
+  </customwidget>
+  <customwidget>
    <class>StyleTreeView</class>
    <extends>QTreeView</extends>
    <header>trees/NamedEntityTreeView.h</header>
@@ -2635,6 +2756,10 @@
   <tabstop>pushButton_addYeast</tabstop>
   <tabstop>pushButton_removeYeast</tabstop>
   <tabstop>pushButton_editYeast</tabstop>
+  <tabstop>saltAdditionTable</tabstop>
+  <tabstop>pushButton_addSalt</tabstop>
+  <tabstop>pushButton_removeSalt</tabstop>
+  <tabstop>pushButton_editSalt</tabstop>
   <tabstop>mashStepTableWidget</tabstop>
   <tabstop>pushButton_addMashStep</tabstop>
   <tabstop>pushButton_removeMashStep</tabstop>

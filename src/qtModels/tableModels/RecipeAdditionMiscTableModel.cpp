@@ -66,7 +66,7 @@ RecipeAdditionMiscTableModel::RecipeAdditionMiscTableModel(QTableView * parent, 
    },
    TableModelBase<RecipeAdditionMiscTableModel, RecipeAdditionMisc>{},
    showIBUs(false) {
-   this->rows.clear();
+   this->m_rows.clear();
 
    QHeaderView * headerView = m_parentTableWidget->horizontalHeader();
    connect(headerView, &QWidget::customContextMenuRequested, this, &RecipeAdditionMiscTableModel::contextMenu);

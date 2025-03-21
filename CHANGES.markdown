@@ -10,9 +10,22 @@ happens, so I'm now setting it to a slightly arbitrary time early in the morning
 ## Forthcoming in v4.1.0
 
 ### New Features
-* Mash, Boil and Fermentation profiles will appear in the left-hand section
+* Boil and Fermentation profiles will appear in the left-hand section
 * Additional methods for calculating IBU
 * We'll list other new features here...
+
+## v4.1.0
+Minor enhancements
+
+### New Features
+* Mash profiles appear in the left-hand section
+* Salts appear in left-hand section, are editable, and can be added to recipes
+
+### Bug Fixes
+* None
+
+### Release Timestamp
+Thu, 20 Mar 2025 04:01:00 +0100
 
 ## v4.0.18
 Bug fixes and minor enhancements.

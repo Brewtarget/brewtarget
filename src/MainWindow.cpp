@@ -102,6 +102,7 @@
 #include "catalogs/FermentableCatalog.h"
 #include "catalogs/HopCatalog.h"
 #include "catalogs/MiscCatalog.h"
+#include "catalogs/SaltCatalog.h"
 #include "catalogs/StyleCatalog.h"
 #include "catalogs/YeastCatalog.h"
 #include "config.h"
@@ -118,6 +119,7 @@
 #include "editors/MashStepEditor.h"
 #include "editors/MiscEditor.h"
 #include "editors/NamedMashEditor.h"
+#include "editors/SaltEditor.h"
 #include "editors/StyleEditor.h"
 #include "editors/WaterEditor.h"
 #include "editors/YeastEditor.h"
@@ -135,6 +137,7 @@
 #include "model/Mash.h"
 #include "model/Recipe.h"
 #include "model/RecipeAdditionYeast.h"
+#include "model/RecipeAdjustmentSalt.h"
 #include "model/Style.h"
 #include "model/Yeast.h"
 #include "serialization/ImportExport.h"
@@ -143,6 +146,7 @@
 #include "qtModels/sortFilterProxyModels/RecipeAdditionHopSortFilterProxyModel.h"
 #include "qtModels/sortFilterProxyModels/RecipeAdditionMiscSortFilterProxyModel.h"
 #include "qtModels/sortFilterProxyModels/RecipeAdditionYeastSortFilterProxyModel.h"
+#include "qtModels/sortFilterProxyModels/RecipeAdjustmentSaltSortFilterProxyModel.h"
 #include "qtModels/sortFilterProxyModels/StyleSortFilterProxyModel.h"
 #include "qtModels/tableModels/BoilStepTableModel.h"
 #include "qtModels/tableModels/FermentableTableModel.h"
@@ -152,6 +156,7 @@
 #include "qtModels/tableModels/RecipeAdditionHopTableModel.h"
 #include "qtModels/tableModels/RecipeAdditionMiscTableModel.h"
 #include "qtModels/tableModels/RecipeAdditionYeastTableModel.h"
+#include "qtModels/tableModels/RecipeAdjustmentSaltTableModel.h"
 #include "undoRedo/RelationalUndoableUpdate.h"
 #include "undoRedo/Undoable.h"
 #include "undoRedo/UndoableAddOrRemove.h"
@@ -252,7 +257,8 @@ public:
       m_fermentableAdditionsTableProxy{nullptr},
       m_hopAdditionsTableProxy        {nullptr},
       m_miscAdditionsTableProxy       {nullptr},
-      m_yeastAdditionsTableProxy      {nullptr} {
+      m_yeastAdditionsTableProxy      {nullptr},
+      m_saltAdditionsTableProxy       {nullptr} {
       return;
    }
 
@@ -318,6 +324,18 @@ public:
          }
       });
 
+      // Salt
+      m_saltAdditionsTableModel = std::make_unique<RecipeAdjustmentSaltTableModel>(m_self.saltAdditionTable);
+      m_saltAdditionsTableProxy = std::make_unique<RecipeAdjustmentSaltSortFilterProxyModel>(m_self.saltAdditionTable, false);
+      m_saltAdditionsTableProxy->setSourceModel(m_saltAdditionsTableModel.get());
+      m_self.saltAdditionTable->setItemDelegate(new RecipeAdjustmentSaltItemDelegate(m_self.saltAdditionTable, *m_saltAdditionsTableModel));
+      m_self.saltAdditionTable->setModel(m_saltAdditionsTableProxy.get());
+      connect(m_self.saltAdditionTable, &QTableView::doubleClicked, &m_self, [&](const QModelIndex &idx) {
+         if (idx.column() == 0) {
+            m_self.editSaltOfSelectedSaltAddition();
+         }
+      });
+
       // Mashes
       m_mashStepTableModel = std::make_unique<MashStepTableModel>(m_self.mashStepTableWidget);
       m_self.mashStepTableWidget->setItemDelegate(new MashStepItemDelegate(m_self.mashStepTableWidget, *m_mashStepTableModel));
@@ -361,6 +379,9 @@ public:
       m_self.yeastAdditionTable->horizontalHeader()->setSortIndicator(static_cast<int>(RecipeAdditionYeastTableModel::ColumnIndex::Name), Qt::DescendingOrder );
       m_self.yeastAdditionTable->setSortingEnabled(true);
       m_yeastAdditionsTableProxy->setDynamicSortFilter(true);
+      m_self.saltAdditionTable->horizontalHeader()->setSortIndicator(static_cast<int>(RecipeAdjustmentSaltTableModel::ColumnIndex::Name), Qt::DescendingOrder );
+      m_self.saltAdditionTable->setSortingEnabled(true);
+      m_saltAdditionsTableProxy->setDynamicSortFilter(true);
    }
 
    //! \brief Previously called setupContextMenu
@@ -374,6 +395,7 @@ public:
       m_self.treeView_hops  ->init(*this->m_hopEditor        );
       m_self.treeView_mash  ->init(*this->m_mashEditor       );
       m_self.treeView_misc  ->init(*this->m_miscEditor       );
+      m_self.treeView_salt  ->init(*this->m_saltEditor       );
       m_self.treeView_yeast ->init(*this->m_yeastEditor      );
       m_self.treeView_water ->init(*this->m_waterEditor      );
 
@@ -404,6 +426,8 @@ public:
       m_mashWizard             = std::make_unique<MashWizard            >(&m_self);
       m_miscCatalog            = std::make_unique<MiscCatalog           >(&m_self);
       m_miscEditor             = std::make_unique<MiscEditor            >(&m_self);
+      m_saltCatalog            = std::make_unique<SaltCatalog           >(&m_self);
+      m_saltEditor             = std::make_unique<SaltEditor            >(&m_self);
       m_styleCatalog           = std::make_unique<StyleCatalog          >(&m_self);
       m_styleEditor            = std::make_unique<StyleEditor           >(&m_self);
       m_yeastCatalog           = std::make_unique<YeastCatalog          >(&m_self);
@@ -475,10 +499,31 @@ public:
       return tableModel->getRow(modelIndex.row()).get();
    }
 
-   RecipeAdditionFermentable * selectedFermentableAddition() { return this->selected<RecipeAdditionFermentable>(m_self.fermentableAdditionTable, this->m_fermentableAdditionsTableProxy.get(), this->m_fermentableAdditionsTableModel.get()); }
-   RecipeAdditionHop *         selectedHopAddition        () { return this->selected<RecipeAdditionHop        >(m_self.hopAdditionTable        , this->m_hopAdditionsTableProxy.get()        , this->m_hopAdditionsTableModel.get()); }
-   RecipeAdditionMisc *        selectedMiscAddition       () { return this->selected<RecipeAdditionMisc       >(m_self.miscAdditionTable       , this->m_miscAdditionsTableProxy.get()       , this->m_miscAdditionsTableModel.get()); }
-   RecipeAdditionYeast *       selectedYeastAddition      () { return this->selected<RecipeAdditionYeast      >(m_self.yeastAdditionTable      , this->m_yeastAdditionsTableProxy.get()      , this->m_yeastAdditionsTableModel.get()); }
+   RecipeAdditionFermentable * selectedFermentableAddition() {
+      return this->selected<RecipeAdditionFermentable>(m_self.fermentableAdditionTable,
+                                                       this->m_fermentableAdditionsTableProxy.get(),
+                                                       this->m_fermentableAdditionsTableModel.get());
+   }
+   RecipeAdditionHop *         selectedHopAddition        () {
+      return this->selected<RecipeAdditionHop        >(m_self.hopAdditionTable        ,
+                                                       this->m_hopAdditionsTableProxy.get()        ,
+                                                       this->m_hopAdditionsTableModel.get());
+   }
+   RecipeAdditionMisc *        selectedMiscAddition       () {
+      return this->selected<RecipeAdditionMisc       >(m_self.miscAdditionTable       ,
+                                                       this->m_miscAdditionsTableProxy.get()       ,
+                                                       this->m_miscAdditionsTableModel.get());
+   }
+   RecipeAdditionYeast *       selectedYeastAddition      () {
+      return this->selected<RecipeAdditionYeast      >(m_self.yeastAdditionTable      ,
+                                                       this->m_yeastAdditionsTableProxy.get()      ,
+                                                       this->m_yeastAdditionsTableModel.get());
+   }
+   RecipeAdjustmentSalt *      selectedSaltAddition       () {
+      return this->selected<RecipeAdjustmentSalt     >(m_self.saltAdditionTable       ,
+                                                       this->m_saltAdditionsTableProxy.get()       ,
+                                                       this->m_saltAdditionsTableModel.get());
+   }
 
    /**
     * \brief Use this for adding \c RecipeAdditionHop etc
@@ -889,12 +934,14 @@ public:
    std::unique_ptr<RecipeAdditionHopTableModel        > m_hopAdditionsTableModel        ;
    std::unique_ptr<RecipeAdditionMiscTableModel       > m_miscAdditionsTableModel       ;
    std::unique_ptr<RecipeAdditionYeastTableModel      > m_yeastAdditionsTableModel      ;
+   std::unique_ptr<RecipeAdjustmentSaltTableModel     > m_saltAdditionsTableModel       ;
 
    // all things sort/filter proxy go here
    std::unique_ptr<RecipeAdditionFermentableSortFilterProxyModel> m_fermentableAdditionsTableProxy;
    std::unique_ptr<RecipeAdditionHopSortFilterProxyModel        > m_hopAdditionsTableProxy        ;
    std::unique_ptr<RecipeAdditionMiscSortFilterProxyModel       > m_miscAdditionsTableProxy       ;
    std::unique_ptr<RecipeAdditionYeastSortFilterProxyModel      > m_yeastAdditionsTableProxy      ;
+   std::unique_ptr<RecipeAdjustmentSaltSortFilterProxyModel     > m_saltAdditionsTableProxy       ;
 
    // All initialised in setupDialogs
    std::unique_ptr<AboutDialog           > m_aboutDialog           ;
@@ -929,6 +976,8 @@ public:
    std::unique_ptr<RefractoDialog        > m_refractoDialog        ;
    std::unique_ptr<ScaleRecipeTool       > m_recipeScaler          ;
    std::unique_ptr<StrikeWaterDialog     > m_strikeWaterDialog     ;
+   std::unique_ptr<SaltCatalog           > m_saltCatalog           ;
+   std::unique_ptr<SaltEditor            > m_saltEditor            ;
    std::unique_ptr<StyleCatalog          > m_styleCatalog          ;
    std::unique_ptr<StyleEditor           > m_styleEditor           ;
    std::unique_ptr<TimerMainDialog       > m_timerMainDialog       ;
@@ -1395,6 +1444,7 @@ void MainWindow::setupTriggers() {
    connect(actionHops                      , &QAction::triggered, this->pimpl->m_hopCatalog.get()           , &QWidget::show                     ); // > View > Hops
    connect(actionMiscs                     , &QAction::triggered, this->pimpl->m_miscCatalog.get()          , &QWidget::show                     ); // > View > Miscs
    connect(actionYeasts                    , &QAction::triggered, this->pimpl->m_yeastCatalog.get()         , &QWidget::show                     ); // > View > Yeasts
+   connect(actionSalts                     , &QAction::triggered, this->pimpl->m_saltCatalog.get()          , &QWidget::show                     ); // > View > Salts
    connect(actionOptions                   , &QAction::triggered, this->pimpl->m_optionDialog.get()         , &OptionDialog::show                ); // > Tools > Options
 //   connect( actionManual, &QAction::triggered, this, &MainWindow::openManual);                                               // > About > Manual
    connect(actionScale_Recipe              , &QAction::triggered, this->pimpl->m_recipeScaler.get()         , &QWidget::show                     ); // > Tools > Scale Recipe
@@ -1447,16 +1497,19 @@ void MainWindow::setupClicks() {
    connect(this->pushButton_addHop        , &QAbstractButton::clicked, this->pimpl->  m_hopCatalog.get(), &QWidget::show         );
    connect(this->pushButton_addMisc       , &QAbstractButton::clicked, this->pimpl-> m_miscCatalog.get(), &QWidget::show         );
    connect(this->pushButton_addYeast      , &QAbstractButton::clicked, this->pimpl->m_yeastCatalog.get(), &QWidget::show         );
+   connect(this->pushButton_addSalt       , &QAbstractButton::clicked, this->pimpl-> m_saltCatalog.get(), &QWidget::show         );
 
    connect(this->pushButton_removeFerm    , &QAbstractButton::clicked, this                       , &MainWindow::removeSelectedFermentableAddition);
    connect(this->pushButton_removeHop     , &QAbstractButton::clicked, this                       , &MainWindow::removeSelectedHopAddition        );
    connect(this->pushButton_removeMisc    , &QAbstractButton::clicked, this                       , &MainWindow::removeSelectedMiscAddition       );
    connect(this->pushButton_removeYeast   , &QAbstractButton::clicked, this                       , &MainWindow::removeSelectedYeastAddition      );
+   connect(this->pushButton_removeSalt    , &QAbstractButton::clicked, this                       , &MainWindow::removeSelectedSaltAddition       );
 
    connect(this->pushButton_editFerm      , &QAbstractButton::clicked, this                       , &MainWindow::editFermentableOfSelectedFermentableAddition);
-   connect(this->pushButton_editMisc      , &QAbstractButton::clicked, this                       , &MainWindow::editMiscOfSelectedMiscAddition              );
    connect(this->pushButton_editHop       , &QAbstractButton::clicked, this                       , &MainWindow::editHopOfSelectedHopAddition                );
+   connect(this->pushButton_editMisc      , &QAbstractButton::clicked, this                       , &MainWindow::editMiscOfSelectedMiscAddition              );
    connect(this->pushButton_editYeast     , &QAbstractButton::clicked, this                       , &MainWindow::editYeastOfSelectedYeastAddition            );
+   connect(this->pushButton_editSalt      , &QAbstractButton::clicked, this                       , &MainWindow::editSaltOfSelectedSaltAddition              );
 
    connect(this->pushButton_editMash        , &QAbstractButton::clicked, this->pimpl->        m_mashEditor.get(),         &MashEditor::showEditor);
    connect(this->pushButton_editBoil        , &QAbstractButton::clicked, this->pimpl->        m_boilEditor.get(),         &BoilEditor::showEditor);
@@ -1532,6 +1585,7 @@ void MainWindow::setupDrops() {
    connect(this->tabWidget_ingredients, &BtTabWidget::setHops,         this, &MainWindow::droppedRecipeHop);
    connect(this->tabWidget_ingredients, &BtTabWidget::setMiscs,        this, &MainWindow::droppedRecipeMisc);
    connect(this->tabWidget_ingredients, &BtTabWidget::setYeasts,       this, &MainWindow::droppedRecipeYeast);
+   connect(this->tabWidget_ingredients, &BtTabWidget::setSalts,        this, &MainWindow::droppedRecipeSalt);
    return;
 }
 
@@ -1586,9 +1640,10 @@ void MainWindow::setRecipe(Recipe* recipe) {
 
    // Reset all previous recipe shit.
    this->pimpl->m_fermentableAdditionsTableModel->observeRecipe(recipe);
-   this->pimpl->m_hopAdditionsTableModel->observeRecipe(recipe);
-   this->pimpl->m_miscAdditionsTableModel->observeRecipe(recipe);
-   this->pimpl->m_yeastAdditionsTableModel->observeRecipe(recipe);
+   this->pimpl->        m_hopAdditionsTableModel->observeRecipe(recipe);
+   this->pimpl->       m_miscAdditionsTableModel->observeRecipe(recipe);
+   this->pimpl->      m_yeastAdditionsTableModel->observeRecipe(recipe);
+   this->pimpl->       m_saltAdditionsTableModel->observeRecipe(recipe);
    this->pimpl->m_mashStepTableModel->setMash(this->pimpl->m_recipeObs->mash());
    this->pimpl->m_boilStepTableModel->setBoil(this->pimpl->m_recipeObs->boil());
    this->pimpl->m_fermentationStepTableModel->setFermentation(this->pimpl->m_recipeObs->fermentation());
@@ -1731,10 +1786,16 @@ void MainWindow::lockRecipe(int state) {
    pushButton_removeYeast->setEnabled(enabled);
    pushButton_editYeast->setEnabled(enabled);
 
-   this->pimpl->m_fermCatalog ->setEnableAddToRecipe(enabled);
-   this->pimpl->m_hopCatalog  ->setEnableAddToRecipe(enabled);
-   this->pimpl->m_miscCatalog ->setEnableAddToRecipe(enabled);
+   saltAdditionTable->setEnabled(enabled);
+   pushButton_addSalt->setEnabled(enabled);
+   pushButton_removeSalt->setEnabled(enabled);
+   pushButton_editSalt->setEnabled(enabled);
+
+   this->pimpl-> m_fermCatalog->setEnableAddToRecipe(enabled);
+   this->pimpl->  m_hopCatalog->setEnableAddToRecipe(enabled);
+   this->pimpl-> m_miscCatalog->setEnableAddToRecipe(enabled);
    this->pimpl->m_yeastCatalog->setEnableAddToRecipe(enabled);
+   this->pimpl-> m_saltCatalog->setEnableAddToRecipe(enabled);
    // TODO: mashes still need dealing with
    //
    return;
@@ -2148,6 +2209,27 @@ void MainWindow::droppedRecipeYeast(QList<Yeast *> yeasts) {
    return;
 }
 
+void MainWindow::droppedRecipeSalt(QList<Salt *> salts) {
+   if (!this->pimpl->m_recipeObs) {
+      return;
+   }
+
+   if (tabWidget_ingredients->currentWidget() != recipeSaltTab) {
+      tabWidget_ingredients->setCurrentWidget(recipeSaltTab);
+   }
+
+   auto saltAdditions = RecipeAdjustmentSalt::create(*this->pimpl->m_recipeObs, salts);
+
+   Undoable::doOrRedoUpdate(
+      newUndoableAddOrRemoveList(*this->pimpl->m_recipeObs,
+                                 &Recipe::addAddition<RecipeAdjustmentSalt>,
+                                 saltAdditions,
+                                 &Recipe::removeAddition<RecipeAdjustmentSalt>,
+                                 tr("Drop salt(s) on a recipe"))
+   );
+   return;
+}
+
 void MainWindow::updateRecipeBatchSize() {
    if (!this->pimpl->m_recipeObs) {
       return;
@@ -2225,6 +2307,7 @@ template void MainWindow::addIngredientToRecipe(Fermentable & ne);
 template void MainWindow::addIngredientToRecipe(Hop         & ne);
 template void MainWindow::addIngredientToRecipe(Misc        & ne);
 template void MainWindow::addIngredientToRecipe(Yeast       & ne);
+template void MainWindow::addIngredientToRecipe(Salt        & ne);
 
 void MainWindow::removeSelectedFermentableAddition() {
    this->pimpl->doRemoveRecipeAddition<RecipeAdditionFermentable>(fermentableAdditionTable,
@@ -2254,6 +2337,12 @@ void MainWindow::removeSelectedYeastAddition() {
    return;
 }
 
+void MainWindow::removeSelectedSaltAddition() {
+   this->pimpl->doRemoveRecipeAddition<RecipeAdjustmentSalt>(saltAdditionTable,
+                                                           this->pimpl->m_saltAdditionsTableProxy.get(),
+                                                           this->pimpl->m_saltAdditionsTableModel.get());
+   return;
+}
 
 void MainWindow::addStepToStepOwner(std::shared_ptr<MashStep> mashStep) {
    Undoable::addStepToStepOwner(this->pimpl->m_recipeObs->mash(), mashStep);
@@ -2329,24 +2418,10 @@ template<> void MainWindow::remove(std::shared_ptr<RecipeAdditionHop        > it
 template<> void MainWindow::remove(std::shared_ptr<RecipeAdditionFermentable> itemToRemove) { this->pimpl->m_fermentableAdditionsTableModel->remove(itemToRemove); return; }
 template<> void MainWindow::remove(std::shared_ptr<RecipeAdditionMisc       > itemToRemove) { this->pimpl->       m_miscAdditionsTableModel->remove(itemToRemove); return; }
 template<> void MainWindow::remove(std::shared_ptr<RecipeAdditionYeast      > itemToRemove) { this->pimpl->      m_yeastAdditionsTableModel->remove(itemToRemove); return; }
+template<> void MainWindow::remove(std::shared_ptr<RecipeAdjustmentSalt     > itemToRemove) { this->pimpl->       m_saltAdditionsTableModel->remove(itemToRemove); return; }
 template<> void MainWindow::remove(std::shared_ptr<MashStep                 > itemToRemove) { this->pimpl->            m_mashStepTableModel->remove(itemToRemove); return; }
 template<> void MainWindow::remove(std::shared_ptr<BoilStep                 > itemToRemove) { this->pimpl->            m_boilStepTableModel->remove(itemToRemove); return; }
 template<> void MainWindow::remove(std::shared_ptr<FermentationStep         > itemToRemove) { this->pimpl->    m_fermentationStepTableModel->remove(itemToRemove); return; }
-
-void MainWindow::editMiscOfSelectedMiscAddition() {
-   RecipeAdditionMisc * miscAddition = this->pimpl->selectedMiscAddition();
-   if (!miscAddition) {
-      return;
-   }
-
-   Misc * misc = miscAddition->misc();
-   if (!misc) {
-      return;
-   }
-
-   this->pimpl->m_miscEditor->setEditItem(ObjectStoreWrapper::getSharedFromRaw(misc));
-   this->pimpl->m_miscEditor->show();
-}
 
 void MainWindow::editFermentableOfSelectedFermentableAddition() {
    RecipeAdditionFermentable * fermentableAddition = this->pimpl->selectedFermentableAddition();
@@ -2361,6 +2436,22 @@ void MainWindow::editFermentableOfSelectedFermentableAddition() {
 
    this->pimpl->m_fermentableEditor->setEditItem(ObjectStoreWrapper::getSharedFromRaw(fermentable));
    this->pimpl->m_fermentableEditor->show();
+   return;
+}
+
+void MainWindow::editMiscOfSelectedMiscAddition() {
+   RecipeAdditionMisc * miscAddition = this->pimpl->selectedMiscAddition();
+   if (!miscAddition) {
+      return;
+   }
+
+   Misc * misc = miscAddition->misc();
+   if (!misc) {
+      return;
+   }
+
+   this->pimpl->m_miscEditor->setEditItem(ObjectStoreWrapper::getSharedFromRaw(misc));
+   this->pimpl->m_miscEditor->show();
    return;
 }
 
@@ -2393,6 +2484,22 @@ void MainWindow::editYeastOfSelectedYeastAddition() {
 
    this->pimpl->m_yeastEditor->setEditItem(ObjectStoreWrapper::getSharedFromRaw(yeast));
    this->pimpl->m_yeastEditor->show();
+   return;
+}
+
+void MainWindow::editSaltOfSelectedSaltAddition() {
+   RecipeAdjustmentSalt * saltAddition = this->pimpl->selectedSaltAddition();
+   if (!saltAddition) {
+      return;
+   }
+
+   Salt * salt = saltAddition->salt();
+   if (!salt) {
+      return;
+   }
+
+   this->pimpl->m_saltEditor->setEditItem(ObjectStoreWrapper::getSharedFromRaw(salt));
+   this->pimpl->m_saltEditor->show();
    return;
 }
 

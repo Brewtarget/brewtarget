@@ -51,8 +51,8 @@ ObjectStore & RecipeAdjustmentSalt::getObjectStoreTypedInstance() const {
 TypeLookup const RecipeAdjustmentSalt::typeLookup {
    "RecipeAdjustmentSalt",
    {
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::RecipeAdjustmentSalt::salt     , RecipeAdjustmentSalt::salt     ),
-      PROPERTY_TYPE_LOOKUP_ENTRY      (PropertyNames::RecipeAdjustmentSalt::whenToAdd, RecipeAdjustmentSalt::m_whenToAdd),
+      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::RecipeAdjustmentSalt::salt     , RecipeAdjustmentSalt::salt                                  ),
+      PROPERTY_TYPE_LOOKUP_ENTRY      (PropertyNames::RecipeAdjustmentSalt::whenToAdd, RecipeAdjustmentSalt::m_whenToAdd, NonPhysicalQuantity::Enum),
    },
    // Parent classes lookup.  NB: IngredientInRecipe not NamedEntity!
    {&IngredientInRecipe::typeLookup,

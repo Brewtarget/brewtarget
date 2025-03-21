@@ -1,5 +1,5 @@
 #
-# meson.build is part of Brewtarget, and is copyright the following authors 2022-2024:
+# meson.build is part of Brewtarget, and is copyright the following authors 2022-2025:
 #   • Matt Young <mfsy@yahoo.com>
 #
 # Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -667,6 +667,7 @@ commonSourceFiles = files([
    'src/catalogs/FermentableCatalog.cpp',
    'src/catalogs/HopCatalog.cpp',
    'src/catalogs/MiscCatalog.cpp',
+   'src/catalogs/SaltCatalog.cpp',
    'src/catalogs/StyleCatalog.cpp',
    'src/catalogs/YeastCatalog.cpp',
    'src/database/BtSqlQuery.cpp',
@@ -687,6 +688,7 @@ commonSourceFiles = files([
    'src/editors/MashStepEditor.cpp',
    'src/editors/MiscEditor.cpp',
    'src/editors/NamedMashEditor.cpp',
+   'src/editors/SaltEditor.cpp',
    'src/editors/StyleEditor.cpp',
    'src/editors/WaterEditor.cpp',
    'src/editors/YeastEditor.cpp',
@@ -763,6 +765,8 @@ commonSourceFiles = files([
    'src/qtModels/sortFilterProxyModels/RecipeAdditionHopSortFilterProxyModel.cpp',
    'src/qtModels/sortFilterProxyModels/RecipeAdditionMiscSortFilterProxyModel.cpp',
    'src/qtModels/sortFilterProxyModels/RecipeAdditionYeastSortFilterProxyModel.cpp',
+   'src/qtModels/sortFilterProxyModels/RecipeAdjustmentSaltSortFilterProxyModel.cpp',
+   'src/qtModels/sortFilterProxyModels/SaltSortFilterProxyModel.cpp',
    'src/qtModels/sortFilterProxyModels/StyleSortFilterProxyModel.cpp',
    'src/qtModels/sortFilterProxyModels/WaterSortFilterProxyModel.cpp',
    'src/qtModels/sortFilterProxyModels/YeastSortFilterProxyModel.cpp',
@@ -913,6 +917,7 @@ mocHeaders = files([
    'src/catalogs/FermentableCatalog.h',
    'src/catalogs/HopCatalog.h',
    'src/catalogs/MiscCatalog.h',
+   'src/catalogs/SaltCatalog.h',
    'src/catalogs/StyleCatalog.h',
    'src/catalogs/YeastCatalog.h',
    'src/database/ObjectStore.h',
@@ -927,6 +932,7 @@ mocHeaders = files([
    'src/editors/MashStepEditor.h',
    'src/editors/MiscEditor.h',
    'src/editors/NamedMashEditor.h',
+   'src/editors/SaltEditor.h',
    'src/editors/StyleEditor.h',
    'src/editors/WaterEditor.h',
    'src/editors/YeastEditor.h',
@@ -998,6 +1004,8 @@ mocHeaders = files([
    'src/qtModels/sortFilterProxyModels/RecipeAdditionHopSortFilterProxyModel.h',
    'src/qtModels/sortFilterProxyModels/RecipeAdditionMiscSortFilterProxyModel.h',
    'src/qtModels/sortFilterProxyModels/RecipeAdditionYeastSortFilterProxyModel.h',
+   'src/qtModels/sortFilterProxyModels/RecipeAdjustmentSaltSortFilterProxyModel.h',
+   'src/qtModels/sortFilterProxyModels/SaltSortFilterProxyModel.h',
    'src/qtModels/sortFilterProxyModels/StyleSortFilterProxyModel.h',
    'src/qtModels/sortFilterProxyModels/WaterSortFilterProxyModel.h',
    'src/qtModels/sortFilterProxyModels/YeastSortFilterProxyModel.h',
@@ -1078,6 +1086,7 @@ uiFiles = files([
    'ui/primingDialog.ui',
    'ui/recipeExtrasWidget.ui',
    'ui/refractoDialog.ui',
+   'ui/saltEditor.ui',
    'ui/strikeWaterDialog.ui',
    'ui/styleEditor.ui',
    'ui/timerDialog.ui',

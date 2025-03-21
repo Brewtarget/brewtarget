@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/Salt.h is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * model/Salt.h is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Mattias Måhl <mattias@kejsarsten.com>
  *   • Matt Young <mfsy@yahoo.com>
@@ -50,6 +50,9 @@ AddPropertyName(type           )
  *
  * \brief Model for salt records in the database.
  *
+ *        Ideally we would come up with a better name for this, as it includes things that aren't salts (eg lactic acid,
+ *        phosphoric acid).
+ *
  *        NOTE that, unlike most of the other \c NamedEntity classes, \c Salt is not included anywhere in either BeerXML
  *        or BeerJSON.
  */
@@ -87,7 +90,7 @@ public:
    static EnumStringMapping const typeStringMapping;
 
    /*!
-    * \brief Localised names of \c Water::Type values suitable for displaying to the end user
+    * \brief Localised names of \c Salt::Type values suitable for displaying to the end user
     */
    static EnumStringMapping const typeDisplayNames;
 
@@ -121,7 +124,8 @@ public:
    //! \brief What kind of salt this is
    Q_PROPERTY(Type      type           READ type           WRITE setType            )
    /**
-    * \brief What percent is acid - valid only for lactic acid, H3PO4 and acid malts
+    * \brief What percent is acid - valid only for lactic acid, H3PO4 and acid malts (ie when \c isAcid() returns
+    *        \c true).
     */
    Q_PROPERTY(std::optional<double>    percentAcid    READ percentAcid    WRITE setPercentAcid     )
    //! \brief Is this an acid or salt?  Deduced from \c type
@@ -135,7 +139,9 @@ public:
 
    void setType       (Salt::Type val);
    void setPercentAcid(std::optional<double> val);
-///   void setIsAcid     (bool       val);
+
+   //! \brief It's useful in other places (eg SaltEditor.cpp) to be able to check whether a salt type is an acid
+   static bool typeIsAcid(Salt::Type const type);
 
    /**
     * \return Mass concentration (in parts per million) of Calcium (Ca) for one gram of this salt in one liter of water
