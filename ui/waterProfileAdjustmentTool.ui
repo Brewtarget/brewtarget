@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>waterDialog</class>
- <widget class="QDialog" name="waterDialog">
+ <class>waterProfileAdjustmentTool</class>
+ <widget class="QDialog" name="waterProfileAdjustmentTool">
+  <!--
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -22,13 +23,20 @@
     <height>0</height>
    </size>
   </property>
+   -->
   <property name="windowTitle">
-   <string>Water Chemistry</string>
+   <string>Water Profile Adjustment Tool</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_4">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
+    <widget class="QSplitter" name="splitter_vertical_recipe">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <!--
+     ================================================= Left-hand panel =================================================
+      -->
+     <widget class="QWidget" name="left_hand_panel" native="true">
       <layout class="QVBoxLayout" name="verticalLayout_left" stretch="0,0,0">
        <item>
         <widget class="QGroupBox" name="groupBox_profiles">
@@ -351,8 +359,11 @@
         </widget>
        </item>
       </layout>
-     </item>
-     <item>
+     </widget>
+     <!--
+     ================================================= Right-hand panel ================================================
+      -->
+     <widget class="QWidget" name="right_hand_panel" native="true">
       <layout class="QVBoxLayout" name="verticalLayout_right">
        <item>
         <widget class="QGroupBox" name="groupBox_salts">
@@ -422,8 +433,9 @@
         </widget>
        </item>
       </layout>
-     </item>
-    </layout>
+     </widget>
+    </widget>
+
    </item>
    <item>
     <widget class="Line" name="line">
@@ -489,7 +501,7 @@
   <connection>
    <sender>buttonBox_save</sender>
    <signal>accepted()</signal>
-   <receiver>waterDialog</receiver>
+   <receiver>waterProfileAdjustmentTool</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -505,7 +517,7 @@
   <connection>
    <sender>buttonBox_save</sender>
    <signal>rejected()</signal>
-   <receiver>waterDialog</receiver>
+   <receiver>waterProfileAdjustmentTool</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

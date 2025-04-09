@@ -1,6 +1,6 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
  * qtModels/tableModels/RecipeAdjustmentSaltTableModel.cpp is part of Brewtarget, and is copyright the following authors
- * 2009-2024:
+ * 2009-2025:
  *   • Mattias Måhl <mattias@kejsarsten.com>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -87,34 +87,32 @@ void RecipeAdjustmentSaltTableModel::removed(std::shared_ptr<RecipeAdjustmentSal
    emit newTotals();
    return;
 }
-void RecipeAdjustmentSaltTableModel::updateTotals() { return; }
-
-void RecipeAdjustmentSaltTableModel::catchSalt() {
-   // TODO: Need to give the saltAdjustment a Salt, which needs to be something that exists in the DB
-   //
-   // This gets stored in the DB in saveAndClose()
-   qDebug() << Q_FUNC_INFO;
-   auto saltAdjustment = std::make_shared<RecipeAdjustmentSalt>("");
-   this->add(saltAdjustment);
+void RecipeAdjustmentSaltTableModel::updateTotals() {
+   emit newTotals();
    return;
 }
 
-double RecipeAdjustmentSaltTableModel::multiplier(RecipeAdjustmentSalt & salt) const {
+double RecipeAdjustmentSaltTableModel::multiplier(RecipeAdjustmentSalt const & salt,
+                                                  bool const convertKilogramsToGrams) const {
    double ret = 1.0;
 
    if (this->recObs->mash()->hasSparge() ) {
       if (salt.whenToAdd() == RecipeAdjustmentSalt::WhenToAdd::Equal) {
          ret = 2.0;
       } else if (salt.whenToAdd() == RecipeAdjustmentSalt::WhenToAdd::Ratio) {
-         // If we are adding a proportional amount to both,
-         // this should handle that math.
-         double spargePct = this->recObs->mash()->totalSpargeAmount_l()/this->recObs->mash()->totalInfusionAmount_l();
+         // If we are adding a proportional amount to both, this should handle that math.
+         double const spargePct =
+            this->recObs->mash()->totalSpargeAmount_l() /
+            this->recObs->mash()->totalInfusionAmount_l();
          ret = 1.0 + spargePct;
       }
    }
 
-   // Per comment in model/Salt.cpp we need to multiply by 1000.0 to convert kilograms to grams
-   return ret * 1000.0;
+   // Per comment in model/Salt.cpp we, for concentrations, we need to multiply by 1000.0 to convert kilograms to grams
+   if (convertKilogramsToGrams) {
+      ret *= 1000.0;
+   }
+   return ret;
 }
 
 // total salt in ppm. Not sure this is helping.
@@ -174,28 +172,54 @@ double RecipeAdjustmentSaltTableModel::total_SO4() const {
    return ret;
 }
 
-double RecipeAdjustmentSaltTableModel::total(Water::Ion ion) const {
+double RecipeAdjustmentSaltTableModel::total(Water::Ion const ion) const {
    switch(ion) {
-      case Water::Ion::Ca:   return total_Ca();
-      case Water::Ion::Cl:   return total_Cl();
-      case Water::Ion::HCO3: return total_HCO3();
-      case Water::Ion::Mg:   return total_Mg();
-      case Water::Ion::Na:   return total_Na();
-      case Water::Ion::SO4:  return total_SO4();
-      default: return 0.0;
+      case Water::Ion::Ca:   return this->total_Ca();
+      case Water::Ion::Cl:   return this->total_Cl();
+      case Water::Ion::HCO3: return this->total_HCO3();
+      case Water::Ion::Mg:   return this->total_Mg();
+      case Water::Ion::Na:   return this->total_Na();
+      case Water::Ion::SO4:  return this->total_SO4();
+      // NB: No default case as we want compiler to warn us if we missed a possibility above
    }
    return 0.0;
 }
 
-double RecipeAdjustmentSaltTableModel::total(Salt::Type type) const {
-   // .:TBD:. Some assumptions in here that mass and volume are interchangeable... :-/
-   double ret = 0.0;
+Measurement::Amount RecipeAdjustmentSaltTableModel::total(Salt::Type const type) const {
+   Measurement::Amount totalAmount{Salt::suggestedMeasureFor(type), 0.0};
    for (auto saltAdjustment : this->m_rows) {
-      if (saltAdjustment->salt()->type() == type) {
-         ret += this->multiplier(*saltAdjustment) * saltAdjustment->amount().quantity;
+      auto salt = saltAdjustment->salt();
+      if (salt->type() == type) {
+         Measurement::Amount const saltAmount = saltAdjustment->amount().toCanonical();
+         // Normally leave this commented out as otherwise generates too much logging
+         qDebug() << Q_FUNC_INFO << saltAmount << "of" << salt << "to add to" << totalAmount;
+         // .:TBD:. For the moment, we are assuming that mass and volume are interchangeable, which isn't great.  But at
+         //         least let's log a warning when we do it.
+         if (saltAmount.unit != totalAmount.unit) {
+            //
+            // If we didn't yet add anything to our running total, we just assume the first amount we find is measured
+            // in the physical quantity we want.
+            //
+            // Although we wouldn't normally compare doubles using ==, I think it's OK in checking whether we yet added
+            // anything to zero.
+            //
+            if (0.0 == totalAmount.quantity) {
+               qDebug() <<
+                  Q_FUNC_INFO << "First salt adjustment found was" << saltAmount << "of" << salt <<
+                  "so changing units from" << totalAmount.unit;
+               totalAmount.unit = saltAmount.unit;
+            } else {
+               qWarning() <<
+                  Q_FUNC_INFO << "Adding" << saltAmount << "of" << salt << "to a total of" << totalAmount <<
+                  "involves implicit assumption that units are interchangeable";
+            }
+
+         }
+         totalAmount.quantity += this->multiplier(*saltAdjustment, false) * saltAmount.quantity;
+         qDebug() << Q_FUNC_INFO << "Total now" << totalAmount;
       }
    }
-   return ret;
+   return totalAmount;
 }
 
 double RecipeAdjustmentSaltTableModel::totalAcidWeight(Salt::Type type) const {
@@ -208,7 +232,7 @@ double RecipeAdjustmentSaltTableModel::totalAcidWeight(Salt::Type type) const {
    for (auto saltAdjustment : this->m_rows) {
       auto salt = saltAdjustment->salt();
       if (salt->type() == type) {
-         double mult  = multiplier(*saltAdjustment);
+         double mult  = this->multiplier(*saltAdjustment);
          if (type == Salt::Type::AcidulatedMalt) {
             // Acid malts are easy
             Q_ASSERT(salt->percentAcid());
@@ -235,7 +259,6 @@ QVariant RecipeAdjustmentSaltTableModel::data(QModelIndex const & index, int rol
 }
 
 Qt::ItemFlags RecipeAdjustmentSaltTableModel::flags(const QModelIndex& index) const {
-   // Q_UNUSED(index)
    if (index.row() >= this->m_rows.size() ) {
       return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
    }
@@ -260,7 +283,7 @@ bool RecipeAdjustmentSaltTableModel::setData(QModelIndex const & index, QVariant
       emit newTotals();
    }
    emit dataChanged(index,index);
-   QHeaderView* headerView = m_parentTableWidget->horizontalHeader();
+   QHeaderView * headerView = m_parentTableWidget->horizontalHeader();
    headerView->resizeSections(QHeaderView::ResizeToContents);
 
    return retVal;

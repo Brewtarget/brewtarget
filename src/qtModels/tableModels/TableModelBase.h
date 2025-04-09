@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * qtModels/tableModels/TableModelBase.h is part of Brewtarget, and is copyright the following authors 2023-2024:
+ * qtModels/tableModels/TableModelBase.h is part of Brewtarget, and is copyright the following authors 2023-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -29,9 +29,11 @@
 #include "undoRedo/Undoable.h"
 #include "measurement/Measurement.h"
 #include "model/IngredientAmount.h"
+#include "model/IngredientInRecipe.h"
 #include "model/Inventory.h"
 #include "model/Recipe.h"
 #include "qtModels/tableModels/BtTableModel.h"
+#include "undoRedo/UndoableAddOrRemove.h"
 #include "utils/CuriouslyRecurringTemplateBase.h"
 #include "utils/MetaTypes.h"
 
@@ -50,25 +52,20 @@ class Style;
 // An alternative would be to use a traits struct, which has fewer limitations, but is somewhat more clunky.
 //
 // See comment in utils/TypeTraits.h for definition of CONCEPT_FIX_UP (and why, for now, we need it)
-template <typename T> concept CONCEPT_FIX_UP IsTableModel   = std::is_base_of_v<BtTableModel, T>;
-///template <typename T> concept CONCEPT_FIX_UP HasInventory   = std::is_base_of_v<BtTableModelInventory, T>;
-///template <typename T> concept CONCEPT_FIX_UP HasNoInventory = std::negation_v<std::is_base_of<BtTableModelInventory, T>>;
+template <typename T> concept CONCEPT_FIX_UP IsTableModel         = std::is_base_of_v<BtTableModel, T>;
 template <typename T> concept CONCEPT_FIX_UP ObservesRecipe       = std::is_base_of_v<BtTableModelRecipeObserver, T>;
 template <typename T> concept CONCEPT_FIX_UP DoesNotObserveRecipe = std::negation_v<std::is_base_of<BtTableModelRecipeObserver, T>>;
 
+template <typename T> concept CONCEPT_FIX_UP IsIngredientInRecipe = std::is_base_of_v<IngredientInRecipe, T>;
+
 //
 // NOTE: At several places below in TableModelBase, we would like to have two versions of a member function depending on
-//       some property of Derived.  Eg for updateInventory() we would like a substantive one for when Derived inherits
-//       from BtTableModelInventory and a no-op one for when it doesn't.  On GCC, we can do the following:
-//          void updateInventory(...) requires HasInventory<Derived> { ... } // Substantive version
-//          void updateInventory(...) requires HasNoInventory<Derived> { ... } // No-op version
-//
-//       HOWEVER, other compilers (eg Clang) do not permit this and give an error along the lines of "incomplete type
-//       ... used in type trait expression ... definition of ...  is not complete until the closing '}'".  This is
-//       annoying but correct.  The C++ standard rules say we are not allowed to use `HasInventory<Derived>` or
-//       `HasNoInventory<Derived>` until `Derived` is fully defined, which won't be until the closing brace of its class
-//       definition (and the `TableModelBase` template is being instantiated before that because `Derived` inherits from
-//       it).
+//       some property of Derived - eg using `requires HasSomeAttribute<Derived>`.  Although GCC lets you do this, other
+//       compilers (eg Clang) do not and give an error along the lines of "incomplete type ... used in type trait
+//       expression ... definition of ...  is not complete until the closing '}'".  This is annoying but correct.  The
+//       C++ standard rules say we are not allowed to use `HasSomeAttribute<Derived>` until `Derived` is fully defined,
+//       which won't be until the closing brace of its class definition (and the `TableModelBase` template is being
+//       instantiated before that because `Derived` inherits from it).
 //
 //       The way round this is to template the member function so that the evaluation of the constraint is deferred
 //       until after the class declaration of `Derived` is complete.  Now, in, eg, HopTableModel we can call the right
@@ -85,8 +82,8 @@ template <typename T> concept CONCEPT_FIX_UP DoesNotObserveRecipe = std::negatio
 //          template<class Caller> Recipe * doGetObservedRecipe() requires DoesNotObserveRecipe<Caller> {...} No-op
 //       And in each of the Derived classes, such as HopTableModel, we have a (macro-inserted) wrapper function such as:
 //          void HopTableModel::getObservedRecipe() { return this->doGetObservedRecipe<NeName##TableModel>(); }
-//       Then, from TableModel, we call this->derived().getObservedRecipe() and the correct version of doGetObservedRecipe()
-//       ends up being called.
+//       Then, from TableModel, we call this->derived().getObservedRecipe() and the correct version of
+//       doGetObservedRecipe() ends up being called.
 //
 //       NOTE: The IsTableModel constraint is useful as a belt-and-braces to make sure you're passing in a useful
 //             template parameter (eg `HopTableModel`, not `HopTableModel *` or `TableModelBase<HopTableModel, Hop>`).
@@ -301,14 +298,6 @@ public:
          return;
       }
 
-///      // If we are watching a Recipe and the new item does not belong to it then there is nothing for us to do
-///      if (observedRecipe && !observedRecipe->uses(*item)) {
-///         qDebug() <<
-///            Q_FUNC_INFO << "Ignoring signal about new" << NE::staticMetaObject.className() << "#" << item->key() <<
-///            "as it does not belong to the Recipe we are watching: #" << observedRecipe->key();
-///         return;
-///      }
-
       int size = this->m_rows.size();
       this->derived().beginInsertRows(QModelIndex(), size, size);
       this->m_rows.append(item);
@@ -366,6 +355,38 @@ public:
       }
 
       return this->remove(this->m_rows[index.row()]);
+   }
+
+   /**
+    * \brief Use this for removing \c RecipeAdditionHop etc
+    */
+   template<class Proxy>
+   void removeSelectedIngredients(QTableView & tableView, Proxy & proxy) /*requires IsIngredientInRecipe<Derived>*/ {
+      QModelIndexList selected = tableView.selectionModel()->selectedIndexes();
+      QList<std::shared_ptr<NE>> itemsToRemove;
+
+      int size = selected.size();
+      if (size == 0) {
+         return;
+      }
+
+      for (int ii = 0; ii < size; ii++) {
+         QModelIndex viewIndex = selected.at(ii);
+         QModelIndex modelIndex = proxy.mapToSource(viewIndex);
+         itemsToRemove.append(this->getRow(modelIndex.row()));
+      }
+
+      for (auto item : itemsToRemove) {
+         Undoable::doOrRedoUpdate(
+            newUndoableAddOrRemove(*this->derived().recObs,
+                                    &Recipe::removeAddition<NE>,
+                                    item,
+                                    &Recipe::addAddition<NE>,
+                                    Recipe::tr("Remove %1 from recipe").arg(NE::localisedName()))
+         );
+         this->remove(item);
+      }
+      return;
    }
 
 protected:

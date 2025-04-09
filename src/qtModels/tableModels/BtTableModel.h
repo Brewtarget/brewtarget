@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * qtModels/tableModels/BtTableModel.h is part of Brewtarget, and is copyright the following authors 2021-2023:
+ * qtModels/tableModels/BtTableModel.h is part of Brewtarget, and is copyright the following authors 2021-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -89,7 +89,7 @@ template<class Derived, class NE> class TableModelBase; // This forward declarat
  *
  *        You might be wondering why there isn't a corresponding inheritance hierarchy in \c TableModelBase.  This is
  *        because, by the magic of template metaprogramming \c TableModelBase "knows" whether its derived class inherits
- *        from \c BtTableModelRecipeObserver or \c BtTableModelInventory, and can therefore adapt accordingly.
+ *        from \c BtTableModelRecipeObserver or directly from \c BtTableModel, and can therefore adapt accordingly.
  */
 class BtTableModel : public QAbstractTableModel {
    Q_OBJECT

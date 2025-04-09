@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * measurement/Amount.cpp is part of Brewtarget, and is copyright the following authors 2022-2023:
+ * measurement/Amount.cpp is part of Brewtarget, and is copyright the following authors 2022-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -24,6 +24,12 @@
 namespace Measurement {
 
    Amount::Amount(double const quantity, Unit const & unit) : quantity{quantity}, unit{&unit} {
+      return;
+   }
+
+   Amount::Amount(PhysicalQuantity const physicalQuantity, double const quantity) :
+      quantity{quantity},
+      unit{&Measurement::Unit::getCanonicalUnit(physicalQuantity)} {
       return;
    }
 
@@ -91,33 +97,11 @@ namespace Measurement {
       return (this->unit && this->quantity >= 0.0);
    }
 
-}
+   Amount Amount::toCanonical() const {
+      return this->unit->toCanonical(this->quantity);
+   }
 
-///bool operator<(Measurement::Amount const & lhs, Measurement::Amount const & rhs) {
-///   // Amounts in the same units are trivial to compare
-///   if (lhs.unit == rhs.unit) {
-///      return lhs.quantity < rhs.quantity;
-///   }
-///
-///   // It's a coding error if we try to compare two things that aren't a measure of the same physical quantity (because
-///   // it's meaningless to compare a temperature to a mass, etc
-///   Q_ASSERT(lhs.unit->getPhysicalQuantity() == rhs.unit->getPhysicalQuantity());
-///
-///   return lhs.unit->toCanonical(lhs.quantity).quantity < rhs.unit->toCanonical(lhs.quantity).quantity;
-///}
-///
-///bool operator==(Measurement::Amount const & lhs, Measurement::Amount const & rhs) {
-///   // Amounts in the same units are trivial to compare
-///   if (lhs.unit == rhs.unit) {
-///      return lhs.quantity == rhs.quantity;
-///   }
-///
-///   // It's a coding error if we try to compare two things that aren't a measure of the same physical quantity (because
-///   // it's meaningless to compare a temperature to a mass, etc
-///   Q_ASSERT(lhs.unit->getPhysicalQuantity() == rhs.unit->getPhysicalQuantity());
-///
-///   return lhs.unit->toCanonical(lhs.quantity).quantity == rhs.unit->toCanonical(lhs.quantity).quantity;
-///}
+}
 
 template<class S>
 S & operator<<(S & stream, Measurement::Amount const amount) {

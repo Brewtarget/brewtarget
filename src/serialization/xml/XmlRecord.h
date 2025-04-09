@@ -81,28 +81,6 @@ public:
              xalanc::XalanNode * rootNodeOfRecord,
              QTextStream & userMessage);
 
-///   /**
-///    * \brief Once the record (including all its sub-records) is loaded into memory, we this function does any final
-///    *        validation and data correction before then storing the object(s) in the database.  Most validation should
-///    *        already have been done via the XSD, but there are some validation rules have to be done in code, including
-///    *        checking for duplicates and name clashes.
-///    *
-///    *        Child classes may override this function to extend functionality but should make sure to call this base
-///    *        class version to ensure child nodes are saved.
-///    *
-///    * \param containingEntity If not null, this is the entity that contains this one.  Eg, for a MashStep it should
-///    *                         always be the containing Mash.  For a Style inside a Recipe, this will be a pointer to
-///    *                         the Recipe, but for a freestanding Style, this will be null.
-///    * \param userMessage Where to append any error messages that we want the user to see on the screen
-///    * \param stats This object keeps tally of how many records (of each type) we skipped or stored
-///    *
-///    * \return \b Succeeded, if processing succeeded, \b Failed, if there was an unresolvable problem, \b FoundDuplicate
-///    *         if the current record is a duplicate of one already in the DB and should be skipped.
-///    */
-///   virtual ProcessingResult normaliseAndStoreInDb(std::shared_ptr<NamedEntity> containingEntity,
-///                                                  QTextStream & userMessage,
-///                                                  ImportRecordCount & stats);
-
    /**
     * \brief Export to XML
     * \param namedEntityToExport The object that we want to export to XML
@@ -132,9 +110,6 @@ private:
                          QTextStream & userMessage);
 
 protected:
-///   bool normaliseAndStoreChildRecordsInDb(QTextStream & userMessage,
-///                                          ImportRecordCount & stats);
-
    /**
     * \brief Called by \c toXml to write out any fields that are themselves records.
     *        Subclasses should provide the obvious recursive implementation.
@@ -161,38 +136,6 @@ protected:
                   QTextStream & out,
                   int indentLevel,
                   char const * const indentString) const;
-
-public:
-
-protected:
-///   XmlCoding           const & m_coding;
-
-///   XmlRecordDefinition const & m_recordDefinition;
-
-///   //
-///   // Keep track of any child (ie contained) records as we're reading in FROM an XML file.  (NB: We don't need to do
-///   // this when writing out TO an XML file as we don't have to worry about duplicate detection or construction order
-///   // etc.)
-///   //
-///   // Note that we don't use QVector here or below as it always wants to be able to copy things, which doesn't play
-///   // nicely with there being a std::unique_ptr inside the ChildRecordSet struct.
-///   //
-///   struct ChildRecordSet {
-///      /**
-///       * \brief Notes the attribute/field to which this set of child records relates.  Eg, if a recipe record has hop
-///       *        and fermentable child records, then it needs to know which is which and how to store them.
-///       *        If it's \c nullptr then that means this is a top-level record (eg just a hop variety rather than a use
-///       *        of a hop in a recipe).
-///       */
-///      XmlRecordDefinition::FieldDefinition const * parentFieldDefinition;
-///
-///      /**
-///       * \brief The actual child record
-///       */
-///      std::vector< std::unique_ptr<XmlRecord> > records;
-///   };
-///
-///   std::vector<ChildRecordSet> m_childRecordSets;
 };
 
 #endif

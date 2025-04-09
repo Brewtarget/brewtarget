@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * BtFieldType.cpp is part of Brewtarget, and is copyright the following authors 2022-2023:
+ * BtFieldType.cpp is part of Brewtarget, and is copyright the following authors 2022-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -38,16 +38,30 @@ QString GetLoggableName(NonPhysicalQuantity nonPhysicalQuantity) {
    Q_ASSERT(false);
 }
 
-Measurement::PhysicalQuantities ConvertToPhysicalQuantities(BtFieldType const & btFieldType) {
-   // It's a coding error to call this function if btFieldType holds NonPhysicalQuantity
-   Q_ASSERT(!std::holds_alternative<NonPhysicalQuantity>(btFieldType));
+bool IsValid(BtFieldType const & fieldType, Measurement::PhysicalQuantity const physicalQuantity) {
+   // It's a coding error to call this function if fieldType holds NonPhysicalQuantity
+   Q_ASSERT(!std::holds_alternative<NonPhysicalQuantity>(fieldType));
 
-   if (std::holds_alternative<Measurement::PhysicalQuantity>(btFieldType)) {
-      return std::get<Measurement::PhysicalQuantity>(btFieldType);
+   if (std::holds_alternative<Measurement::ChoiceOfPhysicalQuantity>(fieldType)) {
+      auto const choiceOfPhysicalQuantity = std::get<Measurement::ChoiceOfPhysicalQuantity>(fieldType);
+      return Measurement::isValid(choiceOfPhysicalQuantity, physicalQuantity);
    }
 
-   Q_ASSERT(std::holds_alternative<Measurement::ChoiceOfPhysicalQuantity>(btFieldType));
-   return std::get<Measurement::ChoiceOfPhysicalQuantity>(btFieldType);
+   // Only one possibility left
+   Q_ASSERT(std::holds_alternative<Measurement::PhysicalQuantity>(fieldType));
+   return physicalQuantity == std::get<Measurement::PhysicalQuantity>(fieldType);
+}
+
+Measurement::PhysicalQuantities ConvertToPhysicalQuantities(BtFieldType const & fieldType) {
+   // It's a coding error to call this function if fieldType holds NonPhysicalQuantity
+   Q_ASSERT(!std::holds_alternative<NonPhysicalQuantity>(fieldType));
+
+   if (std::holds_alternative<Measurement::PhysicalQuantity>(fieldType)) {
+      return std::get<Measurement::PhysicalQuantity>(fieldType);
+   }
+
+   Q_ASSERT(std::holds_alternative<Measurement::ChoiceOfPhysicalQuantity>(fieldType));
+   return std::get<Measurement::ChoiceOfPhysicalQuantity>(fieldType);
 }
 
 BtFieldType ConvertToBtFieldType(Measurement::PhysicalQuantities const & physicalQuantities) {

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * undoRedo/UndoableAddOrRemoveList.h is part of Brewtarget, and is copyright the following authors 2021-2023:
+ * undoRedo/UndoableAddOrRemoveList.h is part of Brewtarget, and is copyright the following authors 2021-2025:
  *   • Mattias Måhl <mattias@kejsarsten.com>
  *   • Matt Young <mfsy@yahoo.com>
  *
@@ -43,10 +43,11 @@ public:
     *             "parent" Fermentable.
     * \param listToAddOrRemove The list of things we're adding or removing - eg fermentable
     * \param undoer The method on the updatee to undo the addition or removal
-    * \param doCallback The method on MainWindow to call after doing/redoing the change - typically to update
-    *                   other display elements.  If null, no callback is made.
-    * \param undoCallback The method on MainWindow to call after undoing the change - typically to update
-    *                     other display elements.  If null, no callback is made.
+    * \param doCallback The free function (usually in \c Undoable.h) to call after doing/redoing the change - typically
+    *                   calling in to \c MainWindow to update other display elements.  If \c null, no callback is made.
+    * \param undoCallback The free function (usually in \c Undoable.h) to call after undoing the change - typically
+    *                     calling in to \c MainWindow to update other display elements.  If \c null, no callback is
+    *                     made.
     * \param description Short text we can show on undo/redo menu to describe this update eg "Change Recipe Style"
     * \param parent This is for grouping updates together.
     */
@@ -54,8 +55,8 @@ public:
                            std::shared_ptr<VV> (BB::*doer)(std::shared_ptr<VV>),
                            QList<VV *> listToAddOrRemove,
                            std::shared_ptr<VV> (BB::*undoer)(std::shared_ptr<VV>),
-                           void (MainWindow::*doCallback)(std::shared_ptr<VV>),
-                           void (MainWindow::*undoCallback)(std::shared_ptr<VV>),
+                           void (*doCallback)(std::shared_ptr<VV>),
+                           void (*undoCallback)(std::shared_ptr<VV>),
                            QString const & description,
                            QUndoCommand * parent = nullptr) : QUndoCommand(parent) {
       // Parent class handles storing description and making it accessible to the undo stack etc - we just have to give
@@ -91,8 +92,8 @@ public:
                            std::shared_ptr<VV> (BB::*doer)(std::shared_ptr<VV>),
                            QList<std::shared_ptr<VV>> listToAddOrRemove,
                            std::shared_ptr<VV> (BB::*undoer)(std::shared_ptr<VV>),
-                           void (MainWindow::*doCallback)(std::shared_ptr<VV>),
-                           void (MainWindow::*undoCallback)(std::shared_ptr<VV>),
+                           void (*doCallback)(std::shared_ptr<VV>),
+                           void (*undoCallback)(std::shared_ptr<VV>),
                            QString const & description,
                            QUndoCommand * parent = nullptr) : QUndoCommand(parent) {
       this->setText(description);
@@ -124,8 +125,8 @@ UndoableAddOrRemoveList<BB, UU, VV> * newUndoableAddOrRemoveList(UU & updatee,
                                                                  std::shared_ptr<VV> (BB::*doer)(std::shared_ptr<VV>),
                                                                  QList<VV *> listToAddOrRemove,
                                                                  std::shared_ptr<VV> (BB::*undoer)(std::shared_ptr<VV>),
-                                                                 void (MainWindow::*doCallback)(std::shared_ptr<VV>),
-                                                                 void (MainWindow::*undoCallback)(std::shared_ptr<VV>),
+                                                                 void (*doCallback)(std::shared_ptr<VV>),
+                                                                 void (*undoCallback)(std::shared_ptr<VV>),
                                                                  QString const & description,
                                                                  QUndoCommand * parent = nullptr) {
    return new UndoableAddOrRemoveList<BB, UU, VV>(updatee,
@@ -143,8 +144,8 @@ UndoableAddOrRemoveList<BB, UU, VV> * newUndoableAddOrRemoveList(UU & updatee,
                                                                  std::shared_ptr<VV> (BB::*doer)(std::shared_ptr<VV>),
                                                                  QList<std::shared_ptr<VV>> listToAddOrRemove,
                                                                  std::shared_ptr<VV> (BB::*undoer)(std::shared_ptr<VV>),
-                                                                 void (MainWindow::*doCallback)(std::shared_ptr<VV>),
-                                                                 void (MainWindow::*undoCallback)(std::shared_ptr<VV>),
+                                                                 void (*doCallback)(std::shared_ptr<VV>),
+                                                                 void (*undoCallback)(std::shared_ptr<VV>),
                                                                  QString const & description,
                                                                  QUndoCommand * parent = nullptr) {
    return new UndoableAddOrRemoveList<BB, UU, VV>(updatee,
@@ -173,8 +174,8 @@ UndoableAddOrRemoveList<BB, UU, VV> * newUndoableAddOrRemoveList(UU & updatee,
                                                   doer,
                                                   listToAddOrRemove,
                                                   undoer,
-                                                  static_cast<void (MainWindow::*)(std::shared_ptr<VV>)>(nullptr),
-                                                  static_cast<void (MainWindow::*)(std::shared_ptr<VV>)>(nullptr),
+                                                  static_cast<void (*)(std::shared_ptr<VV>)>(nullptr),
+                                                  static_cast<void (*)(std::shared_ptr<VV>)>(nullptr),
                                                   description,
                                                   parent);
 }
@@ -190,8 +191,8 @@ UndoableAddOrRemoveList<BB, UU, VV> * newUndoableAddOrRemoveList(UU & updatee,
                                                   doer,
                                                   listToAddOrRemove,
                                                   undoer,
-                                                  static_cast<void (MainWindow::*)(std::shared_ptr<VV>)>(nullptr),
-                                                  static_cast<void (MainWindow::*)(std::shared_ptr<VV>)>(nullptr),
+                                                  static_cast<void (*)(std::shared_ptr<VV>)>(nullptr),
+                                                  static_cast<void (*)(std::shared_ptr<VV>)>(nullptr),
                                                   description,
                                                   parent);
 }

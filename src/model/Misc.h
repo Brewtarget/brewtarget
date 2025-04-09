@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/Misc.h is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * model/Misc.h is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Mattias Måhl <mattias@kejsarsten.com>
@@ -32,6 +32,8 @@
 #include "model/IngredientAmount.h"
 #include "utils/EnumStringMapping.h"
 
+class MiscCatalog;
+class MiscEditor;
 class InventoryMisc;
 class RecipeAdditionMisc;
 
@@ -100,9 +102,11 @@ public:
    static constexpr auto defaultMeasure = Measurement::PhysicalQuantity::Mass;
 
    //
-   // These aliases make it easier to template a number of functions that are essentially the same for all subclasses of
-   // Ingredient.
+   // These aliases make it easier to template a number of functions that are essentially the same for a number of
+   // different NamedEntity subclasses.
    //
+   using CatalogClass        = MiscCatalog;
+   using EditorClass         = MiscEditor;
    using InventoryClass      = InventoryMisc;
    using RecipeAdditionClass = RecipeAdditionMisc;
 

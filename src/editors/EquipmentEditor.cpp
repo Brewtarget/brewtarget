@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * editors/EquipmentEditor.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * editors/EquipmentEditor.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • A.J. Drobnich <aj.drobnich@gmail.com>
  *   • Brian Rower <brian.rower@gmail.com>
  *   • David Grundberg <individ@acc.umu.se>
@@ -37,7 +37,6 @@
 #include "Localization.h"
 #include "measurement/Measurement.h"
 #include "measurement/Unit.h"
-#include "NamedEntitySortProxyModel.h"
 #include "PersistentSettings.h"
 #include "PhysicalConstants.h"
 

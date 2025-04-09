@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * measurement/Amount.h is part of Brewtarget, and is copyright the following authors 2022-2023:
+ * measurement/Amount.h is part of Brewtarget, and is copyright the following authors 2022-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -18,6 +18,8 @@
 #pragma once
 
 #include <compare>
+
+#include "measurement/PhysicalQuantity.h"
 
 // Note that we cannot #include "measurement/Unit.h" because that header file already includes this one
 
@@ -40,6 +42,9 @@ namespace Measurement {
     *                                    always kilograms)
     *
     *                 \b amount = a quantity plus units -- ie an instance of \c Amount
+    *
+    *              Maybe one day we can come up with some better names.  Eg, I don't like that "quantity" and "physical
+    *              quantity" are somewhat unrelated concepts.
     */
    struct Amount {
       double       quantity;
@@ -47,6 +52,15 @@ namespace Measurement {
 
       //! Regular constructor
       Amount(double const quantity, Unit const & unit);
+
+      /**
+       * Constructs quantity amount in the default units for the given \c PhysicalQuantity
+       *
+       * NOTE It is the caller's responsibility to ensure that the defaulted or supplied quantity is valid.  (Eg for
+       * mass or volume, it is safe to assume that 0.0 means the same for all units, but, for temperature, this is not
+       * the case.)
+       */
+      Amount(PhysicalQuantity const physicalQuantity, double const quantity = 0.0);
 
       /**
        * Default constructor is required if we are passing things through the Qt Property system.
@@ -77,12 +91,12 @@ namespace Measurement {
 
       //! Checks for an uninitialised (or badly initialised) amount
       bool isValid() const;
+
+      //! Convenience function for converting this Amount to canonical units (via \c Unit::toCanonical)
+      Amount toCanonical() const;
    };
 
 }
-
-///bool operator<(Measurement::Amount const & lhs, Measurement::Amount const & rhs);
-///bool operator==(Measurement::Amount const & lhs, Measurement::Amount const & rhs);
 
 /**
  * \brief Convenience function to allow output of \c Measurement::Amount to \c QDebug or \c QTextStream stream etc

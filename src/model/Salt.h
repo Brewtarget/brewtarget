@@ -30,6 +30,8 @@
 #include "model/IngredientAmount.h"
 #include "utils/EnumStringMapping.h"
 
+class SaltCatalog;
+class SaltEditor;
 class InventorySalt;
 class RecipeAdjustmentSalt;
 
@@ -95,15 +97,18 @@ public:
    static EnumStringMapping const typeDisplayNames;
 
    /**
-    * \brief This is where we centrally define how \c Salt objects can be measured.  See also suggestedMeasure() below
+    * \brief This is where we centrally define how \c Salt objects can be measured.  See also \c suggestedMeasureFor()
+    *        and \c suggestedMeasure() below.
     */
    static constexpr auto validMeasures  = Measurement::ChoiceOfPhysicalQuantity::Mass_Volume;
    static constexpr auto defaultMeasure = Measurement::PhysicalQuantity::Mass;
 
    //
-   // These aliases make it easier to template a number of functions that are essentially the same for all subclasses of
-   // Ingredient.
+   // These aliases make it easier to template a number of functions that are essentially the same for a number of
+   // different NamedEntity subclasses.
    //
+   using CatalogClass        = SaltCatalog;
+   using EditorClass         = SaltEditor;
    using InventoryClass      = InventorySalt;
    using RecipeAdditionClass = RecipeAdjustmentSalt;
 
@@ -119,6 +124,8 @@ public:
    Salt(Salt const & other);
 
    virtual ~Salt();
+
+   static Measurement::PhysicalQuantity suggestedMeasureFor(Salt::Type const type);
 
    // On a base or target profile, bicarbonate and alkalinity cannot both be used. I'm gonna have fun figuring that out
    //! \brief What kind of salt this is

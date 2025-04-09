@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * BtFieldType.h is part of Brewtarget, and is copyright the following authors 2022-2024:
+ * BtFieldType.h is part of Brewtarget, and is copyright the following authors 2022-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -71,10 +71,15 @@ typedef std::variant<Measurement::PhysicalQuantity,
                      NonPhysicalQuantity> BtFieldType;
 
 /**
+ * \brief Returns \c true if \c physicalQuantity is compatible with the supplied \c fieldType, or \c false otherwise
+ */
+bool IsValid(BtFieldType const & fieldType, Measurement::PhysicalQuantity const physicalQuantity);
+
+/**
  * \brief If you know a \c BtFieldType does \b not contain a \c NonPhysicalQuantity, then this will convert it into
  *        a Measurement::PhysicalQuantities
  */
-Measurement::PhysicalQuantities ConvertToPhysicalQuantities(BtFieldType const & btFieldType);
+Measurement::PhysicalQuantities ConvertToPhysicalQuantities(BtFieldType const & fieldType);
 
 /**
  * \brief If you have a \c Measurement::PhysicalQuantities variant and need to convert it to a \c BtFieldType variant,

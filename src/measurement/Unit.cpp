@@ -362,19 +362,19 @@ bool Measurement::Unit::isCanonical() const {
    return this->pimpl->m_isCanonical;
 }
 
-Measurement::Amount Measurement::Unit::toCanonical(double amt) const {
+Measurement::Amount Measurement::Unit::toCanonical(double quantity) const {
    double const convertedQuantity{
-      this->pimpl->m_multiplierToCanonical ? amt * (*this->pimpl->m_multiplierToCanonical) :
-                                             this->pimpl->m_convertToCanonical(amt)
+      this->pimpl->m_multiplierToCanonical ? quantity * (*this->pimpl->m_multiplierToCanonical) :
+                                             this->pimpl->m_convertToCanonical(quantity)
    };
    return Measurement::Amount{convertedQuantity, this->getCanonical()};
 }
 
-double Measurement::Unit::fromCanonical(double amt) const {
+double Measurement::Unit::fromCanonical(double quantity) const {
    if (this->pimpl->m_multiplierToCanonical) {
-      return amt / (*this->pimpl->m_multiplierToCanonical);
+      return quantity / (*this->pimpl->m_multiplierToCanonical);
    }
-   return this->pimpl->m_convertFromCanonical(amt);
+   return this->pimpl->m_convertFromCanonical(quantity);
 }
 
 Measurement::PhysicalQuantity Measurement::Unit::getPhysicalQuantity() const {

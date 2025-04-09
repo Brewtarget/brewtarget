@@ -2108,7 +2108,7 @@
     <addaction name="actionHydrometer_Temp_Adjustment"/>
     <addaction name="actionAlcohol_Percentage_Tool"/>
     <addaction name="actionStrikeWater_Calculator"/>
-    <addaction name="actionWater_Chemistry"/>
+    <addaction name="actionWaterProfileAdjustmentTool"/>
     <addaction name="actionAncestors"/>
     <addaction name="actionTimers"/>
     <addaction name="separator"/>
@@ -2533,13 +2533,13 @@
     <string>Alcohol Percentage Tool</string>
    </property>
   </action>
-  <action name="actionWater_Chemistry">
+  <action name="actionWaterProfileAdjustmentTool">
    <property name="icon">
     <iconset resource="../resources.qrc">
      <normaloff>:/images/testtube.svg</normaloff>:/images/testtube.svg</iconset>
    </property>
    <property name="text">
-    <string>Water &amp;Chemistry</string>
+    <string>Water &amp;Profile Adjustment Tool</string>
    </property>
   </action>
   <action name="actionUndo">

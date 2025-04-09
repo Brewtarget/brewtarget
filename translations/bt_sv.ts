@@ -2455,10 +2455,6 @@ Log file may contain more details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Remove %1 from recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Remove %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4639,6 +4635,10 @@ Primärens slutgiltiga volym är %1.</translation>
         <source>IBU</source>
         <translation type="unfinished">IBU</translation>
     </message>
+    <message>
+        <source>Remove %1 from recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RecipeAddition</name>
@@ -6128,33 +6128,6 @@ Primärens slutgiltiga volym är %1.</translation>
     </message>
 </context>
 <context>
-    <name>WaterDialog</name>
-    <message>
-        <source>Too low for target profile.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>In range for target profile.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Too high for target profile.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Minimum expected concentration is %1 ppm</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Maximum expected concentration is %1 ppm</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Use of %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>WaterEditor</name>
     <message>
         <source>PPM</source>
@@ -6198,6 +6171,29 @@ Primärens slutgiltiga volym är %1.</translation>
     </message>
     <message>
         <source>HCO3</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>WaterProfileAdjustmentTool</name>
+    <message>
+        <source>Minimum expected concentration is %1 ppm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>In range for target profile.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Maximum expected concentration is %1 ppm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Too low for target profile.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Too high for target profile.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -8740,10 +8736,6 @@ Primärens slutgiltiga volym är %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Water &amp;Chemistry</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Undo</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8877,6 +8869,10 @@ Primärens slutgiltiga volym är %1.</translation>
     </message>
     <message>
         <source>S&amp;alts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Water &amp;Profile Adjustment Tool</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -10510,9 +10506,60 @@ Primärens slutgiltiga volym är %1.</translation>
     </message>
 </context>
 <context>
-    <name>waterDialog</name>
+    <name>waterEditor</name>
     <message>
-        <source>Water Chemistry</source>
+        <source>Dialog</source>
+        <translation type="vanished">Dialog</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation>Namn</translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation>Anteckningar</translation>
+    </message>
+    <message>
+        <source>Edit Water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alkalinity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alkalinity measured as</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save and close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Discard and close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished">Ny</translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished">Spara</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Avbryt</translation>
+    </message>
+</context>
+<context>
+    <name>waterProfileAdjustmentTool</name>
+    <message>
+        <source>Water Profile Adjustment Tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -10610,57 +10657,6 @@ Primärens slutgiltiga volym är %1.</translation>
     <message>
         <source>Remove selected salt</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>waterEditor</name>
-    <message>
-        <source>Dialog</source>
-        <translation type="vanished">Dialog</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation>Namn</translation>
-    </message>
-    <message>
-        <source>Notes</source>
-        <translation>Anteckningar</translation>
-    </message>
-    <message>
-        <source>Edit Water</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Alkalinity</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Alkalinity measured as</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save and close</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Discard and close</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>New water</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>New</source>
-        <translation type="unfinished">Ny</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="unfinished">Spara</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="unfinished">Avbryt</translation>
     </message>
 </context>
 <context>

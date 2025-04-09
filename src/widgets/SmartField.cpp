@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * widgets/SmartField.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * widgets/SmartField.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Mark de Wever <koraq@xs4all.nl>
  *   • Mattias Måhl <mattias@kejsarsten.com>
@@ -137,7 +137,6 @@ public:
       qDebug() <<
          Q_FUNC_INFO << "enteredText:" << enteredText <<  ", old SystemOfMeasurement:" <<
          previousScaleInfo.systemOfMeasurement << ", old RelativeScale: " << previousScaleInfo.relativeScale;
-
 
       auto physicalQuantity{this->m_self.settings().getPhysicalQuantity()};
       Measurement::UnitSystem const & unitSystem{
@@ -343,7 +342,7 @@ template<typename T, typename> void SmartField::setQuantity(T quantity) {
 //         Q_FUNC_INFO << this->pimpl->m_fieldFqName << "forcedSystemOfMeasurement:" <<
 //         this->getForcedSystemOfMeasurement() << ", forcedRelativeScale:" <<
 //         this->getForcedRelativeScale();
-      this->setRawText(this->displayAmount(quantity, this->pimpl->m_precision));
+      this->setRawText(this->displayQuantity(quantity, this->pimpl->m_precision));
    }
 
    return;
@@ -352,14 +351,30 @@ template<typename T, typename> void SmartField::setQuantity(T quantity) {
 void SmartField::setAmount(Measurement::Amount const & amount) {
    Q_ASSERT(this->pimpl->m_initialised);
 
-   // It's a coding error if we're trying to set an Amount on a field that does not hold some PhysicalQuantity
+   // It's a coding error if we're trying to set an Amount on a field that does not hold some PhysicalQuantity.  (It's
+   // not really meaningful to construct an Amount with a NonPhysicalQuantity, so you definitely should not be sending
+   // an Amount to a field that displays a NonPhysicalQuantity.)
    Q_ASSERT(!std::holds_alternative<NonPhysicalQuantity>(*this->getTypeInfo().fieldType));
 
+   // Usually leave this debug log commented out unless trouble-shooting as it generates a lot of logging
+//   qDebug() << Q_FUNC_INFO << this->pimpl->m_fieldFqName << "typeInfo:" << this->getTypeInfo() << "; amount" << amount;
+
+   //
+   // Check that the amount is compatible with this field -- eg not trying to set a color on a volume field etc.  We can
+   // soldier on if it's wrong, but it's probably some sort of bug, so we should at least log it.
+   //
+   auto const & fieldType = *this->getTypeInfo().fieldType;
+   if (!IsValid(fieldType, amount.unit->getPhysicalQuantity())) {
+      qWarning() <<
+         Q_FUNC_INFO << this->pimpl->m_fieldFqName << "Trying to set" << amount << "on field intended to display" <<
+         fieldType;
+   }
+
    // For the moment, I'm going to say this function should _only_ be called for ChoiceOfPhysicalQuantity
-   Q_ASSERT(std::holds_alternative<Measurement::ChoiceOfPhysicalQuantity>(*this->getTypeInfo().fieldType));
+///   Q_ASSERT(std::holds_alternative<Measurement::ChoiceOfPhysicalQuantity>(*this->getTypeInfo().fieldType));
 
    // Usually leave this debug log commented out unless trouble-shooting as it generates a lot of logging
-//   qDebug() << Q_FUNC_INFO << this->pimpl->m_fieldFqName << "amount:" << amount;
+   qDebug() << Q_FUNC_INFO << this->pimpl->m_fieldFqName << "amount:" << amount;
    this->setRawText(this->displayAmount(amount, this->pimpl->m_precision));
    return;
 }
@@ -367,7 +382,7 @@ void SmartField::setAmount(Measurement::Amount const & amount) {
 void SmartField::setAmount(std::optional<Measurement::Amount> const & amount) {
    Q_ASSERT(this->pimpl->m_initialised);
    // Usually leave this debug log commented out unless trouble-shooting as it generates a lot of logging
-//   qDebug() << Q_FUNC_INFO << this->pimpl->m_fieldFqName << "amount:" << amount;
+   qDebug() << Q_FUNC_INFO << this->pimpl->m_fieldFqName << "amount:" << amount;
    if (!amount) {
       this->setRawText("");
       return;
@@ -616,7 +631,7 @@ void SmartField::correctEnteredText(SmartAmounts::ScaleInfo previousScaleInfo) {
    // amount (aka to SI) and then into the unit we want.
    Measurement::Amount amountAsCanonical = this->pimpl->toCanonical(enteredText, previousScaleInfo);
 
-   QString const correctedText = this->displayAmount(amountAsCanonical.quantity, this->pimpl->m_precision);
+   QString const correctedText = this->displayQuantity(amountAsCanonical.quantity, this->pimpl->m_precision);
    qDebug() <<
       Q_FUNC_INFO << this->pimpl->m_fieldFqName << "Interpreted" << enteredText << "as" << amountAsCanonical <<
       "and corrected to" << correctedText;

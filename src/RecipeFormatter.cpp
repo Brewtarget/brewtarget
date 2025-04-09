@@ -1208,14 +1208,6 @@ QString RecipeFormatter::getBBCodeFormat() {
    return ret;
 }
 
-/**
- * \brief For any class where we haven't got a better thing to show (via the specialisations below), we'll just show
- *        the object name.
- */
-///template<class NE> static QString getToolTip(NE const & ne) {
-///   return ne.name();
-///}
-
 void RecipeFormatter::toTextClipboard() {
    QApplication::clipboard()->setText(this->pimpl->getTextFormat());
 }

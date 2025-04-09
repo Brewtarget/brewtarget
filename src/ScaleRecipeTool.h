@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * ScaleRecipeTool.h is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * ScaleRecipeTool.h is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
  *   • Philip Greggory Lee <rocketman768@gmail.com>
@@ -19,21 +19,22 @@
 #define SCALE_RECIPE_TOOL_H
 #pragma once
 
-#include <QDialog>
-#include <QWidget>
-#include <QAbstractButton>
+#include <QAbstractItemModel>
+//#include <QAbstractButton>
+//#include <QAbstractListModel>
 #include <QButtonGroup>
-#include <QLabel>
-#include <QLayout>
-#include <QWizardPage>
-#include <QAbstractListModel>
-#include <QFormLayout>
 #include <QComboBox>
+//#include <QDialog>
 #include <QEvent>
+#include <QFormLayout>
+#include <QLabel>
+//#include <QLayout>
 #include <QLineEdit>
+#include <QSortFilterProxyModel>
+#include <QWidget>
+#include <QWizardPage>
 
 // Forward declarations
-class NamedEntitySortProxyModel;
 class Equipment;
 class EquipmentListModel;
 class Recipe;
@@ -53,16 +54,20 @@ private slots:
    void accept() Q_DECL_OVERRIDE;
 
 private:
-
    //! \brief Scale the observed recipe for the new \c equip
    void scale(Equipment* equip, double newEff);
 
-   Recipe* recObs;
-   QButtonGroup scaleGroup;
-   EquipmentListModel* equipListModel;
-   NamedEntitySortProxyModel* equipSortProxyModel;
+   Recipe * m_recObs;
+///   QButtonGroup m_scaleGroup;
+   EquipmentListModel    * m_equipListModel;
+   QSortFilterProxyModel * m_equipSortProxyModel;
 };
 
+//================================================ ScaleRecipeIntroPage ================================================
+
+/**
+ * \brief
+ */
 class ScaleRecipeIntroPage : public QWizardPage {
 
    Q_OBJECT
@@ -82,6 +87,11 @@ private:
    QLabel* label;
 };
 
+//============================================== ScaleRecipeEquipmentPage ==============================================
+
+/**
+ * \brief
+ */
 class ScaleRecipeEquipmentPage : public QWizardPage {
 
    Q_OBJECT
@@ -99,12 +109,12 @@ protected:
 
 private:
 
-   QFormLayout* layout;
-   QLabel* equipLabel;
-   QComboBox* equipComboBox;
-   QAbstractItemModel* equipListModel;
-   QLabel* effLabel;
-   QLineEdit* effLineEdit;
+   QFormLayout *        layout;
+   QLabel *             m_equipLabel;
+   QComboBox *          m_equipComboBox;
+   QAbstractItemModel * m_equipListModel;
+   QLabel *             m_efficiencyLabel;
+   QLineEdit *          m_efficiencyLineEdit;
 };
 
 #endif

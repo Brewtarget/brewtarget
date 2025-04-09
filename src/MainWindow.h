@@ -95,6 +95,15 @@ public:
    void addStepToStepOwner(std::shared_ptr<BoilStep        > step);
    void addStepToStepOwner(std::shared_ptr<FermentationStep> step);
 
+   template<class NE> NE::EditorClass & getEditor() const;
+
+   /**
+    * \brief Get the Catalog instance for the selected \c Hop, \c Style, etc.
+    *
+    *        For better or worse, \c MainWindow owns the catalogs.
+    */
+   template<class NE> NE::CatalogClass & getCatalog() const;
+
 public slots:
 
    //! \brief Accepts Recipe changes, and takes appropriate action to show the changes.
@@ -215,7 +224,7 @@ public slots:
    void restoreFromBackup();
 
    //! \brief makes sure we can do water chemistry before we show the window
-   void showWaterChemistryTool();
+   void showWaterProfileAdjustmentTool();
 
    //! \brief creates a new brewnote
    void newBrewNote();
@@ -273,6 +282,13 @@ public:
     */
    void showChanges(QMetaProperty* prop = nullptr);
 
+   //
+   // We only use specialisations of this template, which are all defined in the .cpp file
+   //
+   // TODO: At the moment, these need to be in MainWindow itself rather than in the pimpl because of the way function
+   // pointers get passed to UndoableAddOrRemove.  We should fix that at some point.
+   template<typename NE> void remove(std::shared_ptr<NE> itemToRemove);
+
 protected:
    //! \brief Overrides \c QWidget::closeEvent
    virtual void closeEvent(QCloseEvent* event) override;
@@ -293,13 +309,6 @@ private:
 
    // Insert all the usual boilerplate to prevent copy/assignment/move
    NO_COPY_DECLARATIONS(MainWindow)
-
-   //
-   // We only use specialisations of this template, which are all defined in the .cpp file
-   //
-   // TODO: At the moment, these need to be in MainWindow itself rather than in the pimpl because of the way function
-   // pointers get passed to UndoableAddOrRemove.  We should fix that at some point.
-   template<typename NE> void remove(std::shared_ptr<NE> itemToRemove);
 
    //! \brief Scroll to the given \c item in the currently visible item tree.
    void setTreeSelection(QModelIndex item);

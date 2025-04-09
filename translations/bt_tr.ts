@@ -2332,10 +2332,6 @@ Günlük dosyası daha fazla detay içerebilir.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Remove %1 from recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Remove %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4586,6 +4582,10 @@ The final volume in the primary is %1.</source>
         <source>IBU</source>
         <translation type="unfinished">IBU</translation>
     </message>
+    <message>
+        <source>Remove %1 from recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RecipeAddition</name>
@@ -6148,27 +6148,23 @@ The final volume in the primary is %1.</source>
     <name>WaterDialog</name>
     <message>
         <source>Too low for target profile.</source>
-        <translation>Hedeflenen profil için çok düşük.</translation>
+        <translation type="vanished">Hedeflenen profil için çok düşük.</translation>
     </message>
     <message>
         <source>In range for target profile.</source>
-        <translation>Hedeflenen profil için uygun.</translation>
+        <translation type="vanished">Hedeflenen profil için uygun.</translation>
     </message>
     <message>
         <source>Too high for target profile.</source>
-        <translation>Hedeflenen profil için çok yüksek.</translation>
+        <translation type="vanished">Hedeflenen profil için çok yüksek.</translation>
     </message>
     <message>
         <source>Minimum expected concentration is %1 ppm</source>
-        <translation>Beklenen asgari karışım %1 ppm</translation>
+        <translation type="vanished">Beklenen asgari karışım %1 ppm</translation>
     </message>
     <message>
         <source>Maximum expected concentration is %1 ppm</source>
-        <translation>Beklenen azami karışım %1 ppm</translation>
-    </message>
-    <message>
-        <source>Use of %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Beklenen azami karışım %1 ppm</translation>
     </message>
 </context>
 <context>
@@ -6224,6 +6220,29 @@ The final volume in the primary is %1.</source>
     <message>
         <source>HCO3</source>
         <translation type="unfinished">HCO3</translation>
+    </message>
+</context>
+<context>
+    <name>WaterProfileAdjustmentTool</name>
+    <message>
+        <source>Minimum expected concentration is %1 ppm</source>
+        <translation type="unfinished">Beklenen asgari karışım %1 ppm</translation>
+    </message>
+    <message>
+        <source>In range for target profile.</source>
+        <translation type="unfinished">Hedeflenen profil için uygun.</translation>
+    </message>
+    <message>
+        <source>Maximum expected concentration is %1 ppm</source>
+        <translation type="unfinished">Beklenen azami karışım %1 ppm</translation>
+    </message>
+    <message>
+        <source>Too low for target profile.</source>
+        <translation type="unfinished">Hedeflenen profil için çok düşük.</translation>
+    </message>
+    <message>
+        <source>Too high for target profile.</source>
+        <translation type="unfinished">Hedeflenen profil için çok yüksek.</translation>
     </message>
 </context>
 <context>
@@ -8574,7 +8593,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Water &amp;Chemistry</source>
-        <translation>Su &amp;Kimyası</translation>
+        <translation type="vanished">Su &amp;Kimyası</translation>
     </message>
     <message>
         <source>Undo</source>
@@ -8710,6 +8729,10 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>S&amp;alts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Water &amp;Profile Adjustment Tool</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -10318,103 +10341,43 @@ The final volume in the primary is %1.</source>
     <name>waterDialog</name>
     <message>
         <source>Water Chemistry</source>
-        <translation>Su Kimyası</translation>
+        <translation type="vanished">Su Kimyası</translation>
     </message>
     <message>
         <source>Profiles</source>
-        <translation>Profiller</translation>
+        <translation type="vanished">Profiller</translation>
     </message>
     <message>
         <source>% RO in Mash</source>
-        <translation>Mayşede % RO</translation>
+        <translation type="vanished">Mayşede % RO</translation>
     </message>
     <message>
         <source>Target Profile</source>
-        <translation>Hedeflenen Profil</translation>
-    </message>
-    <message>
-        <source>PushButton</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Hedeflenen Profil</translation>
     </message>
     <message>
         <source>Base Profile</source>
-        <translation>Temel Profil</translation>
+        <translation type="vanished">Temel Profil</translation>
     </message>
     <message>
         <source>% RO in Sparge</source>
-        <translation>Yıkamada % RO</translation>
-    </message>
-    <message>
-        <source>PPM</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Ca</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Mg</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>pH</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Na</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Cl</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>SO&lt;sub&gt;4&lt;/sub&gt;</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>HCO&lt;sub&gt;3&lt;/sub&gt;</source>
-        <translation></translation>
+        <translation type="vanished">Yıkamada % RO</translation>
     </message>
     <message>
         <source>Total Salts</source>
-        <translation>Toplam Tuz</translation>
-    </message>
-    <message>
-        <source>CaCl&lt;sub&gt;2&lt;/sub&gt;</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>MgSO&lt;sub&gt;4&lt;/sub&gt;</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>CaCO&lt;sub&gt;3&lt;/sub&gt;</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>NaCl</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>CaSO&lt;sub&gt;4&lt;?sub&gt;</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>NaHCO&lt;sub&gt;3&lt;/sub&gt;</source>
-        <translation></translation>
+        <translation type="vanished">Toplam Tuz</translation>
     </message>
     <message>
         <source>Salts</source>
-        <translation>Tuzlar</translation>
+        <translation type="vanished">Tuzlar</translation>
     </message>
     <message>
         <source>Add a salt</source>
-        <translation>Tuz Ekle</translation>
+        <translation type="vanished">Tuz Ekle</translation>
     </message>
     <message>
         <source>Remove selected salt</source>
-        <translation>Seçilen tuzu kaldır</translation>
+        <translation type="vanished">Seçilen tuzu kaldır</translation>
     </message>
 </context>
 <context>
@@ -10466,6 +10429,109 @@ The final volume in the primary is %1.</source>
     <message>
         <source>Cancel</source>
         <translation type="unfinished">İptal</translation>
+    </message>
+</context>
+<context>
+    <name>waterProfileAdjustmentTool</name>
+    <message>
+        <source>Water Profile Adjustment Tool</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Profiles</source>
+        <translation type="unfinished">Profiller</translation>
+    </message>
+    <message>
+        <source>% RO in Mash</source>
+        <translation type="unfinished">Mayşede % RO</translation>
+    </message>
+    <message>
+        <source>Target Profile</source>
+        <translation type="unfinished">Hedeflenen Profil</translation>
+    </message>
+    <message>
+        <source>PushButton</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Base Profile</source>
+        <translation type="unfinished">Temel Profil</translation>
+    </message>
+    <message>
+        <source>% RO in Sparge</source>
+        <translation type="unfinished">Yıkamada % RO</translation>
+    </message>
+    <message>
+        <source>PPM</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ca</source>
+        <translation type="unfinished">Ca</translation>
+    </message>
+    <message>
+        <source>Mg</source>
+        <translation type="unfinished">Mg</translation>
+    </message>
+    <message>
+        <source>pH</source>
+        <translation type="unfinished">pH</translation>
+    </message>
+    <message>
+        <source>Na</source>
+        <translation type="unfinished">Na</translation>
+    </message>
+    <message>
+        <source>Cl</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SO&lt;sub&gt;4&lt;/sub&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>HCO&lt;sub&gt;3&lt;/sub&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Total Salts</source>
+        <translation type="unfinished">Toplam Tuz</translation>
+    </message>
+    <message>
+        <source>CaCl&lt;sub&gt;2&lt;/sub&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>MgSO&lt;sub&gt;4&lt;/sub&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CaCO&lt;sub&gt;3&lt;/sub&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>NaCl</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CaSO&lt;sub&gt;4&lt;?sub&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>NaHCO&lt;sub&gt;3&lt;/sub&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Salts</source>
+        <translation type="unfinished">Tuzlar</translation>
+    </message>
+    <message>
+        <source>Add a salt</source>
+        <translation type="unfinished">Tuz Ekle</translation>
+    </message>
+    <message>
+        <source>Remove selected salt</source>
+        <translation type="unfinished">Seçilen tuzu kaldır</translation>
     </message>
 </context>
 <context>
