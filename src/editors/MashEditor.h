@@ -57,40 +57,4 @@ class MashEditor : public QDialog,
    //
 };
 
-///// Forward declarations.
-///class Recipe;
-///class Mash;
-///class Equipment;
-///
-////*!
-/// * \class MashEditor
-/// *
-/// * \brief View/controller dialog for editing a mash.
-/// *
-/// *        See also \c NamedMashEditor
-/// */
-///class MashEditor : public QDialog, public Ui::mashEditor {
-///   Q_OBJECT
-///public:
-///   MashEditor(QWidget * parent = nullptr);
-///
-///public slots:
-///   void showEditor();
-///   void closeEditor();
-///   void saveAndClose();
-///   //! Get the tun mass and specific heat from the equipment.
-///   void fromEquipment();
-///   //! Set the mash we wish to view/edit.
-///   void setMash(std::shared_ptr<Mash> mash);
-///   void setRecipe(Recipe* r);
-///
-///   void changed(QMetaProperty,QVariant);
-///private:
-///   void showChanges(QMetaProperty* prop = nullptr);
-///   void clear();
-///
-///   Recipe *              m_recipe;
-///   std::shared_ptr<Mash> m_mashObs;
-///};
-
 #endif

@@ -67,7 +67,6 @@ set(filesToCompile_cpp
     ${repoDir}/src/MainWindow.cpp
     ${repoDir}/src/MashDesigner.cpp
     ${repoDir}/src/MashWizard.cpp
-    ${repoDir}/src/NamedEntitySortProxyModel.cpp
     ${repoDir}/src/OgAdjuster.cpp
     ${repoDir}/src/OptionDialog.cpp
     ${repoDir}/src/PersistentSettings.cpp
@@ -85,7 +84,7 @@ set(filesToCompile_cpp
     ${repoDir}/src/TimerListDialog.cpp
     ${repoDir}/src/TimerMainDialog.cpp
     ${repoDir}/src/TimerWidget.cpp
-    ${repoDir}/src/WaterDialog.cpp
+    ${repoDir}/src/WaterProfileAdjustmentTool.cpp
     ${repoDir}/src/boiltime.cpp
     ${repoDir}/src/buttons/BoilButton.cpp
     ${repoDir}/src/buttons/EquipmentButton.cpp
@@ -223,7 +222,6 @@ set(filesToCompile_cpp
     ${repoDir}/src/qtModels/tableModels/WaterTableModel.cpp
     ${repoDir}/src/qtModels/tableModels/YeastTableModel.cpp
     ${repoDir}/src/serialization/ImportExport.cpp
-    ${repoDir}/src/serialization/SerializationRecord.cpp
     ${repoDir}/src/serialization/json/BeerJson.cpp
     ${repoDir}/src/serialization/json/JsonCoding.cpp
     ${repoDir}/src/serialization/json/JsonMeasureableUnitsMapping.cpp

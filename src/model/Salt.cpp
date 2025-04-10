@@ -133,6 +133,24 @@ Salt::Salt(Salt const & other) :
 
 Salt::~Salt() = default;
 
+Measurement::PhysicalQuantity Salt::suggestedMeasureFor(Salt::Type const type) {
+   switch (type) {
+      case Salt::Type::CaCl2         :
+      case Salt::Type::CaCO3         :
+      case Salt::Type::CaSO4         :
+      case Salt::Type::MgSO4         :
+      case Salt::Type::NaCl          :
+      case Salt::Type::NaHCO3        :
+      case Salt::Type::AcidulatedMalt:
+         return Measurement::PhysicalQuantity::Mass;
+      case Salt::Type::LacticAcid    :
+      case Salt::Type::H3PO4         :
+         return Measurement::PhysicalQuantity::Volume;
+      // No default case as we want the compiler to warn us if we missed one
+   }
+   return Measurement::PhysicalQuantity::Mass; // Should be unreachable, but GCC gives a warning if we don't have this
+}
+
 //============================================= "GETTER" MEMBER FUNCTIONS ==============================================
 Salt::Type            Salt::type       () const { return this->m_type        ; }
 std::optional<double> Salt::percentAcid() const { return this->m_percent_acid; }
@@ -160,21 +178,7 @@ bool Salt::isAcid() const {
 }
 
 Measurement::PhysicalQuantity Salt::suggestedMeasure() const {
-   switch (this->m_type) {
-      case Salt::Type::CaCl2         :
-      case Salt::Type::CaCO3         :
-      case Salt::Type::CaSO4         :
-      case Salt::Type::MgSO4         :
-      case Salt::Type::NaCl          :
-      case Salt::Type::NaHCO3        :
-      case Salt::Type::AcidulatedMalt:
-         return Measurement::PhysicalQuantity::Mass;
-      case Salt::Type::LacticAcid    :
-      case Salt::Type::H3PO4         :
-         return Measurement::PhysicalQuantity::Volume;
-      // No default case as we want the compiler to warn us if we missed one
-   }
-   return Measurement::PhysicalQuantity::Mass; // Should be unreachable, but GCC gives a warning if we don't have this
+   return Salt::suggestedMeasureFor(this->m_type);
 }
 
 //============================================= "SETTER" MEMBER FUNCTIONS ==============================================

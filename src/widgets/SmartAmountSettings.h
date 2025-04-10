@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * widgets/SmartAmountSettings.h is part of Brewtarget, and is copyright the following authors 2023-2024:
+ * widgets/SmartAmountSettings.h is part of Brewtarget, and is copyright the following authors 2023-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -85,7 +85,7 @@ public:
     *
     * \param quantity Must be in canonical units eg kilograms for mass, liters for volume
     */
-   [[nodiscard]] QString displayAmount(double quantity, unsigned int precision) const;
+   [[nodiscard]] QString displayQuantity(double quantity, unsigned int precision) const;
 
    /**
     * \brief This version is not const as we'll set the field's \c PhysicalQuantity based on the \c Unit in \c amount.

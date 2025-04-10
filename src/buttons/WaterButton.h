@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * buttons/WaterButton.h is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * buttons/WaterButton.h is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
  *   • Philip Greggory Lee <rocketman768@gmail.com>
@@ -25,7 +25,7 @@
 /*!
  * \class WaterButton
  *
- * \brief View class that displays the name of a water.  Used in \c WaterDialog (aka Water Chemistry Tool)
+ * \brief View class that displays the name of a water.  Used in \c WaterProfileAdjustmentTool
  */
 class WaterButton : public RecipeAttributeButton,
                     public RecipeAttributeButtonBase<WaterButton, Water> {

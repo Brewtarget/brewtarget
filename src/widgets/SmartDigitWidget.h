@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * widgets/SmartDigitWidget.h is part of Brewtarget, and is copyright the following authors 2009-2023:
+ * widgets/SmartDigitWidget.h is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
  *   • Philip Greggory Lee <rocketman768@gmail.com>
@@ -35,7 +35,7 @@
  * \class SmartDigitWidget
  *
  * \brief Widget that displays colored numbers, depending on if the number is ok, high, or low.  Currently only used in
- *        waterDialog.ui (ie Water Chemistry Dialog).
+ *        \c waterProfileAdjustmentTool.ui.
  *
  * \todo Make this thing directly accept signals from the model items it is supposed to watch.
  *

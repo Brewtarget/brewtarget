@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * undoRedo/Undoable.h is part of Brewtarget, and is copyright the following authors 2020-2024:
+ * undoRedo/Undoable.h is part of Brewtarget, and is copyright the following authors 2020-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -72,7 +72,12 @@ namespace Undoable {
    template<class StepOwnerClass, class StepClass>
    void addStepToStepOwner(std::shared_ptr<StepOwnerClass> stepOwner, std::shared_ptr<StepClass> step) {
       addStepToStepOwner(*stepOwner, step);
+      return;
    }
+
+   // This is just a wrapper around MainWindow::remove, needed to avoid circular dependencies.
+   // See .cpp file for implementation
+   template<typename NE> void removeFromCurrentRecipe(std::shared_ptr<NE> itemToRemove);
 
 }
 

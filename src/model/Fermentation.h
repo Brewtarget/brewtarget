@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/Fermentation.h is part of Brewtarget, and is copyright the following authors 2023-2024:
+ * model/Fermentation.h is part of Brewtarget, and is copyright the following authors 2023-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -29,6 +29,9 @@
 #include "model/FolderBase.h"
 #include "model/NamedEntity.h"
 #include "model/StepOwnerBase.h"
+
+class FermentationCatalog;
+class FermentationEditor;
 
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
@@ -65,6 +68,13 @@ public:
     * \brief See comment in model/NamedEntity.h
     */
    static QString localisedName();
+
+   //
+   // These aliases make it easier to template a number of functions that are essentially the same for a number of
+   // different NamedEntity subclasses.
+   //
+   using CatalogClass = FermentationCatalog;
+   using EditorClass  = FermentationEditor;
 
    /**
     * \brief Mapping of names to types for the Qt properties of this class.  See \c NamedEntity::typeLookup for more

@@ -35,6 +35,10 @@ AddPropertyName(whenToAdd)
 //=========================================== End of property name constants ===========================================
 //======================================================================================================================
 
+class RecipeAdjustmentSaltTableModel;
+class RecipeAdjustmentSaltSortFilterProxyModel;
+class RecipeAdjustmentSaltItemDelegate;
+
 /**
  * \brief Represents the addition of a \c Salt to a \c Recipe to adjust a water profile.
  *
@@ -50,9 +54,6 @@ class RecipeAdjustmentSalt : public IngredientInRecipe,
                              public RecipeAdditionBase<RecipeAdjustmentSalt, Salt>,
                              public IngredientAmount<RecipeAdjustmentSalt, Salt> {
    Q_OBJECT
-
-   // This allows RecipeAdditionBase to call protected and private members of RecipeAdjustmentSalt
-///   friend class RecipeAdditionBase<RecipeAdjustmentSalt, Salt>;
 
    RECIPE_ADDITION_DECL(RecipeAdjustmentSalt, Salt)
 
@@ -75,6 +76,14 @@ public:
 
    static EnumStringMapping const whenToAddStringMapping;
    static EnumStringMapping const whenToAddDisplayNames;
+
+   //
+   // These aliases make it easier to template a number of functions that are essentially the same for a number of
+   // different RecipeAddition etc subclasses.
+   //
+   using TableModelClass           = RecipeAdjustmentSaltTableModel;
+   using SortFilterProxyModelClass = RecipeAdjustmentSaltSortFilterProxyModel;
+   using ItemDelegateClass         = RecipeAdjustmentSaltItemDelegate;
 
    /**
     * \brief Mapping of names to types for the Qt properties of this class.  See \c NamedEntity::typeLookup for more
@@ -99,10 +108,6 @@ public:
    Q_PROPERTY(Measurement::PhysicalQuantity measure   READ measure    WRITE setMeasure )
    Q_PROPERTY(bool                          isWeight  READ isWeight   WRITE setIsWeight)
 
-   /**
-    * \brief The \c Use.  This is moved from \c Salt.  It is retained for our non-standard BeerXML extensions, but
-    *        \b deprecated for other use.
-    */
    //! \brief When to add the salt (mash or sparge)
    Q_PROPERTY(WhenToAdd whenToAdd      READ whenToAdd      WRITE setWhenToAdd       )
 

@@ -148,16 +148,16 @@ namespace Measurement {
       bool isCanonical() const;
 
       /**
-       * \brief Convert an amount of this unit to its canonical system of measurement (usually, but not always, an SI or
-       *        other metric measure)
-       */
-      Measurement::Amount toCanonical(double amt) const;
-
-      /**
-       * \brief Convert an amount of this unit from its canonical system of measurement (usually, but not always, an SI
+       * \brief Convert a quantity of this unit to its canonical system of measurement (usually, but not always, an SI
        *        or other metric measure)
        */
-      double fromCanonical(double amt) const;
+      Measurement::Amount toCanonical(double quantity) const;
+
+      /**
+       * \brief Convert a quantity of this unit from its canonical system of measurement (usually, but not always, an SI
+       *        or other metric measure)
+       */
+      double fromCanonical(double quantity) const;
 
       /**
        * \brief Returns the \c Measurement::PhysicalQuantity that this \c Measurement::Unit measures.  This is a
@@ -220,6 +220,9 @@ namespace Measurement {
       /**
        * \brief Get the canonical \c Unit for a given \c PhysicalQuantity.  This will be the unit we use for storing
        *        amounts of this type in the database - eg we always store volumes in liters and mass in kilograms.
+       *
+       *        TBD: It would be neat to be able to call this at compile-time, ie make it constexpr, but I think that
+       *             would require some non-trivial refactoring.
        */
       static Unit const & getCanonicalUnit(Measurement::PhysicalQuantity const physicalQuantity);
 

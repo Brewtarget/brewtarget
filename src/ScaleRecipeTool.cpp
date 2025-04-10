@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * ScaleRecipeTool.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * ScaleRecipeTool.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
  *   • Philip Greggory Lee <rocketman768@gmail.com>
@@ -39,7 +39,6 @@
 #include "model/RecipeUseOfWater.h"
 #include "model/Water.h"
 #include "model/Yeast.h"
-#include "NamedEntitySortProxyModel.h"
 
 #ifdef BUILDING_WITH_CMAKE
    // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
@@ -48,20 +47,26 @@
 
 ScaleRecipeTool::ScaleRecipeTool(QWidget* parent) :
    QWizard(parent),
-   equipListModel(new EquipmentListModel(this)),
-   equipSortProxyModel(new NamedEntitySortProxyModel(equipListModel)) {
+   m_equipListModel(new EquipmentListModel(this)),
+   m_equipSortProxyModel(new QSortFilterProxyModel(m_equipListModel)) {
+
+   // Sorts models dynamically based on their properties' default sort behavior.
+   m_equipSortProxyModel->setSourceModel(m_equipListModel);
+   m_equipSortProxyModel->setDynamicSortFilter(true);
+   m_equipSortProxyModel->sort(0);
+
    addPage(new ScaleRecipeIntroPage);
-   addPage(new ScaleRecipeEquipmentPage(equipSortProxyModel));
+   addPage(new ScaleRecipeEquipmentPage(m_equipSortProxyModel));
    return;
 }
 
 void ScaleRecipeTool::accept() {
-   int row = field("equipComboBox").toInt();
-   QModelIndex equipProxyNdx( equipSortProxyModel->index(row, 0));
-   QModelIndex equipNdx = equipSortProxyModel->mapToSource(equipProxyNdx);
+   int row = field("m_equipComboBox").toInt();
+   QModelIndex equipProxyNdx( m_equipSortProxyModel->index(row, 0));
+   QModelIndex equipNdx = m_equipSortProxyModel->mapToSource(equipProxyNdx);
 
-   Equipment* selectedEquip = equipListModel->at(equipNdx.row());
-   double newEff = field("effLineEdit").toString().toDouble();
+   Equipment* selectedEquip = m_equipListModel->at(equipNdx.row());
+   double newEff = field("m_efficiencyLineEdit").toString().toDouble();
    scale(selectedEquip, newEff);
 
    QWizard::accept();
@@ -69,35 +74,35 @@ void ScaleRecipeTool::accept() {
 }
 
 void ScaleRecipeTool::setRecipe(Recipe* rec) {
-   this->recObs = rec;
+   this->m_recObs = rec;
    return;
 }
 
 void ScaleRecipeTool::scale(Equipment* equip, double newEff) {
-   if (!this->recObs || !equip) {
+   if (!this->m_recObs || !equip) {
       return;
    }
 
    auto equipment = ObjectStoreWrapper::getSharedFromRaw(equip);
 
    // Calculate volume ratio
-   double currentBatchSize_l = recObs->batchSize_l();
+   double currentBatchSize_l = m_recObs->batchSize_l();
    double newBatchSize_l = equipment->fermenterBatchSize_l();
    double volRatio = newBatchSize_l / currentBatchSize_l;
 
    // Calculate efficiency ratio
-   double oldEfficiency = recObs->efficiency_pct();
+   double oldEfficiency = m_recObs->efficiency_pct();
    double effRatio = oldEfficiency / newEff;
 
-   this->recObs->setEquipment(equipment);
-   this->recObs->setBatchSize_l(newBatchSize_l);
-   this->recObs->nonOptBoil()->setPreBoilSize_l(equipment->kettleBoilSize_l());
-   this->recObs->setEfficiency_pct(newEff);
-   if (this->recObs->boil()) {
-      this->recObs->boil()->setBoilTime_mins(equipment->boilTime_min().value_or(Equipment::default_boilTime_mins));
+   this->m_recObs->setEquipment(equipment);
+   this->m_recObs->setBatchSize_l(newBatchSize_l);
+   this->m_recObs->nonOptBoil()->setPreBoilSize_l(equipment->kettleBoilSize_l());
+   this->m_recObs->setEfficiency_pct(newEff);
+   if (this->m_recObs->boil()) {
+      this->m_recObs->boil()->setBoilTime_mins(equipment->boilTime_min().value_or(Equipment::default_boilTime_mins));
    }
 
-   for (auto fermAddition : this->recObs->fermentableAdditions()) {
+   for (auto fermAddition : this->m_recObs->fermentableAdditions()) {
       // We assume volumes and masses get scaled the same way
       if (!fermAddition->fermentable()->isSugar() && !fermAddition->fermentable()->isExtract()) {
          fermAddition->setQuantity(fermAddition->quantity() * effRatio * volRatio);
@@ -106,21 +111,21 @@ void ScaleRecipeTool::scale(Equipment* equip, double newEff) {
       }
    }
 
-   for (auto hopAddition : this->recObs->hopAdditions()) {
+   for (auto hopAddition : this->m_recObs->hopAdditions()) {
       // We assume volumes and masses get scaled the same way
       hopAddition->setQuantity(hopAddition->quantity() * volRatio);
    }
 
-   for (auto miscAddition : this->recObs->miscAdditions()) {
+   for (auto miscAddition : this->m_recObs->miscAdditions()) {
       // We assume volumes and masses get scaled the same way
       miscAddition->setQuantity(miscAddition->quantity() * volRatio);
    }
 
-   for (auto waterUse : this->recObs->waterUses()) {
+   for (auto waterUse : this->m_recObs->waterUses()) {
       waterUse->setVolume_l(waterUse->volume_l() * volRatio);
    }
 
-   auto mash = this->recObs->mash();
+   auto mash = this->m_recObs->mash();
    if (mash) {
       // Reset all these to zero so that the user
       // will know to re-run the mash wizard.
@@ -183,26 +188,26 @@ void ScaleRecipeIntroPage::changeEvent(QEvent* event) {
 ScaleRecipeEquipmentPage::ScaleRecipeEquipmentPage(QAbstractItemModel* listModel, QWidget* parent) :
    QWizardPage(parent),
    layout(new QFormLayout),
-   equipLabel(new QLabel),
-   equipComboBox(new QComboBox),
-   equipListModel(listModel),
-   effLabel(new QLabel),
-   effLineEdit(new QLineEdit) {
+   m_equipLabel(new QLabel),
+   m_equipComboBox(new QComboBox),
+   m_equipListModel(listModel),
+   m_efficiencyLabel(new QLabel),
+   m_efficiencyLineEdit(new QLineEdit) {
 
    doLayout();
    retranslateUi();
 
-   registerField("equipComboBox", equipComboBox);
-   registerField("effLineEdit", effLineEdit);
+   registerField("m_equipComboBox", m_equipComboBox);
+   registerField("m_efficiencyLineEdit", m_efficiencyLineEdit);
    return;
 }
 
 void ScaleRecipeEquipmentPage::doLayout() {
 
-   layout->addRow(equipLabel, equipComboBox);
-      equipComboBox->setModel(equipListModel);
-   layout->addRow(effLabel, effLineEdit);
-      effLineEdit->setText("70.0");
+   layout->addRow(m_equipLabel, m_equipComboBox);
+      m_equipComboBox->setModel(m_equipListModel);
+   layout->addRow(m_efficiencyLabel, m_efficiencyLineEdit);
+      m_efficiencyLineEdit->setText("70.0");
    setLayout(layout);
    return;
 }
@@ -211,8 +216,8 @@ void ScaleRecipeEquipmentPage::retranslateUi() {
    setTitle(tr("Select Equipment"));
    setSubTitle(tr("The recipe will be scaled to match the batch size and efficiency of the selected equipment"));
 
-   equipLabel->setText(tr("New Equipment"));
-   effLabel->setText(tr("New Efficiency (%)"));
+   m_equipLabel->setText(tr("New Equipment"));
+   m_efficiencyLabel->setText(tr("New Efficiency (%)"));
    return;
 }
 

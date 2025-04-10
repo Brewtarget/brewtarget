@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/Mash.h is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * model/Mash.h is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Kregg Kemper <gigatropolis@yahoo.com>
@@ -36,6 +36,9 @@
 #include "model/NamedEntity.h"
 #include "model/MashStep.h"
 #include "model/StepOwnerBase.h"
+
+class MashCatalog;
+class MashEditor;
 
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
@@ -81,6 +84,13 @@ public:
     * \brief See comment in model/NamedEntity.h
     */
    static QString localisedName();
+
+   //
+   // These aliases make it easier to template a number of functions that are essentially the same for a number of
+   // different NamedEntity subclasses.
+   //
+   using CatalogClass = MashCatalog;
+   using EditorClass  = MashEditor;
 
    /**
     * \brief Mapping of names to types for the Qt properties of this class.  See \c NamedEntity::typeLookup for more

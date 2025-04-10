@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * widgets/SmartAmountSettings.cpp is part of Brewtarget, and is copyright the following authors 2023-2024:
+ * widgets/SmartAmountSettings.cpp is part of Brewtarget, and is copyright the following authors 2023-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -172,7 +172,7 @@ void SmartAmountSettings::selectPhysicalQuantity(Measurement::PhysicalQuantity c
    return;
 }
 
-[[nodiscard]] QString SmartAmountSettings::displayAmount(double quantity, unsigned int precision) const {
+[[nodiscard]] QString SmartAmountSettings::displayQuantity(double quantity, unsigned int precision) const {
    // It's a coding error to call this for NonPhysicalQuantity
    Q_ASSERT(!std::holds_alternative<NonPhysicalQuantity>(*this->pimpl->m_typeInfo.fieldType));
 
@@ -189,21 +189,23 @@ void SmartAmountSettings::selectPhysicalQuantity(Measurement::PhysicalQuantity c
 
 [[nodiscard]] QString SmartAmountSettings::displayAmount(Measurement::Amount const & amount,
                                                          unsigned int precision) {
-   // It's a coding error to call this for NonPhysicalQuantity
-   Q_ASSERT(!std::holds_alternative<NonPhysicalQuantity>(*this->pimpl->m_typeInfo.fieldType));
+   auto const & fieldType = *this->pimpl->m_typeInfo.fieldType;
+   // Per comment on SmartField::setAmount, it's a coding error to call this for NonPhysicalQuantity
+   Q_ASSERT(!std::holds_alternative<NonPhysicalQuantity>(fieldType));
 
-   // For now, I"m saying it's also a coding error to call this for a fixed physical quantity
-   Q_ASSERT(std::holds_alternative<Measurement::ChoiceOfPhysicalQuantity>(*this->pimpl->m_typeInfo.fieldType));
+   if (std::holds_alternative<Measurement::ChoiceOfPhysicalQuantity>(fieldType)) {
+      // Since we're given units, that tells us whether we're measuring by mass, volume, etc
+      this->selectPhysicalQuantity(amount.unit->getPhysicalQuantity());
+   }
 
-   // Since we're given units, that tells us whether we're measuring by mass, volume, etc
-   this->selectPhysicalQuantity(amount.unit->getPhysicalQuantity());
+   QString const retVal{
+      Measurement::displayAmount(amount,
+                                 precision,
+                                 this->getForcedSystemOfMeasurement(),
+                                 this->getForcedRelativeScale())
+   };
 
-   qDebug() << Q_FUNC_INFO << "Precision:" << precision;
+   qDebug() << Q_FUNC_INFO << "Amount:" << amount << "Precision:" << precision << "Displays as:" << retVal;
 
-   return Measurement::displayAmount(
-      amount,
-      precision,
-      this->getForcedSystemOfMeasurement(),
-      this->getForcedRelativeScale()
-   );
+   return retVal;
 }

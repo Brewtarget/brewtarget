@@ -61,19 +61,6 @@ public:
    //! Get a BBCode view. Why is this here?
    QString getBBCodeFormat();
 
-///   // TBD: Not convinced these functions really belong here, but there are worse places for them to be I suppose
-///   //! Generate a tooltip for a recipe, etc
-///   template<class NE> static QString getToolTip(NE const & ne);
-
-///   static QString getToolTip(Recipe      * rec);
-///   static QString getToolTip(Style       * style);
-///   static QString getToolTip(Equipment   * kit);
-///   static QString getToolTip(Fermentable * ferm);
-///   static QString getToolTip(Hop         * hop);
-///   static QString getToolTip(Misc        * misc);
-///   static QString getToolTip(Yeast       * yeast);
-///   static QString getToolTip(Water       * water);
-
 public slots:
    //! Put the plaintext view onto the clipboard.
    void toTextClipboard();

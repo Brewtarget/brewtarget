@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * widgets/SmartBase.h is part of Brewtarget, and is copyright the following authors 2023-2024:
+ * widgets/SmartBase.h is part of Brewtarget, and is copyright the following authors 2023-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -95,8 +95,8 @@ public:
       return;
    }
 
-   [[nodiscard]] QString displayAmount(double quantity, unsigned int precision) const {
-      return this->derived().settings().displayAmount(quantity, precision);
+   [[nodiscard]] QString displayQuantity(double quantity, unsigned int precision) const {
+      return this->derived().settings().displayQuantity(quantity, precision);
    }
 
    [[nodiscard]] QString displayAmount(Measurement::Amount const & amount, unsigned int precision) {

@@ -29,7 +29,6 @@
 #include "editors/MashStepEditor.h"
 #include "qtModels/listModels/MashListModel.h"
 #include "qtModels/listModels/EquipmentListModel.h"
-#include "NamedEntitySortProxyModel.h"
 #include "qtModels/tableModels/MashStepTableModel.h"
 
 

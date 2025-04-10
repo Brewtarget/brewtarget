@@ -114,9 +114,6 @@ private:
                                        boost::json::array & childRecordsData,
                                        QTextStream & userMessage);
 
-protected:
-///   [[nodiscard]] bool normaliseAndStoreChildRecordsInDb(QTextStream & userMessage, ImportRecordCount & stats);
-
 private:
    /**
     * \brief Add a value to a JSON object
@@ -134,8 +131,6 @@ private:
                     QVariant & value);
 
 protected:
-///   JsonCoding const & m_coding;
-
    /**
     * The underlying type of the contents of \c recordData is \c boost::json::object.  However, we need to store it as
     * \c boost::json::value to be able to use JSON pointer (aka XPath) functions (because, although you can easily
@@ -143,41 +138,6 @@ protected:
     * and get the containing \c boost::json::value from a \c boost::json::object).
     */
    boost::json::value & m_recordData;
-
-///   JsonRecordDefinition const & m_recordDefinition;
-
-///   //
-///   // Keep track of any child (ie contained) records as we're reading in FROM a JSON file.  (NB: We don't need to do
-///   // this when writing out TO a JSON file as we don't have to worry about duplicate detection or construction order
-///   // etc.)
-///   //
-///   // This is used both for lists of children (eg hop additions in a recipe, or steps in a mash) and for single children
-///   // (eg boil of a recipe, mash of a recipe).
-///   //
-///   // Note that we don't use QVector here or below as it always wants to be able to copy things, which doesn't play
-///   // nicely with there being a std::unique_ptr inside the ChildRecordSet struct.  OTOH, std::vector is guaranteed to
-///   // be able to hold std_unique_ptr (provided, of course, that we use move semantics to put the elements in the
-///   // vector).
-///   //
-///   struct ChildRecordSet {
-///      /**
-///       * \brief This holds info about the attribute/field to which this set of child records relates.  Eg, if a recipe
-///       *        record has hop addition and fermentable addition child records, then it needs to know which is which and
-///       *        how to connect them with the recipe.
-///       *
-///       *        If it's \c nullptr then that means this is a top-level record (eg just a hop variety rather than a use
-///       *        of a hop in a recipe), in which, once the records are read in, there's no further work to do: the
-///       *        records do not need to be connected with anything else.
-///       */
-///      JsonRecordDefinition::FieldDefinition const * parentFieldDefinition;
-///
-///      /**
-///       * \brief The actual child record(s)
-///       */
-///      std::vector< std::unique_ptr<JsonRecord> > records;
-///   };
-///
-///   std::vector<ChildRecordSet> m_childRecordSets;
 };
 
 #endif

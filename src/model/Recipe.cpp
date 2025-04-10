@@ -2433,7 +2433,10 @@ template<> std::shared_ptr<Water       > Recipe::get<Water       >() const {
    // Water is a bit different as there can be more than one
    auto waterUses = this->waterUses();
    if (waterUses.size() > 0) {
-      return ObjectStoreWrapper::getSharedFromRaw(waterUses.at(0)->water());
+      Water * water = waterUses.at(0)->water();
+      if (water) {
+         return ObjectStoreWrapper::getSharedFromRaw(water);
+      }
    }
    return nullptr;
 }

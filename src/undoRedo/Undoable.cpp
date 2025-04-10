@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * undoRedo/Undoable.cpp is part of Brewktarget, and is copyright the following authors 2020-2024:
+ * undoRedo/Undoable.cpp is part of Brewktarget, and is copyright the following authors 2020-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -68,3 +68,22 @@ void Undoable::addStepToStepOwner(StepOwnerClass & stepOwner, std::shared_ptr<St
 template void Undoable::addStepToStepOwner(Boil         & stepOwner, std::shared_ptr<        BoilStep> step);
 template void Undoable::addStepToStepOwner(Mash         & stepOwner, std::shared_ptr<        MashStep> step);
 template void Undoable::addStepToStepOwner(Fermentation & stepOwner, std::shared_ptr<FermentationStep> step);
+
+
+template<typename NE> void Undoable::removeFromCurrentRecipe(std::shared_ptr<NE> itemToRemove) {
+   MainWindow::instance().remove<NE>(itemToRemove);
+   return;
+}
+
+//
+// Instantiate the above template function for the types that are going to use it
+// (This is all just a trick to allow the template definition to be here in the .cpp file and not in the header.)
+//
+template void Undoable::removeFromCurrentRecipe(std::shared_ptr<RecipeAdditionHop        > ne);
+template void Undoable::removeFromCurrentRecipe(std::shared_ptr<RecipeAdditionFermentable> ne);
+template void Undoable::removeFromCurrentRecipe(std::shared_ptr<RecipeAdditionMisc       > ne);
+template void Undoable::removeFromCurrentRecipe(std::shared_ptr<RecipeAdditionYeast      > ne);
+template void Undoable::removeFromCurrentRecipe(std::shared_ptr<RecipeAdjustmentSalt     > ne);
+template void Undoable::removeFromCurrentRecipe(std::shared_ptr<MashStep                 > ne);
+template void Undoable::removeFromCurrentRecipe(std::shared_ptr<BoilStep                 > ne);
+template void Undoable::removeFromCurrentRecipe(std::shared_ptr<FermentationStep         > ne);

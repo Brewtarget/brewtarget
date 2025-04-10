@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/Water.h is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * model/Water.h is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Mattias Måhl <mattias@kejsarsten.com>
@@ -28,6 +28,9 @@
 #include "model/FolderBase.h"
 #include "model/OutlineableNamedEntity.h"
 #include "utils/EnumStringMapping.h"
+
+class WaterCatalog;
+class WaterEditor;
 
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
@@ -124,9 +127,14 @@ public:
    static EnumStringMapping const ionDisplayNames;
 
    //
-   // Although Water is a bit different from other "ingredients", this alias is still helpful for templating functions
-   // where it is valid to great RecipeUseOfWater as a RecipeAddition class.
+   // These aliases make it easier to template a number of functions that are essentially the same for a number of
+   // different NamedEntity subclasses.
    //
+   // Although Water is a bit different from other "ingredients" (eg no inventory), RecipeAdditionClass is still helpful
+   // for templating functions where it is valid to create RecipeUseOfWater as a RecipeAddition class.
+   //
+   using CatalogClass        = WaterCatalog;
+   using EditorClass         = WaterEditor;
    using RecipeAdditionClass = RecipeUseOfWater;
 
    /**

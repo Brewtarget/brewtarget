@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/RecipeAdditionMisc.h is part of Brewtarget, and is copyright the following authors 2023-2024:
+ * model/RecipeAdditionMisc.h is part of Brewtarget, and is copyright the following authors 2023-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -35,6 +35,10 @@ AddPropertyName(use) // Deprecated - retained only for BeerXML
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
 //======================================================================================================================
+
+class RecipeAdditionMiscTableModel;
+class RecipeAdditionMiscSortFilterProxyModel;
+class RecipeAdditionMiscItemDelegate;
 
 /**
  * \brief Represents the addition of a \c Misc to a \c Recipe
@@ -82,6 +86,14 @@ public:
     * \brief Localised names of \c RecipeAdditionMisc::Use values suitable for displaying to the end user
     */
    static EnumStringMapping const useDisplayNames;
+
+   //
+   // These aliases make it easier to template a number of functions that are essentially the same for a number of
+   // different RecipeAddition etc subclasses.
+   //
+   using TableModelClass           = RecipeAdditionMiscTableModel;
+   using SortFilterProxyModelClass = RecipeAdditionMiscSortFilterProxyModel;
+   using ItemDelegateClass         = RecipeAdditionMiscItemDelegate;
 
    /**
     * \brief Mapping of names to types for the Qt properties of this class.  See \c NamedEntity::typeLookup for more

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/RecipeAdditionBase.h is part of Brewtarget, and is copyright the following authors 2023-2024:
+ * model/RecipeAdditionBase.h is part of Brewtarget, and is copyright the following authors 2023-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -52,7 +52,8 @@ public:
 
    //
    // This alias makes it easier to template a number of functions that are essentially the same for all subclasses of
-   // RecipeAddition.  Note that the alias and the template parameter cannot have the same name, hence why we use Ingr
+   // RecipeAddition.  Eg RecipeAdditionHop::IngredientClass is Hop; RecipeUseOfWater::IngredientClass is Water; etc.
+   // Note that the alias and the template parameter cannot have the same name, hence why we use Ingr
    // for the latter.
    //
    using IngredientClass = Ingr;
