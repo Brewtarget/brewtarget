@@ -22,7 +22,8 @@ Minor enhancements
 * Salts appear in left-hand section, are editable, and can be added to recipes
 
 ### Bug Fixes
-* None
+* Clicking '+' in Water Chemistry tool terminates the application with an assert [819](https://github.com/Brewtarget/brewtarget/issues/819)
+* Application crash when changing value in Carbonation Volumes field [943](https://github.com/Brewtarget/brewtarget/issues/943)
 
 ### Release Timestamp
 Thu, 20 Mar 2025 04:01:00 +0100
