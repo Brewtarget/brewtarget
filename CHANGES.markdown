@@ -15,15 +15,16 @@ happens, so I'm now setting it to a slightly arbitrary time early in the morning
 * We'll list other new features here...
 
 ## v4.1.0
-Minor enhancements
+Expose mash/boil/fermentation profiles in more of the UI
 
 ### New Features
-* Mash profiles appear in the left-hand section
+* Mash, Boil and Fermentation profiles appear in the left-hand section
 * Salts appear in left-hand section, are editable, and can be added to recipes
 
 ### Bug Fixes
 * Clicking '+' in Water Chemistry tool terminates the application with an assert [819](https://github.com/Brewtarget/brewtarget/issues/819)
 * Application crash when changing value in Carbonation Volumes field [943](https://github.com/Brewtarget/brewtarget/issues/943)
+* Application crash related to Alkalinity combobox in Edit Water dialog [944](https://github.com/Brewtarget/brewtarget/issues/944)
 
 ### Release Timestamp
 Thu, 20 Mar 2025 04:01:00 +0100
