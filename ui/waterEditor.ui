@@ -194,18 +194,7 @@
         </widget>
        </item>
        <item row="4" column="5">
-        <widget class="BtComboBoxBool" name="boolCombo_alkalinityAsHCO3">
-         <item>
-          <property name="text">
-           <string notr="true">HCO3</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string notr="true">CaCO3</string>
-          </property>
-         </item>
-        </widget>
+        <widget class="BtComboBoxBool" name="boolCombo_alkalinityAsHCO3"></widget>
        </item>
 
        <item row="5" column="1">

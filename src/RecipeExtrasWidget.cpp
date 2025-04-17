@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * RecipeExtrasWidget.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * RecipeExtrasWidget.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -147,9 +147,10 @@ void RecipeExtrasWidget::updateCarbonation() {
    if (!this->recipe) { return; }
 
    Undoable::doOrRedoUpdate(*recipe,
-                                         TYPE_INFO(Recipe, carbonation_vols),
-                                         lineEdit_carbVols->getNonOptCanonicalQty(),
-                                         tr("Change Carbonation"));
+                            TYPE_INFO(Recipe, carbonation_vols),
+                            lineEdit_carbVols->getOptCanonicalQty(),
+                            tr("Change Carbonation"));
+   return;
 }
 
 void RecipeExtrasWidget::updateTasteNotes() {

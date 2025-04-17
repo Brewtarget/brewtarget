@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * widgets/BtComboBoxBool.cpp is part of Brewtarget, and is copyright the following authors 2023-2024:
+ * widgets/BtComboBoxBool.cpp is part of Brewtarget, and is copyright the following authors 2023-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -60,7 +60,7 @@ public:
 
 BtComboBoxBool::BtComboBoxBool(QWidget * parent) :
    QComboBox{parent},
-   pimpl {std::make_unique<impl>(*this)} {
+   pimpl{std::make_unique<impl>(*this)} {
    return;
 }
 
@@ -91,13 +91,17 @@ void BtComboBoxBool::init(char const * const   editorName    ,
    this->pimpl->m_setDisplay     = &setDisplay    ;
    this->pimpl->m_typeInfo       = &typeInfo      ;
 
+   // It's a coding error if we already have any items in the combo box.  (This could eg happen if any were defined in
+   // the .ui file.)
+   Q_ASSERT(0 == this->count());
+
    // If this is an optional enum, then we need a blank value
    if (typeInfo.isOptional()) {
       this->addItem("", "");
    }
 
-   this->addItem(*this->pimpl->m_unsetDisplay, falseValue);
-   this->addItem(*this->pimpl->m_setDisplay  ,  trueValue);
+   this->addItem(*this->pimpl->m_unsetDisplay, QVariant::fromValue<QString>(falseValue));
+   this->addItem(*this->pimpl->m_setDisplay  , QVariant::fromValue<QString>( trueValue));
 
    this->pimpl->m_initialised = true;
 
@@ -117,18 +121,20 @@ void BtComboBoxBool::init(char const * const   editorName    ,
 void BtComboBoxBool::setValue(bool const value) {
    Q_ASSERT(!this->isOptional());
 
-   // Standard conversion of bool is false -> 0, true -> 1
-   this->setCurrentIndex(static_cast<int>(value));
+   // We could just short-cut things here and cast bool to int to get false -> 0, true -> 1, because this is the same
+   // order we added falseValue and trueValue in init().   However, it's safer to ask Qt "What is the index of...".
+   this->setCurrentIndex(this->findData(value ? trueValue : falseValue));
    return;
 }
 
 void BtComboBoxBool::setValue(std::optional<bool> const value) {
    Q_ASSERT(this->isOptional());
 
+   // See comment above for why we use findData() here
    if (!value) {
-      this->setCurrentIndex(0);
+      this->setCurrentIndex(this->findData(""));
    } else {
-      this->setCurrentIndex(static_cast<int>(*value) + 1);
+      this->setCurrentIndex(this->findData(*value ? trueValue : falseValue));
    }
 
    return;
@@ -136,7 +142,7 @@ void BtComboBoxBool::setValue(std::optional<bool> const value) {
 
 void BtComboBoxBool::setNull() {
    Q_ASSERT(this->isOptional());
-   this->setCurrentIndex(0);
+   this->setCurrentIndex(this->findData(""));
    return;
 }
 
@@ -147,6 +153,7 @@ void BtComboBoxBool::setDefault() {
 
 void BtComboBoxBool::setFromVariant(QVariant const & value) {
    Q_ASSERT(this->pimpl->m_initialised);
+
    if (this->pimpl->m_typeInfo->isOptional()) {
       this->setValue(value.value<std::optional<bool>>());
    } else {
