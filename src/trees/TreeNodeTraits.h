@@ -18,8 +18,10 @@
 #pragma once
 
 #include "config.h"
+#include "model/Boil.h"
 #include "model/Equipment.h"
 #include "model/Fermentable.h"
+#include "model/Fermentation.h"
 #include "model/Folder.h"
 #include "model/Hop.h"
 #include "model/Mash.h"
@@ -246,7 +248,7 @@ template<> struct TreeNodeTraits<Mash, Mash> {
    using ChildPtrTypes = std::variant<std::monostate>;
    static constexpr char const * DragNDropMimeType = DEF_CONFIG_MIME_PREFIX "-mash";
 
-   static QString getRootName() { return Mash::tr("Mashes"); }
+   static QString getRootName() { return Mash::tr("Mash Profiles"); }
 
    static QVariant data(Mash const & mash, ColumnIndex const column) {
       switch (column) {
@@ -257,6 +259,66 @@ template<> struct TreeNodeTraits<Mash, Mash> {
                                                                            Measurement::Units::liters}, 0));
          case ColumnIndex::TotalTime:
             return QVariant::fromValue(mash.totalTime_mins());
+      }
+//      std::unreachable();
+   }
+};
+
+template<> struct TreeNodeTraits<Boil, Boil> {
+   enum class ColumnIndex {
+      Name              ,
+      PreBoilSize       ,
+      LengthOfBoilProper,
+   };
+   static constexpr size_t NumberOfColumns = 2;
+   static constexpr TreeNodeClassifier NodeClassifier = TreeNodeClassifier::PrimaryItem;
+   using TreeType = Boil;
+   using ParentPtrTypes = std::variant<TreeFolderNode<Boil> *>;
+   using ChildPtrTypes = std::variant<std::monostate>;
+   static constexpr char const * DragNDropMimeType = DEF_CONFIG_MIME_PREFIX "-boil";
+
+   static QString getRootName() { return Boil::tr("Boil Profiles"); }
+
+   static QVariant data(Boil const & boil, ColumnIndex const column) {
+      switch (column) {
+         case ColumnIndex::Name:
+            return QVariant(boil.name());
+         case ColumnIndex::PreBoilSize:
+         {
+            std::optional<double> const preBoilSize_l = boil.preBoilSize_l();
+            if (!preBoilSize_l) {
+               return QVariant{};
+            }
+            return QVariant(Measurement::displayAmount(Measurement::Amount{*preBoilSize_l,
+                                                                           Measurement::Units::liters}, 0));
+         }
+         case ColumnIndex::LengthOfBoilProper:
+            return QVariant::fromValue(boil.boilTime_mins());
+      }
+//      std::unreachable();
+   }
+};
+
+template<> struct TreeNodeTraits<Fermentation, Fermentation> {
+   enum class ColumnIndex {
+      Name       ,
+      Description,
+   };
+   static constexpr size_t NumberOfColumns = 2;
+   static constexpr TreeNodeClassifier NodeClassifier = TreeNodeClassifier::PrimaryItem;
+   using TreeType = Fermentation;
+   using ParentPtrTypes = std::variant<TreeFolderNode<Fermentation> *>;
+   using ChildPtrTypes = std::variant<std::monostate>;
+   static constexpr char const * DragNDropMimeType = DEF_CONFIG_MIME_PREFIX "-fermentation";
+
+   static QString getRootName() { return Fermentation::tr("Fermentation Profiles"); }
+
+   static QVariant data(Fermentation const & fermentation, ColumnIndex const column) {
+      switch (column) {
+         case ColumnIndex::Name:
+            return QVariant(fermentation.name());
+         case ColumnIndex::Description:
+            return QVariant::fromValue(fermentation.description());
       }
 //      std::unreachable();
    }

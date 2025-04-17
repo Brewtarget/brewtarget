@@ -148,9 +148,9 @@
            <attribute name="toolTip">
             <string>Equipment</string>
            </attribute>
-           <layout class="QHBoxLayout" name="horizontalLayout_9">
+           <layout class="QHBoxLayout" name="horizontalLayout_equipmentTree">
             <item>
-             <widget class="EquipmentTreeView" name="treeView_equip"/>
+             <widget class="EquipmentTreeView" name="treeView_equipment"/>
             </item>
            </layout>
           </widget>
@@ -158,17 +158,53 @@
           <widget class="QWidget" name="tabTree_mash">
            <attribute name="icon">
             <iconset resource="../resources.qrc">
-             <normaloff>:/images/mashpaddle.svg</normaloff>:/images/mashpaddle.svg</iconset>
+             <normaloff>:/images/iconMash.svg</normaloff>:/images/iconMash.svg</iconset>
            </attribute>
            <attribute name="title">
             <string/>
            </attribute>
            <attribute name="toolTip">
-            <string>Mashes</string>
+            <string>Mash Profiles</string>
            </attribute>
-           <layout class="QHBoxLayout" name="horizontalLayout_12">
+           <layout class="QHBoxLayout" name="horizontalLayout_mashTree">
             <item>
              <widget class="MashTreeView" name="treeView_mash"/>
+            </item>
+           </layout>
+          </widget>
+
+          <widget class="QWidget" name="tabTree_boil">
+           <attribute name="icon">
+            <iconset resource="../resources.qrc">
+             <normaloff>:/images/iconBoil.svg</normaloff>:/images/iconBoil.svg</iconset>
+           </attribute>
+           <attribute name="title">
+            <string/>
+           </attribute>
+           <attribute name="toolTip">
+            <string>Boil Profiles</string>
+           </attribute>
+           <layout class="QHBoxLayout" name="horizontalLayout_boilTree">
+            <item>
+             <widget class="BoilTreeView" name="treeView_boil"/>
+            </item>
+           </layout>
+          </widget>
+
+          <widget class="QWidget" name="tabTree_fermentation">
+           <attribute name="icon">
+            <iconset resource="../resources.qrc">
+             <normaloff>:/images/iconFermentation.svg</normaloff>:/images/iconFermentation.svg</iconset>
+           </attribute>
+           <attribute name="title">
+            <string/>
+           </attribute>
+           <attribute name="toolTip">
+            <string>Fermentation Profiles</string>
+           </attribute>
+           <layout class="QHBoxLayout" name="horizontalLayout_fermentationTree">
+            <item>
+             <widget class="FermentationTreeView" name="treeView_fermentation"/>
             </item>
            </layout>
           </widget>
@@ -184,9 +220,9 @@
            <attribute name="toolTip">
             <string>Fermentables</string>
            </attribute>
-           <layout class="QHBoxLayout" name="horizontalLayout_8">
+           <layout class="QHBoxLayout" name="horizontalLayout_fermentableTree">
             <item>
-             <widget class="FermentableTreeView" name="treeView_ferm"/>
+             <widget class="FermentableTreeView" name="treeView_fermentable"/>
             </item>
            </layout>
           </widget>
@@ -202,9 +238,9 @@
            <attribute name="toolTip">
             <string>Hops</string>
            </attribute>
-           <layout class="QHBoxLayout" name="horizontalLayout_7">
+           <layout class="QHBoxLayout" name="horizontalLayout_hopTree">
             <item>
-             <widget class="HopTreeView" name="treeView_hops"/>
+             <widget class="HopTreeView" name="treeView_hop"/>
             </item>
            </layout>
           </widget>
@@ -2488,19 +2524,47 @@
     <string>Delete recipe</string>
    </property>
   </action>
+
   <action name="actionMashs">
    <property name="icon">
     <iconset resource="../resources.qrc">
-     <normaloff>:/images/mashpaddle.svg</normaloff>
-     <normalon>:/images/bubbles.svg</normalon>:/images/mashpaddle.svg</iconset>
+     <normaloff>:/images/iconMash.svg</normaloff>
+     <normalon>:/images/bubbles.svg</normalon>:/images/iconMash.svg</iconset>
    </property>
    <property name="text">
-    <string>&amp;Mashs</string>
+    <string>&amp;Mash Profiles</string>
    </property>
    <property name="toolTip">
     <string>Mashes</string>
    </property>
   </action>
+  <action name="actionBoils">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/images/iconBoil.svg</normaloff>
+     <normalon>:/images/bubbles.svg</normalon>:/images/iconBoil.svg</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Boil Profiles</string>
+   </property>
+   <property name="toolTip">
+    <string>Boils</string>
+   </property>
+  </action>
+  <action name="actionFermentations">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/images/iconFermentation.svg</normaloff>
+     <normalon>:/images/bubbles.svg</normalon>:/images/iconFermentation.svg</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Fermentation Profiles</string>
+   </property>
+   <property name="toolTip">
+    <string>Fermentations</string>
+   </property>
+  </action>
+
   <action name="actionStrikeWater_Calculator">
    <property name="icon">
     <iconset resource="../resources.qrc">
@@ -2598,6 +2662,16 @@
   </customwidget>
   <customwidget>
    <class>MashTreeView</class>
+   <extends>QTreeView</extends>
+   <header>trees/NamedEntityTreeView.h</header>
+  </customwidget>
+  <customwidget>
+   <class>BoilTreeView</class>
+   <extends>QTreeView</extends>
+   <header>trees/NamedEntityTreeView.h</header>
+  </customwidget>
+  <customwidget>
+   <class>FermentationTreeView</class>
    <extends>QTreeView</extends>
    <header>trees/NamedEntityTreeView.h</header>
   </customwidget>
@@ -2722,9 +2796,9 @@
   <tabstop>tabWidget_Trees</tabstop>
   <tabstop>treeView_recipe</tabstop>
   <tabstop>treeView_style</tabstop>
-  <tabstop>treeView_equip</tabstop>
-  <tabstop>treeView_ferm</tabstop>
-  <tabstop>treeView_hops</tabstop>
+  <tabstop>treeView_equipment</tabstop>
+  <tabstop>treeView_fermentable</tabstop>
+  <tabstop>treeView_hop</tabstop>
   <tabstop>treeView_misc</tabstop>
   <tabstop>treeView_yeast</tabstop>
   <tabstop>scrollArea_tabs</tabstop>

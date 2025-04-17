@@ -38,8 +38,7 @@ class BoilEditor;
 AddPropertyName(description  )
 AddPropertyName(notes        )
 AddPropertyName(preBoilSize_l)
-AddPropertyName(boilTime_mins) // Only used for BeerXML
-///AddPropertyName(boilSteps    )
+AddPropertyName(boilTime_mins)
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
 //======================================================================================================================

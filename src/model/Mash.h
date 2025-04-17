@@ -46,7 +46,6 @@ class MashEditor;
 #define AddPropertyName(property) namespace PropertyNames::Mash { inline BtStringConst const property{#property}; }
 AddPropertyName(equipAdjust              )
 AddPropertyName(grainTemp_c              )
-///AddPropertyName(mashSteps                )
 AddPropertyName(mashTunSpecificHeat_calGC)
 AddPropertyName(mashTunWeight_kg         )
 AddPropertyName(notes                    )

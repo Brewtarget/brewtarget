@@ -101,6 +101,26 @@
         <source>a recipe</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pre-Boil Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Time At Boiling</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Boil time (mins)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Boil Profiles</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>BoilStep</name>
@@ -1520,6 +1540,22 @@ Log file may contain more details.</source>
         <source>Fermentation</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Total time (mins)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fermentation Profiles</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FermentationStep</name>
@@ -2320,7 +2356,7 @@ If you need help, please open an issue at %1</source>
     </message>
     <message>
         <source>Mashes</source>
-        <translation type="unfinished">捣烂Mashes</translation>
+        <translation type="obsolete">捣烂Mashes</translation>
     </message>
     <message>
         <source>Name</source>
@@ -2336,6 +2372,10 @@ If you need help, please open an issue at %1</source>
     </message>
     <message>
         <source>Total time (mins)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mash Profiles</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -8158,7 +8198,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>&amp;Mashs</source>
-        <translation>&amp;Mashs</translation>
+        <translation type="vanished">&amp;Mashs</translation>
     </message>
     <message>
         <source>Mashes</source>
@@ -8398,6 +8438,30 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Water &amp;Profile Adjustment Tool</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mash Profiles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Boil Profiles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fermentation Profiles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Mash Profiles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Boil Profiles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Fermentation Profiles</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

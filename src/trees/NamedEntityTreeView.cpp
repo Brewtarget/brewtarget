@@ -15,12 +15,14 @@
  =====================================================================================================================*/
 #include "trees/NamedEntityTreeView.h"
 
-TREE_VIEW_COMMON_CODE(Equipment  )
-TREE_VIEW_COMMON_CODE(Fermentable)
-TREE_VIEW_COMMON_CODE(Hop        )
-TREE_VIEW_COMMON_CODE(Mash       )
-TREE_VIEW_COMMON_CODE(Misc       )
-TREE_VIEW_COMMON_CODE(Yeast      )
-TREE_VIEW_COMMON_CODE(Salt       )
-TREE_VIEW_COMMON_CODE(Style      )
-TREE_VIEW_COMMON_CODE(Water      )
+TREE_VIEW_COMMON_CODE(Equipment   )
+TREE_VIEW_COMMON_CODE(Mash        )
+TREE_VIEW_COMMON_CODE(Boil        )
+TREE_VIEW_COMMON_CODE(Fermentation)
+TREE_VIEW_COMMON_CODE(Fermentable )
+TREE_VIEW_COMMON_CODE(Hop         )
+TREE_VIEW_COMMON_CODE(Misc        )
+TREE_VIEW_COMMON_CODE(Yeast       )
+TREE_VIEW_COMMON_CODE(Salt        )
+TREE_VIEW_COMMON_CODE(Style       )
+TREE_VIEW_COMMON_CODE(Water       )

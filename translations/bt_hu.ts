@@ -101,6 +101,26 @@
         <source>a recipe</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Név</translation>
+    </message>
+    <message>
+        <source>Pre-Boil Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Time At Boiling</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Boil time (mins)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Boil Profiles</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>BoilStep</name>
@@ -1659,6 +1679,22 @@ Log file may contain more details.</source>
         <source>Fermentation</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Név</translation>
+    </message>
+    <message>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Total time (mins)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fermentation Profiles</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FermentationStep</name>
@@ -2515,7 +2551,7 @@ If you need help, please open an issue at %1</source>
     </message>
     <message>
         <source>Mashes</source>
-        <translation type="unfinished">Cefrék</translation>
+        <translation type="obsolete">Cefrék</translation>
     </message>
     <message>
         <source>Name</source>
@@ -2531,6 +2567,10 @@ If you need help, please open an issue at %1</source>
     </message>
     <message>
         <source>Total time (mins)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mash Profiles</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -8516,7 +8556,7 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source>&amp;Mashs</source>
-        <translation>&amp;Cefrék</translation>
+        <translation type="vanished">&amp;Cefrék</translation>
     </message>
     <message>
         <source>Mashes</source>
@@ -8760,6 +8800,30 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source>Water &amp;Profile Adjustment Tool</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mash Profiles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Boil Profiles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fermentation Profiles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Mash Profiles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Boil Profiles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Fermentation Profiles</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

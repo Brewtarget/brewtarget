@@ -17,8 +17,10 @@
 #define TREES_NAMEDENTITYTREEVIEW_H
 #pragma once
 
+#include "editors/BoilEditor.h"
 #include "editors/EquipmentEditor.h"
 #include "editors/FermentableEditor.h"
+#include "editors/FermentationEditor.h"
 #include "editors/HopEditor.h"
 #include "editors/MashEditor.h"
 #include "editors/MiscEditor.h"
@@ -55,6 +57,36 @@ class EquipmentTreeView : public TreeView,
    TREE_VIEW_COMMON_DECL(Equipment)
 };
 
+class MashTreeView : public TreeView,
+                     public TreeViewBase<MashTreeView,
+                                         MashTreeModel,
+                                         MashTreeSortFilterProxyModel,
+                                         MashEditor,
+                                         Mash> {
+   Q_OBJECT
+   TREE_VIEW_COMMON_DECL(Mash)
+};
+
+class BoilTreeView : public TreeView,
+                     public TreeViewBase<BoilTreeView,
+                                         BoilTreeModel,
+                                         BoilTreeSortFilterProxyModel,
+                                         BoilEditor,
+                                         Boil> {
+   Q_OBJECT
+   TREE_VIEW_COMMON_DECL(Boil)
+};
+
+class FermentationTreeView : public TreeView,
+                     public TreeViewBase<FermentationTreeView,
+                                         FermentationTreeModel,
+                                         FermentationTreeSortFilterProxyModel,
+                                         FermentationEditor,
+                                         Fermentation> {
+   Q_OBJECT
+   TREE_VIEW_COMMON_DECL(Fermentation)
+};
+
 class FermentableTreeView : public TreeView,
                             public TreeViewBase<FermentableTreeView,
                                                 FermentableTreeModel,
@@ -73,16 +105,6 @@ class HopTreeView : public TreeView,
                                         Hop> {
    Q_OBJECT
    TREE_VIEW_COMMON_DECL(Hop)
-};
-
-class MashTreeView : public TreeView,
-                     public TreeViewBase<MashTreeView,
-                                         MashTreeModel,
-                                         MashTreeSortFilterProxyModel,
-                                         MashEditor,
-                                         Mash> {
-   Q_OBJECT
-   TREE_VIEW_COMMON_DECL(Mash)
 };
 
 class MiscTreeView : public TreeView,
