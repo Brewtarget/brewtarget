@@ -37,18 +37,32 @@ class FermentableTreeSortFilterProxyModel :
    TREE_SORT_FILTER_PROXY_MODEL_COMMON_DECL(Fermentable)
 };
 
-class HopTreeSortFilterProxyModel :
-   public QSortFilterProxyModel,
-   public TreeSortFilterProxyModelBase<HopTreeSortFilterProxyModel, HopTreeModel, Hop> {
-   Q_OBJECT
-   TREE_SORT_FILTER_PROXY_MODEL_COMMON_DECL(Hop)
-};
-
 class MashTreeSortFilterProxyModel :
    public QSortFilterProxyModel,
    public TreeSortFilterProxyModelBase<MashTreeSortFilterProxyModel, MashTreeModel, Mash> {
    Q_OBJECT
    TREE_SORT_FILTER_PROXY_MODEL_COMMON_DECL(Mash)
+};
+
+class BoilTreeSortFilterProxyModel :
+   public QSortFilterProxyModel,
+   public TreeSortFilterProxyModelBase<BoilTreeSortFilterProxyModel, BoilTreeModel, Boil> {
+   Q_OBJECT
+   TREE_SORT_FILTER_PROXY_MODEL_COMMON_DECL(Boil)
+};
+
+class FermentationTreeSortFilterProxyModel :
+   public QSortFilterProxyModel,
+   public TreeSortFilterProxyModelBase<FermentationTreeSortFilterProxyModel, FermentationTreeModel, Fermentation> {
+   Q_OBJECT
+   TREE_SORT_FILTER_PROXY_MODEL_COMMON_DECL(Fermentation)
+};
+
+class HopTreeSortFilterProxyModel :
+   public QSortFilterProxyModel,
+   public TreeSortFilterProxyModelBase<HopTreeSortFilterProxyModel, HopTreeModel, Hop> {
+   Q_OBJECT
+   TREE_SORT_FILTER_PROXY_MODEL_COMMON_DECL(Hop)
 };
 
 class MiscTreeSortFilterProxyModel :

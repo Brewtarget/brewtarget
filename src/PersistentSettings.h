@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * PersistentSettings.h is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * PersistentSettings.h is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Dan Cavanagh <dan@dancavanagh.com>
  *   • Daniel Pettersson <pettson81@gmail.com>
  *   • Greg Meess <Daedalus12@gmail.com>
@@ -76,9 +76,9 @@ AddSettingName(recipeKey)
 AddSettingName(showsnapshots)
 AddSettingName(splitter_horizontal_State)        // MainWindow section
 AddSettingName(splitter_vertical_State)          // MainWindow section
-AddSettingName(treeView_equip_headerState)       // MainWindow section
-AddSettingName(treeView_ferm_headerState)        // MainWindow section
-AddSettingName(treeView_hops_headerState)        // MainWindow section
+AddSettingName(treeView_equipment_headerState)       // MainWindow section
+AddSettingName(treeView_fermentable_headerState)        // MainWindow section
+AddSettingName(treeView_hop_headerState)        // MainWindow section
 AddSettingName(treeView_misc_headerState)        // MainWindow section
 AddSettingName(treeView_recipe_headerState)      // MainWindow section
 AddSettingName(treeView_style_headerState)       // MainWindow section

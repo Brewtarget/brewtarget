@@ -143,8 +143,8 @@ void Boil::setNotes        (QString               const & val) { SET_AND_NOTIFY(
 void Boil::setPreBoilSize_l(std::optional<double> const   val) { SET_AND_NOTIFY(PropertyNames::Boil::preBoilSize_l, this->m_preBoilSize_l, val); return; }
 
 //
-// This is only used by BeerXML processing, so we can be a bit fast and loose.  In particular, we assume the first step
-// we find that is a proper boil is also the only such step.
+// This setter is only used by BeerXML processing, so we can be a bit fast and loose.  In particular, we assume the
+// first step we find that is a proper boil is also the only such step.
 //
 void Boil::setBoilTime_mins(double const val) {
    this->ensureStandardProfile();

@@ -37,12 +37,11 @@ class FermentationEditor;
 //========================================== Start of property name constants ==========================================
 // See comment in model/NamedEntity.h
 #define AddPropertyName(property) namespace PropertyNames::Fermentation { inline BtStringConst const property{#property}; }
-AddPropertyName(description      )
-///AddPropertyName(fermentationSteps)
-AddPropertyName(notes            )
-AddPropertyName(primary          )
-AddPropertyName(secondary        )
-AddPropertyName(tertiary         )
+AddPropertyName(description)
+AddPropertyName(notes      )
+AddPropertyName(primary    )
+AddPropertyName(secondary  )
+AddPropertyName(tertiary   )
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
 //======================================================================================================================

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * trees/TreeNode.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * trees/TreeNode.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Daniel Pettersson <pettson81@gmail.com>
  *   • Greg Meess <Daedalus12@gmail.com>
  *   • Mattias Måhl <mattias@kejsarsten.com>
@@ -73,6 +73,23 @@ template<> EnumStringMapping const TreeItemNode<Equipment>::columnDisplayNames {
    {TreeItemNode<Equipment>::ColumnIndex::BoilTime, Equipment::tr("Boil Time")},
 };
 
+template<> EnumStringMapping const TreeItemNode<Mash>::columnDisplayNames {
+   {TreeItemNode<Mash>::ColumnIndex::Name      , Mash::tr("Name"       )},
+   {TreeItemNode<Mash>::ColumnIndex::TotalWater, Mash::tr("Total Water")},
+   {TreeItemNode<Mash>::ColumnIndex::TotalTime , Mash::tr("Total Time" )},
+};
+
+template<> EnumStringMapping const TreeItemNode<Boil>::columnDisplayNames {
+   {TreeItemNode<Boil>::ColumnIndex::Name              , Boil::tr("Name"           )},
+   {TreeItemNode<Boil>::ColumnIndex::PreBoilSize       , Boil::tr("Pre-Boil Size"  )},
+   {TreeItemNode<Boil>::ColumnIndex::LengthOfBoilProper, Boil::tr("Time At Boiling")},
+};
+
+template<> EnumStringMapping const TreeItemNode<Fermentation>::columnDisplayNames {
+   {TreeItemNode<Fermentation>::ColumnIndex::Name       , Fermentation::tr("Name"       )},
+   {TreeItemNode<Fermentation>::ColumnIndex::Description, Fermentation::tr("Description")},
+};
+
 template<> EnumStringMapping const TreeItemNode<Fermentable>::columnDisplayNames {
    {TreeItemNode<Fermentable>::ColumnIndex::Name , Fermentable::tr("Name" )},
    {TreeItemNode<Fermentable>::ColumnIndex::Type , Fermentable::tr("Type" )},
@@ -84,12 +101,6 @@ template<> EnumStringMapping const TreeItemNode<Hop>::columnDisplayNames {
    {TreeItemNode<Hop>::ColumnIndex::Form    , Hop::tr("Type"   )},
    {TreeItemNode<Hop>::ColumnIndex::AlphaPct, Hop::tr("% Alpha")},
    {TreeItemNode<Hop>::ColumnIndex::Origin  , Hop::tr("Origin" )},
-};
-
-template<> EnumStringMapping const TreeItemNode<Mash>::columnDisplayNames {
-   {TreeItemNode<Mash>::ColumnIndex::Name      , Mash::tr("Name"       )},
-   {TreeItemNode<Mash>::ColumnIndex::TotalWater, Mash::tr("Total Water")},
-   {TreeItemNode<Mash>::ColumnIndex::TotalTime , Mash::tr("Total Time" )},
 };
 
 template<> EnumStringMapping const TreeItemNode<Misc>::columnDisplayNames {
@@ -176,6 +187,7 @@ template<> bool TreeItemNode<Recipe>::columnIsLessThan(TreeItemNode<Recipe> cons
    }
 
 //   std::unreachable();
+   return lhs.name() < rhs.name();
 }
 
 template<> bool TreeItemNode<BrewNote>::columnIsLessThan(TreeItemNode<BrewNote> const & other,
@@ -188,6 +200,7 @@ template<> bool TreeItemNode<BrewNote>::columnIsLessThan(TreeItemNode<BrewNote> 
    }
 
 //   std::unreachable();
+   return lhs.name() < rhs.name();
 }
 
 template<> bool TreeItemNode<Equipment>::columnIsLessThan(TreeItemNode<Equipment> const & other,
@@ -204,6 +217,43 @@ template<> bool TreeItemNode<Equipment>::columnIsLessThan(TreeItemNode<Equipment
    }
 
 //   std::unreachable();
+   return lhs.name() < rhs.name();
+}
+
+template<> bool TreeItemNode<Mash>::columnIsLessThan(TreeItemNode<Mash> const & other,
+                                                     TreeNodeTraits<Mash>::ColumnIndex column) const {
+   auto const & lhs = *this->m_underlyingItem;
+   auto const & rhs = *other.m_underlyingItem;
+   switch (column) {
+      case TreeItemNode<Mash>::ColumnIndex::Name      : return lhs.name() < rhs.name();
+      case TreeItemNode<Mash>::ColumnIndex::TotalWater: return lhs.totalMashWater_l() < rhs.totalMashWater_l();
+      case TreeItemNode<Mash>::ColumnIndex::TotalTime : return lhs.totalTime_mins()   < rhs.totalTime_mins();
+   }
+//   std::unreachable();
+   return lhs.name() < rhs.name();
+}
+
+template<> bool TreeItemNode<Boil>::columnIsLessThan(TreeItemNode<Boil> const & other,
+                                                     TreeNodeTraits<Boil>::ColumnIndex column) const {
+   auto const & lhs = *this->m_underlyingItem;
+   auto const & rhs = *other.m_underlyingItem;
+   switch (column) {
+      case TreeItemNode<Boil>::ColumnIndex::Name              : return lhs.name() < rhs.name();
+      case TreeItemNode<Boil>::ColumnIndex::PreBoilSize       : return lhs.preBoilSize_l() < rhs.preBoilSize_l();
+      case TreeItemNode<Boil>::ColumnIndex::LengthOfBoilProper: return lhs.boilTime_mins() < rhs.boilTime_mins();
+   }
+   return lhs.name() < rhs.name();
+}
+
+template<> bool TreeItemNode<Fermentation>::columnIsLessThan(TreeItemNode<Fermentation> const & other,
+                                                             TreeNodeTraits<Fermentation>::ColumnIndex column) const {
+   auto const & lhs = *this->m_underlyingItem;
+   auto const & rhs = *other.m_underlyingItem;
+   switch (column) {
+      case TreeItemNode<Fermentation>::ColumnIndex::Name       : return lhs.name() < rhs.name();
+      case TreeItemNode<Fermentation>::ColumnIndex::Description: return lhs.description() < rhs.description();
+   }
+   return lhs.name() < rhs.name();
 }
 
 template<> bool TreeItemNode<Fermentable>::columnIsLessThan(TreeItemNode<Fermentable> const & other,
@@ -227,18 +277,6 @@ template<> bool TreeItemNode<Hop>::columnIsLessThan(TreeItemNode<Hop> const & ot
       case TreeItemNode<Hop>::ColumnIndex::Form    : return lhs.form()      < rhs.form();
       case TreeItemNode<Hop>::ColumnIndex::AlphaPct: return lhs.alpha_pct() < rhs.alpha_pct();
       case TreeItemNode<Hop>::ColumnIndex::Origin  : return lhs.origin()    < rhs.origin();
-   }
-   return lhs.name() < rhs.name();
-}
-
-template<> bool TreeItemNode<Mash>::columnIsLessThan(TreeItemNode<Mash> const & other,
-                                                     TreeNodeTraits<Mash>::ColumnIndex column) const {
-   auto const & lhs = *this->m_underlyingItem;
-   auto const & rhs = *other.m_underlyingItem;
-   switch (column) {
-      case TreeItemNode<Mash>::ColumnIndex::Name      : return lhs.name() < rhs.name();
-      case TreeItemNode<Mash>::ColumnIndex::TotalWater: return lhs.totalMashWater_l() < rhs.totalMashWater_l();
-      case TreeItemNode<Mash>::ColumnIndex::TotalTime : return lhs.totalTime_mins()   < rhs.totalTime_mins();
    }
    return lhs.name() < rhs.name();
 }
@@ -415,6 +453,72 @@ template<> QString TreeItemNode<Equipment>::getToolTip() const {
    return header + body;
 }
 
+template<> QString TreeItemNode<Mash>::getToolTip() const {
+   // Do the style sheet first
+   QString header = "<html><head><style type=\"text/css\">";
+   header += Html::getCss(":/css/tooltip.css");
+   header += "</style></head>";
+
+   QString body   = "<body>";
+
+   body += QString("<div id=\"headerdiv\">");
+   body += QString("<table id=\"tooltip\">");
+   body += QString("<caption>%1</caption>")
+         .arg( this->m_underlyingItem->name() );
+   // First row -- total time
+   body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
+           .arg(Mash::tr("Total time (mins)"))
+           .arg(Measurement::displayAmount(Measurement::Amount{this->m_underlyingItem->totalTime_mins(), Measurement::Units::minutes}) );
+
+   body += "</table></body></html>";
+
+   return header + body;
+}
+
+template<> QString TreeItemNode<Boil>::getToolTip() const {
+   // Do the style sheet first
+   QString header = "<html><head><style type=\"text/css\">";
+   header += Html::getCss(":/css/tooltip.css");
+   header += "</style></head>";
+
+   QString body   = "<body>";
+
+   body += QString("<div id=\"headerdiv\">");
+   body += QString("<table id=\"tooltip\">");
+   body += QString("<caption>%1</caption>")
+         .arg( this->m_underlyingItem->name() );
+   // First row -- total time
+   body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
+           .arg(Boil::tr("Boil time (mins)"))
+           .arg(Measurement::displayAmount(Measurement::Amount{this->m_underlyingItem->boilTime_mins(), Measurement::Units::minutes}) );
+
+   body += "</table></body></html>";
+
+   return header + body;
+}
+
+template<> QString TreeItemNode<Fermentation>::getToolTip() const {
+   // Do the style sheet first
+   QString header = "<html><head><style type=\"text/css\">";
+   header += Html::getCss(":/css/tooltip.css");
+   header += "</style></head>";
+
+   QString body   = "<body>";
+
+   body += QString("<div id=\"headerdiv\">");
+   body += QString("<table id=\"tooltip\">");
+   body += QString("<caption>%1</caption>")
+         .arg( this->m_underlyingItem->name() );
+   // First row -- description
+   body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
+           .arg(Fermentation::tr("Total time (mins)"))
+           .arg(this->m_underlyingItem->description());
+
+   body += "</table></body></html>";
+
+   return header + body;
+}
+
 // Once we do inventory, this needs to be fixed to show amount on hand
 template<> QString TreeItemNode<Fermentable>::getToolTip() const {
    // Do the style sheet first
@@ -487,28 +591,6 @@ template<> QString TreeItemNode<Hop>::getToolTip() const {
             .arg(Hop::typeDisplayNames[*this->m_underlyingItem->type()]);
    }
    body += QString("</tr>");
-   body += "</table></body></html>";
-
-   return header + body;
-}
-
-template<> QString TreeItemNode<Mash>::getToolTip() const {
-   // Do the style sheet first
-   QString header = "<html><head><style type=\"text/css\">";
-   header += Html::getCss(":/css/tooltip.css");
-   header += "</style></head>";
-
-   QString body   = "<body>";
-
-   body += QString("<div id=\"headerdiv\">");
-   body += QString("<table id=\"tooltip\">");
-   body += QString("<caption>%1</caption>")
-         .arg( this->m_underlyingItem->name() );
-   // First row -- total time
-   body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
-           .arg(Mash::tr("Total time (mins)"))
-           .arg(Measurement::displayAmount(Measurement::Amount{this->m_underlyingItem->totalTime_mins(), Measurement::Units::minutes}) );
-
    body += "</table></body></html>";
 
    return header + body;

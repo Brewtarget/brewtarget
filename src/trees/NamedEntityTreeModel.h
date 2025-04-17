@@ -17,8 +17,10 @@
 #define TREES_NAMEDENTITYTREEMODEL_H
 #pragma once
 
+#include "model/Boil.h"
 #include "model/Equipment.h"
 #include "model/Fermentable.h"
+#include "model/Fermentation.h"
 #include "model/Hop.h"
 #include "model/Mash.h"
 #include "model/Misc.h"
@@ -41,14 +43,24 @@ class FermentableTreeModel : public TreeModel, public TreeModelBase<FermentableT
    TREE_MODEL_COMMON_DECL(Fermentable)
 };
 
-class HopTreeModel : public TreeModel, public TreeModelBase<HopTreeModel, Hop> {
-   Q_OBJECT
-   TREE_MODEL_COMMON_DECL(Hop)
-};
-
 class MashTreeModel : public TreeModel, public TreeModelBase<MashTreeModel, Mash> {
    Q_OBJECT
    TREE_MODEL_COMMON_DECL(Mash)
+};
+
+class BoilTreeModel : public TreeModel, public TreeModelBase<BoilTreeModel, Boil> {
+   Q_OBJECT
+   TREE_MODEL_COMMON_DECL(Boil)
+};
+
+class FermentationTreeModel : public TreeModel, public TreeModelBase<FermentationTreeModel, Fermentation> {
+   Q_OBJECT
+   TREE_MODEL_COMMON_DECL(Fermentation)
+};
+
+class HopTreeModel : public TreeModel, public TreeModelBase<HopTreeModel, Hop> {
+   Q_OBJECT
+   TREE_MODEL_COMMON_DECL(Hop)
 };
 
 class MiscTreeModel : public TreeModel, public TreeModelBase<MiscTreeModel, Misc> {

@@ -325,17 +325,19 @@ public:
 
       m_self.treeView_recipe->init(*this->m_ancestorDialog, *this->m_optionDialog);
 
-      m_self.treeView_style ->init(*this->m_styleEditor      );
-      m_self.treeView_equip ->init(*this->m_equipmentEditor      );
-      m_self.treeView_ferm  ->init(*this->m_fermentableEditor);
-      m_self.treeView_hops  ->init(*this->m_hopEditor        );
-      m_self.treeView_mash  ->init(*this->m_mashEditor       );
-      m_self.treeView_misc  ->init(*this->m_miscEditor       );
-      m_self.treeView_salt  ->init(*this->m_saltEditor       );
-      m_self.treeView_yeast ->init(*this->m_yeastEditor      );
-      m_self.treeView_water ->init(*this->m_waterEditor      );
+      m_self.treeView_style       ->init(*this->m_styleEditor       );
+      m_self.treeView_equipment   ->init(*this->m_equipmentEditor   );
+      m_self.treeView_mash        ->init(*this->m_mashEditor        );
+      m_self.treeView_boil        ->init(*this->m_boilEditor        );
+      m_self.treeView_fermentation->init(*this->m_fermentationEditor);
+      m_self.treeView_fermentable ->init(*this->m_fermentableEditor );
+      m_self.treeView_hop         ->init(*this->m_hopEditor         );
+      m_self.treeView_misc        ->init(*this->m_miscEditor        );
+      m_self.treeView_salt        ->init(*this->m_saltEditor        );
+      m_self.treeView_yeast       ->init(*this->m_yeastEditor       );
+      m_self.treeView_water       ->init(*this->m_waterEditor       );
 
-      connect(m_self.treeView_recipe, &RecipeTreeView::recipeSpawn        , &m_self, &MainWindow::versionedRecipe);
+      connect(m_self.treeView_recipe, &RecipeTreeView::recipeSpawn, &m_self, &MainWindow::versionedRecipe);
       return;
    }
 
@@ -1214,21 +1216,21 @@ void MainWindow::restoreSavedState() {
                                                                        QVariant(),
                                                                        PersistentSettings::Sections::MainWindow).toByteArray());
    }
-   if (PersistentSettings::contains(PersistentSettings::Names::treeView_equip_headerState,
+   if (PersistentSettings::contains(PersistentSettings::Names::treeView_equipment_headerState,
                                     PersistentSettings::Sections::MainWindow)) {
-      treeView_equip->header()->restoreState(PersistentSettings::value(PersistentSettings::Names::treeView_equip_headerState,
+      treeView_equipment->header()->restoreState(PersistentSettings::value(PersistentSettings::Names::treeView_equipment_headerState,
                                                                        QVariant(),
                                                                        PersistentSettings::Sections::MainWindow).toByteArray());
    }
-   if (PersistentSettings::contains(PersistentSettings::Names::treeView_ferm_headerState,
+   if (PersistentSettings::contains(PersistentSettings::Names::treeView_fermentable_headerState,
                                     PersistentSettings::Sections::MainWindow)) {
-      treeView_ferm->header()->restoreState(PersistentSettings::value(PersistentSettings::Names::treeView_ferm_headerState,
+      treeView_fermentable->header()->restoreState(PersistentSettings::value(PersistentSettings::Names::treeView_fermentable_headerState,
                                                                       QVariant(),
                                                                       PersistentSettings::Sections::MainWindow).toByteArray());
    }
-   if (PersistentSettings::contains(PersistentSettings::Names::treeView_hops_headerState,
+   if (PersistentSettings::contains(PersistentSettings::Names::treeView_hop_headerState,
                                     PersistentSettings::Sections::MainWindow)) {
-      treeView_hops->header()->restoreState(PersistentSettings::value(PersistentSettings::Names::treeView_hops_headerState,
+      treeView_hop->header()->restoreState(PersistentSettings::value(PersistentSettings::Names::treeView_hop_headerState,
                                                                       QVariant(),
                                                                       PersistentSettings::Sections::MainWindow).toByteArray());
    }
@@ -2572,9 +2574,9 @@ void MainWindow::closeEvent(QCloseEvent* /*event*/) {
    this->pimpl->saveUiState(PersistentSettings::Names::splitter_horizontal_State              , splitter_horizontal                            );
    this->pimpl->saveUiState(PersistentSettings::Names::treeView_recipe_headerState            , treeView_recipe->header()                      );
    this->pimpl->saveUiState(PersistentSettings::Names::treeView_style_headerState             , treeView_style->header()                       );
-   this->pimpl->saveUiState(PersistentSettings::Names::treeView_equip_headerState             , treeView_equip->header()                       );
-   this->pimpl->saveUiState(PersistentSettings::Names::treeView_ferm_headerState              , treeView_ferm->header()                        );
-   this->pimpl->saveUiState(PersistentSettings::Names::treeView_hops_headerState              , treeView_hops->header()                        );
+   this->pimpl->saveUiState(PersistentSettings::Names::treeView_equipment_headerState             , treeView_equipment->header()                       );
+   this->pimpl->saveUiState(PersistentSettings::Names::treeView_fermentable_headerState              , treeView_fermentable->header()                        );
+   this->pimpl->saveUiState(PersistentSettings::Names::treeView_hop_headerState              , treeView_hop->header()                        );
    this->pimpl->saveUiState(PersistentSettings::Names::treeView_misc_headerState              , treeView_misc->header()                        );
    this->pimpl->saveUiState(PersistentSettings::Names::treeView_yeast_headerState             , treeView_yeast->header()                       );
    this->pimpl->saveUiState(PersistentSettings::Names::mashStepTableWidget_headerState        , mashStepTableWidget->horizontalHeader()        );
@@ -2671,19 +2673,19 @@ void MainWindow::exportSelected() {
                ++count;
             }
          } else if (nodeClass == Equipment::staticMetaObject.className()) {
-            auto item = treeView_equip->getItem<Equipment>(selection);
+            auto item = treeView_equipment->getItem<Equipment>(selection);
             if (item) {
                equipments.append(item.get());
                ++count;
             }
          } else if (nodeClass == Fermentable::staticMetaObject.className()) {
-            auto item = treeView_ferm->getItem<Fermentable>(selection);
+            auto item = treeView_fermentable->getItem<Fermentable>(selection);
             if (item) {
                fermentables.append(item.get());
                ++count;
             }
          } else if (nodeClass == Hop::staticMetaObject.className()) {
-            auto item = treeView_hops->getItem<Hop>(selection);
+            auto item = treeView_hop->getItem<Hop>(selection);
             if (item) {
                hops.append(item.get());
                ++count;

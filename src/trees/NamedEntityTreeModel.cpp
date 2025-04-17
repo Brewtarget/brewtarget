@@ -15,12 +15,14 @@
  =====================================================================================================================*/
 #include "trees/NamedEntityTreeModel.h"
 
-TREE_MODEL_COMMON_CODE(Equipment  )
-TREE_MODEL_COMMON_CODE(Fermentable)
-TREE_MODEL_COMMON_CODE(Hop        )
-TREE_MODEL_COMMON_CODE(Mash       )
-TREE_MODEL_COMMON_CODE(Misc       )
-TREE_MODEL_COMMON_CODE(Yeast      )
-TREE_MODEL_COMMON_CODE(Salt       )
-TREE_MODEL_COMMON_CODE(Style      )
-TREE_MODEL_COMMON_CODE(Water      )
+TREE_MODEL_COMMON_CODE(Equipment   )
+TREE_MODEL_COMMON_CODE(Mash        )
+TREE_MODEL_COMMON_CODE(Boil        )
+TREE_MODEL_COMMON_CODE(Fermentation)
+TREE_MODEL_COMMON_CODE(Fermentable )
+TREE_MODEL_COMMON_CODE(Hop         )
+TREE_MODEL_COMMON_CODE(Misc        )
+TREE_MODEL_COMMON_CODE(Yeast       )
+TREE_MODEL_COMMON_CODE(Salt        )
+TREE_MODEL_COMMON_CODE(Style       )
+TREE_MODEL_COMMON_CODE(Water       )

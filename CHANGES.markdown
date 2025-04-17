@@ -23,6 +23,7 @@ Expose mash/boil/fermentation profiles in more of the UI
 
 ### Bug Fixes
 * Clicking '+' in Water Chemistry tool terminates the application with an assert [819](https://github.com/Brewtarget/brewtarget/issues/819)
+* Wayland placeholder icon instead of Brewtarget's being used in KDE Plasma Wayland session [933](https://github.com/Brewtarget/brewtarget/issues/933)
 * Application crash when changing value in Carbonation Volumes field [943](https://github.com/Brewtarget/brewtarget/issues/943)
 * Application crash related to Alkalinity combobox in Edit Water dialog [944](https://github.com/Brewtarget/brewtarget/issues/944)
 
