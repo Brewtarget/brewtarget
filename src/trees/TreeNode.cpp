@@ -24,8 +24,6 @@
 #include <QDateTime>
 #include <QDebug>
 #include <QHash>
-#include <QObject>
-#include <QString>
 #include <Qt>
 #include <QVariant>
 #include <QVector>
@@ -48,6 +46,83 @@
 #include "model/Yeast.h"
 #include "trees/RecipeTreeModel.h"
 #include "trees/TreeModel.h"
+
+TreeNode::TreeNode(TreeModel & model) :
+   m_model{model} {
+   return;
+}
+
+TreeNode::~TreeNode() = default;
+
+int TreeNode::nodeCount(TreeNodeClassifier const typeToMatch) const {
+   // Include ourselves if we're the right type
+   int total = (this->classifier() == typeToMatch) ? 1 : 0;
+   // Then recursively add the counts of our children
+   for (int childNum = 0; childNum < this->childCount(); ++childNum) {
+      total += this->rawChild(childNum)->nodeCount(typeToMatch);
+   }
+   return total;
+}
+
+QString TreeNode::subTreeToString(QString const indent, QString const prefix) const {
+   QString output{};
+   QTextStream outputStream{&output};
+   this->subTreeToStream(outputStream, indent, prefix);
+
+
+   return output;
+}
+
+void TreeNode::subTreeToStream(QTextStream & outputStream, QString const & indent, QString const & prefix) const {
+   // Print the current node.  Note that everything starts two spaces in.
+   outputStream << "  " << indent << prefix;
+   switch (this->classifier()) {
+      // Apart from folder, these symbols are a bit arbitrary, but they have the merit of brevity
+      case TreeNodeClassifier::Folder       : outputStream << "📁"; break;
+      case TreeNodeClassifier::PrimaryItem  : outputStream << "🗎"; break;
+      case TreeNodeClassifier::SecondaryItem: outputStream << "§"; break;
+   }
+   outputStream << " " << *this << "\n";
+
+   // If we have children, recursively output them
+   int const numChildren = this->childCount();
+   if (numChildren > 0) {
+      for (int childNum = 0; childNum < numChildren; ++childNum) {
+         TreeNode * child = this->rawChild(childNum);
+         //
+         // As can be seen from the following example, to work out the indent for our children, we need to look at our
+         // own prefix.  If our prefix is "├──", then we add "│  " to the indent; if it is "└──" then we add "   ";
+         // otherwise we add nothing (as we are root node).
+         //
+         // NOTE this is the motivation for passing index as QString rather than char *.
+         //
+         // 📁 Top Folder
+         // └──📁 Subfolder
+         //    ├──📁 Sub-subfolder 1
+         //    │  └──🗎 Primary Item
+         //    │     ├──§ Secondary Item a
+         //    │     └──§ Secondary Item b
+         //    └──🗎 Primary Item 2
+         //       ├──§ Secondary Item c
+         //       └──§ Secondary Item d
+         //
+         QString childIndent = indent;
+         if (prefix == "├──") {
+            childIndent += "│  ";
+         } else if (prefix == "└──") {
+            childIndent += "   ";
+         }
+
+         QString childOutput{};
+         // Different prefixes for the last child
+         child->subTreeToStream(outputStream,
+                                childIndent,
+                                QString{childNum == numChildren - 1 ? "└──" : "├──"});
+      }
+   }
+   return;
+}
+
 
 void TreeNode::setShowMe(bool val) {
    this->m_showMe = val;

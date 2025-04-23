@@ -403,6 +403,42 @@ public:
    }
 
    /**
+    * \brief Add an item to the tree
+    */
+   void insertPrimaryItem(std::shared_ptr<NE> item) {
+      QModelIndex parentIndex;
+      int childNumber;
+      QString const folderPath = item->folderPath();
+      if (!folderPath.isEmpty()) {
+         parentIndex = this->findFolder(folderPath, this->m_rootNode.get(), true);
+         // I cannot imagine this failing, but what the hell
+         if (!parentIndex.isValid()) {
+            qCritical() << Q_FUNC_INFO << "Invalid return from findFolder";
+            return;
+         }
+         childNumber = this->doTreeNode(parentIndex)->childCount();
+      } else {
+         childNumber = this->m_rootNode->childCount();
+         parentIndex = this->derived().createIndex(childNumber, 0, this->m_rootNode.get());
+      }
+
+      qDebug() << Q_FUNC_INFO << "Inserting" << *item << "as child #" << childNumber << "of" << parentIndex;
+      if (!this->insertChild(parentIndex, childNumber, item)) {
+         qCritical() << Q_FUNC_INFO << "Insert failed";
+         return;
+      }
+
+      //
+      // If this tree can have secondary items (eg BrewNote items on RecipeTreeModel) then we need to check whether
+      // the newly-added primary one has any.
+      //
+      this->addSecondariesForPrimary(item);
+
+      this->observeElement(item);
+      return;
+   }
+
+   /**
     * \brief Call this at the end of derived class's constructor.
     */
    void loadTreeModel() {
@@ -410,30 +446,20 @@ public:
       qDebug() << Q_FUNC_INFO << "Got " << primaryItems.length() << NE::staticMetaObject.className() << "items";
 
       for (auto item : primaryItems) {
-
-         QModelIndex parentIndex;
-         int childNumber;
-         QString folderPath = item->folderPath();
-         if (!folderPath.isEmpty()) {
-            parentIndex = this->findFolder(folderPath, this->m_rootNode.get(), true);
-            // I cannot imagine this failing, but what the hell
-            if (!parentIndex.isValid()) {
-               qWarning() << Q_FUNC_INFO << "Invalid return from findFolder";
-               continue;
-            }
-            childNumber = this->doTreeNode(parentIndex)->childCount();
-         } else {
-            childNumber = this->m_rootNode->childCount();
-            parentIndex = this->derived().createIndex(childNumber, 0, this->m_rootNode.get());
-         }
-
-         if (!this->insertChild(parentIndex, childNumber, item)) {
-            qWarning() << Q_FUNC_INFO << "Insert failed";
-            continue;
-         }
-
-         this->observeElement(item);
+         this->insertPrimaryItem(item);
       }
+
+      int const numPrimaryItems = this->m_rootNode->nodeCount(TreeNodeClassifier::PrimaryItem);
+      qDebug() <<
+         Q_FUNC_INFO << NE::staticMetaObject.className() << "tree now has" <<
+         numPrimaryItems << "primary items";
+      qDebug().noquote() << Q_FUNC_INFO << "Tree:\n" << this->m_rootNode->subTreeToString();
+      if (numPrimaryItems != primaryItems.length()) {
+         qCritical() <<
+            Q_FUNC_INFO << "Inserting" << primaryItems.length() << NE::staticMetaObject.className() << "items in tree "
+            "only resulted in" << numPrimaryItems << "primary items";
+      }
+
       return;
    }
 
@@ -488,7 +514,7 @@ public:
 
       while (!queue.isEmpty()) {
          auto nodeToSearchIn = queue.dequeue();
-         qDebug() << Q_FUNC_INFO << "Find" << *ne << "in" << nodeToSearchIn->name();
+         qDebug() << Q_FUNC_INFO << "Find" << *ne << "in" << *nodeToSearchIn;
          //
          // This is a compile-time check whether it's possible in this tree for primary items to have other primary
          // items as children.  (If not, which is the case in most trees, we can skip over looking for children of
@@ -542,10 +568,11 @@ public:
             auto child = folderNodeToSearchIn.child(jj);
             if (std::holds_alternative<std::shared_ptr<TreeItemNode<NE>>>(child)) {
                auto itemNode = std::get<std::shared_ptr<TreeItemNode<NE>>>(child);
-               qDebug() << Q_FUNC_INFO << "itemNode:" << *itemNode;
+               // Normally leave the next line commented out as it generates quite a bit of logging
+//               qDebug() << Q_FUNC_INFO << "itemNode:" << *itemNode;
                if (itemNode->underlyingItem() == ne) {
                   // We found what we were looking for
-                  qDebug() << Q_FUNC_INFO << "Found at" << jj;
+                  qDebug() << Q_FUNC_INFO << "Found" << ne << "at" << jj;
                   return this->derived().createIndex(jj, 0, itemNode.get());
                }
                if constexpr (!std::is_constructible_v<typename TreeItemNode<NE>::ChildPtrTypes,
@@ -691,6 +718,7 @@ public:
       TreeModelRowInsertGuard treeModelRowInsertGuard(this->derived(), parentIndex, row, row);
 
       auto childNode = std::make_shared<TreeItemNode<ElementType>>(this->derived(), &parentNode, element);
+      qDebug() << Q_FUNC_INFO << "Parent:" << parentNode << ", Child:" << *childNode;
 
       // Parent node can only be one of two types. (It cannot be SecondaryItem because, although we allow Recipes to
       // contain Recipes -- for Recipe versioning -- we don't allow BrewNotes to contain BrewNotes etc.)
@@ -825,34 +853,10 @@ private:
    }
 
 protected:
-   void doElementAdded(int elementId) {
-      auto element = ObjectStoreWrapper::getById<NE>(elementId);
-      if (!element->display()) {
-         return;
-      }
-
-      // Most of the time, if a new element is created, it's not going to have a folder, so we could just sling it in at
-      // the top level.  However, I don't see that it hurts to check.
-      QString folderPath = element->folderPath();
-      auto folderIndex = this->findFolder(folderPath, this->m_rootNode.get(), true);
-      if (!folderIndex.isValid()) {
-         return;
-      }
-
-      TreeFolderNode<NE> * folderNode = static_cast<TreeFolderNode<NE> *>(folderIndex.internalPointer());
-      int const numChildren = folderNode->childCount();
-      auto childNode = std::make_shared<TreeItemNode<NE>>(this->derived(), folderNode, element);
-      folderNode->insertChild(numChildren, childNode);
-
-      //
-      // If this tree can have secondary elements (eg BrewNote items on RecipeTreeModel) then we need to check whether
-      // the newly-added primary one has any.
-      //
-      this->addSecondariesForPrimary(element);
-
-      this->observeElement(element);
+   void doElementAdded(int itemId) {
+      std::shared_ptr<NE> item = ObjectStoreWrapper::getById<NE>(itemId);
+      this->insertPrimaryItem(item);
       return;
-
    }
 
    void addSecondariesForPrimary(std::shared_ptr<NE> element) {
@@ -1137,19 +1141,39 @@ public:
     *                     \c newName is the name to give the copy.
     */
    void copyItems(QList<std::pair<QModelIndex, QString>> const & toBeCopied) {
+      qDebug() << Q_FUNC_INFO << "Copying" << toBeCopied.length() << "item(s)";
+      //
+      // We make a list of the things we are going to insert before we insert them, as all the QModelIndex objects will
+      // be invalidated by the first insert
+      //
+      QList<std::pair<TreeNode *, QString>> rawToBeCopied;
       for (auto [modelIndex, newName] : toBeCopied) {
          TreeNode * treeNode = this->doTreeNode(modelIndex);
+         rawToBeCopied.append(std::make_pair(treeNode, newName));
+      }
+
+      for (auto [treeNode, newName] : rawToBeCopied) {
          if (treeNode->classifier() == TreeNodeClassifier::PrimaryItem) {
             auto & neTreeNode = static_cast<TreeItemNode<NE> &>(*treeNode);
             std::shared_ptr<NE> neItem = neTreeNode.underlyingItem();
-            auto neItemCopy = ObjectStoreWrapper::copy(*neItem);
+            std::shared_ptr<NE> neItemCopy = ObjectStoreWrapper::insertCopyOf(*neItem);
             neItemCopy->setName(newName);
+            qDebug() << Q_FUNC_INFO << "Copied" << *neItem << "to" << *neItemCopy;
+            //
+            // NOTE that we do NOT need to manually add the item to the tree.  Because we are connected to the
+            // ObjectStore::signalObjectInserted signal, our doElementAdded() member function will already have been
+            // called.  So the new item will already be in our tree.
+            //
          } else {
             // It's a coding error if we ask this function to copy either a folder or a secondary item (eg BrewNote or
             // MashStep).  However, we can recover by just not doing the copy.
             qWarning() << Q_FUNC_INFO << "Unexpected item type" << static_cast<int>(treeNode->classifier());
          }
       }
+      int const numPrimaryItems = this->m_rootNode->nodeCount(TreeNodeClassifier::PrimaryItem);
+      qDebug() <<
+         Q_FUNC_INFO << NE::staticMetaObject.className() << "tree now has" << numPrimaryItems << "primary items";
+      qDebug().noquote() << Q_FUNC_INFO << "Tree:\n" << this->m_rootNode->subTreeToString();
       return;
    }
 

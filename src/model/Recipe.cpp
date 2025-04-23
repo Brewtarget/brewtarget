@@ -283,31 +283,6 @@ public:
       this->m_self.        m_hopAdditions.connectAllItemChangedSignals();
       this->m_self.      m_yeastAdditions.connectAllItemChangedSignals();
 
-      // Below should not be handled via OwnedSet connecting to acceptChangeToRecipeAdditionFermentable etc
-///      auto fermentableAdditions = this->m_self.fermentableAdditions();
-///      for (auto fermentableAddition : fermentableAdditions) {
-///         connect(fermentableAddition->fermentable(),
-///                 &NamedEntity::changed,
-///                 &this->m_self,
-///                 &Recipe::acceptChangeToContainedObject);
-///      }
-///
-///      auto hopAdditions = this->m_self.hopAdditions();
-///      for (auto hopAddition : hopAdditions) {
-///         connect(hopAddition->hop(),
-///                 &NamedEntity::changed,
-///                 &this->m_self,
-///                 &Recipe::acceptChangeToContainedObject);
-///      }
-///
-///      auto yeastAdditions = this->m_self.yeastAdditions();
-///      for (auto yeastAddition : yeastAdditions) {
-///         connect(yeastAddition->yeast(),
-///                 &NamedEntity::changed,
-///                 &this->m_self,
-///                 &Recipe::acceptChangeToContainedObject);
-///      }
-
       auto mash = this->m_self.mash();
       if (mash) {
          connect(mash.get(), &NamedEntity::changed, &this->m_self, &Recipe::acceptChangeToContainedObject);
@@ -1582,12 +1557,6 @@ TypeLookup const Recipe::typeLookup {
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::beerAcidity_pH         , Recipe::m_beerAcidity_pH         , Measurement::PhysicalQuantity::Acidity   ),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::apparentAttenuation_pct, Recipe::m_apparentAttenuation_pct,           NonPhysicalQuantity::Percentage),
 
-///      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::fermentableAdditionIds, Recipe::fermentableAdditionIds),
-///      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::hopAdditionIds        , Recipe::hopAdditionIds        ),
-///      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::miscAdditionIds       , Recipe::miscAdditionIds       ),
-///      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::yeastAdditionIds      , Recipe::yeastAdditionIds      ),
-///      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::saltAdjustmentIds     , Recipe::saltAdjustmentIds     ),
-///      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::waterUseIds           , Recipe::waterUseIds           ),
    },
    // Parent classes lookup
    {&NamedEntity::typeLookup,
@@ -1717,7 +1686,9 @@ Recipe::Recipe(Recipe const & other) :
    m_efficiency_pct         {other.m_efficiency_pct    },
    m_age_days               {other.m_age_days          },
    m_ageTemp_c              {other.m_ageTemp_c         },
-   m_date                   {other.m_date              },
+   m_date                   {QDate::currentDate()      }, // When you copy a recipe, you typically want the copy to have
+                                                          // today's date rather than the date of the recipe you're
+                                                          // copying.
    m_carbonation_vols       {other.m_carbonation_vols  },
    m_forcedCarbonation      {other.m_forcedCarbonation },
    m_primingSugarName       {other.m_primingSugarName  },

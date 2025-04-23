@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * database/ObjectStoreTyped.h is part of Brewtarget, and is copyright the following authors 2021-2024:
+ * database/ObjectStoreTyped.h is part of Brewtarget, and is copyright the following authors 2021-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -74,21 +74,9 @@ public:
 
    /**
     * \brief Insert a copy of an existing object in the DB (and in our cache list)
-    *
-    * \param id  The ID of the object we want to copy
     */
-   std::shared_ptr<NE> insertCopyOf(int id) {
-      // We could do this all on one line, but we break it down a bit here to make clear what's going on
-
-      // From the supplied ID, get a shared pointer to the object we want to copy
-      auto otherNe = this->getById(id);
-      if (!otherNe) {
-         qWarning() << Q_FUNC_INFO << "Unable to find object #" << id;
-      }
-
-      // If we found an object with the supplied ID, make a copy, using the copy constructor (which should do the right
-      // thing about parentage etc).  If not, which shouldn't really happen, make a default object.
-      auto copyNe = otherNe ? std::make_shared<NE>(*otherNe) : std::make_shared<NE>();
+   std::shared_ptr<NE> insertCopyOf(NE const & other) {
+      std::shared_ptr<NE> copyNe = std::make_shared<NE>(other);
 
       // Add the copied object to the database and our object cache, and return it to the caller
       this->insert(copyNe);
