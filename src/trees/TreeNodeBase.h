@@ -238,7 +238,12 @@ public:
    }
 
    /**
-    * \brief inserts a new item at \c position
+    * \brief inserts a new item at \c position.  Note that it is the caller's responsibility to call
+    *        \c QAbstractItemModel::beginInsertRows etc (via \c TreeModelRowInsertGuard).
+    *
+    *        TBD: We could probably simplify the code in a number of places by always adding a new child at the end of
+    *             our list (this->m_children).  The order of child nodes in the TreeModel classes is somewhat irrelevant
+    *             because they get sorted by the TreeSortFilterProxyModel classes.
     *
     * \return \c true if succeeded, \c false otherwise
     */

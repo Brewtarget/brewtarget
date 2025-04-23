@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * trees/TreeNode.h is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * trees/TreeNode.h is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
  *   • Philip Greggory Lee <rocketman768@gmail.com>
@@ -24,6 +24,8 @@
 #include <QList>
 #include <QObject>
 #include <QModelIndex>
+#include <QString>
+#include <QTextStream>
 #include <QVariant>
 
 #include "Localization.h"
@@ -68,13 +70,30 @@ template<class S> S & operator<<(S & stream, TreeNodeClassifier const treeNodeCl
 
 class TreeNode {
 protected:
-   TreeNode(TreeModel & model) :
-      m_model{model} {
-      return;
-   }
+   TreeNode(TreeModel & model);
 
 public:
-   ~TreeNode() = default;
+   ~TreeNode();
+
+   /**
+    * \brief Returns total number of nodes of specified type in this node's subtree.
+    */
+   int nodeCount(TreeNodeClassifier const classifier) const;
+
+   /**
+    * \brief Returns a string representation of this node's subtree, useful for logging/debugging.
+    *        The parameters are used for recursive calling.  The original caller can just leave them defaulted.
+    *
+    * \param indent A string of spaces and "│" characters to indent the current node in the output
+    * \param prefix The characters to prefix the node with (blank for root node, "├──", "└──"
+    */
+   QString subTreeToString(QString const indent = "", QString const prefix = "") const;
+
+   /**
+    * \brief Used by \c subTreeToString.  Saves us creating lots of QTextStream objects when we're ultimately sending
+    *        all the output to the same one.
+    */
+   void subTreeToStream(QTextStream & outputStream, QString const & indent, QString const & prefix) const;
 
    /**
     * \brief Derived classes implement this function, which then makes it easy for us to cast from TreeNode * to the
@@ -164,8 +183,8 @@ private:
 //! \brief Convenience function for logging
 template<class S> S & operator<<(S & stream, TreeNode const & treeNode) {
    stream <<
-      treeNode.className() << "TreeNode (" << treeNode.classifier() << "):" << treeNode.name() << "(" <<
-      treeNode.childCount() << "children)";
+      treeNode.className() << "TreeNode (" << treeNode.classifier() << "): " << treeNode.name() << " (" <<
+      treeNode.childCount() << " children)";
    return stream;
 }
 template<class S> S & operator<<(S & stream, TreeNode const * treeNode) {

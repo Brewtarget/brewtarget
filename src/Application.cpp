@@ -84,9 +84,7 @@ namespace {
    //! \brief Worker thread for finding the latest released version of the program
    QThread latestReleaseFinderThread;
 
-   /**
-    * \brief Create a directory if it doesn't exist, popping a error dialog if creation fails
-    */
+   //! \brief Create a directory if it doesn't exist, popping a error dialog if creation fails
    bool createDir(QDir dir) {
       if( ! dir.mkpath(dir.absolutePath()) ) {
          // Write a message to the log, the usablity check below will alert the user
@@ -113,9 +111,7 @@ namespace {
       return true;
    }
 
-   /**
-    * \brief Ensure our directories exist.
-    */
+   //! \brief Ensure our directories exist.
    bool ensureDirectoriesExist() {
       //
       // A missing resource directory is a serious issue, without it we're missing the default DB, sound files &
@@ -167,9 +163,7 @@ namespace {
              createDir(PersistentSettings::getUserDataDir());
    }
 
-   /**
-    * \brief Every so often, we need to update the config file itself. This does that.
-    */
+   //! \brief Every so often, we need to update the config file itself. This does that.
    void updateConfig() {
       int cVersion = PersistentSettings::value(PersistentSettings::Names::config_version, QVariant(0)).toInt();
       while ( cVersion < CONFIG_VERSION ) {
@@ -337,7 +331,7 @@ bool Application::initialize() {
 #endif
       // Uncomment the following to list all the entries in our resource bundle.  This can be helpful at certain points
       // in debugging, but is not normally needed.
-      qDebug() << "Resource:" << fileInfo.absoluteFilePath() << "- size:" << fileInfo.size() << "bytes";
+//      qDebug() << "Resource:" << fileInfo.absoluteFilePath() << "- size:" << fileInfo.size() << "bytes";
       // It should be impossible that a resource compiled into the binary doesn't exist!
       Q_ASSERT(fileInfo.exists());
       ++numResources;

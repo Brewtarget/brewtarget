@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * database/ObjectStoreWrapper.h is part of Brewtarget, and is copyright the following authors 2021-2024:
+ * database/ObjectStoreWrapper.h is part of Brewtarget, and is copyright the following authors 2021-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -124,11 +124,12 @@ namespace ObjectStoreWrapper {
    }
 
    /**
-    * \brief Makes a \b new object that is a copy of the supplied one
+    * \brief Makes a \b new \b unsaved object that is a copy of the supplied one.  NB: Use \c insertCopyOf to make a
+    *        \c saved copy of an existing object.
     *
     * \return Shared pointer to the new object
     */
-   template<class NE> std::shared_ptr<NE> copy(NE const & ne) {
+   template<class NE> std::shared_ptr<NE> unstoredCopy(NE const & ne) {
       return std::make_shared<NE>(ne);
    }
 
@@ -161,7 +162,7 @@ namespace ObjectStoreWrapper {
    }
 
    template<class NE> std::shared_ptr<NE> insertCopyOf(NE const & ne) {
-      return ObjectStoreTyped<NE>::getInstance().insertCopyOf(ne.key());
+      return ObjectStoreTyped<NE>::getInstance().insertCopyOf(ne);
    }
 
    template<class NE> void update(NE & ne) {
