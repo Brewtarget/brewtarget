@@ -10,8 +10,9 @@ happens, so I'm now setting it to a slightly arbitrary time early in the morning
 ## Forthcoming in v4.1.0
 
 ### New Features
-* Boil and Fermentation profiles will appear in the left-hand section
-* Additional methods for calculating IBU
+* Boil and Fermentation profiles added to the left-hand section
+* Boil and Fermentation buttons added to the toolbar
+* TODO: Additional methods for calculating IBU
 * We'll list other new features here...
 
 ## v4.1.0
@@ -30,7 +31,7 @@ Expose mash/boil/fermentation profiles in more of the UI
 * Copy recipe not working [949](https://github.com/Brewtarget/brewtarget/issues/949)
 
 ### Release Timestamp
-Thu, 20 Mar 2025 04:01:00 +0100
+Sun, 27 Apr 2025 04:01:00 +0100
 
 ## v4.0.18
 Bug fixes and minor enhancements.

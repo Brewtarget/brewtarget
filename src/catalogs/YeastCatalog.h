@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * catalogs/YeastCatalog.h is part of Brewtarget, and is copyright the following authors 2009-2023:
+ * catalogs/YeastCatalog.h is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Daniel Pettersson <pettson81@gmail.com>
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Matt Young <mfsy@yahoo.com>
@@ -32,6 +32,8 @@
 // This needs to be the last include.  (I know, I know...)
 #include "catalogs/CatalogBase.h"
 
+#define YeastCatalogOptions CatalogBaseOptions{ }
+
 /*!
  * \class YeastCatalog
  *
@@ -41,7 +43,8 @@ class YeastCatalog : public QDialog, public CatalogBase<YeastCatalog,
                                                         Yeast,
                                                         YeastTableModel,
                                                         YeastSortFilterProxyModel,
-                                                        YeastEditor> {
+                                                        YeastEditor,
+                                                        YeastCatalogOptions> {
    Q_OBJECT
 
    CATALOG_COMMON_DECL(Yeast)

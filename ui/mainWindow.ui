@@ -2121,7 +2121,9 @@
     </property>
     <addaction name="actionEquipments"/>
     <addaction name="actionStyles"/>
-    <addaction name="actionMashs"/>
+    <addaction name="actionMashes"/>
+    <addaction name="actionBoils"/>
+    <addaction name="actionFermentations"/>
     <addaction name="separator"/>
     <addaction name="actionFermentables"/>
     <addaction name="actionHops"/>
@@ -2165,7 +2167,9 @@
    <addaction name="menuTools"/>
    <addaction name="menuAbout"/>
   </widget>
+
   <widget class="QStatusBar" name="statusbar"/>
+
   <widget class="QToolBar" name="toolBar">
    <property name="font">
     <font>
@@ -2186,7 +2190,9 @@
    <addaction name="actionDeleteSelected"/>
    <addaction name="separator"/>
    <addaction name="actionEquipments"/>
-   <addaction name="actionMashs"/>
+   <addaction name="actionMashes"/>
+   <addaction name="actionBoils"/>
+   <addaction name="actionFermentations"/>
    <addaction name="actionStyles"/>
    <addaction name="separator"/>
    <addaction name="actionFermentables"/>
@@ -2525,7 +2531,7 @@
    </property>
   </action>
 
-  <action name="actionMashs">
+  <action name="actionMashes">
    <property name="icon">
     <iconset resource="../resources.qrc">
      <normaloff>:/images/iconMash.svg</normaloff>

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * catalogs/HopCatalog.h is part of Brewtarget, and is copyright the following authors 2009-2023:
+ * catalogs/HopCatalog.h is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Daniel Pettersson <pettson81@gmail.com>
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Matt Young <mfsy@yahoo.com>
@@ -32,6 +32,8 @@
 // This needs to be the last include.  (I know, I know...)
 #include "catalogs/CatalogBase.h"
 
+#define HopCatalogOptions CatalogBaseOptions{ }
+
 /*!
  * \class HopCatalog
  *
@@ -41,7 +43,8 @@ class HopCatalog : public QDialog, public CatalogBase<HopCatalog,
                                                       Hop,
                                                       HopTableModel,
                                                       HopSortFilterProxyModel,
-                                                      HopEditor> {
+                                                      HopEditor,
+                                                      HopCatalogOptions> {
    Q_OBJECT
 
    CATALOG_COMMON_DECL(Hop)

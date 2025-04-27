@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * serialization/ImportExport.cpp is part of Brewtarget, and is copyright the following authors 2013-2024:
+ * serialization/ImportExport.cpp is part of Brewtarget, and is copyright the following authors 2013-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
  *
@@ -246,7 +246,7 @@ bool ImportExport::importFromFiles(std::optional<QStringList> inputFiles) {
 }
 
 
-void ImportExport::exportToFile(QList<Recipe      const *> const * recipes,
+bool ImportExport::exportToFile(QList<Recipe      const *> const * recipes,
                                 QList<Equipment   const *> const * equipments,
                                 QList<Fermentable const *> const * fermentables,
                                 QList<Hop         const *> const * hops,
@@ -267,7 +267,7 @@ void ImportExport::exportToFile(QList<Recipe      const *> const * recipes,
 
    auto selectedFiles = selectFiles(ImportOrExport::EXPORT);
    if (!selectedFiles) {
-      return;
+      return false;
    }
    QString filename = (*selectedFiles)[0];
 
@@ -280,7 +280,7 @@ void ImportExport::exportToFile(QList<Recipe      const *> const * recipes,
 
    if (!outFile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
       qWarning() << Q_FUNC_INFO << "Could not open" << filename << "for writing.";
-      return;
+      return false;
    }
 
    if (filename.endsWith("json", Qt::CaseInsensitive)) {
@@ -319,7 +319,7 @@ void ImportExport::exportToFile(QList<Recipe      const *> const * recipes,
       if (recipes && recipes->size() > 0) { exporter.add(*recipes                 ); }
 
       exporter.close();
-      return;
+      return true;
    }
 
    if (filename.endsWith("xml", Qt::CaseInsensitive)) {
@@ -350,10 +350,10 @@ void ImportExport::exportToFile(QList<Recipe      const *> const * recipes,
       if (recipes      && recipes     ->size() > 0) { bxml.toXml(*recipes,      outFile); }
       if (equipments   && equipments  ->size() > 0) { bxml.toXml(*equipments,   outFile); }
 
-      return;
+      return true;
    }
 
    qInfo() << Q_FUNC_INFO << "Don't understand file extension on" << filename << "so ignoring!";
 
-   return;
+   return false;
 }
