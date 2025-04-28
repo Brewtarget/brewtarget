@@ -7,11 +7,9 @@ format therein, otherwise you'll get, eg, no-changelogname-tag error from rpmlin
 release timestamp to be a date in the future, and I'm guessing nobody cares about the exact time of day a release
 happens, so I'm now setting it to a slightly arbitrary time early in the morning.
 
-## Forthcoming in v4.1.0
+## Forthcoming in v4.2.0
 
 ### New Features
-* Boil and Fermentation profiles added to the left-hand section
-* Boil and Fermentation buttons added to the toolbar
 * TODO: Additional methods for calculating IBU
 * We'll list other new features here...
 
@@ -21,6 +19,7 @@ Expose mash/boil/fermentation profiles in more of the UI
 ### New Features
 * Mash, Boil and Fermentation profiles appear in the left-hand section
 * Salts appear in left-hand section, are editable, and can be added to recipes
+* Boil and Fermentation buttons added to the toolbar
 
 ### Bug Fixes
 * Clicking '+' in Water Chemistry tool terminates the application with an assert [819](https://github.com/Brewtarget/brewtarget/issues/819)
@@ -29,6 +28,7 @@ Expose mash/boil/fermentation profiles in more of the UI
 * Application crash when changing value in Carbonation Volumes field [943](https://github.com/Brewtarget/brewtarget/issues/943)
 * Application crash related to Alkalinity combobox in Edit Water dialog [944](https://github.com/Brewtarget/brewtarget/issues/944)
 * Copy recipe not working [949](https://github.com/Brewtarget/brewtarget/issues/949)
+* Folders in tree view don't show whether they are expanded or not [951](https://github.com/Brewtarget/brewtarget/issues/951)
 
 ### Release Timestamp
 Sun, 27 Apr 2025 04:01:00 +0100
