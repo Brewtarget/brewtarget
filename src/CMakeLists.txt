@@ -93,9 +93,12 @@ set(filesToCompile_cpp
     ${repoDir}/src/buttons/RecipeAttributeButton.cpp
     ${repoDir}/src/buttons/StyleButton.cpp
     ${repoDir}/src/buttons/WaterButton.cpp
+    ${repoDir}/src/catalogs/BoilCatalog.cpp
     ${repoDir}/src/catalogs/EquipmentCatalog.cpp
     ${repoDir}/src/catalogs/FermentableCatalog.cpp
+    ${repoDir}/src/catalogs/FermentationCatalog.cpp
     ${repoDir}/src/catalogs/HopCatalog.cpp
+    ${repoDir}/src/catalogs/MashCatalog.cpp
     ${repoDir}/src/catalogs/MiscCatalog.cpp
     ${repoDir}/src/catalogs/SaltCatalog.cpp
     ${repoDir}/src/catalogs/StyleCatalog.cpp

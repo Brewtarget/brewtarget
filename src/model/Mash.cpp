@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/Mash.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * model/Mash.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Mattias Måhl <mattias@kejsarsten.com>
  *   • Matt Young <mfsy@yahoo.com>
@@ -61,16 +61,16 @@ ObjectStore & Mash::getObjectStoreTypedInstance() const {
 TypeLookup const Mash::typeLookup {
    "Mash",
    {
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Mash::equipAdjust          , Mash::m_equipAdjust          ,           NonPhysicalQuantity::Bool                ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Mash::grainTemp_c          , Mash::m_grainTemp_c          , Measurement::PhysicalQuantity::Temperature         ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Mash::notes                , Mash::m_notes                ,           NonPhysicalQuantity::String              ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Mash::ph                   , Mash::m_ph                   , Measurement::PhysicalQuantity::Acidity             ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Mash::spargeTemp_c         , Mash::m_spargeTemp_c         , Measurement::PhysicalQuantity::Temperature         ),
-//      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Mash::totalMashWater_l     , Mash::m_totalMashWater_l     ), // Calculated, not stored
-//      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Mash::totalTime            , Mash::m_totalTime            ), // Calculated, not stored
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Mash::equipAdjust              , Mash::m_equipAdjust     ,           NonPhysicalQuantity::Bool                ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Mash::grainTemp_c              , Mash::m_grainTemp_c     , Measurement::PhysicalQuantity::Temperature         ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Mash::notes                    , Mash::m_notes           ,           NonPhysicalQuantity::String              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Mash::ph                       , Mash::m_ph              , Measurement::PhysicalQuantity::Acidity             ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Mash::spargeTemp_c             , Mash::m_spargeTemp_c    , Measurement::PhysicalQuantity::Temperature         ),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Mash::mashTunSpecificHeat_calGC, Mash::m_mashTunSpecificHeat_calGC, Measurement::PhysicalQuantity::SpecificHeatCapacity),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Mash::tunTemp_c            , Mash::m_tunTemp_c            , Measurement::PhysicalQuantity::Temperature         ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Mash::mashTunWeight_kg     , Mash::m_mashTunWeight_kg     , Measurement::PhysicalQuantity::Mass                ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Mash::tunTemp_c                , Mash::m_tunTemp_c       , Measurement::PhysicalQuantity::Temperature         ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Mash::mashTunWeight_kg         , Mash::m_mashTunWeight_kg, Measurement::PhysicalQuantity::Mass                ),
+      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Mash::totalMashWater_l   , Mash::totalMashWater_l  , Measurement::PhysicalQuantity::Volume), // Calculated, not in DB
+      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Mash::totalTime_mins     , Mash::totalTime_mins    , Measurement::PhysicalQuantity::Time  ), // Calculated, not in DB
    },
    // Parent classes lookup
    {&NamedEntity::typeLookup,

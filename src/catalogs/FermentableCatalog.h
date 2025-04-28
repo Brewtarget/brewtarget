@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * catalogs/FermentableCatalog.h is part of Brewtarget, and is copyright the following authors 2009-2023:
+ * catalogs/FermentableCatalog.h is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Daniel Pettersson <pettson81@gmail.com>
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Matt Young <mfsy@yahoo.com>
@@ -32,6 +32,8 @@
 // This needs to be the last include.  (I know, I know...)
 #include "catalogs/CatalogBase.h"
 
+#define FermentableCatalogOptions CatalogBaseOptions{ }
+
 /*!
  * \class FermentableCatalog
  *
@@ -41,7 +43,8 @@ class FermentableCatalog : public QDialog, public CatalogBase<FermentableCatalog
                                                               Fermentable,
                                                               FermentableTableModel,
                                                               FermentableSortFilterProxyModel,
-                                                              FermentableEditor> {
+                                                              FermentableEditor,
+                                                              FermentableCatalogOptions> {
    Q_OBJECT
 
    CATALOG_COMMON_DECL(Fermentable)

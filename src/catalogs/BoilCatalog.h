@@ -1,5 +1,5 @@
 /*======================================================================================================================
- * catalogs/SaltCatalog.h is part of Brewtarget, and is copyright the following authors 2025:
+ * catalogs/BoilCatalog.h is part of Brewtarget, and is copyright the following authors 2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -13,37 +13,37 @@
  * You should have received a copy of the GNU General Public License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
  =====================================================================================================================*/
-#ifndef CATALOGS_SALTCATALOG_H
-#define CATALOGS_SALTCATALOG_H
+#ifndef CATALOGS_BOILCATALOG_H
+#define CATALOGS_BOILCATALOG_H
 #pragma once
 
 #include <QDialog>
 #include <QEvent>
 
-#include "editors/SaltEditor.h"
-#include "model/Salt.h"
-#include "qtModels/sortFilterProxyModels/SaltSortFilterProxyModel.h"
-#include "qtModels/tableModels/SaltTableModel.h"
+#include "editors/BoilEditor.h"
+#include "model/Boil.h"
+#include "qtModels/sortFilterProxyModels/BoilSortFilterProxyModel.h"
+#include "qtModels/tableModels/BoilTableModel.h"
 
 // This needs to be the last include.  (I know, I know...)
 #include "catalogs/CatalogBase.h"
 
-#define SaltCatalogOptions CatalogBaseOptions{ }
+#define BoilCatalogOptions CatalogBaseOptions{ .onePerRecipe = true }
 
 /*!
- * \class SaltCatalog
+ * \class BoilCatalog
  *
  * \brief View/controller class for showing/editing the list of salts in the database.
  */
-class SaltCatalog : public QDialog, public CatalogBase<SaltCatalog,
-                                                       Salt,
-                                                       SaltTableModel,
-                                                       SaltSortFilterProxyModel,
-                                                       SaltEditor,
-                                                       SaltCatalogOptions> {
+class BoilCatalog : public QDialog, public CatalogBase<BoilCatalog,
+                                                       Boil,
+                                                       BoilTableModel,
+                                                       BoilSortFilterProxyModel,
+                                                       BoilEditor,
+                                                       BoilCatalogOptions> {
    Q_OBJECT
 
-   CATALOG_COMMON_DECL(Salt)
+   CATALOG_COMMON_DECL(Boil)
 
 };
 

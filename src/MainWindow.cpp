@@ -98,9 +98,12 @@
 #include "StrikeWaterDialog.h"
 #include "TimerMainDialog.h"
 #include "WaterProfileAdjustmentTool.h"
+#include "catalogs/BoilCatalog.h"
 #include "catalogs/EquipmentCatalog.h"
 #include "catalogs/FermentableCatalog.h"
+#include "catalogs/FermentationCatalog.h"
 #include "catalogs/HopCatalog.h"
+#include "catalogs/MashCatalog.h"
 #include "catalogs/MiscCatalog.h"
 #include "catalogs/SaltCatalog.h"
 #include "catalogs/StyleCatalog.h"
@@ -388,6 +391,9 @@ public:
       m_waterProfileAdjustmentTool = std::make_unique<WaterProfileAdjustmentTool>(&m_self);
       m_waterEditor                = std::make_unique<WaterEditor               >(&m_self);
       m_ancestorDialog             = std::make_unique<AncestorDialog            >(&m_self);
+      m_mashCatalog                = std::make_unique<MashCatalog               >(&m_self);
+      m_boilCatalog                = std::make_unique<BoilCatalog               >(&m_self);
+      m_fermentationCatalog        = std::make_unique<FermentationCatalog       >(&m_self);
 
       return;
    }
@@ -790,6 +796,9 @@ public:
    std::unique_ptr<AboutDialog               > m_aboutDialog           ;
    std::unique_ptr<AlcoholTool               > m_alcoholTool           ;
    std::unique_ptr<AncestorDialog            > m_ancestorDialog        ;
+   std::unique_ptr<MashCatalog               > m_mashCatalog           ;
+   std::unique_ptr<BoilCatalog               > m_boilCatalog           ;
+   std::unique_ptr<FermentationCatalog       > m_fermentationCatalog   ;
    std::unique_ptr<BoilEditor                > m_boilEditor            ;
    std::unique_ptr<BoilStepEditor            > m_boilStepEditor        ;
    std::unique_ptr<BtDatePopup               > m_btDatePopup           ;
@@ -1280,8 +1289,11 @@ void MainWindow::setupTriggers() {
    connect(actionUndo                      , &QAction::triggered, this                                      , &MainWindow::editUndo              ); // > Edit > Undo
    connect(actionRedo                      , &QAction::triggered, this                                      , &MainWindow::editRedo              ); // > Edit > Redo
    this->setUndoRedoEnable();
-   connect(actionEquipments                , &QAction::triggered, this->pimpl->m_equipmentCatalog.get()         , &QWidget::show                     ); // > View > Equipments
-   connect(actionMashs                     , &QAction::triggered, this->pimpl->m_namedMashEditor.get()      , &QWidget::show                     ); // > View > Mashs
+   connect(actionEquipments                , &QAction::triggered, this->pimpl->m_equipmentCatalog.get()     , &QWidget::show                     ); // > View > Equipments
+   connect(actionMashes                    , &QAction::triggered, this->pimpl->m_mashCatalog.get()          , &QWidget::show                     ); // > View > Mash Profiles
+   connect(actionBoils                     , &QAction::triggered, this->pimpl->m_boilCatalog.get()          , &QWidget::show                     ); // > View > Boil Profiles
+   connect(actionFermentations             , &QAction::triggered, this->pimpl->m_fermentationCatalog.get()  , &QWidget::show                     ); // > View > Fermentation Profiles
+
    connect(actionStyles                    , &QAction::triggered, this->pimpl->m_styleCatalog.get()         , &QWidget::show                     ); // > View > Styles
    connect(actionFermentables              , &QAction::triggered, this->pimpl->m_fermentableCatalog.get()          , &QWidget::show                     ); // > View > Fermentables
    connect(actionHops                      , &QAction::triggered, this->pimpl->m_hopCatalog.get()           , &QWidget::show                     ); // > View > Hops
@@ -2206,7 +2218,12 @@ void MainWindow::exportRecipe() {
    QList<Recipe const *> recipes;
    recipes.append(this->pimpl->m_recipeObs);
 
-   ImportExport::exportToFile(&recipes);
+   bool const exportResult = ImportExport::exportToFile(&recipes);
+   if (exportResult) {
+      this->updateStatus(tr("Wrote recipe to file"));
+   } else {
+      this->updateStatus(tr("Error writing recipe to file"));
+   }
    return;
 }
 
@@ -2833,9 +2850,9 @@ void MainWindow::fixBrewNote() {
    return;
 }
 
-void MainWindow::updateStatus(const QString status) {
-   if (statusBar()) {
-      statusBar()->showMessage(status, 3000);
+void MainWindow::updateStatus(QString const status) {
+   if (this->statusBar()) {
+      this->statusBar()->showMessage(status, 3000);
    }
    return;
 }

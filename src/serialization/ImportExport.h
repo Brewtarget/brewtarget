@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * serialization/ImportExport.h is part of Brewtarget, and is copyright the following authors 2013-2024:
+ * serialization/ImportExport.h is part of Brewtarget, and is copyright the following authors 2013-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
  *
@@ -63,8 +63,10 @@ namespace ImportExport {
     * \param styles
     * \param waters
     * \param yeasts
+    *
+    * \return \c true if succeeded, \c false otherwise
     */
-   void exportToFile(QList<Recipe      const *> const * recipes,
+   bool exportToFile(QList<Recipe      const *> const * recipes,
                      QList<Equipment   const *> const * equipments   = nullptr,
                      QList<Fermentable const *> const * fermentables = nullptr,
                      QList<Hop         const *> const * hops         = nullptr,

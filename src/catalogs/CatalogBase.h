@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * catalogs/CatalogBase.h is part of Brewtarget, and is copyright the following authors 2023-2024:
+ * catalogs/CatalogBase.h is part of Brewtarget, and is copyright the following authors 2023-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -36,6 +36,26 @@
 
 // TBD: Double-click does different things depending on whether you're looking at list of things in a recipe or
 // list of all things.  Propose it should become consistent!
+
+/**
+ * \brief This is used as a template parameter to turn on and off various \b small features in \c CatalogBase (in
+ *        conjunction with the concepts defined below).
+ *
+ * \sa CatalogBase
+ */
+struct CatalogBaseOptions {
+   /**
+    * \brief This should be enabled for things such as Mash, Style, Equipment, where there is only one per Recipe (so
+    *        it makes sense to show "Use in recipe" rather than "Add to recipe").
+    *
+    *        We could probably deduce this in another way, eg by seeing if \c NE inherits from \c Ingredient.  But this
+    *        is simpler and more direct, without adding much extra code.
+    */
+   bool onePerRecipe = false;
+};
+template <CatalogBaseOptions cb> struct is_OnePerRecipe : public std::integral_constant<bool, cb.onePerRecipe>{};
+// See comment in utils/TypeTraits.h for definition of CONCEPT_FIX_UP (and why, for now, we need it)
+template <CatalogBaseOptions cb> concept CONCEPT_FIX_UP IsOnePerRecipe = is_OnePerRecipe<cb>::value;
 
 /**
  * \class CatalogBase
@@ -90,7 +110,12 @@
  *        † Not the greatest name, but `new` is a reserved word and `create` is already taken by QWidget
  */
 template<class Derived> class CatalogPhantom;
-template<class Derived, class NE, class NeTableModel, class NeSortFilterProxyModel, class NeEditor>
+template<class Derived,
+         class NE,
+         class NeTableModel,
+         class NeSortFilterProxyModel,
+         class NeEditor,
+         CatalogBaseOptions catalogBaseOptions>
 class CatalogBase : public CuriouslyRecurringTemplateBase<CatalogPhantom, Derived> {
 public:
 
@@ -196,7 +221,16 @@ public:
    void retranslateUi() {
       this->derived().setWindowTitle(QString(QObject::tr("%1 Catalog / Database")).arg(NE::localisedName()));
       if (this->m_pushButton_addToRecipe) {
-         this->m_pushButton_addToRecipe->setText(QString(QObject::tr("Add to Recipe")));
+         //
+         // We say "add to recipe" for things like hops, fermentables, etc, where there can be more than one in a
+         // recipe.  We say "use in recipe" for things like equipment, style, mash, etc where there is only one per
+         // recipe.
+         //
+         if constexpr (IsOnePerRecipe<catalogBaseOptions>) {
+            this->m_pushButton_addToRecipe->setText(QString(QObject::tr("Set for Recipe")));
+         } else {
+            this->m_pushButton_addToRecipe->setText(QString(QObject::tr("Add to Recipe")));
+         }
       }
       this->m_pushButton_new   ->setText(QString(QObject::tr("New")));
       this->m_pushButton_edit  ->setText(QString());
@@ -399,7 +433,8 @@ public:
                             NeName,                                                \
                             NeName##TableModel,                                    \
                             NeName##SortFilterProxyModel,                          \
-                            NeName##Editor>;                                       \
+                            NeName##Editor,                                        \
+                            NeName##CatalogOptions>;                               \
                                                                                    \
    public:                                                                         \
       NeName##Catalog(MainWindow * parent);                                        \
@@ -429,7 +464,8 @@ public:
                   NeName,                                 \
                   NeName##TableModel,                     \
                   NeName##SortFilterProxyModel,           \
-                  NeName##Editor>(parent) {               \
+                  NeName##Editor,                         \
+                  NeName##CatalogOptions>(parent) {       \
       return;                                             \
    }                                                      \
                                                           \

@@ -127,8 +127,8 @@ public slots:
    //! \brief Update Recipe's mash
    void updateRecipeMash();
 
-   //! \brief Update the main windows statusbar.
-   void updateStatus(const QString status);
+   //! \brief Update the main window's statusbar.
+   void updateStatus(QString const status);
 
    //! \brief Close a brewnote tab if we must (because of the BrewNote being deleted)
    void closeBrewNote(int brewNoteId, std::shared_ptr<QObject> object);

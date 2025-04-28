@@ -2506,6 +2506,14 @@ If you need help, please open an issue at %1</source>
         <source>Drop salt(s) on a recipe</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Wrote recipe to file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error writing recipe to file</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Mash</name>
@@ -4237,6 +4245,10 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Add %1 step to recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set for Recipe</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

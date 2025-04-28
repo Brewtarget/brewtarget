@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * catalogs/StyleCatalog.h is part of Brewtarget, and is copyright the following authors 2023:
+ * catalogs/StyleCatalog.h is part of Brewtarget, and is copyright the following authors 2023-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -28,6 +28,8 @@
 // This needs to be the last include.  (I know, I know...)
 #include "catalogs/CatalogBase.h"
 
+#define StyleCatalogOptions CatalogBaseOptions{ .onePerRecipe = true }
+
 /*!
  * \class StyleCatalog
  *
@@ -37,7 +39,8 @@ class StyleCatalog : public QDialog, public CatalogBase<StyleCatalog,
                                                         Style,
                                                         StyleTableModel,
                                                         StyleSortFilterProxyModel,
-                                                        StyleEditor> {
+                                                        StyleEditor,
+                                                        StyleCatalogOptions> {
    Q_OBJECT
 
    CATALOG_COMMON_DECL(Style)
