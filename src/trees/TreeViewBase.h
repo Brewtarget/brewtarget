@@ -79,12 +79,11 @@ private:
 
       this->derived().setAllColumnsShowFocus(true);
       this->derived().setContextMenuPolicy(Qt::CustomContextMenu);
-      this->derived().setRootIsDecorated(false);
 
-      this->derived().setDragEnabled(true);
-      this->derived().setAcceptDrops(true);
-      this->derived().setDropIndicatorShown(true);
-      this->derived().setSelectionMode(QAbstractItemView::ExtendedSelection);
+///      this->derived().setDragEnabled(true); // Already done in TreeView::TreeView
+///      this->derived().setAcceptDrops(true); // Already done in TreeView::TreeView
+///      this->derived().setDropIndicatorShown(true); // Already done in TreeView::TreeView
+///      this->derived().setSelectionMode(QAbstractItemView::ExtendedSelection); // Already done in TreeView::TreeView
 
       this->derived().setExpanded(this->derived().findElement(std::shared_ptr<NE>{nullptr}), true);
       this->derived().setSortingEnabled(true);

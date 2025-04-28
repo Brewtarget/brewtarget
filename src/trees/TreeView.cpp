@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * trees/TreeView.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * trees/TreeView.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Mattias Måhl <mattias@kejsarsten.com>
  *   • Matt Young <mfsy@yahoo.com>
@@ -38,7 +38,9 @@ TreeView::TreeView(QWidget * parent) :
    // Set some global properties that all the kids will use.
    this->setAllColumnsShowFocus(true);
    this->setContextMenuPolicy(Qt::CustomContextMenu);
-   this->setRootIsDecorated(false);
+
+   // This shows the little arrow next to folders so you can see whether they are expanded or not
+   this->setRootIsDecorated(true);
 
    this->setDragEnabled(true);
    this->setAcceptDrops(true);
