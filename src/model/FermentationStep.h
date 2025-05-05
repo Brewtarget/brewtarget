@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/FermentationStep.h is part of Brewtarget, and is copyright the following authors 2023-2024:
+ * model/FermentationStep.h is part of Brewtarget, and is copyright the following authors 2023-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -23,6 +23,10 @@
 #include "model/StepBase.h"
 #include "model/StepExtended.h"
 #include "utils/EnumStringMapping.h"
+
+class FermentationStepEditor;
+class FermentationStepItemDelegate;
+class FermentationStepTableModel;
 
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
@@ -67,6 +71,20 @@ public:
    // Step.
    //
    using OwnerClass = Fermentation;
+
+   //
+   // Aliases to make it easier to template various functions that are essentially the same across different NamedEntity
+   // subclasses.
+   //
+   using EditorClass       = FermentationStepEditor;
+   using ItemDelegateClass = FermentationStepItemDelegate;
+   using TableModelClass   = FermentationStepTableModel;
+
+   /**
+    * \brief Similarly it is useful to be able to get the editor for a \c Step subclass from template code (and without
+    *        needing to directly call a \c MainWindow function, otherwise we get circular dependencies).
+    */
+   static EditorClass & getEditor();
 
    /**
     * \brief Mapping of names to types for the Qt properties of this class.  See \c NamedEntity::typeLookup for more

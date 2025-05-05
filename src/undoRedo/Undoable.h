@@ -74,11 +74,6 @@ namespace Undoable {
       addStepToStepOwner(*stepOwner, step);
       return;
    }
-
-   // This is just a wrapper around MainWindow::remove, needed to avoid circular dependencies.
-   // See .cpp file for implementation
-   template<typename NE> void removeFromCurrentRecipe(std::shared_ptr<NE> itemToRemove);
-
 }
 
 #endif

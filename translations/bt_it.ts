@@ -1172,6 +1172,18 @@ Log file may contain more details.</source>
         <source>A folder name must have at least one non-/ character in it</source>
         <translation type="unfinished">Una cartella deve avere almeno un carattere diverso da /</translation>
     </message>
+    <message>
+        <source>Edit «%1»</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit «%1» %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Equipment</name>
@@ -2364,7 +2376,7 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Please give your mash a name before saving.</source>
-        <translation>Si prega di dare il nome al tuo mash prima di salvare.</translation>
+        <translation type="vanished">Si prega di dare il nome al tuo mash prima di salvare.</translation>
     </message>
     <message>
         <source>Restart</source>
@@ -2487,10 +2499,6 @@ Log file may contain more details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Remove %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Error Loading Data</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2547,10 +2555,6 @@ If you need help, please open an issue at %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Change Recipe Mash</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Change Recipe Equipment</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2572,6 +2576,18 @@ If you need help, please open an issue at %1</source>
     </message>
     <message>
         <source>Error writing recipe to file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change recipe&apos;s mash profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change recipe&apos;s boil profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change recipe&apos;s fermentation profile</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3032,6 +3048,26 @@ If you need help, please open an issue at %1</source>
     </message>
     <message>
         <source>Unnamed %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add %1 step</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove selected %1 step</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move selected %1 step up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move selected %1 step down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit selected %1 step</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4296,11 +4332,11 @@ Log file may contain more details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add %1 step to recipe</source>
+        <source>Set for Recipe</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Set for Recipe</source>
+        <source>Add step to %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -8361,27 +8397,27 @@ Il Volume finale del primo è %1.</translation>
     </message>
     <message>
         <source>Add mash step</source>
-        <translation>Aggiungi step di ammostamento</translation>
+        <translation type="vanished">Aggiungi step di ammostamento</translation>
     </message>
     <message>
         <source>Remove selected mash step</source>
-        <translation>Rimuovi step selezionato di ammostamento</translation>
+        <translation type="vanished">Rimuovi step selezionato di ammostamento</translation>
     </message>
     <message>
         <source>Edit selected mash step</source>
-        <translation>Rimuovi step di ammostamento selezionato</translation>
+        <translation type="vanished">Rimuovi step di ammostamento selezionato</translation>
     </message>
     <message>
         <source>Edit mash properties</source>
-        <translation>Modifica proprietà di ammostamento</translation>
+        <translation type="vanished">Modifica proprietà di ammostamento</translation>
     </message>
     <message>
         <source>Edit mash</source>
-        <translation>Modifica ammostamento</translation>
+        <translation type="vanished">Modifica ammostamento</translation>
     </message>
     <message>
         <source>Mash Des</source>
-        <translation>Mash Des</translation>
+        <translation type="vanished">Mash Des</translation>
     </message>
     <message>
         <source>Invoke the mash wizard</source>
@@ -8389,27 +8425,27 @@ Il Volume finale del primo è %1.</translation>
     </message>
     <message>
         <source>Mash wiz</source>
-        <translation>Mask wiz</translation>
+        <translation type="vanished">Mask wiz</translation>
     </message>
     <message>
         <source>Mashs</source>
-        <translation>Ammostamenti</translation>
+        <translation type="vanished">Ammostamenti</translation>
     </message>
     <message>
         <source>Mash step up</source>
-        <translation>Prosegui ammostamento</translation>
+        <translation type="vanished">Prosegui ammostamento</translation>
     </message>
     <message>
         <source>Mash step down</source>
-        <translation>Regredisci ammostamento</translation>
+        <translation type="vanished">Regredisci ammostamento</translation>
     </message>
     <message>
         <source>Save this mash profile</source>
-        <translation>Salva questo profilo di Mash</translation>
+        <translation type="vanished">Salva questo profilo di Mash</translation>
     </message>
     <message>
         <source>Save Mash</source>
-        <translation>Salva Mash</translation>
+        <translation type="vanished">Salva Mash</translation>
     </message>
     <message>
         <source>&amp;About</source>
@@ -8768,43 +8804,7 @@ Il Volume finale del primo è %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add boil step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Remove selected boil step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit selected boil step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit boil properties</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit boil</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Boils</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Boil step up</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Boil step down</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save this boil profile</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save Boil</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8812,43 +8812,7 @@ Il Volume finale del primo è %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add fermentation step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Remove selected fermentation step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit selected fermentation step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit fermentation properties</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit fermentation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Fermentations</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fermentation step up</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fermentation step down</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save this fermentation profile</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save Fermentation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8910,6 +8874,14 @@ Il Volume finale del primo è %1.</translation>
     <message>
         <source>&amp;Fermentation Profiles</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mash Designer</source>
+        <translation type="unfinished">Progettazione Ammostamenti</translation>
+    </message>
+    <message>
+        <source>Mash Wizard</source>
+        <translation type="unfinished">Mash Wizard</translation>
     </message>
 </context>
 <context>
@@ -9430,80 +9402,76 @@ Il Volume finale del primo è %1.</translation>
 <context>
     <name>namedMashEditor</name>
     <message>
-        <source>Named Mash Editor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Mash</source>
-        <translation>Ammostatura</translation>
+        <translation type="vanished">Ammostatura</translation>
     </message>
     <message>
         <source>Delete selected style</source>
-        <translation>Elimina stile selezionato</translation>
+        <translation type="vanished">Elimina stile selezionato</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation type="vanished">Nome</translation>
     </message>
     <message>
         <source>Initial grain temp</source>
-        <translation>Temp iniziale chicchi</translation>
+        <translation type="vanished">Temp iniziale chicchi</translation>
     </message>
     <message>
         <source>Sparge temp</source>
-        <translation>Temperatura di Sparge</translation>
+        <translation type="vanished">Temperatura di Sparge</translation>
     </message>
     <message>
         <source>Sparge temp target</source>
-        <translation>Obiettivo Temepratuta di Saprge</translation>
+        <translation type="vanished">Obiettivo Temepratuta di Saprge</translation>
     </message>
     <message>
         <source>Sparge pH</source>
-        <translation>pH di Sparge</translation>
+        <translation type="vanished">pH di Sparge</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Note</translation>
+        <translation type="vanished">Note</translation>
     </message>
     <message>
         <source>Tun</source>
-        <translation>Tino</translation>
+        <translation type="vanished">Tino</translation>
     </message>
     <message>
         <source>Initial tun temp</source>
-        <translation>Temp iniziale botte</translation>
+        <translation type="vanished">Temp iniziale botte</translation>
     </message>
     <message>
         <source>From Equipment</source>
-        <translation>Dall&apos;attrezzatura</translation>
+        <translation type="vanished">Dall&apos;attrezzatura</translation>
     </message>
     <message>
         <source>Tun mass</source>
-        <translation>Massa Botte</translation>
+        <translation type="vanished">Massa Botte</translation>
     </message>
     <message>
         <source>Tun sp. heat</source>
-        <translation>Tun sp.Calore</translation>
+        <translation type="vanished">Tun sp.Calore</translation>
     </message>
     <message>
         <source>Tun specific heat (cal/(g*K))</source>
-        <translation>Calore specifico botte (cal/g*K))</translation>
+        <translation type="vanished">Calore specifico botte (cal/g*K))</translation>
     </message>
     <message>
         <source>Add mash step</source>
-        <translation>Aggiungi step mash</translation>
+        <translation type="vanished">Aggiungi step mash</translation>
     </message>
     <message>
         <source>Remove selected mash step</source>
-        <translation>Rimuovi mash step selezionato</translation>
+        <translation type="vanished">Rimuovi mash step selezionato</translation>
     </message>
     <message>
         <source>Mash step up</source>
-        <translation>Procedi con l&apos;ammostamento</translation>
+        <translation type="vanished">Procedi con l&apos;ammostamento</translation>
     </message>
     <message>
         <source>Mash step down</source>
-        <translation>Regredisci Ammostamento</translation>
+        <translation type="vanished">Regredisci Ammostamento</translation>
     </message>
 </context>
 <context>

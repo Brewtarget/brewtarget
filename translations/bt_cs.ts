@@ -1089,6 +1089,18 @@ Log file may contain more details.</source>
         <source>A folder name must have at least one non-/ character in it</source>
         <translation type="unfinished">Název adresáře musí obsahovat alespoň jeden nelomítkový znak</translation>
     </message>
+    <message>
+        <source>Edit «%1»</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit «%1» %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Equipment</name>
@@ -2253,7 +2265,7 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Please give your mash a name before saving.</source>
-        <translation>Prosím, před ukládáním svůj rmut pojmenujte.</translation>
+        <translation type="vanished">Prosím, před ukládáním svůj rmut pojmenujte.</translation>
     </message>
     <message>
         <source>Restart</source>
@@ -2376,10 +2388,6 @@ Log file may contain more details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Remove %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Error Loading Data</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2436,10 +2444,6 @@ If you need help, please open an issue at %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Change Recipe Mash</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Change Recipe Equipment</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2461,6 +2465,18 @@ If you need help, please open an issue at %1</source>
     </message>
     <message>
         <source>Error writing recipe to file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change recipe&apos;s mash profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change recipe&apos;s boil profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change recipe&apos;s fermentation profile</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2917,6 +2933,26 @@ If you need help, please open an issue at %1</source>
     </message>
     <message>
         <source>Unnamed %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add %1 step</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove selected %1 step</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move selected %1 step up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move selected %1 step down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit selected %1 step</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4185,11 +4221,11 @@ Log file may contain more details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add %1 step to recipe</source>
+        <source>Set for Recipe</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Set for Recipe</source>
+        <source>Add step to %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -8212,27 +8248,27 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
     <message>
         <source>Add mash step</source>
-        <translation>Přidat rmutovací krok</translation>
+        <translation type="vanished">Přidat rmutovací krok</translation>
     </message>
     <message>
         <source>Remove selected mash step</source>
-        <translation>Odebrat zvolený rmutovací krok</translation>
+        <translation type="vanished">Odebrat zvolený rmutovací krok</translation>
     </message>
     <message>
         <source>Edit selected mash step</source>
-        <translation>Upravit zvolený rmutovací krok</translation>
+        <translation type="vanished">Upravit zvolený rmutovací krok</translation>
     </message>
     <message>
         <source>Edit mash properties</source>
-        <translation>Upravit možnosti rmutování</translation>
+        <translation type="vanished">Upravit možnosti rmutování</translation>
     </message>
     <message>
         <source>Edit mash</source>
-        <translation>Upravit rmutování</translation>
+        <translation type="vanished">Upravit rmutování</translation>
     </message>
     <message>
         <source>Mash Des</source>
-        <translation>Návrhář rmutování</translation>
+        <translation type="vanished">Návrhář rmutování</translation>
     </message>
     <message>
         <source>Invoke the mash wizard</source>
@@ -8240,27 +8276,27 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
     <message>
         <source>Mash wiz</source>
-        <translation>Průvodce rmutováním</translation>
+        <translation type="vanished">Průvodce rmutováním</translation>
     </message>
     <message>
         <source>Mashs</source>
-        <translation>Rmutování</translation>
+        <translation type="vanished">Rmutování</translation>
     </message>
     <message>
         <source>Mash step up</source>
-        <translation>Krok nahoru</translation>
+        <translation type="vanished">Krok nahoru</translation>
     </message>
     <message>
         <source>Mash step down</source>
-        <translation>Krok dolů</translation>
+        <translation type="vanished">Krok dolů</translation>
     </message>
     <message>
         <source>Save this mash profile</source>
-        <translation>Uložit tento rmutovací profil</translation>
+        <translation type="vanished">Uložit tento rmutovací profil</translation>
     </message>
     <message>
         <source>Save Mash</source>
-        <translation>Uložit rmutování</translation>
+        <translation type="vanished">Uložit rmutování</translation>
     </message>
     <message>
         <source>&amp;About</source>
@@ -8615,43 +8651,7 @@ Celkový objem pro hlavní kvašení je %1.</translation>
         <translation type="unfinished">Chmelovar</translation>
     </message>
     <message>
-        <source>Add boil step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Remove selected boil step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit selected boil step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit boil properties</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit boil</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Boils</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Boil step up</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Boil step down</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save this boil profile</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save Boil</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8659,43 +8659,7 @@ Celkový objem pro hlavní kvašení je %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add fermentation step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Remove selected fermentation step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit selected fermentation step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit fermentation properties</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit fermentation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Fermentations</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fermentation step up</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fermentation step down</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save this fermentation profile</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save Fermentation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8757,6 +8721,14 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     <message>
         <source>&amp;Fermentation Profiles</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mash Designer</source>
+        <translation type="unfinished">Návrhář rmutování</translation>
+    </message>
+    <message>
+        <source>Mash Wizard</source>
+        <translation type="unfinished">Průvodce rmutováním</translation>
     </message>
 </context>
 <context>
@@ -9278,79 +9250,79 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     <name>namedMashEditor</name>
     <message>
         <source>Named Mash Editor</source>
-        <translation>Editor pojmenovaných rmutovacích schémat</translation>
+        <translation type="vanished">Editor pojmenovaných rmutovacích schémat</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation>Rmutovací schéma</translation>
+        <translation type="vanished">Rmutovací schéma</translation>
     </message>
     <message>
         <source>Delete selected style</source>
-        <translation>Odstranit vybraný styl</translation>
+        <translation type="vanished">Odstranit vybraný styl</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Název</translation>
+        <translation type="vanished">Název</translation>
     </message>
     <message>
         <source>Initial grain temp</source>
-        <translation>Počáteční teplota sladu</translation>
+        <translation type="vanished">Počáteční teplota sladu</translation>
     </message>
     <message>
         <source>Sparge temp</source>
-        <translation>Teplota vyslazovací vody</translation>
+        <translation type="vanished">Teplota vyslazovací vody</translation>
     </message>
     <message>
         <source>Sparge temp target</source>
-        <translation>Cílová teplota vyslazovací vody</translation>
+        <translation type="vanished">Cílová teplota vyslazovací vody</translation>
     </message>
     <message>
         <source>Sparge pH</source>
-        <translation>pH sladiny</translation>
+        <translation type="vanished">pH sladiny</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Poznámky</translation>
+        <translation type="vanished">Poznámky</translation>
     </message>
     <message>
         <source>Tun</source>
-        <translation>Káď</translation>
+        <translation type="vanished">Káď</translation>
     </message>
     <message>
         <source>Initial tun temp</source>
-        <translation>Počáteční teplota kádě</translation>
+        <translation type="vanished">Počáteční teplota kádě</translation>
     </message>
     <message>
         <source>From Equipment</source>
-        <translation>Z vybavení</translation>
+        <translation type="vanished">Z vybavení</translation>
     </message>
     <message>
         <source>Tun mass</source>
-        <translation>Hmotnost kádě</translation>
+        <translation type="vanished">Hmotnost kádě</translation>
     </message>
     <message>
         <source>Tun sp. heat</source>
-        <translation>Spec. teplo kádě</translation>
+        <translation type="vanished">Spec. teplo kádě</translation>
     </message>
     <message>
         <source>Tun specific heat (cal/(g*K))</source>
-        <translation>Specifické teplo kádě (kalorií/(g*K))</translation>
+        <translation type="vanished">Specifické teplo kádě (kalorií/(g*K))</translation>
     </message>
     <message>
         <source>Add mash step</source>
-        <translation>Přidat rmutovací krok</translation>
+        <translation type="vanished">Přidat rmutovací krok</translation>
     </message>
     <message>
         <source>Remove selected mash step</source>
-        <translation>Odebrat zvolený rmutovací krok</translation>
+        <translation type="vanished">Odebrat zvolený rmutovací krok</translation>
     </message>
     <message>
         <source>Mash step up</source>
-        <translation>Krok nahoru</translation>
+        <translation type="vanished">Krok nahoru</translation>
     </message>
     <message>
         <source>Mash step down</source>
-        <translation>Krok dolů</translation>
+        <translation type="vanished">Krok dolů</translation>
     </message>
 </context>
 <context>

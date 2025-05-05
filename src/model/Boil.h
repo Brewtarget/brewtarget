@@ -30,6 +30,9 @@
 
 class BoilCatalog;
 class BoilEditor;
+class BoilItemDelegate;
+class BoilSortFilterProxyModel;
+class BoilTableModel;
 
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
@@ -85,11 +88,14 @@ public:
    static QString localisedName();
 
    //
-   // These aliases make it easier to template a number of functions that are essentially the same for a number of
-   // different NamedEntity subclasses.
+   // Aliases to make it easier to template various functions that are essentially the same across different NamedEntity
+   // subclasses.
    //
-   using CatalogClass = BoilCatalog;
-   using EditorClass  = BoilEditor;
+   using CatalogClass              = BoilCatalog;
+   using EditorClass               = BoilEditor;
+   using ItemDelegateClass         = BoilItemDelegate;
+   using SortFilterProxyModelClass = BoilSortFilterProxyModel;
+   using TableModelClass           = BoilTableModel;
 
    /**
     * \brief Mapping of names to types for the Qt properties of this class.  See \c NamedEntity::typeLookup for more

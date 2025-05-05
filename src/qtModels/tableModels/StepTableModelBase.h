@@ -40,6 +40,7 @@ protected:
    }
    ~StepTableModelBase() = default;
 
+public:
    /**
     * \brief Set the step owner (eg Mash) whose steps (eg MashStep objects) we want to model, or reload steps from an
     *        existing step owner after they were changed.
@@ -104,6 +105,7 @@ protected:
       return this->m_stepOwnerObs;
    }
 
+protected:
    //! \returns true if \c step is successfully found and removed.
    bool doRemoveStep(std::shared_ptr<StepClass> step) {
       int ii {static_cast<int>(this->derived().m_rows.indexOf(step))};
@@ -216,7 +218,7 @@ protected:
          int ii = this->derived().findIndexOf(stepSender);
          if (ii >= 0) {
             if (prop.name() == PropertyNames::EnumeratedBase::stepNumber) {
-               qDebug().noquote() << Q_FUNC_INFO << Logging::getStackTrace();
+//               qDebug().noquote() << Q_FUNC_INFO << Logging::getStackTrace();
                this->reorderStep(this->derived().m_rows.at(ii), ii);
             }
 

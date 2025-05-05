@@ -1164,6 +1164,18 @@ Log file may contain more details.</source>
         <source>A folder name must have at least one non-/ character in it</source>
         <translation type="unfinished">Un nom de carpeta ha de tenir al menys un caràcter diferent a «/»</translation>
     </message>
+    <message>
+        <source>Edit «%1»</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit «%1» %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Equipment</name>
@@ -2364,7 +2376,7 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Please give your mash a name before saving.</source>
-        <translation>Cal posar un nom a la maceració abans de guardar.</translation>
+        <translation type="vanished">Cal posar un nom a la maceració abans de guardar.</translation>
     </message>
     <message>
         <source>Restart</source>
@@ -2487,10 +2499,6 @@ Log file may contain more details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Remove %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Error Loading Data</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2547,10 +2555,6 @@ If you need help, please open an issue at %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Change Recipe Mash</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Change Recipe Equipment</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2572,6 +2576,18 @@ If you need help, please open an issue at %1</source>
     </message>
     <message>
         <source>Error writing recipe to file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change recipe&apos;s mash profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change recipe&apos;s boil profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change recipe&apos;s fermentation profile</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3032,6 +3048,26 @@ If you need help, please open an issue at %1</source>
     </message>
     <message>
         <source>Unnamed %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add %1 step</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove selected %1 step</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move selected %1 step up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move selected %1 step down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit selected %1 step</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4312,11 +4348,11 @@ Log file may contain more details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add %1 step to recipe</source>
+        <source>Set for Recipe</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Set for Recipe</source>
+        <source>Add step to %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -8372,27 +8408,27 @@ El volum final al primari és de %1.</translation>
     </message>
     <message>
         <source>Add mash step</source>
-        <translation>Afegeix una fase a la maceració</translation>
+        <translation type="vanished">Afegeix una fase a la maceració</translation>
     </message>
     <message>
         <source>Remove selected mash step</source>
-        <translation>Elimina la fase seleccionada</translation>
+        <translation type="vanished">Elimina la fase seleccionada</translation>
     </message>
     <message>
         <source>Edit selected mash step</source>
-        <translation>Edita la fase seleccionada</translation>
+        <translation type="vanished">Edita la fase seleccionada</translation>
     </message>
     <message>
         <source>Edit mash properties</source>
-        <translation>Edita les característiques de la maceració</translation>
+        <translation type="vanished">Edita les característiques de la maceració</translation>
     </message>
     <message>
         <source>Edit mash</source>
-        <translation>Edita maceració</translation>
+        <translation type="vanished">Edita maceració</translation>
     </message>
     <message>
         <source>Mash Des</source>
-        <translation>Dissenyador</translation>
+        <translation type="vanished">Dissenyador</translation>
     </message>
     <message>
         <source>Invoke the mash wizard</source>
@@ -8400,27 +8436,27 @@ El volum final al primari és de %1.</translation>
     </message>
     <message>
         <source>Mash wiz</source>
-        <translation>Giny</translation>
+        <translation type="vanished">Giny</translation>
     </message>
     <message>
         <source>Mashs</source>
-        <translation>Maceracions</translation>
+        <translation type="vanished">Maceracions</translation>
     </message>
     <message>
         <source>Mash step up</source>
-        <translation>Mou cap a dalt la fase de maceració</translation>
+        <translation type="vanished">Mou cap a dalt la fase de maceració</translation>
     </message>
     <message>
         <source>Mash step down</source>
-        <translation>Mou cap abaix la fase de maceració</translation>
+        <translation type="vanished">Mou cap abaix la fase de maceració</translation>
     </message>
     <message>
         <source>Save this mash profile</source>
-        <translation>Desa aquest perfil de maceració</translation>
+        <translation type="vanished">Desa aquest perfil de maceració</translation>
     </message>
     <message>
         <source>Save Mash</source>
-        <translation>Desa maceració</translation>
+        <translation type="vanished">Desa maceració</translation>
     </message>
     <message>
         <source>&amp;About</source>
@@ -8775,43 +8811,7 @@ El volum final al primari és de %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add boil step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Remove selected boil step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit selected boil step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit boil properties</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit boil</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Boils</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Boil step up</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Boil step down</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save this boil profile</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save Boil</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8819,43 +8819,7 @@ El volum final al primari és de %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add fermentation step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Remove selected fermentation step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit selected fermentation step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit fermentation properties</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit fermentation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Fermentations</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fermentation step up</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fermentation step down</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save this fermentation profile</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save Fermentation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8917,6 +8881,14 @@ El volum final al primari és de %1.</translation>
     <message>
         <source>&amp;Fermentation Profiles</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mash Designer</source>
+        <translation type="unfinished">Dissenyador de maceració</translation>
+    </message>
+    <message>
+        <source>Mash Wizard</source>
+        <translation type="unfinished">Assistent de la maceració</translation>
     </message>
 </context>
 <context>
@@ -9438,79 +9410,79 @@ El volum final al primari és de %1.</translation>
     <name>namedMashEditor</name>
     <message>
         <source>Named Mash Editor</source>
-        <translation>Editor de maceracions amb nom</translation>
+        <translation type="vanished">Editor de maceracions amb nom</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation>Maceració</translation>
+        <translation type="vanished">Maceració</translation>
     </message>
     <message>
         <source>Delete selected style</source>
-        <translation>Elimina estil seleccionat</translation>
+        <translation type="vanished">Elimina estil seleccionat</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nom</translation>
+        <translation type="vanished">Nom</translation>
     </message>
     <message>
         <source>Initial grain temp</source>
-        <translation>Temp. inicial del gra</translation>
+        <translation type="vanished">Temp. inicial del gra</translation>
     </message>
     <message>
         <source>Sparge temp</source>
-        <translation>Temp. de rentat</translation>
+        <translation type="vanished">Temp. de rentat</translation>
     </message>
     <message>
         <source>Sparge temp target</source>
-        <translation>Temp. desitjada del rentat</translation>
+        <translation type="vanished">Temp. desitjada del rentat</translation>
     </message>
     <message>
         <source>Sparge pH</source>
-        <translation>pH del rentat</translation>
+        <translation type="vanished">pH del rentat</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Notes</translation>
+        <translation type="vanished">Notes</translation>
     </message>
     <message>
         <source>Tun</source>
-        <translation>Macerador</translation>
+        <translation type="vanished">Macerador</translation>
     </message>
     <message>
         <source>Initial tun temp</source>
-        <translation>Temp. inicial macerador</translation>
+        <translation type="vanished">Temp. inicial macerador</translation>
     </message>
     <message>
         <source>From Equipment</source>
-        <translation>De l&apos;equip</translation>
+        <translation type="vanished">De l&apos;equip</translation>
     </message>
     <message>
         <source>Tun mass</source>
-        <translation>Macerador</translation>
+        <translation type="vanished">Macerador</translation>
     </message>
     <message>
         <source>Tun sp. heat</source>
-        <translation>Macer. calor específic</translation>
+        <translation type="vanished">Macer. calor específic</translation>
     </message>
     <message>
         <source>Tun specific heat (cal/(g*K))</source>
-        <translation>Calor específic del macerador (cal/(g*K))</translation>
+        <translation type="vanished">Calor específic del macerador (cal/(g*K))</translation>
     </message>
     <message>
         <source>Add mash step</source>
-        <translation>Afegieix una fase a la maceració</translation>
+        <translation type="vanished">Afegieix una fase a la maceració</translation>
     </message>
     <message>
         <source>Remove selected mash step</source>
-        <translation>Elimina la fase seleccionada</translation>
+        <translation type="vanished">Elimina la fase seleccionada</translation>
     </message>
     <message>
         <source>Mash step up</source>
-        <translation>Mou cap a dalt la fase de maceració</translation>
+        <translation type="vanished">Mou cap a dalt la fase de maceració</translation>
     </message>
     <message>
         <source>Mash step down</source>
-        <translation>Mou cap abaix la fase de maceració</translation>
+        <translation type="vanished">Mou cap abaix la fase de maceració</translation>
     </message>
 </context>
 <context>

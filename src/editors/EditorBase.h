@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * editors/EditorBase.h is part of Brewtarget, and is copyright the following authors 2023-2024:
+ * editors/EditorBase.h is part of Brewtarget, and is copyright the following authors 2023-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -35,6 +35,8 @@
 #include "undoRedo/Undoable.h"
 #include "utils/CuriouslyRecurringTemplateBase.h"
 
+class StepOwner;
+
 /**
  * \brief Extra base class for \c MashStepEditor, \c BoilStepEditor and \c FermentationStepEditor to inherit from
  *        \b before inheriting from \c EditorBase.  This provides the functionality that, if we are creating a new step,
@@ -59,8 +61,10 @@ public:
     * \brief If the step being edited is new, then, when save is clicked, this should be called
     */
    void addStepToStepOwner(std::shared_ptr<NE> step) {
-      // Going via Undoable::addStepToStepOwner makes the action undoable
+      // It would be a coding error if, when showing MashStepEditor / BoilStepEditor / etc, the relevant
+      // MashStep / BoilStep / etc were not set.
       Q_ASSERT(this->m_stepOwner);
+      // Going via Undoable::addStepToStepOwner makes the action undoable
       Undoable::addStepToStepOwner(*this->m_stepOwner, step);
       return;
    }
@@ -312,6 +316,15 @@ public:
       if (this->m_editItem) {
          this->derived().connect(this->m_editItem.get(), &NamedEntity::changed, &this->derived(), &Derived::changed);
          this->readFieldsFromEditItem(std::nullopt);
+      }
+
+      //
+      // We detect when NE has a member StepClass (which should be a "using" alias) so we can show MashStep items in the
+      // Mash editor, BoilStep items in the Boil editor, etc.  This requires the Derived class to have (via its .ui
+      // file) a suitable subclass of StepsWidget (eg MashStepsWidget, BoilStepsWidget, etc) called stepsWidget.
+      //
+      if constexpr (std::is_base_of<StepOwner, NE>::value) {
+         this->derived().stepsWidget->setStepOwner(editItem);
       }
 
       this->setLiveEditItem();

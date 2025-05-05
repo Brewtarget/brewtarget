@@ -33,7 +33,10 @@
 class SaltCatalog;
 class SaltEditor;
 class InventorySalt;
+class SaltItemDelegate;
 class RecipeAdjustmentSalt;
+class SaltSortFilterProxyModel;
+class SaltTableModel;
 
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
@@ -104,13 +107,16 @@ public:
    static constexpr auto defaultMeasure = Measurement::PhysicalQuantity::Mass;
 
    //
-   // These aliases make it easier to template a number of functions that are essentially the same for a number of
-   // different NamedEntity subclasses.
+   // Aliases to make it easier to template various functions that are essentially the same across different NamedEntity
+   // subclasses.
    //
-   using CatalogClass        = SaltCatalog;
-   using EditorClass         = SaltEditor;
-   using InventoryClass      = InventorySalt;
-   using RecipeAdditionClass = RecipeAdjustmentSalt;
+   using CatalogClass              = SaltCatalog;
+   using EditorClass               = SaltEditor;
+   using InventoryClass            = InventorySalt;
+   using ItemDelegateClass         = SaltItemDelegate;
+   using RecipeAdditionClass       = RecipeAdjustmentSalt;
+   using SortFilterProxyModelClass = SaltSortFilterProxyModel;
+   using TableModelClass           = SaltTableModel;
 
    /**
     * \brief Mapping of names to types for the Qt properties of this class.  See \c NamedEntity::typeLookup for more

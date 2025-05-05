@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/MashStep.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * model/MashStep.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Mattias Måhl <mattias@kejsarsten.com>
  *   • Matt Young <mfsy@yahoo.com>
@@ -23,6 +23,7 @@
 #include <QVector>
 
 #include "database/ObjectStoreWrapper.h"
+#include "MainWindow.h"
 #include "model/NamedParameterBundle.h"
 #include "PhysicalConstants.h"
 #include "utils/AutoCompare.h"
@@ -69,6 +70,10 @@ bool MashStep::isEqualTo(NamedEntity const & other) const {
                      Mash,
                      MashStepOptions>::doIsEqualTo(rhs)
    );
+}
+
+MashStepEditor & MashStep::getEditor() {
+   return MainWindow::instance().getEditor<MashStep>();
 }
 
 TypeLookup const MashStep::typeLookup {

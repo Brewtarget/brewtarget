@@ -44,7 +44,11 @@
 class FermentableCatalog;
 class FermentableEditor;
 class InventoryFermentable;
+class FermentableItemDelegate;
 class RecipeAdditionFermentable;
+class FermentableSortFilterProxyModel;
+class FermentableTableModel;
+
 
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
@@ -174,13 +178,16 @@ public:
    static constexpr auto defaultMeasure = Measurement::PhysicalQuantity::Mass;
 
    //
-   // These aliases make it easier to template a number of functions that are essentially the same for a number of
-   // different NamedEntity subclasses.
+   // Aliases to make it easier to template various functions that are essentially the same across different NamedEntity
+   // subclasses.
    //
-   using CatalogClass        = FermentableCatalog;
-   using EditorClass         = FermentableEditor;
-   using InventoryClass      = InventoryFermentable;
-   using RecipeAdditionClass = RecipeAdditionFermentable;
+   using CatalogClass              = FermentableCatalog;
+   using EditorClass               = FermentableEditor;
+   using InventoryClass            = InventoryFermentable;
+   using ItemDelegateClass         = FermentableItemDelegate;
+   using RecipeAdditionClass       = RecipeAdditionFermentable;
+   using SortFilterProxyModelClass = FermentableSortFilterProxyModel;
+   using TableModelClass           = FermentableTableModel;
 
    /**
     * \brief Mapping of names to types for the Qt properties of this class.  See \c NamedEntity::typeLookup for more

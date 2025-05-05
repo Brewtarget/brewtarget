@@ -1109,6 +1109,18 @@ Log file may contain more details.</source>
         <source>A folder name must have at least one non-/ character in it</source>
         <translation type="unfinished">Et mappenavn må ha minst et ikke-/  tegn</translation>
     </message>
+    <message>
+        <source>Edit «%1»</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit «%1» %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Equipment</name>
@@ -2273,7 +2285,7 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Please give your mash a name before saving.</source>
-        <translation>Vennligst gi mesken et navn før du lagrer.</translation>
+        <translation type="vanished">Vennligst gi mesken et navn før du lagrer.</translation>
     </message>
     <message>
         <source>Restart</source>
@@ -2396,10 +2408,6 @@ Log file may contain more details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Remove %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Error Loading Data</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2456,10 +2464,6 @@ If you need help, please open an issue at %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Change Recipe Mash</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Change Recipe Equipment</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2481,6 +2485,18 @@ If you need help, please open an issue at %1</source>
     </message>
     <message>
         <source>Error writing recipe to file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change recipe&apos;s mash profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change recipe&apos;s boil profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change recipe&apos;s fermentation profile</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2941,6 +2957,26 @@ If you need help, please open an issue at %1</source>
     </message>
     <message>
         <source>Unnamed %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add %1 step</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove selected %1 step</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move selected %1 step up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move selected %1 step down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit selected %1 step</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4213,11 +4249,11 @@ Log file may contain more details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add %1 step to recipe</source>
+        <source>Set for Recipe</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Set for Recipe</source>
+        <source>Add step to %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -8269,27 +8305,27 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Add mash step</source>
-        <translation>Legg til meskefase</translation>
+        <translation type="vanished">Legg til meskefase</translation>
     </message>
     <message>
         <source>Remove selected mash step</source>
-        <translation>Fjern valgt meskefase</translation>
+        <translation type="vanished">Fjern valgt meskefase</translation>
     </message>
     <message>
         <source>Edit selected mash step</source>
-        <translation>Rediger valgt meskefase</translation>
+        <translation type="vanished">Rediger valgt meskefase</translation>
     </message>
     <message>
         <source>Edit mash properties</source>
-        <translation>Rediger meskeegenskaper</translation>
+        <translation type="vanished">Rediger meskeegenskaper</translation>
     </message>
     <message>
         <source>Edit mash</source>
-        <translation>Rediger mesk</translation>
+        <translation type="vanished">Rediger mesk</translation>
     </message>
     <message>
         <source>Mash Des</source>
-        <translation>Mesk Des</translation>
+        <translation type="vanished">Mesk Des</translation>
     </message>
     <message>
         <source>Invoke the mash wizard</source>
@@ -8297,27 +8333,27 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Mash wiz</source>
-        <translation>Meskeveil.</translation>
+        <translation type="vanished">Meskeveil.</translation>
     </message>
     <message>
         <source>Mashs</source>
-        <translation>Mesker</translation>
+        <translation type="vanished">Mesker</translation>
     </message>
     <message>
         <source>Mash step up</source>
-        <translation>Meskeopptrinn</translation>
+        <translation type="vanished">Meskeopptrinn</translation>
     </message>
     <message>
         <source>Mash step down</source>
-        <translation>Meskenedtrinn</translation>
+        <translation type="vanished">Meskenedtrinn</translation>
     </message>
     <message>
         <source>Save this mash profile</source>
-        <translation>Lagre denne meskeprofilen</translation>
+        <translation type="vanished">Lagre denne meskeprofilen</translation>
     </message>
     <message>
         <source>Save Mash</source>
-        <translation>Lagre mesk</translation>
+        <translation type="vanished">Lagre mesk</translation>
     </message>
     <message>
         <source>&amp;About</source>
@@ -8672,43 +8708,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
         <translation type="unfinished">Kok</translation>
     </message>
     <message>
-        <source>Add boil step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Remove selected boil step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit selected boil step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit boil properties</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit boil</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Boils</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Boil step up</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Boil step down</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save this boil profile</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save Boil</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8716,43 +8716,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add fermentation step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Remove selected fermentation step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit selected fermentation step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit fermentation properties</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit fermentation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Fermentations</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fermentation step up</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fermentation step down</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save this fermentation profile</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save Fermentation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8814,6 +8778,14 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     <message>
         <source>&amp;Fermentation Profiles</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mash Designer</source>
+        <translation type="unfinished">Meskedesigner</translation>
+    </message>
+    <message>
+        <source>Mash Wizard</source>
+        <translation type="unfinished">Meskeveilleder</translation>
     </message>
 </context>
 <context>
@@ -9335,79 +9307,79 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     <name>namedMashEditor</name>
     <message>
         <source>Named Mash Editor</source>
-        <translation>Navngitt meskeredigerer</translation>
+        <translation type="vanished">Navngitt meskeredigerer</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation>Mesk</translation>
+        <translation type="vanished">Mesk</translation>
     </message>
     <message>
         <source>Delete selected style</source>
-        <translation>Slett valgt stil</translation>
+        <translation type="vanished">Slett valgt stil</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Navn</translation>
+        <translation type="vanished">Navn</translation>
     </message>
     <message>
         <source>Initial grain temp</source>
-        <translation>Temperatur malt</translation>
+        <translation type="vanished">Temperatur malt</translation>
     </message>
     <message>
         <source>Sparge temp</source>
-        <translation>Temepratur meskevann</translation>
+        <translation type="vanished">Temepratur meskevann</translation>
     </message>
     <message>
         <source>Sparge temp target</source>
-        <translation>Måltemperatur meskevann</translation>
+        <translation type="vanished">Måltemperatur meskevann</translation>
     </message>
     <message>
         <source>Sparge pH</source>
-        <translation>Meskevannets pH</translation>
+        <translation type="vanished">Meskevannets pH</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Notater</translation>
+        <translation type="vanished">Notater</translation>
     </message>
     <message>
         <source>Tun</source>
-        <translation>Kar</translation>
+        <translation type="vanished">Kar</translation>
     </message>
     <message>
         <source>Initial tun temp</source>
-        <translation>Temperatur kar</translation>
+        <translation type="vanished">Temperatur kar</translation>
     </message>
     <message>
         <source>From Equipment</source>
-        <translation>Fra utstyr</translation>
+        <translation type="vanished">Fra utstyr</translation>
     </message>
     <message>
         <source>Tun mass</source>
-        <translation>Karets masse</translation>
+        <translation type="vanished">Karets masse</translation>
     </message>
     <message>
         <source>Tun sp. heat</source>
-        <translation>Karets spesifikk varme</translation>
+        <translation type="vanished">Karets spesifikk varme</translation>
     </message>
     <message>
         <source>Tun specific heat (cal/(g*K))</source>
-        <translation>Karets spesifikk varme (cal/(g*K))</translation>
+        <translation type="vanished">Karets spesifikk varme (cal/(g*K))</translation>
     </message>
     <message>
         <source>Add mash step</source>
-        <translation>Legg til meskefase</translation>
+        <translation type="vanished">Legg til meskefase</translation>
     </message>
     <message>
         <source>Remove selected mash step</source>
-        <translation>Fjern valgt meskefase</translation>
+        <translation type="vanished">Fjern valgt meskefase</translation>
     </message>
     <message>
         <source>Mash step up</source>
-        <translation>Meskeopptrinn</translation>
+        <translation type="vanished">Meskeopptrinn</translation>
     </message>
     <message>
         <source>Mash step down</source>
-        <translation>Meskenedtrinn</translation>
+        <translation type="vanished">Meskenedtrinn</translation>
     </message>
 </context>
 <context>

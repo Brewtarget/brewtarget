@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/StepOwnerBase.h is part of Brewtarget, and is copyright the following authors 2023-2024:
+ * model/StepOwnerBase.h is part of Brewtarget, and is copyright the following authors 2023-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -39,6 +39,8 @@ AddPropertyName(steps   )
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
 //======================================================================================================================
+
+class StepOwner{};
 
 #define StepOwnerBaseOptions OwnedSetOptions{ .enumerated = true }
 /**
@@ -81,7 +83,7 @@ AddPropertyName(steps   )
  */
 template<class Derived> class StepOwnerPhantom;
 template<class Derived, class DerivedStep>
-class StepOwnerBase : public CuriouslyRecurringTemplateBase<StepOwnerPhantom, Derived> {
+class StepOwnerBase : public CuriouslyRecurringTemplateBase<StepOwnerPhantom, Derived>, public StepOwner {
    // Note that, because this is static, it cannot be initialised inside the class definition
    static TypeLookup const typeLookup;
 

@@ -1057,6 +1057,18 @@ Log file may contain more details.</source>
         <source>A folder name must have at least one non-/ character in it</source>
         <translation type="unfinished">Klasör adları en az bir tane / olmayan karakter içermelidir</translation>
     </message>
+    <message>
+        <source>Edit «%1»</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit «%1» %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Equipment</name>
@@ -2137,7 +2149,7 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Please give your mash a name before saving.</source>
-        <translation>Lütfen kaydetmeden önce mayşenize bir isim verin.</translation>
+        <translation type="vanished">Lütfen kaydetmeden önce mayşenize bir isim verin.</translation>
     </message>
     <message>
         <source>Restart</source>
@@ -2368,10 +2380,6 @@ Günlük dosyası daha fazla detay içerebilir.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Remove %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Error Loading Data</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2428,10 +2436,6 @@ If you need help, please open an issue at %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Change Recipe Mash</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Change Recipe Equipment</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2445,6 +2449,18 @@ If you need help, please open an issue at %1</source>
     </message>
     <message>
         <source>Error writing recipe to file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change recipe&apos;s mash profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change recipe&apos;s boil profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change recipe&apos;s fermentation profile</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2961,6 +2977,26 @@ If you need help, please open an issue at %1</source>
     </message>
     <message>
         <source>Unnamed %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add %1 step</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove selected %1 step</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move selected %1 step up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move selected %1 step down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit selected %1 step</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4275,11 +4311,11 @@ Günlük dosyası daha fazla detay içerebilir.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add %1 step to recipe</source>
+        <source>Set for Recipe</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Set for Recipe</source>
+        <source>Add step to %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -8317,27 +8353,27 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Add mash step</source>
-        <translation>Mayşe adımı ekle</translation>
+        <translation type="vanished">Mayşe adımı ekle</translation>
     </message>
     <message>
         <source>Remove selected mash step</source>
-        <translation>Seçilen mayşe adımını kaldır</translation>
+        <translation type="vanished">Seçilen mayşe adımını kaldır</translation>
     </message>
     <message>
         <source>Edit selected mash step</source>
-        <translation>Seçilen mayşe adımını düzenle</translation>
+        <translation type="vanished">Seçilen mayşe adımını düzenle</translation>
     </message>
     <message>
         <source>Edit mash properties</source>
-        <translation>Mayşe seçeneklerini düzenle</translation>
+        <translation type="vanished">Mayşe seçeneklerini düzenle</translation>
     </message>
     <message>
         <source>Edit mash</source>
-        <translation>Mayşeyi düzenle</translation>
+        <translation type="vanished">Mayşeyi düzenle</translation>
     </message>
     <message>
         <source>Mash Des</source>
-        <translation>Mayşe Tanımı</translation>
+        <translation type="vanished">Mayşe Tanımı</translation>
     </message>
     <message>
         <source>Invoke the mash wizard</source>
@@ -8345,27 +8381,27 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Mash wiz</source>
-        <translation>Mayşe sihirbazı</translation>
+        <translation type="vanished">Mayşe sihirbazı</translation>
     </message>
     <message>
         <source>Mashs</source>
-        <translation>Mayşeler</translation>
+        <translation type="vanished">Mayşeler</translation>
     </message>
     <message>
         <source>Mash step up</source>
-        <translation>Mayşe adımını yukarıya taşı</translation>
+        <translation type="vanished">Mayşe adımını yukarıya taşı</translation>
     </message>
     <message>
         <source>Mash step down</source>
-        <translation>Mayşe adımını aşağıya taşı</translation>
+        <translation type="vanished">Mayşe adımını aşağıya taşı</translation>
     </message>
     <message>
         <source>Save this mash profile</source>
-        <translation>Bu mayşe profilini kaydet</translation>
+        <translation type="vanished">Bu mayşe profilini kaydet</translation>
     </message>
     <message>
         <source>Save Mash</source>
-        <translation>Mayşeyi kaydet</translation>
+        <translation type="vanished">Mayşeyi kaydet</translation>
     </message>
     <message>
         <source>&amp;About</source>
@@ -8668,43 +8704,7 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished">Kaynama</translation>
     </message>
     <message>
-        <source>Add boil step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Remove selected boil step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit selected boil step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit boil properties</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit boil</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Boils</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Boil step up</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Boil step down</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save this boil profile</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save Boil</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8712,43 +8712,7 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add fermentation step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Remove selected fermentation step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit selected fermentation step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit fermentation properties</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit fermentation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Fermentations</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fermentation step up</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fermentation step down</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save this fermentation profile</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save Fermentation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8810,6 +8774,14 @@ The final volume in the primary is %1.</source>
     <message>
         <source>&amp;Fermentation Profiles</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mash Designer</source>
+        <translation type="unfinished">Mayşe Tasarımcısı</translation>
+    </message>
+    <message>
+        <source>Mash Wizard</source>
+        <translation type="unfinished">Mayşe Sihirbazı</translation>
     </message>
 </context>
 <context>
@@ -9303,79 +9275,79 @@ The final volume in the primary is %1.</source>
     <name>namedMashEditor</name>
     <message>
         <source>Named Mash Editor</source>
-        <translation>Adlandırılmış Mayşe Düzenleyicisi</translation>
+        <translation type="vanished">Adlandırılmış Mayşe Düzenleyicisi</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation>Mayşe</translation>
+        <translation type="vanished">Mayşe</translation>
     </message>
     <message>
         <source>Delete selected style</source>
-        <translation>Seçilen stili sil</translation>
+        <translation type="vanished">Seçilen stili sil</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>İsim</translation>
+        <translation type="vanished">İsim</translation>
     </message>
     <message>
         <source>Initial grain temp</source>
-        <translation>Tahılın ilk sıcaklığı</translation>
+        <translation type="vanished">Tahılın ilk sıcaklığı</translation>
     </message>
     <message>
         <source>Sparge temp</source>
-        <translation>Yıkama sıcaklığı</translation>
+        <translation type="vanished">Yıkama sıcaklığı</translation>
     </message>
     <message>
         <source>Sparge temp target</source>
-        <translation>Yıkama sıcaklık hedefi</translation>
+        <translation type="vanished">Yıkama sıcaklık hedefi</translation>
     </message>
     <message>
         <source>Sparge pH</source>
-        <translation>Yıkama pH</translation>
+        <translation type="vanished">Yıkama pH</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Notlar</translation>
+        <translation type="vanished">Notlar</translation>
     </message>
     <message>
         <source>Tun</source>
-        <translation>Kazan</translation>
+        <translation type="vanished">Kazan</translation>
     </message>
     <message>
         <source>Initial tun temp</source>
-        <translation>Kazanın ilk sıcaklığı</translation>
+        <translation type="vanished">Kazanın ilk sıcaklığı</translation>
     </message>
     <message>
         <source>From Equipment</source>
-        <translation>Teçhizattan</translation>
+        <translation type="vanished">Teçhizattan</translation>
     </message>
     <message>
         <source>Tun mass</source>
-        <translation>Kazan kütlesi</translation>
+        <translation type="vanished">Kazan kütlesi</translation>
     </message>
     <message>
         <source>Tun sp. heat</source>
-        <translation>Kazanın spesifik ısısı</translation>
+        <translation type="vanished">Kazanın spesifik ısısı</translation>
     </message>
     <message>
         <source>Tun specific heat (cal/(g*K))</source>
-        <translation>Kazanın spesifik ısısı (cal/(g*K))</translation>
+        <translation type="vanished">Kazanın spesifik ısısı (cal/(g*K))</translation>
     </message>
     <message>
         <source>Add mash step</source>
-        <translation>Mayşe adımı ekle</translation>
+        <translation type="vanished">Mayşe adımı ekle</translation>
     </message>
     <message>
         <source>Remove selected mash step</source>
-        <translation>Seçilen mayşe adımını kaldır</translation>
+        <translation type="vanished">Seçilen mayşe adımını kaldır</translation>
     </message>
     <message>
         <source>Mash step up</source>
-        <translation>Mayşe adımını yukarıya taşı</translation>
+        <translation type="vanished">Mayşe adımını yukarıya taşı</translation>
     </message>
     <message>
         <source>Mash step down</source>
-        <translation>Mayşe adımını aşağıya taşı</translation>
+        <translation type="vanished">Mayşe adımını aşağıya taşı</translation>
     </message>
 </context>
 <context>
