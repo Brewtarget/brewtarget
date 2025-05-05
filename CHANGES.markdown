@@ -20,6 +20,7 @@ Expose mash/boil/fermentation profiles in more of the UI
 * Mash, Boil and Fermentation profiles appear in the left-hand section
 * Salts appear in left-hand section, are editable, and can be added to recipes
 * Boil and Fermentation buttons added to the toolbar
+* Mash/Boil/Fermentation editors should allow you to edit steps [947](https://github.com/Brewtarget/brewtarget/issues/947)
 
 ### Bug Fixes
 * Clicking '+' in Water Chemistry tool terminates the application with an assert [819](https://github.com/Brewtarget/brewtarget/issues/819)
