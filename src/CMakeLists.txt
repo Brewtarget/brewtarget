@@ -120,7 +120,6 @@ set(filesToCompile_cpp
     ${repoDir}/src/editors/MashEditor.cpp
     ${repoDir}/src/editors/MashStepEditor.cpp
     ${repoDir}/src/editors/MiscEditor.cpp
-    ${repoDir}/src/editors/NamedMashEditor.cpp
     ${repoDir}/src/editors/SaltEditor.cpp
     ${repoDir}/src/editors/StyleEditor.cpp
     ${repoDir}/src/editors/WaterEditor.cpp
@@ -279,6 +278,7 @@ set(filesToCompile_cpp
     ${repoDir}/src/widgets/SmartField.cpp
     ${repoDir}/src/widgets/SmartLabel.cpp
     ${repoDir}/src/widgets/SmartLineEdit.cpp
+    ${repoDir}/src/widgets/StepsWidget.cpp
     ${repoDir}/src/widgets/ToggleSwitch.cpp
     ${repoDir}/src/widgets/UnitAndScalePopUpMenu.cpp
 )

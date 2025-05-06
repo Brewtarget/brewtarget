@@ -35,7 +35,10 @@
 class YeastCatalog;
 class YeastEditor;
 class InventoryYeast;
+class YeastItemDelegate;
 class RecipeAdditionYeast;
+class YeastSortFilterProxyModel;
+class YeastTableModel;
 
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
@@ -185,13 +188,16 @@ public:
    static constexpr auto defaultMeasure = Measurement::PhysicalQuantity::Mass;
 
    //
-   // These aliases make it easier to template a number of functions that are essentially the same for a number of
-   // different NamedEntity subclasses.
+   // Aliases to make it easier to template various functions that are essentially the same across different NamedEntity
+   // subclasses.
    //
-   using CatalogClass        = YeastCatalog;
-   using EditorClass         = YeastEditor;
-   using InventoryClass      = InventoryYeast;
-   using RecipeAdditionClass = RecipeAdditionYeast;
+   using CatalogClass              = YeastCatalog;
+   using EditorClass               = YeastEditor;
+   using InventoryClass            = InventoryYeast;
+   using ItemDelegateClass         = YeastItemDelegate;
+   using RecipeAdditionClass       = RecipeAdditionYeast;
+   using SortFilterProxyModelClass = YeastSortFilterProxyModel;
+   using TableModelClass           = YeastTableModel;
 
    /**
     * \brief Mapping of names to types for the Qt properties of this class.  See \c NamedEntity::typeLookup for more

@@ -1164,6 +1164,18 @@ Log file may contain more details.</source>
         <source>A folder name must have at least one non-/ character in it</source>
         <translation type="unfinished">Un nom de dossier doit contenir au moins un caractère différent de /</translation>
     </message>
+    <message>
+        <source>Edit «%1»</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit «%1» %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Equipment</name>
@@ -2368,7 +2380,7 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Please give your mash a name before saving.</source>
-        <translation>Veuillez nommer votre profil d&apos;empâtage avant de sauvegarder.</translation>
+        <translation type="vanished">Veuillez nommer votre profil d&apos;empâtage avant de sauvegarder.</translation>
     </message>
     <message>
         <source>Restart</source>
@@ -2491,10 +2503,6 @@ Log file may contain more details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Remove %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Error Loading Data</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2551,10 +2559,6 @@ If you need help, please open an issue at %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Change Recipe Mash</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Change Recipe Equipment</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2576,6 +2580,18 @@ If you need help, please open an issue at %1</source>
     </message>
     <message>
         <source>Error writing recipe to file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change recipe&apos;s mash profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change recipe&apos;s boil profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change recipe&apos;s fermentation profile</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3036,6 +3052,26 @@ If you need help, please open an issue at %1</source>
     </message>
     <message>
         <source>Unnamed %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add %1 step</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove selected %1 step</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move selected %1 step up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move selected %1 step down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit selected %1 step</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4316,11 +4352,11 @@ Log file may contain more details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add %1 step to recipe</source>
+        <source>Set for Recipe</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Set for Recipe</source>
+        <source>Add step to %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -8390,27 +8426,27 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Add mash step</source>
-        <translation>Ajouter un palier d&apos;empâtage</translation>
+        <translation type="vanished">Ajouter un palier d&apos;empâtage</translation>
     </message>
     <message>
         <source>Remove selected mash step</source>
-        <translation>Supprimer le palier d&apos;empâtage sélectionné</translation>
+        <translation type="vanished">Supprimer le palier d&apos;empâtage sélectionné</translation>
     </message>
     <message>
         <source>Edit selected mash step</source>
-        <translation>Modifier le palier d&apos;empâtage sélectionné</translation>
+        <translation type="vanished">Modifier le palier d&apos;empâtage sélectionné</translation>
     </message>
     <message>
         <source>Edit mash properties</source>
-        <translation>Modifier les paramètres d&apos;empâtage</translation>
+        <translation type="vanished">Modifier les paramètres d&apos;empâtage</translation>
     </message>
     <message>
         <source>Edit mash</source>
-        <translation>Modifier l&apos;empâtage</translation>
+        <translation type="vanished">Modifier l&apos;empâtage</translation>
     </message>
     <message>
         <source>Mash Des</source>
-        <translation>Créateur d&apos;empâtage</translation>
+        <translation type="vanished">Créateur d&apos;empâtage</translation>
     </message>
     <message>
         <source>Invoke the mash wizard</source>
@@ -8418,27 +8454,27 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Mash wiz</source>
-        <translation>Assistant d&apos;empâtage</translation>
+        <translation type="vanished">Assistant d&apos;empâtage</translation>
     </message>
     <message>
         <source>Mashs</source>
-        <translation>Empâtage</translation>
+        <translation type="vanished">Empâtage</translation>
     </message>
     <message>
         <source>Mash step up</source>
-        <translation>Monter le palier</translation>
+        <translation type="vanished">Monter le palier</translation>
     </message>
     <message>
         <source>Mash step down</source>
-        <translation>Descendre le palier</translation>
+        <translation type="vanished">Descendre le palier</translation>
     </message>
     <message>
         <source>Save this mash profile</source>
-        <translation>Sauvegarder ce profil d&apos;empâtage</translation>
+        <translation type="vanished">Sauvegarder ce profil d&apos;empâtage</translation>
     </message>
     <message>
         <source>Save Mash</source>
-        <translation>Sauvegarder le profil</translation>
+        <translation type="vanished">Sauvegarder le profil</translation>
     </message>
     <message>
         <source>&amp;About</source>
@@ -8797,43 +8833,7 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add boil step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Remove selected boil step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit selected boil step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit boil properties</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit boil</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Boils</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Boil step up</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Boil step down</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save this boil profile</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save Boil</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8841,43 +8841,7 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add fermentation step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Remove selected fermentation step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit selected fermentation step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit fermentation properties</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit fermentation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Fermentations</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fermentation step up</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fermentation step down</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save this fermentation profile</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save Fermentation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8939,6 +8903,14 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     <message>
         <source>&amp;Fermentation Profiles</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mash Designer</source>
+        <translation type="unfinished">Créateur de profil d&apos;empâtage</translation>
+    </message>
+    <message>
+        <source>Mash Wizard</source>
+        <translation type="unfinished">Assistant d&apos;empâtage</translation>
     </message>
 </context>
 <context>
@@ -9460,79 +9432,79 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     <name>namedMashEditor</name>
     <message>
         <source>Named Mash Editor</source>
-        <translation>Éditeur de profil d&apos;empâtage</translation>
+        <translation type="vanished">Éditeur de profil d&apos;empâtage</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation>Empâtage</translation>
+        <translation type="vanished">Empâtage</translation>
     </message>
     <message>
         <source>Delete selected style</source>
-        <translation>Supprimer le style sélectionné</translation>
+        <translation type="vanished">Supprimer le style sélectionné</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nom</translation>
+        <translation type="vanished">Nom</translation>
     </message>
     <message>
         <source>Initial grain temp</source>
-        <translation>Température initiale du grain</translation>
+        <translation type="vanished">Température initiale du grain</translation>
     </message>
     <message>
         <source>Sparge temp</source>
-        <translation>Température de rinçage</translation>
+        <translation type="vanished">Température de rinçage</translation>
     </message>
     <message>
         <source>Sparge temp target</source>
-        <translation>Température de rinçage ciblée</translation>
+        <translation type="vanished">Température de rinçage ciblée</translation>
     </message>
     <message>
         <source>Sparge pH</source>
-        <translation>pH eau de rinçage</translation>
+        <translation type="vanished">pH eau de rinçage</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Notes</translation>
+        <translation type="vanished">Notes</translation>
     </message>
     <message>
         <source>Tun</source>
-        <translation>Cuve matière</translation>
+        <translation type="vanished">Cuve matière</translation>
     </message>
     <message>
         <source>Initial tun temp</source>
-        <translation>Température initiale</translation>
+        <translation type="vanished">Température initiale</translation>
     </message>
     <message>
         <source>From Equipment</source>
-        <translation>Valeurs de l&apos;équipement</translation>
+        <translation type="vanished">Valeurs de l&apos;équipement</translation>
     </message>
     <message>
         <source>Tun mass</source>
-        <translation>Poids</translation>
+        <translation type="vanished">Poids</translation>
     </message>
     <message>
         <source>Tun sp. heat</source>
-        <translation>Chaleur spécifique</translation>
+        <translation type="vanished">Chaleur spécifique</translation>
     </message>
     <message>
         <source>Tun specific heat (cal/(g*K))</source>
-        <translation>Chaleur spécifique de la cuve matière (cal/(g*K))</translation>
+        <translation type="vanished">Chaleur spécifique de la cuve matière (cal/(g*K))</translation>
     </message>
     <message>
         <source>Add mash step</source>
-        <translation>Ajouter un palier d&apos;empâtage</translation>
+        <translation type="vanished">Ajouter un palier d&apos;empâtage</translation>
     </message>
     <message>
         <source>Remove selected mash step</source>
-        <translation>Supprimer le palier d&apos;empâtage sélectionné</translation>
+        <translation type="vanished">Supprimer le palier d&apos;empâtage sélectionné</translation>
     </message>
     <message>
         <source>Mash step up</source>
-        <translation>Monter le palier</translation>
+        <translation type="vanished">Monter le palier</translation>
     </message>
     <message>
         <source>Mash step down</source>
-        <translation>Descendre le palier</translation>
+        <translation type="vanished">Descendre le palier</translation>
     </message>
 </context>
 <context>

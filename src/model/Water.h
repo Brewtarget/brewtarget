@@ -31,6 +31,10 @@
 
 class WaterCatalog;
 class WaterEditor;
+class WaterItemDelegate;
+class RecipeUseOfWater;
+class WaterSortFilterProxyModel;
+class WaterTableModel;
 
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
@@ -127,15 +131,18 @@ public:
    static EnumStringMapping const ionDisplayNames;
 
    //
-   // These aliases make it easier to template a number of functions that are essentially the same for a number of
-   // different NamedEntity subclasses.
+   // Aliases to make it easier to template various functions that are essentially the same across different NamedEntity
+   // subclasses.
    //
    // Although Water is a bit different from other "ingredients" (eg no inventory), RecipeAdditionClass is still helpful
    // for templating functions where it is valid to create RecipeUseOfWater as a RecipeAddition class.
    //
-   using CatalogClass        = WaterCatalog;
-   using EditorClass         = WaterEditor;
-   using RecipeAdditionClass = RecipeUseOfWater;
+   using CatalogClass              = WaterCatalog;
+   using EditorClass               = WaterEditor;
+   using ItemDelegateClass         = WaterItemDelegate;
+   using RecipeAdditionClass       = RecipeUseOfWater;
+   using SortFilterProxyModelClass = WaterSortFilterProxyModel;
+   using TableModelClass           = WaterTableModel;
 
    /**
     * \brief Mapping of names to types for the Qt properties of this class.  See \c NamedEntity::typeLookup for more

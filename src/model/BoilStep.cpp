@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/BoilStep.cpp is part of Brewtarget, and is copyright the following authors 2023-2024:
+ * model/BoilStep.cpp is part of Brewtarget, and is copyright the following authors 2023-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -16,6 +16,7 @@
 #include "model/BoilStep.h"
 
 #include "database/ObjectStoreWrapper.h"
+#include "MainWindow.h"
 #include "model/NamedParameterBundle.h"
 #include "utils/OptionalHelpers.h"
 #include "utils/AutoCompare.h"
@@ -46,6 +47,10 @@ bool BoilStep::isEqualTo(NamedEntity const & other) const {
       // Parent classes have to be equal too
       this->StepExtended::isEqualTo(other)
    );
+}
+
+BoilStepEditor & BoilStep::getEditor() {
+   return MainWindow::instance().getEditor<BoilStep>();
 }
 
 TypeLookup const BoilStep::typeLookup {

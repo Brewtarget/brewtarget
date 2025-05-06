@@ -689,7 +689,6 @@ commonSourceFiles = files([
    'src/editors/MashEditor.cpp',
    'src/editors/MashStepEditor.cpp',
    'src/editors/MiscEditor.cpp',
-   'src/editors/NamedMashEditor.cpp',
    'src/editors/SaltEditor.cpp',
    'src/editors/StyleEditor.cpp',
    'src/editors/WaterEditor.cpp',
@@ -848,6 +847,7 @@ commonSourceFiles = files([
    'src/widgets/SmartField.cpp',
    'src/widgets/SmartLabel.cpp',
    'src/widgets/SmartLineEdit.cpp',
+   'src/widgets/StepsWidget.cpp',
    'src/widgets/ToggleSwitch.cpp',
    'src/widgets/UnitAndScalePopUpMenu.cpp',
 ])
@@ -934,7 +934,6 @@ mocHeaders = files([
    'src/editors/MashEditor.h',
    'src/editors/MashStepEditor.h',
    'src/editors/MiscEditor.h',
-   'src/editors/NamedMashEditor.h',
    'src/editors/SaltEditor.h',
    'src/editors/StyleEditor.h',
    'src/editors/WaterEditor.h',
@@ -1051,6 +1050,7 @@ mocHeaders = files([
    'src/widgets/SmartDigitWidget.h',
    'src/widgets/SmartLabel.h',
    'src/widgets/SmartLineEdit.h',
+   'src/widgets/StepsWidget.h',
    'src/widgets/ToggleSwitch.h',
 ])
 
@@ -1082,7 +1082,6 @@ uiFiles = files([
    'ui/mashStepEditor.ui',
    'ui/mashWizard.ui',
    'ui/miscEditor.ui',
-   'ui/namedMashEditor.ui',
    'ui/ogAdjuster.ui',
    'ui/optionsDialog.ui',
    'ui/pitchDialog.ui',

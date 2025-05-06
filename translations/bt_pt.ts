@@ -1152,6 +1152,18 @@ Log file may contain more details.</source>
         <source>A folder name must have at least one non-/ character in it</source>
         <translation type="unfinished">O nome da pasta deve possuir pelo menos um caractere diferente de /</translation>
     </message>
+    <message>
+        <source>Edit «%1»</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit «%1» %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Equipment</name>
@@ -2304,7 +2316,7 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Please give your mash a name before saving.</source>
-        <translation>Favor nomear o mosto antes de salvar.</translation>
+        <translation type="vanished">Favor nomear o mosto antes de salvar.</translation>
     </message>
     <message>
         <source>Restart</source>
@@ -2427,10 +2439,6 @@ Log file may contain more details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Remove %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Error Loading Data</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2487,10 +2495,6 @@ If you need help, please open an issue at %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Change Recipe Mash</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Change Recipe Equipment</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2512,6 +2516,18 @@ If you need help, please open an issue at %1</source>
     </message>
     <message>
         <source>Error writing recipe to file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change recipe&apos;s mash profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change recipe&apos;s boil profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change recipe&apos;s fermentation profile</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2968,6 +2984,26 @@ If you need help, please open an issue at %1</source>
     </message>
     <message>
         <source>Unnamed %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add %1 step</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove selected %1 step</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move selected %1 step up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move selected %1 step down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit selected %1 step</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4244,11 +4280,11 @@ Log file may contain more details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add %1 step to recipe</source>
+        <source>Set for Recipe</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Set for Recipe</source>
+        <source>Add step to %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -8296,27 +8332,27 @@ O volume final do fermentador primário é %1.</translation>
     </message>
     <message>
         <source>Add mash step</source>
-        <translation>Adicionar Passo de Mosturação</translation>
+        <translation type="vanished">Adicionar Passo de Mosturação</translation>
     </message>
     <message>
         <source>Remove selected mash step</source>
-        <translation>Remover Passo de Mosturação Selecionado</translation>
+        <translation type="vanished">Remover Passo de Mosturação Selecionado</translation>
     </message>
     <message>
         <source>Edit selected mash step</source>
-        <translation>Editar Passo de Mosturação Selecionado</translation>
+        <translation type="vanished">Editar Passo de Mosturação Selecionado</translation>
     </message>
     <message>
         <source>Edit mash properties</source>
-        <translation>Editar Propriedades de Mosturação</translation>
+        <translation type="vanished">Editar Propriedades de Mosturação</translation>
     </message>
     <message>
         <source>Edit mash</source>
-        <translation>Editar Mosto</translation>
+        <translation type="vanished">Editar Mosto</translation>
     </message>
     <message>
         <source>Mash Des</source>
-        <translation>Descrição de Mosturação</translation>
+        <translation type="vanished">Descrição de Mosturação</translation>
     </message>
     <message>
         <source>Invoke the mash wizard</source>
@@ -8324,27 +8360,27 @@ O volume final do fermentador primário é %1.</translation>
     </message>
     <message>
         <source>Mash wiz</source>
-        <translation>Assistente de Mosturação</translation>
+        <translation type="vanished">Assistente de Mosturação</translation>
     </message>
     <message>
         <source>Mashs</source>
-        <translation>Mostos</translation>
+        <translation type="vanished">Mostos</translation>
     </message>
     <message>
         <source>Mash step up</source>
-        <translation>Acelerar Brassagem</translation>
+        <translation type="vanished">Acelerar Brassagem</translation>
     </message>
     <message>
         <source>Mash step down</source>
-        <translation>Atrasar brassagem</translation>
+        <translation type="vanished">Atrasar brassagem</translation>
     </message>
     <message>
         <source>Save this mash profile</source>
-        <translation>Salvar o Perfil da Mosturação</translation>
+        <translation type="vanished">Salvar o Perfil da Mosturação</translation>
     </message>
     <message>
         <source>Save Mash</source>
-        <translation>Salvar Mosto</translation>
+        <translation type="vanished">Salvar Mosto</translation>
     </message>
     <message>
         <source>&amp;About</source>
@@ -8699,43 +8735,7 @@ O volume final do fermentador primário é %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add boil step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Remove selected boil step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit selected boil step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit boil properties</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit boil</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Boils</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Boil step up</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Boil step down</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save this boil profile</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save Boil</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8743,43 +8743,7 @@ O volume final do fermentador primário é %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add fermentation step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Remove selected fermentation step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit selected fermentation step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit fermentation properties</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit fermentation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Fermentations</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fermentation step up</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fermentation step down</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save this fermentation profile</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save Fermentation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8841,6 +8805,14 @@ O volume final do fermentador primário é %1.</translation>
     <message>
         <source>&amp;Fermentation Profiles</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mash Designer</source>
+        <translation type="unfinished">Designer da Mosturação</translation>
+    </message>
+    <message>
+        <source>Mash Wizard</source>
+        <translation type="unfinished">Assistente de mostura</translation>
     </message>
 </context>
 <context>
@@ -9362,79 +9334,79 @@ O volume final do fermentador primário é %1.</translation>
     <name>namedMashEditor</name>
     <message>
         <source>Named Mash Editor</source>
-        <translation>Editor de Brassagem Nomeado</translation>
+        <translation type="vanished">Editor de Brassagem Nomeado</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation>Mosto</translation>
+        <translation type="vanished">Mosto</translation>
     </message>
     <message>
         <source>Delete selected style</source>
-        <translation>Excluir estilo selecionado</translation>
+        <translation type="vanished">Excluir estilo selecionado</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation type="vanished">Nome</translation>
     </message>
     <message>
         <source>Initial grain temp</source>
-        <translation>Temperatura inicial dos grãos</translation>
+        <translation type="vanished">Temperatura inicial dos grãos</translation>
     </message>
     <message>
         <source>Sparge temp</source>
-        <translation>Temperatura de aspersão</translation>
+        <translation type="vanished">Temperatura de aspersão</translation>
     </message>
     <message>
         <source>Sparge temp target</source>
-        <translation>meta da temperatura de aspersão</translation>
+        <translation type="vanished">meta da temperatura de aspersão</translation>
     </message>
     <message>
         <source>Sparge pH</source>
-        <translation>pH de aspersão</translation>
+        <translation type="vanished">pH de aspersão</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Anotações</translation>
+        <translation type="vanished">Anotações</translation>
     </message>
     <message>
         <source>Tun</source>
-        <translation>Tina</translation>
+        <translation type="vanished">Tina</translation>
     </message>
     <message>
         <source>Initial tun temp</source>
-        <translation>Temperatura inicial de tina</translation>
+        <translation type="vanished">Temperatura inicial de tina</translation>
     </message>
     <message>
         <source>From Equipment</source>
-        <translation>Do Equipamento</translation>
+        <translation type="vanished">Do Equipamento</translation>
     </message>
     <message>
         <source>Tun mass</source>
-        <translation>Massa da tina</translation>
+        <translation type="vanished">Massa da tina</translation>
     </message>
     <message>
         <source>Tun sp. heat</source>
-        <translation>Calor específico da tina</translation>
+        <translation type="vanished">Calor específico da tina</translation>
     </message>
     <message>
         <source>Tun specific heat (cal/(g*K))</source>
-        <translation>Calor específico da tina (cal/(g*K))</translation>
+        <translation type="vanished">Calor específico da tina (cal/(g*K))</translation>
     </message>
     <message>
         <source>Add mash step</source>
-        <translation>Adicionar passo de Mosturação</translation>
+        <translation type="vanished">Adicionar passo de Mosturação</translation>
     </message>
     <message>
         <source>Remove selected mash step</source>
-        <translation>Remover passo de Mosturação Selecionado</translation>
+        <translation type="vanished">Remover passo de Mosturação Selecionado</translation>
     </message>
     <message>
         <source>Mash step up</source>
-        <translation>Acelerar Mosturação</translation>
+        <translation type="vanished">Acelerar Mosturação</translation>
     </message>
     <message>
         <source>Mash step down</source>
-        <translation>Atrasar Mosturação</translation>
+        <translation type="vanished">Atrasar Mosturação</translation>
     </message>
 </context>
 <context>

@@ -39,6 +39,9 @@
 
 class MashCatalog;
 class MashEditor;
+class MashItemDelegate;
+class MashSortFilterProxyModel;
+class MashTableModel;
 
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
@@ -85,11 +88,14 @@ public:
    static QString localisedName();
 
    //
-   // These aliases make it easier to template a number of functions that are essentially the same for a number of
-   // different NamedEntity subclasses.
+   // Aliases to make it easier to template various functions that are essentially the same across different NamedEntity
+   // subclasses.
    //
-   using CatalogClass = MashCatalog;
-   using EditorClass  = MashEditor;
+   using CatalogClass              = MashCatalog;
+   using EditorClass               = MashEditor;
+   using ItemDelegateClass         = MashItemDelegate;
+   using SortFilterProxyModelClass = MashSortFilterProxyModel;
+   using TableModelClass           = MashTableModel;
 
    /**
     * \brief Mapping of names to types for the Qt properties of this class.  See \c NamedEntity::typeLookup for more

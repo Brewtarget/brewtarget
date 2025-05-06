@@ -37,7 +37,10 @@
 class HopCatalog;
 class HopEditor;
 class InventoryHop;
+class HopItemDelegate;
 class RecipeAdditionHop;
+class HopSortFilterProxyModel;
+class HopTableModel;
 
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
@@ -156,13 +159,16 @@ public:
    static constexpr auto defaultMeasure = Measurement::PhysicalQuantity::Mass;
 
    //
-   // These aliases make it easier to template a number of functions that are essentially the same for a number of
-   // different NamedEntity subclasses.
+   // Aliases to make it easier to template various functions that are essentially the same across different NamedEntity
+   // subclasses.
    //
-   using CatalogClass        = HopCatalog;
-   using EditorClass         = HopEditor;
-   using InventoryClass      = InventoryHop;
-   using RecipeAdditionClass = RecipeAdditionHop;
+   using CatalogClass              = HopCatalog;
+   using EditorClass               = HopEditor;
+   using InventoryClass            = InventoryHop;
+   using ItemDelegateClass         = HopItemDelegate;
+   using RecipeAdditionClass       = RecipeAdditionHop;
+   using SortFilterProxyModelClass = HopSortFilterProxyModel;
+   using TableModelClass           = HopTableModel;
 
    /**
     * \brief Mapping of names to types for the Qt properties of this class.  See \c NamedEntity::typeLookup for more

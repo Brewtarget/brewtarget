@@ -1184,6 +1184,18 @@ Log file may contain more details.</source>
         <source>A folder name must have at least one non-/ character in it</source>
         <translation type="unfinished">Een mapnaam moet tenminste één non-/ karakter bevatten</translation>
     </message>
+    <message>
+        <source>Edit «%1»</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit «%1» %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Equipment</name>
@@ -2368,7 +2380,7 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Please give your mash a name before saving.</source>
-        <translation>Geef uw maisch een naam a.u.b. voor het opslaan.</translation>
+        <translation type="vanished">Geef uw maisch een naam a.u.b. voor het opslaan.</translation>
     </message>
     <message>
         <source>Restart</source>
@@ -2499,10 +2511,6 @@ Log file may contain more details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Remove %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Error Loading Data</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2559,10 +2567,6 @@ If you need help, please open an issue at %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Change Recipe Mash</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Change Recipe Equipment</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2584,6 +2588,18 @@ If you need help, please open an issue at %1</source>
     </message>
     <message>
         <source>Error writing recipe to file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change recipe&apos;s mash profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change recipe&apos;s boil profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change recipe&apos;s fermentation profile</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3044,6 +3060,26 @@ If you need help, please open an issue at %1</source>
     </message>
     <message>
         <source>Unnamed %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add %1 step</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove selected %1 step</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move selected %1 step up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move selected %1 step down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit selected %1 step</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4346,11 +4382,11 @@ Log file may contain more details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add %1 step to recipe</source>
+        <source>Set for Recipe</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Set for Recipe</source>
+        <source>Add step to %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -8378,27 +8414,27 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Add mash step</source>
-        <translation>Voeg maisch stap toe</translation>
+        <translation type="vanished">Voeg maisch stap toe</translation>
     </message>
     <message>
         <source>Remove selected mash step</source>
-        <translation>Verwijder geselecteerde maisch stap</translation>
+        <translation type="vanished">Verwijder geselecteerde maisch stap</translation>
     </message>
     <message>
         <source>Edit selected mash step</source>
-        <translation>Edit geselecteerde maisch stap</translation>
+        <translation type="vanished">Edit geselecteerde maisch stap</translation>
     </message>
     <message>
         <source>Edit mash properties</source>
-        <translation>Edit maisch eigenschappen</translation>
+        <translation type="vanished">Edit maisch eigenschappen</translation>
     </message>
     <message>
         <source>Edit mash</source>
-        <translation>Edit maisch</translation>
+        <translation type="vanished">Edit maisch</translation>
     </message>
     <message>
         <source>Mash Des</source>
-        <translation>Maisch bestemming</translation>
+        <translation type="vanished">Maisch bestemming</translation>
     </message>
     <message>
         <source>Invoke the mash wizard</source>
@@ -8406,27 +8442,27 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Mash wiz</source>
-        <translation>Maisch wizard</translation>
+        <translation type="vanished">Maisch wizard</translation>
     </message>
     <message>
         <source>Mashs</source>
-        <translation>Maisch</translation>
+        <translation type="vanished">Maisch</translation>
     </message>
     <message>
         <source>Mash step up</source>
-        <translation>Maisch stap omhoog</translation>
+        <translation type="vanished">Maisch stap omhoog</translation>
     </message>
     <message>
         <source>Mash step down</source>
-        <translation>Maisch stap omlaag</translation>
+        <translation type="vanished">Maisch stap omlaag</translation>
     </message>
     <message>
         <source>Save this mash profile</source>
-        <translation>Sla dit maisch profiel op</translation>
+        <translation type="vanished">Sla dit maisch profiel op</translation>
     </message>
     <message>
         <source>Save Mash</source>
-        <translation>Opslaan Maisch</translation>
+        <translation type="vanished">Opslaan Maisch</translation>
     </message>
     <message>
         <source>&amp;About</source>
@@ -8777,43 +8813,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
         <translation type="unfinished">Koken</translation>
     </message>
     <message>
-        <source>Add boil step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Remove selected boil step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit selected boil step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit boil properties</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit boil</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Boils</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Boil step up</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Boil step down</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save this boil profile</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save Boil</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8821,43 +8821,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add fermentation step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Remove selected fermentation step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit selected fermentation step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit fermentation properties</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit fermentation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Fermentations</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fermentation step up</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fermentation step down</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save this fermentation profile</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save Fermentation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8919,6 +8883,14 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     <message>
         <source>&amp;Fermentation Profiles</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mash Designer</source>
+        <translation type="unfinished">Maisch Ontwerper</translation>
+    </message>
+    <message>
+        <source>Mash Wizard</source>
+        <translation type="unfinished">Maisch wizard</translation>
     </message>
 </context>
 <context>
@@ -9420,79 +9392,79 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     <name>namedMashEditor</name>
     <message>
         <source>Named Mash Editor</source>
-        <translation>Opgeslagen Maisch Bewerker</translation>
+        <translation type="vanished">Opgeslagen Maisch Bewerker</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation>Maisch</translation>
+        <translation type="vanished">Maisch</translation>
     </message>
     <message>
         <source>Delete selected style</source>
-        <translation>Verwijder geselecteerde stijl</translation>
+        <translation type="vanished">Verwijder geselecteerde stijl</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Naam</translation>
+        <translation type="vanished">Naam</translation>
     </message>
     <message>
         <source>Initial grain temp</source>
-        <translation>Initiële graan temp</translation>
+        <translation type="vanished">Initiële graan temp</translation>
     </message>
     <message>
         <source>Sparge temp</source>
-        <translation>Spoel temp</translation>
+        <translation type="vanished">Spoel temp</translation>
     </message>
     <message>
         <source>Sparge temp target</source>
-        <translation>Beoogde Spoel temp</translation>
+        <translation type="vanished">Beoogde Spoel temp</translation>
     </message>
     <message>
         <source>Sparge pH</source>
-        <translation>Spoel pH</translation>
+        <translation type="vanished">Spoel pH</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Aantekeningen</translation>
+        <translation type="vanished">Aantekeningen</translation>
     </message>
     <message>
         <source>Tun</source>
-        <translation>Vat</translation>
+        <translation type="vanished">Vat</translation>
     </message>
     <message>
         <source>Initial tun temp</source>
-        <translation>Initiële vat temp</translation>
+        <translation type="vanished">Initiële vat temp</translation>
     </message>
     <message>
         <source>From Equipment</source>
-        <translation>Van Apparatuur</translation>
+        <translation type="vanished">Van Apparatuur</translation>
     </message>
     <message>
         <source>Tun mass</source>
-        <translation>Vat massa</translation>
+        <translation type="vanished">Vat massa</translation>
     </message>
     <message>
         <source>Tun sp. heat</source>
-        <translation>Vat spec. hitte</translation>
+        <translation type="vanished">Vat spec. hitte</translation>
     </message>
     <message>
         <source>Tun specific heat (cal/(g*K))</source>
-        <translation>Vat specifieke hitte (cal/g*K)</translation>
+        <translation type="vanished">Vat specifieke hitte (cal/g*K)</translation>
     </message>
     <message>
         <source>Add mash step</source>
-        <translation>Voeg maisch stap toe</translation>
+        <translation type="vanished">Voeg maisch stap toe</translation>
     </message>
     <message>
         <source>Remove selected mash step</source>
-        <translation>Verwijder geselecteerde maisch stap</translation>
+        <translation type="vanished">Verwijder geselecteerde maisch stap</translation>
     </message>
     <message>
         <source>Mash step up</source>
-        <translation>Maisch stap omhoog</translation>
+        <translation type="vanished">Maisch stap omhoog</translation>
     </message>
     <message>
         <source>Mash step down</source>
-        <translation>Maisch stap omlaag</translation>
+        <translation type="vanished">Maisch stap omlaag</translation>
     </message>
 </context>
 <context>

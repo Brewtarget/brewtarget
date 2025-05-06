@@ -32,6 +32,8 @@
 
 class FermentationCatalog;
 class FermentationEditor;
+class FermentationItemDelegate;
+class FermentationTableModel;
 
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
@@ -69,11 +71,13 @@ public:
    static QString localisedName();
 
    //
-   // These aliases make it easier to template a number of functions that are essentially the same for a number of
-   // different NamedEntity subclasses.
+   // Aliases to make it easier to template various functions that are essentially the same across different NamedEntity
+   // subclasses.
    //
-   using CatalogClass = FermentationCatalog;
-   using EditorClass  = FermentationEditor;
+   using CatalogClass      = FermentationCatalog;
+   using EditorClass       = FermentationEditor;
+   using ItemDelegateClass = FermentationItemDelegate;
+   using TableModelClass   = FermentationTableModel;
 
    /**
     * \brief Mapping of names to types for the Qt properties of this class.  See \c NamedEntity::typeLookup for more

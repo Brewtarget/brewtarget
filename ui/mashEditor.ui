@@ -104,6 +104,11 @@
         </widget>
        </item>
 
+       <item row="8" column="1" colspan="5">
+         <widget class="MashStepsWidget" name="stepsWidget">
+         </widget>
+       </item>
+
        <item row="13" column="0">
         <widget class="InfoButton" name="infoButton_id"></widget>
        </item>
@@ -323,6 +328,13 @@
     <slot>lineChanged(PreviousScaleInfo)</slot>
    </slots>
   </customwidget>
+
+  <customwidget>
+   <class>MashStepsWidget</class>
+   <extends>QWidget</extends>
+   <header>widgets/StepsWidget.h</header>
+  </customwidget>
+
  </customwidgets>
  <resources/>
 </ui>

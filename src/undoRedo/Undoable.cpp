@@ -57,7 +57,7 @@ void Undoable::addStepToStepOwner(StepOwnerClass & stepOwner, std::shared_ptr<St
                              &StepOwnerClass::add,
                              step,
                              &StepOwnerClass::remove,
-                             QObject::tr("Add %1 step to recipe").arg(StepOwnerClass::localisedName()))
+                             QObject::tr("Add step to %1").arg(StepOwnerClass::localisedName()))
    );
    // We don't need to do anything further here.  The change to the mash/boil/ferementation will already have triggered
    // the necessary updates to the corresponding MashStepTableModel/BoilStepTableModel/etc.
@@ -68,22 +68,3 @@ void Undoable::addStepToStepOwner(StepOwnerClass & stepOwner, std::shared_ptr<St
 template void Undoable::addStepToStepOwner(Boil         & stepOwner, std::shared_ptr<        BoilStep> step);
 template void Undoable::addStepToStepOwner(Mash         & stepOwner, std::shared_ptr<        MashStep> step);
 template void Undoable::addStepToStepOwner(Fermentation & stepOwner, std::shared_ptr<FermentationStep> step);
-
-
-template<typename NE> void Undoable::removeFromCurrentRecipe(std::shared_ptr<NE> itemToRemove) {
-   MainWindow::instance().remove<NE>(itemToRemove);
-   return;
-}
-
-//
-// Instantiate the above template function for the types that are going to use it
-// (This is all just a trick to allow the template definition to be here in the .cpp file and not in the header.)
-//
-template void Undoable::removeFromCurrentRecipe(std::shared_ptr<RecipeAdditionHop        > ne);
-template void Undoable::removeFromCurrentRecipe(std::shared_ptr<RecipeAdditionFermentable> ne);
-template void Undoable::removeFromCurrentRecipe(std::shared_ptr<RecipeAdditionMisc       > ne);
-template void Undoable::removeFromCurrentRecipe(std::shared_ptr<RecipeAdditionYeast      > ne);
-template void Undoable::removeFromCurrentRecipe(std::shared_ptr<RecipeAdjustmentSalt     > ne);
-template void Undoable::removeFromCurrentRecipe(std::shared_ptr<MashStep                 > ne);
-template void Undoable::removeFromCurrentRecipe(std::shared_ptr<BoilStep                 > ne);
-template void Undoable::removeFromCurrentRecipe(std::shared_ptr<FermentationStep         > ne);

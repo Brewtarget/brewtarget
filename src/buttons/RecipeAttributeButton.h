@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * buttons/RecipeAttributeButton.h is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * buttons/RecipeAttributeButton.h is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
  *   • Philip Greggory Lee <rocketman768@gmail.com>
@@ -66,7 +66,9 @@ protected:
    ~RecipeAttributeButtonBase() = default;
 
 public:
-   //! \brief Observe \c Recipe
+   /**
+    * \brief Observe \c Recipe
+    */
    void setRecipe(Recipe * recipe) {
       if (this->m_recipe) {
          this->derived().disconnect(this->m_recipe, nullptr, &this->derived(), nullptr);
@@ -84,7 +86,12 @@ public:
 
    }
 
-   //! \brief Observe \c Mash, \c Style etc (according to what \c WhatButtonShows is).
+   /**
+    * \brief Observe \c Mash, \c Style etc (according to what \c WhatButtonShows is).
+    *
+    *        Note that, typically, class users should not need to call this function directly.  It should suffice to
+    *        call \c setRecipe.
+    */
    void setWhatButtonShows(std::shared_ptr<WhatButtonShows> whatButtonShows) {
       if (this->m_whatButtonShows) {
          this->derived().disconnect(this->m_whatButtonShows.get(), nullptr, &this->derived(), nullptr);
@@ -93,9 +100,11 @@ public:
       this->m_whatButtonShows = whatButtonShows;
       if(this->m_whatButtonShows) {
          this->derived().connect(this->m_whatButtonShows.get(), &NamedEntity::changed, &this->derived(), &Derived::whatButtonShowsChanged);
-         this->derived().setText(this->m_whatButtonShows->name());
+         this->derived().setText   (Derived::tr("Edit «%1»").arg(this->m_whatButtonShows->name()));
+         this->derived().setToolTip(Derived::tr("Edit «%1» %2").arg(this->m_whatButtonShows->name()).arg(WhatButtonShows::localisedName()));
       } else {
          this->derived().setText("");
+         this->derived().setToolTip("");
       }
       return;
    }

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/BoilStep.h is part of Brewtarget, and is copyright the following authors 2023-2024:
+ * model/BoilStep.h is part of Brewtarget, and is copyright the following authors 2023-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -23,6 +23,10 @@
 #include "model/StepBase.h"
 #include "model/StepExtended.h"
 #include "utils/EnumStringMapping.h"
+
+class BoilStepEditor;
+class BoilStepItemDelegate;
+class BoilStepTableModel;
 
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
@@ -85,10 +89,24 @@ public:
    static EnumStringMapping const chillingTypeDisplayNames;
 
    //
-   // This alias makees it easier to template a number of functions that are essentially the same for all subclasses of
+   // This alias makes it easier to template a number of functions that are essentially the same for all subclasses of
    // Step.
    //
    using OwnerClass = Boil;
+
+   //
+   // Aliases to make it easier to template various functions that are essentially the same across different NamedEntity
+   // subclasses.
+   //
+   using EditorClass       = BoilStepEditor;
+   using ItemDelegateClass = BoilStepItemDelegate;
+   using TableModelClass   = BoilStepTableModel;
+
+   /**
+    * \brief Similarly it is useful to be able to get the editor for a \c Step subclass from template code (and without
+    *        needing to directly call a \c MainWindow function, otherwise we get circular dependencies).
+    */
+   static EditorClass & getEditor();
 
    /**
     * \brief Mapping of names to types for the Qt properties of this class.  See \c NamedEntity::typeLookup for more

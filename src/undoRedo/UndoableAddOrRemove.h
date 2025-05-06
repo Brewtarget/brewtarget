@@ -28,7 +28,6 @@
 
 #include "database/ObjectStoreWrapper.h"
 #include "Logging.h"
-///#include "MainWindow.h"
 #include "undoRedo/Undoable.h"
 
 /*!
@@ -62,6 +61,9 @@ public:
     *                          object gets deleted (eg removing a MashStep from a Mash) then we will be the only ones
     *                          holding a copy of its shared pointer unless and until that action is undone.
     * \param undoer The member function on the updatee to undo the addition or removal
+    *
+    * TBD: Would probably be better to use signals instead of these callbacks...
+    *
     * \param doCallback The free function (usually in \c Undoable.h) to call after doing/redoing the change - typically
     *                   calling in to \c MainWindow to update other display elements.  If \c null, no callback is made.
     * \param undoCallback The free function (usually in \c Undoable.h) to call after undoing the change - typically
@@ -92,8 +94,6 @@ public:
 //      }
       // It's a coding error to add or remove either a null pointer...
       Q_ASSERT(whatToAddOrRemove);
-///      // ...or something that is not yet stored in its corresponding ObjectStore (ie does not yet have a DB ID)
-///      Q_ASSERT(whatToAddOrRemove->key() > 0);
 
       // Parent class handles storing description and making it accessible to the undo stack etc - we just have to give
       // it the text.

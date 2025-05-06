@@ -274,7 +274,7 @@
            <attribute name="toolTip">
             <string>Yeasts</string>
            </attribute>
-           <layout class="QHBoxLayout" name="horizontalLayout_5">
+           <layout class="QHBoxLayout" name="horizontalLayout_yeast">
             <item>
              <widget class="YeastTreeView" name="treeView_yeast"/>
             </item>
@@ -292,7 +292,7 @@
            <attribute name="toolTip">
             <string>Water</string>
            </attribute>
-           <layout class="QHBoxLayout" name="horizontalLayout">
+           <layout class="QHBoxLayout" name="horizontalLayout_water">
             <item>
              <widget class="WaterTreeView" name="treeView_water"/>
             </item>
@@ -310,7 +310,7 @@
            <attribute name="toolTip">
             <string>Salts</string>
            </attribute>
-           <layout class="QHBoxLayout" name="horizontalLayout">
+           <layout class="QHBoxLayout" name="horizontalLayout_salt">
             <item>
              <widget class="SaltTreeView" name="treeView_salt"/>
             </item>
@@ -479,9 +479,6 @@
                            <height>0</height>
                           </size>
                          </property>
-                         <property name="maxVisibleItems">
-                          <number>15</number>
-                         </property>
                         </widget>
                        </item>
                       </layout>
@@ -529,9 +526,6 @@
                            <width>128</width>
                            <height>0</height>
                           </size>
-                         </property>
-                         <property name="maxVisibleItems">
-                          <number>15</number>
                          </property>
                         </widget>
                        </item>
@@ -1247,7 +1241,7 @@
              <attribute name="title">
               <string>Miscellaneous</string>
              </attribute>
-             <layout class="QHBoxLayout" name="horizontalLayout_21">
+             <layout class="QHBoxLayout" name="horizontalLayout_misc">
               <item>
                <widget class="QTableView" name="miscAdditionTable">
                 <property name="contextMenuPolicy">
@@ -1303,7 +1297,7 @@
                  </widget>
                 </item>
                 <item>
-                 <spacer name="verticalSpacer_5">
+                 <spacer name="verticalSpacer_misc">
                   <property name="orientation">
                    <enum>Qt::Vertical</enum>
                   </property>
@@ -1480,104 +1474,8 @@
              </attribute>
              <layout class="QVBoxLayout" name="verticalLayout_mashSteps">
               <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_mashes">
-                <item>
-                 <widget class="QTableView" name="mashStepTableWidget">
-                  <property name="contextMenuPolicy">
-                   <enum>Qt::CustomContextMenu</enum>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <layout class="QVBoxLayout" name="verticalLayout_mashbuttons">
-                  <property name="spacing">
-                   <number>1</number>
-                  </property>
-                  <item>
-                   <widget class="QPushButton" name="pushButton_addMashStep">
-                    <property name="toolTip">
-                     <string>Add mash step</string>
-                    </property>
-                    <property name="text">
-                     <string/>
-                    </property>
-                    <property name="icon">
-                     <iconset resource="../resources.qrc">
-                      <normaloff>:/images/smallPlus.svg</normaloff>:/images/smallPlus.svg</iconset>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QPushButton" name="pushButton_removeMashStep">
-                    <property name="toolTip">
-                     <string>Remove selected mash step</string>
-                    </property>
-                    <property name="text">
-                     <string/>
-                    </property>
-                    <property name="icon">
-                     <iconset resource="../resources.qrc">
-                      <normaloff>:/images/smallMinus.svg</normaloff>:/images/smallMinus.svg</iconset>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QPushButton" name="pushButton_editMashStep">
-                    <property name="toolTip">
-                     <string>Edit selected mash step</string>
-                    </property>
-                    <property name="text">
-                     <string/>
-                    </property>
-                    <property name="icon">
-                     <iconset resource="../resources.qrc">
-                      <normaloff>:/images/edit.svg</normaloff>:/images/edit.svg</iconset>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QPushButton" name="pushButton_editMash">
-                    <property name="toolTip">
-                     <string>Edit mash properties</string>
-                    </property>
-                    <property name="text">
-                     <string>Edit mash</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QPushButton" name="pushButton_mashDes">
-                    <property name="text">
-                     <string>Mash Des</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QPushButton" name="pushButton_mashWizard">
-                    <property name="toolTip">
-                     <string>Invoke the mash wizard</string>
-                    </property>
-                    <property name="text">
-                     <string>Mash wiz</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <spacer name="verticalSpacer_8">
-                    <property name="orientation">
-                     <enum>Qt::Vertical</enum>
-                    </property>
-                    <property name="sizeHint" stdset="0">
-                     <size>
-                      <width>20</width>
-                      <height>40</height>
-                     </size>
-                    </property>
-                   </spacer>
-                  </item>
-                 </layout>
-                </item>
-               </layout>
+                <widget class="MashStepsWidget" name="mashStepsWidget">
+                </widget>
               </item>
               <item>
                <layout class="QHBoxLayout" name="horizontalLayout_mash">
@@ -1593,14 +1491,7 @@
                    </sizepolicy>
                   </property>
                   <property name="text">
-                   <string>Mashs</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="MashButton" name="mashButton">
-                  <property name="text">
-                   <string/>
+                   <string>Mash</string>
                   </property>
                  </widget>
                 </item>
@@ -1621,6 +1512,10 @@
                  </widget>
                 </item>
                 <item>
+                 <widget class="MashButton" name="mashButton">
+                 </widget>
+                </item>
+                <item>
                  <spacer name="horizontalSpacer_mashCombo">
                   <property name="orientation">
                    <enum>Qt::Horizontal</enum>
@@ -1634,45 +1529,19 @@
                  </spacer>
                 </item>
                 <item>
-                 <widget class="QPushButton" name="pushButton_mashRemove">
+                 <widget class="QPushButton" name="pushButton_mashDesigner">
                   <property name="text">
-                   <string/>
-                  </property>
-                  <property name="icon">
-                   <iconset resource="../resources.qrc">
-                    <normaloff>:/images/smallMinus.svg</normaloff>:/images/smallMinus.svg</iconset>
+                   <string>Mash Designer</string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QPushButton" name="pushButton_mashUp">
+                 <widget class="QPushButton" name="pushButton_mashWizard">
                   <property name="toolTip">
-                   <string>Mash step up</string>
-                  </property>
-                  <property name="icon">
-                   <iconset resource="../resources.qrc">
-                    <normaloff>:/images/smallUpArrow.svg</normaloff>:/images/smallUpArrow.svg</iconset>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="pushButton_mashDown">
-                  <property name="toolTip">
-                   <string>Mash step down</string>
-                  </property>
-                  <property name="icon">
-                   <iconset resource="../resources.qrc">
-                    <normaloff>:/images/smallDownArrow.svg</normaloff>:/images/smallDownArrow.svg</iconset>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="pushButton_saveMash">
-                  <property name="toolTip">
-                   <string>Save this mash profile</string>
+                   <string>Invoke the mash wizard</string>
                   </property>
                   <property name="text">
-                   <string>Save Mash</string>
+                   <string>Mash Wizard</string>
                   </property>
                  </widget>
                 </item>
@@ -1687,87 +1556,8 @@
              </attribute>
              <layout class="QVBoxLayout" name="verticalLayout_boilSteps">
               <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_boiles">
-                <item>
-                 <widget class="QTableView" name="boilStepTableWidget">
-                  <property name="contextMenuPolicy">
-                   <enum>Qt::CustomContextMenu</enum>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <layout class="QVBoxLayout" name="verticalLayout_boilbuttons">
-                  <property name="spacing">
-                   <number>1</number>
-                  </property>
-                  <item>
-                   <widget class="QPushButton" name="pushButton_addBoilStep">
-                    <property name="toolTip">
-                     <string>Add boil step</string>
-                    </property>
-                    <property name="text">
-                     <string/>
-                    </property>
-                    <property name="icon">
-                     <iconset resource="../resources.qrc">
-                      <normaloff>:/images/smallPlus.svg</normaloff>:/images/smallPlus.svg</iconset>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QPushButton" name="pushButton_removeBoilStep">
-                    <property name="toolTip">
-                     <string>Remove selected boil step</string>
-                    </property>
-                    <property name="text">
-                     <string/>
-                    </property>
-                    <property name="icon">
-                     <iconset resource="../resources.qrc">
-                      <normaloff>:/images/smallMinus.svg</normaloff>:/images/smallMinus.svg</iconset>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QPushButton" name="pushButton_editBoilStep">
-                    <property name="toolTip">
-                     <string>Edit selected boil step</string>
-                    </property>
-                    <property name="text">
-                     <string/>
-                    </property>
-                    <property name="icon">
-                     <iconset resource="../resources.qrc">
-                      <normaloff>:/images/edit.svg</normaloff>:/images/edit.svg</iconset>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QPushButton" name="pushButton_editBoil">
-                    <property name="toolTip">
-                     <string>Edit boil properties</string>
-                    </property>
-                    <property name="text">
-                     <string>Edit boil</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <spacer name="verticalSpacer_9">
-                    <property name="orientation">
-                     <enum>Qt::Vertical</enum>
-                    </property>
-                    <property name="sizeHint" stdset="0">
-                     <size>
-                      <width>20</width>
-                      <height>40</height>
-                     </size>
-                    </property>
-                   </spacer>
-                  </item>
-                 </layout>
-                </item>
-               </layout>
+                <widget class="BoilStepsWidget" name="boilStepsWidget">
+                </widget>
               </item>
               <item>
                <layout class="QHBoxLayout" name="horizontalLayout_boil">
@@ -1788,13 +1578,6 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="BoilButton" name="boilButton">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item>
                  <widget class="BtComboBoxBoil" name="boilComboBox">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -1811,6 +1594,10 @@
                  </widget>
                 </item>
                 <item>
+                 <widget class="BoilButton" name="boilButton">
+                 </widget>
+                </item>
+                <item>
                  <spacer name="horizontalSpacer_boilCombo">
                   <property name="orientation">
                    <enum>Qt::Horizontal</enum>
@@ -1823,49 +1610,6 @@
                   </property>
                  </spacer>
                 </item>
-                <item>
-                 <widget class="QPushButton" name="pushButton_boilRemove">
-                  <property name="text">
-                   <string/>
-                  </property>
-                  <property name="icon">
-                   <iconset resource="../resources.qrc">
-                    <normaloff>:/images/smallMinus.svg</normaloff>:/images/smallMinus.svg</iconset>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="pushButton_boilUp">
-                  <property name="toolTip">
-                   <string>Boil step up</string>
-                  </property>
-                  <property name="icon">
-                   <iconset resource="../resources.qrc">
-                    <normaloff>:/images/smallUpArrow.svg</normaloff>:/images/smallUpArrow.svg</iconset>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="pushButton_boilDown">
-                  <property name="toolTip">
-                   <string>Boil step down</string>
-                  </property>
-                  <property name="icon">
-                   <iconset resource="../resources.qrc">
-                    <normaloff>:/images/smallDownArrow.svg</normaloff>:/images/smallDownArrow.svg</iconset>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="pushButton_saveBoil">
-                  <property name="toolTip">
-                   <string>Save this boil profile</string>
-                  </property>
-                  <property name="text">
-                   <string>Save Boil</string>
-                  </property>
-                 </widget>
-                </item>
                </layout>
               </item>
              </layout>
@@ -1877,87 +1621,8 @@
              </attribute>
              <layout class="QVBoxLayout" name="verticalLayout_fermentationSteps">
               <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_fermentationes">
-                <item>
-                 <widget class="QTableView" name="fermentationStepTableWidget">
-                  <property name="contextMenuPolicy">
-                   <enum>Qt::CustomContextMenu</enum>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <layout class="QVBoxLayout" name="verticalLayout_fermentationbuttons">
-                  <property name="spacing">
-                   <number>1</number>
-                  </property>
-                  <item>
-                   <widget class="QPushButton" name="pushButton_addFermentationStep">
-                    <property name="toolTip">
-                     <string>Add fermentation step</string>
-                    </property>
-                    <property name="text">
-                     <string/>
-                    </property>
-                    <property name="icon">
-                     <iconset resource="../resources.qrc">
-                      <normaloff>:/images/smallPlus.svg</normaloff>:/images/smallPlus.svg</iconset>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QPushButton" name="pushButton_removeFermentationStep">
-                    <property name="toolTip">
-                     <string>Remove selected fermentation step</string>
-                    </property>
-                    <property name="text">
-                     <string/>
-                    </property>
-                    <property name="icon">
-                     <iconset resource="../resources.qrc">
-                      <normaloff>:/images/smallMinus.svg</normaloff>:/images/smallMinus.svg</iconset>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QPushButton" name="pushButton_editFermentationStep">
-                    <property name="toolTip">
-                     <string>Edit selected fermentation step</string>
-                    </property>
-                    <property name="text">
-                     <string/>
-                    </property>
-                    <property name="icon">
-                     <iconset resource="../resources.qrc">
-                      <normaloff>:/images/edit.svg</normaloff>:/images/edit.svg</iconset>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QPushButton" name="pushButton_editFermentation">
-                    <property name="toolTip">
-                     <string>Edit fermentation properties</string>
-                    </property>
-                    <property name="text">
-                     <string>Edit fermentation</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <spacer name="verticalSpacer_10">
-                    <property name="orientation">
-                     <enum>Qt::Vertical</enum>
-                    </property>
-                    <property name="sizeHint" stdset="0">
-                     <size>
-                      <width>20</width>
-                      <height>40</height>
-                     </size>
-                    </property>
-                   </spacer>
-                  </item>
-                 </layout>
-                </item>
-               </layout>
+                <widget class="FermentationStepsWidget" name="fermentationStepsWidget">
+                </widget>
               </item>
               <item>
                <layout class="QHBoxLayout" name="horizontalLayout_fermentation">
@@ -1978,13 +1643,6 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="FermentationButton" name="fermentationButton">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item>
                  <widget class="BtComboBoxFermentation" name="fermentationComboBox">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -2001,6 +1659,10 @@
                  </widget>
                 </item>
                 <item>
+                 <widget class="FermentationButton" name="fermentationButton">
+                 </widget>
+                </item>
+                <item>
                  <spacer name="horizontalSpacer_fermentationCombo">
                   <property name="orientation">
                    <enum>Qt::Horizontal</enum>
@@ -2012,49 +1674,6 @@
                    </size>
                   </property>
                  </spacer>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="pushButton_fermentationRemove">
-                  <property name="text">
-                   <string/>
-                  </property>
-                  <property name="icon">
-                   <iconset resource="../resources.qrc">
-                    <normaloff>:/images/smallMinus.svg</normaloff>:/images/smallMinus.svg</iconset>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="pushButton_fermentationUp">
-                  <property name="toolTip">
-                   <string>Fermentation step up</string>
-                  </property>
-                  <property name="icon">
-                   <iconset resource="../resources.qrc">
-                    <normaloff>:/images/smallUpArrow.svg</normaloff>:/images/smallUpArrow.svg</iconset>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="pushButton_fermentationDown">
-                  <property name="toolTip">
-                   <string>Fermentation step down</string>
-                  </property>
-                  <property name="icon">
-                   <iconset resource="../resources.qrc">
-                    <normaloff>:/images/smallDownArrow.svg</normaloff>:/images/smallDownArrow.svg</iconset>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="pushButton_saveFermentation">
-                  <property name="toolTip">
-                   <string>Save this fermentation profile</string>
-                  </property>
-                  <property name="text">
-                   <string>Save Fermentation</string>
-                  </property>
-                 </widget>
                 </item>
                </layout>
               </item>
@@ -2797,6 +2416,21 @@
    <extends>QTreeView</extends>
    <header>trees/NamedEntityTreeView.h</header>
   </customwidget>
+  <customwidget>
+   <class>MashStepsWidget</class>
+   <extends>QWidget</extends>
+   <header>widgets/StepsWidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>BoilStepsWidget</class>
+   <extends>QWidget</extends>
+   <header>widgets/StepsWidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>FermentationStepsWidget</class>
+   <extends>QWidget</extends>
+   <header>widgets/StepsWidget.h</header>
+  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>tabWidget_Trees</tabstop>
@@ -2840,19 +2474,12 @@
   <tabstop>pushButton_addSalt</tabstop>
   <tabstop>pushButton_removeSalt</tabstop>
   <tabstop>pushButton_editSalt</tabstop>
-  <tabstop>mashStepTableWidget</tabstop>
-  <tabstop>pushButton_addMashStep</tabstop>
-  <tabstop>pushButton_removeMashStep</tabstop>
-  <tabstop>pushButton_editMashStep</tabstop>
+  <tabstop>mashStepsWidget</tabstop>
   <tabstop>pushButton_editMash</tabstop>
-  <tabstop>pushButton_mashDes</tabstop>
+  <tabstop>pushButton_mashDesigner</tabstop>
   <tabstop>pushButton_mashWizard</tabstop>
   <tabstop>mashButton</tabstop>
   <tabstop>mashComboBox</tabstop>
-  <tabstop>pushButton_mashRemove</tabstop>
-  <tabstop>pushButton_mashUp</tabstop>
-  <tabstop>pushButton_mashDown</tabstop>
-  <tabstop>pushButton_saveMash</tabstop>
  </tabstops>
  <resources>
   <include location="../resources.qrc"/>

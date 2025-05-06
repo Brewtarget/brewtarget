@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/MashStep.h is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * model/MashStep.h is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Mattias Måhl <mattias@kejsarsten.com>
@@ -30,6 +30,10 @@
 #include "model/StepBase.h"
 #include "utils/EnumStringMapping.h"
 #include "utils/OptionalHelpers.h"
+
+class MashStepEditor;
+class MashStepItemDelegate;
+class MashStepTableModel;
 
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
@@ -105,10 +109,24 @@ public:
    static EnumStringMapping const typeDisplayNames;
 
    //
-   // This alias makees it easier to template a number of functions that are essentially the same for all subclasses of
+   // This alias makes it easier to template a number of functions that are essentially the same for all subclasses of
    // Step.
    //
    using OwnerClass = Mash;
+
+   //
+   // Aliases to make it easier to template various functions that are essentially the same across different NamedEntity
+   // subclasses.
+   //
+   using EditorClass       = MashStepEditor;
+   using ItemDelegateClass = MashStepItemDelegate;
+   using TableModelClass   = MashStepTableModel;
+
+   /**
+    * \brief Similarly it is useful to be able to get the editor for a \c Step subclass from template code (and without
+    *        needing to directly call a \c MainWindow function, otherwise we get circular dependencies).
+    */
+   static EditorClass & getEditor();
 
    /**
     * \brief Mapping of names to types for the Qt properties of this class.  See \c NamedEntity::typeLookup for more

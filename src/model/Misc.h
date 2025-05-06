@@ -35,7 +35,10 @@
 class MiscCatalog;
 class MiscEditor;
 class InventoryMisc;
+class MiscItemDelegate;
 class RecipeAdditionMisc;
+class MiscSortFilterProxyModel;
+class MiscTableModel;
 
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
@@ -102,13 +105,16 @@ public:
    static constexpr auto defaultMeasure = Measurement::PhysicalQuantity::Mass;
 
    //
-   // These aliases make it easier to template a number of functions that are essentially the same for a number of
-   // different NamedEntity subclasses.
+   // Aliases to make it easier to template various functions that are essentially the same across different NamedEntity
+   // subclasses.
    //
-   using CatalogClass        = MiscCatalog;
-   using EditorClass         = MiscEditor;
-   using InventoryClass      = InventoryMisc;
-   using RecipeAdditionClass = RecipeAdditionMisc;
+   using CatalogClass              = MiscCatalog;
+   using EditorClass               = MiscEditor;
+   using InventoryClass            = InventoryMisc;
+   using ItemDelegateClass         = MiscItemDelegate;
+   using RecipeAdditionClass       = RecipeAdditionMisc;
+   using SortFilterProxyModelClass = MiscSortFilterProxyModel;
+   using TableModelClass           = MiscTableModel;
 
    /**
     * \brief Mapping of names to types for the Qt properties of this class.  See \c NamedEntity::typeLookup for more

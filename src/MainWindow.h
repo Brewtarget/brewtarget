@@ -91,10 +91,6 @@ public:
     */
    template<class NE> void addIngredientToRecipe(NE & ne);
 
-   void addStepToStepOwner(std::shared_ptr<MashStep        > step);
-   void addStepToStepOwner(std::shared_ptr<BoilStep        > step);
-   void addStepToStepOwner(std::shared_ptr<FermentationStep> step);
-
    template<class NE> NE::EditorClass & getEditor() const;
 
    /**
@@ -126,6 +122,10 @@ public slots:
    void updateRecipeEfficiency();
    //! \brief Update Recipe's mash
    void updateRecipeMash();
+   //! \brief Update Recipe's boil
+   void updateRecipeBoil();
+   //! \brief Update Recipe's fermentation
+   void updateRecipeFermentation();
 
    //! \brief Update the main window's statusbar.
    void updateStatus(QString const status);
@@ -170,34 +170,14 @@ public slots:
    //! \brief Edit the Salt in the selected Salt addition.
    void editSaltOfSelectedSaltAddition();
 
-   //! \brief Invoke the pop-up Window to add a new mash step to (the mash of) the recipe.
-   void addMashStep();
-   void addBoilStep();
-   void addFermentationStep();
+   void editRecipeEquipment();
+   void editRecipeStyle();
+   void editRecipeMash();
+   void editRecipeBoil();
+   void editRecipeFermentation();
 
-   //! \brief Move currently selected mash step down.
-   void moveSelectedMashStepUp();
-   void moveSelectedBoilStepUp();
-   void moveSelectedFermentationStepUp();
-   //! \brief Move currently selected mash step up.
-   void moveSelectedMashStepDown();
-   void moveSelectedBoilStepDown();
-   void moveSelectedFermentationStepDown();
-   //! \brief Remove currently selected mash step.
-   void removeSelectedMashStep        ();
-   void removeSelectedBoilStep        ();
-   void removeSelectedFermentationStep();
-   //! \brief Edit currently selected mash step.
-   void editSelectedMashStep        ();
-   void editSelectedBoilStep        ();
-   void editSelectedFermentationStep();
-
-   //! \brief Set the current recipe's mash to the one selected in the mash combo box.
-   //void setMashToCurrentlySelected();
-   //! \brief Save the current recipe's mash to be used in other recipes.
-   void saveMash();
-   //! \brief Remove the current mash from the recipe, and replace with a blank one.
-   void removeMash();
+///   //! \brief Save the current recipe's mash to be used in other recipes.
+///   void saveMash();
 
    //! \brief Create a new recipe in the database.
    std::shared_ptr<Recipe> newRecipe();
@@ -237,9 +217,6 @@ public slots:
    void fixBrewNote();
 
    void redisplayLabel();
-
-   void showEquipmentEditor();
-   void showStyleEditor();
 
    void updateEquipmentSelector();
 
