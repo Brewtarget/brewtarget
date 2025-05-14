@@ -37,7 +37,7 @@ bool Boil::isEqualTo(NamedEntity const & other) const {
    Boil const & rhs = static_cast<Boil const &>(other);
    // Base class will already have ensured names are equal
    return (
-      Utils::AutoCompare(this->m_description  , rhs.m_description  )   &&
+      Utils::AutoCompare(this->m_description  , rhs.m_description  ) &&
       Utils::AutoCompare(this->m_notes        , rhs.m_notes        ) &&
       Utils::AutoCompare(this->m_preBoilSize_l, rhs.m_preBoilSize_l) &&
       // Parent classes have to be equal too
@@ -69,7 +69,7 @@ static_assert(std::is_base_of<FolderBase<Boil>, Boil>::value);
 //==================================================== CONSTRUCTORS ====================================================
 
 Boil::Boil(QString name) :
-   NamedEntity{name, true},
+   NamedEntity{name},
    FolderBase<Boil>{},
    StepOwnerBase<Boil, BoilStep>{},
    m_description  {""          },

@@ -88,7 +88,8 @@ public:
 
    /**
     * \brief
-    *        NOTE: This does not appear to be part of BeerXML or BeerJSON.  TBD I am not 100% certain that we need it.
+    *        NOTE: This does not appear to be part of BeerXML or BeerJSON.
+    *        TBD: I am not 100% certain that we need it.  If we do, then it most likely belongs on RecipeUseOfWater
     */
    enum class Type {
       Base  ,
@@ -197,6 +198,9 @@ public:
     *        \c std::optional<int>, not \c std::optional<Type>
     */
    Q_PROPERTY(std::optional<int> type READ typeAsInt        WRITE setTypeAsInt)
+   //
+   // TBD: mashRo_pct and spargeRo_pct should probably move to RecipeUseOfWater
+   //
    //! \brief percent of the mash water that is RO (reverse osmosis)   NB: Not part of BeerXML or BeerJSON
    Q_PROPERTY(std::optional<double> mashRo_pct       READ mashRo_pct       WRITE setMashRo_pct)
    //! \brief percent of the sparge water that is RO (reverse osmosis)   NB: Not part of BeerXML or BeerJSON

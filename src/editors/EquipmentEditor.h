@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * editors/EquipmentEditor.h is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * editors/EquipmentEditor.h is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • David Grundberg <individ@acc.umu.se>
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Matt Young <mfsy@yahoo.com>
@@ -30,7 +30,7 @@
 #include "editors/EditorBase.h"
 #include "model/Equipment.h"
 
-#define EquipmentEditorOptions EditorBaseOptions{ .idDisplay = true }
+#define EquipmentEditorOptions EditorBaseOptions{ .idDisplay = true, .numRecipesUsing = true }
 /*!
  * \class EquipmentEditor
  *

@@ -203,9 +203,6 @@ public:
       auto result = this->ObjectStore::findFirstMatching(
          [matchFunction](std::shared_ptr<QObject> obj) {return matchFunction(std::static_pointer_cast<NE>(obj));}
       );
-///      if (!result) {
-///         return nullptr;
-///      }
       return std::shared_ptr<NE>{std::static_pointer_cast<NE>(result)};
    }
 
@@ -280,6 +277,16 @@ public:
    }
 
    /**
+    * \brief Similar to \c idsOfAllMatching but returns a count of the number of cached objects that "match" according
+    *        to the lambda function.
+    */
+   int numMatching(std::function<bool(NE const *)> const & matchFunction) const {
+      return this->ObjectStore::numMatching(
+         [matchFunction](QObject const * obj) { return matchFunction(static_cast<NE const *>(obj)); }
+      );
+   }
+
+   /**
     * \brief Special case of \c findAllMatching that returns a list of all cached objects of a given type
     */
    QList<std::shared_ptr<NE> > getAll() {
@@ -343,7 +350,6 @@ private:
 
       // This marks the in-memory object as deleted and will get pushed down to the DB
       ne->setDeleted(true);
-      ne->setDisplay(false);
 
       // Base class defaultSoftDelete() actually does too much for the soft delete case; we just need to tell any bits
       // of the UI that need to know that an object was deleted.  (In the hard delete case, this signal will already

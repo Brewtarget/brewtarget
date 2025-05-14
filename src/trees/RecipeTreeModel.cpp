@@ -301,8 +301,6 @@ void RecipeTreeModel::orphanRecipe(QModelIndex index) {
    // Display all of its brewnotes
    this->addBrewNoteSubTree(*orphan, index.row(), *parentNode, false);
 
-   // set the ancestor to visible. Not sure this is required?
-   ancestor->setDisplay(true);
    ancestor->setLocked(false);
 
    // Put the ancestor into the tree

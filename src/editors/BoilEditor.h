@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * editors/BoilEditor.h is part of Brewtarget, and is copyright the following authors 2024:
+ * editors/BoilEditor.h is part of Brewtarget, and is copyright the following authors 2024-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -26,7 +26,7 @@
 #include "editors/EditorBase.h"
 #include "model/Boil.h"
 
-#define BoilEditorOptions EditorBaseOptions{ .recipe = true }
+#define BoilEditorOptions EditorBaseOptions{ .recipe = true, .idDisplay = true, .numRecipesUsing = true }
 /*!
  * \class BoilEditor
  *

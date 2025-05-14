@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * utils/TypeTraits.h is part of Brewtarget, and is copyright the following authors 2023-2024:
+ * utils/TypeTraits.h is part of Brewtarget, and is copyright the following authors 2023-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -142,5 +142,25 @@ concept CONCEPT_FIX_UP IsBaseClassTemplateOf = is_base_class_template_of<BaseCla
 //
 template <typename T> concept CONCEPT_FIX_UP IsVoid  = std::is_void<T>::value;
 
+//
+// Sometimes, inside some template code, we want to know (at compile-time) whether a class has a particular member
+// variable.  There are several examples floating around of how to do this for one specific member.  But, with the help
+// of macros, we make it generic here.
+//
+// Use CREATE_HAS_MEMBER(memberName) to create the detection mechanism (near the top of the source file).  Then
+// HAS_MEMBER(T, memberName) to use the compile-time detection mechanism.
+//
+// See https://fekir.info/post/detect-member-variables/ for explanation of how this all works.  In brief, we make a
+// template struct that is false_type, and then provide a partial specialisation that is true_type and that is only
+// valid if the member variable exists.  Because SFINAE, if the member variable does not exist, the specialisation is
+// ignored.
+//
+#define CREATE_HAS_MEMBER(memberName) \
+template <typename T, typename = void> struct has_MemberCalled_##memberName : std::false_type{}; \
+template <typename T> struct has_MemberCalled_##memberName<T, decltype((void)T::member)> : std::true_type{}; \
+template <typename T> concept CONCEPT_FIX_UP HasMemberCalled_##memberName = has_MemberCalled_##memberName<T>::value;
+
+#define HAS_MEMBER(className, memberName) \
+HasMemberCalled_##memberName<className>
 
 #endif

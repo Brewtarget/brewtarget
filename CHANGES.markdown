@@ -21,6 +21,7 @@ Expose mash/boil/fermentation profiles in more of the UI
 * Salts appear in left-hand section, are editable, and can be added to recipes
 * Boil and Fermentation buttons added to the toolbar
 * Mash/Boil/Fermentation editors should allow you to edit steps [947](https://github.com/Brewtarget/brewtarget/issues/947)
+* Mash/Boil/Fermentation editors should show how many recipes use the displayed mash/boil/fermentation profile [948](https://github.com/Brewtarget/brewtarget/issues/948)
 
 ### Bug Fixes
 * Clicking '+' in Water Chemistry tool terminates the application with an assert [819](https://github.com/Brewtarget/brewtarget/issues/819)
@@ -32,7 +33,7 @@ Expose mash/boil/fermentation profiles in more of the UI
 * Folders in tree view don't show whether they are expanded or not [951](https://github.com/Brewtarget/brewtarget/issues/951)
 
 ### Release Timestamp
-Sun, 27 Apr 2025 04:01:00 +0100
+Wed, 14 May 2025 04:01:00 +0100
 
 ## v4.0.18
 Bug fixes and minor enhancements.

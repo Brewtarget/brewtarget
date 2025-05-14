@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/OwnedByRecipe.cpp is part of Brewtarget, and is copyright the following authors 2024:
+ * model/OwnedByRecipe.cpp is part of Brewtarget, and is copyright the following authors 2024-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -48,7 +48,7 @@ TypeLookup const OwnedByRecipe::typeLookup {
 };
 
 OwnedByRecipe::OwnedByRecipe(QString name, int const recipeId) :
-   NamedEntity{name, true},
+   NamedEntity{name},
    m_recipeId{recipeId} {
 
    CONSTRUCTOR_END

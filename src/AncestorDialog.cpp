@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * AncestorDialog.cpp is part of Brewtarget, and is copyright the following authors 2021-2024:
+ * AncestorDialog.cpp is part of Brewtarget, and is copyright the following authors 2021-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@fastmail.com>
  *
@@ -76,7 +76,7 @@ void AncestorDialog::buildAncestorBox() {
    std::sort(recipes.begin(), recipes.end(), AncestorDialog::recipeLessThan);
 
    for (auto recipe : recipes) {
-      if (recipe->display()) {
+      if (!recipe->deleted()) {
          comboBox_ancestor->addItem(recipe->name(), recipe->key());
       }
    }
@@ -94,8 +94,8 @@ void AncestorDialog::buildDescendantBox(Recipe * ignore) {
       if (recipe == ignore) {
          continue;
       }
-      // if the recipe is not being displayed, skip
-      if (! recipe->display()) {
+      // if the recipe is deleted, skip
+      if (recipe->deleted()) {
          continue;
       }
       // if the recipe already has ancestors, skip

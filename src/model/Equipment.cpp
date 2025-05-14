@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/Equipment.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * model/Equipment.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Mattias Måhl <mattias@kejsarsten.com>
  *   • Matt Young <mfsy@yahoo.com>
@@ -124,7 +124,7 @@ static_assert(std::is_base_of<FolderBase<Equipment>, Equipment>::value);
 
 //=============================CONSTRUCTORS=====================================
 Equipment::Equipment(QString name) :
-   NamedEntity        {name, true},
+   NamedEntity{name},
    FolderBase<Equipment>{},
    m_kettleBoilSize_l           {22.927      },
    m_fermenterBatchSize_l       {18.927      },

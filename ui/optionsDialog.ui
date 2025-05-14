@@ -474,18 +474,6 @@
        </item>
        <item>
         <widget class="QGroupBox" name="groupBox_deleteBehavior">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>250</width>
-           <height>16777215</height>
-          </size>
-         </property>
          <property name="title">
           <string>Deleting a recipe</string>
          </property>

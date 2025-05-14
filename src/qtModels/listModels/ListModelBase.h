@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * qtModels/listModels/ListModelBase.h is part of Brewtarget, and is copyright the following authors 2023-2024:
+ * qtModels/listModels/ListModelBase.h is part of Brewtarget, and is copyright the following authors 2023-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -56,9 +56,8 @@ public:
       QList<NE *> tmp;
       for (NE * ii : items) {
          // if the item is not already in the list and
-         // if the item has not been deleted and
-         // if the item is to be displayed, then append it
-         if (!m_items.contains(ii) && ii->display() && !ii->deleted()) {
+         // if the item has not been deleted, then append it
+         if (!m_items.contains(ii) && !ii->deleted()) {
             tmp.append(ii);
          }
       }
@@ -183,7 +182,7 @@ protected:
    void doAddItem(int itemId) {
       qDebug() << Q_FUNC_INFO << "New" << NE::staticMetaObject.className() << "#" << itemId;
       NE * ne = ObjectStoreWrapper::getByIdRaw<NE>(itemId);
-      if (!ne || !ne->display() || ne->deleted()) {
+      if (!ne || ne->deleted()) {
          return;
       }
 

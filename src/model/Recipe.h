@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/Recipe.h is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * model/Recipe.h is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Greg Meess <Daedalus12@gmail.com>
  *   • Jeff Bailey <skydvr38@verizon.net>
@@ -71,7 +71,6 @@ AddPropertyName(date                   )
 AddPropertyName(efficiency_pct         )
 AddPropertyName(equipment              )
 AddPropertyName(equipmentId            )
-///AddPropertyName(fermentableAdditionIds )
 AddPropertyName(fermentableAdditions   )
 AddPropertyName(fermentation           )
 AddPropertyName(fermentationId         )
@@ -80,17 +79,14 @@ AddPropertyName(finalVolume_l          )
 AddPropertyName(forcedCarbonation      )
 AddPropertyName(grainsInMash_kg        )
 AddPropertyName(grains_kg              )
-///AddPropertyName(hopAdditionIds         )
 AddPropertyName(hopAdditions           )
 AddPropertyName(IBU                    )
 AddPropertyName(IBUs                   )
-///AddPropertyName(instructionIds         )
 AddPropertyName(instructions           )
 AddPropertyName(kegPrimingFactor       )
 AddPropertyName(locked                 )
 AddPropertyName(mash                   )
 AddPropertyName(mashId                 )
-///AddPropertyName(miscAdditionIds        )
 AddPropertyName(miscAdditions          )
 AddPropertyName(notes                  )
 AddPropertyName(og                     )
@@ -98,7 +94,6 @@ AddPropertyName(points                 )
 AddPropertyName(postBoilVolume_l       )
 AddPropertyName(primingSugarEquiv      )
 AddPropertyName(primingSugarName       )
-///AddPropertyName(saltAdjustmentIds      )
 AddPropertyName(saltAdjustments        )
 AddPropertyName(SRMColor               )
 AddPropertyName(style                  )
@@ -106,10 +101,8 @@ AddPropertyName(styleId                )
 AddPropertyName(tasteNotes             )
 AddPropertyName(tasteRating            )
 AddPropertyName(type                   )
-///AddPropertyName(waterUseIds            )
 AddPropertyName(waterUses              )
 AddPropertyName(wortFromMash_l         )
-///AddPropertyName(yeastAdditionIds       )
 AddPropertyName(yeastAdditions         )
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
@@ -385,8 +378,8 @@ public:
    //! \brief The instructions.
    Q_PROPERTY(QList<std::shared_ptr<Instruction>> instructions   READ instructions /*WRITE*/ /*NOTIFY changed*/ STORED false)
 
+   //! \brief The immediate ancestor
    Q_PROPERTY(int    ancestorId READ getAncestorId WRITE setAncestorId)
-   //! \brief The ancestors.
 ///   Q_PROPERTY(QList<std::shared_ptr<Recipe>> ancestors      READ ancestors      STORED false)
 ///   Q_PROPERTY(QList<Recipe *>                ancestorsRaw   READ ancestorsRaw   STORED false)
 
@@ -429,7 +422,12 @@ public:
     *        See below for specialisations (which have to be outside the class definition).
     */
    template<class T> static Recipe * findFirstThatUses(T const & var) {
-      return ObjectStoreWrapper::findFirstMatching<Recipe>( [var](Recipe * rec) {return rec->uses(var);} );
+      return ObjectStoreWrapper::findFirstMatching<Recipe>( [& var](Recipe * rec) {return rec->uses(var);} );
+   }
+
+   //! \brief Return a count of how many recipes use the supplied object
+   template<class T> static int numRecipesUsing(T const & var) {
+      return ObjectStoreWrapper::numMatching<Recipe>( [& var](Recipe const * rec) {return rec->uses(var);} );
    }
 
    //! \brief Automagically generate a list of instructions.

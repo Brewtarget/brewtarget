@@ -29,7 +29,7 @@
 #include "editors/EditorBase.h"
 #include "model/Mash.h"
 
-#define MashEditorOptions EditorBaseOptions{ .recipe = true, .idDisplay = true }
+#define MashEditorOptions EditorBaseOptions{ .recipe = true, .idDisplay = true, .numRecipesUsing = true }
 /*!
  * \class MashEditor
  *

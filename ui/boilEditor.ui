@@ -26,7 +26,7 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="2" colspan="2">
+       <item row="0" column="2" colspan="3">
         <widget class="QLineEdit" name="lineEdit_name">
          <property name="toolTip">
           <string>Name</string>
@@ -47,7 +47,7 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="2" colspan="2">
+       <item row="2" column="2" colspan="3">
         <widget class="QTextEdit" name="textEdit_description">
          <property name="toolTip">
           <string>Description</string>
@@ -68,7 +68,7 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="2" colspan="2">
+       <item row="4" column="2" colspan="3">
         <widget class="SmartLineEdit" name="lineEdit_preBoilSize">
          <property name="toolTip">
           <string>Pre-Boil Size</string>
@@ -76,7 +76,7 @@
         </widget>
        </item>
 
-       <item row="6" column="1" colspan="3">
+       <item row="6" column="1" colspan="4">
          <widget class="BoilStepsWidget" name="stepsWidget">
          </widget>
        </item>
@@ -88,11 +88,42 @@
          </property>
         </widget>
        </item>
-       <item row="8" column="2" colspan="2">
+       <item row="8" column="2" colspan="3">
         <widget class="QTextEdit" name="textEdit_notes"/>
        </item>
 
-       <item row="10" column="3">
+       <item row="13" column="0">
+        <widget class="InfoButton" name="infoButton_id"></widget>
+       </item>
+       <item row="13" column="1">
+        <widget class="QLabel" name="label_id">
+         <property name="text">
+          <string>ID in database</string>
+         </property>
+        </widget>
+       </item>
+       <item row="13" column="2">
+        <widget class="QLabel" name="label_id_value">
+        </widget>
+       </item>
+
+       <item row="13" column="4" colspan="1">
+        <widget class="QLabel" name="label_numRecipesUsing">
+        </widget>
+       </item>
+
+       <item row="14" column="1" colspan="4">
+        <widget class="InfoText" name="infoText_id">
+         <property name="buddy">
+          <cstring>infoButton_id</cstring>
+         </property>
+         <property name="text">
+          <string>You can normally ignore this, but it's sometimes useful for debugging.</string>
+         </property>
+        </widget>
+       </item>
+
+       <item row="16" column="4">
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
           <widget class="QPushButton" name="pushButton_new">
@@ -145,6 +176,16 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>InfoButton</class>
+   <extends>QPushButton</extends>
+   <header>widgets/InfoButton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>InfoText</class>
+   <extends>QLabel</extends>
+   <header>widgets/InfoText.h</header>
+  </customwidget>
   <customwidget>
    <class>SmartLabel</class>
    <extends>QLabel</extends>

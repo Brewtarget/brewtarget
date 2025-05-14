@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * editors/StyleEditor.h is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * editors/StyleEditor.h is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -27,7 +27,7 @@
 #include "editors/EditorBase.h"
 #include "model/Style.h"
 
-#define StyleEditorOptions EditorBaseOptions{ .idDisplay = true }
+#define StyleEditorOptions EditorBaseOptions{ .idDisplay = true, .numRecipesUsing = true }
 /*!
  * \class StyleEditor
  *

@@ -223,32 +223,14 @@ public:
    }
 
    /**
-    * \brief Remove duplicates and non-displayable items from the supplied list
+    * \brief Remove duplicates and deleted items from the supplied list
     */
    QList< std::shared_ptr<NE> > removeDuplicates(QList< std::shared_ptr<NE> > items,
                                                  Recipe const * recipe = nullptr) {
       decltype(items) tmp;
 
       for (auto ii : items) {
-         if (!recipe && (ii->deleted() || !ii->display())) {
-            continue;
-         }
-         if (!this->m_rows.contains(ii) ) {
-            tmp.append(ii);
-         }
-      }
-      return tmp;
-   }
-
-   /**
-    * \brief Remove duplicates, ignoring if the item is displayed
-    */
-   QList< std::shared_ptr<NE> > removeDuplicatesIgnoreDisplay(QList< std::shared_ptr<NE> > items,
-                                                              Recipe const * recipe = nullptr) {
-      decltype(items) tmp;
-
-      for (auto ii : items) {
-         if (!recipe && ii->deleted() ) {
+         if (!recipe && ii->deleted()) {
             continue;
          }
          if (!this->m_rows.contains(ii) ) {
@@ -292,9 +274,9 @@ public:
          return;
       }
 
-      // If we are observing the database, ensure that the item is undeleted and fit to display.
+      // If we are observing the database, ensure that the item is not deleted.
       Recipe * observedRecipe = this->derived().getObservedRecipe();
-      if (!observedRecipe && (item->deleted() || !item->display())) {
+      if (!observedRecipe && item->deleted()) {
          return;
       }
 
@@ -923,8 +905,8 @@ protected:
    /**
     * \brief Called from \c Derived::changed slot
     *
-    * \param propNameOfOurAdditionsInRecipe  This needs to be something valid in all cases, but is only used if Derived is a
-    *                                  recipe observer.
+    * \param propNameOfOurAdditionsInRecipe  This needs to be something valid in all cases, but is only used if Derived
+    *                                        is a recipe observer.
     */
    template<class Caller>
    void propertyChanged(QMetaProperty prop,
@@ -950,7 +932,7 @@ protected:
 
          this->derived().updateTotals();
          emit this->derived().dataChanged(this->derived().createIndex(ii, 0),
-                                     this->derived().createIndex(ii, this->derived().columnCount() - 1));
+                                          this->derived().createIndex(ii, this->derived().columnCount() - 1));
          emit this->derived().headerDataChanged(Qt::Vertical, ii, ii);
          return;
       }

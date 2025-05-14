@@ -94,50 +94,6 @@ namespace {
       return lhs.time <=> rhs.time;
    }
 
-   /**
-    * \brief Check whether the supplied instance of (subclass of) NamedEntity (a) is an "instance of use of" (ie has a
-    *        parent) and (b) is not used in any Recipe.
-    */
-   template<class NE> bool isUnusedInstanceOfUseOf(NE & var) {
-      NE * parentOfVar = static_cast<NE *>(var.getParent());
-      if (nullptr == parentOfVar) {
-         // The var has no parent and so is not "an instance of use of"
-         return false;
-      }
-
-      qDebug() <<
-         Q_FUNC_INFO << var.metaObject()->className() << "#" << var.key() << "has parent #" << parentOfVar->key();
-      //
-      // Parameter has a parent.  See if it (the parameter, not its parent!) is used in a recipe.
-      // (NB: The parent of the NamedEntity is not the same thing as its parent recipe.  We should perhaps find some
-      // different terms!)
-      //
-      auto matchingRecipe = ObjectStoreTyped<Recipe>::getInstance().findFirstMatching(
-         // NB: Important to do the lambda capture of var here by reference, otherwise we'll be passing in a copy of
-         //     var, which won't have an ID and therefore will never give a match.
-         [&var](Recipe * recipe) {
-            return recipe->uses(var);
-         }
-      );
-      if (matchingRecipe == nullptr) {
-         // The parameter is not already used in a recipe, so we'll be able to add it without making a copy
-         // Note that we can't just take the address of var and use it to make a new shared_ptr as that would mean
-         // we had two completely unrelated shared_ptr objects (one in the object store and one newly created here)
-         // pointing to the same address.  We need to get an instance of shared_ptr that's copied from (and thus
-         // shares the internal reference count of) the one held by the object store.
-         qDebug() << Q_FUNC_INFO << var.metaObject()->className() << "#" << var.key() << "not used in any recipe";
-         return true;
-      }
-
-      // The var is used in another Recipe.  (We shouldn't really find ourselves in this position, but the way the rest
-      // of the code works means that, even if we do, we should recover OK - or at least not make the situation any
-      // worse.)
-      qWarning() <<
-         Q_FUNC_INFO << var.metaObject()->className() << "#" << var.key() <<
-         "is unexpectedly already used in recipe #" << matchingRecipe->key();
-      return false;
-   }
-
    bool isFermentableSugar(Fermentable * fermy) {
       // TODO: This probably doesn't work in languages other than English!
       if (fermy->type() == Fermentable::Type::Sugar && fermy->name() == "Milk Sugar (Lactose)") {
@@ -170,8 +126,6 @@ template<> BtStringConst const & Recipe::propertyNameFor<RecipeUseOfWater       
 
 // TBD: This is needed for WaterButton, but we should have a proper look at that some day
 template<> BtStringConst const & Recipe::propertyNameFor<Water                    >() { return PropertyNames::Recipe::waterUses             ; }
-
-///template<> BtStringConst const & Recipe::propertyNameFor<Instruction              >() { return PropertyNames::Recipe::instructions        ; }
 
 // This private implementation class holds all private non-virtual members of Recipe
 class Recipe::impl {
@@ -1364,6 +1318,22 @@ public:
       return;
    }
 
+   /**
+    * \brief Called by \c Recipe::uses for "ingredient" types, where we want to know whether a given, eg, \c Hop is used
+    *        in this \c Recipe via a \c RecipeAdditionHop.
+    */
+   template<class IngredientType> bool usesIngredient(IngredientType const & ingredient) const {
+      auto recipeAddition = ObjectStoreWrapper::findFirstMatching<typename IngredientType::RecipeAdditionClass>(
+         [&](IngredientType::RecipeAdditionClass * addition) {
+            return addition->recipeId() == m_self.key() && addition->ingredient()->key() == ingredient.key();
+         }
+      );
+      if (recipeAddition) {
+         return true;
+      }
+      return false;
+   }
+
 
    //================================================ Member variables =================================================
    Recipe & m_self;
@@ -1453,8 +1423,6 @@ bool Recipe::isEqualTo(NamedEntity const & other) const {
       AUTO_LOG_COMPARE(this, rhs, m_efficiency_pct) &&
       AUTO_LOG_COMPARE(this, rhs, m_age_days      ) &&
       AUTO_LOG_COMPARE(this, rhs, m_ageTemp_c     ) &&
-///      AUTO_LOG_COMPARE(this, rhs, m_og            ) &&
-///      AUTO_LOG_COMPARE(this, rhs, m_fg            ) &&
       AUTO_LOG_COMPARE_ID(this, rhs, Style, m_styleId) &&
       AUTO_LOG_COMPARE_ID(this, rhs, Mash , m_mashId ) &&
       AUTO_LOG_COMPARE_ID(this, rhs, Boil , m_boilId ) &&
@@ -1535,8 +1503,6 @@ TypeLookup const Recipe::typeLookup {
       PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::grains_kg        , Recipe::grains_kg         , Measurement::PhysicalQuantity::Mass      ), // Calculated, not in DB
       PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::IBU              , Recipe::IBU               , Measurement::PhysicalQuantity::Bitterness), // Calculated, not in DB
 //      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::IBUs              , Recipe::m_IBUs              ),
-///      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::instructionIds    , Recipe::impl::instructionIds),
-///      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::instructions      , Recipe::m_instructions      ),
 //      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::points            , Recipe::m_points            ),
       PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::postBoilVolume_l, Recipe::postBoilVolume_l  , Measurement::PhysicalQuantity::Volume     ), // Calculated, not in DB
       PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::SRMColor        , Recipe::SRMColor          ),  // Calculated, not in DB.  NB: This is an RGB display color
@@ -1565,7 +1531,7 @@ TypeLookup const Recipe::typeLookup {
 static_assert(std::is_base_of<FolderBase<Recipe>, Recipe>::value);
 
 Recipe::Recipe(QString name) :
-   NamedEntity              {name, true                   },
+   NamedEntity              {name},
    FolderBase<Recipe>       {},
    pimpl                    {std::make_unique<impl>(*this)},
    m_type                   {Recipe::Type::AllGrain       },
@@ -2029,11 +1995,12 @@ template std::shared_ptr<RecipeAdditionYeast      > Recipe::addAddition(std::sha
 template std::shared_ptr<RecipeAdjustmentSalt     > Recipe::addAddition(std::shared_ptr<RecipeAdjustmentSalt     > addition);
 template std::shared_ptr<RecipeUseOfWater         > Recipe::addAddition(std::shared_ptr<RecipeUseOfWater         > addition);
 
-template<> bool Recipe::uses(Fermentable  const & val) const = delete;
-template<> bool Recipe::uses(Misc         const & val) const = delete;
-template<> bool Recipe::uses(Salt         const & val) const = delete;
-template<> bool Recipe::uses(Water        const & val) const = delete;
-template<> bool Recipe::uses(Yeast        const & val) const = delete;
+template<> bool Recipe::uses(Fermentable const & val) const { return this->pimpl->usesIngredient(val); }
+template<> bool Recipe::uses(Hop         const & val) const { return this->pimpl->usesIngredient(val); }
+template<> bool Recipe::uses(Misc        const & val) const { return this->pimpl->usesIngredient(val); }
+template<> bool Recipe::uses(Salt        const & val) const { return this->pimpl->usesIngredient(val); }
+template<> bool Recipe::uses(Water       const & val) const { return this->pimpl->usesIngredient(val); }
+template<> bool Recipe::uses(Yeast       const & val) const { return this->pimpl->usesIngredient(val); }
 template<> bool Recipe::uses<Equipment   > (Equipment    const & val) const { return val.key() == this->m_equipmentId   ; }
 template<> bool Recipe::uses<Style       > (Style        const & val) const { return val.key() == this->m_styleId       ; }
 template<> bool Recipe::uses<Mash        > (Mash         const & val) const { return val.key() == this->m_mashId        ; }
@@ -2333,7 +2300,6 @@ void Recipe::setAncestor(Recipe & ancestor) {
       std::shared_ptr<Recipe> ancestorPointer = ObjectStoreWrapper::getById<Recipe>(ancestor.key());
       this->m_ancestors.append(ancestorPointer);
 
-      ancestor.setDisplay(false);
       ancestor.setLocked(true);
       ancestor.setHasDescendants(true);
    }
@@ -2351,7 +2317,6 @@ Recipe * Recipe::revertToPreviousVersion() {
 
    // Reactivate our immediate ancestor (aka previous version)
    Recipe * ancestor = ObjectStoreWrapper::getByIdRaw<Recipe>(this->m_ancestor_id);
-   ancestor->setDisplay(true);
    ancestor->setLocked(false);
    ancestor->setHasDescendants(false);
 
@@ -2459,13 +2424,6 @@ QList<std::shared_ptr<RecipeAdjustmentSalt     >> Recipe::     saltAdjustments()
 QList<std::shared_ptr<RecipeUseOfWater         >> Recipe::           waterUses() const { return this->allOwned<RecipeUseOfWater         >(); }
 QList<std::shared_ptr<BrewNote                 >> Recipe::           brewNotes() const { return this->allOwned<BrewNote                 >(); }
 QList<std::shared_ptr<Instruction              >> Recipe::        instructions() const { return this->allOwned<Instruction              >(); }
-
-///QVector<int> Recipe::fermentableAdditionIds() const { return this->ownedSetFor<RecipeAdditionFermentable>().itemIds(); }
-///QVector<int> Recipe::        hopAdditionIds() const { return this->ownedSetFor<RecipeAdditionHop        >().itemIds(); }
-///QVector<int> Recipe::       miscAdditionIds() const { return this->ownedSetFor<RecipeAdditionMisc       >().itemIds(); }
-///QVector<int> Recipe::      yeastAdditionIds() const { return this->ownedSetFor<RecipeAdditionYeast      >().itemIds(); }
-///QVector<int> Recipe::     saltAdjustmentIds() const { return this->ownedSetFor<RecipeAdjustmentSalt     >().itemIds(); }
-///QVector<int> Recipe::           waterUseIds() const { return this->ownedSetFor<RecipeUseOfWater         >().itemIds(); }
 
 int Recipe::getAncestorId() const { return this->m_ancestor_id; }
 

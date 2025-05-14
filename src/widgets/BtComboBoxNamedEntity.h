@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * widgets/BtComboBoxNamedEntity.h is part of Brewtarget, and is copyright the following authors 2024:
+ * widgets/BtComboBoxNamedEntity.h is part of Brewtarget, and is copyright the following authors 2024-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -137,31 +137,7 @@ public:
 
    void setItem(std::shared_ptr<NE> item) {
       if (item) {
-         //
-         // For historical reasons, we still have users who have parent-child copies of various records in their DB.
-         // (This is from when each Recipe made a copy of the Equipment/Style/Mash etc records it used.)  In these
-         // cases, only the parent record will be in the combo box, so we want to select that.
-         //
-         // Of course, just to make our lives fun, there are in fact many user databases where the parent-child
-         // relationships are not all present, so it's not guaranteed that we'll be able to find the "original" record.
-         // In these cases, we just show nothing in the combo box.  The corresponding button will still show the actual
-         // record name, and the Recipe will retain this record if no new Equipment/Style/Mash is selected from the
-         // combo box.
-         //
-         // TBD At some point we want to see if we can get rid of all these parent-child records.
-         //
-         if (item->display()) {
-            this->derived().setCurrentId(item->key());
-            return;
-         }
-         int const parentKey = item->getParentKey();
-         if (parentKey > 0) {
-            auto parent = ObjectStoreWrapper::getById<NE>(parentKey);
-            if (parent->display()) {
-               this->derived().setCurrentId(parentKey);
-               return;
-            }
-         }
+         this->derived().setCurrentId(item->key());
 
          // As mentioned above, in this event, we'll drop through and not show anything on the combo box
          qWarning() << Q_FUNC_INFO << "Unable to find displayable parent for" << *item;
@@ -210,7 +186,7 @@ class BtComboBox##NeName : public BtComboBoxNamedEntity, \
  */
 #define BT_COMBO_BOX_NAMED_ENTITY_CODE(NeName) \
    BtComboBox##NeName::BtComboBox##NeName(QWidget * parent) :      \
-      BtComboBoxNamedEntity{"BtComboBox" #NeName, parent},          \
+      BtComboBoxNamedEntity{"BtComboBox" #NeName, parent},         \
       BtComboBoxNamedEntityBase<BtComboBox##NeName          ,      \
                                 NeName                      ,      \
                                 NeName##ListModel           ,      \
