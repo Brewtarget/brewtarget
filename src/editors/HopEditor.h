@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * editors/HopEditor.h is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * editors/HopEditor.h is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Mik Firestone <mikfire@gmail.com>
  *   • Philip Greggory Lee <rocketman768@gmail.com>
@@ -26,7 +26,7 @@
 #include "editors/EditorBase.h"
 #include "model/Hop.h"
 
-#define HopEditorOptions EditorBaseOptions{ .nameTab = true, .idDisplay = true }
+#define HopEditorOptions EditorBaseOptions{ .nameTab = true, .idDisplay = true, .numRecipesUsing = true }
 /*!
  * \class HopEditor
  *

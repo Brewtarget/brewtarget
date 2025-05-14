@@ -78,21 +78,18 @@ namespace ObjectStoreWrapper {
    }
 
    /**
-    * \brief Gets only those objects which are:
-    *          - marked displayable
-    *          - not marked deleted
-    *          - do not have a parent (ie are not "an instance of use of"
+    * \brief Gets only those objects which are not marked deleted
     */
    template<class NE> QList<std::shared_ptr<NE>> getAllDisplayable() {
       return ObjectStoreTyped<NE>::getInstance().findAllMatching(
-         [](std::shared_ptr<NE> ne) { return (ne->display() && !ne->deleted() && ne->getParentKey() <= 0); }
+         [](std::shared_ptr<NE> ne) { return !ne->deleted(); }
       );
    }
 
    //! \brief Raw pointer version
    template<class NE> QList<NE *> getAllDisplayableRaw() {
       return ObjectStoreTyped<NE>::getInstance().findAllMatching(
-         [](NE const * ne) { return (ne->display() && !ne->deleted() && ne->getParentKey() <= 0); }
+         [](NE const * ne) { return !ne->deleted(); }
       );
    }
 
@@ -237,6 +234,14 @@ namespace ObjectStoreWrapper {
    template<class NE>
    QVector<int> idsOfAllMatching(std::function<bool(NE const *)> const & matchFunction) {
       return ObjectStoreTyped<NE>::getInstance().idsOfAllMatching(matchFunction);
+   }
+
+   /**
+    * \brief Similar to \c idsOfAllMatching but returns a count of the number of cached objects that "match" according
+    *        to the lambda function.
+    */
+   template<class NE> int numMatching(std::function<bool(NE const *)> const & matchFunction) {
+      return ObjectStoreTyped<NE>::getInstance().numMatching(matchFunction);
    }
 
    /**

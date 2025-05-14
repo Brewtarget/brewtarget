@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/Step.cpp is part of Brewtarget, and is copyright the following authors 2023-2024:
+ * model/Step.cpp is part of Brewtarget, and is copyright the following authors 2023-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -54,7 +54,7 @@ TypeLookup const Step::typeLookup {
 
 //==================================================== CONSTRUCTORS ====================================================
 Step::Step(QString name) :
-   NamedEntity      {name, true},
+   NamedEntity      {name},
    m_endTemp_c      {std::nullopt},
    // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
    m_description    {""          },

@@ -72,7 +72,7 @@ QMenu * RecipeTreeView::doGetContextMenu(QModelIndex const & selectedViewIndex) 
 
       // if we have ancestors and are showing them but are not an actual
       // ancestor, then enable hide
-      this->enableHideAncestor(recipe->hasAncestors() && this->m_model.showChild(translated) && recipe->display());
+      this->enableHideAncestor(recipe->hasAncestors() && this->m_model.showChild(translated));
 
       // if we have ancestors and are not showing them, enable showAncestors
       this->enableShowAncestor(recipe->hasAncestors() && !this->m_model.showChild(translated));
@@ -81,9 +81,8 @@ QMenu * RecipeTreeView::doGetContextMenu(QModelIndex const & selectedViewIndex) 
       // allow orphaning
       this->enableOrphan(recipe->hasAncestors() && ! recipe->locked());
 
-      // if display is true, we can spawn it. This should mean we cannot spawn
-      // ancestors directly, which is what I want.
-      this->enableSpawn(recipe->display());
+      // We don't want to be able to spawn ancestors directly.
+      this->enableSpawn(!recipe->hasDescendants());
 
       // If user has clicked the Top-level Item 'Recipes' Once this menu Item will be forever disabled if we don't enable it.
       this->m_exportMenu.setEnabled(true);

@@ -135,9 +135,10 @@ protected:
          }
       }
 
+      // Hide deleted items
       NamedEntity * underlyingItem = childNode->rawUnderlyingItem();
       if (underlyingItem) {
-         return underlyingItem->display();
+         return !underlyingItem->deleted();
       }
 
       return true;

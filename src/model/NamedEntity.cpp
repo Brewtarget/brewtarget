@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/NamedEntity.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * model/NamedEntity.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Kregg Kemper <gigatropolis@yahoo.com>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -82,12 +82,10 @@ namespace {
 
 QString NamedEntity::localisedName() { return tr("Named Entity"); }
 
-NamedEntity::NamedEntity(QString t_name, bool t_display) :
+NamedEntity::NamedEntity(QString t_name) :
    QObject        {nullptr  },
    m_key          {-1       },
-   parentKey      {-1       },
    m_name         {t_name   },
-   m_display      {t_display},
    m_deleted      {false    },
    m_beingModified{false    } {
 
@@ -101,20 +99,13 @@ NamedEntity::NamedEntity(QString t_name, bool t_display) :
 // The "key", "display" and "deleted" properties are optional because they will be set if we're creating from a DB
 // record, but not if we're creating from an XML record.
 //
-// The "name" and "parent" properties have to be optional because not all subclasses have them.  (BrewNote is
-// the subclass without a name, and, yes, I know the existence of a NamedEntity without a name calls into question our
-// class naming! :->)
-//
-// .:TBD:. For the moment, parent IDs are actually stored outside the main object table (eg in equipment_children
-//         rather than equipment), so this will always set parentKey to -1, but we could envisage changing that in
-//         future.
+// The "name" property has to be optional because not all subclasses have them.  (BrewNote is the subclass without a
+// name, and, yes, I know the existence of a NamedEntity without a name calls into question our class naming! :->)
 //
 NamedEntity::NamedEntity(NamedParameterBundle const & namedParameterBundle) :
    QObject        {nullptr},
    SET_REGULAR_FROM_NPB (m_key    , namedParameterBundle, PropertyNames::NamedEntity::key,       -1       ),
-   SET_REGULAR_FROM_NPB (parentKey, namedParameterBundle, PropertyNames::NamedEntity::parentKey, -1       ),
    SET_REGULAR_FROM_NPB (m_name   , namedParameterBundle, PropertyNames::NamedEntity::name,      QString{}),
-   SET_REGULAR_FROM_NPB (m_display, namedParameterBundle, PropertyNames::NamedEntity::display,   true     ),
    SET_REGULAR_FROM_NPB (m_deleted, namedParameterBundle, PropertyNames::NamedEntity::deleted,   false    ),
    m_beingModified{false} {
 
@@ -128,9 +119,7 @@ NamedEntity::NamedEntity(NamedParameterBundle const & namedParameterBundle) :
 NamedEntity::NamedEntity(NamedEntity const & other) :
    QObject        {nullptr        }, // QObject doesn't have a copy constructor, so just make a new one
    m_key          {-1             }, // We don't want to copy the other object's key/ID
-   parentKey      {other.parentKey},
    m_name         {other.m_name   },
-   m_display      {other.m_display},
    m_deleted      {other.m_deleted},
    m_beingModified{false} {
 
@@ -151,9 +140,7 @@ void NamedEntity::swap(NamedEntity & other) noexcept {
    Q_ASSERT(!this->m_beingModified);
    Q_ASSERT(!other.m_beingModified);
    // Now do the actual swapping
-   std::swap(this->parentKey, other.parentKey);
    std::swap(this->m_name   , other.m_name   );
-   std::swap(this->m_display, other.m_display);
    std::swap(this->m_deleted, other.m_deleted);
    return;
 }
@@ -166,46 +153,14 @@ TypeLookup const NamedEntity::typeLookup {
       // that's what's going to come out of the Qt property system (and it would significantly complicate other bits of
       // the code to separately register every different enum that we use.)
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::NamedEntity::deleted  , NamedEntity::m_deleted                             ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::NamedEntity::display  , NamedEntity::m_display                             ),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::NamedEntity::key      , NamedEntity::m_key                                 ),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::NamedEntity::name     , NamedEntity::m_name   , NonPhysicalQuantity::String),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::NamedEntity::parentKey, NamedEntity::parentKey                             ),
    },
    // Parent class lookup - none as we're top of the tree
    {}
 };
 
 NamedEntity::~NamedEntity() = default;
-
-void NamedEntity::makeChild(NamedEntity const & copiedFrom) {
-   // It's a coding error if we're not starting out with objects that are copies of each other
-   Q_ASSERT(*this == copiedFrom);
-   Q_ASSERT(this->parentKey == copiedFrom.parentKey);
-
-   // We also assume that this newly-created object has not yet been put in the database (so we don't need to call
-   // down to the ObjectStore to update fields in the DB).
-   Q_ASSERT(this->m_key <= 0);
-
-   // By default, we have the same parent as the object from which we were copied.  But, if that means we have no
-   // parent, then we take object from which we were copied as our parent, on the assumption that it is the master
-   // version of this Hop/Fermentable/etc.
-   if (this->parentKey <= 0) {
-      this->parentKey = copiedFrom.m_key;
-   }
-
-   //
-   // A _child_ of a Hop (or Style/Fermentable/etc) is "an instance of use of" the parent Hop (etc).  Thus we don't want
-   // it to show up in the list of all Hops (etc).
-   //
-   // .:TBD:. It would be nicer to do away with m_display and have NamedEntity::display() do some logic (eg don't
-   // display if deleted or has a parent) that might be overridden by Recipe to add the extra logic around ancestors.
-   //
-   this->m_display = false;
-
-   // So, now, we should have some plausible parent ID, and in particular we should not be our own parent!
-   Q_ASSERT(this->parentKey != this->m_key);
-   return;
-}
 
 // See https://zpz.github.io/blog/overloading-equality-operator-in-cpp-class-hierarchy/ (and cross-references to
 // http://www.gotw.ca/publications/mill18.htm) for good discussion on implementation of operator== in a class
@@ -223,10 +178,10 @@ bool NamedEntity::operator==(NamedEntity const & other) const {
    }
 
    //
-   // For the base class attributes, we deliberately don't compare m_key, parentKey, table or m_folder.  If we've read
-   // in an object from a file and want to  see if it's the same as one in the database, then the DB-related info and
-   // folder classification are not a helpful part of that comparison.  Similarly, we do not compare _display and
-   // m_deleted as they are more related to the UI than whether, in essence, two objects are the same.
+   // For the base class attributes, we deliberately don't compare m_key, table or m_folder.  If we've read in an object
+   // from a file and want to  see if it's the same as one in the database, then the DB-related info and folder
+   // classification are not a helpful part of that comparison.  Similarly, we do not compare m_display and m_deleted as
+   // they are more related to the UI than whether, in essence, two objects are the same.
    //
    if (this->m_name != other.m_name) {
       // Normally leave the next line commented out as it generates a lot of logging
@@ -280,11 +235,6 @@ bool NamedEntity::deleted() const {
    return this->m_deleted;
 }
 
-bool NamedEntity::display() const {
-   return this->m_display;
-}
-
-// Sigh. New databases, more complexity
 void NamedEntity::setDeleted(bool const var) {
    if (this->newValueMatchesExisting(PropertyNames::NamedEntity::deleted, this->m_deleted, var)) {
       return;
@@ -292,15 +242,6 @@ void NamedEntity::setDeleted(bool const var) {
 
    this->m_deleted = var;
    this->propagatePropertyChange(PropertyNames::NamedEntity::deleted);
-   return;
-}
-
-void NamedEntity::setDisplay(bool var) {
-   if (this->newValueMatchesExisting(PropertyNames::NamedEntity::display, this->m_display, var)) {
-      return;
-   }
-   this->m_display = var;
-   this->propagatePropertyChange(PropertyNames::NamedEntity::display);
    return;
 }
 
@@ -338,27 +279,6 @@ void NamedEntity::setKey(int key) {
    return;
 }
 
-int NamedEntity::getParentKey() const {
-   return this->parentKey;
-}
-
-void NamedEntity::setParentKey(int parentKey) {
-   this->parentKey = parentKey;
-
-   //
-   // If the data is obviously messed up then let's at least log it.  (It doesn't necessarily mean there is a bug in
-   // the current version of the code.  It could be the result of a bug in an earlier version.  If so, a manual data
-   // fix is needed in the database.)
-   //
-   // Something should not be its own parent for instance
-   //
-   if (this->parentKey == this->m_key) {
-      qCritical() << Q_FUNC_INFO << this->metaObject()->className() << "#" << this->m_key << "is its own parent!";
-   }
-
-   return;
-}
-
 void NamedEntity::setBeingModified(bool set) {
    // The m_beingModified member variable is not stored in the DB, so we don't call this->propagatePropertyChange etc here
    this->m_beingModified = set;
@@ -367,37 +287,6 @@ void NamedEntity::setBeingModified(bool set) {
 
 bool NamedEntity::isBeingModified() const {
    return this->m_beingModified;
-}
-
-QVector<int> NamedEntity::getParentAndChildrenIds() const {
-   QVector<int> results;
-   NamedEntity const * parent = this->getParent();
-   if (nullptr == parent) {
-      parent = this;
-   }
-
-   // We are assuming that grandparents do not exist - ie that it's a coding error if they do
-   // We want more than just an assert in that case as debugging would be a lot harder without knowing which
-   // NamedEntity has the unexpected data.
-   if (parent->parentKey > 0) {
-      qCritical() <<
-         Q_FUNC_INFO << this->metaObject()->className() << "#" << this->m_key << "has parent #" << this->parentKey <<
-         "with parent #" << parent->parentKey;
-      Q_ASSERT(false);
-   }
-
-   // We've got the parent ingredient...
-   results.append(parent->m_key);
-
-   // ...now find all the children, ie all the other ingredients of this type whose parent is the ingredient we just
-   // found
-   QList<std::shared_ptr<QObject> > children = this->getObjectStoreTypedInstance().findAllMatching(
-      [parent](std::shared_ptr<QObject> obj) { return std::static_pointer_cast<NamedEntity>(obj)->getParentKey() == parent->key(); }
-   );
-   for (auto child : children) {
-      results.append(std::static_pointer_cast<NamedEntity>(child)->key());
-   }
-   return results;
 }
 
 QMetaProperty NamedEntity::metaProperty(char const * const name) const {
@@ -530,19 +419,6 @@ void NamedEntity::notifyPropertyChange(BtStringConst const & propertyName) const
 std::shared_ptr<Recipe> NamedEntity::owningRecipe() const {
    // Default is for NamedEntity not to be owned.
    return nullptr;
-}
-
-NamedEntity * NamedEntity::getParent() const {
-   if (this->parentKey <= 0) {
-      return nullptr;
-   }
-
-   return static_cast<NamedEntity *>(this->getObjectStoreTypedInstance().getById(this->parentKey).get());
-}
-
-void NamedEntity::setParent(NamedEntity const & parentNamedEntity) {
-   SET_AND_NOTIFY(PropertyNames::NamedEntity::parentKey, this->parentKey, parentNamedEntity.m_key);
-   return;
 }
 
 void NamedEntity::hardDeleteOwnedEntities() {

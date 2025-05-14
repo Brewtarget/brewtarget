@@ -1320,21 +1320,13 @@ void MainWindow::setRecipe(Recipe * recipe) {
    this->pimpl->m_recipeScaler->setRecipe(recipe);
 
    // Set the locked flag as required
-   checkBox_locked->setCheckState( recipe->locked() ? Qt::Checked : Qt::Unchecked );
-   lockRecipe( recipe->locked() ? Qt::Checked : Qt::Unchecked );
+   checkBox_locked->setCheckState(recipe->locked() ? Qt::Checked : Qt::Unchecked);
+   lockRecipe(recipe->locked() ? Qt::Checked : Qt::Unchecked);
 
-   // Here's the fun part. If the recipe is locked and display is false, then
-   // you have said "show versions" and we will not all the recipe to be
-   // unlocked. Hmmm. Skeptical Mik is skeptical
-   if ( recipe->locked() && ! recipe->display() ) {
-      checkBox_locked->setEnabled( false );
-   }
-   else {
-      checkBox_locked->setEnabled( true );
-   }
+   checkBox_locked->setEnabled(true);
 
-   checkBox_locked->setCheckState( recipe->locked() ? Qt::Checked : Qt::Unchecked );
-   lockRecipe(recipe->locked() ? Qt::Checked : Qt::Unchecked );
+   checkBox_locked->setCheckState( recipe->locked() ? Qt::Checked : Qt::Unchecked);
+   lockRecipe(recipe->locked() ? Qt::Checked : Qt::Unchecked);
 
    // changes in how the data is loaded means we may not have fired all the signals we should have
    // this makes sure the signals are fired. This is likely a 5kg hammer driving a finishing nail.

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * database/ObjectStore.cpp is part of Brewtarget, and is copyright the following authors 2021-2024:
+ * database/ObjectStore.cpp is part of Brewtarget, and is copyright the following authors 2021-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -822,11 +822,11 @@ public:
                // It's technically wrong but we know about it and it works, so just log it.  If this logging is
                // uncommented, you can get a list of all the things we need to fix with:
                //   grep "known ugliness" *.log | sed 's/^.*property /Property /; s/This is a known ugliness .*$//' | sort -u
-///               qDebug() <<
-///                  Q_FUNC_INFO << fieldDefn.fieldType << "property" << fieldDefn.propertyName << "on table" <<
-///                  primaryTable.tableName << "(value " << propertyValue << ") is stored as " <<
-///                  propertyValue.typeName() << "(" << propertyType << ") in column" << fieldDefn.columnName <<
-///                  ".  This is a known ugliness that we intend to fix one day.";
+//               qDebug() <<
+//                  Q_FUNC_INFO << fieldDefn.fieldType << "property" << fieldDefn.propertyName << "on table" <<
+//                  primaryTable.tableName << "(value " << propertyValue << ") is stored as " <<
+//                  propertyValue.typeName() << "(" << propertyType << ") in column" << fieldDefn.columnName <<
+//                  ".  This is a known ugliness that we intend to fix one day.";
             } else {
                //
                // It's not a known exception, so it's a coding error.  However, we can recover in the following cases:
@@ -877,8 +877,8 @@ public:
                      fieldDefn.columnName;
                   // If, during development or debugging, you want to have the program stop when it cannot interpret
                   // one of the DB fields, then uncomment the following two lines.
-///                  qCritical().noquote() << Q_FUNC_INFO << "Call stack is:" << Logging::getStackTrace();
-///                  Q_ASSERT(false);
+//                  qCritical().noquote() << Q_FUNC_INFO << "Call stack is:" << Logging::getStackTrace();
+//                  Q_ASSERT(false);
                }
 
             }
@@ -1602,7 +1602,6 @@ void ObjectStore::loadAll(Database * database) {
       }
       queryStringAsStream << ";";
 
-///      sqlQuery = BtSqlQuery{connection};
       sqlQuery.prepare(queryString);
       if (!sqlQuery.exec()) {
          qCritical() <<
@@ -2109,6 +2108,16 @@ QVector<int> ObjectStore::idsOfAllMatching(
       }
    }
    return results;
+}
+
+int ObjectStore::numMatching(std::function<bool(QObject const *)> const & matchFunction) const {
+   int count = 0;
+   for (auto hashEntry = this->pimpl->allObjects.cbegin(); hashEntry != this->pimpl->allObjects.cend(); ++hashEntry) {
+      if (matchFunction(hashEntry.value().get())) {
+         ++count;
+      }
+   }
+   return count;
 }
 
 QList<std::shared_ptr<QObject> > ObjectStore::getAll() const {

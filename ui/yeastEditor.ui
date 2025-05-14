@@ -195,6 +195,12 @@
         <widget class="QLabel" name="label_id_value">
         </widget>
        </item>
+
+       <item row="13" column="4" colspan="2">
+        <widget class="QLabel" name="label_numRecipesUsing">
+        </widget>
+       </item>
+
        <item row="14" column="1" colspan="5">
         <widget class="InfoText" name="infoText_id">
          <property name="buddy">
@@ -532,6 +538,11 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>BtComboBoxBool</class>
+   <extends>QComboBox</extends>
+   <header>widgets/BtComboBoxBool.h</header>
+  </customwidget>
+  <customwidget>
    <class>BtComboBoxEnum</class>
    <extends>QComboBox</extends>
    <header>widgets/BtComboBoxEnum.h</header>
@@ -545,11 +556,6 @@
    <class>InfoText</class>
    <extends>QLabel</extends>
    <header>widgets/InfoText.h</header>
-  </customwidget>
-  <customwidget>
-   <class>BtComboBoxBool</class>
-   <extends>QComboBox</extends>
-   <header>widgets/BtComboBoxBool.h</header>
   </customwidget>
   <customwidget>
    <class>SmartLabel</class>

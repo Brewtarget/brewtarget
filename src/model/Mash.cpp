@@ -82,7 +82,7 @@ static_assert(std::is_base_of<FolderBase<Mash>, Mash>::value);
 //==================================================== CONSTRUCTORS ====================================================
 
 Mash::Mash(QString name) :
-   NamedEntity{name, true},
+   NamedEntity{name},
    FolderBase<Mash>{},
    StepOwnerBase<Mash, MashStep>{},
    m_grainTemp_c              {0.0 },

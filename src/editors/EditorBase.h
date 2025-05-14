@@ -107,16 +107,27 @@ struct EditorBaseOptions {
     *        label field called \c label_id_value.
     */
    bool idDisplay = false;
+   /**
+    * \brief Enabling this shows a count of the number of recipes that use the thing we are editing.  The count is shown
+    *        as descriptive text (eg "Used in 3 recipes") in a label field called \c label_numRecipesUsing
+    *
+    *        It would be nice if we could detect directly whether the \c Derived class has a member called
+    *        \c label_numRecipesUsing, but I couldn't get the CREATE_HAS_MEMBER / HAS_MEMBER macros to work on the
+    *        derived class from its CRTP base class.
+    */
+   bool numRecipesUsing = false;
 };
-template <EditorBaseOptions eb> struct has_LiveEditItem : public std::integral_constant<bool, eb.liveEditItem>{};
-template <EditorBaseOptions eb> struct has_NameTab      : public std::integral_constant<bool, eb.nameTab     >{};
-template <EditorBaseOptions eb> struct has_Recipe       : public std::integral_constant<bool, eb.recipe      >{};
-template <EditorBaseOptions eb> struct has_IdDisplay    : public std::integral_constant<bool, eb.idDisplay   >{};
+template <EditorBaseOptions eb> struct has_LiveEditItem    : public std::integral_constant<bool, eb.liveEditItem   >{};
+template <EditorBaseOptions eb> struct has_NameTab         : public std::integral_constant<bool, eb.nameTab        >{};
+template <EditorBaseOptions eb> struct has_Recipe          : public std::integral_constant<bool, eb.recipe         >{};
+template <EditorBaseOptions eb> struct has_IdDisplay       : public std::integral_constant<bool, eb.idDisplay      >{};
+template <EditorBaseOptions eb> struct has_NumRecipesUsing : public std::integral_constant<bool, eb.numRecipesUsing>{};
 // See comment in utils/TypeTraits.h for definition of CONCEPT_FIX_UP (and why, for now, we need it)
-template <EditorBaseOptions eb> concept CONCEPT_FIX_UP HasLiveEditItem = has_LiveEditItem<eb>::value;
-template <EditorBaseOptions eb> concept CONCEPT_FIX_UP HasNameTab      = has_NameTab     <eb>::value;
-template <EditorBaseOptions eb> concept CONCEPT_FIX_UP HasRecipe       = has_Recipe      <eb>::value;
-template <EditorBaseOptions eb> concept CONCEPT_FIX_UP HasIdDisplay    = has_IdDisplay   <eb>::value;
+template <EditorBaseOptions eb> concept CONCEPT_FIX_UP HasLiveEditItem    = has_LiveEditItem   <eb>::value;
+template <EditorBaseOptions eb> concept CONCEPT_FIX_UP HasNameTab         = has_NameTab        <eb>::value;
+template <EditorBaseOptions eb> concept CONCEPT_FIX_UP HasRecipe          = has_Recipe         <eb>::value;
+template <EditorBaseOptions eb> concept CONCEPT_FIX_UP HasIdDisplay       = has_IdDisplay      <eb>::value;
+template <EditorBaseOptions eb> concept CONCEPT_FIX_UP HasNumRecipesUsing = has_NumRecipesUsing<eb>::value;
 
 /**
  * \class EditorBase
@@ -457,6 +468,17 @@ public:
       return;
    }
 
+   void showNumRecipesUsing() {
+      if constexpr (HasNumRecipesUsing<editorBaseOptions>) {
+         int const numRecipes = Recipe::numRecipesUsing(*this->m_editItem);
+         qDebug() << Q_FUNC_INFO << this->m_editItem << "is used in" << numRecipes << "recipes";
+         this->derived().label_numRecipesUsing->setText(
+            Derived::tr("Used in %n recipe(s)", "", numRecipes)
+         );
+      }
+      return;
+   }
+
    //! Derived classes can override this for any extra behaviour
    void postReadFieldsFromEditItem([[maybe_unused]] std::optional<QString> propName) { return; }
 
@@ -510,6 +532,7 @@ public:
       if (!propName) {
          this->showId();
       }
+      this->showNumRecipesUsing();
       this->updateNameTabIfNeeded(propName);
       // Note the need for derived() here to allow Derived to override
       this->derived().postReadFieldsFromEditItem(propName);

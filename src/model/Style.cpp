@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/Style.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * model/Style.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -106,9 +106,8 @@ static_assert(std::is_base_of<FolderBase<Style>, Style>::value);
 
 //====== Constructors =========
 
-// suitable for something that will be written to the db later
 Style::Style(QString name) :
-   NamedEntity        {name, true       },
+   NamedEntity        {name},
    FolderBase<Style>  {},
    m_category         {""               },
    m_categoryNumber   {""               },

@@ -882,7 +882,7 @@ protected:
    //! Substantive version
    void doSecondaryElementAdded(int elementId) requires (!IsVoid<SNE>) {
       auto element = ObjectStoreWrapper::getById<SNE>(elementId);
-      if (!element->display()) {
+      if (element->deleted()) {
          return;
       }
 

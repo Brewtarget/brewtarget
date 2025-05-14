@@ -316,24 +316,27 @@ public:
    }
 
    //============================================ Member variables for impl ============================================
-   WaterProfileAdjustmentTool &     m_self;
-   VeriTable<RecipeAdjustmentSalt>  m_saltAdditionsVeriTable;
-   QVector<WaterIonDigitInfo> const m_waterIonDisplays;
-   QVector<    SaltDigitInfo> const m_saltDisplays;
-   WaterListModel *                 m_base_combo_list   = nullptr;
-   WaterListModel *                 m_target_combo_list = nullptr;
-   WaterEditor *                    m_base_editor       = nullptr;
-   WaterEditor *                    m_target_editor     = nullptr;
-   Recipe *                         m_rec               = nullptr;
-   std::shared_ptr<Water>           m_base              = nullptr;
-   std::shared_ptr<Water>           m_target            = nullptr;
-   double                           m_mashRO            = 0.0;
-   double                           m_spargeRO          = 0.0;
-   double                           m_total_grains      = 0.0;
-   double                           m_thickness         = 0.0;
-   double                           m_weighted_colors   = 0.0;
-   WaterSortFilterProxyModel *      m_base_filter       = nullptr;
-   WaterSortFilterProxyModel *      m_target_filter     = nullptr;
+   WaterProfileAdjustmentTool &      m_self;
+   VeriTable<RecipeAdjustmentSalt>   m_saltAdditionsVeriTable;
+   QVector<WaterIonDigitInfo> const  m_waterIonDisplays;
+   QVector<    SaltDigitInfo> const  m_saltDisplays;
+   WaterListModel *                  m_base_combo_list   = nullptr;
+   WaterListModel *                  m_target_combo_list = nullptr;
+   WaterEditor *                     m_base_editor       = nullptr;
+   WaterEditor *                     m_target_editor     = nullptr;
+   Recipe *                          m_rec               = nullptr;
+   //
+   // TBD: Should m_base and/or m_target become RecipeUseOfWater rather than Water?
+   //
+   std::shared_ptr<Water>            m_base              = nullptr;
+   std::shared_ptr<Water>            m_target            = nullptr;
+   double                            m_mashRO            = 0.0;
+   double                            m_spargeRO          = 0.0;
+   double                            m_total_grains      = 0.0;
+   double                            m_thickness         = 0.0;
+   double                            m_weighted_colors   = 0.0;
+   WaterSortFilterProxyModel *       m_base_filter       = nullptr;
+   WaterSortFilterProxyModel *       m_target_filter     = nullptr;
 };
 
 WaterProfileAdjustmentTool::WaterProfileAdjustmentTool(QWidget* parent) :
@@ -550,16 +553,12 @@ void WaterProfileAdjustmentTool::update_baseProfile(int selected) {
 
    QModelIndex proxyIdx(this->pimpl->m_base_filter->index(baseProfileCombo->currentIndex(),0));
    QModelIndex sourceIdx(this->pimpl->m_base_filter->mapToSource(proxyIdx));
-   Water const * parent = this->pimpl->m_base_combo_list->at(sourceIdx.row());
-   if (parent) {
-      // The copy constructor won't copy the key (aka database ID), so the new object will be in-memory only until we
-      // explicitly insert it in the Object Store (which will be done if/when it is added to the Recipe).  Note
-      // however that we do need to ensure the link to the "parent" water is not lost - hence the call to makeChild().
-      this->pimpl->m_base = std::make_shared<Water>(*parent);
-      this->pimpl->m_base->makeChild(*parent);
-      this->pimpl->m_base->setType(Water::Type::Base);
-      qDebug() << Q_FUNC_INFO << "Made base child" << *this->pimpl->m_base << "from parent" << parent;
+   Water * profile = this->pimpl->m_base_combo_list->at(sourceIdx.row());
 
+   if (profile) {
+      this->pimpl->m_base = ObjectStoreWrapper::getSharedFromRaw<Water>(profile);
+      this->pimpl->m_base->setType(Water::Type::Base);
+      qDebug() << Q_FUNC_INFO << "Set base to" << *this->pimpl->m_base;
       baseProfileButton->setWater(this->pimpl->m_base);
       this->pimpl->m_base_editor->setEditItem(this->pimpl->m_base);
       this->newTotals();
@@ -575,18 +574,15 @@ void WaterProfileAdjustmentTool::update_targetProfile(int selected) {
 
    QModelIndex proxyIdx(this->pimpl->m_target_filter->index(targetProfileCombo->currentIndex(),0));
    QModelIndex sourceIdx(this->pimpl->m_target_filter->mapToSource(proxyIdx));
-   Water* parent = this->pimpl->m_target_combo_list->at(sourceIdx.row());
+   Water * profile = this->pimpl->m_target_combo_list->at(sourceIdx.row());
 
-   if (parent) {
+   if (profile) {
       // Comment above for copy of this->pimpl->m_base applies equally here
-      this->pimpl->m_target = std::make_shared<Water>(*parent);
-      this->pimpl->m_target->makeChild(*parent);
+      this->pimpl->m_target = ObjectStoreWrapper::getSharedFromRaw<Water>(profile);
       this->pimpl->m_target->setType(Water::Type::Target);
-      qDebug() << Q_FUNC_INFO << "Made target child" << *this->pimpl->m_target << "from parent" << parent;
-
+      qDebug() << Q_FUNC_INFO << "Set target to" << *this->pimpl->m_target;
       targetProfileButton->setWater(this->pimpl->m_target);
       this->pimpl->m_target_editor->setEditItem(this->pimpl->m_target);
-
       this->pimpl->setDigits();
    }
    return;

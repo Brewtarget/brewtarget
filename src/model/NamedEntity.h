@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/NamedEntity.h is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * model/NamedEntity.h is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -63,10 +63,8 @@ class Recipe;
 //
 #define AddPropertyName(property) namespace PropertyNames::NamedEntity { inline BtStringConst const property{#property}; }
 AddPropertyName(deleted)
-AddPropertyName(display)
 AddPropertyName(key)
 AddPropertyName(name)
-AddPropertyName(parentKey)
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
 //======================================================================================================================
@@ -164,13 +162,9 @@ public:
    // other classes override (so this is the one place the override keyword is not valid.
    inline virtual TypeLookup const & getTypeLookup() const { return typeLookup; }
 
-   NamedEntity(QString t_name, bool t_display = false);
+   NamedEntity(QString t_name);
    explicit NamedEntity(NamedEntity const & other);
 
-   /**
-    * \brief Note that, if you want a \b child of a \c NamedEntity (to add to a \c Recipe), you should call
-    *        \c makeChild() on the copy, which will do the right things about parentage and inventory.
-    */
    NamedEntity(NamedParameterBundle const & namedParameterBundle);
 
    // Our destructor needs to be virtual because we sometimes point to an instance of a derived class through a pointer
@@ -206,18 +200,6 @@ public:
    NamedEntity(NamedEntity &&) = delete;
 
    /**
-    * \brief Turns a straight copy of an object into a "child" copy that can be used in a Recipe.  (A child copy is
-    *        essentially an "instance of use of".)
-    *
-    *        NB: This function must be called \b before the object is added to its \c ObjectStore
-    *
-    *        TODO: We are trying to retire this!
-    *
-    * \param copiedFrom The object from which this one was copied
-    */
-   [[deprecated]] virtual void makeChild(NamedEntity const & copiedFrom);
-
-   /**
     * \brief This generic version of operator== should work for subclasses provided they correctly _override_ (NB not
     *        overload) the protected virtual isEqualTo() function.
     */
@@ -241,19 +223,14 @@ public:
    // Everything that inherits from NamedEntity has these properties
    Q_PROPERTY(QString name      READ name         WRITE setName     )
    Q_PROPERTY(bool    deleted   READ deleted      WRITE setDeleted  )
-   Q_PROPERTY(bool    display   READ display      WRITE setDisplay  )
    //! Key (ID) in the table we are stored in
    Q_PROPERTY(int     key       READ key          WRITE setKey      )
-   //! TODO Once \c makeChild is retired, this can be retired too
-   Q_PROPERTY(int     parentKey READ getParentKey WRITE setParentKey)
 
    QString name() const;
    //! \brief Returns name with any bracketed number stripped from the end (eg "Foobar" for "Foobar (2)")
    QString strippedName() const;
    bool deleted() const;
-   bool display() const;
    int key() const;
-   [[deprecated]] int getParentKey() const;
 
    /**
     * \brief Returns a regexp that will match the " (n)" (for n some positive integer) added on the end of a name to
@@ -263,14 +240,13 @@ public:
 
    void setName(QString const & var);
    void setDeleted(bool const var);
-   void setDisplay(bool const var);
+
    /**
     * \brief Set the ID (aka key) by which this object is uniquely identified in its DB table
     *
     *        This is virtual because, in some cases, subclasses are going to want to do additional work here
     */
    virtual void setKey(int key);
-   [[deprecated]] void setParentKey(int parentKey);
 
    /**
     * \brief This sets or unsets the "being modified" flag on the object.  Callers should preferably access this via
@@ -283,13 +259,6 @@ public:
     */
    void setBeingModified(bool set);
    bool isBeingModified() const;
-
-   /**
-    * \brief Get the IDs of this object's parent, children and siblings (plus the ID of the object itself).
-    *        A child object is just a copy of the parent that's being used in a Recipe.  Not all NamedEntity subclasses
-    *        have children, just Equipment, Fermentable, Hop, Misc and Yeast.
-    */
-   [[deprecated]] QVector<int> getParentAndChildrenIds() const;
 
    //! Convenience method to get a meta property by name.
    QMetaProperty metaProperty(char const * const name) const;
@@ -367,18 +336,6 @@ public:
     */
    virtual std::shared_ptr<Recipe> owningRecipe() const;
 
-   /*!
-    * \brief Some entities (eg Fermentable, Hop) get copied when added to a recipe, but others (eg Instruction) don't.
-    *        For those that do, we think of the copy as being a child of the original NamedEntity.  This function allows
-    *        us to access that parent.
-    *
-    * \return Pointer to the parent NamedEntity from which this one was originally copied, or null if no such parent
-    *         exists.
-    */
-   [[deprecated]] NamedEntity * getParent() const;
-
-   [[deprecated]] void setParent(NamedEntity const & parentNamedEntity);
-
    /**
     * \brief If we are _really_ deleting (rather than just marking deleted) an entity that owns other entities (eg a
     *        Mash owns its MashSteps) then we need to delete those owned entities immediately beforehand.
@@ -452,8 +409,6 @@ protected:
 
    //! The key of this entity in its table.
    int m_key;
-   // This is <=0 if there is no parent (or parent is not yet known)
-   int parentKey;
 
    /**
     * \brief Subclasses need to overload (NB not override) this function to do the substantive work for operator==.
@@ -661,9 +616,8 @@ protected:
 
 private:
   QString m_name;
-  bool m_display;
-  bool m_deleted;
-  bool m_beingModified;
+  bool    m_deleted;
+  bool    m_beingModified;
 };
 
 /**

@@ -37,7 +37,7 @@
 #include "database/ObjectStoreTyped.h"
 #include "model/Salt.h"
 
-int constexpr DatabaseSchemaHelper::latestVersion = 15;
+int constexpr DatabaseSchemaHelper::latestVersion = 16;
 
 // Default namespace hides functions from everything outside this file.
 namespace {
@@ -2358,6 +2358,128 @@ namespace {
       return executeSqlQueries(q, migrationQueries);
    }
 
+   /**
+    * \brief Eliminate equipment_children table
+    */
+   bool migrate_to_16([[maybe_unused]] Database & db, BtSqlQuery & q) {
+      //
+      // As part of implementing BeerJSON, we got rid of fermentable_children, hop_children, etc.  We now eliminate the
+      // remaining _children table: equipment_children.  This means we can finally remove all the
+      // parent and child logic in the code to do with "using something in a recipe makes a copy of it".
+      //
+      // What we want to do here is merge all the duplicate "child" records in the equipment and style tables - ie find
+      // all "child" records that are still identical to their "parent" record, replace references to the child with
+      // references to the parent, then remove the child.  We do this in two rather laborious queries for each table.
+      // (Although it would be more concise to load everything into memory and use Equipment::isEqualTo,
+      // Style::isEqualTo, etc, I think it's cleaner that we do these schema updates in the DB in pure SQL before we
+      // load data into memory.  These are one-off queries, so it's not a huge bother that they are somewhat inelegant.
+      // What we can do however, is reduce the amount of copy-and-paste with a couple of string constants.)
+      //
+      QString const equipmentSubQuery{
+         "("
+            "SELECT equipment_children.parent_id,        "
+            "       equipment_children.child_id          "
+            "FROM equipment_children,                    "
+            "     equipment AS eqp,                      "
+            "     equipment AS eqc                       "
+            "WHERE equipment_children.parent_id = eqp.id "
+            "AND   equipment_children.child_id  = eqc.id "
+            "AND   eqp.name                           = eqc.name                           "
+            "AND   eqp.fermenter_batch_size_l         = eqc.fermenter_batch_size_l         "
+            "AND   eqp.boiling_point                  = eqc.boiling_point                  "
+            "AND   eqp.kettle_boil_size_l             = eqc.kettle_boil_size_l             "
+            "AND   eqp.boil_time                      = eqc.boil_time                      "
+            "AND   eqp.calc_boil_volume               = eqc.calc_boil_volume               "
+            "AND   eqp.kettle_evaporation_per_hour_l  = eqc.kettle_evaporation_per_hour_l  "
+            "AND   eqp.evap_rate                      = eqc.evap_rate                      "
+            "AND   eqp.mash_tun_grain_absorption_lkg  = eqc.mash_tun_grain_absorption_lkg  "
+            "AND   eqp.hop_utilization                = eqc.hop_utilization                "
+            "AND   eqp.lauter_tun_deadspace_loss_l    = eqc.lauter_tun_deadspace_loss_l    "
+            "AND   eqp.kettle_notes                   = eqc.kettle_notes                   "
+            "AND   eqp.top_up_kettle                  = eqc.top_up_kettle                  "
+            "AND   eqp.top_up_water                   = eqc.top_up_water                   "
+            "AND   eqp.kettle_trub_chiller_loss_l     = eqc.kettle_trub_chiller_loss_l     "
+            "AND   eqp.mash_tun_specific_heat_calgc   = eqc.mash_tun_specific_heat_calgc   "
+            "AND   eqp.mash_tun_volume_l              = eqc.mash_tun_volume_l              "
+            "AND   eqp.mash_tun_weight_kg             = eqc.mash_tun_weight_kg             "
+            "AND   eqp.kettleInternalDiameter_cm      = eqc.kettleInternalDiameter_cm      "
+            "AND   eqp.kettleOpeningDiameter_cm       = eqc.kettleOpeningDiameter_cm       "
+            "AND   eqp.hlt_type                       = eqc.hlt_type                       "
+            "AND   eqp.mash_tun_type                  = eqc.mash_tun_type                  "
+            "AND   eqp.lauter_tun_type                = eqc.lauter_tun_type                "
+            "AND   eqp.kettle_type                    = eqc.kettle_type                    "
+            "AND   eqp.fermenter_type                 = eqc.fermenter_type                 "
+            "AND   eqp.agingvessel_type               = eqc.agingvessel_type               "
+            "AND   eqp.packaging_vessel_type          = eqc.packaging_vessel_type          "
+            "AND   eqp.hlt_volume_l                   = eqc.hlt_volume_l                   "
+            "AND   eqp.lauter_tun_volume_l            = eqc.lauter_tun_volume_l            "
+            "AND   eqp.aging_vessel_volume_l          = eqc.aging_vessel_volume_l          "
+            "AND   eqp.packaging_vessel_volume_l      = eqc.packaging_vessel_volume_l      "
+            "AND   eqp.hlt_loss_l                     = eqc.hlt_loss_l                     "
+            "AND   eqp.mash_tun_loss_l                = eqc.mash_tun_loss_l                "
+            "AND   eqp.fermenter_loss_l               = eqc.fermenter_loss_l               "
+            "AND   eqp.aging_vessel_loss_l            = eqc.aging_vessel_loss_l            "
+            "AND   eqp.packaging_vessel_loss_l        = eqc.packaging_vessel_loss_l        "
+            "AND   eqp.kettle_outflow_per_minute_l    = eqc.kettle_outflow_per_minute_l    "
+            "AND   eqp.hlt_weight_kg                  = eqc.hlt_weight_kg                  "
+            "AND   eqp.lauter_tun_weight_kg           = eqc.lauter_tun_weight_kg           "
+            "AND   eqp.kettle_weight_kg               = eqc.kettle_weight_kg               "
+            "AND   eqp.hlt_specific_heat_calgc        = eqc.hlt_specific_heat_calgc        "
+            "AND   eqp.lauter_tun_specific_heat_calgc = eqc.lauter_tun_specific_heat_calgc "
+            "AND   eqp.kettle_specific_heat_calgc     = eqc.kettle_specific_heat_calgc     "
+            "AND   eqp.hlt_notes                      = eqc.hlt_notes                      "
+            "AND   eqp.mash_tun_notes                 = eqc.mash_tun_notes                 "
+            "AND   eqp.lauter_tun_notes               = eqc.lauter_tun_notes               "
+            "AND   eqp.fermenter_notes                = eqc.fermenter_notes                "
+            "AND   eqp.aging_vessel_notes             = eqc.aging_vessel_notes             "
+            "AND   eqp.packaging_vessel_notes         = eqc.packaging_vessel_notes         "
+         ")"
+      };
+      QVector<QueryAndParameters> const migrationQueries{
+         {QString("UPDATE recipe "
+                  "SET equipment_id = ecj.parent_id "
+                  "FROM %1 AS ecj "
+                  "WHERE recipe.equipment_id = ecj.child_id").arg(equipmentSubQuery)},
+         {QString("DELETE FROM equipment "
+                  "WHERE id IN "
+                  "(SELECT ecj.child_id "
+                  " FROM %1 AS ecj)").arg(equipmentSubQuery)},
+
+         //
+         // Now that we removed duplicate children, we can drop all the parent-child relations
+         //
+         {QString("DROP TABLE equipment_children")},
+         //
+         // We also no longer need the "display" flag on named entities
+         //
+         {QString("ALTER TABLE boil                  DROP COLUMN display")},
+         {QString("ALTER TABLE boil_step             DROP COLUMN display")},
+         {QString("ALTER TABLE brewnote              DROP COLUMN display")},
+         {QString("ALTER TABLE equipment             DROP COLUMN display")},
+         {QString("ALTER TABLE fermentable           DROP COLUMN display")},
+         {QString("ALTER TABLE fermentable_in_recipe DROP COLUMN display")},
+         {QString("ALTER TABLE fermentation          DROP COLUMN display")},
+         {QString("ALTER TABLE fermentation_step     DROP COLUMN display")},
+         {QString("ALTER TABLE hop                   DROP COLUMN display")},
+         {QString("ALTER TABLE hop_in_recipe         DROP COLUMN display")},
+         {QString("ALTER TABLE instruction           DROP COLUMN display")},
+         {QString("ALTER TABLE mash                  DROP COLUMN display")},
+         {QString("ALTER TABLE mash_step             DROP COLUMN display")},
+         {QString("ALTER TABLE misc                  DROP COLUMN display")},
+         {QString("ALTER TABLE misc_in_recipe        DROP COLUMN display")},
+         {QString("ALTER TABLE recipe                DROP COLUMN display")},
+         {QString("ALTER TABLE salt                  DROP COLUMN display")},
+         {QString("ALTER TABLE salt_in_recipe        DROP COLUMN display")},
+         {QString("ALTER TABLE style                 DROP COLUMN display")},
+         {QString("ALTER TABLE water                 DROP COLUMN display")},
+         {QString("ALTER TABLE water_in_recipe       DROP COLUMN display")},
+         {QString("ALTER TABLE yeast                 DROP COLUMN display")},
+         {QString("ALTER TABLE yeast_in_recipe       DROP COLUMN display")},
+      };
+
+      return executeSqlQueries(q, migrationQueries);
+   }
+
    /*!
     * \brief Migrate from version \c oldVersion to \c oldVersion+1
     */
@@ -2366,50 +2488,24 @@ namespace {
       BtSqlQuery sqlQuery(db);
       bool ret = true;
 
-      // NOTE: Add a new case when adding a new schema change
+      // NOTE: Add a new case when adding a new schema change.  It's a bit clunky, but, since there aren't hundreds of
+      //       database versions, I don't think it's worth trying to do something more elegant here.
       switch(oldVersion) {
-         case 1: // == '2.0.0'
-            ret &= migrate_to_202(database, sqlQuery);
-            break;
-         case 2: // == '2.0.2'
-            ret &= migrate_to_210(database, sqlQuery);
-            break;
-         case 3: // == '2.1.0'
-            ret &= migrate_to_4(database, sqlQuery);
-            break;
-         case 4:
-            ret &= migrate_to_5(database, sqlQuery);
-            break;
-         case 5:
-            ret &= migrate_to_6(database, sqlQuery);
-            break;
-         case 6:
-            ret &= migrate_to_7(database, sqlQuery);
-            break;
-         case 7:
-            ret &= migrate_to_8(database, sqlQuery);
-            break;
-         case 8:
-            ret &= migrate_to_9(database, sqlQuery);
-            break;
-         case 9:
-            ret &= migrate_to_10(database, sqlQuery);
-            break;
-         case 10:
-            ret &= migrate_to_11(database, sqlQuery);
-            break;
-         case 11:
-            ret &= migrate_to_12(database, sqlQuery);
-            break;
-         case 12:
-            ret &= migrate_to_13(database, sqlQuery);
-            break;
-         case 13:
-            ret &= migrate_to_14(database, sqlQuery);
-            break;
-         case 14:
-            ret &= migrate_to_15(database, sqlQuery);
-            break;
+         case  1: ret &= migrate_to_202(database, sqlQuery); break; // == '2.0.0'
+         case  2: ret &= migrate_to_210(database, sqlQuery); break; // == '2.0.2'
+         case  3: ret &= migrate_to_4 (database, sqlQuery); break;  // == '2.1.0'
+         case  4: ret &= migrate_to_5 (database, sqlQuery); break;
+         case  5: ret &= migrate_to_6 (database, sqlQuery); break;
+         case  6: ret &= migrate_to_7 (database, sqlQuery); break;
+         case  7: ret &= migrate_to_8 (database, sqlQuery); break;
+         case  8: ret &= migrate_to_9 (database, sqlQuery); break;
+         case  9: ret &= migrate_to_10(database, sqlQuery); break;
+         case 10: ret &= migrate_to_11(database, sqlQuery); break;
+         case 11: ret &= migrate_to_12(database, sqlQuery); break;
+         case 12: ret &= migrate_to_13(database, sqlQuery); break;
+         case 13: ret &= migrate_to_14(database, sqlQuery); break;
+         case 14: ret &= migrate_to_15(database, sqlQuery); break;
+         case 15: ret &= migrate_to_16(database, sqlQuery); break;
          default:
             qCritical() << QString("Unknown version %1").arg(oldVersion);
             return false;

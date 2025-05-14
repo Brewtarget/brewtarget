@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/Fermentation.cpp is part of Brewtarget, and is copyright the following authors 2023-2024:
+ * model/Fermentation.cpp is part of Brewtarget, and is copyright the following authors 2023-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -62,7 +62,7 @@ static_assert(std::is_base_of<FolderBase<Fermentation>, Fermentation>::value);
 //==================================================== CONSTRUCTORS ====================================================
 
 Fermentation::Fermentation(QString name) :
-   NamedEntity{name, true},
+   NamedEntity{name},
    FolderBase<Fermentation>{},
    StepOwnerBase<Fermentation, FermentationStep>{},
    m_description  {""},

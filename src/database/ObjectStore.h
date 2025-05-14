@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * database/ObjectStore.h is part of Brewtarget, and is copyright the following authors 2021-2024:
+ * database/ObjectStore.h is part of Brewtarget, and is copyright the following authors 2021-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -414,9 +414,14 @@ public:
    QList<QObject *> findAllMatching(std::function<bool(QObject *)> const & matchFunction) const;
 
    /**
-    * \brief Similary to \c findAllMatching but returns a list of IDs
+    * \brief Similar to \c findAllMatching but returns a list of IDs
     */
    QVector<int> idsOfAllMatching(std::function<bool(QObject const *)> const & matchFunction) const;
+
+   /**
+    * \brief Similary to \c findAllMatching and \c idsOfAllMatching but just returns how many objects match
+    */
+   int numMatching(std::function<bool(QObject const *)> const & matchFunction) const;
 
    /**
     * \brief Special case of \c findAllMatching that returns a list of all cached objects of a given type

@@ -26,7 +26,7 @@
 #include "editors/EditorBase.h"
 #include "model/Salt.h"
 
-#define SaltEditorOptions EditorBaseOptions{ .liveEditItem = true, .idDisplay = true }
+#define SaltEditorOptions EditorBaseOptions{ .liveEditItem = true, .idDisplay = true, .numRecipesUsing = true }
 /*!
  * \class SaltEditor
  *

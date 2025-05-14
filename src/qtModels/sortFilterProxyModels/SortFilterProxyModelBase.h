@@ -1,6 +1,6 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
  * qtModels/sortFilterProxyModels/SortFilterProxyModelBase.h is part of Brewtarget, and is copyright the following authors
- * 2023-2024:
+ * 2023-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -84,8 +84,8 @@ protected:
             // No filter, so we accept
             return true;
          }
-         if (!tableModel->getRow(source_row)->display()) {
-            // Row not displayed, so reject
+         if (tableModel->getRow(source_row)->deleted()) {
+            // Row deleted, so reject
             return false;
          }
 
@@ -104,7 +104,7 @@ protected:
             return true;
          }
 
-         return listItem->display() && !listItem->deleted();
+         return !listItem->deleted();
       }
 
       qWarning() << Q_FUNC_INFO << "Unrecognised source model";
