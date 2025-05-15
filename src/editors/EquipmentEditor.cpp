@@ -64,6 +64,9 @@ EquipmentEditor::EquipmentEditor(QWidget* parent, QString const editorName) :
       EDITOR_FIELD_NORM(Equipment, label_mashTunWeight           , lineEdit_mashTunWeight           , Equipment::mashTunWeight_kg            ),
       EDITOR_FIELD_NORM(Equipment, label_boilingPoint            , lineEdit_boilingPoint            , Equipment::boilingPoint_c           , 1),
       EDITOR_FIELD_NORM(Equipment, label_boilTime                , lineEdit_boilTime                , Equipment::boilTime_min                ),
+
+      EDITOR_FIELD_NORM(Equipment, label_calcBoilVolume          , checkBox_calcBoilVolume          , Equipment::calcBoilVolume              ),
+
       EDITOR_FIELD_NORM(Equipment, label_fermenterBatchSize      , lineEdit_fermenterBatchSize      , Equipment::fermenterBatchSize_l        ),
       EDITOR_FIELD_NORM(Equipment, label_kettleBoilSize          , lineEdit_kettleBoilSize          , Equipment::kettleBoilSize_l            ),
       EDITOR_FIELD_NORM(Equipment, label_kettleEvaporationPerHour, lineEdit_kettleEvaporationPerHour, Equipment::kettleEvaporationPerHour_l  ),
