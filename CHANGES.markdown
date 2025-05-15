@@ -13,6 +13,18 @@ happens, so I'm now setting it to a slightly arbitrary time early in the morning
 * TODO: Additional methods for calculating IBU
 * We'll list other new features here...
 
+## v4.1.1
+Bug fixes and minor enhancements.
+
+### New Features
+* None
+
+### Bug Fixes
+* Equipment Editor ignores "calculate pre-boil volume" checkbox [957](https://github.com/Brewtarget/brewtarget/issues/957)
+
+### Release Timestamp
+Thu, 15 May 2025 04:01:01 +0100
+
 ## v4.1.0
 Expose mash/boil/fermentation profiles in more of the UI
 
@@ -34,18 +46,6 @@ Expose mash/boil/fermentation profiles in more of the UI
 
 ### Release Timestamp
 Wed, 14 May 2025 04:01:00 +0100
-
-## v4.0.18
-Bug fixes and minor enhancements.
-
-### New Features
-* None
-
-### Bug Fixes
-* None
-
-### Release Timestamp
-Sat, 15 Feb 2025 04:00:18 +0100
 
 ## v4.0.17
 Bug fixes and minor enhancements.

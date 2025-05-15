@@ -87,7 +87,7 @@ namespace {
          {ObjectStore::FieldType::Int   , "id"                            , PropertyNames::NamedEntity::key                      },
          {ObjectStore::FieldType::String, "name"                          , PropertyNames::NamedEntity::name                     },
          {ObjectStore::FieldType::Bool  , "deleted"                       , PropertyNames::NamedEntity::deleted                  },
-         {ObjectStore::FieldType::String, "folder"                        , PropertyNames::FolderBase::folderPath                    },
+         {ObjectStore::FieldType::String, "folder"                        , PropertyNames::FolderBase::folderPath                },
          {ObjectStore::FieldType::Double, "fermenter_batch_size_l"        , PropertyNames::Equipment::fermenterBatchSize_l       },
          {ObjectStore::FieldType::Double, "boiling_point"                 , PropertyNames::Equipment::boilingPoint_c             },
          {ObjectStore::FieldType::Double, "kettle_boil_size_l"            , PropertyNames::Equipment::kettleBoilSize_l           },

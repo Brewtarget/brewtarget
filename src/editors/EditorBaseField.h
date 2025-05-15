@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * editors/EditorBaseField.h is part of Brewtarget, and is copyright the following authors 2024:
+ * editors/EditorBaseField.h is part of Brewtarget, and is copyright the following authors 2024-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -18,6 +18,8 @@
 #pragma once
 
 #include <variant>
+
+#include <QCheckBox>
 
 #include "widgets/BtComboBoxBool.h"
 #include "widgets/BtComboBoxEnum.h"
@@ -226,7 +228,21 @@ struct EditorBaseField {
       return;
    }
 
-   //! Combo boxes are slightly different
+   //! Check boxes are different
+   template <typename Derived, typename Functor>
+   void connectFieldChanged(Derived * context, Functor functor) const
+   requires (std::same_as<EditFieldType, QCheckBox>) {
+      // Qt 6.7 replaces the QCheckBox::stateChanged with the QCheckBox::checkStateChanged signal (and changes the
+      // parameter type, but fortunately we don't care about the parameter)
+#if QT_VERSION >= QT_VERSION_CHECK(6, 7, 0)
+      context->connect(this->editField, &QCheckBox::checkStateChanged, context, functor, Qt::AutoConnection);
+#else
+      context->connect(this->editField, &QCheckBox::stateChanged     , context, functor, Qt::AutoConnection);
+#endif
+      return;
+   }
+
+   //! Combo boxes are also slightly different
    template <typename Derived, typename Functor>
    void connectFieldChanged(Derived * context, Functor functor) const
    requires (std::same_as<EditFieldType, BtComboBoxEnum> ||
@@ -244,6 +260,12 @@ struct EditorBaseField {
 
    QVariant getFieldValue() const requires (std::same_as<EditFieldType, QLineEdit>) {
       return this->editField->text();
+   }
+
+   QVariant getFieldValue() const requires (std::same_as<EditFieldType, QCheckBox>) {
+      // We are assuming that we only use checked/unchecked checkboxes (ie that we never use the "tri-state" checkboxes
+      // which have an additional "partially checked" state).
+      return this->editField->isChecked();
    }
 
    QVariant getFieldValue() const requires (std::same_as<EditFieldType, SmartLineEdit > ||
@@ -292,8 +314,14 @@ struct EditorBaseField {
       return;
    }
 
+   void setEditField(QVariant const & val) const requires (std::same_as<EditFieldType, QCheckBox>) {
+      // Pre comment above, we assume we do not use tri-state checkboxes
+      this->editField->setChecked(val.toBool());
+      return;
+   }
+
    void setEditField(QVariant const & val) const requires (std::same_as<EditFieldType, SmartLineEdit > ||
-                                                           std::same_as<EditFieldType, BtComboBoxEnum    > ||
+                                                           std::same_as<EditFieldType, BtComboBoxEnum> ||
                                                            std::same_as<EditFieldType, BtComboBoxBool>) {
       this->editField->setFromVariant(val);
       return;
@@ -304,6 +332,11 @@ struct EditorBaseField {
                                           std::same_as<EditFieldType, QPlainTextEdit> ||
                                           std::same_as<EditFieldType, QLineEdit     >) {
       this->setEditFieldText("");
+      return;
+   }
+   void clearEditField()  const requires (std::same_as<EditFieldType, QCheckBox>) {
+      // Unchecked seems like the best default value
+      this->editField->setChecked(false);
       return;
    }
    void clearEditField() const requires (std::same_as<EditFieldType, SmartLineEdit > ||
@@ -351,13 +384,14 @@ S & operator<<(S & stream, WhenToWriteField const & val) {
 
 using EditorBaseFieldVariant = std::variant<
    // Not all permutations are valid, hence why some are commented out
-   EditorBaseField<QLabel, QLineEdit     >,
-   EditorBaseField<QLabel, QTextEdit     >,
-   EditorBaseField<QLabel, QPlainTextEdit>,
-   EditorBaseField<QLabel, SmartLineEdit >,
-   EditorBaseField<QLabel, BtComboBoxEnum    >,
-   EditorBaseField<QLabel, BtComboBoxBool>,
-   EditorBaseField<QWidget, QTextEdit     >, // This is for tabs such as tab_notes containing a single QTextEdit with no separate QLabel
+   EditorBaseField<QLabel    , QLineEdit     >,
+   EditorBaseField<QLabel    , QTextEdit     >,
+   EditorBaseField<QLabel    , QPlainTextEdit>,
+   EditorBaseField<QLabel    , SmartLineEdit >,
+   EditorBaseField<QLabel    , BtComboBoxEnum>,
+   EditorBaseField<QLabel    , BtComboBoxBool>,
+   EditorBaseField<QLabel    , QCheckBox     >,
+   EditorBaseField<QWidget   , QTextEdit     >, // This is for tabs such as tab_notes containing a single QTextEdit with no separate QLabel
    EditorBaseField<SmartLabel, QLineEdit     >,
 //   EditorBaseField<SmartLabel, QTextEdit     >,
 //   EditorBaseField<SmartLabel, QPlainTextEdit>,
