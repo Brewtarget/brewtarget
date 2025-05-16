@@ -21,6 +21,7 @@ Bug fixes and minor enhancements.
 
 ### Bug Fixes
 * Equipment Editor ignores "calculate pre-boil volume" checkbox [957](https://github.com/Brewtarget/brewtarget/issues/957)
+* Brewtarget 4.1.0 database upgrade error at startup with PostgreSQL database [958](https://github.com/Brewtarget/brewtarget/issues/958)
 
 ### Release Timestamp
 Thu, 15 May 2025 04:01:01 +0100
