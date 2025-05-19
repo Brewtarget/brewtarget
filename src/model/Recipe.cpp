@@ -2249,6 +2249,22 @@ void Recipe::setHasDescendants(bool spawned) {
    return;
 }
 
+bool Recipe::subsidiary() const {
+   //
+   // Look for a _different_ recipe whose ancestor is this one (because a recipe can be its own ancestor -- though TBD
+   // we should perhaps change that some day!)
+   //
+   Recipe const * firstDescendant = ObjectStoreWrapper::findFirstMatching<Recipe>(
+      [&](Recipe * recipe) { return (recipe->key() != this->key() && recipe->m_ancestor_id == this->key()); }
+   );
+
+   if (firstDescendant) {
+      return true;
+   }
+
+   return false;
+}
+
 void Recipe::setAncestorId(int ancestorId, bool notify) {
    // Setting Recipe's ancestor ID doesn't count as changing it for the purposes of versioning or the UI, so no call to
    // setAndNotify here.  However, we do want the DB to get updated, so we do call propagatePropertyChange.

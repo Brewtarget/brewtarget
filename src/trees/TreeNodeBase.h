@@ -239,7 +239,7 @@ public:
 
    /**
     * \brief inserts a new item at \c position.  Note that it is the caller's responsibility to call
-    *        \c QAbstractItemModel::beginInsertRows etc (via \c TreeModelRowInsertGuard).
+    *        \c QAbstractItemModel::beginInsertRows etc (via \c TreeModelChangeGuard).
     *
     *        TBD: We could probably simplify the code in a number of places by always adding a new child at the end of
     *             our list (this->m_children).  The order of child nodes in the TreeModel classes is somewhat irrelevant
@@ -288,6 +288,9 @@ public:
     *        it does not delete the contents of the nodes (m_underlyingItem).  Similarly, it is not recursive, so it is
     *        the caller's responsibility to do any processing of children's children etc.
     *
+    *        Note that it is the caller's responsibility to call \c QAbstractItemModel::beginRemoveRows etc (via
+    *        \c TreeModelChangeGuard).
+    *
     * \return \c true if succeeded, \c false otherwise
     */
    virtual bool removeChildren(int position, int count) override {
@@ -326,6 +329,7 @@ public:
     */
    ChildPtrTypes child(int number) const {
       if constexpr (IsSubstantiveVariant<ChildPtrTypes>) {
+         Q_ASSERT(number < this->m_children.size());
          return this->m_children.at(number);
       } else {
          // For the moment, it is simpler to allow calls to this function even when there can be no children.  We just

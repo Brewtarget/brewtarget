@@ -85,7 +85,7 @@ private:
 ///      this->derived().setDropIndicatorShown(true); // Already done in TreeView::TreeView
 ///      this->derived().setSelectionMode(QAbstractItemView::ExtendedSelection); // Already done in TreeView::TreeView
 
-      this->derived().setExpanded(this->derived().findElement(std::shared_ptr<NE>{nullptr}), true);
+      this->derived().setExpanded(this->derived().getRootIndex(), true);
       this->derived().setSortingEnabled(true);
       this->derived().sortByColumn(0, Qt::AscendingOrder);
       this->derived().resizeColumnToContents(0);
@@ -221,13 +221,20 @@ public:
       return QModelIndex();
    }
 
-   QModelIndex findElement(std::shared_ptr<NE> const ne) {
-      qDebug() << Q_FUNC_INFO << ne;
+   QModelIndex getRootIndex() {
+      return this->m_treeSortFilterProxy.mapFromSource(this->m_model.getRootIndex());
+   }
+
+   QModelIndex findElement(NE const * ne) {
+      qDebug() << Q_FUNC_INFO << *ne;
       return this->m_treeSortFilterProxy.mapFromSource(this->m_model.findElement(ne));
    }
 
-   QModelIndex findElement(std::shared_ptr<SNE> const sne) requires (!IsVoid<SNE>) {
-      qDebug() << Q_FUNC_INFO << sne;
+   //
+   // See comment on TreeModelBase::findElement for why we cannot just use `SNE const &` as the parameter type
+   //
+   QModelIndex findElement(SNE const * sne) requires (!IsVoid<SNE>) {
+      qDebug() << Q_FUNC_INFO << *sne;
       return this->m_treeSortFilterProxy.mapFromSource(this->m_model.findElement(sne));
    }
 

@@ -72,7 +72,7 @@ void RecipeTreeModel::loadTreeModel() {
    // Set up the BrewNotes in the tree
    auto recipes = ObjectStoreWrapper::getAllDisplayable<Recipe>();
    for (auto recipe : recipes) {
-      QModelIndex recipeIndex = this->findElement(recipe);
+      QModelIndex recipeIndex = this->findElement(recipe.get());
       TreeNode * recipeNode = this->doTreeNode(recipeIndex);
       TreeNode * recipeParent = recipeNode->rawParent();
       qDebug() <<
@@ -137,7 +137,7 @@ void RecipeTreeModel::showAncestors(QModelIndex index) {
       if (!this->insertChild(index, jj, ancestor)) {
          qWarning() << "Could not add ancestoral brewnotes";
       }
-      QModelIndex cIndex = this->findElement(ancestor, node);
+      QModelIndex cIndex = this->findElement(ancestor.get(), node);
       this->setShowChild(cIndex, true);
       // ew, but apparently this has to happen here.
       emit dataChanged(cIndex, cIndex);
@@ -173,7 +173,7 @@ void RecipeTreeModel::hideAncestors(QModelIndex index) {
 
    // Now we just need to mark each ancestor invisible again
    for (auto ancestor : descendant->ancestors()) {
-      QModelIndex aIndex = this->findElement(ancestor, node);
+      QModelIndex aIndex = this->findElement(ancestor.get(), node);
       this->setShowChild(aIndex, false);
       emit dataChanged(aIndex, aIndex);
    }
@@ -184,7 +184,7 @@ void RecipeTreeModel::hideAncestors(QModelIndex index) {
 void RecipeTreeModel::showOrHideAllAncestors(bool show) {
    for (auto recipe : ObjectStoreWrapper::getAllDisplayable<Recipe>()) {
       if (recipe->hasAncestors()) {
-         QModelIndex recipeIndex = this->findElement(recipe);
+         QModelIndex recipeIndex = this->findElement(recipe.get());
          if (show) {
             this->showAncestors(recipeIndex);
          } else {
@@ -257,7 +257,7 @@ void RecipeTreeModel::revertRecipeToPreviousVersion(QModelIndex index) {
    }
 
    // Find the ancestor in the tree
-   QModelIndex ancestorIndex = this->findElement(ancestorPointer);
+   QModelIndex ancestorIndex = this->findElement(ancestorPointer.get());
    if (!ancestorIndex.isValid()) {
       qWarning() << Q_FUNC_INFO << "Couldn't find the ancestor";
    }
@@ -309,7 +309,7 @@ void RecipeTreeModel::orphanRecipe(QModelIndex index) {
    }
 
    // Find the ancestor in the tree
-   QModelIndex ancestorIndex = findElement(ancestor);
+   QModelIndex ancestorIndex = findElement(ancestor.get());
    if (!ancestorIndex.isValid()) {
       qWarning() << Q_FUNC_INFO << "Couldn't find the ancestor";
    }
@@ -346,14 +346,14 @@ void RecipeTreeModel::spawnRecipe(QModelIndex index) {
    // NB: Inserting the descendant in the database will have generated a signal resulting in a call to
    // RecipeTreeModel::elementAddedRecipe(), so we can't assume that index is still valid, hence the reassignement here.
    //
-   index = this->findElement(ancestor);
+   index = this->findElement(ancestor.get());
    if (!this->removeChildren(index.row(), 1, this->parent(index))) {
       qCritical() << Q_FUNC_INFO << "Could not find Recipe" << ancestor->key() << "in display tree";
    }
 
    // Now we need to find the descendant in the tree. This has to be done
    // after we removed the ancestor row, otherwise the index will be wrong.
-   QModelIndex descendantIndex = this->findElement(descendant);
+   QModelIndex descendantIndex = this->findElement(descendant.get());
    this->showAncestors(descendantIndex);
 
    emit dataChanged(descendantIndex, descendantIndex);
@@ -363,21 +363,29 @@ void RecipeTreeModel::spawnRecipe(QModelIndex index) {
 }
 
 void RecipeTreeModel::versionedRecipe(Recipe * ancestor, Recipe * descendant) {
+   //
+   // We have recipe `ancestor` in the tree, and we've created `descendant` as a snapshot of it.  Adding `descendant` to
+   // the object store should already have added it to the tree as a TreeNodeClassifier::PrimaryItem (with `ancestor`
+   // showing as a TreeNodeClassifier::SecondaryItem child of `descendant`). So it should suffice just to remove the
+   // TreeNodeClassifier::PrimaryItem `ancestor` from the tree.
+   //
    qDebug() <<
       Q_FUNC_INFO << "Updating tree now that Recipe" << descendant->key() << "has ancestor Recipe" << ancestor->key();
 
    auto ancestorPointer = ObjectStoreWrapper::getShared(*ancestor);
 
    // like before, remove the ancestor
-   QModelIndex index = this->findElement(ancestorPointer);
-   if (!this->removeChildren(index.row(), 1, this->parent(index))) {
+   QModelIndex ancestorIndex = this->findElement(ancestorPointer.get());
+   int const ancestorRow = ancestorIndex.row();
+   QModelIndex ancestorParentIndex = this->parent(ancestorIndex);
+   if (!this->removeChildren(ancestorRow, 1, ancestorParentIndex)) {
       qCritical() << Q_FUNC_INFO << "Could not find Recipe" << ancestor->key() << "in display tree";
    }
 
    // add the descendant in, but get the index only after we removed the
    // ancestor
    auto descendantPointer = ObjectStoreWrapper::getShared(*descendant);
-   QModelIndex descendantIndex = this->findElement(descendantPointer);
+   QModelIndex descendantIndex = this->findElement(descendantPointer.get());
    this->showAncestors(descendantIndex);
 
    // do not mess with this order. We have to signal the data is in the tree
@@ -402,7 +410,7 @@ void RecipeTreeModel::addAncestoralTree(Recipe const & recipe, int ii, TreeNode 
          continue;
       }
       // we need to find the index of what we just inserted
-      QModelIndex cIndex = this->findElement(ancestor, temp);
+      QModelIndex cIndex = this->findElement(ancestor.get(), temp);
       // and set showChild on it
       this->setShowChild(cIndex, true);
 
@@ -414,28 +422,24 @@ void RecipeTreeModel::addAncestoralTree(Recipe const & recipe, int ii, TreeNode 
    return;
 }
 
-void RecipeTreeModel::addSubTree(std::shared_ptr<Recipe> const element,
-                                 TreeItemNode<Recipe> * elementNode,
-                                 [[maybe_unused]] int offset,
+void RecipeTreeModel::addSubTree(Recipe const & primaryItem,
+                                 TreeItemNode<Recipe> & primaryItemNode,
                                  bool const recurse) {
    QList<std::shared_ptr<BrewNote>> const notes{
-      recurse ? RecipeHelper::brewNotesForRecipeAndAncestors(*element) : element->brewNotes()
+      recurse ? RecipeHelper::brewNotesForRecipeAndAncestors(primaryItem) : primaryItem.brewNotes()
    };
-   TreeNode * temp = elementNode->rawChild(offset);
-
-   int jj = 0;
+   int childNumber = primaryItemNode.childCount();
+   QModelIndex primaryItemIndex = this->findElement(&primaryItem);
 
    for (auto note : notes) {
-      // In previous insert loops, we ignore the error and soldier on. So we
-      // will do that here too
-      auto const index = this->createIndex(elementNode->childNumber(), 0, temp);
-      bool const insertOk = this->insertChild(*elementNode, index, jj, note);
+      bool const insertOk = this->insertChild(primaryItemIndex, childNumber, note);
       if (!insertOk) {
+         // In previous insert loops, we ignore the error and soldier on. So we will do that here too.
          qWarning() << Q_FUNC_INFO << "BrewNote insert failed";
          continue;
       }
       this->observeElement(note);
-      ++jj;
+      ++childNumber;
    }
 
    return;

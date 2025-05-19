@@ -2089,7 +2089,7 @@ std::shared_ptr<Recipe>  MainWindow::newRecipe() {
       }
    }
 
-   this->setTreeSelection(treeView_recipe->findElement(newRec));
+   this->setTreeSelection(treeView_recipe->findElement(newRec.get()));
    this->setRecipe(newRec.get());
    return newRec;
 }
@@ -2199,7 +2199,7 @@ void MainWindow::newBrewNote() {
 
       this->pimpl->setBrewNote(brewNote.get());
 
-      QModelIndex brewNoteIndex = treeView_recipe->findElement(brewNote);
+      QModelIndex brewNoteIndex = treeView_recipe->findElement(brewNote.get());
       if (brewNoteIndex.isValid()) {
          this->setTreeSelection(brewNoteIndex);
       }
@@ -2227,7 +2227,7 @@ void MainWindow::reBrewNote() {
 
       this->pimpl->setBrewNote(bNote.get());
 
-      this->setTreeSelection(treeView_recipe->findElement(bNote));
+      this->setTreeSelection(treeView_recipe->findElement(bNote.get()));
    }
    return;
 }
@@ -2565,8 +2565,8 @@ void MainWindow::updateStatus(QString const status) {
    return;
 }
 
-void MainWindow::versionedRecipe(Recipe* descendant) {
-   QModelIndex ndx = treeView_recipe->findElement(ObjectStoreWrapper::getShared(*descendant));
+void MainWindow::versionedRecipe(Recipe * descendant) {
+   QModelIndex ndx = treeView_recipe->findElement(descendant);
    this->setRecipe(descendant);
    this->treeView_recipe->setCurrentIndex(ndx);
    return;

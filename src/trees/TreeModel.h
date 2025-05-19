@@ -32,7 +32,7 @@
 // Forward declarations
 class TreeView;
 
-class TreeModelRowInsertGuard;
+class TreeModelChangeGuard;
 
 /*!
  * \class TreeModel
@@ -113,8 +113,8 @@ class TreeModelRowInsertGuard;
 class TreeModel : public QAbstractItemModel {
    Q_OBJECT
 
-   // See comment below in TreeModelRowInsertGuard declaration for why it needs to be a friend
-   friend class TreeModelRowInsertGuard;
+   // See comment in trees/TreeModelChangeGuard.h for why TreeModelChangeGuard needs to be a friend
+   friend class TreeModelChangeGuard;
 
 public:
 
@@ -160,22 +160,6 @@ signals:
 private:
    // Insert all the usual boilerplate to prevent copy/assignment/move
    NO_COPY_DECLARATIONS(TreeModel)
-};
-
-
-/**
- * \brief Any time we change the tree structure, we need to call beginInsertRows() and endInsertRows() to notify
- *        other components that the model has changed.  This RAII class handles that for us.
- *
- *        NOTE that because \c QAbstractItemModel::beginInsertRows and \c QAbstractItemModel::endInsertRows are
- *        protected, this class needs to be a friend of \c TreeModel.
- */
-class TreeModelRowInsertGuard {
-public:
-   TreeModelRowInsertGuard(TreeModel & model, QModelIndex const & parent, int const first, int const last);
-   ~TreeModelRowInsertGuard();
-private:
-   TreeModel & m_model;
 };
 
 #endif

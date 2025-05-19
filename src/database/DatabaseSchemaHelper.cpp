@@ -37,7 +37,7 @@
 #include "database/ObjectStoreTyped.h"
 #include "model/Salt.h"
 
-int constexpr DatabaseSchemaHelper::latestVersion = 16;
+int constexpr DatabaseSchemaHelper::latestVersion = 17;
 
 // Default namespace hides functions from everything outside this file.
 namespace {
@@ -2480,6 +2480,42 @@ namespace {
       return executeSqlQueries(q, migrationQueries);
    }
 
+   /**
+    * \brief Give names to unnamed mashes
+    */
+   bool migrate_to_17([[maybe_unused]] Database & db, BtSqlQuery & q) {
+      QVector<QueryAndParameters> const migrationQueries{
+         //
+         // For historical reasons a lot of users will have a lot of mashes with no name at all.  This looks a bit
+         // weird in the UI, so let's give some sane name to all the mashes currently called "" (or NULL).
+         //
+
+         // Where a mash is used in exactly one recipe, we can call it "Mash for [recipe name]".  It's untranslated,
+         // which is not ideal, but it's better than leaving it at empty string.  Note the GROUP BY and HAVING do the
+         // work to give us "where ... used in exactly one".
+         {QString("UPDATE mash "
+                  "SET name = mj.name "
+                  "FROM ( "
+                     "SELECT 'Mash for ' || recipe.name AS name, "
+                            "mash.id AS id "
+                     "FROM mash, recipe "
+                     "WHERE mash.name = '' "
+                     "AND recipe.mash_id = mash.id "
+                     "GROUP BY mash.id "
+                     "HAVING COUNT(*) = 1"
+                  ") as mj "
+                  "WHERE mash.id = mj.id")},
+         // For other unnamed mashes, either used in multiple recipes or used in no recipes, we just give the name
+         // "Mash number [mash id]".   Again, this is not fantastic, but still (I think) better than empty string.
+         {QString("UPDATE mash "
+                  "SET name = 'Mash number ' || CAST(id AS text) "
+                  "WHERE mash.name = '' "
+                  "OR mash.name IS NULL")},
+      };
+
+      return executeSqlQueries(q, migrationQueries);
+   }
+
    /*!
     * \brief Migrate from version \c oldVersion to \c oldVersion+1
     */
@@ -2506,6 +2542,7 @@ namespace {
          case 13: ret &= migrate_to_14(database, sqlQuery); break;
          case 14: ret &= migrate_to_15(database, sqlQuery); break;
          case 15: ret &= migrate_to_16(database, sqlQuery); break;
+         case 16: ret &= migrate_to_17(database, sqlQuery); break;
          default:
             qCritical() << QString("Unknown version %1").arg(oldVersion);
             return false;

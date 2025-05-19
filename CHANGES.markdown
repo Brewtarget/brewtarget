@@ -22,6 +22,9 @@ Bug fixes and minor enhancements.
 ### Bug Fixes
 * Equipment Editor ignores "calculate pre-boil volume" checkbox [957](https://github.com/Brewtarget/brewtarget/issues/957)
 * Brewtarget 4.1.0 database upgrade error at startup with PostgreSQL database [958](https://github.com/Brewtarget/brewtarget/issues/958)
+* Combo-boxes for style, equipment, mash, etc don't show current value [961](https://github.com/Brewtarget/brewtarget/issues/961)
+* Each recipe snapshot generates another tree on the recipe view (4.1.0) [964](https://github.com/Brewtarget/brewtarget/issues/964)
+* Taking a Recipe snapshot causes an assert [965](https://github.com/Brewtarget/brewtarget/issues/965)
 
 ### Release Timestamp
 Thu, 15 May 2025 04:01:01 +0100

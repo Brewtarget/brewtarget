@@ -38,8 +38,17 @@
 #include "database/ObjectStoreWrapper.h"
 #include "trees/TreeNode.h"
 #include "trees/TreeModel.h"
+#include "trees/TreeModelChangeGuard.h"
 #include "utils/CuriouslyRecurringTemplateBase.h"
 #include "utils/TypeTraits.h"
+
+namespace {
+   // This is used as a parameter to findFolder to tell it what to do if it doesn't find the requested folder
+   enum class IfNotFound {
+      Create,
+      ReturnInvalid
+   };
+}
 
 template <typename T>
 concept HasNodeClassifier = requires {
@@ -410,7 +419,7 @@ public:
       int childNumber;
       QString const folderPath = item->folderPath();
       if (!folderPath.isEmpty()) {
-         parentIndex = this->findFolder(folderPath, this->m_rootNode.get(), true);
+         parentIndex = this->findFolder(folderPath, this->m_rootNode.get(), IfNotFound::Create);
          // I cannot imagine this failing, but what the hell
          if (!parentIndex.isValid()) {
             qCritical() << Q_FUNC_INFO << "Invalid return from findFolder";
@@ -484,6 +493,11 @@ public:
       return;
    }
 
+   //! \return Index of the top of the tree
+   QModelIndex getRootIndex() {
+      return this->derived().createIndex(0, 0, this->m_rootNode.get());
+   }
+
    /**
     * \brief Find the given \c NE (eg given \c Recipe) in the tree.  In most trees (eg \c Equipment, \c Hop,
     *        \c Fermentable, \c Yeast, etc), primary elements can only be inside folders.  But in the \c Recipe tree,
@@ -491,15 +505,10 @@ public:
     *        as this is used to show ancestorship (ie prior versions of a \c Recipe).  In all trees, folders can also
     *        contain other folders.  Caller can provide a starting node, otherwise we'll start at the root of the tree.
     *
-    * \param ne If not null, this is the primary element (eg \c Recipe) we are looking for.  Otherwise, we are looking
-    *           for a place to put a new primary element.
+    * \param ne The primary element (eg \c Recipe) we are looking for.
     */
-   QModelIndex findElement(std::shared_ptr<NE> const ne, TreeNode * parent = nullptr) {
-      // No element supplied, so return top of the tree
-      if (!ne) {
-         return this->derived().createIndex(0, 0, this->m_rootNode.get());
-      }
-
+   QModelIndex findElement(NE const * ne, TreeNode * parent = nullptr) {
+      Q_ASSERT(ne);
       if (!parent) {
          parent = this->m_rootNode.get();
       }
@@ -514,7 +523,7 @@ public:
 
       while (!queue.isEmpty()) {
          auto nodeToSearchIn = queue.dequeue();
-         qDebug() << Q_FUNC_INFO << "Find" << *ne << "in" << *nodeToSearchIn;
+         qDebug() << Q_FUNC_INFO << "Find" << ne << "in" << *nodeToSearchIn;
          //
          // This is a compile-time check whether it's possible in this tree for primary items to have other primary
          // items as children.  (If not, which is the case in most trees, we can skip over looking for children of
@@ -536,7 +545,7 @@ public:
                   auto child = searchInItem.child(ii);
                   if (std::holds_alternative<std::shared_ptr<TreeItemNode<NE>>>(child)) {
                      auto itemNode = std::get<std::shared_ptr<TreeItemNode<NE>>>(child);
-                     if (itemNode->underlyingItem() == ne) {
+                     if (itemNode->underlyingItem().get() == const_cast<NE *>(ne)) {
                         // We found what we were looking for
                         qDebug() << Q_FUNC_INFO << "Found at" << ii;
                         return this->derived().createIndex(ii, 0, itemNode.get());
@@ -570,7 +579,7 @@ public:
                auto itemNode = std::get<std::shared_ptr<TreeItemNode<NE>>>(child);
                // Normally leave the next line commented out as it generates quite a bit of logging
 //               qDebug() << Q_FUNC_INFO << "itemNode:" << *itemNode;
-               if (itemNode->underlyingItem() == ne) {
+               if (itemNode->underlyingItem().get() == const_cast<NE *>(ne)) {
                   // We found what we were looking for
                   qDebug() << Q_FUNC_INFO << "Found" << ne << "at" << jj;
                   return this->derived().createIndex(jj, 0, itemNode.get());
@@ -597,12 +606,16 @@ public:
       return QModelIndex();
    }
 
-   QModelIndex findElement(std::shared_ptr<SNE> const sne) requires (!IsVoid<SNE>) {
-      // No element supplied, so return top of the tree
-      if (!sne) {
-         return this->derived().createIndex(0, 0, this->m_rootNode.get());
-      }
-
+   //
+   // Notwithstanding the "requires" condition, GCC 13.3 gives an error about "forming reference to void" when we write:
+   //       QModelIndex findElement(SNE const & sne) requires (!IsVoid<SNE>) {
+   // Tried using std::add_lvalue_reference_t to construct a type that is:
+   //    `SNE &` when SNE is not void
+   //    `void`  when SNE is void
+   // But GCC still complains.  For now, just use raw pointers, which is slightly less satisfactory.
+   //
+   QModelIndex findElement(SNE const * sne) requires (!IsVoid<SNE>) {
+      Q_ASSERT(sne);
       //
       // Secondary elements are owned by primary ones -- eg BrewNotes are owned by Recipes.  (If they weren't they'd
       // have their own tree -- eg Mash has separate tree from Recipe because Mash is not owned by Recipe.)
@@ -610,7 +623,7 @@ public:
       //
       std::shared_ptr<NE> const owner = sne->owner();
 
-      QModelIndex ownerIndex = this->findElement(owner);
+      QModelIndex ownerIndex = this->findElement(owner.get());
       //
       // Secondary elements can only be stored inside of primary ones (eg BrewNote cannot live directly in a folder or
       // in another BrewNote), so this cast is safe.
@@ -632,7 +645,17 @@ public:
       return QModelIndex();
    }
 
-   QModelIndex findFolder(QString name, TreeFolderNode<NE> * parent, bool create) {
+   /**
+    * \param name       Folder name to search for
+    * \param parent     Where in the tree to start searching
+    * \param ifNotFound Whether to create the folder if it is not found
+    * \param folderIsNewlyCreated If supplied, will be set to \c true if the folder was newly created or \c false
+    *                             otherwise
+    */
+   QModelIndex findFolder(QString name,
+                          TreeFolderNode<NE> * parent,
+                          IfNotFound const ifNotFound,
+                          bool * folderIsNewlyCreated = nullptr) {
       auto pItem = parent ? parent : this->m_rootNode.get();
 
       // Upstream interfaces should handle this for me, but I like belt and suspenders
@@ -688,16 +711,22 @@ public:
       }
       // If we get here, we found no match.
 
-      // If we are supposed to create something, then lets get busy
-      if (create) {
+      // If we are supposed to create something, then let's get busy
+      if (ifNotFound == IfNotFound::Create) {
+         if (folderIsNewlyCreated) {
+            *folderIsNewlyCreated = true;
+         }
+
          // push the current dir back on the stack
          dirs.prepend(current);
          // And start with the madness
          return this->createFolderTree(dirs, pItem, fullPath);
       }
 
-      // If we weren't supposed to create, we drop to here and return an empty
-      // index.
+      // If we weren't supposed to create, we drop to here and return an empty index.
+      if (folderIsNewlyCreated) {
+         *folderIsNewlyCreated = false;
+      }
       return QModelIndex();
    }
 
@@ -713,9 +742,13 @@ public:
                     QModelIndex const & parentIndex,
                     int const row,
                     std::shared_ptr<ElementType> element) requires (IsSubstantiveVariant<typename TreeNodeType::ChildPtrTypes>) {
-      // Any time we change the tree structure, we need to call beginInsertRows() and endInsertRows() to notify other
-      // components that the model has changed.
-      TreeModelRowInsertGuard treeModelRowInsertGuard(this->derived(), parentIndex, row, row);
+      // Any time we change the tree structure, we need to call functions such beginInsertRows() and endInsertRows() to
+      // notify other components that the model has changed.  TreeModelChangeGuard handles the details of this for us.
+      TreeModelChangeGuard treeModelChangeGuard(TreeModelChangeType::InsertRows,
+                                                this->derived(),
+                                                parentIndex,
+                                                row,
+                                                row);
 
       auto childNode = std::make_shared<TreeItemNode<ElementType>>(this->derived(), &parentNode, element);
       qDebug() << Q_FUNC_INFO << "Parent:" << parentNode << ", Child:" << *childNode;
@@ -783,17 +816,32 @@ public:
 
    template<std::derived_from<TreeNode> TreeNodeType>
    bool removeChildren(int row, int count, QModelIndex const & parentIndex, TreeNodeType & parentNode) {
-      // Any time we change the tree structure, we need to call beginInsertRows() and endInsertRows() to notify other
-      // components that the model has changed.
-      TreeModelRowInsertGuard treeModelRowInsertGuard(this->derived(), parentIndex, row, row + count - 1);
+      if (0 == count) {
+         // No children to remove = no work to do = succeeded
+         return true;
+      }
+
+      // Comment in insertChild applies here too
+      TreeModelChangeGuard treeModelChangeGuard(TreeModelChangeType::RemoveRows,
+                                                this->derived(),
+                                                parentIndex,
+                                                row,
+                                                row + count - 1);
       return parentNode.removeChildren(row, count);
    }
 
    /**
     * \brief Use this instead of \c QAbstractItemModel::removeRow or \c QAbstractItemModel::removeRows to remove nodes
     *        from the tree.
+    *
+    * \return \c true if succeeded, \c false otherwise
     */
    bool removeChildren(int row, int count, QModelIndex const & parentIndex) {
+      if (0 == count) {
+         // No children to remove = no work to do = succeeded
+         return true;
+      }
+
       TreeNode * parentNode = this->doTreeNode(parentIndex);
       if (!parentNode) {
          return false;
@@ -863,7 +911,7 @@ protected:
       if constexpr (!IsVoid<SNE>) {
          auto secondaries = SNE::ownedBy(*element);
          if (!secondaries.empty()) {
-            QModelIndex parentIndex = this->findElement(element);
+            QModelIndex parentIndex = this->findElement(element.get());
             int row = 0;
             for (auto secondary : secondaries) {
                this->insertChild(parentIndex, row++, secondary);
@@ -887,7 +935,7 @@ protected:
       }
 
       std::shared_ptr<NE> owner = element->owner();
-      QModelIndex parentIndex = this->findElement(owner);
+      QModelIndex parentIndex = this->findElement(owner.get());
       if (!parentIndex.isValid()) {
          return;
       }
@@ -911,7 +959,7 @@ private:
          return;
       }
 
-      QModelIndex index = this->findElement(element);
+      QModelIndex index = this->findElement(element.get());
       if (!index.isValid()) {
          return;
       }
@@ -935,7 +983,7 @@ public:
       // Since findFolder can also create a folder that doesn't exist, there's pretty much no additional work for us to
       // do here.
       //
-      return this->findFolder(name, this->m_rootNode.get(), true).isValid();
+      return this->findFolder(name, this->m_rootNode.get(), IfNotFound::Create).isValid();
    }
 
    /**
@@ -1031,8 +1079,8 @@ public:
    }
 
    bool renameFolder(Folder & folder, QString newName) {
-      QModelIndex folderIndex = findFolder(folder.fullPath(), nullptr, false);
-      if (! folderIndex.isValid()) {
+      QModelIndex folderIndex = findFolder(folder.fullPath(), nullptr, IfNotFound::ReturnInvalid);
+      if (!folderIndex.isValid()) {
          return false;
       }
 
@@ -1201,7 +1249,7 @@ protected:
          return;
       }
 
-      QModelIndex indexLeft = this->findElement(element);
+      QModelIndex indexLeft = this->findElement(element.get());
       if (!indexLeft.isValid()) {
          return;
       }
@@ -1233,17 +1281,17 @@ protected:
    }
 
    //! No-op version
-   void addSubTreeIfNeeded([[maybe_unused]] std::shared_ptr<NE> const element,
-                           [[maybe_unused]] TreeItemNode<NE> * elementNode) requires (IsVoid<SNE>) {
+   void addSubTreeIfNeeded([[maybe_unused]] NE const & element,
+                           [[maybe_unused]] TreeItemNode<NE> & elementNode) requires (IsVoid<SNE>) {
       // It's a coding error if this ever gets called!
       Q_ASSERT(false);
       return;
    }
    //! Substantive version
-   void addSubTreeIfNeeded(std::shared_ptr<NE> const element,
-                           TreeItemNode<NE> * elementNode) requires (!IsVoid<SNE>) {
+   void addSubTreeIfNeeded(NE const & element,
+                           TreeItemNode<NE> & elementNode) requires (!IsVoid<SNE>) {
       // The rules for adding subtrees are class-specific.  Eg for Recipes we need to take account of Ancestors.
-      this->derived().addSubTree(element, elementNode, elementNode->childCount());
+      this->derived().addSubTree(element, elementNode);
       return;
    }
 
@@ -1252,61 +1300,77 @@ protected:
       if (!element) {
          return;
       }
+      qDebug() << Q_FUNC_INFO << *element;
 
-      // Find it.
-      QModelIndex index = this->findElement(element);
-      if (!index.isValid()) {
+      // Find the sending item in the existing tree
+      QModelIndex elementIndex = this->findElement(element.get());
+      if (!elementIndex.isValid()) {
          qWarning() << Q_FUNC_INFO << "Could not find element" << element;
          return;
       }
+      auto elementNode = static_cast<TreeItemNode<NE> *>(this->doTreeNode(elementIndex));
 
-      bool expand = true;
-
-      QModelIndex pIndex = this->derived().parent(index); // Get the parent
-      // If the parent isn't valid, its the root
-      if (!pIndex.isValid()) {
-         pIndex = this->derived().createIndex(0, 0, this->m_rootNode.get());
-      }
-
-      int ii = this->doTreeNode(index)->childNumber();
-      // Remove it
-      if (!this->removeChildren(ii, 1, pIndex)) {
-         qWarning() << Q_FUNC_INFO << "Could not remove row" << ii;
-         return;
-      }
-
-      // Find the new parent
-      QString const & folderPath = element->folderPath();
-      if (folderPath.isEmpty()) {
-         return;
-      }
-
-      // That's awkward, but dropping a folder prolly does need a the folder
-      // created.
       //
-      // TODO: At some point we should refactor this code so that we have separate handling for objects that have
-      //       folders from ones that don't.
-      QModelIndex newIndex = this->findFolder(folderPath, this->m_rootNode.get(), true);
-      if (!newIndex.isValid()) {
-         newIndex = this->derived().createIndex(0, 0, this->m_rootNode.get());
-         expand = false;
-      }
+      // Remove the sending item from its current parent folder (which will be the root node if it had no folder)
+      //
+      QModelIndex parentIndex = this->derived().parent(elementIndex);
+      // It's a coding error if a PrimaryItem in the tree does not have a parent
+      Q_ASSERT(parentIndex.isValid());
 
-      auto elementNode = static_cast<TreeItemNode<NE> *>(this->doTreeNode(newIndex));
-      int jj = elementNode->childCount();
 
-      if (!this->insertChild(newIndex, jj, element)) {
-         qWarning() << Q_FUNC_INFO << "Could not insert row" << jj;
+      int const elementChildNumber = this->doTreeNode(elementIndex)->childNumber();
+      // Remove it
+      if (!this->removeChildren(elementChildNumber, 1, parentIndex)) {
+         qWarning() << Q_FUNC_INFO << "Could not remove row" << elementChildNumber;
          return;
       }
-      // If we have brewnotes, set them up here.
-      this->addSubTreeIfNeeded(element, elementNode);
 
-      if (expand) {
-         emit this->derived().expandFolder(newIndex);
+      // Find the new parent folder.  Note that findFolder() will give us the root node if folderPath is empty, so we
+      // don't have to handle that here.  Similarly, we can ask it to create the folder if it (is non-empty and) does
+      // not exist.
+      QString const & folderPath = element->folderPath();
+      bool folderIsNewlyCreated;
+
+      QModelIndex newParentIndex = this->findFolder(folderPath,
+                                                    this->m_rootNode.get(),
+                                                    IfNotFound::Create,
+                                                    &folderIsNewlyCreated);
+      // Root node is TreeFolderNode<NE> so, regardless of whether the item has a folder, so this cast should always be
+      // valid.
+      auto parentFolderNode = static_cast<TreeFolderNode<NE> *>(this->doTreeNode(newParentIndex));
+
+///      if (folderPath.isEmpty()) {
+///         return;
+///      }
+///
+///      bool expand = true;
+///      // That's awkward, but dropping a folder prolly does need a the folder
+///      // created.
+///      //
+///      // TODO: At some point we should refactor this code so that we have separate handling for objects that have
+///      //       folders from ones that don't.
+///      QModelIndex newIndex = this->findFolder(folderPath, this->m_rootNode.get(), true);
+///      if (!newIndex.isValid()) {
+///         newIndex = this->derived().createIndex(0, 0, this->m_rootNode.get());
+///         expand = false;
+///      }
+///
+///      auto elementNode = static_cast<TreeItemNode<NE> *>(this->doTreeNode(newIndex));
+      int const numElementsInFolder = parentFolderNode->childCount();
+      if (!this->insertChild(newParentIndex, numElementsInFolder, element)) {
+         qWarning() << Q_FUNC_INFO << "Could not insert row" << numElementsInFolder;
+         return;
       }
 
-      // TODO FINISH THIS!
+      qDebug() << Q_FUNC_INFO << "About to add sub tree for" << *element << "," << *elementNode << "¥¥¥";
+      // If we have brewnotes, set them up here.
+      this->addSubTreeIfNeeded(*element, *elementNode);
+      qDebug() << Q_FUNC_INFO << "Sub tree done ¥¥¥";
+
+      if (folderIsNewlyCreated) {
+         emit this->derived().expandFolder(newParentIndex);
+      }
+
       return;
    }
 

@@ -78,18 +78,19 @@ namespace ObjectStoreWrapper {
    }
 
    /**
-    * \brief Gets only those objects which are not marked deleted
+    * \brief Gets only those objects which are not marked deleted and are not "subsidiary" items (ie, for Recipes, are
+    *        not prior versions -- aka ancestors -- of a \c Recipe).
     */
    template<class NE> QList<std::shared_ptr<NE>> getAllDisplayable() {
       return ObjectStoreTyped<NE>::getInstance().findAllMatching(
-         [](std::shared_ptr<NE> ne) { return !ne->deleted(); }
+         [](std::shared_ptr<NE> ne) { return !ne->deleted() && !ne->subsidiary(); }
       );
    }
 
    //! \brief Raw pointer version
    template<class NE> QList<NE *> getAllDisplayableRaw() {
       return ObjectStoreTyped<NE>::getInstance().findAllMatching(
-         [](NE const * ne) { return !ne->deleted(); }
+         [](NE const * ne) { return !ne->deleted() && !ne->subsidiary(); }
       );
    }
 

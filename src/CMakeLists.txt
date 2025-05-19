@@ -246,6 +246,7 @@ set(filesToCompile_cpp
     ${repoDir}/src/trees/RecipeTreeModel.cpp
     ${repoDir}/src/trees/RecipeTreeView.cpp
     ${repoDir}/src/trees/TreeModel.cpp
+    ${repoDir}/src/trees/TreeModelChangeGuard.cpp
     ${repoDir}/src/trees/TreeNode.cpp
     ${repoDir}/src/trees/TreeView.cpp
     ${repoDir}/src/undoRedo/SimpleUndoableUpdate.cpp
