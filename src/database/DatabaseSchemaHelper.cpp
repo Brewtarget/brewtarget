@@ -2501,7 +2501,8 @@ namespace {
                      "FROM mash, recipe "
                      "WHERE mash.name = '' "
                      "AND recipe.mash_id = mash.id "
-                     "GROUP BY mash.id "
+                     "GROUP BY mash.id, recipe.name " // PostgreSQL will complain if we don't include recipe.name in
+                                                      // the GROUP BY clause.
                      "HAVING COUNT(*) = 1"
                   ") as mj "
                   "WHERE mash.id = mj.id")},

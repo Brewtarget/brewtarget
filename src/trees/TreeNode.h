@@ -119,7 +119,7 @@ public:
     */
    virtual NamedEntity * rawUnderlyingItem() const = 0;
 
-   virtual int numberOfChild(void const * childToCheck) = 0;
+   virtual int numberOfChild(TreeNode const * childToCheck) const = 0;
 
    virtual int childNumber() const = 0;
 
@@ -138,6 +138,9 @@ public:
 
    //! \brief Name of individual object stored in this node (eg "Oatmeal Stout")
    virtual QString name() const = 0;
+
+   //! \brief ID of individual object stored in this node.  NB: Will currently return 0 for a \c Folder
+   virtual int underlyingItemKey() const = 0;
 
    virtual QString dragAndDropMimeType() const = 0;
 
@@ -183,8 +186,8 @@ private:
 //! \brief Convenience function for logging
 template<class S> S & operator<<(S & stream, TreeNode const & treeNode) {
    stream <<
-      treeNode.className() << "TreeNode (" << treeNode.classifier() << "): " << treeNode.name() << " (" <<
-      treeNode.childCount() << " children)";
+      treeNode.className() << "TreeNode (" << treeNode.classifier() << " #" << treeNode.underlyingItemKey() << "): " <<
+      treeNode.name() << " (" << treeNode.childCount() << " children)";
    return stream;
 }
 template<class S> S & operator<<(S & stream, TreeNode const * treeNode) {

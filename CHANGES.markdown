@@ -25,6 +25,7 @@ Bug fixes and minor enhancements.
 * Combo-boxes for style, equipment, mash, etc don't show current value [961](https://github.com/Brewtarget/brewtarget/issues/961)
 * Each recipe snapshot generates another tree on the recipe view (4.1.0) [964](https://github.com/Brewtarget/brewtarget/issues/964)
 * Taking a Recipe snapshot causes an assert [965](https://github.com/Brewtarget/brewtarget/issues/965)
+* New recipe snapshot does not show up until after program restart [967](https://github.com/Brewtarget/brewtarget/issues/967)
 
 ### Release Timestamp
 Thu, 15 May 2025 04:01:01 +0100

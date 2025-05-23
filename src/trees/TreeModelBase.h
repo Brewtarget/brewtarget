@@ -177,6 +177,14 @@ public:
       return QModelIndex();
    }
 
+   QModelIndex indexOfNode(TreeNode * node) const {
+      if (!node || node == this->m_rootNode.get()) {
+         return QModelIndex();
+      }
+
+      return this->derived().createIndex(node->childNumber(), 0, node);
+   }
+
    QModelIndex doParent(QModelIndex const & index) const {
       if (!index.isValid()) {
          return QModelIndex();
@@ -188,11 +196,7 @@ public:
       }
 
       TreeNode * parentNode = childNode->rawParent();
-      if (!parentNode || parentNode == this->m_rootNode.get()) {
-         return QModelIndex();
-      }
-
-      return this->derived().createIndex(parentNode->childNumber(), 0, parentNode);
+      return this->indexOfNode(parentNode);
    }
 
    QString folderPath(QModelIndex const & index) const {
@@ -441,7 +445,7 @@ public:
       // If this tree can have secondary items (eg BrewNote items on RecipeTreeModel) then we need to check whether
       // the newly-added primary one has any.
       //
-      this->addSecondariesForPrimary(item);
+      this->addSecondariesForPrimary(*item);
 
       this->observeElement(item);
       return;
@@ -537,18 +541,18 @@ public:
             //
             if (nodeToSearchIn->classifier() == TreeNodeClassifier::PrimaryItem) {
                //
-               // We assume that nodeToSearchIn doesn't itself match what we're looking for, otherwise we wouldn't have put it
-               // on the queue.
+               // We assume that nodeToSearchIn doesn't itself match what we're looking for, otherwise we wouldn't have
+               // put it on the queue.
                //
                auto & searchInItem = static_cast<TreeItemNode<NE> &>(*nodeToSearchIn);
-               for (int ii = 0; ii < searchInItem.childCount(); ++ii) {
-                  auto child = searchInItem.child(ii);
+               for (int childNumInPrimaryItem = 0; childNumInPrimaryItem < searchInItem.childCount(); ++childNumInPrimaryItem) {
+                  auto child = searchInItem.child(childNumInPrimaryItem);
                   if (std::holds_alternative<std::shared_ptr<TreeItemNode<NE>>>(child)) {
                      auto itemNode = std::get<std::shared_ptr<TreeItemNode<NE>>>(child);
                      if (itemNode->underlyingItem().get() == const_cast<NE *>(ne)) {
                         // We found what we were looking for
-                        qDebug() << Q_FUNC_INFO << "Found at" << ii;
-                        return this->derived().createIndex(ii, 0, itemNode.get());
+                        qDebug() << Q_FUNC_INFO << "Found as child #" << childNumInPrimaryItem << "of" << searchInItem;
+                        return this->derived().createIndex(childNumInPrimaryItem, 0, itemNode.get());
                      }
                      //
                      // The child primary item wasn't a match, but it itself might contain other primary items, so throw
@@ -573,16 +577,16 @@ public:
          //
          Q_ASSERT(nodeToSearchIn->classifier() == TreeNodeClassifier::Folder);
          auto & folderNodeToSearchIn = static_cast<TreeFolderNode<NE> &>(*nodeToSearchIn);
-         for (int jj = 0; jj < folderNodeToSearchIn.childCount(); ++jj) {
-            auto child = folderNodeToSearchIn.child(jj);
+         for (int childNumInFolder = 0; childNumInFolder < folderNodeToSearchIn.childCount(); ++childNumInFolder) {
+            auto child = folderNodeToSearchIn.child(childNumInFolder);
             if (std::holds_alternative<std::shared_ptr<TreeItemNode<NE>>>(child)) {
                auto itemNode = std::get<std::shared_ptr<TreeItemNode<NE>>>(child);
                // Normally leave the next line commented out as it generates quite a bit of logging
 //               qDebug() << Q_FUNC_INFO << "itemNode:" << *itemNode;
                if (itemNode->underlyingItem().get() == const_cast<NE *>(ne)) {
                   // We found what we were looking for
-                  qDebug() << Q_FUNC_INFO << "Found" << ne << "at" << jj;
-                  return this->derived().createIndex(jj, 0, itemNode.get());
+                  qDebug() << Q_FUNC_INFO << "Found as child #" << childNumInFolder << "of" << folderNodeToSearchIn;
+                  return this->derived().createIndex(childNumInFolder, 0, itemNode.get());
                }
                if constexpr (!std::is_constructible_v<typename TreeItemNode<NE>::ChildPtrTypes,
                                                       std::shared_ptr<TreeItemNode<NE>>>) {
@@ -742,6 +746,14 @@ public:
                     QModelIndex const & parentIndex,
                     int const row,
                     std::shared_ptr<ElementType> element) requires (IsSubstantiveVariant<typename TreeNodeType::ChildPtrTypes>) {
+      // It's a coding error if the child insert position is more than one place beyond the end of the list of current
+      // children.  Eg, if there are 4 children, then (because numbering starts from 0), the maximum position at which
+      // a child can be inserted is 4.
+      int const numChildrenBeforeInsert = parentNode.childCount();
+      Q_ASSERT(row <= numChildrenBeforeInsert);
+      // It's also a coding error if the child insert position is less than zero!
+      Q_ASSERT(row >= 0);
+
       // Any time we change the tree structure, we need to call functions such beginInsertRows() and endInsertRows() to
       // notify other components that the model has changed.  TreeModelChangeGuard handles the details of this for us.
       TreeModelChangeGuard treeModelChangeGuard(TreeModelChangeType::InsertRows,
@@ -751,7 +763,7 @@ public:
                                                 row);
 
       auto childNode = std::make_shared<TreeItemNode<ElementType>>(this->derived(), &parentNode, element);
-      qDebug() << Q_FUNC_INFO << "Parent:" << parentNode << ", Child:" << *childNode;
+      qDebug() << Q_FUNC_INFO << "Inserting new node " << *childNode << "as child #" << row << "of" << parentNode;
 
       // Parent node can only be one of two types. (It cannot be SecondaryItem because, although we allow Recipes to
       // contain Recipes -- for Recipe versioning -- we don't allow BrewNotes to contain BrewNotes etc.)
@@ -765,8 +777,11 @@ public:
          succeeded = parentItemNode.insertChild(row, childNode);
       }
 
-      // It's a coding error if the parent node into which we just inserted a child doesn't now have at least one child!
-      Q_ASSERT(parentNode.childCount() >= 1);
+      qDebug() << Q_FUNC_INFO << "Insert" << (succeeded ? "succeeded" : "failed");
+
+      // It's a coding error if the parent node into which we just inserted a child doesn't now have one more child than
+      // before!
+      Q_ASSERT(parentNode.childCount() == numChildrenBeforeInsert + 1);
 
       return true;
    }
@@ -815,19 +830,25 @@ public:
    }
 
    template<std::derived_from<TreeNode> TreeNodeType>
-   bool removeChildren(int row, int count, QModelIndex const & parentIndex, TreeNodeType & parentNode) {
+   bool removeChildren(int const firstRow,
+                       int const count,
+                       QModelIndex const & parentIndex,
+                       TreeNodeType & parentNode) {
       if (0 == count) {
          // No children to remove = no work to do = succeeded
          return true;
       }
 
+      int const lastRow = firstRow + count - 1;
+
       // Comment in insertChild applies here too
       TreeModelChangeGuard treeModelChangeGuard(TreeModelChangeType::RemoveRows,
                                                 this->derived(),
                                                 parentIndex,
-                                                row,
-                                                row + count - 1);
-      return parentNode.removeChildren(row, count);
+                                                firstRow,
+                                                lastRow);
+      qDebug() << Q_FUNC_INFO << "Removing children" << firstRow << "to" << lastRow << "from" << parentNode;
+      return parentNode.removeChildren(firstRow, count);
    }
 
    /**
@@ -907,11 +928,11 @@ protected:
       return;
    }
 
-   void addSecondariesForPrimary(std::shared_ptr<NE> element) {
+   void addSecondariesForPrimary(NE & element) {
       if constexpr (!IsVoid<SNE>) {
-         auto secondaries = SNE::ownedBy(*element);
+         auto secondaries = SNE::ownedBy(element);
          if (!secondaries.empty()) {
-            QModelIndex parentIndex = this->findElement(element.get());
+            QModelIndex parentIndex = this->findElement(&element);
             int row = 0;
             for (auto secondary : secondaries) {
                this->insertChild(parentIndex, row++, secondary);
@@ -1063,19 +1084,30 @@ public:
       return leafNodeIndexes;
    }
 
-   bool removeFolder(QModelIndex folderIndex) {
-      if (!folderIndex.isValid()) {
+   /**
+    * \brief Remove the item with supplied index from the tree
+    */
+   bool removeItemByIndex(QModelIndex index) {
+      if (!index.isValid()) {
+         qWarning() << Q_FUNC_INFO << "Could not find node with index " << index << "in display tree";
          return false;
       }
 
-      QModelIndex parentIndex = this->derived().parent(folderIndex);
+      QModelIndex parentIndex = this->derived().parent(index);
       if (!parentIndex.isValid()) {
+         qWarning() << Q_FUNC_INFO << "Could not find parent of node with index " << index << "in display tree";
          return false;
       }
 
-      TreeNode * folderNode = this->doTreeNode(folderIndex);
-      int const childNumber = folderNode->childNumber();
+      TreeNode * node = this->doTreeNode(index);
+      int const childNumber = node->childNumber();
       return this->removeChildren(childNumber, 1, parentIndex);
+   }
+
+   bool removeElement(NE const & element) {
+      qDebug() << Q_FUNC_INFO << "Removing" << element;
+      QModelIndex elementIndex = this->findElement(&element);
+      return this->removeItemByIndex(elementIndex);
    }
 
    bool renameFolder(Folder & folder, QString newName) {
@@ -1177,7 +1209,7 @@ public:
          // We want to delete the contents of the folder (and remove it from from the model) before remove the folder
          // itself, otherwise the QModelIndex values for the contents will not be valid.
          this->deleteItems(this->allChildren(modelIndex));
-         this->removeFolder(modelIndex);
+         this->removeItemByIndex(modelIndex);
       }
       return;
    }
@@ -1339,23 +1371,6 @@ protected:
       // valid.
       auto parentFolderNode = static_cast<TreeFolderNode<NE> *>(this->doTreeNode(newParentIndex));
 
-///      if (folderPath.isEmpty()) {
-///         return;
-///      }
-///
-///      bool expand = true;
-///      // That's awkward, but dropping a folder prolly does need a the folder
-///      // created.
-///      //
-///      // TODO: At some point we should refactor this code so that we have separate handling for objects that have
-///      //       folders from ones that don't.
-///      QModelIndex newIndex = this->findFolder(folderPath, this->m_rootNode.get(), true);
-///      if (!newIndex.isValid()) {
-///         newIndex = this->derived().createIndex(0, 0, this->m_rootNode.get());
-///         expand = false;
-///      }
-///
-///      auto elementNode = static_cast<TreeItemNode<NE> *>(this->doTreeNode(newIndex));
       int const numElementsInFolder = parentFolderNode->childCount();
       if (!this->insertChild(newParentIndex, numElementsInFolder, element)) {
          qWarning() << Q_FUNC_INFO << "Could not insert row" << numElementsInFolder;

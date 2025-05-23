@@ -2271,7 +2271,9 @@ void Recipe::setAncestorId(int ancestorId, bool notify) {
    if (this->newValueMatchesExisting(PropertyNames::Recipe::ancestorId, this->m_ancestor_id, ancestorId)) {
       return;
    }
+   // Note that changing m_ancestor_id invalidates m_ancestors
    this->m_ancestor_id = ancestorId;
+   this->m_ancestors.clear();
    this->propagatePropertyChange(PropertyNames::Recipe::ancestorId, notify);
    return;
 }

@@ -77,14 +77,11 @@ private:
       this->derived().setModel(&this->m_treeSortFilterProxy);
       this->derived().connect(&this->m_model, &NeTreeModel::expandFolder, &this->derived(), &Derived::expandFolder);
 
+      //
+      // See also TreeView::TreeView for some QTreeView settings
+      //
       this->derived().setAllColumnsShowFocus(true);
       this->derived().setContextMenuPolicy(Qt::CustomContextMenu);
-
-///      this->derived().setDragEnabled(true); // Already done in TreeView::TreeView
-///      this->derived().setAcceptDrops(true); // Already done in TreeView::TreeView
-///      this->derived().setDropIndicatorShown(true); // Already done in TreeView::TreeView
-///      this->derived().setSelectionMode(QAbstractItemView::ExtendedSelection); // Already done in TreeView::TreeView
-
       this->derived().setExpanded(this->derived().getRootIndex(), true);
       this->derived().setSortingEnabled(true);
       this->derived().sortByColumn(0, Qt::AscendingOrder);
