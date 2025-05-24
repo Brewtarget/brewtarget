@@ -31,7 +31,8 @@
 
 /**
  * \brief Most fields are written together.  However, some are marked 'Late' because they need to be written after
- *        the object is created.
+ *        the object is created.  Others are read-only (eg because calculated) so marked 'Never' as we don't want to
+ *        write them.
  *
  *        Logically this belongs inside EditorBaseField, but that's templated, so it would get a bit hard to refer to if
  *        we put it there.
@@ -70,7 +71,7 @@ struct EditorBaseField {
    bool hasControlledField = false;
 
    /**
-    * \brief Constructor for when we don't have a SmartLineEdit or similar
+    * \brief General-case constructor
     *
     *        NB: Both \c precision and \c whenToWrite have defaults, but precision is the one that more often needs
     *        something other than default to be specified, so we put it first in the argument list.
@@ -86,9 +87,11 @@ struct EditorBaseField {
                    [[maybe_unused]] TypeInfo const & typeInfo,
                    std::optional<int> precision = std::nullopt,
                    WhenToWriteField whenToWrite = WhenToWriteField::Normal)
-   requires (!std::same_as<EditFieldType, SmartLineEdit > &&
-             !std::same_as<EditFieldType, BtComboBoxEnum    > &&
-             !std::same_as<EditFieldType, BtComboBoxBool>) :
+   requires (// Exclude the cases that have their own constructors below
+             !std::same_as<EditFieldType, SmartLineEdit > &&
+             !std::same_as<EditFieldType, BtComboBoxEnum> &&
+             !std::same_as<EditFieldType, BtComboBoxBool> &&
+             !std::same_as<EditFieldType, QLabel        > ) :
       labelName  {labelName  },
       label      {label      },
       editField  {editField  },
@@ -195,12 +198,41 @@ struct EditorBaseField {
       return;
    }
 
+   //! Constructor for when the label and "edit" (aka value) fields are both QLabel (for a read-only field)
+   EditorBaseField([[maybe_unused]] char const * const editorClass,
+                   char const * const labelName,
+                   [[maybe_unused]] char const * const labelFqName,
+                   LabelType * label,
+                   [[maybe_unused]] char const * const editFieldName,
+                   [[maybe_unused]] char const * const editFieldFqName,
+                   QLabel * editField,
+                   BtStringConst const & property,
+                   [[maybe_unused]] TypeInfo const & typeInfo,
+                   std::optional<int> precision = std::nullopt,
+                   WhenToWriteField whenToWrite = WhenToWriteField::Never) // NB: "Never" here as read-only
+   requires (std::same_as<EditFieldType, QLabel>) :
+      labelName  {labelName  },
+      label      {label      },
+      editField  {editField  },
+      property   {property   },
+      precision  {precision  },
+      whenToWrite{whenToWrite} {
+      return;
+   }
+
    //
    // You might think that in these connectFieldChanged, it would suffice to use QObject * as the type of context, but
    // this gave an error about "invalid conversion from ‘QObject*’ to
    // ‘const QtPrivate::FunctionPointer<void (WaterEditor::*)()>::Object*’ {aka ‘const WaterEditor*’} [-fpermissive]".
    // Rather than fight this, we just add another template parameter.
    //
+
+   //! Trivial case - the field never gets edited because it's read-only
+   template <typename Derived, typename Functor>
+   void connectFieldChanged([[maybe_unused]] Derived * context, [[maybe_unused]] Functor functor) const
+   requires (std::same_as<EditFieldType, QLabel>) {
+      return;
+   }
 
    //! Simple case - the field tells us editing finished via the \c editingFinished signal
    template <typename Derived, typename Functor>
@@ -258,7 +290,8 @@ struct EditorBaseField {
       return this->editField->toPlainText();
    }
 
-   QVariant getFieldValue() const requires (std::same_as<EditFieldType, QLineEdit>) {
+   QVariant getFieldValue() const requires (std::same_as<EditFieldType, QLineEdit> ||
+                                            std::same_as<EditFieldType, QLabel   >) {
       return this->editField->text();
    }
 
@@ -302,14 +335,16 @@ struct EditorBaseField {
    }
 
    void setEditFieldText(QString const & val) const requires (std::same_as<EditFieldType, QLineEdit    > ||
-                                                              std::same_as<EditFieldType, SmartLineEdit>) {
+                                                              std::same_as<EditFieldType, SmartLineEdit> ||
+                                                              std::same_as<EditFieldType, QLabel       >) {
       this->editField->setText(val);
       return;
    }
 
    void setEditField(QVariant const & val) const requires (std::same_as<EditFieldType, QTextEdit     > ||
                                                            std::same_as<EditFieldType, QPlainTextEdit> ||
-                                                           std::same_as<EditFieldType, QLineEdit     >) {
+                                                           std::same_as<EditFieldType, QLineEdit     > ||
+                                                           std::same_as<EditFieldType, QLabel        >) {
       this->setEditFieldText(val.toString());
       return;
    }
@@ -328,13 +363,14 @@ struct EditorBaseField {
    }
 
    //! This clears the field, or sets it to the default value
-   void clearEditField()  const requires (std::same_as<EditFieldType, QTextEdit     > ||
-                                          std::same_as<EditFieldType, QPlainTextEdit> ||
-                                          std::same_as<EditFieldType, QLineEdit     >) {
+   void clearEditField() const requires (std::same_as<EditFieldType, QTextEdit     > ||
+                                         std::same_as<EditFieldType, QPlainTextEdit> ||
+                                         std::same_as<EditFieldType, QLineEdit     > ||
+                                         std::same_as<EditFieldType, QLabel        >) {
       this->setEditFieldText("");
       return;
    }
-   void clearEditField()  const requires (std::same_as<EditFieldType, QCheckBox>) {
+   void clearEditField() const requires (std::same_as<EditFieldType, QCheckBox>) {
       // Unchecked seems like the best default value
       this->editField->setChecked(false);
       return;
@@ -391,12 +427,13 @@ using EditorBaseFieldVariant = std::variant<
    EditorBaseField<QLabel    , BtComboBoxEnum>,
    EditorBaseField<QLabel    , BtComboBoxBool>,
    EditorBaseField<QLabel    , QCheckBox     >,
+   EditorBaseField<QLabel    , QLabel        >, // For read-only fields where "edit" field is actually a QLabel
    EditorBaseField<QWidget   , QTextEdit     >, // This is for tabs such as tab_notes containing a single QTextEdit with no separate QLabel
    EditorBaseField<SmartLabel, QLineEdit     >,
 //   EditorBaseField<SmartLabel, QTextEdit     >,
 //   EditorBaseField<SmartLabel, QPlainTextEdit>,
    EditorBaseField<SmartLabel, SmartLineEdit >,
-   EditorBaseField<SmartLabel, BtComboBoxEnum    >,
+   EditorBaseField<SmartLabel, BtComboBoxEnum>,
    EditorBaseField<SmartLabel, BtComboBoxBool>
 >;
 

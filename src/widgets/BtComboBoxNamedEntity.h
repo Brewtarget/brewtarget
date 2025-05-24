@@ -138,9 +138,7 @@ public:
    void setItem(std::shared_ptr<NE> item) {
       if (item) {
          this->derived().setCurrentId(item->key());
-
-         // As mentioned above, in this event, we'll drop through and not show anything on the combo box
-         qWarning() << Q_FUNC_INFO << "Unable to find displayable parent for" << *item;
+         return;
       }
 
       this->derived().setCurrentId(-1);

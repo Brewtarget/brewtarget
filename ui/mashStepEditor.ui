@@ -46,7 +46,20 @@
        </property>
       </spacer>
      </item>
+
      <item row="0" column="4">
+      <widget class="QLabel" name="label_stepNum">
+       <property name="text">
+        <string>Step Number</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="5">
+      <widget class="QLabel" name="label_stepNum_value">
+      </widget>
+     </item>
+
+     <item row="2" column="4">
       <widget class="QLabel" name="label_mashStepType">
        <property name="text">
         <string>Type</string>
@@ -56,14 +69,14 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="5">
+     <item row="2" column="5">
       <widget class="BtComboBoxEnum" name="comboBox_mashStepType">
        <property name="toolTip">
         <string>Type</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
+     <item row="4" column="1">
       <widget class="SmartLabel" name="label_stepTemp">
        <property name="contextMenuPolicy">
         <enum>Qt::CustomContextMenu</enum>
@@ -76,14 +89,14 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="2">
+     <item row="4" column="2">
       <widget class="SmartLineEdit" name="lineEdit_stepTemp">
        <property name="toolTip">
         <string>Target temp. of this step</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="4">
+     <item row="4" column="4">
       <widget class="SmartLabel" name="label_stepTime">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -102,14 +115,14 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="5">
+     <item row="4" column="5">
       <widget class="SmartLineEdit" name="lineEdit_stepTime">
        <property name="toolTip">
         <string>Time to conduct the step</string>
        </property>
       </widget>
      </item>
-     <item row="4" column="1">
+     <item row="6" column="1">
       <widget class="SmartLabel" name="label_amount">
        <property name="contextMenuPolicy">
         <enum>Qt::CustomContextMenu</enum>
@@ -122,14 +135,14 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="2">
+     <item row="6" column="2">
       <widget class="SmartLineEdit" name="lineEdit_amount">
        <property name="toolTip">
         <string>Amount of water to infuse</string>
        </property>
       </widget>
      </item>
-     <item row="4" column="4">
+     <item row="6" column="4">
       <widget class="SmartLabel" name="label_rampTime">
        <property name="contextMenuPolicy">
         <enum>Qt::CustomContextMenu</enum>
@@ -142,14 +155,14 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="5">
+     <item row="6" column="5">
       <widget class="SmartLineEdit" name="lineEdit_rampTime">
        <property name="toolTip">
         <string>Lag time</string>
        </property>
       </widget>
      </item>
-     <item row="6" column="1">
+     <item row="8" column="1">
         <widget class="SmartLabel" name="label_infuseTemp">
          <property name="contextMenuPolicy">
           <enum>Qt::CustomContextMenu</enum>
@@ -162,14 +175,14 @@
          </property>
         </widget>
      </item>
-     <item row="6" column="2">
+     <item row="8" column="2">
         <widget class="SmartLineEdit" name="lineEdit_infuseTemp">
          <property name="toolTip">
           <string>Temperature of infusion water</string>
          </property>
         </widget>
      </item>
-     <item row="6" column="4">
+     <item row="8" column="4">
       <widget class="SmartLabel" name="label_endTemp">
        <property name="contextMenuPolicy">
         <enum>Qt::CustomContextMenu</enum>
@@ -182,17 +195,17 @@
        </property>
       </widget>
      </item>
-     <item row="6" column="5">
+     <item row="8" column="5">
       <widget class="SmartLineEdit" name="lineEdit_endTemp">
        <property name="toolTip">
         <string>Final temp. of this step</string>
        </property>
       </widget>
      </item>
-     <item row="8" column="0">
+     <item row="10" column="0">
       <widget class="InfoButton" name="infoButton_thickness"></widget>
      </item>
-     <item row="8" column="1">
+     <item row="10" column="1">
       <widget class="SmartLabel" name="label_thickness">
        <property name="text">
         <string>Thickness</string>
@@ -202,11 +215,11 @@
        </property>
       </widget>
      </item>
-     <item row="8" column="2">
+     <item row="10" column="2">
       <widget class="SmartLineEdit" name="lineEdit_thickness">
       </widget>
      </item>
-     <item row="9" column="1" colspan="5">
+     <item row="11" column="1" colspan="5">
       <widget class="InfoText" name="infoText_thickness">
        <property name="buddy">
         <cstring>infoButton_thickness</cstring>
@@ -216,7 +229,7 @@
        </property>
       </widget>
      </item>
-     <item row="10" column="1">
+     <item row="12" column="1">
       <widget class="SmartLabel" name="label_startAcidity">
        <property name="text">
         <string>Start Acidity</string>
@@ -226,11 +239,11 @@
        </property>
       </widget>
      </item>
-     <item row="10" column="2">
+     <item row="12" column="2">
       <widget class="SmartLineEdit" name="lineEdit_startAcidity">
       </widget>
      </item>
-     <item row="10" column="4">
+     <item row="12" column="4">
       <widget class="SmartLabel" name="label_endAcidity">
        <property name="text">
         <string>End Acidity</string>
@@ -240,11 +253,11 @@
        </property>
       </widget>
      </item>
-     <item row="10" column="5">
+     <item row="12" column="5">
       <widget class="SmartLineEdit" name="lineEdit_endAcidity">
       </widget>
      </item>
-     <item row="12" column="1">
+     <item row="14" column="1">
       <widget class="QLabel" name="label_description">
        <property name="toolTip">
         <string>Optional description of this mash step</string>
@@ -257,7 +270,7 @@
        </property>
       </widget>
      </item>
-     <item row="12" column="2" colspan="4">
+     <item row="14" column="2" colspan="4">
       <widget class="QTextEdit" name="textEdit_description">
       </widget>
      </item>

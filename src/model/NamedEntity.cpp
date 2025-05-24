@@ -279,6 +279,12 @@ void NamedEntity::setKey(int key) {
    return;
 }
 
+bool NamedEntity::subsidiary() const {
+   // Per comments in the header file, default implementation is that nothing is a subsidiary.  This behaviour is
+   // overridden in Recipe.
+   return false;
+}
+
 void NamedEntity::setBeingModified(bool set) {
    // The m_beingModified member variable is not stored in the DB, so we don't call this->propagatePropertyChange etc here
    this->m_beingModified = set;

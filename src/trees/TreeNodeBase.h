@@ -239,7 +239,7 @@ public:
 
    /**
     * \brief inserts a new item at \c position.  Note that it is the caller's responsibility to call
-    *        \c QAbstractItemModel::beginInsertRows etc (via \c TreeModelRowInsertGuard).
+    *        \c QAbstractItemModel::beginInsertRows etc (via \c TreeModelChangeGuard).
     *
     *        TBD: We could probably simplify the code in a number of places by always adding a new child at the end of
     *             our list (this->m_children).  The order of child nodes in the TreeModel classes is somewhat irrelevant
@@ -259,34 +259,37 @@ public:
       return true;
    }
 
-   /**
-    * \brief inserts \c count new empty items starting at \c position  TBD Do we need this?
-    *
-    * \return \c true if succeeded, \c false otherwise
-    */
-   bool insertChildren(std::size_t position, int count) requires IsSubstantiveVariant<ChildPtrTypes> {
-      if (position > this->m_children.size()) {
-         // This is probably a coding error, but we can probably recover by just not doing the insert
-         qWarning() << Q_FUNC_INFO << "Position" << position << "outside range (0, " << this->m_children.size() << ")";
-         return false;
-      }
+///   /**
+///    * \brief inserts \c count new empty items starting at \c position  TBD Do we need this?
+///    *
+///    * \return \c true if succeeded, \c false otherwise
+///    */
+///   bool insertChildren(std::size_t position, int count) requires IsSubstantiveVariant<ChildPtrTypes> {
+///      if (position > this->m_children.size()) {
+///         // This is probably a coding error, but we can probably recover by just not doing the insert
+///         qWarning() << Q_FUNC_INFO << "Position" << position << "outside range (0, " << this->m_children.size() << ")";
+///         return false;
+///      }
+///
+///      for (int row = 0; row < count; ++row) {
+///         this->m_children.emplace(this->m_children.begin() + position + row);
+///      }
+///
+///      return true;
+///   }
 
-      for (int row = 0; row < count; ++row) {
-         this->m_children.emplace(this->m_children.begin() + position + row);
-      }
-
-      return true;
-   }
-
-//   bool insertChildren(std::size_t position, int count) requires IsNullVariant<ChildPtrTypes> {
-//      qWarning() << Q_FUNC_INFO << "Should not be called!";
-//      return false;
-//   }
+///   bool insertChildren(std::size_t position, int count) requires IsNullVariant<ChildPtrTypes> {
+///      qWarning() << Q_FUNC_INFO << "Should not be called!";
+///      return false;
+///   }
 
    /**
     * \brief Removes \c count items starting at \c position.  NB: This just removes the nodes from the tree structure;
     *        it does not delete the contents of the nodes (m_underlyingItem).  Similarly, it is not recursive, so it is
     *        the caller's responsibility to do any processing of children's children etc.
+    *
+    *        Note that it is the caller's responsibility to call \c QAbstractItemModel::beginRemoveRows etc (via
+    *        \c TreeModelChangeGuard).
     *
     * \return \c true if succeeded, \c false otherwise
     */
@@ -326,6 +329,7 @@ public:
     */
    ChildPtrTypes child(int number) const {
       if constexpr (IsSubstantiveVariant<ChildPtrTypes>) {
+         Q_ASSERT(number < this->m_children.size());
          return this->m_children.at(number);
       } else {
          // For the moment, it is simpler to allow calls to this function even when there can be no children.  We just
@@ -363,9 +367,12 @@ public:
     * \brief If the supplied parameter is a pointer to one of the children of this node, then return the number of
     *        that child in our list.  Otherwise, return -1.
     */
-   virtual int numberOfChild(void const * childToCheck) {
+   virtual int numberOfChild(TreeNode const * childToCheck) const override {
       // Comment from rawChild above applies equally here
-      if constexpr (!IsNullVariant<ChildPtrTypes>) {
+      if constexpr (IsNullVariant<ChildPtrTypes>) {
+         qCritical() << Q_FUNC_INFO << "TreeNode::numberOfChild() called on node type that has no children!";
+         Q_ASSERT(false);
+      } else {
          for (int childNumber = 0; childNumber < static_cast<int>(this->m_children.size()); ++childNumber) {
             auto const & currentChild = this->m_children.at(childNumber);
             if (std::visit([&](auto visited){ return (visited.get() == childToCheck); }, currentChild)) {
@@ -376,6 +383,7 @@ public:
 
       // Usually it's a coding error if we get here
       qCritical() << Q_FUNC_INFO << "Unable to find child";
+      qCritical().noquote() << Q_FUNC_INFO << Logging::getStackTrace();
       return -1;
    }
 
@@ -405,6 +413,25 @@ public:
          return QObject::tr("None!");
       }
       return this->m_underlyingItem->name();
+   }
+
+   virtual int underlyingItemKey() const override {
+      //
+      // For the moment, Folders don't have IDs, so return 0
+      //
+      if constexpr (NodeClassifier == TreeNodeClassifier::Folder) {
+         return 0;
+      } else {
+         // We need this code inside the else so that the compiler doesn't try to call m_underlyingItem->key() on Folder
+         if (!this->m_underlyingItem) {
+            //
+            // I don't think we ever have things in the tree that aren't in the DB (ie with ID -1), but we might as well
+            // return a different negative number for "null pointer" (which should also be rare-to-never).
+            //
+            return -2;
+         }
+         return this->m_underlyingItem->key();
+      }
    }
 
    virtual QString dragAndDropMimeType() const override {

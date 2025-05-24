@@ -815,6 +815,7 @@ commonSourceFiles = files([
    'src/trees/RecipeTreeModel.cpp',
    'src/trees/RecipeTreeView.cpp',
    'src/trees/TreeModel.cpp',
+   'src/trees/TreeModelChangeGuard.cpp',
    'src/trees/TreeNode.cpp',
    'src/trees/TreeView.cpp',
    'src/undoRedo/SimpleUndoableUpdate.cpp',

@@ -67,20 +67,3 @@ bool TreeModel::removeRows([[maybe_unused]] int row,
 Qt::DropActions TreeModel::supportedDropActions() const {
    return Qt::CopyAction | Qt::MoveAction;
 }
-
-//============================================== TreeModelRowInsertGuard ===============================================
-
-TreeModelRowInsertGuard::TreeModelRowInsertGuard(TreeModel & model,
-                                                 QModelIndex const & parent,
-                                                 int const first,
-                                                 int const last) :
-   m_model{model} {
-   Q_ASSERT(first <= last);
-   this->m_model.beginInsertRows(parent, first, last);
-   return;
-}
-
-TreeModelRowInsertGuard::~TreeModelRowInsertGuard() {
-   this->m_model.endInsertRows();
-   return;
-}

@@ -65,6 +65,7 @@ class Recipe;
 AddPropertyName(deleted)
 AddPropertyName(key)
 AddPropertyName(name)
+AddPropertyName(subsidiary)
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
 //======================================================================================================================
@@ -221,16 +222,24 @@ public:
    std::strong_ordering operator<=>(NamedEntity const & other) const;
 
    // Everything that inherits from NamedEntity has these properties
-   Q_PROPERTY(QString name      READ name         WRITE setName     )
-   Q_PROPERTY(bool    deleted   READ deleted      WRITE setDeleted  )
+   Q_PROPERTY(QString name         READ name         WRITE setName   )
+   Q_PROPERTY(bool    deleted      READ deleted      WRITE setDeleted)
    //! Key (ID) in the table we are stored in
-   Q_PROPERTY(int     key       READ key          WRITE setKey      )
+   Q_PROPERTY(int     key          READ key          WRITE setKey    )
+   /**
+    * \brief Whether this object is a "subsidiary" item.  This is used by the \c Recipe class to indicate that a recipe
+    *        is a snapshot (aka ancestor), so it should be excluded from the top level of trees or lists of recipes.
+    *        It is not currently used in any other classes (ie is \c false for all instances), but it simplifies the
+    *        generic code to have the interface here in the base class and let \c Recipe override it.
+    */
+   Q_PROPERTY(bool    subsidiary   READ subsidiary   STORED false    )
 
    QString name() const;
    //! \brief Returns name with any bracketed number stripped from the end (eg "Foobar" for "Foobar (2)")
    QString strippedName() const;
    bool deleted() const;
    int key() const;
+   virtual bool subsidiary() const;
 
    /**
     * \brief Returns a regexp that will match the " (n)" (for n some positive integer) added on the end of a name to

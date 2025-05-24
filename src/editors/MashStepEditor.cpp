@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * editors/MashStepEditor.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * editors/MashStepEditor.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -40,6 +40,7 @@ MashStepEditor::MashStepEditor(QWidget* parent, QString const editorName) :
       // We retain infuseTemp_c for now, even though it is not part of BeerJSON.  TBD whether it is needed longer-term.
       //
       EDITOR_FIELD_NORM(MashStep, label_name        , lineEdit_name        , NamedEntity::name                  ),
+      EDITOR_FIELD_NORM(MashStep, label_stepNum     , label_stepNum_value  , EnumeratedBase::stepNumber         ),
       EDITOR_FIELD_NORM(MashStep, label_description , textEdit_description , Step::description                  ),
       EDITOR_FIELD_NORM(MashStep, label_amount      , lineEdit_amount      , MashStep::amount_l                 ),
       EDITOR_FIELD_NORM(MashStep, label_stepTemp    , lineEdit_stepTemp    , StepBase::startTemp_c           , 1),

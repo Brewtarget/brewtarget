@@ -1128,9 +1128,18 @@ void Database::setForeignKeysEnabled(bool enabled, QSqlDatabase connection, Data
          queryString = QString{"PRAGMA foreign_keys=%1"}.arg(enabled ? "on": "off");
          break;
       case Database::DbType::PGSQL:
-         // This is a bit of a hack, and needs you to be connected as super user, but seems more robust than
+         //
+         // This is a bit of a hack, but seems more robust than
          // "SET CONSTRAINTS ALL DEFERRED" which requires foreign keys to have been set up in a particular way in the
          // first place (see https://www.postgresql.org/docs/13/sql-set-constraints.html).
+         //
+         // NOTE that, in order for this to work, either your PostgreSQL user needs additional permissions.  Either you
+         // set it to be a "super user", or, in PostgreSQL 15 and higher, you can grant just the
+         // session_replication_role as follows:
+         //
+         //    # Assumes your Brewtarget db user is "brewtarget"
+         //    GRANT SET ON PARAMETER session_replication_role TO brewtarget;
+         //
          queryString = QString{"SET session_replication_role TO '%1'"}.arg(enabled ? "origin": "replica");
          break;
       default:

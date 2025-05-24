@@ -442,7 +442,7 @@ template<> QString TreeItemNode<Recipe>::getToolTip() const {
          .arg( style ? style->categoryNumber() : Recipe::tr("N/A") )
          .arg( style ? style->styleLetter() : "" );
 
-   // Third row: OG and FG
+   // First row: OG and FG
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
            .arg(Recipe::tr("OG"))
            .arg(Measurement::displayAmount(Measurement::Amount{this->m_underlyingItem->og(), Measurement::Units::specificGravity}, 3));
@@ -450,7 +450,7 @@ template<> QString TreeItemNode<Recipe>::getToolTip() const {
            .arg(Recipe::tr("FG"))
            .arg(Measurement::displayAmount(Measurement::Amount{this->m_underlyingItem->fg(), Measurement::Units::specificGravity}, 3));
 
-   // Fourth row: Color and Bitterness.
+   // Second row: Color and Bitterness.
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2 (%3)</td>")
            .arg(Recipe::tr("Color"))
            .arg(Measurement::displayAmount(Measurement::Amount{this->m_underlyingItem->color_srm(), Measurement::Units::srm}, 1))
@@ -459,6 +459,11 @@ template<> QString TreeItemNode<Recipe>::getToolTip() const {
            .arg(Recipe::tr("IBU"))
            .arg(Measurement::displayQuantity(this->m_underlyingItem->IBU(), 1))
            .arg(IbuMethods::ibuFormulaName() );
+   // Third row: DB ID
+   body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
+           .arg(Recipe::tr("ID in DB"))
+           .arg(this->m_underlyingItem->key());
+   body += QString("<td class=\"left\"> </td><td class=\"value\"> </td></tr>");
 
    body += "</table></body></html>";
 

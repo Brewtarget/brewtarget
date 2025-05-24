@@ -380,8 +380,6 @@ public:
 
    //! \brief The immediate ancestor
    Q_PROPERTY(int    ancestorId READ getAncestorId WRITE setAncestorId)
-///   Q_PROPERTY(QList<std::shared_ptr<Recipe>> ancestors      READ ancestors      STORED false)
-///   Q_PROPERTY(QList<Recipe *>                ancestorsRaw   READ ancestorsRaw   STORED false)
 
    /**
     * \brief We need to override \c NamedEntity::setKey to do some extra ancestor stuff
@@ -447,6 +445,13 @@ public:
     * in the form "Add %1 to %2 at %3".
     */
    QString nextAddToBoil(double & time);
+
+   /**
+    * \brief Because we don't want prior versions (aka snapshots aka ancestors) of a recipe to show in the top level
+    *        lists/trees of all recipes, we override \c NamedEntity::subsidiary() to return \c true of a Recipe is an
+    *        ancestor.
+    */
+   virtual bool subsidiary() const override;
 
    //! \brief convenience method to set ancestors
    void setAncestor(Recipe & ancestor);
