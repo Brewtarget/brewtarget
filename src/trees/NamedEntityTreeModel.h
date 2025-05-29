@@ -18,11 +18,14 @@
 #pragma once
 
 #include "model/Boil.h"
+#include "model/BoilStep.h"
 #include "model/Equipment.h"
 #include "model/Fermentable.h"
 #include "model/Fermentation.h"
+#include "model/FermentationStep.h"
 #include "model/Hop.h"
 #include "model/Mash.h"
+#include "model/MashStep.h"
 #include "model/Misc.h"
 #include "model/Salt.h"
 #include "model/Style.h"
@@ -43,19 +46,19 @@ class FermentableTreeModel : public TreeModel, public TreeModelBase<FermentableT
    TREE_MODEL_COMMON_DECL(Fermentable)
 };
 
-class MashTreeModel : public TreeModel, public TreeModelBase<MashTreeModel, Mash> {
+class MashTreeModel : public TreeModel, public TreeModelBase<MashTreeModel, Mash, MashStep> {
    Q_OBJECT
-   TREE_MODEL_COMMON_DECL(Mash)
+   TREE_MODEL_COMMON_DECL(Mash, MashStep)
 };
 
-class BoilTreeModel : public TreeModel, public TreeModelBase<BoilTreeModel, Boil> {
+class BoilTreeModel : public TreeModel, public TreeModelBase<BoilTreeModel, Boil, BoilStep> {
    Q_OBJECT
-   TREE_MODEL_COMMON_DECL(Boil)
+   TREE_MODEL_COMMON_DECL(Boil, BoilStep)
 };
 
-class FermentationTreeModel : public TreeModel, public TreeModelBase<FermentationTreeModel, Fermentation> {
+class FermentationTreeModel : public TreeModel, public TreeModelBase<FermentationTreeModel, Fermentation, FermentationStep> {
    Q_OBJECT
-   TREE_MODEL_COMMON_DECL(Fermentation)
+   TREE_MODEL_COMMON_DECL(Fermentation, FermentationStep)
 };
 
 class HopTreeModel : public TreeModel, public TreeModelBase<HopTreeModel, Hop> {

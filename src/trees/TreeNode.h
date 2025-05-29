@@ -44,9 +44,15 @@
  *        compile-time mapping from object type to show which class belongs in which tree.  The rule here is that things
  *        belong in their own tree (eg Equipment is in Equipment tree) unless there's a specialisation that says
  *        otherwise.
+ *
+ *        If a secondary item \c FooBar is omitted from this list, we'll get compile errors along the lines of `invalid
+ *        use of incomplete type ‘struct TreeNodeTraits<FooBar, FooBar>’`.
  */
-template <class NE> struct TreeTypeDeducer           { using TreeType = NE    ; };
-template<>          struct TreeTypeDeducer<BrewNote> { using TreeType = Recipe; };
+template <class NE> struct TreeTypeDeducer                   { using TreeType = NE          ; };
+template<>          struct TreeTypeDeducer<BrewNote        > { using TreeType = Recipe      ; };
+template<>          struct TreeTypeDeducer<MashStep        > { using TreeType = Mash        ; };
+template<>          struct TreeTypeDeducer<BoilStep        > { using TreeType = Boil        ; };
+template<>          struct TreeTypeDeducer<FermentationStep> { using TreeType = Fermentation; };
 
 class TreeModel;
 

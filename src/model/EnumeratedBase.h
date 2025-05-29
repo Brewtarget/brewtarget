@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/EnumeratedBase.h is part of Brewtarget, and is copyright the following authors 2023-2024:
+ * model/EnumeratedBase.h is part of Brewtarget, and is copyright the following authors 2023-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -153,12 +153,12 @@ public:
    }
 
    /**
-    * \brief This is similarly needed by \c TreeModelBase -- but it needs a bit of a rethink
+    * \brief This is similarly needed by \c TreeModelBase
     */
-//   static QList<std::shared_ptr<Derived>> ownedBy(std::shared_ptr<Owner> owner) {
-//      // We already wrote all the logic in StepOwnerBase.
-//      return owner->steps();
-//   }
+   static QList<std::shared_ptr<Derived>> ownedBy(Owner const & owner) {
+      // We already wrote all the logic in StepOwnerBase.
+      return owner.steps();
+   }
 
    ObjectStore & doGetObjectStoreTypedInstance() const {
       return ObjectStoreTyped<Derived>::getInstance();

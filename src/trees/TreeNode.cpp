@@ -47,6 +47,20 @@
 #include "trees/RecipeTreeModel.h"
 #include "trees/TreeModel.h"
 
+namespace {
+   /**
+    * \brief Create a suitable display string for an optional double representing minutes
+    *
+    * \param units Whether to show the result in minutes or days
+    */
+   QString showOptionalMins(std::optional<double> minutes, Measurement::Unit const & units) {
+      if (minutes) {
+         return QString{"%1"}.arg(Measurement::displayAmount(Measurement::Amount{units.fromCanonical(*minutes), units}));
+      }
+      return "-";
+   }
+}
+
 TreeNode::TreeNode(TreeModel & model) :
    m_model{model} {
    return;
@@ -548,7 +562,29 @@ template<> QString TreeItemNode<Mash>::getToolTip() const {
    // First row -- total time
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
            .arg(Mash::tr("Total time (mins)"))
-           .arg(Measurement::displayAmount(Measurement::Amount{this->m_underlyingItem->totalTime_mins(), Measurement::Units::minutes}) );
+           .arg(Measurement::displayAmount(Measurement::Amount{this->m_underlyingItem->totalTime_mins(),
+                                                               Measurement::Units::minutes}, 0));
+   body += "</table></body></html>";
+
+   return header + body;
+}
+
+template<> QString TreeItemNode<MashStep>::getToolTip() const {
+   // Do the style sheet first
+   QString header = "<html><head><style type=\"text/css\">";
+   header += Html::getCss(":/css/tooltip.css");
+   header += "</style></head>";
+
+   QString body   = "<body>";
+
+   body += QString("<div id=\"headerdiv\">");
+   body += QString("<table id=\"tooltip\">");
+   body += QString("<caption>%1</caption>")
+         .arg( this->m_underlyingItem->name() );
+   // First row -- step time
+   body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
+           .arg(MashStep::tr("Step time (mins)"))
+           .arg(showOptionalMins(this->m_underlyingItem->stepTime_mins(), Measurement::Units::minutes));
 
    body += "</table></body></html>";
 
@@ -570,7 +606,30 @@ template<> QString TreeItemNode<Boil>::getToolTip() const {
    // First row -- total time
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
            .arg(Boil::tr("Boil time (mins)"))
-           .arg(Measurement::displayAmount(Measurement::Amount{this->m_underlyingItem->boilTime_mins(), Measurement::Units::minutes}) );
+           .arg(Measurement::displayAmount(Measurement::Amount{this->m_underlyingItem->boilTime_mins(),
+                                                               Measurement::Units::minutes}, 0));
+
+   body += "</table></body></html>";
+
+   return header + body;
+}
+
+template<> QString TreeItemNode<BoilStep>::getToolTip() const {
+   // Do the style sheet first
+   QString header = "<html><head><style type=\"text/css\">";
+   header += Html::getCss(":/css/tooltip.css");
+   header += "</style></head>";
+
+   QString body   = "<body>";
+
+   body += QString("<div id=\"headerdiv\">");
+   body += QString("<table id=\"tooltip\">");
+   body += QString("<caption>%1</caption>")
+         .arg( this->m_underlyingItem->name() );
+   // First row -- step time
+   body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
+           .arg(BoilStep::tr("Step time (mins)"))
+           .arg(showOptionalMins(this->m_underlyingItem->stepTime_mins(), Measurement::Units::minutes));
 
    body += "</table></body></html>";
 
@@ -591,8 +650,30 @@ template<> QString TreeItemNode<Fermentation>::getToolTip() const {
          .arg( this->m_underlyingItem->name() );
    // First row -- description
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
-           .arg(Fermentation::tr("Total time (mins)"))
+           .arg(Fermentation::tr("Description"))
            .arg(this->m_underlyingItem->description());
+
+   body += "</table></body></html>";
+
+   return header + body;
+}
+
+template<> QString TreeItemNode<FermentationStep>::getToolTip() const {
+   // Do the style sheet first
+   QString header = "<html><head><style type=\"text/css\">";
+   header += Html::getCss(":/css/tooltip.css");
+   header += "</style></head>";
+
+   QString body   = "<body>";
+
+   body += QString("<div id=\"headerdiv\">");
+   body += QString("<table id=\"tooltip\">");
+   body += QString("<caption>%1</caption>")
+         .arg( this->m_underlyingItem->name() );
+   // First row -- step time
+   body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
+           .arg(FermentationStep::tr("Step time (days)"))
+           .arg(showOptionalMins(this->m_underlyingItem->stepTime_mins(), Measurement::Units::days));
 
    body += "</table></body></html>";
 

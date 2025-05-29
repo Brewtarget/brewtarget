@@ -48,4 +48,21 @@ private:
    TreeModel & m_model;
 };
 
+/**
+ * \brief Convenience functions for logging
+ */
+/**@{*/
+template<class S> S & operator<<(S & stream, TreeModelChangeType const val);
+
+template<class S>
+S & operator<<(S & stream, TreeModelChangeType const val) {
+   switch (val) {
+      case TreeModelChangeType::InsertRows: stream << "insert rows"; break;
+      case TreeModelChangeType::RemoveRows: stream << "remove rows"; break;
+      // NB: No default clause, as we want compiler to warn us if we missed a case above
+   }
+   return stream;
+}
+/**@}*/
+
 #endif

@@ -62,13 +62,20 @@ class Recipe;
 //            careful about how we use them in look-ups.
 //
 #define AddPropertyName(property) namespace PropertyNames::NamedEntity { inline BtStringConst const property{#property}; }
-AddPropertyName(deleted)
-AddPropertyName(key)
-AddPropertyName(name)
+AddPropertyName(deleted   )
+AddPropertyName(key       )
+AddPropertyName(name      )
 AddPropertyName(subsidiary)
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
 //======================================================================================================================
+
+// TODO: This needs fleshing out
+template<class NE>
+struct PropertyLookup {
+   NE::PropertyId propertyId;
+   TypeInfo const & typeInfo;
+};
 
 /**
  * \brief See \c NamedEntity::typeLookup.  This macro -- to include just after \c typeLookup in the class declaration of
@@ -129,6 +136,16 @@ class NamedEntity : public QObject {
    Q_CLASSINFO("version","1")
 
 public:
+
+   // TODO: This needs fleshing out
+   enum class PropertyId {
+      // Normally we would upper-case the first letter of an enum name, but here we want the same case as the property
+      // name, so we leave all lower-case
+      deleted   ,
+      key       ,
+      name      ,
+      subsidiary,
+   };
 
    /**
     * \brief Subclasses should provide their localised (ie translated) name via this static member function, so that

@@ -185,6 +185,11 @@ public:
       return this->derived().createIndex(node->childNumber(), 0, node);
    }
 
+   //! \return Index of the top of the tree
+   QModelIndex getRootIndex() {
+      return this->derived().createIndex(0, 0, this->m_rootNode.get());
+   }
+
    QModelIndex doParent(QModelIndex const & index) const {
       if (!index.isValid()) {
          return QModelIndex();
@@ -371,7 +376,7 @@ public:
             }
             auto folder = item->folderPath();
             if (folder.isEmpty()) {
-               qDebug() << Q_FUNC_INFO << "Could not get folder for" << item;
+               qDebug() << Q_FUNC_INFO << item << "has no folder";
                return false;
             }
             qDebug() <<
@@ -432,8 +437,12 @@ public:
          childNumber = this->doTreeNode(parentIndex)->childCount();
       } else {
          childNumber = this->m_rootNode->childCount();
-         parentIndex = this->derived().createIndex(childNumber, 0, this->m_rootNode.get());
+         parentIndex = this->getRootIndex();
       }
+
+      // Get the parent node here, because, in principle at least, parentIndex will no longer be valid after we call
+      // insertChild.
+      TreeNode * parentNode = this->doTreeNode(parentIndex);
 
       qDebug() << Q_FUNC_INFO << "Inserting" << *item << "as child #" << childNumber << "of" << parentIndex;
       if (!this->insertChild(parentIndex, childNumber, item)) {
@@ -441,11 +450,13 @@ public:
          return;
       }
 
-      //
-      // If this tree can have secondary items (eg BrewNote items on RecipeTreeModel) then we need to check whether
-      // the newly-added primary one has any.
-      //
-      this->addSecondariesForPrimary(*item);
+      TreeNode * itemRawNode = parentNode->rawChild(childNumber);
+      // We know what we just inserted, so this should be a safe cast
+      auto & itemNode = static_cast<TreeItemNode<NE> &>(*itemRawNode);
+
+      // Depending on the tree type, there might be secondary items (eg BrewNote items on RecipeTreeModel) or other
+      // primary items (eg ancestor Recipes on RecipeTreeModel) under this one.
+      this->addSubTreeIfNeeded(*item, itemNode);
 
       this->observeElement(item);
       return;
@@ -497,11 +508,6 @@ public:
       return;
    }
 
-   //! \return Index of the top of the tree
-   QModelIndex getRootIndex() {
-      return this->derived().createIndex(0, 0, this->m_rootNode.get());
-   }
-
    /**
     * \brief Find the given \c NE (eg given \c Recipe) in the tree.  In most trees (eg \c Equipment, \c Hop,
     *        \c Fermentable, \c Yeast, etc), primary elements can only be inside folders.  But in the \c Recipe tree,
@@ -531,7 +537,7 @@ public:
          //
          // This is a compile-time check whether it's possible in this tree for primary items to have other primary
          // items as children.  (If not, which is the case in most trees, we can skip over looking for children of
-         // primary items.
+         // primary items.)
          //
          if constexpr (std::is_constructible_v<typename TreeItemNode<NE>::ChildPtrTypes,
                                                std::shared_ptr<TreeItemNode<NE>>>) {
@@ -741,11 +747,11 @@ public:
       return std::make_shared<TreeItemNode<SNE>>(this->derived(), parentNode, element);
    }
 
-   template<class ElementType, HasNodeClassifier TreeNodeType>
-   bool insertChild(TreeNodeType & parentNode,
+   template<class ElementType, HasNodeClassifier ParentNodeType>
+   bool insertChild(ParentNodeType & parentNode,
                     QModelIndex const & parentIndex,
                     int const row,
-                    std::shared_ptr<ElementType> element) requires (IsSubstantiveVariant<typename TreeNodeType::ChildPtrTypes>) {
+                    std::shared_ptr<ElementType> element) requires (IsSubstantiveVariant<typename ParentNodeType::ChildPtrTypes>) {
       // It's a coding error if the child insert position is more than one place beyond the end of the list of current
       // children.  Eg, if there are 4 children, then (because numbering starts from 0), the maximum position at which
       // a child can be inserted is 4.
@@ -768,11 +774,11 @@ public:
       // Parent node can only be one of two types. (It cannot be SecondaryItem because, although we allow Recipes to
       // contain Recipes -- for Recipe versioning -- we don't allow BrewNotes to contain BrewNotes etc.)
       bool succeeded;
-      if constexpr (TreeNodeType::NodeClassifier == TreeNodeClassifier::Folder) {
+      if constexpr (ParentNodeType::NodeClassifier == TreeNodeClassifier::Folder) {
          auto & parentFolderNode = static_cast<TreeFolderNode<NE> &>(parentNode);
          succeeded = parentFolderNode.insertChild(row, childNode);
       } else {
-         Q_ASSERT(TreeNodeType::NodeClassifier == TreeNodeClassifier::PrimaryItem);
+         Q_ASSERT(ParentNodeType::NodeClassifier == TreeNodeClassifier::PrimaryItem);
          auto & parentItemNode = static_cast<TreeItemNode<NE> &>(parentNode);
          succeeded = parentItemNode.insertChild(row, childNode);
       }
@@ -802,30 +808,42 @@ public:
          return false;
       }
 
+      //
+      // We don't want to try to compile things that aren't supported.  Eg, none of our models support putting secondary
+      // items in anything other than primary items, so we don't want to even compile a code call for putting a
+      // secondary item directly in a folder, etc.  Hence why we need the `else` on this `if` statement.
+      //
       if constexpr (!IsVoid<SNE> && std::same_as<T, SNE>) {
-         // Parent of secondary item can only be primary item
+         //
+         // We are inserting a secondary item, so the parent can only be primary item
+         //
          Q_ASSERT(parentNode->classifier() == TreeNodeClassifier::PrimaryItem);
          return this->insertChild(static_cast<TreeItemNode<NE> &>(*parentNode), parentIndex, row, element);
       } else {
-         switch (parentNode->classifier()) {
-            case TreeNodeClassifier::Folder:
-               return this->insertChild(static_cast<TreeFolderNode<NE> &>(*parentNode), parentIndex, row, element);
-            case TreeNodeClassifier::PrimaryItem:
-               if constexpr (IsSubstantiveVariant<typename TreeItemNode<NE>::ChildPtrTypes>) {
-                  return this->insertChild(static_cast<TreeItemNode<NE> &>(*parentNode), parentIndex, row, element);
-               } else {
-                  // This is a tree that does not allow primary items to be parents
-                  Q_ASSERT(false);
-                  return false;
-               }
-            case TreeNodeClassifier::SecondaryItem:
-               // Secondary item cannot be a parent!
-               Q_ASSERT(false);
-               return false;
+         //
+         // For the moment at least, folders are handled by createFolderTree.
+         //
+         // So, we know we are inserting a primary item.  This means the parent could be a folder or, in some trees, it
+         // could be another primary item (eg an ancestor Recipe in RecipeTreeModel).  To determine at compile time
+         // whether the tree supports holding primary items inside other primary items, we look simply at the number of
+         // alternatives in ParentPtrTypes.  This will be 1 in all trees that only allow primary items in folders, and
+         // it will be 2 for trees that also allow primary items inside other primary items.  (There are no other
+         // possibilities.)
+         //
+         if constexpr (std::variant_size_v<typename TreeItemNode<NE>::ParentPtrTypes> == 2) {
+            // This is a tree in which primary items inside each other are supported, so see if parent is primary item
+            if (TreeNodeClassifier::PrimaryItem == parentNode->classifier()) {
+               return this->insertChild(static_cast<TreeItemNode<NE> &>(*parentNode), parentIndex, row, element);
+            }
          }
+
+         //
+         // The only remaining valid possibility is that we are inserting the primary item child in a folder
+         //
+         Q_ASSERT(TreeNodeClassifier::Folder == parentNode->classifier());
+         return this->insertChild(static_cast<TreeFolderNode<NE> &>(*parentNode), parentIndex, row, element);
       }
 
-      // All cases should be covered in switch above
 //      std::unreachable();
    }
 
@@ -925,20 +943,6 @@ protected:
    void doElementAdded(int itemId) {
       std::shared_ptr<NE> item = ObjectStoreWrapper::getById<NE>(itemId);
       this->insertPrimaryItem(item);
-      return;
-   }
-
-   void addSecondariesForPrimary(NE & element) {
-      if constexpr (!IsVoid<SNE>) {
-         auto secondaries = SNE::ownedBy(element);
-         if (!secondaries.empty()) {
-            QModelIndex parentIndex = this->findElement(&element);
-            int row = 0;
-            for (auto secondary : secondaries) {
-               this->insertChild(parentIndex, row++, secondary);
-            }
-         }
-      }
       return;
    }
 
@@ -1312,18 +1316,36 @@ protected:
       return;
    }
 
-   //! No-op version
-   void addSubTreeIfNeeded([[maybe_unused]] NE const & element,
-                           [[maybe_unused]] TreeItemNode<NE> & elementNode) requires (IsVoid<SNE>) {
-      // It's a coding error if this ever gets called!
-      Q_ASSERT(false);
-      return;
-   }
-   //! Substantive version
-   void addSubTreeIfNeeded(NE const & element,
-                           TreeItemNode<NE> & elementNode) requires (!IsVoid<SNE>) {
-      // The rules for adding subtrees are class-specific.  Eg for Recipes we need to take account of Ancestors.
-      this->derived().addSubTree(element, elementNode);
+   void addSubTreeIfNeeded(NE const & element, TreeItemNode<NE> & elementNode) {
+      //
+      // There are two possible reasons a tree could support nodes with sub-trees:
+      //    - the tree supports secondary items; and/or
+      //    - it's possible in this tree for primary items to have other primary items as children.
+      //
+      if constexpr (!IsVoid<SNE> ||
+                    std::is_constructible_v<typename TreeItemNode<NE>::ChildPtrTypes,
+                                             std::shared_ptr<TreeItemNode<NE>>>) {
+         //
+         // The rules for adding subtrees are class-specific.  Eg for Recipes we need to take account of Ancestors.
+         //
+         // However, since the logic for MashTreeModel, BoilTreeModel, FermentationTreeModel is the same, we put it here
+         // rather than either duplicate it in those three classes or make yet another base class.
+         //
+         if constexpr (std::same_as<SNE,         MashStep> ||
+                       std::same_as<SNE,         BoilStep> ||
+                       std::same_as<SNE, FermentationStep>) {
+            auto secondaries = SNE::ownedBy(element);
+            if (!secondaries.empty()) {
+               QModelIndex parentIndex = this->findElement(&element);
+               int row = 0;
+               for (auto secondary : secondaries) {
+                  this->insertChild(parentIndex, row++, secondary);
+               }
+            }
+         } else {
+            this->derived().addSubTree(element, elementNode);
+         }
+      }
       return;
    }
 

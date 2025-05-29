@@ -42,6 +42,12 @@ TreeView::TreeView(QWidget * parent) :
    // This shows the little arrow next to folders so you can see whether they are expanded or not
    this->setRootIsDecorated(true);
 
+   // In QTreeView "this property should only be set to true if it is guaranteed that all items in the view has the same
+   // height. This enables the view to do some optimizations."
+   this->setUniformRowHeights(true);
+
+   this->setAnimated(true);
+
    this->setDragEnabled(true);
    this->setAcceptDrops(true);
    this->setDropIndicatorShown(true);
@@ -125,5 +131,11 @@ void TreeView::keyPressEvent(QKeyEvent * event) {
          return;
    }
    QTreeView::keyPressEvent(event);
+   return;
+}
+
+void TreeView::rowsInserted(QModelIndex const & parent, int start, int end) {
+   qDebug() << Q_FUNC_INFO << "Rows" << start << "-" << end << "added to" << parent;
+   this->QTreeView::rowsInserted(parent, start, end);
    return;
 }

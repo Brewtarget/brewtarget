@@ -62,9 +62,10 @@ class MashTreeView : public TreeView,
                                          MashTreeModel,
                                          MashTreeSortFilterProxyModel,
                                          MashEditor,
-                                         Mash> {
+                                         Mash,
+                                         MashStep> {
    Q_OBJECT
-   TREE_VIEW_COMMON_DECL(Mash)
+   TREE_VIEW_COMMON_DECL(Mash, MashStep)
 };
 
 class BoilTreeView : public TreeView,
@@ -72,19 +73,21 @@ class BoilTreeView : public TreeView,
                                          BoilTreeModel,
                                          BoilTreeSortFilterProxyModel,
                                          BoilEditor,
-                                         Boil> {
+                                         Boil,
+                                         BoilStep> {
    Q_OBJECT
-   TREE_VIEW_COMMON_DECL(Boil)
+   TREE_VIEW_COMMON_DECL(Boil, BoilStep)
 };
 
 class FermentationTreeView : public TreeView,
-                     public TreeViewBase<FermentationTreeView,
-                                         FermentationTreeModel,
-                                         FermentationTreeSortFilterProxyModel,
-                                         FermentationEditor,
-                                         Fermentation> {
+                             public TreeViewBase<FermentationTreeView,
+                                                 FermentationTreeModel,
+                                                 FermentationTreeSortFilterProxyModel,
+                                                 FermentationEditor,
+                                                 Fermentation,
+                                                 FermentationStep> {
    Q_OBJECT
-   TREE_VIEW_COMMON_DECL(Fermentation)
+   TREE_VIEW_COMMON_DECL(Fermentation, FermentationStep)
 };
 
 class FermentableTreeView : public TreeView,
