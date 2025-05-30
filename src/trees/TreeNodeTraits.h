@@ -19,17 +19,47 @@
 
 #include "config.h"
 #include "model/Boil.h"
+#include "model/BoilStep.h"
 #include "model/Equipment.h"
 #include "model/Fermentable.h"
 #include "model/Fermentation.h"
+#include "model/FermentationStep.h"
 #include "model/Folder.h"
 #include "model/Hop.h"
 #include "model/Mash.h"
+#include "model/MashStep.h"
 #include "model/Misc.h"
 #include "model/Salt.h"
 #include "model/Style.h"
 #include "model/Water.h"
 #include "model/Yeast.h"
+
+namespace {
+   /**
+    * \brief When we have an optional property, we can't just hand a std::optional type back to Qt, so we handle both
+    *        "set" and "unset" cases separately.
+    *
+    * \param displayString - if supplied, is used to convert value to a string before converting to a variant
+    * \param value
+    * \param units Units to which to convert value (assuming it is in canonical units in the same unit system)
+    */
+   template<typename T>
+   QVariant qVariantFromOptional(std::optional<T> value) {
+      if (value) {
+         return QVariant::fromValue(*value);
+      }
+      return QVariant{};
+   }
+   template<typename T>
+   QVariant qVariantFromOptional(QString const & displayString,
+                                 std::optional<T> value,
+                                 Measurement::Unit const & units) {
+      if (value) {
+         return displayString.arg(Measurement::displayAmount(Measurement::Amount{units.fromCanonical(*value), units}));
+      }
+      return displayString.arg("-");
+   }
+}
 
 /**
  * \brief See comment in qtModels/tableModels/TableModelBase.h for why we use a traits class to allow the following attributes
@@ -234,18 +264,49 @@ template<> struct TreeNodeTraits<Hop, Hop> {
    }
 };
 
-// TODO: Add MashSteps
+template<> struct TreeNodeTraits<MashStep, Mash> {
+   enum class ColumnIndex {
+      Name        ,
+      Time        ,
+//      Type        ,
+//      Amount      ,
+//      InfusionTemp,
+//      TargetTemp  ,
+   };
+   static constexpr size_t NumberOfColumns = 2;
+   static constexpr TreeNodeClassifier NodeClassifier = TreeNodeClassifier::SecondaryItem;
+   using TreeType = Mash;
+   using ParentPtrTypes = std::variant<TreeItemNode<Mash> *>;
+   using ChildPtrTypes = std::variant<std::monostate>;
+   // MashSteps can't be dropped anywhere, so there isn't anywhere in the program that accepts drops with this MIME type
+   static constexpr char const * DragNDropMimeType = DEF_CONFIG_MIME_PREFIX "-MashStep";
+
+   static QVariant data(MashStep const & mashStep, ColumnIndex const column) {
+      switch (column) {
+         case ColumnIndex::Name        : return QVariant(mashStep.name         ());
+         case ColumnIndex::Time        : return qVariantFromOptional(MashStep::tr("%1 mins"),
+                                                                     mashStep.stepTime_mins(),
+                                                                     Measurement::Units::minutes);
+//         case ColumnIndex::Type        : return QVariant(mashStep.type         ());
+//         case ColumnIndex::Amount      : return QVariant(mashStep.amount_l     ());
+//         case ColumnIndex::InfusionTemp: return QVariant(mashStep.infuseTemp_c ());
+//         case ColumnIndex::TargetTemp  : return QVariant(mashStep.startTemp_c  ());
+      }
+//      std::unreachable();
+   }
+};
+
 template<> struct TreeNodeTraits<Mash, Mash> {
    enum class ColumnIndex {
       Name      ,
       TotalWater,
       TotalTime ,
    };
-   static constexpr size_t NumberOfColumns = 2;
+   static constexpr size_t NumberOfColumns = 3;
    static constexpr TreeNodeClassifier NodeClassifier = TreeNodeClassifier::PrimaryItem;
    using TreeType = Mash;
    using ParentPtrTypes = std::variant<TreeFolderNode<Mash> *>;
-   using ChildPtrTypes = std::variant<std::monostate>;
+   using ChildPtrTypes = std::variant<std::shared_ptr<TreeItemNode<MashStep>>>;
    static constexpr char const * DragNDropMimeType = DEF_CONFIG_MIME_PREFIX "-mash";
 
    static QString getRootName() { return Mash::tr("Mash Profiles"); }
@@ -258,7 +319,47 @@ template<> struct TreeNodeTraits<Mash, Mash> {
             return QVariant(Measurement::displayAmount(Measurement::Amount{mash.totalMashWater_l(),
                                                                            Measurement::Units::liters}, 0));
          case ColumnIndex::TotalTime:
-            return QVariant::fromValue(mash.totalTime_mins());
+            return MashStep::tr("%1 mins").arg(mash.totalTime_mins());
+      }
+//      std::unreachable();
+   }
+};
+
+template<> struct TreeNodeTraits<BoilStep, Boil> {
+   enum class ColumnIndex {
+      Name        ,
+      StepTime    ,
+//      StartTemp   ,
+//      RampTime    ,
+//      EndTemp     ,
+//      StartAcidity,
+//      EndAcidity  ,
+//      StartGravity,
+//      EndGravity  ,
+//      ChillingType,
+   };
+   static constexpr size_t NumberOfColumns = 1;
+   static constexpr TreeNodeClassifier NodeClassifier = TreeNodeClassifier::SecondaryItem;
+   using TreeType = Boil;
+   using ParentPtrTypes = std::variant<TreeItemNode<Boil> *>;
+   using ChildPtrTypes = std::variant<std::monostate>;
+   // BoilSteps can't be dropped anywhere, so there isn't anywhere in the program that accepts drops with this MIME type
+   static constexpr char const * DragNDropMimeType = DEF_CONFIG_MIME_PREFIX "-BoilStep";
+
+   static QVariant data(BoilStep const & boilStep, ColumnIndex const column) {
+      switch (column) {
+         case ColumnIndex::Name        : return QVariant::fromValue(boilStep.name           ());
+         case ColumnIndex::StepTime    : return qVariantFromOptional(BoilStep::tr("%1 mins"),
+                                                                     boilStep.stepTime_mins(),
+                                                                     Measurement::Units::minutes);
+//         case ColumnIndex::StartTemp   : return QVariant::fromValue(boilStep.startTemp_c    ());
+//         case ColumnIndex::RampTime    : return QVariant::fromValue(boilStep.rampTime_mins  ());
+//         case ColumnIndex::EndTemp     : return QVariant::fromValue(boilStep.endTemp_c      ());
+//         case ColumnIndex::StartAcidity: return QVariant::fromValue(boilStep.startAcidity_pH());
+//         case ColumnIndex::EndAcidity  : return QVariant::fromValue(boilStep.endAcidity_pH  ());
+//         case ColumnIndex::StartGravity: return QVariant::fromValue(boilStep.startGravity_sg());
+//         case ColumnIndex::EndGravity  : return QVariant::fromValue(boilStep.  endGravity_sg());
+//         case ColumnIndex::ChillingType: return QVariant::fromValue(BoilStep::chillingTypeDisplayNames[boilStep.chillingType   ()]);
       }
 //      std::unreachable();
    }
@@ -274,7 +375,7 @@ template<> struct TreeNodeTraits<Boil, Boil> {
    static constexpr TreeNodeClassifier NodeClassifier = TreeNodeClassifier::PrimaryItem;
    using TreeType = Boil;
    using ParentPtrTypes = std::variant<TreeFolderNode<Boil> *>;
-   using ChildPtrTypes = std::variant<std::monostate>;
+   using ChildPtrTypes = std::variant<std::shared_ptr<TreeItemNode<BoilStep>>>;
    static constexpr char const * DragNDropMimeType = DEF_CONFIG_MIME_PREFIX "-boil";
 
    static QString getRootName() { return Boil::tr("Boil Profiles"); }
@@ -299,6 +400,34 @@ template<> struct TreeNodeTraits<Boil, Boil> {
    }
 };
 
+template<> struct TreeNodeTraits<FermentationStep, Fermentation> {
+   enum class ColumnIndex {
+      Name     ,
+      Time     ,
+//      StartTemp,
+//      EndTemp  ,
+   };
+   static constexpr size_t NumberOfColumns = 2;
+   static constexpr TreeNodeClassifier NodeClassifier = TreeNodeClassifier::SecondaryItem;
+   using TreeType = Fermentation;
+   using ParentPtrTypes = std::variant<TreeItemNode<Fermentation> *>;
+   using ChildPtrTypes = std::variant<std::monostate>;
+   // FermentationSteps can't be dropped anywhere, so there isn't anywhere in the program that accepts drops with this MIME type
+   static constexpr char const * DragNDropMimeType = DEF_CONFIG_MIME_PREFIX "-FermentationStep";
+
+   static QVariant data(FermentationStep const & fermentationStep, ColumnIndex const column) {
+      switch (column) {
+         case ColumnIndex::Name        : return QVariant(fermentationStep.name         ());
+         case ColumnIndex::Time        : return qVariantFromOptional(FermentationStep::tr("%1 days"),
+                                                                     fermentationStep.stepTime_mins(),
+                                                                     Measurement::Units::days);
+//         case ColumnIndex::StartTemp    : return QVariant(fermentationStep.startTemp_c         ());
+//         case ColumnIndex::EndTemp      : return QVariant(fermentationStep.endTemp_c     ());
+      }
+//      std::unreachable();
+   }
+};
+
 template<> struct TreeNodeTraits<Fermentation, Fermentation> {
    enum class ColumnIndex {
       Name       ,
@@ -308,7 +437,7 @@ template<> struct TreeNodeTraits<Fermentation, Fermentation> {
    static constexpr TreeNodeClassifier NodeClassifier = TreeNodeClassifier::PrimaryItem;
    using TreeType = Fermentation;
    using ParentPtrTypes = std::variant<TreeFolderNode<Fermentation> *>;
-   using ChildPtrTypes = std::variant<std::monostate>;
+   using ChildPtrTypes = std::variant<std::shared_ptr<TreeItemNode<FermentationStep>>>;
    static constexpr char const * DragNDropMimeType = DEF_CONFIG_MIME_PREFIX "-fermentation";
 
    static QString getRootName() { return Fermentation::tr("Fermentation Profiles"); }
@@ -410,12 +539,7 @@ template<> struct TreeNodeTraits<Salt, Salt> {
          case ColumnIndex::IsAcid:
             return QVariant(salt.isAcid());
          case ColumnIndex::PercentAcid:
-            // We can't just hand a std::optional type back to Qt, so we handle both set and unset cases separately
-            if (salt.percentAcid()) {
-               return QVariant(*salt.percentAcid());
-            } else {
-               return QVariant{};
-            }
+            return qVariantFromOptional(salt.percentAcid());
       }
 //      std::unreachable();
    }

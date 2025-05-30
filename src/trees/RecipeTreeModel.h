@@ -63,27 +63,24 @@ protected:
 private:
    //! \b flip the switch to show descendants
    void setShowChild(QModelIndex child, bool val);
-   void addAncestoralTree(TreeNode & recipeNode,
-                          int recipeChildNumber,
-                          Recipe const & recipe);
 
-   /**
-    * \brief Add brewnotes to a recipe as a subtree
-    * \param recurse
-    */
-   void addSubTree(Recipe const & recipe,
-                   TreeItemNode<Recipe> & recipeNode,
-                   bool const recurse = true);
-
-private:
    //! \brief convenience function to add brewnotes to a recipe as a subtree
    void addBrewNoteSubTree(TreeNode & recipeNodeRaw,
                            int recipeChildNumber,
                            Recipe const & recipe,
                            bool recurse = true);
 
-   //! \brief Override \c TreeModelBase::loadTreeModel()
-   void loadTreeModel();
+   void addAncestoralTree(TreeNode & recipeNode,
+                          int recipeChildNumber,
+                          Recipe const & recipe);
+
+   /**
+    * \brief Add BrewNotes and ancestors to a recipe as a sub-tree
+    * \param recurse
+    */
+   void addSubTree(Recipe const & recipe,
+                   TreeItemNode<Recipe> & recipeNode,
+                   bool const recurse = true);
 
 };
 

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/OwnedSet.h is part of Brewtarget, and is copyright the following authors 2024:
+ * model/OwnedSet.h is part of Brewtarget, and is copyright the following authors 2024-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -110,15 +110,6 @@ public:
 
    //! Non-virtual equivalent of isEqualTo
    bool doIsEqualTo(OwnedSet const & other) const {
-      //
-      // Check each object has the same number of items and they're all the same
-      //
-///      QList<std::shared_ptr<Item>> const myItems = this->items();
-///      QList<std::shared_ptr<Item>> const otherItems = other.items();
-///      return std::equal(   myItems.begin(),    myItems.end(),
-///                        otherItems.begin(), otherItems.end(),
-///                        [](std::shared_ptr<Item> const & lhs,
-///                           std::shared_ptr<Item> const & rhs) {return *lhs == *rhs;});
       return AUTO_LOG_COMPARE_FN(this, other, items);
    }
 
@@ -330,6 +321,11 @@ public:
       }
 
       return items;
+   }
+
+   //! An alternate way of calling \c items.  Used in \c trees/TreeModelBase.h
+   static QList<std::shared_ptr<Item>> ownedBy(Owner const & owner) {
+      return owner.items();
    }
 
    /**
@@ -558,8 +554,6 @@ public:
 
       // It's also a coding error if we're trying to swap a item with itself
       Q_ASSERT(lhs.key() != rhs.key());
-
-///      this->normaliseSeqNums();
 
       qDebug() <<
          Q_FUNC_INFO << "Swapping items" << lhs.seqNum() << "(#" << lhs.key() << ") and " << rhs.seqNum() << " (#" <<

@@ -329,7 +329,7 @@ public:
     */
    ChildPtrTypes child(int number) const {
       if constexpr (IsSubstantiveVariant<ChildPtrTypes>) {
-         Q_ASSERT(number < this->m_children.size());
+         Q_ASSERT(number < static_cast<int>(this->m_children.size()));
          return this->m_children.at(number);
       } else {
          // For the moment, it is simpler to allow calls to this function even when there can be no children.  We just

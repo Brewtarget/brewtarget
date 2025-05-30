@@ -17,7 +17,7 @@ happens, so I'm now setting it to a slightly arbitrary time early in the morning
 Bug fixes and minor enhancements.
 
 ### New Features
-* None
+* Show mash steps, boil steps, fermentation steps under mashes, boils, fermentations in tree in left-hand section
 
 ### Bug Fixes
 * Equipment Editor ignores "calculate pre-boil volume" checkbox [957](https://github.com/Brewtarget/brewtarget/issues/957)
@@ -26,6 +26,7 @@ Bug fixes and minor enhancements.
 * Each recipe snapshot generates another tree on the recipe view (4.1.0) [964](https://github.com/Brewtarget/brewtarget/issues/964)
 * Taking a Recipe snapshot causes an assert [965](https://github.com/Brewtarget/brewtarget/issues/965)
 * New recipe snapshot does not show up until after program restart [967](https://github.com/Brewtarget/brewtarget/issues/967)
+* 4.1 brew date duplication (Each BrewNote is shown twice in the Recipe tree) [971](https://github.com/Brewtarget/brewtarget/issues/971)
 
 ### Release Timestamp
 Thu, 15 May 2025 04:01:01 +0100

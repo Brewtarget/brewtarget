@@ -25,6 +25,7 @@
 #include <QVector>
 
 #include "Logging.h"
+#include "utils/EnumMapping.h"
 #include "utils/TypeLookup.h"
 
 /**

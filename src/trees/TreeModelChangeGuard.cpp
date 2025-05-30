@@ -15,6 +15,8 @@
  =====================================================================================================================*/
 #include "trees/TreeModelChangeGuard.h"
 
+#include <QDebug>
+
 TreeModelChangeGuard::TreeModelChangeGuard(TreeModelChangeType const changeType,
                                            TreeModel & model,
                                            QModelIndex const & parent,
@@ -23,6 +25,8 @@ TreeModelChangeGuard::TreeModelChangeGuard(TreeModelChangeType const changeType,
    m_changeType{changeType},
    m_model{model} {
    Q_ASSERT(first <= last);
+   qDebug() <<
+      Q_FUNC_INFO << "Prepare to" << this->m_changeType << ":" << first << "-" << last << "for parent" << parent;
    switch (this->m_changeType) {
       case TreeModelChangeType::InsertRows: this->m_model.beginInsertRows(parent, first, last); break;
       case TreeModelChangeType::RemoveRows: this->m_model.beginRemoveRows(parent, first, last); break;
@@ -32,6 +36,7 @@ TreeModelChangeGuard::TreeModelChangeGuard(TreeModelChangeType const changeType,
 }
 
 TreeModelChangeGuard::~TreeModelChangeGuard() {
+   qDebug() << Q_FUNC_INFO << "End of" << this->m_changeType;
    switch (this->m_changeType) {
       case TreeModelChangeType::InsertRows: this->m_model.endInsertRows(); break;
       case TreeModelChangeType::RemoveRows: this->m_model.endRemoveRows(); break;

@@ -53,9 +53,8 @@ void RecipeTreeModel::addBrewNoteSubTree(TreeNode & recipeNodeRaw,
    // ...so this cast should be safe.
    auto & recipeNode = static_cast<TreeItemNode<Recipe> &>(recipeNodeRaw);
 
-
-   int jj = 0;
-
+   qDebug() << Q_FUNC_INFO << "Adding" << brewNotes.size() << "BrewNotes for" << recipe;
+   int childNum = recipeNode.childCount();
    for (auto brewNote : brewNotes) {
       //
       // You might think we should just set recipeNodeIndex outside the loop or even pass it into this function as a
@@ -69,12 +68,12 @@ void RecipeTreeModel::addBrewNoteSubTree(TreeNode & recipeNodeRaw,
       QModelIndex recipeNodeIndex = this->createIndex(recipeChildNumber, 0, &recipeNodeRaw);
       // In previous insert loops, we ignore the error and soldier on. So we
       // will do that here too
-      if (!this->insertChild(recipeNode, recipeNodeIndex, jj, brewNote)) {
+      if (!this->insertChild(recipeNode, recipeNodeIndex, childNum, brewNote)) {
          qWarning() << Q_FUNC_INFO << "BrewNote insert failed";
          continue;
       }
       this->observeElement(brewNote);
-      ++jj;
+      ++childNum;
    }
    return;
 }
@@ -89,8 +88,8 @@ void RecipeTreeModel::addAncestoralTree(TreeNode & recipeNodeRaw,
    // ...so this cast should be safe.
    auto & recipeNode = static_cast<TreeItemNode<Recipe> &>(recipeNodeRaw);
 
-   // Now loop through the ancestors. The nature of the beast is nearest
-   // ancestors are first
+   // Now loop through the ancestors. The nature of the beast is nearest ancestors are first
+   qDebug() << Q_FUNC_INFO << "Adding" << ancestors.size() << "ancestors for" << recipe;
    int childNum = recipeNode.childCount();
    for (auto ancestor : ancestors) {
       // Comment in addBrewNoteSubTree() about indexes also applies here
@@ -136,22 +135,6 @@ void RecipeTreeModel::addSubTree(Recipe const & recipe,
 
    return;
 }
-
-void RecipeTreeModel::loadTreeModel() {
-   this->TreeModelBase::loadTreeModel();
-   // Set up the BrewNotes in the tree
-   auto recipes = ObjectStoreWrapper::getAllDisplayable<Recipe>();
-   for (auto recipe : recipes) {
-
-      QModelIndex recipeNodeIndex = this->findElement(recipe.get());
-      TreeNode * recipeNodeRaw = this->doTreeNode(recipeNodeIndex);
-      auto & recipeNode = static_cast<TreeItemNode<Recipe> &>(*recipeNodeRaw);
-
-      this->addSubTree(*recipe, recipeNode);
-   }
-   return;
-}
-
 
 bool RecipeTreeModel::showChild(QModelIndex child) const {
    TreeNode * node = this->treeNode(child);
