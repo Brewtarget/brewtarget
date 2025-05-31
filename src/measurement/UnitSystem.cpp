@@ -135,25 +135,46 @@ public:
          return std::pair(bb->fromCanonical(siAmount.quantity), bb->name);
       }
 
+      //
+      // The final special case is specialy handling of zero values.  If a value is zero (or so close to zero as makes
+      // no difference) then we prefer to use the default units for the scale rather than the smallest that will fit.
+      // Eg, for time, we would prefer to write "0 min" rather than "0 s".  Per the comment in the header file, we'd
+      // ultimately like to have a per-field hint so that, eg, we show "0 min" for mash & boil times but "0 days" for
+      // fermentation times.
+      //
+      if (qFuzzyIsNull(siAmount.quantity)) {
+         return std::pair(this->defaultUnit->fromCanonical(siAmount.quantity), this->defaultUnit->name);
+      }
+
       // Search for the smallest measure in this system that's not too big to show the supplied value
       // QMap guarantees that we iterate in the order of its keys, thus here we'll loop from smallest to largest scale
       // (e.g., mg, g, kg).
       Measurement::Unit const * last  = nullptr;
       for (auto it : this->scaleToUnit) {
-         if (last != nullptr && qAbs(siAmount.quantity) < it->toCanonical(it->boundary()).quantity) {
-            // Stop looping as we've found a unit that's too big to use (so we'll return the last one, ie the one smaller,
-            // below)
-            break;
+         if (last) {
+            if (qAbs(siAmount.quantity) < it->toCanonical(it->boundary()).quantity) {
+               // Stop looping, as we've found a unit that's too big to use (so we'll return the last one, ie the one
+               // smaller, below).
+               break;
+            }
+
+            if (qFuzzyCompare(last->fromCanonical(siAmount.quantity), it->fromCanonical(siAmount.quantity))) {
+               // Stop looping, as the current unit is essentially the same as the previous one.  This is rare, but
+               // eg happens in massFractionOrConc_Brewing where we have Measurement::Units::partsPerMillionMass and
+               // Measurement::Units::milligramsPerLiter which are (for our purposes) the same.  Breaking out here means
+               // we use the former of the two when it would otherwise be a tie, and sticks with the general principle
+               // of not preferring something "later" in the list if it's not a better match.
+               break;
+            }
          }
          last = it;
       }
 
       // It is a programming error if the map was empty (ie we didn't go through the loop at all)
-      Q_ASSERT(last != nullptr);
       return std::pair(last->fromCanonical(siAmount.quantity), last->name);
    }
 
-   // Member variables for impl
+   //============================================ Member variables for impl ============================================
    Measurement::UnitSystem & self;
    Measurement::PhysicalQuantity const physicalQuantity;
    Measurement::Unit const * const thickness;

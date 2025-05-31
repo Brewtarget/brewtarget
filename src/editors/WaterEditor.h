@@ -32,7 +32,7 @@
 #include "editors/EditorBase.h"
 #include "model/Water.h"
 
-#define WaterEditorOptions EditorBaseOptions{ .liveEditItem = true, .numRecipesUsing = true }
+#define WaterEditorOptions EditorBaseOptions{ .liveEditItem = true, .idDisplay = true, .numRecipesUsing = true }
 /*!
  * \class WaterEditor
  *

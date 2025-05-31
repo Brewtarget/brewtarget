@@ -148,12 +148,12 @@ void Measurement::setDisplayUnitSystem(Measurement::PhysicalQuantity physicalQua
    return;
 }
 
-void Measurement::setDisplayUnitSystem(UnitSystem const & unitSystem) {
-   // It's a coding error if we try to store a UnitSystem against a PhysicalQuantity to which it does not relate!
-   auto physicalQuantity = unitSystem.getPhysicalQuantity();
-   Measurement::setDisplayUnitSystem(physicalQuantity, unitSystem);
-   return;
-}
+///void Measurement::setDisplayUnitSystem(UnitSystem const & unitSystem) {
+///   // It's a coding error if we try to store a UnitSystem against a PhysicalQuantity to which it does not relate!
+///   auto physicalQuantity = unitSystem.getPhysicalQuantity();
+///   Measurement::setDisplayUnitSystem(physicalQuantity, unitSystem);
+///   return;
+///}
 
 Measurement::UnitSystem const & Measurement::getDisplayUnitSystem(Measurement::PhysicalQuantity physicalQuantity) {
    // It is a coding error if physicalQuantityToDisplayUnitSystem has not had data loaded into it by the time this
