@@ -424,6 +424,15 @@ public:
     * \brief Add an item to the tree
     */
    void insertPrimaryItem(std::shared_ptr<NE> item) {
+      //
+      // When we call insertChild below, it results in beginInsertRows() and endInsertRows() signals being emitted.
+      // However, for reasons I didn't get to the bottom of, this doesn't result in the display getting updated.
+      // Neither does emitting the dataChanged() signal for either the newly-inserted item or its parent.  What does
+      // work is the layoutAboutToBeChanged() and layoutChanged() signals.  It seems like a bit of a sledgehammer
+      // solution, but it works, and so is useful unless and until we find a better approach.
+      //
+      TreeModelChangeGuard treeModelChangeGuard(TreeModelChangeType::ChangeLayout, this->derived());
+
       QModelIndex parentIndex;
       int childNumber;
       QString const folderPath = item->folderPath();
@@ -1399,10 +1408,8 @@ protected:
          return;
       }
 
-      qDebug() << Q_FUNC_INFO << "About to add sub tree for" << *element << "," << *elementNode << "¥¥¥";
       // If we have brewnotes, set them up here.
       this->addSubTreeIfNeeded(*element, *elementNode);
-      qDebug() << Q_FUNC_INFO << "Sub tree done ¥¥¥";
 
       if (folderIsNewlyCreated) {
          emit this->derived().expandFolder(newParentIndex);

@@ -28,8 +28,9 @@ TreeModelChangeGuard::TreeModelChangeGuard(TreeModelChangeType const changeType,
    qDebug() <<
       Q_FUNC_INFO << "Prepare to" << this->m_changeType << ":" << first << "-" << last << "for parent" << parent;
    switch (this->m_changeType) {
-      case TreeModelChangeType::InsertRows: this->m_model.beginInsertRows(parent, first, last); break;
-      case TreeModelChangeType::RemoveRows: this->m_model.beginRemoveRows(parent, first, last); break;
+      case TreeModelChangeType::InsertRows  : emit this->m_model.beginInsertRows(parent, first, last); break;
+      case TreeModelChangeType::RemoveRows  : emit this->m_model.beginRemoveRows(parent, first, last); break;
+      case TreeModelChangeType::ChangeLayout: emit this->m_model.layoutAboutToBeChanged(); break;
       // NB: No default clause, as we want compiler to warn us if we missed a case above
    }
    return;
@@ -38,8 +39,9 @@ TreeModelChangeGuard::TreeModelChangeGuard(TreeModelChangeType const changeType,
 TreeModelChangeGuard::~TreeModelChangeGuard() {
    qDebug() << Q_FUNC_INFO << "End of" << this->m_changeType;
    switch (this->m_changeType) {
-      case TreeModelChangeType::InsertRows: this->m_model.endInsertRows(); break;
-      case TreeModelChangeType::RemoveRows: this->m_model.endRemoveRows(); break;
+      case TreeModelChangeType::InsertRows  : emit this->m_model.endInsertRows(); break;
+      case TreeModelChangeType::RemoveRows  : emit this->m_model.endRemoveRows(); break;
+      case TreeModelChangeType::ChangeLayout: emit this->m_model.layoutChanged(); break;
       // NB: No default clause, as we want compiler to warn us if we missed a case above
    }
    return;

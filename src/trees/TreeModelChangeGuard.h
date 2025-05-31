@@ -21,13 +21,18 @@
 
 //! The types of \c QAbstractItemModel change that \c TreeModelChangeGuard supports
 enum class TreeModelChangeType {
-   InsertRows,
-   RemoveRows
+   InsertRows  ,
+   RemoveRows  ,
+   ChangeLayout,
 };
 
 /**
  * \brief Any time we change the tree structure, we need to call beginInsertRows() and endInsertRows() to notify
  *        other components that the model has changed.  This RAII class handles that for us.
+ *
+ * \param parent is not required for \c changeType of \c ChangeLayout
+ * \param first  is not required for \c changeType of \c ChangeLayout
+ * \param last   is not required for \c changeType of \c ChangeLayout
  *
  *        NOTE that because \c QAbstractItemModel::beginInsertRows, \c QAbstractItemModel::endInsertRows,
  *        \c QAbstractItemModel::beginRemoveRows, \c QAbstractItemModel::endRemoveRows etc are protected, this class
@@ -39,9 +44,9 @@ class TreeModelChangeGuard {
 public:
    TreeModelChangeGuard(TreeModelChangeType const changeType,
                         TreeModel & model,
-                        QModelIndex const & parent,
-                        int const first,
-                        int const last);
+                        QModelIndex const & parent = QModelIndex(),
+                        int const first = -1,
+                        int const last  = -1);
    ~TreeModelChangeGuard();
 private:
    TreeModelChangeType const m_changeType;
@@ -57,8 +62,9 @@ template<class S> S & operator<<(S & stream, TreeModelChangeType const val);
 template<class S>
 S & operator<<(S & stream, TreeModelChangeType const val) {
    switch (val) {
-      case TreeModelChangeType::InsertRows: stream << "insert rows"; break;
-      case TreeModelChangeType::RemoveRows: stream << "remove rows"; break;
+      case TreeModelChangeType::InsertRows  : stream << "insert rows"; break;
+      case TreeModelChangeType::RemoveRows  : stream << "remove rows"; break;
+      case TreeModelChangeType::ChangeLayout: stream << "change layout"; break;
       // NB: No default clause, as we want compiler to warn us if we missed a case above
    }
    return stream;
