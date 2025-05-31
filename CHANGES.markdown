@@ -26,10 +26,11 @@ Bug fixes and minor enhancements.
 * Each recipe snapshot generates another tree on the recipe view (4.1.0) [964](https://github.com/Brewtarget/brewtarget/issues/964)
 * Taking a Recipe snapshot causes an assert [965](https://github.com/Brewtarget/brewtarget/issues/965)
 * New recipe snapshot does not show up until after program restart [967](https://github.com/Brewtarget/brewtarget/issues/967)
+* Various water creation issues [969](https://github.com/Brewtarget/brewtarget/issues/969)
 * 4.1 brew date duplication (Each BrewNote is shown twice in the Recipe tree) [971](https://github.com/Brewtarget/brewtarget/issues/971)
 
 ### Release Timestamp
-Thu, 15 May 2025 04:01:01 +0100
+Sat, 31 May 2025 04:01:01 +0100
 
 ## v4.1.0
 Expose mash/boil/fermentation profiles in more of the UI

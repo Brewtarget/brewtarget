@@ -90,7 +90,14 @@ namespace Measurement {
        * \brief Constructor
        *
        * \param type
-       * \param defaultUnit
+       * \param defaultUnit is the default unit to use in this unit system.  It's what we assume if the user provides no
+       *                    units, and it's what we use to show zero values.
+       *                    TBD: It's not ideal to try to set this at the UnitSystem level because the correct "default"
+       *                    depends on the field - eg whether we're measuring mash time (in minutes) or fermentation
+       *                    time (in days).  It would be neat to have some sort of hint on display fields, though for
+       *                    mass and volume fields, we'd have to find something that works for metric, imperial and US
+       *                    customary.  Eg we might say pick the unit on the current display scale that's closest to
+       *                    canonical unit X.
        * \param uniqueName
        * \param systemOfMeasurement
        * \param unitEntriesSmallestToLargest Will be empty if there is only one unit in this unit system

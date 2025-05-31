@@ -681,8 +681,8 @@ namespace Measurement::Units {
 
    // == Mass Fraction & Mass Concentration ==
    Unit const partsPerMillionMass {Measurement::UnitSystems::massFractionOrConc_Brewing, QObject::tr("ppm" )};
-   Unit const partsPerBillionMass {Measurement::UnitSystems::massFractionOrConc_Brewing, QObject::tr("ppb" ), 1000.0, &partsPerMillionMass};
-   Unit const milligramsPerLiter  {Measurement::UnitSystems::massFractionOrConc_Brewing, QObject::tr("mg/L"),    1.0, &partsPerMillionMass};
+   Unit const partsPerBillionMass {Measurement::UnitSystems::massFractionOrConc_Brewing, QObject::tr("ppb" ), 1.0/1000.0, &partsPerMillionMass};
+   Unit const milligramsPerLiter  {Measurement::UnitSystems::massFractionOrConc_Brewing, QObject::tr("mg/L"), 1.0       , &partsPerMillionMass};
 
    // == Viscosity ==
    // Yes, 1 centipoise = 1 millipascal-second.  See comment in measurement/Unit.h for more info
