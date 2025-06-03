@@ -20,7 +20,7 @@ Bug fixes and minor enhancements.
 * None
 
 ### Bug Fixes
-* None
+* Crash when deleting a water profile [974](https://github.com/Brewtarget/brewtarget/issues/974)
 
 ### Release Timestamp
 Mon, 2 Jun 2025 04:01:02 +0100
