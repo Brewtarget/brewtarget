@@ -132,6 +132,14 @@
         <source>Inline</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Step time (mins)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 mins</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>BoilStepTableModel</name>
@@ -827,6 +835,13 @@ Log file may contain more details.</source>
         <source>Remove %1</source>
         <translation type="unfinished"></translation>
     </message>
+    <message numerus="yes">
+        <source>Used in %n recipe(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
 </context>
 <context>
     <name>Equipment</name>
@@ -1074,10 +1089,6 @@ Log file may contain more details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Total time (mins)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Fermentation Profiles</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1086,6 +1097,14 @@ Log file may contain more details.</source>
     <name>FermentationStep</name>
     <message>
         <source>Fermentation Step</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Step time (days)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 days</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1786,6 +1805,14 @@ If you need help, please open an issue at %1</source>
     </message>
     <message>
         <source>Souring Wort</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Step time (mins)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 mins</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3386,6 +3413,10 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Remove %1 from recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ID in DB</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -5024,6 +5055,14 @@ The final volume in the primary is %1.</source>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>ID in database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>boilStepEditor</name>
@@ -5918,6 +5957,14 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ID in database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -6868,14 +6915,6 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Get following parameters from the recipe&apos;s equipment.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>From Equipment</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Tun mass</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6893,10 +6932,6 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Use for</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -6921,6 +6956,10 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tun</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -7028,6 +7067,10 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Step Number</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -8148,6 +8191,14 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ID in database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

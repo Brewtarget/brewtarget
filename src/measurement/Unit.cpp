@@ -680,6 +680,9 @@ namespace Measurement::Units {
    Unit const carbonationGramsPerLiter{Measurement::UnitSystems::carbonation_MassPerVolume, QObject::tr("mg/L"), 1.0/1.96, &carbonationVolumes};
 
    // == Mass Fraction & Mass Concentration ==
+   //
+   // One part per million (parts) = 1,000 parts per billion
+   //
    Unit const partsPerMillionMass {Measurement::UnitSystems::massFractionOrConc_Brewing, QObject::tr("ppm" )};
    Unit const partsPerBillionMass {Measurement::UnitSystems::massFractionOrConc_Brewing, QObject::tr("ppb" ), 1.0/1000.0, &partsPerMillionMass};
    Unit const milligramsPerLiter  {Measurement::UnitSystems::massFractionOrConc_Brewing, QObject::tr("mg/L"), 1.0       , &partsPerMillionMass};

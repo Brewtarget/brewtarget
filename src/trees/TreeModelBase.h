@@ -517,6 +517,20 @@ public:
       return;
    }
 
+   void unObserveElement(std::shared_ptr<NE> observed) {
+      if (observed) {
+         this->derived().disconnect(observed.get(), nullptr, &this->derived(), nullptr);
+      }
+      return;
+   }
+
+   void unObserveElement(std::shared_ptr<SNE> observed) requires (!IsVoid<SNE>) {
+      if (observed) {
+         this->derived().disconnect(observed.get(), nullptr, &this->derived(), nullptr);
+      }
+      return;
+   }
+
    /**
     * \brief Find the given \c NE (eg given \c Recipe) in the tree.  In most trees (eg \c Equipment, \c Hop,
     *        \c Fermentable, \c Yeast, etc), primary elements can only be inside folders.  But in the \c Recipe tree,
@@ -914,10 +928,10 @@ private:
       // so we need to declare and initialize outside of the loop
       QModelIndex newIndex = this->derived().createIndex(parentNode->childCount(), 0, parentNode);
 
-      // Need to call this because we are adding different things with different
+      // Need to call layoutAboutToBeChanged because we are adding different things with different
       // column counts. Just using the rowsAboutToBeAdded throws ugly errors and
       // then a sigsegv
-      emit this->derived().layoutAboutToBeChanged();
+      TreeModelChangeGuard treeModelChangeGuard(TreeModelChangeType::ChangeLayout, this->derived());
       for (QString cur : dirs) {
 
          // If we have a parent folder, use its full path.  Otherwise, use the parent path
@@ -942,7 +956,6 @@ private:
          // And this for the return
          newIndex = this->derived().createIndex(parentNode->childCount(), 0, parentNode);
       }
-      emit this->derived().layoutChanged();
 
       // May K&R have mercy on my soul
       return newIndex;
@@ -993,21 +1006,15 @@ private:
          return;
       }
 
+      qDebug() << Q_FUNC_INFO << *element << "was deleted";
       QModelIndex index = this->findElement(element.get());
       if (!index.isValid()) {
+         // This is probably a coding error, but we can recover
+         qWarning() << Q_FUNC_INFO << "Could not find" << *element << "in the tree";
          return;
       }
 
-      QModelIndex pIndex = this->derived().parent(index);
-      if (!pIndex.isValid()) {
-         return;
-      }
-
-      if (!this->removeChildren(index.row(), 1, pIndex)) {
-         return;
-      }
-
-      this->derived().disconnect(element.get(), nullptr, &this->derived(), nullptr);
+      this->removeItemByIndex(index);
       return;
    }
 
@@ -1106,14 +1113,31 @@ public:
          return false;
       }
 
+      // Note that parentIndex.isValid() being false just implies the parent is the root node
       QModelIndex parentIndex = this->derived().parent(index);
-      if (!parentIndex.isValid()) {
-         qWarning() << Q_FUNC_INFO << "Could not find parent of node with index " << index << "in display tree";
-         return false;
+
+      //
+      // Comment in insertPrimaryItem() about insertChild equally applies here to removeChildren, hence this guard to
+      // emit the layoutAboutToBeChanged() and layoutChanged() signals.
+      //
+      TreeModelChangeGuard treeModelChangeGuard(TreeModelChangeType::ChangeLayout, this->derived());
+
+      TreeNode * treeNode = this->doTreeNode(index);
+      if (treeNode->classifier() == TreeNodeClassifier::PrimaryItem) {
+         auto & neTreeNode = static_cast<TreeItemNode<NE> &>(*treeNode);
+         std::shared_ptr<NE> neItem = neTreeNode.underlyingItem();
+         this->unObserveElement(neItem);
       }
 
-      TreeNode * node = this->doTreeNode(index);
-      int const childNumber = node->childNumber();
+      if constexpr (!IsVoid<SNE>) {
+         if (treeNode->classifier() == TreeNodeClassifier::SecondaryItem) {
+            auto & sneTreeNode = static_cast<TreeItemNode<SNE> &>(*treeNode);
+            std::shared_ptr<SNE> sneItem = sneTreeNode.underlyingItem();
+            this->unObserveElement(sneItem);
+         }
+      }
+
+      int const childNumber = treeNode->childNumber();
       return this->removeChildren(childNumber, 1, parentIndex);
    }
 
@@ -1200,6 +1224,12 @@ public:
     * \param selectedModelIndexes
     */
    void deleteItems(QModelIndexList const & selectedModelIndexes) {
+      //
+      // In the loop below, the calls to ObjectStoreWrapper::softDelete will, via the
+      // ObjectStoreTyped::signalObjectDeleted signal, result in implElementRemoved being called, so we don't need to
+      // remove the object from the tree here, other than in the case that it is a folder (and thus does not have an
+      // entity in the DB).
+      //
       for (QModelIndex const & modelIndex : selectedModelIndexes) {
          TreeNode * treeNode = this->doTreeNode(modelIndex);
          if (treeNode->classifier() == TreeNodeClassifier::PrimaryItem) {

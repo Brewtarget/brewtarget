@@ -402,11 +402,10 @@ public:
 
       QModelIndex start = selected.first();
       qDebug() << Q_FUNC_INFO << "Delete starting from row" << start.row();
-      auto newSelected = this->doDeleteItems(selected);
-
+      std::optional<QModelIndex> newSelected = this->doDeleteItems(selected);
       if (newSelected && newSelected->isValid()) {
-         TreeNode * node = this->m_model.doTreeNode(*newSelected);
-         qDebug() << Q_FUNC_INFO << "Row" << start.row() << "is" << node->className();
+         TreeNode * node = this->doTreeNode(*newSelected);
+         qDebug() << Q_FUNC_INFO << "Row" << newSelected->row() << "(" << *newSelected << ") is" << *node;
          this->derived().setSelected(*newSelected);
       }
 
