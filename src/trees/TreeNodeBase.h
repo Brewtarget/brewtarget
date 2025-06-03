@@ -259,30 +259,6 @@ public:
       return true;
    }
 
-///   /**
-///    * \brief inserts \c count new empty items starting at \c position  TBD Do we need this?
-///    *
-///    * \return \c true if succeeded, \c false otherwise
-///    */
-///   bool insertChildren(std::size_t position, int count) requires IsSubstantiveVariant<ChildPtrTypes> {
-///      if (position > this->m_children.size()) {
-///         // This is probably a coding error, but we can probably recover by just not doing the insert
-///         qWarning() << Q_FUNC_INFO << "Position" << position << "outside range (0, " << this->m_children.size() << ")";
-///         return false;
-///      }
-///
-///      for (int row = 0; row < count; ++row) {
-///         this->m_children.emplace(this->m_children.begin() + position + row);
-///      }
-///
-///      return true;
-///   }
-
-///   bool insertChildren(std::size_t position, int count) requires IsNullVariant<ChildPtrTypes> {
-///      qWarning() << Q_FUNC_INFO << "Should not be called!";
-///      return false;
-///   }
-
    /**
     * \brief Removes \c count items starting at \c position.  NB: This just removes the nodes from the tree structure;
     *        it does not delete the contents of the nodes (m_underlyingItem).  Similarly, it is not recursive, so it is

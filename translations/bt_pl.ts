@@ -136,6 +136,14 @@
         <source>Inline</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Step time (mins)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 mins</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>BoilStepTableModel</name>
@@ -1117,6 +1125,14 @@ Log file may contain more details.</source>
         <source>Remove %1</source>
         <translation type="unfinished"></translation>
     </message>
+    <message numerus="yes">
+        <source>Used in %n recipe(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
 </context>
 <context>
     <name>Equipment</name>
@@ -1625,10 +1641,6 @@ Log file may contain more details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Total time (mins)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Fermentation Profiles</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1637,6 +1649,14 @@ Log file may contain more details.</source>
     <name>FermentationStep</name>
     <message>
         <source>Fermentation Step</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Step time (days)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 days</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2578,6 +2598,14 @@ If you need help, please open an issue at %1</source>
     </message>
     <message>
         <source>Souring Wort</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Step time (mins)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 mins</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4552,6 +4580,10 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
         <source>Remove %1 from recipe</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>ID in DB</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RecipeAddition</name>
@@ -6468,6 +6500,14 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
         <source>Cancel</source>
         <translation type="unfinished">Anuluj</translation>
     </message>
+    <message>
+        <source>ID in database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>boilStepEditor</name>
@@ -7547,6 +7587,14 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     <message>
         <source>Cancel</source>
         <translation type="unfinished">Anuluj</translation>
+    </message>
+    <message>
+        <source>ID in database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -8796,7 +8844,7 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Tun</source>
-        <translation type="vanished">Kadź zacierna</translation>
+        <translation>Kadź zacierna</translation>
     </message>
     <message>
         <source>Initial tun temp</source>
@@ -8804,11 +8852,11 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Get following parameters from the recipe&apos;s equipment.</source>
-        <translation>Pobierz poniższe parametry ze sprzętu.</translation>
+        <translation type="vanished">Pobierz poniższe parametry ze sprzętu.</translation>
     </message>
     <message>
         <source>From Equipment</source>
-        <translation>Pobierz z ustawień sprzętu</translation>
+        <translation type="vanished">Pobierz z ustawień sprzętu</translation>
     </message>
     <message>
         <source>Tun mass</source>
@@ -8832,10 +8880,6 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Use for</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8996,6 +9040,10 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     <message>
         <source>Cancel</source>
         <translation type="unfinished">Anuluj</translation>
+    </message>
+    <message>
+        <source>Step Number</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -10451,6 +10499,14 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     <message>
         <source>Cancel</source>
         <translation type="unfinished">Anuluj</translation>
+    </message>
+    <message>
+        <source>ID in database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

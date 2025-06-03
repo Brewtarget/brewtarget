@@ -13,8 +13,20 @@ happens, so I'm now setting it to a slightly arbitrary time early in the morning
 * TODO: Additional methods for calculating IBU
 * We'll list other new features here...
 
-## v4.1.1
+## v4.1.2
 Bug fixes and minor enhancements.
+
+### New Features
+* None
+
+### Bug Fixes
+* Crash when deleting a water profile [974](https://github.com/Brewtarget/brewtarget/issues/974)
+
+### Release Timestamp
+Mon, 2 Jun 2025 04:01:02 +0100
+
+## v4.1.1
+This release adds mash steps / boil steps / fermentation steps in the "tree" view, and fixes a number of bugs.
 
 ### New Features
 * Show mash steps, boil steps, fermentation steps under mashes, boils, fermentations in tree in left-hand section
@@ -30,10 +42,10 @@ Bug fixes and minor enhancements.
 * 4.1 brew date duplication (Each BrewNote is shown twice in the Recipe tree) [971](https://github.com/Brewtarget/brewtarget/issues/971)
 
 ### Release Timestamp
-Sat, 31 May 2025 04:01:01 +0100
+Sun, 1 Jun 2025 04:01:01 +0100
 
 ## v4.1.0
-Expose mash/boil/fermentation profiles in more of the UI
+This release exposes mash/boil/fermentation profiles in more of the UI, tidies up some of the technical hang-overs from before the BeerJSON work, and fixes a number of bugs.
 
 ### New Features
 * Mash, Boil and Fermentation profiles appear in the left-hand section
