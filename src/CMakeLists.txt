@@ -279,6 +279,7 @@ set(filesToCompile_cpp
     ${repoDir}/src/widgets/SmartField.cpp
     ${repoDir}/src/widgets/SmartLabel.cpp
     ${repoDir}/src/widgets/SmartLineEdit.cpp
+    ${repoDir}/src/widgets/SmartValueDisplay.cpp
     ${repoDir}/src/widgets/StepsWidget.cpp
     ${repoDir}/src/widgets/ToggleSwitch.cpp
     ${repoDir}/src/widgets/UnitAndScalePopUpMenu.cpp

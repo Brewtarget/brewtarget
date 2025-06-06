@@ -848,6 +848,7 @@ commonSourceFiles = files([
    'src/widgets/SmartField.cpp',
    'src/widgets/SmartLabel.cpp',
    'src/widgets/SmartLineEdit.cpp',
+   'src/widgets/SmartValueDisplay.cpp',
    'src/widgets/StepsWidget.cpp',
    'src/widgets/ToggleSwitch.cpp',
    'src/widgets/UnitAndScalePopUpMenu.cpp',
@@ -1051,6 +1052,7 @@ mocHeaders = files([
    'src/widgets/SmartDigitWidget.h',
    'src/widgets/SmartLabel.h',
    'src/widgets/SmartLineEdit.h',
+   'src/widgets/SmartValueDisplay.h',
    'src/widgets/StepsWidget.h',
    'src/widgets/ToggleSwitch.h',
 ])

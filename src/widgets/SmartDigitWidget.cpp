@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * widgets/SmartDigitWidget.cpp is part of Brewtarget, and is copyright the following authors 2009-2023:
+ * widgets/SmartDigitWidget.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Mattias Måhl <mattias@kejsarsten.com>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -29,7 +29,6 @@
 #include "measurement/Unit.h"
 #include "measurement/UnitSystem.h"
 #include "PersistentSettings.h"
-#include "widgets/SmartLabel.h"
 
 #ifdef BUILDING_WITH_CMAKE
    // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
@@ -111,30 +110,16 @@ public:
 };
 
 SmartDigitWidget::SmartDigitWidget(QWidget *parent) :
-   QLabel(parent),
-   SmartField{},
+   SmartValueDisplay(parent),
    pimpl{std::make_unique<impl>(*this)} {
    return;
 }
 
 SmartDigitWidget::~SmartDigitWidget() = default;
 
-QString SmartDigitWidget::getRawText() const {
-   return this->text();
-}
-
 void SmartDigitWidget::setRawText(QString const & text) {
-   this->QLabel::setText(text);
+   this->SmartValueDisplay::setRawText(text);
    this->pimpl->updateColors();
-   return;
-}
-
-void SmartDigitWidget::connectSmartLabelSignal(SmartLabel & smartLabel) {
-   connect(&smartLabel, &SmartLabel::changedSystemOfMeasurementOrScale, this, &SmartDigitWidget::displayChanged);
-   return;
-}
-
-void SmartDigitWidget::doPostInitWork() {
    return;
 }
 
@@ -180,10 +165,5 @@ void SmartDigitWidget::setMessages(QString lowMsg, QString goodMsg, QString high
    this->pimpl->m_good_msg = goodMsg;
    this->pimpl->m_high_msg = highMsg;
    this->pimpl->updateColors();
-   return;
-}
-
-void SmartDigitWidget::displayChanged(SmartAmounts::ScaleInfo previousScaleInfo) {
-   this->correctEnteredText(previousScaleInfo);
    return;
 }

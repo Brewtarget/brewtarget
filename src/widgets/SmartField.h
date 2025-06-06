@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * widgets/SmartField.h is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * widgets/SmartField.h is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Mark de Wever <koraq@xs4all.nl>
  *   • Matt Young <mfsy@yahoo.com>
@@ -59,10 +59,14 @@ struct TypeInfo;
  *                                              /                     \
  *                                             /        SmartBase      \
  *                                        QLabel        /      \        \
- *                                         \    \      /    SmartField   \
- *                                          \  SmartLabel    /      \     \
- *                                           \              /        \     \
- *                                          SmartDigitWidget        SmartLineEdit
+ *                                          \   \      /    SmartField   \
+ *                                           \  SmartLabel   /      \     \
+ *                                            \             /        \     \
+ *                                           SmartValueDisplay      SmartLineEdit
+ *                                                  |
+ *                                                  |
+ *                                            SmartDigitWidget
+ *
  *
  *        A number of helper functions exist in the \c SmartAmounts namespace.
  *
