@@ -13,6 +13,9 @@ happens, so I'm now setting it to a slightly arbitrary time early in the morning
 * TODO: Additional methods for calculating IBU
 * We'll list other new features here...
 
+### Bug Fixes
+* Windows version opens a console in addition to the main window [976](https://github.com/Brewtarget/brewtarget/issues/976)
+
 ## v4.1.2
 Bug fixes and minor enhancements.
 
