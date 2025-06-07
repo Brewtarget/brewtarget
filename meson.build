@@ -1720,7 +1720,7 @@ mainExecutable = executable(mainExecutableTargetName,
                             link_with : commonCodeStaticLib,
                             kwargs : platformSpecificArgs,
                             install : true,
-                            gui_app : true)
+                            win_subsystem : 'windows')
 
 testRunner = executable(testRunnerTargetName,
                         unitTestMainSourceFile,
