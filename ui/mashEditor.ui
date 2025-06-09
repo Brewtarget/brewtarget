@@ -64,6 +64,23 @@
          </property>
         </widget>
        </item>
+       <item row="2" column="4">
+        <widget class="SmartLabel" name="label_tunTemp">
+         <property name="text">
+          <string>Initial tun temp</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_tunTemp</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="5">
+        <widget class="SmartLineEdit" name="lineEdit_tunTemp">
+         <property name="text">
+          <string>Name</string>
+         </property>
+        </widget>
+       </item>
 
        <item row="4" column="1">
         <widget class="SmartLabel" name="label_spargeTemp">
@@ -85,6 +102,23 @@
          </property>
         </widget>
        </item>
+       <item row="4" column="4">
+        <widget class="SmartLabel" name="label_tunMass">
+         <property name="text">
+          <string>Tun mass</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_tunMass</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="5">
+        <widget class="SmartLineEdit" name="lineEdit_tunMass">
+         <property name="toolTip">
+          <string>Tun mass</string>
+         </property>
+        </widget>
+       </item>
 
        <item row="6" column="1">
         <widget class="SmartLabel" name="label_spargePh">
@@ -103,10 +137,50 @@
          </property>
         </widget>
        </item>
+       <item row="6" column="4">
+        <widget class="SmartLabel" name="label_tunSpHeat">
+         <property name="text">
+          <string>Tun specific heat</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_tunSpHeat</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="5">
+        <widget class="SmartLineEdit" name="lineEdit_tunSpHeat">
+         <property name="toolTip">
+          <string>Tun specific heat (cal/(g*K))</string>
+         </property>
+        </widget>
+       </item>
 
        <item row="8" column="1" colspan="5">
          <widget class="MashStepsWidget" name="stepsWidget">
          </widget>
+       </item>
+
+       <item row="10" column="1">
+        <widget class="SmartLabel" name="label_totalMashWater">
+         <property name="text">
+          <string>Total Mash Water</string>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="2">
+        <widget class="SmartValueDisplay" name="label_totalMashWater_value">
+        </widget>
+       </item>
+       <item row="10" column="4">
+        <widget class="SmartLabel" name="label_totalTime">
+         <property name="text">
+          <string>Total Time</string>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="5">
+        <widget class="SmartValueDisplay" name="label_totalTime_value">
+        </widget>
        </item>
 
        <item row="13" column="0">
@@ -136,68 +210,6 @@
          </property>
          <property name="text">
           <string>You can normally ignore this, but it's sometimes useful for debugging.</string>
-         </property>
-        </widget>
-       </item>
-
-      </layout>
-     </widget>
-
-     <widget class="QWidget" name="tab_tun">
-      <attribute name="title">
-       <string>Tun</string>
-      </attribute>
-      <layout class="QGridLayout" name="gridLayoutTun">
-       <item row="0" column="1">
-        <widget class="SmartLabel" name="label_tunTemp">
-         <property name="text">
-          <string>Initial tun temp</string>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit_tunTemp</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="2">
-        <widget class="SmartLineEdit" name="lineEdit_tunTemp">
-         <property name="text">
-          <string>Name</string>
-         </property>
-        </widget>
-       </item>
-
-       <item row="4" column="1">
-        <widget class="SmartLabel" name="label_tunMass">
-         <property name="text">
-          <string>Tun mass</string>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit_tunMass</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="2">
-        <widget class="SmartLineEdit" name="lineEdit_tunMass">
-         <property name="toolTip">
-          <string>Tun mass</string>
-         </property>
-        </widget>
-       </item>
-
-       <item row="6" column="1">
-        <widget class="SmartLabel" name="label_tunSpHeat">
-         <property name="text">
-          <string>Tun specific heat</string>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit_tunSpHeat</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="2">
-        <widget class="SmartLineEdit" name="lineEdit_tunSpHeat">
-         <property name="toolTip">
-          <string>Tun specific heat (cal/(g*K))</string>
          </property>
         </widget>
        </item>
@@ -314,7 +326,11 @@
     <slot>lineChanged(PreviousScaleInfo)</slot>
    </slots>
   </customwidget>
-
+  <customwidget>
+   <class>SmartValueDisplay</class>
+   <extends>QLabel</extends>
+   <header>widgets/SmartValueDisplay.h</header>
+  </customwidget>
   <customwidget>
    <class>MashStepsWidget</class>
    <extends>QWidget</extends>
